@@ -36,6 +36,8 @@ Alleen apparaten met `kind: 'instrument'` hebben tunes. Leveler is een `effect`,
 | `gate` | Stiltedrempel | −80 … −30 | −55 | dB |
 | `ceiling` | Plafond van de limiter | −12 … 0 | −1 | dB |
 
+Wat Leveler met zijn ingang doet (getest): `NaN`, `±Infinity` en absurd grote waarden (boven ±16, +24 dB) worden begrensd, zodat één foutieve waarde van een apparaat ervoor de meting en de limiter niet voorgoed vergiftigt. Normaal geluid blijft bit-identiek.
+
 Wat Leveler met een state doet (getest):
 - Getallen buiten het bereik worden afgekapt; een tekst, `null`, `NaN` of een ontbrekende waarde geeft de startwaarde.
 - `on` die geen boolean is, geeft de startwaarde.
