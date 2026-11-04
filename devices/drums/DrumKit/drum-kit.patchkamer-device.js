@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Verbeterd: een nieuw of fabrieks-bassdrumkanaal begint met een lage tuning per klankmodel (voorheen 0, waardoor de kick te hoog klonk). Tunes en bewaarde instellingen houden hun eigen tuning; de motor is ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Drum Kit en nieuwe id nl.patchkamer.drumkit (voorheen Slagwerk, nl.patchkamer.slagwerk); tunes en songs uit die tijd
 //          verwijzen naar de oude id. Tweetalig (host.lang; namen van het apparaat en de poorten per taal in i18n; alle teksten in TXT). De twee eerste
 //          klankmodellen heten nu Deep en Punch (voorheen met een getal als naam) en de tekst met herkomst is weg. Tekenen via host.frame (de eigen
@@ -85,7 +86,8 @@ const KIT={
  Industrial:['kick','snare','closedhat','openhat','metal','zap','clapdigital','sub','crash']
 };
 const cell=()=>({v:0,p:1,r:1});
-function lane(type='kick',model='Deep',i=0){const t=TYPES[type],m=MODEL[model];return {type,model,note:t[2],tune:0,decay:t[4]*m.decay,tone:t[5],noise:Math.min(1,t[6]*m.noise),sweep:type==='kick'?.65:.25,attack:.001,cutoff:model==='Lo-fi'?4600:18000,resonance:.7,filter:'lowpass',drive:model==='Industrial'?.55:model==='Lo-fi'?.22:0,level:.7,pan:0,mute:false,solo:false,mix:true,choke:type==='closedhat'||type==='openhat'?1:0,steps:Array.from({length:4},()=>Array.from({length:64},cell))};}
+const KICK_TUNE={Punch:-22,Deep:-20,Industrial:-14,Rock:-17,Pop:-22,Jazz:-18,Funk:-23,'Lo-fi':-17};  // een bassdrum begint hoog; deze standaard tuning geeft per klankmodel een echte bassdrum
+function lane(type='kick',model='Deep',i=0){const t=TYPES[type],m=MODEL[model];return {type,model,note:t[2],tune:type==='kick'?(KICK_TUNE[model]??-20):0,decay:t[4]*m.decay,tone:t[5],noise:Math.min(1,t[6]*m.noise),sweep:type==='kick'?.65:.25,attack:.001,cutoff:model==='Lo-fi'?4600:18000,resonance:.7,filter:'lowpass',drive:model==='Industrial'?.55:model==='Lo-fi'?.22:0,level:.7,pan:0,mute:false,solo:false,mix:true,choke:type==='closedhat'||type==='openhat'?1:0,steps:Array.from({length:4},()=>Array.from({length:64},cell))};}
 function makeState(kit='Punch'){return {kit,channels:KIT[kit].map((t,i)=>lane(t,kit,i)),length:16,pattern:0,bank:0,selected:0,run:true,master:.72,human:0,presets:[],editVelocity:.8,editProbability:1,editRatchet:1};}
 function groove(s,style){s.channels.forEach(c=>c.steps[s.pattern]=Array.from({length:64},cell));const put=(type,steps,v=.8)=>{const c=s.channels.find(c=>c.type===type);if(c)steps.forEach((n,i)=>c.steps[s.pattern][n]={v:i%2?v*.85:v,p:1,r:1});};
  if(style==='Jazz'){put('kick',[0,10],.5);put('brush',[4,12],.65);put('ride',[0,4,7,8,12,15],.65);put('closedhat',[4,12],.55);}
@@ -115,7 +117,7 @@ const CSS=`
 // ruim 15 dB onder andere apparaten; met deze waarde op ongeveer −3 dBFS. De verhouding tussen de kanalen verandert niet.
 const OUT_TRIM=.36*5.5;
 const __pkDef = {
- id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.11.0',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.11.1',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
