@@ -1,0 +1,234 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.resonator",
+  "name": "Resonator Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Resonator: subtle tuning of drums and percussion, chord-tuned washes, and long, extreme drones.",
+  "tree": [
+    {
+      "folder": "Subtle",
+      "items": [
+        {
+          "name": "Subtle Tint",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 45,
+            "chord": "min",
+            "decay": 0.6,
+            "damp": 0.5,
+            "detune": 6,
+            "tune": 0,
+            "mix": 0.2,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Drum Tuner",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 36,
+            "chord": "uni",
+            "decay": 0.4,
+            "damp": 0.5,
+            "detune": 3,
+            "tune": 0,
+            "mix": 0.4,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Sub Ring",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 28,
+            "chord": "oct",
+            "decay": 0.8,
+            "damp": 0.4,
+            "detune": 4,
+            "tune": 0,
+            "mix": 0.35,
+            "gain": 1.2,
+            "follow": false
+          }
+        },
+        {
+          "name": "Marimba Hit",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 60,
+            "chord": "fifth",
+            "decay": 0.6,
+            "damp": 0.6,
+            "detune": 8,
+            "tune": 0,
+            "mix": 0.5,
+            "gain": 1,
+            "follow": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Chords",
+      "items": [
+        {
+          "name": "Minor Haze",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 45,
+            "chord": "min",
+            "decay": 2.5,
+            "damp": 0.35,
+            "detune": 8,
+            "tune": 0,
+            "mix": 0.5,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Major Shine",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 57,
+            "chord": "maj",
+            "decay": 2.5,
+            "damp": 0.3,
+            "detune": 6,
+            "tune": 0,
+            "mix": 0.5,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Sus Cloud",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 52,
+            "chord": "sus",
+            "decay": 4,
+            "damp": 0.5,
+            "detune": 12,
+            "tune": 0,
+            "mix": 0.6,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Jazz Seven",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 48,
+            "chord": "min7",
+            "decay": 3,
+            "damp": 0.4,
+            "detune": 5,
+            "tune": 0,
+            "mix": 0.5,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Open Fourths",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 50,
+            "chord": "fourth",
+            "decay": 3,
+            "damp": 0.4,
+            "detune": 4,
+            "tune": 0,
+            "mix": 0.5,
+            "gain": 1,
+            "follow": false
+          }
+        },
+        {
+          "name": "Note Follower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 45,
+            "chord": "fifth",
+            "decay": 1.2,
+            "damp": 0.4,
+            "detune": 5,
+            "tune": 0,
+            "mix": 0.6,
+            "gain": 1,
+            "follow": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Metal Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 40,
+            "chord": "cluster",
+            "decay": 8,
+            "damp": 0.1,
+            "detune": 50,
+            "tune": 0,
+            "mix": 0.8,
+            "gain": 0.8,
+            "follow": false
+          }
+        },
+        {
+          "name": "Endless Bells",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 64,
+            "chord": "oct",
+            "decay": 8,
+            "damp": 0,
+            "detune": 20,
+            "tune": 0,
+            "mix": 0.7,
+            "gain": 0.7,
+            "follow": false
+          }
+        },
+        {
+          "name": "Scream Pipes",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 72,
+            "chord": "cluster",
+            "decay": 6,
+            "damp": 0.05,
+            "detune": 30,
+            "tune": 0,
+            "mix": 1,
+            "gain": 0.6,
+            "follow": false
+          }
+        }
+      ]
+    }
+  ]
+}

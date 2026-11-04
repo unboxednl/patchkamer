@@ -1,0 +1,311 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.vocoder",
+  "name": "Vocoder Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Vocoder: classic robot voices, warm choirs and pads, breathy whispers, extreme metallic and chattering settings, and presets for an external synth carrier.",
+  "tree": [
+    {
+      "folder": "Voices",
+      "items": [
+        {
+          "name": "Classic Robot",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 9,
+            "response": 30,
+            "formant": 0,
+            "brightness": 0.6,
+            "noise": 0.08,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0.05,
+            "wet": 1,
+            "release": 0.15,
+            "level": 0.75,
+            "wave": "sawtooth",
+            "preset": "Warm Robot"
+          }
+        },
+        {
+          "name": "Warm Pad Voice",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 8,
+            "response": 15,
+            "formant": 0,
+            "brightness": 0.35,
+            "noise": 0.1,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0.1,
+            "wet": 0.9,
+            "release": 0.8,
+            "level": 0.75,
+            "wave": "triangle",
+            "preset": "Warm Robot"
+          }
+        },
+        {
+          "name": "Soft Choir",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 12,
+            "response": 10,
+            "formant": 3,
+            "brightness": 0.5,
+            "noise": 0.2,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0.06,
+            "wet": 0.95,
+            "release": 1.2,
+            "level": 0.75,
+            "wave": "sawtooth",
+            "preset": "Whisper Choir"
+          }
+        },
+        {
+          "name": "Voice Doubler",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 5,
+            "response": 30,
+            "formant": 0,
+            "brightness": 0.55,
+            "noise": 0.05,
+            "carrier": 0.7,
+            "external": 0,
+            "dry": 0.6,
+            "wet": 0.45,
+            "release": 0.3,
+            "level": 0.75,
+            "wave": "sawtooth",
+            "preset": "Subtle Voice"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Textures",
+      "items": [
+        {
+          "name": "Whisper",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 16,
+            "response": 40,
+            "formant": 0,
+            "brightness": 0.9,
+            "noise": 1,
+            "carrier": 0,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.2,
+            "level": 0.9,
+            "wave": "sawtooth",
+            "preset": "Whisper Choir"
+          }
+        },
+        {
+          "name": "Breathy Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 12,
+            "response": 12,
+            "formant": 2,
+            "brightness": 0.7,
+            "noise": 0.6,
+            "carrier": 0.6,
+            "external": 0,
+            "dry": 0.05,
+            "wet": 1,
+            "release": 1.0,
+            "level": 0.75,
+            "wave": "sawtooth",
+            "preset": "Whisper Choir"
+          }
+        },
+        {
+          "name": "Ghost Choir",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 12,
+            "response": 8,
+            "formant": 5,
+            "brightness": 0.35,
+            "noise": 0.15,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 1.5,
+            "level": 0.75,
+            "wave": "sawtooth",
+            "preset": "Ghost Choir"
+          }
+        },
+        {
+          "name": "Deep Giant",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 10,
+            "response": 20,
+            "formant": -10,
+            "brightness": 0.25,
+            "noise": 0.04,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.4,
+            "level": 0.75,
+            "wave": "square",
+            "preset": "Warm Robot"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Steel Machine",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 10,
+            "response": 60,
+            "formant": -4,
+            "brightness": 0.9,
+            "noise": 0.03,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.1,
+            "level": 0.75,
+            "wave": "square",
+            "preset": "Hard Machine"
+          }
+        },
+        {
+          "name": "Tiny Alien",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 14,
+            "response": 45,
+            "formant": 11,
+            "brightness": 1,
+            "noise": 0.1,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.15,
+            "level": 0.75,
+            "wave": "square",
+            "preset": "Warm Robot"
+          }
+        },
+        {
+          "name": "Screamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 24,
+            "response": 80,
+            "formant": 7,
+            "brightness": 1,
+            "noise": 0.3,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.08,
+            "level": 0.9,
+            "wave": "square",
+            "preset": "Hard Machine"
+          }
+        },
+        {
+          "name": "Gate Chatter",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 20,
+            "response": 80,
+            "formant": -2,
+            "brightness": 0.8,
+            "noise": 0.02,
+            "carrier": 0.8,
+            "external": 0,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.02,
+            "level": 0.85,
+            "wave": "sawtooth",
+            "preset": "Hard Machine"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "External",
+      "items": [
+        {
+          "name": "External Clean",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 8,
+            "response": 25,
+            "formant": 0,
+            "brightness": 0.6,
+            "noise": 0.02,
+            "carrier": 0,
+            "external": 1,
+            "dry": 0.1,
+            "wet": 0.9,
+            "release": 0.2,
+            "level": 0.75,
+            "wave": "sawtooth",
+            "preset": "External Synth"
+          }
+        },
+        {
+          "name": "External Edge",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sensitivity": 16,
+            "response": 50,
+            "formant": 2,
+            "brightness": 0.9,
+            "noise": 0,
+            "carrier": 0,
+            "external": 1,
+            "dry": 0,
+            "wet": 1,
+            "release": 0.2,
+            "level": 0.8,
+            "wave": "sawtooth",
+            "preset": "External Synth"
+          }
+        }
+      ]
+    }
+  ]
+}

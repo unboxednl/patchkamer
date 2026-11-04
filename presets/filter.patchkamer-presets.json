@@ -1,0 +1,222 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.filter",
+  "name": "Filter Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Filter: classic low-pass and high-pass tone shaping, band and notch effects, vowel and comb movement, and loud resonant settings.",
+  "tree": [
+    {
+      "folder": "Basics",
+      "items": [
+        {
+          "name": "Soft Lowpass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "lp12",
+            "cut": 4000,
+            "res": 0.1,
+            "drive": 0,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1
+          }
+        },
+        {
+          "name": "Warm Lowpass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "lp24",
+            "cut": 900,
+            "res": 0.25,
+            "drive": 0.1,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1
+          }
+        },
+        {
+          "name": "Tight Highpass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "hp12",
+            "cut": 120,
+            "res": 0.15,
+            "drive": 0,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1
+          }
+        },
+        {
+          "name": "Telephone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "bp",
+            "cut": 1500,
+            "res": 0.55,
+            "drive": 0.3,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1.3
+          }
+        },
+        {
+          "name": "Notch Scoop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "notch",
+            "cut": 800,
+            "res": 0.6,
+            "drive": 0,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Movement",
+      "items": [
+        {
+          "name": "Wah Stop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "bp",
+            "cut": 700,
+            "res": 0.8,
+            "drive": 0.1,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1.2
+          }
+        },
+        {
+          "name": "Vowel Choir",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "vowel",
+            "cut": 1000,
+            "res": 0.5,
+            "drive": 0,
+            "vowel": 0.5,
+            "mix": 1,
+            "gain": 1
+          }
+        },
+        {
+          "name": "Talking Mouth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "vowel",
+            "cut": 1400,
+            "res": 0.8,
+            "drive": 0.2,
+            "vowel": 2.5,
+            "mix": 1,
+            "gain": 0.9
+          }
+        },
+        {
+          "name": "Comb Pipe",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "combp",
+            "cut": 220,
+            "res": 0.7,
+            "drive": 0,
+            "vowel": 0,
+            "mix": 0.7,
+            "gain": 1
+          }
+        },
+        {
+          "name": "Hollow Comb",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "combm",
+            "cut": 440,
+            "res": 0.6,
+            "drive": 0.1,
+            "vowel": 0,
+            "mix": 0.7,
+            "gain": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Aggressive",
+      "items": [
+        {
+          "name": "Ladder Squelch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "ladder",
+            "cut": 600,
+            "res": 0.8,
+            "drive": 0.5,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 1
+          }
+        },
+        {
+          "name": "Screaming Resonance",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "lp24",
+            "cut": 2500,
+            "res": 0.95,
+            "drive": 0.7,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 0.6
+          }
+        },
+        {
+          "name": "Fuzz Wall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "ladder",
+            "cut": 3000,
+            "res": 0.5,
+            "drive": 1,
+            "vowel": 0,
+            "mix": 1,
+            "gain": 0.8
+          }
+        },
+        {
+          "name": "Razor Comb",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "combp",
+            "cut": 110,
+            "res": 0.9,
+            "drive": 0.8,
+            "vowel": 0,
+            "mix": 0.8,
+            "gain": 0.5
+          }
+        }
+      ]
+    }
+  ]
+}
