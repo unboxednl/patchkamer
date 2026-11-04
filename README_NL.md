@@ -39,7 +39,7 @@ De [gebruikershandleiding](docs/USER-MANUAL_NL.md) leidt je er stap voor stap do
 | **Scope** | Een transparante doorvoer die het geluid laat zien: spectrum, golfvorm, spectrogram, stereobeeld en peak/RMS | `devices/tools/Scope/` |
 | **Speakers** | De uitgang: volume, een begrenzer en een uitsteekmeter | `devices/mixer/Speakers/` |
 
-De map `tunes/` bevat **Duofone Styles** (60 tunes in 12 stijlen) en **Acid Baselines Classics** (40 tunes in 8 stijlen).
+De map `tunes/` bevat **Duofone Styles** (60 tunes in 12 stijlen) en **Acid Baselines Classics** (49 tunes in 9 stijlen, waaronder de map **AIcid** die de nieuwste regelaars van Acid Baselines gebruikt).
 
 ## Bouw je eigen apparaten, met of zonder AI
 
