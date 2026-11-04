@@ -49,7 +49,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "clap",
@@ -231,7 +232,7 @@
        }
       ],
       "length": 16,
-      "master": 0.68
+      "master": 0.704
      }
     },
     {
@@ -275,7 +276,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -456,7 +458,7 @@
        }
       ],
       "length": 16,
-      "master": 0.54
+      "master": 0.62
      }
     },
     {
@@ -498,7 +500,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "rim",
@@ -669,7 +672,7 @@
        }
       ],
       "length": 16,
-      "master": 0.473
+      "master": 0.447
      }
     },
     {
@@ -710,7 +713,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -14
        },
        {
         "type": "snare",
@@ -884,7 +888,7 @@
        }
       ],
       "length": 16,
-      "master": 0.324
+      "master": 0.331
      }
     },
     {
@@ -925,7 +929,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -1110,7 +1115,7 @@
        }
       ],
       "length": 16,
-      "master": 0.613
+      "master": 0.649
      }
     }
    ]
@@ -1156,7 +1161,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "clap",
@@ -1338,7 +1344,7 @@
        }
       ],
       "length": 16,
-      "master": 0.68
+      "master": 0.688
      }
     },
     {
@@ -1380,7 +1386,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "rim",
@@ -1534,7 +1541,7 @@
        }
       ],
       "length": 16,
-      "master": 0.496
+      "master": 0.562
      }
     },
     {
@@ -1577,7 +1584,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -23
        },
        {
         "type": "snare",
@@ -1762,7 +1770,7 @@
        }
       ],
       "length": 16,
-      "master": 0.353
+      "master": 0.534
      }
     }
    ]
@@ -1808,7 +1816,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "clap",
@@ -2030,7 +2039,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -14
        },
        {
         "type": "snare",
@@ -2171,7 +2181,7 @@
        }
       ],
       "length": 16,
-      "master": 0.437
+      "master": 0.442
      }
     },
     {
@@ -2212,7 +2222,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "clap",
@@ -2390,7 +2401,7 @@
        }
       ],
       "length": 16,
-      "master": 0.62
+      "master": 0.657
      }
     }
    ]
@@ -2432,7 +2443,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -2611,7 +2623,7 @@
        }
       ],
       "length": 16,
-      "master": 0.606
+      "master": 0.649
      }
     },
     {
@@ -2650,7 +2662,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "snare",
@@ -2835,7 +2848,7 @@
        }
       ],
       "length": 16,
-      "master": 0.613
+      "master": 0.664
      }
     },
     {
@@ -2874,7 +2887,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -3044,7 +3058,7 @@
        }
       ],
       "length": 16,
-      "master": 0.613
+      "master": 0.62
      }
     }
    ]
@@ -3087,7 +3101,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -14
        },
        {
         "type": "snare",
@@ -3256,7 +3271,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "snare",
@@ -3381,7 +3397,7 @@
        }
       ],
       "length": 16,
-      "master": 0.363
+      "master": 0.38
      }
     },
     {
@@ -3419,7 +3435,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -14
        },
        {
         "type": "snare",
@@ -3550,7 +3567,7 @@
        }
       ],
       "length": 16,
-      "master": 0.442
+      "master": 0.452
      }
     }
    ]
@@ -3594,7 +3611,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -17
        },
        {
         "type": "snare",
@@ -3769,7 +3787,7 @@
        }
       ],
       "length": 16,
-      "master": 0.565,
+      "master": 0.553,
       "human": 0.008
      }
     },
@@ -3810,7 +3828,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "clap",
@@ -3977,7 +3996,7 @@
        }
       ],
       "length": 16,
-      "master": 0.335
+      "master": 0.347
      }
     },
     {
@@ -4016,7 +4035,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -17
        },
        {
         "type": "snare",
@@ -4187,7 +4207,7 @@
        }
       ],
       "length": 16,
-      "master": 0.589,
+      "master": 0.582,
       "human": 0.012
      }
     }
@@ -4234,7 +4254,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -4411,7 +4432,7 @@
        }
       ],
       "length": 16,
-      "master": 0.333
+      "master": 0.487
      }
     },
     {
@@ -4452,7 +4473,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -23
        },
        {
         "type": "snare",
@@ -4643,7 +4665,7 @@
        }
       ],
       "length": 16,
-      "master": 0.572,
+      "master": 0.546,
       "human": 0.006
      }
     },
@@ -4685,7 +4707,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -23
        },
        {
         "type": "snare",
@@ -4862,7 +4885,7 @@
        }
       ],
       "length": 16,
-      "master": 0.528
+      "master": 0.559
      }
     }
    ]
@@ -4906,7 +4929,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -5077,7 +5101,7 @@
        }
       ],
       "length": 16,
-      "master": 0.613
+      "master": 0.649
      }
     },
     {
@@ -5118,7 +5142,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "snare",
@@ -5261,7 +5286,7 @@
        }
       ],
       "length": 16,
-      "master": 0.329
+      "master": 0.369
      }
     },
     {
@@ -5305,7 +5330,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "snare",
@@ -5474,7 +5500,7 @@
        }
       ],
       "length": 16,
-      "master": 0.572
+      "master": 0.613
      }
     }
    ]
@@ -5520,7 +5546,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "clap",
@@ -5697,7 +5724,7 @@
        }
       ],
       "length": 16,
-      "master": 0.439
+      "master": 0.579
      }
     },
     {
@@ -5736,7 +5763,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -5897,7 +5925,7 @@
        }
       ],
       "length": 16,
-      "master": 0.465
+      "master": 0.516
      }
     },
     {
@@ -5936,7 +5964,8 @@
           },
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -6073,7 +6102,7 @@
        }
       ],
       "length": 16,
-      "master": 0.585,
+      "master": 0.54,
       "human": 0.008
      }
     }
@@ -6116,7 +6145,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -17
        },
        {
         "type": "snare",
@@ -6275,7 +6305,7 @@
        }
       ],
       "length": 16,
-      "master": 0.504,
+      "master": 0.528,
       "human": 0.006
      }
     },
@@ -6317,7 +6347,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -17
        },
        {
         "type": "snare",
@@ -6498,7 +6529,7 @@
        }
       ],
       "length": 16,
-      "master": 0.487,
+      "master": 0.516,
       "human": 0.006
      }
     },
@@ -6536,7 +6567,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -17
        },
        {
         "type": "snare",
@@ -6667,7 +6699,7 @@
        }
       ],
       "length": 16,
-      "master": 0.407,
+      "master": 0.398,
       "human": 0.008
      }
     }
@@ -6710,7 +6742,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -18
        },
        {
         "type": "ride",
@@ -6885,7 +6918,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -18
        },
        {
         "type": "brush",
@@ -7059,7 +7093,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -18
        },
        {
         "type": "rim",
@@ -7217,7 +7252,7 @@
        }
       ],
       "length": 16,
-      "master": 0.907,
+      "master": 0.876,
       "human": 0.01
      }
     }
@@ -7264,7 +7299,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -7479,7 +7515,7 @@
        }
       ],
       "length": 16,
-      "master": 0.283
+      "master": 0.4
      }
     },
     {
@@ -7517,7 +7553,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -20
        },
        {
         "type": "snare",
@@ -7653,7 +7690,7 @@
        }
       ],
       "length": 16,
-      "master": 0.646
+      "master": 0.661
      }
     },
     {
@@ -7694,7 +7731,8 @@
           null,
           null
          ]
-        ]
+        ],
+        "tune": -22
        },
        {
         "type": "snare",
@@ -7872,7 +7910,7 @@
        }
       ],
       "length": 16,
-      "master": 0.307
+      "master": 0.449
      }
     }
    ]
