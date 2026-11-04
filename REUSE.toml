@@ -23,3 +23,10 @@ path = "songs/**"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Freek van Gool"
 SPDX-License-Identifier = "CC-BY-4.0"
+
+# Recorder bevat de MP3-encoder lamejs (LGPL-3.0) onveranderd als tekstconstante LAME_SRC onderaan het bestand
+[[annotations]]
+path = "devices/tools/Recorder/recorder.patchkamer-device.js"
+precedence = "aggregate"
+SPDX-FileCopyrightText = ["2026 Freek van Gool", "lamejs en LAME, zie de kop onderaan het bestand"]
+SPDX-License-Identifier = "AGPL-3.0-or-later AND LGPL-3.0-only"

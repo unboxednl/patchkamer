@@ -13,3 +13,7 @@ Elke map heeft een eigen licentie. De volledige tekst staat in het `LICENSE`-bes
 | Songs van anderen | Keuze van de maker | De muziek is van de artiest. Patchkamer legt niets op. |
 
 De `LICENSE` in de root (AGPL-3.0) geldt voor alles wat hierboven niet anders is aangegeven.
+
+## Onderdelen van derden
+
+- **lamejs 1.2.1** (MP3-encoder, [LGPL-3.0](LICENSES/LGPL-3.0-only.txt), https://github.com/zhuker/lamejs) zit onveranderd in `devices/tools/Recorder/recorder.patchkamer-device.js`, als de tekstconstante `LAME_SRC` onderaan het bestand. Dat is het bestand `lame.min.js` uit de npm-release. Een apparaat moet één bestand zijn, dus een apart bestand kan niet. Je kunt de constante vervangen door een andere versie of een eigen build van lamejs: hij moet alleen een globale functie `lamejs` met `Mp3Encoder` opleveren. De rest van het bestand blijft AGPL-3.0-or-later. `REUSE.toml` legt dat per bestand vast.

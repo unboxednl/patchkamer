@@ -35,7 +35,7 @@ De [gebruikershandleiding](docs/USER-MANUAL_NL.md) leidt je er stap voor stap do
 | **Leveler** | Houdt het gemiddelde volume van een bron gelijk: een leveler met een begrenzer erachter | `devices/mixer/Leveler/` |
 | **Multitrack** | Een meersporenrecorder voor tot 16 sporen, sample-gelijk, bewaard als WAV (16 of 24 bit, of 32 bit float) | `devices/tools/Multitrack/` |
 | **Notes** | Een notitieblok op de vloer voor ideeën, toonsoort, structuur en een takenlijst; maakt geen geluid | `devices/tools/Notes/` |
-| **Recorder** | Neemt op wat er binnenkomt en laat het ongewijzigd doorlopen; takes kun je als audiobestand bewaren | `devices/tools/Recorder/` |
+| **Recorder** | Neemt op wat er binnenkomt en laat het ongewijzigd doorlopen; takes kun je bewaren als WAV (16 of 24 bit), MP3 of WebM/MP4 | `devices/tools/Recorder/` |
 | **Scope** | Een transparante doorvoer die het geluid laat zien: spectrum, golfvorm, spectrogram, stereobeeld en peak/RMS | `devices/tools/Scope/` |
 | **Speakers** | De uitgang: volume, een begrenzer en een uitsteekmeter | `devices/mixer/Speakers/` |
 
@@ -74,3 +74,5 @@ In [LICENSING.md](LICENSING.md) staat waarom elke keuze is gemaakt.
 ## Licentie
 
 Elke map heeft een eigen licentie, hierboven en in [LICENSING.md](LICENSING.md) vermeld. Het `LICENSE`-bestand in de root (AGPL-3.0) geldt voor alles wat niet anders is aangegeven. Copyright 2026 Freek van Gool.
+
+Onderdeel van derden: het apparaat Recorder maakt MP3-bestanden met [lamejs](https://github.com/zhuker/lamejs) 1.2.1 (LGPL-3.0, [licentietekst](LICENSES/LGPL-3.0-only.txt)), onveranderd opgenomen als losse tekst in `devices/tools/Recorder/recorder.patchkamer-device.js`. De rest van dat bestand is AGPL-3.0-or-later. Zie [LICENSING.md](LICENSING.md).
