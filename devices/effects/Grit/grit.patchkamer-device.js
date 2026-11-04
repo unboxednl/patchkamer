@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Grit en nieuwe id nl.patchkamer.grit (voorheen Roest, nl.patchkamer.roest); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n), setState kapt getallen af op hun bereik en negeert onbekende velden, de saturatie volgt host.audio.oversample.
 //          Bewaker: een kleine worklet begrenst de ingang (±16 = +24 dB) en zet NaN op 0, en een meter controleert om de 50 ms of het filter niet-eindige waarden geeft en vervangt het dan.
@@ -29,8 +30,9 @@ class GritGuard extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', GritGuard);`;
 
 export default {
-  id: 'nl.patchkamer.grit', name: 'Grit', version: '1.11.0', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.grit', name: 'Grit', version: '1.11.1', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out' } } },
+  ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'cc', name: 'CC' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
     const nl = !!host && host.lang === 'nl', NI = nl ? 1 : 2;

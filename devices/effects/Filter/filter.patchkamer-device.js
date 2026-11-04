@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
 //   setState volgt §13: onbekende velden genegeerd, ongeldige waarden op de standaard, getallen afgekapt op hun bereik.
 //   Bewaker: in de worklet wordt de ingang begrensd (±16) en wordt NaN 0, en de toestand van ladder en kamfilter wordt per blok op eindigheid
@@ -91,10 +92,10 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.filter',
   name: 'Filter',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'effect',
   category: 'effect',
-  ui: { width: 320 },
+  ui: { width: 320, minWidth: 280 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
 

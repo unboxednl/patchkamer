@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe id nl.patchkamer.tremolo (voorheen nl.voorbeeld.tremolo); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang; poortnamen in i18n, namen van de stuurbare parameters per taal). setState negeert onbekende velden en kapt getallen af op hun bereik;
 //          het geluid is ongewijzigd.
@@ -20,10 +21,11 @@ const DEF = () => Object.fromEntries(MODP.map(m => [m.id, m.def]));
 export default {
   id: 'nl.patchkamer.tremolo',
   name: 'Tremolo',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out' } } },
+  ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en;
