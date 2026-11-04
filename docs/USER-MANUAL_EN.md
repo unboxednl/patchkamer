@@ -196,8 +196,12 @@ Records what comes in, for example the mix, and passes it on unchanged. Place it
 ![The Recorder card](images/en/15-recorder.png)
 
 - Give the recording a name, then press **● Record** and **■ Stop**. **Record with Start/Stop of the clock** makes it follow the clock.
-- Every take appears in the list with **▶** to listen and **Save**. Takes stay in memory until you close the page; Save gives an audio file (webm/opus or mp4, depending on your browser).
+- **Format** (choose it before you record; it is locked while recording): **WebM/Opus** (or **MP4/AAC**, depending on your browser) gives small files. **WAV 16-bit** and **WAV 24-bit** are lossless. **MP3** adds a **Bitrate** choice (128, 192, 256 or 320 kbps).
+- Every take appears in the list with its format and size, with **▶** to listen and **Save**. Takes stay in memory until you close the page; Save gives an audio file. A WAV or MP3 take keeps the raw sound in memory, about 23 MB per minute at 48 kHz stereo, and the file is made when you press Save (an MP3 takes a moment to make; a message shows the progress).
+- MP3 works at 8–48 kHz and at multiples of 48, 44.1 or 32 kHz (for example 96 kHz, which Recorder brings back to 48 kHz). At another sample rate Recorder says so; WAV always works.
 - A Recorder has **presets**.
+
+**License of the MP3 encoder.** Recorder makes MP3 files with [lamejs](https://github.com/zhuker/lamejs) 1.2.1, a JavaScript version of the LAME encoder. lamejs is free software under the [LGPL-3.0](../LICENSES/LGPL-3.0-only.txt) and sits unchanged in the Recorder file, as one separate piece of text (`LAME_SRC`, at the bottom). You can replace it with another version or your own build of lamejs. The rest of Recorder is AGPL-3.0-or-later. See [LICENSING.md](../LICENSING.md) (in Dutch).
 
 ### Scope
 

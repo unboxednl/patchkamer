@@ -35,7 +35,7 @@ The [user manual](docs/USER-MANUAL_EN.md) walks you through it step by step, wit
 | **Leveler** | Keeps the average volume of a source steady: a leveler with a limiter behind it | `devices/mixer/Leveler/` |
 | **Multitrack** | A multitrack recorder for up to 16 tracks, sample-aligned, saved as WAV (16 or 24 bit, or 32 bit float) | `devices/tools/Multitrack/` |
 | **Notes** | A notepad on the floor for ideas, key, structure and a to-do list; makes no sound | `devices/tools/Notes/` |
-| **Recorder** | Records what comes in and passes it through unchanged; takes can be saved as an audio file | `devices/tools/Recorder/` |
+| **Recorder** | Records what comes in and passes it through unchanged; takes can be saved as WAV (16 or 24 bit), MP3 or WebM/MP4 | `devices/tools/Recorder/` |
 | **Scope** | A transparent pass-through that shows the sound: spectrum, waveform, spectrogram, stereo image and peak/RMS | `devices/tools/Scope/` |
 | **Speakers** | The output: volume, a limiter and a level meter | `devices/mixer/Speakers/` |
 
@@ -74,3 +74,5 @@ See [LICENSING.md](LICENSING.md) for the reasons behind each choice.
 ## License
 
 Each folder has its own license, listed above and in [LICENSING.md](LICENSING.md). The `LICENSE` file in the root (AGPL-3.0) covers everything not stated otherwise. Copyright 2026 Freek van Gool.
+
+Third-party part: the Recorder device makes MP3 files with [lamejs](https://github.com/zhuker/lamejs) 1.2.1 (LGPL-3.0, [license text](LICENSES/LGPL-3.0-only.txt)), included unchanged as a separate piece of text in `devices/tools/Recorder/recorder.patchkamer-device.js`. The rest of that file is AGPL-3.0-or-later. See [LICENSING.md](LICENSING.md).

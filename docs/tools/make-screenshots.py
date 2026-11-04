@@ -109,6 +109,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
     for dev, shot in (('Mixer', '11-mixer'), ('Leveler', '12-leveler'), ('Multitrack', '13-multitrack'), ('Notes', '14-notes'), ('Recorder', '15-recorder'), ('Scope', '16-scope')):
         pg = newpage(nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(2500)
+        if dev == 'Recorder': pg.locator('.card').first.evaluate("c=>{const h=[...c.querySelectorAll('*')].find(e=>e.shadowRoot); const s=[...(h?h.shadowRoot:c).querySelectorAll('select')].find(x=>[...x.options].some(o=>o.value==='mp3')); s.value='mp3'; s.dispatchEvent(new Event('change'))}"); pg.wait_for_timeout(300)   # laat ook de bitratekeuze zien
         pg.locator('.card').first.screenshot(path=OUT + '/' + shot + '.png'); done(pg)
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 

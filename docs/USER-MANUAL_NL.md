@@ -196,8 +196,12 @@ Neemt op wat er binnenkomt, bijvoorbeeld de mix, en laat het ongewijzigd doorlop
 ![De kaart van Recorder](images/nl/15-recorder.png)
 
 - Geef de opname een naam en druk op **● Opnemen** en **■ Stop**. **Opnemen met Start/Stop van de klok** laat hem de klok volgen.
-- Elke take komt in de lijst met **▶** om te beluisteren en **Bewaar**. Takes blijven in het geheugen tot je de pagina sluit; Bewaar geeft een audiobestand (webm/opus of mp4, afhankelijk van je browser).
+- **Formaat** (kies het vóór het opnemen; tijdens het opnemen staat het vast): **WebM/Opus** (of **MP4/AAC**, afhankelijk van je browser) geeft kleine bestanden. **WAV 16-bit** en **WAV 24-bit** zijn zonder verlies. Bij **MP3** komt een keuze **Bitrate** (128, 192, 256 of 320 kbps).
+- Elke take komt in de lijst met zijn formaat en grootte, met **▶** om te beluisteren en **Bewaar**. Takes blijven in het geheugen tot je de pagina sluit; Bewaar geeft een audiobestand. Een WAV- of MP3-take houdt het ruwe geluid in het geheugen, ongeveer 23 MB per minuut bij 48 kHz stereo, en het bestand wordt gemaakt als je op Bewaar drukt (een MP3 maken kost even tijd; een melding toont de voortgang).
+- MP3 werkt bij 8–48 kHz en bij veelvouden van 48, 44,1 of 32 kHz (bijvoorbeeld 96 kHz, dat Recorder terugbrengt naar 48 kHz). Bij een andere sample rate meldt Recorder dat; WAV werkt altijd.
 - Een Recorder heeft **presets**.
+
+**Licentie van de MP3-encoder.** Recorder maakt MP3-bestanden met [lamejs](https://github.com/zhuker/lamejs) 1.2.1, een JavaScript-versie van de LAME-encoder. lamejs is vrije software onder de [LGPL-3.0](../LICENSES/LGPL-3.0-only.txt) en staat onveranderd in het bestand van Recorder, als één losse tekst (`LAME_SRC`, onderaan). Je kunt hem vervangen door een andere versie of een eigen build van lamejs. De rest van Recorder is AGPL-3.0-or-later. Zie [LICENSING.md](../LICENSING.md).
 
 ### Scope
 
