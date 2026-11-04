@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — Plafond achter de stereomix: tot 0,8 (−2 dBFS) ongewijzigd, daarboven zacht naar 1,0 in plaats van boven 0 dBFS te komen. Geen vertraging. De uitgangen per kanaal blijven ongewijzigd.
 // 1.11.1 — Verbeterd: een nieuw of fabrieks-bassdrumkanaal begint met een lage tuning per klankmodel (voorheen 0, waardoor de kick te hoog klonk). Tunes en bewaarde instellingen houden hun eigen tuning; de motor is ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Drum Kit en nieuwe id nl.patchkamer.drumkit (voorheen Slagwerk, nl.patchkamer.slagwerk); tunes en songs uit die tijd
 //          verwijzen naar de oude id. Tweetalig (host.lang; namen van het apparaat en de poorten per taal in i18n; alle teksten in TXT). De twee eerste
@@ -116,8 +117,9 @@ const CSS=`
 // Uitgangsniveau: een vaste factor op de stereomix en op de kanaaluitgangen. Gemeten met de standaardgroove (10 s, 120 BPM): met .36 lag de piek op −18 dBFS,
 // ruim 15 dB onder andere apparaten; met deze waarde op ongeveer −3 dBFS. De verhouding tussen de kanalen verandert niet.
 const OUT_TRIM=.36*5.5;
+const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.11.1',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.11.2',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -128,7 +130,8 @@ const __pkDef = {
  const own=n=>(owned.add(n),n),gain=()=>own(ctx.createGain());
  const mix=gain();mix.gain.value=state.master*OUT_TRIM;
  const mixMeter=own(ctx.createAnalyser());mixMeter.fftSize=512;mix.connect(mixMeter);
- const outputs={mix};
+ const ceilPre=gain(),ceilShaper=own(ctx.createWaveShaper()),ceilPost=gain();ceilPre.gain.value=.5;ceilPost.gain.value=2;ceilShaper.curve=CEIL_CURVE;ceilShaper.oversample='none';mix.connect(ceilPre).connect(ceilShaper).connect(ceilPost);
+ const outputs={mix:ceilPost};
  const noiseBuffer=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*2),ctx.sampleRate),nd=noiseBuffer.getChannelData(0);let seed=74133;
  for(let i=0;i<nd.length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;nd[i]=seed/2147483648-1;}
  const curves=Array.from({length:41},(_,j)=>{const a=new Float32Array(1024),k=j/40*12;for(let i=0;i<a.length;i++){const x=i/(a.length-1)*2-1;a[i]=k?Math.tanh(x*(1+k))/Math.tanh(1+k):x;}return a;});
