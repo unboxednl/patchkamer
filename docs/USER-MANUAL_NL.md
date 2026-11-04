@@ -136,6 +136,29 @@ Een keyboard dat zelf geen geluid maakt. Het stuurt noten naar andere apparaten.
 
 Een synth in analoge stijl met twee onafhankelijke toonhoogten, een gedeeld filter en een gedeelde VCA, met ringmodulatie, hard sync en sample & hold. Verbind Keys met de poort **Keyboard / noten** en de uitgang **Stereo** met Speakers.
 
+### Mixer
+
+Een mengpaneel met 1 tot 32 kanalen en 0 tot 8 groepen, en een master met een begrenzer. Verbind de apparaten die geluid maken met de kanaalingangen (**1**, **2**, …) en de poort **Uit** van de master met Speakers.
+
+![De kaart van Mixer](images/nl/11-mixer.png)
+
+- **Kanalen** en **Groepen** bepalen hoeveel er zijn. De poorten op de kaart komen en gaan mee. Elk kanaal heeft een ingang, een poort **send** en een poort **ret** (return). Typ in het naamveld om een kanaal een naam te geven.
+- Per kanaal: **Trim**, een **EQ** van 3 of 5 banden (kies onder **EQ**), **Send**, **Return**, de groep waar het heen gaat (**→ M** is de master), **Pan**, een fader met een niveaumeter, en **M** (mute) en **S** (solo). Groepen en de master hebben ook een EQ, send/return en een fader, en achter de master zit een begrenzer. Dubbelklik op een schuif om terug te gaan naar de beginwaarde.
+- **Gelijk trekken** meet 4 seconden en zet de trim van elk kanaal zo dat alle bronnen op het **Doel**niveau binnenkomen. **Doorlopend** houdt ze daar langzaam op (hooguit 3 dB per seconde).
+- **Bundels.** Een groene bundelkabel (bijvoorbeeld de losse uitgangen van een drumcomputer) gaat in **bundel in**; kies per kanaal onder het naamveld welk bundelkanaal daar binnenkomt. **Kanalen uit** stuurt alle kanalen, na het mixen, als één bundel door, bijvoorbeeld naar een recorder. **+ groepen en mix** voegt de groepen en de totale mix toe.
+- Een Mixer heeft **presets** (hij maakt zelf geen geluid). Een preset bewaart de instellingen maar niet de bronkeuzes van de kanalen.
+
+### Leveler
+
+Houdt het gemiddelde volume van een bron gelijk. Zet hem tussen een instrument en de Mixer, of op de mix vóór Speakers. Dat helpt bij bronnen die langzaam harder en zachter worden, bijvoorbeeld door een modulator.
+
+![De kaart van Leveler](images/nl/12-leveler.png)
+
+- **Stand:** *Regelen* of *Doorlaten* (het geluid gaat ongewijzigd door).
+- **Doelniveau** is het niveau waar hij naartoe regelt. **Reactietijd** is hoe snel het volume omhoog of omlaag gaat (omlaag is drie keer zo snel). **Meettijd** is de tijd waarover hij meet. **Bereik ±** is hoeveel hij het volume hooguit omhoog of omlaag draait. Onder de **Stiltedrempel** blijft het volume staan, zodat galmstaarten en pauzes niet worden opgeblazen. **Plafond** is de grens van de begrenzer erachter, die pieken opvangt.
+- De meter toont **IN**, **UIT** en **REGEL**, met een lampje voor de begrenzer. **Huidig niveau = doel** zet het doelniveau op wat er nu binnenkomt. **Regeling op 0** zet de correctie terug op 0.
+- Een Leveler heeft **presets**. Zonder AudioWorklet in je browser laat hij het geluid ongewijzigd door en meldt dat.
+
 ## 7. Tunes en presets
 
 Een **tune** is een volledige instelling van één apparaat dat geluid maakt: alle knoppen, patronen en keuzes. Een **preset** is hetzelfde voor een apparaat zonder eigen geluid, zoals een effect of een mixer. Geen van beide bevat kabels.
