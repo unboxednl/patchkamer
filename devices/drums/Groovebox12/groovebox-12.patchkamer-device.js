@@ -225,6 +225,8 @@ export default {
   create(ctx0, host) {
     const TX = TXT[host && host.lang] || TXT.en;
     const live = new Set(), ctx = __ctxProxy(ctx0, live), OUT = ctx0.createGain();
+    // Uitgangsniveau: gemeten met de standaardsong stond de piek op +3 dBFS (boven volle schaal); met deze trim op ongeveer −3 dBFS. De losse uitgangen (bundel) staan vóór deze trim.
+    OUT.gain.value = 0.5;
     let api = null, pending = null;
     function __init(ROOT) {
 
