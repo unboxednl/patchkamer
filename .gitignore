@@ -1,2 +1,3 @@
 # Werkafspraken voor Claude: niet publiek
 CLAUDE.md
+.claude/settings.local.json
