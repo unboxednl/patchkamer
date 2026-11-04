@@ -1,4 +1,6 @@
-# Patchkamer — Instrumentcontract v1.3 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.4 voor bouwende agents
+
+_Wijzigingen in v1.4: snelle (sample-nauwkeurige) sturing met `fast: true` + `modInput(paramId)` en `host.modSignal`; eigen DSP via AudioWorklet met `host.loadWorklet(naam, code)`. Optioneel: apparaten uit v1.3 werken ongewijzigd._
 
 _Wijzigingen in v1.3: sturing. Een nieuwe kabelsoort (`mod`, paars gestippeld) stuurt parameters in plaats van geluid. Apparaten geven hun stuurbare parameters op met `params()` en ontvangen `modulate(offsets)`; modulatoren (`kind: 'modulator'`) sturen met `host.modulate`. Volledig optioneel: apparaten uit v1.2 werken ongewijzigd._
 
@@ -275,7 +277,55 @@ create(ctx, host) {
 - Een modulator mag ook een sturingsingang hebben (bijvoorbeeld `volg`) om met andere modulatoren samen te werken; `onModSources` vertelt wie er op welke ingang zit.
 - Modulatie loopt los van de transportknop: een modulator blijft bewegen, ook als de klok stilstaat. Plan dus niets op `onStep`.
 
-Voorbeelden: `mono11.js` (Monosynth 1.1.0, één spoor), `drums11.js` (Drumcomputer 1.1.0, vier sporen), `driftmod.js` (Drift · modulator, met groepen en volgen).
+Voorbeelden: `instrumenten/monosynth.js` (één spoor), `instrumenten/drumcomputer.js` (vier sporen), `modulatie/drift-modulator.js` (groepen en volgen).
+
+## 7c. Snelle sturing (v1.4)
+
+`host.modulate` werkt op ongeveer 20–30 updates per seconde: goed voor trage beweging (Drift), te grof voor een LFO op 1/16. Daarom kan een parameter **snel** zijn: de modulator levert dan een audiosignaal, sample-nauwkeurig.
+
+**Bestuurbaar apparaat.** Markeer de parameter met `fast: true` in `params()` en implementeer `modInput(paramId)`. Die geeft een AudioNode (of AudioParam) die een signaal **−1..1** ontvangt, als deel van het bereik, net als bij `modulate`. Jij rekent het om en telt het op bij de knop:
+
+```js
+const FAST = { cut: 1200 * Math.log2(8000 / 80), lvl: 1 };   // −1..1 → cents (log) of eenheden (lin)
+modInput(id) {
+  if (!(id in FAST)) return null;                // null voor trage of onbekende parameters
+  if (fastIn[id]) return fastIn[id];
+  const g = ctx.createGain(); g.gain.value = FAST[id];
+  ({ cut: [filter.detune], lvl: [out.gain] })[id].forEach(p => g.connect(p));
+  return (fastIn[id] = g);
+}
+```
+
+Tip: voor frequenties werkt `detune` (cents) van BiquadFilter en Oscillator perfect als logaritmische optelling. Zet ook de trage offsets voor deze parameters via een ConstantSource op dezelfde bus. Dan klinken Drift (traag) en LFO (snel) samen continu, ook tussen noten door.
+
+**Modulator.** Maak je signaal (bijvoorbeeld een ConstantSource waarop je stukjes curve vooruit plant), en verbind per toewijzing een GainNode (de diepte):
+
+```js
+const ok = host.modSignal(this, targetId, paramId, gainNode);   // true: verbonden; false: doel biedt het niet
+// false → stuur deze parameter via host.modulate; null als node maakt de verbinding los
+```
+
+De host verbreekt de verbinding zelf als de kabel of een apparaat verdwijnt. Roep `modSignal` opnieuw aan in elke `onModTargets`, want na een versiewissel is het doel nieuw.
+
+## 7d. Eigen DSP met AudioWorklet (v1.4)
+
+Voor wat Web Audio-nodes niet kunnen (ladderfilter met terugkoppeling, korte vertraging in een lus, Hilbert-filter, Karplus-Strong):
+
+```js
+const NAME = 'jouwnaam-mijnfilter-1';           // uniek, met versienummer: een naam kan maar één keer geregistreerd worden
+const CODE = `class P extends AudioWorkletProcessor { process(inputs, outputs, params) { … return true; } }
+registerProcessor('${NAME}', P);`;
+host.loadWorklet(NAME, CODE)
+  .then(() => { node = new AudioWorkletNode(ctx, NAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] }); input.connect(node).connect(out); })
+  .catch(() => { /* toon een melding en laat het geluid onbewerkt door */ });
+```
+
+- De host laadt de code als blob en valt terug op een data-URL. Daardoor werkt het ook vanuit een los HTML-bestand (`file://`).
+- Laat je apparaat werken zonder worklet: bypass en een korte melding in de UI. Controleer `typeof AudioWorkletNode`.
+- Wijzig je de worklet-code, verhoog dan het versienummer in de naam. Een oude registratie blijft in de AudioContext bestaan.
+- Noten naar een worklet stuur je met `node.port.postMessage({ note, t, dur })` en plan je in de processor op `currentTime`.
+
+Voorbeelden: `effecten/flanger.js`, `effecten/filter.js`, `effecten/resonator.js`, `effecten/freqshift.js`, `instrumenten/string.js`.
 
 ## 8. State
 
@@ -309,6 +359,7 @@ Voorbeelden: `mono11.js` (Monosynth 1.1.0, één spoor), `drums11.js` (Drumcompu
 7. `setState(getState())` levert hetzelfde geluid en dezelfde UI.
 8. `setState(getState())` levert byte-voor-byte dezelfde state (de validator controleert dit).
 9. Bij een nieuwe versie van een bestaand apparaat: zelfde `id`, hogere `version`, poort-id's behouden, `setState` accepteert de state van de vorige versie.
+10b. Snel (optioneel): `fast: true` alleen waar `modInput(id)` een echte ingang geeft; worklet-naam uniek met versie, en een terugval zonder worklet.
 10. Bestuurbaar (optioneel): `params()` en `modulate()` allebei aanwezig, ids stabiel, `modulate({})` zet alles terug naar de knopstand.
 11. `node validate-instrument.mjs jouw-bestand.js` geeft `OK`.
 
@@ -425,24 +476,62 @@ onEvent(port, ev) {
 
 1. **Statisch**: default export; `id` reverse-DNS; `version` semver; `kind` geldig; `ui.width` 200–6000; poort-id's geldig en uniek; geen `ctx.destination` (tenzij `output`), geen browseropslag, geen netwerk, geen `import`, geen eigen `AudioContext`.
 2. **Levenscyclus**: `create` → `getState` vóór `mount` → `mount` → `onTransport(start)` → 32 × `onStep` → `onEvent` met note, legato-note, trig, cc en een onbekend type op elke `eventIn`-poort → `onTransport(stop)`.
+2c. **Snel en worklets (v1.4)**: parameters met `fast: true` vragen `modInput(id)` die een AudioNode of AudioParam geeft (en `null` voor onbekende ids); modulatoren krijgen `onModTargets([])` en een tweede keer de doelen; `host.modSignal` krijgt een echte AudioNode; `host.loadWorklet` krijgt een naam en code met `registerProcessor(...)`.
 2b. **Sturing (v1.3)**: `params()` en `modulate()` samen aanwezig; elke parameter met unieke `id`, `name`, `min < max`, geldige `scale`/`drift`; `modulate` met alles op 1, −1 en 0,37, met onbekende ids en met `{}`. Bij `kind: 'modulator'`: minstens één `modOut`, `onModTargets` met een nepdoel, en `host.modulate` alleen met getallen tussen −1 en 1.
 3. **State**: JSON-serialiseerbaar, geen AudioNodes, en `setState(getState())` geeft dezelfde state terug; `setState({})` moet werken.
 4. **Opruimen**: `unmount`, dan tweemaal `destroy`; `emit` alleen op gedeclareerde `eventOut`-poorten.
 
 Uitvoer: één regel `OK  Naam versie (id) — …` met exitcode 0, of `FOUT: …` met de eerste fout en exitcode 1. Geschikt om in een agentloop te lezen.
 
+## Bibliotheken en werkruimtes
+
+### Een bibliotheek publiceren
+Patchkamer heeft zelf **geen** apparaten; alles komt uit **bronnen**: een GitHub-repo (of een map daarin), een webadres, of een map op de computer. Een bibliotheek is gewoon een map met modules volgens dit contract.
+
+```
+mijn-patchkamer-bieb/
+  patchkamer.json        (optioneel)
+  echo.js
+  synths/wolk.js
+```
+
+- Zonder `patchkamer.json` laadt Patchkamer elk `.js`/`.mjs`-bestand in de map en de submappen (tot drie niveaus diep). `node_modules`, `test(s)`, `*.test.js` en de validator worden overgeslagen, net als bestanden die geen `export default { … create(…) }` bevatten.
+- Met `patchkamer.json` bepaal je het zelf: `{ "name": "Mijn bieb", "modules": ["echo.js", "synths/wolk.js"], "workspaces": [{ "name": "Startpunt", "path": "werkruimtes/startpunt.patchkamer.json" }] }`. `workspaces` (optioneel) zijn startwerkruimtes die in het werkruimtepaneel onder *Uit je bibliotheken* verschijnen; zonder manifest telt elk `*.patchkamer.json`-bestand als werkruimte. Gebruik bestandsnamen zonder spaties. Paden zijn relatief aan het manifest. Voor een gewone webserver (geen GitHub) is het manifest nodig, omdat een webserver geen maplijst geeft.
+- Een GitHub-bron haalt de bestanden op via `raw.githubusercontent.com`; de repo moet openbaar zijn.
+
+### Bestanden aan de gebruiker geven (optioneel)
+`host.saveFile(bestandsnaam, data)` (data: tekst of Blob) laat de gebruiker een bestand bewaren, ook binnen de gepubliceerde weergave, en geeft `'saved'` of `'declined'`. Controleer eerst of de functie bestaat. Voorbeeld: `hulpmiddelen/opname.js`.
+
+### Wat een werkruimte bewaart
+Een werkruimtebestand (`Naam.patchkamer.json`) bevat de naam van de compositie, tempo, swing, beeld, alle apparaten met positie, grootte en `getState()`, de kabels, en per extern instrument **waar het vandaan komt**: `{ id, version, src: { kind, url | path, label } }`. Bij het openen haalt Patchkamer elk ontbrekend instrument van die plek. Code gaat alleen mee voor instrumenten zonder vaste plek (los bestand, geplakte code), of als de gebruiker dat aanvinkt.
+
+Gevolgen voor bouwers:
+- Houd **bestandsnaam en pad stabiel**: een werkruimte zoekt op die plek.
+- Houd **`id` en poort-id's stabiel** en verhoog `version` bij elke wijziging. Staat er bij het openen een andere versie op de bron, dan gebruikt Patchkamer die en meldt dat. `setState` moet dus de state van eerdere versies accepteren (zie §8).
+- Wil je dat oude werkruimtes exact de oude versie krijgen, zet de nieuwe versie dan in een **nieuw bestand** (`echo-1.1.0.js`) en laat het oude staan.
+
 ## Bestaande apparaten als referentie
+
+Alle apparaten staan in de map **patchkamer-bibliotheek** (paden hieronder relatief daaraan).
+
 
 | Apparaat | id | Laat zien |
 |---|---|---|
-| Tremolo | `nl.voorbeeld.tremolo` | kleinste effect: audio in/uit, twee knoppen |
+| Tremolo 1.1.0 | `nl.voorbeeld.tremolo` | kleinste effect: audio in/uit, twee knoppen; kleinste bestuurbare apparaat |
 | Klik | `nl.voorbeeld.klik` | klok-gestuurd, stuurt trig-gebeurtenissen |
-| Drone Synth | `nl.patchkamer.drone` | Shadow DOM met tabbladen, noten- en CC-ingang, stil bij stop |
-| Acid 303 · Devil Fish | `nl.patchkamer.acid303` | eigen sequencer én externe noten, slide via overlappende noten |
-| Takt Twaalf | `nl.patchkamer.takt12` | volledige groovebox als module, `host.setTempo` op demoknoppen |
+| Drone Synth 1.2.0 | `nl.patchkamer.drone` | bestuurbaar in vijf sporen met een aparte lichte `applyMod()` die toonhoogte en sequencer-gate met rust laat; Shadow DOM met tabbladen, noten- en CC-ingang, stil bij stop |
+| Acid 303 · Devil Fish 1.3.0 | `nl.patchkamer.acid303` | eigen sequencer én externe noten, slide via overlappende noten; bestuurbaar groot apparaat in Shadow DOM: `params()` + `modulate()` naast CC-ingang en knoppen |
+| Takt Twaalf 1.2.0 | `nl.patchkamer.takt12` | bestuurbaar per track bovenop p-locks; meldt `host.paramsChanged` als een machine of naam verandert; volledige groovebox als module, `host.setTempo` op demoknoppen |
 | Drift | `nl.patchkamer.drift` | groot apparaat, state inclusief driftgeneratoren voor exact herstel |
 | Monosynth 1.1.0 | `nl.patchkamer.mono` | bestuurbaar: `params()` + `modulate()`, één spoor, log-schaal voor cutoff en decay |
 | Drumcomputer 1.1.0 | `nl.patchkamer.drums` | bestuurbaar met een spoor per drumgeluid, leest de state van 1.0.0 |
+| Opname | `nl.patchkamer.opname` | audio door, `MediaRecorder` op een `MediaStreamDestination`, `host.saveFile` |
+| Notities | `nl.patchkamer.notities` | apparaat zonder poorten of geluid; alleen state |
+| Polysynth | `nl.patchkamer.polysynth` | meerstemmig met stemmenbeheer; snelle bussen per parameter die met elke stem verbonden worden |
+| String | `nl.patchkamer.string` | instrument als AudioWorklet; noten via `port.postMessage` |
+| LFO, MSEG, Macro | `nl.patchkamer.lfo` · `.mseg` · `.macro` | modulatoren met `host.modSignal` (snel) en `host.modulate` (terugval); tempo via `onStep` |
+| Filter, Flanger, Resonator, Frequency Shifter | `nl.patchkamer.filter` · `.flanger` · `.resonator` · `.freqshift` | `host.loadWorklet`, terugval zonder worklet, snelle ingang op een worklet-parameter |
+| Chorus, Phaser | `nl.patchkamer.chorus` · `.phaser` | effecten met gewone nodes, LFO op tempo |
 | Drift · modulator | `nl.patchkamer.driftmod` | `kind: 'modulator'`: `onModTargets`, `host.modulate`, groepen en volgen via `onModSources` |
 | Mixer 2.1.0 | `nl.patchkamer.mixer` | `host.setPorts` bij een ander aantal kanalen/groepen, `ui.jacks` met poorten in de strips, leest de state van 1.x en 2.0 |
 
