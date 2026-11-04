@@ -11,7 +11,7 @@ Patchkamer is een modulaire muziekstudio in de browser op Web Audio: één HTML-
 | `contract/PATCHKAMER-CONTRACT.md` | Het contract: de volledige, zelfstandige instructie voor het bouwen van een apparaat | **Lees dit.** Je hebt geen andere bron nodig |
 | `contract/validate-instrument.mjs` | De validator die controleert of je apparaat aan het contract voldoet | **Draai dit** voor je oplevert |
 | `patchkamer/patchkamer.html` | De host (de studio). Hierin test je wat de validator niet kan zien | Zie `patchkamer/AGENTS.md` |
-| `devices/` | De meegeleverde apparaten | **Hier zet je je apparaat neer** |
+| `devices/<categorie>/<Naam>/` | De meegeleverde apparaten: één map per apparaat binnen een categorie, bijvoorbeeld `devices/synths/Duofone/duofone.patchkamer-device.js` | **Hier zet je je apparaat neer.** Heeft het apparaat een eigen `AGENTS.md`, lees die dan ook |
 | `tunes/` | Klanken van apparaten die geluid maken (`kind: 'instrument'`) | Zie `tunes/AGENTS.md` |
 | `presets/` | Instellingen van apparaten zonder eigen geluid | Contract §13c, licentie `CC0-1.0` |
 | `songs/` | Meegeleverde songs | Niet aanraken tenzij gevraagd |
@@ -24,7 +24,7 @@ Het contract en de validator horen bij elkaar. Controleer dit **voor je begint**
 head -1 contract/PATCHKAMER-CONTRACT.md contract/validate-instrument.mjs
 ```
 
-Beide regels moeten dezelfde versie noemen (nu v1.9: "Instrumentcontract v1.9" en "Patchkamer contract v1.9"). Het getal bij `patchkamer:` in `patchkamer/patchkamer.html` hoort daar ook mee gelijk te zijn.
+Beide regels moeten dezelfde versie noemen (nu v1.10: "Instrumentcontract v1.10" en "Patchkamer contract v1.10"). Het getal bij `patchkamer:` in `patchkamer/patchkamer.html` hoort daar ook mee gelijk te zijn.
 
 - Noemen ze verschillende versies, **stop dan** en meld dat. Gok niet welke goed is en meng nooit een contract van de ene met een validator van de andere versie.
 - Heb je bewust een oudere versie nodig, haal dan **beide** uit dezelfde tag: `git show contract/v1.8:contract/PATCHKAMER-CONTRACT.md` en `git show contract/v1.8:contract/validate-instrument.mjs`. Zet ze buiten de repo (bijvoorbeeld in je tijdelijke map), niet in `contract/`.
@@ -34,14 +34,16 @@ Beide regels moeten dezelfde versie noemen (nu v1.9: "Instrumentcontract v1.9" e
 ## Werkwijze
 
 1. **Lees het contract** (`contract/PATCHKAMER-CONTRACT.md`) volledig. Let vooral op §21 (opdrachtformaat), §18 (checklist), §19 (veelgemaakte fouten) en de voorbeelden in §20. Een opdracht komt in de vorm van §21; ontbreekt iets in de opdracht dat je nodig hebt, kies dan het eenvoudigste dat het contract toestaat en meld dat.
-2. **Schrijf één bestand** in `devices/`:
-   - één `.js`-module met een default export, zonder `import`, zonder netwerk, zonder browseropslag, zonder eigen `AudioContext` (de validator weigert dat);
-   - bestandsnaam in kleine letters met streepjes, afgeleid van de naam, **zonder versienummer** (`tremolo.js`, niet `tremolo-v2.js`). De versie staat in het veld `version` (semver). Eerdere versies staan in de git-geschiedenis, niet in losse bestanden;
+2. **Schrijf één bestand** in een eigen map in `devices/`:
+   - de map is `devices/<categorie>/<Naam>/`, met de naam met een hoofdletter (`devices/effects/Tremolo/`). Kies een bestaande categorie; bestaat de juiste niet, meld dat dan in plaats van er een te verzinnen. In die map staat het apparaat en, als dat nuttig is, een eigen `AGENTS.md` (zie `devices/synths/Duofone/`);
+   - één JavaScript-module (ES-module) met een default export, zonder `import`, zonder netwerk, zonder browseropslag, zonder eigen `AudioContext` (de validator weigert dat);
+   - bestandsnaam `<naam>.patchkamer-device.js`, met de naam in kleine letters met streepjes, afgeleid van de naam van het apparaat, **zonder versienummer** (`tremolo.patchkamer-device.js`, niet `tremolo-v2.patchkamer-device.js`). Op de eindgedeelte `.patchkamer-device.js` herkent Patchkamer een apparaat; hulpscripts in dezelfde map krijgen die naam niet. De versie staat in het veld `version` (semver). Eerdere versies staan in de git-geschiedenis, niet in losse bestanden;
+   - zet geen merknamen of productnamen van bestaande instrumenten in `name`, bestandsnaam, `id`, teksten of commentaar. Een korte omschrijving als "geïnspireerd op klassieke analoge synths" mag;
    - `id` in reverse-DNS (`nl.<naam>.<apparaat>`), uniek en voor altijd gelijk;
    - eerste regel: `// SPDX-License-Identifier: AGPL-3.0-or-later`.
 3. **Valideer** vanuit de root van de repo:
    ```
-   node contract/validate-instrument.mjs devices/<naam>.js
+   node contract/validate-instrument.mjs devices/<categorie>/<Naam>/<naam>.patchkamer-device.js
    ```
    Het resultaat moet één `OK`-regel zijn (exit 0), **zonder waarschuwing** (`let op`). Bij een fout (exit 1) staat de eerste fout in de uitvoer: herstel en draai opnieuw. Meld nooit "klaar" zolang de validator niet `OK` geeft.
 4. **Loop de checklist** uit §18 langs. De validator kan niet zien of het goed klinkt, of eigen HTML-knoppen meebewegen, of je timing klopt. Test dat in de host als je een browser tot je beschikking hebt (`patchkamer/AGENTS.md`). Heb je die niet, schrijf dan in je oplevering dat dit **niet getest** is. Beweer niet dat het werkt.
