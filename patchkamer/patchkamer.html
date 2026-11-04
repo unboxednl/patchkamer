@@ -372,6 +372,10 @@ body.nopbar .pbar{display:none}
 .pritem .nm small{color:var(--muted);margin-left:6px;font-size:10px}
 .pritem .b{display:flex;gap:3px} .pritem .b button{padding:1px 6px;font-size:10px}
 .pritem input{font-size:12px;padding:2px 4px;width:100%}
+/* tekstgrootte van de hostteksten (menu's, panelen, dialogen); apparaten en de vloer blijven zoals ze zijn */
+:root{--pkfs:1}
+.wspanel{top:calc(60px/var(--pkfs));right:calc(16px/var(--pkfs));max-height:calc((100vh - 80px)/var(--pkfs));width:min(460px,calc((100vw - 32px)/var(--pkfs)))}
+.pkmodal .box,.focusview .fvbar,.floorempty .box,.toast{zoom:var(--pkfs)}
 </style>
 
 <header>
@@ -450,6 +454,7 @@ body.nopbar .pbar{display:none}
   <div class="wsrow"><label><span data-i18n="ui.kabeldekking">Kabeldekking</span>&nbsp;<input type="range" id="cabOp" min="0.15" max="1" step="0.05" value="1" style="width:140px;vertical-align:middle"> <output id="cabOpV">100%</output></label></div>
   <div class="wsrow"><label><span data-i18n="ui.schaal">Schaal</span>&nbsp;<select id="scaleSel"></select></label> <span class="note" id="scaleNote"></span></div>
   <div class="wsrow"><label><span data-i18n="ui.knoppen_van_de_host">Knoppen van de host</span>&nbsp;<select id="knobStyle"><option value="slider" data-i18n="ui.schuif">schuif</option><option value="rotary" data-i18n="ui.draaiknop">draaiknop</option></select></label></div>
+  <div class="wsrow"><label><span data-i18n="ui.tekstgrootte_menus">Tekstgrootte menu's en bibliotheek</span></label>&nbsp;<button class="small" id="libFsDown" title="kleinere tekst" data-i18n-title="attr.kleinere_tekst">A−</button> <output id="libFsV" style="min-width:4ch;display:inline-block;text-align:center">14 px</output> <button class="small" id="libFsUp" title="grotere tekst" data-i18n-title="attr.grotere_tekst">A+</button></div>
   <h3 style="margin-top:12px" data-i18n="ui.browsergeheugen">Browsergeheugen</h3>
   <div class="note" style="margin-bottom:6px" data-i18n="ui.browsergeheugen_uitleg">Patchkamer onthoudt in deze browser je instellingen, bibliotheekindeling (ook eigen categorieën), bronnen, werkruimte en eigen tunes en presets. Hiermee wis je dat allemaal en begint Patchkamer opnieuw. Bestanden op je computer en op GitHub blijven staan.</div>
   <div class="wsrow"><button class="small" id="wipeBtn" data-i18n="ui.browsergeheugen_wissen">Browsergeheugen wissen…</button></div>
@@ -473,7 +478,7 @@ body.nopbar .pbar{display:none}
     </div></div>
   </div>
   <section class="libwin" id="libwin" aria-label="Bibliotheek" data-i18n-aria="attr.bibliotheek">
-    <div class="libbar" id="libbar"><span class="t" data-i18n="ui.bibliotheek">Bibliotheek</span><span class="cnt" id="libCount"></span><button id="libCfgBtn" title="categorieën toevoegen, hernoemen, verwijderen en de indeling bewaren of laden" aria-expanded="false" aria-controls="libCfg" data-i18n-title="attr.categorie_n_toevoegen_hernoemen_verwijderen" data-i18n="ui.indeling">Indeling</button><button id="libFsDown" title="kleinere tekst" data-i18n-title="attr.kleinere_tekst">A−</button><button id="libFsUp" title="grotere tekst" data-i18n-title="attr.grotere_tekst">A+</button><button id="libMin" title="inklappen" data-i18n-title="attr.inklappen">—</button></div>
+    <div class="libbar" id="libbar"><span class="t" data-i18n="ui.bibliotheek">Bibliotheek</span><span class="cnt" id="libCount"></span><button id="libCfgBtn" title="categorieën toevoegen, hernoemen, verwijderen en de indeling bewaren of laden" aria-expanded="false" aria-controls="libCfg" data-i18n-title="attr.categorie_n_toevoegen_hernoemen_verwijderen" data-i18n="ui.indeling">Indeling</button><button id="libMin" title="inklappen" data-i18n-title="attr.inklappen">—</button></div>
     <div class="libbody">
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
       <div class="libcfg" id="libCfg" hidden></div>
@@ -578,6 +583,7 @@ const I18N={
    "ui.schuif":"schuif",
    "ui.draaiknop":"draaiknop",
    "ui.knoppen_van_de_host":"Knoppen van de host",
+   "ui.tekstgrootte_menus":"Tekstgrootte menu's en bibliotheek",
    "ui.contract_opstelling":"Contract & opstelling",
    "ui.contract":"Contract",
    "ui.validator":"validator",
@@ -1101,6 +1107,7 @@ const I18N={
    "ui.schuif":"slider",
    "ui.draaiknop":"rotary knob",
    "ui.knoppen_van_de_host":"Host controls",
+   "ui.tekstgrootte_menus":"Text size of menus and library",
    "ui.contract_opstelling":"Contract & setup",
    "ui.contract":"Contract",
    "ui.validator":"validator",
@@ -1572,7 +1579,7 @@ try{ PKS.mode=localStorage.getItem('patchkamer.scaleMode')||'auto'; PKS.pct=+(lo
 function pksAuto(){ const h=window.innerHeight||1000, w=window.innerWidth||1400; return Math.max(0.55,Math.min(1,Math.round(Math.min(h/700,w/1100)*20)/20)); }   // 100%, behalve op een erg klein scherm (tablet, telefoon: onder ±700 px hoog of ±1100 px breed)
 function pksTarget(){ return PKS.mode==='auto'?pksAuto():Math.max(0.5,Math.min(1.5,PKS.pct/100)); }
 PKS.f=pksTarget(); PKS.ui=Math.max(0.7,PKS.f);
-(function(){ const st=document.createElement('style'); st.textContent='header,.wspanel,.focusview,.libwin{zoom:var(--pkui,1)}'; document.head.appendChild(st); document.documentElement.style.setProperty('--pkui',String(PKS.ui)); })();
+(function(){ const st=document.createElement('style'); st.textContent='.focusview,.libwin{zoom:var(--pkui,1)} header,.wspanel{zoom:calc(var(--pkui,1)*var(--pkfs,1))}'; document.head.appendChild(st); document.documentElement.style.setProperty('--pkui',String(PKS.ui)); })();
 
 (() => {
 const $=id=>document.getElementById(id);
@@ -2338,8 +2345,10 @@ libGesture(libwin.querySelector('.rz.se'),(st,dx,dy)=>{ LIB.w=st.w+dx; LIB.h=st.
 libGesture(libwin.querySelector('.rz.w'),(st,dx)=>{ const w=clamp(st.w-dx,260,4000); LIB.x=st.x+(st.w-w); LIB.w=w; });
 $('libbar').addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; LIB.min=!LIB.min; placeLib(); saveLib(); });
 $('libMin').onclick=()=>{ LIB.min=!LIB.min; placeLib(); saveLib(); };
-$('libFsUp').onclick=()=>{ LIB.fs=clamp(LIB.fs+1,11,22); placeLib(); saveLib(); };
-$('libFsDown').onclick=()=>{ LIB.fs=clamp(LIB.fs-1,11,22); placeLib(); saveLib(); };
+function paintLibFs(){ LIB.fs=clamp(+LIB.fs||14,11,18); document.documentElement.style.setProperty('--pkfs',String(LIB.fs/14)); $('libFsV').textContent=LIB.fs+' px'; $('libFsDown').disabled=LIB.fs<=11; $('libFsUp').disabled=LIB.fs>=18; }
+$('libFsUp').onclick=()=>{ LIB.fs=clamp(LIB.fs+1,11,18); placeLib(); saveLib(); paintLibFs(); };
+$('libFsDown').onclick=()=>{ LIB.fs=clamp(LIB.fs-1,11,18); placeLib(); saveLib(); paintLibFs(); };
+paintLibFs();
 $('libToggle').onclick=()=>{ LIB.shown=!LIB.shown; placeLib(); saveLib(); };
 $('libSearch').addEventListener('input',paintLib);
 libwin.addEventListener('pointerdown',e=>e.stopPropagation());
