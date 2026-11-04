@@ -1,0 +1,25 @@
+version = 1
+
+[[annotations]]
+path = ["patchkamer/**", "devices/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Freek van Gool"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "contract/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Freek van Gool"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["tunes/**", "presets/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Freek van Gool"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = "songs/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Freek van Gool"
+SPDX-License-Identifier = "CC-BY-4.0"
