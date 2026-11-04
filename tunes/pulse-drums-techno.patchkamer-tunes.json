@@ -1,0 +1,5754 @@
+{
+ "format": "patchkamer-tunes",
+ "formatVersion": 1,
+ "device": "nl.patchkamer.pulsedrums",
+ "name": "Pulse Drums Techno",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Techno kits for Pulse Drums in eight styles: techno, minimal, peak time, hard techno, dub techno, acid, electro and breaks. The kits use what Pulse adds: the kick layers, FM percussion, polymetric channel lengths, rumble and grit.",
+ "tree": [
+  {
+   "folder": "Techno",
+   "items": [
+    {
+     "name": "Hypnotic",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.16,
+      "rumbleTone": 700,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.4,
+        "sub": 0.16,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.6,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.3,
+        "seqLength": 15,
+        "fm": 1.5,
+        "ratio": 2.7,
+        "decay": 0.13,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": 0.3,
+        "seqLength": 11,
+        "steps": [
+         [
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Punch",
+        "level": 0.35,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.672
+     }
+    },
+    {
+     "name": "Hardgroove",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.18,
+      "rumbleTone": 800,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.22,
+        "sub": 0.16,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmhat",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.585
+     }
+    },
+    {
+     "name": "Deep Dub",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.25,
+      "rumbleTone": 600,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.92,
+        "decay": 0.5,
+        "sub": 0.3,
+        "click": 0.2,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Deep",
+        "level": 0.55,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": -0.3,
+        "fm": 1.0,
+        "ratio": 1.5,
+        "decay": 0.5,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": 0.25,
+        "decay": 0.6,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.684
+     }
+    },
+    {
+     "name": "Industrial",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.32,
+      "rumbleTone": 500,
+      "grit": 0.45,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.92,
+        "decay": 0.45,
+        "sub": 0.16,
+        "click": 0.6,
+        "drive": 0.5,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Industrial",
+        "level": 0.5,
+        "pan": 0.3,
+        "fm": 4,
+        "ratio": 5.1,
+        "decay": 0.5,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.432
+     }
+    },
+    {
+     "name": "Broken",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.16,
+      "rumbleTone": 700,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.4,
+        "sub": 0.16,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": -0.3,
+        "fm": 2.5,
+        "ratio": 3.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.6,
+           "micro": -0.12
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.688
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Minimal",
+   "items": [
+    {
+     "name": "Click Minimal",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.08,
+      "rumbleTone": 900,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.8,
+        "decay": 0.25,
+        "sub": 0.1,
+        "click": 0.55,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "level": 0.35,
+        "pan": 0.25,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Lo-fi",
+        "level": 0.5,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Lo-fi",
+        "level": 0.45,
+        "pan": 0.3,
+        "seqLength": 13,
+        "decay": 0.08,
+        "fm": 2,
+        "ratio": 4,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.6,
+           "micro": -0.12
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clave",
+        "model": "Lo-fi",
+        "level": 0.35,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.599
+     }
+    },
+    {
+     "name": "Micro House",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.1,
+      "rumbleTone": 800,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.85,
+        "decay": 0.3,
+        "sub": 0.12,
+        "click": 0.4,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Lo-fi",
+        "level": 0.5,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "level": 0.35,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmhat",
+        "model": "Lo-fi",
+        "level": 0.25,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.649
+     }
+    },
+    {
+     "name": "Glitch",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.06,
+      "rumbleTone": 1000,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.82,
+        "decay": 0.28,
+        "sub": 0.1,
+        "click": 0.5,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.75,
+           "r": 2
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.75,
+           "r": 2
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Lo-fi",
+        "level": 0.5,
+        "pan": -0.3,
+        "seqLength": 14,
+        "fm": 3,
+        "ratio": 6.3,
+        "decay": 0.07,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.6,
+           "micro": -0.12
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.6,
+           "micro": -0.12
+          },
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Lo-fi",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "wood",
+        "model": "Lo-fi",
+        "level": 0.35,
+        "pan": -0.25,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.534
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Peak Time",
+   "items": [
+    {
+     "name": "Main Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.28,
+      "rumbleTone": 650,
+      "grit": 0.1,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "decay": 0.38,
+        "sub": 0.2,
+        "click": 0.4,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.75,
+        "pan": 0.15,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.55,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": -0.3,
+        "fm": 2,
+        "ratio": 2.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.664
+     }
+    },
+    {
+     "name": "Warehouse",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.3,
+      "rumbleTone": 600,
+      "grit": 0.15,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "decay": 0.35,
+        "sub": 0.22,
+        "click": 0.45,
+        "drive": 0.2,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.7,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.25,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Punch",
+        "level": 0.35,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.606
+     }
+    },
+    {
+     "name": "Driving",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.26,
+      "rumbleTone": 700,
+      "grit": 0.2,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "decay": 0.3,
+        "sub": 0.18,
+        "click": 0.5,
+        "drive": 0.25,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmhat",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.391
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Hard Techno",
+   "items": [
+    {
+     "name": "Rave",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.34,
+      "rumbleTone": 550,
+      "grit": 0.4,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.98,
+        "decay": 0.3,
+        "sub": 0.25,
+        "click": 0.6,
+        "drive": 0.45,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Industrial",
+        "level": 0.8,
+        "pan": 0.15,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.437
+     }
+    },
+    {
+     "name": "Bunker",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.36,
+      "rumbleTone": 500,
+      "grit": 0.5,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.98,
+        "decay": 0.25,
+        "sub": 0.3,
+        "click": 0.55,
+        "drive": 0.55,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Industrial",
+        "level": 0.5,
+        "pan": 0.3,
+        "fm": 5,
+        "ratio": 7,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.343
+     }
+    },
+    {
+     "name": "Warp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.38,
+      "rumbleTone": 480,
+      "grit": 0.55,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.98,
+        "decay": 0.28,
+        "sub": 0.2,
+        "click": 0.65,
+        "drive": 0.6,
+        "body": 0.85,
+        "tune": 2,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "level": 0.7,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Industrial",
+        "level": 0.5,
+        "pan": -0.3,
+        "fm": 6,
+        "ratio": 8.2,
+        "decay": 0.1,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 2
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 2
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "sub",
+        "model": "Industrial",
+        "level": 0.5,
+        "pan": 0.0,
+        "decay": 1.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.638
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dub Techno",
+   "items": [
+    {
+     "name": "Chord Haze",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.3,
+      "rumbleTone": 500,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.85,
+        "decay": 0.5,
+        "sub": 0.3,
+        "click": 0.15,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Deep",
+        "level": 0.45,
+        "pan": -0.3,
+        "fm": 0.8,
+        "ratio": 1.5,
+        "decay": 0.9,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": 0.3,
+        "decay": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.696
+     }
+    },
+    {
+     "name": "Echo Chamber",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.28,
+      "rumbleTone": 550,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.85,
+        "decay": 0.45,
+        "sub": 0.25,
+        "click": 0.15,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Deep",
+        "level": 0.45,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.68
+     }
+    },
+    {
+     "name": "Basement",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.34,
+      "rumbleTone": 450,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.55,
+        "sub": 0.35,
+        "click": 0.1,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Deep",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": -0.3,
+        "seqLength": 12,
+        "fm": 1,
+        "ratio": 2,
+        "decay": 0.6,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Deep",
+        "level": 0.25,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Acid",
+   "items": [
+    {
+     "name": "Squelch",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.14,
+      "rumbleTone": 800,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.38,
+        "sub": 0.16,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.65,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Punch",
+        "level": 0.35,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.3,
+        "fm": 2.5,
+        "ratio": 3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.68
+     }
+    },
+    {
+     "name": "Squarepusher",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.12,
+      "rumbleTone": 900,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.3,
+        "sub": 0.16,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmhat",
+        "model": "Punch",
+        "level": 0.25,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.585
+     }
+    },
+    {
+     "name": "Detuned",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.18,
+      "rumbleTone": 700,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.42,
+        "sub": 0.2,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Deep",
+        "level": 0.65,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.657
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Electro",
+   "items": [
+    {
+     "name": "Breakbeat",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.12,
+      "rumbleTone": 800,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.34,
+        "sub": 0.15,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.688
+     }
+    },
+    {
+     "name": "Robot",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.14,
+      "rumbleTone": 700,
+      "grit": 0.2,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.4,
+        "sub": 0.2,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.3,
+        "pan": -0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.3,
+        "fm": 3,
+        "ratio": 4.5,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.4
+     }
+    },
+    {
+     "name": "Miami",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.16,
+      "rumbleTone": 650,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.95,
+        "decay": 0.55,
+        "sub": 0.3,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Deep",
+        "level": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Deep",
+        "level": 0.35,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.642
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Breaks",
+   "items": [
+    {
+     "name": "Two-Step",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.12,
+      "rumbleTone": 800,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.3,
+        "sub": 0.15,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.688
+     }
+    },
+    {
+     "name": "Jungle",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.14,
+      "rumbleTone": 750,
+      "grit": 0,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.3,
+        "sub": 0.16,
+        "click": 0.35,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Funk",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Funk",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "bongo",
+        "model": "Funk",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Funk",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.696,
+      "human": 0.006
+     }
+    },
+    {
+     "name": "Half-Time",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "rumble": 0.3,
+      "rumbleTone": 550,
+      "grit": 0.25,
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.92,
+        "decay": 0.6,
+        "sub": 0.3,
+        "click": 0.3,
+        "drive": 0.12,
+        "body": 0.85,
+        "tune": 0,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.35,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "sub",
+        "model": "Industrial",
+        "level": 0.5,
+        "decay": 1.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.407
+     }
+    }
+   ]
+  }
+ ]
+}
