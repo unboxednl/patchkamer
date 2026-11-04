@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.4.1 — Bewaker tegen NaN en Infinity: één foute waarde van een apparaat ervoor liet de EQ-filters en de begrenzer voorgoed ontsporen (daarna was de hele uitvoer stil of NaN). Elke 100 ms kijkt de Mixer met de meters of er iets niet-eindigs of absurds uitkomt en vervangt dan de ontspoorde EQ-filters en de begrenzer. Normaal geluid is ongewijzigd.
 // 2.4.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poort- en kaartnamen per taal in i18n). setState negeert onbekende velden,
 //         kapt getallen af op hun bereik en geeft ongeldige waarden de standaard; presets volgen dezelfde regels. Geluid ongewijzigd.
 //         Versie 2.4.0 i.p.v. 1.11.0: een lager nummer dan 2.3.0 zou de host als ouder zien.
@@ -120,7 +121,7 @@ const CSS = `
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.4.0',
+  version: '2.4.1',
   kind: 'mixer',
   category: 'mix',
   ui: { width: 960, minWidth: 360, jacks: true },
@@ -130,13 +131,15 @@ export default {
     const T = TXT[host && host.lang] || TXT.en;
     const S = { ...DEF, ch: Array.from({ length: MAXCH }, chDef), grp: Array.from({ length: MAXGRP }, grpDef), master: mstDef() };
     const inputs = {}, outputs = {};
+    const buf = new Float32Array(2048);
     const db = v => Math.pow(10, v / 20), fgain = v => (v <= -59.5 ? 0 : db(v));
     let self, root = null, raf = 0, ui = null, measure = null, msg = '';
 
     // ---------- master ----------
     const M = { eq: [] }, mPost = ctx.createGain();
-    const mSum = ctx.createGain(), mFader = ctx.createGain(), mSend = ctx.createGain(), mRetIn = ctx.createGain(), mRet = ctx.createGain(), lim = ctx.createDynamicsCompressor(), out = ctx.createGain(), mMeter = ctx.createAnalyser();
-    lim.threshold.value = -3; lim.ratio.value = 10; lim.knee.value = 2; lim.attack.value = 0.003; lim.release.value = 0.15; mMeter.fftSize = 1024;
+    const mSum = ctx.createGain(), mFader = ctx.createGain(), mSend = ctx.createGain(), mRetIn = ctx.createGain(), mRet = ctx.createGain(), out = ctx.createGain(), mMeter = ctx.createAnalyser();
+    const mkLim = () => { const l = ctx.createDynamicsCompressor(); l.threshold.value = -3; l.ratio.value = 10; l.knee.value = 2; l.attack.value = 0.003; l.release.value = 0.15; return l; };
+    let lim = mkLim(); mMeter.fftSize = 1024;
     mPost.connect(mFader); mPost.connect(mSend); mRetIn.connect(mRet).connect(mFader); mFader.connect(lim).connect(out); out.connect(mMeter);
 
     // ---------- groups and channels ----------
@@ -226,9 +229,19 @@ export default {
     }
     buildEq(M, mSum, mPost);
     configure(DEF.nCh, DEF.nGrp, false);
+    // bewaker tegen NaN en Infinity: biquad-filters en de compressor houden een toestand die een niet-eindige waarde nooit meer kwijtraakt.
+    // Elke 100 ms kijken de meters of er iets niet-eindigs of absurds uitkomt; zo ja, dan vervangen we de ontspoorde filters (de instellingen blijven).
+    const badAn = an => { an.getFloatTimeDomainData(buf); const n = an.fftSize; for (let i = 0; i < n; i++) { const x = buf[i]; if (!(x > -1e6 && x < 1e6)) return true; } return false; };
+    function guard() {
+      let fixed = false;
+      chans.forEach(n => { if (badAn(n.meter)) { buildEq(n, n.trim, n.fader); fixed = true; } });
+      groups.forEach(n => { if (badAn(n.meter)) { buildEq(n, n.sum, n.post); fixed = true; } });
+      if (badAn(mMeter)) { buildEq(M, mSum, mPost); try { mFader.disconnect(lim); } catch (e) {} try { lim.disconnect(); } catch (e) {} lim = mkLim(); mFader.connect(lim).connect(out); fixed = true; }
+      if (fixed) applyAll();
+    }
+    const guardT = setInterval(guard, 100);
 
     // ---------- levels: meters and "gelijk trekken" ----------
-    const buf = new Float32Array(2048);
     function rmsDb(an) { an.getFloatTimeDomainData(buf); let s = 0; const n = an.fftSize; for (let i = 0; i < n; i++) s += buf[i] * buf[i]; return 10 * Math.log10(s / n + 1e-12); }
     function peak(an) { an.getFloatTimeDomainData(buf); let p = 0; const n = an.fftSize; for (let i = 0; i < n; i++) { const a = Math.abs(buf[i]); if (a > p) p = a; } return p; }
     function startMeasure() { measure = { until: performance.now() + 4000, sum: chans.map(() => 0), cnt: chans.map(() => 0) }; msg = T.measuring; paintMsg(); }
@@ -398,7 +411,7 @@ export default {
         applyAll(); announce(); if (root) render();
       },
       destroy() {
-        stopLoops(); clearTimeout(bundleT);
+        stopLoops(); clearTimeout(bundleT); clearInterval(guardT);
         chans.forEach(n => { if (n.srcNode) { try { n.srcNode.disconnect(n.in); } catch (e) {} n.srcNode = null; } kill([n.in, n.trim, ...n.eq, n.fader, n.pan, n.mute, n.send, n.retIn, n.ret, n.tap]); });
         groups.forEach(n => kill([n.sum, ...n.eq, n.post, n.fader, n.mute, n.send, n.retIn, n.ret, n.tap]));
         kill([mSum, ...M.eq, mPost, mFader, mSend, mRetIn, mRet, lim, out]);

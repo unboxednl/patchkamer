@@ -63,6 +63,7 @@ Wat Mixer met een state doet (getest):
 - Getallen buiten het bereik worden afgekapt; een tekst, `null`, `NaN` of een ontbrekende waarde geeft de startwaarde. Een lijst die korter is dan `nCh` of `nGrp` wordt aangevuld met standaardkanalen.
 - Een boolean die geen boolean is en een `eq` die niet 3 of 5 is geven de standaard. `v` wordt bij het zetten genegeerd; `getState` geeft altijd `2`.
 - Onbekende velden worden genegeerd en komen niet in de state terecht. Zet er geen in.
+- Een niet-eindige of absurde waarde (`NaN`, `±Infinity`, 1e9 en groter) die van een apparaat ervoor binnenkomt, laat de EQ-filters en de begrenzer niet meer voorgoed ontsporen: elke 100 ms vervangt de Mixer een ontspoord filter (de instellingen blijven) en het geluid komt terug. Getest met een burst van `NaN`, `±Infinity`, 1e9 en 1e30; normaal geluid is ongewijzigd.
 - Een state van de oude Mixer 1.x (lineaire niveaus, geen groepen) wordt nog omgezet.
 
 ## Controleren
