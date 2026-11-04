@@ -111,6 +111,9 @@ const MOD_DEFS={
 };
 const CSS=`
 .sw{--bg:var(--card,#14191c);--panel:var(--card-2,#1e2529);--edge:var(--line,#364148);--ink:var(--fg,#e8e9df);--dim:var(--muted,#9aa9ad);--accent:#f6b85c;--btn:color-mix(in srgb,var(--card-2,#1e2529) 86%,var(--fg,#e8e9df));--stepbg:var(--step-q,#273036);--screen:var(--well,#101618);color:var(--ink);background:var(--bg);padding:20px;border-radius:10px;font:13px 'IBM Plex Mono',monospace;container-type:inline-size}.sw *{box-sizing:border-box}.sw h1{font:700 32px 'Barlow Condensed',sans-serif;letter-spacing:4px;margin:0}.sw .top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.sw .brand small{color:var(--accent);letter-spacing:2px}.sw .tag{color:var(--dim);font-size:11px}.sw button,.sw select,.sw input{font:inherit;color:inherit}.sw button,.sw select,.sw input[type=text],.sw input[type=number]{background:var(--btn);border:1px solid var(--edge);border-radius:5px;padding:7px;min-height:32px}.sw button{cursor:pointer}.sw button:hover{border-color:var(--accent)}.sw button.active{background:var(--accent);color:#14191c;border-color:var(--accent)}.sw button:focus-visible,.sw input:focus-visible,.sw select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.sw .toolbar{display:flex;gap:9px;align-items:end;flex-wrap:wrap;margin:16px 0}.sw label{display:flex;flex-direction:column;gap:5px;font-size:10px;color:var(--dim);letter-spacing:.5px}.sw .row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.sw .section{border:1px solid var(--edge);background:var(--panel);border-radius:7px;padding:13px;margin:12px 0}.sw .caption{font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:10px}.sw .table{overflow-x:auto}.sw .track{display:grid;grid-template-columns:190px repeat(16,minmax(25px,1fr));gap:5px;min-width:740px;margin:5px 0;align-items:center}.sw .lane{display:flex;align-items:center;gap:4px;min-width:0}.sw .lane .choose{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}.sw .mini{padding:4px;min-width:25px;font-size:10px}.sw .step{height:34px;padding:0;border-radius:4px;background:var(--stepbg);position:relative}.sw .step.quarter{border-left:2px solid var(--dim)}.sw .step.on{background:linear-gradient(0deg,#b76d2e,var(--accent));color:#14191c}.sw .step .velocity{position:absolute;bottom:2px;left:3px;right:3px;background:color-mix(in srgb,var(--bg) 55%,transparent);height:3px;transform-origin:left}.sw .step.now{outline:2px solid var(--ink);outline-offset:1px}.sw .ruler{font-size:10px;text-align:center;color:var(--dim)}.sw .selected .choose{border-color:var(--accent);color:var(--accent)}.sw .editor{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:15px}.sw input[type=range]{width:100%;accent-color:var(--accent);margin:4px 0}.sw output{color:var(--ink);font-size:12px}.sw .scope{width:100%;height:92px;background:var(--screen);border-radius:5px}.sw .bottom{display:grid;grid-template-columns:2fr 1fr;gap:12px}.sw .ports{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sw .jackbox{border:1px solid var(--edge);border-radius:5px;padding:5px;font-size:10px;color:var(--dim)}.sw .notice{font-size:11px;line-height:1.7;color:var(--dim)}.sw .error{color:var(--stop,#ff9386)}.sw .check{flex-direction:row;align-items:center}.sw .stats{color:var(--accent);font-size:11px}.sw .hr{border-top:1px solid var(--edge);margin:13px 0}@container(max-width:700px){.sw .bottom{grid-template-columns:1fr}.sw h1{font-size:26px}.sw .editor{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}}`;
+// Uitgangsniveau: een vaste factor op de stereomix en op de kanaaluitgangen. Gemeten met de standaardgroove (10 s, 120 BPM): met .36 lag de piek op −18 dBFS,
+// ruim 15 dB onder andere apparaten; met deze waarde op ongeveer −3 dBFS. De verhouding tussen de kanalen verandert niet.
+const OUT_TRIM=.36*5.5;
 const __pkDef = {
  id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.11.0',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
@@ -121,7 +124,7 @@ const __pkDef = {
  let mod=Object.create(null),paramList=[],paramIds=new Set(),paramSignature='',modStatus=null;
  const owned=new Set(),sources=new Set(),voices=new Set(),buses=[],meters=[];
  const own=n=>(owned.add(n),n),gain=()=>own(ctx.createGain());
- const mix=gain();mix.gain.value=state.master*.36;
+ const mix=gain();mix.gain.value=state.master*OUT_TRIM;
  const mixMeter=own(ctx.createAnalyser());mixMeter.fftSize=512;mix.connect(mixMeter);
  const outputs={mix};
  const noiseBuffer=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*2),ctx.sampleRate),nd=noiseBuffer.getChannelData(0);let seed=74133;
@@ -129,7 +132,7 @@ const __pkDef = {
  const curves=Array.from({length:41},(_,j)=>{const a=new Float32Array(1024),k=j/40*12;for(let i=0;i<a.length;i++){const x=i/(a.length-1)*2-1;a[i]=k?Math.tanh(x*(1+k))/Math.tanh(1+k):x;}return a;});
  for(let i=0;i<16;i++){
   const filter=own(ctx.createBiquadFilter()),shaper=own(ctx.createWaveShaper()),panner=own(ctx.createStereoPanner()),level=gain(),direct=gain(),send=gain(),meter=own(ctx.createAnalyser());
-  meter.fftSize=256;shaper.oversample='2x';filter.connect(shaper).connect(panner).connect(level);level.connect(direct);level.connect(send).connect(mix);level.connect(meter);direct.gain.value=.36;
+  meter.fftSize=256;shaper.oversample='2x';filter.connect(shaper).connect(panner).connect(level);level.connect(direct);level.connect(send).connect(mix);level.connect(meter);direct.gain.value=OUT_TRIM;
   outputs['ch'+(i+1)]=direct;buses.push({filter,shaper,panner,level,direct,send});meters.push(meter);
  }
  function refreshParams(notify=true){
@@ -152,7 +155,7 @@ const __pkDef = {
  function effective(i){const c=state.channels[i],out={...c};for(const key of Object.keys(MOD_DEFS))out[key]=value(c[key],key,'ch'+(i+1)+'.'+key);return out;}
  function apply(){
   if(dead)return;const solo=state.channels.some(c=>c.solo);
-  mix.gain.setTargetAtTime(value(state.master,'master','master')*.36,ctx.currentTime,.02);
+  mix.gain.setTargetAtTime(value(state.master,'master','master')*OUT_TRIM,ctx.currentTime,.02);
   buses.forEach((b,i)=>{if(!state.channels[i]){b.level.gain.setTargetAtTime(0,ctx.currentTime,.01);return;}const c=effective(i);
    b.filter.type=c.filter;b.filter.frequency.setTargetAtTime(Math.min(c.cutoff,ctx.sampleRate*.45),ctx.currentTime,.02);b.filter.Q.setTargetAtTime(c.resonance,ctx.currentTime,.02);
    const curveIndex=Math.round(c.drive*40);if(b.curveIndex!==curveIndex){b.shaper.curve=curves[curveIndex];b.curveIndex=curveIndex;}
