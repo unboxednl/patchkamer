@@ -14,7 +14,7 @@ const EN = {
   'Keyboard / sequencer → Noten. Mono last-note priority; legato, sub en FM.': 'Keyboard / sequencer → Notes. Mono, last-note priority; legato, sub and FM.',
   'Eigen': 'Custom', 'Aan': 'On', 'Uit': 'Off', 'Proefbas': 'Test bass', 'Alles uit': 'All off',
   'Paarse Mod-kabel laat klankparameters bewegen. Enveloppen en glide worden bij de volgende noot gelezen.': 'The purple Mod cable moves sound parameters. Envelopes and glide are read at the next note.',
-  'Resonantie': 'Resonance', 'Zweving': 'Detune', 'FM-diepte': 'FM depth', 'Filter-envelope': 'Filter envelope',
+  'Golfvorm': 'Waveform', 'Resonantie': 'Resonance', 'Zweving': 'Detune', 'FM-diepte': 'FM depth', 'Filter-envelope': 'Filter envelope',
 };
 const LABELS = { cutoff: 'Cutoff', resonance: 'Resonantie', sub: 'Sub', detune: 'Zweving', drive: 'Drive', fm: 'FM-diepte', env: 'Filter-envelope', glide: 'Glide', attack: 'Attack', decay: 'Decay', sustain: 'Sustain', release: 'Release', accent: 'Accent', level: 'Volume', bend: 'Pitchbend' };
 
