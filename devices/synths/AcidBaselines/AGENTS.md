@@ -1,0 +1,75 @@
+# AGENTS.md: Acid Baselines
+
+Dit bestand is voor AI-agents die **tunes voor Acid Baselines** maken. Het is niet geschreven voor mensen. Het hoort bij `../../../AGENTS.md` (algemeen) en `../../../tunes/AGENTS.md` (regels voor tunepacks); lees die eerst. Hier staat wat alleen voor Acid Baselines geldt.
+
+## Wat Acid Baselines is
+
+Een basslijn-synth met een oscillator (zaagtand of blok), een tweevoudig lowpass-filter met resonantie, aparte normal- en accent-decay, soft attack, filter-FM, overdrive en een toonfilter. Er zit een eigen 16-staps sequencer in met accent, slide en octaaf per stap, 1 tot 16 sets (maten), een keuzelijst met 16 klassieke acid-patronen (eigen werk in de stijl; een patroon komt in de maat die je bewerkt) en een lijngenerator. Het speelt ook noten van een externe sequencer.
+
+| | |
+|---|---|
+| Bestand | `acid-baselines.patchkamer-device.js` (in deze map) |
+| `id` | `nl.patchkamer.acidbaselines`. Verander die nooit: daaraan hangen tunes en songs van gebruikers |
+| Naam | `Acid Baselines` in alle talen; alleen de poortnamen `Out` en `Notes` hebben een Nederlandse variant (via `i18n`) |
+| Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
+| Poorten | eventingangen `notes` (Notes) en `cc` (CC), modulatie-ingang `mod`, audio-uitgang `out` (Out) |
+| Contract | v1.11 |
+| Licentie apparaat | AGPL-3.0-or-later |
+
+Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id. Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
+
+## Wat je hier doet
+
+Je maakt klanken (tunes) voor Acid Baselines en zet ze als pack in `../../../tunes/`. Het apparaat zelf pas je alleen aan als de opdracht dat zegt (`version` ophogen; `id`, poort-id's en state-velden gelijk houden).
+
+## De state
+
+`state` van een tune is wat `getState()` teruggeeft: de knoppen plus het hele sequencerraster.
+
+| Veld | Wat | Bereik | Start |
+|---|---|---|---|
+| `wave` | Golfvorm | `sawtooth` of `square` | `sawtooth` |
+| `oct` | Octaaf (hele apparaat) | −1, 0 of 1 | 0 |
+| `fine` | Stemming in cent | −100 … 100 | 0 |
+| `cut` | Cutoff in Hz | 80 … 5000 | 520 |
+| `res` | Resonantie | 0,5 … 28 | 14 |
+| `env` | Env mod | 0 … 1 | 0,65 |
+| `ndec` | Normal decay (s) | 0,03 … 3 | 0,3 |
+| `adec` | Accent decay (s) | 0,03 … 1 | 0,12 |
+| `acc` | Accentsterkte | 0 … 1 | 0,7 |
+| `soft` | Soft attack (s) | 0,001 … 0,3 | 0,003 |
+| `slide` | Slide-tijd (s) | 0,02 … 0,6 | 0,09 |
+| `fm` | Filter-FM | 0 … 1 | 0 |
+| `drive` | Overdrive | 0 … 1 | 0,35 |
+| `muf` | Toonfilter in Hz | 500 … 12000 | 7000 |
+| `vca` | VCA decay (s) | 0,1 … 4 | 2 |
+| `lvl` | Niveau | 0 … 1 | 0,6 |
+| `seqOn` | Interne sequencer aan | `true` of `false` | `true` |
+| `bars` | Aantal sets | 1, 2, 4, 8 of 16 | 2 |
+| `grid` | Raster: 16 sets | lijst van sets | twee startlijnen |
+
+Elke set in `grid` heeft vier lijsten van 16 stappen: `n` (noot: −1 = rust, 0 … 12 = C2 … C3 in halve tonen), `acc` (accent, 0 of 1), `sl` (slide, 0 of 1) en `oc` (octaaf per stap, −2 … 2).
+
+Wat het apparaat met een state doet (getest):
+- Getallen buiten het bereik worden afgekapt (`cut: 1e9` wordt 5000); een tekst of ontbrekende waarde geeft de startwaarde.
+- Een ongeldige `wave`, `bars`, `oct` of `seqOn` geeft de startwaarde.
+- In `grid` worden noten buiten 0 … 12 afgekapt, accent en slide tot 0 of 1, en octaaf tot −2 … 2. Een ontbrekende set is leeg.
+- Onbekende velden worden genegeerd. Zet er geen in.
+
+## Een tune
+
+Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het formaat en de licentie (`CC0-1.0` voor alles in `tunes/`) staan in `../../../tunes/AGENTS.md`. Voor dit apparaat is `device` altijd `nl.patchkamer.acidbaselines` en elke tune is `kind: "set"` met een volledige `state` als hierboven. Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
+
+Geef elke tune een eigen `grid` met een lijn die bij de klank past. Is de lijn niet het punt, laat `grid` dan weg: het apparaat gebruikt dan de twee startlijnen.
+
+## Controleren
+
+- Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/AcidBaselines/acid-baselines.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.
+- Je kunt niet horen hoe een tune klinkt. Heb je een browser, laad dan de host (`../../../patchkamer/AGENTS.md`) en kies de tune. Heb je geen browser, schrijf dan in je oplevering dat de tune **niet beluisterd** is.
+- Alle tekst in het apparaat staat in het woordenboek `EN` bovenin het bestand (Nederlandse bron, Engels via `host.lang`). Een nieuwe tekst krijgt altijd nl én en.
+
+## Wat je niet doet
+
+- Verander nooit de `id`, de `kind`, de poort-id's of de namen van state-velden.
+- Pas het apparaat niet aan om een tune te laten kloppen.
+- Commit of push niet, tenzij de opdracht dat vraagt.
