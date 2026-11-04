@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Een niet-eindige of absurd grote ingangswaarde (NaN, ±Infinity, een filter dat ontploft) vergiftigde de meting en de piekvolger voor altijd: na één Infinity-sample bleef alles stil. Nu wordt de ingang begrensd (±16 = +24 dB) en NaN wordt 0, en een bewaker zet een ontspoorde toestand terug. Normaal geluid is bit-identiek aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Leveler en nieuwe id nl.patchkamer.leveler (voorheen Egaal, nl.patchkamer.egaal); presets en songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, poortnamen per taal in i18n). Tekenen via host.frame met een ResizeObserver en een kleurcache
 //          (de tekenpoort-omzetting is weg). setState negeert onbekende velden en kapt getallen af op hun bereik; de klank is ongewijzigd.
 // 1.8.0 — Patchkamer contract v1.8: dubbelklik = beginwaarde, klik op het getal = waarde typen, en (instelbaar) draaiknop.
@@ -12,8 +13,9 @@
 // het instrument en de mixer, of op de mix vóór de uitgang.
 // Zonder AudioWorklet laat Leveler het geluid ongewijzigd door en meldt dat in de UI.
 
-const WNAME = 'nl-patchkamer-egaal-1-7-4';
+const WNAME = 'nl-patchkamer-leveler-1-11-1';
 const WORKLET = `
+const IN_MAX = 16;
 class Egaal extends AudioWorkletProcessor {
   constructor() {
     super();
@@ -21,7 +23,7 @@ class Egaal extends AudioWorkletProcessor {
     this.ms = 0; this.gDb = 0; this.lg = 1; this.env = 0; this.outMs = 0;
     this.L = Math.max(1, Math.round(sampleRate * 0.005)); this.bl = new Float32Array(this.L); this.br = new Float32Array(this.L); this.bi = 0;
     this.n = 0; this.lim = 1;
-    this.port.onmessage = e => { const m = e.data || {}; if (m.type === 'set') Object.assign(this.s, m.s); else if (m.type === 'reset') { this.gDb = 0; this.lg = 1; } };
+    this.port.onmessage = e => { const m = e.data || {}; if (m.type === 'set') { for (const k in (m.s || {})) { const v = m.s[k]; if (k in this.s && (k === 'on' ? typeof v === 'boolean' : Number.isFinite(v))) this.s[k] = v; } } else if (m.type === 'reset') { this.gDb = 0; this.lg = 1; } };
   }
   process(inputs, outputs) {
     const inp = inputs[0], out = outputs[0]; if (!out || !out.length) return true;
@@ -35,7 +37,10 @@ class Egaal extends AudioWorkletProcessor {
     const aOut = 1 - Math.exp(-1 / (0.4 * sr));
     let minLg = 1;
     for (let i = 0; i < n; i++) {
-      const xl = iL[i], xr = iR[i];
+      let xl = iL[i], xr = iR[i];
+      // vangnet: NaN, ±Infinity of een absurde waarde zou de meting en de piekvolger voorgoed vergiftigen
+      if (!(xl > -IN_MAX && xl < IN_MAX)) xl = xl !== xl ? 0 : xl > 0 ? IN_MAX : -IN_MAX;
+      if (!(xr > -IN_MAX && xr < IN_MAX)) xr = xr !== xr ? 0 : xr > 0 ? IN_MAX : -IN_MAX;
       // 1. meten: gemiddeld vermogen van beide kanalen (ook in de stand Doorlaten, voor de meter)
       this.ms += ((xl * xl + xr * xr) * 0.5 - this.ms) * aW;
       if (!s.on) { oL[i] = xl; if (oR !== oL) oR[i] = xr; this.outMs += ((xl * xl + xr * xr) * 0.5 - this.outMs) * aOut; continue; }
@@ -53,6 +58,12 @@ class Egaal extends AudioWorkletProcessor {
       oL[i] = ol; if (oR !== oL) oR[i] = or;
       this.outMs += ((ol * ol + or * or) * 0.5 - this.outMs) * aOut;
     }
+    // bewaker: een ontspoorde toestand herstelt zichzelf in plaats van het geluid voorgoed te stoppen
+    if (!(this.ms >= 0 && this.ms < 1e6)) this.ms = 0;
+    if (!(this.outMs >= 0 && this.outMs < 1e6)) this.outMs = 0;
+    if (!(this.env >= 0 && this.env < 1e6)) this.env = 0;
+    if (!(this.gDb > -100 && this.gDb < 100)) this.gDb = 0;
+    if (!(this.lg > 0 && this.lg <= 1)) this.lg = 1;
     this.lim = Math.min(this.lim, minLg);
     this.post(10 * Math.log10(this.ms + 1e-12));
     return true;
@@ -98,7 +109,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.leveler',
   name: 'Leveler',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'effect',
   category: 'mix',
   ui: { width: 420, minWidth: 300 },
