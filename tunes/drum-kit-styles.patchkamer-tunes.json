@@ -50,7 +50,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "clap",
@@ -232,7 +234,7 @@
        }
       ],
       "length": 16,
-      "master": 0.704
+      "master": 0.7631
      }
     },
     {
@@ -277,7 +279,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -458,7 +462,7 @@
        }
       ],
       "length": 16,
-      "master": 0.62
+      "master": 0.4982
      }
     },
     {
@@ -501,7 +505,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "rim",
@@ -672,7 +678,7 @@
        }
       ],
       "length": 16,
-      "master": 0.447
+      "master": 0.5015
      }
     },
     {
@@ -714,7 +720,9 @@
           null
          ]
         ],
-        "tune": -14
+        "tune": -14,
+        "drive": 0.55,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -888,7 +896,7 @@
        }
       ],
       "length": 16,
-      "master": 0.331
+      "master": 0.3934
      }
     },
     {
@@ -930,7 +938,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -1162,7 +1172,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "clap",
@@ -1344,7 +1356,7 @@
        }
       ],
       "length": 16,
-      "master": 0.688
+      "master": 0.7457
      }
     },
     {
@@ -1387,7 +1399,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "rim",
@@ -1541,7 +1555,7 @@
        }
       ],
       "length": 16,
-      "master": 0.562
+      "master": 0.5306
      }
     },
     {
@@ -1585,7 +1599,9 @@
           null
          ]
         ],
-        "tune": -23
+        "tune": -23,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -1770,7 +1786,7 @@
        }
       ],
       "length": 16,
-      "master": 0.534
+      "master": 0.4814
      }
     }
    ]
@@ -1817,7 +1833,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "clap",
@@ -2040,7 +2058,9 @@
           null
          ]
         ],
-        "tune": -14
+        "tune": -14,
+        "drive": 0.55,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -2181,7 +2201,7 @@
        }
       ],
       "length": 16,
-      "master": 0.442
+      "master": 0.5253
      }
     },
     {
@@ -2223,7 +2243,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "clap",
@@ -2401,7 +2423,7 @@
        }
       ],
       "length": 16,
-      "master": 0.657
+      "master": 0.7372
      }
     }
    ]
@@ -2444,7 +2466,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -2623,7 +2647,7 @@
        }
       ],
       "length": 16,
-      "master": 0.649
+      "master": 0.6127
      }
     },
     {
@@ -2663,7 +2687,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -2848,7 +2874,7 @@
        }
       ],
       "length": 16,
-      "master": 0.664
+      "master": 0.7115
      }
     },
     {
@@ -2888,7 +2914,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -3102,7 +3130,9 @@
           null
          ]
         ],
-        "tune": -14
+        "tune": -14,
+        "drive": 0.55,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -3233,7 +3263,7 @@
        }
       ],
       "length": 16,
-      "master": 0.331
+      "master": 0.3934
      }
     },
     {
@@ -3272,7 +3302,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -3397,7 +3429,7 @@
        }
       ],
       "length": 16,
-      "master": 0.38
+      "master": 0.4025
      }
     },
     {
@@ -3436,7 +3468,9 @@
           null
          ]
         ],
-        "tune": -14
+        "tune": -14,
+        "drive": 0.55,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -3567,7 +3601,7 @@
        }
       ],
       "length": 16,
-      "master": 0.452
+      "master": 0.5372
      }
     }
    ]
@@ -3612,7 +3646,9 @@
           null
          ]
         ],
-        "tune": -17
+        "tune": -17,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -3787,7 +3823,7 @@
        }
       ],
       "length": 16,
-      "master": 0.553,
+      "master": 0.6726,
       "human": 0.008
      }
     },
@@ -3829,7 +3865,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "clap",
@@ -3996,7 +4034,7 @@
        }
       ],
       "length": 16,
-      "master": 0.347
+      "master": 0.3893
      }
     },
     {
@@ -4036,7 +4074,9 @@
           null
          ]
         ],
-        "tune": -17
+        "tune": -17,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -4207,7 +4247,7 @@
        }
       ],
       "length": 16,
-      "master": 0.582,
+      "master": 0.7078,
       "human": 0.012
      }
     }
@@ -4255,7 +4295,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -4432,7 +4474,7 @@
        }
       ],
       "length": 16,
-      "master": 0.487
+      "master": 0.4493
      }
     },
     {
@@ -4474,7 +4516,9 @@
           null
          ]
         ],
-        "tune": -23
+        "tune": -23,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -4665,7 +4709,7 @@
        }
       ],
       "length": 16,
-      "master": 0.546,
+      "master": 0.7115,
       "human": 0.006
      }
     },
@@ -4708,7 +4752,9 @@
           null
          ]
         ],
-        "tune": -23
+        "tune": -23,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -4885,7 +4931,7 @@
        }
       ],
       "length": 16,
-      "master": 0.559
+      "master": 0.6272
      }
     }
    ]
@@ -4930,7 +4976,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -5143,7 +5191,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -5331,7 +5381,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -5547,7 +5599,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "clap",
@@ -5764,7 +5818,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -5925,7 +5981,7 @@
        }
       ],
       "length": 16,
-      "master": 0.516
+      "master": 0.5993
      }
     },
     {
@@ -5965,7 +6021,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -6102,7 +6160,7 @@
        }
       ],
       "length": 16,
-      "master": 0.54,
+      "master": 0.613,
       "human": 0.008
      }
     }
@@ -6146,7 +6204,9 @@
           null
          ]
         ],
-        "tune": -17
+        "tune": -17,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -6305,7 +6365,7 @@
        }
       ],
       "length": 16,
-      "master": 0.528,
+      "master": 0.6203,
       "human": 0.006
      }
     },
@@ -6348,7 +6408,9 @@
           null
          ]
         ],
-        "tune": -17
+        "tune": -17,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -6529,7 +6591,7 @@
        }
       ],
       "length": 16,
-      "master": 0.516,
+      "master": 0.6062,
       "human": 0.006
      }
     },
@@ -6568,7 +6630,9 @@
           null
          ]
         ],
-        "tune": -17
+        "tune": -17,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -6699,7 +6763,7 @@
        }
       ],
       "length": 16,
-      "master": 0.398,
+      "master": 0.3801,
       "human": 0.008
      }
     }
@@ -6743,7 +6807,9 @@
           null
          ]
         ],
-        "tune": -18
+        "tune": -18,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "ride",
@@ -6880,7 +6946,7 @@
        }
       ],
       "length": 16,
-      "master": 1.0,
+      "master": 1,
       "human": 0.012
      }
     },
@@ -6919,7 +6985,9 @@
           null
          ]
         ],
-        "tune": -18
+        "tune": -18,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "brush",
@@ -7051,7 +7119,7 @@
        }
       ],
       "length": 16,
-      "master": 1.0,
+      "master": 1,
       "human": 0.012
      }
     },
@@ -7094,7 +7162,9 @@
           null
          ]
         ],
-        "tune": -18
+        "tune": -18,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "rim",
@@ -7300,7 +7370,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -7515,7 +7587,7 @@
        }
       ],
       "length": 16,
-      "master": 0.4
+      "master": 0.3733
      }
     },
     {
@@ -7554,7 +7626,9 @@
           null
          ]
         ],
-        "tune": -20
+        "tune": -20,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -7690,7 +7764,7 @@
        }
       ],
       "length": 16,
-      "master": 0.661
+      "master": 0.7766
      }
     },
     {
@@ -7732,7 +7806,9 @@
           null
          ]
         ],
-        "tune": -22
+        "tune": -22,
+        "drive": 0.3,
+        "noise": 0.4
        },
        {
         "type": "snare",
@@ -7910,7 +7986,7 @@
        }
       ],
       "length": 16,
-      "master": 0.449
+      "master": 0.4142
      }
     }
    ]

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.3 — De bassdrum klinkt langer door: de body van de kick werd door twee opeenvolgende afbouwen (in de toon en in de envelope) al na ongeveer 60 ms zwak. De toon loopt nu door tot het eind van de envelope en de envelope houdt het niveau even vast (een vijfde van de decay). Andere instrumenten ongewijzigd.
 // 1.11.2 — Plafond achter de stereomix: tot 0,8 (−2 dBFS) ongewijzigd, daarboven zacht naar 1,0 in plaats van boven 0 dBFS te komen. Geen vertraging. De uitgangen per kanaal blijven ongewijzigd.
 // 1.11.1 — Verbeterd: een nieuw of fabrieks-bassdrumkanaal begint met een lage tuning per klankmodel (voorheen 0, waardoor de kick te hoog klonk). Tunes en bewaarde instellingen houden hun eigen tuning; de motor is ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pulse Drums en nieuwe id nl.patchkamer.pulsedrums (voorheen Puls Drums, nl.patchkamer.puls-drums); tunes en songs uit die tijd
@@ -140,7 +141,7 @@ const CSS=`
 const OUT_TRIM=.36*4.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.11.2',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.11.3',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -213,13 +214,13 @@ const __pkDef = {
   if(c.choke)voices.forEach(o=>{if(o!==v&&o.choke===c.choke&&o.t<=t)release(o,t);});
   while(voices.size>128){const old=voices.values().next().value;release(old,t);voices.delete(old);}
   let amp=(family==='kick'?.9:family==='snare'?.62:.45)*vel;
-  env.gain.setValueAtTime(.00001,t);env.gain.linearRampToValueAtTime(amp,t+c.attack);env.gain.exponentialRampToValueAtTime(.00001,t+c.attack+d*1.6);
+  const hold=family==='kick'?d*.22:0;env.gain.setValueAtTime(.00001,t);env.gain.linearRampToValueAtTime(amp,t+c.attack);if(hold)env.gain.setValueAtTime(amp,t+c.attack+hold);env.gain.exponentialRampToValueAtTime(.00001,t+c.attack+hold+d*1.6);  // een bassdrum houdt zijn body even vast
   const track=n=>{own(n);v.nodes.add(n);return n;};
   const source=(s,end)=>{v.src.push(s);sources.add(s);s.onended=()=>{sources.delete(s);try{s.disconnect();}catch{}owned.delete(s);if(v.src.every(x=>!sources.has(x))){v.nodes.forEach(n=>{try{n.disconnect();}catch{}owned.delete(n);});voices.delete(v);}};s.start(t);s.stop(t+end);};
   const tone=(freq,level=.5,wave='sine',len=d,drop=0,delay=0)=>{const o=track(ctx.createOscillator()),g=track(ctx.createGain());o.type=wave;o.frequency.setValueAtTime(Math.min(freq*(1+drop),20000),t);o.frequency.exponentialRampToValueAtTime(Math.max(12,Math.min(freq,18000)),t+Math.min(len*.55,.25));g.gain.setValueAtTime(.00001,t);g.gain.setValueAtTime(Math.max(.00001,level),t+delay);g.gain.exponentialRampToValueAtTime(.00001,t+Math.max(delay+.01,len));o.connect(g).connect(env);source(o,Math.max(len,d*1.6+c.attack)+.04);};
   const noise=(level,cut,mode='highpass',len=d,delay=0)=>{const n=track(ctx.createBufferSource()),g=track(ctx.createGain()),b=track(ctx.createBiquadFilter());n.buffer=noiseBuffer;n.loop=true;b.type=mode;b.frequency.value=Math.min(cut,ctx.sampleRate*.45);b.Q.value=.7;g.gain.setValueAtTime(.00001,t);g.gain.setValueAtTime(Math.max(.00001,level),t+delay);g.gain.exponentialRampToValueAtTime(.00001,t+Math.max(delay+.01,len));n.connect(b).connect(g).connect(env);source(n,Math.max(len,d*1.6+c.attack)+.04);};
   const acoustic=['Rock','Pop','Jazz','Funk'].includes(c.model),bright=.25+c.tone*.75;
-  if(family==='kick'){duck.gain.cancelScheduledValues(t);duck.gain.setValueAtTime(.04,t);duck.gain.exponentialRampToValueAtTime(1,t+.26);tone(f,.95*c.body,c.model==='Punch'?'triangle':'sine',d, c.sweep*(c.model==='Punch'?7:4));tone(f*1.48,acoustic?.22:.03,'sine',d*.3,c.sweep);tone(f*.5,c.sub*.5,'sine',d*1.1,c.sweep*.5);noise(c.click*.6,1700+bright*5500,'highpass',.012+c.tone*.018);}
+  if(family==='kick'){duck.gain.cancelScheduledValues(t);duck.gain.setValueAtTime(.04,t);duck.gain.exponentialRampToValueAtTime(1,t+.26);tone(f,.95*c.body,c.model==='Punch'?'triangle':'sine',d*1.9, c.sweep*(c.model==='Punch'?7:4));tone(f*1.48,acoustic?.22:.03,'sine',d*.3,c.sweep);tone(f*.5,c.sub*.5,'sine',d*1.9,c.sweep*.5);noise(c.click*.6,1700+bright*5500,'highpass',.012+c.tone*.018);}
   else if(family==='fm'){
    const carrier=track(ctx.createOscillator()),modulator=track(ctx.createOscillator()),depth=track(ctx.createGain()),amp=track(ctx.createGain());carrier.type='sine';modulator.type='sine';carrier.frequency.value=f;modulator.frequency.value=Math.min(18000,f*c.ratio);depth.gain.setValueAtTime(f*c.fm,t);depth.gain.exponentialRampToValueAtTime(.0001,t+d);amp.gain.value=.7;modulator.connect(depth).connect(carrier.frequency);carrier.connect(amp).connect(env);source(modulator,d*1.6+c.attack+.04);source(carrier,d*1.6+c.attack+.04);noise(c.noise*.6,2000+bright*5000,'highpass',d*.5);
   }
