@@ -1,0 +1,7881 @@
+{
+ "format": "patchkamer-tunes",
+ "formatVersion": 1,
+ "device": "nl.patchkamer.drumkit",
+ "name": "Drum Kit Styles",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Kits for Drum Kit in the most common styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave. Each kit combines instruments, sound models and a one-bar groove; techno has five kits.",
+ "tree": [
+  {
+   "folder": "Techno",
+   "items": [
+    {
+     "name": "Hypnotic",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.9,
+        "decay": 0.4,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.6,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Hardgroove",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "decay": 0.22,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.25,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Deep",
+        "level": 0.35,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Deep Dub",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.5,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Deep",
+        "level": 0.55,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Deep",
+        "level": 0.3,
+        "pan": 0.35,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "sub",
+        "model": "Deep",
+        "level": 0.5,
+        "decay": 1.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Industrial",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.95,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Industrial",
+        "level": 0.5,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Broken",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "House",
+   "items": [
+    {
+     "name": "Classic",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.7,
+        "pan": 0.15,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.55,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Pop",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Deep",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.5,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Lo-fi",
+        "level": 0.6,
+        "pan": 0.1,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Lo-fi",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Funky",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Funk",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.7,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Funk",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Funk",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Funk",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "tamb",
+        "model": "Funk",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Trance",
+   "items": [
+    {
+     "name": "Uplifting",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.75,
+        "pan": 0.15,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.55,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Pop",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Psy",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.95,
+        "decay": 0.35,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.6,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.3,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Progressive",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Punch",
+        "level": 0.65,
+        "pan": 0.15,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Drum & Bass",
+   "items": [
+    {
+     "name": "Two-Step",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Punch",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Liquid",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.45,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Pop",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Jazz",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Jump Up",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dubstep",
+   "items": [
+    {
+     "name": "Half-Time",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.95,
+        "decay": 0.8,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.35,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "sub",
+        "model": "Industrial",
+        "level": 0.55,
+        "decay": 1.5,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Heavy",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.95,
+        "decay": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "sub",
+        "model": "Deep",
+        "level": 0.55,
+        "decay": 1.8,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Riddim",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "level": 0.95,
+        "decay": 0.7,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "metal",
+        "model": "Industrial",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Hip-hop",
+   "items": [
+    {
+     "name": "Boom Bap",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Lo-fi",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Lo-fi",
+        "level": 0.25,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72,
+      "human": 0.008
+     }
+    },
+    {
+     "name": "Trap",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.95,
+        "decay": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Deep",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.75,
+           "r": 2
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "sub",
+        "model": "Deep",
+        "level": 0.5,
+        "decay": 1.0,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Lo-fi",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Lo-fi",
+        "level": 0.85,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Lo-fi",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Lo-fi",
+        "level": 0.4,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Lo-fi",
+        "level": 0.25,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "wood",
+        "model": "Lo-fi",
+        "level": 0.35,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7,
+      "human": 0.012
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Funk & disco",
+   "items": [
+    {
+     "name": "Disco",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Pop",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "tamb",
+        "model": "Pop",
+        "level": 0.35,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Funk",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Funk",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Funk",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Funk",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Funk",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Funk",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72,
+      "human": 0.006
+     }
+    },
+    {
+     "name": "Boogie",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Funk",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "bongo",
+        "model": "Funk",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Electro",
+   "items": [
+    {
+     "name": "Breakbeat",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "level": 0.95,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Punch",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Robot",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "level": 0.3,
+        "pan": -0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Deep",
+        "level": 0.35,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Miami",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.95,
+        "decay": 0.7,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Deep",
+        "level": 0.8,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Deep",
+        "level": 0.35,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Pop",
+   "items": [
+    {
+     "name": "Dance Pop",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Pop",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Pop",
+        "level": 0.75,
+        "pan": 0.15,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.5,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Pop",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Backbeat",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Pop",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "tamb",
+        "model": "Pop",
+        "level": 0.35,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Pop",
+        "level": 0.45,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Pop",
+        "level": 0.85,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.75,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.35,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Pop",
+        "level": 0.25,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Pop",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.68,
+      "human": 0.008
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Rock",
+   "items": [
+    {
+     "name": "Straight",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Rock",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Rock",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Rock",
+        "level": 0.45,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Rock",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Rock",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "hitom",
+        "model": "Rock",
+        "level": 0.6,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72,
+      "human": 0.006
+     }
+    },
+    {
+     "name": "Driving",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Rock",
+        "level": 0.95,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Rock",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Rock",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Rock",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "midtom",
+        "model": "Rock",
+        "level": 0.6,
+        "pan": -0.1,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "lowtom",
+        "model": "Rock",
+        "level": 0.65,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72,
+      "human": 0.006
+     }
+    },
+    {
+     "name": "Half-Time",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Rock",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Rock",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Rock",
+        "level": 0.45,
+        "pan": 0.25,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Rock",
+        "level": 0.5,
+        "pan": -0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "tamb",
+        "model": "Rock",
+        "level": 0.3,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7,
+      "human": 0.008
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jazz",
+   "items": [
+    {
+     "name": "Swing",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Jazz",
+        "level": 0.55,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Jazz",
+        "level": 0.6,
+        "pan": 0.25,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Jazz",
+        "level": 0.45,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "brush",
+        "model": "Jazz",
+        "level": 0.45,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Jazz",
+        "level": 0.35,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.68,
+      "human": 0.012
+     }
+    },
+    {
+     "name": "Brushes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Jazz",
+        "level": 0.5,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "brush",
+        "model": "Jazz",
+        "level": 0.6,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "brushswirl",
+        "model": "Jazz",
+        "level": 0.45,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Jazz",
+        "level": 0.4,
+        "pan": -0.25,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Jazz",
+        "level": 0.4,
+        "pan": 0.25,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.66,
+      "human": 0.012
+     }
+    },
+    {
+     "name": "Bossa",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Jazz",
+        "level": 0.6,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Jazz",
+        "level": 0.55,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Jazz",
+        "level": 0.4,
+        "pan": -0.25,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "shaker",
+        "model": "Jazz",
+        "level": 0.3,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          {
+           "v": 0.55
+          }
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Jazz",
+        "level": 0.4,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.68,
+      "human": 0.01
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Synthwave",
+   "items": [
+    {
+     "name": "Retro Drive",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Pop",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.9,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "hitom",
+        "model": "Pop",
+        "level": 0.6,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "midtom",
+        "model": "Pop",
+        "level": 0.6,
+        "pan": 0.1,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "lowtom",
+        "model": "Pop",
+        "level": 0.65,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Pop",
+        "level": 0.45,
+        "pan": 0.3,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    },
+    {
+     "name": "Night Ride",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.6,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Deep",
+        "level": 0.9,
+        "decay": 0.4,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Deep",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Deep",
+        "level": 0.4,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.7
+     }
+    },
+    {
+     "name": "Neon",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Pop",
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "level": 0.85,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "level": 0.4,
+        "pan": 0.2,
+        "steps": [
+         [
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          },
+          null,
+          {
+           "v": 0.85
+          },
+          {
+           "v": 0.85
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": -0.2,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.85
+          },
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Pop",
+        "level": 0.5,
+        "pan": 0.3,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.55
+          },
+          null,
+          null,
+          null
+         ]
+        ]
+       },
+       {
+        "type": "cowbell",
+        "model": "Pop",
+        "level": 0.3,
+        "pan": -0.3,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          {
+           "v": 0.7,
+           "p": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null
+         ]
+        ]
+       }
+      ],
+      "length": 16,
+      "master": 0.72
+     }
+    }
+   ]
+  }
+ ]
+}
