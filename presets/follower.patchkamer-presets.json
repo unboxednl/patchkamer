@@ -1,0 +1,348 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.follower",
+  "name": "Follower Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Follower: smooth and fast level following, band-focused followers for bass, voice and hats, onset triggers for drums and notes, and extreme hair-trigger and gate-like settings.",
+  "tree": [
+    {
+      "folder": "Level",
+      "items": [
+        {
+          "name": "Smooth Envelope",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 10,
+            "rel": 300,
+            "gain": 0,
+            "floor": -50,
+            "range": 40,
+            "focus": "alles",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Slow Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 120,
+            "rel": 1800,
+            "gain": 0,
+            "floor": -40,
+            "range": 36,
+            "focus": "alles",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Bass Follower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 5,
+            "rel": 200,
+            "gain": 0,
+            "floor": -45,
+            "range": 30,
+            "focus": "laag",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Voice Follower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 8,
+            "rel": 250,
+            "gain": 6,
+            "floor": -55,
+            "range": 35,
+            "focus": "midden",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Hat Follower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 2,
+            "rel": 80,
+            "gain": 0,
+            "floor": -55,
+            "range": 35,
+            "focus": "hoog",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Kick Ducker",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 2,
+            "rel": 400,
+            "gain": 0,
+            "floor": -40,
+            "range": 25,
+            "focus": "laag",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": true,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -50,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Onsets",
+      "items": [
+        {
+          "name": "Kick Trigger",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 5,
+            "rel": 150,
+            "gain": 0,
+            "floor": -50,
+            "range": 40,
+            "focus": "laag",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.6,
+            "tdec": 100,
+            "hold": 120,
+            "gate": -45,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Snare Trigger",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 5,
+            "rel": 150,
+            "gain": 0,
+            "floor": -50,
+            "range": 40,
+            "focus": "midden",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 80,
+            "hold": 80,
+            "gate": -50,
+            "trigOut": "ch2",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Hat Trigger",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 5,
+            "rel": 150,
+            "gain": 0,
+            "floor": -50,
+            "range": 40,
+            "focus": "hoog",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.6,
+            "tdec": 40,
+            "hold": 40,
+            "gate": -50,
+            "trigOut": "ch3",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Note Follower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 2,
+            "rel": 80,
+            "gain": 0,
+            "floor": -45,
+            "range": 30,
+            "focus": "alles",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.55,
+            "tdec": 150,
+            "hold": 100,
+            "gate": -50,
+            "trigOut": "noot",
+            "trigNote": 48,
+            "sel": {}
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Centered Wobble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 15,
+            "rel": 500,
+            "gain": 0,
+            "floor": -60,
+            "range": 50,
+            "focus": "alles",
+            "freq": 1000,
+            "pol": "bi",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Gate Slammer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 0.5,
+            "rel": 30,
+            "gain": 0,
+            "floor": -24,
+            "range": 6,
+            "focus": "alles",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.5,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -40,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Hair Trigger",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 0.5,
+            "rel": 40,
+            "gain": 12,
+            "floor": -80,
+            "range": 30,
+            "focus": "alles",
+            "freq": 1000,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 1,
+            "tdec": 30,
+            "hold": 10,
+            "gate": -80,
+            "trigOut": "noot",
+            "trigNote": 72,
+            "sel": {}
+          }
+        },
+        {
+          "name": "Tuned Band Follower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "att": 3,
+            "rel": 120,
+            "gain": 6,
+            "floor": -55,
+            "range": 35,
+            "focus": "eigen",
+            "freq": 2400,
+            "pol": "uni",
+            "inv": false,
+            "tsens": 0.6,
+            "tdec": 120,
+            "hold": 60,
+            "gate": -60,
+            "trigOut": "ch1",
+            "trigNote": 60,
+            "sel": {}
+          }
+        }
+      ]
+    }
+  ]
+}
