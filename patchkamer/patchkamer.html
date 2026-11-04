@@ -356,7 +356,7 @@ svg.cables g.cable:hover{opacity:1}
 body.nopbar .pbar{display:none}
 .prdlg .box label{display:grid;gap:4px;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
 .prdlg .box input[type=text],.prdlg .box select{font-size:13px;padding:6px 8px;text-transform:none;letter-spacing:0}
-.libcfg .hint{font-size:11px;color:var(--muted);margin:4px 0 0}
+.libcfg .hint,#srcDirHint{font-size:11px;line-height:1.4;color:var(--muted);margin:4px 0 0;text-transform:none;letter-spacing:0;font-family:inherit}
 .prdlg .box .hint{font-size:11px;color:var(--muted);text-transform:none;letter-spacing:0;min-height:15px}
 .prlib{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:6px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--card-2);min-width:0}
 .prlib.act{border-color:var(--audio)}
@@ -483,7 +483,7 @@ body.nopbar .pbar{display:none}
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
       <div class="libcfg" id="libCfg" hidden></div>
       <div class="libcats" id="lib"></div>
-      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>B</kbd> toont of verbergt dit venster.</div>
+      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.</div>
       <details class="libsec" id="srcSec" open><summary data-i18n="ui.bronnen">Bronnen</summary>
         <div class="srclist" id="srcList"></div>
         <div class="srcadd"><input type="url" id="srcUrl" placeholder="github.com/naam/repo, een map daarin, of URL van een .patchkamer-device.js / patchkamer.json" aria-label="adres van een bron" data-i18n-ph="attr.github_com_naam_repo_een" data-i18n-aria="attr.adres_van_een_bron"><button class="small" id="srcAddUrl" data-i18n="ui.toevoegen">Toevoegen</button></div>
@@ -605,7 +605,7 @@ const I18N={
    "ui.indeling":"Indeling",
    "ui.plaatsen":"Plaatsen",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>B</kbd> toont of verbergt dit venster.",
+   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.",
    "ui.bronnen":"Bronnen",
    "ui.toevoegen":"Toevoegen",
    "ui.lokale_map_kiezen":"Lokale map kiezen…",
@@ -1130,7 +1130,7 @@ const I18N={
    "ui.indeling":"Layout",
    "ui.plaatsen":"Place",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>B</kbd> shows or hides this window.",
+   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window.",
    "ui.bronnen":"Sources",
    "ui.toevoegen":"Add",
    "ui.lokale_map_kiezen":"Choose local folder…",
