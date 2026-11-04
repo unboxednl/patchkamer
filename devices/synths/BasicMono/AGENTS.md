@@ -44,18 +44,20 @@ Meerdere noten tegelijk kunnen niet: het apparaat is monofoon. Noten die elkaar 
 
 Een kleine bijzonderheid: het sub-signaal loopt mee met `fine` en met glide, en gaat net als de hoofdoscillator door het filter. `sub` 1 bij hoge `res` kan dus hard worden (zie het niveau hieronder).
 
-### Gemeten niveaus
+### Gemeten niveaus en de begrenzer
 
 Piek van één noot (C2, velocity 0,8, 0,4 s) bij 48 kHz, gemeten in een offline render:
 
 | Instelling | Piek |
 |---|---|
 | startwaarden | ongeveer 0,59 |
-| `lvl` 1, `sub` 1, `res` 8 | ongeveer 1,5 (**klipt** bij een uitgang van 1,0) |
-| `cut` 80, `res` 24, `lvl` 1, `sub` 1 | ongeveer 1,9 |
+| `lvl` 1, `sub` 1, `res` 8 | 0,99 (zonder begrenzer 1,43 tot 2,0 afhankelijk van de velocity: **klipte**) |
+| `cut` 80, `res` 24, `lvl` 1, `sub` 1, `wave` `square`, velocity 1 | 0,99 (zonder begrenzer 3,2) |
 | `lvl` 0 | ongeveer 0,01 (praktisch stil) |
 
-Houd `lvl` dus onder 0,6, en onder 0,4 als `sub` en `res` allebei hoog staan.
+Waar de overschrijding vandaan kwam: een volle oscillator (±1) en een volle sub (±1) zijn samen al 2 groot vóór het filter; de resonantie voegt daar tot ongeveer een kwart aan toe, de versterker brengt het terug naar 0,8 × velocity, en het niveau `lvl` 1 laat het ongewijzigd door.
+
+Sinds versie 1.11.1 staat er een zachte begrenzer op de uitgang. Tot een niveau van 0,9 verandert hij niets (het signaal blijft bit voor bit gelijk aan versie 1.11.0); daarboven buigt hij zacht af naar een plafond van 0,99. Een tune klipt dus niet meer, maar `lvl` 1 met `sub` 1 klinkt dan wel samengedrukt (vervormd) in plaats van hard. Houd `lvl` toch onder 0,6, en onder 0,4 als `sub` en `res` allebei hoog staan: dan blijft het geluid helemaal onder de begrenzer.
 
 ## Wat het apparaat met een state doet (getest)
 
@@ -63,7 +65,7 @@ Houd `lvl` dus onder 0,6, en onder 0,4 als `sub` en `res` allebei hoog staan.
 - Getallen buiten het bereik worden afgekapt (`cut: 1e9` wordt 8000, `sub: -5` wordt 0); een tekst, `NaN`, `Infinity` of een ontbrekende waarde geeft de startwaarde (`res: "x"` wordt 8).
 - Een ongeldige `wave` geeft `sawtooth`. Onbekende velden worden genegeerd. Zet er geen in.
 - De knoppen en de golfkeuze op de kaart bewegen mee met `setState`; knoppen gaan zacht over (niet beluisterd).
-- Geluid is bit-identiek aan de oudere versie (Monosynth 1.8.0) in een offline render met 160 willekeurige instellingen, nootreeksen en modulatie. De state-sleutels zijn ongewijzigd.
+- Geluid is bit-identiek aan de oudere versie (Monosynth 1.8.0) in een offline render met 160 willekeurige instellingen, nootreeksen en modulatie. Versie 1.11.1 (met begrenzer) is bit-identiek aan 1.11.0 voor elke render die onder 0,9 blijft (65 willekeurige renders en alle 65 tunes uit `basic-mono-styles`: 0 afwijkende samples); alleen wat boven 0,9 komt verandert. De state-sleutels zijn ongewijzigd.
 
 ## Spelen en modulatie
 
@@ -86,7 +88,7 @@ Alle waarden zijn uitgangspunten; luisteren is niet mogelijk, controleer dus op 
 Het apparaat kan niet voor altijd stilvallen of `NaN` geven (zie hieronder), maar je kunt wel een tune maken die onbruikbaar klinkt:
 
 - `lvl` 0: stil.
-- `res` 24 met `cut` onder 150 en `sub` 1: erg hard en schreeuwend; kan klippen. Kies `lvl` onder 0,4.
+- `res` 24 met `cut` onder 150 en `sub` 1: erg hard en schreeuwend; de begrenzer houdt het onder 0,99 maar het wordt samengedrukt. Kies `lvl` onder 0,4.
 - `env` 1 met `dec` 2: de cutoff zakt zo langzaam terug dat elke noot dezelfde fluitende sweep krijgt.
 - Meer dan één noot tegelijk verwachten. Het apparaat is monofoon.
 - Geen velden verzinnen, en geen routing, patroon of positie in de tune zetten.

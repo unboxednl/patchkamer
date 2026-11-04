@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Zachte begrenzer op de uitgang: bij het niveau op 1 met de sub op 1 klipte de uitgang (een volle oscillator plus een volle sub is 2 groot vóór het filter). Tot 0,9 is het geluid bit voor bit ongewijzigd, daarboven buigt het zacht af naar 0,99.
 // 1.11.0 — Nieuw als Basic Mono (nieuwe naam; de id nl.patchkamer.mono blijft gelijk, dus bestaande werkruimtes laden), eigen map, bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Basic Mono
 //   - setState volgt §13: onbekende velden worden genegeerd, ongeldige waarden krijgen de standaard, getallen worden binnen hun bereik afgekapt
@@ -29,12 +30,19 @@ const P = [
 ];
 const BY = Object.fromEntries(P.map(p => [p[0], p]));
 const WAVES = ['sawtooth', 'square', 'triangle'];
+// zachte begrenzer op de uitgang: een volle oscillator plus een volle sub is samen al 2 groot, en met het niveau op 1 klipt dat. De begrenzer telt een correctie op bij het
+// onveranderde signaal: tot 0,9 is de correctie precies 0 (het signaal blijft bit voor bit gelijk), daarboven buigt hij zacht af naar een plafond van 0,99.
+// De curve beslaat −32 … 32 (voor en na de curve een factor 1/32 en 32, beide exact) en geeft de correctie (begrensd signaal min signaal).
+const LIM_K = 0.9, LIM_C = 0.99, LIM_N = 32769, LIM_R = 32;
+const limCurve = (() => { const c = new Float32Array(LIM_N);
+  for (let i = 0; i < LIM_N; i++) { const x = LIM_R * (-1 + 2 * i / (LIM_N - 1)), a = Math.abs(x); const g = a <= LIM_K ? 0 : LIM_K + (LIM_C - LIM_K) * Math.tanh((a - LIM_K) / (LIM_C - LIM_K)) - a; c[i] = Math.sign(x) * g / LIM_R; }
+  return c; })();
 const FAST = { cut: 1200 * Math.log2(8000 / 80), fine: 200, res: 23.5, sub: 1, lvl: 1 };   // signaal −1..1 → eenheid van de AudioParam
 
 export default {
   id: 'nl.patchkamer.mono',
   name: 'Basic Mono',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 340 },
@@ -44,6 +52,7 @@ export default {
   create(ctx, host) {
     const tx = k => (host.lang === 'nl' ? k : (EN[k] ?? k));
     const osc = ctx.createOscillator(), sub = ctx.createOscillator(), vca = ctx.createGain(), out = ctx.createGain(), subG = ctx.createGain();
+    const limPre = ctx.createGain(), lim = ctx.createWaveShaper(), limPost = ctx.createGain(), limOut = ctx.createGain(); limPre.gain.value = 1 / LIM_R; lim.curve = limCurve; limPost.gain.value = LIM_R; limOut.gain.value = 1; out.connect(limOut); out.connect(limPre); limPre.connect(lim); lim.connect(limPost); limPost.connect(limOut);
     osc.type = 'sawtooth'; sub.type = 'square'; vca.gain.value = 0; subG.gain.value = 0.3; out.gain.value = 0.5;
     const mon = ctx.createAnalyser(); mon.fftSize = 256;   // meter op de uitvoer van het filter (voor de versterker)
     let f = null, baseCut = 800;
@@ -92,7 +101,7 @@ export default {
 
     const knobs = {}; let waveSel = null;
     return {
-      inputs: {}, outputs: { out },
+      inputs: {}, outputs: { out: limOut },
       mount(el) {
         waveSel = host.ui.select(el, tx('Golf'), [['sawtooth', tx('zaag')], ['square', tx('blok')], ['triangle', tx('driehoek')]], state.wave, v => { state.wave = WAVES.includes(v) ? v : 'sawtooth'; apply(); });
         P.forEach(([k, lab, mn, mx, st, def, fmt]) => { knobs[k] = host.ui.knob(el, tx(lab), [mn, mx, st], state[k], fmt, v => { state[k] = clamp(fin(v, def), mn, mx); apply(); }, { default: def }); });
@@ -116,7 +125,7 @@ export default {
       getState() { return { ...state }; },
       setState(s) { const d = DEF(); s = s && typeof s === 'object' ? s : {}; state.wave = WAVES.includes(s.wave) ? s.wave : d.wave;
         P.forEach(([k, , mn, mx]) => { state[k] = typeof s[k] === 'number' && Number.isFinite(s[k]) ? clamp(s[k], mn, mx) : d[k]; if (knobs[k]) knobs[k].set(state[k]); }); if (waveSel) waveSel.value = state.wave; apply(); },
-      destroy() { if (dead) return; dead = true; if (guardT) clearInterval(guardT); try { osc.stop(); sub.stop(); } catch (e) {} try { mon.disconnect(); } catch (e) {} try { f.disconnect(); } catch (e) {} try { out.disconnect(); } catch (e) {} Object.values(fastIn).forEach(g => { try { g.disconnect(); } catch (e) {} }); }
+      destroy() { if (dead) return; dead = true; if (guardT) clearInterval(guardT); try { osc.stop(); sub.stop(); } catch (e) {} try { mon.disconnect(); } catch (e) {} try { f.disconnect(); } catch (e) {} try { out.disconnect(); } catch (e) {} try { limPre.disconnect(); lim.disconnect(); limPost.disconnect(); limOut.disconnect(); } catch (e) {} Object.values(fastIn).forEach(g => { try { g.disconnect(); } catch (e) {} }); }
     };
   }
 };
