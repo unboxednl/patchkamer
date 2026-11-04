@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Versterking (+8 dB) achter de compressor: het apparaat en de tunes waren erg zacht (piek rond −14 tot −7 dBFS bij vierstemmige akkoorden). De uitgangsbegrenzer blijft de pieken afronden.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Bowed Ensemble (nieuwe id nl.patchkamer.bowedensemble, eigen map; voorheen Strijk Ensemble, nl.patchkamer.strijk);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Bowed Ensemble; de preset-namen zijn Engels
@@ -31,7 +32,7 @@ const EN = {
     'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Expression makes swells. A purple Mod cable controls sound parameters; the knobs stay the base. Connect MIDI hardware through a keyboard/MIDI device in Patchkamer.'
 };
 export default {
-  id:'nl.patchkamer.bowedensemble',name:'Bowed Ensemble',version:'1.11.0',kind:'instrument',category:'synth',
+  id:'nl.patchkamer.bowedensemble',name:'Bowed Ensemble',version:'1.11.1',kind:'instrument',category:'synth',
   ui:{width:720,minWidth:340},
   ports:{audioIn:[],audioOut:[{id:'out',name:'Stereo strings'}],eventIn:[{id:'notes',name:'Keyboard / notes'}],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   i18n:{nl:{ports:{out:'Stereo strijkers',notes:'Keyboard / noten'}}},
@@ -90,7 +91,7 @@ export default {
     const chorus=[];
     bus.connect(hp=biquad('highpass',35)).connect(body=biquad('peaking',330,0.65)).connect(presence=biquad('peaking',2100,0.8));presence.connect(chorusDry).connect(sum);
     for(let j=0;j<3;j++){const d=own(ctx.createDelay(0.1)),lfo=own(ctx.createOscillator()),depth=gain(0.004),pan=own(ctx.createStereoPanner()),tap=gain(0.34);d.delayTime.value=0.018+j*0.006;lfo.frequency.value=[0.21,0.37,0.63][j];lfo.connect(depth).connect(d.delayTime);presence.connect(d).connect(pan).connect(tap).connect(chorusWet);start(lfo);chorus.push({depth,pan,j,delay:d});}chorusWet.connect(sum);
-    const dry=gain(0.9),roomGain=gain(0.25),expression=gain(0.9),pan=own(ctx.createStereoPanner()),volume=gain(0.8),out=own(ctx.createWaveShaper());
+    const dry=gain(0.9),roomGain=gain(0.25),trim=gain(2.5),expression=gain(0.9),pan=own(ctx.createStereoPanner()),volume=gain(0.8),out=own(ctx.createWaveShaper());
     let room=null,compressor=null;
     // galm en compressor houden hun toestand; de bewaker kan ze vervangen
     function makeCore(){
@@ -98,10 +99,10 @@ export default {
       try{sum.disconnect(room);}catch{}try{dry.disconnect();}catch{}try{roomGain.disconnect();}catch{}
       room=own(ctx.createConvolver());room.buffer=ir;compressor=own(ctx.createDynamicsCompressor());
       sum.connect(dry).connect(compressor);sum.connect(room).connect(roomGain).connect(compressor);compressor.threshold.value=-12;compressor.knee.value=12;compressor.ratio.value=3;compressor.attack.value=0.012;compressor.release.value=0.3;
-      compressor.connect(expression);
+      compressor.connect(trim);
     }
     makeCore();
-    expression.connect(pan).connect(volume).connect(out);
+    trim.connect(expression).connect(pan).connect(volume).connect(out);  // +8 dB versterking na de compressor: de strijkers waren erg zacht
     const curve=new Float32Array(4097);for(let i=0;i<curve.length;i++){const x=i/(curve.length-1)*2-1;curve[i]=0.9*Math.tanh(x/0.9);}out.curve=curve;out.oversample=(host.audio&&host.audio.oversample)||'2x';
     const vibrato=own(ctx.createOscillator()),vibratoDepth=gain(4),drift=own(ctx.createOscillator()),driftDepth=gain(1);vibrato.frequency.value=5.1;drift.frequency.value=0.173;vibrato.connect(vibratoDepth);drift.connect(driftDepth);start(vibrato);start(drift);
     // Fixed pool: no resource growth during rapid sequences or voice stealing.
