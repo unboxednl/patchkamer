@@ -29,7 +29,7 @@ The [user manual](docs/USER-MANUAL_EN.md) walks you through it step by step, wit
 | Device | What it is | Folder |
 |---|---|---|
 | **Duofone** | An analog-style synth with two independent pitches, a shared filter and VCA, ring modulation, hard sync and sample & hold | `devices/synths/Duofone/` |
-| **Acid Baselines** | A bass synth with a 16-step sequencer (accent, slide, octave per step) and 16 classic acid-style patterns | `devices/synths/AcidBaselines/` |
+| **Acid Baselines** | A bass synth with a 16-step sequencer (accent, slide, octave per step), 16 classic acid-style patterns, extra oscillators and four kinds of distortion | `devices/synths/AcidBaselines/` |
 | **Keys / MIDI** | A keyboard and Web MIDI bridge that sends notes to other devices | `devices/tools/Keys/` |
 | **Mixer** | A mixing desk with 1 to 32 channels and 0 to 8 groups: trim, EQ, sends and returns, pan, faders, mute and solo, bundle in and out, and a master with a limiter | `devices/mixer/Mixer/` |
 | **Leveler** | Keeps the average volume of a source steady: a leveler with a limiter behind it | `devices/mixer/Leveler/` |

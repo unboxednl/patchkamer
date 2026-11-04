@@ -115,7 +115,15 @@ Een bassynth met een ingebouwde sequencer van 16 stappen.
 
 ![De kaart van Acid Baselines](images/nl/04-acid-baselines.png)
 
-- **Knoppen** bepalen de klank: golfvorm, octaaf, stemming, cutoff, resonantie, env mod, accent, decaytijden, soft attack, slidetijd, filter-FM, overdrive, toonfilter, VCA-decay en niveau. Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal om een waarde te typen.
+- **Zes secties** groeperen de regelaars in de volgorde waarin het geluid door het apparaat loopt. Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal om een waarde te typen.
+  - **Oscillator:** golfvorm, octaaf en stemming, plus **Sub** (een blokgolf een octaaf lager), **Ruis**, **Osc 2** met een eigen **Detune 2**, en **Ring** (ringmodulatie van de twee oscillatoren).
+  - **Filter:** het filtertype (lowpass, bandpass of highpass), cutoff, resonantie, env mod en **Filter FM**, plus **Filter 2**, een tweede bandpass-filter parallel, met een eigen octaafverschuiving (**F2 octaaf**).
+  - **Envelope:** accent, normal en accent decay, soft attack en VCA-decay.
+  - **Slide:** de glijtijd.
+  - **Distortion:** het **Type** (zacht, hard, fold of asym), **Overdrive**, **Tight** (filtert de bas weg vóór de vervorming, zodat hij strak blijft), **Mix** (vervormd tegenover schoon) en **Crush** (bitdiepte), plus het toonfilter.
+  - **Output:** het niveau.
+
+  Alles wat bovenop de oorspronkelijke regelaars is gekomen (sub, ruis, Osc 2, Ring, Filter 2, filtertype, vervormingstype, Tight, Mix en Crush) staat standaard uit, dus bestaande klanken en tunes blijven zoals ze waren. Combineer veel resonantie, filter-FM en vervorming voor extreme klanken. Een ingebouwde bewaker herstart de filters als ze ontsporen, zodat het geluid niet stil blijft.
 - **Sequencer.** Klik op een vakje om een noot op die stap te zetten; klik nog eens om hem weg te halen. De rijen lopen van C2 tot C3. Onder de noten vind je de rij **Accent** (een luidere, scherpere noot), de rij **Slide** (glijden vanuit de vorige stap) en een keuze **Octaaf** per stap.
 - **Sets.** Kies 1, 2, 4, 8 of 16 sets van 16 stappen. Met de genummerde knoppen kies je welke set je bewerkt.
 - **Patroon kiezen…** zet een van de 16 klassieke patronen in acid-stijl in de set die je bewerkt.
