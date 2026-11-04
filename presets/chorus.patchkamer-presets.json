@@ -1,0 +1,211 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.chorus",
+  "name": "Chorus Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Chorus: subtle doubling and classic two-voice chorus, three-voice ensembles for pads and strings, tempo-synced movement, and a few extreme, characterful settings.",
+  "tree": [
+    {
+      "folder": "Subtle",
+      "items": [
+        {
+          "name": "Subtle Double",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "free",
+            "rate": 0.4,
+            "depth": 0.25,
+            "delay": 14,
+            "width": 0.6,
+            "tone": 12000,
+            "mix": 0.35
+          }
+        },
+        {
+          "name": "Classic Chorus",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "free",
+            "rate": 0.6,
+            "depth": 0.5,
+            "delay": 12,
+            "width": 0.8,
+            "tone": 9000,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Thick Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "free",
+            "rate": 0.8,
+            "depth": 0.35,
+            "delay": 9,
+            "width": 0,
+            "tone": 10000,
+            "mix": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Ensemble",
+      "items": [
+        {
+          "name": "String Section",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ensemble",
+            "sync": "free",
+            "rate": 0.5,
+            "depth": 0.6,
+            "delay": 12,
+            "width": 1,
+            "tone": 8000,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Wide Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ensemble",
+            "sync": "free",
+            "rate": 0.15,
+            "depth": 0.7,
+            "delay": 18,
+            "width": 1,
+            "tone": 7000,
+            "mix": 0.55
+          }
+        },
+        {
+          "name": "Dark Choir",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ensemble",
+            "sync": "free",
+            "rate": 0.2,
+            "depth": 0.8,
+            "delay": 25,
+            "width": 1,
+            "tone": 1200,
+            "mix": 0.7
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Movement",
+      "items": [
+        {
+          "name": "Bar Shimmer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "4",
+            "rate": 0.5,
+            "depth": 0.6,
+            "delay": 10,
+            "width": 1,
+            "tone": 14000,
+            "mix": 0.45
+          }
+        },
+        {
+          "name": "Slow Wash",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ensemble",
+            "sync": "16",
+            "rate": 0.5,
+            "depth": 0.9,
+            "delay": 22,
+            "width": 1,
+            "tone": 5000,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Eighth Pulse",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "0.5",
+            "rate": 0.5,
+            "depth": 0.3,
+            "delay": 8,
+            "width": 0.8,
+            "tone": 11000,
+            "mix": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Seasick",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "free",
+            "rate": 0.35,
+            "depth": 1,
+            "delay": 28,
+            "width": 1,
+            "tone": 3000,
+            "mix": 0.7
+          }
+        },
+        {
+          "name": "Tape Warble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "chorus",
+            "sync": "free",
+            "rate": 5.5,
+            "depth": 0.35,
+            "delay": 8,
+            "width": 0.3,
+            "tone": 4500,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Lo-fi Swarm",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ensemble",
+            "sync": "free",
+            "rate": 7.5,
+            "depth": 1,
+            "delay": 5,
+            "width": 1,
+            "tone": 2500,
+            "mix": 0.8
+          }
+        }
+      ]
+    }
+  ]
+}
