@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die **tunes voor Acid Baselines** maken. Het is ni
 
 ## Wat Acid Baselines is
 
-Een basslijn-synth met een oscillator (zaagtand of blok), een tweevoudig lowpass-filter met resonantie, aparte normal- en accent-decay, soft attack, filter-FM, overdrive en een toonfilter. Er zit een eigen 16-staps sequencer in met accent, slide en octaaf per stap, 1 tot 16 sets (maten), een keuzelijst met 16 klassieke acid-patronen (eigen werk in de stijl; een patroon komt in de maat die je bewerkt) en een lijngenerator. Het speelt ook noten van een externe sequencer.
+Een basslijn-synth met een oscillator (zaagtand of blok) plus sub, ruis en een tweede oscillator met ringmodulatie, een tweevoudig filter (lowpass, bandpass of highpass) met resonantie en een tweede parallel filter, aparte normal- en accent-decay, soft attack, filter-FM, een vervormer met vier typen (zacht, hard, fold, asym) met Tight, Mix en Crush, en een toonfilter. Er zit een eigen 16-staps sequencer in met accent, slide en octaaf per stap, 1 tot 16 sets (maten), een keuzelijst met 16 klassieke acid-patronen (eigen werk in de stijl; een patroon komt in de maat die je bewerkt) en een lijngenerator. Het speelt ook noten van een externe sequencer.
 
 | | |
 |---|---|
@@ -44,13 +44,27 @@ Je maakt klanken (tunes) voor Acid Baselines en zet ze als pack in `../../../tun
 | `muf` | Toonfilter in Hz | 500 … 12000 | 7000 |
 | `vca` | VCA decay (s) | 0,1 … 4 | 2 |
 | `lvl` | Niveau | 0 … 1 | 0,6 |
+| `sub` | Sub-oscillator (blokgolf, een octaaf lager) | 0 … 1 | 0 |
+| `noise` | Ruis | 0 … 1 | 0 |
+| `osc2` | Tweede oscillator (zelfde golfvorm) | 0 … 1 | 0 |
+| `det2` | Detune van osc 2 in cent | −100 … 100 | 0 |
+| `ring` | Ringmodulatie osc × osc 2 | 0 … 1 | 0 |
+| `ftype` | Filtertype van filter 1 | `lowpass`, `bandpass` of `highpass` | `lowpass` |
+| `p2` | Filter 2 (parallelle bandpass, +12 dB bij 1) | 0 … 1 | 0 |
+| `p2o` | Octaafverschuiving van filter 2 ten opzichte van de cutoff | −2 … 3 | 0 |
+| `dtype` | Vervormingstype | `soft`, `hard`, `fold` of `asym` | `soft` |
+| `tight` | Hoogdoorlaat vóór de vervorming in Hz (0 = uit) | 0 … 600 | 0 |
+| `mix` | Nat (vervormd) tegenover droog | 0 … 1 | 1 |
+| `crush` | Bitdiepte na de vervorming (16 = uit) | 2 … 16 | 16 |
 | `seqOn` | Interne sequencer aan | `true` of `false` | `true` |
 | `bars` | Aantal sets | 1, 2, 4, 8 of 16 | 2 |
 | `grid` | Raster: 16 sets | lijst van sets | twee startlijnen |
 
 Elke set in `grid` heeft vier lijsten van 16 stappen: `n` (noot: −1 = rust, 0 … 12 = C2 … C3 in halve tonen), `acc` (accent, 0 of 1), `sl` (slide, 0 of 1) en `oc` (octaaf per stap, −2 … 2).
 
-Een bewaker controleert om de 50 ms de uitvoer van de filterketen. Bij veel resonantie, filter-FM en een omlaag gemoduleerde cutoff kan een filter instabiel worden (`Infinity`, daarna `NaN`); de bewaker vervangt dan de filters, zodat het apparaat niet voor altijd stil blijft en geen `NaN` doorgeeft. Test extreme instellingen altijd ook met een modulator.
+De knoppen staan op de kaart in zes secties (Oscillator, Filter, Envelope, Slide, Distortion, Output). Alle velden vanaf `sub` zijn nieuw en staan standaard uit: een tune zonder die velden klinkt als vroeger, ook al staan ze er niet in. Een tune hoeft ze dus alleen te zetten als de klank er gebruik van maakt.
+
+Een bewaker controleert om de 50 ms de ruwe uitvoer van de filterketen (voor de vervorming). Bij veel resonantie, filter-FM en een omlaag gemoduleerde cutoff kan een filter instabiel worden (`Infinity`, daarna `NaN`); de bewaker vervangt dan de filters, zodat het apparaat niet voor altijd stil blijft en geen `NaN` doorgeeft. Test extreme instellingen altijd ook met een modulator.
 
 Wat het apparaat met een state doet (getest):
 - Getallen buiten het bereik worden afgekapt (`cut: 1e9` wordt 5000); een tekst of ontbrekende waarde geeft de startwaarde.
