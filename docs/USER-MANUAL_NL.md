@@ -159,6 +159,48 @@ Houdt het gemiddelde volume van een bron gelijk. Zet hem tussen een instrument e
 - De meter toont **IN**, **UIT** en **REGEL**, met een lampje voor de begrenzer. **Huidig niveau = doel** zet het doelniveau op wat er nu binnenkomt. **Regeling op 0** zet de correctie terug op 0.
 - Een Leveler heeft **presets**. Zonder AudioWorklet in je browser laat hij het geluid ongewijzigd door en meldt dat.
 
+### Multitrack
+
+Een meersporenrecorder voor tot 16 sporen, sample-gelijk. Hij neemt een bundel op, bijvoorbeeld **Kanalen uit** van de Mixer: verbind de groene bundelkabel met de poort **Bundel**.
+
+![De kaart van Multitrack](images/nl/13-multitrack.png)
+
+- **● Opnemen** en **■ Stop** bedienen de opname. **met start/stop van de klok** laat hem Start en Stop van de klok volgen.
+- **Sporen** bepaalt hoeveel sporen er zijn. Kies per spoor welk bundelkanaal het opneemt, of **— geen**. **nieuwe kanalen vanzelf toewijzen** vult nieuwe bundelkanalen in op lege sporen. **Alles armen** armt elk spoor.
+- Kies het bestandsformaat onder **WAV**: 16 bit, 24 bit of 32 bit float.
+- Takes blijven in het geheugen tot je de pagina sluit. **Bewaar alles (.zip)** bewaart een take als één zipbestand; **Per spoor** bewaart losse sporen.
+- Een Multitrack heeft **presets** (niet de bron van elk spoor).
+
+### Notes
+
+Een notitieblok op de vloer voor ideeën, toonsoort, structuur en wat je nog wilt doen. Het maakt geen geluid en heeft geen poorten. De tekst wordt met de werkruimte bewaard.
+
+![De kaart van Notes](images/nl/14-notes.png)
+
+- **Toonsoort** en **Tempo / gevoel** zijn korte velden. **Deel** heeft knoppen (**Intro**, **Opbouw**, **Break**, **Drop**, **Outro**) die een kop aan de tekst toevoegen.
+- Schrijf in het grote tekstveld. Typ onder **Nog doen** een taak en druk op **Enter**; vink hem af als hij klaar is en haal hem weg met het kruisje.
+- De regel onderaan toont wanneer je de notities voor het laatst wijzigde. Een Notes-kaart heeft **presets**.
+
+### Recorder
+
+Neemt op wat er binnenkomt, bijvoorbeeld de mix, en laat het ongewijzigd doorlopen. Zet hem tussen de Mixer en Speakers.
+
+![De kaart van Recorder](images/nl/15-recorder.png)
+
+- Geef de opname een naam en druk op **● Opnemen** en **■ Stop**. **Opnemen met Start/Stop van de klok** laat hem de klok volgen.
+- Elke take komt in de lijst met **▶** om te beluisteren en **Bewaar**. Takes blijven in het geheugen tot je de pagina sluit; Bewaar geeft een audiobestand (webm/opus of mp4, afhankelijk van je browser).
+- Een Recorder heeft **presets**.
+
+### Scope
+
+Een transparante doorvoer die het geluid laat zien: de audio gaat ongewijzigd van **In** naar **Door**.
+
+![De kaart van Scope](images/nl/16-scope.png)
+
+- **Beeld** kiest wat je ziet: **Spectrum**, **Golfvorm L/R**, **Spectrogram**, **Stereobeeld** of **Peak / RMS**. De regel met getallen toont peak en RMS in dBFS, en CLIP als het signaal over de grens gaat.
+- **FFT** (1024 tot 8192) bepaalt de details van het spectrum, **Glad** hoe rustig het beweegt, **Bereik** hoeveel dB je ziet en **Tijd** de lengte van de golfvorm (5 tot 50 ms). **Pauze** zet het beeld stil.
+- Een Scope heeft **presets**.
+
 ## 7. Tunes en presets
 
 Een **tune** is een volledige instelling van één apparaat dat geluid maakt: alle knoppen, patronen en keuzes. Een **preset** is hetzelfde voor een apparaat zonder eigen geluid, zoals een effect of een mixer. Geen van beide bevat kabels.

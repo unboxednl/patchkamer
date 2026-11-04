@@ -4,6 +4,8 @@
 
 Gebruik, vanuit de root van de repo:   python3 docs/tools/make-screenshots.py [nl] [en]
 Zonder argumenten worden beide talen gemaakt.
+Met `--also=devices/tools/Naam` (herhaalbaar) neemt de demobibliotheek ook een nog niet gecommitte apparaatmap mee,
+bijvoorbeeld bij het toevoegen van een nieuw apparaat vóór de commit.
 
 Nodig: Python 3, `pip install playwright` en `playwright install chromium`.
 Het script zet zelf een webserver op de repo, bouwt een demobibliotheek van alleen de gecommitte
@@ -14,11 +16,15 @@ from playwright.sync_api import sync_playwright
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 LANGS = [a for a in sys.argv[1:] if a in ('nl', 'en')] or ['nl', 'en']
+ALSO = [a[len('--also='):] for a in sys.argv[1:] if a.startswith('--also=')]
 LOCALE = {'en': 'en-US', 'nl': 'nl-NL'}
 PLACE = re.compile('place|plaats', re.I)
 
 def demo_library(dest):
     files = subprocess.check_output(['git', 'ls-files', 'devices'], cwd=ROOT, text=True).split('\n')
+    for extra in ALSO:
+        for dp, _, fn in os.walk(os.path.join(ROOT, extra)):
+            files += [os.path.relpath(os.path.join(dp, f), ROOT) for f in fn if f.endswith('.patchkamer-device.js')]
     for f in files:
         if f.endswith('.patchkamer-device.js'):
             d = os.path.join(dest, os.path.dirname(f[len('devices/'):])); os.makedirs(d, exist_ok=True)
@@ -101,7 +107,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)
     pg = newpage(nopicker=True); load_lib(pg); place(pg, 'Keys'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
-    for dev, shot in (('Mixer', '11-mixer'), ('Leveler', '12-leveler')):
+    for dev, shot in (('Mixer', '11-mixer'), ('Leveler', '12-leveler'), ('Multitrack', '13-multitrack'), ('Notes', '14-notes'), ('Recorder', '15-recorder'), ('Scope', '16-scope')):
         pg = newpage(nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(2500)
         pg.locator('.card').first.screenshot(path=OUT + '/' + shot + '.png'); done(pg)
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
