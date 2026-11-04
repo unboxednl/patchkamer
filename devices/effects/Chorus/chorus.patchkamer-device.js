@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n). setState negeert onbekende velden en kapt getallen af op hun bereik.
 //          Een bewaker vervangt het toonfilter als een niet-eindige ingang (NaN, Infinity) het voorgoed zou vergiftigen. De klank is ongewijzigd.
 // Chorus: Chorus (2 stemmen) of Ensemble (3 stemmen met een trage en een snelle LFO, 120° uit fase, zoals een string-ensemble).
@@ -30,10 +31,11 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.chorus',
   name: 'Chorus',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { name: 'Chorus', ports: { in: 'In', out: 'Out' } } },
+  ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
 
   create(ctx, host) {

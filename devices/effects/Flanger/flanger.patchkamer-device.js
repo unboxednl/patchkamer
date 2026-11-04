@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n), nieuwe worklet-naam. setState negeert onbekende velden en kapt getallen af op hun bereik.
 //          Bewaker in de worklet: NaN en ±Infinity op de ingang worden 0 en ±16 (+24 dB), een niet-eindige Manual-stuurwaarde wordt begrensd, en een vertraglijn waarin toch iets niet-eindigs
 //          terechtkomt, wordt geleegd. Voorheen bleef de terugkoppeling na één NaN voorgoed NaN geven. De vertraglijn is nu groot genoeg voor 96 kHz.
@@ -83,10 +84,11 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.flanger',
   name: 'Flanger',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { name: 'Flanger', ports: { in: 'In', out: 'Out' } } },
+  ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
 
   create(ctx, host) {

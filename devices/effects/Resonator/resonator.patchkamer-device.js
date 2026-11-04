@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 290 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
 //   setState volgt §13: onbekende velden genegeerd, ongeldige waarden op de standaard, getallen afgekapt op hun bereik; een ongeldige tijd
 //   op een noot-gebeurtenis laat het apparaat niet meer struikelen.
@@ -68,10 +69,11 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.resonator',
   name: 'Resonator',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', notes: 'Notes', mod: 'Mod' } } },
+  ui: { width: 300, minWidth: 290 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'notes', name: 'Noten' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
 
   create(ctx, host) {

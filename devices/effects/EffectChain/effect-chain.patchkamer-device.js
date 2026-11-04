@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — De kaart kan niet smaller dan 960 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Effect Chain en nieuwe id nl.patchkamer.effect-chain (voorheen Schakel FX, nl.patchkamer.schakel); songs en presets uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang; poortnamen per taal in i18n), kleuren uit de CSS-variabelen van de host, tekenen via host.frame met een ResizeObserver en een kleurcache (de tekenpoort-omzetting is weg).
 //          De namen van de ketenpresets zijn Engels (oude Nederlandse namen in een bewaarde state worden herkend). setState negeert onbekende velden en kapt getallen af op hun bereik.
@@ -132,7 +133,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.11.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:360},
+  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.11.1', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
   i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',mod:'Mod'}}},
   ports:{audioIn:[{id:'in',name:'Stereo in'}],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   create(ctx,host){
