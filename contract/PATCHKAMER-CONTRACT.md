@@ -1,289 +1,188 @@
-# Patchkamer — Instrumentcontract v1.4 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.6 voor bouwende agents
 
-_Wijzigingen in v1.4: snelle (sample-nauwkeurige) sturing met `fast: true` + `modInput(paramId)` en `host.modSignal`; eigen DSP via AudioWorklet met `host.loadWorklet(naam, code)`. Optioneel: apparaten uit v1.3 werken ongewijzigd._
+Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één `.js`-bestand op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
-_Wijzigingen in v1.3: sturing. Een nieuwe kabelsoort (`mod`, paars gestippeld) stuurt parameters in plaats van geluid. Apparaten geven hun stuurbare parameters op met `params()` en ontvangen `modulate(offsets)`; modulatoren (`kind: 'modulator'`) sturen met `host.modulate`. Volledig optioneel: apparaten uit v1.2 werken ongewijzigd._
+_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 en v1.6 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets._
 
-_Wijzigingen in v1.2: poorten die tijdens het draaien veranderen (`host.setPorts`) en poorten die het apparaat zelf in zijn interface plaatst (`ui.jacks` + `host.ui.jack`)._
-
-_Wijzigingen in v1.1: identiteit `id@version` met versiewissel, optioneel `ui.width`, Shadow DOM-advies, optioneel `host.setTempo`, strengere validator._
-
-Dit document is de volledige, zelfstandige instructie om een instrument, effect of hulpapparaat te bouwen dat werkt in **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één `.js`-bestand op dat aan dit contract voldoet en door `validate-instrument.mjs` komt.
+| Versie | Wat erbij kwam |
+|---|---|
+| v1.0 | Basis: default export, poorten, klok, gebeurtenissen, state |
+| v1.1–v1.3 | Kaartbreedte (`ui.width`, `ui.minWidth`) en `category` (het precieze versienummer staat niet meer vast) |
+| v1.2 | Poorten die veranderen (`host.setPorts`), poorten in je eigen UI (`ui.jacks` + `host.ui.jack`) |
+| v1.3 | Sturing: paarse kabels, `params()` + `modulate()`, modulatoren (`kind: 'modulator'`) met `host.modulate` |
+| v1.4 | Snelle sturing (`fast: true`, `modInput`, `host.modSignal`) en AudioWorklets (`host.loadWorklet`) |
+| v1.5 | Bundels: één dikke groene kabel met veel audiokanalen (`multiIn`/`multiOut`, `bundles`, `onBundle`, `host.bundleChanged`, `host.isWired`) |
+| v1.6 | Presets: `setState` moet ook de knoppen bijwerken; optioneel `getPreset`/`setPreset` om routing buiten presets te houden |
 
 ---
 
 ## 1. Wat Patchkamer is
 
-- Een webpagina (host) met een **vloer** waarop apparaten als kaarten staan, verbonden met kabels.
-- Twee kabelsoorten: **audio** (AudioNode → AudioNode) en **gebeurtenissen** (noten, trigs, CC als JSON-objecten).
-- Eén gedeelde **klok** (BPM, swing). De host plant elke zestiende noot vooruit en meldt die aan elk apparaat dat het wil weten.
-- Apparaten worden geladen als **ES-modules**. Alles wat de module nodig heeft, zit in dat ene bestand. Geen imports van buiten, geen netwerk, geen externe assets.
+- Een webpagina (de **host**) met een **vloer** waarop apparaten als kaarten staan, verbonden met kabels.
+- Vier kabelsoorten:
+  - **audio** (cyaan): AudioNode → AudioNode;
+  - **gebeurtenissen** (oranje): noten, trigs en CC als kleine JSON-objecten;
+  - **sturing** (paars): een modulator verschuift parameters van een ander apparaat;
+  - **bundel** (dik, groen): veel audiokanalen tegelijk, elk met een naam.
+- Eén gedeelde **klok** (BPM, swing). De host plant elke zestiende noot vooruit en meldt die aan elk apparaat dat dat wil weten.
+- Apparaten zijn **ES-modules**. Alles wat de module nodig heeft, zit in dat ene bestand: geen imports, geen netwerk, geen externe bestanden.
+- Elke kaart heeft een **presetbalk**. De host bewaart en herstelt presets met de state van het apparaat (§13).
 
-Een instrument beslist zelf hoe het klinkt en hoe zijn UI eruitziet; de host beslist over verbindingen, timing, opslaan en laden.
+Een apparaat beslist zelf hoe het klinkt en hoe zijn UI eruitziet. De host beslist over verbindingen, timing, opslaan, laden en presets.
 
 ---
 
 ## 2. Het bestand
 
-Eén ES-module met een default export. Minimale vorm:
+Eén ES-module met een default export:
 
 ```js
 export default {
-  id: 'nl.jouwdomein.naam',      // uniek, reverse-DNS, kleine letters, [a-z0-9.-]
-  name: 'Leesbare naam',         // max ~18 tekens, wordt op de kaart getoond
-  version: '1.0.0',              // semver
+  id: 'nl.jouwdomein.naam',      // uniek, reverse-DNS, kleine letters: [a-z0-9] en punten/streepjes
+  name: 'Leesbare naam',         // kort; staat op de kaart en in de bibliotheek
+  version: '1.0.0',              // semver x.y.z
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
-  category: 'effect',           // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool'
-  ui: { width: 640, minWidth: 420 },  // optioneel: standaardbreedte 200..6000 px (standaard ~300) en kleinste zinvolle breedte
+  category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool'
+  ui: { width: 360, minWidth: 260, jacks: false },   // optioneel, zie §12
   ports: {
     audioIn:  [{ id: 'in',    name: 'In' }],
     audioOut: [{ id: 'out',   name: 'Uit' }],
     eventIn:  [{ id: 'notes', name: 'Noten' }],
     eventOut: [{ id: 'trigs', name: 'Trigs' }],
-    // optioneel (v1.3): modIn / modOut — sturing, zie §7b
+    modIn:    [],                // sturing in (zelden nodig: de host geeft automatisch 'mod', zie §8)
+    modOut:   [],                // sturing uit (alleen modulatoren)
+    multiIn:  [],                // bundel in (v1.5)
+    multiOut: [],                // bundel uit (v1.5)
   },
   create(ctx, host) { /* ... */ return instance; }
 };
 ```
 
-### Identiteit en versies
+**Identiteit.** Een apparaat is uniek door `id` + `version`. Hetzelfde `id` met een andere `version` is een andere versie van hetzelfde apparaat. Beide kunnen tegelijk geladen zijn en op een kaart kun je tussen versies wisselen: de host bewaart `getState()`, maakt de nieuwe versie, roept `setState()` aan en legt de kabels opnieuw. Houd daarom poort-id's gelijk tussen versies, en laat `setState` zowel oude als nieuwe state accepteren. Nieuw gedrag betekent een nieuwe `version`; het `id` en de bestandsnaam blijven gelijk.
 
-- Een apparaat wordt uniek bepaald door **`id` + `version`** (de host gebruikt intern de sleutel `id@version`). Hetzelfde `id` met een andere `version` is een andere versie van hetzelfde apparaat; beide kunnen tegelijk geladen zijn.
-- `id` verandert nooit tussen versies. Een nieuw `id` is een nieuw apparaat.
-- `version` is semver (`MAJOR.MINOR.PATCH`). De host sorteert versies numeriek en zet standaard de nieuwste op de vloer.
-- Dezelfde `id@version` opnieuw laden **vervangt** die versie in de bibliotheek; apparaten die al op de vloer staan houden hun code tot je ze wisselt.
-- Op elke kaart kan de gebruiker van versie wisselen. De host doet dan: `getState()` van de oude versie → `destroy()` → `create()` van de nieuwe versie → `setState(oudeState)` → kabels opnieuw leggen. Kabels naar poort-id's die in de nieuwe versie niet bestaan worden losgehaald en gemeld.
-- Daarom: **behoud poort-id's tussen versies** en laat `setState` zowel oudere als nieuwere state accepteren (onbekende velden negeren, ontbrekende velden standaardwaarde geven). Hernoem je een poort of verander je de betekenis van state op een niet-compatibele manier, verhoog dan `MAJOR`.
-- Een opgeslagen opstelling bewaart per apparaat `def` (id) en `version`. Ontbreekt die versie bij het laden, dan gebruikt de host de nieuwste beschikbare versie van hetzelfde `id` en meldt dat.
+**`kind`** is een hint voor de bibliotheek en voor de validator, geen beperking. Alleen `kind: 'output'` mag met `ctx.destination` verbinden. Een `modulator` heeft minstens één `modOut`.
 
-### Categorie in de bibliotheek
+**`category`** bepaalt waar het apparaat in de bibliotheek staat. Zonder category leidt de host hem af van `kind`.
 
-`category` bepaalt onder welk kopje een apparaat in de bibliotheek staat. Kies het kopje waar een muzikant het zou zoeken:
+---
 
-| `category` | Kopje | Voor |
+## 3. Poorten
+
+- Alle acht lijsten mogen leeg zijn of ontbreken. Poort-id's zijn uniek binnen hun lijst en bestaan uit `[a-z0-9_-]`.
+- Elke `audioIn`-poort heeft een AudioNode in `instance.inputs`, elke `audioOut`-poort een AudioNode in `instance.outputs`, met dezelfde id.
+- **Poorten die veranderen (v1.2).** `host.setPorts(this, ports)` vervangt je poortenlijst terwijl je apparaat draait, bijvoorbeeld als de gebruiker meer kanalen kiest. Zet eerst de nieuwe AudioNodes in `inputs`/`outputs` en roep dan `setPorts` aan. Kabels naar poorten die verdwijnen, haalt de host los.
+- **Poorten in je eigen UI (v1.2).** Met `ui: { jacks: true }` tekent de host geen poortenrij. Je plaatst dan elke poort zelf met `host.ui.jack(this, parent, poortId, 'in' | 'out', label)`. Dat werkt voor alle vier de kabelsoorten.
+
+---
+
+## 4. De instance
+
+`create(ctx, host)` krijgt de gedeelde AudioContext en de host, en geeft een object terug:
+
+| Veld | Verplicht | Wat de host ermee doet |
 |---|---|---|
-| `synth` | Synths | toonbronnen die noten spelen of een drone maken |
-| `groove` | Drums & grooveboxen | drummachines en complete grooveboxen met eigen patronen |
-| `sequencer` | Sequencers | apparaten die vooral noten, trigs of CC uitsturen |
-| `mod` | Modulatie | modulatoren: sturen parameters van andere apparaten, maken zelf geen geluid (v1.3) |
-| `effect` | Effecten | audio in, bewerkte audio uit |
-| `mix` | Mixen & uitgang | mixers, sommering, de uitgang naar de luidsprekers |
-| `tool` | Meten & hulpmiddelen | scopes, meters, klokhulpen, utilities |
+| `inputs` | ja | `{ poortId: AudioNode }` voor elke `audioIn` |
+| `outputs` | ja | `{ poortId: AudioNode }` voor elke `audioOut` |
+| `mount(el)` | ja | Bouw je UI in dit lege element. Wordt één keer aangeroepen, ná `create`. |
+| `unmount()` | nee | Stop animaties (`requestAnimationFrame`) en timers van je UI. |
+| `onStep(info)` | nee | Klok: elke zestiende noot, vooruit gepland (§5). |
+| `onTransport({ playing })` | nee | Start en stop van de klok. |
+| `onEvent(poortId, ev)` | nee | Inkomende gebeurtenis (§6). |
+| `getState()` | ja | Alles wat nodig is om het apparaat exact te herstellen, als gewone JSON. |
+| `setState(s)` | ja | Zet state terug, **inclusief de knoppen in je UI** (§13). |
+| `destroy()` | ja | Stop bronnen, ontkoppel nodes. Moet twee keer aangeroepen kunnen worden. |
+| `params()`, `modulate(o)` | nee | Stuurbaar maken (v1.3, §8). Altijd samen. |
+| `modInput(paramId)` | bij `fast` | Snelle sturing (v1.4, §9). |
+| `onModTargets(t)`, `onModSources(s)` | modulator | Wie je stuurt, wie jou stuurt (§8). |
+| `bundles` | bij `multiOut` | `{ poortId: () => ({ label, channels }) }` (v1.5, §11) |
+| `onBundle(poortId, sleutel, bundel)` | bij `multiIn` | Bundel aangesloten, gewijzigd of los (v1.5, §11) |
+| `getPreset()`, `setPreset(p)` | nee | Alleen als een preset iets niet moet bevatten (v1.6, §13). Altijd samen. |
 
-Zonder `category` leidt de host het kopje af van `kind` (`instrument` → Synths, `effect` → Effecten, `mixer`/`output` → Mixen & uitgang, `utility` → Meten & hulpmiddelen). `kind` blijft de technische soort; `category` is alleen de plek in de bibliotheek.
-
-Regels voor `ports`:
-- Elke lijst mag leeg zijn, maar moet bestaan. Poort-id's zijn uniek binnen hun lijst, kleine letters.
-- `kind` is een hint voor de bibliotheek, geen beperking. Een `instrument` heeft normaal `audioOut`, een `effect` `audioIn` + `audioOut`, een `output` alleen `audioIn`, een `utility` wat het nodig heeft.
-- Poorten staan vast na laden. Dynamische poorten bestaan niet in v1.
-
----
-
-## 3. De instance
-
-`create(ctx, host)` wordt één keer aangeroepen per exemplaar op de vloer en geeft een object terug:
-
-| Veld | Verplicht | Betekenis |
-|---|---|---|
-| `inputs` | ja (mag `{}`) | object: poort-id → AudioNode, één per `audioIn`-poort |
-| `outputs` | ja (mag `{}`) | object: poort-id → AudioNode, één per `audioOut`-poort |
-| `mount(el)` | ja | bouw de UI in dit lege element (breedte ≈ 280 px) |
-| `unmount()` | nee | stop animaties; wordt aangeroepen vóór `destroy` |
-| `onStep(info)` | nee | klok-callback, zie §4 |
-| `onTransport({playing})` | nee | start/stop; bij stop: laat klinkende stemmen netjes uitsterven |
-| `onEvent(portId, ev)` | nee | inkomende gebeurtenis, zie §5 |
-| `getState()` | ja | JSON-serialiseerbaar object dat het geluid exact herstelt |
-| `setState(s)` | ja | herstel uit `getState()`; ontbrekende velden → standaardwaarden, onbekende velden negeren |
-| `destroy()` | ja | stop oscillators, `disconnect()` op alle eigen nodes |
-
-De host zet zelf `instance._id` en `instance._def`; raak die niet aan, maar geef `this`/de instance door aan `host.emit`.
+Volgorde bij het plaatsen van een kaart: `create` → `mount` → `setState(opgeslagen)` (als er een opgeslagen state is) → kabels. Bij het laden van een werkruimte komen de kabels pas daarna, in een volgend frame.
 
 ---
 
-## 4. Klok en timing
+## 5. Klok en timing
 
 ```js
-onStep({ step, bar, time, stepDur, bpm, swing })
+onStep({ step, bar, time, stepDur, bpm, swing }) { ... }
 ```
 
-- Wordt voor **elke zestiende noot** aangeroepen, ongeveer 100 ms vóór het moment zelf (lookahead).
-- `step` = 0..15 binnen de maat, `bar` telt door vanaf 0, `time` = AudioContext-tijd waarop de stap klinkt (swing is al verwerkt), `stepDur` = duur van één stap in seconden.
-- **Plan alles op `time`**: `osc.start(time)`, `param.setValueAtTime(v, time)`, `param.setTargetAtTime(v, time, tc)`. Nooit `Date.now()`, `setTimeout` of `setInterval` voor geluid. UI-feedback (cursor, led) mag wél via `setTimeout(…, (time - ctx.currentTime) * 1000)`.
-- `onStep` draait in de planner: **nooit een exception laten ontsnappen**, geen zware berekeningen, geen DOM-opbouw. Maak buffers en curves vooraf in `create`.
-- Wil je iets per maat doen: `if (step === 0) …`. Wil je iets per N maten: `if (step === 0 && bar % N === 0) …`.
+- De host roept `onStep` aan voor **elke zestiende noot**, ruim vóór het moment zelf (vooruitkijken ongeveer 100 ms).
+- `step` loopt van 0 tot 15, `bar` telt door. `time` is AudioContext-tijd; swing zit er al in verwerkt.
+- Plan geluid altijd op `time`: `osc.start(time)`, `param.setValueAtTime(v, time)`. Gebruik nooit `Date.now()` of `setTimeout` voor timing.
+- Lees het tempo uit `bpm` en `stepDur`. De klok is van de host. `host.setTempo(bpm)` mag alleen na een klik van de gebruiker, bijvoorbeeld bij het kiezen van een preset die een tempo voorstelt.
+- Gooi geen fouten in `onStep`: die functie draait in de planner van de host.
+- In `onStep` mag je ook je UI bijwerken, zoals een stapcursor.
 
 ---
 
-## 5. Gebeurtenissen
+## 6. Gebeurtenissen
 
-Verzenden: `host.emit(instance, 'poortId', ev)` — alleen op poorten uit je eigen `eventOut`.
-Ontvangen: `onEvent(portId, ev)` — alleen voor poorten uit je `eventIn`.
-
-Vaste vormen (velden erbij mag, deze niet weglaten):
+Versturen: `host.emit(this, 'poortId', ev)`. De poort moet in `eventOut` staan. Ontvangen doe je in `onEvent(poortId, ev)`.
 
 ```js
-{ type: 'note', note: 60, vel: 0.8, time, dur }   // note = MIDI-nummer, vel 0..1, dur in seconden
-{ type: 'trig', lane: 'kick', vel: 0.9, time }    // lane = vrije string
-{ type: 'cc',   id: 'cutoff', value: 0.5, time }  // value genormaliseerd 0..1
+{ type: 'note', note: 60, vel: 0.8, time, dur }    // MIDI-nootnummer, velocity 0..1, duur in seconden
+{ type: 'trig', vel: 0.9, time, lane: 'kick' }     // een slag; lane zegt welke stem
+{ type: 'cc', id: 'cutoff', value: 0.5, time }     // een waarde 0..1 op een naam
 ```
 
-- `time` is altijd AudioContext-tijd; ontvangers plannen daarop. Onbekende `type` negeren.
-- Een synth die `note` ontvangt, sluit de gate op `time + dur` (of eigen release). Een slide/legato is: twee noten waarvan de tweede begint vóór `time + dur` van de eerste; dat mag je herkennen, maar hoeft niet.
-- Een apparaat dat CC uitstuurt (LFO, sequencer, macro-knop) stuurt genormaliseerd 0..1; de ontvanger schaalt naar zijn eigen bereik.
+- `time` is altijd AudioContext-tijd. Plan op `time`, niet op het moment van ontvangst.
+- Negeer types die je niet kent; gooi geen fout.
 
 ---
 
-## 6. Audio
+## 7. Audio
 
-- De host verbindt `outputs[x]` van het ene apparaat met `inputs[y]` van het andere via `connect`/`disconnect`. Eén AudioNode per poort; een AudioNode mag voor meerdere poorten dienen (bijvoorbeeld een Analyser als in én uit).
-- **Nooit** zelf `ctx.destination` aansluiten, tenzij `kind === 'output'`. Een `output` moet dan zelf een limiter zetten.
-- Houd je uitgang rond **−12 dBFS** bij normale instellingen; de mixer en de uitgang doen de rest. Interne luide trappen (vervorming, resonantie) compenseer je zelf.
-- Alle nodes komen uit de meegegeven `ctx`. Maak geen eigen AudioContext.
-- Oscillators die blijven lopen (drones, LFO's) start je in `create` en stop je in `destroy`. Eenmalige stemmen (drumslagen) stop je met `node.stop(time + duur)`.
-
----
-
-## 7. UI
-
-`mount(el)` krijgt een leeg `<div>` in de kaart. De kaart groeit mee in hoogte; houd het compact. Heb je meer ruimte nodig, zet dan `ui: { width }` in de definitie (200–6000 px).
-
-**Ruimte boven compactheid.** De vloer is onbegrensd en zoomt van 10% tot 250%. Ontwerp een apparaat dus op de breedte waarop het het best leesbaar en bespeelbaar is, niet zo smal mogelijk. Is het apparaat afgeleid van een bestaand instrument of pagina, neem dan diens ontwerpbreedte over (`max-width` van de inhoud plus ~22 px kaartrand). Vouw niets standaard in om hoogte te sparen; inklappen mag als keuze van de gebruiker.
-
-**De gebruiker bepaalt de maat.** Elke kaart heeft greepjes op de rechterrand (breedte), de onderrand (hoogte) en de hoek (beide); dubbelklik zet de standaardmaat terug. De host bewaart de maat per exemplaar in de opstelling en houdt hem vast bij een versiewissel. Voor jouw apparaat betekent dat:
-
-- `ui.width` is alleen de **standaard**breedte. Je UI moet ook smaller en breder goed werken: gebruik `repeat(auto-fit, minmax(…))`-grids en container queries, geen vaste pixelbreedtes voor het geheel.
-- Zet `ui.minWidth` als je layout onder een bepaalde breedte onbruikbaar wordt; de host laat de kaart dan niet smaller worden.
-- Geeft de gebruiker de kaart een vaste hoogte, dan scrolt de host je UI binnen de kaart; de poorten blijven zichtbaar. Zelf `height` of `overflow` op je buitenste element zetten is niet nodig.
-
-**Reageer op de kaartbreedte, niet op het venster.** `@media (max-width: …)` kijkt naar het browservenster; binnen een kaart is dat zinloos. Gebruik in je shadow root `container-type: inline-size` op je buitenste element en `@container (max-width: …)` voor je breekpunten.
-
-**Grote of eigen-gestileerde interfaces: gebruik Shadow DOM.** Hang een shadow root aan een eigen div en bouw daarin:
-
-```js
-mount(el) {
-  const wrap = document.createElement('div'); el.appendChild(wrap);
-  const root = wrap.attachShadow({ mode: 'open' });
-  root.innerHTML = '<style>' + CSS + '</style><div class="app">…</div>';
-  root.getElementById('mijn-knop').onclick = …;   // id's zijn per exemplaar uniek binnen de shadow root
-}
-```
-
-Zo lekken je stijlen niet naar de host of andere apparaten, en kunnen twee exemplaren dezelfde id's gebruiken. Gebruik in je CSS `:host { … }` in plaats van `:root`. Lettertypen: de host laadt Barlow Condensed, Fira Code, Oswald, IBM Plex Mono, Chakra Petch, JetBrains Mono, Syne en DM Mono; geef altijd een terugvalstapel op. `host.ui.*` werkt alleen buiten de shadow root (de host-CSS komt daar niet in). Hulpmiddelen op `host.ui`:
-
-```js
-host.ui.knob(el, 'Label', [min, max, step], waarde, fmtFn, onChangeFn)   // -> { set(v) }
-host.ui.select(el, 'Label', [[value, tekst], ...], waarde, onChangeFn)   // -> <select>
-host.ui.steps(el, 'Label', array16, onChangeFn)                          // -> { btns, paint(), cursor(step) }
-host.ui.noise(ctx)        // AudioBufferSourceNode met witte ruis, loop aan, nog niet gestart
-host.ui.curve(k)          // Float32Array vervormingscurve, k = 0..1, voor WaveShaperNode.curve
-```
-
-Eigen HTML mag ook. Beschikbare CSS-klassen uit de host: `.k` (knoppenrij), `.grid16` + `.st` (stapknoppen), `.rowlab`, `.meter`, `.note`. Gebruik geen globale CSS en geen `id`-attributen die kunnen botsen; prefix eigen id's met je module-id.
-
-Gebruikersacties in de UI werken je `state` bij **en** passen het geluid direct toe (met `setTargetAtTime(v, ctx.currentTime, 0.02)` tegen klikken). `setState` moet dezelfde route nemen en ook de UI bijwerken.
+- De host verbindt jouw `outputs[x]` met de `inputs[y]` van een ander apparaat. Je verbindt nooit zelf met andere apparaten.
+- Verbind nooit met `ctx.destination`, tenzij je `kind: 'output'` bent.
+- Houd je uitgang rond −12 dBFS; de mixer en de uitgang doen de rest.
+- Maak geen eigen AudioContext. Gebruik `ctx` uit `create`.
+- Ruis: `host.ui.noise(ctx)` geeft een lussende BufferSource met witte ruis. Vervorming: `host.ui.curve(k)` geeft een WaveShaper-curve (k 0..1).
 
 ---
 
-### Tempo voorstellen (optioneel)
+## 8. Sturing (v1.3)
 
-De klok is van de host. Lees het tempo uit `onStep` (`bpm`, `stepDur`) en nooit uit een eigen knop. Een preset mag na een **klik van de gebruiker** zijn tempo voorstellen met `host.setTempo && host.setTempo(134)`; roep dit nooit aan vanuit `create`, `mount`, `setState` of `onStep`.
+Paarse kabels sturen parameters, geen geluid. Een modulator (LFO, MSEG, Drift…) laat de parameters van een ander apparaat rond hun knopstand bewegen.
 
-### Poorten die veranderen (v1.2)
-
-Sommige apparaten hebben een instelbaar aantal poorten, zoals een mixer met een instelbaar aantal kanalen. `ports` in de definitie is dan de **beginsituatie**. Verander je de configuratie, dan meld je de nieuwe lijst met:
+**Bestuurbaar apparaat.** Geef `params()` en `modulate(offsets)`. De host geeft je dan automatisch een sturingsingang met id `mod`.
 
 ```js
-host.setPorts(this, { audioIn: [...], audioOut: [...], eventIn: [...], eventOut: [...] });
-```
-
-Volgorde:
-
-1. Maak de AudioNodes voor nieuwe poorten aan en zet ze in `inputs`/`outputs`.
-2. Roep `host.setPorts` aan. De host haalt kabels naar verdwenen poorten los (en meldt dat) terwijl de oude nodes nog bestaan.
-3. Ruim daarna de nodes van verdwenen poorten op en haal ze uit `inputs`/`outputs`.
-
-Houd de id's van poorten die blijven bestaan gelijk; hun kabels blijven dan liggen. Roep `setPorts` niet aan vanuit `create` (de host kent je dan nog niet); doe het vanuit `setState` of een actie van de gebruiker. De configuratie hoort in je state, zodat een geladen opstelling eerst de juiste poorten krijgt en daarna de kabels.
-
-### Poorten in je eigen layout (v1.2)
-
-Standaard tekent de host al je poorten in één rij bovenaan de kaart. Wil je ze op een eigen plek, bijvoorbeeld bovenaan elk mixerkanaal, zet dan `ui: { jacks: true }` en plaats **elke** poort zelf:
-
-```js
-const el = host.ui.jack(this, parent, 'ch1', 'in', '1');   // instance, ouder-element, poort-id, 'in'|'out', label
-```
-
-- De host maakt het element en regelt alles: kabels slepen, oplichten, kabels tekenen. Jij bepaalt alleen waar het staat.
-- Jacks moeten in de **gewone DOM** van je kaart staan, niet in een shadow root; anders kan de host ze niet vinden. Gebruik voor je eigen stijlen dan een uniek klasse-prefix (bijvoorbeeld `.mx2-…`) in een `<style>` binnen je element.
-- Bouw je je interface opnieuw op (bijvoorbeeld na `setPorts`), maak dan ook de jacks opnieuw aan. Scrollt een deel van je interface, dan tekent de host de kabels zelf bij.
-- De validator controleert dat elke jack bij een bestaande poort hoort en dat er minstens één geplaatst is als `ui.jacks` aan staat.
-
-Voorbeeld: `mixer2.js` (Mixer 2.1.0) doet beide.
-
-## 7b. Sturing: parameters laten bewegen (v1.3)
-
-Naast audio (cyaan) en gebeurtenissen (oranje) kent Patchkamer **sturing** (paars, gestippeld). Een sturingskabel draagt geen geluid en geen noten, maar een continue afwijking op parameters van een ander apparaat. Een modulator is geen sequencer: hij speelt niets, hij laat bestaande klank bewegen.
-
-### Bestuurbaar worden (instrument of effect)
-
-Implementeer twee functies op je instance. De host geeft je dan automatisch een sturingsingang `mod` (je mag die ook zelf opgeven als `ports.modIn: [{ id: 'mod', name: 'Mod' }]`).
-
-```js
-params() {          // wat een modulator mag besturen; gewone data, mag veranderen (meld dat met host.paramsChanged(this))
+params() {
   return [
-    { id: 'cut',  name: 'Cutoff', lane: 'synth', laneName: 'Synth', min: 80, max: 8000, scale: 'log', role: 'filter', drift: 0.10, on: true },
-    { id: 'kick.tune', name: 'Tune', lane: 'kick', laneName: 'Kick', min: 30, max: 90, scale: 'log', role: 'pitch', drift: 0.04, on: true },
+    { id: 'cut', name: 'Cutoff', lane: 'filter', laneName: 'Filter', min: 80, max: 8000,
+      role: 'filter', scale: 'log', drift: 0.10, on: true, fast: false },
   ];
 },
-modulate(offsets) {  // { paramId: -1..1 } — vervangt de vorige set; ontbrekende ids = 0
-  for (const k in mod) delete mod[k]; Object.assign(mod, offsets);
-  apply();          // pas continue waarden direct toe; waarden die per noot gelden lees je bij de volgende noot
+modulate(offsets) {   // { paramId: −1..1 } — deel van het bereik, bovenop de knop
+  for (const k in mod) delete mod[k];
+  for (const k in offsets) if (bekend(k)) mod[k] = offsets[k];
+  apply();
 }
 ```
 
-| Veld | Betekenis |
-|---|---|
-| `id` | uniek binnen het apparaat, stabiel tussen versies (de selectie in een modulator wordt erop bewaard) |
-| `name` | korte naam in de modulator |
-| `lane`, `laneName` | spoor: parameters met dezelfde `lane` worden samen getoond (een synth heeft er één, een drumcomputer één per drumgeluid) |
-| `min`, `max` | bereik van de knop |
-| `scale` | `'lin'` of `'log'`: hoe jij de afwijking toepast (log voor frequenties en tijden) |
-| `role` | soort parameter: `pitch`, `filter`, `res`, `env`, `decay`, `level`, `pan`, `sub`, `glide`, of eigen; modulatoren laten gelijke rollen samen bewegen |
-| `drift` | voorgesteld maximaal bereik als deel van `max − min` (0..1); een goede startwaarde ligt onder de hoorbaarheidsgrens |
-| `on` | standaard aangevinkt in een modulator |
+- `id` en `name` zijn verplicht, met `min < max`.
+- `lane`/`laneName` groeperen parameters in **sporen**, bijvoorbeeld één spoor per drumgeluid.
+- `scale` is `'lin'` of `'log'`. `drift` (0..1) is het voorgestelde bereik voor trage beweging. `on` zegt of de parameter standaard aan staat in een modulator.
+- `role` is een vrije hint (`filter`, `pitch`, `level`, `decay`, …).
+- **Effectieve waarde** = knop + modulatie:
+  - lineair: `clamp(knop + o × (max − min))`;
+  - logaritmisch: `clamp(knop × (max/min)^o)`.
+- `modulate({})` haalt alle modulatie weg. Onbekende ids negeer je.
+- Na een wijziging van je parameterlijst roep je `host.paramsChanged(this)` aan.
 
-**Wat een offset betekent.** `−1..1` is een deel van het bereik van de parameter, bovenop de knopstand. Effectieve waarde: lineair `clamp(basis + offset × (max − min))`, logaritmisch `clamp(basis × (max/min)^offset)`. De knop blijft dus de basis; laat de knop zelf niet meebewegen. De host telt alle modulatoren die op je apparaat zijn aangesloten op en begrenst de som op `−1..1`; jij krijgt altijd één totaal. Bij het loskoppelen krijg je een set zonder die bijdrage (vaak `{}`): keer dan terug naar de knopstand.
+**Modulator.** Gebruik `kind: 'modulator'` en `ports.modOut: [{ id: 'mod', name: 'Mod' }]`. Je krijgt `onModTargets(targets)` met voor elk doel `{ id, name, def, version, params }`. Die aanroep komt ook met een lege lijst, en opnieuw bij elke wijziging. Stuur met `host.modulate(this, doelId, { paramId: −1..1 })`. Optioneel krijg je `onModSources(sources)`: wie er naar jou stuurt. Een modulator mag zelf ook bestuurbaar zijn.
 
-### Een modulator bouwen
+`host.modulate` geeft ongeveer 20 tot 30 updates per seconde: goed voor trage beweging, te grof voor een LFO op 1/16. Daarvoor is §9.
 
-```js
-kind: 'modulator', category: 'mod',
-ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [{ id: 'mod', name: 'Drift' }] },
-create(ctx, host) {
-  let targets = [];
-  const timer = setInterval(() => targets.forEach(T => host.modulate(self, T.id, { [T.params[0].id]: Math.sin(ctx.currentTime) * 0.05 })), 50);
-  const self = {
-    inputs: {}, outputs: {},
-    onModTargets(list) { targets = list.filter(T => T.params.length); /* herteken je UI */ },
-    onModSources(list) { /* optioneel: wie stuurt jou aan (list[i].port = jouw ingang) */ },
-    // mount, getState, setState …
-    destroy() { clearInterval(timer); }
-  };
-  return self;
-}
-```
+---
 
-- `onModTargets(targets)` komt bij elke wijziging in de bekabeling of in de parameters van een doel: `[{ id, name, def, version, params }]`.
-- `host.modulate(this, targetId, offsets)` werkt alleen zolang er een sturingskabel van jou naar dat doel loopt. Stuur ongeveer 20–30× per seconde; meer heeft geen zin.
-- Een modulator mag ook een sturingsingang hebben (bijvoorbeeld `volg`) om met andere modulatoren samen te werken; `onModSources` vertelt wie er op welke ingang zit.
-- Modulatie loopt los van de transportknop: een modulator blijft bewegen, ook als de klok stilstaat. Plan dus niets op `onStep`.
+## 9. Snelle sturing (v1.4)
 
-Voorbeelden: `instrumenten/monosynth.js` (één spoor), `instrumenten/drumcomputer.js` (vier sporen), `modulatie/drift-modulator.js` (groepen en volgen).
+Een parameter kan **snel** zijn: de modulator levert dan een audiosignaal, sample-nauwkeurig.
 
-## 7c. Snelle sturing (v1.4)
-
-`host.modulate` werkt op ongeveer 20–30 updates per seconde: goed voor trage beweging (Drift), te grof voor een LFO op 1/16. Daarom kan een parameter **snel** zijn: de modulator levert dan een audiosignaal, sample-nauwkeurig.
-
-**Bestuurbaar apparaat.** Markeer de parameter met `fast: true` in `params()` en implementeer `modInput(paramId)`. Die geeft een AudioNode (of AudioParam) die een signaal **−1..1** ontvangt, als deel van het bereik, net als bij `modulate`. Jij rekent het om en telt het op bij de knop:
+**Bestuurbaar apparaat.** Zet `fast: true` in `params()` en implementeer `modInput(paramId)`. Die geeft een AudioNode of AudioParam die een signaal **−1..1** ontvangt, als deel van het bereik, net als bij `modulate`. Jij rekent het om en telt het op bij de knop:
 
 ```js
 const FAST = { cut: 1200 * Math.log2(8000 / 80), lvl: 1 };   // −1..1 → cents (log) of eenheden (lin)
@@ -296,259 +195,450 @@ modInput(id) {
 }
 ```
 
-Tip: voor frequenties werkt `detune` (cents) van BiquadFilter en Oscillator perfect als logaritmische optelling. Zet ook de trage offsets voor deze parameters via een ConstantSource op dezelfde bus. Dan klinken Drift (traag) en LFO (snel) samen continu, ook tussen noten door.
+Tip: voor frequenties werkt `detune` (cents) van BiquadFilter en Oscillator goed als logaritmische optelling.
 
-**Modulator.** Maak je signaal (bijvoorbeeld een ConstantSource waarop je stukjes curve vooruit plant), en verbind per toewijzing een GainNode (de diepte):
+**Modulator.** Probeer eerst `host.modSignal(this, doelId, paramId, node)` met je signaal (−1..1). Dat geeft `true` als het doel die parameter snel kan sturen. Geeft het `false`, val dan voor die parameter terug op `host.modulate`. Met `node = null` maak je de verbinding los.
+
+---
+
+## 10. AudioWorklets (v1.4)
+
+Eigen DSP schrijf je als AudioWorklet. De code staat als tekst in je module:
 
 ```js
-const ok = host.modSignal(this, targetId, paramId, gainNode);   // true: verbonden; false: doel biedt het niet
-// false → stuur deze parameter via host.modulate; null als node maakt de verbinding los
+const WNAME = 'nl-jouwnaam-mijnfx-1';            // uniek, met versienummer
+const WORKLET = `
+class P extends AudioWorkletProcessor { process(inputs, outputs) { /* ... */ return true; } }
+registerProcessor('${WNAME}', P);`;
+host.loadWorklet(WNAME, WORKLET).then(() => {
+  node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
+  // in de keten zetten
+}).catch(() => { /* terugval */ });
 ```
 
-De host verbreekt de verbinding zelf als de kabel of een apparaat verdwijnt. Roep `modSignal` opnieuw aan in elke `onModTargets`, want na een versiewissel is het doel nieuw.
+- `host.loadWorklet(naam, code)` laadt elke naam één keer per AudioContext en geeft een Promise.
+- Wijzig je de worklet-code, verhoog dan het versienummer in de naam: een oude registratie blijft in de AudioContext bestaan.
+- Laat je apparaat ook werken zonder worklet: laat het geluid ongewijzigd doorgaan en toon een korte melding in de UI. Controleer `typeof AudioWorkletNode`.
+- Een worklet zonder uitgangen (`numberOfOutputs: 0`) wordt in Chrome toch verwerkt. Dat is handig voor een opnemer of meter die niets doorgeeft.
+- Noten naar een worklet stuur je met `node.port.postMessage({ note, t, dur })`. In de processor plan je ze op `currentTime`.
 
-## 7d. Eigen DSP met AudioWorklet (v1.4)
+---
 
-Voor wat Web Audio-nodes niet kunnen (ladderfilter met terugkoppeling, korte vertraging in een lus, Hilbert-filter, Karplus-Strong):
+## 11. Bundels (v1.5)
+
+Een **bundel** draagt veel audiokanalen in één kabel, elk met een id en een naam. Voorbeelden uit de bibliotheek:
+- de drumcomputer stuurt elk drumgeluid apart (`Losse uit`);
+- de mixer neemt bundels aan (`bundel in`) en geeft al zijn kanalen na afmixen als bundel door (`kanalen uit`);
+- de multitrack neemt een bundel op, een spoor per kanaal.
+
+**Bron.** Zet `ports.multiOut: [{ id: 'los', name: 'Losse uit' }]` en geef `bundles`:
 
 ```js
-const NAME = 'jouwnaam-mijnfilter-1';           // uniek, met versienummer: een naam kan maar één keer geregistreerd worden
-const CODE = `class P extends AudioWorkletProcessor { process(inputs, outputs, params) { … return true; } }
-registerProcessor('${NAME}', P);`;
-host.loadWorklet(NAME, CODE)
-  .then(() => { node = new AudioWorkletNode(ctx, NAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] }); input.connect(node).connect(out); })
-  .catch(() => { /* toon een melding en laat het geluid onbewerkt door */ });
+bundles: {
+  los: () => ({ label: 'Losse uit', channels: [
+    { id: 'kick',  name: 'Kick',  node: kickBus },     // een AudioNode per kanaal; stereo mag
+    { id: 'snare', name: 'Snare', node: snareBus },
+  ] }),
+},
 ```
 
-- De host laadt de code als blob en valt terug op een data-URL. Daardoor werkt het ook vanuit een los HTML-bestand (`file://`).
-- Laat je apparaat werken zonder worklet: bypass en een korte melding in de UI. Controleer `typeof AudioWorkletNode`.
-- Wijzig je de worklet-code, verhoog dan het versienummer in de naam. Een oude registratie blijft in de AudioContext bestaan.
-- Noten naar een worklet stuur je met `node.port.postMessage({ note, t, dur })` en plan je in de processor op `currentTime`.
+- Gebruik een **functie**, zodat de host altijd de actuele kanalen leest.
+- Kanaal-id's zijn uniek en blijven gelijk zolang het kanaal bestaat; namen mogen veranderen.
+- Verandert de lijst (aantal kanalen, namen), roep dan `host.bundleChanged(this, 'los')` aan. De host stuurt de nieuwe bundel naar iedereen die aan die poort hangt.
+- De nodes in een bundel blijven van jou: verbind ze niet zelf met andere apparaten en ontkoppel ze niet omdat iemand ze gebruikt.
 
-Voorbeelden: `effecten/flanger.js`, `effecten/filter.js`, `effecten/resonator.js`, `effecten/freqshift.js`, `instrumenten/string.js`.
-
-## 8. State
-
-- `getState()` geeft een plat JSON-object (getallen, strings, booleans, arrays daarvan). Geen AudioNodes, functies of DOM.
-- Maak kopieën van arrays (`arr.slice()`), zodat de host je state veilig kan opslaan.
-- `setState` kan vóór of ná `mount` worden aangeroepen; beide moeten werken.
-- Bij een nieuwe `version` met gewijzigde state: lees oude velden met een standaardwaarde (`s.cut ?? 800`). Versienummer in state is niet nodig; de host bewaart `version` van de module.
-
----
-
-## 9. Hygiëne en veiligheid
-
-- Geen netwerk, geen `fetch`, geen `import`, geen `eval`, geen `localStorage`/`sessionStorage`/`indexedDB`, geen eigen `AudioContext`. De host regelt opslag en geluid.
-- Geen `document.addEventListener` of `window.addEventListener` voor toetsen; sneltoetsen zijn van de host. Luister alleen op je eigen elementen.
-- Lussen met `requestAnimationFrame` stop je in `unmount`/`destroy`.
-- Geen globale variabelen; alles leeft binnen `create` (closure).
-- Meerdere exemplaren van hetzelfde instrument moeten onafhankelijk naast elkaar kunnen staan. Gedeelde buffers (bijvoorbeeld ruis) mag je cachen op de module, nooit op `window`.
-- Fouten in `mount`/`setState` mogen een melding geven via `throw` (de host toont ze); fouten in `onStep`/`onEvent` vang je zelf af.
-- `destroy()` is idempotent (twee keer aanroepen mag).
-
----
-
-## 10. Checklist vóór oplevering
-
-1. Bestand is één ES-module met `export default { … }`.
-2. `id` uniek en reverse-DNS; `name`, `version`, `kind`, `ports` aanwezig.
-3. Voor elke `audioIn`-poort een `inputs[id]`, voor elke `audioOut`-poort een `outputs[id]`.
-4. `mount`, `getState`, `setState`, `destroy` aanwezig.
-5. Alles wat klinkt, wordt gepland op `time` uit `onStep`/`onEvent`.
-6. Geen `ctx.destination` (tenzij `kind: 'output'`).
-7. `setState(getState())` levert hetzelfde geluid en dezelfde UI.
-8. `setState(getState())` levert byte-voor-byte dezelfde state (de validator controleert dit).
-9. Bij een nieuwe versie van een bestaand apparaat: zelfde `id`, hogere `version`, poort-id's behouden, `setState` accepteert de state van de vorige versie.
-10b. Snel (optioneel): `fast: true` alleen waar `modInput(id)` een echte ingang geeft; worklet-naam uniek met versie, en een terugval zonder worklet.
-10. Bestuurbaar (optioneel): `params()` en `modulate()` allebei aanwezig, ids stabiel, `modulate({})` zet alles terug naar de knopstand.
-11. `node validate-instrument.mjs jouw-bestand.js` geeft `OK`.
-
----
-
-## 11. Volledig voorbeeld: effect
+**Ontvanger.** Zet `ports.multiIn: [{ id: 'in', name: 'Bundel' }]` en implementeer:
 
 ```js
-// tremolo.js — Patchkamer contract v1
+onBundle(poortId, sleutel, bundel) { ... }
+```
+
+- `sleutel` is uniek per kabel (vorm: `"apparaatId:poortId"` van de bron) en blijft gelijk zolang de kabel er is.
+- `bundel` is `{ key, source: { id, port, name }, label, channels: [{ id, name, node }] }`.
+- **Dezelfde sleutel opnieuw** betekent dat de bundel is gewijzigd. Verbind dan opnieuw wat je had gekozen.
+- **`bundel === null`** betekent dat de kabel los is. Ontkoppel dan alles wat je van die bundel had verbonden: `kanaal.node.disconnect(jouwIngang)`, nooit `kanaal.node.disconnect()` zonder argument, want dat haalt ook de verbindingen van anderen los.
+- Bewaar je keuze in je state als `sleutel + '|' + kanaalId`, nooit de node zelf. Na het laden van een werkruimte komt dezelfde sleutel terug en vind je je keuze terug. Is de bundel er (nog) niet, laat de keuze dan staan en toon "(niet verbonden)".
+- Wil je nieuwe kanalen vanzelf toewijzen, doe dat dan alleen voor kanalen die je nog niet eerder zag. Dan overschrijf je geen keuze die de gebruiker bewust leeg liet.
+- `host.isWired(this, poortId, 'in' | 'out')` zegt of een eigen poort bekabeld is. De mixer gebruikt dat om een bundel niet op een kanaal te zetten waar al een gewone kabel in zit.
+
+---
+
+## 12. UI
+
+- `mount(el)` krijgt een leeg element in de kaart. De kaart is standaard ongeveer 300 px breed. Met `ui: { width: 200..6000, minWidth }` krijg je een bredere kaart.
+- De gebruiker kan elke kaart breder, smaller, hoger en lager maken. Laat je UI dus meevloeien: auto-fit grids, `minmax(0, 1fr)`, container queries. Bij een vaste hoogte scrolt de host je UI; de poorten blijven zichtbaar.
+- **Hulpmiddelen** in `host.ui`:
+  - `knob(parent, label, [min, max, stap], waarde, fmt, onchange)` → `{ set(v) }`
+  - `select(parent, label, [[waarde, tekst], …], waarde, onchange)` → een `<select>`; zet `select.value = v`
+  - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(stap) }`; houdt een verwijzing naar de array
+  - `jack(this, parent, poortId, dir, label)` (zie §3), `noise(ctx)`, `curve(k)`
+- **Bewaar wat `knob` en `select` teruggeven.** `setState` moet die bijwerken (§13).
+- Eigen HTML mag ook. Gebruik de CSS-variabelen van de host, dan volgt je apparaat de kleurstelling (donker, licht, sampler):
+  - kleuren: `--bg --floor --card --card-2 --line --fg --muted`;
+  - kabelkleuren: `--audio --event --mod --multi`;
+  - status: `--go --stop --sel`;
+  - verzonken vlakken en schermen: `--well --well-fg`;
+  - invoervelden: `--field --field-fg`;
+  - lettertypen: `--disp --mono --lcd-font`.
+
+  Vaste kleuren als `#0b0d10` zien er in de lichte stand verkeerd uit.
+- Een grote UI hang je aan een eigen shadow root: `const d = document.createElement('div'); el.appendChild(d); d.attachShadow({ mode: 'open' })`. Stijlen en id's blijven dan per exemplaar gescheiden. CSS-variabelen werken ook in een shadow root.
+- Klikken in je UI mogen de kaart niet laten slepen: zet `e.stopPropagation()` op `pointerdown` in invoervelden die je zelf bouwt.
+- Gebruik geen `alert`, `confirm` of `prompt`: die blokkeren de hele studio.
+
+---
+
+## 13. State, versies en presets (v1.6)
+
+**State.** `getState()` geeft alles terug wat nodig is om het geluid en het gedrag exact te herstellen: knoppen, patronen en keuzes. Het resultaat moet gewone JSON zijn, zonder AudioNodes.
+- `setState(s)` krijgt dat later terug: bij laden, bij een versiewissel en bij een preset.
+- Onbekende velden negeer je; ontbrekende velden krijgen een standaardwaarde. `setState({})` moet werken.
+- `setState(getState())` moet exact dezelfde state opleveren.
+
+**De knoppen volgen.** De host gebruikt `setState` ook voor presets, terwijl je UI al op het scherm staat. Werk daarom in `setState` het geluid én je UI bij:
+
+```js
+setState(s) {
+  /* ... state normaliseren ... */
+  apply();                                   // geluid
+  ui.rate.set(S.rate);                       // knoppen van host.ui.knob
+  ui.shape.value = S.shape;                  // keuzes van host.ui.select
+  rows.kick.paint();                         // stappen van host.ui.steps (array in place vervangen!)
+}
+```
+
+- De validator controleert dit voor alles wat je met `host.ui.knob` en `host.ui.select` maakt: na `setState(getState())` moet elk ervan bijgewerkt zijn. Een volledige herbouw van je UI in `setState` telt ook.
+- Bij `host.ui.steps`: vervang de inhoud van de array met `splice`, niet de array zelf. De stappenrij houdt een verwijzing naar de oorspronkelijke array.
+
+**`getPreset` / `setPreset`.** Hoort iets in je state níet in een preset, implementeer dan beide:
+- `getPreset()` geeft een kopie van je state zonder die velden;
+- `setPreset(p)` zet alleen de andere velden terug en laat de rest staan.
+
+Gebruik het voor:
+- **routing en bronkeuzes**: welk bundelkanaal op welk kanaal staat (mixer, multitrack);
+- **lopende posities**: waar een trage beweging nu is (Drift · modulator bewaart zijn klokpositie niet in een preset);
+- **gegevens van deze sessie**: opnames, namen van takes.
+
+Zonder deze twee functies gebruikt de host `getState`/`setState`. Ook `setPreset(getPreset())` moet dezelfde preset opleveren, en `setPreset({})` mag niet gooien.
+
+**Presetbestanden.** De host bewaart presets in presetbibliotheken. Je kunt die exporteren als `.patchkamer-presets.json`:
+
+```json
+{ "format": "patchkamer-presets", "formatVersion": 1, "name": "Startpresets",
+  "presets": [ { "name": "Acid-bas", "device": "nl.patchkamer.mono", "version": "1.2.0", "state": { "cut": 320, "res": 16 } } ] }
+```
+
+`state` is precies wat `getPreset()` (of anders `getState()`) teruggeeft. Een preset van een oudere versie gaat gewoon naar je huidige `setState`/`setPreset`. Nog een reden om oude state te accepteren.
+
+---
+
+## 14. Host-API in één overzicht
+
+| Aanroep | Sinds | Wat |
+|---|---|---|
+| `host.bpm`, `host.swing`, `host.stepDur()` | v1.0 | Huidig tempo, swing, duur van een zestiende in seconden |
+| `host.emit(this, poort, ev)` | v1.0 | Gebeurtenis versturen (§6) |
+| `host.setTempo(bpm)` | v1.0 | Tempo voorstellen, alleen na een klik |
+| `host.ui.knob / select / steps / noise / curve` | v1.0 | UI-hulpmiddelen (§12) |
+| `host.setPorts(this, ports)` | v1.2 | Poorten vervangen (§3) |
+| `host.ui.jack(this, parent, poort, dir, label)` | v1.2 | Poort in je eigen UI (§3) |
+| `host.modulate(this, doelId, offsets)` | v1.3 | Sturen, traag (§8) |
+| `host.paramsChanged(this)` | v1.3 | Je parameterlijst is veranderd |
+| `host.modSignal(this, doelId, paramId, node)` | v1.4 | Sturen, snel; `true`/`false` (§9) |
+| `host.loadWorklet(naam, code)` | v1.4 | AudioWorklet laden; Promise (§10) |
+| `host.saveFile(bestandsnaam, data)` | — | Een bestand aan de gebruiker geven (string of Blob); geeft `'saved'` of `'declined'` |
+| `host.bundleChanged(this, poort)` | v1.5 | Je bundel is veranderd (§11) |
+| `host.isWired(this, poort, dir)` | v1.5 | Is deze eigen poort bekabeld? |
+
+Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
+
+---
+
+## 15. Hygiëne
+
+- `destroy()` stopt oscillators en bronnen, ontkoppelt je nodes (`disconnect()`), stopt timers en animaties, en ontkoppelt bundelkanalen die je verbond. Twee keer `destroy()` mag niet gooien.
+- Geen globale variabelen. Meerdere exemplaren van je apparaat moeten naast elkaar kunnen bestaan. Wil je bewust delen tussen exemplaren, zoals de groepen van Drift, doe dat dan in een variabele op moduleniveau en ruim die op.
+- Geen browseropslag (`localStorage`, `sessionStorage`, `indexedDB`): state gaat via `getState`/`setState`.
+- Geen netwerk (`fetch`, `XMLHttpRequest`, `WebSocket`), geen `import`, geen eigen AudioContext.
+- Gooi geen fouten uit `onStep`, `onEvent`, `onBundle` of `modulate`.
+
+---
+
+## 16. Een bibliotheek
+
+Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en een `patchkamer.json`:
+
+```json
+{
+  "name": "Patchkamer-bibliotheek",
+  "version": "1.0.0",
+  "modules": ["instrumenten/mijn-synth.js", "effecten/mijn-effect.js"],
+  "workspaces": [{ "name": "Startpunt", "path": "werkruimtes/startpunt.patchkamer.json" }],
+  "presets": [{ "name": "Startpresets", "path": "presets/startpresets.patchkamer-presets.json" }]
+}
+```
+
+- Patchkamer laadt alleen de modules die in `modules` staan.
+- Werkruimtes (`*.patchkamer.json`) en presetbibliotheken (`*.patchkamer-presets.json`) zijn optioneel. Presetbibliotheken uit een bibliotheek zijn alleen-lezen; de gebruiker kan er een kopie van maken.
+- Zonder `patchkamer.json` zoekt Patchkamer zelf naar `.js`-modules, `*.patchkamer.json` en `*.patchkamer-presets.json`.
+- Wijzig je een bestaand apparaat: verhoog `version` en houd `id`, poort-id's en bestandsnaam gelijk. Dan vinden bewaarde werkruimtes en presets het terug.
+
+---
+
+## 17. De validator
+
+```
+node validate-instrument.mjs mijn-apparaat.js
+```
+
+De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow roots) en een nep-host. Hij eindigt met één `OK`-regel (exit 0) of met de eerste fout (exit 1). Hij controleert:
+
+1. **Bestand**: default export met `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; geldige `category` en `ui`; geen `ctx.destination` (behalve bij `output`), geen browseropslag, geen netwerk, geen imports, geen eigen AudioContext.
+2. **Poorten**: alle acht lijsten, geldige en unieke id's, een AudioNode per audiopoort, `setPorts` met klaarstaande nodes, `jack` alleen voor bestaande poorten, `ui.jacks` alleen samen met minstens één `jack`.
+3. **Levensloop**: `create` → `getState` vóór `mount` → `mount` → twee maten `onStep` → elk gebeurtenistype plus een onbekend type → `onTransport` → `getState`/`setState`-ronde → `setState({})` → twee keer `destroy`; `emit` alleen op eigen `eventOut`-poorten.
+4. **Sturing (v1.3)**: `params` en `modulate` samen; geldige parameterlijst; `modulate` met +1, −1, 0,37, onbekende ids en `{}`. Een modulator heeft `modOut` en `onModTargets`; die krijgt eerst `[]` en daarna twee keer doelen.
+5. **Snel en worklets (v1.4)**: `fast: true` vraagt `modInput(id)` met een AudioNode of AudioParam, en `null` voor onbekende ids; `host.modSignal` krijgt een echte AudioNode; `host.loadWorklet` krijgt een naam en code met `registerProcessor(...)`.
+6. **Bundels (v1.5)**: elke `multiOut` heeft `bundles[id]` met kanalen (unieke id, naam, AudioNode). Elke `multiIn` heeft `onBundle`; die krijgt een bundel, dezelfde sleutel met een kanaal erbij, een tweede bundel en dan twee keer `null`. Daarna mag geen enkel kanaal nog verbonden zijn en mag er geen AudioNode in de state staan. `host.bundleChanged` alleen voor eigen `multiOut`-poorten.
+7. **Presets (v1.6)**: elke knop en keuze van `host.ui.knob`/`select` wordt bijgewerkt door `setState(getState())`. `getPreset`/`setPreset` alleen samen, JSON zonder AudioNodes, `setPreset(getPreset())` geeft dezelfde preset, `setPreset({})` werkt.
+
+Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
+
+---
+
+## 18. Checklist voor oplevering
+
+1. Eén bestand, default export, `id` reverse-DNS, `version` semver, juiste `kind` en `category`.
+2. Alle audiopoorten hebben een node; geen `ctx.destination` (behalve `output`).
+3. Geluid gepland op `time` uit `onStep`/`onEvent`; geen `setTimeout` voor timing.
+4. `getState()` is gewone JSON en compleet; `setState({})` geeft standaardwaarden.
+5. `setState()` werkt het geluid **en alle knoppen, keuzes en stappenrijen** bij.
+6. Geen routing, bronkeuzes of lopende posities in een preset: zo nodig `getPreset`/`setPreset`.
+7. Bundel uit: `bundles[poort]` als functie, stabiele kanaal-id's, `host.bundleChanged` bij wijziging.
+8. Bundel in: keuze bewaard als `sleutel|kanaalId`, opnieuw verbinden bij dezelfde sleutel, alles ontkoppelen bij `null`.
+9. Stuurbaar (optioneel): `params` + `modulate`, knop + modulatie, `modulate({})` = geen modulatie.
+10. Snel (optioneel): `fast: true` alleen waar `modInput(id)` een echte ingang geeft.
+11. Worklet (optioneel): unieke naam met versie, en een terugval zonder worklet.
+12. UI vloeit mee met de kaartbreedte en gebruikt de CSS-variabelen van de host (geen vaste kleuren).
+13. `destroy()` ruimt alles op en kan twee keer worden aangeroepen.
+14. `node validate-instrument.mjs bestand.js` geeft `OK`.
+
+---
+
+## 19. Veelgemaakte fouten
+
+| Fout | Gevolg | Oplossing |
+|---|---|---|
+| `setState` zet alleen het geluid, niet de knop | Na een preset of versiewissel staat de knop verkeerd; de eerstvolgende aanraking springt terug | Bewaar wat `host.ui.knob/select` teruggeeft en zet `.set(v)` / `.value` in `setState` |
+| Nieuwe array in `setState` voor een stappenrij | De rij toont het oude patroon | `arr.splice(0, 16, ...nieuw)` en daarna `rij.paint()` |
+| Lopende waarde (klok, fase, positie) in de state | Elke preset springt terug in de tijd; "gewijzigd" staat altijd aan | Laat die waarde weg in `getPreset` en zet hem in `setPreset` niet terug |
+| Bronkeuze of routing in een preset | Een preset gooit kabels of bundelkeuzes om | `getPreset` zonder die velden; `setPreset` laat ze staan |
+| `kanaal.node.disconnect()` zonder argument | Ook andere ontvangers van die bundel verliezen hun signaal | `kanaal.node.disconnect(jouwIngang)` |
+| AudioNode in de state | Opslaan mislukt | Bewaar `sleutel|kanaalId` |
+| `setTimeout` voor noten | Slordige timing, vooral bij een volle pagina | Plan op `time` met de Web Audio-klok |
+| Vaste donkere kleuren in eigen CSS | Onleesbaar in de lichte stand | `var(--card)`, `var(--fg)`, `var(--well)` … |
+| `bundles.x` als vast object | De host ziet geen nieuwe kanalen | Een functie die de actuele lijst geeft, plus `host.bundleChanged` |
+| Oude state niet geaccepteerd | Werkruimtes en presets van een vorige versie laden niet | Onbekende velden negeren, ontbrekende standaard geven |
+| Worklet-naam zonder versie | Gewijzigde worklet-code wordt niet geladen | `'nl-naam-fx-2'` bij elke wijziging |
+
+---
+
+## 20. Volledige voorbeelden
+
+Alle drie komen door de validator. Ze staan ook als losse bestanden in `bouwen/voorbeelden/`.
+
+### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.js`
+
+```js
+// tremolo.js — voorbeeld-effect · Patchkamer contract v1.6
+// Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets), stuurbaar (params + modulate),
+// één snelle parameter (fast + modInput), opruimen in destroy.
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const DEF = () => ({ rate: 4, depth: 0.5, shape: 'sine' });
+const MODP = [['rate', 'Snelheid', 0.1, 20, true], ['depth', 'Diepte', 0, 1, false]];
+
 export default {
-  id: 'nl.voorbeeld.tremolo',
+  id: 'nl.voorbeeld.tremolo2',
   name: 'Tremolo',
-  version: '1.0.0',
+  version: '2.0.0',
   kind: 'effect',
+  category: 'effect',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [] },
+
   create(ctx, host) {
-    const inG = ctx.createGain(), outG = ctx.createGain();
-    const lfo = ctx.createOscillator(), depth = ctx.createGain();
-    lfo.frequency.value = 4; depth.gain.value = 0.5;
-    lfo.connect(depth).connect(outG.gain); lfo.start();
-    inG.connect(outG);
-    const state = { rate: 4, depth: 0.5 };
-    let ui = {};
-    const apply = () => { lfo.frequency.setTargetAtTime(state.rate, ctx.currentTime, 0.02); depth.gain.setTargetAtTime(state.depth, ctx.currentTime, 0.02); };
+    const S = DEF(), mod = {}; let dead = false;
+    const inG = ctx.createGain(), out = ctx.createGain(), lfo = ctx.createOscillator(), depth = ctx.createGain(), fastDepth = ctx.createGain();
+    out.gain.value = 1; lfo.connect(depth).connect(out.gain); inG.connect(out); lfo.start();
+    fastDepth.gain.value = 1; fastDepth.connect(depth.gain);   // snel signaal −1..1 telt op bij de diepte
+    // effectieve waarde = knop + modulatie (deel van het bereik; log-parameters in octaven)
+    const E = k => { const m = MODP.find(x => x[0] === k), b = S[k], o = mod[k] || 0; if (!o) return b; return m[4] ? clamp(b * Math.pow(m[3] / m[2], o), m[2], m[3]) : clamp(b + o * (m[3] - m[2]), m[2], m[3]); };
+    function apply() { if (dead) return; const t = ctx.currentTime; lfo.type = S.shape; lfo.frequency.setTargetAtTime(E('rate'), t, 0.03); depth.gain.setTargetAtTime(E('depth') * 0.5, t, 0.03); out.gain.setTargetAtTime(1 - E('depth') * 0.5, t, 0.03); }
+    apply();
+    const ui = {};   // bewaar wat host.ui teruggeeft: setState zet deze terug
     return {
-      inputs: { in: inG }, outputs: { out: outG },
+      inputs: { in: inG }, outputs: { out },
       mount(el) {
-        ui.rate  = host.ui.knob(el, 'Snelheid', [0.1, 20, 0.1], state.rate,  v => v.toFixed(1) + ' Hz',       v => { state.rate = v;  apply(); });
-        ui.depth = host.ui.knob(el, 'Diepte',   [0, 1, 0.01],   state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; apply(); });
+        ui.shape = host.ui.select(el, 'Vorm', [['sine', 'sinus'], ['triangle', 'driehoek'], ['square', 'blok']], S.shape, v => { S.shape = v; apply(); });
+        ui.rate = host.ui.knob(el, 'Snelheid', [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); });
+        ui.depth = host.ui.knob(el, 'Diepte', [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); });
       },
-      getState() { return { ...state }; },
-      setState(s) { Object.assign(state, { rate: s.rate ?? 4, depth: s.depth ?? 0.5 }); apply(); ui.rate && ui.rate.set(state.rate); ui.depth && ui.depth.set(state.depth); },
-      destroy() { try { lfo.stop(); } catch (e) {} inG.disconnect(); outG.disconnect(); }
+      params() { return MODP.map(([id, name, min, max, log]) => ({ id, name, lane: 'trem', laneName: 'Tremolo', min, max, role: id === 'rate' ? 'rate' : 'depth', scale: log ? 'log' : 'lin', drift: 0.1, on: true, fast: id === 'depth' })); },
+      modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODP.some(m => m[0] === k)) mod[k] = o[k]; apply(); },
+      modInput(id) { return id === 'depth' ? fastDepth : null; },
+      getState() { return { ...S }; },
+      setState(s) {
+        s = s || {}; const d = DEF();
+        S.rate = typeof s.rate === 'number' ? clamp(s.rate, 0.1, 20) : d.rate;
+        S.depth = typeof s.depth === 'number' ? clamp(s.depth, 0, 1) : d.depth;
+        S.shape = ['sine', 'triangle', 'square'].includes(s.shape) ? s.shape : d.shape;
+        apply();
+        if (ui.rate) { ui.rate.set(S.rate); ui.depth.set(S.depth); ui.shape.value = S.shape; }   // knoppen volgen (v1.6)
+      },
+      destroy() { if (dead) return; dead = true; try { lfo.stop(); } catch (e) {} inG.disconnect(); out.disconnect(); fastDepth.disconnect(); },
     };
   }
 };
 ```
 
-## 12. Volledig voorbeeld: instrument met klok en gebeurtenissen
+### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.js`
 
 ```js
-// klik.js — metronoom die ook trigs uitstuurt
+// tweeklank.js — voorbeeld-instrument · Patchkamer contract v1.6
+// Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
+// stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets).
+const VOICES = [['tik', 'Tik'], ['toon', 'Toon']];
+const DEF = () => ({ pat: { tik: [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,1], toon: [1,0,0,0, 0,0,1,0, 0,0,0,0, 1,0,0,0] }, pitch: 220, lvl: 0.7 });
+
 export default {
-  id: 'nl.voorbeeld.klik',
-  name: 'Klik',
+  id: 'nl.voorbeeld.tweeklank',
+  name: 'Tweeklank',
   version: '1.0.0',
   kind: 'instrument',
-  ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [{ id: 'trigs', name: 'Trigs' }] },
+  category: 'groove',
+  ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [{ id: 'trigs', name: 'Trigs' }],
+    multiOut: [{ id: 'los', name: 'Losse uit' }] },
+
   create(ctx, host) {
-    const out = ctx.createGain(); out.gain.value = 0.5;
-    const state = { div: 4, lvl: 0.5 };            // div = elke hoeveel stappen
-    let self, cursor;
-    function tick(time, accent) {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.frequency.value = accent ? 1600 : 1000;
-      g.gain.setValueAtTime(0.6, time); g.gain.exponentialRampToValueAtTime(0.0001, time + 0.05);
-      o.connect(g).connect(out); o.start(time); o.stop(time + 0.06);
+    const S = DEF(); let self, dead = false; const rows = {}, ui = {};
+    const out = ctx.createGain(); out.gain.value = S.lvl;
+    const bus = {}; VOICES.forEach(([k]) => { bus[k] = ctx.createGain(); bus[k].connect(out); });   // één node per stem: die gaan in de bundel
+    function hit(k, t) {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g).connect(bus[k]);
+      if (k === 'tik') { o.type = 'square'; o.frequency.value = 2400; g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03); o.start(t); o.stop(t + 0.04); }
+      else { o.type = 'sine'; o.frequency.setValueAtTime(S.pitch, t); g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4); o.start(t); o.stop(t + 0.42); }
     }
     self = {
       inputs: {}, outputs: { out },
+      // v1.5: de bundel. Een functie, zodat de host altijd de actuele kanalen krijgt.
+      bundles: { los: () => ({ label: 'Losse uit', channels: VOICES.map(([k, name]) => ({ id: k, name, node: bus[k] })) }) },
       mount(el) {
-        host.ui.select(el, 'Elke', [[16, 'maat'], [4, 'tel'], [2, '8e'], [1, '16e']], state.div, v => state.div = +v);
-        host.ui.knob(el, 'Niveau', [0, 1, 0.01], state.lvl, v => Math.round(v * 100) + '%', v => { state.lvl = v; out.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });
-        cursor = host.ui.steps(el, 'Stap', new Array(16).fill(0));
+        VOICES.forEach(([k, name]) => { rows[k] = host.ui.steps(el, name, S.pat[k]); });
+        ui.pitch = host.ui.knob(el, 'Toonhoogte', [80, 880, 1], S.pitch, v => Math.round(v) + ' Hz', v => { S.pitch = v; });
+        ui.lvl = host.ui.knob(el, 'Niveau', [0, 1, 0.01], S.lvl, v => Math.round(v * 100) + '%', v => { S.lvl = v; out.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });
       },
       onStep({ step, time }) {
-        if (step % state.div === 0) { const acc = step === 0; tick(time, acc); host.emit(self, 'trigs', { type: 'trig', lane: 'klik', vel: acc ? 1 : 0.7, time }); }
-        cursor && cursor.cursor(step);
+        VOICES.forEach(([k]) => { if (S.pat[k][step]) { hit(k, time); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: 1, time }); } });
+        Object.values(rows).forEach(r => r.cursor(step));
       },
-      onTransport({ playing }) { if (!playing && cursor) cursor.cursor(-1); },
-      getState() { return { ...state }; },
-      setState(s) { Object.assign(state, { div: s.div ?? 4, lvl: s.lvl ?? 0.5 }); out.gain.value = state.lvl; },
-      destroy() { out.disconnect(); }
+      onTransport({ playing }) { if (!playing) Object.values(rows).forEach(r => r.cursor(-1)); },
+      getState() { return JSON.parse(JSON.stringify(S)); },
+      setState(s) {
+        s = s || {}; const d = DEF();
+        // patronen in place vervangen: host.ui.steps houdt een verwijzing naar deze arrays
+        VOICES.forEach(([k]) => { const src = Array.isArray(s.pat && s.pat[k]) ? s.pat[k].slice(0, 16) : d.pat[k]; S.pat[k].splice(0, 16, ...src); });
+        S.pitch = typeof s.pitch === 'number' ? s.pitch : d.pitch; S.lvl = typeof s.lvl === 'number' ? s.lvl : d.lvl;
+        out.gain.value = S.lvl;
+        Object.values(rows).forEach(r => r.paint()); if (ui.pitch) { ui.pitch.set(S.pitch); ui.lvl.set(S.lvl); }
+      },
+      destroy() { if (dead) return; dead = true; out.disconnect(); VOICES.forEach(([k]) => bus[k].disconnect()); },
     };
     return self;
   }
 };
 ```
 
-## 13. Volledig voorbeeld: ontvanger van noten (synthskelet)
+### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.js`
 
 ```js
-onEvent(port, ev) {
-  if (ev.type !== 'note') return;
-  const t = ev.time, f = 440 * Math.pow(2, (ev.note - 69) / 12);
-  osc.frequency.setValueAtTime(f, t);
-  vca.gain.cancelScheduledValues(t);
-  vca.gain.setValueAtTime(0.0001, t);
-  vca.gain.linearRampToValueAtTime(ev.vel * 0.8, t + 0.004);     // attack
-  vca.gain.setTargetAtTime(ev.vel * 0.3, t + 0.004, 0.2);         // decay naar sustain
-  vca.gain.setTargetAtTime(0.0001, t + (ev.dur || 0.2), 0.01);    // release op gate-einde
-}
+// bundelkeuze.js — voorbeeld-ontvanger · Patchkamer contract v1.6
+// Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
+// de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
+// en routing buiten presets houden (getPreset/setPreset).
+const OUTS = ['a', 'b'];
+const DEF = () => ({ src: { a: '', b: '' }, lvl: 0.8 });
+
+export default {
+  id: 'nl.voorbeeld.bundelkeuze',
+  name: 'Bundelkeuze',
+  version: '1.0.0',
+  kind: 'utility',
+  category: 'mix',
+  ports: { audioIn: [], audioOut: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }], eventIn: [], eventOut: [], multiIn: [{ id: 'in', name: 'Bundel' }] },
+
+  create(ctx, host) {
+    const S = DEF(); let self, dead = false, root = null, lvlK = null;
+    const outs = {}; OUTS.forEach(k => { outs[k] = ctx.createGain(); outs[k].gain.value = S.lvl; });
+    const bundles = new Map();                  // sleutel -> bundel van de host
+    const linked = { a: null, b: null };        // welk bundelkanaal (AudioNode) nu aan elke uitgang hangt
+    const find = src => { if (!src) return null; const i = src.lastIndexOf('|'), b = bundles.get(src.slice(0, i)); return b ? b.channels.find(c => c.id === src.slice(i + 1)) || null : null; };
+    function link(k) {                          // verbind precies wat de state vraagt, en niets anders
+      const want = find(S.src[k]), n = want ? want.node : null;
+      if (linked[k] === n) return;
+      if (linked[k]) { try { linked[k].disconnect(outs[k]); } catch (e) {} }   // alleen ónze verbinding los
+      linked[k] = n; if (n) n.connect(outs[k]);
+    }
+    function paint() {
+      if (!root) return; root.innerHTML = '';
+      OUTS.forEach(k => {
+        const opts = [['', '— niets']]; bundles.forEach(b => b.channels.forEach(c => opts.push([b.key + '|' + c.id, b.source.name + ' · ' + c.name])));
+        if (S.src[k] && !find(S.src[k])) opts.push([S.src[k], '(niet verbonden)']);
+        host.ui.select(root, 'Uit ' + k.toUpperCase(), opts, S.src[k], v => { S.src[k] = v; link(k); });
+      });
+      lvlK = host.ui.knob(root, 'Niveau', [0, 1, 0.01], S.lvl, v => Math.round(v * 100) + '%', v => { S.lvl = v; OUTS.forEach(k => outs[k].gain.setTargetAtTime(v, ctx.currentTime, 0.02)); });
+    }
+    self = {
+      inputs: {}, outputs: outs,
+      mount(el) { root = document.createElement('div'); el.appendChild(root); paint(); },
+      unmount() { root = null; },
+      // v1.5: bundel aangesloten, gewijzigd (zelfde sleutel, andere kanalen) of los (null)
+      onBundle(port, key, b) {
+        if (b) bundles.set(key, b); else bundles.delete(key);
+        OUTS.forEach(k => { if (b && !S.src[k] && b.channels[OUTS.indexOf(k)]) S.src[k] = key + '|' + b.channels[OUTS.indexOf(k)].id; link(k); });   // lege uitgangen vanzelf vullen
+        paint();
+      },
+      getState() { return JSON.parse(JSON.stringify(S)); },
+      setState(s) {
+        s = s || {}; const d = DEF();
+        OUTS.forEach(k => { S.src[k] = typeof (s.src && s.src[k]) === 'string' ? s.src[k] : d.src[k]; link(k); });
+        S.lvl = typeof s.lvl === 'number' ? s.lvl : d.lvl; OUTS.forEach(k => { outs[k].gain.value = S.lvl; });
+        paint();   // bouwt de keuzes opnieuw op met de nieuwe waarden; telt als "knoppen volgen"
+      },
+      // v1.6: een preset bevat het niveau, niet welke kanalen je koos (dat is routing)
+      getPreset() { const s = self.getState(); delete s.src; return s; },
+      setPreset(p) { self.setState({ ...(p || {}), src: { ...S.src } }); },
+      destroy() { if (dead) return; dead = true; OUTS.forEach(k => { if (linked[k]) { try { linked[k].disconnect(outs[k]); } catch (e) {} } outs[k].disconnect(); }); },
+    };
+    return self;
+  }
+};
 ```
+
+Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel van **Losse uit** naar **Bundel**, en hang **A** en **B** aan twee kanalen van de mixer.
 
 ---
 
-## 14. Veelgemaakte fouten
+## 21. Opdrachtformaat
 
-| Fout | Gevolg | Oplossing |
-|---|---|---|
-| geluid plannen op `ctx.currentTime` in `onStep` | alles klinkt ~100 ms te vroeg en jittert | gebruik `time` uit de callback |
-| `outputs` ontbreekt of poort-id klopt niet met `ports` | kabel kan niet worden gelegd | id's in `ports` en `outputs`/`inputs` identiek houden |
-| oscillator niet gestopt in `destroy` | CPU en geluid lopen door na verwijderen | `osc.stop()` in `destroy`, in try/catch |
-| state bevat de array zelf | host-opslag en instrument delen hetzelfde object | `slice()` / spread in `getState` |
-| `setState` vergeet de UI | knoppen tonen oude waarden na laden | bewaar `host.ui.knob`-handles en roep `set(v)` aan |
-| exception in `onStep` | hele klok hapert | try/catch binnen `onStep` |
-| rechtstreeks `ctx.destination` | dubbel geluid, geen mixerbesturing | alleen via `outputs` |
-
----
-
-## 15. Validator
-
-`validate-instrument.mjs` wordt naast dit document meegeleverd. Draai `node validate-instrument.mjs mijn-instrument.js`. Hij laadt de module met een nep-AudioContext en een nep-DOM (met Shadow DOM) en controleert, in deze volgorde:
-
-1. **Statisch**: default export; `id` reverse-DNS; `version` semver; `kind` geldig; `ui.width` 200–6000; poort-id's geldig en uniek; geen `ctx.destination` (tenzij `output`), geen browseropslag, geen netwerk, geen `import`, geen eigen `AudioContext`.
-2. **Levenscyclus**: `create` → `getState` vóór `mount` → `mount` → `onTransport(start)` → 32 × `onStep` → `onEvent` met note, legato-note, trig, cc en een onbekend type op elke `eventIn`-poort → `onTransport(stop)`.
-2c. **Snel en worklets (v1.4)**: parameters met `fast: true` vragen `modInput(id)` die een AudioNode of AudioParam geeft (en `null` voor onbekende ids); modulatoren krijgen `onModTargets([])` en een tweede keer de doelen; `host.modSignal` krijgt een echte AudioNode; `host.loadWorklet` krijgt een naam en code met `registerProcessor(...)`.
-2b. **Sturing (v1.3)**: `params()` en `modulate()` samen aanwezig; elke parameter met unieke `id`, `name`, `min < max`, geldige `scale`/`drift`; `modulate` met alles op 1, −1 en 0,37, met onbekende ids en met `{}`. Bij `kind: 'modulator'`: minstens één `modOut`, `onModTargets` met een nepdoel, en `host.modulate` alleen met getallen tussen −1 en 1.
-3. **State**: JSON-serialiseerbaar, geen AudioNodes, en `setState(getState())` geeft dezelfde state terug; `setState({})` moet werken.
-4. **Opruimen**: `unmount`, dan tweemaal `destroy`; `emit` alleen op gedeclareerde `eventOut`-poorten.
-
-Uitvoer: één regel `OK  Naam versie (id) — …` met exitcode 0, of `FOUT: …` met de eerste fout en exitcode 1. Geschikt om in een agentloop te lezen.
-
-## Bibliotheken en werkruimtes
-
-### Een bibliotheek publiceren
-Patchkamer heeft zelf **geen** apparaten; alles komt uit **bronnen**: een GitHub-repo (of een map daarin), een webadres, of een map op de computer. Een bibliotheek is gewoon een map met modules volgens dit contract.
+Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-mijn-patchkamer-bieb/
-  patchkamer.json        (optioneel)
-  echo.js
-  synths/wolk.js
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.6.
+Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
+Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
+Wat het doet:     <één alinea: klank, gedrag, waarvoor>
+Poorten:          audio in: …   audio uit: …   events in: …   events uit: …   bundel in: …   bundel uit: …
+Bediening:        <knoppen en keuzes met bereik en eenheid>
+Stuurbaar:        <welke parameters, welke snel>   (of: nee)
+Presets:          <wat níet in een preset hoort, of: alles>
+Kaartbreedte:     <px, of standaard>
+Lever op:         één .js-bestand + de OK-regel van validate-instrument.mjs.
 ```
-
-- Zonder `patchkamer.json` laadt Patchkamer elk `.js`/`.mjs`-bestand in de map en de submappen (tot drie niveaus diep). `node_modules`, `test(s)`, `*.test.js` en de validator worden overgeslagen, net als bestanden die geen `export default { … create(…) }` bevatten.
-- Met `patchkamer.json` bepaal je het zelf: `{ "name": "Mijn bieb", "modules": ["echo.js", "synths/wolk.js"], "workspaces": [{ "name": "Startpunt", "path": "werkruimtes/startpunt.patchkamer.json" }] }`. `workspaces` (optioneel) zijn startwerkruimtes die in het werkruimtepaneel onder *Uit je bibliotheken* verschijnen; zonder manifest telt elk `*.patchkamer.json`-bestand als werkruimte. Gebruik bestandsnamen zonder spaties. Paden zijn relatief aan het manifest. Voor een gewone webserver (geen GitHub) is het manifest nodig, omdat een webserver geen maplijst geeft.
-- Een GitHub-bron haalt de bestanden op via `raw.githubusercontent.com`; de repo moet openbaar zijn.
-
-### Bestanden aan de gebruiker geven (optioneel)
-`host.saveFile(bestandsnaam, data)` (data: tekst of Blob) laat de gebruiker een bestand bewaren, ook binnen de gepubliceerde weergave, en geeft `'saved'` of `'declined'`. Controleer eerst of de functie bestaat. Voorbeeld: `hulpmiddelen/opname.js`.
-
-### Wat een werkruimte bewaart
-Een werkruimtebestand (`Naam.patchkamer.json`) bevat de naam van de compositie, tempo, swing, beeld, alle apparaten met positie, grootte en `getState()`, de kabels, en per extern instrument **waar het vandaan komt**: `{ id, version, src: { kind, url | path, label } }`. Bij het openen haalt Patchkamer elk ontbrekend instrument van die plek. Code gaat alleen mee voor instrumenten zonder vaste plek (los bestand, geplakte code), of als de gebruiker dat aanvinkt.
-
-Gevolgen voor bouwers:
-- Houd **bestandsnaam en pad stabiel**: een werkruimte zoekt op die plek.
-- Houd **`id` en poort-id's stabiel** en verhoog `version` bij elke wijziging. Staat er bij het openen een andere versie op de bron, dan gebruikt Patchkamer die en meldt dat. `setState` moet dus de state van eerdere versies accepteren (zie §8).
-- Wil je dat oude werkruimtes exact de oude versie krijgen, zet de nieuwe versie dan in een **nieuw bestand** (`echo-1.1.0.js`) en laat het oude staan.
-
-## Bestaande apparaten als referentie
-
-Alle apparaten staan in de map **patchkamer-bibliotheek** (paden hieronder relatief daaraan).
-
-
-| Apparaat | id | Laat zien |
-|---|---|---|
-| Tremolo 1.1.0 | `nl.voorbeeld.tremolo` | kleinste effect: audio in/uit, twee knoppen; kleinste bestuurbare apparaat |
-| Klik | `nl.voorbeeld.klik` | klok-gestuurd, stuurt trig-gebeurtenissen |
-| Drone Synth 1.2.0 | `nl.patchkamer.drone` | bestuurbaar in vijf sporen met een aparte lichte `applyMod()` die toonhoogte en sequencer-gate met rust laat; Shadow DOM met tabbladen, noten- en CC-ingang, stil bij stop |
-| Acid 303 · Devil Fish 1.3.0 | `nl.patchkamer.acid303` | eigen sequencer én externe noten, slide via overlappende noten; bestuurbaar groot apparaat in Shadow DOM: `params()` + `modulate()` naast CC-ingang en knoppen |
-| Takt Twaalf 1.2.0 | `nl.patchkamer.takt12` | bestuurbaar per track bovenop p-locks; meldt `host.paramsChanged` als een machine of naam verandert; volledige groovebox als module, `host.setTempo` op demoknoppen |
-| Drift | `nl.patchkamer.drift` | groot apparaat, state inclusief driftgeneratoren voor exact herstel |
-| Monosynth 1.1.0 | `nl.patchkamer.mono` | bestuurbaar: `params()` + `modulate()`, één spoor, log-schaal voor cutoff en decay |
-| Drumcomputer 1.1.0 | `nl.patchkamer.drums` | bestuurbaar met een spoor per drumgeluid, leest de state van 1.0.0 |
-| Opname | `nl.patchkamer.opname` | audio door, `MediaRecorder` op een `MediaStreamDestination`, `host.saveFile` |
-| Notities | `nl.patchkamer.notities` | apparaat zonder poorten of geluid; alleen state |
-| Polysynth | `nl.patchkamer.polysynth` | meerstemmig met stemmenbeheer; snelle bussen per parameter die met elke stem verbonden worden |
-| String | `nl.patchkamer.string` | instrument als AudioWorklet; noten via `port.postMessage` |
-| LFO, MSEG, Macro | `nl.patchkamer.lfo` · `.mseg` · `.macro` | modulatoren met `host.modSignal` (snel) en `host.modulate` (terugval); tempo via `onStep` |
-| Filter, Flanger, Resonator, Frequency Shifter | `nl.patchkamer.filter` · `.flanger` · `.resonator` · `.freqshift` | `host.loadWorklet`, terugval zonder worklet, snelle ingang op een worklet-parameter |
-| Chorus, Phaser | `nl.patchkamer.chorus` · `.phaser` | effecten met gewone nodes, LFO op tempo |
-| Drift · modulator | `nl.patchkamer.driftmod` | `kind: 'modulator'`: `onModTargets`, `host.modulate`, groepen en volgen via `onModSources` |
-| Mixer 2.1.0 | `nl.patchkamer.mixer` | `host.setPorts` bij een ander aantal kanalen/groepen, `ui.jacks` met poorten in de strips, leest de state van 1.x en 2.0 |
-
-## 16. Opdrachtformaat voor een bouwende agent
-
-Geef een agent dit document plus een opdracht in deze vorm:
-
-```
-Bouw een Patchkamer-instrument volgens contract v1.
-Naam: <naam>            id: nl.<domein>.<naam>     versie: <x.y.z>  (nieuwe versie van bestaand id? noem de vorige versie en wat er verandert)
-Soort: <instrument|effect|mixer|output|utility>
-Poorten: audio in <n>, audio uit <n>, events in <lijst>, events uit <lijst>
-Klank/gedrag: <één alinea>
-Bedieningselementen: <lijst van knoppen met bereik en standaardwaarde>
-Reageert op klok: <ja/nee, wat per stap/maat>
-Reageert op gebeurtenissen: <welke types, wat ze doen>
-Lever: één .js-bestand; draai de validator en toon de OK-regel.
-```
-
-De agent levert het bestand, de validator-uitvoer en drie regels uitleg: wat het doet, hoe je het aansluit, en wat de knoppen betekenen.
