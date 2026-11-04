@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Een noot korter dan de attack van de versterker (of van de filter-envelope) was stil, doordat de release de attack-ramp annuleerde: de release begint nu vanaf de waarde die de envelope op dat moment heeft (cancelAndHoldAtTime), dus een korte noot laat een zacht stuk van de attack horen.
+//   Voor noten die langer duren dan hun attack is de reeks Web Audio-aanroepen identiek aan 1.11.0.
 // 1.11.0 — Nieuw als Triple Osc Poly (nieuwe naam; de id nl.patchkamer.polysynth blijft gelijk, dus bestaande werkruimtes laden), eigen map, bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Triple Osc Poly; namen van de klankstanden zijn Engels
 //   - setState volgt §13: onbekende velden worden genegeerd, ongeldige waarden krijgen de standaard, getallen worden binnen hun bereik afgekapt
@@ -109,7 +111,7 @@ input[type=checkbox]{accent-color:var(--x-acc);margin:0}
 export default {
   id: 'nl.patchkamer.polysynth',
   name: 'Triple Osc Poly',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1180, minWidth: 420 },
@@ -149,7 +151,7 @@ export default {
     }
     function envFreq(params, base, env, A, D, S, R, t, tOff) {   // filterenvelope op frequentie (oct = env*7)
       const pk = clamp(base * Math.pow(2, env * 7), 20, 20000), su = clamp(base * Math.pow(2, env * 7 * S), 20, 20000);
-      params.forEach(p => { p.cancelScheduledValues(t); p.setValueAtTime(base, t); p.linearRampToValueAtTime(pk, t + A); p.setTargetAtTime(su, t + A, D / 4); if (tOff != null) { p.cancelScheduledValues(tOff); p.setTargetAtTime(base, tOff, R / 4); } });
+      params.forEach(p => { p.cancelScheduledValues(t); p.setValueAtTime(base, t); p.linearRampToValueAtTime(pk, t + A); p.setTargetAtTime(su, t + A, D / 4); if (tOff != null) { if (tOff < t + A && typeof p.cancelAndHoldAtTime === 'function') p.cancelAndHoldAtTime(tOff); else p.cancelScheduledValues(tOff); p.setTargetAtTime(base, tOff, R / 4); } });
     }
     const isHeld = v => v.relAt == null;   // nog aangehouden (nog niet losgelaten)
     function voiceOn(note, vel, t, dur, scale) {
@@ -197,12 +199,12 @@ export default {
       if (F2) envFreq(F2.fs.map(f => f.frequency), clamp(E('cut2') * kt(P.f2), 20, 20000), E('env2'), fa, fd, P.fs, fr, t, tOff);
       const peak = (1 - P.vel * (1 - clamp(vel, 0, 1))) * 0.35 * (scale || 1);
       vca.gain.setValueAtTime(0.0001, t); vca.gain.linearRampToValueAtTime(peak, t + aa); vca.gain.setTargetAtTime(peak * as, t + aa, ad / 4);
-      v.ar = ar; v.peak = peak; v.as = as;
+      v.ar = ar; v.aa = aa; v.peak = peak; v.as = as;
       v.srcs.forEach(s => { try { s.start(t); } catch (e) {} });
       if (tOff != null) release(v, tOff);
       voices.push(v); return v;
     }
-    function release(v, t) { if (v.endAt != null && v.endAt <= t + v.ar * 1.5) return; v.relAt = t; v.vca.gain.cancelScheduledValues(t); v.vca.gain.setTargetAtTime(0.0001, t, Math.max(0.005, v.ar / 4)); v.endAt = t + v.ar * 1.6 + 0.05; v.srcs.forEach(s => { try { s.stop(v.endAt); } catch (e) {} }); }
+    function release(v, t) { if (v.endAt != null && v.endAt <= t + v.ar * 1.5) return; v.relAt = t; if (t < v.t0 + v.aa && typeof v.vca.gain.cancelAndHoldAtTime === 'function') v.vca.gain.cancelAndHoldAtTime(t); else v.vca.gain.cancelScheduledValues(t); v.vca.gain.setTargetAtTime(0.0001, t, Math.max(0.005, v.ar / 4)); v.endAt = t + v.ar * 1.6 + 0.05; v.srcs.forEach(s => { try { s.stop(v.endAt); } catch (e) {} }); }
     function kill(v, t) { v.ar = 0.02; v.endAt = null; release(v, Math.max(t - 0.005, ctx.currentTime)); }
     function cleanup() { const now = ctx.currentTime; voices = voices.filter(v => { if (v.endAt != null && now > v.endAt + 0.1) { v.conns.forEach(([a, b]) => { try { a.disconnect(b); } catch (e) {} }); v.nodes.forEach(n => { try { n.disconnect(); } catch (e) {} }); return false; } return true; });
       if (voiceInfo) { const h = voices.filter(v => v.relAt == null || v.relAt > now).length, tl = voices.filter(v => v.relAt != null && v.relAt <= now && v.endAt > now).length; voiceInfo.textContent = tx('{0} van {1} stemmen', h, P.poly) + (tl ? tx(' · {0} sterven uit', tl) : ''); } }
