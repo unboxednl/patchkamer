@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Verbeterd: noteoff, noteon, een aangehouden toets (held) en panic worden nu verwerkt (voorheen klonk elke toets van Keys in de stand "Toets vasthouden" door, omdat noteoff werd genegeerd). De drive is veel zachter (een zachte begrenzing met een kleine vaste kromming, gedeeld door de toename) en de ingang is versterkt, zodat het volume ook zonder drive goed is.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe id nl.patchkamer.stagekeys (voorheen nl.unboxed.stagekeys). Tweetalig (host.lang, namen per taal in i18n).
 //   - klankmodellen en hun state-waarden hebben neutrale namen: tine, reed, combpluck, organ, combo, vibes, bass (inst);
 //     de rotary-snelheid heet rotaryFast en het CC-id rotary
@@ -12,7 +13,7 @@
 export default {
   id: 'nl.patchkamer.stagekeys',
   name: 'Stage Keys',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 560, minWidth: 260 },
@@ -37,7 +38,7 @@ export default {
     };
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
     // ---- uitgangsketen: stemmen -> drive -> stereo tremolo (L/R in tegenfase) -> niveau ----
-    const sum = ctx.createGain(); sum.gain.value = 1;
+    const sum = ctx.createGain(); sum.gain.value = 3;   // versterking vóór de drive: ook zonder drive klinkt het apparaat vol genoeg
     const shaper = ctx.createWaveShaper(); shaper.oversample = (host.audio && host.audio.oversample) || '2x';
     const tremL = ctx.createGain(), tremR = ctx.createGain();
     const lfo = ctx.createOscillator(); lfo.type = 'sine';
@@ -200,10 +201,13 @@ export default {
       return p.scale === 'log' ? clamp(base * Math.pow(p.max / p.min, o), p.min, p.max) : clamp(base + o * (p.max - p.min), p.min, p.max);
     };
 
+    // Drive: zacht begrensd, met een kleine minimale kromming zodat de pieken nooit hard afknappen. Gedeeld door de toename, zodat het volume
+    // bij meer drive niet stijgt; de ingang is versterkt zodat ook zonder drive het niveau goed is.
+    const driveCurve = d => { const n = 2048, c = new Float32Array(n), a = 0.4 + d * 10, comp = 1 / (1 + a * 0.5); for (let i = 0; i < n; i++) { const x = i * 2 / (n - 1) - 1; c[i] = ((1 + a) * x / (1 + a * Math.abs(x))) * comp; } return c; };
     let lastDrive = -1;
     const apply = (t = ctx.currentTime) => {
       const d = eff('drive');
-      if (Math.abs(d - lastDrive) > 0.004) { shaper.curve = host.ui.curve(d); lastDrive = d; }
+      if (Math.abs(d - lastDrive) > 0.004) { shaper.curve = driveCurve(d); lastDrive = d; }
       lfo.frequency.setTargetAtTime(eff('tremrate'), t, 0.05);
       const td = eff('trem');
       lfoL.gain.setTargetAtTime(td * 0.5, t, 0.03); lfoR.gain.setTargetAtTime(-td * 0.5, t, 0.03);
@@ -478,11 +482,13 @@ button.sus[aria-pressed="true"]{background:var(--md);border-color:var(--md)}
         try {
           if (!ev) return;
           if (ev.type === 'cc') { onCC(ev); return; }
-          if (ev.type !== 'note' || typeof ev.note !== 'number' || !isFinite(ev.note)) return;
+          const type = String(ev.type).toLowerCase().replace(/[_-]/g, '');
+          if (type === 'panic' || type === 'allnotesoff') { silenceAll(false); sustained.clear(); return; }
+          if (!['note', 'noteon', 'noteoff'].includes(type) || typeof ev.note !== 'number' || !isFinite(ev.note)) return;
           const t = typeof ev.time === 'number' && isFinite(ev.time) ? Math.min(Math.max(ev.time, ctx.currentTime), ctx.currentTime + 30) : ctx.currentTime;   // een noot hoogstens 30 s vooruit: een tijd ver in de toekomst liet een stem hangen die Stop niet meer bereikte
           const m = Math.round(ev.note) + 12 * state.oct;
-          if (ev.vel === 0 || ev.off) { if (!sustain) noteOff(m, t, false); return; }
-          const vel = typeof ev.vel === 'number' && isFinite(ev.vel) ? ev.vel : 0.8, dur = typeof ev.dur === 'number' && isFinite(ev.dur) ? Math.min(ev.dur, 3600) : 0.3;
+          if (type === 'noteoff' || ev.vel === 0 || ev.off) { if (!sustain) noteOff(m, t, false); return; }
+          const vel = typeof ev.vel === 'number' && isFinite(ev.vel) ? ev.vel : 0.8, dur = ev.held || type === 'noteon' ? 0 : typeof ev.dur === 'number' && isFinite(ev.dur) ? Math.min(ev.dur, 3600) : 0.3;   // een aangehouden toets (held, noteon) klinkt tot zijn noteoff
           if (sustain) { noteOn(m, vel, t, 0); sustained.add(m); at(t, () => light(m, true)); }
           else { noteOn(m, vel, t, dur); lightAt(m, t, dur); }
         } catch (e) { /* nooit de planner laten struikelen */ }

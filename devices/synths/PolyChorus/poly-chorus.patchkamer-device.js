@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Versterking (+9,5 dB) achter de compressor: het apparaat en de tunes waren erg zacht (pieken rond −34 tot −10 dBFS). Het plafond rondt de pieken af.
 // 1.11.0 — Nieuw als Poly Chorus (nieuwe id nl.patchkamer.polychorus, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is
 //   bit-identiek aan het oude bestand; de motor bevat alleen nog de code voor dit apparaat:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Poly Chorus
@@ -281,7 +282,7 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.polychorus',
   name: 'Poly Chorus',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
@@ -322,7 +323,8 @@ export default {
     { const c = new Float32Array(2049); for (let i = 0; i < c.length; i++) c[i] = 0.92 * Math.tanh((i / (c.length - 1) * 2 - 1) / 0.92); out.curve = c; }
     out.oversample = (host.audio && host.audio.oversample) || '2x';
     const analyser = own(ctx.createAnalyser()); analyser.fftSize = 1024;
-    volume.connect(comp).connect(out); out.connect(analyser);
+    const trim = own(ctx.createGain()); trim.gain.value = 3;   // +9,5 dB achter de compressor: de tunes waren erg zacht; het plafond rondt de pieken af
+    volume.connect(comp).connect(trim).connect(out); out.connect(analyser);
     const scopeData = new Float32Array(analyser.fftSize);
 
     function send(message) {
