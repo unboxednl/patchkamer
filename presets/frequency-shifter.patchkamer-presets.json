@@ -1,0 +1,182 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.freqshift",
+  "name": "Frequency Shifter Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Frequency Shifter: slow beating and stereo detune, inharmonic metal and radio sounds, and feedback spirals.",
+  "tree": [
+    {
+      "folder": "Subtle",
+      "items": [
+        {
+          "name": "Gentle Shift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.05,
+            "range": 200,
+            "fb": 0,
+            "stereo": 0,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Slow Beat",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.5,
+            "range": 20,
+            "fb": 0,
+            "stereo": 0,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Stereo Drift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.8,
+            "range": 20,
+            "fb": 0,
+            "stereo": 1,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Thick Detune",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.3,
+            "range": 20,
+            "fb": 0,
+            "stereo": 1,
+            "mix": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Inharmonic",
+      "items": [
+        {
+          "name": "Metal Shimmer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.5,
+            "range": 200,
+            "fb": 0,
+            "stereo": 0,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Bell Warp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": -0.4,
+            "range": 200,
+            "fb": 0,
+            "stereo": 0.3,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Robot Voice",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.7,
+            "range": 200,
+            "fb": 0,
+            "stereo": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Broken Radio",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.3,
+            "range": 2000,
+            "fb": 0,
+            "stereo": 0,
+            "mix": 0.7
+          }
+        },
+        {
+          "name": "Alien Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": -0.6,
+            "range": 2000,
+            "fb": 0,
+            "stereo": 0.5,
+            "mix": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Feedback",
+      "items": [
+        {
+          "name": "Rising Spiral",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.35,
+            "range": 200,
+            "fb": 0.75,
+            "stereo": 0,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Falling Spiral",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": -0.35,
+            "range": 200,
+            "fb": 0.8,
+            "stereo": 0.2,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Barber Chaos",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": 0.5,
+            "range": 2000,
+            "fb": 0.9,
+            "stereo": 1,
+            "mix": 0.8
+          }
+        },
+        {
+          "name": "Endless Fall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shift": -0.8,
+            "range": 200,
+            "fb": 0.93,
+            "stereo": 0,
+            "mix": 0.7
+          }
+        }
+      ]
+    }
+  ]
+}
