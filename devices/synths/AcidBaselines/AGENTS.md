@@ -50,6 +50,8 @@ Je maakt klanken (tunes) voor Acid Baselines en zet ze als pack in `../../../tun
 
 Elke set in `grid` heeft vier lijsten van 16 stappen: `n` (noot: −1 = rust, 0 … 12 = C2 … C3 in halve tonen), `acc` (accent, 0 of 1), `sl` (slide, 0 of 1) en `oc` (octaaf per stap, −2 … 2).
 
+Een bewaker controleert om de 50 ms de uitvoer van de filterketen. Bij veel resonantie, filter-FM en een omlaag gemoduleerde cutoff kan een filter instabiel worden (`Infinity`, daarna `NaN`); de bewaker vervangt dan de filters, zodat het apparaat niet voor altijd stil blijft en geen `NaN` doorgeeft. Test extreme instellingen altijd ook met een modulator.
+
 Wat het apparaat met een state doet (getest):
 - Getallen buiten het bereik worden afgekapt (`cut: 1e9` wordt 5000); een tekst of ontbrekende waarde geeft de startwaarde.
 - Een ongeldige `wave`, `bars`, `oct` of `seqOn` geeft de startwaarde.
