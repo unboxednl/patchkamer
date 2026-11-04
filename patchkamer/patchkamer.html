@@ -1569,7 +1569,7 @@ function pkQualityOf(a){ for(const k of Object.keys(PK_QUALITY)){ const p=PK_QUA
 // ---------- schaal per scherm (v1.8) ----------
 var PKS={mode:'auto',pct:100,f:1,ui:1};
 try{ PKS.mode=localStorage.getItem('patchkamer.scaleMode')||'auto'; PKS.pct=+(localStorage.getItem('patchkamer.scalePct')||100)||100; }catch(e){}
-function pksAuto(){ const h=window.innerHeight||1000; return Math.max(0.55,Math.min(1.25,Math.round(h/1300*20)/20)); }   // ±1300 px vensterhoogte = 100%
+function pksAuto(){ const h=window.innerHeight||1000, w=window.innerWidth||1400; return Math.max(0.55,Math.min(1,Math.round(Math.min(h/700,w/1100)*20)/20)); }   // 100%, behalve op een erg klein scherm (tablet, telefoon: onder ±700 px hoog of ±1100 px breed)
 function pksTarget(){ return PKS.mode==='auto'?pksAuto():Math.max(0.5,Math.min(1.5,PKS.pct/100)); }
 PKS.f=pksTarget(); PKS.ui=Math.max(0.7,PKS.f);
 (function(){ const st=document.createElement('style'); st.textContent='header,.wspanel,.focusview,.libwin{zoom:var(--pkui,1)}'; document.head.appendChild(st); document.documentElement.style.setProperty('--pkui',String(PKS.ui)); })();
