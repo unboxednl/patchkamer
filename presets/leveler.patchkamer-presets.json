@@ -1,0 +1,180 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.leveler",
+  "name": "Leveler Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Leveler: gentle and fast leveling for single sources (bass, lead, pad, modulated sounds), settings for the mix bus, and a pass-through setting that only shows the meter.",
+  "tree": [
+    {
+      "folder": "Sources",
+      "items": [
+        {
+          "name": "Gentle Leveling",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -18,
+            "speed": 6,
+            "window": 1.0,
+            "range": 6,
+            "gate": -55,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Drift Tamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -18,
+            "speed": 8,
+            "window": 1.5,
+            "range": 18,
+            "gate": -60,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Pad Smoother",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -20,
+            "speed": 10,
+            "window": 2.0,
+            "range": 12,
+            "gate": -65,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Bass Control",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -16,
+            "speed": 2,
+            "window": 0.4,
+            "range": 8,
+            "gate": -50,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Lead Steady",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -17,
+            "speed": 3,
+            "window": 0.6,
+            "range": 9,
+            "gate": -55,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Quiet Rescue",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -20,
+            "speed": 4,
+            "window": 1.0,
+            "range": 24,
+            "gate": -70,
+            "ceiling": -1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Mix",
+      "items": [
+        {
+          "name": "Mix Bus Safety",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -14,
+            "speed": 12,
+            "window": 2.0,
+            "range": 4,
+            "gate": -55,
+            "ceiling": -0.3
+          }
+        },
+        {
+          "name": "Slow Ride",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -18,
+            "speed": 15,
+            "window": 2.5,
+            "range": 9,
+            "gate": -60,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Fast Catch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -18,
+            "speed": 0.6,
+            "window": 0.2,
+            "range": 12,
+            "gate": -55,
+            "ceiling": -1
+          }
+        },
+        {
+          "name": "Loud and Tight",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "target": -10,
+            "speed": 1.5,
+            "window": 0.5,
+            "range": 10,
+            "gate": -50,
+            "ceiling": -2
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Utility",
+      "items": [
+        {
+          "name": "Meter Only",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": false,
+            "target": -18,
+            "speed": 3,
+            "window": 0.8,
+            "range": 12,
+            "gate": -55,
+            "ceiling": -1
+          }
+        }
+      ]
+    }
+  ]
+}
