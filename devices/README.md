@@ -4,7 +4,9 @@ De meegeleverde apparaten van Patchkamer: instrumenten, effecten en andere bouws
 
 ## Een apparaat toevoegen
 
-Houd je aan het contract en geef het apparaat één stabiele bestandsnaam zonder versienummer. De geschiedenis staat in Git.
+Houd je aan het contract en geef het apparaat één stabiele bestandsnaam zonder versienummer, die eindigt op `.patchkamer-device.js`. De geschiedenis staat in Git.
+
+Elk apparaat staat in een eigen map binnen een categorie, bijvoorbeeld `synths/Duofone/duofone.patchkamer-device.js`. In die map kan ook een `AGENTS.md` staan met uitleg voor agents die het apparaat configureren, zoals tunes maken.
 
 ## Licentie
 

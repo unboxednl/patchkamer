@@ -4,13 +4,13 @@ Dit bestand is voor AI-agents. Het is niet geschreven voor mensen. Het hoort bij
 
 ## Wat hier staat
 
-`patchkamer.html` is de **host**: de studio zelf, als één HTML-pagina. Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.9** (in de code: `patchkamer:'1.9'`).
+`patchkamer.html` is de **host**: de studio zelf, als één HTML-pagina. Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.10** (in de code: `patchkamer:'1.10'`).
 
 ## Voor het bouwen van een apparaat
 
 De host is hier **alleen om in te testen**. Pas haar niet aan om een apparaat te laten werken. Past het apparaat niet in de host, dan klopt het apparaat niet met het contract.
 
-Eerst `node ../contract/validate-instrument.mjs ../devices/<naam>.js` laten slagen (zie `../AGENTS.md`). Test daarna wat de validator niet kan zien:
+Eerst `node ../contract/validate-instrument.mjs ../devices/<categorie>/<Naam>/<naam>.patchkamer-device.js` laten slagen (zie `../AGENTS.md`). Test daarna wat de validator niet kan zien:
 
 1. Start een lokale webserver in de root van de repo, bijvoorbeeld `python3 -m http.server 8080`, en open `http://localhost:8080/patchkamer/patchkamer.html`. Gebruik geen `file://`: dan laadt de host geen bibliotheken.
 2. Laad het apparaat: gebruik het bestandsveld voor een instrumentbestand (`.js`), of kies een map met een `patchkamer.json` (contract §16).
