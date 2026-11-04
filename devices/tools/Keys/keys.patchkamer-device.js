@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Hernoemd van Toets naar Keys: nieuwe id nl.patchkamer.keys, naam Keys / MIDI (Engelstalig, zoals de andere apparaten). Poort-id, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: tweetalig (host.lang, namen per taal in i18n), kleuren uit de CSS-variabelen van de host (volgt licht/donker/retro), getPreset/setPreset (zonder routing en zonder lopende waarden). Noten, CC en gedrag ongewijzigd.
 // 1.8.0 — Patchkamer contract v1.8: de host geeft elke schuif dubbelklik = beginwaarde, klik op het getal = waarde typen, en (instelbaar) draaiknop.
-/** Toets — Patchkamer keyboard / Web MIDI bridge, no audio output.
+/** Keys — Patchkamer keyboard / Web MIDI bridge, no audio output.
  * Emits standard finite note events. Hold mode adds held:true and noteoff for
  * instruments supporting held keys (Laag, Strijk, Samplebank and Toonladder).
  * Pulse mode supports duration-only instruments such as Nevel.
  * MIDI access is requested only via an explicit user button; no sysex.
  */
 const EN={
-  'TOETS · keyboard & MIDI':'KEYS · keyboard & MIDI',
   'Klik in het toetsenbord voor A–W–S–E… computertoetsen. Verbind Noten / CC met een synth, sampler of arpeggiator.':'Click in the keyboard to use the A–W–S–E… computer keys. Connect Notes / CC to a synth, sampler or arpeggiator.',
   'MIDI opnieuw verbinden':'Reconnect MIDI','MIDI verbinden':'Connect MIDI','Alles uit':'All off',
   'Alle MIDI-ingangen':'All MIDI inputs','MIDI-ingang':'MIDI input','Kanaal':'Channel','Alle kanalen':'All channels','Speelmodus':'Play mode',
@@ -20,7 +20,7 @@ const EN={
   'Puls werkt ook met duur-gestuurde synths zoals Nevel. Vasthouden is voor Laag, Strijk, Samplebank en de arpeggiator. Sustainpedaal werkt in Vasthouden. MIDI CC 1/11/74/7 → vibrato/expressie/cutoff/volume.':'Pulse also works with duration-driven synths such as Nevel. Hold is for Laag, Strijk, Samplebank and the arpeggiator. The sustain pedal works in Hold. MIDI CC 1/11/74/7 → vibrato/expression/cutoff/volume.',
   'Web MIDI is hier niet beschikbaar. Gebruik schermtoetsen/computertoetsen of een browser met Web MIDI.':'Web MIDI is not available here. Use the on-screen keys, the computer keys or a browser with Web MIDI.'
 };
-export default {id:'nl.patchkamer.toets',name:'Toets / MIDI',version:'1.11.0',kind:'utility',category:'tool',ui:{width:760,minWidth:360},ports:{audioIn:[],audioOut:[],eventIn:[],eventOut:[{id:'notes',name:'Noten / CC'}],modIn:[],modOut:[]},i18n:{en:{name:'Keys / MIDI',ports:{notes:'Notes / CC'}}},create(ctx,host){
+export default {id:'nl.patchkamer.keys',name:'Keys / MIDI',version:'1.11.1',kind:'utility',category:'tool',ui:{width:760,minWidth:360},ports:{audioIn:[],audioOut:[],eventIn:[],eventOut:[{id:'notes',name:'Notes / CC'}],modIn:[],modOut:[]},i18n:{nl:{ports:{notes:'Noten / CC'}}},create(ctx,host){
     const tr=(k,...a)=>{let t=host.lang==='nl'?k:(EN[k]??k);a.forEach((v,i)=>{t=t.replace('{'+i+'}',v);});return t;};
     const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
     const finite=(v,d,a,b)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,a,b):d;
@@ -57,7 +57,7 @@ export default {id:'nl.patchkamer.toets',name:'Toets / MIDI',version:'1.11.0',ki
     function keyup(e){if(pressed.has('key:'+e.code)){e.preventDefault();up('key:'+e.code);}}
     function unmount(){for(const source of [...pressed.keys()])if(!source.startsWith('midi:'))up(source);if(keyTarget){keyTarget.removeEventListener?.('keyup',keyup);keyTarget.removeEventListener?.('blur',lostFocus);keyTarget=null;}buttons.clear();status=null;clearUI();}
     function lostFocus(){panic();}
-    function render(el){unmount();mountUI(el,tr('TOETS · keyboard & MIDI'),tr('Klik in het toetsenbord voor A–W–S–E… computertoetsen. Verbind Noten / CC met een synth, sampler of arpeggiator.'));const top=row(panel);button(top,tr(access?'MIDI opnieuw verbinden':'MIDI verbinden'),connect);button(top,tr('Alles uit'),panic);const opts=[['all',tr('Alle MIDI-ingangen')]];if(access)for(const input of access.inputs.values())opts.push([input.id,input.name||input.id]);select(top,tr('MIDI-ingang'),opts,state.input,v=>{panic();state.input=v;});select(top,tr('Kanaal'),[[0,tr('Alle kanalen')],...Array.from({length:16},(_,i)=>[i+1,String(i+1)])],state.channel,v=>{panic();state.channel=+v;});
+    function render(el){unmount();mountUI(el,tr('KEYS · keyboard & MIDI'),tr('Klik in het toetsenbord voor A–W–S–E… computertoetsen. Verbind Noten / CC met een synth, sampler of arpeggiator.'));const top=row(panel);button(top,tr(access?'MIDI opnieuw verbinden':'MIDI verbinden'),connect);button(top,tr('Alles uit'),panic);const opts=[['all',tr('Alle MIDI-ingangen')]];if(access)for(const input of access.inputs.values())opts.push([input.id,input.name||input.id]);select(top,tr('MIDI-ingang'),opts,state.input,v=>{panic();state.input=v;});select(top,tr('Kanaal'),[[0,tr('Alle kanalen')],...Array.from({length:16},(_,i)=>[i+1,String(i+1)])],state.channel,v=>{panic();state.channel=+v;});
       select(top,tr('Speelmodus'),[['pulse',tr('Puls · note + dur')],['hold',tr('Toets vasthouden · noteoff')]],state.mode,v=>{panic();state.mode=v;});const controls=grid(panel);knob(controls,'root',tr('Laagste toets (MIDI)'),[24,84,12],state.root,v=>{panic();state.root=v;render(el);},v=>'C'+(v/12-1));knob(controls,'velocity','Velocity',[0.05,1,0.01],state.velocity,v=>state.velocity=v);knob(controls,'duration',tr('Pulsduur (s)'),[0.05,8,0.05],state.duration,v=>state.duration=v);
       knob(controls,'bend','Pitchbend',[-1,1,0.01],state.bend*2-1,v=>{state.bend=(v+1)/2;cc('bend',state.bend);});button(controls,tr('Bend midden'),()=>{state.bend=0.5;cc('bend',0.5);uiHandles.bend?.set(0);});knob(controls,'wheel',tr('Modulatiewiel'),[0,1,0.01],state.wheel,v=>{state.wheel=v;cc('vibrato',v);});
       const keyboard=add(panel,'div');keyboard.className='keyboard';keyboard.tabIndex=0;keyboard.onkeydown=keydown;keyboard.setAttribute('aria-label',tr('Piano, focus voor computertoetsen'));

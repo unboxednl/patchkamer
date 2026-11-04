@@ -1,16 +1,16 @@
-# AGENTS.md: Toets / MIDI
+# AGENTS.md: Keys / MIDI
 
 Dit bestand is voor AI-agents die dit apparaat configureren. Het is niet geschreven voor mensen. Het hoort bij `../../../AGENTS.md` (algemeen); lees die eerst. Hier staat wat alleen voor Toets / MIDI geldt.
 
-## Wat Toets / MIDI is
+## Wat Keys / MIDI is
 
 Een toetsenbord en Web MIDI-brug zonder eigen geluid. Het stuurt noten en controllers naar andere apparaten (synth, sampler, arpeggiator). De bron is het schermtoetsenbord, de computertoetsen (A–W–S–E…) of een aangesloten MIDI-keyboard.
 
 | | |
 |---|---|
-| Bestand | `toets.patchkamer-device.js` (in deze map) |
-| `id` | `nl.patchkamer.toets`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
-| Naam | `Toets / MIDI` (Engels: `Keys / MIDI`, via `i18n`) |
+| Bestand | `keys.patchkamer-device.js` (in deze map) |
+| `id` | `nl.patchkamer.keys`. Verander die nooit: daaraan hangen presets en songs van gebruikers. Het apparaat heette eerst `nl.patchkamer.toets`; werkruimtes of presets uit die tijd verwijzen naar de oude id |
+| Naam | `Keys / MIDI` in alle talen; alleen de poortnaam `Notes / CC` heeft een Nederlandse variant (`Noten / CC`, via `i18n`) |
 | Soort | `utility` (categorie `tool`) |
 | Poorten | alleen een eventuitgang `notes` ("Noten / CC"); geen audio, geen ingangen |
 | Contract | v1.11 |
@@ -20,7 +20,7 @@ Wat het uitstuurt: `note` (met `dur`, in vasthoudmodus ook `held: true`), `noteo
 
 ## Geen tunes, wel presets
 
-Alleen apparaten met `kind: 'instrument'` hebben tunes. Toets / MIDI is een `utility`, dus het krijgt **presets** en **nooit tunes** (contract §0 en §13c). Maak hiervoor geen pack in `../../../tunes/`. Maak alleen presets als de opdracht dat uitdrukkelijk vraagt.
+Alleen apparaten met `kind: 'instrument'` hebben tunes. Keys / MIDI is een `utility`, dus het krijgt **presets** en **nooit tunes** (contract §0 en §13c). Maak hiervoor geen pack in `../../../tunes/`. Maak alleen presets als de opdracht dat uitdrukkelijk vraagt.
 
 ## De state en de preset
 
@@ -50,8 +50,8 @@ Een pack heet `naam.patchkamer-presets.json` en staat in `../../../presets/`. He
 {
   "format": "patchkamer-presets",
   "formatVersion": 2,
-  "device": "nl.patchkamer.toets",
-  "name": "Toets speelstanden",
+  "device": "nl.patchkamer.keys",
+  "name": "Keys play modes",
   "author": "<naam van de maker>",
   "license": "CC0-1.0",
   "description": "<korte omschrijving>",
@@ -66,7 +66,7 @@ Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin g
 
 ## Controleren
 
-- Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/tools/Toets/toets.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.
+- Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/tools/Keys/keys.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.
 - Het apparaat tekent niet zelf per frame; er is geen `requestAnimationFrame`. Houd dat zo.
 - De validator kan geen echte MIDI-hardware en geen toestemmingsvraag van de browser testen. Schrijf in je oplevering wat je **niet** hebt getest.
 - Alle tekst staat in het woordenboek `EN` bovenin het bestand (Nederlandse bron, Engels via `host.lang`). Een nieuwe tekst krijgt altijd nl én en.
