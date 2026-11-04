@@ -114,8 +114,9 @@ svg.cables path.hit{pointer-events:stroke;stroke:transparent;stroke-width:14;cur
 .mc .e{position:absolute;top:-1px;width:8px;height:8px;border-radius:50%;background:var(--mod);transform:translateX(-50%)}
 .mc .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--mod)}
 body.nomodview .modbar,body.nomodview .pkmodmark{display:none!important}
-.card.sized-h .body{grid-template-rows:auto minmax(0,1fr);min-height:0}
-.card.sized-h .ui{overflow:auto;min-height:0;overscroll-behavior:contain}
+.card.sized-h .body{display:flex;flex-direction:column;min-height:0}
+.card.sized-h .body>.ports,.card.sized-h .body>.modbar{flex:none}
+.card.sized-h .ui{flex:1 1 0;overflow:auto;min-height:0;overscroll-behavior:contain}
 .card .rz{position:absolute;z-index:4;touch-action:none}
 .card .rz.e{top:34px;right:-5px;bottom:14px;width:10px;cursor:ew-resize}
 .card .rz.s{left:14px;right:14px;bottom:-5px;height:10px;cursor:ns-resize}
@@ -820,9 +821,9 @@ function addDevice(defId,x,y,state,fixedId,version){
   const bm=document.createElement('button'); bm.textContent='–'; bm.title='minimaliseer tot icoon'; bm.setAttribute('aria-label','minimaliseer'); bm.onclick=e=>{e.stopPropagation(); setMini(id,true);};
   const bx=document.createElement('button'); bx.textContent='×'; bx.title='verwijder'; bx.onclick=e=>{e.stopPropagation(); removeDevice(id);}; bar.append(bf,bm,bx);
   const body=document.createElement('div'); body.className='body';
-  const mb=document.createElement('div'); mb.className='modbar'; mb.hidden=true; body.appendChild(mb);
   const ports=document.createElement('div'); ports.className='ports';
   body.appendChild(ports);
+  const mb=document.createElement('div'); mb.className='modbar'; mb.hidden=true; body.appendChild(mb);   // onder de poorten: kabelpoorten staan altijd bovenaan
   const ui=document.createElement('div'); ui.className='ui'; body.appendChild(ui);
   const ic=document.createElement('div'); ic.className='pkicon c-ic-'+categoryOf(def); ic.style.setProperty('--ic',catColor(categoryOf(def))); ic.title=def.name+' · sleep om te verplaatsen · dubbelklik of ⤢ voor de vorige grootte';
   ic.innerHTML=`<span class="led"></span><span class="glyph">${esc(initials(def.name))}</span><span class="lbl">${esc(def.name)}</span>`;
