@@ -1,6 +1,6 @@
-# Patchkamer — Instrumentcontract v1.9 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.10 voor bouwende agents
 
-Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één `.js`-bestand op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
+Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
 _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 t/m v1.9 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat. v1.8 vraagt bijna niets van een apparaat: de host maakt de regelaars beter._
 
@@ -16,6 +16,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.7 | Soepel: tekenen via de klok van de host (`host.frame`, `host.visible`) en regels tegen haperen (§12b). Besturing voor controllers: `host.peers`, `onPeers`, `host.connect`, `host.disconnect`, `host.cablesFrom` (§13b) |
 | v1.8 | Regelaars door de host: dubbelklik = beginwaarde, klik op het getal = typen, draaiknop als keuze; `host.ui.knob` krijgt een 7e argument `{ default, scale }`; `data-pk-default` / `data-pk-noreset` / `data-pk-for` voor eigen schuiven (§12a). Tekenpoort als snelle omzetting van oude tekenlussen (§12b) |
 | v1.9 | Onderdelen: tunes (apparaten die geluid maken) en presets (al het andere) in bibliotheken per apparaat, met mappen en deelbare packs; songs als export van een werkruimte; een licentie (SPDX) bij elke tune, preset en song. Optioneel voor drumcomputers: instrumenten (`parts`, `getPart`, `setPart`) voor tunes per instrument (§0, §13c) |
+| v1.10 | Bestandsnaam `*.patchkamer-device.js` voor apparaten (§2, §16): de host zoekt zonder manifest alleen nog naar deze bestanden, de validator waarschuwt bij een andere naam |
 
 ---
 
@@ -25,7 +26,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 |---|---|---|
 | **Patchkamer** | De studio (één HTML-pagina): apparaten plaatsen en koppelen, de klok, en het beheer van alle onderstaande onderdelen. Haar eigen instellingen (weergave, kabels, schaal) staan apart onder *Instellingen*, per computer, en zitten in geen enkel ander bestand. | `patchkamer.html` |
 | **Contract** | Dit document plus `validate-instrument.mjs`: hoe een apparaat eruitziet, zodat ook een AI er een kan bouwen. Hoort bij een versie van Patchkamer. | `PATCHKAMER-CONTRACT.md` |
-| **Apparatenbibliotheek** | Apparaten in categorieën (synths, drums, effecten, mixers, sequencers, modulatie, mastering, hulpmiddelen). | `*.js`, plus `patchkamer-bibliotheek.json` voor de indeling |
+| **Apparatenbibliotheek** | Apparaten in categorieën (synths, drums, effecten, mixers, sequencers, modulatie, mastering, hulpmiddelen). | `*.patchkamer-device.js`, plus `patchkamer-bibliotheek.json` voor de indeling |
 | **Song** | Een export van een werkruimte: alle apparaten **met hun code**, hun instellingen en patronen, de kabels en het tempo, plus titel, maker, licentie en omschrijving. Wie hem opent, hoort hem precies zoals bedoeld en kan verder werken. (Een opname, bijv. MP3, hoort in de repository naast de song; niet in het bestand.) | `*.patchkamer-song.json` |
 | **Tune** | De klank van een apparaat **dat geluid maakt** (`kind: 'instrument'`: synths, drones, drumcomputers), in een tunebibliotheek van dat apparaat. Drumcomputers kunnen ook tunes per instrument hebben. | `*.patchkamer-tunes.json` |
 | **Preset** | De instelling van een apparaat **zonder eigen geluid** (`effect`, `mixer`, `output`, `utility`, `modulator`: effecten, mixers, mastering, sequencers, modulatoren, controllers), in een presetbibliotheek van dat apparaat. | `*.patchkamer-presets.json` |
@@ -52,7 +53,7 @@ Een apparaat beslist zelf hoe het klinkt en hoe zijn UI eruitziet. De host besli
 
 ## 2. Het bestand
 
-Eén ES-module met een default export:
+Een apparaat is één ES-module met een default export, in een bestand `naam.patchkamer-device.js` (bijvoorbeeld `tremolo.patchkamer-device.js`). De inhoud is gewoon JavaScript. De dubbele extensie laat Patchkamer in een bibliotheek zonder manifest zien welke bestanden apparaten zijn en welke niet (§16); editors en Node behandelen het bestand als `.js`.
 
 ```js
 export default {
@@ -366,7 +367,7 @@ const tekenLus = (host, inst, cb, fps) => {
 2. Zeg het abonnement op in `unmount()` en `destroy()`.
 3. Vervang maat- en kleuropvragingen per frame door een `ResizeObserver` en een kleurcache.
 4. Verhoog `version`. Poort-id's, `id` en state blijven gelijk, zodat werkruimtes en presets blijven werken.
-5. `node validate-instrument.mjs bestand.js` geeft `OK … tekent via host.frame`. Staat er `let op: eigen requestAnimationFrame`, dan is stap 1 nog niet klaar.
+5. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK … tekent via host.frame`. Staat er `let op: eigen requestAnimationFrame`, dan is stap 1 nog niet klaar.
 
 **Snelle omzetting: de tekenpoort (v1.8).** Voor een groot of oud apparaat met veel losse lussen mag je ook de standaard-tekenpoort gebruiken, in plaats van elke lus om te bouwen. Zet het blok `__pkRaf` / `__pkCaf` / `__pkWrap` bovenin het bestand (zie de bibliotheek, bijvoorbeeld `lfo`), vervang `requestAnimationFrame(` door `__pkRaf(` en `cancelAnimationFrame(` door `__pkCaf(`, en schrijf de export als `const __pkDef = { … }; export default { ...__pkWrap(__pkDef) };` (de host herkent een apparaat aan `export default {`). Een lus die vanuit een methode van het apparaat start (meestal `mount`), loopt dan op volle snelheid zolang de kaart te zien is, en verborgen ongeveer 2× per seconde. Niet gebruiken voor lussen die timing of MIDI doen: die horen niet in `requestAnimationFrame`.
 
@@ -532,7 +533,7 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 {
   "name": "Patchkamer-bibliotheek",
   "version": "1.0.0",
-  "modules": ["instrumenten/mijn-synth.js", "effecten/mijn-effect.js"],
+  "modules": ["instrumenten/mijn-synth.patchkamer-device.js", "effecten/mijn-effect.patchkamer-device.js"],
   "workspaces": [{ "name": "Startpunt", "path": "werkruimtes/startpunt.patchkamer.json" }],
   "presets": [{ "name": "Startpresets", "path": "presets/startpresets.patchkamer-presets.json" }]
 }
@@ -540,7 +541,7 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 
 - Patchkamer laadt alleen de modules die in `modules` staan.
 - Werkruimtes (`*.patchkamer.json`) en presetbibliotheken (`*.patchkamer-presets.json`) zijn optioneel. Presetbibliotheken uit een bibliotheek zijn alleen-lezen; de gebruiker kan er een kopie van maken.
-- Zonder `patchkamer.json` zoekt Patchkamer zelf naar `.js`-modules, `*.patchkamer.json` en `*.patchkamer-presets.json`.
+- Zonder `patchkamer.json` zoekt Patchkamer zelf naar `*.patchkamer-device.js`, `*.patchkamer.json`, `*.patchkamer-presets.json` en `*.patchkamer-tunes.json`. Andere `.js`-bestanden in de map, zoals hulpscripts, worden dan genegeerd. Modules die in `patchkamer.json` staan, mogen elke bestandsnaam hebben.
 - Wijzig je een bestaand apparaat: verhoog `version` en houd `id`, poort-id's en bestandsnaam gelijk. Dan vinden bewaarde werkruimtes en presets het terug.
 
 ---
@@ -548,12 +549,12 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 ## 17. De validator
 
 ```
-node validate-instrument.mjs mijn-apparaat.js
+node validate-instrument.mjs mijn-apparaat.patchkamer-device.js
 ```
 
 De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow roots) en een nep-host. Hij eindigt met één `OK`-regel (exit 0) of met de eerste fout (exit 1). Hij controleert:
 
-1. **Bestand**: default export met `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; geldige `category` en `ui`; geen `ctx.destination` (behalve bij `output`), geen browseropslag, geen netwerk, geen imports, geen eigen AudioContext.
+1. **Bestand**: bestandsnaam `*.patchkamer-device.js` (een andere naam geeft een waarschuwing, geen fout); default export met `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; geldige `category` en `ui`; geen `ctx.destination` (behalve bij `output`), geen browseropslag, geen netwerk, geen imports, geen eigen AudioContext.
 2. **Poorten**: alle acht lijsten, geldige en unieke id's, een AudioNode per audiopoort, `setPorts` met klaarstaande nodes, `jack` alleen voor bestaande poorten, `ui.jacks` alleen samen met minstens één `jack`.
 3. **Levensloop**: `create` → `getState` vóór `mount` → `mount` → twee maten `onStep` → elk gebeurtenistype plus een onbekend type → `onTransport` → `getState`/`setState`-ronde → `setState({})` → twee keer `destroy`; `emit` alleen op eigen `eventOut`-poorten.
 4. **Sturing (v1.3)**: `params` en `modulate` samen; geldige parameterlijst; `modulate` met +1, −1, 0,37, onbekende ids en `{}`. Een modulator heeft `modOut` en `onModTargets`; die krijgt eerst `[]` en daarna twee keer doelen.
@@ -570,7 +571,7 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 
 ## 18. Checklist voor oplevering
 
-1. Eén bestand, default export, `id` reverse-DNS, `version` semver, juiste `kind` en `category`.
+1. Eén bestand `naam.patchkamer-device.js`, default export, `id` reverse-DNS, `version` semver, juiste `kind` en `category`.
 2. Alle audiopoorten hebben een node; geen `ctx.destination` (behalve `output`).
 3. Geluid gepland op `time` uit `onStep`/`onEvent`; geen `setTimeout` voor timing.
 4. `getState()` is gewone JSON en compleet; `setState({})` geeft standaardwaarden.
@@ -586,7 +587,7 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 14. Bewegende UI via `host.frame` (met terugval), geen maat- of kleuropvragingen per frame (§12b).
 15. Schuiven staan na `mount()` op hun standaardwaarde; getallen naast schuiven worden direct in de `input`-handler bijgewerkt; open shadow root (§12a).
 16. Instrumenten (optioneel): `parts`/`getPart`/`setPart` samen, alleen klank in `getPart`, terugzetten laat de instelling gelijk (§13c).
-17. `node validate-instrument.mjs bestand.js` geeft `OK`, zonder `let op`.
+17. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -618,10 +619,10 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 
 Alle drie komen door de validator. Ze staan ook als losse bestanden in `bouwen/voorbeelden/`.
 
-### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.js`
+### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.js — voorbeeld-effect · Patchkamer contract v1.6
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.6
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy.
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -671,10 +672,10 @@ export default {
 };
 ```
 
-### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.js`
+### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.js — voorbeeld-instrument · Patchkamer contract v1.6
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.6
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets).
 const VOICES = [['tik', 'Tik'], ['toon', 'Toon']];
@@ -728,10 +729,10 @@ export default {
 };
 ```
 
-### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.js`
+### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.js — voorbeeld-ontvanger · Patchkamer contract v1.6
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.6
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // en routing buiten presets houden (getPreset/setPreset).
@@ -803,7 +804,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.9.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.10.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
@@ -812,5 +813,5 @@ Bediening:        <knoppen en keuzes met bereik en eenheid>
 Stuurbaar:        <welke parameters, welke snel>   (of: nee)
 Presets:          <wat níet in een preset hoort, of: alles>
 Kaartbreedte:     <px, of standaard>
-Lever op:         één .js-bestand + de OK-regel van validate-instrument.mjs.
+Lever op:         één .patchkamer-device.js-bestand + de OK-regel van validate-instrument.mjs.
 ```
