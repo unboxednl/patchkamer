@@ -1,6 +1,8 @@
-# Patchkamer — Instrumentcontract v1.10 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.11 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
+
+_Dit contract staat in twee talen: `PATCHKAMER-CONTRACT_NL.md` (Nederlands, de brontekst) en `PATCHKAMER-CONTRACT_EN.md` (English). Beide hebben dezelfde versie en dezelfde inhoud; verschillen ze, dan geldt de Nederlandse tekst. De validator spreekt ook beide talen (`--lang nl|en`)._
 
 _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 t/m v1.9 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat. v1.8 vraagt bijna niets van een apparaat: de host maakt de regelaars beter._
 
@@ -17,6 +19,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.8 | Regelaars door de host: dubbelklik = beginwaarde, klik op het getal = typen, draaiknop als keuze; `host.ui.knob` krijgt een 7e argument `{ default, scale }`; `data-pk-default` / `data-pk-noreset` / `data-pk-for` voor eigen schuiven (§12a). Tekenpoort als snelle omzetting van oude tekenlussen (§12b) |
 | v1.9 | Onderdelen: tunes (apparaten die geluid maken) en presets (al het andere) in bibliotheken per apparaat, met mappen en deelbare packs; songs als export van een werkruimte; een licentie (SPDX) bij elke tune, preset en song. Optioneel voor drumcomputers: instrumenten (`parts`, `getPart`, `setPart`) voor tunes per instrument (§0, §13c) |
 | v1.10 | Bestandsnaam `*.patchkamer-device.js` voor apparaten (§2, §16): de host zoekt zonder manifest alleen nog naar deze bestanden, de validator waarschuwt bij een andere naam |
+| v1.11 | Taal en audio: `host.lang` (`'nl'` of `'en'`) en `host.audio` (`sampleRate`, `quality`, `oversample`, `latency`) voor apparaten; optioneel `i18n` op de definitie voor namen per taal (§2, §12c). Het contract en de validator zijn tweetalig (Nederlands en Engels) |
 
 ---
 
@@ -25,7 +28,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | Onderdeel | Wat het is | Bestand |
 |---|---|---|
 | **Patchkamer** | De studio (één HTML-pagina): apparaten plaatsen en koppelen, de klok, en het beheer van alle onderstaande onderdelen. Haar eigen instellingen (weergave, kabels, schaal) staan apart onder *Instellingen*, per computer, en zitten in geen enkel ander bestand. | `patchkamer.html` |
-| **Contract** | Dit document plus `validate-instrument.mjs`: hoe een apparaat eruitziet, zodat ook een AI er een kan bouwen. Hoort bij een versie van Patchkamer. | `PATCHKAMER-CONTRACT.md` |
+| **Contract** | Dit document (in twee talen) plus `validate-instrument.mjs`: hoe een apparaat eruitziet, zodat ook een AI er een kan bouwen. Hoort bij een versie van Patchkamer. | `PATCHKAMER-CONTRACT_NL.md`, `PATCHKAMER-CONTRACT_EN.md` |
 | **Apparatenbibliotheek** | Apparaten in categorieën (synths, drums, effecten, mixers, sequencers, modulatie, mastering, hulpmiddelen). | `*.patchkamer-device.js`, plus `patchkamer-bibliotheek.json` voor de indeling |
 | **Song** | Een export van een werkruimte: alle apparaten **met hun code**, hun instellingen en patronen, de kabels en het tempo, plus titel, maker, licentie en omschrijving. Wie hem opent, hoort hem precies zoals bedoeld en kan verder werken. (Een opname, bijv. MP3, hoort in de repository naast de song; niet in het bestand.) | `*.patchkamer-song.json` |
 | **Tune** | De klank van een apparaat **dat geluid maakt** (`kind: 'instrument'`: synths, drones, drumcomputers), in een tunebibliotheek van dat apparaat. Drumcomputers kunnen ook tunes per instrument hebben. | `*.patchkamer-tunes.json` |
@@ -63,6 +66,7 @@ export default {
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
   category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool'
   ui: { width: 360, minWidth: 260, jacks: false },   // optioneel, zie §12
+  i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optioneel (v1.11): namen per taal, zie §12c
   ports: {
     audioIn:  [{ id: 'in',    name: 'In' }],
     audioOut: [{ id: 'out',   name: 'Uit' }],
@@ -82,6 +86,8 @@ export default {
 **`kind`** is een hint voor de bibliotheek en voor de validator, geen beperking. Alleen `kind: 'output'` mag met `ctx.destination` verbinden. Een `modulator` heeft minstens één `modOut`.
 
 **`category`** bepaalt waar het apparaat in de bibliotheek staat. Zonder category leidt de host hem af van `kind`.
+
+**`i18n`** (v1.11, optioneel) geeft de naam van het apparaat en van zijn poorten per taal: `{ en: { name: '…', ports: { in: '…' } } }`. De host past de naam toe in `host.lang` en gebruikt anders `name` en de poortnamen uit `ports`. Zie §12c.
 
 ---
 
@@ -373,6 +379,42 @@ const tekenLus = (host, inst, cb, fps) => {
 
 ---
 
+## 12c. Taal en audiokwaliteit (v1.11)
+
+**Taal.** `host.lang` is de taal van de gebruiker: `'nl'` of `'en'` (er kunnen later talen bijkomen). Hij staat vast zolang je apparaat bestaat. Wisselt de gebruiker van taal, dan laadt de host de studio opnieuw en maakt hij je apparaat opnieuw.
+
+- Alle tekst die de gebruiker ziet, kies je op `host.lang`: labels, keuzelijsten, meldingen, hulpteksten en tooltips. Ken je de taal niet, gebruik dan `'en'`.
+- Namen die de host zelf toont (kaarttitel, bibliotheek, poortnamen) geef je per taal in het veld `i18n` van de definitie (§2). Dat veld is statisch: het wordt gelezen vóórdat `create` draait, dus gebruik het niet voor teksten in je UI.
+- Vertaal **niet**: `id`, `kind`, `category`, poort-id's en de sleutels en waarden in je `state`. Namen van presets en tunes die in je `state` staan, houd je taalneutraal. Gangbare muziekvaktermen (preset, tune, sample rate, latency, oversampling, swing) laat je in alle talen Engels.
+- Houd teksten per taal bij elkaar in één tabel en kies erin op `host.lang`. De validator draait je apparaat met beide waarden van `host.lang` en meldt een fout in een van de twee takken.
+
+```js
+export default {
+  id: 'nl.voorbeeld.tremolo', name: 'Tremolo', version: '1.0.0', kind: 'effect',
+  ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [] },
+  i18n: { en: { ports: { in: 'In', out: 'Out' } } },
+  create(ctx, host) {
+    const T = { nl: { rate: 'Snelheid', depth: 'Diepte' }, en: { rate: 'Rate', depth: 'Depth' } }[host.lang] || { rate: 'Rate', depth: 'Depth' };
+    /* … */ return { mount(el) { host.ui.knob(el, T.rate, [0.1, 20, 0.1], 4, v => v.toFixed(1) + ' Hz', v => {}); /* … */ } };
+  }
+};
+```
+
+**Audiokwaliteit.** `host.audio` geeft de keuze van de gebruiker. Het is alleen lezen en staat vast zolang je apparaat bestaat (de host maakt je apparaat opnieuw als de gebruiker iets wijzigt).
+
+| Veld | Waarden | Betekenis |
+|---|---|---|
+| `sampleRate` | getal (Hz) | De echte samplefrequentie van de AudioContext, gelijk aan `ctx.sampleRate` |
+| `quality` | `'low'`, `'normal'`, `'high'`, `'custom'` | Het gekozen kwaliteitsniveau; `'custom'` als de gebruiker losse keuzes heeft aangepast |
+| `oversample` | `'none'`, `'2x'`, `'4x'` | Hoeveel oversampling je mag gebruiken waar je aliasing veroorzaakt |
+| `latency` | `'interactive'`, `'balanced'`, `'playback'` | De gekozen buffergrootte van de browser (klein = lage latency, grotere buffer = stabieler) |
+
+- Gebruik `oversample` waar je zelf aliasing veroorzaakt, bijvoorbeeld op een `WaveShaperNode` (`shaper.oversample = host.audio.oversample`) of in eigen DSP die je intern op een hogere samplefrequentie kunt laten draaien. Doe je dat niet, dan werkt je apparaat nog steeds.
+- Reken niet op een vaste samplefrequentie: lees `ctx.sampleRate`.
+- Verander de kwaliteit niet zelf: de gebruiker kiest die in Instellingen. Ter informatie: *Normaal* is `interactive`, automatische samplefrequentie en `'2x'` (het gedrag van vóór v1.11); *Laag* is 44,1 kHz, `playback` en `'none'`; *Hoog* is 96 kHz, `balanced` en `'4x'`.
+
+---
+
 ## 13. State, versies en presets (v1.6)
 
 **State.** `getState()` geeft alles terug wat nodig is om het geluid en het gedrag exact te herstellen: knoppen, patronen en keuzes. Het resultaat moet gewone JSON zijn, zonder AudioNodes.
@@ -441,7 +483,7 @@ const o = ctx.getOutputTimestamp();   // { contextTime, performanceTime }
 const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.performanceTime) / 1000 + 0.012);
 ```
 
-**Latency.** De host kiest de latency van de AudioContext (Laag / Gebalanceerd / Stabiel, in de kopbalk). Maak nooit een eigen AudioContext; gebruik `ctx` uit `create`.
+**Latency.** De host kiest de latency van de AudioContext (Laag / Gebalanceerd / Stabiel, onder Instellingen → Audio, samen met de sample rate en het kwaliteitsniveau, §12c). Maak nooit een eigen AudioContext; gebruik `ctx` uit `create`.
 
 ---
 
@@ -464,7 +506,7 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ```json
 { "format": "patchkamer-song", "formatVersion": 1, "title": "Nachtvlucht", "author": "…", "license": "CC-BY-4.0",
-  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.9",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.11",
   "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
                  "devices": [ ], "cables": [ ], "bpm": 126 } }
 ```
@@ -508,6 +550,8 @@ Regels: `setPart(id, getPart(id))` laat de instelling ongewijzigd, en `setPart(a
 | `host.tunes.list / apply / save / applyPart` | v1.9 | Tunes en presets zonder UI (voor tests en controllers); `host.presets` is hetzelfde |
 | `host.frame(this, cb, fps)` | v1.7 | Tekenen op de klok van de host, alleen als je kaart te zien is; geeft een opzeg-functie (§12b) |
 | `host.visible(this)` | v1.7 | Is je kaart nu te zien? |
+| `host.lang` | v1.11 | Taal van de gebruiker: `'nl'` of `'en'`; vast zolang je apparaat bestaat (§12c) |
+| `host.audio` | v1.11 | `{ sampleRate, quality, oversample, latency }`: audiokeuze van de gebruiker, alleen lezen (§12c) |
 | `host.peers(this)`, `onPeers(lijst)` | v1.7 | Andere apparaten zien (alleen lezen) (§13b) |
 | `host.connect / disconnect / cablesFrom` | v1.7 | Kabels vanaf je eigen uitgangen leggen, weghalen, opvragen (§13b) |
 
@@ -550,6 +594,7 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 
 ```
 node validate-instrument.mjs mijn-apparaat.patchkamer-device.js
+node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --lang en   # uitvoer in het Engels (standaard Nederlands)
 ```
 
 De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow roots) en een nep-host. Hij eindigt met één `OK`-regel (exit 0) of met de eerste fout (exit 1). Hij controleert:
@@ -565,7 +610,9 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 9. **Regelaars en tekenpoort (v1.8)**: een apparaat met de tekenpoort (`__pkWrap`) geeft geen waarschuwing meer. Dubbelklik en typen kan de validator niet testen (dat doet de host met de echte UI).
 10. **Instrumenten (v1.9)**: heeft de instance `parts`, dan ook `getPart` en `setPart`; elk instrument een uniek `id` en een `name`; `getPart` geeft JSON; `setPart(id, getPart(id))` laat de instelling gelijk; kruislings zetten neemt de klank over en raakt geen ander instrument.
 
-Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
+11. **Taal en audio (v1.11)**: een optioneel `i18n` is een object met per taal een `name` en/of `ports` (poort-id → naam) van bestaande poorten; `host.lang` en `host.audio` zijn aanwezig; het hele apparaat wordt twee keer doorlopen, met `host.lang` `'nl'` en `'en'`, en een fout in een van beide takken is een fout.
+
+Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
 ---
 
@@ -587,7 +634,8 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 14. Bewegende UI via `host.frame` (met terugval), geen maat- of kleuropvragingen per frame (§12b).
 15. Schuiven staan na `mount()` op hun standaardwaarde; getallen naast schuiven worden direct in de `input`-handler bijgewerkt; open shadow root (§12a).
 16. Instrumenten (optioneel): `parts`/`getPart`/`setPart` samen, alleen klank in `getPart`, terugzetten laat de instelling gelijk (§13c).
-17. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+17. Alle tekst voor de gebruiker kiest op `host.lang` (`'nl'` en `'en'`, anders `'en'`); namen per taal in `i18n`; `oversample` van `host.audio` gebruikt waar je zelf aliasing veroorzaakt (§12c).
+18. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -612,22 +660,27 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 | UI na `mount()` opbouwen met de opgeslagen waarden | Dubbelklik zet de schuif terug naar de opgeslagen waarde in plaats van de standaard | In `mount()` de standaardwaarden tonen; `setState()` zet daarna de rest (§12a), of `data-pk-default` |
 | Getal pas in een volgende frame bijwerken | Typen werkt niet: de host ziet het getal niet meebewegen | Getal direct in de `input`-handler zetten |
 | Eigen dubbelklik-reset op elke schuif | Dubbel werk; de host doet het al | Weglaten, of `data-pk-noreset` als de schuif níet terug mag |
+| Teksten vast in één taal | Gebruikers van de andere taal zien vreemde tekst | Kies alle teksten op `host.lang` en geef namen per taal in `i18n` (§12c) |
 
 ---
 
 ## 20. Volledige voorbeelden
 
-Alle drie komen door de validator. Ze staan ook als losse bestanden in `bouwen/voorbeelden/`.
+Alle drie komen door de validator.
 
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.6
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.11
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets), stuurbaar (params + modulate),
-// één snelle parameter (fast + modInput), opruimen in destroy.
+// één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const DEF = () => ({ rate: 4, depth: 0.5, shape: 'sine' });
-const MODP = [['rate', 'Snelheid', 0.1, 20, true], ['depth', 'Diepte', 0, 1, false]];
+const MODP = [['rate', 'rate', 0.1, 20, true], ['depth', 'depth', 0, 1, false]];   // [id, tekstsleutel, min, max, log]
+const TXT = {
+  nl: { shape: 'Vorm', rate: 'Snelheid', depth: 'Diepte', sine: 'sinus', triangle: 'driehoek', square: 'blok' },
+  en: { shape: 'Shape', rate: 'Rate', depth: 'Depth', sine: 'sine', triangle: 'triangle', square: 'square' },
+};
 
 export default {
   id: 'nl.voorbeeld.tremolo2',
@@ -636,8 +689,10 @@ export default {
   kind: 'effect',
   category: 'effect',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [] },
+  i18n: { en: { ports: { in: 'In', out: 'Out' } } },   // namen die de host zelf toont, per taal
 
   create(ctx, host) {
+    const T = TXT[host.lang] || TXT.en;   // teksten in je UI: kies op host.lang
     const S = DEF(), mod = {}; let dead = false;
     const inG = ctx.createGain(), out = ctx.createGain(), lfo = ctx.createOscillator(), depth = ctx.createGain(), fastDepth = ctx.createGain();
     out.gain.value = 1; lfo.connect(depth).connect(out.gain); inG.connect(out); lfo.start();
@@ -650,11 +705,11 @@ export default {
     return {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
-        ui.shape = host.ui.select(el, 'Vorm', [['sine', 'sinus'], ['triangle', 'driehoek'], ['square', 'blok']], S.shape, v => { S.shape = v; apply(); });
-        ui.rate = host.ui.knob(el, 'Snelheid', [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); });
-        ui.depth = host.ui.knob(el, 'Diepte', [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); });
+        ui.shape = host.ui.select(el, T.shape, [['sine', T.sine], ['triangle', T.triangle], ['square', T.square]], S.shape, v => { S.shape = v; apply(); });
+        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); });
+        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); });
       },
-      params() { return MODP.map(([id, name, min, max, log]) => ({ id, name, lane: 'trem', laneName: 'Tremolo', min, max, role: id === 'rate' ? 'rate' : 'depth', scale: log ? 'log' : 'lin', drift: 0.1, on: true, fast: id === 'depth' })); },
+      params() { return MODP.map(([id, key, min, max, log]) => ({ id, name: T[key], lane: 'trem', laneName: 'Tremolo', min, max, role: id === 'rate' ? 'rate' : 'depth', scale: log ? 'log' : 'lin', drift: 0.1, on: true, fast: id === 'depth' })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODP.some(m => m[0] === k)) mod[k] = o[k]; apply(); },
       modInput(id) { return id === 'depth' ? fastDepth : null; },
       getState() { return { ...S }; },
@@ -675,10 +730,14 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.6
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.11
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
-// stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets).
-const VOICES = [['tik', 'Tik'], ['toon', 'Toon']];
+// stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
+const VOICES = ['tik', 'toon'];
+const TXT = {
+  nl: { tik: 'Tik', toon: 'Toon', pitch: 'Toonhoogte', lvl: 'Niveau', sep: 'Losse uit' },
+  en: { tik: 'Tick', toon: 'Tone', pitch: 'Pitch', lvl: 'Level', sep: 'Separate out' },
+};
 const DEF = () => ({ pat: { tik: [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,1], toon: [1,0,0,0, 0,0,1,0, 0,0,0,0, 1,0,0,0] }, pitch: 220, lvl: 0.7 });
 
 export default {
@@ -689,11 +748,13 @@ export default {
   category: 'groove',
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [{ id: 'trigs', name: 'Trigs' }],
     multiOut: [{ id: 'los', name: 'Losse uit' }] },
+  i18n: { en: { ports: { out: 'Out', los: 'Separate out' } } },
 
   create(ctx, host) {
+    const T = TXT[host.lang] || TXT.en;
     const S = DEF(); let self, dead = false; const rows = {}, ui = {};
     const out = ctx.createGain(); out.gain.value = S.lvl;
-    const bus = {}; VOICES.forEach(([k]) => { bus[k] = ctx.createGain(); bus[k].connect(out); });   // één node per stem: die gaan in de bundel
+    const bus = {}; VOICES.forEach(k => { bus[k] = ctx.createGain(); bus[k].connect(out); });   // één node per stem: die gaan in de bundel
     function hit(k, t) {
       const o = ctx.createOscillator(), g = ctx.createGain(); o.connect(g).connect(bus[k]);
       if (k === 'tik') { o.type = 'square'; o.frequency.value = 2400; g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03); o.start(t); o.stop(t + 0.04); }
@@ -702,14 +763,14 @@ export default {
     self = {
       inputs: {}, outputs: { out },
       // v1.5: de bundel. Een functie, zodat de host altijd de actuele kanalen krijgt.
-      bundles: { los: () => ({ label: 'Losse uit', channels: VOICES.map(([k, name]) => ({ id: k, name, node: bus[k] })) }) },
+      bundles: { los: () => ({ label: T.sep, channels: VOICES.map(k => ({ id: k, name: T[k], node: bus[k] })) }) },
       mount(el) {
-        VOICES.forEach(([k, name]) => { rows[k] = host.ui.steps(el, name, S.pat[k]); });
-        ui.pitch = host.ui.knob(el, 'Toonhoogte', [80, 880, 1], S.pitch, v => Math.round(v) + ' Hz', v => { S.pitch = v; });
-        ui.lvl = host.ui.knob(el, 'Niveau', [0, 1, 0.01], S.lvl, v => Math.round(v * 100) + '%', v => { S.lvl = v; out.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });
+        VOICES.forEach(k => { rows[k] = host.ui.steps(el, T[k], S.pat[k]); });
+        ui.pitch = host.ui.knob(el, T.pitch, [80, 880, 1], S.pitch, v => Math.round(v) + ' Hz', v => { S.pitch = v; });
+        ui.lvl = host.ui.knob(el, T.lvl, [0, 1, 0.01], S.lvl, v => Math.round(v * 100) + '%', v => { S.lvl = v; out.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });
       },
       onStep({ step, time }) {
-        VOICES.forEach(([k]) => { if (S.pat[k][step]) { hit(k, time); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: 1, time }); } });
+        VOICES.forEach(k => { if (S.pat[k][step]) { hit(k, time); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: 1, time }); } });
         Object.values(rows).forEach(r => r.cursor(step));
       },
       onTransport({ playing }) { if (!playing) Object.values(rows).forEach(r => r.cursor(-1)); },
@@ -717,12 +778,12 @@ export default {
       setState(s) {
         s = s || {}; const d = DEF();
         // patronen in place vervangen: host.ui.steps houdt een verwijzing naar deze arrays
-        VOICES.forEach(([k]) => { const src = Array.isArray(s.pat && s.pat[k]) ? s.pat[k].slice(0, 16) : d.pat[k]; S.pat[k].splice(0, 16, ...src); });
+        VOICES.forEach(k => { const src = Array.isArray(s.pat && s.pat[k]) ? s.pat[k].slice(0, 16) : d.pat[k]; S.pat[k].splice(0, 16, ...src); });
         S.pitch = typeof s.pitch === 'number' ? s.pitch : d.pitch; S.lvl = typeof s.lvl === 'number' ? s.lvl : d.lvl;
         out.gain.value = S.lvl;
         Object.values(rows).forEach(r => r.paint()); if (ui.pitch) { ui.pitch.set(S.pitch); ui.lvl.set(S.lvl); }
       },
-      destroy() { if (dead) return; dead = true; out.disconnect(); VOICES.forEach(([k]) => bus[k].disconnect()); },
+      destroy() { if (dead) return; dead = true; out.disconnect(); VOICES.forEach(k => bus[k].disconnect()); },
     };
     return self;
   }
@@ -732,11 +793,15 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.6
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.11
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
-// en routing buiten presets houden (getPreset/setPreset).
+// routing buiten presets houden (getPreset/setPreset), en teksten per taal.
 const OUTS = ['a', 'b'];
+const TXT = {
+  nl: { none: '— niets', gone: '(niet verbonden)', out: 'Uit ', lvl: 'Niveau' },
+  en: { none: '— nothing', gone: '(not connected)', out: 'Out ', lvl: 'Level' },
+};
 const DEF = () => ({ src: { a: '', b: '' }, lvl: 0.8 });
 
 export default {
@@ -746,8 +811,10 @@ export default {
   kind: 'utility',
   category: 'mix',
   ports: { audioIn: [], audioOut: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }], eventIn: [], eventOut: [], multiIn: [{ id: 'in', name: 'Bundel' }] },
+  i18n: { en: { name: 'Bundle chooser', ports: { in: 'Bundle' } } },
 
   create(ctx, host) {
+    const T = TXT[host.lang] || TXT.en;
     const S = DEF(); let self, dead = false, root = null, lvlK = null;
     const outs = {}; OUTS.forEach(k => { outs[k] = ctx.createGain(); outs[k].gain.value = S.lvl; });
     const bundles = new Map();                  // sleutel -> bundel van de host
@@ -762,11 +829,11 @@ export default {
     function paint() {
       if (!root) return; root.innerHTML = '';
       OUTS.forEach(k => {
-        const opts = [['', '— niets']]; bundles.forEach(b => b.channels.forEach(c => opts.push([b.key + '|' + c.id, b.source.name + ' · ' + c.name])));
-        if (S.src[k] && !find(S.src[k])) opts.push([S.src[k], '(niet verbonden)']);
-        host.ui.select(root, 'Uit ' + k.toUpperCase(), opts, S.src[k], v => { S.src[k] = v; link(k); });
+        const opts = [['', T.none]]; bundles.forEach(b => b.channels.forEach(c => opts.push([b.key + '|' + c.id, b.source.name + ' · ' + c.name])));
+        if (S.src[k] && !find(S.src[k])) opts.push([S.src[k], T.gone]);
+        host.ui.select(root, T.out + k.toUpperCase(), opts, S.src[k], v => { S.src[k] = v; link(k); });
       });
-      lvlK = host.ui.knob(root, 'Niveau', [0, 1, 0.01], S.lvl, v => Math.round(v * 100) + '%', v => { S.lvl = v; OUTS.forEach(k => outs[k].gain.setTargetAtTime(v, ctx.currentTime, 0.02)); });
+      lvlK = host.ui.knob(root, T.lvl, [0, 1, 0.01], S.lvl, v => Math.round(v * 100) + '%', v => { S.lvl = v; OUTS.forEach(k => outs[k].gain.setTargetAtTime(v, ctx.currentTime, 0.02)); });
     }
     self = {
       inputs: {}, outputs: outs,
@@ -804,7 +871,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.10.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.11.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
@@ -813,5 +880,6 @@ Bediening:        <knoppen en keuzes met bereik en eenheid>
 Stuurbaar:        <welke parameters, welke snel>   (of: nee)
 Presets:          <wat níet in een preset hoort, of: alles>
 Kaartbreedte:     <px, of standaard>
+Talen:            nl + en (via host.lang)   (of: alleen één taal)
 Lever op:         één .patchkamer-device.js-bestand + de OK-regel van validate-instrument.mjs.
 ```
