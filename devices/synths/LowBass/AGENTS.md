@@ -71,7 +71,7 @@ Legato werkt alleen zolang de vorige noot nog klinkt (overlappende noten of `hel
 
 ### Modulatie
 
-Vijftien velden zijn te moduleren (spoor `bass`): alle getallen hierboven. Standaard aan staan alle behalve `bend`, `level`, `attack`, `release`, `sustain`, `decay` en `glide`. De knop blijft de basis; een modulator telt er een uitslag van −1 … 1 bij op.
+Vijftien velden zijn te moduleren (spoor `bass`): alle getallen hierboven. Het veld `on` in de parameterlijst is alleen een **voorstel** voor een modulator (contract §8: "of de parameter standaard aan staat"): het schakelt niets uit. Alle vijftien zijn altijd te moduleren en te zien; een gebruiker kan elk ervan zelf aanzetten. Voorgesteld aan staan alle behalve `bend` (toonhoogte) en `level` (volume), zodat een modulator niet standaard de stemming of het volume laat bewegen. De knop blijft de basis; een modulator telt er een uitslag van −1 … 1 bij op.
 
 ### Wat een bewaker doet
 
