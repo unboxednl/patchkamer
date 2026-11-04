@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Bewaker tegen een ontspoord filter: bij veel resonantie, filter-FM en een omlaag gemoduleerde cutoff kan het filter instabiel worden
+//   (Infinity, daarna NaN) en herstelt het nooit meer, waardoor het apparaat voor altijd stil bleef en NaN naar de rest van de studio stuurde.
+//   Nu controleert een meter om de 50 ms de uitvoer van de filterketen; bij NaN, Infinity of een absurde waarde worden de filters vervangen
+//   en gaat het geluid door. Instellingen en geluid in het normale gebied zijn ongewijzigd.
 // 1.11.0 — Nieuw als Acid Baselines (nieuwe id nl.patchkamer.acidbaselines, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Acid Baselines
 //   - setState volgt §13: waarden buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard
@@ -141,7 +145,7 @@ const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 export default {
   id: 'nl.patchkamer.acidbaselines',
   name: 'Acid Baselines',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1102, minWidth: 420 },
@@ -162,13 +166,30 @@ export default {
 
     // ---------- graph: osc -> 2x LP (ladder-ish) -> toonfilter -> overdrive -> VCA -> out ----------
     const osc = ctx.createOscillator(); osc.start();
-    const f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(); f1.type = 'lowpass'; f2.type = 'lowpass'; f2.Q.value = 0.7;
+    let f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(); f1.type = 'lowpass'; f2.type = 'lowpass'; f2.Q.value = 0.7;
     const fm = ctx.createGain(); osc.connect(fm).connect(f1.frequency);
-    const muf = ctx.createBiquadFilter(); muf.type = 'lowpass'; muf.Q.value = 0.5;
+    let muf = ctx.createBiquadFilter(); muf.type = 'lowpass'; muf.Q.value = 0.5;
     const drv = ctx.createWaveShaper(); drv.oversample = (host.audio && host.audio.oversample) || '2x';
     const vca = ctx.createGain(); vca.gain.value = 0;
     const out = ctx.createGain();
     osc.connect(f1).connect(f2).connect(muf).connect(drv).connect(vca).connect(out);
+
+    // bewaker: een instabiel filter geeft Infinity en daarna NaN en herstelt nooit meer; dan vervangen we de filters
+    const mon = ctx.createAnalyser(); mon.fftSize = 256; drv.connect(mon);
+    const chk = new Float32Array(256); let rebuilt = 0, dead = false;
+    function rebuildFilters() {
+      try { osc.disconnect(f1); } catch (e) {} try { fm.disconnect(); } catch (e) {}
+      [f1, f2, muf].forEach(n => { try { n.disconnect(); } catch (e) {} });
+      f1 = ctx.createBiquadFilter(); f1.type = 'lowpass'; f2 = ctx.createBiquadFilter(); f2.type = 'lowpass'; f2.Q.value = 0.7;
+      muf = ctx.createBiquadFilter(); muf.type = 'lowpass'; muf.Q.value = 0.5;
+      osc.connect(f1); f1.connect(f2); f2.connect(muf); muf.connect(drv); osc.connect(fm); fm.connect(f1.frequency);
+      busyUntil = 0; rebuilt++; apply();
+    }
+    function guard() {
+      if (dead) return; mon.getFloatTimeDomainData(chk);
+      for (let i = 0; i < chk.length; i++) if (!(Math.abs(chk[i]) < 32)) { rebuildFilters(); return; }
+    }
+    const guardT = typeof setInterval === 'function' ? setInterval(guard, 50) : null; if (guardT && guardT.unref) guardT.unref();
 
     // knopstand + modulatie (contract v1.3); de knoppen blijven de basis
     const mod = {};
@@ -327,7 +348,7 @@ export default {
         else { grid = Array.from({ length: MAXBARS }, emptyBar); grid[0] = copyBar(START_LINES['Zweef']); grid[1] = copyBar(START_LINES['Roller']); }
         apply(); refreshAll(); paint();
       },
-      destroy() { try { osc.stop(); } catch (e) {} try { out.disconnect(); } catch (e) {} },
+      destroy() { dead = true; if (guardT) clearInterval(guardT); try { osc.stop(); } catch (e) {} try { mon.disconnect(); } catch (e) {} try { out.disconnect(); } catch (e) {} },
     };
   },
 };
