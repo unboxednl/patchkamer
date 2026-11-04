@@ -39,7 +39,7 @@ The [user manual](docs/USER-MANUAL_EN.md) walks you through it step by step, wit
 | **Scope** | A transparent pass-through that shows the sound: spectrum, waveform, spectrogram, stereo image and peak/RMS | `devices/tools/Scope/` |
 | **Speakers** | The output: volume, a limiter and a level meter | `devices/mixer/Speakers/` |
 
-The `tunes/` folder has **Duofone Styles** (60 tunes in 12 styles) and **Acid Baselines Classics** (40 tunes in 8 styles).
+The `tunes/` folder has **Duofone Styles** (60 tunes in 12 styles) and **Acid Baselines Classics** (49 tunes in 9 styles, including the **AIcid** folder that uses the newest Acid Baselines controls).
 
 ## Build your own devices, with or without AI
 
