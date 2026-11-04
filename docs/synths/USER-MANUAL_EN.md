@@ -150,7 +150,7 @@ The sequencer under the controls:
 
 **Controls.**
 
-- **Top row:** **Preset** (Analog Bass, Deep Sub, Acid Slide, Square Punch, FM Growl, Rumble Bass, Pluck Bass; choosing one loads its knob settings; it shows **Custom** as soon as you change a knob), **Golfvorm** (the waveform of both oscillators: Sawtooth, Square or Triangle; on the English card the label is still the Dutch word) and **Legato** (overlapping notes glide instead of striking again).
+- **Top row:** **Preset** (Analog Bass, Deep Sub, Acid Slide, Square Punch, FM Growl, Rumble Bass, Pluck Bass; choosing one loads its knob settings; it shows **Custom** as soon as you change a knob), **Waveform** (the waveform of both oscillators: Sawtooth, Square or Triangle) and **Legato** (overlapping notes glide instead of striking again).
 - **Sound:** **Cutoff** (40 to 10000 Hz), **Resonance** (0.2 to 7), **Sub**, **Detune** (0 to 20 cents between the two oscillators), **Drive** (1 to 16; the level is compensated), **FM depth** (how strongly the second oscillator modulates the pitch of the first), **Filter envelope** (0 to 5 octaves) and **Glide** (0.001 to 1.5 s).
 - **Envelope:** **Attack**, **Decay** (for amplifier and filter), **Sustain** and **Release**.
 - **Level:** **Accent** (how much extra volume a hard key press gets), **Volume** and **Pitchbend** (a fixed shift of −12 to 12 semitones).
@@ -344,7 +344,7 @@ In mono mode the controls for the second oscillator (**VCO B** level, **VCO B in
 
 No keyboard? Use **Hold note** or **Test chord** on the card instead.
 
-**Tunes.** Pack **Duofone Styles**: 60 tunes in 12 folders (Techno, House, Trance, Ambient, Drum & Bass, Dubstep, Synthwave, Funk & Disco, Hip-hop, Electro, Pop, Chiptune), five per folder, file [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json). A few names: **Dark Stab**, **Supersaw Lead**, **Reese Bass** and **Neon Lead** (two oscillators), and **Rolling Bass**, **Wobble Bass** and **Pulse Lead** (mono mode). A tune also sets **Mode**.
+**Tunes.** Pack **Duofone Styles**: 60 tunes in 12 folders (Techno, House, Trance, Ambient, Drum & Bass, Dubstep, Synthwave, Funk & Disco, Hip-hop, Electro, Pop, Chiptune), five per folder, file [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json). A few names: **Dark Stab**, **Supersaw Lead**, **Detuned Saw Bass** and **Neon Lead** (two oscillators), and **Rolling Bass**, **Wobble Bass** and **Pulse Lead** (mono mode). A tune also sets **Mode**.
 
 **Tips and limits.**
 
