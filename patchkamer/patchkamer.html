@@ -846,6 +846,7 @@ const I18N={
    "m.tw_tune_many":"tunes",
    "m.sturing_in":"<b>sturing in</b> {0}",
    "m.deze_bron":"deze bron",
+   "m.audio_staat_uit":"Het geluid staat uit: de browser heeft de audio gepauzeerd. Klik ergens in Patchkamer of druk op Start.",
    "m.naamloos":"Naamloos",
    "m.versie_niet_aanwezig_nieuwste_gebruikt":"Versie niet aanwezig, nieuwste gebruikt: ",
    "m.bibliotheek_niet_geladen":" (bibliotheek niet geladen)",
@@ -1281,6 +1282,7 @@ const I18N={
    "m.start":"Start",
    "m.versie_niet_aanwezig_nieuwste_gebruikt":"Version not present, latest used: ",
    "m.ontbrekende_instrumenten_laad_ze_eerst":"Missing instruments (load them first): ",
+   "m.audio_staat_uit":"The sound is off: the browser has paused the audio. Click anywhere in Patchkamer or press Start.",
    "m.naamloos":"Untitled",
    "m.overslaan":"Skip",
    "m.map_voorvoegsel":"Folder · ",
@@ -1729,7 +1731,11 @@ $('devPaste').onclick=async()=>{try{const def=await loadDeviceSource($('devText'
 const floor=$('floor'), floorwrap=$('floorwrap'), svg=$('cables');
 let selected=null, armed=null;   // armed = {id,port,dir:'out'|'in',kind}
 function ensureCtx(){ if(!Host.ctx){ const AC=window.AudioContext||window.webkitAudioContext; let hint=PK_AUDIO.latency;
-    const srq=PK_AUDIO.sampleRate==='auto'?0:+PK_AUDIO.sampleRate; try{ Host.ctx=new AC(srq?{latencyHint:hint,sampleRate:srq}:{latencyHint:hint}); }catch(e){ try{ Host.ctx=new AC({latencyHint:hint}); if(srq) setTimeout(()=>status(pkt('m.samplerate_niet_ondersteund',srq),true),500); }catch(e2){ Host.ctx=new AC(); } } Host.latencyHint=hint; } return Host.ctx; }
+    const srq=PK_AUDIO.sampleRate==='auto'?0:+PK_AUDIO.sampleRate; try{ Host.ctx=new AC(srq?{latencyHint:hint,sampleRate:srq}:{latencyHint:hint}); }catch(e){ try{ Host.ctx=new AC({latencyHint:hint}); if(srq) setTimeout(()=>status(pkt('m.samplerate_niet_ondersteund',srq),true),500); }catch(e2){ Host.ctx=new AC(); } } Host.latencyHint=hint; Host.ctx.addEventListener('statechange',pkCtxState); } return Host.ctx; }
+// De browser zet de audio stil (zonder klik gemaakt, slaapstand, andere audio-uitgang). Alleen Start hervatte hem: met een MIDI-keyboard druk je geen Start.
+function pkResumeCtx(){ const c=Host.ctx; if(c&&c.state!=='running'&&c.state!=='closed'){ try{ c.resume().catch(()=>{}); }catch(e){} } }
+function pkCtxState(){ const c=Host.ctx; if(!c||c.state==='running'||c.state==='closed'||document.hidden) return; status(pkt('m.audio_staat_uit'),true); pkResumeCtx(); }
+['pointerdown','keydown','touchend'].forEach(t=>document.addEventListener(t,pkResumeCtx,true));
 
 function addDevice(defId,x,y,state,fixedId,version){
   const def=version?Host.registry.get(Host.key(defId,version)):Host.latest(defId); if(!def) return null; const ctx=ensureCtx();
@@ -2387,7 +2393,10 @@ function loadPatch(p){ clearFloor(); Host.bpm=p.bpm||126; $('bpm').value=Host.bp
   if(p.view){Host.view={x:+p.view.x||0,y:+p.view.y||0,scale:(+p.view.scale||1)*PKS.f}; applyView();}
   const missing=[], fallback=[]; p.devices.forEach(d=>{ let ver=d.version; if(ver&&!Host.registry.has(Host.key(d.def,ver))){ const l=Host.latest(d.def); if(l){fallback.push(`${l.name} v${ver}→v${l.version}`); ver=l.version;} } if(!Host.latest(d.def)){missing.push(d.def); return;} const nid=addDevice(d.def,d.x,d.y,d.state,d.id,ver); if(nid&&(d.w||d.h)) setSize(nid, d.w||undefined, d.h||undefined); if(nid&&d.mini) setMini(nid,true); if(nid&&d.focus) setFocus(nid,true,+d.focus); if(nid&&d.preset) presetMark(nid,d.preset); });
   if(fallback.length) status(pkt('m.versie_niet_aanwezig_nieuwste_gebruikt')+fallback.join(', '));
-  requestAnimationFrame(()=>{ p.cables.forEach(c=>{ if(Host.devices.has(c.from.id)&&Host.devices.has(c.to.id)) patch({from:c.from,to:c.to,kind:c.kind,...(typeof c.color==='string'&&/^#[0-9a-f]{3,8}$/i.test(c.color)?{color:c.color}:{})}); }); drawCables(); setTimeout(drawCables,250); setTimeout(drawCables,1200); });
+  // rAF staat stil in een tab op de achtergrond: dan zouden de kabels (en dus het geluid) ontbreken; een timer vangt dat op
+  let cabled=false; const cableUp=()=>{ if(cabled) return; cabled=true; p.cables.forEach(c=>{ if(Host.devices.has(c.from.id)&&Host.devices.has(c.to.id)) patch({from:c.from,to:c.to,kind:c.kind,...(typeof c.color==='string'&&/^#[0-9a-f]{3,8}$/i.test(c.color)?{color:c.color}:{})}); }); drawCables(); setTimeout(drawCables,250); setTimeout(drawCables,1200); };
+  requestAnimationFrame(cableUp); setTimeout(cableUp,300);
+  setTimeout(()=>{ if(Host.devices.size&&Host.ctx){ pkResumeCtx(); if(Host.ctx.state!=='running') status(pkt('m.audio_staat_uit'),true); } },700);
   if(missing.length) status(pkt('m.ontbrekende_instrumenten_laad_ze_eerst')+[...new Set(missing)].join(', '),true); }
 /* =====================================================================
    WERKRUIMTE · naam, bestand, browser — en BRONNEN · GitHub, URL, lokale map
