@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.8
+// validate-instrument.mjs — Patchkamer contract v1.9
 // Gebruik: node validate-instrument.mjs mijn-instrument.js
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -8,6 +8,7 @@
 // v1.6: presets (getPreset/setPreset) en: setState() moet de knoppen van host.ui bijwerken.
 // v1.7: host.frame / host.visible (tekenklok; na destroy geen open abonnement), onPeers, host.connect/disconnect/cablesFrom;
 //       waarschuwing (geen fout) bij een eigen requestAnimationFrame zonder host.frame.
+// v1.9: instrumenten (parts/getPart/setPart) voor tunes per instrument: lijst, JSON, terugzetten, kruislings zetten.
 // v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
 import { pathToFileURL } from 'node:url';
 import { readFileSync } from 'node:fs';
@@ -178,6 +179,24 @@ const knobCheck = (how, fn) => { const before = KNOBS.length; KNOBS.forEach(k =>
   if (!fresh && stale.length) fail(`${how} werkt deze knoppen niet bij: ${stale.join(', ')} — bewaar wat host.ui.knob/select teruggeeft en zet de waarde in setState (knop.set(v), select.value = v)`); };
 knobCheck('setState(getState())', () => inst.setState(JSON.parse(json)));
 // contract v1.6: presets
+let nParts = 0;
+if (inst.parts !== undefined || inst.getPart !== undefined || inst.setPart !== undefined) {
+  for (const k of ['parts', 'getPart', 'setPart']) if (typeof inst[k] !== 'function') fail(`instrumenten (v1.9): ${k}() ontbreekt; parts, getPart en setPart horen bij elkaar`);
+  let L; try { L = inst.parts(); } catch (e) { fail('parts() gooit: ' + e.message); }
+  if (!Array.isArray(L) || !L.length) fail('parts() geeft geen lijst met instrumenten');
+  const ids = new Set();
+  for (const p of L) { if (!p || typeof p.id !== 'string' || !p.id) fail('parts(): elk instrument heeft een id (string)'); if (ids.has(p.id)) fail('parts(): dubbel id ' + p.id); ids.add(p.id); if (typeof p.name !== 'string') fail('parts(): instrument ' + p.id + ' heeft geen name'); }
+  const before = JSON.stringify(inst.getState());
+  for (const p of L.slice(0, 24)) { let d; try { d = JSON.stringify(inst.getPart(p.id)); } catch (e) { fail(`getPart('${p.id}') gooit: ` + e.message); } if (!d || d === 'null' || d.includes('_isNode')) fail(`getPart('${p.id}') geeft geen JSON-object`);
+    try { inst.setPart(p.id, JSON.parse(d)); } catch (e) { fail(`setPart('${p.id}', getPart('${p.id}')) gooit: ` + e.message); } }
+  if (norm(JSON.stringify(inst.getState())) !== norm(before)) fail('setPart(id, getPart(id)) verandert de instelling (moet gelijk blijven)');
+  if (L.length > 1) { const a0 = JSON.stringify(inst.getPart(L[0].id)), b0 = JSON.stringify(inst.getPart(L[1].id));
+    try { inst.setPart(L[0].id, JSON.parse(b0)); } catch (e) { fail('setPart kruislings gooit: ' + e.message); }
+    if (norm(JSON.stringify(inst.getPart(L[0].id))) !== norm(b0)) fail(`setPart('${L[0].id}', klank van '${L[1].id}') neemt de klank niet over`);
+    if (norm(JSON.stringify(inst.getPart(L[1].id))) !== norm(b0)) fail('setPart verandert ook een ander instrument');
+    inst.setPart(L[0].id, JSON.parse(a0)); if (norm(JSON.stringify(inst.getState())) !== norm(before)) fail('na terugzetten met setPart is de instelling niet hetzelfde als ervoor'); }
+  nParts = L.length;
+}
 let presetBytes = 0;
 if (inst.getPreset !== undefined || inst.setPreset !== undefined) {
   if (typeof inst.getPreset !== 'function' || typeof inst.setPreset !== 'function') fail('getPreset() en setPreset() horen bij elkaar: implementeer beide');
@@ -220,5 +239,5 @@ for (const port of emitted.map(x => x.port)) if (!d.ports.eventOut.some(p => p.i
 if (d.ui && d.ui.jacks && jacks === 0) fail('ui.jacks is aan maar er is geen enkele host.ui.jack() geplaatst');
 if (modBad) fail(modBad);
 const nKnobs = nMountKnobs;
-console.log(`OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}${d.ui && d.ui.width ? ', breedte ' + d.ui.width + ' px' : ''}, poorten: audio ${d.ports.audioIn.length}→${d.ports.audioOut.length}, events ${d.ports.eventIn.length}→${d.ports.eventOut.length}, state ${json.length} bytes, bronnen gestart ${started}${jacks ? ', ' + jacks + ' jacks' : ''}${portChanges ? ', ' + portChanges + '× setPorts' : ''}${emitted.length ? ', ' + emitted.length + ' gebeurtenissen' : ''}${nParams ? `, ${nParams} stuurbare parameters in ${nLanes} spo${nLanes > 1 ? 'ren' : 'or'}` : ''}${nFast ? `, ${nFast} snel` : ''}${d.kind === 'modulator' ? ', modulator' + (sigCalls ? ` (modSignal ${sigCalls}×)` : '') : ''}${worklets ? `, ${worklets} worklet${worklets > 1 ? 's' : ''}` : ''}${d.ports.multiOut.length ? `, bundel uit ${nBundleCh} kanalen` : ''}${d.ports.multiIn.length ? ', bundel in' : ''}${presetBytes ? `, eigen preset ${presetBytes} bytes` : ''}${nKnobs ? `, ${nKnobs} host-knoppen volgen setState` : ''}${frames.length ? ', tekent via host.frame' : (/__pkWrap\(/.test(src) ? ', tekent via de tekenpoort' : '')}${peerCalls || connects ? ', besturing (peers/connect)' : ''}${rafWarn ? ' · let op: eigen requestAnimationFrame zonder host.frame (v1.7, §12b)' : ''}`);
+console.log(`OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}${d.ui && d.ui.width ? ', breedte ' + d.ui.width + ' px' : ''}, poorten: audio ${d.ports.audioIn.length}→${d.ports.audioOut.length}, events ${d.ports.eventIn.length}→${d.ports.eventOut.length}, state ${json.length} bytes, bronnen gestart ${started}${jacks ? ', ' + jacks + ' jacks' : ''}${portChanges ? ', ' + portChanges + '× setPorts' : ''}${emitted.length ? ', ' + emitted.length + ' gebeurtenissen' : ''}${nParams ? `, ${nParams} stuurbare parameters in ${nLanes} spo${nLanes > 1 ? 'ren' : 'or'}` : ''}${nFast ? `, ${nFast} snel` : ''}${d.kind === 'modulator' ? ', modulator' + (sigCalls ? ` (modSignal ${sigCalls}×)` : '') : ''}${worklets ? `, ${worklets} worklet${worklets > 1 ? 's' : ''}` : ''}${d.ports.multiOut.length ? `, bundel uit ${nBundleCh} kanalen` : ''}${d.ports.multiIn.length ? ', bundel in' : ''}${presetBytes ? `, eigen preset ${presetBytes} bytes` : ''}${nParts ? `, ${nParts} instrumenten voor tunes` : ''}${nKnobs ? `, ${nKnobs} host-knoppen volgen setState` : ''}${frames.length ? ', tekent via host.frame' : (/__pkWrap\(/.test(src) ? ', tekent via de tekenpoort' : '')}${peerCalls || connects ? ', besturing (peers/connect)' : ''}${rafWarn ? ' · let op: eigen requestAnimationFrame zonder host.frame (v1.7, §12b)' : ''}`);
 process.exit(0);

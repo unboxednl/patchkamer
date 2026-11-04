@@ -1,8 +1,8 @@
-# Patchkamer — Instrumentcontract v1.8 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.9 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één `.js`-bestand op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
-_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 t/m v1.8 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat. v1.8 vraagt bijna niets van een apparaat: de host maakt de regelaars beter._
+_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 t/m v1.9 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat. v1.8 vraagt bijna niets van een apparaat: de host maakt de regelaars beter._
 
 | Versie | Wat erbij kwam |
 |---|---|
@@ -15,6 +15,22 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.6 | Presets: `setState` moet ook de knoppen bijwerken; optioneel `getPreset`/`setPreset` om routing buiten presets te houden |
 | v1.7 | Soepel: tekenen via de klok van de host (`host.frame`, `host.visible`) en regels tegen haperen (§12b). Besturing voor controllers: `host.peers`, `onPeers`, `host.connect`, `host.disconnect`, `host.cablesFrom` (§13b) |
 | v1.8 | Regelaars door de host: dubbelklik = beginwaarde, klik op het getal = typen, draaiknop als keuze; `host.ui.knob` krijgt een 7e argument `{ default, scale }`; `data-pk-default` / `data-pk-noreset` / `data-pk-for` voor eigen schuiven (§12a). Tekenpoort als snelle omzetting van oude tekenlussen (§12b) |
+| v1.9 | Onderdelen: tunes (apparaten die geluid maken) en presets (al het andere) in bibliotheken per apparaat, met mappen en deelbare packs; songs als export van een werkruimte; een licentie (SPDX) bij elke tune, preset en song. Optioneel voor drumcomputers: instrumenten (`parts`, `getPart`, `setPart`) voor tunes per instrument (§0, §13c) |
+
+---
+
+## 0. De onderdelen van Patchkamer
+
+| Onderdeel | Wat het is | Bestand |
+|---|---|---|
+| **Patchkamer** | De studio (één HTML-pagina): apparaten plaatsen en koppelen, de klok, en het beheer van alle onderstaande onderdelen. Haar eigen instellingen (weergave, kabels, schaal) staan apart onder *Instellingen*, per computer, en zitten in geen enkel ander bestand. | `patchkamer.html` |
+| **Contract** | Dit document plus `validate-instrument.mjs`: hoe een apparaat eruitziet, zodat ook een AI er een kan bouwen. Hoort bij een versie van Patchkamer. | `PATCHKAMER-CONTRACT.md` |
+| **Apparatenbibliotheek** | Apparaten in categorieën (synths, drums, effecten, mixers, sequencers, modulatie, mastering, hulpmiddelen). | `*.js`, plus `patchkamer-bibliotheek.json` voor de indeling |
+| **Song** | Een export van een werkruimte: alle apparaten **met hun code**, hun instellingen en patronen, de kabels en het tempo, plus titel, maker, licentie en omschrijving. Wie hem opent, hoort hem precies zoals bedoeld en kan verder werken. (Een opname, bijv. MP3, hoort in de repository naast de song; niet in het bestand.) | `*.patchkamer-song.json` |
+| **Tune** | De klank van een apparaat **dat geluid maakt** (`kind: 'instrument'`: synths, drones, drumcomputers), in een tunebibliotheek van dat apparaat. Drumcomputers kunnen ook tunes per instrument hebben. | `*.patchkamer-tunes.json` |
+| **Preset** | De instelling van een apparaat **zonder eigen geluid** (`effect`, `mixer`, `output`, `utility`, `modulator`: effecten, mixers, mastering, sequencers, modulatoren, controllers), in een presetbibliotheek van dat apparaat. | `*.patchkamer-presets.json` |
+
+Of je apparaat tunes of presets krijgt, volgt dus uit je `kind`. Werkruimte en song zijn bijna hetzelfde: de werkruimte is waar je in werkt (in je browser of als `*.patchkamer.json`), de song is de deelbare export daarvan.
 
 ---
 
@@ -275,7 +291,7 @@ onBundle(poortId, sleutel, bundel) { ... }
   - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(stap) }`; houdt een verwijzing naar de array
   - `jack(this, parent, poortId, dir, label)` (zie §3), `noise(ctx)`, `curve(k)`
 - **Bewaar wat `knob` en `select` teruggeven.** `setState` moet die bijwerken (§13).
-- Eigen HTML mag ook. Gebruik de CSS-variabelen van de host, dan volgt je apparaat de kleurstelling (donker, licht, sampler):
+- Eigen HTML mag ook. Gebruik de CSS-variabelen van de host, dan volgt je apparaat de kleurstelling (donker, licht, retro):
   - kleuren: `--bg --floor --card --card-2 --line --fg --muted`;
   - kabelkleuren: `--audio --event --mod --multi`;
   - status: `--go --stop --sel`;
@@ -352,7 +368,7 @@ const tekenLus = (host, inst, cb, fps) => {
 4. Verhoog `version`. Poort-id's, `id` en state blijven gelijk, zodat werkruimtes en presets blijven werken.
 5. `node validate-instrument.mjs bestand.js` geeft `OK … tekent via host.frame`. Staat er `let op: eigen requestAnimationFrame`, dan is stap 1 nog niet klaar.
 
-**Snelle omzetting: de tekenpoort (v1.8).** Voor een groot of oud apparaat met veel losse lussen mag je ook de standaard-tekenpoort gebruiken, in plaats van elke lus om te bouwen. Zet het blok `__pkRaf` / `__pkCaf` / `__pkWrap` bovenin het bestand (zie de bibliotheek, bijvoorbeeld `lfo`), vervang `requestAnimationFrame(` door `__pkRaf(` en `cancelAnimationFrame(` door `__pkCaf(`, en schrijf de export als `const __pkDef = { … }; export default __pkWrap(__pkDef);`. Een lus die vanuit een methode van het apparaat start (meestal `mount`), loopt dan op volle snelheid zolang de kaart te zien is, en verborgen ongeveer 2× per seconde. Niet gebruiken voor lussen die timing of MIDI doen: die horen niet in `requestAnimationFrame`.
+**Snelle omzetting: de tekenpoort (v1.8).** Voor een groot of oud apparaat met veel losse lussen mag je ook de standaard-tekenpoort gebruiken, in plaats van elke lus om te bouwen. Zet het blok `__pkRaf` / `__pkCaf` / `__pkWrap` bovenin het bestand (zie de bibliotheek, bijvoorbeeld `lfo`), vervang `requestAnimationFrame(` door `__pkRaf(` en `cancelAnimationFrame(` door `__pkCaf(`, en schrijf de export als `const __pkDef = { … }; export default { ...__pkWrap(__pkDef) };` (de host herkent een apparaat aan `export default {`). Een lus die vanuit een methode van het apparaat start (meestal `mount`), loopt dan op volle snelheid zolang de kaart te zien is, en verborgen ongeveer 2× per seconde. Niet gebruiken voor lussen die timing of MIDI doen: die horen niet in `requestAnimationFrame`.
 
 ---
 
@@ -428,6 +444,46 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ---
 
+## 13c. Tunes, presets, songs, licenties en instrumenten (v1.9)
+
+**Tunes en presets.** Voor jou als bouwer werken ze hetzelfde: de host gebruikt `getPreset`/`setPreset` (of `getState`/`setState`) zoals in §13. Een apparaat met `kind: 'instrument'` krijgt tunes, alle andere krijgen presets (§0). De host bewaart ze in bibliotheken die bij één apparaat-id horen, met mappen in mappen. Ieder exemplaar krijgt bij het laden een eigen kopie. Verander dus nooit je `id` of je `kind`: daaraan hangen de tunes en presets van je gebruikers.
+
+**Pack**, om te delen; in een bibliotheekmap of op GitHub laadt het vanzelf mee. Een tunepack heet `naam.patchkamer-tunes.json` (`"format": "patchkamer-tunes"`, `formatVersion` 1), een presetpack `naam.patchkamer-presets.json` (`"format": "patchkamer-presets"`, `formatVersion` 2, verder hetzelfde):
+
+```json
+{ "format": "patchkamer-tunes", "formatVersion": 1, "device": "nl.jouwnaam.apparaat", "name": "Trance basics",
+  "author": "…", "license": "CC-BY-4.0", "description": "…",
+  "tree": [ { "folder": "Leads", "items": [ { "name": "Uplifting", "kind": "set", "version": "1.0.0", "state": { } } ] },
+            { "name": "Diepe kick", "kind": "part", "part": "kick", "author": "…", "license": "LicenseRef-All-Rights-Reserved", "state": { } } ] }
+```
+
+**Licenties.** Elke tune, preset en song heeft een veld `license` met een [SPDX](https://spdx.org/licenses/)-code, en meestal `author`. In Patchkamer kiest de maker bij het bewaren uit `CC-BY-4.0` (vrij te gebruiken met naamsvermelding) of `LicenseRef-All-Rights-Reserved` (alle rechten voorbehouden). Andere geldige SPDX-codes uit bestanden worden getoond en blijven staan. Op bibliotheekniveau is `license` de standaard voor nieuwe items. Is een tune of song gemaakt op basis van die van een ander, dan bewaart de host dat in `basedOn: { name|title, author, license }`. De host toont de licentie bij het laden of openen.
+
+**Song** (`naam.patchkamer-song.json`), een export van een werkruimte:
+
+```json
+{ "format": "patchkamer-song", "formatVersion": 1, "title": "Nachtvlucht", "author": "…", "license": "CC-BY-4.0",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.9",
+  "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
+                 "devices": [ ], "cables": [ ], "bpm": 126 } }
+```
+
+`workspace` is een gewone werkruimte, altijd met de code van alle apparaten (`defs[].code`), zodat de song ook werkt bij iemand die jouw bibliotheek niet heeft. Voor jou als bouwer betekent dit: wat in `getState()` staat, bepaalt of een song bij een ander precies zo klinkt.
+
+`state` van een tune of preset (`kind: 'set'`) is precies wat `getPreset()` (of `getState()`) teruggeeft; van een instrument-tune (`kind: 'part'`) wat `getPart(id)` teruggeeft. Oude presetbestanden (`formatVersion` 1, met een lijst `presets`) blijven werken.
+
+**Instrumenten** (optioneel, voor drumcomputers en andere apparaten met losse geluiden). Geef de instance drie methodes:
+
+| Methode | Wat |
+|---|---|
+| `parts()` | `[{ id, name, type }]`: één regel per instrument. `type` is een korte soortnaam (`'kick'`, `'snare'`, `'closedhat'`…); de host zet tunes van dezelfde soort bovenaan. |
+| `getPart(id)` | Een JSON-kopie van de **klank** van dat instrument: geen patroon, geen mute/solo, geen routing. |
+| `setPart(id, data)` | Zet die klank op dat instrument, ook als `data` van een ander instrument komt. Werk de knoppen bij, net als `setState`. Onbekende velden negeer je. |
+
+Regels: `setPart(id, getPart(id))` laat de instelling ongewijzigd, en `setPart(a, getPart(b))` verandert alleen instrument `a`. Heeft je apparaat de klank per patroon (zoals Takt Twaalf), dan werken `getPart`/`setPart` op het actieve patroon. Een kant-en-klare laag die dit doet via `getPreset`/`setPreset` staat in de bibliotheek (`__pkPartsWrap`, bijvoorbeeld in Slagwerk).
+
+---
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -447,6 +503,8 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 | `host.isWired(this, poort, dir)` | v1.5 | Is deze eigen poort bekabeld? |
 | `host.ui.knob(…, opties)` | v1.8 | `{ default, scale: 'log' }`; draaiknop als de gebruiker dat kiest (§12a) |
 | `data-pk-default`, `data-pk-noreset`, `data-pk-for` | v1.8 | Hints op eigen schuiven en getallen (§12a) |
+| `parts()`, `getPart(id)`, `setPart(id, data)` | v1.9 | Instrumenten voor tunes per instrument, optioneel (§13c) |
+| `host.tunes.list / apply / save / applyPart` | v1.9 | Tunes en presets zonder UI (voor tests en controllers); `host.presets` is hetzelfde |
 | `host.frame(this, cb, fps)` | v1.7 | Tekenen op de klok van de host, alleen als je kaart te zien is; geeft een opzeg-functie (§12b) |
 | `host.visible(this)` | v1.7 | Is je kaart nu te zien? |
 | `host.peers(this)`, `onPeers(lijst)` | v1.7 | Andere apparaten zien (alleen lezen) (§13b) |
@@ -504,6 +562,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 7. **Presets (v1.6)**: elke knop en keuze van `host.ui.knob`/`select` wordt bijgewerkt door `setState(getState())`. `getPreset`/`setPreset` alleen samen, JSON zonder AudioNodes, `setPreset(getPreset())` geeft dezelfde preset, `setPreset({})` werkt.
 8. **Soepel en besturing (v1.7)**: `host.frame` krijgt een functie; elke tekenfunctie wordt een paar keer aangeroepen en mag niet gooien; na `destroy()` staat er geen abonnement meer open. Een eigen `requestAnimationFrame` zonder `host.frame` geeft een waarschuwing in de OK-regel (geen fout). `onPeers` krijgt `[]` en een lijst met twee apparaten. `host.connect` alleen vanaf eigen uitgangen van de juiste soort.
 9. **Regelaars en tekenpoort (v1.8)**: een apparaat met de tekenpoort (`__pkWrap`) geeft geen waarschuwing meer. Dubbelklik en typen kan de validator niet testen (dat doet de host met de echte UI).
+10. **Instrumenten (v1.9)**: heeft de instance `parts`, dan ook `getPart` en `setPart`; elk instrument een uniek `id` en een `name`; `getPart` geeft JSON; `setPart(id, getPart(id))` laat de instelling gelijk; kruislings zetten neemt de klank over en raakt geen ander instrument.
 
 Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -526,7 +585,8 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 13. `destroy()` ruimt alles op en kan twee keer worden aangeroepen.
 14. Bewegende UI via `host.frame` (met terugval), geen maat- of kleuropvragingen per frame (§12b).
 15. Schuiven staan na `mount()` op hun standaardwaarde; getallen naast schuiven worden direct in de `input`-handler bijgewerkt; open shadow root (§12a).
-16. `node validate-instrument.mjs bestand.js` geeft `OK`, zonder `let op`.
+16. Instrumenten (optioneel): `parts`/`getPart`/`setPart` samen, alleen klank in `getPart`, terugzetten laat de instelling gelijk (§13c).
+17. `node validate-instrument.mjs bestand.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -743,7 +803,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.8.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.9.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
