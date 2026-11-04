@@ -1,0 +1,191 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.phaser",
+  "name": "Phaser Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Phaser: soft phasing, slow classic sweeps, negative-feedback notches, tempo-synced sweeps, and a few extreme, characterful settings that stay stable.",
+  "tree": [
+    {
+      "folder": "Classic",
+      "items": [
+        {
+          "name": "Soft Phase",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 4,
+            "sync": "free",
+            "rate": 0.3,
+            "depth": 0.5,
+            "center": 1000,
+            "fb": 0.3,
+            "stereo": 0.4,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Slow Sweep",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 6,
+            "sync": "free",
+            "rate": 0.12,
+            "depth": 0.8,
+            "center": 700,
+            "fb": 0.5,
+            "stereo": 0.5,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Swirl",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 8,
+            "sync": "free",
+            "rate": 0.4,
+            "depth": 0.9,
+            "center": 900,
+            "fb": 0.6,
+            "stereo": 0.7,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Hollow Notch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 6,
+            "sync": "free",
+            "rate": 0.2,
+            "depth": 0.8,
+            "center": 1500,
+            "fb": -0.6,
+            "stereo": 0.5,
+            "mix": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Tempo",
+      "items": [
+        {
+          "name": "Bar Phase",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 8,
+            "sync": "4",
+            "rate": 0.25,
+            "depth": 0.8,
+            "center": 800,
+            "fb": 0.5,
+            "stereo": 0.6,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Long Rise",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 12,
+            "sync": "32",
+            "rate": 0.25,
+            "depth": 1,
+            "center": 500,
+            "fb": 0.65,
+            "stereo": 0.5,
+            "mix": 0.55
+          }
+        },
+        {
+          "name": "Stereo Drift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 4,
+            "sync": "free",
+            "rate": 0.2,
+            "depth": 0.4,
+            "center": 2000,
+            "fb": 0,
+            "stereo": 1,
+            "mix": 0.4
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Rocket",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 12,
+            "sync": "free",
+            "rate": 0.05,
+            "depth": 1,
+            "center": 400,
+            "fb": 0.8,
+            "stereo": 1,
+            "mix": 0.7
+          }
+        },
+        {
+          "name": "Warp Drive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 8,
+            "sync": "free",
+            "rate": 6,
+            "depth": 1,
+            "center": 1200,
+            "fb": -0.8,
+            "stereo": 0.8,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Wobble Robot",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 4,
+            "sync": "free",
+            "rate": 9,
+            "depth": 1,
+            "center": 600,
+            "fb": 0.7,
+            "stereo": 0,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Wide Vortex",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "stages": 12,
+            "sync": "free",
+            "rate": 0.6,
+            "depth": 1,
+            "center": 2500,
+            "fb": -0.75,
+            "stereo": 1,
+            "mix": 0.6
+          }
+        }
+      ]
+    }
+  ]
+}

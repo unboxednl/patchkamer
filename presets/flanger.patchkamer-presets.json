@@ -1,0 +1,211 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.flanger",
+  "name": "Flanger Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Flanger: gentle and classic sweeps, jet-style resonant flanging, tempo-synced sweeps, subtle stereo shimmer, and a few extreme, resonant settings.",
+  "tree": [
+    {
+      "folder": "Classic",
+      "items": [
+        {
+          "name": "Gentle Flange",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 0.15,
+            "depth": 0.5,
+            "manual": 2.5,
+            "fb": 0.4,
+            "stereo": 0.25,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Jet Sweep",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 0.08,
+            "depth": 0.9,
+            "manual": 3,
+            "fb": 0.85,
+            "stereo": 0.3,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Slow Tide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 0.05,
+            "depth": 0.8,
+            "manual": 5,
+            "fb": 0.7,
+            "stereo": 0.5,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Metal Sweep",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 1,
+            "sync": "free",
+            "rate": 0.1,
+            "depth": 1,
+            "manual": 1.5,
+            "fb": -0.9,
+            "stereo": 0.2,
+            "mix": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Subtle",
+      "items": [
+        {
+          "name": "Stereo Shimmer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 0.3,
+            "depth": 0.3,
+            "manual": 1,
+            "fb": 0.2,
+            "stereo": 1,
+            "mix": 0.35
+          }
+        },
+        {
+          "name": "Soft Doubler",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 0.5,
+            "depth": 0.1,
+            "manual": 8,
+            "fb": 0,
+            "stereo": 0.5,
+            "mix": 0.4
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Tempo",
+      "items": [
+        {
+          "name": "Bar Sweep",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 1,
+            "sync": "4",
+            "rate": 0.15,
+            "depth": 0.8,
+            "manual": 2,
+            "fb": 0.75,
+            "stereo": 0.3,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Two-Bar Rise",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "8",
+            "rate": 0.15,
+            "depth": 1,
+            "manual": 1.2,
+            "fb": 0.8,
+            "stereo": 0.4,
+            "mix": 0.55
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Metallic Scream",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 1,
+            "sync": "free",
+            "rate": 0.3,
+            "depth": 0.6,
+            "manual": 0.6,
+            "fb": 0.95,
+            "stereo": 0.2,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Laser Drop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 1,
+            "sync": "free",
+            "rate": 9,
+            "depth": 1,
+            "manual": 4,
+            "fb": 0.8,
+            "stereo": 0.5,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Comb Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 0.02,
+            "depth": 0,
+            "manual": 0.8,
+            "fb": -0.95,
+            "stereo": 0.5,
+            "mix": 0.7
+          }
+        },
+        {
+          "name": "Wild Wobble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "shape": 0,
+            "sync": "free",
+            "rate": 6,
+            "depth": 1,
+            "manual": 6,
+            "fb": -0.85,
+            "stereo": 1,
+            "mix": 0.6
+          }
+        }
+      ]
+    }
+  ]
+}

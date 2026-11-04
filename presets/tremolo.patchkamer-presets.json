@@ -1,0 +1,148 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.tremolo",
+  "name": "Tremolo Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Tremolo: subtle movement, classic amp-style pulsing, slow swells, rhythmic chops, and extreme choppy or buzzing settings.",
+  "tree": [
+    {
+      "folder": "Classic",
+      "items": [
+        {
+          "name": "Subtle Shimmer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 6,
+            "depth": 0.15
+          }
+        },
+        {
+          "name": "Gentle Pulse",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 3.5,
+            "depth": 0.3
+          }
+        },
+        {
+          "name": "Vintage Amp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 5.2,
+            "depth": 0.55
+          }
+        },
+        {
+          "name": "Deep Throb",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 2.4,
+            "depth": 0.85
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Slow",
+      "items": [
+        {
+          "name": "Slow Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 0.8,
+            "depth": 0.7
+          }
+        },
+        {
+          "name": "Tidal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 0.3,
+            "depth": 0.9
+          }
+        },
+        {
+          "name": "Deep Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 0.5,
+            "depth": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Rhythmic",
+      "items": [
+        {
+          "name": "Slow Pump",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 2,
+            "depth": 0.9
+          }
+        },
+        {
+          "name": "Eighth Chop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 4,
+            "depth": 1.0
+          }
+        },
+        {
+          "name": "Sixteenth Gate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 8,
+            "depth": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Helicopter",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 13,
+            "depth": 1.0
+          }
+        },
+        {
+          "name": "Ring Buzz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 20,
+            "depth": 1.0
+          }
+        },
+        {
+          "name": "Seasick Wobble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "rate": 9.5,
+            "depth": 0.65
+          }
+        }
+      ]
+    }
+  ]
+}
