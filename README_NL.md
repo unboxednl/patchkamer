@@ -24,22 +24,25 @@
 
 De [gebruikershandleiding](docs/USER-MANUAL_NL.md) leidt je er stap voor stap doorheen, met screenshots.
 
-## Meegeleverde apparaten
+## Apparaten
 
-| Apparaat | Wat het is | Map |
-|---|---|---|
-| **Duofone** | Een synth in analoge stijl met twee onafhankelijke toonhoogten, een gedeeld filter en een gedeelde VCA, ringmodulatie, hard sync en sample & hold | `devices/synths/Duofone/` |
-| **Acid Baselines** | Een bassynth met een sequencer van 16 stappen (accent, slide, octaaf per stap), 16 klassieke patronen in acid-stijl, extra oscillatoren en vier soorten vervorming | `devices/synths/AcidBaselines/` |
-| **Keys / MIDI** | Een keyboard en Web MIDI-brug die noten naar andere apparaten stuurt | `devices/tools/Keys/` |
-| **Mixer** | Een mengpaneel met 1 tot 32 kanalen en 0 tot 8 groepen: trim, EQ, sends en returns, pan, faders, mute en solo, bundel in en uit, en een master met een begrenzer | `devices/mixer/Mixer/` |
-| **Leveler** | Houdt het gemiddelde volume van een bron gelijk: een leveler met een begrenzer erachter | `devices/mixer/Leveler/` |
-| **Multitrack** | Een meersporenrecorder voor tot 16 sporen, sample-gelijk, bewaard als WAV (16 of 24 bit, of 32 bit float) | `devices/tools/Multitrack/` |
-| **Notes** | Een notitieblok op de vloer voor ideeën, toonsoort, structuur en een takenlijst; maakt geen geluid | `devices/tools/Notes/` |
-| **Recorder** | Neemt op wat er binnenkomt en laat het ongewijzigd doorlopen; takes kun je bewaren als WAV (16 of 24 bit), MP3 of WebM/MP4 | `devices/tools/Recorder/` |
-| **Scope** | Een transparante doorvoer die het geluid laat zien: spectrum, golfvorm, spectrogram, stereobeeld en peak/RMS | `devices/tools/Scope/` |
-| **Speakers** | De uitgang: volume, een begrenzer en een uitsteekmeter | `devices/mixer/Speakers/` |
+Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en een eigen gebruikershandleiding.
 
-De map `tunes/` bevat **Duofone Styles** (60 tunes in 12 stijlen) en **Acid Baselines Classics** (49 tunes in 9 stijlen, waaronder de map **AIcid** die de nieuwste regelaars van Acid Baselines gebruikt).
+| Soort | Waar het voor dient | Apparaten | README | Handleiding |
+|---|---|---|---|---|
+| **Synths** | Geluid maken uit noten | Acid Baselines, Duofone | [devices/synths](devices/synths/README_NL.md) | [Synths](docs/synths/USER-MANUAL_NL.md) |
+| **Drums** | Drumgeluiden en ritme | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [devices/drums](devices/drums/README_NL.md) | [Drums](docs/drums/USER-MANUAL_NL.md) |
+| **Effecten** | Het geluid vormgeven: modulatie, vervorming, ruimte, filters, ritme, stem, hele ketens | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [devices/effects](devices/effects/README_NL.md) | [Effecten](docs/effects/USER-MANUAL_NL.md) |
+| **Mixer** | Mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers | [devices/mixer](devices/mixer/README_NL.md) | [Mixer](docs/mixer/USER-MANUAL_NL.md) |
+| **Modulatoren** | De regelaars van andere apparaten bewegen | Follower | [devices/modulators](devices/modulators/README_NL.md) | [Modulatoren](docs/modulators/USER-MANUAL_NL.md) |
+| **Tools** | Spelen, opnemen, meten en notities maken | Keys / MIDI, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README_NL.md) | [Tools](docs/tools/USER-MANUAL_NL.md) |
+
+## Kant-en-klare klanken en instellingen
+
+| | Wat het is | README | Handleiding |
+|---|---|---|---|
+| **Tunes** | Complete klanken voor apparaten die geluid maken (de synths en de drumapparaten), in packs per stijl | [tunes](tunes/README_NL.md) | [Tunes](docs/tunes/USER-MANUAL_NL.md) |
+| **Presets** | Beginstanden voor apparaten zonder eigen geluid: een pack voor de meeste effecten, de Follower en de Leveler. De packs van de Effect Chain zijn complete ketens van vier tot acht effecten, elk gemaakt voor één toepassing | [presets](presets/README_NL.md) | [Presets](docs/presets/USER-MANUAL_NL.md) |
 
 ## Bouw je eigen apparaten, met of zonder AI
 
@@ -57,17 +60,18 @@ Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waa
 |---|---|---|
 | `patchkamer/` | De host: de studio zelf, als één HTML-pagina | AGPL-3.0-or-later |
 | `contract/` | Het contract voor apparaten (Nederlands en Engels) en de validator | MIT |
-| `devices/` | De meegeleverde apparaten, één map per apparaat | AGPL-3.0-or-later |
+| `devices/` | De meegeleverde apparaten, in een map per soort en een map per apparaat | AGPL-3.0-or-later |
 | `tunes/` | Klanken voor apparaten die geluid maken | CC0-1.0 |
 | `presets/` | Instellingen voor apparaten zonder eigen geluid | CC0-1.0 |
 | `songs/` | Meegeleverde songs | CC-BY-4.0 |
-| `docs/` | De gebruikershandleiding, de screenshots en het script dat ze maakt | AGPL-3.0 (de root-licentie) |
+| `docs/` | De gebruikershandleiding, de handleidingen per soort apparaat, hun screenshots en de scripts die ze maken | AGPL-3.0 (de root-licentie) |
 
 In [LICENSING.md](LICENSING.md) staat waarom elke keuze is gemaakt.
 
 ## Documentatie
 
-- [Gebruikershandleiding](docs/USER-MANUAL_NL.md) ([English](docs/USER-MANUAL_EN.md))
+- [Gebruikershandleiding](docs/USER-MANUAL_NL.md) ([English](docs/USER-MANUAL_EN.md)): de studio, de bibliotheek, patchen, werkruimtes, instellingen en sneltoetsen
+- Handleidingen per soort apparaat en voor klanken: [synths](docs/synths/USER-MANUAL_NL.md), [drums](docs/drums/USER-MANUAL_NL.md), [effecten](docs/effects/USER-MANUAL_NL.md), [mixer](docs/mixer/USER-MANUAL_NL.md), [modulatoren](docs/modulators/USER-MANUAL_NL.md), [tools](docs/tools/USER-MANUAL_NL.md), [tunes](docs/tunes/USER-MANUAL_NL.md) en [presets](docs/presets/USER-MANUAL_NL.md) (ook in het Engels: vervang `_NL` door `_EN`)
 - [Contract voor apparaten](contract/PATCHKAMER-CONTRACT_NL.md) ([English](contract/PATCHKAMER-CONTRACT_EN.md))
 - [AGENTS.md](AGENTS.md): instructies voor AI-agents die apparaten bouwen
 

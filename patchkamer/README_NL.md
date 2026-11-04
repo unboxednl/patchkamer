@@ -1,5 +1,7 @@
 # patchkamer
 
+*English version: [README.md](README.md)*
+
 De host van Patchkamer: het webplatform waarin je met AI-agents apparaten, geluiden en muziek maakt.
 
 Apparaten, tunes, presets en songs staan in hun eigen mappen en praten met de host via het [contract](../contract/).

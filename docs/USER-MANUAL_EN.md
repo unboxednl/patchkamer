@@ -13,7 +13,7 @@ Patchkamer is a modular music studio that runs in your browser. You place device
 3. [A tour of the studio](#3-a-tour-of-the-studio)
 4. [Load a library](#4-load-a-library)
 5. [Your first patch](#5-your-first-patch)
-6. [Play and sequence](#6-play-and-sequence)
+6. [The devices](#6-the-devices)
 7. [Tunes and presets](#7-tunes-and-presets)
 8. [Save, open and share](#8-save-open-and-share)
 9. [Find your way around the floor](#9-find-your-way-around-the-floor)
@@ -107,111 +107,20 @@ You will make a keyboard play a bass synth through your speakers.
 
 **Volume.** Use the slider on Speakers. It has a limiter, but keep the volume modest at first.
 
-## 6. Play and sequence
+## 6. The devices
 
-### Acid Baselines
+Devices come in kinds. Every kind has its own README and its own user manual, with a section per device: what it is for, the controls, the ports, an example patch, and the presets or tunes that come with it. A patch usually runs from left to right: **tools** and **drums** send notes, **synths** make the sound, **effects** shape it, the **mixer** combines it and **Speakers** plays it. The **Arrange** button puts your devices in that order.
 
-A bass synth with a built-in 16-step sequencer.
+| Kind | What it is for | Devices | Manual |
+|---|---|---|---|
+| **Synths** | Make sound from notes | Acid Baselines, Duofone | [Synths manual](synths/USER-MANUAL_EN.md) · [README](../devices/synths/README.md) |
+| **Drums** | Drum sounds and rhythm | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [Drums manual](drums/USER-MANUAL_EN.md) · [README](../devices/drums/README.md) |
+| **Effects** | Shape the sound: modulation, distortion, space, filters, rhythm, voice, chains | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [Effects manual](effects/USER-MANUAL_EN.md) · [README](../devices/effects/README.md) |
+| **Mixer** | Mix, keep the level steady, play out | Mixer, Leveler, Speakers | [Mixer manual](mixer/USER-MANUAL_EN.md) · [README](../devices/mixer/README.md) |
+| **Modulators** | Move the controls of other devices | Follower | [Modulators manual](modulators/USER-MANUAL_EN.md) · [README](../devices/modulators/README.md) |
+| **Tools** | Play, record, measure and take notes | Keys / MIDI, Multitrack, Notes, Pad Controller, Recorder, Scope | [Tools manual](tools/USER-MANUAL_EN.md) · [README](../devices/tools/README.md) |
 
-![The Acid Baselines card](images/en/04-acid-baselines.png)
-
-- **Six sections** group the controls in the order the sound travels through the device. Double-click a slider to go back to its starting value. Click the number to type a value.
-  - **Oscillator:** waveform, octave and tuning, plus **Sub** (a square wave an octave down), **Noise**, **Osc 2** with its own **Detune 2**, and **Ring** (ring modulation of the two oscillators).
-  - **Filter:** the filter type (lowpass, bandpass or highpass), cutoff, resonance, envelope amount and **Filter FM**, plus **Filter 2**, a second bandpass filter in parallel, with its own octave offset (**F2 octave**).
-  - **Envelope:** accent, normal and accent decay, soft attack and VCA decay.
-  - **Slide:** the glide time.
-  - **Distortion:** the **Type** (soft, hard, fold or asym), **Overdrive**, **Tight** (filters the bass out before the distortion so it stays punchy), **Mix** (distorted against clean) and **Crush** (bit depth), plus the tone filter.
-  - **Output:** the level.
-
-  Everything on top of the original controls (sub, noise, Osc 2, Ring, Filter 2, filter type, distortion type, Tight, Mix and Crush) is off by default, so existing sounds and tunes stay as they were. Combine a lot of resonance, filter FM and distortion for extreme sounds. A built-in guard restarts the filters if they run away, so the sound does not stay silent.
-- **Sequencer.** Click a square to place a note on that step; click again to remove it. The rows run from C2 to C3. Below the notes you find the **Accent** row (a louder, snappier note), the **Slide** row (glide from the previous step) and an **Octave** choice per step.
-- **Sets.** Choose 1, 2, 4, 8 or 16 sets of 16 steps. The numbered buttons switch which set you edit.
-- **Choose pattern…** puts one of 16 classic acid-style patterns in the set you are editing.
-- **New line** makes a random line. **Transpose +/−** moves it up or down, **Copy bar to all** copies the set to all sets and **Clear** empties it.
-- Switch **internal** off to play only the notes that arrive from another device, for example from Keys. A note with velocity above 0.9 counts as an accent.
-
-### Keys / MIDI
-
-A keyboard that makes no sound itself. It sends notes to other devices.
-
-![The Keys card](images/en/05-keys.png)
-
-- Click the piano keys, use the computer keys, or press **Connect MIDI** to use a MIDI keyboard. The browser asks permission once.
-- **Play mode:** *Pulse* sends a note with a fixed length (**Pulse length**). *Hold* keeps the note as long as you hold the key.
-- **Lowest key** sets the first note of the on-screen keyboard. **Velocity**, **Pitchbend** and **Modulation wheel** add expression. **All off** silences stuck notes.
-
-### Duofone
-
-An analog-style synth with two independent pitches, a shared filter and VCA, with ring modulation, hard sync and sample & hold. Connect Keys to its **Keyboard / notes** port and its **Stereo** out to Speakers.
-
-### Mixer
-
-A mixing desk with 1 to 32 channels and 0 to 8 groups, and a master with a limiter. Connect the sound-making devices to the channel inputs (**1**, **2**, …) and the **Out** port of the master to Speakers.
-
-![The Mixer card](images/en/11-mixer.png)
-
-- **Channels** and **Groups** set how many there are. The ports on the card appear and disappear with them. Every channel has its input, a **send** port and a **ret** (return) port. Type in the name field to name a channel.
-- Per channel: **Trim**, a 3- or 5-band **EQ** (choose under **EQ**), **Send**, **Return**, the group it goes to (**→ M** is the master), **Pan**, a fader with a level meter, and **M** (mute) and **S** (solo). Groups and the master have an EQ, send/return and a fader too, and a limiter sits behind the master. Double-click a slider to go back to its starting value.
-- **Level match** measures for 4 seconds and sets the trim of every channel so all sources arrive at the **Target** level. **Continuous** keeps them there slowly (at most 3 dB per second).
-- **Bundles.** A green bundle cable (for example the separate outputs of a drum machine) goes into **bundle in**; choose per channel which bundle channel arrives there, under the name field. **Channels out** sends all channels, after mixing, as one bundle, for example to a recorder. **+ groups and mix** adds the groups and the total mix to it.
-- A Mixer has **presets** (it makes no sound of its own). A preset keeps the settings but not the source choices of the channels.
-
-### Leveler
-
-Keeps the average volume of a source steady. Place it between an instrument and the Mixer, or on the mix before Speakers. It helps with sources that slowly get louder and softer, for example through a modulator.
-
-![The Leveler card](images/en/12-leveler.png)
-
-- **Mode:** *Leveling* or *Pass through* (the sound goes through unchanged).
-- **Target** is the level it aims for. **Response** is how fast the volume moves up or down (down is three times faster). **Window** is the time over which it measures. **Range ±** is the most it may turn the volume up or down. Below the **Gate** level the volume stays where it is, so reverb tails and pauses are not blown up. **Ceiling** is the limit of the limiter behind it, which catches peaks.
-- The meter shows **IN**, **OUT** and **GAIN**, with a lamp for the limiter. **Current level = target** sets the target to what comes in now. **Reset gain** sets the correction back to 0.
-- A Leveler has **presets**. Without AudioWorklet in your browser it passes the sound through unchanged and tells you so.
-
-### Multitrack
-
-A multitrack recorder for up to 16 tracks, sample-aligned. It records a bundle, for example the **Channels out** of the Mixer: connect the green bundle cable to the **Bundle** port.
-
-![The Multitrack card](images/en/13-multitrack.png)
-
-- **● Record** and **■ Stop** control the recording. **with clock start/stop** makes it follow Start and Stop of the clock.
-- **Tracks** sets how many tracks there are. Choose per track which bundle channel it records, or **— none**. **assign new channels automatically** fills new bundle channels in on empty tracks. **Arm all** arms every track.
-- Choose the file format under **WAV**: 16 bit, 24 bit or 32 bit float.
-- Takes stay in memory until you close the page. **Save all (.zip)** saves a take as one zip file; **Per track** saves single tracks.
-- A Multitrack has **presets** (not the source of each track).
-
-### Notes
-
-A notepad on the floor for ideas, key, structure and what you still want to do. It makes no sound and has no ports. The text is saved with the workspace.
-
-![The Notes card](images/en/14-notes.png)
-
-- **Key** and **Tempo / feel** are short fields. **Section** has buttons (**Intro**, **Build**, **Break**, **Drop**, **Outro**) that add a heading to the text.
-- Write in the large text field. Under **To do**, type a task and press **Enter**; tick it off when it is done and remove it with the cross.
-- The line at the bottom shows when you last changed the notes. A Notes card has **presets**.
-
-### Recorder
-
-Records what comes in, for example the mix, and passes it on unchanged. Place it between the Mixer and Speakers.
-
-![The Recorder card](images/en/15-recorder.png)
-
-- Give the recording a name, then press **● Record** and **■ Stop**. **Record with Start/Stop of the clock** makes it follow the clock.
-- **Format** (choose it before you record; it is locked while recording): **WebM/Opus** (or **MP4/AAC**, depending on your browser) gives small files. **WAV 16-bit** and **WAV 24-bit** are lossless. **MP3** adds a **Bitrate** choice (128, 192, 256 or 320 kbps).
-- Every take appears in the list with its format and size, with **▶** to listen and **Save**. Takes stay in memory until you close the page; Save gives an audio file. A WAV or MP3 take keeps the raw sound in memory, about 23 MB per minute at 48 kHz stereo, and the file is made when you press Save (an MP3 takes a moment to make; a message shows the progress).
-- MP3 works at 8–48 kHz and at multiples of 48, 44.1 or 32 kHz (for example 96 kHz, which Recorder brings back to 48 kHz). At another sample rate Recorder says so; WAV always works.
-- A Recorder has **presets**.
-
-**License of the MP3 encoder.** Recorder makes MP3 files with [lamejs](https://github.com/zhuker/lamejs) 1.2.1, a JavaScript version of the LAME encoder. lamejs is free software under the [LGPL-3.0](../LICENSES/LGPL-3.0-only.txt) and sits unchanged in the Recorder file, as one separate piece of text (`LAME_SRC`, at the bottom). You can replace it with another version or your own build of lamejs. The rest of Recorder is AGPL-3.0-or-later. See [LICENSING.md](../LICENSING.md) (in Dutch).
-
-### Scope
-
-A transparent pass-through that shows the sound: the audio goes from **In** to **Through** unchanged.
-
-![The Scope card](images/en/16-scope.png)
-
-- **View** chooses what you see: **Spectrum**, **Waveform L/R**, **Spectrogram**, **Stereo image** or **Peak / RMS**. The line of numbers shows peak and RMS in dBFS, and CLIP when the signal goes over the limit.
-- **FFT** (1024 to 8192) sets the detail of the spectrum, **Smooth** how calm it moves, **Range** how many dB you see and **Time** the length of the waveform (5 to 50 ms). **Pause** freezes the picture.
-- A Scope has **presets**.
+Their ready-made sounds and settings have their own manuals: [Tunes](tunes/USER-MANUAL_EN.md) for devices that make sound and [Presets](presets/USER-MANUAL_EN.md) for the rest (also section 7).
 
 ## 7. Tunes and presets
 
@@ -221,7 +130,9 @@ On every card you see a bar with ◀ ▶ buttons and a list. Pick a tune or pres
 
 ![Tune libraries](images/en/09-tunes-panel.png)
 
-The **Tunes** and **Presets** menus manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. This repository includes **Duofone Styles** (60 tunes in 12 styles) and **Acid Baselines Classics** (40 tunes in 8 styles).
+The **Tunes** and **Presets** menus manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. The packs that come with this repository are listed in the [tunes manual](tunes/USER-MANUAL_EN.md) and the [presets manual](presets/USER-MANUAL_EN.md).
+
+For the whole story, with the list of included packs and how to make your own, see the [presets manual](presets/USER-MANUAL_EN.md) and the [tunes manual](tunes/USER-MANUAL_EN.md).
 
 ## 8. Save, open and share
 

@@ -24,22 +24,25 @@
 
 The [user manual](docs/USER-MANUAL_EN.md) walks you through it step by step, with screenshots.
 
-## Included devices
+## Devices
 
-| Device | What it is | Folder |
-|---|---|---|
-| **Duofone** | An analog-style synth with two independent pitches, a shared filter and VCA, ring modulation, hard sync and sample & hold | `devices/synths/Duofone/` |
-| **Acid Baselines** | A bass synth with a 16-step sequencer (accent, slide, octave per step), 16 classic acid-style patterns, extra oscillators and four kinds of distortion | `devices/synths/AcidBaselines/` |
-| **Keys / MIDI** | A keyboard and Web MIDI bridge that sends notes to other devices | `devices/tools/Keys/` |
-| **Mixer** | A mixing desk with 1 to 32 channels and 0 to 8 groups: trim, EQ, sends and returns, pan, faders, mute and solo, bundle in and out, and a master with a limiter | `devices/mixer/Mixer/` |
-| **Leveler** | Keeps the average volume of a source steady: a leveler with a limiter behind it | `devices/mixer/Leveler/` |
-| **Multitrack** | A multitrack recorder for up to 16 tracks, sample-aligned, saved as WAV (16 or 24 bit, or 32 bit float) | `devices/tools/Multitrack/` |
-| **Notes** | A notepad on the floor for ideas, key, structure and a to-do list; makes no sound | `devices/tools/Notes/` |
-| **Recorder** | Records what comes in and passes it through unchanged; takes can be saved as WAV (16 or 24 bit), MP3 or WebM/MP4 | `devices/tools/Recorder/` |
-| **Scope** | A transparent pass-through that shows the sound: spectrum, waveform, spectrogram, stereo image and peak/RMS | `devices/tools/Scope/` |
-| **Speakers** | The output: volume, a limiter and a level meter | `devices/mixer/Speakers/` |
+Devices come in kinds. Every kind has its own README in its folder and its own user manual.
 
-The `tunes/` folder has **Duofone Styles** (60 tunes in 12 styles) and **Acid Baselines Classics** (49 tunes in 9 styles, including the **AIcid** folder that uses the newest Acid Baselines controls).
+| Kind | What it is for | Devices | README | Manual |
+|---|---|---|---|---|
+| **Synths** | Make sound from notes | Acid Baselines, Duofone | [devices/synths](devices/synths/README.md) | [Synths](docs/synths/USER-MANUAL_EN.md) |
+| **Drums** | Drum sounds and rhythm | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [devices/drums](devices/drums/README.md) | [Drums](docs/drums/USER-MANUAL_EN.md) |
+| **Effects** | Shape the sound: modulation, distortion, space, filters, rhythm, voice, whole chains | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [devices/effects](devices/effects/README.md) | [Effects](docs/effects/USER-MANUAL_EN.md) |
+| **Mixer** | Mix, keep the level steady, play out | Mixer, Leveler, Speakers | [devices/mixer](devices/mixer/README.md) | [Mixer](docs/mixer/USER-MANUAL_EN.md) |
+| **Modulators** | Move the controls of other devices | Follower | [devices/modulators](devices/modulators/README.md) | [Modulators](docs/modulators/USER-MANUAL_EN.md) |
+| **Tools** | Play, record, measure and take notes | Keys / MIDI, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README.md) | [Tools](docs/tools/USER-MANUAL_EN.md) |
+
+## Ready-made sounds and settings
+
+| | What it is | README | Manual |
+|---|---|---|---|
+| **Tunes** | Complete sounds for devices that make sound (the synths and the drum devices), in packs per style | [tunes](tunes/README.md) | [Tunes](docs/tunes/USER-MANUAL_EN.md) |
+| **Presets** | Starting settings for devices without a sound of their own: a pack for most effects, the Follower and the Leveler. The Effect Chain packs are complete chains of four to eight effects, each built for one application | [presets](presets/README.md) | [Presets](docs/presets/USER-MANUAL_EN.md) |
 
 ## Build your own devices, with or without AI
 
@@ -57,17 +60,18 @@ Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, 
 |---|---|---|
 | `patchkamer/` | The host: the studio itself, as one HTML page | AGPL-3.0-or-later |
 | `contract/` | The device contract (English and Dutch) and the validator | MIT |
-| `devices/` | The included devices, one folder per device | AGPL-3.0-or-later |
+| `devices/` | The included devices, in a folder per kind and a folder per device | AGPL-3.0-or-later |
 | `tunes/` | Sounds for devices that make sound | CC0-1.0 |
 | `presets/` | Settings for devices without a sound of their own | CC0-1.0 |
 | `songs/` | Included songs | CC-BY-4.0 |
-| `docs/` | The user manual, its screenshots and the script that makes them | AGPL-3.0 (the root license) |
+| `docs/` | The user manual, the manuals per kind of device, their screenshots and the scripts that make them | AGPL-3.0 (the root license) |
 
 See [LICENSING.md](LICENSING.md) for the reasons behind each choice.
 
 ## Documentation
 
-- [User manual](docs/USER-MANUAL_EN.md) ([Nederlands](docs/USER-MANUAL_NL.md))
+- [User manual](docs/USER-MANUAL_EN.md) ([Nederlands](docs/USER-MANUAL_NL.md)): the studio, the library, patching, workspaces, settings and shortcuts
+- Manuals per kind of device and for sounds: [synths](docs/synths/USER-MANUAL_EN.md), [drums](docs/drums/USER-MANUAL_EN.md), [effects](docs/effects/USER-MANUAL_EN.md), [mixer](docs/mixer/USER-MANUAL_EN.md), [modulators](docs/modulators/USER-MANUAL_EN.md), [tools](docs/tools/USER-MANUAL_EN.md), [tunes](docs/tunes/USER-MANUAL_EN.md) and [presets](docs/presets/USER-MANUAL_EN.md) (all in Dutch too: replace `_EN` by `_NL`)
 - [Device contract](contract/PATCHKAMER-CONTRACT_EN.md) ([Nederlands](contract/PATCHKAMER-CONTRACT_NL.md))
 - [AGENTS.md](AGENTS.md): instructions for AI agents that build devices
 
