@@ -356,6 +356,7 @@ svg.cables g.cable:hover{opacity:1}
 body.nopbar .pbar{display:none}
 .prdlg .box label{display:grid;gap:4px;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
 .prdlg .box input[type=text],.prdlg .box select{font-size:13px;padding:6px 8px;text-transform:none;letter-spacing:0}
+.libcfg .hint{font-size:11px;color:var(--muted);margin:4px 0 0}
 .prdlg .box .hint{font-size:11px;color:var(--muted);text-transform:none;letter-spacing:0;min-height:15px}
 .prlib{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:6px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--card-2);min-width:0}
 .prlib.act{border-color:var(--audio)}
@@ -449,6 +450,9 @@ body.nopbar .pbar{display:none}
   <div class="wsrow"><label><span data-i18n="ui.kabeldekking">Kabeldekking</span>&nbsp;<input type="range" id="cabOp" min="0.15" max="1" step="0.05" value="1" style="width:140px;vertical-align:middle"> <output id="cabOpV">100%</output></label></div>
   <div class="wsrow"><label><span data-i18n="ui.schaal">Schaal</span>&nbsp;<select id="scaleSel"></select></label> <span class="note" id="scaleNote"></span></div>
   <div class="wsrow"><label><span data-i18n="ui.knoppen_van_de_host">Knoppen van de host</span>&nbsp;<select id="knobStyle"><option value="slider" data-i18n="ui.schuif">schuif</option><option value="rotary" data-i18n="ui.draaiknop">draaiknop</option></select></label></div>
+  <h3 style="margin-top:12px" data-i18n="ui.browsergeheugen">Browsergeheugen</h3>
+  <div class="note" style="margin-bottom:6px" data-i18n="ui.browsergeheugen_uitleg">Patchkamer onthoudt in deze browser je instellingen, bibliotheekindeling (ook eigen categorieën), bronnen, werkruimte en eigen tunes en presets. Hiermee wis je dat allemaal en begint Patchkamer opnieuw. Bestanden op je computer en op GitHub blijven staan.</div>
+  <div class="wsrow"><button class="small" id="wipeBtn" data-i18n="ui.browsergeheugen_wissen">Browsergeheugen wissen…</button></div>
   <h3 style="margin-top:12px" data-i18n="ui.contract_opstelling">Contract &amp; opstelling</h3>
   <div class="note" id="contractLinks"><b data-i18n="ui.contract">Contract</b>: <a id="ctrA" href="https://github.com/unboxednl/patchkamer/blob/main/contract/PATCHKAMER-CONTRACT_NL.md" target="_blank" rel="noopener" data-i18n="ui.nederlands">Nederlands</a> · <a id="ctrB" href="https://github.com/unboxednl/patchkamer/blob/main/contract/PATCHKAMER-CONTRACT_EN.md" target="_blank" rel="noopener" data-i18n="ui.english">English</a> · <a id="valA" href="https://github.com/unboxednl/patchkamer/blob/main/contract/validate-instrument.mjs" target="_blank" rel="noopener" data-i18n="ui.validator">validator</a> <span data-i18n="ui.op_github">(op GitHub)</span></div>
   <details><summary data-i18n="ui.sjabloon_kopieer_bewaar_als_patchkamer">Sjabloon (kopieer, bewaar als .patchkamer-device.js)</summary><pre id="tmpl"></pre><button class="small" id="copyTmpl" data-i18n="ui.kopieer_sjabloon">Kopieer sjabloon</button></details>
@@ -479,6 +483,7 @@ body.nopbar .pbar{display:none}
         <div class="srclist" id="srcList"></div>
         <div class="srcadd"><input type="url" id="srcUrl" placeholder="github.com/naam/repo, een map daarin, of URL van een .patchkamer-device.js / patchkamer.json" aria-label="adres van een bron" data-i18n-ph="attr.github_com_naam_repo_een" data-i18n-aria="attr.adres_van_een_bron"><button class="small" id="srcAddUrl" data-i18n="ui.toevoegen">Toevoegen</button></div>
         <div class="wsrow"><button class="small" id="srcAddDir" data-i18n="ui.lokale_map_kiezen">Lokale map kiezen…</button><input type="file" id="srcDirInput" webkitdirectory multiple hidden></div>
+        <div class="hint" id="srcDirHint" hidden data-i18n="ui.map_telling_uitleg">Je browser telt bij een map alle bestanden ("N bestanden uploaden"). Er wordt niets geüpload; Patchkamer leest alleen de bestanden met de extensie .patchkamer-device.js en toont daarna het echte aantal apparaten. Via https of localhost krijg je een map-kiezer zonder telling.</div>
         <div class="note" data-i18n="ui.een_bron_is_een_github">Een bron is een GitHub-repo (of een map daarin), een webadres of een map op je computer met apparaten (*.patchkamer-device.js). Bronnen worden onthouden en bij het openen weer geladen; een werkruimte haalt zijn instrumenten van deze plekken op.</div>
       </details>
       <details class="libsec"><summary data-i18n="ui.instrument_laden">Instrument laden</summary>
@@ -598,6 +603,12 @@ const I18N={
    "ui.bronnen":"Bronnen",
    "ui.toevoegen":"Toevoegen",
    "ui.lokale_map_kiezen":"Lokale map kiezen…",
+   "ui.browsergeheugen":"Browsergeheugen",
+   "ui.browsergeheugen_uitleg":"Patchkamer onthoudt in deze browser je instellingen, bibliotheekindeling (ook eigen categorieën), bronnen, werkruimte en eigen tunes en presets. Hiermee wis je dat allemaal en begint Patchkamer opnieuw. Bestanden op je computer en op GitHub blijven staan.",
+   "ui.browsergeheugen_wissen":"Browsergeheugen wissen…",
+   "m.browsergeheugen_wissen_vraag":"<b>Browsergeheugen wissen?</b><br>Alle instellingen, bibliotheekindeling, bronnen, de huidige werkruimte en je eigen tunes en presets in deze browser worden gewist. Patchkamer start daarna opnieuw. Dit kan niet ongedaan worden gemaakt.",
+   "m.wissen":"Wissen",
+   "ui.map_telling_uitleg":"Je browser telt bij een map alle bestanden (\"N bestanden uploaden\"). Er wordt niets geüpload; Patchkamer leest alleen de bestanden met de extensie .patchkamer-device.js en toont daarna het echte aantal apparaten. Via https of localhost krijg je een map-kiezer zonder telling.",
    "ui.een_bron_is_een_github":"Een bron is een GitHub-repo (of een map daarin), een webadres of een map op je computer met apparaten (*.patchkamer-device.js). Bronnen worden onthouden en bij het openen weer geladen; een werkruimte haalt zijn instrumenten van deze plekken op.",
    "ui.instrument_laden":"Instrument laden",
    "ui.of_plak_de_code":"…of plak de code",
@@ -1113,6 +1124,12 @@ const I18N={
    "ui.bronnen":"Sources",
    "ui.toevoegen":"Add",
    "ui.lokale_map_kiezen":"Choose local folder…",
+   "ui.browsergeheugen":"Browser storage",
+   "ui.browsergeheugen_uitleg":"In this browser Patchkamer remembers your settings, library layout (including your own categories), sources, workspace and your own tunes and presets. This clears all of it and Patchkamer starts fresh. Files on your computer and on GitHub stay as they are.",
+   "ui.browsergeheugen_wissen":"Clear browser storage…",
+   "m.browsergeheugen_wissen_vraag":"<b>Clear browser storage?</b><br>All settings, library layout, sources, the current workspace and your own tunes and presets in this browser will be erased. Patchkamer then restarts. This cannot be undone.",
+   "m.wissen":"Clear",
+   "ui.map_telling_uitleg":"For a folder, your browser counts all files (\"Upload N files\"). Nothing is uploaded; Patchkamer only reads files with the extension .patchkamer-device.js and then shows the real number of devices. Over https or localhost you get a folder picker without that count.",
    "ui.een_bron_is_een_github":"A source is a GitHub repo (or a folder in it), a web address or a folder on your computer with devices (*.patchkamer-device.js). Sources are remembered and loaded again when you open Patchkamer; a workspace fetches its instruments from these places.",
    "ui.instrument_laden":"Load instrument",
    "ui.of_plak_de_code":"…or paste the code",
@@ -2486,6 +2503,7 @@ async function addSource(src){ const same=SOURCES.find(x=>x.kind===src.kind&&(sr
   SOURCES.push(src); saveSources(); const r=await loadSource(src,{interactive:true}); status(`${srcLabel(src)}: ${SRCSTATE.get(src.sid)?.msg||''}`,!!(r&&r.errs&&r.errs.length&&!r.n)); return r; }
 $('srcAddUrl').onclick=async()=>{ let src; try{ src={sid:newSid(),...parseSourceUrl($('srcUrl').value),added:Date.now()}; }catch(e){ status(e.message,true); return; } if(!src.label) src.label=src.kind==='github'?`${src.owner}/${src.repo}${src.path?'/'+src.path:''}`:src.url; $('srcUrl').value=''; await addSource(src); };
 $('srcUrl').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); $('srcAddUrl').click(); } });
+if(!window.showDirectoryPicker) $('srcDirHint').hidden=false;
 $('srcAddDir').onclick=async()=>{ const pk=await pickFolder(null); if(!pk) return; const src={sid:newSid(),kind:'folder',label:pk.name,added:Date.now()};
   if(pk.handle){ await IDB.set('dir:'+src.sid,pk.handle); src.persist=true; } else DIRFILES.set(src.sid,pk.files);
   await addSource(src); };
@@ -2645,7 +2663,7 @@ let prPersistT=0;
 const prDump=()=>prUser().map(l=>({lid:l.lid,name:l.name,device:l.device,author:l.author||'',license:l.license||'',description:l.description||'',type:libType(l),tree:l.tree}));
 // direct wegschrijven (samengevoegd binnen één taak), en nogmaals bij het verlaten van de pagina
 function prPersist(){ if(prPersistT) return; prPersistT=setTimeout(()=>{ prPersistT=0; IDB.set('tunes:user',prDump()); },0); }
-window.addEventListener('pagehide',()=>{ if(prPersistT){ clearTimeout(prPersistT); prPersistT=0; IDB.set('tunes:user',prDump()); } });
+window.addEventListener('pagehide',()=>{ if(typeof PK_WIPING!=='undefined'&&PK_WIPING) return; if(prPersistT){ clearTimeout(prPersistT); prPersistT=0; IDB.set('tunes:user',prDump()); } });
 // de state die een tune bewaart: getPreset() als het apparaat die heeft (bv. zonder routing), anders getState()
 function presetStateOf(r){ const i=r.inst; try{ return prClone(typeof i.getPreset==='function'?i.getPreset():i.getState?i.getState():{}); }catch(e){ console.warn('tune',r.def.name,e); return {}; } }
 const presetKey=r=>{ try{ return JSON.stringify(presetStateOf(r)); }catch(e){ return ''; } };
@@ -2905,6 +2923,13 @@ const _wsSongBtn=document.getElementById('wsSong'); if(_wsSongBtn) _wsSongBtn.on
 const setPanel=$('setPanel');
 function closeSettings(){ if(!setPanel) return; setPanel.hidden=true; $('setBtn').setAttribute('aria-expanded','false'); $('setBtn').classList.remove('on'); }
 function openSettings(){ if(!setPanel) return; if(!wsPanel.hidden) closeWs(); prClosePanel(); setPanel.hidden=false; $('setBtn').setAttribute('aria-expanded','true'); $('setBtn').classList.add('on'); try{ if(typeof paintScaleUI==='function') paintScaleUI(); }catch(e){} }
+let PK_WIPING=false;
+$('wipeBtn').onclick=async()=>{ if(!(await askUser(pkt('m.browsergeheugen_wissen_vraag'),pkt('m.wissen'),pkt('m.annuleren')))) return;
+  PK_WIPING=true;
+  for(const st of [localStorage,sessionStorage]){ try{ Object.keys(st).filter(k=>k.startsWith('patchkamer')).forEach(k=>st.removeItem(k)); }catch(e){} }
+  try{ const db=await IDB.open(); db.close(); }catch(e){}
+  await new Promise(res=>{ try{ const r=indexedDB.deleteDatabase('patchkamer'); r.onsuccess=r.onerror=r.onblocked=()=>res(); }catch(e){ res(); } });
+  location.reload(); };
 if(setPanel){ $('setBtn').onclick=e=>{ e.stopPropagation(); setPanel.hidden?openSettings():closeSettings(); }; $('setClose').onclick=closeSettings;
   document.addEventListener('pointerdown',e=>{ if(!setPanel.hidden&&!e.target.closest('#setPanel,#setBtn,.pkmodal')) closeSettings(); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!setPanel.hidden&&!document.querySelector('.pkmodal')) closeSettings(); });
