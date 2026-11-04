@@ -344,7 +344,7 @@ In de monostand zijn de regelaars voor de tweede oscillator (niveau **VCO B**, *
 
 Geen toetsenbord? Gebruik dan **Houd noot** of **Test akkoord** op de kaart.
 
-**Tunes.** Pack **Duofone Styles**: 60 tunes in 12 mappen (Techno, House, Trance, Ambient, Drum & Bass, Dubstep, Synthwave, Funk & Disco, Hip-hop, Electro, Pop, Chiptune), vijf per map, bestand [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json). Een paar namen: **Dark Stab**, **Supersaw Lead**, **Reese Bass** en **Neon Lead** (twee oscillatoren), en **Rolling Bass**, **Wobble Bass** en **Pulse Lead** (monostand). Een tune zet ook **Stand**.
+**Tunes.** Pack **Duofone Styles**: 60 tunes in 12 mappen (Techno, House, Trance, Ambient, Drum & Bass, Dubstep, Synthwave, Funk & Disco, Hip-hop, Electro, Pop, Chiptune), vijf per map, bestand [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json). Een paar namen: **Dark Stab**, **Supersaw Lead**, **Detuned Saw Bass** en **Neon Lead** (twee oscillatoren), en **Rolling Bass**, **Wobble Bass** en **Pulse Lead** (monostand). Een tune zet ook **Stand**.
 
 **Tips en beperkingen.**
 
