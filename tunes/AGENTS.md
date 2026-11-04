@@ -9,7 +9,7 @@ Een tune is de **klank** van een apparaat dat geluid maakt (`kind: 'instrument'`
 ## Wat je nodig hebt
 
 - Het apparaat zelf, in `../devices/<categorie>/<Naam>/<naam>.patchkamer-device.js`, en zijn exacte `id`. Staat er in die map een `AGENTS.md`, lees die dan ook: daar staan de velden, bereiken en een controlescript voor dat apparaat (zoals `../devices/synths/Duofone/AGENTS.md`).
-- Het contract, §13c: `../contract/PATCHKAMER-CONTRACT.md`. Controleer eerst dat contract en validator dezelfde versie hebben (`../AGENTS.md`, regel 1).
+- Het contract, §13c: `../contract/PATCHKAMER-CONTRACT_NL.md` (of `_EN.md`). Controleer eerst dat contract en validator dezelfde versie hebben (`../AGENTS.md`, regel 1).
 
 ## Bestand
 

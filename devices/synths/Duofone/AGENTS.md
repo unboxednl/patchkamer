@@ -11,7 +11,7 @@ Een analoog klinkende synth met twee onafhankelijke toonhoogten, een gedeeld fil
 | Bestand | `duofone.patchkamer-device.js` (in deze map) |
 | `id` | `nl.patchkamer.duofone`. Verander die nooit: daaraan hangen tunes en songs van gebruikers |
 | Soort | `instrument`: Duofone krijgt dus **tunes** (geen presets) |
-| Contract | v1.10 |
+| Contract | v1.11 |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Wat je hier doet

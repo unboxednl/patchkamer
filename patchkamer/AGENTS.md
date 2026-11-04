@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents. Het is niet geschreven voor mensen. Het hoort bij
 
 ## Wat hier staat
 
-`patchkamer.html` is de **host**: de studio zelf, als één HTML-pagina. Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.10** (in de code: `patchkamer:'1.10'`).
+`patchkamer.html` is de **host**: de studio zelf, als één HTML-pagina. Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.11** (in de code: `patchkamer:'1.11'`). De host is tweetalig (Nederlands en Engels, standaard de taal van de browser) en heeft onder Instellingen een Audio-gedeelte (kwaliteit, sample rate, latency, oversampling). Het contract staat niet in de host maar op GitHub (links onder Instellingen → Contract & opstelling).
 
 ## Voor het bouwen van een apparaat
 
@@ -17,6 +17,7 @@ Eerst `node ../contract/validate-instrument.mjs ../devices/<categorie>/<Naam>/<n
 3. Zet het apparaat op de vloer en kijk of het doet wat de opdracht vraagt: klinkt het, bewegen de regelaars mee, springen ze terug bij een preset?
 4. Test de presetronde (contract §17, laatste alinea): zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 5. Wissel van versie als er twee `version`s zijn (contract §13): de state moet overeind blijven.
+6. Wissel de taal (Instellingen → Taal, Nederlands en English; de pagina laadt opnieuw en de werkruimte blijft) en controleer dat alle tekst van het apparaat meewisselt. Een tekst die in de andere taal hetzelfde blijft terwijl hij vertaald hoort te zijn, is een fout in het apparaat.
 
 Heb je geen browser tot je beschikking, schrijf dan in je oplevering dat de hosttest **niet is uitgevoerd**. Beweer niet dat het apparaat werkt.
 
@@ -24,8 +25,9 @@ Heb je geen browser tot je beschikking, schrijf dan in je oplevering dat de host
 
 Alleen als de opdracht dat uitdrukkelijk zegt. De host en het contract horen bij elkaar:
 
-- Verandert het gedrag dat apparaten zien (`host`-API, poorten, state), dan verandert ook `../contract/PATCHKAMER-CONTRACT.md` en `../contract/validate-instrument.mjs`, **alle drie naar dezelfde nieuwe versie**, en het getal bij `patchkamer:` in de HTML.
+- Verandert het gedrag dat apparaten zien (`host`-API, poorten, state), dan verandert ook `../contract/PATCHKAMER-CONTRACT_NL.md`, `../contract/PATCHKAMER-CONTRACT_EN.md` (altijd allebei) en `../contract/validate-instrument.mjs`, **alle drie naar dezelfde nieuwe versie**, en het getal bij `patchkamer:` in de HTML.
 - Zorg dat bestaande apparaten in `../devices/` nog door de validator komen.
+- **Elke tekst die de host toont staat in beide talen.** In de HTML een `data-i18n`-sleutel (of `data-i18n-title`, `-ph`, `-aria`, `-html`), in de code `pkt('sleutel', …)` (meervoud: `pktp('sleutel', voorwaarde, …)`), en de tekst in de woordenboeken `I18N.nl` en `I18N.en` bovenin het bestand. Voeg nooit een tekst in maar één taal toe. De bronstaal is Nederlands; Engelse muziekvaktermen (tune, preset, latency, sample rate, oversampling) blijven in beide talen Engels, en de merknaam Patchkamer wordt nergens vertaald.
 - Gebruikers hebben bewaarde werkruimtes en songs die op `id` en `version` van apparaten steunen. Breek dat niet.
 
 ## Licentie

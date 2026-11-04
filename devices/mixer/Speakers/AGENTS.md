@@ -12,7 +12,7 @@ De uitgang van de studio: het geluid gaat naar de luidsprekers van de computer, 
 | `id` | `nl.patchkamer.speakers`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
 | Soort | `output` |
 | Poorten | één audio-ingang (`in`); geen uitgangen |
-| Contract | v1.10 |
+| Contract | v1.11 |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Geen tunes, wel presets
