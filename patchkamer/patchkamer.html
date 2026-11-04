@@ -2893,7 +2893,7 @@ async function songExportDialog(){ const cur=WS.song||{}; const mine=!cur.author
   if(await p!==1||!v) { status(pkt('m.song_niet_ge_xporteerd')); return; }
   PR.prefs.author=v.author; PR.prefs.license=v.license; prSavePrefs();
   WS.song={...v,...(based?{basedOn:based}:{})};
-  const song={format:SONGFMT,formatVersion:1,title:v.title,author:v.author,license:v.license,description:v.description,...(based?{basedOn:based}:{}),created:new Date().toISOString(),patchkamer:'1.10',workspace:workspaceState(true)};
+  const song={format:SONGFMT,formatVersion:1,title:v.title,author:v.author,license:v.license,description:v.description,...(based?{basedOn:based}:{}),created:new Date().toISOString(),patchkamer:'1.11',workspace:workspaceState(true)};
   const fn=(String(v.title).replace(/[\\/:*?"<>|\u0000-\u001f]+/g,' ').replace(/\s+/g,' ').trim()||pkt('m.song_2'))+'.patchkamer-song.json';
   const r=await saveFileData(fn,JSON.stringify(song,null,1)); status(r==='saved'?pkt('m.song_ge_xporteerd_apparaten_met',v.title,licName(v.license),song.workspace.devices.length):pkt('m.exporteren_geannuleerd')); }
 function songShow(s){ songModal(pkt('m.song',esc(s.title||pkt('m.naamloos')),esc(licLine({author:s.author,license:s.license})),s.description?'<br>'+esc(s.description):'',s.basedOn?pkt('m.gebaseerd_op')+esc(s.basedOn.title||'')+'”'+(s.basedOn.author?' van '+esc(s.basedOn.author):'')+' ('+esc(licName(s.basedOn.license))+')':'',s.license===LIC_ARR?pkt('m.alle_rechten_voorbehouden_je_mag'):s.license==='CC-BY-4.0'?pkt('m.cc_by_4_0_je'):s.license?pkt('m.lees_de_licentie')+esc(s.license)+pkt('m.voor_wat_je_ermee_mag'):pkt('m.er_is_geen_licentie_opgegeven')),['OK']); }
