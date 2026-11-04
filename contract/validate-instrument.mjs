@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.6
+// validate-instrument.mjs — Patchkamer contract v1.7
 // Gebruik: node validate-instrument.mjs mijn-instrument.js
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -6,6 +6,8 @@
 // v1.4: snelle sturing (fast + modInput), host.modSignal, host.loadWorklet; nep-AudioWorklet.
 // v1.5: bundels (ports.multiIn/multiOut, bundles, onBundle, host.bundleChanged, host.isWired).
 // v1.6: presets (getPreset/setPreset) en: setState() moet de knoppen van host.ui bijwerken.
+// v1.7: host.frame / host.visible (tekenklok; na destroy geen open abonnement), onPeers, host.connect/disconnect/cablesFrom;
+//       waarschuwing (geen fout) bij een eigen requestAnimationFrame zonder host.frame.
 import { pathToFileURL } from 'node:url';
 import { readFileSync } from 'node:fs';
 
@@ -64,6 +66,9 @@ if (!globalThis.performance) globalThis.performance = { now: () => Date.now() };
 const realSetTimeout = setTimeout; globalThis.setTimeout = (f, ms) => 0; globalThis.clearTimeout = () => {}; globalThis.setInterval = () => 0; globalThis.clearInterval = () => {};
 
 // ---------- fake host ----------
+let frames = [], peerCalls = 0, connects = 0;
+const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true },
+  { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
 let emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
 const PL = (P, k) => Array.isArray(P[k]) ? P[k] : [];
@@ -76,6 +81,14 @@ const host = { ctx, bpm: 120, swing: 0, emit(inst, port, ev) { emitted.push({ po
   // v1.5
   bundleChanged(inst, port) { bundleCalls++; if (!PL(curPorts || d.ports, 'multiOut').some(p => p.id === port)) modBad = `host.bundleChanged(): "${port}" is geen multiOut-poort`; },
   isWired() { return false; },
+  // v1.7
+  frame(inst, cb, fps) { if (typeof cb !== 'function') { modBad = 'host.frame(): geef een functie'; return () => {}; } if (fps !== undefined && !(+fps > 0)) modBad = 'host.frame(): fps moet een getal > 0 zijn';
+    const e = { cb, off: false }; frames.push(e); return () => { e.off = true; }; },
+  visible() { return true; },
+  peers() { peerCalls++; return FAKE_PEERS.map(p => ({ ...p, eventIn: p.eventIn.slice() })); },
+  connect(inst, from, tid, to, kind) { connects++; const k = kind === 'mod' ? 'mod' : kind === 'audio' ? 'audio' : 'event'; if (!PL(curPorts || d.ports, k + 'Out').some(p => p.id === from)) modBad = `host.connect(): "${from}" is geen eigen ${k}-uitgang`; return true; },
+  disconnect() { return 0; },
+  cablesFrom() { return []; },
   saveFile: async () => 'saved',
   stepDur: () => 0.125,
   setPorts(inst, ports) {   // contract v1.2: dynamic ports; every listed audio port must already have its AudioNode
@@ -110,6 +123,7 @@ if (/new\s+(window\.)?(webkit)?AudioContext/.test(src)) fail('maakt een eigen Au
 
 // ---------- lifecycle ----------
 let inst; try { inst = d.create(ctx, host); } catch (e) { fail('create() gooit: ' + e.message); }
+if (inst && typeof inst === 'object' && !inst._id) { inst._id = 'd1'; inst._def = d; }   // zoals de host doet
 for (const k of ['mount', 'getState', 'setState', 'destroy']) if (typeof inst[k] !== 'function') fail(`instance.${k} ontbreekt`);
 if (typeof inst.inputs !== 'object' || typeof inst.outputs !== 'object') fail('inputs/outputs moeten objecten zijn');
 for (const p of d.ports.audioIn) if (!inst.inputs[p.id] || !inst.inputs[p.id]._isNode) fail(`inputs.${p.id} ontbreekt of is geen AudioNode`);
@@ -195,10 +209,15 @@ for (const p of d.ports.multiIn) {
   try { inst.onBundle(p.id, key, null); inst.onBundle(p.id, 'd8:uit', null); } catch (e) { fail(`onBundle(${p.id}, null) gooit: ` + e.message); }
   const still = B2.filter(c => c.node._to.size); if (still.length) fail(`onBundle(null) laat ${still.length} kanaal/kanalen verbonden; ontkoppel wat je verbond (node.disconnect(jouwIngang))`);
 }
+// v1.7: tekenfuncties draaien, onPeers aanroepen
+for (const e of frames) if (!e.off) { try { e.cb(16.7); e.cb(50); e.cb(83.3); } catch (err) { fail('een host.frame-tekenfunctie gooit: ' + err.message); } }
+if (typeof inst.onPeers === 'function') { try { inst.onPeers([]); inst.onPeers(FAKE_PEERS); } catch (e) { fail('onPeers() gooit: ' + e.message); } }
 try { if (inst.unmount) inst.unmount(); inst.destroy(); inst.destroy(); } catch (e) { fail('destroy() gooit (moet idempotent zijn): ' + e.message); }
+const openFrames = frames.filter(e => !e.off).length; if (openFrames) fail(`na destroy() staan er nog ${openFrames} host.frame-abonnement(en) open; roep de opzeg-functie aan in unmount()/destroy()`);
+const rafWarn = /requestAnimationFrame\s*\(/.test(src) && !/host\.frame\b|\.frame\s*===\s*'function'/.test(src);
 for (const port of emitted.map(x => x.port)) if (!d.ports.eventOut.some(p => p.id === port)) fail(`emit op onbekende eventOut-poort "${port}"`);
 if (d.ui && d.ui.jacks && jacks === 0) fail('ui.jacks is aan maar er is geen enkele host.ui.jack() geplaatst');
 if (modBad) fail(modBad);
 const nKnobs = nMountKnobs;
-console.log(`OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}${d.ui && d.ui.width ? ', breedte ' + d.ui.width + ' px' : ''}, poorten: audio ${d.ports.audioIn.length}→${d.ports.audioOut.length}, events ${d.ports.eventIn.length}→${d.ports.eventOut.length}, state ${json.length} bytes, bronnen gestart ${started}${jacks ? ', ' + jacks + ' jacks' : ''}${portChanges ? ', ' + portChanges + '× setPorts' : ''}${emitted.length ? ', ' + emitted.length + ' gebeurtenissen' : ''}${nParams ? `, ${nParams} stuurbare parameters in ${nLanes} spo${nLanes > 1 ? 'ren' : 'or'}` : ''}${nFast ? `, ${nFast} snel` : ''}${d.kind === 'modulator' ? ', modulator' + (sigCalls ? ` (modSignal ${sigCalls}×)` : '') : ''}${worklets ? `, ${worklets} worklet${worklets > 1 ? 's' : ''}` : ''}${d.ports.multiOut.length ? `, bundel uit ${nBundleCh} kanalen` : ''}${d.ports.multiIn.length ? ', bundel in' : ''}${presetBytes ? `, eigen preset ${presetBytes} bytes` : ''}${nKnobs ? `, ${nKnobs} host-knoppen volgen setState` : ''}`);
+console.log(`OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}${d.ui && d.ui.width ? ', breedte ' + d.ui.width + ' px' : ''}, poorten: audio ${d.ports.audioIn.length}→${d.ports.audioOut.length}, events ${d.ports.eventIn.length}→${d.ports.eventOut.length}, state ${json.length} bytes, bronnen gestart ${started}${jacks ? ', ' + jacks + ' jacks' : ''}${portChanges ? ', ' + portChanges + '× setPorts' : ''}${emitted.length ? ', ' + emitted.length + ' gebeurtenissen' : ''}${nParams ? `, ${nParams} stuurbare parameters in ${nLanes} spo${nLanes > 1 ? 'ren' : 'or'}` : ''}${nFast ? `, ${nFast} snel` : ''}${d.kind === 'modulator' ? ', modulator' + (sigCalls ? ` (modSignal ${sigCalls}×)` : '') : ''}${worklets ? `, ${worklets} worklet${worklets > 1 ? 's' : ''}` : ''}${d.ports.multiOut.length ? `, bundel uit ${nBundleCh} kanalen` : ''}${d.ports.multiIn.length ? ', bundel in' : ''}${presetBytes ? `, eigen preset ${presetBytes} bytes` : ''}${nKnobs ? `, ${nKnobs} host-knoppen volgen setState` : ''}${frames.length ? ', tekent via host.frame' : ''}${peerCalls || connects ? ', besturing (peers/connect)' : ''}${rafWarn ? ' · let op: eigen requestAnimationFrame zonder host.frame (v1.7, §12b)' : ''}`);
 process.exit(0);

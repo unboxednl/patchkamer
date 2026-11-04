@@ -1,8 +1,8 @@
-# Patchkamer — Instrumentcontract v1.6 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.7 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één `.js`-bestand op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
-_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 en v1.6 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets._
+_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5, v1.6 en v1.7 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat._
 
 | Versie | Wat erbij kwam |
 |---|---|
@@ -13,6 +13,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.4 | Snelle sturing (`fast: true`, `modInput`, `host.modSignal`) en AudioWorklets (`host.loadWorklet`) |
 | v1.5 | Bundels: één dikke groene kabel met veel audiokanalen (`multiIn`/`multiOut`, `bundles`, `onBundle`, `host.bundleChanged`, `host.isWired`) |
 | v1.6 | Presets: `setState` moet ook de knoppen bijwerken; optioneel `getPreset`/`setPreset` om routing buiten presets te houden |
+| v1.7 | Soepel: tekenen via de klok van de host (`host.frame`, `host.visible`) en regels tegen haperen (§12b). Besturing voor controllers: `host.peers`, `onPeers`, `host.connect`, `host.disconnect`, `host.cablesFrom` (§13b) |
 
 ---
 
@@ -288,6 +289,57 @@ onBundle(poortId, sleutel, bundel) { ... }
 
 ---
 
+## 12b. Tekenen zonder haperen (v1.7)
+
+Alles wat je UI doet, draait op dezelfde thread als MIDI, de kabels en de klok van de host. Een apparaat dat 60 keer per seconde tekent terwijl niemand kijkt, maakt live spelen haperig. Daarom:
+
+**De tekenklok van de host.** Teken bewegende dingen (meters, scopes, cursors, animaties) via `host.frame`:
+
+```js
+// in mount()
+stopTekenen = host.frame(this, t => tekenScope(t), 30);   // hooguit 30× per seconde
+// in unmount() en destroy()
+if (stopTekenen) { stopTekenen(); stopTekenen = null; }
+```
+
+- `host.frame(this, cb, fps)` roept `cb(t)` aan zolang je kaart **te zien is**: niet geminimaliseerd, niet buiten het zichtbare deel van de vloer, tabblad zichtbaar (of in de focusweergave). `fps` is 1–60; gebruik 30 voor meters en scopes, 60 alleen voor vloeiende animatie.
+- Het geeft een functie terug die het abonnement opzegt. Roep die aan in `unmount()` en `destroy()`. De validator controleert dat er na `destroy()` niets meer openstaat.
+- `host.visible(this)` zegt of je kaart nu te zien is, handig voor werk dat je buiten de tekenlus doet.
+- Werk dat **altijd** moet doorgaan (geluid, meten voor een automatische functie, sturing via `host.modulate`) hoort niet in `host.frame`: dat stopt als de kaart uit beeld is.
+- Terugval voor oudere hosts zonder `host.frame`: een eigen `requestAnimationFrame`-lus die `document.hidden` respecteert en hooguit `fps` keer per seconde tekent.
+
+```js
+const tekenLus = (host, inst, cb, fps) => {
+  if (host && typeof host.frame === 'function') return host.frame(inst, cb, fps);
+  let raf = 0, last = 0, stop = false;
+  const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); };
+  raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
+};
+```
+
+**Geen layout-werk per frame.** Elke frame je maat opvragen of zetten dwingt de browser de hele pagina opnieuw op te meten.
+- Lees de breedte van een canvas uit een `ResizeObserver`, niet elke frame uit `clientWidth`/`getBoundingClientRect()`.
+- Zet `canvas.style.height` één keer, niet elke frame. Pas `canvas.width/height` alleen aan als de maat echt veranderde.
+- Vraag CSS-kleuren (`getComputedStyle(...).getPropertyValue('--audio')`) hooguit één keer per seconde op, of na het venster-event `patchkamer-skin`, en bewaar ze.
+- Bewaar `canvas.getContext('2d')`; vraag het niet elke frame opnieuw.
+
+**Teken alleen wat verandert.** Een golfvorm, raster of achtergrond die zelden verandert: teken die één keer op een eigen (niet-zichtbaar) canvas en kopieer dat elke frame met `drawImage`. Werk tekst (`textContent`) alleen bij als de waarde anders is.
+
+**Overig.**
+- Geen `setInterval` korter dan 30 ms voor de UI.
+- Geen `JSON.parse(JSON.stringify(...))` of `getState()` per frame.
+- Stuur vanuit een worklet hooguit 30–60 berichten per seconde naar de UI.
+
+### Bestaand apparaat bijwerken naar v1.7
+
+1. Zoek elke `requestAnimationFrame`-lus. Haal het opnieuw-plannen uit de tekenfunctie (`raf = requestAnimationFrame(draw)` aan het eind weg) en start de tekenfunctie in `mount()` met `host.frame(this, draw, 30)` (met de terugval hierboven).
+2. Zeg het abonnement op in `unmount()` en `destroy()`.
+3. Vervang maat- en kleuropvragingen per frame door een `ResizeObserver` en een kleurcache.
+4. Verhoog `version`. Poort-id's, `id` en state blijven gelijk, zodat werkruimtes en presets blijven werken.
+5. `node validate-instrument.mjs bestand.js` geeft `OK … tekent via host.frame`. Staat er `let op: eigen requestAnimationFrame`, dan is stap 1 nog niet klaar.
+
+---
+
 ## 13. State, versies en presets (v1.6)
 
 **State.** `getState()` geeft alles terug wat nodig is om het geluid en het gedrag exact te herstellen: knoppen, patronen en keuzes. Het resultaat moet gewone JSON zijn, zonder AudioNodes.
@@ -332,6 +384,34 @@ Zonder deze twee functies gebruikt de host `getState`/`setState`. Ook `setPreset
 
 ---
 
+## 13b. Besturing: andere apparaten zien en kabels leggen (v1.7)
+
+Voor controllers (zoals een MIDI-apparaat dat pads aan apparaten koppelt). Gewone instrumenten en effecten hebben dit niet nodig.
+
+| Aanroep | Wat |
+|---|---|
+| `host.peers(this)` | Lijst van de andere apparaten op de vloer: `{ id, name, def, version, kind, category, eventIn:[{id,name}], mod, selected }`. Alleen lezen. `mod` = heeft een Mod-ingang; `selected` = laatst aangeklikt. |
+| `onPeers(lijst)` | Optioneel op je instance: de host roept dit aan als apparaten bijkomen, verdwijnen, geselecteerd worden of als kabels veranderen. |
+| `host.connect(this, eigenUitgang, doelId, doelIngang, soort)` | Legt een gewone, zichtbare kabel van **je eigen** uitgang naar een ingang van een ander apparaat. `soort` = `'event'`, `'mod'` of `'audio'`. Geeft `true` als de kabel er ligt. |
+| `host.disconnect(this, eigenUitgang?, doelId?, doelIngang?)` | Haalt kabels weg die **vanaf jouw** uitgangen vertrekken (filters zijn optioneel). Geeft het aantal. |
+| `host.cablesFrom(this, eigenUitgang?)` | De kabels vanaf jouw uitgangen: `[{ port, to, toPort, kind }]`. Gebruik dit om te zien of de gebruiker een kabel heeft losgehaald. |
+
+- Je kunt alleen vanaf je eigen uitgangen kabels leggen of weghalen; de host weigert de rest.
+- De gebruiker blijft de baas: hij kan elke kabel zelf losmaken. Toon dat in je UI ("kabel los") in plaats van hem stilletjes opnieuw te leggen.
+- Bewaar in je state **naar welk apparaat-id** je koppelde. De kabels zelf bewaart de werkruimte; leg ze bij het laden niet opnieuw.
+- Geef `onPeers` geen zwaar werk: hij kan een paar keer per seconde komen.
+
+**MIDI en timing.** Gebruik je Web MIDI (alleen na een klik, zonder sysex), plan noten dan niet op "nu" maar via de tijdstempel van het bericht. Dan krijgt elke aanslag dezelfde kleine vertraging, ook als de pagina even druk is:
+
+```js
+const o = ctx.getOutputTimestamp();   // { contextTime, performanceTime }
+const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.performanceTime) / 1000 + 0.012);
+```
+
+**Latency.** De host kiest de latency van de AudioContext (Laag / Gebalanceerd / Stabiel, in de kopbalk). Maak nooit een eigen AudioContext; gebruik `ctx` uit `create`.
+
+---
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -349,6 +429,10 @@ Zonder deze twee functies gebruikt de host `getState`/`setState`. Ook `setPreset
 | `host.saveFile(bestandsnaam, data)` | — | Een bestand aan de gebruiker geven (string of Blob); geeft `'saved'` of `'declined'` |
 | `host.bundleChanged(this, poort)` | v1.5 | Je bundel is veranderd (§11) |
 | `host.isWired(this, poort, dir)` | v1.5 | Is deze eigen poort bekabeld? |
+| `host.frame(this, cb, fps)` | v1.7 | Tekenen op de klok van de host, alleen als je kaart te zien is; geeft een opzeg-functie (§12b) |
+| `host.visible(this)` | v1.7 | Is je kaart nu te zien? |
+| `host.peers(this)`, `onPeers(lijst)` | v1.7 | Andere apparaten zien (alleen lezen) (§13b) |
+| `host.connect / disconnect / cablesFrom` | v1.7 | Kabels vanaf je eigen uitgangen leggen, weghalen, opvragen (§13b) |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -356,7 +440,7 @@ Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging v
 
 ## 15. Hygiëne
 
-- `destroy()` stopt oscillators en bronnen, ontkoppelt je nodes (`disconnect()`), stopt timers en animaties, en ontkoppelt bundelkanalen die je verbond. Twee keer `destroy()` mag niet gooien.
+- `destroy()` stopt oscillators en bronnen, ontkoppelt je nodes (`disconnect()`), stopt timers, animaties en abonnementen op `host.frame`, en ontkoppelt bundelkanalen die je verbond. Twee keer `destroy()` mag niet gooien.
 - Geen globale variabelen. Meerdere exemplaren van je apparaat moeten naast elkaar kunnen bestaan. Wil je bewust delen tussen exemplaren, zoals de groepen van Drift, doe dat dan in een variabele op moduleniveau en ruim die op.
 - Geen browseropslag (`localStorage`, `sessionStorage`, `indexedDB`): state gaat via `getState`/`setState`.
 - Geen netwerk (`fetch`, `XMLHttpRequest`, `WebSocket`), geen `import`, geen eigen AudioContext.
@@ -400,6 +484,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 5. **Snel en worklets (v1.4)**: `fast: true` vraagt `modInput(id)` met een AudioNode of AudioParam, en `null` voor onbekende ids; `host.modSignal` krijgt een echte AudioNode; `host.loadWorklet` krijgt een naam en code met `registerProcessor(...)`.
 6. **Bundels (v1.5)**: elke `multiOut` heeft `bundles[id]` met kanalen (unieke id, naam, AudioNode). Elke `multiIn` heeft `onBundle`; die krijgt een bundel, dezelfde sleutel met een kanaal erbij, een tweede bundel en dan twee keer `null`. Daarna mag geen enkel kanaal nog verbonden zijn en mag er geen AudioNode in de state staan. `host.bundleChanged` alleen voor eigen `multiOut`-poorten.
 7. **Presets (v1.6)**: elke knop en keuze van `host.ui.knob`/`select` wordt bijgewerkt door `setState(getState())`. `getPreset`/`setPreset` alleen samen, JSON zonder AudioNodes, `setPreset(getPreset())` geeft dezelfde preset, `setPreset({})` werkt.
+8. **Soepel en besturing (v1.7)**: `host.frame` krijgt een functie; elke tekenfunctie wordt een paar keer aangeroepen en mag niet gooien; na `destroy()` staat er geen abonnement meer open. Een eigen `requestAnimationFrame` zonder `host.frame` geeft een waarschuwing in de OK-regel (geen fout). `onPeers` krijgt `[]` en een lijst met twee apparaten. `host.connect` alleen vanaf eigen uitgangen van de juiste soort.
 
 Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -420,7 +505,8 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 11. Worklet (optioneel): unieke naam met versie, en een terugval zonder worklet.
 12. UI vloeit mee met de kaartbreedte en gebruikt de CSS-variabelen van de host (geen vaste kleuren).
 13. `destroy()` ruimt alles op en kan twee keer worden aangeroepen.
-14. `node validate-instrument.mjs bestand.js` geeft `OK`.
+14. Bewegende UI via `host.frame` (met terugval), geen maat- of kleuropvragingen per frame (§12b).
+15. `node validate-instrument.mjs bestand.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -439,6 +525,9 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 | `bundles.x` als vast object | De host ziet geen nieuwe kanalen | Een functie die de actuele lijst geeft, plus `host.bundleChanged` |
 | Oude state niet geaccepteerd | Werkruimtes en presets van een vorige versie laden niet | Onbekende velden negeren, ontbrekende standaard geven |
 | Worklet-naam zonder versie | Gewijzigde worklet-code wordt niet geladen | `'nl-naam-fx-2'` bij elke wijziging |
+| Eigen `requestAnimationFrame`-lus op 60 fps | Tekent ook buiten beeld en geminimaliseerd; MIDI en kabels gaan haperen | `host.frame(this, draw, 30)` (§12b) |
+| `clientWidth` / `getComputedStyle` in de tekenfunctie | De browser rekent elke frame de opmaak opnieuw uit | `ResizeObserver` en een kleurcache |
+| `host.frame` niet opgezegd | Een verwijderd apparaat blijft tekenen | Opzeg-functie aanroepen in `unmount()` en `destroy()` |
 
 ---
 
@@ -631,7 +720,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.6.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.7.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
