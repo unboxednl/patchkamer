@@ -33,6 +33,10 @@ The [user manual](docs/USER-MANUAL_EN.md) walks you through it step by step, wit
 | **Keys / MIDI** | A keyboard and Web MIDI bridge that sends notes to other devices | `devices/tools/Keys/` |
 | **Mixer** | A mixing desk with 1 to 32 channels and 0 to 8 groups: trim, EQ, sends and returns, pan, faders, mute and solo, bundle in and out, and a master with a limiter | `devices/mixer/Mixer/` |
 | **Leveler** | Keeps the average volume of a source steady: a leveler with a limiter behind it | `devices/mixer/Leveler/` |
+| **Multitrack** | A multitrack recorder for up to 16 tracks, sample-aligned, saved as WAV (16 or 24 bit, or 32 bit float) | `devices/tools/Multitrack/` |
+| **Notes** | A notepad on the floor for ideas, key, structure and a to-do list; makes no sound | `devices/tools/Notes/` |
+| **Recorder** | Records what comes in and passes it through unchanged; takes can be saved as an audio file | `devices/tools/Recorder/` |
+| **Scope** | A transparent pass-through that shows the sound: spectrum, waveform, spectrogram, stereo image and peak/RMS | `devices/tools/Scope/` |
 | **Speakers** | The output: volume, a limiter and a level meter | `devices/mixer/Speakers/` |
 
 The `tunes/` folder has **Duofone Styles** (60 tunes in 12 styles) and **Acid Baselines Classics** (40 tunes in 8 styles).

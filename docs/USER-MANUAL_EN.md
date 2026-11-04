@@ -159,6 +159,48 @@ Keeps the average volume of a source steady. Place it between an instrument and 
 - The meter shows **IN**, **OUT** and **GAIN**, with a lamp for the limiter. **Current level = target** sets the target to what comes in now. **Reset gain** sets the correction back to 0.
 - A Leveler has **presets**. Without AudioWorklet in your browser it passes the sound through unchanged and tells you so.
 
+### Multitrack
+
+A multitrack recorder for up to 16 tracks, sample-aligned. It records a bundle, for example the **Channels out** of the Mixer: connect the green bundle cable to the **Bundle** port.
+
+![The Multitrack card](images/en/13-multitrack.png)
+
+- **● Record** and **■ Stop** control the recording. **with clock start/stop** makes it follow Start and Stop of the clock.
+- **Tracks** sets how many tracks there are. Choose per track which bundle channel it records, or **— none**. **assign new channels automatically** fills new bundle channels in on empty tracks. **Arm all** arms every track.
+- Choose the file format under **WAV**: 16 bit, 24 bit or 32 bit float.
+- Takes stay in memory until you close the page. **Save all (.zip)** saves a take as one zip file; **Per track** saves single tracks.
+- A Multitrack has **presets** (not the source of each track).
+
+### Notes
+
+A notepad on the floor for ideas, key, structure and what you still want to do. It makes no sound and has no ports. The text is saved with the workspace.
+
+![The Notes card](images/en/14-notes.png)
+
+- **Key** and **Tempo / feel** are short fields. **Section** has buttons (**Intro**, **Build**, **Break**, **Drop**, **Outro**) that add a heading to the text.
+- Write in the large text field. Under **To do**, type a task and press **Enter**; tick it off when it is done and remove it with the cross.
+- The line at the bottom shows when you last changed the notes. A Notes card has **presets**.
+
+### Recorder
+
+Records what comes in, for example the mix, and passes it on unchanged. Place it between the Mixer and Speakers.
+
+![The Recorder card](images/en/15-recorder.png)
+
+- Give the recording a name, then press **● Record** and **■ Stop**. **Record with Start/Stop of the clock** makes it follow the clock.
+- Every take appears in the list with **▶** to listen and **Save**. Takes stay in memory until you close the page; Save gives an audio file (webm/opus or mp4, depending on your browser).
+- A Recorder has **presets**.
+
+### Scope
+
+A transparent pass-through that shows the sound: the audio goes from **In** to **Through** unchanged.
+
+![The Scope card](images/en/16-scope.png)
+
+- **View** chooses what you see: **Spectrum**, **Waveform L/R**, **Spectrogram**, **Stereo image** or **Peak / RMS**. The line of numbers shows peak and RMS in dBFS, and CLIP when the signal goes over the limit.
+- **FFT** (1024 to 8192) sets the detail of the spectrum, **Smooth** how calm it moves, **Range** how many dB you see and **Time** the length of the waveform (5 to 50 ms). **Pause** freezes the picture.
+- A Scope has **presets**.
+
 ## 7. Tunes and presets
 
 A **tune** is a complete setting of one device that makes sound: all knobs, patterns and choices. A **preset** is the same for a device without a sound of its own, such as an effect or a mixer. Neither contains cables.
