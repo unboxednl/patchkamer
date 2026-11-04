@@ -117,8 +117,9 @@ Devices come in kinds. Every kind has its own README and its own user manual, wi
 
 | Kind | What it is for | Devices | Manual |
 |---|---|---|---|
-| **Synths** | Make sound from notes | Acid Baselines, Duofone | [Synths manual](synths/USER-MANUAL_EN.md) · [README](../devices/synths/README.md) |
-| **Drums** | Drum sounds and rhythm | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [Drums manual](drums/USER-MANUAL_EN.md) · [README](../devices/drums/README.md) |
+| **Synths** | Make sound from notes | Acid Baselines, Acid Stepper, Basic Mono, Bowed Ensemble, Chord Poly, Cross Mod Mono, Dissonant Cluster, Duofone, Four-Operator FM, Karplus String, Low Bass, Patch Mono, Patchbay Synth, Poly Chorus, Stage Keys, Sub Line, Supersaw Swarm, Triple Osc Poly | [Synths manual](synths/USER-MANUAL_EN.md) · [README](../devices/synths/README.md) |
+| **Sequencers** | Play notes and chords on other devices | Chord Sequencer | [Sequencers manual](sequencers/USER-MANUAL_EN.md) · [README](../devices/sequencers/README.md) |
+| **Drums** | Drum sounds and rhythm | Drum Machine, Drum Kit, Groovebox 12, Pulse Drums, Latin Percussion, Click Synth | [Drums manual](drums/USER-MANUAL_EN.md) · [README](../devices/drums/README.md) |
 | **Effects** | Shape the sound: modulation, distortion, space, filters, rhythm, voice, chains | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [Effects manual](effects/USER-MANUAL_EN.md) · [README](../devices/effects/README.md) |
 | **Mixer** | Mix, keep the level steady, play out | Mixer, Leveler, Speakers | [Mixer manual](mixer/USER-MANUAL_EN.md) · [README](../devices/mixer/README.md) |
 | **Modulators** | Move the controls of other devices | Follower | [Modulators manual](modulators/USER-MANUAL_EN.md) · [README](../devices/modulators/README.md) |

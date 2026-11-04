@@ -30,8 +30,9 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en e
 
 | Soort | Waar het voor dient | Apparaten | README | Handleiding |
 |---|---|---|---|---|
-| **Synths** | Geluid maken uit noten | Acid Baselines, Duofone | [devices/synths](devices/synths/README_NL.md) | [Synths](docs/synths/USER-MANUAL_NL.md) |
-| **Drums** | Drumgeluiden en ritme | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [devices/drums](devices/drums/README_NL.md) | [Drums](docs/drums/USER-MANUAL_NL.md) |
+| **Synths** | Geluid maken uit noten | Acid Baselines, Acid Stepper, Basic Mono, Bowed Ensemble, Chord Poly, Cross Mod Mono, Dissonant Cluster, Duofone, Four-Operator FM, Karplus String, Low Bass, Patch Mono, Patchbay Synth, Poly Chorus, Stage Keys, Sub Line, Supersaw Swarm, Triple Osc Poly | [devices/synths](devices/synths/README_NL.md) | [Synths](docs/synths/USER-MANUAL_NL.md) |
+| **Sequencers** | Noten en akkoorden laten spelen op andere apparaten | Chord Sequencer | [devices/sequencers](devices/sequencers/README_NL.md) | [Sequencers](docs/sequencers/USER-MANUAL_NL.md) |
+| **Drums** | Drumgeluiden en ritme | Drum Machine, Drum Kit, Groovebox 12, Pulse Drums, Latin Percussion, Click Synth | [devices/drums](devices/drums/README_NL.md) | [Drums](docs/drums/USER-MANUAL_NL.md) |
 | **Effecten** | Het geluid vormgeven: modulatie, vervorming, ruimte, filters, ritme, stem, hele ketens | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [devices/effects](devices/effects/README_NL.md) | [Effecten](docs/effects/USER-MANUAL_NL.md) |
 | **Mixer** | Mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers | [devices/mixer](devices/mixer/README_NL.md) | [Mixer](docs/mixer/USER-MANUAL_NL.md) |
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Follower | [devices/modulators](devices/modulators/README_NL.md) | [Modulatoren](docs/modulators/USER-MANUAL_NL.md) |
@@ -71,7 +72,7 @@ In [LICENSING.md](LICENSING.md) staat waarom elke keuze is gemaakt.
 ## Documentatie
 
 - [Gebruikershandleiding](docs/USER-MANUAL_NL.md) ([English](docs/USER-MANUAL_EN.md)): de studio, de bibliotheek, patchen, werkruimtes, instellingen en sneltoetsen
-- Handleidingen per soort apparaat en voor klanken: [synths](docs/synths/USER-MANUAL_NL.md), [drums](docs/drums/USER-MANUAL_NL.md), [effecten](docs/effects/USER-MANUAL_NL.md), [mixer](docs/mixer/USER-MANUAL_NL.md), [modulatoren](docs/modulators/USER-MANUAL_NL.md), [tools](docs/tools/USER-MANUAL_NL.md), [tunes](docs/tunes/USER-MANUAL_NL.md) en [presets](docs/presets/USER-MANUAL_NL.md) (ook in het Engels: vervang `_NL` door `_EN`)
+- Handleidingen per soort apparaat en voor klanken: [synths](docs/synths/USER-MANUAL_NL.md), [sequencers](docs/sequencers/USER-MANUAL_NL.md), [drums](docs/drums/USER-MANUAL_NL.md), [effecten](docs/effects/USER-MANUAL_NL.md), [mixer](docs/mixer/USER-MANUAL_NL.md), [modulatoren](docs/modulators/USER-MANUAL_NL.md), [tools](docs/tools/USER-MANUAL_NL.md), [tunes](docs/tunes/USER-MANUAL_NL.md) en [presets](docs/presets/USER-MANUAL_NL.md) (ook in het Engels: vervang `_NL` door `_EN`)
 - [Contract voor apparaten](contract/PATCHKAMER-CONTRACT_NL.md) ([English](contract/PATCHKAMER-CONTRACT_EN.md))
 - [AGENTS.md](AGENTS.md): instructies voor AI-agents die apparaten bouwen
 
