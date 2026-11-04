@@ -1,0 +1,1081 @@
+{
+ "format": "patchkamer-tunes",
+ "formatVersion": 1,
+ "device": "nl.patchkamer.string",
+ "name": "Karplus String Styles",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "String sounds for Karplus String by style: guitars, harps, koto, bowed strings, metallic strings and muted plucks for Folk, Ambient, Cinematic, Pop, World, Lo-fi, Ballad, Flamenco, Jazz and Metallic.",
+ "tree": [
+  {
+   "folder": "Folk",
+   "items": [
+    {
+     "name": "Open Guitar",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.4,
+      "bright": 0.6,
+      "pos": 0.15,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.68
+     }
+    },
+    {
+     "name": "Steel Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2.5,
+      "damp": 0.25,
+      "bright": 0.8,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0.05,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.69
+     }
+    },
+    {
+     "name": "Soft Fingerstyle",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.5,
+      "bright": 0.4,
+      "pos": 0.2,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.92
+     }
+    },
+    {
+     "name": "Tin Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.2,
+      "damp": 0.3,
+      "bright": 0.9,
+      "pos": 0.07,
+      "bow": 0,
+      "stiff": 0.15,
+      "tune": 0,
+      "spread": 0.3,
+      "oct": 0,
+      "lvl": 0.93
+     }
+    },
+    {
+     "name": "Folk Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 6,
+      "damp": 0.25,
+      "bright": 0.45,
+      "pos": 0.4,
+      "bow": 0,
+      "stiff": 0.05,
+      "tune": 0,
+      "spread": 0.7,
+      "oct": 0,
+      "lvl": 0.85
+     }
+    },
+    {
+     "name": "Gentle Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.5,
+      "bright": 0.4,
+      "pos": 0.15,
+      "bow": 0.4,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.83
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Ambient",
+   "items": [
+    {
+     "name": "Glass Strings",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 12,
+      "damp": 0.15,
+      "bright": 0.7,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.3,
+      "tune": 0,
+      "spread": 0.9,
+      "oct": 0,
+      "lvl": 0.53
+     }
+    },
+    {
+     "name": "Slow Bow Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 8,
+      "damp": 0.4,
+      "bright": 0.35,
+      "pos": 0.2,
+      "bow": 0.5,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.8,
+      "oct": 0,
+      "lvl": 0.61
+     }
+    },
+    {
+     "name": "Shimmer Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 10,
+      "damp": 0.1,
+      "bright": 0.6,
+      "pos": 0.4,
+      "bow": 0,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 1,
+      "oct": 0,
+      "lvl": 0.65
+     }
+    },
+    {
+     "name": "Drone Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 15,
+      "damp": 0.3,
+      "bright": 0.3,
+      "pos": 0.15,
+      "bow": 0.6,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": -1,
+      "lvl": 0.51
+     }
+    },
+    {
+     "name": "Deep Resonance",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 14,
+      "damp": 0.3,
+      "bright": 0.4,
+      "pos": 0.1,
+      "bow": 0,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": -1,
+      "lvl": 0.59
+     }
+    },
+    {
+     "name": "Wind Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 6,
+      "damp": 0.45,
+      "bright": 0.3,
+      "pos": 0.2,
+      "bow": 0.35,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 0.8,
+      "oct": 0,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Cinematic",
+   "items": [
+    {
+     "name": "Low Bow Strings",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 6,
+      "damp": 0.45,
+      "bright": 0.45,
+      "pos": 0.15,
+      "bow": 0.7,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": -1,
+      "lvl": 0.6
+     }
+    },
+    {
+     "name": "Tension Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 5,
+      "damp": 0.35,
+      "bright": 0.6,
+      "pos": 0.12,
+      "bow": 0.8,
+      "stiff": 0.2,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.86
+     }
+    },
+    {
+     "name": "Metal Hit",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 9,
+      "damp": 0.1,
+      "bright": 0.9,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.8,
+      "tune": 0,
+      "spread": 0.8,
+      "oct": 0,
+      "lvl": 0.44
+     }
+    },
+    {
+     "name": "Heavy Pizzicato",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1,
+      "damp": 0.6,
+      "bright": 0.5,
+      "pos": 0.1,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Haunted Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 8,
+      "damp": 0.2,
+      "bright": 0.5,
+      "pos": 0.45,
+      "bow": 0,
+      "stiff": 0.25,
+      "tune": -12,
+      "spread": 0.9,
+      "oct": 0,
+      "lvl": 0.64
+     }
+    },
+    {
+     "name": "Dark Swell",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 10,
+      "damp": 0.55,
+      "bright": 0.25,
+      "pos": 0.15,
+      "bow": 0.55,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": -1,
+      "lvl": 0.65
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Pop",
+   "items": [
+    {
+     "name": "Pop Guitar",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.35,
+      "bright": 0.65,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.74
+     }
+    },
+    {
+     "name": "Muted Pop Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1,
+      "damp": 0.8,
+      "bright": 0.3,
+      "pos": 0.25,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Bright Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 5,
+      "damp": 0.2,
+      "bright": 0.55,
+      "pos": 0.35,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.7,
+      "oct": 0,
+      "lvl": 0.74
+     }
+    },
+    {
+     "name": "Bell Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.15,
+      "bright": 0.8,
+      "pos": 0.2,
+      "bow": 0,
+      "stiff": 0.3,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Soft Bow Lead",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.45,
+      "bright": 0.4,
+      "pos": 0.15,
+      "bow": 0.35,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.3,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Pluck Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.5,
+      "damp": 0.6,
+      "bright": 0.4,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "World",
+   "items": [
+    {
+     "name": "Koto Lead",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.55,
+      "bright": 0.85,
+      "pos": 0.07,
+      "bow": 0,
+      "stiff": 0.35,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.92
+     }
+    },
+    {
+     "name": "Lute Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2.5,
+      "damp": 0.45,
+      "bright": 0.7,
+      "pos": 0.1,
+      "bow": 0,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.71
+     }
+    },
+    {
+     "name": "Thumb Bell",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.2,
+      "damp": 0.35,
+      "bright": 0.8,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.5,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 1,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Buzz String",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.2,
+      "bright": 0.9,
+      "pos": 0.06,
+      "bow": 0,
+      "stiff": 0.6,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.6
+     }
+    },
+    {
+     "name": "Wide Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 5.5,
+      "damp": 0.3,
+      "bright": 0.4,
+      "pos": 0.45,
+      "bow": 0,
+      "stiff": 0.15,
+      "tune": 0,
+      "spread": 1,
+      "oct": 0,
+      "lvl": 0.8
+     }
+    },
+    {
+     "name": "Bowed Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3.5,
+      "damp": 0.4,
+      "bright": 0.6,
+      "pos": 0.1,
+      "bow": 0.6,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.3,
+      "oct": 0,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Lo-fi",
+   "items": [
+    {
+     "name": "Dusty Guitar",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.65,
+      "bright": 0.3,
+      "pos": 0.2,
+      "bow": 0,
+      "stiff": 0,
+      "tune": -15,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.95
+     }
+    },
+    {
+     "name": "Tape Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.8,
+      "damp": 0.7,
+      "bright": 0.25,
+      "pos": 0.15,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 10,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Muffled Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.6,
+      "bright": 0.2,
+      "pos": 0.4,
+      "bow": 0,
+      "stiff": 0,
+      "tune": -8,
+      "spread": 0.6,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Warped Koto",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.6,
+      "bright": 0.5,
+      "pos": 0.08,
+      "bow": 0,
+      "stiff": 0.3,
+      "tune": -35,
+      "spread": 0.3,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Sleepy Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.7,
+      "bright": 0.2,
+      "pos": 0.15,
+      "bow": 0.3,
+      "stiff": 0,
+      "tune": -20,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Soft Bass Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.2,
+      "damp": 0.75,
+      "bright": 0.2,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Ballad",
+   "items": [
+    {
+     "name": "Tender Guitar",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3.5,
+      "damp": 0.45,
+      "bright": 0.45,
+      "pos": 0.18,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.78
+     }
+    },
+    {
+     "name": "Warm Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 6,
+      "damp": 0.3,
+      "bright": 0.4,
+      "pos": 0.4,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": 0,
+      "lvl": 0.84
+     }
+    },
+    {
+     "name": "Soft Bow Strings",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 5,
+      "damp": 0.5,
+      "bright": 0.35,
+      "pos": 0.15,
+      "bow": 0.45,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.79
+     }
+    },
+    {
+     "name": "Intimate Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.55,
+      "bright": 0.35,
+      "pos": 0.22,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.3,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Lullaby Bells",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.2,
+      "bright": 0.6,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.3,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": 1,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Low Pluck Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.5,
+      "bright": 0.35,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Flamenco",
+   "items": [
+    {
+     "name": "Bright Nylon",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.35,
+      "bright": 0.9,
+      "pos": 0.08,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.57
+     }
+    },
+    {
+     "name": "Sharp Strum",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.4,
+      "damp": 0.3,
+      "bright": 0.95,
+      "pos": 0.06,
+      "bow": 0,
+      "stiff": 0.05,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": 0,
+      "lvl": 0.67
+     }
+    },
+    {
+     "name": "Hot Bridge",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.8,
+      "damp": 0.25,
+      "bright": 0.95,
+      "pos": 0.04,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.3,
+      "oct": 0,
+      "lvl": 0.98
+     }
+    },
+    {
+     "name": "Dry Nylon",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1,
+      "damp": 0.5,
+      "bright": 0.8,
+      "pos": 0.1,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.71
+     }
+    },
+    {
+     "name": "Dark Nylon",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.55,
+      "bright": 0.5,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 0.83
+     }
+    },
+    {
+     "name": "Thumb Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.4,
+      "damp": 0.5,
+      "bright": 0.55,
+      "pos": 0.08,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jazz",
+   "items": [
+    {
+     "name": "Mellow Archtop",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2.5,
+      "damp": 0.7,
+      "bright": 0.25,
+      "pos": 0.18,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Warm Comping",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2,
+      "damp": 0.65,
+      "bright": 0.3,
+      "pos": 0.22,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Bass Pizzicato",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 1.2,
+      "damp": 0.65,
+      "bright": 0.3,
+      "pos": 0.1,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Chord Harp",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 4,
+      "damp": 0.35,
+      "bright": 0.35,
+      "pos": 0.35,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": 0,
+      "lvl": 0.88
+     }
+    },
+    {
+     "name": "Glassy Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.25,
+      "bright": 0.6,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.2,
+      "tune": 0,
+      "spread": 0.5,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Smoky Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.6,
+      "bright": 0.25,
+      "pos": 0.15,
+      "bow": 0.3,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Metallic",
+   "items": [
+    {
+     "name": "Rust Strings",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 6,
+      "damp": 0.15,
+      "bright": 0.85,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.7,
+      "tune": 0,
+      "spread": 0.7,
+      "oct": 0,
+      "lvl": 0.52
+     }
+    },
+    {
+     "name": "Iron Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.1,
+      "bright": 0.95,
+      "pos": 0.25,
+      "bow": 0,
+      "stiff": 0.9,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.92
+     }
+    },
+    {
+     "name": "Wire Drone",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 12,
+      "damp": 0.1,
+      "bright": 0.7,
+      "pos": 0.3,
+      "bow": 0.7,
+      "stiff": 0.6,
+      "tune": 0,
+      "spread": 0.7,
+      "oct": -1,
+      "lvl": 0.36
+     }
+    },
+    {
+     "name": "Clank Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 2.5,
+      "damp": 0.2,
+      "bright": 0.8,
+      "pos": 0.12,
+      "bow": 0,
+      "stiff": 0.5,
+      "tune": 0,
+      "spread": 0.2,
+      "oct": -1,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Bell Cluster",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 9,
+      "damp": 0.1,
+      "bright": 0.9,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.8,
+      "tune": 0,
+      "spread": 1,
+      "oct": 0,
+      "lvl": 0.41
+     }
+    },
+    {
+     "name": "Scrape Bow",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 3,
+      "damp": 0.4,
+      "bright": 0.9,
+      "pos": 0.1,
+      "bow": 0.85,
+      "stiff": 0.4,
+      "tune": 0,
+      "spread": 0.4,
+      "oct": 0,
+      "lvl": 0.92
+     }
+    }
+   ]
+  }
+ ]
+}

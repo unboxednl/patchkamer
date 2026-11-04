@@ -1,0 +1,6349 @@
+{
+  "format": "patchkamer-tunes",
+  "formatVersion": 1,
+  "device": "nl.patchkamer.polysynth",
+  "name": "Triple Osc Poly Styles",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Tunes for Triple Osc Poly by music style: trance, house, pop, synthwave, ambient, cinematic, future bass, funk, disco, electro, techno and lo-fi. Pads, strings, leads, chords, stabs, arps, keys and basses. Pads and strings need notes of at least half a second; stabs, plucks and arps are for short notes.",
+  "tree": [
+    {
+      "folder": "Trance",
+      "items": [
+        {
+          "name": "Supersaw Anthem",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 7,
+                "det": 30,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.45,
+                "uni": 5,
+                "det": 22,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 5000,
+              "res": 1,
+              "env": 0.2,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.3
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.71,
+            "pan": 0,
+            "fa": 0.005,
+            "fd": 0.4,
+            "fs": 0.8,
+            "fr": 0.4,
+            "aa": 0.006,
+            "ad": 0.4,
+            "as": 0.8,
+            "ar": 0.45
+          }
+        },
+        {
+          "name": "Uplift Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 5,
+                "det": 20,
+                "spread": 0.9,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 3,
+                "det": 14,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 2400,
+              "res": 1,
+              "env": 0.15,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.82,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1,
+            "fs": 0.6,
+            "fr": 1.5,
+            "aa": 0.3,
+            "ad": 1,
+            "as": 0.85,
+            "ar": 1.6
+          }
+        },
+        {
+          "name": "Pluck Arp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.62,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": -8,
+                "lvl": 0.51,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 900,
+              "res": 2,
+              "env": 0.7,
+              "kt": 0.7
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        },
+        {
+          "name": "Rolling Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 4,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 350,
+              "res": 2,
+              "env": 0.4,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.2
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.56,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.1,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.4,
+            "as": 0.8,
+            "ar": 0.12
+          }
+        },
+        {
+          "name": "Euphoric Chords",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.82,
+                "uni": 5,
+                "det": 18,
+                "spread": 0.9,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.47,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 3800,
+              "res": 1,
+              "env": 0.2,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 10,
+            "chord": "min",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.45,
+            "fs": 0.3,
+            "fr": 0.4,
+            "aa": 0.004,
+            "ad": 0.5,
+            "as": 0.5,
+            "ar": 0.5
+          }
+        },
+        {
+          "name": "Gate Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 3,
+                "det": 15,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.57,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2500,
+              "res": 1,
+              "env": 0.5,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.18,
+            "fs": 0,
+            "fr": 0.15,
+            "aa": 0.002,
+            "ad": 0.2,
+            "as": 0,
+            "ar": 0.15
+          }
+        },
+        {
+          "name": "Euphoric Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 7,
+                "det": 22,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 3000,
+              "res": 0.8,
+              "env": 0.15,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.85,
+            "pan": 0,
+            "fa": 0.2,
+            "fd": 1,
+            "fs": 0.6,
+            "fr": 1.2,
+            "aa": 0.25,
+            "ad": 1,
+            "as": 0.85,
+            "ar": 1.6
+          }
+        }
+      ]
+    },
+    {
+      "folder": "House",
+      "items": [
+        {
+          "name": "Piano Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.65,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.41,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.35,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 3200,
+              "res": 0.8,
+              "env": 0.3,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.3,
+            "fs": 0,
+            "fr": 0.3,
+            "aa": 0.002,
+            "ad": 0.4,
+            "as": 0.05,
+            "ar": 0.3
+          }
+        },
+        {
+          "name": "Organ Chord",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sine",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.35,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 5000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "dom7",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.86,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.3,
+            "fs": 1,
+            "fr": 0.1,
+            "aa": 0.003,
+            "ad": 0.3,
+            "as": 1,
+            "ar": 0.08
+          }
+        },
+        {
+          "name": "Deep Chord Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 900,
+              "res": 1.2,
+              "env": 0.3,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.66,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1.2,
+            "fs": 0.5,
+            "fr": 1.2,
+            "aa": 0.3,
+            "ad": 1,
+            "as": 0.8,
+            "ar": 1.2
+          }
+        },
+        {
+          "name": "Bouncy Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 6,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 450,
+              "res": 2,
+              "env": 0.55,
+              "kt": 0.2
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.2
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.6,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.18,
+            "fs": 0.1,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.28,
+            "as": 0.7,
+            "ar": 0.1
+          }
+        },
+        {
+          "name": "Hollow Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 2,
+                "det": 10,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2500,
+              "res": 3,
+              "env": 0.3,
+              "kt": 0.7
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 4,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.57,
+            "pan": 0,
+            "fa": 0.01,
+            "fd": 0.5,
+            "fs": 0.5,
+            "fr": 0.4,
+            "aa": 0.01,
+            "ad": 0.5,
+            "as": 0.75,
+            "ar": 0.4
+          }
+        },
+        {
+          "name": "Funky Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 6,
+                "lvl": 0.36,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1400,
+              "res": 2,
+              "env": 0.6,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Pop",
+      "items": [
+        {
+          "name": "Bright Keys",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 1,
+                "fmi": 2.2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 7000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 40,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": true,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.8,
+            "fs": 0,
+            "fr": 0.6,
+            "aa": 0.002,
+            "ad": 0.9,
+            "as": 0.05,
+            "ar": 0.6
+          }
+        },
+        {
+          "name": "Warm Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 10,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1600,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.33,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1,
+            "fs": 0.7,
+            "fr": 1.5,
+            "aa": 0.35,
+            "ad": 1,
+            "as": 0.85,
+            "ar": 1.6
+          }
+        },
+        {
+          "name": "Pop Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 10,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 7,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 4000,
+              "res": 1.5,
+              "env": 0.25,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 4,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.64,
+            "pan": 0,
+            "fa": 0.008,
+            "fd": 0.4,
+            "fs": 0.6,
+            "fr": 0.3,
+            "aa": 0.008,
+            "ad": 0.4,
+            "as": 0.8,
+            "ar": 0.3
+          }
+        },
+        {
+          "name": "Soft Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 5,
+                "det": 14,
+                "spread": 0.8,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2600,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.15,
+            "fd": 1,
+            "fs": 0.7,
+            "fr": 1,
+            "aa": 0.25,
+            "ad": 1,
+            "as": 0.9,
+            "ar": 1.2
+          }
+        },
+        {
+          "name": "Synth Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 600,
+              "res": 1.5,
+              "env": 0.4,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.45,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0.2,
+            "fr": 0.12,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0.8,
+            "ar": 0.12
+          }
+        },
+        {
+          "name": "Chord Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.76,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": -7,
+                "lvl": 0.76,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1800,
+              "res": 1.2,
+              "env": 0.5,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "maj7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.3,
+            "fs": 0,
+            "fr": 0.25,
+            "aa": 0.002,
+            "ad": 0.35,
+            "as": 0,
+            "ar": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Synthwave",
+      "items": [
+        {
+          "name": "Retro Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 2,
+                "det": 9,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 5,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 3200,
+              "res": 2,
+              "env": 0.25,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 4,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.66,
+            "pan": 0,
+            "fa": 0.01,
+            "fd": 0.4,
+            "fs": 0.6,
+            "fr": 0.4,
+            "aa": 0.01,
+            "ad": 0.6,
+            "as": 0.7,
+            "ar": 0.5
+          }
+        },
+        {
+          "name": "Neon Brass Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.57,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1800,
+              "res": 1.2,
+              "env": 0.55,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "fifth",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.04,
+            "fd": 0.25,
+            "fs": 0.5,
+            "fr": 0.2,
+            "aa": 0.01,
+            "ad": 0.3,
+            "as": 0.1,
+            "ar": 0.2
+          }
+        },
+        {
+          "name": "Night Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 5,
+                "det": 22,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1300,
+              "res": 1,
+              "env": 0.15,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.58,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1.5,
+            "fs": 0.5,
+            "fr": 2,
+            "aa": 0.35,
+            "ad": 1.5,
+            "as": 0.85,
+            "ar": 2
+          }
+        },
+        {
+          "name": "Pulse Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.65,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 3,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 500,
+              "res": 2,
+              "env": 0.35,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.52,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.2,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0.8,
+            "ar": 0.1
+          }
+        },
+        {
+          "name": "Arp Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1800,
+              "res": 2,
+              "env": 0.6,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        },
+        {
+          "name": "Warm Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.55,
+                "uni": 5,
+                "det": 16,
+                "spread": 0.9,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2200,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.82,
+            "pan": 0,
+            "fa": 0.2,
+            "fd": 1,
+            "fs": 0.7,
+            "fr": 1.3,
+            "aa": 0.3,
+            "ad": 1.2,
+            "as": 0.9,
+            "ar": 1.5
+          }
+        },
+        {
+          "name": "Chord Wash",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 4,
+                "det": 18,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 2000,
+              "res": 1,
+              "env": 0.3,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 10,
+            "chord": "maj7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.75,
+            "pan": 0,
+            "fa": 0.2,
+            "fd": 1.5,
+            "fs": 0.4,
+            "fr": 2,
+            "aa": 0.3,
+            "ad": 1.4,
+            "as": 0.7,
+            "ar": 2.2
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Ambient",
+      "items": [
+        {
+          "name": "Slow Drift Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.72,
+                "uni": 5,
+                "det": 16,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.31,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1500,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "sus2",
+            "spread": 2,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 2,
+            "fs": 0.6,
+            "fr": 3,
+            "aa": 0.35,
+            "ad": 2,
+            "as": 0.9,
+            "ar": 4
+          }
+        },
+        {
+          "name": "Glass Bells",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.86,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 3.5,
+                "fmi": 2.2
+              },
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.26,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 7,
+                "fmi": 1
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 8000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 2.5,
+            "fs": 0,
+            "fr": 2.5,
+            "aa": 0.002,
+            "ad": 2.5,
+            "as": 0,
+            "ar": 2.5
+          }
+        },
+        {
+          "name": "Air Texture",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "noise",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.8,
+                "uni": 3,
+                "det": 25,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "noise",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0.9,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 3000,
+              "res": 1,
+              "env": 0.1,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 400,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": true,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 4,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.73,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 2,
+            "fs": 0.8,
+            "fr": 3,
+            "aa": 0.35,
+            "ad": 2,
+            "as": 0.9,
+            "ar": 3
+          }
+        },
+        {
+          "name": "Warm Organ Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sine",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.15,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "fifth",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.76,
+            "pan": 0,
+            "fa": 0.1,
+            "fd": 1,
+            "fs": 1,
+            "fr": 2,
+            "aa": 0.2,
+            "ad": 1,
+            "as": 1,
+            "ar": 2
+          }
+        },
+        {
+          "name": "Dark Wash",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 5,
+                "det": 25,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 500,
+              "res": 1,
+              "env": 0.2,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.72,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 2,
+            "fs": 0.6,
+            "fr": 3,
+            "aa": 0.35,
+            "ad": 2,
+            "as": 0.85,
+            "ar": 3
+          }
+        },
+        {
+          "name": "Soft Strings Bed",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.63,
+                "uni": 5,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1800,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 2,
+            "fs": 0.8,
+            "fr": 2.5,
+            "aa": 0.35,
+            "ad": 2,
+            "as": 0.9,
+            "ar": 2.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Cinematic",
+      "items": [
+        {
+          "name": "Epic Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 7,
+                "det": 20,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.2,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2800,
+              "res": 0.8,
+              "env": 0.15,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.78,
+            "pan": 0,
+            "fa": 0.2,
+            "fd": 1,
+            "fs": 0.7,
+            "fr": 1.2,
+            "aa": 0.3,
+            "ad": 1,
+            "as": 0.9,
+            "ar": 1.8
+          }
+        },
+        {
+          "name": "Low Brass Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 10,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 700,
+              "res": 1,
+              "env": 0.55,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "fifth",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.51,
+            "pan": 0,
+            "fa": 0.4,
+            "fd": 0.8,
+            "fs": 0.6,
+            "fr": 0.8,
+            "aa": 0.3,
+            "ad": 0.8,
+            "as": 0.85,
+            "ar": 1
+          }
+        },
+        {
+          "name": "Tension Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 30,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -2,
+                "semi": 0,
+                "fine": 13,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -3,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 300,
+              "res": 3,
+              "env": 0.1,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.2
+            },
+            "vel": 0.5,
+            "poly": 3,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.32,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 2,
+            "fs": 0.8,
+            "fr": 3,
+            "aa": 0.35,
+            "ad": 2,
+            "as": 0.9,
+            "ar": 3
+          }
+        },
+        {
+          "name": "Deep Hit",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -3,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.89,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.44,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0.2,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 220,
+              "res": 1,
+              "env": 0.6,
+              "kt": 0.2
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.3
+            },
+            "vel": 0.5,
+            "poly": 2,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.5,
+            "fs": 0,
+            "fr": 0.5,
+            "aa": 0.002,
+            "ad": 1.2,
+            "as": 0,
+            "ar": 0.8
+          }
+        },
+        {
+          "name": "Choir Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 5,
+                "det": 14,
+                "spread": 0.8,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.43,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1800,
+              "res": 1.5,
+              "env": 0.1,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 300,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": true,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.96,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1,
+            "fs": 0.7,
+            "fr": 1.5,
+            "aa": 0.35,
+            "ad": 1,
+            "as": 0.85,
+            "ar": 2
+          }
+        },
+        {
+          "name": "Pulse Ostinato",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.86,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.43,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 700,
+              "res": 2,
+              "env": 0.6,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Future Bass",
+      "items": [
+        {
+          "name": "Supersaw Chords",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.6,
+                "uni": 7,
+                "det": 40,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 5,
+                "det": 30,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 3500,
+              "res": 1,
+              "env": 0.3,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.3
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.004,
+            "fd": 0.6,
+            "fs": 0.5,
+            "fr": 0.6,
+            "aa": 0.004,
+            "ad": 0.7,
+            "as": 0.55,
+            "ar": 0.6
+          }
+        },
+        {
+          "name": "Wide Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 5,
+                "det": 35,
+                "spread": 1,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 3,
+                "det": 20,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 4500,
+              "res": 1,
+              "env": 0.2,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.2
+            },
+            "vel": 0.5,
+            "poly": 4,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.71,
+            "pan": 0,
+            "fa": 0.005,
+            "fd": 0.4,
+            "fs": 0.7,
+            "fr": 0.4,
+            "aa": 0.006,
+            "ad": 0.4,
+            "as": 0.8,
+            "ar": 0.4
+          }
+        },
+        {
+          "name": "Sub Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.8,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 400,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0.2
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.45,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.3,
+            "fs": 0.5,
+            "fr": 0.1,
+            "aa": 0.003,
+            "ad": 0.4,
+            "as": 0.9,
+            "ar": 0.1
+          }
+        },
+        {
+          "name": "Bell Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 3.01,
+                "fmi": 3
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 7000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 1,
+            "fs": 0,
+            "fr": 1,
+            "aa": 0.002,
+            "ad": 1.2,
+            "as": 0,
+            "ar": 1
+          }
+        },
+        {
+          "name": "Pad Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 5,
+                "det": 25,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.43,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 2800,
+              "res": 1,
+              "env": 0.5,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "maj",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.35,
+            "fs": 0,
+            "fr": 0.3,
+            "aa": 0.003,
+            "ad": 0.4,
+            "as": 0,
+            "ar": 0.35
+          }
+        },
+        {
+          "name": "Detuned Keys",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 2,
+                "det": 18,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.35,
+                "uni": 2,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 3000,
+              "res": 1,
+              "env": 0.3,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.86,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.8,
+            "fs": 0.2,
+            "fr": 0.5,
+            "aa": 0.003,
+            "ad": 0.9,
+            "as": 0.2,
+            "ar": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Funk",
+      "items": [
+        {
+          "name": "Funk Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.87,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 7,
+                "lvl": 0.43,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2000,
+              "res": 1.5,
+              "env": 0.6,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "dom7",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.15,
+            "fs": 0,
+            "fr": 0.12,
+            "aa": 0.002,
+            "ad": 0.18,
+            "as": 0,
+            "ar": 0.12
+          }
+        },
+        {
+          "name": "Pluck Keys",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.43,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1500,
+              "res": 1.5,
+              "env": 0.5,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.35,
+            "as": 0,
+            "ar": 0.25
+          }
+        },
+        {
+          "name": "Squelch Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 5,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1300,
+              "res": 6,
+              "env": 0.6,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 3,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.76,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.25,
+            "fs": 0.2,
+            "fr": 0.2,
+            "aa": 0.004,
+            "ad": 0.35,
+            "as": 0.7,
+            "ar": 0.2
+          }
+        },
+        {
+          "name": "Brass Section",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.74,
+                "uni": 3,
+                "det": 10,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.37,
+                "uni": 2,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2000,
+              "res": 1,
+              "env": 0.45,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "dom7",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.03,
+            "fd": 0.3,
+            "fs": 0.6,
+            "fr": 0.2,
+            "aa": 0.015,
+            "ad": 0.3,
+            "as": 0.7,
+            "ar": 0.2
+          }
+        },
+        {
+          "name": "Fat Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 5,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 400,
+              "res": 2.5,
+              "env": 0.6,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.57,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.1,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.25,
+            "as": 0.7,
+            "ar": 0.1
+          }
+        },
+        {
+          "name": "Wah Chord",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.85,
+                "uni": 2,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.36,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 500,
+              "res": 5,
+              "env": 0.6,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min7",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.1,
+            "fr": 0.15,
+            "aa": 0.002,
+            "ad": 0.25,
+            "as": 0.4,
+            "ar": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Disco",
+      "items": [
+        {
+          "name": "String Section",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 5,
+                "det": 16,
+                "spread": 0.9,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 3000,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.71,
+            "pan": 0,
+            "fa": 0.1,
+            "fd": 0.8,
+            "fs": 0.7,
+            "fr": 0.6,
+            "aa": 0.12,
+            "ad": 1,
+            "as": 0.85,
+            "ar": 0.6
+          }
+        },
+        {
+          "name": "Octave Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.71,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 2200,
+              "res": 1.5,
+              "env": 0.4,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0,
+            "fr": 0.15,
+            "aa": 0.002,
+            "ad": 0.25,
+            "as": 0,
+            "ar": 0.2
+          }
+        },
+        {
+          "name": "Brass Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 3,
+                "det": 10,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.57,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2500,
+              "res": 1,
+              "env": 0.5,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "maj",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.02,
+            "fd": 0.2,
+            "fs": 0.2,
+            "fr": 0.15,
+            "aa": 0.01,
+            "ad": 0.25,
+            "as": 0.2,
+            "ar": 0.15
+          }
+        },
+        {
+          "name": "Bright Chord",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 2,
+                "det": 8,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 4500,
+              "res": 0.8,
+              "env": 0.2,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "maj7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.77,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.4,
+            "fs": 0.3,
+            "fr": 0.3,
+            "aa": 0.004,
+            "ad": 0.4,
+            "as": 0.5,
+            "ar": 0.3
+          }
+        },
+        {
+          "name": "Electric Keys",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 1,
+                "fmi": 1.6
+              },
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.33,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 7,
+                "fmi": 0.6
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 6000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 40,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": true,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.9,
+            "fs": 0.05,
+            "fr": 0.5,
+            "aa": 0.002,
+            "ad": 1,
+            "as": 0.1,
+            "ar": 0.5
+          }
+        },
+        {
+          "name": "Disco Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 700,
+              "res": 1.5,
+              "env": 0.3,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.6,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.2,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.25,
+            "as": 0.7,
+            "ar": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Electro",
+      "items": [
+        {
+          "name": "Robot Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 12,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 2200,
+              "res": 3,
+              "env": 0.4,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 2,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.57,
+            "pan": 0,
+            "fa": 0.005,
+            "fd": 0.3,
+            "fs": 0.5,
+            "fr": 0.3,
+            "aa": 0.005,
+            "ad": 0.4,
+            "as": 0.7,
+            "ar": 0.3
+          }
+        },
+        {
+          "name": "Electro Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.5,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 500,
+              "res": 3,
+              "env": 0.7,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.55,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.1,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.25,
+            "as": 0.7,
+            "ar": 0.1
+          }
+        },
+        {
+          "name": "Zap Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.94,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 20,
+                "lvl": 0.67,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "hp12",
+              "cut": 3000,
+              "res": 3,
+              "env": -0.5,
+              "kt": 0.3
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        },
+        {
+          "name": "Cold Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 20,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.25,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0.1,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1800,
+              "res": 1.5,
+              "env": 0.2,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.42,
+            "pan": 0,
+            "fa": 0.2,
+            "fd": 1,
+            "fs": 0.6,
+            "fr": 1.5,
+            "aa": 0.3,
+            "ad": 1,
+            "as": 0.8,
+            "ar": 1.6
+          }
+        },
+        {
+          "name": "Cold Arp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.77,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.39,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1200,
+              "res": 3,
+              "env": 0.7,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        },
+        {
+          "name": "FM Bell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2.5,
+                "fmi": 3
+              },
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 5,
+                "fmi": 1
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 6000,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.8,
+            "fs": 0,
+            "fr": 0.8,
+            "aa": 0.002,
+            "ad": 0.9,
+            "as": 0,
+            "ar": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Techno",
+      "items": [
+        {
+          "name": "Warehouse Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 2,
+                "det": 14,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.71,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 700,
+              "res": 2,
+              "env": 0.6,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "fifth",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.25,
+            "as": 0,
+            "ar": 0.2
+          }
+        },
+        {
+          "name": "Dub Chord",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.81,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.58,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1200,
+              "res": 1.5,
+              "env": 0.7,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min7",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.6,
+            "fs": 0,
+            "fr": 0.5,
+            "aa": 0.003,
+            "ad": 0.6,
+            "as": 0,
+            "ar": 0.5
+          }
+        },
+        {
+          "name": "Hypnotic Arp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.77,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.32,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 800,
+              "res": 3,
+              "env": 0.8,
+              "kt": 0.6
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.25,
+            "fs": 0,
+            "fr": 0.2,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0,
+            "ar": 0.25
+          }
+        },
+        {
+          "name": "Dark Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 15,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.3,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 700,
+              "res": 1.5,
+              "env": 0.2,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 6,
+            "chord": "min",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.86,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1.5,
+            "fs": 0.6,
+            "fr": 2,
+            "aa": 0.35,
+            "ad": 1.5,
+            "as": 0.85,
+            "ar": 2
+          }
+        },
+        {
+          "name": "Detuned Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 3,
+                "det": 28,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sqr",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.35,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 2200,
+              "res": 3,
+              "env": 0.4,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 3,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.7,
+            "pan": 0,
+            "fa": 0.005,
+            "fd": 0.4,
+            "fs": 0.5,
+            "fr": 0.3,
+            "aa": 0.006,
+            "ad": 0.4,
+            "as": 0.8,
+            "ar": 0.3
+          }
+        },
+        {
+          "name": "Warehouse Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.8,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.35,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 200,
+              "res": 1.5,
+              "env": 0.3,
+              "kt": 0.2
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.52,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.2,
+            "fs": 0.2,
+            "fr": 0.1,
+            "aa": 0.002,
+            "ad": 0.3,
+            "as": 0.8,
+            "ar": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Lo-fi",
+      "items": [
+        {
+          "name": "Dusty Keys",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 1,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "fm",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.43,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 1,
+                "fmi": 1.2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2200,
+              "res": 0.7,
+              "env": 0.1,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "asym",
+              "drive": 0.2
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 1,
+            "pan": 0,
+            "fa": 0.002,
+            "fd": 0.8,
+            "fs": 0.1,
+            "fr": 0.5,
+            "aa": 0.002,
+            "ad": 0.9,
+            "as": 0.15,
+            "ar": 0.5
+          }
+        },
+        {
+          "name": "Tape Chord",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": -9,
+                "lvl": 0.63,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 9,
+                "lvl": 0.63,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp24",
+              "cut": 1400,
+              "res": 1,
+              "env": 0.3,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.25
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "min9",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.004,
+            "fd": 0.9,
+            "fs": 0.3,
+            "fr": 0.6,
+            "aa": 0.005,
+            "ad": 1,
+            "as": 0.3,
+            "ar": 0.7
+          }
+        },
+        {
+          "name": "Mellow Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.87,
+                "uni": 2,
+                "det": 8,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "sine",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.31,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 2500,
+              "res": 0.8,
+              "env": 0.2,
+              "kt": 0.5
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 2,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.01,
+            "fd": 0.5,
+            "fs": 0.6,
+            "fr": 0.4,
+            "aa": 0.01,
+            "ad": 0.5,
+            "as": 0.8,
+            "ar": 0.4
+          }
+        },
+        {
+          "name": "Warm Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "sine",
+                "oct": -2,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.8,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": -1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.4,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 500,
+              "res": 0.7,
+              "env": 0.1,
+              "kt": 0.2
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "soft",
+              "drive": 0.15
+            },
+            "vel": 0.5,
+            "poly": 1,
+            "chord": "",
+            "spread": 0,
+            "tune": 0,
+            "lvl": 0.56,
+            "pan": 0,
+            "fa": 0.003,
+            "fd": 0.3,
+            "fs": 0.5,
+            "fr": 0.1,
+            "aa": 0.004,
+            "ad": 0.4,
+            "as": 0.85,
+            "ar": 0.12
+          }
+        },
+        {
+          "name": "Soft Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "osc": [
+              {
+                "on": true,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.9,
+                "uni": 3,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": true,
+                "type": "tri",
+                "oct": 1,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.54,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              },
+              {
+                "on": false,
+                "type": "saw",
+                "oct": 0,
+                "semi": 0,
+                "fine": 0,
+                "lvl": 0.7,
+                "uni": 1,
+                "det": 12,
+                "spread": 0.5,
+                "fmr": 2,
+                "fmi": 2
+              }
+            ],
+            "noise": 0,
+            "ring": 0,
+            "fm21": 0,
+            "f1": {
+              "type": "lp12",
+              "cut": 1400,
+              "res": 0.8,
+              "env": 0.1,
+              "kt": 0.4
+            },
+            "f2": {
+              "type": "hp12",
+              "cut": 60,
+              "res": 0.7,
+              "env": 0,
+              "kt": 0
+            },
+            "f2on": false,
+            "route": "serial",
+            "shp": {
+              "type": "off",
+              "drive": 0
+            },
+            "vel": 0.5,
+            "poly": 8,
+            "chord": "maj7",
+            "spread": 1,
+            "tune": 0,
+            "lvl": 0.9,
+            "pan": 0,
+            "fa": 0.3,
+            "fd": 1.5,
+            "fs": 0.7,
+            "fr": 2,
+            "aa": 0.3,
+            "ad": 1.5,
+            "as": 0.85,
+            "ar": 2
+          }
+        }
+      ]
+    }
+  ]
+}
