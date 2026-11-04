@@ -117,8 +117,9 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README en een eigen geb
 
 | Soort | Waar het voor dient | Apparaten | Handleiding |
 |---|---|---|---|
-| **Synths** | Geluid maken uit noten | Acid Baselines, Duofone | [Handleiding synths](synths/USER-MANUAL_NL.md) · [README](../devices/synths/README_NL.md) |
-| **Drums** | Drumgeluiden en ritme | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [Handleiding drums](drums/USER-MANUAL_NL.md) · [README](../devices/drums/README_NL.md) |
+| **Synths** | Geluid maken uit noten | Acid Baselines, Acid Stepper, Basic Mono, Bowed Ensemble, Chord Poly, Cross Mod Mono, Dissonant Cluster, Duofone, Four-Operator FM, Karplus String, Low Bass, Patch Mono, Patchbay Synth, Poly Chorus, Stage Keys, Sub Line, Supersaw Swarm, Triple Osc Poly | [Handleiding synths](synths/USER-MANUAL_NL.md) · [README](../devices/synths/README_NL.md) |
+| **Sequencers** | Noten en akkoorden laten spelen op andere apparaten | Chord Sequencer | [Handleiding sequencers](sequencers/USER-MANUAL_NL.md) · [README](../devices/sequencers/README_NL.md) |
+| **Drums** | Drumgeluiden en ritme | Drum Machine, Drum Kit, Groovebox 12, Pulse Drums, Latin Percussion, Click Synth | [Handleiding drums](drums/USER-MANUAL_NL.md) · [README](../devices/drums/README_NL.md) |
 | **Effecten** | Het geluid vormgeven: modulatie, vervorming, ruimte, filters, ritme, stem, ketens | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [Handleiding effecten](effects/USER-MANUAL_NL.md) · [README](../devices/effects/README_NL.md) |
 | **Mixer** | Mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers | [Handleiding mixer](mixer/USER-MANUAL_NL.md) · [README](../devices/mixer/README_NL.md) |
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Follower | [Handleiding modulatoren](modulators/USER-MANUAL_NL.md) · [README](../devices/modulators/README_NL.md) |
