@@ -115,7 +115,15 @@ A bass synth with a built-in 16-step sequencer.
 
 ![The Acid Baselines card](images/en/04-acid-baselines.png)
 
-- **Knobs** shape the sound: waveform, octave, tuning, cutoff, resonance, envelope amount, accent, decay times, soft attack, slide time, filter FM, overdrive, tone filter, VCA decay and level. Double-click a slider to go back to its starting value. Click the number to type a value.
+- **Six sections** group the controls in the order the sound travels through the device. Double-click a slider to go back to its starting value. Click the number to type a value.
+  - **Oscillator:** waveform, octave and tuning, plus **Sub** (a square wave an octave down), **Noise**, **Osc 2** with its own **Detune 2**, and **Ring** (ring modulation of the two oscillators).
+  - **Filter:** the filter type (lowpass, bandpass or highpass), cutoff, resonance, envelope amount and **Filter FM**, plus **Filter 2**, a second bandpass filter in parallel, with its own octave offset (**F2 octave**).
+  - **Envelope:** accent, normal and accent decay, soft attack and VCA decay.
+  - **Slide:** the glide time.
+  - **Distortion:** the **Type** (soft, hard, fold or asym), **Overdrive**, **Tight** (filters the bass out before the distortion so it stays punchy), **Mix** (distorted against clean) and **Crush** (bit depth), plus the tone filter.
+  - **Output:** the level.
+
+  Everything on top of the original controls (sub, noise, Osc 2, Ring, Filter 2, filter type, distortion type, Tight, Mix and Crush) is off by default, so existing sounds and tunes stay as they were. Combine a lot of resonance, filter FM and distortion for extreme sounds. A built-in guard restarts the filters if they run away, so the sound does not stay silent.
 - **Sequencer.** Click a square to place a note on that step; click again to remove it. The rows run from C2 to C3. Below the notes you find the **Accent** row (a louder, snappier note), the **Slide** row (glide from the previous step) and an **Octave** choice per step.
 - **Sets.** Choose 1, 2, 4, 8 or 16 sets of 16 steps. The numbered buttons switch which set you edit.
 - **Choose pattern…** puts one of 16 classic acid-style patterns in the set you are editing.
