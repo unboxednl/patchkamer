@@ -1,0 +1,1111 @@
+{
+  "format": "patchkamer-tunes",
+  "formatVersion": 1,
+  "device": "nl.patchkamer.mono",
+  "name": "Basic Mono Styles",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Tunes for Basic Mono by music style: techno, house, electro, hip-hop, funk, synthwave, dub, pop, chiptune, acid, trance and ambient. Basses, leads, stabs and plucks, a few arps and drones. Play them from a keyboard or an external sequencer; one voice at a time.",
+  "tree": [
+    {
+      "folder": "Techno",
+      "items": [
+        {
+          "name": "Rolling Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 170,
+            "res": 5,
+            "env": 0.45,
+            "dec": 0.18,
+            "sub": 0.6,
+            "glide": 0,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Warehouse Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 700,
+            "res": 9,
+            "env": 0.75,
+            "dec": 0.12,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.53
+          }
+        },
+        {
+          "name": "Dark Pulse Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": -6,
+            "cut": 1100,
+            "res": 8,
+            "env": 0.45,
+            "dec": 0.5,
+            "sub": 0.2,
+            "glide": 0.03,
+            "lvl": 0.38
+          }
+        },
+        {
+          "name": "Industrial Grinder",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 5,
+            "cut": 240,
+            "res": 15,
+            "env": 0.8,
+            "dec": 0.22,
+            "sub": 0.4,
+            "glide": 0.04,
+            "lvl": 0.39
+          }
+        },
+        {
+          "name": "Hypnotic Blip",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 500,
+            "res": 10,
+            "env": 0.9,
+            "dec": 0.1,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.53
+          }
+        },
+        {
+          "name": "Dread Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 130,
+            "res": 14,
+            "env": 0.2,
+            "dec": 2,
+            "sub": 1,
+            "glide": 0,
+            "lvl": 0.27
+          }
+        }
+      ]
+    },
+    {
+      "folder": "House",
+      "items": [
+        {
+          "name": "Deep Sub Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 150,
+            "res": 2,
+            "env": 0.3,
+            "dec": 0.35,
+            "sub": 0.8,
+            "glide": 0,
+            "lvl": 0.42
+          }
+        },
+        {
+          "name": "Bouncy Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 260,
+            "res": 7,
+            "env": 0.6,
+            "dec": 0.2,
+            "sub": 0.4,
+            "glide": 0,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Organ Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 3,
+            "cut": 1400,
+            "res": 3,
+            "env": 0.5,
+            "dec": 0.25,
+            "sub": 0.2,
+            "glide": 0,
+            "lvl": 0.48
+          }
+        },
+        {
+          "name": "Offbeat Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 600,
+            "res": 5,
+            "env": 0.8,
+            "dec": 0.12,
+            "sub": 0.2,
+            "glide": 0,
+            "lvl": 0.59
+          }
+        },
+        {
+          "name": "Hollow Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 2200,
+            "res": 4,
+            "env": 0.35,
+            "dec": 1,
+            "sub": 0.1,
+            "glide": 0.02,
+            "lvl": 0.54
+          }
+        },
+        {
+          "name": "Round Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 220,
+            "res": 1,
+            "env": 0.15,
+            "dec": 0.5,
+            "sub": 0.5,
+            "glide": 0,
+            "lvl": 0.49
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Electro",
+      "items": [
+        {
+          "name": "Zap Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 200,
+            "res": 12,
+            "env": 1,
+            "dec": 0.15,
+            "sub": 0.3,
+            "glide": 0.02,
+            "lvl": 0.48
+          }
+        },
+        {
+          "name": "Robot Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 2000,
+            "res": 11,
+            "env": 0.5,
+            "dec": 0.3,
+            "sub": 0,
+            "glide": 0.05,
+            "lvl": 0.43
+          }
+        },
+        {
+          "name": "Pulse Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 300,
+            "res": 6,
+            "env": 0.55,
+            "dec": 0.2,
+            "sub": 0.6,
+            "glide": 0,
+            "lvl": 0.4
+          }
+        },
+        {
+          "name": "Laser Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 1500,
+            "res": 14,
+            "env": 1,
+            "dec": 0.1,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Cold Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": -4,
+            "cut": 1800,
+            "res": 7,
+            "env": 0.6,
+            "dec": 0.15,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.53
+          }
+        },
+        {
+          "name": "Sweep Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 8,
+            "cut": 900,
+            "res": 16,
+            "env": 0.7,
+            "dec": 0.8,
+            "sub": 0,
+            "glide": 0.1,
+            "lvl": 0.47
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Hip-hop",
+      "items": [
+        {
+          "name": "Boom Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 120,
+            "res": 1,
+            "env": 0.15,
+            "dec": 0.45,
+            "sub": 1,
+            "glide": 0.05,
+            "lvl": 0.34
+          }
+        },
+        {
+          "name": "Dusty Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 200,
+            "res": 3,
+            "env": 0.3,
+            "dec": 0.3,
+            "sub": 0.4,
+            "glide": 0.02,
+            "lvl": 0.59
+          }
+        },
+        {
+          "name": "Mellow Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 1800,
+            "res": 2,
+            "env": 0.3,
+            "dec": 0.6,
+            "sub": 0.1,
+            "glide": 0.03,
+            "lvl": 0.58
+          }
+        },
+        {
+          "name": "Dark Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 600,
+            "res": 5,
+            "env": 0.6,
+            "dec": 0.2,
+            "sub": 0.3,
+            "glide": 0,
+            "lvl": 0.48
+          }
+        },
+        {
+          "name": "Slide Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 260,
+            "res": 4,
+            "env": 0.4,
+            "dec": 0.35,
+            "sub": 0.5,
+            "glide": 0.12,
+            "lvl": 0.47
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Funk",
+      "items": [
+        {
+          "name": "Slap Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 380,
+            "res": 6,
+            "env": 0.8,
+            "dec": 0.12,
+            "sub": 0.3,
+            "glide": 0,
+            "lvl": 0.52
+          }
+        },
+        {
+          "name": "Pocket Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 300,
+            "res": 3,
+            "env": 0.5,
+            "dec": 0.25,
+            "sub": 0.35,
+            "glide": 0,
+            "lvl": 0.6
+          }
+        },
+        {
+          "name": "Funk Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 1600,
+            "res": 4,
+            "env": 0.6,
+            "dec": 0.1,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.59
+          }
+        },
+        {
+          "name": "Squelch Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 1100,
+            "res": 14,
+            "env": 0.9,
+            "dec": 0.2,
+            "sub": 0,
+            "glide": 0.02,
+            "lvl": 0.49
+          }
+        },
+        {
+          "name": "Rubber Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 700,
+            "res": 8,
+            "env": 0.9,
+            "dec": 0.12,
+            "sub": 0.2,
+            "glide": 0,
+            "lvl": 0.81
+          }
+        },
+        {
+          "name": "Wah Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 3,
+            "cut": 450,
+            "res": 12,
+            "env": 0.7,
+            "dec": 0.3,
+            "sub": 0.2,
+            "glide": 0,
+            "lvl": 0.47
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Synthwave",
+      "items": [
+        {
+          "name": "Night Drive Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 330,
+            "res": 4,
+            "env": 0.35,
+            "dec": 0.3,
+            "sub": 0.5,
+            "glide": 0,
+            "lvl": 0.53
+          }
+        },
+        {
+          "name": "Neon Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": -5,
+            "cut": 2600,
+            "res": 5,
+            "env": 0.3,
+            "dec": 1,
+            "sub": 0.1,
+            "glide": 0.08,
+            "lvl": 0.61
+          }
+        },
+        {
+          "name": "Retro Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 1400,
+            "res": 4,
+            "env": 0.6,
+            "dec": 0.18,
+            "sub": 0.1,
+            "glide": 0,
+            "lvl": 0.51
+          }
+        },
+        {
+          "name": "Chrome Pulse Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 260,
+            "res": 5,
+            "env": 0.5,
+            "dec": 0.22,
+            "sub": 0.6,
+            "glide": 0,
+            "lvl": 0.42
+          }
+        },
+        {
+          "name": "Soft Square Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 5,
+            "cut": 1800,
+            "res": 3,
+            "env": 0.3,
+            "dec": 0.8,
+            "sub": 0.2,
+            "glide": 0.05,
+            "lvl": 0.37
+          }
+        },
+        {
+          "name": "Arp Blip",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 1600,
+            "res": 6,
+            "env": 0.7,
+            "dec": 0.1,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.61
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dub",
+      "items": [
+        {
+          "name": "Deep Dub Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 110,
+            "res": 3,
+            "env": 0.15,
+            "dec": 0.6,
+            "sub": 1,
+            "glide": 0,
+            "lvl": 0.33
+          }
+        },
+        {
+          "name": "Echo Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 700,
+            "res": 10,
+            "env": 0.6,
+            "dec": 0.3,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.45
+          }
+        },
+        {
+          "name": "Skank Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 900,
+            "res": 6,
+            "env": 0.7,
+            "dec": 0.15,
+            "sub": 0.1,
+            "glide": 0,
+            "lvl": 0.59
+          }
+        },
+        {
+          "name": "Rubber Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 200,
+            "res": 6,
+            "env": 0.5,
+            "dec": 0.3,
+            "sub": 0.5,
+            "glide": 0.08,
+            "lvl": 0.45
+          }
+        },
+        {
+          "name": "Siren Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 1500,
+            "res": 12,
+            "env": 0.4,
+            "dec": 1.5,
+            "sub": 0,
+            "glide": 0.2,
+            "lvl": 0.51
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Pop",
+      "items": [
+        {
+          "name": "Clean Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 260,
+            "res": 1.5,
+            "env": 0.4,
+            "dec": 0.35,
+            "sub": 0.4,
+            "glide": 0,
+            "lvl": 0.57
+          }
+        },
+        {
+          "name": "Warm Saw Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 280,
+            "res": 2,
+            "env": 0.35,
+            "dec": 0.3,
+            "sub": 0.3,
+            "glide": 0,
+            "lvl": 0.64
+          }
+        },
+        {
+          "name": "Bright Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 1500,
+            "res": 3,
+            "env": 0.6,
+            "dec": 0.15,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.54
+          }
+        },
+        {
+          "name": "Pop Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 4,
+            "cut": 3000,
+            "res": 3,
+            "env": 0.3,
+            "dec": 0.6,
+            "sub": 0.1,
+            "glide": 0.03,
+            "lvl": 0.68
+          }
+        },
+        {
+          "name": "Soft Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 2000,
+            "res": 1,
+            "env": 0.4,
+            "dec": 0.3,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.71
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Chiptune",
+      "items": [
+        {
+          "name": "Square Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 8000,
+            "res": 0.5,
+            "env": 0,
+            "dec": 1.5,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.35
+          }
+        },
+        {
+          "name": "Triangle Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 8000,
+            "res": 0.5,
+            "env": 0,
+            "dec": 1,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.55
+          }
+        },
+        {
+          "name": "Pulse Arp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 6000,
+            "res": 0.5,
+            "env": 0.1,
+            "dec": 0.12,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.48
+          }
+        },
+        {
+          "name": "Octave Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 7000,
+            "res": 0.5,
+            "env": 0,
+            "dec": 1,
+            "sub": 0.6,
+            "glide": 0,
+            "lvl": 0.32
+          }
+        },
+        {
+          "name": "Blip Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 5000,
+            "res": 1,
+            "env": 0.2,
+            "dec": 0.08,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.64
+          }
+        },
+        {
+          "name": "Buzz Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 4000,
+            "res": 1,
+            "env": 0.1,
+            "dec": 0.4,
+            "sub": 0.3,
+            "glide": 0,
+            "lvl": 0.66
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Acid",
+      "items": [
+        {
+          "name": "Squelch Line",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 220,
+            "res": 18,
+            "env": 0.85,
+            "dec": 0.2,
+            "sub": 0,
+            "glide": 0.05,
+            "lvl": 0.46
+          }
+        },
+        {
+          "name": "Resonant Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 700,
+            "res": 20,
+            "env": 0.7,
+            "dec": 0.35,
+            "sub": 0,
+            "glide": 0.06,
+            "lvl": 0.44
+          }
+        },
+        {
+          "name": "Wet Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 500,
+            "res": 16,
+            "env": 0.9,
+            "dec": 0.1,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.46
+          }
+        },
+        {
+          "name": "Sub Acid Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 150,
+            "res": 12,
+            "env": 0.6,
+            "dec": 0.25,
+            "sub": 0.5,
+            "glide": 0.04,
+            "lvl": 0.33
+          }
+        },
+        {
+          "name": "Screamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 6,
+            "cut": 1100,
+            "res": 22,
+            "env": 0.6,
+            "dec": 0.5,
+            "sub": 0,
+            "glide": 0.1,
+            "lvl": 0.42
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Trance",
+      "items": [
+        {
+          "name": "Rolling Trance Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 200,
+            "res": 6,
+            "env": 0.5,
+            "dec": 0.17,
+            "sub": 0.4,
+            "glide": 0,
+            "lvl": 0.53
+          }
+        },
+        {
+          "name": "Gate Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 1800,
+            "res": 5,
+            "env": 0.7,
+            "dec": 0.12,
+            "sub": 0.1,
+            "glide": 0,
+            "lvl": 0.62
+          }
+        },
+        {
+          "name": "Anthem Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 6,
+            "cut": 3500,
+            "res": 4,
+            "env": 0.35,
+            "dec": 1.2,
+            "sub": 0.2,
+            "glide": 0.06,
+            "lvl": 0.58
+          }
+        },
+        {
+          "name": "Offbeat Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": -3,
+            "cut": 240,
+            "res": 7,
+            "env": 0.55,
+            "dec": 0.14,
+            "sub": 0.3,
+            "glide": 0,
+            "lvl": 0.54
+          }
+        },
+        {
+          "name": "Acid Trance Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 1200,
+            "res": 8,
+            "env": 0.8,
+            "dec": 0.15,
+            "sub": 0,
+            "glide": 0,
+            "lvl": 0.52
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Ambient",
+      "items": [
+        {
+          "name": "Deep Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 200,
+            "res": 4,
+            "env": 0.1,
+            "dec": 2,
+            "sub": 1,
+            "glide": 0,
+            "lvl": 0.28
+          }
+        },
+        {
+          "name": "Slow Tone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 500,
+            "res": 3,
+            "env": 0.2,
+            "dec": 2,
+            "sub": 0.5,
+            "glide": 0,
+            "lvl": 0.44
+          }
+        },
+        {
+          "name": "Glass Tone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "triangle",
+            "fine": 4,
+            "cut": 3500,
+            "res": 6,
+            "env": 0.15,
+            "dec": 2,
+            "sub": 0,
+            "glide": 0.15,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Dark Pulse Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 160,
+            "res": 9,
+            "env": 0.15,
+            "dec": 2,
+            "sub": 0.8,
+            "glide": 0,
+            "lvl": 0.25
+          }
+        }
+      ]
+    }
+  ]
+}

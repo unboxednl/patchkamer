@@ -1,0 +1,1122 @@
+{
+ "format": "patchkamer-tunes",
+ "formatVersion": 1,
+ "device": "nl.patchkamer.stagekeys",
+ "name": "Stage Keys Styles",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Keyboard sounds for Stage Keys by style: electric pianos, organs, vibraphone, plucks and bass for Soul, Funk, Jazz, Pop, Gospel, Rock, Disco, House, Lo-fi, Reggae and Ballad.",
+ "tree": [
+  {
+   "folder": "Soul",
+   "items": [
+    {
+     "name": "Warm Tine Chords",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.45,
+      "drive": 0.12,
+      "tremRate": 4.2,
+      "tremDepth": 0.3,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.34
+     }
+    },
+    {
+     "name": "Velvet Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.5,
+      "drive": 0.1,
+      "tremRate": 3.8,
+      "tremDepth": 0.35,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.41
+     }
+    },
+    {
+     "name": "Soul Drawbars",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.3,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.63
+     }
+    },
+    {
+     "name": "Honey Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.45,
+      "drive": 0.05,
+      "tremRate": 5.2,
+      "tremDepth": 0.35,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.53
+     }
+    },
+    {
+     "name": "Round Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.25,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.62
+     }
+    },
+    {
+     "name": "Gentle Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.35,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.82
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Funk",
+   "items": [
+    {
+     "name": "Funk Comb",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.7,
+      "drive": 0.25,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.52
+     }
+    },
+    {
+     "name": "Greasy Organ",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.55,
+      "drive": 0.3,
+      "tremRate": 6,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": true,
+      "oct": 0,
+      "lvl": 0.47
+     }
+    },
+    {
+     "name": "Slap Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.75,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.49
+     }
+    },
+    {
+     "name": "Funky Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.75,
+      "drive": 0.3,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.33
+     }
+    },
+    {
+     "name": "Tight Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.8,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.32
+     }
+    },
+    {
+     "name": "Bark Lead",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.6,
+      "drive": 0.2,
+      "tremRate": 5.6,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.8
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jazz",
+   "items": [
+    {
+     "name": "Mellow Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.3,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.4
+     }
+    },
+    {
+     "name": "Smoky Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.5,
+      "drive": 0.05,
+      "tremRate": 5.5,
+      "tremDepth": 0.45,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.52
+     }
+    },
+    {
+     "name": "Jazz Drawbars",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.2,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.76
+     }
+    },
+    {
+     "name": "Walking Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.3,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.81
+     }
+    },
+    {
+     "name": "Dark Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.3,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.42
+     }
+    },
+    {
+     "name": "Bell Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.9,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.6
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Pop",
+   "items": [
+    {
+     "name": "Pop Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.55,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.36
+     }
+    },
+    {
+     "name": "Bright Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.6,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.38
+     }
+    },
+    {
+     "name": "Pluck Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.65,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.43
+     }
+    },
+    {
+     "name": "Pop Synth Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.5,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.49
+     }
+    },
+    {
+     "name": "Soft Combo Lead",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.4,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.91
+     }
+    },
+    {
+     "name": "Stab Chords",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.5,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.6
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Gospel",
+   "items": [
+    {
+     "name": "Church Drawbars",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 1,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.65
+     }
+    },
+    {
+     "name": "Rotary Swell",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.7,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": true,
+      "oct": 0,
+      "lvl": 0.59
+     }
+    },
+    {
+     "name": "Praise Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.5,
+      "drive": 0.1,
+      "tremRate": 4,
+      "tremDepth": 0.25,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.35
+     }
+    },
+    {
+     "name": "Low Pedal",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.1,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": -1,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Choir Combo",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.15,
+      "drive": 0.1,
+      "tremRate": 5.5,
+      "tremDepth": 0.3,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.66
+     }
+    },
+    {
+     "name": "Soul Stabs",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.55,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.36
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Rock",
+   "items": [
+    {
+     "name": "Rock Drawbars",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.75,
+      "drive": 0.4,
+      "tremRate": 6,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": true,
+      "oct": 0,
+      "lvl": 0.41
+     }
+    },
+    {
+     "name": "Driven Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.6,
+      "drive": 0.4,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.32
+     }
+    },
+    {
+     "name": "Crunch Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.7,
+      "drive": 0.4,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.29
+     }
+    },
+    {
+     "name": "Grit Combo",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.8,
+      "drive": 0.35,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.61
+     }
+    },
+    {
+     "name": "Heavy Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.4,
+      "drive": 0.4,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.39
+     }
+    },
+    {
+     "name": "Garage Combo",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.6,
+      "drive": 0.35,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.43
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Disco",
+   "items": [
+    {
+     "name": "Disco Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.6,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.56
+     }
+    },
+    {
+     "name": "Octave Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.6,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.54
+     }
+    },
+    {
+     "name": "Sparkle Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.85,
+      "drive": 0.1,
+      "tremRate": 6,
+      "tremDepth": 0.2,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.43
+     }
+    },
+    {
+     "name": "Disco Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.7,
+      "drive": 0.15,
+      "tremRate": 5.5,
+      "tremDepth": 0.25,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.33
+     }
+    },
+    {
+     "name": "Strut Combo",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.25,
+      "drive": 0.1,
+      "tremRate": 6.5,
+      "tremDepth": 0.35,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.66
+     }
+    },
+    {
+     "name": "Hot Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.65,
+      "drive": 0.25,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.34
+     }
+    }
+   ]
+  },
+  {
+   "folder": "House",
+   "items": [
+    {
+     "name": "Stab Organ",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.5,
+      "drive": 0.3,
+      "tremRate": 6,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": true,
+      "oct": 0,
+      "lvl": 0.47
+     }
+    },
+    {
+     "name": "Piano Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.6,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.32
+     }
+    },
+    {
+     "name": "Deep Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.3,
+      "drive": 0.3,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.43
+     }
+    },
+    {
+     "name": "Chord Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.4,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.57
+     }
+    },
+    {
+     "name": "Combo Hook",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.7,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.93
+     }
+    },
+    {
+     "name": "Vibe Hook",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.6,
+      "drive": 0.15,
+      "tremRate": 3,
+      "tremDepth": 0.5,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.38
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Lo-fi",
+   "items": [
+    {
+     "name": "Dusty Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.35,
+      "drive": 0.35,
+      "tremRate": 0.9,
+      "tremDepth": 0.5,
+      "tune": -18,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.29
+     }
+    },
+    {
+     "name": "Wobbly Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.4,
+      "drive": 0.3,
+      "tremRate": 2,
+      "tremDepth": 0.6,
+      "tune": 12,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.33
+     }
+    },
+    {
+     "name": "Tape Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.4,
+      "drive": 0.3,
+      "tremRate": 1.2,
+      "tremDepth": 0.4,
+      "tune": -25,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.32
+     }
+    },
+    {
+     "name": "Mellow Organ",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.15,
+      "drive": 0.3,
+      "tremRate": 0.7,
+      "tremDepth": 0.3,
+      "tune": -10,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.49
+     }
+    },
+    {
+     "name": "Sleepy Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.15,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": -12,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.48
+     }
+    },
+    {
+     "name": "Warbled Combo",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combo",
+      "tone": 0.2,
+      "drive": 0.25,
+      "tremRate": 1.5,
+      "tremDepth": 0.5,
+      "tune": 20,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.69
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Reggae",
+   "items": [
+    {
+     "name": "Skank Organ",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.5,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.61
+     }
+    },
+    {
+     "name": "Bubble Organ",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.3,
+      "drive": 0.2,
+      "tremRate": 6,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": true,
+      "oct": 0,
+      "lvl": 0.56
+     }
+    },
+    {
+     "name": "Offbeat Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.5,
+      "drive": 0.1,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.66
+     }
+    },
+    {
+     "name": "Dub Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.15,
+      "drive": 0,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 1
+     }
+    },
+    {
+     "name": "Sunny Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.4,
+      "drive": 0.1,
+      "tremRate": 3,
+      "tremDepth": 0.2,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.36
+     }
+    },
+    {
+     "name": "Reed Skank",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.55,
+      "drive": 0.15,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.38
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Ballad",
+   "items": [
+    {
+     "name": "Soft Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "tine",
+      "tone": 0.35,
+      "drive": 0.05,
+      "tremRate": 4,
+      "tremDepth": 0.2,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.4
+     }
+    },
+    {
+     "name": "Tender Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "reed",
+      "tone": 0.35,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0.25,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.48
+     }
+    },
+    {
+     "name": "Ballad Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.4,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0.3,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.53
+     }
+    },
+    {
+     "name": "Warm Organ Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "organ",
+      "tone": 0.25,
+      "drive": 0.05,
+      "tremRate": 0.8,
+      "tremDepth": 0.25,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.78
+     }
+    },
+    {
+     "name": "Heart Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "bass",
+      "tone": 0.2,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.82
+     }
+    },
+    {
+     "name": "Glass Bells",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "inst": "vibes",
+      "tone": 0.9,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 1,
+      "lvl": 0.56
+     }
+    }
+   ]
+  }
+ ]
+}
