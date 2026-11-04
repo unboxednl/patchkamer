@@ -915,6 +915,8 @@ const I18N={
    "m.kopie":"Kopie",
    "m.apparaat":"Apparaat",
    "m.kies_de_map_om_de":"Kies de map <b>{0}</b> om de instrumenten daaruit te laden.",
+   "m.kies_de_map_opnieuw_om_te_scannen":"<b>{0}</b> is gekoppeld via de gewone mapkiezer; de browser geeft dan een vaste momentopname van de bestanden. Kies de map opnieuw om nieuwe en gewijzigde apparaten te zien.",
+   "m.scannen":"↻ Scannen",
    "m.lees_de_licentie":"Lees de licentie ",
    "m.is_een_tune_voor_niet":"“{0}” is een tune voor {1}, niet voor {2}",
    "m.herschikt_in_kolommen":"Herschikt in {0} kolommen",
@@ -1292,6 +1294,8 @@ const I18N={
    "m.de_map_heeft_opnieuw_toestemming":"The folder <b>{0}</b> needs permission again to read instruments.",
    "m.toestaan":"Allow",
    "m.kies_de_map_om_de":"Choose the folder <b>{0}</b> to load its instruments.",
+   "m.kies_de_map_opnieuw_om_te_scannen":"<b>{0}</b> is linked through the ordinary folder picker; the browser then gives a fixed snapshot of the files. Choose the folder again to see new and changed devices.",
+   "m.scannen":"↻ Scan",
    "m.map_kiezen":"Choose folder",
    "m.deze_bron_staat_er_al":"This source is already there; I'm loading it again.",
    "m.nog_geen_bronnen_de_ingebouwde":"No sources yet. The built-in devices are always in the library.",
@@ -2139,7 +2143,7 @@ async function folderSig(src){ let h=null; try{ h=await IDB.get('dir:'+src.sid);
       if(e.kind==='file'){ if(/\.m?js$|\.json$/i.test(n)){ let m=0, z=0; try{ const f=await e.getFile(); m=f.lastModified; z=f.size; }catch(_){} list.push(pre+n+':'+m+':'+z); } }
       else if(dep<3) await walk(e,pre+n+'/',dep+1); } };
   try{ await walk(h,'',0); }catch(e){ return null; } return list.sort().join('|'); }
-async function rescanSource(src,interactive){ const before=new Set(Host.registry.keys()); const r=await loadSource(src,{interactive});
+async function rescanSource(src,interactive){ const before=new Set(Host.registry.keys()); const r=await loadSource(src,{interactive,fresh:true});
   const added=[...Host.registry.entries()].filter(([k])=>!before.has(k)).map(([,d])=>d.name+' v'+d.version);
   if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); }
   const errs=(r&&r.errs)||[];
@@ -2485,9 +2489,11 @@ async function dirHandle(src,interactive){ const h=await IDB.get('dir:'+src.sid)
   return st==='granted'?h:null; }
 async function folderFiles(src,opts){
   const h=await dirHandle(src,!!opts.interactive); if(h) return walkDir(h,'',[],0);
-  const mem=DIRFILES.get(src.sid); if(mem) return [...mem.entries()].map(([p,f])=>[p,()=>f.text()]);
+  const mem=DIRFILES.get(src.sid), asList=m=>[...m.entries()].map(([p,f])=>[p,()=>f.text()]);
+  // zonder blijvende toegang is mem een vaste momentopname: bij Scannen (fresh) vragen we de map opnieuw
+  if(mem&&!(opts.fresh&&opts.interactive)) return asList(mem);
   if(!opts.interactive) return null;
-  const picked=await pickFolder(pkt('m.kies_de_map_om_de',esc(src.label))); if(!picked) return null;
+  const picked=await pickFolder(pkt(mem?'m.kies_de_map_opnieuw_om_te_scannen':'m.kies_de_map_om_de',esc(src.label))); if(!picked) return mem?asList(mem):null;
   if(picked.handle){ await IDB.set('dir:'+src.sid,picked.handle); return walkDir(picked.handle,'',[],0); }
   DIRFILES.set(src.sid,picked.files); return [...picked.files.entries()].map(([p,f])=>[p,()=>f.text()]); }
 // kies een map; geeft {handle,name} of {files:Map,name}
@@ -2514,7 +2520,7 @@ function paintSources(){ const box=$('srcList'); if(!box) return; box.innerHTML=
     const kind={github:'GitHub',url:'URL',folder:pkt('m.map')}[src.kind]||src.kind; const info=document.createElement('div'); info.style.minWidth='0';
     info.innerHTML=`<span class="nm"><span class="kind">${kind}</span>${esc(src.label||'')}</span><small title="${esc((st.errs||[]).join('\n'))}">${esc(st.msg||'')}</small>`;
     const b=document.createElement('div'); b.className='b';
-    const rl=document.createElement('button'); rl.className='small'; rl.textContent=st.state==='warn'&&src.kind==='folder'&&!st.n?pkt('m.verbinden'):'↻ Scannen'; rl.title=pkt('m.opnieuw_inlezen_nieuwe_en_gewijzigde'); rl.onclick=()=>rescanSource(src,true);
+    const rl=document.createElement('button'); rl.className='small'; rl.textContent=st.state==='warn'&&src.kind==='folder'&&!st.n?pkt('m.verbinden'):pkt('m.scannen'); rl.title=pkt('m.opnieuw_inlezen_nieuwe_en_gewijzigde'); rl.onclick=()=>rescanSource(src,true);
     const rm=document.createElement('button'); rm.className='small'; rm.textContent='×'; rm.title=pkt('m.bron_vergeten_geladen_apparaten_blijven');
     rm.onclick=()=>{ if(rm.dataset.arm){ SOURCES=SOURCES.filter(x=>x!==src); saveSources(); IDB.del('dir:'+src.sid); SRCSTATE.delete(src.sid); paintSources(); } else { rm.dataset.arm='1'; rm.textContent=pkt('m.vergeten'); setTimeout(()=>{ if(rm.isConnected){ rm.dataset.arm=''; rm.textContent='×'; } },2500); } };
     b.append(rl,rm); it.append(info,b); box.appendChild(it); }); }
