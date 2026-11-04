@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.7
+// validate-instrument.mjs — Patchkamer contract v1.8
 // Gebruik: node validate-instrument.mjs mijn-instrument.js
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -8,6 +8,7 @@
 // v1.6: presets (getPreset/setPreset) en: setState() moet de knoppen van host.ui bijwerken.
 // v1.7: host.frame / host.visible (tekenklok; na destroy geen open abonnement), onPeers, host.connect/disconnect/cablesFrom;
 //       waarschuwing (geen fout) bij een eigen requestAnimationFrame zonder host.frame.
+// v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
 import { pathToFileURL } from 'node:url';
 import { readFileSync } from 'node:fs';
 
@@ -99,7 +100,7 @@ const host = { ctx, bpm: 120, swing: 0, emit(inst, port, ev) { emitted.push({ po
     for (const p of ports.audioOut) if (!inst.outputs[p.id] || !inst.outputs[p.id]._isNode) fail(`setPorts(): outputs.${p.id} bestaat nog niet; zet eerst de AudioNode klaar`);
     curPorts = ports; portChanges++; },
   ui: { jack(inst, parent, id, dir) { const P = curPorts || d.ports; const L = dir === 'out' ? [...P.audioOut, ...P.eventOut, ...PL(P, 'modOut'), ...PL(P, 'multiOut')] : dir === 'in' ? [...P.audioIn, ...P.eventIn, ...PL(P, 'modIn'), ...PL(P, 'multiIn'), ...(inst && typeof inst.params === 'function' ? [{ id: 'mod' }] : [])] : fail(`jack(): richting moet 'in' of 'out' zijn`); if (!L.some(p => p.id === id)) fail(`jack(): poort "${id}" (${dir}) bestaat niet in de huidige poorten`); jacks++; const e = el('div'); e.className = 'port jack'; if (parent && parent.appendChild) parent.appendChild(e); return e; },
-    knob: (parent, label) => { const k = { label: 'knop ' + label, sets: 0 }; KNOBS.push(k); return { set(){ k.sets++; } }; },
+    knob: (parent, label) => { const k = { label: 'knop ' + label, sets: 0 }; KNOBS.push(k); return { set(){ k.sets++; }, el: el('div'), input: el('input') }; },
     select: (parent, label, opts, val) => { const k = { label: 'keuze ' + label, sets: 0 }; KNOBS.push(k); const s = el('select'); let v = val; Object.defineProperty(s, 'value', { get: () => v, set: x => { v = x; k.sets++; } }); return s; }, steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
 
 // ---------- load + static checks ----------
@@ -214,10 +215,10 @@ for (const e of frames) if (!e.off) { try { e.cb(16.7); e.cb(50); e.cb(83.3); } 
 if (typeof inst.onPeers === 'function') { try { inst.onPeers([]); inst.onPeers(FAKE_PEERS); } catch (e) { fail('onPeers() gooit: ' + e.message); } }
 try { if (inst.unmount) inst.unmount(); inst.destroy(); inst.destroy(); } catch (e) { fail('destroy() gooit (moet idempotent zijn): ' + e.message); }
 const openFrames = frames.filter(e => !e.off).length; if (openFrames) fail(`na destroy() staan er nog ${openFrames} host.frame-abonnement(en) open; roep de opzeg-functie aan in unmount()/destroy()`);
-const rafWarn = /requestAnimationFrame\s*\(/.test(src) && !/host\.frame\b|\.frame\s*===\s*'function'/.test(src);
+const rafWarn = /requestAnimationFrame\s*\(/.test(src) && !/host\.frame\b|\.frame\s*===\s*'function'|__pkWrap\(/.test(src);
 for (const port of emitted.map(x => x.port)) if (!d.ports.eventOut.some(p => p.id === port)) fail(`emit op onbekende eventOut-poort "${port}"`);
 if (d.ui && d.ui.jacks && jacks === 0) fail('ui.jacks is aan maar er is geen enkele host.ui.jack() geplaatst');
 if (modBad) fail(modBad);
 const nKnobs = nMountKnobs;
-console.log(`OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}${d.ui && d.ui.width ? ', breedte ' + d.ui.width + ' px' : ''}, poorten: audio ${d.ports.audioIn.length}→${d.ports.audioOut.length}, events ${d.ports.eventIn.length}→${d.ports.eventOut.length}, state ${json.length} bytes, bronnen gestart ${started}${jacks ? ', ' + jacks + ' jacks' : ''}${portChanges ? ', ' + portChanges + '× setPorts' : ''}${emitted.length ? ', ' + emitted.length + ' gebeurtenissen' : ''}${nParams ? `, ${nParams} stuurbare parameters in ${nLanes} spo${nLanes > 1 ? 'ren' : 'or'}` : ''}${nFast ? `, ${nFast} snel` : ''}${d.kind === 'modulator' ? ', modulator' + (sigCalls ? ` (modSignal ${sigCalls}×)` : '') : ''}${worklets ? `, ${worklets} worklet${worklets > 1 ? 's' : ''}` : ''}${d.ports.multiOut.length ? `, bundel uit ${nBundleCh} kanalen` : ''}${d.ports.multiIn.length ? ', bundel in' : ''}${presetBytes ? `, eigen preset ${presetBytes} bytes` : ''}${nKnobs ? `, ${nKnobs} host-knoppen volgen setState` : ''}${frames.length ? ', tekent via host.frame' : ''}${peerCalls || connects ? ', besturing (peers/connect)' : ''}${rafWarn ? ' · let op: eigen requestAnimationFrame zonder host.frame (v1.7, §12b)' : ''}`);
+console.log(`OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}${d.ui && d.ui.width ? ', breedte ' + d.ui.width + ' px' : ''}, poorten: audio ${d.ports.audioIn.length}→${d.ports.audioOut.length}, events ${d.ports.eventIn.length}→${d.ports.eventOut.length}, state ${json.length} bytes, bronnen gestart ${started}${jacks ? ', ' + jacks + ' jacks' : ''}${portChanges ? ', ' + portChanges + '× setPorts' : ''}${emitted.length ? ', ' + emitted.length + ' gebeurtenissen' : ''}${nParams ? `, ${nParams} stuurbare parameters in ${nLanes} spo${nLanes > 1 ? 'ren' : 'or'}` : ''}${nFast ? `, ${nFast} snel` : ''}${d.kind === 'modulator' ? ', modulator' + (sigCalls ? ` (modSignal ${sigCalls}×)` : '') : ''}${worklets ? `, ${worklets} worklet${worklets > 1 ? 's' : ''}` : ''}${d.ports.multiOut.length ? `, bundel uit ${nBundleCh} kanalen` : ''}${d.ports.multiIn.length ? ', bundel in' : ''}${presetBytes ? `, eigen preset ${presetBytes} bytes` : ''}${nKnobs ? `, ${nKnobs} host-knoppen volgen setState` : ''}${frames.length ? ', tekent via host.frame' : (/__pkWrap\(/.test(src) ? ', tekent via de tekenpoort' : '')}${peerCalls || connects ? ', besturing (peers/connect)' : ''}${rafWarn ? ' · let op: eigen requestAnimationFrame zonder host.frame (v1.7, §12b)' : ''}`);
 process.exit(0);

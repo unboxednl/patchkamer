@@ -1,8 +1,8 @@
-# Patchkamer — Instrumentcontract v1.7 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.8 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één `.js`-bestand op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
-_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5, v1.6 en v1.7 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat._
+_Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek van november 2026; ze vervangt eerdere versies van dit document. Alles uit v1.0–v1.4 blijft geldig; v1.5 t/m v1.8 zijn toevoegingen. Een apparaat dat aan een oudere versie voldoet, werkt nog steeds, maar alleen apparaten die aan v1.6 voldoen werken goed met presets, en alleen apparaten die aan v1.7 voldoen houden de studio soepel als er veel op de vloer staat. v1.8 vraagt bijna niets van een apparaat: de host maakt de regelaars beter._
 
 | Versie | Wat erbij kwam |
 |---|---|
@@ -14,6 +14,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.5 | Bundels: één dikke groene kabel met veel audiokanalen (`multiIn`/`multiOut`, `bundles`, `onBundle`, `host.bundleChanged`, `host.isWired`) |
 | v1.6 | Presets: `setState` moet ook de knoppen bijwerken; optioneel `getPreset`/`setPreset` om routing buiten presets te houden |
 | v1.7 | Soepel: tekenen via de klok van de host (`host.frame`, `host.visible`) en regels tegen haperen (§12b). Besturing voor controllers: `host.peers`, `onPeers`, `host.connect`, `host.disconnect`, `host.cablesFrom` (§13b) |
+| v1.8 | Regelaars door de host: dubbelklik = beginwaarde, klik op het getal = typen, draaiknop als keuze; `host.ui.knob` krijgt een 7e argument `{ default, scale }`; `data-pk-default` / `data-pk-noreset` / `data-pk-for` voor eigen schuiven (§12a). Tekenpoort als snelle omzetting van oude tekenlussen (§12b) |
 
 ---
 
@@ -269,7 +270,7 @@ onBundle(poortId, sleutel, bundel) { ... }
 - `mount(el)` krijgt een leeg element in de kaart. De kaart is standaard ongeveer 300 px breed. Met `ui: { width: 200..6000, minWidth }` krijg je een bredere kaart.
 - De gebruiker kan elke kaart breder, smaller, hoger en lager maken. Laat je UI dus meevloeien: auto-fit grids, `minmax(0, 1fr)`, container queries. Bij een vaste hoogte scrolt de host je UI; de poorten blijven zichtbaar.
 - **Hulpmiddelen** in `host.ui`:
-  - `knob(parent, label, [min, max, stap], waarde, fmt, onchange)` → `{ set(v) }`
+  - `knob(parent, label, [min, max, stap], waarde, fmt, onchange, opties?)` → `{ set(v), el, input }`; `opties` (v1.8): `{ default: getal, scale: 'log' }`
   - `select(parent, label, [[waarde, tekst], …], waarde, onchange)` → een `<select>`; zet `select.value = v`
   - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(stap) }`; houdt een verwijzing naar de array
   - `jack(this, parent, poortId, dir, label)` (zie §3), `noise(ctx)`, `curve(k)`
@@ -286,6 +287,19 @@ onBundle(poortId, sleutel, bundel) { ... }
 - Een grote UI hang je aan een eigen shadow root: `const d = document.createElement('div'); el.appendChild(d); d.attachShadow({ mode: 'open' })`. Stijlen en id's blijven dan per exemplaar gescheiden. CSS-variabelen werken ook in een shadow root.
 - Klikken in je UI mogen de kaart niet laten slepen: zet `e.stopPropagation()` op `pointerdown` in invoervelden die je zelf bouwt.
 - Gebruik geen `alert`, `confirm` of `prompt`: die blokkeren de hele studio.
+
+---
+
+## 12a. Regelaars (v1.8)
+
+De host verbetert elke `<input type="range">` op je kaart, ook in een **open** shadow root. Je hoeft er niets voor te doen:
+
+- **Dubbelklik = beginwaarde.** De beginwaarde is de waarde die de schuif heeft direct na `mount()`, vóór de host `setState()` aanroept. Bouw je UI dus in `mount()` op met de standaardwaarden uit `create()`. Bouw je een schuif pas later (een tabblad, een pagina), zet dan `data-pk-default="waarde"` op de schuif, anders kan de host hem niet terugzetten.
+- **Klik op het getal = typen.** Het getal naast een schuif (een `<output>` of een element zonder kinderen, in hetzelfde kleine groepje met precies één schuif) wordt klikbaar. De host zoekt zelf de schuifstand die dat getal oplevert, dus ook bij Hz/kHz, ms/s, dB, procent en logaritmische schalen. Voorwaarde: je werkt het getal **direct** bij in je `input`-handler. Staat het getal ergens anders, zet dan `data-pk-for="id-van-de-schuif"` op het getal.
+- **Draaiknop.** Kiest de gebruiker draaiknoppen, dan toont `host.ui.knob` een draaiknop (slepen omhoog/omlaag, Shift = fijn). Met `{ scale: 'log' }` draait de knop logaritmisch; met `{ default: x }` is `x` de beginwaarde. Eigen schuiven blijven schuiven.
+- Heeft een schuif een eigen dubbelklik (`ondblclick`, of `dubbelklik` in de `title`), of staat er `data-pk-noreset` op, dan blijft de host eraf.
+- De host stuurt gewone `input`- en `change`-events. Een `oninput`-handler die de waarde leest, is genoeg.
+- Een **gesloten** shadow root (`mode: 'closed'`) kan de host niet zien. Gebruik `mode: 'open'`.
 
 ---
 
@@ -337,6 +351,8 @@ const tekenLus = (host, inst, cb, fps) => {
 3. Vervang maat- en kleuropvragingen per frame door een `ResizeObserver` en een kleurcache.
 4. Verhoog `version`. Poort-id's, `id` en state blijven gelijk, zodat werkruimtes en presets blijven werken.
 5. `node validate-instrument.mjs bestand.js` geeft `OK … tekent via host.frame`. Staat er `let op: eigen requestAnimationFrame`, dan is stap 1 nog niet klaar.
+
+**Snelle omzetting: de tekenpoort (v1.8).** Voor een groot of oud apparaat met veel losse lussen mag je ook de standaard-tekenpoort gebruiken, in plaats van elke lus om te bouwen. Zet het blok `__pkRaf` / `__pkCaf` / `__pkWrap` bovenin het bestand (zie de bibliotheek, bijvoorbeeld `lfo`), vervang `requestAnimationFrame(` door `__pkRaf(` en `cancelAnimationFrame(` door `__pkCaf(`, en schrijf de export als `const __pkDef = { … }; export default __pkWrap(__pkDef);`. Een lus die vanuit een methode van het apparaat start (meestal `mount`), loopt dan op volle snelheid zolang de kaart te zien is, en verborgen ongeveer 2× per seconde. Niet gebruiken voor lussen die timing of MIDI doen: die horen niet in `requestAnimationFrame`.
 
 ---
 
@@ -429,6 +445,8 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 | `host.saveFile(bestandsnaam, data)` | — | Een bestand aan de gebruiker geven (string of Blob); geeft `'saved'` of `'declined'` |
 | `host.bundleChanged(this, poort)` | v1.5 | Je bundel is veranderd (§11) |
 | `host.isWired(this, poort, dir)` | v1.5 | Is deze eigen poort bekabeld? |
+| `host.ui.knob(…, opties)` | v1.8 | `{ default, scale: 'log' }`; draaiknop als de gebruiker dat kiest (§12a) |
+| `data-pk-default`, `data-pk-noreset`, `data-pk-for` | v1.8 | Hints op eigen schuiven en getallen (§12a) |
 | `host.frame(this, cb, fps)` | v1.7 | Tekenen op de klok van de host, alleen als je kaart te zien is; geeft een opzeg-functie (§12b) |
 | `host.visible(this)` | v1.7 | Is je kaart nu te zien? |
 | `host.peers(this)`, `onPeers(lijst)` | v1.7 | Andere apparaten zien (alleen lezen) (§13b) |
@@ -485,6 +503,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 6. **Bundels (v1.5)**: elke `multiOut` heeft `bundles[id]` met kanalen (unieke id, naam, AudioNode). Elke `multiIn` heeft `onBundle`; die krijgt een bundel, dezelfde sleutel met een kanaal erbij, een tweede bundel en dan twee keer `null`. Daarna mag geen enkel kanaal nog verbonden zijn en mag er geen AudioNode in de state staan. `host.bundleChanged` alleen voor eigen `multiOut`-poorten.
 7. **Presets (v1.6)**: elke knop en keuze van `host.ui.knob`/`select` wordt bijgewerkt door `setState(getState())`. `getPreset`/`setPreset` alleen samen, JSON zonder AudioNodes, `setPreset(getPreset())` geeft dezelfde preset, `setPreset({})` werkt.
 8. **Soepel en besturing (v1.7)**: `host.frame` krijgt een functie; elke tekenfunctie wordt een paar keer aangeroepen en mag niet gooien; na `destroy()` staat er geen abonnement meer open. Een eigen `requestAnimationFrame` zonder `host.frame` geeft een waarschuwing in de OK-regel (geen fout). `onPeers` krijgt `[]` en een lijst met twee apparaten. `host.connect` alleen vanaf eigen uitgangen van de juiste soort.
+9. **Regelaars en tekenpoort (v1.8)**: een apparaat met de tekenpoort (`__pkWrap`) geeft geen waarschuwing meer. Dubbelklik en typen kan de validator niet testen (dat doet de host met de echte UI).
 
 Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -506,7 +525,8 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 12. UI vloeit mee met de kaartbreedte en gebruikt de CSS-variabelen van de host (geen vaste kleuren).
 13. `destroy()` ruimt alles op en kan twee keer worden aangeroepen.
 14. Bewegende UI via `host.frame` (met terugval), geen maat- of kleuropvragingen per frame (§12b).
-15. `node validate-instrument.mjs bestand.js` geeft `OK`, zonder `let op`.
+15. Schuiven staan na `mount()` op hun standaardwaarde; getallen naast schuiven worden direct in de `input`-handler bijgewerkt; open shadow root (§12a).
+16. `node validate-instrument.mjs bestand.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -528,6 +548,9 @@ Wat de validator níet kan zien: of het goed klinkt, of je eigen HTML-knoppen (b
 | Eigen `requestAnimationFrame`-lus op 60 fps | Tekent ook buiten beeld en geminimaliseerd; MIDI en kabels gaan haperen | `host.frame(this, draw, 30)` (§12b) |
 | `clientWidth` / `getComputedStyle` in de tekenfunctie | De browser rekent elke frame de opmaak opnieuw uit | `ResizeObserver` en een kleurcache |
 | `host.frame` niet opgezegd | Een verwijderd apparaat blijft tekenen | Opzeg-functie aanroepen in `unmount()` en `destroy()` |
+| UI na `mount()` opbouwen met de opgeslagen waarden | Dubbelklik zet de schuif terug naar de opgeslagen waarde in plaats van de standaard | In `mount()` de standaardwaarden tonen; `setState()` zet daarna de rest (§12a), of `data-pk-default` |
+| Getal pas in een volgende frame bijwerken | Typen werkt niet: de host ziet het getal niet meebewegen | Getal direct in de `input`-handler zetten |
+| Eigen dubbelklik-reset op elke schuif | Dubbel werk; de host doet het al | Weglaten, of `data-pk-noreset` als de schuif níet terug mag |
 
 ---
 
@@ -720,7 +743,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.7.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT.md v1.8.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
