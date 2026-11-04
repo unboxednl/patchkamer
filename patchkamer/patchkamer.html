@@ -271,6 +271,7 @@ svg.cables circle.clip{fill:var(--floor);stroke-width:2.2}
 /* v1.8: kabeldekking en draaiknoppen */
 svg.cables g.cable{opacity:var(--cableOp,1);transition:opacity .12s}
 svg.cables g.cable:hover{opacity:1}
+svg.cables g.cable.drop{opacity:1} svg.cables g.cable.drop path:not(.hit):not(.multicore){stroke-width:6;opacity:1;filter:drop-shadow(0 0 5px var(--sel))}
 .pkentry{position:fixed;z-index:9999;font:12px/1.2 var(--mono,ui-monospace,monospace);padding:2px 5px;border:1px solid var(--sel,#4ea8ff);background:var(--panel,#16191f);color:var(--fg,#ddd);border-radius:3px;outline:none;box-shadow:0 2px 10px #0008}
 .pknum{cursor:text}
 /* tunes (v1.9) */
@@ -483,7 +484,7 @@ body.nopbar .pbar{display:none}
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
       <div class="libcfg" id="libCfg" hidden></div>
       <div class="libcats" id="lib"></div>
-      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.</div>
+      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.</div>
       <details class="libsec" id="srcSec" open><summary data-i18n="ui.bronnen">Bronnen</summary>
         <div class="srclist" id="srcList"></div>
         <div class="srcadd"><input type="url" id="srcUrl" placeholder="github.com/naam/repo, een map daarin, of URL van een .patchkamer-device.js / patchkamer.json" aria-label="adres van een bron" data-i18n-ph="attr.github_com_naam_repo_een" data-i18n-aria="attr.adres_van_een_bron"><button class="small" id="srcAddUrl" data-i18n="ui.toevoegen">Toevoegen</button></div>
@@ -605,7 +606,7 @@ const I18N={
    "ui.indeling":"Indeling",
    "ui.plaatsen":"Plaatsen",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.",
+   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.",
    "ui.bronnen":"Bronnen",
    "ui.toevoegen":"Toevoegen",
    "ui.lokale_map_kiezen":"Lokale map kiezen…",
@@ -793,7 +794,11 @@ const I18N={
    "m.kon_de_module_niet_uitvoeren":"Kon de module niet uitvoeren: ",
    "m.de_map_heeft_opnieuw_toestemming":"De map <b>{0}</b> heeft opnieuw toestemming nodig om instrumenten te lezen.",
    "m.sleep_om_te_verplaatsen_dubbelklik":" · sleep om te verplaatsen · dubbelklik of ⤢ voor de vorige grootte",
-   "m.klik_kabel_los_rechtermuisknop_kleur":"\nklik: kabel los · rechtermuisknop: kleur",
+   "m.klik_kabel_los_rechtermuisknop_kleur":"\nklik: kabel los · sleep een kant: kabel omhangen · rechtermuisknop: kleur",
+   "m.kabel_teruggezet":"Kabel teruggezet",
+   "m.in_de_kabel":"in de kabel",
+   "m.in_kabel_gezet":"{0} in de kabel gezet: {1} → {0} → {2}",
+   "m.kabel_niet_gesplitst":"{0} kon niet in de kabel: de kabel is teruggezet",
    "m.categorie_toegevoegd_sleep_apparaten_erop":"Categorie “{0}” toegevoegd · sleep apparaten erop of kies hem in hun menu",
    "m.naam_maker_licentie_en_omschrijving":"naam, maker, licentie en omschrijving",
    "m.bewaren_in_map":"Bewaren in map",
@@ -1130,7 +1135,7 @@ const I18N={
    "ui.indeling":"Layout",
    "ui.plaatsen":"Place",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window.",
+   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it or drag one end to another port to move it. Drop a new device on a cable to put it in. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window.",
    "ui.bronnen":"Sources",
    "ui.toevoegen":"Add",
    "ui.lokale_map_kiezen":"Choose local folder…",
@@ -1236,7 +1241,11 @@ const I18N={
    "m.deze_map_is_gekoppeld_zonder":"{0}: this folder is linked without persistent access. I only see new files when you choose the folder again.",
    "m.automatisch":"<option value=\"auto\">automatic ({0}%)</option>",
    "m.dit_venster_px_onthouden_per":"This window: {0}×{1} px. Remembered per computer and browser.",
-   "m.klik_kabel_los_rechtermuisknop_kleur":"\nclick: detach cable · right-click: color",
+   "m.klik_kabel_los_rechtermuisknop_kleur":"\nclick: detach cable · drag an end: move cable · right-click: color",
+   "m.kabel_teruggezet":"Cable put back",
+   "m.in_de_kabel":"into the cable",
+   "m.in_kabel_gezet":"{0} put into the cable: {1} → {0} → {2}",
+   "m.kabel_niet_gesplitst":"{0} could not go into the cable: the cable was put back",
    "m.kabelkleur":"cable color",
    "m.audiokabel_vast":"Audio cable (solid)",
    "m.gebeurteniskabel_gestreept":"Event cable (dashed)",
@@ -1774,8 +1783,8 @@ function addDevice(defId,x,y,state,fixedId,version){
   // drag
   let drag=null; [bar,ic].forEach(h=>{   // the title bar, or the whole icon when minimised, moves the device
     h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
-    h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; drawCables();});
-    h.addEventListener('pointerup',()=>{drag=null;}); h.addEventListener('pointercancel',()=>{drag=null;}); });
+    h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; setDrop(cableThroughRect({x:rec.x,y:rec.y,w:el.offsetWidth,h:el.offsetHeight},rec.ports,id,k=>!hasCable(id,k))); drawCables();});
+    h.addEventListener('pointerup',()=>{ const c=drag&&dropCable; drag=null; if(c){ setDrop(null); insertOnCable(id,c); } else setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; setDrop(null);}); });
   el.addEventListener('pointerdown',e=>{select(id); e.stopPropagation();});
   new ResizeObserver(en=>{ for(const x of en){ rec._w=el.offsetWidth; rec._h=el.offsetHeight; } drawCables(); }).observe(el);
   drawCables(); peersChanged(); return id;
@@ -1913,19 +1922,59 @@ function edgePan(){
 }
 function endWire(connect){
   if(!wire) return; cancelAnimationFrame(wire.raf);
-  const w=wire; wire=null;
-  if(connect&&w.hover){ const out=w.src.dir==='out'?w.src:w.hover, inn=w.src.dir==='out'?w.hover:w.src;
-    const before=Host.cables.length; patch({from:{id:out.id,port:out.port},to:{id:inn.id,port:inn.port},kind:w.src.kind});
-    if(Host.cables.length>before){ const a=Host.devices.get(out.id).def.name, b=Host.devices.get(inn.id).def.name; status(pkt('m.verbonden',a,out.port,b,inn.port)); } }
+  const w=wire; wire=null; let done=false;
+  if(connect&&w.hover){ const out=w.src.dir==='out'?w.src:w.hover, inn=w.src.dir==='out'?w.hover:w.src, o=w.replace;
+    const same=!!o&&o.from.id===out.id&&o.from.port===out.port&&o.to.id===inn.id&&o.to.port===inn.port;
+    if(same) done=true;   // teruggebracht op dezelfde plek: niets verandert
+    else { if(o) unpatch(o);   // de oude kabel pas los als de nieuwe plek vaststaat
+      const before=Host.cables.length; patch({from:{id:out.id,port:out.port},to:{id:inn.id,port:inn.port},kind:w.src.kind,...(o&&o.color?{color:o.color}:{})});
+      if(Host.cables.length>before){ const a=Host.devices.get(out.id).def.name, b=Host.devices.get(inn.id).def.name; status(pkt('m.verbonden',a,out.port,b,inn.port)); } done=true; } }
+  if(w.replace){ lastRewire=performance.now(); if(!done) status(pkt('m.kabel_teruggezet')); drawCables(); }
   while(wireSvg.firstChild) wireSvg.removeChild(wireSvg.firstChild);
   document.body.classList.remove('wiring');
   floor.querySelectorAll('.port').forEach(pe=>pe.classList.remove('target','dim','hover','source'));
 }
+// ---------- een kabel aan één kant oppakken en omhangen ----------
+// Slepen aan een kabel maakt de dichtstbijzijnde kant los; de andere kant blijft zitten. Loslaten op een passende poort hangt de kabel om,
+// loslaten ergens anders (of Esc) zet hem terug. De oude kabel blijft tot dan gewoon aangesloten, dus het geluid loopt door.
+let cgrab=null, lastRewire=0, dropCable=null;
+function startRewire(g,e){ const c=g.c, p1=portPos(c.from.id,c.from.port,'out'), p2=portPos(c.to.id,c.to.port,'in'); if(!p1||!p2) return;
+  const gp=floorPoint(g.x0,g.y0), takeFrom=Math.hypot(gp.x-p1.x,gp.y-p1.y)<=Math.hypot(gp.x-p2.x,gp.y-p2.y);   // de dichtstbijzijnde kant komt los
+  const fixed=takeFrom?{id:c.to.id,port:c.to.port,dir:'in'}:{id:c.from.id,port:c.from.port,dir:'out'};
+  startWire(fixed.id,fixed.port,fixed.dir,c.kind,e); wire.replace=c; wire.moved=true; drawCables(); hoverAt(e.clientX,e.clientY); drawWire(); }
+document.addEventListener('pointermove',e=>{ if(!cgrab||wire) return; if(Math.hypot(e.clientX-cgrab.x0,e.clientY-cgrab.y0)<5) return; const g=cgrab; cgrab=null; startRewire(g,e); });
+document.addEventListener('pointerup',()=>{ cgrab=null; }); document.addEventListener('pointercancel',()=>{ cgrab=null; });
+// ---------- een apparaat op een kabel leggen: de kabel splitst en het apparaat hangt erin ----------
+const insertPorts=(ports,kind)=>{ if(kind!=='audio'&&kind!=='event') return null; const i=portList(ports,'in',kind)[0], o=portList(ports,'out',kind)[0]; return i&&o?{i:i.id,o:o.id}:null; };
+function cableSamples(path){ const d=path.getAttribute('d'); if(path._smp&&path._smpD===d) return path._smp; const L=path.getTotalLength(), n=Math.max(8,Math.ceil(L/10)), a=[];
+  for(let i=0;i<=n;i++){ const q=path.getPointAtLength(L*i/n); a.push([q.x,q.y]); } path._smp=a; path._smpD=d; return a; }
+// de kabel dichtbij een punt (vloercoördinaten) waar dit apparaat in past
+function cableNearPoint(fp,tol,ports,nid){ let best=null, bd=Infinity;
+  svg.querySelectorAll('g.cable path.hit').forEach(h=>{ const c=h._cable; if(!c||c.from.id===nid||c.to.id===nid||!insertPorts(ports,c.kind)) return;
+    for(const [x,y] of cableSamples(h)){ const d=Math.hypot(x-fp.x,y-fp.y); if(d<bd){ bd=d; best=c; } } });
+  return bd<=tol?best:null; }
+// de kabel die door de kaart loopt, en het dichtst bij het midden ervan
+function cableThroughRect(rc,ports,nid,fresh){ let best=null, bd=Infinity; const cx=rc.x+rc.w/2, cy=rc.y+rc.h/2;
+  svg.querySelectorAll('g.cable path.hit').forEach(h=>{ const c=h._cable; if(!c||c.from.id===nid||c.to.id===nid||!insertPorts(ports,c.kind)||!fresh(c.kind)) return;
+    for(const [x,y] of cableSamples(h)){ if(x>rc.x+6&&x<rc.x+rc.w-6&&y>rc.y+6&&y<rc.y+rc.h-6){ const d=Math.hypot(x-cx,y-cy); if(d<bd){ bd=d; best=c; } } } });
+  return best; }
+function setDrop(c){ if(dropCable===c) return; dropCable=c; drawCables(); }
+const hasCable=(nid,kind)=>Host.cables.some(c=>c.kind===kind&&(c.from.id===nid||c.to.id===nid));
+function insertOnCable(nid,c){ const r=Host.devices.get(nid), a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); if(!r||!a||!b||c.from.id===nid||c.to.id===nid) return false;
+  const ip=insertPorts(r.ports,c.kind); if(!ip||!Host.cables.includes(c)) return false;
+  const col=c.color?{color:c.color}:{}, n0=Host.cables.length;
+  unpatch(c);
+  const c1={from:c.from,to:{id:nid,port:ip.i},kind:c.kind,...col}, c2={from:{id:nid,port:ip.o},to:c.to,kind:c.kind,...col};
+  patch(c1); patch(c2);
+  if(!Host.cables.some(x=>x.from.id===c1.from.id&&x.from.port===c1.from.port&&x.to.id===nid&&x.to.port===c1.to.port)||!Host.cables.some(x=>x.from.id===nid&&x.from.port===c2.from.port&&x.to.id===c.to.id&&x.to.port===c.to.port)){
+    [c1,c2].forEach(n=>{ const f=Host.cables.find(x=>x.from.id===n.from.id&&x.from.port===n.from.port&&x.to.id===n.to.id&&x.to.port===n.to.port); if(f) unpatch(f); }); patch(c);   // terugdraaien: de oude kabel komt terug
+    status(pkt('m.kabel_niet_gesplitst',r.def.name),true); return false; }
+  status(pkt('m.in_kabel_gezet',r.def.name,a.def.name,b.def.name)); return true; }
 document.addEventListener('pointermove',e=>{ if(!wire) return; wire.cx=e.clientX; wire.cy=e.clientY; if(Math.hypot(e.clientX-wire.x0,e.clientY-wire.y0)>4) wire.moved=true; hoverAt(e.clientX,e.clientY); drawWire(); });
 document.addEventListener('pointerup',e=>{ if(!wire) return;
   if(!wire.moved){ const s=wire.src; endWire(false); portClick(s.id,s.port,s.dir,s.kind); return; }   // a plain click still works: click out, then click in
   hoverAt(e.clientX,e.clientY); endWire(true); });
-document.addEventListener('pointercancel',()=>endWire(false));
+document.addEventListener('pointercancel',()=>{ endWire(false); setDrop(null); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&wire){ endWire(false); e.preventDefault(); } });
 window.addEventListener('blur',()=>endWire(false));
 function portClick(id,port,dir,kind){
@@ -2186,12 +2235,13 @@ function drawCablesNow(){ if(_dcRaf){ cancelAnimationFrame(_dcRaf); _dcRaf=0; } 
   while(svg.firstChild) svg.removeChild(svg.firstChild);
   floor.querySelectorAll('.port').forEach(p=>{ p.classList.remove('wired'); const d=p.querySelector('.dot'); if(d&&d.dataset.cc){ d.style.background=''; d.style.borderColor=''; delete d.dataset.cc; } });
   Host.cables.forEach(c=>{ const a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); if(!a||!b) return;
+    if(wire&&wire.replace===c) return;   // een kabel die je omhangt, tekenen we als de losse kabel van het slepen
     if(a.el.classList.contains('infocus')||b.el.classList.contains('infocus')) return;   // in de focusweergave: geen kabels
     const p1=portPos(c.from.id,c.from.port,'out'), p2=portPos(c.to.id,c.to.port,'in'); if(!p1||!p2) return;
     const R=cableRoute(c,p1,p2), P=R.P, d=R.d;
-    const g=svgEl('g',{class:'cable'},svg);
-    const hit=svgEl('path',{d,class:'hit'},g); svgEl('title',{},hit).textContent=cableLabel(c)+pkt('m.klik_kabel_los_rechtermuisknop_kleur');
-    hit.onclick=()=>unpatch(c); hit.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); cableMenu(c,e.clientX,e.clientY); });
+    const g=svgEl('g',{class:'cable'+(dropCable===c?' drop':'')},svg);
+    const hit=svgEl('path',{d,class:'hit'},g); hit._cable=c; hit.addEventListener('pointerdown',e=>{ if(e.button===0) cgrab={c,x0:e.clientX,y0:e.clientY}; }); svgEl('title',{},hit).textContent=cableLabel(c)+pkt('m.klik_kabel_los_rechtermuisknop_kleur');
+    hit.onclick=()=>{ if(performance.now()-lastRewire<400) return; unpatch(c); }; hit.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); cableMenu(c,e.clientX,e.clientY); });
     const vis=svgEl('path',{d:c.kind==='mod'?(R.pts?wavePts(R.pts):wavePath(P)):d,class:c.kind},g); if(c.color) vis.style.stroke=c.color;
     if(c.kind==='multi') svgEl('path',{d,class:'multicore'},g);
     [[p1,c.from.id,c.from.port,'out'],[p2,c.to.id,c.to.port,'in']].forEach(([p,did,port,dir])=>{
@@ -2327,12 +2377,13 @@ document.addEventListener('pointermove',e=>{ if(!libDrag) return;
   const g=libDrag.ghost; g.style.left=e.clientX+'px'; g.style.top=e.clientY+'px';
   const ct=catTarget(e.clientX,e.clientY), cur=categoryOf(libDrag.def); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
   if(ct&&ct.dataset.cat!==cur){ ct.classList.add('drop'); g.textContent=`${libDrag.def.name} → ${CATS.find(x=>x[0]===ct.dataset.cat)[1]}`; g.classList.remove('no'); }
-  else { g.textContent=libDrag.def.name; g.classList.toggle('no',!overFloor(e.clientX,e.clientY)); } });
+  else { const onFloor=overFloor(e.clientX,e.clientY), cb=onFloor?cableNearPoint(floorPoint(e.clientX,e.clientY),18/Host.view.scale,libDrag.def.ports,null):null; setDrop(cb);
+    g.textContent=libDrag.def.name+(cb?' → '+pkt('m.in_de_kabel'):''); g.classList.toggle('no',!onFloor); } });
 function catTarget(cx,cy){ const el=document.elementFromPoint(cx,cy); return el&&el.closest('#lib .cat'); }
-document.addEventListener('pointerup',e=>{ if(!libDrag) return; const d=libDrag; libDrag=null; document.body.style.cursor='';
+document.addEventListener('pointerup',e=>{ if(!libDrag) return; const d=libDrag, dc=dropCable; libDrag=null; document.body.style.cursor=''; setDrop(null);
   if(!d.ghost) return; d.ghost.remove(); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
   const ct=catTarget(e.clientX,e.clientY); if(ct){ if(ct.dataset.cat!==categoryOf(d.def)) setCategory(d.def.id,ct.dataset.cat); return; }
-  if(overFloor(e.clientX,e.clientY)){ const p=floorPoint(e.clientX,e.clientY); const nid=addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid) afterAdd(nid); } });
+  if(overFloor(e.clientX,e.clientY)){ const p=floorPoint(e.clientX,e.clientY); const nid=addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid){ afterAdd(nid); if(dc) insertOnCable(nid,dc); } } });
 const libwin=$('libwin'), room=$('room');
 function placeLib(){ const r0=room.getBoundingClientRect(), r={width:r0.width/PKS.ui,height:r0.height/PKS.ui};
   LIB.w=clamp(LIB.w,260,Math.max(260,r.width-8)); LIB.h=clamp(LIB.h,160,Math.max(160,r.height-8));
