@@ -385,9 +385,9 @@ body.nopbar .pbar{display:none}
     <button class="small" id="wsBtn" aria-expanded="false" aria-controls="wsPanel" data-i18n="ui.werkruimte">Werkruimte ▾</button>
     <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
     <button class="small" id="arrange" title="apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)" data-i18n-title="attr.apparaten_netjes_van_links_naar" data-i18n="ui.herschik">Herschik</button>
-    <button class="small" id="focusBtn" title="focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (F)" data-i18n-title="attr.focusweergave_de_apparaten_met_f" data-i18n="ui.focus">Focus</button>
+    <button class="small" id="focusBtn" title="focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (Alt+F)" data-i18n-title="attr.focusweergave_de_apparaten_met_f" data-i18n="ui.focus">Focus</button>
     <button class="small danger" id="clear" data-i18n="ui.leeg">Leeg</button>
-    <button class="small on" id="libToggle" title="bibliotheek tonen of verbergen (B)" data-i18n-title="attr.bibliotheek_tonen_of_verbergen_b" data-i18n="ui.bibliotheek">Bibliotheek</button>
+    <button class="small on" id="libToggle" title="bibliotheek tonen of verbergen (Alt+B)" data-i18n-title="attr.bibliotheek_tonen_of_verbergen_b" data-i18n="ui.bibliotheek">Bibliotheek</button>
     <span class="tp" id="latBox" title="vertraging tussen een geluid berekenen en het horen (browser + besturingssysteem + geluidskaart), zoals de browser die opgeeft" data-i18n-title="attr.vertraging_tussen_een_geluid_berekenen"><span data-i18n="ui.latency">Latency</span> <output id="latVal">–</output></span>
     <span class="tp"><span data-i18n="ui.kleur">Kleur</span> <select id="skin" aria-label="kleurstelling" data-i18n-aria="attr.kleurstelling"><option value="dark" data-i18n="ui.donker">Donker</option><option value="light" data-i18n="ui.licht">Licht</option><option value="s1000" data-i18n="ui.retro">Retro</option></select></span>
   </div>
@@ -619,8 +619,8 @@ const I18N={
    "attr.instellingen_van_effecten_mixers_mastering":"instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid",
    "attr.instellingen_van_patchkamer_zelf":"instellingen van Patchkamer zelf",
    "attr.apparaten_netjes_van_links_naar":"apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)",
-   "attr.focusweergave_de_apparaten_met_f":"focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (F)",
-   "attr.bibliotheek_tonen_of_verbergen_b":"bibliotheek tonen of verbergen (B)",
+   "attr.focusweergave_de_apparaten_met_f":"focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (Alt+F)",
+   "attr.bibliotheek_tonen_of_verbergen_b":"bibliotheek tonen of verbergen (Alt+B)",
    "attr.vertraging_tussen_een_geluid_berekenen":"vertraging tussen een geluid berekenen en het horen (browser + besturingssysteem + geluidskaart), zoals de browser die opgeeft",
    "attr.kleurstelling":"kleurstelling",
    "attr.werkruimte":"Werkruimte",
@@ -1142,8 +1142,8 @@ const I18N={
    "attr.instellingen_van_effecten_mixers_mastering":"settings of effects, mixers, mastering, sequencers and other devices without a sound of their own",
    "attr.instellingen_van_patchkamer_zelf":"settings of Patchkamer itself",
    "attr.apparaten_netjes_van_links_naar":"arrange devices neatly from left to right: sources → instruments → effects → mixer → output (Ctrl+Z undoes)",
-   "attr.focusweergave_de_apparaten_met_f":"focus view: the devices with [f] next to or below each other, without moving them on the canvas (F)",
-   "attr.bibliotheek_tonen_of_verbergen_b":"show or hide the library (B)",
+   "attr.focusweergave_de_apparaten_met_f":"focus view: the devices with [f] next to or below each other, without moving them on the canvas (Alt+F)",
+   "attr.bibliotheek_tonen_of_verbergen_b":"show or hide the library (Alt+B)",
    "attr.vertraging_tussen_een_geluid_berekenen":"delay between calculating a sound and hearing it (browser + operating system + sound card), as reported by the browser",
    "attr.kleurstelling":"color scheme",
    "attr.werkruimte":"Workspace",
@@ -2345,7 +2345,7 @@ $('libSearch').addEventListener('input',paintLib);
 libwin.addEventListener('pointerdown',e=>e.stopPropagation());
 window.addEventListener('resize',placeLib);
 const textEntry=e=>{const t=(e.composedPath&&e.composedPath()[0])||e.target; return !!t&&((t.tagName==='INPUT'&&!['button','checkbox','radio','range','file'].includes(t.type))||['SELECT','TEXTAREA'].includes(t.tagName)||t.isContentEditable);};
-document.addEventListener('keydown',e=>{ if(textEntry(e)) return; if((e.key==='b'||e.key==='B')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){ LIB.shown=!LIB.shown; placeLib(); saveLib(); } });
+document.addEventListener('keydown',e=>{ if(textEntry(e)) return; if(e.code==='KeyB'&&e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){ e.preventDefault(); LIB.shown=!LIB.shown; placeLib(); saveLib(); } });
 placeLib();
 paintLib();
 
@@ -3189,7 +3189,7 @@ function fillFocus(){ if(!focusEl) return; const body=focusEl.querySelector('.fv
 function openFocus(){ if(FOCUS.open) return; FOCUS.open=true; if(!focusEl) buildFocusView(); focusEl.hidden=false; fillFocus(); paintFocusBtn(); }
 function closeFocus(){ if(!FOCUS||!FOCUS.open) return; FOCUS.open=false; Host.devices.forEach(putBack); if(focusEl) focusEl.hidden=true; paintFocusBtn(); drawCables(); }
 $('focusBtn').onclick=()=>{ FOCUS.open?closeFocus():openFocus(); };
-document.addEventListener('keydown',e=>{ if(typing(e)||e.ctrlKey||e.metaKey||e.altKey) return; if(e.key==='f'||e.key==='F'){ FOCUS.open?closeFocus():openFocus(); e.preventDefault(); } if(e.key==='Escape'&&FOCUS.open&&!document.querySelector('.pkmodal')){ closeFocus(); } });
+document.addEventListener('keydown',e=>{ if(!textEntry(e)&&e.code==='KeyF'&&e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){ FOCUS.open?closeFocus():openFocus(); e.preventDefault(); } if(typing(e)) return; if(e.key==='Escape'&&FOCUS.open&&!document.querySelector('.pkmodal')){ closeFocus(); } });
 paintFocusBtn();
 
 })();
