@@ -136,6 +136,29 @@ A keyboard that makes no sound itself. It sends notes to other devices.
 
 An analog-style synth with two independent pitches, a shared filter and VCA, with ring modulation, hard sync and sample & hold. Connect Keys to its **Keyboard / notes** port and its **Stereo** out to Speakers.
 
+### Mixer
+
+A mixing desk with 1 to 32 channels and 0 to 8 groups, and a master with a limiter. Connect the sound-making devices to the channel inputs (**1**, **2**, …) and the **Out** port of the master to Speakers.
+
+![The Mixer card](images/en/11-mixer.png)
+
+- **Channels** and **Groups** set how many there are. The ports on the card appear and disappear with them. Every channel has its input, a **send** port and a **ret** (return) port. Type in the name field to name a channel.
+- Per channel: **Trim**, a 3- or 5-band **EQ** (choose under **EQ**), **Send**, **Return**, the group it goes to (**→ M** is the master), **Pan**, a fader with a level meter, and **M** (mute) and **S** (solo). Groups and the master have an EQ, send/return and a fader too, and a limiter sits behind the master. Double-click a slider to go back to its starting value.
+- **Level match** measures for 4 seconds and sets the trim of every channel so all sources arrive at the **Target** level. **Continuous** keeps them there slowly (at most 3 dB per second).
+- **Bundles.** A green bundle cable (for example the separate outputs of a drum machine) goes into **bundle in**; choose per channel which bundle channel arrives there, under the name field. **Channels out** sends all channels, after mixing, as one bundle, for example to a recorder. **+ groups and mix** adds the groups and the total mix to it.
+- A Mixer has **presets** (it makes no sound of its own). A preset keeps the settings but not the source choices of the channels.
+
+### Leveler
+
+Keeps the average volume of a source steady. Place it between an instrument and the Mixer, or on the mix before Speakers. It helps with sources that slowly get louder and softer, for example through a modulator.
+
+![The Leveler card](images/en/12-leveler.png)
+
+- **Mode:** *Leveling* or *Pass through* (the sound goes through unchanged).
+- **Target** is the level it aims for. **Response** is how fast the volume moves up or down (down is three times faster). **Window** is the time over which it measures. **Range ±** is the most it may turn the volume up or down. Below the **Gate** level the volume stays where it is, so reverb tails and pauses are not blown up. **Ceiling** is the limit of the limiter behind it, which catches peaks.
+- The meter shows **IN**, **OUT** and **GAIN**, with a lamp for the limiter. **Current level = target** sets the target to what comes in now. **Reset gain** sets the correction back to 0.
+- A Leveler has **presets**. Without AudioWorklet in your browser it passes the sound through unchanged and tells you so.
+
 ## 7. Tunes and presets
 
 A **tune** is a complete setting of one device that makes sound: all knobs, patterns and choices. A **preset** is the same for a device without a sound of its own, such as an effect or a mixer. Neither contains cables.

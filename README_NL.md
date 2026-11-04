@@ -31,6 +31,8 @@ De [gebruikershandleiding](docs/USER-MANUAL_NL.md) leidt je er stap voor stap do
 | **Duofone** | Een synth in analoge stijl met twee onafhankelijke toonhoogten, een gedeeld filter en een gedeelde VCA, ringmodulatie, hard sync en sample & hold | `devices/synths/Duofone/` |
 | **Acid Baselines** | Een bassynth met een sequencer van 16 stappen (accent, slide, octaaf per stap) en 16 klassieke patronen in acid-stijl | `devices/synths/AcidBaselines/` |
 | **Keys / MIDI** | Een keyboard en Web MIDI-brug die noten naar andere apparaten stuurt | `devices/tools/Keys/` |
+| **Mixer** | Een mengpaneel met 1 tot 32 kanalen en 0 tot 8 groepen: trim, EQ, sends en returns, pan, faders, mute en solo, bundel in en uit, en een master met een begrenzer | `devices/mixer/Mixer/` |
+| **Leveler** | Houdt het gemiddelde volume van een bron gelijk: een leveler met een begrenzer erachter | `devices/mixer/Leveler/` |
 | **Speakers** | De uitgang: volume, een begrenzer en een uitsteekmeter | `devices/mixer/Speakers/` |
 
 De map `tunes/` bevat **Duofone Styles** (60 tunes in 12 stijlen) en **Acid Baselines Classics** (40 tunes in 8 stijlen).

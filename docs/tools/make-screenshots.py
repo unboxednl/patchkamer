@@ -101,6 +101,9 @@ def shots(browser, lang, OUT, LIB, BASE):
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)
     pg = newpage(nopicker=True); load_lib(pg); place(pg, 'Keys'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
+    for dev, shot in (('Mixer', '11-mixer'), ('Leveler', '12-leveler')):
+        pg = newpage(nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(2500)
+        pg.locator('.card').first.screenshot(path=OUT + '/' + shot + '.png'); done(pg)
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 
 if __name__ == '__main__':
