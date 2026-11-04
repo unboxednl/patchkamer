@@ -1,0 +1,182 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.grit",
+  "name": "Grit Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Grit: warm and dark saturation, moving filter sweeps and pulses, and loud, resonant, screaming settings.",
+  "tree": [
+    {
+      "folder": "Warm",
+      "items": [
+        {
+          "name": "Warm Edge",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.25,
+            "cut": 6000,
+            "res": 1,
+            "rate": 0.2,
+            "depth": 0,
+            "lvl": 0.8
+          }
+        },
+        {
+          "name": "Dull Blanket",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.4,
+            "cut": 900,
+            "res": 1.5,
+            "rate": 0.2,
+            "depth": 0,
+            "lvl": 0.8
+          }
+        },
+        {
+          "name": "Fuzz Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.7,
+            "cut": 700,
+            "res": 3,
+            "rate": 0.2,
+            "depth": 0,
+            "lvl": 0.7
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Motion",
+      "items": [
+        {
+          "name": "Slow Sweep",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.45,
+            "cut": 1800,
+            "res": 6,
+            "rate": 0.15,
+            "depth": 0.6,
+            "lvl": 0.8
+          }
+        },
+        {
+          "name": "Wah Pulse",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.5,
+            "cut": 1200,
+            "res": 9,
+            "rate": 2.5,
+            "depth": 0.7,
+            "lvl": 0.7
+          }
+        },
+        {
+          "name": "Underwater",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.2,
+            "cut": 500,
+            "res": 2,
+            "rate": 0.3,
+            "depth": 0.8,
+            "lvl": 0.8
+          }
+        },
+        {
+          "name": "Helicopter",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.6,
+            "cut": 2500,
+            "res": 5,
+            "rate": 7,
+            "depth": 0.9,
+            "lvl": 0.7
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Extreme",
+      "items": [
+        {
+          "name": "Bright Razor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.9,
+            "cut": 9000,
+            "res": 8,
+            "rate": 0.2,
+            "depth": 0,
+            "lvl": 0.6
+          }
+        },
+        {
+          "name": "Acid Bite",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.8,
+            "cut": 900,
+            "res": 16,
+            "rate": 0.4,
+            "depth": 0.5,
+            "lvl": 0.6
+          }
+        },
+        {
+          "name": "Screamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 1,
+            "cut": 3500,
+            "res": 14,
+            "rate": 0.1,
+            "depth": 0,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Siren",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 0.85,
+            "cut": 2200,
+            "res": 15,
+            "rate": 0.8,
+            "depth": 1,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Meltdown",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "drive": 1,
+            "cut": 2000,
+            "res": 18,
+            "rate": 5.5,
+            "depth": 1,
+            "lvl": 0.45
+          }
+        }
+      ]
+    }
+  ]
+}
