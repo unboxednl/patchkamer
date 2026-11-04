@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.0 — Patchkamer contract v1.11. Geen teksten die vertaald moeten worden (alleen 'Volume' en 'In', in alle talen gelijk); geluid en state ongewijzigd.
 // 1.9.0 — Patchkamer contract v1.9 (gevalideerd met validate-instrument v1.10). Nieuwe naam Speakers en id nl.patchkamer.speakers; poorten ongewijzigd.
 //   - setState volgt nu het contract (§13): onbekende velden worden genegeerd, een ontbrekende of ongeldige lvl wordt de standaard (0.8), lvl blijft tussen 0 en 1
 //   - setState zet het volume zacht (setTargetAtTime), zodat een preset tijdens het spelen niet knakt
@@ -6,7 +7,7 @@
 // Speakers — naar de luidsprekers, met begrenzer en meter · Patchkamer contract v1.9
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export default {
-  id:'nl.patchkamer.speakers', name:'Speakers', version:'1.9.0', category:'mix', kind:'output',
+  id:'nl.patchkamer.speakers', name:'Speakers', version:'1.11.0', category:'mix', kind:'output',
   ports:{audioIn:[{id:'in',name:'In'}],audioOut:[],eventIn:[],eventOut:[]},
   create(ctx,host){
     const inG=ctx.createGain(), lim=ctx.createDynamicsCompressor(), an=ctx.createAnalyser(); lim.threshold.value=-3; lim.ratio.value=12; lim.knee.value=0; lim.attack.value=0.002; an.fftSize=512;
