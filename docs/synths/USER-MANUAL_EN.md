@@ -254,7 +254,7 @@ The sequencer under the controls:
 
 **Tips and limits.**
 
-- Keep **Level** below 0.6 (60%), and below 0.4 when **Sub** and **Resonance** are both high: in a measurement, **Level** 100%, **Sub** 100% and **Resonance** 8 clipped.
+- Keep **Level** below 0.6 (60%), and below 0.4 when **Sub** and **Resonance** are both high. A soft limiter on the output keeps the peak below 0.99 (it does nothing below 0.9), so **Level** 100%, **Sub** 100% and **Resonance** 8 sound compressed instead of clipping.
 - A pad is not really possible (mono, no slow attack); a drone with long notes is.
 - A built-in guard replaces the filter if it derails.
 
@@ -497,7 +497,7 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 
 **Tips and limits.**
 
-- A note that is shorter than the amplifier **Attack** is silent (measured). Keep the attack short for short notes.
+- A note that is shorter than the amplifier **Attack** is not silent: the release starts from the level the attack had reached, so a short note sounds soft. For short notes and plucks, keep the attack short anyway.
 - The level of each voice is divided by the square root of the unison count and of the number of chord notes, so many unison voices do not make it louder in the same measure.
 - Oscillator type **Noise** is very soft; a patch with only noise oscillators stays quiet.
 
@@ -793,6 +793,6 @@ The eight algorithms (`a → b` means a modulates b):
 - **A synth does not react to a keyboard.** Connect the orange cable to its notes port (**Notes**, **Keyboard / notes**, **External notes**), not to **Mod**. Acid Baselines needs **internal on** off for outside notes, Acid Stepper needs **Control** = **External keyboard / sequencer**, and Sub Line and Cross Mod Mono need **Control** = **Keyboard / external sequencer**. For a MIDI keyboard use **Connect MIDI** on Keys; see the [main manual](../USER-MANUAL_EN.md#13-troubleshooting).
 - **Notes keep sounding.** A note without a length keeps sounding on some synths (Bowed Ensemble). Make the sequencer send note lengths, or press **All off** on the card.
 - **Supersaw Swarm gate or pump does nothing.** They only work while the clock runs.
-- **Quiet or silent.** Check **Level** or **Output**, and the sound controls: a very low cutoff with a low envelope amount is very quiet (Acid Baselines, Basic Mono), Patchbay Synth needs a VCA source (see its tips) and a note shorter than the amplifier attack is silent on Triple Osc Poly.
+- **Quiet or silent.** Check **Level** or **Output**, and the sound controls: a very low cutoff with a low envelope amount is very quiet (Acid Baselines, Basic Mono), Patchbay Synth needs a VCA source (see its tips) and a very short note with a long amplifier attack sounds only faintly on Triple Osc Poly.
 - **A filter blows up or goes silent.** Several synths (for example Acid Baselines, Basic Mono and Low Bass) have a guard that checks the filter every 50 ms and replaces it when it derails, so the sound comes back by itself. If it happens again, lower **Resonance**.
 - **Crackles.** Open Settings → Audio and choose a larger latency, or a lower quality.

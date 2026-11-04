@@ -254,7 +254,7 @@ De sequencer onder de regelaars:
 
 **Tips en beperkingen.**
 
-- Houd **Niveau** onder 60%, en onder 40% als **Sub** en **Reso** allebei hoog staan: in een meting klipten **Niveau** 100%, **Sub** 100% en **Reso** 8.
+- Houd **Niveau** onder 60%, en onder 40% als **Sub** en **Reso** allebei hoog staan. Een zachte begrenzer op de uitgang houdt de piek onder 0,99 (hij doet niets onder 0,9), dus **Niveau** 100%, **Sub** 100% en **Reso** 8 klinken samengedrukt in plaats van te klippen.
 - Een pad is er niet echt mee te maken (mono, geen langzame attack); een drone met lange noten wel.
 - Een ingebouwde bewaker vervangt het filter als het ontspoort.
 
@@ -497,7 +497,7 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 
 **Tips en beperkingen.**
 
-- Een noot die korter duurt dan de **Attack** van de versterker is stil (gemeten). Houd de attack kort voor korte noten.
+- Een noot die korter duurt dan de **Attack** van de versterker is niet stil: de release start vanaf het niveau dat de attack had bereikt, dus een korte noot klinkt zacht. Houd de attack voor korte noten en plucks toch kort.
 - Het niveau van elke stem wordt gedeeld door de wortel van het aantal unisonstemmetjes en van het aantal akkoordnoten, dus veel unison maakt het niet in dezelfde mate luider.
 - Oscillatortype **Ruis** is erg zacht; een patch met alleen ruisoscillatoren blijft zacht.
 
@@ -793,6 +793,6 @@ De acht algoritmes (`a → b` betekent: a moduleert b):
 - **Een synth reageert niet op een toetsenbord.** Sluit de oranje kabel aan op zijn notenpoort (**Noten**, **Keyboard / noten**, **Externe noten**), niet op **Mod**. Bij Acid Baselines moet **intern aan** uit voor noten van buiten, bij Acid Stepper moet **Besturing** op **Extern keyboard / sequencer** staan, en bij Sub Line en Cross Mod Mono op **Keyboard / externe sequencer**. Gebruik voor een MIDI-toetsenbord **Connect MIDI** op Keys; zie de [basishandleiding](../USER-MANUAL_NL.md#13-problemen-oplossen).
 - **Noten blijven klinken.** Een noot zonder lengte blijft bij sommige synths doorklinken (Bowed Ensemble). Laat de sequencer nootlengtes sturen, of druk op **Alles uit** op de kaart.
 - **De gate of pomp van Supersaw Swarm doet niets.** Ze werken alleen als de klok loopt.
-- **Zacht of stil.** Controleer **Niveau** of **Uitgang** en de klankregelaars: een heel lage cutoff met een lage envelope-diepte klinkt heel zacht (Acid Baselines, Basic Mono), Patchbay Synth heeft een VCA-bron nodig (zie zijn tips) en een noot die korter is dan de attack van de versterker is stil bij Triple Osc Poly.
+- **Zacht of stil.** Controleer **Niveau** of **Uitgang** en de klankregelaars: een heel lage cutoff met een lage envelope-diepte klinkt heel zacht (Acid Baselines, Basic Mono), Patchbay Synth heeft een VCA-bron nodig (zie zijn tips) en een heel korte noot met een lange attack van de versterker klinkt bij Triple Osc Poly maar zacht.
 - **Een filter ontspoort of valt stil.** Meerdere synths (bijvoorbeeld Acid Baselines, Basic Mono en Low Bass) hebben een bewaker die het filter elke 50 ms controleert en vervangt als het ontspoort, zodat het geluid vanzelf terugkomt. Gebeurt het opnieuw, zet dan **Resonantie** lager.
 - **Gekraak.** Open Instellingen → Audio en kies een grotere latency, of een lagere kwaliteit.
