@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Het Nederlandse label Modelstand heet nu Stand (Engels: Mode); het gaat om de keuze Duofoon of Mono, niet om een model. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Teksten in de UI per taal (host.lang: nl en en, anders en) en de uitgangsbegrenzer volgt host.audio.oversample;
 //   namen van poorten per taal via i18n. Geluid en state ongewijzigd.
 // 1.9.0 — Patchkamer contract v1.9 (gevalideerd met validate-instrument v1.9). Nieuwe naam Duofone en id nl.patchkamer.duofone;
@@ -66,7 +67,7 @@ const EN = {   // Nederlands is de brontekst; host.lang 'nl' toont hem ongewijzi
   'Modulatie': 'Modulation', 'Ruis': 'Noise', 'LFO-snelheid': 'LFO rate', 'Transpositie': 'Transpose', 'Uitgang': 'Output',
   'VCO B fijn': 'VCO B fine', 'Ringmodulatie': 'Ring modulation',
   "Duofoon · twee VCO's": 'Duophonic · two VCOs', 'Mono · één VCO': 'Mono · one VCO', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle',
-  'Modelstand': 'Mode', 'LFO-vorm': 'LFO shape',
+  'Stand': 'Mode', 'LFO-vorm': 'LFO shape',
   'Geïnspireerd op klassieke duofone analoge synths · twee onafhankelijke toonhoogten met gedeeld filter en VCA · ringmod · sync · sample & hold.':
     'Inspired by classic duophonic analog synths · two independent pitches with a shared filter and VCA · ring mod · sync · sample & hold.',
   'Duofoon-stand: de laagste toets stuurt VCO A, de hoogste VCO B; filter en VCA worden gedeeld. Mono-stand schakelt naar één VCO en mono. Filtertypen zijn eigen 12-/24-dB-benaderingen.':
@@ -77,7 +78,7 @@ const EN = {   // Nederlands is de brontekst; host.lang 'nl' toont hem ongewijzi
   'Zelfstandige Patchkamer-synth. Eigen presets en klanksynthese. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.':
     'Standalone Patchkamer synth. Own presets and sound synthesis. The purple Mod input changes the sound without overwriting base values.',
 };
-const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1.11.0", "kind": "instrument", "category": "synth", "ui": {"width": 920, "minWidth": 380}, "i18n": {"en": {"ports": {"notes": "Keyboard / notes"}}}, "ports": {"audioIn": [], "audioOut": [{"id": "out", "name": "Stereo"}], "eventIn": [{"id": "notes", "name": "Keyboard / noten"}], "eventOut": [], "modIn": [{"id": "mod", "name": "Mod"}], "modOut": []},create(ctx,host){
+const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1.11.1", "kind": "instrument", "category": "synth", "ui": {"width": 920, "minWidth": 380}, "i18n": {"en": {"ports": {"notes": "Keyboard / notes"}}}, "ports": {"audioIn": [], "audioOut": [{"id": "out", "name": "Stereo"}], "eventIn": [{"id": "notes", "name": "Keyboard / noten"}], "eventOut": [], "modIn": [{"id": "mod", "name": "Mod"}], "modOut": []},create(ctx,host){
     const tr=host.lang==='nl'?x=>x:x=>EN[x]??x;   // teksten in de UI: kies op host.lang (contract §12c)
     let mountHost=null,panel=null,uiHandles={};
     const add=(parent,tag,text,css)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(css)el.style.cssText=css;parent.appendChild(el);return el;};
@@ -118,7 +119,7 @@ const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1
     const options={"variant":[["duo","Duofoon · twee VCO's"],["mono","Mono · één VCO"]],"wave":[["sawtooth","Zaagtand"],["square","Puls"],["triangle","Driehoek"]],"wave2":[["sawtooth","Zaagtand"],["square","Puls"],["triangle","Driehoek"]],"filterType":[["12","12 dB"],["24","24 dB"]],"ampMode":[["adsr","ADSR"],["ar","AR"]],"lfoWave":[["sawtooth","Zaagtand"],["square","Puls"],["triangle","Driehoek"]]};
     for(const vals of Object.values(options))for(const v of vals)v[1]=tr(v[1]);
     const presets={"Duo Brass":{"cutoff":2400,"filterEnv":2.5,"ring":0,"fAttack":0.1},"Ring Factory":{"ring":0.9,"osc2Semi":17,"osc1":0.25,"osc2":0.1,"cutoff":7000,"drive":0.35},"Sample Hold Lab":{"sampleHold":0.55,"shFilter":0.4,"lfoRate":6,"cutoff":2500},"Sync Flight":{"sync":true,"osc2Semi":19,"osc2":0.9,"osc1":0.1,"ring":0,"glide":0.05},"Mono Pulse Bass":{"variant":"mono","wave":"square","pw":0.25,"cutoff":800,"filterEnv":3,"fDecay":0.2},"Duo Atmosphere":{"attack":1.2,"release":3,"filterEnv":1,"ring":0.12,"pwm":0.6,"lfoRate":0.2}};
-    const labels={"variant":"Modelstand","wave":"VCO A","wave2":"VCO B","filterType":"Low-pass","ampMode":"VCA envelope","sync":"Hard sync","legato":"Legato","lfoWave":"LFO-vorm"};
+    const labels={"variant":"Stand","wave":"VCO A","wave2":"VCO B","filterType":"Low-pass","ampMode":"VCA envelope","sync":"Hard sync","legato":"Legato","lfoWave":"LFO-vorm"};
     for(const k in labels)labels[k]=tr(labels[k]);
     const booleanFields=["sync","legato"];
     const subtitle=tr("Geïnspireerd op klassieke duofone analoge synths · twee onafhankelijke toonhoogten met gedeeld filter en VCA · ringmod · sync · sample & hold.");
