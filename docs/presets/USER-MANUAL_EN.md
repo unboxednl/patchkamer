@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-A **preset** is a saved setting of one device that makes no sound of its own: an effect, a mixer, a modulator or a tool. You pick a preset from a list on the device's card and every knob and choice moves to the saved value. This page explains how to use presets, how to import, export and share a pack, which packs come with Patchkamer, and how to make your own. Devices that make sound (synths, drum machines) have **tunes** instead: see the [tunes manual](../tunes/USER-MANUAL_EN.md). For the basics of Patchkamer (start, loading a library, cables), see the [main manual](../USER-MANUAL_EN.md).
+A **preset** is a saved setting of one device that makes no sound of its own: an effect, a mixer, a modulator, a sequencer or a tool. You pick a preset from a list on the device's card and every knob and choice moves to the saved value. This page explains how to use presets, how to import, export and share a pack, which packs come with Patchkamer, and how to make your own. Devices that make sound (synths, drum machines) have **tunes** instead: see the [tunes manual](../tunes/USER-MANUAL_EN.md). For the basics of Patchkamer (start, loading a library, cables), see the [main manual](../USER-MANUAL_EN.md).
 
 ## Contents
 
@@ -14,8 +14,9 @@ A **preset** is a saved setting of one device that makes no sound of its own: an
 6. [Share a pack: the file and the license](#share-a-pack-the-file-and-the-license)
 7. [The packs that come with Patchkamer](#the-packs-that-come-with-patchkamer)
 8. [Effect Chain: complete chains](#effect-chain-complete-chains)
-9. [Make your own pack](#make-your-own-pack)
-10. [If it does not work](#if-it-does-not-work)
+9. [Chord Sequencer: chord and pattern presets](#chord-sequencer-chord-and-pattern-presets)
+10. [Make your own pack](#make-your-own-pack)
+11. [If it does not work](#if-it-does-not-work)
 
 ## What a preset is
 
@@ -109,7 +110,9 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 14 packs with **178 presets** in total, one per device. Each is named after its device ("Chorus Basics" and so on) and is licensed CC0-1.0.
+This repository has 15 packs with **238 presets** in total, one per device. Each is named after its device ("Chorus Basics", "Chord Sequencer Styles" and so on) and is licensed CC0-1.0. The names of packs, folders and presets are English.
+
+### Effects (12)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
@@ -117,16 +120,32 @@ This repository has 14 packs with **178 presets** in total, one per device. Each
 | [Effect Chain](../../devices/effects/EffectChain/) | Effect Chain Basics | 14 | Atmosphere (4), Studio (4), Club (4), Sound Design (2) | [`effect-chain.patchkamer-presets.json`](../../presets/effect-chain.patchkamer-presets.json) |
 | [Filter](../../devices/effects/Filter/) | Filter Basics | 14 | Basics (5), Movement (5), Aggressive (4) | [`filter.patchkamer-presets.json`](../../presets/filter.patchkamer-presets.json) |
 | [Flanger](../../devices/effects/Flanger/) | Flanger Basics | 12 | Classic (4), Subtle (2), Tempo (2), Extreme (4) | [`flanger.patchkamer-presets.json`](../../presets/flanger.patchkamer-presets.json) |
-| [Follower](../../devices/modulators/Follower/) | Follower Basics | 14 | Level (6), Onsets (4), Extreme (4) | [`follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json) |
 | [Frequency Shifter](../../devices/effects/FrequencyShifter/) | Frequency Shifter Basics | 13 | Subtle (4), Inharmonic (5), Feedback (4) | [`frequency-shifter.patchkamer-presets.json`](../../presets/frequency-shifter.patchkamer-presets.json) |
 | [Grit](../../devices/effects/Grit/) | Grit Basics | 12 | Warm (3), Motion (4), Extreme (5) | [`grit.patchkamer-presets.json`](../../presets/grit.patchkamer-presets.json) |
-| [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
 | [Phaser](../../devices/effects/Phaser/) | Phaser Basics | 11 | Classic (4), Tempo (3), Extreme (4) | [`phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json) |
 | [Pump](../../devices/effects/Pump/) | Pump Basics | 13 | Clock (6), Sidechain (3), Split and Mix (4) | [`pump.patchkamer-presets.json`](../../presets/pump.patchkamer-presets.json) |
 | [Resonator](../../devices/effects/Resonator/) | Resonator Basics | 13 | Subtle (4), Chords (6), Extreme (3) | [`resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json) |
 | [Room](../../devices/effects/Room/) | Room Basics | 12 | Spaces (4), Delays (4), Space FX (4) | [`room.patchkamer-presets.json`](../../presets/room.patchkamer-presets.json) |
 | [Tremolo](../../devices/effects/Tremolo/) | Tremolo Basics | 13 | Classic (4), Slow (3), Rhythmic (3), Extreme (3) | [`tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json) |
 | [Vocoder](../../devices/effects/Vocoder/) | Vocoder Basics | 14 | Voices (4), Textures (4), Extreme (4), External (2) | [`vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json) |
+
+### Mixer (1)
+
+| Device | Pack | Presets | Folders | File |
+|---|---|---|---|---|
+| [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
+
+### Modulators (1)
+
+| Device | Pack | Presets | Folders | File |
+|---|---|---|---|---|
+| [Follower](../../devices/modulators/Follower/) | Follower Basics | 14 | Level (6), Onsets (4), Extreme (4) | [`follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json) |
+
+### Sequencers (1)
+
+| Device | Pack | Presets | Folders | File |
+|---|---|---|---|---|
+| [Chord Sequencer](../../devices/sequencers/ChordSequencer/) | Chord Sequencer Styles | 60 | Pop (6), Ballad (5), Cinematic (6), Film Score (5), Ambient (6), Trance (6), Synthwave (6), Lo-fi (5), Neo-classical (5), Deep House (5), Funk & Disco (5) | [`chord-sequencer.patchkamer-presets.json`](../../presets/chord-sequencer.patchkamer-presets.json) |
 
 Mixer, Speakers, Multitrack, Notes, Recorder, Scope and other devices can also have presets, but no pack comes with them yet: save your own with **Save**.
 
@@ -168,13 +187,19 @@ How to use them:
 - Some of the effects in the chain run on the main thread of the browser and add a little latency. On a slow computer, use chains with fewer of them, or hide slots.
 - The chain levels were set on paper and have not been listened to. Check the loudness with your own source and use **Input**, **Output** and **Total mix**.
 
+## Chord Sequencer: chord and pattern presets
+
+Chord Sequencer makes no sound of its own: it sends notes to four outputs, which you connect to four synths. So it has presets, not tunes. The **Chord Sequencer Styles** pack has 60 presets in 11 folders: Pop, Ballad, Cinematic, Film Score, Ambient, Trance, Synthwave, Lo-fi, Neo-classical, Deep House and Funk & Disco. For example **Pop**: Bright Four, Sunday Drive, Late Night Minor. **Ambient**: Floating Garden, Deep Water, Aurora Drift.
+
+According to the description of the pack, each preset fills all four tracks (chords, bass, pulse and bells) in one key, and all four scenes (main, variation, breakdown and lift). A preset holds the settings, not the cables: connect the four outputs to your synths yourself, and see the [sequencers manual](../sequencers/USER-MANUAL_EN.md) for how. The synths that go with it are in the [tunes manual](../tunes/USER-MANUAL_EN.md).
+
 ## Make your own pack
 
 **Without an agent.** Place the device, set a sound, click **Save** and choose **+ New library…** to start a library. Repeat for every preset, use folders to sort them, and click **Info** to fill in the author, the license and a description. Then click **Export**. The file is your pack.
 
 **With an AI agent.** An agent can write a pack file directly. Give it:
 
-- the `AGENTS.md` in the device's folder (for example `devices/effects/Chorus/AGENTS.md`): it lists the device's id, its values and their ranges;
+- the `AGENTS.md` in the device's folder (for example `devices/effects/Chorus/AGENTS.md` or `devices/sequencers/ChordSequencer/AGENTS.md`): it lists the device's id, its values and their ranges;
 - [`tunes/AGENTS.md`](../../tunes/AGENTS.md): the file layout and the rules for the license. It is written for tunes; for presets the layout is the same, except that `formatVersion` is `2` and the file is named `name.patchkamer-presets.json` in `presets/`.
 
 Ask the agent to use only values that the device knows, to keep names in English and free of brand names, and to say that it did not listen to the result. Then import the pack, step through it and listen yourself.

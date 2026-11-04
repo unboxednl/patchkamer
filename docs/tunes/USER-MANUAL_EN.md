@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-A **tune** is a saved sound of one device that makes sound: a synth or a drum machine. You pick a tune from a list on the device's card and all its knobs, choices and patterns move to the saved values. This page explains how to use tunes, how to import, export and share a pack, which packs come with Patchkamer, and how to make your own. Devices without a sound of their own (effects, mixers, tools) have **presets** instead: see the [presets manual](../presets/USER-MANUAL_EN.md). For the basics of Patchkamer (start, loading a library, cables), see the [main manual](../USER-MANUAL_EN.md).
+A **tune** is a saved sound of one device that makes sound: a synth or a drum device. You pick a tune from a list on the device's card and all its knobs, choices and patterns move to the saved values. This page explains how to use tunes, how to import, export and share a pack, which packs come with Patchkamer, and how to make your own. Devices without a sound of their own (effects, mixers, tools) have **presets** instead: see the [presets manual](../presets/USER-MANUAL_EN.md). For the basics of Patchkamer (start, loading a library, cables), see the [main manual](../USER-MANUAL_EN.md).
 
 ## Contents
 
@@ -19,7 +19,7 @@ A **tune** is a saved sound of one device that makes sound: a synth or a drum ma
 
 ## What a tune is
 
-A tune is the **sound of one device**: all its knobs, choices and patterns. It does not contain cables. Tunes are for devices that make sound (in the contract: `instrument` devices): synths, drones and drum machines. A device without a sound of its own has presets, not tunes.
+A tune is the **sound of one device**: all its knobs, choices and patterns. It does not contain cables. Tunes are for devices that make sound (in the contract: `instrument` devices): synths, drones and drum devices. A device without a sound of its own has presets, not tunes.
 
 Tunes are kept per device. A tune made for Duofone only shows up on a Duofone card. Every card with that device gets its own copy of the values when you load a tune, so changing one Duofone does not change another.
 
@@ -54,7 +54,7 @@ Your own tunes are kept in your browser. Export a library to put it in a file (s
 
 Patchkamer's host has a second feature for drum machines. A drum machine that offers separate instruments (for example a kick and a snare) gets a **second row** on its tune bar, named **Instrument**. There you choose an instrument, then **load or save one sound** (such as the kick) as a tune of its own, next to the tunes of the whole machine. In a pack file such an item has `kind: "part"` and names the instrument in `part`.
 
-What I could check in this repository: the drum devices that come with it (Drum Kit, Drum Machine and Groovebox 12) do not offer separate instruments, so you will not see this row on them, and the three drum packs contain whole-machine tunes only (`kind: "set"`). The row is there for drum machines that do offer instruments.
+What I could check in this repository: none of the drum devices that come with it (Drum Kit, Drum Machine, Groovebox 12, Pulse Drums, Latin Percussion and Click Synth) offers separate instruments, so you will not see this row on them, and the six drum packs contain whole-machine tunes only (`kind: "set"`). The row is there for drum machines that do offer instruments.
 
 ## The Tunes menu: libraries and folders
 
@@ -114,37 +114,51 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 5 packs with **221 tunes** in total, one per device. All are licensed CC0-1.0, and the names of packs, folders and tunes are English.
+This repository has 24 packs with **1393 tunes** in total, one per device: 18 packs for synths (1186 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
+
+### Synths (18)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
-| [Duofone](../../devices/synths/Duofone/) | Duofone Styles | 60 | Techno (5), House (5), Trance (5), Ambient (5), Drum & Bass (5), Dubstep (5), Synthwave (5), Funk & Disco (5), Hip-hop (5), Electro (5), Pop (5), Chiptune (5) | [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json) |
 | [Acid Baselines](../../devices/synths/AcidBaselines/) | Acid Baselines Classics | 49 | Chicago Origins (5), Frankfurt Rolling (5), Minimal Acid (5), Squelch Anthems (5), Acid Techno (5), Acid Trance (5), Electro Acid (5), Deep Acid (5), AIcid (9) | [`acid-baselines-classics.patchkamer-tunes.json`](../../tunes/acid-baselines-classics.patchkamer-tunes.json) |
+| [Acid Stepper](../../devices/synths/AcidStepper/) | Acid Stepper Styles | 65 | Acid (7), Techno (6), House (6), Deep House (5), Electro (6), Trance (6), Breakbeat (5), Hip-hop (5), Synthwave (5), Dub (5), Industrial (5), Garage (4) | [`acid-stepper-styles.patchkamer-tunes.json`](../../tunes/acid-stepper-styles.patchkamer-tunes.json) |
+| [Basic Mono](../../devices/synths/BasicMono/) | Basic Mono Styles | 65 | Techno (6), House (6), Electro (6), Hip-hop (5), Funk (6), Synthwave (6), Dub (5), Pop (5), Chiptune (6), Acid (5), Trance (5), Ambient (4) | [`basic-mono-styles.patchkamer-tunes.json`](../../tunes/basic-mono-styles.patchkamer-tunes.json) |
+| [Bowed Ensemble](../../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 65 | Cinematic (7), Ambient (6), Pop (6), Ballad (6), Trance (6), Synthwave (6), Film Score (6), Lo-fi (6), Neo-classical (6), Disco & Funk (5), Deep House (5) | [`bowed-ensemble-styles.patchkamer-tunes.json`](../../tunes/bowed-ensemble-styles.patchkamer-tunes.json) |
+| [Chord Poly](../../devices/synths/ChordPoly/) | Chord Poly Styles | 60 | House (6), Deep House (6), Garage (6), Lo-fi (6), Ambient (6), Pop (6), Soul (6), Synthwave (6), Cinematic (6), Disco & Funk (6) | [`chord-poly-styles.patchkamer-tunes.json`](../../tunes/chord-poly-styles.patchkamer-tunes.json) |
+| [Cross Mod Mono](../../devices/synths/CrossModMono/) | Cross Mod Mono Styles | 63 | Techno (6), Acid (5), House (6), Trance (5), Ambient (5), Synthwave (6), Electro (5), Drum & Bass (5), Dub (5), Hip-hop (4), Chiptune (6), Funk & Disco (5) | [`cross-mod-mono-styles.patchkamer-tunes.json`](../../tunes/cross-mod-mono-styles.patchkamer-tunes.json) |
+| [Dissonant Cluster](../../devices/synths/DissonantCluster/) | Dissonant Cluster Styles | 60 | Industrial (8), Horror & Cinematic (8), Dark Ambient (7), Techno (6), Experimental (7), Sound Design (6), Noise (5), Dubstep (6), Drone (7) | [`dissonant-cluster-styles.patchkamer-tunes.json`](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) |
+| [Duofone](../../devices/synths/Duofone/) | Duofone Styles | 60 | Techno (5), House (5), Trance (5), Ambient (5), Drum & Bass (5), Dubstep (5), Synthwave (5), Funk & Disco (5), Hip-hop (5), Electro (5), Pop (5), Chiptune (5) | [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json) |
+| [Four-Operator FM](../../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | Synthwave (7), Electro (6), Pop (6), Chiptune (6), Jazz & Soul (6), Ambient (6), Cinematic (6), Techno & House (6), Drum & Bass (6), Hip-hop & Lo-fi (6), Funk & Disco (6) | [`four-operator-fm-styles.patchkamer-tunes.json`](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) |
+| [Karplus String](../../devices/synths/KarplusString/) | Karplus String Styles | 60 | Folk (6), Ambient (6), Cinematic (6), Pop (6), World (6), Lo-fi (6), Ballad (6), Flamenco (6), Jazz (6), Metallic (6) | [`karplus-string-styles.patchkamer-tunes.json`](../../tunes/karplus-string-styles.patchkamer-tunes.json) |
+| [Low Bass](../../devices/synths/LowBass/) | Low Bass Styles | 64 | Sub (6), Rolling Bass (5), Detuned Wide (5), Dub (5), Booming Sub (6), Acid (5), Funk (5), Drum & Bass (5), Dubstep (5), Garage (4), Trap (4), Synthwave (4), Techno & House (5) | [`low-bass-styles.patchkamer-tunes.json`](../../tunes/low-bass-styles.patchkamer-tunes.json) |
+| [Patch Mono](../../devices/synths/PatchMono/) | Patch Mono Styles | 79 | Techno (6), Acid (6), Dubstep (6), Drum & Bass (6), Hip-hop (5), Dub (5), Synthwave (6), Ambient (6), Electro (5), Funk & Disco (5), Trance (5), Chiptune (5), Patch Routes (7), External Input (6) | [`patch-mono-styles.patchkamer-tunes.json`](../../tunes/patch-mono-styles.patchkamer-tunes.json) |
+| [Patchbay Synth](../../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | Techno (7), Acid (6), House (6), Synthwave (6), Ambient (7), Cinematic (7), Electro (6), Hip-hop (5), Dub (5), Funk & Disco (6), Trance (5), Chiptune (5), Drum & Bass (6), Generative (7), FX (5) | [`patchbay-synth-styles.patchkamer-tunes.json`](../../tunes/patchbay-synth-styles.patchkamer-tunes.json) |
+| [Poly Chorus](../../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | Synthwave (6), Ambient (6), Cinematic (6), Pop (6), Trance (6), House (6), Deep House (6), Funk & Disco (6), Soul (6), Electro (6), Lo-fi (6), Techno (6) | [`poly-chorus-styles.patchkamer-tunes.json`](../../tunes/poly-chorus-styles.patchkamer-tunes.json) |
+| [Stage Keys](../../devices/synths/StageKeys/) | Stage Keys Styles | 66 | Soul (6), Funk (6), Jazz (6), Pop (6), Gospel (6), Rock (6), Disco (6), House (6), Lo-fi (6), Reggae (6), Ballad (6) | [`stage-keys-styles.patchkamer-tunes.json`](../../tunes/stage-keys-styles.patchkamer-tunes.json) |
+| [Sub Line](../../devices/synths/SubLine/) | Sub Line Styles | 68 | Techno (8), House (7), Deep House (5), Acid (8), Electro (7), Synthwave (8), Hip-hop (7), Dub (6), Drum & Bass (6), Trance (6) | [`subline-styles.patchkamer-tunes.json`](../../tunes/subline-styles.patchkamer-tunes.json) |
+| [Supersaw Swarm](../../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | Trance (7), Hardstyle (6), Progressive (6), Big Room (6), Synthwave (6), Pop (6), Future Bass (6), Eurodance (6), Ambient (6), Cinematic (6) | [`supersaw-swarm-styles.patchkamer-tunes.json`](../../tunes/supersaw-swarm-styles.patchkamer-tunes.json) |
+| [Triple Osc Poly](../../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | Trance (7), House (6), Pop (6), Synthwave (7), Ambient (6), Cinematic (6), Future Bass (6), Funk (6), Disco (6), Electro (6), Techno (6), Lo-fi (5) | [`triple-osc-poly-styles.patchkamer-tunes.json`](../../tunes/triple-osc-poly-styles.patchkamer-tunes.json) |
+
+### Drums (6)
+
+| Device | Pack | Tunes | Folders | File |
+|---|---|---|---|---|
+| [Click Synth](../../devices/drums/ClickSynth/) | Click Synth Styles | 30 | Minimal Techno (3), Microhouse (3), Techno (3), Glitch (3), Electro (3), Breakbeat (3), Ambient (3), Industrial (3), Dub Techno (3), Acid (3) | [`click-synth-styles.patchkamer-tunes.json`](../../tunes/click-synth-styles.patchkamer-tunes.json) |
 | [Drum Kit](../../devices/drums/DrumKit/) | Drum Kit Styles | 38 | Techno (5), House (3), Trance (3), Drum & Bass (3), Dubstep (3), Hip-hop (3), Funk & disco (3), Electro (3), Pop (3), Rock (3), Jazz (3), Synthwave (3) | [`drum-kit-styles.patchkamer-tunes.json`](../../tunes/drum-kit-styles.patchkamer-tunes.json) |
 | [Drum Machine](../../devices/drums/DrumMachine/) | Drum Machine Styles | 36 | Techno (3), House (3), Trance (3), Drum & Bass (3), Dubstep (3), Hip-hop (3), Funk & disco (3), Electro (3), Pop (3), Rock (3), Jazz (3), Synthwave (3) | [`drum-machine-styles.patchkamer-tunes.json`](../../tunes/drum-machine-styles.patchkamer-tunes.json) |
 | [Groovebox 12](../../devices/drums/Groovebox12/) | Groovebox 12 Styles | 38 | Techno (5), House (3), Trance (3), Drum & Bass (3), Dubstep (3), Hip-hop (3), Funk & disco (3), Electro (3), Pop (3), Rock (3), Jazz (3), Synthwave (3) | [`groovebox-12-styles.patchkamer-tunes.json`](../../tunes/groovebox-12-styles.patchkamer-tunes.json) |
+| [Latin Percussion](../../devices/drums/LatinPercussion/) | Latin Percussion Styles | 39 | Salsa (3), Son (3), Mambo (3), Cha-Cha-Cha (3), Rumba (3), Bossa Nova (3), Samba (3), Merengue (3), Bachata (3), Cumbia (3), Reggaeton (3), Latin Jazz (3), Latin Soul (3) | [`latin-percussion-styles.patchkamer-tunes.json`](../../tunes/latin-percussion-styles.patchkamer-tunes.json) |
+| [Pulse Drums](../../devices/drums/PulseDrums/) | Pulse Drums Techno | 26 | Techno (5), Minimal (3), Peak Time (3), Hard Techno (3), Dub Techno (3), Acid (3), Electro (3), Breaks (3) | [`pulse-drums-techno.patchkamer-tunes.json`](../../tunes/pulse-drums-techno.patchkamer-tunes.json) |
 
-### Duofone Styles
+### What a tune holds
 
-60 tunes in 12 styles, 5 per style: bass, lead, pad and a few colours. For example **Techno**: Rolling Bass, Acid Squelch, Dark Stab, Industrial Hit. **House**: Deep House Bass, Piano Stab, Organ Stab, Filter Pad. **Ambient**: Slow Drift, Glass Bells, Deep Space, Wind Over Water. The other folders are Trance, Drum & Bass, Dubstep, Synthwave, Funk & Disco, Hip-hop, Electro, Pop and Chiptune. See the [synths manual](../synths/USER-MANUAL_EN.md) for the controls of Duofone.
-
-### Acid Baselines Classics
-
-49 tunes in 9 folders. Eight folders have 5 tunes each and are named after eras and styles of acid music: Chicago Origins, Frankfurt Rolling, Minimal Acid, Squelch Anthems, Acid Techno, Acid Trance, Electro Acid and Deep Acid. For example **Chicago Origins**: Warehouse Squelch, Raw Saw, Basement Tape, Square Pulse. Each tune comes with its own bassline, so the sequencer fills with a pattern when you load it. The ninth folder, **AIcid** (9 tunes), goes further: it uses the extra oscillators, filter types and distortions of Acid Baselines version 1.11.2 (Sub, Noise, Osc 2, Ring, Filter 2 and the distortion types). Its tunes are named Neural Squelch, Gradient Descent, Hallucination, Latent Space and so on.
-
-### Drum packs
-
-Three packs have tunes for the drum devices, all in the same 12 styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave.
-
-- **Drum Kit Styles** (device Drum Kit): 38 kits; techno has 5 and every other style 3. Each kit combines instruments, sound models and a one-bar groove.
-- **Drum Machine Styles** (device Drum Machine): 36 kits, 3 per style. Each has a groove and matching sound settings.
-- **Groovebox 12 Styles** (device Groovebox 12): 38 kits; techno has 5 and every other style 3. Each kit sets the tempo, the drum sounds, a one-bar groove and a bass line, with pads and leads where the style calls for them.
-
-A tune for a drum device is a whole machine: sounds and pattern together. See the [drums manual](../drums/USER-MANUAL_EN.md) for those devices.
+- **Synth tunes** set the sound of the synth: oscillators, filter, envelopes and so on. Some synths also keep a pattern or a bassline in the tune (for example the Acid Baselines pack); the device manual says which.
+- **Drum tunes** are a whole machine: sounds and pattern together (see [Drum machines: the Instrument row](#drum-machines-the-instrument-row)).
+- A tune never contains cables, and it does not start playing by itself. Connect the device and start the clock or play notes; see the manual of the device: [synths](../synths/USER-MANUAL_EN.md) and [drums](../drums/USER-MANUAL_EN.md).
 
 ### How to use them
 
-Either load `github.com/unboxednl/patchkamer` as a library (the packs come with it, read-only), or download a file from the [tunes folder](../../tunes/) and use **Import…**.
+Either load `github.com/unboxednl/patchkamer` as a library (the packs come with it, read-only), or download a file from the [tunes folder](../../tunes/) and use **Import…**. Packs for a device that is not on the floor yet show up as soon as you place the device.
 
 ## Make your own pack
 

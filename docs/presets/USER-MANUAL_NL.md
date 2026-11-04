@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Een **preset** is een bewaarde instelling van één apparaat dat geen eigen geluid maakt: een effect, een mixer, een modulator of een tool. Je kiest een preset uit een lijst op de kaart van het apparaat en alle knoppen en keuzes springen naar de bewaarde waarden. Deze pagina legt uit hoe je presets gebruikt, hoe je een pack importeert, exporteert en deelt, welke packs er met Patchkamer meekomen en hoe je een eigen pack maakt. Apparaten die geluid maken (synths, drumcomputers) hebben **tunes**: zie de [handleiding voor tunes](../tunes/USER-MANUAL_NL.md). De basis van Patchkamer (opstarten, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md).
+Een **preset** is een bewaarde instelling van één apparaat dat geen eigen geluid maakt: een effect, een mixer, een modulator, een sequencer of een tool. Je kiest een preset uit een lijst op de kaart van het apparaat en alle knoppen en keuzes springen naar de bewaarde waarden. Deze pagina legt uit hoe je presets gebruikt, hoe je een pack importeert, exporteert en deelt, welke packs er met Patchkamer meekomen en hoe je een eigen pack maakt. Apparaten die geluid maken (synths, drumcomputers) hebben **tunes**: zie de [handleiding voor tunes](../tunes/USER-MANUAL_NL.md). De basis van Patchkamer (opstarten, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md).
 
 ## Inhoud
 
@@ -14,8 +14,9 @@ Een **preset** is een bewaarde instelling van één apparaat dat geen eigen gelu
 6. [Een pack delen: het bestand en de licentie](#een-pack-delen-het-bestand-en-de-licentie)
 7. [De packs die met Patchkamer meekomen](#de-packs-die-met-patchkamer-meekomen)
 8. [Effect Chain: complete ketens](#effect-chain-complete-ketens)
-9. [Een eigen pack maken](#een-eigen-pack-maken)
-10. [Als het niet werkt](#als-het-niet-werkt)
+9. [Chord Sequencer: akkoord- en patroonpresets](#chord-sequencer-akkoord--en-patroonpresets)
+10. [Een eigen pack maken](#een-eigen-pack-maken)
+11. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat een preset is
 
@@ -109,7 +110,9 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 14 packs met samen **178 presets**, één per apparaat. Elk pack is genoemd naar zijn apparaat ("Chorus Basics" enzovoort) en heeft de licentie CC0-1.0. De namen van packs, mappen en presets zijn Engels.
+Deze repository heeft 15 packs met samen **238 presets**, één per apparaat. Elk pack is genoemd naar zijn apparaat ("Chorus Basics", "Chord Sequencer Styles" enzovoort) en heeft de licentie CC0-1.0. De namen van packs, mappen en presets zijn Engels.
+
+### Effecten (12)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
@@ -117,16 +120,32 @@ Deze repository heeft 14 packs met samen **178 presets**, één per apparaat. El
 | [Effect Chain](../../devices/effects/EffectChain/) | Effect Chain Basics | 14 | Atmosphere (4), Studio (4), Club (4), Sound Design (2) | [`effect-chain.patchkamer-presets.json`](../../presets/effect-chain.patchkamer-presets.json) |
 | [Filter](../../devices/effects/Filter/) | Filter Basics | 14 | Basics (5), Movement (5), Aggressive (4) | [`filter.patchkamer-presets.json`](../../presets/filter.patchkamer-presets.json) |
 | [Flanger](../../devices/effects/Flanger/) | Flanger Basics | 12 | Classic (4), Subtle (2), Tempo (2), Extreme (4) | [`flanger.patchkamer-presets.json`](../../presets/flanger.patchkamer-presets.json) |
-| [Follower](../../devices/modulators/Follower/) | Follower Basics | 14 | Level (6), Onsets (4), Extreme (4) | [`follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json) |
 | [Frequency Shifter](../../devices/effects/FrequencyShifter/) | Frequency Shifter Basics | 13 | Subtle (4), Inharmonic (5), Feedback (4) | [`frequency-shifter.patchkamer-presets.json`](../../presets/frequency-shifter.patchkamer-presets.json) |
 | [Grit](../../devices/effects/Grit/) | Grit Basics | 12 | Warm (3), Motion (4), Extreme (5) | [`grit.patchkamer-presets.json`](../../presets/grit.patchkamer-presets.json) |
-| [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
 | [Phaser](../../devices/effects/Phaser/) | Phaser Basics | 11 | Classic (4), Tempo (3), Extreme (4) | [`phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json) |
 | [Pump](../../devices/effects/Pump/) | Pump Basics | 13 | Clock (6), Sidechain (3), Split and Mix (4) | [`pump.patchkamer-presets.json`](../../presets/pump.patchkamer-presets.json) |
 | [Resonator](../../devices/effects/Resonator/) | Resonator Basics | 13 | Subtle (4), Chords (6), Extreme (3) | [`resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json) |
 | [Room](../../devices/effects/Room/) | Room Basics | 12 | Spaces (4), Delays (4), Space FX (4) | [`room.patchkamer-presets.json`](../../presets/room.patchkamer-presets.json) |
 | [Tremolo](../../devices/effects/Tremolo/) | Tremolo Basics | 13 | Classic (4), Slow (3), Rhythmic (3), Extreme (3) | [`tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json) |
 | [Vocoder](../../devices/effects/Vocoder/) | Vocoder Basics | 14 | Voices (4), Textures (4), Extreme (4), External (2) | [`vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json) |
+
+### Mixer (1)
+
+| Apparaat | Pack | Presets | Mappen | Bestand |
+|---|---|---|---|---|
+| [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
+
+### Modulatoren (1)
+
+| Apparaat | Pack | Presets | Mappen | Bestand |
+|---|---|---|---|---|
+| [Follower](../../devices/modulators/Follower/) | Follower Basics | 14 | Level (6), Onsets (4), Extreme (4) | [`follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json) |
+
+### Sequencers (1)
+
+| Apparaat | Pack | Presets | Mappen | Bestand |
+|---|---|---|---|---|
+| [Chord Sequencer](../../devices/sequencers/ChordSequencer/) | Chord Sequencer Styles | 60 | Pop (6), Ballad (5), Cinematic (6), Film Score (5), Ambient (6), Trance (6), Synthwave (6), Lo-fi (5), Neo-classical (5), Deep House (5), Funk & Disco (5) | [`chord-sequencer.patchkamer-presets.json`](../../presets/chord-sequencer.patchkamer-presets.json) |
 
 Mixer, Speakers, Multitrack, Notes, Recorder, Scope en andere apparaten kunnen ook presets hebben, maar daar komt nog geen pack bij: bewaar je eigen met **Bewaar**.
 
@@ -168,13 +187,19 @@ Zo gebruik je ze:
 - Een deel van de effecten in de keten draait op de hoofdthread van de browser en voegt wat latency toe. Gebruik op een trage computer ketens met minder van die effecten, of verberg slots.
 - De niveaus van de ketens zijn op papier ingesteld en niet beluisterd. Controleer het volume met je eigen bron en gebruik **Ingang**, **Uitgang** en **Totale mix**.
 
+## Chord Sequencer: akkoord- en patroonpresets
+
+Chord Sequencer maakt zelf geen geluid: hij stuurt noten naar vier uitgangen, die je met vier synths verbindt. Daarom heeft hij presets en geen tunes. Het pack **Chord Sequencer Styles** heeft 60 presets in 11 mappen: Pop, Ballad, Cinematic, Film Score, Ambient, Trance, Synthwave, Lo-fi, Neo-classical, Deep House en Funk & Disco. Bijvoorbeeld **Pop**: Bright Four, Sunday Drive, Late Night Minor. **Ambient**: Floating Garden, Deep Water, Aurora Drift.
+
+Volgens de omschrijving van het pack vult elke preset alle vier de sporen (akkoorden, bas, puls en bellen) in één toonsoort, en alle vier de scènes (hoofdpart, variatie, breakdown en lift). Een preset bevat de instellingen, geen kabels: verbind de vier uitgangen zelf met je synths, en zie de [handleiding voor sequencers](../sequencers/USER-MANUAL_NL.md) voor hoe. De synths die erbij passen staan in de [handleiding voor tunes](../tunes/USER-MANUAL_NL.md).
+
 ## Een eigen pack maken
 
 **Zonder agent.** Plaats het apparaat, stel een geluid in, klik op **Bewaar** en kies **+ Nieuwe bibliotheek…** om een bibliotheek te beginnen. Herhaal dat voor elke preset, sorteer ze in mappen en klik op **Info** om de maker, de licentie en een omschrijving in te vullen. Klik dan op **Exporteer**. Het bestand is je pack.
 
 **Met een AI-agent.** Een agent kan een packbestand rechtstreeks schrijven. Geef hem:
 
-- de `AGENTS.md` in de map van het apparaat (bijvoorbeeld `devices/effects/Chorus/AGENTS.md`): daar staan de id van het apparaat, zijn waarden en hun bereiken;
+- de `AGENTS.md` in de map van het apparaat (bijvoorbeeld `devices/effects/Chorus/AGENTS.md` of `devices/sequencers/ChordSequencer/AGENTS.md`): daar staan de id van het apparaat, zijn waarden en hun bereiken;
 - [`tunes/AGENTS.md`](../../tunes/AGENTS.md): de indeling van het bestand en de regels voor de licentie. Die is geschreven voor tunes; voor presets is de indeling gelijk, behalve dat `formatVersion` `2` is en het bestand `naam.patchkamer-presets.json` heet, in `presets/`.
 
 Vraag de agent alleen waarden te gebruiken die het apparaat kent, namen Engels en zonder merknamen te houden, en erbij te zeggen dat hij het resultaat niet heeft beluisterd. Importeer het pack daarna, blader erdoor en luister zelf.
