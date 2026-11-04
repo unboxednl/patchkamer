@@ -44,7 +44,7 @@ Wat het apparaat met een state doet:
 
 ## Een preset
 
-Een pack heet `naam.patchkamer-presets.json` en staat in `../../../presets/`. Het formaat staat in het contract (§13c); alles in `presets/` heeft licentie `CC0-1.0`. Voor dit apparaat is `device` altijd `nl.patchkamer.toets`, elke preset is `kind: "set"` en `state` bevat alleen de vier velden uit de tabel.
+Een pack heet `naam.patchkamer-presets.json` en staat in `../../../presets/`. Het formaat staat in het contract (§13c); alles in `presets/` heeft licentie `CC0-1.0`. Voor dit apparaat is `device` altijd `nl.patchkamer.keys`, elke preset is `kind: "set"` en `state` bevat alleen de vier velden uit de tabel.
 
 ```json
 {

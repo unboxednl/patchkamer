@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — De hulptekst noemt geen apparaten meer bij naam (Nevel, Laag, Strijk, Samplebank bestaan niet in de bibliotheek) maar beschrijft het soort instrument. Geluid, state en gedrag ongewijzigd.
 // 1.11.1 — Hernoemd van Toets naar Keys: nieuwe id nl.patchkamer.keys, naam Keys / MIDI (Engelstalig, zoals de andere apparaten). Poort-id, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: tweetalig (host.lang, namen per taal in i18n), kleuren uit de CSS-variabelen van de host (volgt licht/donker/retro), getPreset/setPreset (zonder routing en zonder lopende waarden). Noten, CC en gedrag ongewijzigd.
 // 1.8.0 — Patchkamer contract v1.8: de host geeft elke schuif dubbelklik = beginwaarde, klik op het getal = waarde typen, en (instelbaar) draaiknop.
 /** Keys — Patchkamer keyboard / Web MIDI bridge, no audio output.
  * Emits standard finite note events. Hold mode adds held:true and noteoff for
- * instruments supporting held keys (Laag, Strijk, Samplebank and Toonladder).
- * Pulse mode supports duration-only instruments such as Nevel.
+ * instruments that support held keys.
+ * Pulse mode supports duration-only instruments.
  * MIDI access is requested only via an explicit user button; no sysex.
  */
 const EN={
@@ -17,10 +18,10 @@ const EN={
   'Piano, focus voor computertoetsen':'Piano, focus for computer keys',
   'MIDI verbonden · {0} ingangen':'MIDI connected · {0} inputs',
   'MIDI verbinden vraagt eenmalig browsertoestemming.':'Connecting MIDI asks the browser for permission once.',
-  'Puls werkt ook met duur-gestuurde synths zoals Nevel. Vasthouden is voor Laag, Strijk, Samplebank en de arpeggiator. Sustainpedaal werkt in Vasthouden. MIDI CC 1/11/74/7 → vibrato/expressie/cutoff/volume.':'Pulse also works with duration-driven synths such as Nevel. Hold is for Laag, Strijk, Samplebank and the arpeggiator. The sustain pedal works in Hold. MIDI CC 1/11/74/7 → vibrato/expression/cutoff/volume.',
+  'Puls werkt met instrumenten die bij elke noot een vaste duur krijgen. Vasthouden is voor instrumenten die weten wanneer je een toets loslaat, zoals een bas of een pad, en voor een arpeggiator. Sustainpedaal werkt in Vasthouden. MIDI CC 1/11/74/7 → vibrato/expressie/cutoff/volume.':'Pulse works with instruments that get a fixed length for every note. Hold is for instruments that know when you release a key, such as a bass or a pad, and for an arpeggiator. The sustain pedal works in Hold. MIDI CC 1/11/74/7 → vibrato/expression/cutoff/volume.',
   'Web MIDI is hier niet beschikbaar. Gebruik schermtoetsen/computertoetsen of een browser met Web MIDI.':'Web MIDI is not available here. Use the on-screen keys, the computer keys or a browser with Web MIDI.'
 };
-export default {id:'nl.patchkamer.keys',name:'Keys / MIDI',version:'1.11.1',kind:'utility',category:'tool',ui:{width:760,minWidth:360},ports:{audioIn:[],audioOut:[],eventIn:[],eventOut:[{id:'notes',name:'Notes / CC'}],modIn:[],modOut:[]},i18n:{nl:{ports:{notes:'Noten / CC'}}},create(ctx,host){
+export default {id:'nl.patchkamer.keys',name:'Keys / MIDI',version:'1.11.2',kind:'utility',category:'tool',ui:{width:760,minWidth:360},ports:{audioIn:[],audioOut:[],eventIn:[],eventOut:[{id:'notes',name:'Notes / CC'}],modIn:[],modOut:[]},i18n:{nl:{ports:{notes:'Noten / CC'}}},create(ctx,host){
     const tr=(k,...a)=>{let t=host.lang==='nl'?k:(EN[k]??k);a.forEach((v,i)=>{t=t.replace('{'+i+'}',v);});return t;};
     const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
     const finite=(v,d,a,b)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,a,b):d;
@@ -62,7 +63,7 @@ export default {id:'nl.patchkamer.keys',name:'Keys / MIDI',version:'1.11.1',kind
       knob(controls,'bend','Pitchbend',[-1,1,0.01],state.bend*2-1,v=>{state.bend=(v+1)/2;cc('bend',state.bend);});button(controls,tr('Bend midden'),()=>{state.bend=0.5;cc('bend',0.5);uiHandles.bend?.set(0);});knob(controls,'wheel',tr('Modulatiewiel'),[0,1,0.01],state.wheel,v=>{state.wheel=v;cc('vibrato',v);});
       const keyboard=add(panel,'div');keyboard.className='keyboard';keyboard.tabIndex=0;keyboard.onkeydown=keydown;keyboard.setAttribute('aria-label',tr('Piano, focus voor computertoetsen'));
       for(let i=0;i<24;i++){const n=state.root+i,black=[1,3,6,8,10].includes(n%12),b=button(keyboard,['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'][n%12]+(Math.floor(n/12)-1),()=>{});b.className='key'+(black?' black':'');b.onpointerdown=e=>{e.preventDefault();keyboard.focus();b.setPointerCapture?.(e.pointerId);down('pointer:'+e.pointerId,n);};b.onpointerup=e=>up('pointer:'+e.pointerId);b.onpointercancel=b.onlostpointercapture=e=>up('pointer:'+e.pointerId);buttons.set(n,b);}
-      keyTarget=typeof window!=='undefined'?window:null;if(keyTarget?.addEventListener){keyTarget.addEventListener('keyup',keyup);keyTarget.addEventListener('blur',lostFocus);}status=add(panel,'p',access?tr('MIDI verbonden · {0} ingangen',access.inputs.size):tr('MIDI verbinden vraagt eenmalig browsertoestemming.'));add(panel,'p',tr('Puls werkt ook met duur-gestuurde synths zoals Nevel. Vasthouden is voor Laag, Strijk, Samplebank en de arpeggiator. Sustainpedaal werkt in Vasthouden. MIDI CC 1/11/74/7 → vibrato/expressie/cutoff/volume.'));
+      keyTarget=typeof window!=='undefined'?window:null;if(keyTarget?.addEventListener){keyTarget.addEventListener('keyup',keyup);keyTarget.addEventListener('blur',lostFocus);}status=add(panel,'p',access?tr('MIDI verbonden · {0} ingangen',access.inputs.size):tr('MIDI verbinden vraagt eenmalig browsertoestemming.'));add(panel,'p',tr('Puls werkt met instrumenten die bij elke noot een vaste duur krijgen. Vasthouden is voor instrumenten die weten wanneer je een toets loslaat, zoals een bas of een pad, en voor een arpeggiator. Sustainpedaal werkt in Vasthouden. MIDI CC 1/11/74/7 → vibrato/expressie/cutoff/volume.'));
     }
     const self={inputs:{},outputs:{},mount:render,unmount,onTransport(info){if(!info?.playing)panic();},getState(){return {...state};},setState(raw){if(dead)return;panic();const s=raw&&typeof raw==='object'?raw:{};state={root:Math.round(finite(s.root,48,24,84)/12)*12,velocity:finite(s.velocity,0.8,0.05,1),duration:finite(s.duration,0.5,0.05,8),mode:['hold','pulse'].includes(s.mode)?s.mode:'pulse',channel:Math.round(finite(s.channel,0,0,16)),input:typeof s.input==='string'?s.input:'all',bend:finite(s.bend,0.5,0,1),wheel:finite(s.wheel,0,0,1)};if(mountHost)render(mountHost);},getPreset(){return {root:state.root,velocity:state.velocity,duration:state.duration,mode:state.mode};},setPreset(p){const s=p&&typeof p==='object'?p:{};const n={...state};for(const k of ['root','velocity','duration','mode'])if(s[k]!==undefined)n[k]=s[k];self.setState(n);},destroy(){if(dead)return;panic();unmount();dead=true;connectToken++;detachMIDI();if(access&&stateListener)access.removeEventListener('statechange',stateListener);access=null;}};return self;
 }};
