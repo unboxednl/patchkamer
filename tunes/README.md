@@ -1,6 +1,6 @@
 # tunes
 
-Instellingen voor apparaten, opgeslagen als data. Een tune kun je gebruiken in een song of in een eigen bibliotheek.
+Instellingen voor apparaten die geluid produceren, opgeslagen als data. Een tune kun je gebruiken in een song of in een eigen bibliotheek.
 
 ## Licentie
 
