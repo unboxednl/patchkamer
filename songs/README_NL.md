@@ -1,5 +1,7 @@
 # songs
 
+*English version: [README.md](README.md)*
+
 De songs die met Patchkamer worden meegeleverd.
 
 ## Licentie

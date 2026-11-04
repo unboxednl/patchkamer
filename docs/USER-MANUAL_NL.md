@@ -13,7 +13,7 @@ Patchkamer is een modulaire muziekstudio die in je browser draait. Je plaatst ap
 3. [Een rondleiding door de studio](#3-een-rondleiding-door-de-studio)
 4. [Een bibliotheek laden](#4-een-bibliotheek-laden)
 5. [Je eerste patch](#5-je-eerste-patch)
-6. [Spelen en sequencen](#6-spelen-en-sequencen)
+6. [De apparaten](#6-de-apparaten)
 7. [Tunes en presets](#7-tunes-en-presets)
 8. [Bewaren, openen en delen](#8-bewaren-openen-en-delen)
 9. [Je weg vinden op de vloer](#9-je-weg-vinden-op-de-vloer)
@@ -107,111 +107,20 @@ Je laat een keyboard een bassynth bespelen via je speakers.
 
 **Volume.** Gebruik de schuif op Speakers. Die heeft een begrenzer, maar zet het volume in het begin bescheiden.
 
-## 6. Spelen en sequencen
+## 6. De apparaten
 
-### Acid Baselines
+Apparaten zijn er in soorten. Elke soort heeft een eigen README en een eigen gebruikershandleiding, met per apparaat een sectie: waar het voor dient, de regelaars, de poorten, een voorbeeldpatch en de presets of tunes die erbij horen. Een patch loopt meestal van links naar rechts: **tools** en **drums** sturen noten, **synths** maken het geluid, **effecten** geven het vorm, de **mixer** voegt het samen en **Speakers** speelt het af. De knop **Herschik** zet je apparaten in die volgorde.
 
-Een bassynth met een ingebouwde sequencer van 16 stappen.
+| Soort | Waar het voor dient | Apparaten | Handleiding |
+|---|---|---|---|
+| **Synths** | Geluid maken uit noten | Acid Baselines, Duofone | [Handleiding synths](synths/USER-MANUAL_NL.md) · [README](../devices/synths/README_NL.md) |
+| **Drums** | Drumgeluiden en ritme | Drum Kit, Drum Machine, Groovebox 12, Pulse Drums | [Handleiding drums](drums/USER-MANUAL_NL.md) · [README](../devices/drums/README_NL.md) |
+| **Effecten** | Het geluid vormgeven: modulatie, vervorming, ruimte, filters, ritme, stem, ketens | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [Handleiding effecten](effects/USER-MANUAL_NL.md) · [README](../devices/effects/README_NL.md) |
+| **Mixer** | Mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers | [Handleiding mixer](mixer/USER-MANUAL_NL.md) · [README](../devices/mixer/README_NL.md) |
+| **Modulatoren** | De regelaars van andere apparaten bewegen | Follower | [Handleiding modulatoren](modulators/USER-MANUAL_NL.md) · [README](../devices/modulators/README_NL.md) |
+| **Tools** | Spelen, opnemen, meten en notities maken | Keys / MIDI, Multitrack, Notes, Pad Controller, Recorder, Scope | [Handleiding tools](tools/USER-MANUAL_NL.md) · [README](../devices/tools/README_NL.md) |
 
-![De kaart van Acid Baselines](images/nl/04-acid-baselines.png)
-
-- **Zes secties** groeperen de regelaars in de volgorde waarin het geluid door het apparaat loopt. Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal om een waarde te typen.
-  - **Oscillator:** golfvorm, octaaf en stemming, plus **Sub** (een blokgolf een octaaf lager), **Ruis**, **Osc 2** met een eigen **Detune 2**, en **Ring** (ringmodulatie van de twee oscillatoren).
-  - **Filter:** het filtertype (lowpass, bandpass of highpass), cutoff, resonantie, env mod en **Filter FM**, plus **Filter 2**, een tweede bandpass-filter parallel, met een eigen octaafverschuiving (**F2 octaaf**).
-  - **Envelope:** accent, normal en accent decay, soft attack en VCA-decay.
-  - **Slide:** de glijtijd.
-  - **Distortion:** het **Type** (zacht, hard, fold of asym), **Overdrive**, **Tight** (filtert de bas weg vóór de vervorming, zodat hij strak blijft), **Mix** (vervormd tegenover schoon) en **Crush** (bitdiepte), plus het toonfilter.
-  - **Output:** het niveau.
-
-  Alles wat bovenop de oorspronkelijke regelaars is gekomen (sub, ruis, Osc 2, Ring, Filter 2, filtertype, vervormingstype, Tight, Mix en Crush) staat standaard uit, dus bestaande klanken en tunes blijven zoals ze waren. Combineer veel resonantie, filter-FM en vervorming voor extreme klanken. Een ingebouwde bewaker herstart de filters als ze ontsporen, zodat het geluid niet stil blijft.
-- **Sequencer.** Klik op een vakje om een noot op die stap te zetten; klik nog eens om hem weg te halen. De rijen lopen van C2 tot C3. Onder de noten vind je de rij **Accent** (een luidere, scherpere noot), de rij **Slide** (glijden vanuit de vorige stap) en een keuze **Octaaf** per stap.
-- **Sets.** Kies 1, 2, 4, 8 of 16 sets van 16 stappen. Met de genummerde knoppen kies je welke set je bewerkt.
-- **Patroon kiezen…** zet een van de 16 klassieke patronen in acid-stijl in de set die je bewerkt.
-- **Nieuwe lijn** maakt een willekeurige lijn. **Transponeer +/−** schuift hem omhoog of omlaag, **Kopieer maat naar alle** kopieert de set naar alle sets en **Leeg** maakt hem leeg.
-- Zet **intern** uit om alleen de noten te spelen die van een ander apparaat komen, bijvoorbeeld van Keys. Een noot met een velocity boven 0,9 telt als accent.
-
-### Keys / MIDI
-
-Een keyboard dat zelf geen geluid maakt. Het stuurt noten naar andere apparaten.
-
-![De kaart van Keys](images/nl/05-keys.png)
-
-- Klik op de pianotoetsen, gebruik de computertoetsen, of druk op **MIDI verbinden** om een MIDI-keyboard te gebruiken. De browser vraagt eenmalig toestemming.
-- **Speelmodus:** *Puls* stuurt een noot met een vaste lengte (**Pulsduur**). *Toets vasthouden* houdt de noot aan zolang je de toets indrukt.
-- **Laagste toets** bepaalt de eerste noot van het schermtoetsenbord. **Velocity**, **Pitchbend** en **Modulatiewiel** geven expressie. **Alles uit** zet blijvende noten stil.
-
-### Duofone
-
-Een synth in analoge stijl met twee onafhankelijke toonhoogten, een gedeeld filter en een gedeelde VCA, met ringmodulatie, hard sync en sample & hold. Verbind Keys met de poort **Keyboard / noten** en de uitgang **Stereo** met Speakers.
-
-### Mixer
-
-Een mengpaneel met 1 tot 32 kanalen en 0 tot 8 groepen, en een master met een begrenzer. Verbind de apparaten die geluid maken met de kanaalingangen (**1**, **2**, …) en de poort **Uit** van de master met Speakers.
-
-![De kaart van Mixer](images/nl/11-mixer.png)
-
-- **Kanalen** en **Groepen** bepalen hoeveel er zijn. De poorten op de kaart komen en gaan mee. Elk kanaal heeft een ingang, een poort **send** en een poort **ret** (return). Typ in het naamveld om een kanaal een naam te geven.
-- Per kanaal: **Trim**, een **EQ** van 3 of 5 banden (kies onder **EQ**), **Send**, **Return**, de groep waar het heen gaat (**→ M** is de master), **Pan**, een fader met een niveaumeter, en **M** (mute) en **S** (solo). Groepen en de master hebben ook een EQ, send/return en een fader, en achter de master zit een begrenzer. Dubbelklik op een schuif om terug te gaan naar de beginwaarde.
-- **Gelijk trekken** meet 4 seconden en zet de trim van elk kanaal zo dat alle bronnen op het **Doel**niveau binnenkomen. **Doorlopend** houdt ze daar langzaam op (hooguit 3 dB per seconde).
-- **Bundels.** Een groene bundelkabel (bijvoorbeeld de losse uitgangen van een drumcomputer) gaat in **bundel in**; kies per kanaal onder het naamveld welk bundelkanaal daar binnenkomt. **Kanalen uit** stuurt alle kanalen, na het mixen, als één bundel door, bijvoorbeeld naar een recorder. **+ groepen en mix** voegt de groepen en de totale mix toe.
-- Een Mixer heeft **presets** (hij maakt zelf geen geluid). Een preset bewaart de instellingen maar niet de bronkeuzes van de kanalen.
-
-### Leveler
-
-Houdt het gemiddelde volume van een bron gelijk. Zet hem tussen een instrument en de Mixer, of op de mix vóór Speakers. Dat helpt bij bronnen die langzaam harder en zachter worden, bijvoorbeeld door een modulator.
-
-![De kaart van Leveler](images/nl/12-leveler.png)
-
-- **Stand:** *Regelen* of *Doorlaten* (het geluid gaat ongewijzigd door).
-- **Doelniveau** is het niveau waar hij naartoe regelt. **Reactietijd** is hoe snel het volume omhoog of omlaag gaat (omlaag is drie keer zo snel). **Meettijd** is de tijd waarover hij meet. **Bereik ±** is hoeveel hij het volume hooguit omhoog of omlaag draait. Onder de **Stiltedrempel** blijft het volume staan, zodat galmstaarten en pauzes niet worden opgeblazen. **Plafond** is de grens van de begrenzer erachter, die pieken opvangt.
-- De meter toont **IN**, **UIT** en **REGEL**, met een lampje voor de begrenzer. **Huidig niveau = doel** zet het doelniveau op wat er nu binnenkomt. **Regeling op 0** zet de correctie terug op 0.
-- Een Leveler heeft **presets**. Zonder AudioWorklet in je browser laat hij het geluid ongewijzigd door en meldt dat.
-
-### Multitrack
-
-Een meersporenrecorder voor tot 16 sporen, sample-gelijk. Hij neemt een bundel op, bijvoorbeeld **Kanalen uit** van de Mixer: verbind de groene bundelkabel met de poort **Bundel**.
-
-![De kaart van Multitrack](images/nl/13-multitrack.png)
-
-- **● Opnemen** en **■ Stop** bedienen de opname. **met start/stop van de klok** laat hem Start en Stop van de klok volgen.
-- **Sporen** bepaalt hoeveel sporen er zijn. Kies per spoor welk bundelkanaal het opneemt, of **— geen**. **nieuwe kanalen vanzelf toewijzen** vult nieuwe bundelkanalen in op lege sporen. **Alles armen** armt elk spoor.
-- Kies het bestandsformaat onder **WAV**: 16 bit, 24 bit of 32 bit float.
-- Takes blijven in het geheugen tot je de pagina sluit. **Bewaar alles (.zip)** bewaart een take als één zipbestand; **Per spoor** bewaart losse sporen.
-- Een Multitrack heeft **presets** (niet de bron van elk spoor).
-
-### Notes
-
-Een notitieblok op de vloer voor ideeën, toonsoort, structuur en wat je nog wilt doen. Het maakt geen geluid en heeft geen poorten. De tekst wordt met de werkruimte bewaard.
-
-![De kaart van Notes](images/nl/14-notes.png)
-
-- **Toonsoort** en **Tempo / gevoel** zijn korte velden. **Deel** heeft knoppen (**Intro**, **Opbouw**, **Break**, **Drop**, **Outro**) die een kop aan de tekst toevoegen.
-- Schrijf in het grote tekstveld. Typ onder **Nog doen** een taak en druk op **Enter**; vink hem af als hij klaar is en haal hem weg met het kruisje.
-- De regel onderaan toont wanneer je de notities voor het laatst wijzigde. Een Notes-kaart heeft **presets**.
-
-### Recorder
-
-Neemt op wat er binnenkomt, bijvoorbeeld de mix, en laat het ongewijzigd doorlopen. Zet hem tussen de Mixer en Speakers.
-
-![De kaart van Recorder](images/nl/15-recorder.png)
-
-- Geef de opname een naam en druk op **● Opnemen** en **■ Stop**. **Opnemen met Start/Stop van de klok** laat hem de klok volgen.
-- **Formaat** (kies het vóór het opnemen; tijdens het opnemen staat het vast): **WebM/Opus** (of **MP4/AAC**, afhankelijk van je browser) geeft kleine bestanden. **WAV 16-bit** en **WAV 24-bit** zijn zonder verlies. Bij **MP3** komt een keuze **Bitrate** (128, 192, 256 of 320 kbps).
-- Elke take komt in de lijst met zijn formaat en grootte, met **▶** om te beluisteren en **Bewaar**. Takes blijven in het geheugen tot je de pagina sluit; Bewaar geeft een audiobestand. Een WAV- of MP3-take houdt het ruwe geluid in het geheugen, ongeveer 23 MB per minuut bij 48 kHz stereo, en het bestand wordt gemaakt als je op Bewaar drukt (een MP3 maken kost even tijd; een melding toont de voortgang).
-- MP3 werkt bij 8–48 kHz en bij veelvouden van 48, 44,1 of 32 kHz (bijvoorbeeld 96 kHz, dat Recorder terugbrengt naar 48 kHz). Bij een andere sample rate meldt Recorder dat; WAV werkt altijd.
-- Een Recorder heeft **presets**.
-
-**Licentie van de MP3-encoder.** Recorder maakt MP3-bestanden met [lamejs](https://github.com/zhuker/lamejs) 1.2.1, een JavaScript-versie van de LAME-encoder. lamejs is vrije software onder de [LGPL-3.0](../LICENSES/LGPL-3.0-only.txt) en staat onveranderd in het bestand van Recorder, als één losse tekst (`LAME_SRC`, onderaan). Je kunt hem vervangen door een andere versie of een eigen build van lamejs. De rest van Recorder is AGPL-3.0-or-later. Zie [LICENSING.md](../LICENSING.md).
-
-### Scope
-
-Een transparante doorvoer die het geluid laat zien: de audio gaat ongewijzigd van **In** naar **Door**.
-
-![De kaart van Scope](images/nl/16-scope.png)
-
-- **Beeld** kiest wat je ziet: **Spectrum**, **Golfvorm L/R**, **Spectrogram**, **Stereobeeld** of **Peak / RMS**. De regel met getallen toont peak en RMS in dBFS, en CLIP als het signaal over de grens gaat.
-- **FFT** (1024 tot 8192) bepaalt de details van het spectrum, **Glad** hoe rustig het beweegt, **Bereik** hoeveel dB je ziet en **Tijd** de lengte van de golfvorm (5 tot 50 ms). **Pauze** zet het beeld stil.
-- Een Scope heeft **presets**.
+Hun kant-en-klare klanken en instellingen hebben eigen handleidingen: [Tunes](tunes/USER-MANUAL_NL.md) voor apparaten die geluid maken en [Presets](presets/USER-MANUAL_NL.md) voor de rest (zie ook onderdeel 7).
 
 ## 7. Tunes en presets
 
@@ -221,7 +130,9 @@ Op elke kaart zie je een balk met ◀ ▶-knoppen en een lijst. Kies een tune of
 
 ![Tunebibliotheken](images/nl/09-tunes-panel.png)
 
-De menu's **Tunes** en **Presets** beheren je bibliotheken: maak een nieuwe, zet tunes in mappen, importeer een pakket (`.patchkamer-tunes.json` of `.patchkamer-presets.json`) en exporteer er een om te delen. Pakketten in een bibliotheek die je van GitHub of uit een map laadt, verschijnen vanzelf. Deze repository bevat **Duofone Styles** (60 tunes in 12 stijlen) en **Acid Baselines Classics** (40 tunes in 8 stijlen).
+De menu's **Tunes** en **Presets** beheren je bibliotheken: maak een nieuwe, zet tunes in mappen, importeer een pakket (`.patchkamer-tunes.json` of `.patchkamer-presets.json`) en exporteer er een om te delen. Pakketten in een bibliotheek die je van GitHub of uit een map laadt, verschijnen vanzelf. De packs die bij deze repository horen, staan in de [handleiding tunes](tunes/USER-MANUAL_NL.md) en de [handleiding presets](presets/USER-MANUAL_NL.md).
+
+Het hele verhaal, met de lijst van de meegeleverde packs en hoe je een eigen pack maakt, staat in de [handleiding presets](presets/USER-MANUAL_NL.md) en de [handleiding tunes](tunes/USER-MANUAL_NL.md).
 
 ## 8. Bewaren, openen en delen
 

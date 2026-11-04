@@ -1,5 +1,7 @@
 # contract
 
+*English version: [README.md](README.md)*
+
 De afspraken tussen de host ([patchkamer](../patchkamer/)) en de [apparaten](../devices/). Wie, mens of AI, een apparaat bouwt dat zich aan dit contract houdt, kan dat zonder voorwaarden doen.
 
 ## Licentie
