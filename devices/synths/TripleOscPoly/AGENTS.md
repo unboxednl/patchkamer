@@ -95,7 +95,7 @@ De filter-envelope (`fa`, `fd`, `fs`, `fr`) is gedeeld door beide filters; `f1.e
 
 Een noot met een `dur` begint zijn release na `dur`. Een noot zonder `dur` krijgt 0,25 s. Een stem klinkt nog ongeveer `1,6 × ar` na de release door voor hij weg is.
 
-**Let op, een val (gemeten, ook in de oudere versie):** een noot die korter duurt dan de versterker-attack `aa` is **volledig stil**. De release annuleert de attack voordat die klaar is, en het volume blijft op bijna nul (met `aa` 0,5 gaf `dur` 0,45 een piek van 0 en `dur` 0,55 een piek van 0,15). Houd `dur` van de noten waarvoor de tune bedoeld is dus altijd langer dan `aa`, of houd `aa` kort (onder 0,05 s) voor alles wat met korte noten wordt gespeeld. Een lange `fa` (filter-attack) geeft dit niet: dan blijft het filter hooguit dicht.
+**Korte noten (sinds versie 1.11.1):** is een noot korter dan de versterker-attack `aa`, dan begint de release vanaf het volume dat de attack op dat moment heeft bereikt. Een korte noot klinkt dus zachter (met `aa` 0,5 gaf `dur` 0,1 een piek van 0,03, `dur` 0,3 een piek van 0,09, `dur` 0,45 een piek van 0,13 en `dur` 0,55 of meer de volle 0,15), maar is nooit meer stil. In versie 1.11.0 was zo'n noot volledig stil. Hetzelfde geldt voor de filter-envelope: een noot korter dan `fa` laat het filter nog gedeeltelijk openen. Noten die langer duren dan hun attack klinken precies als voorheen. Een lange `aa` blijft toch ongeschikt voor tunes die met korte noten worden gespeeld, omdat de noot dan zacht blijft: houd `aa` kort (onder 0,05 s) voor alles wat korte noten krijgt.
 
 ### Stemmen en uitgang
 
@@ -122,7 +122,7 @@ Akkoordintervallen (in halve tonen boven de grondtoon): `maj` 0 4 7; `min` 0 3 7
 - Getallen buiten het bereik worden afgekapt (`f1.cut: 1e9` wordt 20000, `osc[0].oct: 99` wordt 2, `poly: 0,2` wordt 1, `fd: 1e9` wordt 8); een tekst, `NaN`, `Infinity` of een ontbrekende waarde geeft de startwaarde. Geheel-getalvelden (`oct`, `uni`, `poly`, `spread`) worden naar nul afgerond.
 - Een ongeldige `type`, `chord`, `shp.type` of `route` geeft de startwaarde. Onbekende velden (op elk niveau) worden genegeerd en komen niet terug in `getState()`. Zet er geen in.
 - De knoppen, keuzelijsten en aan/uit-vakjes op de kaart bewegen mee met `setState`.
-- Geluid is gelijk aan de oudere versie (Polysynth 1.8.0): de volledige reeks Web Audio-aanroepen (nodes, verbindingen, parameterwaarden en automatie) is identiek bij 20 willekeurige instellingen en nootreeksen, en de negen klankstanden geven dezelfde state. De state-sleutels zijn ongewijzigd. De klankstanden heten nu Engels (zie hieronder).
+- Geluid is gelijk aan de oudere versie (Polysynth 1.8.0), met één bewuste uitzondering sinds 1.11.1 (korte noten, zie bij de envelopes): de volledige reeks Web Audio-aanroepen (nodes, verbindingen, parameterwaarden en automatie) is voor noten die langer duren dan hun attack identiek bij 60 willekeurige instellingen en nootreeksen (versie 1.11.1 tegen 1.11.0), en de negen klankstanden geven dezelfde state. De state-sleutels zijn ongewijzigd. De klankstanden heten nu Engels (zie hieronder).
 
 ## Spelen en modulatie
 
@@ -179,7 +179,7 @@ Het apparaat kan niet voor altijd stilvallen of `NaN` geven (zie hieronder), maa
 
 - `lvl` 0, of alle drie de oscillators `on: false`, of alle `lvl` 0: stil.
 - Een oscillator met `type` `noise` als enige bron: bijna onhoorbaar (zie hierboven).
-- Een `aa` die langer is dan de noten die erop gespeeld worden: de noot is dan volledig stil (zie de val bij de envelopes). Een `aa` van meer dan ongeveer 0,5 s hoort alleen bij lange noten of het klavier.
+- Een `aa` die langer is dan de noten die erop gespeeld worden: de noot klinkt dan maar voor een deel van zijn attack en dus zacht (zie bij de envelopes). Een `aa` van meer dan ongeveer 0,5 s hoort alleen bij lange noten of het klavier.
 - `fm21` of `ring` hoger dan 0 terwijl oscillator 1 of 2 uit staat: geen effect.
 - `chord` met vijf noten (`min9`) en `uni` 7 en `poly` 12: te zwaar voor de processor.
 - `f1.res` 20 met `lp24` en een cutoff dicht bij de toonhoogte, op een geluid met sterke boventonen: schreeuwt en wordt hard. Kies `lvl` lager.
