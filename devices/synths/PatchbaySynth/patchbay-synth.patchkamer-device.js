@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Verbeterd: een aangehouden toets (Keys in de stand "Toets vasthouden", of een MIDI-toetsenbord) werd nooit losgelaten, omdat noteoff werd genegeerd en de noot 120 s bleef staan; daardoor bleef de laagste ingedrukte toets de toonhoogte bepalen en klonk elke toets hetzelfde. noteon, noteoff, held en panic worden nu verwerkt.
 // 1.11.0 — Nieuw als Patchbay Synth (nieuwe id nl.patchkamer.patchbaysynth, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Patchbay Synth
 //   - kleuren uit de CSS-variabelen van de host (donker, licht en retro)
@@ -355,7 +356,7 @@ svg.cords path.tmp{stroke-dasharray:6 5;pointer-events:none}
 export default {
   id: 'nl.patchkamer.patchbaysynth',
   name: 'Patchbay Synth',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1680, minWidth: 1200 },
@@ -518,8 +519,13 @@ export default {
       mount(el) { refreshers = []; const wrap = document.createElement('div'); el.appendChild(wrap); build(wrap);
         if (host && typeof host.frame === 'function') unframe = host.frame(self, tick, 12); },
       unmount() { if (unframe) { unframe(); unframe = null; } if (ui.ro) ui.ro.disconnect(); root = null; ui = {}; refreshers = []; Object.keys(jackEl).forEach(k => delete jackEl[k]); },
-      onEvent(port, ev) { if (port !== 'notes' || !ev || ev.type !== 'note' || !Number.isFinite(ev.note)) return; const t = Number.isFinite(ev.time) ? ev.time : ctx.currentTime, d = Number.isFinite(ev.dur) ? ev.dur : 0.25, n = ev.note | 0;
-        noteMsg(true, n, t); noteMsg(false, n, t + Math.max(0.01, d)); },
+      onEvent(port, ev) { if (port !== 'notes' || !ev) return; const type = String(ev.type).toLowerCase().replace(/[_-]/g, '');
+        if ((type === 'panic' || type === 'allnotesoff') && node) { node.port.postMessage({ t: 'all' }); return; }
+        if (!['note', 'noteon', 'noteoff'].includes(type) || !Number.isFinite(ev.note)) return;
+        const t = Number.isFinite(ev.time) ? ev.time : ctx.currentTime, d = Number.isFinite(ev.dur) ? ev.dur : 0.25, n = ev.note | 0;
+        // noteoff (of noteon zonder aanslag) laat de toets los; een aangehouden toets (held, noteon) blijft staan tot zijn noteoff komt
+        if (type === 'noteoff' || ((type === 'noteon' || type === 'note') && ev.vel === 0)) { noteMsg(false, n, t); return; }
+        noteMsg(true, n, t); if (type === 'note' && !ev.held) noteMsg(false, n, t + Math.max(0.01, d)); },
       onTransport({ playing }) { if (!playing && node) node.port.postMessage({ t: 'all' }); },
       params() { return MODP.map(([id, lane, role, drift, on, fst]) => { const [, mn, mx, , sc, name] = PBY[id]; return { id, name: tx(name), lane, laneName: tx(LANES[lane]), min: mn, max: mx, role, scale: sc === 'log' ? 'log' : 'lin', drift, on, fast: !!fst }; }); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODBY[k] && Number.isFinite(o[k])) mod[k] = o[k]; sendParams(); },
