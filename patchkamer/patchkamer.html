@@ -1323,7 +1323,7 @@ var CATS=CAT_DEFAULT.map(x=>[x[0],x[1]]), CATCOL=Object.fromEntries(CAT_DEFAULT.
 const CAT_PALETTE=['#5f8dff','#ff8fd1','#8bdb6a','#c9b080','#2ec27e','#e76f51','#7fd6ff','#d98cff','#f4a261','#e4574a','#f4d35e','#a0a8b4'];
 const catColor=k=>CATCOL[k]||'var(--muted)';
 var LAYOUT_FILE='patchkamer-bibliotheek.json';
-const CAT_HINTS={'nl.patchkamer.drums':'groove','nl.patchkamer.seq':'sequencer','nl.patchkamer.mono':'synth','nl.patchkamer.ruimte':'effect','nl.patchkamer.roest':'effect','nl.patchkamer.mixer':'mix','nl.patchkamer.out':'mix','nl.patchkamer.scope':'tool','nl.patchkamer.drone':'synth','nl.patchkamer.acid303':'synth','nl.patchkamer.takt12':'groove','nl.patchkamer.drift':'groove','nl.voorbeeld.tremolo':'effect','nl.voorbeeld.klik':'tool','nl.patchkamer.driftmod':'mod'};
+const CAT_HINTS={'nl.patchkamer.drums':'groove','nl.patchkamer.seq':'sequencer','nl.patchkamer.mono':'synth','nl.patchkamer.ruimte':'effect','nl.patchkamer.roest':'effect','nl.patchkamer.mixer':'mix','nl.patchkamer.speakers':'mix','nl.patchkamer.scope':'tool','nl.patchkamer.drone':'synth','nl.patchkamer.acid303':'synth','nl.patchkamer.takt12':'groove','nl.patchkamer.drift':'groove','nl.voorbeeld.tremolo':'effect','nl.voorbeeld.klik':'tool','nl.patchkamer.driftmod':'mod'};
 var CAT_OVR={};   // your own category per device id (kept in the library settings)
 function categoryOf(def){ const o=CAT_OVR&&CAT_OVR[def.id]; if(o&&CATS.some(x=>x[0]===o)) return o; const b=baseCategory(def); return CATS.some(x=>x[0]===b)?b:'other'; }
 function baseCategory(def){ const c=def.category||CAT_HINTS[def.id]; if(c&&BUILTIN_CATS.has(c)) return c; return {instrument:'synth',effect:'effect',mixer:'mix',output:'mix',utility:'tool',modulator:'mod'}[def.kind]||'other'; }
