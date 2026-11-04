@@ -2,16 +2,16 @@
   "format": "patchkamer-tunes",
   "formatVersion": 1,
   "device": "nl.patchkamer.duofone",
-  "name": "Duofone stijlen",
+  "name": "Duofone Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Tunes voor Duofone per muziekstijl: techno, house, trance, ambient, drum & bass, dubstep, synthwave, funk & disco, hiphop, electro, pop en chiptune. Vijf klanken per stijl: bas, lead, pad en een paar kleuren.",
+  "description": "Tunes for Duofone by music style: techno, house, trance, ambient, drum & bass, dubstep, synthwave, funk & disco, hip-hop, electro, pop and chiptune. Five sounds per style: bass, lead, pad and a few colours.",
   "tree": [
     {
       "folder": "Techno",
       "items": [
         {
-          "name": "Rollende bas",
+          "name": "Rolling Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -60,7 +60,7 @@
           }
         },
         {
-          "name": "Acid kronkel",
+          "name": "Acid Squelch",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -109,7 +109,7 @@
           }
         },
         {
-          "name": "Donkere stab",
+          "name": "Dark Stab",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -158,7 +158,7 @@
           }
         },
         {
-          "name": "Industriële klap",
+          "name": "Industrial Hit",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -207,7 +207,7 @@
           }
         },
         {
-          "name": "Magazijn drone",
+          "name": "Warehouse Drone",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -261,7 +261,7 @@
       "folder": "House",
       "items": [
         {
-          "name": "Diepe housebas",
+          "name": "Deep House Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -310,7 +310,7 @@
           }
         },
         {
-          "name": "Pianostab",
+          "name": "Piano Stab",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -359,7 +359,7 @@
           }
         },
         {
-          "name": "Orgelstab",
+          "name": "Organ Stab",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -408,7 +408,7 @@
           }
         },
         {
-          "name": "Filterpad",
+          "name": "Filter Pad",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -457,7 +457,7 @@
           }
         },
         {
-          "name": "Warme lead",
+          "name": "Warm Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -511,7 +511,7 @@
       "folder": "Trance",
       "items": [
         {
-          "name": "Supersaw-lead",
+          "name": "Supersaw Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -560,7 +560,7 @@
           }
         },
         {
-          "name": "Pluk-arp",
+          "name": "Pluck Arp",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -609,7 +609,7 @@
           }
         },
         {
-          "name": "Gated pad",
+          "name": "Gated Pad",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -658,7 +658,7 @@
           }
         },
         {
-          "name": "Trancebas",
+          "name": "Trance Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -707,7 +707,7 @@
           }
         },
         {
-          "name": "Sync-lead",
+          "name": "Sync Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -761,7 +761,7 @@
       "folder": "Ambient",
       "items": [
         {
-          "name": "Trage drift",
+          "name": "Slow Drift",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -810,7 +810,7 @@
           }
         },
         {
-          "name": "Glazen klokken",
+          "name": "Glass Bells",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -859,7 +859,7 @@
           }
         },
         {
-          "name": "Diepe ruimte",
+          "name": "Deep Space",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -908,7 +908,7 @@
           }
         },
         {
-          "name": "Wind over water",
+          "name": "Wind Over Water",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -957,7 +957,7 @@
           }
         },
         {
-          "name": "Zachte zang",
+          "name": "Soft Voice",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1008,10 +1008,10 @@
       ]
     },
     {
-      "folder": "Drum & bass",
+      "folder": "Drum & Bass",
       "items": [
         {
-          "name": "Reese-bas",
+          "name": "Reese Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1060,7 +1060,7 @@
           }
         },
         {
-          "name": "Sub-roller",
+          "name": "Sub Roller",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1109,7 +1109,7 @@
           }
         },
         {
-          "name": "Neuro-grom",
+          "name": "Neuro Growl",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1158,7 +1158,7 @@
           }
         },
         {
-          "name": "Liquid stab",
+          "name": "Liquid Stab",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1207,7 +1207,7 @@
           }
         },
         {
-          "name": "Liquid pad",
+          "name": "Liquid Pad",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1261,7 +1261,7 @@
       "folder": "Dubstep",
       "items": [
         {
-          "name": "Wobbelbas",
+          "name": "Wobble Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1310,7 +1310,7 @@
           }
         },
         {
-          "name": "Brul",
+          "name": "Roar",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1359,7 +1359,7 @@
           }
         },
         {
-          "name": "Sub-druppel",
+          "name": "Sub Drop",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1408,7 +1408,7 @@
           }
         },
         {
-          "name": "Roofdier-lead",
+          "name": "Predator Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1457,7 +1457,7 @@
           }
         },
         {
-          "name": "Metalen tik",
+          "name": "Metal Tick",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1511,7 +1511,7 @@
       "folder": "Synthwave",
       "items": [
         {
-          "name": "Neon-lead",
+          "name": "Neon Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1560,7 +1560,7 @@
           }
         },
         {
-          "name": "Pulsbas",
+          "name": "Pulse Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1609,7 +1609,7 @@
           }
         },
         {
-          "name": "Koperblazers",
+          "name": "Brass Section",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1658,7 +1658,7 @@
           }
         },
         {
-          "name": "Nachtrit-pad",
+          "name": "Night Drive Pad",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1707,7 +1707,7 @@
           }
         },
         {
-          "name": "Gated arp",
+          "name": "Gated Arp",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1758,10 +1758,10 @@
       ]
     },
     {
-      "folder": "Funk & disco",
+      "folder": "Funk & Disco",
       "items": [
         {
-          "name": "Funkbas",
+          "name": "Funk Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1810,7 +1810,7 @@
           }
         },
         {
-          "name": "Discostrijkers",
+          "name": "Disco Strings",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1859,7 +1859,7 @@
           }
         },
         {
-          "name": "Clavi-tokkel",
+          "name": "Clavi Pluck",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1908,7 +1908,7 @@
           }
         },
         {
-          "name": "Spuuglead",
+          "name": "Squelch Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1957,7 +1957,7 @@
           }
         },
         {
-          "name": "Blazersklap",
+          "name": "Horn Stab",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2008,10 +2008,10 @@
       ]
     },
     {
-      "folder": "Hiphop",
+      "folder": "Hip-hop",
       "items": [
         {
-          "name": "Subdreun",
+          "name": "Sub Boom",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2060,7 +2060,7 @@
           }
         },
         {
-          "name": "Stoffige toetsen",
+          "name": "Dusty Keys",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2109,7 +2109,7 @@
           }
         },
         {
-          "name": "Lo-fi pad",
+          "name": "Lo-fi Pad",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2158,7 +2158,7 @@
           }
         },
         {
-          "name": "Donkere bel",
+          "name": "Dark Bell",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2207,7 +2207,7 @@
           }
         },
         {
-          "name": "Grommende bas",
+          "name": "Growling Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2261,7 +2261,7 @@
       "folder": "Electro",
       "items": [
         {
-          "name": "Robotbas",
+          "name": "Robot Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2310,7 +2310,7 @@
           }
         },
         {
-          "name": "Vocoderachtige zang",
+          "name": "Vocoder Voice",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2359,7 +2359,7 @@
           }
         },
         {
-          "name": "Laserschot",
+          "name": "Laser Shot",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2408,7 +2408,7 @@
           }
         },
         {
-          "name": "Toevalsmelodie",
+          "name": "Random Melody",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2457,7 +2457,7 @@
           }
         },
         {
-          "name": "Koude akkoorden",
+          "name": "Cold Chords",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2511,7 +2511,7 @@
       "folder": "Pop",
       "items": [
         {
-          "name": "Heldere lead",
+          "name": "Bright Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2560,7 +2560,7 @@
           }
         },
         {
-          "name": "Zachte pluk",
+          "name": "Soft Pluck",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2609,7 +2609,7 @@
           }
         },
         {
-          "name": "Brede pad",
+          "name": "Wide Pad",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2658,7 +2658,7 @@
           }
         },
         {
-          "name": "Ronde bas",
+          "name": "Round Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2707,7 +2707,7 @@
           }
         },
         {
-          "name": "Glinsterbel",
+          "name": "Sparkle Bell",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2761,7 +2761,7 @@
       "folder": "Chiptune",
       "items": [
         {
-          "name": "Pulslead",
+          "name": "Pulse Lead",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2810,7 +2810,7 @@
           }
         },
         {
-          "name": "Driehoeksbas",
+          "name": "Triangle Bass",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2859,7 +2859,7 @@
           }
         },
         {
-          "name": "Brede puls",
+          "name": "Wide Pulse",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2908,7 +2908,7 @@
           }
         },
         {
-          "name": "Ruisklap",
+          "name": "Noise Hit",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -2957,7 +2957,7 @@
           }
         },
         {
-          "name": "Arpeggio-piep",
+          "name": "Arpeggio Beep",
           "kind": "set",
           "version": "1.0.0",
           "state": {
