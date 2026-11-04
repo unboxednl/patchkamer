@@ -100,12 +100,12 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg.screenshot(path=OUT + '/08-focus.png'); done(pg)
     for skin, name in (('light', '03-patch-light'), ('s1000', '03-patch-retro')):
         pg = newpage(nopicker=True, skin=skin); build_patch(pg); pg.screenshot(path=OUT + '/' + name + '.png'); done(pg)
-    pg = newpage(nopicker=True); load_lib(pg); place(pg, 'Acid Baselines'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
+    pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Acid Baselines'); pg.click('#libToggle'); pg.wait_for_timeout(2500)   # hoog scherm: de kaart past er helemaal op
     import_tunes(pg); pg.click('#prPanel .close'); pg.wait_for_timeout(300)
     c = pg.locator('.card').first
     c.evaluate("c=>{const s=[...c.querySelectorAll('select')].find(x=>x.options.length>3&&x.options[0].value===''); s.selectedIndex=1; s.dispatchEvent(new Event('change',{bubbles:true}))}"); pg.wait_for_timeout(600)
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)
-    pg = newpage(nopicker=True); load_lib(pg); place(pg, 'Keys'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
+    pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Keys'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
     for dev, shot in (('Mixer', '11-mixer'), ('Leveler', '12-leveler'), ('Multitrack', '13-multitrack'), ('Notes', '14-notes'), ('Recorder', '15-recorder'), ('Scope', '16-scope')):
         pg = newpage(nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(2500)
