@@ -442,7 +442,7 @@ Vertaal dit naar de velden van het gekozen apparaat. Voor [Step Sequencer](../de
 
 Een patroon van 12 stappen levert 3/4 (of 6/8) en een patroon van 7 of 5 stappen een evoluerend polyritme; zie de Step Sequencer-AGENTS.md voor `len` en `res`.
 
-**Verbinden.** Een song is een werkruimte met apparaten en kabels. Notenkabels (soort `event`) gaan van de uitgang van een sequencer naar de notenpoort van een synth of drumcomputer; audiokabels (soort `audio`) van een synth naar een effect, de [Mixer](../devices/mixer/README.md) en tot slot [Speakers](../devices/mixer/README.md); modulatiekabels (soort `mod`) van een modulator naar een regelbare parameter. Het exacte songbestand en de controle staan in [AGENTS.md](AGENTS.md) en de controlescript `check-song.py` die daarin staat.
+**Verbinden.** Een song is een werkruimte met apparaten en kabels. Notenkabels (soort `event`) gaan van de uitgang van een sequencer naar de notenpoort van een synth of drumcomputer; audiokabels (soort `audio`) van een synth naar een effect, de [Mixer](../devices/mixer/README.md) en tot slot [Speakers](../devices/mixer/README.md); modulatiekabels (soort `mod`) van een modulator naar een regelbare parameter. Het exacte songbestand en de werkwijze staan in [AGENTS.md](AGENTS.md); de controle doe je met het script [check-song.py](../docs/tools/check-song.py).
 
 **Klank kiezen.** Een synth of drumcomputer krijgt zijn klank via een **tune** (de volledige instelling, [tunes/](../tunes/README.md)); sequencers, effecten en mixers krijgen **presets** ([presets/](../presets/README.md)). Gebruik de tunes en presets uit de repo (CC0-1.0) liever dan zelf waarden te verzinnen. Per stijl staan in de gids de passende packs en mappen.
 
