@@ -104,3 +104,13 @@ Wat Click Synth met een state doet (getest): getallen buiten het bereik worden a
 - Pas het apparaat niet aan om een tune te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam, omschrijving of tune, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Click Synth: [NL](../../../docs/drums/USER-MANUAL_NL.md#click-synth) · [EN](../../../docs/drums/USER-MANUAL_EN.md#click-synth).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/drums/USER-MANUAL_NL.md) · [EN](../../../docs/drums/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [click-synth-styles.patchkamer-tunes.json](../../../tunes/click-synth-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: percussie met microgeluiden (kliks, tiks, bleeps). Triggers of noten gaan naar de eventingang `trigger`; het apparaat heeft ook een eigen sequencer op de klok. Audio komt uit `out` (stereo mix) of per spoor via de bundel `multi`.

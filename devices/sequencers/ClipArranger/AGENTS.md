@@ -307,3 +307,14 @@ Elke preset heeft 3 tot 7 sporen met een rol, een toonsoort en akkoordprogressie
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam, spoornamen, scènenamen, presetnamen of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Clip Arranger: [NL](../../../docs/sequencers/USER-MANUAL_NL.md#clip-arranger) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#clip-arranger).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/sequencers/USER-MANUAL_NL.md) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md).
+- Presets (patronen en instellingen, `kind: set`): [clip-arranger.patchkamer-presets.json](../../../presets/clip-arranger.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Sequencers in het algemeen (raster, velocity, lengte, timing, accenten): [NL](../../../docs/sequencers/USER-MANUAL_NL.md#wat-de-sequencers-gemeen-hebben) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#what-the-sequencers-have-in-common). Muziektheorie vertaald naar waarden: [songs/MUSIC-THEORY.md](../../../songs/MUSIC-THEORY.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing en songstructuur: clips, scènes en een songtijdlijn voor 1 tot 16 sporen. Elk spoor `track1` … `track16` gaat met een gebeurteniskabel naar een eigen synth of drumcomputer; de bundeluitgang `tracks` stuurt alle sporen in één kabel. Hiermee leg je intro, opbouw, break en drop vast.

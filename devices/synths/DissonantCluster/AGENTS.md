@@ -159,3 +159,13 @@ Namen van tunes en packs zijn Engels. Geef elke tune een naam die beschrijft hoe
 - Verander nooit de `id`, de `kind`, de poort-id's of de namen van state-velden.
 - Pas het apparaat niet aan om een tune te laten kloppen.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Dissonant Cluster: [NL](../../../docs/synths/USER-MANUAL_NL.md#dissonant-cluster) · [EN](../../../docs/synths/USER-MANUAL_EN.md#dissonant-cluster).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/synths/USER-MANUAL_NL.md) · [EN](../../../docs/synths/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [dissonant-cluster-styles.patchkamer-tunes.json](../../../tunes/dissonant-cluster-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: pads of effecten die alleen dissonant klinken; elke noot wordt een cluster van 2 tot 6 stemmen. Noten op `notes`, audio uit `out`. Past in donkere stijlen, spanning en cinematic; niet voor consonante harmonie.

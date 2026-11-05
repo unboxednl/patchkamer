@@ -49,3 +49,13 @@ Een preset is `{ "div": 4, "lvl": 0.5 }`. Zinvolle presets: een zachte maattik o
 
 - Verander nooit de `id`, de `kind` of de poort-id's. Zet geen merknamen in naam of omschrijving.
 - Geen tunes. Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Metronome: [NL](../../../docs/tools/USER-MANUAL_NL.md#metronome) · [EN](../../../docs/tools/USER-MANUAL_EN.md#metronome).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [metronome.patchkamer-presets.json](../../../presets/metronome.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: tel-klik op de klok; de slagen gaan ook als `trig`-events naar de uitgang `trigs` (bijvoorbeeld om een drumcomputer of sampler te triggeren). Audio uit `out`. Een telhulp, geen onderdeel van de klank van een song.

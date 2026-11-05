@@ -101,3 +101,13 @@ Een bewaker in de worklet controleert elke stem: wordt de uitvoer niet eindig (`
 - Pas het apparaat niet aan om een tune te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Karplus String: [NL](../../../docs/synths/USER-MANUAL_NL.md#karplus-string) · [EN](../../../docs/synths/USER-MANUAL_EN.md#karplus-string).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/synths/USER-MANUAL_NL.md) · [EN](../../../docs/synths/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [karplus-string-styles.patchkamer-tunes.json](../../../tunes/karplus-string-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: plukkende of gestreken snaar (acht stemmen), geschikt voor melodie en arpeggio. Noten op `notes`, audio uit `out`.

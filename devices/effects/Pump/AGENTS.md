@@ -73,3 +73,13 @@ Wat Pump met een state doet (getest):
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Pump: [NL](../../../docs/effects/USER-MANUAL_NL.md#pump) · [EN](../../../docs/effects/USER-MANUAL_EN.md#pump).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/effects/USER-MANUAL_NL.md) · [EN](../../../docs/effects/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [pump.patchkamer-presets.json](../../../presets/pump.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sidechain-ducking in het spoor van bas en pads (audio in `in`, uit `out`). Het veld `mode` kiest de bron: `sc` (audio-ingang `sc`, bijvoorbeeld een kick), `trig` (elke trig of noot op de eventingang `trig`, bijvoorbeeld van de uitgang `trigs` van een drumcomputer) of `klok` (volgt de klok van de studio).

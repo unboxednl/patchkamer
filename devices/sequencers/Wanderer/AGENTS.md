@@ -164,3 +164,14 @@ Wanderer heeft geen sporen of clips: het toetsenbord is hier de **akkoordbron** 
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Wanderer: [NL](../../../docs/sequencers/USER-MANUAL_NL.md#wanderer) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#wanderer).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/sequencers/USER-MANUAL_NL.md) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md).
+- Presets (patronen en instellingen, `kind: set`): [wanderer.patchkamer-presets.json](../../../presets/wanderer.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Sequencers in het algemeen (raster, velocity, lengte, timing, accenten): [NL](../../../docs/sequencers/USER-MANUAL_NL.md#wat-de-sequencers-gemeen-hebben) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#what-the-sequencers-have-in-common). Muziektheorie vertaald naar waarden: [songs/MUSIC-THEORY.md](../../../songs/MUSIC-THEORY.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing, kansmelodie in een toonladder die langzaam verandert (lead, bovenstem). Eventingang `akkoord` volgt een akkoord uit bijvoorbeeld een Chord Sequencer, eventuitgang `notes` gaat naar een synth.

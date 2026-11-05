@@ -231,3 +231,14 @@ De drumsporen 1, 2, 3 en 8 hoor je het best op dezelfde drumcomputer: verbind el
 Bijzondere presets: `Minimal Polymeter Loops` en `Phasing Pulses` leggen één lang blok per laag met patronen van 3, 4, 5 en 7 maten die tegen elkaar draaien (geen sectiegrenzen); `Liquid Drum and Bass`, `Jungle Breakbeat Roller`, `Trap Hat Rolls` en `Breakbeat Funk Cut` gebruiken het 1/32-raster; `Trailer Rise and Hit` en `Film Score Tension Cue` bouwen een cue zonder 4/4-groove.
 
 Een nieuwe preset maken: bouw de state met bovenstaande velden, zet hem door `setPreset` en `getPreset` (zodat alle velden volledig en genormaliseerd zijn), controleer dat elke waarde ongewijzigd terugkomt en dat de noten binnen 0 – 127 en de velocity binnen 0 – 1 blijven, en voeg hem toe in een bestaande map van het pack. Namen zijn Engels en uniek binnen het pack.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Pattern Playlist: [NL](../../../docs/sequencers/USER-MANUAL_NL.md#pattern-playlist) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#pattern-playlist).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/sequencers/USER-MANUAL_NL.md) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md).
+- Presets (patronen en instellingen, `kind: set`): [pattern-playlist.patchkamer-presets.json](../../../presets/pattern-playlist.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Sequencers in het algemeen (raster, velocity, lengte, timing, accenten): [NL](../../../docs/sequencers/USER-MANUAL_NL.md#wat-de-sequencers-gemeen-hebben) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#what-the-sequencers-have-in-common). Muziektheorie vertaald naar waarden: [songs/MUSIC-THEORY.md](../../../songs/MUSIC-THEORY.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing en songstructuur: patronen op een tijdlijn met tot 32 sporen. Elk spoor `track1` … `track8` (meer via `trackCount`, tot 32) gaat naar een eigen synth of drumcomputer, of gebruik de bundeluitgang `tracks`. De ingang `input` neemt live noten en CC op.

@@ -72,3 +72,12 @@ Dit moet eindigen op een `OK`-regel (exit 0). Het kan niet horen hoe het klinkt.
 
 - Pas `speakers.patchkamer-device.js` niet aan om een preset te laten kloppen, en verander nooit de `id` of de `kind`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Speakers: [NL](../../../docs/mixer/USER-MANUAL_NL.md#speakers) · [EN](../../../docs/mixer/USER-MANUAL_EN.md#speakers).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mixer/USER-MANUAL_NL.md) · [EN](../../../docs/mixer/USER-MANUAL_EN.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: eindpunt van de studio (luidsprekers van de computer, met begrenzer). Audio in `in`; één regelaar: volume. Elke song heeft een eindpunt: Speakers of een Listening Output of Audio Output.

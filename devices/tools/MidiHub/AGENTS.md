@@ -40,3 +40,13 @@ Web MIDI en echte keyboards zijn niet getest. Test met een testapparaat dat `cc`
 ## Presets
 
 Het pack `../../../presets/midi-hub.patchkamer-presets.json` (formatVersion 2, CC0-1.0, namen Engels) heeft 15 presets in vier mappen: Sound Controllers, Wheels and Pedals, Effects en Utility. Elke preset gebruikt de sleutel `'*'`: hij geldt voor elk apparaat in de hub en zoekt de regelaars op hun naam.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van MIDI Hub: [NL](../../../docs/tools/USER-MANUAL_NL.md#midi-hub) · [EN](../../../docs/tools/USER-MANUAL_EN.md#midi-hub).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [midi-hub.patchkamer-presets.json](../../../presets/midi-hub.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: koppelt MIDI-bronnen (`in`, `tracks`) aan de apparaten van de werkruimte; per apparaat met een eventingang komt er een eventuitgang `o_<apparaat-id>`. Vooral nuttig bij live MIDI; in een song met vaste kabels zelden nodig.
