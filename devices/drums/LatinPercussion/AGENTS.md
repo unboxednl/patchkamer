@@ -68,7 +68,24 @@ Modulatie: `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en
 
 ## Nootnamen voor sequencers
 
-Latin Percussion heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): de vijftien klanken (`High Bongo` … `Star Chime`) op `baseNote` + 0 tot 14. Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen.
+Latin Percussion heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): de vijftien klanken (`High Bongo` … `Star Chime`) op `baseNote` + 0 tot 14. Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen. Latin Percussion heeft geen instrumentkeuze (de vijftien klanken zijn vast), dus de lijst is al volledig en er is geen gastinstrument.
+
+## Swing per bank en per klank (1.14.1)
+
+Naast de swing van de host (die zit al in de tijd van elke stap) kent Latin Percussion extra swing, in dezelfde eenheid als de hostschuif: een fractie van een zestiende-stap, 0 … 0,5 (de UI toont 0 … 50 %, dubbelklik = 0). Alleen in de modus "Eigen patroon op interne klok" (`sequence: true`) klinkt het.
+
+| Sleutel | Wat | Waarden |
+|---|---|---|
+| `bankSwing` | swing per bank A, B, C, D (lijst van 4 getallen; de bank van `bank` speelt) | 0 … 0,5 per getal, start `[0,0,0,0]` |
+| `laneSwing` | swing per klank (lijst van 15 getallen, in de volgorde van de pads) | 0 … 0,5 per getal, start allemaal 0 |
+| `quantize` | opname kwantiseert naar de dichtstbijzijnde stap (zie hieronder) | `true`/`false`, start `true` |
+
+- Optelregel: de extra vertraging van een oneven zestiende (stapnummer 1, 3, 5, … van de klok) = `min(0,5; bankSwing[bank] + laneSwing[klank]) × stapduur`, bovenop de hostswing. Even stappen blijven staan.
+- Ontbrekende of ongeldige waarden (ook `NaN`, tekst, negatief of boven 0,5) geven 0, resp. 0,5; een oude state zonder deze sleutels klinkt gelijk. Een klank uit de lijst (`preset`) kiezen zet alles op de waarden van die preset op zijn standaard, dus ook de swing op 0 (de preset kent geen swing); `getPreset`/`setPreset` nemen de nieuwe sleutels wel mee.
+
+## Live inspelen (1.14.1)
+
+De ingang `notes` speelt klanken altijd zoals voorheen. Staat de knop **Opname** aan (alleen in de UI, niet in de state, bij het laden uit) en loopt de klok, dan schrijft elke trig (`lane` = klanknaam of `padN`) en elke noot (`baseNote` + 0 … 14) met `vel > 0` ook een stap in de **gekozen bank** (`bank`) op de juiste klank: `vel` ≥ 0,85 wordt een accent (waarde 2), lager een gewone slag (1); een bestaande stap op die plek wordt vervangen, de rest blijft staan; geen undo. De stap volgt uit de laatste stap van de klok en de tijd van de gebeurtenis, met de swing van de host en de extra swing van die klank meegerekend. `quantize` aan: de dichtstbijzijnde (geswingde) stap; uit: de stap die op dat moment klinkt. Het patroon heeft alleen 16 stappen per klank: geen keuze 1/32 of triolen. Klok stil, opname uit, onbekende klank, `noteoff`, `vel` 0 of een gebeurtenis meer dan 4 s van de klokstap: er wordt niets geschreven.
 
 ## Tunes maken
 

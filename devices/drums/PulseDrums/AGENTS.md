@@ -62,6 +62,25 @@ Wat Pulse Drums met een state doet (getest): getallen buiten het bereik worden a
 
 Pulse Drums heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): elk kanaal met zijn instrumentnaam en zijn `note`, in de volgorde van `channels`; twee kanalen met dezelfde noot geven één regel (de eerste). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen. Sinds 1.14.1 volgen daarna **alle instrumenten uit de instrumentkeuze** die (nog) geen kanaal hebben, met hun standaardnoot (of de eerstvolgende vrije). Een noot of `trig` met de naam van zo'n instrument klinkt als **gast** op een vrij kanaal (index vanaf het aantal kanalen; bij 16 kanalen is er geen vrije bus en blijft het stil), met de standaardinstellingen van het klankmodel van kanaal 1. Zo kan een sequencer de hele lijst bespelen zonder dat je eerst kanalen toevoegt; de state verandert niet.
 
+## Swing en live inspelen (sinds 1.14.2)
+
+Nieuwe state-sleutels (alle standaard 0 of uit; een oude state of tune laadt en klinkt ongewijzigd):
+
+| Veld | Wat | Waarden | Start |
+|---|---|---|---|
+| `patternSwing` | Extra swing per patroon A–D (index = `pattern`); lijst van 4 getallen | elk 0 … 0,5 (fractie van een zestiende) | `[0,0,0,0]` |
+| `channels[n].swing` | Extra swing van één kanaal | 0 … 0,5 | 0 |
+| `record` | Opname aan (werkstand: staat niet in `getPreset`, een preset laat hem staan) | boolean | `false` |
+| `quantize` | Kwantiseren bij opname (werkstand, idem) | boolean | `true` |
+
+Swing: de host vertraagt de oneven zestienden al met `Host.swing`. Daar komt per kanaal `min(0,5, patternSwing[pattern] + channel.swing) × stepDur` bij. Een zestiende is oneven als de hoststap (`bar × 16 + step`) oneven is, ook bij een kanaal met een eigen `seqLength` (polymetrie): het raster van de klok bepaalt, niet de plek in het kanaalpatroon. Een ratchet op een oneven stap schuift als geheel mee (met zijn eigen offset erbinnen); `micro` en humanize komen er los bij. Het apparaat heeft alleen het zestiende-raster (ratchets zijn delen van een stap), dus er is geen aparte regel voor 1/32 of triolen. Een ontbrekend, niet-eindig of buiten bereik veld wordt 0 of afgekapt.
+
+Opname: staat `record` aan en loopt de klok (er is dan een `onStep` binnengekomen), dan schrijven `note` (alle kanalen met die noot) en `trig` (`lane` is `chN` of een instrumentnaam) met `vel` een stap in het **actieve patroon** op het juiste kanaal. De positie is het dichtstbijzijnde *geswingde* rasterpunt van dat kanaal (hostswing + `patternSwing` + `swing`), bepaald uit `ev.time` (of `ctx.currentTime`) en de laatste klokstap. De stap is `{ v: vel, p: 1, r: 1, micro, every: 1, phase: 1, fill: 0, locks: {} }`: een oude stap op dezelfde plek en hetzelfde kanaal wordt vervangen (overdub: andere stappen blijven staan; "Wis pattern" wist). Met `quantize` aan is `micro` 0; uit, dan komt de afwijking van het rasterpunt in `micro` (−0,4 … 0,4, afgerond op 0,01). De kanaallengte (`seqLength`) bepaalt de plek (`stap mod seqLength`). Een stap die nog niet door de klok is gepland klinkt niet dubbel (de live gespeelde noot telt). Niets wordt geschreven bij opname uit, bij stilstaande klok, bij een niet-eindige `vel`, `vel` ≤ 0 of een tijd meer dan 4 s van de klok. Geen undo.
+
+**Gastinstrumenten**: een instrument zonder kanaal (uit de instrumentkeuze, zie Nootnamen) klinkt wel als gast maar wordt **niet opgenomen**: een stappenraster heeft alleen rijen voor kanalen en opname voegt nooit zelf een kanaal toe (dat zou kit, bundel en uitgangen veranderen). Wil je het opnemen, voeg dan eerst een kanaal met dat instrument toe.
+
+Bij ingespeelde noten rond een zwaar geswingde stap is de tolerantie kleiner: tussen een oneven en de volgende even stap ligt dan minder dan een stap; bij 50 % extra swing (en hostswing 8 %) ligt het grensvlak op ±0,21 stap (26 ms bij 120 BPM).
+
 ## Tunes maken
 
 - **Zet de eigen sequencer uit**: elke tune bevat `run: false`, zodat een gebruiker met zijn eigen sequencer kan beluisteren welke kit het best past. De patronen blijven in de tune staan; wie de eigen sequencer weer aanzet, hoort de groove. Laat dit veld in een nieuwe tune dus nooit weg (bij een ontbrekend veld start het apparaat zijn eigen sequencer).

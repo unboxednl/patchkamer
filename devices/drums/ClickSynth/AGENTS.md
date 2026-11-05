@@ -88,7 +88,28 @@ Wat Click Synth met een state doet (getest): getallen buiten het bereik worden a
 
 ## Nootnamen voor sequencers
 
-Click Synth heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): de acht sporen met hun `name` op de noten 36 tot 43 (spoor 1 = 36). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen.
+Click Synth heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): de acht sporen met hun `name` op de noten 36 tot 43 (spoor 1 = 36). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen. Click Synth heeft geen instrumentkeuze per kanaal die buiten de acht sporen valt (de klankmotor per spoor is een synthese-instelling, geen lijst instrumenten); de lijst is dus al volledig en er is geen gastinstrument.
+
+## Swing per patroon en per spoor (1.14.1)
+
+Naast de swing van de host (die zit al in de tijd van elke stap) kent Click Synth extra swing, in dezelfde eenheid als de hostschuif: een fractie van een zestiende-stap, 0 … 0,5 (de UI toont 0 … 50 %, dubbelklik = 0).
+
+| Sleutel | Wat | Waarden |
+|---|---|---|
+| `patSwing` | swing per patroon A, B, C, D (lijst van 4 getallen; het patroon van `pattern` klinkt) | 0 … 0,5 per getal, start `[0,0,0,0]` |
+| `lanes[i].swing` | swing van één spoor | 0 … 0,5, start 0 |
+| `quantize` | opname kwantiseert naar de dichtstbijzijnde stap (zie hieronder) | `true`/`false`, start `true` |
+
+- Optelregel: de extra vertraging van een oneven zestiende = `min(0,5; patSwing[pattern] + lanes[i].swing) × stapduur`, bovenop de hostswing. Oneven = het stapnummer van de klok (`bar × 16 + step`), dus bij sporen met een eigen lengte (polyritme) telt de klokstap, niet de plaats in het spoor. Alle slagen van die stap schuiven mee, ook de ratchets (die houden hun eigen offset binnen de stap). Even stappen blijven staan. Kans, willekeur (`vari`) en ratchet werken zoals voorheen.
+- Ontbrekende of ongeldige waarden (ook `NaN`, tekst, negatief of boven 0,5) geven 0, resp. 0,5. Een oude state zonder deze sleutels klinkt gelijk. Een kit kiezen (`kit`) zet de spoorswing terug op 0 (de sporen komen uit de kit); `patSwing` blijft.
+
+## Live inspelen (1.14.1)
+
+De ingang `trigger` (trigs `ch1` … `ch8`, noten 36 … 43 of 60 … 67) speelt de klank altijd zoals voorheen. Staat de knop **Opname** aan (alleen in de UI, hij zit niet in de state en staat bij het laden uit) en loopt de klok, dan schrijft elke trig of noot met `vel > 0` ook een stap in het **gekozen patroon** (`pattern`) op het juiste spoor (`{ v: vel, p: 1, r: 1, t: 0 }`; een bestaande stap op die plek wordt vervangen, de rest blijft staan; geen undo). De stap volgt uit de laatste stap van de klok en de tijd van de gebeurtenis (`time`, of nu), met de swing van de host en de extra swing van dat spoor meegerekend; de spoorlengte (`len`) wordt gerespecteerd (index = klokstap modulo `len`).
+
+- `quantize` aan: de dichtstbijzijnde (geswingde) stap. Uit: de stap die op dat moment klinkt (de laatste stap waarvan de geswingde tijd al voorbij is). Het apparaat heeft maar één raster (zestiende-stappen), dus er is geen keuze 1/32 of triolen; fijnere timing kan alleen als ratchet.
+- Klok stil, opname uit, onbekend spoor, `vel` 0, een gebeurtenis meer dan 4 s van de klokstap of een gebeurtenis zonder bruikbare noot of lane: er wordt niets geschreven. Het geluid van de gebeurtenis zelf verandert daar niet door.
+- De sequencer hoeft niet aan te staan (`run`) om op te nemen, maar de klok van de host moet lopen.
 
 ## Tunes maken
 

@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Swing op patroonniveau (`swing`) en per geluid (`laneSwing`), naast de hostswing: extra vertraging van de oneven zestienden, 0 … 50% van een stap, de som begrensd tot 50%.
+//          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0). Het apparaat heeft geen noten- of triggeringang, dus er is niets om live in te spelen
+//          en er zijn geen noten om door te geven (noteNames).
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Drum Machine en nieuwe id nl.patchkamer.drummachine (voorheen Drumcomputer, nl.patchkamer.drums);
 //          tunes en songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang; namen van het apparaat en de poorten per taal in i18n).
 //          setState kapt getallen af op hun bereik, maakt van elk stap een 0 of 1 en geeft ongeldige waarden de standaard; modulate neemt alleen
@@ -9,8 +12,8 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { tone: 'Toon', click: 'Klik', lvl: 'Niveau', dbl: 'dubbelklik: standaard', multi: 'Losse uit' },
-  en: { tone: 'Tone', click: 'Click', lvl: 'Level', dbl: 'double-click: default', multi: 'Separate outs' },
+  nl: { tone: 'Toon', click: 'Klik', lvl: 'Niveau', dbl: 'dubbelklik: standaard', multi: 'Losse uit', swing: 'Patroonswing', laneSwing: 'swing' },
+  en: { tone: 'Tone', click: 'Click', lvl: 'Level', dbl: 'double-click: default', multi: 'Separate outs', swing: 'Pattern swing', laneSwing: 'swing' },
 };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const VOICES = [['kick', 'Kick'], ['snare', 'Snare'], ['hat', 'Hat'], ['perc', 'Perc']];
@@ -31,7 +34,7 @@ const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -44,11 +47,11 @@ export default {
     const out = ctx.createGain(); out.gain.value = 0.8;
     const bus = {}; VOICES.forEach(([k]) => { const g = ctx.createGain(), p = ctx.createStereoPanner(); g.connect(p).connect(out); bus[k] = { g, p }; });
     const defV = () => Object.fromEntries(VOICES.map(([k]) => [k, Object.fromEntries(Object.entries(VP[k]).map(([p, d]) => [p, d[4]]))]));
-    const state = { pat: JSON.parse(JSON.stringify(PAT)), v: defV(), lvl: 0.8 };
+    const state = { pat: JSON.parse(JSON.stringify(PAT)), v: defV(), lvl: 0.8, swing: 0, laneSwing: Object.fromEntries(VOICES.map(([k]) => [k, 0])) };
     const mod = {};   // 'kick.tune' -> −1..1
     const eff = (vk, pk) => { const d = VP[vk][pk]; const b = state.v[vk][pk], o = mod[vk + '.' + pk] || 0; if (!o) return b;
       return d[5] ? clamp(b * Math.pow(d[2] / d[1], o), d[1], d[2]) : clamp(b + o * (d[2] - d[1]), d[1], d[2]); };
-    let rows = {}, cells = {}, self, dead = false, lvlKnob = null;
+    let rows = {}, cells = {}, self, dead = false, lvlKnob = null, swKnob = null, lswKnobs = {};
     const apply = () => { if (dead) return; const t = ctx.currentTime; VOICES.forEach(([k]) => { bus[k].g.gain.setTargetAtTime(eff(k, 'lvl'), t, 0.03); bus[k].p.pan.setTargetAtTime(eff(k, 'pan'), t, 0.03); }); out.gain.setTargetAtTime(state.lvl, t, 0.02); };
     apply();
     function hit(lane, t, v) {
@@ -85,8 +88,12 @@ export default {
             cell.append(i, o); g.appendChild(cell); cells[vk + '.' + pk] = { i, o }; }); });
         el.appendChild(g);
         lvlKnob = host.ui.knob(el, T.lvl, [0, 1, 0.01], state.lvl, pct, v => { state.lvl = v; apply(); });
+        // swing: patroon en per geluid (extra op de oneven zestienden, naast de hostswing)
+        swKnob = host.ui.knob(el, T.swing, [0, 0.5, 0.005], state.swing, pct, v => { state.swing = v; }, { default: 0 });
+        lswKnobs = {}; VOICES.forEach(([k, lab]) => { lswKnobs[k] = host.ui.knob(el, lab + ' ' + T.laneSwing, [0, 0.5, 0.005], state.laneSwing[k], pct, v => { state.laneSwing[k] = v; }, { default: 0 }); });
       },
-      onStep({ step, time }) { VOICES.forEach(([k]) => { if (state.pat[k][step]) { const v = step % 4 === 0 ? 1 : 0.75; hit(k, time, v); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: v, time }); } }); Object.values(rows).forEach(r => r.cursor(step)); },
+      onStep({ step, time, stepDur, bpm }) { const sd = Number.isFinite(stepDur) && stepDur > 0 ? stepDur : Number.isFinite(bpm) && bpm > 0 ? 15 / bpm : 0, odd = step % 2 === 1;
+        VOICES.forEach(([k]) => { if (state.pat[k][step]) { const v = step % 4 === 0 ? 1 : 0.75, t = odd ? time + clamp(state.swing + state.laneSwing[k], 0, 0.5) * sd : time; hit(k, t, v); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: v, time: t }); } }); Object.values(rows).forEach(r => r.cursor(step)); },
       onTransport({ playing }) { if (!playing) Object.values(rows).forEach(r => r.cursor(-1)); },
       // contract v1.3 — elk drumgeluid is een spoor
       params() { const L = []; VOICES.forEach(([vk, vl]) => Object.entries(VP[vk]).forEach(([pk, d]) => L.push({ id: vk + '.' + pk, name: d[0], lane: vk, laneName: vl, min: d[1], max: d[2], role: d[6], scale: d[5] ? 'log' : 'lin', drift: d[7], on: d[8] }))); return L; },
@@ -98,6 +105,9 @@ export default {
         state.v = d; if (s.v) VOICES.forEach(([vk]) => Object.keys(VP[vk]).forEach(pk => { const x = s.v[vk] && s.v[vk][pk]; if (typeof x === 'number' && isFinite(x)) state.v[vk][pk] = clamp(x, VP[vk][pk][1], VP[vk][pk][2]); }));
         if (!s.v) { if (typeof s.tune === 'number' && isFinite(s.tune)) state.v.kick.tune = clamp(s.tune, 30, 90); if (typeof s.hatDec === 'number' && isFinite(s.hatDec)) state.v.hat.dec = clamp(s.hatDec, 0.02, 0.4); }   // state van 1.0.0
         state.lvl = typeof s.lvl === 'number' && isFinite(s.lvl) ? clamp(s.lvl, 0, 1) : 0.8;
+        const sw = (x) => typeof x === 'number' && isFinite(x) ? clamp(x, 0, 0.5) : 0;
+        state.swing = sw(s.swing); VOICES.forEach(([k]) => { state.laneSwing[k] = sw(s.laneSwing && s.laneSwing[k]); });
+        if (swKnob) swKnob.set(state.swing); VOICES.forEach(([k]) => { if (lswKnobs[k]) lswKnobs[k].set(state.laneSwing[k]); });
         Object.values(rows).forEach(r => r.paint()); paintCells(); if (lvlKnob) lvlKnob.set(state.lvl); apply(); },
       destroy() { if (dead) return; dead = true; try { out.disconnect(); } catch (e) {} }
     };

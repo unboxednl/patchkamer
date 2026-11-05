@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Extra swing op patroonniveau (`pat.swing`) en per track (`track.swing`), 0 … 50% van een stap, naast de bestaande Swing-schuif (G.swing, 50 … 80) en de hostswing. De som van
+//          patroon- en trackswing (begrensd tot 50%) vertraagt de oneven zestienden (stapnummer van de klok) met som × stap; de bestaande swing op het tracklokale stapnummer is ongewijzigd.
+//          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0). Het apparaat heeft geen noten- of triggeringang (geen eventIn): live inspelen en noteNames
+//          zijn er dus niet.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Groovebox 12 en nieuwe id nl.patchkamer.groovebox12 (voorheen Takt Twaalf, nl.patchkamer.takt12); tunes en songs uit die tijd
 //          verwijzen naar de oude id. Tweetalig (host.lang; namen van het apparaat en de poorten per taal in i18n; alle teksten in TXT).
 //          setState en modulate controleren alles: getallen binnen hun bereik, onbekende of ongeldige waarden op de standaard, ontbrekende sporen, stappen en
@@ -19,11 +23,13 @@ const TXT = {
     chainNote: 'Ketting = patroonnummers op volgorde, bv. <code>1 1 2 3</code>.', fxSends: 'FX-blok &amp; sends', reverb: 'Galm', fxBlock: 'FX-blok', songs: 'Songs', demoNight: 'Demo: Nachtstad', demoBasic: 'Demo: Basis',
     name: 'Naam', exportSum: 'Exporteren / importeren als tekst', toText: 'Naar tekst', copyText: 'Kopieer', import: 'Importeer',
     stepAria: n => `stap ${n}`, lenWord: 'lengte', lockStep: n => `P-lock stap ${n}: knoppen gelden alleen voor deze stap (dubbelklik = lock wissen)`, lockPick: 'P-lock: kies een stap', stepSel: n => `stap ${n} geselecteerd`,
+    patSwing: 'Pat. swing', trkSwing: 'Trackswing', swingTitle: 'extra swing op de oneven zestienden, bovenop Swing en de swing van de host (dubbelklik: 0)',
     importFail: 'Kon deze tekst niet lezen als song.', multi: 'Losse uit', songNight: 'Nachtstad', songBasic: 'Basis' },
   en: { lockTitle: 'Parameter locks: pick a step and turn a knob', length: 'Length', note: 'Note', off: 'off', on: 'on', patSong: 'Patterns &amp; song', chain: 'Chain', copy: 'Copy →', clearTrigs: 'Clear trigs', random: 'Random',
     chainNote: 'Chain = pattern numbers in order, e.g. <code>1 1 2 3</code>.', fxSends: 'FX block &amp; sends', reverb: 'Reverb', fxBlock: 'FX block', songs: 'Songs', demoNight: 'Demo: Night City', demoBasic: 'Demo: Basic',
     name: 'Name', exportSum: 'Export / import as text', toText: 'To text', copyText: 'Copy', import: 'Import',
     stepAria: n => `step ${n}`, lenWord: 'length', lockStep: n => `P-lock step ${n}: knobs only apply to this step (double-click = clear lock)`, lockPick: 'P-lock: pick a step', stepSel: n => `step ${n} selected`,
+    patSwing: 'Pat. swing', trkSwing: 'Track swing', swingTitle: 'extra swing on the odd sixteenths, on top of Swing and the host swing (double-click: 0)',
     importFail: 'Could not read this text as a song.', multi: 'Separate outs', songNight: 'Night City', songBasic: 'Basic' },
 };
 const __CSS = `
@@ -174,12 +180,14 @@ const __HTML = T => `<div class="device">
     <div class="f"><span>Retrig</span><select id="sretrig"><option value="1">${T.off}</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option><option value="8">8</option></select></div>
     <div class="f three"><span>Vel.</span><input type="range" id="svel" min="0.1" max="1" step="0.01" value="0.8"><output id="svelOut">80</output></div>
     <div class="f"><span>Micro</span><select id="smicro"><option value="-0.25">−¼</option><option value="-0.125">−⅛</option><option value="0" selected>0</option><option value="0.125">+⅛</option><option value="0.25">+¼</option></select></div>
+    <div class="f three" style="grid-column:span 2;grid-template-columns:auto minmax(0,1fr) 38px"><span>${T.trkSwing}</span><input type="range" id="trkSwing" min="0" max="0.5" step="0.005" value="0" title="${T.swingTitle}"><output id="trkSwingOut">0%</output></div>
   </div>
 
   <div class="side">
     <div class="panel">
       <h2>${T.patSong}</h2>
       <div class="pats" id="pats"></div>
+      <div class="row"><label for="patSwing" title="${T.swingTitle}">${T.patSwing}</label><input type="range" id="patSwing" min="0" max="0.5" step="0.005" value="0" title="${T.swingTitle}"><output id="patSwingOut">0%</output></div>
       <div class="row wide"><label for="chain">${T.chain}</label><input type="text" id="chain" class="chain" value="1" maxlength="48"></div>
       <div class="pats actions"><button id="patCopy">${T.copy}</button><button id="patClear">${T.clearTrigs}</button><button id="patRnd">${T.random}</button></div>
       <div class="note">${T.chainNote}</div>
@@ -216,7 +224,7 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 1262 },
@@ -266,12 +274,12 @@ const DEFAULT_NAMES=['Kick','Snare','Rim','Clap','HH closed','HH open','Ride','C
 function defaults(page,mach){const src=page==='syn'?MACH[mach].syn:PAGES[page]; const o={}; src.forEach(([k,,,,d])=>o[k]=d); return o;}
 function newStep(){return {on:0,vel:0.8,note:48,cond:0,retrig:1,micro:0,lock:{}};}
 function newTrack(i){
-  const m=DEFAULT_MACH[i], t={machine:m,name:DEFAULT_NAMES[i],len:16,mute:false,steps:Array.from({length:STEPS},newStep),
+  const m=DEFAULT_MACH[i], t={machine:m,name:DEFAULT_NAMES[i],len:16,mute:false,swing:0,steps:Array.from({length:STEPS},newStep),
     syn:defaults('syn',m),flt:defaults('flt'),amp:defaults('amp'),lfo:defaults('lfo'),fx:defaults('fx')};
   if(i===5){t.syn.dec=0.5;} if(i===8){t.amp.dec=0.3;t.flt.cut=1200;t.flt.env=0.6;t.flt.res=6;} if(i===9){t.fx.rev=0.5;t.flt.cut=3000;} if(i===10){t.flt.cut=600;t.flt.env=0.5;t.flt.res=4;t.amp.dec=0.4;} if(i===11){t.flt.cut=4000;t.amp.dec=0.4;}
   return t;
 }
-function newPattern(){return {tracks:Array.from({length:NT},(_,i)=>newTrack(i)),bpm:null};}
+function newPattern(){return {tracks:Array.from({length:NT},(_,i)=>newTrack(i)),bpm:null,swing:0};}
 let pats=Array.from({length:NPAT},newPattern), curPat=0, playPat=-1, curTrack=0, page='syn', lockMode=false, selStep=-1;
 const G={bpm:124,swing:54,vol:0.7,fxDrive:0.25,fxCut:9000,fxRes:1,dlyTime:1,dlyFb:0.45,revSize:3,chain:'1'};
 const P=()=>pats[curPat], T=()=>P().tracks[curTrack], PP=()=>pats[playPat>=0?playPat:curPat];  // PP = the pattern the clock is playing
@@ -289,10 +297,10 @@ function cleanStep(x,mach){const s=newStep(); if(!x||typeof x!=='object') return
   return s;}
 function cleanTrack(x,i){const d=newTrack(i); if(!x||typeof x!=='object') return d;
   const m=typeof x.machine==='string'&&Object.prototype.hasOwnProperty.call(MACH,x.machine)?x.machine:d.machine;
-  return {machine:m,name:typeof x.name==='string'?x.name.slice(0,40):d.name,len:int(x.len,1,STEPS,STEPS),mute:x.mute===true,
+  return {machine:m,name:typeof x.name==='string'?x.name.slice(0,40):d.name,len:int(x.len,1,STEPS,STEPS),mute:x.mute===true,swing:num(x.swing,0,0.5,0),
     steps:Array.from({length:STEPS},(_,k)=>cleanStep(Array.isArray(x.steps)?x.steps[k]:null,m)),
     syn:cleanParams('syn',m,x.syn),flt:cleanParams('flt',m,x.flt),amp:cleanParams('amp',m,x.amp),lfo:cleanParams('lfo',m,x.lfo),fx:cleanParams('fx',m,x.fx)};}
-function cleanPattern(p){return {tracks:Array.from({length:NT},(_,i)=>cleanTrack(p&&Array.isArray(p.tracks)?p.tracks[i]:null,i)),bpm:null};}
+function cleanPattern(p){return {tracks:Array.from({length:NT},(_,i)=>cleanTrack(p&&Array.isArray(p.tracks)?p.tracks[i]:null,i)),bpm:null,swing:num(p&&p.swing,0,0.5,0)};}
 function cleanG(g){if(!g||typeof g!=='object') return; for(const k in GSPEC) if(typeof g[k]==='number'&&Number.isFinite(g[k])) G[k]=clamp(g[k],GSPEC[k][0],GSPEC[k][1]); if(typeof g.chain==='string') G.chain=g.chain.replace(/[^1-8 ]/g,'').slice(0,48);}
 
 // ---------- built-in demo songs ----------
@@ -533,12 +541,12 @@ function tick(info){
   {
     const cs=chainSeq(), bar=Math.floor(pos/STEPS), pIdx=cs[bar%cs.length];
     if(pIdx!==playPat){playPat=pIdx; for(let k=0;k<NT;k++) applyTrack(k); paintPats();}
-    const pat=pats[pIdx], sw=(G.swing-50)/50*0.66;
+    const pat=pats[pIdx], sw=(G.swing-50)/50*0.66, oddPos=(Number.isInteger(info.step)?info.step:pos)%2===1;
     pat.tracks.forEach((tr,i)=>{
       const st=pos%tr.len; const loop=Math.floor(pos/tr.len), first=pos<tr.len;
       const step=tr.steps[st]; if(!step.on||tr.mute) return;
       if(!condOK(step.cond,loop,first)) return;
-      let t=nextT+(st%2?stepDur()*sw:0)+step.micro*stepDur();
+      let t=nextT+(st%2?stepDur()*sw:0)+step.micro*stepDur()+(oddPos?Math.min(0.5,(pat.swing||0)+(tr.swing||0))*stepDur():0);
       const n=step.retrig; for(let k=0;k<n;k++) trig(pat,i,t+k*stepDur()/n,step,step.vel*(k?0.75:1));
     });
     const curPos=pos; setTimeout(()=>{uiCur=curPos; paintTrigsCursor();},Math.max(0,(nextT-ctx.currentTime)*1000));
@@ -607,13 +615,18 @@ function paintTrigsCursor(){const tr=T(); const cur=uiCur<0?-1:(uiCur%tr.len); t
 const snote=$('snote'); for(let m=24;m<=96;m++){const o=document.createElement('option'); o.value=m; o.textContent=nname(m); snote.appendChild(o);}
 const scond=$('scond'); CONDS.forEach((c,i)=>{const o=document.createElement('option'); o.value=i; o.textContent=c; scond.appendChild(o);});
 function curStep(){return selStep>=0?T().steps[selStep]:null;}
+const pctS=v=>Math.round(v*100)+'%';
+$('patSwing').oninput=()=>{const v=clamp(+$('patSwing').value,0,0.5); P().swing=v; $('patSwingOut').textContent=pctS(v);};
+$('patSwing').ondblclick=()=>{P().swing=0; paintStepbar();};
+$('trkSwing').oninput=()=>{const v=clamp(+$('trkSwing').value,0,0.5); T().swing=v; $('trkSwingOut').textContent=pctS(v);};
+$('trkSwing').ondblclick=()=>{T().swing=0; paintStepbar();};
 $('tlen').oninput=()=>{T().len=+$('tlen').value; $('tlenOut').textContent=T().len; paintTrigs();};
 snote.onchange=()=>{const st=curStep(); if(st) st.note=+snote.value;};
 scond.onchange=()=>{const st=curStep(); if(st){st.cond=+scond.value; paintTrigs();}};
 $('sretrig').onchange=()=>{const st=curStep(); if(st){st.retrig=+$('sretrig').value; paintTrigs();}};
 $('smicro').onchange=()=>{const st=curStep(); if(st){st.micro=+$('smicro').value; paintTrigs();}};
 $('svel').oninput=()=>{const st=curStep(); $('svelOut').textContent=Math.round($('svel').value*100); if(st){st.vel=+$('svel').value; paintTrigs();}};
-function paintStepbar(){const tr=T(), st=curStep(), has=!!st; $('tlen').value=tr.len; $('tlenOut').textContent=tr.len;
+function paintStepbar(){const tr=T(), st=curStep(), has=!!st; $('tlen').value=tr.len; $('tlenOut').textContent=tr.len; $('trkSwing').value=tr.swing; $('trkSwingOut').textContent=pctS(tr.swing); $('patSwing').value=P().swing; $('patSwingOut').textContent=pctS(P().swing);
   ['snote','scond','sretrig','smicro','svel'].forEach(id=>$(id).disabled=!has);
   snote.parentElement.hidden=!MACH[tr.machine].synth;
   if(has){snote.value=st.note; scond.value=st.cond; $('sretrig').value=st.retrig; $('smicro').value=st.micro; $('svel').value=st.vel; $('svelOut').textContent=Math.round(st.vel*100);}}

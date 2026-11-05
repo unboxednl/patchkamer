@@ -68,7 +68,23 @@ Wat Drum Kit met een state doet (getest):
 
 ## Nootnamen voor sequencers
 
-Drum Kit heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): elk kanaal met zijn instrumentnaam (bijvoorbeeld `Bass drum`, `Snare`) en zijn `note`, in de volgorde van `channels`; twee kanalen met dezelfde noot geven één regel (de eerste). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen.
+Drum Kit heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): elk kanaal met zijn instrumentnaam (bijvoorbeeld `Bass drum`, `Snare`) en zijn `note`, in de volgorde van `channels`; twee kanalen met dezelfde noot geven één regel (de eerste). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen. Sinds 1.14.1 volgen daarna ook de instrumenten zonder kanaal (zie hieronder).
+
+## Swing, live inspelen en de volledige lijst (sinds 1.14.1)
+
+Nieuwe state-sleutels (alle standaard 0 of uit; een oude state of tune laadt en klinkt ongewijzigd):
+
+| Veld | Wat | Waarden | Start |
+|---|---|---|---|
+| `patternSwing` | Extra swing per patroon A–D (index = `pattern`); lijst van 4 getallen | elk 0 … 0,5 (fractie van een zestiende) | `[0,0,0,0]` |
+| `channels[n].swing` | Extra swing van één kanaal | 0 … 0,5 | 0 |
+| `record` | Opname aan (werkstand: staat niet in `getPreset`, een preset laat hem staan) | boolean | `false` |
+
+Swing: de host vertraagt de oneven zestienden al met `Host.swing`. Daar komt per kanaal `min(0,5, patternSwing[pattern] + channel.swing) × stepDur` bij; een zestiende is oneven als de hoststap (`bar × 16 + step`) oneven is. Een ratchet op een oneven stap schuift als geheel mee, humanize komt er los bij. Het apparaat heeft alleen het zestiende-raster (geen 1/32, geen triolen, geen micro-timing). Ontbrekende, niet-eindige of onmogelijke waarden worden 0 of afgekapt.
+
+Opname: staat `record` aan en loopt de klok, dan schrijven `note` (alle kanalen met die noot) en `trig` (`lane` `chN` of een instrumentnaam) met `vel` een stap `{ v: vel, p: 1, r: 1 }` in het actieve patroon op het juiste kanaal, op het dichtstbijzijnde *geswingde* zestiende (hostswing + `patternSwing` + `swing`), bepaald uit `ev.time` (of `ctx.currentTime`) en de laatste klokstap. Een oude stap op dezelfde plek en hetzelfde kanaal wordt vervangen; andere stappen blijven staan. Omdat Drum Kit geen fijner raster kent, is kwantiseren altijd aan (er is geen vinkje). De plek is `stap mod length`. Een stap die nog niet gepland is klinkt niet dubbel. Niets wordt geschreven bij opname uit, bij stilstaande klok, een niet-eindige of nul-`vel`, of een tijd meer dan 4 s van de klok. Geen undo.
+
+Volledige lijst: `noteNames()` geeft sinds 1.14.1 eerst de kanalen en daarna **alle overige instrumenten uit de instrumentkeuze** (alle 24 in totaal) met hun standaardnoot of de eerstvolgende vrije. Een `note` of `trig` met zo'n instrument klinkt als **gast** op een vrij kanaal (index vanaf het aantal kanalen; bij 16 kanalen is er geen vrije bus en blijft het stil), met de standaardinstellingen van het klankmodel van kanaal 1; de state verandert niet. Een gast wordt **niet opgenomen** (een stappenraster heeft alleen rijen voor kanalen en opname voegt nooit een kanaal toe).
 
 ## Tunes maken
 
