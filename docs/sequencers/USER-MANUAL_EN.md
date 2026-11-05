@@ -629,9 +629,9 @@ Clip Arranger works like a session view. For each track (1 to 16) there are 8 **
 
 | Port | Kind | What to connect |
 |---|---|---|
-| **MIDI / record** | event input | A keyboard (**Keys**), to play through the selected track and to record into the selected clip. |
-| **Track 1** … **Track 16** | event outputs | One per track, to a synth, drone or drum machine. |
-| **Tracks** | multi-MIDI out | All tracks in one double dashed orange cable, with the track names. Connect it to **Tracks in** of the [MIDI Hub](../tools/USER-MANUAL_EN.md#midi-hub). |
+| **MIDI** (left) | event input | A keyboard (**Keys**), to play through the selected track and to record into the selected clip. |
+| **1**, **2**, … | event outputs | One per track, to a synth, drone or drum machine. The ports sit in one row at the top of the card, with only the track number, and there are exactly as many as there are tracks (1 to 16). If you remove a track, its cable goes away. |
+| **Tracks** (right) | multi-MIDI out | All tracks in one double dashed orange cable, with the track names. Connect it to **Tracks in** of the [MIDI Hub](../tools/USER-MANUAL_EN.md#midi-hub). |
 
 #### An example
 
