@@ -2,9 +2,9 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Ready-made sounds for devices that make sound (synths and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
+Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **32 packs with 2012 tunes**, one pack per device: 26 for synths (1805 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **34 packs with 2160 tunes**, one pack per device: 26 for synths (1805 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -38,6 +38,15 @@ This folder has **32 packs with 2012 tunes**, one pack per device: 26 for synths
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10 | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12 | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) |
+
+### Samplers (2)
+
+| Device | Pack | Tunes | Folders | File |
+|---|---|---|---|---|
+| [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | 12 | [`loop-slicer-styles.patchkamer-tunes.json`](loop-slicer-styles.patchkamer-tunes.json) |
+| [Samplebank](../devices/samplers/Samplebank/) | Samplebank Styles | 79 | 16 | [`samplebank-styles.patchkamer-tunes.json`](samplebank-styles.patchkamer-tunes.json) |
+
+A Samplebank tune carries its own small generated sounds. Eight Loop Slicer tunes (folder Own Loop) use the loop you have loaded and stay silent without one.
 
 ### Drums (6)
 

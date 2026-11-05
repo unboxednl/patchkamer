@@ -31,6 +31,7 @@ Devices come in kinds. Every kind has its own README in its folder and its own u
 | Kind | What it is for | Devices | README | Manual |
 |---|---|---|---|---|
 | **Synths** | Make sound from notes | Acid Baselines, Acid Stepper, Basic Mono, Biotope, Bowed Ensemble, Celestial Mechanics, Chord Poly, Cross Mod Mono, Dissonant Cluster, Drone Synth, Duofone, Foundry, Four-Operator FM, Grain Cloud, Karplus String, Layered Landscape, Low Bass, Mist, Paradox, Patch Mono, Patchbay Synth, Poly Chorus, Stage Keys, Sub Line, Supersaw Swarm, Triple Osc Poly | [devices/synths](devices/synths/README.md) | [Synths](docs/synths/USER-MANUAL_EN.md) |
+| **Samplers** | Play your own sounds: pads and slices from loaded audio | Samplebank, Loop Slicer | [devices/samplers](devices/samplers/README.md) | [Samplers](docs/samplers/USER-MANUAL_EN.md) |
 | **Sequencers** | Play notes and chords on other devices | Chord Sequencer, Clip Arranger, Euclidean Rhythms, Pattern Playlist, Pattern Tracker, Scale Arpeggiator, Step Sequencer, Wanderer | [devices/sequencers](devices/sequencers/README.md) | [Sequencers](docs/sequencers/USER-MANUAL_EN.md) |
 | **Drums** | Drum sounds and rhythm | Drum Machine, Drum Kit, Groovebox 12, Pulse Drums, Latin Percussion, Click Synth | [devices/drums](devices/drums/README.md) | [Drums](docs/drums/USER-MANUAL_EN.md) |
 | **Effects** | Shape the sound: modulation, distortion, space, filters, rhythm, voice, whole chains | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [devices/effects](devices/effects/README.md) | [Effects](docs/effects/USER-MANUAL_EN.md) |
@@ -43,7 +44,7 @@ Devices come in kinds. Every kind has its own README in its folder and its own u
 
 | | What it is | README | Manual |
 |---|---|---|---|
-| **Tunes** | Complete sounds for devices that make sound (the synths and the drum devices), in packs per style | [tunes](tunes/README.md) | [Tunes](docs/tunes/USER-MANUAL_EN.md) |
+| **Tunes** | Complete sounds for devices that make sound (the synths, the samplers and the drum devices), in packs per style | [tunes](tunes/README.md) | [Tunes](docs/tunes/USER-MANUAL_EN.md) |
 | **Presets** | Starting settings for devices without a sound of their own: a pack for most effects, the modulators, the sequencers, the mastering devices, the Metronome and the Leveler. The Effect Chain packs are complete chains of four to eight effects, each built for one application | [presets](presets/README.md) | [Presets](docs/presets/USER-MANUAL_EN.md) |
 
 ## Build your own devices, with or without AI
@@ -73,7 +74,7 @@ See [LICENSING.md](LICENSING.md) for the reasons behind each choice.
 ## Documentation
 
 - [User manual](docs/USER-MANUAL_EN.md) ([Nederlands](docs/USER-MANUAL_NL.md)): the studio, the library, patching, workspaces, settings and shortcuts
-- Manuals per kind of device and for sounds: [synths](docs/synths/USER-MANUAL_EN.md), [sequencers](docs/sequencers/USER-MANUAL_EN.md), [drums](docs/drums/USER-MANUAL_EN.md), [effects](docs/effects/USER-MANUAL_EN.md), [mastering](docs/mastering/USER-MANUAL_EN.md), [mixer](docs/mixer/USER-MANUAL_EN.md), [modulators](docs/modulators/USER-MANUAL_EN.md), [tools](docs/tools/USER-MANUAL_EN.md), [tunes](docs/tunes/USER-MANUAL_EN.md) and [presets](docs/presets/USER-MANUAL_EN.md) (all in Dutch too: replace `_EN` by `_NL`)
+- Manuals per kind of device and for sounds: [synths](docs/synths/USER-MANUAL_EN.md), [samplers](docs/samplers/USER-MANUAL_EN.md), [sequencers](docs/sequencers/USER-MANUAL_EN.md), [drums](docs/drums/USER-MANUAL_EN.md), [effects](docs/effects/USER-MANUAL_EN.md), [mastering](docs/mastering/USER-MANUAL_EN.md), [mixer](docs/mixer/USER-MANUAL_EN.md), [modulators](docs/modulators/USER-MANUAL_EN.md), [tools](docs/tools/USER-MANUAL_EN.md), [tunes](docs/tunes/USER-MANUAL_EN.md) and [presets](docs/presets/USER-MANUAL_EN.md) (all in Dutch too: replace `_EN` by `_NL`)
 - [Device contract](contract/PATCHKAMER-CONTRACT_EN.md) ([Nederlands](contract/PATCHKAMER-CONTRACT_NL.md))
 - [AGENTS.md](AGENTS.md): instructions for AI agents that build devices
 
