@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Swing per rij en de hele klanklijst van een drumcomputer bereikbaar. Staat de swing van een rij op 0 (de standaard), dan geeft elke state dezelfde gebeurtenissen als voorheen.
+//   - swing per rij (`swing`, 0 … 0,5 van een zestiende, regelaar bij de gekozen rij): een slag die in een oneven zestiende valt (ook een 1/32-slag of de tweede helft van een ratchet daarin) komt (rijswing) × stepDur later, bovenop de swing van de host;
+//     rijen op 1/8 of langzamer hebben alleen slagen op even zestienden en schuiven dus niet
+//   - de nootkeuze van een rij mag elke noot 0 … 127 zijn (was 12 … 108) en toont, als er een drumcomputer aan hangt, eerst al zijn klanken in zijn volgorde en daarna alle noten
 // 1.14.0 — Patchkamer contract v1.14. De uitgangskeuze en de nootkeuze tonen de klanken van de aangesloten drumcomputer (noteNames, host.peers); zonder zo'n apparaat is alles als voorheen.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Euclidean Rhythms (nieuwe id nl.patchkamer.euclidean, eigen map in sequencers; voorheen Euclides, nl.patchkamer.euclides).
 //   Presets en songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state klinkt identiek: zelfde state en zelfde klokstappen geven dezelfde
@@ -43,6 +47,8 @@ const EN = {
   'Stappen = lengte van de rij, Slagen = hoeveel daarvan klinken (zo gelijk mogelijk verdeeld), Rotatie = waar de rij begint. Accent: zoveel slagen klinken hard, ook die zijn euclidisch verdeeld; Ghost notes zijn zachte slagen tussen de rest. Fill: elke N-de maat extra slagen (dubbel) of trillers (ratchet). Mutatie: de rij verspringt soms een maat lang. Rij-nummer aanklikken = kiezen voor het live spelen, de noot en de notenlengte (bij Uitgang = Noot).':
     'Steps = length of the row, Pulses = how many of them sound (spread as evenly as possible), Rotation = where the row starts. Accents: this many pulses sound hard, also spread euclidean; ghost notes are soft hits between the rest. Fill: every Nth bar extra pulses (double) or rolls (ratchet). Mutation: the row sometimes shifts for a bar. Click a row number to choose it for live play, the note and the note length (when Out = Note).',
   '(uit)': '(off)',
+  'Swing': 'Swing', 'Klanken van de drumcomputer': 'Drum machine sounds', 'Alle noten': 'All notes',
+  'extra vertraging van slagen op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)': 'extra delay for hits on an odd sixteenth, on top of the host swing (grids of 1/16 and faster only)',
 };
 const LEGACY_PRESETS = { 'Klikwerk-kit': 'Drum kit', 'Afro-Cubaans': 'Afro-Cuban', 'Bembé (7 over 12)': 'Bembe (7 over 12)', 'Polyritme 3·4·5·7': 'Polyrhythm 3·4·5·7', 'Techno': 'Techno', 'IDM-stotter': 'IDM stutter', 'Melodisch (noten)': 'Melodic (notes)', 'Eigen': 'Custom' };
 // ---------- UI-kit (eigen kopie) ----------
@@ -93,7 +99,7 @@ const ukVar = (el, name, d) => { const c = el._ukv || (el._ukv = {}), now = perf
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.14.0', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.14.1', kind: 'utility', category: 'sequencer',
   ui: { width: 900, minWidth: 420 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'reset', name: 'Reset' }, { id: 'keys', name: 'Notes in' }], eventOut: [{ id: 'trigs', name: 'Trigs / notes' }], modIn: [], modOut: [] },
   i18n: { nl: { ports: { reset: 'Reset', keys: 'Noten in', trigs: 'Trigs / noten' } } },
@@ -104,7 +110,7 @@ export default {
     const FILLS = [['0', 'Geen'], ['2', '2'], ['4', '4'], ['8', '8']];
     const CURVES = [['flat', 'Vlak'], ['up', 'Crescendo'], ['down', 'Decrescendo'], ['arch', 'Boog']];
     const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'], nn = n => NOTE_NAMES[n % 12] + (Math.floor(n / 12) - 1);
-    const ROWDEF = { gate: 0.5, accVel: 1, softVel: 0.75, ghost: 0, ghostVel: 0.35, curveAmt: 0, human: 0 };
+    const ROWDEF = { swing: 0, gate: 0.5, accVel: 1, softVel: 0.75, ghost: 0, ghostVel: 0.35, curveAmt: 0, human: 0 };
     const row = (on, steps, pulses, rot, out, o = {}) => ({ on, steps, pulses, rot, div: '1', out, note: 60, vel: 0.8, acc: 0, prob: 1, fill: '0', fillMode: 'dubbel', mut: 0, ...ROWDEF, curve: 'flat', ...o });
     const PRESETS = {
       'Drum kit': () => [row(true, 16, 4, 0, 'ch1', { acc: 1 }), row(true, 8, 3, 1, 'ch2'), row(true, 12, 5, 0, 'ch3', { prob: 0.85 }), row(true, 16, 2, 4, 'ch4'), row(true, 16, 9, 0, 'ch5', { acc: 3, vel: 0.6 }), row(true, 7, 3, 0, 'ch6', { div: '0.5' }), row(true, 16, 1, 14, 'ch7', { fill: '4', fillMode: 'ratchet' }), row(true, 13, 4, 2, 'ch8', { mut: 0.3, prob: 0.7 })],
@@ -118,10 +124,10 @@ export default {
     const PNAMES = Object.keys(PRESETS), CUSTOM = 'Custom', RUNFIELDS = ['sel', 'run'];
     function cleanRow(r, i) { const d = PRESETS['Drum kit']()[i]; r = r && typeof r === 'object' ? r : d; const steps = Math.round(ukFinite(r.steps, d.steps, 1, 32)); const out = r.out === 'note' ? 'noot' : r.out;
       return { on: r.on !== undefined ? !!r.on : d.on, steps, pulses: Math.round(ukFinite(r.pulses, d.pulses, 0, steps)), rot: Math.round(ukFinite(r.rot, d.rot, 0, steps - 1)), div: DIVS.some(x => x[0] === r.div) ? r.div : '1',
-        out: /^ch[1-8]$|^noot$/.test(out) ? out : d.out, note: Math.round(ukFinite(r.note, 60, 12, 108)), vel: ukFinite(r.vel, 0.8, 0.05, 1), acc: Math.round(ukFinite(r.acc, 0, 0, 32)), prob: ukFinite(r.prob, 1, 0, 1),
+        out: /^ch[1-8]$|^noot$/.test(out) ? out : d.out, note: Math.round(ukFinite(r.note, 60, 0, 127)), vel: ukFinite(r.vel, 0.8, 0.05, 1), acc: Math.round(ukFinite(r.acc, 0, 0, 32)), prob: ukFinite(r.prob, 1, 0, 1),
         fill: FILLS.some(x => x[0] === r.fill) ? r.fill : '0', fillMode: ['dubbel', 'ratchet'].includes(r.fillMode) ? r.fillMode : 'dubbel', mut: ukFinite(r.mut, 0, 0, 1), gate: ukFinite(r.gate, ROWDEF.gate, 0.05, 4),
         accVel: ukFinite(r.accVel, ROWDEF.accVel, 0.05, 1), softVel: ukFinite(r.softVel, ROWDEF.softVel, 0.05, 1), ghost: Math.round(ukFinite(r.ghost, 0, 0, 32)), ghostVel: ukFinite(r.ghostVel, ROWDEF.ghostVel, 0.05, 1),
-        curve: CURVES.some(x => x[0] === r.curve) ? r.curve : 'flat', curveAmt: ukFinite(r.curveAmt, 0, 0, 1), human: ukFinite(r.human, 0, 0, 1) }; }
+        curve: CURVES.some(x => x[0] === r.curve) ? r.curve : 'flat', curveAmt: ukFinite(r.curveAmt, 0, 0, 1), human: ukFinite(r.human, 0, 0, 1), swing: ukFinite(r.swing, ROWDEF.swing, 0, 0.5) }; }
     function normalize(raw) { const s = raw && typeof raw === 'object' ? raw : {}, p = LEGACY_PRESETS[s.preset] || s.preset;
       return { preset: PNAMES.includes(p) || p === CUSTOM ? p : PNAMES[0], run: s.run !== undefined ? !!s.run : true, sel: Math.round(ukFinite(s.sel, 0, 0, NR - 1)), live: s.live !== undefined ? !!s.live : true,
       rows: Array.from({ length: NR }, (_, i) => cleanRow(Array.isArray(s.rows) ? s.rows[i] : undefined, i)) }; }
@@ -167,7 +173,9 @@ export default {
       if (!root) return;
       const byNote = new Map(); for (const x of peerNames) { const n = Math.round(x.note); if (n >= 0 && n <= 127 && !byNote.has(n)) byNote.set(n, String(x.name)); }
       rowEls.forEach(E => { const v = E.out.value; E.out.innerHTML = ''; [...Array.from({ length: NR }, (_, k) => { const nm = peerNames[k] ? String(peerNames[k].name) : ''; return ['ch' + (k + 1), nm ? (k + 1) + ' · ' + nm : tx('Spoor {0}', k + 1)]; }), ['noot', tx('Noot')]].forEach(([val, t]) => { const o = ukEl(E.out, 'option', '', t); o.value = val; o.title = t; }); E.out.value = v; });
-      if (ui.noteSel) { const v = ui.noteSel.value; ui.noteSel.innerHTML = ''; const lo = Math.min(24, ...byNote.keys()), hi = Math.max(96, ...byNote.keys()); for (let n = lo; n <= hi; n++) { const o = ukEl(ui.noteSel, 'option', '', byNote.has(n) ? nn(n) + ' · ' + byNote.get(n) : nn(n)); o.value = String(n); } ui.noteSel.value = v; }
+      if (ui.noteSel) { const v = ui.noteSel.value; ui.noteSel.innerHTML = ''; const lo = 0, hi = 127; let into = ui.noteSel;
+        if (byNote.size) { const g1 = ukEl(ui.noteSel, 'optgroup'); g1.label = tx('Klanken van de drumcomputer'); for (const [n, name] of byNote) { const o = ukEl(g1, 'option', '', nn(n) + ' · ' + name); o.value = String(n); } into = ukEl(ui.noteSel, 'optgroup'); into.label = tx('Alle noten'); }
+        for (let n = lo; n <= hi; n++) { const o = ukEl(into, 'option', '', byNote.has(n) ? nn(n) + ' · ' + byNote.get(n) : nn(n)); o.value = String(n); } ui.noteSel.value = v; }
     }
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--event,#ffd166)') + `
 .rows{display:grid;gap:4px;margin-top:8px}.rh,.r{display:grid;grid-template-columns:34px 30px 58px 58px 58px 88px 82px minmax(60px,1fr) 58px minmax(60px,1fr) 112px minmax(56px,1fr);gap:5px;align-items:center}
@@ -210,9 +218,10 @@ export default {
         E.row = r; rowEls.push(E); }
       ui.selH = ukEl(app, 'h3', '', '');
       const ed = ukEl(app, 'div', 'top');
-      ui.noteSel = ukSelect(ed, tx('Noot van de gekozen rij'), Array.from({ length: 73 }, (_, k) => [24 + k, nn(24 + k)]), 60, v => { R(state.sel).note = +v; eigen(); });
+      ui.noteSel = ukSelect(ed, tx('Noot van de gekozen rij'), Array.from({ length: 128 }, (_, k) => [k, nn(k)]), 60, v => { R(state.sel).note = +v; eigen(); });
       ui.curve = ukSelect(ed, tx('Verloop'), CURVES.map(([v, t]) => [v, tx(t)]), 'flat', v => { R(state.sel).curve = v; eigen(); });
-      const SP = { gate: { name: tx('Notenlengte'), min: 0.05, max: 4, step: 0.01, unit: 'x', tip: tx('lengte van de noot als deel van een rasterstap van de rij (tot 4: legato en overlap); bij trigs zonder effect') },
+      const SP = { swing: { name: tx('Swing'), min: 0, max: 0.5, step: 0.01, unit: '%', tip: tx('extra vertraging van slagen op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)') },
+        gate: { name: tx('Notenlengte'), min: 0.05, max: 4, step: 0.01, unit: 'x', tip: tx('lengte van de noot als deel van een rasterstap van de rij (tot 4: legato en overlap); bij trigs zonder effect') },
         accVel: { name: tx('Accentsterkte'), min: 0.05, max: 1, step: 0.01, unit: '%', tip: tx('sterkte van de accenten') },
         softVel: { name: tx('Zachte slagen'), min: 0.05, max: 1, step: 0.01, unit: '%', tip: tx('sterkte van de overige slagen in een rij met accenten') },
         ghost: { name: tx('Ghost notes'), min: 0, max: 32, step: 1, unit: 'int', tip: tx('zoveel niet-accent slagen worden ghost notes, euclidisch verdeeld') },
@@ -256,7 +265,8 @@ export default {
               if (!p[idx] || Math.random() >= r.prob) continue; const time = t + (k / rate - abs) * sd, tick = sd / rate; let vel = hitVel(r, levels(r, p), idx), dur = tick * r.gate;
               if (r.human > 0) { vel = clamp(vel * (1 + (Math.random() - 0.5) * r.human * 0.6), 0.05, 1); dur *= 1 + (Math.random() - 0.5) * r.human * 0.4; }
               flash[i] = performance.now() + Math.max(0, (time - ctx.currentTime) * 1000);
-              if (ratchet) { emit(r, time, vel, tick * 0.4); emit(r, time + tick / 2, vel * 0.8, tick * 0.4); } else emit(r, time, vel, dur); } });
+              const sw = r.swing > 0 ? Math.min(0.5, r.swing) : 0, p0 = k / rate + offset, sh = q => (sw > 0 && Math.floor(p0 + q + 1e-9) % 2 === 1 ? sw * sd : 0);
+              if (ratchet) { emit(r, time + sh(0), vel, tick * 0.4); emit(r, time + tick / 2 + sh(0.5 / rate), vel * 0.8, tick * 0.4); } else emit(r, time + sh(0), vel, dur); } });
            } catch { } },
       onPeers(list) { if (!dead) readTarget(list); },
       onTransport(info) { try { if (!info?.playing) { cur.fill(-1); offset = 0; lastAbs = -1; } } catch { } },

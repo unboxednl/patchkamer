@@ -13,7 +13,7 @@ Een geklokte arpeggiator. Hij neemt de noten die op de ingang `notes` klinken of
 | Naam | `Scale Arpeggiator` in alle talen; de poortnamen zijn Engels in alle talen (`Chord / keyboard`, `Arpeggio`; in- en uitgang delen de poort-id `notes`, daarom is er geen aparte Nederlandse naam) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `notes`, modulatie-ingang `mod`, eventuitgang `notes`; geen audio |
-| Contract | v1.11 |
+| Contract | v1.14 (apparaatversie 1.14.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe vorm van een ouder, Nederlandstalig bestand met een andere naam en id (`nl.patchkamer.toonladder`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -116,6 +116,12 @@ Het toetsenbord is hier de **akkoordbron** zelf: sluit het aan op de ingang `not
 - Alle uitgestuurde noten zijn eindig met `note` 0 … 127, `vel` 0 … 1, `dur` > 0 (500 willekeurige runs met rommel op ingang, klok en state; ruim 60000 gebeurtenissen; geen overtreding).
 - Met een ongewijzigde (oude) state, dezelfde ingang en dezelfde klokstappen geeft het apparaat dezelfde gebeurtenissen als het oude bestand (inclusief cc, panic, latch en `held`): 400 willekeurige runs, 19700 gebeurtenissen, 0 verschillen.
 - Niet beluisterd; geen echte synth of toetsenbord aangesloten getest.
+
+## Swing (1.14.0)
+
+Nieuwe sleutel `swing` (0 … 0,5 van een zestiende, standaard 0, altijd in de state; schuif "Swing"). Het is swing van het apparaat zelf (er zijn geen sporen of rijen).
+
+Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.11.0. Een noot (ook elke herhaling bij `repeat`, en `chord`-pulsen) valt in een oneven zestiende als `floor(positie)` oneven is. Bij `rate` 2 (1/8) en langzamer speelt de arpeggiator alleen op even zestienden: dan is swing zonder effect; gebruik `rate` 1 (1/16) of sneller. Opnemen/kwantiseren is niet van toepassing: dit apparaat is een generator.
 
 ## Controleren
 

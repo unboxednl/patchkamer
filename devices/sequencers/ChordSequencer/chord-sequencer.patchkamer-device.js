@@ -1,4 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Extra swing per spoor en inspelen op het geswingde raster. Staat het veld swing niet in een spoor (= 0), dan speelt alles precies als voorheen.
+//   - swing per spoor (`swing`, 0 … 0,5 van een zestiende, alleen in de state als het niet 0 is): een gebeurtenis in een oneven zestiende (stapspoor, ook de 1/32- en 1/64-stappen en ratchets die daarin vallen,
+//     en de noten van de spelwijze `notes`) wordt (spoorswing) × stepDur later gespeeld, bovenop de swing van de host; even zestienden blijven staan
+//   - inspelen kwantiseert naar het dichtstbijzijnde geswingde rasterpunt van het spoor (host + spoorswing), en de lengte wordt uit twee rasterpunten gemeten (niet meer uit seconden gedeeld door een gemiddelde stap)
+//   - trig-gebeurtenissen met een noot op de ingang Live worden als korte noot doorgegeven en ingespeeld
 // 1.11.1 — Nieuw (oude states en presets klinken gelijk; de nieuwe velden staan alleen in de state als ze van de standaard afwijken):
 //   - live spelen: ingang `live` (Keys of elke notenbron). Het gekozen spoor (Edit track) stuurt de live noten door naar zijn uitgang, zodat de
 //     gekoppelde synth klinkt zonder tweede kabel. Wisselen van spoor sluit hangende noten. Doorgeven kan uit (`thru`)
@@ -45,7 +50,7 @@ const EN = {
 };
 const LEGACY_NAMES = ['Akkoorden', 'Bas', 'Puls', 'Bellen'];
 export default {
-  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.13.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
+  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.14.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'transpose', name: 'Transpose' }, { id: 'live', name: 'Live' }], eventOut: [{ id: 'a', name: 'Track A' }, { id: 'b', name: 'Track B' }, { id: 'c', name: 'Track C' }, { id: 'd', name: 'Track D' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiEventOut: [{ id: 'tracks', name: 'Tracks' }] },
   i18n: { nl: { ports: { transpose: 'Transpositie', live: 'Live', a: 'Spoor A', b: 'Spoor B', c: 'Spoor C', d: 'Spoor D', tracks: 'Sporen' } } },
   create(ctx, host) {
@@ -104,6 +109,7 @@ export default {
       const out = { name: typeof r.name === 'string' && r.name !== LEGACY_NAMES[i] ? r.name.slice(0, 40) : d.name, enabled: typeof r.enabled === 'boolean' ? r.enabled : d.enabled, root: Math.round(finite(r.root, d.root, 24, 96)), quality: Object.hasOwn(qualities, r.quality) ? r.quality : d.quality, inversion: Math.round(finite(r.inversion, 0, 0, 3)), mode, length: Math.round(finite(r.length, d.length, 1, 16)), division: [1, 2, 4, 8].includes(r.division) ? r.division : d.division, steps: Array.from({ length: 16 }, (_, j) => Math.round(finite(r.steps?.[j], d.steps[j], 0, 1))), progression: Array.from({ length: 4 }, (_, j) => Math.round(finite(r.progression?.[j], d.progression[j], -24, 24))), probability: finite(r.probability, 1, 0, 1), ratchet: Math.round(finite(r.ratchet, 1, 1, 4)) };
       // nieuwe velden: alleen in de state als ze van de standaard afwijken (oude states blijven dan gelijk)
       if ([2, 4].includes(r.grid)) out.grid = r.grid;
+      const sw = finite(r.swing, 0, 0, 0.5); if (sw > 0) out.swing = r3(sw);
       if (Array.isArray(r.vel)) { const v = Array.from({ length: 16 }, (_, j) => r3(finite(r.vel[j], 1, 0.05, 1))); if (v.some(x => x !== 1)) out.vel = v; }
       if (Array.isArray(r.len)) { const v = Array.from({ length: 16 }, (_, j) => r3(finite(r.len[j], 1, 0.1, 4))); if (v.some(x => x !== 1)) out.len = v; }
       const bars = Math.round(finite(r.bars, 1, 1, 4)); if (bars !== 1) out.bars = bars;
@@ -125,17 +131,25 @@ export default {
       const L = (tr.bars || 1) * 64; tr.rec = (tr.rec || []).filter(x => !(x[0] === p && x[1] === n));
       tr.rec.push([p, n, r3(clamp(v, 0.01, 1)), clamp(Math.round(l), 1, L)]); tr.rec.sort((a, b) => a[0] - b[0] || a[1] - b[1]); if (tr.rec.length > 256) tr.rec.shift(); rollDirty = true;
     }
-    function posOf(tr, t) {   // positie in 1/64-eenheden in de lus van het spoor, uit de laatste klokstap
-      if (!tick) return null; const L = (tr.bars || 1) * 64, u = (tick.idx + (t - tick.time) / tick.sd) * 4, q = state.rquant === false ? 1 : gridUnit(tr);
-      const p = Math.round(u / q) * q; return ((p % L) + L) % L;
+    // dichtstbijzijnde (geswingde) rasterpunt voor tijdstip t, in 1/64-eenheden (niet gemodulo'd): een oneven zestiende ligt (hostswing + spoorswing) × stepDur later
+    function gridPos(tr, t) {
+      const sd = tick.sd, ls = tr.swing || 0, hs = tick.hs || 0, q = state.rquant === false ? 1 : gridUnit(tr), qs = q / 4;
+      const base = tick.time - tick.idx * sd - (tick.idx % 2 === 1 ? hs * sd : 0);
+      const at = k => { const u = k * qs, s = Math.floor(u + 1e-9); return base + u * sd + (s % 2 === 1 ? (hs + ls) * sd : 0); };
+      const k0 = Math.round((t - base) / sd / qs); let best = k0, bd = Infinity;
+      for (let k = k0 - 2; k <= k0 + 2; k++) { const d = Math.abs(t - at(k)); if (d < bd) { bd = d; best = k; } }
+      return best * q;
     }
-    function lenOf(tr, seconds) { const q = state.rquant === false ? 1 : gridUnit(tr); return Math.max(q, Math.round(seconds / (tick.sd / 4) / q) * q); }
+    function posOf(tr, t) {   // positie in 1/64-eenheden in de lus van het spoor, uit de laatste klokstap
+      if (!tick) return null; const L = (tr.bars || 1) * 64, p = gridPos(tr, t); return ((p % L) + L) % L;
+    }
+    function lenOf(tr, tOn, tOff) { const q = state.rquant === false ? 1 : gridUnit(tr); if (!tick) return q; return Math.max(q, gridPos(tr, tOff) - gridPos(tr, tOn)); }
     function live(e) {
-      const type = cleanType(e), port = PORTS[state.editTrack], t = e.time;
+      let type = cleanType(e); const port = PORTS[state.editTrack], t = e.time, isTrig = type === 'trig'; if (isTrig) type = 'note';
       if (type === 'panic' || type === 'allnotesoff') { emit(port, { type: 'allnotesoff', time: t }); held.clear(); pending.clear(); return; }
       if (!['note', 'noteon', 'noteoff'].includes(type) || !Number.isFinite(e.note)) return;
       const n = clamp(Math.round(e.note), 0, 127), v = Number.isFinite(e.vel) ? clamp(e.vel, 0, 1) : 0.8, off = type === 'noteoff' || (type !== 'noteoff' && e.vel === 0);
-      const dur = Number.isFinite(e.dur) ? clamp(e.dur, 0.005, 120) : undefined;
+      const dur = Number.isFinite(e.dur) ? clamp(e.dur, 0.005, 120) : isTrig ? 0.1 : undefined;
       if (state.thru !== false) {
         if (off) { held.delete(n); emit(port, { type: 'noteoff', note: n, time: t }); }
         else if (type === 'note' && dur !== undefined) emit(port, { type: 'note', note: n, vel: Math.max(0.01, v), time: t, dur });
@@ -143,9 +157,9 @@ export default {
       }
       if (state.record === true && playing === true && tick && tick.sd > 0) {
         const tr = curTrack(); const key = n;
-        if (off) { const pn = pending.get(key); if (pn) { pending.delete(key); recordNote(tr, pn.p, n, pn.v, lenOf(tr, Math.max(0, t - pn.t))); } }
+        if (off) { const pn = pending.get(key); if (pn) { pending.delete(key); recordNote(tr, pn.p, n, pn.v, lenOf(tr, pn.t, Math.max(pn.t, t))); } }
         else { if (tr.mode !== 'notes') { tr.mode = 'notes'; if (mountHost) render(mountHost); } const p = posOf(tr, t); if (p === null) return;
-          if (dur !== undefined && type === 'note') recordNote(tr, p, n, v, lenOf(tr, dur)); else pending.set(key, { p, v, t }); }
+          if (dur !== undefined && type === 'note') recordNote(tr, p, n, v, lenOf(tr, t, t + dur)); else pending.set(key, { p, v, t }); }
       }
     }
     function changeTarget(index) { closeHeld(); pending.clear(); state.editTrack = index; selNote = -1; }
@@ -186,6 +200,7 @@ export default {
       nameInput.onchange = () => { const v = nameInput.value.slice(0, 40); tr.name = v === defaultName(i) ? '' : v; };
       select(edit, tx('Actief'), [[0, tx('Uit')], [1, tx('Aan')]], +tr.enabled, v => { tr.enabled = v === '1'; if (!tr.enabled) emit(PORTS[i], { type: 'allnotesoff', time: ctx.currentTime }); });
       select(edit, tx('Spel'), [['chord', tx('Volledig akkoord')], ['arp', tx('Arpeggio')], ['pulse', tx('Alleen grondtoon')], ['notes', tx('Noten (opgenomen)')]], tr.mode, v => { tr.mode = v; render(el); });
+      knob(edit, tx('Swing'), [0, 0.5, 0.01], tr.swing || 0, v => { if (v > 0) tr.swing = r3(v); else delete tr.swing; }, v => Math.round(v * 100) + '%', 0);
       select(edit, tx('Raster'), [[1, '1/16'], [2, '1/32'], [4, '1/64']], tr.grid || 1, v => { if (+v === 1) delete tr.grid; else tr.grid = +v; if (tr.mode === 'notes') { rollDirty = true; } });
       if (tr.mode !== 'notes') {
         select(edit, tx('Akkoord'), Object.keys(qualities).map(k => [k, k]), tr.quality, v => tr.quality = v);
@@ -250,15 +265,15 @@ export default {
           const key = info.time + ':' + info.step; if (key === last) return; last = key;
           if (queuedScene !== null && info.step === 0) { panic(info.time); state.scene = queuedScene; queuedScene = null; counters = [0, 0, 0, 0]; }
           consume(info.time); if (info.step < previousStep) localBar++; previousStep = info.step; const bar = Number.isInteger(info.bar) ? info.bar : localBar;
-          tick = { time: info.time, sd, idx: bar * 16 + info.step };
+          tick = { time: info.time, sd, idx: bar * 16 + info.step, hs: finite(info.swing, 0, 0, 0.95) };
           for (let i = 0; i < 4; i++) {
             const tr = scenes[state.scene][i];
             if (tr.mode === 'notes') {
-              if (!tr.enabled || !tr.rec) continue; const pos = tick.idx % ((tr.bars || 1) * 16), tp = Math.round(effective['t' + i + 'transpose']) + transposeNote;
-              for (const x of tr.rec) { if (x[0] >> 2 !== pos) continue; emit(PORTS[i], { type: 'note', note: Math.round(clamp(x[1] + tp, 0, 127)), vel: clamp(x[2] * effective['t' + i + 'velocity'] / 0.8, 0.01, 1), time: info.time + (x[0] & 3) * sd / 4, dur: Math.max(0.005, x[3] * sd / 4 * effective['t' + i + 'gate'] / 0.7) }); }
+              if (!tr.enabled || !tr.rec) continue; const swn = tr.swing || 0, pos = tick.idx % ((tr.bars || 1) * 16), tp = Math.round(effective['t' + i + 'transpose']) + transposeNote;
+              for (const x of tr.rec) { if (x[0] >> 2 !== pos) continue; emit(PORTS[i], { type: 'note', note: Math.round(clamp(x[1] + tp, 0, 127)), vel: clamp(x[2] * effective['t' + i + 'velocity'] / 0.8, 0.01, 1), time: info.time + (x[0] & 3) * sd / 4 + (swn > 0 && tick.idx % 2 === 1 ? swn * sd : 0), dur: Math.max(0.005, x[3] * sd / 4 * effective['t' + i + 'gate'] / 0.7) }); }
               continue;
             }
-            const g = tr.grid || 1;
+            const g = tr.grid || 1, sws = tr.swing || 0;
             for (let s = 0; s < g; s++) {
               if ((info.step * g + s) % tr.division) continue; const count = counters[i]++, j = count % tr.length;
               if (i === state.editTrack) for (let k = 0; k < stepButtons.length; k++) stepButtons[k].style.borderColor = j === k ? 'var(--sel)' : '';
@@ -267,7 +282,7 @@ export default {
               const root = tr.root + tr.progression[((bar % 4) + 4) % 4] + Math.round(effective['t' + i + 'transpose']) + transposeNote, list = intervals.map(x => Math.round(clamp(root + x, 0, 127)));
               const selected = tr.mode === 'chord' ? list : tr.mode === 'pulse' ? [Math.round(clamp(root, 0, 127))] : [list[count % list.length]], duration = sd * tr.division / g / tr.ratchet;
               const vel = tr.vel ? clamp(effective['t' + i + 'velocity'] * tr.vel[j], 0.01, 1) : effective['t' + i + 'velocity'], dur = tr.len ? duration * effective['t' + i + 'gate'] * tr.len[j] : duration * effective['t' + i + 'gate'];
-              for (let r = 0; r < tr.ratchet; r++) for (const note of selected) emit(PORTS[i], { type: 'note', note, vel, time: info.time + s * sd / g + r * duration, dur });
+              for (let r = 0; r < tr.ratchet; r++) { const sh = sws > 0 && Math.floor(info.step + s / g + r * duration / sd + 1e-9) % 2 === 1 ? sws * sd : 0; for (const note of selected) emit(PORTS[i], { type: 'note', note, vel, time: info.time + s * sd / g + r * duration + sh, dur }); }
             }
           }
           if (infoText) infoText.textContent = tx('Scène {0}', state.scene + 1) + ' · ' + Math.round(15 / sd) + ' BPM' + (queuedScene !== null ? ' · ' + tx('volgende') + ': ' + (queuedScene + 1) : '');

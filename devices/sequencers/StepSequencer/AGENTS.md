@@ -13,7 +13,7 @@ Een monofone stap-sequencer: één patroon van 1 tot 64 stappen dat noten als ge
 | Naam | `Step Sequencer`; de poortnamen hebben een Nederlandse variant (`Noten in`, `Noten`) via `i18n` |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `in` (Notes in), eventuitgang `notes` (Notes); geen audio, geen modulatie |
-| Contract | v1.11 |
+| Contract | v1.14 (apparaatversie 1.14.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Presets: `../../../presets/step-sequencer.patchkamer-presets.json` (70 patronen in zes mappen).
@@ -47,7 +47,8 @@ De positie in het patroon volgt de teller van de studio (`bar` × 16 + `step`), 
 | `oct` | Octaafverschuiving bij het spelen | −1, 0 of 1 | 0 |
 | `len` | Patroonlengte in stappen | 1 … 64 (geheel) | 16 |
 | `res` | Raster: 16, 32 of 64 | 16, 32 of 64 | 16 |
-| `swing` | Elke tweede rasterstap (oneven positie) later, als deel van een rasterstap | 0 … 0,6 | 0 |
+| `swing` | Patroonswing (ongewijzigd): elke tweede rasterstap (oneven positie) later, als deel van een rasterstap | 0 … 0,6 | 0 |
+| `rowSwing` | Swing per rij (sinds 1.14.1): object `{"<nootnummer>": swing}` met swing in zestienden (0 … 0,5); alleen waarden boven 0 worden bewaard, onzin valt weg | object, 0 … 0,5 per nootnummer 0 … 127 | `{}` |
 | `humT` | Humanize tijd: willekeurige afwijking tot ± `humT` × een halve rasterstap | 0 … 1 | 0 |
 | `humV` | Humanize velocity: afwijking tot ± `humV` × 0,3 | 0 … 1 | 0 |
 | `seed` | Zaad van humanize (dezelfde seed geeft elke ronde dezelfde afwijkingen) | 0 … 65535 | 1 |
@@ -144,9 +145,19 @@ Een patroon is één loop. Voor een nummer zet je meerdere sequencers naast elka
 
 - **Doorgeven.** Een toetsenbord op de ingang `in` gaat, met `thru` aan, rechtstreeks naar de uitgang `notes`, dus naar de synth die daaraan hangt, met velocity en met de juiste toonlengte: een aanslag met `held: true` (Keys in vasthoudmodus) wordt doorgegeven met zijn `noteoff`, een puls (vaste `dur`) met die `dur`. `allnotesoff` en `cc` (bijvoorbeeld pitchbend) gaan mee. Bij `thru` uit, bij `setState`, bij vernietigen en bij een `allnotesoff` worden hangende noten netjes afgesloten.
 - **Dubbel spelen.** Staat het toetsenbord óók rechtstreeks met de synth verbonden, dan klinkt elke noot twee keer. Dat is een keuze van de gebruiker; het apparaat voorkomt het niet. Dit apparaat heeft één spoor, dus het "geselecteerde spoor" is altijd de uitgang `notes`.
-- **Inspelen (`rec`).** Loopt de klok, dan schrijft elke aanslag zijn noot in de stap die het dichtst bij de aanslag ligt (`quant` aan) of in dezelfde stap met de afwijking in `mt` (`quant` uit). De velocity van de aanslag wordt `vel`, `acc` en `ln` van die stap worden gewist. In vasthoudmodus (`held`) wordt `ln` de duur tot de `noteoff`, afgerond op rasterstappen (minstens één); bij een puls blijft `ln` 0 (de `gate` geldt). Bestaat die stap al, dan wordt hij overschreven.
+- **Inspelen (`rec`).** Loopt de klok, dan schrijft elke aanslag zijn noot in de stap die het dichtst bij de aanslag ligt (`quant` aan) of in dezelfde stap met de afwijking in `mt` (`quant` uit). Sinds 1.14.1 is dat het dichtstbijzijnde **geswingde** punt: de host-swing, de patroonswing `swing` en de `rowSwing` van de gespeelde noot tellen mee, zodat een aanslag niet naar een buurstap springt; bij `quant` uit wordt `mt` de afwijking tegen dat geswingde punt, dus de noot klinkt op het moment van de aanslag. Een aanslag die meer dan een zestiende buiten de geplande stappen valt, of een niet-eindige noot, tijd of velocity, schrijft niets. Een aanslag met een echte `dur` (geen vasthouden) zet `ln` op die duur in rasterstappen als dat er minstens 2 zijn; korter laat `ln` 0 (de `gate` geldt). Er is geen undo in dit apparaat. De velocity van de aanslag wordt `vel`, `acc` en `ln` van die stap worden gewist. In vasthoudmodus (`held`) wordt `ln` de duur tot de `noteoff`, afgerond op rasterstappen (minstens één); bij een puls blijft `ln` 0 (de `gate` geldt). Bestaat die stap al, dan wordt hij overschreven.
 - **Stap-voor-stap invoer.** Staat de klok stil en `rec` aan, dan schrijft elke aanslag in de stap `cur` en schuift `cur` één op (rondlopend binnen `len`). Klik in de ruler (onderaan de rol) om `cur` te zetten.
-- Maximaal één opgenomen noot per stap.
+- Maximaal één opgenomen noot per stap: een nieuwe noot op dezelfde stap vervangt de oude, ook van een andere rij (met een drumcomputer speel je dus één klank per stap; voor akkoorden of meerdere klanken tegelijk gebruik je één Step Sequencer per klank of een Pattern Tracker).
+
+## Swing per niveau (sinds 1.14.1)
+
+Een Step Sequencer heeft één patroon en één lijn, dus de niveaus zijn: patroon (`swing`, bestond al) en rij (`rowSwing`, nieuw). Er is geen clip- of spoorniveau.
+
+- **Eenheid.** `rowSwing` is een deel van een zestiende (0 … 0,5), zoals de swingschuif van de host. De bestaande patroon-`swing` is een deel van een *rasterstap* en werkt op elke tweede rasterstap; dat gedrag is niet veranderd (bij `res` 16 is een rasterstap een zestiende).
+- **Welke noten.** `rowSwing` vertraagt elke noot van die rij waarvan de zestiende (naar beneden afgerond) oneven is, met `swing × stepDur`. Bij raster 1/32 of 1/64 schuiven alle subrasterstappen van een oneven zestiende als geheel mee; even zestienden blijven staan. Een vertraagde noot behoudt zijn lengte.
+- **Optellen.** De host-swing zit al in de kloktijd. Het rijdeel komt erbij en wordt zo begrensd dat patroonswing (als die op dezelfde noot werkt, omgerekend naar zestienden) plus rijdeel hoogstens 0,5 blijft; de patroonswing zelf wordt niet begrensd, dus een bestaande state klinkt gelijk.
+- **UI.** Onder de eerste knoppenrij staan een keuze **Rij** (de klanken van de drumcomputer, anders de 25 toonhoogten in beeld) en de schuif **Rij-swing** (0 … 50 %, dubbelklik = 0).
+- Humanize blijft werken zoals voorheen.
 
 ## De editor
 
@@ -158,6 +169,7 @@ De pianorol toont de stappen als blokjes: **breedte = lengte** (`ln` of `gate`),
 - Oud en nieuw bestand gaven bij 200 willekeurige oude states (en een tot drie maten klok) exact dezelfde gebeurtenissen (4477 stuks).
 - Raster 1/32 en 1/64 geven 2 en 4 gebeurtenissen per zestiende noot op de juiste tijden en duren; `ln`, `vel` en `mt` per stap kloppen; humanize is deterministisch; opnemen met en zonder kwantiseren, met vasthouden en stap-voor-stap invoer, en doorgeven werken.
 - De editor (klikken, slepen, lengte, velocity, accent, raster, verdubbelen) is in een echte browser getest; de kaart volgt `setState`.
+- 1.14.1: met `rowSwing` leeg gaven oud en nieuw bij 120 willekeurige states (80 stappen elk, raster 1/16, 1/32, 1/64; 11.795 gebeurtenissen) 0 verschillen; `getState` kreeg alleen de sleutel `rowSwing` erbij. Rij-swing, kwantiseren naar het geswingde raster (jitter), `quant` uit, opname uit, klok stil, onzin-gebeurtenissen en de lijst van 27 klanken in de echte host (nl en en) zijn getest.
 - Niet beluisterd; er is geen echte synth of MIDI-toetsenbord aangesloten getest.
 
 ## Controleren
@@ -173,7 +185,7 @@ De pianorol toont de stappen als blokjes: **breedte = lengte** (`ln` of `gate`),
 
 ## Een drumcomputer aan de uitgang
 
-Hangt er via de notenkabel een apparaat met `noteNames()` aan (Drum Kit, Pulse Drums, Click Synth, Latin Percussion; contract v1.14), dan is elke rij van de rol een klank met zijn naam, in de volgorde van dat apparaat (de eerste kabel met een lijst telt). Dit is alleen weergave: in `n` staan nog steeds absolute nootnummers, er komt niets bij in de state en een preset verandert niet. Noten in het patroon die het apparaat niet kent, blijven als rij met het nootnummer en een vraagteken. Een Step Sequencer heeft één noot per stap; voor een drumstel met meer klanken tegelijk gebruik je één per klank of een Pattern Tracker.
+Hangt er via de notenkabel een apparaat met `noteNames()` aan (Drum Kit, Pulse Drums, Click Synth, Latin Percussion; contract v1.14), dan is elke rij van de rol een klank met zijn naam, in de volgorde van dat apparaat (de eerste kabel met een lijst telt). Dit is alleen weergave: in `n` staan nog steeds absolute nootnummers, er komt niets bij in de state en een preset verandert niet. Noten in het patroon die het apparaat niet kent, blijven als rij met het nootnummer en een vraagteken. De lijst mag tot 64 rijen bevatten (Pulse Drums heeft er 27 met alle instrumenten uit de instrumentkeuze); met meer dan 25 rijen wordt de rol hoger (11 pixels per rij) in plaats van de lijst af te kappen, en met 25 of minder is hij zoals altijd. Afspelen gebruikt het nootnummer uit `n` (met `oct` erbij: houd `oct` op 0 bij een drumcomputer); nootnummers buiten 12 … 108 worden bij het laden nog steeds begrensd. Een Step Sequencer heeft één noot per stap; voor een drumstel met meer klanken tegelijk gebruik je één per klank of een Pattern Tracker.
 
 ## Documentatie en songs
 

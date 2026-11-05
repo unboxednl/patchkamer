@@ -13,7 +13,7 @@ Een kansmelodie-sequencer. Hij verzint een **motief** (2 tot 64 stappen) binnen 
 | Naam | `Wanderer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Akkoord / toetsen`, `Noten`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `akkoord` (Chord / keys), modulatie-ingang `mod`, eventuitgang `notes`; geen audio |
-| Contract | v1.11 |
+| Contract | v1.14 (apparaatversie 1.14.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe vorm van een ouder, Nederlandstalig bestand met een andere naam en id (`nl.patchkamer.dwaler`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state (met Nederlandse toonladdernamen zoals `mineur`) wordt bij het laden herkend en omgezet naar de Engelse sleutel.
@@ -88,7 +88,7 @@ Twee manieren:
 - **Raster per rol**: `"1"` (1/16) voor melodie en bas; `"0.5"` (1/8) voor trage lijnen en ballads; `"0.75"`/`"1.5"` voor triolen; `"2"` (1/32) voor snelle runs, schitterende arps en trillers; `"4"` (1/64) alleen voor sprays en roll-effecten. Reken `len × stapduur`: 16 stappen op 1/16 is een maat; 32 stappen op 1/32 ook; 64 stappen op 1/64 ook.
 - **Toonlengte**: `gate` 0,2 … 0,4 is staccato (pluck, bas, techno), 0,5 … 0,8 normaal, 0,9 … 1 legato (stap loopt aan de volgende vast), 1,2 … 1,5 overlappend (pad-achtig; de synth moet polyfoon zijn of de noten afkappen). Per stap kan `gate` tot 4 (een lange noot over meerdere stappen heen; zet de stappen erachter op `on: false`).
 - **Rolls en grace notes**: `rat: 2` of `3` op een enkele stap; `rat: 4` op een 1/16-raster geeft een 1/64-roll. Gebruik ze spaarzaam (een of twee per maat); `ratchet` in het algemeen 0,1 … 0,3, hoger voor trap-achtige stotters.
-- **Swing en humanize**: swing komt van de klok van de studio. `human` 0,1 … 0,3 maakt het levendiger (velocity en kleine vertraging); boven 0,6 klinkt het slordig.
+- **Swing en humanize**: swing komt van de klok van de studio, plus de eigen `swing` van dit apparaat. `human` 0,1 … 0,3 maakt het levendiger (velocity en kleine vertraging); boven 0,6 klinkt het slordig.
 
 ### Velocity en dynamiek
 
@@ -152,6 +152,12 @@ Wanderer heeft geen sporen of clips: het toetsenbord is hier de **akkoordbron** 
 - Alle uitgestuurde gebeurtenissen zijn eindig met `note` 0 … 127, `vel` 0 … 1, `dur` > 0 (400 willekeurige runs met rommel op ingang en klok, ruim 57000 gebeurtenissen, geen enkele overtreding).
 - Met een ongewijzigde (oude) state en dezelfde willekeur geeft het apparaat dezelfde gebeurtenissen als het oude bestand: 400 willekeurige runs, 11640 gebeurtenissen, 0 verschillen. Nieuwe velden gebruiken alleen willekeur als ze aan staan.
 - Niet beluisterd; geen echte synth of toetsenbord aangesloten getest.
+
+## Swing (1.14.0)
+
+Nieuwe sleutel `swing` (0 … 0,5 van een zestiende, standaard 0, schuif "Swing" bij Voordracht; niet te moduleren, zodat de lijst stuurbare parameters gelijk blijft; altijd in de state).
+
+Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.11.0. Een noot (en elke noot van een ratchet) valt in een oneven zestiende als `floor(stap / raster)` oneven is; bij raster 1/8 en 1/4 schuift niets. Er wordt geen extra willekeur gebruikt, dus dezelfde reeks willekeurige getallen geeft met swing 0 dezelfde noten als voorheen. Opnemen/kwantiseren is niet van toepassing: dit apparaat is een generator.
 
 ## Controleren
 

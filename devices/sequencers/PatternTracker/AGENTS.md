@@ -17,7 +17,7 @@ Het verschil met **Regie** (de clip/scene-sequencer): Regie bewaart per track va
 | Naam | `Pattern Tracker` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Live noten / CC`, `Spoor 1` … `Spoor 8`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input` (Live notes / CC), eventuitgangen `track1` … `track8` (meer tot 32 via `trackCount`); geen audio, geen modulatie; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.13 (apparaatversie 1.13.0) |
+| Contract | v1.14 (apparaatversie 1.14.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Regie Tracker, `nl.patchkamer.regie.tracker`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in; de oude compositie-export (`patchkamer-regie-duo`) kun je wel importeren.
@@ -104,7 +104,7 @@ Effecten (de tijd is die van de klok van de host; ze veranderen het tempo niet):
   * 1/32 (`8`): hi-hat-rijen in dubbele snelheid, grace notes (een zachte noot één rij vóór een hoofdnoot), snelle arpeggio's, flams.
   * 1/64 (`16`): rolls, glitch en micro-timing; een noot van één rij is dan 1/64. Een patroon van 4 maten is 256 rijen.
   * 1/8 (`2`): trage, spaarzame lijnen (ambient, pads).
-* **Swing en humanize**: de swing van de host verschuift de rijen. Voor eigen feel gebruik je `DEL` (laid-back), kleine velocity-verschillen per cel en `PRB` op ghost notes. Variatie in `vel` tussen 0,05 en 0,15 per cel klinkt menselijker dan alles op 0,8.
+* **Swing en humanize**: de swing van de host verschuift de rijen; extra swing per patroon, spoor en drumrij staat in "Swing per niveau". Voor eigen feel gebruik je `DEL` (laid-back), kleine velocity-verschillen per cel en `PRB` op ghost notes. Variatie in `vel` tussen 0,05 en 0,15 per cel klinkt menselijker dan alles op 0,8.
 
 ### Dynamiek per rol (richtlijnen voor `vel`)
 
@@ -137,6 +137,26 @@ Crescendo: laat de velocity per herhaling 0,05 – 0,1 stijgen. Decrescendo en i
 * Noten met `held: true` (toets ingedrukt houden) worden samen met hun `noteoff` doorgestuurd naar het spoor waar de noot begon. Wissel je van gekozen spoor of stuur je `allnotesoff`/`panic`, dan sluit het apparaat de hangende noten af (`noteoff`, of `allnotesoff` bij een paniek). `cc`-gebeurtenissen op de ingang gaan ook naar het gekozen spoor.
 * **Opnemen**: zet "Opnemen" aan en start de klok. Elke live noot wordt geschreven in het **gekozen patroon op het gekozen spoor** op de rij die op dat moment speelt: in de modus `pattern` is dat het gekozen patroon, in `order` het patroon van de huidige volgordestap, in `playlist` het blok op dat spoor (zonder blok het gekozen patroon). "Kwantiseer naar raster" aan zet de noot op de **dichtstbijzijnde** rij, uit op de rij waarin de noot begon. De velocity is die van de toets; de lengte is van noteon tot noteoff, afgerond op rijen, minstens één rij (een noot zonder noteoff gebruikt `dur`). Noten op dezelfde rij komen in één cel (maximaal 8, de hardste velocity en de langste lengte blijven). Een cel met `fx: "CC"` wordt niet overschreven. Eén opnameronde is één stap voor Ongedaan. Het afspelen pakt de nieuwe noten bij de volgende ronde op.
 * Een preset bewaart de opname-instellingen niet (ze horen bij `view`); een geladen state begint altijd met de opnameknop uit.
+
+## Swing per niveau (1.14.1)
+
+Nieuwe state-sleutels (alle standaard 0 / leeg; ongeldig → standaard; zichtbaar in `getState`/`getPreset`):
+
+| Sleutel | Niveau | Bereik | Start |
+|---|---|---|---|
+| `patterns[].swing` | patroon (schuif "SWING PATROON (%)" bij de patroonbank) | 0 … 0,5 | 0 |
+| `tracks[].swing` | spoor (schuif "SWING (%)" in de sporeninstellingen) | 0 … 0,5 | 0 |
+| `tracks[].lanes` | drumrij: object `{ "<nootnummer>": swing }` (schuif per rij in de drumeditor); alleen waarden > 0 blijven staan, sleutels 0 … 127, hoogstens 256 | per waarde 0 … 0,5 | `{}` |
+
+Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.14.0. De som is patroon + spoor + drumrij (de drumrij hoort bij de ongetransponeerde nootwaarde in de cel). Alle gebeurtenissen van een rij die in een oneven zestiende vallen schuiven mee, ook een `RAT`-slag, een `ARP`-noot of `DEL`-vertraging in een oneven zestiende, een rij van een 1/32- of 1/64-raster en een `cc`; `dur` verschuift niet apart (de noot schuift als geheel). Bij `rowsPerBeat: 2` (1/8) staan rijen alleen op even zestienden.
+
+### Inspelen (1.14.1)
+
+* Kwantiseren gaat naar het dichtstbijzijnde **geswingde** rasterpunt van het doelspoor, de gespeelde noot (drumrij) en het patroon: een rij in een oneven zestiende ligt `(hostswing + patroon + spoor + drumrij) × stepDur` later. Uit: de rij waarin de noot begon (de laatste rij die al begonnen was). Het raster is `rowsPerBeat` (1/8, 1/16, 1/32, 1/64; geen triolen). Heel fijne rasters met veel swing (swing groter dan één rij) kunnen twee rasterpunten laten overlappen; dan wint het dichtstbijzijnde punt.
+* Een noot ver (meer dan twee zestienden) buiten de ingeplande rijen wordt niet geschreven. Opname uit, transport stil of een ongeldige noot/velocity schrijft niets; een ongeldige tijd telt als "nu".
+* Een noot op dezelfde plek vervangt de noot in de cel (velocity en lengte van de nieuwe), andere noten in de cel blijven. Lengtes worden in nominale rijen gemeten (voorheen in de swing-vervormde rij, waardoor een noot van 8 stappen op een even rij 7 of 9 rijen kon worden).
+* `trig`-gebeurtenissen op `input` worden ingespeeld: met een `note` als die noot, met `lane: "chN"` als de N-de klank van de drumcomputer aan het gekozen spoor (volgorde van `noteNames`).
+* De drum-editor toont alle klanken van de drumcomputer (voorheen hoogstens 32 rijen; een lijst van 27 namen werd getest).
 
 ## Controleren
 
