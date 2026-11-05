@@ -110,7 +110,7 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 38 packs with **1851 presets** in total, one per device: 12 for effects (153 presets), 9 for mastering (919), 2 for the mixer (42), 6 for modulators (267), 8 for sequencers (461) and 1 for the tools (9). Each is named after its device ("Chorus Basics", "Chord Sequencer Styles" and so on) and is licensed CC0-1.0. The files have `formatVersion` 2. The names of packs, folders and presets are English. The devices are described in the manuals for [effects](../effects/USER-MANUAL_EN.md), [mastering](../mastering/USER-MANUAL_EN.md), [mixer](../mixer/USER-MANUAL_EN.md), [modulators](../modulators/USER-MANUAL_EN.md), [sequencers](../sequencers/USER-MANUAL_EN.md) and [tools](../tools/USER-MANUAL_EN.md).
+This repository has 39 packs with **1867 presets** in total, one per device: 12 for effects (153 presets), 9 for mastering (919), 3 for the mixer (58), 6 for modulators (267), 8 for sequencers (461) and 1 for the tools (9). Each is named after its device ("Chorus Basics", "Chord Sequencer Styles" and so on) and is licensed CC0-1.0. The files have `formatVersion` 2. The names of packs, folders and presets are English. The devices are described in the manuals for [effects](../effects/USER-MANUAL_EN.md), [mastering](../mastering/USER-MANUAL_EN.md), [mixer](../mixer/USER-MANUAL_EN.md), [modulators](../modulators/USER-MANUAL_EN.md), [sequencers](../sequencers/USER-MANUAL_EN.md) and [tools](../tools/USER-MANUAL_EN.md).
 
 ### Effects (12)
 
@@ -147,6 +147,7 @@ This repository has 38 packs with **1851 presets** in total, one per device: 12 
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
+| [Audio Output](../../devices/mixer/AudioOutput/) | Audio Output Basics | 16 | Main Out (5), Headphones (4), Interface Pairs (4), Checks (3) | [`audio-output.patchkamer-presets.json`](../../presets/audio-output.patchkamer-presets.json) |
 | [Audio Input](../../devices/mixer/AudioInput/) | Audio Input Basics | 31 | Line Level (7), Voice (6), Instruments (6), Interface Channels (8), Utility (4) | [`audio-input.patchkamer-presets.json`](../../presets/audio-input.patchkamer-presets.json) |
 | [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
 
