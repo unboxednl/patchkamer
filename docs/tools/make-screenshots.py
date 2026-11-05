@@ -60,7 +60,7 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg = browser.new_context(viewport={'width': w, 'height': h}, locale=LOCALE[lang]).new_page(); pg.errs = []
         pg.on('pageerror', lambda e: pg.errs.append(str(e)))
         pg.route('**/*', lambda r: r.continue_() if r.request.url.startswith('http://localhost') else r.abort())
-        init = ("delete window.showDirectoryPicker;" if nopicker else "") + "localStorage.setItem('patchkamerLib',JSON.stringify({x:16,y:16,w:340,h:%d,fs:14,min:false,shown:true,closed:[]}));" % libh
+        init = "localStorage.setItem('patchkamerWsAuto',JSON.stringify({dev:{on:false},pre:{on:false},tun:{on:false}}));" + ("delete window.showDirectoryPicker;" if nopicker else "") + "localStorage.setItem('patchkamerLib',JSON.stringify({x:16,y:16,w:340,h:%d,fs:14,min:false,shown:true,closed:[]}));" % libh
         if skin: init += "localStorage.setItem('patchkamer.skin','%s');" % skin
         pg.add_init_script(init); pg.goto(BASE + '/patchkamer/patchkamer.html')
         pg.add_style_tag(content='*{user-select:none!important}'); pg.wait_for_timeout(700); return pg
@@ -94,6 +94,11 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg.click('#wsBtn'); pg.wait_for_timeout(400); pg.locator('#wsPanel').screenshot(path=OUT + '/06-workspace.png'); pg.click('#wsPanel .close'); pg.wait_for_timeout(300)
     pg.click('#setBtn'); pg.wait_for_timeout(400); pg.locator('#setPanel').screenshot(path=OUT + '/07-settings.png'); pg.click('#setClose'); pg.wait_for_timeout(300)
     import_tunes(pg); pg.locator('#prPanel').screenshot(path=OUT + '/09-tunes-panel.png'); done(pg)
+    pg = newpage(nopicker=True); build_patch(pg)   # meerdere werkruimtes: de tabbalk met drie werkruimtes
+    pg.fill('#wsName', 'Acid jam'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)
+    pg.fill('#wsName', 'Ideas'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)
+    pg.fill('#wsName', 'Mix check'); pg.press('#wsName', 'Enter'); pg.keyboard.press('F1'); pg.wait_for_timeout(2500)
+    pg.locator('#wsTabs').screenshot(path=OUT + '/11-workspaces.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg)
     for i in (0, 1): pg.locator('.card').nth(i).locator('button', has_text='F').first.click(); pg.wait_for_timeout(200)
     pg.click('#focusBtn'); pg.wait_for_timeout(800); pg.locator('#focusview button, .focusview button').nth(1).click(); pg.wait_for_timeout(1000)
