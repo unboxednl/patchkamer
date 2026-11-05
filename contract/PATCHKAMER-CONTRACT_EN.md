@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.13 for building agents
+# Patchkamer — Instrument contract v1.14 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -22,6 +22,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.11 | Language and audio: `host.lang` (`'nl'` or `'en'`) and `host.audio` (`sampleRate`, `quality`, `oversample`, `latency`) for devices; optional `i18n` on the definition for names per language (§2, §12c). The contract and the validator are bilingual (Dutch and English) |
 | v1.12 | Mastering: a cable kind of its own (yellow, dotted sine) with triangle ports `masteringIn`/`masteringOut`; `configureMastering` and `onMasteringTargets`; `host.mastering` for a Master Director that sets the settings of mastering devices together (§11b) |
 | v1.13 | Multi-MIDI and controls: a cable kind of its own (double dashed orange cable) with `multiEventIn`/`multiEventOut`, `eventBundles`, `onEventBundle` and `host.eventBundleChanged`; the optional fields `ch` and `cc` on events; `host.controls` and `host.setControl` to see and set the controls of other devices (§11c) |
+| v1.14 | Note names: a device that maps notes to names (a drum machine) can offer `noteNames()` and call `host.noteNamesChanged`; `host.peers` passes them on as `noteNames`, so a sequencer can name its rows (§13b) |
 
 ---
 
@@ -533,7 +534,7 @@ For controllers (such as a MIDI device that couples pads to devices). Ordinary i
 
 | Call | What |
 |---|---|
-| `host.peers(this)` | List of the other devices on the floor: `{ id, name, def, version, kind, category, eventIn:[{id,name}], mod, selected }`. Read-only. `mod` = has a Mod input; `selected` = last clicked. |
+| `host.peers(this)` | List of the other devices on the floor: `{ id, name, def, version, kind, category, eventIn:[{id,name}], mod, selected, noteNames:[{note,name}] }`. Read-only. `mod` = has a Mod input; `selected` = last clicked. |
 | `onPeers(list)` | Optional on your instance: the host calls this when devices are added, removed, selected or when cables change. |
 | `host.connect(this, ownOutput, targetId, targetInput, kind)` | Lays an ordinary, visible cable from **your own** output to an input of another device. `kind` = `'event'`, `'mod'` or `'audio'`. Returns `true` if the cable is there. |
 | `host.disconnect(this, ownOutput?, targetId?, targetInput?)` | Removes cables that leave **your** outputs (filters are optional). Returns the number. |
@@ -543,6 +544,17 @@ For controllers (such as a MIDI device that couples pads to devices). Ordinary i
 - The user stays in charge: he can detach every cable himself. Show that in your UI ("cable detached") instead of quietly laying it again.
 - Keep in your state **which device id** you coupled to. The workspace keeps the cables themselves; do not lay them again when loading.
 - Do not give `onPeers` heavy work: it can come a few times per second.
+
+**Note names (v1.14).** A device whose notes have names (a drum machine: 36 = bass drum, 38 = snare, etc.) can show them to sequencers.
+
+| Call | What |
+|---|---|
+| `noteNames()` | Optional on your instance. Returns a list `[{ note: 0..127, name: 'Snare' }]` in the order in which your device shows its sounds. At most 128 items, `name` at most 40 characters; the host skips invalid items. Return only the sounds that have a note right now |
+| `host.noteNamesChanged(this)` | Call this when the list changes (another kit, another order, another note, a tune loaded). The host tells the other devices through `onPeers` |
+| `peers[].noteNames` | In the list from `host.peers(this)`: the cleaned list of that device, or `[]` if it has none |
+
+- A sequencer or controller finds its target with `host.cablesFrom(this, ownOutput)` and looks the `id` up in `host.peers(this)`. Without a cable or without a list it behaves as always.
+- `noteNames()` must not throw and must be light: the host calls it on every `peers` request. Call `host.noteNamesChanged` only when the list really differs (compare with the previous one).
 
 **MIDI and timing.** If you use Web MIDI (only after a click, without sysex), do not schedule notes at "now" but via the timestamp of the message. Then every key press gets the same small delay, even if the page is busy for a moment:
 
@@ -574,7 +586,7 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ```json
 { "format": "patchkamer-song", "formatVersion": 1, "title": "Night flight", "author": "…", "license": "CC-BY-4.0",
-  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.13",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.14",
   "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
                  "devices": [ ], "cables": [ ], "bpm": 126 } }
 ```
@@ -626,6 +638,7 @@ Rules: `setPart(id, getPart(id))` leaves the setting unchanged, and `setPart(a, 
 | `host.eventBundleChanged(this, port)` | v1.13 | The tracks of your multi-MIDI port have changed (§11c) |
 | `host.controls(this, targetId)` | v1.13 | The controls on the card of another device (§11c) |
 | `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
+| `host.noteNamesChanged(this)` | v1.14 | Your `noteNames()` changed; other devices hear it through `onPeers` (§13b) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -684,6 +697,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 11. **Language and audio (v1.11)**: an optional `i18n` is an object with, per language, a `name` and/or `ports` (port id → name) of existing ports; `host.lang` and `host.audio` are present; the whole device is run through twice, with `host.lang` `'nl'` and `'en'`, and an error in either branch is an error.
 12. **Mastering (v1.12)**: a device with `masteringIn` has `configureMastering(patch)` (and optionally `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); they receive `{}`, `null` and unknown or invalid fields and return an object (or nothing), and `getMasteringReport` returns JSON without AudioNodes. A device with `masteringOut` has `onMasteringTargets(targets)`; it receives `[]`, a list with one target (twice) and `[]` again. The fake host checks `host.mastering` for a known action and an existing `masteringOut` port. A modulator has `modOut` or `masteringOut`.
 13. **Multi-MIDI (v1.13)**: a device with `multiEventOut` has `eventBundles[portId]` with a list `tracks` (unique text ids, a `name`, an optional `ch` from 1 to 16); a device with `multiEventIn` has `onEventBundle`; it receives a bundle, the same key with another track added, and then `null`. Events with `ch` or `cc` have values in range; on a multi-MIDI port every event carries a `track` from the list. The fake host knows `host.eventBundleChanged`, `host.controls` and `host.setControl`.
+14. **Note names (v1.14)**: a device with `noteNames()` returns a list of `{ note, name }` (note 0 to 127, a non-empty `name`); `noteNames()` does not throw and `host.noteNamesChanged(this)` may be called without error.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -744,7 +758,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.13
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.14
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -803,7 +817,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.13
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.14
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -866,7 +880,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.13
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.14
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -944,7 +958,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.13.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.14.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.13
+// validate-instrument.mjs — Patchkamer contract v1.14
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -13,6 +13,7 @@
 // v1.11: --lang nl|en (taal van de uitvoer; standaard nl); optioneel veld i18n op de definitie; host.lang en host.audio in de nep-host;
 //        tweede doorloop met de andere host.lang, zodat een fout in de taaltak van het apparaat ook wordt gevonden.
 // v1.13: multi-MIDI: ports.multiEventIn/multiEventOut, eventBundles, onEventBundle, host.eventBundleChanged; velden ch en cc op gebeurtenissen; host.controls en host.setControl.
+// v1.14: nootnamen: optioneel noteNames() op het apparaat (lijst { note, name }) en host.noteNamesChanged; host.peers geeft ze door als noteNames.
 // v1.12: mastering: ports.masteringIn/masteringOut (kabeltype mastering), configureMastering, onMasteringTargets, host.mastering.
 // v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
 import { pathToFileURL, fileURLToPath } from 'node:url';
@@ -89,6 +90,8 @@ const V = {
     "v.na_destroy_staan_er_nog": "na destroy() staan er nog {0} host.frame-abonnement(en) open; roep de opzeg-functie aan in unmount()/destroy()",
     "v.destroy_gooit_moet_idempotent_zijn": "destroy() gooit (moet idempotent zijn): ",
     "v.onpeers_gooit": "onPeers() gooit: ",
+    "v.notenames_gooit": "noteNames() gooit: ",
+    "v.notenames_ongeldig": "noteNames() moet een lijst van { note: 0..127, name: tekst } geven, kreeg: ",
     "v.een_host_frame_tekenfunctie_gooit": "een host.frame-tekenfunctie gooit: ",
     "v.onbundle_null_laat_kanaal_kanalen": "onBundle(null) laat {0} kanaal/kanalen verbonden; ontkoppel wat je verbond (node.disconnect(jouwIngang))",
     "v.onbundle_null_gooit": "onBundle({0}, null) gooit: ",
@@ -252,6 +255,8 @@ const V = {
     "v.na_destroy_staan_er_nog": "after destroy() {0} host.frame subscription(s) are still open; call the cancel function in unmount()/destroy()",
     "v.destroy_gooit_moet_idempotent_zijn": "destroy() throws (must be idempotent): ",
     "v.onpeers_gooit": "onPeers() throws: ",
+    "v.notenames_gooit": "noteNames() throws: ",
+    "v.notenames_ongeldig": "noteNames() must return a list of { note: 0..127, name: text }, got: ",
     "v.een_host_frame_tekenfunctie_gooit": "a host.frame draw function throws: ",
     "v.onbundle_null_laat_kanaal_kanalen": "onBundle(null) leaves {0} channel(s) connected; disconnect what you connected (node.disconnect(yourInput))",
     "v.onbundle_null_gooit": "onBundle({0}, null) throws: ",
@@ -411,7 +416,7 @@ const realSetTimeout = setTimeout; globalThis.setTimeout = (f, ms) => 0; globalT
 
 // ---------- fake host ----------
 let frames = [], peerCalls = 0, connects = 0;
-const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true },
+const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true, noteNames: [{ note: 36, name: 'Kick' }] },
   { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
 let masteringCalls = 0, masteringBad = null, emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
@@ -429,6 +434,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   // v1.13
   eventBundleChanged(inst, port) { if (!PL(curPorts || d.ports, 'multiEventOut').some(p => p.id === port)) modBad = vt('v.host_eventbundlechanged_is_geen_multieventout',port); },
   controls() { return []; }, setControl() { return false; },
+  // v1.14
+  noteNamesChanged() {},
   mastering(inst, action, opts) { masteringCalls++; if (!['inspect', 'apply', 'analyse', 'accept', 'undo'].includes(action)) masteringBad = vt('v.host_mastering_onbekende_actie',action); if (!PL(curPorts || d.ports, 'masteringOut').length) masteringBad = vt('v.host_mastering_geen_masteringout'); return { changed: 0, results: [] }; },
   // v1.7
   frame(inst, cb, fps) { if (typeof cb !== 'function') { modBad = vt('v.host_frame_geef_een_functie'); return () => {}; } if (fps !== undefined && !(+fps > 0)) modBad = vt('v.host_frame_fps_moet_een');
@@ -625,6 +632,8 @@ for (const p of d.ports.multiIn) {
 // v1.7: tekenfuncties draaien, onPeers aanroepen
 for (const e of frames) if (!e.off) { try { e.cb(16.7); e.cb(50); e.cb(83.3); } catch (err) { fail(vt('v.een_host_frame_tekenfunctie_gooit') + err.message); } }
 if (typeof inst.onPeers === 'function') { try { inst.onPeers([]); inst.onPeers(FAKE_PEERS); } catch (e) { fail(vt('v.onpeers_gooit') + e.message); } }
+// v1.14: noteNames() is optioneel; als hij er is, een lijst van { note 0..127, name } en hij gooit niet
+if (typeof inst.noteNames === 'function') { let l; try { l = inst.noteNames(); } catch (e) { fail(vt('v.notenames_gooit') + e.message); } if (!Array.isArray(l) || l.some(x => !x || !Number.isFinite(x.note) || x.note < 0 || x.note > 127 || typeof x.name !== 'string' || !x.name)) fail(vt('v.notenames_ongeldig') + JSON.stringify(l).slice(0, 80)); }
 try { if (inst.unmount) inst.unmount(); inst.destroy(); inst.destroy(); } catch (e) { fail(vt('v.destroy_gooit_moet_idempotent_zijn') + e.message); }
 const openFrames = frames.filter(e => !e.off).length; if (openFrames) fail(vt('v.na_destroy_staan_er_nog',openFrames));
 const extWarn = !/\.patchkamer-device\.js$/i.test(file);
