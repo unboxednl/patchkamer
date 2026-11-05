@@ -411,7 +411,7 @@ body.nopbar .pbar{display:none}
     <span class="tp"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
     <span class="tp"><span data-i18n="ui.swing">Swing</span> <input type="range" id="swing" min="0" max="0.5" step="0.01" value="0.08" style="width:80px"></span>
     <button class="small" id="wsBtn" aria-expanded="false" aria-controls="wsPanel" data-i18n="ui.werkruimte">Werkruimte ▾</button>
-    <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
+    <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="songBtn" aria-expanded="false" aria-controls="songPanel" title="songs openen: demo's van GitHub en recente songs" data-i18n-title="attr.songs_open_titel" data-i18n="ui.songs_knop">Songs ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
     <button class="small" id="arrange" title="apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)" data-i18n-title="attr.apparaten_netjes_van_links_naar" data-i18n="ui.herschik">Herschik</button>
     <button class="small" id="focusBtn" title="focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (Alt+F)" data-i18n-title="attr.focusweergave_de_apparaten_met_f" data-i18n="ui.focus">Focus</button>
     <button class="small danger" id="clear" data-i18n="ui.leeg">Leeg</button>
@@ -455,6 +455,23 @@ body.nopbar .pbar{display:none}
   
   <div class="note" data-i18n-html="ui.een_tune_of_preset_is">Een tune of preset is de instelling van één apparaat (alle knoppen, patronen en keuzes), niet de kabels. Kies op de kaart, of blader met ◀ ▶. <b data-i18n="ui.bewaar">Bewaar</b> legt de huidige instelling vast in een bibliotheek en map, met jouw naam als maker en een licentie (CC-BY-4.0 of alle rechten voorbehouden); een cursieve naam betekent dat je sindsdien iets hebt veranderd. Ieder exemplaar krijgt een eigen kopie. Drumcomputers hebben een tweede regel <b data-i18n="ui.instrument">Instrument</b>: één geluid (bijv. de kick) als tune laden of bewaren. De licentie zie je bij het laden en bij elk item hieronder.</div>
 </section>
+<section class="wspanel" id="songPanel" hidden aria-label="Songs" data-i18n-aria="attr.songs_paneel">
+  <button class="small close" id="songClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
+  <div>
+    <h3 data-i18n="ui.songs_kop">Songs</h3>
+    <div class="note" style="margin-bottom:6px" data-i18n="ui.songs_uitleg">Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt. Ontbreken er apparaten, dan laadt Patchkamer eerst de apparatenbibliotheek uit Instellingen.</div>
+    <div class="wsrow"><button class="small" id="songFileBtn" data-i18n="ui.songs_bestand">Bestand openen…</button><input type="file" id="songFile" accept=".json,application/json" hidden></div>
+  </div>
+  <div>
+    <h3 data-i18n="ui.songs_recent">Recent</h3>
+    <div class="wslist" id="songRecent"></div>
+  </div>
+  <div>
+    <h3 data-i18n="ui.songs_demos">Demo's op GitHub</h3>
+    <div class="wsrow"><button class="small" id="songRefresh" data-i18n="ui.songs_vernieuwen">Vernieuwen</button></div>
+    <div class="wslist" id="songDemo" style="margin-top:6px"></div>
+  </div>
+</section>
 <section class="wspanel" id="setPanel" hidden aria-label="Instellingen" data-i18n-aria="attr.instellingen">
   <button class="small close" id="setClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
   <div>
@@ -481,6 +498,8 @@ body.nopbar .pbar{display:none}
   <div class="wsrow"><input type="text" id="wsuPre" class="wsurl" spellcheck="false" aria-label="adres van de presets" data-i18n-aria="attr.adres_presets"></div>
   <div class="wsrow"><label><input type="checkbox" id="wsaTun"> <span data-i18n="ui.tunes_laden">Tunes laden</span></label></div>
   <div class="wsrow"><input type="text" id="wsuTun" class="wsurl" spellcheck="false" aria-label="adres van de tunes" data-i18n-aria="attr.adres_tunes"></div>
+  <div class="wsrow"><label><span data-i18n="ui.songs_adres">Songs (demo's): adres op GitHub</span>&nbsp;<input type="text" id="songAddr" class="wsurl" spellcheck="false"></label></div>
+  <div class="wsrow"><button class="small" id="songAddrReset" data-i18n="ui.songs_adres_herstel">Standaardadres herstellen</button></div>
   <div class="wsrow"><button class="small" id="wsaReset" data-i18n="ui.standaardadressen_herstellen">Standaardadressen herstellen</button></div>
   <h3 style="margin-top:12px" data-i18n="ui.weergave">Weergave</h3>
   <div class="wsrow"><label><span data-i18n="ui.kabels">Kabels</span>&nbsp;<select id="cabStyle"><option value="curve" data-i18n="ui.in_een_boog">in een boog</option><option value="orth" data-i18n="ui.recht_met_hoeken">recht, met hoeken</option><option value="route" data-i18n="ui.recht_om_de_apparaten_heen">recht, om de apparaten heen</option></select></label></div>
@@ -872,6 +891,27 @@ const I18N={
    "m.scan_packs_gewijzigd":"{0} gewijzigde packs",
    "m.badge_nieuw":"nieuw",
    "m.badge_gewijzigd":"gewijzigd",
+   "ui.songs_knop":"Songs ▾",
+   "attr.songs_open_titel":"songs openen: demo's van GitHub en recente songs",
+   "attr.songs_paneel":"Songs",
+   "ui.songs_kop":"Songs",
+   "ui.songs_uitleg":"Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt. Ontbreken er apparaten, dan laadt Patchkamer eerst de apparatenbibliotheek uit Instellingen.",
+   "ui.songs_bestand":"Bestand openen…",
+   "ui.songs_recent":"Recent",
+   "ui.songs_demos":"Demo's op GitHub",
+   "ui.songs_vernieuwen":"Vernieuwen",
+   "ui.songs_adres":"Songs (demo's): adres op GitHub",
+   "ui.songs_adres_herstel":"Standaardadres herstellen",
+   "m.songs_ongeldig":"Dit is geen geldige song of werkruimte.",
+   "m.songs_vol":"Alle 10 werkruimtes zijn in gebruik: sluit er eerst een.",
+   "m.songs_bibliotheek_laden":"Apparatenbibliotheek laden…",
+   "m.songs_openen_mislukt":"Song openen mislukt: {0}",
+   "m.songs_geen_recent":"Nog geen recente songs.",
+   "m.songs_laden":"Songs ophalen…",
+   "m.songs_ophalen_mislukt":"Kon de songs niet ophalen: {0}",
+   "m.songs_geen_demos":"Geen demo-songs gevonden op dit adres.",
+   "m.songs_verwijder":"Uit de lijst halen",
+   "m.songs_bestand_opnieuw":"Deze song is niet bewaard: open het bestand opnieuw.",
    "m.mastering_categorie":"Mastering",
    "attr.werkruimtes_tabs":"Werkruimtes",
    "m.werkruimte_toevoegen":"Werkruimte toevoegen",
@@ -1449,6 +1489,27 @@ const I18N={
    "m.scan_packs_gewijzigd":"{0} changed packs",
    "m.badge_nieuw":"new",
    "m.badge_gewijzigd":"changed",
+   "ui.songs_knop":"Songs ▾",
+   "attr.songs_open_titel":"open songs: demos from GitHub and recent songs",
+   "attr.songs_paneel":"Songs",
+   "ui.songs_kop":"Songs",
+   "ui.songs_uitleg":"A song opens in a new workspace tab and the devices are arranged afterwards. If devices are missing, Patchkamer first loads the device library from Settings.",
+   "ui.songs_bestand":"Open file…",
+   "ui.songs_recent":"Recent",
+   "ui.songs_demos":"Demos on GitHub",
+   "ui.songs_vernieuwen":"Refresh",
+   "ui.songs_adres":"Songs (demos): address on GitHub",
+   "ui.songs_adres_herstel":"Restore default address",
+   "m.songs_ongeldig":"This is not a valid song or workspace.",
+   "m.songs_vol":"All 10 workspaces are in use: close one first.",
+   "m.songs_bibliotheek_laden":"Loading the device library…",
+   "m.songs_openen_mislukt":"Opening the song failed: {0}",
+   "m.songs_geen_recent":"No recent songs yet.",
+   "m.songs_laden":"Fetching songs…",
+   "m.songs_ophalen_mislukt":"Could not fetch the songs: {0}",
+   "m.songs_geen_demos":"No demo songs found at this address.",
+   "m.songs_verwijder":"Remove from the list",
+   "m.songs_bestand_opnieuw":"This song was not stored: open the file again.",
    "m.mastering_categorie":"Mastering",
    "attr.werkruimtes_tabs":"Workspaces",
    "m.werkruimte_toevoegen":"Add workspace",
@@ -3742,5 +3803,61 @@ function pkAiMount(el,k){
   paint(); })();
 
 { const d=pkAiDef(); d._builtin=true; Host.registry.set(Host.key(d.id,d.version),d); paintLib(); }
+/* =====================================================================
+   SONGS · knop in de kopbalk: demo's van GitHub en recente songs. Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt.
+   ===================================================================== */
+const SONG_ADDR_KEY='patchkamerSongsAddr', SONG_ADDR_DEF='github.com/unboxednl/patchkamer/tree/main/songs', SONGREC_MAX=12, SONG_MAXBYTES=4000000;
+let SONGREC=[], SONG_DEMO=null, SONG_DEMO_ERR='', SONG_BUSY=false;
+function songAddr(){ let a=''; try{ a=localStorage.getItem(SONG_ADDR_KEY)||''; }catch(e){} return a.trim()||SONG_ADDR_DEF; }
+const songPanel=$('songPanel'), songBtn=$('songBtn');
+function songRecSave(){ IDB.set('songs:recent',SONGREC); }
+function songRecAdd(e){ SONGREC=[e,...SONGREC.filter(x=>x.key!==e.key)].slice(0,SONGREC_MAX); songRecSave(); }
+function songTitleOf(o){ return String((o&&(o.title||(o.workspace&&o.workspace.name)||o.name))||pkt('m.naamloos')).slice(0,80); }
+function songDevicesOf(o){ const w=o&&o.format==='patchkamer-song'?o.workspace:o; return w&&Array.isArray(w.devices)?w.devices:null; }
+async function songOpen(obj,meta){   // obj = song of werkruimte (geparsed); meta = {key,url?,name?,text?}
+  if(SONG_BUSY) return false; const devs=songDevicesOf(obj); if(!devs){ status(pkt('m.songs_ongeldig'),true); return false; }
+  if(typeof WSL==='undefined'||!WSL.ready){ status(pkt('m.songs_ongeldig'),true); return false; }
+  if(WSL.slots.length>=WSL_MAX){ status(pkt('m.songs_vol'),true); return false; }
+  SONG_BUSY=true;
+  try{ if(devs.some(d=>!Host.latest(d.def))){ status(pkt('m.songs_bibliotheek_laden')); try{ await wsaLoad('dev',false); }catch(e){} }
+    await wslAdd(); const ok=await openWorkspace(obj);
+    if(ok){ songRecAdd({key:meta.key,title:songTitleOf(obj),author:String((obj&&obj.author)||'').slice(0,60),t:Date.now(),url:meta.url||'',name:meta.name||'',text:meta.text&&meta.text.length<=SONG_MAXBYTES?meta.text:''});
+      setTimeout(()=>{ try{ if(Host.devices.size) $('arrange').click(); }catch(e){} },1300); closeSongs(); }
+    return ok; }
+  catch(e){ status(pkt('m.songs_openen_mislukt',e.message),true); return false; }
+  finally{ SONG_BUSY=false; } }
+async function songOpenUrl(url,name){ try{ const x=await fetch(url); if(!x.ok) throw new Error('HTTP '+x.status); const text=await x.text(); return songOpen(JSON.parse(text),{key:url,url,name}); }catch(e){ status(pkt('m.songs_openen_mislukt',e.message),true); return false; } }
+async function songDemoLoad(force){ SONG_DEMO_ERR=''; try{ let p=null; try{ p=parseSourceUrl(songAddr()); }catch(e){} if(!p||p.kind!=='github') throw new Error(pkt('m.geen_geldig_adres'));
+    if(!p.ref){ const j=await fetchJSON(`https://api.github.com/repos/${p.owner}/${p.repo}`); p.ref=j.default_branch||'main'; }
+    if(force) PKAI_TREE.delete(p.owner+'/'+p.repo+'@'+p.ref);
+    const t=await pkAiTree({owner:p.owner,repo:p.repo,ref:p.ref}), base=p.path?p.path.replace(/\/$/,'')+'/':'';
+    SONG_DEMO=(t.tree||[]).filter(n=>n.type==='blob'&&n.path.startsWith(base)&&/\.patchkamer(-song)?\.json$/i.test(n.path)).map(n=>({path:n.path,url:`https://raw.githubusercontent.com/${p.owner}/${p.repo}/${p.ref}/${n.path.split('/').map(encodeURIComponent).join('/')}`,name:wsNameOf(n.path).replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())})).sort((a,b)=>a.name.localeCompare(b.name)); }
+  catch(e){ SONG_DEMO=[]; SONG_DEMO_ERR=e.message; } songPaint(); }
+function songPaint(){
+  const rec=$('songRecent'), demo=$('songDemo'); rec.innerHTML=''; demo.innerHTML=''; const lang=(typeof PK_LANG!=='undefined'&&PK_LANG)||'en';
+  const item=(title,sub,btns)=>{ const it=document.createElement('div'); it.className='wsitem'; const info=document.createElement('div'); info.style.minWidth='0'; info.innerHTML=`<span class="nm">${esc(title)}</span><small>${esc(sub)}</small>`; const b=document.createElement('div'); b.className='b'; btns.forEach(x=>b.appendChild(x)); it.append(info,b); return it; };
+  const btn=(label,title,fn)=>{ const x=document.createElement('button'); x.className='small'; x.textContent=label; if(title) x.title=title; x.onclick=fn; return x; };
+  if(!SONGREC.length){ const e=document.createElement('div'); e.className='note'; e.textContent=pkt('m.songs_geen_recent'); rec.appendChild(e); }
+  SONGREC.forEach(r=>{ const sub=[r.author,new Date(r.t).toLocaleString(lang)].filter(Boolean).join(' · ');
+    const open=btn(pkt('m.openen'),'',async()=>{ if(r.url){ await songOpenUrl(r.url,r.name); } else if(r.text){ try{ await songOpen(JSON.parse(r.text),{key:r.key,name:r.name,text:r.text}); }catch(e){ status(pkt('m.songs_openen_mislukt',e.message),true); } } else status(pkt('m.songs_bestand_opnieuw'),true); });
+    const rm=btn('×',pkt('m.songs_verwijder'),()=>{ SONGREC=SONGREC.filter(x=>x!==r); songRecSave(); songPaint(); });
+    rec.appendChild(item(r.title,sub||(r.url?'GitHub':''),[open,rm])); });
+  if(SONG_DEMO===null){ const e=document.createElement('div'); e.className='note'; e.textContent=pkt('m.songs_laden'); demo.appendChild(e); }
+  else if(SONG_DEMO_ERR){ const e=document.createElement('div'); e.className='note'; e.textContent=pkt('m.songs_ophalen_mislukt',SONG_DEMO_ERR); demo.appendChild(e); }
+  else if(!SONG_DEMO.length){ const e=document.createElement('div'); e.className='note'; e.textContent=pkt('m.songs_geen_demos'); demo.appendChild(e); }
+  (SONG_DEMO||[]).forEach(d=>demo.appendChild(item(d.name,d.path,[btn(pkt('m.openen'),'',()=>songOpenUrl(d.url,d.name))]))); }
+function openSongs(){ if(!wsPanel.hidden) closeWs(); if(!$('prPanel').hidden) prClosePanel(); if(typeof closeSettings==='function') closeSettings(); songPanel.hidden=false; songBtn.setAttribute('aria-expanded','true'); songBtn.classList.add('on'); songPaint(); if(SONG_DEMO===null) songDemoLoad(false); }
+function closeSongs(){ songPanel.hidden=true; songBtn.setAttribute('aria-expanded','false'); songBtn.classList.remove('on'); }
+songBtn.onclick=e=>{ e.stopPropagation(); songPanel.hidden?openSongs():closeSongs(); }; $('songClose').onclick=closeSongs;
+document.addEventListener('pointerdown',e=>{ if(!songPanel.hidden&&!e.target.closest('#songPanel,#songBtn,.pkmodal')) closeSongs(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!songPanel.hidden&&!document.querySelector('.pkmodal')) closeSongs(); });
+$('songRefresh').onclick=()=>{ SONG_DEMO=null; songPaint(); songDemoLoad(true); };
+$('songFileBtn').onclick=()=>{ $('songFile').value=''; $('songFile').click(); };
+$('songFile').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f) return; let text, obj; try{ text=await f.text(); obj=JSON.parse(text); }catch(err){ status(pkt('m.dit_bestand_is_geen_leesbare'),true); return; }
+  if(!obj.name&&obj.format!=='patchkamer-song') obj.name=f.name.replace(/\.patchkamer\.json$|\.json$/i,''); await songOpen(obj,{key:'file:'+f.name+':'+f.size,name:f.name,text}); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!songPanel.hidden) closeSongs(); });
+{ const a=$('songAddr'); if(a){ a.value=songAddr(); a.onchange=()=>{ const v=a.value.trim(); try{ if(v&&v!==SONG_ADDR_DEF) localStorage.setItem(SONG_ADDR_KEY,v); else localStorage.removeItem(SONG_ADDR_KEY); }catch(e){} a.value=songAddr(); SONG_DEMO=null; }; }
+  const r=$('songAddrReset'); if(r) r.onclick=()=>{ try{ localStorage.removeItem(SONG_ADDR_KEY); }catch(e){} $('songAddr').value=SONG_ADDR_DEF; SONG_DEMO=null; }; }
+IDB.get('songs:recent').then(v=>{ SONGREC=Array.isArray(v)?v.filter(x=>x&&x.key&&x.title).slice(0,SONGREC_MAX):[]; if(!songPanel.hidden) songPaint(); });
 })();
 </script>

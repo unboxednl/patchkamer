@@ -58,6 +58,7 @@ Patchkamer volgt de taal van je browser: Nederlands of Engels. Je wijzigt dat on
 | **BPM**, **Swing** | Tempo (40–200) en swing van de klok. |
 | **Werkruimte** | Bewaar, open en exporteer je opstelling (onderdeel 8). |
 | **Tunes**, **Presets** | De bibliotheken met klanken en instellingen (onderdeel 7). |
+| **Songs** | Opent een song: de demo's van GitHub, je recente songs of een bestand (onderdeel 8). |
 | **Instellingen** | Taal, audiokwaliteit, weergave en meer (onderdeel 10). |
 | **Herschik** | Zet je apparaten netjes op volgorde, van links naar rechts. |
 | **Focus** | Toont de apparaten die je met **F** hebt gemarkeerd naast elkaar (onderdeel 9). |
@@ -162,6 +163,8 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 - **Exporteer als song…** maakt een deelbaar bestand (`.patchkamer-song.json`) met alle apparaatcode, een titel, de maker en een licentie. Iemand anders kan het openen zonder bibliotheek.
 - **Nieuwe lege werkruimte** begint opnieuw.
 
+**Songs.** De knop **Songs** in de bovenbalk opent een song in een **nieuwe werkruimte-tab** en herschikt daarna de apparaten (**Ctrl+Z** zet terug). Hij toont de **demo-songs** uit de map `songs` van deze repository op GitHub, je **recente songs** (de laatste twaalf, ook bestanden die je opende) en **Bestand openen…**. Heeft een song apparaten nodig die nog niet in je bibliotheek staan, dan laadt Patchkamer eerst de apparatenbibliotheek uit **Instellingen → Nieuwe werkruimte**. Er kunnen tien werkruimtes open zijn: sluit er eerst een als ze allemaal in gebruik zijn.
+
 **Meer dan één werkruimte.** De tabbalk onder de bovenbalk bevat maximaal tien werkruimtes. Klik op een tab, of druk op **F1** t/m **F10**, om te wisselen. **+** voegt een nieuwe lege werkruimte toe; **×** sluit er een (Patchkamer vraagt eerst als er apparaten in staan, en de laatste kun je niet sluiten: gebruik **Leeg**). Elke werkruimte heeft eigen apparaten, kabels, tempo en naam, en alles in dit hoofdstuk werkt op de werkruimte waarin je zit. Bij het wisselen stopt de klok en start je hem zelf weer. Een nieuwe werkruimte laadt wat je koos onder **Instellingen → Nieuwe werkruimte**. Patchkamer bewaart je werkruimtes in je browser en opent ze de volgende keer weer.
 
 ![De tabbalk met drie werkruimtes](images/nl/11-workspaces.png)
@@ -183,6 +186,7 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 - **Audio:** kies kwaliteit **Laag**, **Normaal** of **Hoog**, of stel **sample rate**, **latency** en **oversampling** zelf in. Hogere kwaliteit vraagt meer van je computer. Een wijziging laadt Patchkamer opnieuw en behoudt je werkruimte. Hoor je geknetter, kies dan een grotere latencybuffer (*Gebalanceerd* of *Stabiel*).
 - **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet de drie terug. De knop **Alles laden** in het Tunes- en Presets-paneel gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
 - **AI-assistent:** kies een aanbieder (**Anthropic**, **OpenAI** of een **eigen adres** voor elke OpenAI-compatibele dienst, zoals je eigen proxy, OpenRouter of een lokaal model), plak je **API-sleutel** en kies een **model** (**Modellen ophalen** vult de lijst). De sleutel staat alleen in deze browser (localStorage) en gaat alleen naar de aanbieder die je koos. Daaronder kun je instellen uit welke GitHub-repository de AI zijn documentatie leest, of **Eigen agent-instructies gebruiken** aanvinken en je eigen tekst schrijven: de AI gebruikt die dan in plaats van de GitHub-documentatie. **Sleutels wissen** haalt alle sleutels weg. Zie *AI Chat* in hoofdstuk 6.
+- **Adres van de songs:** onder **Nieuwe werkruimte** staat ook het adres van de demo-songs (standaard de map `songs` op GitHub); **Standaardadres herstellen** zet het terug.
 - **Weergave:** de stijl van de kabels, hun dekking, de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
 - **Kleur** (rechtsboven): donker, licht of retro.
 

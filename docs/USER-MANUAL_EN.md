@@ -58,6 +58,7 @@ Patchkamer follows the language of your browser: Dutch or English. You can chang
 | **BPM**, **Swing** | Tempo (40–200) and swing of the clock. |
 | **Workspace** | Save, open and export your setup (section 8). |
 | **Tunes**, **Presets** | The libraries of sounds and settings (section 7). |
+| **Songs** | Opens a song: the demos from GitHub, your recent songs, or a file (section 8). |
 | **Settings** | Language, audio quality, display and more (section 10). |
 | **Arrange** | Puts your devices neatly in order, from left to right. |
 | **Focus** | Shows the devices you flagged with **F** next to each other (section 9). |
@@ -162,6 +163,8 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 - **Export as song…** makes a shareable file (`.patchkamer-song.json`) that holds all device code, a title, the author and a license. Someone else can open it without any library.
 - **New empty workspace** starts again.
 
+**Songs.** The **Songs** button in the top bar opens a song in a **new workspace tab** and arranges the devices afterwards (**Ctrl+Z** undoes it). It lists the **demo songs** from the `songs` folder of this repository on GitHub, your **recent songs** (the last twelve, also files you opened) and **Open file…**. If a song needs devices that are not in your library yet, Patchkamer first loads the device library from **Settings → New workspace**. Up to ten workspaces can be open, so close one first when they are all in use.
+
 **More than one workspace.** The tab bar under the top bar holds up to ten workspaces. Click a tab, or press **F1** to **F10**, to switch. **+** adds a new empty workspace; **×** closes one (Patchkamer asks first if it holds devices, and the last one cannot be closed: use **Clear**). Every workspace has its own devices, cables, tempo and name, and everything in this section works on the workspace you are in. When you switch, the clock stops and you start it again yourself. A new workspace loads what you chose under **Settings → New workspace**. Patchkamer keeps your workspaces in your browser and opens them again the next time.
 
 ![The tab bar with three workspaces](images/en/11-workspaces.png)
@@ -183,6 +186,7 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 - **Audio:** pick **Low**, **Normal** or **High** quality, or set **sample rate**, **latency** and **oversampling** yourself. Higher quality asks more of your computer. A change reloads Patchkamer and keeps your workspace. If you hear crackles, choose a larger latency buffer (*Balanced* or *Stable*).
 - **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts the three back. The **Load all** button in the Tunes and Presets panel uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
 - **AI assistant:** choose a provider (**Anthropic**, **OpenAI** or a **custom address** for any OpenAI-compatible service, such as your own proxy, OpenRouter or a local model), paste your **API key** and choose a **model** (**Fetch models** fills the list). The key is stored only in this browser (localStorage) and goes only to the provider you chose. Under it you can change which GitHub repository the AI reads its documentation from, or tick **Use my own agent instructions** and write your own: the AI then uses those instead of the GitHub documentation. **Clear keys** removes all keys. See *AI Chat* in section 6.
+- **Songs address:** under **New workspace** you also find the address of the demo songs (by default the `songs` folder on GitHub); **Restore default address** puts it back.
 - **Display:** the style of the cables, their opacity, the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
 - **Color** (top right): dark, light or retro.
 
