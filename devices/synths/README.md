@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 26 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones and textures. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 29 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -43,6 +43,14 @@ Eight synths for long, slowly changing sounds: drones, soundscapes and textures.
 | **Foundry** | A mono industrial sound sculptor: FM, ring modulation, four metal resonators, overdrive and wavefolder, with a drone and a notes mode | [`Foundry/`](Foundry/) | [69](../../tunes/foundry-styles.patchkamer-tunes.json) | [Foundry](../../docs/synths/USER-MANUAL_EN.md#foundry) |
 | **Mist** | A drone and ambient synth that follows the clock: a standing chord with its own chord changes and melody, wind, reverb and echoes | [`Mist/`](Mist/) | [62](../../tunes/mist-styles.patchkamer-tunes.json) | [Mist](../../docs/synths/USER-MANUAL_EN.md#mist) |
 | **Grain Cloud** | A granular synth and effect: a built-in sound as a synth, or live audio from its input as an effect | [`GrainCloud/`](GrainCloud/) | [61](../../tunes/grain-cloud-styles.patchkamer-tunes.json) | [Grain Cloud](../../docs/synths/USER-MANUAL_EN.md#grain-cloud) |
+
+## Voice
+
+One synth that sings: you give it a text and notes.
+
+| Device | What it does | Folder | Tunes | Manual |
+|---|---|---|---|---|
+| **Formant Singer** | A synth that sings a text: every note sings the next syllable, with six voice types, a choir of up to eight singers, vibrato and a way to write sounds directly | [`FormantSinger/`](FormantSinger/) | [66](../../tunes/formant-singer-styles.patchkamer-tunes.json) | [Formant Singer](../../docs/synths/USER-MANUAL_EN.md#formant-singer) |
 
 The **Tunes** column links to the pack of that synth and gives the number of tunes in it.
 

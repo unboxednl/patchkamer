@@ -2,7 +2,7 @@
 
 *English version: [README.md](README.md)*
 
-Apparaten die uit noten geluid maken: 26 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones en texturen. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
+Apparaten die uit noten geluid maken: 29 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones, texturen en zang. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
 
 Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke synth voor welk doel".
 
@@ -43,6 +43,14 @@ Acht synths voor lange, langzaam veranderende klanken: drones, soundscapes en te
 | **Foundry** | Een mono industriële klankvormer: FM, ringmodulatie, vier metalen resonatoren, overdrive en wavefolder, met een drone- en een notenstand | [`Foundry/`](Foundry/) | [69](../../tunes/foundry-styles.patchkamer-tunes.json) | [Foundry](../../docs/synths/USER-MANUAL_NL.md#foundry) |
 | **Mist** | Een drone- en ambient-synth die de klok volgt: een stilstaand akkoord met eigen akkoordgang en melodie, wind, galm en echo's | [`Mist/`](Mist/) | [62](../../tunes/mist-styles.patchkamer-tunes.json) | [Mist](../../docs/synths/USER-MANUAL_NL.md#mist) |
 | **Grain Cloud** | Een granulaire synth en een granulair effect: een ingebouwde klank als synth, of live audio van de ingang als effect | [`GrainCloud/`](GrainCloud/) | [61](../../tunes/grain-cloud-styles.patchkamer-tunes.json) | [Grain Cloud](../../docs/synths/USER-MANUAL_NL.md#grain-cloud) |
+
+## Zang
+
+Één synth die zingt: je geeft hem een tekst en noten.
+
+| Apparaat | Wat het doet | Map | Tunes | Handleiding |
+|---|---|---|---|---|
+| **Formant Singer** | Een synth die een tekst zingt: elke noot zingt de volgende lettergreep, met zes stemtypen, een koor van maximaal acht zangers, vibrato en een manier om klanken direct te schrijven | [`FormantSinger/`](FormantSinger/) | [66](../../tunes/formant-singer-styles.patchkamer-tunes.json) | [Formant Singer](../../docs/synths/USER-MANUAL_NL.md#formant-singer) |
 
 De kolom **Tunes** verwijst naar het pack van die synth en noemt het aantal tunes erin.
 

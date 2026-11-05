@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 26 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 29 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -14,7 +14,8 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 2
 6. [Toetsen en snaren](#toetsen-en-snaren): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
-9. [Als het niet werkt](#als-het-niet-werkt)
+9. [Zang](#zang): [Formant Singer](#formant-singer)
+10. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat synths doen
 
@@ -60,6 +61,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Industriële klanken: metalen resonanties, FM, ringmodulatie, wavefolding | [Foundry](#foundry) |
 | Een traag akkoordbed met eigen akkoorden en melodie onder een song | [Mist](#mist) |
 | Wolken van kleine korrels uit een ingebouwde klank, of een effect op live audio | [Grain Cloud](#grain-cloud) |
+| Een stem die een tekst zingt: lead, koor, gefluister, robotstemmen | [Formant Singer](#formant-singer) |
 
 ## Bassen
 
@@ -1185,12 +1187,86 @@ De klank van deze synths verandert voortdurend. Een tune is een beginpunt, geen 
 - Voor melodieën: gebruik een lage **Toonspreiding** (onder 1 halve toon) of **Octaven** of **Kwinten**, anders klinken de noten onzuiver.
 - Bij meerdere noten tegelijk houd je **Uitgang** onder ongeveer 60%.
 
+## Zang
+
+Formant Singer is de enige synth in Patchkamer die zingt. Hij staat hier apart beschreven, omdat hij anders werkt dan de rest: hij leest een tekst en elke noot die je speelt zingt de volgende lettergreep daarvan.
+
+### Formant Singer
+
+**Waar het voor dient.** Een synth die een tekst zingt. Je typt de tekst op de kaart en speelt noten vanaf **Keys / MIDI** of een sequencer. Elke noot zingt de **volgende lettergreep** van de tekst, op de toonhoogte, de lengte en de velocity van die noot. Hij maakt zelf geen geluid en heeft geen sequencer of klok: hij zingt alleen de noten die hij krijgt (of de knop **Proef**). Hij werkt met filters op een ruis- en toonbron (formantsynthese), dus zonder netwerk en zonder opgenomen stem. Gebruik hem voor een leadstem, een koor, een pad van klinkers, een gefluisterde regel of een robotstem.
+
+![De kaart van Formant Singer](../images/nl/synths/formant-singer.png)
+
+**De regelaars.** Dubbelklik op een schuif om terug te gaan naar de beginwaarde. De kaart heeft deze volgorde:
+
+- **Tekst** (het tekstveld), **Taal** (**English**, **Nederlands** of **Klanken**: hoe de tekst wordt gelezen), **Stem** (**Sopraan**, **Alt**, **Tenor**, **Bas**, **Kind**, **Gefluister** of **Eigen**) en **Spel** (**Mono (legato)** of **Polyfoon**).
+- **Einde van de tekst:** wat er gebeurt na de laatste lettergreep: **Herhalen** (opnieuw beginnen), **Aanhouden** (de laatste klinker blijven zingen, zonder medeklinkers) of **Stoppen** (stil tot je op **Herstart** drukt).
+- **Vaste klinker** en **Klinker:** staat **Vaste klinker** aan, dan zingt elke noot de gekozen klinker en wordt de tekst overgeslagen. **Klinker** geldt ook als **Tekst** leeg is. De lijst heeft 14 klinkers, bijvoorbeeld **a – spa**, **ae – kat**, **i – zie**, **u – boek**, **y – uur**.
+- **Lettergrepen:** de tekst in lettergrepen, met de volgende gemarkeerd, en de regel **Lettergreep 1 van 5**. Knoppen: **Herstart** (begin bij de eerste lettergreep), **Proef** (zingt de huidige lettergreep een tel lang en blijft erop staan) en **Alles uit** (laat alle stemmen uitklinken).
+- **Stem & bron:** **Formantverschuiving** (−12 tot +12 halve tonen: verschuift de klinkerkleuren, niet de toonhoogte; positief is kleiner en helderder, negatief groter en donkerder), **Adem** (ruis in de bron, 0 tot 100%), **Helderheid** (hoe helder de bron is), **Koorstemmen** (1 tot 8 zangers per noot), **Verstemming** (0 tot 50 ct tussen de zangers, alleen hoorbaar bij meer dan één) en **Stereobreedte** (breedte van de zangers, en bij **Polyfoon** van de noten).
+- **Beweging:** **Vibratosnelheid** (3 tot 8 Hz), **Vibratodiepte** (0 tot 100 ct), **Vibratovertraging** (0 tot 2 s voordat het vibrato inzet), **Glijtijd** (0 tot 0,5 s: de toonhoogteglijding bij **Mono** en de snelheid waarmee de klinkerkleur naar de volgende klinker beweegt), **Opkomst** (0,005 tot 3 s) en **Uitklank** (0,02 tot 6 s).
+- **Spraak:** **Medeklinkers** (hoeveel je van de medeklinkers hoort; 0 zingt alleen klinkers) en **Beginmedeklinker** (langste duur van de medeklinkers aan het begin van een lettergreep, 5 tot 200 ms; medeklinkers aan het eind krijgen 80% daarvan).
+- **Niveau:** **Uitgang**.
+- Onderaan een spectrum van de uitgang met de eerste twee klinkerpieken (F1 en F2) van de laatste klinker.
+
+**Spel.** Bij **Mono (legato)** is er één stem. Noten die overlappen worden aan elkaar gebonden: de toonhoogte en de klinker glijden naar de nieuwe noot. Bij **Polyfoon** klinken tot 8 noten tegelijk; een negende neemt de oudste over met een korte fade. Noten die binnen 30 ms van elkaar beginnen tellen als één akkoord en zingen dezelfde lettergreep.
+
+**Hoe de tekst wordt gesplitst.** Lettergrepen worden gescheiden door een spatie, een streepje (`-`) of een streep (`|`). Een woord zonder `-` of `|` wordt automatisch gesplitst met een eenvoudige regel (**hello** wordt hel-lo). Wil je het zeker weten, schrijf de splitsing dan zelf: `ha-lle-lu-ja`.
+
+| Schrijf | Betekenis |
+|---|---|
+| spatie, `-` of `|` | volgende lettergreep |
+| `_` of `~` | **melisma**: deze noot zingt de laatste klinker van de vorige lettergreep door, zonder medeklinkers (`glo_o_o-ri-a`, of `no _ _`) |
+| `*` of `.` los staand | **rust**: de noot neemt een plek in de tekst in maar zingt niets (`la*la`) |
+
+Leestekens, hoofdletters en accenten worden genegeerd. Een lettergreep zonder klinker wordt gezongen met een korte **uh**; een lettergreep van alleen **m** of **n** is een gonzende klank die de hele noot duurt. Een tekst heeft hoogstens 2000 tekens en 1500 lettergrepen.
+
+**Een woord herstellen met klanken.** De spellingsregels voor Engels en Nederlands zijn compact en dekken niet alles. Wordt een woord verkeerd gezongen, zet **Taal** dan op **Klanken** en schrijf de klanken van elke lettergreep direct, achter elkaar zonder spaties, met `-` tussen de lettergrepen. De klanken worden van links naar rechts gelezen, met de langste code eerst; zet een apostrof tussen codes die je uit elkaar wilt houden (`s'h` is **s** en **h**, `n'g` is **n** en **g**). Twee klinkers met een apostrof ertussen geven een glijding van de eerste naar de tweede. `_`, `~` en `*` werken zoals hierboven.
+
+| Soort | Codes |
+|---|---|
+| Klinkers | `a` spa, `ae` kat, `e` bed, `ee` veel, `i` zie, `ih` bit, `o` boom, `aw` bot, `u` boek, `oo` hoed, `y` uur, `oe` deur, `uh` de, `er` her |
+| Tweeklanken | `ai`, `ei`, `au`, `ou`, `oi`, `ui` |
+| Stemloze wrijfklanken | `s`, `sh`, `f`, `th`, `x` (Nederlands ch en g), `h` |
+| Stemhebbende wrijfklanken | `v`, `z`, `zh`, `dh` |
+| Plofklanken | `p`, `t`, `k`, `b`, `d`, `g` |
+| Nasalen | `m`, `n`, `ng` |
+| Liquids en glides | `l`, `r`, `j`, `w` |
+| Samengesteld | `ch` (t + sh), `jh` (d + zh) |
+
+Voorbeelden: `ha-lo`, `shaet`, `mm-ou` (eerst gonzen, dan **ou**).
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer: elke noot zingt de volgende lettergreep. Een sequencer moet een nootlengte (`dur`) meesturen, anders blijft de noot klinken. Control changes bewegen de regelaars (niet **Koorstemmen**). |
+| **Tekst / herstart** | noten in (oranje) | Een trigger of noot hier doet een **Herstart**: de tekst begint weer bij de eerste lettergreep. Een sequencer kan dit gebruiken om elke zin op dezelfde woorden te laten beginnen. |
+| **Mod** | modulatie in (paars) | Een modulator kan 14 regelaars bewegen (alle getalregelaars behalve **Koorstemmen**). |
+| **Stereo zang** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Formant Singer** en **Speakers** en verbind ze in die volgorde (noten, daarna audio). Kies de tune **Clear Alto Lead** (map Solo Voices) en vervang de tekst door `sing-ing in the rain`: dat zijn vijf lettergrepen. Druk op **Herstart** en speel vijf noten: elke noot zingt de volgende lettergreep; de kaart toont de huidige. Staat **Einde van de tekst** op **Herhalen**, dan begint de zesde noot weer bij **sing**. Wil je een lange noot een woord laten dragen, schrijf dan `rain _ _`: de tweede en derde noot blijven de klinker zingen. Voor een koor kies je **Warm Choir**, die **Polyfoon** en **Koorstemmen** 6 gebruikt, en speel je akkoorden: een akkoord zingt één lettergreep.
+
+**Tunes.** Pack **Formant Singer Styles**: 66 tunes in 12 mappen (Choir, Solo Voices, Bass Voices, Whisper and Breath, Pads and Ambient, Cinematic, Pop Leads, Robot and FX, Chant, Lullaby, Hymn, Syllable Study), bestand [`formant-singer-styles.patchkamer-tunes.json`](../../tunes/formant-singer-styles.patchkamer-tunes.json). Een paar namen: **Warm Choir**, **Clear Alto Lead**, **Low Monk**, **Soft Whisper**, **Robot Voice**. Elke tune heeft een korte eigen tekst van ongeveer 1 tot 9 lettergrepen, in het Engels, Nederlands of in klanken, passend bij de stijl; speel een melodie met zoveel noten, of druk op **Herstart** om opnieuw te beginnen. Tunes met **Vaste klinker** zingen op elke noot één klinker. De positie in de tekst wordt niet in een tune bewaard.
+
+**Tips en beperkingen.**
+
+- Geef lange noten aan de klinkers en korte noten aan eenvoudige lettergrepen (**la**, **te**, **ko**): op een zeer korte noot worden de medeklinkers afgekapt op 35% van de noot en worden lange clusters onduidelijk. Voor noten korter dan ongeveer 80 ms helpt het **Medeklinkers** te verlagen.
+- Een hogere velocity geeft een stevigere stem en duidelijker medeklinkers; een lage velocity een zachtere stem met zachtere, kortere medeklinkers.
+- **Gefluister** heeft geen toonhoogte: de noten geven alleen het ritme.
+- Een **Opkomst** die langer is dan de noot betekent dat de noot voorbij is voor hij opkomt.
+- **Koorstemmen** 8 met **Polyfoon** en veel noten is zwaar voor de browser; 3 tot 5 is meestal genoeg.
+- **Formantverschuiving** aan de uiterste kanten (±12) maakt klinkers onherkenbaar; dat is bedoeld als effect.
+- De stem is bewust robotachtig: klinkers zijn herkenbaar en medeklinkers zijn benaderd. De regels van spelling naar klank zijn compact; gebruik **Klanken** voor woorden die misgaan. De beschrijvingen van de tunes zijn gebaseerd op hun instellingen, niet op luisteren.
+- **Stoppen** en **Aanhouden** aan het eind van de tekst: een transportstop zet de positie niet terug. Gebruik **Herstart**.
+
 ## Als het niet werkt
 
 - **Geen geluid.** Controleer of er audio loopt van de synth naar **Speakers** (groenblauwe kabel), of je op **Start** hebt gedrukt en of het volume op Speakers hoog genoeg staat. Klik één keer ergens in Patchkamer: browsers houden audio tegen tot je dat doet.
 - **Een ingebouwde sequencer of arpeggiator is stil.** Acid Baselines (met **intern aan**), Acid Stepper (**Besturing** = **Interne klok / patroon**), Sub Line en Cross Mod Mono (**Besturing** = **Eigen patroon** of **Arpeggiator**) spelen alleen als de klok loopt: druk op **Start**. Een arpeggiator heeft ook vastgehouden toetsen nodig.
 - **Een synth reageert niet op een toetsenbord.** Sluit de oranje kabel aan op zijn notenpoort (**Noten**, **Keyboard / noten**, **Externe noten**), niet op **Mod**. Bij Acid Baselines moet **intern aan** uit voor noten van buiten, bij Acid Stepper moet **Besturing** op **Extern keyboard / sequencer** staan, en bij Sub Line en Cross Mod Mono op **Keyboard / externe sequencer**. Gebruik voor een MIDI-toetsenbord **Connect MIDI** op Keys; zie de [basishandleiding](../USER-MANUAL_NL.md#13-problemen-oplossen).
 - **Een drone- of textuursynth is stil.** Elk start op zijn eigen manier: **Start landschap** (Layered Landscape), **Start / stop drone** (Foundry), **START DRONE** (Mist), **Wolk (drone)** (Grain Cloud), **Leeft** (Paradox), **Aan** (Biotope). Drone Synth, Mist, Foundry (in de speelstand **Drone / transport**) en Layered Landscape (met de eigen sequencer) volgen de klok: druk op **Start**, of controleer dat **Volg start/stop** uit staat. Grain Cloud op de bron **Live (ingang)** is stil zonder kabel op **In (bron)**, en Celestial Mechanics heeft noten nodig.
+- **Formant Singer is stil of stopt met zingen.** Controleer **Uitgang** en of er noten aankomen op **Noten**. Staat **Einde van de tekst** op **Stoppen**, dan blijft hij na de laatste lettergreep stil tot je op **Herstart** drukt; bij **Stem** op **Gefluister** is er geen toonhoogte, alleen adem.
 - **Noten blijven klinken.** Een noot zonder lengte blijft bij sommige synths doorklinken (Bowed Ensemble). Laat de sequencer nootlengtes sturen, of druk op **Alles uit** op de kaart.
 - **De gate of pomp van Supersaw Swarm doet niets.** Ze werken alleen als de klok loopt.
 - **Zacht of stil.** Controleer **Niveau** of **Uitgang** en de klankregelaars: een heel lage cutoff met een lage envelope-diepte klinkt heel zacht (Acid Baselines, Basic Mono), Patchbay Synth heeft een VCA-bron nodig (zie zijn tips) en een heel korte noot met een lange attack van de versterker klinkt bij Triple Osc Poly maar zacht.

@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 26 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 29 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
@@ -14,7 +14,8 @@ Synths are the devices that make sound from notes. This page covers the 26 synth
 6. [Keys and strings](#keys-and-strings): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
-9. [If it does not work](#if-it-does-not-work)
+9. [Voice](#voice): [Formant Singer](#formant-singer)
+10. [If it does not work](#if-it-does-not-work)
 
 ## What synths do
 
@@ -60,6 +61,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | Industrial sounds: metal resonances, FM, ring modulation, wavefolding | [Foundry](#foundry) |
 | A slow chord bed with its own chords and melody under a song | [Mist](#mist) |
 | Clouds of tiny grains from a built-in sound, or an effect on live audio | [Grain Cloud](#grain-cloud) |
+| A voice that sings a text: lead, choir, whispers, robot voices | [Formant Singer](#formant-singer) |
 
 ## Basses
 
@@ -1185,12 +1187,86 @@ The sound of these synths changes all the time. A tune is a starting point, not 
 - For melodies: use a low **Pitch spread** (under 1 semitone) or **Octaves** or **Fifths**, or the notes sound out of tune.
 - With several notes together, keep **Output** under about 60%.
 
+## Voice
+
+Formant Singer is the one synth in Patchkamer that sings. It is described here on its own, because it works differently from the others: it reads a text and every note you play sings the next syllable of it.
+
+### Formant Singer
+
+**What it is for.** A synth that sings a text. You type the lyrics on the card and play notes from **Keys / MIDI** or a sequencer. Every note sings the **next syllable** of the text, at the pitch, the length and the velocity of that note. It makes no sound by itself and has no sequencer or clock: it only sings the notes it receives (or the **Test** button). It works with filters on a noise and tone source (formant synthesis), so there is no network and no recorded voice. Use it for a lead voice, a choir, a pad of vowels, a whispered line or a robot voice.
+
+![The Formant Singer card](../images/en/synths/formant-singer.png)
+
+**Controls.** Double-click a slider to go back to its starting value. The card follows this order:
+
+- **Lyrics** (the text field), **Language** (**English**, **Dutch** or **Phonemes**: how the text is read), **Voice** (**Soprano**, **Alto**, **Tenor**, **Bass**, **Child**, **Whisper** or **Custom**) and **Mode** (**Mono (legato)** or **Poly**).
+- **End of lyrics:** what happens after the last syllable: **Loop** (start again), **Hold** (keep singing the last vowel, without consonants) or **Stop** (silent until you press **Restart**).
+- **Fixed vowel** and **Vowel:** with **Fixed vowel** on, every note sings the chosen vowel and the text is skipped. **Vowel** is also used when **Lyrics** is empty. The list has 14 vowels, for example **a – spa**, **ae – cat**, **i – see**, **u – moon**, **y – Dutch uur**.
+- **Syllables:** the text cut into syllables, with the next one highlighted, and the line **Syllable 1 of 5**. Buttons: **Restart** (start at the first syllable), **Test** (sings the current syllable for a second and stays on it) and **All off** (lets all voices fade out).
+- **Voice & source:** **Formant shift** (−12 to +12 semitones: moves the vowel colours, not the pitch; positive is smaller and brighter, negative is larger and darker), **Breath** (noise in the source, 0 to 100%), **Brightness** (how bright the source is), **Choir voices** (1 to 8 singers per note), **Detune** (0 to 50 ct between the singers, only audible with more than one) and **Stereo spread** (width of the singers, and with **Poly** of the notes).
+- **Movement:** **Vibrato rate** (3 to 8 Hz), **Vibrato depth** (0 to 100 ct), **Vibrato delay** (0 to 2 s before the vibrato starts), **Glide** (0 to 0.5 s: the pitch glide in **Mono** and the speed at which the vowel colour moves to the next vowel), **Attack** (0.005 to 3 s) and **Release** (0.02 to 6 s).
+- **Speech:** **Consonants** (how much of the consonants you hear; 0 sings only vowels) and **Onset length** (longest length of the consonants at the start of a syllable, 5 to 200 ms; consonants at the end get 80% of it).
+- **Level:** **Output**.
+- At the bottom a spectrum of the output with the first two vowel peaks (F1 and F2) of the last vowel.
+
+**Mode.** In **Mono (legato)** there is one voice. Notes that overlap are tied: the pitch and the vowel glide to the new note. In **Poly** up to 8 notes sound at once; a ninth takes over the oldest note with a short fade. Notes that begin within 30 ms of each other count as one chord and sing the same syllable.
+
+**How the text is split.** Syllables are separated by a space, a hyphen (`-`) or a bar (`|`). A word without `-` or `|` is split automatically by a simple rule (**hello** becomes hel-lo). If you want to be sure, write the split yourself: `ha-lle-lu-ja`.
+
+| Write | Meaning |
+|---|---|
+| space, `-` or `|` | next syllable |
+| `_` or `~` | **melisma**: this note keeps singing the last vowel of the previous syllable, without consonants (`glo_o_o-ri-a`, or `no _ _`) |
+| `*` or `.` on its own | **rest**: the note takes a place in the text but sings nothing (`la*la`) |
+
+Punctuation, capital letters and accents are ignored. A syllable without a vowel is sung with a short **uh**; a syllable of only **m** or **n** is a hum that lasts the whole note. A text has at most 2000 characters and 1500 syllables.
+
+**Fixing a word with phonemes.** The spelling rules for English and Dutch are compact and do not cover everything. When a word is sung wrong, set **Language** to **Phonemes** and write the sounds of each syllable directly, one after another without spaces, with `-` between syllables. Sounds are read from left to right, longest code first; put an apostrophe between codes you want to keep apart (`s'h` is **s** and **h**, `n'g` is **n** and **g**). Two vowels with an apostrophe between them make a glide from the first to the second. `_`, `~` and `*` work as above.
+
+| Kind | Codes |
+|---|---|
+| Vowels | `a` spa, `ae` cat, `e` bed, `ee` Dutch veel, `i` see, `ih` sit, `o` oh, `aw` law, `u` moon, `oo` foot, `y` Dutch uur, `oe` Dutch deur, `uh` cup, `er` her |
+| Diphthongs | `ai`, `ei`, `au`, `ou`, `oi`, `ui` |
+| Voiceless fricatives | `s`, `sh`, `f`, `th`, `x` (Dutch ch and g), `h` |
+| Voiced fricatives | `v`, `z`, `zh`, `dh` |
+| Plosives | `p`, `t`, `k`, `b`, `d`, `g` |
+| Nasals | `m`, `n`, `ng` |
+| Liquids and glides | `l`, `r`, `j`, `w` |
+| Combined | `ch` (t + sh), `jh` (d + zh) |
+
+Examples: `ha-lo`, `shaet`, `mm-ou` (a hum, then **ou**).
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer: every note sings the next syllable. A sequencer must send a note length (`dur`), or the note keeps sounding. Control changes move the knobs (not **Choir voices**). |
+| **Lyrics / restart** | notes in (orange) | A trigger or note here does a **Restart**: the text starts again at the first syllable. A sequencer can use this to start every phrase on the same words. |
+| **Mod** | modulation in (purple) | A modulator can move 14 controls (all number controls except **Choir voices**). |
+| **Stereo voice** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Formant Singer** and **Speakers** and connect them in that order (notes, then audio). Choose the tune **Clear Alto Lead** (folder Solo Voices) and replace the text with `sing-ing in the rain`: that is five syllables. Press **Restart** and play five notes: each one sings the next syllable; the card shows the current one. With **End of lyrics** on **Loop** the sixth note starts again at **sing**. To let a long note carry a word, write `rain _ _`: the second and third note keep singing the vowel. For a choir, choose **Warm Choir**, which uses **Poly** and **Choir voices** 6, and play chords: a chord sings one syllable.
+
+**Tunes.** Pack **Formant Singer Styles**: 66 tunes in 12 folders (Choir, Solo Voices, Bass Voices, Whisper and Breath, Pads and Ambient, Cinematic, Pop Leads, Robot and FX, Chant, Lullaby, Hymn, Syllable Study), file [`formant-singer-styles.patchkamer-tunes.json`](../../tunes/formant-singer-styles.patchkamer-tunes.json). A few names: **Warm Choir**, **Clear Alto Lead**, **Low Monk**, **Soft Whisper**, **Robot Voice**. Every tune has a short original text of about 1 to 9 syllables, in English, Dutch or phonemes, that fits its style; play a melody with that many notes, or press **Restart** to begin again. Tunes with **Fixed vowel** sing one vowel on every note. The syllable position is not saved in a tune.
+
+**Tips and limits.**
+
+- Give long notes to the vowels and short notes to simple syllables (**la**, **te**, **ko**): on a very short note the consonants are cut off at 35% of the note and long clusters become unclear. For notes shorter than about 80 ms, lower **Consonants**.
+- A higher velocity gives a firmer voice and clearer consonants; a low velocity gives a softer voice and softer, shorter consonants.
+- **Whisper** has no pitch: the notes only give the rhythm.
+- **Attack** longer than the note means the note is over before it comes up.
+- **Choir voices** 8 with **Poly** and many notes is heavy for the browser; 3 to 5 is usually enough.
+- **Formant shift** at the extremes (±12) makes vowels unrecognisable; that is meant as an effect.
+- The voice is robotic by design: vowels are recognisable and consonants are approximations. The spelling-to-sound rules are compact, so use **Phonemes** for words that go wrong. The tune descriptions are based on their settings, not on listening.
+- **Stop** and **Hold** at the end of the text: a transport stop does not reset the position. Use **Restart**.
+
 ## If it does not work
 
 - **No sound.** Check that audio runs from the synth to **Speakers** (teal cable), that you pressed **Start** and that the volume on Speakers is up. Click anywhere in Patchkamer once: browsers pause audio until you do.
 - **A built-in sequencer or arpeggiator is silent.** Acid Baselines (with **internal on**), Acid Stepper (**Control** = **Internal clock / pattern**), Sub Line and Cross Mod Mono (**Control** = **Own pattern** or **Arpeggiator**) only play while the clock runs: press **Start**. An arpeggiator also needs held keys.
 - **A synth does not react to a keyboard.** Connect the orange cable to its notes port (**Notes**, **Keyboard / notes**, **External notes**), not to **Mod**. Acid Baselines needs **internal on** off for outside notes, Acid Stepper needs **Control** = **External keyboard / sequencer**, and Sub Line and Cross Mod Mono need **Control** = **Keyboard / external sequencer**. For a MIDI keyboard use **Connect MIDI** on Keys; see the [main manual](../USER-MANUAL_EN.md#13-troubleshooting).
 - **A drone or texture synth is silent.** Each one starts in its own way: **Start landscape** (Layered Landscape), **Start / stop drone** (Foundry), **START DRONE** (Mist), **Cloud (drone)** (Grain Cloud), **Alive** (Paradox), **On** (Biotope). Drone Synth, Mist, Foundry (in the play mode **Drone / transport**) and Layered Landscape (with the own sequencer) follow the clock: press **Start**, or check that **Follow start/stop** is off. Grain Cloud on the source **Live (input)** is silent without a cable on **In (source)**, and Celestial Mechanics needs notes.
+- **Formant Singer is silent or stops singing.** Check **Level** (**Output**) and that notes arrive on **Notes**. With **End of lyrics** on **Stop** it stays silent after the last syllable until you press **Restart**; with **Voice** on **Whisper** there is no pitch, only breath.
 - **Notes keep sounding.** A note without a length keeps sounding on some synths (Bowed Ensemble). Make the sequencer send note lengths, or press **All off** on the card.
 - **Supersaw Swarm gate or pump does nothing.** They only work while the clock runs.
 - **Quiet or silent.** Check **Level** or **Output**, and the sound controls: a very low cutoff with a low envelope amount is very quiet (Acid Baselines, Basic Mono), Patchbay Synth needs a VCA source (see its tips) and a very short note with a long amplifier attack sounds only faintly on Triple Osc Poly.
