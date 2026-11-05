@@ -2377,16 +2377,17 @@ try{ Object.assign(LIB,JSON.parse(localStorage.getItem(LIBKEY)||'{}')); }catch(e
 LIB.cats=(LIB.cats&&typeof LIB.cats==='object')?LIB.cats:{}; CAT_OVR=LIB.cats;
 LIB.layoutSeen=(LIB.layoutSeen&&typeof LIB.layoutSeen==='object')?LIB.layoutSeen:{};
 // eigen categorieën: LIB.catList = [{key,label,color}] in volgorde; 'other' (Overig) blijft altijd bestaan
-function cleanCatList(list){ const out=[], seen=new Set();
+function cleanCatList(list,addMastering){ const out=[], seen=new Set();
   (Array.isArray(list)?list:[]).forEach(c=>{ if(!c||typeof c!=='object') return; const key=String(c.key||'').trim().slice(0,40), label=String(c.label||'').trim().slice(0,60);
     if(!/^[a-z0-9_-]+$/i.test(key)||!label||seen.has(key)) return; seen.add(key); const color=typeof c.color==='string'&&/^(#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))$/i.test(c.color)?c.color:undefined; out.push({key,label,...(color?{color}:{})}); });
+  if(addMastering&&!seen.has('mastering')){ const m={key:'mastering',label:pkt('m.mastering_categorie')}, i=out.findIndex(c=>c.key==='effect'), o=out.findIndex(c=>c.key==='other'); out.splice(i>=0?i+1:(o>=0?o:out.length),0,m); }   // een oudere opgeslagen indeling kent de categorie Mastering (v1.12) nog niet
   if(!seen.has('other')) out.push({key:'other',label:pkt('m.overig')}); return out; }
 const CAT_KEYS={synth:'m.synths',groove:'m.drums_grooveboxen',sequencer:'m.sequencers',mod:'m.modulatie',effect:'m.effecten',mastering:'m.mastering_categorie',mix:'m.mixen_uitgang',tool:'m.meten_hulpmiddelen',other:'m.overig'};
 function pkCatLabel(c){ const k=CAT_KEYS[c.key]; return k&&Object.values(I18N).some(d=>d[k]===c.label)?pkt(k):c.label; }
 function applyCats(){ const list=LIB.catList&&LIB.catList.length?LIB.catList:CAT_DEFAULT.map(x=>({key:x[0],label:x[1]}));
   CATS=list.map(c=>[c.key,pkCatLabel(c)]); CATCOL={}; list.forEach((c,i)=>{ CATCOL[c.key]=c.color||(CAT_DEFAULT.find(x=>x[0]===c.key)||[])[2]||CAT_PALETTE[i%CAT_PALETTE.length]; });
   for(const k of Object.keys(LIB.cats)) if(!CATS.some(x=>x[0]===LIB.cats[k])) delete LIB.cats[k]; }
-LIB.catList=LIB.catList?cleanCatList(LIB.catList):null; applyCats();
+LIB.catList=LIB.catList?cleanCatList(LIB.catList,!(LIB.catV>=2)):null; LIB.catV=2; applyCats();
 const saveLib=()=>{ try{ localStorage.setItem(LIBKEY,JSON.stringify(LIB)); }catch(e){} };
 function setCategory(defId,cat){ const def=Host.latest(defId); if(!def||!CATS.some(x=>x[0]===cat)) return;
   if(cat===baseCategory(def)) delete LIB.cats[defId]; else LIB.cats[defId]=cat; LIB.layoutT=Date.now(); saveLib();
@@ -3185,14 +3186,14 @@ function renameCatInline(key,head){ const lab=CATS.find(x=>x[0]===key); if(!lab)
   i.style.cssText='flex:1;min-width:0;font:inherit;background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:3px 6px';
   head.replaceWith(i); i.focus(); i.select(); let done=false; const fin=ok=>{ if(done) return; done=true; if(ok) renameCat(key,i.value); else paintLib(); };
   i.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Enter') fin(true); if(e.key==='Escape') fin(false); }); i.addEventListener('blur',()=>fin(true)); i.addEventListener('pointerdown',e=>e.stopPropagation()); }
-function layoutState(){ ensureCatList(); return {format:'patchkamer-bibliotheek',formatVersion:1,saved:new Date().toISOString(),
+function layoutState(){ ensureCatList(); return {format:'patchkamer-bibliotheek',formatVersion:1,catV:2,saved:new Date().toISOString(),
   categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key)})),assign:{...LIB.cats},closed:[...(LIB.closed||[])]}; }
 // L = inhoud van patchkamer-bibliotheek.json. force=false bij het laden van een bron: alleen toepassen als het bestand nieuw of gewijzigd is
 function applyLayout(L,src,force){ if(!L||L.format!=='patchkamer-bibliotheek'||!Array.isArray(L.categories)) throw new Error(pkt('m.geen_bibliotheekindeling_format_patchkamer_bibliotheek'));
   const stamp=String(L.saved||'')+'|'+L.categories.length+'|'+Object.keys(L.assign||{}).length, k=src?src.sid:'file';
   if(!force&&LIB.layoutSeen[k]===stamp) return '';
   if(!force&&src&&LIB.layoutT&&!(Date.parse(L.saved||'')>=LIB.layoutT)){ LIB.layoutSeen[k]=stamp; saveLib(); return pkt('m.indeling_in_deze_browser_is')+LAYOUT_FILE+pkt('m.en_blijft_staan'); }
-  LIB.catList=cleanCatList(L.categories); LIB.cats={}; const keys=new Set(LIB.catList.map(c=>c.key));
+  LIB.catList=cleanCatList(L.categories,!(L.catV>=2)); LIB.cats={}; const keys=new Set(LIB.catList.map(c=>c.key));
   if(L.assign&&typeof L.assign==='object') for(const [id,cat] of Object.entries(L.assign)) if(typeof id==='string'&&keys.has(cat)) LIB.cats[id]=cat;
   CAT_OVR=LIB.cats; if(Array.isArray(L.closed)) LIB.closed=L.closed.filter(x=>keys.has(x)); LIB.layoutSeen[k]=stamp; LIB.layoutT=Date.parse(L.saved||'')||Date.now(); applyCats(); saveLib(); paintLib(); paintIcons();
   return pkt('m.indeling_categorie_n',LIB.catList.length); }
