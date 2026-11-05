@@ -223,7 +223,7 @@ Audio Input haalt geluid van buiten de studio naar binnen: de standaardingang va
 | **Versterking** | Maakt de ingang harder of zachter. | −24 tot +36 dB (0 dB) |
 | **Hoogdoorlaat** | Snijdt lage dreun weg: uit, 40, 80 of 120 Hz. | uit |
 | **Polariteit omkeren** | Draait het signaal om. Gebruik het als twee microfoons bij één bron elkaar tegenwerken. | uit |
-| **Gedempt** | Maakt de uitgang stil. Staat de eerste keer aan, zodat een microfoon bij de luidsprekers geen rondzingen geeft. | aan |
+| **Dempen** | Een knop die de uitgang stil maakt; hij licht op zolang hij aan staat. Staat eerst uit, zodat de ingang meteen klinkt. | uit |
 | **Browserbewerking** | Echo-onderdrukking, ruisonderdrukking en automatisch niveau van de browser. Uit laat het signaal ongemoeid; zet het aan voor een belgesprek. | uit |
 | Meters **L** / **R** | Het niveau na de versterking. **clip** licht even op als het signaal vol uitgestuurd is. | |
 
@@ -239,7 +239,7 @@ Audio Input haalt geluid van buiten de studio naar binnen: de standaardingang va
 2. Gebruik een koptelefoon, of zet het volume van je computer laag.
 3. Klik op **Start ingang** en geef in de browser toestemming. Kies je interface in de lijst.
 4. Speel iets en kijk naar de meters. Verhoog **Versterking** tot de meter op ongeveer driekwart komt en het **clip**-lampje uit blijft.
-5. Haal het vinkje bij **Gedempt** weg om het te horen.
+5. Druk op **Dempen** om het stil te maken, en nog eens om het weer te horen.
 
 ### Presets
 
@@ -249,7 +249,7 @@ Het pack **Audio Input Basics** heeft 31 presets in vijf mappen: **Line Level**,
 
 - Een browser kent geen ASIO. Een interface werkt via het stuurprogramma van je besturingssysteem, en hoeveel kanalen de browser ziet, hangt af van dat stuurprogramma en het systeem: sommige systemen tonen in de browser maar twee kanalen. De kaart toont hoeveel kanalen er binnenkomen.
 - Het geluid van een ingang loopt door de browser, dus er is vertraging. De grootte hangt af van de interface, het stuurprogramma en je **Latency**-instelling onder Instellingen → Audio.
-- Een microfoon in een kamer met luidsprekers geeft rondzingen. Gebruik een koptelefoon, of laat **Gedempt** aan staan tot je het volume hebt ingesteld.
+- Een microfoon in een kamer met luidsprekers geeft rondzingen. Gebruik een koptelefoon, of druk op **Dempen** tot je het volume hebt ingesteld.
 - De sample rate van de ingang kan afwijken van die van Patchkamer. De browser rekent dat om.
 - Gebruikt een ander programma de ingang, dan kan de browser hem soms niet openen. Sluit dat programma en klik opnieuw op **Start ingang**.
 

@@ -223,7 +223,7 @@ Audio Input brings sound from the outside into the studio: the default input of 
 | **Gain** | Raises or lowers the input. | −24 to +36 dB (0 dB) |
 | **High-pass** | Cuts low rumble: off, 40, 80 or 120 Hz. | off |
 | **Invert polarity** | Turns the signal upside down. Use it when two microphones on one source cancel each other. | off |
-| **Muted** | Silences the output. It is on the first time, so a microphone near the speakers does not cause feedback. | on |
+| **Mute** | A button that silences the output; it lights up while it is on. It is off at first, so the input sounds right away. | off |
 | **Browser processing** | Echo cancelling, noise suppression and automatic level of the browser. Off keeps the signal untouched; switch it on for a voice call. | off |
 | **L** / **R** meters | The level after the gain. **clip** lights up for a moment when the signal reaches full scale. | |
 
@@ -239,7 +239,7 @@ Audio Input brings sound from the outside into the studio: the default input of 
 2. Use headphones, or turn your computer volume low.
 3. Click **Start input** and allow the input in the browser. Choose your interface in the list.
 4. Play something and watch the meters. Raise **Gain** until the meter reaches about three quarters and the **clip** light stays off.
-5. Untick **Muted** to hear it.
+5. Press **Mute** to silence it, and again to hear it.
 
 ### Presets
 
@@ -249,7 +249,7 @@ The **Audio Input Basics** pack has 31 presets in five folders: **Line Level**, 
 
 - A browser has no ASIO. An interface works through the driver of your operating system, and how many channels the browser sees depends on that driver and on the system: some systems show only two channels in the browser. The card shows how many channels came in.
 - The sound of an input goes through the browser, so there is a delay. The size depends on the interface, its driver and your **Latency** setting under Settings → Audio.
-- A microphone in a room with speakers gives feedback. Use headphones, or keep **Muted** on until you have set the volume.
+- A microphone in a room with speakers gives feedback. Use headphones, or press **Mute** until you have set the volume.
 - The sample rate of the input can differ from the sample rate of Patchkamer. The browser converts it.
 - If another program has the input, the browser may not be able to open it. Close that program and click **Start input** again.
 
