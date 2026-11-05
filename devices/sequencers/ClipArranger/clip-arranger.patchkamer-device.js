@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// 1.13.1 — Een drumspoor volgt het aangesloten apparaat (noteNames, contract v1.14): rijnamen, nootnummers en kanalen komen van het apparaat, ook als de kit of volgorde wijzigt.
+// 1.13.1 — Een drumspoor volgt het aangesloten apparaat (noteNames, contract v1.14): de rol toont de hele lijst klanken van het apparaat onder elkaar, met hun nootnummers en kanalen, ook als de kit of volgorde wijzigt.
 // 1.13.1 — Pads kiezen een spoor of starten een scène (state `pads`): noten in een instelbaar bereik (standaard 36…, de pads van een MPK mini) spelen niet maar kiezen
 //   spoor 1…n, en een tweede bereik (standaard 44…51) start scène 1…8. Standaard uit, dus een bestaande song klinkt gelijk. De instelling hoort bij de hardware: een preset laat haar staan.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Clip Arranger (nieuwe id nl.patchkamer.cliparranger, eigen map in sequencers; voorheen Regie,
@@ -22,7 +22,7 @@ const EN = {
   'SONG': 'SONG', 'TRACKS': 'TRACKS', 'AFSPELEN': 'PLAYBACK', 'Clips / scènes': 'Clips / scenes', 'Song arrangement': 'Song arrangement',
   'Vanaf begin': 'From start', 'Song herhalen': 'Loop song', 'Undo': 'Undo', 'Redo': 'Redo',
   'STARTPUNT': 'TEMPLATE', 'Techno / house': 'Techno / house', 'Ambient / drone': 'Ambient / drone', 'Rock / pop': 'Rock / pop', 'Leeg project': 'Empty project',
-  'Dit spoor hangt aan een apparaat met klanknamen: de eerste rijen nemen hun naam, noot en kanaal van dat apparaat over (de velden hieronder gelden voor de rest).': 'This track is cabled to a device with sound names: the first rows take their name, note and channel from that device (the fields below apply to the rest).',
+  'Dit spoor hangt aan een apparaat met klanknamen: de rijen, hun namen, noten en kanalen komen van dat apparaat.': 'This track is cabled to a device with sound names: the rows, their names, notes and channels come from that device.',
   'Pads kiezen spoor': 'Pads select track', 'Pads starten scène': 'Pads start scene', 'vanaf noot': 'from note', 'Gekozen spoor: {0} · {1}': 'Selected track: {0} · {1}', 'Laad startpunt': 'Load template', 'Vervangt de compositie; Undo herstelt je vorige versie.': 'Replaces the composition; Undo restores your previous version.',
   'Nieuwe song': 'New song', 'Zwevende velden': 'Floating fields', 'Band schets': 'Band sketch', 'Nachtpatronen': 'Night patterns',
   'Aansluiten en bediening': 'Connecting and controls',
@@ -221,7 +221,7 @@ export default {
     function pruneLive() { const now = ctx.currentTime; for (const [k, e] of [...live]) if (!e.held && e.until < now) live.delete(k); }
     // pads (MPK mini e.d.): een noot in het padbereik kiest een spoor of start een scène en klinkt niet
     // drumrijen volgen het apparaat achter een drumspoor (contract v1.14, noteNames): rij j krijgt naam en nootnummer van de j-de klank en lane chj+1 (een eigen lane-naam blijft staan).
-    // De opgeslagen rijen veranderen niet; zonder kabel of zonder namen gelden ze zoals ze zijn. Rijen voorbij de lijst van het apparaat heten '–'.
+    // De hele lijst klanken staat onder elkaar (hoogstens 16 rijen); de opgeslagen rijen veranderen niet. Zonder kabel of zonder namen gelden ze zoals ze zijn.
     let trackNames = [], namesSig = '';
     function readTargets(list) {
       const all = [];
@@ -239,7 +239,7 @@ export default {
     }
     function rowsOf(t) {
       const nm = trackNames[state.tracks.indexOf(t)]; if (!nm || !nm.length) return t.rows;
-      return t.rows.map((r, j) => j < nm.length ? { name: String(nm[j].name).slice(0, 24), note: integer(nm[j].note, 0, 127, r.note), lane: /^ch\d+$/.test(r.lane) ? 'ch' + (j + 1) : r.lane } : { name: '–', note: r.note, lane: r.lane });
+      return nm.slice(0, t.rows.length).map((x, j) => ({ name: String(x.name).slice(0, 24), note: integer(x.note, 0, 127, t.rows[j].note), lane: /^ch\d+$/.test(t.rows[j].lane) ? 'ch' + (j + 1) : t.rows[j].lane }));
     }
     function padNote(n) {
       const p = state.pads;
@@ -343,7 +343,7 @@ export default {
       sel(row, tx('TRACKTYPE'), [['notes', tx('Toetsen / melodie')], ['drums', tx('Drumcomputer')], ['drone', tx('Drone / pad / ambient')]], t.type, v => change(() => { releaseLive(); t.type = v; t.gate = v === 'drone' ? 1 : .9; state.selectedNote = -1; })); sel(row, tx('KLEUR'), COLORS.map((c, i) => [c, tx('Kleur {0}', i + 1)]), t.color, v => change(() => t.color = v));
       if (t.type !== 'drums') { input(row, tx('TRANSPONEREN'), t.transpose, v => change(() => { releaseLive(); t.transpose = integer(v, -48, 48, 0); }), 'number', -48, 48); range(row, tx('GATE'), t.gate, .05, 1.5, .05, v => change(() => t.gate = v), v => Math.round(v * 100) + '%'); } else sel(row, tx('DRUMPROTOCOL'), [['trig', tx('Trig → kanaalnaam')], ['note', tx('MIDI → notennummer')]], t.drumProtocol, v => change(() => t.drumProtocol = v));
       range(row, tx('VELOCITY SCHAAL'), t.velocity, 0, 1, .01, v => change(() => t.velocity = v), pct); btn(row, tx('Track auditeren'), () => audition(t.type === 'drone' ? 48 : 60, state.selectedRow)); check(row, tx('Live opname → deze clip'), state.record, v => change(() => state.record = v));
-      if (t.type === 'drums') { const map = el('details', sec); el('summary', map, tx('Drumrijen en kanaaltoewijzing')); if (trackNames[state.tracks.indexOf(t)]) el('p', map, tx('Dit spoor hangt aan een apparaat met klanknamen: de eerste rijen nemen hun naam, noot en kanaal van dat apparaat over (de velden hieronder gelden voor de rest).'), 'small'); el('p', map, tx('Trig gebruikt de lane-naam; MIDI gebruikt het notennummer. Volgorde en namen mogen afwijken van de aangesloten kit.'), 'small'); const rows = el('div', map, undefined, 'noteinspector'); t.rows.forEach((r, i) => { const box = el('div', rows); input(box, tx('RIJ {0}', i + 1), r.name, v => change(() => r.name = v.slice(0, 24))); input(box, tx('TRIG LANE {0}', i + 1), r.lane, v => change(() => r.lane = v.slice(0, 32))); input(box, tx('MIDI {0}', i + 1), r.note, v => change(() => r.note = integer(v, 0, 127, 36)), 'number', 0, 127); }); }
+      if (t.type === 'drums') { const map = el('details', sec); el('summary', map, tx('Drumrijen en kanaaltoewijzing')); if (trackNames[state.tracks.indexOf(t)]) el('p', map, tx('Dit spoor hangt aan een apparaat met klanknamen: de rijen, hun namen, noten en kanalen komen van dat apparaat.'), 'small'); if (!trackNames[state.tracks.indexOf(t)]) el('p', map, tx('Trig gebruikt de lane-naam; MIDI gebruikt het notennummer. Volgorde en namen mogen afwijken van de aangesloten kit.'), 'small'); const rows = el('div', map, undefined, 'noteinspector'); (trackNames[state.tracks.indexOf(t)] ? [] : t.rows).forEach((r, i) => { const box = el('div', rows); input(box, tx('RIJ {0}', i + 1), r.name, v => change(() => r.name = v.slice(0, 24))); input(box, tx('TRIG LANE {0}', i + 1), r.lane, v => change(() => r.lane = v.slice(0, 32))); input(box, tx('MIDI {0}', i + 1), r.note, v => change(() => r.note = integer(v, 0, 127, 36)), 'number', 0, 127); }); }
     }
     function renderEditor(app) {
       const t = currentTrack(), c = currentClip(), sec = el('section', app, undefined, 'section'); sec.style.setProperty('--track', t.color); el('h2', sec, tx('03 · CLIP EDITOR — TRACK {0} / CLIP {1}', state.selectedTrack + 1, state.selectedClip + 1));
@@ -363,7 +363,7 @@ export default {
     }
     function view(c) { const g = c.grid, u = 16 / g, offset = state.editPage * state.zoom, span = Math.min(state.zoom, c.bars * 16 - offset); return { g, u, offset, span, cols: Math.round(span / u) }; }
     function renderPiano(sec, t, c) {
-      const { g, u, offset, span, cols } = view(c), count = t.type === 'drums' ? 16 : 24, cell = g === 16 ? 27 : g === 32 ? 17 : 11, wrap = el('div', sec, undefined, 'gridwrap'), body = el('div', wrap, undefined, 'pianobody'); body.style.minWidth = (112 + cols * cell) + 'px';
+      const { g, u, offset, span, cols } = view(c), count = t.type === 'drums' ? rowsOf(t).length : 24, cell = g === 16 ? 27 : g === 32 ? 17 : 11, wrap = el('div', sec, undefined, 'gridwrap'), body = el('div', wrap, undefined, 'pianobody'); body.style.minWidth = (112 + cols * cell) + 'px';
       const keys = el('div', body, undefined, 'keys'); el('div', keys, tx('▶ Auditie'), 'ruler');
       for (let r = 0; r < count; r++) { const n = state.pianoBase + 23 - r; const label = t.type === 'drums' ? rowsOf(t)[r].name : pitch(n), k = el('div', keys, label, 'key' + (t.type !== 'drums' && [1, 3, 6, 8, 10].includes(n % 12) ? ' black' : '') + (t.type === 'drums' && r === state.selectedRow ? ' selected' : '')); k.tabIndex = 0; k.setAttribute('role', 'button'); k.setAttribute('aria-label', tx('Auditeer {0}', label)); const play = () => { state.selectedRow = r; audition(n, r); }; k.onclick = play; k.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } }; }
       const area = el('div', body, undefined, 'gridarea'), ruler = el('div', area, undefined, 'ruler'); for (let j = 0; j < span; j++) { const s = el('span', ruler, j % 4 === 0 ? `${Math.floor((offset + j) / 16) + 1}.${Math.floor(j % 16 / 4) + 1}` : '·'); s.style.left = j / span * 100 + '%'; }
@@ -379,7 +379,7 @@ export default {
           if (e.button !== 0) return; e.stopPropagation(); e.preventDefault(); b.setPointerCapture(e.pointerId); const initial = { x: e.clientX, y: e.clientY, step: n.step, note: n.note, row: n.row, len: n.len }, rect = ground.getBoundingClientRect(), resizing = e.target?.className === 'resize'; let moved = false; state.selectedNote = n.id; remember();
           b.onpointermove = ev => {
             const dx = Math.round((ev.clientX - initial.x) / rect.width * cols), dy = Math.round((ev.clientY - initial.y) / rect.height * count); if (dx || dy) moved = true;
-            if (resizing) n.len = Math.max(u, Math.min(1024, initial.len + dx * u)); else { n.step = Math.max(0, Math.min(c.bars * 16 - u, initial.step + dx * u)); if (t.type === 'drums') { n.row = Math.max(0, Math.min(15, initial.row + dy)); n.note = rowsOf(t)[n.row].note; } else n.note = Math.max(0, Math.min(127, initial.note - dy)); }
+            if (resizing) n.len = Math.max(u, Math.min(1024, initial.len + dx * u)); else { n.step = Math.max(0, Math.min(c.bars * 16 - u, initial.step + dx * u)); if (t.type === 'drums') { n.row = Math.max(0, Math.min(rowsOf(t).length - 1, initial.row + dy)); n.note = rowsOf(t)[n.row].note; } else n.note = Math.max(0, Math.min(127, initial.note - dy)); }
             place(b, n);
           };
           b.onpointerup = ev => { ev.preventDefault(); b.onpointermove = null; b.onpointerup = null; try { b.releasePointerCapture(ev.pointerId); } catch { } if (!moved) { history.pop(); } render(); };
