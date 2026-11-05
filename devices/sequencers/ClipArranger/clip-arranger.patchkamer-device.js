@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.1 — De poorten staan in één horizontale rij bovenin de kaart (ui.jacks): ingang, dan alleen zoveel spooruitgangen als er sporen zijn (met alleen het nummer), en rechts altijd de multi-MIDI-poort Sporen. Minder sporen haalt de kabels van de verdwenen uitgangen weg.
 // 1.13.1 — Een drumspoor volgt het aangesloten apparaat (noteNames, contract v1.14): de rol toont de hele lijst klanken van het apparaat onder elkaar, met hun nootnummers en kanalen, ook als de kit of volgorde wijzigt.
 // 1.13.1 — Pads kiezen een spoor of starten een scène (state `pads`): noten in een instelbaar bereik (standaard 36…, de pads van een MPK mini) spelen niet maar kiezen
 //   spoor 1…n, en een tweede bereik (standaard 44…51) start scène 1…8. Standaard uit, dus een bestaande song klinkt gelijk. De instelling hoort bij de hardware: een preset laat haar staan.
@@ -80,7 +81,7 @@ const EN = {
   'ongebruikt': 'unused', 'Kabel → noten / trigs / CC': 'Cable → notes / trigs / CC', 'Deze uitgang blijft beschikbaar.': 'This output stays available.',
   'Sequencer: {0}': 'Sequencer: {0}', 'Invoer: {0}': 'Input: {0}', 'Clip Arranger sequencer': 'Clip Arranger sequencer',
   'Atmosfeer': 'Atmosphere', 'Bas': 'Bass', 'Variatie': 'Variation', 'Opbouw': 'Build-up', 'Hoofddeel': 'Main', 'Vrij': 'Free', 'Track {0}': 'Track {0}',
-  'MIDI / opname': 'MIDI / record', 'Rock drums': 'Rock drums'
+  'MIDI / opname': 'MIDI / record', 'MIDI': 'MIDI', 'Sporen': 'Tracks', 'Sporen: alle sporen met hun namen in één kabel': 'Tracks: all tracks with their names in one cable', 'Poorten: {0}': 'Ports: {0}', 'Rock drums': 'Rock drums'
 };
 // Nederlandse standaardnamen uit het oude bestand: een opgeslagen naam die hier gelijk aan is, wordt een lege naam en volgt dan de taal
 const OLD_TRACKS = ['Drums', 'Bas', 'Keys', 'Atmosfeer'], OLD_SCENES = ['Intro', 'Groove', 'Variatie', 'Break', 'Opbouw', 'Hoofddeel', 'Outro', 'Vrij'];
@@ -136,7 +137,7 @@ const frameLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.cliparranger', name: 'Clip Arranger', version: '1.13.1', kind: 'utility', category: 'sequencer', ui: { width: 1340, minWidth: 560 }, ports: PORTS,
+  id: 'nl.patchkamer.cliparranger', name: 'Clip Arranger', version: '1.13.1', kind: 'utility', category: 'sequencer', ui: { width: 1340, minWidth: 560, jacks: true }, ports: PORTS,
   i18n: { nl: { ports: Object.assign({ input: 'MIDI / opname', tracks: 'Sporen' }, ...Array.from({ length: 16 }, (_, i) => ({ ['track' + (i + 1)]: 'Track ' + (i + 1) }))) } },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.split('{' + i + '}').join(v); }); return t; };
@@ -275,8 +276,8 @@ export default {
     }
     const instance = {
       inputs: {}, outputs: {}, eventBundles: { tracks: () => bundle() },
-      mount(container) { const wrap = document.createElement('div'); container.appendChild(wrap); root = wrap.attachShadow({ mode: 'open' }); namesSig = ''; readTargets(); render(); if (stopFrame) stopFrame(); stopFrame = frameLoop(host, self, animate, 30); },
-      unmount() { if (stopFrame) { stopFrame(); stopFrame = null; } root = null; viewRefs = {}; },
+      mount(container) { jackBar = document.createElement('div'); jackBar.className = 'pk-jackbar'; jackBar.style.cssText = 'display:flex;align-items:flex-end;gap:6px 14px;padding:6px 10px;flex-wrap:wrap'; container.appendChild(jackBar); portN = 0; const wrap = document.createElement('div'); container.appendChild(wrap); root = wrap.attachShadow({ mode: 'open' }); namesSig = ''; readTargets(); render(); buildJacks(); if (stopFrame) stopFrame(); stopFrame = frameLoop(host, self, animate, 30); },
+      unmount() { if (stopFrame) { stopFrame(); stopFrame = null; } root = null; viewRefs = {}; if (jackBar) { jackBar.remove(); jackBar = null; } },
       onPeers(list) { if (!dead) readTargets(list); },
       onStep(info) { try { schedule(info); } catch (e) { error = tx('Sequencer: {0}', e?.message || e); } },
       onTransport(info) { if (dead) return; const cue = seek; playing = !!info?.playing; reset(); if (playing) seek = cue; },
@@ -312,8 +313,24 @@ export default {
     function check(parent, label, value, fn) { const l = el('label', parent, undefined, 'check'), n = el('input', l); n.type = 'checkbox'; n.checked = value; n.onchange = () => fn(n.checked); el('span', l, label); return n; }
     function selectClip(ti, ci) { setSelectedTrack(ti); state.selectedClip = ci; state.selectedNote = -1; state.editPage = 0; render(); }
     const pct = v => Math.round(v * 100) + '%';
+    // poortenrij (ui.jacks): ingang links, spooruitgangen 1…n met alleen het nummer, rechts altijd de multi-MIDI-poort
+    let jackBar = null, portN = 0;
+    function buildJacks() {
+      if (!jackBar) return; jackBar.replaceChildren();
+      const group = (cls) => { const d = document.createElement('div'); d.className = cls; jackBar.appendChild(d); return d; };
+      try {
+        const left = group('pk-jin'); host.ui.jack(self, left, 'input', 'in', tx('MIDI')).title = tx('MIDI / opname');
+        const mid = group('pk-jtr'); mid.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap'; state.tracks.forEach((t, i) => { const j = host.ui.jack(self, mid, 'track' + (i + 1), 'out', String(i + 1)); j.title = `${i + 1} · ${trackName(i)}` + (t.target ? ' → ' + t.target : ''); });
+        const right = group('pk-jmu'); right.style.marginLeft = 'auto'; host.ui.jack(self, right, 'tracks', 'out', tx('Sporen')).title = tx('Sporen: alle sporen met hun namen in één kabel');
+      } catch (e) { error = tx('Poorten: {0}', e?.message || e); }
+    }
+    function syncPorts() {
+      const n = state.tracks.length; if (n === portN) return;
+      try { host.setPorts(self, { ...PORTS, eventOut: PORTS.eventOut.slice(0, n) }); portN = n; } catch (e) { return; }   // de host kent ons nog niet: mount probeert het opnieuw
+      buildJacks();
+    }
     function render() {
-      syncBundle(); if (!root) return; root.replaceChildren(); viewRefs = { slots: [], scenes: [], song: [], playline: null, status: null }; const style = el('style', root); style.textContent = CSS; const app = el('div', root, undefined, 'rg'); app.tabIndex = 0; app.setAttribute('aria-label', tx('Clip Arranger sequencer'));
+      syncPorts(); syncBundle(); if (!root) return; root.replaceChildren(); viewRefs = { slots: [], scenes: [], song: [], playline: null, status: null }; const style = el('style', root); style.textContent = CSS; const app = el('div', root, undefined, 'rg'); app.tabIndex = 0; app.setAttribute('aria-label', tx('Clip Arranger sequencer'));
       app.onkeydown = e => { if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target?.tagName)) return; if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); } else if (e.key === 'Delete' || e.key === 'Backspace') { if (selected()) { e.preventDefault(); change(() => { currentClip().notes = currentClip().notes.filter(n => n.id !== state.selectedNote); state.selectedNote = -1; }); } } };
       const top = el('div', app, undefined, 'row spread'), brand = el('div', top); el('div', brand, 'PATCHKAMER · ' + tx('CLIPS / SCENES / SONG'), 'kicker'); el('h1', brand, tx('CLIP ARRANGER')); viewRefs.status = el('div', top, tx('Host transport staat stil.'), 'status');
       const tools = el('div', app, undefined, 'toolbar'); input(tools, tx('SONG'), state.title || tx('Nieuwe song'), v => change(() => state.title = v.slice(0, 64)));
@@ -441,7 +458,7 @@ export default {
     }
     function renderPorts(app) {
       const sec = el('section', app, undefined, 'section'); el('h2', sec, tx('05 · INSTRUMENTEN TOEWIJZEN')); el('p', sec, tx('Verbind iedere trackuitgang (bovenin de kaart) met één instrumentingang. Doelapparaat is een vrij label; de eventkabel bepaalt de toewijzing. De ingang MIDI / opname gaat naar het geselecteerde spoor.'), 'small'); const ports = el('div', sec, undefined, 'ports');
-      for (let i = 0; i < 16; i++) { const t = state.tracks[i], box = el('div', ports, undefined, 'port'); box.style.setProperty('--track', t?.color || '#39454c'); el('div', box, `${i + 1} · ${t ? trackName(i) : tx('ongebruikt')}`); el('small', box, t ? (t.target || tx('Kabel → noten / trigs / CC')) : tx('Deze uitgang blijft beschikbaar.')); }
+      for (let i = 0; i < state.tracks.length; i++) { const t = state.tracks[i], box = el('div', ports, undefined, 'port'); box.style.setProperty('--track', t?.color || '#39454c'); el('div', box, `${i + 1} · ${t ? trackName(i) : tx('ongebruikt')}`); el('small', box, t ? (t.target || tx('Kabel → noten / trigs / CC')) : tx('Deze uitgang blijft beschikbaar.')); }
     }
     function animate() {
       if (!root || dead) return; while (pending.length && pending[0].time <= ctx.currentTime) visual = pending.shift(); if (renderWanted) { renderWanted = false; render(); }
