@@ -2211,7 +2211,11 @@ function reloadDevice(id){
   if(mini) setMini(nid,true);
   requestAnimationFrame(()=>{ cables.forEach(c=>{ const ok=(c.from.id!==id||portExists(nid,c.from.port,'out'))&&(c.to.id!==id||portExists(nid,c.to.port,'in')); if(ok) patch(c); }); if(wasSel) select(nid); });
   return true; }
-function updatePlaced(){ let n=0; [...Host.devices.keys()].forEach(id=>{ try{ if(reloadDevice(id)) n++; }catch(e){ console.warn('reloadDevice()',e); } }); return n; }
+// newKeys: de apparaat@versie-sleutels die deze scan voor het eerst zag. Staat er een apparaat op de vloer met een lagere versie en bracht de scan een hogere, dan gaat het mee omhoog (state, kabels en grootte blijven).
+function updatePlaced(newKeys){ let n=0; [...Host.devices.keys()].forEach(id=>{ try{
+    const r=Host.devices.get(id); if(!r) return; const top=Host.latest(r.def.id);
+    if(newKeys&&top&&top.version!==r.def.version&&cmpVer(top.version,r.def.version)>0&&newKeys.has(Host.key(top.id,top.version))){ switchVersion(id,top.version); n++; }
+    else if(reloadDevice(id)) n++; }catch(e){ console.warn('reloadDevice()',e); } }); return n; }
 function portExists(id,port,dir){ const r=Host.devices.get(id); return !!(r&&r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`)); }
 function select(id){ const ch=selected!==id; selected=id; Host.devices.forEach((r,k)=>r.el.classList.toggle('sel',k===id)); if(ch) peersChanged(); }
 let _frameRaf=0, _vis={t:-1,wr:null};
@@ -2574,7 +2578,7 @@ async function rescanSource(src,interactive){
   let pn=0, pc=0; PR.libs.filter(l=>l.ro&&l.src&&l.src.sid===src.sid).forEach(l=>{ if(!libsBefore.has(l.lid)) pn++; else if(libsBefore.get(l.lid)!==pkSig(l)) pc++; });
   const total=nw.length+ch.length+pn+pc;
   LIBMARK.nw=new Set(total<=25?nw.map(d=>d.id):[]); LIBMARK.ch=new Set(total<=25?ch.map(d=>d.id):[]); clearTimeout(LIBMARK.t); if(LIBMARK.nw.size||LIBMARK.ch.size) LIBMARK.t=setTimeout(()=>{ LIBMARK.nw=new Set(); LIBMARK.ch=new Set(); paintLib(); },120000);
-  const upd=ch.length?updatePlaced():0;
+  const upd=(ch.length||nw.length)?updatePlaced(new Set(nw.map(d=>Host.key(d.id,d.version)))):0;
   paintLib(); refreshVersionSelects(); presetRefreshAll(); if(wsPanel&&!wsPanel.hidden) paintPatches();   // de bibliotheek meteen opnieuw tekenen
   if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); }
   const errs=(r&&r.errs)||[], parts=[];
