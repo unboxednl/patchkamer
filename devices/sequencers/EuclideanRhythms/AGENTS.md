@@ -15,7 +15,7 @@ Wat een rij speelt, is volledig **gegenereerd uit getallen**; er staat geen lijs
 | Naam | `Euclidean Rhythms` in alle talen; poortnamen hebben een Nederlandse variant (via `i18n`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `reset` (Reset) en `keys` (Notes in / Noten in), eventuitgang `trigs` (Trigs / notes); geen audio, geen modulatie |
-| Contract | v1.11 |
+| Contract | v1.14 (apparaatversie 1.14.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Euclides, `nl.patchkamer.euclides`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state die je zelf in dit apparaat zet (zonder de nieuwe velden) klinkt gelijk aan vroeger: alle nieuwe velden hebben als standaard het oude gedrag.
@@ -173,6 +173,10 @@ De drumpresets gebruiken één kanaalplan; stel het drumapparaat daarop in:
 | `ch6` | percussie B (cowbell, woodblock) |
 | `ch7` | percussie C (shaker, tamboerijn, tom; in de rollen ook hat-roll) |
 | `ch8` | crash of effect |
+
+## Klanken van de drumcomputer tonen
+
+Hangt aan `trigs` een apparaat dat `noteNames()` heeft (contract v1.14: Drum Kit, Pulse Drums, Click Synth, Latin Percussion), dan leest dit apparaat die lijst via `host.cablesFrom(self, 'trigs')` en `host.peers` / `onPeers`. De uitgangskeuze per rij toont dan `k · naam` in plaats van `Spoor k` (de naam op plaats k van het apparaat), en de nootkeuze van de gekozen rij toont de namen achter de nootnamen (`C2 · Bass drum`). Wijzigt het apparaat kit, volgorde of noot, dan volgen de teksten direct. Alleen de teksten veranderen: `out` en `note` in de state en de gebeurtenissen blijven gelijk. `Spoor k` is het k-de kanaal van de drumcomputer; hebben twee kanalen dezelfde noot, dan telt de lijst die noot één keer en kan de naam een plaats opschuiven. Zonder kabel of zonder namen is alles als voorheen.
 
 ## Live spelen met een toetsenbord
 
