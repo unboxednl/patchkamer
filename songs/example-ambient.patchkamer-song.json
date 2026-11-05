@@ -1,0 +1,1066 @@
+{
+ "format": "patchkamer-song",
+ "formatVersion": 1,
+ "title": "Example Ambient",
+ "author": "Patchkamer examples",
+ "license": "CC-BY-4.0",
+ "description": "A format example, not a finished track: a slow ambient piece in A minor at 70 BPM with a pad and a sparse melody, arranged as intro, main, break and outro in a Clip Arranger (40 bars), with a reverb on a mixer send. It teaches the song file layout and has not been listened to.",
+ "created": "2026-11-05T00:00:00.000Z",
+ "patchkamer": "1.13",
+ "workspace": {
+  "format": "patchkamer-werkruimte",
+  "formatVersion": 1,
+  "name": "Example Ambient",
+  "defs": [],
+  "sources": [],
+  "bpm": 70,
+  "swing": 0,
+  "view": {
+   "x": 0,
+   "y": 0,
+   "scale": 1
+  },
+  "devices": [
+   {
+    "id": "d1",
+    "def": "nl.patchkamer.cliparranger",
+    "version": "1.13.0",
+    "x": 0,
+    "y": 0,
+    "state": {
+     "title": "Example Ambient",
+     "tracks": [
+      {
+       "name": "Pad",
+       "target": "Bowed Ensemble",
+       "type": "notes",
+       "transpose": 0,
+       "velocity": 1,
+       "gate": 1,
+       "clips": [
+        {
+         "name": "Intro",
+         "bars": 8,
+         "grid": 16,
+         "notes": [
+          {
+           "step": 0,
+           "note": 57,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 0
+          },
+          {
+           "step": 0,
+           "note": 60,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 1
+          },
+          {
+           "step": 0,
+           "note": 64,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 2
+          },
+          {
+           "step": 0,
+           "note": 71,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 3
+          },
+          {
+           "step": 32,
+           "note": 53,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 4
+          },
+          {
+           "step": 32,
+           "note": 57,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 5
+          },
+          {
+           "step": 32,
+           "note": 60,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 6
+          },
+          {
+           "step": 32,
+           "note": 64,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 7
+          },
+          {
+           "step": 64,
+           "note": 55,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 8
+          },
+          {
+           "step": 64,
+           "note": 60,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 9
+          },
+          {
+           "step": 64,
+           "note": 64,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 10
+          },
+          {
+           "step": 64,
+           "note": 67,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 11
+          },
+          {
+           "step": 96,
+           "note": 55,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 12
+          },
+          {
+           "step": 96,
+           "note": 59,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 13
+          },
+          {
+           "step": 96,
+           "note": 62,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 14
+          },
+          {
+           "step": 96,
+           "note": 64,
+           "vel": 0.4,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 15
+          }
+         ],
+         "cc": []
+        },
+        {
+         "name": "Main",
+         "bars": 8,
+         "grid": 16,
+         "notes": [
+          {
+           "step": 0,
+           "note": 57,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 0
+          },
+          {
+           "step": 0,
+           "note": 60,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 1
+          },
+          {
+           "step": 0,
+           "note": 64,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 2
+          },
+          {
+           "step": 0,
+           "note": 71,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 3
+          },
+          {
+           "step": 32,
+           "note": 53,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 4
+          },
+          {
+           "step": 32,
+           "note": 57,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 5
+          },
+          {
+           "step": 32,
+           "note": 60,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 6
+          },
+          {
+           "step": 32,
+           "note": 64,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 7
+          },
+          {
+           "step": 64,
+           "note": 55,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 8
+          },
+          {
+           "step": 64,
+           "note": 60,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 9
+          },
+          {
+           "step": 64,
+           "note": 64,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 10
+          },
+          {
+           "step": 64,
+           "note": 67,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 11
+          },
+          {
+           "step": 96,
+           "note": 55,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 12
+          },
+          {
+           "step": 96,
+           "note": 59,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 13
+          },
+          {
+           "step": 96,
+           "note": 62,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 14
+          },
+          {
+           "step": 96,
+           "note": 64,
+           "vel": 0.5,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 15
+          }
+         ],
+         "cc": []
+        },
+        {
+         "name": "Break",
+         "bars": 8,
+         "grid": 16,
+         "notes": [
+          {
+           "step": 0,
+           "note": 57,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 0
+          },
+          {
+           "step": 0,
+           "note": 64,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 1
+          },
+          {
+           "step": 32,
+           "note": 53,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 2
+          },
+          {
+           "step": 32,
+           "note": 60,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 3
+          },
+          {
+           "step": 64,
+           "note": 55,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 4
+          },
+          {
+           "step": 64,
+           "note": 64,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 5
+          },
+          {
+           "step": 96,
+           "note": 55,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 6
+          },
+          {
+           "step": 96,
+           "note": 62,
+           "vel": 0.35,
+           "len": 32,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 7
+          }
+         ],
+         "cc": []
+        },
+        {
+         "name": "Outro",
+         "bars": 8,
+         "grid": 16,
+         "notes": [
+          {
+           "step": 0,
+           "note": 57,
+           "vel": 0.4,
+           "len": 64,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 0
+          },
+          {
+           "step": 0,
+           "note": 64,
+           "vel": 0.35,
+           "len": 64,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 1
+          },
+          {
+           "step": 64,
+           "note": 57,
+           "vel": 0.3,
+           "len": 64,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 2
+          },
+          {
+           "step": 64,
+           "note": 64,
+           "vel": 0.25,
+           "len": 64,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 3
+          }
+         ],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        }
+       ],
+       "liveClip": 0
+      },
+      {
+       "name": "Melody",
+       "target": "Poly Chorus",
+       "type": "notes",
+       "transpose": 0,
+       "velocity": 1,
+       "gate": 1,
+       "clips": [
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "Melody",
+         "bars": 16,
+         "grid": 16,
+         "notes": [
+          {
+           "step": 8,
+           "note": 76,
+           "vel": 0.55,
+           "len": 12,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 0
+          },
+          {
+           "step": 32,
+           "note": 74,
+           "vel": 0.5,
+           "len": 10,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 1
+          },
+          {
+           "step": 44,
+           "note": 72,
+           "vel": 0.5,
+           "len": 14,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 2
+          },
+          {
+           "step": 72,
+           "note": 76,
+           "vel": 0.6,
+           "len": 16,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 3
+          },
+          {
+           "step": 96,
+           "note": 79,
+           "vel": 0.55,
+           "len": 12,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 4
+          },
+          {
+           "step": 112,
+           "note": 76,
+           "vel": 0.5,
+           "len": 8,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 5
+          },
+          {
+           "step": 136,
+           "note": 74,
+           "vel": 0.55,
+           "len": 12,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 6
+          },
+          {
+           "step": 160,
+           "note": 72,
+           "vel": 0.5,
+           "len": 20,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 7
+          },
+          {
+           "step": 192,
+           "note": 76,
+           "vel": 0.6,
+           "len": 12,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 8
+          },
+          {
+           "step": 208,
+           "note": 79,
+           "vel": 0.65,
+           "len": 16,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 9
+          },
+          {
+           "step": 232,
+           "note": 76,
+           "vel": 0.55,
+           "len": 8,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 10
+          },
+          {
+           "step": 240,
+           "note": 74,
+           "vel": 0.5,
+           "len": 14,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 11
+          },
+          {
+           "step": 264,
+           "note": 72,
+           "vel": 0.5,
+           "len": 12,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 12
+          },
+          {
+           "step": 288,
+           "note": 69,
+           "vel": 0.55,
+           "len": 24,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 13
+          },
+          {
+           "step": 320,
+           "note": 74,
+           "vel": 0.5,
+           "len": 12,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 14
+          },
+          {
+           "step": 352,
+           "note": 72,
+           "vel": 0.45,
+           "len": 20,
+           "prob": 1,
+           "ratchet": 1,
+           "row": 0,
+           "id": 15
+          }
+         ],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        },
+        {
+         "name": "",
+         "bars": 1,
+         "grid": 16,
+         "notes": [],
+         "cc": []
+        }
+       ],
+       "liveClip": 0
+      }
+     ],
+     "scenes": [
+      {
+       "name": "Intro"
+      },
+      {
+       "name": "Main"
+      },
+      {
+       "name": "Break"
+      },
+      {
+       "name": "Outro"
+      },
+      {
+       "name": ""
+      },
+      {
+       "name": ""
+      },
+      {
+       "name": ""
+      },
+      {
+       "name": ""
+      }
+     ],
+     "arrangement": [
+      {
+       "scene": 0,
+       "bars": 8,
+       "repeats": 1
+      },
+      {
+       "scene": 1,
+       "bars": 16,
+       "repeats": 1
+      },
+      {
+       "scene": 2,
+       "bars": 8,
+       "repeats": 1
+      },
+      {
+       "scene": 3,
+       "bars": 8,
+       "repeats": 1
+      }
+     ],
+     "mode": "song",
+     "songLoop": true,
+     "armed": true
+    }
+   },
+   {
+    "id": "d2",
+    "def": "nl.patchkamer.bowedensemble",
+    "version": "1.11.1",
+    "x": 360,
+    "y": 0,
+    "state": {
+     "cutoff": 3200,
+     "resonance": 0.7,
+     "body": 0.7,
+     "bow": 0.08,
+     "detune": 6.0,
+     "width": 0.8,
+     "vibrato": 0.2,
+     "rate": 5.1,
+     "human": 0.5,
+     "ensemble": 0.8,
+     "space": 0.75,
+     "pan": 0.0,
+     "expression": 0.9,
+     "level": 0.68,
+     "attack": 3.2,
+     "decay": 1.5,
+     "sustain": 1,
+     "release": 7.0,
+     "velocity": 0.7,
+     "transpose": 0,
+     "preset": "Custom"
+    }
+   },
+   {
+    "id": "d3",
+    "def": "nl.patchkamer.polychorus",
+    "version": "1.11.1",
+    "x": 360,
+    "y": 300,
+    "state": {
+     "saw": 0,
+     "pulse": 0.6,
+     "sub": 0,
+     "noise": 0.08,
+     "pw": 0.3,
+     "pwm": 0.5,
+     "transpose": 0,
+     "cutoff": 5000,
+     "resonance": 0.25,
+     "filterEnv": 0.5,
+     "keytrack": 0.8,
+     "drive": 0.1,
+     "attack": 2,
+     "decay": 2,
+     "sustain": 0.8,
+     "release": 4,
+     "lfoRate": 0.4,
+     "vibrato": 0,
+     "lfoFilter": 0.1,
+     "glide": 0.005,
+     "chorusMode": 2,
+     "chorusMix": 0.8,
+     "width": 1,
+     "hpf": 2,
+     "vcaMode": "env",
+     "level": 0.33
+    }
+   },
+   {
+    "id": "d4",
+    "def": "nl.patchkamer.mixer",
+    "version": "2.4.1",
+    "x": 720,
+    "y": 150,
+    "state": {
+     "v": 2,
+     "nCh": 2,
+     "nGrp": 0,
+     "eq": 3,
+     "ch": [
+      {
+       "name": "Pad",
+       "lvl": -10,
+       "pan": 0,
+       "send": 0.5
+      },
+      {
+       "name": "Melody",
+       "lvl": -12,
+       "pan": 0.2,
+       "send": 0.7
+      }
+     ],
+     "master": {
+      "lvl": 0.0
+     }
+    }
+   },
+   {
+    "id": "d5",
+    "def": "nl.patchkamer.room",
+    "version": "1.11.1",
+    "x": 1050,
+    "y": 400,
+    "state": {
+     "sync": true,
+     "time": 0.375,
+     "fb": 0.3,
+     "hp": 200,
+     "dsend": 0.0,
+     "size": 8,
+     "tone": 3000,
+     "wet": 1.0
+    }
+   },
+   {
+    "id": "d6",
+    "def": "nl.patchkamer.masterchain",
+    "version": "1.12.1",
+    "x": 1050,
+    "y": 100,
+    "state": {
+     "profile": "transparent",
+     "target": -15.6,
+     "gain": 0,
+     "ceiling": -3.0,
+     "eq": true,
+     "low": 0.0,
+     "mid": 0.0,
+     "high": -0.2,
+     "compress": true,
+     "threshold": -18,
+     "ratio": 1.15,
+     "attack": 0.03,
+     "release": 0.25,
+     "knee": 6,
+     "makeup": 0,
+     "compMix": 1,
+     "limit": true
+    }
+   },
+   {
+    "id": "d7",
+    "def": "nl.patchkamer.speakers",
+    "version": "1.11.0",
+    "x": 1380,
+    "y": 100,
+    "state": {
+     "lvl": 0.8
+    }
+   }
+  ],
+  "cables": [
+   {
+    "from": {
+     "id": "d1",
+     "port": "track1"
+    },
+    "to": {
+     "id": "d2",
+     "port": "notes"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d1",
+     "port": "track2"
+    },
+    "to": {
+     "id": "d3",
+     "port": "notes"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d2",
+     "port": "out"
+    },
+    "to": {
+     "id": "d4",
+     "port": "ch1"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d3",
+     "port": "out"
+    },
+    "to": {
+     "id": "d4",
+     "port": "ch2"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d4",
+     "port": "s1"
+    },
+    "to": {
+     "id": "d5",
+     "port": "in"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d5",
+     "port": "out"
+    },
+    "to": {
+     "id": "d4",
+     "port": "r1"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d4",
+     "port": "out"
+    },
+    "to": {
+     "id": "d6",
+     "port": "in"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d6",
+     "port": "out"
+    },
+    "to": {
+     "id": "d7",
+     "port": "in"
+    },
+    "kind": "audio"
+   }
+  ]
+ }
+}
