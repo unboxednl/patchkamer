@@ -9,7 +9,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 2
 1. [Wat synths doen](#wat-synths-doen)
 2. [Welke synth voor welk doel](#welke-synth-voor-welk-doel)
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
-4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
+4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
@@ -39,6 +39,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Een bas die ik vanaf mijn eigen toetsenbord of sequencer speel | [Low Bass](#low-bass), [Basic Mono](#basic-mono), [Sub Line](#sub-line) |
 | Een eenvoudige, directe monoklank met weinig knoppen | [Basic Mono](#basic-mono) |
 | Een lead met twee toonhoogten tegelijk, ringmodulatie, hard sync of sample & hold | [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono) |
+| Een klassiek analoog monogeluid: dikke bas, zingende lead, een resonant filter dat zelf zingt | [Ladder Mono](#ladder-mono) |
 | Een monosynth die ik van binnen kan omschakelen, met een ingang voor extern geluid | [Patch Mono](#patch-mono) |
 | Pads en polyfone klanken met een ingebouwde chorus | [Poly Chorus](#poly-chorus) |
 | Een grote, flexibele polyfone synth met drie oscillatoren en twee filters | [Triple Osc Poly](#triple-osc-poly) |
@@ -361,6 +362,41 @@ Geen toetsenbord? Gebruik dan **Houd noot** of **Test akkoord** op de kaart.
 - **Klankbeeld** vervangt veel regelaars tegelijk. Kies het eerst en pas daarna aan. Als je een tune kiest, toont **Klankbeeld** de beginklank waar de tune op gebaseerd is.
 - De monostand speelt één noot tegelijk. De duofone stand speelt twee toonhoogten tegelijk (de laagste en de hoogste toets die je vasthoudt).
 - Ondersteunt je browser geen AudioWorklet, dan meldt de kaart dat de audiomotor niet beschikbaar is.
+
+### Ladder Mono
+
+**Waar het voor dient.** Een monofone analoge synth in de geest van de klassieke analoge monosynths: dikke bassen, zingende en schreeuwende leads, mono-koper en -strijkers, plucks en geluidseffecten. Hij heeft drie oscillators, een ruisbron, een mixer die overstuurd kan raken en een vierpolig **24 dB-laddermodel-filter** met terugkoppeling dat bij een hoge **Emphasis** uit zichzelf gaat zingen. Twee omhullingen (filter en volume), toetsvolging, glide, een LFO en pitchbend maken het af. Al het geluid wordt gemaakt in een AudioWorklet, met oversampling in het filter, bandbegrensde oscillators en een bewaking tegen ongeldige waarden.
+
+![De kaart van Ladder Mono](../images/nl/synths/ladder-mono.png)
+
+**Regelaars.**
+
+- **Oscillators:** elk van de drie heeft een **Golfvorm** (driehoek, haaientand, zaagtand, blok, brede puls, smalle puls), een **Bereik** (−2 tot +2 octaven) en een **Niveau**. Oscillator 2 en 3 hebben ook een fijne **Stemming** (±7 halve tonen). **Sync 2 op 1** start oscillator 2 opnieuw bij elke ronde van oscillator 1. **Osc 3 volgt klavier** kun je uitzetten om oscillator 3 als vaste lage drone te gebruiken.
+- **Mixer:** **Ruis** (wit of roze) en **Mixer-overstuur** (de mixer raakt verzadigd als je hem hard aanstuurt).
+- **Filter:** **Cutoff** (20 tot 16000 Hz), **Emphasis** (van 0 tot 105%: boven ongeveer 100% zingt het filter uit zichzelf), **Omhullingsdiepte** (−5 tot +5 octaven) en **Toetsvolging** (0 tot 100%).
+- **Filteromhulling** en **Volume-omhulling:** elk met **Aanval**, **Verval**, **Houd** en **Loslaten**.
+- **Spelen:** **Glide** (0 tot 2 s), **Aanslag** (**Elke noot** start de omhullingen bij elke toets opnieuw, **Legato** alleen als er geen toets werd vastgehouden), **Bendbereik** (0 tot 12 halve tonen) en **Transpositie**.
+- **Modulatie:** **LFO-snelheid**, **LFO-vorm** (driehoek, blok, zaagtand, sample & hold), **LFO naar toonhoogte** (0 tot 100 cent) en **LFO naar filter** (0 tot 3 octaven). Het modulatiewiel (CC 1) voegt vibrato toe; pitchbend verschuift de toonhoogte.
+- **Uitgang:** **Uitgangsvervorming** en **Niveau**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Noten van **Keys / MIDI**, een sequencer of de **MIDI Hub**. |
+| **Mod** | sturing in (paars) | Een modulator kan 15 parameters bewegen (cutoff, emphasis, omhullingsdiepte, LFO-diepten, mixer-overstuur, de drie niveaus, beide stemmingen, ruis, glide, uitgangsvervorming en niveau). |
+| **Uit** | audio uit (blauwgroen) | Verbind met **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Ladder Mono** en **Speakers**. Kies de tune **Bass › Fat Ladder Bass** en speel lage noten. Draai **Emphasis** open voor een squelch, of open **Cutoff** terwijl je speelt. Voor een zingende lead kies je **Lead › Singing Lead**, speel je legato en glij je tussen de noten.
+
+**Tunes.** Pack **Ladder Mono Classics**: 58 tunes in 7 mappen (Bass, Lead, Brass and Strings, Plucks and Keys, Sequences, Effects, Percussion).
+
+**Tips en beperkingen.**
+
+- De synth speelt één noot tegelijk. Houd je een toets vast en druk je een andere in, dan klinkt de nieuwe; laat je hem los, dan klinkt de vastgehouden weer.
+- Zonder AudioWorklet blijft de synth stil en meldt de kaart dat.
+- Een zeer hoge **Emphasis** met een hoog **Niveau** kan hard zijn; begin laag.
+- Het filter krijgt het geluid van drie oscillators: met alle drie op volle **Niveau** wordt de mixer hard aangestuurd. Zet de niveaus lager of gebruik **Mixer-overstuur** voor het effect.
 
 ### Cross Mod Mono
 

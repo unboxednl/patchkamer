@@ -9,7 +9,7 @@ Synths are the devices that make sound from notes. This page covers the 26 synth
 1. [What synths do](#what-synths-do)
 2. [Which synth for which goal](#which-synth-for-which-goal)
 3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
-4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
+4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble)
 6. [Keys and strings](#keys-and-strings): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
@@ -39,6 +39,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | A bass played from my own keyboard or sequencer | [Low Bass](#low-bass), [Basic Mono](#basic-mono), [Sub Line](#sub-line) |
 | A simple, direct mono sound with few knobs | [Basic Mono](#basic-mono) |
 | A lead with two pitches at once, ring modulation, hard sync or sample & hold | [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono) |
+| A classic analog mono sound: fat bass, singing lead, resonant filter that sings by itself | [Ladder Mono](#ladder-mono) |
 | A mono synth I can re-wire inside, with an input for outside sound | [Patch Mono](#patch-mono) |
 | Pads and polyphonic sounds with a built-in chorus | [Poly Chorus](#poly-chorus) |
 | A big, flexible polyphonic synth with three oscillators and two filters | [Triple Osc Poly](#triple-osc-poly) |
@@ -361,6 +362,41 @@ No keyboard? Use **Hold note** or **Test chord** on the card instead.
 - **Sound** replaces many controls at once. Choose it first, then adjust. After you pick a tune, **Sound** shows the starting sound that the tune is based on.
 - Mono mode plays one note at a time. Duophonic mode plays two pitches at once (the lowest and the highest key you hold).
 - Without AudioWorklet support in your browser the card says that the audio engine is not available.
+
+### Ladder Mono
+
+**What it is for.** A monophonic analog synth in the spirit of the classic analog mono synths: fat basses, singing and screaming leads, mono brass and strings, plucks and sound effects. It has three oscillators, a noise source, a mixer that can be overloaded and a four-pole **24 dB ladder-model filter** with feedback that sings by itself at a high **Emphasis**. Two envelopes (filter and loudness), key tracking, glide, an LFO and pitch bend complete it. All the sound is made in an AudioWorklet, with oversampling in the filter, band-limited oscillators and a guard against invalid values.
+
+![The Ladder Mono card](../images/en/synths/ladder-mono.png)
+
+**Controls.**
+
+- **Oscillators:** each of the three has a **Waveform** (triangle, shark tooth, sawtooth, square, wide pulse, narrow pulse), a **Range** (−2 to +2 octaves) and a **Level**. Oscillators 2 and 3 also have a fine **Tune** (±7 semitones). **Sync 2 to 1** restarts oscillator 2 with every cycle of oscillator 1. **Osc 3 follows keyboard** can be switched off to use oscillator 3 as a fixed low drone.
+- **Mixer:** **Noise** (white or pink) and **Mixer overload** (the mixer saturates when it is driven hard).
+- **Filter:** **Cutoff** (20 to 16000 Hz), **Emphasis** (from 0 to 105%: above about 100% the filter oscillates by itself), **Envelope amount** (−5 to +5 octaves) and **Key tracking** (0 to 100%).
+- **Filter envelope** and **Loudness envelope:** **Attack**, **Decay**, **Sustain** and **Release** each.
+- **Play:** **Glide** (0 to 2 s), **Trigger** (**Every note** restarts the envelopes with every key, **Legato** only when no key was held), **Bend range** (0 to 12 semitones) and **Transpose**.
+- **Modulation:** **LFO rate**, **LFO shape** (triangle, square, saw, sample & hold), **LFO to pitch** (0 to 100 cents) and **LFO to filter** (0 to 3 octaves). The mod wheel (CC 1) adds vibrato; pitch bend moves the pitch.
+- **Output:** **Output drive** and **Level**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Notes from **Keys / MIDI**, a sequencer or the **MIDI Hub**. |
+| **Mod** | modulation in (purple) | A modulator can move 15 parameters (cutoff, emphasis, envelope amount, LFO depths, mixer overload, the three levels, both tunings, noise, glide, output drive and level). |
+| **Out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Ladder Mono** and **Speakers**. Pick the tune **Bass › Fat Ladder Bass** and play low notes. Turn **Emphasis** up for a squelch, or open **Cutoff** while you play. For a singing lead pick **Lead › Singing Lead**, play legato and slide between notes.
+
+**Tunes.** Pack **Ladder Mono Classics**: 58 tunes in 7 folders (Bass, Lead, Brass and Strings, Plucks and Keys, Sequences, Effects, Percussion).
+
+**Tips and limits.**
+
+- The synth plays one note at a time. If you hold a key and press another, the new one sounds; when you release it the held one sounds again.
+- Without AudioWorklet the synth stays silent and the card says so.
+- A very high **Emphasis** with a high **Level** can be loud; start low.
+- The filter takes the sound from three oscillators: with all three at full **Level** the mixer is driven hard. Lower the levels or use **Mixer overload** for the effect.
 
 ### Cross Mod Mono
 

@@ -4,7 +4,7 @@
 
 Kant-en-klare klanken voor apparaten die geluid maken (synths, samplers en drumapparaten), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, gebruik hem in een song of in een eigen bibliotheek. Apparaten zonder eigen geluid hebben [presets](../presets/README_NL.md).
 
-Deze map heeft **35 packs met 2216 tunes**, één pack per apparaat: 27 voor synths (1861 tunes), 2 voor samplers (148 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
+Deze map heeft **36 packs met 2274 tunes**, één pack per apparaat: 28 voor synths (1919 tunes), 2 voor samplers (148 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
@@ -27,6 +27,7 @@ Deze map heeft **35 packs met 2216 tunes**, één pack per apparaat: 27 voor syn
 | [Foundry](../devices/synths/Foundry/) | Foundry Styles | 69 | 11 | [`foundry-styles.patchkamer-tunes.json`](foundry-styles.patchkamer-tunes.json) |
 | [Four-Operator FM](../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | 11 | [`four-operator-fm-styles.patchkamer-tunes.json`](four-operator-fm-styles.patchkamer-tunes.json) |
 | [Grain Cloud](../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | 10 | [`grain-cloud-styles.patchkamer-tunes.json`](grain-cloud-styles.patchkamer-tunes.json) |
+| [Ladder Mono](../devices/synths/LadderMono/) | Ladder Mono Classics | 58 | 7 | [`ladder-mono-classics.patchkamer-tunes.json`](ladder-mono-classics.patchkamer-tunes.json) |
 | [Karplus String](../devices/synths/KarplusString/) | Karplus String Styles | 60 | 10 | [`karplus-string-styles.patchkamer-tunes.json`](karplus-string-styles.patchkamer-tunes.json) |
 | [Layered Landscape](../devices/synths/LayeredLandscape/) | Layered Landscape Styles | 71 | 11 | [`layered-landscape-styles.patchkamer-tunes.json`](layered-landscape-styles.patchkamer-tunes.json) |
 | [Low Bass](../devices/synths/LowBass/) | Low Bass Styles | 64 | 13 | [`low-bass-styles.patchkamer-tunes.json`](low-bass-styles.patchkamer-tunes.json) |
