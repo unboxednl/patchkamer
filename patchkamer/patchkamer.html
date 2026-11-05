@@ -286,12 +286,6 @@ svg.cables g.cable.drop{opacity:1} svg.cables g.cable.drop path:not(.hit):not(.m
 .pbar .pparts .pl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .pritem.fold .nm{font-weight:500}
 .pritem select.mv{font-size:10px;padding:1px 3px;max-width:110px}
-#setPanel .wsurl{width:100%;font-family:var(--mono,monospace);font-size:12px}
-#prPanel h4.tudev{margin:10px 0 4px;font-family:var(--disp);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg)}
-/* bibliotheekvenster: inhoud blijft binnen de rand, ook als het smal is */
-.libwin{grid-template-columns:minmax(0,1fr)}
-.libwin .libbar{flex-wrap:wrap;row-gap:4px;min-width:0}
-.libwin .libbar .t{flex-shrink:0;overflow:visible}
 /* meerdere werkruimtes: tabbalk, F1 t/m F10 */
 .wstabs{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:4px 0 0}
 .wstab{display:inline-flex;align-items:stretch;border:1px solid var(--line);background:var(--card);border-radius:6px;overflow:hidden;font-size:12px}
@@ -301,6 +295,12 @@ svg.cables g.cable.drop{opacity:1} svg.cables g.cable.drop path:not(.hit):not(.m
 .wstab .nm span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .wstab kbd{font-family:var(--mono);font-size:10px;opacity:.7}
 .wstab .x{padding:2px 6px;border-left:1px solid var(--line)} .wstab .x:hover{color:var(--stop)}
 .wstabs .add{all:unset;cursor:pointer;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:2px 9px;font-size:12px} .wstabs .add:hover{color:var(--fg)} .wstabs .add:focus-visible{outline:2px solid var(--sel)}
+#setPanel .wsurl{width:100%;font-family:var(--mono,monospace);font-size:12px}
+#prPanel h4.tudev{margin:10px 0 4px;font-family:var(--disp);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg)}
+/* bibliotheekvenster: inhoud blijft binnen de rand, ook als het smal is */
+.libwin{grid-template-columns:minmax(0,1fr)}
+.libwin .libbar{flex-wrap:wrap;row-gap:4px;min-width:0}
+.libwin .libbar .t{flex-shrink:0;overflow:visible}
 .libwin .libbar .cnt{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .libwin .libbody{min-width:0}
 .libwin #lib,.libwin .cat,.libwin .devs{min-width:0}
@@ -491,13 +491,13 @@ body.nopbar .pbar{display:none}
   </div>
 </section>
 
+<nav class="wstabs" id="wsTabs" aria-label="Werkruimtes" data-i18n-aria="attr.werkruimtes_tabs"></nav>
 <div class="room" id="room">
   <div class="floorwrap" id="floorwrap"><div class="floor" id="floor"><svg class="cables" id="cables"></svg><svg class="cables wire" id="wire"></svg></div>
     <div class="viewctl"><button id="zoomOut" title="uitzoomen" data-i18n-title="attr.uitzoomen">−</button><output id="zoomOut_v">100%</output><button id="zoomIn" title="inzoomen" data-i18n-title="attr.inzoomen">+</button><button id="zoomFit" title="alles in beeld" data-i18n-title="attr.alles_in_beeld" data-i18n="ui.alles">Alles</button><button id="zoomHome" title="terug naar begin" data-i18n-title="attr.terug_naar_begin">⌂</button></div>
     <div class="toast" id="devStatus" role="status" aria-live="polite"></div>
     <div class="floorempty" id="floorEmpty" hidden><div class="box">
       <h2 data-i18n="ui.lege_werkruimte">Lege werkruimte</h2>
-<nav class="wstabs" id="wsTabs" aria-label="Werkruimtes" data-i18n-aria="attr.werkruimtes_tabs"></nav>
       <p data-i18n-html="ui.patchkamer_heeft_zelf_geen_instrumenten">Patchkamer heeft zelf geen instrumenten. Laad een bibliotheek (een map met instrumenten, bijvoorbeeld <b data-i18n="ui.patchkamer_bibliotheek">patchkamer-bibliotheek</b>) of open een werkruimte die je eerder hebt bewaard.</p>
       <div class="wsrow"><button class="small" id="feLib" data-i18n="ui.bibliotheekmap_kiezen">Bibliotheekmap kiezen…</button><button class="small" id="feBundled" hidden data-i18n="ui.meegeleverde_bibliotheek_laden">Meegeleverde bibliotheek laden</button><button class="small" id="feOpen" data-i18n="ui.werkruimte_openen">Werkruimte openen…</button></div>
       <p id="feHint"></p>
@@ -803,6 +803,13 @@ const I18N={
    "m.mastering_uit":"<b>mastering uit</b> {0}",
    "m.soort_mastering":"mastering",
    "m.mastering_categorie":"Mastering",
+   "attr.werkruimtes_tabs":"Werkruimtes",
+   "m.werkruimte_toevoegen":"Werkruimte toevoegen",
+   "m.werkruimte_sluiten":"Werkruimte sluiten",
+   "m.werkruimte_sluiten_vraag":"<b>{0} sluiten?</b><br>Wijzigingen die je niet als bestand hebt bewaard, verdwijnen.",
+   "m.sluiten_knop":"Sluiten",
+   "m.werkruimte_maximum":"Maximaal 10 werkruimtes (F1 t/m F10).",
+   "m.werkruimte_laatste":"Dit is de enige werkruimte. Met Leeg maak je hem leeg; open of bewaar een andere via Werkruimte.",
    "ui.nieuwe_werkruimte":"Nieuwe werkruimte",
    "ui.nieuwe_werkruimte_uitleg":"Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden in het Tunes- en Presets-paneel gebruikt hetzelfde adres.",
    "ui.apparatenbibliotheek_laden":"Apparatenbibliotheek laden",
@@ -814,13 +821,6 @@ const I18N={
    "attr.adres_tunes":"adres van de tunes",
    "m.alle_tunes_laden":"Alles laden",
    "m.alle_presets_laden":"Alles laden",
-   "attr.werkruimtes_tabs":"Werkruimtes",
-   "m.werkruimte_toevoegen":"Werkruimte toevoegen",
-   "m.werkruimte_sluiten":"Werkruimte sluiten",
-   "m.werkruimte_sluiten_vraag":"<b>{0} sluiten?</b><br>Wijzigingen die je niet als bestand hebt bewaard, verdwijnen.",
-   "m.sluiten_knop":"Sluiten",
-   "m.werkruimte_maximum":"Maximaal 10 werkruimtes (F1 t/m F10).",
-   "m.werkruimte_laatste":"Dit is de enige werkruimte. Met Leeg maak je hem leeg; open of bewaar een andere via Werkruimte.",
    "m.alles_laden_titel_tunes":"Laad alle tunebibliotheken van het adres uit Instellingen > Nieuwe werkruimte",
    "m.alles_laden_titel_presets":"Laad alle presetbibliotheken van het adres uit Instellingen > Nieuwe werkruimte",
    "m.werkruimte_laden_adres":"Geen geldig adres voor {0}: controleer Instellingen > Nieuwe werkruimte",
@@ -1329,6 +1329,13 @@ const I18N={
    "m.mastering_uit":"<b>mastering out</b> {0}",
    "m.soort_mastering":"mastering",
    "m.mastering_categorie":"Mastering",
+   "attr.werkruimtes_tabs":"Workspaces",
+   "m.werkruimte_toevoegen":"Add workspace",
+   "m.werkruimte_sluiten":"Close workspace",
+   "m.werkruimte_sluiten_vraag":"<b>Close {0}?</b><br>Changes you have not saved as a file are lost.",
+   "m.sluiten_knop":"Close",
+   "m.werkruimte_maximum":"At most 10 workspaces (F1 to F10).",
+   "m.werkruimte_laatste":"This is the only workspace. Use Clear to empty it; open or save another one via Workspace.",
    "ui.nieuwe_werkruimte":"New workspace",
    "ui.nieuwe_werkruimte_uitleg":"What Patchkamer loads when you start with an empty workspace. For each kind you choose a GitHub folder or another address; everything below it is read. The Load all button in the Tunes and Presets panel uses the same address.",
    "ui.apparatenbibliotheek_laden":"Load the device library",
@@ -1345,13 +1352,6 @@ const I18N={
    "m.werkruimte_laden_adres":"No valid address for {0}: check Settings > New workspace",
    "m.kan_geen_mastering_ontvangen":" cannot receive mastering commands (configureMastering is missing)",
    "m.mastering_geen_regie":"Only a device with a mastering output can direct mastering.",
-   "attr.werkruimtes_tabs":"Workspaces",
-   "m.werkruimte_toevoegen":"Add workspace",
-   "m.werkruimte_sluiten":"Close workspace",
-   "m.werkruimte_sluiten_vraag":"<b>Close {0}?</b><br>Changes you have not saved as a file are lost.",
-   "m.sluiten_knop":"Close",
-   "m.werkruimte_maximum":"At most 10 workspaces (F1 to F10).",
-   "m.werkruimte_laatste":"This is the only workspace. Use Clear to empty it; open or save another one via Workspace.",
    "m.mastering_onbekende_actie":"Unknown mastering action: {0}",
    "m.mastering_geen_instellingen":"No settings were given.",
    "m.mastering_niets_terug":"There is no group change to undo.",
@@ -2838,6 +2838,42 @@ $('wsaReset').onclick=()=>{ WSA=JSON.parse(JSON.stringify(WSA_DEF)); saveWsa(); 
 wsaPaint();
 $('prLoadAll').onclick=async()=>{ const k=TUMODE==='tune'?'tun':'pre', b=$('prLoadAll'); b.disabled=true;
   try{ const src=await wsaLoad(k,true); if(src){ const st=SRCSTATE.get(src.sid)||{}; status(`${srcLabel(src)}: ${st.msg||''}`,st.state==='err'); } }catch(e){ status(e.message,true); } finally{ b.disabled=false; prPaintPanel(); } };
+// ---- meerdere werkruimtes: tabbalk, F1 t/m F10, toevoegen en sluiten ----
+// Elke werkruimte is een gewone werkruimte (zoals Bewaar/Open als bestand); wisselen bewaart de huidige, ruimt de vloer op en opent de gekozen. De afspeelstand stopt bij het wisselen.
+// De lijst wordt in IndexedDB bewaard (sleutel wslots) en weer geopend bij het starten.
+var PK_PENDING=false;   // na een taalwissel zet de host zelf de werkruimte terug
+var WSL={ready:false,busy:false,cur:0,slots:[]}; const WSL_MAX=10, wslUid=()=>'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+function wslSnap(){ const sl=WSL.slots[WSL.cur]; if(!sl) return; sl.name=WS.name; sl.state=Host.devices.size?workspaceState(false):null; }
+async function wslSave(){ if((typeof PK_WIPING!=='undefined'&&PK_WIPING)||!WSL.ready||WSL.busy) return; try{ wslSnap(); await IDB.set('wslots',{cur:WSL.cur,slots:JSON.parse(JSON.stringify(WSL.slots))}); }catch(e){} }
+function wslPaint(){ const nav=$('wsTabs'); if(!nav||!WSL.slots.length) return; nav.innerHTML='';
+  WSL.slots.forEach((sl,i)=>{ const on=i===WSL.cur, name=on?WS.name:(sl.name||pkt('m.naamloos'));
+    const t=document.createElement('div'); t.className='wstab'+(on?' on':''); t.setAttribute('role','group');
+    const b=document.createElement('button'); b.className='nm'; b.setAttribute('aria-pressed',on?'true':'false'); b.innerHTML='<kbd>F'+(i+1)+'</kbd><span>'+esc(name)+'</span>'; b.title=name+' (F'+(i+1)+')'; b.onclick=()=>wslSwitch(i);
+    const x=document.createElement('button'); x.className='x'; x.textContent='×'; x.title=pkt('m.werkruimte_sluiten'); x.setAttribute('aria-label',pkt('m.werkruimte_sluiten')+': '+name); x.onclick=()=>wslClose(i);
+    t.append(b,x); nav.appendChild(t); });
+  if(WSL.slots.length<WSL_MAX){ const a=document.createElement('button'); a.className='add'; a.textContent='+'; a.title=pkt('m.werkruimte_toevoegen'); a.setAttribute('aria-label',pkt('m.werkruimte_toevoegen')); a.onclick=wslAdd; nav.appendChild(a); } }
+async function wslShow(i){   // de vloer leegmaken en werkruimte i openen (of een nieuwe, lege starten)
+  if(Host.running) stop(); clearFloor(); WS.song=null; WSL.cur=i; const t=WSL.slots[i];
+  if(t.state&&Array.isArray(t.state.devices)&&t.state.devices.length) await openWorkspace(t.state); else { setName(t.name||''); await wsaAutoLoad(); }
+  wslPaint(); }
+async function wslSwitch(i){ if(WSL.busy||i===WSL.cur||i<0||i>=WSL.slots.length) return; WSL.busy=true; try{ wslSnap(); await wslShow(i); }finally{ WSL.busy=false; } wslSave(); }
+async function wslAdd(){ if(WSL.busy) return; if(WSL.slots.length>=WSL_MAX){ status(pkt('m.werkruimte_maximum'),true); return; } WSL.busy=true;
+  try{ wslSnap(); WSL.slots.push({id:wslUid(),name:pkt('m.naamloos'),state:null}); await wslShow(WSL.slots.length-1); }finally{ WSL.busy=false; } wslSave(); }
+async function wslClose(i){ if(WSL.busy) return; if(WSL.slots.length<2){ status(pkt('m.werkruimte_laatste'),true); return; }
+  const sl=WSL.slots[i], name=i===WSL.cur?WS.name:(sl.name||pkt('m.naamloos')), full=i===WSL.cur?Host.devices.size>0:!!(sl.state&&sl.state.devices&&sl.state.devices.length);
+  if(full&&!(await askUser(pkt('m.werkruimte_sluiten_vraag',esc(name)),pkt('m.sluiten_knop'),pkt('m.annuleren')))) return;
+  WSL.busy=true; try{ if(i===WSL.cur){ const next=i>0?i-1:1; wslSnap(); const keep=WSL.slots[next]; WSL.slots.splice(i,1); WSL.cur=-1; await wslShow(WSL.slots.indexOf(keep)); }
+    else { wslSnap(); const keep=WSL.slots[WSL.cur]; WSL.slots.splice(i,1); WSL.cur=WSL.slots.indexOf(keep); wslPaint(); } }finally{ WSL.busy=false; } wslSave(); }
+async function wslInit(){ let saved=await IDB.get('wslots');
+  if(saved&&Array.isArray(saved.slots)&&saved.slots.length){ WSL.slots=saved.slots.filter(x=>x&&x.id).slice(0,WSL_MAX).map(x=>({id:x.id,name:String(x.name||'').slice(0,60),state:x.state||null})); WSL.cur=Math.min(Math.max(0,saved.cur|0),WSL.slots.length-1); }
+  if(!WSL.slots.length){ WSL.slots=[{id:wslUid(),name:pkt('m.naamloos'),state:null}]; WSL.cur=0; }
+  const t=WSL.slots[WSL.cur];
+  if(!PK_PENDING&&Host.devices.size===0&&t.state&&Array.isArray(t.state.devices)&&t.state.devices.length) await openWorkspace(t.state);
+  else if(Host.devices.size===0) await wsaAutoLoad();
+  WSL.ready=true; wslPaint(); }
+document.addEventListener('keydown',e=>{ if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||!WSL.ready) return; const m=/^F(\d{1,2})$/.exec(e.key); if(!m) return; const n=+m[1]; if(n<1||n>WSL.slots.length) return;
+  e.preventDefault(); if(document.querySelector('.pkmodal')) return; wslSwitch(n-1); });
+setInterval(wslSave,15000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') wslSave(); }); window.addEventListener('pagehide',()=>{ wslSave(); });
 paintSources(); (async()=>{ for(const src of SOURCES){ try{ await loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); } }catch(e){} }
   await wslInit(); })();
 paintPatches();
@@ -2893,42 +2929,6 @@ const presetKey=r=>{ try{ return JSON.stringify(presetStateOf(r)); }catch(e){ re
 function presetDirty(r){ return !!(r.preset&&r.presetSnap!=null&&presetKey(r)!==r.presetSnap); }
 const tuParts=r=>{ try{ const p=typeof r.inst.parts==='function'?r.inst.parts():null; return Array.isArray(p)?p.filter(x=>x&&typeof x.id==='string'):[]; }catch(e){ return []; } };
 
-// ---- meerdere werkruimtes: tabbalk, F1 t/m F10, toevoegen en sluiten ----
-// Elke werkruimte is een gewone werkruimte (zoals Bewaar/Open als bestand); wisselen bewaart de huidige, ruimt de vloer op en opent de gekozen. De afspeelstand stopt bij het wisselen.
-// De lijst wordt in IndexedDB bewaard (sleutel wslots) en weer geopend bij het starten.
-var PK_PENDING=false;   // na een taalwissel zet de host zelf de werkruimte terug
-var WSL={ready:false,busy:false,cur:0,slots:[]}; const WSL_MAX=10, wslUid=()=>'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-function wslSnap(){ const sl=WSL.slots[WSL.cur]; if(!sl) return; sl.name=WS.name; sl.state=Host.devices.size?workspaceState(false):null; }
-async function wslSave(){ if((typeof PK_WIPING!=='undefined'&&PK_WIPING)||!WSL.ready||WSL.busy) return; try{ wslSnap(); await IDB.set('wslots',{cur:WSL.cur,slots:JSON.parse(JSON.stringify(WSL.slots))}); }catch(e){} }
-function wslPaint(){ const nav=$('wsTabs'); if(!nav||!WSL.slots.length) return; nav.innerHTML='';
-  WSL.slots.forEach((sl,i)=>{ const on=i===WSL.cur, name=on?WS.name:(sl.name||pkt('m.naamloos'));
-    const t=document.createElement('div'); t.className='wstab'+(on?' on':''); t.setAttribute('role','group');
-    const b=document.createElement('button'); b.className='nm'; b.setAttribute('aria-pressed',on?'true':'false'); b.innerHTML='<kbd>F'+(i+1)+'</kbd><span>'+esc(name)+'</span>'; b.title=name+' (F'+(i+1)+')'; b.onclick=()=>wslSwitch(i);
-    const x=document.createElement('button'); x.className='x'; x.textContent='×'; x.title=pkt('m.werkruimte_sluiten'); x.setAttribute('aria-label',pkt('m.werkruimte_sluiten')+': '+name); x.onclick=()=>wslClose(i);
-    t.append(b,x); nav.appendChild(t); });
-  if(WSL.slots.length<WSL_MAX){ const a=document.createElement('button'); a.className='add'; a.textContent='+'; a.title=pkt('m.werkruimte_toevoegen'); a.setAttribute('aria-label',pkt('m.werkruimte_toevoegen')); a.onclick=wslAdd; nav.appendChild(a); } }
-async function wslShow(i){   // de vloer leegmaken en werkruimte i openen (of een nieuwe, lege starten)
-  if(Host.running) stop(); clearFloor(); WS.song=null; WSL.cur=i; const t=WSL.slots[i];
-  if(t.state&&Array.isArray(t.state.devices)&&t.state.devices.length) await openWorkspace(t.state); else { setName(t.name||''); await wsaAutoLoad(); }
-  wslPaint(); }
-async function wslSwitch(i){ if(WSL.busy||i===WSL.cur||i<0||i>=WSL.slots.length) return; WSL.busy=true; try{ wslSnap(); await wslShow(i); }finally{ WSL.busy=false; } wslSave(); }
-async function wslAdd(){ if(WSL.busy) return; if(WSL.slots.length>=WSL_MAX){ status(pkt('m.werkruimte_maximum'),true); return; } WSL.busy=true;
-  try{ wslSnap(); WSL.slots.push({id:wslUid(),name:pkt('m.naamloos'),state:null}); await wslShow(WSL.slots.length-1); }finally{ WSL.busy=false; } wslSave(); }
-async function wslClose(i){ if(WSL.busy) return; if(WSL.slots.length<2){ status(pkt('m.werkruimte_laatste'),true); return; }
-  const sl=WSL.slots[i], name=i===WSL.cur?WS.name:(sl.name||pkt('m.naamloos')), full=i===WSL.cur?Host.devices.size>0:!!(sl.state&&sl.state.devices&&sl.state.devices.length);
-  if(full&&!(await askUser(pkt('m.werkruimte_sluiten_vraag',esc(name)),pkt('m.sluiten_knop'),pkt('m.annuleren')))) return;
-  WSL.busy=true; try{ if(i===WSL.cur){ const next=i>0?i-1:1; wslSnap(); const keep=WSL.slots[next]; WSL.slots.splice(i,1); WSL.cur=-1; await wslShow(WSL.slots.indexOf(keep)); }
-    else { wslSnap(); const keep=WSL.slots[WSL.cur]; WSL.slots.splice(i,1); WSL.cur=WSL.slots.indexOf(keep); wslPaint(); } }finally{ WSL.busy=false; } wslSave(); }
-async function wslInit(){ let saved=await IDB.get('wslots');
-  if(saved&&Array.isArray(saved.slots)&&saved.slots.length){ WSL.slots=saved.slots.filter(x=>x&&x.id).slice(0,WSL_MAX).map(x=>({id:x.id,name:String(x.name||'').slice(0,60),state:x.state||null})); WSL.cur=Math.min(Math.max(0,saved.cur|0),WSL.slots.length-1); }
-  if(!WSL.slots.length){ WSL.slots=[{id:wslUid(),name:pkt('m.naamloos'),state:null}]; WSL.cur=0; }
-  const t=WSL.slots[WSL.cur];
-  if(!PK_PENDING&&Host.devices.size===0&&t.state&&Array.isArray(t.state.devices)&&t.state.devices.length) await openWorkspace(t.state);
-  else if(Host.devices.size===0) await wsaAutoLoad();
-  WSL.ready=true; wslPaint(); }
-document.addEventListener('keydown',e=>{ if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||!WSL.ready) return; const m=/^F(\d{1,2})$/.exec(e.key); if(!m) return; const n=+m[1]; if(n<1||n>WSL.slots.length) return;
-  e.preventDefault(); if(document.querySelector('.pkmodal')) return; wslSwitch(n-1); });
-setInterval(wslSave,15000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') wslSave(); }); window.addEventListener('pagehide',()=>{ wslSave(); });
 // ---- bestanden: tunepack (nieuw) en presetbestand (oud) → bibliotheken per apparaat ----
 function tuNodeIn(x,depth=0){ if(!x||typeof x!=='object'||depth>8) return null;
   if(typeof x.folder==='string'||x.type==='folder') return {type:'folder',fid:prUid('f'),name:String(x.folder||x.name||pkt('m.map')).slice(0,60),children:(Array.isArray(x.items||x.children)?(x.items||x.children):[]).map(y=>tuNodeIn(y,depth+1)).filter(Boolean)};
