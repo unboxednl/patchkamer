@@ -613,6 +613,7 @@ Clip Arranger werkt als een sessieweergave. Per spoor (1 tot 16) zijn er 8 **cli
 - **Song**: de titel. **Tracks**: het aantal sporen, 1 tot 16.
 - **Afspelen**: **Clips / scènes** (lanceren) of **Song arrangement** (speel de secties op volgorde).
 - **Sequencer aan** / **Sequencer uit**, **Vanaf begin**, **Song herhalen**, **Undo**, **Redo**.
+- **Pads kiezen spoor** en **Pads starten scène**, elk met **vanaf noot**: met een controller met pads (bijvoorbeeld de Akai MPK mini, pads op de noten 36 tot en met 51) kiest pad 1 spoor 1, pad 2 spoor 2 enzovoort, en start de tweede groep pads scène 1 tot en met 8. Die pads klinken zelf niet; de toetsen spelen daarna het gekozen spoor, dus op het apparaat achter dat spoor. Naast de regelaars staat welk spoor gekozen is, met het doelapparaat. Beide staan standaard uit en horen bij je controller, niet bij de compositie: een preset en **Laad startpunt** laten ze staan. Met een MIDI Hub ertussen werkt het hetzelfde, zolang de hub de pads naar de Clip Arranger doorstuurt (route **Keyboard**).
 - **Startpunt** en **Laad startpunt**: een beginpunt (Techno / house, Ambient / drone, Rock / pop, Leeg project). Het vervangt de compositie; Undo haalt de vorige versie terug.
 
 **01 · Clipmatrix.** Sporen zijn kolommen, scènes zijn rijen. Klik links op een scèneknop om de hele scène op de volgende maat te starten. Klik op een clip om hem te starten; zijn naam opent de clip in de editor. Per spoor zijn er knoppen **M** (dempen), **S** (solo) en **■** (stop op de volgende maat).

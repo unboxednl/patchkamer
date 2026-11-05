@@ -611,6 +611,7 @@ Clip Arranger works like a session view. For each track (1 to 16) there are 8 **
 - **Song**: the title. **Tracks**: the number of tracks, 1 to 16.
 - **Playback**: **Clips / scenes** (launching) or **Song arrangement** (play the sections in order).
 - **Sequencer on** / **Sequencer off**, **From start**, **Loop song**, **Undo**, **Redo**.
+- **Pads select track** and **Pads start scene**, each with **from note**: with a controller that has pads (for example the Akai MPK mini, pads on notes 36 to 51), pad 1 selects track 1, pad 2 track 2 and so on, and the second group of pads starts scene 1 to 8. Those pads make no sound themselves; the keys then play the selected track, so the device behind that track. Next to the controls the card shows which track is selected, with its target device. Both are off by default and belong to your controller, not to the composition: a preset and **Load template** leave them alone. With a MIDI Hub in between it works the same, as long as the hub passes the pads on to the Clip Arranger (route **Keyboard**).
 - **Template** and **Load template**: a starting point (Techno / house, Ambient / drone, Rock / pop, Empty project). It replaces the composition; Undo gets the previous version back.
 
 **01 · Clip matrix.** Tracks are columns, scenes are rows. Click a scene button on the left to start the whole scene at the next bar. Click a clip to start it; its name opens the clip in the editor. Per track there are buttons **M** (mute), **S** (solo) and **■** (stop at the next bar).
