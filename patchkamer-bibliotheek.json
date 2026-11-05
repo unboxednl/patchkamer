@@ -1,0 +1,59 @@
+{
+  "format": "patchkamer-bibliotheek",
+  "formatVersion": 1,
+  "catV": 2,
+  "saved": "2026-11-05T21:06:07.000Z",
+  "categories": [
+    {
+      "key": "synth",
+      "label": "Synths"
+    },
+    {
+      "key": "drone",
+      "label": "Drone synthesizers"
+    },
+    {
+      "key": "groove",
+      "label": "Drums & grooveboxen"
+    },
+    {
+      "key": "sequencer",
+      "label": "Sequencers"
+    },
+    {
+      "key": "mod",
+      "label": "Modulatie"
+    },
+    {
+      "key": "effect",
+      "label": "Effecten"
+    },
+    {
+      "key": "mastering",
+      "label": "Mastering"
+    },
+    {
+      "key": "mix",
+      "label": "Mixen & uitgang"
+    },
+    {
+      "key": "tool",
+      "label": "Meten & hulpmiddelen"
+    },
+    {
+      "key": "other",
+      "label": "Overig"
+    }
+  ],
+  "assign": {
+    "nl.patchkamer.layeredlandscape": "drone",
+    "nl.patchkamer.biotope": "drone",
+    "nl.patchkamer.drone": "drone",
+    "nl.patchkamer.celestialmechanics": "drone",
+    "nl.patchkamer.paradox": "drone",
+    "nl.patchkamer.foundry": "drone",
+    "nl.patchkamer.mist": "drone",
+    "nl.patchkamer.graincloud": "drone"
+  },
+  "closed": []
+}
