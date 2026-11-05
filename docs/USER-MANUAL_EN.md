@@ -93,6 +93,8 @@ A device is a file that ends in `.patchkamer-device.js`. Sources are remembered,
 
 **Categories.** Devices are grouped by category. Click a category name to fold it. The **Layout** button opens a panel where you can add, rename and delete your own categories and save or load the layout.
 
+**Folders as categories.** If a source has no layout file (`patchkamer-bibliotheek.json`), the first folder a device sits in is its category (`synths/…` becomes the category Synths). If there is a file and it does not know a folder (the file lists the known folders under `folders`; a folder named like a category belongs to that category), that folder is added as an extra category. A device that the file assigns to a category stays there. If everything in a source sits in one shared top folder, that folder does not count.
+
 ![Library layout](images/en/10-library-layout.png)
 
 ## 5. Your first patch

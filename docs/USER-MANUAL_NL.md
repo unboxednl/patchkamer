@@ -93,6 +93,8 @@ Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen word
 
 **Categorieën.** Apparaten staan per categorie. Klik op een categorienaam om hem in te klappen. De knop **Indeling** opent een paneel waar je eigen categorieën toevoegt, hernoemt en verwijdert, en de indeling bewaart of laadt.
 
+**Mappen als categorieën.** Staat er in een bron geen indelingsbestand (`patchkamer-bibliotheek.json`), dan is de eerste map waarin een apparaat staat zijn categorie (`synths/…` wordt de categorie Synths). Staat er wel een bestand en bevat een map die het niet kent (de bestandsindeling noemt de bekende mappen onder `folders`; een map met dezelfde naam als een categorie hoort bij die categorie), dan verschijnt die map er als extra categorie bij. Een apparaat dat in het bestand aan een categorie is toegewezen, blijft daar staan. Staat alles van een bron in één gedeelde bovenmap, dan telt die map niet mee.
+
 ![Indeling van de bibliotheek](images/nl/10-library-layout.png)
 
 ## 5. Je eerste patch
