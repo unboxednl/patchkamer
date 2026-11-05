@@ -66,6 +66,7 @@ Patchkamer follows the language of your browser: Dutch or English. You can chang
 | **Latency** | The delay between a sound being calculated and you hearing it, as reported by your browser. |
 | **Color** | Dark, light or retro (section 10). |
 | The name at the top | The name of your workspace. Click it to rename. |
+| **F1**, **F2**… tabs | The bar under the top bar holds your workspaces. Click a tab or press **F1** to **F10** to switch; **+** adds one and **×** closes one (section 8). |
 
 The big area is the **floor**. Your devices live there. The window on the left is the **library**, the list of devices you can place. Bottom right you find the zoom controls.
 
@@ -82,6 +83,8 @@ Patchkamer comes without devices of its own. A **library** is a collection of de
 ![The library with devices, ready to place](images/en/02-library.png)
 
 A device is a file that ends in `.patchkamer-device.js`. Sources are remembered, so next time they load by themselves.
+
+**It can also happen by itself.** Under **Settings → New workspace** Patchkamer can load the device library, the presets and the tunes from GitHub whenever you start with an empty workspace. You can change the three addresses there (section 10). Each one becomes a source of its own in the list, with a **Scan** button.
 
 **Choosing a folder.** On `localhost` or over https, Chrome and Edge remember the folder and Patchkamer sees new devices when you come back to the window. In other cases the browser takes a one-time snapshot of the folder and its prompt says something like "Upload 7 files". Nothing is uploaded, and the number counts every file in the folder, not only devices. Patchkamer reads only the files that end in `.patchkamer-device.js` and then shows the real number of devices. With a snapshot, **Scan** asks you to pick the folder again to see new files.
 
@@ -137,6 +140,8 @@ On every card you see a bar with ◀ ▶ buttons and a list. Pick a tune or pres
 
 ![Tune libraries](images/en/09-tunes-panel.png)
 
+The **Load all** button at the top of the Tunes and Presets panel loads every tune pack, or every preset pack, from the address you set under **Settings → New workspace** (by default the `tunes` and `presets` folders of this repository on GitHub). Everything below that folder is read.
+
 The **Tunes** and **Presets** menus manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. The packs that come with this repository are listed in the [tunes manual](tunes/USER-MANUAL_EN.md) and the [presets manual](presets/USER-MANUAL_EN.md).
 
 For the whole story, with the list of included packs and how to make your own, see the [presets manual](presets/USER-MANUAL_EN.md) and the [tunes manual](tunes/USER-MANUAL_EN.md).
@@ -153,6 +158,10 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 - **Export as song…** makes a shareable file (`.patchkamer-song.json`) that holds all device code, a title, the author and a license. Someone else can open it without any library.
 - **New empty workspace** starts again.
 
+**More than one workspace.** The tab bar under the top bar holds up to ten workspaces. Click a tab, or press **F1** to **F10**, to switch. **+** adds a new empty workspace; **×** closes one (Patchkamer asks first if it holds devices, and the last one cannot be closed: use **Clear**). Every workspace has its own devices, cables, tempo and name, and everything in this section works on the workspace you are in. When you switch, the clock stops and you start it again yourself. A new workspace loads what you chose under **Settings → New workspace**. Patchkamer keeps your workspaces in your browser and opens them again the next time.
+
+![The tab bar with three workspaces](images/en/11-workspaces.png)
+
 ## 9. Find your way around the floor
 
 - **Move around:** drag the floor to pan. **Ctrl + scroll** zooms between 10% and 250%. The buttons bottom right zoom out, zoom in, fit everything (**All**) and go back to the start (⌂).
@@ -168,6 +177,7 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 
 - **Language:** automatic (your browser), Nederlands or English. Patchkamer reloads and keeps your workspace.
 - **Audio:** pick **Low**, **Normal** or **High** quality, or set **sample rate**, **latency** and **oversampling** yourself. Higher quality asks more of your computer. A change reloads Patchkamer and keeps your workspace. If you hear crackles, choose a larger latency buffer (*Balanced* or *Stable*).
+- **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts the three back. The **Load all** button in the Tunes and Presets panel uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
 - **Display:** the style of the cables, their opacity, the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
 - **Color** (top right): dark, light or retro.
 
@@ -182,6 +192,7 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 | Keys | What it does |
 |---|---|
 | **Space** | Start or stop |
+| **F1** to **F10** | Switch to workspace 1 to 10 (tab bar) |
 | **Alt+F** | Open or close the focus view |
 | **Alt+B** | Show or hide the library |
 | **+** / **−** / **0** | Zoom in / zoom out / reset zoom |

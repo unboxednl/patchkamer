@@ -66,6 +66,7 @@ Patchkamer volgt de taal van je browser: Nederlands of Engels. Je wijzigt dat on
 | **Latency** | De vertraging tussen het berekenen van een geluid en het horen ervan, zoals je browser die meldt. |
 | **Kleur** | Donker, licht of retro (onderdeel 10). |
 | De naam bovenaan | De naam van je werkruimte. Klik erop om hem te wijzigen. |
+| Tabs **F1**, **F2**… | De balk onder de bovenbalk bevat je werkruimtes. Klik op een tab of druk op **F1** t/m **F10** om te wisselen; **+** voegt er een toe en **×** sluit er een (hoofdstuk 8). |
 
 Het grote vlak is de **vloer**. Daar staan je apparaten. Het venster links is de **bibliotheek**, de lijst met apparaten die je kunt plaatsen. Rechtsonder zie je de zoomknoppen.
 
@@ -82,6 +83,8 @@ Patchkamer heeft zelf geen apparaten. Een **bibliotheek** is een verzameling app
 ![De bibliotheek met apparaten, klaar om te plaatsen](images/nl/02-library.png)
 
 Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen worden onthouden, dus de volgende keer laden ze vanzelf.
+
+**Het kan ook vanzelf.** Onder **Instellingen → Nieuwe werkruimte** kan Patchkamer de apparatenbibliotheek, de presets en de tunes van GitHub laden zodra je met een lege werkruimte begint. De drie adressen kun je daar wijzigen (hoofdstuk 10). Elk adres wordt een eigen bron in de lijst, met een knop **Scannen**.
 
 **Een map kiezen.** Op `localhost` of via https onthouden Chrome en Edge de map en ziet Patchkamer nieuwe apparaten als je terugkomt in het venster. In andere gevallen maakt de browser een eenmalige momentopname van de map en zegt de vraag iets als "7 bestanden uploaden". Er wordt niets geüpload, en het getal telt elk bestand in de map, niet alleen apparaten. Patchkamer leest alleen de bestanden die eindigen op `.patchkamer-device.js` en toont daarna het echte aantal apparaten. Bij een momentopname vraagt **Scannen** je de map opnieuw te kiezen om nieuwe bestanden te zien.
 
@@ -137,6 +140,8 @@ Op elke kaart zie je een balk met ◀ ▶-knoppen en een lijst. Kies een tune of
 
 ![Tunebibliotheken](images/nl/09-tunes-panel.png)
 
+De knop **Alles laden** bovenaan het Tunes- en Presets-paneel laadt alle tunepacks, of alle presetpacks, van het adres dat je instelt onder **Instellingen → Nieuwe werkruimte** (standaard de mappen `tunes` en `presets` van deze repository op GitHub). Alles onder die map wordt ingelezen.
+
 De menu's **Tunes** en **Presets** beheren je bibliotheken: maak een nieuwe, zet tunes in mappen, importeer een pakket (`.patchkamer-tunes.json` of `.patchkamer-presets.json`) en exporteer er een om te delen. Pakketten in een bibliotheek die je van GitHub of uit een map laadt, verschijnen vanzelf. De packs die bij deze repository horen, staan in de [handleiding tunes](tunes/USER-MANUAL_NL.md) en de [handleiding presets](presets/USER-MANUAL_NL.md).
 
 Het hele verhaal, met de lijst van de meegeleverde packs en hoe je een eigen pack maakt, staat in de [handleiding presets](presets/USER-MANUAL_NL.md) en de [handleiding tunes](tunes/USER-MANUAL_NL.md).
@@ -153,6 +158,10 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 - **Exporteer als song…** maakt een deelbaar bestand (`.patchkamer-song.json`) met alle apparaatcode, een titel, de maker en een licentie. Iemand anders kan het openen zonder bibliotheek.
 - **Nieuwe lege werkruimte** begint opnieuw.
 
+**Meer dan één werkruimte.** De tabbalk onder de bovenbalk bevat maximaal tien werkruimtes. Klik op een tab, of druk op **F1** t/m **F10**, om te wisselen. **+** voegt een nieuwe lege werkruimte toe; **×** sluit er een (Patchkamer vraagt eerst als er apparaten in staan, en de laatste kun je niet sluiten: gebruik **Leeg**). Elke werkruimte heeft eigen apparaten, kabels, tempo en naam, en alles in dit hoofdstuk werkt op de werkruimte waarin je zit. Bij het wisselen stopt de klok en start je hem zelf weer. Een nieuwe werkruimte laadt wat je koos onder **Instellingen → Nieuwe werkruimte**. Patchkamer bewaart je werkruimtes in je browser en opent ze de volgende keer weer.
+
+![De tabbalk met drie werkruimtes](images/nl/11-workspaces.png)
+
 ## 9. Je weg vinden op de vloer
 
 - **Verplaatsen:** sleep de vloer om te schuiven. **Ctrl + scroll** zoomt tussen 10% en 250%. Met de knoppen rechtsonder zoom je uit, zoom je in, zie je alles (**Alles**) en ga je terug naar het begin (⌂).
@@ -168,6 +177,7 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 
 - **Taal:** automatisch (je browser), Nederlands of English. Patchkamer laadt opnieuw en behoudt je werkruimte.
 - **Audio:** kies kwaliteit **Laag**, **Normaal** of **Hoog**, of stel **sample rate**, **latency** en **oversampling** zelf in. Hogere kwaliteit vraagt meer van je computer. Een wijziging laadt Patchkamer opnieuw en behoudt je werkruimte. Hoor je geknetter, kies dan een grotere latencybuffer (*Gebalanceerd* of *Stabiel*).
+- **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet de drie terug. De knop **Alles laden** in het Tunes- en Presets-paneel gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
 - **Weergave:** de stijl van de kabels, hun dekking, de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
 - **Kleur** (rechtsboven): donker, licht of retro.
 
@@ -182,6 +192,7 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 | Toetsen | Wat het doet |
 |---|---|
 | **Spatie** | Start of stop |
+| **F1** t/m **F10** | Wisselen naar werkruimte 1 t/m 10 (tabbalk) |
 | **Alt+F** | Focusweergave openen of sluiten |
 | **Alt+B** | Bibliotheek tonen of verbergen |
 | **+** / **−** / **0** | Inzoomen / uitzoomen / zoom herstellen |
