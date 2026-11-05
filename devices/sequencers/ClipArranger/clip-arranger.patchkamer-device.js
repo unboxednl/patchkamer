@@ -101,7 +101,7 @@ const PAD_NOTES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A',
 function note(id, step, n, len = 1, vel = .8, row = 0) { return { id, step, note: n, len, vel, prob: 1, ratchet: 1, row }; }
 function cleanClip(x, i) {
   const c = blankClip(i); c.name = text(x?.name, c.name, 32); c.bars = integer(x?.bars, 1, 64, 1); c.grid = GRIDS.includes(x?.grid) ? x.grid : 16; const max = c.bars * 16;
-  if (Array.isArray(x?.notes)) c.notes = x.notes.slice(0, MAXNOTES).map((n, j) => ({ id: integer(n?.id, 0, 1e8, j), step: quant(n?.step, 0, max - .25, 0), note: integer(n?.note, 0, 127, 60), len: quant(n?.len, .25, 1024, 1), vel: lim(n?.vel, .01, 1, .8), prob: lim(n?.prob, 0, 1, 1), ratchet: integer(n?.ratchet, 1, 4, 1), row: integer(n?.row, 0, 15, 0) }));
+  if (Array.isArray(x?.notes)) c.notes = x.notes.slice(0, MAXNOTES).map((n, j) => ({ id: integer(n?.id, 0, 1e8, j), step: quant(n?.step, 0, max - .25, 0), note: integer(n?.note, 0, 127, 60), len: quant(n?.len, .25, 1024, 1), vel: lim(n?.vel, .01, 1, .8), prob: lim(n?.prob, 0, 1, 1), ratchet: integer(n?.ratchet, 1, 4, 1), row: integer(n?.row, 0, 63, 0) }));
   // Nootnummers blijven stabiel na het laden, ook bij handgemaakte of oudere bestanden met dubbele nummers.
   const ids = new Set(); let next = Math.max(0, ...c.notes.map(n => n.id)) + 1; for (const n of c.notes) { if (ids.has(n.id)) n.id = next++; ids.add(n.id); }
   if (Array.isArray(x?.cc)) c.cc = x.cc.slice(0, 8).filter(a => a && typeof a.id === 'string').map(a => ({ id: a.id.slice(0, 48), shape: a.shape === 'hold' ? 'hold' : 'linear', points: Array.isArray(a.points) ? a.points.slice(0, 1024).map(p => ({ step: integer(p?.step, 0, max - 1, 0), value: lim(p?.value, 0, 1, .5) })).sort((a, b) => a.step - b.step) : [] }));
@@ -119,7 +119,7 @@ function sanitize(x) {
   s.scenes = Array.from({ length: 8 }, (_, i) => { let n = text(x?.scenes?.[i]?.name, '', 24); if (n === OLD_SCENES[i] && n !== ['Intro', 'Groove', 'Variation', 'Break', 'Build-up', 'Main', 'Outro', 'Free'][i]) n = ''; return { name: n }; });
   s.arrangement = Array.isArray(x?.arrangement) && x.arrangement.length ? x.arrangement.slice(0, 64).map(a => ({ scene: integer(a?.scene, 0, 7, 0), bars: integer(a?.bars, 1, 64, 4), repeats: integer(a?.repeats, 1, 16, 1) })) : d.arrangement;
   s.mode = x?.mode === 'song' ? 'song' : 'session'; for (const k of ['songLoop', 'armed', 'record', 'quantize']) s[k] = typeof x?.[k] === 'boolean' ? x[k] : d[k];
-  for (const [k, a, b] of [['selectedTrack', 0, s.tracks.length - 1], ['selectedClip', 0, 7], ['selectedSection', 0, s.arrangement.length - 1], ['editPage', 0, 63], ['pianoBase', 0, 104], ['drawRatchet', 1, 4], ['selectedNote', -1, 1e8], ['selectedRow', 0, 15]]) s[k] = integer(x?.[k], a, b, d[k]);
+  for (const [k, a, b] of [['selectedTrack', 0, s.tracks.length - 1], ['selectedClip', 0, 7], ['selectedSection', 0, s.arrangement.length - 1], ['editPage', 0, 63], ['pianoBase', 0, 104], ['drawRatchet', 1, 4], ['selectedNote', -1, 1e8], ['selectedRow', 0, 63]]) s[k] = integer(x?.[k], a, b, d[k]);
   s.drawLength = quant(x?.drawLength, .25, 1024, 1); s.zoom = [16, 32, 64].includes(x?.zoom) ? x.zoom : 16; s.drawVelocity = lim(x?.drawVelocity, .01, 1, .8); s.drawProbability = lim(x?.drawProbability, 0, 1, 1);
   s.pads = { track: { on: x?.pads?.track?.on === true, base: integer(x?.pads?.track?.base, 0, 127, 36) }, scene: { on: x?.pads?.scene?.on === true, base: integer(x?.pads?.scene?.base, 0, 127, 44) } };
   s.ccId = text(x?.ccId, 'cutoff', 48); s.ccShape = x?.ccShape === 'hold' ? 'hold' : 'linear'; return s;
@@ -221,7 +221,7 @@ export default {
     function pruneLive() { const now = ctx.currentTime; for (const [k, e] of [...live]) if (!e.held && e.until < now) live.delete(k); }
     // pads (MPK mini e.d.): een noot in het padbereik kiest een spoor of start een scène en klinkt niet
     // drumrijen volgen het apparaat achter een drumspoor (contract v1.14, noteNames): rij j krijgt naam en nootnummer van de j-de klank en lane chj+1 (een eigen lane-naam blijft staan).
-    // De hele lijst klanken staat onder elkaar (hoogstens 16 rijen); de opgeslagen rijen veranderen niet. Zonder kabel of zonder namen gelden ze zoals ze zijn.
+    // De hele lijst klanken staat onder elkaar (hoogstens 64 rijen); de opgeslagen rijen veranderen niet. Zonder kabel of zonder namen gelden ze zoals ze zijn.
     let trackNames = [], namesSig = '';
     function readTargets(list) {
       const all = [];
@@ -235,11 +235,11 @@ export default {
       } catch (e) { all.length = 0; }
       const sig = JSON.stringify(all); if (sig === namesSig) return; namesSig = sig; trackNames = all; renderWanted = true;
       // een noot in een clip blijft bij zijn klank: wijzigt kit of volgorde, dan schuift de noot mee naar de rij van dat nootnummer (een onbekend nootnummer houdt zijn rij)
-      state.tracks.forEach((t, i) => { const nm = all[i]; if (t.type !== 'drums' || !nm) return; for (const c of t.clips) for (const n of c.notes) { const j = nm.findIndex(x => Math.round(x.note) === n.note); if (j >= 0 && j < 16) n.row = j; } });
+      state.tracks.forEach((t, i) => { const nm = all[i]; if (t.type !== 'drums' || !nm) return; for (const c of t.clips) for (const n of c.notes) { const j = nm.findIndex(x => Math.round(x.note) === n.note); if (j >= 0 && j < 64) n.row = j; } });
     }
     function rowsOf(t) {
       const nm = trackNames[state.tracks.indexOf(t)]; if (!nm || !nm.length) return t.rows;
-      return nm.slice(0, t.rows.length).map((x, j) => ({ name: String(x.name).slice(0, 24), note: integer(x.note, 0, 127, t.rows[j].note), lane: /^ch\d+$/.test(t.rows[j].lane) ? 'ch' + (j + 1) : t.rows[j].lane }));
+      return nm.slice(0, 64).map((x, j) => { const r = t.rows[j] || t.rows[t.rows.length - 1]; return { name: String(x.name).slice(0, 24), note: integer(x.note, 0, 127, r.note), lane: /^ch\d+$/.test(r.lane) ? 'ch' + (j + 1) : r.lane }; });
     }
     function padNote(n) {
       const p = state.pads;
