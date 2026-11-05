@@ -84,6 +84,8 @@ Patchkamer heeft zelf geen apparaten. Een **bibliotheek** is een verzameling app
 
 Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen worden onthouden, dus de volgende keer laden ze vanzelf.
 
+**Scannen.** De knop **Scannen** naast een bron leest hem opnieuw in. Patchkamer meldt dan hoeveel wijzigingen hij vond, verdeeld in nieuwe en gewijzigde apparaten en nieuwe en gewijzigde tune- en presetpacks, bijvoorbeeld "3 wijzigingen gevonden · 1 nieuw, 1 gewijzigd, 1 nieuwe packs". De bibliotheek wordt meteen opnieuw getekend, en de nieuwe en gewijzigde apparaten krijgen een paar minuten een kleine badge **nieuw** of **gewijzigd**. De eerste scan van een bron telt alles als nieuw en toont geen badges.
+
 **Het kan ook vanzelf.** Onder **Instellingen → Nieuwe werkruimte** kan Patchkamer de apparatenbibliotheek, de presets en de tunes van GitHub laden zodra je met een lege werkruimte begint. De drie adressen kun je daar wijzigen (hoofdstuk 10). Elk adres wordt een eigen bron in de lijst, met een knop **Scannen**.
 
 **Een map kiezen.** Op `localhost` of via https onthouden Chrome en Edge de map en ziet Patchkamer nieuwe apparaten als je terugkomt in het venster. In andere gevallen maakt de browser een eenmalige momentopname van de map en zegt de vraag iets als "7 bestanden uploaden". Er wordt niets geüpload, en het getal telt elk bestand in de map, niet alleen apparaten. Patchkamer leest alleen de bestanden die eindigen op `.patchkamer-device.js` en toont daarna het echte aantal apparaten. Bij een momentopname vraagt **Scannen** je de map opnieuw te kiezen om nieuwe bestanden te zien.

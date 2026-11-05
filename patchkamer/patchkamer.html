@@ -193,6 +193,8 @@ kbd{border:1px solid var(--line);border-radius:3px;padding:0 4px;font-size:10px}
 .libdev.c-synth{border-left-color:var(--event)} .libdev.c-groove{border-left-color:#e4574a} .libdev.c-sequencer{border-left-color:#f4d35e} .libdev.c-effect{border-left-color:var(--audio)} .libdev.c-mix{border-left-color:var(--sel)} .libdev.c-tool{border-left-color:var(--muted)}
 .libdev .nm{font-family:var(--disp);font-weight:700;font-size:1.1em;letter-spacing:.05em;text-transform:uppercase;line-height:1.15;overflow-wrap:anywhere}
 .libdev .id{font-size:.75em;color:var(--muted);overflow-wrap:anywhere}
+.libdev .lbadge{margin-left:8px;padding:1px 6px;border-radius:9px;background:var(--audio);color:var(--glyph-fg,#06222a);font:600 10px var(--mono);letter-spacing:.05em;vertical-align:middle;white-space:nowrap}
+.libdev.mark-changed .lbadge{background:var(--event)} .libdev.mark-new,.libdev.mark-changed{border-left-color:var(--audio)}
 .libdev .pt{font-size:.8em;color:var(--muted);line-height:1.4}
 .libdev .pt b{font-weight:500;color:var(--fg)}
 .libdev .act{display:flex;gap:6px;align-items:center;margin-top:2px}
@@ -861,6 +863,15 @@ const I18N={
    "m.ai_models_n.t":"{0} model",
    "m.ai_models_n.f":"{0} modellen",
    "m.ai_keys_cleared":"API-sleutels gewist",
+   "m.scan_n_wijzigingen.t":"{0} wijziging gevonden",
+   "m.scan_n_wijzigingen.f":"{0} wijzigingen gevonden",
+   "m.scan_geen":"geen wijzigingen gevonden",
+   "m.scan_nieuw_n":"{0} nieuw",
+   "m.scan_gewijzigd_n":"{0} gewijzigd",
+   "m.scan_packs_nieuw":"{0} nieuwe packs",
+   "m.scan_packs_gewijzigd":"{0} gewijzigde packs",
+   "m.badge_nieuw":"nieuw",
+   "m.badge_gewijzigd":"gewijzigd",
    "m.mastering_categorie":"Mastering",
    "attr.werkruimtes_tabs":"Werkruimtes",
    "m.werkruimte_toevoegen":"Werkruimte toevoegen",
@@ -1429,6 +1440,15 @@ const I18N={
    "m.ai_models_n.t":"{0} model",
    "m.ai_models_n.f":"{0} models",
    "m.ai_keys_cleared":"API keys cleared",
+   "m.scan_n_wijzigingen.t":"{0} change found",
+   "m.scan_n_wijzigingen.f":"{0} changes found",
+   "m.scan_geen":"no changes found",
+   "m.scan_nieuw_n":"{0} new",
+   "m.scan_gewijzigd_n":"{0} changed",
+   "m.scan_packs_nieuw":"{0} new packs",
+   "m.scan_packs_gewijzigd":"{0} changed packs",
+   "m.badge_nieuw":"new",
+   "m.badge_gewijzigd":"changed",
    "m.mastering_categorie":"Mastering",
    "attr.werkruimtes_tabs":"Workspaces",
    "m.werkruimte_toevoegen":"Add workspace",
@@ -2459,11 +2479,21 @@ async function folderSig(src){ let h=null; try{ h=await IDB.get('dir:'+src.sid);
       if(e.kind==='file'){ if(/\.m?js$|\.json$/i.test(n)){ let m=0, z=0; try{ const f=await e.getFile(); m=f.lastModified; z=f.size; }catch(_){} list.push(pre+n+':'+m+':'+z); } }
       else if(dep<3) await walk(e,pre+n+'/',dep+1); } };
   try{ await walk(h,'',0); }catch(e){ return null; } return list.sort().join('|'); }
-async function rescanSource(src,interactive){ const before=new Set(Host.registry.keys()); const r=await loadSource(src,{interactive,fresh:true});
-  const added=[...Host.registry.entries()].filter(([k])=>!before.has(k)).map(([,d])=>d.name+' v'+d.version);
+var LIBMARK={nw:new Set(),ch:new Set(),t:0};   // apparaten die de laatste scan nieuw of gewijzigd vond: een badge in de bibliotheek
+const pkSig=l=>{ const t=JSON.stringify([l.name,l.device,l.tree],(k,v)=>(k==='pid'||k==='fid'||k==='t')?undefined:v); let h=5381; for(let i=0;i<t.length;i++) h=((h<<5)+h+t.charCodeAt(i))|0; return t.length+':'+h; };
+async function rescanSource(src,interactive){
+  const before=new Map([...Host.registry.entries()].map(([k,d])=>[k,d._code||''])), libsBefore=new Map(PR.libs.filter(l=>l.ro&&l.src&&l.src.sid===src.sid).map(l=>[l.lid,pkSig(l)]));
+  const r=await loadSource(src,{interactive,fresh:true});
+  const nw=[], ch=[]; Host.registry.forEach((d,k)=>{ if(!before.has(k)) nw.push(d); else if(d._src&&d._src.sid===src.sid&&before.get(k)!==(d._code||'')) ch.push(d); });
+  let pn=0, pc=0; PR.libs.filter(l=>l.ro&&l.src&&l.src.sid===src.sid).forEach(l=>{ if(!libsBefore.has(l.lid)) pn++; else if(libsBefore.get(l.lid)!==pkSig(l)) pc++; });
+  const total=nw.length+ch.length+pn+pc;
+  LIBMARK.nw=new Set(total<=25?nw.map(d=>d.id):[]); LIBMARK.ch=new Set(total<=25?ch.map(d=>d.id):[]); clearTimeout(LIBMARK.t); if(LIBMARK.nw.size||LIBMARK.ch.size) LIBMARK.t=setTimeout(()=>{ LIBMARK.nw=new Set(); LIBMARK.ch=new Set(); paintLib(); },120000);
+  paintLib(); refreshVersionSelects(); presetRefreshAll(); if(wsPanel&&!wsPanel.hidden) paintPatches();   // de bibliotheek meteen opnieuw tekenen
   if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); }
-  const errs=(r&&r.errs)||[];
-  status(`${srcLabel(src)}: `+(added.length?pkt('m.nieuw',added.slice(0,6).join(', '),added.length>6?pkt('m.en_nog',added.length-6):''):pkt('m.geen_nieuwe_apparaten'))+(errs.length?pktp('m.fouten_fout',errs.length>1,errs.length,errs[0]):''),errs.length>0);
+  const errs=(r&&r.errs)||[], parts=[];
+  if(nw.length) parts.push(pkt('m.scan_nieuw_n',nw.length)); if(ch.length) parts.push(pkt('m.scan_gewijzigd_n',ch.length)); if(pn) parts.push(pkt('m.scan_packs_nieuw',pn)); if(pc) parts.push(pkt('m.scan_packs_gewijzigd',pc));
+  const names=[...nw,...ch].map(d=>d.name).filter((x,i,a)=>a.indexOf(x)===i), nm=names.length&&total<=25?' ('+names.slice(0,6).join(', ')+(names.length>6?pkt('m.en_nog',names.length-6):'')+')':'';
+  status(`${srcLabel(src)}: `+(total?pktp('m.scan_n_wijzigingen',total===1,total)+' · '+parts.join(', ')+nm:pkt('m.scan_geen'))+(errs.length?pktp('m.fouten_fout',errs.length>1,errs.length,errs[0]):''),errs.length>0);
   if(src.kind==='folder'&&!FOLDERSIG.has(src.sid)&&interactive) status(pkt('m.deze_map_is_gekoppeld_zonder',srcLabel(src)),true);
   return r; }
 async function autoScan(){ if(_scanBusy||document.hidden||Date.now()-_scanT<2500) return; _scanBusy=true; _scanT=Date.now();
@@ -2611,6 +2641,7 @@ function paintLib(){
     items.forEach(def=>{ const vers=Host.versionsOf(def.id);
       const d=document.createElement('div'); d.className='libdev c-'+cat; d.dataset.id=def.id; d.title=pkt('m.sleep_naar_de_vloer');
       d.innerHTML=`<span class="nm">${esc(def.name)}</span><span class="id">${esc(def.id)} · ${esc(def.kind)}</span><span class="pt">${portsLine(def)}</span>`+(def._src?`<span class="src">${esc(srcLabel(def._src))}</span>`:'');
+      { const mk=LIBMARK.nw.has(def.id)?'new':LIBMARK.ch.has(def.id)?'changed':''; if(mk){ d.classList.add('mark-'+mk); d.querySelector('.nm').insertAdjacentHTML('beforeend','<span class="lbadge">'+esc(pkt(mk==='new'?'m.badge_nieuw':'m.badge_gewijzigd'))+'</span>'); } }
       const act=document.createElement('div'); act.className='act';
       const vs=document.createElement('select'); vs.setAttribute('aria-label',pkt('m.versie_van')+def.name); vers.forEach(v=>{const o=document.createElement('option'); o.value=v.version; o.textContent='v'+v.version; vs.appendChild(o);}); vs.disabled=vers.length<2;
       const b=document.createElement('button'); b.className='small'; b.textContent=pkt('m.plaatsen'); b.title=pkt('m.zet_midden_in_je_beeld'); b.onclick=()=>placeNew(def.id,vs.value);
