@@ -1,0 +1,207 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.audiooutput",
+  "name": "Audio Output Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Output settings for Audio Output: main outputs, headphones, the channel pairs of a multichannel interface and a few checks. The choice of output and the mute switch are not part of a preset.",
+  "tree": [
+    {
+      "folder": "Main Out",
+      "items": [
+        {
+          "name": "Main Out Default",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -6,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Main Out Quiet",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -18,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Main Out Late Night",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -24,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Main Out Loud",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": 0,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Main Out Limiter Off",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -6,
+            "mono": false,
+            "limiter": false,
+            "pair": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Headphones",
+      "items": [
+        {
+          "name": "Headphones Comfortable",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -18,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Headphones Loud",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -9,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Headphones Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -15,
+            "mono": true,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Cue Mix Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -12,
+            "mono": true,
+            "limiter": true,
+            "pair": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Interface Pairs",
+      "items": [
+        {
+          "name": "Outputs 1-2",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -6,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Outputs 3-4",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -6,
+            "mono": false,
+            "limiter": true,
+            "pair": 2
+          }
+        },
+        {
+          "name": "Outputs 5-6",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -6,
+            "mono": false,
+            "limiter": true,
+            "pair": 3
+          }
+        },
+        {
+          "name": "Outputs 7-8",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -6,
+            "mono": false,
+            "limiter": true,
+            "pair": 4
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Checks",
+      "items": [
+        {
+          "name": "Mono Check",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -12,
+            "mono": true,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Reference Level",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -14,
+            "mono": false,
+            "limiter": true,
+            "pair": 1
+          }
+        },
+        {
+          "name": "Unlimited Peaks",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "level": -12,
+            "mono": false,
+            "limiter": false,
+            "pair": 1
+          }
+        }
+      ]
+    }
+  ]
+}

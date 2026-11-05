@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This page covers the devices that bring your sounds together and send them out: **Mixer**, **Leveler**, **Speakers** and **Audio Input**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/mixer](../../devices/mixer/README.md).
+This page covers the devices that bring your sounds together and send them out: **Mixer**, **Leveler**, **Speakers**, **Audio Input** and **Audio Output**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/mixer](../../devices/mixer/README.md).
 
 ## Contents
 
@@ -12,7 +12,8 @@ This page covers the devices that bring your sounds together and send them out: 
 4. [Leveler](#leveler)
 5. [Speakers](#speakers)
 6. [Audio Input](#audio-input)
-7. [If it does not work](#if-it-does-not-work)
+7. [Audio Output](#audio-output)
+8. [If it does not work](#if-it-does-not-work)
 
 ## What these devices do
 
@@ -37,6 +38,7 @@ All cables here are teal audio cables. The Mixer also has a green **bundle** cab
 | Keep a source that slowly gets louder and softer at a steady volume | [Leveler](#leveler) |
 | Hear the result and set the final volume | [Speakers](#speakers) |
 | Bring in a microphone, an instrument or an audio interface | [Audio Input](#audio-input) |
+| Send sound to a chosen output, such as an audio interface or headphones | [Audio Output](#audio-output) |
 
 ## Mixer
 
@@ -250,6 +252,54 @@ The **Audio Input Basics** pack has 31 presets in five folders: **Line Level**, 
 - A microphone in a room with speakers gives feedback. Use headphones, or keep **Muted** on until you have set the volume.
 - The sample rate of the input can differ from the sample rate of Patchkamer. The browser converts it.
 - If another program has the input, the browser may not be able to open it. Close that program and click **Start input** again.
+
+## Audio Output
+
+### What it is for
+
+Audio Output sends the sound to an output of your computer that you choose: the default output, a headphone output or an audio interface that your computer knows. Next to **Speakers** (which always plays to the default output) you can use several Audio Outputs at the same time, for example the mix to the monitors and a listening mix to the headphones. Patchkamer asks the browser for a list of outputs and shows them with the names your system gives them.
+
+![The Audio Output card](../images/en/mixer/audio-output.png)
+
+### The controls
+
+| Control | What it does | Range (start) |
+|---|---|---|
+| **Output** (list) | The output to play to. **System default output** is the output your computer uses. | system default |
+| **Choose output…** | Lets the browser show its own output picker and gives Patchkamer the name. It only appears in browsers that have this function. | |
+| **Refresh list** | Reads the list of outputs again. The list also updates when you plug in or unplug an interface. | |
+| **Pair** | Which pair of channels (1+2, 3+4 …) the sound goes to. It only appears when the default output has more than two channels, and it only works on the default output. | 1+2 |
+| **Volume** | The volume. | −60 to +6 dB (−6 dB) |
+| **Mono** | Plays left and right as one mono signal. Use it to check a mix or for a single speaker. | off |
+| **Limiter** | A limiter (threshold −1 dB, ratio 20:1) behind the volume. Behind it sits a hard limit at 0 dBFS. | on |
+| **Muted** | Silences the output. | off |
+| **L** / **R** meters | The level that goes out. **clip** lights up for a moment at full scale. | |
+
+### Ports
+
+| Port | Kind | Use |
+|---|---|---|
+| **In** | audio in | Connect the Mixer, a Leveler, a Recorder or a synth. |
+
+### An example
+
+1. Place two **Audio Output** devices and a **Mixer** with at least two channels.
+2. Connect **Out** of the Mixer to **In** of the first Audio Output and choose your monitors in its list.
+3. Connect a second source, for example a click or a cue sound, to the second Audio Output and choose your headphones. Set the **Mono** switch if you want one ear only.
+4. Start with the **Volume** low and raise it.
+
+### Presets
+
+The **Audio Output Basics** pack has 16 presets in four folders: **Main Out**, **Headphones**, **Interface Pairs** and **Checks**. A preset sets the volume, mono, the limiter and the pair. It does not set the output itself and it does not mute. See [Presets](../presets/USER-MANUAL_EN.md).
+
+### Tips and limits
+
+- A browser has no ASIO. An interface works through the driver of your operating system. A chosen output is stereo. Picking a pair of channels only works on the default output, and only if the browser shows more than two channels.
+- A chosen output goes through a second path in the browser, so it can have a little more delay than the default output.
+- The sound of Audio Output goes to the output you chose and no longer through the default output. Speakers keeps playing to the default output, so use only one of them for the same signal unless you want it on both.
+- The browser may hold back the sound of a chosen output until you click in Patchkamer once (press **Start**). The card then says so.
+- If the chosen output is gone, for example because an interface was unplugged, the sound goes to the default output and the card says so.
+- A signal that is not a number (NaN) or infinite from another device is stopped, and the limiter is restored.
 
 ## If it does not work
 

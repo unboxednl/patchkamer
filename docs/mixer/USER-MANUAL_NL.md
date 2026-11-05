@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten sturen: **Mixer**, **Leveler**, **Speakers** en **Audio Input**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/mixer](../../devices/mixer/README_NL.md).
+Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten sturen: **Mixer**, **Leveler**, **Speakers**, **Audio Input** en **Audio Output**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/mixer](../../devices/mixer/README_NL.md).
 
 ## Inhoud
 
@@ -12,7 +12,8 @@ Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten 
 4. [Leveler](#leveler)
 5. [Speakers](#speakers)
 6. [Audio Input](#audio-input)
-7. [Als het niet werkt](#als-het-niet-werkt)
+7. [Audio Output](#audio-output)
+8. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat deze apparaten doen
 
@@ -37,6 +38,7 @@ Alle kabels hier zijn groenblauwe audiokabels. De Mixer heeft ook een groene **b
 | Een bron die langzaam harder en zachter wordt op een gelijk volume houden | [Leveler](#leveler) |
 | Het resultaat horen en het eindvolume instellen | [Speakers](#speakers) |
 | Een microfoon, een instrument of een audio-interface naar binnen halen | [Audio Input](#audio-input) |
+| Geluid naar een gekozen uitgang sturen, zoals een audio-interface of koptelefoon | [Audio Output](#audio-output) |
 
 ## Mixer
 
@@ -250,6 +252,54 @@ Het pack **Audio Input Basics** heeft 31 presets in vijf mappen: **Line Level**,
 - Een microfoon in een kamer met luidsprekers geeft rondzingen. Gebruik een koptelefoon, of laat **Gedempt** aan staan tot je het volume hebt ingesteld.
 - De sample rate van de ingang kan afwijken van die van Patchkamer. De browser rekent dat om.
 - Gebruikt een ander programma de ingang, dan kan de browser hem soms niet openen. Sluit dat programma en klik opnieuw op **Start ingang**.
+
+## Audio Output
+
+### Waar het voor dient
+
+Audio Output stuurt het geluid naar een uitgang van je computer die je zelf kiest: de standaarduitgang, een koptelefoonuitgang of een audio-interface die je computer kent. Naast **Speakers** (die altijd naar de standaarduitgang speelt) kun je meerdere Audio Outputs tegelijk gebruiken, bijvoorbeeld de mix naar de monitors en een luistermix naar de koptelefoon. Patchkamer vraagt de browser om een lijst met uitgangen en toont ze met de namen die je systeem geeft.
+
+![De kaart van Audio Output](../images/nl/mixer/audio-output.png)
+
+### De regelaars
+
+| Regelaar | Wat hij doet | Bereik (start) |
+|---|---|---|
+| **Uitgang** (lijst) | De uitgang waar het geluid naartoe gaat. **Standaarduitgang van het systeem** is de uitgang die je computer gebruikt. | standaard van het systeem |
+| **Kies uitgang…** | Laat de browser zijn eigen keuzevenster voor uitgangen tonen en geeft Patchkamer de naam. Staat er alleen in browsers die deze functie hebben. | |
+| **Ververs lijst** | Leest de lijst met uitgangen opnieuw. De lijst ververst ook als je een interface aansluit of loskoppelt. | |
+| **Paar** | Naar welk paar kanalen (1+2, 3+4 …) het geluid gaat. Staat er alleen als de standaarduitgang meer dan twee kanalen heeft, en werkt alleen op de standaarduitgang. | 1+2 |
+| **Volume** | Het volume. | −60 tot +6 dB (−6 dB) |
+| **Mono** | Speelt links en rechts als één mono-signaal. Gebruik het om een mix te controleren of voor één luidspreker. | uit |
+| **Begrenzer** | Een begrenzer (drempel −1 dB, ratio 20:1) achter het volume. Daarachter ligt een harde grens op 0 dBFS. | aan |
+| **Gedempt** | Maakt de uitgang stil. | uit |
+| Meters **L** / **R** | Het niveau dat naar buiten gaat. **clip** licht even op bij volle uitsturing. | |
+
+### Poorten
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **In** | audio in | Verbind de Mixer, een Leveler, een Recorder of een synth. |
+
+### Een voorbeeld
+
+1. Plaats twee **Audio Output**-apparaten en een **Mixer** met minstens twee kanalen.
+2. Verbind **Uit** van de Mixer met **In** van de eerste Audio Output en kies je monitors in de lijst.
+3. Verbind een tweede bron, bijvoorbeeld een klik of een voorluistergeluid, met de tweede Audio Output en kies je koptelefoon. Zet **Mono** aan als je één oor wilt.
+4. Begin met een laag **Volume** en draai het op.
+
+### Presets
+
+Het pack **Audio Output Basics** heeft 16 presets in vier mappen: **Main Out**, **Headphones**, **Interface Pairs** en **Checks**. Een preset stelt het volume, mono, de begrenzer en het paar in. Hij kiest de uitgang zelf niet en dempt niet. Zie [Presets](../presets/USER-MANUAL_NL.md).
+
+### Tips en beperkingen
+
+- Een browser kent geen ASIO. Een interface werkt via het stuurprogramma van je besturingssysteem. Een gekozen uitgang is stereo. Een paar kanalen kiezen werkt alleen op de standaarduitgang, en alleen als de browser meer dan twee kanalen toont.
+- Een gekozen uitgang loopt in de browser via een tweede route en kan daardoor iets meer vertraging hebben dan de standaarduitgang.
+- Het geluid van Audio Output gaat naar de uitgang die je koos en niet meer via de standaarduitgang. Speakers blijft naar de standaarduitgang spelen, dus gebruik voor hetzelfde signaal maar één van de twee, tenzij je het op beide wilt.
+- De browser kan het geluid van een gekozen uitgang tegenhouden tot je één keer in Patchkamer klikt (druk op **Start**). De kaart meldt dat dan.
+- Is de gekozen uitgang weg, bijvoorbeeld omdat een interface is losgekoppeld, dan gaat het geluid naar de standaarduitgang en meldt de kaart dat.
+- Een signaal dat geen getal (NaN) of oneindig is van een ander apparaat wordt tegengehouden en de begrenzer wordt hersteld.
 
 ## Als het niet werkt
 
