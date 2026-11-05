@@ -58,7 +58,13 @@ Wat Pulse Drums met een state doet (getest): getallen buiten het bereik worden a
 - `onEvent` op `trigger`: `{ type: 'trig', lane: 'ch3' of een instrumentnaam, vel }`, `{ type: 'note', note, vel }` en `{ type: 'cc', id: 'ch2.cutoff', value }` met `cutoff`, `resonance`, `level`, `pan`, `drive` of `tune`, of `id: 'master'`. Zie Drum Kit.
 - `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en 1 aan en alleen voor bestaande spoor-id's. Naast `ch1.tune`, `ch1.decay` enzovoort (ook `fm`, `ratio`, `body`, `sub` en `click` waar die bij het instrument horen) zijn er globale sporen: `master`, `rumble`, `rumbleTone` en `grit`. Modulatie verandert nooit de bewaarde waarden.
 
+## Nootnamen voor sequencers
+
+Pulse Drums heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): elk kanaal met zijn instrumentnaam en zijn `note`, in de volgorde van `channels`; twee kanalen met dezelfde noot geven één regel (de eerste). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen.
+
 ## Tunes maken
+
+- **Zet de eigen sequencer uit**: elke tune bevat `run: false`, zodat een gebruiker met zijn eigen sequencer kan beluisteren welke kit het best past. De patronen blijven in de tune staan; wie de eigen sequencer weer aanzet, hoort de groove. Laat dit veld in een nieuwe tune dus nooit weg (bij een ontbrekend veld start het apparaat zijn eigen sequencer).
 
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.pulsedrums`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **kit met groove**: instrumenten, klankmodellen en een patroon. Houd hem klein: laat patronen die je niet gebruikt leeg en houd het aantal kanalen laag. Geef elke tune een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".

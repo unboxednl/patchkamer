@@ -5,7 +5,7 @@
  "name": "Pulse Drums Techno",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Techno kits for Pulse Drums in eight styles: techno, minimal, peak time, hard techno, dub techno, acid, electro and breaks. The kits use what Pulse adds: the kick layers, FM percussion, polymetric channel lengths, rumble and grit.",
+ "description": "Techno kits for Pulse Drums in eight styles: techno, minimal, peak time, hard techno, dub techno, acid, electro and breaks. The kits use what Pulse adds: the kick layers, FM percussion, polymetric channel lengths, rumble and grit. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune.",
  "tree": [
   {
    "folder": "Techno",
@@ -280,7 +280,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8367
+      "master": 0.8367,
+      "run": false
      }
     },
     {
@@ -525,7 +526,8 @@
        }
       ],
       "length": 16,
-      "master": 0.606
+      "master": 0.606,
+      "run": false
      }
     },
     {
@@ -752,7 +754,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8226
+      "master": 0.8226,
+      "run": false
      }
     },
     {
@@ -984,7 +987,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4903
+      "master": 0.4903,
+      "run": false
      }
     },
     {
@@ -1214,7 +1218,8 @@
        }
       ],
       "length": 16,
-      "master": 0.856
+      "master": 0.856,
+      "run": false
      }
     }
    ]
@@ -1427,7 +1432,8 @@
        }
       ],
       "length": 16,
-      "master": 0.6799
+      "master": 0.6799,
+      "run": false
      }
     },
     {
@@ -1663,7 +1669,8 @@
        }
       ],
       "length": 16,
-      "master": 0.799
+      "master": 0.799,
+      "run": false
      }
     },
     {
@@ -1878,7 +1885,8 @@
        }
       ],
       "length": 16,
-      "master": 0.6798
+      "master": 0.6798,
+      "run": false
      }
     }
    ]
@@ -2119,7 +2127,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8173
+      "master": 0.8173,
+      "run": false
      }
     },
     {
@@ -2351,7 +2360,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7369
+      "master": 0.7369,
+      "run": false
      }
     },
     {
@@ -2592,7 +2602,8 @@
        }
       ],
       "length": 16,
-      "master": 0.492
+      "master": 0.492,
+      "run": false
      }
     }
    ]
@@ -2799,7 +2810,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5134
+      "master": 0.5134,
+      "run": false
      }
     },
     {
@@ -2998,7 +3010,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4319
+      "master": 0.4319,
+      "run": false
      }
     },
     {
@@ -3193,7 +3206,8 @@
        }
       ],
       "length": 16,
-      "master": 0.638
+      "master": 0.638,
+      "run": false
      }
     }
    ]
@@ -3378,7 +3392,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8366
+      "master": 0.8366,
+      "run": false
      }
     },
     {
@@ -3584,7 +3599,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8562
+      "master": 0.8562,
+      "run": false
      }
     },
     {
@@ -3769,7 +3785,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8267
+      "master": 0.8267,
+      "run": false
      }
     }
    ]
@@ -4002,7 +4019,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8553
+      "master": 0.8553,
+      "run": false
      }
     },
     {
@@ -4225,7 +4243,8 @@
        }
       ],
       "length": 16,
-      "master": 0.613
+      "master": 0.613,
+      "run": false
      }
     },
     {
@@ -4466,7 +4485,8 @@
        }
       ],
       "length": 16,
-      "master": 0.827
+      "master": 0.827,
+      "run": false
      }
     }
    ]
@@ -4690,7 +4710,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7899
+      "master": 0.7899,
+      "run": false
      }
     },
     {
@@ -4885,7 +4906,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4921
+      "master": 0.4921,
+      "run": false
      }
     },
     {
@@ -5106,7 +5128,8 @@
        }
       ],
       "length": 16,
-      "master": 0.6957
+      "master": 0.6957,
+      "run": false
      }
     }
    ]
@@ -5336,7 +5359,8 @@
        }
       ],
       "length": 16,
-      "master": 0.8172
+      "master": 0.8172,
+      "run": false
      }
     },
     {
@@ -5568,7 +5592,8 @@
       ],
       "length": 16,
       "master": 0.7895,
-      "human": 0.006
+      "human": 0.006,
+      "run": false
      }
     },
     {
@@ -5745,7 +5770,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5011
+      "master": 0.5011,
+      "run": false
      }
     }
    ]

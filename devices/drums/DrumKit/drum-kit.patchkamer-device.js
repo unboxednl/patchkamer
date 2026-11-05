@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Patchkamer contract v1.14. Geeft de klanknamen met hun noot door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen; de volgorde, kit en noten volgen de kanalen.
 // 1.11.3 — De bassdrum klinkt langer door: de body van de kick werd door twee opeenvolgende afbouwen (in de toon en in de envelope) al na ongeveer 60 ms zwak. De toon loopt nu door tot het eind van de envelope en de envelope houdt het niveau even vast (een vijfde van de decay). Andere instrumenten ongewijzigd.
 // 1.11.2 — Plafond achter de stereomix: tot 0,8 (−2 dBFS) ongewijzigd, daarboven zacht naar 1,0 in plaats van boven 0 dBFS te komen. Geen vertraging. De uitgangen per kanaal blijven ongewijzigd.
 // 1.11.1 — Verbeterd: een nieuw of fabrieks-bassdrumkanaal begint met een lage tuning per klankmodel (voorheen 0, waardoor de kick te hoog klonk). Tunes en bewaarde instellingen houden hun eigen tuning; de motor is ongewijzigd.
@@ -120,7 +121,7 @@ const CSS=`
 const OUT_TRIM=.36*5.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.11.3',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.14.0',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -160,7 +161,7 @@ const __pkDef = {
  function value(base,key,id){const def=key==='master'?{min:0,max:1,scale:'lin'}:MOD_DEFS[key],offset=mod[id]||0;if(!offset)return base;return clamp(def.scale==='log'?base*Math.pow(def.max/def.min,offset):base+offset*(def.max-def.min),def.min,def.max,base);}
  function effective(i){const c=state.channels[i],out={...c};for(const key of Object.keys(MOD_DEFS))out[key]=value(c[key],key,'ch'+(i+1)+'.'+key);return out;}
  function apply(){
-  if(dead)return;const solo=state.channels.some(c=>c.solo);
+  if(dead)return;notesNotify();const solo=state.channels.some(c=>c.solo);
   mix.gain.setTargetAtTime(value(state.master,'master','master')*OUT_TRIM,ctx.currentTime,.02);
   buses.forEach((b,i)=>{if(!state.channels[i]){b.level.gain.setTargetAtTime(0,ctx.currentTime,.01);return;}const c=effective(i);
    b.filter.type=c.filter;b.filter.frequency.setTargetAtTime(Math.min(c.cutoff,ctx.sampleRate*.45),ctx.currentTime,.02);b.filter.Q.setTargetAtTime(c.resonance,ctx.currentTime,.02);
@@ -217,7 +218,10 @@ const __pkDef = {
  function check(parent,label,value,fn){const l=node('label',parent,undefined,'check'),r=node('input',l);r.type='checkbox';r.checked=value;node('span',l,label);r.onchange=()=>fn(r.checked);}
  let stepButtons=[],cursorLabels=[],scope,status;
  let bundleSig='';
- function bundleNotify(){const sig=state.channels.map(c=>c.type).join('|');if(sig===bundleSig)return;bundleSig=sig;if(self&&typeof host.bundleChanged==='function')try{host.bundleChanged(self,'multi');}catch(e){}}
+ function noteList(){const seen=new Set(),o=[];state.channels.forEach(c=>{const n=Math.round(c.note);if(!(n>=0&&n<=127)||seen.has(n))return;seen.add(n);o.push({note:n,name:(TYPES[c.type]||[c.type])[0]});});return o;}
+ let notesSig='';
+ function notesNotify(){const sig=JSON.stringify(noteList());if(sig===notesSig)return;notesSig=sig;if(self&&typeof host.noteNamesChanged==='function')try{host.noteNamesChanged(self);}catch(e){}}
+ function bundleNotify(){notesNotify();const sig=state.channels.map(c=>c.type).join('|');if(sig===bundleSig)return;bundleSig=sig;if(self&&typeof host.bundleChanged==='function')try{host.bundleChanged(self,'multi');}catch(e){}}
  function render(){refreshParams();bundleNotify();if(!root)return;root.replaceChildren();const style=node('style',root);style.textContent=CSS;const app=node('div',root,undefined,'sw');
  const top=node('div',app,undefined,'top'),brand=node('div',top,undefined,'brand');node('small',brand,'PATCHKAMER · DRUM WORKSTATION');node('h1',brand,'DRUM KIT');node('span',top,T.tag,'tag');
  const toolbar=node('div',app,undefined,'toolbar');select(toolbar,T.factory,MODELS.map(x=>[x,x]).concat([['Custom',T.custom]]),KIT[state.kit]?state.kit:'Custom',x=>{if(KIT[x])loadKit(x);});select(toolbar,T.channels,Array.from({length:16},(_,i)=>[i+1,String(i+1)]),state.channels.length,x=>setCount(+x));button(toolbar,'Demo groove',()=>{groove(state,KIT[state.kit]?state.kit:'Punch');render();});button(toolbar,state.run?T.seqOn:T.seqOff,()=>{state.run=!state.run;if(!state.run)stopAll();render();},state.run?'active':'');
@@ -262,6 +266,7 @@ const __pkDef = {
  onStep(info){try{if(dead||!state.run)return;const {step,bar,time,stepDur}=info,idx=((bar*16+step)%state.length+state.length)%state.length;pending.push({step:idx,time});if(pending.length>128)pending.shift();state.channels.forEach((c,i)=>{const z=c.steps[state.pattern][idx];if(z.v>0&&Math.random()<=z.p)for(let r=0;r<z.r;r++){const offset=state.human*Math.random(),v=z.v*(1-state.human*4*Math.random());hit(i,time+r*stepDur/z.r+offset,v);}});}catch(e){fail(e);}},
  onTransport({playing:p}){playing=!!p;if(!playing){stopAll();pending.length=0;lastStep=-1;}},
  onEvent(port,ev){try{if(dead||port!=='trigger'||!ev)return;const t=Number.isFinite(ev.time)?ev.time:ctx.currentTime;if(ev.type==='trig'){let i=/^ch\d+$/.test(ev.lane)?+ev.lane.slice(2)-1:state.channels.findIndex(c=>c.type===ev.lane);if(i>=0)hit(i,t,ev.vel??1);}else if(ev.type==='note'&&ev.vel>0){state.channels.forEach((c,i)=>{if(c.note===Math.round(ev.note))hit(i,t,ev.vel);});}else if(ev.type==='cc'){const v=clamp(ev.value,0,1),m=/^ch(\d+)\.(cutoff|resonance|level|pan|drive|tune)$/.exec(ev.id);if(m&&state.channels[+m[1]-1]){const c=state.channels[+m[1]-1],k=m[2];c[k]=k==='cutoff'?30*Math.pow(20000/30,v):k==='resonance'?.1+v*11.9:k==='pan'?v*2-1:k==='tune'?v*48-24:v;apply();}else if(ev.id==='master'){state.master=v;apply();}}}catch(e){fail(e);}},
+ noteNames(){return noteList();},
  getState(){return copy(state);},setState(s){restore(s||{});},
  destroy(){if(dead)return;dead=true;self.unmount();sources.forEach(n=>{try{n.stop();}catch{}});sources.clear();owned.forEach(n=>{try{n.disconnect();}catch{}});owned.clear();voices.clear();pending.length=0;}
  };refreshParams(false);apply();return self;

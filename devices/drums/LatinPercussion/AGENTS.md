@@ -66,7 +66,13 @@ Wat Latin Percussion met een state doet (getest): getallen buiten het bereik wor
 
 Modulatie: `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en 1 aan voor bestaande parameter-id's (`d<n>level`, `d<n>tune`, `d<n>decay`, `d<n>pan`, `grit`, `level`); al het andere wordt genegeerd. Modulatie verandert nooit de bewaarde waarden.
 
+## Nootnamen voor sequencers
+
+Latin Percussion heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): de vijftien klanken (`High Bongo` … `Star Chime`) op `baseNote` + 0 tot 14. Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen.
+
 ## Tunes maken
+
+- **Zet de eigen sequencer uit**: elke tune bevat `sequence: false`, zodat een gebruiker met zijn eigen sequencer kan beluisteren welke kit het best past. De patronen blijven in de tune staan; wie de eigen sequencer weer aanzet, hoort de groove. Laat dit veld in een nieuwe tune dus nooit weg (bij een ontbrekend veld start het apparaat zijn eigen sequencer).
 
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.latinpercussion`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **ritme met klank**: een patroon (in `patternData`) plus de instellingen van de pads. Gebruik de banken A tot D voor varianten (hoofdritme, variatie, fill, break); de klok speelt de bank die in `bank` staat. Geef elke tune een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".

@@ -5,7 +5,7 @@
  "name": "Drum Kit Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Kits for Drum Kit in the most common styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave. Each kit combines instruments, sound models and a one-bar groove; techno has five kits.",
+ "description": "Kits for Drum Kit in the most common styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave. Each kit combines instruments, sound models and a one-bar groove; techno has five kits. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune.",
  "tree": [
   {
    "folder": "Techno",
@@ -234,7 +234,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7631
+      "master": 0.7631,
+      "run": false
      }
     },
     {
@@ -462,7 +463,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4982
+      "master": 0.4982,
+      "run": false
      }
     },
     {
@@ -678,7 +680,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5015
+      "master": 0.5015,
+      "run": false
      }
     },
     {
@@ -896,7 +899,8 @@
        }
       ],
       "length": 16,
-      "master": 0.3934
+      "master": 0.3934,
+      "run": false
      }
     },
     {
@@ -1125,7 +1129,8 @@
        }
       ],
       "length": 16,
-      "master": 0.649
+      "master": 0.649,
+      "run": false
      }
     }
    ]
@@ -1356,7 +1361,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7457
+      "master": 0.7457,
+      "run": false
      }
     },
     {
@@ -1555,7 +1561,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5306
+      "master": 0.5306,
+      "run": false
      }
     },
     {
@@ -1786,7 +1793,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4814
+      "master": 0.4814,
+      "run": false
      }
     }
    ]
@@ -2015,7 +2023,8 @@
        }
       ],
       "length": 16,
-      "master": 0.634
+      "master": 0.634,
+      "run": false
      }
     },
     {
@@ -2201,7 +2210,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5253
+      "master": 0.5253,
+      "run": false
      }
     },
     {
@@ -2423,7 +2433,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7372
+      "master": 0.7372,
+      "run": false
      }
     }
    ]
@@ -2647,7 +2658,8 @@
        }
       ],
       "length": 16,
-      "master": 0.6127
+      "master": 0.6127,
+      "run": false
      }
     },
     {
@@ -2874,7 +2886,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7115
+      "master": 0.7115,
+      "run": false
      }
     },
     {
@@ -3086,7 +3099,8 @@
        }
       ],
       "length": 16,
-      "master": 0.62
+      "master": 0.62,
+      "run": false
      }
     }
    ]
@@ -3263,7 +3277,8 @@
        }
       ],
       "length": 16,
-      "master": 0.3934
+      "master": 0.3934,
+      "run": false
      }
     },
     {
@@ -3429,7 +3444,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4025
+      "master": 0.4025,
+      "run": false
      }
     },
     {
@@ -3601,7 +3617,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5372
+      "master": 0.5372,
+      "run": false
      }
     }
    ]
@@ -3824,7 +3841,8 @@
       ],
       "length": 16,
       "master": 0.6726,
-      "human": 0.008
+      "human": 0.008,
+      "run": false
      }
     },
     {
@@ -4034,7 +4052,8 @@
        }
       ],
       "length": 16,
-      "master": 0.3893
+      "master": 0.3893,
+      "run": false
      }
     },
     {
@@ -4248,7 +4267,8 @@
       ],
       "length": 16,
       "master": 0.7078,
-      "human": 0.012
+      "human": 0.012,
+      "run": false
      }
     }
    ]
@@ -4474,7 +4494,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4493
+      "master": 0.4493,
+      "run": false
      }
     },
     {
@@ -4710,7 +4731,8 @@
       ],
       "length": 16,
       "master": 0.7115,
-      "human": 0.006
+      "human": 0.006,
+      "run": false
      }
     },
     {
@@ -4931,7 +4953,8 @@
        }
       ],
       "length": 16,
-      "master": 0.6272
+      "master": 0.6272,
+      "run": false
      }
     }
    ]
@@ -5149,7 +5172,8 @@
        }
       ],
       "length": 16,
-      "master": 0.649
+      "master": 0.649,
+      "run": false
      }
     },
     {
@@ -5336,7 +5360,8 @@
        }
       ],
       "length": 16,
-      "master": 0.369
+      "master": 0.369,
+      "run": false
      }
     },
     {
@@ -5552,7 +5577,8 @@
        }
       ],
       "length": 16,
-      "master": 0.613
+      "master": 0.613,
+      "run": false
      }
     }
    ]
@@ -5778,7 +5804,8 @@
        }
       ],
       "length": 16,
-      "master": 0.579
+      "master": 0.579,
+      "run": false
      }
     },
     {
@@ -5981,7 +6008,8 @@
        }
       ],
       "length": 16,
-      "master": 0.5993
+      "master": 0.5993,
+      "run": false
      }
     },
     {
@@ -6161,7 +6189,8 @@
       ],
       "length": 16,
       "master": 0.613,
-      "human": 0.008
+      "human": 0.008,
+      "run": false
      }
     }
    ]
@@ -6366,7 +6395,8 @@
       ],
       "length": 16,
       "master": 0.6203,
-      "human": 0.006
+      "human": 0.006,
+      "run": false
      }
     },
     {
@@ -6592,7 +6622,8 @@
       ],
       "length": 16,
       "master": 0.6062,
-      "human": 0.006
+      "human": 0.006,
+      "run": false
      }
     },
     {
@@ -6764,7 +6795,8 @@
       ],
       "length": 16,
       "master": 0.3801,
-      "human": 0.008
+      "human": 0.008,
+      "run": false
      }
     }
    ]
@@ -6947,7 +6979,8 @@
       ],
       "length": 16,
       "master": 1,
-      "human": 0.012
+      "human": 0.012,
+      "run": false
      }
     },
     {
@@ -7120,7 +7153,8 @@
       ],
       "length": 16,
       "master": 1,
-      "human": 0.012
+      "human": 0.012,
+      "run": false
      }
     },
     {
@@ -7323,7 +7357,8 @@
       ],
       "length": 16,
       "master": 0.876,
-      "human": 0.01
+      "human": 0.01,
+      "run": false
      }
     }
    ]
@@ -7587,7 +7622,8 @@
        }
       ],
       "length": 16,
-      "master": 0.3733
+      "master": 0.3733,
+      "run": false
      }
     },
     {
@@ -7764,7 +7800,8 @@
        }
       ],
       "length": 16,
-      "master": 0.7766
+      "master": 0.7766,
+      "run": false
      }
     },
     {
@@ -7986,7 +8023,8 @@
        }
       ],
       "length": 16,
-      "master": 0.4142
+      "master": 0.4142,
+      "run": false
      }
     }
    ]

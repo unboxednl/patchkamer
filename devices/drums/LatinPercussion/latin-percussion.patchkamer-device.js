@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Patchkamer contract v1.14. Geeft de vijftien klanknamen met hun noot (eerste pad + 0 tot 14) door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Latin Percussion en nieuwe id nl.patchkamer.latinpercussion (voorheen onder een andere naam en id); tunes en songs uit die tijd
 //          verwijzen naar de oude id. Het apparaat had een algemene motor met takken voor andere instrumenten; die takken en alle verwijzingen ernaar zijn weg: LatinEngine
 //          bevat alleen de percussie. Tweetalig (host.lang; poortnamen per taal in i18n; alle teksten in TXT). Tekenen via host.frame (geen eigen requestAnimationFrame-lus).
@@ -80,7 +81,7 @@ const buildSpec = T => {
 export default {
   id: 'nl.patchkamer.latinpercussion',
   name: 'Latin Percussion',
-  version: '1.11.0',
+  version: '1.14.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 920, minWidth: 380 },
@@ -131,7 +132,8 @@ export default {
     const localEngine=new LatinEngine(ctx.sampleRate,effective);
     function engineMessage(message){if(dead)return;if(backendType==='worklet')backend.port.postMessage(message);else if(message.type==='params')localEngine.setParams(message.params);else if(message.type==='event'){localEngine.enqueue(message.event);if(backendType==='loading'){pending.push(message.event);if(pending.length>1024)pending.shift();}}}
     function tellEngine(){if(engineText)engineText.textContent=backendType==='loading'?T.loading:backendType==='unavailable'?T.unavailable:T.ready(playing);}
-    function apply(){if(dead)return;resolve();smooth(volume.gain,effective.level);engineMessage({type:'params',params:effective});}
+    let notesSig='';const noteList=()=>LANE_NAMES.map((name,i)=>({note:Math.round(state.baseNote??36)+i,name})).filter(x=>x.note>=0&&x.note<=127);function notesNotify(){try{const sig=JSON.stringify(noteList());if(sig===notesSig)return;if(self&&typeof host.noteNamesChanged==='function'){notesSig=sig;host.noteNamesChanged(self);}}catch(e){}}
+    function apply(){if(dead)return;notesNotify();resolve();smooth(volume.gain,effective.level);engineMessage({type:'params',params:effective});}
     async function init(){const id=++generation;let url=null;try{if(ctx.audioWorklet&&typeof globalThis.AudioWorkletNode==='function'){
         const name='pk-latinpercussion-'+Math.random().toString(36).slice(2),code=LatinEngine.toString()+'\nregisterProcessor('+JSON.stringify(name)+', class extends AudioWorkletProcessor { constructor(options){super();this.engine=new LatinEngine(sampleRate,options.processorOptions.params);this.closed=false;this.port.onmessage=e=>{const m=e.data;if(m.type===\"params\")this.engine.setParams(m.params);else if(m.type===\"event\")this.engine.enqueue(m.event);else if(m.type===\"close\")this.closed=true;};} process(inputs,outputs){if(this.closed)return false;const output=outputs[0];if(output?.length){this.engine.process(output[0],output[1]||output[0],currentTime);}return true;} });';
         url=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));await ctx.audioWorklet.addModule(url);if(dead||id!==generation)return;backend=own(new globalThis.AudioWorkletNode(ctx,name,{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[2],processorOptions:{params:effective}}));backendType='worklet';backend.connect(volume);input.connect(backend);for(const e of pending)backend.port.postMessage({type:'event',event:e});pending=[];tellEngine();return;
@@ -159,7 +161,7 @@ export default {
       scopeMount(panel,analyser);engineText=add(panel,'p');tellEngine();add(panel,'p',T.help);add(panel,'p',T.note);
     }
     const PRESET_SKIP=['lane'];  // contract v1.6: werkstand, geen klank — een preset laat dit staan
-    const self={inputs:{},outputs:{out},mount:render,unmount(){engineText=null;stepButtons=[];unmount();},onEvent:event,onStep:step,onTransport(e){if(dead)return;playing=!!e?.playing;lastStep='';if(!playing)panic();tellEngine();},params:descriptors,modulate:receiveMod,getPreset(){const p=self.getState();for(const k of PRESET_SKIP)delete p[k];return p;},setPreset(p){if(dead)return;const keep={};for(const k of PRESET_SKIP)if(k in state)keep[k]=state[k];self.setState({...(p&&typeof p==='object'?p:{}),...keep});},getState(){const copy={...state};for(const k in copy)if(Array.isArray(copy[k]))copy[k]=copy[k].slice();return copy;},setState(raw){if(dead)return;panic();state=numericState(raw);lastStep='';apply();if(mountHost)render(mountHost);},destroy(){if(dead)return;panic();generation++;if(backendType==='worklet'){try{backend.port.postMessage({type:'close'});backend.port.close();}catch{}}if(backend)backend.onaudioprocess=null;pending=[];localEngine.voices=[];localEngine.queue=[];dead=true;self.unmount();dispose();}};
+    const self={inputs:{},outputs:{out},noteNames(){return noteList();},mount:render,unmount(){engineText=null;stepButtons=[];unmount();},onEvent:event,onStep:step,onTransport(e){if(dead)return;playing=!!e?.playing;lastStep='';if(!playing)panic();tellEngine();},params:descriptors,modulate:receiveMod,getPreset(){const p=self.getState();for(const k of PRESET_SKIP)delete p[k];return p;},setPreset(p){if(dead)return;const keep={};for(const k of PRESET_SKIP)if(k in state)keep[k]=state[k];self.setState({...(p&&typeof p==='object'?p:{}),...keep});},getState(){const copy={...state};for(const k in copy)if(Array.isArray(copy[k]))copy[k]=copy[k].slice();return copy;},setState(raw){if(dead)return;panic();state=numericState(raw);lastStep='';apply();if(mountHost)render(mountHost);},destroy(){if(dead)return;panic();generation++;if(backendType==='worklet'){try{backend.port.postMessage({type:'close'});backend.port.close();}catch{}}if(backend)backend.onaudioprocess=null;pending=[];localEngine.voices=[];localEngine.queue=[];dead=true;self.unmount();dispose();}};
     apply();init();return self;
   },
 };

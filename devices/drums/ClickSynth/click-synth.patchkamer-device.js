@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Patchkamer contract v1.14. Geeft de namen van de acht sporen met hun noot (36 tot 43) door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen.
 // 1.11.1 — Verbeterd: de waarnemer van de breedte van de scoop gooide een fout als de kaart werd weggehaald of opnieuw opgebouwd; hij wordt nu losgekoppeld. Het geluid is ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Click Synth en nieuwe id nl.patchkamer.clicksynth (voorheen Klikwerk, nl.patchkamer.klikwerk); tunes en songs uit die tijd verwijzen
 //          naar de oude id. Tweetalig (host.lang; namen van het apparaat en de poorten per taal in i18n; alle teksten in TXT). De namen in de state zijn Engels: de klankmotoren
@@ -106,7 +107,7 @@ const pkLoop = (host, getInst, cb, fps) => {   // tekenen via de klok van de hos
   const inst = getInst(); if (host && typeof host.frame === 'function' && inst && inst._id) return host.frame(inst, cb, fps);
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 export default {
-  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.11.1', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.14.0', kind: 'instrument', category: 'groove',
   ui: { width: 1080, minWidth: 560 },
   i18n: { en: { name: 'Click Synth', ports: { out: 'Stereo mix', trigger: 'Trigs / notes', mod: 'Mod', multi: 'Separate lanes (bundle)' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo mix' }], eventIn: [{ id: 'trigger', name: 'Trigs / noten' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiIn: [], multiOut: [{ id: 'multi', name: 'Sporen los (bundel)' }] },
@@ -374,13 +375,17 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           g.strokeStyle = accCol; g.lineWidth = 1.5; g.beginPath(); for (let i = 0; i < a.length; i++) { const x = i / (a.length - 1) * w, y = h / 2 - clamp(a[i], -1, 1) * h * 0.45; i ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); } }
       }
     function unmount() { if (raf) raf(); raf = null; if (cv?._ro) { try { cv._ro.disconnect(); } catch { } } if (root) root.innerHTML = ''; root = null; ui = {}; cv = null; statusEl = null; stepEls.length = 0; rowEls.length = 0; }
-    function bundleChanged() { try { if (host && typeof host.bundleChanged === 'function') host.bundleChanged(self, 'multi'); } catch {} }
+    const noteList = () => state.lanes.map((L, i) => ({ note: 36 + i, name: L.name || ('Lane ' + (i + 1)) }));
+    let notesSig = '';
+    function notesNotify() { const sig = JSON.stringify(noteList()); if (sig === notesSig) return; notesSig = sig; try { if (host && typeof host.noteNamesChanged === 'function') host.noteNamesChanged(self); } catch {} }
+    function bundleChanged() { notesNotify(); try { if (host && typeof host.bundleChanged === 'function') host.bundleChanged(self, 'multi'); } catch {} }
     const laneOf = e => { if (typeof e.lane === 'string') { const m = e.lane.match(/(\d+)$/); if (m) return +m[1] - 1; } if (Number.isFinite(e.lane)) return e.lane | 0; if (Number.isFinite(e.note)) { const n = Math.round(e.note); if (n >= 36 && n < 44) return n - 36; if (n >= 60 && n < 68) return n - 60; } return -1; };
 
     const self = {
       inputs: {}, outputs: { out },
       bundles: { multi: () => ({ label: T.bundle, channels: state.lanes.map((L, i) => ({ id: 'ch' + (i + 1), name: `${i + 1} ${L.name}`, node: laneOut[i] })) }) },
       mount, unmount,
+      noteNames() { return noteList(); },
       onStep(info) { try { if (dead || !info) return; const sd = finite(info.stepDur, 0.125, 0.01, 2); stepDur = sd; const t = finite(info.time, ctx.currentTime, 0, 1e9);
           const abs = Number.isFinite(info.bar) ? info.bar * 16 + (info.step | 0) : (absStep + 1); absStep = abs;
           for (let i = 0; i < NL; i++) { const L = state.lanes[i], idx = ((abs % L.len) + L.len) % L.len; cur[i] = state.run ? idx : -1; if (!state.run || !audible(i)) continue;
