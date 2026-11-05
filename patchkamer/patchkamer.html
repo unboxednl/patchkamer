@@ -885,6 +885,11 @@ const I18N={
    "m.scan_n_wijzigingen.t":"{0} wijziging gevonden",
    "m.scan_n_wijzigingen.f":"{0} wijzigingen gevonden",
    "m.scan_geen":"geen wijzigingen gevonden",
+   "m.scan_bijgewerkt_n":"{0} op de vloer bijgewerkt",
+   "m.host_andere_versie":"Op GitHub staat een andere versie van patchkamer.html dan deze. Ververs de pagina of haal de nieuwste versie op om bij te blijven.",
+   "m.host_bekijken":"Bekijk op GitHub",
+   "m.host_later":"Later",
+   "m.host_niet_meer":"Niet meer melden voor deze versie",
    "m.scan_nieuw_n":"{0} nieuw",
    "m.scan_gewijzigd_n":"{0} gewijzigd",
    "m.scan_packs_nieuw":"{0} nieuwe packs",
@@ -1483,6 +1488,11 @@ const I18N={
    "m.scan_n_wijzigingen.t":"{0} change found",
    "m.scan_n_wijzigingen.f":"{0} changes found",
    "m.scan_geen":"no changes found",
+   "m.scan_bijgewerkt_n":"{0} on the floor updated",
+   "m.host_andere_versie":"GitHub has a different version of patchkamer.html than this one. Reload the page or fetch the latest version to stay up to date.",
+   "m.host_bekijken":"View on GitHub",
+   "m.host_later":"Later",
+   "m.host_niet_meer":"Do not tell me again for this version",
    "m.scan_nieuw_n":"{0} new",
    "m.scan_gewijzigd_n":"{0} changed",
    "m.scan_packs_nieuw":"{0} new packs",
@@ -2014,7 +2024,7 @@ BUILTIN.forEach(d=>{ d._builtin=true; });
 // origin: where this code came from ({sid,kind:'github'|'url'|'folder',url?,path?,label} | {kind:'file',name} | {kind:'paste'} | {kind:'embedded'})
 async function loadDeviceSource(src,origin,quiet,importUrl){
   let def=null, err=null;
-  if(importUrl){ try{ const mod=await import(importUrl); if(mod&&mod.default) def=mod.default; }catch(e){} }
+  if(importUrl){ try{ const mod=await import(importUrl+(importUrl.includes('?')?'&':'?')+'pk='+Date.now()); if(mod&&mod.default) def=mod.default; }catch(e){} }   // met een eigen tijdstempel, anders geeft de browser bij een nieuwe scan de oude module uit zijn cache
   if(!def) try{ const url=URL.createObjectURL(new Blob([src],{type:'text/javascript'})); const mod=await import(url); URL.revokeObjectURL(url); def=mod.default; }
   catch(e){ err=e; try{ const body=src.replace(/export\s+default\s+/,'return '); def=(new Function(body))(); err=null; }catch(e2){ err=e2; } }
   if(def) err=null;
@@ -2192,6 +2202,16 @@ function switchVersion(id,version){
   const dropped=[]; requestAnimationFrame(()=>{ cables.forEach(c=>{ const ok=(c.from.id!==id||portExists(nid,c.from.port,'out'))&&(c.to.id!==id||portExists(nid,c.to.port,'in')); if(ok) patch(c); else dropped.push(c.from.id===id?c.from.port:c.to.port); });
     status(`${def.name}: v${r.def.version} → v${version}`+(dropped.length?pkt('m.kabels_losgehaald_poort_bestaat_niet',dropped.join(', ')):''),dropped.length>0); select(nid); });
 }
+// na een scan: een geplaatst apparaat waarvan de code is gewijzigd (zelfde versienummer) wordt opnieuw gemaakt met zijn state, kabels, grootte en stand
+function reloadDevice(id){
+  const r=Host.devices.get(id); if(!r) return false; const def=Host.registry.get(Host.key(r.def.id,r.def.version)); if(!def||def===r.def) return false;
+  const wasSel=selected===id, state=r.inst.getState?r.inst.getState():{}, cables=Host.cables.filter(c=>c.from.id===id||c.to.id===id).map(c=>({...c})), {x,y,w,h,mini}=r;
+  removeDevice(id); const nid=addDevice(def.id,x,y,state,id,def.version); if(!nid) return true;
+  if(w!==null||h!==null) setSize(nid, w===null?undefined:w, h===null?undefined:h);
+  if(mini) setMini(nid,true);
+  requestAnimationFrame(()=>{ cables.forEach(c=>{ const ok=(c.from.id!==id||portExists(nid,c.from.port,'out'))&&(c.to.id!==id||portExists(nid,c.to.port,'in')); if(ok) patch(c); }); if(wasSel) select(nid); });
+  return true; }
+function updatePlaced(){ let n=0; [...Host.devices.keys()].forEach(id=>{ try{ if(reloadDevice(id)) n++; }catch(e){ console.warn('reloadDevice()',e); } }); return n; }
 function portExists(id,port,dir){ const r=Host.devices.get(id); return !!(r&&r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`)); }
 function select(id){ const ch=selected!==id; selected=id; Host.devices.forEach((r,k)=>r.el.classList.toggle('sel',k===id)); if(ch) peersChanged(); }
 let _frameRaf=0, _vis={t:-1,wr:null};
@@ -2554,10 +2574,11 @@ async function rescanSource(src,interactive){
   let pn=0, pc=0; PR.libs.filter(l=>l.ro&&l.src&&l.src.sid===src.sid).forEach(l=>{ if(!libsBefore.has(l.lid)) pn++; else if(libsBefore.get(l.lid)!==pkSig(l)) pc++; });
   const total=nw.length+ch.length+pn+pc;
   LIBMARK.nw=new Set(total<=25?nw.map(d=>d.id):[]); LIBMARK.ch=new Set(total<=25?ch.map(d=>d.id):[]); clearTimeout(LIBMARK.t); if(LIBMARK.nw.size||LIBMARK.ch.size) LIBMARK.t=setTimeout(()=>{ LIBMARK.nw=new Set(); LIBMARK.ch=new Set(); paintLib(); },120000);
+  const upd=ch.length?updatePlaced():0;
   paintLib(); refreshVersionSelects(); presetRefreshAll(); if(wsPanel&&!wsPanel.hidden) paintPatches();   // de bibliotheek meteen opnieuw tekenen
   if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); }
   const errs=(r&&r.errs)||[], parts=[];
-  if(nw.length) parts.push(pkt('m.scan_nieuw_n',nw.length)); if(ch.length) parts.push(pkt('m.scan_gewijzigd_n',ch.length)); if(pn) parts.push(pkt('m.scan_packs_nieuw',pn)); if(pc) parts.push(pkt('m.scan_packs_gewijzigd',pc));
+  if(nw.length) parts.push(pkt('m.scan_nieuw_n',nw.length)); if(ch.length) parts.push(pkt('m.scan_gewijzigd_n',ch.length)); if(pn) parts.push(pkt('m.scan_packs_nieuw',pn)); if(pc) parts.push(pkt('m.scan_packs_gewijzigd',pc)); if(upd) parts.push(pkt('m.scan_bijgewerkt_n',upd));
   const names=[...nw,...ch].map(d=>d.name).filter((x,i,a)=>a.indexOf(x)===i), nm=names.length&&total<=25?' ('+names.slice(0,6).join(', ')+(names.length>6?pkt('m.en_nog',names.length-6):'')+')':'';
   status(`${srcLabel(src)}: `+(total?pktp('m.scan_n_wijzigingen',total===1,total)+' · '+parts.join(', ')+nm:pkt('m.scan_geen'))+(errs.length?pktp('m.fouten_fout',errs.length>1,errs.length,errs[0]):''),errs.length>0);
   if(src.kind==='folder'&&!FOLDERSIG.has(src.sid)&&interactive) status(pkt('m.deze_map_is_gekoppeld_zonder',srcLabel(src)),true);
@@ -2567,6 +2588,24 @@ async function autoScan(){ if(_scanBusy||document.hidden||Date.now()-_scanT<2500
   catch(e){} finally{ _scanBusy=false; } }
 window.addEventListener('focus',()=>autoScan()); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) autoScan(); });
 setInterval(()=>{ if(!document.hidden&&document.hasFocus()) autoScan(); },15000);
+
+// ---------- bij het opstarten: staat er een andere versie van patchkamer.html op GitHub? ----------
+// Vergelijkt de git-blob-hash van dit bestand (zoals de server het levert, regeleinden genormaliseerd) met die van main op GitHub. Alleen bij http(s); een bestand dat je via file:// opent kan zichzelf niet lezen.
+const HOSTCHK={repo:'unboxednl/patchkamer',path:'patchkamer/patchkamer.html',ref:'main',key:'patchkamerHostSeen'};
+async function gitBlobSha(buf){ const txt=new TextDecoder().decode(buf).replace(/\r\n/g,'\n'), body=new TextEncoder().encode(txt), head=new TextEncoder().encode('blob '+body.length+'\0'), all=new Uint8Array(head.length+body.length); all.set(head); all.set(body,head.length);
+  return [...new Uint8Array(await crypto.subtle.digest('SHA-1',all))].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+function showHostUpdate(sha){ if($('pkHostUpdate')) return; const b=document.createElement('div'); b.id='pkHostUpdate'; b.setAttribute('role','status');
+  b.style.cssText='position:fixed;right:14px;bottom:14px;z-index:9999;max-width:420px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:13px;line-height:1.45';
+  const t=document.createElement('div'); t.textContent=pkt('m.host_andere_versie'); const row=document.createElement('div'); row.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px';
+  const a=document.createElement('a'); a.href=`https://github.com/${HOSTCHK.repo}/commits/${HOSTCHK.ref}/${HOSTCHK.path}`; a.target='_blank'; a.rel='noopener'; a.textContent=pkt('m.host_bekijken'); a.className='small'; a.style.cssText='padding:4px 10px;border:1px solid var(--line);border-radius:6px;color:inherit;text-decoration:none';
+  const later=document.createElement('button'); later.className='small'; later.type='button'; later.textContent=pkt('m.host_later'); later.onclick=()=>b.remove();
+  const never=document.createElement('button'); never.className='small'; never.type='button'; never.textContent=pkt('m.host_niet_meer'); never.onclick=()=>{ try{ localStorage.setItem(HOSTCHK.key,sha); }catch(e){} b.remove(); };
+  row.append(a,later,never); b.append(t,row); document.body.appendChild(b); }
+async function checkHostVersion(){ try{ if(!/^https?:$/.test(location.protocol)||!(window.crypto&&crypto.subtle)||navigator.onLine===false) return;
+  const [mine,remote]=await Promise.all([fetch(location.href.split('#')[0].split('?')[0],{cache:'no-cache'}).then(r=>r.ok?r.arrayBuffer():null), fetchJSON(`https://api.github.com/repos/${HOSTCHK.repo}/contents/${HOSTCHK.path}?ref=${HOSTCHK.ref}`)]);
+  if(!mine||!remote||typeof remote.sha!=='string') return; const own=await gitBlobSha(mine); if(own===remote.sha) return;
+  let seen=''; try{ seen=localStorage.getItem(HOSTCHK.key)||''; }catch(e){} if(seen===remote.sha) return; showHostUpdate(remote.sha); }catch(e){} }
+setTimeout(checkHostVersion,4000);
 
 // ---------- schaal per scherm: toepassen (v1.8) ----------
 function applyScale(){ const old=PKS.f, f=pksTarget(); PKS.f=f; PKS.ui=Math.max(0.7,f); document.documentElement.style.setProperty('--pkui',String(PKS.ui));
@@ -2686,6 +2725,7 @@ function portsLine(def){ const P=def.ports, nm=a=>esc(a.map(x=>x.name||x.id).joi
   if((P.multiIn||[]).length) parts.push(pkt('m.bundel_in',nm(P.multiIn)));
   if((P.multiOut||[]).length) parts.push(pkt('m.bundel_uit',nm(P.multiOut)));
   return parts.join(' · ')||pkt('m.geen_poorten'); }
+const LIBOPEN=new Set();   // categorieën die je in deze sessie openklapte: bij elke start staat alles ingeklapt
 const LIBKEY='patchkamerLib'; let LIB={x:16,y:16,w:340,h:620,fs:14,min:false,shown:true,closed:[]};
 try{ Object.assign(LIB,JSON.parse(localStorage.getItem(LIBKEY)||'{}')); }catch(e){}
 LIB.cats=(LIB.cats&&typeof LIB.cats==='object')?LIB.cats:{}; CAT_OVR=LIB.cats;
@@ -2706,7 +2746,7 @@ LIB.catList=LIB.catList?cleanCatList(LIB.catList,!(LIB.catV>=2)):null; LIB.catV=
 const saveLib=()=>{ try{ localStorage.setItem(LIBKEY,JSON.stringify(LIB)); }catch(e){} };
 function setCategory(defId,cat){ const def=Host.latest(defId); if(!def||!CATS.some(x=>x[0]===cat)) return;
   if(cat===baseCategory(def)) delete LIB.cats[defId]; else LIB.cats[defId]=cat; LIB.layoutT=Date.now(); saveLib();
-  LIB.closed=LIB.closed.filter(x=>x!==cat); paintLib();
+  LIBOPEN.add(cat); paintLib();
   paintIcons();
   status(`${def.name} → ${CATS.find(x=>x[0]===cat)[1]}`); }
 function paintLib(){
@@ -2716,10 +2756,10 @@ function paintLib(){
     const items=ids.map(id=>Host.versionsOf(id)[0]).filter(def=>categoryOf(def)===cat)
       .filter(def=>!q||[def.name,def.id,def.kind,label].some(t=>String(t).toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name,'nl'));
     if(!items.length&&(q||BUILTIN_CATS.has(cat)||cat.startsWith('dir-'))) return; shown+=items.length;
-    const box=document.createElement('div'); box.className='cat'+(LIB.closed.includes(cat)&&!q?' closed':''); box.dataset.cat=cat; box.style.setProperty('--catc',catColor(cat));
+    const box=document.createElement('div'); box.className='cat'+(!LIBOPEN.has(cat)&&!q?' closed':''); box.dataset.cat=cat; box.style.setProperty('--catc',catColor(cat));
     const head=document.createElement('button'); head.className='cathead'; head.setAttribute('aria-expanded',String(!box.classList.contains('closed')));
     head.innerHTML=`<span class="chev">▾</span><span class="cdot"></span>${esc(label)}<span class="n">${items.length}</span>`; head.title=pkt('m.klik_in_of_uitklappen_dubbelklik'); head.addEventListener('dblclick',e=>{ e.preventDefault(); renameCatInline(cat,head); });
-    head.onclick=()=>{ box.classList.toggle('closed'); const c=box.classList.contains('closed'); head.setAttribute('aria-expanded',String(!c)); LIB.closed=c?[...new Set([...LIB.closed,cat])]:LIB.closed.filter(x=>x!==cat); saveLib(); };
+    head.onclick=()=>{ box.classList.toggle('closed'); const c=box.classList.contains('closed'); head.setAttribute('aria-expanded',String(!c)); if(c) LIBOPEN.delete(cat); else LIBOPEN.add(cat); };
     const devs=document.createElement('div'); devs.className='devs'; if(!items.length){ const e=document.createElement('div'); e.className='note'; e.style.cssText='padding:6px 10px;font-size:11px'; e.textContent=pkt('m.nog_leeg_sleep_een_apparaat'); devs.appendChild(e); }
     items.forEach(def=>{ const vers=Host.versionsOf(def.id);
       const d=document.createElement('div'); d.className='libdev c-'+cat; d.dataset.id=def.id; d.title=pkt('m.sleep_naar_de_vloer');
@@ -3568,7 +3608,7 @@ function renameCatInline(key,head){ const lab=CATS.find(x=>x[0]===key); if(!lab)
   head.replaceWith(i); i.focus(); i.select(); let done=false; const fin=ok=>{ if(done) return; done=true; if(ok) renameCat(key,i.value); else paintLib(); };
   i.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Enter') fin(true); if(e.key==='Escape') fin(false); }); i.addEventListener('blur',()=>fin(true)); i.addEventListener('pointerdown',e=>e.stopPropagation()); }
 function layoutState(){ ensureCatList(); return {format:'patchkamer-bibliotheek',formatVersion:1,catV:2,saved:new Date().toISOString(),
-  categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key)})),folders:[...new Set(latestDefs().map(dirOf).filter(Boolean))].sort(),assign:Object.fromEntries(Object.entries(LIB.cats).filter(([,c])=>!String(c).startsWith('dir-'))),closed:[...(LIB.closed||[])]}; }
+  categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key)})),folders:[...new Set(latestDefs().map(dirOf).filter(Boolean))].sort(),assign:Object.fromEntries(Object.entries(LIB.cats).filter(([,c])=>!String(c).startsWith('dir-'))),closed:CATS.map(x=>x[0]).filter(k=>!LIBOPEN.has(k))}; }
 // L = inhoud van patchkamer-bibliotheek.json. force=false bij het laden van een bron: alleen toepassen als het bestand nieuw of gewijzigd is
 function applyLayout(L,src,force){ if(!L||L.format!=='patchkamer-bibliotheek'||!Array.isArray(L.categories)) throw new Error(pkt('m.geen_bibliotheekindeling_format_patchkamer_bibliotheek'));
   { const o=src&&SRCLAYOUT.get(src.sid); if(o) o.folders=Array.isArray(L.folders)?L.folders.map(String):null; }
@@ -3577,7 +3617,7 @@ function applyLayout(L,src,force){ if(!L||L.format!=='patchkamer-bibliotheek'||!
   if(!force&&src&&LIB.layoutT&&!(Date.parse(L.saved||'')>=LIB.layoutT)){ LIB.layoutSeen[k]=stamp; saveLib(); return pkt('m.indeling_in_deze_browser_is')+LAYOUT_FILE+pkt('m.en_blijft_staan'); }
   LIB.catList=cleanCatList(L.categories,!(L.catV>=2)); LIB.cats={}; const keys=new Set(LIB.catList.map(c=>c.key));
   if(L.assign&&typeof L.assign==='object') for(const [id,cat] of Object.entries(L.assign)) if(typeof id==='string'&&keys.has(cat)) LIB.cats[id]=cat;
-  CAT_OVR=LIB.cats; if(Array.isArray(L.closed)) LIB.closed=L.closed.filter(x=>keys.has(x)); LIB.layoutSeen[k]=stamp; LIB.layoutT=Date.parse(L.saved||'')||Date.now(); applyCats(); saveLib(); paintLib(); paintIcons();
+  CAT_OVR=LIB.cats; LIB.layoutSeen[k]=stamp; LIB.layoutT=Date.parse(L.saved||'')||Date.now(); applyCats(); saveLib(); paintLib(); paintIcons();
   return pkt('m.indeling_categorie_n',LIB.catList.length); }
 async function downloadLayout(){ const r=await saveFileData(LAYOUT_FILE,JSON.stringify(layoutState(),null,2)); status(r==='saved'?LAYOUT_FILE+pkt('m.bewaard_zet_het_in_de'):pkt('m.bewaren_geannuleerd')); return; 
   status(pkt('m.gedownload_zet_het_in_de',LAYOUT_FILE)); }
