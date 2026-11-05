@@ -477,7 +477,7 @@ Een transparante luisteruitgang: het geluid gaat ongewijzigd naar de uitgang van
 
 | Regelaar | Wat hij doet | Bereik (start) |
 |---|---|---|
-| **Luistervolume** | Het volume van wat je hoort. Het verandert het niveau in de keten ervoor niet. | 0 tot 100% (70%) |
+| **Volume** | Het luistervolume: het volume van wat je hoort. Het verandert het niveau in de keten ervoor niet. | 0 tot 100% (70%) |
 
 ### Poorten
 

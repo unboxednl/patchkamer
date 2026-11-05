@@ -20,7 +20,7 @@ Voorganger: Luisteruitgang (`nl.patchkamer.monitoruit`).
 
 | Veld | Wat | Bereik | Start |
 |---|---|---|---|
-| `level` | Luistervolume | 0 … 1 | 0,7 |
+| `level` | Volume (luistervolume) | 0 … 1 | 0,7 |
 
 `getPreset()` geeft hetzelfde. Een ongeldige waarde (tekst, `NaN`, `Infinity`) geeft 0,7; een getal buiten het bereik wordt afgekapt; het volume gaat zacht naar zijn nieuwe waarde.
 
