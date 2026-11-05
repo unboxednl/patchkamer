@@ -36,7 +36,7 @@ Devices come in kinds. Every kind has its own README in its folder and its own u
 | **Drums** | Drum sounds and rhythm | Drum Machine, Drum Kit, Groovebox 12, Pulse Drums, Latin Percussion, Click Synth | [devices/drums](devices/drums/README.md) | [Drums](docs/drums/USER-MANUAL_EN.md) |
 | **Effects** | Shape the sound: modulation, distortion, space, filters, rhythm, voice, whole chains | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [devices/effects](devices/effects/README.md) | [Effects](docs/effects/USER-MANUAL_EN.md) |
 | **Mastering** | Finish a mix: tone, dynamics, saturation, width, loudness and checking, for many styles and situations | Balance EQ, Multiband Balance, Bus Compressor, Patina, Stereo Space, Master Chain, Mix Check, Master Director, Listening Output | [devices/mastering](devices/mastering/README.md) | [Mastering](docs/mastering/USER-MANUAL_EN.md) |
-| **Mixer** | Mix, keep the level steady, play out | Mixer, Leveler, Speakers | [devices/mixer](devices/mixer/README.md) | [Mixer](docs/mixer/USER-MANUAL_EN.md) |
+| **Mixer** | Bring in, mix, keep the level steady, play out | Mixer, Leveler, Speakers, Audio Input | [devices/mixer](devices/mixer/README.md) | [Mixer](docs/mixer/USER-MANUAL_EN.md) |
 | **Modulators** | Move the controls of other devices | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [devices/modulators](devices/modulators/README.md) | [Modulators](docs/modulators/USER-MANUAL_EN.md) |
 | **Tools** | Play, record, measure and take notes | Keys / MIDI, Metronome, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README.md) | [Tools](docs/tools/USER-MANUAL_EN.md) |
 
@@ -45,7 +45,7 @@ Devices come in kinds. Every kind has its own README in its folder and its own u
 | | What it is | README | Manual |
 |---|---|---|---|
 | **Tunes** | Complete sounds for devices that make sound (the synths, the samplers and the drum devices), in packs per style | [tunes](tunes/README.md) | [Tunes](docs/tunes/USER-MANUAL_EN.md) |
-| **Presets** | Starting settings for devices without a sound of their own: a pack for most effects, the modulators, the sequencers, the mastering devices, the Metronome and the Leveler. The Effect Chain packs are complete chains of four to eight effects, each built for one application | [presets](presets/README.md) | [Presets](docs/presets/USER-MANUAL_EN.md) |
+| **Presets** | Starting settings for devices without a sound of their own: a pack for most effects, the modulators, the sequencers, the mastering devices, the Metronome, the Leveler and Audio Input. The Effect Chain packs are complete chains of four to eight effects, each built for one application | [presets](presets/README.md) | [Presets](docs/presets/USER-MANUAL_EN.md) |
 
 ## Build your own devices, with or without AI
 

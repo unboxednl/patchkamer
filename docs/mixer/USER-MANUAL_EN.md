@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This page covers the devices that bring your sounds together and send them out: **Mixer**, **Leveler** and **Speakers**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/mixer](../../devices/mixer/README.md).
+This page covers the devices that bring your sounds together and send them out: **Mixer**, **Leveler**, **Speakers** and **Audio Input**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/mixer](../../devices/mixer/README.md).
 
 ## Contents
 
@@ -11,7 +11,8 @@ This page covers the devices that bring your sounds together and send them out: 
 3. [Mixer](#mixer)
 4. [Leveler](#leveler)
 5. [Speakers](#speakers)
-6. [If it does not work](#if-it-does-not-work)
+6. [Audio Input](#audio-input)
+7. [If it does not work](#if-it-does-not-work)
 
 ## What these devices do
 
@@ -23,7 +24,7 @@ synths, drums …  →  Mixer  →  Leveler (optional)  →  Speakers
 
 All cables here are teal audio cables. The Mixer also has a green **bundle** cable (many channels in one cable), which is described below.
 
-**Presets.** These three devices do not make sound themselves, so they have **presets** and not tunes. See [Presets](../presets/USER-MANUAL_EN.md) for how to use and share them.
+**Presets.** These devices do not make sound themselves, so they have **presets** and not tunes. See [Presets](../presets/USER-MANUAL_EN.md) for how to use and share them.
 
 ## Which device for which goal
 
@@ -35,6 +36,7 @@ All cables here are teal audio cables. The Mixer also has a green **bundle** cab
 | Bring many sources to the same volume at once | [Mixer](#mixer) (**Level match**) |
 | Keep a source that slowly gets louder and softer at a steady volume | [Leveler](#leveler) |
 | Hear the result and set the final volume | [Speakers](#speakers) |
+| Bring in a microphone, an instrument or an audio interface | [Audio Input](#audio-input) |
 
 ## Mixer
 
@@ -197,6 +199,57 @@ Speakers has the preset bar like every device, but no preset pack comes with it:
 
 - Speakers has an input and no output. The volume moves smoothly when you change it or load a preset.
 - A volume above 100% is not possible.
+
+## Audio Input
+
+### What it is for
+
+Audio Input brings sound from the outside into the studio: the default input of your sound card, or an audio interface that your computer knows (USB interfaces, the line or microphone input of a sound card). Patchkamer asks the browser for a list of inputs and shows them with the names your system gives them. Use it to play a guitar, a keyboard or a microphone through effects, or to record it with the **Recorder**.
+
+![The Audio Input card](../images/en/mixer/audio-input.png)
+
+### The controls
+
+| Control | What it does | Range (start) |
+|---|---|---|
+| **Start input** / **Stop input** | Opens or closes the input. The browser asks for permission the first time. Nothing starts by itself, also not when you load a song or a preset. | off |
+| **Input** (list) | The input to use. **System default input** follows the choice of your computer. After the first start the list shows the real names. | system default |
+| **Refresh list** | Reads the list of inputs again. The list also updates when you plug in or unplug an interface. | |
+| **Channels of the input** | **2 (stereo)** opens two channels. **As many as the input gives** asks for all channels of an interface, so you can pick a pair or a single input. | 2 (stereo) |
+| **Mode** | **Stereo (a pair)**, **Mono (one channel to left and right)** or **Mono (pair summed)**. | Stereo |
+| **Pair** / **Channel** | Which pair (1+2, 3+4 …) or which single channel is used. | 1+2 |
+| **Gain** | Raises or lowers the input. | −24 to +36 dB (0 dB) |
+| **High-pass** | Cuts low rumble: off, 40, 80 or 120 Hz. | off |
+| **Invert polarity** | Turns the signal upside down. Use it when two microphones on one source cancel each other. | off |
+| **Muted** | Silences the output. It is on the first time, so a microphone near the speakers does not cause feedback. | on |
+| **Browser processing** | Echo cancelling, noise suppression and automatic level of the browser. Off keeps the signal untouched; switch it on for a voice call. | off |
+| **L** / **R** meters | The level after the gain. **clip** lights up for a moment when the signal reaches full scale. | |
+
+### Ports
+
+| Port | Kind | Use |
+|---|---|---|
+| **Out** | audio out | Stereo sound. Connect to a Mixer channel, an effect, the **Recorder** or **Speakers**. |
+
+### An example
+
+1. Place **Audio Input**, **Room** and **Speakers**. Connect **Out** of Audio Input to the effect and the effect to **Speakers**.
+2. Use headphones, or turn your computer volume low.
+3. Click **Start input** and allow the input in the browser. Choose your interface in the list.
+4. Play something and watch the meters. Raise **Gain** until the meter reaches about three quarters and the **clip** light stays off.
+5. Untick **Muted** to hear it.
+
+### Presets
+
+The **Audio Input Basics** pack has 31 presets in five folders: **Line Level**, **Voice**, **Instruments**, **Interface Channels** and **Utility**. A preset sets the mode, the channel, the gain, the high-pass, the polarity and the browser processing. It does not set the input itself, and it does not unmute. See [Presets](../presets/USER-MANUAL_EN.md).
+
+### Tips and limits
+
+- A browser has no ASIO. An interface works through the driver of your operating system, and how many channels the browser sees depends on that driver and on the system: some systems show only two channels in the browser. The card shows how many channels came in.
+- The sound of an input goes through the browser, so there is a delay. The size depends on the interface, its driver and your **Latency** setting under Settings → Audio.
+- A microphone in a room with speakers gives feedback. Use headphones, or keep **Muted** on until you have set the volume.
+- The sample rate of the input can differ from the sample rate of Patchkamer. The browser converts it.
+- If another program has the input, the browser may not be able to open it. Close that program and click **Start input** again.
 
 ## If it does not work
 

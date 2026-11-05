@@ -4,7 +4,7 @@
 
 Kant-en-klare instellingen voor apparaten die geen eigen geluid maken (effecten, mixers, modulatoren, sequencers en andere tools), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, of gebruik een pack als beginpunt voor je eigen presets. Apparaten die geluid maken hebben [tunes](../tunes/README_NL.md).
 
-Deze map heeft **37 packs met 1820 presets**, één pack per apparaat: 12 voor effecten, 9 voor mastering, 1 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 1 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
+Deze map heeft **38 packs met 1851 presets**, één pack per apparaat: 12 voor effecten, 9 voor mastering, 2 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 1 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
@@ -39,10 +39,11 @@ Deze map heeft **37 packs met 1820 presets**, één pack per apparaat: 12 voor e
 | [Patina](../devices/mastering/Patina/) | Patina Situations and Styles | 128 | 10 | [`patina.patchkamer-presets.json`](patina.patchkamer-presets.json) |
 | [Stereo Space](../devices/mastering/StereoSpace/) | Stereo Space Situations and Styles | 128 | 10 | [`stereo-space.patchkamer-presets.json`](stereo-space.patchkamer-presets.json) |
 
-### Mixer (1)
+### Mixer (2)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
+| [Audio Input](../devices/mixer/AudioInput/) | Audio Input Basics | 31 | 5 | [`audio-input.patchkamer-presets.json`](audio-input.patchkamer-presets.json) |
 | [Leveler](../devices/mixer/Leveler/) | Leveler Basics | 11 | 3 | [`leveler.patchkamer-presets.json`](leveler.patchkamer-presets.json) |
 
 ### Modulatoren (6)
