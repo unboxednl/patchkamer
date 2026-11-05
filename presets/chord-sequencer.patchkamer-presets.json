@@ -5,7 +5,7 @@
   "name": "Chord Sequencer Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Chord and pattern presets for Chord Sequencer by music style: pop, ballad, cinematic, film score, ambient, trance, synthwave, lo-fi, neo-classical, deep house and funk & disco. Every preset fills all four tracks (chords, bass, pulse, bells) in one key and all four scenes (main, variation, breakdown, lift).",
+  "description": "Chord and pattern presets for Chord Sequencer by music style: pop, ballad, cinematic, film score, ambient, trance, synthwave, lo-fi, neo-classical, deep house and funk & disco. Newer presets use per-step velocity and length, 1/32 and 1/64 rolls and recorded-note tracks. Every preset fills all four tracks (chords, bass, pulse, bells) in one key and all four scenes (main, variation, breakdown, lift).",
   "tree": [
     {
       "folder": "Pop",
@@ -1737,6 +1737,581 @@
               "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":70,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":82,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1}]",
               "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":70,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":82,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1}]",
               "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":70,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":94,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dynamics",
+      "items": [
+        {
+          "name": "Accent Four",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 301,
+            "t0gate": 0.85,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.55,0.8,0.55,1,0.55,0.8,0.55,1,1,1,1,1,1,1,1],\"len\":[1,0.6,0.9,0.6,1,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.9,0.5,0.7,0.5,0.9,0.5,0.7,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.55,0.8,0.55,1,0.55,0.8,0.55,1,1,1,1,1,1,1,1],\"len\":[1,0.6,0.9,0.6,1,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":2,\"vel\":[0.9,0.5,0.7,0.5,0.9,0.5,0.7,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.55,0.8,0.55,1,0.55,0.8,0.55,1,1,1,1,1,1,1,1],\"len\":[1,0.6,0.9,0.6,1,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.9,0.5,0.7,0.5,0.9,0.5,0.7,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.55,0.8,0.55,1,0.55,0.8,0.55,1,1,1,1,1,1,1,1],\"len\":[1,0.6,0.9,0.6,1,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":2,\"vel\":[0.9,0.5,0.7,0.5,0.9,0.5,0.7,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":84,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Ghost Groove",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 302,
+            "t0gate": 0.3,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.45,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.25,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.6,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.3,0.3,0.8,0.3,0.3,1,0.3,0.3,0.7,0.3,0.9,0.3,0.3,0.3,0.3],\"len\":[0.7,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.25,0.25,0.9,0.25,0.25,0.8,0.25,0.25,0.7,0.25,1,0.25,0.25,0.5,0.25]},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.3,0.3,0.8,0.3,0.3,1,0.3,0.3,0.7,0.3,0.9,0.3,0.3,0.3,0.3],\"len\":[0.7,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.25,0.25,0.9,0.25,0.25,0.8,0.25,0.25,0.7,0.25,1,0.25,0.25,0.5,0.25]},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.3,0.3,0.8,0.3,0.3,1,0.3,0.3,0.7,0.3,0.9,0.3,0.3,0.3,0.3],\"len\":[0.7,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]},{\"name\":\"\",\"enabled\":false,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.25,0.25,0.9,0.25,0.25,0.8,0.25,0.25,0.7,0.25,1,0.25,0.25,0.5,0.25]},{\"name\":\"\",\"enabled\":false,\"root\":64,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.3,0.3,0.8,0.3,0.3,1,0.3,0.3,0.7,0.3,0.9,0.3,0.3,0.3,0.3],\"len\":[0.7,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.25,0.25,0.9,0.25,0.25,0.8,0.25,0.25,0.7,0.25,1,0.25,0.25,0.5,0.25]},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3,0.9,0.3,0.5,0.3],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":88,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,7],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Crescendo Arp",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 303,
+            "t0gate": 0.9,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.55,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.4,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.6,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1,\"vel\":[0.4,0.486,0.571,0.657,0.743,0.829,0.914,1,0.4,0.486,0.571,0.657,0.743,0.829,0.914,1]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1,\"vel\":[0.4,0.486,0.571,0.657,0.743,0.829,0.914,1,0.4,0.486,0.571,0.657,0.743,0.829,0.914,1]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.4,0.486,0.571,0.657,0.743,0.829,0.914,1,0.4,0.486,0.571,0.657,0.743,0.829,0.914,1]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":93,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1,\"vel\":[0.4,0.486,0.571,0.657,0.743,0.829,0.914,1,0.4,0.486,0.571,0.657,0.743,0.829,0.914,1]}]"
+            ]
+          }
+        },
+        {
+          "name": "Legato Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 304,
+            "t0gate": 1.0,
+            "t0velocity": 0.6,
+            "t0transpose": 0,
+            "t1gate": 1.0,
+            "t1velocity": 0.65,
+            "t1transpose": 0,
+            "t2gate": 0.6,
+            "t2velocity": 0.5,
+            "t2transpose": 0,
+            "t3gate": 1.0,
+            "t3velocity": 0.5,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.7,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[-5,-2,0,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[-5,-2,0,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.7,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[-5,-2,0,-2],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[-5,-2,0,-2],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.7,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":62,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.6,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":1,\"vel\":[0.7,0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":86,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-5,-2],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Staccato Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 305,
+            "t0gate": 0.85,
+            "t0velocity": 0.8,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.9,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.65,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.65,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":55,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.85,0.6,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[0.3,0.3,0.3,0.3,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":43,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":67,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.7,0.5,1,0.5,0.7,0.5,1,1,1,1,1,1,1,1],\"len\":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":79,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":5,\"division\":2,\"steps\":[1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":55,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.85,0.6,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[0.3,0.3,0.3,0.3,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":43,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":67,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":2,\"vel\":[1,0.5,0.7,0.5,1,0.5,0.7,0.5,1,1,1,1,1,1,1,1],\"len\":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":79,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":5,\"division\":2,\"steps\":[1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":55,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.85,0.6,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[0.3,0.3,0.3,0.3,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":43,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":67,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.7,0.5,1,0.5,0.7,0.5,1,1,1,1,1,1,1,1],\"len\":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":79,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":5,\"division\":2,\"steps\":[1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":55,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.85,0.6,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[0.3,0.3,0.3,0.3,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":43,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":67,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":2,\"vel\":[1,0.5,0.7,0.5,1,0.5,0.7,0.5,1,1,1,1,1,1,1,1],\"len\":[0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":91,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":5,\"division\":2,\"steps\":[1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Breathing Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 306,
+            "t0gate": 0.4,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.55,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.3,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.7,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":51,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.8,0.6,0.9,0.6,0.8,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":39,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.75,0.5,0.9,0.5,0.7,0.6,1,1,1,1,1,1,1,1],\"len\":[1.2,0.5,0.9,0.5,1.2,0.5,0.9,0.7,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":63,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":75,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":51,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.8,0.6,0.9,0.6,0.8,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":39,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.75,0.5,0.9,0.5,0.7,0.6,1,1,1,1,1,1,1,1],\"len\":[1.2,0.5,0.9,0.5,1.2,0.5,0.9,0.7,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":63,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":75,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":51,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.8,0.6,0.9,0.6,0.8,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":39,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.75,0.5,0.9,0.5,0.7,0.6,1,1,1,1,1,1,1,1],\"len\":[1.2,0.5,0.9,0.5,1.2,0.5,0.9,0.7,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":63,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":75,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":51,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.8,0.6,0.9,0.6,0.8,0.6,0.9,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":39,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.75,0.5,0.9,0.5,0.7,0.6,1,1,1,1,1,1,1,1],\"len\":[1.2,0.5,0.9,0.5,1.2,0.5,0.9,0.7,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":63,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":87,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,0,5],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Backbeat Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 307,
+            "t0gate": 0.35,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.5,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.3,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.6,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.5,0.5,1,0.5,0.5,0.5,1,1,1,1,1,1,1,1],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.8,0.6,1,0.6,0.8,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.5,0.5,1,0.5,0.5,0.5,1,1,1,1,1,1,1,1],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.8,0.6,1,0.6,0.8,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.5,0.5,1,0.5,0.5,0.5,1,1,1,1,1,1,1,1],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.8,0.6,1,0.6,0.8,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":69,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":8,\"division\":2,\"steps\":[1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.5,0.5,0.5,1,0.5,0.5,0.5,1,1,1,1,1,1,1,1],\"len\":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"vel\":[1,0.6,0.8,0.6,1,0.6,0.8,0.6,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":93,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Swell And Release",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 308,
+            "t0gate": 0.9,
+            "t0velocity": 0.6,
+            "t0transpose": 0,
+            "t1gate": 0.8,
+            "t1velocity": 0.75,
+            "t1transpose": 0,
+            "t2gate": 0.5,
+            "t2velocity": 0.5,
+            "t2transpose": 0,
+            "t3gate": 0.9,
+            "t3velocity": 0.55,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,0.6,0.8,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.2,0.7,1.2,0.7,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":70,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":6,\"division\":1,\"steps\":[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":0.9,\"ratchet\":1,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,1,1,1,1,1,1,1,1,1,1],\"len\":[1.5,1.5,1.5,1.5,1.5,1.5,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":82,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[5,5,0,7],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,0.6,0.8,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.2,0.7,1.2,0.7,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[5,5,0,7],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":70,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":6,\"division\":1,\"steps\":[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],\"progression\":[5,5,0,7],\"probability\":0.9,\"ratchet\":1,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,1,1,1,1,1,1,1,1,1,1],\"len\":[1.5,1.5,1.5,1.5,1.5,1.5,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":82,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[5,5,0,7],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,0.6,0.8,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.2,0.7,1.2,0.7,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":false,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":70,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":6,\"division\":1,\"steps\":[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":0.9,\"ratchet\":1,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,1,1,1,1,1,1,1,1,1,1],\"len\":[1.5,1.5,1.5,1.5,1.5,1.5,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":82,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":58,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1,\"vel\":[0.5,0.9,0.6,0.8,1,1,1,1,1,1,1,1,1,1,1,1],\"len\":[1.2,0.7,1.2,0.7,1,1,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":46,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":70,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":6,\"division\":1,\"steps\":[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":0.9,\"ratchet\":1,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,1,1,1,1,1,1,1,1,1,1],\"len\":[1.5,1.5,1.5,1.5,1.5,1.5,1,1,1,1,1,1,1,1,1,1]},{\"name\":\"\",\"enabled\":true,\"root\":94,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,7,5,5],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Rolls",
+      "items": [
+        {
+          "name": "Thirty-Second Pulse",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 311,
+            "t0gate": 0.9,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.55,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.35,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.6,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55,0.9,0.55,0.45,0.55],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":93,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Snare Roll Bells",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 312,
+            "t0gate": 0.85,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"grid\":4,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1,1,1,1,1,1,1,1],\"len\":[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"grid\":4,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1,1,1,1,1,1,1,1],\"len\":[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"grid\":4,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1,1,1,1,1,1,1,1],\"len\":[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":84,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"grid\":4,\"vel\":[0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1,1,1,1,1,1,1,1],\"len\":[0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9]}]"
+            ]
+          }
+        },
+        {
+          "name": "Grace Notes",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 313,
+            "t0gate": 1.3,
+            "t0velocity": 0.55,
+            "t0transpose": 0,
+            "t1gate": 1.0,
+            "t1velocity": 0.65,
+            "t1transpose": 0,
+            "t2gate": 0.7,
+            "t2velocity": 0.55,
+            "t2transpose": 0,
+            "t3gate": 1.2,
+            "t3velocity": 0.55,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,0,0,0,0,1,0,1,0,1,1,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.4,0.9,0.5,0.6,0.6,0.6,0.6,0.95,0.45,0.8,0.5,0.9,0.4,0.6,0.6],\"len\":[1,0.5,1,0.5,1,1,1,1,1,1,1,1,1,1,1,1]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,0,0,0,0,1,0,1,0,1,1,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.4,0.9,0.5,0.6,0.6,0.6,0.6,0.95,0.45,0.8,0.5,0.9,0.4,0.6,0.6],\"len\":[1,0.5,1,0.5,1,1,1,1,1,1,1,1,1,1,1,1]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":62,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,0,0,0,0,1,0,1,0,1,1,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.4,0.9,0.5,0.6,0.6,0.6,0.6,0.95,0.45,0.8,0.5,0.9,0.4,0.6,0.6],\"len\":[1,0.5,1,0.5,1,1,1,1,1,1,1,1,1,1,1,1]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":86,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,0,0,0,0,1,0,1,0,1,1,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.4,0.9,0.5,0.6,0.6,0.6,0.6,0.95,0.45,0.8,0.5,0.9,0.4,0.6,0.6],\"len\":[1,0.5,1,0.5,1,1,1,1,1,1,1,1,1,1,1,1]}]"
+            ]
+          }
+        },
+        {
+          "name": "Fast Trill",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 314,
+            "t0gate": 0.85,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5],\"len\":[0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7]},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":2,\"grid\":2,\"vel\":[0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5],\"len\":[0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7]},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5],\"len\":[0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7]},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":2,\"grid\":2,\"vel\":[0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5],\"len\":[0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7]},{\"name\":\"\",\"enabled\":true,\"root\":88,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Build-Up Roll",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 315,
+            "t0gate": 1.3,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.6,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.3,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 1,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1,\"grid\":4,\"vel\":[0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-4,-5],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[-4,-5,0,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[-4,-5,0,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[-4,-5,0,-2],\"probability\":1,\"ratchet\":1,\"grid\":4,\"vel\":[0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[-4,-5,0,-2],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":false,\"root\":60,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1,\"grid\":4,\"vel\":[0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[0.3,0.347,0.393,0.44,0.487,0.533,0.58,0.627,0.673,0.72,0.767,0.813,0.86,0.907,0.953,1]},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-2,-4,-5],\"probability\":1,\"ratchet\":1,\"grid\":4,\"vel\":[0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1],\"len\":[0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]},{\"name\":\"\",\"enabled\":true,\"root\":84,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-2,-4,-5],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Gallop Thirty-Second",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 316,
+            "t0gate": 0.5,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.55,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.35,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.6,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6],\"len\":[0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":12,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6],\"len\":[0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":12,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6],\"len\":[0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":false,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":12,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":16,\"division\":1,\"steps\":[1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"grid\":2,\"vel\":[1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6,1,0.5,0.8,0.6],\"len\":[0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5,0.7,0.5,0.5,0.5]},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":12,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":88,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Melodies",
+      "items": [
+        {
+          "name": "Hook In A Minor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 321,
+            "t0gate": 0.8,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.8,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.9,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,69,0.9,8],[8,72,0.65,4],[12,71,0.7,4],[16,76,1,16],[32,74,0.8,8],[40,72,0.6,4],[44,71,0.7,4],[48,72,0.95,16],[64,74,0.9,8],[72,77,0.65,4],[76,76,0.7,4],[80,81,1,16],[96,77,0.8,8],[104,76,0.6,4],[108,74,0.7,4],[112,77,0.9,16],[128,76,0.85,8],[136,79,0.6,4],[140,71,0.7,8],[152,67,0.65,4],[160,76,0.9,12],[172,74,0.6,4],[176,71,0.8,16],[192,69,0.9,8],[200,74,0.6,4],[204,77,0.7,4],[208,76,1,12],[224,74,0.8,8],[232,72,0.6,4],[236,71,0.7,4],[240,69,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,69,0.9,8],[8,72,0.65,4],[12,71,0.7,4],[16,76,1,16],[32,74,0.8,8],[40,72,0.6,4],[44,71,0.7,4],[48,72,0.95,16],[64,74,0.9,8],[72,77,0.65,4],[76,76,0.7,4],[80,81,1,16],[96,77,0.8,8],[104,76,0.6,4],[108,74,0.7,4],[112,77,0.9,16],[128,76,0.85,8],[136,79,0.6,4],[140,71,0.7,8],[152,67,0.65,4],[160,76,0.9,12],[172,74,0.6,4],[176,71,0.8,16],[192,69,0.9,8],[200,74,0.6,4],[204,77,0.7,4],[208,76,1,12],[224,74,0.8,8],[232,72,0.6,4],[236,71,0.7,4],[240,69,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":69,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":81,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,69,0.9,8],[8,72,0.65,4],[12,71,0.7,4],[16,76,1,16],[32,74,0.8,8],[40,72,0.6,4],[44,71,0.7,4],[48,72,0.95,16],[64,74,0.9,8],[72,77,0.65,4],[76,76,0.7,4],[80,81,1,16],[96,77,0.8,8],[104,76,0.6,4],[108,74,0.7,4],[112,77,0.9,16],[128,76,0.85,8],[136,79,0.6,4],[140,71,0.7,8],[152,67,0.65,4],[160,76,0.9,12],[172,74,0.6,4],[176,71,0.8,16],[192,69,0.9,8],[200,74,0.6,4],[204,77,0.7,4],[208,76,1,12],[224,74,0.8,8],[232,72,0.6,4],[236,71,0.7,4],[240,69,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":57,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":45,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":69,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":93,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,69,0.9,8],[8,72,0.65,4],[12,71,0.7,4],[16,76,1,16],[32,74,0.8,8],[40,72,0.6,4],[44,71,0.7,4],[48,72,0.95,16],[64,74,0.9,8],[72,77,0.65,4],[76,76,0.7,4],[80,81,1,16],[96,77,0.8,8],[104,76,0.6,4],[108,74,0.7,4],[112,77,0.9,16],[128,76,0.85,8],[136,79,0.6,4],[140,71,0.7,8],[152,67,0.65,4],[160,76,0.9,12],[172,74,0.6,4],[176,71,0.8,16],[192,69,0.9,8],[200,74,0.6,4],[204,77,0.7,4],[208,76,1,12],[224,74,0.8,8],[232,72,0.6,4],[236,71,0.7,4],[240,69,1,16]]}]"
+            ]
+          }
+        },
+        {
+          "name": "Pop Hook In C",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 322,
+            "t0gate": 0.85,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,0.9,8],[8,79,0.7,4],[12,81,0.75,4],[16,84,1,12],[28,81,0.6,4],[32,79,0.85,8],[40,76,0.7,4],[48,74,0.9,12],[60,72,0.55,4],[64,81,0.9,8],[72,84,0.7,4],[76,81,0.7,4],[80,77,1,12],[92,76,0.6,4],[96,77,0.85,8],[104,81,0.7,4],[112,84,0.9,12],[124,81,0.5,4],[128,79,0.9,8],[136,83,0.7,4],[140,86,0.75,8],[152,83,0.6,4],[160,79,0.85,8],[168,74,0.7,8],[176,71,1,16],[192,81,0.9,8],[200,84,0.7,4],[204,81,0.65,4],[208,77,0.9,12],[224,76,0.85,8],[232,74,0.7,4],[240,72,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,0.9,8],[8,79,0.7,4],[12,81,0.75,4],[16,84,1,12],[28,81,0.6,4],[32,79,0.85,8],[40,76,0.7,4],[48,74,0.9,12],[60,72,0.55,4],[64,81,0.9,8],[72,84,0.7,4],[76,81,0.7,4],[80,77,1,12],[92,76,0.6,4],[96,77,0.85,8],[104,81,0.7,4],[112,84,0.9,12],[124,81,0.5,4],[128,79,0.9,8],[136,83,0.7,4],[140,86,0.75,8],[152,83,0.6,4],[160,79,0.85,8],[168,74,0.7,8],[176,71,1,16],[192,81,0.9,8],[200,84,0.7,4],[204,81,0.65,4],[208,77,0.9,12],[224,76,0.85,8],[232,74,0.7,4],[240,72,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":72,\"quality\":\"major\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,0.9,8],[8,79,0.7,4],[12,81,0.75,4],[16,84,1,12],[28,81,0.6,4],[32,79,0.85,8],[40,76,0.7,4],[48,74,0.9,12],[60,72,0.55,4],[64,81,0.9,8],[72,84,0.7,4],[76,81,0.7,4],[80,77,1,12],[92,76,0.6,4],[96,77,0.85,8],[104,81,0.7,4],[112,84,0.9,12],[124,81,0.5,4],[128,79,0.9,8],[136,83,0.7,4],[140,86,0.75,8],[152,83,0.6,4],[160,79,0.85,8],[168,74,0.7,8],[176,71,1,16],[192,81,0.9,8],[200,84,0.7,4],[204,81,0.65,4],[208,77,0.9,12],[224,76,0.85,8],[232,74,0.7,4],[240,72,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":48,\"quality\":\"major\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":36,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":60,\"quality\":\"major\",\"inversion\":0,\"mode\":\"arp\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":84,\"quality\":\"major\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,0.9,8],[8,79,0.7,4],[12,81,0.75,4],[16,84,1,12],[28,81,0.6,4],[32,79,0.85,8],[40,76,0.7,4],[48,74,0.9,12],[60,72,0.55,4],[64,81,0.9,8],[72,84,0.7,4],[76,81,0.7,4],[80,77,1,12],[92,76,0.6,4],[96,77,0.85,8],[104,81,0.7,4],[112,84,0.9,12],[124,81,0.5,4],[128,79,0.9,8],[136,83,0.7,4],[140,86,0.75,8],[152,83,0.6,4],[160,79,0.85,8],[168,74,0.7,8],[176,71,1,16],[192,81,0.9,8],[200,84,0.7,4],[204,81,0.65,4],[208,77,0.9,12],[224,76,0.85,8],[232,74,0.7,4],[240,72,1,16]]}]"
+            ]
+          }
+        },
+        {
+          "name": "Walking Bass In D",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 323,
+            "t0gate": 0.8,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.4,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.9,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"notes\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,38,1,6],[8,41,0.6,4],[16,45,0.8,6],[24,41,0.6,4],[32,38,0.9,6],[40,41,0.6,4],[48,45,0.8,6],[56,48,0.7,6],[64,43,1,6],[72,46,0.6,4],[80,50,0.8,6],[88,46,0.6,4],[96,43,0.9,6],[104,46,0.6,4],[112,50,0.8,6],[120,46,0.7,6],[128,45,1,6],[136,48,0.6,4],[144,52,0.8,6],[152,48,0.6,4],[160,45,0.9,6],[168,48,0.6,4],[176,52,0.8,6],[184,48,0.7,6],[192,43,1,6],[200,46,0.6,4],[208,50,0.8,6],[216,46,0.6,4],[224,43,0.9,6],[232,46,0.6,4],[240,50,0.8,6],[248,43,0.7,6]]},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"notes\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,38,1,6],[8,41,0.6,4],[16,45,0.8,6],[24,41,0.6,4],[32,38,0.9,6],[40,41,0.6,4],[48,45,0.8,6],[56,48,0.7,6],[64,43,1,6],[72,46,0.6,4],[80,50,0.8,6],[88,46,0.6,4],[96,43,0.9,6],[104,46,0.6,4],[112,50,0.8,6],[120,46,0.7,6],[128,45,1,6],[136,48,0.6,4],[144,52,0.8,6],[152,48,0.6,4],[160,45,0.9,6],[168,48,0.6,4],[176,52,0.8,6],[184,48,0.7,6],[192,43,1,6],[200,46,0.6,4],[208,50,0.8,6],[216,46,0.6,4],[224,43,0.9,6],[232,46,0.6,4],[240,50,0.8,6],[248,43,0.7,6]]},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"notes\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,38,1,6],[8,41,0.6,4],[16,45,0.8,6],[24,41,0.6,4],[32,38,0.9,6],[40,41,0.6,4],[48,45,0.8,6],[56,48,0.7,6],[64,43,1,6],[72,46,0.6,4],[80,50,0.8,6],[88,46,0.6,4],[96,43,0.9,6],[104,46,0.6,4],[112,50,0.8,6],[120,46,0.7,6],[128,45,1,6],[136,48,0.6,4],[144,52,0.8,6],[152,48,0.6,4],[160,45,0.9,6],[168,48,0.6,4],[176,52,0.8,6],[184,48,0.7,6],[192,43,1,6],[200,46,0.6,4],[208,50,0.8,6],[216,46,0.6,4],[224,43,0.9,6],[232,46,0.6,4],[240,50,0.8,6],[248,43,0.7,6]]},{\"name\":\"\",\"enabled\":false,\"root\":62,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":74,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":50,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":38,\"quality\":\"single\",\"inversion\":0,\"mode\":\"notes\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,38,1,6],[8,41,0.6,4],[16,45,0.8,6],[24,41,0.6,4],[32,38,0.9,6],[40,41,0.6,4],[48,45,0.8,6],[56,48,0.7,6],[64,43,1,6],[72,46,0.6,4],[80,50,0.8,6],[88,46,0.6,4],[96,43,0.9,6],[104,46,0.6,4],[112,50,0.8,6],[120,46,0.7,6],[128,45,1,6],[136,48,0.6,4],[144,52,0.8,6],[152,48,0.6,4],[160,45,0.9,6],[168,48,0.6,4],[176,52,0.8,6],[184,48,0.7,6],[192,43,1,6],[200,46,0.6,4],[208,50,0.8,6],[216,46,0.6,4],[224,43,0.9,6],[232,46,0.6,4],[240,50,0.8,6],[248,43,0.7,6]]},{\"name\":\"\",\"enabled\":true,\"root\":62,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":86,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1}]"
+            ]
+          }
+        },
+        {
+          "name": "Arp Cascade",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 324,
+            "t0gate": 1.3,
+            "t0velocity": 0.55,
+            "t0transpose": 0,
+            "t1gate": 1.0,
+            "t1velocity": 0.65,
+            "t1transpose": 0,
+            "t2gate": 0.5,
+            "t2velocity": 0.55,
+            "t2transpose": 0,
+            "t3gate": 1.2,
+            "t3velocity": 0.55,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1,\"grid\":2,\"bars\":4,\"rec\":[[0,64,0.85,2],[2,67,0.55,2],[4,71,0.6,2],[6,76,0.5,2],[8,71,0.85,2],[10,67,0.6,2],[12,64,0.5,2],[14,67,0.55,2],[16,71,0.85,2],[18,76,0.5,2],[20,71,0.55,2],[22,67,0.6,2],[24,64,0.85,2],[26,67,0.55,2],[28,71,0.6,2],[30,76,0.5,2],[32,52,0.6,32],[64,69,0.85,2],[66,72,0.55,2],[68,76,0.6,2],[70,81,0.5,2],[72,76,0.85,2],[74,72,0.6,2],[76,69,0.5,2],[78,72,0.55,2],[80,76,0.85,2],[82,81,0.5,2],[84,76,0.55,2],[86,72,0.6,2],[88,69,0.85,2],[90,72,0.55,2],[92,76,0.6,2],[94,81,0.5,2],[96,57,0.6,32],[128,71,0.85,2],[130,74,0.55,2],[132,78,0.6,2],[134,83,0.5,2],[136,78,0.85,2],[138,74,0.6,2],[140,71,0.5,2],[142,74,0.55,2],[144,78,0.85,2],[146,83,0.5,2],[148,78,0.55,2],[150,74,0.6,2],[152,71,0.85,2],[154,74,0.55,2],[156,78,0.6,2],[158,83,0.5,2],[160,59,0.6,32],[192,64,0.85,2],[194,67,0.55,2],[196,71,0.6,2],[198,76,0.5,2],[200,71,0.85,2],[202,67,0.6,2],[204,64,0.5,2],[206,67,0.55,2],[208,71,0.85,2],[210,76,0.5,2],[212,71,0.55,2],[214,67,0.6,2],[216,64,0.85,2],[218,67,0.55,2],[220,71,0.6,2],[222,76,0.5,2],[224,52,0.6,32]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,0,0,5],\"probability\":1,\"ratchet\":1,\"grid\":2,\"bars\":4,\"rec\":[[0,64,0.85,2],[2,67,0.55,2],[4,71,0.6,2],[6,76,0.5,2],[8,71,0.85,2],[10,67,0.6,2],[12,64,0.5,2],[14,67,0.55,2],[16,71,0.85,2],[18,76,0.5,2],[20,71,0.55,2],[22,67,0.6,2],[24,64,0.85,2],[26,67,0.55,2],[28,71,0.6,2],[30,76,0.5,2],[32,52,0.6,32],[64,69,0.85,2],[66,72,0.55,2],[68,76,0.6,2],[70,81,0.5,2],[72,76,0.85,2],[74,72,0.6,2],[76,69,0.5,2],[78,72,0.55,2],[80,76,0.85,2],[82,81,0.5,2],[84,76,0.55,2],[86,72,0.6,2],[88,69,0.85,2],[90,72,0.55,2],[92,76,0.6,2],[94,81,0.5,2],[96,57,0.6,32],[128,71,0.85,2],[130,74,0.55,2],[132,78,0.6,2],[134,83,0.5,2],[136,78,0.85,2],[138,74,0.6,2],[140,71,0.5,2],[142,74,0.55,2],[144,78,0.85,2],[146,83,0.5,2],[148,78,0.55,2],[150,74,0.6,2],[152,71,0.85,2],[154,74,0.55,2],[156,78,0.6,2],[158,83,0.5,2],[160,59,0.6,32],[192,64,0.85,2],[194,67,0.55,2],[196,71,0.6,2],[198,76,0.5,2],[200,71,0.85,2],[202,67,0.6,2],[204,64,0.5,2],[206,67,0.55,2],[208,71,0.85,2],[210,76,0.5,2],[212,71,0.55,2],[214,67,0.6,2],[216,64,0.85,2],[218,67,0.55,2],[220,71,0.6,2],[222,76,0.5,2],[224,52,0.6,32]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1,\"grid\":2,\"bars\":4,\"rec\":[[0,64,0.85,2],[2,67,0.55,2],[4,71,0.6,2],[6,76,0.5,2],[8,71,0.85,2],[10,67,0.6,2],[12,64,0.5,2],[14,67,0.55,2],[16,71,0.85,2],[18,76,0.5,2],[20,71,0.55,2],[22,67,0.6,2],[24,64,0.85,2],[26,67,0.55,2],[28,71,0.6,2],[30,76,0.5,2],[32,52,0.6,32],[64,69,0.85,2],[66,72,0.55,2],[68,76,0.6,2],[70,81,0.5,2],[72,76,0.85,2],[74,72,0.6,2],[76,69,0.5,2],[78,72,0.55,2],[80,76,0.85,2],[82,81,0.5,2],[84,76,0.55,2],[86,72,0.6,2],[88,69,0.85,2],[90,72,0.55,2],[92,76,0.6,2],[94,81,0.5,2],[96,57,0.6,32],[128,71,0.85,2],[130,74,0.55,2],[132,78,0.6,2],[134,83,0.5,2],[136,78,0.85,2],[138,74,0.6,2],[140,71,0.5,2],[142,74,0.55,2],[144,78,0.85,2],[146,83,0.5,2],[148,78,0.55,2],[150,74,0.6,2],[152,71,0.85,2],[154,74,0.55,2],[156,78,0.6,2],[158,83,0.5,2],[160,59,0.6,32],[192,64,0.85,2],[194,67,0.55,2],[196,71,0.6,2],[198,76,0.5,2],[200,71,0.85,2],[202,67,0.6,2],[204,64,0.5,2],[206,67,0.55,2],[208,71,0.85,2],[210,76,0.5,2],[212,71,0.55,2],[214,67,0.6,2],[216,64,0.85,2],[218,67,0.55,2],[220,71,0.6,2],[222,76,0.5,2],[224,52,0.6,32]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"arp\",\"length\":4,\"division\":4,\"steps\":[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":1,\"ratchet\":2},{\"name\":\"\",\"enabled\":true,\"root\":88,\"quality\":\"minor\",\"inversion\":0,\"mode\":\"notes\",\"length\":4,\"division\":4,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,0],\"probability\":0.85,\"ratchet\":1,\"grid\":2,\"bars\":4,\"rec\":[[0,64,0.85,2],[2,67,0.55,2],[4,71,0.6,2],[6,76,0.5,2],[8,71,0.85,2],[10,67,0.6,2],[12,64,0.5,2],[14,67,0.55,2],[16,71,0.85,2],[18,76,0.5,2],[20,71,0.55,2],[22,67,0.6,2],[24,64,0.85,2],[26,67,0.55,2],[28,71,0.6,2],[30,76,0.5,2],[32,52,0.6,32],[64,69,0.85,2],[66,72,0.55,2],[68,76,0.6,2],[70,81,0.5,2],[72,76,0.85,2],[74,72,0.6,2],[76,69,0.5,2],[78,72,0.55,2],[80,76,0.85,2],[82,81,0.5,2],[84,76,0.55,2],[86,72,0.6,2],[88,69,0.85,2],[90,72,0.55,2],[92,76,0.6,2],[94,81,0.5,2],[96,57,0.6,32],[128,71,0.85,2],[130,74,0.55,2],[132,78,0.6,2],[134,83,0.5,2],[136,78,0.85,2],[138,74,0.6,2],[140,71,0.5,2],[142,74,0.55,2],[144,78,0.85,2],[146,83,0.5,2],[148,78,0.55,2],[150,74,0.6,2],[152,71,0.85,2],[154,74,0.55,2],[156,78,0.6,2],[158,83,0.5,2],[160,59,0.6,32],[192,64,0.85,2],[194,67,0.55,2],[196,71,0.6,2],[198,76,0.5,2],[200,71,0.85,2],[202,67,0.6,2],[204,64,0.5,2],[206,67,0.55,2],[208,71,0.85,2],[210,76,0.5,2],[212,71,0.55,2],[214,67,0.6,2],[216,64,0.85,2],[218,67,0.55,2],[220,71,0.6,2],[222,76,0.5,2],[224,52,0.6,32]]}]"
+            ]
+          }
+        },
+        {
+          "name": "Lo-fi Melody",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 325,
+            "t0gate": 0.85,
+            "t0velocity": 0.55,
+            "t0transpose": 0,
+            "t1gate": 0.7,
+            "t1velocity": 0.75,
+            "t1transpose": 0,
+            "t2gate": 0.45,
+            "t2velocity": 0.45,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.5,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":53,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":41,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":65,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,7,5],\"probability\":0.7,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":77,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,72,0.7,12],[16,68,0.5,4],[24,67,0.6,8],[32,65,0.8,16],[56,67,0.45,4],[64,73,0.7,12],[80,70,0.5,4],[88,73,0.6,8],[96,77,0.8,16],[120,73,0.45,4],[128,75,0.7,12],[144,72,0.5,4],[152,67,0.6,8],[160,75,0.8,16],[184,72,0.45,4],[192,73,0.7,12],[208,70,0.5,4],[216,68,0.6,8],[224,65,0.85,24]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":53,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":41,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":65,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[7,5,0,5],\"probability\":0.7,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":77,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[7,5,0,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,72,0.7,12],[16,68,0.5,4],[24,67,0.6,8],[32,65,0.8,16],[56,67,0.45,4],[64,73,0.7,12],[80,70,0.5,4],[88,73,0.6,8],[96,77,0.8,16],[120,73,0.45,4],[128,75,0.7,12],[144,72,0.5,4],[152,67,0.6,8],[160,75,0.8,16],[184,72,0.45,4],[192,73,0.7,12],[208,70,0.5,4],[216,68,0.6,8],[224,65,0.85,24]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":53,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":41,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":65,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,7,5],\"probability\":0.7,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":77,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,72,0.7,12],[16,68,0.5,4],[24,67,0.6,8],[32,65,0.8,16],[56,67,0.45,4],[64,73,0.7,12],[80,70,0.5,4],[88,73,0.6,8],[96,77,0.8,16],[120,73,0.45,4],[128,75,0.7,12],[144,72,0.5,4],[152,67,0.6,8],[160,75,0.8,16],[184,72,0.45,4],[192,73,0.7,12],[208,70,0.5,4],[216,68,0.6,8],[224,65,0.85,24]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":53,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":41,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":65,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0],\"progression\":[0,5,7,5],\"probability\":0.7,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":89,\"quality\":\"minor7\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,5,7,5],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,72,0.7,12],[16,68,0.5,4],[24,67,0.6,8],[32,65,0.8,16],[56,67,0.45,4],[64,73,0.7,12],[80,70,0.5,4],[88,73,0.6,8],[96,77,0.8,16],[120,73,0.45,4],[128,75,0.7,12],[144,72,0.5,4],[152,67,0.6,8],[160,75,0.8,16],[184,72,0.45,4],[192,73,0.7,12],[208,70,0.5,4],[216,68,0.6,8],[224,65,0.85,24]]}]"
+            ]
+          }
+        },
+        {
+          "name": "Synth Lead Riff",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "scene": 0,
+            "launch": "bar",
+            "seed": 326,
+            "t0gate": 0.9,
+            "t0velocity": 0.7,
+            "t0transpose": 0,
+            "t1gate": 0.6,
+            "t1velocity": 0.85,
+            "t1transpose": 0,
+            "t2gate": 0.35,
+            "t2velocity": 0.6,
+            "t2transpose": 0,
+            "t3gate": 0.8,
+            "t3velocity": 0.6,
+            "t3transpose": 0,
+            "scenes": [
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,1,4],[4,76,0.5,4],[8,79,0.8,4],[16,76,0.9,4],[24,74,0.7,4],[28,76,0.5,4],[32,71,0.9,8],[44,76,0.6,4],[48,74,1,8],[56,79,0.7,4],[64,72,1,4],[68,72,0.5,4],[72,76,0.8,4],[80,72,0.9,4],[88,71,0.7,4],[92,72,0.5,4],[96,67,0.9,8],[108,72,0.6,4],[112,76,1,12],[128,79,1,4],[132,79,0.5,4],[136,83,0.8,4],[144,86,0.9,4],[152,83,0.7,4],[156,81,0.5,4],[160,79,0.9,8],[172,74,0.6,4],[176,79,1,8],[184,81,0.7,4],[192,74,1,4],[196,74,0.5,4],[200,81,0.8,4],[208,74,0.9,4],[216,72,0.7,4],[220,74,0.5,4],[224,69,0.9,8],[236,72,0.6,4],[240,74,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[3,-2,0,-4],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,1,4],[4,76,0.5,4],[8,79,0.8,4],[16,76,0.9,4],[24,74,0.7,4],[28,76,0.5,4],[32,71,0.9,8],[44,76,0.6,4],[48,74,1,8],[56,79,0.7,4],[64,72,1,4],[68,72,0.5,4],[72,76,0.8,4],[80,72,0.9,4],[88,71,0.7,4],[92,72,0.5,4],[96,67,0.9,8],[108,72,0.6,4],[112,76,1,12],[128,79,1,4],[132,79,0.5,4],[136,83,0.8,4],[144,86,0.9,4],[152,83,0.7,4],[156,81,0.5,4],[160,79,0.9,8],[172,74,0.6,4],[176,79,1,8],[184,81,0.7,4],[192,74,1,4],[196,74,0.5,4],[200,81,0.8,4],[208,74,0.9,4],[216,72,0.7,4],[220,74,0.5,4],[224,69,0.9,8],[236,72,0.6,4],[240,74,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":2,\"division\":8,\"steps\":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":false,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":76,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,1,4],[4,76,0.5,4],[8,79,0.8,4],[16,76,0.9,4],[24,74,0.7,4],[28,76,0.5,4],[32,71,0.9,8],[44,76,0.6,4],[48,74,1,8],[56,79,0.7,4],[64,72,1,4],[68,72,0.5,4],[72,76,0.8,4],[80,72,0.9,4],[88,71,0.7,4],[92,72,0.5,4],[96,67,0.9,8],[108,72,0.6,4],[112,76,1,12],[128,79,1,4],[132,79,0.5,4],[136,83,0.8,4],[144,86,0.9,4],[152,83,0.7,4],[156,81,0.5,4],[160,79,0.9,8],[172,74,0.6,4],[176,79,1,8],[184,81,0.7,4],[192,74,1,4],[196,74,0.5,4],[200,81,0.8,4],[208,74,0.9,4],[216,72,0.7,4],[220,74,0.5,4],[224,69,0.9,8],[236,72,0.6,4],[240,74,1,16]]}]",
+              "[{\"name\":\"\",\"enabled\":true,\"root\":52,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"chord\",\"length\":4,\"division\":4,\"steps\":[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":40,\"quality\":\"single\",\"inversion\":0,\"mode\":\"pulse\",\"length\":8,\"division\":2,\"steps\":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":64,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"arp\",\"length\":16,\"division\":1,\"steps\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"progression\":[0,-4,3,-2],\"probability\":1,\"ratchet\":1},{\"name\":\"\",\"enabled\":true,\"root\":88,\"quality\":\"fifth\",\"inversion\":0,\"mode\":\"notes\",\"length\":8,\"division\":2,\"steps\":[1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],\"progression\":[0,-4,3,-2],\"probability\":0.85,\"ratchet\":1,\"bars\":4,\"rec\":[[0,76,1,4],[4,76,0.5,4],[8,79,0.8,4],[16,76,0.9,4],[24,74,0.7,4],[28,76,0.5,4],[32,71,0.9,8],[44,76,0.6,4],[48,74,1,8],[56,79,0.7,4],[64,72,1,4],[68,72,0.5,4],[72,76,0.8,4],[80,72,0.9,4],[88,71,0.7,4],[92,72,0.5,4],[96,67,0.9,8],[108,72,0.6,4],[112,76,1,12],[128,79,1,4],[132,79,0.5,4],[136,83,0.8,4],[144,86,0.9,4],[152,83,0.7,4],[156,81,0.5,4],[160,79,0.9,8],[172,74,0.6,4],[176,79,1,8],[184,81,0.7,4],[192,74,1,4],[196,74,0.5,4],[200,81,0.8,4],[208,74,0.9,4],[216,72,0.7,4],[220,74,0.5,4],[224,69,0.9,8],[236,72,0.6,4],[240,74,1,16]]}]"
             ]
           }
         }
