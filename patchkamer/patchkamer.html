@@ -2775,7 +2775,7 @@ async function loadSource(src,opts={}){
       let paths, wpaths; const man=blobs.find(x=>x.path===base+'patchkamer.json');
       let ppaths;
       if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[])].map(prEntry).map(w=>({...w,path:base+w.path})); if(m.name) src.label=m.name+' · '+src.label; }
-      else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,80); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); }
+      else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,500); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); }
       if(src.only){ if(src.only!=='devices') paths=[]; wpaths=[]; ppaths=ppaths.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }   // een bron voor één soort: alleen apparaten, alleen presets of alleen tunes
       { const lb=blobs.find(x=>x.path===base+LAYOUT_FILE); if(lb) layout=async()=>JSON.parse((await fetchText(rawOf(lb.path))).text); }
       ppaths.forEach(w=>prs.push({path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
