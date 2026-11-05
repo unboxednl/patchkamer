@@ -91,7 +91,13 @@ app.whenReady().then(async () => {
   if (PROBE) {
     win.webContents.on('console-message', (e, level, msg) => {
       const text = typeof msg === 'string' ? msg : (e && e.message) || '';
-      if (text.startsWith('PROBE ')) { console.log(text.slice(6)); app.exit(0); }
+      if (text.startsWith('PROBE ')) {
+        const json = text.slice(6); console.log(json);
+        // A packaged exe has no console: also write the result next to the exe (or in the current folder).
+        const dir = app.isPackaged ? exeDir : process.cwd();
+        try { fs.writeFileSync(path.join(dir, 'patchkamer-probe.json'), json); } catch (err) {}
+        app.exit(0);
+      }
     });
     setTimeout(() => { console.log(JSON.stringify({ error: 'timeout' })); app.exit(1); }, 30000);
     await win.loadURL(origin + '/probe.html');
