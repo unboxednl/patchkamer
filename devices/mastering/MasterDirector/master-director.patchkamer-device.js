@@ -42,7 +42,7 @@ function recipe(s, connected) {
   return r;
 }
 export default {
-  id: 'nl.patchkamer.masterdirector', name: 'Master Director', version: '1.12.0', kind: 'modulator', category: 'mod', collection: 'mastering', masteringController: 1, ui: { width: 670, minWidth: 320 },
+  id: 'nl.patchkamer.masterdirector', name: 'Master Director', version: '1.12.1', kind: 'modulator', category: 'mastering', collection: 'mastering', masteringController: 1, ui: { width: 670, minWidth: 320 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], masteringIn: [], masteringOut: [{ id: 'setup', name: 'Style / setup' }] },
   i18n: { nl: { ports: { setup: 'Stijl / setup' } } },
   create(ctx, host) {
