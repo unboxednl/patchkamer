@@ -10,7 +10,7 @@ Synths are the devices that make sound from notes. This page covers the 26 synth
 2. [Which synth for which goal](#which-synth-for-which-goal)
 3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
-5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Bowed Ensemble](#bowed-ensemble)
+5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble)
 6. [Keys and strings](#keys-and-strings): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
@@ -44,6 +44,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | A big, flexible polyphonic synth with three oscillators and two filters | [Triple Osc Poly](#triple-osc-poly) |
 | Trance supersaws with delay, reverb and gate | [Supersaw Swarm](#supersaw-swarm) |
 | Chords from single notes (stabs, organ chords, pads) | [Chord Poly](#chord-poly), [Supersaw Swarm](#supersaw-swarm), [Triple Osc Poly](#triple-osc-poly) |
+| Film-score sounds: braams, big pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strings and string sections | [Bowed Ensemble](#bowed-ensemble) |
 | Electric pianos, organs, vibraphone | [Stage Keys](#stage-keys) |
 | Bells, glass, tines, FM basses | [Four-Operator FM](#four-operator-fm) |
@@ -575,6 +576,41 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 - Every chord note takes one of the 24 voices: a four-note chord leaves room for six chords.
 - The volume of a chord is divided by the square root of the number of notes, so a chord is not much louder than a single note.
 - If your sequencer already sends chords, choose **Single notes**.
+
+### Cinematic Synth
+
+**What it is for.** A polyphonic synth for film-score sounds: huge brass-like braams, wide pads and drones, low pulsing ostinati and organ-like arpeggios. Each voice has a main layer of up to 5 detuned oscillators with stereo spread, a second layer with an octave choice, a sub sine and noise, a lowpass filter with its own swell, an amplifier envelope with up to 12 seconds of attack and 15 seconds of release, and a pitch drop or rise at the start of every note. Behind the voices sit drive, a low and a high shelf, an ensemble chorus, a ping-pong echo and a big reverb of 0.5 to 9 seconds. A **pulse engine** follows the studio clock and plays the notes you hold as an ostinato or arpeggio.
+
+![The Cinematic Synth card](../images/en/synths/cinematic-synth.png)
+
+**Controls.**
+
+- **Oscillators:** **Waveform**, **Voices per note** (1 to 5), **Detune**, **Stereo spread**, **Second layer** (off, saw, square, triangle, sine), **Second layer octave** (−2 to +1), **Second layer mix**, **Sub**, **Noise**, **Pitch drop** (−12 to +12 semitones at the start of each note) and **Drop time**.
+- **Filter:** **Cutoff**, **Resonance**, **Swell** (how many octaves the filter opens, −4 to +5), **Filter attack**, **Filter decay**, **Filter hold** and **Key tracking**.
+- **Amplifier:** **Attack** (up to 12 s), **Decay**, **Sustain** and **Release** (up to 15 s).
+- **Motion:** **Vibrato rate**, **Vibrato depth** and **Filter wave** (a slow wave on the cutoff).
+- **Space and tone:** **Drive**, **Weight** (low shelf), **Air** (high shelf), **Ensemble**, **Echo time**, **Echo feedback**, **Echo**, **Reverb length**, **Reverb damping** and **Reverb**.
+- **Pulse engine:** **Pattern** (off, eighths, sixteenths, up, down, up and down, random, organ run, chord hits), **Rate** (1/4, 1/8, 1/8 triplet, 1/16, 1/16 triplet, 1/32), **Gate**, **Octaves** (1 to 3), **Accent** and **Latch** (keep the chord after you let go).
+- **Output:** **Level** and **Transpose**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Notes from **Keys / MIDI**, a sequencer or the **MIDI Hub**. |
+| **Mod** | modulation in (purple) | A modulator can move 18 parameters (cutoff, resonance, swell, detune, sub, noise, layer mix, vibrato depth, filter wave, drive, weight, air, ensemble, echo feedback, echo, reverb, gate and level). |
+| **Out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Cinematic Synth** and **Speakers**. Pick the tune **Dream Heist › Heist Braam** and play a low note: a huge brass-like swell. For an ostinato pick **Dream Heist › Pulse Ostinato Low**, press **Start** and hold a chord: the pulse engine plays it in eighths.
+
+**Tunes.** Pack **Cinematic Synth Scores**: 56 tunes in 7 sets (Dream Heist, Dark Hero, Space Voyage, Desert Epic, Ancient Battle, Quiet Tension, Impacts and Risers): braams and brass, drones, pads, ostinati, arpeggios, bells and impacts. Choose a set and then a tune in the tune list. Tunes with a pulse pattern follow the clock, so press **Start**.
+
+**Tips and limits.**
+
+- Up to 10 voices play at once; the oldest one is cut short when you play more. A big unison (5 voices per note) with a second layer uses the most processing power.
+- The pulse engine plays only while the studio clock runs (**Start**). Without it the notes you hold stay silent when a pattern is on.
+- A new reverb length builds a new reverb a moment after you stop turning the knob.
+- With long attacks and releases the notes you play stay audible for a long time: use **Stop** or **All notes off** to silence them.
 
 ### Bowed Ensemble
 
