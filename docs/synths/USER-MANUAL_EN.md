@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 18 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 26 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
@@ -13,19 +13,20 @@ Synths are the devices that make sound from notes. This page covers the 18 synth
 5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Bowed Ensemble](#bowed-ensemble)
 6. [Keys and strings](#keys-and-strings): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
-8. [If it does not work](#if-it-does-not-work)
+8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
+9. [If it does not work](#if-it-does-not-work)
 
 ## What synths do
 
-A synth has no audio input (one exception: the **Preamp in** of Patchbay Synth and the **External audio / envelope** input of Patch Mono). It receives **notes** (orange cables) and gives you **sound** (a teal audio cable). Every synth also has a purple **Mod** input: a modulator can move its controls while you play (see [Modulators](../modulators/USER-MANUAL_EN.md)). The knob keeps its value; the modulator adds to it.
+Most synths have no audio input. The exceptions are the **Preamp in** of Patchbay Synth, the **External audio / envelope** input of Patch Mono and, among the drone and texture synths, Layered Landscape, Paradox, Foundry and Grain Cloud. It receives **notes** (orange cables) and gives you **sound** (a teal audio cable). Every synth also has a purple **Mod** input: a modulator can move its controls while you play (see [Modulators](../modulators/USER-MANUAL_EN.md)). The knob keeps its value; the modulator adds to it.
 
 A typical patch has three steps, from left to right:
 
-1. A source of notes: **Keys / MIDI** (a keyboard that makes no sound itself), a sequencer, or the built-in sequencer of the synth (Acid Baselines, Acid Stepper, Sub Line, Cross Mod Mono).
+1. A source of notes: **Keys / MIDI** (a keyboard that makes no sound itself), a sequencer, or the built-in sequencer of the synth (Acid Baselines, Acid Stepper, Sub Line, Cross Mod Mono, and the drone and texture synths Drone Synth and Layered Landscape). The drone and texture synths often need no notes at all: they keep sounding on their own (see [Drone and texture synths](#drone-and-texture-synths)).
 2. The synth.
 3. Where the sound goes: **Speakers** directly, or first a channel of a **Mixer** and an effect.
 
-Press **Start** to run the clock. Built-in sequencers, arpeggiators, the trance gate of Supersaw Swarm and the pump only move while the clock runs. Notes from Keys and the test buttons on the cards work without it. A sequencer that sends notes to a polyphonic synth should always send a note length (`dur`); a note without a length keeps sounding on some synths.
+Press **Start** to run the clock. Built-in sequencers, arpeggiators, the trance gate of Supersaw Swarm, the pump and the automatic chords and melody of Mist only move while the clock runs. Notes from Keys and the test buttons on the cards work without it. A sequencer that sends notes to a polyphonic synth should always send a note length (`dur`); a note without a length keeps sounding on some synths.
 
 Every synth has **tunes**: a tune is the complete setting of one synth, and some tunes include a bass line or pattern. Load a pack from a library or with the **Tunes ▾** menu → **Import…**, then pick a tune in the list at the top of the card (it reads `Folder › Name`). See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use, save and share them. The synths have no presets: the choices that look like presets inside a card (a **Sound** list, **Preset** buttons) are starting sounds that set the knobs once.
 
@@ -49,6 +50,14 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | Plucked or bowed single strings (guitar, harp, koto) | [Karplus String](#karplus-string) |
 | Dissonant clusters, drones, tension, sound effects | [Dissonant Cluster](#dissonant-cluster) |
 | A modular feel: patch cables between modules | [Patchbay Synth](#patchbay-synth) |
+| A long ambient landscape of four layers (drone, pad, atmosphere, texture) | [Layered Landscape](#layered-landscape) |
+| Natural soundscapes: rain, wind, water, fire, footsteps | [Biotope](#biotope) |
+| A continuous drone with a sub, a second layer, noise and a root sequencer | [Drone Synth](#drone-synth) |
+| Planets that bend in pitch (Doppler), drones, bells, sirens | [Celestial Mechanics](#celestial-mechanics) |
+| Self-moving, experimental sounds, glitch and textures | [Paradox](#paradox) |
+| Industrial sounds: metal resonances, FM, ring modulation, wavefolding | [Foundry](#foundry) |
+| A slow chord bed with its own chords and melody under a song | [Mist](#mist) |
+| Clouds of tiny grains from a built-in sound, or an effect on live audio | [Grain Cloud](#grain-cloud) |
 
 ## Basses
 
@@ -559,7 +568,7 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 
 **Example.** Place **Keys / MIDI**, **Chord Poly** and **Speakers**. Set **Chord memory** to **Minor 7** and play one key at a time: each key sounds a four-note chord. For your own chord, choose the custom chord and type `0,4,7,11` in **Custom intervals**.
 
-**Tunes.** Pack **Chord Poly Styles**: 60 tunes in 10 folders (House, Deep House, Garage, Lo-fi, Ambient, Pop, Soul, Synthwave, Cinematic, Disco & Funk), six per folder, file [`chord-poly-styles.patchkamer-tunes.json`](../../tunes/chord-poly-styles.patchkamer-tunes.json). A few names: **Classic House Stab**, **Deep Ninth Chord**, **Velvet Chord**, **Endless Pad**, **Disco Stab**.
+**Tunes.** Pack **Chord Poly Styles**: 120 tunes in 20 folders (House, Deep House, Garage, Lo-fi, Ambient, Pop, Soul, Synthwave, Cinematic, Disco & Funk, Techno, Dub Techno, Trance, Progressive Trance, Big Room, Electro House, Electro, Future Bass, Hardstyle, Eurodance), six per folder, file [`chord-poly-styles.patchkamer-tunes.json`](../../tunes/chord-poly-styles.patchkamer-tunes.json). A few names: **Classic House Stab**, **Deep Ninth Chord**, **Velvet Chord**, **Endless Pad**, **Disco Stab**.
 
 **Tips and limits.**
 
@@ -786,11 +795,330 @@ The eight algorithms (`a → b` means a modulates b):
 - Pitch and filter follow 1 volt per octave. The LF range decouples the keyboard from a VCO.
 - The envelopes take their gate from the keyboard and host notes; with **Gate source** on **Gate in** the gate comes from the external input (the clock by default).
 
+## Drone and texture synths
+
+Eight synths for long, slowly changing sounds: drones, pads, soundscapes and textures. Most of them keep sounding without anyone playing; some are played with notes as well. Each has its own way to start, so read the first lines of its section.
+
+| Synth | Plays by itself | Played with notes | Audio input |
+|---|---|---|---|
+| [Layered Landscape](#layered-landscape) | Yes: four layers hold notes or run a pattern | Yes (**Note input** picks the layer) | **Stereo texture / recording** (for the Noise layer) |
+| [Biotope](#biotope) | Yes: eight sound layers | No (triggers only) | No |
+| [Drone Synth](#drone-synth) | Yes: one continuous drone | Notes set the root | No |
+| [Celestial Mechanics](#celestial-mechanics) | No | Yes: every note becomes a planet | No |
+| [Paradox](#paradox) | Yes (**Drone** and **Organism**) | Yes (**Playable**) | **Feed** |
+| [Foundry](#foundry) | Yes (**Drone / transport**) | Yes (**Keyboard / sequencer**) | **External material** |
+| [Mist](#mist) | Yes (**Drone + notes**) | Yes | No |
+| [Grain Cloud](#grain-cloud) | Yes (**Cloud (drone)**) | Yes | **In (source)** |
+
+How they start (the details are in each section):
+
+- **Layered Landscape:** **Start landscape** (also works without the clock).
+- **Biotope:** plays as soon as **On** is checked; with **Follow start/stop** only while the clock runs.
+- **Drone Synth:** silent until you press **Start**, unless **On stop** is set to **keeps sounding**.
+- **Paradox:** the **Alive** checkbox, and **Behavior** (**Playable**, **Drone** or **Organism**).
+- **Foundry:** **Start / stop drone**, or **Keyboard / sequencer** for notes.
+- **Mist:** **Start drone**, or press **Start** for chords and melody.
+- **Grain Cloud:** the **Cloud (drone)** button, or notes.
+- **Celestial Mechanics:** needs notes, or the buttons under the star field.
+
+The sound of these synths changes all the time. A tune is a starting point, not a recording; some synths use chance, so the same tune can sound a little different each time.
+
+### Layered Landscape
+
+**What it is for.** A four-layer ambient instrument. Four layers sound together and make one "landscape": **Drone** (low, slow, an octave below the root), **Pad** (the main sound, on the root), **Atmos** (high and light, an octave above) and **Noise** (a texture such as waves, rain or wind, at a fixed pitch). Each layer has its own wave family, filter, two slow LFOs, pan, a send to a shared room and a send to a shimmer (octave up). After that come a stereo room with nine characters and a master effect. Each layer can hold notes, run its own pattern, play notes from outside, or be off.
+
+![The Layered Landscape card](../images/en/synths/layered-landscape.png)
+
+**Controls.** The card is long; from top to bottom:
+
+- **Top row:** **Landscape** (a list of twelve starting landscapes), **Start landscape**, **Stop sources** and **Silence**, **Root note (MIDI)**, **Master volume**, **Sound character** (**Soft / flowing** or **Original / bright**) and **Note input** (which layer the **Notes to chosen layer** port feeds).
+- **Four layer blocks** (**Drone · edit**, **Pad · edit**, **Atmos · edit**, **Noise · edit**): the button chooses the layer you edit below. Each block has **Level**, **Pan**, **Mute** and **Solo**.
+- **XY pad** with **X axis** and **Y axis**: drag the dot to move two controls at once. **Save A** and **Save B** store a sound; **Morph A ↔ B** blends between them. A/B stores the numeric controls only; structures, wave choices and patterns do not change with it.
+- **Sound and motion** of the chosen layer: **Source control** (**Drone / Hold**, **Own sequencer**, **External notes** or **Off**), **Chord**, **Filter** (**Low-pass** and others), **Structure** (six ways the oscillators work together, for example **Pad I · triple**) and **Wave family** (16 families). Under them: **Wave morph**, **Filter**, **Resonance**, **Motion depth**, **LFO 1**, **LFO 2**, **Oscillator spread**, **Attack**, **Release**, **Transpose**, **Room send** and **Shimmer send**. The Noise layer has a **Texture** list instead of a wave family.
+- **Sequencer** of the chosen layer: **Note division**, **Steps** (1 to 64), the step buttons, and per step **Note offset**, **Velocity / rest** (0 is a rest) and **Length in steps**. **Motion recording**, **Write motion to step** and **Clear motion** store movements of the controls per step. The pattern only plays when **Source control** is **Own sequencer**.
+- **Room and master effect:** **Room** (small, large or infinite, each dark, neutral or bright), **Freeze** (holds the room: no new sound goes into it), **Master effect** (for example **Stereo chorus**, **Tape echo** and **Reverse echo**), **Room size**, **Room damping**, **Effect mix** and **Effect time / character**.
+- **Visualization** and the save buttons: **Save landscape (.json)** writes the whole landscape to a file, and the file chooser below it opens one again. The file format is `patchkamer-landscape-1`. This is a separate file from a tune.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Stereo texture / recording** | audio in (teal) | Sound for the Noise layer (an outside texture or a recording). |
+| **Notes to chosen layer** | notes in (orange) | Notes for the layer chosen in **Note input**. |
+| **Drone notes**, **Pad notes**, **Atmos notes**, **Noise notes** | notes in (orange) | Notes straight to one layer. |
+| **Mod** | modulation in (purple) | A modulator can move the controls. |
+| **Stereo landscape** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Layered Landscape** and **Speakers**, connect **Stereo landscape** to **In**. Choose a tune, then click **Start landscape**: all layers on **Drone / Hold** start sounding. Turn **Master volume** and the **Level** of a layer to taste. For a moving line, set the **Pad** layer's **Source control** to **Own sequencer**, press **Start** and edit the steps.
+
+**Tunes.** Pack **Layered Landscape Styles**: 71 tunes in 11 folders (Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Nature, Space, Drone, Lo-fi, Minimal, Industrial), file [`layered-landscape-styles.patchkamer-tunes.json`](../../tunes/layered-landscape-styles.patchkamer-tunes.json). A few names: **Morning Haze**, **Floating Garden**, **Sunken Hall**, **Black Tide**, **Epic Swell**. In the pack, 61 tunes hold their notes with the Pad layer, 7 tunes run a pattern on the Pad layer and 3 tunes are played with notes on the Pad layer. A tune holds the sound, not an own sample or recording.
+
+**Tips and limits.**
+
+- The landscape sounds after **Start landscape** or when the clock starts; a tune alone does not make sound until then.
+- Choosing another tune while the landscape sounds stops the old sound and starts the new one at once.
+- A layer on **Mute**, or all four layers at level 0, is silent.
+- With **Freeze** on, no new sound goes into the room.
+- A landscape file has the name of the format in it; only files made by Layered Landscape open.
+- An own sample or recording for the Noise layer is not part of a tune.
+
+### Biotope
+
+**What it is for.** A synth for environments that makes its own sounds without samples: eight layers (**Rain**, **Drops**, **Bubbles**, **Wind**, **Footsteps**, **Fireplace**, **Sea**, **Creaks**) that together make a soundscape. It has no keyboard and no notes: it plays as soon as it is on and changes slowly through chance and slow waves. The low wind characters (**Red planet**, **Gas giant**, **Cosmic imagination**), the deep bubbles and the ship's hull creaks make dark, slowly changing drones.
+
+![The Biotope card](../images/en/synths/biotope.png)
+
+**Controls.**
+
+- **Top:** a list **Choose a soundscape…** (starting settings), **All layers off**, the **On** checkbox and **Follow start/stop** (only sound while the clock runs).
+- **Output**, **Space** (stereo reverb) and **Width** (0% is mono).
+- **Eight layer blocks.** Each has a **Character** list (four to seven kinds per layer), **Volume** (0% is off), **Density** (how active: drops, bubbles, crackles per second; for rain, wind and sea also how heavy the noise is), **Tone** (dark and dull to bright and sharp) and **Motion** (variation in stereo, pitch and timing; for wind the speed of the gusts, for sea the depth of the swell).
+- **Footsteps** also has **Steps/min** and **Clock** (**Free tempo**, **Triggers only**, or every 1/16, 1/8, 1/4, 1/2 or bar of the clock). It is the only layer with a tempo of its own.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Triggers / CC** | notes in (orange) | Triggers play one event of the layers Drops, Bubbles, Footsteps, Fireplace or Creaks; CC messages move the controls. |
+| **Mod** | modulation in (purple) | A modulator can move the controls. |
+| **Stereo out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Biotope** and **Speakers**, connect **Stereo out** to **In**. Choose a tune such as **Morning Forest**: it plays at once. Turn up **Volume** of **Rain** and turn **Tone** of **Wind** down for something darker. For a drone, set **Wind** to **Red planet** or **Gas giant**, **Tone** low and **Space** high.
+
+**Tunes.** Pack **Biotope Styles**: 86 tunes in 13 folders (Nature, Weather, Water, Ambient, Meditation, Sleep, Cinematic, Sci-Fi, Dark Ambient, Lo-fi, Field Recording, Interiors, Rhythmic), file [`biotope-styles.patchkamer-tunes.json`](../../tunes/biotope-styles.patchkamer-tunes.json). A few names: **Morning Forest**, **Meadow Breeze**, **Light Drizzle**, **Steady Rain**, **Slow March**.
+
+**Tips and limits.**
+
+- With **Follow start/stop** on, or **Clock** on a clock setting, you hear nothing until the clock runs.
+- With **Clock** on **Triggers only** the footsteps are silent until a trigger arrives.
+- Drops, footsteps, fireplace and creaks are single events and sound soft next to rain, wind and sea; give them a higher **Volume**, or add a soft bed.
+- The noise is random: a tune is a setting, so it sounds a little different every time.
+- At most 96 voices at once; many layers at full level and full **Density** can fill them.
+
+### Drone Synth
+
+**What it is for.** A drone and ambient synth. The sound is one continuous tone built from a first drone layer (three detuned oscillators and a sine sub an octave lower), an optional second layer at an interval of your choice, filtered noise, a resonant lowpass filter with a slow LFO, distortion, a delay and a reverb. On top come random events (siren, metal hit, radio static, heartbeat) and a 16-step root sequencer. It does not play chords or notes with an envelope: what changes is the **root**.
+
+![The Drone Synth card](../images/en/synths/drone-synth.png)
+
+**Controls.**
+
+- **Starting sounds** at the top: **ABANDONED FACTORY**, **VENTILATION SHAFT**, **AIR RAID**, **DEAD STATION**, **UNDERGROUND**, **COLD DAWN** and **RANDOM**. They set the knobs once.
+- **Drone:** **on**, **ROOT** (in Hz), **WAVEFORM**, **TUNING**, **DETUNE**, **SUB OCTAVE** and **LEVEL**.
+- **Drone B:** **on**, **WAVEFORM**, **INTERVAL** (in semitones; +7 is a fifth, +12 an octave), **DETUNE** and **LEVEL**.
+- **Noise:** **on**, **COLOUR** (brown, pink or white), **BAND FILTER**, **RESONANCE** and **LEVEL**.
+- **Filter & LFO:** **CUTOFF**, **RESONANCE**, **LFO RATE**, **LFO DEPTH** and **PITCH WOBBLE**.
+- **Space & decay:** **DISTORTION**, **DELAY TIME**, **DELAY FEEDBACK**, **REVERB SIZE** and **REVERB MIX**.
+- **Output:** **LEVEL** and **ON STOP** (**silent** or **keeps sounding**).
+- **Events:** **TYPE** (**None**, **Siren**, **Metal hit**, **Radio static** or **Heartbeat**), **INTERVAL** and **LEVEL**. They fire at random around the interval while the clock runs.
+- **Play:** eight buttons (A1 to B♭2) that set the root at once.
+- **Root sequencer:** **on**, **SETS** (1 to 16 sets of 16 steps), **GLIDE** and **GATE**. The grid has eight fixed notes (A1, C2, D2, E♭2, F2, G2, A2, B♭2); one note per step, an empty step keeps the previous pitch. **RISING**, **PULSE** and **RANDOM** fill the set, **COPY BAR TO ALL** copies it and **CLEAR** empties it. With **GATE** above 0% only the first drone layer pulses.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Incoming notes also set the root. |
+| **CC** | notes in (orange) | Control changes for the knobs. |
+| **Mod** | modulation in (purple) | A modulator can move the controls. |
+| **Out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Drone Synth** and **Speakers**. Click **ABANDONED FACTORY**, set **ON STOP** to **keeps sounding** and press a button under **Play**. For a rhythm: switch **on** in the root sequencer, put notes on a few steps, set **GATE** to 50% and press **Start**.
+
+**Tunes.** Pack **Drone Synth Styles**: 66 tunes in 10 folders (Drone, Ambient, Dark Ambient, Techno, Industrial, Cinematic, Meditation, Sci-Fi, Doom, Minimal), file [`drone-synth-styles.patchkamer-tunes.json`](../../tunes/drone-synth-styles.patchkamer-tunes.json). A few names: **Root Fifth Pad**, **Pure Sine Floor**, **Glass Pad**, **Floating Fifths**, **Crypt Choir**. In the pack, 20 tunes use the root sequencer and all 66 are set to keep sounding.
+
+**Tips and limits.**
+
+- The output is closed until the clock runs, or until **ON STOP** is on **keeps sounding**. Events and the sequencer only run along with the clock.
+- The sequencer has only the eight fixed notes; for other roots use **ROOT** and a flat drone.
+- **GATE** has no effect without notes in the sequencer.
+- With very high **RESONANCE**, a very low **CUTOFF** and strong **LFO DEPTH**, or a long delay with very high feedback, the sound can break up; a guard replaces the filter, delay and reverb when that happens.
+- Many layers at full level together can be louder than 1; keep **LEVEL** (Output) in check.
+
+### Celestial Mechanics
+
+**What it is for.** A gravity synth. Every note that comes in becomes a planet that circles a sun, and the physics of the system makes the sound. The pitch is the note, shifted by the Doppler effect (towards you is higher, away is lower). Planets that approach each other modulate each other and can collide and merge. A planet that grazes the sun picks up a "solar flare" of noise. There is no envelope, no filter and no fixed waveform.
+
+![The Celestial Mechanics card](../images/en/synths/celestial-mechanics.png)
+
+**Controls.**
+
+- **Top:** **Universe** (seven starting universes, for example **Solar System** and **Glass Spheres**), **Scale (slinging)**, **Root note** (for planets you sling yourself and for the Big Bang) and **Lifetime** (**Forever (until swallowed)** and shorter choices).
+- **Star field.** Drag in it to sling a planet away. Under it: **Big Bang** (five planets from the scale), **Comet** (a comet falls in), **Black hole: swallow everything** and **Silence**. A line shows how many celestial bodies are in space.
+- **Orbital mechanics:** **Gravity**, **Orbit size**, **Eccentricity** and **Time**.
+- **Space-time:** **Black hole**, **Speed of light** (low = big Doppler bends), **Interaction** (how much planets influence each other) and **Grain**.
+- **Celestial phenomena:** **Solar flares**, **Pulsar** (ticks on the clock) and **Comets** (how often one falls in).
+- **Sound:** **Ether (reverb)**, **Echo from the deep** and **Output**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer; each note makes a planet. |
+| **Mod** | modulation in (purple) | A modulator can move 14 controls, for example **Gravity** or **Time**. |
+| **Out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Celestial Mechanics** and **Speakers**. Hold one or two long notes with a wide interval. Slowly raise **Black hole**: the orbits shrink, the pitches sink and the planets are swallowed. Lower **Speed of light** and every orbit becomes a wailing Doppler siren.
+
+**Tunes.** Pack **Celestial Mechanics Styles**: 74 tunes in 11 folders (Space, Cinematic, Sci-Fi, Ambient, Dark Ambient, Experimental, Sound Design, Synthwave, Trance, Horror, Drone), file [`celestial-mechanics-styles.patchkamer-tunes.json`](../../tunes/celestial-mechanics-styles.patchkamer-tunes.json). A few names: **Orbit Drift**, **Deep Field**, **Tension Bed**, **Doppler Siren**, **Warp Core**.
+
+**Tips and limits.**
+
+- At most 14 planets exist at once; a new note pushes the oldest one away.
+- The pitch of a note you play is exact; **Scale (slinging)** only applies to planets you sling yourself and to the Big Bang.
+- A note-off removes its planet at once, even with **Lifetime** on forever.
+- **Pulsar** and **Echo from the deep** follow the tempo of the clock; without the clock the pulsar does nothing.
+- A note comes in softly (about 0.1 s), so the synth is not suited to percussive sounds.
+
+### Paradox
+
+**What it is for.** An experimental synth that moves by itself. Every voice is a sine synthesis with mutual modulation, a wavefolder, a lowpass filter and a string-like feedback loop. A chaos system (Lorenz) lets pitch and tone drift slowly. A cellular automaton can invent notes on its own (the "organism"). A granular memory plays pieces of its own past back, backwards, standing still or faster. For drones, textures, glitch, sound design and unusual playable sounds. It has no sequencer or pattern.
+
+![The Paradox card](../images/en/synths/paradox.png)
+
+**Controls.**
+
+- **Top:** a list **Choose a universe…** (starting settings), **Anatomy** (the basic sound of the voices: **Plasma**, **Glass flesh**, **Machine choir**, **Swarm**, **Fault line**, **Time leak**) and **Behavior** (**Playable**: only outside notes sound; **Drone**: one voice keeps sounding on the root, outside notes sound on top; **Organism**: the automaton plays notes itself around the root).
+- **Alive** (off = silent), **Follow Start/Stop** (only sound while the clock runs) and **Clock** with a division list (the automaton follows the tempo of the studio instead of **Cell rate**).
+- **Display** with the Lorenz orbit, the automaton and the live audio. Buttons: **Mutate** (moves most knobs a bit at random), **Cell division!** (triggers one event of the automaton), **Fold time** (turns **Time direction** around), **Freeze memory** and **PANIC / silence**.
+- **Knobs:** **Matter**, **Mutation**, **Friction**, **Fold**, **Fracture** (bit crusher), **Memory**, **Time direction** (0% backwards, around 50% almost standing still, 100% faster), **Grain size**, **Space**, **Orbit** (stereo width), **Life** (speed of the chaos), **Population** (how many notes the automaton plays), **Feed** (how much of the audio input goes through the voices), **Cell rate**, **Root** (a MIDI note), **Birth** (attack), **Decay** and **Output**.
+- A small keyboard of 13 keys at the bottom plays the card from the root.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Feed** | audio in (teal) | Sound that goes through the voices and the memory (see **Feed**). |
+| **Notes / CC** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer. A trigger makes one cell division. |
+| **Mod** | modulation in (purple) | A modulator can move 18 controls. |
+| **Escape** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Paradox** and **Speakers**. Choose the tune **Sub Cathedral** (it sets **Behavior** to **Drone**): it keeps sounding. Turn **Time direction** back to hear the memory play backwards. For a generative rhythm, choose **Organism**, check **Clock**, pick a division and press **Start**.
+
+**Tunes.** Pack **Paradox Styles**: 70 tunes in 10 folders (Drone, Ambient, Dark Ambient, Cinematic, Sci-Fi, Glitch, Industrial, Experimental, Sound Design, Noise), file [`paradox-styles.patchkamer-tunes.json`](../../tunes/paradox-styles.patchkamer-tunes.json). A few names: **Sub Cathedral**, **Choir of Pipes**, **Frozen Lake**, **Morning Glass**, **Abandoned Hall**. In the pack, 37 tunes are **Playable**, 19 **Organism** and 14 **Drone**.
+
+**Tips and limits.**
+
+- At most 6 voices; when all are busy new notes are skipped. A tune with **Drone** always uses one voice.
+- The sound is not deterministic: voices get a random pan, detune and phase, so the same note never sounds exactly the same twice.
+- Freezing the memory only lasts this session; its content is not stored in a tune.
+- **Follow Start/Stop** on means silence without the clock.
+- **Mutation**, **Life** and **Fold** all above 90% give the chaotic extreme: noise with pitch jumps.
+- The output is limited softly, so it does not clip, but the level differs per setting; adjust **Output** per sound.
+
+### Foundry
+
+**What it is for.** An industrial sound sculptor, mono. The sound runs in a fixed order: an FM chain of three oscillators, a ring modulator, noise and optional outside sound; four resonators (a metal "body" made of feedback delays) in four materials (steel, glass, concrete, cable); two parallel distortions (overdrive and wavefolder); an output filter; an envelope; and a room with a compressor. A slow motion (LFO on pitch, filter and ring modulator) and an irregular drift keep it moving. It has no sequencer or arpeggiator of its own.
+
+![The Foundry card](../images/en/synths/foundry.png)
+
+**Controls.**
+
+- **Top:** **Sound** (twelve starting sounds, for example **Steel Mill**, plus **Custom sculpture**), **Play mode** (**Drone / transport** or **Keyboard / sequencer**), **Start / stop drone**, **Metal strike** (switches to notes and plays one note), **All off** and **Mutate sound** (changes the sound, not the output level).
+- **XY pad** with **X axis** and **Y axis**. **Save A**, **Save B**, **Recall A**, **Recall B** and **Morph A ↔ B** keep two sounds and blend between them.
+- **Material** (**Steel**, **Glass**, **Concrete**, **Cable**), **Source** (the waveform of the main oscillator) and **Scope** (display only).
+- **Sources & frequencies:** **Drone frequency**, **Transpose**, **FM amount**, **FM ratio** (whole numbers sound harmonic, other values metallic), **Ring modulation**, **Ring frequency**, **Noise / scrape** and **External material**.
+- **Material & distortion:** **Resonator mix**, **Body frequency**, **Damping / brightness**, **Roughness / drive**, **Wavefold mix**, **Output filter** and **Filter resonance**.
+- **Motion & space:** **Cyclic motion**, **Motion rate**, **Irregular drift**, **Space / echo** and **Stereo width**.
+- **Envelope & level:** **Attack**, **Decay**, **Sustain**, **Release** and **Output**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **External material** | audio in (teal) | Outside sound that goes through the chain; raise the knob **External material**. |
+| **Keyboard / notes** | notes in (orange) | Notes in the play mode **Keyboard / sequencer**. Monophonic: a new note takes over. |
+| **Mod** | modulation in (purple) | A modulator can move the controls; it also works without the clock. |
+| **Stereo sculpture** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Foundry** and **Speakers**. Choose the tune **Press Line Bass** (set to **Keyboard / sequencer**) and play low notes. For a drone: choose **Drone / transport**, press **Start / stop drone**, and drag in the XY pad to change **FM amount** and **Wavefold mix**.
+
+**Tunes.** Pack **Foundry Styles**: 69 tunes in 11 folders (Industrial, Techno, Dark Ambient, Cinematic, Sound Design, Horror, Experimental, Noise, Drone, Metal Percussion, Electro), file [`foundry-styles.patchkamer-tunes.json`](../../tunes/foundry-styles.patchkamer-tunes.json). A few names: **Press Line Bass**, **Rivet Lead**, **Warehouse Sub**, **Rolling Rumble**, **Cathedral Drone**. In the pack, 50 tunes are set to **Keyboard / sequencer** and 19 to **Drone / transport**.
+
+**Tips and limits.**
+
+- A drone only sounds when the clock runs or **Start / stop drone** is on. For a keyboard, a sound must be on **Keyboard / sequencer**.
+- The resonators sit in a feedback loop; the highest tuned **Body frequency** is about 375 Hz. Use it as a colour rather than a tuned pitch.
+- **Resonator mix** above about 94% gives no longer decay.
+- **External material** only has an effect when something is connected to the input.
+- A guard blocks the input while it carries invalid or absurdly large values and rebuilds the chain after them.
+
+### Mist
+
+**What it is for.** A drone and ambient synth that runs along with the clock of the studio. Eight oscillators (alternately sine and triangle, slightly detuned) make a standing chord that fades in and out slowly. Under it lies brown noise through a band filter, like wind. Everything goes through a tone filter with a slow LFO, a long reverb and two stereo echoes. As long as the clock runs and **Play** is on **Drone + notes**, the chords change by themselves and an automatic melody plays. It also plays outside notes, up to twelve at once. It is meant as a bed under a song.
+
+![The Mist card](../images/en/synths/mist.png)
+
+**Controls.**
+
+- **Soundscape** (14 starting sounds, plus **Custom sound**), **Play** (**Drone + notes** or **Notes only**: the drone is silent and only your notes sound) and **Chord** (**Open fifths**, **Minor 7**, **Major 7**, **Sus / floating**, **Open add9**, **Minor 9**, **Major 9** or **Major 6**).
+- **Melody** (level of the automatic melody) and **Density** (how often it plays a note).
+- **Warmth**, **Detune**, **Root** (the drone and the automatic melody; outside notes keep their own pitch) and **Level**.
+- **Brightness** (cutoff of the tone filter), **Wind**, **Motion**, **Reverb**, **Echo**, **Attack**, **Release** and **Evolve** (after how many bars the chord changes).
+- **START DRONE**: plays a standing chord without the clock.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes / CC** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer; control changes for the knobs. |
+| **Mod** | modulation in (purple) | A modulator can move 13 controls. |
+| **Stereo out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Mist** and **Speakers**. Choose the tune **Slow Horizon** and press **Start**: the chord drifts and the melody plays. Without the clock, press **START DRONE**. For soft bells: choose **Notes only** and play notes from **Keys / MIDI**.
+
+**Tunes.** Pack **Mist Styles**: 62 tunes in 11 folders (Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Lo-fi, Drone, Sound Design, New Age, Chillout), file [`mist-styles.patchkamer-tunes.json`](../../tunes/mist-styles.patchkamer-tunes.json). A few names: **Slow Horizon**, **Open Fields**, **Sub Cave**, **Black Cathedral**, **Epic Rise**. In the pack, 54 tunes are **Drone + notes** and 8 are **Notes only**.
+
+**Tips and limits.**
+
+- The drone only sounds when the clock runs (or after **START DRONE**) and **Play** is **Drone + notes**. When the clock stops, everything fades out over **Release**.
+- Chord changes and the melody are fixed and repeat: same tune and same clock give the same result.
+- A note is at least 0.2 s long to come up and sounds at least 1 s after: Mist is not suited to plucks or stabs.
+- At most twelve notes at once, the automatic melody included; a thirteenth is ignored.
+- A very long **Release** (24 s) with many notes fills the voices.
+
+### Grain Cloud
+
+**What it is for.** A granular synth and a granular effect in one. It cuts sound into grains of 5 ms to 1 s and scatters them again, each with its own pitch, direction, place in the source and stereo position. There are three sources: **Wave (built-in)** (a one-second sound that loops endlessly; the card is then a synth and sounds without an input), **Live (input)** (whatever arrives on **In (source)**, through a memory of 8 seconds; the card is then an effect and is silent without a cable) and **Frozen recording** (the memory stands still and you play around in it). There is no sequencer or arpeggiator.
+
+![The Grain Cloud card](../images/en/synths/grain-cloud.png)
+
+**Controls.**
+
+- **Soundscape** (starting settings), **Source** (**Live (input)**, **Frozen recording** or **Wave (built-in)**), **Wave** (**Choir (aah)**, **Organ**, **Sawtooth**, **Glass**, **Noise**, **Sine**; only for the built-in source) and **Pitch jumps** (**Free**, **Octaves**, **Fifths**, **Octave + fifth**).
+- Buttons: **Cloud (drone)** (an endless cloud at the original pitch, also without notes), **Freeze** (switches between live and frozen), **Record 4 s** (records 4 seconds from the input and then freezes) and **Test note**.
+- **Where and how often:** **Position**, **Spread**, **Scan** (the position moves through the source by itself), **Grain size** (in ms) and **Density** (grains per second).
+- **Every grain:** **Pitch**, **Pitch spread**, **Reverse** (chance that a grain plays backwards), **Width** and **Window** (0% soft, 100% angular like a click).
+- **Cloud and mix:** **Feedback** (the cloud goes back into the recording; only for Live), **Mix**, **Attack**, **Release** and **Output**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **In (source)** | audio in (teal) | The sound for the sources **Live (input)** and **Frozen recording**. Without a cable **Live (input)** is silent. |
+| **Notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer. A note shifts the pitch of the grains (C4 is the original pitch; with the built-in source it is A3). |
+| **Mod** | modulation in (purple) | A modulator can move 15 controls, for example **Position**. |
+| **Stereo** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** As a synth: place **Grain Cloud** and **Speakers**, choose the tune **Choir Mist** (source **Wave (built-in)**): a choir cloud sounds. As an effect: connect a synth to **In (source)**, choose the source **Live (input)**, set **Mix** around 50% and play: you hear stutters, scatterings and reverse echoes of what you send in. Give it one or two seconds to fill the memory.
+
+**Tunes.** Pack **Grain Cloud Styles**: 61 tunes in 10 folders (Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Glitch/IDM, Lo-fi, Drone, Sound Design), file [`grain-cloud-styles.patchkamer-tunes.json`](../../tunes/grain-cloud-styles.patchkamer-tunes.json). A few names: **Choir Mist**, **Glass Shimmer**, **Sunken Choir**, **Cave Breath**, **Epic Choir Rise**. Of the 61 tunes, 54 use the built-in source and sound on their own; 7 use **Live (input)** and work as effects, silent without a cable: **Stutter Cloud**, **Micro Slicer**, **Pitch Scatter**, **Reverse Chop**, **Warped Cassette**, **Freeze Echo** and **Smear Cloud**.
+
+**Tips and limits.**
+
+- At most 8 voices (the cloud counts as one) and 160 grains at once.
+- A frozen recording is a recording of this session and is not part of a tune: a tune never contains a sample.
+- With **Live (input)** the grains come from the memory of the last 8 seconds; test with a real signal (a short pluck, a rhythm or chords), because silence hides most effects.
+- Keep **Feedback** under about 60%: higher values can turn the recording into an endlessly screaming cloud.
+- For melodies: use a low **Pitch spread** (under 1 semitone) or **Octaves** or **Fifths**, or the notes sound out of tune.
+- With several notes together, keep **Output** under about 60%.
+
 ## If it does not work
 
 - **No sound.** Check that audio runs from the synth to **Speakers** (teal cable), that you pressed **Start** and that the volume on Speakers is up. Click anywhere in Patchkamer once: browsers pause audio until you do.
 - **A built-in sequencer or arpeggiator is silent.** Acid Baselines (with **internal on**), Acid Stepper (**Control** = **Internal clock / pattern**), Sub Line and Cross Mod Mono (**Control** = **Own pattern** or **Arpeggiator**) only play while the clock runs: press **Start**. An arpeggiator also needs held keys.
 - **A synth does not react to a keyboard.** Connect the orange cable to its notes port (**Notes**, **Keyboard / notes**, **External notes**), not to **Mod**. Acid Baselines needs **internal on** off for outside notes, Acid Stepper needs **Control** = **External keyboard / sequencer**, and Sub Line and Cross Mod Mono need **Control** = **Keyboard / external sequencer**. For a MIDI keyboard use **Connect MIDI** on Keys; see the [main manual](../USER-MANUAL_EN.md#13-troubleshooting).
+- **A drone or texture synth is silent.** Each one starts in its own way: **Start landscape** (Layered Landscape), **Start / stop drone** (Foundry), **START DRONE** (Mist), **Cloud (drone)** (Grain Cloud), **Alive** (Paradox), **On** (Biotope). Drone Synth, Mist, Foundry (in the play mode **Drone / transport**) and Layered Landscape (with the own sequencer) follow the clock: press **Start**, or check that **Follow start/stop** is off. Grain Cloud on the source **Live (input)** is silent without a cable on **In (source)**, and Celestial Mechanics needs notes.
 - **Notes keep sounding.** A note without a length keeps sounding on some synths (Bowed Ensemble). Make the sequencer send note lengths, or press **All off** on the card.
 - **Supersaw Swarm gate or pump does nothing.** They only work while the clock runs.
 - **Quiet or silent.** Check **Level** or **Output**, and the sound controls: a very low cutoff with a low envelope amount is very quiet (Acid Baselines, Basic Mono), Patchbay Synth needs a VCA source (see its tips) and a very short note with a long amplifier attack sounds only faintly on Triple Osc Poly.

@@ -2,7 +2,7 @@
 
 *English version: [README.md](README.md)*
 
-Apparaten die uit noten geluid maken: 18 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design en modulair patchen. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
+Apparaten die uit noten geluid maken: 26 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones en texturen. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
 
 Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke synth voor welk doel".
 
@@ -26,6 +26,21 @@ Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke sy
 | **Karplus String** | Een model van geplukte en gestreken snaren met acht stemmen en een eigen klavier van twee octaven | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_NL.md#karplus-string) |
 | **Dissonant Cluster** | Een polyfone synth die alleen dissonant klinkt: elke noot wordt een cluster van 2 tot 6 stemmen | [`DissonantCluster/`](DissonantCluster/) | [60](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) | [Dissonant Cluster](../../docs/synths/USER-MANUAL_NL.md#dissonant-cluster) |
 | **Patchbay Synth** | Een halfmodulaire synth met een patchpaneel: drie VCO's, ringmodulator, filter, envelopes, sample & hold en kabels | [`PatchbaySynth/`](PatchbaySynth/) | [89](../../tunes/patchbay-synth-styles.patchkamer-tunes.json) | [Patchbay Synth](../../docs/synths/USER-MANUAL_NL.md#patchbay-synth) |
+
+## Drone- en textuursynths
+
+Acht synths voor lange, langzaam veranderende klanken: drones, soundscapes en texturen. De meeste blijven vanzelf klinken zonder dat iemand speelt.
+
+| Apparaat | Wat het doet | Map | Tunes | Handleiding |
+|---|---|---|---|---|
+| **Layered Landscape** | Een ambient-instrument met vier lagen (drone, pad, sfeer, ruistextuur) met een stereo-ruimte, een master-effect en patronen per laag | [`LayeredLandscape/`](LayeredLandscape/) | [71](../../tunes/layered-landscape-styles.patchkamer-tunes.json) | [Layered Landscape](../../docs/synths/USER-MANUAL_NL.md#layered-landscape) |
+| **Biotope** | Een synth voor omgevingen zonder samples: acht lagen (regen, druppels, bubbels, wind, voetstappen, haardvuur, zee, gekraak) die een soundscape vormen | [`Biotope/`](Biotope/) | [86](../../tunes/biotope-styles.patchkamer-tunes.json) | [Biotope](../../docs/synths/USER-MANUAL_NL.md#biotope) |
+| **Drone Synth** | Een doorlopende drone met een sub, een tweede laag, ruis, een filter met LFO, delay, galm, willekeurige gebeurtenissen en een grondtoon-sequencer van 16 stappen | [`DroneSynth/`](DroneSynth/) | [66](../../tunes/drone-synth-styles.patchkamer-tunes.json) | [Drone Synth](../../docs/synths/USER-MANUAL_NL.md#drone-synth) |
+| **Celestial Mechanics** | Een zwaartekrachtsynth: elke noot wordt een planeet om een zon; Doppler, een zwart gat, een pulsar en kometen vormen de klank | [`CelestialMechanics/`](CelestialMechanics/) | [74](../../tunes/celestial-mechanics-styles.patchkamer-tunes.json) | [Celestial Mechanics](../../docs/synths/USER-MANUAL_NL.md#celestial-mechanics) |
+| **Paradox** | Een experimentele synth die zelf meebeweegt: chaos, een cellulaire automaat, een wavefolder en een granulair geheugen; bespeelbaar, drone of organisme | [`Paradox/`](Paradox/) | [70](../../tunes/paradox-styles.patchkamer-tunes.json) | [Paradox](../../docs/synths/USER-MANUAL_NL.md#paradox) |
+| **Foundry** | Een mono industriële klankvormer: FM, ringmodulatie, vier metalen resonatoren, overdrive en wavefolder, met een drone- en een notenstand | [`Foundry/`](Foundry/) | [69](../../tunes/foundry-styles.patchkamer-tunes.json) | [Foundry](../../docs/synths/USER-MANUAL_NL.md#foundry) |
+| **Mist** | Een drone- en ambient-synth die de klok volgt: een stilstaand akkoord met eigen akkoordgang en melodie, wind, galm en echo's | [`Mist/`](Mist/) | [62](../../tunes/mist-styles.patchkamer-tunes.json) | [Mist](../../docs/synths/USER-MANUAL_NL.md#mist) |
+| **Grain Cloud** | Een granulaire synth en een granulair effect: een ingebouwde klank als synth, of live audio van de ingang als effect | [`GrainCloud/`](GrainCloud/) | [61](../../tunes/grain-cloud-styles.patchkamer-tunes.json) | [Grain Cloud](../../docs/synths/USER-MANUAL_NL.md#grain-cloud) |
 
 De kolom **Tunes** verwijst naar het pack van die synth en noemt het aantal tunes erin.
 

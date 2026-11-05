@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 18 synths for basses, leads, pads, chords, keys, strings, sound design and modular patching. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 26 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones and textures. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -26,6 +26,21 @@ Not sure which one to pick? The manual starts with a table "Which synth for whic
 | **Karplus String** | A plucked and bowed string model with eight voices and its own two-octave keyboard | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_EN.md#karplus-string) |
 | **Dissonant Cluster** | A polyphonic synth that only sounds dissonant: every note becomes a cluster of 2 to 6 voices | [`DissonantCluster/`](DissonantCluster/) | [60](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) | [Dissonant Cluster](../../docs/synths/USER-MANUAL_EN.md#dissonant-cluster) |
 | **Patchbay Synth** | A semi-modular synth with a patch panel: three VCOs, ring modulator, filter, envelopes, sample & hold and cables | [`PatchbaySynth/`](PatchbaySynth/) | [89](../../tunes/patchbay-synth-styles.patchkamer-tunes.json) | [Patchbay Synth](../../docs/synths/USER-MANUAL_EN.md#patchbay-synth) |
+
+## Drone & texture synths
+
+Eight synths for long, slowly changing sounds: drones, soundscapes and textures. Most keep sounding without anyone playing.
+
+| Device | What it does | Folder | Tunes | Manual |
+|---|---|---|---|---|
+| **Layered Landscape** | A four-layer ambient instrument (drone, pad, atmosphere, noise texture) with a stereo room, a master effect and patterns per layer | [`LayeredLandscape/`](LayeredLandscape/) | [71](../../tunes/layered-landscape-styles.patchkamer-tunes.json) | [Layered Landscape](../../docs/synths/USER-MANUAL_EN.md#layered-landscape) |
+| **Biotope** | A synth for environments without samples: eight layers (rain, drops, bubbles, wind, footsteps, fireplace, sea, creaks) that make a soundscape | [`Biotope/`](Biotope/) | [86](../../tunes/biotope-styles.patchkamer-tunes.json) | [Biotope](../../docs/synths/USER-MANUAL_EN.md#biotope) |
+| **Drone Synth** | A continuous drone with a sub, a second layer, noise, a filter with LFO, delay, reverb, random events and a 16-step root sequencer | [`DroneSynth/`](DroneSynth/) | [66](../../tunes/drone-synth-styles.patchkamer-tunes.json) | [Drone Synth](../../docs/synths/USER-MANUAL_EN.md#drone-synth) |
+| **Celestial Mechanics** | A gravity synth: every note becomes a planet around a sun; Doppler, a black hole, a pulsar and comets shape the sound | [`CelestialMechanics/`](CelestialMechanics/) | [74](../../tunes/celestial-mechanics-styles.patchkamer-tunes.json) | [Celestial Mechanics](../../docs/synths/USER-MANUAL_EN.md#celestial-mechanics) |
+| **Paradox** | An experimental synth that moves by itself: chaos, a cellular automaton, a wavefolder and a granular memory; playable, drone or organism | [`Paradox/`](Paradox/) | [70](../../tunes/paradox-styles.patchkamer-tunes.json) | [Paradox](../../docs/synths/USER-MANUAL_EN.md#paradox) |
+| **Foundry** | A mono industrial sound sculptor: FM, ring modulation, four metal resonators, overdrive and wavefolder, with a drone and a notes mode | [`Foundry/`](Foundry/) | [69](../../tunes/foundry-styles.patchkamer-tunes.json) | [Foundry](../../docs/synths/USER-MANUAL_EN.md#foundry) |
+| **Mist** | A drone and ambient synth that follows the clock: a standing chord with its own chord changes and melody, wind, reverb and echoes | [`Mist/`](Mist/) | [62](../../tunes/mist-styles.patchkamer-tunes.json) | [Mist](../../docs/synths/USER-MANUAL_EN.md#mist) |
+| **Grain Cloud** | A granular synth and effect: a built-in sound as a synth, or live audio from its input as an effect | [`GrainCloud/`](GrainCloud/) | [61](../../tunes/grain-cloud-styles.patchkamer-tunes.json) | [Grain Cloud](../../docs/synths/USER-MANUAL_EN.md#grain-cloud) |
 
 The **Tunes** column links to the pack of that synth and gives the number of tunes in it.
 

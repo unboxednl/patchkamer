@@ -4,25 +4,33 @@
 
 Kant-en-klare klanken voor apparaten die geluid maken (synths en drumapparaten), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, gebruik hem in een song of in een eigen bibliotheek. Apparaten zonder eigen geluid hebben [presets](../presets/README_NL.md).
 
-Deze map heeft **24 packs met 1393 tunes**, één pack per apparaat: 18 voor synths (1186 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
+Deze map heeft **32 packs met 2012 tunes**, één pack per apparaat: 26 voor synths (1805 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
-### Synths (18)
+### Synths (26)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
 |---|---|---|---|---|
 | [Acid Baselines](../devices/synths/AcidBaselines/) | Acid Baselines Classics | 49 | 9 | [`acid-baselines-classics.patchkamer-tunes.json`](acid-baselines-classics.patchkamer-tunes.json) |
 | [Acid Stepper](../devices/synths/AcidStepper/) | Acid Stepper Styles | 65 | 12 | [`acid-stepper-styles.patchkamer-tunes.json`](acid-stepper-styles.patchkamer-tunes.json) |
 | [Basic Mono](../devices/synths/BasicMono/) | Basic Mono Styles | 65 | 12 | [`basic-mono-styles.patchkamer-tunes.json`](basic-mono-styles.patchkamer-tunes.json) |
+| [Biotope](../devices/synths/Biotope/) | Biotope Styles | 86 | 13 | [`biotope-styles.patchkamer-tunes.json`](biotope-styles.patchkamer-tunes.json) |
 | [Bowed Ensemble](../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 65 | 11 | [`bowed-ensemble-styles.patchkamer-tunes.json`](bowed-ensemble-styles.patchkamer-tunes.json) |
-| [Chord Poly](../devices/synths/ChordPoly/) | Chord Poly Styles | 60 | 10 | [`chord-poly-styles.patchkamer-tunes.json`](chord-poly-styles.patchkamer-tunes.json) |
+| [Celestial Mechanics](../devices/synths/CelestialMechanics/) | Celestial Mechanics Styles | 74 | 11 | [`celestial-mechanics-styles.patchkamer-tunes.json`](celestial-mechanics-styles.patchkamer-tunes.json) |
+| [Chord Poly](../devices/synths/ChordPoly/) | Chord Poly Styles | 120 | 20 | [`chord-poly-styles.patchkamer-tunes.json`](chord-poly-styles.patchkamer-tunes.json) |
 | [Cross Mod Mono](../devices/synths/CrossModMono/) | Cross Mod Mono Styles | 63 | 12 | [`cross-mod-mono-styles.patchkamer-tunes.json`](cross-mod-mono-styles.patchkamer-tunes.json) |
 | [Dissonant Cluster](../devices/synths/DissonantCluster/) | Dissonant Cluster Styles | 60 | 9 | [`dissonant-cluster-styles.patchkamer-tunes.json`](dissonant-cluster-styles.patchkamer-tunes.json) |
+| [Drone Synth](../devices/synths/DroneSynth/) | Drone Synth Styles | 66 | 10 | [`drone-synth-styles.patchkamer-tunes.json`](drone-synth-styles.patchkamer-tunes.json) |
 | [Duofone](../devices/synths/Duofone/) | Duofone Styles | 60 | 12 | [`duofone-styles.patchkamer-tunes.json`](duofone-styles.patchkamer-tunes.json) |
+| [Foundry](../devices/synths/Foundry/) | Foundry Styles | 69 | 11 | [`foundry-styles.patchkamer-tunes.json`](foundry-styles.patchkamer-tunes.json) |
 | [Four-Operator FM](../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | 11 | [`four-operator-fm-styles.patchkamer-tunes.json`](four-operator-fm-styles.patchkamer-tunes.json) |
+| [Grain Cloud](../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | 10 | [`grain-cloud-styles.patchkamer-tunes.json`](grain-cloud-styles.patchkamer-tunes.json) |
 | [Karplus String](../devices/synths/KarplusString/) | Karplus String Styles | 60 | 10 | [`karplus-string-styles.patchkamer-tunes.json`](karplus-string-styles.patchkamer-tunes.json) |
+| [Layered Landscape](../devices/synths/LayeredLandscape/) | Layered Landscape Styles | 71 | 11 | [`layered-landscape-styles.patchkamer-tunes.json`](layered-landscape-styles.patchkamer-tunes.json) |
 | [Low Bass](../devices/synths/LowBass/) | Low Bass Styles | 64 | 13 | [`low-bass-styles.patchkamer-tunes.json`](low-bass-styles.patchkamer-tunes.json) |
+| [Mist](../devices/synths/Mist/) | Mist Styles | 62 | 11 | [`mist-styles.patchkamer-tunes.json`](mist-styles.patchkamer-tunes.json) |
+| [Paradox](../devices/synths/Paradox/) | Paradox Styles | 70 | 10 | [`paradox-styles.patchkamer-tunes.json`](paradox-styles.patchkamer-tunes.json) |
 | [Patch Mono](../devices/synths/PatchMono/) | Patch Mono Styles | 79 | 14 | [`patch-mono-styles.patchkamer-tunes.json`](patch-mono-styles.patchkamer-tunes.json) |
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | 15 | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | 12 | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) |

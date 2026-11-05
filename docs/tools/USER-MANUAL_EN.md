@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the six **tools** of Patchkamer. Tools are helpers: you use them to play, record, measure, take notes or control other devices. They are not sound sources and they are not effects. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the seven **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -13,6 +13,7 @@ This manual covers the six **tools** of Patchkamer. Tools are helpers: you use t
 | record the finished mix (or any sound) into one file | [Recorder](#recorder) | **In** and **Through** audio |
 | record many tracks at once, one file per track | [Multitrack](#multitrack) | a **Bundle** in |
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
+| hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
 | write down ideas, the key and a to-do list | [Notes](#notes) | no ports |
 
 ## How you connect tools
@@ -20,9 +21,10 @@ This manual covers the six **tools** of Patchkamer. Tools are helpers: you use t
 - **Keys / MIDI** and **Pad Controller** send *events* (notes). Their orange event ports connect to the notes input of a synth, a sampler or an arpeggiator.
 - **Recorder** and **Scope** are audio devices that let the sound through unchanged. Put them in the audio path, for example between the Mixer and Speakers. Recorder and Scope can also hang on the end of a cable that continues to other devices.
 - **Multitrack** listens to a *bundle* (the thick green cable with many channels) and does not pass sound on. It sits next to the Mixer, not in the path.
+- **Metronome** has an audio out (the click) and an event out (**Trigs**). Connect **Out** to your mixer to hear the click, and **Trigs** to a drum machine or sampler to let it play on the beats.
 - **Notes** is not connected to anything.
 
-None of these tools changes your sound: they play, look, record or note.
+Apart from the click of Metronome, none of these tools adds to your sound: they play, look, record or note.
 
 ---
 
@@ -186,6 +188,28 @@ None of these tools changes your sound: they play, look, record or note.
 
 ---
 
+## Metronome
+
+**What it is for.** A click that keeps time with the clock of the studio: a short beep on every bar, beat, eighth or sixteenth. Use it to practise or record in time, or let the same beats play along with a drum machine or sampler. The first step of every bar is louder and higher than the other clicks.
+
+![The Metronome card](../images/en/tools/metronome.png)
+
+**Controls**
+
+- **Every** chooses how often a click sounds: every **Bar**, **Beat**, **8th** or **16th**. The start is **Beat**.
+- **Level** (0 to 100%, start 50%) is the volume of the click on the audio output.
+- **Step** shows the 16 steps of the bar and lights the current one while the clock runs.
+
+**Ports.** Two outputs and no inputs. **Out** is the click as audio (teal). **Trigs** (orange) sends a trigger at every click, so a drum machine or a sampler can play on the same beats. The trigger on the first step of the bar is stronger than the others. The level knob only affects **Out**, not **Trigs**.
+
+**Example patch.** Place Metronome, a **Mixer** and **Speakers**. Connect **Out** of Metronome to an input of the Mixer and **Out** of the Mixer to **In** on Speakers. Press **Start**: you hear a click on every beat, with a higher one on the first beat of each bar. Choose **Practice › Bar Only Quiet** from the presets for a soft click once per bar. To let a drum play on the beats, also connect **Trigs** to a drum machine.
+
+**Presets.** The pack **Metronome Basics** has 9 presets in three folders: **Practice** (Bar Only, Bar Only Quiet, Quarter Beats, Quarter Beats Quiet), **Subdivisions** (Eighth Notes, Eighth Notes Quiet, Sixteenth Ticks) and **Loud** (Quarter Beats Loud, Stage Click). The file is [`presets/metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets ▾** menu → **Import…**. A preset holds **Every** and **Level**.
+
+**Tips and limits.** Metronome only clicks while the clock runs (after **Start**); it follows the tempo of the studio and has no tempo of its own. A click is a short sine beep of 1000 Hz (1600 Hz on the first step of the bar). Not listened to: set **Level** by ear, for example with headphones.
+
+---
+
 ## Notes
 
 **What it is for.** A notepad on the floor for ideas, the key, the structure and what you still want to do. It makes no sound and has no ports; the text is saved with the workspace or song.
@@ -217,4 +241,5 @@ None of these tools changes your sound: they play, look, record or note.
 - **The computer keys do nothing.** Click the piano on the card first; the keys only work when the card has focus and not while you are typing in a field.
 - **Pad Controller plays notes instead of using the pads.** Choose **pads + buttons** for that MIDI input before you press the pads. For the lights, choose an output under **LEDs to**.
 - **Recorder or Multitrack records silence.** Recorder needs sound on **In**. Multitrack needs a bundle on **Bundle** and a source on each armed track (**— none** records nothing). Check that **Start** has been pressed.
+- **Metronome does not click.** It only clicks while the clock runs: press **Start**. Connect **Out** to a mixer or to Speakers.
 - **MP3 is not possible.** Your sample rate is not supported by MP3. Choose WAV, or change the sample rate under Settings.
