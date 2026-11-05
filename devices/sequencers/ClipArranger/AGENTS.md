@@ -13,7 +13,7 @@ Een clip-, scène- en songsequencer met 1 tot 16 sporen (tracks). Het maakt **ze
 | Naam | `Clip Arranger` in alle talen; de poortnamen hebben een Nederlandse variant (`MIDI / opname`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input`; eventuitgangen `track1` … `track16`; geen audio, geen sturing; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.13 (apparaatversie 1.13.0) |
+| Contract | v1.13 (apparaatversie 1.13.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen met vier sporen en scènes van vier sporen; Pattern Playlist en Pattern Tracker bouwen een song van patronen in een playlist of tracker. Clip Arranger werkt zoals een sessieweergave: een matrix van clips per spoor en per scène, plus een lineair song-arrangement erboven.
@@ -99,6 +99,8 @@ Op elke zestiende noot (`onStep`) kijkt elk spoor in zijn clip welke noten begin
 Scènes lanceren op de volgende maat (sessiemodus). In songmodus bepaalt het arrangement welke scène speelt.
 
 ## Live spelen en inspelen (ingang `input`)
+
+- **Pads kiezen een spoor of starten een scène** (sinds 1.13.1, state `pads`): `pads.track = { on, base }` laat de noten `base` … `base + aantal sporen − 1` het spoor `noot − base` (0 = spoor 1) kiezen in plaats van te klinken; `pads.scene = { on, base }` laat de noten `base` … `base + 7` scène 1 … 8 starten (op de eerstvolgende maat als de klok loopt, zoals de scèneknop). Standaard staan beide uit (`on: false`, `base` 36 en 44, de twee padbanken van een MPK mini), dus bestaande songs klinken gelijk. Het spoorbereik gaat voor als de bereiken overlappen; een noot erbuiten gaat gewoon naar het geselecteerde spoor. `pads` hoort bij de hardware: het zit in `getState()` maar niet in `getPreset()`, en **Laad startpunt** laat het staan. De noot-off van een pad doet niets. Zo schakel je met één toetsenbord en een MIDI Hub (route **Keyboard**) tussen de apparaten achter de sporen.
 
 - Sluit een toetsenbord (device Keys of een andere notenbron) op `input` aan. De noten gaan **direct door naar de uitgang van het geselecteerde spoor** (met velocity en toonlengte), zodat je de synth op dat spoor kunt bespelen zonder een tweede kabel van het toetsenbord. Is het toetsenbord ook direct met die synth verbonden, dan klinkt het dubbel: dat is jouw keuze.
 - Een vastgehouden toets (`held: true` met `noteoff`, zoals Keys in de stand "Toets vasthouden") wordt doorgegeven en afgesloten met een `noteoff` op dezelfde uitgang. Wisselt het geselecteerde spoor, of komt er een nieuwe state, of wordt het apparaat verwijderd, dan krijgt het oude spoor een `noteoff` voor elke nog klinkende toets. `allnotesoff` en `panic` sluiten alles af. Een tweede aanslag van dezelfde nog vastgehouden toets sluit de eerste eerst af.
