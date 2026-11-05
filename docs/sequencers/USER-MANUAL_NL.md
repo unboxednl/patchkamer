@@ -77,6 +77,26 @@ Hangt er aan de notenuitgang van een sequencer een drumcomputer (**Drum Kit**, *
 
 Staat de **eigen sequencer van de drumcomputer** aan, dan speelt die tegelijk met jouw sequencer. De tunes van de drumcomputers zetten hem uit (zie de handleiding van de drumcomputers), zodat je met je eigen sequencer kunt beluisteren welke kit het best past.
 
+### Swing per niveau
+
+Bovenaan de studio staat de **Swing** voor het hele nummer: elke tweede zestiende (stap 2, 4, 6, … van de maat) komt wat later, zodat het minder strak klinkt. Veel sequencers hebben daarnaast **extra swing op een lager niveau**, die erbij komt:
+
+| Apparaat | Niveaus |
+|---|---|
+| Clip Arranger | **Swing clip**, **Swing spoor** en (bij drumsporen) **Swing rij** |
+| Pattern Tracker, Pattern Playlist | **Patroon**, **spoor** en per **drumrij** |
+| Step Sequencer | **Swing** van het patroon en per rij (**Rij-swing**) |
+| Euclidean Rhythms | per **rij** |
+| Chord Sequencer, Wanderer, Scale Arpeggiator | één **Swing** per apparaat (Chord Sequencer per spoor) |
+
+Elke schuif loopt van 0 tot 50 % van een zestiende; dubbelklik zet hem terug op 0. De niveaus tellen op bij de hostswing, met een bovengrens van 50 % voor het lokale deel. Alleen de oneven zestienden schuiven (ook een ratchet of een 32e-noot daarbinnen); een raster van 1/8 of langzamer heeft er niets van, omdat alle slagen op even zestienden vallen. Staan alle schuiven op 0, dan klinkt alles precies als voorheen.
+
+### Inspelen en kwantiseren
+
+Pattern Tracker, Pattern Playlist, Chord Sequencer, Clip Arranger en Step Sequencer kunnen **live inspelen**: zet **Opname** aan, start de klok en speel op je toetsenbord of pads. Met **Kwantiseer** aan springt elke noot naar het dichtstbijzijnde punt van het ingestelde raster, **mét de swing meegerekend** (een noot die je op een swingende stap speelt, blijft daar). Uit: de noot komt op de stap waarin je hem speelde. Een nieuwe noot op dezelfde plek vervangt de oude. Euclidean Rhythms, Wanderer en Scale Arpeggiator genereren hun noten en nemen niet op.
+
+In de **Clip Arranger** kies je bij **Opname** tussen **Aanvullen** (bestaande noten blijven, standaard) en **Overschrijven** (de clip wordt gewist bij de eerste noot die je inspeelt, daarna vul je aan; Undo herstelt de oude clip). Met **Speel deze clip** speel je alleen de gekozen clip van het gekozen spoor in een lus, los van scènes en song, en je kunt daarbij opnemen: elke ronde vult aan of overschrijft, volgens je keuze. **Stop clip** (of een scène lanceren) brengt je terug in de gewone weergave.
+
 ### Velocity en lengte
 
 Elke noot heeft naast zijn toonhoogte twee dingen: hoe hard hij wordt gespeeld (**velocity**) en hoe lang hij duurt (**lengte**). In alle sequencers die noten bewerken zie je allebei:

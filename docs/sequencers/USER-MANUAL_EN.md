@@ -77,6 +77,26 @@ When a drum machine (**Drum Kit**, **Pulse Drums**, **Click Synth** or **Latin P
 
 If the drum machine's **own sequencer** is on, it plays at the same time as your sequencer. The tunes of the drum machines switch it off (see the drum machine manual), so you can audition with your own sequencer which kit fits best.
 
+### Swing per level
+
+At the top of the studio sits the **Swing** for the whole song: every second sixteenth (steps 2, 4, 6, … of the bar) comes a little later, so it sounds less rigid. Many sequencers also have **extra swing at a lower level**, which is added:
+
+| Device | Levels |
+|---|---|
+| Clip Arranger | **Clip swing**, **Track swing** and (on drum tracks) **Row swing** |
+| Pattern Tracker, Pattern Playlist | **Pattern**, **track** and per **drum row** |
+| Step Sequencer | **Swing** of the pattern and per row (**Row swing**) |
+| Euclidean Rhythms | per **row** |
+| Chord Sequencer, Wanderer, Scale Arpeggiator | one **Swing** per device (Chord Sequencer per track) |
+
+Each slider runs from 0 to 50 % of a sixteenth; double-click resets it to 0. The levels add to the host swing, with an upper limit of 50 % for the local part. Only the odd sixteenths move (also a ratchet or a 32nd note inside them); a grid of 1/8 or slower shows none of it, because all hits fall on even sixteenths. With all sliders at 0, everything sounds exactly as before.
+
+### Recording and quantizing
+
+Pattern Tracker, Pattern Playlist, Chord Sequencer, Clip Arranger and Step Sequencer can **record live**: switch **Record** on, start the clock and play on your keyboard or pads. With **Quantize** on, every note jumps to the nearest point of the set grid, **with the swing taken into account** (a note you play on a swung step stays there). Off: the note lands on the step you played it in. A new note in the same place replaces the old one. Euclidean Rhythms, Wanderer and Scale Arpeggiator generate their notes and do not record.
+
+In the **Clip Arranger** you choose under **Record** between **Overdub** (existing notes stay, the default) and **Replace** (the clip is cleared at the first note you play, then you add; Undo restores the old clip). With **Play this clip** you play only the chosen clip of the chosen track in a loop, apart from scenes and song, and you can record while it plays: each round adds (Overdub) or overwrites (Replace), as you chose. **Stop clip** (or launching a scene) returns you to the normal view.
+
 ### Velocity and length
 
 Every note has two things besides its pitch: how hard it is played (**velocity**) and how long it lasts (**length**). In all sequencers that edit notes you can see both:
