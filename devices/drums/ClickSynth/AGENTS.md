@@ -86,7 +86,13 @@ Wat Click Synth met een state doet (getest): getallen buiten het bereik worden a
 - `onEvent` op `trigger`: `{ type: 'trig', lane: 'ch3' (elke tekst die op een cijfer eindigt telt), vel }` slaat dat spoor aan; een noot 36 … 43 of 60 … 67 slaat spoor 1 … 8 aan; `{ type: 'cc', id: 'l2.cut', value }` zet de parameter (`value` loopt van 0 tot 1 over het bereik); `panic` en `allnotesoff` kappen alle klanken af.
 - `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en 1 aan voor spoor-id's `l1.pitch` … `l8.vari`; al het andere wordt genegeerd. Modulatie verandert nooit de bewaarde waarden.
 
+## Nootnamen voor sequencers
+
+Click Synth heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-CONTRACT_NL.md` §13b): de acht sporen met hun `name` op de noten 36 tot 43 (spoor 1 = 36). Een sequencer die er met een notenkabel aan hangt, toont die klanken als rijen (Step Sequencer) of drumrijen (Pattern Tracker, Pattern Playlist) en volgt wijzigingen van kit, volgorde of noot via `host.noteNamesChanged`. Een tune die de kanalen verandert, verandert dus ook wat de sequencer toont. Je hoeft er in een tune niets voor te doen.
+
 ## Tunes maken
+
+- **Zet de eigen sequencer uit**: elke tune bevat `run: false`, zodat een gebruiker met zijn eigen sequencer kan beluisteren welke kit het best past. De patronen blijven in de tune staan; wie de eigen sequencer weer aanzet, hoort de groove. Laat dit veld in een nieuwe tune dus nooit weg (bij een ontbrekend veld start het apparaat zijn eigen sequencer).
 
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.clicksynth`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **kit**: acht sporen met klank en ritme. Zet `kit` op `Custom` voor een eigen kit. Geef elke tune en elk spoor een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".

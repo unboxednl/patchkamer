@@ -5,7 +5,7 @@
  "name": "Click Synth Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Kits for Click Synth in ten styles: minimal techno, microhouse, techno, glitch, electro, breakbeat, ambient, industrial, dub techno and acid. Each kit has a groove in pattern A, a variation in B, a sparse breakdown in C and the groove with a fill in D.",
+ "description": "Kits for Click Synth in ten styles: minimal techno, microhouse, techno, glitch, electro, breakbeat, ambient, industrial, dub techno and acid. Each kit has a groove in pattern A, a variation in B, a sparse breakdown in C and the groove with a fill in D. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune.",
  "tree": [
   {
    "folder": "Minimal Techno",
@@ -17,7 +17,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -280,7 +280,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -543,7 +543,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6668,
@@ -811,7 +811,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6461,
@@ -1074,7 +1074,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6315,
@@ -1337,7 +1337,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6823,
@@ -1605,7 +1605,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -1868,7 +1868,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6031,
@@ -2131,7 +2131,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6294,
@@ -2399,7 +2399,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6242,
@@ -2662,7 +2662,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6031,
@@ -2925,7 +2925,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -3193,7 +3193,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5893,
@@ -3456,7 +3456,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6031,
@@ -3719,7 +3719,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -3987,7 +3987,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6031,
@@ -4250,7 +4250,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6031,
@@ -4513,7 +4513,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6536,
@@ -4781,7 +4781,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6222,
@@ -5044,7 +5044,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6982,
@@ -5307,7 +5307,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.689,
@@ -5575,7 +5575,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5893,
@@ -5838,7 +5838,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -6101,7 +6101,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -6369,7 +6369,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6537,
@@ -6632,7 +6632,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -6895,7 +6895,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.6367,
@@ -7163,7 +7163,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.61,
@@ -7426,7 +7426,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,
@@ -7689,7 +7689,7 @@
      "state": {
       "kit": "Custom",
       "pattern": 0,
-      "run": true,
+      "run": false,
       "sel": 0,
       "mode": "on",
       "master": 0.5962,

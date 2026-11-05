@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Patchkamer contract v1.14. Geeft de klanknamen met hun noot door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen; de volgorde, kit en noten volgen de kanalen.
 // 1.11.4 — De rumble is minder aanwezig: de fabrieksstand heeft een cutoff van 210 Hz (voorheen 700 Hz) en 20% minder rumble (0,14 in plaats van 0,18; de Techno DNA-kits 0,13, Deep dub 0,2 en Industrial 0,26). Alleen de beginwaarden veranderen; opgeslagen tunes en songs houden hun eigen waarden en het geluid van de rest is ongewijzigd.
 // 1.11.3 — De bassdrum klinkt langer door: de body van de kick werd door twee opeenvolgende afbouwen (in de toon en in de envelope) al na ongeveer 60 ms zwak. De toon loopt nu door tot het eind van de envelope en de envelope houdt het niveau even vast (een vijfde van de decay). Andere instrumenten ongewijzigd.
 // 1.11.2 — Plafond achter de stereomix: tot 0,8 (−2 dBFS) ongewijzigd, daarboven zacht naar 1,0 in plaats van boven 0 dBFS te komen. Geen vertraging. De uitgangen per kanaal blijven ongewijzigd.
@@ -142,7 +143,7 @@ const CSS=`
 const OUT_TRIM=.36*4.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.11.4',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.14.0',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -191,7 +192,7 @@ const __pkDef = {
  function value(base,key,id){const def=GLOBAL_DEFS[key]||MOD_DEFS[key],offset=mod[id]||0;if(!offset)return base;return clamp(def.scale==='log'?base*Math.pow(def.max/def.min,offset):base+offset*(def.max-def.min),def.min,def.max,base);}
  function effective(i){const c=state.channels[i],out={...c};for(const key of Object.keys(MOD_DEFS))out[key]=value(c[key],key,'ch'+(i+1)+'.'+key);out.drive=Math.min(1,out.drive+value(state.grit,'grit','grit')*.6);return out;}
  function apply(){
-  if(dead)return;const solo=state.channels.some(c=>c.solo);
+  if(dead)return;notesNotify();const solo=state.channels.some(c=>c.solo);
   rumbleReturn.gain.setTargetAtTime(value(state.rumble,'rumble','rumble')*.9,ctx.currentTime,.03);rumbleLP.frequency.setTargetAtTime(value(state.rumbleTone,'rumbleTone','rumbleTone'),ctx.currentTime,.03);
   mix.gain.setTargetAtTime(value(state.master,'master','master')*OUT_TRIM,ctx.currentTime,.02);
   buses.forEach((b,i)=>{if(!state.channels[i]){b.level.gain.setTargetAtTime(0,ctx.currentTime,.01);b.rumbleSend.gain.setTargetAtTime(0,ctx.currentTime,.01);return;}const c=effective(i);
@@ -254,7 +255,10 @@ const __pkDef = {
  function check(parent,label,value,fn){const l=node('label',parent,undefined,'check'),r=node('input',l);r.type='checkbox';r.checked=value;node('span',l,label);r.onchange=()=>fn(r.checked);}
  let stepButtons=[],cursorLabels=[],scope,status;
  let bundleSig='';
- function bundleNotify(){const sig=state.channels.map(c=>c.type).join('|');if(sig===bundleSig)return;bundleSig=sig;if(self&&typeof host.bundleChanged==='function')try{host.bundleChanged(self,'multi');}catch(e){}}
+ function noteList(){const seen=new Set(),o=[];state.channels.forEach(c=>{const n=Math.round(c.note);if(!(n>=0&&n<=127)||seen.has(n))return;seen.add(n);o.push({note:n,name:(TYPES[c.type]||[c.type])[0]});});return o;}
+ let notesSig='';
+ function notesNotify(){const sig=JSON.stringify(noteList());if(sig===notesSig)return;notesSig=sig;if(self&&typeof host.noteNamesChanged==='function')try{host.noteNamesChanged(self);}catch(e){}}
+ function bundleNotify(){notesNotify();const sig=state.channels.map(c=>c.type).join('|');if(sig===bundleSig)return;bundleSig=sig;if(self&&typeof host.bundleChanged==='function')try{host.bundleChanged(self,'multi');}catch(e){}}
  function render(){refreshParams();bundleNotify();if(!root)return;root.replaceChildren();const style=node('style',root);style.textContent=CSS;const app=node('div',root,undefined,'sw');
  const top=node('div',app,undefined,'top'),brand=node('div',top,undefined,'brand');node('small',brand,'PATCHKAMER · TECHNO RHYTHM ENGINE');node('h1',brand,'PULSE');node('span',top,T.tag,'tag');
  const presetbar=node('div',app,undefined,'toolbar');select(presetbar,'TECHNO DNA',[['Hypnotic','Hypnotic'],['Hardgroove','Hardgroove'],['Industrial','Industrial'],['Deep dub','Deep dub'],['Broken','Broken'],['Custom','Custom']],['Hypnotic','Hardgroove','Industrial','Deep dub','Broken'].includes(state.kit)?state.kit:'Custom',x=>{if(x==='Custom')return;state=techno(x);stopAll();apply();render();});range(presetbar,'RUMBLE',state.rumble,0,1,.01,v=>{state.rumble=v;apply();},v=>Math.round(v*100)+'%');range(presetbar,'RUMBLE TONE',state.rumbleTone,80,2500,10,v=>{state.rumbleTone=v;apply();},v=>Math.round(v)+' Hz');range(presetbar,'GLOBAL GRIT',state.grit,0,1,.01,v=>{state.grit=v;apply();},v=>Math.round(v*100)+'%');button(presetbar,state.fill?'FILL ON':'Fill',()=>{state.fill=!state.fill;render();},state.fill?'active':'');node('span',presetbar,T.dnaNote,'notice');
@@ -305,6 +309,7 @@ const __pkDef = {
  // contract v1.6: preset = klank, kanalen en patronen; kitlijst en edit-instellingen blijven staan
  getPreset(){const s=copy(state);PRESET_SKIP.forEach(k=>delete s[k]);return s;},
  setPreset(p){const keep={};PRESET_SKIP.forEach(k=>keep[k]=copy(state[k]));restore({...(p&&typeof p==='object'?p:{}),...keep});},
+ noteNames(){return noteList();},
  getState(){return copy(state);},setState(s){restore(s||{});},
  destroy(){if(dead)return;dead=true;self.unmount();sources.forEach(n=>{try{n.stop();}catch{}});sources.clear();owned.forEach(n=>{try{n.disconnect();}catch{}});owned.clear();voices.clear();pending.length=0;}
  };refreshParams(false);apply();return self;
