@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — noteNames() geeft ook alle instrumenten uit de instrumentkeuze door die (nog) geen kanaal hebben, met hun standaardnoot; zo'n instrument klinkt als gast op een vrij kanaal (kanaal 12…16), zodat een sequencer de hele lijst kan bespelen. Fabrieksinstellingen en tunes blijven gelijk.
 // 1.14.0 — Patchkamer contract v1.14. Geeft de klanknamen met hun noot door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen; de volgorde, kit en noten volgen de kanalen.
 // 1.11.4 — De rumble is minder aanwezig: de fabrieksstand heeft een cutoff van 210 Hz (voorheen 700 Hz) en 20% minder rumble (0,14 in plaats van 0,18; de Techno DNA-kits 0,13, Deep dub 0,2 en Industrial 0,26). Alleen de beginwaarden veranderen; opgeslagen tunes en songs houden hun eigen waarden en het geluid van de rest is ongewijzigd.
 // 1.11.3 — De bassdrum klinkt langer door: de body van de kick werd door twee opeenvolgende afbouwen (in de toon en in de envelope) al na ongeveer 60 ms zwak. De toon loopt nu door tot het eind van de envelope en de envelope houdt het niveau even vast (een vijfde van de decay). Andere instrumenten ongewijzigd.
@@ -143,7 +144,7 @@ const CSS=`
 const OUT_TRIM=.36*4.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.14.0',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.14.1',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -206,8 +207,8 @@ const __pkDef = {
  function fail(e){error='Audio: '+(e?.message||String(e));}
  function release(v,t){try{v.env.gain.cancelScheduledValues(t);v.env.gain.setTargetAtTime(.00001,t,.004);v.src.forEach(s=>{try{s.stop(t+.035);}catch{}});}catch{}}
  function stopAll(){voices.forEach(v=>release(v,ctx.currentTime));}
- function hit(i,time,velocity=1,emit=true,locks={}){
-  if(dead||!state.channels[i])return;const c={...effective(i)},solo=state.channels.some(c=>c.solo);if(c.mute||(solo&&!c.solo)||velocity<=0)return;for(const [k,v] of Object.entries(locks)){if(MOD_DEFS[k]&&Number.isFinite(v))c[k]=clamp(v,MOD_DEFS[k].min,MOD_DEFS[k].max,c[k]);}
+ function hit(i,time,velocity=1,emit=true,locks={},guest=null){
+  if(dead||(!guest&&!state.channels[i]))return;const c=guest?{...guest}:{...effective(i)},solo=!guest&&state.channels.some(c=>c.solo);if(c.mute||(solo&&!c.solo)||velocity<=0)return;for(const [k,v] of Object.entries(locks)){if(MOD_DEFS[k]&&Number.isFinite(v))c[k]=clamp(v,MOD_DEFS[k].min,MOD_DEFS[k].max,c[k]);}
   const t=Math.max(ctx.currentTime,Number.isFinite(time)?time:ctx.currentTime),type=TYPES[c.type],family=type[1],model=MODEL[c.model],pitch=Math.pow(2,c.tune/12),f=type[3]*pitch*model.tone;
   // Step locks override the channel target for this hit, without writing the knob state.
   const b=buses[i];b.filter.frequency.setTargetAtTime(Math.min(c.cutoff,ctx.sampleRate*.45),t,.005);b.filter.Q.setTargetAtTime(c.resonance,t,.005);
@@ -255,7 +256,17 @@ const __pkDef = {
  function check(parent,label,value,fn){const l=node('label',parent,undefined,'check'),r=node('input',l);r.type='checkbox';r.checked=value;node('span',l,label);r.onchange=()=>fn(r.checked);}
  let stepButtons=[],cursorLabels=[],scope,status;
  let bundleSig='';
- function noteList(){const seen=new Set(),o=[];state.channels.forEach(c=>{const n=Math.round(c.note);if(!(n>=0&&n<=127)||seen.has(n))return;seen.add(n);o.push({note:n,name:(TYPES[c.type]||[c.type])[0]});});return o;}
+ // De lijst voor een sequencer: eerst de kanalen, daarna elk instrument uit de instrumentkeuze dat nog geen kanaal heeft (gast), met zijn standaardnoot of de eerstvolgende vrije.
+ function fullList(){const seen=new Set(),o=[],types=new Set();state.channels.forEach(c=>{types.add(c.type);const n=Math.round(c.note);if(!(n>=0&&n<=127)||seen.has(n))return;seen.add(n);o.push({note:n,name:(TYPES[c.type]||[c.type])[0]});});
+  for(const [k,t] of Object.entries(TYPES)){if(types.has(k)||o.length>=128)continue;let n=t[2];for(let g=0;g<128&&seen.has(n);g++)n=(n+1)%128;if(seen.has(n))continue;seen.add(n);o.push({note:n,name:t[0],type:k});}return o;}
+ function noteList(){return fullList().map(x=>({note:x.note,name:x.name}));}
+ const guestBusy=new Array(16).fill(0);
+ // een instrument zonder kanaal klinkt op een vrije bus (index vanaf het aantal kanalen); zijn er 16 kanalen, dan is er geen vrije bus en blijft het stil
+ function guestHit(type,time,velocity){if(dead||!TYPES[type]||!(velocity>0))return;const t=Math.max(ctx.currentTime,Number.isFinite(time)?time:ctx.currentTime),free=[];for(let j=state.channels.length;j<16;j++)free.push(j);if(!free.length)return;
+  const j=free.find(k=>guestBusy[k]<=t)??free.reduce((a,k)=>guestBusy[k]<guestBusy[a]?k:a,free[0]),model=MODELS.includes(state.channels[0]?.model)?state.channels[0].model:'Deep',g=lane(type,model,j),b=buses[j],now=ctx.currentTime;
+  b.rumbleSend.gain.setTargetAtTime(TYPES[type][1]==='kick'?1:0,now,.005);b.filter.type=g.filter;b.filter.frequency.setTargetAtTime(Math.min(g.cutoff,ctx.sampleRate*.45),now,.005);b.filter.Q.setTargetAtTime(g.resonance,now,.005);
+  const ci=Math.round(g.drive*40);if(b.curveIndex!==ci){b.shaper.curve=curves[ci];b.curveIndex=ci;}b.panner.pan.setTargetAtTime(g.pan,now,.005);b.level.gain.setTargetAtTime(g.level/(1+g.drive*.6),now,.005);b.send.gain.setTargetAtTime(g.mix?1:0,now,.005);
+  guestBusy[j]=t+Math.max(.1,g.decay)+.2;hit(j,t,velocity,false,{},g);}
  let notesSig='';
  function notesNotify(){const sig=JSON.stringify(noteList());if(sig===notesSig)return;notesSig=sig;if(self&&typeof host.noteNamesChanged==='function')try{host.noteNamesChanged(self);}catch(e){}}
  function bundleNotify(){notesNotify();const sig=state.channels.map(c=>c.type).join('|');if(sig===bundleSig)return;bundleSig=sig;if(self&&typeof host.bundleChanged==='function')try{host.bundleChanged(self,'multi');}catch(e){}}
@@ -303,7 +314,7 @@ const __pkDef = {
  unmount(){stopLoop();root=null;scope=null;status=null;modStatus=null;stepButtons=[];},
  onStep(info){try{if(dead||!state.run)return;const {step,bar,time,stepDur}=info;if(!Number.isFinite(time)||!(stepDur>0))return;const absolute=bar*16+step;pending.push({step:absolute,time});if(pending.length>128)pending.shift();state.channels.forEach((c,i)=>{const idx=((absolute%c.seqLength)+c.seqLength)%c.seqLength,z=c.steps[state.pattern][idx],cycle=Math.floor(absolute/c.seqLength);if(z.v>0&&Math.random()<=z.p&&cycle%z.every===(Math.min(z.phase,z.every)-1)&&(z.fill===0||(z.fill===1&&state.fill)||(z.fill===2&&!state.fill)))for(let r=0;r<z.r;r++){const offset=state.human*Math.random()+z.micro*stepDur,v=z.v*(1-state.human*4*Math.random());hit(i,time+r*stepDur/z.r+offset,v,true,z.locks);}});}catch(e){fail(e);}},
  onTransport({playing:p}){playing=!!p;if(!playing){stopAll();pending.length=0;lastStep=-1;}},
- onEvent(port,ev){try{if(dead||port!=='trigger'||!ev)return;const t=Number.isFinite(ev.time)?ev.time:ctx.currentTime;if(ev.type==='trig'){let i=/^ch\d+$/.test(ev.lane)?+ev.lane.slice(2)-1:state.channels.findIndex(c=>c.type===ev.lane);if(i>=0)hit(i,t,ev.vel??1);}else if(ev.type==='note'&&ev.vel>0){state.channels.forEach((c,i)=>{if(c.note===Math.round(ev.note))hit(i,t,ev.vel);});}else if(ev.type==='cc'){const v=clamp(ev.value,0,1),m=/^ch(\d+)\.(cutoff|resonance|level|pan|drive|tune)$/.exec(ev.id);if(m&&state.channels[+m[1]-1]){const c=state.channels[+m[1]-1],k=m[2];c[k]=k==='cutoff'?30*Math.pow(20000/30,v):k==='resonance'?.1+v*11.9:k==='pan'?v*2-1:k==='tune'?v*48-24:v;apply();}else if(ev.id==='master'){state.master=v;apply();}}}catch(e){fail(e);}},
+ onEvent(port,ev){try{if(dead||port!=='trigger'||!ev)return;const t=Number.isFinite(ev.time)?ev.time:ctx.currentTime;if(ev.type==='trig'){let i=/^ch\d+$/.test(ev.lane)?+ev.lane.slice(2)-1:state.channels.findIndex(c=>c.type===ev.lane);if(i>=0)hit(i,t,ev.vel??1);else if(Object.hasOwn(TYPES,ev.lane))guestHit(ev.lane,t,ev.vel??1);}else if(ev.type==='note'&&ev.vel>0){let any=false;state.channels.forEach((c,i)=>{if(c.note===Math.round(ev.note)){any=true;hit(i,t,ev.vel);}});if(!any){const gst=fullList().find(x=>x.type&&x.note===Math.round(ev.note));if(gst)guestHit(gst.type,t,ev.vel);}}else if(ev.type==='cc'){const v=clamp(ev.value,0,1),m=/^ch(\d+)\.(cutoff|resonance|level|pan|drive|tune)$/.exec(ev.id);if(m&&state.channels[+m[1]-1]){const c=state.channels[+m[1]-1],k=m[2];c[k]=k==='cutoff'?30*Math.pow(20000/30,v):k==='resonance'?.1+v*11.9:k==='pan'?v*2-1:k==='tune'?v*48-24:v;apply();}else if(ev.id==='master'){state.master=v;apply();}}}catch(e){fail(e);}},
  // contract v1.5: één bundel met de actieve kanalen (zelfde nodes als ch1…ch16)
  bundles:{multi:()=>({label:T.multi,channels:state.channels.map((c,i)=>({id:'ch'+(i+1),name:String(i+1).padStart(2,'0')+' · '+TYPES[c.type][0],node:buses[i].direct}))})},
  // contract v1.6: preset = klank, kanalen en patronen; kitlijst en edit-instellingen blijven staan
