@@ -4,7 +4,7 @@
 
 Ready-made settings for devices that make no sound of their own (effects, mixers, modulators, sequencers and other tools), saved as data. Choose one from the list on a device's card, or use a pack as the starting point for your own. Devices that make sound have [tunes](../tunes/README.md) instead.
 
-This folder has **37 packs with 1820 presets**, one pack per device: 12 for effects, 9 for mastering, 1 for the mixer, 6 for modulators, 8 for sequencers and 1 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
+This folder has **38 packs with 1851 presets**, one pack per device: 12 for effects, 9 for mastering, 2 for the mixer, 6 for modulators, 8 for sequencers and 1 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -39,10 +39,11 @@ This folder has **37 packs with 1820 presets**, one pack per device: 12 for effe
 | [Patina](../devices/mastering/Patina/) | Patina Situations and Styles | 128 | 10 | [`patina.patchkamer-presets.json`](patina.patchkamer-presets.json) |
 | [Stereo Space](../devices/mastering/StereoSpace/) | Stereo Space Situations and Styles | 128 | 10 | [`stereo-space.patchkamer-presets.json`](stereo-space.patchkamer-presets.json) |
 
-### Mixer (1)
+### Mixer (2)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
+| [Audio Input](../devices/mixer/AudioInput/) | Audio Input Basics | 31 | 5 | [`audio-input.patchkamer-presets.json`](audio-input.patchkamer-presets.json) |
 | [Leveler](../devices/mixer/Leveler/) | Leveler Basics | 11 | 3 | [`leveler.patchkamer-presets.json`](leveler.patchkamer-presets.json) |
 
 ### Modulators (6)

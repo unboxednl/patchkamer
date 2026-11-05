@@ -36,7 +36,7 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en e
 | **Drums** | Drumgeluiden en ritme | Drum Machine, Drum Kit, Groovebox 12, Pulse Drums, Latin Percussion, Click Synth | [devices/drums](devices/drums/README_NL.md) | [Drums](docs/drums/USER-MANUAL_NL.md) |
 | **Effecten** | Het geluid vormgeven: modulatie, vervorming, ruimte, filters, ritme, stem, hele ketens | Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo, Vocoder | [devices/effects](devices/effects/README_NL.md) | [Effecten](docs/effects/USER-MANUAL_NL.md) |
 | **Mastering** | Een mix afmaken: toon, dynamiek, saturatie, breedte, volume en controle, voor veel stijlen en situaties | Balance EQ, Multiband Balance, Bus Compressor, Patina, Stereo Space, Master Chain, Mix Check, Master Director, Listening Output | [devices/mastering](devices/mastering/README_NL.md) | [Mastering](docs/mastering/USER-MANUAL_NL.md) |
-| **Mixer** | Mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers | [devices/mixer](devices/mixer/README_NL.md) | [Mixer](docs/mixer/USER-MANUAL_NL.md) |
+| **Mixer** | Binnenhalen, mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers, Audio Input | [devices/mixer](devices/mixer/README_NL.md) | [Mixer](docs/mixer/USER-MANUAL_NL.md) |
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [devices/modulators](devices/modulators/README_NL.md) | [Modulatoren](docs/modulators/USER-MANUAL_NL.md) |
 | **Tools** | Spelen, opnemen, meten en notities maken | Keys / MIDI, Metronome, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README_NL.md) | [Tools](docs/tools/USER-MANUAL_NL.md) |
 
@@ -45,7 +45,7 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en e
 | | Wat het is | README | Handleiding |
 |---|---|---|---|
 | **Tunes** | Complete klanken voor apparaten die geluid maken (de synths, de samplers en de drumapparaten), in packs per stijl | [tunes](tunes/README_NL.md) | [Tunes](docs/tunes/USER-MANUAL_NL.md) |
-| **Presets** | Beginstanden voor apparaten zonder eigen geluid: een pack voor de meeste effecten, de modulatoren, de sequencers, de masteringapparaten, de Metronome en de Leveler. De packs van de Effect Chain zijn complete ketens van vier tot acht effecten, elk gemaakt voor één toepassing | [presets](presets/README_NL.md) | [Presets](docs/presets/USER-MANUAL_NL.md) |
+| **Presets** | Beginstanden voor apparaten zonder eigen geluid: een pack voor de meeste effecten, de modulatoren, de sequencers, de masteringapparaten, de Metronome, de Leveler en Audio Input. De packs van de Effect Chain zijn complete ketens van vier tot acht effecten, elk gemaakt voor één toepassing | [presets](presets/README_NL.md) | [Presets](docs/presets/USER-MANUAL_NL.md) |
 
 ## Bouw je eigen apparaten, met of zonder AI
 

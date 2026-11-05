@@ -1,0 +1,470 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.audioinput",
+  "name": "Audio Input Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Input settings for Audio Input: line level, voice, instruments and the channel pairs of a multichannel interface. The input, the mute switch and the choice of device are not part of a preset.",
+  "tree": [
+    {
+      "folder": "Line Level",
+      "items": [
+        {
+          "name": "Line In Stereo",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Line In Mono Sum",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "sum",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Line In Left Only",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Line In Right Only",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 2,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Line In Stereo Rumble Cut",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 40,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Line In Quiet Source",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 12,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Line In Hot Source",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": -12,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Voice",
+      "items": [
+        {
+          "name": "Voice Close Mic",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 24,
+            "hp": 80,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Voice Soft Spoken",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 30,
+            "hp": 80,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Voice Loud Singer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 12,
+            "hp": 120,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Podcast Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 18,
+            "hp": 80,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Voice Chat Clean-up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 6,
+            "hp": 80,
+            "invert": false,
+            "processing": true
+          }
+        },
+        {
+          "name": "Room Pair Stereo",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 18,
+            "hp": 40,
+            "invert": false,
+            "processing": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Instruments",
+      "items": [
+        {
+          "name": "Guitar Direct",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 12,
+            "hp": 80,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Bass Direct",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 6,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Keyboard Stereo",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Synth Stereo Rumble Cut",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 40,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Drum Machine Stereo",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Acoustic Instrument Mic",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 20,
+            "hp": 80,
+            "invert": false,
+            "processing": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Interface Channels",
+      "items": [
+        {
+          "name": "Interface Channels 1-2",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Channels 3-4",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 3,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Channels 5-6",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 5,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Channels 7-8",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 7,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Input 1 Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 1,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Input 2 Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 2,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Input 3 Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 3,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Interface Input 4 Mono",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "ch": 4,
+            "capture": "all",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Utility",
+      "items": [
+        {
+          "name": "Raw Signal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Polarity Flipped",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": true,
+            "processing": false
+          }
+        },
+        {
+          "name": "Mono Check",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "sum",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false,
+            "processing": false
+          }
+        },
+        {
+          "name": "Rumble Cut 80",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "ch": 1,
+            "capture": "stereo",
+            "gain": 0,
+            "hp": 80,
+            "invert": false,
+            "processing": false
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten sturen: **Mixer**, **Leveler** en **Speakers**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/mixer](../../devices/mixer/README_NL.md).
+Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten sturen: **Mixer**, **Leveler**, **Speakers** en **Audio Input**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/mixer](../../devices/mixer/README_NL.md).
 
 ## Inhoud
 
@@ -11,7 +11,8 @@ Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten 
 3. [Mixer](#mixer)
 4. [Leveler](#leveler)
 5. [Speakers](#speakers)
-6. [Als het niet werkt](#als-het-niet-werkt)
+6. [Audio Input](#audio-input)
+7. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat deze apparaten doen
 
@@ -23,7 +24,7 @@ synths, drums …  →  Mixer  →  Leveler (optioneel)  →  Speakers
 
 Alle kabels hier zijn groenblauwe audiokabels. De Mixer heeft ook een groene **bundel**kabel (veel kanalen in één kabel), die hieronder wordt uitgelegd.
 
-**Presets.** Deze drie apparaten maken zelf geen geluid, dus ze hebben **presets** en geen tunes. Zie [Presets](../presets/USER-MANUAL_NL.md) voor het gebruiken en delen ervan.
+**Presets.** Deze apparaten maken zelf geen geluid, dus ze hebben **presets** en geen tunes. Zie [Presets](../presets/USER-MANUAL_NL.md) voor het gebruiken en delen ervan.
 
 ## Welk apparaat voor welk doel
 
@@ -35,6 +36,7 @@ Alle kabels hier zijn groenblauwe audiokabels. De Mixer heeft ook een groene **b
 | Veel bronnen in één keer op hetzelfde volume brengen | [Mixer](#mixer) (**Gelijk trekken**) |
 | Een bron die langzaam harder en zachter wordt op een gelijk volume houden | [Leveler](#leveler) |
 | Het resultaat horen en het eindvolume instellen | [Speakers](#speakers) |
+| Een microfoon, een instrument of een audio-interface naar binnen halen | [Audio Input](#audio-input) |
 
 ## Mixer
 
@@ -197,6 +199,57 @@ Speakers heeft de presetbalk zoals elk apparaat, maar er hoort geen presetpack b
 
 - Speakers heeft een ingang en geen uitgang. Het volume beweegt zacht mee als je het verandert of een preset laadt.
 - Een volume boven 100% is niet mogelijk.
+
+## Audio Input
+
+### Waar het voor dient
+
+Audio Input haalt geluid van buiten de studio naar binnen: de standaardingang van je geluidskaart, of een audio-interface die je computer kent (USB-interfaces, de lijn- of microfooningang van een geluidskaart). Patchkamer vraagt de browser om een lijst met ingangen en toont ze met de namen die je systeem geeft. Gebruik het om een gitaar, een keyboard of een microfoon door effecten te spelen, of om op te nemen met de **Recorder**.
+
+![De kaart van Audio Input](../images/nl/mixer/audio-input.png)
+
+### De regelaars
+
+| Regelaar | Wat hij doet | Bereik (start) |
+|---|---|---|
+| **Start ingang** / **Stop ingang** | Opent of sluit de ingang. De browser vraagt de eerste keer om toestemming. Er start niets uit zichzelf, ook niet als je een song of preset laadt. | uit |
+| **Ingang** (lijst) | De ingang die je gebruikt. **Standaardingang van het systeem** volgt de keuze van je computer. Na de eerste start toont de lijst de echte namen. | standaard van het systeem |
+| **Ververs lijst** | Leest de lijst met ingangen opnieuw. De lijst ververst ook als je een interface aansluit of loskoppelt. | |
+| **Kanalen van de ingang** | **2 (stereo)** opent twee kanalen. **Zoveel als de ingang geeft** vraagt alle kanalen van een interface, zodat je een paar of één ingang kunt kiezen. | 2 (stereo) |
+| **Weergave** | **Stereo (een paar)**, **Mono (één kanaal naar links en rechts)** of **Mono (paar samengeteld)**. | Stereo |
+| **Paar** / **Kanaal** | Welk paar (1+2, 3+4 …) of welk los kanaal wordt gebruikt. | 1+2 |
+| **Versterking** | Maakt de ingang harder of zachter. | −24 tot +36 dB (0 dB) |
+| **Hoogdoorlaat** | Snijdt lage dreun weg: uit, 40, 80 of 120 Hz. | uit |
+| **Polariteit omkeren** | Draait het signaal om. Gebruik het als twee microfoons bij één bron elkaar tegenwerken. | uit |
+| **Gedempt** | Maakt de uitgang stil. Staat de eerste keer aan, zodat een microfoon bij de luidsprekers geen rondzingen geeft. | aan |
+| **Browserbewerking** | Echo-onderdrukking, ruisonderdrukking en automatisch niveau van de browser. Uit laat het signaal ongemoeid; zet het aan voor een belgesprek. | uit |
+| Meters **L** / **R** | Het niveau na de versterking. **clip** licht even op als het signaal vol uitgestuurd is. | |
+
+### Poorten
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Uit** | audio uit | Stereogeluid. Verbind met een Mixer-kanaal, een effect, de **Recorder** of **Speakers**. |
+
+### Een voorbeeld
+
+1. Plaats **Audio Input**, **Room** en **Speakers**. Verbind **Uit** van Audio Input met het effect en het effect met **Speakers**.
+2. Gebruik een koptelefoon, of zet het volume van je computer laag.
+3. Klik op **Start ingang** en geef in de browser toestemming. Kies je interface in de lijst.
+4. Speel iets en kijk naar de meters. Verhoog **Versterking** tot de meter op ongeveer driekwart komt en het **clip**-lampje uit blijft.
+5. Haal het vinkje bij **Gedempt** weg om het te horen.
+
+### Presets
+
+Het pack **Audio Input Basics** heeft 31 presets in vijf mappen: **Line Level**, **Voice**, **Instruments**, **Interface Channels** en **Utility**. Een preset stelt de weergave, het kanaal, de versterking, de hoogdoorlaat, de polariteit en de browserbewerking in. Hij kiest de ingang zelf niet en haalt de demping niet weg. Zie [Presets](../presets/USER-MANUAL_NL.md).
+
+### Tips en beperkingen
+
+- Een browser kent geen ASIO. Een interface werkt via het stuurprogramma van je besturingssysteem, en hoeveel kanalen de browser ziet, hangt af van dat stuurprogramma en het systeem: sommige systemen tonen in de browser maar twee kanalen. De kaart toont hoeveel kanalen er binnenkomen.
+- Het geluid van een ingang loopt door de browser, dus er is vertraging. De grootte hangt af van de interface, het stuurprogramma en je **Latency**-instelling onder Instellingen → Audio.
+- Een microfoon in een kamer met luidsprekers geeft rondzingen. Gebruik een koptelefoon, of laat **Gedempt** aan staan tot je het volume hebt ingesteld.
+- De sample rate van de ingang kan afwijken van die van Patchkamer. De browser rekent dat om.
+- Gebruikt een ander programma de ingang, dan kan de browser hem soms niet openen. Sluit dat programma en klik opnieuw op **Start ingang**.
 
 ## Als het niet werkt
 
