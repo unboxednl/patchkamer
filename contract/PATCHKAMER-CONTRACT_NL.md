@@ -66,7 +66,7 @@ export default {
   name: 'Leesbare naam',         // kort; staat op de kaart en in de bibliotheek
   version: '1.0.0',              // semver x.y.z
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
-  category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool'
+  category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool' | 'mastering'
   ui: { width: 360, minWidth: 260, jacks: false },   // optioneel, zie §12
   i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optioneel (v1.11): namen per taal, zie §12c
   ports: {
@@ -89,7 +89,7 @@ export default {
 
 **`kind`** is een hint voor de bibliotheek en voor de validator, geen beperking. Alleen `kind: 'output'` mag met `ctx.destination` verbinden. Een `modulator` heeft minstens één `modOut`.
 
-**`category`** bepaalt waar het apparaat in de bibliotheek staat. Zonder category leidt de host hem af van `kind`.
+**`category`** bepaalt waar het apparaat in de bibliotheek staat. Zonder category leidt de host hem af van `kind`. `'mastering'` (v1.12) is de bibliotheekgroep voor apparaten die een mix afwerken (mastering-effecten, de Master Director, de mixcontrole en de luisteruitgang).
 
 **`i18n`** (v1.11, optioneel) geeft de naam van het apparaat en van zijn poorten per taal: `{ en: { name: '…', ports: { in: '…' } } }`. De host past de naam toe in `host.lang` en gebruikt anders `name` en de poortnamen uit `ports`. Zie §12c.
 

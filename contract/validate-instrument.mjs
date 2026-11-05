@@ -422,7 +422,7 @@ if (!/^[a-z0-9]+(\.[a-z0-9-]+)+$/.test(d.id)) fail(vt('v.id_moet_reverse_dns_zij
 if (!/^\d+\.\d+\.\d+$/.test(d.version)) fail(vt('v.version_moet_semver_zijn_x'));
 if (!['instrument', 'effect', 'mixer', 'output', 'utility', 'modulator'].includes(d.kind)) fail('onbekende kind');
 if (d.ui !== undefined && (typeof d.ui !== 'object' || (d.ui.width !== undefined && !(d.ui.width >= 200 && d.ui.width <= 6000)))) fail(vt('v.ui_width_moet_tussen_200'));
-if (d.category !== undefined && !['synth', 'groove', 'sequencer', 'mod', 'effect', 'mix', 'tool'].includes(d.category)) fail('onbekende category (synth, groove, sequencer, mod, effect, mix of tool)');
+if (d.category !== undefined && !['synth', 'groove', 'sequencer', 'mod', 'effect', 'mix', 'tool', 'mastering'].includes(d.category)) fail('onbekende category (synth, groove, sequencer, mod, effect, mix, tool of mastering)');
 if (d.ui && d.ui.minWidth !== undefined && !(d.ui.minWidth >= 200 && d.ui.minWidth <= (d.ui.width || 300))) fail(vt('v.ui_minwidth_moet_tussen_200'));
 for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) if (d.ports[k] === undefined) d.ports[k] = [];
 for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) { if (!Array.isArray(d.ports[k])) fail(vt('v.ports_moet_een_lijst_zijn',k)); const ids = d.ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.dubbele_poort_id_in',k)); }
