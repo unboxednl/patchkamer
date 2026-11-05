@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de acht **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de negen **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -16,6 +16,7 @@ Deze handleiding gaat over de acht **tools** van Patchkamer. Tools zijn hulpmidd
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
 | ideeën, toonsoort en een lijst met taken opschrijven | [Notes](#notes) | geen poorten |
 | een MIDI-keyboard en de sporen van een sequencer koppelen aan apparaten, en hun regelaars op knoppen van je keyboard zetten | [MIDI Hub](#midi-hub) | een eventingang **MIDI in**, een multi-MIDI-ingang **Sporen in** en een eventuitgang per apparaat |
+| een controller met knoppen, schuiven en pads als paneel tonen en zijn berichten doorsturen | [Control Surface](#control-surface) | een eventuitgang **CC uit** |
 
 ## Hoe je tools aansluit
 
@@ -302,6 +303,58 @@ Het pack **MIDI Hub Basics** heeft 15 presets in vier mappen: **Sound Controller
 - De hub verandert niets als je een werkruimte opent of een kabel verbindt: hij reageert alleen op wat je speelt en indrukt.
 - Een koppeling van vóór versie 1.13.1 heeft geen ingang en werkt op alle vier de ingangen. Leer hem opnieuw als twee apparaten hetzelfde CC-nummer sturen.
 - De hub speelt geen geluid.
+
+## Control Surface
+
+### Waar het voor dient
+
+Control Surface is een paneel voor een MIDI-controller met knoppen, schuiven, pads of drukknoppen en zonder klavier. Het toont de controller op het scherm en beweegt mee met wat je op de hardware doet. Wat je doet gaat door als CC-berichten (met nummer en kanaal) naar de apparaten die je aansluit, meestal de **MIDI Hub**, die daarna elk element kan koppelen aan een regelaar van elk apparaat.
+
+De vorm van het paneel bouw je uit **secties**. Elke sectie heeft een soort (**Draaiknoppen**, **Schuiven**, **Pads** of **Knoppen**), een aantal **Rijen**, een aantal elementen **Per rij** en een **Band**. Secties in dezelfde band staan naast elkaar; banden staan onder elkaar. Zo kun je de vorm van bijna elke controller nabouwen, bijvoorbeeld 3 rijen van 8 draaiknoppen, een rij van 8 schuiven en 2 rijen van 8 knoppen eronder. Het pack **Control Surface Layouts** heeft kant-en-klare vormen.
+
+![De kaart van Control Surface](../images/nl/tools/control-surface.png)
+
+### De regelaars
+
+| Regelaar | Wat hij doet |
+|---|---|
+| **MIDI verbinden** | Vraagt de browser om MIDI-toegang (eenmalig, na jouw klik). Zonder kun je nog steeds de muis gebruiken. Er wordt nooit sysex gebruikt. |
+| **MIDI-ingang** (lijst) | **Alle MIDI-ingangen** of één ingang. Gebruik één ingang per fysiek apparaat. |
+| **Kanaal** | **alle kanalen** of één MIDI-kanaal. |
+| **Leer alles** | Loopt het hele paneel langs: het eerste element licht op, je beweegt het bijbehorende element op je controller, en het volgende licht op. **Stop leren** beëindigt het. |
+| **Wis toewijzingen** | Haalt de toewijzing van elk element weg. |
+| Het paneel | Draaiknoppen, schuiven, pads en knoppen. Ze bewegen mee met de hardware. Je kunt ook met de muis aan een knop of schuif slepen (pads en knoppen reageren op een klik). Klik op een element om het te selecteren. |
+| **Element** (editor) | Voor het geselecteerde element: een **Naam** (die naam zie je terug in de MIDI Hub), **Leer** (wijs het toe door het element op je controller te bewegen), het toegewezen **CC** of de **Noot** met zijn kanaal, en **Wis**. |
+| **Laatste invoer** | Het laatste bericht dat binnenkwam. Een bericht dat niet aan een element is toegewezen gaat ook door, als gewone CC. |
+| **Indeling** | Eén regel per sectie: de soort, **Rijen**, **Per rij** en **Band**, en **×** om hem te verwijderen. **+ sectie** voegt er een toe. Ten hoogste 8 secties en 256 elementen. |
+
+Pads en knoppen die noten sturen, gaan door als CC met een waarde van 0 of 1 (0 tot 100% bij pads die voelen hoe hard je slaat).
+
+### Poorten
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **CC uit** | event uit | Verbind met een van de **MIDI in**-poorten van de **MIDI Hub**, of rechtstreeks met een apparaat dat naar CC luistert. |
+
+### Een voorbeeld
+
+1. Plaats **Control Surface**, **MIDI Hub** en een synth. Verbind **CC uit** met **MIDI in** van de hub en voeg de synth toe in de hub.
+2. Kies in **Control Surface** **MIDI verbinden** en kies je controller bij **MIDI-ingang**.
+3. Kies een indeling in de presetbalk, bijvoorbeeld **Strips › 8 Strips Full**, of bouw er een onder **Indeling**.
+4. Klik op **Leer alles** en beweeg de elementen een voor een, van linksboven naar rechtsonder. Klik op **Stop leren** als je klaar bent. Klik op een element om het een naam te geven, bijvoorbeeld **Filter**.
+5. Klik in de hub op **+ koppeling**, beweeg de knop (de rij toont zijn naam, bijvoorbeeld **Filter · CC 21 · ch 1**) en kies de regelaar van de synth.
+
+Gebruik je ook een klavier, zet dat dan via **Keys / MIDI** op **MIDI in** van de hub, en de controller via Control Surface op **MIDI in 2**.
+
+### Presets
+
+Het pack **Control Surface Layouts** heeft 20 presets in vier mappen: **Strips**, **Faders**, **Knobs** en **Pads**. Een preset stelt alleen de vorm van het paneel in (en wist de toewijzingen, omdat die bij de oude vorm horen); hij verandert de ingang niet. Zie [Presets](../presets/USER-MANUAL_NL.md).
+
+### Tips en beperkingen
+
+- Web MIDI werkt in Chrome en Edge. Control Surface gebruikt geen sysex en kan de ledjes van je controller dus niet laten branden.
+- Een element behoudt zijn toewijzing zolang zijn plek in de indeling gelijk blijft. Verwijder je een sectie, dan krijgen de elementen erna nieuwe nummers.
+- Heeft je controller meerdere pagina's of standen, leer dan elke stand met een eigen indeling, of gebruik één ingang en kanaal per stand.
 
 ## Als het niet werkt
 

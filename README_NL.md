@@ -38,7 +38,7 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en e
 | **Mastering** | Een mix afmaken: toon, dynamiek, saturatie, breedte, volume en controle, voor veel stijlen en situaties | Balance EQ, Multiband Balance, Bus Compressor, Patina, Stereo Space, Master Chain, Mix Check, Master Director, Listening Output | [devices/mastering](devices/mastering/README_NL.md) | [Mastering](docs/mastering/USER-MANUAL_NL.md) |
 | **Mixer** | Binnenhalen, mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers, Audio Input, Audio Output | [devices/mixer](devices/mixer/README_NL.md) | [Mixer](docs/mixer/USER-MANUAL_NL.md) |
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [devices/modulators](devices/modulators/README_NL.md) | [Modulatoren](docs/modulators/USER-MANUAL_NL.md) |
-| **Tools** | Spelen, opnemen, meten en notities maken | Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README_NL.md) | [Tools](docs/tools/USER-MANUAL_NL.md) |
+| **Tools** | Spelen, opnemen, meten en notities maken | Control Surface, Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README_NL.md) | [Tools](docs/tools/USER-MANUAL_NL.md) |
 
 ## Kant-en-klare klanken en instellingen
 

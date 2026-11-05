@@ -4,7 +4,7 @@
 
 Kant-en-klare instellingen voor apparaten die geen eigen geluid maken (effecten, mixers, modulatoren, sequencers en andere tools), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, of gebruik een pack als beginpunt voor je eigen presets. Apparaten die geluid maken hebben [tunes](../tunes/README_NL.md).
 
-Deze map heeft **40 packs met 1882 presets**, één pack per apparaat: 12 voor effecten, 9 voor mastering, 3 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 2 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
+Deze map heeft **41 packs met 1902 presets**, één pack per apparaat: 12 voor effecten, 9 voor mastering, 3 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 3 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
@@ -71,10 +71,11 @@ Deze map heeft **40 packs met 1882 presets**, één pack per apparaat: 12 voor e
 | [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | 6 | [`step-sequencer.patchkamer-presets.json`](step-sequencer.patchkamer-presets.json) |
 | [Wanderer](../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | 9 | [`wanderer.patchkamer-presets.json`](wanderer.patchkamer-presets.json) |
 
-### Tools (2)
+### Tools (3)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
+| [Control Surface](../devices/tools/ControlSurface/) | Control Surface Layouts | 20 | 4 | [`control-surface.patchkamer-presets.json`](control-surface.patchkamer-presets.json) |
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4 | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) |
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3 | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) |
 

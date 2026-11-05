@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.2 — Een koppeling onthoudt de naam van het element van een Control Surface (bijvoorbeeld "Filter 1") en toont die in plaats van alleen het CC-nummer.
 // 1.13.1 — Vier MIDI-ingangen (MIDI in, 2, 3 en 4) in plaats van één, zodat je meer dan één fysiek MIDI-apparaat tegelijk kunt gebruiken: zet per apparaat een Keys / MIDI op zijn eigen ingang (kies daar de MIDI-ingang) en verbind elk met een eigen ingang van de hub. Een koppeling en een noteroute kunnen op één ingang gelden of op alle; oude koppelingen en routes gelden op alle ingangen en werken dus als voorheen.
 // 1.13.0 — Eerste versie. De MIDI Hub staat tussen je MIDI-bronnen (Keys / MIDI, een controller) en de apparaten in de werkruimte. Hij ziet welke apparaten er staan en laat je er een
 //          toevoegen aan zijn actieve apparaten. Per apparaat kies je waar de noten vandaan komen (het keyboard, met een MIDI-kanaal, of een spoor van een sequencer via de multi-MIDI-kabel,
@@ -40,7 +41,7 @@ const TXT = {
 
 const newMap = () => ({ src: null, ctl: '', label: '', min: 0, max: 1, inv: false, toggle: false });
 function normMap(m) {
-  m = m && typeof m === 'object' ? m : {}; const s = m.src && typeof m.src === 'object' && KINDS.includes(m.src.k) ? { k: m.src.k, n: int(m.src.n, -1, 127, -1), id: str(m.src.id, '', 40), ch: int(m.src.ch, 0, 16, 0), port: INS.includes(m.src.port) ? m.src.port : '' } : null;
+  m = m && typeof m === 'object' ? m : {}; const s = m.src && typeof m.src === 'object' && KINDS.includes(m.src.k) ? { k: m.src.k, n: int(m.src.n, -1, 127, -1), id: str(m.src.id, '', 40), ch: int(m.src.ch, 0, 16, 0), port: INS.includes(m.src.port) ? m.src.port : '', slot: str(m.src.slot, '', 40) } : null;
   const lo = typeof m.min === 'number' && Number.isFinite(m.min) ? clamp(m.min, 0, 1) : 0, hi = typeof m.max === 'number' && Number.isFinite(m.max) ? clamp(m.max, 0, 1) : 1;
   return { src: s, ctl: str(m.ctl, '', 120), label: str(m.label, '', 60), min: lo, max: hi, inv: m.inv === true, toggle: m.toggle === true };
 }
@@ -58,7 +59,7 @@ function normalize(s) {
 }
 
 export default {
-  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.13.1', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
+  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.13.2', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
   i18n: { nl: { ports: { in: 'MIDI in', in2: 'MIDI in 2', in3: 'MIDI in 3', in4: 'MIDI in 4', tracks: 'Sporen in' } } },
   ports: { audioIn: [], audioOut: [], eventIn: INS.map((id, i) => ({ id, name: i ? 'MIDI in ' + (i + 1) : 'MIDI in' })), eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] },
   create(ctx, host) {
@@ -107,7 +108,7 @@ export default {
       return { k: 'name', n: -1, id: String(ev.id || ''), val: v };
     }
     const sameSrc = (a, b) => a && b && a.k === b.k && (a.k === 'cc' || a.k === 'note' ? a.n === b.n : a.k === 'name' ? a.id === b.id : true);
-    const srcLabel = s => !s ? T.unmapped : (s.k === 'cc' ? T.srcCc(s.n) : s.k === 'note' ? T.srcNote(s.n) : s.k === 'bend' ? T.srcBend : s.k === 'pressure' ? T.srcPress : T.srcName(s.id)) + ' · ' + (s.ch ? 'ch ' + s.ch : T.anyCh) + (s.port ? ' · ' + T.inN(s.port) : '');
+    const srcLabel = s => !s ? T.unmapped : (s.slot ? s.slot + ' · ' : '') + (s.k === 'cc' ? T.srcCc(s.n) : s.k === 'note' ? T.srcNote(s.n) : s.k === 'bend' ? T.srcBend : s.k === 'pressure' ? T.srcPress : T.srcName(s.id)) + ' · ' + (s.ch ? 'ch ' + s.ch : T.anyCh) + (s.port ? ' · ' + T.inN(s.port) : '');
     function apply(t, m, mi, s) {
       let v = s.val; if (m.inv) v = 1 - v; v = m.min + v * (m.max - m.min);
       const key = t.id + ':' + mi, c = resolve(t, m); if (!c) return;
@@ -117,12 +118,12 @@ export default {
       const bar = liveBars.get(key); if (bar) bar.style.width = Math.round(clamp(v, 0, 1) * 100) + '%';
     }
     function onKeyboard(ev, port) {
-      const s = srcOf(ev), ch = int(ev.ch, 0, 16, 0);
+      const s = srcOf(ev), ch = int(ev.ch, 0, 16, 0); if (s && typeof ev.slot === 'string') s.slot = ev.slot.slice(0, 40);
       if (!heard.has(port)) { heard.add(port); render(); }
       if (s) {
         const shown = s.k === 'note' && ev.type === 'noteoff' ? null : srcLabel({ ...s, ch, port }) + ' = ' + Math.round(s.val * 100) + '%';
         if (shown) { lastText = shown; if (lastEl) lastEl.textContent = shown; }
-        if (learn && !(s.k === 'note' && ev.type === 'noteoff')) { const t = target(learn.t), m = t && t.maps[learn.m]; if (m) { m.src = { k: s.k, n: s.n, id: s.id || '', ch, port }; learn = null; render(); return; } learn = null; }
+        if (learn && !(s.k === 'note' && ev.type === 'noteoff')) { const t = target(learn.t), m = t && t.maps[learn.m]; if (m) { m.src = { k: s.k, n: s.n, id: s.id || '', ch, port, slot: s.slot || '' }; learn = null; render(); return; } learn = null; }
       }
       if (s) for (const t of state.targets) t.maps.forEach((m, mi) => { if (m.src && m.ctl && sameSrc(m.src, s) && (!m.src.ch || m.src.ch === ch) && (!m.src.port || m.src.port === port)) { try { apply(t, m, mi, s); } catch (e) { /* de regelaar is weg */ } } });
       for (const t of state.targets) {
