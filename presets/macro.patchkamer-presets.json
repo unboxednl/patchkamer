@@ -1,0 +1,1076 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.macro",
+  "name": "Macro Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Macro: four-knob performance sets (intensity, brightness, space, movement), filter/resonance and wet/dry pairs, build-ups and drops, per-style control sets, and bipolar sound-design knobs. Knob labels, positions, bipolar switches and glide only; the parameter assignments belong to the workspace and are not stored in presets.",
+  "tree": [
+    {
+      "folder": "Performance Sets",
+      "items": [
+        {
+          "name": "Core Four",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.3,
+              0.3
+            ],
+            "names": [
+              "Intensity",
+              "Brightness",
+              "Space",
+              "Movement"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.05
+          }
+        },
+        {
+          "name": "Live Rig",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.6,
+              0.5,
+              0.25,
+              0.4
+            ],
+            "names": [
+              "Energy",
+              "Tone",
+              "Depth",
+              "Motion"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.08
+          }
+        },
+        {
+          "name": "Gentle Hands",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.25,
+              0.4,
+              0.2,
+              0.15
+            ],
+            "names": [
+              "Intensity",
+              "Brightness",
+              "Space",
+              "Movement"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.3
+          }
+        },
+        {
+          "name": "Fast Hands",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "names": [
+              "Intensity",
+              "Brightness",
+              "Space",
+              "Movement"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.005
+          }
+        },
+        {
+          "name": "Slow Hands",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.4,
+              0.4,
+              0.4,
+              0.4
+            ],
+            "names": [
+              "Intensity",
+              "Brightness",
+              "Space",
+              "Movement"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 1.5
+          }
+        },
+        {
+          "name": "Centre Stage",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "names": [
+              "Intensity",
+              "Brightness",
+              "Space",
+              "Movement"
+            ],
+            "bip": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "glide": 0.1
+          }
+        },
+        {
+          "name": "Instant Snap",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "names": [
+              "Snap A",
+              "Snap B",
+              "Snap C",
+              "Snap D"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0
+          }
+        },
+        {
+          "name": "Four Faders",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.75,
+              0.75,
+              0.75,
+              0.75
+            ],
+            "names": [
+              "Fader 1",
+              "Fader 2",
+              "Fader 3",
+              "Fader 4"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Pairs",
+      "items": [
+        {
+          "name": "Filter and Resonance",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.6,
+              0.3,
+              0.2,
+              1
+            ],
+            "names": [
+              "Cutoff",
+              "Resonance",
+              "Drive",
+              "Mix"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.05
+          }
+        },
+        {
+          "name": "Filter Sweep Pair",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.25,
+              0,
+              0.5
+            ],
+            "names": [
+              "Cutoff",
+              "Resonance",
+              "Drive",
+              "Tilt"
+            ],
+            "bip": [
+              true,
+              false,
+              false,
+              true
+            ],
+            "glide": 0.12
+          }
+        },
+        {
+          "name": "Open and Close",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.2,
+              0.8
+            ],
+            "names": [
+              "Open",
+              "Close",
+              "Resonance",
+              "Level"
+            ],
+            "bip": [
+              true,
+              true,
+              false,
+              false
+            ],
+            "glide": 0.08
+          }
+        },
+        {
+          "name": "Wet and Dry",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.3,
+              0.7,
+              0.4,
+              0.5
+            ],
+            "names": [
+              "Wet",
+              "Dry",
+              "Decay",
+              "Tone"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.1
+          }
+        },
+        {
+          "name": "Wet Dry Seesaw",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "names": [
+              "Wet/Dry",
+              "Size",
+              "Tone",
+              "Width"
+            ],
+            "bip": [
+              true,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.15
+          }
+        },
+        {
+          "name": "Send Levels",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0,
+              0.5
+            ],
+            "names": [
+              "Send A",
+              "Send B",
+              "Send C",
+              "Return"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.1
+          }
+        },
+        {
+          "name": "Drive and Level",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.35,
+              0.8,
+              0.5,
+              1
+            ],
+            "names": [
+              "Drive",
+              "Level",
+              "Tone",
+              "Mix"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.04
+          }
+        },
+        {
+          "name": "Attack and Release",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.2,
+              0.5,
+              0.3,
+              0.6
+            ],
+            "names": [
+              "Attack",
+              "Release",
+              "Hold",
+              "Amount"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.03
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Build-ups",
+      "items": [
+        {
+          "name": "Build-up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "names": [
+              "Build",
+              "Tension",
+              "Noise",
+              "Rise"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.5
+          }
+        },
+        {
+          "name": "Drop Switch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "names": [
+              "Drop",
+              "Impact",
+              "Silence",
+              "Reset"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.002
+          }
+        },
+        {
+          "name": "Riser Set",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "names": [
+              "Riser",
+              "Filter Open",
+              "Reverb Swell",
+              "Intensity"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 2
+          }
+        },
+        {
+          "name": "Breakdown",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.6,
+              0.4,
+              0.5
+            ],
+            "names": [
+              "Breakdown",
+              "Pad Level",
+              "Space",
+              "Filter"
+            ],
+            "bip": [
+              true,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.4
+          }
+        },
+        {
+          "name": "Tension and Release",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0.2,
+              0
+            ],
+            "names": [
+              "Tension",
+              "Release",
+              "Noise",
+              "Pulse"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.8
+          }
+        },
+        {
+          "name": "Last Bars",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "names": [
+              "Lift",
+              "Stutter",
+              "Sweep",
+              "Crash"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.15
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Styles",
+      "items": [
+        {
+          "name": "Techno Console",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.4,
+              0.5,
+              0.2,
+              0.1
+            ],
+            "names": [
+              "Drive",
+              "Cutoff",
+              "Delay",
+              "Reverb"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.03
+          }
+        },
+        {
+          "name": "House Groove",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.4,
+              0.2
+            ],
+            "names": [
+              "Groove",
+              "Filter",
+              "Pump",
+              "Space"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.06
+          }
+        },
+        {
+          "name": "Ambient Drift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.3,
+              0.4,
+              0.6,
+              0.5
+            ],
+            "names": [
+              "Drift",
+              "Bloom",
+              "Haze",
+              "Depth"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 1.2
+          }
+        },
+        {
+          "name": "Dub Controls",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.3,
+              0.4,
+              0.2,
+              0.5
+            ],
+            "names": [
+              "Echo",
+              "Feedback",
+              "Spring",
+              "Filter"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.2
+          }
+        },
+        {
+          "name": "Trap Energy",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.6,
+              0.3,
+              0.2
+            ],
+            "names": [
+              "Grit",
+              "Sub",
+              "Hats",
+              "Space"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.02
+          }
+        },
+        {
+          "name": "Roller",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.4,
+              0.7,
+              0.5,
+              0.2
+            ],
+            "names": [
+              "Roll",
+              "Bass Weight",
+              "Snap",
+              "Space"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.04
+          }
+        },
+        {
+          "name": "Cinematic Score",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.2,
+              0.5,
+              0.6,
+              0.4
+            ],
+            "names": [
+              "Tension",
+              "Swell",
+              "Width",
+              "Air"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 1
+          }
+        },
+        {
+          "name": "Lo-fi Tape",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "names": [
+              "Wobble",
+              "Dust",
+              "Warmth",
+              "Darkness"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.4
+          }
+        },
+        {
+          "name": "Pop Polish",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.6,
+              0.5,
+              0.2
+            ],
+            "names": [
+              "Shine",
+              "Punch",
+              "Width",
+              "Lift"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.07
+          }
+        },
+        {
+          "name": "Night Drive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.4,
+              0.5,
+              0.3,
+              0.2
+            ],
+            "names": [
+              "Glow",
+              "Chorus",
+              "Pulse",
+              "Gate"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.25
+          }
+        },
+        {
+          "name": "Jazz Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.3,
+              0.4,
+              0.3
+            ],
+            "names": [
+              "Warmth",
+              "Room",
+              "Brush",
+              "Air"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Sound Design",
+      "items": [
+        {
+          "name": "Timbre Morph",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "names": [
+              "Morph",
+              "Bend",
+              "Fold",
+              "Tilt"
+            ],
+            "bip": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "glide": 0.15
+          }
+        },
+        {
+          "name": "Detune and Width",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.3,
+              0.2,
+              0.5
+            ],
+            "names": [
+              "Detune",
+              "Spread",
+              "Shimmer",
+              "Drift"
+            ],
+            "bip": [
+              true,
+              false,
+              false,
+              true
+            ],
+            "glide": 0.2
+          }
+        },
+        {
+          "name": "Pitch Dive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.3,
+              0.4,
+              0.2
+            ],
+            "names": [
+              "Dive",
+              "Glide Time",
+              "Envelope",
+              "Amount"
+            ],
+            "bip": [
+              true,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.02
+          }
+        },
+        {
+          "name": "Stereo Tilt",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.3,
+              0.8
+            ],
+            "names": [
+              "Pan Tilt",
+              "Width",
+              "Depth",
+              "Level"
+            ],
+            "bip": [
+              true,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.1
+          }
+        },
+        {
+          "name": "Mix Balance",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.8,
+              0.7,
+              0.6,
+              0.5
+            ],
+            "names": [
+              "Drums",
+              "Bass",
+              "Music",
+              "Vocals"
+            ],
+            "bip": [
+              false,
+              false,
+              false,
+              false
+            ],
+            "glide": 0.1
+          }
+        },
+        {
+          "name": "Mix Rider",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.4,
+              0.5
+            ],
+            "names": [
+              "Lift",
+              "Duck",
+              "Air",
+              "Weight"
+            ],
+            "bip": [
+              true,
+              true,
+              false,
+              false
+            ],
+            "glide": 0.12
+          }
+        },
+        {
+          "name": "Bend Four",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "v": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "names": [
+              "Bend 1",
+              "Bend 2",
+              "Bend 3",
+              "Bend 4"
+            ],
+            "bip": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "glide": 0.02
+          }
+        }
+      ]
+    }
+  ]
+}
