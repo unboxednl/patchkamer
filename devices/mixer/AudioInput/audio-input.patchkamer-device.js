@@ -41,7 +41,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.12.0', kind: 'utility', category: 'mix', ui: { width: 380, minWidth: 300 },
+  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.12.1', kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
   i18n: { nl: { ports: { out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
