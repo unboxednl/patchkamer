@@ -1,0 +1,1041 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.swell",
+  "name": "Swell Presets",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Slow, coherent atmosphere movements for Swell: pads, warm and close sounds, bright and open spaces, tempo-synced swells, subtle natural variation, big expressive waves and generative drift. Routes to targets are not part of a preset.",
+  "tree": [
+    {
+      "folder": "Pads & Atmospheres",
+      "items": [
+        {
+          "name": "Slow Tide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 60,
+            "depth": 0.36,
+            "warmth": 0.55,
+            "space": 0.5,
+            "motion": 0.2,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Deep Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 30,
+            "depth": 0.45,
+            "warmth": 0.6,
+            "space": 0.55,
+            "motion": 0.25,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Long Exhale",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 90,
+            "depth": 0.4,
+            "warmth": 0.5,
+            "space": 0.6,
+            "motion": 0.15,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Calm Lake",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 45,
+            "depth": 0.25,
+            "warmth": 0.55,
+            "space": 0.45,
+            "motion": 0.1,
+            "human": 0.1
+          }
+        },
+        {
+          "name": "Dawn Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 38,
+            "depth": 0.4,
+            "warmth": 0.7,
+            "space": 0.55,
+            "motion": 0.3,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Soft Haze",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 40,
+            "depth": 0.3,
+            "warmth": 0.5,
+            "space": 0.7,
+            "motion": 0.2,
+            "human": 0.3
+          }
+        },
+        {
+          "name": "Open Sky",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 26,
+            "depth": 0.45,
+            "warmth": 0.6,
+            "space": 0.8,
+            "motion": 0.35,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Deep Water",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 35,
+            "depth": 0.45,
+            "warmth": 0.3,
+            "space": 0.6,
+            "motion": 0.25,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Night Garden",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 55,
+            "depth": 0.35,
+            "warmth": 0.65,
+            "space": 0.45,
+            "motion": 0.25,
+            "human": 0.35
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Warm & Close",
+      "items": [
+        {
+          "name": "Warm Blanket",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 18,
+            "depth": 0.4,
+            "warmth": 0.85,
+            "space": 0.35,
+            "motion": 0.2,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Soft Glow",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 24,
+            "depth": 0.35,
+            "warmth": 0.75,
+            "space": 0.4,
+            "motion": 0.15,
+            "human": 0.1
+          }
+        },
+        {
+          "name": "Velvet Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 14,
+            "depth": 0.35,
+            "warmth": 0.7,
+            "space": 0.25,
+            "motion": 0.3,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Fireside",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 28,
+            "depth": 0.45,
+            "warmth": 0.8,
+            "space": 0.3,
+            "motion": 0.25,
+            "human": 0.35
+          }
+        },
+        {
+          "name": "Intimate Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 10,
+            "depth": 0.42,
+            "warmth": 0.72,
+            "space": 0.24,
+            "motion": 0.4,
+            "human": 0.24
+          }
+        },
+        {
+          "name": "Close Whisper",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 7,
+            "depth": 0.22,
+            "warmth": 0.6,
+            "space": 0.2,
+            "motion": 0.2,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Cosy Evening",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 16,
+            "depth": 0.5,
+            "warmth": 0.82,
+            "space": 0.35,
+            "motion": 0.3,
+            "human": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Bright & Open",
+      "items": [
+        {
+          "name": "Rising Light",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 9,
+            "depth": 0.6,
+            "warmth": 0.7,
+            "space": 0.6,
+            "motion": 0.6,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Bright Bloom",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 12,
+            "depth": 0.5,
+            "warmth": 0.35,
+            "space": 0.75,
+            "motion": 0.5,
+            "human": 0.3
+          }
+        },
+        {
+          "name": "Open Horizon",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 20,
+            "depth": 0.5,
+            "warmth": 0.5,
+            "space": 0.85,
+            "motion": 0.4,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Sunrise Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 13,
+            "depth": 0.55,
+            "warmth": 0.7,
+            "space": 0.65,
+            "motion": 0.55,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Shimmer Air",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 4.5,
+            "depth": 0.3,
+            "warmth": 0.45,
+            "space": 0.7,
+            "motion": 0.8,
+            "human": 0.3
+          }
+        },
+        {
+          "name": "Joyful Lift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 5,
+            "depth": 0.5,
+            "warmth": 0.65,
+            "space": 0.5,
+            "motion": 0.8,
+            "human": 0.35
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Tempo Synced",
+      "items": [
+        {
+          "name": "One Bar Pulse",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": true,
+            "sync": true,
+            "beats": 4,
+            "period": 22,
+            "depth": 0.3,
+            "warmth": 0.55,
+            "space": 0.5,
+            "motion": 0.35,
+            "human": 0.1
+          }
+        },
+        {
+          "name": "Two Bar Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": true,
+            "sync": true,
+            "beats": 8,
+            "period": 22,
+            "depth": 0.35,
+            "warmth": 0.6,
+            "space": 0.45,
+            "motion": 0.3,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Four Bar Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": true,
+            "sync": true,
+            "beats": 16,
+            "period": 22,
+            "depth": 0.45,
+            "warmth": 0.65,
+            "space": 0.5,
+            "motion": 0.3,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Eight Bar Wave",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": true,
+            "sync": true,
+            "beats": 32,
+            "period": 22,
+            "depth": 0.5,
+            "warmth": 0.55,
+            "space": 0.6,
+            "motion": 0.35,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Sixteen Bar Tide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": true,
+            "sync": true,
+            "beats": 64,
+            "period": 22,
+            "depth": 0.55,
+            "warmth": 0.5,
+            "space": 0.65,
+            "motion": 0.3,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Thirty-Two Bar Evolve",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": true,
+            "sync": true,
+            "beats": 128,
+            "period": 22,
+            "depth": 0.6,
+            "warmth": 0.55,
+            "space": 0.7,
+            "motion": 0.45,
+            "human": 0.35
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Subtle & Natural",
+      "items": [
+        {
+          "name": "Barely There",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 40,
+            "depth": 0.12,
+            "warmth": 0.5,
+            "space": 0.5,
+            "motion": 0.15,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Tiny Life",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 25,
+            "depth": 0.15,
+            "warmth": 0.55,
+            "space": 0.5,
+            "motion": 0.2,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Gentle Sway",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 12,
+            "depth": 0.22,
+            "warmth": 0.5,
+            "space": 0.5,
+            "motion": 0.5,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Slight Variation",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 70,
+            "depth": 0.18,
+            "warmth": 0.5,
+            "space": 0.5,
+            "motion": 0.2,
+            "human": 0.85
+          }
+        },
+        {
+          "name": "Natural Pulse",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 7,
+            "depth": 0.2,
+            "warmth": 0.55,
+            "space": 0.45,
+            "motion": 0.25,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Quiet Shift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 80,
+            "depth": 0.15,
+            "warmth": 0.5,
+            "space": 0.55,
+            "motion": 0.1,
+            "human": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Big & Expressive",
+      "items": [
+        {
+          "name": "Big Wave",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 19,
+            "depth": 0.85,
+            "warmth": 0.6,
+            "space": 0.6,
+            "motion": 0.5,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Ocean Roll",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 15,
+            "depth": 0.9,
+            "warmth": 0.5,
+            "space": 0.7,
+            "motion": 0.5,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Storm Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 6,
+            "depth": 1.0,
+            "warmth": 0.45,
+            "space": 0.6,
+            "motion": 0.8,
+            "human": 0.3
+          }
+        },
+        {
+          "name": "Tidal Rush",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 10,
+            "depth": 0.8,
+            "warmth": 0.3,
+            "space": 0.8,
+            "motion": 0.6,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Cinematic Rise",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 45,
+            "depth": 0.9,
+            "warmth": 0.7,
+            "space": 0.8,
+            "motion": 0.4,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Dark Tide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 24,
+            "depth": 0.8,
+            "warmth": 0.2,
+            "space": 0.6,
+            "motion": 0.35,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Heavy Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 9,
+            "depth": 0.7,
+            "warmth": 0.75,
+            "space": 0.4,
+            "motion": 0.3,
+            "human": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Generative & Evolving",
+      "items": [
+        {
+          "name": "Wandering Mind",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 100,
+            "depth": 0.5,
+            "warmth": 0.5,
+            "space": 0.5,
+            "motion": 0.7,
+            "human": 1.0
+          }
+        },
+        {
+          "name": "Restless Sea",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 14,
+            "depth": 0.55,
+            "warmth": 0.5,
+            "space": 0.55,
+            "motion": 0.9,
+            "human": 0.8
+          }
+        },
+        {
+          "name": "Slow Evolution",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 110,
+            "depth": 0.6,
+            "warmth": 0.5,
+            "space": 0.5,
+            "motion": 0.8,
+            "human": 0.9
+          }
+        },
+        {
+          "name": "Unsteady Tide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 20,
+            "depth": 0.5,
+            "warmth": 0.5,
+            "space": 0.5,
+            "motion": 0.6,
+            "human": 0.7
+          }
+        },
+        {
+          "name": "Living Drone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 70,
+            "depth": 0.4,
+            "warmth": 0.55,
+            "space": 0.45,
+            "motion": 0.5,
+            "human": 0.8
+          }
+        },
+        {
+          "name": "Lo-fi Wobble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 5,
+            "depth": 0.3,
+            "warmth": 0.4,
+            "space": 0.4,
+            "motion": 0.9,
+            "human": 0.6
+          }
+        }
+      ]
+    },
+    {
+      "folder": "By Application",
+      "items": [
+        {
+          "name": "Pad Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 22,
+            "depth": 0.4,
+            "warmth": 0.6,
+            "space": 0.45,
+            "motion": 0.25,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Reverb Bloom",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 34,
+            "depth": 0.55,
+            "warmth": 0.5,
+            "space": 0.92,
+            "motion": 0.25,
+            "human": 0.3
+          }
+        },
+        {
+          "name": "Filter Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 15,
+            "depth": 0.5,
+            "warmth": 0.3,
+            "space": 0.5,
+            "motion": 0.3,
+            "human": 0.15
+          }
+        },
+        {
+          "name": "Drone Tide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 75,
+            "depth": 0.55,
+            "warmth": 0.45,
+            "space": 0.55,
+            "motion": 0.4,
+            "human": 0.5
+          }
+        },
+        {
+          "name": "String Ease",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "geborgen",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 13,
+            "depth": 0.38,
+            "warmth": 0.7,
+            "space": 0.45,
+            "motion": 0.3,
+            "human": 0.25
+          }
+        },
+        {
+          "name": "Choir Air",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "euforie",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 32,
+            "depth": 0.4,
+            "warmth": 0.65,
+            "space": 0.75,
+            "motion": 0.35,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Piano Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "rust",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 48,
+            "depth": 0.22,
+            "warmth": 0.55,
+            "space": 0.7,
+            "motion": 0.15,
+            "human": 0.2
+          }
+        },
+        {
+          "name": "Lo-fi Haze",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "profile": "nabij",
+            "on": true,
+            "follow": false,
+            "sync": false,
+            "beats": 32,
+            "period": 18,
+            "depth": 0.35,
+            "warmth": 0.35,
+            "space": 0.35,
+            "motion": 0.45,
+            "human": 0.5
+          }
+        }
+      ]
+    }
+  ]
+}

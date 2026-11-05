@@ -1,0 +1,750 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.drift",
+  "name": "Drift Presets",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "How much, how fast and how coherent Drift lets connected parameters wander: subtle life, slow evolution, wide wander, restless motion, together and apart, per-style settings and group ensembles. Which parameters drift (the couplings to targets) is not part of a preset.",
+  "tree": [
+    {
+      "folder": "Subtle Life",
+      "items": [
+        {
+          "name": "Barely Alive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 154729,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.12,
+              "coh": 0.35,
+              "seed": 17919,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Subtle Life",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 259458,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.2,
+              "coh": 0.35,
+              "seed": 25838,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Gentle Life",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 364187,
+            "clock": {
+              "speed": 1.5,
+              "amount": 0.28,
+              "coh": 0.4,
+              "seed": 33757,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Natural Wobble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 468916,
+            "clock": {
+              "speed": 2.0,
+              "amount": 0.22,
+              "coh": 0.25,
+              "seed": 41676,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Quiet Variation",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 573645,
+            "clock": {
+              "speed": 0.7,
+              "amount": 0.18,
+              "coh": 0.5,
+              "seed": 49595,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Slight Shift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 678374,
+            "clock": {
+              "speed": 0.5,
+              "amount": 0.15,
+              "coh": 0.3,
+              "seed": 57514,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Slow Evolution",
+      "items": [
+        {
+          "name": "Slow Evolution",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 783103,
+            "clock": {
+              "speed": 0.5,
+              "amount": 0.55,
+              "coh": 0.35,
+              "seed": 65433,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Glacial",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 887832,
+            "clock": {
+              "speed": 0.25,
+              "amount": 0.6,
+              "coh": 0.4,
+              "seed": 73352,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Tidal Hours",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 992561,
+            "clock": {
+              "speed": 0.3,
+              "amount": 0.7,
+              "coh": 0.5,
+              "seed": 81271,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Long Arc",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1097290,
+            "clock": {
+              "speed": 0.35,
+              "amount": 0.8,
+              "coh": 0.3,
+              "seed": 89190,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Creeping Change",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1202019,
+            "clock": {
+              "speed": 0.4,
+              "amount": 0.45,
+              "coh": 0.2,
+              "seed": 97109,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Morning Mist",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1306748,
+            "clock": {
+              "speed": 0.6,
+              "amount": 0.5,
+              "coh": 0.6,
+              "seed": 105028,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Wide Wander",
+      "items": [
+        {
+          "name": "Wide Wander",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1411477,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.9,
+              "coh": 0.35,
+              "seed": 112947,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Far Roaming",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1516206,
+            "clock": {
+              "speed": 1.5,
+              "amount": 1.0,
+              "coh": 0.3,
+              "seed": 120866,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Open Road",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1620935,
+            "clock": {
+              "speed": 2.0,
+              "amount": 0.85,
+              "coh": 0.45,
+              "seed": 128785,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Big Drift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1725664,
+            "clock": {
+              "speed": 0.8,
+              "amount": 1.0,
+              "coh": 0.4,
+              "seed": 136704,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Lost at Sea",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1830393,
+            "clock": {
+              "speed": 0.5,
+              "amount": 1.0,
+              "coh": 0.25,
+              "seed": 144623,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Free Spirit",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 1935122,
+            "clock": {
+              "speed": 3.0,
+              "amount": 0.9,
+              "coh": 0.2,
+              "seed": 152542,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Restless",
+      "items": [
+        {
+          "name": "Restless",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2039851,
+            "clock": {
+              "speed": 4.0,
+              "amount": 0.35,
+              "coh": 0.3,
+              "seed": 160461,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Nervous Energy",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2144580,
+            "clock": {
+              "speed": 8.0,
+              "amount": 0.3,
+              "coh": 0.2,
+              "seed": 168380,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Shaky Hands",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2249309,
+            "clock": {
+              "speed": 16.0,
+              "amount": 0.15,
+              "coh": 0.1,
+              "seed": 176299,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Quick Breeze",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2354038,
+            "clock": {
+              "speed": 6.0,
+              "amount": 0.5,
+              "coh": 0.4,
+              "seed": 184218,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Fluttering",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2458767,
+            "clock": {
+              "speed": 24.0,
+              "amount": 0.12,
+              "coh": 0.1,
+              "seed": 192137,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Busy Bees",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2563496,
+            "clock": {
+              "speed": 12.0,
+              "amount": 0.3,
+              "coh": 0.15,
+              "seed": 200056,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Together & Apart",
+      "items": [
+        {
+          "name": "Locked Together",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2668225,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.5,
+              "coh": 1.0,
+              "seed": 207975,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Unison Wander",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2772954,
+            "clock": {
+              "speed": 2.0,
+              "amount": 0.6,
+              "coh": 0.9,
+              "seed": 215894,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Shared Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2877683,
+            "clock": {
+              "speed": 0.7,
+              "amount": 0.5,
+              "coh": 0.8,
+              "seed": 223813,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "All Different",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 2982412,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.5,
+              "coh": 0.0,
+              "seed": 231732,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Independent Voices",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3087141,
+            "clock": {
+              "speed": 1.5,
+              "amount": 0.6,
+              "coh": 0.05,
+              "seed": 239651,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Scattered",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3191870,
+            "clock": {
+              "speed": 2.5,
+              "amount": 0.5,
+              "coh": 0.1,
+              "seed": 247570,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Per Style",
+      "items": [
+        {
+          "name": "Ambient Bed",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3296599,
+            "clock": {
+              "speed": 0.5,
+              "amount": 0.5,
+              "coh": 0.6,
+              "seed": 255489,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Techno Evolve",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3401328,
+            "clock": {
+              "speed": 2.0,
+              "amount": 0.4,
+              "coh": 0.3,
+              "seed": 263408,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Lo-fi Tape",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3506057,
+            "clock": {
+              "speed": 5.0,
+              "amount": 0.3,
+              "coh": 0.2,
+              "seed": 271327,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Modular Patch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3610786,
+            "clock": {
+              "speed": 3.0,
+              "amount": 0.55,
+              "coh": 0.1,
+              "seed": 279246,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Drone Breathing",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3715515,
+            "clock": {
+              "speed": 0.3,
+              "amount": 0.7,
+              "coh": 0.7,
+              "seed": 287165,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Pad Shimmer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3820244,
+            "clock": {
+              "speed": 1.2,
+              "amount": 0.35,
+              "coh": 0.5,
+              "seed": 295084,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Dub Wander",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 3924973,
+            "clock": {
+              "speed": 1.5,
+              "amount": 0.7,
+              "coh": 0.4,
+              "seed": 303003,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Generative Piece",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 4029702,
+            "clock": {
+              "speed": 0.35,
+              "amount": 0.9,
+              "coh": 0.15,
+              "seed": 310922,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Cinematic Bed",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 4134431,
+            "clock": {
+              "speed": 0.4,
+              "amount": 0.6,
+              "coh": 0.7,
+              "seed": 318841,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Acoustic Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0,
+            "ownSeed": 4239160,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.2,
+              "coh": 0.6,
+              "seed": 326760,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Group Ensembles",
+      "items": [
+        {
+          "name": "Loose Ensemble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0.5,
+            "ownSeed": 4343889,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.5,
+              "coh": 0.6,
+              "seed": 334679,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Tight Ensemble",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0.1,
+            "ownSeed": 4448618,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.5,
+              "coh": 0.7,
+              "seed": 342598,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Own Voice",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0.8,
+            "ownSeed": 4553347,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.5,
+              "coh": 0.5,
+              "seed": 350517,
+              "frozen": false
+            }
+          }
+        },
+        {
+          "name": "Shared Wind",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "eigen": 0.25,
+            "ownSeed": 4658076,
+            "clock": {
+              "speed": 1.0,
+              "amount": 0.6,
+              "coh": 0.6,
+              "seed": 358436,
+              "frozen": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
