@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Swing per patroon (A tot D) en per spoor, naast de hostswing (som begrensd tot 50%; standaard 0 = ongewijzigd), en live inspelen: een knop Opname schrijft binnenkomende trigs en noten
+//          (ingang "Trigs / noten") op het juiste spoor in het gekozen patroon, op de huidige stap, met Kwantiseer (dichtstbijzijnde geswingde stap) aan of uit. Nieuwe state-sleutels:
+//          patSwing (4 getallen), lanes[].swing en quantize. Het geluid en het afspelen zijn bij de standaardwaarden ongewijzigd. De instrumenten per spoor waren al volledig doorgegeven (noteNames).
 // 1.14.0 — Patchkamer contract v1.14. Geeft de namen van de acht sporen met hun noot (36 tot 43) door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen.
 // 1.11.1 — Verbeterd: de waarnemer van de breedte van de scoop gooide een fout als de kaart werd weggehaald of opnieuw opgebouwd; hij wordt nu losgekoppeld. Het geluid is ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Click Synth en nieuwe id nl.patchkamer.clicksynth (voorheen Klikwerk, nl.patchkamer.klikwerk); tunes en songs uit die tijd verwijzen
@@ -20,6 +23,8 @@ const TXT = {
     hints: { tick: 'Kleur = ruis in de klik · Karakter = resonantie', bleep: 'Kleur = sinus → blok → zaag · Karakter = octaaf-FM', fm: 'Kleur = verhouding modulator · Karakter = FM-diepte', noise: 'Kleur = wit → donker · Karakter = smalheid filter', modal: 'Kleur = materiaal: hout, glas, metaal, vel · Karakter = hoge delen sterven sneller', string: 'Kleur = helderheid · Karakter = vervorming', zap: 'Kleur = sinus → blok · Karakter = fold', glitch: 'Kleur = stotter-snelheid · Karakter = boventonen' },
     ftypes: { lp: 'Laagdoorlaat', bp: 'Banddoorlaat', hp: 'Hoogdoorlaat' }, center: 'midden', custom: 'Eigen kit', kit: 'Kit', pattern: 'Patroon', patTitle: n => 'patroon ' + n + ' · Shift-klik: kopieer het huidige patroon hierheen',
     clickStep: 'Klik op een stap', modes: { on: 'Aan / uit', accent: 'Accent (hard / zacht)', chance: 'Kans (100 → 25%)', ratchet: 'Ratchet (1 → 4)', tone: 'Toonsprong' },
+    patSwing: 'Patroonswing', laneSwing: 'Spoorswing', swingTitle: 'extra swing op de oneven zestienden, bovenop de swing van de host (dubbelklik: 0)',
+    rec: 'Opname', recTitle: 'aan: binnenkomende trigs en noten worden in het gekozen patroon geschreven, op de stap van dat moment (alleen als de klok loopt)', quantize: 'Kwantiseer', quantizeTitle: 'aan: naar de dichtstbijzijnde (geswingde) stap; uit: de stap die op dat moment klinkt',
     sequencer: 'Sequencer', runTitle: 'uit: alleen spelen via de ingang (een ander apparaat / keyboard)', on: 'Aan', off: 'Uit', master: 'Master', surpriseKit: 'Verras kit', surpriseKitTitle: 'elk spoor een willekeurige nieuwe klank (patronen blijven)',
     laneTitle: 'kies dit spoor · speelt de klank', mute: 'demp', solo: 'solo', stepAria: (i, j) => `spoor ${i} stap ${j}`, lenTitle: 'lengte van dit spoor (polyritme)', lenAria: i => 'lengte spoor ' + i,
     name: 'Naam', engine: 'Klankmotor', ftype: 'Filtertype', choke: 'Afknijpgroep', none: 'Geen', group: n => 'Groep ' + n, play: 'Speel', surprise: 'Verras', surpriseTitle: 'willekeurige klank binnen deze klankmotor',
@@ -33,6 +38,8 @@ const TXT = {
     hints: { tick: 'Color = noise in the click · Character = resonance', bleep: 'Color = sine → square → saw · Character = octave FM', fm: 'Color = modulator ratio · Character = FM depth', noise: 'Color = white → dark · Character = filter narrowness', modal: 'Color = material: wood, glass, metal, skin · Character = high parts die faster', string: 'Color = brightness · Character = distortion', zap: 'Color = sine → square · Character = fold', glitch: 'Color = stutter speed · Character = overtones' },
     ftypes: { lp: 'Low-pass', bp: 'Band-pass', hp: 'High-pass' }, center: 'center', custom: 'Custom kit', kit: 'Kit', pattern: 'Pattern', patTitle: n => 'pattern ' + n + ' · Shift-click: copy the current pattern here',
     clickStep: 'Click on a step', modes: { on: 'On / off', accent: 'Accent (hard / soft)', chance: 'Chance (100 → 25%)', ratchet: 'Ratchet (1 → 4)', tone: 'Pitch jump' },
+    patSwing: 'Pattern swing', laneSwing: 'Lane swing', swingTitle: 'extra swing on the odd sixteenths, on top of the host swing (double-click: 0)',
+    rec: 'Record', recTitle: 'on: incoming trigs and notes are written into the chosen pattern, on the step of that moment (only while the clock runs)', quantize: 'Quantize', quantizeTitle: 'on: to the nearest (swung) step; off: the step that is sounding at that moment',
     sequencer: 'Sequencer', runTitle: 'off: only play through the input (another device / keyboard)', on: 'On', off: 'Off', master: 'Master', surpriseKit: 'Surprise kit', surpriseKitTitle: 'a random new sound for every lane (patterns stay)',
     laneTitle: 'select this lane · plays the sound', mute: 'mute', solo: 'solo', stepAria: (i, j) => `lane ${i} step ${j}`, lenTitle: 'length of this lane (polyrhythm)', lenAria: i => 'length of lane ' + i,
     name: 'Name', engine: 'Sound engine', ftype: 'Filter type', choke: 'Choke group', none: 'None', group: n => 'Group ' + n, play: 'Play', surprise: 'Surprise', surpriseTitle: 'a random sound within this sound engine',
@@ -107,7 +114,7 @@ const pkLoop = (host, getInst, cb, fps) => {   // tekenen via de klok van de hos
   const inst = getInst(); if (host && typeof host.frame === 'function' && inst && inst._id) return host.frame(inst, cb, fps);
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 export default {
-  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.14.0', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.14.1', kind: 'instrument', category: 'groove',
   ui: { width: 1080, minWidth: 560 },
   i18n: { en: { name: 'Click Synth', ports: { out: 'Stereo mix', trigger: 'Trigs / notes', mod: 'Mod', multi: 'Separate lanes (bundle)' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo mix' }], eventIn: [{ id: 'trigger', name: 'Trigs / noten' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiIn: [], multiOut: [{ id: 'multi', name: 'Sporen los (bundel)' }] },
@@ -210,16 +217,17 @@ export default {
       ],
     };
     const KIT_NAMES = Object.keys(KITS);
-    const defaults = () => ({ kit: 'Micro Click', pattern: 0, run: true, sel: 0, mode: 'on', master: 0.55, lanes: KITS['Micro Click']() });
+    const defaults = () => ({ kit: 'Micro Click', pattern: 0, run: true, sel: 0, mode: 'on', master: 0.55, patSwing: [0, 0, 0, 0], quantize: true, lanes: KITS['Micro Click']() });
     function cleanStep(s) { s = s && typeof s === 'object' ? s : {}; return { v: finite(s.v, 0, 0, 1), p: finite(s.p, 1, 0, 1), r: Math.round(finite(s.r, 1, 1, 4)), t: Math.round(finite(s.t, 0, -24, 24)) }; }
     function cleanLane(l, i) { const d = KITS['Micro Click']()[i]; l = l && typeof l === 'object' ? l : d; const p = {};
       for (const [id, s] of Object.entries(PS)) p[id] = finite(l.p?.[id], d.p[id], s.min, s.max);
       const pats = [0, 1, 2, 3].map(k => Array.from({ length: NS }, (_, j) => cleanStep(l.pats?.[k]?.[j])));
       return { name: String(l.name ?? d.name).slice(0, 20), engine: ENGINES.some(e => e[0] === l.engine) ? l.engine : d.engine, choke: Math.round(finite(l.choke, 0, 0, 3)), ftype: ['lp', 'bp', 'hp'].includes(l.ftype) ? l.ftype : 'lp',
-        mute: !!l.mute, solo: !!l.solo, len: Math.round(finite(l.len, 16, 1, 16)), p, pats }; }
+        mute: !!l.mute, solo: !!l.solo, len: Math.round(finite(l.len, 16, 1, 16)), swing: finite(l.swing, 0, 0, 0.5), p, pats }; }
     function normalize(raw) { const d = defaults(), s = raw && typeof raw === 'object' ? raw : {};
       return { kit: KIT_NAMES.includes(s.kit) || s.kit === 'Custom' ? s.kit : d.kit, pattern: Math.round(finite(s.pattern, 0, 0, 3)), run: s.run !== undefined ? !!s.run : true, sel: Math.round(finite(s.sel, 0, 0, NL - 1)),
         mode: ['on', 'accent', 'chance', 'ratchet', 'tone'].includes(s.mode) ? s.mode : 'on', master: finite(s.master, 0.55, 0, 1),
+        patSwing: [0, 1, 2, 3].map(k => finite(Array.isArray(s.patSwing) ? s.patSwing[k] : undefined, 0, 0, 0.5)), quantize: s.quantize !== undefined ? !!s.quantize : true,
         lanes: Array.from({ length: NL }, (_, i) => cleanLane(Array.isArray(s.lanes) ? s.lanes[i] : undefined, i)) }; }
     let state = normalize({});
 
@@ -242,6 +250,17 @@ export default {
     // ---------- slagen ----------
     const effP = (i, id) => { const s = PS[id], b = state.lanes[i].p[id], x = mod['l' + (i + 1) + '.' + id] || 0; if (!x) return b; return clamp(s.scale === 'log' ? b * (s.max / s.min) ** x : b + x * (s.max - s.min), s.min, s.max); };
     const flash = new Array(NL).fill(0);
+    // ---------- swing per patroon en per spoor, en live inspelen ----------
+    let anc = null, playing = false, rec = false;   // anc = de laatste stap van de klok: tijd (met hostswing), stapnummer, stapduur en hostswing
+    const localSw = i => clamp(finite(state.patSwing[state.pattern], 0, 0, 0.5) + finite(state.lanes[i].swing, 0, 0, 0.5), 0, 0.5);
+    const isOdd = m => ((m % 2) + 2) % 2 === 1;
+    const stepTime = (m, i) => anc.base + (m - anc.abs) * anc.sd + (isOdd(m) ? (anc.hs + localSw(i)) * anc.sd : 0);
+    function nearestStep(i, tau, quant) { if (!anc || !playing || !Number.isFinite(tau) || Math.abs(tau - anc.t) > 4) return null;
+      const k0 = Math.round((tau - anc.base) / anc.sd) + anc.abs; let best = null, bd = Infinity;
+      for (let m = k0 - 2; m <= k0 + 2; m++) { const tm = stepTime(m, i); if (quant) { const d = Math.abs(tau - tm); if (d < bd) { bd = d; best = m; } } else if (tm <= tau + 1e-9 && (best === null || m > best)) best = m; }
+      return best; }
+    function recordHit(i, tau, vel) { if (!rec || !(vel > 0)) return; const m = nearestStep(i, tau, state.quantize); if (m === null) return;
+      const L = state.lanes[i], idx = ((m % L.len) + L.len) % L.len; L.pats[state.pattern][idx] = { v: Math.max(0.05, clamp(vel, 0, 1)), p: 1, r: 1, t: 0 }; paintRows(); }
     function hit(i, time, vel = 0.8, tone = 0) { if (!node) return; const L = state.lanes[i], p = {}; for (const id of Object.keys(PS)) p[id] = effP(i, id);
       const r = p.vari, rn = () => Math.random() * 2 - 1;
       if (r > 0) { p.pitch *= 2 ** (rn() * r * 0.6); p.decay *= 2 ** (rn() * r * 0.8); p.color = clamp(p.color + rn() * r * 0.35, 0, 1); p.shape = clamp(p.shape + rn() * r * 0.35, 0, 1); p.pan = clamp(p.pan + rn() * r * 0.4, -1, 1); vel *= 1 - Math.random() * r * 0.35; }
@@ -262,7 +281,9 @@ h2{margin:0;font-size:19px;letter-spacing:1.5px;color:var(--k-ink)} .sub{margin:
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:10px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button,input[type=text]{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;box-sizing:border-box;max-width:100%;text-transform:none;letter-spacing:0}
-button{cursor:pointer} button:hover{border-color:var(--k-acc)} button.on{background:var(--k-acc);border-color:var(--k-acc);color:#1c1006}
+button{cursor:pointer} button:hover{border-color:var(--k-acc)} button.rec.on{background:var(--stop,#e05a4f);border-color:var(--stop,#e05a4f);color:#fff}
+.swrow{display:flex;align-items:center;gap:6px} .swrow output{min-width:4ch;font-size:11px;color:var(--fg,#e2e6ea);text-transform:none;letter-spacing:0}
+button.on{background:var(--k-acc);border-color:var(--k-acc);color:#1c1006}
 .patbtns{display:flex;gap:3px} .patbtns button{min-width:30px;padding:6px 0}
 .rows{display:grid;gap:4px}
 .row{display:grid;grid-template-columns:minmax(110px,150px) 26px 26px minmax(0,1fr) 54px;gap:5px;align-items:center}
@@ -290,6 +311,9 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     const el = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; p.appendChild(e); return e; };
     const stop = e => e.stopPropagation();
     function selectBox(p, label, opts, value, change) { const box = el(p, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', stop); return s; }
+    function swingBox(p, label, get, set) { const box = el(p, 'label', 'sel'); el(box, 'span', '', label); const row = el(box, 'div', 'swrow'); const inp = el(row, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '0.5'; inp.step = '0.005'; inp.style.width = '110px'; inp.setAttribute('aria-label', label); inp.title = T.swingTitle; inp.addEventListener('pointerdown', stop);
+      const o = el(row, 'output'); const show = v => { inp.value = String(v); o.textContent = Math.round(v * 100) + ' %'; };
+      inp.oninput = () => { const v = clamp(+inp.value, 0, 0.5); set(v); o.textContent = Math.round(v * 100) + ' %'; }; inp.ondblclick = () => { set(0); show(0); }; show(get()); return { set: show }; }
     function mount(hostEl) {
       unmount(); const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; root = hostEl;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
@@ -300,9 +324,12 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
       const pb = el(el(top, 'label', 'sel'), 'span', '', T.pattern).parentElement; const pbx = el(pb, 'div', 'patbtns'); ui.pat = [];
       ['A', 'B', 'C', 'D'].forEach((n, k) => { const b = el(pbx, 'button', '', n); b.type = 'button'; b.title = T.patTitle(n); b.addEventListener('pointerdown', stop);
         b.onclick = e => { if (e.shiftKey && k !== state.pattern) { state.lanes.forEach(L => { L.pats[k] = L.pats[state.pattern].map(x => ({ ...x })); }); } state.pattern = k; paint(); }; ui.pat.push(b); });
+      ui.patSw = swingBox(top, T.patSwing, () => state.patSwing[state.pattern], v => { state.patSwing[state.pattern] = v; });
       ui.mode = selectBox(top, T.clickStep, Object.keys(T.modes).map(k => [k, T.modes[k]]), state.mode, v => { state.mode = v; });
       const runL = el(top, 'label', 'sel'); el(runL, 'span', '', T.sequencer); ui.run = el(runL, 'button', '', ''); ui.run.type = 'button'; ui.run.title = T.runTitle; ui.run.addEventListener('pointerdown', stop); ui.run.onclick = () => { state.run = !state.run; paint(); };
       const ml = el(top, 'label', 'sel'); el(ml, 'span', '', T.master); ui.master = el(ml, 'input'); ui.master.type = 'range'; ui.master.min = '0'; ui.master.max = '1'; ui.master.step = '0.01'; ui.master.style.width = '110px'; ui.master.setAttribute('aria-label', T.master); ui.master.addEventListener('pointerdown', stop); ui.master.oninput = () => { state.master = +ui.master.value; applyMaster(); };
+      const rcl = el(top, 'label', 'sel'); el(rcl, 'span', '', T.rec); ui.rec = el(rcl, 'button', 'rec', T.rec); ui.rec.type = 'button'; ui.rec.title = T.recTitle; ui.rec.setAttribute('aria-pressed', 'false'); ui.rec.addEventListener('pointerdown', stop); ui.rec.onclick = () => { rec = !rec; paint(); };
+      const qzl = el(top, 'label', 'sel'); el(qzl, 'span', '', T.quantize); ui.quant = el(qzl, 'button', '', ''); ui.quant.type = 'button'; ui.quant.title = T.quantizeTitle; ui.quant.addEventListener('pointerdown', stop); ui.quant.onclick = () => { state.quantize = !state.quantize; paint(); };
       const rb = el(top, 'button', '', T.surpriseKit); rb.type = 'button'; rb.title = T.surpriseKitTitle; rb.addEventListener('pointerdown', stop); rb.onclick = () => { for (let i = 0; i < NL; i++) surprise(i); state.kit = 'Custom'; paint(); };
       statusEl = el(app, 'p', 'stt');
       const rows = el(app, 'div', 'rows'); stepEls.length = 0; rowEls.length = 0;
@@ -321,6 +348,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
       ui.engine = selectBox(et, T.engine, ENGINES, state.lanes[state.sel].engine, v => { state.lanes[state.sel].engine = v; markEigen(); paint(); audition(); });
       ui.ftype = selectBox(et, T.ftype, FTYPES, state.lanes[state.sel].ftype, v => { state.lanes[state.sel].ftype = v; markEigen(); audition(); });
       ui.choke = selectBox(et, T.choke, [[0, T.none], [1, T.group(1)], [2, T.group(2)], [3, T.group(3)]], state.lanes[state.sel].choke, v => { state.lanes[state.sel].choke = +v; markEigen(); });
+      ui.laneSw = swingBox(et, T.laneSwing, () => state.lanes[state.sel].swing, v => { state.lanes[state.sel].swing = v; });
       const b1 = el(et, 'button', '', T.play); b1.type = 'button'; b1.addEventListener('pointerdown', stop); b1.onclick = () => audition();
       const b2 = el(et, 'button', '', T.surprise); b2.type = 'button'; b2.title = T.surpriseTitle; b2.addEventListener('pointerdown', stop); b2.onclick = () => { surprise(state.sel, true); paint(); audition(); };
       const b3 = el(et, 'button', '', T.surprisePat); b3.type = 'button'; b3.title = T.surprisePatTitle; b3.addEventListener('pointerdown', stop); b3.onclick = () => { randomPattern(state.sel); paint(); };
@@ -364,6 +392,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
         const P = L.pats[state.pattern]; stepEls[i].forEach((b, j) => { const S = P[j]; b.classList.toggle('v', S.v > 0); b.style.setProperty('--v', String(0.35 + 0.65 * S.v)); b.classList.toggle('off-len', j >= L.len);
           b.querySelector('.b').textContent = S.v && S.r > 1 ? '×' + S.r : S.v && S.t ? (S.t > 0 ? '+' : '') + S.t : ''; b.querySelector('.pr').textContent = S.v && S.p < 1 ? Math.round(S.p * 100) + '%' : ''; }); } }
     function paint() { if (!root) return; const L = state.lanes[state.sel]; if (ui.kit) ui.kit.value = state.kit; ui.pat.forEach((b, k) => b.classList.toggle('on', k === state.pattern)); ui.mode.value = state.mode;
+      ui.patSw.set(state.patSwing[state.pattern]); ui.laneSw.set(L.swing); ui.rec.classList.toggle('on', rec); ui.rec.setAttribute('aria-pressed', String(rec)); ui.rec.textContent = rec ? T.on : T.off; ui.quant.textContent = state.quantize ? T.on : T.off; ui.quant.classList.toggle('on', state.quantize);
       ui.run.textContent = state.run ? T.on : T.off; ui.run.classList.toggle('on', state.run); ui.master.value = String(state.master);
       ui.name.value = L.name; ui.engine.value = L.engine; ui.ftype.value = L.ftype; ui.choke.value = String(L.choke); ui.hint.textContent = COLOR_HINT[L.engine] || '';
       for (const [id, k] of Object.entries(ui.k)) k.set(L.p[id]); paintRows(); }
@@ -388,14 +417,15 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
       noteNames() { return noteList(); },
       onStep(info) { try { if (dead || !info) return; const sd = finite(info.stepDur, 0.125, 0.01, 2); stepDur = sd; const t = finite(info.time, ctx.currentTime, 0, 1e9);
           const abs = Number.isFinite(info.bar) ? info.bar * 16 + (info.step | 0) : (absStep + 1); absStep = abs;
+          const hs = finite(info.swing, 0, 0, 0.5), odd = isOdd(abs); playing = true; anc = { t, abs, sd, hs, base: t - (odd ? hs * sd : 0) };
           for (let i = 0; i < NL; i++) { const L = state.lanes[i], idx = ((abs % L.len) + L.len) % L.len; cur[i] = state.run ? idx : -1; if (!state.run || !audible(i)) continue;
-            const S = L.pats[state.pattern][idx]; if (!S.v || Math.random() >= S.p) continue; for (let k = 0; k < S.r; k++) hit(i, t + k * sd / S.r, S.v * (k ? 0.8 : 1), S.t); }
+            const S = L.pats[state.pattern][idx]; if (!S.v || Math.random() >= S.p) continue; const sw = odd ? localSw(i) * sd : 0; for (let k = 0; k < S.r; k++) hit(i, t + sw + k * sd / S.r, S.v * (k ? 0.8 : 1), S.t); }
            } catch {} },
-      onTransport(info) { try { if (!info?.playing) { absStep = -1; cur.fill(-1); } } catch {} },
+      onTransport(info) { try { if (!info?.playing) { absStep = -1; cur.fill(-1); playing = false; anc = null; } } catch {} },
       onEvent(port, e) { try { if (dead || port !== 'trigger' || !e) return; const time = Math.max(ctx.currentTime, finite(e.time, ctx.currentTime, 0, 1e9)), type = String(e.type || '').toLowerCase().replace(/[_-]/g, '');
           if (type === 'panic' || type === 'allnotesoff') { if (node) node.port.postMessage({ type: 'panic' }); return; }
           if (type === 'cc' && typeof e.id === 'string') { const m = e.id.match(/^l([1-8])\.(\w+)$/); if (m && PS[m[2]] && Number.isFinite(e.value)) { const s = PS[m[2]]; state.lanes[+m[1] - 1].p[m[2]] = s.min + clamp(e.value, 0, 1) * (s.max - s.min); markEigen(); if (+m[1] - 1 === state.sel) paint(); } return; }
-          if (!['trig', 'note', 'noteon'].includes(type) || e.vel === 0) return; const i = laneOf(e); if (i < 0 || i >= NL || !audible(i)) return; hit(i, time, finite(e.vel, 0.8, 0, 1)); } catch {} },
+          if (!['trig', 'note', 'noteon'].includes(type) || e.vel === 0) return; const i = laneOf(e); if (i < 0 || i >= NL) return; recordHit(i, time, finite(e.vel, 0.8, 0, 1)); if (!audible(i)) return; hit(i, time, finite(e.vel, 0.8, 0, 1)); } catch {} },
       params() { const list = []; state.lanes.forEach((L, i) => { for (const [id, s] of Object.entries(PS)) list.push({ id: 'l' + (i + 1) + '.' + id, name: s.name, lane: 'l' + (i + 1), laneName: `${i + 1} ${L.name}`, min: s.min, max: s.max, scale: s.scale || 'lin', role: id === 'level' ? 'level' : id === 'pan' ? 'pan' : id === 'pitch' ? 'pitch' : 'color', drift: 0.02, on: !['level', 'pan', 'pitch', 'vari'].includes(id) }); }); return list; },
       modulate(o) { try { if (dead) return; mod = {}; if (o && typeof o === 'object' && !Array.isArray(o)) for (const [k, v] of Object.entries(o)) if (/^l[1-8]\.\w+$/.test(k) && typeof v === 'number' && Number.isFinite(v)) mod[k] = clamp(v, -1, 1); } catch {} },
       getState() { return JSON.parse(JSON.stringify(state)); },

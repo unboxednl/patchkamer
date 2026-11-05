@@ -290,6 +290,21 @@ Wat Groovebox 12 met een state doet (getest):
 
 Modulatie: `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en 1 aan; al het andere wordt genegeerd. Per track zijn acht parameters stuurbaar (spoor-id `t<n>.syn.tun`, `.syn.dec`, `.flt.cut`, `.flt.res`, `.amp.vol`, `.amp.pan`, `.fx.dly`, `.fx.rev`). Modulatie verandert nooit de bewaarde waarden.
 
+## Swing (1.11.1)
+
+Groovebox 12 had al één eigen schuif **Swing** (`G.swing`, 50 … 80, start 54; de klok zelf is van de host, het apparaat rekent die swing op het tracklokale stapnummer `stap % 2` en telt hem op bij de hostswing in `info.time`). Dat is ongewijzigd. Erbij kwamen twee velden voor extra swing, in dezelfde eenheid als de hostschuif (een fractie van een zestiende-stap, 0 … 0,5; de UI toont 0 … 50 %, dubbelklik = 0):
+
+| Veld | Wat | Waarden |
+|---|---|---|
+| `pats[i].swing` | swing van patroon *i* (het patroon dat de klok speelt) | 0 … 0,5, start 0 |
+| `pats[i].tracks[j].swing` | swing van track *j* in dat patroon | 0 … 0,5, start 0 |
+
+Optelregel: de extra vertraging van een oneven zestiende = `min(0,5; pat.swing + track.swing) × stapduur`, bovenop `G.swing` en de hostswing. Oneven = het stapnummer van de klok (`info.step`, bij ontbreken de positie sinds de start), dus bij een track met een eigen lengte (polymetrie) telt de klokstap; `G.swing` blijft op de plaats in de track werken. Alle retrigs van die stap schuiven als geheel mee (met de micro-timing erbij). Ongeldige of ontbrekende waarden geven 0 (boven 0,5 wordt het 0,5); een oude song of tune zonder deze velden klinkt gelijk. De velden staan in `getState().pats` en dus in een tune.
+
+## Geen noten- of triggeringang
+
+Groovebox 12 heeft geen eventingang en dus geen `noteNames`: er is geen live inspelen (opname of kwantiseren) en geen noot waarmee een sequencer de tracks kan benoemen. Het apparaat heeft wel een eigen stappenraster (16 stappen per track, 8 patronen), maar de stappen zijn alleen via de UI en de state te vullen.
+
 ## Tunes maken
 
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.groovebox12`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.

@@ -47,6 +47,21 @@ Wat Drum Machine met een state doet (getest):
 
 Modulatie: `modulate` neemt alleen eindige getallen tussen −1 en 1 aan; al het andere wordt genegeerd. Modulatie verandert nooit de bewaarde waarden.
 
+## Swing (1.11.1)
+
+Naast de swing van de host (die zit al in de tijd van elke stap) heeft Drum Machine extra swing: een fractie van een zestiende-stap, 0 … 0,5 (de UI toont 0 … 50 %, dubbelklik = 0).
+
+| Veld | Wat | Waarden |
+|---|---|---|
+| `swing` | swing van het patroon (er is één patroon) | 0 … 0,5, start 0 |
+| `laneSwing.<geluid>` | swing van één geluid (`kick`, `snare`, `hat`, `perc`) | 0 … 0,5, start 0 |
+
+Optelregel: de extra vertraging van een oneven zestiende (stap 2, 4, 6, … in de tellingen van de UI, `step` 1, 3, 5, … van de klok) = `min(0,5; swing + laneSwing[geluid]) × stapduur`, bovenop de hostswing; de slag en de `trigs`-gebeurtenis krijgen dezelfde tijd. Even stappen blijven staan. Ongeldige of ontbrekende waarden geven 0 (boven 0,5 wordt het 0,5); een oude state klinkt gelijk. Het patroon is altijd 16 stappen op een zestienden-raster; er zijn geen sub-zestiende rijen.
+
+## Geen noten- of triggeringang
+
+Drum Machine heeft geen eventingang (alleen de eventuitgang `trigs`) en dus ook geen `noteNames`: er is niets om live in te spelen (geen opname of kwantiseren) en geen noot die een sequencer kan benoemen. Een sequencer kan de vier geluiden alleen via de patronen van dit apparaat laten klinken, of via een ander apparaat met een eigen sequencer.
+
 ## Tunes maken
 
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.drummachine`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
