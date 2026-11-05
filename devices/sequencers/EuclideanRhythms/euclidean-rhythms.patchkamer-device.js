@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Patchkamer contract v1.14. De uitgangskeuze en de nootkeuze tonen de klanken van de aangesloten drumcomputer (noteNames, host.peers); zonder zo'n apparaat is alles als voorheen.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Euclidean Rhythms (nieuwe id nl.patchkamer.euclidean, eigen map in sequencers; voorheen Euclides, nl.patchkamer.euclides).
 //   Presets en songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state klinkt identiek: zelfde state en zelfde klokstappen geven dezelfde
 //   gebeurtenissen, want alle nieuwe velden hebben als standaard het oude gedrag.
@@ -92,7 +93,7 @@ const ukVar = (el, name, d) => { const c = el._ukv || (el._ukv = {}), now = perf
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.11.0', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.14.0', kind: 'utility', category: 'sequencer',
   ui: { width: 900, minWidth: 420 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'reset', name: 'Reset' }, { id: 'keys', name: 'Notes in' }], eventOut: [{ id: 'trigs', name: 'Trigs / notes' }], modIn: [], modOut: [] },
   i18n: { nl: { ports: { reset: 'Reset', keys: 'Noten in', trigs: 'Trigs / noten' } } },
@@ -152,6 +153,22 @@ export default {
       else host.emit(self, 'trigs', { type: 'trig', lane: r.out, vel, time }); } catch { } }
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, cs = null, raf = null; const rowEls = [];
+    // Klanken van het apparaat achter 'trigs' (contract v1.14): "Spoor k" krijgt de naam op plaats k van het apparaat, de nootkeuze de namen per nootnummer.
+    let peerNames = [], namesSig = '';
+    function readTarget(list) {
+      let names = [];
+      try {
+        const cs = typeof host.cablesFrom === 'function' ? host.cablesFrom(self, 'trigs') : [], ps = Array.isArray(list) ? list : (typeof host.peers === 'function' ? host.peers(self) : []);
+        for (const k of cs) { const p = k && ps.find(x => x && x.id === k.to); if (p && Array.isArray(p.noteNames) && p.noteNames.length) { names = p.noteNames; break; } }
+      } catch { names = []; }
+      const sig = JSON.stringify(names); if (sig === namesSig) return; namesSig = sig; peerNames = names; labelOuts();
+    }
+    function labelOuts() {
+      if (!root) return;
+      const byNote = new Map(); for (const x of peerNames) { const n = Math.round(x.note); if (n >= 0 && n <= 127 && !byNote.has(n)) byNote.set(n, String(x.name)); }
+      rowEls.forEach(E => { const v = E.out.value; E.out.innerHTML = ''; [...Array.from({ length: NR }, (_, k) => { const nm = peerNames[k] ? String(peerNames[k].name) : ''; return ['ch' + (k + 1), nm ? (k + 1) + ' · ' + nm : tx('Spoor {0}', k + 1)]; }), ['noot', tx('Noot')]].forEach(([val, t]) => { const o = ukEl(E.out, 'option', '', t); o.value = val; o.title = t; }); E.out.value = v; });
+      if (ui.noteSel) { const v = ui.noteSel.value; ui.noteSel.innerHTML = ''; const lo = Math.min(24, ...byNote.keys()), hi = Math.max(96, ...byNote.keys()); for (let n = lo; n <= hi; n++) { const o = ukEl(ui.noteSel, 'option', '', byNote.has(n) ? nn(n) + ' · ' + byNote.get(n) : nn(n)); o.value = String(n); } ui.noteSel.value = v; }
+    }
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--event,#ffd166)') + `
 .rows{display:grid;gap:4px;margin-top:8px}.rh,.r{display:grid;grid-template-columns:34px 30px 58px 58px 58px 88px 82px minmax(60px,1fr) 58px minmax(60px,1fr) 112px minmax(56px,1fr);gap:5px;align-items:center}
 .rh{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)} .r select,.r input[type=number]{padding:4px;font-size:11px;width:100%}
@@ -204,7 +221,7 @@ export default {
         human: { name: tx('Menselijk'), min: 0, max: 1, step: 0.01, unit: '%', tip: tx('willekeurige variatie in velocity en lengte') } };
       ui.sl = ukSliders(app, SP, (id, v) => { R(state.sel)[id] = id === 'ghost' ? Math.round(v) : v; eigen(); }, ROWDEF, tx(' · dubbelklik: standaard'));
       ukEl(app, 'p', 'note', tx('Stappen = lengte van de rij, Slagen = hoeveel daarvan klinken (zo gelijk mogelijk verdeeld), Rotatie = waar de rij begint. Accent: zoveel slagen klinken hard, ook die zijn euclidisch verdeeld; Ghost notes zijn zachte slagen tussen de rest. Fill: elke N-de maat extra slagen (dubbel) of trillers (ratchet). Mutatie: de rij verspringt soms een maat lang. Rij-nummer aanklikken = kiezen voor het live spelen, de noot en de notenlengte (bij Uitgang = Noot).'));
-      paint(); raf = host.frame(self, draw, 30); }
+      namesSig = ''; readTarget(); paint(); raf = host.frame(self, draw, 30); }
     const R = i => state.rows[i];
     function eigen() { if (state.preset !== CUSTOM) { state.preset = CUSTOM; if (ui.preset) ui.preset.value = CUSTOM; } }
     function paint() { if (!root) return; ui.preset.value = state.preset; ui.run.textContent = state.run ? tx('Aan') : tx('Uit'); ui.run.classList.toggle('on', state.run); ui.live.textContent = state.live ? tx('Aan') : tx('Uit'); ui.live.classList.toggle('on', state.live);
@@ -241,6 +258,7 @@ export default {
               flash[i] = performance.now() + Math.max(0, (time - ctx.currentTime) * 1000);
               if (ratchet) { emit(r, time, vel, tick * 0.4); emit(r, time + tick / 2, vel * 0.8, tick * 0.4); } else emit(r, time, vel, dur); } });
            } catch { } },
+      onPeers(list) { if (!dead) readTarget(list); },
       onTransport(info) { try { if (!info?.playing) { cur.fill(-1); offset = 0; lastAbs = -1; } } catch { } },
       onEvent(port, e) { try { if (port === 'reset' && e && ['trig', 'note', 'noteon'].includes(String(e.type).toLowerCase())) offset = lastAbs + 1; else if (port === 'keys') liveIn(e); } catch { } },
       getState() { return JSON.parse(JSON.stringify(state)); },
