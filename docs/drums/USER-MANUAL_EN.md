@@ -31,7 +31,7 @@ All six devices have **tunes**. A tune is the complete setting of one device, in
 
 **With your own sequencer.** Drum Kit, Pulse Drums, Click Synth and Latin Percussion accept notes from a sequencer. Their tunes switch the **device's own sequencer off** (Drum Kit and Pulse Drums: **Sequencer off**; Click Synth: the **Sequencer** button; Latin Percussion: **Control** is set to *Pads / external trigs only*). The tune's patterns stay stored: switch the own sequencer back on and you hear the tune's groove. This way you can audition with your own sequencer which kit sounds best. Drum Machine and Groovebox 12 have no note input: their own pattern is their only source.
 
-**The sequencer shows the sounds.** A sequencer connected to such a drum machine shows the sounds with their names, in the order of the drum machine. When the kit, the order or the note of a channel changes (also through another tune), the sequencer's rows follow. See [Driving a drum machine](../sequencers/USER-MANUAL_EN.md#driving-a-drum-machine-the-rows-follow-the-device).
+**The sequencer shows the sounds.** A sequencer connected to such a drum machine shows the sounds with their names, in the order of the drum machine. With **Pulse Drums** every instrument of the instrument choice that has no channel yet follows, and it sounds as a guest on a free channel (up to channel 16). When the kit, the order or the note of a channel changes (also through another tune), the sequencer's rows follow. See [Driving a drum machine](../sequencers/USER-MANUAL_EN.md#driving-a-drum-machine-the-rows-follow-the-device).
 
 Double-click a slider to go back to its starting value. Click the number to type a value.
 
