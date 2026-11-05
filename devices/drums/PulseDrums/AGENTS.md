@@ -26,8 +26,8 @@ Voor de velden `kit`, `channels` (met `type`, `model`, `note`, `tune`, `decay`, 
 
 | Veld | Wat | Waarden | Start |
 |---|---|---|---|
-| `rumble` | Hoeveelheid rumble: de kicks (`kick` en `sub`) gaan door een galm, een hoog- en laagdoorlaatfilter, verzadiging en ducking; het resultaat gaat naar de mix en naar de uitgang `rumble` | 0 … 1 | 0,18 |
-| `rumbleTone` | Filterfrequentie van de rumble | 80 … 2500 Hz | 700 |
+| `rumble` | Hoeveelheid rumble: de kicks (`kick` en `sub`) gaan door een galm, een hoog- en laagdoorlaatfilter, verzadiging en ducking; het resultaat gaat naar de mix en naar de uitgang `rumble` | 0 … 1 | 0,14 (sinds 1.11.4; voorheen 0,18) |
+| `rumbleTone` | Filterfrequentie van de rumble | 80 … 2500 Hz | 210 (sinds 1.11.4; voorheen 700) |
 | `grit` | Verzadiging over de hele mix | 0 … 1 | 0 |
 | `fill` | Fill aan (voor stappen met een fill-voorwaarde) | boolean | `false` |
 | `length` | Lengte van het raster (de kaart biedt 16, 32 en 64) | 1 … 64 | 64 bij Techno DNA, anders 16 |
@@ -82,3 +82,13 @@ Pulse Drums heeft `noteNames()` (contract v1.14, `../../../contract/PATCHKAMER-C
 - Pas het apparaat niet aan om een tune te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam, omschrijving of tune, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Pulse Drums: [NL](../../../docs/drums/USER-MANUAL_NL.md#pulse-drums) · [EN](../../../docs/drums/USER-MANUAL_EN.md#pulse-drums).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/drums/USER-MANUAL_NL.md) · [EN](../../../docs/drums/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [pulse-drums-techno.patchkamer-tunes.json](../../../tunes/pulse-drums-techno.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: drums, gebouwd voor techno. Het speelt zelf patronen A tot D op de klok (per kanaal een eigen lengte voor polymetrie) en kan via `trigger` getriggerd worden. De som komt uit `mix`; `rumble` en `ch1` … `ch16` zijn aparte audio-uitgangen; `trigs` stuurt de slagen door.
