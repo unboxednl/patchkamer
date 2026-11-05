@@ -68,14 +68,14 @@ def shots(browser, lang, OUT, LIB, BASE):
         with pg.expect_file_chooser() as fc: pg.click('#srcAddDir')
         fc.value.set_files(LIB); pg.wait_for_timeout(1500)
     def place(pg, name):
-        pg.locator('.libdev').filter(has=pg.locator('.nm', has_text=name)).locator('button').filter(has_text=PLACE).first.click(); pg.wait_for_timeout(500)
+        pg.locator('.libdev').filter(has=pg.locator('.nm', has_text=re.compile('^\\s*' + re.escape(name) + '\\s*$'))).locator('button').filter(has_text=PLACE).first.click(); pg.wait_for_timeout(500)
     def import_tunes(pg):
         pg.click('#prBtn'); pg.wait_for_timeout(300)
         with pg.expect_file_chooser() as fc: pg.click('#prImport')
         fc.value.set_files(os.path.join(ROOT, 'tunes', 'acid-baselines-classics.patchkamer-tunes.json')); pg.wait_for_timeout(1000)
     def build_patch(pg):
         load_lib(pg)
-        for n in ['Keys', 'Acid Baselines', 'Speakers']: place(pg, n)
+        for n in ['Keys / MIDI', 'Acid Baselines', 'Speakers']: place(pg, n)
         pg.click('#libToggle'); pg.wait_for_timeout(300); pg.click('#arrange'); pg.wait_for_timeout(1200)
         c = pg.locator('.card')
         drag(pg, c.nth(0).locator('[data-port="notes"][data-dir="out"]'), c.nth(1).locator('[data-port="notes"][data-dir="in"]'))
@@ -105,7 +105,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     c = pg.locator('.card').first
     c.evaluate("c=>{const s=[...c.querySelectorAll('select')].find(x=>x.options.length>3&&x.options[0].value===''); s.selectedIndex=1; s.dispatchEvent(new Event('change',{bubbles:true}))}"); pg.wait_for_timeout(600)
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)
-    pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Keys'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
+    pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Keys / MIDI'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 
