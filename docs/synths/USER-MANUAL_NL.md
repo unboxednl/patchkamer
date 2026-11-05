@@ -10,7 +10,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 2
 2. [Welke synth voor welk doel](#welke-synth-voor-welk-doel)
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
-5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Bowed Ensemble](#bowed-ensemble)
+5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
@@ -44,6 +44,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Een grote, flexibele polyfone synth met drie oscillatoren en twee filters | [Triple Osc Poly](#triple-osc-poly) |
 | Trance-supersaws met delay, galm en gate | [Supersaw Swarm](#supersaw-swarm) |
 | Akkoorden uit losse noten (stabs, orgelakkoorden, pads) | [Chord Poly](#chord-poly), [Supersaw Swarm](#supersaw-swarm), [Triple Osc Poly](#triple-osc-poly) |
+| Klanken uit filmmuziek: braams, grote pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strijkers en strijkerssecties | [Bowed Ensemble](#bowed-ensemble) |
 | Elektrische piano's, orgels, vibrafoon | [Stage Keys](#stage-keys) |
 | Klokken, glas, tines, FM-bassen | [Four-Operator FM](#four-operator-fm) |
@@ -575,6 +576,41 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Elke akkoordnoot neemt een van de 24 stemmen in: een akkoord van vier noten laat ruimte voor zes akkoorden.
 - Het volume van een akkoord wordt gedeeld door de wortel van het aantal noten, dus een akkoord klinkt niet veel harder dan een losse noot.
 - Stuurt je sequencer al akkoorden, kies dan **Losse noten**.
+
+### Cinematic Synth
+
+**Waar het voor dient.** Een polyfone synth voor klanken uit filmmuziek: enorme koperachtige braams, brede pads en drones, lage pulserende ostinati en orgelachtige arpeggio's. Elke stem heeft een hoofdlaag van tot 5 ontstemde oscillators met stereospreiding, een tweede laag met een octaafkeuze, een sub-sinus en ruis, een laagdoorlaatfilter met een eigen aanzwelling, een versterkingsomhulling met tot 12 seconden aanval en 15 seconden uitklinken, en een pitchdaling of -stijging aan het begin van elke noot. Achter de stemmen zitten vervorming, een laag- en een hoogplank, een ensemble-chorus, een pingpongecho en een grote galm van 0,5 tot 9 seconden. Een **pulsmotor** volgt de klok van de studio en speelt de noten die je vasthoudt als ostinato of arpeggio.
+
+![De kaart van de Cinematic Synth](../images/nl/synths/cinematic-synth.png)
+
+**Regelaars.**
+
+- **Oscillators:** **Golfvorm**, **Stemmen per noot** (1 tot 5), **Ontstemming**, **Stereospreiding**, **Tweede laag** (uit, zaagtand, blok, driehoek, sinus), **Octaaf tweede laag** (−2 tot +1), **Mix tweede laag**, **Sub**, **Ruis**, **Pitchdaling** (−12 tot +12 halve tonen aan het begin van elke noot) en **Duur daling**.
+- **Filter:** **Cutoff**, **Resonantie**, **Aanzwelling** (hoeveel octaven het filter opengaat, −4 tot +5), **Filteraanval**, **Filterverval**, **Filterhoud** en **Toetsvolging**.
+- **Versterking:** **Aanval** (tot 12 s), **Verval**, **Houd** en **Uitklinken** (tot 15 s).
+- **Beweging:** **Vibrato-snelheid**, **Vibrato-diepte** en **Filtergolf** (een trage golf op de cutoff).
+- **Ruimte en klank:** **Vervorming**, **Gewicht** (laagplank), **Lucht** (hoogplank), **Ensemble**, **Echotijd**, **Echo-terugkoppeling**, **Echo**, **Galmlengte**, **Galmdemping** en **Galm**.
+- **Pulsmotor:** **Patroon** (uit, achtsten, zestienden, omhoog, omlaag, heen en weer, willekeurig, orgelloop, akkoordslagen), **Snelheid** (1/4, 1/8, 1/8 triplet, 1/16, 1/16 triplet, 1/32), **Lengte**, **Octaven** (1 tot 3), **Accent** en **Vasthouden** (houd het akkoord na het loslaten).
+- **Uitgang:** **Niveau** en **Transpositie**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Noten van **Keys / MIDI**, een sequencer of de **MIDI Hub**. |
+| **Mod** | sturing in (paars) | Een modulator kan 18 parameters bewegen (cutoff, resonantie, aanzwelling, ontstemming, sub, ruis, mix tweede laag, vibrato-diepte, filtergolf, vervorming, gewicht, lucht, ensemble, echo-terugkoppeling, echo, galm, lengte en niveau). |
+| **Uit** | audio uit (blauwgroen) | Verbind met **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Cinematic Synth** en **Speakers**. Kies de tune **Dream Heist › Heist Braam** en speel een lage noot: een enorme koperachtige aanzwelling. Voor een ostinato kies je **Dream Heist › Pulse Ostinato Low**, druk je op **Start** en houd je een akkoord vast: de pulsmotor speelt het in achtsten.
+
+**Tunes.** Pack **Cinematic Synth Scores**: 56 tunes in 7 sets (Dream Heist, Dark Hero, Space Voyage, Desert Epic, Ancient Battle, Quiet Tension, Impacts and Risers): braams en koper, drones, pads, ostinati, arpeggio's, bellen en impacts. Kies een set en dan een tune in de tunelijst. Tunes met een pulspatroon volgen de klok, dus druk op **Start**.
+
+**Tips en beperkingen.**
+
+- Er klinken ten hoogste 10 stemmen tegelijk; de oudste wordt afgekapt als je er meer speelt. Een grote unison (5 stemmen per noot) met een tweede laag vraagt de meeste rekenkracht.
+- De pulsmotor speelt alleen terwijl de klok van de studio loopt (**Start**). Zonder klok blijven de noten die je vasthoudt stil als er een patroon aan staat.
+- Een nieuwe galmlengte bouwt een moment nadat je de knop loslaat een nieuwe galm op.
+- Bij lange aanvallen en uitklinktijden blijven gespeelde noten lang hoorbaar: gebruik **Stop** of **Alles uit** om ze stil te krijgen.
 
 ### Bowed Ensemble
 

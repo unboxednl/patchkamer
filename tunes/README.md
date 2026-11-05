@@ -4,7 +4,7 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **34 packs with 2160 tunes**, one pack per device: 26 for synths (1805 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **35 packs with 2216 tunes**, one pack per device: 27 for synths (1861 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -18,6 +18,7 @@ This folder has **34 packs with 2160 tunes**, one pack per device: 26 for synths
 | [Biotope](../devices/synths/Biotope/) | Biotope Styles | 86 | 13 | [`biotope-styles.patchkamer-tunes.json`](biotope-styles.patchkamer-tunes.json) |
 | [Bowed Ensemble](../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 65 | 11 | [`bowed-ensemble-styles.patchkamer-tunes.json`](bowed-ensemble-styles.patchkamer-tunes.json) |
 | [Celestial Mechanics](../devices/synths/CelestialMechanics/) | Celestial Mechanics Styles | 74 | 11 | [`celestial-mechanics-styles.patchkamer-tunes.json`](celestial-mechanics-styles.patchkamer-tunes.json) |
+| [Cinematic Synth](../devices/synths/CinematicSynth/) | Cinematic Synth Scores | 56 | 7 | [`cinematic-synth-scores.patchkamer-tunes.json`](cinematic-synth-scores.patchkamer-tunes.json) |
 | [Chord Poly](../devices/synths/ChordPoly/) | Chord Poly Styles | 120 | 20 | [`chord-poly-styles.patchkamer-tunes.json`](chord-poly-styles.patchkamer-tunes.json) |
 | [Cross Mod Mono](../devices/synths/CrossModMono/) | Cross Mod Mono Styles | 63 | 12 | [`cross-mod-mono-styles.patchkamer-tunes.json`](cross-mod-mono-styles.patchkamer-tunes.json) |
 | [Dissonant Cluster](../devices/synths/DissonantCluster/) | Dissonant Cluster Styles | 60 | 9 | [`dissonant-cluster-styles.patchkamer-tunes.json`](dissonant-cluster-styles.patchkamer-tunes.json) |

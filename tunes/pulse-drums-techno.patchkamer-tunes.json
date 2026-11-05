@@ -16,8 +16,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.16,
-      "rumbleTone": 700,
+      "rumble": 0.128,
+      "rumbleTone": 210,
       "grit": 0,
       "channels": [
        {
@@ -289,8 +289,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.18,
-      "rumbleTone": 800,
+      "rumble": 0.144,
+      "rumbleTone": 240,
       "grit": 0,
       "channels": [
        {
@@ -534,8 +534,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.25,
-      "rumbleTone": 600,
+      "rumble": 0.2,
+      "rumbleTone": 180,
       "grit": 0,
       "channels": [
        {
@@ -761,8 +761,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.32,
-      "rumbleTone": 500,
+      "rumble": 0.256,
+      "rumbleTone": 150,
       "grit": 0.45,
       "channels": [
        {
@@ -993,8 +993,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.16,
-      "rumbleTone": 700,
+      "rumble": 0.128,
+      "rumbleTone": 210,
       "grit": 0,
       "channels": [
        {
@@ -1228,8 +1228,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.08,
-      "rumbleTone": 900,
+      "rumble": 0.064,
+      "rumbleTone": 260,
       "grit": 0,
       "channels": [
        {
@@ -1436,8 +1436,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.1,
-      "rumbleTone": 800,
+      "rumble": 0.08,
+      "rumbleTone": 240,
       "grit": 0,
       "channels": [
        {
@@ -1672,8 +1672,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.06,
-      "rumbleTone": 1000,
+      "rumble": 0.048,
+      "rumbleTone": 260,
       "grit": 0,
       "channels": [
        {
@@ -1892,8 +1892,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.28,
-      "rumbleTone": 650,
+      "rumble": 0.224,
+      "rumbleTone": 200,
       "grit": 0.1,
       "channels": [
        {
@@ -2128,8 +2128,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.3,
-      "rumbleTone": 600,
+      "rumble": 0.24,
+      "rumbleTone": 180,
       "grit": 0.15,
       "channels": [
        {
@@ -2360,8 +2360,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.26,
-      "rumbleTone": 700,
+      "rumble": 0.208,
+      "rumbleTone": 210,
       "grit": 0.2,
       "channels": [
        {
@@ -2606,8 +2606,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.34,
-      "rumbleTone": 550,
+      "rumble": 0.272,
+      "rumbleTone": 160,
       "grit": 0.4,
       "channels": [
        {
@@ -2808,8 +2808,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.36,
-      "rumbleTone": 500,
+      "rumble": 0.288,
+      "rumbleTone": 150,
       "grit": 0.5,
       "channels": [
        {
@@ -3007,8 +3007,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.38,
-      "rumbleTone": 480,
+      "rumble": 0.304,
+      "rumbleTone": 140,
       "grit": 0.55,
       "channels": [
        {
@@ -3207,8 +3207,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.3,
-      "rumbleTone": 500,
+      "rumble": 0.24,
+      "rumbleTone": 150,
       "grit": 0,
       "channels": [
        {
@@ -3387,8 +3387,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.28,
-      "rumbleTone": 550,
+      "rumble": 0.224,
+      "rumbleTone": 160,
       "grit": 0,
       "channels": [
        {
@@ -3593,8 +3593,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.34,
-      "rumbleTone": 450,
+      "rumble": 0.272,
+      "rumbleTone": 140,
       "grit": 0,
       "channels": [
        {
@@ -3783,8 +3783,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.14,
-      "rumbleTone": 800,
+      "rumble": 0.112,
+      "rumbleTone": 240,
       "grit": 0,
       "channels": [
        {
@@ -4011,8 +4011,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.12,
-      "rumbleTone": 900,
+      "rumble": 0.096,
+      "rumbleTone": 260,
       "grit": 0,
       "channels": [
        {
@@ -4234,8 +4234,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.18,
-      "rumbleTone": 700,
+      "rumble": 0.144,
+      "rumbleTone": 210,
       "grit": 0,
       "channels": [
        {
@@ -4480,8 +4480,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.12,
-      "rumbleTone": 800,
+      "rumble": 0.096,
+      "rumbleTone": 240,
       "grit": 0,
       "channels": [
        {
@@ -4699,8 +4699,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.14,
-      "rumbleTone": 700,
+      "rumble": 0.112,
+      "rumbleTone": 210,
       "grit": 0.2,
       "channels": [
        {
@@ -4894,8 +4894,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.16,
-      "rumbleTone": 650,
+      "rumble": 0.128,
+      "rumbleTone": 200,
       "grit": 0,
       "channels": [
        {
@@ -5120,8 +5120,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.12,
-      "rumbleTone": 800,
+      "rumble": 0.096,
+      "rumbleTone": 240,
       "grit": 0,
       "channels": [
        {
@@ -5345,8 +5345,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.14,
-      "rumbleTone": 750,
+      "rumble": 0.112,
+      "rumbleTone": 220,
       "grit": 0,
       "channels": [
        {
@@ -5577,8 +5577,8 @@
      "version": "1.0.0",
      "state": {
       "kit": "Custom",
-      "rumble": 0.3,
-      "rumbleTone": 550,
+      "rumble": 0.24,
+      "rumbleTone": 160,
       "grit": 0.25,
       "channels": [
        {
