@@ -12,8 +12,8 @@ Een masterketen: toonregeling (laag, midden, hoog) → buscompressie → lookahe
 | `id` | `nl.patchkamer.masterchain`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
 | Naam | `Master Chain` in alle talen; de kaart, de besturingen, de opties, de startprofielen, de meldingen en de poortnamen zijn tweetalig (`host.lang`, `LOC` en `TXT` bovenin) |
 | Soort | `effect`: dit apparaat krijgt dus **presets** (geen tunes) |
-| Poorten | audio-ingang `in` (Stereo in); audio-uitgang `out` (Stereo uit); modulatie-ingang `setup` (Master Director: de paarse kabel van de Master Director) |
-| Contract | v1.11 |
+| Poorten | audio-ingang `in` (Stereo in); audio-uitgang `out` (Stereo uit); mastering-ingang `setup` (Master Director: driehoekpoort voor de gele, gestippelde mastering-kabel van de Master Director) |
+| Contract | v1.12 |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Eindbeeld, `nl.patchkamer.mastering.master`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De DSP is sample voor sample gelijk aan het oude bestand (bewezen met een offline render); alleen de meldingen uit de DSP zijn codes geworden die de kaart vertaalt, en de waarden van de keuze "Doelkarakter" heten nu Engels (`transparent`, `firm`).

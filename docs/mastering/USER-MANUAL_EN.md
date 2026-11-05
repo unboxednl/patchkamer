@@ -24,7 +24,7 @@ Mastering devices help you finish a mix: balance the tone, control the dynamics,
 
 ## What mastering devices do
 
-A mastering device takes the finished stereo mix and shapes it. They are used one after the other, on the master. Most of them have a **Master Director** port (purple): the Master Director can set the whole chain for a music style and a situation at once. Everything is also set by hand, and every device has **presets** (a preset is the setting of one device). See [Presets](../presets/USER-MANUAL_EN.md) for how to use and share them.
+A mastering device takes the finished stereo mix and shapes it. They are used one after the other, on the master. Most of them have a **Master Director** port (a yellow triangle): the Master Director can set the whole chain for a music style and a situation at once. Everything is also set by hand, and every device has **presets** (a preset is the setting of one device). See [Presets](../presets/USER-MANUAL_EN.md) for how to use and share them.
 
 All six processing devices measure what comes in and goes out: loudness (LUFS-I, LUFS-M, LUFS-S, loudness range), peaks (sample peak and, in the Master Chain and Mix Check, 4× true peak), stereo correlation and left/right balance. The measurements are our own implementation of the usual loudness method (K-weighting, 400 ms blocks, gating); they are meant as a guide and are not a formal certification.
 
@@ -138,7 +138,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 |---|---|---|
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -198,7 +198,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 |---|---|---|
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -241,7 +241,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Sidechain** | audio in (teal) | A second signal for the detector (for example a kick), used when **Detector** is on **Sidechain input**. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -283,7 +283,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 |---|---|---|
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -325,7 +325,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 |---|---|---|
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -376,7 +376,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 |---|---|---|
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -414,7 +414,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 | **Stereo in** | audio in (teal) | The sound to process. |
 | **Reference** | audio in (teal) | A reference track to compare with. You can also load a local audio file on the card. |
 | **Stereo out** | audio out (teal) | The processed sound. Connect it to the next device or to **Speakers**. |
-| **Master Director** | modulation in (purple) | Receives the settings of the Master Director. Optional. |
+| **Master Director** | mastering in (yellow triangle) | Receives the settings of the Master Director. Optional. |
 
 ### Presets
 
@@ -453,7 +453,7 @@ The Master Director sets a whole mastering chain at once. You choose a **music s
 
 | Port | Kind | Use |
 |---|---|---|
-| **Style / setup** | modulation out (purple) | Connect it to the **Master Director** port of each mastering device. The audio cables stay as they are. |
+| **Style / setup** | mastering out (yellow triangle) | Connect it to the **Master Director** port of each mastering device with a yellow, dotted wave cable (the mastering cable). The audio cables stay as they are. |
 
 ### Presets
 
