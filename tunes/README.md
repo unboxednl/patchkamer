@@ -4,11 +4,11 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **36 packs with 2274 tunes**, one pack per device: 28 for synths (1919 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **37 packs with 2340 tunes**, one pack per device: 29 for synths (1985 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
-### Synths (26)
+### Synths (29)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
@@ -24,6 +24,7 @@ This folder has **36 packs with 2274 tunes**, one pack per device: 28 for synths
 | [Dissonant Cluster](../devices/synths/DissonantCluster/) | Dissonant Cluster Styles | 60 | 9 | [`dissonant-cluster-styles.patchkamer-tunes.json`](dissonant-cluster-styles.patchkamer-tunes.json) |
 | [Drone Synth](../devices/synths/DroneSynth/) | Drone Synth Styles | 66 | 10 | [`drone-synth-styles.patchkamer-tunes.json`](drone-synth-styles.patchkamer-tunes.json) |
 | [Duofone](../devices/synths/Duofone/) | Duofone Styles | 60 | 12 | [`duofone-styles.patchkamer-tunes.json`](duofone-styles.patchkamer-tunes.json) |
+| [Formant Singer](../devices/synths/FormantSinger/) | Formant Singer Styles | 66 | 12 | [`formant-singer-styles.patchkamer-tunes.json`](formant-singer-styles.patchkamer-tunes.json) |
 | [Foundry](../devices/synths/Foundry/) | Foundry Styles | 69 | 11 | [`foundry-styles.patchkamer-tunes.json`](foundry-styles.patchkamer-tunes.json) |
 | [Four-Operator FM](../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | 11 | [`four-operator-fm-styles.patchkamer-tunes.json`](four-operator-fm-styles.patchkamer-tunes.json) |
 | [Grain Cloud](../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | 10 | [`grain-cloud-styles.patchkamer-tunes.json`](grain-cloud-styles.patchkamer-tunes.json) |

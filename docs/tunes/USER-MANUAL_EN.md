@@ -114,9 +114,9 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 36 packs with **2274 tunes** in total, one per device: 28 packs for synths (1919 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. The files have `formatVersion` 1. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
+This repository has 37 packs with **2340 tunes** in total, one per device: 29 packs for synths (1985 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. The files have `formatVersion` 1. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
 
-### Synths (26)
+### Synths (29)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
@@ -132,6 +132,7 @@ This repository has 36 packs with **2274 tunes** in total, one per device: 28 pa
 | [Dissonant Cluster](../../devices/synths/DissonantCluster/) | Dissonant Cluster Styles | 60 | Industrial (8), Horror & Cinematic (8), Dark Ambient (7), Techno (6), Experimental (7), Sound Design (6), Noise (5), Dubstep (6), Drone (7) | [`dissonant-cluster-styles.patchkamer-tunes.json`](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) |
 | [Drone Synth](../../devices/synths/DroneSynth/) | Drone Synth Styles | 66 | Drone (7), Ambient (7), Dark Ambient (7), Techno (7), Industrial (6), Cinematic (7), Meditation (6), Sci-Fi (7), Doom (6), Minimal (6) | [`drone-synth-styles.patchkamer-tunes.json`](../../tunes/drone-synth-styles.patchkamer-tunes.json) |
 | [Duofone](../../devices/synths/Duofone/) | Duofone Styles | 60 | Techno (5), House (5), Trance (5), Ambient (5), Drum & Bass (5), Dubstep (5), Synthwave (5), Funk & Disco (5), Hip-hop (5), Electro (5), Pop (5), Chiptune (5) | [`duofone-styles.patchkamer-tunes.json`](../../tunes/duofone-styles.patchkamer-tunes.json) |
+| [Formant Singer](../../devices/synths/FormantSinger/) | Formant Singer Styles | 66 | Choir (6), Solo Voices (6), Bass Voices (5), Whisper and Breath (5), Pads and Ambient (6), Cinematic (6), Pop Leads (6), Robot and FX (6), Chant (5), Lullaby (5), Hymn (5), Syllable Study (5) | [`formant-singer-styles.patchkamer-tunes.json`](../../tunes/formant-singer-styles.patchkamer-tunes.json) |
 | [Foundry](../../devices/synths/Foundry/) | Foundry Styles | 69 | Industrial (6), Techno (6), Dark Ambient (6), Cinematic (6), Sound Design (6), Horror (6), Experimental (6), Noise (6), Drone (7), Metal Percussion (8), Electro (6) | [`foundry-styles.patchkamer-tunes.json`](../../tunes/foundry-styles.patchkamer-tunes.json) |
 | [Four-Operator FM](../../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | Synthwave (7), Electro (6), Pop (6), Chiptune (6), Jazz & Soul (6), Ambient (6), Cinematic (6), Techno & House (6), Drum & Bass (6), Hip-hop & Lo-fi (6), Funk & Disco (6) | [`four-operator-fm-styles.patchkamer-tunes.json`](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) |
 | [Grain Cloud](../../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | Ambient (7), Dark Ambient (6), Cinematic (6), Meditation (5), Sci-Fi (6), Experimental (6), Glitch/IDM (7), Lo-fi (5), Drone (6), Sound Design (7) | [`grain-cloud-styles.patchkamer-tunes.json`](../../tunes/grain-cloud-styles.patchkamer-tunes.json) |
