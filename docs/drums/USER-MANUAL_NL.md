@@ -29,6 +29,10 @@ Elk apparaat heeft een groenblauwe **audio-uitgang** met de hele kit gemengd. De
 
 Alle zes apparaten hebben **tunes**. Een tune is de volledige instelling van één apparaat, inclusief de patronen, dus een tune kiezen geeft je een groove. Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor hoe je ze gebruikt en deelt. De tunes staan op een vergelijkbaar volume, dus wisselen van tune geeft geen sprong in luidheid.
 
+**Met je eigen sequencer.** Drum Kit, Pulse Drums, Click Synth en Latin Percussion nemen noten van een sequencer aan. Hun tunes zetten de **eigen sequencer van het apparaat uit** (Drum Kit en Pulse Drums: **Sequencer uit**; Click Synth: de knop **Sequencer**; Latin Percussion: **Besturing** staat op *Alleen pads / externe trigs*). De patronen van de tune blijven bewaard: zet de eigen sequencer weer aan en je hoort de groove van de tune. Zo kun je met je eigen sequencer beluisteren welke kit het best klinkt. Drum Machine en Groovebox 12 hebben geen noteningang: hun eigen patroon is hun enige bron.
+
+**De sequencer toont de klanken.** Een sequencer die aan zo'n drumcomputer hangt, laat de klanken met hun namen zien, in de volgorde van de drumcomputer. Wisselt de kit, de volgorde of de noot van een kanaal (ook door een andere tune), dan volgen de rijen van de sequencer. Zie [Een drumcomputer aansturen](../sequencers/USER-MANUAL_NL.md#een-drumcomputer-aansturen-de-rijen-volgen-het-apparaat).
+
 Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal om een waarde te typen.
 
 ## Welk apparaat voor welk doel

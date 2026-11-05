@@ -33,6 +33,8 @@ Verzin geen velden. Lees de broncode van het apparaat: welke sleutels geeft `get
 
 Zet er geen routing, bronkeuzes, lopende posities (klok, fase), AudioNodes of patronen in. Dat hoort niet bij de klank (contract §13, §19).
 
+**Drumcomputers met een eigen sequencer.** Een tune voor Drum Kit, Pulse Drums of Click Synth bevat `run: false`, een tune voor Latin Percussion `sequence: false`: het laden van een tune start de eigen sequencer van het apparaat niet, zodat de gebruiker met zijn eigen sequencer kan beluisteren welke kit past. De patronen blijven in de tune staan (gebruik je ze niet, laat ze dan leeg). Bij een ontbrekend veld zet het apparaat zijn eigen sequencer wél aan.
+
 ## Licentie: altijd `CC0-1.0`
 
 Alles in deze map is `CC0-1.0` (publiek domein), zie `LICENSE` en `../LICENSING.md`. Zet daarom `"license": "CC0-1.0"` op het pack **en** op elk item dat een eigen `license` krijgt. Het contract noemt `CC-BY-4.0` en `LicenseRef-All-Rights-Reserved` als keuzes in de studio; die gelden **niet** voor deze map.
