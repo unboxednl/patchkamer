@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the eight **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the nine **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -15,7 +15,8 @@ This manual covers the eight **tools** of Patchkamer. Tools are helpers: you use
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
 | write down ideas, the key and a to-do list | [Notes](#notes) | no ports |
-| connect a MIDI keyboard and the tracks of a sequencer to devices, and put their knobs on your keyboard knobs | [MIDI Hub](#midi-hub) | a **MIDI in** event in, a **Tracks in** multi-MIDI in, and an event out per device |
+| connect a MIDI keyboard and the tracks of a sequencer to devices, and put their knobs on your keyboard knobs | [MIDI Hub](#midi-hub) | four **MIDI in** event ins, a **Tracks in** multi-MIDI in, and an event out per device |
+| show a controller with knobs, faders and pads as a panel and send its messages on | [Control Surface](#control-surface) | a **CC out** event out |
 
 ## How you connect tools
 
@@ -302,6 +303,58 @@ The **MIDI Hub Basics** pack has 15 presets in four folders: **Sound Controllers
 - The hub changes nothing when you open a workspace or connect a cable: it only reacts to what you play and press.
 - A mapping made before version 1.13.1 has no input and works on all four inputs. Learn it again if two devices send the same CC number.
 - The hub does not play audio.
+
+## Control Surface
+
+### What it is for
+
+Control Surface is a panel for a MIDI controller that has knobs, faders, pads or buttons and no keyboard. It shows the controller on the screen and moves along with what you do on the hardware. What you do goes on as CC messages (with number and channel) to the devices you connect, usually the **MIDI Hub**, which can then map every element to a control of any device.
+
+You build the shape of the panel from **sections**. Each section has a kind (**Knobs**, **Faders**, **Pads** or **Buttons**), a number of **Rows**, a number of elements **Per row** and a **Band**. Sections in the same band stand next to each other; bands stand below each other. That way you can recreate the shape of almost any controller, for example 3 rows of 8 knobs, a row of 8 faders and 2 rows of 8 buttons under them. The **Control Surface Layouts** pack has ready-made shapes.
+
+![The Control Surface card](../images/en/tools/control-surface.png)
+
+### The controls
+
+| Control | What it does |
+|---|---|
+| **Connect MIDI** | Asks the browser for MIDI access (once, after your click). Without it you can still use the mouse. It never uses sysex. |
+| **MIDI input** (list) | **All MIDI inputs** or one input. Use one input per physical device. |
+| **Channel** | **all channels** or one MIDI channel. |
+| **Learn all** | Walks through the whole panel: the first element lights up, you move the matching element on your controller, and the next one lights up. **Stop learning** ends it. |
+| **Clear assignments** | Removes the assignment of every element. |
+| The panel | Knobs, faders, pads and buttons. They move when the hardware moves. You can also drag a knob or fader with the mouse (pads and buttons react to a click). Click an element to select it. |
+| **Element** (editor) | For the selected element: a **Name** (this name shows up in the MIDI Hub), **Learn** (assign it by moving the element on your controller), the assigned **CC** or **Note** with its channel, and **Clear**. |
+| **Last input** | The last message that came in. A message that is not assigned to an element also goes on, as a plain CC. |
+| **Layout** | One line per section: the kind, **Rows**, **Per row** and **Band**, and **×** to remove it. **+ section** adds one. At most 8 sections and 256 elements. |
+
+Pads and buttons that send notes are passed on as CC with a value of 0 or 1 (0 to 100% for pads that sense how hard you hit).
+
+### Ports
+
+| Port | Kind | Use |
+|---|---|---|
+| **CC out** | event out | Connect to one of the **MIDI in** ports of the **MIDI Hub**, or directly to a device that listens to CC. |
+
+### An example
+
+1. Place **Control Surface**, **MIDI Hub** and a synth. Connect **CC out** to **MIDI in** of the hub, and add the synth in the hub.
+2. In **Control Surface** choose **Connect MIDI** and pick your controller under **MIDI input**.
+3. Pick a layout in the preset bar, for example **Strips › 8 Strips Full**, or build one under **Layout**.
+4. Click **Learn all** and move the elements one by one, from the top left to the bottom right. Click **Stop learning** when you are done. Click an element to give it a name, for example **Filter**.
+5. In the hub click **+ mapping**, move the knob (the row shows its name, for example **Filter · CC 21 · ch 1**) and pick the control of the synth.
+
+If you also use a keyboard, put it on **MIDI in** of the hub through **Keys / MIDI**, and the controller on **MIDI in 2** through Control Surface.
+
+### Presets
+
+The **Control Surface Layouts** pack has 20 presets in four folders: **Strips**, **Faders**, **Knobs** and **Pads**. A preset only sets the shape of the panel (and clears the assignments, because they belong to the old shape); it does not change the input. See [Presets](../presets/USER-MANUAL_EN.md).
+
+### Tips and limits
+
+- Web MIDI works in Chrome and Edge. Control Surface does not use sysex, so it cannot light the LEDs of your controller.
+- An element keeps its assignment as long as its place in the layout stays the same. If you remove a section, the elements after it get new numbers.
+- If your controller has several pages or modes, learn each mode with its own layout, or use one input and channel per mode.
 
 ## If it does not work
 

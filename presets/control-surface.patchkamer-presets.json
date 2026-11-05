@@ -1,0 +1,453 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.controlsurface",
+  "name": "Control Surface Layouts",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Layouts for the Control Surface that match the shape of common MIDI controllers: strips of knobs, faders and buttons, banks of faders, knob grids and pad grids. A layout only sets the shape of the panel; assign the elements to your own controller with Learn.",
+  "tree": [
+    {
+      "folder": "Strips",
+      "items": [
+        {
+          "name": "8 Strips Full",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 3,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "button",
+                "rows": 2,
+                "cols": 8,
+                "band": 2
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "8 Strips Two Knob Rows",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 2,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 2
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "8 Strips One Knob Row",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 2
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "4 Strips",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 4,
+                "band": 1
+              },
+              {
+                "type": "button",
+                "rows": 2,
+                "cols": 4,
+                "band": 2
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Mixer 9 Faders",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 9,
+                "band": 0
+              },
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 9,
+                "band": 1
+              }
+            ],
+            "channel": 0
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Faders",
+      "items": [
+        {
+          "name": "8 Faders and 8 Buttons",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 1
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "16 Faders",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 16,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "8 Faders",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "4 Faders and 4 Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 4,
+                "band": 1
+              }
+            ],
+            "channel": 0
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Knobs",
+      "items": [
+        {
+          "name": "8 Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "16 Knobs 4x4",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 4,
+                "cols": 4,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "32 Knobs 4x8",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 4,
+                "cols": 8,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "4 Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 4,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Knobs and Buttons",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 2,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 1
+              }
+            ],
+            "channel": 0
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Pads",
+      "items": [
+        {
+          "name": "Pads 4x4",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 4,
+                "cols": 4,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Pads 8x8",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 8,
+                "cols": 8,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Pads 4x4 and 8 Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 4,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "knob",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Pads 2x8 and Knob Row",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "pad",
+                "rows": 2,
+                "cols": 8,
+                "band": 1
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Pads 2x4 and Knobs 2x4",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "knob",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Pads and Faders",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 6,
+                "band": 1
+              }
+            ],
+            "channel": 0
+          }
+        }
+      ]
+    }
+  ]
+}

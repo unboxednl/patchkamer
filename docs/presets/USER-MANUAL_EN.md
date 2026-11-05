@@ -110,7 +110,7 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 40 packs with **1882 presets** in total, one per device: 12 for effects (153 presets), 9 for mastering (919), 3 for the mixer (58), 6 for modulators (267), 8 for sequencers (461) and 2 for the tools (24). Each is named after its device ("Chorus Basics", "Chord Sequencer Styles" and so on) and is licensed CC0-1.0. The files have `formatVersion` 2. The names of packs, folders and presets are English. The devices are described in the manuals for [effects](../effects/USER-MANUAL_EN.md), [mastering](../mastering/USER-MANUAL_EN.md), [mixer](../mixer/USER-MANUAL_EN.md), [modulators](../modulators/USER-MANUAL_EN.md), [sequencers](../sequencers/USER-MANUAL_EN.md) and [tools](../tools/USER-MANUAL_EN.md).
+This repository has 41 packs with **1902 presets** in total, one per device: 12 for effects (153 presets), 9 for mastering (919), 3 for the mixer (58), 6 for modulators (267), 8 for sequencers (461) and 3 for the tools (44). Each is named after its device ("Chorus Basics", "Chord Sequencer Styles" and so on) and is licensed CC0-1.0. The files have `formatVersion` 2. The names of packs, folders and presets are English. The devices are described in the manuals for [effects](../effects/USER-MANUAL_EN.md), [mastering](../mastering/USER-MANUAL_EN.md), [mixer](../mixer/USER-MANUAL_EN.md), [modulators](../modulators/USER-MANUAL_EN.md), [sequencers](../sequencers/USER-MANUAL_EN.md) and [tools](../tools/USER-MANUAL_EN.md).
 
 ### Effects (12)
 
@@ -175,10 +175,11 @@ This repository has 40 packs with **1882 presets** in total, one per device: 12 
 | [Step Sequencer](../../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | Bass Lines (14), Arpeggios (12), Drum Triggers (13), Melodic Hooks (17), Long Notes & Pads (6), Polymeter & Feel (8) | [`step-sequencer.patchkamer-presets.json`](../../presets/step-sequencer.patchkamer-presets.json) |
 | [Wanderer](../../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | Lead Lines (9), Basslines (7), Arps and Plucks (8), Ambient and Slow (5), Genre Starters (13), Dynamics (6), Rolls and Ratchets (5), Follow Chord (3), Evolving (4) | [`wanderer.patchkamer-presets.json`](../../presets/wanderer.patchkamer-presets.json) |
 
-### Tools (2)
+### Tools (3)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
+| [Control Surface](../../devices/tools/ControlSurface/) | Control Surface Layouts | 20 | Strips (5), Faders (4), Knobs (5), Pads (6) | [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) |
 | [MIDI Hub](../../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | Sound Controllers (6), Wheels and Pedals (5), Effects (3), Utility (1) | [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) |
 | [Metronome](../../devices/tools/Metronome/) | Metronome Basics | 9 | Practice (4), Subdivisions (3), Loud (2) | [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) |
 
