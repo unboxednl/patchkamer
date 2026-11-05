@@ -4,3 +4,4 @@ CLAUDE.md
 __pycache__/
 app/node_modules/
 app/dist/
+patchkamer-probe.json

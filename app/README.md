@@ -26,7 +26,7 @@ A folder `bibliotheek` next to the exe replaces the bundled library. It is a nor
 npm run probe
 ```
 
-Prints the base and output latency that this Chromium reports per `latencyHint` and sample rate, as JSON. Run it on the machine and sound card you play on. The numbers say how much the audio path of Chromium costs; they are the basis for deciding whether a native ASIO route is worth building.
+Prints the base and output latency that this Chromium reports per `latencyHint` and sample rate, as JSON, and also writes it to `patchkamer-probe.json` (next to the exe, or in the current folder). With the portable exe: `Patchkamer-0.1.0-portable.exe --probe` from a terminal, then open `patchkamer-probe.json`. Run it on the machine and sound card you play on. The numbers say how much the audio path of Chromium costs; they are the basis for deciding whether a native ASIO route is worth building.
 
 ## Notes
 
