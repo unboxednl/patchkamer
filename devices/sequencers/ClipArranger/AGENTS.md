@@ -12,8 +12,8 @@ Een clip-, scène- en songsequencer met 1 tot 16 sporen (tracks). Het maakt **ze
 | `id` | `nl.patchkamer.cliparranger` (nieuw: voorheen `nl.patchkamer.regie`, de naam Regie; songs en presets uit die tijd verwijzen naar de oude id en laden hier niet in) |
 | Naam | `Clip Arranger` in alle talen; de poortnamen hebben een Nederlandse variant (`MIDI / opname`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
-| Poorten | eventingang `input`; eventuitgangen `track1` … `track16`; geen audio, geen sturing |
-| Contract | v1.11 |
+| Poorten | eventingang `input`; eventuitgangen `track1` … `track16`; geen audio, geen sturing; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
+| Contract | v1.13 (apparaatversie 1.13.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen met vier sporen en scènes van vier sporen; Pattern Playlist en Pattern Tracker bouwen een song van patronen in een playlist of tracker. Clip Arranger werkt zoals een sessieweergave: een matrix van clips per spoor en per scène, plus een lineair song-arrangement erboven.

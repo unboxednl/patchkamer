@@ -45,9 +45,9 @@ const EN = {
 };
 const LEGACY_NAMES = ['Akkoorden', 'Bas', 'Puls', 'Bellen'];
 export default {
-  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.11.1', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
-  ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'transpose', name: 'Transpose' }, { id: 'live', name: 'Live' }], eventOut: [{ id: 'a', name: 'Track A' }, { id: 'b', name: 'Track B' }, { id: 'c', name: 'Track C' }, { id: 'd', name: 'Track D' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
-  i18n: { nl: { ports: { transpose: 'Transpositie', live: 'Live', a: 'Spoor A', b: 'Spoor B', c: 'Spoor C', d: 'Spoor D' } } },
+  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.13.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
+  ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'transpose', name: 'Transpose' }, { id: 'live', name: 'Live' }], eventOut: [{ id: 'a', name: 'Track A' }, { id: 'b', name: 'Track B' }, { id: 'c', name: 'Track C' }, { id: 'd', name: 'Track D' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiEventOut: [{ id: 'tracks', name: 'Tracks' }] },
+  i18n: { nl: { ports: { transpose: 'Transpositie', live: 'Live', a: 'Spoor A', b: 'Spoor B', c: 'Spoor C', d: 'Spoor D', tracks: 'Sporen' } } },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
     let mountHost = null, panel = null;
@@ -91,7 +91,10 @@ export default {
     let tick = null, held = new Map(), pending = new Map(), selNote = -1, roll = null, rollDirty = false, stopFrame = null, ro = null, selInfo = null, noteSliders = null, newVel = 0.8, newLen = 1;
     resolve();
     function reset() { localBar = 0; previousStep = -1; counters = [0, 0, 0, 0]; last = ''; queue = []; transposeNote = 0; gen = state.seed; tick = null; pending.clear(); }
-    function emit(port, e) { if (!dead) host.emit(self, port, e); }
+    function emit(port, e) { if (dead) return; host.emit(self, port, e); const i = PORTS.indexOf(port); if (i >= 0) host.emit(self, 'tracks', { ...e, track: port, ch: i + 1 }); }
+    let bundleSig = '';
+    const bundle = () => ({ label: 'Chord Sequencer', tracks: PORTS.map((p, i) => ({ id: p, name: (scenes[state.scene] && scenes[state.scene][i] && scenes[state.scene][i].name) || defaultName(i), ch: i + 1 })) });
+    function syncBundle() { if (dead || !self) return; const sig = JSON.stringify(bundle().tracks); if (sig !== bundleSig) { bundleSig = sig; if (typeof host.eventBundleChanged === 'function') host.eventBundleChanged(self, 'tracks'); } }
     function panic(t = ctx.currentTime) { for (const port of PORTS) emit(port, { type: 'allnotesoff', time: t }); held.clear(); }
     function consume(t) { while (queue.length && queue[0].time <= t) { const e = queue.shift(), type = cleanType(e); if (type === 'note' || type === 'noteon') transposeNote = clamp(Math.round(e.note) - 60, -36, 36); else if (type === 'panic' || type === 'allnotesoff') transposeNote = 0; } }
     function random() { gen = (Math.imul(gen, 1664525) + 1013904223) >>> 0; return gen / 4294967296; }
@@ -166,7 +169,7 @@ export default {
     }
     function syncNoteUI() { if (!noteSliders) return; const tr = curTrack(), x = selNote >= 0 ? tr.rec?.[selNote] : null; noteSliders.setEnabled(!!x); if (x) noteSliders.set(x[2], x[3] / gridUnit(tr)); if (selInfo) selInfo.textContent = x ? tx('noot {0} · positie {1}', x[1], x[0]) : tx('geen noot gekozen'); }
     function render(el) {
-      unmount(); mountUI(el, tx('CHORD SEQUENCER · akkoord- en patroonsequencer'), tx('Vier onafhankelijke sporen → vier synths. Alles volgt de klok van de studio.'));
+      syncBundle(); unmount(); mountUI(el, tx('CHORD SEQUENCER · akkoord- en patroonsequencer'), tx('Vier onafhankelijke sporen → vier synths. Alles volgt de klok van de studio.'));
       const top = row(panel);
       for (let i = 0; i < 4; i++) { const b = button(top, tx('Scène {0}', i + 1), () => launch(i)); if (i === state.scene) b.classList.add('active'); }
       select(top, tx('Scènewissel'), [['bar', tx('Volgende maat')], ['now', tx('Direct')]], state.launch, v => state.launch = v);
@@ -232,7 +235,7 @@ export default {
     function unmount() { if (stopFrame) { stopFrame(); stopFrame = null; } if (ro) { ro.disconnect(); ro = null; } if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); roll = null; noteSliders = null; selInfo = null; clearUI(); }
     const PRESET_SKIP = ['editTrack', 'editStep', 'record'];  // contract v1.6: werkstand, geen klank — een preset laat dit staan
     const self = {
-      inputs: {}, outputs: {}, mount: render, unmount() { infoText = null; stepButtons = []; unmount(); },
+      inputs: {}, outputs: {}, eventBundles: { tracks: () => bundle() }, mount: render, unmount() { infoText = null; stepButtons = []; unmount(); },
       onEvent(port, e) {
         try {
           if (dead || !Number.isFinite(e?.time)) return;

@@ -7,6 +7,7 @@ Hulpmiddelen om muziek te maken: spelen, opnemen, meten, notities maken en ander
 | Apparaat | Wat het doet | Map | Handleiding |
 |---|---|---|---|
 | **Keys / MIDI** | Een keyboard (scherm, computertoetsen of MIDI) dat noten naar andere apparaten stuurt | `Keys/` | [Keys / MIDI](../../docs/tools/USER-MANUAL_NL.md#keys--midi) |
+| **MIDI Hub** | Verbindt MIDI-bronnen en sequencersporen met apparaten en zet elke regelaar van een apparaat op een knop, schuif of pad van je MIDI-apparaat; bewaart koppelingen per apparaat | `MidiHub/` | [MIDI Hub](../../docs/tools/USER-MANUAL_NL.md#midi-hub) |
 | **Pad Controller** | Koppelt apparaten aan een raster van 40 pads (8 × 5) op een MIDI-controller; je kiest zelf de MIDI-ingang en de uitgang voor de lampjes | `PadController/` | [Pad Controller](../../docs/tools/USER-MANUAL_NL.md#pad-controller) |
 | **Recorder** | Neemt op wat er binnenkomt en geeft het ongewijzigd door; bewaart WAV, MP3 of WebM/MP4 | `Recorder/` | [Recorder](../../docs/tools/USER-MANUAL_NL.md#recorder) |
 | **Multitrack** | Neemt tot 16 sporen op uit een bundel, een WAV per spoor | `Multitrack/` | [Multitrack](../../docs/tools/USER-MANUAL_NL.md#multitrack) |
@@ -18,7 +19,7 @@ Hulpmiddelen om muziek te maken: spelen, opnemen, meten, notities maken en ander
 
 - Gebruikershandleiding van de tools: [docs/tools/USER-MANUAL_NL.md](../../docs/tools/USER-MANUAL_NL.md)
 - Basishandleiding: [docs/USER-MANUAL_NL.md](../../docs/USER-MANUAL_NL.md)
-- Presets voor tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets). De andere tools hebben er nog geen; het formaat en hoe je er zelf een maakt staan in [presets/](../../presets/README_NL.md)
+- Presets voor tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets) en [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) (MIDI Hub Basics, 15 presets). De andere tools hebben er nog geen; het formaat en hoe je er zelf een maakt staan in [presets/](../../presets/README_NL.md)
 
 ## Licentie
 

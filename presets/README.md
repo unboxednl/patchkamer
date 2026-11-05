@@ -4,7 +4,7 @@
 
 Ready-made settings for devices that make no sound of their own (effects, mixers, modulators, sequencers and other tools), saved as data. Choose one from the list on a device's card, or use a pack as the starting point for your own. Devices that make sound have [tunes](../tunes/README.md) instead.
 
-This folder has **39 packs with 1867 presets**, one pack per device: 12 for effects, 9 for mastering, 3 for the mixer, 6 for modulators, 8 for sequencers and 1 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
+This folder has **40 packs with 1882 presets**, one pack per device: 12 for effects, 9 for mastering, 3 for the mixer, 6 for modulators, 8 for sequencers and 2 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -71,10 +71,11 @@ This folder has **39 packs with 1867 presets**, one pack per device: 12 for effe
 | [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | 6 | [`step-sequencer.patchkamer-presets.json`](step-sequencer.patchkamer-presets.json) |
 | [Wanderer](../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | 9 | [`wanderer.patchkamer-presets.json`](wanderer.patchkamer-presets.json) |
 
-### Tools (1)
+### Tools (2)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
+| [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4 | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) |
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3 | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) |
 
 The folders inside each pack are listed in the manual: [Presets: user manual](../docs/presets/USER-MANUAL_EN.md).

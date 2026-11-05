@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de zeven **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de acht **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -15,6 +15,7 @@ Deze handleiding gaat over de zeven **tools** van Patchkamer. Tools zijn hulpmid
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
 | ideeën, toonsoort en een lijst met taken opschrijven | [Notes](#notes) | geen poorten |
+| een MIDI-keyboard en de sporen van een sequencer koppelen aan apparaten, en hun regelaars op knoppen van je keyboard zetten | [MIDI Hub](#midi-hub) | een eventingang **MIDI in**, een multi-MIDI-ingang **Sporen in** en een eventuitgang per apparaat |
 
 ## Hoe je tools aansluit
 
@@ -233,6 +234,72 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 **Tips en beperkingen.** De notities nemen maximaal 100.000 tekens en maximaal 200 taken van elk maximaal 500 tekens.
 
 ---
+
+## MIDI Hub
+
+### Waar het voor dient
+
+De MIDI Hub staat tussen je MIDI-bronnen en de apparaten in je werkruimte. Verbind een keyboard of controller (via **Keys / MIDI**) en een sequencer ermee, en de hub doet drie dingen:
+
+- Hij ziet welke apparaten er in de werkruimte staan en laat je ze toevoegen aan zijn **actieve apparaten**.
+- Per apparaat kies je **waar de noten vandaan komen**: het keyboard (alle kanalen of één MIDI-kanaal), of een spoor van een sequencer, met de spoornaam erbij.
+- Je kunt **elke regelaar op de kaart** van een apparaat (schuiven, draaiknoppen, lijsten, vinkjes en knoppen) koppelen aan een knop, schuif, pad of toets van je MIDI-apparaat. Je hoeft geen MIDI-nummer te kennen: druk op **Leer** en draai aan de knop.
+
+Je kunt een koppeling bewaren per soort apparaat, en als preset van de hub.
+
+![De kaart van de MIDI Hub](../images/nl/tools/midi-hub.png)
+
+### De regelaars
+
+| Regelaar | Wat hij doet |
+|---|---|
+| **Bronnen** | Toont of er MIDI-invoer binnenkomt, en de sporen van elke sequencer die met een multi-MIDI-kabel is verbonden (met spoornaam en kanaal). |
+| **Laatste invoer** | Het laatste bericht dat binnenkwam, bijvoorbeeld **CC 74 · ch 1 = 52%**. Draai aan een knop om te zien welk nummer hij heeft. |
+| **Apparaat toevoegen…** | Voegt een apparaat uit de werkruimte toe aan de actieve apparaten. De hub legt dan een kabel van zijn eigen uitgang naar dat apparaat. |
+| **×** (bovenaan een apparaat) | Haalt het apparaat uit de hub en haalt zijn kabel weg. |
+| **Ververs regelaars** | Leest de regelaars op de kaart van het apparaat opnieuw. Gebruik het nadat je een ander tabblad van het apparaat hebt geopend. |
+| **Noten van** | Een of meer bronnen voor de noten van dit apparaat: **Keyboard** (met **alle kanalen** of één **kanaal**), of **Spoor: sequencer › spoornaam (ch n)**. **+ bron** voegt er een toe. |
+| **Opnieuw verbinden** | Legt de kabel naar het apparaat opnieuw als je hem zelf hebt losgehaald. De hub legt hem nooit uit zichzelf terug. |
+| **Bibliotheek** | Bewaarde koppelingen voor dit soort apparaat: kies er een en **Laad**, of typ een naam en **Bewaar als…**. **Wis** verwijdert de gekozen. |
+| **+ koppeling** | Voegt een rij toe en start **Leer**. |
+| **Leer** | Draai aan een knop, beweeg een schuif, sla een pad of druk een toets op je MIDI-apparaat. Het eerste bericht dat binnenkomt is de bron van de rij (CC-nummer, noot, pitch bend of kanaaldruk, met zijn kanaal). |
+| **Regelaar** (lijst) | De regelaar op het apparaat die deze knop beweegt. De lijst toont elke schuif, knop, lijst, vinkje en knop van de kaart. |
+| **min** / **max** | Het deel van het bereik van de regelaar dat de knop beweegt, in procenten. Zet min op 20 en max op 80 om de regelaar in het midden te houden. |
+| **omkeren** | Draait de richting om. |
+| **wissel** | Alleen voor vinkjes: elke druk schakelt om. Zonder dit volgt het vinkje de knop (aan vanaf 50%). |
+| **Alles wissen** | Haalt alle koppelingen van dit apparaat weg. |
+
+Een gekoppelde knop van het keyboard wordt niet ook nog als CC-bericht naar het apparaat gestuurd, zodat je het niet dubbel krijgt. Noten en alle andere berichten gaan door als het apparaat een bron heeft.
+
+### Poorten
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **MIDI in** | event in | Verbind **Notes / CC** van **Keys / MIDI**, of een andere MIDI-bron. |
+| **Sporen in** | multi-MIDI in | Verbind de poort **Sporen** van een sequencer (Clip Arranger, Chord Sequencer, Pattern Tracker, Pattern Playlist). Je kunt meer dan één sequencer verbinden. |
+| **→ apparaat** | event uit | Eén per actief apparaat met een eventingang. De hub legt deze kabels zelf; het zijn gewone kabels die je kunt weghalen. |
+
+De multi-MIDI-kabel is een dubbele, gestreepte oranje kabel. Hij draagt alle sporen van een sequencer tegelijk, elk met zijn naam.
+
+### Een voorbeeld
+
+1. Plaats **Keys / MIDI**, **MIDI Hub**, **Acid Baselines** en **Speakers**. Verbind **Notes / CC** met **MIDI in** van de hub, en **Uit** van Acid Baselines met Speakers.
+2. Kies in de hub **Apparaat toevoegen…** › Acid Baselines. Het keyboard speelt hem nu.
+3. Klik op **+ koppeling**, draai aan een knop op je keyboard (de rij zegt bijvoorbeeld **CC 74 · ch 1**) en kies **Cutoff** in de lijst. De knop beweegt nu de cutoff.
+4. Typ **Mijn keyboard** bij **Bibliotheek** en klik op **Bewaar als…**. De volgende keer kies je hem en klik je op **Laad**.
+5. Een spoor van een sequencer op de synth spelen: verbind de poort **Sporen** van de sequencer met **Sporen in**, en kies bij **Noten van** **Spoor: … › Bass**. Haal de rij **Keyboard** weg als de synth alleen het spoor moet spelen.
+
+### Presets
+
+Het pack **MIDI Hub Basics** heeft 15 presets in vier mappen: **Sound Controllers**, **Wheels and Pedals**, **Effects** en **Utility**. Een preset wordt op elk apparaat in de hub toegepast en vindt de regelaars op hun naam (Cutoff, Resonance, Attack enzovoort). Een regelaar die een apparaat niet heeft, wordt overgeslagen en staat als *niet gevonden*. Een preset vervangt alleen de koppelingen; hij verandert de bronnen en de kabels niet. Zie [Presets](../presets/USER-MANUAL_NL.md).
+
+### Tips en beperkingen
+
+- De namen van de regelaars zijn de labels op de kaart. Een koppeling die je in de ene taal van Patchkamer maakte, vindt dus zijn regelaars op hetzelfde label in die taal.
+- Verandert een apparaat zijn kaart (bijvoorbeeld een ander tabblad), druk dan op **Ververs regelaars**. Een koppeling waarvan de regelaar weg is, staat als *niet gevonden* en doet niets.
+- Web MIDI werkt in Chrome en Edge, en pas nadat je in **Keys / MIDI** op **MIDI verbinden** klikt. De hub zelf opent geen MIDI.
+- De hub verandert niets als je een werkruimte opent of een kabel verbindt: hij reageert alleen op wat je speelt en indrukt.
+- De hub speelt geen geluid.
 
 ## Als het niet werkt
 

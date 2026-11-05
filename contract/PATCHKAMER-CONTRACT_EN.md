@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.12 for building agents
+# Patchkamer — Instrument contract v1.13 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -21,6 +21,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.10 | File name `*.patchkamer-device.js` for devices (§2, §16): without a manifest the host now only looks for these files, the validator warns about any other name |
 | v1.11 | Language and audio: `host.lang` (`'nl'` or `'en'`) and `host.audio` (`sampleRate`, `quality`, `oversample`, `latency`) for devices; optional `i18n` on the definition for names per language (§2, §12c). The contract and the validator are bilingual (Dutch and English) |
 | v1.12 | Mastering: a cable kind of its own (yellow, dotted sine) with triangle ports `masteringIn`/`masteringOut`; `configureMastering` and `onMasteringTargets`; `host.mastering` for a Master Director that sets the settings of mastering devices together (§11b) |
+| v1.13 | Multi-MIDI and controls: a cable kind of its own (double dashed orange cable) with `multiEventIn`/`multiEventOut`, `eventBundles`, `onEventBundle` and `host.eventBundleChanged`; the optional fields `ch` and `cc` on events; `host.controls` and `host.setControl` to see and set the controls of other devices (§11c) |
 
 ---
 
@@ -42,12 +43,13 @@ Whether your device gets tunes or presets follows from its `kind`. Workspace and
 ## 1. What Patchkamer is
 
 - A web page (the **host**) with a **floor** on which devices stand as cards, connected with cables.
-- Five kinds of cables:
+- Six kinds of cables:
   - **audio** (cyan): AudioNode → AudioNode;
   - **events** (orange): notes, trigs and CC as small JSON objects;
   - **modulation** (purple): a modulator shifts parameters of another device;
   - **bundle** (thick, green): many audio channels at once, each with a name.
   - **mastering** (yellow, dotted sine): a Master Director sets the settings of mastering devices (§11b).
+  - **multi-MIDI** (double dashed orange): many tracks with a name in one cable, for example all tracks of a sequencer (§11c).
 - One shared **clock** (BPM, swing). The host schedules every sixteenth note ahead of time and reports it to every device that wants to know.
 - Devices are **ES modules**. Everything the module needs is in that one file: no imports, no network, no external files.
 - Every card has a **preset bar**. The host saves and restores presets with the state of the device (§13).
@@ -80,6 +82,8 @@ export default {
     multiOut: [],                // bundle out (v1.5)
     masteringIn:  [],            // mastering in: target of a Master Director (v1.12)
     masteringOut: [],            // mastering out: a Master Director only (v1.12)
+    multiEventIn:  [],           // multi-MIDI in: a receiver of tracks (v1.13)
+    multiEventOut: [],           // multi-MIDI out: a source of tracks (v1.13)
   },
   create(ctx, host) { /* ... */ return instance; }
 };
@@ -97,10 +101,10 @@ export default {
 
 ## 3. Ports
 
-- All ten lists may be empty or absent. Port ids are unique within their list and consist of `[a-z0-9_-]`.
+- All twelve lists may be empty or absent. Port ids are unique within their list and consist of `[a-z0-9_-]`.
 - Every `audioIn` port has an AudioNode in `instance.inputs`, every `audioOut` port an AudioNode in `instance.outputs`, with the same id.
 - **Ports that change (v1.2).** `host.setPorts(this, ports)` replaces your port list while your device is running, for example when the user chooses more channels. First put the new AudioNodes in `inputs`/`outputs` and then call `setPorts`. Cables to ports that disappear are detached by the host.
-- **Ports in your own UI (v1.2).** With `ui: { jacks: true }` the host does not draw a port row. You then place every port yourself with `host.ui.jack(this, parent, portId, 'in' | 'out', label)`. This works for all five kinds of cables.
+- **Ports in your own UI (v1.2).** With `ui: { jacks: true }` the host does not draw a port row. You then place every port yourself with `host.ui.jack(this, parent, portId, 'in' | 'out', label)`. This works for all six kinds of cables.
 
 ---
 
@@ -154,6 +158,7 @@ Send with `host.emit(this, 'portId', ev)`. The port must be in `eventOut`. You r
 { type: 'note', note: 60, vel: 0.8, time, dur }    // MIDI note number, velocity 0..1, duration in seconds
 { type: 'trig', vel: 0.9, time, lane: 'kick' }     // a hit; lane says which voice
 { type: 'cc', id: 'cutoff', value: 0.5, time }     // a value 0..1 on a name
+// Optional on note, trig and cc (v1.13): ch = MIDI channel 1..16; on cc also cc = controller number 0..127. Ignore unknown fields.
 ```
 
 - `time` is always AudioContext time. Schedule at `time`, not at the moment of receipt.
@@ -313,6 +318,41 @@ onBundle(portId, key, bundle) { ... }
 
   `targetIds` limits the action to targets on your cables; if it is missing, that is all of them. The host returns `{ changed, results: [{ id, name, ok, reason, changed, skipped, report }] }`, or `{ error: 'text' }` in the user's language. `changed` counts the devices that changed something. For `apply` and `accept` the host only looks at devices on your cables and not at others.
 - **Follow the user.** Change nothing on load, on connecting or when the workspace is restored; only after an action by the user. Put only what the user chose in the director's `getState` (style, situation, strength), no targets and no cables.
+
+---
+
+## 11c. Multi-MIDI and controls of other devices (v1.13)
+
+Three things for sequencers and controllers: two optional fields on events, a cable that carries many tracks at once, and a way to set the controls of other devices.
+
+**The fields `ch` and `cc`.** `note`, `trig` and `cc` may have `ch`: the MIDI channel, an integer from 1 to 16. `cc` may also have `cc`: the MIDI controller number, 0 to 127. A MIDI input sets them as the hardware sends them. A sequencer sets `ch` on the events of its multi-MIDI port to the channel of the track (the track number by default). A device that does not know the fields ignores them.
+
+**The multi-MIDI cable.** A double, dashed orange cable that carries all tracks of a source at once, each with an id and a name.
+
+- **Ports.** `ports.multiEventOut` (the source) and `ports.multiEventIn` (the receiver). A multi-MIDI output only fits a multi-MIDI input.
+- **Source.** Give `eventBundles`: per port a function (or an object) with the tracks. Call `host.eventBundleChanged(this, portId)` when a name or the number of tracks changes.
+
+```js
+eventBundles: {
+  tracks: () => ({ label: 'My sequencer', tracks: [{ id: 'a', name: 'Bass', ch: 1 }, { id: 'b', name: 'Lead', ch: 2 }] }),
+},
+// a note on track a:
+host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, track: 'a', ch: 1 });
+```
+
+  Every event on a multi-MIDI port carries `track`: the id from the list. You may also keep sending the same events on your ordinary `eventOut` ports; the multi-MIDI cable is an extra.
+- **Receiver.** `onEventBundle(portId, key, bundle)` receives `{ key, source: { id, port, name }, label, tracks: [{ id, name, ch }] }`, and `null` when the cable is removed. `ch` is 0 if the track has no channel. The events arrive in `onEvent(portId, ev)` with `track` and `bundle` (the key of the bundle).
+
+**Controls of other devices.** For controllers (§13b). The host finds all controls on the card of another device, also in open shadow roots; that device does not have to do anything.
+
+| Call | What |
+|---|---|
+| `host.controls(this, targetId)` | A list `{ key, label, type, … }`: `type` is `'range'` (with `min`, `max`, `step`, `value`, `scale`), `'select'` (with `options: [{ value, text }]`), `'check'` or `'button'`. `scale` is `'log'` for a knob from `host.ui.knob` with `{ scale: 'log' }` and otherwise `'lin'`. |
+| `host.setControl(this, targetId, key, value)` | Sets the control. `value` is 0..1: a slider or knob gets that part of its range (logarithmic if `scale` is `'log'`), a list gets the option at that position, a checkbox is on from 0.5 and a button is pressed from 0.5. Returns `true` if the control is there. |
+
+- The `key` has the form `type|name#n` and stays the same as long as the card has the same controls. Keep keys in your state, but expect them to be gone when the target device changes its UI; `setControl` then returns `false`. Ask for `controls` again on `onPeers`.
+- You cannot control yourself. An unknown device or key gives `[]` or `false`.
+- The user stays in charge: the control moves visibly and the user can still turn it by hand.
 
 ---
 
@@ -534,7 +574,7 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ```json
 { "format": "patchkamer-song", "formatVersion": 1, "title": "Night flight", "author": "…", "license": "CC-BY-4.0",
-  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.12",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.13",
   "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
                  "devices": [ ], "cables": [ ], "bpm": 126 } }
 ```
@@ -583,6 +623,9 @@ Rules: `setPart(id, getPart(id))` leaves the setting unchanged, and `setPart(a, 
 | `host.peers(this)`, `onPeers(list)` | v1.7 | See other devices (read-only) (§13b) |
 | `host.connect / disconnect / cablesFrom` | v1.7 | Lay, remove and query cables from your own outputs (§13b) |
 | `host.mastering(this, action, options)` | v1.12 | A Master Director directs the devices on its mastering cables (§11b) |
+| `host.eventBundleChanged(this, port)` | v1.13 | The tracks of your multi-MIDI port have changed (§11c) |
+| `host.controls(this, targetId)` | v1.13 | The controls on the card of another device (§11c) |
+| `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -629,7 +672,7 @@ node validate-instrument.mjs my-device.patchkamer-device.js --lang en   # output
 The validator loads your module with a fake AudioContext, a fake DOM (with shadow roots) and a fake host. It ends with one `OK` line (exit 0) or with the first error (exit 1). It checks:
 
 1. **File**: file name `*.patchkamer-device.js` (any other name gives a warning, not an error); default export with `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; valid `category` and `ui`; no `ctx.destination` (except for `output`), no browser storage, no network, no imports, no own AudioContext.
-2. **Ports**: all ten lists, valid and unique ids, an AudioNode per audio port, `setPorts` with nodes ready, `jack` only for existing ports, `ui.jacks` only together with at least one `jack`.
+2. **Ports**: all twelve lists, valid and unique ids, an AudioNode per audio port, `setPorts` with nodes ready, `jack` only for existing ports, `ui.jacks` only together with at least one `jack`.
 3. **Life cycle**: `create` → `getState` before `mount` → `mount` → two bars of `onStep` → every event type plus an unknown type → `onTransport` → `getState`/`setState` round → `setState({})` → `destroy` twice; `emit` only on own `eventOut` ports.
 4. **Modulation (v1.3)**: `params` and `modulate` together; valid parameter list; `modulate` with +1, −1, 0.37, unknown ids and `{}`. A modulator has `modOut` (with `onModTargets`) or `masteringOut`; it first receives `[]` and then targets twice.
 5. **Fast and worklets (v1.4)**: `fast: true` requires `modInput(id)` with an AudioNode or AudioParam, and `null` for unknown ids; `host.modSignal` receives a real AudioNode; `host.loadWorklet` receives a name and code with `registerProcessor(...)`.
@@ -640,6 +683,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 10. **Instruments (v1.9)**: if the instance has `parts`, then also `getPart` and `setPart`; every instrument a unique `id` and a `name`; `getPart` gives JSON; `setPart(id, getPart(id))` leaves the setting the same; setting crosswise takes over the sound and touches no other instrument.
 11. **Language and audio (v1.11)**: an optional `i18n` is an object with, per language, a `name` and/or `ports` (port id → name) of existing ports; `host.lang` and `host.audio` are present; the whole device is run through twice, with `host.lang` `'nl'` and `'en'`, and an error in either branch is an error.
 12. **Mastering (v1.12)**: a device with `masteringIn` has `configureMastering(patch)` (and optionally `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); they receive `{}`, `null` and unknown or invalid fields and return an object (or nothing), and `getMasteringReport` returns JSON without AudioNodes. A device with `masteringOut` has `onMasteringTargets(targets)`; it receives `[]`, a list with one target (twice) and `[]` again. The fake host checks `host.mastering` for a known action and an existing `masteringOut` port. A modulator has `modOut` or `masteringOut`.
+13. **Multi-MIDI (v1.13)**: a device with `multiEventOut` has `eventBundles[portId]` with a list `tracks` (unique text ids, a `name`, an optional `ch` from 1 to 16); a device with `multiEventIn` has `onEventBundle`; it receives a bundle, the same key with another track added, and then `null`. Events with `ch` or `cc` have values in range; on a multi-MIDI port every event carries a `track` from the list. The fake host knows `host.eventBundleChanged`, `host.controls` and `host.setControl`.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -700,7 +744,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.12
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.13
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -759,7 +803,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.12
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.13
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -822,7 +866,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.12
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.13
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -900,7 +944,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.12.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.13.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

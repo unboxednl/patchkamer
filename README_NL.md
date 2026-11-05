@@ -38,7 +38,7 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en e
 | **Mastering** | Een mix afmaken: toon, dynamiek, saturatie, breedte, volume en controle, voor veel stijlen en situaties | Balance EQ, Multiband Balance, Bus Compressor, Patina, Stereo Space, Master Chain, Mix Check, Master Director, Listening Output | [devices/mastering](devices/mastering/README_NL.md) | [Mastering](docs/mastering/USER-MANUAL_NL.md) |
 | **Mixer** | Binnenhalen, mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers, Audio Input, Audio Output | [devices/mixer](devices/mixer/README_NL.md) | [Mixer](docs/mixer/USER-MANUAL_NL.md) |
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [devices/modulators](devices/modulators/README_NL.md) | [Modulatoren](docs/modulators/USER-MANUAL_NL.md) |
-| **Tools** | Spelen, opnemen, meten en notities maken | Keys / MIDI, Metronome, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README_NL.md) | [Tools](docs/tools/USER-MANUAL_NL.md) |
+| **Tools** | Spelen, opnemen, meten en notities maken | Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Scope | [devices/tools](devices/tools/README_NL.md) | [Tools](docs/tools/USER-MANUAL_NL.md) |
 
 ## Kant-en-klare klanken en instellingen
 
@@ -55,7 +55,7 @@ Een apparaat is één `.patchkamer-device.js`-bestand. Het **contract** zegt pre
 node contract/validate-instrument.mjs devices/synths/Duofone/duofone.patchkamer-device.js
 ```
 
-Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waar hij de bestanden neerzet en wat hij moet controleren. Het huidige contract is **v1.12**. Elke versie heeft een tag (`contract/vX.Y`).
+Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waar hij de bestanden neerzet en wat hij moet controleren. Het huidige contract is **v1.13**. Elke versie heeft een tag (`contract/vX.Y`).
 
 ## Wat er in deze repository staat
 

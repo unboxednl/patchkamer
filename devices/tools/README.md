@@ -7,6 +7,7 @@ Helpers for making music: play, record, measure, take notes and control other de
 | Device | What it does | Folder | Manual |
 |---|---|---|---|
 | **Keys / MIDI** | A keyboard (screen, computer keys or MIDI) that sends notes to other devices | `Keys/` | [Keys / MIDI](../../docs/tools/USER-MANUAL_EN.md#keys--midi) |
+| **MIDI Hub** | Connects MIDI sources and sequencer tracks to devices, and puts any control of a device on a knob, slider or pad of your MIDI device; saves mappings per device | `MidiHub/` | [MIDI Hub](../../docs/tools/USER-MANUAL_EN.md#midi-hub) |
 | **Pad Controller** | Links devices to a grid of 40 pads (8 × 5) on a MIDI controller; you choose the MIDI input and the output for the lights | `PadController/` | [Pad Controller](../../docs/tools/USER-MANUAL_EN.md#pad-controller) |
 | **Recorder** | Records what comes in and passes it on unchanged; saves WAV, MP3 or WebM/MP4 | `Recorder/` | [Recorder](../../docs/tools/USER-MANUAL_EN.md#recorder) |
 | **Multitrack** | Records up to 16 tracks from a bundle, one WAV per track | `Multitrack/` | [Multitrack](../../docs/tools/USER-MANUAL_EN.md#multitrack) |
@@ -18,7 +19,7 @@ Helpers for making music: play, record, measure, take notes and control other de
 
 - User manual for the tools: [docs/tools/USER-MANUAL_EN.md](../../docs/tools/USER-MANUAL_EN.md)
 - Main manual: [docs/USER-MANUAL_EN.md](../../docs/USER-MANUAL_EN.md)
-- Presets for tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets). The other tools have none yet; the format and how to make your own are in [presets/](../../presets/README.md)
+- Presets for tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets) and [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) (MIDI Hub Basics, 15 presets). The other tools have none yet; the format and how to make your own are in [presets/](../../presets/README.md)
 
 ## License
 

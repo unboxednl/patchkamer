@@ -170,6 +170,7 @@ De regel onder de regelaars toont de scène en het tempo in BPM, bijvoorbeeld "S
 | **Live** | eventingang | Een toetsenbord om op te spelen en in te spelen. De noten gaan naar de uitgang van het bewerkte spoor. Niet getransponeerd. |
 | **Mod** | modulatie-ingang | Een modulator. Die kan de **Gate**, **Velocity** en **Transpositie** van elk spoor bewegen. |
 | **Spoor A** … **Spoor D** | eventuitgangen | Elk gaat naar de notenpoort van de synth die dat spoor speelt. |
+| **Sporen** | multi-MIDI uit | Alle sporen in één dubbele gestreepte oranje kabel, met de spoornamen. Verbind hem met **Sporen in** van de [MIDI Hub](../tools/USER-MANUAL_NL.md#midi-hub). |
 
 Er zijn geen audiopoorten.
 
@@ -515,6 +516,7 @@ Pattern Playlist bouwt een song in **lagen**, zoals een producerprogramma. Elke 
 |---|---|---|
 | **Live noten / CC** | eventingang | Een toetsenbord (**Keys**), om live door het gekozen spoor te spelen en in te spelen. |
 | **Spoor 1** … **Spoor 8** | eventuitgangen | Eén per spoor, naar een synth of drumcomputer. Met **Aantal tracks** krijg je er tot 32. |
+| **Sporen** | multi-MIDI uit | Alle sporen in één dubbele gestreepte oranje kabel, met de spoornamen. Verbind hem met **Sporen in** van de [MIDI Hub](../tools/USER-MANUAL_NL.md#midi-hub). |
 
 #### Een voorbeeld
 
@@ -563,6 +565,7 @@ Het bovenste deel, de patronenbank, de patroon-editor, de celinspecteur, het spo
 |---|---|---|
 | **Live noten / CC** | eventingang | Een toetsenbord (**Keys**), om door het gekozen spoor te spelen en in te spelen. |
 | **Spoor 1** … **Spoor 8** | eventuitgangen | Eén per spoor, naar een synth of drumcomputer. Tot 32 met **Aantal tracks**. |
+| **Sporen** | multi-MIDI uit | Alle sporen in één dubbele gestreepte oranje kabel, met de spoornamen. Verbind hem met **Sporen in** van de [MIDI Hub](../tools/USER-MANUAL_NL.md#midi-hub). |
 
 #### Een voorbeeld
 
@@ -617,6 +620,7 @@ Clip Arranger werkt als een sessieweergave. Per spoor (1 tot 16) zijn er 8 **cli
 |---|---|---|
 | **MIDI / opname** | eventingang | Een toetsenbord (**Keys**), om door het gekozen spoor te spelen en in de gekozen clip in te spelen. |
 | **Track 1** … **Track 16** | eventuitgangen | Eén per spoor, naar een synth, drone of drumcomputer. |
+| **Sporen** | multi-MIDI uit | Alle sporen in één dubbele gestreepte oranje kabel, met de spoornamen. Verbind hem met **Sporen in** van de [MIDI Hub](../tools/USER-MANUAL_NL.md#midi-hub). |
 
 #### Een voorbeeld
 

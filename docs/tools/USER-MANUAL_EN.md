@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the seven **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the eight **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -15,6 +15,7 @@ This manual covers the seven **tools** of Patchkamer. Tools are helpers: you use
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
 | write down ideas, the key and a to-do list | [Notes](#notes) | no ports |
+| connect a MIDI keyboard and the tracks of a sequencer to devices, and put their knobs on your keyboard knobs | [MIDI Hub](#midi-hub) | a **MIDI in** event in, a **Tracks in** multi-MIDI in, and an event out per device |
 
 ## How you connect tools
 
@@ -233,6 +234,72 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 **Tips and limits.** The notes hold up to 100,000 characters and up to 200 tasks of up to 500 characters each.
 
 ---
+
+## MIDI Hub
+
+### What it is for
+
+The MIDI Hub sits between your MIDI sources and the devices in your workspace. Connect a keyboard or controller (through **Keys / MIDI**) and a sequencer to it, and the hub does three things:
+
+- It sees which devices are in the workspace and lets you add them to its **active devices**.
+- For each device you choose **where the notes come from**: the keyboard (all channels or one MIDI channel), or a track of a sequencer, shown with the track name.
+- It lets you put **every control on the card** of a device (sliders, knobs, lists, tick boxes and buttons) on a knob, slider, pad or key of your MIDI device. You do not have to know a MIDI number: press **Learn** and turn the knob.
+
+You can save a mapping for each kind of device, and as a preset of the hub.
+
+![The MIDI Hub card](../images/en/tools/midi-hub.png)
+
+### The controls
+
+| Control | What it does |
+|---|---|
+| **Sources** | Shows if MIDI input arrives, and the tracks of every sequencer that is connected with a multi-MIDI cable (with track name and channel). |
+| **Last input** | The last message that came in, for example **CC 74 · ch 1 = 52%**. Turn a knob to see which number it is. |
+| **Add a device…** | Adds a device of the workspace to the active devices. The hub then puts a cable from its own output to that device. |
+| **×** (top of a device) | Removes the device from the hub and takes its cable away. |
+| **Refresh controls** | Reads the controls on the card of the device again. Use it after you opened another tab of the device. |
+| **Notes from** | One or more sources for the notes of this device: **Keyboard** (with **all channels** or one **channel**), or **Track: sequencer › track name (ch n)**. **+ source** adds one. |
+| **Reconnect** | Lays the cable to the device again when you removed it yourself. The hub never puts it back by itself. |
+| **Library** | Saved mappings for this kind of device: pick one and **Load**, or type a name and **Save as…**. **Delete** removes the picked one. |
+| **+ mapping** | Adds a row and starts **Learn**. |
+| **Learn** | Turn a knob, move a slider, hit a pad or press a key on your MIDI device. The first message that arrives is the source of the row (CC number, note, pitch bend or channel pressure, with its channel). |
+| **Control** (list) | The control on the device that this knob moves. The list shows every slider, knob, list, tick box and button of the card. |
+| **min** / **max** | The part of the control's range that the knob moves, in percent. Set min 20 and max 80 to keep the control in the middle. |
+| **invert** | Turns the direction round. |
+| **toggle** | Only for tick boxes: every press switches. Without it the box follows the knob (on from 50%). |
+| **Clear all** | Removes all mappings of this device. |
+
+A knob on the keyboard that is mapped is not sent on to the device as a CC message, so you do not get it twice. Notes and all other messages pass through when the device has a source.
+
+### Ports
+
+| Port | Kind | Use |
+|---|---|---|
+| **MIDI in** | event in | Connect **Notes / CC** of **Keys / MIDI**, or another MIDI source. |
+| **Tracks in** | multi-MIDI in | Connect the **Tracks** port of a sequencer (Clip Arranger, Chord Sequencer, Pattern Tracker, Pattern Playlist). You can connect more than one sequencer. |
+| **→ device** | event out | One per active device that has an event input. The hub lays these cables itself; they are normal cables that you can remove. |
+
+The multi-MIDI cable is a double, dashed orange cable. It carries all tracks of a sequencer at once, each with its name.
+
+### An example
+
+1. Place **Keys / MIDI**, **MIDI Hub**, **Acid Baselines** and **Speakers**. Connect **Notes / CC** to **MIDI in** of the hub, and **Out** of Acid Baselines to Speakers.
+2. In the hub, choose **Add a device…** › Acid Baselines. The keyboard now plays it.
+3. Click **+ mapping**, turn a knob on your keyboard (the row says for example **CC 74 · ch 1**) and pick **Cutoff** in the list. The knob now moves the cutoff.
+4. Type **My keyboard** under **Library** and click **Save as…**. The next time you can pick it and **Load** it.
+5. To play a track of a sequencer on the synth: connect the sequencer **Tracks** port to **Tracks in**, and in **Notes from** pick **Track: … › Bass**. Remove the **Keyboard** row if the synth must only play the track.
+
+### Presets
+
+The **MIDI Hub Basics** pack has 15 presets in four folders: **Sound Controllers**, **Wheels and Pedals**, **Effects** and **Utility**. A preset is applied to every device in the hub and finds the controls by their name (Cutoff, Resonance, Attack and so on). A control a device does not have is skipped and shown as *not found*. A preset only replaces the mappings; it does not change the sources or the cables. See [Presets](../presets/USER-MANUAL_EN.md).
+
+### Tips and limits
+
+- The names of the controls are the labels on the card, so a mapping made in one language of Patchkamer finds its controls by the same label in that language.
+- If a device changes its card (for example another tab), press **Refresh controls**. A mapping whose control is gone is shown as *not found* and does nothing.
+- Web MIDI works in Chrome and Edge, and only after you click **Connect MIDI** in **Keys / MIDI**. The hub itself does not open MIDI.
+- The hub changes nothing when you open a workspace or connect a cable: it only reacts to what you play and press.
+- The hub does not play audio.
 
 ## If it does not work
 
