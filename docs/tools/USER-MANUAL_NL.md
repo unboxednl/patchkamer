@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de zes **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen klankbronnen en geen effecten. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de zeven **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -13,6 +13,7 @@ Deze handleiding gaat over de zes **tools** van Patchkamer. Tools zijn hulpmidde
 | de afgewerkte mix (of ander geluid) in één bestand opnemen | [Recorder](#recorder) | audio **In** en **Door** |
 | veel sporen tegelijk opnemen, een bestand per spoor | [Multitrack](#multitrack) | een **Bundel**-ingang |
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
+| een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
 | ideeën, toonsoort en een lijst met taken opschrijven | [Notes](#notes) | geen poorten |
 
 ## Hoe je tools aansluit
@@ -20,9 +21,10 @@ Deze handleiding gaat over de zes **tools** van Patchkamer. Tools zijn hulpmidde
 - **Keys / MIDI** en **Pad Controller** sturen *events* (noten). Hun oranje eventpoorten sluit je aan op de noteningang van een synth, een sampler of een arpeggiator.
 - **Recorder** en **Scope** zijn audioapparaten die het geluid ongewijzigd doorlaten. Zet ze in het audiopad, bijvoorbeeld tussen de Mixer en Speakers. Je kunt ze ook aan het eind van een kabel hangen die verder gaat naar andere apparaten.
 - **Multitrack** luistert naar een *bundel* (de dikke groene kabel met veel kanalen) en geeft het geluid niet door. Hij hangt naast de Mixer, niet in het pad.
+- **Metronome** heeft een audio-uitgang (de tik) en een eventuitgang (**Trigs**). Sluit **Uit** aan op je mixer om de tik te horen, en **Trigs** op een drumcomputer of sampler om die op de slagen te laten spelen.
 - **Notes** sluit je nergens op aan.
 
-Geen van deze tools verandert je geluid: ze spelen, kijken, nemen op of noteren.
+Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze spelen, kijken, nemen op of noteren.
 
 ---
 
@@ -186,6 +188,28 @@ Geen van deze tools verandert je geluid: ze spelen, kijken, nemen op of noteren.
 
 ---
 
+## Metronome
+
+**Waar het voor dient.** Een tik die de maat houdt met de klok van de studio: een korte piep op elke maat, tel, achtste of zestiende. Gebruik hem om in de maat te oefenen of op te nemen, of laat dezelfde slagen meespelen met een drumcomputer of sampler. De eerste stap van elke maat is luider en hoger dan de andere tikken.
+
+![De kaart van Metronome](../images/nl/tools/metronome.png)
+
+**Regelaars**
+
+- **Elke** kiest hoe vaak er een tik klinkt: elke **maat**, **tel**, **8e** of **16e**. Het begin is **tel**.
+- **Niveau** (0 tot 100%, begin 50%) is het volume van de tik op de audio-uitgang.
+- **Stap** toont de 16 stappen van de maat en verlicht de huidige stap zolang de klok loopt.
+
+**Poorten.** Twee uitgangen en geen ingangen. **Uit** is de tik als audio (groenblauw). **Trigs** (oranje) stuurt bij elke tik een trig, zodat een drumcomputer of een sampler op dezelfde slagen kan spelen. De trig op de eerste stap van de maat is sterker dan de andere. De regelaar **Niveau** werkt alleen op **Uit**, niet op **Trigs**.
+
+**Voorbeeldpatch.** Plaats Metronome, een **Mixer** en **Speakers**. Verbind **Uit** van Metronome met een ingang van de Mixer en **Uit** van de Mixer met **In** op Speakers. Druk op **Start**: je hoort een tik op elke tel, met een hogere op de eerste tel van elke maat. Kies in de presets **Practice › Bar Only Quiet** voor een zachte tik één keer per maat. Wil je een drum op de slagen laten spelen, verbind dan ook **Trigs** met een drumcomputer.
+
+**Presets.** Het pack **Metronome Basics** heeft 9 presets in drie mappen: **Practice** (Bar Only, Bar Only Quiet, Quarter Beats, Quarter Beats Quiet), **Subdivisions** (Eighth Notes, Eighth Notes Quiet, Sixteenth Ticks) en **Loud** (Quarter Beats Loud, Stage Click). Het bestand is [`presets/metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met het menu **Presets ▾** → **Importeren…**. Een preset bevat **Elke** en **Niveau**.
+
+**Tips en beperkingen.** Metronome tikt alleen terwijl de klok loopt (na **Start**); hij volgt het tempo van de studio en heeft geen eigen tempo. Een tik is een korte sinuspiep van 1000 Hz (1600 Hz op de eerste stap van de maat). Niet beluisterd: stel **Niveau** op het gehoor in, bijvoorbeeld met een koptelefoon.
+
+---
+
 ## Notes
 
 **Waar het voor dient.** Een notitieblok op de vloer voor ideeën, de toonsoort, de structuur en wat je nog wilt doen. Het maakt geen geluid en heeft geen poorten; de tekst wordt met de werkruimte of song bewaard.
@@ -217,4 +241,5 @@ Geen van deze tools verandert je geluid: ze spelen, kijken, nemen op of noteren.
 - **De computertoetsen doen niets.** Klik eerst op de piano op de kaart; de toetsen werken alleen als de kaart focus heeft en niet terwijl je in een veld typt.
 - **Pad Controller speelt noten in plaats van de pads te gebruiken.** Kies **pads + knoppen** voor die MIDI-ingang voordat je pads indrukt. Kies voor de lampjes een uitgang bij **lampjes naar**.
 - **Recorder of Multitrack neemt stilte op.** Recorder heeft geluid op **In** nodig. Multitrack heeft een bundel op **Bundel** nodig en een bron op elk gearmd spoor (**— geen** neemt niets op). Controleer of je op **Start** hebt gedrukt.
+- **Metronome tikt niet.** Hij tikt alleen terwijl de klok loopt: druk op **Start**. Sluit **Uit** aan op een mixer of op Speakers.
 - **MP3 kan niet.** Je sample rate wordt door MP3 niet ondersteund. Kies WAV, of verander de sample rate onder Instellingen.

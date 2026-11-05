@@ -4,7 +4,7 @@
 
 Ready-made settings for devices that make no sound of their own (effects, mixers, modulators, sequencers and other tools), saved as data. Choose one from the list on a device's card, or use a pack as the starting point for your own. Devices that make sound have [tunes](../tunes/README.md) instead.
 
-This folder has **15 packs with 238 presets**, one pack per device. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Chord Sequencer Styles** pack is the only one for a sequencer: 60 presets in 11 style folders, each filling four tracks and four scenes. The column **Folders** is the number of folders in the pack; their names are in the manual.
+This folder has **37 packs with 1820 presets**, one pack per device: 12 for effects, 9 for mastering, 1 for the mixer, 6 for modulators, 8 for sequencers and 1 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -25,23 +25,55 @@ This folder has **15 packs with 238 presets**, one pack per device. The **Effect
 | [Tremolo](../devices/effects/Tremolo/) | Tremolo Basics | 13 | 4 | [`tremolo.patchkamer-presets.json`](tremolo.patchkamer-presets.json) |
 | [Vocoder](../devices/effects/Vocoder/) | Vocoder Basics | 14 | 4 | [`vocoder.patchkamer-presets.json`](vocoder.patchkamer-presets.json) |
 
+### Mastering (9)
+
+| Device | Pack | Presets | Folders | File |
+|---|---|---|---|---|
+| [Balance EQ](../devices/mastering/BalanceEQ/) | Balance EQ Situations and Styles | 128 | 10 | [`balance-eq.patchkamer-presets.json`](balance-eq.patchkamer-presets.json) |
+| [Bus Compressor](../devices/mastering/BusCompressor/) | Bus Compressor Situations and Styles | 128 | 10 | [`bus-compressor.patchkamer-presets.json`](bus-compressor.patchkamer-presets.json) |
+| [Listening Output](../devices/mastering/ListeningOutput/) | Listening Output Levels | 5 | 1 | [`listening-output.patchkamer-presets.json`](listening-output.patchkamer-presets.json) |
+| [Master Chain](../devices/mastering/MasterChain/) | Master Chain Situations and Styles | 128 | 10 | [`master-chain.patchkamer-presets.json`](master-chain.patchkamer-presets.json) |
+| [Master Director](../devices/mastering/MasterDirector/) | Master Director Situations and Styles | 128 | 10 | [`master-director.patchkamer-presets.json`](master-director.patchkamer-presets.json) |
+| [Mix Check](../devices/mastering/MixCheck/) | Mix Check Monitoring | 18 | 2 | [`mix-check.patchkamer-presets.json`](mix-check.patchkamer-presets.json) |
+| [Multiband Balance](../devices/mastering/MultibandBalance/) | Multiband Balance Situations and Styles | 128 | 10 | [`multiband-balance.patchkamer-presets.json`](multiband-balance.patchkamer-presets.json) |
+| [Patina](../devices/mastering/Patina/) | Patina Situations and Styles | 128 | 10 | [`patina.patchkamer-presets.json`](patina.patchkamer-presets.json) |
+| [Stereo Space](../devices/mastering/StereoSpace/) | Stereo Space Situations and Styles | 128 | 10 | [`stereo-space.patchkamer-presets.json`](stereo-space.patchkamer-presets.json) |
+
 ### Mixer (1)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
 | [Leveler](../devices/mixer/Leveler/) | Leveler Basics | 11 | 3 | [`leveler.patchkamer-presets.json`](leveler.patchkamer-presets.json) |
 
-### Modulators (1)
+### Modulators (6)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
+| [Drift](../devices/modulators/Drift/) | Drift Presets | 44 | 7 | [`drift.patchkamer-presets.json`](drift.patchkamer-presets.json) |
 | [Follower](../devices/modulators/Follower/) | Follower Basics | 14 | 3 | [`follower.patchkamer-presets.json`](follower.patchkamer-presets.json) |
+| [LFO](../devices/modulators/Lfo/) | LFO Basics | 60 | 10 | [`lfo.patchkamer-presets.json`](lfo.patchkamer-presets.json) |
+| [Macro](../devices/modulators/Macro/) | Macro Basics | 40 | 5 | [`macro.patchkamer-presets.json`](macro.patchkamer-presets.json) |
+| [MSEG](../devices/modulators/Mseg/) | Multi-Segment Envelope Presets | 54 | 9 | [`mseg.patchkamer-presets.json`](mseg.patchkamer-presets.json) |
+| [Swell](../devices/modulators/Swell/) | Swell Presets | 55 | 8 | [`swell.patchkamer-presets.json`](swell.patchkamer-presets.json) |
 
-### Sequencers (1)
+### Sequencers (8)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
-| [Chord Sequencer](../devices/sequencers/ChordSequencer/) | Chord Sequencer Styles | 60 | 11 | [`chord-sequencer.patchkamer-presets.json`](chord-sequencer.patchkamer-presets.json) |
+| [Chord Sequencer](../devices/sequencers/ChordSequencer/) | Chord Sequencer Styles | 80 | 14 | [`chord-sequencer.patchkamer-presets.json`](chord-sequencer.patchkamer-presets.json) |
+| [Clip Arranger](../devices/sequencers/ClipArranger/) | Clip Arranger Song Starters | 58 | 10 | [`clip-arranger.patchkamer-presets.json`](clip-arranger.patchkamer-presets.json) |
+| [Euclidean Rhythms](../devices/sequencers/EuclideanRhythms/) | Euclidean Rhythms Grooves | 65 | 8 | [`euclidean-rhythms.patchkamer-presets.json`](euclidean-rhythms.patchkamer-presets.json) |
+| [Pattern Playlist](../devices/sequencers/PatternPlaylist/) | Pattern Playlist Arrangements | 35 | 5 | [`pattern-playlist.patchkamer-presets.json`](pattern-playlist.patchkamer-presets.json) |
+| [Pattern Tracker](../devices/sequencers/PatternTracker/) | Pattern Tracker Modules | 34 | 4 | [`pattern-tracker.patchkamer-presets.json`](pattern-tracker.patchkamer-presets.json) |
+| [Scale Arpeggiator](../devices/sequencers/ScaleArpeggiator/) | Scale Arpeggiator Patterns | 59 | 10 | [`scale-arpeggiator.patchkamer-presets.json`](scale-arpeggiator.patchkamer-presets.json) |
+| [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | 6 | [`step-sequencer.patchkamer-presets.json`](step-sequencer.patchkamer-presets.json) |
+| [Wanderer](../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | 9 | [`wanderer.patchkamer-presets.json`](wanderer.patchkamer-presets.json) |
+
+### Tools (1)
+
+| Device | Pack | Presets | Folders | File |
+|---|---|---|---|---|
+| [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3 | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) |
 
 The folders inside each pack are listed in the manual: [Presets: user manual](../docs/presets/USER-MANUAL_EN.md).
 

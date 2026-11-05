@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Helpers for making music: play, record, measure, take notes and control other devices. Tools make no sound of their own and are not effects. Each tool has its own folder here with the device file and an `AGENTS.md`.
+Helpers for making music: play, record, measure, take notes and control other devices. Tools are not effects, and most make no sound of their own (the exception is Metronome, which plays a click). Each tool has its own folder here with the device file and an `AGENTS.md`.
 
 | Device | What it does | Folder | Manual |
 |---|---|---|---|
@@ -11,13 +11,14 @@ Helpers for making music: play, record, measure, take notes and control other de
 | **Recorder** | Records what comes in and passes it on unchanged; saves WAV, MP3 or WebM/MP4 | `Recorder/` | [Recorder](../../docs/tools/USER-MANUAL_EN.md#recorder) |
 | **Multitrack** | Records up to 16 tracks from a bundle, one WAV per track | `Multitrack/` | [Multitrack](../../docs/tools/USER-MANUAL_EN.md#multitrack) |
 | **Scope** | Shows the sound (spectrum, waveform, spectrogram, stereo image, peak/RMS); passes it on unchanged | `Scope/` | [Scope](../../docs/tools/USER-MANUAL_EN.md#scope) |
+| **Metronome** | A click on every bar, beat, eighth or sixteenth of the studio clock; the same beats go out as trigs | `Metronome/` | [Metronome](../../docs/tools/USER-MANUAL_EN.md#metronome) |
 | **Notes** | A notepad with key, tempo, sections and a to-do list; no sound, no ports | `Notes/` | [Notes](../../docs/tools/USER-MANUAL_EN.md#notes) |
 
 ## More
 
 - User manual for the tools: [docs/tools/USER-MANUAL_EN.md](../../docs/tools/USER-MANUAL_EN.md)
 - Main manual: [docs/USER-MANUAL_EN.md](../../docs/USER-MANUAL_EN.md)
-- Presets for tools: none are included yet; the format and how to make your own are in [presets/](../../presets/README.md)
+- Presets for tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets). The other tools have none yet; the format and how to make your own are in [presets/](../../presets/README.md)
 
 ## License
 

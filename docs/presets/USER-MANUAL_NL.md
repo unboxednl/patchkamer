@@ -14,7 +14,7 @@ Een **preset** is een bewaarde instelling van één apparaat dat geen eigen gelu
 6. [Een pack delen: het bestand en de licentie](#een-pack-delen-het-bestand-en-de-licentie)
 7. [De packs die met Patchkamer meekomen](#de-packs-die-met-patchkamer-meekomen)
 8. [Effect Chain: complete ketens](#effect-chain-complete-ketens)
-9. [Chord Sequencer: akkoord- en patroonpresets](#chord-sequencer-akkoord--en-patroonpresets)
+9. [Sequencers: patronen en songstarters](#sequencers-patronen-en-songstarters)
 10. [Een eigen pack maken](#een-eigen-pack-maken)
 11. [Als het niet werkt](#als-het-niet-werkt)
 
@@ -110,7 +110,7 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 15 packs met samen **238 presets**, één per apparaat. Elk pack is genoemd naar zijn apparaat ("Chorus Basics", "Chord Sequencer Styles" enzovoort) en heeft de licentie CC0-1.0. De namen van packs, mappen en presets zijn Engels.
+Deze repository heeft 37 packs met samen **1820 presets**, één per apparaat: 12 voor effecten (153 presets), 9 voor mastering (919), 1 voor de mixer (11), 6 voor modulatoren (267), 8 voor sequencers (461) en 1 voor de tools (9). Elk pack is genoemd naar zijn apparaat ("Chorus Basics", "Chord Sequencer Styles" enzovoort) en heeft de licentie CC0-1.0. De bestanden hebben `formatVersion` 2. De namen van packs, mappen en presets zijn Engels. De apparaten staan beschreven in de handleidingen voor [effecten](../effects/USER-MANUAL_NL.md), [mastering](../mastering/USER-MANUAL_NL.md), [mixer](../mixer/USER-MANUAL_NL.md), [modulatoren](../modulators/USER-MANUAL_NL.md), [sequencers](../sequencers/USER-MANUAL_NL.md) en [tools](../tools/USER-MANUAL_NL.md).
 
 ### Effecten (12)
 
@@ -129,23 +129,55 @@ Deze repository heeft 15 packs met samen **238 presets**, één per apparaat. El
 | [Tremolo](../../devices/effects/Tremolo/) | Tremolo Basics | 13 | Classic (4), Slow (3), Rhythmic (3), Extreme (3) | [`tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json) |
 | [Vocoder](../../devices/effects/Vocoder/) | Vocoder Basics | 14 | Voices (4), Textures (4), Extreme (4), External (2) | [`vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json) |
 
+### Mastering (9)
+
+| Apparaat | Pack | Presets | Mappen | Bestand |
+|---|---|---|---|---|
+| [Balance EQ](../../devices/mastering/BalanceEQ/) | Balance EQ Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`balance-eq.patchkamer-presets.json`](../../presets/balance-eq.patchkamer-presets.json) |
+| [Bus Compressor](../../devices/mastering/BusCompressor/) | Bus Compressor Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`bus-compressor.patchkamer-presets.json`](../../presets/bus-compressor.patchkamer-presets.json) |
+| [Listening Output](../../devices/mastering/ListeningOutput/) | Listening Output Levels | 5 | Levels (5) | [`listening-output.patchkamer-presets.json`](../../presets/listening-output.patchkamer-presets.json) |
+| [Master Chain](../../devices/mastering/MasterChain/) | Master Chain Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`master-chain.patchkamer-presets.json`](../../presets/master-chain.patchkamer-presets.json) |
+| [Master Director](../../devices/mastering/MasterDirector/) | Master Director Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`master-director.patchkamer-presets.json`](../../presets/master-director.patchkamer-presets.json) |
+| [Mix Check](../../devices/mastering/MixCheck/) | Mix Check Monitoring | 18 | Monitoring (9), Situations (9) | [`mix-check.patchkamer-presets.json`](../../presets/mix-check.patchkamer-presets.json) |
+| [Multiband Balance](../../devices/mastering/MultibandBalance/) | Multiband Balance Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`multiband-balance.patchkamer-presets.json`](../../presets/multiband-balance.patchkamer-presets.json) |
+| [Patina](../../devices/mastering/Patina/) | Patina Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`patina.patchkamer-presets.json`](../../presets/patina.patchkamer-presets.json) |
+| [Stereo Space](../../devices/mastering/StereoSpace/) | Stereo Space Situations and Styles | 128 | Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8) | [`stereo-space.patchkamer-presets.json`](../../presets/stereo-space.patchkamer-presets.json) |
+
 ### Mixer (1)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
 | [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
 
-### Modulatoren (1)
+### Modulatoren (6)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
+| [Drift](../../devices/modulators/Drift/) | Drift Presets | 44 | Subtle Life (6), Slow Evolution (6), Wide Wander (6), Restless (6), Together & Apart (6), Per Style (10), Group Ensembles (4) | [`drift.patchkamer-presets.json`](../../presets/drift.patchkamer-presets.json) |
 | [Follower](../../devices/modulators/Follower/) | Follower Basics | 14 | Level (6), Onsets (4), Extreme (4) | [`follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json) |
+| [LFO](../../devices/modulators/Lfo/) | LFO Basics | 60 | Vibrato & Tremolo (8), Pan & Space (4), Filter Sweeps (7), Wobble (5), Rhythmic Gates (7), Step Patterns (6), Generative (5), Slow & Ambient (6), Trigger Envelopes (6), By Genre (6) | [`lfo.patchkamer-presets.json`](../../presets/lfo.patchkamer-presets.json) |
+| [Macro](../../devices/modulators/Macro/) | Macro Basics | 40 | Performance Sets (8), Pairs (8), Build-ups (6), Styles (11), Sound Design (7) | [`macro.patchkamer-presets.json`](../../presets/macro.patchkamer-presets.json) |
+| [MSEG](../../devices/modulators/Mseg/) | Multi-Segment Envelope Presets | 54 | Build-ups (8), Drops & Breaks (6), Filter Sweeps (7), Steps (5), Breathing & Swells (5), Gates & Ratchets (7), Pumps & Plucks (6), Generative & Ambient (5), By Style (5) | [`mseg.patchkamer-presets.json`](../../presets/mseg.patchkamer-presets.json) |
+| [Swell](../../devices/modulators/Swell/) | Swell Presets | 55 | Pads & Atmospheres (9), Warm & Close (7), Bright & Open (6), Tempo Synced (6), Subtle & Natural (6), Big & Expressive (7), Generative & Evolving (6), By Application (8) | [`swell.patchkamer-presets.json`](../../presets/swell.patchkamer-presets.json) |
 
-### Sequencers (1)
+### Sequencers (8)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
-| [Chord Sequencer](../../devices/sequencers/ChordSequencer/) | Chord Sequencer Styles | 60 | Pop (6), Ballad (5), Cinematic (6), Film Score (5), Ambient (6), Trance (6), Synthwave (6), Lo-fi (5), Neo-classical (5), Deep House (5), Funk & Disco (5) | [`chord-sequencer.patchkamer-presets.json`](../../presets/chord-sequencer.patchkamer-presets.json) |
+| [Chord Sequencer](../../devices/sequencers/ChordSequencer/) | Chord Sequencer Styles | 80 | Pop (6), Ballad (5), Cinematic (6), Film Score (5), Ambient (6), Trance (6), Synthwave (6), Lo-fi (5), Neo-classical (5), Deep House (5), Funk & Disco (5), Dynamics (8), Rolls (6), Melodies (6) | [`chord-sequencer.patchkamer-presets.json`](../../presets/chord-sequencer.patchkamer-presets.json) |
+| [Clip Arranger](../../devices/sequencers/ClipArranger/) | Clip Arranger Song Starters | 58 | Pop & Rock (7), Electronic Dance (13), Bass Music (7), Hip-Hop & Chill (4), Funk, Soul & Disco (4), Jazz & Blues (5), Reggae & World (4), Ambient & Cinematic (5), Classical & Neo-Classical (4), Retro & Game (5) | [`clip-arranger.patchkamer-presets.json`](../../presets/clip-arranger.patchkamer-presets.json) |
+| [Euclidean Rhythms](../../devices/sequencers/EuclideanRhythms/) | Euclidean Rhythms Grooves | 65 | Techno (8), House (7), Afro & Latin (11), Dub & Reggae (6), Drum & Bass and Breakbeat (8), Odd Meters and Polymeters (8), Fills and Rolls (8), Melodic (notes) (9) | [`euclidean-rhythms.patchkamer-presets.json`](../../presets/euclidean-rhythms.patchkamer-presets.json) |
+| [Pattern Playlist](../../devices/sequencers/PatternPlaylist/) | Pattern Playlist Arrangements | 35 | Dance Floor (13), Bass Music (6), Hip-hop and Soul (5), Song Forms (5), Ambient and Cinematic (6) | [`pattern-playlist.patchkamer-presets.json`](../../presets/pattern-playlist.patchkamer-presets.json) |
+| [Pattern Tracker](../../devices/sequencers/PatternTracker/) | Pattern Tracker Modules | 34 | Module Classics (12), Songwriting Forms (8), World and Latin (7), Electronic Rows (7) | [`pattern-tracker.patchkamer-presets.json`](../../presets/pattern-tracker.patchkamer-presets.json) |
+| [Scale Arpeggiator](../../devices/sequencers/ScaleArpeggiator/) | Scale Arpeggiator Patterns | 59 | Classic Patterns (10), Trance and Dance (8), House and Disco (5), Synthwave and Retro (4), Ambient and Cinematic (7), Funk and Jazz (4), Fine Grids and Rolls (7), Dynamics (7), Generative (5), Live Playing (2) | [`scale-arpeggiator.patchkamer-presets.json`](../../presets/scale-arpeggiator.patchkamer-presets.json) |
+| [Step Sequencer](../../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | Bass Lines (14), Arpeggios (12), Drum Triggers (13), Melodic Hooks (17), Long Notes & Pads (6), Polymeter & Feel (8) | [`step-sequencer.patchkamer-presets.json`](../../presets/step-sequencer.patchkamer-presets.json) |
+| [Wanderer](../../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | Lead Lines (9), Basslines (7), Arps and Plucks (8), Ambient and Slow (5), Genre Starters (13), Dynamics (6), Rolls and Ratchets (5), Follow Chord (3), Evolving (4) | [`wanderer.patchkamer-presets.json`](../../presets/wanderer.patchkamer-presets.json) |
+
+### Tools (1)
+
+| Apparaat | Pack | Presets | Mappen | Bestand |
+|---|---|---|---|---|
+| [Metronome](../../devices/tools/Metronome/) | Metronome Basics | 9 | Practice (4), Subdivisions (3), Loud (2) | [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) |
 
 Mixer, Speakers, Multitrack, Notes, Recorder, Scope en andere apparaten kunnen ook presets hebben, maar daar komt nog geen pack bij: bewaar je eigen met **Bewaar**.
 
@@ -187,11 +219,17 @@ Zo gebruik je ze:
 - Een deel van de effecten in de keten draait op de hoofdthread van de browser en voegt wat latency toe. Gebruik op een trage computer ketens met minder van die effecten, of verberg slots.
 - De niveaus van de ketens zijn op papier ingesteld en niet beluisterd. Controleer het volume met je eigen bron en gebruik **Ingang**, **Uitgang** en **Totale mix**.
 
-## Chord Sequencer: akkoord- en patroonpresets
+## Sequencers: patronen en songstarters
 
-Chord Sequencer maakt zelf geen geluid: hij stuurt noten naar vier uitgangen, die je met vier synths verbindt. Daarom heeft hij presets en geen tunes. Het pack **Chord Sequencer Styles** heeft 60 presets in 11 mappen: Pop, Ballad, Cinematic, Film Score, Ambient, Trance, Synthwave, Lo-fi, Neo-classical, Deep House en Funk & Disco. Bijvoorbeeld **Pop**: Bright Four, Sunday Drive, Late Night Minor. **Ambient**: Floating Garden, Deep Water, Aurora Drift.
+Een sequencer maakt zelf geen geluid: hij stuurt noten naar andere apparaten, die je zelf verbindt. Daarom heeft een sequencer presets en geen tunes. De 8 sequencerpacks bevatten samen 461 presets: Chord Sequencer Styles, Step Sequencer Patterns, Wanderer Melodies, Scale Arpeggiator Patterns, Euclidean Rhythms Grooves, Pattern Playlist Arrangements, Pattern Tracker Modules en Clip Arranger Song Starters. De mappen en hun omvang staan in de tabel hierboven.
 
-Volgens de omschrijving van het pack vult elke preset alle vier de sporen (akkoorden, bas, puls en bellen) in één toonsoort, en alle vier de scènes (hoofdpart, variatie, breakdown en lift). Een preset bevat de instellingen, geen kabels: verbind de vier uitgangen zelf met je synths, en zie de [handleiding voor sequencers](../sequencers/USER-MANUAL_NL.md) voor hoe. De synths die erbij passen staan in de [handleiding voor tunes](../tunes/USER-MANUAL_NL.md).
+**Een preset bevat het patroon en de instellingen, niet de werkstand van de kaart.** Het gekozen spoor, de zoom en andere dingen die alleen beschrijven hoe je naar het apparaat kijkt, horen niet bij een preset (voor Clip Arranger staan ze in de AGENTS.md van het apparaat). Ook kabels zitten er niet in: verbind de uitgangen zelf met je synths, en zie de [handleiding voor sequencers](../sequencers/USER-MANUAL_NL.md) voor hoe. De synths die erbij passen staan in de [handleiding voor tunes](../tunes/USER-MANUAL_NL.md).
+
+**Chord Sequencer Styles** heeft 80 presets in 14 mappen: Pop, Ballad, Cinematic, Film Score, Ambient, Trance, Synthwave, Lo-fi, Neo-classical, Deep House, Funk & Disco, Dynamics, Rolls, Melodies. Bijvoorbeeld **Pop**: Bright Four, Sunday Drive, Late Night Minor. **Ambient**: Floating Garden, Deep Water, Aurora Drift. Volgens de omschrijving van het pack vullen de stijlpresets alle vier de sporen (akkoorden, bas, puls en bellen) in één toonsoort, en alle vier de scènes (hoofdpart, variatie, breakdown en lift). De omschrijving van het pack zegt dat de nieuwere presets snelheid en lengte per stap, 1/32- en 1/64-rolls en opgenomen-notensporen gebruiken (zie de mappen **Dynamics**, **Rolls** en **Melodies**).
+
+**Clip Arranger Song Starters** wijkt af van de andere packs: de 58 presets zijn **compositie-startconfiguraties per genre**. Elke preset zet een handvol sporen op met een duidelijke rol (drums, bas, akkoorden, pad, arp, lead, percussie, FX), tot acht scènes (intro, couplet, refrein, opbouw, drop, break, brug, outro enzovoort) met een lengte in maten, een songarrangement in de volgorde die bij dat genre hoort, en in elke clip een eerste bruikbare partij. Laad er een en vervang de partijen door je eigen. Mappen: Pop & Rock (7), Electronic Dance (13), Bass Music (7), Hip-Hop & Chill (4), Funk, Soul & Disco (4), Jazz & Blues (5), Reggae & World (4), Ambient & Cinematic (5), Classical & Neo-Classical (4), Retro & Game (5). Bijvoorbeeld **Electronic Dance**: Techno Peak-Time, Minimal Techno Groove, Melodic Techno Journey.
+
+**Step Sequencer Patterns** (baslijnen, arpeggio's, drumtriggers, melodische hooks, lange noten en polymetrische figuren) en **Euclidean Rhythms Grooves** laad je op dezelfde manier in het apparaat. **Metronome Basics** (tools) bevat klikinstellingen: maat-, tel-, achtste- en zestiende-kliks op oefen-, repetitie- en hard niveau.
 
 ## Een eigen pack maken
 

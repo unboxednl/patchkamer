@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 18 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 26 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -13,19 +13,20 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 1
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Bowed Ensemble](#bowed-ensemble)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
-8. [Als het niet werkt](#als-het-niet-werkt)
+8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
+9. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat synths doen
 
-Een synth heeft geen audio-ingang (met twee uitzonderingen: **Voorversterker in** van Patchbay Synth en **Extern geluid / envelope** van Patch Mono). Hij ontvangt **noten** (oranje kabels) en geeft **geluid** (een groenblauwe audiokabel). Elke synth heeft ook een paarse **Mod**-ingang: een modulator kan zijn regelaars laten bewegen terwijl je speelt (zie [Modulators](../modulators/USER-MANUAL_NL.md)). De knop houdt zijn waarde; de modulator telt erbij op.
+De meeste synths hebben geen audio-ingang. De uitzonderingen zijn **Voorversterker in** van Patchbay Synth, **Extern geluid / envelope** van Patch Mono en, bij de drone- en textuursynths, Layered Landscape, Paradox, Foundry en Grain Cloud. Hij ontvangt **noten** (oranje kabels) en geeft **geluid** (een groenblauwe audiokabel). Elke synth heeft ook een paarse **Mod**-ingang: een modulator kan zijn regelaars laten bewegen terwijl je speelt (zie [Modulators](../modulators/USER-MANUAL_NL.md)). De knop houdt zijn waarde; de modulator telt erbij op.
 
 Een gewone patch heeft drie stappen, van links naar rechts:
 
-1. Een bron van noten: **Keys / MIDI** (een toetsenbord dat zelf geen geluid maakt), een sequencer, of de ingebouwde sequencer van de synth (Acid Baselines, Acid Stepper, Sub Line, Cross Mod Mono).
+1. Een bron van noten: **Keys / MIDI** (een toetsenbord dat zelf geen geluid maakt), een sequencer, of de ingebouwde sequencer van de synth (Acid Baselines, Acid Stepper, Sub Line, Cross Mod Mono, en bij de drone- en textuursynths Drone Synth en Layered Landscape). De drone- en textuursynths hebben vaak helemaal geen noten nodig: ze blijven vanzelf klinken (zie [Drone- en textuursynths](#drone--en-textuursynths)).
 2. De synth.
 3. Waar het geluid heen gaat: direct naar **Speakers**, of eerst via een kanaal van een **Mixer** en een effect.
 
-Druk op **Start** om de klok te laten lopen. Ingebouwde sequencers, arpeggiators, de trance-gate van Supersaw Swarm en de pomp bewegen alleen als de klok loopt. Noten van Keys en de testknoppen op de kaarten werken wel zonder. Een sequencer die noten naar een polyfone synth stuurt, moet altijd een nootlengte (`dur`) meesturen; een noot zonder lengte blijft bij sommige synths doorklinken.
+Druk op **Start** om de klok te laten lopen. Ingebouwde sequencers, arpeggiators, de trance-gate van Supersaw Swarm, de pomp en de automatische akkoorden en melodie van Mist bewegen alleen als de klok loopt. Noten van Keys en de testknoppen op de kaarten werken wel zonder. Een sequencer die noten naar een polyfone synth stuurt, moet altijd een nootlengte (`dur`) meesturen; een noot zonder lengte blijft bij sommige synths doorklinken.
 
 Elke synth heeft **tunes**: een tune is de volledige instelling van één synth, en sommige tunes bevatten ook een baslijn of patroon. Laad een pack vanuit een bibliotheek of met het menu **Tunes ▾** → **Importeren…**, en kies daarna een tune in de lijst bovenaan de kaart (er staat `Map › Naam`). Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor het gebruiken, bewaren en delen ervan. De synths hebben geen presets: de keuzes die op een preset lijken binnen een kaart (een **Klank**- of **Klankbeeld**-lijst, **Preset**-knoppen) zijn beginklanken die de regelaars één keer zetten.
 
@@ -49,6 +50,14 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Geplukte of gestreken losse snaren (gitaar, harp, koto) | [Karplus String](#karplus-string) |
 | Dissonante clusters, drones, spanning, geluidseffecten | [Dissonant Cluster](#dissonant-cluster) |
 | Een modulair gevoel: patchkabels tussen modules | [Patchbay Synth](#patchbay-synth) |
+| Een lang ambient-landschap van vier lagen (drone, pad, sfeer, textuur) | [Layered Landscape](#layered-landscape) |
+| Natuurlijke soundscapes: regen, wind, water, vuur, voetstappen | [Biotope](#biotope) |
+| Een doorlopende drone met een sub, een tweede laag, ruis en een grondtoon-sequencer | [Drone Synth](#drone-synth) |
+| Planeten die in toonhoogte buigen (Doppler), drones, klokken, sirenes | [Celestial Mechanics](#celestial-mechanics) |
+| Zelf bewegende, experimentele klanken, glitch en texturen | [Paradox](#paradox) |
+| Industriële klanken: metalen resonanties, FM, ringmodulatie, wavefolding | [Foundry](#foundry) |
+| Een traag akkoordbed met eigen akkoorden en melodie onder een song | [Mist](#mist) |
+| Wolken van kleine korrels uit een ingebouwde klank, of een effect op live audio | [Grain Cloud](#grain-cloud) |
 
 ## Bassen
 
@@ -559,7 +568,7 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 
 **Voorbeeld.** Plaats **Keys / MIDI**, **Chord Poly** en **Speakers**. Zet **Akkoordgeheugen** op **Mineur 7** en speel één toets tegelijk: elke toets klinkt als een akkoord van vier noten. Voor een eigen akkoord kies je het eigen akkoord en typ je `0,4,7,11` bij **Eigen intervallen**.
 
-**Tunes.** Pack **Chord Poly Styles**: 60 tunes in 10 mappen (House, Deep House, Garage, Lo-fi, Ambient, Pop, Soul, Synthwave, Cinematic, Disco & Funk), zes per map, bestand [`chord-poly-styles.patchkamer-tunes.json`](../../tunes/chord-poly-styles.patchkamer-tunes.json). Een paar namen: **Classic House Stab**, **Deep Ninth Chord**, **Velvet Chord**, **Endless Pad**, **Disco Stab**.
+**Tunes.** Pack **Chord Poly Styles**: 120 tunes in 20 mappen (House, Deep House, Garage, Lo-fi, Ambient, Pop, Soul, Synthwave, Cinematic, Disco & Funk, Techno, Dub Techno, Trance, Progressive Trance, Big Room, Electro House, Electro, Future Bass, Hardstyle, Eurodance), zes per map, bestand [`chord-poly-styles.patchkamer-tunes.json`](../../tunes/chord-poly-styles.patchkamer-tunes.json). Een paar namen: **Classic House Stab**, **Deep Ninth Chord**, **Velvet Chord**, **Endless Pad**, **Disco Stab**.
 
 **Tips en beperkingen.**
 
@@ -786,11 +795,330 @@ De acht algoritmes (`a → b` betekent: a moduleert b):
 - Toonhoogte en filter volgen 1 volt per octaaf. Het bereik LF koppelt het klavier los van een VCO.
 - De envelopes krijgen hun gate van het klavier en de noten van de host; met **Poortbron** op **Poort in** komt de gate van de externe ingang (standaard de klok).
 
+## Drone- en textuursynths
+
+Acht synths voor lange, langzaam veranderende klanken: drones, pads, soundscapes en texturen. De meeste blijven vanzelf klinken zonder dat iemand speelt; sommige speel je ook met noten. Elke synth start op zijn eigen manier, dus lees de eerste regels van zijn sectie.
+
+| Synth | Speelt zelf | Met noten te spelen | Audio-ingang |
+|---|---|---|---|
+| [Layered Landscape](#layered-landscape) | Ja: vier lagen houden noten vast of spelen een patroon | Ja (**Noteningang** kiest de laag) | **Stereo textuur / opname** (voor de Noise-laag) |
+| [Biotope](#biotope) | Ja: acht geluidslagen | Nee (alleen triggers) | Nee |
+| [Drone Synth](#drone-synth) | Ja: één doorlopende drone | Noten zetten de grondtoon | Nee |
+| [Celestial Mechanics](#celestial-mechanics) | Nee | Ja: elke noot wordt een planeet | Nee |
+| [Paradox](#paradox) | Ja (**Drone** en **Organisme**) | Ja (**Bespeelbaar**) | **Eten** |
+| [Foundry](#foundry) | Ja (**Drone / transport**) | Ja (**Keyboard / sequencer**) | **Extern materiaal** |
+| [Mist](#mist) | Ja (**Drone + noten**) | Ja | Nee |
+| [Grain Cloud](#grain-cloud) | Ja (**Wolk (drone)**) | Ja | **In (bron)** |
+
+Hoe ze starten (de details staan in elke sectie):
+
+- **Layered Landscape:** **Start landschap** (werkt ook zonder klok).
+- **Biotope:** speelt zodra **Aan** is aangevinkt; met **Volg start/stop** alleen als de klok loopt.
+- **Drone Synth:** stil tot je op **Start** drukt, tenzij **Bij stop** op **blijft klinken** staat.
+- **Paradox:** het vinkje **Leeft**, en **Gedrag** (**Bespeelbaar**, **Drone** of **Organisme**).
+- **Foundry:** **Start / stop drone**, of **Keyboard / sequencer** voor noten.
+- **Mist:** **Start drone**, of druk op **Start** voor akkoorden en melodie.
+- **Grain Cloud:** de knop **Wolk (drone)**, of noten.
+- **Celestial Mechanics:** heeft noten nodig, of de knoppen onder het sterrenveld.
+
+De klank van deze synths verandert voortdurend. Een tune is een beginpunt, geen opname; sommige synths gebruiken toeval, dus dezelfde tune kan elke keer een beetje anders klinken.
+
+### Layered Landscape
+
+**Waar het voor dient.** Een ambient-instrument met vier lagen. Vier lagen klinken tegelijk en vormen samen één "landschap": **Drone** (laag, traag, een octaaf onder de grondtoon), **Pad** (de hoofdklank, op de grondtoon), **Atmos** (hoog en licht, een octaaf erboven) en **Noise** (een textuur zoals golven, regen of wind, op vaste toonhoogte). Elke laag heeft een eigen golf-familie, filter, twee trage LFO's, pan, een send naar een gezamenlijke ruimte en een send naar een shimmer (octaaf omhoog). Daarna volgen een stereo-ruimte met negen karakters en een master-effect. Elke laag kan noten vasthouden, een eigen patroon spelen, noten van buiten spelen of uit staan.
+
+![De kaart van Layered Landscape](../images/nl/synths/layered-landscape.png)
+
+**De regelaars.** De kaart is lang; van boven naar beneden:
+
+- **Bovenste rij:** **Landschap** (een lijst met twaalf beginlandschappen), **Start landschap**, **Bronnen stoppen** en **Stilte**, **Grondtoon MIDI**, **Mastervolume**, **Klankkarakter** (**Zacht / vloeiend** of **Oorspronkelijk / helder**) en **Noteningang** (naar welke laag de poort **Noten naar gekozen laag** gaat).
+- **Vier laagblokken** (**Drone · bewerken**, **Pad · bewerken**, **Atmos · bewerken**, **Noise · bewerken**): met de knop kies je de laag die je hieronder bewerkt. Elk blok heeft **Niveau**, **Pan**, **Mute** en **Solo**.
+- **XY-vlak** met **X-as** en **Y-as**: sleep het bolletje om twee regelaars tegelijk te bewegen. **Bewaar A** en **Bewaar B** bewaren een klank; **Morph A ↔ B** wisselt ertussen. A/B bewaart alleen de numerieke regelaars; structuren, golfkeuzes en patronen wisselen niet mee.
+- **Klank en beweging** van de gekozen laag: **Bronbesturing** (**Drone / Hold**, **Eigen sequencer**, **Externe noten** of **Uit**), **Akkoord**, **Filter** (**Low-pass** en andere), **Structuur** (zes manieren waarop de oscillatoren samenwerken, bijvoorbeeld **Pad I · drievoudig**) en **Golf-familie** (16 families). Daaronder: **Golfmorph**, **Filter**, **Resonantie**, **Bewegingsdiepte**, **LFO 1**, **LFO 2**, **Oscillator-spreiding**, **Opkomst**, **Uitklank**, **Transpositie**, **Ruimte-send** en **Shimmer-send**. De Noise-laag heeft een lijst **Textuur** in plaats van een golf-familie.
+- **Sequencer** van de gekozen laag: **Nootdeling**, **Stappen** (1 tot 64), de stapknoppen, en per stap **Nootafstand**, **Velocity / rust** (0 is een rust) en **Duur in stappen**. **Motion-opname**, **Schrijf beweging op stap** en **Wis bewegingen** bewaren bewegingen van de regelaars per stap. Het patroon speelt alleen als **Bronbesturing** op **Eigen sequencer** staat.
+- **Ruimte en master-effect:** **Ruimte** (klein, groot of eindeloos, elk donker, neutraal of helder), **Freeze** (houdt de ruimte vast: er gaat geen nieuw geluid meer in), **Master-effect** (bijvoorbeeld **Stereo-chorus**, **Tape-echo** en **Reverse-echo**), **Ruimteschaal**, **Ruimtedemping**, **Effectmix** en **Effecttijd / karakter**.
+- **Visualisatie** en de bewaarknoppen: **Bewaar landschap (.json)** schrijft het hele landschap naar een bestand, en de bestandskiezer eronder opent er weer een. Het bestandsformaat heet `patchkamer-landscape-1`. Dit is een ander bestand dan een tune.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Stereo textuur / opname** | audio in (groenblauw) | Geluid voor de Noise-laag (een textuur van buiten of een opname). |
+| **Noten naar gekozen laag** | noten in (oranje) | Noten voor de laag die bij **Noteningang** is gekozen. |
+| **Drone-noten**, **Pad-noten**, **Atmos-noten**, **Noise-noten** | noten in (oranje) | Noten rechtstreeks naar één laag. |
+| **Mod** | modulatie in (paars) | Een modulator kan de regelaars bewegen. |
+| **Stereo landschap** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Layered Landscape** en **Speakers**, verbind **Stereo landschap** met **In**. Kies een tune en klik op **Start landschap**: alle lagen op **Drone / Hold** gaan klinken. Draai **Mastervolume** en het **Niveau** van een laag naar smaak. Voor een bewegende lijn zet je **Bronbesturing** van de **Pad**-laag op **Eigen sequencer**, druk je op **Start** en bewerk je de stappen.
+
+**Tunes.** Pack **Layered Landscape Styles**: 71 tunes in 11 mappen (Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Nature, Space, Drone, Lo-fi, Minimal, Industrial), bestand [`layered-landscape-styles.patchkamer-tunes.json`](../../tunes/layered-landscape-styles.patchkamer-tunes.json). Een paar namen: **Morning Haze**, **Floating Garden**, **Sunken Hall**, **Black Tide**, **Epic Swell**. In het pack houden 61 tunes hun noten vast met de Pad-laag, 7 tunes spelen een patroon op de Pad-laag en 3 tunes bespeel je met noten op de Pad-laag. Een tune bevat de klank, geen eigen sample of opname.
+
+**Tips en beperkingen.**
+
+- Het landschap klinkt na **Start landschap** of als de klok start; een tune alleen maakt tot dan toe geen geluid.
+- Kies je een andere tune terwijl het landschap klinkt, dan stopt het de oude klank en start de nieuwe meteen.
+- Een laag op **Mute**, of alle vier de lagen op niveau 0, is stil.
+- Met **Freeze** aan gaat er geen nieuw geluid meer de ruimte in.
+- Een landschapsbestand bevat de naam van het formaat; alleen bestanden die Layered Landscape heeft gemaakt, openen.
+- Een eigen sample of opname voor de Noise-laag hoort niet bij een tune.
+
+### Biotope
+
+**Waar het voor dient.** Een synth voor omgevingen die zonder samples zelf geluiden maakt: acht lagen (**Regen**, **Druppels**, **Bubbels**, **Wind**, **Voetstappen**, **Haardvuur**, **Zee**, **Gekraak**) die samen een soundscape vormen. Er is geen toetsenbord en geen noot: hij speelt zodra hij aan staat en verandert langzaam door toeval en trage golven. De lage windkarakters (**Rode planeet**, **Gasreus**, **Kosmische verbeelding**), de diepe bubbels en het scheepsromp-gekraak maken donkere, langzaam veranderende drones.
+
+![De kaart van Biotope](../images/nl/synths/biotope.png)
+
+**De regelaars.**
+
+- **Bovenaan:** een lijst **Kies een soundscape…** (beginstanden), **Alle lagen uit**, het vinkje **Aan** en **Volg start/stop** (alleen geluid als de klok loopt).
+- **Uitgang**, **Ruimte** (stereo-galm) en **Breedte** (0% is mono).
+- **Acht laagblokken.** Elk heeft een lijst **Karakter** (vier tot zeven soorten per laag), **Volume** (0% is uit), **Dichtheid** (hoe actief: druppels, bubbels, knetters per seconde; bij regen, wind en zee ook hoe zwaar de ruis is), **Kleur** (donker en dof tot helder en scherp) en **Beweging** (variatie in stereo, toonhoogte en timing; bij wind de snelheid van de vlagen, bij zee de diepte van de deining).
+- **Voetstappen** heeft ook **Stappen/min** en **Klok** (**Vrij tempo**, **Alleen triggers**, of elke 1/16, 1/8, 1/4, 1/2 of maat van de klok). Het is de enige laag met een eigen tempo.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Triggers / CC** | noten in (oranje) | Triggers spelen één gebeurtenis van de lagen Druppels, Bubbels, Voetstappen, Haardvuur of Gekraak; CC-berichten bewegen de regelaars. |
+| **Mod** | modulatie in (paars) | Een modulator kan de regelaars bewegen. |
+| **Stereo uit** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Biotope** en **Speakers**, verbind **Stereo uit** met **In**. Kies een tune als **Morning Forest**: hij speelt meteen. Zet het **Volume** van **Regen** omhoog en de **Kleur** van **Wind** omlaag voor iets donkerders. Voor een drone zet je **Wind** op **Rode planeet** of **Gasreus**, **Kleur** laag en **Ruimte** hoog.
+
+**Tunes.** Pack **Biotope Styles**: 86 tunes in 13 mappen (Nature, Weather, Water, Ambient, Meditation, Sleep, Cinematic, Sci-Fi, Dark Ambient, Lo-fi, Field Recording, Interiors, Rhythmic), bestand [`biotope-styles.patchkamer-tunes.json`](../../tunes/biotope-styles.patchkamer-tunes.json). Een paar namen: **Morning Forest**, **Meadow Breeze**, **Light Drizzle**, **Steady Rain**, **Slow March**.
+
+**Tips en beperkingen.**
+
+- Met **Volg start/stop** aan, of **Klok** op een kloksetting, hoor je niets tot de klok loopt.
+- Met **Klok** op **Alleen triggers** zijn de voetstappen stil tot er een trigger binnenkomt.
+- Druppels, voetstappen, haardvuur en gekraak zijn losse gebeurtenissen en klinken zacht naast regen, wind en zee; geef ze een hoger **Volume**, of voeg een zacht bed toe.
+- De ruis is willekeurig: een tune is een instelling, dus hij klinkt elke keer een beetje anders.
+- Hoogstens 96 stemmen tegelijk; veel lagen op volle sterkte en volle **Dichtheid** kunnen ze vullen.
+
+### Drone Synth
+
+**Waar het voor dient.** Een drone- en ambient-synth. De klank is één doorlopende toon van een eerste dronelaag (drie ontstemde oscillatoren en een sinus-sub een octaaf lager), een optionele tweede laag op een interval naar keuze, gefilterde ruis, een resonant lowpass-filter met een trage LFO, vervorming, een delay en een galm. Daarbij komen willekeurige gebeurtenissen (sirene, metaalslag, radiostatic, hartslag) en een grondtoon-sequencer van 16 stappen. Hij speelt geen akkoorden of noten met een envelope: wat verandert is de **grondtoon**.
+
+![De kaart van Drone Synth](../images/nl/synths/drone-synth.png)
+
+**De regelaars.**
+
+- **Beginklanken** bovenaan: **ABANDONED FACTORY**, **VENTILATION SHAFT**, **AIR RAID**, **DEAD STATION**, **UNDERGROUND**, **COLD DAWN** en **WILLEKEURIG**. Ze zetten de regelaars één keer.
+- **Drone:** **aan**, **GRONDTOON** (in Hz), **GOLFVORM**, **STEMMING**, **ONTSTEMMING**, **SUB-OCTAAF** en **NIVEAU**.
+- **Drone B:** **aan**, **GOLFVORM**, **INTERVAL** (in halve tonen; +7 is een kwint, +12 een octaaf), **ONTSTEMMING** en **NIVEAU**.
+- **Ruis:** **aan**, **KLEUR** (bruin, roze of wit), **BANDFILTER**, **RESONANTIE** en **NIVEAU**.
+- **Filter & LFO:** **AFSNIJFREQ.**, **RESONANTIE**, **LFO SNELHEID**, **LFO DIEPTE** en **TOONWOBBEL**.
+- **Ruimte & verval:** **VERVORMING**, **DELAYTIJD**, **DELAY FEEDBACK**, **GALMGROOTTE** en **GALM MIX**.
+- **Uitgang:** **NIVEAU** en **BIJ STOP** (**stil** of **blijft klinken**).
+- **Gebeurtenissen:** **TYPE** (**Geen**, **Sirene**, **Metaalslag**, **Radiostatic** of **Hartslag**), **INTERVAL** en **NIVEAU**. Ze vuren willekeurig rond het interval zolang de klok loopt.
+- **Speel:** acht knoppen (A1 tot B♭2) die de grondtoon direct zetten.
+- **Grondtoon-sequencer:** **aan**, **SETS** (1 tot 16 sets van 16 stappen), **GLIDE** en **GATE**. Het raster heeft acht vaste noten (A1, C2, D2, E♭2, F2, G2, A2, B♭2); één noot per stap, een lege stap houdt de vorige toon aan. **STIJGEND**, **PULS** en **WILLEKEURIG** vullen de set, **KOPIEER MAAT NAAR ALLE** kopieert hem en **LEEG** maakt hem leeg. Met **GATE** boven 0% pulseert alleen de eerste dronelaag.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Binnenkomende noten zetten ook de grondtoon. |
+| **CC** | noten in (oranje) | Control changes voor de regelaars. |
+| **Mod** | modulatie in (paars) | Een modulator kan de regelaars bewegen. |
+| **Uit** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Drone Synth** en **Speakers**. Klik op **ABANDONED FACTORY**, zet **BIJ STOP** op **blijft klinken** en druk op een knop onder **Speel**. Voor een ritme: zet **aan** in de grondtoon-sequencer, zet noten op een paar stappen, zet **GATE** op 50% en druk op **Start**.
+
+**Tunes.** Pack **Drone Synth Styles**: 66 tunes in 10 mappen (Drone, Ambient, Dark Ambient, Techno, Industrial, Cinematic, Meditation, Sci-Fi, Doom, Minimal), bestand [`drone-synth-styles.patchkamer-tunes.json`](../../tunes/drone-synth-styles.patchkamer-tunes.json). Een paar namen: **Root Fifth Pad**, **Pure Sine Floor**, **Glass Pad**, **Floating Fifths**, **Crypt Choir**. In het pack gebruiken 20 tunes de grondtoon-sequencer en staan alle 66 op blijven klinken.
+
+**Tips en beperkingen.**
+
+- De uitgang is dicht tot de klok loopt, of tot **BIJ STOP** op **blijft klinken** staat. Gebeurtenissen en de sequencer lopen alleen mee met de klok.
+- De sequencer heeft alleen de acht vaste noten; voor andere grondtonen gebruik je **GRONDTOON** en een vlakke drone.
+- **GATE** doet niets zonder noten in de sequencer.
+- Bij een zeer hoge **RESONANTIE**, een zeer lage **AFSNIJFREQ.** en sterke **LFO DIEPTE**, of een lange delay met zeer hoge feedback, kan het geluid breken; een bewaker vervangt dan het filter, de delay en de galm.
+- Veel lagen op volle sterkte samen kunnen harder zijn dan 1; houd **NIVEAU** (Uitgang) in de gaten.
+
+### Celestial Mechanics
+
+**Waar het voor dient.** Een zwaartekrachtsynth. Elke noot die binnenkomt wordt een planeet die om een zon draait, en de natuurkunde van het stelsel maakt het geluid. De toonhoogte is de noot, verschoven door het Dopplereffect (naar je toe is hoger, weg is lager). Planeten die elkaar naderen moduleren elkaar en kunnen botsen en samensmelten. Een planeet die langs de zon scheert, neemt een "zonnevlam" van ruis mee. Er is geen envelope, geen filter en geen vaste golfvorm.
+
+![De kaart van Celestial Mechanics](../images/nl/synths/celestial-mechanics.png)
+
+**De regelaars.**
+
+- **Bovenaan:** **Heelal** (zeven beginheelallen, bijvoorbeeld **Zonnestelsel** en **Glazen sferen**), **Toonladder (slingeren)**, **Grondtoon** (voor planeten die je zelf wegslingert en voor de Oerknal) en **Levensduur** (**Eeuwig (tot opgeslokt)** en kortere keuzes).
+- **Sterrenveld.** Sleep erin om een planeet weg te slingeren. Eronder: **Oerknal** (vijf planeten uit de toonladder), **Komeet** (een komeet valt binnen), **Zwart gat: slik alles** en **Stilte**. Een regel toont hoeveel hemellichamen er in de ruimte zijn.
+- **Baanmechaniek:** **Zwaartekracht**, **Baanmaat**, **Excentriciteit** en **Tijd**.
+- **Ruimte-tijd:** **Zwart gat**, **Lichtsnelheid** (laag = grote Doppler-buigingen), **Wisselwerking** (hoeveel planeten elkaar beïnvloeden) en **Korrel**.
+- **Hemelverschijnselen:** **Zonnevlammen**, **Pulsar** (tikt op de klok) en **Kometen** (hoe vaak er een binnenvalt).
+- **Klank:** **Ether (galm)**, **Echo uit de diepte** en **Uitgang**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer; elke noot maakt een planeet. |
+| **Mod** | modulatie in (paars) | Een modulator kan 14 regelaars bewegen, bijvoorbeeld **Zwaartekracht** of **Tijd**. |
+| **Uit** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Celestial Mechanics** en **Speakers**. Houd een of twee lange noten met een groot interval vast. Draai **Zwart gat** langzaam omhoog: de banen krimpen, de tonen zakken en de planeten worden opgeslokt. Draai **Lichtsnelheid** omlaag en elke baan wordt een jankende Doppler-sirene.
+
+**Tunes.** Pack **Celestial Mechanics Styles**: 74 tunes in 11 mappen (Space, Cinematic, Sci-Fi, Ambient, Dark Ambient, Experimental, Sound Design, Synthwave, Trance, Horror, Drone), bestand [`celestial-mechanics-styles.patchkamer-tunes.json`](../../tunes/celestial-mechanics-styles.patchkamer-tunes.json). Een paar namen: **Orbit Drift**, **Deep Field**, **Tension Bed**, **Doppler Siren**, **Warp Core**.
+
+**Tips en beperkingen.**
+
+- Er bestaan hoogstens 14 planeten tegelijk; een nieuwe noot jaagt de oudste weg.
+- De toonhoogte van een noot die je speelt is exact; **Toonladder (slingeren)** geldt alleen voor planeten die je zelf wegslingert en voor de Oerknal.
+- Een noot-uit haalt zijn planeet meteen weg, ook bij **Levensduur** eeuwig.
+- **Pulsar** en **Echo uit de diepte** volgen het tempo van de klok; zonder klok doet de pulsar niets.
+- Een noot komt zacht binnen (ongeveer 0,1 s), dus de synth is niet geschikt voor percussieve klanken.
+
+### Paradox
+
+**Waar het voor dient.** Een experimentele synth die zelf meebeweegt. Elke stem is een sinus-synthese met onderlinge modulatie, een wavefolder, een lowpass-filter en een snaarachtige terugkoppellus. Een chaossysteem (Lorenz) laat toonhoogte en klank langzaam afdrijven. Een cellulaire automaat kan zelf noten verzinnen (het "organisme"). Een granulair geheugen speelt stukjes van zijn eigen verleden terug, achteruit, stilstaand of versneld. Voor drones, texturen, glitch, geluidsontwerp en bijzondere speelbare klanken. Er is geen sequencer of patroon.
+
+![De kaart van Paradox](../images/nl/synths/paradox.png)
+
+**De regelaars.**
+
+- **Bovenaan:** een lijst **Kies een universum…** (beginstanden), **Anatomie** (de basisklank van de stemmen: **Plasma**, **Glasvlees**, **Machinekoor**, **Zwerm**, **Breuklijn**, **Tijdlek**) en **Gedrag** (**Bespeelbaar**: alleen noten van buiten klinken; **Drone**: één stem blijft klinken op de grondtoon, noten van buiten klinken erbovenop; **Organisme**: de automaat speelt zelf noten rond de grondtoon).
+- **Leeft** (uit = stil), **Volg Start/Stop** (alleen geluid als de klok loopt) en **Klok** met een lijst **Delen per** (de automaat volgt het tempo van de studio in plaats van **Celdeling**).
+- **Beeld** met de Lorenz-baan, de automaat en het live audio. Knoppen: **Muteer** (verschuift de meeste regelaars een beetje willekeurig), **Celdeling!** (activeert één gebeurtenis van de automaat), **Vouw de tijd** (draait **Tijdrichting** om), **Bevries geheugen** en **PANIEK / stil**.
+- **Regelaars:** **Materie**, **Mutatie**, **Wrijving**, **Vouwing**, **Breuk** (bitcrusher), **Geheugen**, **Tijdrichting** (0% achteruit, rond 50% bijna stilstaand, 100% versneld), **Korrelgrootte**, **Ruimte**, **Baan** (stereobreedte), **Leven** (snelheid van de chaos), **Bevolking** (hoeveel noten de automaat speelt), **Voeding** (hoeveel van de audio-ingang door de stemmen gaat), **Celdeling**, **Grondtoon** (een MIDI-noot), **Geboorte** (attack), **Verval** en **Uitgang**.
+- Een klein klavier van 13 toetsen onderaan speelt de kaart vanaf de grondtoon.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Eten** | audio in (groenblauw) | Geluid dat door de stemmen en het geheugen gaat (zie **Voeding**). |
+| **Noten / CC** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer. Een trigger geeft één celdeling. |
+| **Mod** | modulatie in (paars) | Een modulator kan 18 regelaars bewegen. |
+| **Ontsnapping** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Paradox** en **Speakers**. Kies de tune **Sub Cathedral** (die zet **Gedrag** op **Drone**): hij blijft klinken. Draai **Tijdrichting** terug om het geheugen achteruit te horen spelen. Voor een generatief ritme kies je **Organisme**, vink je **Klok** aan, kies je een deling en druk je op **Start**.
+
+**Tunes.** Pack **Paradox Styles**: 70 tunes in 10 mappen (Drone, Ambient, Dark Ambient, Cinematic, Sci-Fi, Glitch, Industrial, Experimental, Sound Design, Noise), bestand [`paradox-styles.patchkamer-tunes.json`](../../tunes/paradox-styles.patchkamer-tunes.json). Een paar namen: **Sub Cathedral**, **Choir of Pipes**, **Frozen Lake**, **Morning Glass**, **Abandoned Hall**. In het pack zijn 37 tunes **Bespeelbaar**, 19 **Organisme** en 14 **Drone**.
+
+**Tips en beperkingen.**
+
+- Hoogstens 6 stemmen; zijn ze allemaal bezet, dan worden nieuwe noten overgeslagen. Een tune met **Drone** gebruikt er altijd één.
+- De klank is niet deterministisch: stemmen krijgen een willekeurige pan, detune en fase, dus dezelfde noot klinkt nooit twee keer precies gelijk.
+- Het bevriezen van het geheugen duurt alleen deze sessie; de inhoud wordt niet in een tune opgeslagen.
+- **Volg Start/Stop** aan betekent stilte zonder klok.
+- **Mutatie**, **Leven** en **Vouwing** alle drie boven 90% geven het chaotische uiterste: ruis met toonhoogtesprongen.
+- De uitgang is zacht begrensd, dus hij clipt niet, maar het niveau verschilt per instelling; stel **Uitgang** per klank af.
+
+### Foundry
+
+**Waar het voor dient.** Een industriële klankvormer, mono. De klank loopt in vaste volgorde: een FM-keten van drie oscillatoren, een ringmodulator, ruis en optioneel extern geluid; vier resonatoren (een metalen "corpus" van terugkoppelende vertragingen) in vier materialen (staal, glas, beton, kabel); twee parallelle vervormers (overdrive en wavefolder); een uitgangsfilter; een envelope; en een ruimte met een compressor. Een trage beweging (LFO op toonhoogte, filter en ringmodulator) en een onregelmatige drift houden hem in beweging. Hij heeft geen eigen sequencer of arpeggiator.
+
+![De kaart van Foundry](../images/nl/synths/foundry.png)
+
+**De regelaars.**
+
+- **Bovenaan:** **Klankbeeld** (twaalf beginklanken, bijvoorbeeld **Steel Mill**, plus **Eigen sculptuur**), **Spel** (**Drone / transport** of **Keyboard / sequencer**), **Start / stop drone**, **Metalen slag** (schakelt naar noten en speelt één noot), **Alles uit** en **Muteer klank** (verandert de klank, niet het uitgangsniveau).
+- **XY-vlak** met **X-as** en **Y-as**. **Bewaar A**, **Bewaar B**, **Herstel A**, **Herstel B** en **Morph A ↔ B** bewaren twee klanken en wisselen ertussen.
+- **Materiaal** (**Staal**, **Glas**, **Beton**, **Kabel**), **Bron** (de golfvorm van de hoofdoscillator) en **Scope** (alleen weergave).
+- **Bronnen & frequenties:** **Dronefrequentie**, **Transpositie**, **FM-intensiteit**, **FM-verhouding** (hele getallen klinken harmonisch, andere waarden metallisch), **Ringmodulatie**, **Ringfrequentie**, **Ruis / schuren** en **Extern materiaal**.
+- **Materiaal & vervorming:** **Resonator-mix**, **Corpusfrequentie**, **Demping / helderheid**, **Ruwheid / drive**, **Wavefold-mix**, **Uitgangsfilter** en **Filterresonantie**.
+- **Beweging & ruimte:** **Cyclische beweging**, **Bewegingssnelheid**, **Onregelmatige drift**, **Ruimte / echo** en **Stereobreedte**.
+- **Envelope & niveau:** **Opkomst**, **Decay**, **Sustain**, **Uitklank** en **Uitgang**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Extern materiaal** | audio in (groenblauw) | Geluid van buiten dat door de keten gaat; zet de regelaar **Extern materiaal** open. |
+| **Keyboard / noten** | noten in (oranje) | Noten bij de speelstand **Keyboard / sequencer**. Monofoon: een nieuwe noot neemt over. |
+| **Mod** | modulatie in (paars) | Een modulator kan de regelaars bewegen; werkt ook zonder klok. |
+| **Stereo sculptuur** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Foundry** en **Speakers**. Kies de tune **Press Line Bass** (staat op **Keyboard / sequencer**) en speel lage noten. Voor een drone: kies **Drone / transport**, druk op **Start / stop drone** en sleep in het XY-vlak om **FM-intensiteit** en **Wavefold-mix** te veranderen.
+
+**Tunes.** Pack **Foundry Styles**: 69 tunes in 11 mappen (Industrial, Techno, Dark Ambient, Cinematic, Sound Design, Horror, Experimental, Noise, Drone, Metal Percussion, Electro), bestand [`foundry-styles.patchkamer-tunes.json`](../../tunes/foundry-styles.patchkamer-tunes.json). Een paar namen: **Press Line Bass**, **Rivet Lead**, **Warehouse Sub**, **Rolling Rumble**, **Cathedral Drone**. In het pack staan 50 tunes op **Keyboard / sequencer** en 19 op **Drone / transport**.
+
+**Tips en beperkingen.**
+
+- Een drone klinkt alleen als de klok loopt of **Start / stop drone** aan staat. Voor een toetsenbord moet een klank op **Keyboard / sequencer** staan.
+- De resonatoren zitten in een terugkoppelende lus; de hoogste gestemde **Corpusfrequentie** is ongeveer 375 Hz. Gebruik hem als kleur, niet als gestemde toon.
+- **Resonator-mix** boven ongeveer 94% geeft geen langere naklank meer.
+- **Extern materiaal** heeft alleen effect als er iets op de ingang is aangesloten.
+- Een bewaker blokkeert de ingang zolang die ongeldige of absurd grote waarden voert en bouwt de keten daarna opnieuw op.
+
+### Mist
+
+**Waar het voor dient.** Een drone- en ambient-synth die meeloopt met de klok van de studio. Acht oscillatoren (om en om sinus en driehoek, licht verstemd) vormen een stilstaand akkoord dat langzaam in- en uitfadet. Daaronder ligt bruine ruis door een bandfilter, als wind. Alles loopt door een toonfilter met een trage LFO, een lange galm en twee stereo-echo's. Zolang de klok loopt en **Spel** op **Drone + noten** staat, wisselen de akkoorden vanzelf en speelt een automatische melodie. Hij speelt ook noten van buiten, tot twaalf tegelijk. Bedoeld als bed onder een song.
+
+![De kaart van Mist](../images/nl/synths/mist.png)
+
+**De regelaars.**
+
+- **Klankbeeld** (14 beginklanken, plus **Eigen klank**), **Spel** (**Drone + noten** of **Alleen noten**: de drone is stil en alleen jouw noten klinken) en **Akkoord** (**Open kwinten**, **Mineur 7**, **Majeur 7**, **Sus / zwevend**, **Open add9**, **Mineur 9**, **Majeur 9** of **Majeur 6**).
+- **Melodie** (niveau van de automatische melodie) en **Dichtheid** (hoe vaak hij een toon speelt).
+- **Warmte**, **Zweving**, **Grondtoon** (de drone en de automatische melodie; noten van buiten houden hun eigen toonhoogte) en **Niveau**.
+- **Helderheid** (cutoff van het toonfilter), **Wind**, **Beweging**, **Galm**, **Echo**, **Opkomst**, **Uitklank** en **Evolutie** (na hoeveel maten het akkoord wisselt).
+- **START DRONE**: speelt een stilstaand akkoord zonder klok.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten / CC** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer; control changes voor de regelaars. |
+| **Mod** | modulatie in (paars) | Een modulator kan 13 regelaars bewegen. |
+| **Stereo uit** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Mist** en **Speakers**. Kies de tune **Slow Horizon** en druk op **Start**: het akkoord drijft en de melodie speelt. Zonder klok druk je op **START DRONE**. Voor zachte klokjes: kies **Alleen noten** en speel noten vanaf **Keys / MIDI**.
+
+**Tunes.** Pack **Mist Styles**: 62 tunes in 11 mappen (Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Lo-fi, Drone, Sound Design, New Age, Chillout), bestand [`mist-styles.patchkamer-tunes.json`](../../tunes/mist-styles.patchkamer-tunes.json). Een paar namen: **Slow Horizon**, **Open Fields**, **Sub Cave**, **Black Cathedral**, **Epic Rise**. In het pack staan 54 tunes op **Drone + noten** en 8 op **Alleen noten**.
+
+**Tips en beperkingen.**
+
+- De drone klinkt alleen als de klok loopt (of na **START DRONE**) en **Spel** op **Drone + noten** staat. Stopt de klok, dan sterft alles uit in **Uitklank** seconden.
+- Akkoordgang en melodie liggen vast en herhalen zich: dezelfde tune en dezelfde klok geven hetzelfde resultaat.
+- Een noot heeft minstens 0,2 s om op te komen en klinkt minstens 1 s na: Mist is niet geschikt voor plucks of stabs.
+- Hoogstens twaalf noten tegelijk, de automatische melodie meegeteld; een dertiende wordt genegeerd.
+- Een zeer lange **Uitklank** (24 s) met veel noten vult de stemmen.
+
+### Grain Cloud
+
+**Waar het voor dient.** Een granulaire synth en een granulair effect in één. Hij knipt geluid in korreltjes van 5 ms tot 1 s en strooit ze opnieuw uit, elk met een eigen toonhoogte, richting, plek in de bron en stereopositie. Er zijn drie bronnen: **Golf (ingebouwd)** (een klank van een seconde die eindeloos loopt; de kaart is dan een synth en klinkt zonder ingang), **Live (ingang)** (alles wat op **In (bron)** binnenkomt, via een geheugen van 8 seconden; de kaart is dan een effect en is stil zonder kabel) en **Bevroren opname** (het geheugen staat stil en je speelt erin rond). Er is geen sequencer of arpeggiator.
+
+![De kaart van Grain Cloud](../images/nl/synths/grain-cloud.png)
+
+**De regelaars.**
+
+- **Klankbeeld** (beginstanden), **Bron** (**Live (ingang)**, **Bevroren opname** of **Golf (ingebouwd)**), **Golf** (**Koor (aah)**, **Orgel**, **Zaagtand**, **Glas**, **Ruis**, **Sinus**; alleen voor de ingebouwde bron) en **Toonsprongen** (**Vrij**, **Octaven**, **Kwinten**, **Octaaf + kwint**).
+- Knoppen: **Wolk (drone)** (een eindeloze wolk op de oorspronkelijke toon, ook zonder noten), **Bevries** (wisselt tussen live en bevroren), **Neem 4 s op** (neemt 4 seconden van de ingang op en bevriest dan) en **Test noot**.
+- **Waar en hoe vaak:** **Positie**, **Spreiding**, **Scannen** (de positie schuift vanzelf door de bron), **Korrelgrootte** (in ms) en **Dichtheid** (korrels per seconde).
+- **Elke korrel:** **Toon**, **Toonspreiding**, **Achteruit** (kans dat een korrel achteruit speelt), **Breedte** en **Venster** (0% zacht, 100% hoekig als een tik).
+- **Wolk en mix:** **Terugkoppeling** (de wolk gaat terug de opname in; alleen bij Live), **Mix**, **Aanzet**, **Uitklank** en **Uitgang**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **In (bron)** | audio in (groenblauw) | Het geluid voor de bronnen **Live (ingang)** en **Bevroren opname**. Zonder kabel is **Live (ingang)** stil. |
+| **Noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer. Een noot verschuift de toonhoogte van de korrels (C4 is de oorspronkelijke toon; bij de ingebouwde bron is dat A3). |
+| **Mod** | modulatie in (paars) | Een modulator kan 15 regelaars bewegen, bijvoorbeeld **Positie**. |
+| **Stereo** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Als synth: plaats **Grain Cloud** en **Speakers**, kies de tune **Choir Mist** (bron **Golf (ingebouwd)**): er klinkt een koorwolk. Als effect: sluit een synth aan op **In (bron)**, kies de bron **Live (ingang)**, zet **Mix** rond 50% en speel: je hoort stotters, verstrooiingen en omgekeerde echo's van wat je erin stuurt. Geef het een of twee seconden om het geheugen te vullen.
+
+**Tunes.** Pack **Grain Cloud Styles**: 61 tunes in 10 mappen (Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Glitch/IDM, Lo-fi, Drone, Sound Design), bestand [`grain-cloud-styles.patchkamer-tunes.json`](../../tunes/grain-cloud-styles.patchkamer-tunes.json). Een paar namen: **Choir Mist**, **Glass Shimmer**, **Sunken Choir**, **Cave Breath**, **Epic Choir Rise**. Van de 61 tunes gebruiken er 54 de ingebouwde bron en klinken ze vanzelf; 7 gebruiken **Live (ingang)** en werken als effect, stil zonder kabel: **Stutter Cloud**, **Micro Slicer**, **Pitch Scatter**, **Reverse Chop**, **Warped Cassette**, **Freeze Echo** en **Smear Cloud**.
+
+**Tips en beperkingen.**
+
+- Hoogstens 8 stemmen (de wolk telt als één) en 160 korrels tegelijk.
+- Een bevroren opname is een opname van deze sessie en hoort niet bij een tune: een tune bevat nooit een sample.
+- Bij **Live (ingang)** komen de korrels uit het geheugen van de laatste 8 seconden; test met een echt signaal (een korte pluck, een ritme of akkoorden), want stilte verbergt de meeste effecten.
+- Houd **Terugkoppeling** onder ongeveer 60%: hogere waarden kunnen de opname laten overgaan in een eindeloos schreeuwende wolk.
+- Voor melodieën: gebruik een lage **Toonspreiding** (onder 1 halve toon) of **Octaven** of **Kwinten**, anders klinken de noten onzuiver.
+- Bij meerdere noten tegelijk houd je **Uitgang** onder ongeveer 60%.
+
 ## Als het niet werkt
 
 - **Geen geluid.** Controleer of er audio loopt van de synth naar **Speakers** (groenblauwe kabel), of je op **Start** hebt gedrukt en of het volume op Speakers hoog genoeg staat. Klik één keer ergens in Patchkamer: browsers houden audio tegen tot je dat doet.
 - **Een ingebouwde sequencer of arpeggiator is stil.** Acid Baselines (met **intern aan**), Acid Stepper (**Besturing** = **Interne klok / patroon**), Sub Line en Cross Mod Mono (**Besturing** = **Eigen patroon** of **Arpeggiator**) spelen alleen als de klok loopt: druk op **Start**. Een arpeggiator heeft ook vastgehouden toetsen nodig.
 - **Een synth reageert niet op een toetsenbord.** Sluit de oranje kabel aan op zijn notenpoort (**Noten**, **Keyboard / noten**, **Externe noten**), niet op **Mod**. Bij Acid Baselines moet **intern aan** uit voor noten van buiten, bij Acid Stepper moet **Besturing** op **Extern keyboard / sequencer** staan, en bij Sub Line en Cross Mod Mono op **Keyboard / externe sequencer**. Gebruik voor een MIDI-toetsenbord **Connect MIDI** op Keys; zie de [basishandleiding](../USER-MANUAL_NL.md#13-problemen-oplossen).
+- **Een drone- of textuursynth is stil.** Elk start op zijn eigen manier: **Start landschap** (Layered Landscape), **Start / stop drone** (Foundry), **START DRONE** (Mist), **Wolk (drone)** (Grain Cloud), **Leeft** (Paradox), **Aan** (Biotope). Drone Synth, Mist, Foundry (in de speelstand **Drone / transport**) en Layered Landscape (met de eigen sequencer) volgen de klok: druk op **Start**, of controleer dat **Volg start/stop** uit staat. Grain Cloud op de bron **Live (ingang)** is stil zonder kabel op **In (bron)**, en Celestial Mechanics heeft noten nodig.
 - **Noten blijven klinken.** Een noot zonder lengte blijft bij sommige synths doorklinken (Bowed Ensemble). Laat de sequencer nootlengtes sturen, of druk op **Alles uit** op de kaart.
 - **De gate of pomp van Supersaw Swarm doet niets.** Ze werken alleen als de klok loopt.
 - **Zacht of stil.** Controleer **Niveau** of **Uitgang** en de klankregelaars: een heel lage cutoff met een lage envelope-diepte klinkt heel zacht (Acid Baselines, Basic Mono), Patchbay Synth heeft een VCA-bron nodig (zie zijn tips) en een heel korte noot met een lange attack van de versterker klinkt bij Triple Osc Poly maar zacht.
