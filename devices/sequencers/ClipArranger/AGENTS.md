@@ -98,6 +98,10 @@ Op elke zestiende noot (`onStep`) kijkt elk spoor in zijn clip welke noten begin
 
 Scènes lanceren op de volgende maat (sessiemodus). In songmodus bepaalt het arrangement welke scène speelt.
 
+## Drumsporen volgen het aangesloten apparaat
+
+Hangt de uitgang `trackN` van een drumspoor aan een apparaat met `noteNames()` (contract v1.14: Drum Kit, Pulse Drums, Click Synth, Latin Percussion), dan nemen de eerste rijen van dat spoor de naam, het nootnummer en het kanaal (`lane` `ch1`, `ch2`, …, in de volgorde van het apparaat) van dat apparaat over; rijen daarachter heten `–`. Een eigen lane-naam (niet `chN`) blijft staan. De opgeslagen `rows` in de state veranderen niet. Wijzigt de kit of de volgorde, dan schuiven de noten in de clips van dat spoor mee naar de rij van hun nootnummer (`row` wordt bijgewerkt); een nootnummer dat het apparaat niet kent, houdt zijn rij. Hebben twee kanalen van het apparaat dezelfde noot, dan telt de lijst die noot één keer en kan een kanaal een plaats opschuiven. Zonder kabel of zonder namen is alles als voorheen.
+
 ## Live spelen en inspelen (ingang `input`)
 
 - **Pads kiezen een spoor of starten een scène** (sinds 1.13.1, state `pads`): `pads.track = { on, base }` laat de noten `base` … `base + aantal sporen − 1` het spoor `noot − base` (0 = spoor 1) kiezen in plaats van te klinken; `pads.scene = { on, base }` laat de noten `base` … `base + 7` scène 1 … 8 starten (op de eerstvolgende maat als de klok loopt, zoals de scèneknop). Standaard staan beide uit (`on: false`, `base` 36 en 44, de twee padbanken van een MPK mini), dus bestaande songs klinken gelijk. Het spoorbereik gaat voor als de bereiken overlappen; een noot erbuiten gaat gewoon naar het geselecteerde spoor. `pads` hoort bij de hardware: het zit in `getState()` maar niet in `getPreset()`, en **Laad startpunt** laat het staan. De noot-off van een pad doet niets. Zo schakel je met één toetsenbord en een MIDI Hub (route **Keyboard**) tussen de apparaten achter de sporen.
