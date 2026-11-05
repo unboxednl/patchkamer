@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Builds the Patchkamer desktop app (portable Windows exe). Start it by hand (Actions > App > Run workflow)
+# or by pushing a tag app/vX.Y.Z.
+name: App
+on:
+  workflow_dispatch:
+  push:
+    tags: ['app/v*']
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Patchkamer-portable
+          path: app/dist/*.exe

@@ -64,6 +64,7 @@ Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waa
 | `patchkamer/` | De host: de studio zelf, als één HTML-pagina | AGPL-3.0-or-later |
 | `contract/` | Het contract voor apparaten (Nederlands en Engels) en de validator | MIT |
 | `devices/` | De meegeleverde apparaten, in een map per soort en een map per apparaat | AGPL-3.0-or-later |
+| `app/` | De desktop-app (Electron): de host in een eigen venster, met de meegeleverde bibliotheek; bouwt een portable Windows-exe | AGPL-3.0-or-later |
 | `tunes/` | Klanken voor apparaten die geluid maken | CC0-1.0 |
 | `presets/` | Instellingen voor apparaten zonder eigen geluid | CC0-1.0 |
 | `songs/` | Meegeleverde songs | CC-BY-4.0 |

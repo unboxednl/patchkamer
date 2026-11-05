@@ -64,6 +64,7 @@ Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, 
 | `patchkamer/` | The host: the studio itself, as one HTML page | AGPL-3.0-or-later |
 | `contract/` | The device contract (English and Dutch) and the validator | MIT |
 | `devices/` | The included devices, in a folder per kind and a folder per device | AGPL-3.0-or-later |
+| `app/` | The desktop app (Electron): the host in its own window, with the bundled library; builds a portable Windows exe | AGPL-3.0-or-later |
 | `tunes/` | Sounds for devices that make sound | CC0-1.0 |
 | `presets/` | Settings for devices without a sound of their own | CC0-1.0 |
 | `songs/` | Included songs | CC-BY-4.0 |
