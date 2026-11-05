@@ -65,6 +65,16 @@ Sluit een toetsenbord (het apparaat **Keys**, of een andere notenbron) aan op de
 - Wanderer en Scale Arpeggiator geven het toetsenbord niet door en nemen niets op: daar is het toetsenbord het **akkoord** waarover het apparaat speelt. Euclidean Rhythms neemt ook niet op, omdat een rij een formule is en geen lijst noten.
 - Opnemen en de plek van de cursor zijn werkstanden: ze worden **niet** in een preset bewaard.
 
+### Een drumcomputer aansturen: de rijen volgen het apparaat
+
+Hangt er aan de notenuitgang van een sequencer een drumcomputer (**Drum Kit**, **Pulse Drums**, **Click Synth** of **Latin Percussion**), dan geeft die computer zijn klanken met hun nootnummer door. De sequencer toont dan geen noten maar **de klanken zelf**, in de volgorde van de drumcomputer:
+
+- **Step Sequencer**: elke rij van de rol is een klank, met de naam links. Verandert de kit, de volgorde of de noot van een kanaal in de drumcomputer, dan volgen de rijen direct. Een noot in het patroon die de nieuwe kit niet kent, blijft staan als rij met alleen het nootnummer en een vraagteken. Een Step Sequencer speelt één noot per stap: voor een heel drumstel zet je er één per klank, of gebruik je een Pattern Tracker.
+- **Pattern Tracker** en **Pattern Playlist**: de **drum-editor** toont de klanken van de drumcomputer die aan het **gekozen spoor** hangt (de kabel van de uitgang van dat spoor), met de naam, de volgorde en de noot van het apparaat. Leg je de kabel voor het eerst, dan schakelt de editor eenmalig naar de drumrijen. De pianorol en de titels van de cellen noemen de klanknamen erbij.
+- Zonder kabel, of bij een apparaat dat geen namen doorgeeft, blijft alles zoals het was (pianorol, of de zes vaste drumrijen van de drum-editor).
+
+Staat de **eigen sequencer van de drumcomputer** aan, dan speelt die tegelijk met jouw sequencer. De tunes van de drumcomputers zetten hem uit (zie de handleiding van de drumcomputers), zodat je met je eigen sequencer kunt beluisteren welke kit het best past.
+
 ### Velocity en lengte
 
 Elke noot heeft naast zijn toonhoogte twee dingen: hoe hard hij wordt gespeeld (**velocity**) en hoe lang hij duurt (**lengte**). In alle sequencers die noten bewerken zie je allebei:

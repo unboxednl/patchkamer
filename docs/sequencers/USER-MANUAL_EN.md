@@ -65,6 +65,16 @@ Connect a keyboard (the device **Keys**, or another source of notes) to the note
 - Wanderer and Scale Arpeggiator do not pass the keyboard on and do not record: there the keyboard is the **chord** that the device plays from. Euclidean Rhythms does not record either, because a row is a formula and not a list of notes.
 - Recording and the position of the cursor are working states: they are **not** stored in a preset.
 
+### Driving a drum machine: the rows follow the device
+
+When a drum machine (**Drum Kit**, **Pulse Drums**, **Click Synth** or **Latin Percussion**) hangs on the note output of a sequencer, that machine passes on its sounds with their note numbers. The sequencer then shows **the sounds themselves** instead of notes, in the order of the drum machine:
+
+- **Step Sequencer**: every row of the roll is a sound, with its name on the left. When the kit, the order or the note of a channel changes in the drum machine, the rows follow at once. A note in the pattern that the new kit does not know stays as a row with only the note number and a question mark. A Step Sequencer plays one note per step: for a whole kit you use one per sound, or a Pattern Tracker.
+- **Pattern Tracker** and **Pattern Playlist**: the **drum editor** shows the sounds of the drum machine that hangs on the **chosen track** (the cable from that track's output), with the name, the order and the note of the device. When you lay the cable for the first time, the editor switches once to the drum rows. The piano roll and the titles of the cells also name the sounds.
+- Without a cable, or with a device that passes on no names, everything stays as it was (piano roll, or the six fixed drum rows of the drum editor).
+
+If the drum machine's **own sequencer** is on, it plays at the same time as your sequencer. The tunes of the drum machines switch it off (see the drum machine manual), so you can audition with your own sequencer which kit fits best.
+
 ### Velocity and length
 
 Every note has two things besides its pitch: how hard it is played (**velocity**) and how long it lasts (**length**). In all sequencers that edit notes you can see both:
