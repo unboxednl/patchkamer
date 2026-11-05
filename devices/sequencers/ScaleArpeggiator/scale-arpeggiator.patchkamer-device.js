@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Extra swing (`swing`, 0 … 0,5 van een zestiende, standaard 0). Een noot (of roll-herhaling) die in een oneven zestiende valt komt swing × stepDur later, bovenop de swing van de host; even zestienden blijven staan.
+//   Snelheden van 1/8 en langzamer spelen alleen op even zestienden en schuiven dus niet. Met swing 0 geeft een state dezelfde gebeurtenissen als voorheen.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Scale Arpeggiator (nieuwe id nl.patchkamer.scale-arpeggiator, eigen map in sequencers; voorheen een
 //   Nederlandstalig apparaat met een andere naam en id, nl.patchkamer.toonladder). Songs en presets uit die tijd verwijzen naar de oude id en laden hier niet in.
 //   Met een ongewijzigde (oude) state en dezelfde ingang en klokstappen stuurt dit apparaat dezelfde noten uit als het oude bestand.
@@ -19,7 +21,7 @@ const EN = {
   'Snelheid': 'Rate', '1/16 triool': '1/16 triplet', '1/8 triool': '1/8 triplet', '1/32 triool': '1/32 triplet',
   'Octaven': 'Octaves', 'Latch': 'Latch', 'Uit': 'Off', 'Akkoord vasthouden': 'Hold chord', 'Actief': 'Active', 'Arpeggio': 'Arpeggio', 'Doorvoer': 'Pass-through',
   'Herhalingen': 'Repeats', 'Gate': 'Gate', 'Velocity': 'Velocity', 'Accent op de tel': 'Beat accent', 'Zwakke noten zachter': 'Soft weak notes', 'Mensachtig': 'Humanize', 'Speelkans': 'Probability',
-  'Akkoord wissen': 'Clear chord', 'Patroonlengte': 'Pattern length', 'Velocity-patroon': 'Velocity pattern', 'Lengte-patroon': 'Length pattern',
+  'Akkoord wissen': 'Clear chord', 'Swing': 'Swing', 'Patroonlengte': 'Pattern length', 'Velocity-patroon': 'Velocity pattern', 'Lengte-patroon': 'Length pattern',
   'Balkjes: klik of sleep om de velocity en lengte van elke noot in de cyclus te zetten (hoog = hard of lang).': 'Bars: click or drag to set the velocity and length of each note in the cycle (high = loud or long).',
   'Interne klok gestopt': 'Internal clock stopped', 'Interne klok · {0} BPM': 'Internal clock · {0} BPM', 'Wacht op interne klok': 'Waiting for internal clock',
   'Noten komen van de aangesloten oranje kabel. Latch bewaart het akkoord tot een nieuw akkoord of Wissen.': 'Notes come from the connected orange cable. Latch keeps the chord until a new chord or Clear.',
@@ -27,7 +29,7 @@ const EN = {
     'The host sets BPM and swing. 1/32 schedules two notes per sixteenth ahead; all times are AudioContext times. A keyboard on the input is the chord source itself: set Active to Pass-through to let the keyboard through unchanged.',
 };
 export default {
-  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.11.0', kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
+  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.14.0', kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'notes', name: 'Chord / keyboard' }], eventOut: [{ id: 'notes', name: 'Arpeggio' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -56,7 +58,7 @@ export default {
       const set = e => { const r = cv.getBoundingClientRect(), i = clamp(Math.floor((e.clientX - r.left) / (r.width || 1) * 16), 0, 15), v = clamp(1 - (e.clientY - r.top) / (r.height || 1), lo, 1); if (i < lenGet()) arr[i] = Math.round(v * 20) / 20 < lo ? lo : Math.round(v * 20) / 20; draw(); };
       cv.onpointerdown = e => { down = true; try { cv.setPointerCapture(e.pointerId); } catch { } set(e); }; cv.onpointermove = e => { if (down) set(e); }; cv.onpointerup = cv.onpointercancel = () => { down = false; };
       let ro = null; try { ro = new ResizeObserver(draw); ro.observe(cv); } catch { } uiHandles[id] = { set() { draw(); }, dispose() { try { ro && ro.disconnect(); } catch { } } }; draw(); return cv; }
-    const defaults = { mode: 'up', rate: 2, octaves: 2, gate: 0.7, velocity: 0.85, latch: false, enabled: true, seed: 12345, plen: 1, vpat: new Array(16).fill(1), gpat: new Array(16).fill(1), accent: 0, ghost: 0, human: 0, chance: 1, repeat: 1 };
+    const defaults = { swing: 0, mode: 'up', rate: 2, octaves: 2, gate: 0.7, velocity: 0.85, latch: false, enabled: true, seed: 12345, plen: 1, vpat: new Array(16).fill(1), gpat: new Array(16).fill(1), accent: 0, ghost: 0, human: 0, chance: 1, repeat: 1 };
     let state = JSON.parse(JSON.stringify(defaults)), mod = {}, dead = false, playing = null, queue = [], held = new Map(), latched = new Map(), counter = 0, last = -1, gen = 12345, pgen = 7, status = null, clockStatus = null, clockBpm = 0, ownAbs = -1;
     const rates = [0.5, 1, 2, 4, 8];                                   // de eerste vijf: noten per stap of stappen per noot (ongewijzigd)
     const NEWRATES = { 5: 0.25, 6: 2 / 3, 7: 4 / 3, 8: 1 / 3 };      // nieuwe snelheden: afstand tussen noten in zestiende noten
@@ -74,7 +76,7 @@ export default {
     }
     function notes() { const base = [...(state.latch ? latched : held).values()]; if (state.mode !== 'order') base.sort((a, b) => a.note - b.note); const result = []; for (let o = 0; o < state.octaves; o++) for (const e of base) if (e.note + o * 12 <= 127) result.push({ note: e.note + o * 12, vel: e.vel }); return result.slice(0, 128); }
     const lcg = g => (Math.imul(g, 1664525) + 1013904223) >>> 0;
-    function tick(t, stepSeconds, pos) {
+    function tick(t, stepSeconds, pos, sd = stepSeconds) {
       consume(t); const list = notes(); if (!list.length) return false; let index = 0; const n = list.length;
       if (state.mode === 'down') index = n - 1 - counter % n; else if (state.mode === 'updown') { const period = Math.max(1, n * 2 - 2), x = counter % period; index = x < n ? x : period - x; }
       else if (state.mode === 'updown2') { const period = n * 2, x = counter % period; index = x < n ? x : period - 1 - x; }
@@ -84,13 +86,14 @@ export default {
       const gate = clamp(state.gate + (mod.gate || 0) * 1.4, 0.1, 1.5), velocity = clamp(state.velocity + (mod.velocity || 0) * 0.95, 0.05, 1), c = counter % state.plen, vm = state.vpat[c], gm = state.gpat[c];
       counter++;
       if (state.chance < 1) { pgen = lcg(pgen); if (pgen / 4294967296 >= state.chance) return true; }
+      const sw = state.swing > 0 && Math.floor(pos + 1e-9) % 2 === 1 ? Math.min(0.5, state.swing) * sd : 0;
       const beat = Math.abs(pos / 4 - Math.round(pos / 4)) < 1e-6, eighth = Math.abs(pos / 2 - Math.round(pos / 2)) < 1e-6, rep = state.repeat;
       let hum = 0, delay = 0; if (state.human > 0) { hum = (Math.random() * 2 - 1) * state.human * 0.25; delay = Math.random() * state.human * 0.3 * stepSeconds; }
       for (const e of state.mode === 'chord' ? list : [list[index]]) {
         let v = e.vel * velocity * vm; if (state.accent > 0 && beat) v += state.accent * 0.3; if (state.ghost > 0 && !eighth) v *= 1 - state.ghost * 0.6; v += hum;
         v = clamp(v, 0.01, 1);
-        if (rep === 1) emit({ type: 'note', note: e.note, vel: v, time: t + delay, dur: Math.max(0.01, stepSeconds * gate * gm) });
-        else for (let r = 0; r < rep; r++) emit({ type: 'note', note: e.note, vel: clamp(v * (1 - 0.12 * r), 0.01, 1), time: t + delay + r * stepSeconds / rep, dur: Math.max(0.005, stepSeconds / rep * gate * gm) });
+        if (rep === 1) emit({ type: 'note', note: e.note, vel: v, time: t + delay + sw, dur: Math.max(0.01, stepSeconds * gate * gm) });
+        else for (let r = 0; r < rep; r++) emit({ type: 'note', note: e.note, vel: clamp(v * (1 - 0.12 * r), 0.01, 1), time: t + delay + sw + r * stepSeconds / rep, dur: Math.max(0.005, stepSeconds / rep * gate * gm) });
       }
       return true;
     }
@@ -109,6 +112,7 @@ export default {
       knob(controls, 'velocity', tx('Velocity'), [0.05, 1, 0.01], state.velocity, v => state.velocity = v);
       knob(controls, 'accent', tx('Accent op de tel'), [0, 1, 0.01], state.accent, v => state.accent = v, pct);
       knob(controls, 'ghost', tx('Zwakke noten zachter'), [0, 1, 0.01], state.ghost, v => state.ghost = v, pct);
+      knob(controls, 'swing', tx('Swing'), [0, 0.5, 0.01], state.swing, v => state.swing = v, pct);
       knob(controls, 'human', tx('Mensachtig'), [0, 1, 0.01], state.human, v => state.human = v, pct);
       knob(controls, 'chance', tx('Speelkans'), [0, 1, 0.01], state.chance, v => state.chance = v, pct);
       bars(panel, 'vpat', tx('Velocity-patroon'), state.vpat, () => state.plen, 0.05); bars(panel, 'gpat', tx('Lengte-patroon'), state.gpat, () => state.plen, 0.1);
@@ -117,7 +121,7 @@ export default {
       add(panel, 'p', tx('De host bepaalt BPM en swing. 1/32 plant twee noten per zestiende vooruit; alle tijden zijn AudioContext-tijden. Een toetsenbord op de ingang is de akkoordbron zelf: zet Actief op Doorvoer om het toetsenbord ongewijzigd door te laten.')); }
     const self = { inputs: {}, outputs: {}, mount: render, unmount() { status = null; clockStatus = null; clearUI(); },
       onEvent(port, e) { try { if (dead || port !== 'notes' || !e || !Number.isFinite(e.time)) return; if (e.type === 'cc' || !state.enabled) { emit({ ...e }); return; } if (!['note', 'noteon', 'noteoff', 'note_on', 'note_off', 'panic', 'allnotesoff'].includes(String(e.type).toLowerCase())) return; queue.push({ ...e }); queue.sort((a, b) => a.time - b.time); if (queue.length > 512) queue.shift();
-          if (playing && missed.length) { const now = ctx.currentTime; missed = missed.filter(m => m.t >= now); const due = missed.filter(m => m.t >= e.time).sort((a, b) => a.t - b.t); if (due.length) { missed = missed.filter(m => m.t < e.time); for (const m of due) if (!tick(m.t, m.d, m.p)) missed.push(m); } } } catch { } },
+          if (playing && missed.length) { const now = ctx.currentTime; missed = missed.filter(m => m.t >= now); const due = missed.filter(m => m.t >= e.time).sort((a, b) => a.t - b.t); if (due.length) { missed = missed.filter(m => m.t < e.time); for (const m of due) if (!tick(m.t, m.d, m.p, m.s)) missed.push(m); } } } catch { } },
       onTransport(info) { if (dead) return; const next = !!info?.playing; if (next !== playing) last = -1; playing = next; if (!playing) { reset(); emit({ type: 'allnotesoff', time: ctx.currentTime }); } clockLabel(); },
       onStep(info) { try {
         if (dead || playing === false || !state.enabled || !info || !Number.isFinite(info.time) || !Number.isInteger(info.step) || info.step < 0 || info.step > 15) return;
@@ -129,7 +133,7 @@ export default {
         clockBpm = bpm > 0 ? bpm : 15 / stepSeconds; clockLabel();
         const t = info.time;
         // Elke ondersteunde deling herhaalt binnen één maat van 16 stappen of loopt via de absolute positie. De getimede stappen van de host blijven staan.
-        const run = (at, d, p) => { if (!tick(at, d, p)) { missed.push({ t: at, d, p }); if (missed.length > 8) missed.shift(); } };
+        const run = (at, d, p) => { if (!tick(at, d, p, stepSeconds)) { missed.push({ t: at, d, p, s: stepSeconds }); if (missed.length > 8) missed.shift(); } };
         if (Object.hasOwn(NEWRATES, state.rate)) {
           const sp = NEWRATES[state.rate], abs = Number.isFinite(info.bar) ? info.bar * 16 + info.step : ownAbs + 1; ownAbs = abs;
           for (let k = Math.ceil(abs / sp - 1e-9); k * sp < abs + 1 - 1e-9; k++) run(t + (k * sp - abs) * stepSeconds, stepSeconds * sp, k * sp);
@@ -142,7 +146,7 @@ export default {
       modulate(o) { mod = {}; if (o && typeof o === 'object') for (const k of ['gate', 'velocity']) if (Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(raw) { if (dead) return; const s = raw && typeof raw === 'object' ? raw : {}; const pat = (a, lo) => Array.from({ length: 16 }, (_, i) => finite(Array.isArray(a) ? a[i] : undefined, 1, lo, 1));
-        state = { mode: modes.some(([v]) => v === s.mode) ? s.mode : 'up', rate: Math.round(finite(s.rate, 2, 0, 8)), octaves: Math.round(finite(s.octaves, 2, 1, 4)), gate: finite(s.gate, 0.7, 0.1, 1.5), velocity: finite(s.velocity, 0.85, 0.05, 1), latch: typeof s.latch === 'boolean' ? s.latch : false, enabled: typeof s.enabled === 'boolean' ? s.enabled : true, seed: Math.round(finite(s.seed, 12345, 0, 4294967295)),
+        state = { swing: finite(s.swing, 0, 0, 0.5), mode: modes.some(([v]) => v === s.mode) ? s.mode : 'up', rate: Math.round(finite(s.rate, 2, 0, 8)), octaves: Math.round(finite(s.octaves, 2, 1, 4)), gate: finite(s.gate, 0.7, 0.1, 1.5), velocity: finite(s.velocity, 0.85, 0.05, 1), latch: typeof s.latch === 'boolean' ? s.latch : false, enabled: typeof s.enabled === 'boolean' ? s.enabled : true, seed: Math.round(finite(s.seed, 12345, 0, 4294967295)),
           plen: Math.round(finite(s.plen, 1, 1, 16)), vpat: pat(s.vpat, 0.05), gpat: pat(s.gpat, 0.1), accent: finite(s.accent, 0, 0, 1), ghost: finite(s.ghost, 0, 0, 1), human: finite(s.human, 0, 0, 1), chance: finite(s.chance, 1, 0, 1), repeat: Math.round(finite(s.repeat, 1, 1, 4)) };
         reset(); if (mountHost) render(mountHost); },
       destroy() { if (dead) return; reset(); dead = true; self.unmount(); } };

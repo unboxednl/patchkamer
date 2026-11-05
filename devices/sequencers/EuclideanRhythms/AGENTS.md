@@ -15,7 +15,7 @@ Wat een rij speelt, is volledig **gegenereerd uit getallen**; er staat geen lijs
 | Naam | `Euclidean Rhythms` in alle talen; poortnamen hebben een Nederlandse variant (via `i18n`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `reset` (Reset) en `keys` (Notes in / Noten in), eventuitgang `trigs` (Trigs / notes); geen audio, geen modulatie |
-| Contract | v1.14 (apparaatversie 1.14.0) |
+| Contract | v1.14 (apparaatversie 1.14.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Euclides, `nl.patchkamer.euclides`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state die je zelf in dit apparaat zet (zonder de nieuwe velden) klinkt gelijk aan vroeger: alle nieuwe velden hebben als standaard het oude gedrag.
@@ -146,7 +146,7 @@ Overlap: een noot met `gate` > 1 klinkt nog als de volgende slag van dezelfde ri
 
 Een **flam** (een zachte slag vlak vóór een harde) is twee rijen op dezelfde uitgang: rij A `steps 32, pulses 1, rot 16, div "4", vel 0,35` en rij B `steps 32, pulses 1, rot 17, div "4", vel 1`. Een **drag/roll**-opbouw is één rij `steps 32, pulses 32, div "4"` met `curve: "up"`.
 
-Een **swing** hoort bij de klok van de studio (`host.swing`), niet bij dit apparaat; gebruik voor een shuffle liever `div: "0.75"` met 12 stappen.
+Naast de swing van de klok van de studio (`host.swing`) heeft elke rij een eigen extra `swing` (zie "Swing per rij en klankenlijst"); voor een shuffle kan ook `div: "0.75"` met 12 stappen.
 
 ## Uitvoer en gebeurtenissen
 
@@ -262,6 +262,16 @@ Vijf noten per maat (C2, MIDI 36), twee ervan als accent (velocity 1), de rest 0
 - Gelijkheid met het oude apparaat (Euclides): 314 willekeurige runs (96 841 gebeurtenissen) met willekeurige oude states, tempo's, resets en transportwisselingen gaven precies dezelfde gebeurtenissen (dezelfde noot, velocity, duur, tijd, lane) als het oude bestand, met dezelfde reeks willekeurige getallen.
 - Alle 65 presets: `setPreset` gevolgd door `getPreset` geeft dezelfde state, vier maten spelen eindige gebeurtenissen, niet stil, geen twee presets met dezelfde uitvoer.
 - Niet beluisterd; er is geen echt drumapparaat of echte synth aan gekoppeld getest, en geen echt MIDI-toetsenbord (de live-ingang is getest met gebeurtenissen).
+
+## Swing per rij en klankenlijst (1.14.1)
+
+Nieuwe sleutel per rij: `swing` (0 … 0,5 van een zestiende; schuif "Swing" bij de gekozen rij, standaard 0, altijd aanwezig in `rows[]`).
+
+Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.14.0. Een slag valt in een oneven zestiende als `floor(stap / div + offset)` oneven is (de teller loopt mee met "Terug naar het begin"); bij `"1.5"` en `"3"` (triolen) schuift dus een deel van de slagen, bij `"0.5"` en `"0.25"` geen. De tweede helft van een ratchet beoordeelt zijn eigen positie.
+
+De nootkeuze van een rij (`note`) is nu 0 … 127 (was 12 … 108, zodat een klank van een drumcomputer met een noot buiten dat bereik onbereikbaar was). De keuzelijst toont, als er een drumcomputer aan `trigs` hangt, eerst al zijn klanken in zijn volgorde (groep "Klanken van de drumcomputer", getest met 27 klanken) en daarna alle noten 0 … 127. Een klank zonder eigen kanaal (gast) bereik je dus via `out: "noot"` met zijn noot. De trig-uitgangen blijven `ch1` … `ch8`.
+
+Opnemen/kwantiseren is niet van toepassing: dit apparaat is een generator zonder lijst noten om in te schrijven.
 
 ## Controleren
 

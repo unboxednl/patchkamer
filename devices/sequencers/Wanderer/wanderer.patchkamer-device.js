@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Extra swing (`swing`, 0 … 0,5 van een zestiende, standaard 0). Een noot (of ratchet-noot) die in een oneven zestiende valt komt swing × stepDur later, bovenop de swing van de host; even zestienden blijven staan.
+//   Rasters van 1/8 en langzamer hebben alleen noten op even zestienden en schuiven dus niet. Met swing 0 speelt een state precies als voorheen (geen extra willekeur). De regelaar is niet te moduleren, zodat de lijst stuurbare parameters gelijk blijft.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Wanderer (nieuwe id nl.patchkamer.wanderer, eigen map in sequencers; voorheen een Nederlandstalig
 //   apparaat met een andere naam en id, nl.patchkamer.dwaler). Songs en presets uit die tijd verwijzen naar de oude id en laden hier niet in.
 //   Met een ongewijzigde (oude) state, dezelfde klokstappen en dezelfde willekeur geeft dit apparaat dezelfde noten als het oude bestand.
@@ -34,6 +36,7 @@ const EN = {
   'Het motief herhaalt zich; na "Herhaal eerst" keer verandert elke noot met de kans Verandering, en soms schuift het hele motief een trede. Vergrendel houdt een motief vast dat je goed vindt (het wordt bewaard in de werkruimte). Paarse Mod: Drift op Dichtheid of Sprongen laat de melodie ademen; Volger op Dichtheid laat hem drukker spelen als de drums luider zijn. Live toetsenbord: sluit een toetsenbord aan op de ingang en zet Volg akkoord aan; dit apparaat stuurt geen toetsenbord door naar een synth.':
     'The motif repeats; after "Repeat first" times every note changes with the chance Change, and now and then the whole motif shifts a scale step. Lock keeps a motif you like (it is saved in the workspace). Purple Mod: Drift on Density or Leaps lets the melody breathe; Follower on Density makes it play busier when the drums get louder. Live keyboard: connect a keyboard to the input and switch on Follow chord; this device does not pass a keyboard through to a synth.',
   'dubbelklik: standaard': 'double-click: default',
+  'extra vertraging van noten op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)': 'extra delay for notes on an odd sixteenth, on top of the host swing (grids of 1/16 and faster only)',
   'akkoord: ': 'chord: ', 'wacht op een akkoord (speelt intussen de toonladder)': 'waiting for a chord (plays the scale meanwhile)', 'wacht op een akkoord': 'waiting for a chord',
   'herhaling {0}': 'repeat {0}', ' · vergrendeld': ' · locked',
   '1/8 triool': '1/8 triplet', '1/16 triool': '1/16 triplet', '1/32 triool': '1/32 triplet',
@@ -94,7 +97,7 @@ function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([,
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.11.0', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.14.0', kind: 'utility', category: 'sequencer',
   ui: { width: 820, minWidth: 400 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'akkoord', name: 'Chord / keys' }], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { akkoord: 'Akkoord / toetsen', notes: 'Noten' } } },
@@ -121,10 +124,11 @@ export default {
       vel: { name: 'Velocity', min: 0.1, max: 1, unit: '%', g: 3 },
       accent: { name: 'Accenten', min: 0, max: 1, unit: '%', g: 3, tip: 'zware tellen harder' },
       ghost: { name: 'Spooknoten', min: 0, max: 1, unit: '%', g: 3, tip: 'kans dat een lichte noot een zachte spooknoot wordt' },
+      swing: { name: 'Swing', min: 0, max: 0.5, step: 0.01, unit: '%', g: 2, nomod: true, tip: 'extra vertraging van noten op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)' },
       human: { name: 'Mensachtig', min: 0, max: 1, unit: '%', g: 3, tip: 'willekeurige velocity en lichte vertraging bij het spelen' },
       ratchet: { name: 'Ratchets', min: 0, max: 1, unit: '%', g: 3, tip: 'kans dat een noot een roll van 2 tot 4 noten wordt' },
     };
-    const defaults = { density: 0.65, jump: 0.15, drift: 0, chord: 0.6, octave: 0.05, mut: 0.25, reps: 2, gate: 0.6, gvar: 0.3, vel: 0.75, accent: 0.4, ghost: 0, human: 0, ratchet: 0,
+    const defaults = { swing: 0, density: 0.65, jump: 0.15, drift: 0, chord: 0.6, octave: 0.05, mut: 0.25, reps: 2, gate: 0.6, gvar: 0.3, vel: 0.75, accent: 0.4, ghost: 0, human: 0, ratchet: 0,
       root: 57, scale: 'minor', lo: 50, hi: 74, div: '1', len: 16, contour: 'flat', follow: false, lock: false, run: true, preset: 'Calm line', motif: null, seed: 1 };
     const presets = {
       'Calm line': {},
@@ -247,9 +251,10 @@ export default {
             let vel = s.vel; if (state.contour !== 'flat') vel *= contourFactor(j, state.motif.length);
             let delay = 0; if (eff.human > 0) { vel += (Math.random() * 2 - 1) * eff.human * 0.25; delay = Math.random() * eff.human * 0.3 * slot; }
             vel = clamp(Number.isFinite(vel) ? vel : 0.75, 0.01, 1);
+            const sw = eff.swing > 0 ? Math.min(0.5, eff.swing) : 0, sh = q => (sw > 0 && Math.floor(k / rate + q + 1e-9) % 2 === 1 ? sw * sd : 0);
             try { const rat = s.rat > 1 ? s.rat : 1;
-              if (rat === 1) host.emit(self, 'notes', { type: 'note', note, vel, time: time + delay, dur: Math.max(0.001, s.gate * sd / rate) });
-              else for (let r = 0; r < rat; r++) host.emit(self, 'notes', { type: 'note', note, vel: clamp(vel * (1 - 0.12 * r), 0.01, 1), time: time + delay + r * slot / rat, dur: Math.max(0.001, slot / rat * clamp(s.gate, 0.1, 1)) });
+              if (rat === 1) host.emit(self, 'notes', { type: 'note', note, vel, time: time + delay + sh(0), dur: Math.max(0.001, s.gate * sd / rate) });
+              else for (let r = 0; r < rat; r++) host.emit(self, 'notes', { type: 'note', note, vel: clamp(vel * (1 - 0.12 * r), 0.01, 1), time: time + delay + sh(r / rat / rate) + r * slot / rat, dur: Math.max(0.001, slot / rat * clamp(s.gate, 0.1, 1)) });
             } catch {} }
            } catch {} },
       onTransport(info) { try { if (!info?.playing) { tickN = 0; cycle = 0; curStep = -1; lastAbs = -1; } } catch {} },

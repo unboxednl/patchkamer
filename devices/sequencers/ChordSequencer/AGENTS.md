@@ -15,7 +15,7 @@ Het verschil met `Pulse Drums` (drumcomputer, geeft geluid): Chord Sequencer is 
 | Naam | `Chord Sequencer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Transpositie`, `Spoor A` … `Spoor D`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `transpose` (Transpose) en `live` (Live, voor een toetsenbord of andere notenbron), modulatie-ingang `mod`, eventuitgangen `a`, `b`, `c`, `d` (Track A–D); geen audio; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.13 (apparaatversie 1.13.0) |
+| Contract | v1.14 (apparaatversie 1.14.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Sequencer, `nl.patchkamer.puls`, stond bij de synths). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -144,7 +144,7 @@ Een melodie in `notes` is niet getransponeerd door de progressie: kies de noten 
 - Drive (bas): `division: 2` (1/8) met `steps` allemaal 1, of op de tellen (`division: 4`).
 - Synco: `division: 1` met een patroon als `x..x..x...x.x...`.
 - Rolls/versieringen: `grid` 2 of 4 met `division: 1` (zie de tabel).
-- Swing en humanize: dit apparaat kent geen swing; maak lichte verschillen met `vel`, `len`, `probability` (0,7 … 0,95) en bij `notes` met posities die 1 of 2 eenheden naast het raster liggen (zet dan `rquant` uit bij het opnemen, of schrijf `rec` direct).
+- Swing en humanize: naast de swing van de host heeft elk spoor een eigen `swing` (zie "Swing per spoor"); maak verder lichte verschillen met `vel`, `len`, `probability` (0,7 … 0,95) en bij `notes` met posities die 1 of 2 eenheden naast het raster liggen (zet dan `rquant` uit bij het opnemen, of schrijf `rec` direct).
 
 ### Velocity en dynamiek per rol
 
@@ -223,6 +223,17 @@ In `scenes` staat elke scène als **tekst**: `JSON.stringify` van een lijst van 
 - Ook bij rommel op de ingang en in `onStep` (`NaN`, `Infinity`, tekst, stapdelen) komen er alleen eindige noten van 0 … 127 uit en speelt het apparaat daarna gewoon verder (300 willekeurige runs, geen enkele fout). Oud en nieuw bestand gaven bij 400 willekeurige runs (89016 gebeurtenissen) precies dezelfde gebeurtenissen.
 - Nieuwe velden: waarden buiten het bereik worden afgekapt (`grid` anders dan 2 of 4 wordt weggelaten, `vel` 0,05 … 1, `len` 0,1 … 4, `bars` 1 … 4, `rec` hoogstens 256 noten met `p` 0 … `bars × 64 − 1`, `n` 0 … 127, `v` 0,01 … 1, `l` 1 … `bars × 64`); rommel in `rec` wordt overgeslagen. Het apparaat stuurt nooit een niet-eindige waarde, een noot buiten 0 … 127, een velocity buiten 0 … 1 of een `dur` ≤ 0 uit, ook niet bij rommel op `live`, `onStep` of in de state (getest met 400 rommelregels).
 - Niet beluisterd; er is geen echte synth aan gekoppeld getest.
+
+## Swing per spoor (1.14.0)
+
+Nieuwe sleutel in een spoor in `scenes[n]`: `swing` (0 … 0,5 van een zestiende; schuif "Swing" in de spooreditor). Zoals `grid`, `vel` en `len` staat hij **alleen in de state als hij niet 0 is**, dus een oude state geeft dezelfde `getState()`-tekst.
+
+Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.13.0. Het geldt voor stapsporen (de 1/32- en 1/64-stappen en ratchets die in een oneven zestiende vallen schuiven mee) en voor de noten van de spelwijze `notes` (positie `p`: de noot schuift als zijn zestiende, `p >> 2`, oneven is). `division` 2 of hoger (1/8 en langzamer) staat op even zestienden en schuift dus niet.
+
+### Inspelen (1.14.0)
+
+* Kwantiseren (`rquant`) gaat naar het dichtstbijzijnde geswingde rasterpunt van het spoor (hostswing + spoorswing); uit: 1/64. De lengte komt uit twee rasterpunten (noteon en noteoff) in plaats van seconden gedeeld door een gemiddelde stap, zodat swing de lengte niet vervormt. Loop-rand: een noot vlak voor het einde van de lus rondt af naar positie 0. Bij een zeer fijn raster met veel swing (swing groter dan een rasterstap) kunnen twee rasterpunten overlappen; dan wint het dichtstbijzijnde.
+* `trig`-gebeurtenissen met een `note` op `live` worden als korte noot (0,1 s) doorgegeven en ingespeeld.
 
 ## Controleren
 

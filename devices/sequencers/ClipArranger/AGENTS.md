@@ -13,7 +13,7 @@ Een clip-, scène- en songsequencer met 1 tot 16 sporen (tracks). Het maakt **ze
 | Naam | `Clip Arranger` in alle talen; de poortnamen hebben een Nederlandse variant (`MIDI / opname`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input`; eventuitgangen `track1` … `track16` (de statische lijst; via `host.setPorts` en `ui.jacks` toont de kaart in één horizontale rij alleen `track1` … `trackN` voor de N sporen, met alleen het nummer, en rechts altijd `tracks`; minder sporen haalt de kabels van de verdwenen uitgangen weg); geen audio, geen sturing; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.13 (apparaatversie 1.13.1) |
+| Contract | v1.14 (apparaatversie 1.14.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen met vier sporen en scènes van vier sporen; Pattern Playlist en Pattern Tracker bouwen een song van patronen in een playlist of tracker. Clip Arranger werkt zoals een sessieweergave: een matrix van clips per spoor en per scène, plus een lineair song-arrangement erboven.
@@ -24,7 +24,7 @@ Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen m
 
 ## De state
 
-`getPreset()` geeft `getState()` zonder de werkstand: `selectedTrack`, `selectedClip`, `selectedSection`, `editPage`, `zoom`, `pianoBase`, `drawLength`, `drawVelocity`, `drawProbability`, `drawRatchet`, `selectedNote`, `selectedRow`, `record`, `quantize`, `ccId`, `ccShape`. Een preset laat die velden bij het laden staan. De state is gewone JSON. Een getal buiten het bereik wordt afgekapt; tekst, `NaN`, `null` of een ontbrekende waarde geeft de standaard; onbekende velden worden genegeerd. `setState({})` geeft het lege standaardproject (4 sporen, 8 scènes, een kort arrangement).
+`getPreset()` geeft `getState()` zonder de werkstand: `recordMode`, `selectedTrack`, `selectedClip`, `selectedSection`, `editPage`, `zoom`, `pianoBase`, `drawLength`, `drawVelocity`, `drawProbability`, `drawRatchet`, `selectedNote`, `selectedRow`, `record`, `quantize`, `ccId`, `ccShape`. Een preset laat die velden bij het laden staan. De state is gewone JSON. Een getal buiten het bereik wordt afgekapt; tekst, `NaN`, `null` of een ontbrekende waarde geeft de standaard; onbekende velden worden genegeerd. `setState({})` geeft het lege standaardproject (4 sporen, 8 scènes, een kort arrangement).
 
 ### Bovenste niveau
 
@@ -37,6 +37,7 @@ Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen m
 | `mode` | `"session"`: clips en scènes lanceren; `"song"`: het arrangement afspelen | `"session"` of `"song"` | `"session"` |
 | `songLoop` | Het arrangement begint opnieuw na het einde | `true`/`false` | `true` |
 | `armed` | De sequencer speelt (`false` is stil) | `true`/`false` | `true` |
+| `recordMode` | Opnamemodus (werkstand): `overdub` = Aanvullen, `replace` = Overschrijven (zie Live spelen en inspelen) | `overdub` of `replace` | `overdub` |
 
 Een preset die een compositie neerzet, zet `mode` op `"song"` zodat het arrangement meteen speelt.
 
@@ -52,6 +53,8 @@ Een preset die een compositie neerzet, zet `mode` op `"song"` zodat het arrangem
 | `transpose` | Transpositie in halve tonen (niet bij `drums`) | −48 … 48 | 0 |
 | `velocity` | Schaal voor alle velocities van het spoor | 0 … 1 | 1 |
 | `gate` | Deel van de notenlengte dat echt klinkt (`dur = len × stap × gate`) | 0,05 … 1,5 | 0,9 (drone: 1) |
+| `swing` | Spoorswing (sinds 1.14.0): vertraagt de oneven zestienden van dit spoor, in zestienden | 0 … 0,5 | 0 |
+| `rowSwing` | Swing per drumrij: object `{"<nootnummer van de rij>": swing}` (zie Swing), alleen waarden boven 0 worden bewaard | object, 0 … 0,5 per nootnummer 0 … 127 | `{}` |
 | `drumProtocol` | `trig`: stuurt `trig` met de `lane` van de rij; `note`: stuurt `note` met het MIDI-nummer van de rij | `trig` of `note` | `trig` |
 | `rows` | 16 drumrijen `{name, note, lane}` (alleen bij `drums` van belang) | 16 vaste rijen | zie hieronder |
 | `clips` | Lijst van **8** clips | 8 vaste plaatsen | 8 lege clips |
@@ -65,6 +68,7 @@ Standaard drumrijen (index 0 … 15, MIDI-nummer, lane): Kick 36 `ch1`, Snare 38
 |---|---|---|---|
 | `name` | Clipnaam | hoogstens 32 tekens | `Clip n` |
 | `bars` | Lengte in maten (een maat is 16 zestienden) | 1 … 64 | 1 |
+| `swing` | Clipswing (sinds 1.14.0), in zestienden | 0 … 0,5 | 0 |
 | `grid` | **Raster van de editor** voor deze clip: `16` = 1/16, `32` = 1/32, `64` = 1/64 | 16, 32 of 64 | 16 |
 | `notes` | Lijst van noten (zie hieronder), hoogstens 4096 | | `[]` |
 | `cc` | Lijst van hoogstens 8 CC-lanes `{id, shape, points}` | | `[]` |
@@ -98,9 +102,13 @@ Op elke zestiende noot (`onStep`) kijkt elk spoor in zijn clip welke noten begin
 
 Scènes lanceren op de volgende maat (sessiemodus). In songmodus bepaalt het arrangement welke scène speelt.
 
+## Swing per niveau (sinds 1.14.0)
+
+`clip.swing`, `track.swing` en `track.rowSwing[<nootnummer>]` zijn elk een deel van een zestiende (0 … 0,5, standaard 0, UI 0 … 50 %, dubbelklik op de schuif = 0). Een noot van een **oneven zestiende** (de stap van de host, 1, 3, 5 …) wordt `min(0,5, clip + spoor + rij) × stepDur` later gespeeld, bovenop de swing van de host (die zit al in `info.time` en blijft apart werken). Noot, ratchets en 1/32-, 1/64-posities binnen die zestiende schuiven als geheel mee (de lengte blijft); even zestienden blijven staan. CC-lanes schuiven mee met clip + spoor (geen rij). De rij wordt aan het **nootnummer** van de drumrij gekoppeld, zodat de swing bij de klank blijft als de volgorde van een aangesloten apparaat wijzigt. Humanize/kans werken zoals voorheen. Met alles op 0 zijn de gebeurtenissen gelijk aan 1.13.1.
+
 ## Drumsporen volgen het aangesloten apparaat
 
-Hangt de uitgang `trackN` van een drumspoor aan een apparaat met `noteNames()` (contract v1.14: Drum Kit, Pulse Drums, Click Synth, Latin Percussion), dan toont de rol van dat spoor de hele lijst klanken van dat apparaat onder elkaar (hoogstens 64 rijen), met hun naam, nootnummer en kanaal (`lane` `ch1`, `ch2`, …, in de volgorde van het apparaat); het veld voor de rijtoewijzing verdwijnt dan. Een eigen lane-naam (niet `chN`) blijft staan. De opgeslagen `rows` in de state veranderen niet. Wijzigt de kit of de volgorde, dan schuiven de noten in de clips van dat spoor mee naar de rij van hun nootnummer (`row` wordt bijgewerkt); een nootnummer dat het apparaat niet kent, houdt zijn rij. Hebben twee kanalen van het apparaat dezelfde noot, dan telt de lijst die noot één keer en kan een kanaal een plaats opschuiven. Zonder kabel of zonder namen is alles als voorheen.
+Hangt de uitgang `trackN` van een drumspoor aan een apparaat met `noteNames()` (contract v1.14: Drum Kit, Pulse Drums, Click Synth, Latin Percussion), dan toont de rol van dat spoor de hele lijst klanken van dat apparaat onder elkaar (hoogstens 64 rijen), met hun naam, nootnummer en kanaal (`lane` `ch1`, `ch2`, …, in de volgorde van het apparaat); het veld voor de rijtoewijzing verdwijnt dan. Een eigen lane-naam (niet `chN`) blijft staan. De opgeslagen `rows` in de state veranderen niet. Wijzigt de kit of de volgorde, dan schuiven de noten in de clips van dat spoor mee naar de rij van hun nootnummer (`row` wordt bijgewerkt); een nootnummer dat het apparaat niet kent, houdt zijn rij. Hebben twee kanalen van het apparaat dezelfde noot, dan telt de lijst die noot één keer en kan een kanaal een plaats opschuiven. Zonder kabel of zonder namen is alles als voorheen. Sinds 1.14.0 stuurt zo'n spoor zijn rijen altijd als `note` met het nootnummer uit de lijst (ook als `drumProtocol` `trig` is): `trig` met `lane` `chN` raakt een gastinstrument zonder kanaal niet, en klopt niet meer als twee kanalen een noot delen. De lijst mag 64 rijen hebben (Pulse Drums: 27); de rol scrolt (hoogstens 620 pixels hoog). Een noot met een rij buiten de lijst klinkt niet, maar breekt de stap niet meer af.
 
 ## Live spelen en inspelen (ingang `input`)
 
@@ -109,7 +117,9 @@ Hangt de uitgang `trackN` van een drumspoor aan een apparaat met `noteNames()` (
 - Sluit een toetsenbord (device Keys of een andere notenbron) op `input` aan. De noten gaan **direct door naar de uitgang van het geselecteerde spoor** (met velocity en toonlengte), zodat je de synth op dat spoor kunt bespelen zonder een tweede kabel van het toetsenbord. Is het toetsenbord ook direct met die synth verbonden, dan klinkt het dubbel: dat is jouw keuze.
 - Een vastgehouden toets (`held: true` met `noteoff`, zoals Keys in de stand "Toets vasthouden") wordt doorgegeven en afgesloten met een `noteoff` op dezelfde uitgang. Wisselt het geselecteerde spoor, of komt er een nieuwe state, of wordt het apparaat verwijderd, dan krijgt het oude spoor een `noteoff` voor elke nog klinkende toets. `allnotesoff` en `panic` sluiten alles af. Een tweede aanslag van dezelfde nog vastgehouden toets sluit de eerste eerst af.
 - Op een drumspoor worden noten naar de drumrij met dat nootnummer gestuurd, en `trig` naar de rij met die `lane` (of die naam). Noten zonder rij worden niet doorgegeven.
-- **Opname**: staat `record` aan en loopt de transport, dan schrijft elke inkomende noot een nootobject in de **geselecteerde clip van het geselecteerde spoor**, op de juiste plek. `vel` is de velocity van de aanslag, `len` de duur (van noteon tot noteoff, of `dur` van het event), op de rasterstap afgerond en minstens één rasterstap. Het raster is dat van de clip (`grid`). `quantize` (standaard aan) rondt de beginpositie af op dat raster; uit rondt af op 1/64. Dit zijn werkstanden die in een preset niet worden opgeslagen.
+- **Opname**: staat `record` aan (checkbox *Live opname* of de knop **● Opname**), loopt de transport en staat `armed` aan, dan schrijft elke inkomende `note`/`noteon`/`trig` een nootobject in de **geselecteerde clip van het geselecteerde spoor**. `vel` is de velocity van de aanslag, `len` de duur (van noteon tot noteoff, of `dur`), op het raster afgerond en minstens één rasterstap. Het raster is dat van de clip (`grid`); `quantize` (standaard aan) zet de noot op het dichtstbijzijnde rasterpunt, uit op 1/64. Sinds 1.14.0 is dat het dichtstbijzijnde **geswingde** rasterpunt (host-swing + clip + spoor + rij, zoals hierboven), zodat een noot niet naar een buurstap springt. Het kwantiseren loopt rond de loop-rand (een noot net voor het eind van de clip komt op stap 0). Een nieuwe noot op dezelfde plek en rij (drums) of hetzelfde nootnummer vervangt de oude. Er wordt niets geschreven bij opname uit, transport stil, sequencer uit, niet-eindige noot/velocity, of een aanslag meer dan een zestiende van een geplande stap. Elke opgenomen noot is een Undo-stap.
+- **Opnamemodus** (`recordMode`, keuze *Opname*): **Aanvullen** (standaard) laat bestaande noten staan. **Overschrijven** wist de noten van de clip één keer, bij de eerste ingespeelde noot van een opnamerun, en vult daarna aan (meerdere rondes). Een run begint opnieuw bij opname aan/uit, een transportwissel, Undo/Redo en `setState`; wisselt de geselecteerde clip, dan wist de eerste noot in de nieuwe clip die clip. Er wordt dus niets gewist zolang je niets speelt, en Undo herstelt de oude clip.
+- **Speel deze clip** (knoppen *▶ Speel deze clip* en *■ Stop clip* in de clip-editor; ook `playClip()`/`stopClip()` op het apparaat): alleen de geselecteerde clip van het geselecteerde spoor loopt, op zijn eigen lengte, los van scènes en song; andere sporen zijn stil en mute/solo gelden dan niet. Hij start op de volgende maatgrens, of meteen op de eerste stap als de klok stilstaat; kies je een andere clip of spoor, dan volgt de weergave dat op de volgende maatgrens. Stop, een scène of clip lanceren, of het wisselen van Afspelen (Clips / scènes, Song) of `setState` zet de gewone weergave terug. Het is een losse werkstand en staat niet in de state. Samen met Opname loopt de opname rond (loop-opname) in de clip die speelt.
 
 ## Raster en opslag
 
@@ -161,7 +171,7 @@ Posities binnen een maat: tel 1 op 0, tel 2 op 4, tel 3 op 8, tel 4 op 12; de "e
 - **1/32** (`grid` 32, `step` met `.5`): snelle arpeggio's, snare roll in de laatste tel, flams, grace notes (een korte noot 0,5 zestiende vóór de hoofdnoot).
 - **1/64** (`grid` 64, `step` met `.25`): hi-hat rolls in trap en dubstep, ratchets zonder `ratchet`, strums, en laid-back timing (een snare of akkoord 0,25 zestiende te laat, typisch voor lo-fi en neo-soul).
 - Zet `grid` op de fijnste rastereenheid die in die clip voorkomt, zodat de editor het goed toont.
-- Swing/humanize: swing zit in de host-klok; humanize doe je met kleine verschuivingen van 0,25 in `step` en kleine verschillen in `vel`.
+- Swing/humanize: naast de host-swing kun je `swing` per clip, spoor en drumrij zetten (zie Swing per niveau); humanize doe je met kleine verschuivingen van 0,25 in `step` en kleine verschillen in `vel`.
 
 ### Per rol
 
@@ -300,6 +310,7 @@ Elke preset heeft 3 tot 7 sporen met een rol, een toonsoort en akkoordprogressie
 - De kaart bouwt zich opnieuw op bij `setState`, dus alle velden en knoppen volgen.
 - Een oude compositie klinkt gelijk aan die van het oude bestand: bij 150 willekeurige instellingen en klokreeksen (69.572 gebeurtenissen) en 150 live-invoerreeksen met opname (33.642 gebeurtenissen) 0 verschil.
 - Alle 58 presets: geldige JSON, unieke Engelse namen, `setPreset`→`getPreset` gelijk, een hele song afgespeeld (alle gebeurtenissen eindig en binnen bereik), import in de host (nl en en).
+- 1.14.0: met alle nieuwe velden op hun standaard gaven oud en nieuw bij 120 willekeurige states (6 maten klok, 1 tot 6 sporen; 73.954 gebeurtenissen) 0 verschillen, en live doorgeven (noot, trig, noteoff, cc) was gelijk. Swing per niveau, kwantiseren naar het geswingde raster (jitter ± 30 ms; bij clip + spoor samen 0,5 liggen buurpunten dichter dan de jitter, daar zijn missers inherent), loop-opname in Speel deze clip met Aanvullen en Overschrijven, 40 klanken van een drumcomputer en de echte host (nl en en, geen paginafouten) zijn getest.
 - Niet beluisterd; er is geen echte synth of drumcomputer aan gekoppeld getest, en geen echt MIDI-toetsenbord.
 
 ## Controleren

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Swing per rij en inspelen tegen het geswingde raster. Nieuw: `rowSwing` (nootnummer → 0 … 0,5 zestiende, standaard leeg): vertraagt de noten van die rij op de oneven zestienden, bovenop de swing van de host en de bestaande patroon-`swing` (die ongewijzigd blijft werken: elke tweede rasterstap, in rasterstappen); samen hoogstens 0,5 zestiende voor het rijdeel. Inspelen met de klok kwantiseert naar het dichtstbijzijnde GESWINGDE rasterpunt (hostswing, patroonswing en rijswing), zet bij Kwantiseren uit de afwijking als microtiming tegen dat punt, neemt de lengte van een noot met `dur` over (vanaf 2 rasterstappen) en negeert aanslagen die buiten de geplande stappen vallen. De rol toont de volledige klankenlijst van een drumcomputer (tot 64 rijen; de rol wordt hoger in plaats van de lijst af te kappen). Met `rowSwing` leeg speelt alles als voorheen.
 // 1.14.0 — Patchkamer contract v1.14. Hangt er via de notenkabel een apparaat met noteNames() (een drumcomputer) aan, dan is elke rij van de rol een klank in de volgorde van dat apparaat, met de naam erbij; noten die het apparaat niet kent blijven zichtbaar met een vraagteken. Zonder lijst blijft het de gewone pianorol. Geen wijziging in klank of state.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Step Sequencer (id nl.patchkamer.seq blijft gelijk, eigen map in sequencers; voorheen Sequencer, 16 stappen).
 //   Uitgebreid tot een volwaardige stap-sequencer: patroonlengte 1–64 stappen, raster 1/16, 1/32 of 1/64, per stap noot, velocity, lengte en
@@ -15,12 +16,15 @@ const EN = {
     'Sends note events; connect the orange output to a synth. Click in the roll to place a note, drag its right edge for the length, click or drag in the strip for the velocity.',
   'Sluit een toetsenbord (Keys) aan op de ingang: dat gaat meteen door naar de uitgang. Met Opnemen aan schrijft het de noten in het patroon (tijdens de klok op de plek van de aanslag, anders stap voor stap).':
     'Connect a keyboard (Keys) to the input: it goes straight through to the output. With Record on it writes the notes into the pattern (on the beat position while the clock runs, otherwise step by step).',
+  'Rij': 'Row', 'Rij-swing': 'Row swing',
+  'Swing per rij vertraagt de noten van één rij (een klank van de drumcomputer) op de oneven zestienden; Swing vertraagt het hele patroon. Beide komen bovenop de swing van de host. Inspelen kwantiseert naar het geswingde raster; per stap past één noot (een nieuwe noot vervangt de oude).':
+    'Row swing delays the notes of one row (one sound of the drum machine) on the odd sixteenths; Swing delays the whole pattern. Both come on top of the host swing. Recording quantizes to the swung grid; a step holds one note (a new note replaces the old one).',
   'Stap {0}': 'Step {0}', 'Noten in': 'Notes in', 'Noten': 'Notes'
 };
 const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
-const MAXN = 64, LO = 12, HI = 108, ROWS = 25;
+const MAXN = 64, LO = 12, HI = 108, ROWS = 25, LANEMAX = 64;
 export default {
-  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.14.0', category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
+  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.14.1', category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'Notes in' }], eventOut: [{ id: 'notes', name: 'Notes' }] },
   i18n: { nl: { ports: { in: 'Noten in', notes: 'Noten' } } },
   create(ctx, host) {
@@ -31,13 +35,18 @@ export default {
     const defN = () => { const base = [45, -1, 45, 48, -1, 45, 52, -1, 45, -1, 43, 45, -1, 48, -1, 52]; return Array.from({ length: MAXN }, (_, i) => i < 16 ? base[i] : -1); };
     const defAcc = () => { const base = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0]; return Array.from({ length: MAXN }, (_, i) => i < 16 ? base[i] : 0); };
     const zeros = () => new Array(MAXN).fill(0);
-    const DEF = () => ({ n: defN(), acc: defAcc(), vel: zeros(), ln: zeros(), mt: zeros(), gate: 0.6, oct: 0, len: 16, res: 16, swing: 0, humT: 0, humV: 0, seed: 1, quant: true, thru: true, rec: false, view: 36, cur: 0 });
+    const DEF = () => ({ n: defN(), acc: defAcc(), vel: zeros(), ln: zeros(), mt: zeros(), gate: 0.6, oct: 0, len: 16, res: 16, swing: 0, rowSwing: {}, humT: 0, humV: 0, seed: 1, quant: true, thru: true, rec: false, view: 36, cur: 0 });
     const PRESET_SKIP = ['rec', 'view', 'cur'];  // werkstand, geen klank
     let state = DEF(), dead = false, mountHost = null, shadow = null, canvas = null, g2 = null, cw = 600, stopFrame = null, ro = null, colors = null, colorAge = 0;
     let skinOn = false, dirty = true, playPos = -1, lastPlayDrawn = -2, page = 0, ticks = [], localBar = 0, prevStep = -1, playing = null, lastTickT = -1, heldThru = new Set(), pending = new Map(), self, recBtn, drag = null, labels = {};
     const resOf = () => state.res / 16;
     const gridDur = sd => sd / resOf();
     const stepDurOf = info => Number.isFinite(info?.stepDur) && info.stepDur > 0 ? info.stepDur : Number.isFinite(info?.bpm) && info.bpm > 0 ? 15 / info.bpm : typeof host.stepDur === 'function' && Number.isFinite(host.stepDur()) && host.stepDur() > 0 ? host.stepDur() : 0;
+    // rowSwing: nootnummer (als tekst) → 0 … 0,5 zestiende; alleen waarden boven 0 blijven bewaard
+    const cleanRowSwing = x => { const o = {}; if (!x || typeof x !== 'object' || Array.isArray(x)) return o; for (const k of Object.keys(x).slice(0, 256)) { const n = Number(k); if (!Number.isInteger(n) || n < 0 || n > 127) continue; const v = finite(x[k], 0, 0, 0.5); if (v > 0) o[String(n)] = v; } return o; };
+    const rowSwingOf = m => { const v = state.rowSwing && state.rowSwing[String(m)]; return typeof v === 'number' && Number.isFinite(v) ? clamp(v, 0, 0.5) : 0; };
+    // het rijdeel van de swing (in zestienden) voor een noot op een rasterstap: hoogstens 0,5 samen met wat de patroonswing er al aan toevoegt
+    const rowPart = (m, legacyFrac) => Math.min(rowSwingOf(m), Math.max(0, 0.5 - legacyFrac));
     const hash = a => { a = Math.imul((a | 0) ^ ((a | 0) >>> 16), 0x7feb352d); a = Math.imul(a ^ (a >>> 15), 0x846ca68b); return (((a ^ (a >>> 16)) >>> 0) / 4294967296) * 2 - 1; };
     const effVel = i => state.vel[i] > 0 ? state.vel[i] : (state.acc[i] ? 1 : 0.7);
     const autoView = () => { let lo = 999, hi = -1; for (let i = 0; i < state.len; i++) if (state.n[i] >= 0) { lo = Math.min(lo, state.n[i]); hi = Math.max(hi, state.n[i]); } return lo > hi ? 36 : clamp(Math.round((lo + hi) / 2) - 12, 0, 127 - (ROWS - 1)); };
@@ -58,11 +67,12 @@ export default {
           playing = true;
           for (let k = 0; k < res; k++) {
             const gi = abs16 * res + k, pos = gi % state.len, tBase = info.time + k * gd;
-            ticks.push({ t: tBase, pos }); if (k === 0) playPos = pos;
+            ticks.push({ t: tBase, pos, gOdd: !!(gi & 1), odd16: !!(info.step & 1), gd, sd }); if (k === 0) playPos = pos;
             const m = state.n[pos]; if (!(m >= 0)) continue;
             let t = tBase, vel = effVel(pos);
             if (state.mt[pos]) t += state.mt[pos] * gd;
             if (state.swing && (gi & 1)) t += state.swing * gd;
+            if ((info.step & 1) && state.rowSwing) { const rp = rowPart(m, state.swing && (gi & 1) ? state.swing * gd / sd : 0); if (rp) t += rp * sd; }
             if (state.humT) t += hash(gi * 2 + state.seed * 131) * state.humT * 0.5 * gd;
             if (state.humV) vel += hash(gi * 2 + 1 + state.seed * 977) * state.humV * 0.3;
             if (state.humT) t = Math.max(t, info.time - 0.5 * gd);
@@ -86,9 +96,9 @@ export default {
           if (type === 'note' || type === 'noteon') {
             if (!Number.isFinite(e.note)) return;
             const note = Math.round(clamp(e.note, 0, 127)), vel = Number.isFinite(e.vel) ? clamp(e.vel, 0, 1) : 0.8, held = e.held === true;
-            const dur = Number.isFinite(e.dur) && e.dur > 0 ? e.dur : 0.25;
+            const realDur = Number.isFinite(e.dur) && e.dur > 0 ? e.dur : 0, dur = realDur || 0.25;
             if (state.thru) { emit('notes', { type: 'note', note, vel, time: t, dur, ...(held ? { held: true } : {}) }); if (held) heldThru.add(note); }
-            if (state.rec) record(note, vel, t, held);
+            if (state.rec) record(note, vel, t, held, realDur);
           } else if (type === 'noteoff') {
             if (!Number.isFinite(e.note)) return; const note = Math.round(clamp(e.note, 0, 127));
             if (state.thru && heldThru.delete(note)) emit('notes', { type: 'noteoff', note, vel: 0, time: t });
@@ -115,7 +125,7 @@ export default {
         next.mt = arr(s.mt, d.mt, (x, df) => typeof x === 'number' && Number.isFinite(x) ? clamp(x, -0.5, 0.5) : df);
         next.gate = finite(s.gate, d.gate, 0.1, 1); next.oct = [-1, 0, 1].includes(+s.oct) && s.oct != null ? +s.oct : d.oct;
         next.len = Math.round(finite(s.len, 16, 1, MAXN)); next.res = [16, 32, 64].includes(s.res) ? s.res : 16;
-        next.swing = finite(s.swing, 0, 0, 0.6); next.humT = finite(s.humT, 0, 0, 1); next.humV = finite(s.humV, 0, 0, 1);
+        next.swing = finite(s.swing, 0, 0, 0.6); next.rowSwing = cleanRowSwing(s.rowSwing); next.humT = finite(s.humT, 0, 0, 1); next.humV = finite(s.humV, 0, 0, 1);
         next.seed = Math.round(finite(s.seed, 1, 0, 65535)); next.quant = typeof s.quant === 'boolean' ? s.quant : true; next.thru = typeof s.thru === 'boolean' ? s.thru : true;
         next.rec = typeof s.rec === 'boolean' ? s.rec : false;
         state = next; state.view = Number.isFinite(s.view) ? Math.round(clamp(s.view, 0, 127 - (ROWS - 1))) : autoView();
@@ -126,16 +136,25 @@ export default {
       unmount() { teardown(); },
       destroy() { if (dead) return; releaseThru(); dead = true; teardown(); }
     };
-    function record(note, vel, t, held) {
+    // Inspelen: met de klok loopt de aanslag naar het dichtstbijzijnde GESWINGDE rasterpunt (host-, patroon- en rijswing), zoals de noot straks ook echt klinkt.
+    // Kwantiseren uit: de noot staat op dat punt met de afwijking als microtiming (± een halve rasterstap). Zonder klok schrijft het stap voor stap vanaf de cursor.
+    function record(note, vel, t, held, realDur) {
+      if (!Number.isFinite(t) || !Number.isFinite(vel)) return;
       const live = playing === true && lastTickT >= 0 && ctx.currentTime - lastTickT < 1.5 && ticks.length;
-      let pos, gd;
+      let pos, gd, mt = 0;
+      const stored = Math.round(clamp(clamp(note, LO, HI) - 12 * state.oct, LO, HI));
       if (live) {
-        let best = ticks[0]; for (const k of ticks) if (Math.abs(k.t - t) < Math.abs(best.t - t)) best = k;
-        pos = best.pos; gd = ticks.length > 1 ? Math.abs(ticks[ticks.length - 1].t - ticks[ticks.length - 2].t) || 0 : 0;
-        if (!(gd > 0) && Number.isFinite(host.stepDur?.())) gd = host.stepDur() / resOf();
-        state.mt[pos] = state.quant || !(gd > 0) ? 0 : clamp((t - best.t) / gd, -0.5, 0.5);
+        let best = null, bd = Infinity;
+        for (const k of ticks) {
+          const lf = state.swing && k.gOdd ? state.swing * k.gd / k.sd : 0, ct = k.t + (state.swing && k.gOdd ? state.swing * k.gd : 0) + (k.odd16 ? rowPart(stored, lf) * k.sd : 0), d = Math.abs(ct - t);
+          if (d < bd) { bd = d; best = { k, ct }; }
+        }
+        if (!best || bd > best.k.sd) return; // buiten de geplande stappen: niet gokken
+        pos = best.k.pos; gd = best.k.gd;
+        mt = state.quant ? 0 : clamp((t - best.ct) / gd, -0.5, 0.5);
       } else { pos = state.cur; gd = Number.isFinite(host.stepDur?.()) ? host.stepDur() / resOf() : 0; state.cur = (state.cur + 1) % state.len; }
-      state.n[pos] = clamp(note, LO, HI) - 12 * state.oct; state.n[pos] = Math.round(clamp(state.n[pos], LO, HI)); state.vel[pos] = Math.max(0.05, vel); state.acc[pos] = 0; state.ln[pos] = 0;
+      state.mt[pos] = mt; state.n[pos] = stored; state.vel[pos] = Math.max(0.05, vel); state.acc[pos] = 0; state.ln[pos] = 0;
+      if (!held && realDur > 0 && gd > 0) { const l = Math.round(realDur / gd); if (l >= 2) state.ln[pos] = clamp(l, 1, MAXN); }
       if (held && gd > 0) pending.set(note, { pos, t, gd });
       dirty = true;
     }
@@ -167,6 +186,7 @@ export default {
       knob(r1, 'Swing', [0, 0.6, 0.01], state.swing, v => state.swing = v, v => Math.round(v * 100) + '%', 0);
       knob(r1, tx('Humanize tijd'), [0, 1, 0.01], state.humT, v => state.humT = v, v => Math.round(v * 100) + '%', 0);
       knob(r1, tx('Humanize velocity'), [0, 1, 0.01], state.humV, v => state.humV = v, v => Math.round(v * 100) + '%', 0);
+      const rsBox = add(panel, 'div'); rsBox.className = 'row'; labels.rs = rsBox; lastLaneSig = null; syncRowSwing();
       const r2 = add(panel, 'div'); r2.className = 'row';
       recBtn = toggle(r2, '● ' + tx('Opnemen'), 'rec'); recBtn.classList.add('rec');
       toggle(r2, tx('Kwantiseren'), 'quant'); toggle(r2, tx('Doorgeven'), 'thru', () => { if (!state.thru) releaseThru(); });
@@ -176,8 +196,8 @@ export default {
       button(r2, tx('Dubbel'), () => shift(() => { if (state.len * 2 <= MAXN) { for (const a of [state.n, state.acc, state.vel, state.ln, state.mt]) for (let i = 0; i < state.len; i++) a[state.len + i] = a[i]; state.len *= 2; render(el); } }));
       button(r2, tx('Wis'), () => shift(() => { state.n.fill(-1); for (const a of [state.acc, state.vel, state.ln, state.mt]) a.fill(0); }));
       const pager = add(r2, 'span', undefined, 'display:flex;gap:6px;align-items:center'); pager.className = 'pager';
-      const up = button(r2, '↑ ' + tx('Hoger'), () => { state.view = clamp(state.view + 12, 0, 127 - (ROWS - 1)); dirty = true; });
-      const down = button(r2, '↓ ' + tx('Lager'), () => { state.view = clamp(state.view - 12, 0, 127 - (ROWS - 1)); dirty = true; }); void up; void down;
+      const up = button(r2, '↑ ' + tx('Hoger'), () => { state.view = clamp(state.view + 12, 0, 127 - (ROWS - 1)); dirty = true; syncRowSwing(); });
+      const down = button(r2, '↓ ' + tx('Lager'), () => { state.view = clamp(state.view - 12, 0, 127 - (ROWS - 1)); dirty = true; syncRowSwing(); }); void up; void down;
       labels.pager = pager; syncPager();
       canvas = add(panel, 'canvas'); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', tx('STEP SEQUENCER · stap-sequencer'));
       canvas.style.height = H + 'px'; g2 = canvas.getContext('2d'); resize(canvas.getBoundingClientRect().width || 600);
@@ -185,8 +205,18 @@ export default {
       if (typeof window !== 'undefined' && window.addEventListener) { window.addEventListener('patchkamer-skin', onSkin); skinOn = true; }
       canvas.addEventListener('pointerdown', pdown); canvas.addEventListener('pointermove', pmove); canvas.addEventListener('pointerup', pup); canvas.addEventListener('pointercancel', pup);
       add(panel, 'p', tx('Stuurt note-gebeurtenissen; verbind de oranje uitgang met een synth. Klik in de rol voor een noot, sleep de rechterrand voor de lengte, klik of sleep in de strook voor de velocity.'));
+      add(panel, 'p', tx('Swing per rij vertraagt de noten van één rij (een klank van de drumcomputer) op de oneven zestienden; Swing vertraagt het hele patroon. Beide komen bovenop de swing van de host. Inspelen kwantiseert naar het geswingde raster; per stap past één noot (een nieuwe noot vervangt de oude).'));
       add(panel, 'p', tx('Sluit een toetsenbord (Keys) aan op de ingang: dat gaat meteen door naar de uitgang. Met Opnemen aan schrijft het de noten in het patroon (tijdens de klok op de plek van de aanslag, anders stap voor stap).'));
       readTarget(); dirty = true; stopFrame = typeof host.frame === 'function' ? host.frame(self, draw, 30) : null;
+    }
+    function setRowSwing(m, v) { if (v > 0) state.rowSwing[String(m)] = clamp(v, 0, 0.5); else delete state.rowSwing[String(m)]; }
+    // rij en rij-swing: de rijen van de drumcomputer, anders de toonhoogten in beeld
+    function syncRowSwing() {
+      const box = labels.rs; if (!box || !box.isConnected && !shadow) return; box.textContent = '';
+      const opts = lanes ? lanes.map(l => [l.note, l.name]) : Array.from({ length: ROWS }, (_, r) => { const m = state.view + (ROWS - 1) - r; return [m, noteName(m)]; });
+      if (!opts.some(o => o[0] === rsel)) rsel = opts[0][0];
+      select(box, tx('Rij'), opts, rsel, v => { rsel = +v; syncRowSwing(); });
+      knob(box, tx('Rij-swing'), [0, 0.5, 0.01], rowSwingOf(rsel), v => setRowSwing(rsel, v), v => Math.round(v * 100) + '%', 0);
     }
     function syncPager() {
       const p = labels.pager; if (!p) return; p.textContent = '';
@@ -196,12 +226,14 @@ export default {
     function transpose(d) { for (let i = 0; i < state.len; i++) if (state.n[i] >= 0) state.n[i] = Math.round(clamp(state.n[i] + d, LO, HI)); state.view = clamp(state.view + (Math.abs(d) >= 12 ? d : 0), 0, 127 - (ROWS - 1)); }
 
     // ---- tekenen --------------------------------------------------------------------------------------------------------------------------
-    const ROWH = 11, ACCH = 14, STRIPH = 60, RULERH = 14, ROLLH = ROWS * ROWH, H = ROLLH + ACCH + STRIPH + RULERH;
+    let ROWH = 11, ACCH = 14, STRIPH = 60, RULERH = 14, ROLLH = ROWS * ROWH, H = ROLLH + ACCH + STRIPH + RULERH;
+    // de rol groeit mee met de lijst klanken (tot 64 rijen van elk ROWH); met 25 rijen of minder blijft hij zoals hij was
+    function setRoll(n) { const r = Math.max(ROWS, n) * ROWH; if (r === ROLLH) return; ROLLH = r; H = ROLLH + ACCH + STRIPH + RULERH; if (canvas) { canvas.style.height = H + 'px'; resize(cw); } }
     let LABW = 32;
     // Rijen volgen de drumcomputer (contract v1.14): hangt er via de notenkabel een apparaat met noteNames() aan, dan is elke rij een klank, in de volgorde van dat apparaat.
     // Noten in het patroon die het apparaat niet kent, blijven zichtbaar als rij met alleen het nootnummer. Zonder lijst is het de gewone pianorol.
     const LANE_LABW = 92;
-    let peerNames = [], namesSig = '', lanes = null;
+    let peerNames = [], namesSig = '', lanes = null, lastLaneSig = null, rsel = null;
     function readTarget(list) {
       let names = [];
       try {
@@ -211,12 +243,13 @@ export default {
       const sig = JSON.stringify(names); if (sig !== namesSig) { namesSig = sig; peerNames = names; dirty = true; }
     }
     function refreshRows() {
-      if (!peerNames.length) { lanes = null; LABW = 32; return; }
+      if (!peerNames.length) { lanes = null; LABW = 32; setRoll(ROWS); if (lastLaneSig !== '') { lastLaneSig = ''; syncRowSwing(); } return; }
       const seen = new Set(), rows = [];
-      for (const x of peerNames) { const n = Math.round(x.note); if (rows.length >= ROWS || seen.has(n) || !(n >= 0 && n <= 127)) continue; seen.add(n); rows.push({ note: n, name: String(x.name), named: true }); }
+      for (const x of peerNames) { const n = Math.round(x.note); if (rows.length >= LANEMAX || seen.has(n) || !(n >= 0 && n <= 127)) continue; seen.add(n); rows.push({ note: n, name: String(x.name), named: true }); }
       const extra = new Set(); for (let i = 0; i < state.len; i++) { const m = state.n[i]; if (m >= 0 && !seen.has(m)) extra.add(m); }
-      for (const m of [...extra].sort((a, b) => a - b)) if (rows.length < ROWS) rows.push({ note: m, name: noteName(m), named: false });
-      lanes = rows; LABW = LANE_LABW;
+      for (const m of [...extra].sort((a, b) => a - b)) if (rows.length < LANEMAX) rows.push({ note: m, name: noteName(m), named: false });
+      lanes = rows; LABW = LANE_LABW; setRoll(rows.length);
+      const sig = rows.map(r => r.note).join(','); if (sig !== lastLaneSig) { lastLaneSig = sig; syncRowSwing(); }
     }
     const rowH = () => lanes ? ROLLH / lanes.length : ROWH;
     const noteOfRow = r => lanes ? lanes[clamp(r, 0, lanes.length - 1)].note : clamp(state.view + (ROWS - 1) - r, LO, HI);
@@ -231,13 +264,13 @@ export default {
     function draw() {
       if (!g2 || !canvas) return;
       if (!colors || ++colorAge > 60) { colorAge = 0; readColors(); dirty = true; }
-      if (!dirty && lastPlayDrawn === playPos) return; dirty = false; lastPlayDrawn = playPos;
+      if (!dirty && lastPlayDrawn === playPos) return; dirty = false; lastPlayDrawn = playPos; refreshRows();
       const c = colors, sw = stepW(), nc = cols(), p0 = page * 32, W = cw;
       g2.clearRect(0, 0, W, H); g2.fillStyle = c.well; g2.fillRect(0, 0, W, H);
       g2.font = '9px system-ui,sans-serif'; g2.textBaseline = 'middle';
-      refreshRows(); const rh = rowH();
+      const rh = rowH();
       if (lanes) {
-        g2.font = '11px system-ui,sans-serif';
+        g2.font = (rh < 14 ? 10 : 11) + 'px system-ui,sans-serif';
         lanes.forEach((ln, r) => {
           const y = r * rh; if (r % 2) { g2.fillStyle = c.card; g2.globalAlpha = 0.55; g2.fillRect(LABW, y, W - LABW, rh); g2.globalAlpha = 1; }
           g2.fillStyle = ln.named ? c.fg : c.muted; g2.textAlign = 'right'; g2.fillText(ln.named ? ln.name : ln.name + ' ?', LABW - 4, y + rh / 2, LABW - 6);
