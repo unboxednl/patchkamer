@@ -286,6 +286,7 @@ svg.cables g.cable.drop{opacity:1} svg.cables g.cable.drop path:not(.hit):not(.m
 .pbar .pparts .pl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .pritem.fold .nm{font-weight:500}
 .pritem select.mv{font-size:10px;padding:1px 3px;max-width:110px}
+#setPanel .wsurl{width:100%;font-family:var(--mono,monospace);font-size:12px}
 #prPanel h4.tudev{margin:10px 0 4px;font-family:var(--disp);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg)}
 /* bibliotheekvenster: inhoud blijft binnen de rand, ook als het smal is */
 .libwin{grid-template-columns:minmax(0,1fr)}
@@ -433,7 +434,7 @@ body.nopbar .pbar{display:none}
     <div class="note" style="margin-bottom:6px" data-i18n-html="ui.tunes_zijn_klanken_van_apparaten"><b data-i18n="ui.tunes_2">Tunes</b> zijn klanken van apparaten die geluid maken (synths, drones, drumcomputers); <b data-i18n="ui.presets_2">presets</b> zijn instellingen van apparaten zonder eigen geluid (effecten, mixers, mastering, sequencers, modulatoren, controllers). Elke bibliotheek hoort bij één apparaat en kan mappen in mappen hebben. Vinkje = zichtbaar in de keuzelijst op de kaarten. Bibliotheken uit een bron (map, GitHub) zijn alleen-lezen; maak een kopie om ze aan te passen. <b data-i18n="ui.exporteer">Exporteer</b> maakt een pack (.patchkamer-tunes.json of .patchkamer-presets.json) met maker en licentie; zet het in je bibliotheekmap of op GitHub en het laadt vanzelf mee.</div>
     <div class="wslist" id="prLibs" style="max-height:min(56vh,520px)"></div>
   </div>
-  <div class="wsrow"><button class="small" id="prNew" data-i18n="ui.nieuwe_bibliotheek">Nieuwe bibliotheek</button><button class="small" id="prImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="prFile" accept=".json,application/json" multiple hidden></div>
+  <div class="wsrow"><button class="small" id="prLoadAll">Alles laden</button><button class="small" id="prNew" data-i18n="ui.nieuwe_bibliotheek">Nieuwe bibliotheek</button><button class="small" id="prImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="prFile" accept=".json,application/json" multiple hidden></div>
   
   <div class="note" data-i18n-html="ui.een_tune_of_preset_is">Een tune of preset is de instelling van één apparaat (alle knoppen, patronen en keuzes), niet de kabels. Kies op de kaart, of blader met ◀ ▶. <b data-i18n="ui.bewaar">Bewaar</b> legt de huidige instelling vast in een bibliotheek en map, met jouw naam als maker en een licentie (CC-BY-4.0 of alle rechten voorbehouden); een cursieve naam betekent dat je sindsdien iets hebt veranderd. Ieder exemplaar krijgt een eigen kopie. Drumcomputers hebben een tweede regel <b data-i18n="ui.instrument">Instrument</b>: één geluid (bijv. de kick) als tune laden of bewaren. De licentie zie je bij het laden en bij elk item hieronder.</div>
 </section>
@@ -455,6 +456,15 @@ body.nopbar .pbar{display:none}
   <h3 style="margin-top:12px" data-i18n="ui.instellingen_2">Instellingen</h3>
   <div class="wsrow"><label><input type="checkbox" id="prShowBar" checked> <span data-i18n="ui.tune_en_presetbalk_op_de">Tune- en presetbalk op de kaarten tonen</span></label></div>
   <div class="wsrow"><label><input type="checkbox" id="modViewCb" checked> <span data-i18n="ui.modulatie_op_de_apparaten_tonen">Modulatie op de apparaten tonen (strook ∿ mod en paarse stip op de regelaar)</span></label></div>
+  <h3 style="margin-top:12px" data-i18n="ui.nieuwe_werkruimte">Nieuwe werkruimte</h3>
+  <div class="note" style="margin-bottom:6px" data-i18n="ui.nieuwe_werkruimte_uitleg">Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden in het Tunes- en Presets-paneel gebruikt hetzelfde adres.</div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaDev"> <span data-i18n="ui.apparatenbibliotheek_laden">Apparatenbibliotheek laden</span></label></div>
+  <div class="wsrow"><input type="text" id="wsuDev" class="wsurl" spellcheck="false" aria-label="adres van de apparatenbibliotheek" data-i18n-aria="attr.adres_apparatenbibliotheek"></div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaPre"> <span data-i18n="ui.presets_laden">Presets laden</span></label></div>
+  <div class="wsrow"><input type="text" id="wsuPre" class="wsurl" spellcheck="false" aria-label="adres van de presets" data-i18n-aria="attr.adres_presets"></div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaTun"> <span data-i18n="ui.tunes_laden">Tunes laden</span></label></div>
+  <div class="wsrow"><input type="text" id="wsuTun" class="wsurl" spellcheck="false" aria-label="adres van de tunes" data-i18n-aria="attr.adres_tunes"></div>
+  <div class="wsrow"><button class="small" id="wsaReset" data-i18n="ui.standaardadressen_herstellen">Standaardadressen herstellen</button></div>
   <h3 style="margin-top:12px" data-i18n="ui.weergave">Weergave</h3>
   <div class="wsrow"><label><span data-i18n="ui.kabels">Kabels</span>&nbsp;<select id="cabStyle"><option value="curve" data-i18n="ui.in_een_boog">in een boog</option><option value="orth" data-i18n="ui.recht_met_hoeken">recht, met hoeken</option><option value="route" data-i18n="ui.recht_om_de_apparaten_heen">recht, om de apparaten heen</option></select></label></div>
   <div class="wsrow"><label><span data-i18n="ui.kabeldekking">Kabeldekking</span>&nbsp;<input type="range" id="cabOp" min="0.15" max="1" step="0.05" value="1" style="width:140px;vertical-align:middle"> <output id="cabOpV">100%</output></label></div>
@@ -783,6 +793,20 @@ const I18N={
    "m.mastering_uit":"<b>mastering uit</b> {0}",
    "m.soort_mastering":"mastering",
    "m.mastering_categorie":"Mastering",
+   "ui.nieuwe_werkruimte":"Nieuwe werkruimte",
+   "ui.nieuwe_werkruimte_uitleg":"Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden in het Tunes- en Presets-paneel gebruikt hetzelfde adres.",
+   "ui.apparatenbibliotheek_laden":"Apparatenbibliotheek laden",
+   "ui.presets_laden":"Presets laden",
+   "ui.tunes_laden":"Tunes laden",
+   "ui.standaardadressen_herstellen":"Standaardadressen herstellen",
+   "attr.adres_apparatenbibliotheek":"adres van de apparatenbibliotheek",
+   "attr.adres_presets":"adres van de presets",
+   "attr.adres_tunes":"adres van de tunes",
+   "m.alle_tunes_laden":"Alles laden",
+   "m.alle_presets_laden":"Alles laden",
+   "m.alles_laden_titel_tunes":"Laad alle tunebibliotheken van het adres uit Instellingen > Nieuwe werkruimte",
+   "m.alles_laden_titel_presets":"Laad alle presetbibliotheken van het adres uit Instellingen > Nieuwe werkruimte",
+   "m.werkruimte_laden_adres":"Geen geldig adres voor {0}: controleer Instellingen > Nieuwe werkruimte",
    "m.kan_geen_mastering_ontvangen":" kan geen mastering-opdrachten ontvangen (configureMastering ontbreekt)",
    "m.mastering_geen_regie":"Alleen een apparaat met een mastering-uitgang kan mastering aansturen.",
    "m.mastering_onbekende_actie":"Onbekende masteringactie: {0}",
@@ -1288,6 +1312,20 @@ const I18N={
    "m.mastering_uit":"<b>mastering out</b> {0}",
    "m.soort_mastering":"mastering",
    "m.mastering_categorie":"Mastering",
+   "ui.nieuwe_werkruimte":"New workspace",
+   "ui.nieuwe_werkruimte_uitleg":"What Patchkamer loads when you start with an empty workspace. For each kind you choose a GitHub folder or another address; everything below it is read. The Load all button in the Tunes and Presets panel uses the same address.",
+   "ui.apparatenbibliotheek_laden":"Load the device library",
+   "ui.presets_laden":"Load presets",
+   "ui.tunes_laden":"Load tunes",
+   "ui.standaardadressen_herstellen":"Restore default addresses",
+   "attr.adres_apparatenbibliotheek":"address of the device library",
+   "attr.adres_presets":"address of the presets",
+   "attr.adres_tunes":"address of the tunes",
+   "m.alle_tunes_laden":"Load all",
+   "m.alle_presets_laden":"Load all",
+   "m.alles_laden_titel_tunes":"Load all tune libraries from the address in Settings > New workspace",
+   "m.alles_laden_titel_presets":"Load all preset libraries from the address in Settings > New workspace",
+   "m.werkruimte_laden_adres":"No valid address for {0}: check Settings > New workspace",
    "m.kan_geen_mastering_ontvangen":" cannot receive mastering commands (configureMastering is missing)",
    "m.mastering_geen_regie":"Only a device with a mastering output can direct mastering.",
    "m.mastering_onbekende_actie":"Unknown mastering action: {0}",
@@ -2541,6 +2579,7 @@ const NETMSG=pkt('m.in_de_gepubliceerde_artifact_weergave');
 async function fetchText(url){
   try{ const r=await fetch(url,{cache:'no-cache'}); if(!r.ok) throw new Error('HTTP '+r.status); const t=await r.text(); IDB.set('code:'+url,{t:Date.now(),code:t}); return {text:t,cached:false}; }
   catch(e){ const c=await IDB.get('code:'+url); if(c&&c.code) return {text:c.code,cached:true}; throw new Error('kon '+url+pkt('m.niet_ophalen')+e.message+NETMSG); } }
+const TREEMEMO=new Map();   // één GitHub-aanroep per repo en boom, ook als apparaten, presets en tunes als aparte bronnen laden
 async function fetchJSON(url){ const r=await fetch(url,{headers:{Accept:'application/vnd.github+json'}}); if(!r.ok) throw new Error((r.status===403?pkt('m.github_limiet_bereikt_of_geen'):'HTTP '+r.status)+pkt('m.bij')+url); return r.json(); }
 const looksLikeDevice=t=>/export\s+default\b/.test(t)&&/\bcreate\s*\(/.test(t);
 const isModulePath=p=>/\.patchkamer-device\.js$/i.test(p)&&!/(^|\/)(node_modules|tests?|\.github|dist\/vendor)\//i.test(p)&&!/validate-instrument|\.test\.m?js$|\.config\.m?js$/i.test(p);
@@ -2567,12 +2606,13 @@ async function loadSource(src,opts={}){
     if(src.kind==='github'){
       const api=`https://api.github.com/repos/${src.owner}/${src.repo}`; if(!src.ref) src.ref=(await fetchJSON(api)).default_branch||'main';
       src.label=`${src.owner}/${src.repo}${src.path?'/'+src.path:''}@${src.ref}`;
-      const tree=await fetchJSON(`${api}/git/trees/${encodeURIComponent(src.ref)}?recursive=1`); const base=src.path?src.path.replace(/\/$/,'')+'/':'';
+      const tkey=api+'@'+src.ref; if(opts.fresh) TREEMEMO.delete(tkey); if(!TREEMEMO.has(tkey)) TREEMEMO.set(tkey,fetchJSON(`${api}/git/trees/${encodeURIComponent(src.ref)}?recursive=1`).catch(e=>{ TREEMEMO.delete(tkey); throw e; })); const tree=await TREEMEMO.get(tkey); const base=src.path?src.path.replace(/\/$/,'')+'/':'';
       const blobs=(tree.tree||[]).filter(x=>x.type==='blob'&&x.path.startsWith(base)); const rawOf=p=>`https://raw.githubusercontent.com/${src.owner}/${src.repo}/${src.ref}/${p}`;
       let paths, wpaths; const man=blobs.find(x=>x.path===base+'patchkamer.json');
       let ppaths;
       if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[])].map(prEntry).map(w=>({...w,path:base+w.path})); if(m.name) src.label=m.name+' · '+src.label; }
       else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,80); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); }
+      if(src.only){ if(src.only!=='devices') paths=[]; wpaths=[]; ppaths=ppaths.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }   // een bron voor één soort: alleen apparaten, alleen presets of alleen tunes
       { const lb=blobs.find(x=>x.path===base+LAYOUT_FILE); if(lb) layout=async()=>JSON.parse((await fetchText(rawOf(lb.path))).text); }
       ppaths.forEach(w=>prs.push({path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
       for(const pth of paths){ try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
@@ -2592,6 +2632,7 @@ async function loadSource(src,opts={}){
       if(man){ const m=JSON.parse(await man()); if(m.name) src.label=m.name; mods=(m.modules||[]).map(x=>String(x).replace(/^\.\//,'')); wps=(m.workspaces||[]).map(wsEntry); pps=[...(m.presets||[]),...(m.tunes||[])].map(prEntry); }
       else { mods=files.map(f=>f[0]).filter(isModulePath); wps=files.map(f=>f[0]).filter(isWs).map(wsEntry); pps=files.map(f=>f[0]).filter(isPr).map(prEntry); }
       { const lg=byPath.get(LAYOUT_FILE); if(lg) layout=async()=>JSON.parse(await lg()); }
+      if(src.only){ if(src.only!=='devices') mods=[]; wps=[]; pps=pps.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }
       pps.forEach(w=>{ const get=byPath.get(w.path); if(get) prs.push({path:w.path,load:async()=>JSON.parse(await get())}); });
       for(const pth of mods){ const get=byPath.get(pth); if(!get){ errs.push(pth+pkt('m.staat_in_patchkamer_json_maar')); continue; } try{ await one(await get(),{sid:src.sid,kind:'folder',path:pth,label:src.label}); }catch(e){ errs.push(pth+': '+e.message); } }
       wps.forEach(w=>{ const get=byPath.get(w.path); if(get) wss.push({name:w.name,path:w.path,load:async()=>JSON.parse(await get())}); });
@@ -2653,7 +2694,7 @@ function paintSources(){ const box=$('srcList'); if(!box) return; box.innerHTML=
     b.append(rl,rm); it.append(info,b); box.appendChild(it); }); }
 
 // ---- werkruimte: opslaan ----
-const publicSrc=x=>{ const o={sid:x.sid,kind:x.kind,label:x.label}; ['url','owner','repo','ref','path'].forEach(k=>{ if(x[k]) o[k]=x[k]; }); return o; };
+const publicSrc=x=>{ const o={sid:x.sid,kind:x.kind,label:x.label}; ['url','owner','repo','ref','path','only'].forEach(k=>{ if(x[k]) o[k]=x[k]; }); return o; };
 function workspaceState(embedAll){
   const used=new Map(); Host.devices.forEach(r=>used.set(Host.key(r.def.id,r.def.version),r.def));
   const defs=[...used.values()].filter(d=>!d._builtin).map(d=>{ const o=d._src||{kind:'paste'}, located=['github','url','folder'].includes(o.kind);
@@ -2739,7 +2780,7 @@ document.addEventListener('pointerdown',e=>{ if(!wsPanel.hidden&&!e.target.close
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!wsPanel.hidden) closeWs(); });
 $('wsNew').onclick=()=>{ const b=$('wsNew'); if(!b.dataset.arm){ b.dataset.arm='1'; b.textContent=pkt('m.zeker_niet_opgeslagen_werk_verdwijnt'); setTimeout(()=>{ b.dataset.arm=''; b.textContent=pkt('m.nieuwe_lege_werkruimte'); },3000); return; }
   b.dataset.arm=''; b.textContent=pkt('m.nieuwe_lege_werkruimte'); clearFloor(); setName(pkt('m.naamloos')); Host.view={x:40,y:40,scale:PKS.f}; applyView(); closeWs(); status(pkt('m.nieuwe_lege_werkruimte')); };
-$('clear').onclick=()=>{ if($('clear').dataset.arm){clearFloor(); $('clear').dataset.arm=''; $('clear').textContent=pkt('m.leeg');} else {$('clear').dataset.arm='1'; $('clear').textContent=pkt('m.zeker'); setTimeout(()=>{$('clear').dataset.arm=''; $('clear').textContent=pkt('m.leeg');},2500);} };
+$('clear').onclick=()=>{ if($('clear').dataset.arm){clearFloor(); wsaAutoLoad(); $('clear').dataset.arm=''; $('clear').textContent=pkt('m.leeg');} else {$('clear').dataset.arm='1'; $('clear').textContent=pkt('m.zeker'); setTimeout(()=>{$('clear').dataset.arm=''; $('clear').textContent=pkt('m.leeg');},2500);} };
 $('exportPatch').onclick=()=>{$('patchText').value=JSON.stringify(workspaceState($('wsEmbed').checked));};
 $('importPatch').onclick=async()=>{ let ws; try{ ws=JSON.parse($('patchText').value); }catch(e){ status(pkt('m.kon_de_werkruimte_niet_lezen'),true); return; } if(await openWorkspace(ws)) $('patchText').value=''; };
 var BUNDLED_LIB=null;   // var: paintLib kan eerder draaien
@@ -2749,7 +2790,32 @@ async function loadBundled(){ if(!BUNDLED_LIB) return; const known=SOURCES.find(
   BUNDLED_LIB=u; $('feBundled').hidden=false; $('feHint').textContent=pkt('m.de_meegeleverde_bibliotheek_bevat')+pktp('m.n_apparaat',m.modules.length===1,m.modules.length)+(m.workspaces&&m.workspaces.length?pkt('m.en_n_startwerkruimtes',m.workspaces.length):'')+'.'; paintLib(); }catch(e){} })();
 $('feLib').onclick=()=>$('srcAddDir').click(); $('feBundled').onclick=loadBundled; $('feOpen').onclick=()=>{ $('wsFileInput').value=''; $('wsFileInput').click(); };
 // bij het openen: onthouden bronnen weer laden (mappen alleen als de browser de toestemming nog heeft)
-paintSources(); (async()=>{ for(const src of SOURCES){ try{ await loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); } }catch(e){} } })();
+// ---- nieuwe werkruimte: wat er automatisch wordt geladen (Instellingen) en de knop Alles laden in het Tunes- en Presets-paneel ----
+// Per soort (apparaten, presets, tunes) één adres; een GitHub-map met alles daaronder. Elk adres is een gewone bron met `only`, dus ze staan ook in de lijst Bronnen.
+const WSAKEY='patchkamerWsAuto', WSA_KINDS={dev:'devices',pre:'presets',tun:'tunes'};
+const WSA_DEF={dev:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/devices'},pre:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/presets'},tun:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/tunes'}};
+let WSA=JSON.parse(JSON.stringify(WSA_DEF));
+try{ const o=JSON.parse(localStorage.getItem(WSAKEY)||'null'); if(o&&typeof o==='object') for(const k of Object.keys(WSA)) if(o[k]&&typeof o[k]==='object') WSA[k]={on:o[k].on!==false,url:typeof o[k].url==='string'&&o[k].url.trim()?o[k].url.trim().slice(0,400):WSA_DEF[k].url}; }catch(e){}
+const saveWsa=()=>{ try{ localStorage.setItem(WSAKEY,JSON.stringify(WSA)); }catch(e){} };
+function wsaSource(k){ let p; try{ p=parseSourceUrl(WSA[k].url); }catch(e){ p=null; }
+  if(!p||p.kind!=='github'){ status(pkt('m.werkruimte_laden_adres',WSA_KINDS[k]),true); return null; }
+  const only=WSA_KINDS[k], same=SOURCES.find(x=>x.kind==='github'&&x.only===only&&x.owner===p.owner&&x.repo===p.repo&&(!p.ref||(x.ref||'')===p.ref)&&(x.path||'')===(p.path||''));
+  if(same) return same;
+  const src={sid:newSid(),...p,only,label:`${p.owner}/${p.repo}${p.path?'/'+p.path:''}`,added:Date.now()}; SOURCES.push(src); saveSources(); return src; }
+async function wsaLoad(k,force){ const src=wsaSource(k); if(!src) return null; const st=SRCSTATE.get(src.sid);
+  if(!force&&st&&(st.state==='ok'||st.state==='warn'||st.state==='busy')) return src;
+  await loadSource(src,{interactive:false,fresh:!!force}); return src; }
+async function wsaAutoLoad(){ for(const k of Object.keys(WSA)) if(WSA[k].on){ try{ await wsaLoad(k,false); }catch(e){} } }
+function wsaPaint(){ for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun']]){ $('wsa'+id).checked=WSA[k].on; $('wsu'+id).value=WSA[k].url; $('wsu'+id).disabled=false; } }
+for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun']]){
+  $('wsa'+id).onchange=()=>{ WSA[k].on=$('wsa'+id).checked; saveWsa(); };
+  $('wsu'+id).onchange=()=>{ const v=$('wsu'+id).value.trim(); WSA[k].url=v||WSA_DEF[k].url; $('wsu'+id).value=WSA[k].url; saveWsa(); }; }
+$('wsaReset').onclick=()=>{ WSA=JSON.parse(JSON.stringify(WSA_DEF)); saveWsa(); wsaPaint(); };
+wsaPaint();
+$('prLoadAll').onclick=async()=>{ const k=TUMODE==='tune'?'tun':'pre', b=$('prLoadAll'); b.disabled=true;
+  try{ const src=await wsaLoad(k,true); if(src){ const st=SRCSTATE.get(src.sid)||{}; status(`${srcLabel(src)}: ${st.msg||''}`,st.state==='err'); } }catch(e){ status(e.message,true); } finally{ b.disabled=false; prPaintPanel(); } };
+paintSources(); (async()=>{ for(const src of SOURCES){ try{ await loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await folderSig(src); if(sg) FOLDERSIG.set(src.sid,sg); } }catch(e){} }
+  if(Host.devices.size===0) await wsaAutoLoad(); })();
 paintPatches();
 
 /* =====================================================================
@@ -2974,7 +3040,7 @@ function tuPaintTree(box,l,list,depth){
       const rm=mbtn('×'); armBtn(rm,'×','Weg?',()=>{ tuWalk(l.tree,(x,p,arr)=>{ if(x===n) arr.splice(arr.indexOf(x),1); }); prPersist(); presetRefreshAll(); }); bb.append(rm); }
     else { const own=tuLibsFor(l.device,true).filter(x=>!x.ro); if(own.length){ const cp=mbtn('→ '+own[0].name,pkt('m.kopieer_naar_je_eigen_bibliotheek'),()=>{ own[0].tree.push({...prClone(n),pid:prUid('p'),t:Date.now()}); prPersist(); presetRefreshAll(); status(pkt('m.gekopieerd_naar',n.name,own[0].name)); }); bb.appendChild(cp); } }
     it.append(nm,bb); box.appendChild(it); }); }
-function prPaintPanel(){ const box=$('prLibs'); box.innerHTML=''; $('prShowBar').checked=PR.prefs.bar!==false;
+function prPaintPanel(){ const box=$('prLibs'); box.innerHTML=''; { const la=$('prLoadAll'); la.textContent=pkt(TUMODE==='tune'?'m.alle_tunes_laden':'m.alle_presets_laden'); la.title=pkt(TUMODE==='tune'?'m.alles_laden_titel_tunes':'m.alles_laden_titel_presets'); } $('prShowBar').checked=PR.prefs.bar!==false;
   const W=TW[TUMODE];
   const devs=[...new Set([...PR.libs.map(l=>l.device),...[...Host.devices.values()].map(r=>r.def.id)])].filter(d=>tuTypeOf(d,(PR.libs.find(l=>l.device===d)||{}).type)===TUMODE).sort((a,b)=>devName(a).localeCompare(devName(b),'nl'));
   const top=mk('div','wsrow'); const fsel=mk('select','small'); fsel.innerHTML=pkt('m.alle_apparaten')+devs.map(d=>`<option value="${esc(d)}">${esc(devName(d))} (${tuLibsFor(d,true).length})</option>`).join(''); fsel.value=devs.includes(TUFILTER)?TUFILTER:''; fsel.onchange=()=>{ TUFILTER=fsel.value; prPaintPanel(); };
