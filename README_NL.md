@@ -55,7 +55,7 @@ Een apparaat is één `.patchkamer-device.js`-bestand. Het **contract** zegt pre
 node contract/validate-instrument.mjs devices/synths/Duofone/duofone.patchkamer-device.js
 ```
 
-Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waar hij de bestanden neerzet en wat hij moet controleren. Het huidige contract is **v1.13**. Elke versie heeft een tag (`contract/vX.Y`).
+Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waar hij de bestanden neerzet en wat hij moet controleren. Het huidige contract is **v1.14**. Elke versie heeft een tag (`contract/vX.Y`).
 
 ## Wat er in deze repository staat
 
