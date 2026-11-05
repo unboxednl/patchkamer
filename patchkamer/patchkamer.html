@@ -2894,11 +2894,13 @@ const saveSources=()=>{ try{ localStorage.setItem(SKEY,JSON.stringify(SOURCES));
 const newSid=()=>'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function srcLabel(o){ if(!o) return ''; if(o.kind==='github') return 'GitHub · '+(o.label||''); if(o.kind==='url') return 'URL · '+(o.label||o.url||''); if(o.kind==='folder') return pkt('m.map_voorvoegsel')+(o.label||'')+(o.path?' / '+o.path:''); if(o.kind==='file') return pkt('m.los_bestand')+(o.name||''); if(o.kind==='embedded') return pkt('m.uit_werkruimtebestand'); return pkt('m.geplakte_code'); }
 const NETMSG=pkt('m.in_de_gepubliceerde_artifact_weergave');
+// raw.githubusercontent.com bewaart een bestand tot 5 minuten in zijn cache, ook als de browser om verversen vraagt: tijdens en vlak na een scan voegen we een tijdstempel toe, zodat een scan altijd de nieuwste versie ziet
+let _freshUntil=0; const rawBust=u=>Date.now()<_freshUntil&&/^https:\/\/raw\.githubusercontent\.com\//.test(u)?u+(u.includes('?')?'&':'?')+'pk='+Date.now():u;
 async function fetchText(url){
-  try{ const r=await fetch(url,{cache:'no-cache'}); if(!r.ok) throw new Error('HTTP '+r.status); const t=await r.text(); IDB.set('code:'+url,{t:Date.now(),code:t}); return {text:t,cached:false}; }
+  try{ const r=await fetch(rawBust(url),{cache:'no-cache'}); if(!r.ok) throw new Error('HTTP '+r.status); const t=await r.text(); IDB.set('code:'+url,{t:Date.now(),code:t}); return {text:t,cached:false}; }
   catch(e){ const c=await IDB.get('code:'+url); if(c&&c.code) return {text:c.code,cached:true}; throw new Error('kon '+url+pkt('m.niet_ophalen')+e.message+NETMSG); } }
 const TREEMEMO=new Map();   // één GitHub-aanroep per repo en boom, ook als apparaten, presets en tunes als aparte bronnen laden
-async function fetchJSON(url){ const r=await fetch(url,{headers:{Accept:'application/vnd.github+json'}}); if(!r.ok) throw new Error((r.status===403?pkt('m.github_limiet_bereikt_of_geen'):'HTTP '+r.status)+pkt('m.bij')+url); return r.json(); }
+async function fetchJSON(url){ const r=await fetch(url,{headers:{Accept:'application/vnd.github+json'},cache:Date.now()<_freshUntil?'no-cache':'default'}); if(!r.ok) throw new Error((r.status===403?pkt('m.github_limiet_bereikt_of_geen'):'HTTP '+r.status)+pkt('m.bij')+url); return r.json(); }
 const looksLikeDevice=t=>/export\s+default\b/.test(t)&&/\bcreate\s*\(/.test(t);
 const isModulePath=p=>/\.patchkamer-device\.js$/i.test(p)&&!/(^|\/)(node_modules|tests?|\.github|dist\/vendor)\//i.test(p)&&!/validate-instrument|\.test\.m?js$|\.config\.m?js$/i.test(p);
 
@@ -2917,6 +2919,7 @@ const wsNameOf=pth=>decodeURIComponent(String(pth).split('/').pop()).replace(/\.
 const prEntry=x=>({path:String(typeof x==='string'?x:(x&&x.path)||'').replace(/^\.\//,''),name:typeof x==='string'?'':((x&&x.name)||'')});
 const wsEntry=x=>typeof x==='string'?{path:x.replace(/^\.\//,''),name:wsNameOf(x)}:{path:String(x&&x.path||'').replace(/^\.\//,''),name:(x&&x.name)||wsNameOf(x&&x.path||'')};
 async function loadSource(src,opts={}){
+  if(opts.fresh) _freshUntil=Date.now()+90000;
   SRCSTATE.set(src.sid,{state:'busy',msg:pkt('m.laden_ellipsis')}); paintSources(); let n=0, skipped=0, cached=0, layoutNote=''; const errs=[], wss=[], prs=[];
   const one=async(text,origin,imp)=>{ if(!looksLikeDevice(text)){ skipped++; if(/export\s+default/.test(text)) errs.push((origin.path||origin.url)+pkt('m.overgeslagen_geen_apparaat_herkend_export')); return; } try{ await loadDeviceSource(text,origin,true,imp); n++; }catch(e){ errs.push((origin.path||origin.url)+': '+e.message); } };
   const isWs=pth=>/\.patchkamer(-song)?\.json$/i.test(pth), isPr=pth=>/\.patchkamer-(presets|tunes)\.json$/i.test(pth); let layout=null;
