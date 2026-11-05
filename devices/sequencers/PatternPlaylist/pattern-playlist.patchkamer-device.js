@@ -251,4 +251,4 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  destroy(){if(dead)return;allOff(false);dead=true;playing=false;self.unmount();queue=[];hist=[];undo=[];redo=[];clipboard=null;}};return self;
 }
 const NL_PORTS={input:'Live noten / CC',...Object.fromEntries(Array.from({length:32},(_,i)=>['track'+(i+1),'Spoor '+(i+1)]))};
-export default {id:'nl.patchkamer.patternplaylist',name:'Pattern Playlist',version:'1.11.0',kind:'utility',category:'sequencer',ui:{width:1260,minWidth:620,jacks:false},ports:portsFor(8,false),i18n:{nl:{ports:Object.fromEntries(Object.entries(NL_PORTS).filter(([k])=>k==='input'||+k.slice(5)<=8))}},create:createSequencer};
+export default {id:'nl.patchkamer.patternplaylist',name:'Pattern Playlist',version:'1.11.0',kind:'utility',category:'sequencer',ui:{width:1260,minWidth:620,jacks:false},ports:portsFor(8,false),i18n:{nl:{ports:Object.fromEntries(Object.entries(NL_PORTS).filter(([k])=>k==='input'||+k.slice(5)<=8))}},create(ctx,host){return createSequencer(ctx,host);}};
