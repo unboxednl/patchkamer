@@ -1,0 +1,56 @@
+{
+ "format": "patchkamer-presets",
+ "formatVersion": 2,
+ "device": "nl.patchkamer.listeningoutput",
+ "name": "Listening Output Levels",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Listening volumes for Listening Output, from quiet to full.",
+ "tree": [
+  {
+   "folder": "Levels",
+   "items": [
+    {
+     "name": "Quiet",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "level": 0.3
+     }
+    },
+    {
+     "name": "Low",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "level": 0.5
+     }
+    },
+    {
+     "name": "Normal",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "level": 0.7
+     }
+    },
+    {
+     "name": "High",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "level": 0.85
+     }
+    },
+    {
+     "name": "Full",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "level": 1.0
+     }
+    }
+   ]
+  }
+ ]
+}
