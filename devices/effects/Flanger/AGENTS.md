@@ -56,3 +56,13 @@ Wat Flanger met zijn ingang doet (getest): de worklet begrenst de ingang op ±16
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Flanger: [NL](../../../docs/effects/USER-MANUAL_NL.md#flanger) · [EN](../../../docs/effects/USER-MANUAL_EN.md#flanger).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/effects/USER-MANUAL_NL.md) · [EN](../../../docs/effects/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [flanger.patchkamer-presets.json](../../../presets/flanger.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: insert-effect voor beweging en kleuring. Audio in `in`, uit `out`; zes parameters zijn stuurbaar via `mod`.

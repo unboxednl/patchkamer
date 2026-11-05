@@ -52,3 +52,12 @@ Wat Scope met een state doet (getest):
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Scope: [NL](../../../docs/tools/USER-MANUAL_NL.md#scope) · [EN](../../../docs/tools/USER-MANUAL_EN.md#scope).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: meetinstrument dat het geluid ongewijzigd doorgeeft (`in` naar `out`) en laat zien wat er langskomt. Zet hem op een stem of de mix om te controleren.

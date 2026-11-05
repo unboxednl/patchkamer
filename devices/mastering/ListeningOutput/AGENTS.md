@@ -27,3 +27,13 @@ Voorganger: Luisteruitgang (`nl.patchkamer.monitoruit`).
 ## Controleren
 
 `node contract/validate-instrument.mjs devices/mastering/ListeningOutput/listening-output.patchkamer-device.js --lang nl` en `--lang en`. Niet beluisterd.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Listening Output: [NL](../../../docs/mastering/USER-MANUAL_NL.md#listening-output) · [EN](../../../docs/mastering/USER-MANUAL_EN.md#listening-output).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mastering/USER-MANUAL_NL.md) · [EN](../../../docs/mastering/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [listening-output.patchkamer-presets.json](../../../presets/listening-output.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: laatste schakel van een masterketen met alleen een luistervolume, bedoeld om te meten wat je hoort. Audio in `in`; geen uitgangen. Zet hem na de mastering-apparaten.

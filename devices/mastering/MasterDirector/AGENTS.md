@@ -37,3 +37,13 @@ De formules staan in `recipe()` in het bestand en zijn gelijk aan die van de pre
 
 - `node contract/validate-instrument.mjs devices/mastering/MasterDirector/master-director.patchkamer-device.js --lang nl` en `--lang en`. Beide `OK`.
 - Niet beluisterd; de Director heeft geen eigen geluid.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Master Director: [NL](../../../docs/mastering/USER-MANUAL_NL.md#master-director) · [EN](../../../docs/mastering/USER-MANUAL_EN.md#master-director).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mastering/USER-MANUAL_NL.md) · [EN](../../../docs/mastering/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [master-director.patchkamer-presets.json](../../../presets/master-director.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing van de hele masteringketen (kies een stijl en situatie). Het heeft alleen de mastering-uitgang `setup`, die met de gele gestippelde kabel naar de `setup`-poorten van de mastering-apparaten gaat. Het maakt geen geluid en zit niet in de audioketen.

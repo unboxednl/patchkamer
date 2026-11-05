@@ -113,3 +113,13 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 - Verander nooit de `id`, de `kind`, de poort-id's of de namen van state-velden.
 - Pas het apparaat niet aan om een tune te laten kloppen.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Basic Mono: [NL](../../../docs/synths/USER-MANUAL_NL.md#basic-mono) · [EN](../../../docs/synths/USER-MANUAL_EN.md#basic-mono).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/synths/USER-MANUAL_NL.md) · [EN](../../../docs/synths/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [basic-mono-styles.patchkamer-tunes.json](../../../tunes/basic-mono-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: eenvoudige monofone synth voor bas of lead. Noten op `notes`, audio uit `out` (mono). Geen eigen patroon: stuur hem met een sequencer.

@@ -59,3 +59,13 @@ Wat Room met een state doet (getest):
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Room: [NL](../../../docs/effects/USER-MANUAL_NL.md#room) · [EN](../../../docs/effects/USER-MANUAL_EN.md#room).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/effects/USER-MANUAL_NL.md) · [EN](../../../docs/effects/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [room.patchkamer-presets.json](../../../presets/room.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: delay en galm in één apparaat, als insert of op een send-bus. Audio in `in`, uit `out`; het delay loopt op het tempo van de studio. Delay- en galmmix staan in de velden `dsend` en `wet`.

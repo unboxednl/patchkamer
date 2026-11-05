@@ -73,3 +73,13 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Neutral`, `Low under co
 - `node contract/validate-instrument.mjs devices/mastering/MultibandBalance/multiband-balance.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
 - Je kunt niet horen hoe een preset klinkt. Schrijf in je oplevering dat het **niet beluisterd** is.
 - Alle tekst in het apparaat staat in `TXT` en `LOC` bovenin het bestand (Nederlands en Engels). Een nieuwe tekst krijgt altijd nl én en.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Multiband Balance: [NL](../../../docs/mastering/USER-MANUAL_NL.md#multiband-balance) · [EN](../../../docs/mastering/USER-MANUAL_EN.md#multiband-balance).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mastering/USER-MANUAL_NL.md) · [EN](../../../docs/mastering/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [multiband-balance.patchkamer-presets.json](../../../presets/multiband-balance.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: mastering, multibandcompressie of dynamische EQ op de eindmix. Audio in `in`, uit `out`; `setup` ontvangt de mastering-kabel van de Master Director.

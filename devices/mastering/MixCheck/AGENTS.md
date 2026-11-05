@@ -50,3 +50,13 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Stereo`, `Mono`, `Check
 - `node contract/validate-instrument.mjs devices/mastering/MixCheck/mix-check.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
 - Je kunt niet horen hoe een preset klinkt. Schrijf in je oplevering dat het **niet beluisterd** is.
 - Alle tekst in het apparaat staat in `TXT` en `LOC` bovenin het bestand (Nederlands en Engels). Een nieuwe tekst krijgt altijd nl én en.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Mix Check: [NL](../../../docs/mastering/USER-MANUAL_NL.md#mix-check) · [EN](../../../docs/mastering/USER-MANUAL_EN.md#mix-check).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mastering/USER-MANUAL_NL.md) · [EN](../../../docs/mastering/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [mix-check.patchkamer-presets.json](../../../presets/mix-check.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: controle van de mix (mono, links, rechts, Side, correlatie, loudness, referentie); verandert niets aan het geluid behalve het luisteren. Audio in `in`, referentie in `ref`, uit `out`. Zet hem als meter in de masterketen en haal hem niet weg uit de signaalweg zonder te controleren wat er daarna komt.

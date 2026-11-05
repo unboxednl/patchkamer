@@ -233,3 +233,14 @@ De drumsporen 1, 2, 3 en 8 hoor je het best op dezelfde drumcomputer (controleer
 Bijzondere presets: `Glitch Micro Rows 1/64` gebruikt het 1/64-raster; `Chiptune Hero Loop`, `Chip Boss Battle`, `Demoscene Arp Anthem` en `Jungle Chop Rows` het 1/32-raster; `Acid Squelch Rows`, `Trance Gate Rows`, `Goa Rolling Bass Rows` en `Ambient Evolver Rows` hebben een `CC`-spoor (`cutoff`); `Waltz in Three` is een 3/4-patroon van 12 rijen per maat (de maatstreep van de host is 4/4); `Twelve-Bar Blues` is een patroon van 192 rijen; `Probability Groove Machine` en `IDM Stutter Rows` gebruiken `PRB`, `RAT` en `DEL` zwaar.
 
 Een nieuwe preset maken: bouw de state met bovenstaande velden, zet hem door `setPreset` en `getPreset` (zodat alle velden volledig en genormaliseerd zijn), controleer dat elke waarde ongewijzigd terugkomt en dat de noten binnen 0 – 127 en de velocity binnen 0 – 1 blijven, en voeg hem toe in een bestaande map van het pack. Namen zijn Engels en uniek binnen het pack.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Pattern Tracker: [NL](../../../docs/sequencers/USER-MANUAL_NL.md#pattern-tracker) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#pattern-tracker).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/sequencers/USER-MANUAL_NL.md) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md).
+- Presets (patronen en instellingen, `kind: set`): [pattern-tracker.patchkamer-presets.json](../../../presets/pattern-tracker.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Sequencers in het algemeen (raster, velocity, lengte, timing, accenten): [NL](../../../docs/sequencers/USER-MANUAL_NL.md#wat-de-sequencers-gemeen-hebben) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#what-the-sequencers-have-in-common). Muziektheorie vertaald naar waarden: [songs/MUSIC-THEORY.md](../../../songs/MUSIC-THEORY.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing, patronen in een trackertabel van tot 32 kolommen. Elk spoor `track1` … `track8` (meer via `trackCount`, tot 32) gaat naar een eigen synth of drumcomputer, of gebruik de bundeluitgang `tracks`. De ingang `input` neemt live noten en CC op.

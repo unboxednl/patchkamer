@@ -170,3 +170,14 @@ De pianorol toont de stappen als blokjes: **breedte = lengte** (`ln` of `gate`),
 - Verander nooit de `id`, de `kind`, de poort-id's of de namen van state-velden.
 - Pas het apparaat niet aan om een preset te laten kloppen. Zet geen merknamen in naam of omschrijving.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Step Sequencer: [NL](../../../docs/sequencers/USER-MANUAL_NL.md#step-sequencer) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#step-sequencer).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/sequencers/USER-MANUAL_NL.md) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md).
+- Presets (patronen en instellingen, `kind: set`): [step-sequencer.patchkamer-presets.json](../../../presets/step-sequencer.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Sequencers in het algemeen (raster, velocity, lengte, timing, accenten): [NL](../../../docs/sequencers/USER-MANUAL_NL.md#wat-de-sequencers-gemeen-hebben) · [EN](../../../docs/sequencers/USER-MANUAL_EN.md#what-the-sequencers-have-in-common). Muziektheorie vertaald naar waarden: [songs/MUSIC-THEORY.md](../../../songs/MUSIC-THEORY.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing, één monofone stem (bas, lead, motief of drumtriggers) van 1 tot 64 stappen. Eventuitgang `notes` gaat naar de `notes` van een synth; voor meer stemmen gebruik je meer Step Sequencers, voor akkoorden de Chord Sequencer. Alle lijsten in de `state` hebben 64 plaatsen: geef ze altijd volledig op.

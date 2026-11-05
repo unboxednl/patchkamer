@@ -94,3 +94,13 @@ Wat LFO met zijn ingangen doet (getest): de uitvoer is **altijd eindig** en ligt
 - Zet geen `sel` in een preset en geen routes naar apparaten die niet bestaan.
 - Zet geen merknamen van bestaande apparatuur of software in naam, preset of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van LFO: [NL](../../../docs/modulators/USER-MANUAL_NL.md#lfo) · [EN](../../../docs/modulators/USER-MANUAL_EN.md#lfo).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/modulators/USER-MANUAL_NL.md) · [EN](../../../docs/modulators/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [lfo.patchkamer-presets.json](../../../presets/lfo.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing, periodieke beweging op het tempo van de klok (acht vormen). Uitgang `mod` naar de `mod`-ingang van het doel; de eventingang `trig` herstart hem. Maakt geen geluid.

@@ -149,3 +149,13 @@ Zet alle 16 velden erin: dan klinkt de tune hetzelfde als de startwaarden ooit v
 - Verander nooit de `id`, de `kind`, de poort-id's of de namen van state-velden.
 - Pas het apparaat niet aan om een tune te laten kloppen.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Loop Slicer: [NL](../../../docs/samplers/USER-MANUAL_NL.md#loop-slicer) · [EN](../../../docs/samplers/USER-MANUAL_EN.md#loop-slicer).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/samplers/USER-MANUAL_NL.md) · [EN](../../../docs/samplers/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [loop-slicer-styles.patchkamer-tunes.json](../../../tunes/loop-slicer-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: loop-afspeler in plakken (4, 8, 16 of 32 slices) voor ritme en breaks. Noten of trigs op `notes` spelen de slices, of gebruik het eigen patroon van 16 stappen op de klok; audio uit `out`. De loop zelf (WAV/MP3) laad je in de app: een song kan dat bestand niet meebrengen, dus houd je aan de ingebouwde demo-loop of benoem de afhankelijkheid.

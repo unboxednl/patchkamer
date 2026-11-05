@@ -197,3 +197,13 @@ Het script kan niet horen of de tune goed klinkt. Heb je een browser, laad dan d
 - Pas `duofone.patchkamer-device.js` niet aan om een tune te laten kloppen, en verander nooit de `id`.
 - Zet geen merknamen van bestaande synths in de naam, omschrijving of `author` van een tune.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Duofone: [NL](../../../docs/synths/USER-MANUAL_NL.md#duofone) · [EN](../../../docs/synths/USER-MANUAL_EN.md#duofone).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/synths/USER-MANUAL_NL.md) · [EN](../../../docs/synths/USER-MANUAL_EN.md).
+- Tunes (klanken, `kind: set`): [duofone-styles.patchkamer-tunes.json](../../../tunes/duofone-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: synth met twee onafhankelijke toonhoogten voor bas, lead of effecten. Noten op `notes`, audio uit `out` (stereo), `mod` voor sturing; geen eigen patroon, dus stuur hem met een sequencer.

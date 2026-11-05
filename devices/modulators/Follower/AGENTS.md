@@ -67,3 +67,13 @@ Wat Follower met zijn ingang doet (getest): `NaN`, `±Infinity` en absurd grote 
 - Pas het apparaat niet aan om een preset te laten kloppen.
 - Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Documentatie en songs
+
+Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
+
+- Handleiding van Follower: [NL](../../../docs/modulators/USER-MANUAL_NL.md#follower) · [EN](../../../docs/modulators/USER-MANUAL_EN.md#follower).
+- Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/modulators/USER-MANUAL_NL.md) · [EN](../../../docs/modulators/USER-MANUAL_EN.md).
+- Presets (instellingen, `kind: set`): [follower.patchkamer-presets.json](../../../presets/follower.patchkamer-presets.json). Kies een preset als beginpunt voor de `state` van dit apparaat in de song; velden die de preset niet noemt krijgen hun standaard.
+- Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Rol in een song: sturing uit audio (niveau, transiënt, helderheid). Audio in `in` (luistert), audio door via `out`, `trig` stuurt aanslagen door als events en `mod` is de stuuruitgang naar de parameters van andere apparaten.
