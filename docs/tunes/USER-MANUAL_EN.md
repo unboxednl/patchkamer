@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-A **tune** is a saved sound of one device that makes sound: a synth or a drum device. You pick a tune from a list on the device's card and all its knobs, choices and patterns move to the saved values. This page explains how to use tunes, how to import, export and share a pack, which packs come with Patchkamer, and how to make your own. Devices without a sound of their own (effects, mixers, tools) have **presets** instead: see the [presets manual](../presets/USER-MANUAL_EN.md). For the basics of Patchkamer (start, loading a library, cables), see the [main manual](../USER-MANUAL_EN.md).
+A **tune** is a saved sound of one device that makes sound: a synth, a sampler or a drum device. You pick a tune from a list on the device's card and all its knobs, choices and patterns move to the saved values. This page explains how to use tunes, how to import, export and share a pack, which packs come with Patchkamer, and how to make your own. Devices without a sound of their own (effects, mixers, tools) have **presets** instead: see the [presets manual](../presets/USER-MANUAL_EN.md). For the basics of Patchkamer (start, loading a library, cables), see the [main manual](../USER-MANUAL_EN.md).
 
 ## Contents
 
@@ -19,7 +19,7 @@ A **tune** is a saved sound of one device that makes sound: a synth or a drum de
 
 ## What a tune is
 
-A tune is the **sound of one device**: all its knobs, choices and patterns. It does not contain cables. Tunes are for devices that make sound (in the contract: `instrument` devices): synths, drones and drum devices. A device without a sound of its own has presets, not tunes.
+A tune is the **sound of one device**: all its knobs, choices and patterns. It does not contain cables. Tunes are for devices that make sound (in the contract: `instrument` devices): synths, drones, samplers and drum devices. A device without a sound of its own has presets, not tunes.
 
 Tunes are kept per device. A tune made for Duofone only shows up on a Duofone card. Every card with that device gets its own copy of the values when you load a tune, so changing one Duofone does not change another.
 
@@ -114,7 +114,7 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 32 packs with **2012 tunes** in total, one per device: 26 packs for synths (1805 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. The files have `formatVersion` 1. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
+This repository has 34 packs with **2160 tunes** in total, one per device: 26 packs for synths (1805 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. The files have `formatVersion` 1. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
 
 ### Synths (26)
 
@@ -147,6 +147,15 @@ This repository has 32 packs with **2012 tunes** in total, one per device: 26 pa
 | [Supersaw Swarm](../../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | Trance (7), Hardstyle (6), Progressive (6), Big Room (6), Synthwave (6), Pop (6), Future Bass (6), Eurodance (6), Ambient (6), Cinematic (6) | [`supersaw-swarm-styles.patchkamer-tunes.json`](../../tunes/supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | Trance (7), House (6), Pop (6), Synthwave (7), Ambient (6), Cinematic (6), Future Bass (6), Funk (6), Disco (6), Electro (6), Techno (6), Lo-fi (5) | [`triple-osc-poly-styles.patchkamer-tunes.json`](../../tunes/triple-osc-poly-styles.patchkamer-tunes.json) |
 
+### Samplers (2)
+
+| Device | Pack | Tunes | Folders | File |
+|---|---|---|---|---|
+| [Loop Slicer](../../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | House (6), Techno (6), Breakbeat (6), Drum and Bass (5), Hip-hop (6), Trap (5), Funk (5), Dub (5), Cinematic (5), Glitch (6), Pitched Hits (6), Own Loop (8) | [`loop-slicer-styles.patchkamer-tunes.json`](../../tunes/loop-slicer-styles.patchkamer-tunes.json) |
+| [Samplebank](../../devices/samplers/Samplebank/) | Samplebank Styles | 79 | Techno (7), House (7), Trance (5), Ambient (5), Synthwave (5), Hip-hop (4), Lo-fi (5), Trap (4), Drum & Bass (5), Dubstep (4), Electro (5), Pop (4), Chiptune (5), Funk & Disco (6), Dub (4), Cinematic (4) | [`samplebank-styles.patchkamer-tunes.json`](../../tunes/samplebank-styles.patchkamer-tunes.json) |
+
+A Samplebank tune carries its own small generated sounds. Eight Loop Slicer tunes (folder Own Loop) use the loop you have loaded and stay silent without one.
+
 ### Drums (6)
 
 | Device | Pack | Tunes | Folders | File |
@@ -161,8 +170,9 @@ This repository has 32 packs with **2012 tunes** in total, one per device: 26 pa
 ### What a tune holds
 
 - **Synth tunes** set the sound of the synth: oscillators, filter, envelopes and so on. Some synths also keep a pattern or a bassline in the tune (for example the Acid Baselines pack); the device manual says which.
+- **Sampler tunes** set the slicing and playing of a sampler. A Samplebank tune also holds its own small generated sounds, so it replaces the banks you had. A Loop Slicer tune never holds the audio of your loop: it only sets how the loop is cut and played (the tunes in the folder Own Loop keep the loop you have loaded; the other tunes switch on the built-in demo loop). See the [samplers manual](../samplers/USER-MANUAL_EN.md).
 - **Drum tunes** are a whole machine: sounds and pattern together (see [Drum machines: the Instrument row](#drum-machines-the-instrument-row)).
-- A tune never contains cables, and it does not start playing by itself. Connect the device and start the clock or play notes; see the manual of the device: [synths](../synths/USER-MANUAL_EN.md) and [drums](../drums/USER-MANUAL_EN.md).
+- A tune never contains cables, and it does not start playing by itself. Connect the device and start the clock or play notes; see the manual of the device: [synths](../synths/USER-MANUAL_EN.md), [samplers](../samplers/USER-MANUAL_EN.md) and [drums](../drums/USER-MANUAL_EN.md).
 
 ### How to use them
 

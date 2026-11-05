@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Een **tune** is een bewaarde klank van één apparaat dat geluid maakt: een synth of een drumapparaat. Je kiest een tune uit een lijst op de kaart van het apparaat en alle knoppen, keuzes en patronen springen naar de bewaarde waarden. Deze pagina legt uit hoe je tunes gebruikt, hoe je een pack importeert, exporteert en deelt, welke packs er met Patchkamer meekomen en hoe je een eigen pack maakt. Apparaten zonder eigen geluid (effecten, mixers, tools) hebben **presets**: zie de [handleiding voor presets](../presets/USER-MANUAL_NL.md). De basis van Patchkamer (opstarten, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md).
+Een **tune** is een bewaarde klank van één apparaat dat geluid maakt: een synth, een sampler of een drumapparaat. Je kiest een tune uit een lijst op de kaart van het apparaat en alle knoppen, keuzes en patronen springen naar de bewaarde waarden. Deze pagina legt uit hoe je tunes gebruikt, hoe je een pack importeert, exporteert en deelt, welke packs er met Patchkamer meekomen en hoe je een eigen pack maakt. Apparaten zonder eigen geluid (effecten, mixers, tools) hebben **presets**: zie de [handleiding voor presets](../presets/USER-MANUAL_NL.md). De basis van Patchkamer (opstarten, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md).
 
 ## Inhoud
 
@@ -19,7 +19,7 @@ Een **tune** is een bewaarde klank van één apparaat dat geluid maakt: een synt
 
 ## Wat een tune is
 
-Een tune is de **klank van één apparaat**: alle knoppen, keuzes en patronen. Kabels zitten er niet in. Tunes zijn voor apparaten die geluid maken (in het contract: `instrument`-apparaten): synths, drones en drumapparaten. Een apparaat zonder eigen geluid heeft presets, geen tunes.
+Een tune is de **klank van één apparaat**: alle knoppen, keuzes en patronen. Kabels zitten er niet in. Tunes zijn voor apparaten die geluid maken (in het contract: `instrument`-apparaten): synths, drones, samplers en drumapparaten. Een apparaat zonder eigen geluid heeft presets, geen tunes.
 
 Tunes horen bij één apparaat. Een tune die voor Duofone is gemaakt, zie je alleen op een Duofone-kaart. Elke kaart met dat apparaat krijgt bij het laden een eigen kopie van de waarden, dus als je de ene Duofone verandert, verandert de andere niet.
 
@@ -114,7 +114,7 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 32 packs met samen **2012 tunes**, één per apparaat: 26 packs voor synths (1805 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
+Deze repository heeft 34 packs met samen **2160 tunes**, één per apparaat: 26 packs voor synths (1805 tunes), 2 voor samplers (148 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
 
 ### Synths (26)
 
@@ -147,6 +147,15 @@ Deze repository heeft 32 packs met samen **2012 tunes**, één per apparaat: 26 
 | [Supersaw Swarm](../../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | Trance (7), Hardstyle (6), Progressive (6), Big Room (6), Synthwave (6), Pop (6), Future Bass (6), Eurodance (6), Ambient (6), Cinematic (6) | [`supersaw-swarm-styles.patchkamer-tunes.json`](../../tunes/supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | Trance (7), House (6), Pop (6), Synthwave (7), Ambient (6), Cinematic (6), Future Bass (6), Funk (6), Disco (6), Electro (6), Techno (6), Lo-fi (5) | [`triple-osc-poly-styles.patchkamer-tunes.json`](../../tunes/triple-osc-poly-styles.patchkamer-tunes.json) |
 
+### Samplers (2)
+
+| Apparaat | Pack | Tunes | Mappen | Bestand |
+|---|---|---|---|---|
+| [Loop Slicer](../../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | House (6), Techno (6), Breakbeat (6), Drum and Bass (5), Hip-hop (6), Trap (5), Funk (5), Dub (5), Cinematic (5), Glitch (6), Pitched Hits (6), Own Loop (8) | [`loop-slicer-styles.patchkamer-tunes.json`](../../tunes/loop-slicer-styles.patchkamer-tunes.json) |
+| [Samplebank](../../devices/samplers/Samplebank/) | Samplebank Styles | 79 | Techno (7), House (7), Trance (5), Ambient (5), Synthwave (5), Hip-hop (4), Lo-fi (5), Trap (4), Drum & Bass (5), Dubstep (4), Electro (5), Pop (4), Chiptune (5), Funk & Disco (6), Dub (4), Cinematic (4) | [`samplebank-styles.patchkamer-tunes.json`](../../tunes/samplebank-styles.patchkamer-tunes.json) |
+
+Een Samplebank-tune brengt zijn eigen kleine gegenereerde geluiden mee. Acht Loop Slicer-tunes (map Own Loop) gebruiken de loop die je hebt geladen en blijven daar zonder stil.
+
 ### Drums (6)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
@@ -161,8 +170,9 @@ Deze repository heeft 32 packs met samen **2012 tunes**, één per apparaat: 26 
 ### Wat een tune bevat
 
 - **Tunes voor synths** stellen de klank van de synth in: oscillatoren, filter, enveloppen enzovoort. Sommige synths bewaren ook een patroon of een baslijn in de tune (bijvoorbeeld het pack van Acid Baselines); de handleiding van het apparaat zegt welke.
+- **Tunes voor samplers** stellen in hoe een sampler knipt en speelt. Een Samplebank-tune bevat ook zijn eigen kleine gegenereerde geluiden en vervangt dus de banken die je had. Een Loop Slicer-tune bevat nooit de audio van je loop: hij stelt alleen in hoe de loop geknipt en gespeeld wordt (de tunes in de map Own Loop laten de loop die je hebt geladen staan; de andere tunes zetten de ingebouwde demo-loop aan). Zie de [handleiding voor samplers](../samplers/USER-MANUAL_NL.md).
 - **Tunes voor drums** zijn een hele machine: klanken en patroon samen (zie [Drumcomputers: de regel Instrument](#drumcomputers-de-regel-instrument)).
-- Een tune bevat nooit kabels en begint niet uit zichzelf te spelen. Sluit het apparaat aan en start de klok of speel noten; zie de handleiding van het apparaat: [synths](../synths/USER-MANUAL_NL.md) en [drums](../drums/USER-MANUAL_NL.md).
+- Een tune bevat nooit kabels en begint niet uit zichzelf te spelen. Sluit het apparaat aan en start de klok of speel noten; zie de handleiding van het apparaat: [synths](../synths/USER-MANUAL_NL.md), [samplers](../samplers/USER-MANUAL_NL.md) en [drums](../drums/USER-MANUAL_NL.md).
 
 ### Zo gebruik je ze
 
