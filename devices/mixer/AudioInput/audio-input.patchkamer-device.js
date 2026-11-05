@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// 1.12.0 — Eerste versie. Audio Input haalt geluid van een ingang van de computer in de studio: de standaardingang van de geluidskaart of een
+// 1.12.2 — Dempen is nu een knop en staat standaard uit (de ingang klinkt meteen); 1.12.1 — bredere kaart. 1.12.0 — Eerste versie. Audio Input haalt geluid van een ingang van de computer in de studio: de standaardingang van de geluidskaart of een
 //          audio-interface die het besturingssysteem als ingang aanbiedt (USB-interfaces, ingebouwde lijn-/microfooningang). De lijst met ingangen
 //          komt van de browser (namen zoals het systeem ze geeft; er staan geen vaste namen in dit bestand). Kies de ingang, het kanaal of kanaalpaar
 //          (bij interfaces met meer dan twee ingangen), mono of stereo, een versterking van -24 tot +36 dB, een hoogdoorlaat tegen dreun, en polariteit.
@@ -14,16 +14,16 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const num = (v, a, b, d) => typeof v === 'number' && Number.isFinite(v) ? clamp(v, a, b) : d;
 const pick = (v, list, d) => list.includes(v) ? v : d;
 const MODES = ['stereo', 'mono', 'sum'], HPS = [0, 40, 80, 120], CAPS = ['stereo', 'all'];
-const DEFAULTS = { device: '', deviceLabel: '', mode: 'stereo', ch: 1, capture: 'stereo', gain: 0, hp: 0, invert: false, mute: true, processing: false };
+const DEFAULTS = { device: '', deviceLabel: '', mode: 'stereo', ch: 1, capture: 'stereo', gain: 0, hp: 0, invert: false, mute: false, processing: false };
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
   nl: { title: 'Audio Input', hint: 'Haalt geluid van een ingang van je computer: de standaardingang of een audio-interface die je systeem kent.',
     start: 'Start ingang', stop: 'Stop ingang', device: 'Ingang', defaultDev: 'Standaardingang van het systeem', unnamed: 'Ingang', capture: 'Kanalen van de ingang', capStereo: '2 (stereo)', capAll: 'Zoveel als de ingang geeft',
     mode: 'Weergave', modeStereo: 'Stereo (een paar)', modeMono: 'Mono (één kanaal naar links en rechts)', modeSum: 'Mono (paar samengeteld)', ch: 'Kanaal', pair: 'Paar',
-    gain: 'Versterking', hp: 'Hoogdoorlaat', hpOff: 'uit', invert: 'Polariteit omkeren', mute: 'Gedempt', processing: 'Browserbewerking (echo, ruis, automatisch niveau)',
+    gain: 'Versterking', hp: 'Hoogdoorlaat', hpOff: 'uit', invert: 'Polariteit omkeren', mute: 'Dempen', processing: 'Browserbewerking (echo, ruis, automatisch niveau)',
     left: 'L', right: 'R', clip: 'clip', idle: 'Ingang is uit. Klik op Start ingang; de browser vraagt eenmalig toestemming.',
-    live: (n, r) => 'Ingang loopt: ' + n + ' ' + (n === 1 ? 'kanaal' : 'kanalen') + (r ? ' · ' + r + ' Hz' : ''), muted: ' · gedempt: haal Gedempt weg om te horen',
+    live: (n, r) => 'Ingang loopt: ' + n + ' ' + (n === 1 ? 'kanaal' : 'kanalen') + (r ? ' · ' + r + ' Hz' : ''), muted: ' · gedempt: klik op Dempen om weer te horen',
     unsupported: 'Deze browser kan geen ingang openen (getUserMedia ontbreekt, of de pagina is niet veilig geladen).', denied: 'Geen toegang tot de ingang: geef toestemming in de browser.',
     notFound: 'De gekozen ingang is er niet (meer). Kies een andere.', busy: 'De ingang is in gebruik door een ander programma, of kon niet starten.', failed: m => 'Starten lukt niet: ' + m,
     feedback: 'Gebruik een koptelefoon of zet het volume laag: een microfoon bij de luidsprekers geeft rondzingen.', channelsNote: n => 'De ingang geeft ' + n + ' ' + (n === 1 ? 'kanaal' : 'kanalen') + '.',
@@ -31,9 +31,9 @@ const TXT = {
   en: { title: 'Audio Input', hint: 'Brings sound in from an input on your computer: the default input or an audio interface your system knows.',
     start: 'Start input', stop: 'Stop input', device: 'Input', defaultDev: 'System default input', unnamed: 'Input', capture: 'Channels of the input', capStereo: '2 (stereo)', capAll: 'As many as the input gives',
     mode: 'Mode', modeStereo: 'Stereo (a pair)', modeMono: 'Mono (one channel to left and right)', modeSum: 'Mono (pair summed)', ch: 'Channel', pair: 'Pair',
-    gain: 'Gain', hp: 'High-pass', hpOff: 'off', invert: 'Invert polarity', mute: 'Muted', processing: 'Browser processing (echo, noise, auto level)',
+    gain: 'Gain', hp: 'High-pass', hpOff: 'off', invert: 'Invert polarity', mute: 'Mute', processing: 'Browser processing (echo, noise, auto level)',
     left: 'L', right: 'R', clip: 'clip', idle: 'The input is off. Click Start input; the browser asks for permission once.',
-    live: (n, r) => 'Input running: ' + n + ' channel' + (n === 1 ? '' : 's') + (r ? ' · ' + r + ' Hz' : ''), muted: ' · muted: untick Muted to hear it',
+    live: (n, r) => 'Input running: ' + n + ' channel' + (n === 1 ? '' : 's') + (r ? ' · ' + r + ' Hz' : ''), muted: ' · muted: click Mute to hear it again',
     unsupported: 'This browser cannot open an input (getUserMedia is missing, or the page was not loaded securely).', denied: 'No access to the input: allow it in the browser.',
     notFound: 'The chosen input is not there (any more). Pick another.', busy: 'The input is in use by another program, or could not start.', failed: m => 'Could not start: ' + m,
     feedback: 'Use headphones or keep the volume low: a microphone near the speakers makes feedback.', channelsNote: n => 'The input gives ' + n + ' channel' + (n === 1 ? '' : 's') + '.',
@@ -41,7 +41,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.12.1', kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
+  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.12.2', kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
   i18n: { nl: { ports: { out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -115,7 +115,7 @@ export default {
       for (let i = 1; i <= count; i++) { const o = el('option', pairs ? (2 * i - 1) + '+' + Math.min(2 * i, Math.max(n, 2 * i - 1)) : String(i), ui.ch); o.value = String(pairs ? 2 * i - 1 : i); }
       const want = pairs ? (state.ch % 2 === 0 ? state.ch - 1 : state.ch) : state.ch; ui.ch.value = String(want); if (ui.ch.value !== String(want)) ui.ch.value = ui.ch.options[0].value;
       ui.chLabel.textContent = pairs ? T.pair : T.ch;
-      ui.hp.value = String(state.hp); ui.invert.checked = state.invert; ui.mute.checked = state.mute; ui.proc.checked = state.processing; ui.gain.set && ui.gain.set(state.gain);
+      ui.hp.value = String(state.hp); ui.invert.checked = state.invert; ui.mute.classList.toggle('on', state.mute); ui.mute.setAttribute('aria-pressed', state.mute ? 'true' : 'false'); ui.proc.checked = state.processing; ui.gain.set && ui.gain.set(state.gain);
       ui.status.textContent = errText || (running() ? T.live(nCh, rate) + (state.mute ? T.muted : '') : T.idle);
       ui.status.classList.toggle('err', !!errText);
     }
@@ -142,7 +142,7 @@ export default {
         const r5 = el('div', null, app, 'row'); const l5 = el('label', T.hp, r5); const hpSel = el('select', null, l5); hpSel.setAttribute('aria-label', T.hp);
         for (const f of HPS) { const o = el('option', f ? f + ' Hz' : T.hpOff, hpSel); o.value = String(f); } hpSel.onchange = () => { state.hp = pick(parseInt(hpSel.value, 10), HPS, 0); applyStage(); };
         const l6 = el('label', null, r5); const inv = el('input', null, l6); inv.type = 'checkbox'; el('span', T.invert, l6); inv.onchange = () => { state.invert = inv.checked; applyStage(); };
-        const r6 = el('div', null, app, 'row'); const l7 = el('label', null, r6); const mute = el('input', null, l7); mute.type = 'checkbox'; el('span', T.mute, l7); mute.onchange = () => { state.mute = mute.checked; applyStage(); paint(); };
+        const r6 = el('div', null, app, 'row'); const mute = el('button', T.mute, r6); mute.type = 'button'; mute.onclick = () => { state.mute = !state.mute; applyStage(); paint(); };
         const l8 = el('label', null, r6); const proc = el('input', null, l8); proc.type = 'checkbox'; el('span', T.processing, l8); proc.onchange = () => { state.processing = proc.checked; if (running()) start(); };
         const bars = [], clips = []; for (const side of [T.left, T.right]) { const m = el('div', null, app, 'meter'); el('span', side, m); const b = el('div', null, m, 'bar'); bars.push(el('i', null, b)); clips.push(el('span', T.clip, m, 'clip')); }
         el('div', T.feedback, app, 'warn'); const status = el('div', null, app, 'status'); sh.addEventListener('pointerdown', e => e.stopPropagation());

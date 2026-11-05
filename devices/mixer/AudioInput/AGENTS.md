@@ -23,7 +23,7 @@ Keten: `MediaStreamSource` → `ChannelSplitter` (zoveel kanalen als de ingang g
 - `capture` is `stereo` (vraagt 2 kanalen) of `all` (vraagt er 32, de browser geeft wat de ingang heeft). Het aantal kanalen dat echt binnenkomt staat in `track.getSettings().channelCount`.
 - De browserbewerking (echo, ruis, automatisch niveau) staat standaard **uit**. `processing: true` zet alle drie aan.
 - Het apparaat start de ingang **alleen na een klik**. `setState`, `setPreset` en het herstellen van een werkruimte starten niets; ze herstarten alleen een ingang die al liep, als de ingang, `capture` of `processing` veranderen.
-- `mute` staat standaard **aan**, tegen rondzingen. `getPreset` laat `device`, `deviceLabel` en `mute` weg; `setPreset` laat ze staan.
+- `mute` staat standaard **uit** en is op de kaart een knop **Dempen** (licht op als hij aan staat); een microfoon bij luidsprekers kan rondzingen, dus de kaart waarschuwt voor een koptelefoon. `getPreset` laat `device`, `deviceLabel` en `mute` weg; `setPreset` laat ze staan.
 
 ## De state
 
@@ -37,7 +37,7 @@ Keten: `MediaStreamSource` → `ChannelSplitter` (zoveel kanalen als de ingang g
 | `gain` | Versterking in dB | −24 … 36 | 0 |
 | `hp` | Hoogdoorlaat in Hz; 0 = uit | 0, 40, 80, 120 | 0 |
 | `invert` | Polariteit omkeren | aan/uit | uit |
-| `mute` | Uitgang dempen | aan/uit | aan |
+| `mute` | Uitgang dempen (knop Dempen) | aan/uit | uit |
 | `processing` | Browserbewerking | aan/uit | uit |
 
 ## Wat je niet kunt testen zonder hardware

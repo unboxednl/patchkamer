@@ -5,7 +5,7 @@
   "name": "Audio Input Basics",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Input settings for Audio Input: line level, voice, instruments and the channel pairs of a multichannel interface. The input, the mute switch and the choice of device are not part of a preset.",
+  "description": "Input settings for Audio Input: line level, voice, instruments and the channel pairs of a multichannel interface. The input, the Mute button and the choice of device are not part of a preset.",
   "tree": [
     {
       "folder": "Line Level",
