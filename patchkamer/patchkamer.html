@@ -12,7 +12,7 @@
   --event:#f4a261;   /* event cables (trigs, notes) */
   --go:#6bd98a; --stop:#e4574a; --sel:#9b8cff;
   --disp:'Barlow Condensed',system-ui,sans-serif; --mono:'Fira Code',ui-monospace,Menlo,monospace;
-  --mod:#b48cff; --multi:#8bdb6a;          /* sturing, bundels */
+  --mod:#b48cff; --multi:#8bdb6a; --mastering:#f2cf3b;          /* sturing, bundels */
   --well:#090b0e; --well-fg:#b9c3d0;       /* verzonken vlakken: code, meters, schermen */
   --overlay:rgba(16,19,24,.9); --scrim:rgba(5,7,10,.6); --shadow:var(--shadow); --step-q:#242a34; --glyph-fg:#11151b;
   --bar:var(--card-2); --bar-fg:var(--fg); --field:var(--card-2); --field-fg:var(--fg); --lcd-font:var(--mono);
@@ -21,14 +21,14 @@
 /* ---------- kleurstelling: licht ---------- */
 :root[data-skin="light"]{
   --bg:#e9ecf0; --floor:#f6f7f9; --card:#ffffff; --card-2:#eef1f5; --line:#cfd5dd; --fg:#1a2028; --muted:#5b6572;
-  --audio:#0d8a80; --event:#c4650f; --go:#2f9a52; --stop:#cc3a2e; --sel:#5f4bd8; --mod:#8250d6; --multi:#3f9a2f;
+  --audio:#0d8a80; --event:#c4650f; --go:#2f9a52; --stop:#cc3a2e; --sel:#5f4bd8; --mod:#8250d6; --multi:#3f9a2f; --mastering:#c79a06;
   --well:#eef1f5; --well-fg:#26303c; --overlay:rgba(255,255,255,.94); --scrim:rgba(20,28,38,.35); --shadow:rgba(25,35,50,.14); --step-q:#dde2e9; --glyph-fg:#ffffff;
   color-scheme:light;
 }
 /* ---------- kleurstelling: retro (interne naam s1000): grijsbeige paneel, geelgroen LCD, donkere toetsbalken ---------- */
 :root[data-skin="s1000"]{
   --bg:#b4afa3; --floor:#c3beb2; --card:#d9d5ca; --card-2:#e6e2d8; --line:#8e897d; --fg:#1c1b18; --muted:#57534a;
-  --audio:#2d5f8c; --event:#c9621c; --go:#557f22; --stop:#b8322a; --sel:#1c1b18; --mod:#6a4a98; --multi:#2f6b2a;
+  --audio:#2d5f8c; --event:#c9621c; --go:#557f22; --stop:#b8322a; --sel:#1c1b18; --mod:#6a4a98; --multi:#2f6b2a; --mastering:#9a7400;
   --well:#aec05a; --well-fg:#1d2709; --overlay:rgba(217,213,202,.95); --scrim:rgba(40,36,28,.45); --shadow:rgba(30,26,18,.28); --step-q:#cfcabd; --glyph-fg:#e9e5da;
   --bar:#45433e; --bar-fg:#ece8dd; --field:#b7c862; --field-fg:#1d2709; --lcd-font:'VT323',ui-monospace,monospace;
   --disp:'Barlow Condensed',system-ui,sans-serif;
@@ -262,6 +262,11 @@ svg.wire path.mod{stroke:var(--mod)}
 svg.cables path.multi{stroke:var(--multi);stroke-width:7;opacity:.85}
 svg.cables path.multicore{stroke:var(--floor);stroke-width:2.5;fill:none;opacity:1}
 svg.wire path.multi{stroke:var(--multi);stroke-width:6}
+/* v1.12: mastering = driehoekpoort, gele gestippelde sinus */
+.port.mastering .dot{width:14px;height:14px;border:0;border-radius:0;background:var(--mastering);opacity:.5;clip-path:polygon(0 0,100% 50%,0 100%)} .port.mastering.wired .dot{opacity:1}
+.port.jack.mastering .dot{width:16px;height:16px}
+svg.cables path.mastering{stroke:var(--mastering);stroke-dasharray:1 6;stroke-linecap:round;stroke-width:3.2}
+svg.wire path.mastering{stroke:var(--mastering)}
 /* kabelsoorten: audio vast · sturing golvend · gebeurtenissen gestreept · bundel dubbel */
 svg.cables path.event{stroke-dasharray:10 6}
 svg.cables path.mod{stroke-dasharray:none;stroke-width:2.2;stroke-linecap:round}
@@ -382,7 +387,7 @@ body.nopbar .pbar{display:none}
 <header>
   <h1 data-i18n-html="ui.patch_kamer"><b data-i18n="ui.patch">Patch</b>kamer</h1>
   <input class="wsname" id="wsName" value="Naamloos" maxlength="60" spellcheck="false" aria-label="naam van je compositie" title="naam van je compositie" data-i18n-title="attr.naam_van_je_compositie" data-i18n-aria="attr.naam_van_je_compositie">
-  <span class="note" style="max-width:40ch" data-i18n="ui.modulaire_browserstudio_laad_instrumenten_trek">Modulaire browserstudio. Laad instrumenten, trek kabels, sla de opstelling op. Kabels: audio, gebeurtenissen, sturing (paars) en bundels (dik, groen): veel kanalen in één kabel.</span>
+  <span class="note" style="max-width:40ch" data-i18n="ui.modulaire_browserstudio_laad_instrumenten_trek">Modulaire browserstudio. Laad instrumenten, trek kabels, sla de opstelling op. Kabels: audio, gebeurtenissen, sturing (paars), mastering (geel, gestippeld) en bundels (dik, groen): veel kanalen in één kabel.</span>
   <div class="transport">
     <button class="go" id="play" data-i18n="ui.start">Start</button>
     <span class="tp"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
@@ -509,7 +514,7 @@ const I18N={
    "ui.patchkamer":"Patchkamer",
    "ui.patch":"Patch",
    "ui.patch_kamer":"<b>Patch</b>kamer",
-   "ui.modulaire_browserstudio_laad_instrumenten_trek":"Modulaire browserstudio. Laad instrumenten, trek kabels, sla de opstelling op. Kabels: audio, gebeurtenissen, sturing (paars) en bundels (dik, groen): veel kanalen in één kabel.",
+   "ui.modulaire_browserstudio_laad_instrumenten_trek":"Modulaire browserstudio. Laad instrumenten, trek kabels, sla de opstelling op. Kabels: audio, gebeurtenissen, sturing (paars), mastering (geel, gestippeld) en bundels (dik, groen): veel kanalen in één kabel.",
    "ui.start":"Start",
    "ui.bpm":"BPM",
    "ui.swing":"Swing",
@@ -774,6 +779,15 @@ const I18N={
    "m.zoom_ten_opzichte_van_de":"zoom ten opzichte van de schaal van dit scherm (",
    "m.opnieuw_verbinden_nodig":"opnieuw verbinden nodig",
    "m.sturing_uit":"<b>sturing uit</b> {0}",
+   "m.mastering_in":"<b>mastering in</b> {0}",
+   "m.mastering_uit":"<b>mastering uit</b> {0}",
+   "m.soort_mastering":"mastering",
+   "m.kan_geen_mastering_ontvangen":" kan geen mastering-opdrachten ontvangen (configureMastering ontbreekt)",
+   "m.mastering_geen_regie":"Alleen een apparaat met een mastering-uitgang kan mastering aansturen.",
+   "m.mastering_onbekende_actie":"Onbekende masteringactie: {0}",
+   "m.mastering_geen_instellingen":"Geen instellingen meegegeven.",
+   "m.mastering_niets_terug":"Er is geen groepswijziging om terug te zetten.",
+   "m.mastering_geen_methode":"Het apparaat ondersteunt {0} niet.",
    "m.browser_ms_uitgang_os_geluidskaart":"browser: {0} ms · uitgang (OS + geluidskaart): {1} · {2} Hz · keuze: {3}",
    "m.verplaats_naar_een_andere_map":"verplaats naar een andere map",
    "m.song_ge_xporteerd_apparaten_met":"Song “{0}” geëxporteerd · {1} · {2} apparaten met hun code",
@@ -814,7 +828,7 @@ const I18N={
    "m.bewaren_en_laden":"Bewaren en laden",
    "m.stop":"Stop",
    "m.de_indeling_categorie_n_namen":"De indeling (categorieën, namen, kleuren en welk apparaat waar staat) wordt in deze browser onthouden. <b>Bewaren in map</b> schrijft <b>{0}</b> in de hoofdmap van je bibliotheek; laad je die map later (ook in een andere browser), dan komt de indeling vanzelf mee. Hetzelfde bestand in de hoofdmap van een GitHub-bron werkt ook. Dubbelklik op een categoriekop om hem snel te hernoemen.",
-   "m.sjabloon":"// mijn-instrument.patchkamer-device.js — Patchkamer contract v1.11\nexport default {\n  id: 'nl.voorbeeld.tremolo',\n  name: 'Tremolo',\n  version: '1.0.0',\n  kind: 'effect',\n  ports: { audioIn:[{id:'in',name:'In'}], audioOut:[{id:'out',name:'Uit'}], eventIn:[], eventOut:[] },\n  i18n: { en: { ports: { in: 'In', out: 'Out' } } },   // optioneel: namen in andere talen\n  create(ctx, host) {\n    const T = host.lang === 'nl' ? { rate: 'Snelheid', depth: 'Diepte' } : { rate: 'Rate', depth: 'Depth' };   // host.lang: 'nl' of 'en'\n    const inG = ctx.createGain(), outG = ctx.createGain();\n    const lfo = ctx.createOscillator(), depth = ctx.createGain();\n    lfo.frequency.value = 4; depth.gain.value = 0.5;\n    lfo.connect(depth).connect(outG.gain); lfo.start();\n    inG.connect(outG);\n    const state = { rate: 4, depth: 0.5 };\n    return {\n      inputs: { in: inG }, outputs: { out: outG },\n      mount(el) {\n        host.ui.knob(el, T.rate, [0.1, 20, 0.1], state.rate, v => v.toFixed(1) + ' Hz', v => { state.rate = v; lfo.frequency.setTargetAtTime(v, ctx.currentTime, 0.02); });\n        host.ui.knob(el, T.depth, [0, 1, 0.01], state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; depth.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });\n      },\n      onStep({ step, time }) { /* optioneel: iets op de klok doen */ },\n      getState() { return { ...state }; },\n      setState(s) { Object.assign(state, s); lfo.frequency.value = state.rate; depth.gain.value = state.depth; },\n      destroy() { lfo.stop(); inG.disconnect(); outG.disconnect(); }\n    };\n  }\n};\n",
+   "m.sjabloon":"// mijn-instrument.patchkamer-device.js — Patchkamer contract v1.12\nexport default {\n  id: 'nl.voorbeeld.tremolo',\n  name: 'Tremolo',\n  version: '1.0.0',\n  kind: 'effect',\n  ports: { audioIn:[{id:'in',name:'In'}], audioOut:[{id:'out',name:'Uit'}], eventIn:[], eventOut:[] },\n  i18n: { en: { ports: { in: 'In', out: 'Out' } } },   // optioneel: namen in andere talen\n  create(ctx, host) {\n    const T = host.lang === 'nl' ? { rate: 'Snelheid', depth: 'Diepte' } : { rate: 'Rate', depth: 'Depth' };   // host.lang: 'nl' of 'en'\n    const inG = ctx.createGain(), outG = ctx.createGain();\n    const lfo = ctx.createOscillator(), depth = ctx.createGain();\n    lfo.frequency.value = 4; depth.gain.value = 0.5;\n    lfo.connect(depth).connect(outG.gain); lfo.start();\n    inG.connect(outG);\n    const state = { rate: 4, depth: 0.5 };\n    return {\n      inputs: { in: inG }, outputs: { out: outG },\n      mount(el) {\n        host.ui.knob(el, T.rate, [0.1, 20, 0.1], state.rate, v => v.toFixed(1) + ' Hz', v => { state.rate = v; lfo.frequency.setTargetAtTime(v, ctx.currentTime, 0.02); });\n        host.ui.knob(el, T.depth, [0, 1, 0.01], state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; depth.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });\n      },\n      onStep({ step, time }) { /* optioneel: iets op de klok doen */ },\n      getState() { return { ...state }; },\n      setState(s) { Object.assign(state, s); lfo.frequency.value = state.rate; depth.gain.value = state.depth; },\n      destroy() { lfo.stop(); inG.disconnect(); outG.disconnect(); }\n    };\n  }\n};\n",
    "m.sleep_naar_de_vloer":"sleep naar de vloer",
    "m.map_hierbinnen":"map hierbinnen",
    "m.nieuwe_lege_werkruimte":"Nieuwe lege werkruimte",
@@ -1038,7 +1052,7 @@ const I18N={
    "ui.patchkamer":"Patchkamer",
    "ui.patch":"Patch",
    "ui.patch_kamer":"<b>Patch</b>kamer",
-   "ui.modulaire_browserstudio_laad_instrumenten_trek":"Modular browser studio. Load instruments, drag cables, save your setup. Cables: audio, events, modulation (purple) and bundles (thick, green): many channels in one cable.",
+   "ui.modulaire_browserstudio_laad_instrumenten_trek":"Modular browser studio. Load instruments, drag cables, save your setup. Cables: audio, events, modulation (purple), mastering (yellow, dotted) and bundles (thick, green): many channels in one cable.",
    "ui.start":"Start",
    "ui.bpm":"BPM",
    "ui.swing":"Swing",
@@ -1189,7 +1203,7 @@ const I18N={
    "m.jack_geef_je_instance_mee":"jack(): pass your instance as the first argument",
    "m.jack_poort_bestaat_niet_roep":"jack(): port \"{0}\" ({1}) does not exist; call host.setPorts first",
    "m.stap":"{0} step {1}",
-   "m.sjabloon":"// my-instrument.patchkamer-device.js — Patchkamer contract v1.11\nexport default {\n  id: 'nl.example.tremolo',\n  name: 'Tremolo',\n  version: '1.0.0',\n  kind: 'effect',\n  ports: { audioIn:[{id:'in',name:'In'}], audioOut:[{id:'out',name:'Out'}], eventIn:[], eventOut:[] },\n  i18n: { nl: { ports: { in: 'In', out: 'Uit' } } },   // optional: names in other languages\n  create(ctx, host) {\n    const T = host.lang === 'nl' ? { rate: 'Snelheid', depth: 'Diepte' } : { rate: 'Rate', depth: 'Depth' };   // host.lang: 'nl' or 'en'\n    const inG = ctx.createGain(), outG = ctx.createGain();\n    const lfo = ctx.createOscillator(), depth = ctx.createGain();\n    lfo.frequency.value = 4; depth.gain.value = 0.5;\n    lfo.connect(depth).connect(outG.gain); lfo.start();\n    inG.connect(outG);\n    const state = { rate: 4, depth: 0.5 };\n    return {\n      inputs: { in: inG }, outputs: { out: outG },\n      mount(el) {\n        host.ui.knob(el, T.rate, [0.1, 20, 0.1], state.rate, v => v.toFixed(1) + ' Hz', v => { state.rate = v; lfo.frequency.setTargetAtTime(v, ctx.currentTime, 0.02); });\n        host.ui.knob(el, T.depth, [0, 1, 0.01], state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; depth.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });\n      },\n      onStep({ step, time }) { /* optional: do something on the clock */ },\n      getState() { return { ...state }; },\n      setState(s) { Object.assign(state, s); lfo.frequency.value = state.rate; depth.gain.value = state.depth; },\n      destroy() { lfo.stop(); inG.disconnect(); outG.disconnect(); }\n    };\n  }\n};\n",
+   "m.sjabloon":"// my-instrument.patchkamer-device.js — Patchkamer contract v1.12\nexport default {\n  id: 'nl.example.tremolo',\n  name: 'Tremolo',\n  version: '1.0.0',\n  kind: 'effect',\n  ports: { audioIn:[{id:'in',name:'In'}], audioOut:[{id:'out',name:'Out'}], eventIn:[], eventOut:[] },\n  i18n: { nl: { ports: { in: 'In', out: 'Uit' } } },   // optional: names in other languages\n  create(ctx, host) {\n    const T = host.lang === 'nl' ? { rate: 'Snelheid', depth: 'Diepte' } : { rate: 'Rate', depth: 'Depth' };   // host.lang: 'nl' or 'en'\n    const inG = ctx.createGain(), outG = ctx.createGain();\n    const lfo = ctx.createOscillator(), depth = ctx.createGain();\n    lfo.frequency.value = 4; depth.gain.value = 0.5;\n    lfo.connect(depth).connect(outG.gain); lfo.start();\n    inG.connect(outG);\n    const state = { rate: 4, depth: 0.5 };\n    return {\n      inputs: { in: inG }, outputs: { out: outG },\n      mount(el) {\n        host.ui.knob(el, T.rate, [0.1, 20, 0.1], state.rate, v => v.toFixed(1) + ' Hz', v => { state.rate = v; lfo.frequency.setTargetAtTime(v, ctx.currentTime, 0.02); });\n        host.ui.knob(el, T.depth, [0, 1, 0.01], state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; depth.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });\n      },\n      onStep({ step, time }) { /* optional: do something on the clock */ },\n      getState() { return { ...state }; },\n      setState(s) { Object.assign(state, s); lfo.frequency.value = state.rate; depth.gain.value = state.depth; },\n      destroy() { lfo.stop(); inG.disconnect(); outG.disconnect(); }\n    };\n  }\n};\n",
    "m.kon_de_module_niet_uitvoeren":"Could not run the module: ",
    "m.in_de_artifact_weergave_kan":" (in the artifact view this may be blocked; try the standalone HTML file)",
    "m.contract_veld_ontbreekt":"Contract: field \"{0}\" is missing",
@@ -1269,6 +1283,15 @@ const I18N={
    "m.events_uit":"<b>events out</b> {0}",
    "m.sturing_in":"<b>modulation in</b> {0}",
    "m.sturing_uit":"<b>modulation out</b> {0}",
+   "m.mastering_in":"<b>mastering in</b> {0}",
+   "m.mastering_uit":"<b>mastering out</b> {0}",
+   "m.soort_mastering":"mastering",
+   "m.kan_geen_mastering_ontvangen":" cannot receive mastering commands (configureMastering is missing)",
+   "m.mastering_geen_regie":"Only a device with a mastering output can direct mastering.",
+   "m.mastering_onbekende_actie":"Unknown mastering action: {0}",
+   "m.mastering_geen_instellingen":"No settings were given.",
+   "m.mastering_niets_terug":"There is no group change to undo.",
+   "m.mastering_geen_methode":"The device does not support {0}.",
    "m.bundel_in":"<b>bundle in</b> {0}",
    "m.bundel_uit":"<b>bundle out</b> {0}",
    "m.geen_poorten":"no ports",
@@ -1672,6 +1695,28 @@ const Host={
   cablesFrom(inst,fromPort){ const sid=inst&&inst._id; return this.cables.filter(c=>c.from.id===sid&&(!fromPort||c.from.port===fromPort)).map(c=>({port:c.from.port,to:c.to.id,toPort:c.to.port,kind:c.kind})); },
   // contract v1.5: bundels. Een bron geeft bundles: {poortId: ()=>({label, channels:[{id,name,node}]})} en meldt
   // wijzigingen met host.bundleChanged(this, poortId). Een ontvanger implementeert onBundle(poortId, sleutel, bundel|null).
+  // contract v1.12: mastering. Een Master Director (poort masteringOut) stuurt de apparaten aan die aan zijn mastering-kabels hangen.
+  // Acties: inspect, apply (settings per doel-id), analyse, accept, undo. De host bewaart per Director de laatste 20 groepswijzigingen voor undo (alleen wijzigingen die iets veranderden).
+  mastering(inst,action,opts){
+    const sid=inst&&inst._id, src=sid&&this.devices.get(sid);
+    if(!src||!portList(src.ports,'out','mastering').length) return {error:pkt('m.mastering_geen_regie')};
+    action=String(action); if(!['inspect','apply','analyse','accept','undo'].includes(action)) return {error:pkt('m.mastering_onbekende_actie',action)};
+    const wired=masteringTargets(sid).map(t=>t.id), ask=opts&&Array.isArray(opts.targetIds)?opts.targetIds.map(String):wired, ids=wired.filter(x=>ask.includes(x));
+    const U=this._masterUndo||(this._masterUndo=new Map()), push=snap=>{ if(!snap.length||!changed) return; const L=U.get(sid)||[]; L.push(snap); while(L.length>20) L.shift(); U.set(sid,L); }, results=[]; let changed=0;
+    const note=(id,o)=>{ const r=this.devices.get(id); results.push({id,name:r?r.def.name:id,...o}); if(o.ok!==false&&(action==='analyse'||(o.changed||[]).length)) changed++; };
+    const call=(id,fn,...a)=>{ const r=this.devices.get(id); if(!r||typeof r.inst[fn]!=='function') return {ok:false,reason:pkt('m.mastering_geen_methode',fn)};
+      try{ const x=r.inst[fn](...a); return x&&typeof x==='object'?x:{ok:true}; }catch(e){ console.warn(fn,r.def.name,e); return {ok:false,reason:String(e&&e.message||e)}; } };
+    const snapshot=()=>{ const snap=[]; ids.forEach(id=>{ const r=this.devices.get(id); try{ if(r&&typeof r.inst.getState==='function') snap.push([id,JSON.parse(JSON.stringify(r.inst.getState()))]); }catch(e){} }); return snap; };
+    if(action==='undo'){ const L=U.get(sid), snap=L&&L.pop(); if(!snap) return {error:pkt('m.mastering_niets_terug')}; if(!L.length) U.delete(sid);
+      snap.forEach(([id,st])=>{ const r=this.devices.get(id); if(!r||!wired.includes(id)) return; try{ r.inst.setState(st); note(id,{ok:true,changed:['*'],skipped:[]}); }catch(e){ note(id,{ok:false,reason:String(e&&e.message||e)}); } });
+      return {changed,results}; }
+    if(action==='apply'){ const set=opts&&opts.settings&&typeof opts.settings==='object'?opts.settings:null; if(!set) return {error:pkt('m.mastering_geen_instellingen')};
+      const mine=ids.filter(id=>set[id]&&typeof set[id]==='object'), snap=[]; mine.forEach(id=>{ const r=this.devices.get(id); try{ if(typeof r.inst.getState==='function') snap.push([id,JSON.parse(JSON.stringify(r.inst.getState()))]); }catch(e){} });
+      mine.forEach(id=>note(id,call(id,'configureMastering',set[id]))); push(snap); return {changed,results}; }
+    if(action==='accept'){ const snap=snapshot(); ids.forEach(id=>note(id,call(id,'acceptMasteringProposal'))); push(snap); return {changed,results}; }
+    if(action==='analyse'){ ids.forEach(id=>note(id,call(id,'analyseMastering'))); return {changed,results}; }
+    ids.forEach(id=>note(id,{ok:true,report:call(id,'getMasteringReport')})); return {changed:0,results};
+  },
   bundleChanged(inst,port){ const sid=inst&&inst._id; if(!sid) return; this.cables.filter(c=>c.kind==='multi'&&c.from.id===sid&&(port==null||c.from.port===port)).forEach(deliverBundle); },
   // contract v1.5: is deze poort van mij bekabeld? (bv. om een bundel alleen op lege kanalen te zetten)
   isWired(inst,port,dir){ const id=inst&&inst._id; return this.cables.some(c=>dir==='out'?(c.from.id===id&&c.from.port===port):(c.to.id===id&&c.to.port===port)); },
@@ -1680,7 +1725,7 @@ const Host={
   ui:{
     // contract v1.2: place one of your ports inside your own UI (light DOM). Pass your instance.
     jack(inst,parent,portId,dir,label){ const r=Host.devices.get(inst&&inst._id); if(!r) throw new Error(pkt('m.jack_geef_je_instance_mee'));
-      const P=r.ports, L=['audio','event','mod','multi'].flatMap(k=>portList(P,dir,k).map(x=>[x,k]));
+      const P=r.ports, L=['audio','event','mod','multi','mastering'].flatMap(k=>portList(P,dir,k).map(x=>[x,k]));
       const hit=L.find(([x])=>x.id===portId); if(!hit) throw new Error(pkt('m.jack_poort_bestaat_niet_roep',portId,dir));
       const el=makePortEl(r.inst._id,hit[0],hit[1],dir,label); el.classList.add('jack'); parent.appendChild(el); return el; },
     knob(parent,label,[mn,mx,st],val,fmt,onchange,opts){ return pkKnob(parent,label,mn,mx,st,val,fmt,onchange,opts||{}); },
@@ -1727,7 +1772,7 @@ function validateDef(d){
   const need=k=>{ if(!d||d[k]===undefined) throw new Error(pkt('m.contract_veld_ontbreekt',k)); };
   ['id','name','version','kind','ports','create'].forEach(need);
   if(typeof d.create!=='function') throw new Error(pkt('m.contract_create_moet_een_functie'));
-  ['audioIn','audioOut','eventIn','eventOut','modIn','modOut','multiIn','multiOut'].forEach(k=>{ if(!Array.isArray(d.ports[k])) d.ports[k]=[]; });
+  ['audioIn','audioOut','eventIn','eventOut','modIn','modOut','multiIn','multiOut','masteringIn','masteringOut'].forEach(k=>{ if(!Array.isArray(d.ports[k])) d.ports[k]=[]; });
   if(!['instrument','effect','mixer','output','utility','modulator'].includes(d.kind)) throw new Error(pkt('m.contract_onbekende_kind')+d.kind+'"');
 }
 let _toastT=0; const status=(msg,err)=>{const el=$('devStatus'); el.textContent=msg; el.classList.toggle('err',!!err); el.classList.toggle('show',!!msg); clearTimeout(_toastT); if(msg) _toastT=setTimeout(()=>el.classList.remove('show'),err?7000:3500);};
@@ -1833,6 +1878,11 @@ function modNotify(...ids){ const touched=new Set(ids); Host.cables.forEach(c=>{
   touched.forEach(k=>{ const r=Host.devices.get(k); if(!r) return; const mc=Host.cables.filter(c=>c.kind==='mod');
     if(r.inst.onModTargets){ const t=[...new Set(mc.filter(c=>c.from.id===k).map(c=>c.to.id))].filter(x=>Host.devices.has(x)).map(modInfo); try{ r.inst.onModTargets(t); }catch(e){ console.warn('onModTargets',e); } }
     if(r.inst.onModSources){ const s=mc.filter(c=>c.to.id===k&&Host.devices.has(c.from.id)).map(c=>({id:c.from.id,port:c.to.port,name:Host.devices.get(c.from.id).def.name,def:Host.devices.get(c.from.id).def.id})); try{ r.inst.onModSources(s); }catch(e){ console.warn('onModSources',e); } } }); }
+// v1.12: mastering. Wie hangt er aan de mastering-uitgang van `id`? (onMasteringTargets)
+function masteringTargets(id){ const seen=new Set(), all=[...Host.devices.entries()], cnt=new Map(); all.forEach(([,r])=>cnt.set(r.def.id,(cnt.get(r.def.id)||0)+1));
+  return Host.cables.filter(c=>c.kind==='mastering'&&c.from.id===id&&Host.devices.has(c.to.id)).map(c=>c.to.id).filter(x=>!seen.has(x)&&seen.add(x))
+    .map(x=>{ const r=Host.devices.get(x); return {id:x,name:r.def.name+(cnt.get(r.def.id)>1?' · '+x:''),def:r.def.id,version:r.def.version}; }); }
+function masteringNotify(id){ const r=Host.devices.get(id); if(r&&typeof r.inst.onMasteringTargets==='function'){ try{ r.inst.onMasteringTargets(masteringTargets(id)); }catch(e){ console.warn('onMasteringTargets',e); } } }
 function removeDevice(id){ const r=Host.devices.get(id); if(!r) return; Host.cables.filter(c=>c.from.id===id||c.to.id===id).forEach(unpatch); Host._modOff.delete(id); Host._dropModSig(v=>v.sid===id||v.tid===id); try{r.inst.unmount&&r.inst.unmount(); r.inst.destroy&&r.inst.destroy();}catch(e){} Host.stepSubs.delete(r.inst); r.el.remove(); Host.devices.delete(id); if(selected===id) selected=null; drawCables(); if(typeof paintFocusBtn==='function') paintFocusBtn(); peersChanged(); }
 // size: null = the device's own default (width from def.ui.width, height follows the content)
 function defWidth(def){ return clamp((def.ui&&def.ui.width)||300,200,6000); }
@@ -1844,20 +1894,20 @@ function setSize(id,w,h){
   drawCables();
 }
 function showDim(r){ const d=r.el.querySelector('.bar .dim'); if(d) d.textContent=`${r.el.offsetWidth} × ${r.el.offsetHeight}`; }
-function pkApplyI18n(d){ const o=d&&d.i18n&&d.i18n[PK_LANG]; if(!o||typeof o!=='object') return d; if(typeof o.name==='string'&&o.name) d.name=o.name; if(o.ports&&typeof o.ports==='object'&&d.ports) for(const k of ['audioIn','audioOut','eventIn','eventOut','modIn','modOut','multiIn','multiOut']) if(Array.isArray(d.ports[k])) d.ports[k].forEach(p=>{ if(p&&typeof o.ports[p.id]==='string') p.name=o.ports[p.id]; }); return d; }
+function pkApplyI18n(d){ const o=d&&d.i18n&&d.i18n[PK_LANG]; if(!o||typeof o!=='object') return d; if(typeof o.name==='string'&&o.name) d.name=o.name; if(o.ports&&typeof o.ports==='object'&&d.ports) for(const k of ['audioIn','audioOut','eventIn','eventOut','modIn','modOut','multiIn','multiOut','masteringIn','masteringOut']) if(Array.isArray(d.ports[k])) d.ports[k].forEach(p=>{ if(p&&typeof o.ports[p.id]==='string') p.name=o.ports[p.id]; }); return d; }
 function normPorts(P,inst){ P=P||{}; const L=k=>(Array.isArray(P[k])?P[k]:[]).map(x=>({id:String(x.id),name:x.name!=null?String(x.name):String(x.id)}));
-  const r={audioIn:L('audioIn'),audioOut:L('audioOut'),eventIn:L('eventIn'),eventOut:L('eventOut'),modIn:L('modIn'),modOut:L('modOut'),multiIn:L('multiIn'),multiOut:L('multiOut')};
+  const r={audioIn:L('audioIn'),audioOut:L('audioOut'),eventIn:L('eventIn'),eventOut:L('eventOut'),modIn:L('modIn'),modOut:L('modOut'),multiIn:L('multiIn'),multiOut:L('multiOut'),masteringIn:L('masteringIn'),masteringOut:L('masteringOut')};
   if(inst&&typeof inst.params==='function'&&!r.modIn.some(x=>x.id==='mod')) r.modIn.push({id:'mod',name:'Mod'});   // contract v1.3
   return r; }
-const portList=(P,dir,kind)=>P[({audio:'audio',event:'event',mod:'mod',multi:'multi'}[kind]||'mod')+(dir==='out'?'Out':'In')]||[];
-function makePortEl(id,p,kind,dir,label){ const d=document.createElement('div'); d.className=`port ${kind}`; d.dataset.port=p.id; d.dataset.kind=kind; d.dataset.dir=dir; d.title=pkt('m.poort_titel',p.name,kind==='audio'?pkt('m.soort_audio'):kind==='event'?pkt('m.soort_events'):kind==='multi'?pkt('m.soort_bundel'):pkt('m.soort_sturing'),dir==='in'?pkt('m.richting_in'):pkt('m.richting_uit'));
+const portList=(P,dir,kind)=>P[({audio:'audio',event:'event',mod:'mod',multi:'multi',mastering:'mastering'}[kind]||'mod')+(dir==='out'?'Out':'In')]||[];
+function makePortEl(id,p,kind,dir,label){ const d=document.createElement('div'); d.className=`port ${kind}`; d.dataset.port=p.id; d.dataset.kind=kind; d.dataset.dir=dir; d.title=pkt('m.poort_titel',p.name,kind==='audio'?pkt('m.soort_audio'):kind==='event'?pkt('m.soort_events'):kind==='multi'?pkt('m.soort_bundel'):kind==='mastering'?pkt('m.soort_mastering'):pkt('m.soort_sturing'),dir==='in'?pkt('m.richting_in'):pkt('m.richting_uit'));
   const dot=document.createElement('span'); dot.className='dot'; const t=document.createElement('span'); t.textContent=label!=null?label:p.name; d.append(dot,t);
   d.addEventListener('pointerdown',e=>{ if(e.button!==0) return; e.stopPropagation(); e.preventDefault(); startWire(id,p.id,dir,kind,e); }); d.addEventListener('click',e=>e.stopPropagation()); return d; }
 function renderPorts(id){ const r=Host.devices.get(id); if(!r) return; const box=r.portsEl; box.innerHTML='';
   if(r.def.ui&&r.def.ui.jacks){ box.hidden=true; return; } box.hidden=false;
   const cin=document.createElement('div'); cin.className='col in'; const cout=document.createElement('div'); cout.className='col out';
-  r.ports.audioIn.forEach(x=>cin.appendChild(makePortEl(id,x,'audio','in'))); r.ports.eventIn.forEach(x=>cin.appendChild(makePortEl(id,x,'event','in'))); r.ports.modIn.forEach(x=>cin.appendChild(makePortEl(id,x,'mod','in'))); r.ports.multiIn.forEach(x=>cin.appendChild(makePortEl(id,x,'multi','in')));
-  r.ports.audioOut.forEach(x=>cout.appendChild(makePortEl(id,x,'audio','out'))); r.ports.eventOut.forEach(x=>cout.appendChild(makePortEl(id,x,'event','out'))); r.ports.modOut.forEach(x=>cout.appendChild(makePortEl(id,x,'mod','out'))); r.ports.multiOut.forEach(x=>cout.appendChild(makePortEl(id,x,'multi','out')));
+  r.ports.audioIn.forEach(x=>cin.appendChild(makePortEl(id,x,'audio','in'))); r.ports.eventIn.forEach(x=>cin.appendChild(makePortEl(id,x,'event','in'))); r.ports.modIn.forEach(x=>cin.appendChild(makePortEl(id,x,'mod','in'))); r.ports.multiIn.forEach(x=>cin.appendChild(makePortEl(id,x,'multi','in'))); r.ports.masteringIn.forEach(x=>cin.appendChild(makePortEl(id,x,'mastering','in')));
+  r.ports.audioOut.forEach(x=>cout.appendChild(makePortEl(id,x,'audio','out'))); r.ports.eventOut.forEach(x=>cout.appendChild(makePortEl(id,x,'event','out'))); r.ports.modOut.forEach(x=>cout.appendChild(makePortEl(id,x,'mod','out'))); r.ports.multiOut.forEach(x=>cout.appendChild(makePortEl(id,x,'multi','out'))); r.ports.masteringOut.forEach(x=>cout.appendChild(makePortEl(id,x,'mastering','out')));
   box.append(cin,cout); }
 function fillVersionSelect(sel,def){ sel.innerHTML=''; Host.versionsOf(def.id).forEach(d=>{const o=document.createElement('option'); o.value=d.version; o.textContent='v'+d.version; sel.appendChild(o);}); sel.value=def.version; sel.disabled=sel.children.length<2; }
 function refreshVersionSelects(){ Host.devices.forEach(r=>fillVersionSelect(r.verSel,r.def)); }
@@ -1989,9 +2039,11 @@ function patch(c){
   if(Host.cables.some(x=>x.from.id===c.from.id&&x.from.port===c.from.port&&x.to.id===c.to.id&&x.to.port===c.to.port)) return;
   const a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); if(!a||!b) return;
   if(c.kind==='audio'){ const o=a.inst.outputs&&a.inst.outputs[c.from.port], i=b.inst.inputs&&b.inst.inputs[c.to.port]; if(!o||!i){status(pkt('m.audiopoort_ontbreekt_in_instance'),true); return;} try{o.connect(i);}catch(e){status(pkt('m.connect_faalde')+e.message,true); return;} }
+  if(c.kind==='mastering'&&typeof b.inst.configureMastering!=='function'){ status(b.def.name+pkt('m.kan_geen_mastering_ontvangen'),true); return; }
   if(c.kind==='multi'){ if(!bundleOf(a,c.from.port)){ status(pkt('m.bundelpoort_levert_geen_bundel_bundles')+c.from.port+pkt('m.ontbreekt_haakje'),true); return; } if(typeof b.inst.onBundle!=='function'){ status(b.def.name+pkt('m.kan_geen_bundel_ontvangen_onbundle'),true); return; } }
   Host.cables.push(c); drawCables(); peersChanged();
   if(c.kind==='mod') modNotify(c.from.id,c.to.id);
+  if(c.kind==='mastering') masteringNotify(c.from.id);
   if(c.kind==='multi') deliverBundle(c);
 }
 // ---------- bundels (contract v1.5) ----------
@@ -2010,10 +2062,11 @@ function unpatch(c){
   if(c.kind==='multi'){ const b=Host.devices.get(c.to.id); if(b&&typeof b.inst.onBundle==='function'){ try{ b.inst.onBundle(c.to.port,bundleKey(c),null); }catch(e){ console.warn('onBundle()',b.def.name,e); } } }
   if(c.kind==='mod'){ const still=Host.cables.some(x=>x.kind==='mod'&&x.from.id===c.from.id&&x.to.id===c.to.id); const m=Host._modOff.get(c.to.id); if(m&&!still){ m.delete(c.from.id); modApply(c.to.id); }
     if(!still) Host._dropModSig(v=>v.sid===c.from.id&&v.tid===c.to.id); modNotify(c.from.id,c.to.id); }
+  if(c.kind==='mastering') masteringNotify(c.from.id);
   drawCables(); peersChanged();
 }
 function portPos(id,port,dir){ const r=Host.devices.get(id); if(!r) return null; const el=r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"] .dot`); if(!el) return null; const fr=floor.getBoundingClientRect(), b=el.getBoundingClientRect(), k=Host.view.scale;
-  if(r.mini){ const ib=r.iconEl.getBoundingClientRect(), kd=el.closest('.port').dataset.kind; return {x:((dir==='out'?ib.right:ib.left)-fr.left)/k,y:(ib.top-fr.top+ib.height*(kd==='event'?0.62:kd==='mod'?0.84:kd==='multi'?0.5:0.38))/k}; }
+  if(r.mini){ const ib=r.iconEl.getBoundingClientRect(), kd=el.closest('.port').dataset.kind; return {x:((dir==='out'?ib.right:ib.left)-fr.left)/k,y:(ib.top-fr.top+ib.height*(kd==='event'?0.62:kd==='mod'?0.84:kd==='multi'?0.5:kd==='mastering'?0.7:0.38))/k}; }
   // de stip kan buiten beeld zijn: in een scrollend deel van de kaart (vaste hoogte, interne scroll) of verborgen.
   // Dan hangt de kabel aan de rand van het zichtbare deel, met een open rondje als teken.
   let cx=b.left+b.width/2, cy=b.top+b.height/2, clipped=false; const cb=r.el.getBoundingClientRect();
@@ -2028,7 +2081,7 @@ function clipAncestors(el,stop){ if(!_clipCache) _clipCache=new WeakMap(); let c
   const ui=stop.querySelector(':scope > .body > .ui'); if(ui&&ui.contains(el)&&!list.includes(ui)) list.push(ui);
   _clipCache.set(el,{ok:true,list}); return list; }
 function paintFloorEmpty(){ const fe=document.getElementById('floorEmpty'); if(fe) fe.hidden=Host.devices.size>0; }
-function cableLabel(c){ const a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); const pn=(r,port,dir)=>{ const L=r?['audio','event','mod','multi'].flatMap(k=>portList(r.ports,dir,k)):[]; const p=L.find(x=>x.id===port); return p?p.name:port; };
+function cableLabel(c){ const a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); const pn=(r,port,dir)=>{ const L=r?['audio','event','mod','multi','mastering'].flatMap(k=>portList(r.ports,dir,k)):[]; const p=L.find(x=>x.id===port); return p?p.name:port; };
   return `${a?a.def.name:c.from.id} · ${pn(a,c.from.port,'out')}  →  ${b?b.def.name:c.to.id} · ${pn(b,c.to.port,'in')}`; }
 function bez(p1,p2){ const dx=Math.max(40,Math.abs(p2.x-p1.x)*0.5); return [p1,{x:p1.x+dx,y:p1.y},{x:p2.x-dx,y:p2.y},p2]; }
 function bezAt(P,t){ const u=1-t; return {x:u*u*u*P[0].x+3*u*u*t*P[1].x+3*u*t*t*P[2].x+t*t*t*P[3].x, y:u*u*u*P[0].y+3*u*u*t*P[1].y+3*u*t*t*P[2].y+t*t*t*P[3].y}; }
@@ -2242,10 +2295,10 @@ function drawCablesNow(){ if(_dcRaf){ cancelAnimationFrame(_dcRaf); _dcRaf=0; } 
     const g=svgEl('g',{class:'cable'+(dropCable===c?' drop':'')},svg);
     const hit=svgEl('path',{d,class:'hit'},g); hit._cable=c; hit.addEventListener('pointerdown',e=>{ if(e.button===0) cgrab={c,x0:e.clientX,y0:e.clientY}; }); svgEl('title',{},hit).textContent=cableLabel(c)+pkt('m.klik_kabel_los_rechtermuisknop_kleur');
     hit.onclick=()=>{ if(performance.now()-lastRewire<400) return; unpatch(c); }; hit.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); cableMenu(c,e.clientX,e.clientY); });
-    const vis=svgEl('path',{d:c.kind==='mod'?(R.pts?wavePts(R.pts):wavePath(P)):d,class:c.kind},g); if(c.color) vis.style.stroke=c.color;
+    const vis=svgEl('path',{d:c.kind==='mod'||c.kind==='mastering'?(R.pts?wavePts(R.pts):wavePath(P)):d,class:c.kind},g); if(c.color) vis.style.stroke=c.color;
     if(c.kind==='multi') svgEl('path',{d,class:'multicore'},g);
     [[p1,c.from.id,c.from.port,'out'],[p2,c.to.id,c.to.port,'in']].forEach(([p,did,port,dir])=>{
-      if(p.clipped){ const ci=svgEl('circle',{cx:p.x,cy:p.y,r:5,class:'clip'},g); ci.style.stroke=c.color||`var(--${c.kind==='event'?'event':c.kind==='mod'?'mod':c.kind==='multi'?'multi':'audio'})`; }
+      if(p.clipped){ const ci=svgEl('circle',{cx:p.x,cy:p.y,r:5,class:'clip'},g); ci.style.stroke=c.color||`var(--${c.kind==='event'?'event':c.kind==='mod'?'mod':c.kind==='multi'?'multi':c.kind==='mastering'?'mastering':'audio'})`; }
       const pe=Host.devices.get(did).el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`); if(!pe) return; pe.classList.add('wired');
       if(c.color){ const dot=pe.querySelector('.dot'); if(dot){ dot.style.background=c.color; dot.style.borderColor=c.color; dot.dataset.cc='1'; } } }); });
 }
@@ -2312,6 +2365,8 @@ function portsLine(def){ const P=def.ports, nm=a=>esc(a.map(x=>x.name||x.id).joi
   if(P.eventOut.length) parts.push(pkt('m.events_uit',nm(P.eventOut)));
   if((P.modIn||[]).length) parts.push(pkt('m.sturing_in',nm(P.modIn)));
   if((P.modOut||[]).length) parts.push(pkt('m.sturing_uit',nm(P.modOut)));
+  if((P.masteringIn||[]).length) parts.push(pkt('m.mastering_in',nm(P.masteringIn)));
+  if((P.masteringOut||[]).length) parts.push(pkt('m.mastering_uit',nm(P.masteringOut)));
   if((P.multiIn||[]).length) parts.push(pkt('m.bundel_in',nm(P.multiIn)));
   if((P.multiOut||[]).length) parts.push(pkt('m.bundel_uit',nm(P.multiOut)));
   return parts.join(' · ')||pkt('m.geen_poorten'); }
@@ -2986,7 +3041,7 @@ async function songExportDialog(){ const cur=WS.song||{}; const mine=!cur.author
   if(await p!==1||!v) { status(pkt('m.song_niet_ge_xporteerd')); return; }
   PR.prefs.author=v.author; PR.prefs.license=v.license; prSavePrefs();
   WS.song={...v,...(based?{basedOn:based}:{})};
-  const song={format:SONGFMT,formatVersion:1,title:v.title,author:v.author,license:v.license,description:v.description,...(based?{basedOn:based}:{}),created:new Date().toISOString(),patchkamer:'1.11',workspace:workspaceState(true)};
+  const song={format:SONGFMT,formatVersion:1,title:v.title,author:v.author,license:v.license,description:v.description,...(based?{basedOn:based}:{}),created:new Date().toISOString(),patchkamer:'1.12',workspace:workspaceState(true)};
   const fn=(String(v.title).replace(/[\\/:*?"<>|\u0000-\u001f]+/g,' ').replace(/\s+/g,' ').trim()||pkt('m.song_2'))+'.patchkamer-song.json';
   const r=await saveFileData(fn,JSON.stringify(song,null,1)); status(r==='saved'?pkt('m.song_ge_xporteerd_apparaten_met',v.title,licName(v.license),song.workspace.devices.length):pkt('m.exporteren_geannuleerd')); }
 function songShow(s){ songModal(pkt('m.song',esc(s.title||pkt('m.naamloos')),esc(licLine({author:s.author,license:s.license})),s.description?'<br>'+esc(s.description):'',s.basedOn?pkt('m.gebaseerd_op')+esc(s.basedOn.title||'')+'”'+(s.basedOn.author?' van '+esc(s.basedOn.author):'')+' ('+esc(licName(s.basedOn.license))+')':'',s.license===LIC_ARR?pkt('m.alle_rechten_voorbehouden_je_mag'):s.license==='CC-BY-4.0'?pkt('m.cc_by_4_0_je'):s.license?pkt('m.lees_de_licentie')+esc(s.license)+pkt('m.voor_wat_je_ermee_mag'):pkt('m.er_is_geen_licentie_opgegeven')),['OK']); }

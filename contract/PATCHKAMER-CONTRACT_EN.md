@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.11 for building agents
+# Patchkamer — Instrument contract v1.12 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -20,6 +20,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.9 | Components: tunes (devices that make sound) and presets (everything else) in libraries per device, with folders and shareable packs; songs as an export of a workspace; a license (SPDX) on every tune, preset and song. Optional for drum machines: instruments (`parts`, `getPart`, `setPart`) for tunes per instrument (§0, §13c) |
 | v1.10 | File name `*.patchkamer-device.js` for devices (§2, §16): without a manifest the host now only looks for these files, the validator warns about any other name |
 | v1.11 | Language and audio: `host.lang` (`'nl'` or `'en'`) and `host.audio` (`sampleRate`, `quality`, `oversample`, `latency`) for devices; optional `i18n` on the definition for names per language (§2, §12c). The contract and the validator are bilingual (Dutch and English) |
+| v1.12 | Mastering: a cable kind of its own (yellow, dotted sine) with triangle ports `masteringIn`/`masteringOut`; `configureMastering` and `onMasteringTargets`; `host.mastering` for a Master Director that sets the settings of mastering devices together (§11b) |
 
 ---
 
@@ -41,11 +42,12 @@ Whether your device gets tunes or presets follows from its `kind`. Workspace and
 ## 1. What Patchkamer is
 
 - A web page (the **host**) with a **floor** on which devices stand as cards, connected with cables.
-- Four kinds of cables:
+- Five kinds of cables:
   - **audio** (cyan): AudioNode → AudioNode;
   - **events** (orange): notes, trigs and CC as small JSON objects;
   - **modulation** (purple): a modulator shifts parameters of another device;
   - **bundle** (thick, green): many audio channels at once, each with a name.
+  - **mastering** (yellow, dotted sine): a Master Director sets the settings of mastering devices (§11b).
 - One shared **clock** (BPM, swing). The host schedules every sixteenth note ahead of time and reports it to every device that wants to know.
 - Devices are **ES modules**. Everything the module needs is in that one file: no imports, no network, no external files.
 - Every card has a **preset bar**. The host saves and restores presets with the state of the device (§13).
@@ -76,6 +78,8 @@ export default {
     modOut:   [],                // modulation out (modulators only)
     multiIn:  [],                // bundle in (v1.5)
     multiOut: [],                // bundle out (v1.5)
+    masteringIn:  [],            // mastering in: target of a Master Director (v1.12)
+    masteringOut: [],            // mastering out: a Master Director only (v1.12)
   },
   create(ctx, host) { /* ... */ return instance; }
 };
@@ -93,10 +97,10 @@ export default {
 
 ## 3. Ports
 
-- All eight lists may be empty or absent. Port ids are unique within their list and consist of `[a-z0-9_-]`.
+- All ten lists may be empty or absent. Port ids are unique within their list and consist of `[a-z0-9_-]`.
 - Every `audioIn` port has an AudioNode in `instance.inputs`, every `audioOut` port an AudioNode in `instance.outputs`, with the same id.
 - **Ports that change (v1.2).** `host.setPorts(this, ports)` replaces your port list while your device is running, for example when the user chooses more channels. First put the new AudioNodes in `inputs`/`outputs` and then call `setPorts`. Cables to ports that disappear are detached by the host.
-- **Ports in your own UI (v1.2).** With `ui: { jacks: true }` the host does not draw a port row. You then place every port yourself with `host.ui.jack(this, parent, portId, 'in' | 'out', label)`. This works for all four kinds of cables.
+- **Ports in your own UI (v1.2).** With `ui: { jacks: true }` the host does not draw a port row. You then place every port yourself with `host.ui.jack(this, parent, portId, 'in' | 'out', label)`. This works for all five kinds of cables.
 
 ---
 
@@ -285,6 +289,30 @@ onBundle(portId, key, bundle) { ... }
 - Save your choice in your state as `key + '|' + channelId`, never the node itself. After loading a workspace the same key comes back and you find your choice again. If the bundle is not (yet) there, leave the choice in place and show "(not connected)".
 - If you want to assign new channels automatically, do that only for channels you had not seen before. Then you do not overwrite a choice the user deliberately left empty.
 - `host.isWired(this, portId, 'in' | 'out')` says whether an own port is wired. The mixer uses that to avoid putting a bundle on a channel that already has an ordinary cable in it.
+
+---
+
+## 11b. Mastering (v1.12)
+
+**Mastering** is a cable kind of its own, for one task: one device, the **Master Director**, sets the settings of several mastering devices at once. It is not modulation (§8): no values from −1 to 1 travel over the cable but complete settings, and each target keeps its own locks and permission. It is not audio either: the signal path does not change.
+
+- **Ports.** `ports.masteringOut` (the director) and `ports.masteringIn` (a target). The host draws them as a **triangle** instead of a circle, and the cable as a **yellow, dotted sine**. A mastering output only fits a mastering input. It stays an ordinary cable: visible, can be removed, with a colour of its own to choose, and saved in the workspace as `kind: 'mastering'`. Nothing is added to `params()` or `modInput`.
+- **Target (`masteringIn`).** A target has `configureMastering(patch)`. If it is missing, the host refuses the cable with a message. `analyseMastering()`, `acceptMasteringProposal()` and `getMasteringReport()` are optional. Each method returns an object, for example `{ ok: true, changed: ['threshold'], skipped: ['ratio'] }`:
+  - `configureMastering` takes over known fields only, limits numbers to their range, skips locked fields (`skipped`) and ignores unknown and invalid values. If the user has switched off outside control, return `{ ok: false, reason: '…', changed: [], skipped: [] }` and change nothing;
+  - `getMasteringReport()` returns JSON without AudioNodes (the current settings, whether there is a suggestion, a few meter values).
+  - A target may put `mastering: { protocol: 1, configure: true }` in its definition. That is an announcement for people and the library; the host looks at the port and the methods.
+- **Director (`masteringOut`).** A Master Director has `onMasteringTargets(targets)`: a list `{ id, name, def, version }` of the targets on its cables. That call also comes with an empty list, and again on every change. It uses `kind: 'modulator'`; `masteringController: 1` in the definition is optional. It asks the host to do something with `host.mastering(this, action, options)`:
+
+| Action | `options` | What the host does |
+|---|---|---|
+| `inspect` | `targetIds` (optional) | Calls `getMasteringReport()`; the result is in `results[].report` |
+| `apply` | `settings`: `{ [targetId]: patch }`, `targetIds` | Calls `configureMastering(settings[targetId])` per target and keeps the old state for undo |
+| `analyse` | `targetIds` | Calls `analyseMastering()` |
+| `accept` | `targetIds` | Calls `acceptMasteringProposal()` and keeps the old state for undo |
+| `undo` | — | Puts the last group change back with `setState` (the host keeps twenty per director) |
+
+  `targetIds` limits the action to targets on your cables; if it is missing, that is all of them. The host returns `{ changed, results: [{ id, name, ok, reason, changed, skipped, report }] }`, or `{ error: 'text' }` in the user's language. `changed` counts the devices that changed something. For `apply` and `accept` the host only looks at devices on your cables and not at others.
+- **Follow the user.** Change nothing on load, on connecting or when the workspace is restored; only after an action by the user. Put only what the user chose in the director's `getState` (style, situation, strength), no targets and no cables.
 
 ---
 
@@ -506,7 +534,7 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ```json
 { "format": "patchkamer-song", "formatVersion": 1, "title": "Night flight", "author": "…", "license": "CC-BY-4.0",
-  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.11",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.12",
   "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
                  "devices": [ ], "cables": [ ], "bpm": 126 } }
 ```
@@ -554,6 +582,7 @@ Rules: `setPart(id, getPart(id))` leaves the setting unchanged, and `setPart(a, 
 | `host.audio` | v1.11 | `{ sampleRate, quality, oversample, latency }`: the user's audio choice, read-only (§12c) |
 | `host.peers(this)`, `onPeers(list)` | v1.7 | See other devices (read-only) (§13b) |
 | `host.connect / disconnect / cablesFrom` | v1.7 | Lay, remove and query cables from your own outputs (§13b) |
+| `host.mastering(this, action, options)` | v1.12 | A Master Director directs the devices on its mastering cables (§11b) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -600,9 +629,9 @@ node validate-instrument.mjs my-device.patchkamer-device.js --lang en   # output
 The validator loads your module with a fake AudioContext, a fake DOM (with shadow roots) and a fake host. It ends with one `OK` line (exit 0) or with the first error (exit 1). It checks:
 
 1. **File**: file name `*.patchkamer-device.js` (any other name gives a warning, not an error); default export with `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; valid `category` and `ui`; no `ctx.destination` (except for `output`), no browser storage, no network, no imports, no own AudioContext.
-2. **Ports**: all eight lists, valid and unique ids, an AudioNode per audio port, `setPorts` with nodes ready, `jack` only for existing ports, `ui.jacks` only together with at least one `jack`.
+2. **Ports**: all ten lists, valid and unique ids, an AudioNode per audio port, `setPorts` with nodes ready, `jack` only for existing ports, `ui.jacks` only together with at least one `jack`.
 3. **Life cycle**: `create` → `getState` before `mount` → `mount` → two bars of `onStep` → every event type plus an unknown type → `onTransport` → `getState`/`setState` round → `setState({})` → `destroy` twice; `emit` only on own `eventOut` ports.
-4. **Modulation (v1.3)**: `params` and `modulate` together; valid parameter list; `modulate` with +1, −1, 0.37, unknown ids and `{}`. A modulator has `modOut` and `onModTargets`; it first receives `[]` and then targets twice.
+4. **Modulation (v1.3)**: `params` and `modulate` together; valid parameter list; `modulate` with +1, −1, 0.37, unknown ids and `{}`. A modulator has `modOut` (with `onModTargets`) or `masteringOut`; it first receives `[]` and then targets twice.
 5. **Fast and worklets (v1.4)**: `fast: true` requires `modInput(id)` with an AudioNode or AudioParam, and `null` for unknown ids; `host.modSignal` receives a real AudioNode; `host.loadWorklet` receives a name and code with `registerProcessor(...)`.
 6. **Bundles (v1.5)**: every `multiOut` has `bundles[id]` with channels (unique id, name, AudioNode). Every `multiIn` has `onBundle`; it receives a bundle, the same key with one more channel, a second bundle and then `null` twice. After that no channel may still be connected and no AudioNode may be in the state. `host.bundleChanged` only for own `multiOut` ports.
 7. **Presets (v1.6)**: every knob and choice from `host.ui.knob`/`select` is updated by `setState(getState())`. `getPreset`/`setPreset` only together, JSON without AudioNodes, `setPreset(getPreset())` gives the same preset, `setPreset({})` works.
@@ -610,6 +639,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 9. **Controls and drawing gate (v1.8)**: a device with the drawing gate (`__pkWrap`) no longer gives a warning. Double-click and typing cannot be tested by the validator (the host does that with the real UI).
 10. **Instruments (v1.9)**: if the instance has `parts`, then also `getPart` and `setPart`; every instrument a unique `id` and a `name`; `getPart` gives JSON; `setPart(id, getPart(id))` leaves the setting the same; setting crosswise takes over the sound and touches no other instrument.
 11. **Language and audio (v1.11)**: an optional `i18n` is an object with, per language, a `name` and/or `ports` (port id → name) of existing ports; `host.lang` and `host.audio` are present; the whole device is run through twice, with `host.lang` `'nl'` and `'en'`, and an error in either branch is an error.
+12. **Mastering (v1.12)**: a device with `masteringIn` has `configureMastering(patch)` (and optionally `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); they receive `{}`, `null` and unknown or invalid fields and return an object (or nothing), and `getMasteringReport` returns JSON without AudioNodes. A device with `masteringOut` has `onMasteringTargets(targets)`; it receives `[]`, a list with one target (twice) and `[]` again. The fake host checks `host.mastering` for a known action and an existing `masteringOut` port. A modulator has `modOut` or `masteringOut`.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -670,7 +700,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.11
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.12
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -729,7 +759,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.11
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.12
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -792,7 +822,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.11
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.12
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -870,7 +900,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.11.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.12.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

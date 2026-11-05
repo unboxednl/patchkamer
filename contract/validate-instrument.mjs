@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.11
+// validate-instrument.mjs — Patchkamer contract v1.12
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -12,6 +12,7 @@
 // v1.10: bestandsnaam *.patchkamer-device.js; een andere naam geeft een waarschuwing (geen fout).
 // v1.11: --lang nl|en (taal van de uitvoer; standaard nl); optioneel veld i18n op de definitie; host.lang en host.audio in de nep-host;
 //        tweede doorloop met de andere host.lang, zodat een fout in de taaltak van het apparaat ook wordt gevonden.
+// v1.12: mastering: ports.masteringIn/masteringOut (kabeltype mastering), configureMastering, onMasteringTargets, host.mastering.
 // v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -47,6 +48,16 @@ const V = {
     "v.ok_worklet": ", {0} worklet",
     "v.ok_bundel_uit": ", bundel uit {0} kanalen",
     "v.ok_bundel_in": ", bundel in",
+    "v.ok_mastering_uit": ", mastering uit (regie)",
+    "v.ok_mastering_in": ", mastering in (doel)",
+    "v.host_mastering_onbekende_actie": "host.mastering(): onbekende actie \"{0}\" (kies inspect, apply, analyse, accept of undo)",
+    "v.host_mastering_geen_masteringout": "host.mastering(): het apparaat heeft geen masteringOut-poort",
+    "v.masteringout_instance_onmasteringtargets_ontbreekt": "masteringOut: instance.onMasteringTargets(targets) ontbreekt",
+    "v.onmasteringtargets_gooit": "onMasteringTargets() gooit: ",
+    "v.masteringin_instance_configuremastering_ontbreekt": "masteringIn: instance.configureMastering(patch) ontbreekt",
+    "v.mastering_methode_gooit": "{0}() gooit: ",
+    "v.mastering_methode_object": "{0}() moet een object geven (bijvoorbeeld {ok, changed, skipped})",
+    "v.getmasteringreport_niet_json": "getMasteringReport() moet JSON-serialiseerbaar zijn en mag geen AudioNodes bevatten",
     "v.ok_preset": ", eigen preset {0} bytes",
     "v.ok_instrumenten": ", {0} instrumenten voor tunes",
     "v.ok_knoppen": ", {0} host-knoppen volgen setState",
@@ -106,7 +117,7 @@ const V = {
     "v.onmodsources_gooit": "onModSources() gooit: ",
     "v.onmodtargets_gooit": "onModTargets() gooit: ",
     "v.een_modulator_implementeert_onmodtargets_targets": "een modulator implementeert onModTargets(targets)",
-    "v.een_modulator_heeft_minstens_n": "een modulator heeft minstens één ports.modOut",
+    "v.een_modulator_heeft_minstens_n": "een modulator heeft minstens één ports.modOut of ports.masteringOut",
     "v.modinput_moet_null_geven_voor": "modInput() moet null geven voor een onbekende of trage parameter",
     "v.modinput_onbekend_gooit": "modInput(onbekend) gooit: ",
     "v.modinput_moet_een_audionode_of": "modInput({0}) moet een AudioNode of AudioParam geven (fast:true)",
@@ -183,6 +194,16 @@ const V = {
     "v.ok_worklet": ", {0} worklet",
     "v.ok_bundel_uit": ", bundle out {0} channels",
     "v.ok_bundel_in": ", bundle in",
+    "v.ok_mastering_uit": ", mastering out (director)",
+    "v.ok_mastering_in": ", mastering in (target)",
+    "v.host_mastering_onbekende_actie": "host.mastering(): unknown action \"{0}\" (choose inspect, apply, analyse, accept or undo)",
+    "v.host_mastering_geen_masteringout": "host.mastering(): the device has no masteringOut port",
+    "v.masteringout_instance_onmasteringtargets_ontbreekt": "masteringOut: instance.onMasteringTargets(targets) is missing",
+    "v.onmasteringtargets_gooit": "onMasteringTargets() throws: ",
+    "v.masteringin_instance_configuremastering_ontbreekt": "masteringIn: instance.configureMastering(patch) is missing",
+    "v.mastering_methode_gooit": "{0}() throws: ",
+    "v.mastering_methode_object": "{0}() must return an object (for example {ok, changed, skipped})",
+    "v.getmasteringreport_niet_json": "getMasteringReport() must be JSON-serialisable and must not contain AudioNodes",
     "v.ok_preset": ", own preset {0} bytes",
     "v.ok_instrumenten": ", {0} instruments for tunes",
     "v.ok_knoppen": ", {0} host knobs follow setState",
@@ -242,7 +263,7 @@ const V = {
     "v.onmodsources_gooit": "onModSources() throws: ",
     "v.onmodtargets_gooit": "onModTargets() throws: ",
     "v.een_modulator_implementeert_onmodtargets_targets": "a modulator implements onModTargets(targets)",
-    "v.een_modulator_heeft_minstens_n": "a modulator has at least one ports.modOut",
+    "v.een_modulator_heeft_minstens_n": "a modulator has at least one ports.modOut or ports.masteringOut",
     "v.modinput_moet_null_geven_voor": "modInput() must return null for an unknown or slow parameter",
     "v.modinput_onbekend_gooit": "modInput(unknown) throws: ",
     "v.modinput_moet_een_audionode_of": "modInput({0}) must return an AudioNode or AudioParam (fast:true)",
@@ -357,7 +378,7 @@ const realSetTimeout = setTimeout; globalThis.setTimeout = (f, ms) => 0; globalT
 let frames = [], peerCalls = 0, connects = 0;
 const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true },
   { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
-let emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
+let masteringCalls = 0, masteringBad = null, emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
 const PL = (P, k) => Array.isArray(P[k]) ? P[k] : [];
 const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal', oversample: '2x', latency: 'interactive' }, bpm: 120, swing: 0, emit(inst, port, ev) { emitted.push({ port, ev }); }, setTempo(b) { tempo = b; },
@@ -369,6 +390,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   // v1.5
   bundleChanged(inst, port) { bundleCalls++; if (!PL(curPorts || d.ports, 'multiOut').some(p => p.id === port)) modBad = vt('v.host_bundlechanged_is_geen_multiout',port); },
   isWired() { return false; },
+  // v1.12
+  mastering(inst, action, opts) { masteringCalls++; if (!['inspect', 'apply', 'analyse', 'accept', 'undo'].includes(action)) masteringBad = vt('v.host_mastering_onbekende_actie',action); if (!PL(curPorts || d.ports, 'masteringOut').length) masteringBad = vt('v.host_mastering_geen_masteringout'); return { changed: 0, results: [] }; },
   // v1.7
   frame(inst, cb, fps) { if (typeof cb !== 'function') { modBad = vt('v.host_frame_geef_een_functie'); return () => {}; } if (fps !== undefined && !(+fps > 0)) modBad = vt('v.host_frame_fps_moet_een');
     const e = { cb, off: false }; frames.push(e); return () => { e.off = true; }; },
@@ -382,11 +405,11 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   setPorts(inst, ports) {   // contract v1.2: dynamic ports; every listed audio port must already have its AudioNode
     if (!ports || typeof ports !== 'object') fail(vt('v.setports_ports_ontbreekt'));
     for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut']) { if (!Array.isArray(ports[k])) fail(vt('v.setports_ports_moet_een_lijst',k)); const ids = ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.setports_ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.setports_dubbele_poort_id_in',k)); }
-    for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut']) if (ports[k] !== undefined && !Array.isArray(ports[k])) fail(vt('v.setports_ports_moet_een_lijst',k));
+    for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) if (ports[k] !== undefined && !Array.isArray(ports[k])) fail(vt('v.setports_ports_moet_een_lijst',k));
     for (const p of ports.audioIn) if (!inst.inputs[p.id] || !inst.inputs[p.id]._isNode) fail(vt('v.setports_inputs_bestaat_nog_niet',p.id));
     for (const p of ports.audioOut) if (!inst.outputs[p.id] || !inst.outputs[p.id]._isNode) fail(vt('v.setports_outputs_bestaat_nog_niet',p.id));
     curPorts = ports; portChanges++; },
-  ui: { jack(inst, parent, id, dir) { const P = curPorts || d.ports; const L = dir === 'out' ? [...P.audioOut, ...P.eventOut, ...PL(P, 'modOut'), ...PL(P, 'multiOut')] : dir === 'in' ? [...P.audioIn, ...P.eventIn, ...PL(P, 'modIn'), ...PL(P, 'multiIn'), ...(inst && typeof inst.params === 'function' ? [{ id: 'mod' }] : [])] : fail(vt('v.jack_richting_moet_in_of')); if (!L.some(p => p.id === id)) fail(vt('v.jack_poort_bestaat_niet_in',id,dir)); jacks++; const e = el('div'); e.className = 'port jack'; if (parent && parent.appendChild) parent.appendChild(e); return e; },
+  ui: { jack(inst, parent, id, dir) { const P = curPorts || d.ports; const L = dir === 'out' ? [...P.audioOut, ...P.eventOut, ...PL(P, 'modOut'), ...PL(P, 'multiOut'), ...PL(P, 'masteringOut')] : dir === 'in' ? [...P.audioIn, ...P.eventIn, ...PL(P, 'modIn'), ...PL(P, 'multiIn'), ...PL(P, 'masteringIn'), ...(inst && typeof inst.params === 'function' ? [{ id: 'mod' }] : [])] : fail(vt('v.jack_richting_moet_in_of')); if (!L.some(p => p.id === id)) fail(vt('v.jack_poort_bestaat_niet_in',id,dir)); jacks++; const e = el('div'); e.className = 'port jack'; if (parent && parent.appendChild) parent.appendChild(e); return e; },
     knob: (parent, label) => { const k = { label: 'knop ' + label, sets: 0 }; KNOBS.push(k); return { set(){ k.sets++; }, el: el('div'), input: el('input') }; },
     select: (parent, label, opts, val) => { const k = { label: vt('v.keuze') + label, sets: 0 }; KNOBS.push(k); const s = el('select'); let v = val; Object.defineProperty(s, 'value', { get: () => v, set: x => { v = x; k.sets++; } }); return s; }, steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
 
@@ -401,11 +424,11 @@ if (!['instrument', 'effect', 'mixer', 'output', 'utility', 'modulator'].include
 if (d.ui !== undefined && (typeof d.ui !== 'object' || (d.ui.width !== undefined && !(d.ui.width >= 200 && d.ui.width <= 6000)))) fail(vt('v.ui_width_moet_tussen_200'));
 if (d.category !== undefined && !['synth', 'groove', 'sequencer', 'mod', 'effect', 'mix', 'tool'].includes(d.category)) fail('onbekende category (synth, groove, sequencer, mod, effect, mix of tool)');
 if (d.ui && d.ui.minWidth !== undefined && !(d.ui.minWidth >= 200 && d.ui.minWidth <= (d.ui.width || 300))) fail(vt('v.ui_minwidth_moet_tussen_200'));
-for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut']) if (d.ports[k] === undefined) d.ports[k] = [];
-for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut']) { if (!Array.isArray(d.ports[k])) fail(vt('v.ports_moet_een_lijst_zijn',k)); const ids = d.ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.dubbele_poort_id_in',k)); }
+for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) if (d.ports[k] === undefined) d.ports[k] = [];
+for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) { if (!Array.isArray(d.ports[k])) fail(vt('v.ports_moet_een_lijst_zijn',k)); const ids = d.ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.dubbele_poort_id_in',k)); }
 if (d.i18n !== undefined) {   // v1.11: optionele namen per taal
   if (!d.i18n || typeof d.i18n !== 'object' || Array.isArray(d.i18n)) fail(vt('v.i18n_object'));
-  const portIds = new Set(['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut'].flatMap(k => (d.ports[k] || []).map(p => p.id)));
+  const portIds = new Set(['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut'].flatMap(k => (d.ports[k] || []).map(p => p.id)));
   for (const [lang, o] of Object.entries(d.i18n)) {
     if (!o || typeof o !== 'object' || Array.isArray(o)) fail(vt('v.i18n_taal_object', lang));
     if (o.name !== undefined && (typeof o.name !== 'string' || !o.name)) fail(vt('v.i18n_name', lang));
@@ -451,12 +474,28 @@ if (inst.params !== undefined || inst.modulate !== undefined) {
     let u; try { u = inst.modInput('onbekend'); } catch (e) { fail(vt('v.modinput_onbekend_gooit') + e.message); } if (u != null) fail(vt('v.modinput_moet_null_geven_voor')); }
 }
 if (d.kind === 'modulator') {
-  if (!d.ports.modOut.length) fail(vt('v.een_modulator_heeft_minstens_n'));
-  if (typeof inst.onModTargets !== 'function') fail(vt('v.een_modulator_implementeert_onmodtargets_targets'));
+  if (!d.ports.modOut.length && !d.ports.masteringOut.length) fail(vt('v.een_modulator_heeft_minstens_n'));
+  if (d.ports.modOut.length && typeof inst.onModTargets !== 'function') fail(vt('v.een_modulator_implementeert_onmodtargets_targets'));
   inst._id = 'm1';
   const fakeT = [{ id: 'd9', name: 'Test', def: 'nl.test.x', version: '1.0.0', params: [{ id: 'a', name: 'A', lane: 'x', laneName: 'X', min: 0, max: 1, role: 'filter', drift: 0.1, on: true }, { id: 'b', name: 'B', lane: 'y', min: 20, max: 20000, scale: 'log' }] }];
-  try { inst.onModTargets([]); inst.onModTargets(fakeT); inst.onModTargets(fakeT); } catch (e) { fail(vt('v.onmodtargets_gooit') + e.message); }
+  if (d.ports.modOut.length) try { inst.onModTargets([]); inst.onModTargets(fakeT); inst.onModTargets(fakeT); } catch (e) { fail(vt('v.onmodtargets_gooit') + e.message); }
   if (inst.onModSources) { try { inst.onModSources([]); } catch (e) { fail(vt('v.onmodsources_gooit') + e.message); } }
+}
+// contract v1.12: mastering. masteringOut (regie): onMasteringTargets; masteringIn (doel): configureMastering (en optioneel de rest).
+if (d.ports.masteringOut.length) {
+  if (typeof inst.onMasteringTargets !== 'function') fail(vt('v.masteringout_instance_onmasteringtargets_ontbreekt'));
+  inst._id = inst._id || 'm1';
+  const fakeM = [{ id: 'd9', name: 'Test', def: 'nl.test.x', version: '1.0.0' }];
+  try { inst.onMasteringTargets([]); inst.onMasteringTargets(fakeM); inst.onMasteringTargets(fakeM); inst.onMasteringTargets([]); } catch (e) { fail(vt('v.onmasteringtargets_gooit') + e.message); }
+}
+if (d.ports.masteringIn.length) {
+  if (typeof inst.configureMastering !== 'function') fail(vt('v.masteringin_instance_configuremastering_ontbreekt'));
+  for (const [m, a] of [['configureMastering', [{}]], ['configureMastering', [null]], ['configureMastering', [{ onbekend: 1, x: NaN }]], ['analyseMastering', []], ['acceptMasteringProposal', []], ['getMasteringReport', []]]) {
+    if (typeof inst[m] !== 'function') continue;
+    let r; try { r = inst[m](...a); } catch (e) { fail(vt('v.mastering_methode_gooit',m) + e.message); }
+    if (m === 'getMasteringReport') { try { JSON.stringify(r); } catch (e) { fail(vt('v.getmasteringreport_niet_json')); } if (JSON.stringify(r || {}).includes('_isNode')) fail(vt('v.getmasteringreport_niet_json')); }
+    else if (r != null && typeof r !== 'object') fail(vt('v.mastering_methode_object',m));
+  }
 }
 if (inst.onTransport) { try { inst.onTransport({ playing: true }); } catch (e) { fail(vt('v.ontransport_start_gooit') + e.message); } }
 if (inst.onStep) for (let s = 0; s < 32; s++) { ctx.currentTime = s * 0.125; try { inst.onStep({ step: s % 16, bar: Math.floor(s / 16), time: 0.1 + s * 0.125, stepDur: 0.125, bpm: 120, swing: 0 }); } catch (e) { fail(vt('v.onstep_gooit_bij_stap') + s + ': ' + e.message); } }
@@ -556,6 +595,9 @@ const nKnobs = nMountKnobs;
   if (worklets) line += worklets > 1 ? vt('v.ok_worklets', worklets) : vt('v.ok_worklet', worklets);
   if (d.ports.multiOut.length) line += vt('v.ok_bundel_uit', nBundleCh);
   if (d.ports.multiIn.length) line += vt('v.ok_bundel_in');
+  if (d.ports.masteringOut.length) line += vt('v.ok_mastering_uit');
+  if (d.ports.masteringIn.length) line += vt('v.ok_mastering_in');
+  if (masteringBad) fail(masteringBad);
   if (presetBytes) line += vt('v.ok_preset', presetBytes);
   if (nParts) line += vt('v.ok_instrumenten', nParts);
   if (nKnobs) line += vt('v.ok_knoppen', nKnobs);

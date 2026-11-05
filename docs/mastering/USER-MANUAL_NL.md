@@ -24,7 +24,7 @@ Mastering-apparaten helpen je een mix af te maken: de toon in balans brengen, de
 
 ## Wat mastering-apparaten doen
 
-Een mastering-apparaat neemt de afgemaakte stereomix en geeft hem vorm. Je gebruikt ze achter elkaar, op de master. De meeste hebben een **Master Director**-poort (paars): de Master Director kan de hele keten in één keer instellen voor een muziekstijl en een situatie. Alles kan ook met de hand, en elk apparaat heeft **presets** (een preset is de instelling van één apparaat). Zie [Presets](../presets/USER-MANUAL_NL.md) voor hoe je ze gebruikt en deelt.
+Een mastering-apparaat neemt de afgemaakte stereomix en geeft hem vorm. Je gebruikt ze achter elkaar, op de master. De meeste hebben een **Master Director**-poort (een geel driehoekje): de Master Director kan de hele keten in één keer instellen voor een muziekstijl en een situatie. Alles kan ook met de hand, en elk apparaat heeft **presets** (een preset is de instelling van één apparaat). Zie [Presets](../presets/USER-MANUAL_NL.md) voor hoe je ze gebruikt en deelt.
 
 Alle zes bewerkende apparaten meten wat er in en uit gaat: volume (LUFS-I, LUFS-M, LUFS-S, loudness range), pieken (sample peak en, in de Master Chain en Mix Check, 4× true peak), stereocorrelatie en links/rechts-balans. De metingen zijn een eigen uitwerking van de gebruikelijke loudnessmethode (K-weging, blokken van 400 ms, gating); ze zijn een richtlijn en geen formele certificering.
 
@@ -138,7 +138,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 |---|---|---|
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -198,7 +198,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 |---|---|---|
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -241,7 +241,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Sidechain** | audio in (groenblauw) | Een tweede signaal voor de detector (bijvoorbeeld een kick), gebruikt als **Detector** op **Sidechain-ingang** staat. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -283,7 +283,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 |---|---|---|
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -325,7 +325,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 |---|---|---|
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -376,7 +376,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 |---|---|---|
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -414,7 +414,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 | **Stereo in** | audio in (groenblauw) | Het geluid dat bewerkt wordt. |
 | **Referentie** | audio in (groenblauw) | Een referentietrack om mee te vergelijken. Je kunt ook op de kaart een lokaal audiobestand laden. |
 | **Stereo uit** | audio uit (groenblauw) | Het bewerkte geluid. Sluit het aan op het volgende apparaat of op **Speakers**. |
-| **Master Director** | modulatie in (paars) | Ontvangt de instellingen van de Master Director. Optioneel. |
+| **Master Director** | mastering in (geel driehoekje) | Ontvangt de instellingen van de Master Director. Optioneel. |
 
 ### Presets
 
@@ -453,7 +453,7 @@ De Master Director stelt een hele masteringketen in één keer in. Je kiest een 
 
 | Poort | Soort | Gebruik |
 |---|---|---|
-| **Stijl / setup** | modulatie uit (paars) | Verbind hem met de **Master Director**-poort van elk mastering-apparaat. De audiokabels blijven zoals ze zijn. |
+| **Stijl / setup** | mastering uit (geel driehoekje) | Verbind hem met de **Master Director**-poort van elk mastering-apparaat met een gele, gestippelde golfkabel (de mastering-kabel). De audiokabels blijven zoals ze zijn. |
 
 ### Presets
 

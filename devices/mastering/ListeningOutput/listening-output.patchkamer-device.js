@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// 1.11.0 — Patchkamer contract v1.11. Nieuw als Listening Output (nieuwe id, eigen map; voorheen Luisteruitgang). Tweetalig (host.lang: label en poortnaam per taal). setState kapt het volume af op 0 … 1 en zet het bij een ongeldige waarde op de
+// 1.11.1 — de Nederlandse naam per taal is vervallen (namen zijn Engels). 1.11.0 — Patchkamer contract v1.11. Nieuw als Listening Output (nieuwe id, eigen map; voorheen Luisteruitgang). Tweetalig (host.lang: label en poortnaam per taal). setState kapt het volume af op 0 … 1 en zet het bij een ongeldige waarde op de
 //          standaard (0,7); het volume gaat zacht naar zijn nieuwe waarde. Nieuw: getPreset/setPreset. Het geluid is ongewijzigd.
 // Listening Output: een transparante luisteruitgang: de audio gaat ongewijzigd naar de uitgang van de browser, met alleen een luistervolume (de masteringketen blijft ervoor, zodat je meet wat je hoort).
 const TXT = { nl: { level: 'Luistervolume', port: 'In', name: 'Luisteruitgang' }, en: { level: 'Listening volume', port: 'In', name: 'Listening Output' } };
 export default {
-  id: 'nl.patchkamer.listeningoutput', name: 'Listening Output', version: '1.11.0', kind: 'output', category: 'mix',
+  id: 'nl.patchkamer.listeningoutput', name: 'Listening Output', version: '1.11.1', kind: 'output', category: 'mix',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
-  i18n: { nl: { name: 'Luisteruitgang' } },
   create(ctx, host) {
     const TX = TXT[host && host.lang] || TXT.en, DEFAULT = 0.7;
     const input = ctx.createGain(); let level = DEFAULT, knob = null, dead = false;

@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.11 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.12 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -20,6 +20,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.9 | Onderdelen: tunes (apparaten die geluid maken) en presets (al het andere) in bibliotheken per apparaat, met mappen en deelbare packs; songs als export van een werkruimte; een licentie (SPDX) bij elke tune, preset en song. Optioneel voor drumcomputers: instrumenten (`parts`, `getPart`, `setPart`) voor tunes per instrument (§0, §13c) |
 | v1.10 | Bestandsnaam `*.patchkamer-device.js` voor apparaten (§2, §16): de host zoekt zonder manifest alleen nog naar deze bestanden, de validator waarschuwt bij een andere naam |
 | v1.11 | Taal en audio: `host.lang` (`'nl'` of `'en'`) en `host.audio` (`sampleRate`, `quality`, `oversample`, `latency`) voor apparaten; optioneel `i18n` op de definitie voor namen per taal (§2, §12c). Het contract en de validator zijn tweetalig (Nederlands en Engels) |
+| v1.12 | Mastering: een eigen kabelsoort (gele, gestippelde sinus) met driehoekpoorten `masteringIn`/`masteringOut`; `configureMastering` en `onMasteringTargets`; `host.mastering` voor een Master Director die de instellingen van mastering-apparaten tegelijk zet (§11b) |
 
 ---
 
@@ -41,11 +42,12 @@ Of je apparaat tunes of presets krijgt, volgt dus uit je `kind`. Werkruimte en s
 ## 1. Wat Patchkamer is
 
 - Een webpagina (de **host**) met een **vloer** waarop apparaten als kaarten staan, verbonden met kabels.
-- Vier kabelsoorten:
+- Vijf kabelsoorten:
   - **audio** (cyaan): AudioNode → AudioNode;
   - **gebeurtenissen** (oranje): noten, trigs en CC als kleine JSON-objecten;
   - **sturing** (paars): een modulator verschuift parameters van een ander apparaat;
   - **bundel** (dik, groen): veel audiokanalen tegelijk, elk met een naam.
+  - **mastering** (geel, gestippelde sinus): een Master Director zet de instellingen van mastering-apparaten (§11b).
 - Eén gedeelde **klok** (BPM, swing). De host plant elke zestiende noot vooruit en meldt die aan elk apparaat dat dat wil weten.
 - Apparaten zijn **ES-modules**. Alles wat de module nodig heeft, zit in dat ene bestand: geen imports, geen netwerk, geen externe bestanden.
 - Elke kaart heeft een **presetbalk**. De host bewaart en herstelt presets met de state van het apparaat (§13).
@@ -76,6 +78,8 @@ export default {
     modOut:   [],                // sturing uit (alleen modulatoren)
     multiIn:  [],                // bundel in (v1.5)
     multiOut: [],                // bundel uit (v1.5)
+    masteringIn:  [],            // mastering in: doel van een Master Director (v1.12)
+    masteringOut: [],            // mastering uit: alleen een Master Director (v1.12)
   },
   create(ctx, host) { /* ... */ return instance; }
 };
@@ -93,10 +97,10 @@ export default {
 
 ## 3. Poorten
 
-- Alle acht lijsten mogen leeg zijn of ontbreken. Poort-id's zijn uniek binnen hun lijst en bestaan uit `[a-z0-9_-]`.
+- Alle tien lijsten mogen leeg zijn of ontbreken. Poort-id's zijn uniek binnen hun lijst en bestaan uit `[a-z0-9_-]`.
 - Elke `audioIn`-poort heeft een AudioNode in `instance.inputs`, elke `audioOut`-poort een AudioNode in `instance.outputs`, met dezelfde id.
 - **Poorten die veranderen (v1.2).** `host.setPorts(this, ports)` vervangt je poortenlijst terwijl je apparaat draait, bijvoorbeeld als de gebruiker meer kanalen kiest. Zet eerst de nieuwe AudioNodes in `inputs`/`outputs` en roep dan `setPorts` aan. Kabels naar poorten die verdwijnen, haalt de host los.
-- **Poorten in je eigen UI (v1.2).** Met `ui: { jacks: true }` tekent de host geen poortenrij. Je plaatst dan elke poort zelf met `host.ui.jack(this, parent, poortId, 'in' | 'out', label)`. Dat werkt voor alle vier de kabelsoorten.
+- **Poorten in je eigen UI (v1.2).** Met `ui: { jacks: true }` tekent de host geen poortenrij. Je plaatst dan elke poort zelf met `host.ui.jack(this, parent, poortId, 'in' | 'out', label)`. Dat werkt voor alle vijf de kabelsoorten.
 
 ---
 
@@ -285,6 +289,30 @@ onBundle(poortId, sleutel, bundel) { ... }
 - Bewaar je keuze in je state als `sleutel + '|' + kanaalId`, nooit de node zelf. Na het laden van een werkruimte komt dezelfde sleutel terug en vind je je keuze terug. Is de bundel er (nog) niet, laat de keuze dan staan en toon "(niet verbonden)".
 - Wil je nieuwe kanalen vanzelf toewijzen, doe dat dan alleen voor kanalen die je nog niet eerder zag. Dan overschrijf je geen keuze die de gebruiker bewust leeg liet.
 - `host.isWired(this, poortId, 'in' | 'out')` zegt of een eigen poort bekabeld is. De mixer gebruikt dat om een bundel niet op een kanaal te zetten waar al een gewone kabel in zit.
+
+---
+
+## 11b. Mastering (v1.12)
+
+**Mastering** is een eigen kabelsoort voor één taak: een apparaat, de **Master Director**, zet de instellingen van meerdere mastering-apparaten tegelijk. Het is geen sturing (§8): er gaan geen waarden van −1 tot 1 over de kabel, maar complete instellingen, en elk doel houdt zijn eigen vergrendelingen en toestemming. Het is ook geen audio: het signaalpad verandert niet.
+
+- **Poorten.** `ports.masteringOut` (de regie) en `ports.masteringIn` (een doel). De host tekent ze als een **driehoekje** in plaats van een rondje, en de kabel als een **gele, gestippelde sinus**. Een mastering-uitgang past alleen op een mastering-ingang. Het blijft een gewone kabel: zichtbaar, los te maken, met een eigen kleur te kiezen, en opgeslagen in de werkruimte als `kind: 'mastering'`. Er komt niets bij in `params()` of `modInput`.
+- **Doel (`masteringIn`).** Een doel heeft `configureMastering(patch)`. Ontbreekt die, dan weigert de host de kabel met een melding. Optioneel zijn `analyseMastering()`, `acceptMasteringProposal()` en `getMasteringReport()`. Elke methode geeft een object terug, bijvoorbeeld `{ ok: true, changed: ['threshold'], skipped: ['ratio'] }`:
+  - `configureMastering` neemt alleen bekende velden over, begrenst getallen binnen het bereik, slaat vergrendelde velden over (`skipped`) en negeert onbekende en ongeldige waarden. Heeft de gebruiker bediening van buiten uitgezet, geef dan `{ ok: false, reason: '…', changed: [], skipped: [] }` en verander niets;
+  - `getMasteringReport()` geeft JSON zonder AudioNodes (de huidige instellingen, of er een voorstel is, een paar meterwaarden).
+  - Een doel mag in zijn definitie `mastering: { protocol: 1, configure: true }` zetten. Dat is een aankondiging voor mensen en bibliotheek; de host kijkt naar de poort en de methoden.
+- **Regie (`masteringOut`).** Een Master Director heeft `onMasteringTargets(targets)`: een lijst `{ id, name, def, version }` van de doelen aan zijn kabels. Die aanroep komt ook met een lege lijst, en opnieuw bij elke wijziging. Hij gebruikt `kind: 'modulator'`; `masteringController: 1` in de definitie is optioneel. Hij vraagt de host iets met `host.mastering(this, actie, opties)`:
+
+| Actie | `opties` | Wat de host doet |
+|---|---|---|
+| `inspect` | `targetIds` (optioneel) | Roept `getMasteringReport()` aan; het resultaat staat in `results[].report` |
+| `apply` | `settings`: `{ [doelId]: patch }`, `targetIds` | Roept per doel `configureMastering(settings[doelId])` aan en bewaart de oude state om terug te zetten |
+| `analyse` | `targetIds` | Roept `analyseMastering()` aan |
+| `accept` | `targetIds` | Roept `acceptMasteringProposal()` aan en bewaart de oude state om terug te zetten |
+| `undo` | — | Zet de laatste groepswijziging terug met `setState` (de host bewaart er per regie twintig) |
+
+  `targetIds` beperkt de actie tot doelen aan jouw kabels; ontbreekt het, dan zijn het er allemaal. De host geeft `{ changed, results: [{ id, name, ok, reason, changed, skipped, report }] }` terug, of `{ error: 'tekst' }` in de taal van de gebruiker. `changed` telt de apparaten die iets veranderden. Bij `apply` en `accept` kijkt de host alleen naar apparaten aan jouw kabels en niet naar anderen.
+- **Houd je aan de gebruiker.** Verander niets bij laden, aansluiten of het herstellen van de werkruimte; alleen na een handeling van de gebruiker. Zet in `getState` van de regie alleen wat de gebruiker koos (stijl, situatie, sterkte), geen doelen en geen kabels.
 
 ---
 
@@ -506,7 +534,7 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ```json
 { "format": "patchkamer-song", "formatVersion": 1, "title": "Nachtvlucht", "author": "…", "license": "CC-BY-4.0",
-  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.11",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.12",
   "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
                  "devices": [ ], "cables": [ ], "bpm": 126 } }
 ```
@@ -554,6 +582,7 @@ Regels: `setPart(id, getPart(id))` laat de instelling ongewijzigd, en `setPart(a
 | `host.audio` | v1.11 | `{ sampleRate, quality, oversample, latency }`: audiokeuze van de gebruiker, alleen lezen (§12c) |
 | `host.peers(this)`, `onPeers(lijst)` | v1.7 | Andere apparaten zien (alleen lezen) (§13b) |
 | `host.connect / disconnect / cablesFrom` | v1.7 | Kabels vanaf je eigen uitgangen leggen, weghalen, opvragen (§13b) |
+| `host.mastering(this, actie, opties)` | v1.12 | Een Master Director stuurt de apparaten aan zijn mastering-kabels aan (§11b) |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -600,9 +629,9 @@ node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --lang en   # ui
 De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow roots) en een nep-host. Hij eindigt met één `OK`-regel (exit 0) of met de eerste fout (exit 1). Hij controleert:
 
 1. **Bestand**: bestandsnaam `*.patchkamer-device.js` (een andere naam geeft een waarschuwing, geen fout); default export met `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; geldige `category` en `ui`; geen `ctx.destination` (behalve bij `output`), geen browseropslag, geen netwerk, geen imports, geen eigen AudioContext.
-2. **Poorten**: alle acht lijsten, geldige en unieke id's, een AudioNode per audiopoort, `setPorts` met klaarstaande nodes, `jack` alleen voor bestaande poorten, `ui.jacks` alleen samen met minstens één `jack`.
+2. **Poorten**: alle tien lijsten, geldige en unieke id's, een AudioNode per audiopoort, `setPorts` met klaarstaande nodes, `jack` alleen voor bestaande poorten, `ui.jacks` alleen samen met minstens één `jack`.
 3. **Levensloop**: `create` → `getState` vóór `mount` → `mount` → twee maten `onStep` → elk gebeurtenistype plus een onbekend type → `onTransport` → `getState`/`setState`-ronde → `setState({})` → twee keer `destroy`; `emit` alleen op eigen `eventOut`-poorten.
-4. **Sturing (v1.3)**: `params` en `modulate` samen; geldige parameterlijst; `modulate` met +1, −1, 0,37, onbekende ids en `{}`. Een modulator heeft `modOut` en `onModTargets`; die krijgt eerst `[]` en daarna twee keer doelen.
+4. **Sturing (v1.3)**: `params` en `modulate` samen; geldige parameterlijst; `modulate` met +1, −1, 0,37, onbekende ids en `{}`. Een modulator heeft `modOut` (met `onModTargets`) of `masteringOut`; die krijgt eerst `[]` en daarna twee keer doelen.
 5. **Snel en worklets (v1.4)**: `fast: true` vraagt `modInput(id)` met een AudioNode of AudioParam, en `null` voor onbekende ids; `host.modSignal` krijgt een echte AudioNode; `host.loadWorklet` krijgt een naam en code met `registerProcessor(...)`.
 6. **Bundels (v1.5)**: elke `multiOut` heeft `bundles[id]` met kanalen (unieke id, naam, AudioNode). Elke `multiIn` heeft `onBundle`; die krijgt een bundel, dezelfde sleutel met een kanaal erbij, een tweede bundel en dan twee keer `null`. Daarna mag geen enkel kanaal nog verbonden zijn en mag er geen AudioNode in de state staan. `host.bundleChanged` alleen voor eigen `multiOut`-poorten.
 7. **Presets (v1.6)**: elke knop en keuze van `host.ui.knob`/`select` wordt bijgewerkt door `setState(getState())`. `getPreset`/`setPreset` alleen samen, JSON zonder AudioNodes, `setPreset(getPreset())` geeft dezelfde preset, `setPreset({})` werkt.
@@ -611,6 +640,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 10. **Instrumenten (v1.9)**: heeft de instance `parts`, dan ook `getPart` en `setPart`; elk instrument een uniek `id` en een `name`; `getPart` geeft JSON; `setPart(id, getPart(id))` laat de instelling gelijk; kruislings zetten neemt de klank over en raakt geen ander instrument.
 
 11. **Taal en audio (v1.11)**: een optioneel `i18n` is een object met per taal een `name` en/of `ports` (poort-id → naam) van bestaande poorten; `host.lang` en `host.audio` zijn aanwezig; het hele apparaat wordt twee keer doorlopen, met `host.lang` `'nl'` en `'en'`, en een fout in een van beide takken is een fout.
+12. **Mastering (v1.12)**: een apparaat met `masteringIn` heeft `configureMastering(patch)` (en optioneel `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); die krijgen `{}`, `null` en onbekende of ongeldige velden en geven een object terug (of niets), en `getMasteringReport` geeft JSON zonder AudioNodes. Een apparaat met `masteringOut` heeft `onMasteringTargets(targets)`; die krijgt `[]`, een lijst met één doel (twee keer) en weer `[]`. De nep-host controleert `host.mastering` op een bekende actie en een bestaande `masteringOut`-poort. Een modulator heeft `modOut` of `masteringOut`.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -671,7 +701,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.11
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.12
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -730,7 +760,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.11
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.12
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -793,7 +823,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.11
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.12
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -871,7 +901,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.11.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.12.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

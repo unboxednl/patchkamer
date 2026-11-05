@@ -4,15 +4,15 @@ Dit bestand is voor AI-agents die **presets voor Master Director** maken of het 
 
 ## Wat Master Director is
 
-Een modulator-achtig bedieningsapparaat voor de hele masteringketen. Je kiest een **muziekstijl** (32, van transparant tot hardstyle) en een **situatie** (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming); uit stijl × situatie × sterkte volgt een recept per apparaat (Bus Compressor, Balance EQ, Multiband Balance, Patina, Stereo Space en Master Chain) dat als echte instellingen in de aangesloten apparaten wordt gezet. Mix Check blijft ongemoeid. De Director heeft geen audio; zijn paarse uitgang `setup` gaat naar de Master Director-ingang van de apparaten.
+Een bedieningsapparaat voor de hele masteringketen. Je kiest een **muziekstijl** (32, van transparant tot hardstyle) en een **situatie** (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming); uit stijl × situatie × sterkte volgt een recept per apparaat (Bus Compressor, Balance EQ, Multiband Balance, Patina, Stereo Space en Master Chain) dat als echte instellingen in de aangesloten apparaten wordt gezet. Mix Check blijft ongemoeid. De Director heeft geen audio; zijn mastering-uitgang `setup` (gele, gestippelde kabel) gaat naar de Master Director-ingang van de apparaten. De Director gebruikt `host.mastering` (contract v1.12, §11b).
 
 | | |
 |---|---|
 | Bestand | `master-director.patchkamer-device.js` (in deze map) |
 | `id` | `nl.patchkamer.masterdirector`. Verander die nooit |
 | Soort | `modulator` met `masteringController: 1`; krijgt dus **presets** |
-| Poorten | modulatie-uitgang `setup` (Style / setup) |
-| Contract | v1.11 |
+| Poorten | mastering-uitgang `setup` (Style / setup; driehoekpoort, gele gestippelde kabel) |
+| Contract | v1.12 |
 
 Voorganger: Masterregie (`nl.patchkamer.mastering.director`, acht stijlen, geen situaties). De host moet het Master Director-protocol bieden (`host.mastering`, versie 1) om de apparaten daadwerkelijk in te stellen; zonder dat meldt de kaart "Hostuitbreiding vereist" en verandert er niets. **Controleer dat vóór je beweert dat een preset werkt.**
 
