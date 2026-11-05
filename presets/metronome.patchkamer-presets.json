@@ -1,0 +1,107 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.klik",
+  "name": "Metronome Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Click settings for the Metronome: bar, beat, eighth and sixteenth clicks at practice, rehearsal and loud levels. The same beats also go out as trigs.",
+  "tree": [
+    {
+      "folder": "Practice",
+      "items": [
+        {
+          "name": "Bar Only",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 16,
+            "lvl": 0.45
+          }
+        },
+        {
+          "name": "Bar Only Quiet",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 16,
+            "lvl": 0.2
+          }
+        },
+        {
+          "name": "Quarter Beats",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 4,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Quarter Beats Quiet",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 4,
+            "lvl": 0.22
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Subdivisions",
+      "items": [
+        {
+          "name": "Eighth Notes",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 2,
+            "lvl": 0.4
+          }
+        },
+        {
+          "name": "Eighth Notes Quiet",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 2,
+            "lvl": 0.18
+          }
+        },
+        {
+          "name": "Sixteenth Ticks",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 1,
+            "lvl": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Loud",
+      "items": [
+        {
+          "name": "Quarter Beats Loud",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 4,
+            "lvl": 0.9
+          }
+        },
+        {
+          "name": "Stage Click",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "div": 4,
+            "lvl": 1.0
+          }
+        }
+      ]
+    }
+  ]
+}
