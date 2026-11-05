@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>probe</title>
+<script>
+(async () => {
+  const out = { userAgent: navigator.userAgent, hints: [], rates: [] };
+  const run = async (opts) => {
+    const c = new AudioContext(opts);
+    await c.resume().catch(() => {});
+    await new Promise(r => setTimeout(r, 300));
+    const r = { opts, state: c.state, sampleRate: c.sampleRate,
+      baseLatencyMs: +(c.baseLatency * 1000).toFixed(2),
+      outputLatencyMs: c.outputLatency ? +(c.outputLatency * 1000).toFixed(2) : null };
+    await c.close();
+    return r;
+  };
+  try {
+    for (const h of ['interactive', 'balanced', 'playback']) out.hints.push(await run({ latencyHint: h }));
+    for (const s of [44100, 48000, 96000]) out.rates.push(await run({ latencyHint: 'interactive', sampleRate: s }));
+    for (const n of [0.002, 0.005, 0.01]) out.hints.push(Object.assign(await run({ latencyHint: n }), { requestedSec: n }));
+  } catch (e) { out.error = String(e); }
+  try { const d = await navigator.mediaDevices.enumerateDevices(); out.outputs = d.filter(x => x.kind === 'audiooutput').length; } catch (e) {}
+  try { out.midi = !!navigator.requestMIDIAccess; } catch (e) {}
+  console.log('PROBE ' + JSON.stringify(out));
+})();
+</script>
