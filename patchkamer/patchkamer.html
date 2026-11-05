@@ -782,6 +782,7 @@ const I18N={
    "m.mastering_in":"<b>mastering in</b> {0}",
    "m.mastering_uit":"<b>mastering uit</b> {0}",
    "m.soort_mastering":"mastering",
+   "m.mastering_categorie":"Mastering",
    "m.kan_geen_mastering_ontvangen":" kan geen mastering-opdrachten ontvangen (configureMastering ontbreekt)",
    "m.mastering_geen_regie":"Alleen een apparaat met een mastering-uitgang kan mastering aansturen.",
    "m.mastering_onbekende_actie":"Onbekende masteringactie: {0}",
@@ -1286,6 +1287,7 @@ const I18N={
    "m.mastering_in":"<b>mastering in</b> {0}",
    "m.mastering_uit":"<b>mastering out</b> {0}",
    "m.soort_mastering":"mastering",
+   "m.mastering_categorie":"Mastering",
    "m.kan_geen_mastering_ontvangen":" cannot receive mastering commands (configureMastering is missing)",
    "m.mastering_geen_regie":"Only a device with a mastering output can direct mastering.",
    "m.mastering_onbekende_actie":"Unknown mastering action: {0}",
@@ -2347,7 +2349,7 @@ function placeNew(id,version){
   afterAdd(nid);
 }
 // ---------- bibliotheek: categorieën, zoeken, slepen naar de vloer ----------
-const CAT_DEFAULT=[['synth',pkt('m.synths'),'var(--event)'],['groove',pkt('m.drums_grooveboxen'),'#e4574a'],['sequencer',pkt('m.sequencers'),'#f4d35e'],['mod',pkt('m.modulatie'),'var(--mod)'],['effect',pkt('m.effecten'),'var(--audio)'],['mix',pkt('m.mixen_uitgang'),'var(--sel)'],['tool',pkt('m.meten_hulpmiddelen'),'var(--muted)'],['other',pkt('m.overig'),'var(--muted)']];
+const CAT_DEFAULT=[['synth',pkt('m.synths'),'var(--event)'],['groove',pkt('m.drums_grooveboxen'),'#e4574a'],['sequencer',pkt('m.sequencers'),'#f4d35e'],['mod',pkt('m.modulatie'),'var(--mod)'],['effect',pkt('m.effecten'),'var(--audio)'],['mastering',pkt('m.mastering_categorie'),'var(--mastering)'],['mix',pkt('m.mixen_uitgang'),'var(--sel)'],['tool',pkt('m.meten_hulpmiddelen'),'var(--muted)'],['other',pkt('m.overig'),'var(--muted)']];
 const BUILTIN_CATS=new Set(CAT_DEFAULT.map(x=>x[0]));
 var CATS=CAT_DEFAULT.map(x=>[x[0],x[1]]), CATCOL=Object.fromEntries(CAT_DEFAULT.map(x=>[x[0],x[2]]));
 const CAT_PALETTE=['#5f8dff','#ff8fd1','#8bdb6a','#c9b080','#2ec27e','#e76f51','#7fd6ff','#d98cff','#f4a261','#e4574a','#f4d35e','#a0a8b4'];
@@ -2379,7 +2381,7 @@ function cleanCatList(list){ const out=[], seen=new Set();
   (Array.isArray(list)?list:[]).forEach(c=>{ if(!c||typeof c!=='object') return; const key=String(c.key||'').trim().slice(0,40), label=String(c.label||'').trim().slice(0,60);
     if(!/^[a-z0-9_-]+$/i.test(key)||!label||seen.has(key)) return; seen.add(key); const color=typeof c.color==='string'&&/^(#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))$/i.test(c.color)?c.color:undefined; out.push({key,label,...(color?{color}:{})}); });
   if(!seen.has('other')) out.push({key:'other',label:pkt('m.overig')}); return out; }
-const CAT_KEYS={synth:'m.synths',groove:'m.drums_grooveboxen',sequencer:'m.sequencers',mod:'m.modulatie',effect:'m.effecten',mix:'m.mixen_uitgang',tool:'m.meten_hulpmiddelen',other:'m.overig'};
+const CAT_KEYS={synth:'m.synths',groove:'m.drums_grooveboxen',sequencer:'m.sequencers',mod:'m.modulatie',effect:'m.effecten',mastering:'m.mastering_categorie',mix:'m.mixen_uitgang',tool:'m.meten_hulpmiddelen',other:'m.overig'};
 function pkCatLabel(c){ const k=CAT_KEYS[c.key]; return k&&Object.values(I18N).some(d=>d[k]===c.label)?pkt(k):c.label; }
 function applyCats(){ const list=LIB.catList&&LIB.catList.length?LIB.catList:CAT_DEFAULT.map(x=>({key:x[0],label:x[1]}));
   CATS=list.map(c=>[c.key,pkCatLabel(c)]); CATCOL={}; list.forEach((c,i)=>{ CATCOL[c.key]=c.color||(CAT_DEFAULT.find(x=>x[0]===c.key)||[])[2]||CAT_PALETTE[i%CAT_PALETTE.length]; });

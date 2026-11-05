@@ -66,7 +66,7 @@ export default {
   name: 'Readable name',         // short; shown on the card and in the library
   version: '1.0.0',              // semver x.y.z
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
-  category: 'effect',            // optional: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool'
+  category: 'effect',            // optional: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool' | 'mastering'
   ui: { width: 360, minWidth: 260, jacks: false },   // optional, see §12
   i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optional (v1.11): names per language, see §12c
   ports: {
@@ -89,7 +89,7 @@ export default {
 
 **`kind`** is a hint for the library and for the validator, not a restriction. Only `kind: 'output'` may connect to `ctx.destination`. A `modulator` has at least one `modOut`.
 
-**`category`** determines where the device is in the library. Without a category the host derives it from `kind`.
+**`category`** determines where the device is in the library. Without a category the host derives it from `kind`. `'mastering'` (v1.12) is the library group for devices that finish a mix (mastering effects, the Master Director, the mix check and the listening output).
 
 **`i18n`** (v1.11, optional) gives the name of the device and of its ports per language: `{ en: { name: '…', ports: { in: '…' } } }`. The host applies the name in `host.lang` and otherwise uses `name` and the port names from `ports`. See §12c.
 
