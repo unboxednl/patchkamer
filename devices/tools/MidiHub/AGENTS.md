@@ -11,8 +11,8 @@ Een controller tussen MIDI-bronnen en de apparaten in de werkruimte (contract v1
 | Bestand | `midi-hub.patchkamer-device.js` (in deze map) |
 | `id` | `nl.patchkamer.midihub`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
 | Soort | `utility`; krijgt dus **presets** en nooit tunes |
-| Poorten | eventingang `in` (MIDI in), multi-MIDI-ingang `tracks` (Tracks in), en per actief apparaat met een eventingang een eventuitgang `o_<apparaat-id>` (→ naam); geen audio |
-| Contract | v1.13 |
+| Poorten | eventingangen `in`, `in2`, `in3`, `in4` (MIDI in 1 tot 4, één per fysiek MIDI-apparaat), multi-MIDI-ingang `tracks` (Tracks in), en per actief apparaat met een eventingang een eventuitgang `o_<apparaat-id>` (→ naam); geen audio |
+| Contract | v1.13 (apparaatversie 1.13.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Hoe het werkt
@@ -29,8 +29,8 @@ Een controller tussen MIDI-bronnen en de apparaten in de werkruimte (contract v1
 | Veld | Wat |
 |---|---|
 | `targets[]` | `{ id, def, name, port, linked, routes[], maps[] }`: het apparaat-id (zoals de host het geeft), de definitie, de naam, zijn eventingang, of de hub de kabel legde, de noteroutes en de koppelingen |
-| `targets[].routes[]` | `{ src: 'in' \| 'tr', ch: 0…16, key, track }` |
-| `targets[].maps[]` | `{ src: { k: 'cc' \| 'note' \| 'bend' \| 'pressure' \| 'name', n, id, ch } \| null, ctl, label, min, max, inv, toggle }` |
+| `targets[].routes[]` | `{ src: 'in' \| 'tr', ch: 0…16, port, key, track }` (`port` is `''` voor alle ingangen of `in`…`in4`) |
+| `targets[].maps[]` | `{ src: { k: 'cc' \| 'note' \| 'bend' \| 'pressure' \| 'name', n, id, ch, port } \| null, ctl, label, min, max, inv, toggle }` |
 | `library` | `{ <apparaat-def>: { <naam>: rijen } }` |
 
 ## Wat je niet kunt testen zonder hardware
