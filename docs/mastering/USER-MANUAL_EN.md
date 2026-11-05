@@ -477,7 +477,7 @@ A transparent listening output: the sound goes unchanged to the output of the br
 
 | Control | What it does | Range (start) |
 |---|---|---|
-| **Listening volume** | The volume of what you hear. It does not change the level in the chain before it. | 0 to 100% (70%) |
+| **Volume** | The listening volume: the volume of what you hear. It does not change the level in the chain before it. | 0 to 100% (70%) |
 
 ### Ports
 
