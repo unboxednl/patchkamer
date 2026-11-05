@@ -14,8 +14,8 @@ Het verschil met `Pulse Drums` (drumcomputer, geeft geluid): Chord Sequencer is 
 | `id` | `nl.patchkamer.chordsequencer`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
 | Naam | `Chord Sequencer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Transpositie`, `Spoor A` … `Spoor D`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
-| Poorten | eventingang `transpose` (Transpose), modulatie-ingang `mod`, eventuitgangen `a`, `b`, `c`, `d` (Track A–D); geen audio |
-| Contract | v1.11 |
+| Poorten | eventingangen `transpose` (Transpose) en `live` (Live, voor een toetsenbord of andere notenbron), modulatie-ingang `mod`, eventuitgangen `a`, `b`, `c`, `d` (Track A–D); geen audio |
+| Contract | v1.11 (apparaatversie 1.11.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Sequencer, `nl.patchkamer.puls`, stond bij de synths). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -26,18 +26,21 @@ Alleen apparaten met `kind: 'instrument'` hebben tunes. Chord Sequencer is een `
 
 ## De state
 
-`getPreset()` geeft `getState()` zonder `editTrack` en `editStep` (werkstand: welk spoor je bewerkt). Een preset laat die velden bij het laden staan. De state is gewone JSON.
+`getPreset()` geeft `getState()` zonder `editTrack`, `editStep` en `record` (werkstand: welk spoor je bewerkt, of er wordt opgenomen). Een preset laat die velden bij het laden staan. De state is gewone JSON.
 
 | Veld | Wat | Bereik | Start |
 |---|---|---|---|
 | `scene` | Actieve scène (0 = scène 1) | hele getallen 0 … 3 | 0 |
 | `launch` | Scènewissel: `"bar"` op de volgende maat, `"now"` direct | `"bar"` of `"now"` | `"bar"` |
 | `seed` | Zaad van de speelkans (dezelfde seed en state geven steeds dezelfde noten) | hele getallen 0 … 4294967295 | 18743 |
+| `thru` | Live doorgeven aan het gekozen spoor. **Staat alleen in de state als het `false` is** | alleen `false` | (ontbreekt = aan) |
+| `rquant` | Kwantiseren bij inspelen (naar het raster van het spoor). **Alleen in de state als `false`** | alleen `false` | (ontbreekt = aan) |
+| `record` | Opnemen aan. Werkstand, **niet in een preset**; alleen in de state als `true` | alleen `true` | (ontbreekt = uit) |
 | `editTrack`, `editStep` | Werkstand (niet in een preset) | 0 … 3 en 0 … 15 | 0 |
 | `t0gate` … `t3gate` | Nootlengte per spoor, als deel van de nootdeling | 0,1 … 1,5 | 0,7 |
 | `t0velocity` … `t3velocity` | Velocity per spoor | 0,05 … 1 | 0,8 |
 | `t0transpose` … `t3transpose` | Transpositie per spoor in halve tonen (wordt afgerond bij het spelen) | −24 … 24 | 0 |
-| `scenes` | Lijst van **vier teksten**: per scène een JSON-tekst met een lijst van vier sporen (zie hieronder) | elke tekst korter dan 30000 tekens | vier scènes met de standaardsporen |
+| `scenes` | Lijst van **vier teksten**: per scène een JSON-tekst met een lijst van vier sporen (zie hieronder) | elke tekst korter dan 100000 tekens | vier scènes met de standaardsporen |
 
 Een getal buiten het bereik wordt afgekapt; een tekst, `NaN`, `null` of een ontbrekende waarde geeft de startwaarde. Een scène die geen geldige JSON-lijst is, geeft de standaardscène.
 
@@ -52,17 +55,143 @@ Een getal buiten het bereik wordt afgekapt; een tekst, `NaN`, `null` of een ontb
 | `root` | Grondtoon als MIDI-nootnummer | 24 … 96 | 48 / 36 / 60 / 72 |
 | `quality` | Akkoordsoort: `major` (0,4,7), `minor` (0,3,7), `sus` (0,5,7), `minor7` (0,3,7,10), `fifth` (0,7), `single` (alleen 0) | een van die zes | `minor` / `single` / `minor` / `minor` |
 | `inversion` | Omkeerligging: zoveel keer gaat de laagste noot een octaaf omhoog | 0 … 3 | 0 |
-| `mode` | `chord` alle noten tegelijk, `arp` de noten om de beurt (per afgespeelde stap de volgende), `pulse` alleen de grondtoon | een van die drie | `chord` / `arp` / `chord` / `chord` |
+| `mode` | `chord` alle noten tegelijk, `arp` de noten om de beurt (per afgespeelde stap de volgende), `pulse` alleen de grondtoon, `notes` speelt de opgenomen of getekende noten uit `rec` (zie hieronder) | een van die vier | `chord` / `arp` / `chord` / `chord` |
 | `length` | Patroonlengte in stappen; elk spoor loopt onafhankelijk | 1 … 16 | 16 / 12 / 7 / 5 |
 | `division` | Nootdeling in zestiende noten: 1 = 1/16, 2 = 1/8, 4 = 1/4, 8 = 1/2 | 1, 2, 4 of 8 | 4 / 2 / 1 / 2 |
 | `steps` | Zestien getallen (0 of 1): speelt deze stap. Alleen de eerste `length` tellen | lijst van 16 | A: 1 op 0, 4, 8, 12; de andere sporen allemaal 1 |
 | `progression` | Vier getallen: halve tonen die bij de grondtoon opgeteld worden in maat 1, 2, 3, 4 van de cyclus | 4 × −24 … 24 | `[0,3,-2,5]` |
 | `probability` | Kans dat een stap speelt | 0 … 1 | 1 |
 | `ratchet` | Herhalingen per stap (de nootlengte wordt gedeeld) | 1 … 4 | 1 |
+| `grid` | Raster van het spoor: 2 = 1/32, 4 = 1/64. **Alleen aanwezig als het niet 1 (= 1/16) is** | 2 of 4 | (ontbreekt = 1/16) |
+| `vel` | Velocity per stap: 16 getallen die met de velocity van het spoor worden vermenigvuldigd. **Alleen aanwezig als er iets anders dan 1 in staat** | 16 × 0,05 … 1 | (ontbreekt = alles 1) |
+| `len` | Lengte per stap: 16 getallen die met de gate en de nootlengte worden vermenigvuldigd. **Alleen aanwezig als er iets anders dan 1 in staat** | 16 × 0,1 … 4 | (ontbreekt = alles 1) |
+| `bars` | Aantal maten van de lus bij `mode: "notes"` (alleen aanwezig als niet 1) | 1 … 4 | (ontbreekt = 1) |
+| `rec` | De noten van `mode: "notes"`: lijst van `[positie, noot, velocity, lengte]`, hoogstens 256, gesorteerd op positie (alleen aanwezig als niet leeg) | zie hieronder | (ontbreekt = leeg) |
 
 Hoe het speelt: op elke zestiende noot (`onStep`) speelt een spoor alleen als de stapteller een veelvoud van `division` is. Dan telt het spoor zijn eigen teller door (modulo `length`), kijkt of `steps[teller]` aan staat, en gooit de speelkans. De noten zijn `root + progression[maat % 4] + transpose (spoor) + transpositie van de ingang` plus de akkoordtonen, afgekapt op 0 … 127. De duur is `nootdeling × stap / ratchet × gate`. Velocity is die van het spoor. Alles loopt vanaf stap 0 van de transportstart; een stop zet de tellers en de zaadwaarde terug.
 
 De ingang `transpose` neemt een `note` of `noteon`: nootnummer 60 (C4) is nul, daaromheen ±36 halve tonen. Een `panic` zet de transpositie terug op 0.
+
+## Raster, timing, velocity en lengte (opslagformaat)
+
+**Alles in de state is gewone JSON; een nieuw veld dat op zijn standaard staat, staat er niet in.** Een oude state (zonder `grid`, `vel`, `len`, `bars`, `rec`, `thru`, `rquant`) klinkt dus precies als vroeger en geeft bij `getState()` dezelfde tekst terug.
+
+### Raster van een stappenspoor (`mode` `chord`, `arp` of `pulse`)
+
+De klok geeft de studio elke zestiende noot (`onStep`). Een stap van het patroon is `division` rasterstappen lang; de rasterstap is 1/16 (`grid` ontbreekt), 1/32 (`grid: 2`) of 1/64 (`grid: 4`). Met `grid: 2` en `division: 1` speelt het patroon dus 32ste noten, met `grid: 4` en `division: 1` 64ste noten. Een stap duurt `sd × division / grid` seconden (`sd` = duur van een zestiende). Het patroon is hoogstens 16 stappen lang (`length`), dus bij 1/64 duurt een patroon van 16 stappen maar een kwart maat: gebruik 1/32 en 1/64 voor korte rollen, trillers en versieringen, en laat de rest van het patroon rusten (nullen in `steps`) als het niet de hele maat moet vullen.
+`division` blijft 1, 2, 4 of 8 rasterstappen; bij `grid: 2` is `division: 2` dus 1/16 en `division: 8` 1/8.
+
+| Je wilt | `grid` | `division` | `length` |
+|---|---|---|---|
+| gewone 1/16, 1/8, 1/4 | ontbreekt | 1, 2, 4 | 1 … 16 |
+| 32ste-roll van een hele halve maat | 2 | 1 | 16 |
+| 64ste-flutter, één keer per kwart maat | 4 | 1 | 8 met 8 nullen erachter (bijvoorbeeld `xxxxxxxx........`) |
+| versiering (grace note) vóór een tel | 2 | 1 | een kort patroon, bijvoorbeeld `x.xx` |
+
+### Velocity en lengte per stap
+
+`vel[j]` en `len[j]` horen bij stap `j` van het patroon. De uitgestuurde `vel` is `velocity van het spoor × vel[j]` (afgekapt op 0,01 … 1) en de uitgestuurde `dur` is `nootlengte × gate × len[j]`, waarbij de nootlengte `sd × division / grid / ratchet` is. Staat er geen `vel` of `len`, dan gelden de oude waarden.
+
+- **Accenten:** zet de `velocity` van het spoor op 0,9 … 1 en geef de gewone stappen 0,5 … 0,8; de accenten 1.
+- **Ghost notes:** 0,2 … 0,35, kort (`len` 0,3 … 0,5).
+- **Crescendo/decrescendo:** een lijst die stijgt of daalt, bijvoorbeeld `0.3 + 0.7 × k / 15`.
+- **Staccato:** `len` 0,3 … 0,5; **legato:** `len` 1 … 1,6 (de noot loopt dan door tot de volgende); `len` boven 1 laat noten van opeenvolgende stappen overlappen, vooral bij `division` 1.
+- **Menselijk:** kleine variaties van ±0,05 … 0,15 op de velocity, niet op alle stappen even groot.
+- Een velocity onder ongeveer 0,1 is nauwelijks hoorbaar op de meeste synths; vel 0 bestaat niet (de minimale waarde is 0,05 per stap).
+
+### Spelwijze `notes`: opgenomen of getekende noten
+
+`rec` is een lijst van `[p, n, v, l]`, gesorteerd op `p`:
+
+| Veld | Wat | Bereik |
+|---|---|---|
+| `p` | Positie in de lus, in **1/64-eenheden** (de fijnste eenheid). Een zestiende is 4 eenheden, een 32ste is 2, een 64ste is 1, een kwart (tel) is 16, een maat is 64 | 0 … `bars × 64 − 1` |
+| `n` | MIDI-nootnummer (60 = C4). De transpositie van het spoor en van de ingang `transpose` wordt erbij opgeteld; de progressie niet | 0 … 127 |
+| `v` | Velocity | 0,01 … 1 |
+| `l` | Lengte in 1/64-eenheden (minimaal 1) | 1 … `bars × 64` |
+
+De lus is `bars` maten lang (1 … 4) en loopt vanaf maat 0 van de transport. Per zestiende speelt het spoor de noten waarvan `p` in die zestiende valt, op `p mod 4 × sd / 4` na het begin ervan. De uitgestuurde `vel` is `v × velocity van het spoor / 0,8` en `dur` is `l × sd / 4 × gate / 0,7`: met de standaardinstellingen (0,8 en 0,7) komt dus precies terug wat is opgeslagen. `division`, `length`, `steps`, `ratchet` en `probability` doen niets in deze spelwijze. Een lijst `rec` hoort bij één spoor in één scène: zet bij een compositie met 4 maten alle 4 maten in dezelfde `rec` (`bars: 4`). Noten die over het einde van de lus lopen zijn niet toegestaan (de lengte wordt afgekapt tot het einde).
+Het `grid` van een `notes`-spoor bepaalt het raster van de editor en van het opnemen (en dus hoe fijn je noten kunt zetten); afspelen gebruikt altijd de opgeslagen eenheden.
+
+## Live spelen en inspelen
+
+- Sluit een toetsenbord (het apparaat Keys of een andere notenbron) aan op de eventingang **Live**. Het **gekozen spoor** (`editTrack`; in de kaart de keuzelijst *Edit track*) geeft de noten direct door naar zijn uitgang (A–D), zodat de synth die daaraan hangt klinkt zonder tweede kabel van het toetsenbord. `thru: false` zet dat uit.
+- Doorgegeven wordt `note` (met `dur`), `noteon` (aangehouden, velocity blijft), `noteoff`, `panic` en `allnotesoff`; het nootnummer wordt op 0 … 127 afgekapt, de velocity op 0,01 … 1 (ontbreekt die: 0,8). Er wordt niet getransponeerd. Bij wisselen van het gekozen spoor krijgt de oude uitgang een `noteoff` voor elke nog aangehouden noot. Is het toetsenbord óók rechtstreeks met de synth verbonden, dan klinkt de noot dubbel: dat is een keuze van de gebruiker; het apparaat stuurt zelf nooit dubbel.
+- **Opnemen:** met `record: true` (knop *Record*) en de transport lopend schrijft elke live noot zich in het gekozen spoor; een spoor dat nog niet in `notes` staat wordt omgezet naar `notes` (de oude instellingen blijven in het spoor staan). De positie komt uit de laatste klokstap; een `note` met `dur` of een `noteon` met `noteoff` geeft de lengte. Met `rquant` aan (standaard) worden positie en lengte naar het raster van het spoor afgerond (lengte minimaal één rasterstap); uit: naar 1/64. Een noot op dezelfde positie en toon vervangt de vorige. Het opnemen is een werkstand en geen onderdeel van een preset.
+- Een agent hoeft niet live te spelen: schrijf `rec` direct (zie de voorbeelden).
+
+## Componeren met Chord Sequencer: gids voor agents
+
+Er zijn drie manieren om iets te maken, vaak in één spoor gecombineerd:
+
+1. **Akkoordspoor** (`chord`): een akkoordsoort, een grondtoon en vier progressiegetallen; één of twee regels JSON geven een hele harmonische cyclus.
+2. **Patroonspoor** (`arp` of `pulse`): een ritmisch figuurtje op de akkoordtonen of de grondtoon, met `steps`, `vel` en `len`. Bas, ostinato's, arpeggio's, rollen.
+3. **Notenspoor** (`notes`): een melodie, hook of basloop noot voor noot, met eigen velocity en lengte. Dit is de enige manier voor een melodie die niet uit de akkoordtonen bestaat.
+
+### Toonsoort en akkoorden
+
+`root` van de sporen A en B zet de toonsoort (bijvoorbeeld 48 = C3). Alle sporen gebruiken dezelfde `progression` voor een samenhangende cyclus. De akkoordsoort is **per spoor vast**, niet per maat. Kies dus soort en progressie samen:
+- alleen `minor`/`minor7` met i, iv, v (`[0,5,7,5]` = i iv v iv): alle akkoorden blijven in de natuurlijke mineurtoonladder;
+- alleen `major` met I, IV, V (`[0,5,7,5]`), of I bVII IV (`[0,-2,5,0]`), of I bVI bVII (`[0,8,10,0]`, filmisch);
+- `fifth` of `sus` voor elke progressie, ook i VI III VII (`[0,-4,3,-2]`) of i bVII v bVII; kies deze als het akkoord mineur én majeur moet kunnen klinken;
+- een arpeggio of belspoor gebruikt zijn eigen `quality`; laat die dezelfde zijn als die van het akkoordspoor, of `fifth`/`single`, anders botst hij met de progressie.
+Een melodie in `notes` is niet getransponeerd door de progressie: kies de noten zelf in de toonsoort en zet ze op de akkoordtonen van de maat waarin ze vallen (de progressie wisselt per maat, `bar mod 4`).
+
+### Ritme: waar zet je wat
+
+- Positie van een tel: tel 1 van maat 0 is `p = 0`; elke tel 16 eenheden; "en" van een tel 8; de zestiende na een tel 4. Een 1/32-noot na een tel is 2 eenheden, 1/64 is 1.
+- Lange noten (pads): akkoord op `division: 8`, `steps: [1,0]`, `len` 1 … 1,6.
+- Drive (bas): `division: 2` (1/8) met `steps` allemaal 1, of op de tellen (`division: 4`).
+- Synco: `division: 1` met een patroon als `x..x..x...x.x...`.
+- Rolls/versieringen: `grid` 2 of 4 met `division: 1` (zie de tabel).
+- Swing en humanize: dit apparaat kent geen swing; maak lichte verschillen met `vel`, `len`, `probability` (0,7 … 0,95) en bij `notes` met posities die 1 of 2 eenheden naast het raster liggen (zet dan `rquant` uit bij het opnemen, of schrijf `rec` direct).
+
+### Velocity en dynamiek per rol
+
+| Rol | Velocity van het spoor | Per stap |
+|---|---|---|
+| Akkoorden / pads | 0,55 … 0,75 | zacht en gelijkmatig; bij stabs 0,5 … 1 afwisselend |
+| Bas | 0,8 … 0,95 | accenten 1 op de tellen, tussendoor 0,5 … 0,7, ghost notes 0,25 |
+| Pulse / arp | 0,55 … 0,7 | accent op de eerste van elke vier (1), de rest 0,45 … 0,6; crescendo over een maat bij een opbouw |
+| Bells / melodie | 0,55 … 0,85 | hoge noten van een melodie iets zachter, de doelnoot van een frase (de langste) het hardst |
+
+Dynamiek tussen de scènes: de scène *breakdown* laat bas en pulse uit; de scène *lift* zet alles aan en kan de bells een octaaf hoger zetten (`root` +12).
+
+### Voorbeelden (JSON)
+
+Een staprij met accenten en een ghost note (spoor B, bas):
+```json
+{ "enabled": true, "root": 36, "quality": "single", "mode": "pulse", "length": 8, "division": 2,
+  "steps": [1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0], "progression": [0,5,7,5], "probability": 1, "ratchet": 1,
+  "vel": [1,0.5,0.8,0.5,0.9,0.25,0.8,0.6,1,1,1,1,1,1,1,1],
+  "len": [1.2,0.5,0.9,0.5,1.2,0.3,0.9,0.7,1,1,1,1,1,1,1,1] }
+```
+Een 32ste-roll van acht noten (spoor C, `grid: 2`):
+```json
+{ "enabled": true, "root": 60, "quality": "minor", "mode": "arp", "length": 8, "division": 1,
+  "steps": [1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0], "progression": [0,5,7,5], "probability": 1, "ratchet": 1,
+  "grid": 2, "vel": [0.9,0.5,0.9,0.5,0.9,0.5,0.9,0.5,1,1,1,1,1,1,1,1] }
+```
+Een melodie van vier maten in A mineur (spoor D, `notes`; `p` is `16 × tel`, `4 × zestiende`):
+```json
+{ "enabled": true, "root": 72, "quality": "minor", "mode": "notes", "length": 5, "division": 2,
+  "steps": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], "progression": [0,5,7,5], "probability": 1, "ratchet": 1,
+  "bars": 4,
+  "rec": [[0,69,0.9,8],[8,72,0.65,4],[12,71,0.7,4],[16,76,1,16],[32,74,0.8,8],[40,72,0.6,4],[44,71,0.7,4],[48,72,0.95,16]] }
+```
+In `scenes` staat elke scène als **tekst**: `JSON.stringify` van een lijst van vier van zulke sporen.
+
+### Fouten die agents niet moeten maken
+
+- `p` buiten de lus (≥ `bars × 64`) of een noot die voorbij het einde loopt: wordt afgekapt, de bedoeling gaat verloren.
+- Twee noten met dezelfde `p` en `n`: de tweede vervangt de eerste. Hangende, overlappende noten van dezelfde toon: laat de lengte voor de volgende noot van die toon eindigen.
+- `vel` 0 of een negatieve waarde: de minimale waarde is 0,05 per stap en 0,01 per noot.
+- Een `len` van 4 met `division` 1 en veel noten tegelijk: de ontvangende synth raakt zijn stemmen kwijt; houd lange noten bij `division` 4 of 8.
+- `grid` 4 met een lang patroon: het duurt maar een kwart maat. Vul de rest van de maat niet met 1-en tenzij je een roll van een hele tel wilt.
+- Alle stappen even hard laten klinken en geen `vel`: dat klinkt mechanisch; geef minstens het spoor een patroon van accenten.
+- `rec` in een spoor dat niet `mode: "notes"` heeft: het wordt bewaard maar niet gespeeld.
+- Het veld `record` of `editTrack` in een preset zetten.
+- Een melodie schrijven zonder naar de akkoorden van de maat te kijken: een akkoord wisselt elke maat (`bar mod 4`).
 
 ### Instellen voor een goede preset
 
@@ -82,12 +211,17 @@ De ingang `transpose` neemt een `note` of `noteon`: nootnummer 60 (C4) is nul, d
 - Geen routing in de state: de kabels naar de synths horen er niet in. Geen velden verzinnen.
 - Geen `editTrack` of `editStep` in een preset.
 
+## Het presetpack
+
+`../../../presets/chord-sequencer.patchkamer-presets.json` heeft 80 presets in 14 mappen. De eerste 60 (elf stijlen: Pop, Ballad, Cinematic, Film Score, Ambient, Trance, Synthwave, Lo-fi, Neo-classical, Deep House, Funk & Disco) gebruiken alleen de oude velden. **Dynamics** (8) gebruikt `vel` en `len` (accenten, ghost notes, crescendo, legato en staccato), **Rolls** (6) gebruikt `grid` 2 en 4 (32ste- en 64ste-rollen, versieringen, trillers) en **Melodies** (6) gebruikt de spelwijze `notes` met uitgeschreven melodieën, basloopjes en arpeggio's van vier maten in een vaste toonsoort. Wijzig bestaande presets niet.
+
 ## Wat het apparaat met een state doet (getest)
 
 - `setState({})` geeft alle startwaarden; `setState(getState())` geeft dezelfde state terug; `setPreset({})` geeft de startwaarden en laat `editTrack` en `editStep` staan.
 - Ongeldige waarden (`NaN`, `Infinity`, tekst, `null`, ongeldige JSON in `scenes`, een lijst met rommel) geven de standaard of worden afgekapt; er komt geen uitzondering.
 - De kaart bouwt zich opnieuw op bij `setState`, dus alle knoppen, keuzes en stapknoppen volgen.
 - Ook bij rommel op de ingang en in `onStep` (`NaN`, `Infinity`, tekst, stapdelen) komen er alleen eindige noten van 0 … 127 uit en speelt het apparaat daarna gewoon verder (300 willekeurige runs, geen enkele fout). Oud en nieuw bestand gaven bij 400 willekeurige runs (89016 gebeurtenissen) precies dezelfde gebeurtenissen.
+- Nieuwe velden: waarden buiten het bereik worden afgekapt (`grid` anders dan 2 of 4 wordt weggelaten, `vel` 0,05 … 1, `len` 0,1 … 4, `bars` 1 … 4, `rec` hoogstens 256 noten met `p` 0 … `bars × 64 − 1`, `n` 0 … 127, `v` 0,01 … 1, `l` 1 … `bars × 64`); rommel in `rec` wordt overgeslagen. Het apparaat stuurt nooit een niet-eindige waarde, een noot buiten 0 … 127, een velocity buiten 0 … 1 of een `dur` ≤ 0 uit, ook niet bij rommel op `live`, `onStep` of in de state (getest met 400 rommelregels).
 - Niet beluisterd; er is geen echte synth aan gekoppeld getest.
 
 ## Controleren
