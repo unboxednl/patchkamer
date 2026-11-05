@@ -253,16 +253,16 @@ You can save a mapping for each kind of device, and as a preset of the hub.
 
 | Control | What it does |
 |---|---|
-| **Sources** | Shows if MIDI input arrives, and the tracks of every sequencer that is connected with a multi-MIDI cable (with track name and channel). |
+| **Sources** | Shows which of the four MIDI inputs have received something (✓), and the tracks of every sequencer that is connected with a multi-MIDI cable (with track name and channel). |
 | **Last input** | The last message that came in, for example **CC 74 · ch 1 = 52%**. Turn a knob to see which number it is. |
 | **Add a device…** | Adds a device of the workspace to the active devices. The hub then puts a cable from its own output to that device. |
 | **×** (top of a device) | Removes the device from the hub and takes its cable away. |
 | **Refresh controls** | Reads the controls on the card of the device again. Use it after you opened another tab of the device. |
-| **Notes from** | One or more sources for the notes of this device: **Keyboard** (with **all channels** or one **channel**), or **Track: sequencer › track name (ch n)**. **+ source** adds one. |
+| **Notes from** | One or more sources for the notes of this device: **Keyboard** (with **all channels** or one **channel**, and **any input** or one of the four MIDI inputs), or **Track: sequencer › track name (ch n)**. **+ source** adds one. |
 | **Reconnect** | Lays the cable to the device again when you removed it yourself. The hub never puts it back by itself. |
 | **Library** | Saved mappings for this kind of device: pick one and **Load**, or type a name and **Save as…**. **Delete** removes the picked one. |
 | **+ mapping** | Adds a row and starts **Learn**. |
-| **Learn** | Turn a knob, move a slider, hit a pad or press a key on your MIDI device. The first message that arrives is the source of the row (CC number, note, pitch bend or channel pressure, with its channel). |
+| **Learn** | Turn a knob, move a slider, hit a pad or press a key on your MIDI device. The first message that arrives is the source of the row (CC number, note, pitch bend or channel pressure, with its channel and the MIDI input it came in on). |
 | **Control** (list) | The control on the device that this knob moves. The list shows every slider, knob, list, tick box and button of the card. |
 | **min** / **max** | The part of the control's range that the knob moves, in percent. Set min 20 and max 80 to keep the control in the middle. |
 | **invert** | Turns the direction round. |
@@ -275,7 +275,7 @@ A knob on the keyboard that is mapped is not sent on to the device as a CC messa
 
 | Port | Kind | Use |
 |---|---|---|
-| **MIDI in** | event in | Connect **Notes / CC** of **Keys / MIDI**, or another MIDI source. |
+| **MIDI in**, **MIDI in 2**, **MIDI in 3**, **MIDI in 4** | event in | Connect **Notes / CC** of **Keys / MIDI**, or another MIDI source. Use one input for each physical MIDI device (see below). |
 | **Tracks in** | multi-MIDI in | Connect the **Tracks** port of a sequencer (Clip Arranger, Chord Sequencer, Pattern Tracker, Pattern Playlist). You can connect more than one sequencer. |
 | **→ device** | event out | One per active device that has an event input. The hub lays these cables itself; they are normal cables that you can remove. |
 
@@ -287,7 +287,8 @@ The multi-MIDI cable is a double, dashed orange cable. It carries all tracks of 
 2. In the hub, choose **Add a device…** › Acid Baselines. The keyboard now plays it.
 3. Click **+ mapping**, turn a knob on your keyboard (the row says for example **CC 74 · ch 1**) and pick **Cutoff** in the list. The knob now moves the cutoff.
 4. Type **My keyboard** under **Library** and click **Save as…**. The next time you can pick it and **Load** it.
-5. To play a track of a sequencer on the synth: connect the sequencer **Tracks** port to **Tracks in**, and in **Notes from** pick **Track: … › Bass**. Remove the **Keyboard** row if the synth must only play the track.
+5. **Two physical MIDI devices at once**, for example a keyboard and a box with knobs: place two **Keys / MIDI** devices and choose in each its own **MIDI input**. Connect the first to **MIDI in** of the hub and the second to **MIDI in 2**. A mapping you learn from a knob remembers the input (for example **CC 74 · ch 1 · MIDI in 2**), so the same CC number on the other device does not move it. Under **Notes from** you can limit the keyboard route to one input.
+6. To play a track of a sequencer on the synth: connect the sequencer **Tracks** port to **Tracks in**, and in **Notes from** pick **Track: … › Bass**. Remove the **Keyboard** row if the synth must only play the track.
 
 ### Presets
 
@@ -299,6 +300,7 @@ The **MIDI Hub Basics** pack has 15 presets in four folders: **Sound Controllers
 - If a device changes its card (for example another tab), press **Refresh controls**. A mapping whose control is gone is shown as *not found* and does nothing.
 - Web MIDI works in Chrome and Edge, and only after you click **Connect MIDI** in **Keys / MIDI**. The hub itself does not open MIDI.
 - The hub changes nothing when you open a workspace or connect a cable: it only reacts to what you play and press.
+- A mapping made before version 1.13.1 has no input and works on all four inputs. Learn it again if two devices send the same CC number.
 - The hub does not play audio.
 
 ## If it does not work

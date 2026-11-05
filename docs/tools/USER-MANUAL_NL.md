@@ -253,16 +253,16 @@ Je kunt een koppeling bewaren per soort apparaat, en als preset van de hub.
 
 | Regelaar | Wat hij doet |
 |---|---|
-| **Bronnen** | Toont of er MIDI-invoer binnenkomt, en de sporen van elke sequencer die met een multi-MIDI-kabel is verbonden (met spoornaam en kanaal). |
+| **Bronnen** | Toont op welke van de vier MIDI-ingangen iets is binnengekomen (✓), en de sporen van elke sequencer die met een multi-MIDI-kabel is verbonden (met spoornaam en kanaal). |
 | **Laatste invoer** | Het laatste bericht dat binnenkwam, bijvoorbeeld **CC 74 · ch 1 = 52%**. Draai aan een knop om te zien welk nummer hij heeft. |
 | **Apparaat toevoegen…** | Voegt een apparaat uit de werkruimte toe aan de actieve apparaten. De hub legt dan een kabel van zijn eigen uitgang naar dat apparaat. |
 | **×** (bovenaan een apparaat) | Haalt het apparaat uit de hub en haalt zijn kabel weg. |
 | **Ververs regelaars** | Leest de regelaars op de kaart van het apparaat opnieuw. Gebruik het nadat je een ander tabblad van het apparaat hebt geopend. |
-| **Noten van** | Een of meer bronnen voor de noten van dit apparaat: **Keyboard** (met **alle kanalen** of één **kanaal**), of **Spoor: sequencer › spoornaam (ch n)**. **+ bron** voegt er een toe. |
+| **Noten van** | Een of meer bronnen voor de noten van dit apparaat: **Keyboard** (met **alle kanalen** of één **kanaal**, en **alle ingangen** of één van de vier MIDI-ingangen), of **Spoor: sequencer › spoornaam (ch n)**. **+ bron** voegt er een toe. |
 | **Opnieuw verbinden** | Legt de kabel naar het apparaat opnieuw als je hem zelf hebt losgehaald. De hub legt hem nooit uit zichzelf terug. |
 | **Bibliotheek** | Bewaarde koppelingen voor dit soort apparaat: kies er een en **Laad**, of typ een naam en **Bewaar als…**. **Wis** verwijdert de gekozen. |
 | **+ koppeling** | Voegt een rij toe en start **Leer**. |
-| **Leer** | Draai aan een knop, beweeg een schuif, sla een pad of druk een toets op je MIDI-apparaat. Het eerste bericht dat binnenkomt is de bron van de rij (CC-nummer, noot, pitch bend of kanaaldruk, met zijn kanaal). |
+| **Leer** | Draai aan een knop, beweeg een schuif, sla een pad of druk een toets op je MIDI-apparaat. Het eerste bericht dat binnenkomt is de bron van de rij (CC-nummer, noot, pitch bend of kanaaldruk, met zijn kanaal en de MIDI-ingang waarop hij binnenkwam). |
 | **Regelaar** (lijst) | De regelaar op het apparaat die deze knop beweegt. De lijst toont elke schuif, knop, lijst, vinkje en knop van de kaart. |
 | **min** / **max** | Het deel van het bereik van de regelaar dat de knop beweegt, in procenten. Zet min op 20 en max op 80 om de regelaar in het midden te houden. |
 | **omkeren** | Draait de richting om. |
@@ -275,7 +275,7 @@ Een gekoppelde knop van het keyboard wordt niet ook nog als CC-bericht naar het 
 
 | Poort | Soort | Gebruik |
 |---|---|---|
-| **MIDI in** | event in | Verbind **Notes / CC** van **Keys / MIDI**, of een andere MIDI-bron. |
+| **MIDI in**, **MIDI in 2**, **MIDI in 3**, **MIDI in 4** | event in | Verbind **Notes / CC** van **Keys / MIDI**, of een andere MIDI-bron. Gebruik één ingang per fysiek MIDI-apparaat (zie hieronder). |
 | **Sporen in** | multi-MIDI in | Verbind de poort **Sporen** van een sequencer (Clip Arranger, Chord Sequencer, Pattern Tracker, Pattern Playlist). Je kunt meer dan één sequencer verbinden. |
 | **→ apparaat** | event uit | Eén per actief apparaat met een eventingang. De hub legt deze kabels zelf; het zijn gewone kabels die je kunt weghalen. |
 
@@ -287,7 +287,8 @@ De multi-MIDI-kabel is een dubbele, gestreepte oranje kabel. Hij draagt alle spo
 2. Kies in de hub **Apparaat toevoegen…** › Acid Baselines. Het keyboard speelt hem nu.
 3. Klik op **+ koppeling**, draai aan een knop op je keyboard (de rij zegt bijvoorbeeld **CC 74 · ch 1**) en kies **Cutoff** in de lijst. De knop beweegt nu de cutoff.
 4. Typ **Mijn keyboard** bij **Bibliotheek** en klik op **Bewaar als…**. De volgende keer kies je hem en klik je op **Laad**.
-5. Een spoor van een sequencer op de synth spelen: verbind de poort **Sporen** van de sequencer met **Sporen in**, en kies bij **Noten van** **Spoor: … › Bass**. Haal de rij **Keyboard** weg als de synth alleen het spoor moet spelen.
+5. **Twee fysieke MIDI-apparaten tegelijk**, bijvoorbeeld een keyboard en een kastje met knoppen: plaats twee **Keys / MIDI**-apparaten en kies in elk zijn eigen **MIDI-ingang**. Verbind de eerste met **MIDI in** van de hub en de tweede met **MIDI in 2**. Een koppeling die je leert onthoudt de ingang (bijvoorbeeld **CC 74 · ch 1 · MIDI in 2**), dus hetzelfde CC-nummer op het andere apparaat beweegt hem niet. Bij **Noten van** kun je de keyboardroute tot één ingang beperken.
+6. Een spoor van een sequencer op de synth spelen: verbind de poort **Sporen** van de sequencer met **Sporen in**, en kies bij **Noten van** **Spoor: … › Bass**. Haal de rij **Keyboard** weg als de synth alleen het spoor moet spelen.
 
 ### Presets
 
@@ -299,6 +300,7 @@ Het pack **MIDI Hub Basics** heeft 15 presets in vier mappen: **Sound Controller
 - Verandert een apparaat zijn kaart (bijvoorbeeld een ander tabblad), druk dan op **Ververs regelaars**. Een koppeling waarvan de regelaar weg is, staat als *niet gevonden* en doet niets.
 - Web MIDI werkt in Chrome en Edge, en pas nadat je in **Keys / MIDI** op **MIDI verbinden** klikt. De hub zelf opent geen MIDI.
 - De hub verandert niets als je een werkruimte opent of een kabel verbindt: hij reageert alleen op wat je speelt en indrukt.
+- Een koppeling van vóór versie 1.13.1 heeft geen ingang en werkt op alle vier de ingangen. Leer hem opnieuw als twee apparaten hetzelfde CC-nummer sturen.
 - De hub speelt geen geluid.
 
 ## Als het niet werkt

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.1 — Vier MIDI-ingangen (MIDI in, 2, 3 en 4) in plaats van één, zodat je meer dan één fysiek MIDI-apparaat tegelijk kunt gebruiken: zet per apparaat een Keys / MIDI op zijn eigen ingang (kies daar de MIDI-ingang) en verbind elk met een eigen ingang van de hub. Een koppeling en een noteroute kunnen op één ingang gelden of op alle; oude koppelingen en routes gelden op alle ingangen en werken dus als voorheen.
 // 1.13.0 — Eerste versie. De MIDI Hub staat tussen je MIDI-bronnen (Keys / MIDI, een controller) en de apparaten in de werkruimte. Hij ziet welke apparaten er staan en laat je er een
 //          toevoegen aan zijn actieve apparaten. Per apparaat kies je waar de noten vandaan komen (het keyboard, met een MIDI-kanaal, of een spoor van een sequencer via de multi-MIDI-kabel,
 //          met de spoornaam erbij) en koppel je knoppen, schuiven, pads en toetsen van je MIDI-apparaat aan elke regelaar op de kaart van dat apparaat (schuiven, draaiknoppen, keuzelijsten,
@@ -11,39 +12,39 @@ const NOTE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const noteName = n => NOTE[((n % 12) + 12) % 12] + (Math.floor(n / 12) - 1);
 const str = (v, d, max) => typeof v === 'string' ? v.slice(0, max || 200) : d;
 const int = (v, a, b, d) => typeof v === 'number' && Number.isFinite(v) ? clamp(Math.round(v), a, b) : d;
-const KINDS = ['cc', 'note', 'bend', 'pressure', 'name'];
+const KINDS = ['cc', 'note', 'bend', 'pressure', 'name'], INS = ['in', 'in2', 'in3', 'in4'];
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
   nl: { title: 'MIDI Hub', hint: 'Koppel je MIDI-apparaat en de sporen van een sequencer aan apparaten, en zet hun knoppen en schuiven op een knop van je keyboard.',
     last: 'Laatste invoer', none: 'nog niets ontvangen', sources: 'Bronnen', noSources: 'Verbind een MIDI-bron (bijvoorbeeld Keys / MIDI) met MIDI in, en een sequencer met Sporen in.',
-    kbd: 'MIDI in', kbdOn: 'ontvangt invoer', kbdOff: 'wacht op invoer', tracks: 'Sporen',
+    kbd: 'MIDI in', inputs: 'Ingangen', kbdOn: 'ontvangt invoer', kbdOff: 'wacht op invoer', tracks: 'Sporen',
     devices: 'Actieve apparaten', addDevice: 'Apparaat toevoegen…', noDevices: 'Nog geen apparaten. Kies er hierboven een om toe te voegen.', remove: 'Verwijder',
     routes: 'Noten van', addRoute: '+ bron', routeNone: 'geen', routeKbd: 'Keyboard', routeTrack: 'Spoor', chAny: 'alle kanalen', ch: 'kanaal',
     cable: 'kabel', cableOk: 'verbonden', cableNone: 'geen kabel', cableLost: 'kabel is los', reconnect: 'Opnieuw verbinden', noInput: 'Dit apparaat heeft geen gebeurtenissen-ingang.',
     maps: 'Koppelingen', addMap: '+ koppeling', learn: 'Leer', learning: 'Draai aan een knop…', learned: 'Geleerd', control: 'Regelaar', pick: 'Kies een regelaar', missing: 'niet gevonden',
     min: 'min', max: 'max', invert: 'omkeren', toggle: 'wissel', clear: 'Alles wissen', refresh: 'Ververs regelaars', counts: n => n + ' regelaar' + (n === 1 ? '' : 's'),
     lib: 'Bibliotheek', libPick: 'Opgeslagen koppeling…', load: 'Laad', save: 'Bewaar als…', del: 'Wis', libName: 'Naam van de koppeling', gone: 'Apparaat staat niet meer in de werkruimte',
-    srcCc: n => 'CC ' + n, srcName: n => 'CC ' + n, srcNote: n => 'Noot ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Kanaaldruk', anyCh: 'ch alle', unmapped: 'nog geen knop geleerd' },
+    inAny: 'alle ingangen', inN: p => (p === 'in' ? 'MIDI in' : 'MIDI in ' + p.slice(2)), srcCc: n => 'CC ' + n, srcName: n => 'CC ' + n, srcNote: n => 'Noot ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Kanaaldruk', anyCh: 'ch alle', unmapped: 'nog geen knop geleerd' },
   en: { title: 'MIDI Hub', hint: 'Connect your MIDI device and the tracks of a sequencer to devices, and put their knobs and sliders on a knob of your keyboard.',
     last: 'Last input', none: 'nothing received yet', sources: 'Sources', noSources: 'Connect a MIDI source (for example Keys / MIDI) to MIDI in, and a sequencer to Tracks in.',
-    kbd: 'MIDI in', kbdOn: 'receiving input', kbdOff: 'waiting for input', tracks: 'Tracks',
+    kbd: 'MIDI in', inputs: 'Inputs', kbdOn: 'receiving input', kbdOff: 'waiting for input', tracks: 'Tracks',
     devices: 'Active devices', addDevice: 'Add a device…', noDevices: 'No devices yet. Pick one above to add it.', remove: 'Remove',
     routes: 'Notes from', addRoute: '+ source', routeNone: 'none', routeKbd: 'Keyboard', routeTrack: 'Track', chAny: 'all channels', ch: 'channel',
     cable: 'cable', cableOk: 'connected', cableNone: 'no cable', cableLost: 'cable was removed', reconnect: 'Reconnect', noInput: 'This device has no event input.',
     maps: 'Mappings', addMap: '+ mapping', learn: 'Learn', learning: 'Move a knob…', learned: 'Learned', control: 'Control', pick: 'Pick a control', missing: 'not found',
     min: 'min', max: 'max', invert: 'invert', toggle: 'toggle', clear: 'Clear all', refresh: 'Refresh controls', counts: n => n + ' control' + (n === 1 ? '' : 's'),
     lib: 'Library', libPick: 'Saved mapping…', load: 'Load', save: 'Save as…', del: 'Delete', libName: 'Name of the mapping', gone: 'This device is no longer in the workspace',
-    srcCc: n => 'CC ' + n, srcName: n => 'CC ' + n, srcNote: n => 'Note ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Channel pressure', anyCh: 'ch any', unmapped: 'no knob learned yet' }
+    inAny: 'any input', inN: p => (p === 'in' ? 'MIDI in' : 'MIDI in ' + p.slice(2)), srcCc: n => 'CC ' + n, srcName: n => 'CC ' + n, srcNote: n => 'Note ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Channel pressure', anyCh: 'ch any', unmapped: 'no knob learned yet' }
 };
 
 const newMap = () => ({ src: null, ctl: '', label: '', min: 0, max: 1, inv: false, toggle: false });
 function normMap(m) {
-  m = m && typeof m === 'object' ? m : {}; const s = m.src && typeof m.src === 'object' && KINDS.includes(m.src.k) ? { k: m.src.k, n: int(m.src.n, -1, 127, -1), id: str(m.src.id, '', 40), ch: int(m.src.ch, 0, 16, 0) } : null;
+  m = m && typeof m === 'object' ? m : {}; const s = m.src && typeof m.src === 'object' && KINDS.includes(m.src.k) ? { k: m.src.k, n: int(m.src.n, -1, 127, -1), id: str(m.src.id, '', 40), ch: int(m.src.ch, 0, 16, 0), port: INS.includes(m.src.port) ? m.src.port : '' } : null;
   const lo = typeof m.min === 'number' && Number.isFinite(m.min) ? clamp(m.min, 0, 1) : 0, hi = typeof m.max === 'number' && Number.isFinite(m.max) ? clamp(m.max, 0, 1) : 1;
   return { src: s, ctl: str(m.ctl, '', 120), label: str(m.label, '', 60), min: lo, max: hi, inv: m.inv === true, toggle: m.toggle === true };
 }
-function normRoute(r) { r = r && typeof r === 'object' ? r : {}; return { src: r.src === 'tr' ? 'tr' : 'in', ch: int(r.ch, 0, 16, 0), key: str(r.key, '', 120), track: str(r.track, '', 80) }; }
+function normRoute(r) { r = r && typeof r === 'object' ? r : {}; return { src: r.src === 'tr' ? 'tr' : 'in', ch: int(r.ch, 0, 16, 0), port: INS.includes(r.port) ? r.port : '', key: str(r.key, '', 120), track: str(r.track, '', 80) }; }
 function normTarget(t) {
   t = t && typeof t === 'object' ? t : {};
   return { id: str(t.id, '', 40), def: str(t.def, '', 120), name: str(t.name, '', 80), port: str(t.port, '', 40), linked: t.linked === true, routes: (Array.isArray(t.routes) ? t.routes : []).slice(0, 16).map(normRoute), maps: (Array.isArray(t.maps) ? t.maps : []).slice(0, 128).map(normMap) };
@@ -57,12 +58,12 @@ function normalize(s) {
 }
 
 export default {
-  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.13.0', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
-  i18n: { nl: { ports: { in: 'MIDI in', tracks: 'Sporen in' } } },
-  ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'MIDI in' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] },
+  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.13.1', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
+  i18n: { nl: { ports: { in: 'MIDI in', in2: 'MIDI in 2', in3: 'MIDI in 3', in4: 'MIDI in 4', tracks: 'Sporen in' } } },
+  ports: { audioIn: [], audioOut: [], eventIn: INS.map((id, i) => ({ id, name: i ? 'MIDI in ' + (i + 1) : 'MIDI in' })), eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en;
-    let state = defaults(), dead = false, shell = null, sh = null, peers = [], bundles = new Map(), ctlCache = new Map(), learn = null, lastText = T.none, lastEl = null, heard = false, root = null, peerSig = '', portsApplied = false;
+    let state = defaults(), dead = false, shell = null, sh = null, peers = [], bundles = new Map(), ctlCache = new Map(), learn = null, lastText = T.none, lastEl = null, heard = new Set(), root = null, peerSig = '', portsApplied = false;
     const liveBars = new Map(), prev = new Map();   // meters en vorige waarde per koppeling (voor het oppakken van een flank)
     const pid = t => 'o_' + t.id;
     const peerOf = id => peers.find(p => p.id === id) || null;
@@ -70,7 +71,7 @@ export default {
     // ---- poorten: één eventuit per actief apparaat met een gebeurtenissen-ingang ----
     function portsNow() {
       const out = state.targets.filter(t => t.port).map(t => ({ id: pid(t), name: '→ ' + (t.name || t.id) }));
-      return { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'MIDI in' }], eventOut: out, modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] };
+      return { audioIn: [], audioOut: [], eventIn: INS.map((id, i) => ({ id, name: i ? 'MIDI in ' + (i + 1) : 'MIDI in' })), eventOut: out, modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] };
     }
     let portSig = '';
     function syncPorts() { const p = portsNow(), sig = JSON.stringify(p.eventOut); if (sig === portSig) return; portSig = sig; try { host.setPorts(self, p); } catch (e) { /* de host kent ons nog niet */ } }
@@ -106,7 +107,7 @@ export default {
       return { k: 'name', n: -1, id: String(ev.id || ''), val: v };
     }
     const sameSrc = (a, b) => a && b && a.k === b.k && (a.k === 'cc' || a.k === 'note' ? a.n === b.n : a.k === 'name' ? a.id === b.id : true);
-    const srcLabel = s => !s ? T.unmapped : (s.k === 'cc' ? T.srcCc(s.n) : s.k === 'note' ? T.srcNote(s.n) : s.k === 'bend' ? T.srcBend : s.k === 'pressure' ? T.srcPress : T.srcName(s.id)) + ' · ' + (s.ch ? 'ch ' + s.ch : T.anyCh);
+    const srcLabel = s => !s ? T.unmapped : (s.k === 'cc' ? T.srcCc(s.n) : s.k === 'note' ? T.srcNote(s.n) : s.k === 'bend' ? T.srcBend : s.k === 'pressure' ? T.srcPress : T.srcName(s.id)) + ' · ' + (s.ch ? 'ch ' + s.ch : T.anyCh) + (s.port ? ' · ' + T.inN(s.port) : '');
     function apply(t, m, mi, s) {
       let v = s.val; if (m.inv) v = 1 - v; v = m.min + v * (m.max - m.min);
       const key = t.id + ':' + mi, c = resolve(t, m); if (!c) return;
@@ -115,19 +116,19 @@ export default {
       const q = Math.round(v * 1024); if (prev.get(key) === q) return; prev.set(key, q); host.setControl(self, t.id, c.key, v);
       const bar = liveBars.get(key); if (bar) bar.style.width = Math.round(clamp(v, 0, 1) * 100) + '%';
     }
-    function onKeyboard(ev) {
+    function onKeyboard(ev, port) {
       const s = srcOf(ev), ch = int(ev.ch, 0, 16, 0);
-      if (!heard) { heard = true; render(); }
+      if (!heard.has(port)) { heard.add(port); render(); }
       if (s) {
-        const shown = s.k === 'note' && ev.type === 'noteoff' ? null : srcLabel({ ...s, ch }) + ' = ' + Math.round(s.val * 100) + '%';
+        const shown = s.k === 'note' && ev.type === 'noteoff' ? null : srcLabel({ ...s, ch, port }) + ' = ' + Math.round(s.val * 100) + '%';
         if (shown) { lastText = shown; if (lastEl) lastEl.textContent = shown; }
-        if (learn && !(s.k === 'note' && ev.type === 'noteoff')) { const t = target(learn.t), m = t && t.maps[learn.m]; if (m) { m.src = { k: s.k, n: s.n, id: s.id || '', ch }; learn = null; render(); return; } learn = null; }
+        if (learn && !(s.k === 'note' && ev.type === 'noteoff')) { const t = target(learn.t), m = t && t.maps[learn.m]; if (m) { m.src = { k: s.k, n: s.n, id: s.id || '', ch, port }; learn = null; render(); return; } learn = null; }
       }
-      if (s) for (const t of state.targets) t.maps.forEach((m, mi) => { if (m.src && m.ctl && sameSrc(m.src, s) && (!m.src.ch || m.src.ch === ch)) { try { apply(t, m, mi, s); } catch (e) { /* de regelaar is weg */ } } });
+      if (s) for (const t of state.targets) t.maps.forEach((m, mi) => { if (m.src && m.ctl && sameSrc(m.src, s) && (!m.src.ch || m.src.ch === ch) && (!m.src.port || m.src.port === port)) { try { apply(t, m, mi, s); } catch (e) { /* de regelaar is weg */ } } });
       for (const t of state.targets) {
-        if (!t.port) continue; const mapped = s && ev.type === 'cc' && t.maps.some(m => m.src && m.ctl && sameSrc(m.src, s) && (!m.src.ch || m.src.ch === ch));
+        if (!t.port) continue; const mapped = s && ev.type === 'cc' && t.maps.some(m => m.src && m.ctl && sameSrc(m.src, s) && (!m.src.ch || m.src.ch === ch) && (!m.src.port || m.src.port === port));
         if (mapped) continue;
-        for (const r of t.routes) if (r.src === 'in' && (!r.ch || r.ch === ch)) { host.emit(self, pid(t), ev); break; }
+        for (const r of t.routes) if (r.src === 'in' && (!r.ch || r.ch === ch) && (!r.port || r.port === port)) { host.emit(self, pid(t), ev); break; }
       }
     }
     function onTrack(ev) {
@@ -140,9 +141,9 @@ export default {
       if (!root) return; root.replaceChildren(); liveBars.clear();
       // bronnen
       const sec = el('div', null, root, 'sec'); el('h3', T.sources, sec);
-      const k = el('div', null, sec, 'line'); el('b', T.kbd + ': ', k); k.appendChild(document.createTextNode(heard ? T.kbdOn : T.kbdOff));
+      const k = el('div', null, sec, 'line'); el('b', T.inputs + ': ', k); k.appendChild(document.createTextNode(INS.map(p => T.inN(p) + ' ' + (heard.has(p) ? '✓' : '–')).join(' · ')));
       for (const b of bundles.values()) { const l = el('div', null, sec, 'line'); el('b', b.label + ': ', l); l.appendChild(document.createTextNode(b.tracks.map(t => t.name + (t.ch ? ' (' + t.ch + ')' : '')).join(' · ') || '–')); }
-      if (!heard && !bundles.size) el('div', T.noSources, sec, 'hint');
+      if (!heard.size && !bundles.size) el('div', T.noSources, sec, 'hint');
       const act = el('div', null, sec, 'line act'); el('b', T.last + ': ', act); lastEl = el('span', lastText, act);
       // apparaten
       const dv = el('div', null, root, 'sec'); el('h3', T.devices, dv);
@@ -168,6 +169,7 @@ export default {
           if (r.src === 'tr' && !tl.some(x => x.key === r.key && x.track === r.track)) { const o = el('option', T.routeTrack + ': ' + (r.track || '?') + ' (' + T.missing + ')', sel); o.value = 'tr|' + r.key + '|' + r.track; }
           sel.value = r.src === 'in' ? 'in' : 'tr|' + r.key + '|' + r.track;
           const chs = el('select', null, row); chs.setAttribute('aria-label', T.ch); const a0 = el('option', T.chAny, chs); a0.value = '0'; for (let c = 1; c <= 16; c++) { const o = el('option', T.ch + ' ' + c, chs); o.value = String(c); } chs.value = String(r.ch); chs.hidden = r.src !== 'in';
+          const ins = el('select', null, row); ins.setAttribute('aria-label', T.kbd); const i0 = el('option', T.inAny, ins); i0.value = ''; for (const q of INS) { const o = el('option', T.inN(q), ins); o.value = q; } ins.value = r.port; ins.hidden = r.src !== 'in'; ins.onchange = () => { r.port = INS.includes(ins.value) ? ins.value : ''; };
           sel.onchange = () => { const v = sel.value; if (v === 'in') { r.src = 'in'; r.key = ''; r.track = ''; } else { const [, k, tr] = v.split('|'); r.src = 'tr'; r.key = k; r.track = tr; } render(); };
           chs.onchange = () => { r.ch = int(parseInt(chs.value, 10), 0, 16, 0); };
           const x = el('button', '×', row); x.type = 'button'; x.setAttribute('aria-label', T.remove); x.onclick = () => { t.routes.splice(ri, 1); render(); };
@@ -221,7 +223,7 @@ export default {
       onEventBundle(port, key, b) { if (dead) return; if (b) bundles.set(key, b); else bundles.delete(key); render(); },
       onEvent(port, ev) {
         if (dead || !ev || typeof ev !== 'object') return;
-        if (port === 'tracks') onTrack(ev); else if (port === 'in') onKeyboard(ev);
+        if (port === 'tracks') onTrack(ev); else if (INS.includes(port)) onKeyboard(ev, port);
       },
       onTransport() {},
       getState() { return JSON.parse(JSON.stringify(state)); },
