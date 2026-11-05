@@ -87,11 +87,15 @@ A device is a file that ends in `.patchkamer-device.js`. Sources are remembered,
 
 **Scan.** The **Scan** button next to a source reads it again. Patchkamer then tells you how many changes it found, split into new and changed devices and new and changed tune and preset packs, for example "3 changes found · 1 new, 1 changed, 1 new packs". The library redraws at once, and the new and changed devices carry a small **new** or **changed** badge for a couple of minutes. The first scan of a source counts everything as new and shows no badges.
 
+**Updating.** A scan also loads the changed code of devices that are already on the floor: such a device is rebuilt with its settings, cables and size, and the message says how many were updated.
+
+**New version of Patchkamer.** At startup (over http or https) Patchkamer compares `patchkamer.html` with the version on GitHub (`main`). If it differs, a notice appears at the bottom right with **View on GitHub**, **Later** and **Do not tell me again for this version**. A file opened through `file://` cannot read itself and gets no notice.
+
 **It can also happen by itself.** Under **Settings → New workspace** Patchkamer can load the device library, the presets and the tunes from GitHub whenever you start with an empty workspace. You can change the three addresses there (section 10). Each one becomes a source of its own in the list, with a **Scan** button.
 
 **Choosing a folder.** On `localhost` or over https, Chrome and Edge remember the folder and Patchkamer sees new devices when you come back to the window. In other cases the browser takes a one-time snapshot of the folder and its prompt says something like "Upload 7 files". Nothing is uploaded, and the number counts every file in the folder, not only devices. Patchkamer reads only the files that end in `.patchkamer-device.js` and then shows the real number of devices. With a snapshot, **Scan** asks you to pick the folder again to see new files.
 
-**Categories.** Devices are grouped by category. Click a category name to fold it. The **Layout** button opens a panel where you can add, rename and delete your own categories and save or load the layout.
+**Categories.** Devices are grouped by category. At startup every category is folded; click a category name to unfold it (searching unfolds the matches by itself). The **Layout** button opens a panel where you can add, rename and delete your own categories and save or load the layout.
 
 **Folders as categories.** If a source has no layout file (`patchkamer-bibliotheek.json`), the first folder a device sits in is its category (`synths/…` becomes the category Synths). If there is a file and it does not know a folder (the file lists the known folders under `folders`; a folder named like a category belongs to that category), that folder is added as an extra category. A device that the file assigns to a category stays there. If everything in a source sits in one shared top folder, that folder does not count.
 
