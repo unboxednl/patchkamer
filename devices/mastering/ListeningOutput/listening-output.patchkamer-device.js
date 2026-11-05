@@ -4,7 +4,7 @@
 // Listening Output: een transparante luisteruitgang: de audio gaat ongewijzigd naar de uitgang van de browser, met alleen een luistervolume (de masteringketen blijft ervoor, zodat je meet wat je hoort).
 const TXT = { nl: { level: 'Luistervolume', port: 'In', name: 'Luisteruitgang' }, en: { level: 'Listening volume', port: 'In', name: 'Listening Output' } };
 export default {
-  id: 'nl.patchkamer.listeningoutput', name: 'Listening Output', version: '1.11.1', kind: 'output', category: 'mix',
+  id: 'nl.patchkamer.listeningoutput', name: 'Listening Output', version: '1.12.0', kind: 'output', category: 'mastering',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const TX = TXT[host && host.lang] || TXT.en, DEFAULT = 0.7;
