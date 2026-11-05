@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.4 — De rumble is minder aanwezig: de fabrieksstand heeft een cutoff van 210 Hz (voorheen 700 Hz) en 20% minder rumble (0,14 in plaats van 0,18; de Techno DNA-kits 0,13, Deep dub 0,2 en Industrial 0,26). Alleen de beginwaarden veranderen; opgeslagen tunes en songs houden hun eigen waarden en het geluid van de rest is ongewijzigd.
 // 1.11.3 — De bassdrum klinkt langer door: de body van de kick werd door twee opeenvolgende afbouwen (in de toon en in de envelope) al na ongeveer 60 ms zwak. De toon loopt nu door tot het eind van de envelope en de envelope houdt het niveau even vast (een vijfde van de decay). Andere instrumenten ongewijzigd.
 // 1.11.2 — Plafond achter de stereomix: tot 0,8 (−2 dBFS) ongewijzigd, daarboven zacht naar 1,0 in plaats van boven 0 dBFS te komen. Geen vertraging. De uitgangen per kanaal blijven ongewijzigd.
 // 1.11.1 — Verbeterd: een nieuw of fabrieks-bassdrumkanaal begint met een lage tuning per klankmodel (voorheen 0, waardoor de kick te hoog klonk). Tunes en bewaarde instellingen houden hun eigen tuning; de motor is ongewijzigd.
@@ -95,14 +96,14 @@ const KIT={
 const cell=()=>({v:0,p:1,r:1,micro:0,every:1,phase:1,fill:0,locks:{}});
 const KICK_TUNE={Punch:-22,Deep:-20,Industrial:-14,Rock:-17,Pop:-22,Jazz:-18,Funk:-23,'Lo-fi':-17};  // een bassdrum begint hoog; deze standaard tuning geeft per klankmodel een echte bassdrum
 function lane(type='kick',model='Deep',i=0){const t=TYPES[type],m=MODEL[model];return {type,model,seqLength:16,fm:1.5,ratio:2.7,body:.85,sub:.18,click:.2,note:t[2],tune:type==='kick'?(KICK_TUNE[model]??-20):0,decay:t[4]*m.decay,tone:t[5],noise:Math.min(1,t[6]*m.noise),sweep:type==='kick'?.65:.25,attack:.001,cutoff:model==='Lo-fi'?4600:18000,resonance:.7,filter:'lowpass',drive:model==='Industrial'?.55:model==='Lo-fi'?.22:0,level:.7,pan:0,mute:false,solo:false,mix:true,choke:type==='closedhat'||type==='openhat'?1:0,steps:Array.from({length:4},()=>Array.from({length:64},cell))};}
-function makeState(kit='Punch'){return {rumble:.18,rumbleTone:700,grit:0,fill:false,stepEdit:0,kit,channels:KIT[kit].map((t,i)=>lane(t,kit,i)),length:16,pattern:0,bank:0,selected:0,run:true,master:.72,human:0,presets:[],editVelocity:.8,editProbability:1,editRatchet:1};}
+function makeState(kit='Punch'){return {rumble:.14,rumbleTone:210,grit:0,fill:false,stepEdit:0,kit,channels:KIT[kit].map((t,i)=>lane(t,kit,i)),length:16,pattern:0,bank:0,selected:0,run:true,master:.72,human:0,presets:[],editVelocity:.8,editProbability:1,editRatchet:1};}
 function groove(s,style){s.channels.forEach(c=>c.steps[s.pattern]=Array.from({length:64},cell));const put=(type,steps,v=.8)=>{const c=s.channels.find(c=>c.type===type);if(c)steps.forEach((n,i)=>c.steps[s.pattern][n]={...cell(),v:i%2?v*.85:v});};
  if(style==='Jazz'){put('kick',[0,10],.5);put('brush',[4,12],.65);put('ride',[0,4,7,8,12,15],.65);put('closedhat',[4,12],.55);}
  else{put('kick',style==='Rock'?[0,6,8,10]:style==='Funk'?[0,3,6,10]:style==='Lo-fi'?[0,7,10]:[0,4,8,12],.92);put('snare',[4,12],.83);put('clap',[4,12],.48);put('closedhat',style==='Rock'?[0,2,4,6,8,10,12,14]:[0,2,4,6,8,10,12,14],.63);put('openhat',[6,14],.45);put('shaker',[1,3,5,7,9,11,13,15],.4);put('ride',style==='Rock'?[0,4,8,12]:[],.4);}
 }
 function cleanLocks(x){const out={};if(x&&typeof x==='object')for(const [key,def] of Object.entries(MOD_DEFS))if(typeof x[key]==='number'&&Number.isFinite(x[key]))out[key]=clamp(x[key],def.min,def.max);return out;}
 function techno(name='Hypnotic'){
- const s=makeState('Punch');s.kit=name;s.channels=['kick','snare','clap','closedhat','openhat','fmperc','conga','rim','fmmetal','ride','fmhat','shaker'].map((t,i)=>lane(t,'Punch',i));s.rumble=name==='Industrial'?.32:name==='Deep dub'?.25:.16;s.grit=name==='Industrial'?.35:0;
+ const s=makeState('Punch');s.kit=name;s.channels=['kick','snare','clap','closedhat','openhat','fmperc','conga','rim','fmmetal','ride','fmhat','shaker'].map((t,i)=>lane(t,'Punch',i));s.rumble=name==='Industrial'?.26:name==='Deep dub'?.2:.13;s.grit=name==='Industrial'?.35:0;
  s.channels[0].decay=name==='Hardgroove'?.22:.4;s.channels[0].sub=.16;s.channels[0].click=.35;s.channels[0].drive=.12;s.channels[8].level=.35;s.channels[10].level=.3;
  for(let p=0;p<4;p++){s.pattern=p;groove(s,'Punch');const put=(i,steps,v)=>steps.forEach((j,k)=>s.channels[i].steps[p][j]={...cell(),v:k%2?v*.8:v});if(name==='Broken')s.channels[0].steps[p]=Array.from({length:64},cell),put(0,[0,3,7,10,14],.9);
  put(5,[1,6,11,14],.5);put(6,name==='Hardgroove'?[0,3,5,7,10,12,15]:[3,10],.5);put(11,[1,3,5,7,9,11,13,15],.35);if(name==='Hypnotic'){s.channels[5].seqLength=15;s.channels[8].seqLength=11;put(8,[0,4,7],.3);}if(name==='Industrial')put(8,[2,7,10,15],.48);if(p===1)put(10,[3,7,11,15],.35);if(p===2){s.channels[4].mute=false;put(9,[0,4,8,12],.4);}if(p===3)put(1,[11,13,14,15],.65);
@@ -141,7 +142,7 @@ const CSS=`
 const OUT_TRIM=.36*4.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.11.3',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.11.4',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
