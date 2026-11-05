@@ -631,9 +631,9 @@ Clip Arranger werkt als een sessieweergave. Per spoor (1 tot 16) zijn er 8 **cli
 
 | Poort | Soort | Waar je hem op aansluit |
 |---|---|---|
-| **MIDI / opname** | eventingang | Een toetsenbord (**Keys**), om door het gekozen spoor te spelen en in de gekozen clip in te spelen. |
-| **Track 1** … **Track 16** | eventuitgangen | Eén per spoor, naar een synth, drone of drumcomputer. |
-| **Sporen** | multi-MIDI uit | Alle sporen in één dubbele gestreepte oranje kabel, met de spoornamen. Verbind hem met **Sporen in** van de [MIDI Hub](../tools/USER-MANUAL_NL.md#midi-hub). |
+| **MIDI** (links) | eventingang | Een toetsenbord (**Keys**), om door het gekozen spoor te spelen en in de gekozen clip in te spelen. |
+| **1**, **2**, … | eventuitgangen | Eén per spoor, naar een synth, drone of drumcomputer. De poorten staan in één rij bovenin de kaart, met alleen het spoornummer, en er zijn er precies zoveel als er sporen zijn (1 tot 16). Haal je een spoor weg, dan verdwijnt zijn kabel. |
+| **Sporen** (rechts) | multi-MIDI uit | Alle sporen in één dubbele gestreepte oranje kabel, met de spoornamen. Verbind hem met **Sporen in** van de [MIDI Hub](../tools/USER-MANUAL_NL.md#midi-hub). |
 
 #### Een voorbeeld
 
