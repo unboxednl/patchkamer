@@ -232,6 +232,10 @@ Bijzondere presets: `Minimal Polymeter Loops` en `Phasing Pulses` leggen één l
 
 Een nieuwe preset maken: bouw de state met bovenstaande velden, zet hem door `setPreset` en `getPreset` (zodat alle velden volledig en genormaliseerd zijn), controleer dat elke waarde ongewijzigd terugkomt en dat de noten binnen 0 – 127 en de velocity binnen 0 – 1 blijven, en voeg hem toe in een bestaande map van het pack. Namen zijn Engels en uniek binnen het pack.
 
+## Een drumcomputer aan een spoor
+
+Hangt er aan de uitgang van een spoor (`track1` …) een apparaat met `noteNames()` (Drum Kit, Pulse Drums, Click Synth, Latin Percussion; contract v1.14), dan toont de drum-editor (`view.editor: "drums"`) de klanken van dat apparaat als rijen, in zijn volgorde, met zijn noten. Bij een nieuwe koppeling schakelt de editor eenmalig van `piano` naar `drums`. De pianorol en de celtitels noemen de klanknamen. Zonder lijst staan er de zes vaste GM-rijen (36 kick, 38 snare, 39 clap, 42 gesloten hihat, 46 open hihat, 37 rim). In de state verandert niets: de cellen houden gewone nootnummers.
+
 ## Documentatie en songs
 
 Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.

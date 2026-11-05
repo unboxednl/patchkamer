@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Patchkamer contract v1.14. Hangt er via de notenkabel een apparaat met noteNames() (een drumcomputer) aan, dan is elke rij van de rol een klank in de volgorde van dat apparaat, met de naam erbij; noten die het apparaat niet kent blijven zichtbaar met een vraagteken. Zonder lijst blijft het de gewone pianorol. Geen wijziging in klank of state.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Step Sequencer (id nl.patchkamer.seq blijft gelijk, eigen map in sequencers; voorheen Sequencer, 16 stappen).
 //   Uitgebreid tot een volwaardige stap-sequencer: patroonlengte 1–64 stappen, raster 1/16, 1/32 of 1/64, per stap noot, velocity, lengte en
 //   microtiming, accent, swing en humanize (vast zaad), pianorol met velocity-strook, live spelen (doorgeven) en inspelen met een toetsenbord
@@ -19,7 +20,7 @@ const EN = {
 const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const MAXN = 64, LO = 12, HI = 108, ROWS = 25;
 export default {
-  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.11.0', category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
+  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.14.0', category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'Notes in' }], eventOut: [{ id: 'notes', name: 'Notes' }] },
   i18n: { nl: { ports: { in: 'Noten in', notes: 'Noten' } } },
   create(ctx, host) {
@@ -73,6 +74,7 @@ export default {
           dirty = true;
         } catch (e) {}
       },
+      onPeers(list) { if (!dead) readTarget(list); },
       onTransport(info) {
         if (dead) return; playing = !!info?.playing; ticks = []; localBar = 0; prevStep = -1; lastTickT = -1;
         if (!playing) { playPos = -1; dirty = true; }
@@ -184,7 +186,7 @@ export default {
       canvas.addEventListener('pointerdown', pdown); canvas.addEventListener('pointermove', pmove); canvas.addEventListener('pointerup', pup); canvas.addEventListener('pointercancel', pup);
       add(panel, 'p', tx('Stuurt note-gebeurtenissen; verbind de oranje uitgang met een synth. Klik in de rol voor een noot, sleep de rechterrand voor de lengte, klik of sleep in de strook voor de velocity.'));
       add(panel, 'p', tx('Sluit een toetsenbord (Keys) aan op de ingang: dat gaat meteen door naar de uitgang. Met Opnemen aan schrijft het de noten in het patroon (tijdens de klok op de plek van de aanslag, anders stap voor stap).'));
-      dirty = true; stopFrame = typeof host.frame === 'function' ? host.frame(self, draw, 30) : null;
+      readTarget(); dirty = true; stopFrame = typeof host.frame === 'function' ? host.frame(self, draw, 30) : null;
     }
     function syncPager() {
       const p = labels.pager; if (!p) return; p.textContent = '';
@@ -194,7 +196,31 @@ export default {
     function transpose(d) { for (let i = 0; i < state.len; i++) if (state.n[i] >= 0) state.n[i] = Math.round(clamp(state.n[i] + d, LO, HI)); state.view = clamp(state.view + (Math.abs(d) >= 12 ? d : 0), 0, 127 - (ROWS - 1)); }
 
     // ---- tekenen --------------------------------------------------------------------------------------------------------------------------
-    const ROWH = 11, ACCH = 14, STRIPH = 60, RULERH = 14, LABW = 32, ROLLH = ROWS * ROWH, H = ROLLH + ACCH + STRIPH + RULERH;
+    const ROWH = 11, ACCH = 14, STRIPH = 60, RULERH = 14, ROLLH = ROWS * ROWH, H = ROLLH + ACCH + STRIPH + RULERH;
+    let LABW = 32;
+    // Rijen volgen de drumcomputer (contract v1.14): hangt er via de notenkabel een apparaat met noteNames() aan, dan is elke rij een klank, in de volgorde van dat apparaat.
+    // Noten in het patroon die het apparaat niet kent, blijven zichtbaar als rij met alleen het nootnummer. Zonder lijst is het de gewone pianorol.
+    const LANE_LABW = 92;
+    let peerNames = [], namesSig = '', lanes = null;
+    function readTarget(list) {
+      let names = [];
+      try {
+        const cs = typeof host.cablesFrom === 'function' ? host.cablesFrom(self, 'notes') : [], ps = Array.isArray(list) ? list : (typeof host.peers === 'function' ? host.peers(self) : []);
+        for (const k of cs) { const p = k && ps.find(x => x && x.id === k.to); if (p && Array.isArray(p.noteNames) && p.noteNames.length) { names = p.noteNames; break; } }
+      } catch (e) { names = []; }
+      const sig = JSON.stringify(names); if (sig !== namesSig) { namesSig = sig; peerNames = names; dirty = true; }
+    }
+    function refreshRows() {
+      if (!peerNames.length) { lanes = null; LABW = 32; return; }
+      const seen = new Set(), rows = [];
+      for (const x of peerNames) { const n = Math.round(x.note); if (rows.length >= ROWS || seen.has(n) || !(n >= 0 && n <= 127)) continue; seen.add(n); rows.push({ note: n, name: String(x.name), named: true }); }
+      const extra = new Set(); for (let i = 0; i < state.len; i++) { const m = state.n[i]; if (m >= 0 && !seen.has(m)) extra.add(m); }
+      for (const m of [...extra].sort((a, b) => a - b)) if (rows.length < ROWS) rows.push({ note: m, name: noteName(m), named: false });
+      lanes = rows; LABW = LANE_LABW;
+    }
+    const rowH = () => lanes ? ROLLH / lanes.length : ROWH;
+    const noteOfRow = r => lanes ? lanes[clamp(r, 0, lanes.length - 1)].note : clamp(state.view + (ROWS - 1) - r, LO, HI);
+    const rowOfNote = m => lanes ? lanes.findIndex(x => x.note === m) : state.view + (ROWS - 1) - m;
     function resize(w) { cw = Math.max(200, w); if (!canvas) return; const dpr = Math.min(2, (typeof devicePixelRatio === 'number' && devicePixelRatio) || 1); canvas.width = Math.round(cw * dpr); canvas.height = Math.round(H * dpr); g2.setTransform(dpr, 0, 0, dpr, 0, 0); dirty = true; }
     function readColors() {
       const cs = getComputedStyle(canvas), v = (n, d) => (cs.getPropertyValue(n) || '').trim() || d;
@@ -209,7 +235,16 @@ export default {
       const c = colors, sw = stepW(), nc = cols(), p0 = page * 32, W = cw;
       g2.clearRect(0, 0, W, H); g2.fillStyle = c.well; g2.fillRect(0, 0, W, H);
       g2.font = '9px system-ui,sans-serif'; g2.textBaseline = 'middle';
-      for (let r = 0; r < ROWS; r++) {
+      refreshRows(); const rh = rowH();
+      if (lanes) {
+        g2.font = '11px system-ui,sans-serif';
+        lanes.forEach((ln, r) => {
+          const y = r * rh; if (r % 2) { g2.fillStyle = c.card; g2.globalAlpha = 0.55; g2.fillRect(LABW, y, W - LABW, rh); g2.globalAlpha = 1; }
+          g2.fillStyle = ln.named ? c.fg : c.muted; g2.textAlign = 'right'; g2.fillText(ln.named ? ln.name : ln.name + ' ?', LABW - 4, y + rh / 2, LABW - 6);
+          g2.strokeStyle = c.line; g2.globalAlpha = 0.6; g2.beginPath(); g2.moveTo(0, y + rh); g2.lineTo(W, y + rh); g2.stroke(); g2.globalAlpha = 1;
+        });
+        g2.font = '9px system-ui,sans-serif';
+      } else for (let r = 0; r < ROWS; r++) {
         const m = state.view + (ROWS - 1) - r, y = r * ROWH, black = [1, 3, 6, 8, 10].includes(m % 12);
         if (black) { g2.fillStyle = c.card; g2.globalAlpha = 0.55; g2.fillRect(LABW, y, W - LABW, ROWH); g2.globalAlpha = 1; }
         if (m % 12 === 0 || r === 0) { g2.fillStyle = c.muted; g2.textAlign = 'right'; g2.fillText(noteName(m), LABW - 3, y + ROWH / 2); g2.strokeStyle = c.line; g2.globalAlpha = 0.6; g2.beginPath(); g2.moveTo(LABW, y + ROWH); g2.lineTo(W, y + ROWH); g2.stroke(); g2.globalAlpha = 1; }
@@ -222,7 +257,7 @@ export default {
         if (idx % beat === 0) { g2.fillStyle = c.muted; g2.textAlign = 'left'; g2.fillText(String(idx + 1), x + 2, ROLLH + ACCH + STRIPH + RULERH / 2); }
         if (m < 0) continue;
         const v = effVel(idx), L = state.ln[idx] > 0 ? state.ln[idx] : state.gate, bw = Math.max(3, Math.min(L * sw, W - x) - 1);
-        const r = state.view + (ROWS - 1) - m, inView = r >= 0 && r < ROWS, rr = clamp(r, 0, ROWS - 1), bh = ROWH * (0.3 + 1.1 * v), cy = rr * ROWH + ROWH / 2;
+        const r = rowOfNote(m), nr = lanes ? lanes.length : ROWS, inView = r >= 0 && r < nr, rr = clamp(r, 0, nr - 1), bh = lanes ? rh * (0.35 + 0.55 * v) : ROWH * (0.3 + 1.1 * v), cy = rr * rh + rh / 2;
         g2.fillStyle = state.acc[idx] ? c.acc : c.note; g2.globalAlpha = inView ? 1 : 0.4; g2.fillRect(x + 0.5, cy - bh / 2, bw, bh); g2.globalAlpha = 1;
         if (state.ln[idx] > 0 || bw > 8) { g2.fillStyle = c.fg; g2.globalAlpha = 0.5; g2.fillRect(x + bw - 2, cy - bh / 2, 2, bh); g2.globalAlpha = 1; }
         if (state.acc[idx]) { g2.fillStyle = c.acc; g2.fillRect(x + 1, ROLLH + 3, Math.max(3, sw - 3), ACCH - 6); }
@@ -237,7 +272,7 @@ export default {
       if (dead || !canvas) return; const { x, y, col } = where(e); if (col < 0 || col >= state.len) return; canvas.setPointerCapture?.(e.pointerId);
       const sw = stepW();
       if (y < ROLLH) {
-        const pitch = clamp(state.view + (ROWS - 1) - Math.floor(y / ROWH), LO, HI);
+        refreshRows(); const pitch = noteOfRow(Math.floor(y / rowH()));
         for (let s = Math.max(0, col - 32); s <= col; s++) { // rechterrand van een blok: lengte
           if (state.n[s] !== pitch) continue; const L = state.ln[s] > 0 ? state.ln[s] : state.gate, x0 = LABW + (s - page * 32) * sw, x1 = x0 + L * sw;
           if (x >= x1 - 8 && x <= x1 + 1 && s + L >= col) { drag = { mode: 'len', s }; return; }
@@ -255,7 +290,7 @@ export default {
       if (!drag || dead) return; const { x, y, col } = where(e); const sw = stepW();
       if (drag.mode === 'len') { const x0 = LABW + (drag.s - page * 32) * sw; state.ln[drag.s] = clamp(Math.floor((x - x0) / sw) + 1, 1, MAXN); }
       else if (col >= 0 && col < state.len) {
-        if (drag.mode === 'paint' && y < ROLLH) { drag.pitch = clamp(state.view + (ROWS - 1) - Math.floor(y / ROWH), LO, HI); place(col, drag.pitch); }
+        if (drag.mode === 'paint' && y < ROLLH) { drag.pitch = noteOfRow(Math.floor(y / rowH())); place(col, drag.pitch); }
         else if (drag.mode === 'erase' && y < ROLLH) { state.n[col] = -1; state.ln[col] = 0; state.vel[col] = 0; state.acc[col] = 0; }
         else if (drag.mode === 'vel') setVel(col, y);
       }

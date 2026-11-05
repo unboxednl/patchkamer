@@ -171,6 +171,10 @@ De pianorol toont de stappen als blokjes: **breedte = lengte** (`ln` of `gate`),
 - Pas het apparaat niet aan om een preset te laten kloppen. Zet geen merknamen in naam of omschrijving.
 - Commit of push niet, tenzij de opdracht dat vraagt.
 
+## Een drumcomputer aan de uitgang
+
+Hangt er via de notenkabel een apparaat met `noteNames()` aan (Drum Kit, Pulse Drums, Click Synth, Latin Percussion; contract v1.14), dan is elke rij van de rol een klank met zijn naam, in de volgorde van dat apparaat (de eerste kabel met een lijst telt). Dit is alleen weergave: in `n` staan nog steeds absolute nootnummers, er komt niets bij in de state en een preset verandert niet. Noten in het patroon die het apparaat niet kent, blijven als rij met het nootnummer en een vraagteken. Een Step Sequencer heeft één noot per stap; voor een drumstel met meer klanken tegelijk gebruik je één per klank of een Pattern Tracker.
+
 ## Documentatie en songs
 
 Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componeren van songs met dit apparaat. Songs zijn CC-BY-4.0, tunes en presets CC0-1.0, het apparaat AGPL-3.0-or-later.
