@@ -1,0 +1,201 @@
+{
+ "format": "patchkamer-presets",
+ "formatVersion": 2,
+ "device": "nl.patchkamer.mixcheck",
+ "name": "Mix Check Monitoring",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Starting points for Mix Check: stereo, mono, left, right and side monitoring, quiet-check levels for late hours and neighbours, and a monitoring setting for each situation (club, festival, big room, home, headphones, studio, radio, car and streaming).",
+ "tree": [
+  {
+   "folder": "Monitoring",
+   "items": [
+    {
+     "name": "Stereo",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Mono check",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "mono",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Left only",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "left",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Right only",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "right",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Side only",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "side",
+      "dim": -3,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Quiet check (-6 dB)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": -6,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Quiet check (-12 dB)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": -12,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Neighbour level (-18 dB)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": -18,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Reference at its own level",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": 0,
+      "refMatch": false
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Situations",
+   "items": [
+    {
+     "name": "Club (mono compatibility)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "mono",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Festival PA (mono compatibility)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "mono",
+      "dim": -3,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Big room (mono compatibility)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "mono",
+      "dim": -3,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Home hi-fi (stereo)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Headphones (side check)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "side",
+      "dim": -6,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Studio reference",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": 0,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Radio (mono, quiet)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "mono",
+      "dim": -9,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Car (quiet stereo)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": -9,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Streaming (quiet stereo)",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "monitor": "stereo",
+      "dim": -6,
+      "refMatch": true
+     }
+    }
+   ]
+  }
+ ]
+}
