@@ -16,8 +16,8 @@ Het verschil met **Regie** (de clip/scene-sequencer): Regie bewaart per track va
 | `id` | `nl.patchkamer.patterntracker`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
 | Naam | `Pattern Tracker` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Live noten / CC`, `Spoor 1` … `Spoor 8`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
-| Poorten | eventingang `input` (Live notes / CC), eventuitgangen `track1` … `track8` (meer tot 32 via `trackCount`); geen audio, geen modulatie |
-| Contract | v1.11 |
+| Poorten | eventingang `input` (Live notes / CC), eventuitgangen `track1` … `track8` (meer tot 32 via `trackCount`); geen audio, geen modulatie; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
+| Contract | v1.13 (apparaatversie 1.13.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Regie Tracker, `nl.patchkamer.regie.tracker`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in; de oude compositie-export (`patchkamer-regie-duo`) kun je wel importeren.

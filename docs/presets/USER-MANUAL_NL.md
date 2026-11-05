@@ -110,7 +110,7 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 39 packs met samen **1867 presets**, één per apparaat: 12 voor effecten (153 presets), 9 voor mastering (919), 3 voor de mixer (58), 6 voor modulatoren (267), 8 voor sequencers (461) en 1 voor de tools (9). Elk pack is genoemd naar zijn apparaat ("Chorus Basics", "Chord Sequencer Styles" enzovoort) en heeft de licentie CC0-1.0. De bestanden hebben `formatVersion` 2. De namen van packs, mappen en presets zijn Engels. De apparaten staan beschreven in de handleidingen voor [effecten](../effects/USER-MANUAL_NL.md), [mastering](../mastering/USER-MANUAL_NL.md), [mixer](../mixer/USER-MANUAL_NL.md), [modulatoren](../modulators/USER-MANUAL_NL.md), [sequencers](../sequencers/USER-MANUAL_NL.md) en [tools](../tools/USER-MANUAL_NL.md).
+Deze repository heeft 40 packs met samen **1882 presets**, één per apparaat: 12 voor effecten (153 presets), 9 voor mastering (919), 3 voor de mixer (58), 6 voor modulatoren (267), 8 voor sequencers (461) en 2 voor de tools (24). Elk pack is genoemd naar zijn apparaat ("Chorus Basics", "Chord Sequencer Styles" enzovoort) en heeft de licentie CC0-1.0. De bestanden hebben `formatVersion` 2. De namen van packs, mappen en presets zijn Engels. De apparaten staan beschreven in de handleidingen voor [effecten](../effects/USER-MANUAL_NL.md), [mastering](../mastering/USER-MANUAL_NL.md), [mixer](../mixer/USER-MANUAL_NL.md), [modulatoren](../modulators/USER-MANUAL_NL.md), [sequencers](../sequencers/USER-MANUAL_NL.md) en [tools](../tools/USER-MANUAL_NL.md).
 
 ### Effecten (12)
 
@@ -175,10 +175,11 @@ Deze repository heeft 39 packs met samen **1867 presets**, één per apparaat: 1
 | [Step Sequencer](../../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | Bass Lines (14), Arpeggios (12), Drum Triggers (13), Melodic Hooks (17), Long Notes & Pads (6), Polymeter & Feel (8) | [`step-sequencer.patchkamer-presets.json`](../../presets/step-sequencer.patchkamer-presets.json) |
 | [Wanderer](../../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | Lead Lines (9), Basslines (7), Arps and Plucks (8), Ambient and Slow (5), Genre Starters (13), Dynamics (6), Rolls and Ratchets (5), Follow Chord (3), Evolving (4) | [`wanderer.patchkamer-presets.json`](../../presets/wanderer.patchkamer-presets.json) |
 
-### Tools (1)
+### Tools (2)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
+| [MIDI Hub](../../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | Sound Controllers (6), Wheels and Pedals (5), Effects (3), Utility (1) | [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) |
 | [Metronome](../../devices/tools/Metronome/) | Metronome Basics | 9 | Practice (4), Subdivisions (3), Loud (2) | [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) |
 
 Mixer, Speakers, Multitrack, Notes, Recorder, Scope en andere apparaten kunnen ook presets hebben, maar daar komt nog geen pack bij: bewaar je eigen met **Bewaar**.

@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.12 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.13 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -21,6 +21,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.10 | Bestandsnaam `*.patchkamer-device.js` voor apparaten (§2, §16): de host zoekt zonder manifest alleen nog naar deze bestanden, de validator waarschuwt bij een andere naam |
 | v1.11 | Taal en audio: `host.lang` (`'nl'` of `'en'`) en `host.audio` (`sampleRate`, `quality`, `oversample`, `latency`) voor apparaten; optioneel `i18n` op de definitie voor namen per taal (§2, §12c). Het contract en de validator zijn tweetalig (Nederlands en Engels) |
 | v1.12 | Mastering: een eigen kabelsoort (gele, gestippelde sinus) met driehoekpoorten `masteringIn`/`masteringOut`; `configureMastering` en `onMasteringTargets`; `host.mastering` voor een Master Director die de instellingen van mastering-apparaten tegelijk zet (§11b) |
+| v1.13 | Multi-MIDI en regelaars: een eigen kabelsoort (dubbele gestreepte oranje kabel) met `multiEventIn`/`multiEventOut`, `eventBundles`, `onEventBundle` en `host.eventBundleChanged`; de optionele velden `ch` en `cc` op gebeurtenissen; `host.controls` en `host.setControl` om de regelaars van andere apparaten te zien en te zetten (§11c) |
 
 ---
 
@@ -42,12 +43,13 @@ Of je apparaat tunes of presets krijgt, volgt dus uit je `kind`. Werkruimte en s
 ## 1. Wat Patchkamer is
 
 - Een webpagina (de **host**) met een **vloer** waarop apparaten als kaarten staan, verbonden met kabels.
-- Vijf kabelsoorten:
+- Zes kabelsoorten:
   - **audio** (cyaan): AudioNode → AudioNode;
   - **gebeurtenissen** (oranje): noten, trigs en CC als kleine JSON-objecten;
   - **sturing** (paars): een modulator verschuift parameters van een ander apparaat;
   - **bundel** (dik, groen): veel audiokanalen tegelijk, elk met een naam.
   - **mastering** (geel, gestippelde sinus): een Master Director zet de instellingen van mastering-apparaten (§11b).
+  - **multi-MIDI** (dubbel, gestreept oranje): veel sporen met een naam in één kabel, bijvoorbeeld alle sporen van een sequencer (§11c).
 - Eén gedeelde **klok** (BPM, swing). De host plant elke zestiende noot vooruit en meldt die aan elk apparaat dat dat wil weten.
 - Apparaten zijn **ES-modules**. Alles wat de module nodig heeft, zit in dat ene bestand: geen imports, geen netwerk, geen externe bestanden.
 - Elke kaart heeft een **presetbalk**. De host bewaart en herstelt presets met de state van het apparaat (§13).
@@ -80,6 +82,8 @@ export default {
     multiOut: [],                // bundel uit (v1.5)
     masteringIn:  [],            // mastering in: doel van een Master Director (v1.12)
     masteringOut: [],            // mastering uit: alleen een Master Director (v1.12)
+    multiEventIn:  [],           // multi-MIDI in: een ontvanger van sporen (v1.13)
+    multiEventOut: [],           // multi-MIDI uit: een bron met sporen (v1.13)
   },
   create(ctx, host) { /* ... */ return instance; }
 };
@@ -97,10 +101,10 @@ export default {
 
 ## 3. Poorten
 
-- Alle tien lijsten mogen leeg zijn of ontbreken. Poort-id's zijn uniek binnen hun lijst en bestaan uit `[a-z0-9_-]`.
+- Alle twaalf lijsten mogen leeg zijn of ontbreken. Poort-id's zijn uniek binnen hun lijst en bestaan uit `[a-z0-9_-]`.
 - Elke `audioIn`-poort heeft een AudioNode in `instance.inputs`, elke `audioOut`-poort een AudioNode in `instance.outputs`, met dezelfde id.
 - **Poorten die veranderen (v1.2).** `host.setPorts(this, ports)` vervangt je poortenlijst terwijl je apparaat draait, bijvoorbeeld als de gebruiker meer kanalen kiest. Zet eerst de nieuwe AudioNodes in `inputs`/`outputs` en roep dan `setPorts` aan. Kabels naar poorten die verdwijnen, haalt de host los.
-- **Poorten in je eigen UI (v1.2).** Met `ui: { jacks: true }` tekent de host geen poortenrij. Je plaatst dan elke poort zelf met `host.ui.jack(this, parent, poortId, 'in' | 'out', label)`. Dat werkt voor alle vijf de kabelsoorten.
+- **Poorten in je eigen UI (v1.2).** Met `ui: { jacks: true }` tekent de host geen poortenrij. Je plaatst dan elke poort zelf met `host.ui.jack(this, parent, poortId, 'in' | 'out', label)`. Dat werkt voor alle zes de kabelsoorten.
 
 ---
 
@@ -154,6 +158,7 @@ Versturen: `host.emit(this, 'poortId', ev)`. De poort moet in `eventOut` staan. 
 { type: 'note', note: 60, vel: 0.8, time, dur }    // MIDI-nootnummer, velocity 0..1, duur in seconden
 { type: 'trig', vel: 0.9, time, lane: 'kick' }     // een slag; lane zegt welke stem
 { type: 'cc', id: 'cutoff', value: 0.5, time }     // een waarde 0..1 op een naam
+// Optioneel op note, trig en cc (v1.13): ch = MIDI-kanaal 1..16; op cc ook cc = controllernummer 0..127. Onbekende velden negeer je.
 ```
 
 - `time` is altijd AudioContext-tijd. Plan op `time`, niet op het moment van ontvangst.
@@ -313,6 +318,41 @@ onBundle(poortId, sleutel, bundel) { ... }
 
   `targetIds` beperkt de actie tot doelen aan jouw kabels; ontbreekt het, dan zijn het er allemaal. De host geeft `{ changed, results: [{ id, name, ok, reason, changed, skipped, report }] }` terug, of `{ error: 'tekst' }` in de taal van de gebruiker. `changed` telt de apparaten die iets veranderden. Bij `apply` en `accept` kijkt de host alleen naar apparaten aan jouw kabels en niet naar anderen.
 - **Houd je aan de gebruiker.** Verander niets bij laden, aansluiten of het herstellen van de werkruimte; alleen na een handeling van de gebruiker. Zet in `getState` van de regie alleen wat de gebruiker koos (stijl, situatie, sterkte), geen doelen en geen kabels.
+
+---
+
+## 11c. Multi-MIDI en regelaars van andere apparaten (v1.13)
+
+Drie dingen voor sequencers en controllers: twee optionele velden op gebeurtenissen, een kabel die veel sporen tegelijk draagt, en een manier om de regelaars van andere apparaten te zetten.
+
+**De velden `ch` en `cc`.** Bij `note`, `trig` en `cc` mag `ch` staan: het MIDI-kanaal, een geheel getal van 1 tot 16. Bij `cc` mag ook `cc` staan: het MIDI-controllernummer, 0 tot 127. Een MIDI-ingang zet ze zoals de hardware ze stuurt. Een sequencer zet `ch` op de gebeurtenissen van zijn multi-MIDI-poort op het kanaal van het spoor (standaard het spoornummer). Een apparaat dat de velden niet kent, negeert ze.
+
+**De multi-MIDI-kabel.** Een dubbele, gestreepte oranje kabel die alle sporen van een bron in één keer draagt, elk met een id en een naam.
+
+- **Poorten.** `ports.multiEventOut` (de bron) en `ports.multiEventIn` (de ontvanger). Een multi-MIDI-uitgang past alleen op een multi-MIDI-ingang.
+- **Bron.** Geef `eventBundles`: per poort een functie (of een object) met de sporen. Roep `host.eventBundleChanged(this, poortId)` aan als een naam of het aantal sporen verandert.
+
+```js
+eventBundles: {
+  tracks: () => ({ label: 'Mijn sequencer', tracks: [{ id: 'a', name: 'Bas', ch: 1 }, { id: 'b', name: 'Lead', ch: 2 }] }),
+},
+// een noot op spoor a:
+host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, track: 'a', ch: 1 });
+```
+
+  Elke gebeurtenis op een multi-MIDI-poort draagt `track`: het id uit de lijst. Je mag dezelfde gebeurtenissen ook nog op je gewone `eventOut`-poorten sturen; de multi-MIDI-kabel is een extra.
+- **Ontvanger.** `onEventBundle(poortId, sleutel, bundel)` krijgt `{ key, source: { id, port, name }, label, tracks: [{ id, name, ch }] }`, en `null` als de kabel losgaat. `ch` is 0 als het spoor geen kanaal heeft. De gebeurtenissen komen in `onEvent(poortId, ev)` met `track` en `bundle` (de sleutel van de bundel).
+
+**Regelaars van andere apparaten.** Voor controllers (§13b). De host vindt alle regelaars op de kaart van een ander apparaat, ook in open shadow roots; dat apparaat hoeft er niets voor te doen.
+
+| Aanroep | Wat |
+|---|---|
+| `host.controls(this, doelId)` | Een lijst `{ key, label, type, … }`: `type` is `'range'` (met `min`, `max`, `step`, `value`, `scale`), `'select'` (met `options: [{ value, text }]`), `'check'` of `'button'`. `scale` is `'log'` voor een draaiknop van `host.ui.knob` met `{ scale: 'log' }` en anders `'lin'`. |
+| `host.setControl(this, doelId, sleutel, waarde)` | Zet de regelaar. `waarde` is 0..1: een schuif of knop krijgt dat deel van zijn bereik (logaritmisch als `scale` `'log'` is), een keuzelijst de optie op die plaats, een vinkje is aan vanaf 0,5 en een knop wordt vanaf 0,5 ingedrukt. Geeft `true` als de regelaar er is. |
+
+- De `key` heeft de vorm `type|naam#n` en blijft gelijk zolang de kaart dezelfde regelaars heeft. Bewaar sleutels in je state, maar reken erop dat ze niet meer bestaan als het doelapparaat zijn UI verandert; `setControl` geeft dan `false`. Vraag `controls` opnieuw aan bij `onPeers`.
+- Je kunt jezelf niet besturen. Een onbekend apparaat of een onbekende sleutel geeft `[]` of `false`.
+- De gebruiker blijft de baas: de regelaar beweegt zichtbaar mee en hij kan hem gewoon zelf verdraaien.
 
 ---
 
@@ -534,7 +574,7 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
 
 ```json
 { "format": "patchkamer-song", "formatVersion": 1, "title": "Nachtvlucht", "author": "…", "license": "CC-BY-4.0",
-  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.12",
+  "description": "…", "created": "2026-11-04T…", "patchkamer": "1.13",
   "workspace": { "format": "patchkamer-werkruimte", "formatVersion": 1, "defs": [ { "id": "…", "version": "…", "code": "…" } ],
                  "devices": [ ], "cables": [ ], "bpm": 126 } }
 ```
@@ -583,6 +623,9 @@ Regels: `setPart(id, getPart(id))` laat de instelling ongewijzigd, en `setPart(a
 | `host.peers(this)`, `onPeers(lijst)` | v1.7 | Andere apparaten zien (alleen lezen) (§13b) |
 | `host.connect / disconnect / cablesFrom` | v1.7 | Kabels vanaf je eigen uitgangen leggen, weghalen, opvragen (§13b) |
 | `host.mastering(this, actie, opties)` | v1.12 | Een Master Director stuurt de apparaten aan zijn mastering-kabels aan (§11b) |
+| `host.eventBundleChanged(this, poort)` | v1.13 | De sporen van je multi-MIDI-poort zijn veranderd (§11c) |
+| `host.controls(this, doelId)` | v1.13 | De regelaars op de kaart van een ander apparaat (§11c) |
+| `host.setControl(this, doelId, sleutel, waarde)` | v1.13 | Zet een regelaar van een ander apparaat, waarde 0..1 (§11c) |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -629,7 +672,7 @@ node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --lang en   # ui
 De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow roots) en een nep-host. Hij eindigt met één `OK`-regel (exit 0) of met de eerste fout (exit 1). Hij controleert:
 
 1. **Bestand**: bestandsnaam `*.patchkamer-device.js` (een andere naam geeft een waarschuwing, geen fout); default export met `id` (reverse-DNS), `name`, `version` (semver), `kind`, `ports`, `create`; geldige `category` en `ui`; geen `ctx.destination` (behalve bij `output`), geen browseropslag, geen netwerk, geen imports, geen eigen AudioContext.
-2. **Poorten**: alle tien lijsten, geldige en unieke id's, een AudioNode per audiopoort, `setPorts` met klaarstaande nodes, `jack` alleen voor bestaande poorten, `ui.jacks` alleen samen met minstens één `jack`.
+2. **Poorten**: alle twaalf lijsten, geldige en unieke id's, een AudioNode per audiopoort, `setPorts` met klaarstaande nodes, `jack` alleen voor bestaande poorten, `ui.jacks` alleen samen met minstens één `jack`.
 3. **Levensloop**: `create` → `getState` vóór `mount` → `mount` → twee maten `onStep` → elk gebeurtenistype plus een onbekend type → `onTransport` → `getState`/`setState`-ronde → `setState({})` → twee keer `destroy`; `emit` alleen op eigen `eventOut`-poorten.
 4. **Sturing (v1.3)**: `params` en `modulate` samen; geldige parameterlijst; `modulate` met +1, −1, 0,37, onbekende ids en `{}`. Een modulator heeft `modOut` (met `onModTargets`) of `masteringOut`; die krijgt eerst `[]` en daarna twee keer doelen.
 5. **Snel en worklets (v1.4)**: `fast: true` vraagt `modInput(id)` met een AudioNode of AudioParam, en `null` voor onbekende ids; `host.modSignal` krijgt een echte AudioNode; `host.loadWorklet` krijgt een naam en code met `registerProcessor(...)`.
@@ -641,6 +684,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 
 11. **Taal en audio (v1.11)**: een optioneel `i18n` is een object met per taal een `name` en/of `ports` (poort-id → naam) van bestaande poorten; `host.lang` en `host.audio` zijn aanwezig; het hele apparaat wordt twee keer doorlopen, met `host.lang` `'nl'` en `'en'`, en een fout in een van beide takken is een fout.
 12. **Mastering (v1.12)**: een apparaat met `masteringIn` heeft `configureMastering(patch)` (en optioneel `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); die krijgen `{}`, `null` en onbekende of ongeldige velden en geven een object terug (of niets), en `getMasteringReport` geeft JSON zonder AudioNodes. Een apparaat met `masteringOut` heeft `onMasteringTargets(targets)`; die krijgt `[]`, een lijst met één doel (twee keer) en weer `[]`. De nep-host controleert `host.mastering` op een bekende actie en een bestaande `masteringOut`-poort. Een modulator heeft `modOut` of `masteringOut`.
+13. **Multi-MIDI (v1.13)**: een apparaat met `multiEventOut` heeft `eventBundles[poortId]` met een lijst `tracks` (unieke tekst-id's, een `name`, een optioneel `ch` van 1 tot 16); een apparaat met `multiEventIn` heeft `onEventBundle`; die krijgt een bundel, dezelfde sleutel met een ander spoor erbij en dan `null`. Gebeurtenissen met `ch` of `cc` hebben waarden in het bereik; op een multi-MIDI-poort draagt elke gebeurtenis een `track` uit de lijst. De nep-host kent `host.eventBundleChanged`, `host.controls` en `host.setControl`.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -701,7 +745,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.12
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.13
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -760,7 +804,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.12
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.13
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -823,7 +867,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.12
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.13
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -901,7 +945,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.12.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.13.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

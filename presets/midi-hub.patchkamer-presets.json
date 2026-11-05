@@ -1,0 +1,531 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.midihub",
+  "name": "MIDI Hub Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting mappings for the MIDI Hub: the standard sound-controller knobs, the mod wheel, sliders and effect knobs of a MIDI keyboard. A preset is applied to every device in the hub and finds its controls by name (Cutoff, Resonance, Attack and so on); controls a device does not have are skipped.",
+  "tree": [
+    {
+      "folder": "Sound Controllers",
+      "items": [
+        {
+          "name": "Sound Controllers 71-75",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 71,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Resonance#0",
+                  "label": "Resonance",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 72,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Release#0",
+                  "label": "Release",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 73,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Attack#0",
+                  "label": "Attack",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 74,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Cutoff#0",
+                  "label": "Cutoff",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 75,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Decay#0",
+                  "label": "Decay",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 74,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Cutoff#0",
+                  "label": "Cutoff",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 71,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Resonance#0",
+                  "label": "Resonance",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Envelope Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 73,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Attack#0",
+                  "label": "Attack",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 75,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Decay#0",
+                  "label": "Decay",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 70,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Sustain#0",
+                  "label": "Sustain",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 72,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Release#0",
+                  "label": "Release",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cutoff Only on CC 74",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 74,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Cutoff#0",
+                  "label": "Cutoff",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cutoff Narrow Range",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 74,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Cutoff#0",
+                  "label": "Cutoff",
+                  "min": 0.2,
+                  "max": 0.8,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cutoff Inverted",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 74,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Cutoff#0",
+                  "label": "Cutoff",
+                  "min": 0,
+                  "max": 1,
+                  "inv": true,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Wheels and Pedals",
+      "items": [
+        {
+          "name": "Mod Wheel to Cutoff",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 1,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Cutoff#0",
+                  "label": "Cutoff",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mod Wheel to Resonance",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 1,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Resonance#0",
+                  "label": "Resonance",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mod Wheel to Mix",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 1,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Mix#0",
+                  "label": "Mix",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Volume Slider to Level",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 7,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Level#0",
+                  "label": "Level",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Expression to Volume",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 11,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Volume#0",
+                  "label": "Volume",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Effects",
+      "items": [
+        {
+          "name": "Effect Mix on CC 91",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 91,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Mix#0",
+                  "label": "Mix",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Drive on CC 76",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 76,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Drive#0",
+                  "label": "Drive",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reverb Knobs",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": [
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 91,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Mix#0",
+                  "label": "Mix",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 92,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Size#0",
+                  "label": "Size",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                },
+                {
+                  "src": {
+                    "k": "cc",
+                    "n": 93,
+                    "id": "",
+                    "ch": 0
+                  },
+                  "ctl": "range|Decay#0",
+                  "label": "Decay",
+                  "min": 0,
+                  "max": 1,
+                  "inv": false,
+                  "toggle": false
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Utility",
+      "items": [
+        {
+          "name": "Clear All Mappings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "maps": {
+              "*": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

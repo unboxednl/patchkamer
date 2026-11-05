@@ -170,6 +170,7 @@ The line under the controls shows the scene and the tempo in BPM, for example "S
 | **Live** | event input | A keyboard to play and record on. The notes go to the output of the edited track. Not transposed. |
 | **Mod** | modulation input | A modulator. It can move the **Gate**, **Velocity** and **Transpose** of each track. |
 | **Track A** … **Track D** | event outputs | Each goes to the notes input of the synth that plays that track. |
+| **Tracks** | multi-MIDI out | All tracks in one double dashed orange cable, with the track names. Connect it to **Tracks in** of the [MIDI Hub](../tools/USER-MANUAL_EN.md#midi-hub). |
 
 There are no audio ports.
 
@@ -513,6 +514,7 @@ Pattern Playlist builds a song in **layers**, like a producer program. Each laye
 |---|---|---|
 | **Live notes / CC** | event input | A keyboard (**Keys**), to play live through the selected track and to record. |
 | **Track 1** … **Track 8** | event outputs | One per track, to a synth or drum machine. With **Number of tracks** you get up to 32. |
+| **Tracks** | multi-MIDI out | All tracks in one double dashed orange cable, with the track names. Connect it to **Tracks in** of the [MIDI Hub](../tools/USER-MANUAL_EN.md#midi-hub). |
 
 #### An example
 
@@ -561,6 +563,7 @@ The top part, the pattern bank, the pattern editor, the cell inspector, the trac
 |---|---|---|
 | **Live notes / CC** | event input | A keyboard (**Keys**), to play through the selected track and to record. |
 | **Track 1** … **Track 8** | event outputs | One per track, to a synth or drum machine. Up to 32 with **Number of tracks**. |
+| **Tracks** | multi-MIDI out | All tracks in one double dashed orange cable, with the track names. Connect it to **Tracks in** of the [MIDI Hub](../tools/USER-MANUAL_EN.md#midi-hub). |
 
 #### An example
 
@@ -615,6 +618,7 @@ Clip Arranger works like a session view. For each track (1 to 16) there are 8 **
 |---|---|---|
 | **MIDI / record** | event input | A keyboard (**Keys**), to play through the selected track and to record into the selected clip. |
 | **Track 1** … **Track 16** | event outputs | One per track, to a synth, drone or drum machine. |
+| **Tracks** | multi-MIDI out | All tracks in one double dashed orange cable, with the track names. Connect it to **Tracks in** of the [MIDI Hub](../tools/USER-MANUAL_EN.md#midi-hub). |
 
 #### An example
 

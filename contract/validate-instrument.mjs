@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.12
+// validate-instrument.mjs — Patchkamer contract v1.13
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -12,6 +12,7 @@
 // v1.10: bestandsnaam *.patchkamer-device.js; een andere naam geeft een waarschuwing (geen fout).
 // v1.11: --lang nl|en (taal van de uitvoer; standaard nl); optioneel veld i18n op de definitie; host.lang en host.audio in de nep-host;
 //        tweede doorloop met de andere host.lang, zodat een fout in de taaltak van het apparaat ook wordt gevonden.
+// v1.13: multi-MIDI: ports.multiEventIn/multiEventOut, eventBundles, onEventBundle, host.eventBundleChanged; velden ch en cc op gebeurtenissen; host.controls en host.setControl.
 // v1.12: mastering: ports.masteringIn/masteringOut (kabeltype mastering), configureMastering, onMasteringTargets, host.mastering.
 // v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
 import { pathToFileURL, fileURLToPath } from 'node:url';
@@ -49,6 +50,23 @@ const V = {
     "v.ok_bundel_uit": ", bundel uit {0} kanalen",
     "v.ok_bundel_in": ", bundel in",
     "v.ok_mastering_uit": ", mastering uit (regie)",
+    "v.ok_multievent_uit": ", multi-MIDI uit ({0} sporen)",
+    "v.ok_multievent_in": ", multi-MIDI in",
+    "v.host_eventbundlechanged_is_geen_multieventout": "host.eventBundleChanged(): \"{0}\" is geen multiEventOut-poort",
+    "v.gebeurtenis_ch_moet_een_geheel_getal": "gebeurtenis: ch moet een geheel getal van 1 tot 16 zijn (kreeg {0})",
+    "v.gebeurtenis_cc_moet_een_geheel_getal": "gebeurtenis: cc moet een geheel getal van 0 tot 127 zijn (kreeg {0})",
+    "v.gebeurtenis_op_multieventout_mist_track": "gebeurtenis op multiEventOut \"{0}\" mist track (het id van een spoor uit eventBundles)",
+    "v.multieventout_instance_eventbundles_ontbreekt": "multiEventOut \"{0}\": instance.eventBundles.{1} ontbreekt",
+    "v.eventbundles_gooit": "eventBundles.{0} gooit: ",
+    "v.eventbundles_moet_label_tracks_id": "eventBundles.{0} moet { label, tracks: [{ id, name, ch }] } geven",
+    "v.eventbundles_elk_spoor_heeft_een": "eventBundles.{0}: elk spoor heeft een id (niet-lege tekst)",
+    "v.eventbundles_dubbele_spoor_id": "eventBundles.{0}: dubbele spoor-id",
+    "v.eventbundles_spoor_name": "eventBundles.{0}: spoor \"{1}\" heeft een name die geen tekst is",
+    "v.eventbundles_spoor_ch": "eventBundles.{0}: spoor \"{1}\" heeft een ch buiten 0 tot 16",
+    "v.multieventin_instance_oneventbundle_poortid_sleutel": "multiEventIn \"{0}\": instance.onEventBundle(poortId, sleutel, bundel) ontbreekt",
+    "v.oneventbundle_gooit": "onEventBundle() gooit op \"{0}\": ",
+    "v.onevent_gooit_op_multieventin": "onEvent() gooit op multiEventIn \"{0}\": ",
+    "v.oneventbundle_null_gooit": "onEventBundle(null) gooit op \"{0}\": ",
     "v.ok_mastering_in": ", mastering in (doel)",
     "v.host_mastering_onbekende_actie": "host.mastering(): onbekende actie \"{0}\" (kies inspect, apply, analyse, accept of undo)",
     "v.host_mastering_geen_masteringout": "host.mastering(): het apparaat heeft geen masteringOut-poort",
@@ -195,6 +213,23 @@ const V = {
     "v.ok_bundel_uit": ", bundle out {0} channels",
     "v.ok_bundel_in": ", bundle in",
     "v.ok_mastering_uit": ", mastering out (director)",
+    "v.ok_multievent_uit": ", multi-MIDI out ({0} tracks)",
+    "v.ok_multievent_in": ", multi-MIDI in",
+    "v.host_eventbundlechanged_is_geen_multieventout": "host.eventBundleChanged(): \"{0}\" is not a multiEventOut port",
+    "v.gebeurtenis_ch_moet_een_geheel_getal": "event: ch must be an integer from 1 to 16 (got {0})",
+    "v.gebeurtenis_cc_moet_een_geheel_getal": "event: cc must be an integer from 0 to 127 (got {0})",
+    "v.gebeurtenis_op_multieventout_mist_track": "event on multiEventOut \"{0}\" is missing track (the id of a track from eventBundles)",
+    "v.multieventout_instance_eventbundles_ontbreekt": "multiEventOut \"{0}\": instance.eventBundles.{1} is missing",
+    "v.eventbundles_gooit": "eventBundles.{0} throws: ",
+    "v.eventbundles_moet_label_tracks_id": "eventBundles.{0} must return { label, tracks: [{ id, name, ch }] }",
+    "v.eventbundles_elk_spoor_heeft_een": "eventBundles.{0}: every track has an id (non-empty text)",
+    "v.eventbundles_dubbele_spoor_id": "eventBundles.{0}: duplicate track id",
+    "v.eventbundles_spoor_name": "eventBundles.{0}: track \"{1}\" has a name that is not text",
+    "v.eventbundles_spoor_ch": "eventBundles.{0}: track \"{1}\" has a ch outside 0 to 16",
+    "v.multieventin_instance_oneventbundle_poortid_sleutel": "multiEventIn \"{0}\": instance.onEventBundle(portId, key, bundle) is missing",
+    "v.oneventbundle_gooit": "onEventBundle() throws on \"{0}\": ",
+    "v.onevent_gooit_op_multieventin": "onEvent() throws on multiEventIn \"{0}\": ",
+    "v.oneventbundle_null_gooit": "onEventBundle(null) throws on \"{0}\": ",
     "v.ok_mastering_in": ", mastering in (target)",
     "v.host_mastering_onbekende_actie": "host.mastering(): unknown action \"{0}\" (choose inspect, apply, analyse, accept or undo)",
     "v.host_mastering_geen_masteringout": "host.mastering(): the device has no masteringOut port",
@@ -391,6 +426,9 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   bundleChanged(inst, port) { bundleCalls++; if (!PL(curPorts || d.ports, 'multiOut').some(p => p.id === port)) modBad = vt('v.host_bundlechanged_is_geen_multiout',port); },
   isWired() { return false; },
   // v1.12
+  // v1.13
+  eventBundleChanged(inst, port) { if (!PL(curPorts || d.ports, 'multiEventOut').some(p => p.id === port)) modBad = vt('v.host_eventbundlechanged_is_geen_multieventout',port); },
+  controls() { return []; }, setControl() { return false; },
   mastering(inst, action, opts) { masteringCalls++; if (!['inspect', 'apply', 'analyse', 'accept', 'undo'].includes(action)) masteringBad = vt('v.host_mastering_onbekende_actie',action); if (!PL(curPorts || d.ports, 'masteringOut').length) masteringBad = vt('v.host_mastering_geen_masteringout'); return { changed: 0, results: [] }; },
   // v1.7
   frame(inst, cb, fps) { if (typeof cb !== 'function') { modBad = vt('v.host_frame_geef_een_functie'); return () => {}; } if (fps !== undefined && !(+fps > 0)) modBad = vt('v.host_frame_fps_moet_een');
@@ -405,11 +443,11 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   setPorts(inst, ports) {   // contract v1.2: dynamic ports; every listed audio port must already have its AudioNode
     if (!ports || typeof ports !== 'object') fail(vt('v.setports_ports_ontbreekt'));
     for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut']) { if (!Array.isArray(ports[k])) fail(vt('v.setports_ports_moet_een_lijst',k)); const ids = ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.setports_ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.setports_dubbele_poort_id_in',k)); }
-    for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) if (ports[k] !== undefined && !Array.isArray(ports[k])) fail(vt('v.setports_ports_moet_een_lijst',k));
+    for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut', 'multiEventIn', 'multiEventOut']) if (ports[k] !== undefined && !Array.isArray(ports[k])) fail(vt('v.setports_ports_moet_een_lijst',k));
     for (const p of ports.audioIn) if (!inst.inputs[p.id] || !inst.inputs[p.id]._isNode) fail(vt('v.setports_inputs_bestaat_nog_niet',p.id));
     for (const p of ports.audioOut) if (!inst.outputs[p.id] || !inst.outputs[p.id]._isNode) fail(vt('v.setports_outputs_bestaat_nog_niet',p.id));
     curPorts = ports; portChanges++; },
-  ui: { jack(inst, parent, id, dir) { const P = curPorts || d.ports; const L = dir === 'out' ? [...P.audioOut, ...P.eventOut, ...PL(P, 'modOut'), ...PL(P, 'multiOut'), ...PL(P, 'masteringOut')] : dir === 'in' ? [...P.audioIn, ...P.eventIn, ...PL(P, 'modIn'), ...PL(P, 'multiIn'), ...PL(P, 'masteringIn'), ...(inst && typeof inst.params === 'function' ? [{ id: 'mod' }] : [])] : fail(vt('v.jack_richting_moet_in_of')); if (!L.some(p => p.id === id)) fail(vt('v.jack_poort_bestaat_niet_in',id,dir)); jacks++; const e = el('div'); e.className = 'port jack'; if (parent && parent.appendChild) parent.appendChild(e); return e; },
+  ui: { jack(inst, parent, id, dir) { const P = curPorts || d.ports; const L = dir === 'out' ? [...P.audioOut, ...P.eventOut, ...PL(P, 'modOut'), ...PL(P, 'multiOut'), ...PL(P, 'masteringOut'), ...PL(P, 'multiEventOut')] : dir === 'in' ? [...P.audioIn, ...P.eventIn, ...PL(P, 'modIn'), ...PL(P, 'multiIn'), ...PL(P, 'masteringIn'), ...PL(P, 'multiEventIn'), ...(inst && typeof inst.params === 'function' ? [{ id: 'mod' }] : [])] : fail(vt('v.jack_richting_moet_in_of')); if (!L.some(p => p.id === id)) fail(vt('v.jack_poort_bestaat_niet_in',id,dir)); jacks++; const e = el('div'); e.className = 'port jack'; if (parent && parent.appendChild) parent.appendChild(e); return e; },
     knob: (parent, label) => { const k = { label: 'knop ' + label, sets: 0 }; KNOBS.push(k); return { set(){ k.sets++; }, el: el('div'), input: el('input') }; },
     select: (parent, label, opts, val) => { const k = { label: vt('v.keuze') + label, sets: 0 }; KNOBS.push(k); const s = el('select'); let v = val; Object.defineProperty(s, 'value', { get: () => v, set: x => { v = x; k.sets++; } }); return s; }, steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
 
@@ -424,11 +462,11 @@ if (!['instrument', 'effect', 'mixer', 'output', 'utility', 'modulator'].include
 if (d.ui !== undefined && (typeof d.ui !== 'object' || (d.ui.width !== undefined && !(d.ui.width >= 200 && d.ui.width <= 6000)))) fail(vt('v.ui_width_moet_tussen_200'));
 if (d.category !== undefined && !['synth', 'groove', 'sequencer', 'mod', 'effect', 'mix', 'tool', 'mastering'].includes(d.category)) fail('onbekende category (synth, groove, sequencer, mod, effect, mix, tool of mastering)');
 if (d.ui && d.ui.minWidth !== undefined && !(d.ui.minWidth >= 200 && d.ui.minWidth <= (d.ui.width || 300))) fail(vt('v.ui_minwidth_moet_tussen_200'));
-for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) if (d.ports[k] === undefined) d.ports[k] = [];
-for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut']) { if (!Array.isArray(d.ports[k])) fail(vt('v.ports_moet_een_lijst_zijn',k)); const ids = d.ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.dubbele_poort_id_in',k)); }
+for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut', 'multiEventIn', 'multiEventOut']) if (d.ports[k] === undefined) d.ports[k] = [];
+for (const k of ['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut', 'multiEventIn', 'multiEventOut']) { if (!Array.isArray(d.ports[k])) fail(vt('v.ports_moet_een_lijst_zijn',k)); const ids = d.ports[k].map(p => p.id); if (ids.some(x => !/^[a-z0-9_-]+$/.test(x || ''))) fail(vt('v.ongeldige_poort_id_in',k)); if (new Set(ids).size !== ids.length) fail(vt('v.dubbele_poort_id_in',k)); }
 if (d.i18n !== undefined) {   // v1.11: optionele namen per taal
   if (!d.i18n || typeof d.i18n !== 'object' || Array.isArray(d.i18n)) fail(vt('v.i18n_object'));
-  const portIds = new Set(['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut'].flatMap(k => (d.ports[k] || []).map(p => p.id)));
+  const portIds = new Set(['audioIn', 'audioOut', 'eventIn', 'eventOut', 'modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut', 'multiEventIn', 'multiEventOut'].flatMap(k => (d.ports[k] || []).map(p => p.id)));
   for (const [lang, o] of Object.entries(d.i18n)) {
     if (!o || typeof o !== 'object' || Array.isArray(o)) fail(vt('v.i18n_taal_object', lang));
     if (o.name !== undefined && (typeof o.name !== 'string' || !o.name)) fail(vt('v.i18n_name', lang));
@@ -496,6 +534,25 @@ if (d.ports.masteringIn.length) {
     if (m === 'getMasteringReport') { try { JSON.stringify(r); } catch (e) { fail(vt('v.getmasteringreport_niet_json')); } if (JSON.stringify(r || {}).includes('_isNode')) fail(vt('v.getmasteringreport_niet_json')); }
     else if (r != null && typeof r !== 'object') fail(vt('v.mastering_methode_object',m));
   }
+}
+// contract v1.13: multi-MIDI. multiEventOut (bron): eventBundles[poort]; multiEventIn (ontvanger): onEventBundle.
+let nTracks = 0;
+for (const p of d.ports.multiEventOut) {
+  const b = inst.eventBundles && inst.eventBundles[p.id]; if (!b) fail(vt('v.multieventout_instance_eventbundles_ontbreekt',p.id,p.id));
+  let v; try { v = typeof b === 'function' ? b() : b; } catch (e) { fail(vt('v.eventbundles_gooit',p.id) + e.message); }
+  if (!v || !Array.isArray(v.tracks)) fail(vt('v.eventbundles_moet_label_tracks_id',p.id));
+  const ids = v.tracks.map(t => t && t.id); if (ids.some(x => typeof x !== 'string' || !x)) fail(vt('v.eventbundles_elk_spoor_heeft_een',p.id)); if (new Set(ids).size !== ids.length) fail(vt('v.eventbundles_dubbele_spoor_id',p.id));
+  for (const t of v.tracks) { if (t.name !== undefined && typeof t.name !== 'string') fail(vt('v.eventbundles_spoor_name',p.id,t.id)); if (t.ch !== undefined && !(Number.isInteger(t.ch) && t.ch >= 0 && t.ch <= 16)) fail(vt('v.eventbundles_spoor_ch',p.id,t.id)); }
+  nTracks += v.tracks.length;
+}
+for (const p of d.ports.multiEventIn) {
+  if (typeof inst.onEventBundle !== 'function') fail(vt('v.multieventin_instance_oneventbundle_poortid_sleutel',p.id));
+  const tr = n => Array.from({ length: n }, (_, i) => ({ id: 't' + i, name: 'Spoor ' + i, ch: i + 1 })), key = 'd9:tracks';
+  const mk = t => ({ key, source: { id: 'd9', port: 'tracks', name: 'Test' }, label: 'Test', tracks: t });
+  try { inst.onEventBundle(p.id, key, mk(tr(3))); inst.onEventBundle(p.id, key, mk(tr(5))); inst.onEventBundle(p.id, 'd8:tracks', { ...mk(tr(2)), key: 'd8:tracks' }); inst.onEventBundle(p.id, key, mk([])); } catch (e) { fail(vt('v.oneventbundle_gooit',p.id) + e.message); }
+  if (inst.onEvent) { try { inst.onEvent(p.id, { type: 'note', note: 60, vel: 0.8, time: 1, dur: 0.1, track: 't0', ch: 1, bundle: key }); inst.onEvent(p.id, { type: 'cc', id: 'x', cc: 74, value: 0.5, time: 1, track: 't1', ch: 2, bundle: key }); } catch (e) { fail(vt('v.onevent_gooit_op_multieventin',p.id) + e.message); } }
+  try { inst.onEventBundle(p.id, key, null); inst.onEventBundle(p.id, 'd8:tracks', null); } catch (e) { fail(vt('v.oneventbundle_null_gooit',p.id) + e.message); }
+  let js; try { js = JSON.stringify(inst.getState()); } catch (e) { fail('getState() na onEventBundle faalt: ' + e.message); }
 }
 if (inst.onTransport) { try { inst.onTransport({ playing: true }); } catch (e) { fail(vt('v.ontransport_start_gooit') + e.message); } }
 if (inst.onStep) for (let s = 0; s < 32; s++) { ctx.currentTime = s * 0.125; try { inst.onStep({ step: s % 16, bar: Math.floor(s / 16), time: 0.1 + s * 0.125, stepDur: 0.125, bpm: 120, swing: 0 }); } catch (e) { fail(vt('v.onstep_gooit_bij_stap') + s + ': ' + e.message); } }
@@ -572,7 +629,15 @@ try { if (inst.unmount) inst.unmount(); inst.destroy(); inst.destroy(); } catch 
 const openFrames = frames.filter(e => !e.off).length; if (openFrames) fail(vt('v.na_destroy_staan_er_nog',openFrames));
 const extWarn = !/\.patchkamer-device\.js$/i.test(file);
 const rafWarn = /requestAnimationFrame\s*\(/.test(src) && !/host\.frame\b|\.frame\s*===\s*'function'|__pkWrap\(/.test(src);
-for (const port of emitted.map(x => x.port)) if (!d.ports.eventOut.some(p => p.id === port)) fail(vt('v.emit_op_onbekende_eventout_poort',port));
+for (const { port, ev } of emitted) {
+  const multi = d.ports.multiEventOut.some(p => p.id === port);
+  if (!multi && !d.ports.eventOut.some(p => p.id === port)) fail(vt('v.emit_op_onbekende_eventout_poort',port));
+  if (ev && typeof ev === 'object') {
+    if (ev.ch !== undefined && !(Number.isInteger(ev.ch) && ev.ch >= 1 && ev.ch <= 16)) fail(vt('v.gebeurtenis_ch_moet_een_geheel_getal',ev.ch));
+    if (ev.cc !== undefined && !(Number.isInteger(ev.cc) && ev.cc >= 0 && ev.cc <= 127)) fail(vt('v.gebeurtenis_cc_moet_een_geheel_getal',ev.cc));
+    if (multi && (typeof ev.track !== 'string' || !ev.track)) fail(vt('v.gebeurtenis_op_multieventout_mist_track',port));
+  }
+}
 if (d.ui && d.ui.jacks && jacks === 0) fail(vt('v.ui_jacks_is_aan_maar'));
 if (modBad) fail(modBad);
 const nKnobs = nMountKnobs;
@@ -597,6 +662,8 @@ const nKnobs = nMountKnobs;
   if (d.ports.multiIn.length) line += vt('v.ok_bundel_in');
   if (d.ports.masteringOut.length) line += vt('v.ok_mastering_uit');
   if (d.ports.masteringIn.length) line += vt('v.ok_mastering_in');
+  if (d.ports.multiEventOut.length) line += vt('v.ok_multievent_uit', nTracks);
+  if (d.ports.multiEventIn.length) line += vt('v.ok_multievent_in');
   if (masteringBad) fail(masteringBad);
   if (presetBytes) line += vt('v.ok_preset', presetBytes);
   if (nParts) line += vt('v.ok_instrumenten', nParts);

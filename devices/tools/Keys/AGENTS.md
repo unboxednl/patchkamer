@@ -13,7 +13,7 @@ Een toetsenbord en Web MIDI-brug zonder eigen geluid. Het stuurt noten en contro
 | Naam | `Keys / MIDI` in alle talen; alleen de poortnaam `Notes / CC` heeft een Nederlandse variant (`Noten / CC`, via `i18n`) |
 | Soort | `utility` (categorie `tool`) |
 | Poorten | alleen een eventuitgang `notes` ("Noten / CC"); geen audio, geen ingangen |
-| Contract | v1.11 |
+| Contract | v1.13 (apparaatversie 1.12.0): elke gebeurtenis draagt `ch` (MIDI-kanaal); elke MIDI-CC gaat door met `cc` (nummer) en een naam (`cutoff`, `level`, `vibrato`, `expression` zoals eerder, anders `ccN`; het sustainpedaal als `pedal`; kanaaldruk als `pressure`) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Wat het uitstuurt: `note` (met `dur`, in vasthoudmodus ook `held: true`), `noteoff`, `allnotesoff` en `cc` met `id` `bend`, `vibrato`, `expression`, `cutoff` of `level` (waarde 0 … 1). MIDI vraagt alleen toestemming na een klik op de knop; er is geen sysex.
