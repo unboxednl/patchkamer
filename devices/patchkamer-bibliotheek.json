@@ -45,6 +45,17 @@
       "label": "Overig"
     }
   ],
+  "folders": [
+    "drums",
+    "effects",
+    "mastering",
+    "mixer",
+    "modulators",
+    "samplers",
+    "sequencers",
+    "synths",
+    "tools"
+  ],
   "assign": {
     "nl.patchkamer.layeredlandscape": "drone",
     "nl.patchkamer.biotope": "drone",

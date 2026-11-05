@@ -2653,7 +2653,23 @@ const catColor=k=>CATCOL[k]||'var(--muted)';
 var LAYOUT_FILE='patchkamer-bibliotheek.json';
 const CAT_HINTS={'nl.patchkamer.drums':'groove','nl.patchkamer.seq':'sequencer','nl.patchkamer.mono':'synth','nl.patchkamer.ruimte':'effect','nl.patchkamer.roest':'effect','nl.patchkamer.mixer':'mix','nl.patchkamer.speakers':'mix','nl.patchkamer.scope':'tool','nl.patchkamer.drone':'synth','nl.patchkamer.acid303':'synth','nl.patchkamer.takt12':'groove','nl.patchkamer.drift':'groove','nl.voorbeeld.tremolo':'effect','nl.voorbeeld.klik':'tool','nl.patchkamer.driftmod':'mod'};
 var CAT_OVR={};   // your own category per device id (kept in the library settings)
-function categoryOf(def){ const o=CAT_OVR&&CAT_OVR[def.id]; if(o&&CATS.some(x=>x[0]===o)) return o; const b=baseCategory(def); return CATS.some(x=>x[0]===b)?b:'other'; }
+// mappen als categorieën: zonder indelingsbestand is de eerste map van een apparaat in zijn bron zijn categorie; met een bestand komen de mappen die het niet kent erbij
+const SRCLAYOUT=new Map(), SRCDEPTH=new Map();   // sid -> {has, folders} ; sid -> aantal gedeelde bovenste mappen dat wegvalt
+const dirSlug=t=>String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function pathSegs(def){ const p=def&&def._src&&def._src.path; return p?String(p).split('/').filter(Boolean):[]; }
+function dirOf(def){ const sg=pathSegs(def), d=SRCDEPTH.get(def._src&&def._src.sid)||0; return sg.length>d+1?sg[d]:''; }
+function dirCatKey(def){ const f=dirOf(def), slug=f&&dirSlug(f); if(!slug) return null; const L=SRCLAYOUT.get(def._src.sid);
+  if(L&&L.has){ const sl=x=>dirSlug(x).replace(/s$/,''), m=CATS.find(c=>!c[0].startsWith('dir-')&&(sl(c[0])===sl(f)||sl(c[1])===sl(f))); if(m) return m[0];
+    if(L.folders?L.folders.some(x=>dirSlug(x)===slug):(def.category||CAT_HINTS[def.id])) return null; }
+  return 'dir-'+slug; }
+function latestDefs(){ return [...new Set([...Host.registry.values()].map(d=>d.id))].map(id=>Host.versionsOf(id)[0]).filter(Boolean); }
+function syncDirCats(){ const defs=latestDefs(), per=new Map();
+  defs.forEach(d=>{ const sid=d._src&&d._src.sid; if(!sid) return; const sg=pathSegs(d), o=per.get(sid)||{tops:new Set(),deep:true}; if(sg.length<2) o.deep=false; else o.tops.add(sg[0]); per.set(sid,o); });
+  SRCDEPTH.clear(); per.forEach((o,sid)=>{ if(o.tops.size===1&&o.deep) SRCDEPTH.set(sid,1); });
+  CATS=CATS.filter(c=>!c[0].startsWith('dir-')); const found=new Map(); defs.forEach(d=>{ const k=dirCatKey(d); if(k&&k.startsWith('dir-')&&!found.has(k)) found.set(k,dirOf(d)); });
+  const i=CATS.findIndex(c=>c[0]==='other'), add=[...found].sort((a,b)=>a[1].localeCompare(b[1],'nl')).map(([k,f],n)=>{ CATCOL[k]=CAT_PALETTE[n%CAT_PALETTE.length]; return [k,f.charAt(0).toUpperCase()+f.slice(1)]; });
+  CATS.splice(i<0?CATS.length:i,0,...add); }
+function categoryOf(def){ const o=CAT_OVR&&CAT_OVR[def.id]; if(o&&CATS.some(x=>x[0]===o)) return o; const dk=dirCatKey(def); if(dk&&CATS.some(x=>x[0]===dk)) return dk; const b=baseCategory(def); return CATS.some(x=>x[0]===b)?b:'other'; }
 function baseCategory(def){ const c=def.category||CAT_HINTS[def.id]; if(c&&BUILTIN_CATS.has(c)) return c; return {instrument:'synth',effect:'effect',mixer:'mix',output:'mix',utility:'tool',modulator:'mod'}[def.kind]||'other'; }
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function portsLine(def){ const P=def.ports, nm=a=>esc(a.map(x=>x.name||x.id).join(', ')), parts=[];
@@ -2684,7 +2700,8 @@ const CAT_KEYS={synth:'m.synths',groove:'m.drums_grooveboxen',sequencer:'m.seque
 function pkCatLabel(c){ const k=CAT_KEYS[c.key]; return k&&Object.values(I18N).some(d=>d[k]===c.label)?pkt(k):c.label; }
 function applyCats(){ const list=LIB.catList&&LIB.catList.length?LIB.catList:CAT_DEFAULT.map(x=>({key:x[0],label:x[1]}));
   CATS=list.map(c=>[c.key,pkCatLabel(c)]); CATCOL={}; list.forEach((c,i)=>{ CATCOL[c.key]=c.color||(CAT_DEFAULT.find(x=>x[0]===c.key)||[])[2]||CAT_PALETTE[i%CAT_PALETTE.length]; });
-  for(const k of Object.keys(LIB.cats)) if(!CATS.some(x=>x[0]===LIB.cats[k])) delete LIB.cats[k]; }
+  for(const k of Object.keys(LIB.cats)) if(!String(LIB.cats[k]).startsWith('dir-')&&!CATS.some(x=>x[0]===LIB.cats[k])) delete LIB.cats[k];
+  syncDirCats(); }
 LIB.catList=LIB.catList?cleanCatList(LIB.catList,!(LIB.catV>=2)):null; LIB.catV=2; applyCats();
 const saveLib=()=>{ try{ localStorage.setItem(LIBKEY,JSON.stringify(LIB)); }catch(e){} };
 function setCategory(defId,cat){ const def=Host.latest(defId); if(!def||!CATS.some(x=>x[0]===cat)) return;
@@ -2693,12 +2710,12 @@ function setCategory(defId,cat){ const def=Host.latest(defId); if(!def||!CATS.so
   paintIcons();
   status(`${def.name} → ${CATS.find(x=>x[0]===cat)[1]}`); }
 function paintLib(){
-  const lib=$('lib'), q=($('libSearch').value||'').trim().toLowerCase(); lib.innerHTML='';
+  syncDirCats(); const lib=$('lib'), q=($('libSearch').value||'').trim().toLowerCase(); lib.innerHTML='';
   const ids=[...new Set([...Host.registry.values()].map(d=>d.id))]; let shown=0;
   CATS.forEach(([cat,label])=>{
     const items=ids.map(id=>Host.versionsOf(id)[0]).filter(def=>categoryOf(def)===cat)
       .filter(def=>!q||[def.name,def.id,def.kind,label].some(t=>String(t).toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name,'nl'));
-    if(!items.length&&(q||BUILTIN_CATS.has(cat))) return; shown+=items.length;
+    if(!items.length&&(q||BUILTIN_CATS.has(cat)||cat.startsWith('dir-'))) return; shown+=items.length;
     const box=document.createElement('div'); box.className='cat'+(LIB.closed.includes(cat)&&!q?' closed':''); box.dataset.cat=cat; box.style.setProperty('--catc',catColor(cat));
     const head=document.createElement('button'); head.className='cathead'; head.setAttribute('aria-expanded',String(!box.classList.contains('closed')));
     head.innerHTML=`<span class="chev">▾</span><span class="cdot"></span>${esc(label)}<span class="n">${items.length}</span>`; head.title=pkt('m.klik_in_of_uitklappen_dubbelklik'); head.addEventListener('dblclick',e=>{ e.preventDefault(); renameCatInline(cat,head); });
@@ -2874,7 +2891,7 @@ async function loadSource(src,opts={}){
       if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[])].map(prEntry).map(w=>({...w,path:base+w.path})); if(m.name) src.label=m.name+' · '+src.label; }
       else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,500); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); }
       if(src.only){ if(src.only!=='devices') paths=[]; wpaths=[]; ppaths=ppaths.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }   // een bron voor één soort: alleen apparaten, alleen presets of alleen tunes
-      { const lb=blobs.find(x=>x.path===base+LAYOUT_FILE); if(lb) layout=async()=>JSON.parse((await fetchText(rawOf(lb.path))).text); }
+      { const lb=blobs.find(x=>x.path===base+LAYOUT_FILE)||blobs.find(x=>x.path===base+'devices/'+LAYOUT_FILE); if(lb) layout=async()=>JSON.parse((await fetchText(rawOf(lb.path))).text); }
       ppaths.forEach(w=>prs.push({path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
       for(const pth of paths){ try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
       wpaths.forEach(w=>wss.push({name:w.name,path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
@@ -2900,6 +2917,7 @@ async function loadSource(src,opts={}){
     }
     LIBWS.set(src.sid,wss);
     await presetsFromSource(src,prs,errs);
+    SRCLAYOUT.set(src.sid,{has:!!layout,folders:null});
     if(layout){ try{ const L=await layout(); const r=applyLayout(L,src,false); if(r) layoutNote=r; }catch(e){ errs.push(LAYOUT_FILE+': '+e.message); } }
     SRCSTATE.set(src.sid,{state:errs.length&&!n?'err':errs.length?'warn':'ok',n,msg:pktp('m.n_apparaat',n===1,n)+(wss.length?pktp('m.werkruimtes_werkruimte',wss.length>1,wss.length):'')+(prs.length?pktp('m.presetbibliotheken_presetbibliotheek',prs.length>1,prs.length):'')+(cached?pkt('m.uit_eerder_opgehaalde_kopie',cached):'')+(layoutNote?' · '+layoutNote:'')+(skipped?pktp('m.bestanden_overgeslagen_bestand_overgeslagen',skipped>1,skipped):'')+(errs.length?pktp('m.fouten_fout',errs.length>1,errs.length):''),errs});
   }catch(e){ SRCSTATE.set(src.sid,{state:'err',msg:e.message,errs:[e.message]}); errs.push(e.message); }
@@ -3550,9 +3568,10 @@ function renameCatInline(key,head){ const lab=CATS.find(x=>x[0]===key); if(!lab)
   head.replaceWith(i); i.focus(); i.select(); let done=false; const fin=ok=>{ if(done) return; done=true; if(ok) renameCat(key,i.value); else paintLib(); };
   i.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Enter') fin(true); if(e.key==='Escape') fin(false); }); i.addEventListener('blur',()=>fin(true)); i.addEventListener('pointerdown',e=>e.stopPropagation()); }
 function layoutState(){ ensureCatList(); return {format:'patchkamer-bibliotheek',formatVersion:1,catV:2,saved:new Date().toISOString(),
-  categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key)})),assign:{...LIB.cats},closed:[...(LIB.closed||[])]}; }
+  categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key)})),folders:[...new Set(latestDefs().map(dirOf).filter(Boolean))].sort(),assign:Object.fromEntries(Object.entries(LIB.cats).filter(([,c])=>!String(c).startsWith('dir-'))),closed:[...(LIB.closed||[])]}; }
 // L = inhoud van patchkamer-bibliotheek.json. force=false bij het laden van een bron: alleen toepassen als het bestand nieuw of gewijzigd is
 function applyLayout(L,src,force){ if(!L||L.format!=='patchkamer-bibliotheek'||!Array.isArray(L.categories)) throw new Error(pkt('m.geen_bibliotheekindeling_format_patchkamer_bibliotheek'));
+  { const o=src&&SRCLAYOUT.get(src.sid); if(o) o.folders=Array.isArray(L.folders)?L.folders.map(String):null; }
   const stamp=String(L.saved||'')+'|'+L.categories.length+'|'+Object.keys(L.assign||{}).length, k=src?src.sid:'file';
   if(!force&&LIB.layoutSeen[k]===stamp) return '';
   if(!force&&src&&LIB.layoutT&&!(Date.parse(L.saved||'')>=LIB.layoutT)){ LIB.layoutSeen[k]=stamp; saveLib(); return pkt('m.indeling_in_deze_browser_is')+LAYOUT_FILE+pkt('m.en_blijft_staan'); }
