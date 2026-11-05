@@ -92,7 +92,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg.click('#libCfgBtn'); pg.wait_for_timeout(400); pg.locator('#libwin').screenshot(path=OUT + '/10-library-layout.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg); pg.screenshot(path=OUT + '/03-patch.png')
     pg.click('#wsBtn'); pg.wait_for_timeout(400); pg.locator('#wsPanel').screenshot(path=OUT + '/06-workspace.png'); pg.click('#wsPanel .close'); pg.wait_for_timeout(300)
-    pg.click('#setBtn'); pg.wait_for_timeout(400); pg.locator('#setPanel').screenshot(path=OUT + '/07-settings.png'); pg.click('#setClose'); pg.wait_for_timeout(300)
+    pg.click('#setBtn'); pg.set_viewport_size({'width': 1900, 'height': 1700}); pg.wait_for_timeout(600); pg.locator('#setPanel').screenshot(path=OUT + '/07-settings.png'); pg.set_viewport_size({'width': 1900, 'height': 1060}); pg.click('#setClose'); pg.wait_for_timeout(300)
     import_tunes(pg); pg.locator('#prPanel').screenshot(path=OUT + '/09-tunes-panel.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg)   # meerdere werkruimtes: de tabbalk met drie werkruimtes
     pg.fill('#wsName', 'Acid jam'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)
