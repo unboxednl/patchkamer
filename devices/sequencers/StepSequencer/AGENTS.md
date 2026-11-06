@@ -13,7 +13,7 @@ Een monofone stap-sequencer: één patroon van 1 tot 64 stappen dat noten als ge
 | Naam | `Step Sequencer`; de poortnamen hebben een Nederlandse variant (`Noten in`, `Noten`) via `i18n` |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `in` (Notes in), eventuitgang `notes` (Notes); geen audio, geen modulatie |
-| Contract | v1.14 (apparaatversie 1.14.1) |
+| Contract | v1.17 (apparaatversie 1.17.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Presets: `../../../presets/step-sequencer.patchkamer-presets.json` (70 patronen in zes mappen).
@@ -170,7 +170,34 @@ De pianorol toont de stappen als blokjes: **breedte = lengte** (`ln` of `gate`),
 - Raster 1/32 en 1/64 geven 2 en 4 gebeurtenissen per zestiende noot op de juiste tijden en duren; `ln`, `vel` en `mt` per stap kloppen; humanize is deterministisch; opnemen met en zonder kwantiseren, met vasthouden en stap-voor-stap invoer, en doorgeven werken.
 - De editor (klikken, slepen, lengte, velocity, accent, raster, verdubbelen) is in een echte browser getest; de kaart volgt `setState`.
 - 1.14.1: met `rowSwing` leeg gaven oud en nieuw bij 120 willekeurige states (80 stappen elk, raster 1/16, 1/32, 1/64; 11.795 gebeurtenissen) 0 verschillen; `getState` kreeg alleen de sleutel `rowSwing` erbij. Rij-swing, kwantiseren naar het geswingde raster (jitter), `quant` uit, opname uit, klok stil, onzin-gebeurtenissen en de lijst van 27 klanken in de echte host (nl en en) zijn getest.
+- 1.17.0: met de drie nieuwe methoden gaven oud (1.14.1) en nieuw bij 120 willekeurige en ongeldige states (klok, preset, gebeurtenissen, ook met een drumlijst aan de uitgang, in nl en en) exact dezelfde gebeurtenissen, `getState` en `getPreset` (0 afwijkingen).
 - Niet beluisterd; er is geen echte synth of MIDI-toetsenbord aangesloten getest.
+
+## Klembord: patroon kopiëren en plakken (sinds 1.17.0)
+
+De host kopieert en plakt het patroon met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V. Het apparaat doet daar drie dingen voor (contract v1.17, formaat `patchkamer-clip`, formatVersion 1; tijd in **tikken**, 12 per zestiende, dus 192 per maat). Ze veranderen niets aan `getState()`, de presets of het geluid.
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | Licht en dynamisch, gooit nooit, `null` na `destroy`. Zonder drumcomputer aan de uitgang: `copy` en `paste` zijn `['notes']`. Met een drumcomputer (`noteNames()`): `['drums']` en `lanes` zijn de benoemde klanken van dat apparaat (`id` `n<nootnummer>`, `type` leeg). Verder `length` (`min` 3, `max` 768, `step` 3 tikken; `shared` onwaar), `grid` `[16, 32, 64]`, `poly` 1 (mono), `range` `[12, 108]`, `vel` `continuous`, `prob` en `ratchet` onwaar, `maxEvents` 64. |
+| `getClip()` | Het patroon als `patchkamer-clip` of `null`. `notes`: `t` (tik; microtiming `mt` zit erin verwerkt), `n` (zoals opgeslagen, zonder `oct`), `len` (`ln` of `gate`, hoogstens tot het einde van het patroon), `vel` (automatisch = 0,7 of 1 bij accent) en `acc`. `drums`: dezelfde tijden als `hits` met een `lane`-index in `lanes` (de klanken, plus noten in het patroon die het apparaat niet kent). `grid` is `res`; `swing` (hoogstens 0,5 zestiende) volgt de patroon-swing. `native` bevat het hele patroon voor een verliesvrije terugkeer. |
+| `setClip(clip)` | Zet `n`, `acc`, `vel`, `ln`, `mt`, `len` en `res` en laat al het andere staan (`gate`, `oct`, `swing`, `rowSwing`, humanize, `thru`, `rec`, `view`, `cur`, de pagina). Geeft `{ ok: true }` (met `dropped`: het aantal weggelaten noten, alleen als dat er is) of `{ ok: false, reason }` in de taal van de host. Gooit nooit en zet niets half: bij een weigering blijft de state gelijk. Stuurt zelf geen gebeurtenissen. |
+
+Wat `setClip` doet, in volgorde:
+
+1. **Controle.** Het formaat moet `patchkamer-clip` zijn (formatVersion ontbreekt of is 1), `kind` moet passen bij het apparaat nu (`notes` of `drums`; een soortverschil wordt geweigerd) en `length` moet een getal zijn. Alles wordt geklemd: `length` 1 tot 12288 tikken, hoogstens 4096 gebeurtenissen (de rest telt als weggelaten), `t` binnen de lengte, `n` 0 tot 127, `vel` 0,01 tot 1. Gebeurtenissen met onzin (`NaN`, geen getal, een baan die niet bestaat) vallen weg. Onbekende velden worden genegeerd.
+2. **Raster.** `grid` is een voorkeur. Het apparaat neemt dat raster als alle tijden erop passen en de lengte binnen 64 stappen blijft; anders het dichtstbijzijnde raster waarop wel alles past; past niets precies, dan het raster waarbij de minste noten samenvallen en de afrondingen het kleinst zijn. De host kiest dit zelf al; het apparaat klemt voor de zekerheid.
+3. **Lengte.** `len` = `length` omhoog afgerond op hele rasterstappen, hoogstens 64. Noten voorbij het einde vallen weg.
+4. **Mono.** Per rasterstap blijft de hardste noot (bij gelijke velocity de eerste); de rest telt mee in `dropped`. Een noot die tussen twee stappen valt, gaat naar de dichtstbijzijnde stap met de afwijking in `mt` (hoogstens ± een halve stap); een noot precies tussen twee stappen kiest een vrije buur. De host doet deze reductie ook al en meldt die; het apparaat doet haar nog eens.
+5. **Bereik.** Noten buiten 12 tot 108 gaan per octaaf naar binnen (de toonhoogte blijft).
+6. **Velocity, accent, lengte.** Accent met velocity 1 wordt `acc` 1 met `vel` 0 (automatisch); velocity 0,7 zonder accent wordt `vel` 0 (automatisch, klinkt gelijk). Een lengte gelijk aan de gate wordt `ln` 0. Kans en ratchet kent dit apparaat niet; ze worden genegeerd. Bij `drums` is er geen lengte in de clip: `ln` wordt 0 (de gate).
+7. **Drums.** De noot van een slag is de `note` van de baan (`lanes[hit.lane].note`); de host heeft de banen al op de klanken van dit apparaat uitgelijnd.
+8. **Eigen clip.** Hoort `native.device` bij dit apparaat en komt de clip nog overeen met het patroon in `native` (zelfde noten, velocity en accent; tijden en lengtes hoogstens een halve rasterstap verschoven, want de host zet de tijden op het raster van het doel), dan komt het eigen patroon **exact** terug, ook de stappen voorbij `len` en de fijne timing. Is de clip echt aangepast (andere noten, lengte, mono-reductie), dan geldt stap 1 tot en met 7.
+9. **Weergave.** Alleen als het patroon echt verandert: de kaart wordt opnieuw opgebouwd (lengte, raster en pagina's volgen), `cur` en de pagina blijven binnen `len`, en de zichtbare toonhoogtes springen alleen mee als de nieuwe noten buiten beeld vallen. Een clip die het patroon niet verandert, doet niets.
+
+Er is geen undo in het apparaat. De host maakt vóór het plakken een momentopname met `getState()` en zet die terug met `setState` (toast Ongedaan maken, Ctrl+Z).
+
+Getest met een nep-host in Node: de rondreis `setClip(getClip())` laat `getState()` gelijk in 600 willekeurige states (300 voor `notes` en 300 voor `drums`, ook via JSON-tekst), ook zonder `native` blijven tijd en toonhoogte gelijk; ongeldige en extreme clips (`NaN`, `Infinity`, lengtes tot 1e9, 100000 noten, onbekende velden, verkeerde soort) geven geen fout en laten de state intact of binnen het bereik; kopiëren naar Clip Arranger en terug behoudt noten en lengte voor zover het formaat het toelaat (accent en kans niet). Niet beluisterd.
 
 ## Controleren
 

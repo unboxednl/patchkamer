@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende). Zonder drumcomputer aan de uitgang is het patroon een `notes`-clip, met een drumcomputer (`noteNames`) een `drums`-clip met de klanken als banen. Plakken zet alleen het patroon (`n`, `acc`, `vel`, `ln`, `mt`, `len`, `res`); swing, humanize, octaaf, gate en werkstand blijven. Het apparaat is mono: per rasterstap blijft de hardste noot. Een clip uit hetzelfde apparaat komt via `native` verliesvrij terug. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Swing per rij en inspelen tegen het geswingde raster. Nieuw: `rowSwing` (nootnummer → 0 … 0,5 zestiende, standaard leeg): vertraagt de noten van die rij op de oneven zestienden, bovenop de swing van de host en de bestaande patroon-`swing` (die ongewijzigd blijft werken: elke tweede rasterstap, in rasterstappen); samen hoogstens 0,5 zestiende voor het rijdeel. Inspelen met de klok kwantiseert naar het dichtstbijzijnde GESWINGDE rasterpunt (hostswing, patroonswing en rijswing), zet bij Kwantiseren uit de afwijking als microtiming tegen dat punt, neemt de lengte van een noot met `dur` over (vanaf 2 rasterstappen) en negeert aanslagen die buiten de geplande stappen vallen. De rol toont de volledige klankenlijst van een drumcomputer (tot 64 rijen; de rol wordt hoger in plaats van de lijst af te kappen). Met `rowSwing` leeg speelt alles als voorheen.
 // 1.14.0 — Patchkamer contract v1.14. Hangt er via de notenkabel een apparaat met noteNames() (een drumcomputer) aan, dan is elke rij van de rol een klank in de volgorde van dat apparaat, met de naam erbij; noten die het apparaat niet kent blijven zichtbaar met een vraagteken. Zonder lijst blijft het de gewone pianorol. Geen wijziging in klank of state.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Step Sequencer (id nl.patchkamer.seq blijft gelijk, eigen map in sequencers; voorheen Sequencer, 16 stappen).
@@ -19,12 +20,14 @@ const EN = {
   'Rij': 'Row', 'Rij-swing': 'Row swing',
   'Swing per rij vertraagt de noten van één rij (een klank van de drumcomputer) op de oneven zestienden; Swing vertraagt het hele patroon. Beide komen bovenop de swing van de host. Inspelen kwantiseert naar het geswingde raster; per stap past één noot (een nieuwe noot vervangt de oude).':
     'Row swing delays the notes of one row (one sound of the drum machine) on the odd sixteenths; Swing delays the whole pattern. Both come on top of the host swing. Recording quantizes to the swung grid; a step holds one note (a new note replaces the old one).',
-  'Stap {0}': 'Step {0}', 'Noten in': 'Notes in', 'Noten': 'Notes'
+  'Stap {0}': 'Step {0}', 'Noten in': 'Notes in', 'Noten': 'Notes',
+  'Patroon van {0} stappen': 'Pattern of {0} steps', 'Geen geldige clip.': 'Not a valid clip.', 'Het apparaat is verwijderd.': 'The device has been removed.',
+  'De soort past niet: dit apparaat neemt nu {0}.': 'Wrong kind: this device now takes {0}.', 'noten': 'notes', 'drums': 'drums'
 };
 const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const MAXN = 64, LO = 12, HI = 108, ROWS = 25, LANEMAX = 64;
 export default {
-  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.14.1', category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
+  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.17.0', category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'Notes in' }], eventOut: [{ id: 'notes', name: 'Notes' }] },
   i18n: { nl: { ports: { in: 'Noten in', notes: 'Noten' } } },
   create(ctx, host) {
@@ -132,10 +135,152 @@ export default {
         state.cur = Math.round(finite(s.cur, 0, 0, state.len - 1)); page = 0; dirty = true;
         if (mountHost) render(mountHost);
       },
+      // ---- klembord (contract v1.17): patroon kopiëren en plakken ----
+      clipInfo() { return clipInfo(); },
+      getClip() { return getClip(); },
+      setClip(clip) { return setClip(clip); },
       mount(el) { render(el); },
       unmount() { teardown(); },
       destroy() { if (dead) return; releaseThru(); dead = true; teardown(); }
     };
+    // ---- klembord (contract v1.17) ----------------------------------------------------------------------------------------------------------
+    // Formaat `patchkamer-clip` (formatVersion 1): tijd in tikken, 12 per zestiende, dus 192 per maat. Een rasterstap is 192 / res tikken (12, 6 of 3).
+    // Zonder drumcomputer aan de uitgang is het patroon een `notes`-clip, met een drumcomputer (noteNames) een `drums`-clip met de klanken als banen.
+    // Plakken zet alleen het patroon: `n`, `acc`, `vel`, `ln`, `mt`, `len` en `res`. Swing, humanize, octaaf, gate en de werkstand blijven staan.
+    const CLIP_ID = 'nl.patchkamer.seq', MAXEV = 4096, MAXTICKS = 12288, GRIDS = [16, 32, 64];
+    const cellTicks = res => 192 / res;
+    const foldNote = n => { n = Math.round(n); while (n < LO) n += 12; while (n > HI) n -= 12; return n; };
+    const kindNow = () => (buildLanes() ? 'drums' : 'notes');
+    // het patroon (zonder de werkstand) als eenvoudig object; ook voor een vergelijking vóór en na
+    const patternOf = () => ({ len: state.len, res: state.res, n: state.n.slice(), acc: state.acc.slice(), vel: state.vel.slice(), ln: state.ln.slice(), mt: state.mt.slice(), gate: state.gate });
+    // gebeurtenissen van een patroon in tikken; de toonhoogte staat zoals opgeslagen (zonder `oct`)
+    function eventsOf(p) {
+      const ct = cellTicks(p.res), length = p.len * ct, out = [];
+      for (let i = 0; i < p.len; i++) {
+        const m = p.n[i]; if (!(m >= 0)) continue;
+        const t = clamp(Math.round((i + p.mt[i]) * ct), 0, length - 1);
+        // een noot die over het einde van het patroon loopt, wordt in de clip bij het einde afgekapt (zoals het formaat voorschrijft)
+        out.push({ t, note: m, len: Math.max(1, Math.min(length - t, Math.round((p.ln[i] > 0 ? p.ln[i] : p.gate) * ct))), vel: p.vel[i] > 0 ? p.vel[i] : (p.acc[i] ? 1 : 0.7), acc: !!p.acc[i] });
+      }
+      return out;
+    }
+    // Is `inc` (wat er binnenkomt) nog dezelfde clip als `ref` (het eigen patroon dat in `native` zat)? Gelijke lengte en aantal, gelijke noten, snelheid en accent;
+    // de tijd (en bij `notes` de lengte) mag hoogstens `tol` tikken verschillen, want de host zet de tijden op het rasterpunt van het doel en kapt noten bij het einde af.
+    function sameClip(ref, refLength, inc, incLength, drums, tol) {
+      if (ref.length !== inc.length || refLength !== incLength) return false;
+      const key = (a, b) => a.note - b.note || a.t - b.t || a.vel - b.vel, A = ref.slice().sort(key), B = inc.slice().sort(key);
+      return A.every((a, i) => { const b = B[i]; return a.note === b.note && Math.abs(a.t - b.t) <= tol && Math.abs(a.vel - b.vel) < 1e-6 && a.acc === b.acc && (drums || Math.abs(a.len - b.len) <= tol); });
+    }
+    // het patroon uit `native.data` van dit apparaat, op dezelfde manier gezuiverd als setState; null bij onzin
+    function cleanPattern(d) {
+      if (!d || typeof d !== 'object') return null;
+      const res = GRIDS.includes(d.res) ? d.res : 16, len = Math.round(finite(d.len, 0, 0, MAXN)); if (len < 1) return null;
+      const arr = (v, def, f) => Array.from({ length: MAXN }, (_, i) => Array.isArray(v) ? f(v[i], def) : def);
+      const num = x => typeof x === 'number' && Number.isFinite(x);
+      return {
+        len, res, gate: state.gate,
+        n: arr(d.n, -1, (x, df) => num(x) ? (x < 0 ? -1 : Math.round(clamp(x, LO, HI))) : df),
+        acc: arr(d.acc, 0, (x, df) => x != null ? (x ? 1 : 0) : df),
+        vel: arr(d.vel, 0, (x, df) => num(x) ? (x <= 0 ? 0 : clamp(x, 0.05, 1)) : df),
+        ln: arr(d.ln, 0, (x, df) => num(x) ? (x <= 0 ? 0 : clamp(x, 0.1, MAXN)) : df),
+        mt: arr(d.mt, 0, (x, df) => num(x) ? clamp(x, -0.5, 0.5) : df)
+      };
+    }
+    function clipInfo() {
+      try {
+        if (dead) return null;
+        readTarget(); const ln = buildLanes(), kind = ln ? 'drums' : 'notes';
+        const info = { name: tx('Patroon van {0} stappen', state.len), copy: [kind], paste: [kind], length: { min: 3, max: 64 * 12, step: 3, current: state.len * cellTicks(state.res), shared: false }, grid: [16, 32, 64], poly: 1, range: [LO, HI], scheme: ln ? 'device' : 'gm', vel: 'continuous', prob: false, ratchet: false, maxEvents: MAXN };
+        if (ln) info.lanes = ln.filter(l => l.named).map(l => ({ id: 'n' + l.note, name: l.name.slice(0, 40), type: '', note: l.note }));
+        return info;
+      } catch (e) { return null; }
+    }
+    function getClip() {
+      try {
+        if (dead) return null;
+        readTarget(); const p = patternOf(), ln = buildLanes(), evs = eventsOf(p), ct = cellTicks(p.res), length = p.len * ct;
+        const clip = { format: 'patchkamer-clip', formatVersion: 1, kind: ln ? 'drums' : 'notes', name: tx('Patroon van {0} stappen', p.len), length, grid: p.res, source: { device: CLIP_ID, name: 'Step Sequencer', version: '1.17.0', scheme: ln ? 'device' : 'gm' } };
+        const sw = Math.min(0.5, state.swing * 16 / p.res); if (sw > 0) clip.swing = sw;
+        if (ln) {
+          clip.lanes = ln.map(l => ({ id: 'n' + l.note, name: l.name.slice(0, 40), type: '', note: l.note }));
+          clip.hits = []; for (const e of evs) { const j = ln.findIndex(l => l.note === e.note); if (j < 0) continue; const h = { t: e.t, lane: j, vel: e.vel }; if (e.acc) h.acc = true; clip.hits.push(h); }
+        } else clip.notes = evs.map(e => { const o = { t: e.t, n: e.note, len: e.len, vel: e.vel }; if (e.acc) o.acc = true; return o; });
+        clip.native = { device: CLIP_ID, data: { len: p.len, res: p.res, n: p.n, acc: p.acc, vel: p.vel, ln: p.ln, mt: p.mt } };
+        return JSON.parse(JSON.stringify(clip));
+      } catch (e) { return null; }
+    }
+    // leest een clip uit onbetrouwbare invoer: { kind, length, hint, evs:[{t,note,len,vel,acc}], native } of { err }
+    function parseClip(clip) {
+      const bad = { err: tx('Geen geldige clip.') };
+      if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1)) return bad;
+      const want = kindNow(); if (clip.kind !== want) return { err: tx('De soort past niet: dit apparaat neemt nu {0}.', tx(want === 'drums' ? 'drums' : 'noten')) };
+      if (typeof clip.length !== 'number' || !Number.isFinite(clip.length)) return bad;
+      const length = Math.round(clamp(clip.length, 1, MAXTICKS)), evs = [], num = x => typeof x === 'number' && Number.isFinite(x);
+      let seen = 0;
+      if (want === 'notes') {
+        const src = Array.isArray(clip.notes) ? clip.notes : []; seen = src.length;
+        for (const x of src.slice(0, MAXEV)) { if (!x || typeof x !== 'object' || !num(x.t) || !num(x.n)) continue; evs.push({ t: Math.round(clamp(x.t, 0, length - 1)), note: foldNote(clamp(x.n, 0, 127)), len: Math.round(finite(x.len, 12, 1, MAXTICKS)), vel: finite(x.vel, 0.8, 0.01, 1), acc: x.acc === true }); }
+      } else {
+        const lanes = Array.isArray(clip.lanes) ? clip.lanes.slice(0, 64) : [], src = Array.isArray(clip.hits) ? clip.hits : []; seen = src.length;
+        for (const x of src.slice(0, MAXEV)) { if (!x || typeof x !== 'object' || !num(x.t) || !Number.isInteger(x.lane) || x.lane < 0 || x.lane >= lanes.length) continue; const l = lanes[x.lane]; if (!l || typeof l !== 'object' || !num(l.note)) continue; evs.push({ t: Math.round(clamp(x.t, 0, length - 1)), note: foldNote(clamp(l.note, 0, 127)), len: 0, vel: finite(x.vel, 0.8, 0.01, 1), acc: x.acc === true }); }
+      }
+      const nat = clip.native && typeof clip.native === 'object' && clip.native.device === CLIP_ID ? clip.native.data : null;
+      return { kind: want, length, hint: GRIDS.includes(clip.grid) ? clip.grid : 16, evs, native: nat, cut: Math.max(0, seen - MAXEV) };
+    }
+    // zet de gebeurtenissen op rasterstappen (hoogstens één per stap: de hardste wint); noten precies tussen twee stappen kiezen een vrije buur
+    function placeEvents(evs, L, ct) {
+      const best = new Map(); let dropped = 0;
+      const put = (cell, e) => { const o = best.get(cell); if (o) { dropped++; if (e.vel <= o.vel) return; } best.set(cell, e); };
+      const half = [];
+      for (const e of evs) {
+        if (e.t >= L * ct) { dropped++; continue; }
+        if ((e.t * 2) % (2 * ct) === ct) half.push(e); else put(Math.min(L - 1, Math.round(e.t / ct)), e);
+      }
+      for (const e of half) { const lo = Math.min(L - 1, Math.floor(e.t / ct)), hi = Math.min(L - 1, lo + 1); put(best.has(lo) && !best.has(hi) ? hi : lo, e); }
+      return { best, dropped };
+    }
+    // kies het raster: bij voorkeur het gevraagde, anders het dichtstbijzijnde waarop alles precies past
+    function pickRes(hint, length, evs) {
+      const cand = GRIDS.map(res => { const ct = cellTicks(res); return { res, ct, fits: Math.ceil(length / ct) <= MAXN, aligned: evs.every(e => e.t % ct === 0) }; });
+      const near = c => Math.abs(Math.log2(c.res / hint));
+      const ok = cand.filter(c => c.fits && c.aligned);
+      if (ok.length) return ok.reduce((b, c) => near(c) < near(b) ? c : b);
+      // niets past precies: het raster waarbij de minste noten wegvallen en de afrondingen het kleinst zijn
+      const fit = cand.filter(c => c.fits); if (!fit.length) return cand[0];
+      for (const c of fit) { c.lost = placeEvents(evs, Math.ceil(length / c.ct), c.ct).dropped; c.err = 0; for (const e of evs) c.err += Math.abs(e.t / c.ct - Math.round(e.t / c.ct)) * c.ct; }
+      return fit.reduce((b, c) => c.lost < b.lost || (c.lost === b.lost && (c.err < b.err - 1e-9 || (Math.abs(c.err - b.err) <= 1e-9 && near(c) < near(b)))) ? c : b);
+    }
+    function setClip(clip) {
+      try {
+        if (dead) return { ok: false, reason: tx('Het apparaat is verwijderd.') };
+        readTarget(); const c = parseClip(clip); if (c.err) return { ok: false, reason: c.err };
+        let pat = null, dropped = c.cut;
+        // een clip uit dit apparaat die niet is aangepast: het eigen patroon komt exact terug
+        const nat = cleanPattern(c.native);
+        if (nat && sameClip(eventsOf(nat), nat.len * cellTicks(nat.res), c.evs, c.length, c.kind === 'drums', Math.floor(cellTicks(c.hint) / 2))) pat = nat;
+        if (!pat) {
+          const r = pickRes(c.hint, c.length, c.evs), ct = r.ct, L = clamp(Math.ceil(c.length / ct), 1, MAXN);
+          pat = { len: L, res: r.res, n: new Array(MAXN).fill(-1), acc: zeros(), vel: zeros(), ln: zeros(), mt: zeros() };
+          const pl = placeEvents(c.evs, L, ct), best = pl.best; dropped += pl.dropped;
+          for (const [cell, e] of best) {
+            pat.n[cell] = e.note; pat.mt[cell] = clamp((e.t - cell * ct) / ct, -0.5, 0.5) + 0;
+            pat.acc[cell] = e.acc ? 1 : 0;
+            pat.vel[cell] = e.acc && e.vel >= 0.999 ? 0 : (!e.acc && Math.abs(e.vel - 0.7) < 1e-9 ? 0 : clamp(e.vel, 0.05, 1));
+            // c.kind === 'drums': geen lengte in de clip, dan geldt de gate
+            pat.ln[cell] = c.kind === 'drums' || Math.round(state.gate * ct) === e.len ? 0 : clamp(e.len / ct, 0.1, MAXN);
+          }
+        }
+        const before = JSON.stringify(patternOf());
+        for (const k of ['n', 'acc', 'vel', 'ln', 'mt']) state[k] = pat[k].slice();
+        state.len = pat.len; state.res = pat.res;
+        if (JSON.stringify(patternOf()) === before) return { ok: true, ...(dropped ? { dropped } : {}) };
+        state.cur = Math.min(state.cur, state.len - 1); page = Math.min(page, pages() - 1);
+        if (!buildLanes()) { let out = false; for (let i = 0; i < state.len; i++) { const m = state.n[i]; if (m >= 0 && (m < state.view || m > state.view + ROWS - 1)) out = true; } if (out) state.view = autoView(); }
+        dirty = true; if (mountHost) render(mountHost);
+        return { ok: true, ...(dropped ? { dropped } : {}) };
+      } catch (e) { return { ok: false, reason: tx('Geen geldige clip.') }; }
+    }
+
     // Inspelen: met de klok loopt de aanslag naar het dichtstbijzijnde GESWINGDE rasterpunt (host-, patroon- en rijswing), zoals de noot straks ook echt klinkt.
     // Kwantiseren uit: de noot staat op dat punt met de afwijking als microtiming (± een halve rasterstap). Zonder klok schrijft het stap voor stap vanaf de cursor.
     function record(note, vel, t, held, realDur) {
@@ -242,12 +387,18 @@ export default {
       } catch (e) { names = []; }
       const sig = JSON.stringify(names); if (sig !== namesSig) { namesSig = sig; peerNames = names; dirty = true; }
     }
-    function refreshRows() {
-      if (!peerNames.length) { lanes = null; LABW = 32; setRoll(ROWS); if (lastLaneSig !== '') { lastLaneSig = ''; syncRowSwing(); } return; }
+    // de rijen van de drumcomputer (zie boven), of null zonder lijst klanken
+    function buildLanes() {
+      if (!peerNames.length) return null;
       const seen = new Set(), rows = [];
       for (const x of peerNames) { const n = Math.round(x.note); if (rows.length >= LANEMAX || seen.has(n) || !(n >= 0 && n <= 127)) continue; seen.add(n); rows.push({ note: n, name: String(x.name), named: true }); }
       const extra = new Set(); for (let i = 0; i < state.len; i++) { const m = state.n[i]; if (m >= 0 && !seen.has(m)) extra.add(m); }
       for (const m of [...extra].sort((a, b) => a - b)) if (rows.length < LANEMAX) rows.push({ note: m, name: noteName(m), named: false });
+      return rows;
+    }
+    function refreshRows() {
+      const rows = buildLanes();
+      if (!rows) { lanes = null; LABW = 32; setRoll(ROWS); if (lastLaneSig !== '') { lastLaneSig = ''; syncRowSwing(); } return; }
       lanes = rows; LABW = LANE_LABW; setRoll(rows.length);
       const sig = rows.map(r => r.note).join(','); if (sig !== lastLaneSig) { lastLaneSig = sig; syncRowSwing(); }
     }
