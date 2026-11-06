@@ -1,0 +1,5 @@
+/* css/file-drop.css — overlay "Laat los om te laden" bij het slepen van bestanden over het canvas (js/file-drop.js) */
+.pkdrop{position:absolute;inset:4px;z-index:25;display:grid;place-items:center;background:var(--scrim);border:2px dashed var(--audio);border-radius:6px;pointer-events:none}
+.pkdrop .box{display:grid;gap:6px;max-width:min(52ch,90%);padding:14px 20px;text-align:center;background:var(--overlay);border:1px solid var(--line);border-radius:6px}
+.pkdrop b{font-family:var(--disp);font-size:20px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg)}
+.pkdrop span{font-size:11px;line-height:1.45;color:var(--muted)}

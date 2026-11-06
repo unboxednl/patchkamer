@@ -1,0 +1,23 @@
+/* css/dialogs.css — menu-onderdeel Automatisch koppelen, koppeldialoog, lege-vloerkaart */
+.hdrmenu .hm-al{display:flex;align-items:center;gap:10px;min-height:44px;margin-top:6px}
+.aldlg .box{width:min(580px,100%);max-height:calc(92dvh / var(--pkfs,1));overflow:hidden;grid-template-rows:auto minmax(0,1fr) auto}
+.aldlg h3{margin:0 0 4px;font-size:1.1em}
+.aldlg .albody{overflow:auto;min-height:0;display:grid;gap:10px;align-content:start;overscroll-behavior:contain}
+.aldlg .algrp h4{margin:0 0 4px;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-left:3px solid var(--gc,var(--muted));padding-left:6px}
+.aldlg .alrow{border:1px solid var(--line);border-left:3px solid var(--gc,var(--muted));border-radius:4px;background:var(--card-2);margin-bottom:4px;min-width:0}
+.aldlg .alchk{display:flex;gap:10px;align-items:center;min-height:44px;padding:4px 8px;cursor:pointer}
+.aldlg .alchk input,.aldlg .alask input{width:22px;height:22px;flex:none}
+.aldlg .altxt{min-width:0;overflow-wrap:anywhere}
+.aldlg .alp,.aldlg .altag,.aldlg .alwhy{color:var(--muted)}
+.aldlg .alsel{display:flex;gap:8px;align-items:center;padding:0 8px 6px 40px;color:var(--muted);font-size:.9em}
+.aldlg .alsel select{min-width:0;max-width:100%;flex:1;min-height:36px}
+.aldlg .alfoot{display:grid;gap:8px}
+.aldlg .alask{display:flex;gap:10px;align-items:center;min-height:44px;cursor:pointer}
+.aldlg .alfoot .wsrow button{min-height:44px;min-width:96px}
+.floorempty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:2;padding:16px}
+.floorempty .box{pointer-events:auto;max-width:520px;background:var(--overlay);border:1px solid var(--line);border-radius:10px;padding:22px 24px;display:grid;gap:12px;text-align:center;box-shadow:0 18px 50px var(--shadow)}
+.floorempty h2{margin:0;font-family:var(--disp);font-size:22px;letter-spacing:.12em;text-transform:uppercase}
+.floorempty p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
+.floorempty .wsrow{justify-content:center}
+.libempty2{display:grid;gap:10px;padding:10px 4px;font-size:.9em;line-height:1.5;color:var(--muted)}
+.libempty2 b{color:var(--fg)}

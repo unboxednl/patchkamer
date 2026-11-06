@@ -1,0 +1,32 @@
+/* css/cables.css — poort- en kabelsoorten (sturing, bundels, multi-MIDI, mastering) en kabelstijlen */
+.port.mod .dot{border-color:var(--mod)} .port.mod.wired .dot{background:var(--mod)}
+svg.cables path.mod{stroke:var(--mod);stroke-dasharray:1 7;stroke-linecap:round;stroke-width:3.5}
+svg.wire path.mod{stroke:var(--mod)}
+.port.multi .dot{border-color:var(--multi);border-radius:3px;width:14px} .port.multi.wired .dot{background:var(--multi);box-shadow:inset 0 0 0 2px var(--card)}
+.port.jack.multi .dot{width:18px}
+svg.cables path.multi{stroke:var(--multi);stroke-width:7;opacity:.85}
+svg.cables path.multicore{stroke:var(--floor);stroke-width:2.5;fill:none;opacity:1}
+/* v1.13: multi-MIDI = dubbele gestreepte oranje kabel */
+.port.multievent .dot{border-color:var(--event);border-radius:3px;width:14px} .port.multievent.wired .dot{background:var(--event);box-shadow:inset 0 0 0 2px var(--card)}
+.port.jack.multievent .dot{width:18px}
+svg.cables path.multievent{stroke:var(--event);stroke-width:7;stroke-dasharray:10 6;opacity:.85}
+svg.cables path.eventcore{stroke:var(--floor);stroke-width:2.5;stroke-dasharray:10 6;fill:none;opacity:1}
+svg.wire path.multievent{stroke:var(--event);stroke-width:6}
+svg.wire path.multi{stroke:var(--multi);stroke-width:6}
+/* v1.12: mastering = driehoekpoort, gele gestippelde sinus */
+.port.mastering .dot{width:14px;height:14px;border:0;border-radius:0;background:var(--mastering);opacity:.5;clip-path:polygon(0 0,100% 50%,0 100%)} .port.mastering.wired .dot{opacity:1}
+.port.jack.mastering .dot{width:16px;height:16px}
+svg.cables path.mastering{stroke:var(--mastering);stroke-dasharray:1 6;stroke-linecap:round;stroke-width:3.2}
+svg.wire path.mastering{stroke:var(--mastering)}
+/* kabelsoorten: audio vast · sturing golvend · gebeurtenissen gestreept · bundel dubbel */
+svg.cables path.event{stroke-dasharray:10 6}
+svg.cables path.mod{stroke-dasharray:none;stroke-width:2.2;stroke-linecap:round}
+svg.cables g.cable:hover path:not(.hit):not(.multicore):not(.eventcore){stroke-width:4.5;opacity:1}
+svg.cables g.cable:hover path.multi,svg.cables g.cable:hover path.multievent{stroke-width:9}
+svg.cables circle.clip{fill:var(--floor);stroke-width:2.2}
+/* v1.8: kabeldekking en draaiknoppen */
+svg.cables g.cable{opacity:var(--cableOp,1);transition:opacity .12s}
+svg.cables g.cable:hover{opacity:1}
+svg.cables g.cable.drop{opacity:1} svg.cables g.cable.drop path:not(.hit):not(.multicore){stroke-width:6;opacity:1;filter:drop-shadow(0 0 5px var(--sel))}
+.pkentry{position:fixed;z-index:9999;font:12px/1.2 var(--mono,ui-monospace,monospace);padding:2px 5px;border:1px solid var(--sel,#4ea8ff);background:var(--panel,#16191f);color:var(--fg,#ddd);border-radius:3px;outline:none;box-shadow:0 2px 10px #0008}
+.pknum{cursor:text}

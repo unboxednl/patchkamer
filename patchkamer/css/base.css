@@ -1,0 +1,24 @@
+/* css/base.css — basis: reset, body, kopbalk, knoppen, invoervelden, schuiven */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);transition:background-color .2s;font-family:var(--mono);font-size:12px;line-height:1.4;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px 16px;display:flex;flex-direction:column;gap:10px}
+header{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px}
+h1{font-family:var(--disp);font-weight:700;font-size:24px;letter-spacing:.14em;text-transform:uppercase;margin:0}
+h1 b{color:var(--audio)}
+.transport{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-left:auto}
+button{font-family:var(--disp);font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase;background:var(--card-2);color:var(--fg);border:1px solid var(--line);padding:6px 11px;cursor:pointer;border-radius:3px}
+button:hover{border-color:var(--audio)}
+button:focus-visible{outline:1px solid var(--audio);outline-offset:2px}
+button.go{background:var(--go);border-color:var(--go);color:#06130a;font-weight:700;min-width:80px}
+button.go.on{background:var(--stop);border-color:var(--stop);color:#fff}
+button.small{font-size:11px;padding:4px 8px}
+button.danger:hover{border-color:var(--stop)}
+.tp{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.tp input[type=number]{width:60px;background:var(--field);color:var(--field-fg);border:1px solid var(--line);font-family:var(--mono);padding:4px 6px;font-size:12px;border-radius:3px;font-variant-numeric:tabular-nums}
+input[type=range]{appearance:none;height:16px;background:transparent;margin:0;cursor:pointer;width:100%;min-width:0}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--line)}
+input[type=range]::-moz-range-track{height:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:10px;height:14px;margin-top:-5.5px;border-radius:2px;background:var(--card-2);border:1px solid var(--audio)}
+input[type=range]::-moz-range-thumb{width:9px;height:13px;border-radius:2px;background:var(--card-2);border:1px solid var(--audio)}
+input[type=range]:focus-visible{outline:1px solid var(--audio);outline-offset:2px}
+select,input[type=text]{background:var(--field);color:var(--field-fg);border:1px solid var(--line);font-family:var(--mono);font-size:11px;padding:4px 6px;border-radius:3px;min-width:0}

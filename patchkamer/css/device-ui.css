@@ -1,0 +1,22 @@
+/* css/device-ui.css — algemene UI-hulpklassen voor apparaten (raster, stappen, meter, strip), formulier- en tekstvelden */
+/* generic device UI helpers (devices may use these classes) */
+.k{display:grid;grid-template-columns:70px minmax(0,1fr) 44px;gap:6px;align-items:center}
+.k label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k output{font-size:10px;text-align:right;font-variant-numeric:tabular-nums}
+.grid16{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:2px}
+.st{height:16px;border:1px solid var(--line);background:var(--card-2);border-radius:2px;cursor:pointer;padding:0;min-width:0}
+.st.q{background:var(--step-q)} .st.on{background:var(--event);border-color:var(--event)} .st.cur{box-shadow:inset 0 0 0 2px var(--fg)}
+.rowlab{display:grid;grid-template-columns:44px minmax(0,1fr);gap:6px;align-items:center;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meter{height:6px;background:var(--line);border-radius:2px;overflow:hidden} .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--audio),var(--go) 70%,var(--stop))}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.strip .ch{display:grid;gap:4px;border:1px solid var(--line);border-radius:3px;padding:5px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center}
+.strip .ch input[type=range]{writing-mode:vertical-lr;direction:rtl;height:70px;width:100%}
+.strip .ch button{padding:2px 0;font-size:10px} .strip .ch button.on{background:var(--stop);border-color:var(--stop);color:#fff}
+textarea{width:100%;background:var(--card-2);color:var(--fg);border:1px solid var(--line);font-family:var(--mono);font-size:10px;padding:6px;resize:vertical;border-radius:3px;min-width:0}
+details summary{cursor:pointer;color:var(--muted);font-size:11px}
+pre{margin:0;background:var(--well);border:1px solid var(--line);border-radius:3px;padding:8px;font-size:10px;line-height:1.45;overflow:auto;max-height:360px;color:var(--well-fg)}
+.status{font-size:10px;color:var(--muted);min-height:14px}
+.status.err{color:var(--stop)}
+kbd{border:1px solid var(--line);border-radius:3px;padding:0 4px;font-size:10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+

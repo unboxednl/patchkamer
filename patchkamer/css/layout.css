@@ -1,0 +1,14 @@
+/* css/layout.css — indeling: werkruimtevak, paneel, vloer en zoombalk */
+.room{position:relative;flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr)}
+@media (max-width:820px){.room{min-height:560px}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:5px;padding:10px 12px;display:grid;gap:8px;min-width:0}
+.panel h2{margin:0;font-family:var(--disp);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.note{color:var(--muted);font-size:10px;line-height:1.45}
+.floorwrap{position:relative;background:var(--floor);border:1px solid var(--line);border-radius:5px;overflow:hidden;min-height:0;cursor:grab;touch-action:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px}
+.floorwrap.panning{cursor:grabbing}
+.floor{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
+.viewctl{position:absolute;right:10px;bottom:10px;display:flex;gap:4px;align-items:center;z-index:5;background:var(--overlay);border:1px solid var(--line);border-radius:4px;padding:4px}
+.viewctl button{padding:3px 8px;font-size:12px;min-width:30px}
+.viewctl output{font-size:10px;color:var(--muted);min-width:4ch;text-align:center;font-variant-numeric:tabular-nums}
+.card .bar select.ver{font-size:9px;padding:1px 2px;max-width:70px}

@@ -1,0 +1,37 @@
+/* css/responsive.css — aanraking en klein scherm, deel 1: basis, semantisch zoomen en compacte bibliotheek */
+/* =====================================================================
+   TOUCH, KLEIN SCHERM, BIBLIOTHEEK COMPACT/ONDERLADE, CAMERASTANDEN, SCHERMINDELING
+   Muis en breed scherm blijven zoals ze waren: alles hieronder is nieuw, of staat in een media query voor aanraking / smal scherm.
+   ===================================================================== */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+html,body{overscroll-behavior:none}
+@supports (height:100dvh){html,body{height:100dvh}}
+body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px))}
+.floorwrap{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+.floorwrap.pinching{cursor:move}
+.narrowonly{display:none}
+@media (max-width:820px) and (min-height:700px){.room{min-height:560px}}
+/* compacte kaarten bij uitzoomen (semantisch zoomen): binnenkant overgeslagen, state en geluid blijven */
+.floor.lite .card:not(.mini):not(.keepui) .ui,.floor.lite .card:not(.mini) .pbar{content-visibility:hidden}
+.floor.lite .card:not(.mini) .pbar{display:none}
+.floor.lite .card:not(.mini):not(.keepui) .modbar{display:none!important}
+.floor.lite .card:not(.mini):not(.keepui){height:auto!important}
+/* bibliotheek: weergaveschakelaar, compacte regels */
+.libbar .seg{display:inline-flex}
+.libbar .seg button{border-radius:0;padding:3px 8px;font-size:12px;min-width:0}
+.libbar .seg button:first-child{border-radius:3px 0 0 3px}
+.libbar .seg button:last-child{border-radius:0 3px 3px 0;border-left:0}
+.libbar .seg button.on{background:var(--sel);color:#fff;border-color:var(--sel)}
+.libdev>.kd,.libdev>.vr,.libdev>.xp{display:none}
+#lib.cmp .devs{grid-template-columns:minmax(0,1fr);gap:3px}
+#lib.cmp .libdev{grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;gap:2px 10px;padding:6px 6px 6px 10px;min-height:36px}
+#lib.cmp .libdev>.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:1em}
+#lib.cmp .libdev>.kd,#lib.cmp .libdev>.vr{display:block;font-size:.8em;color:var(--muted);white-space:nowrap}
+#lib.cmp .libdev>.vr{font-variant-numeric:tabular-nums}
+#lib.cmp .libdev>.xp{display:block;padding:2px 8px;font-size:.9em;min-width:30px;line-height:1.2}
+#lib.cmp .libdev>.id,#lib.cmp .libdev>.pt,#lib.cmp .libdev>.src,#lib.cmp .libdev>.act{display:none}
+#lib.cmp .libdev.open>.id,#lib.cmp .libdev.open>.pt,#lib.cmp .libdev.open>.src{display:block;grid-column:1/-1}
+#lib.cmp .libdev.open>.act{display:flex;grid-column:1/-1}
+#lib.cmp .libdev.open>.xp{transform:rotate(90deg)}
+#lib.cmp .libdev{cursor:pointer}
+#libClose{display:none}

@@ -1,0 +1,46 @@
+/* css/themes.css — kleurvariabelen en de drie kleurstellingen (donker, licht, retro) met hun overschrijvingen */
+/* Layout: a studio room. Top bar = transport. Left = device library and spec. Centre = the patch floor: draggable device cards with ports, cables drawn in an SVG overlay on top. Single committed dark look. */
+:root{
+  --bg:#0c0e11; --floor:#101318; --card:#171b22; --card-2:#1e232c; --line:#2a3039; --fg:#dce1e8; --muted:#7d8794;
+  --audio:#4fd1c5;   /* audio cables */
+  --event:#f4a261;   /* event cables (trigs, notes) */
+  --go:#6bd98a; --stop:#e4574a; --sel:#9b8cff;
+  --disp:'Barlow Condensed',system-ui,sans-serif; --mono:'Fira Code',ui-monospace,Menlo,monospace;
+  --mod:#b48cff; --multi:#8bdb6a; --mastering:#f2cf3b;          /* sturing, bundels */
+  --well:#090b0e; --well-fg:#b9c3d0;       /* verzonken vlakken: code, meters, schermen */
+  --overlay:rgba(16,19,24,.9); --scrim:rgba(5,7,10,.6); --shadow:var(--shadow); --step-q:#242a34; --glyph-fg:#11151b;
+  --bar:var(--card-2); --bar-fg:var(--fg); --field:var(--card-2); --field-fg:var(--fg); --lcd-font:var(--mono);
+  color-scheme:dark;
+}
+/* ---------- kleurstelling: licht ---------- */
+:root[data-skin="light"]{
+  --bg:#e9ecf0; --floor:#f6f7f9; --card:#ffffff; --card-2:#eef1f5; --line:#cfd5dd; --fg:#1a2028; --muted:#5b6572;
+  --audio:#0d8a80; --event:#c4650f; --go:#2f9a52; --stop:#cc3a2e; --sel:#5f4bd8; --mod:#8250d6; --multi:#3f9a2f; --mastering:#c79a06;
+  --well:#eef1f5; --well-fg:#26303c; --overlay:rgba(255,255,255,.94); --scrim:rgba(20,28,38,.35); --shadow:rgba(25,35,50,.14); --step-q:#dde2e9; --glyph-fg:#ffffff;
+  color-scheme:light;
+}
+/* ---------- kleurstelling: retro (interne naam s1000): grijsbeige paneel, geelgroen LCD, donkere toetsbalken ---------- */
+:root[data-skin="s1000"]{
+  --bg:#b4afa3; --floor:#c3beb2; --card:#d9d5ca; --card-2:#e6e2d8; --line:#8e897d; --fg:#1c1b18; --muted:#57534a;
+  --audio:#2d5f8c; --event:#c9621c; --go:#557f22; --stop:#b8322a; --sel:#1c1b18; --mod:#6a4a98; --multi:#2f6b2a; --mastering:#9a7400;
+  --well:#aec05a; --well-fg:#1d2709; --overlay:rgba(217,213,202,.95); --scrim:rgba(40,36,28,.45); --shadow:rgba(30,26,18,.28); --step-q:#cfcabd; --glyph-fg:#e9e5da;
+  --bar:#45433e; --bar-fg:#ece8dd; --field:#b7c862; --field-fg:#1d2709; --lcd-font:'VT323',ui-monospace,monospace;
+  --disp:'Barlow Condensed',system-ui,sans-serif;
+  color-scheme:light;
+}
+:root[data-skin="s1000"] h1{font-family:var(--lcd-font);font-weight:400;letter-spacing:.08em;background:var(--well);color:var(--well-fg);padding:0 10px;border:3px solid #45433e;border-radius:3px;box-shadow:inset 0 0 8px rgba(30,40,10,.35)}
+:root[data-skin="s1000"] h1 b{color:var(--well-fg)}
+:root[data-skin="s1000"] .tp input[type=number],:root[data-skin="s1000"] .wsname:focus{font-family:var(--lcd-font);font-size:16px}
+:root[data-skin="s1000"] button{background:#ece8de;border-color:#8e897d;box-shadow:0 2px 0 #8e897d;border-radius:2px}
+:root[data-skin="s1000"] button:active{transform:translateY(1px);box-shadow:0 1px 0 #8e897d}
+:root[data-skin="s1000"] .card .bar button,:root[data-skin="s1000"] .card .bar select{background:#5a5853;color:var(--bar-fg);border-color:#2f2e2a;box-shadow:none}
+:root[data-skin="s1000"] .card{border-color:#7a766b;border-radius:3px}
+:root[data-skin="s1000"] .card .bar{border-radius:3px 3px 0 0}
+:root[data-skin="s1000"] .card .bar .nm small{color:#bdb8aa}
+:root[data-skin="s1000"] .libbar{background:#45433e;color:#ece8dd}
+:root[data-skin="s1000"] .libbar .cnt{color:#bdb8aa}
+:root[data-skin="s1000"] .card .bar .nm{font-family:var(--lcd-font);font-weight:400;font-size:18px;letter-spacing:.06em}
+:root[data-skin="s1000"] .floorwrap{background-color:var(--floor)}
+:root[data-skin="s1000"] .card .bar .dim{font-family:var(--lcd-font);font-size:14px}
+:root[data-skin="s1000"] .k output{white-space:nowrap}
+:root[data-skin="light"] .card .bar,:root[data-skin="light"] .libbar{background:var(--card-2)}
