@@ -38,6 +38,12 @@
 #skDesign .dz-hint{font-size:11px;color:var(--muted);margin:2px 0 4px}
 #skDesign .dz-warn{font-size:11px;color:var(--event);margin:2px 0 4px}
 #skDesign .dz-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+#skDesign .dz-rule{border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin:6px 0}
+#skDesign .dz-rhead{display:flex;align-items:center;gap:4px;margin-bottom:4px}
+#skDesign .dz-rhead select{flex:1;min-width:0}
+#skDesign .dz-rn{font-size:11px;color:var(--muted);white-space:nowrap}
+#skDesign .dz-regtab{font-size:11px;border-collapse:collapse;margin:4px 0}
+#skDesign .dz-regtab th,#skDesign .dz-regtab td{text-align:left;padding:1px 8px 1px 0}
 @media (max-width:520px){ #skDesign .dz-row{grid-template-columns:1fr} }
 @media (pointer:coarse){ #skDesign button,#skDesign select,#skDesign input[type=text]{min-height:44px} #skDesign .dz-sw{width:56px;height:44px} }
 /* kleurkiezer */
