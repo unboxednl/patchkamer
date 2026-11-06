@@ -13,7 +13,7 @@ Een clip-, scène- en songsequencer met 1 tot 16 sporen (tracks). Het maakt **ze
 | Naam | `Clip Arranger` in alle talen; de poortnamen hebben een Nederlandse variant (`MIDI / opname`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input`; eventuitgangen `track1` … `track16` (de statische lijst; via `host.setPorts` en `ui.jacks` toont de kaart in één horizontale rij alleen `track1` … `trackN` voor de N sporen, met alleen het nummer, en rechts altijd `tracks`; minder sporen haalt de kabels van de verdwenen uitgangen weg); geen audio, geen sturing; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.14 (apparaatversie 1.14.0) |
+| Contract | v1.17 (apparaatversie 1.17.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen met vier sporen en scènes van vier sporen; Pattern Playlist en Pattern Tracker bouwen een song van patronen in een playlist of tracker. Clip Arranger werkt zoals een sessieweergave: een matrix van clips per spoor en per scène, plus een lineair song-arrangement erboven.
@@ -286,6 +286,29 @@ Een arrangement van een dance-nummer (scène 0 Intro, 1 Build, 2 Drop, 3 Break):
 - **Routing, selecties of opname in de preset**: de kabels horen niet in de state; `selectedTrack`, `record` en dergelijke zijn werkstand en horen niet in een preset.
 - **Merknamen** in spoor-, clip-, scène- of presetnamen of in `target`.
 
+## Klembord: een clip kopiëren en plakken (sinds 1.17.0)
+
+De host kopieert en plakt de gekozen clip van het gekozen spoor met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V. Het apparaat doet daar drie dingen voor (contract v1.17, formaat `patchkamer-clip`, formatVersion 1; tijd in **tikken**, 12 per zestiende, dus 192 per maat; de stap van een noot in de state is in zestienden, dus tikken = stap × 12). Ze veranderen niets aan `getState()`, de presets of het geluid. Los van de eigen knoppen Kopieer clip en Plak clip, die binnen dit apparaat blijven werken.
+
+**Het tracktype bepaalt de soort.** Een spoor van het type `notes` of `drone` kopieert en plakt `notes`; een spoor van het type `drums` kopieert en plakt `drums`. Een clip van de andere soort wordt geweigerd (`{ ok: false, reason }`); het apparaat verandert het tracktype nooit.
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | Licht, gooit nooit, verandert niets, `null` na `destroy`. `name` is "spoornaam · clipnaam", `copy` en `paste` zijn `['notes']` of `['drums']`, `length` is `min` 192, `max` 12288, `step` 192 (hele maten), `current` de lengte van de clip, `shared` onwaar. Verder `grid` `[16, 32, 64]`, `poly` 128, `range` `[0, 127]`, `vel` `continuous`, `prob` en `ratchet` waar, `maxEvents` 4096. Bij `drums` ook `lanes`: de rijen van het spoor uit `rowsOf` (dus de klanken van een aangesloten apparaat met `noteNames()`, anders de opgeslagen `rows`), met `id` `r<positie>`, `name`, `note` en `type` (alleen voor de standaardrijen: `kick`, `snare`, `clap`, `closedhat`, `openhat`, `lowtom`, `midtom`, `hitom`, `rim`, `crash`, `ride`, `shaker`, `tamb`, `conga`, `bongo`). `scheme` is `gm` voor de standaardrijen en voor toetsen, anders `device`. |
+| `getClip()` | De clip als `patchkamer-clip` of `null`. `notes`: `t`, `n`, `len`, `vel` en (alleen als ze niet 1 zijn) `prob` en `ratchet`. `drums`: `lanes` zoals hierboven en `hits` met `t`, `lane` (de rij), `vel`, `prob`, `ratchet`. `length` is `bars` × 192, `grid` het raster van de clip, `swing` de clipswing (alleen als hij boven 0 is), `source.trackType` het tracktype. Noten voorbij het einde van de clip en noten van een rij die niet meer bestaat, worden niet meegegeven; een noot over het einde wordt ingekort. `native` bevat noten, CC-lanes, raster en swing voor een verliesvrije terugkeer. |
+| `setClip(clip)` | Vervangt de noten van de gekozen clip en zet `bars`, `grid` en `swing`. Naam, CC-lanes (hun punten worden binnen de nieuwe lengte gehouden), de overige clips en sporen en de rest van de compositie blijven staan. Geeft `{ ok: true }` (met `dropped` als er noten weggelaten zijn) of `{ ok: false, reason }` in de taal van de host. Gooit nooit en zet niets half: bij een weigering blijft de state gelijk. Stuurt zelf geen gebeurtenissen. |
+
+Wat `setClip` doet:
+
+1. **Controle.** Formaat `patchkamer-clip` (formatVersion ontbreekt of is 1), `kind` past bij het tracktype, `length` is een getal. Daarna wordt alles geklemd: `length` 1 tot 12288 tikken, `bars` = `length` omhoog afgerond op hele maten (1 tot 64), `t` binnen de clip, `n` 0 tot 127, `len` 3 tikken (een 1/64) tot 12288, `vel` 0,01 tot 1, `prob` 0 tot 1, `ratchet` 1 tot 4, het raster 16, 32 of 64 (anders blijft het raster van de clip). Hoogstens **4096** noten (de rest telt als weggelaten). Onzin (`NaN`, geen getal, onbekende velden, een baan of rij die niet bestaat) valt weg of wordt genegeerd. De stappen komen op veelvouden van 0,25 zestiende (3 tikken); een tijd daartussen gaat naar het dichtstbijzijnde punt (de host doet dat al).
+2. **Drumbanen.** Een slag (`hit.lane`) gaat naar de rij van dit spoor waarvan `id` (`r<positie>`) en `note` kloppen met de baan; de host heeft de banen al op de rijen van dit spoor uitgelijnd. Alleen bij standaardrijen en een GM-bron valt het apparaat terug op het nootnummer, daarna op de naam; wat nergens op past, wordt weggelaten. De `note` van de noot is die van de rij, `len` is 1.
+3. **Noot-nummers.** De `id`'s van de nieuwe noten worden opnieuw uitgedeeld als 0, 1, 2, … in de volgorde van de clip; de gekozen noot (`selectedNote`) wordt gewist.
+4. **Eigen clip.** Hoort `native.device` bij dit apparaat en komt de clip nog overeen met de noten in `native` (zelfde tijden, noten of rijen, lengtes, velocity, kans, ratchet en dezelfde lengte), dan komen noten (met hun `id`'s), **CC-lanes**, raster en swing exact terug. Is de clip aangepast, dan geldt stap 1 tot en met 3 en blijven de CC-lanes van het doel staan.
+5. **Undo.** Een plak die iets verandert, roept eerst `remember()` aan: de knop Undo, Redo en Ctrl+Z (op de kaart) herstellen de vorige clip. Een clip die niets verandert, doet niets (ook geen geschiedenisregel).
+6. **Weergave.** De kaart wordt opnieuw opgebouwd, zoals na `setState`. De afspeellus loopt door; de nieuwe noten klinken vanaf de volgende stap.
+
+Getest met een nep-host in Node en in een echte browser (Chromium, de apparaatbestanden direct geladen): de rondreis `setClip(getClip())` laat `getState()` gelijk (2880 gevallen: drie tracktypen, drie van de acht clips, 120 willekeurige states, met en zonder klanklijst aan een drumspoor, ook via JSON-tekst), zonder `native` blijven noten en lengte gelijk; extreme en ongeldige clips (`NaN`, lengtes tot 1e9, 100000 noten, onbekende velden, verkeerde soort, onzin-banen) geven geen fout en laten de state intact of binnen het bereik; 100000 noten geven er 4096; Undo, Redo en Ctrl+Z herstellen; kopiëren van en naar Step Sequencer behoudt noten en lengte voor zover het formaat het toelaat (CC-lanes alleen binnen dit apparaat). Niet beluisterd.
+
 ## Het presetpack
 
 `../../../presets/clip-arranger.patchkamer-presets.json` bevat 58 presets in 10 mappen, elk een **startconfiguratie voor een compositie** gebaseerd op de muziektheorie van het genre:
@@ -311,6 +334,7 @@ Elke preset heeft 3 tot 7 sporen met een rol, een toonsoort en akkoordprogressie
 - Een oude compositie klinkt gelijk aan die van het oude bestand: bij 150 willekeurige instellingen en klokreeksen (69.572 gebeurtenissen) en 150 live-invoerreeksen met opname (33.642 gebeurtenissen) 0 verschil.
 - Alle 58 presets: geldige JSON, unieke Engelse namen, `setPreset`→`getPreset` gelijk, een hele song afgespeeld (alle gebeurtenissen eindig en binnen bereik), import in de host (nl en en).
 - 1.14.0: met alle nieuwe velden op hun standaard gaven oud en nieuw bij 120 willekeurige states (6 maten klok, 1 tot 6 sporen; 73.954 gebeurtenissen) 0 verschillen, en live doorgeven (noot, trig, noteoff, cc) was gelijk. Swing per niveau, kwantiseren naar het geswingde raster (jitter ± 30 ms; bij clip + spoor samen 0,5 liggen buurpunten dichter dan de jitter, daar zijn missers inherent), loop-opname in Speel deze clip met Aanvullen en Overschrijven, 40 klanken van een drumcomputer en de echte host (nl en en, geen paginafouten) zijn getest.
+- 1.17.0: met de drie nieuwe methoden gaven oud (1.14.0) en nieuw bij 60 willekeurige en ongeldige states (klok, preset, ingespeelde noten, ook met een klanklijst aan een drumspoor, in nl en en) exact dezelfde gebeurtenissen en `getState` (0 afwijkingen).
 - Niet beluisterd; er is geen echte synth of drumcomputer aan gekoppeld getest, en geen echt MIDI-toetsenbord.
 
 ## Controleren

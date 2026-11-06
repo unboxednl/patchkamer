@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Patchkamer contract v1.17: klembord voor clips. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, dus 192 per maat). Het tracktype bepaalt de soort: toetsen en drone zijn `notes`, drums is `drums` (de banen zijn de rijen van het spoor, ook die van een aangesloten apparaat met klanknamen). Plakken vervangt de noten van de gekozen clip en zet lengte (hele maten), raster en clipswing; naam, CC-lanes en de rest van de compositie blijven staan; de noot-nummers worden opnieuw uitgedeeld; de grens van 4096 noten geldt; Undo en Redo werken. Een clip uit dit apparaat komt via `native` verliesvrij terug (ook CC-lanes). Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.0.
 // 1.14.0 — Swing per niveau, opname en één clip spelen. Swing (0 … 0,5 van een zestiende, standaard 0) op clip- (`swing`), spoor- (`swing`) en drumrij-niveau (`rowSwing`, per nootnummer van de rij); samen (som, hoogstens 0,5) vertragen ze de noten, ratchets en CC van de oneven zestienden, bovenop de swing van de host. Live opname kwantiseert naar het dichtstbijzijnde geswingde rasterpunt, een nieuwe noot op dezelfde plek en rij vervangt de oude, de opnamemodus `recordMode` is Aanvullen (standaard) of Overschrijven (wist de clip bij de eerste ingespeelde noot van een opnamerun). 'Speel deze clip' loopt alleen de gekozen clip van het gekozen spoor, los van scènes en song. Een drumspoor dat een apparaat met klanknamen volgt, stuurt zijn rijen als noot (niet als trig op chN): dat bereikt ook de gastinstrumenten. Rijen die buiten de lijst vallen crashen de weergave niet meer. Met alle nieuwe velden op hun standaard speelt alles als voorheen.
 // 1.13.1 — De poorten staan in één horizontale rij bovenin de kaart (ui.jacks): ingang, dan alleen zoveel spooruitgangen als er sporen zijn (met alleen het nummer), en rechts altijd de multi-MIDI-poort Sporen. Minder sporen haalt de kabels van de verdwenen uitgangen weg.
 // 1.13.1 — Een drumspoor volgt het aangesloten apparaat (noteNames, contract v1.14): de rol toont de hele lijst klanken van het apparaat onder elkaar, met hun nootnummers en kanalen, ook als de kit of volgorde wijzigt.
@@ -87,6 +88,7 @@ const EN = {
   'ongebruikt': 'unused', 'Kabel → noten / trigs / CC': 'Cable → notes / trigs / CC', 'Deze uitgang blijft beschikbaar.': 'This output stays available.',
   'Sequencer: {0}': 'Sequencer: {0}', 'Invoer: {0}': 'Input: {0}', 'Clip Arranger sequencer': 'Clip Arranger sequencer',
   'Atmosfeer': 'Atmosphere', 'Bas': 'Bass', 'Variatie': 'Variation', 'Opbouw': 'Build-up', 'Hoofddeel': 'Main', 'Vrij': 'Free', 'Track {0}': 'Track {0}',
+  'Geen geldige clip.': 'Not a valid clip.', 'Het apparaat is verwijderd.': 'The device has been removed.', 'De soort past niet: dit spoor neemt nu {0}.': 'Wrong kind: this track now takes {0}.', 'noten': 'notes', 'drums': 'drums',
   'MIDI / opname': 'MIDI / record', 'MIDI': 'MIDI', 'Sporen': 'Tracks', 'Sporen: alle sporen met hun namen in één kabel': 'Tracks: all tracks with their names in one cable', 'Poorten: {0}': 'Ports: {0}', 'Rock drums': 'Rock drums'
 };
 // Nederlandse standaardnamen uit het oude bestand: een opgeslagen naam die hier gelijk aan is, wordt een lege naam en volgt dan de taal
@@ -149,7 +151,7 @@ const frameLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.cliparranger', name: 'Clip Arranger', version: '1.14.0', kind: 'utility', category: 'sequencer', ui: { width: 1340, minWidth: 560, jacks: true }, ports: PORTS,
+  id: 'nl.patchkamer.cliparranger', name: 'Clip Arranger', version: '1.17.0', kind: 'utility', category: 'sequencer', ui: { width: 1340, minWidth: 560, jacks: true }, ports: PORTS,
   i18n: { nl: { ports: Object.assign({ input: 'MIDI / opname', tracks: 'Sporen' }, ...Array.from({ length: 16 }, (_, i) => ({ ['track' + (i + 1)]: 'Track ' + (i + 1) }))) } },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.split('{' + i + '}').join(v); }); return t; };
@@ -321,12 +323,101 @@ export default {
         if (r && held) { const e = live.get(n); if (e) { e.rec = { clip: r.c, id: r.z.id }; e.rec0 = { time, g: r.g }; } }
       }
     }
+    // ---- klembord (contract v1.17) ----
+    // Formaat `patchkamer-clip` (formatVersion 1): tijd in tikken, 12 per zestiende, dus 192 per maat. Het tracktype bepaalt de soort: toetsen en drone zijn
+    // `notes`, drums is `drums` met de rijen van het spoor als banen (rowsOf: ook de klanken van een aangesloten apparaat). Plakken vervangt de noten van de
+    // gekozen clip en zet lengte (hele maten), raster en clipswing. Naam, CC-lanes en de rest van de compositie blijven staan; het spoortype verandert nooit.
+    const CLIP_ID = 'nl.patchkamer.cliparranger', MAXTICKS = 64 * 192, ROW_TYPES = ['kick', 'snare', 'clap', 'closedhat', 'openhat', 'lowtom', 'midtom', 'hitom', 'rim', 'crash', 'ride', 'shaker', 'tamb', 'conga', 'bongo', ''];
+    const clipKind = t => (t.type === 'drums' ? 'drums' : 'notes'), isNum = x => typeof x === 'number' && Number.isFinite(x);
+    // true als de rijen nog de standaardrijen zijn (algemene MIDI-nummers), anders volgen ze een apparaat of de eigen keuze
+    const defaultRows = t => { const d = drumRows(); return !fromDevice(t) && t.rows.length === d.length && t.rows.every((r, j) => r.name === d[j].name && r.note === d[j].note); };
+    function laneList(t) { const gm = defaultRows(t); return rowsOf(t).map((r, j) => ({ id: 'r' + j, name: String(r.name).slice(0, 40), type: gm ? ROW_TYPES[j] || '' : '', note: r.note })); }
+    // de gebeurtenissen van een clip in tikken; een rij die niet meer bestaat of een noot buiten de clip telt niet mee (klinkt ook niet)
+    function eventsOf(t, c) {
+      const drums = t.type === 'drums', L = c.bars * 192, rows = drums ? rowsOf(t) : null, out = [];
+      for (const n of c.notes) {
+        const tk = Math.round(n.step * 12); if (tk < 0 || tk >= L) continue;
+        if (drums) { if (!rows[n.row]) continue; out.push({ t: tk, row: n.row, vel: n.vel, prob: n.prob, ratchet: n.ratchet }); }
+        else out.push({ t: tk, note: n.note, len: Math.max(1, Math.min(L - tk, Math.round(n.len * 12))), vel: n.vel, prob: n.prob, ratchet: n.ratchet }); // een noot over het einde wordt in de clip bij het einde afgekapt
+      }
+      return out;
+    }
+    const printOf = (evs, length) => JSON.stringify([length, evs.map(e => [e.t, e.note ?? e.row, e.len ?? 0, Math.round(e.vel * 1e6), Math.round(e.prob * 1e6), e.ratchet]).sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[3] - b[3] || a[2] - b[2] || a[4] - b[4] || a[5] - b[5])]);
+    function clipInfo() {
+      try {
+        if (dead || !state.tracks.length) return null;
+        const t = currentTrack(), c = currentClip(), kind = clipKind(t), drums = kind === 'drums';
+        const info = { name: (trackName(state.selectedTrack) + ' · ' + c.name).slice(0, 40), copy: [kind], paste: [kind], length: { min: 192, max: MAXTICKS, step: 192, current: c.bars * 192, shared: false }, grid: [16, 32, 64], poly: 128, range: [0, 127], scheme: drums && !defaultRows(t) ? 'device' : 'gm', vel: 'continuous', prob: true, ratchet: true, maxEvents: MAXNOTES };
+        if (drums) info.lanes = laneList(t);
+        return info;
+      } catch (e) { return null; }
+    }
+    function getClip() {
+      try {
+        if (dead || !state.tracks.length) return null;
+        const t = currentTrack(), c = currentClip(), kind = clipKind(t), drums = kind === 'drums', evs = eventsOf(t, c);
+        const clip = { format: 'patchkamer-clip', formatVersion: 1, kind, name: String(c.name).slice(0, 40), length: c.bars * 192, grid: c.grid, source: { device: CLIP_ID, name: 'Clip Arranger', version: '1.17.0', trackType: t.type, scheme: drums && !defaultRows(t) ? 'device' : 'gm' } };
+        if (c.swing > 0) clip.swing = c.swing;
+        const extra = (o, e) => { if (e.prob !== 1) o.prob = e.prob; if (e.ratchet !== 1) o.ratchet = e.ratchet; return o; };
+        if (drums) { clip.lanes = laneList(t); clip.hits = evs.map(e => extra({ t: e.t, lane: e.row, vel: e.vel }, e)); }
+        else clip.notes = evs.map(e => extra({ t: e.t, n: e.note, len: e.len, vel: e.vel }, e));
+        clip.native = { device: CLIP_ID, data: { bars: c.bars, grid: c.grid, swing: c.swing, notes: c.notes, cc: c.cc } };
+        return clone(clip);
+      } catch (e) { return null; }
+    }
+    // welke rij van dit spoor bedoelt een baan van de clip? Eerst onze eigen id en nootnummer samen, dan (alleen bij gelijke GM-nummers) het nootnummer, dan de naam
+    function laneToRow(l, rows, gm) {
+      if (!l || typeof l !== 'object') return -1;
+      const m = typeof l.id === 'string' ? /^r(\d+)$/.exec(l.id) : null;
+      if (m && +m[1] < rows.length && isNum(l.note) && rows[+m[1]].note === Math.round(l.note)) return +m[1];
+      if (gm && isNum(l.note)) { const j = rows.findIndex(r => r.note === Math.round(l.note)); if (j >= 0) return j; }
+      if (typeof l.name === 'string' && l.name) { const nm = l.name.trim().toLowerCase(), j = rows.findIndex(r => String(r.name).trim().toLowerCase() === nm); if (j >= 0) return j; }
+      return -1;
+    }
+    function setClip(clip) {
+      try {
+        if (dead) return { ok: false, reason: tx('Het apparaat is verwijderd.') };
+        const bad = { ok: false, reason: tx('Geen geldige clip.') };
+        if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1)) return bad;
+        const t = currentTrack(), cur = currentClip(), kind = clipKind(t), drums = kind === 'drums';
+        if (clip.kind !== kind) return { ok: false, reason: tx('De soort past niet: dit spoor neemt nu {0}.', tx(drums ? 'drums' : 'noten')) };
+        if (!isNum(clip.length)) return bad;
+        const length = Math.round(lim(clip.length, 1, MAXTICKS, 192)), bars = integer(Math.ceil(length / 192), 1, 64, 1), evs = [], rows = drums ? rowsOf(t) : null;
+        const src = Array.isArray(drums ? clip.hits : clip.notes) ? (drums ? clip.hits : clip.notes) : [], lanes = drums && Array.isArray(clip.lanes) ? clip.lanes.slice(0, 64) : [];
+        const gm = drums && defaultRows(t) && clip.source?.scheme === 'gm', map = lanes.map(l => laneToRow(l, rows || [], gm));
+        let dropped = Math.max(0, src.length - MAXNOTES);
+        for (const x of src.slice(0, MAXNOTES)) {
+          if (!x || typeof x !== 'object' || !isNum(x.t) || x.t < 0 || x.t >= bars * 192) { dropped++; continue; }
+          const e = { t: Math.round(x.t), vel: lim(x.vel, 0.01, 1, 0.8), prob: lim(x.prob, 0, 1, 1), ratchet: integer(x.ratchet, 1, 4, 1) };
+          if (drums) { if (!Number.isInteger(x.lane) || x.lane < 0 || x.lane >= map.length || map[x.lane] < 0) { dropped++; continue; } e.row = map[x.lane]; }
+          else { if (!isNum(x.n)) { dropped++; continue; } e.note = integer(x.n, 0, 127, 60); e.len = Math.round(lim(x.len, 3, 12288, 12)); }
+          evs.push(e);
+        }
+        const done = () => ({ ok: true, ...(dropped ? { dropped } : {}) });
+        let next = null;
+        // een clip uit dit apparaat die niet is aangepast: de eigen noten, CC-lanes, raster en swing komen exact terug
+        const nd = clip.native && typeof clip.native === 'object' && clip.native.device === CLIP_ID ? clip.native.data : null;
+        if (nd && typeof nd === 'object') {
+          const tmp = cleanClip({ name: cur.name, bars: nd.bars, grid: nd.grid, swing: nd.swing, notes: nd.notes, cc: nd.cc }, state.selectedClip);
+          if (printOf(eventsOf(t, tmp), tmp.bars * 192) === printOf(evs, bars * 192)) next = tmp;
+        }
+        if (!next) {
+          const notes = evs.map((e, j) => ({ id: j, step: e.t / 12, note: drums ? rows[e.row].note : e.note, len: drums ? 1 : e.len / 12, vel: e.vel, prob: e.prob, ratchet: e.ratchet, row: drums ? e.row : 0 }));
+          next = cleanClip({ name: cur.name, bars, grid: GRIDS.includes(clip.grid) ? clip.grid : cur.grid, swing: clip.swing, notes, cc: cur.cc }, state.selectedClip);
+        }
+        if (JSON.stringify(next) === JSON.stringify(cur)) return done();
+        remember(); t.clips[state.selectedClip] = next; state.selectedNote = -1; render();
+        return done();
+      } catch (e) { return { ok: false, reason: tx('Geen geldige clip.') }; }
+    }
     const instance = {
       inputs: {}, outputs: {}, eventBundles: { tracks: () => bundle() },
       mount(container) { jackBar = document.createElement('div'); jackBar.className = 'pk-jackbar'; jackBar.style.cssText = 'display:flex;align-items:flex-end;gap:6px 14px;padding:6px 10px;flex-wrap:wrap'; container.appendChild(jackBar); portN = 0; const wrap = document.createElement('div'); container.appendChild(wrap); root = wrap.attachShadow({ mode: 'open' }); namesSig = ''; readTargets(); render(); buildJacks(); if (stopFrame) stopFrame(); stopFrame = frameLoop(host, self, animate, 30); },
       unmount() { if (stopFrame) { stopFrame(); stopFrame = null; } root = null; viewRefs = {}; if (jackBar) { jackBar.remove(); jackBar = null; } },
       onPeers(list) { if (!dead) readTargets(list); },
       playClip() { playClip(); }, stopClip() { stopClip(); },
+      // klembord (contract v1.17): de gekozen clip van het gekozen spoor kopiëren en plakken
+      clipInfo() { return clipInfo(); }, getClip() { return getClip(); }, setClip(clip) { return setClip(clip); },
       onStep(info) { try { schedule(info); } catch (e) { error = tx('Sequencer: {0}', e?.message || e); } },
       onTransport(info) { if (dead) return; const cue = seek; playing = !!info?.playing; recRun = null; reset(); if (playing) seek = cue; },
       onEvent(port, ev) {

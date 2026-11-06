@@ -108,10 +108,12 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Dissonant Cluster](../devices/synths/DissonantCluster/) | Dissonant Cluster Styles | 60 | 9: Industrial, Horror & Cinematic, Dark Ambient, Techno, Experimental, Sound Design, Noise, Dubstep, Drone | [`dissonant-cluster-styles.patchkamer-tunes.json`](dissonant-cluster-styles.patchkamer-tunes.json) | – |
 | [Drone Synth](../devices/synths/DroneSynth/) | Drone Synth Styles | 66 | 10: Drone, Ambient, Dark Ambient, Techno, Industrial, Cinematic, Meditation, Sci-Fi, Doom, Minimal | [`drone-synth-styles.patchkamer-tunes.json`](drone-synth-styles.patchkamer-tunes.json) | – |
 | [Duofone](../devices/synths/Duofone/) | Duofone Styles | 60 | 12: Techno, House, Trance, Ambient, Drum & Bass, Dubstep, Synthwave, Funk & Disco, Hip-hop, Electro, Pop, Chiptune | [`duofone-styles.patchkamer-tunes.json`](duofone-styles.patchkamer-tunes.json) | – |
+| [Formant Singer](../devices/synths/FormantSinger/) | Formant Singer Styles | 66 | 12: Choir, Solo Voices, Bass Voices, Whisper and Breath, Pads and Ambient, Cinematic, Pop Leads, Robot and FX, Chant, Lullaby, Hymn, Syllable Study | [`formant-singer-styles.patchkamer-tunes.json`](formant-singer-styles.patchkamer-tunes.json) | – |
 | [Foundry](../devices/synths/Foundry/) | Foundry Styles | 69 | 11: Industrial, Techno, Dark Ambient, Cinematic, Sound Design, Horror, Experimental, Noise, Drone, Metal Percussion, Electro | [`foundry-styles.patchkamer-tunes.json`](foundry-styles.patchkamer-tunes.json) | – |
 | [Four-Operator FM](../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | 11: Synthwave, Electro, Pop, Chiptune, Jazz & Soul, Ambient, Cinematic, Techno & House, Drum & Bass, Hip-hop & Lo-fi, Funk & Disco | [`four-operator-fm-styles.patchkamer-tunes.json`](four-operator-fm-styles.patchkamer-tunes.json) | – |
 | [Grain Cloud](../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | 10: Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Glitch/IDM, Lo-fi, Drone, Sound Design | [`grain-cloud-styles.patchkamer-tunes.json`](grain-cloud-styles.patchkamer-tunes.json) | – |
 | [Karplus String](../devices/synths/KarplusString/) | Karplus String Styles | 60 | 10: Folk, Ambient, Cinematic, Pop, World, Lo-fi, Ballad, Flamenco, Jazz, Metallic | [`karplus-string-styles.patchkamer-tunes.json`](karplus-string-styles.patchkamer-tunes.json) | – |
+| [Ladder Mono](../devices/synths/LadderMono/) | Ladder Mono Classics | 58 | 7: Bass, Lead, Brass and Strings, Plucks and Keys, Sequences, Effects, Percussion | [`ladder-mono-classics.patchkamer-tunes.json`](ladder-mono-classics.patchkamer-tunes.json) | – |
 | [Layered Landscape](../devices/synths/LayeredLandscape/) | Layered Landscape Styles | 71 | 11: Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Nature, Space, Drone, Lo-fi, Minimal, Industrial | [`layered-landscape-styles.patchkamer-tunes.json`](layered-landscape-styles.patchkamer-tunes.json) | – |
 | [Low Bass](../devices/synths/LowBass/) | Low Bass Styles | 64 | 13: Sub, Rolling Bass, Detuned Wide, Dub, Booming Sub, Acid, Funk, Drum & Bass, Dubstep, Garage, Trap, Synthwave, Techno & House | [`low-bass-styles.patchkamer-tunes.json`](low-bass-styles.patchkamer-tunes.json) | – |
 | [Mist](../devices/synths/Mist/) | Mist Styles | 62 | 11: Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Lo-fi, Drone, Sound Design, New Age, Chillout | [`mist-styles.patchkamer-tunes.json`](mist-styles.patchkamer-tunes.json) | – |
@@ -124,7 +126,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 
-Samen 35 packs met 2216 tunes.
+Samen 37 packs met 2340 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet
