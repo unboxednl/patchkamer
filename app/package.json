@@ -10,26 +10,104 @@
   "scripts": {
     "start": "electron .",
     "probe": "electron . --probe",
-    "dist": "electron-builder --win portable --x64"
+    "dist": "electron-builder --win portable --x64",
+    "build:native": "node-gyp rebuild",
+    "test:native": "g++ -O2 -std=c++17 -Wall native/test/ring_test.cpp -o native/test/ring_test && native/test/ring_test",
+    "asio-test": "electron . --asio-test"
   },
   "devDependencies": {
     "electron": "^33.2.0",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "node-addon-api": "^8.9.2",
+    "node-gyp": "^13.1.0"
   },
   "build": {
     "appId": "nl.patchkamer.app",
     "productName": "Patchkamer",
-    "directories": { "output": "dist" },
-    "files": ["main.js", "preload.js", "probe.html", "library.js", "package.json"],
-    "extraResources": [
-      { "from": "../patchkamer/patchkamer.html", "to": "patchkamer/patchkamer.html" },
-      { "from": "../patchkamer/css", "to": "patchkamer/css", "filter": ["*.css"] },
-      { "from": "../patchkamer/js", "to": "patchkamer/js", "filter": ["*.js"] },
-      { "from": "../patchkamer/i18n", "to": "patchkamer/i18n", "filter": ["*.js"] },
-      { "from": "../devices", "to": "library/devices", "filter": ["**/*.js", "**/*.json"] },
-      { "from": "../presets", "to": "library/presets", "filter": ["**/*.json"] },
-      { "from": "../tunes", "to": "library/tunes", "filter": ["**/*.json"] }
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "probe.html",
+      "library.js",
+      "asio.js",
+      "asio-test.js",
+      "package.json",
+      "build/Release/*.node"
     ],
-    "win": { "target": "portable", "artifactName": "Patchkamer-${version}-portable.exe" }
+    "extraResources": [
+      {
+        "from": "../patchkamer",
+        "to": "patchkamer",
+        "filter": [
+          "patchkamer.html",
+          "js/**",
+          "css/**",
+          "i18n/**",
+          "fonts/**",
+          "img/**"
+        ]
+      },
+      {
+        "from": "../patchkamer/css",
+        "to": "patchkamer/css",
+        "filter": [
+          "*.css"
+        ]
+      },
+      {
+        "from": "../patchkamer/js",
+        "to": "patchkamer/js",
+        "filter": [
+          "*.js"
+        ]
+      },
+      {
+        "from": "../patchkamer/i18n",
+        "to": "patchkamer/i18n",
+        "filter": [
+          "*.js"
+        ]
+      },
+      {
+        "from": "../devices",
+        "to": "library/devices",
+        "filter": [
+          "**/*.js",
+          "**/*.json"
+        ]
+      },
+      {
+        "from": "../presets",
+        "to": "library/presets",
+        "filter": [
+          "**/*.json"
+        ]
+      },
+      {
+        "from": "../tunes",
+        "to": "library/tunes",
+        "filter": [
+          "**/*.json"
+        ]
+      },
+      {
+        "from": ".",
+        "to": "licenses",
+        "filter": [
+          "ASIO-SDK-LICENSE.txt"
+        ]
+      }
+    ],
+    "win": {
+      "target": "portable",
+      "artifactName": "Patchkamer-${version}-portable.exe"
+    },
+    "asarUnpack": [
+      "build/Release/*.node"
+    ],
+    "npmRebuild": false
   }
 }

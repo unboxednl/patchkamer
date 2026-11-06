@@ -1,13 +1,23 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# Builds the Patchkamer desktop app (portable Windows exe). Start it by hand (Actions > App > Run workflow)
-# or by pushing a tag app/vX.Y.Z.
+# Builds the Patchkamer desktop app (portable Windows exe, with the native ASIO addon). Start it by hand
+# (Actions > App > Run workflow) or by pushing a tag app/vX.Y.Z.
 name: App
 on:
   workflow_dispatch:
   push:
     tags: ['app/v*']
+env:
+  # Official download of the ASIO SDK 2.3.4 (2025-10-15), used under its GPLv3 option. Not stored in this repo.
+  ASIO_SDK_URL: https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip
+  ASIO_SDK_SHA256: d5ebf0c20dd2c5f43771fd0c1418f4b361bf52434ee670097cfa6b3a335e2eca
 jobs:
+  native-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: g++ -O2 -std=c++17 -Wall app/native/test/ring_test.cpp -o ring_test && ./ring_test
   windows:
+    needs: native-tests
     runs-on: windows-latest
     defaults:
       run:
@@ -19,7 +29,19 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: app/package-lock.json
+      - name: ASIO SDK
+        shell: pwsh
+        run: |
+          $zip = Join-Path $env:RUNNER_TEMP 'asio.zip'
+          Invoke-WebRequest $env:ASIO_SDK_URL -OutFile $zip
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
+          if ($hash -ne $env:ASIO_SDK_SHA256) { throw "ASIO SDK checksum differs: $hash" }
+          Expand-Archive $zip -DestinationPath (Join-Path $env:RUNNER_TEMP 'asio')
+          $dir = (Join-Path $env:RUNNER_TEMP 'asio/ASIOSDK') -replace '\\', '/'
+          "ASIO_SDK_DIR=$dir" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+          Copy-Item "$dir/LICENSE.txt" ASIO-SDK-LICENSE.txt
       - run: npm ci
+      - run: npm run build:native
       - run: npm run dist
       - uses: actions/upload-artifact@v4
         with:
