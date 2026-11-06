@@ -18,8 +18,8 @@
 
 ## Quick start
 
-1. Download this repository (**Code → Download ZIP**, or `git clone https://github.com/unboxednl/patchkamer`).
-2. Open `patchkamer/patchkamer.html` in Chrome or Edge. For the smoothest start, run `python3 -m http.server 8080` in the repository folder and open `http://localhost:8080/patchkamer/patchkamer.html`.
+1. Open Patchkamer online at <https://unboxednl.github.io/patchkamer/> (Chrome or Edge, also on an Android phone). It always runs the latest version from this repository. Prefer to run it yourself? Download this repository (**Code → Download ZIP**, or `git clone https://github.com/unboxednl/patchkamer`) and open `patchkamer/patchkamer.html`.
+2. Offline, for the smoothest start, run `python3 -m http.server 8080` in the repository folder and open `http://localhost:8080/patchkamer/patchkamer.html`.
 3. In the library window, under **Sources**, type `github.com/unboxednl/patchkamer` and click **Add**. Place **Keys / MIDI**, **Acid Baselines** and **Speakers**, connect them with cables, press **Start** and play.
 
 The [user manual](docs/USER-MANUAL_EN.md) walks you through it step by step, with screenshots.
