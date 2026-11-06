@@ -1,0 +1,288 @@
+// js/clip.js — klembord voor patronen en clips: controleren (sanitize), aanpassen aan het doel (fit), kopiëren, plakken, ongedaan maken, kaartbalkknoppen
+(function(PK){
+/* =====================================================================
+   KLEMBORD · formaat `patchkamer-clip` (contract v1.17: clipInfo / getClip / setClip)
+   Het klembord is onbetrouwbare invoer: alles gaat eerst door clipClean (grenzen, 1 MB, 4096 gebeurtenissen,
+   64 banen, namen hoogstens 40 tekens, onbekende velden weg). Namen komen alleen als textContent op het scherm.
+   Tijd in tikken: 12 per zestiende, 192 per maat.
+   ===================================================================== */
+const CLIP_TICK={16:12,32:6,64:3}, CLIP_MAXTEXT=1000000, CLIP_MAXEV=4096, CLIP_MAXLANES=64, CLIP_MAXLEN=12288, CLIP_UNDO_MS=15000;
+// naamgroepen voor het uitlijnen van drumbanen (genormaliseerde naam of type -> groep)
+const CLIP_SYN={kick:['kick','bassdrum','bd','bass','kickdrum'],snare:['snare','sd','snaredrum'],clap:['clap','handclap','cp'],
+  closedhat:['closedhat','hhclosed','closedhihat','hihatclosed','ch','hat','hh','hihat'],openhat:['openhat','hhopen','openhihat','hihatopen','oh'],
+  rim:['rim','rimshot','sidestick','rimclick'],lowtom:['lowtom','tomlow','lotom'],midtom:['midtom','tommid','tom'],hightom:['hightom','hitom','tomhigh','tomhi'],
+  crash:['crash','crashcymbal'],ride:['ride','ridecymbal'],shaker:['shaker'],tamb:['tamb','tambourine'],cowbell:['cowbell','cow'],conga:['conga'],bongo:['bongo']};
+const CLIP_SYNMAP=(()=>{ const m={}; for(const g in CLIP_SYN) CLIP_SYN[g].forEach(s=>{ m[s]=g; }); return m; })();
+
+const clipNum=(v,lo,hi,d)=>typeof v==='number'&&isFinite(v)?Math.min(hi,Math.max(lo,v)):d;
+const clipInt=(v,lo,hi,d)=>typeof v==='number'&&isFinite(v)?Math.round(Math.min(hi,Math.max(lo,v))):d;
+const clipStr=(v,n)=>typeof v==='string'?v.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g,' ').trim().slice(0,n):'';
+const clipNorm=s=>String(s==null?'':s).toLowerCase().replace(/[^a-z0-9]/g,'');
+const clipCanon=s=>{ const n=clipNorm(s); return n?(CLIP_SYNMAP[n]||n):''; };
+const clipGcd=(a,b)=>b?clipGcd(b,a%b):a;
+const clipLcm=(a,b)=>a/clipGcd(a,b)*b;
+
+// ---- controleren: geeft {clip} of {err:'bad'|'newer'|'kind'|'big', kind?} ----
+function clipClean(o){
+  if(!o||typeof o!=='object'||Array.isArray(o)||o.format!=='patchkamer-clip') return {err:'bad'};
+  if(typeof o.formatVersion!=='number'||!(o.formatVersion>=1)) return {err:'bad'};
+  if(Math.floor(o.formatVersion)>1) return {err:'newer'};
+  if(o.kind!=='notes'&&o.kind!=='drums') return {err:'kind',kind:clipStr(o.kind,20)};
+  if(typeof o.length!=='number'||!isFinite(o.length)||o.length<1) return {err:'bad'};
+  const len=clipInt(o.length,1,CLIP_MAXLEN,1);
+  const c={format:'patchkamer-clip',formatVersion:1,kind:o.kind,name:clipStr(o.name,40),length:len,grid:[16,32,64].includes(o.grid)?o.grid:16};
+  if(o.source&&typeof o.source==='object'){ const s=o.source; c.source={device:clipStr(s.device,80),name:clipStr(s.name,60),version:clipStr(s.version,20),trackType:clipStr(s.trackType,20),scheme:s.scheme==='gm'?'gm':'device'}; }
+  const sw=clipNum(o.swing,0,0.5,0); if(sw>0) c.swing=sw;
+  const ev=x=>{ if(!x||typeof x!=='object') return null; if(typeof x.t!=='number'||!isFinite(x.t)||x.t<0||x.t>=len) return null;
+    const e={t:Math.round(x.t),vel:clipNum(x.vel,0.01,1,0.8)}; if(x.acc===true) e.acc=true;
+    const p=clipNum(x.prob,0,1,1); if(p<1) e.prob=p; const rt=clipInt(x.ratchet,1,16,1); if(rt>1) e.ratchet=rt; return e; };
+  if(o.kind==='notes'){
+    const a=Array.isArray(o.notes)?o.notes:[]; c.notes=[];
+    for(let i=0;i<a.length&&c.notes.length<CLIP_MAXEV;i++){ const e=ev(a[i]); if(!e) continue; const n=clipInt(a[i].n,0,127,-1); if(n<0) continue;
+      e.n=n; e.len=clipInt(a[i].len,1,len,12); if(e.t+e.len>len) e.len=len-e.t; c.notes.push(e); }
+    c.notes.sort((p,q)=>p.t-q.t||p.n-q.n);
+  } else {
+    const a=Array.isArray(o.lanes)?o.lanes.slice(0,CLIP_MAXLANES):[]; c.lanes=a.map((l,i)=>{ l=l&&typeof l==='object'?l:{}; const r={id:clipStr(l.id,40)||('l'+i),name:clipStr(l.name,40),type:clipStr(l.type,30),note:clipInt(l.note,0,127,-1)}; const ll=clipInt(l.length,1,CLIP_MAXLEN,0); if(ll) r.length=ll; return r; });
+    const h=Array.isArray(o.hits)?o.hits:[]; c.hits=[];
+    for(let i=0;i<h.length&&c.hits.length<CLIP_MAXEV;i++){ const e=ev(h[i]); if(!e) continue; const ln=h[i].lane; if(typeof ln!=='number'||!Number.isInteger(ln)||ln<0||ln>=c.lanes.length) continue; e.lane=ln; c.hits.push(e); }
+    c.hits.sort((p,q)=>p.t-q.t||p.lane-q.lane);
+  }
+  if(o.native&&typeof o.native==='object'&&typeof o.native.device==='string'&&o.native.data&&typeof o.native.data==='object'){
+    try{ c.native={device:clipStr(o.native.device,80),data:JSON.parse(JSON.stringify(o.native.data))}; }catch(e){} }
+  return {clip:c};
+} PK.clipClean=clipClean;
+
+// tekst van het systeemklembord: null = geen clip (negeren), {err} = een clip die we weigeren, {clip}
+function clipFromText(text){
+  if(typeof text!=='string') return null; const t=text.replace(/^\s+/,'');
+  if(t.charAt(0)!=='{') return null;
+  if(text.length>CLIP_MAXTEXT) return t.slice(0,400).includes('patchkamer-clip')?{err:'big'}:null;
+  let o; try{ o=JSON.parse(t); }catch(e){ return null; }
+  if(!o||o.format!=='patchkamer-clip') return null;
+  return clipClean(o);
+} PK.clipFromText=clipFromText;
+
+// ---- aanpassen aan het doel: {clip,report,count} of {err:'kind'|'none'|'nolanes'|'nomatch', ...} ----
+function clipFit(c,inf,ctx){
+  ctx=ctx||{};
+  const rep={cut:0,shortened:0,tiled:0,padded:0,moved:0,merged:0,folded:0,dropped:[],lanesUnplaced:[]};
+  if(!inf||typeof inf!=='object') return {err:'none'};
+  const paste=Array.isArray(inf.paste)?inf.paste:[];
+  if(!paste.includes(c.kind)) return {err:'kind',kind:c.kind,paste};
+  const dropAdd=(kind,n)=>{ if(n>0) rep.dropped.push({kind,n}); };
+  const L=inf.length&&typeof inf.length==='object'?inf.length:{};
+  const origLen=c.length;
+  let S=c.length, ev=(c.kind==='notes'?c.notes:c.hits).map(e=>({...e}));
+  let outLanes=null;
+  const same=ctx.devId&&c.native&&c.native.device===ctx.devId;
+  // drums: banen van de bron naar de banen van het doel (type, naam, nootnummer; nooit op volgorde, behalve hetzelfde apparaat)
+  if(c.kind==='drums'){
+    const tl=Array.isArray(inf.lanes)?inf.lanes.slice(0,CLIP_MAXLANES):[]; if(!tl.length) return {err:'nolanes'};
+    // polymeter naar monometer: banen met eigen lengte herhalen tot het kleinste gemene veelvoud (begrensd)
+    const ls=c.lanes.map(l=>l.length||S);
+    if(ls.some(x=>x!==S)){ const cap=L.shared&&typeof L.current==='number'?clipInt(L.current,1,CLIP_MAXLEN,CLIP_MAXLEN):clipInt(L.max,1,CLIP_MAXLEN,CLIP_MAXLEN);
+      let m=1; for(const x of ls){ m=clipLcm(m,x); if(m>=cap){ m=cap; break; } } m=Math.max(m,S);
+      if(ls.some(x=>m%x!==0)) dropAdd('poly',1);
+      const out=[]; ev.forEach(e=>{ const ll=ls[e.lane]; for(let t=e.t;t<m;t+=ll) out.push({...e,t}); }); ev=out; S=m; }
+    const map=new Array(c.lanes.length).fill(-1), used=new Set(), pass=(fn)=>{ c.lanes.forEach((sl,i)=>{ if(map[i]>=0) return; const j=tl.findIndex((tg,j)=>!used.has(j)&&fn(sl,tg)); if(j>=0){ map[i]=j; used.add(j); } }); };
+    if(same) c.lanes.forEach((sl,i)=>{ if(i<tl.length){ map[i]=i; used.add(i); } });
+    pass((s,t)=>{ const a=clipCanon(s.type), b=clipCanon(t.type); return !!a&&a===b; });
+    pass((s,t)=>{ const a=clipCanon(s.name)||clipCanon(s.type), b=clipCanon(t.name)||clipCanon(t.type); return !!a&&(a===b||a===clipCanon(t.name)||clipCanon(s.name)===clipCanon(t.type)); });
+    if(c.source&&c.source.scheme==='gm'&&inf.scheme==='gm') pass((s,t)=>s.note>=0&&typeof t.note==='number'&&s.note===t.note);
+    const hasHits=new Set(ev.map(e=>e.lane)); let placed=0;
+    c.lanes.forEach((sl,i)=>{ if(map[i]<0&&hasHits.has(i)) rep.lanesUnplaced.push(sl.name||sl.type||sl.id); });
+    ev=ev.filter(e=>map[e.lane]>=0).map(e=>{ placed++; return {...e,lane:map[e.lane]}; });
+    if(!placed&&hasHits.size) return {err:'nomatch',names:rep.lanesUnplaced.slice()};
+    outLanes=tl.map((l,j)=>({id:clipStr(l&&l.id,40)||('l'+j),name:clipStr(l&&l.name,40),type:clipStr(l&&l.type,30),note:clipInt(l&&l.note,0,127,-1)}));
+  }
+  // lengte: eigen lengte volgen (binnen min/max/stap), gedeelde lengte houden
+  const min=clipInt(L.min,1,CLIP_MAXLEN,1), max=clipInt(L.max,min,CLIP_MAXLEN,CLIP_MAXLEN), step=clipInt(L.step,1,CLIP_MAXLEN,1);
+  let T;
+  if(L.shared&&typeof L.current==='number') T=clipInt(L.current,1,CLIP_MAXLEN,S);
+  else { T=Math.min(Math.max(S,min),max); if(step>1){ T=Math.ceil(T/step)*step; if(T>max) T=Math.floor(max/step)*step; if(T<min) T=min; } }
+  T=Math.max(1,T);
+  let tiledNow=false;
+  if(T>S){
+    if(T%S===0){ const f=T/S, base=ev; ev=[]; for(let k=0;k<f;k++) base.forEach(e=>ev.push({...e,t:e.t+k*S})); tiledNow=true; }
+    else rep.padded=T-S;
+  } else if(T<S){
+    const keep=[]; ev.forEach(e=>{ if(e.t>=T) rep.cut++; else keep.push(e); }); ev=keep; }
+  if(S!==origLen||tiledNow) rep.tiled=Math.round(T/origLen); if(rep.tiled<2) rep.tiled=0;
+  if(c.kind==='notes') ev.forEach(e=>{ if(e.t+e.len>T){ e.len=T-e.t; rep.shortened++; } });
+  // raster: het grofste raster van het doel waarop alles blijft staan, anders het fijnste met afronden
+  let grid=c.grid;
+  const grids=Array.isArray(inf.grid)?inf.grid.filter(g=>CLIP_TICK[g]).sort((a,b)=>a-b):[];
+  if(grids.length){ let pick=grids.find(g=>ev.every(e=>e.t%CLIP_TICK[g]===0));
+    if(!pick&&same) pick=grids[grids.length-1];   // hetzelfde apparaat: de tijden blijven staan, het apparaat zet het origineel terug via native
+    if(!pick){ pick=grids[grids.length-1]; const q=CLIP_TICK[pick]; const last=Math.floor((T-1)/q)*q;
+      ev.forEach(e=>{ const nt=Math.min(last,Math.round(e.t/q)*q); if(nt!==e.t){ e.t=nt; rep.moved++; if(c.kind==='notes'&&e.t+e.len>T) e.len=T-e.t; } }); }
+    grid=pick; }
+  // bereik (noten): per octaaf naar binnen
+  if(c.kind==='notes'&&Array.isArray(inf.range)&&inf.range.length===2&&typeof inf.range[0]==='number'&&typeof inf.range[1]==='number'){
+    const lo=inf.range[0], hi=inf.range[1], keep=[]; let out=0;
+    ev.forEach(e=>{ const n0=e.n; while(e.n<lo) e.n+=12; while(e.n>hi) e.n-=12; if(e.n<lo||e.n>hi){ out++; return; } if(e.n!==n0) rep.folded++; keep.push(e); });
+    ev=keep; dropAdd('range',out); }
+  // samenvallen: dezelfde plek en noot of baan, de hardste wint
+  { const key=e=>e.t+'|'+(c.kind==='notes'?e.n:e.lane), best=new Map(), vv=e=>e.acc?1:e.vel;
+    ev.forEach(e=>{ const k=key(e), b=best.get(k); if(!b) best.set(k,e); else { rep.merged++; if(vv(e)>vv(b)) best.set(k,e); } });
+    if(rep.merged){ const keepSet=new Set(best.values()); ev=ev.filter(e=>keepSet.has(e)); } }
+  ev.sort((p,q)=>p.t-q.t||(c.kind==='notes'?p.n-q.n:p.lane-q.lane));
+  // mono: per starttik de hardste noot, overlappende noten inkorten
+  if(c.kind==='notes'&&inf.poly===1){
+    const byT=new Map(); ev.forEach(e=>{ const b=byT.get(e.t); if(!b||(e.acc?1:e.vel)>(b.acc?1:b.vel)) byT.set(e.t,e); });
+    const keep=[...byT.values()].sort((p,q)=>p.t-q.t); dropAdd('mono',ev.length-keep.length);
+    keep.forEach((e,i)=>{ const nx=keep[i+1]; if(nx&&e.t+e.len>nx.t) e.len=nx.t-e.t; }); ev=keep; }
+  // kans en ratchet: weg als het doel ze niet kent
+  if(!inf.prob){ const n=ev.filter(e=>e.prob!=null).length; ev.forEach(e=>{ delete e.prob; }); dropAdd('prob',n); }
+  if(!inf.ratchet){ const n=ev.filter(e=>e.ratchet!=null).length; ev.forEach(e=>{ delete e.ratchet; }); dropAdd('ratchet',n); }
+  // velocity
+  if(inf.vel==='binary') ev.forEach(e=>{ e.vel=1; delete e.acc; });
+  else if(inf.vel==='accent') ev.forEach(e=>{ if(e.acc||e.vel>=0.85){ e.acc=true; e.vel=1; } else delete e.acc; });
+  // maximum aantal gebeurtenissen
+  const mx=clipInt(inf.maxEvents,1,CLIP_MAXEV,0); if(mx&&ev.length>mx){ rep.cut+=ev.length-mx; ev=ev.slice(0,mx); }
+  const out={format:'patchkamer-clip',formatVersion:1,kind:c.kind,name:c.name,length:T,grid};
+  if(c.source) out.source={...c.source}; if(c.swing) out.swing=c.swing;
+  if(c.kind==='notes') out.notes=ev; else { out.lanes=outLanes; out.hits=ev; }
+  if(same&&c.native) out.native={device:c.native.device,data:JSON.parse(JSON.stringify(c.native.data))};
+  return {clip:out,report:rep,count:ev.length};
+} PK.clipFit=clipFit;
+
+// ---- meldingen ----
+function clipKindText(k){ return PK.pkt('m.clip_k_'+(k==='drums'?'drums':'notes')); }
+function clipAcceptText(inf){ const p=inf&&Array.isArray(inf.paste)?inf.paste:[]; return p.length?p.map(clipKindText).join(' / '):PK.pkt('m.clip_niets'); }
+function clipLabel(r,inf){ return inf&&inf.name?r.def.name+' · '+inf.name:r.def.name; }
+function clipErrText(f,c,r,inf){
+  const lbl=clipLabel(r,inf);
+  if(f.err==='kind') return PK.pkt('m.clip_niet_soort',clipKindText(c.kind),lbl,clipAcceptText(inf));
+  if(f.err==='nolanes') return PK.pkt('m.clip_geen_banen',lbl);
+  if(f.err==='nomatch') return PK.pkt('m.clip_geen_baan_past',f.names&&f.names.length?f.names.slice(0,6).join(', '):'-');
+  return PK.pkt('m.clip_kan_niets',lbl);
+}
+function clipSrcErr(e){ return e.err==='newer'?PK.pkt('m.clip_nieuwer'):e.err==='big'?PK.pkt('m.clip_te_groot'):e.err==='kind'?PK.pkt('m.clip_onbekende_soort',e.kind||'?'):PK.pkt('m.clip_ongeldig'); }
+function clipCountText(c,n){ return c.kind==='drums'?PK.pktp('m.clip_n_slagen',n!==1,n):PK.pktp('m.clip_n_noten',n!==1,n); }
+function clipBars(T){ const b=T/192; const v=Math.round(b*100)/100; return PK.pktp('m.clip_n_maten',v!==1,String(v).replace('.',PK.PK_LANG==='nl'?',':'.')); }
+function clipReportText(rep){
+  const p=[];
+  if(rep.tiled) p.push(PK.pkt('m.clip_r_herhaald',rep.tiled));
+  if(rep.padded) p.push(PK.pkt('m.clip_r_stilte'));
+  if(rep.cut) p.push(PK.pktp('m.clip_r_afgekapt',rep.cut!==1,rep.cut));
+  if(rep.moved) p.push(PK.pktp('m.clip_r_raster',rep.moved!==1,rep.moved));
+  if(rep.merged) p.push(PK.pktp('m.clip_r_samengevallen',rep.merged!==1,rep.merged));
+  if(rep.folded) p.push(PK.pktp('m.clip_r_octaaf',rep.folded!==1,rep.folded));
+  rep.dropped.forEach(d=>{ p.push(d.kind==='mono'?PK.pktp('m.clip_r_mono',d.n!==1,d.n):d.kind==='range'?PK.pktp('m.clip_r_bereik',d.n!==1,d.n):d.kind==='poly'?PK.pkt('m.clip_r_poly'):d.kind==='prob'?PK.pktp('m.clip_r_kans',d.n!==1,d.n):PK.pktp('m.clip_r_ratchet',d.n!==1,d.n)); });
+  if(rep.lanesUnplaced.length){ const l=rep.lanesUnplaced; p.push(PK.pkt('m.clip_r_banen',l.slice(0,6).join(', ')+(l.length>6?'…':''))); }
+  return p.join('; ');
+} PK.clipReportText=clipReportText;
+
+// ---- toestand van het klembord (alleen in dit bestand) ----
+const CL={mem:null,pend:new Map(),undo:null,undoT:0,kb:null};
+const clipHasApi=i=>!!i&&typeof i.clipInfo==='function'&&typeof i.getClip==='function'&&typeof i.setClip==='function';
+function clipInfoOf(id){ const r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return null; try{ const i=r.inst.clipInfo(); return i&&typeof i==='object'?i:null; }catch(e){ return null; } }
+
+// ---- kopiëren ----
+function clipCopy(id){
+  const r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return false; const inf=clipInfoOf(id), lbl=clipLabel(r,inf);
+  if(!inf||!(Array.isArray(inf.copy)&&inf.copy.length)){ PK.status(PK.pkt('m.clip_niet_kopieerbaar',lbl),true); return false; }
+  let raw=null; try{ raw=r.inst.getClip(); }catch(e){ raw=null; }
+  if(!raw){ PK.status(PK.pkt('m.clip_niets_te_kopieren',lbl),true); return false; }
+  const s=clipClean(raw); if(s.err){ PK.status(PK.pkt('m.clip_kopie_ongeldig',lbl),true); return false; }
+  const json=JSON.stringify(s.clip); CL.mem={json,clip:s.clip,from:id};
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText){ const p=navigator.clipboard.writeText(json); if(p&&p.catch) p.catch(()=>{}); } }catch(e){}
+  const n=(s.clip.kind==='notes'?s.clip.notes:s.clip.hits).length;
+  PK.status(PK.pkt('m.clip_gekopieerd',s.clip.name||lbl,clipCountText(s.clip,n),clipBars(s.clip.length)));
+  clipRefreshAll(); return true;
+} PK.clipCopy=clipCopy;
+
+// ---- plakken ----
+async function clipPaste(id,o){
+  o=o||{}; let r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return false;
+  let text=o.text;
+  if(typeof text!=='string'&&navigator.clipboard&&navigator.clipboard.readText){ try{ text=await navigator.clipboard.readText(); }catch(e){ text=null; } }
+  r=PK.Host.devices.get(id); if(!r) return false;
+  const inf=clipInfoOf(id), t=clipFromText(text); let c=null;
+  if(t&&t.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipSrcErr(t)),true); return false; }
+  if(t) c=t.clip; else if(CL.mem) c=CL.mem.clip; else { PK.status(PK.pkt('m.clip_leeg'),true); return false; }
+  const f=clipFit(c,inf,{devId:r.def.id}); if(f.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipErrText(f,c,r,inf)),true); return false; }
+  if(PK.Host.running&&!o.direct){
+    CL.pend.set(id,{clip:c});
+    PK.toastAction(PK.pkt('m.clip_wacht',clipLabel(r,inf)),[{label:PK.pkt('m.annuleren'),fn:()=>{ CL.pend.delete(id); PK.status(PK.pkt('m.clip_geannuleerd')); }}],{ms:0});
+    return true; }
+  return clipApply(id,c);
+} PK.clipPaste=clipPaste;
+
+function clipApply(id,c){
+  const r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return false; const inf=clipInfoOf(id), lbl=clipLabel(r,inf);
+  const f=clipFit(c,inf,{devId:r.def.id}); if(f.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipErrText(f,c,r,inf)),true); return false; }
+  let snap=null; try{ snap=JSON.parse(JSON.stringify(r.inst.getState())); }catch(e){ snap=null; }
+  let res; try{ res=r.inst.setClip(f.clip); }catch(e){ res={ok:false,reason:e&&e.message}; }
+  if(!res||res.ok!==true){ if(res&&res.ok!==false&&snap){ try{ r.inst.setState(snap); }catch(e){} }
+    PK.status(PK.pkt('m.clip_niet_geplakt',PK.pkt('m.clip_geweigerd',lbl)+(res&&typeof res.reason==='string'&&res.reason?': '+res.reason.slice(0,120):'')),true); return false; }
+  clearTimeout(CL.undoT); CL.undo=snap?{id,snap,label:lbl}:null; if(CL.undo) CL.undoT=setTimeout(()=>{ CL.undo=null; },CLIP_UNDO_MS);
+  const rt=clipReportText(f.report), msg=PK.pkt('m.clip_geplakt',lbl,clipCountText(f.clip,f.count),clipBars(f.clip.length))+(rt?' ('+rt+')':'');
+  PK.toastAction(msg,CL.undo?[{label:PK.pkt('m.clip_ongedaan'),fn:()=>{ clipUndo(); }}]:[],{ms:CLIP_UNDO_MS});
+  return true;
+}
+
+function clipUndo(){
+  const u=CL.undo; if(!u) return false; const r=PK.Host.devices.get(u.id); CL.undo=null; clearTimeout(CL.undoT); if(!r) return false;
+  try{ r.inst.setState(JSON.parse(JSON.stringify(u.snap))); }catch(e){ PK.status(PK.pkt('m.clip_ongedaan_mislukt',u.label),true); return false; }
+  PK.status(PK.pkt('m.clip_ongedaan_gemaakt',u.label)); return true;
+} PK.clipUndo=clipUndo;
+
+// wachtende plakacties: aan het begin van de maat (haakje in clock.js) of bij stoppen
+function clipFlush(){ if(!CL.pend.size) return; const l=[...CL.pend.entries()]; CL.pend.clear(); let ok=false; l.forEach(([id,p])=>{ try{ if(clipApply(id,p.clip)) ok=true; }catch(e){ console.warn('clip',e); } }); if(!ok&&l.length) PK.status(''); }
+function clipBar(info){ if(!CL.pend.size) return; clipFlush(); } PK.clipBar=clipBar;
+function clipOnStop(){ clipFlush(); } PK.clipOnStop=clipOnStop;
+
+// ---- kaartbalkknoppen ----
+function clipRefresh(id){
+  const r=PK.Host.devices.get(id); if(!r||!r._clipBtns) return; const inf=clipInfoOf(id), lbl=clipLabel(r,inf), b=r._clipBtns;
+  const cp=!!(inf&&Array.isArray(inf.copy)&&inf.copy.length);
+  b.copy.setAttribute('aria-disabled',cp?'false':'true'); b.copy.classList.toggle('dis',!cp);
+  b.copy.title=cp?PK.pkt('m.clip_t_kopieer',lbl):PK.pkt('m.clip_niet_kopieerbaar',lbl);
+  let why='';
+  if(!inf||!(Array.isArray(inf.paste)&&inf.paste.length)) why=PK.pkt('m.clip_kan_niets',lbl);
+  else if(CL.mem&&!inf.paste.includes(CL.mem.clip.kind)) why=clipErrText({err:'kind'},CL.mem.clip,r,inf);
+  b.paste.setAttribute('aria-disabled',why?'true':'false'); b.paste.classList.toggle('dis',!!why);
+  b.paste.title=why?PK.pkt('m.clip_niet_geplakt',why):PK.pkt('m.clip_t_plak',lbl);
+}
+function clipRefreshAll(){ PK.Host.devices.forEach((r,id)=>{ if(r._clipBtns) clipRefresh(id); }); }
+// geeft [] voor een apparaat zonder de drie methoden: de kaartbalk blijft dan precies zoals hij was
+function clipBtns(id,inst){
+  if(!clipHasApi(inst)) return [];
+  const mk=(cls,txt)=>{ const b=document.createElement('button'); b.type='button'; b.className='clipbtn '+cls; b.textContent=PK.pkt(txt); ['pointerenter','focus','pointerdown'].forEach(ev=>b.addEventListener(ev,()=>clipRefresh(id))); return b; };
+  const bc=mk('clipcopy','m.clip_kopieer'), bp=mk('clippaste','m.clip_plak');
+  bc.onclick=e=>{ e.stopPropagation(); PK.select(id); clipCopy(id); };
+  bp.onclick=e=>{ e.stopPropagation(); PK.select(id); clipPaste(id,{direct:e.shiftKey}); };
+  const r=PK.Host.devices.get(id); const hold={copy:bc,paste:bp};
+  requestAnimationFrame(()=>{ const rr=PK.Host.devices.get(id); if(rr){ rr._clipBtns=hold; clipRefresh(id); } });
+  return [bc,bp];
+} PK.clipBtns=clipBtns;
+
+// ---- sneltoetsen (aangeroepen vanuit boot.js) ----
+function clipTarget(e){
+  if(PK.textEntry(e)||document.querySelector('.pkmodal')) return null;
+  const id=PK.selected, r=id&&PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return null; return id;
+}
+function clipInit(){
+  document.addEventListener('keydown',e=>{
+    if(!(e.ctrlKey||e.metaKey)||e.altKey) return; const k=(e.key||'').toLowerCase();
+    if(k==='z'){ if(!CL.undo||e.shiftKey||PK.textEntry(e)||document.querySelector('.pkmodal')) return; e.preventDefault(); e.stopImmediatePropagation(); clipUndo(); return; }
+    if(k!=='c'&&k!=='v') return;
+    const id=clipTarget(e); if(!id) return; const inf=clipInfoOf(id);
+    if(k==='c'){ if(e.shiftKey) return; const sel=window.getSelection&&window.getSelection(); if(sel&&!sel.isCollapsed&&String(sel).length) return;
+      if(!inf||!(Array.isArray(inf.copy)&&inf.copy.length)) return; e.preventDefault(); clipCopy(id); return; }
+    if(!inf||!(Array.isArray(inf.paste)&&inf.paste.length)) return;
+    // geen preventDefault: de browser stuurt een paste-gebeurtenis (zonder toestemmingsvraag); komt die niet, dan lezen we het klembord zelf
+    const t=performance.now(), direct=e.shiftKey; CL.kb={t,id,direct};
+    setTimeout(()=>{ if(CL.kb&&CL.kb.t===t){ CL.kb=null; clipPaste(id,{direct}); } },200);
+  },true);
+  document.addEventListener('paste',e=>{
+    const kb=CL.kb; const id=clipTarget(e); if(!id) return; const inf=clipInfoOf(id); if(!inf||!(Array.isArray(inf.paste)&&inf.paste.length)) return;
+    let text=''; try{ text=e.clipboardData?e.clipboardData.getData('text/plain'):''; }catch(x){}
+    e.preventDefault(); CL.kb=null; clipPaste(id,{text:text||'',direct:!!(kb&&kb.direct)});
+  });
+} PK.clipInit=clipInit;
+
+PK.clip={clean:clipClean,fit:clipFit,fromText:clipFromText,reportText:clipReportText,copy:clipCopy,paste:clipPaste,undo:clipUndo,canon:clipCanon};
+})(window.__PK);

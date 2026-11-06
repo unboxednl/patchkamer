@@ -207,6 +207,20 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README en een eigen geb
 
 Hun kant-en-klare klanken en instellingen hebben eigen handleidingen: [Tunes](tunes/USER-MANUAL_NL.md) voor apparaten die geluid maken en [Presets](presets/USER-MANUAL_NL.md) voor de rest (zie ook onderdeel 7).
 
+### Patronen kopiëren en plakken
+
+Een apparaat dat een patroon of clip kan delen, krijgt in de balk van zijn kaart twee knoppen: **Kopieer** en **Plak**. Je ziet ze alleen bij apparaten die dit kunnen (nu bijvoorbeeld de Step Sequencer en de Clip Arranger). Zo neem je een patroon mee van het ene apparaat naar het andere, of naar een ander spoor.
+
+- **Kopieer** zet het patroon dat het apparaat nu toont op het klembord: in het geheugen van Patchkamer én als tekst op het systeemklembord. Zo kun je het ook in een ander browsertabblad of op een andere computer plakken (dat vraagt een veilige context: `localhost` of https; waar de browser het systeemklembord niet toelaat, werkt alleen het geheugen).
+- **Plak** zet het patroon van het klembord in het apparaat. Staat er geen patchkamer-clip op het systeemklembord, dan gebruikt Plak wat je het laatst in Patchkamer kopieerde.
+- **Sneltoetsen:** selecteer een apparaat en druk op **Ctrl+C** of **Ctrl+V** (op een Mac **Cmd**). **Ctrl+Shift+V** plakt meteen. In een tekstveld of terwijl een venster open staat, doen de toetsen hun gewone werk.
+- **Alleen gelijksoortig.** Noten gaan naar noten en drums naar drums. Past de soort niet, dan blijft alles zoals het was en zegt een melding waarom (de knop **Plak** is dan grijs; houd de aanwijzer erboven of tik erop voor de uitleg). Een toetsen- of dronespoor in de Clip Arranger neemt noten, een drumspoor neemt drums; Patchkamer verandert nooit zelf het type van een spoor.
+- **Het doel houdt zijn lengte.** Patchkamer past het patroon aan het apparaat aan: een kort patroon wordt herhaald als het een veelvoud past (anders volgt stilte), een te lang patroon wordt afgekapt, noten gaan naar het raster van het doel, een mono-apparaat houdt per moment de hardste noot, en noten buiten het bereik gaan per octaaf naar binnen. Drumbanen worden op instrument en naam uitgelijnd, niet op volgorde; een baan die nergens past, blijft weg. De melding noemt wat er is aangepast.
+- **Terwijl het speelt** plakt Patchkamer aan het begin van de volgende maat (de melding heeft een knop **Annuleren**). **Shift-klik** op Plak of **Ctrl+Shift+V** plakt meteen; staat de klok stil, dan gaat het ook meteen.
+- **Ongedaan maken.** Na het plakken staat in de melding een knop **Ongedaan maken**, ongeveer vijftien seconden lang. **Ctrl+Z** doet hetzelfde in die tijd.
+
+Op een telefoon werken de knoppen met een tik; sneltoetsen heb je daar niet nodig. De knoppen staan in de kaartbalk, dus ze zijn niet bereikbaar zolang de kaart tot een icoon is geminimaliseerd.
+
 ## 7. Tunes en presets
 
 Een **tune** is een volledige instelling van één apparaat dat geluid maakt: alle knoppen, patronen en keuzes. Een **preset** is hetzelfde voor een apparaat zonder eigen geluid, zoals een effect of een mixer. Geen van beide bevat kabels.
@@ -359,7 +373,9 @@ De functies die de werkwijze het meest versnellen, op een rij:
 | **← →** | In de focusweergave "Eén tegelijk": vorig of volgend apparaat |
 | **Ctrl + scroll** | De vloer zoomen |
 | **Delete** | Het geselecteerde apparaat verwijderen |
-| **Ctrl+Z** | Herschik ongedaan maken |
+| **Ctrl+Z** | Herschik ongedaan maken, of (kort daarna) een zojuist geplakt patroon |
+| **Ctrl+C** / **Ctrl+V** | Het patroon van het geselecteerde apparaat kopiëren / plakken (Cmd op een Mac) |
+| **Ctrl+Shift+V** | Plakken, meteen (ook als de klok loopt) |
 | **Esc** | Een kabel die je sleept annuleren, of een paneel sluiten |
 | Dubbelklik op een schuif | Terug naar de beginwaarde |
 | Klik op het getal naast een schuif | Een waarde typen en op Enter drukken |

@@ -207,6 +207,20 @@ Devices come in kinds. Every kind has its own README and its own user manual, wi
 
 Their ready-made sounds and settings have their own manuals: [Tunes](tunes/USER-MANUAL_EN.md) for devices that make sound and [Presets](presets/USER-MANUAL_EN.md) for the rest (also section 7).
 
+### Copying and pasting patterns
+
+A device that can share a pattern or clip gets two buttons in its card bar: **Copy** and **Paste**. You only see them on devices that can do this (for example the Step Sequencer and the Clip Arranger today). They let you take a pattern from one device to another, or to another track.
+
+- **Copy** puts the pattern the device is showing on the clipboard: in Patchkamer's memory and as text on the system clipboard. That also lets you paste it in another browser tab or on another computer (this needs a secure context: `localhost` or https; where the browser does not allow the system clipboard, only the memory works).
+- **Paste** puts the pattern from the clipboard into the device. If the system clipboard holds no Patchkamer clip, Paste uses what you last copied in Patchkamer.
+- **Shortcuts:** select a device and press **Ctrl+C** or **Ctrl+V** (**Cmd** on a Mac). **Ctrl+Shift+V** pastes right away. In a text field, or while a window is open, the keys do their usual job.
+- **Like for like only.** Notes go to notes and drums go to drums. If the kind does not fit, nothing changes and a message says why (the **Paste** button is greyed out then; hover it or tap it for the explanation). A keys or drone track in the Clip Arranger takes notes, a drum track takes drums; Patchkamer never changes the type of a track by itself.
+- **The target keeps its length.** Patchkamer fits the pattern to the device: a short pattern is repeated when it divides evenly (otherwise silence follows), a pattern that is too long is cut off, notes go to the target's grid, a mono device keeps the loudest note at each moment, and notes outside the range are moved in by octaves. Drum lanes are matched by instrument and name, not by order; a lane that fits nowhere is left out. The message says what was adjusted.
+- **While it plays,** Patchkamer pastes at the start of the next bar (the message has a **Cancel** button). **Shift-click** on Paste or **Ctrl+Shift+V** pastes right away; with the clock stopped it also pastes right away.
+- **Undo.** After pasting, the message shows an **Undo** button for about fifteen seconds. **Ctrl+Z** does the same in that time.
+
+On a phone the buttons work with a tap; you do not need shortcuts there. The buttons live in the card bar, so they are out of reach while the card is minimized to an icon.
+
 ## 7. Tunes and presets
 
 A **tune** is a complete setting of one device that makes sound: all knobs, patterns and choices. A **preset** is the same for a device without a sound of its own, such as an effect or a mixer. Neither contains cables.
@@ -359,7 +373,9 @@ The features that speed up your workflow the most, in one list:
 | **← →** | In the focus view "One at a time": previous or next device |
 | **Ctrl + scroll** | Zoom the floor |
 | **Delete** | Remove the selected device |
-| **Ctrl+Z** | Undo Arrange |
+| **Ctrl+Z** | Undo Arrange, or (shortly after) a pattern you just pasted |
+| **Ctrl+C** / **Ctrl+V** | Copy / paste the pattern of the selected device (Cmd on a Mac) |
+| **Ctrl+Shift+V** | Paste right away (also while the clock runs) |
 | **Esc** | Cancel a cable you are dragging, or close a panel |
 | Double-click a slider | Back to its starting value |
 | Click the number next to a slider | Type a value, then press Enter |
