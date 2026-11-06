@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.15 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.16 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -23,7 +23,8 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.12 | Mastering: een eigen kabelsoort (gele, gestippelde sinus) met driehoekpoorten `masteringIn`/`masteringOut`; `configureMastering` en `onMasteringTargets`; `host.mastering` voor een Master Director die de instellingen van mastering-apparaten tegelijk zet (§11b) |
 | v1.13 | Multi-MIDI en regelaars: een eigen kabelsoort (dubbele gestreepte oranje kabel) met `multiEventIn`/`multiEventOut`, `eventBundles`, `onEventBundle` en `host.eventBundleChanged`; de optionele velden `ch` en `cc` op gebeurtenissen; `host.controls` en `host.setControl` om de regelaars van andere apparaten te zien en te zetten (§11c) |
 | v1.14 | Nootnamen: een apparaat dat noten op namen afbeeldt (een drumcomputer) kan `noteNames()` aanbieden en `host.noteNamesChanged` aanroepen; `host.peers` geeft ze door als `noteNames`, zodat een sequencer de rijen kan benoemen (§13b) |
-| v1.15 | Regelaars herkenbaar voor skins: `id`, `role` en `group` op `host.ui.knob` (in de `opties`) en `host.ui.select` (nieuw 6e argument), de attributen `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` voor eigen elementen en `host.ui.list` voor het register; de validator meldt een `let op` bij dubbele of ontbrekende id's en kent `--controls` (§12d) |
+| v1.15 | Regelaars herkenbaar voor skins: `id`, `role` en `group` op `host.ui.knob` (in de `opties`) en `host.ui.select` (nieuw 6e argument), de attributen `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` voor eigen elementen en `host.ui.list` voor het register; de validator meldt een `let op` bij dubbele of ontbrekende id's en kent `--controls` (§12d). |
+| v1.16 | Dekking van `params()`: elke continue regelaar hoort in `params()` (`modExclude` voor bewust uitgesloten, `on`/`drift` voor wat ongevraagd bewegen vals maakt, §8); de validator geeft een `let op` bij een regelaar die niet in `params()` staat, bij een apparaat met regelaars maar zonder `params()` en bij een param-id zonder regelaar, en `--controls` toont de kolom `in params()` |
 
 ---
 
@@ -207,6 +208,15 @@ modulate(offsets) {   // { paramId: −1..1 } — deel van het bereik, bovenop d
   - logaritmisch: `clamp(knop × (max/min)^o)`.
 - `modulate({})` haalt alle modulatie weg. Onbekende ids negeer je.
 - Na een wijziging van je parameterlijst roep je `host.paramsChanged(this)` aan.
+
+**Dekking: wat in `params()` hoort (v1.16).** Een modulator ziet alleen wat een apparaat in `params()` aanbiedt. Een regelaar die ontbreekt, bestaat voor Drift, LFO en MSEG niet.
+
+- `params()` bevat **elke continue regelaar** van het apparaat (schuif, draaiknop, `<input type="range">`, `host.ui.knob`), met `id` gelijk aan de state-sleutel (en aan het `id` uit §12d). Een apparaat dat een of meer van die regelaars heeft en geen `params()`, is niet bestuurbaar.
+- **Discrete regelaars** (keuzelijst, vinkje, knop) staan er niet in: continu bewegen over een keuze klikt en bouwt buffers opnieuw op. Wie er toch een wil sturen, gebruikt `host.setControl` (§11c).
+- **Bewust uitgesloten regelaars** (testnoot, basisnoot, patroonlengte, aantal stemmen, stapdata, bewerkgereedschap) staan er ook niet in. Zeg dat met `modExclude: ['testNote', 'baseNote']` op de definitie (state-sleutels of id's van regelaars); `modExclude: '*'` betekent dat het apparaat bewust niets aanbiedt. Zonder die opgave kan niemand "vergeten" van "bewust niet" onderscheiden.
+- **`on` en `drift` maken aanvullen veilig.** `on` zegt of een modulator de parameter uit zichzelf laat bewegen; zonder `on` staat hij uit. Zet `on: false` (en een klein `drift`, 0,05 tot 0,10; 0 = niet bewegen) bij alles waarvan ongevraagd bewegen vals of storend klinkt: toonhoogte (`pitch`, halve tonen, fijn), masterniveau, gate, octaaf, ADSR-tijden en lengtes. Zet `on: true` bij klank waar bewegen mooi is (cutoff, resonantie, mix). Een vergeten parameter toevoegen verandert dan niets hoorbaars totdat de gebruiker hem aanzet.
+- Wie hoort `params()` te hebben: `instrument`, `effect` en `mixer` met continue regelaars (behalve de categorieën `sequencer` en `tool`). `utility`, `output` en `modulator` hoeven niet; een modulator mag wel zelf bestuurbaar zijn (bijvoorbeeld LFO-snelheid).
+- De validator meldt hier een `let op` (nooit een fout) bij: continue regelaars die niet in `params()` staan en niet in `modExclude`, een `instrument`, `effect` of `mixer` met continue regelaars maar zonder `params()`, en een `params()`-id zonder regelaar of state-sleutel (een typefout: `modulate` negeert onbekende ids). Zie §17.
 
 **Modulator.** Gebruik `kind: 'modulator'` en `ports.modOut: [{ id: 'mod', name: 'Mod' }]`. Je krijgt `onModTargets(targets)` met voor elk doel `{ id, name, def, version, params }`. Die aanroep komt ook met een lege lijst, en opnieuw bij elke wijziging. Stuur met `host.modulate(this, doelId, { paramId: −1..1 })`. Optioneel krijg je `onModSources(sources)`: wie er naar jou stuurt. Een modulator mag zelf ook bestuurbaar zijn.
 
@@ -522,7 +532,7 @@ mount(el) {
 - Een apparaat dat zijn UI herbouwt (Mixer, Control Surface) leidt id's af uit zijn indeling (`k1.2.3`, `ch3.vol`) en geeft elke regelaar zijn rol en groep, zodat een skin op rol of groep kan mikken.
 - Het geluid, de state en de presets veranderen niet door id's, rollen of groepen. Verander ze niet in dezelfde actie.
 
-**Wat de validator doet.** Hij geeft alleen een `let op` (nooit een fout) bij: een id dat bij twee regelaars staat (alleen wat in `create()`/`mount()` is gebouwd; een latere herbouw telt niet dubbel), een deel van de regelaars zonder id terwijl andere er wel een hebben (helemaal geen ids = niet gemigreerd, geen melding), een rol buiten de lijst, een id of groep buiten `[A-Za-z0-9._-]{1,60}`, opties die geen object zijn, `adopt` op een element zonder model of zonder element, een `data-pk-id` op een element dat nergens in de kaart hangt, en id's die van `host.lang` afhangen. Met `--controls` drukt hij daarna de tabel `id | rol | groep | label nl/en | bereik | gezicht` af (het label uit de nl- en de en-ronde; zijn ze gelijk, dan staat het één keer).
+**Wat de validator doet.** Hij geeft alleen een `let op` (nooit een fout) bij: een id dat bij twee regelaars staat (alleen wat in `create()`/`mount()` is gebouwd; een latere herbouw telt niet dubbel), een deel van de regelaars zonder id terwijl andere er wel een hebben (helemaal geen ids = niet gemigreerd, geen melding), een rol buiten de lijst, een id of groep buiten `[A-Za-z0-9._-]{1,60}`, opties die geen object zijn, `adopt` op een element zonder model of zonder element, een `data-pk-id` op een element dat nergens in de kaart hangt, en id's die van `host.lang` afhangen. Met `--controls` drukt hij daarna de tabel `id | rol | groep | label nl/en | bereik | gezicht | in params()` af (het label uit de nl- en de en-ronde; zijn ze gelijk, dan staat het één keer; de laatste kolom zegt of een continue regelaar in `params()` staat: `ja`, `nee`, `uitgesloten`, `?` voor niet te koppelen en `-` voor een keuze, vinkje of knop).
 
 ---
 
@@ -746,7 +756,8 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 12. **Mastering (v1.12)**: een apparaat met `masteringIn` heeft `configureMastering(patch)` (en optioneel `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); die krijgen `{}`, `null` en onbekende of ongeldige velden en geven een object terug (of niets), en `getMasteringReport` geeft JSON zonder AudioNodes. Een apparaat met `masteringOut` heeft `onMasteringTargets(targets)`; die krijgt `[]`, een lijst met één doel (twee keer) en weer `[]`. De nep-host controleert `host.mastering` op een bekende actie en een bestaande `masteringOut`-poort. Een modulator heeft `modOut` of `masteringOut`.
 13. **Multi-MIDI (v1.13)**: een apparaat met `multiEventOut` heeft `eventBundles[poortId]` met een lijst `tracks` (unieke tekst-id's, een `name`, een optioneel `ch` van 1 tot 16); een apparaat met `multiEventIn` heeft `onEventBundle`; die krijgt een bundel, dezelfde sleutel met een ander spoor erbij en dan `null`. Gebeurtenissen met `ch` of `cc` hebben waarden in het bereik; op een multi-MIDI-poort draagt elke gebeurtenis een `track` uit de lijst. De nep-host kent `host.eventBundleChanged`, `host.controls` en `host.setControl`.
 14. **Nootnamen (v1.14)**: een apparaat met `noteNames()` geeft een lijst `{ note, name }` (noot 0 tot 127, `name` niet leeg); `noteNames()` gooit niet en `host.noteNamesChanged(this)` mag zonder fout worden aangeroepen.
-15. **Regelaars voor skins (v1.15)**: de nep-host kent `host.ui.knob(…, opties)`, `host.ui.select(…, opties)`, `host.ui.adopt` en `host.ui.list`, en leest ook `data-pk-*`-attributen op eigen elementen. Alleen een `let op` (nooit een fout) bij een dubbel id, deels ontbrekende id's, een rol buiten de lijst, een ongeldig id of groep, opties die geen object zijn, `adopt` op een element zonder model, een id op een element dat nergens hangt, en id's die per `host.lang` verschillen. `--controls` drukt de tabel `id | rol | groep | label nl/en | bereik | gezicht` af (zie §12d).
+15. **Regelaars voor skins (v1.15)**: de nep-host kent `host.ui.knob(…, opties)`, `host.ui.select(…, opties)`, `host.ui.adopt` en `host.ui.list`, en leest ook `data-pk-*`-attributen op eigen elementen. Alleen een `let op` (nooit een fout) bij een dubbel id, deels ontbrekende id's, een rol buiten de lijst, een ongeldig id of groep, opties die geen object zijn, `adopt` op een element zonder model, een id op een element dat nergens hangt, en id's die per `host.lang` verschillen. `--controls` drukt de tabel `id | rol | groep | label nl/en | bereik | gezicht | in params()` af (zie §12d).
+16. **Dekking van `params()` (v1.16, §8)**: elke continue regelaar (`<input type="range">`, `host.ui.knob`, `host.ui.adopt`; niet de rollen `step`, `display`, `meter`, `jack`, `pad`, `button`) wordt aan `params()` gekoppeld: eerst via het `id` (opties of `data-pk-id`), dan via de `getState`-sleutel die verandert als de validator de waarde verzet en de `input`/`change`-afhandeling aanroept (genummerde sleutels als `osc.0.fine` tellen mee als ze op meerdere posities voorkomen; stapdata en een enkele gekozen positie niet), dan via een label dat aan precies één parameternaam gelijk is. Alleen een `let op` (nooit een fout) bij: continue regelaars die niet in `params()` en niet in `modExclude` staan; een `instrument`, `effect` of `mixer` (niet de categorieën `sequencer` en `tool`) met continue regelaars maar zonder `params()`; een `params()`-id zonder regelaar of state-sleutel; een `modExclude` dat geen lijst met tekst (of `'*'`) is. Wat de validator niet kan koppelen, laat hij stil (`?` in `--controls`). Regelaars die als `innerHTML` of op een canvas zijn getekend ziet hij niet.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -772,7 +783,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 16. Instrumenten (optioneel): `parts`/`getPart`/`setPart` samen, alleen klank in `getPart`, terugzetten laat de instelling gelijk (§13c).
 17. Alle tekst voor de gebruiker kiest op `host.lang` (`'nl'` en `'en'`, anders `'en'`); namen per taal in `i18n`; `oversample` van `host.audio` gebruikt waar je zelf aliasing veroorzaakt (§12c).
 18. Regelaars (v1.15, aanbevolen): elke `host.ui.knob`/`select` en elke eigen schuif heeft een `id` (= state-/parametersleutel, nooit het label), een `role` en een `group`; `node validate-instrument.mjs bestand.patchkamer-device.js --controls` toont de tabel zonder `let op` (§12d).
-19. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+19. Dekking (v1.16): `params()` bevat elke continue regelaar met `id` = state-sleutel, behalve wat in `modExclude` staat (testnoot, basisnoot, lengte, stemmen, stapdata); keuzes en vinkjes horen er niet in; parameters die niet ongevraagd mogen bewegen (toonhoogte, master, gate, octaaf, tijden) hebben `on: false` (§8). `--controls` toont in de kolom `in params()` geen `nee`.
+20. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -811,7 +823,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.15
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.16
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -870,7 +882,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.15
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.16
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -886,6 +898,7 @@ export default {
   version: '1.0.0',
   kind: 'instrument',
   category: 'groove',
+  modExclude: '*',   // dit voorbeeld toont de bundel, niet de sturing: bewust geen params() (§8)
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [{ id: 'trigs', name: 'Trigs' }],
     multiOut: [{ id: 'los', name: 'Losse uit' }] },
   i18n: { en: { ports: { out: 'Out', los: 'Separate out' } } },
@@ -933,7 +946,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.15
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.16
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -1011,7 +1024,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.15.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.16.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

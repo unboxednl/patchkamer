@@ -1,4 +1,4 @@
-// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles van validate-instrument.mjs (contract v1.15)
+// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15)
 // Gebruik / Usage:  node contract/test-validate-instrument.mjs      (exit 0 = alles groen / all green)
 // Elk geval is een klein apparaat dat in een tijdelijke map wordt gezet en in beide talen (--lang nl en --lang en) wordt gevalideerd.
 // "warn" = fragmenten (nl, en) die in de OK-regel als let op / warning moeten staan; zonder "warn" mag er geen enkele waarschuwing staan.
@@ -13,7 +13,7 @@ const tmp = mkdtempSync(join(tmpdir(), 'inst-test-'));
 // Apparaat met een vrij te kiezen mount-body. `ui.k` (knoppen) en `ui.s` (keuzes) worden door setState bijgewerkt (anders faalt contract §13).
 const dev = (body, { lang = false } = {}) => `// SPDX-License-Identifier: MIT
 export default {
-  id: 'nl.test.ctl', name: 'Ctl', version: '1.0.0', kind: 'effect',
+  id: 'nl.test.ctl', name: 'Ctl', version: '1.0.0', kind: 'effect', modExclude: '*',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },
   create(ctx, host) {
     const g = ctx.createGain(); const ui = { k: [], s: [] }; const T = host.lang === 'nl' ? { a: 'Snelheid', b: 'Diepte', c: 'Vorm' } : { a: 'Rate', b: 'Depth', c: 'Shape' };
@@ -101,6 +101,68 @@ ok('--controls adopt: gezicht hslider en bereik', dev(`${IN()} host.ui.adopt(i, 
 ok('--controls: host.ui.list en id op de terugwaarde', dev(`const k = host.ui.knob(el, T.a, [0, 1, 0.01], 0.5, v => v, v => {}, { id: "rate", role: "fader" }); ui.k.push(k); if (k.id !== 'rate') throw new Error('knob().id ontbreekt'); const l = host.ui.list({}); if (!Array.isArray(l) || l.length !== 1 || l[0].id !== 'rate' || l[0].role !== 'fader' || l[0].type !== 'range') throw new Error('list() klopt niet: ' + JSON.stringify(l));`));
 ok('--controls: label nl/en door twee taalronden', dev(`${K('id: "rate"')}`, { lang: true }), { controls: true, has: [['Snelheid / Rate', 'Snelheid / Rate']] });
 ok('--controls met --host-lang en: kolom blijft nl/en', dev(`${K('id: "rate"')}`, { lang: true }), { controls: true, hostLang: 'en', has: [['Snelheid / Rate', 'Snelheid / Rate']] });
+
+// ---- dekking van params() (§8): continue regelaars horen in params(), of in modExclude
+// Apparaat mét echte state: S wordt door de regelaars gezet; params() en modExclude kiest het geval.
+const dev2 = ({ kind = 'effect', category = '', def = '', plist = null, body, state = "{ cut: 0.5, res: 0.2, testNote: 60, osc: [{ fine: 0 }, { fine: 0 }, { fine: 0 }], steps: Array.from({ length: 16 }, () => 0) }" }) => `// SPDX-License-Identifier: MIT
+export default {
+  id: 'nl.test.dek', name: 'Dek', version: '1.0.0', kind: '${kind}', ${category ? `category: '${category}',` : ''} ${def}
+  ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },
+  create(ctx, host) {
+    const g = ctx.createGain(); const ui = { k: [], s: [] }; const S = ${state}; const sel = (o) => ui.s.push(host.ui.select(EL, 'Vorm', [['a', 'A']], 'a', v => {}, o));
+    const knob = (id, key = id, label = id) => ui.k.push(host.ui.knob(EL, label, [0, 1, 0.01], 0.5, v => v, v => { S[key] = v; }, id ? { id } : undefined));
+    const own = (key, label = '', min = '0', max = '1', role) => { const i = document.createElement('input'); i.type = 'range'; i.min = min; i.max = max; i.step = '0.01'; if (label) i.setAttribute('aria-label', label); if (role) i.setAttribute('data-pk-role', role);
+      i.oninput = () => { S[key] = +i.value; }; EL.appendChild(i); return i; };
+    let EL = null;
+    return { inputs: { in: g }, outputs: { out: g },
+      mount(el) { EL = el; ${body} },
+      getState() { return JSON.parse(JSON.stringify(S)); },
+      setState(s) { Object.assign(S, JSON.parse(JSON.stringify(s || {}))); for (const k of ui.k) k.set(0); for (const x of ui.s) x.value = 'a'; },
+      ${plist === null ? '' : `params() { return [${plist.map(i => `{ id: '${i}', name: '${i}', min: 0, max: 1 }`).join(', ')}]; }, modulate() {},`}
+      destroy() {} };
+  }
+};
+`;
+const NOTIN = (names, n = names.split(',').length) => [`${n} continue regelaar(s) staan niet in params(): ${names}`, `${n} continuous control(s) are not in params(): ${names}`];
+const NOPAR = (kind, n) => [`${n} continue regelaar(s) maar geen params() (kind ${kind})`, `${n} continuous control(s) but no params() (kind ${kind})`];
+
+// zonder let op
+ok('dekking: knop met id in params()', dev2({ plist: ['cut'], body: `knob('cut');` }));
+ok('dekking: eigen schuif, state-sleutel = param-id', dev2({ plist: ['cut', 'res'], body: `own('cut'); own('res');` }));
+ok('dekking: eigen schuif via addEventListener', dev2({ plist: ['cut'], body: `const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; i.addEventListener('input', () => { S.cut = +i.value; }); el.appendChild(i);` }));
+ok('dekking: schuif met data-pk-id = param-id', dev2({ plist: ['cut'], body: `const i = own('cut'); i.setAttribute('data-pk-id', 'cut');` }));
+ok('dekking: label gelijk aan unieke param-naam (geen state-koppeling)', dev2({ plist: ['Cutoff'], body: `const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; i.setAttribute('aria-label', 'Cutoff'); el.appendChild(i);` }));
+ok('dekking: genummerde sleutel osc.0.fine = param osc1.fine', dev2({ plist: ['osc1.fine', 'osc2.fine', 'osc3.fine'], body: `for (let n = 0; n < 3; n++) { const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; i.oninput = () => { S.osc[n].fine = +i.value; }; el.appendChild(i); }` }));
+ok('dekking: stapdata (16 schuiven op steps.N) telt niet', dev2({ plist: ['cut'], body: `knob('cut'); for (let n = 0; n < 16; n++) { const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; i.oninput = () => { S.steps[n] = +i.value; }; el.appendChild(i); }` }));
+ok('dekking: rol step/display telt niet', dev2({ plist: ['cut'], body: `knob('cut'); own('res', '', '0', '1', 'step'); own('testNote', '', '0', '127', 'display');` }));
+ok('dekking: keuzes en vinkjes hoeven niet in params()', dev2({ plist: ['cut'], body: `knob('cut'); sel({ id: 'shape' }); const c = document.createElement('input'); c.type = 'checkbox'; el.appendChild(c);` }));
+ok('dekking: modExclude sluit testnoot uit', dev2({ def: "modExclude: ['testNote'],", plist: ['cut'], body: `knob('cut'); own('testNote', 'Test note', '0', '127');` }));
+ok('dekking: modExclude op een knop met id', dev2({ def: "modExclude: ['res'],", plist: ['cut'], body: `knob('cut'); knob('res');` }));
+ok('dekking: modExclude \'*\' zonder params()', dev2({ def: "modExclude: '*',", body: `knob('cut');` }));
+ok('dekking: modulator zonder params() krijgt geen let op', dev2({ kind: 'modulator', def: "", body: `knob('cut');` }).replace("eventOut: [] }", "eventOut: [], modOut: [{ id: 'mod', name: 'Mod' }] }").replace('destroy() {} };', 'onModTargets() {}, destroy() {} };'));
+ok('dekking: utility, output zonder params() krijgen geen let op', dev2({ kind: 'utility', body: `knob('cut');` }));
+ok('dekking: output zonder params()', dev2({ kind: 'output', body: `knob('cut');` }).replace("outputs: { out: g }", "outputs: { out: g }"));
+ok('dekking: sequencer-categorie zonder params()', dev2({ kind: 'instrument', category: 'sequencer', body: `knob('cut');` }));
+ok('dekking: apparaat zonder regelaars en zonder params()', dev2({ kind: 'instrument', body: `el.appendChild(document.createElement('div'));` }));
+ok('dekking: param-id met state-sleutel zonder regelaar mag', dev2({ plist: ['cut', 'res'], body: `knob('cut');` }));
+// let op
+warns('dekking: knop met id staat niet in params()', dev2({ plist: ['cut'], body: `knob('cut'); knob('res');` }), [NOTIN('res')]);
+warns('dekking: eigen schuif (state-sleutel) staat niet in params()', dev2({ plist: ['cut'], body: `knob('cut'); own('res');` }), [NOTIN('res')]);
+warns('dekking: meerdere ontbrekende regelaars', dev2({ plist: ['cut'], body: `knob('cut'); own('res'); own('testNote', '', '0', '127');` }), [NOTIN('res, testNote', 2)]);
+warns('dekking: genummerde sleutel mist in params()', dev2({ plist: ['cut'], body: `knob('cut'); for (let n = 0; n < 3; n++) { const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; i.oninput = () => { S.osc[n].fine = +i.value; }; el.appendChild(i); }` }), [NOTIN('osc.0.fine, osc.1.fine, osc.2.fine', 3)]);
+warns('dekking: schuif met data-pk-id staat niet in params()', dev2({ plist: ['cut'], body: `knob('cut'); const i = own('res'); i.setAttribute('data-pk-id', 'res');` }), [NOTIN('res')]);
+warns('dekking: modExclude sluit een ander id uit, res blijft ontbreken', dev2({ def: "modExclude: ['testNote'],", plist: ['cut'], body: `knob('cut'); own('res'); own('testNote');` }), [NOTIN('res')]);
+warns('dekking: apparaat met regelaars maar zonder params() (effect)', dev2({ body: `knob('cut'); own('res');` }), [NOPAR('effect', 2)]);
+warns('dekking: instrument zonder params()', dev2({ kind: 'instrument', body: `knob('cut');` }), [NOPAR('instrument', 1)]);
+warns('dekking: mixer zonder params()', dev2({ kind: 'mixer', body: `knob('cut');` }), [NOPAR('mixer', 1)]);
+warns('dekking: zonder params(), maar modExclude laat er één over', dev2({ def: "modExclude: ['testNote'],", body: `knob('cut'); own('testNote');` }), [NOPAR('effect', 1)]);
+warns('dekking: param-id zonder regelaar of state-sleutel', dev2({ plist: ['cut', 'cutt'], body: `knob('cut');` }), [['zonder regelaar of state-sleutel: cutt', 'without a control or state key: cutt']]);
+warns('dekking: modExclude is geen lijst', dev2({ def: "modExclude: 'testNote',", plist: ['cut'], body: `knob('cut');` }), [['modExclude moet een lijst', 'modExclude must be a list']]);
+warns('dekking: modExclude bevat een getal', dev2({ def: "modExclude: [5],", plist: ['cut'], body: `knob('cut');` }), [['modExclude moet een lijst', 'modExclude must be a list']]);
+// --controls: kolom "in params()"
+ok('--controls: kolom in params() (ja, nee, uitgesloten, ?)', dev2({ def: "modExclude: ['testNote'],", plist: ['cut'], body: `knob('cut'); knob('res'); own('testNote', 'Test note', '0', '127'); const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; el.appendChild(i);` }), { controls: true, warn: [NOTIN('res', 1)], has: [
+  ['in params()', 'in params()'], ['cut', 'cut'], [' | ja', ' | yes'], [' | nee', ' | no'], [' | uitgesloten', ' | excluded'], [' | ?', ' | ?'], ['Test note', 'Test note']] });
+ok('--controls: keuze krijgt streepje in de kolom in params()', dev2({ plist: ['cut'], body: `knob('cut'); sel({ id: 'shape' });` }), { controls: true, has: [['shape | select | -', 'shape | select | -'], ['| ja', '| yes']] });
 
 let fail = 0, n = 0;
 let idx = 0;
