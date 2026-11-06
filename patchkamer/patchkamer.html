@@ -443,6 +443,21 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
 #lib.cmp .libdev.open>.xp{transform:rotate(90deg)}
 #lib.cmp .libdev{cursor:pointer}
 #libClose{display:none}
+/* menu in de hoofdbalk (smal scherm) */
+#menuBtn{display:none}
+.hdrmenu{position:fixed;left:8px;right:8px;z-index:45;background:var(--overlay);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:10px;padding:10px 12px 12px;box-shadow:0 12px 32px var(--shadow);overflow:auto;overscroll-behavior:contain;display:grid;gap:12px}
+.hdrmenu[hidden]{display:none}
+.hdrmenu h4{margin:0 0 6px;font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hdrmenu .hm-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.hdrmenu button,.hdrmenu select,.hdrmenu .tp,.hdrmenu #latBox{min-height:44px;font-size:14px}
+.hdrmenu button{padding:8px 10px;letter-spacing:.04em}
+.hdrmenu .tp{justify-content:space-between;font-size:11px;padding:0 4px}
+.hdrmenu .tp select{flex:1 1 auto;min-width:0}
+.hdrmenu #latBox{display:flex;align-items:center;gap:6px}
+.hdrmenu .hm-name{display:grid}
+.hdrmenu .wsname{width:100%;max-width:none;font-size:16px;min-height:44px}
+.hdrmenu #fitScreen{grid-column:1/-1}
+@media (max-width:699px){#menuBtn{display:inline-block}}
 /* camerastanden */
 .standpop{position:absolute;right:10px;bottom:52px;z-index:7;width:min(300px,calc(100% - 20px));max-height:min(60%,380px);overflow:auto;background:var(--overlay);border:1px solid var(--line);border-radius:6px;padding:8px;display:grid;gap:6px;box-shadow:0 10px 30px var(--shadow);font-size:12px}
 .standpop h4{margin:0;font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
@@ -492,16 +507,19 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
 /* smal scherm: bibliotheek als onderlade, hoofdbalk scrolt horizontaal, panelen passen */
 @media (max-width:699px){
   body{padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));gap:6px}
-  header{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:8px;scrollbar-width:none;padding-bottom:6px;overscroll-behavior-x:contain;zoom:var(--pkfs,1)!important}
-  header::-webkit-scrollbar{display:none}
+  header{flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:6px;zoom:var(--pkfs,1)!important}
   header>*,.transport>*{flex:none}
-  header>.note{display:none}
-  header h1{font-size:20px}
-  header .wsname{max-width:28vw;font-size:16px;width:12ch}
+  header>.note,header h1{display:none}
   .transport{display:contents}
-  header .go{order:-3;position:sticky;left:0;z-index:3;box-shadow:6px 0 8px var(--bg)}
+  header .go{order:-3}
   header .tpbpm{order:-2}
-  header h1{order:-1}
+  header>.tp>span:first-child,.transport>.tp>span:first-child{display:none}
+  header .tp input[type=range]{width:72px!important}
+  header .tp input[type=number]{width:62px}
+  #libToggle{font-size:0;min-width:44px;padding-left:0;padding-right:0}
+  #libToggle::after{content:"▤";font-size:18px}
+  #menuBtn{order:1;min-width:44px;font-size:20px;line-height:1;padding-left:0;padding-right:0}
+  .hdrmenu{zoom:var(--pkfs,1)}
   .narrowonly{display:inline-block}
   .wstabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
   .wstab{flex:none}
@@ -545,7 +563,15 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
     <span class="tp" id="latBox" title="vertraging tussen een geluid berekenen en het horen (browser + besturingssysteem + geluidskaart), zoals de browser die opgeeft" data-i18n-title="attr.vertraging_tussen_een_geluid_berekenen"><span data-i18n="ui.latency">Latency</span> <output id="latVal">–</output></span>
     <span class="tp"><span data-i18n="ui.kleur">Kleur</span> <select id="skin" aria-label="kleurstelling" data-i18n-aria="attr.kleurstelling"><option value="dark" data-i18n="ui.donker">Donker</option><option value="light" data-i18n="ui.licht">Licht</option><option value="s1000" data-i18n="ui.retro">Retro</option></select></span>
   </div>
+  <button class="small" id="menuBtn" aria-expanded="false" aria-controls="hdrMenu" title="menu" aria-label="menu" data-i18n-title="attr.t_menu" data-i18n-aria="attr.t_menu">☰</button>
 </header>
+<div class="hdrmenu" id="hdrMenu" hidden role="dialog" aria-label="menu" data-i18n-aria="attr.t_menu">
+  <div class="hm-name" id="hmName"></div>
+  <div><h4 data-i18n="ui.t_grp_bestanden">Bestanden</h4><div class="hm-row" id="hmFiles"></div></div>
+  <div><h4 data-i18n="ui.t_grp_geluid">Geluid</h4><div class="hm-row" id="hmSound"></div></div>
+  <div><h4 data-i18n="ui.t_grp_weergave">Weergave</h4><div class="hm-row" id="hmView"></div></div>
+  <div><h4 data-i18n="ui.t_grp_overig">Overig</h4><div class="hm-row" id="hmMisc"></div></div>
+</div>
 
 <section class="wspanel" id="wsPanel" hidden aria-label="Werkruimte" data-i18n-aria="attr.werkruimte">
   <button class="small close" id="wsClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
@@ -1339,6 +1365,11 @@ const I18N={
    "ui.t_bladeren":"Bladeren",
    "ui.t_kaartjes":"Kaartjes",
    "ui.t_standen":"Standen ▾",
+   "attr.t_menu":"menu",
+   "ui.t_grp_bestanden":"Bestanden",
+   "ui.t_grp_geluid":"Geluid",
+   "ui.t_grp_weergave":"Weergave",
+   "ui.t_grp_overig":"Overig",
    "ui.t_lite":"Kaarten vereenvoudigen bij uitzoomen",
    "attr.t_scherm":"schermindeling: automatisch, breed of compact",
    "attr.t_pas_aan":"maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)",
@@ -2014,6 +2045,11 @@ const I18N={
    "ui.t_bladeren":"Browse",
    "ui.t_kaartjes":"Cards",
    "ui.t_standen":"Views ▾",
+   "attr.t_menu":"menu",
+   "ui.t_grp_bestanden":"Files",
+   "ui.t_grp_geluid":"Sound",
+   "ui.t_grp_weergave":"View",
+   "ui.t_grp_overig":"Other",
    "ui.t_lite":"Simplify cards when zoomed out",
    "attr.t_scherm":"screen layout: automatic, wide or compact",
    "attr.t_pas_aan":"make a compact layout that fits this screen (the wide layout is kept)",
@@ -4220,6 +4256,38 @@ document.addEventListener('pointermove',e=>{ if(LIBP.id!==e.pointerId) return; i
 document.addEventListener('touchmove',e=>{ if(libDrag&&libDrag.touch&&e.cancelable) e.preventDefault(); },{passive:false});
 PKT.narrow.addEventListener('change',()=>{ placeLib(); paintLib(); if(typeof FOCUS!=='undefined'&&!FOCUS.open&&!FOCUS_PICKED) FOCUS.layout=focusBase(); });
 PKT.coarse.addEventListener('change',()=>{ paintLib(); hitWidthRefresh(); });
+/* ---------- menu in de hoofdbalk op smal scherm: de balk houdt Start, BPM, Swing en Bibliotheek; de rest staat achter ☰ ---------- */
+const HM={menu:$('hdrMenu'),btn:$('menuBtn'),tr:document.querySelector('header .transport'),open:false,pushed:false};
+HM.orig=[...HM.tr.children];
+function hmPlace(narrow){
+  const rows={files:$('hmFiles'),sound:$('hmSound'),view:$('hmView'),misc:$('hmMisc')};
+  if(narrow){
+    rows.files.append($('wsBtn'),$('songBtn')); rows.sound.append($('prBtn'),$('psBtn'));
+    rows.view.append($('arrange'),$('layoutSel').closest('.tp'),$('fitScreen'),$('focusBtn'),$('browseBtn'),$('skin').closest('.tp'));
+    rows.misc.append($('clear'),$('latBox'),$('setBtn')); $('hmName').append($('wsName'));
+  } else { hmClose(true); HM.tr.append(...HM.orig); document.querySelector('header .note').before($('wsName')); }
+}
+function hmOpen(){
+  if(HM.open) return; HM.open=true;
+  const f=parseFloat(getComputedStyle(document.body).getPropertyValue('--pkfs'))||1, b=document.querySelector('header').getBoundingClientRect().bottom;
+  HM.menu.style.top=Math.max(0,b)/f+'px'; HM.menu.style.maxHeight='calc((100dvh - '+Math.max(0,b)+'px - 8px)/'+f+')';
+  HM.menu.hidden=false; HM.btn.setAttribute('aria-expanded','true');
+  try{ history.pushState({pkmenu:1},''); HM.pushed=true; }catch(e){}
+}
+function hmClose(quiet){
+  if(!HM.open) return; HM.open=false; HM.menu.hidden=true; HM.btn.setAttribute('aria-expanded','false');
+  if(HM.pushed){ HM.pushed=false; if(!quiet&&history.state&&history.state.pkmenu){ try{ history.back(); }catch(e){} } }
+}
+HM.btn.addEventListener('click',()=>HM.open?hmClose():hmOpen());
+HM.menu.addEventListener('click',e=>{ if(e.target.closest('button')) setTimeout(hmClose,0); },true);
+HM.menu.addEventListener('change',e=>{ if(e.target.closest('select')) hmClose(); });
+document.addEventListener('pointerdown',e=>{ if(HM.open&&!HM.menu.contains(e.target)&&!HM.btn.contains(e.target)) hmClose(); },true);
+document.addEventListener('keydown',e=>{ if(HM.open&&e.key==='Escape'){ e.preventDefault(); hmClose(); } });
+window.addEventListener('popstate',()=>{ if(HM.open){ HM.pushed=false; hmClose(true); } });
+(function(){ const lab=(id,span)=>{ const el=$(id), t=span&&span.textContent.trim(); if(el&&t){ el.title=t; el.setAttribute('aria-label',t); } };
+  lab('bpm',$('bpm').closest('.tp').firstElementChild); lab('swing',$('swing').closest('.tp').firstElementChild); lab('libToggle',$('libToggle')); })();
+PKT.narrow.addEventListener('change',()=>hmPlace(PKT.narrow.matches));
+if(PKT.narrow.matches) hmPlace(true);
 paintLibView();
 
 /* =====================================================================
