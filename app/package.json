@@ -23,6 +23,9 @@
     "files": ["main.js", "preload.js", "probe.html", "library.js", "package.json"],
     "extraResources": [
       { "from": "../patchkamer/patchkamer.html", "to": "patchkamer/patchkamer.html" },
+      { "from": "../patchkamer/css", "to": "patchkamer/css", "filter": ["*.css"] },
+      { "from": "../patchkamer/js", "to": "patchkamer/js", "filter": ["*.js"] },
+      { "from": "../patchkamer/i18n", "to": "patchkamer/i18n", "filter": ["*.js"] },
       { "from": "../devices", "to": "library/devices", "filter": ["**/*.js", "**/*.json"] },
       { "from": "../presets", "to": "library/presets", "filter": ["**/*.json"] },
       { "from": "../tunes", "to": "library/tunes", "filter": ["**/*.json"] }
