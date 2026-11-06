@@ -1,4 +1,4 @@
-// validate-skin.mjs — Patchkamer skins contract v0.1
+// validate-skin.mjs — Patchkamer skins contract v0.2
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
 // Usage:    same; --dir validates every *.patchkamer-skin.json and icon.* in a library folder (skins/library or one device folder).
@@ -32,7 +32,14 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.1; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.1; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.2; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.2; unknown fields are ignored'],
+  design_object: ['{0} moet een object zijn', '{0} must be an object'],
+  design_enum: ['{0} moet een van {1} zijn', '{0} must be one of {1}'],
+  design_colour: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
+  design_custom_unused: ['{0}.colors.custom wordt niet gebruikt: scheme is niet "custom"', '{0}.colors.custom is not used: scheme is not "custom"'],
+  design_custom_missing: ['{0}.colors: scheme "custom" mist {1}; die vallen terug op de werkruimtekleur', '{0}.colors: scheme "custom" lacks {1}; they fall back to the workspace colour'],
+  design_contrast: ['{0}.colors: contrast tussen text en {1} is {2}:1; onder 3:1 is slecht leesbaar', '{0}.colors: contrast between text and {1} is {2}:1; below 3:1 is hard to read'],
+  design_contract: ['design hoort bij skinsContract 0.2; een host met 0.1 negeert het', 'design belongs to skinsContract 0.2; a host on 0.1 ignores it'],
   id_form: ['id moet 3 tot 100 tekens zijn uit [a-z0-9.-]', 'id must be 3 to 100 characters from [a-z0-9.-]'],
   id_prefix: ['id begint niet met het apparaat-id ("{0}."); aanbevolen is <device-id>.<slug>', 'id does not start with the device id ("{0}."); <device-id>.<slug> is recommended'],
   device_form: ['device moet het apparaat-id zijn: 3 tot 100 tekens uit [a-z0-9.-], beginnend en eindigend met een letter of cijfer', 'device must be the device id: 3 to 100 characters from [a-z0-9.-], starting and ending with a letter or digit'],
@@ -102,6 +109,7 @@ const M = {
   ok_css: ['css {0} bytes', 'css {0} bytes'],
   ok_assets: ['{0} afbeeldingen', '{0} images'],
   ok_icon: ['met icoon', 'with icon'],
+  ok_design: ['met design', 'with design'],
   ok_file: ['bestand {0} bytes', 'file {0} bytes'],
   ok_icon_file: ['iconbestand {0} bytes', 'icon file {0} bytes'],
 };
@@ -112,14 +120,44 @@ if (!DIR && !files.length) { console.error(vt('usage')); process.exit(2); }
 // ---------- hulpfuncties ----------
 const MAX_FILE = 2 * 1024 * 1024, MAX_ICON = 200 * 1024, MAX_CSS = 200 * 1024, MAX_ASSET = 200 * 1024, MAX_ASSETS = 1024 * 1024;
 const SCREENS = ['phone', 'compact', 'wide'];
-const KNOWN_TOP = new Set(['format', 'formatVersion', 'skinsContract', 'id', 'device', 'name', 'version', 'author', 'license', 'description', 'created', 'icon', 'default', 'appearances']);
-const KNOWN_APP = new Set(['id', 'name', 'description', 'when', 'css', 'assets']);
+const KNOWN_TOP = new Set(['format', 'formatVersion', 'skinsContract', 'id', 'device', 'name', 'version', 'author', 'license', 'description', 'created', 'icon', 'default', 'appearances', 'design']);
+const KNOWN_APP = new Set(['id', 'name', 'description', 'when', 'css', 'assets', 'design']);
 const KNOWN_WHEN = new Set(['minWidth', 'maxWidth', 'screens']);
 // de lijst met merk- en modelnamen staat in rot13, zodat de namen zelf niet in de repo staan
 const rot13 = t => t.replace(/[a-z]/gi, c => String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26));
 const BRAND_RE = new RegExp(rot13('nec[ _-]?[0-9]|bqlffrl|nkkr|zbbt|xbet|ebynaq|lnznun|frdhragvny|boreurvz|whab|zvavzbbt|cebcurg|whcvgre|zf-?20|fu-?101|ceb-?bar|qk-?7'), 'i');
 const DUTCH = ['de', 'het', 'een', 'voor', 'met', 'van', 'niet', 'geen', 'maar', 'naar', 'wordt', 'deze', 'ook', 'kleur', 'kleuren', 'knop', 'knoppen', 'regelaar', 'regelaars', 'apparaat', 'apparaten', 'geluid', 'standaard', 'gewoon', 'normaal', 'uiterlijk', 'donker', 'licht', 'zwart', 'wit', 'rood', 'groen', 'blauw', 'geel', 'oranje', 'paars', 'grijs', 'bruin', 'roze', 'eenvoudig', 'helder', 'nacht', 'groot', 'klein', 'vloer', 'schuif', 'voorbeeld', 'verschijning', 'kaart', 'hout', 'staal', 'koper', 'zilver', 'goud', 'ouderwets', 'rustig', 'strak'];
 const IMG_RE = /^data:image\/(svg\+xml|png|webp|jpeg)(;[A-Za-z0-9=._+-]+)*,/;
+const PORT_MODES = ['default', 'always', 'hover', 'strip'], HAPTIC_LEVELS = ['off', 'light', 'medium', 'strong'];
+const KNOB_STYLES = ['workspace', 'rotary', 'slider'], KNOB_SIZES = ['s', 'm', 'l'], COLOUR_SCHEMES = ['workspace', 'custom'];
+const COLOUR_KEYS = ['bg', 'surface', 'text', 'muted', 'accent', 'line'], HAPTIC_KEYS = ['click', 'turn', 'slide'];
+const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'] };
+const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+const normColour = v => { if (typeof v !== 'string') return null; const m = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec(v); if (!m) return null; let h = m[1].toLowerCase(); if (h.length === 3) h = [...h].map(c => c + c).join(''); return '#' + h; };
+const lum = hex => { const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+// Controleert de vorm van één design-object (streng: fouten bij verkeerde waarden, let op bij onbekende sleutels).
+// Geeft de geldige, genormaliseerde delen terug (voor samenvoegen en contrastcontrole).
+function checkDesignShape(d, path, E, W) {
+  const out = {};
+  if (!isObj(d)) { E('design_object', path); return out; }
+  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN)) W('unknown_field', `${path}.${k}`);
+  for (const sec of Object.keys(KNOWN_DESIGN)) { if (d[sec] === undefined) continue; const sp = `${path}.${sec}`;
+    if (!isObj(d[sec])) { E('design_object', sp); continue; }
+    for (const k of Object.keys(d[sec])) if (!KNOWN_DESIGN[sec].includes(k)) W('unknown_field', `${sp}.${k}`);
+    const o = out[sec] = {}, src = d[sec];
+    const en = (k, list) => { if (src[k] === undefined) return; if (list.includes(src[k])) o[k] = src[k]; else E('design_enum', `${sp}.${k}`, list.map(x => '"' + x + '"').join(', ')); };
+    if (sec === 'ports') en('mode', PORT_MODES);
+    else if (sec === 'haptics') HAPTIC_KEYS.forEach(k => en(k, HAPTIC_LEVELS));
+    else if (sec === 'knobs') { en('style', KNOB_STYLES); en('size', KNOB_SIZES); }
+    else { en('scheme', COLOUR_SCHEMES);
+      if (src.custom !== undefined) { if (!isObj(src.custom)) E('design_object', `${sp}.custom`);
+        else { o.custom = {}; for (const k of Object.keys(src.custom)) { if (!COLOUR_KEYS.includes(k)) { W('unknown_field', `${sp}.custom.${k}`); continue; }
+          const c = normColour(src.custom[k]); if (c) o.custom[k] = c; else E('design_colour', `${sp}.custom.${k}`); } } } }
+  }
+  return out;
+}
+const mergeDesign = (a, b) => { const r = {}; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
 const isInt = v => Number.isInteger(v);
 const isStr = v => typeof v === 'string';
 function dataInfo(s) { // { type, base64, body } of null
@@ -162,7 +200,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 1) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 2) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -183,11 +221,15 @@ function validateSkin(path, ctx = {}) {
       else { hasIcon = true; const n = Buffer.byteLength(s.icon); if (n > MAX_ICON) E('icon_big', n);
         if (info.type === 'svg+xml') { const p = svgProblem(svgText(info)); if (p) E('icon_svg', p); } } }
   } else if (s.icon === undefined) E('icon_type');
+  // design (laag 1, contract 0.2)
+  const skinDesign = s.design === undefined ? null : checkDesignShape(s.design, 'design', E, W);
+  let hasDesign = s.design !== undefined;
   // appearances
   const apps = Array.isArray(s.appearances) ? s.appearances : null;
   if (!apps || apps.length < 1 || apps.length > 12) E('app_array');
   const seen = new Set(), ids = []; let assetTotal = 0, cssTotal = 0, nAssets = 0;
   const ranges = []; // voor 'nooit gekozen'
+  const appDesigns = [];
   (apps || []).forEach((a, i) => {
     if (!a || typeof a !== 'object' || Array.isArray(a)) { E('app_object', i); ranges.push(null); return; }
     for (const k of Object.keys(a)) if (!KNOWN_APP.has(k)) W('unknown_field', `appearances[${i}].${k}`);
@@ -195,6 +237,7 @@ function validateSkin(path, ctx = {}) {
     ids.push(isStr(a.id) ? a.id : null);
     if (!isStr(a.name) || !a.name.trim() || [...a.name].length > 40) E('app_name', i);
     if (a.description !== undefined && (!isStr(a.description) || [...a.description].length > 300)) E('app_desc', i);
+    if (a.design !== undefined) { hasDesign = true; appDesigns[i] = checkDesignShape(a.design, `appearances[${i}].design`, E, W); }
     // when
     let rng = null;
     if (a.when !== undefined) {
@@ -237,6 +280,16 @@ function validateSkin(path, ctx = {}) {
     for (const u of used) if (!(assets && typeof assets === 'object' && Object.prototype.hasOwnProperty.call(assets, u))) E('css_asset_missing', i, u);
   });
   if (assetTotal > MAX_ASSETS) E('assets_total', assetTotal);
+  // design: samengevoegd per verschijningsvorm (skin-niveau, daarover de verschijning per sleutel)
+  if (hasDesign && /^0\.1$/.test(String(s.skinsContract))) W('design_contract');
+  const seenMsg = new Set();
+  const once = (k, ...a) => { const t = vt(k, ...a); if (!seenMsg.has(t)) { seenMsg.add(t); warns.push([k, t]); } };
+  (apps || []).forEach((a, i) => { if (!skinDesign && !appDesigns[i]) return;
+    const d = mergeDesign(skinDesign, appDesigns[i]), lbl = appDesigns[i] ? `appearances[${i}].design` : 'design', cs = d.colors || {};
+    if (cs.scheme === 'custom') {
+      const have = cs.custom || {}, miss = COLOUR_KEYS.filter(k => !have[k]); if (miss.length) once('design_custom_missing', lbl, miss.join(', '));
+      for (const other of ['bg', 'surface']) if (have.text && have[other]) { const c = contrast(have.text, have[other]); if (c < 3) once('design_contrast', lbl, other, c.toFixed(1)); }
+    } else if (cs.custom && Object.keys(cs.custom).length) once('design_custom_unused', lbl); });
   // default
   if (s.default !== undefined) { if (!isStr(s.default)) E('default_type'); else if (!ids.includes(s.default)) E('default_ref', s.default); }
   else (apps || []).forEach(a => { if (a && typeof a === 'object' && a.when === undefined && isStr(a.id)) W('no_when_no_default', a.id); });
@@ -256,7 +309,7 @@ function validateSkin(path, ctx = {}) {
   else if (!ctx.skipDirWarn) W('dir_elsewhere');
   const n = (apps || []).length;
   const info = [vt('ok_dev', s.device), vt(n === 1 ? 'ok_app' : 'ok_apps', n), vt('ok_css', cssTotal), vt('ok_assets', nAssets)];
-  if (hasIcon) info.push(vt('ok_icon')); info.push(vt('ok_file', size));
+  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); info.push(vt('ok_file', size));
   return { errs, warns, line: `${isStr(s.name) ? s.name : '?'} ${isStr(s.version) ? s.version : '?'} (${isStr(s.id) ? s.id : '?'}) — ${info.join(', ')}`, id: s.id, device: s.device };
 }
 

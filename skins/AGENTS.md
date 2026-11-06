@@ -2,7 +2,7 @@
 
 Dit bestand is voor AI-agents die **skins** maken voor Patchkamer-apparaten. Het is niet geschreven voor mensen. Het hoort bij de algemene instructies in `../AGENTS.md`; lees die eerst. Een skin bouwen is iets anders dan een apparaat bouwen: een skin raakt geen apparaatcode.
 
-**Eerlijk vooraf:** in versie 0.1 is de **inhoud** van een skin een placeholder. Het formaat, de mappen, het laden en het wisselen van verschijningsvormen liggen vast; de eisen aan echte artwork, regelaargrafiek en indeling levert Freek later aan (zie het contract, §13). Maak dus geen ingewikkelde skins en verzin geen eisen die er niet zijn.
+**Eerlijk vooraf:** in versie 0.2 (laag 1) bestaat een skin uit CSS en ingesloten afbeeldingen plus een kleine set gevalideerde ontwerpkeuzes (`design`, hieronder). Het formaat, de mappen, het laden en het wisselen van verschijningsvormen liggen vast; de eisen aan echte artwork, regelaargrafiek, indeling, bouwstenen en een editor (laag 2 en 3) levert Freek later aan (zie het contract, §13). Maak dus geen ingewikkelde skins en verzin geen eisen of `design`-sleutels die er niet zijn.
 
 ## Wat een skin is
 
@@ -28,10 +28,11 @@ De mapnaam onder `library/` is **letterlijk** het `id` van het apparaat (lees he
 
 Een bestand `<naam>.patchkamer-skin.json` (kleine letters met streepjes, **geen versienummer** in de naam) met:
 
-- `format` (`"patchkamer-skin"`), `formatVersion` (`1`), `skinsContract` (`"0.1"`);
+- `format` (`"patchkamer-skin"`), `formatVersion` (`1`), `skinsContract` (`"0.2"`, of `"0.1"` zonder `design`);
 - `id` (`<device-id>.<slug>`), `device` (het apparaat-id), `name` (Engels, 1 tot 60), `version` (semver), `author`, `license` (`CC0-1.0`), `description` (Engels, hoogstens 300), `created` (`YYYY-MM-DD`);
 - `icon` (`null` of een data-adres, hoogstens 200 kB) en `default` (de `id` van de verschijningsvorm als niets in Auto past);
-- `appearances`: 1 tot 12 verschijningsvormen met `id`, `name`, optioneel `description`, `when` (`minWidth`, `maxWidth`, `screens` met `phone`, `compact`, `wide`), `css` en `assets`.
+- `design` (optioneel, vanaf 0.2): ontwerpkeuzes voor alle verschijningsvormen;
+- `appearances`: 1 tot 12 verschijningsvormen met `id`, `name`, optioneel `description`, `when` (`minWidth`, `maxWidth`, `screens` met `phone`, `compact`, `wide`), `css`, `assets` en eventueel een eigen `design` (overschrijft dat van de skin per sleutel).
 
 Alle velden, bereiken en regels staan in het contract: [`contract/SKINS-CONTRACT_NL.md`](contract/SKINS-CONTRACT_NL.md) (of `_EN.md`). Lees het volledig voor je een skin maakt.
 
@@ -45,11 +46,28 @@ Alle velden, bereiken en regels staan in het contract: [`contract/SKINS-CONTRACT
    ```
    Het resultaat moet één `OK`-regel zijn (exit 0), **zonder `let op`**. Bij een fout (exit 1) staan alle fouten in de uitvoer: herstel en draai opnieuw. Voor de hele bibliotheek: `node skins/contract/validate-skin.mjs --dir skins/library`. Meld nooit "klaar" zolang de validator niet `OK` geeft.
 4. **Test in de host** als je een browser tot je beschikking hebt (`../patchkamer/AGENTS.md`): laad de skin, kies hem op de kaart van het apparaat, en kijk of de verschijningsvormen wisselen. De validator kan niet zien of de CSS iets raakt of er goed uitziet. Heb je geen browser, schrijf dan in je oplevering dat dit **niet getest** is. Beweer niet dat het werkt.
-5. **Lever op:** het pad van het bestand, de contractversie (`0.1`), de `OK`-regel van de validator en wat je niet hebt kunnen testen.
+5. **Lever op:** het pad van het bestand, de contractversie (`0.2`), de `OK`-regel van de validator en wat je niet hebt kunnen testen.
+
+### Ontwerpkeuzes (`design`, laag 1)
+
+Werken via de host op alle apparaten; zonder CSS en zonder dat je de apparaatbron hoeft te lezen. Alle sleutels zijn optioneel; gebruik alleen deze sleutels en waarden (de validator weigert andere waarden).
+
+| Optie | Waarden | Werkt op |
+|---|---|---|
+| `design.ports.mode` | `default`, `always`, `hover`, `strip` | poortenbalk bovenaan elk apparaat (niet bij `ui.jacks`) |
+| `design.colors` | `scheme` `workspace` of `custom` met `bg`, `surface`, `text`, `muted`, `accent`, `line` (`#rgb` of `#rrggbb`) | de kaart en het hostelement van elk apparaat |
+| `design.haptics` | `click`, `turn`, `slide`: `off`, `light`, `medium`, `strong` | elke kaart (alleen waar het apparaat of de browser trilt) |
+| `design.knobs` | `style` `workspace`, `rotary`, `slider`; `size` `s`, `m`, `l` | alleen `host.ui.knob`-regelaars |
+
+- `ports.mode`: `default` zoals nu, `always` poortenbalk altijd zichtbaar, `hover` poorten verschijnen bij een kabel boven het apparaat of de muis boven de strook, `strip` een dunne strook die altijd zichtbaar is. Zie het contract, §4b, voor de schets.
+- Kleuren alleen als `#rgb` of `#rrggbb`. Kies bij `scheme: "custom"` alle zes de kleuren; zorg dat `text` tegen `bg` en `surface` minstens 3:1 haalt (anders een `let op`). Per verschijningsvorm hoef je alleen de kleuren te herhalen die anders zijn.
+- Haptiek en knoppen werken niet overal (geen trilling in elke browser; eigen `range`-invoeren van een apparaat blijven ongemoeid). Beloof dus niet meer in de omschrijving dan het contract zegt.
+- Een skin met `design` krijgt `skinsContract` `"0.2"`. Voorbeelden: `library/nl.patchkamer.duofone/example-back-panel.patchkamer-skin.json` en `example-touch.patchkamer-skin.json`.
+- Welke skinkleur welke CSS-variabele in de host zet, staat in het contract (§4b) en in `../patchkamer/AGENTS.md` (sectie Skins).
 
 ### Stijlhaken per apparaat
 
-Welke klassen, ids, variabelen en `part`-namen een apparaat in zijn shadow root heeft, **verschilt per apparaat** en wordt in versie 0.1 niet door een contract vastgelegd. Gebruik alleen wat je in het apparaatbestand ziet (`:host` en CSS-variabelen werken altijd, mits het apparaat ze gebruikt). Een selector die niets raakt, is geen fout van de validator, maar je skin doet dan niets. Zie het contract, §4.
+Welke klassen, ids, variabelen en `part`-namen een apparaat in zijn shadow root heeft, **verschilt per apparaat** en wordt in versie 0.2 niet door een contract vastgelegd. Gebruik alleen wat je in het apparaatbestand ziet (`:host` en CSS-variabelen werken altijd, mits het apparaat ze gebruikt). Een selector die niets raakt, is geen fout van de validator, maar je skin doet dan niets. Zie het contract, §4.
 
 ## Namen en taal
 
@@ -81,9 +99,10 @@ Alles in `library/` is `CC0-1.0` (publiek domein): zet `"license": "CC0-1.0"` op
 ## Controlelijst voor je oplevert
 
 - [ ] Bestand `<naam>.patchkamer-skin.json` in `library/<device-id>/`, mapnaam gelijk aan `device`.
-- [ ] `skinsContract` `"0.1"`, `format` `"patchkamer-skin"`, `formatVersion` `1`.
+- [ ] `skinsContract` `"0.2"` (of `"0.1"` zonder `design`), `format` `"patchkamer-skin"`, `formatVersion` `1`.
 - [ ] Namen en omschrijving Engels en merkvrij; `license` `CC0-1.0`; `created` is een echte datum.
 - [ ] Verschijningsvormen met een `when` die klopt (geen overlap die een vorm onbereikbaar maakt) en een `default`.
+- [ ] Een eventueel `design` gebruikt alleen sleutels en waarden uit de tabel hierboven; kleuren zijn `#rgb` of `#rrggbb`.
 - [ ] CSS zonder `@import` en zonder externe `url(`; afbeeldingen in `assets`, gebruikt via `var(--skin-asset-<naam>)`.
 - [ ] Alleen selectors, klassen en variabelen die je in het apparaatbestand hebt gezien.
 - [ ] `node skins/contract/validate-skin.mjs --lang nl <bestand>`: één `OK`-regel, geen `let op`, en dat ook met `--lang en`.
@@ -94,8 +113,8 @@ Alles in `library/` is `CC0-1.0` (publiek domein): zet `"license": "CC0-1.0"` op
 ## Documentatie
 
 - [Skinscontract (Nederlands)](contract/SKINS-CONTRACT_NL.md) en [Skins contract (English)](contract/SKINS-CONTRACT_EN.md): het volledige formaat, de regels en de validator.
-- [Validator](contract/validate-skin.mjs): `node skins/contract/validate-skin.mjs --lang nl <bestand>`.
-- [Voorbeeldskin](library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json) en [voorbeeldicoon](library/nl.patchkamer.duofone/icon.svg).
+- [Validator](contract/validate-skin.mjs): `node skins/contract/validate-skin.mjs --lang nl <bestand>`; testgevallen: `node skins/contract/test-validate-skin.mjs`.
+- Voorbeeldskins: [plain (0.1)](library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json), [back panel](library/nl.patchkamer.duofone/example-back-panel.patchkamer-skin.json) en [touch](library/nl.patchkamer.duofone/example-touch.patchkamer-skin.json) (laag 1), en het [voorbeeldicoon](library/nl.patchkamer.duofone/icon.svg).
 - [README (Engels)](README.md) en [README (Nederlands)](README_NL.md) van deze map.
 - [Algemene agent-instructies voor apparaten](../AGENTS.md), [tunes](../tunes/AGENTS.md), [presets](../presets/AGENTS.md) en [songs](../songs/AGENTS.md).
 - [Apparaatcontract](../contract/PATCHKAMER-CONTRACT_NL.md) ([English](../contract/PATCHKAMER-CONTRACT_EN.md)) en [licenties](../LICENSING.md).
