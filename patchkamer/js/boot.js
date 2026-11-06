@@ -146,7 +146,7 @@ PK.CAT_OVR={};   // your own category per device id (kept in the library setting
 PK.SK={user:[],src:[],emb:[]}, PK.SKICON=new Map(), PK.DEVICON=new Map(), PK.skOpen=new Set(), PK.SKFILTER='';   // skins per herkomst · 'bron|apparaat-id' -> icoon uit skins/library · 'bron|map' -> icoon uit de apparaatmap
 { const skPanel=PK.$('skPanel'); PK.skPanel=skPanel; let skRT=0;
   PK.$('skBtn').onclick=e=>{ e.stopPropagation(); skPanel.hidden?PK.skOpenPanel():PK.skClosePanel(); }; PK.$('skClose').onclick=PK.skClosePanel;
-  document.addEventListener('pointerdown',e=>{ if(!skPanel.hidden&&!e.target.closest('#skPanel,#skBtn,.pkmodal')) PK.skClosePanel(); });
+  document.addEventListener('pointerdown',e=>{ if(!skPanel.hidden&&!(PK.skDesigning&&PK.skDesigning())&&!e.target.closest('#skPanel,#skBtn,.pkmodal')) PK.skClosePanel(); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!skPanel.hidden&&!document.querySelector('.pkmodal')) PK.skClosePanel(); });
   PK.$('skImport').onclick=()=>{ PK.$('skFile').value=''; PK.$('skFile').click(); };
   PK.$('skFile').addEventListener('change',async e=>{ await PK.skinsImport(e.target.files); });
