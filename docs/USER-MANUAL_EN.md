@@ -188,6 +188,8 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 
 ### Touchscreen and phone
 
+On a **narrow screen** (under 700 pixels) the top bar keeps only what you need while playing: **Start**, **BPM**, **Swing** (without text labels; long-press for the name) and a ▤ button for the **Library**. Everything else is behind the **☰** button: a menu with large touch targets in four groups (**Files**, **Sound**, **View**, **Other**), with the name of your workspace at the top. The menu closes after a choice, with **Esc**, with a tap outside it or with the Android back button. On a wide screen everything is back in the bar.
+
 - **Panning:** one finger on empty floor pans, like the mouse. A finger on a port drags a cable, a finger on a card's title bar moves the card.
 - **Zooming:** pinch with two fingers to zoom and drag with two fingers to pan the floor. A cable or card you were dragging with the first finger is cancelled. Two fingers inside one device's controls (for example on pads) do nothing to the floor.
 - **Long press** (half a second, without moving): on a cable it opens the colour menu (with **Detach cable**), on a port or title bar the explanation shows as a message, and on any other button with a hint (the text you see on hover with a mouse) that hint shows too. In the library it picks up a device so you can drag it to the floor.

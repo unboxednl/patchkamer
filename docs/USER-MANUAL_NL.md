@@ -188,6 +188,8 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 
 ### Touchscreen en telefoon
 
+Op een **smal scherm** (onder 700 pixels) houdt de hoofdbalk alleen over wat je tijdens het spelen nodig hebt: **Start**, **BPM**, **Swing** (zonder tekstlabels; houd ingedrukt voor de naam) en een knop ▤ voor de **Bibliotheek**. De rest staat achter de knop **☰**: een menu met grote tikvlakken in vier groepen (**Bestanden**, **Geluid**, **Weergave**, **Overig**) en bovenaan de naam van je werkruimte. Het menu sluit na een keuze, met **Esc**, met een tik ernaast of met de terugknop van Android. Op een breed scherm staat alles weer in de balk.
+
 - **Schuiven:** één vinger op de lege vloer schuift, net als de muis. Een vinger op een poort trekt een kabel, een vinger op de titelbalk van een kaart sleept de kaart.
 - **Zoomen:** knijp met twee vingers om in of uit te zoomen en schuif met twee vingers om de vloer te verplaatsen. Een kabel of kaart die je met de eerste vinger sleepte, wordt dan afgebroken. Twee vingers in de bediening van één apparaat (bijvoorbeeld op pads) doen niets met de vloer.
 - **Lang indrukken** (een halve seconde, zonder te bewegen): op een kabel opent het kleurmenu (met **Kabel los**), op een poort of titelbalk verschijnt de uitleg als melding, en op elk ander knopje met een uitleg (de tekst die je met de muis bij zweven ziet) verschijnt die uitleg ook. In de bibliotheek pak je zo een apparaat op om het naar de vloer te slepen.
