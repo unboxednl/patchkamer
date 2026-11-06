@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Level (gain) is nu ook stuurbaar (params/modulate, standaard uit in Drift); knopwaarde, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: het keuzemenu Type.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
@@ -15,7 +16,8 @@ const TYPES = [['lp12', 'LP 12 dB'], ['lp24', 'LP 24 dB'], ['hp12', 'HP 12 dB'],
 const WTYPES = { ladder: 0, combp: 1, combm: 2 };
 const VOWELS = [[730, 1090, 2440], [530, 1840, 2480], [270, 2290, 3010], [570, 840, 2410], [300, 870, 2240]];   // A E I O U
 const MODP = [['cut', 'Cutoff', 20, 20000, true, 'filter', 0.08, true, true], ['res', 'Resonantie', 0, 1, false, 'res', 0.08, true], ['drive', 'Drive', 0, 1, false, 'drive', 0.1, false],
-  ['vowel', 'Klinker', 0, 4, false, 'vowel', 0.15, false], ['mix', 'Mix', 0, 1, false, 'send', 0.06, false]];
+  ['vowel', 'Klinker', 0, 4, false, 'vowel', 0.15, false], ['mix', 'Mix', 0, 1, false, 'send', 0.06, false],
+  ['gain', 'Niveau', 0, 2, false, 'level', 0.05, false]];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const OCT = Math.log2(20000 / 20);
 const DEF = () => ({ type: 'lp24', cut: 1200, res: 0.3, drive: 0, vowel: 0, mix: 1, gain: 1 });
@@ -82,7 +84,7 @@ registerProcessor('${WNAME}', PkFilter);
 
 function restoreValues(S, raw) {
   const d = DEF(), s = raw && typeof raw === 'object' ? raw : {};
-  const ranges = { ...Object.fromEntries(MODP.map(p => [p[0], [p[2], p[3]]])), gain: [0, 2] };
+  const ranges = Object.fromEntries(MODP.map(p => [p[0], [p[2], p[3]]]));
   Object.keys(d).forEach(k => {
     const v = s[k];
     S[k] = typeof d[k] === 'number' ? (typeof v === 'number' && Number.isFinite(v) ? clamp(v, ...ranges[k]) : d[k]) : (typeof v === typeof d[k] ? v : d[k]);
@@ -93,7 +95,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.filter',
   name: 'Filter',
-  version: '1.15.0',
+  version: '1.15.1',
   kind: 'effect',
   category: 'effect',
   ui: { width: 320, minWidth: 280 },
@@ -149,7 +151,7 @@ export default {
       formants.forEach((x, k) => { const hz = (VOWELS[i0][k] * (1 - fr) + VOWELS[i0 + 1][k] * fr) * sc; x.f.frequency.setTargetAtTime(clamp(hz, 60, 16000), t, r); x.f.Q.setTargetAtTime(4 + res * 16, t, r); x.g.gain.setTargetAtTime([1, 0.6, 0.35][k] * 2.2, t, r); });
       const qd = Math.round(drv * 50) / 50; if (qd !== curveFor) { curveFor = qd; if (qd > 0) { const n = 1024, c = new Float32Array(n), k = 1 + qd * 8; for (let i = 0; i < n; i++) { const x = i * 2 / (n - 1) - 1; c[i] = Math.tanh(k * x) / Math.tanh(k); } pre.curve = c; } else pre.curve = null; }
       if (wnode) { const p = wnode.parameters; p.get('type').setValueAtTime(WTYPES[S.type] || 0, t); p.get('cut').setTargetAtTime(cut, t, r); p.get('res').setTargetAtTime(res, t, r); p.get('drive').setTargetAtTime(drv, t, r); }
-      wet.gain.setTargetAtTime(S.type in WTYPES && !wnode ? 0 : mx * S.gain, t, r); dry.gain.setTargetAtTime(S.type in WTYPES && !wnode ? 1 : 1 - mx, t, r);
+      wet.gain.setTargetAtTime(S.type in WTYPES && !wnode ? 0 : mx * E('gain'), t, r); dry.gain.setTargetAtTime(S.type in WTYPES && !wnode ? 1 : 1 - mx, t, r);
     }
     const loader = typeof AudioWorkletNode === 'function' && host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
     loader.then(() => { if (dead || typeof AudioWorkletNode === 'undefined') { wstate = 'failed'; return; } wnode = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] }); cutBus.connect(wnode.parameters.get('oct')); wstate = 'ok'; wire(); })

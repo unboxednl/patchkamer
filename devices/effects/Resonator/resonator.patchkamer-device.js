@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Level (gain) is nu ook stuurbaar (params/modulate, standaard uit in Drift); knopwaarde, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: Grondtoon (MIDI-basisnoot), het keuzemenu Akkoord en de keuze Noten.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 290 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
@@ -14,7 +15,8 @@ const NOTE = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B�
 const CHORDS = [['uni', 'Unisono', [0, 0, 0, 0]], ['oct', 'Octaven', [0, 12, 24, -12]], ['fifth', 'Kwinten', [0, 7, 12, 19]], ['maj', 'Groot', [0, 4, 7, 12]], ['min', 'Klein', [0, 3, 7, 12]],
   ['sus', 'Sus4', [0, 5, 7, 12]], ['min7', 'Klein 7', [0, 3, 7, 10]], ['fourth', 'Kwarten', [0, 5, 10, 15]], ['cluster', 'Cluster', [0, 1, 2, 3]]];
 const MODP = [['decay', 'Galmtijd', 0.05, 8, true, 'decay', 0.1, true], ['damp', 'Demping', 0, 1, false, 'tone', 0.1, true], ['detune', 'Ontstemming', 0, 50, false, 'detune', 0.15, false],
-  ['tune', 'Stemming', -12, 12, false, 'pitch', 0.02, false], ['mix', 'Mix', 0, 1, false, 'send', 0.06, false]];
+  ['tune', 'Stemming', -12, 12, false, 'pitch', 0.02, false], ['mix', 'Mix', 0, 1, false, 'send', 0.06, false],
+  ['gain', 'Niveau', 0, 2, false, 'level', 0.05, false]];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const DEF = () => ({ root: 45, chord: 'min', decay: 1.5, damp: 0.35, detune: 6, tune: 0, mix: 0.5, gain: 1, follow: false });
 const EN = {
@@ -59,7 +61,7 @@ registerProcessor('${WNAME}', PkReson);
 
 function restoreValues(S, raw) {
   const d = DEF(), s = raw && typeof raw === 'object' ? raw : {};
-  const ranges = { root: [24, 84], gain: [0, 2], ...Object.fromEntries(MODP.map(p => [p[0], [p[2], p[3]]])) };
+  const ranges = { root: [24, 84], ...Object.fromEntries(MODP.map(p => [p[0], [p[2], p[3]]])) };
   Object.keys(d).forEach(k => {
     const v = s[k];
     S[k] = typeof d[k] === 'number' ? (typeof v === 'number' && Number.isFinite(v) ? clamp(v, ...ranges[k]) : d[k]) : (typeof v === typeof d[k] ? v : d[k]);
@@ -70,7 +72,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.resonator',
   name: 'Resonator',
-  version: '1.15.0',
+  version: '1.15.1',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', notes: 'Notes', mod: 'Mod' } } },
@@ -83,7 +85,7 @@ export default {
     const inG = ctx.createGain(), out = ctx.createGain(), dry = ctx.createGain(), wet = ctx.createGain(); inG.connect(dry).connect(out); wet.connect(out);
     const E = k => { const m = MODBY[k], b = S[k], o = mod[k] || 0; if (!m || !o) return b; return m[4] ? clamp(b * Math.pow(m[3] / m[2], o), m[2], m[3]) : clamp(b + o * (m[3] - m[2]), m[2], m[3]); };
     function paintNote() { if (note) note.textContent = node ? '' : failed ? tx('AudioWorklet niet beschikbaar: het geluid gaat onbewerkt door.') : tx('AudioWorklet laden…'); }
-    function apply(t) { t = t ?? ctx.currentTime; const r = 0.03, mx = E('mix'); wet.gain.setTargetAtTime((node ? mx : 0) * S.gain, t, r); dry.gain.setTargetAtTime(node ? 1 - mx : 1, t, r); if (!node) return;
+    function apply(t) { t = t ?? ctx.currentTime; const r = 0.03, mx = E('mix'); wet.gain.setTargetAtTime((node ? mx : 0) * E('gain'), t, r); dry.gain.setTargetAtTime(node ? 1 - mx : 1, t, r); if (!node) return;
       const ch = (CHORDS.find(c => c[0] === S.chord) || CHORDS[0])[2], tu = E('tune'), dt = E('detune'), P = node.parameters;
       ch.forEach((iv, k) => { const cents = (k - 1.5) * dt * 0.66; P.get('f' + k).setTargetAtTime(clamp(440 * Math.pow(2, (root + iv + tu - 69) / 12 + cents / 1200), 16, 8000), t, 0.005); });
       P.get('decay').setTargetAtTime(E('decay'), t, r); P.get('damp').setTargetAtTime(E('damp'), t, r); }

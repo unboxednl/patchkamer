@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Luisterfilter (Detector filter) en Release op tempo (Tempo release) zijn nu ook stuurbaar (params/modulate, standaard uit in Drift); knopwaarden, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: de keuzemenu's en vinkjes (Bron, Klok, Wat duikt, Sidechain-filtersoort, Release volgt tempo, Aan).
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pump en nieuwe id nl.patchkamer.pump (voorheen Pomp · sidechain, nl.patchkamer.pomp); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n), presetnamen in het Engels (de oude Nederlandse namen worden bij het laden herkend), kleuren uit de host, tekenen via host.frame.
 //          Bewaker: de worklet begrenst de ingangen (±16 = +24 dB), zet NaN op 0, accepteert alleen eindige parameters en zet een ontspoorde toestand terug. Normaal geluid is bit-identiek aan de vorige versie.
@@ -100,7 +101,7 @@ const ukLoop = (host, inst, cb, fps) => {
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 
 function ukResolve(spec, state, mod) { const e = { ...state }; for (const [id, d] of Object.entries(spec)) { const x = d.nomod ? 0 : (mod[id] || 0); if (!x) continue; e[id] = ukClamp(d.scale === 'log' ? state[id] * (d.max / d.min) ** x : state[id] + x * (d.max - d.min), d.min, d.max); } return e; }
-function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([, d]) => !d.nomod).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'color', drift: 0.015, on: !d.role || !['level', 'pitch'].includes(d.role) })); }
+function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([, d]) => !d.nomod).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'color', drift: d.drift ?? 0.015, on: d.on ?? (!d.role || !['level', 'pitch'].includes(d.role)) })); }
 
 const WNAME = 'nl-patchkamer-pump-1-11-0';
 const WORKLET = `
@@ -154,7 +155,7 @@ class Pump extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Pump);`;
 
 export default {
-  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.11.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.11.1', kind: 'effect', category: 'effect',
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', trig: 'Trigger', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }, { id: 'sc', name: 'Sidechain' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'trig', name: 'Trigger' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -172,11 +173,11 @@ export default {
       curve: { name: tx('curve'), min: 0, max: 1, unit: '%', g: 0, tip: tx('curve_t') },
       thr: { name: tx('thr'), min: -60, max: 0, unit: 'dB', g: 1, tip: tx('thr_t') },
       ratio: { name: tx('ratio'), min: 1, max: 20, scale: 'log', unit: ':1', g: 1 },
-      scfreq: { name: tx('scfreq'), min: 40, max: 8000, scale: 'log', unit: 'Hz', g: 1, nomod: true },
+      scfreq: { name: tx('scfreq'), min: 40, max: 8000, scale: 'log', unit: 'Hz', g: 1, role: 'filter', drift: 0.06, on: false },
       xo: { name: tx('xo'), min: 40, max: 1000, scale: 'log', unit: 'Hz', g: 2, tip: tx('xo_t') },
       mix: { name: tx('mix'), min: 0, max: 1, unit: '%', g: 2, tip: tx('mix_t') },
       makeup: { name: tx('makeup'), min: 0, max: 12, unit: 'dB', g: 2, role: 'level' },
-      tail: { name: tx('tail'), min: 0.1, max: 1, unit: '%', g: 2, nomod: true, tip: tx('tail_t') },
+      tail: { name: tx('tail'), min: 0.1, max: 1, unit: '%', g: 2, role: 'decay', drift: 0.06, on: false, tip: tx('tail_t') },
     };
     const MODES = [['sc', tx('m_sc')], ['trig', tx('m_trig')], ['klok', tx('m_klok')]], DIVS = [['16', tx('d16')], ['8', tx('d8')], ['4', tx('d4')], ['2', tx('d2')], ['1', tx('d1')]];
     const defaults = { depth: 0.8, rel: 180, att: 3, hold: 20, curve: 0.5, thr: -24, ratio: 6, scfreq: 150, xo: 120, mix: 1, makeup: 0, tail: 0.85, mode: 'klok', div: '4', band: 'alles', scf: 'lp', relSync: true, on: true, preset: 'Classic pump' };
