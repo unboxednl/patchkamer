@@ -184,6 +184,31 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 
 ![Focus view](images/en/08-focus.png)
 
+### Touchscreen and phone
+
+- **Panning:** one finger on empty floor pans, like the mouse. A finger on a port drags a cable, a finger on a card's title bar moves the card.
+- **Zooming:** pinch with two fingers to zoom and drag with two fingers to pan the floor. A cable or card you were dragging with the first finger is cancelled. Two fingers inside one device's controls (for example on pads) do nothing to the floor.
+- **Long press** (half a second, without moving): on a cable it opens the colour menu (with **Detach cable**), on a port or title bar the explanation shows as a message, and on any other button with a hint (the text you see on hover with a mouse) that hint shows too. In the library it picks up a device so you can drag it to the floor.
+- **Double-tap** works as a double-click: a slider's starting value, a card's default size, restoring an icon.
+- On a touchscreen ports, buttons, card edges and cables are easier to hit. Releasing a cable just beside a matching port still connects it.
+
+### Compact library and bottom sheet
+
+- **Cards** or **Compact** (in the library bar): compact is one line per device with name, type and version. Tap a line to place it, or drag it (with a finger: long press first). The small arrow on the right expands the line with ports and choices. Search, categories and folders work in both views. Your choice is remembered; until you choose, compact is the default on a narrow or touch screen.
+- On a **narrow screen** (under 700 pixels) the library is a **bottom sheet**: about 60% of the screen. Open or close it with the **Library** button at the top, with **Alt+B**, with the **×** in the sheet, or by dragging the grip down. The top bar scrolls sideways; **Start** stays visible.
+
+### Camera views
+
+With **Views** at the bottom right you save the part of the floor you are looking at, under a name, and jump back to it later (smoothly, unless your computer asks for less motion). **Shift+1** to **Shift+9** saves a view, **1** to **9** jumps to it (not while you type in a text field). You can rename, overwrite and delete in the list. Views belong to the workspace and go along in a file or song.
+
+### Compact layout per screen
+
+A workspace can have a **compact layout** next to the wide one. With **Screen** (top bar) you choose **Auto** (compact under 1100 pixels wide), **Wide** or **Compact**; the choice applies to this browser. **Fit to this screen** makes a first compact layout: the devices in signal order in columns that fit the screen, devices without cables as icons, and then everything is brought into view. Your wide layout is kept: choose **Wide** to go back. Moving and resizing apply to the layout that is on. Both layouts are saved.
+
+### Focus "One at a time"
+
+In the focus view, **One at a time** shows a single device. Switch with **◀ ▶**, with the tab bar, with the arrow keys, or by swiping the tab bar (only there, so swiping never clashes with sliders inside a device). On a narrow screen this is the default, and the **Browse** button in the top bar opens Focus straight away with all devices of the workspace. The card itself shows its ports with names. When zoomed out (below about 55%) cards show only the title bar and ports; double-click or double-tap such a card to zoom in on it. Turn this off under **Settings** with *Simplify cards when zoomed out*.
+
 ## 10. Settings
 
 ![The Settings panel](images/en/07-settings.png)
@@ -211,6 +236,8 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 | **Alt+F** | Open or close the focus view |
 | **Alt+B** | Show or hide the library |
 | **+** / **−** / **0** | Zoom in / zoom out / reset zoom |
+| **Shift+1** to **Shift+9** / **1** to **9** | Save a camera view / jump to it |
+| **← →** | In the focus view "One at a time": previous or next device |
 | **Ctrl + scroll** | Zoom the floor |
 | **Delete** | Remove the selected device |
 | **Ctrl+Z** | Undo Arrange |

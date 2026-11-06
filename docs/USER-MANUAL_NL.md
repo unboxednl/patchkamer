@@ -184,6 +184,31 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 
 ![Focusweergave](images/nl/08-focus.png)
 
+### Touchscreen en telefoon
+
+- **Schuiven:** één vinger op de lege vloer schuift, net als de muis. Een vinger op een poort trekt een kabel, een vinger op de titelbalk van een kaart sleept de kaart.
+- **Zoomen:** knijp met twee vingers om in of uit te zoomen en schuif met twee vingers om de vloer te verplaatsen. Een kabel of kaart die je met de eerste vinger sleepte, wordt dan afgebroken. Twee vingers in de bediening van één apparaat (bijvoorbeeld op pads) doen niets met de vloer.
+- **Lang indrukken** (een halve seconde, zonder te bewegen): op een kabel opent het kleurmenu (met **Kabel los**), op een poort of titelbalk verschijnt de uitleg als melding, en op elk ander knopje met een uitleg (de tekst die je met de muis bij zweven ziet) verschijnt die uitleg ook. In de bibliotheek pak je zo een apparaat op om het naar de vloer te slepen.
+- **Dubbeltik** werkt als dubbelklik: beginwaarde van een schuif, standaardmaat van een kaart, icoon terugzetten.
+- Op een aanraakscherm zijn poorten, knoppen, kaartranden en kabels makkelijker te raken. Loslaten van een kabel ergens vlak naast een passende poort koppelt hem toch.
+
+### Bibliotheek compact en onderlade
+
+- **Kaartjes** of **Compact** (in de balk van de bibliotheek): compact is één regel per apparaat met naam, soort en versie. Tik op een regel om hem te plaatsen, of sleep hem (met de vinger: eerst lang indrukken). Het pijltje rechts klapt de regel uit met poorten en keuzes. Zoeken, categorieën en mappen werken in beide weergaven. Je keuze wordt onthouden; zolang je niet koos is het compact op een smal scherm of aanraakscherm.
+- Op een **smal scherm** (onder 700 pixels) is de bibliotheek een **onderlade**: ongeveer 60% van het scherm. Open of sluit hem met de knop **Bibliotheek** bovenin, met **Alt+B**, met de **×** in de lade, of door aan de greep omlaag te slepen. De hoofdbalk bovenin scrolt horizontaal; **Start** blijft zichtbaar.
+
+### Camerastanden
+
+Met **Standen** rechtsonder bewaar je de uitsnede van de vloer die je nu ziet, onder een naam, en spring je er later naartoe (zacht, tenzij je computer minder beweging vraagt). **Shift+1** t/m **Shift+9** bewaart een stand, **1** t/m **9** springt ernaartoe (niet terwijl je in een tekstveld typt). Hernoemen, overschrijven en verwijderen kan in de lijst. De standen horen bij de werkruimte en gaan mee in een bestand of song.
+
+### Compacte indeling per scherm
+
+Een werkruimte kan naast de brede indeling een **compacte indeling** hebben. Met **Scherm** (hoofdbalk) kies je **Auto** (compact onder 1100 pixels breed), **Breed** of **Compact**; je keuze geldt voor deze browser. **Pas aan op dit scherm** maakt een eerste compacte indeling: de apparaten in signaalvolgorde in kolommen die op het scherm passen, apparaten zonder kabels als icoon, en daarna past alles in beeld. Je brede indeling blijft bewaard: kies **Breed** om terug te gaan. Verplaatsen en vergroten werkt op de indeling die aan staat. Beide indelingen worden bewaard.
+
+### Focus "Eén tegelijk"
+
+In de focusweergave toont **Eén tegelijk** één apparaat tegelijk. Wissel met **◀ ▶**, met de tabbalk, met de pijltjestoetsen of door op de tabbalk te vegen (alleen daar, zodat vegen niet botst met schuiven in een apparaat). Op een smal scherm is dit de standaard, en de knop **Bladeren** in de hoofdbalk opent Focus meteen met alle apparaten van de werkruimte. Het kaartje zelf toont zijn poorten met namen. Bij uitzoomen (onder ongeveer 55%) tonen kaarten alleen de titelbalk en poorten; dubbelklik of dubbeltik op zo'n kaart zoomt erop in. Dat zet je uit bij **Instellingen** met *Kaarten vereenvoudigen bij uitzoomen*.
+
 ## 10. Instellingen
 
 ![Het paneel Instellingen](images/nl/07-settings.png)
@@ -211,6 +236,8 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 | **Alt+F** | Focusweergave openen of sluiten |
 | **Alt+B** | Bibliotheek tonen of verbergen |
 | **+** / **−** / **0** | Inzoomen / uitzoomen / zoom herstellen |
+| **Shift+1** t/m **Shift+9** / **1** t/m **9** | Camerastand bewaren / ernaartoe springen |
+| **← →** | In de focusweergave "Eén tegelijk": vorig of volgend apparaat |
 | **Ctrl + scroll** | De vloer zoomen |
 | **Delete** | Het geselecteerde apparaat verwijderen |
 | **Ctrl+Z** | Herschik ongedaan maken |
