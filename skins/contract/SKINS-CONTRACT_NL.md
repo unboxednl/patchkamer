@@ -1,4 +1,4 @@
-# Patchkamer — Skinscontract v0.1 voor bouwende agents
+# Patchkamer — Skinscontract v0.2 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een **skin** te bouwen voor **Patchkamer**: een los bestand dat het uiterlijk van één apparaat verandert, zonder het apparaat zelf of het apparaatcontract aan te raken. Een agent die dit document krijgt, heeft geen andere context nodig. Lever een bestand `naam.patchkamer-skin.json` op dat aan dit contract voldoet en zonder fouten door `validate-skin.mjs` komt.
 
@@ -9,6 +9,7 @@ _Dit contract is een eigen contract naast het apparaatcontract (`../../contract/
 | Versie | Wat erbij kwam |
 |---|---|
 | v0.1 | Eerste versie, bewust klein: een manifest, verschijningsvormen met CSS en ingesloten afbeeldingen, automatisch wisselen op kaartbreedte en schermklasse, een icoon per skin en per apparaat. De inhoud van een skin is een placeholder; de eisen voor artwork, regelaargrafiek en indeling volgen later (§13) |
+| v0.2 | Laag 1: het veld `design` met ontwerpkeuzes die op alle apparaten werken (poortenmodus, kleurenschema, haptiek, stijl en grootte van de hostknop), op skinniveau en per verschijningsvorm (§4b). Skins van 0.1 blijven ongewijzigd werken |
 
 ---
 
@@ -19,7 +20,7 @@ _Dit contract is een eigen contract naast het apparaatcontract (`../../contract/
 - Een skin hoort bij **één apparaat-id** (het veld `device`). Voor een ander apparaat wordt hij bewaard maar nergens aangeboden.
 - Een apparaat hoeft niets te doen om skins te kunnen krijgen. Heeft het apparaat geen open shadow root (zie §4), dan kan de host de skin niet toepassen en meldt dat; dat is geen fout van de skin of van het apparaat.
 - Skins zijn een nieuw soort bibliotheekmateriaal naast tunes en presets: ze worden geladen uit bronnen (een GitHub-map, een lokale map, een adres), bekeken in een eigen paneel, gekozen per apparaat op de kaart, bewaard in de werkruimte en in de song, en kunnen op het canvas worden gedropt (§8, §9).
-- Versie 0.1 is bewust klein. Het formaat is uitbreidbaar (onbekende velden worden genegeerd, §10); wat er nog niet in zit staat in §13.
+- Versie 0.2 blijft bewust klein: CSS plus een kleine set ontwerpkeuzes (`design`, §4b). Het formaat is uitbreidbaar (onbekende velden worden genegeerd, §10); wat er nog niet in zit staat in §13.
 
 ---
 
@@ -33,7 +34,7 @@ Een skin is een UTF-8 JSON-bestand met één object, genaamd `naam.patchkamer-sk
 |---|---|---|---|---|
 | `format` | tekst | altijd `"patchkamer-skin"` | | ja |
 | `formatVersion` | geheel getal | nu `1` | | ja |
-| `skinsContract` | tekst | `"major.minor"`, nu `"0.1"`; zie §10 | | ja |
+| `skinsContract` | tekst | `"major.minor"`, nu `"0.2"` (`"0.1"` blijft geldig); zie §10 | | ja |
 | `id` | tekst | 3 tot 100 tekens uit `[a-z0-9.-]`; aanbevolen `<device-id>.<slug>`; uniek: dezelfde `id` is dezelfde skin | | ja |
 | `device` | tekst | de `id` van het apparaat waarvoor de skin is, bijvoorbeeld `nl.patchkamer.duofone` | | ja |
 | `name` | tekst | Engelse naam, 1 tot 60 tekens, merkvrij (§11) | | ja |
@@ -44,6 +45,7 @@ Een skin is een UTF-8 JSON-bestand met één object, genaamd `naam.patchkamer-sk
 | `created` | tekst | datum `YYYY-MM-DD` | | ja |
 | `icon` | tekst of `null` | `null`, of een afbeelding als data-adres, hoogstens 200 kB (§6) | `null` | ja (mag `null` zijn) |
 | `default` | tekst | de `id` van de verschijningsvorm die geldt als niets in `auto` past (§3) | de eerste verschijningsvorm | nee |
+| `design` | object | ontwerpkeuzes voor alle verschijningsvormen (§4b); sinds 0.2 | geen | nee |
 | `appearances` | lijst | 1 tot 12 verschijningsvormen (§2b) | | ja |
 
 Twee skins met dezelfde `id` zijn dezelfde skin: de nieuwere `version` wint. Samen met `device` identificeert `id` de skin.
@@ -60,6 +62,7 @@ Een **verschijningsvorm** (appearance) is één uiterlijk van de skin, bijvoorbe
 | `when` | object | voorwaarden voor **automatisch** kiezen (§2c, §3) | geen: nooit automatisch | nee |
 | `css` | tekst | CSS voor de shadow root van het apparaat, hoogstens 200 kB (§4) | leeg | nee |
 | `assets` | object | naam → data-adres van een afbeelding (§5) | `{}` | nee |
+| `design` | object | ontwerpkeuzes voor alleen deze verschijningsvorm; overschrijft het `design` van de skin per sleutel (§4b) | geen | nee |
 
 ### 2c. De voorwaarden `when`
 
@@ -118,6 +121,130 @@ Daarbuiten is gewone CSS toegestaan, ook `@media`, `@container` en `@keyframes`.
 - `::part(naam)` werkt alleen op onderdelen van een **ingebedde** shadow root die zelf een `part` heeft. Dat hangt af van het apparaat.
 - Wat een apparaat precies aanbiedt, **verschilt per apparaat** en is in dit contract bewust **per apparaat vast te stellen**: welke klassen, ids, variabelen en `part`-namen er zijn staat in de bron van dat apparaat (en later in de beschrijving van het apparaat, §13). **Verzin geen klassen of variabelen.** Gebruik alleen wat je in het apparaatbestand ziet; een selector die niets raakt, is geen fout, maar doet ook niets.
 - Een apparaat zonder open shadow root (zonder `attachShadow`, of met een gesloten) kan de host niet van een skin voorzien. Dat is een melding, geen fout.
+
+---
+
+## 4b. Ontwerpkeuzes (`design`, vanaf 0.2)
+
+Naast CSS kan een skin vanaf versie 0.2 een set **gevalideerde ontwerpkeuzes** meebrengen in het veld `design`. Anders dan CSS werken die keuzes op **alle apparaten** via de host, zonder dat een apparaat iets hoeft te doen (met de beperkingen hieronder). `design` staat op skinniveau (de standaard voor alle verschijningsvormen) en mag per verschijningsvorm worden overschreven met `appearances[].design`.
+
+```json
+"design": {
+  "ports":   { "mode": "default|always|hover|strip" },
+  "colors":  { "scheme": "workspace|custom",
+               "custom": { "bg": "#rrggbb", "surface": "#rrggbb", "text": "#rrggbb", "muted": "#rrggbb", "accent": "#rrggbb", "line": "#rrggbb" } },
+  "haptics": { "click": "off|light|medium|strong", "turn": "off|light|medium|strong", "slide": "off|light|medium|strong" },
+  "knobs":   { "style": "workspace|rotary|slider", "size": "s|m|l" }
+}
+```
+
+### Overzicht en samenvoegen
+
+- **Alle sleutels zijn optioneel.** Een ontbrekende sleutel betekent: het gedrag van het apparaat zelf of van de werkruimte (de waarde `default`, `workspace` of `off` hieronder). Een skin zonder `design` (ook elke skin van 0.1) gedraagt zich exact zoals voorheen.
+- **Samenvoegen:** de host neemt het `design` van de skin en legt daar het `design` van de gekozen verschijningsvorm overheen, **per sleutel** (en in `colors.custom` per kleur). Een verschijningsvorm hoeft dus alleen te herhalen wat anders is.
+- **Soepel in de host, streng in de validator:** de host negeert een ongeldige waarde of onbekende sleutel (die ene sleutel valt terug op het standaardgedrag) en meldt het; de validator geeft bij een ongeldige waarde een **fout** en bij een onbekende sleutel een `let op`. Onbekende sleutels en secties horen bij latere versies (§13) en worden genegeerd.
+- **Standaard wist alles:** kiest de gebruiker op de kaart Standaard (geen skin), dan zijn kaart, apparaat en kabels exact zoals zonder skin.
+- `design` hoort bij `skinsContract` `"0.2"`. In een bestand met `"0.1"` negeert een 0.1-host het; de validator geeft daar een `let op`.
+
+### Poortenmodus (`ports.mode`)
+
+De kabelpoorten staan bovenaan het apparaat, als de achterkant van een apparaat. De modus bepaalt wanneer ze zichtbaar zijn:
+
+| Waarde | Wat |
+|---|---|
+| `default` | zoals nu: het gedrag van de host blijft ongewijzigd |
+| `always` | de poortenbalk is altijd zichtbaar bovenaan het apparaat (zoals bij het mengpaneel) |
+| `hover` | de poorten zijn verborgen; ze verschijnen bovenaan zodra je met een kabel (tijdens slepen) over het apparaat gaat, of met de muis over de poortenstrook bovenaan |
+| `strip` | een dunne poortenstrook bovenaan is altijd zichtbaar; de muis (met of zonder kabel) over die strook of over het apparaat toont alle poorten |
+
+```
+ default / always              hover or strip, closed         hover or strip, open
++-------------------------+   +-------------------------+   +-------------------------+
+| [in] [in] [out] [mod]   |   |=========== strip ======|   | [in] [in] [out] [mod]   |
++-------------------------+   +-------------------------+   +-------------------------+
+|                         |   |                         |   |                         |
+|       device UI         |   |       device UI         |   |       device UI         |
+|                         |   |                         |   |                         |
++-------------------------+   +-------------------------+   +-------------------------+
+ (default: zoals eerder;        (hover: geen strook, poorten   (een kabel boven het apparaat
+  always: balk blijft staan)     verborgen tot nodig)           of de muis boven de strook)
+```
+
+- **Touch** (geen hover): `hover` en `strip` openen en sluiten door te tikken op de strook, en tonen de poorten ook tijdens het slepen van een kabel over het apparaat.
+- **Kabels blijven kloppen:** een verborgen poort tekent zijn kabel naar de strook (geen kabels die in het niets eindigen), en koppelen op een verborgen poort door een kabel over het apparaat te slepen kan: de poorten klappen open zodra de kabel erboven komt. Dit geldt voor alle soorten poorten (audio, midi, mod, mastering, event en de andere).
+- **Uitzondering:** een apparaat dat zijn poorten in de eigen UI tekent (`ui.jacks: true`) houdt de modus `default`; het Skins-paneel meldt dat.
+
+### Kleurenschema (`colors`)
+
+| Sleutel | Waarden | Standaard |
+|---|---|---|
+| `scheme` | `workspace`: de kleuren van de werkruimte; `custom`: de kleuren uit `custom` | `workspace` |
+| `custom` | object met de zes kleuren hieronder | geen |
+
+Elke kleur is `#rgb` of `#rrggbb` (hoofdletters mogen; de host maakt er zes kleine cijfers van). Andere schrijfwijzen (`rgb()`, namen, acht cijfers) worden geweigerd.
+
+| Kleur | Betekenis |
+|---|---|
+| `bg` | achtergrond van de kaart en het apparaat |
+| `surface` | vlakken op de achtergrond (panelen, titelbalk, poortenbalk) |
+| `text` | gewone tekst |
+| `muted` | bijzaken, labels en uitgeschakelde tekst |
+| `accent` | de accentkleur (actieve onderdelen, markeringen) |
+| `line` | randen en scheidingslijnen |
+
+- **De host past de kleuren toe als CSS-variabelen** op het hostelement van het apparaat en op de kaart zelf (titelbalk, poortenbalk), **niet** op de werkruimte. Het effect op een apparaat hangt ervan af of het apparaat die variabelen gebruikt; wat de host echt zet, staat hieronder.
+- Mist een kleur bij `scheme: "custom"`, dan valt die terug op de werkruimtekleur (het paneel meldt dat; de skin wordt niet geweigerd).
+- **Contrast:** de validator rekent het contrast van `text` tegen `bg` en tegen `surface` uit (WCAG-verhouding); onder 3:1 geeft hij een `let op`. Het is geen weigering.
+
+**Welke skinkleur welke variabele zet** (alleen bij `scheme:"custom"` en alleen voor ingevulde kleuren; als inline stijl op de kaart en op het apparaat zelf, dat erft door in de shadow root):
+
+| Skinkleur | Op de kaart | Op het apparaat |
+|---|---|---|
+| `bg` | `--card` | `--card`, `--floor`, `--bg`, `--panel` |
+| `bg` (afgeleid) | `--well`, `color-scheme` | idem |
+| `surface` | `--card-2`, `--bar`, `--field` | idem, plus `--panel-2` |
+| `surface` (afgeleid) | `--step-q` | idem |
+| `text` | `--fg`, `--bar-fg`, `--field-fg`, `--well-fg` | idem |
+| `muted` | `--muted` | `--muted` |
+| `accent` | `--sel`, `--accent` | idem, plus `--audio` |
+| `line` | `--line` | `--line` |
+
+Een apparaat dat eigen variabelen of vaste kleuren gebruikt, volgt alleen wat in deze tabel staat. `--audio` wordt alleen op het apparaat gezet, zodat poorten en kabels hun kleur per soort houden.
+
+### Haptiek (`haptics`)
+
+| Sleutel | Wanneer de host trilt |
+|---|---|
+| `click` | bij knoppen en pads (`button`, `[role=button]`, en een druk op andere klikbare onderdelen in de kaart) |
+| `turn` | bij het draaien aan een draaiknop van de host (`host.ui.knob`), per stap |
+| `slide` | bij het schuiven aan een `range`-invoer, per stap |
+
+Waarden: `off` (geen), `light` (8 ms), `medium` (15 ms), `strong` (30 ms); standaard `off`.
+
+- De host gebruikt `navigator.vibrate` (één korte puls). Hij trilt **niet** als het apparaat dat niet ondersteunt (bijvoorbeeld Safari op iPhone), als de gebruiker `prefers-reduced-motion` heeft, of als de pagina op de achtergrond staat.
+- **Begrenzing:** hoogstens één puls per 40 ms per kaart; bij `turn` en `slide` per stap (niet per pixel) en hoogstens 25 pulsen per seconde.
+- De host luistert op de kaart (de events zijn `composed`), dus ook bij onderdelen in open shadow roots van het apparaat.
+- Haptiek verandert het geluid en de state niet.
+
+### Draaiknoppen (`knobs`)
+
+| Sleutel | Waarden | Standaard |
+|---|---|---|
+| `style` | `workspace`: de globale instelling van de werkruimte; `rotary`: draaiknoppen; `slider`: schuifregelaars | `workspace` |
+| `size` | `s`, `m`, `l`: de host-knop op ongeveer 0,8, 1 en 1,3 maal de normale grootte | `m` |
+
+Dit werkt **alleen op wat via `host.ui.knob` is gebouwd**. Eigen `range`-invoeren en eigen tekeningen van een apparaat blijven ongemoeid; dat is laag 2 (§13). Het Skins-paneel meldt dat eerlijk: "werkt op apparaten die de hostknop gebruiken", met het aantal apparaten dat dat doet.
+
+### Wat "werkt op alle apparaten" betekent
+
+| Onderdeel | Bereik in laag 1 |
+|---|---|
+| `ports.mode` | alle apparaten met een door de host getekende poortenbalk; niet bij `ui.jacks: true` (blijft `default`) |
+| `colors` | alle apparaten voor de kaart (titelbalk, poortenbalk) en voor het hostelement; de UI binnen een apparaat volgt alleen waar het de variabelen gebruikt |
+| `haptics` | alle apparaten met een open shadow root of gewone UI in de kaart; niet te zien in een gesloten shadow root |
+| `knobs` | alleen wat via `host.ui.knob` is gebouwd |
+
+Nog **niet beschikbaar** (laag 2 en 3, §13): eigen bouwstenen en indeling, secties, meters, pads, een schermpje, en een editor. Laag 1 verandert niets aan de bouw van een apparaat.
 
 ---
 
@@ -206,7 +333,7 @@ skins/
 
 ## 10. Versies
 
-Dit contract heeft een versie `major.minor` (nu **0.1**), vastgelegd in het veld `skinsContract` van elke skin.
+Dit contract heeft een versie `major.minor` (nu **0.2**), vastgelegd in het veld `skinsContract` van elke skin.
 
 | Verschil met de versie van de host | Wat de host doet |
 |---|---|
@@ -218,7 +345,20 @@ Dit contract heeft een versie `major.minor` (nu **0.1**), vastgelegd in het veld
 - Onbekende velden, ook in een verschijningsvorm of in `when`, **worden genegeerd** en niet geweigerd. De validator meldt ze met een `let op` om typefouten te vangen.
 - `formatVersion` (nu `1`) is de versie van de bestandsopbouw zelf; `skinsContract` is de versie van dit contract.
 - Houd `id` en `device` gelijk bij een nieuwe versie van een skin en verhoog `version`: de nieuwere `version` wint.
-- Dit contract, de validator (`validate-skin.mjs`) en de host horen bij dezelfde versie. De eerste regels van `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` en `validate-skin.mjs` noemen elk "v0.1".
+- Dit contract, de validator (`validate-skin.mjs`) en de host horen bij dezelfde versie. De eerste regels van `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` en `validate-skin.mjs` noemen elk "v0.2".
+
+**Wijzigingen van 0.1 naar 0.2:**
+
+| Onderdeel | 0.1 | 0.2 |
+|---|---|---|
+| `skinsContract` | `"0.1"` | `"0.2"`; `"0.1"` blijft geldig |
+| Veld `design` (skin en verschijningsvorm) | bestaat niet | nieuw, optioneel (§4b) |
+| Poortenmodus | alleen het gedrag van de host | `ports.mode`: `default`, `always`, `hover`, `strip` |
+| Kleuren | alleen via CSS-variabelen in de skin | `colors`: schema `workspace` of `custom` met zes kleuren |
+| Haptiek | geen | `haptics`: `click`, `turn`, `slide` |
+| Hostknop | geen | `knobs`: `style` en `size` |
+| Validator | geen controle op `design` | controleert `design` (strenger dan de host) en heeft testgevallen |
+| Bestaande 0.1-skins | | blijven ongewijzigd werken |
 
 ---
 
@@ -270,14 +410,21 @@ Wat de validator controleert:
 | Een `assets`-item dat de CSS niet gebruikt; een onbekend veld | let op |
 | Twee skins met dezelfde `id` in één bibliotheek, meer dan één `icon.*` in een map, een iconbestand zonder `viewBox="0 0 24 24"` (alleen met `--dir` of bij een icoon) | let op |
 | Iconbestand: toegestane extensie, inhoud klopt met de extensie, hoogstens 200 kB, SVG zonder script of externe verwijzing | fout |
+| `design` (skin of verschijningsvorm) of een sectie daarin is geen object; een waarde buiten de lijst (`ports.mode`, `colors.scheme`, `haptics.*`, `knobs.style`, `knobs.size`); een kleur die geen `#rgb` of `#rrggbb` is | fout |
+| Een onbekende sleutel in `design` of in een sectie ervan | let op |
+| `scheme: "custom"` met ontbrekende kleuren (na samenvoegen met de verschijningsvorm); `colors.custom` terwijl `scheme` niet `custom` is | let op |
+| Contrast tussen `text` en `bg` of `surface` onder 3:1 | let op |
+| `design` in een bestand met `skinsContract` `"0.1"` | let op |
 
-De validator kan niet zien of de CSS er goed uitziet of een selector iets raakt. Test dat in de host als je een browser hebt; heb je die niet, schrijf dan in je oplevering dat het **niet getest** is.
+De validator controleert `design` strenger dan de host: de host negeert wat hij niet snapt, de validator weigert het. De testgevallen staan in `skins/contract/test-validate-skin.mjs` (`node skins/contract/test-validate-skin.mjs`; grenzen, kleuren, contrast, onbekende sleutels, beide talen). Skins van 0.1 blijven `OK`.
+
+De validator kan niet zien of de CSS er goed uitziet of een selector iets raakt, en ook niet of een apparaat zijn poorten in de eigen UI tekent of de hostknop gebruikt. Test dat in de host als je een browser hebt; heb je die niet, schrijf dan in je oplevering dat het **niet getest** is.
 
 ---
 
-## 13. Wat nog niet in versie 0.1 zit
+## 13. Wat nog niet in versie 0.2 zit
 
-Versie 0.1 legt het formaat en de weg naar de gebruiker vast. De inhoud van een skin is een **placeholder**: CSS en afbeeldingen zonder verdere eisen. Bewust later, in een volgende versie:
+Versie 0.1 legt het formaat en de weg naar de gebruiker vast; versie 0.2 (laag 1) voegt de ontwerpkeuzes toe die op alle apparaten werken (§4b). Daarbuiten is de inhoud van een skin nog een **placeholder**: CSS en afbeeldingen zonder verdere eisen. Bewust later, in een volgende versie:
 
 - artwork voor frontplaten, met de posities van de regelaars erop;
 - een grafiek voor regelaars (draaiknoppen, schuiven), eventueel met sprites;
@@ -286,11 +433,13 @@ Versie 0.1 legt het formaat en de weg naar de gebruiker vast. De inhoud van een 
 
 Freek levert de eisen daarvoor nog aan. Verzin tot die tijd niets: bouw een skin met alleen wat in dit contract staat.
 
+**Vooruitblik (nog niet beschikbaar).** Laag 2 brengt bouwstenen, indeling, secties, meters, pads en een schermpje: een skin kan dan ook de opbouw van een apparaat bepalen, niet alleen kleur en gedrag van de host. Laag 3 is een editor waarin je een skin samenstelt. Beide ontbreken nu; `design` blijft daarvoor uitbreidbaar (nieuwe secties naast `ports`, `colors`, `haptics` en `knobs`), en de ontwerper in het Skins-paneel is een eerste stap. Schrijf er niets voor.
+
 ---
 
 ## 14. Een minimaal voorbeeld
 
-Dit is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`: twee verschijningsvormen die alleen een dunne rand om het apparaat zetten en de accentkleur van Duofone veranderen.
+Dit is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`: twee verschijningsvormen die alleen een dunne rand om het apparaat zetten en de accentkleur van Duofone veranderen. Het is een skin van 0.1 en blijft geldig. Voorbeelden van laag 1 met `design`: `example-back-panel.patchkamer-skin.json` (poortenstrook en eigen kleuren, donker compact en licht breed) en `example-touch.patchkamer-skin.json` (`hover`, haptiek en grote knoppen) in dezelfde map.
 
 ```json
 {
@@ -333,8 +482,9 @@ Dit is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`:
 ## 15. Checklist voor oplevering
 
 - Het bestand heet `<naam>.patchkamer-skin.json` (zonder versienummer) en staat in `skins/library/<device-id>/`, met die map gelijk aan `device`.
-- `skinsContract` is `"0.1"`, `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.2"` (of `"0.1"` als de skin geen `design` heeft), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` en de verschijningsnamen zijn Engels en merkvrij; `license` is `CC0-1.0`.
+- Een eventueel `design` bevat alleen sleutels uit §4b met geldige waarden; kleuren zijn `#rgb` of `#rrggbb`.
 - De CSS bevat geen `@import` en geen externe `url(`; afbeeldingen staan in `assets` en worden met `var(--skin-asset-<naam>)` gebruikt.
 - Er staan alleen selectors, klassen en variabelen in die je in het apparaatbestand hebt gezien.
 - `node skins/contract/validate-skin.mjs <bestand>` geeft één `OK`-regel zonder `let op`.

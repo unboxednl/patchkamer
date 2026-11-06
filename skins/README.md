@@ -4,7 +4,7 @@
 
 A skin changes how one device **looks**, without changing the device or how it sounds. A skin is one small JSON file with one or more appearances (for example a compact and a wide one). Each appearance holds some CSS for the device's interface and, if you like, a few embedded images. On the card of a device you choose a skin and an appearance; **Auto** switches by itself on the width of the card and the size of the screen. Skins sit next to [tunes](../tunes/README.md) and [presets](../presets/README.md) as library material.
 
-This is version 0.1 of the skins contract, deliberately small: the file format, the folders and the way skins are loaded and switched are fixed. The content of a skin is still a placeholder; artwork, control graphics and layouts follow in a later version. The folder has one example skin, for Duofone, and a device icon.
+This is version 0.2 of the skins contract (layer 1), deliberately small: the file format, the folders and the way skins are loaded and switched are fixed. Besides CSS, since 0.2 a skin can bring a set of design choices (`design`) that work on **all devices**: ports mode, colour scheme, haptics and style and size of the host knob (table below). Artwork, control graphics, layouts and an editor (layers 2 and 3) do not exist yet. The folder has three example skins for Duofone and a device icon. Skins of 0.1 keep working.
 
 ## What is in here
 
@@ -20,7 +20,18 @@ This is version 0.1 of the skins contract, deliberately small: the file format, 
 
 ## File format
 
-One skin per file, named `name.patchkamer-skin.json`: JSON with `format` (`patchkamer-skin`), `formatVersion` (1), `skinsContract` (`0.1`), `id`, `device` (the exact id of the device), `name`, `version`, `author`, `license`, `description`, `created`, `icon`, `default` and a list of `appearances`. Check a skin with `node contract/validate-skin.mjs file.patchkamer-skin.json`. The full format is in the [contract](contract/SKINS-CONTRACT_EN.md); rules for agents that write skins: [AGENTS.md](AGENTS.md) (in Dutch).
+One skin per file, named `name.patchkamer-skin.json`: JSON with `format` (`patchkamer-skin`), `formatVersion` (1), `skinsContract` (`0.2`, or `0.1`), `id`, `device` (the exact id of the device), `name`, `version`, `author`, `license`, `description`, `created`, `icon`, `default`, an optional `design` and a list of `appearances` (each possibly with its own `design`). Check a skin with `node contract/validate-skin.mjs file.patchkamer-skin.json`. The full format is in the [contract](contract/SKINS-CONTRACT_EN.md); rules for agents that write skins: [AGENTS.md](AGENTS.md) (in Dutch).
+
+## Design choices (`design`)
+
+| Option | Values | Works on |
+|---|---|---|
+| `design.ports.mode` | `default`, `always`, `hover`, `strip` | the port bar at the top of every device (not with `ui.jacks`) |
+| `design.colors` | `scheme` `workspace` or `custom` with `bg`, `surface`, `text`, `muted`, `accent`, `line` (`#rgb` or `#rrggbb`) | the card and the host element of every device |
+| `design.haptics` | `click`, `turn`, `slide`: `off`, `light`, `medium`, `strong` | every card (only where the device or browser vibrates) |
+| `design.knobs` | `style` `workspace`, `rotary`, `slider`; `size` `s`, `m`, `l` | only `host.ui.knob` controls |
+
+All keys are optional; a missing key lets the device or the workspace keep its own behaviour. The `design` of an appearance overrides that of the skin per key. See [`library/nl.patchkamer.duofone/`](library/nl.patchkamer.duofone/) for `example-back-panel` and `example-touch`, and the [contract](contract/SKINS-CONTRACT_EN.md) (§4b) for the details.
 
 ## License
 

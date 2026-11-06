@@ -1,4 +1,4 @@
-# Patchkamer — Skins contract v0.1 for building agents
+# Patchkamer — Skins contract v0.2 for building agents
 
 This document is the complete, self-contained instruction for building a **skin** for **Patchkamer**: a separate file that changes the look of one device, without touching the device itself or the device contract. An agent that receives this document needs no other context. Deliver a file `name.patchkamer-skin.json` that follows this contract and passes `validate-skin.mjs` without errors.
 
@@ -9,6 +9,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 | Version | What was added |
 |---|---|
 | v0.1 | First version, deliberately small: a manifest, appearances with CSS and embedded images, automatic switching on card width and screen class, an icon per skin and per device. The content of a skin is a placeholder; the requirements for artwork, control graphics and layout follow later (§13) |
+| v0.2 | Layer 1: the field `design` with design choices that work on all devices (ports mode, colour scheme, haptics, style and size of the host knob), at skin level and per appearance (§4b). Skins of 0.1 keep working unchanged |
 
 ---
 
@@ -19,7 +20,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 - A skin belongs to **one device id** (the field `device`). For another device it is kept but never offered.
 - A device does not have to do anything to be able to get skins. If the device has no open shadow root (see §4), the host cannot apply the skin and says so; that is not a fault of the skin or of the device.
 - Skins are a new kind of library material next to tunes and presets: they are loaded from sources (a GitHub folder, a local folder, an address), browsed in a panel of their own, chosen per device on the card, saved in the workspace and in the song, and can be dropped on the canvas (§8, §9).
-- Version 0.1 is deliberately small. The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
+- Version 0.2 stays deliberately small: CSS plus a small set of design choices (`design`, §4b). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
 
 ---
 
@@ -33,7 +34,7 @@ A skin is a UTF-8 JSON file with one object, named `name.patchkamer-skin.json`: 
 |---|---|---|---|---|
 | `format` | text | always `"patchkamer-skin"` | | yes |
 | `formatVersion` | integer | now `1` | | yes |
-| `skinsContract` | text | `"major.minor"`, now `"0.1"`; see §10 | | yes |
+| `skinsContract` | text | `"major.minor"`, now `"0.2"` (`"0.1"` stays valid); see §10 | | yes |
 | `id` | text | 3 to 100 characters from `[a-z0-9.-]`; recommended `<device-id>.<slug>`; unique: the same `id` is the same skin | | yes |
 | `device` | text | the `id` of the device the skin is for, for example `nl.patchkamer.duofone` | | yes |
 | `name` | text | English name, 1 to 60 characters, brand-free (§11) | | yes |
@@ -44,6 +45,7 @@ A skin is a UTF-8 JSON file with one object, named `name.patchkamer-skin.json`: 
 | `created` | text | date `YYYY-MM-DD` | | yes |
 | `icon` | text or `null` | `null`, or an image as a data address, at most 200 kB (§6) | `null` | yes (may be `null`) |
 | `default` | text | the `id` of the appearance that applies when nothing fits in `auto` (§3) | the first appearance | no |
+| `design` | object | design choices for all appearances (§4b); since 0.2 | none | no |
 | `appearances` | list | 1 to 12 appearances (§2b) | | yes |
 
 Two skins with the same `id` are the same skin: the newer `version` wins. Together with `device`, `id` identifies the skin.
@@ -60,6 +62,7 @@ An **appearance** is one look of the skin, for example a compact and a wide vari
 | `when` | object | conditions for **automatic** choosing (§2c, §3) | none: never automatic | no |
 | `css` | text | CSS for the shadow root of the device, at most 200 kB (§4) | empty | no |
 | `assets` | object | name → data address of an image (§5) | `{}` | no |
+| `design` | object | design choices for this appearance only; overrides the `design` of the skin per key (§4b) | none | no |
 
 ### 2c. The conditions `when`
 
@@ -118,6 +121,130 @@ Apart from that, ordinary CSS is allowed, including `@media`, `@container` and `
 - `::part(name)` only works on parts of a **nested** shadow root that has a `part` of its own. That depends on the device.
 - What exactly a device offers **differs per device** and is deliberately marked in this contract as **to be established per device**: which classes, ids, variables and `part` names exist is in the source of that device (and later in the description of the device, §13). **Do not invent classes or variables.** Use only what you see in the device file; a selector that matches nothing is not an error, but it does nothing either.
 - A device without an open shadow root (without `attachShadow`, or with a closed one) cannot be given a skin by the host. That is a message, not an error.
+
+---
+
+## 4b. Design choices (`design`, from 0.2)
+
+Besides CSS, from version 0.2 a skin can bring a set of **validated design choices** in the field `design`. Unlike CSS, these choices work on **all devices** through the host, without the device having to do anything (with the limits below). `design` sits at skin level (the default for all appearances) and can be overridden per appearance with `appearances[].design`.
+
+```json
+"design": {
+  "ports":   { "mode": "default|always|hover|strip" },
+  "colors":  { "scheme": "workspace|custom",
+               "custom": { "bg": "#rrggbb", "surface": "#rrggbb", "text": "#rrggbb", "muted": "#rrggbb", "accent": "#rrggbb", "line": "#rrggbb" } },
+  "haptics": { "click": "off|light|medium|strong", "turn": "off|light|medium|strong", "slide": "off|light|medium|strong" },
+  "knobs":   { "style": "workspace|rotary|slider", "size": "s|m|l" }
+}
+```
+
+### Overview and merging
+
+- **All keys are optional.** A missing key means: the behaviour of the device itself or of the workspace (the value `default`, `workspace` or `off` below). A skin without `design` (including every 0.1 skin) behaves exactly as before.
+- **Merging:** the host takes the `design` of the skin and lays the `design` of the chosen appearance over it, **per key** (and per colour in `colors.custom`). An appearance only has to repeat what differs.
+- **Lenient in the host, strict in the validator:** the host ignores an invalid value or unknown key (that one key falls back to the default behaviour) and reports it; the validator gives an **error** for an invalid value and a warning for an unknown key. Unknown keys and sections belong to later versions (§13) and are ignored.
+- **Standard clears everything:** if the user picks Standard (no skin) on the card, the card, the device and the cables are exactly as without a skin.
+- `design` belongs to `skinsContract` `"0.2"`. In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there.
+
+### Ports mode (`ports.mode`)
+
+The cable ports sit at the top of the device, like the back of a device. The mode decides when they are visible:
+
+| Value | What |
+|---|---|
+| `default` | as now: the behaviour of the host is unchanged |
+| `always` | the port bar is always visible at the top of the device (like the mixer panel) |
+| `hover` | the ports are hidden; they appear at the top as soon as you drag a cable over the device, or move the mouse over the port strip at the top |
+| `strip` | a thin port strip at the top is always visible; the mouse (with or without a cable) over that strip or over the device shows all ports |
+
+```
+ default / always              hover or strip, closed         hover or strip, open
++-------------------------+   +-------------------------+   +-------------------------+
+| [in] [in] [out] [mod]   |   |=========== strip ======|   | [in] [in] [out] [mod]   |
++-------------------------+   +-------------------------+   +-------------------------+
+|                         |   |                         |   |                         |
+|       device UI         |   |       device UI         |   |       device UI         |
+|                         |   |                         |   |                         |
++-------------------------+   +-------------------------+   +-------------------------+
+ (default: as before;          (hover: no strip, ports       (a cable over the device or
+  always: bar never hides)      hidden until needed)          the pointer over the strip)
+```
+
+- **Touch** (no hover): `hover` and `strip` open and close by tapping the strip, and also show the ports while a cable is dragged over the device.
+- **Cables stay correct:** a hidden port draws its cable to the strip (no cables that end in nothing), and connecting to a hidden port by dragging a cable over the device works: the ports unfold as soon as the cable is above them. This holds for all kinds of ports (audio, midi, mod, mastering, event and the others).
+- **Exception:** a device that draws its ports in its own UI (`ui.jacks: true`) keeps the mode `default`; the Skins panel says so.
+
+### Colour scheme (`colors`)
+
+| Key | Values | Default |
+|---|---|---|
+| `scheme` | `workspace`: the colours of the workspace; `custom`: the colours from `custom` | `workspace` |
+| `custom` | object with the six colours below | none |
+
+Each colour is `#rgb` or `#rrggbb` (capitals are fine; the host turns them into six lowercase digits). Other notations (`rgb()`, names, eight digits) are rejected.
+
+| Colour | Meaning |
+|---|---|
+| `bg` | background of the card and the device |
+| `surface` | surfaces on the background (panels, title bar, port bar) |
+| `text` | ordinary text |
+| `muted` | secondary things, labels and disabled text |
+| `accent` | the accent colour (active parts, highlights) |
+| `line` | borders and dividing lines |
+
+- **The host applies the colours as CSS variables** on the host element of the device and on the card itself (title bar, port bar), **not** on the workspace. The effect on a device depends on whether the device uses those variables; what the host really sets is below.
+- If a colour is missing with `scheme: "custom"`, it falls back to the workspace colour (the panel says so; the skin is not rejected).
+- **Contrast:** the validator calculates the contrast of `text` against `bg` and against `surface` (WCAG ratio); below 3:1 it gives a warning. It is not a rejection.
+
+**Which skin colour sets which variable** (only with `scheme:"custom"` and only for colours that are filled in; as inline style on the card and on the device itself, which inherits into the shadow root):
+
+| Skin colour | On the card | On the device |
+|---|---|---|
+| `bg` | `--card` | `--card`, `--floor`, `--bg`, `--panel` |
+| `bg` (derived) | `--well`, `color-scheme` | same |
+| `surface` | `--card-2`, `--bar`, `--field` | same, plus `--panel-2` |
+| `surface` (derived) | `--step-q` | same |
+| `text` | `--fg`, `--bar-fg`, `--field-fg`, `--well-fg` | same |
+| `muted` | `--muted` | `--muted` |
+| `accent` | `--sel`, `--accent` | same, plus `--audio` |
+| `line` | `--line` | `--line` |
+
+A device that uses its own variables or fixed colours follows only what is in this table. `--audio` is set on the device only, so ports and cables keep their colour per kind.
+
+### Haptics (`haptics`)
+
+| Key | When the host vibrates |
+|---|---|
+| `click` | on buttons and pads (`button`, `[role=button]`, and a press on other clickable parts in the card) |
+| `turn` | when turning a host knob (`host.ui.knob`), per step |
+| `slide` | when moving a `range` input, per step |
+
+Values: `off` (none), `light` (8 ms), `medium` (15 ms), `strong` (30 ms); default `off`.
+
+- The host uses `navigator.vibrate` (one short pulse). It does **not** vibrate if the device does not support it (for example Safari on iPhone), if the user has `prefers-reduced-motion`, or if the page is in the background.
+- **Limits:** at most one pulse per 40 ms per card; for `turn` and `slide` per step (not per pixel) and at most 25 pulses per second.
+- The host listens on the card (the events are `composed`), so also for parts in open shadow roots of the device.
+- Haptics change neither the sound nor the state.
+
+### Knobs (`knobs`)
+
+| Key | Values | Default |
+|---|---|---|
+| `style` | `workspace`: the global setting of the workspace; `rotary`: rotary knobs; `slider`: sliders | `workspace` |
+| `size` | `s`, `m`, `l`: the host knob at about 0.8, 1 and 1.3 times the normal size | `m` |
+
+This works **only on what is built through `host.ui.knob`**. A device's own `range` inputs and own drawings are left alone; that is layer 2 (§13). The Skins panel says so honestly: "works on devices that use the host knob", with the number of devices that do.
+
+### What "works on all devices" means
+
+| Part | Reach in layer 1 |
+|---|---|
+| `ports.mode` | all devices with a port bar drawn by the host; not with `ui.jacks: true` (stays `default`) |
+| `colors` | all devices for the card (title bar, port bar) and for the host element; the UI inside a device only follows where it uses the variables |
+| `haptics` | all devices with an open shadow root or plain UI in the card; not visible inside a closed shadow root |
+| `knobs` | only what is built through `host.ui.knob` |
+
+**Not yet available** (layers 2 and 3, §13): own building blocks and layout, sections, meters, pads, a small screen, and an editor. Layer 1 changes nothing about how a device is built.
 
 ---
 
@@ -206,7 +333,7 @@ skins/
 
 ## 10. Versions
 
-This contract has a version `major.minor` (now **0.1**), recorded in the field `skinsContract` of every skin.
+This contract has a version `major.minor` (now **0.2**), recorded in the field `skinsContract` of every skin.
 
 | Difference with the version of the host | What the host does |
 |---|---|
@@ -218,7 +345,20 @@ This contract has a version `major.minor` (now **0.1**), recorded in the field `
 - Unknown fields, also inside an appearance or in `when`, **are ignored** and not rejected. The validator reports them with a warning to catch typos.
 - `formatVersion` (now `1`) is the version of the file layout itself; `skinsContract` is the version of this contract.
 - Keep `id` and `device` the same in a new version of a skin and raise `version`: the newer `version` wins.
-- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.1".
+- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.2".
+
+**Changes from 0.1 to 0.2:**
+
+| Part | 0.1 | 0.2 |
+|---|---|---|
+| `skinsContract` | `"0.1"` | `"0.2"`; `"0.1"` stays valid |
+| Field `design` (skin and appearance) | does not exist | new, optional (§4b) |
+| Ports mode | only the behaviour of the host | `ports.mode`: `default`, `always`, `hover`, `strip` |
+| Colours | only via CSS variables in the skin | `colors`: scheme `workspace` or `custom` with six colours |
+| Haptics | none | `haptics`: `click`, `turn`, `slide` |
+| Host knob | none | `knobs`: `style` and `size` |
+| Validator | no check on `design` | checks `design` (stricter than the host) and has test cases |
+| Existing 0.1 skins | | keep working unchanged |
 
 ---
 
@@ -270,14 +410,21 @@ What the validator checks:
 | An `assets` item the CSS does not use; an unknown field | warning |
 | Two skins with the same `id` in one library, more than one `icon.*` in a folder, an icon file without `viewBox="0 0 24 24"` (only with `--dir` or for an icon) | warning |
 | Icon file: allowed extension, content matches the extension, at most 200 kB, SVG without script or external reference | error |
+| `design` (skin or appearance) or a section in it is not an object; a value outside the list (`ports.mode`, `colors.scheme`, `haptics.*`, `knobs.style`, `knobs.size`); a colour that is not `#rgb` or `#rrggbb` | error |
+| An unknown key in `design` or in a section of it | warning |
+| `scheme: "custom"` with missing colours (after merging with the appearance); `colors.custom` while `scheme` is not `custom` | warning |
+| Contrast between `text` and `bg` or `surface` below 3:1 | warning |
+| `design` in a file with `skinsContract` `"0.1"` | warning |
 
-The validator cannot see whether the CSS looks right or whether a selector matches anything. Test that in the host if you have a browser; if you do not, write in your delivery that it is **not tested**.
+The validator checks `design` more strictly than the host: the host ignores what it does not understand, the validator rejects it. The test cases are in `skins/contract/test-validate-skin.mjs` (`node skins/contract/test-validate-skin.mjs`; limits, colours, contrast, unknown keys, both languages). Skins of 0.1 stay `OK`.
+
+The validator cannot see whether the CSS looks right or whether a selector matches anything, nor whether a device draws its ports in its own UI or uses the host knob. Test that in the host if you have a browser; if you do not, write in your delivery that it is **not tested**.
 
 ---
 
-## 13. What is not in version 0.1 yet
+## 13. What is not in version 0.2 yet
 
-Version 0.1 fixes the format and the way to the user. The content of a skin is a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version:
+Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b). Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version:
 
 - artwork for front panels, with the positions of the controls on it;
 - a graphic for controls (knobs, sliders), possibly with sprites;
@@ -286,11 +433,13 @@ Version 0.1 fixes the format and the way to the user. The content of a skin is a
 
 Freek still has to supply the requirements for these. Until then, invent nothing: build a skin with only what is in this contract.
 
+**Outlook (not yet available).** Layer 2 brings building blocks, layout, sections, meters, pads and a small screen: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now; `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics` and `knobs`), and the designer in the Skins panel is a first step. Do not write anything for them.
+
 ---
 
 ## 14. A minimal example
 
-This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`: two appearances that only put a thin outline around the device and change the accent color of Duofone.
+This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`: two appearances that only put a thin outline around the device and change the accent color of Duofone. It is a 0.1 skin and stays valid. Examples of layer 1 with `design`: `example-back-panel.patchkamer-skin.json` (port strip and own colours, dark compact and light full) and `example-touch.patchkamer-skin.json` (`hover`, haptics and large knobs) in the same folder.
 
 ```json
 {
@@ -333,8 +482,9 @@ This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`
 ## 15. Checklist for delivery
 
 - The file is named `<name>.patchkamer-skin.json` (without a version number) and is in `skins/library/<device-id>/`, with that folder equal to `device`.
-- `skinsContract` is `"0.1"`, `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.2"` (or `"0.1"` if the skin has no `design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` and the appearance names are English and brand-free; `license` is `CC0-1.0`.
+- Any `design` contains only keys from §4b with valid values; colours are `#rgb` or `#rrggbb`.
 - The CSS has no `@import` and no external `url(`; images are in `assets` and used with `var(--skin-asset-<name>)`.
 - It contains only selectors, classes and variables you have seen in the device file.
 - `node skins/contract/validate-skin.mjs <file>` gives one `OK` line without a warning.
