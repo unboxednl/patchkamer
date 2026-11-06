@@ -1,0 +1,16 @@
+/* css/menu.css — hoofdbalkmenu achter de knop op een smal scherm */
+/* menu in de hoofdbalk (smal scherm) */
+#menuBtn{display:none}
+.hdrmenu{position:fixed;left:8px;right:8px;z-index:45;background:var(--overlay);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:10px;padding:10px 12px 12px;box-shadow:0 12px 32px var(--shadow);overflow:auto;overscroll-behavior:contain;display:grid;gap:12px}
+.hdrmenu[hidden]{display:none}
+.hdrmenu h4{margin:0 0 6px;font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hdrmenu .hm-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.hdrmenu button,.hdrmenu select,.hdrmenu .tp,.hdrmenu #latBox{min-height:44px;font-size:14px}
+.hdrmenu button{padding:8px 10px;letter-spacing:.04em}
+.hdrmenu .tp{justify-content:space-between;font-size:11px;padding:0 4px}
+.hdrmenu .tp select{flex:1 1 auto;min-width:0}
+.hdrmenu #latBox{display:flex;align-items:center;gap:6px}
+.hdrmenu .hm-name{display:grid}
+.hdrmenu .wsname{width:100%;max-width:none;font-size:16px;min-height:44px}
+.hdrmenu #fitScreen{grid-column:1/-1}
+@media (max-width:699px){#menuBtn{display:inline-block}}

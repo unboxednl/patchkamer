@@ -1,0 +1,17 @@
+/* css/focus.css — focusweergave */
+.card .bar button.fbtn{font-family:var(--mono);font-weight:700;min-width:22px}
+.card .bar button.fbtn.on{background:var(--sel);color:#fff;border-color:var(--sel)}
+.focusview{position:absolute;inset:0;z-index:30;background:var(--floor);border:1px solid var(--line);border-radius:5px;display:grid;grid-template-rows:auto minmax(0,1fr)}
+.focusview .fvbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--card)}
+.focusview .fvbar h2{margin:0 8px 0 0;font-family:var(--disp);font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+.focusview .fvbar .seg button.on{background:var(--sel);color:#fff;border-color:var(--sel)}
+.focusview .fvbar .note{flex:1;min-width:20ch}
+.focusview .fvbody{overflow:auto;padding:16px;display:flex;gap:16px;align-items:flex-start;overscroll-behavior:contain}
+.focusview .fvbody.row{flex-direction:row;flex-wrap:nowrap}
+.focusview .fvbody.col{flex-direction:column;align-items:flex-start}
+.focusview .fvbody.grid{flex-direction:row;flex-wrap:wrap}
+.focusview .fvempty{color:var(--muted);font-size:12px;padding:30px}
+.card.infocus{position:relative!important;left:auto!important;top:auto!important;flex:none;z-index:auto!important}
+.card.infocus .bar{cursor:default}
+.card.infocus .rz.s,.card.infocus .rz.se{display:none}
+

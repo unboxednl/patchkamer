@@ -1,0 +1,39 @@
+/* css/narrow.css — smal scherm (max-width:699px): onderlade, hoofdbalk, panelen */
+/* smal scherm: bibliotheek als onderlade, hoofdbalk scrolt horizontaal, panelen passen */
+@media (max-width:699px){
+  body{padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));gap:6px}
+  header{flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:6px;zoom:var(--pkfs,1)!important}
+  header>*,.transport>*{flex:none}
+  header>.note,header h1{display:none}
+  .transport{display:contents}
+  header .go{order:-3}
+  header .tpbpm{order:-2}
+  header>.tp>span:first-child,.transport>.tp>span:first-child{display:none}
+  header .tp input[type=range]{width:72px!important}
+  header .tp input[type=number]{width:62px}
+  #libToggle{font-size:0;min-width:44px;padding-left:0;padding-right:0}
+  #libToggle::after{content:"▤";font-size:18px}
+  #menuBtn{order:1;min-width:44px;font-size:20px;line-height:1;padding-left:0;padding-right:0}
+  .hdrmenu{zoom:var(--pkfs,1)}
+  .narrowonly{display:inline-block}
+  .wstabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .wstab{flex:none}
+  .wspanel{zoom:var(--pkfs,1)!important;left:8px;right:8px;top:calc(56px + env(safe-area-inset-top,0px));width:auto;max-width:none;max-height:calc((100dvh - 72px)/var(--pkfs,1));overflow:auto}
+  .wspanel .wslist,.wspanel .srclist{max-height:none!important;overflow:visible}   /* op een telefoon scrolt alleen het paneel zelf, geen lijst binnen het paneel */
+  .pkmodal .box{max-width:100%;max-height:92dvh;overflow:auto}
+  .focusview{zoom:1!important}
+  .focusview .fvbar .note{display:none}
+  .libwin{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:60dvh!important;min-width:0;z-index:40;zoom:1!important;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px);transition:none}
+  .libwin.min{height:60dvh!important}
+  .libwin.min .libbody{display:grid}
+  .libwin .rz{display:none!important}
+  .libwin .libbar{position:relative;padding-top:20px;border-radius:14px 14px 0 0;cursor:default}
+  .libwin .libbar::before{content:'';position:absolute;top:7px;left:50%;width:48px;height:5px;margin-left:-24px;border-radius:3px;background:var(--muted);opacity:.6}
+  #libMin{display:none}
+  #libClose{display:inline-block}
+  .libwin .libbody{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  body.libsheet .toast{bottom:calc(60dvh + 74px)}
+  body.libsheet .viewctl{bottom:calc(60dvh + 10px)}
+  body.libsheet .standpop{bottom:calc(60dvh + 52px)}
+  .floorempty .box{padding:14px 14px}
+}

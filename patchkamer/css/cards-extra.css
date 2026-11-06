@@ -1,0 +1,51 @@
+/* css/cards-extra.css — toast, jackpoorten, miniatuurkaarten, animaties en categorie-iconen */
+.toast{position:absolute;left:12px;bottom:12px;z-index:6;max-width:min(60ch,calc(100% - 240px));background:var(--overlay);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:11px;color:var(--fg);opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.err{border-color:var(--stop);color:var(--stop)}
+button.on{border-color:var(--audio);color:var(--audio)}
+.port.jack{flex-direction:column;gap:2px;align-items:center;justify-content:center;font-size:10px;letter-spacing:.04em;text-align:center;line-height:1.1}
+.port.jack .dot{width:14px;height:14px}
+.port.jack.big{font-family:var(--disp);font-size:15px;font-weight:700;color:var(--fg);letter-spacing:.02em}
+.port.jack.big .dot{width:16px;height:16px}
+[hidden]{display:none!important}   /* hidden must win over component display rules, also outside the artifact viewer */
+.card .pkicon{display:none}
+.card.mini{width:auto!important;height:auto!important;min-width:0;background:none;border:none;box-shadow:none;display:block}
+.card.mini>:not(.pkicon){display:none!important}
+.card.mini .pkicon{display:grid;justify-items:center;gap:5px;width:124px;padding:10px 5px 7px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--ic,var(--muted));border-radius:8px;box-shadow:0 8px 24px var(--shadow);cursor:grab;user-select:none;touch-action:none;position:relative}
+.card.mini .pkicon:active{cursor:grabbing}
+.card.mini.sel .pkicon{border-color:var(--sel);border-top-color:var(--ic,var(--muted))}
+.pkicon .glyph{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:.02em;color:var(--glyph-fg);background:var(--ic,var(--muted))}
+.pkicon .lbl{font-family:var(--disp);font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;text-align:center;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
+.pkicon .restore{position:absolute;top:-11px;right:-11px;width:26px;height:26px;padding:0;border-radius:50%;font-size:14px;line-height:1;display:grid;place-items:center}
+.pkicon .led{position:absolute;top:7px;left:7px;width:6px;height:6px;border-radius:50%;background:var(--line)}
+.card.mini.active .pkicon .led{background:var(--event);box-shadow:0 0 6px var(--event)}
+.c-ic-synth{--ic:var(--event)} .c-ic-groove{--ic:#e4574a} .c-ic-sequencer{--ic:#f4d35e} .c-ic-effect{--ic:var(--audio)} .c-ic-mix{--ic:var(--sel)} .c-ic-tool{--ic:var(--muted)} .c-ic-other{--ic:var(--muted)}
+.card.moving{transition:left .35s ease,top .35s ease}
+.card.fresh{animation:pkfresh 1.6s ease-out}
+.card.mini.fresh{animation:none} .card.mini.fresh .pkicon{animation:pkfresh 1.6s ease-out}
+@keyframes pkfresh{0%,35%{box-shadow:0 0 0 4px var(--audio),0 8px 24px var(--shadow)}100%{box-shadow:0 0 0 0 transparent,0 8px 24px var(--shadow)}}
+.libdev .act select.catsel{max-width:9.5em}
+.cat.drop{outline:2px dashed var(--audio);outline-offset:3px;border-radius:4px}
+.cat.drop .cathead{color:var(--audio)}
+.libdev{border-left-color:var(--catc,var(--muted))!important}
+.cathead .cdot{width:9px;height:9px;border-radius:50%;background:var(--catc,var(--muted));flex:none}
+/* categorie-iconen: een vakje in de kleur van de categorie met het icoon erin; een eigen afbeelding staat er los, zoals ze is */
+.cicon{display:inline-grid;place-items:center;flex:none;width:20px;height:20px;border-radius:5px;background:var(--ic,var(--catc,var(--muted)));color:var(--glyph-fg);vertical-align:middle;overflow:hidden}
+.cicon svg{width:74%;height:74%;display:block}
+.cicon.img{background:transparent;border-radius:0;overflow:visible}
+.cicon img{width:100%;height:100%;object-fit:contain;display:block}
+.cathead .cicon{width:22px;height:22px}
+.libdev .nm .cicon{margin-right:6px;position:relative;top:-1px}
+#lib.cmp .libdev .nm .cicon{width:18px;height:18px;margin-right:5px}
+.card .bar .cicon{width:20px;height:20px}
+.focusview .fvstrip .cicon{width:16px;height:16px;margin-right:5px;vertical-align:-3px}
+.pkicon .glyph.img{background:transparent;border-radius:0}
+.pkicon .glyph svg{width:30px;height:30px;display:block}
+.pkicon .glyph img{width:48px;height:48px;object-fit:contain;display:block}
+.libcfg .crow button.ibtn{width:30px;height:30px;padding:0;display:grid;place-items:center;min-width:0}
+.libcfg .ipick{display:grid;gap:8px;padding:8px;border:1px dashed var(--line);border-radius:6px}
+.libcfg .igrid{display:flex;flex-wrap:wrap;gap:6px}
+.libcfg .igrid button:not(.small){width:36px;height:36px;padding:0;display:grid;place-items:center;min-width:0!important}
+.libcfg .igrid button .cicon{width:26px;height:26px}
+.libcfg .igrid button.cur{outline:2px solid var(--fg);outline-offset:1px}
+.libcfg .ipick input[type=text]{flex:1;min-width:0;background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:5px 7px;font:inherit;font-size:.9em}

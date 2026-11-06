@@ -1,0 +1,25 @@
+/* css/touch.css — aanraking: groter doelvlak (pointer:coarse) */
+/* aanraking: groter doelvlak, geen tekstselectie op de bediening, lang indrukken */
+@media (pointer:coarse){
+  header,header *,.viewctl,.libbar,.cathead,.libdev,.port,.card .bar,.pkicon,.wstab,.wstabs,.focusview .fvbar,.standpop,svg.cables{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  header button,header select,header input[type=number],header .wsname,.viewctl button,.libbar button,.libwin button,.libwin select,.libsearch,.cathead,.wspanel button,.wspanel select,.wspanel input[type=text],.pkmodal button,.pkmodal select,.focusview button,.standpop button,.wstab button,.wstabs .add{min-height:40px}
+  header input[type=range]{height:40px}
+  header input[type=range]::-webkit-slider-thumb{width:20px;height:28px;margin-top:-12.5px}
+  header input[type=range]::-moz-range-thumb{width:20px;height:28px}
+  .viewctl{gap:6px;padding:6px} .viewctl button{min-width:44px}
+  .libdev{touch-action:pan-y}
+  .libbar button{min-width:40px}
+  .card .bar{padding-block:7px;gap:6px}
+  .card .bar button{min-width:34px;min-height:30px;padding:2px 8px}
+  .card .bar select.ver{min-height:30px;font-size:11px}
+  .port{position:relative}
+  .port::before{content:'';position:absolute;left:-12px;right:-12px;top:-7px;bottom:-7px}
+  .ports .col{gap:9px}
+  .card .rz.e::before{content:'';position:absolute;top:0;bottom:0;left:-8px;right:-8px}
+  .card .rz.s::before{content:'';position:absolute;left:0;right:0;top:-8px;bottom:-8px}
+  .card .rz.se{opacity:1}
+  .card .rz.se::before{content:'';position:absolute;inset:-14px}
+  .pkicon .restore{width:34px;height:34px;top:-14px;right:-14px}
+  .wstab button{padding:6px 12px}
+  .toast{max-width:calc(100% - 24px);bottom:62px}
+}

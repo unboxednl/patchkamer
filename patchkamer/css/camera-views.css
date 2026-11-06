@@ -1,0 +1,12 @@
+/* css/camera-views.css — camerastanden (standen-venster) */
+/* camerastanden */
+.standpop{position:absolute;right:10px;bottom:52px;z-index:7;width:min(300px,calc(100% - 20px));max-height:min(60%,380px);overflow:auto;background:var(--overlay);border:1px solid var(--line);border-radius:6px;padding:8px;display:grid;gap:6px;box-shadow:0 10px 30px var(--shadow);font-size:12px}
+.standpop h4{margin:0;font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.standpop .strow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:4px;align-items:center}
+.standpop .strow kbd{min-width:1.6ch;text-align:center}
+.standpop .strow .go2{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:none;letter-spacing:0;font-family:var(--mono);font-size:12px}
+.standpop .strow input{min-width:0;width:100%}
+.standpop .strow button{padding:3px 8px;min-width:28px}
+.standpop .note{font-size:10px}
+.viewctl #standBtn{font-size:11px}
+.viewctl #standBtn.on{border-color:var(--audio);color:var(--audio)}

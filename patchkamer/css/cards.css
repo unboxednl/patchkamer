@@ -1,0 +1,60 @@
+/* css/cards.css — apparaatkaarten, modulatiestrook, poorten en kabeltekening op de vloer */
+svg.cables{position:absolute;left:0;top:0;width:1px;height:1px;pointer-events:none;overflow:visible}
+svg.cables path{fill:none;stroke-width:2.5;opacity:.9}
+svg.cables path.audio{stroke:var(--audio)} svg.cables path.event{stroke:var(--event)} svg.cables path.pending{stroke-dasharray:6 5;opacity:.6}
+svg.cables path.hit{pointer-events:stroke;stroke:transparent;stroke-width:14;cursor:pointer}
+.card{position:absolute;width:300px;background:var(--card);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 24px var(--shadow);display:grid;grid-template-rows:auto auto minmax(0,1fr);min-width:0}
+.card.sel{border-color:var(--sel)}
+.card .bar{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);cursor:grab;user-select:none;background:var(--bar);color:var(--bar-fg);border-radius:6px 6px 0 0}
+.card .bar:active{cursor:grabbing}
+.card .bar .nm{font-family:var(--disp);font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .bar .nm small{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0;text-transform:none;margin-left:6px}
+.card .bar .led{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.card.active .bar .led{background:var(--event);box-shadow:0 0 6px var(--event)}
+.card .bar button{padding:1px 6px;font-size:11px}
+.card .body{padding:8px 10px;display:grid;gap:6px;min-width:0;position:relative}
+.card .ui{display:grid;gap:5px;min-width:0}
+/* modulatie zichtbaar: strook met wat er nu gestuurd wordt + stip op de schuifregelaars */
+.modbar{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:5px 8px;border:1px solid color-mix(in srgb,var(--mod) 45%,var(--line));border-radius:5px;background:color-mix(in srgb,var(--mod) 7%,var(--card));font-family:var(--mono);font-size:10px;color:var(--muted);min-width:0}
+.modbar[hidden]{display:none}
+.modbar .mh{color:var(--mod);cursor:pointer;user-select:none;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;background:none;border:none;padding:0;font:inherit}
+.modbar.closed .mc{display:none}
+.mc{display:grid;grid-template-columns:auto 64px 6ch;gap:5px;align-items:center;min-width:0}
+.mc .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:14ch;color:var(--fg)}
+.mc .tr{position:relative;height:6px;border-radius:3px;background:var(--well)}
+.mc .ln{position:absolute;top:2px;height:2px;background:var(--mod);opacity:.65}
+.mc .b{position:absolute;top:-2px;width:2px;height:10px;background:var(--muted);transform:translateX(-50%)}
+.mc .e{position:absolute;top:-1px;width:8px;height:8px;border-radius:50%;background:var(--mod);transform:translateX(-50%)}
+.mc .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--mod)}
+body.nomodview .modbar,body.nomodview .pkmodmark{display:none!important}
+.card.sized-h .body{display:flex;flex-direction:column;min-height:0}
+.card.sized-h .body>.ports,.card.sized-h .body>.modbar{flex:none}
+.card.sized-h .ui{flex:1 1 0;overflow:auto;min-height:0;overscroll-behavior:contain}
+.card .rz{position:absolute;z-index:4;touch-action:none}
+.card .rz.e{top:34px;right:-5px;bottom:14px;width:10px;cursor:ew-resize}
+.card .rz.s{left:14px;right:14px;bottom:-5px;height:10px;cursor:ns-resize}
+.card .rz.se{right:-2px;bottom:-2px;width:16px;height:16px;cursor:nwse-resize;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);border-radius:0 0 6px 0;opacity:.55}
+.card:hover .rz.se,.card.sel .rz.se,.card.resizing .rz.se{opacity:1;border-color:var(--audio)}
+.card .rz.e:hover,.card .rz.s:hover,.card.resizing .rz.e,.card.resizing .rz.s{background:rgba(79,209,197,.18)}
+.card.resizing{box-shadow:0 0 0 1px var(--audio),0 8px 24px var(--shadow)}
+.card .bar .dim{display:none;font-family:var(--mono);font-size:10px;color:var(--audio);font-variant-numeric:tabular-nums}
+.card.resizing .bar .dim{display:inline}
+.ports{display:flex;justify-content:space-between;gap:8px;padding:4px 0 2px}
+.ports .col{display:grid;gap:4px}
+.port{display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:crosshair;touch-action:none;user-select:none;transition:opacity .12s}
+.port .dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);background:var(--card)}
+.port.audio .dot{border-color:var(--audio)} .port.event .dot{border-color:var(--event)}
+.port.audio.wired .dot{background:var(--audio)} .port.event.wired .dot{background:var(--event)}
+.port.armed .dot{box-shadow:0 0 0 3px rgba(155,140,255,.5)}
+.port .dot{transition:transform .1s,box-shadow .1s}
+body.wiring,body.wiring *{cursor:crosshair!important}
+body.wiring .port.dim{opacity:.25}
+.port.target .dot{box-shadow:0 0 0 3px rgba(220,225,232,.25)}
+.port.target{color:var(--fg)}
+.port.hover .dot{transform:scale(1.45);box-shadow:0 0 0 4px rgba(220,225,232,.55)}
+.port.source .dot{box-shadow:0 0 0 3px rgba(155,140,255,.6)}
+svg.wire path{fill:none;stroke-width:3;stroke-dasharray:7 6;opacity:.95}
+svg.wire path.audio{stroke:var(--audio)} svg.wire path.event{stroke:var(--event)}
+svg.wire path.snap{stroke-dasharray:none}
+svg.wire circle{fill:var(--fg)}
+.col.out .port{flex-direction:row-reverse}

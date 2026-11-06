@@ -1,0 +1,50 @@
+/* css/library.css — bibliotheekvenster: categorieen, apparaatregels, zijpaneel, sleepspook */
+/* ---------- library window: floats above the floor, never zooms ---------- */
+.libwin{position:absolute;z-index:20;display:grid;grid-template-rows:auto minmax(0,1fr);background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 14px 40px var(--shadow);min-width:260px;min-height:44px;--libfs:14px;font-size:var(--libfs)}
+.libwin.min{height:auto!important}
+.libwin.min .libbody,.libwin.min .rz{display:none}
+.libbar{display:flex;align-items:center;gap:8px;padding:8px 10px 8px 14px;background:var(--card-2);border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;cursor:grab;user-select:none;touch-action:none}
+.libwin.min .libbar{border-bottom:none;border-radius:8px}
+.libbar:active{cursor:grabbing}
+.libbar .t{font-family:var(--disp);font-weight:700;font-size:1.15em;letter-spacing:.14em;text-transform:uppercase;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.libbar .cnt{color:var(--muted);font-size:.8em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.libbar button{padding:3px 8px;font-size:12px;min-width:30px}
+.libbody{overflow:auto;padding:10px 12px 14px;display:grid;gap:12px;align-content:start;overscroll-behavior:contain}
+.libsearch{width:100%;background:var(--card-2);color:var(--fg);border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:.95em;padding:8px 10px}
+.libsearch:focus-visible{outline:1px solid var(--audio)}
+.libcats{display:grid;gap:12px}
+.cat{display:grid;gap:6px}
+.cathead{display:flex;align-items:center;gap:8px;width:100%;background:none;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:4px 2px 6px;color:var(--fg);font-family:var(--disp);font-size:1em;letter-spacing:.14em;text-transform:uppercase;font-weight:700;text-align:left;cursor:pointer}
+.cathead:hover{color:var(--audio)}
+.cathead .chev{display:inline-block;width:1em;color:var(--muted);transition:transform .12s}
+.cat.closed .cathead .chev{transform:rotate(-90deg)}
+.cathead .n{margin-left:auto;color:var(--muted);font-family:var(--mono);font-size:.8em;letter-spacing:0;font-weight:400}
+.cat.closed .devs{display:none}
+.devs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.libdev{display:grid;gap:4px;border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:4px;padding:8px 10px;background:var(--card-2);cursor:grab;touch-action:none;min-width:0}
+.libdev:hover{border-color:var(--audio)}
+.libdev.c-synth{border-left-color:var(--event)} .libdev.c-groove{border-left-color:#e4574a} .libdev.c-sequencer{border-left-color:#f4d35e} .libdev.c-effect{border-left-color:var(--audio)} .libdev.c-mix{border-left-color:var(--sel)} .libdev.c-tool{border-left-color:var(--muted)}
+.libdev .nm{font-family:var(--disp);font-weight:700;font-size:1.1em;letter-spacing:.05em;text-transform:uppercase;line-height:1.15;overflow-wrap:anywhere}
+.libdev .id{font-size:.75em;color:var(--muted);overflow-wrap:anywhere}
+.libdev .lbadge{margin-left:8px;padding:1px 6px;border-radius:9px;background:var(--audio);color:var(--glyph-fg,#06222a);font:600 10px var(--mono);letter-spacing:.05em;vertical-align:middle;white-space:nowrap}
+.libdev.mark-changed .lbadge{background:var(--event)} .libdev.mark-new,.libdev.mark-changed{border-left-color:var(--audio)}
+.libdev .pt{font-size:.8em;color:var(--muted);line-height:1.4}
+.libdev .pt b{font-weight:500;color:var(--fg)}
+.libdev .act{display:flex;gap:6px;align-items:center;margin-top:2px}
+.libdev .act select{font-size:.8em;padding:3px 4px}
+.libdev .act button{margin-left:auto;font-size:.85em;padding:4px 10px}
+.libempty{color:var(--muted);font-size:.9em}
+.libwin .note{font-size:.78em}
+.libsec{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:8px}
+.libsec>summary{cursor:pointer;font-family:var(--disp);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-size:.9em}
+.libsec[open]>summary{margin-bottom:6px}
+.libsec details summary{font-size:.85em}
+.libwin .rz{position:absolute;z-index:2;touch-action:none}
+.libwin .rz.e{top:44px;right:-5px;bottom:14px;width:10px;cursor:ew-resize}
+.libwin .rz.w{top:44px;left:-5px;bottom:14px;width:10px;cursor:ew-resize}
+.libwin .rz.s{left:14px;right:14px;bottom:-5px;height:10px;cursor:ns-resize}
+.libwin .rz.se{right:-2px;bottom:-2px;width:18px;height:18px;cursor:nwse-resize;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);border-radius:0 0 8px 0}
+.libwin .rz.e:hover,.libwin .rz.w:hover,.libwin .rz.s:hover{background:rgba(79,209,197,.18)}
+.libwin .rz.se:hover{border-color:var(--audio)}
+.libghost{position:fixed;z-index:50;pointer-events:none;background:var(--card-2);border:1px solid var(--audio);border-radius:4px;padding:6px 10px;font-family:var(--disp);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;box-shadow:0 8px 24px var(--shadow);transform:translate(12px,12px)}
+.libghost.no{border-color:var(--stop);opacity:.7}

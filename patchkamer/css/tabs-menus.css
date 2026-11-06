@@ -1,0 +1,37 @@
+/* css/tabs-menus.css — tunebalk-onderdelen, werkruimtetabs, instellingenpaneel, bibliotheek binnen de rand, kabelmenu */
+/* tunes (v1.9) */
+.pbar .pbrowse{padding:2px 6px}
+.pbar .pparts{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.4fr) auto;gap:4px;align-items:center}
+.pbar .pparts[hidden]{display:none}
+.pbar .pparts .pl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pritem.fold .nm{font-weight:500}
+.pritem select.mv{font-size:10px;padding:1px 3px;max-width:110px}
+/* meerdere werkruimtes: tabbalk, F1 t/m F10 */
+.wstabs{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:4px 0 0}
+.wstab{display:inline-flex;align-items:stretch;border:1px solid var(--line);background:var(--card);border-radius:6px;overflow:hidden;font-size:12px}
+.wstab.on{border-color:var(--sel);background:var(--card-2)}
+.wstab button{all:unset;cursor:pointer;color:var(--muted);padding:2px 8px;display:inline-flex;align-items:center;gap:6px;max-width:220px}
+.wstab.on button{color:var(--fg)} .wstab button:focus-visible{outline:2px solid var(--sel);outline-offset:-2px}
+.wstab .nm span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .wstab kbd{font-family:var(--mono);font-size:10px;opacity:.7}
+.wstab .x{padding:2px 6px;border-left:1px solid var(--line)} .wstab .x:hover{color:var(--stop)}
+.wstabs .add{all:unset;cursor:pointer;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:2px 9px;font-size:12px} .wstabs .add:hover{color:var(--fg)} .wstabs .add:focus-visible{outline:2px solid var(--sel)}
+#setPanel .wsurl{width:100%;font-family:var(--mono,monospace);font-size:12px}
+#prPanel h4.tudev{margin:10px 0 4px;font-family:var(--disp);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg)}
+/* bibliotheekvenster: inhoud blijft binnen de rand, ook als het smal is */
+.libwin{grid-template-columns:minmax(0,1fr)}
+.libwin .libbar{flex-wrap:wrap;row-gap:4px;min-width:0}
+.libwin .libbar .t{flex-shrink:0;overflow:visible}
+.libwin .libbar .cnt{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.libwin .libbody{min-width:0}
+.libwin #lib,.libwin .cat,.libwin .devs{min-width:0}
+.libdev .act{flex-wrap:wrap;min-width:0}
+.libdev .act select{min-width:0;max-width:100%}
+.libdev .nm,.libdev .id,.libdev .pt,.libdev .src{overflow-wrap:anywhere}
+
+.cablemenu{position:fixed;z-index:85;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;box-shadow:0 14px 40px var(--shadow);padding:10px 12px;display:grid;gap:8px;font-size:11px;width:240px}
+.cablemenu .ttl{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.45;word-break:break-word}
+.cablemenu .sw{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.cablemenu .sw button{width:26px;height:26px;border-radius:50%;padding:0;border:2px solid var(--line);cursor:pointer}
+.cablemenu .sw button.cur{outline:2px solid var(--fg);outline-offset:2px}
+.cablemenu label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.cablemenu .row{display:flex;gap:6px;flex-wrap:wrap}
