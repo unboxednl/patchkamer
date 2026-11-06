@@ -56,6 +56,8 @@ Bovenste niveau:
 | `bpm` | tempo | 40 tot 200, standaard 126 |
 | `swing` | swing van de klok | 0 tot 0,5, standaard 0,08 |
 | `view` | `{ "x": 0, "y": 0, "scale": 1 }` | alleen de weergave |
+| `views` | `[{ "name": "Drums", "x": 0, "y": 0, "scale": 1 }]` | optioneel: camerastanden, hoogstens 30; `x`, `y` is het midden van de uitsnede, `scale` relatief aan de schermschaal |
+| `layouts` | `{ "compact": { "<id>": { "x": 0, "y": 0, "w": null, "h": null, "mini": false } } }` | optioneel: compacte indeling voor kleine schermen; de gewone velden van `devices` blijven de brede indeling |
 | `devices` | lijst van apparaten | zie hieronder |
 | `cables` | lijst van kabels | zie hieronder |
 
