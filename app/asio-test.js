@@ -48,10 +48,15 @@ async function run(argv) {
   out.options = o;
   const want = (arg(argv, 'asio-test') || '').toLowerCase();
   const real = out.drivers.filter(d => d !== 'Test clock (no sound)');
-  const pick = want ? real.find(d => d.toLowerCase().includes(want)) : real[0];
-  out.runs = [];
-  if (pick) out.runs.push(await play(pick, o, 2.5));
-  else out.note = real.length ? 'no driver matches ' + want : 'no ASIO driver found';
+  // the drivers to try: the one that matches the name, or all of them in turn until one opens (a driver of a device that is not connected fails)
+  const tryList = want ? real.filter(d => d.toLowerCase().includes(want)) : real;
+  out.runs = []; out.failed = [];
+  for (const d of tryList) {
+    const r = await play(d, o, 2.5);
+    if (r.open && r.open.ok && (!r.start || r.start.ok)) { out.runs.push(r); break; }
+    out.failed.push({ driver: d, open: r.open, start: r.start });
+  }
+  if (!out.runs.length) out.note = !real.length ? 'no ASIO driver found' : want && !tryList.length ? 'no driver matches ' + want : 'no driver could be opened';
   out.runs.push(await play('Test clock (no sound)', o, 1.5));   // the software side without a sound card, for comparison
   return out;
 }
