@@ -10,7 +10,7 @@ function focusOneApply(){ if(!PK.focusEl) return; const one=PK.FOCUS.layout==='o
   if(!one){ PK.Host.devices.forEach(r=>r.el.classList.remove('fvoff')); return; }
   list.forEach(([,r],i)=>r.el.classList.toggle('fvoff',i!==PK.FOCUS.idx));
   const strip=tabs.querySelector('.fvstrip'); strip.innerHTML='';
-  list.forEach(([id,r],i)=>{ const b=document.createElement('button'); b.className='small'+(i===PK.FOCUS.idx?' on':''); b.innerHTML=PK.catIconHTML(PK.categoryOf(r.def))+PK.esc(r.def.name); b.setAttribute('role','tab'); b.setAttribute('aria-selected',String(i===PK.FOCUS.idx)); b.dataset.i=String(i); strip.appendChild(b); });
+  list.forEach(([id,r],i)=>{ const b=document.createElement('button'); b.className='small'+(i===PK.FOCUS.idx?' on':''); b.innerHTML=PK.devIconHTML(r.def,r)+PK.esc(r.def.name); b.setAttribute('role','tab'); b.setAttribute('aria-selected',String(i===PK.FOCUS.idx)); b.dataset.i=String(i); strip.appendChild(b); });
   tabs.querySelector('.fvcnt').textContent=list.length?PK.pkt('m.t_n_van_m',PK.FOCUS.idx+1,list.length):'';
   const on=strip.querySelector('.on'); if(on) strip.scrollLeft=Math.max(0,on.offsetLeft-strip.clientWidth/2+on.offsetWidth/2); } PK.focusOneApply=focusOneApply;
 function focusBuildTabs(){ const bar=PK.focusEl.querySelector('.fvbar'), tabs=document.createElement('div'); tabs.className='fvtabs';

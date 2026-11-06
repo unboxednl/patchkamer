@@ -13,7 +13,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   let inst; try{ inst=def.create(ctx,PK.Host); }catch(e){ PK.status(PK.pkt('m.create_faalde_voor')+def.name+': '+e.message,true); return null; }
   inst._id=id; inst._def=def;
   const el=document.createElement('div'); el.className='card'+((def.ui&&def.ui.jacks)?' keepui':''); el.dataset.id=id; el.style.left=(x||40)+'px'; el.style.top=(y||40)+'px'; el.style.width=PK.clamp((def.ui&&def.ui.width)||300,200,6000)+'px';
-  const bar=document.createElement('div'); bar.className='bar'; bar.innerHTML=`<span class="led"></span>${PK.catIconHTML(PK.categoryOf(def))}<span class="nm">${def.name}</span><span class="dim"></span>`;
+  const bar=document.createElement('div'); bar.className='bar'; bar.innerHTML=`<span class="led"></span>${PK.devIconHTML(def,null)}<span class="nm">${def.name}</span><span class="dim"></span>`;
   const ver=document.createElement('select'); ver.className='ver'; ver.title=PK.pkt('m.versie_wisselen'); ver.setAttribute('aria-label',PK.pkt('m.versie')); ver.addEventListener('pointerdown',e=>e.stopPropagation()); ver.onchange=()=>switchVersion(id,ver.value); bar.appendChild(ver);
   const bf=document.createElement('button'); bf.className='fbtn'; bf.textContent='f'; bf.title=PK.pkt('m.focus_zet_dit_apparaat_in'); bf.setAttribute('aria-label',PK.pkt('m.focus_3')); bf.setAttribute('aria-pressed','false'); bf.onclick=e=>{e.stopPropagation(); PK.setFocus(id,!PK.Host.devices.get(id).focus);};
   const bm=document.createElement('button'); bm.textContent='–'; bm.title=PK.pkt('m.minimaliseer_tot_icoon'); bm.setAttribute('aria-label',PK.pkt('m.minimaliseer')); bm.onclick=e=>{e.stopPropagation(); setMini(id,true);};
@@ -24,7 +24,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   const mb=document.createElement('div'); mb.className='modbar'; mb.hidden=true; body.appendChild(mb);   // onder de poorten: kabelpoorten staan altijd bovenaan
   const ui=document.createElement('div'); ui.className='ui'; body.appendChild(ui);
   const ic=document.createElement('div'); ic.className='pkicon c-ic-'+PK.categoryOf(def); ic.style.setProperty('--ic',PK.catColor(PK.categoryOf(def))); ic.title=def.name+PK.pkt('m.sleep_om_te_verplaatsen_dubbelklik');
-  { const m=PK.catIconParts(PK.categoryOf(def)); ic.innerHTML=`<span class="led"></span><span class="glyph${m.img?' img':''}">${m.html}</span><span class="lbl">${PK.esc(def.name)}</span>`; el.style.setProperty('--ic',PK.catColor(PK.categoryOf(def))); }
+  { const m=PK.devIconParts(def,null); ic.innerHTML=`<span class="led"></span><span class="glyph${m.img?' img':''}">${m.html}</span><span class="lbl">${PK.esc(def.name)}</span>`; el.style.setProperty('--ic',PK.catColor(PK.categoryOf(def))); }
   const br=document.createElement('button'); br.className='restore'; br.textContent='⤢'; br.title=PK.pkt('m.terug_naar_de_vorige_grootte'); br.setAttribute('aria-label',PK.pkt('m.herstel_grootte')); br.onclick=e=>{e.stopPropagation(); setMini(id,false);}; ic.appendChild(br);
   ic.addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; e.stopPropagation(); setMini(id,false); });
   const pb=document.createElement('div'); pb.className='pbar';
@@ -40,7 +40,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   });
   try{ inst.mount&&inst.mount(ui); PK.ctlSnapshot(rec,ui); if(state&&inst.setState) inst.setState(state); }catch(e){ PK.status(PK.pkt('m.mount_faalde_voor')+def.name+': '+e.message,true); }
   if(inst.onStep) PK.Host.stepSubs.add(inst);
-  PK.presetCardInit(id);
+  PK.presetCardInit(id); PK.skinCardInit(id);
   // drag
   let drag=null; [bar,ic].forEach(h=>{   // the title bar, or the whole icon when minimised, moves the device
     h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
@@ -149,6 +149,7 @@ function switchVersion(id,version){
   const r=PK.Host.devices.get(id); if(!r||r.def.version===version) return; const def=PK.Host.registry.get(PK.Host.key(r.def.id,version)); if(!def) return;
   const state=r.inst.getState?r.inst.getState():{}; const cables=PK.Host.cables.filter(c=>c.from.id===id||c.to.id===id).map(c=>({...c})); const {x,y,w,h,mini}=r;
   removeDevice(id); const nid=addDevice(def.id,x,y,state,id,version); if(!nid){PK.status(PK.pkt('m.versiewissel_mislukt_apparaat_verwijderd'),true); return;}
+  if(r.skin) PK.skinRestore(nid,r.skin);
   if(w!==null||h!==null) setSize(nid, w===null?undefined:w, h===null?undefined:h);
   if(mini) setMini(nid,true);
   const dropped=[]; requestAnimationFrame(()=>{ cables.forEach(c=>{ const ok=(c.from.id!==id||portExists(nid,c.from.port,'out'))&&(c.to.id!==id||portExists(nid,c.to.port,'in')); if(ok) PK.patch(c); else dropped.push(c.from.id===id?c.from.port:c.to.port); });
@@ -159,6 +160,7 @@ function reloadDevice(id){
   const r=PK.Host.devices.get(id); if(!r) return false; const def=PK.Host.registry.get(PK.Host.key(r.def.id,r.def.version)); if(!def||def===r.def) return false;
   const wasSel=PK.selected===id, state=r.inst.getState?r.inst.getState():{}, cables=PK.Host.cables.filter(c=>c.from.id===id||c.to.id===id).map(c=>({...c})), {x,y,w,h,mini}=r;
   removeDevice(id); const nid=addDevice(def.id,x,y,state,id,def.version); if(!nid) return true;
+  if(r.skin) PK.skinRestore(nid,r.skin);
   if(w!==null||h!==null) setSize(nid, w===null?undefined:w, h===null?undefined:h);
   if(mini) setMini(nid,true);
   requestAnimationFrame(()=>{ cables.forEach(c=>{ const ok=(c.from.id!==id||portExists(nid,c.from.port,'out'))&&(c.to.id!==id||portExists(nid,c.to.port,'in')); if(ok) PK.patch(c); }); if(wasSel) select(nid); });

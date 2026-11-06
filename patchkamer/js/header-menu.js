@@ -3,7 +3,7 @@
 function hmPlace(narrow){
   const rows={files:PK.$('hmFiles'),sound:PK.$('hmSound'),view:PK.$('hmView'),misc:PK.$('hmMisc')};
   if(narrow){
-    rows.files.append(PK.$('wsBtn'),PK.$('songBtn')); rows.sound.append(PK.$('prBtn'),PK.$('psBtn'));
+    rows.files.append(PK.$('wsBtn'),PK.$('songBtn')); rows.sound.append(PK.$('prBtn'),PK.$('psBtn'),PK.$('skBtn'));
     rows.view.append(PK.$('arrange'),PK.$('layoutSel').closest('.tp'),PK.$('fitScreen'),PK.$('focusBtn'),PK.$('browseBtn'),PK.$('skin').closest('.tp'));
     rows.misc.append(PK.$('clear'),PK.$('latBox'),PK.$('setBtn')); PK.$('hmName').append(PK.$('wsName'));
   } else { hmClose(true); PK.HM.tr.append(...PK.HM.orig); document.querySelector('header .note').before(PK.$('wsName')); }

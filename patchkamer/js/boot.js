@@ -141,6 +141,19 @@ PK.CAT_ICONS={
 document.addEventListener('error',e=>{ const t=e.target; if(!t||t.tagName!=='IMG'||!t.closest||!t.closest('.cicon, .glyph')) return; const u=t.getAttribute('src'); if(!u||PK.BADICON.has(u)) return; PK.BADICON.add(u); try{ PK.paintLib(); PK.paintIcons(); }catch(x){} },true);
 PK.LAYOUT_FILE='patchkamer-bibliotheek.json';
 PK.CAT_OVR={};   // your own category per device id (kept in the library settings)
+// ===== skins =====
+/* ---------- skins: register, apparaaticonen en het paneel Skins (js/skins.js, js/skins-ui.js, js/device-icons.js) ---------- */
+PK.SK={user:[],src:[],emb:[]}, PK.SKICON=new Map(), PK.DEVICON=new Map(), PK.skOpen=new Set(), PK.SKFILTER='';   // skins per herkomst · 'bron|apparaat-id' -> icoon uit skins/library · 'bron|map' -> icoon uit de apparaatmap
+{ const skPanel=PK.$('skPanel'); PK.skPanel=skPanel; let skRT=0;
+  PK.$('skBtn').onclick=e=>{ e.stopPropagation(); skPanel.hidden?PK.skOpenPanel():PK.skClosePanel(); }; PK.$('skClose').onclick=PK.skClosePanel;
+  document.addEventListener('pointerdown',e=>{ if(!skPanel.hidden&&!e.target.closest('#skPanel,#skBtn,.pkmodal')) PK.skClosePanel(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!skPanel.hidden&&!document.querySelector('.pkmodal')) PK.skClosePanel(); });
+  PK.$('skImport').onclick=()=>{ PK.$('skFile').value=''; PK.$('skFile').click(); };
+  PK.$('skFile').addEventListener('change',async e=>{ await PK.skinsImport(e.target.files); });
+  PK.$('skLoadAll').onclick=async()=>{ const b=PK.$('skLoadAll'); b.disabled=true;
+    try{ const src=await PK.wsaLoad('ski',true); if(src){ const st=PK.SRCSTATE.get(src.sid)||{}; PK.status(`${PK.srcLabel(src)}: ${st.msg||''}`,st.state==='err'); } }catch(e){ PK.status(e.message,true); } finally{ b.disabled=false; PK.skPaintPanel(); } };
+  window.addEventListener('resize',()=>{ clearTimeout(skRT); skRT=setTimeout(PK.skScreenCheck,150); });   // schermklasse gewisseld: Auto opnieuw bepalen
+  PK.skinsLoadUser(); }
 // ===== library-window =====
 try{ Object.assign(PK.LIB,JSON.parse(localStorage.getItem(PK.LIBKEY)||'{}')); }catch(e){}
 try{ if(PK.isSheet()&&!localStorage.getItem(PK.LIBKEY)) PK.LIB.shown=false; }catch(e){}
@@ -229,7 +242,7 @@ PK.$('feLib').onclick=()=>PK.$('srcAddDir').click(); PK.$('feBundled').onclick=P
 // ===== workspace-auto =====
 PK.WSA=JSON.parse(JSON.stringify(PK.WSA_DEF));
 try{ const o=JSON.parse(localStorage.getItem(PK.WSAKEY)||'null'); if(o&&typeof o==='object') for(const k of Object.keys(PK.WSA)) if(o[k]&&typeof o[k]==='object') PK.WSA[k]={on:o[k].on!==false,url:typeof o[k].url==='string'&&o[k].url.trim()?o[k].url.trim().slice(0,400):PK.WSA_DEF[k].url}; }catch(e){}
-for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun']]){
+for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun'],['ski','Ski']]){
   PK.$('wsa'+id).onchange=()=>{ PK.WSA[k].on=PK.$('wsa'+id).checked; PK.saveWsa(); };
   PK.$('wsu'+id).onchange=()=>{ const v=PK.$('wsu'+id).value.trim(); PK.WSA[k].url=v||PK.WSA_DEF[k].url; PK.$('wsu'+id).value=PK.WSA[k].url; PK.saveWsa(); }; }
 PK.$('wsaReset').onclick=()=>{ PK.WSA=JSON.parse(JSON.stringify(PK.WSA_DEF)); PK.saveWsa(); PK.wsaPaint(); };
