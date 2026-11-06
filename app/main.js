@@ -25,7 +25,7 @@ const exeDir = process.env.PORTABLE_EXECUTABLE_DIR || path.dirname(process.execP
 const overrideRoot = path.join(exeDir, 'bibliotheek');
 const libRoot = fs.existsSync(overrideRoot) ? overrideRoot : bundledRoot;
 const SERVED = new Set(['devices', 'presets', 'tunes']);
-const TYPES = { '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8' };
+const TYPES = { '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8' };
 
 function send(res, code, body, type) {
   res.writeHead(code, { 'Content-Type': type || 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
@@ -40,6 +40,8 @@ function handler(req, res) {
   let p;
   try { p = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { return send(res, 400, 'bad request'); }
   if (p === '/' || p === '/patchkamer.html') return sendFile(res, hostFile);
+  // the host's own stylesheets and scripts (patchkamer/css, patchkamer/js, patchkamer/i18n), loaded by patchkamer.html with relative paths
+  if (/^\/(css|js|i18n)\/[a-z0-9-]+\.(css|js)$/.test(p)) return sendFile(res, path.join(path.dirname(hostFile), p));
   if (PROBE && p === '/probe.html') return sendFile(res, path.join(__dirname, 'probe.html'));
   if (p === '/bibliotheek/patchkamer.json') {
     const own = path.join(libRoot, 'patchkamer.json');
