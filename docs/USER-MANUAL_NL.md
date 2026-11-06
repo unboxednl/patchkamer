@@ -103,6 +103,15 @@ Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen word
 
 ![Indeling van de bibliotheek](images/nl/10-library-layout.png)
 
+### Categorie-iconen
+
+Elke categorie heeft een icoon. Het staat bij de categorienaam in de bibliotheek, bij elk apparaat in die categorie (kaartjes en compacte regels), op de titelbalk van een apparaat, en in de compacte en minimale stand van een apparaat, waar het icoon de initialen vervangt. Het icoon staat in de kleur van de categorie. Je kiest een ander icoon in het paneel **Indeling**: klik op het icoon links van de categorienaam en kies er een uit het rooster, plak een adres van een afbeelding (alleen van dezelfde bron als de bibliotheek) of kies **Bestand kiezen…** voor een eigen afbeelding (png, svg, webp of jpg, hoogstens 200 kB). **Standaard** zet het oorspronkelijke icoon terug. Je keuze wordt bewaard in de indeling en staat dus ook in `patchkamer-bibliotheek.json` (veld `icon`).
+
+### Een icoon in een bibliotheekmap zetten
+
+Zet een bestand `icon.svg`, `icon.png`, `icon.webp` of `icon.jpg` (in die volgorde gezocht, hoofdletters maken niet uit) in de map die als categorie telt, bijvoorbeeld `devices/synths/`. Dat icoon wordt dan het icoon van die categorie en van alle apparaten erin. Het werkt voor een lokale map, een GitHub-bron en een webadres; **Scannen** neemt een gewijzigd icoon over. Een `icon.*` in een andere map, bijvoorbeeld in de map van één apparaat, doet niets. Wat wint: eerst je eigen keuze onder **Indeling** (en het veld `icon` in het indelingsbestand), dan het bestand in de map, dan het ingebouwde icoon. De afbeelding wordt getoond zoals ze is (niet omgekleurd) en alleen als afbeelding, dus scripts in een svg draaien nooit. Bestanden groter dan 200 kB of die geen afbeelding zijn, worden overgeslagen. Een vierkante, transparante afbeelding (svg, of minstens 64 pixels) ziet er het mooist uit.
+
+
 ## 5. Je eerste patch
 
 Je laat een keyboard een bassynth bespelen via je speakers.
@@ -122,6 +131,30 @@ Je laat een keyboard een bassynth bespelen via je speakers.
 **Een kabel omhangen.** Sleep een kabel aan één kant naar een andere passende poort. De kant die het dichtst bij je greep zit, komt los en de andere kant blijft zitten. Laat je los op een passende poort, dan hangt de kabel daar. Laat je ergens anders los, of druk je op **Esc**, dan gaat de kabel terug naar waar hij was. De oude kabel blijft aangesloten tot je loslaat, dus het geluid blijft doorspelen.
 
 **Een apparaat op een kabel leggen.** Sleep een apparaat uit de bibliotheek, of een apparaat dat nog geen kabels heeft, op een kabel. De kabel licht op en als je loslaat splitst hij: het apparaat zit tussen de twee uiteinden. Dat werkt voor apparaten die zowel een ingang als een uitgang hebben van die soort kabel (audio of noten), zoals de effecten. Licht een kabel niet op, dan past het apparaat er niet in.
+
+### Kabelkleur
+
+Een kabel krijgt de kleur van de categorie van het apparaat waar hij vandaan komt: een kabel uit een synth heeft de kleur van de categorie Synths. De soort kabel zie je aan de lijnstijl (audio vast, gebeurtenissen gestreept, sturing golvend, bundels dik en dubbel). De kleur wordt zo nodig iets lichter of donkerder gemaakt zodat hij op de vloer van elke kleurstelling goed te zien is. Onder **Instellingen → Weergave** kies je bij **Kabelkleur** tussen **per categorie** (standaard) en **per soort** (de kleuren van vroeger: audio, gebeurtenissen, sturing, mastering en bundels elk een eigen kleur). Een kleur die je zelf aan een kabel gaf, wint altijd. Een kabel van een apparaat in **Overig** houdt de kleur van zijn soort.
+
+### Kabeltekst bij hover
+
+Wijs je met de muis een kabel aan, dan verschijnt er een kleine tekst met de namen van de gekoppelde apparaten, gescheiden door een streepje: `Chord Poly - Pump`. Heeft een apparaat meer poorten van die soort, dan staat de poort erbij: `Chord Sequencer (Spoor A) - Chord Poly`. Bij multi-MIDI, bundels en mastering staat de soort tussen haakjes erachter. Op een aanraakscherm houd je een kabel lang ingedrukt: dan krijg je dezelfde tekst als melding, naast het kleurmenu.
+
+### Automatisch koppelen bij plaatsen
+
+Patchkamer kan na het plaatsen kabels voorstellen, zodat je niet elke kabel zelf hoeft te slepen. De schakelaar **Automatisch koppelen bij plaatsen** staat in het menu ☰ (smal scherm, groep **Overig**) en onder **Instellingen**; beide schakelaars horen bij elkaar. Zonder eigen keuze staat hij **aan op een aanraakscherm** (telefoon, tablet) en **uit op een computer met muis**; een smal venster op een computer telt dus niet als mobiel. Zodra je de schakelaar zelf zet, onthoudt je browser die keuze.
+
+Staat hij aan, dan opent na elk apparaat dat **jij zelf plaatst** (slepen, **Plaatsen** of een tik op een compacte bibliotheekregel) een venster **Koppelen met apparaten op het canvas**, als er iets te koppelen valt. Bij het openen van een song of werkruimte, bij **Herschik**, bij Ctrl+Z en bij wisselen van tabblad gebeurt dit nooit. Leg je het apparaat op een kabel, dan krijgt dat voorrang en komt het venster niet.
+
+Het voorbeeld: je plaatst **Speakers** op een leeg canvas. Er gebeurt niets. Dan plaats je een synth: het venster toont de groep **Audio** met de Speakers (compact, één regel) al aangevinkt. Daarna plaats je een sequencer: nu staat er een groep **Gebeurtenissen (MIDI)** met de synth aangevinkt. Het venster groepeert de voorstellen per soort kabel (audio, gebeurtenissen, sturing en de overige soorten) en je kunt in alle groepen tegelijk vinken. Eén klik op **OK** maakt alles wat is aangevinkt; **Overslaan** (of Esc) doet niets. Met **Niet meer vragen** zet je de schakelaar uit.
+
+Patchkamer stelt alleen kabels voor die kloppen met de volgorde bronnen, instrumenten, effecten, mengpaneel, uitgang. Per apparaat en per soort staat hooguit één voor de hand liggend voorstel aangevinkt (het volgende apparaat in de keten met een vrije ingang); de rest staat in de lijst maar uit. Plaats je een **effect**, dan kun je het ook in een bestaande audiokabel zetten: de groep **In een bestaande kabel zetten** toont per kabel een regel "Tussen A en B". Die regel sluit de gewone audiovoorstellen voor dat effect uit, en je kunt hooguit één kabel kiezen.
+
+**Sequencers met sporen.** Heeft een sequencer meer uitgangspoorten (een poort per spoor, zoals de Clip Arranger), dan kiest Patchkamer de laagste vrije poort voor elk doelapparaat en toont erbij of dat doel een drumcomputer is (**drums**) of een melodisch apparaat (**melodisch**). Een apparaat legt zelf niet vast welk type een spoor heeft: de keuze volgt het apparaat dat je koppelt. Met de keuzelijsten **Uitgang** en **Ingang** kies je een andere vrije poort. Zijn alle poorten in gebruik, dan staat het voorstel uit met de reden "alle poorten in gebruik".
+
+**Niet te veel.** Zijn er meer dan **7** mogelijkheden (alle groepen samen, ook de uitgevinkte), dan verschijnt er geen venster en koppel je zelf.
+
+**Ongedaan maken.** Eén keer **Ctrl+Z** na **OK** haalt alle kabels van die ene keer weer weg; bij een ingevoegd effect komt de oorspronkelijke kabel terug.
 
 **Volume.** Gebruik de schuif op Speakers. Die heeft een begrenzer, maar zet het volume in het begin bescheiden.
 
@@ -222,7 +255,7 @@ In de focusweergave toont **Eén tegelijk** één apparaat tegelijk. Wissel met 
 - **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet de drie terug. De knop **Alles laden** in het Tunes- en Presets-paneel gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
 - **AI-assistent:** kies een aanbieder (**Anthropic**, **OpenAI** of een **eigen adres** voor elke OpenAI-compatibele dienst, zoals je eigen proxy, OpenRouter of een lokaal model), plak je **API-sleutel** en kies een **model** (**Modellen ophalen** vult de lijst). De sleutel staat alleen in deze browser (localStorage) en gaat alleen naar de aanbieder die je koos. Daaronder kun je instellen uit welke GitHub-repository de AI zijn documentatie leest, of **Eigen agent-instructies gebruiken** aanvinken en je eigen tekst schrijven: de AI gebruikt die dan in plaats van de GitHub-documentatie. **Sleutels wissen** haalt alle sleutels weg. Zie *AI Chat* in hoofdstuk 6.
 - **Adres van de songs:** onder **Nieuwe werkruimte** staat ook het adres van de demo-songs (standaard de map `songs` op GitHub); **Standaardadres herstellen** zet het terug.
-- **Weergave:** de stijl van de kabels, hun dekking, de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
+- **Weergave:** de stijl van de kabels, hun dekking, de kabelkleur (per categorie of per soort), de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
 - **Kleur** (rechtsboven): donker, licht of retro.
 
 ![De kleurstellingen licht en retro](images/nl/03-patch-light.png)
