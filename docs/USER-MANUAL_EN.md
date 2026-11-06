@@ -103,7 +103,7 @@ A device is a file that ends in `.patchkamer-device.js`. Sources are remembered,
 
 **New version of Patchkamer.** At startup (over http or https) Patchkamer compares `patchkamer.html` and its stylesheets and scripts with the version on GitHub (`main`). If it differs, a notice appears at the bottom right with **View on GitHub**, **Later** and **Do not tell me again for this version**. A file opened through `file://` cannot read itself and gets no notice.
 
-**It can also happen by itself.** Under **Settings → New workspace** Patchkamer can load the device library, the presets and the tunes from GitHub whenever you start with an empty workspace. You can change the three addresses there (section 10). Each one becomes a source of its own in the list, with a **Scan** button.
+**It can also happen by itself.** Under **Settings → New workspace** Patchkamer can load the device library, the presets and the tunes from GitHub whenever you start with an empty workspace. You can change the addresses there (section 10). Each one becomes a source of its own in the list, with a **Scan** button.
 
 **Choosing a folder.** On `localhost` or over https, Chrome and Edge remember the folder and Patchkamer sees new devices when you come back to the window. In other cases the browser takes a one-time snapshot of the folder and its prompt says something like "Upload 7 files". Nothing is uploaded, and the number counts every file in the folder, not only devices. Patchkamer reads only the files that end in `.patchkamer-device.js` and then shows the real number of devices. With a snapshot, **Scan** asks you to pick the folder again to see new files.
 
@@ -119,7 +119,19 @@ Every category has an icon. It shows next to the category name in the library, o
 
 ### Put an icon in a library folder
 
-Put a file `icon.svg`, `icon.png`, `icon.webp` or `icon.jpg` (searched in that order, case does not matter) in the folder that counts as a category, for example `devices/synths/`. That icon then becomes the icon of the category and of all devices in it. It works for a local folder, a GitHub source and a web address; **Scan** picks up a changed icon. An `icon.*` in any other folder, for example the folder of a single device, does nothing. What wins: first your own choice under **Layout** (and the field `icon` in the layout file), then the file in the folder, then the built-in icon. The image is shown as it is (not recolored) and only as an image, so scripts in an svg never run. Files larger than 200 kB or that are not an image are skipped. A square, transparent image (svg, or at least 64 pixels) looks best.
+Put a file `icon.svg`, `icon.png`, `icon.webp` or `icon.jpg` (searched in that order, case does not matter) in the folder that counts as a category, for example `devices/synths/`. That icon then becomes the icon of the category and of all devices in it. It works for a local folder, a GitHub source and a web address; **Scan** picks up a changed icon. An `icon.*` in any other folder does nothing for the category (in the folder of a single device it is that device's icon, see below). What wins: first your own choice under **Layout** (and the field `icon` in the layout file), then the file in the folder, then the built-in icon. The image is shown as it is (not recolored) and only as an image, so scripts in an svg never run. Files larger than 200 kB or that are not an image are skipped. A square, transparent image (svg, or at least 64 pixels) looks best. An `icon.*` in the folder of a single device is, however, an icon for that device: see below.
+
+### An icon of your own for a device
+
+Besides the category, a single **device** can have an icon of its own. Patchkamer looks in this order (the first one that exists wins):
+
+1. the `icon` of the **skin** that is active on that card (on that card only);
+2. an `icon.svg`, `icon.png`, `icon.webp` or `icon.jpg` in the **device's folder** in your device library, next to the `.patchkamer-device.js`, for example `devices/synths/Duofone/icon.svg` (only for a local folder and a GitHub source; for a web address Patchkamer does not look for device folders);
+3. an `icon.*` in `skins/library/<device-id>/`, for example `skins/library/nl.patchkamer.duofone/icon.svg`, if that source is loaded. This also gives a device you do not have in your own library an icon;
+4. the icon of the **category** (see above), in the category color;
+5. the neutral default icon.
+
+An icon of its own appears in the same places as the category icon: in the library (cards and compact rows), on the title bar, in the minimized state, in the simplified card when zoomed out and in the tab bar of Focus "One at a time". It is shown as it is (not recolored) and only as an image, so scripts in an svg never run. The same limits apply as for category icons: at most 200 kB, an image only, only from the same source as the library. A device without an icon of its own looks exactly as before. The category keeps its own icon next to the category name. **Scan** picks up a changed icon. If you choose **Default** under Skin on the card again, the icon goes back to point 2, 3 or 4.
 
 
 ## 5. Your first patch
@@ -202,6 +214,20 @@ The **Tunes** and **Presets** menus manage your libraries: create a new one, put
 
 For the whole story, with the list of included packs and how to make your own, see the [presets manual](presets/USER-MANUAL_EN.md) and the [tunes manual](tunes/USER-MANUAL_EN.md).
 
+### Skins
+
+A **skin** only changes the **looks** of one device, never its sound, settings or behaviour. It is a separate file (`.patchkamer-skin.json`) with one or more **appearances**, for example a compact and a wide one. Skins are a third kind of library material next to tunes and presets.
+
+**Where do you find skins?** In the `skins/library` folder of this repository on GitHub, with a folder per device (`skins/library/<device-id>/`). Under **Settings → New workspace** there is **Load skins** with that address; the **Load all** button in the Skins panel loads them too. A GitHub, web or local folder that contains `skins/library/<device-id>/*.patchkamer-skin.json` is added as a source like any library; a local folder with devices and skins works as well. A skin for a device you do not have is kept but not offered anywhere.
+
+**Loading.** Open **Skins ▾** (in the ☰ menu under **Sound**) for the **Skin libraries** panel: per device the skins with name, author, version, license and appearances. With **Import…** you choose a file; you can also **drop** it onto the floor or the library window (without confirmation, after devices and tunes and before songs and workspaces). An imported skin stays in your browser until you remove it with **×**; skins from a source are read-only and go away with that source. An invalid file is refused with a message that names the file; the rest keeps loading. A skin with an unknown major version of the skin format, or with CSS that loads from outside (`@import`, a `url(` to a web address), is refused.
+
+**Choosing on the card.** As soon as a device has at least one skin, the card's bar shows two lists: **Skin** (**Default** is the device's own look) and **Appearance**. With **Auto** Patchkamer picks the appearance itself from the **width of the card** and the **screen size** (phone, compact or wide); the list shows which one is active. If you choose an appearance yourself, Auto stays off for that device until you go back to **Auto**. The choice applies immediately. With **Default** everything is gone and the device looks exactly as before. If the bars on the cards are switched off (Settings), choose from the panel with **Apply** and **Choose**.
+
+**Saving.** The choice per device is stored in the workspace and in the song, together with the skins used (at most 20), so a song keeps its looks without the library. When you open one, those skins quietly enter your register (a newer version wins). Workspaces and songs without skins load as always. Skins never touch the sound: the device's settings are the same with and without a skin.
+
+**Making a skin?** See [skins/AGENTS.md](https://github.com/unboxednl/patchkamer/blob/main/skins/AGENTS.md) (for people working with an AI agent) and the skins contract ([Nederlands](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_NL.md), [English](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_EN.md)).
+
 ## 8. Save, open and share
 
 ![The Workspace menu](images/en/06-workspace.png)
@@ -227,9 +253,10 @@ With a mouse you can drop files from your file manager onto the **floor** or the
 - a **song** (`.patchkamer-song.json`) or a **workspace file** opens in a **new workspace tab**; your current workspace stays as it is. As with the **Songs** button, the devices are arranged afterwards;
 - a **device** (`.patchkamer-device.js`) goes into the **library**, not onto the floor. If the same version is already loaded it is replaced. Place it afterwards as usual;
 - a **tune pack** or **preset pack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) goes into your tune or preset libraries, like **Import**;
+- a **skin** (`.patchkamer-skin.json`) goes into your skin library, like **Import** in the Skins panel;
 - a **library layout** (`patchkamer-bibliotheek.json`) is applied.
 
-If you drop several files at once (at most 50, each up to 50 MB), devices go first, then tunes and presets, the layout, and finally songs and workspaces, so a song finds the devices from the same drop already in the library. You get one message with the result. Folders and unknown files are not loaded; an image or sound file is left to the device or the browser. A file you drop on a device itself (for example on a sampler's waveform) is for that device. This does not exist on a phone or tablet: use the existing buttons there (**Open file…**, **Import**, **Load instrument**).
+If you drop several files at once (at most 50, each up to 50 MB), devices go first, then tunes and presets, skins, the layout, and finally songs and workspaces, so a song finds the devices from the same drop already in the library. You get one message with the result. Folders and unknown files are not loaded; an image or sound file is left to the device or the browser. A file you drop on a device itself (for example on a sampler's waveform) is for that device. This does not exist on a phone or tablet: use the existing buttons there (**Open file…**, **Import**, **Load instrument**).
 
 ## 9. Find your way around the floor
 
@@ -287,7 +314,7 @@ The features that speed up your workflow the most, in one list:
 
 - **Language:** automatic (your browser), Nederlands or English. Patchkamer reloads and keeps your workspace.
 - **Audio:** pick **Low**, **Normal** or **High** quality, or set **sample rate**, **latency** and **oversampling** yourself. Higher quality asks more of your computer. A change reloads Patchkamer and keeps your workspace. If you hear crackles, choose a larger latency buffer (*Balanced* or *Stable*).
-- **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts the three back. The **Load all** button in the Tunes and Presets panel uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
+- **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**, **Load skins**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts them back. **Load skins** works the same, with the `skins/library` folder as the default; if that folder is not (yet) on GitHub you only get a short message and everything else loads as usual. The **Load all** button in the Tunes, Presets and Skins panel uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
 - **AI assistant:** choose a provider (**Anthropic**, **OpenAI** or a **custom address** for any OpenAI-compatible service, such as your own proxy, OpenRouter or a local model), paste your **API key** and choose a **model** (**Fetch models** fills the list). The key is stored only in this browser (localStorage) and goes only to the provider you chose. Under it you can change which GitHub repository the AI reads its documentation from, or tick **Use my own agent instructions** and write your own: the AI then uses those instead of the GitHub documentation. **Clear keys** removes all keys. See *AI Chat* in section 6.
 - **Songs address:** under **New workspace** you also find the address of the demo songs (by default the `songs` folder on GitHub); **Restore default address** puts it back.
 - **Display:** the style of the cables, their opacity, the cable color (by category or by type), the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
