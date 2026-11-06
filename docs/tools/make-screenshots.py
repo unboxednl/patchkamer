@@ -67,6 +67,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     def load_lib(pg):
         with pg.expect_file_chooser() as fc: pg.click('#srcAddDir')
         fc.value.set_files(LIB); pg.wait_for_timeout(1500)
+        pg.evaluate("document.querySelectorAll('.cat.closed .cathead').forEach(b=>b.click())"); pg.wait_for_timeout(300)   # de host start met alle categorieën ingeklapt
     def place(pg, name):
         pg.locator('.libdev').filter(has=pg.locator('.nm', has_text=re.compile('^\\s*' + re.escape(name) + '\\s*$'))).locator('button').filter(has_text=PLACE).first.click(); pg.wait_for_timeout(500)
     def import_tunes(pg):
