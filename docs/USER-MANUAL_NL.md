@@ -33,7 +33,9 @@ Je hoeft niets te installeren, er is geen account en er wordt niets geüpload. A
 
 ## 2. Patchkamer openen
 
-Patchkamer is één HTML-bestand.
+Patchkamer is één HTML-bestand. De snelste manier is het online te openen via <https://unboxednl.github.io/patchkamer/>. Dat draait altijd de nieuwste versie uit deze repository, werkt in Chrome en Edge (ook op een Android-telefoon) en draait nog steeds helemaal in je eigen browser: er wordt niets geüpload. Omdat het via https wordt aangeboden, werken Web MIDI en audio-ingang er ook.
+
+Wil je liever je eigen kopie draaien:
 
 1. Haal deze repository binnen: kies op GitHub **Code → Download ZIP** en pak het uit, of draai `git clone https://github.com/unboxednl/patchkamer`.
 2. Open `patchkamer/patchkamer.html` in je browser.

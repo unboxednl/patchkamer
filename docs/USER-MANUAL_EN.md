@@ -33,7 +33,9 @@ There is nothing to install, no account and no upload. Everything runs on your o
 
 ## 2. Open Patchkamer
 
-Patchkamer is one HTML file.
+Patchkamer is one HTML file. The quickest way is to open it online at <https://unboxednl.github.io/patchkamer/>. It always runs the latest version from this repository, works in Chrome and Edge (also on an Android phone), and still runs entirely in your own browser: nothing is uploaded. Because it is served over https, Web MIDI and audio input work there too.
+
+To run your own copy instead:
 
 1. Download this repository: on GitHub choose **Code → Download ZIP** and unpack it, or run `git clone https://github.com/unboxednl/patchkamer`.
 2. Open `patchkamer/patchkamer.html` in your browser.
