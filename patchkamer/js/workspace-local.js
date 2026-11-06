@@ -18,7 +18,7 @@ function paintPatches(){ paintLibWs(); const o=readP(), box=PK.$('wsList'); box.
     const rm=document.createElement('button'); rm.className='small'; rm.textContent='×'; rm.title=PK.pkt('m.verwijder_uit_deze_browser');
     rm.onclick=()=>{ if(rm.dataset.arm){ const x=readP(); delete x[n]; writeP(x); paintPatches(); } else { rm.dataset.arm='1'; rm.textContent=PK.pkt('m.weg'); setTimeout(()=>{ if(rm.isConnected){ rm.dataset.arm=''; rm.textContent='×'; } },2500); } };
     b.append(ld,rm); it.append(info,b); box.appendChild(it); }); } PK.paintPatches=paintPatches;
-function openWs(){ if(!PK.$('prPanel').hidden){ PK.$('prPanel').hidden=true; PK.$('prBtn').setAttribute('aria-expanded','false'); } PK.wsPanel.hidden=false; PK.$('wsBtn').setAttribute('aria-expanded','true'); paintPatches(); } PK.openWs=openWs; function closeWs(){ PK.wsPanel.hidden=true; PK.$('wsBtn').setAttribute('aria-expanded','false'); } PK.closeWs=closeWs;
+function openWs(){ PK.wsPanel.hidden=false; PK.$('wsBtn').setAttribute('aria-expanded','true'); paintPatches(); } PK.openWs=openWs; function closeWs(){ PK.wsPanel.hidden=true; PK.$('wsBtn').setAttribute('aria-expanded','false'); } PK.closeWs=closeWs;
 async function loadBundled(){ if(!PK.BUNDLED_LIB) return; const known=PK.SOURCES.find(x=>x.kind==='url'&&x.url===PK.BUNDLED_LIB);
   if(known){ await PK.loadSource(known,{interactive:true}); return; } await PK.addSource({sid:PK.newSid(),kind:'url',url:PK.BUNDLED_LIB,label:PK.pkt('m.meegeleverde_bibliotheek'),added:Date.now()}); } PK.loadBundled=loadBundled;
 })(window.__PK);

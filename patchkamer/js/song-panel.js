@@ -1,7 +1,7 @@
-// js/song-panel.js — songs-paneel in de kopbalk: demos en recente songs
+// js/song-panel.js — tab Songs van het bibliotheekvenster: demos en recente songs
 (function(PK){
 /* =====================================================================
-   SONGS · knop in de kopbalk: demo's van GitHub en recente songs. Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt.
+   SONGS · tab Songs in de bibliotheek: demo's van GitHub en recente songs. Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt.
    ===================================================================== */
 const SONG_ADDR_KEY='patchkamerSongsAddr', SONG_ADDR_DEF='github.com/unboxednl/patchkamer/tree/main/songs', SONGREC_MAX=12, SONG_MAXBYTES=4000000; PK.SONG_ADDR_KEY=SONG_ADDR_KEY; PK.SONG_ADDR_DEF=SONG_ADDR_DEF; PK.SONGREC_MAX=SONGREC_MAX;
 PK.SONGREC=[], PK.SONG_DEMO=null, PK.SONG_DEMO_ERR='', PK.SONG_BUSY=false;
@@ -30,20 +30,23 @@ async function songDemoLoad(force){ PK.SONG_DEMO_ERR=''; try{ let p=null; try{ p
     PK.SONG_DEMO=(t.tree||[]).filter(n=>n.type==='blob'&&n.path.startsWith(base)&&/\.patchkamer(-song)?\.json$/i.test(n.path)).map(n=>({path:n.path,url:`https://raw.githubusercontent.com/${p.owner}/${p.repo}/${p.ref}/${n.path.split('/').map(encodeURIComponent).join('/')}`,name:PK.wsNameOf(n.path).replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())})).sort((a,b)=>a.name.localeCompare(b.name)); }
   catch(e){ PK.SONG_DEMO=[]; PK.SONG_DEMO_ERR=e.message; } songPaint(); } PK.songDemoLoad=songDemoLoad;
 function songPaint(){
-  const rec=PK.$('songRecent'), demo=PK.$('songDemo'); rec.innerHTML=''; demo.innerHTML=''; const lang=(typeof PK.PK_LANG!=='undefined'&&PK.PK_LANG)||'en';
+  const rec=PK.$('songRecent'), demo=PK.$('songDemo'); rec.innerHTML=''; demo.innerHTML=''; const q=((PK.$('songSearch')||{}).value||'').trim().toLowerCase(), hit=(...t)=>!q||t.join(' ').toLowerCase().includes(q); const lang=(typeof PK.PK_LANG!=='undefined'&&PK.PK_LANG)||'en';
   const item=(title,sub,btns)=>{ const it=document.createElement('div'); it.className='wsitem'; const info=document.createElement('div'); info.style.minWidth='0'; info.innerHTML=`<span class="nm">${PK.esc(title)}</span><small>${PK.esc(sub)}</small>`; const b=document.createElement('div'); b.className='b'; btns.forEach(x=>b.appendChild(x)); it.append(info,b); return it; };
   const btn=(label,title,fn)=>{ const x=document.createElement('button'); x.className='small'; x.textContent=label; if(title) x.title=title; x.onclick=fn; return x; };
   if(!PK.SONGREC.length){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_geen_recent'); rec.appendChild(e); }
-  PK.SONGREC.forEach(r=>{ const sub=[r.author,new Date(r.t).toLocaleString(lang)].filter(Boolean).join(' · ');
+  PK.SONGREC.filter(r=>hit(r.title,r.author)).forEach(r=>{ const sub=[r.author,new Date(r.t).toLocaleString(lang)].filter(Boolean).join(' · ');
     const open=btn(PK.pkt('m.openen'),'',async()=>{ if(r.url){ await songOpenUrl(r.url,r.name); } else if(r.text){ try{ await songOpen(JSON.parse(r.text),{key:r.key,name:r.name,text:r.text}); }catch(e){ PK.status(PK.pkt('m.songs_openen_mislukt',e.message),true); } } else PK.status(PK.pkt('m.songs_bestand_opnieuw'),true); });
     const rm=btn('×',PK.pkt('m.songs_verwijder'),()=>{ PK.SONGREC=PK.SONGREC.filter(x=>x!==r); songRecSave(); songPaint(); });
     rec.appendChild(item(r.title,sub||(r.url?'GitHub':''),[open,rm])); });
   if(PK.SONG_DEMO===null){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_laden'); demo.appendChild(e); }
   else if(PK.SONG_DEMO_ERR){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_ophalen_mislukt',PK.SONG_DEMO_ERR); demo.appendChild(e); }
   else if(!PK.SONG_DEMO.length){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_geen_demos'); demo.appendChild(e); }
-  (PK.SONG_DEMO||[]).forEach(d=>demo.appendChild(item(d.name,d.path,[btn(PK.pkt('m.openen'),'',()=>songOpenUrl(d.url,d.name))]))); } PK.songPaint=songPaint;
-function openSongs(){ if(!PK.wsPanel.hidden) PK.closeWs(); if(!PK.$('prPanel').hidden) PK.prClosePanel(); if(typeof PK.closeSettings==='function') PK.closeSettings(); PK.songPanel.hidden=false; PK.songBtn.setAttribute('aria-expanded','true'); PK.songBtn.classList.add('on'); songPaint(); if(PK.SONG_DEMO===null) songDemoLoad(false); } PK.openSongs=openSongs;
-function closeSongs(){ PK.songPanel.hidden=true; PK.songBtn.setAttribute('aria-expanded','false'); PK.songBtn.classList.remove('on'); } PK.closeSongs=closeSongs;
+  (PK.SONG_DEMO||[]).filter(d=>hit(d.name,d.path)).forEach(d=>demo.appendChild(item(d.name,d.path,[btn(PK.pkt('m.openen'),'',()=>songOpenUrl(d.url,d.name))])));
+  if(q&&!rec.querySelector('.wsitem')&&!demo.querySelector('.wsitem')&&(PK.SONGREC.length||(PK.SONG_DEMO||[]).length)){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_niets_gevonden',PK.$('songSearch').value.trim()); rec.appendChild(e); } } PK.songPaint=songPaint;
+function songShow(){ songPaint(); if(PK.SONG_DEMO===null) songDemoLoad(false); } PK.songShow=songShow;
+function openSongs(){ PK.libOpen('songs'); } PK.openSongs=openSongs;
+// na het openen van een song: op een telefoon de lade sluiten, op een computer blijft het venster staan
+function closeSongs(){ if(PK.libTab()==='songs'&&PK.isSheet()) PK.libClose(); } PK.closeSongs=closeSongs;
 // een song- of werkruimtebestand openen in een nieuwe werkruimte-tab (bestandskiezer in het songs-paneel en bestanden die op het canvas worden losgelaten); quiet: geen eigen foutmelding bij een onleesbaar bestand
 async function songOpenFile(f,quiet){ let text, obj; try{ text=await f.text(); obj=JSON.parse(text); }catch(err){ if(!quiet) PK.status(PK.pkt('m.dit_bestand_is_geen_leesbare'),true); return false; }
   if(!obj.name&&obj.format!=='patchkamer-song') obj.name=f.name.replace(/\.patchkamer\.json$|\.json$/i,''); return songOpen(obj,{key:'file:'+f.name+':'+f.size,name:f.name,text}); } PK.songOpenFile=songOpenFile;

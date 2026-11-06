@@ -104,7 +104,7 @@ async function exportIt(){ if(!D||!D.name.trim()) return; const j=build(false); 
   const res=await PK.saveFileData(fn,JSON.stringify(j,null,2)+'\n'); say(res==='saved'?PK.pkt('m.dz_geexporteerd',fn):PK.pkt('m.exporteren_geannuleerd')); }
 
 // ---- openen en sluiten ----
-function skDesignOpen(dev,src){ if(D) skDesignClose(true); const def=PK.Host.latest(dev); if(!def){ PK.status(PK.pkt('m.sk_apparaat_ontbreekt'),true); return; }
+function skDesignOpen(dev,src){ if(D) skDesignClose(true); const def=PK.Host.latest(dev); if(!def){ PK.status(PK.pkt('m.sk_apparaat_ontbreekt'),true); return; } PK.libOpen('skins');   // de ontwerper is een deel van de tab Skins: zorg dat die open staat
   const cid=PK.skCardFor(dev); if(!cid){ PK.status(PK.pkt('m.sk_apparaat_ontbreekt'),true); return; } const r=PK.Host.devices.get(cid);
   D={dev,cardId:cid,tab:0,name:src?src.name.slice(0,50)+PK.pkt('m.dz_kopie'):'',author:src?src.author:'',design:src&&src.design?clone(src.design):{},aps:src?clone(src.appearances):[{id:'standard',name:'Standard',css:'',assets:{}}],dflt:src?src.default:'standard',version:'1.0.0'};
   D.aps.forEach(a=>{ if(!a.assets) a.assets={}; }); if(!D.dflt||!D.aps.some(a=>a.id===D.dflt)) D.dflt=D.aps[0].id;

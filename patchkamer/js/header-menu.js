@@ -1,13 +1,5 @@
-// js/header-menu.js — hoofdbalkmenu achter de menuknop op een smal scherm
+// js/header-menu.js — hoofdbalkmenu achter de menuknop ☰ (alle schermbreedten): openen en sluiten
 (function(PK){
-function hmPlace(narrow){
-  const rows={files:PK.$('hmFiles'),sound:PK.$('hmSound'),view:PK.$('hmView'),misc:PK.$('hmMisc')};
-  if(narrow){
-    rows.files.append(PK.$('wsBtn'),PK.$('songBtn')); rows.sound.append(PK.$('prBtn'),PK.$('psBtn'),PK.$('skBtn'));
-    rows.view.append(PK.$('arrange'),PK.$('layoutSel').closest('.tp'),PK.$('fitScreen'),PK.$('focusBtn'),PK.$('browseBtn'),PK.$('skin').closest('.tp'));
-    rows.misc.append(PK.$('clear'),PK.$('latBox'),PK.$('setBtn')); PK.$('hmName').append(PK.$('wsName'));
-  } else { hmClose(true); PK.HM.tr.append(...PK.HM.orig); document.querySelector('header .note').before(PK.$('wsName')); }
-} PK.hmPlace=hmPlace;
 function hmOpen(){
   if(PK.HM.open) return; PK.HM.open=true;
   const f=parseFloat(getComputedStyle(document.body).getPropertyValue('--pkfs'))||1, b=document.querySelector('header').getBoundingClientRect().bottom;

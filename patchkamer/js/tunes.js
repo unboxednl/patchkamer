@@ -170,10 +170,11 @@ function presetSave(id,name,lid,newLibName,opt={}){ const r=PK.Host.devices.get(
   else { r.preset={lid:l.lid,pid:p.pid,name:p.name}; r.presetSnap=JSON.stringify(state); }
   prPersist(); presetRefreshAll(); PK.status(PK.pkt('m.bewaard_in',kind==='part'?'Instrument-tune':PK.TW[libType(l)].One,name,l.name,licName(meta.license))); return p; } PK.presetSave=presetSave;
 PK.prOpen=new Set(), PK.TUFILTER='', PK.TUMODE='tune';
-function prOpenPanel(mode){ if(mode==='tune'||mode==='preset'){ if(mode!==PK.TUMODE&&PK.TUFILTER&&tuTypeOf(PK.TUFILTER)!==mode) PK.TUFILTER=''; PK.TUMODE=mode; } if(!PK.wsPanel.hidden) PK.closeWs(); if(typeof PK.closeSettings==='function') PK.closeSettings(); PK.prPanel.hidden=false;
-  PK.$('prBtn').setAttribute('aria-expanded',String(PK.TUMODE==='tune')); PK.$('psBtn').setAttribute('aria-expanded',String(PK.TUMODE==='preset')); PK.$('prBtn').classList.toggle('on',PK.TUMODE==='tune'); PK.$('psBtn').classList.toggle('on',PK.TUMODE==='preset');
-  const t=PK.$('prTitle'); if(t) t.textContent=PK.TW[PK.TUMODE].libs.replace(/^./,c=>c.toUpperCase()); PK.prPanel.setAttribute('aria-label',PK.TW[PK.TUMODE].Many); prPaintPanel(); } PK.prOpenPanel=prOpenPanel;
-function prClosePanel(){ PK.prPanel.hidden=true; ['prBtn','psBtn'].forEach(b=>{ PK.$(b).setAttribute('aria-expanded','false'); PK.$(b).classList.remove('on'); }); } PK.prClosePanel=prClosePanel;
+// de tabs Tunes en Presets van het bibliotheekvenster delen één paneel (#prPanel); prShowMode zet de soort en tekent hem
+function prShowMode(mode){ if(mode==='tune'||mode==='preset'){ if(mode!==PK.TUMODE&&PK.TUFILTER&&tuTypeOf(PK.TUFILTER)!==mode) PK.TUFILTER=''; PK.TUMODE=mode; }
+  const t=PK.$('prTitle'); if(t) t.textContent=PK.TW[PK.TUMODE].libs.replace(/^./,c=>c.toUpperCase()); PK.prPanel.setAttribute('aria-label',PK.TW[PK.TUMODE].Many); prPaintPanel(); } PK.prShowMode=prShowMode;
+function prOpenPanel(mode){ PK.libOpen(mode==='preset'?'presets':'tunes'); } PK.prOpenPanel=prOpenPanel;
+function prClosePanel(){ if(PK.libTab()==='tunes'||PK.libTab()==='presets') PK.libClose(); } PK.prClosePanel=prClosePanel;
 const devName=d=>(PK.Host.latest(d)||{}).name||d;
 function armBtn(b,label,ask,fn){ b.textContent=label; b.onclick=()=>{ if(b.dataset.arm){ fn(); } else { b.dataset.arm='1'; b.textContent=ask; setTimeout(()=>{ if(b.isConnected){ b.dataset.arm=''; b.textContent=label; } },2500); } }; }
 function tuInline(el,value,fin){ const i=document.createElement('input'); i.type='text'; i.value=value; i.maxLength=80; el.replaceWith(i); i.focus(); i.select(); let doneF=false; const f=ok=>{ if(doneF) return; doneF=true; fin(ok&&i.value.trim()?i.value.trim():null); }; i.onkeydown=e=>{ e.stopPropagation(); if(e.key==='Enter') f(true); if(e.key==='Escape') f(false); }; i.onblur=()=>f(true); i.onpointerdown=e=>e.stopPropagation(); }

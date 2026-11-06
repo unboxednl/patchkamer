@@ -1,8 +1,8 @@
-/* css/library.css — bibliotheekvenster: categorieen, apparaatregels, zijpaneel, sleepspook */
+/* css/library.css — bibliotheekvenster: categorieen, apparaatregels, tabs, sleepspook */
 /* ---------- library window: floats above the floor, never zooms ---------- */
-.libwin{position:absolute;z-index:20;display:grid;grid-template-rows:auto minmax(0,1fr);background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 14px 40px var(--shadow);min-width:260px;min-height:44px;--libfs:14px;font-size:var(--libfs)}
+.libwin{position:absolute;z-index:20;display:grid;grid-template-rows:auto auto minmax(0,1fr);background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 14px 40px var(--shadow);min-width:260px;min-height:44px;--libfs:14px;font-size:var(--libfs)}
 .libwin.min{height:auto!important}
-.libwin.min .libbody,.libwin.min .rz{display:none}
+.libwin.min .libbody,.libwin.min .libtabs,.libwin.min .rz{display:none}
 .libbar{display:flex;align-items:center;gap:8px;padding:8px 10px 8px 14px;background:var(--card-2);border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;cursor:grab;user-select:none;touch-action:none}
 .libwin.min .libbar{border-bottom:none;border-radius:8px}
 .libbar:active{cursor:grabbing}
@@ -48,3 +48,20 @@
 .libwin .rz.se:hover{border-color:var(--audio)}
 .libghost{position:fixed;z-index:50;pointer-events:none;background:var(--card-2);border:1px solid var(--audio);border-radius:4px;padding:6px 10px;font-family:var(--disp);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;box-shadow:0 8px 24px var(--shadow);transform:translate(12px,12px)}
 .libghost.no{border-color:var(--stop);opacity:.7}
+
+/* ---------- tabs: Apparaten, Tunes, Presets, Songs, Skins (js/library-tabs.js) ---------- */
+.libwin>.libbody{grid-row:3}
+.libwin .libbody[hidden]{display:none!important}
+.libtabs{grid-row:2;display:flex;align-items:stretch;background:var(--card-2);border-bottom:1px solid var(--line);min-width:0}
+.libtablist{display:flex;flex:1 1 auto;min-width:0;overflow:hidden;white-space:nowrap;padding:0 6px}
+.libtablist button{flex:none;background:none;border:none;border-bottom:2px solid transparent;border-radius:0;margin:0 0 -1px;padding:8px 8px 7px;color:var(--muted);font-family:var(--disp);font-size:.85em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.libtablist button:hover{color:var(--fg);border-color:transparent}
+.libtablist button.on{color:var(--fg);border-bottom-color:var(--audio)}
+.libtablist button:focus-visible{outline:1px solid var(--audio);outline-offset:-3px}
+.libtabs select{display:none;flex:1 1 auto;min-width:0;margin:6px 10px;font-family:var(--disp);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.libtabs.dd .libtablist{display:none}
+.libtabs.dd select{display:block}
+.libwin:not([data-tab=devices]) :is(#libCount,#libCfgBtn,#libView){display:none}
+.libpane h3{margin:0 0 6px;font-family:var(--disp);font-size:.95em;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.libpane .wslist{max-height:none!important;overflow:visible}   /* het paneel zelf scrolt, geen lijst binnen het paneel */
+.libpane>.libsearch{position:sticky;top:-10px;z-index:1}

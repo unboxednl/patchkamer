@@ -4,17 +4,18 @@
   body{padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));gap:6px}
   header{flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:6px;zoom:var(--pkfs,1)!important}
   header>*,.transport>*{flex:none}
-  header>.note,header h1{display:none}
+  header{gap:6px}
+  header h1{order:-5;font-size:0;letter-spacing:0;width:30px;height:30px;border-radius:7px;background:#0c0e11 url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M9 23C9 9 23 23 23 9' fill='none' stroke='%234fd1b8' stroke-width='2.6' stroke-linecap='round'/><circle cx='9' cy='23' r='4' fill='%234fd1b8'/><circle cx='23' cy='9' r='4' fill='%234fd1b8'/><circle cx='9' cy='23' r='1.6' fill='%230c0e11'/><circle cx='23' cy='9' r='1.6' fill='%230c0e11'/></svg>") center/100% no-repeat;overflow:hidden}   /* op een telefoon: alleen het logo */
+  header .wsname{order:-4;flex:1 1 0;min-width:0;width:auto;max-width:none;field-sizing:fixed;font-size:15px;padding-left:4px;padding-right:4px;text-overflow:ellipsis}
   .transport{display:contents}
-  header .go{order:-3}
+  header .go{order:-3;min-width:56px;padding-left:8px;padding-right:8px}
   header .tpbpm{order:-2}
   header>.tp>span:first-child,.transport>.tp>span:first-child{display:none}
-  header .tp input[type=range]{width:72px!important}
-  header .tp input[type=number]{width:62px}
+  header .tp input[type=range]{width:56px!important}
+  header .tp input[type=number]{width:54px}
   #libToggle{font-size:0;min-width:44px;padding-left:0;padding-right:0}
   #libToggle::after{content:"▤";font-size:18px}
   #menuBtn{order:1;min-width:44px;font-size:20px;line-height:1;padding-left:0;padding-right:0}
-  .hdrmenu{zoom:var(--pkfs,1)}
   .narrowonly{display:inline-block}
   .wstabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
   .wstab{flex:none}
@@ -36,4 +37,15 @@
   body.libsheet .viewctl{bottom:calc(60dvh + 10px)}
   body.libsheet .standpop{bottom:calc(60dvh + 52px)}
   .floorempty .box{padding:14px 14px}
+}
+@media (max-width:479px){
+  /* telefoon: twee regels. Boven logo, werkruimtenaam, Bibliotheek en ☰; eronder Start, BPM en Swing over de volle breedte */
+  header{flex-wrap:wrap;row-gap:4px}
+  header::before{content:'';order:-1;flex:0 0 100%;height:0}
+  header #libToggle{order:-3}
+  header #menuBtn{order:-2}
+  header .go{order:1;flex:none}
+  header .tpbpm{order:2}
+  header .transport>.tp:not(.tpbpm){order:3;flex:1 1 0;min-width:0}
+  header .tp input[type=range]{width:100%!important}
 }

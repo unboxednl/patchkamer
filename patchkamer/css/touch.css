@@ -9,6 +9,7 @@
   .viewctl{gap:6px;padding:6px} .viewctl button{min-width:44px}
   .libdev{touch-action:pan-y}
   .libbar button{min-width:40px}
+  .libtablist button,.libtabs select{min-height:44px}
   .card .bar{padding-block:7px;gap:6px}
   .card .bar button{min-width:34px;min-height:30px;padding:2px 8px}
   .card .bar select.ver{min-height:30px;font-size:11px}
