@@ -1,4 +1,4 @@
-// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.2) / test cases for the validator
+// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.3) / test cases for the validator
 // Gebruik / Usage:  node skins/contract/test-validate-skin.mjs      (exit 0 = alles groen / all green)
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const V = join(dirname(fileURLToPath(import.meta.url)), 'validate-skin.mjs');
 const tmp = mkdtempSync(join(tmpdir(), 'skin-test-'));
-const base = () => ({ format: 'patchkamer-skin', formatVersion: 1, skinsContract: '0.2', id: 'nl.test.dev.sample', device: 'nl.test.dev', name: 'Sample', version: '1.0.0', author: 'Test', license: 'CC0-1.0', description: 'A test skin.', created: '2026-11-06', icon: null, default: 'a', appearances: [{ id: 'a', name: 'A', when: { minWidth: 0 }, css: '' }] });
+const base = () => ({ format: 'patchkamer-skin', formatVersion: 1, skinsContract: '0.3', id: 'nl.test.dev.sample', device: 'nl.test.dev', name: 'Sample', version: '1.0.0', author: 'Test', license: 'CC0-1.0', description: 'A test skin.', created: '2026-11-06', icon: null, default: 'a', appearances: [{ id: 'a', name: 'A', when: { minWidth: 0 }, css: '' }] });
 const withDesign = d => ({ ...base(), design: d });
 const withAppDesign = d => { const s = base(); s.appearances[0].design = d; return s; };
 const cases = []; // [naam, skin, verwacht: { ok:bool, codes:[...] (alle moeten voorkomen), no:[...] (mogen niet voorkomen) }]
@@ -18,7 +18,7 @@ const SK = s => { const o = base(); return Object.assign(o, s); };
 // --- 0.1 en basis
 ok('0.1-bestand zonder design', SK({ skinsContract: '0.1' }));
 ok('0.2-bestand zonder design', base());
-okWarn('minor 3 is nieuwer', SK({ skinsContract: '0.3' }), ['contract_minor']);
+okWarn('minor 4 is nieuwer', SK({ skinsContract: '0.4' }), ['contract_minor']);
 bad('major 1', SK({ skinsContract: '1.0' }), ['contract_major']);
 okWarn('design in een 0.1-bestand', { ...withDesign({ ports: { mode: 'hover' } }), skinsContract: '0.1' }, ['design_contract']);
 // --- ports
@@ -34,7 +34,7 @@ bad('design geen object (tekst)', withDesign('x'), ['design_object']);
 bad('design lijst', withDesign([]), ['design_object']);
 bad('design null', withDesign(null), ['design_object']);
 ok('design leeg object', withDesign({}));
-okWarn('design onbekende sectie (laag 2)', withDesign({ layout: { x: 1 } }), ['unknown_field']);
+okWarn('design onbekende sectie (laag 2: layout)', withDesign({ layout: { x: 1 } }), ['unknown_field']);
 // --- colors
 const full = { bg: '#14191f', surface: '#1d252e', text: '#e6edf3', muted: '#8b98a5', accent: '#4fd1b8', line: '#2d3a46' };
 ok('colors custom volledig', withDesign({ colors: { scheme: 'custom', custom: full } }), ['design_contrast', 'design_custom_missing']);
@@ -83,6 +83,92 @@ okWarn('verschijning-design onbekende sleutel', withAppDesign({ foo: 1 }), ['unk
 { const s = withDesign({ colors: { scheme: 'custom', custom: full } }); s.appearances[0].design = { colors: { custom: { text: '#14191f' } } }; okWarn('verschijning overschrijft kleur per sleutel (contrast)', s, ['design_contrast']); }
 { const s = withDesign({ colors: { scheme: 'custom', custom: { bg: '#fff' } } }); s.appearances[0].design = { colors: { custom: { surface: '#fff', text: '#000', muted: '#555', accent: '#06c', line: '#ccc' } } }; ok('skin + verschijning samen volledig', s, ['design_custom_missing']); }
 { const s = withDesign({ ports: { mode: 'strip' } }); s.appearances.push({ id: 'b', name: 'B', when: { minWidth: 1 }, css: '' }); s.appearances[0].when = { maxWidth: 0 }; okWarn('twee verschijningen delen skin-design', s, ['when_zero']); }
+
+// --- controls (0.3)
+const ctl = (...rules) => withDesign({ controls: rules });
+const ctlApp = (...rules) => withAppDesign({ controls: rules });
+ok('0.2-bestand zonder controls blijft ok', SK({ skinsContract: '0.2' }));
+ok('controls: alle matchvormen', ctl({ match: '*', color: 'accent' }, { match: 'cut', face: 'rotary' }, { match: 'role:fader', face: 'vslider' }, { match: 'group:filter', size: 'l' }, { match: 'kick.tune-2_a', size: 1 }));
+for (const f of ['rotary', 'hslider', 'vslider', 'default']) ok('controls face ' + f, ctl({ match: '*', face: f }));
+for (const sz of ['xs', 's', 'm', 'l', 'xl', 0.6, 1, 2, 1.25]) ok('controls size ' + sz, ctl({ match: '*', size: sz }));
+for (const l of ['short', 'medium', 'long', 40, 400, 120.5]) ok('controls length ' + l, ctl({ match: 'role:fader', face: 'hslider', length: l }));
+for (const th of [2, 24, 4.5]) ok('controls thickness ' + th, ctl({ match: 'role:fader', face: 'vslider', thickness: th }));
+for (const th of ['round', 'square', 'bar', 'none']) ok('controls thumb ' + th, ctl({ match: 'role:fader', face: 'vslider', thumb: th }));
+for (const c of ['accent', '#ff8800', '#F80']) ok('controls color ' + c, ctl({ match: '*', color: c }));
+for (const sv of ['always', 'hover', 'never']) ok('controls showValue ' + sv, ctl({ match: '*', showValue: sv }));
+ok('controls per verschijning', ctlApp({ match: 'cut', size: 's' }));
+ok('controls leeg is geldig', ctl());
+ok('knobs en controls samen', withDesign({ knobs: { style: 'slider', size: 's' }, controls: [{ match: 'role:param', face: 'rotary' }] }));
+ok('64 regels is het maximum', ctl(...Array.from({ length: 64 }, (_, i) => ({ match: 'id' + i, size: 'm' }))));
+bad('65 regels', ctl(...Array.from({ length: 65 }, (_, i) => ({ match: 'id' + i, size: 'm' }))), ['controls_max']);
+bad('controls geen lijst (object)', withDesign({ controls: { match: '*' } }), ['controls_list']);
+bad('controls geen lijst (tekst)', withDesign({ controls: 'all' }), ['controls_list']);
+bad('regel is geen object', ctl('cut'), ['controls_rule']);
+bad('regel is null', ctl(null), ['controls_rule']);
+bad('match ontbreekt', ctl({ face: 'rotary' }), ['controls_match']);
+bad('match is een getal', ctl({ match: 3, face: 'rotary' }), ['controls_match']);
+bad('match leeg', ctl({ match: '', face: 'rotary' }), ['controls_match']);
+ok('match camelCase-id', ctl({ match: 'envAmt', size: 's' }, { match: 'fAttack', size: 'l' }, { match: 'group:envAmp', color: 'accent' }));
+bad('match met underscore-spatie', ctl({ match: 'env amt', face: 'rotary' }), ['controls_match']);
+bad('role: met hoofdletter blijft fout', ctl({ match: 'role:Fader', face: 'rotary' }), ['controls_match']);
+bad('match met spatie', ctl({ match: 'my cut', face: 'rotary' }), ['controls_match']);
+bad('match "role:" leeg', ctl({ match: 'role:', face: 'rotary' }), ['controls_match']);
+bad('match "group:" leeg', ctl({ match: 'group:', face: 'rotary' }), ['controls_match']);
+bad('match 61 tekens', ctl({ match: 'a'.repeat(61), face: 'rotary' }), ['controls_match']);
+bad('match jokerteken **', ctl({ match: '**', face: 'rotary' }), ['controls_match']);
+bad('face none (verbergen bestaat niet)', ctl({ match: 'cut', face: 'none' }), ['controls_none']);
+bad('face onbekend', ctl({ match: 'cut', face: 'dial' }), ['design_enum']);
+bad('face getal', ctl({ match: 'cut', face: 1 }), ['design_enum']);
+bad('size te klein (0.5)', ctl({ match: '*', size: 0.5 }), ['controls_enum_num']);
+bad('size te groot (2.1)', ctl({ match: '*', size: 2.1 }), ['controls_enum_num']);
+bad('size onbekend (xxl)', ctl({ match: '*', size: 'xxl' }), ['controls_enum_num']);
+bad('size NaN-tekst', ctl({ match: '*', size: '1.5' }), ['controls_enum_num']);
+bad('length 39', ctl({ match: '*', length: 39 }), ['controls_enum_num']);
+bad('length 401', ctl({ match: '*', length: 401 }), ['controls_enum_num']);
+bad('length onbekend', ctl({ match: '*', length: 'huge' }), ['controls_enum_num']);
+bad('thickness 1', ctl({ match: '*', thickness: 1 }), ['controls_num']);
+bad('thickness 25', ctl({ match: '*', thickness: 25 }), ['controls_num']);
+bad('thickness tekst', ctl({ match: '*', thickness: '4' }), ['controls_num']);
+bad('thumb onbekend', ctl({ match: '*', thumb: 'diamond' }), ['design_enum']);
+bad('color naam', ctl({ match: '*', color: 'red' }), ['controls_colour']);
+bad('color 4 cijfers', ctl({ match: '*', color: '#abcd' }), ['controls_colour']);
+bad('color 8 cijfers', ctl({ match: '*', color: '#ff880080' }), ['controls_colour']);
+bad('color getal', ctl({ match: '*', color: 5 }), ['controls_colour']);
+bad('showValue onbekend', ctl({ match: '*', showValue: 'sometimes' }), ['design_enum']);
+bad('showValue boolean', ctl({ match: '*', showValue: false }), ['design_enum']);
+bad('controls in verschijning ongeldig', ctlApp({ match: 'cut', face: 'none' }), ['controls_none']);
+okWarn('regel met onbekende sleutel', ctl({ match: 'cut', size: 's', hidden: true }), ['unknown_field']);
+okWarn('regel met onbekende rol', ctl({ match: 'role:knob', size: 's' }), ['controls_role']);
+okWarn('regel zonder eigenschap', ctl({ match: 'cut' }), ['controls_empty']);
+okWarn('rotary met length', ctl({ match: 'cut', face: 'rotary', length: 'long' }), ['controls_slider_only']);
+okWarn('rotary met thumb', ctl({ match: 'cut', face: 'rotary', thumb: 'bar' }), ['controls_slider_only']);
+okWarn('rotary met thickness', ctl({ match: 'cut', face: 'rotary', thickness: 4 }), ['controls_slider_only']);
+okWarn('controls in een 0.2-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.2' }, ['controls_contract']);
+okWarn('controls in een 0.1-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.1' }, ['controls_contract', 'design_contract']);
+okWarn('0.4 is nieuwer dan 0.3', SK({ skinsContract: '0.4' }), ['contract_minor']);
+ok('0.3 is bekend', SK({ skinsContract: '0.3' }), ['contract_minor']);
+// --- --device: register van een apparaat (id's, groepen, rollen)
+const DEVSRC = `export default { id: 'nl.test.dev', name: 'D', version: '1.0.0', kind: 'effect',
+  ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },
+  create(ctx, host) { const g = ctx.createGain(); const ui = [];
+    return { inputs: { in: g }, outputs: { out: g },
+      mount(el) { ui.push(host.ui.knob(el, 'Cut', [0, 1, 0.01], 0.5, v => v, v => {}, { id: 'cut', role: 'param', group: 'filter' })); ui.push(host.ui.select(el, 'Mode', [['a', 'A']], 'a', v => {}, { id: 'mode', group: 'filter' })); },
+      getState() { return { v: 1 }; }, setState() { ui[0].set(0); ui[1].value = 'a'; }, destroy() {} }; } };`;
+const DEVSRC_PLAIN = DEVSRC.replace(/, \{ id: 'cut', role: 'param', group: 'filter' \}/, '').replace(/, \{ id: 'mode', group: 'filter' \}/, '');
+const dev = (name, skin, src, codes, extra = {}) => cases.push([name, skin, { ok: true, codes, no: codes.length ? [] : ['*'], device: src, ...extra }]);
+dev('device: bekende id en groep', ctl({ match: 'cut', face: 'vslider' }, { match: 'group:filter', size: 'l' }, { match: 'role:param', color: 'accent' }, { match: '*', showValue: 'hover' }), DEVSRC, []);
+dev('device: camelCase-id uit het register', ctl({ match: 'envAmt', size: 's' }), DEVSRC.replace("id: 'cut'", "id: 'envAmt'"), []);
+dev('device: id met andere hoofdletters is onbekend', ctl({ match: 'envamt', size: 's' }), DEVSRC.replace("id: 'cut'", "id: 'envAmt'"), ['dev_unknown_id']);
+dev('device: onbekend id', ctl({ match: 'cutoff', face: 'rotary' }), DEVSRC, ['dev_unknown_id']);
+dev('device: onbekende groep', ctl({ match: 'group:osc', size: 's' }), DEVSRC, ['dev_unknown_group']);
+dev('device: rol die het apparaat niet heeft', ctl({ match: 'role:fader', face: 'vslider' }), DEVSRC, ['dev_unknown_role']);
+dev('device: onbekend id in een verschijning', ctlApp({ match: 'nope', size: 's' }), DEVSRC, ['dev_unknown_id']);
+dev('device: niet gemigreerd (geen id\'s)', ctl({ match: 'cut', size: 's' }), DEVSRC_PLAIN, ['dev_no_ids']);
+dev('device: niet gemigreerd, alleen * en rol: geen melding behalve rol', ctl({ match: '*', size: 's' }, { match: 'role:param', face: 'rotary' }), DEVSRC_PLAIN, []);
+dev('device: ander apparaat dan de skin', SK({ device: 'nl.test.other', id: 'nl.test.other.sample', design: { controls: [{ match: 'zzz', size: 's' }] } }), DEVSRC, ['dev_other']);
+dev('device: onbekend id zonder controls in de skin', base(), DEVSRC, []);
+cases.push(['device: pad bestaat niet', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], devicePath: '/nonexistent/x.patchkamer-device.js' }]);
+cases.push(['device: apparaat faalt in de validator', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], device: 'export default {}' }]);
 // --- 0.1-regels blijven
 bad('nog steeds: merknaam', { ...base(), name: ['M', 'oog'].join('') }, ['brand']);
 bad('nog steeds: @import in css', (() => { const s = base(); s.appearances[0].css = '@import "x";'; return s; })(), ['css_import']);
@@ -95,8 +181,11 @@ for (const lang of ['nl', 'en']) {
     n++;
     const dir = join(tmp, lang, String(i)); mkdirSync(dir, { recursive: true });
     const f = join(dir, 'sample.patchkamer-skin.json'); writeFileSync(f, JSON.stringify(skin));
+    const args = [V, '--lang', lang, f];
+    if (exp.device !== undefined) { const df = join(dir, 'dev.patchkamer-device.js'); writeFileSync(df, exp.device); args.push('--device', df); }
+    if (exp.devicePath) args.push('--device', exp.devicePath);
     let out = '', code = 0;
-    try { out = execFileSync('node', [V, '--lang', lang, f], { env: { ...process.env, PK_SKIN_CODES: '1' }, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); }
+    try { out = execFileSync('node', args, { env: { ...process.env, PK_SKIN_CODES: '1' }, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); }
     catch (e) { code = e.status; out = (e.stdout || '') + (e.stderr || ''); }
     const got = [...out.matchAll(/\[([a-z0-9_]+)\]/g)].map(m => m[1]).filter(c => c !== 'dir_elsewhere');
     const problems = [];

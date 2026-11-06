@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.14 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.15 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -23,6 +23,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.12 | Mastering: een eigen kabelsoort (gele, gestippelde sinus) met driehoekpoorten `masteringIn`/`masteringOut`; `configureMastering` en `onMasteringTargets`; `host.mastering` voor een Master Director die de instellingen van mastering-apparaten tegelijk zet (§11b) |
 | v1.13 | Multi-MIDI en regelaars: een eigen kabelsoort (dubbele gestreepte oranje kabel) met `multiEventIn`/`multiEventOut`, `eventBundles`, `onEventBundle` en `host.eventBundleChanged`; de optionele velden `ch` en `cc` op gebeurtenissen; `host.controls` en `host.setControl` om de regelaars van andere apparaten te zien en te zetten (§11c) |
 | v1.14 | Nootnamen: een apparaat dat noten op namen afbeeldt (een drumcomputer) kan `noteNames()` aanbieden en `host.noteNamesChanged` aanroepen; `host.peers` geeft ze door als `noteNames`, zodat een sequencer de rijen kan benoemen (§13b) |
+| v1.15 | Regelaars herkenbaar voor skins: `id`, `role` en `group` op `host.ui.knob` (in de `opties`) en `host.ui.select` (nieuw 6e argument), de attributen `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` voor eigen elementen en `host.ui.list` voor het register; de validator meldt een `let op` bij dubbele of ontbrekende id's en kent `--controls` (§12d) |
 
 ---
 
@@ -362,10 +363,11 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 - `mount(el)` krijgt een leeg element in de kaart. De kaart is standaard ongeveer 300 px breed. Met `ui: { width: 200..6000, minWidth }` krijg je een bredere kaart.
 - De gebruiker kan elke kaart breder, smaller, hoger en lager maken. Laat je UI dus meevloeien: auto-fit grids, `minmax(0, 1fr)`, container queries. Bij een vaste hoogte scrolt de host je UI; de poorten blijven zichtbaar.
 - **Hulpmiddelen** in `host.ui`:
-  - `knob(parent, label, [min, max, stap], waarde, fmt, onchange, opties?)` → `{ set(v), el, input }`; `opties` (v1.8): `{ default: getal, scale: 'log' }`
-  - `select(parent, label, [[waarde, tekst], …], waarde, onchange)` → een `<select>`; zet `select.value = v`
+  - `knob(parent, label, [min, max, stap], waarde, fmt, onchange, opties?)` → `{ set(v), el, input }`; `opties` (v1.8): `{ default: getal, scale: 'log' }`; sinds v1.15 ook `{ id, role, group }` (§12d)
+  - `select(parent, label, [[waarde, tekst], …], waarde, onchange)` → een `<select>`; zet `select.value = v`; sinds v1.15 een 6e argument `{ id, role, group }` (§12d)
   - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(stap) }`; houdt een verwijzing naar de array
   - `jack(this, parent, poortId, dir, label)` (zie §3), `noise(ctx)`, `curve(k)`
+  - `adopt(el, { id, role, group, label })` en `list(this)` (v1.15, §12d)
 - **Bewaar wat `knob` en `select` teruggeven.** `setState` moet die bijwerken (§13).
 - Eigen HTML mag ook. Gebruik de CSS-variabelen van de host, dan volgt je apparaat de kleurstelling (donker, licht, retro):
   - kleuren: `--bg --floor --card --card-2 --line --fg --muted`;
@@ -484,6 +486,46 @@ export default {
 
 ---
 
+## 12d. Regelaars herkenbaar maken voor skins (v1.15)
+
+Een skin (zie `skins/`) kan het gezicht van een regelaar kiezen (draaiknop, horizontale of verticale schuif), de maat, de lengte en de kleur. Daarvoor moet de host een regelaar **vast kunnen aanwijzen**. Zonder dat raadt hij uit het label, en dat is vertaald en verandert. Alles hieronder is **optioneel en additief**: een apparaat dat niets doet, werkt zoals voorheen, en een oudere host negeert de opties en attributen.
+
+**De drie gegevens per regelaar**
+
+| Gegeven | Waarden | Betekenis |
+|---|---|---|
+| `id` | tekst, 1 tot 60 tekens uit `[A-Za-z0-9._-]` | Vast adres van de regelaar. Gelijk aan de sleutel in `getState()` of `params()` (`cut`, `kick.tune`, `ch3.vol`), **nooit het label**. Uniek binnen het apparaat. Een id verandert niet tussen versies; een nieuw id mag, verwijderen alleen met een nieuwe apparaatversie. |
+| `role` | `param`, `fader`, `toggle`, `button`, `pad`, `step`, `display`, `select`, `meter`, `jack` | De bedoeling van de regelaar. Standaard: `param` bij `host.ui.knob`, `select` bij `host.ui.select`. `fader` is een lange worp (kanaalvolume), `param` een gewone instelling. |
+| `group` | tekst, 1 tot 60 tekens uit `[A-Za-z0-9._-]` | Vrije sectienaam uit de logische indeling van je UI (`osc`, `filter`, `env`). Een skin kan er op mikken (`group:filter`). |
+
+**Drie manieren om ze te geven (gelijkwaardig)**
+
+1. Via de bestaande aanroepen: `host.ui.knob(parent, label, [min, max, stap], waarde, fmt, onchange, { id, role, group, default, scale })` (de `opties` van v1.8 krijgen drie sleutels erbij) en `host.ui.select(parent, label, opties, waarde, onchange, { id, role, group })` (nieuw 6e argument). De terugwaarde blijft `{ set, el, input }` resp. de `<select>`; bij `knob` komt er `id` bij.
+2. Met attributen op je eigen elementen: `data-pk-id`, `data-pk-role`, `data-pk-group`. Geen aanroep nodig, onschadelijk voor een oudere host.
+3. Met `host.ui.adopt(el, { id, role, group, label })`: zet de attributen en meldt het element aan; geeft `el` terug. Alleen voor elementen met een **model**: `input` van het type range of checkbox, `select` of `button`. Een `div` kan niet.
+
+```js
+mount(el) {
+  ui.cut = host.ui.knob(el, T.cut, [0, 1, 0.001], S.cut, v => Math.round(v * 100) + '%', v => { S.cut = v; apply(); }, { id: 'cut', role: 'param', group: 'filter' });
+  ui.mode = host.ui.select(el, T.mode, [['lp', 'LP'], ['hp', 'HP']], S.mode, v => { S.mode = v; apply(); }, { id: 'mode', group: 'filter' });
+  host.ui.adopt(mijnSchuif, { id: 'ch1.vol', role: 'fader', group: 'ch1', label: T.vol });   // eigen <input type="range">
+}
+```
+
+**Het register.** De host houdt per apparaat bij wat er is aangemeld, ook als je UI zichzelf herbouwt (een `render()` die nieuwe elementen maakt). `host.ui.list(this)` geeft het terug als `[{ id, role, group, label, type, min, max, face }]` (`type`: `'range'`, `'select'`, `'check'` of `'button'`; `face`: het gezicht dat de regelaar nu heeft). Een skinmaker ziet hetzelfde in de tabel van `validate-instrument.mjs --controls` en in het tabblad *Regelaars* van de ontwerper.
+
+**Regels**
+
+- Een skin kiest alleen het **gezicht**; waarde, `onchange` en `setState` lopen ongewijzigd via je element. Een skin kan geen waarde zetten en geen regelaar verbergen.
+- Gebruik alleen id's die je zelf kent als state- of parametersleutel. Een id dat per `host.lang` verschilt, is een label en dus fout.
+- Geef bij een apparaat dat je migreert **alle** knoppen en keuzes een id, niet een paar: een skin die een id noemt dat ontbreekt, doet stil niets.
+- Een apparaat dat zijn UI herbouwt (Mixer, Control Surface) leidt id's af uit zijn indeling (`k1.2.3`, `ch3.vol`) en geeft elke regelaar zijn rol en groep, zodat een skin op rol of groep kan mikken.
+- Het geluid, de state en de presets veranderen niet door id's, rollen of groepen. Verander ze niet in dezelfde actie.
+
+**Wat de validator doet.** Hij geeft alleen een `let op` (nooit een fout) bij: een id dat bij twee regelaars staat (alleen wat in `create()`/`mount()` is gebouwd; een latere herbouw telt niet dubbel), een deel van de regelaars zonder id terwijl andere er wel een hebben (helemaal geen ids = niet gemigreerd, geen melding), een rol buiten de lijst, een id of groep buiten `[A-Za-z0-9._-]{1,60}`, opties die geen object zijn, `adopt` op een element zonder model of zonder element, een `data-pk-id` op een element dat nergens in de kaart hangt, en id's die van `host.lang` afhangen. Met `--controls` drukt hij daarna de tabel `id | rol | groep | label nl/en | bereik | gezicht` af (het label uit de nl- en de en-ronde; zijn ze gelijk, dan staat het één keer).
+
+---
+
 ## 13. State, versies en presets (v1.6)
 
 **State.** `getState()` geeft alles terug wat nodig is om het geluid en het gedrag exact te herstellen: knoppen, patronen en keuzes. Het resultaat moet gewone JSON zijn, zonder AudioNodes.
@@ -551,6 +593,10 @@ Voor controllers (zoals een MIDI-apparaat dat pads aan apparaten koppelt). Gewon
 |---|---|
 | `noteNames()` | Optioneel op je instance. Geeft een lijst `[{ note: 0..127, name: 'Snare' }]` in de volgorde waarin je apparaat de klanken toont. Hoogstens 128 items, `name` hoogstens 40 tekens; ongeldige items slaat de host over. Geef alleen de klanken die op dit moment een noot hebben |
 | `host.noteNamesChanged(this)` | Roep dit aan als de lijst verandert (andere kit, andere volgorde, andere noot, tune geladen). De host meldt het via `onPeers` aan de andere apparaten |
+| `host.ui.knob(…, { id, role, group })`, `host.ui.select(…, { id, role, group })` | v1.15 | Regelaar herkenbaar maken voor skins (§12d) |
+| `host.ui.adopt(el, { id, role, group, label })` | v1.15 | Eigen element aanmelden als regelaar; geeft `el` terug (§12d) |
+| `host.ui.list(this)` | v1.15 | Het register: `[{ id, role, group, label, type, min, max, face }]` (§12d) |
+| `data-pk-id`, `data-pk-role`, `data-pk-group` | v1.15 | Dezelfde gegevens als attributen op eigen elementen (§12d) |
 | `peers[].noteNames` | In de lijst van `host.peers(this)`: de gezuiverde lijst van dat apparaat, of `[]` als het er geen heeft |
 
 - Een sequencer of controller vindt het doel met `host.cablesFrom(this, eigenUitgang)` en zoekt het `id` op in `host.peers(this)`. Zonder kabel of zonder lijst gedraagt hij zich zoals altijd.
@@ -680,6 +726,7 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 ```
 node validate-instrument.mjs mijn-apparaat.patchkamer-device.js
 node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --lang en   # uitvoer in het Engels (standaard Nederlands)
+node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --controls  # druk ook de tabel van regelaars af (v1.15)
 ```
 
 De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow roots) en een nep-host. Hij eindigt met één `OK`-regel (exit 0) of met de eerste fout (exit 1). Hij controleert:
@@ -699,6 +746,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 12. **Mastering (v1.12)**: een apparaat met `masteringIn` heeft `configureMastering(patch)` (en optioneel `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); die krijgen `{}`, `null` en onbekende of ongeldige velden en geven een object terug (of niets), en `getMasteringReport` geeft JSON zonder AudioNodes. Een apparaat met `masteringOut` heeft `onMasteringTargets(targets)`; die krijgt `[]`, een lijst met één doel (twee keer) en weer `[]`. De nep-host controleert `host.mastering` op een bekende actie en een bestaande `masteringOut`-poort. Een modulator heeft `modOut` of `masteringOut`.
 13. **Multi-MIDI (v1.13)**: een apparaat met `multiEventOut` heeft `eventBundles[poortId]` met een lijst `tracks` (unieke tekst-id's, een `name`, een optioneel `ch` van 1 tot 16); een apparaat met `multiEventIn` heeft `onEventBundle`; die krijgt een bundel, dezelfde sleutel met een ander spoor erbij en dan `null`. Gebeurtenissen met `ch` of `cc` hebben waarden in het bereik; op een multi-MIDI-poort draagt elke gebeurtenis een `track` uit de lijst. De nep-host kent `host.eventBundleChanged`, `host.controls` en `host.setControl`.
 14. **Nootnamen (v1.14)**: een apparaat met `noteNames()` geeft een lijst `{ note, name }` (noot 0 tot 127, `name` niet leeg); `noteNames()` gooit niet en `host.noteNamesChanged(this)` mag zonder fout worden aangeroepen.
+15. **Regelaars voor skins (v1.15)**: de nep-host kent `host.ui.knob(…, opties)`, `host.ui.select(…, opties)`, `host.ui.adopt` en `host.ui.list`, en leest ook `data-pk-*`-attributen op eigen elementen. Alleen een `let op` (nooit een fout) bij een dubbel id, deels ontbrekende id's, een rol buiten de lijst, een ongeldig id of groep, opties die geen object zijn, `adopt` op een element zonder model, een id op een element dat nergens hangt, en id's die per `host.lang` verschillen. `--controls` drukt de tabel `id | rol | groep | label nl/en | bereik | gezicht` af (zie §12d).
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -723,7 +771,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 15. Schuiven staan na `mount()` op hun standaardwaarde; getallen naast schuiven worden direct in de `input`-handler bijgewerkt; open shadow root (§12a).
 16. Instrumenten (optioneel): `parts`/`getPart`/`setPart` samen, alleen klank in `getPart`, terugzetten laat de instelling gelijk (§13c).
 17. Alle tekst voor de gebruiker kiest op `host.lang` (`'nl'` en `'en'`, anders `'en'`); namen per taal in `i18n`; `oversample` van `host.audio` gebruikt waar je zelf aliasing veroorzaakt (§12c).
-18. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+18. Regelaars (v1.15, aanbevolen): elke `host.ui.knob`/`select` en elke eigen schuif heeft een `id` (= state-/parametersleutel, nooit het label), een `role` en een `group`; `node validate-instrument.mjs bestand.patchkamer-device.js --controls` toont de tabel zonder `let op` (§12d).
+19. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -749,6 +798,9 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 | Getal pas in een volgende frame bijwerken | Typen werkt niet: de host ziet het getal niet meebewegen | Getal direct in de `input`-handler zetten |
 | Eigen dubbelklik-reset op elke schuif | Dubbel werk; de host doet het al | Weglaten, of `data-pk-noreset` als de schuif níet terug mag |
 | Teksten vast in één taal | Gebruikers van de andere taal zien vreemde tekst | Kies alle teksten op `host.lang` en geef namen per taal in `i18n` (§12c) |
+| Het label als `id` van een regelaar | Het label is vertaald en verandert: een skin raakt de regelaar niet meer; de validator meldt een `let op` als het per taal verschilt | `id` = de sleutel in `getState()`/`params()` (§12d) |
+| Een paar regelaars met een id, de rest zonder | Een skin kan alleen de aangemelde aanwijzen; de rest blijft op de standaard | Geef alle knoppen, keuzes en schuiven een id |
+| `host.ui.adopt` op een `div` of een tekening | Geen model: de host kan er geen ander gezicht op leggen | Alleen op `input` (range/checkbox), `select` of `button` |
 
 ---
 
@@ -759,8 +811,8 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.14
-// Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets), stuurbaar (params + modulate),
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.15
+// Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const DEF = () => ({ rate: 4, depth: 0.5, shape: 'sine' });
@@ -793,9 +845,9 @@ export default {
     return {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
-        ui.shape = host.ui.select(el, T.shape, [['sine', T.sine], ['triangle', T.triangle], ['square', T.square]], S.shape, v => { S.shape = v; apply(); });
-        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); });
-        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); });
+        ui.shape = host.ui.select(el, T.shape, [['sine', T.sine], ['triangle', T.triangle], ['square', T.square]], S.shape, v => { S.shape = v; apply(); }, { id: 'shape', group: 'lfo' });
+        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); }, { id: 'rate', role: 'param', group: 'lfo' });
+        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); }, { id: 'depth', role: 'param', group: 'lfo' });
       },
       params() { return MODP.map(([id, key, min, max, log]) => ({ id, name: T[key], lane: 'trem', laneName: 'Tremolo', min, max, role: id === 'rate' ? 'rate' : 'depth', scale: log ? 'log' : 'lin', drift: 0.1, on: true, fast: id === 'depth' })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODP.some(m => m[0] === k)) mod[k] = o[k]; apply(); },
@@ -818,7 +870,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.14
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.15
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -881,7 +933,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.14
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.15
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -959,7 +1011,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.14.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.15.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

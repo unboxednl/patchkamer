@@ -1,19 +1,23 @@
-// validate-skin.mjs — Patchkamer skins contract v0.2
+// validate-skin.mjs — Patchkamer skins contract v0.3
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
+//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls tegen het register van het apparaat; onbekend = let op)
 // Usage:    same; --dir validates every *.patchkamer-skin.json and icon.* in a library folder (skins/library or one device folder).
 // Controleert een skin (zie SKINS-CONTRACT_NL.md / _EN.md) en eindigt met één OK-regel per bestand (exit 0)
 // of met alle gevonden fouten (exit 1). Waarschuwingen ("let op" / "warning") staan achter de OK-regel en geven exit 0.
 // Alleen Node, geen npm-pakketten. Meldingen in beide talen (--lang nl|en, standaard nl).
 // PK_SKIN_CODES=1 zet achter elke melding de code tussen blokhaken (voor tests).
 import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { basename, dirname, join, resolve } from 'node:path';
 
 // ---------- argumenten ----------
-const argv = process.argv.slice(2); let LANG = 'nl', DIR = null; const files = [];
+const argv = process.argv.slice(2); let LANG = 'nl', DIR = null, DEVICE = null; const files = [];
 for (let i = 0; i < argv.length; i++) { const a = argv[i];
   if (a === '--lang') LANG = argv[++i] || ''; else if (a.startsWith('--lang=')) LANG = a.slice(7);
   else if (a === '--dir') DIR = argv[++i] || ''; else if (a.startsWith('--dir=')) DIR = a.slice(6);
+  else if (a === '--device') DEVICE = argv[++i] || ''; else if (a.startsWith('--device=')) DEVICE = a.slice(9);
   else files.push(a); }
 const CODES = process.env.PK_SKIN_CODES === '1';
 
@@ -32,7 +36,26 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.2; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.2; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.3; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.3; unknown fields are ignored'],
+  controls_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
+  controls_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
+  controls_rule: ['{0} moet een object zijn', '{0} must be an object'],
+  controls_match: ['{0}.match moet "*", "role:<rol>", "group:<groep>" of een id zijn (1 tot 60 tekens uit [A-Za-z0-9._-])', '{0}.match must be "*", "role:<role>", "group:<group>" or an id (1 to 60 characters from [A-Za-z0-9._-])'],
+  controls_role: ['{0}.match: rol "{1}" staat niet in de lijst ({2}); de host negeert de regel', '{0}.match: role "{1}" is not in the list ({2}); the host ignores the rule'],
+  controls_none: ['{0}.face: "none" bestaat niet; een skin verbergt geen regelaars (kies rotary, hslider, vslider of default)', '{0}.face: "none" does not exist; a skin does not hide controls (choose rotary, hslider, vslider or default)'],
+  controls_enum_num: ['{0} moet een van {1} zijn of een getal van {2} tot {3}', '{0} must be one of {1} or a number from {2} to {3}'],
+  controls_num: ['{0} moet een getal van {1} tot {2} zijn', '{0} must be a number from {1} to {2}'],
+  controls_colour: ['{0} moet "accent" of een kleur #rgb of #rrggbb zijn', '{0} must be "accent" or a colour #rgb or #rrggbb'],
+  controls_empty: ['{0} heeft naast match geen enkele eigenschap; de regel doet niets', '{0} has no property besides match; the rule does nothing'],
+  controls_slider_only: ['{0}: length, thickness en thumb gelden alleen voor schuifregelaars, niet bij face "rotary"', '{0}: length, thickness and thumb only apply to sliders, not with face "rotary"'],
+  controls_contract: ['design.controls hoort bij skinsContract 0.3; een host met 0.2 of lager negeert het', 'design.controls belongs to skinsContract 0.3; a host on 0.2 or lower ignores it'],
+  dev_unreadable: ['--device: het apparaat is niet te laden of faalt in de validator: {0}', '--device: the device cannot be loaded or fails the validator: {0}'],
+  dev_other: ['--device is "{0}" maar de skin is voor "{1}"; de regels zijn niet getoetst', '--device is "{0}" but the skin is for "{1}"; the rules were not checked'],
+  dev_no_ids: ['het apparaat meldt geen id\'s of groepen aan (nog niet gemigreerd); regels op een id of groep doen niets', 'the device registers no ids or groups (not migrated yet); rules on an id or group do nothing'],
+  dev_unknown_id: ['{0}.match: id "{1}" staat niet in het register van het apparaat; de host negeert de regel', '{0}.match: id "{1}" is not in the device\'s register; the host ignores the rule'],
+  dev_unknown_group: ['{0}.match: groep "{1}" staat niet in het register van het apparaat', '{0}.match: group "{1}" is not in the device\'s register'],
+  dev_unknown_role: ['{0}.match: het apparaat heeft geen regelaar met rol "{1}"', '{0}.match: the device has no control with role "{1}"'],
+  ok_controls: ['{0} regelaarregels', '{0} control rules'],
   design_object: ['{0} moet een object zijn', '{0} must be an object'],
   design_enum: ['{0} moet een van {1} zijn', '{0} must be one of {1}'],
   design_colour: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
@@ -131,6 +154,9 @@ const IMG_RE = /^data:image\/(svg\+xml|png|webp|jpeg)(;[A-Za-z0-9=._+-]+)*,/;
 const PORT_MODES = ['default', 'always', 'hover', 'strip'], HAPTIC_LEVELS = ['off', 'light', 'medium', 'strong'];
 const KNOB_STYLES = ['workspace', 'rotary', 'slider'], KNOB_SIZES = ['s', 'm', 'l'], COLOUR_SCHEMES = ['workspace', 'custom'];
 const COLOUR_KEYS = ['bg', 'surface', 'text', 'muted', 'accent', 'line'], HAPTIC_KEYS = ['click', 'turn', 'slide'];
+const CTL_ROLES = ['param', 'fader', 'toggle', 'button', 'pad', 'step', 'display', 'select', 'meter', 'jack'];
+const CTL_FACE = ['rotary', 'hslider', 'vslider', 'default'], CTL_SIZE = ['xs', 's', 'm', 'l', 'xl'], CTL_LENGTH = ['short', 'medium', 'long'], CTL_THUMB = ['round', 'square', 'bar', 'none'], CTL_SHOW = ['always', 'hover', 'never'], CTL_MAX = 64;
+const CTL_KEYS = ['match', 'face', 'size', 'length', 'thickness', 'thumb', 'color', 'showValue'];
 const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'] };
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const normColour = v => { if (typeof v !== 'string') return null; const m = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec(v); if (!m) return null; let h = m[1].toLowerCase(); if (h.length === 3) h = [...h].map(c => c + c).join(''); return '#' + h; };
@@ -138,10 +164,34 @@ const lum = hex => { const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 
 const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 // Controleert de vorm van één design-object (streng: fouten bij verkeerde waarden, let op bij onbekende sleutels).
 // Geeft de geldige, genormaliseerde delen terug (voor samenvoegen en contrastcontrole).
-function checkDesignShape(d, path, E, W) {
+function checkControls(list, path, E, W, C) {
+  if (!Array.isArray(list)) { E('controls_list', path); return; }
+  if (list.length > CTL_MAX) E('controls_max', path, list.length, CTL_MAX);
+  list.slice(0, CTL_MAX).forEach((r, i) => { const P = `${path}[${i}]`;
+    if (!isObj(r)) { E('controls_rule', P); return; }
+    for (const k of Object.keys(r)) if (!CTL_KEYS.includes(k)) W('unknown_field', `${P}.${k}`);
+    const enm = (k, list2) => { if (r[k] === undefined) return false; if (list2.includes(r[k])) return true; E('design_enum', `${P}.${k}`, list2.map(x => '"' + x + '"').join(', ')); return false; };
+    const numOrEnum = (k, list2, a, b) => { if (r[k] === undefined) return false; if (list2.includes(r[k]) || (typeof r[k] === 'number' && Number.isFinite(r[k]) && r[k] >= a && r[k] <= b)) return true; E('controls_enum_num', `${P}.${k}`, list2.map(x => '"' + x + '"').join(', '), a, b); return false; };
+    const m = r.match; let matchOk = false;
+    if (typeof m !== 'string' || !/^(\*|role:[a-z]{1,16}|group:[A-Za-z0-9._-]{1,60}|[A-Za-z0-9._-]{1,60})$/.test(m)) E('controls_match', P);
+    else { matchOk = true; if (m.startsWith('role:') && !CTL_ROLES.includes(m.slice(5))) W('controls_role', P, m.slice(5), CTL_ROLES.join(', ')); }
+    let n = 0;
+    if (r.face === 'none') E('controls_none', P); else if (enm('face', CTL_FACE)) n++;
+    if (numOrEnum('size', CTL_SIZE, 0.6, 2)) n++;
+    if (numOrEnum('length', CTL_LENGTH, 40, 400)) n++;
+    if (r.thickness !== undefined) { if (typeof r.thickness === 'number' && Number.isFinite(r.thickness) && r.thickness >= 2 && r.thickness <= 24) n++; else E('controls_num', `${P}.thickness`, 2, 24); }
+    if (enm('thumb', CTL_THUMB)) n++;
+    if (r.color !== undefined) { if (r.color === 'accent' || normColour(r.color)) n++; else E('controls_colour', `${P}.color`); }
+    if (enm('showValue', CTL_SHOW)) n++;
+    if (matchOk && n === 0 && !CTL_KEYS.slice(1).some(k => r[k] !== undefined)) W('controls_empty', P);
+    if (r.face === 'rotary' && (r.length !== undefined || r.thickness !== undefined || r.thumb !== undefined)) W('controls_slider_only', P);
+    if (matchOk && C) C.push({ p: P, match: m, face: r.face }); });
+}
+function checkDesignShape(d, path, E, W, C) {
   const out = {};
   if (!isObj(d)) { E('design_object', path); return out; }
-  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN)) W('unknown_field', `${path}.${k}`);
+  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls') W('unknown_field', `${path}.${k}`);
+  if (d.controls !== undefined) { out.controls = Array.isArray(d.controls) ? d.controls.slice(0, CTL_MAX).filter(isObj) : []; checkControls(d.controls, `${path}.controls`, E, W, C); }
   for (const sec of Object.keys(KNOWN_DESIGN)) { if (d[sec] === undefined) continue; const sp = `${path}.${sec}`;
     if (!isObj(d[sec])) { E('design_object', sp); continue; }
     for (const k of Object.keys(d[sec])) if (!KNOWN_DESIGN[sec].includes(k)) W('unknown_field', `${sp}.${k}`);
@@ -157,7 +207,7 @@ function checkDesignShape(d, path, E, W) {
   }
   return out;
 }
-const mergeDesign = (a, b) => { const r = {}; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
+const mergeDesign = (a, b) => { const r = {}; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
 const isInt = v => Number.isInteger(v);
 const isStr = v => typeof v === 'string';
 function dataInfo(s) { // { type, base64, body } of null
@@ -185,6 +235,28 @@ function svgProblem(t) {
 function unescapeCss(s) { return s.replace(/\\([0-9a-fA-F]{1,6})\s?/g, (m, h) => { const c = parseInt(h, 16); return c > 0 && c < 0x110000 ? String.fromCodePoint(c) : ''; }).replace(/\\(.)/gs, '$1'); }
 function dutchHits(text) { const words = String(text).toLowerCase().match(/[a-zà-ÿ]+/g) || []; return [...new Set(words.filter(w => DUTCH.includes(w)))]; }
 
+// ---------- het register van een apparaat (voor --device): draait validate-instrument.mjs --sub ----------
+function loadDevice(path) {
+  const V = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'contract', 'validate-instrument.mjs');
+  const r = spawnSync(process.execPath, [V, path, '--sub'], { encoding: 'utf8' });
+  if (r.status !== 0) return { error: ((r.stderr || r.stdout || '').trim().split('\n')[0] || 'exit ' + r.status) };
+  const id = /^PKDEV (.*)$/m.exec(r.stdout || ''), c = /^PKCTL (.*)$/m.exec(r.stdout || '');
+  if (!id || !c) return { error: 'validate-instrument.mjs gaf geen register (te oude versie?)' };
+  try { return { id: id[1], list: JSON.parse(c[1]) }; } catch (e) { return { error: e.message }; }
+}
+function checkAgainstDevice(s, rules, dev, W) {
+  if (dev.error) { W('dev_unreadable', dev.error); return; }
+  if (s.device !== dev.id) { W('dev_other', dev.id, s.device); return; }
+  const ids = new Set(dev.list.filter(c => c.id).map(c => c.id)), groups = new Set(dev.list.filter(c => c.group).map(c => c.group)), roles = new Set(dev.list.map(c => c.role));
+  if (!ids.size && !groups.size && rules.some(r => !r.match.startsWith('role:') && r.match !== '*')) W('dev_no_ids');
+  const seen = new Set();
+  for (const r of rules) { const m = r.match; if (m === '*') continue;
+    const key = r.p; if (seen.has(key)) continue; seen.add(key);
+    if (m.startsWith('role:')) { if (CTL_ROLES.includes(m.slice(5)) && !roles.has(m.slice(5))) W('dev_unknown_role', r.p, m.slice(5)); }
+    else if (m.startsWith('group:')) { if ((ids.size || groups.size) && !groups.has(m.slice(6))) W('dev_unknown_group', r.p, m.slice(6)); }
+    else if ((ids.size || groups.size) && !ids.has(m)) W('dev_unknown_id', r.p, m); }
+}
+
 // ---------- één skin ----------
 function validateSkin(path, ctx = {}) {
   const errs = [], warns = []; // elk: [code, tekst]
@@ -200,7 +272,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 2) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 3) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -222,7 +294,8 @@ function validateSkin(path, ctx = {}) {
         if (info.type === 'svg+xml') { const p = svgProblem(svgText(info)); if (p) E('icon_svg', p); } } }
   } else if (s.icon === undefined) E('icon_type');
   // design (laag 1, contract 0.2)
-  const skinDesign = s.design === undefined ? null : checkDesignShape(s.design, 'design', E, W);
+  const CR = [];   // regels uit design.controls (voor --device)
+  const skinDesign = s.design === undefined ? null : checkDesignShape(s.design, 'design', E, W, CR);
   let hasDesign = s.design !== undefined;
   // appearances
   const apps = Array.isArray(s.appearances) ? s.appearances : null;
@@ -237,7 +310,7 @@ function validateSkin(path, ctx = {}) {
     ids.push(isStr(a.id) ? a.id : null);
     if (!isStr(a.name) || !a.name.trim() || [...a.name].length > 40) E('app_name', i);
     if (a.description !== undefined && (!isStr(a.description) || [...a.description].length > 300)) E('app_desc', i);
-    if (a.design !== undefined) { hasDesign = true; appDesigns[i] = checkDesignShape(a.design, `appearances[${i}].design`, E, W); }
+    if (a.design !== undefined) { hasDesign = true; appDesigns[i] = checkDesignShape(a.design, `appearances[${i}].design`, E, W, CR); }
     // when
     let rng = null;
     if (a.when !== undefined) {
@@ -282,6 +355,9 @@ function validateSkin(path, ctx = {}) {
   if (assetTotal > MAX_ASSETS) E('assets_total', assetTotal);
   // design: samengevoegd per verschijningsvorm (skin-niveau, daarover de verschijning per sleutel)
   if (hasDesign && /^0\.1$/.test(String(s.skinsContract))) W('design_contract');
+  const nCtl = (skinDesign?.controls?.length || 0) + appDesigns.reduce((a, x) => a + (x?.controls?.length || 0), 0);
+  if (nCtl && /^0\.[012]$/.test(String(s.skinsContract))) W('controls_contract');
+  if (ctx.device && CR.length) checkAgainstDevice(s, CR, ctx.device, W);
   const seenMsg = new Set();
   const once = (k, ...a) => { const t = vt(k, ...a); if (!seenMsg.has(t)) { seenMsg.add(t); warns.push([k, t]); } };
   (apps || []).forEach((a, i) => { if (!skinDesign && !appDesigns[i]) return;
@@ -309,7 +385,7 @@ function validateSkin(path, ctx = {}) {
   else if (!ctx.skipDirWarn) W('dir_elsewhere');
   const n = (apps || []).length;
   const info = [vt('ok_dev', s.device), vt(n === 1 ? 'ok_app' : 'ok_apps', n), vt('ok_css', cssTotal), vt('ok_assets', nAssets)];
-  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); info.push(vt('ok_file', size));
+  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); info.push(vt('ok_file', size));
   return { errs, warns, line: `${isStr(s.name) ? s.name : '?'} ${isStr(s.version) ? s.version : '?'} (${isStr(s.id) ? s.id : '?'}) — ${info.join(', ')}`, id: s.id, device: s.device };
 }
 
@@ -330,6 +406,7 @@ function validateIconFile(path) {
 }
 
 // ---------- uitvoer ----------
+const DEV = DEVICE ? loadDevice(DEVICE) : null;
 let nFiles = 0, nOk = 0, nBad = 0, nWarn = 0;
 const fmt = ([k, t]) => t + (CODES ? ` [${k}]` : '');
 function report(path, r, label) {
@@ -349,7 +426,7 @@ if (DIR) {
   const all = walk(root, 0), skinIds = new Map(); const iconsByDir = new Map(); let n = 0;
   for (const p of all) { const b = basename(p), rel = p.slice(root.length + 1) || b, dir = dirname(p), inLib = basename(dirname(dir)) === 'library';
     if (/\.patchkamer-skin\.json$/i.test(b)) { n++;
-      const r = validateSkin(p, { inLibrary: inLib, skipDirWarn: false });
+      const r = validateSkin(p, { inLibrary: inLib, skipDirWarn: false, device: DEV });
       if (r.id) { const k = r.id; if (skinIds.has(k)) r.warns.push(['dir_dup', vt('dir_dup', k, skinIds.get(k), rel)]); else skinIds.set(k, rel); }
       report(p, r, rel); }
     else if (/^icon\.[a-z0-9]+$/i.test(b)) { n++; validateOne(p, rel); (iconsByDir.get(dir) || iconsByDir.set(dir, []).get(dir)).push(b); }
@@ -361,6 +438,6 @@ if (DIR) {
   if (!n) { console.error(`${vt('fout')} ${vt('dir_none', DIR)}`); process.exit(1); }
   console.log(vt('summary', nFiles, nOk, nBad, nWarn));
 } else {
-  for (const f of files) validateOne(f, f, {});
+  for (const f of files) validateOne(f, f, { device: DEV });
 }
 process.exit(nBad ? 1 : 0);

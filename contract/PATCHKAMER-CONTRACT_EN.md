@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.14 for building agents
+# Patchkamer — Instrument contract v1.15 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -23,6 +23,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.12 | Mastering: a cable kind of its own (yellow, dotted sine) with triangle ports `masteringIn`/`masteringOut`; `configureMastering` and `onMasteringTargets`; `host.mastering` for a Master Director that sets the settings of mastering devices together (§11b) |
 | v1.13 | Multi-MIDI and controls: a cable kind of its own (double dashed orange cable) with `multiEventIn`/`multiEventOut`, `eventBundles`, `onEventBundle` and `host.eventBundleChanged`; the optional fields `ch` and `cc` on events; `host.controls` and `host.setControl` to see and set the controls of other devices (§11c) |
 | v1.14 | Note names: a device that maps notes to names (a drum machine) can offer `noteNames()` and call `host.noteNamesChanged`; `host.peers` passes them on as `noteNames`, so a sequencer can name its rows (§13b) |
+| v1.15 | Controls recognisable for skins: `id`, `role` and `group` on `host.ui.knob` (in the `options`) and `host.ui.select` (new 6th argument), the attributes `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` for your own elements and `host.ui.list` for the register; the validator gives a `warning` for duplicate or missing ids and knows `--controls` (§12d) |
 
 ---
 
@@ -362,10 +363,11 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 - `mount(el)` receives an empty element in the card. The card is about 300 px wide by default. With `ui: { width: 200..6000, minWidth }` you get a wider card.
 - The user can make every card wider, narrower, taller and shorter. So let your UI flow: auto-fit grids, `minmax(0, 1fr)`, container queries. With a fixed height the host scrolls your UI; the ports stay visible.
 - **Helpers** in `host.ui`:
-  - `knob(parent, label, [min, max, step], value, fmt, onchange, options?)` → `{ set(v), el, input }`; `options` (v1.8): `{ default: number, scale: 'log' }`
-  - `select(parent, label, [[value, text], …], value, onchange)` → a `<select>`; set `select.value = v`
+  - `knob(parent, label, [min, max, step], value, fmt, onchange, options?)` → `{ set(v), el, input }`; `options` (v1.8): `{ default: number, scale: 'log' }`; since v1.15 also `{ id, role, group }` (§12d)
+  - `select(parent, label, [[value, text], …], value, onchange)` → a `<select>`; set `select.value = v`; since v1.15 a 6th argument `{ id, role, group }` (§12d)
   - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(step) }`; keeps a reference to the array
   - `jack(this, parent, portId, dir, label)` (see §3), `noise(ctx)`, `curve(k)`
+  - `adopt(el, { id, role, group, label })` and `list(this)` (v1.15, §12d)
 - **Keep what `knob` and `select` return.** `setState` must update them (§13).
 - Your own HTML is fine too. Use the CSS variables of the host, then your device follows the color scheme (dark, light, retro):
   - colors: `--bg --floor --card --card-2 --line --fg --muted`;
@@ -484,6 +486,46 @@ export default {
 
 ---
 
+## 12d. Making controls recognisable for skins (v1.15)
+
+A skin (see `skins/`) can choose the face of a control (rotary knob, horizontal or vertical slider), its size, length and colour. For that the host must be able to **point at a control for certain**. Without it, it guesses from the label, and that is translated and changes. Everything below is **optional and additive**: a device that does nothing works as before, and an older host ignores the options and attributes.
+
+**The three pieces of data per control**
+
+| Data | Values | Meaning |
+|---|---|---|
+| `id` | text, 1 to 60 characters from `[A-Za-z0-9._-]` | Fixed address of the control. Equal to the key in `getState()` or `params()` (`cut`, `kick.tune`, `ch3.vol`), **never the label**. Unique within the device. An id does not change between versions; a new id is fine, removing one only with a new device version. |
+| `role` | `param`, `fader`, `toggle`, `button`, `pad`, `step`, `display`, `select`, `meter`, `jack` | The intent of the control. Default: `param` for `host.ui.knob`, `select` for `host.ui.select`. `fader` is a long-throw control (channel volume), `param` an ordinary setting. |
+| `group` | text, 1 to 60 characters from `[A-Za-z0-9._-]` | Free section name from the logical layout of your UI (`osc`, `filter`, `env`). A skin can target it (`group:filter`). |
+
+**Three ways to give them (equivalent)**
+
+1. Through the existing calls: `host.ui.knob(parent, label, [min, max, step], value, fmt, onchange, { id, role, group, default, scale })` (the `options` of v1.8 get three more keys) and `host.ui.select(parent, label, options, value, onchange, { id, role, group })` (new 6th argument). The return value stays `{ set, el, input }` or the `<select>`; `knob` also returns `id`.
+2. With attributes on your own elements: `data-pk-id`, `data-pk-role`, `data-pk-group`. No call needed, harmless for an older host.
+3. With `host.ui.adopt(el, { id, role, group, label })`: sets the attributes and registers the element; returns `el`. Only for elements with a **model**: an `input` of type range or checkbox, a `select` or a `button`. A `div` cannot.
+
+```js
+mount(el) {
+  ui.cut = host.ui.knob(el, T.cut, [0, 1, 0.001], S.cut, v => Math.round(v * 100) + '%', v => { S.cut = v; apply(); }, { id: 'cut', role: 'param', group: 'filter' });
+  ui.mode = host.ui.select(el, T.mode, [['lp', 'LP'], ['hp', 'HP']], S.mode, v => { S.mode = v; apply(); }, { id: 'mode', group: 'filter' });
+  host.ui.adopt(mySlider, { id: 'ch1.vol', role: 'fader', group: 'ch1', label: T.vol });   // your own <input type="range">
+}
+```
+
+**The register.** The host keeps per device what was registered, also when your UI rebuilds itself (a `render()` that makes new elements). `host.ui.list(this)` returns it as `[{ id, role, group, label, type, min, max, face }]` (`type`: `'range'`, `'select'`, `'check'` or `'button'`; `face`: the face the control has now). A skin maker sees the same in the table of `validate-instrument.mjs --controls` and in the *Controls* tab of the designer.
+
+**Rules**
+
+- A skin only chooses the **face**; value, `onchange` and `setState` run unchanged through your element. A skin cannot set a value and cannot hide a control.
+- Only use ids you know as a state or parameter key. An id that differs per `host.lang` is a label and therefore wrong.
+- When you migrate a device, give **all** its knobs and choices an id, not a few: a skin that names a missing id silently does nothing.
+- A device that rebuilds its UI (Mixer, Control Surface) derives ids from its layout (`k1.2.3`, `ch3.vol`) and gives every control its role and group, so a skin can target by role or group.
+- Sound, state and presets do not change because of ids, roles or groups. Do not change them in the same action.
+
+**What the validator does.** It only gives a `warning` (never an error) for: an id on two controls (only what is built in `create()`/`mount()`; a later rebuild does not count twice), some controls without an id while others have one (no ids at all = not migrated, no message), a role outside the list, an id or group outside `[A-Za-z0-9._-]{1,60}`, options that are not an object, `adopt` on an element without a model or without an element, a `data-pk-id` on an element that is not attached anywhere in the card, and ids that depend on `host.lang`. With `--controls` it then prints the table `id | role | group | label nl/en | range | face` (the label from the nl and en rounds; if they are equal it appears once).
+
+---
+
 ## 13. State, versions and presets (v1.6)
 
 **State.** `getState()` returns everything needed to restore the sound and the behavior exactly: knobs, patterns and choices. The result must be plain JSON, without AudioNodes.
@@ -551,6 +593,10 @@ For controllers (such as a MIDI device that couples pads to devices). Ordinary i
 |---|---|
 | `noteNames()` | Optional on your instance. Returns a list `[{ note: 0..127, name: 'Snare' }]` in the order in which your device shows its sounds. At most 128 items, `name` at most 40 characters; the host skips invalid items. Return only the sounds that have a note right now |
 | `host.noteNamesChanged(this)` | Call this when the list changes (another kit, another order, another note, a tune loaded). The host tells the other devices through `onPeers` |
+| `host.ui.knob(…, { id, role, group })`, `host.ui.select(…, { id, role, group })` | v1.15 | Make a control recognisable for skins (§12d) |
+| `host.ui.adopt(el, { id, role, group, label })` | v1.15 | Register your own element as a control; returns `el` (§12d) |
+| `host.ui.list(this)` | v1.15 | The register: `[{ id, role, group, label, type, min, max, face }]` (§12d) |
+| `data-pk-id`, `data-pk-role`, `data-pk-group` | v1.15 | The same data as attributes on your own elements (§12d) |
 | `peers[].noteNames` | In the list from `host.peers(this)`: the cleaned list of that device, or `[]` if it has none |
 
 - A sequencer or controller finds its target with `host.cablesFrom(this, ownOutput)` and looks the `id` up in `host.peers(this)`. Without a cable or without a list it behaves as always.
@@ -680,6 +726,7 @@ A library is a folder (local, on GitHub or at a web address) with modules and a 
 ```
 node validate-instrument.mjs my-device.patchkamer-device.js
 node validate-instrument.mjs my-device.patchkamer-device.js --lang en   # output in English (default Dutch)
+node validate-instrument.mjs my-device.patchkamer-device.js --controls  # also print the table of controls (v1.15)
 ```
 
 The validator loads your module with a fake AudioContext, a fake DOM (with shadow roots) and a fake host. It ends with one `OK` line (exit 0) or with the first error (exit 1). It checks:
@@ -698,6 +745,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 12. **Mastering (v1.12)**: a device with `masteringIn` has `configureMastering(patch)` (and optionally `analyseMastering`, `acceptMasteringProposal`, `getMasteringReport`); they receive `{}`, `null` and unknown or invalid fields and return an object (or nothing), and `getMasteringReport` returns JSON without AudioNodes. A device with `masteringOut` has `onMasteringTargets(targets)`; it receives `[]`, a list with one target (twice) and `[]` again. The fake host checks `host.mastering` for a known action and an existing `masteringOut` port. A modulator has `modOut` or `masteringOut`.
 13. **Multi-MIDI (v1.13)**: a device with `multiEventOut` has `eventBundles[portId]` with a list `tracks` (unique text ids, a `name`, an optional `ch` from 1 to 16); a device with `multiEventIn` has `onEventBundle`; it receives a bundle, the same key with another track added, and then `null`. Events with `ch` or `cc` have values in range; on a multi-MIDI port every event carries a `track` from the list. The fake host knows `host.eventBundleChanged`, `host.controls` and `host.setControl`.
 14. **Note names (v1.14)**: a device with `noteNames()` returns a list of `{ note, name }` (note 0 to 127, a non-empty `name`); `noteNames()` does not throw and `host.noteNamesChanged(this)` may be called without error.
+15. **Controls for skins (v1.15)**: the fake host knows `host.ui.knob(…, options)`, `host.ui.select(…, options)`, `host.ui.adopt` and `host.ui.list`, and also reads `data-pk-*` attributes on your own elements. Only a `warning` (never an error) for a duplicate id, some ids missing, a role outside the list, an invalid id or group, options that are not an object, `adopt` on an element without a model, an id on an element that is not attached anywhere, and ids that differ per `host.lang`. `--controls` prints the table `id | role | group | label nl/en | range | face` (see §12d).
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -722,7 +770,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 15. Sliders are at their default value after `mount()`; numbers next to sliders are updated directly in the `input` handler; open shadow root (§12a).
 16. Instruments (optional): `parts`/`getPart`/`setPart` together, only sound in `getPart`, restoring leaves the setting the same (§13c).
 17. All text for the user is chosen on `host.lang` (`'nl'` and `'en'`, otherwise `'en'`); names per language in `i18n`; `oversample` of `host.audio` used where you cause aliasing yourself (§12c).
-18. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+18. Controls (v1.15, recommended): every `host.ui.knob`/`select` and every own slider has an `id` (= state/parameter key, never the label), a `role` and a `group`; `node validate-instrument.mjs file.patchkamer-device.js --controls` shows the table without `warning` (§12d).
+19. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 
@@ -748,6 +797,9 @@ What the validator can *not* see: whether your texts are well translated, whethe
 | Updating the number only in a following frame | Typing does not work: the host does not see the number move along | Set the number directly in the `input` handler |
 | Own double-click reset on every slider | Double work; the host already does it | Leave it out, or `data-pk-noreset` if the slider must *not* go back |
 | Texts hard-coded in one language | Users of the other language see foreign text | Choose all texts on `host.lang` and give names per language in `i18n` (§12c) |
+| The label as the `id` of a control | The label is translated and changes: a skin no longer hits the control; the validator gives a `warning` if it differs per language | `id` = the key in `getState()`/`params()` (§12d) |
+| A few controls with an id, the rest without | A skin can only target the registered ones; the rest stays default | Give all knobs, choices and sliders an id |
+| `host.ui.adopt` on a `div` or a drawing | No model: the host cannot put another face on it | Only on `input` (range/checkbox), `select` or `button` |
 
 ---
 
@@ -758,7 +810,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.14
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.15
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -792,9 +844,9 @@ export default {
     return {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
-        ui.shape = host.ui.select(el, T.shape, [['sine', T.sine], ['triangle', T.triangle], ['square', T.square]], S.shape, v => { S.shape = v; apply(); });
-        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); });
-        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); });
+        ui.shape = host.ui.select(el, T.shape, [['sine', T.sine], ['triangle', T.triangle], ['square', T.square]], S.shape, v => { S.shape = v; apply(); }, { id: 'shape', group: 'lfo' });
+        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], S.rate, v => v.toFixed(1) + ' Hz', v => { S.rate = v; apply(); }, { id: 'rate', role: 'param', group: 'lfo' });
+        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], S.depth, v => Math.round(v * 100) + '%', v => { S.depth = v; apply(); }, { id: 'depth', role: 'param', group: 'lfo' });
       },
       params() { return MODP.map(([id, key, min, max, log]) => ({ id, name: T[key], lane: 'trem', laneName: 'Tremolo', min, max, role: id === 'rate' ? 'rate' : 'depth', scale: log ? 'log' : 'lin', drift: 0.1, on: true, fast: id === 'depth' })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODP.some(m => m[0] === k)) mod[k] = o[k]; apply(); },
@@ -817,7 +869,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.14
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.15
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -880,7 +932,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.14
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.15
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -958,7 +1010,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.14.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.15.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

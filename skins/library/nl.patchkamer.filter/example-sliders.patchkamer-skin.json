@@ -1,0 +1,43 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.3",
+  "id": "nl.patchkamer.filter.example-sliders",
+  "device": "nl.patchkamer.filter",
+  "name": "Example sliders",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Shows design.controls per appearance: horizontal sliders on a narrow card, tall vertical sliders on a wide card, and the type choice left as it is.",
+  "created": "2026-11-06",
+  "icon": null,
+  "default": "narrow",
+  "design": {
+    "controls": [
+      { "match": "role:param", "face": "hslider", "length": "medium", "thickness": 4, "thumb": "round", "showValue": "always" },
+      { "match": "role:select", "face": "default" }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "narrow",
+      "name": "Narrow",
+      "description": "Horizontal sliders that fill a narrow card.",
+      "when": { "maxWidth": 419 },
+      "assets": {}
+    },
+    {
+      "id": "wide",
+      "name": "Wide",
+      "description": "Tall vertical sliders with a bar thumb, shown only on hover to keep the card calm.",
+      "when": { "minWidth": 420 },
+      "design": {
+        "controls": [
+          { "match": "role:param", "face": "vslider", "length": 160, "thumb": "bar", "showValue": "hover" },
+          { "match": "drive", "color": "accent" }
+        ]
+      },
+      "assets": {}
+    }
+  ]
+}
