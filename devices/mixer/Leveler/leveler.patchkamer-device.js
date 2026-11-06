@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Alle zes continue regelaars (Target, Response, Window, Range ±, Gate, Ceiling) zijn nu stuurbaar via params/modulate; het apparaat krijgt daarmee automatisch een mod-ingang. Alles staat standaard uit in Drift. Knopwaarden, getState, presets en geluid zonder modulatie ongewijzigd. Bewust niet: het keuzemenu Stand (Regelen/Doorlaten) en de twee knoppen.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Een niet-eindige of absurd grote ingangswaarde (NaN, ±Infinity, een filter dat ontploft) vergiftigde de meting en de piekvolger voor altijd: na één Infinity-sample bleef alles stil. Nu wordt de ingang begrensd (±16 = +24 dB) en NaN wordt 0, en een bewaker zet een ontspoorde toestand terug. Normaal geluid is bit-identiek aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Leveler en nieuwe id nl.patchkamer.leveler (voorheen Egaal, nl.patchkamer.egaal); presets en songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, poortnamen per taal in i18n). Tekenen via host.frame met een ResizeObserver en een kleurcache
@@ -76,12 +77,14 @@ registerProcessor('${WNAME}', Egaal);`;
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
   nl: { mode: 'Stand', lvl: 'Regelen', thru: 'Doorlaten',
+    gLevel: 'Niveau', gTiming: 'Timing', gLimits: 'Grenzen',
     target: 'Doelniveau', speed: 'Reactietijd', window: 'Meettijd', range: 'Bereik ±', gate: 'Stiltedrempel', ceiling: 'Plafond',
     b1: 'Huidig niveau = doel', b1t: 'Zet het doelniveau op wat er nu binnenkomt', b2: 'Regeling op 0',
     loading: 'Leveler laden…', failed: 'AudioWorklet niet beschikbaar: Leveler laat het geluid ongewijzigd door.',
     aria: 'Niveaumeter: in, uit en regeling', rIn: 'IN', rOut: 'UIT', rGain: 'REGEL', lim: 'limiter ', limIdle: 'limiter rust',
     tip: 'Houdt het gemiddelde volume gelijk: meet over de meettijd en regelt in de reactietijd omhoog of omlaag naar het doel (omlaag drie keer sneller), binnen het bereik. Onder de stiltedrempel blijft de regeling staan. De limiter erachter vangt pieken boven het plafond op (5 ms vertraging).' },
   en: { mode: 'Mode', lvl: 'Leveling', thru: 'Pass through',
+    gLevel: 'Level', gTiming: 'Timing', gLimits: 'Limits',
     target: 'Target', speed: 'Response', window: 'Window', range: 'Range ±', gate: 'Gate', ceiling: 'Ceiling',
     b1: 'Current level = target', b1t: 'Sets the target level to what is coming in now', b2: 'Reset gain',
     loading: 'Loading Leveler…', failed: 'AudioWorklet unavailable: Leveler passes the sound through unchanged.',
@@ -98,6 +101,8 @@ const K = [   // id, tekstsleutel, [min, max, stap], standaard, weergave
   ['ceiling', 'ceiling', [-12, 0, 0.1], -1, v => v.toFixed(1) + ' dB'],
 ];
 const GRP = { target: 'level', speed: 'timing', window: 'timing', range: 'limits', gate: 'limits', ceiling: 'limits' };   // sectie per regelaar (voor skins)
+// stuurbaar: id -> [rol, bereik van de drift, logaritmisch]; alles standaard uit (niveau, tijden en drempels bewegen niet ongevraagd)
+const MODP = { target: ['level', 0.05, false], speed: ['env', 0.08, true], window: ['env', 0.08, true], range: ['depth', 0.08, false], gate: ['level', 0.05, false], ceiling: ['level', 0.05, false] };
 const DEF = () => ({ on: true, ...Object.fromEntries(K.map(k => [k[0], k[3]])) });
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 // terugval voor een host zonder host.frame (contract §12b)
@@ -111,7 +116,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.leveler',
   name: 'Leveler',
-  version: '1.15.0',
+  version: '1.15.1',
   kind: 'effect',
   category: 'mix',
   ui: { width: 420, minWidth: 300 },
@@ -125,7 +130,9 @@ export default {
     input.connect(out);                                   // doorlaten tot de worklet er is (en als terugval)
     let node = null, dead = false, ui = {}, meter = { in: -120, gain: 0, out: -120, lim: 0 }, canvas = null, g2 = null, note = null, stopDraw = null, ready = false;
     let cw = 300, ro = null, col = null, colT = 0;
-    const send = () => { if (node) node.port.postMessage({ type: 'set', s: { ...S } }); };
+    const mod = {};
+    const E = k => { const b = S[k], o = mod[k] || 0, r = K.find(x => x[0] === k)[2]; if (!o) return b; const mn = r[0], mx = r[1]; return MODP[k][2] ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
+    const send = () => { if (node) node.port.postMessage({ type: 'set', s: { ...S, ...Object.fromEntries(Object.keys(mod).map(k => [k, E(k)])) } }); };
     const loader = host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
     loader.then(() => {
       if (dead || typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet');
@@ -154,11 +161,11 @@ export default {
       row(6, T.rIn, meter.in, au, meter.in > -100 ? meter.in.toFixed(1) : '—');
       row(24, T.rOut, meter.out, au, meter.out > -100 ? meter.out.toFixed(1) : '—');
       // regeling: balk vanuit het midden, ±bereik
-      const y = 44, mid = (L + R) / 2, span = (R - L) / 2, gr = S.range > 0 ? clamp(meter.gain / S.range, -1, 1) : 0;
+      const y = 44, mid = (L + R) / 2, span = (R - L) / 2, gr = E('range') > 0 ? clamp(meter.gain / E('range'), -1, 1) : 0;
       g.fillStyle = fg; g.fillText(T.rGain, 6, y + 6); g.fillStyle = ln; g.fillRect(L, y, R - L, 12); g.fillStyle = ev; g.fillRect(Math.min(mid, mid + gr * span), y, Math.abs(gr * span), 12);
       g.fillStyle = fg; g.fillRect(mid - 0.5, y - 2, 1, 16); g.fillText((meter.gain >= 0 ? '+' : '') + meter.gain.toFixed(1), R + 6, y + 6);
       // doellijn op IN/UIT en limiter-lampje
-      g.fillStyle = fg; g.fillRect(X(S.target) - 1, 3, 2, 36);
+      g.fillStyle = fg; g.fillRect(X(E('target')) - 1, 3, 2, 36);
       const limOn = meter.lim < -0.3; g.fillStyle = limOn ? st : ln; g.fillRect(L, 62, 8, 8); g.fillStyle = fg; g.fillText(limOn ? T.lim + meter.lim.toFixed(1) + ' dB' : T.limIdle, L + 12, 66);
     }
     const stopLoop = () => { if (stopDraw) { stopDraw(); stopDraw = null; } };
@@ -184,6 +191,8 @@ export default {
         paintAll(); stopLoop(); stopDraw = tekenLus(host, self, draw, 30);
       },
       unmount() { stopLoop(); if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); canvas = null; g2 = null; note = null; ui = {}; },
+      params() { return K.map(([id, tk, range]) => ({ id, name: T[tk], lane: GRP[id], laneName: T['g' + GRP[id][0].toUpperCase() + GRP[id].slice(1)], min: range[0], max: range[1], role: MODP[id][0], scale: MODP[id][2] ? 'log' : 'lin', drift: MODP[id][1], on: false })); },
+      modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (Object.hasOwn(MODP, k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); send(); },
       getState() { return { ...S }; },
       setState(s) {
         s = s && typeof s === 'object' ? s : {}; const d = DEF();

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.2 — Geen params(): de enige continue regelaar (Stijlsterkte, strength) is bewust niet stuurbaar. Hij is een invoer voor het recept en werkt pas bij de actie Stel keten in (host.mastering 'apply'), die de instellingen van andere apparaten overschrijft en in de undo-geschiedenis komt; een modulator zou dat 25 keer per seconde moeten herhalen en geeft geen stuurbare klank. Verder alleen keuzelijsten en vinkjes. Niets aan het gedrag veranderd.
 // 1.12.0 — contract v1.12: De poort `setup` is nu een mastering-uitgang (driehoek, gele gestippelde kabel); onMasteringTargets in plaats van onModTargets, instellingen per doel-id via host.mastering, accentkleur geel. Het geluid is ongewijzigd (zelfde DSP, zelfde worklet).
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Master Director (nieuwe id, eigen map; voorheen Masterregie). Tweetalig (host.lang). Nieuw: een tweede keuze, de situatie (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming),
 //          naast de muziekstijl, en 32 muziekstijlen in plaats van 8. Het recept per apparaat volgt uit stijl × situatie en wordt via host.mastering (Master Director-protocol 1) in de aangesloten apparaten gezet.
@@ -42,7 +43,7 @@ function recipe(s, connected) {
   return r;
 }
 export default {
-  id: 'nl.patchkamer.masterdirector', name: 'Master Director', version: '1.12.1', kind: 'modulator', category: 'mastering', collection: 'mastering', masteringController: 1, ui: { width: 670, minWidth: 320 },
+  id: 'nl.patchkamer.masterdirector', name: 'Master Director', version: '1.12.2', modExclude: ['strength'], kind: 'modulator', category: 'mastering', collection: 'mastering', masteringController: 1, ui: { width: 670, minWidth: 320 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], masteringIn: [], masteringOut: [{ id: 'setup', name: 'Style / setup' }] },
   i18n: { nl: { ports: { setup: 'Stijl / setup' } } },
   create(ctx, host) {

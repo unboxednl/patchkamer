@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Reverb length (size) is nu ook stuurbaar (params/modulate, standaard uit in Drift). Een gemoduleerde lengte bouwt de galmimpuls opnieuw op: dat gebeurt hoogstens vier keer per seconde en in stappen van 0,1 s (niet beluisterd: de galmstaart wisselt bij elke stap). Knopwaarde, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: het keuzemenu Delay (op tempo of vrij).
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Room en nieuwe id nl.patchkamer.room (voorheen Ruimte, nl.patchkamer.ruimte); presets en songs uit die tijd verwijzen naar de oude id.
@@ -11,7 +12,8 @@
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 // id, naam per taal (nl, en), min, max, log, rol, bereik, aan, spoor
 const MODP = [['time', 'Tijd (vrij)', 'Time (free)', 0.05, 1.5, true, 'time', 0.03, false, 'delay'], ['fb', 'Feedback', 'Feedback', 0, 0.92, false, 'feedback', 0.10, true, 'delay'], ['hp', 'Delay HP', 'Delay HP', 40, 2000, true, 'filter', 0.10, true, 'delay'], ['dsend', 'Delay mix', 'Delay mix', 0, 1, false, 'send', 0.10, false, 'delay'],
-  ['tone', 'Galm toon', 'Reverb tone', 500, 16000, true, 'tone', 0.10, true, 'reverb'], ['wet', 'Galm mix', 'Reverb mix', 0, 1, false, 'send', 0.08, true, 'reverb']];
+  ['tone', 'Galm toon', 'Reverb tone', 500, 16000, true, 'tone', 0.10, true, 'reverb'], ['wet', 'Galm mix', 'Reverb mix', 0, 1, false, 'send', 0.08, true, 'reverb'],
+  ['size', 'Galm lengte', 'Reverb length', 0.3, 8, true, 'decay', 0.05, false, 'reverb']];
 const TXT = {
   nl: { delay: 'Delay', sync: 'op tempo (3/16)', free: 'vrij', time: 'Tijd', size: 'Galm', laneDelay: 'Delay', laneReverb: 'Galm' },
   en: { delay: 'Delay', sync: 'to tempo (3/16)', free: 'free', time: 'Time', size: 'Reverb', laneDelay: 'Delay', laneReverb: 'Reverb' },
@@ -33,7 +35,7 @@ class RoomGuard extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', RoomGuard);`;
 
 export default {
-  id: 'nl.patchkamer.room', name: 'Room', version: '1.15.0', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.room', name: 'Room', version: '1.15.1', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out' } } },
   ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
@@ -52,7 +54,17 @@ export default {
     const bpm = +(host && host.bpm);
     let lastStepDur = 60 / (Number.isFinite(bpm) && bpm > 0 ? bpm : 120) / 4, lastSize = 0;
     const apply = () => { const t = ctx.currentTime, r = 0.04, w = E('wet'); fb.gain.setTargetAtTime(E('fb') * fbScale, t, r); dsend.gain.setTargetAtTime(E('dsend'), t, r); wet.gain.setTargetAtTime(w * 1.2, t, r); dry.gain.setTargetAtTime(1 - w * 0.4, t, r); dhp.frequency.setTargetAtTime(E('hp'), t, r); rtone.frequency.setTargetAtTime(E('tone'), t, r); dly.delayTime.setTargetAtTime(state.sync ? Math.min(1.9, lastStepDur * 3) : E('time'), t, 0.08); };
-    const mkRev = () => { if (Math.abs(lastSize - state.size) > 0.05) { reverbBuf = impulse(state.size); conv.buffer = reverbBuf; lastSize = state.size; } };
+    let revAt = -1e9, revPend = false;
+    const clock = () => (typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now());
+    // throttle: alleen voor een gemoduleerde lengte (vanuit modulate/watch); de knop en setState bouwen direct, zoals voorheen
+    const mkRev = throttle => {
+      const sz = mod.size ? Math.round(E('size') * 10) / 10 : state.size;
+      if (Math.abs(lastSize - sz) > 0.05) {
+        if (throttle && clock() - revAt < 250) { revPend = true; return; }
+        reverbBuf = impulse(sz); conv.buffer = reverbBuf; lastSize = sz; revAt = clock();
+      }
+      revPend = false;
+    };
     mkRev(); apply();
     // bewaker 1: de ingangsbeveiliging (worklet); zonder AudioWorklet blijft de ingang direct verbonden
     let guard = null;
@@ -80,6 +92,7 @@ export default {
       else if (pl > 6) { fbScale = Math.max(0.3, fbScale * 0.85); apply(); }     // de delaylus loopt op (de lusversterking kan boven 1 komen): feedback tijdelijk omlaag
       else if (pl < 1.5 && fbScale < 1) { fbScale = Math.min(1, fbScale + 0.02); apply(); }
       if (peak(probeRev) === Infinity) replaceReverb();
+      if (revPend) mkRev(true);
     };
     const timer = typeof OfflineAudioContext !== 'undefined' && ctx instanceof OfflineAudioContext ? 0 : setInterval(watch, 50);
     const ui = {};
@@ -98,7 +111,7 @@ export default {
       },
       onStep(info) { if (!info) return; const { stepDur, time } = info; if (!Number.isFinite(stepDur) || stepDur <= 0 || !Number.isFinite(time)) return; lastStepDur = stepDur; if (state.sync) dly.delayTime.setTargetAtTime(Math.min(1.9, stepDur * 3), time, 0.05); },
       params() { return MODP.map(m => ({ id: m[0], name: m[NI], lane: m[9], laneName: m[9] === 'delay' ? T.laneDelay : T.laneReverb, min: m[3], max: m[4], role: m[6], scale: m[5] ? 'log' : 'lin', drift: m[7], on: m[8] })); },
-      modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODP.some(x => x[0] === k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); },
+      modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (MODP.some(x => x[0] === k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); mkRev(!!timer); },
       getState() { return { ...state }; },
       setState(s) {
         s = s && typeof s === 'object' ? s : {};

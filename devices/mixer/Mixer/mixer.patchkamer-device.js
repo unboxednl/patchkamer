@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.5.0 — Alle continue regelaars staan in params() en worden bestuurbaar via modulate(): per kanaal (lane ch1..), groep (g1..) en de master: trim, EQ, send, return, pan en fader. Effectieve waarde = knop + offset × bereik (lineair, geclampt) en gaat alleen naar de audiograaf: de zichtbare regelaar, getState en presets blijven ongewijzigd. Alles staat standaard uit (on: false). Bewust niet: mute, solo, groepstoewijzing, aantal kanalen/groepen, EQ-banden, doelniveau (keuzes, vinkjes en configuratie). Bij een ander aantal kanalen/groepen of EQ-banden meldt de Mixer host.paramsChanged. De sturingsingang 'Mod' staat in de bovenste rij naast de bundelpoorten (de Mixer tekent zijn poorten zelf).
 // 2.4.1 — Bewaker tegen NaN en Infinity: één foute waarde van een apparaat ervoor liet de EQ-filters en de begrenzer voorgoed ontsporen (daarna was de hele uitvoer stil of NaN). Elke 100 ms kijkt de Mixer met de meters of er iets niet-eindigs of absurds uitkomt en vervangt dan de ontspoorde EQ-filters en de begrenzer. Normaal geluid is ongewijzigd.
 // 2.4.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poort- en kaartnamen per taal in i18n). setState negeert onbekende velden,
 //         kapt getallen af op hun bereik en geeft ongeldige waarden de standaard; presets volgen dezelfde regels. Geluid ongewijzigd.
@@ -121,8 +122,9 @@ const CSS = `
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.4.1',
+  version: '2.5.0',
   kind: 'mixer',
+  modExclude: ['target'],   // doelniveau van 'gelijk trekken': geen audioregelaar maar een meetinstelling
   category: 'mix',
   ui: { width: 960, minWidth: 360, jacks: true },
   i18n: { en: { name: 'Mixer', ports: portNames(portsFor(DEF.nCh, DEF.nGrp, TXT.en)) } },
@@ -211,21 +213,45 @@ export default {
       while (groups.length > nGrp) { const n = groups.pop(); kill([n.sum, ...n.eq, n.post, n.fader, n.mute, n.send, n.retIn, n.ret, n.tap]); }
       syncIO();
       chans.forEach((n, i) => { if (n.dest && !groups.some(g => g.sum === n.dest) && n.dest !== mSum) n.dest = null; route(i); connectSrc(i); });
-      applyAll(); announce();
+      applyAll(); announce(); paramsChanged();
       if (root) render();
     }
+    // ---------- sturing (contract §8): effectieve waarde = knop + offset × bereik, alleen naar de graaf ----------
+    const mod = {};   // id -> offset (-1..1)
+    const E = (id, base, mn, mx) => { const o = mod[id]; return o ? clamp(base + o * (mx - mn), mn, mx) : base; };
+    let pdefs = null;
+    const eqLab = b => T[b.lab];
+    function paramDefs() {
+      if (pdefs) return pdefs;
+      const out = [], bands = S.eq === 5 ? EQ5 : EQ3, arr = S.eq === 5 ? 'eq5' : 'eq3';
+      const add = (lane, laneName, pre, who, key, label, mn, mx, role, drift) => out.push({ id: pre + '.' + key, name: who + ' ' + label, lane, laneName, min: mn, max: mx, role, scale: 'lin', drift, on: false });
+      const strip = (lane, laneName, pre, who, withTrimPan) => {
+        if (withTrimPan) add(lane, laneName, pre, who, 'trim', T.trim, -24, 24, 'level', 0.05);
+        bands.forEach((b, q) => add(lane, laneName, pre, who, arr + '.' + q, eqLab(b), -15, 15, 'color', 0.1));
+        add(lane, laneName, pre, who, 'send', T.send, 0, 1, 'level', 0.1);
+        add(lane, laneName, pre, who, 'ret', T.ret, 0, 1, 'level', 0.1);
+        if (withTrimPan) add(lane, laneName, pre, who, 'pan', T.pan, -1, 1, 'pan', 0.1);
+        add(lane, laneName, pre, who, 'lvl', T.fader, -60, 6, 'level', 0.05);
+      };
+      for (let i = 1; i <= S.nCh; i++) strip('ch' + i, T.chN(i), 'ch' + i, T.chN(i), true);
+      for (let g = 1; g <= S.nGrp; g++) strip('g' + g, T.grpN(g), 'g' + g, T.grpN(g), false);
+      strip('master', T.master, 'master', T.master, false);
+      return (pdefs = out);
+    }
+    function paramsChanged() { pdefs = null; { const known = new Set(paramDefs().map(d => d.id)); for (const k in mod) if (!known.has(k)) delete mod[k]; } if (self && host && typeof host.paramsChanged === 'function') host.paramsChanged(self); }
     function applyAll() {
       const t = ctx.currentTime, r = 0.02, anySolo = S.ch.slice(0, S.nCh).some(c => c.solo);
+      const eqk = S.eq === 5 ? 'eq5' : 'eq3';
       chans.forEach((n, i) => {
-        const c = S.ch[i], eq = S.eq === 5 ? c.eq5 : c.eq3;
-        n.trim.gain.setTargetAtTime(db(c.trim), t, r); n.eq.forEach((f, k) => f.gain.setTargetAtTime(eq[k] || 0, t, r));
-        n.fader.gain.setTargetAtTime(fgain(c.lvl), t, r); n.pan.pan.setTargetAtTime(c.pan, t, r);
+        const c = S.ch[i], eq = c[eqk], p = 'ch' + (i + 1) + '.';
+        n.trim.gain.setTargetAtTime(db(E(p + 'trim', c.trim, -24, 24)), t, r); n.eq.forEach((f, k) => f.gain.setTargetAtTime(E(p + eqk + '.' + k, eq[k] || 0, -15, 15), t, r));
+        n.fader.gain.setTargetAtTime(fgain(E(p + 'lvl', c.lvl, -60, 6)), t, r); n.pan.pan.setTargetAtTime(E(p + 'pan', c.pan, -1, 1), t, r);
         n.mute.gain.setTargetAtTime(c.mute || (anySolo && !c.solo) ? 0 : 1, t, r);
-        n.send.gain.setTargetAtTime(c.send, t, r); n.ret.gain.setTargetAtTime(c.ret, t, r);
+        n.send.gain.setTargetAtTime(E(p + 'send', c.send, 0, 1), t, r); n.ret.gain.setTargetAtTime(E(p + 'ret', c.ret, 0, 1), t, r);
       });
-      const eqOf = c => (S.eq === 5 ? c.eq5 : c.eq3);
-      groups.forEach((n, g) => { const c = S.grp[g]; n.eq.forEach((f, k) => f.gain.setTargetAtTime(eqOf(c)[k] || 0, t, r)); n.fader.gain.setTargetAtTime(fgain(c.lvl), t, r); n.mute.gain.setTargetAtTime(c.mute ? 0 : 1, t, r); n.send.gain.setTargetAtTime(c.send, t, r); n.ret.gain.setTargetAtTime(c.ret, t, r); });
-      M.eq.forEach((f, k) => f.gain.setTargetAtTime(eqOf(S.master)[k] || 0, t, r)); mFader.gain.setTargetAtTime(fgain(S.master.lvl), t, r); mSend.gain.setTargetAtTime(S.master.send, t, r); mRet.gain.setTargetAtTime(S.master.ret, t, r);
+      groups.forEach((n, g) => { const c = S.grp[g], p = 'g' + (g + 1) + '.'; n.eq.forEach((f, k) => f.gain.setTargetAtTime(E(p + eqk + '.' + k, c[eqk][k] || 0, -15, 15), t, r)); n.fader.gain.setTargetAtTime(fgain(E(p + 'lvl', c.lvl, -60, 6)), t, r); n.mute.gain.setTargetAtTime(c.mute ? 0 : 1, t, r); n.send.gain.setTargetAtTime(E(p + 'send', c.send, 0, 1), t, r); n.ret.gain.setTargetAtTime(E(p + 'ret', c.ret, 0, 1), t, r); });
+      const m = S.master;
+      M.eq.forEach((f, k) => f.gain.setTargetAtTime(E('master.' + eqk + '.' + k, m[eqk][k] || 0, -15, 15), t, r)); mFader.gain.setTargetAtTime(fgain(E('master.lvl', m.lvl, -60, 6)), t, r); mSend.gain.setTargetAtTime(E('master.send', m.send, 0, 1), t, r); mRet.gain.setTargetAtTime(E('master.ret', m.ret, 0, 1), t, r);
     }
     buildEq(M, mSum, mPost);
     configure(DEF.nCh, DEF.nGrp, false);
@@ -265,7 +291,7 @@ export default {
           const l = rmsDb(n.inMeter);
           if (l > -60) {
             if (measure && i < measure.sum.length) { measure.sum[i] += Math.pow(10, l / 10); measure.cnt[i]++; }
-            if (S.auto) { n.ema = n.ema == null ? l : n.ema + (l - n.ema) * Math.min(1, dt / 3); const want = clamp(S.target - n.ema, -24, 24), c = S.ch[i]; const step = clamp(want - c.trim, -3 * dt, 3 * dt); if (Math.abs(step) > 0.001) { c.trim = Math.round((c.trim + step) * 10) / 10; n.trim.gain.setTargetAtTime(db(c.trim), ctx.currentTime, 0.1); } }
+            if (S.auto) { n.ema = n.ema == null ? l : n.ema + (l - n.ema) * Math.min(1, dt / 3); const want = clamp(S.target - n.ema, -24, 24), c = S.ch[i]; const step = clamp(want - c.trim, -3 * dt, 3 * dt); if (Math.abs(step) > 0.001) { c.trim = Math.round((c.trim + step) * 10) / 10; n.trim.gain.setTargetAtTime(db(E('ch' + (i + 1) + '.trim', c.trim, -24, 24)), ctx.currentTime, 0.1); } }
           }
         }
       });
@@ -312,7 +338,7 @@ export default {
       numIn(T.chs, S.nCh, 1, MAXCH, v => configure(v, S.nGrp, true));
       numIn(T.grps, S.nGrp, 0, MAXGRP, v => configure(S.nCh, v, true));
       { const l = el('label'), s = el('select'); [[3, T.bands3], [5, T.bands5]].forEach(([v, t]) => { const o = el('option', null, t); o.value = v; s.appendChild(o); }); s.value = S.eq; s.style.width = 'auto';
-        s.onchange = () => { S.eq = +s.value; rebuildAllEq(); applyAll(); render(); }; l.append(T.eq, s); cfg.appendChild(l); }
+        s.onchange = () => { S.eq = +s.value; rebuildAllEq(); applyAll(); paramsChanged(); render(); }; l.append(T.eq, s); cfg.appendChild(l); }
       cfg.appendChild(el('span', 'sep'));
       { const b = el('button', null, T.match); b.title = T.matchT; b.onclick = startMeasure; cfg.appendChild(b); }
       { const l = el('label'), c = el('input'); c.type = 'checkbox'; c.checked = S.auto; c.onchange = () => { S.auto = c.checked; chans.forEach(n => n.ema = null); }; l.append(c, T.cont); l.title = T.contT; cfg.appendChild(l); }
@@ -320,7 +346,7 @@ export default {
         i.oninput = () => { S.target = +i.value; o.textContent = S.target + ' dB'; }; o.style.fontWeight = '400'; o.style.color = 'var(--fg)'; l.append(T.goal, i, o); cfg.appendChild(l); }
       ui.msg = el('span', 'msg', msg); cfg.appendChild(ui.msg);
       cfg.appendChild(el('span', 'sep'));
-      { const b = el('div', 'mx2-bun'); jack(b, 'multi', 'in', T.bunIn); jack(b, 'post', 'out', T.bunOut); cfg.appendChild(b);
+      { const b = el('div', 'mx2-bun'); jack(b, 'multi', 'in', T.bunIn); jack(b, 'post', 'out', T.bunOut); jack(b, 'mod', 'in', 'Mod'); cfg.appendChild(b);
         const l = el('label'), c = el('input'); c.type = 'checkbox'; c.checked = S.bundleAll; c.onchange = () => { S.bundleAll = c.checked; announce(); }; l.append(c, T.bunAll); l.title = T.bunAllT; cfg.appendChild(l); }
       // desk: channels | groups | master
       const desk = el('div', 'mx2-desk'); app.appendChild(desk);
@@ -385,6 +411,14 @@ export default {
         if (port !== 'multi') return;
         if (b) { bundlesIn.set(key, b); autoAssign(b); } else { bundlesIn.delete(key); seen.delete(key); }
         chans.forEach((n, i) => connectSrc(i)); refresh(); announce();
+      },
+      params() { return paramDefs().map(d => ({ ...d })); },
+      modulate(offsets) {
+        const known = new Set(paramDefs().map(d => d.id)), next = {};
+        for (const k in offsets || {}) { const o = offsets[k]; if (known.has(k) && typeof o === 'number' && Number.isFinite(o) && o) next[k] = clamp(o, -1, 1); }
+        const same = Object.keys(next).length === Object.keys(mod).length && Object.keys(next).every(k => mod[k] === next[k]);
+        if (same) return;
+        for (const k in mod) delete mod[k]; Object.assign(mod, next); applyAll();
       },
       mount(e) { root = el('div'); e.appendChild(root); render(); lastT = performance.now(); startLoops(); },
       unmount() { stopLoops(); root = null; ui = null; },
