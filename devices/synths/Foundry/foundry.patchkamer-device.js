@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Gecontroleerd op stuurbaarheid: alle continue klankregelaars stonden al in params(). Bewust niet stuurbaar: Morph A ↔ B (die schrijft de knopstanden zelf om
+//   en dat is state, geen modulatie; vandaar modExclude). Geluid en instellingen ongewijzigd.
 // 1.11.0 — Nieuw als Foundry (nieuwe id nl.patchkamer.foundry, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is ongewijzigd:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Foundry
 //   - tekenen via host.frame (XY-vlak en scope), met ResizeObserver en een kleurcache; de eigen tekenpoort is weg
@@ -84,7 +86,7 @@ const hz = n => 440 * 2 ** ((n - 69) / 12);
 const FB_MAX = 0.82;
 
 export default {
-  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.11.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.11.1', modExclude: ['morph'], kind: 'instrument', category: 'synth',
   ui: { width: 920, minWidth: 380 },
   ports: {
     audioIn: [{ id: 'in', name: 'External material' }], audioOut: [{ id: 'out', name: 'Stereo sculpture' }],

@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Gecontroleerd op stuurbaarheid: alle 65 klankregelaars stonden al in params(). Bewust niet stuurbaar: Grondtoon (MIDI-basisnoot), Morph A ↔ B (schrijft de knopstanden
+//   zelf om: state, geen modulatie) en de patroonlengte van de Pad-laag (vandaar modExclude). Geluid en instellingen ongewijzigd.
 // 1.11.0 — Nieuw als Layered Landscape (nieuwe id nl.patchkamer.layeredlandscape, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Layered Landscape
 //   - tekent via host.frame (ResizeObserver, kleurcache) in plaats van eigen tekenlussen
@@ -183,7 +185,7 @@ class LandscapeEngine {
   }
 }
 
-export default {"id": "nl.patchkamer.layeredlandscape", "name": "Layered Landscape", "version": "1.11.0", "kind": "instrument", "category": "synth", "ui": {"width": 1100, "minWidth": 400}, "i18n": {"en": {"name": "Layered Landscape", "ports": {"in": "Stereo texture / recording", "out": "Stereo landscape", "notes": "Notes to chosen layer", "drone": "Drone notes", "pad": "Pad notes", "atmos": "Atmos notes", "noise": "Noise notes", "mod": "Mod"}}}, "ports": {"audioIn": [{"id": "in", "name": "Stereo textuur / opname"}], "audioOut": [{"id": "out", "name": "Stereo landschap"}], "eventIn": [{"id": "notes", "name": "Noten naar gekozen laag"}, {"id": "drone", "name": "Drone-noten"}, {"id": "pad", "name": "Pad-noten"}, {"id": "atmos", "name": "Atmos-noten"}, {"id": "noise", "name": "Noise-noten"}], "eventOut": [], "modIn": [{"id": "mod", "name": "Mod"}], "modOut": []},create(ctx,host){
+export default {"id": "nl.patchkamer.layeredlandscape", "name": "Layered Landscape", "version": "1.11.1", "modExclude": ["root", "morph", "l1length"], "kind": "instrument", "category": "synth", "ui": {"width": 1100, "minWidth": 400}, "i18n": {"en": {"name": "Layered Landscape", "ports": {"in": "Stereo texture / recording", "out": "Stereo landscape", "notes": "Notes to chosen layer", "drone": "Drone notes", "pad": "Pad notes", "atmos": "Atmos notes", "noise": "Noise notes", "mod": "Mod"}}}, "ports": {"audioIn": [{"id": "in", "name": "Stereo textuur / opname"}], "audioOut": [{"id": "out", "name": "Stereo landschap"}], "eventIn": [{"id": "notes", "name": "Noten naar gekozen laag"}, {"id": "drone", "name": "Drone-noten"}, {"id": "pad", "name": "Pad-noten"}, {"id": "atmos", "name": "Atmos-noten"}, {"id": "noise", "name": "Noise-noten"}], "eventOut": [], "modIn": [{"id": "mod", "name": "Mod"}], "modOut": []},create(ctx,host){
     const en=host.lang!=='nl';
     const tx=(k,...a)=>{let r=k;if(en&&typeof k==='string'){if(Object.hasOwn(EN,k))r=EN[k];else if(k.includes(' · '))r=k.split(' · ').map(x=>Object.hasOwn(EN,x)?EN[x]:x).join(' · ');}return a.length&&typeof r==='string'?r.replace(/\{(\d+)\}/g,(m,i)=>a[+i]):r;};
     let mountHost=null,panel=null,uiHandles={};

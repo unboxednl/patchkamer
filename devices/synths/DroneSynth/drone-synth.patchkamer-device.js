@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Meer regelaars stuurbaar voor modulatoren: Interval van de tweede drone, Glide en Gate van de sequencer, en snelheid en niveau van de gebeurtenissen
+//   stonden niet in params(). Nu wel (alle standaard uit). Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Grondtoon (volgt de sequencer en noten),
+//   Galmgrootte (bouwt de galm opnieuw op) en de keuzelijsten en schakelaars.
 // 1.11.0 — Bijgewerkt naar Patchkamer contract v1.11 (id nl.patchkamer.drone en het geluid zijn ongewijzigd):
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Drone Synth
 //   - setState volgt §13: waarden buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard, ook in de sequencer
@@ -123,15 +126,18 @@ const MODP = [
   ['nfreq', 'Bandfilter', 60, 8000, true, 'filter', 0.12, true, 'ruis'], ['nq', 'Resonantie', 0.3, 18, false, 'res', 0.10, false, 'ruis'], ['nlevel', 'Niveau', 0, 1, false, 'level', 0.10, false, 'ruis'],
   ['cut', 'Afsnijfreq.', 80, 12000, true, 'filter', 0.10, true, 'filter'], ['res', 'Resonantie', 0.3, 20, false, 'res', 0.10, true, 'filter'], ['lrate', 'LFO snelheid', 0.02, 8, true, 'rate', 0.12, false, 'filter'], ['ldepth', 'LFO diepte', 0, 4000, false, 'depth', 0.08, false, 'filter'], ['pitchmod', 'Toonwobbel', 0, 80, false, 'detune', 0.12, false, 'filter'],
   ['drive', 'Vervorming', 0, 1, false, 'drive', 0.10, false, 'ruimte'], ['dtime', 'Delaytijd', 0.05, 1.5, true, 'time', 0.03, false, 'ruimte'], ['dfb', 'Delay feedback', 0, 0.95, false, 'feedback', 0.10, true, 'ruimte'], ['rmix', 'Galm mix', 0, 1, false, 'send', 0.10, true, 'ruimte'], ['lvl', 'Niveau', 0, 1, false, 'level', 0.05, false, 'ruimte'],
+  ['dbInt', 'Interval', -24, 24, false, 'pitch', 0.04, false, 'drone2'], ['erate', 'Interval', 1, 30, true, 'time', 0.08, false, 'events'], ['elevel', 'Niveau', 0, 1, false, 'level', 0.10, false, 'events'],
+  ['glide', 'Glide', 0, 1, false, 'glide', 0.10, false, 'seq'], ['gate', 'Gate', 0, 1, false, 'accent', 0.10, false, 'seq'],
 ];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
-const LANES = { drone: 'Drone', drone2: 'Tweede drone', ruis: 'Ruis', filter: 'Filter', ruimte: 'Ruimte' };
-const LANES_EN = { drone: 'Drone', drone2: 'Second drone', ruis: 'Noise', filter: 'Filter', ruimte: 'Space' };
+const LANES = { drone: 'Drone', drone2: 'Tweede drone', ruis: 'Ruis', filter: 'Filter', ruimte: 'Ruimte', events: 'Gebeurtenissen', seq: 'Grondtoon-sequencer' };
+const LANES_EN = { drone: 'Drone', drone2: 'Second drone', ruis: 'Noise', filter: 'Filter', ruimte: 'Space', events: 'Events', seq: 'Root sequencer' };
 
 export default {
   id: 'nl.patchkamer.drone',
   name: 'Drone Synth',
-  version: '1.11.0',
+  version: '1.11.1',
+  modExclude: ['freq', 'rsize'],   // grondtoon volgt sequencer en noten; galmgrootte bouwt de galm opnieuw op
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1102, minWidth: 420 },
@@ -202,24 +208,25 @@ export default {
       noise = ctx.createBufferSource(); noise.buffer = noiseBuffer(ctx, type); noise.loop = true; noise.connect(nfilt); noise.start(); noiseType = type;
     }
     // knopstand + modulatie (contract v1.3)
-    const modOff = {};
+    const modOff = {}; let curF = P.freq, dbNow = null;   // curF: de grondtoon zoals hij nu klinkt; dbNow: het laatst toegepaste interval van de tweede drone
     const E = k => { const m = MODBY[k], b = +P[k], o = modOff[k] || 0; if (!m || !o) return b; const [, , mn, mx, log] = m; return log ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
     let curveNow = -1; const setDrive = v => { const q = Math.round(v * 200) / 200; if (q !== curveNow) { shaper.curve = shapeCurve(q); curveNow = q; } };
     // alleen wat modulatie raakt; laat toonhoogte en gate (sequencer) met rust
     function applyMod() {
       const t = ctx.currentTime, r = 0.08, set = (p, v) => p.setTargetAtTime(v, t, r), fine = E('fine');
       oscs.forEach(o => set(o.detune, o._k * E('detune') + fine)); set(subo.detune, fine); oscB.forEach(o => set(o.detune, o._k * E('dbDet') + fine));
-      set(subg.gain, P.droneOn ? E('sub') * 0.5 : 0); if (!(P.gate > 0)) set(dgain.gain, P.droneOn ? E('dlevel') * 0.28 : 0); set(dbg.gain, P.droneOn && P.dbOn ? E('dbLvl') * 0.25 : 0);
+      const di = E('dbInt'); if (di !== dbNow) { dbNow = di; oscB.forEach(o => set(o.frequency, curF * Math.pow(2, di / 12))); }   // alleen als het interval echt verandert: de sequencer-glide blijft met rust
+      set(subg.gain, P.droneOn ? E('sub') * 0.5 : 0); if (!(E('gate') > 0)) set(dgain.gain, P.droneOn ? E('dlevel') * 0.28 : 0); set(dbg.gain, P.droneOn && P.dbOn ? E('dbLvl') * 0.25 : 0);
       set(nfilt.frequency, E('nfreq')); set(nfilt.Q, E('nq')); set(ngain.gain, P.noiseOn ? E('nlevel') * 0.9 : 0);
       const cut = E('cut'); set(filter.frequency, cut); set(filter.Q, E('res')); set(lfo.frequency, E('lrate')); set(lfoG.gain, Math.max(0, Math.min(E('ldepth'), cut - 60))); set(lfo2G.gain, E('pitchmod'));
       setDrive(E('drive')); const rm = E('rmix'); set(dry.gain, 1 - rm * 0.6); set(delay.delayTime, E('dtime')); set(dfb.gain, E('dfb')); set(wet.gain, rm * 1.4); set(out.gain, E('lvl'));
     }
     function apply() {
       const t = ctx.currentTime, r = 0.05, ramp = (p, v) => { p.cancelScheduledValues(t); p.setTargetAtTime(v, t, r); };
-      const fine = E('fine'), cut = E('cut'), rm = E('rmix');
+      const fine = E('fine'), cut = E('cut'), rm = E('rmix'); curF = P.freq; dbNow = E('dbInt');
       oscs.forEach(o => { o.type = P.wave; ramp(o.frequency, P.freq); ramp(o.detune, o._k * E('detune') + fine); });
       ramp(subo.frequency, P.freq / 2); ramp(subo.detune, fine); ramp(subg.gain, P.droneOn ? E('sub') * 0.5 : 0); ramp(dgain.gain, P.droneOn ? E('dlevel') * 0.28 : 0);
-      oscB.forEach(o => { o.type = P.dbWave; ramp(o.frequency, P.freq * Math.pow(2, P.dbInt / 12)); ramp(o.detune, o._k * E('dbDet') + fine); });
+      oscB.forEach(o => { o.type = P.dbWave; ramp(o.frequency, P.freq * Math.pow(2, dbNow / 12)); ramp(o.detune, o._k * E('dbDet') + fine); });
       ramp(dbg.gain, P.droneOn && P.dbOn ? E('dbLvl') * 0.25 : 0);
       setNoise(P.ntype); ramp(nfilt.frequency, E('nfreq')); ramp(nfilt.Q, E('nq')); ramp(ngain.gain, P.noiseOn ? E('nlevel') * 0.9 : 0);
       ramp(filter.frequency, cut); ramp(filter.Q, E('res'));
@@ -236,7 +243,7 @@ export default {
     function track(n, stopAt) { live.add(n); n.onended = () => live.delete(n); n.stop(stopAt); }
     function noiseSrc(type) { const s = ctx.createBufferSource(); s.buffer = noiseBuffer(ctx, type); s.loop = true; return s; }
     function fire(kind, t) {
-      const lv = P.elevel;
+      const lv = E('elevel');
       if (kind === 'siren') {
         const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'triangle';
         o.frequency.setValueAtTime(380, t); o.frequency.linearRampToValueAtTime(620, t + 1.6); o.frequency.linearRampToValueAtTime(380, t + 3.2); o.frequency.linearRampToValueAtTime(600, t + 4.8);
@@ -264,9 +271,10 @@ export default {
 
     // ---------- pitch ----------
     function setPitch(f, t, tc) {
+      curF = f; dbNow = E('dbInt');
       oscs.forEach(o => { o.frequency.cancelScheduledValues(t); o.frequency.setTargetAtTime(f, t, tc); });
       subo.frequency.cancelScheduledValues(t); subo.frequency.setTargetAtTime(f / 2, t, tc);
-      oscB.forEach(o => { o.frequency.cancelScheduledValues(t); o.frequency.setTargetAtTime(f * Math.pow(2, P.dbInt / 12), t, tc); });
+      oscB.forEach(o => { o.frequency.cancelScheduledValues(t); o.frequency.setTargetAtTime(f * Math.pow(2, dbNow / 12), t, tc); });
       const g = gen;
       setTimeout(() => { if (dead || g !== gen) return; P.freq = f; refreshAll(); }, Math.max(0, (t - ctx.currentTime) * 1000));
     }
@@ -353,7 +361,7 @@ export default {
         // Sequencer
         [m] = mod(rack, 'Speel');
         const pads = document.createElement('div'); pads.className = 'pads'; m.appendChild(pads);
-        NOTES.forEach(([n, f]) => { const b = document.createElement('button'); b.textContent = n; b.onclick = () => { setPitch(f, ctx.currentTime, Math.max(0.005, P.glide / 3)); b.classList.add('held'); setTimeout(() => b.classList.remove('held'), 250); }; pads.appendChild(b); padBtns.push(b); });
+        NOTES.forEach(([n, f]) => { const b = document.createElement('button'); b.textContent = n; b.onclick = () => { setPitch(f, ctx.currentTime, Math.max(0.005, E('glide') / 3)); b.classList.add('held'); setTimeout(() => b.classList.remove('held'), 250); }; pads.appendChild(b); padBtns.push(b); });
         [m, h] = mod(rack, 'Grondtoon-sequencer', true); toggle(h, 'seqOn', 'aan');
         const sh = document.createElement('div'); sh.className = 'seqhead'; m.appendChild(sh);
         choose(sh, 'dbars', 'Sets', [[1, '1 × 16'], [2, '2 × 16'], [4, '4 × 16'], [8, '8 × 16'], [16, '16 × 16']], true);
@@ -379,16 +387,17 @@ export default {
       onStep({ step, bar, time, stepDur }) {
         try {
           if (P.seqOn) {
-            const b = bar % (+P.dbars), ni = dgrid[b][step];
+            const b = bar % (+P.dbars), ni = dgrid[b][step], gt = E('gate');
             if (ni >= 0) {
-              setPitch(NOTES[ni][1], time, Math.max(0.005, P.glide / 3));
-              if (P.gate > 0 && P.droneOn) { dgain.gain.cancelScheduledValues(time); dgain.gain.setTargetAtTime(E('dlevel') * 0.28, time, 0.01); }
-            } else if (P.gate > 0 && P.droneOn) { dgain.gain.cancelScheduledValues(time); dgain.gain.setTargetAtTime(E('dlevel') * 0.28 * (1 - P.gate), time, 0.03); }
+              setPitch(NOTES[ni][1], time, Math.max(0.005, E('glide') / 3));
+              if (gt > 0 && P.droneOn) { dgain.gain.cancelScheduledValues(time); dgain.gain.setTargetAtTime(E('dlevel') * 0.28, time, 0.01); }
+            } else if (gt > 0 && P.droneOn) { dgain.gain.cancelScheduledValues(time); dgain.gain.setTargetAtTime(E('dlevel') * 0.28 * (1 - gt), time, 0.03); }
             if (step === 0) setTimeout(() => { playBar = b; paintSeq(); }, Math.max(0, (time - ctx.currentTime) * 1000));
           }
           if (P.evt !== 'none' && playing) {
-            if (!nextEvt) nextEvt = time + P.erate * 0.5;
-            if (time >= nextEvt) { fire(P.evt, time); nextEvt = time + P.erate * (0.6 + Math.random() * 0.8); }
+            const er = E('erate');
+            if (!nextEvt) nextEvt = time + er * 0.5;
+            if (time >= nextEvt) { fire(P.evt, time); nextEvt = time + er * (0.6 + Math.random() * 0.8); }
           }
           if (root) setTimeout(() => cursor(step), Math.max(0, (time - ctx.currentTime) * 1000));
         } catch (e) { console.warn('Drone Synth', e); }
@@ -400,7 +409,7 @@ export default {
       },
       onEvent(port, ev) {
         try {
-          if (port === 'notes' && ev.type === 'note') { if (Number.isFinite(+ev.note)) setPitch(440 * Math.pow(2, (ev.note - 69) / 12), ev.time ?? ctx.currentTime, Math.max(0.005, P.glide / 3)); }
+          if (port === 'notes' && ev.type === 'note') { if (Number.isFinite(+ev.note)) setPitch(440 * Math.pow(2, (ev.note - 69) / 12), ev.time ?? ctx.currentTime, Math.max(0.005, E('glide') / 3)); }
           if (port === 'cc' && ev.type === 'cc') {
             const v = clamp(+ev.value || 0, 0, 1);
             if (ev.id === 'cutoff') P.cut = Math.round(80 * Math.pow(150, v));

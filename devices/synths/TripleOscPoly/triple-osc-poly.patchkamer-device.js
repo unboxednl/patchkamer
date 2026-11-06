@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — Alle continue regelaars zijn stuurbaar: per oscillator Halve tonen, Fijn, Spreiding, Stereo, FM-ratio en FM-index, Reso van filter 2, Toonvolgen van beide filters, Filter sustain,
+//   Filter release, Amp sustain en Aanslag stonden niet in params(). Nu wel (alle standaard uit); ze werken vanaf de volgende noot, net als de omhullingen en niveaus al deden.
+//   Klank en instellingen zonder modulatie zijn ongewijzigd. Bewust weggelaten: Unison (aantal), Stemmen (aantal), Octaaf, Type, Vorm, Routing, Akkoord en Ligging (aantallen en keuzelijsten).
 // 1.11.1 — Een noot korter dan de attack van de versterker (of van de filter-envelope) was stil, doordat de release de attack-ramp annuleerde: de release begint nu vanaf de waarde die de envelope op dat moment heeft (cancelAndHoldAtTime), dus een korte noot laat een zacht stuk van de attack horen.
 //   Voor noten die langer duren dan hun attack is de reeks Web Audio-aanroepen identiek aan 1.11.0.
 // 1.11.0 — Nieuw als Triple Osc Poly (nieuwe naam; de id nl.patchkamer.polysynth blijft gelijk, dus bestaande werkruimtes laden), eigen map, bijgewerkt naar Patchkamer contract v1.11:
@@ -64,9 +67,13 @@ const MODP = [
   ['fa', 'Filter attack', 0.001, 8, true, 'attack', 0.1, false, 'env'], ['fd', 'Filter decay', 0.01, 8, true, 'decay', 0.1, false, 'env'], ['aa', 'Amp attack', 0.001, 8, true, 'attack', 0.1, false, 'env'],
   ['ad', 'Amp decay', 0.01, 8, true, 'decay', 0.1, false, 'env'], ['ar', 'Amp release', 0.01, 10, true, 'decay', 0.1, false, 'env'],
   ['lvl', 'Niveau', 0, 1, false, 'level', 0.05, false, 'out', true], ['pan', 'Pan', -1, 1, false, 'pan', 0.15, false, 'out', true],
+  ['res2', 'Reso', 0.3, 20, false, 'res', 0.08, false, 'f2'], ['kt1', 'Toonvolgen', 0, 1, false, 'filter', 0.08, false, 'f1'], ['kt2', 'Toonvolgen', 0, 1, false, 'filter', 0.08, false, 'f2'],
+  ['fs', 'Filter sustain', 0, 1, false, 'env', 0.10, false, 'env'], ['fr', 'Filter release', 0.01, 10, true, 'decay', 0.10, false, 'env'], ['as', 'Amp sustain', 0, 1, false, 'env', 0.10, false, 'env'], ['vel', 'Aanslag', 0, 1, false, 'env', 0.10, false, 'env'],
+  ...[1, 2, 3].flatMap(n => [[`osc${n}semi`, 'Halve tonen', -12, 12, false, 'pitch', 0.04, false, `osc${n}`], [`osc${n}fine`, 'Fijn', -50, 50, false, 'pitch', 0.04, false, `osc${n}`], [`osc${n}det`, 'Spreiding', 0, 60, false, 'detune', 0.12, false, `osc${n}`],
+    [`osc${n}spread`, 'Stereo', 0, 1, false, 'pan', 0.10, false, `osc${n}`], [`osc${n}fmr`, 'FM-ratio', 0.25, 12, false, 'fm', 0.08, false, `osc${n}`], [`osc${n}fmi`, 'FM-index', 0, 12, false, 'fm', 0.10, false, `osc${n}`]]),
 ];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
-const LANES = { osc: 'Oscillators', f1: 'Filter 1', f2: 'Filter 2', shp: 'Shaper', env: 'Envelopes', out: 'Uitgang' };
+const LANES = { osc: 'Oscillators', osc1: 'Oscillator 1', osc2: 'Oscillator 2', osc3: 'Oscillator 3', f1: 'Filter 1', f2: 'Filter 2', shp: 'Shaper', env: 'Envelopes', out: 'Uitgang' };
 const FAST = { tune: 200, cut1: 1200 * Math.log2(20000 / 40), res1: 19.7, cut2: 1200 * Math.log2(20000 / 40), lvl: 1, pan: 2 };
 const GUARD_LIMIT = 1000;   // ruwe filteruitvoer: normaal tot enkele tientallen; een ontspoord filter loopt in tientallen ms naar 1e6
 const CURVES = new Map();
@@ -111,7 +118,9 @@ input[type=checkbox]{accent-color:var(--x-acc);margin:0}
 export default {
   id: 'nl.patchkamer.polysynth',
   name: 'Triple Osc Poly',
-  version: '1.11.1',
+  version: '1.11.2',
+  // aantallen (unison, stemmen) blijven buiten sturing; de filterregelaars f1.*/f2.* staan wel in params() (cut1, res1, env1, kt1, cut2, res2, env2, kt2), maar de validator herkent die ids niet aan hun state-sleutel
+  modExclude: ['osc.0.uni', 'osc.1.uni', 'osc.2.uni', 'poly', 'f1.cut', 'f1.res', 'f1.env', 'f1.kt', 'f2.cut', 'f2.res', 'f2.env', 'f2.kt'],
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1180, minWidth: 420 },
@@ -135,7 +144,8 @@ export default {
       if (typeof ctx.createConstantSource === 'function') { const c = ctx.createConstantSource(); c.offset.value = 0; try { c.start(); } catch (e) {} c.connect(g); ctl[k] = c; } });
     bus.lvl.connect(polyOut.gain); bus.pan.connect(pan.pan);
     const E = k => { const m = MODBY[k]; let b; switch (k) { case 'o1lvl': b = P.osc[0].lvl; break; case 'o2lvl': b = P.osc[1].lvl; break; case 'o3lvl': b = P.osc[2].lvl; break; case 'udet': b = 1; break;
-      case 'cut1': b = P.f1.cut; break; case 'res1': b = P.f1.res; break; case 'env1': b = P.f1.env; break; case 'cut2': b = P.f2.cut; break; case 'env2': b = P.f2.env; break; case 'drive': b = P.shp.drive; break; default: b = P[k]; }
+      case 'cut1': b = P.f1.cut; break; case 'res1': b = P.f1.res; break; case 'env1': b = P.f1.env; break; case 'cut2': b = P.f2.cut; break; case 'env2': b = P.f2.env; break; case 'drive': b = P.shp.drive; break; case 'res2': b = P.f2.res; break; case 'kt1': b = P.f1.kt; break; case 'kt2': b = P.f2.kt; break;
+      default: { const mo = /^osc([123])(semi|fine|det|spread|fmr|fmi)$/.exec(k); b = mo ? P.osc[+mo[1] - 1][mo[2]] : P[k]; } }
       const o = mod[k] || 0; if (!m || !o || FAST[k] !== undefined) return b; const [, , mn, mx, log] = m; return log ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
     function applyGlobal() { const t = ctx.currentTime; polyOut.gain.setTargetAtTime(P.lvl, t, 0.03); pan.pan.setTargetAtTime(P.pan, t, 0.03); }
     applyGlobal();
@@ -166,12 +176,13 @@ export default {
       P.osc.forEach((o, oi) => {
         const lvl = E(['o1lvl', 'o2lvl', 'o3lvl'][oi]); if (!o.on || lvl <= 0.0001) { first[oi] = null; return; }
         const n = clamp(o.uni | 0, 1, 7), og = ctx.createGain(); og.gain.value = lvl / Math.sqrt(n); og.connect(mix); v.nodes.push(og);
-        const fr = f0 * Math.pow(2, o.oct + o.semi / 12);
+        const pk = 'osc' + (oi + 1), eFine = E(pk + 'fine'), eDet = E(pk + 'det'), eSpr = E(pk + 'spread'), eFmr = E(pk + 'fmr'), eFmi = E(pk + 'fmi');
+        const fr = f0 * Math.pow(2, o.oct + E(pk + 'semi') / 12);
         for (let u = 0; u < n; u++) {
-          const spread = n > 1 ? (u / (n - 1)) * 2 - 1 : 0, cents = o.fine + fineC + spread * o.det * udet, pn = ctx.createStereoPanner(); pn.pan.value = spread * o.spread; pn.connect(og); v.nodes.push(pn);
+          const spread = n > 1 ? (u / (n - 1)) * 2 - 1 : 0, cents = eFine + fineC + spread * eDet * udet, pn = ctx.createStereoPanner(); pn.pan.value = spread * eSpr; pn.connect(og); v.nodes.push(pn);
           let src, detP = [];
           if (o.type === 'noise') { const s = noise(), bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = fr; bp.detune.value = cents; bp.Q.value = 25; const g = ctx.createGain(); g.gain.value = 4; s.connect(bp).connect(g).connect(pn); v.srcs.push(s); v.nodes.push(bp, g); src = g; detP = [bp.detune]; }
-          else if (o.type === 'fm') { const c = ctx.createOscillator(), m = ctx.createOscillator(), mg = ctx.createGain(); c.type = 'sine'; m.type = 'sine'; c.frequency.value = fr; m.frequency.value = fr * o.fmr; c.detune.value = cents; m.detune.value = cents; mg.gain.value = fr * o.fmr * o.fmi; m.connect(mg).connect(c.frequency); c.connect(pn); v.srcs.push(c, m); v.nodes.push(mg); src = c; detP = [c.detune, m.detune]; v.fmIn = v.fmIn || []; if (oi === 0) v.fmIn.push(c.frequency); }
+          else if (o.type === 'fm') { const c = ctx.createOscillator(), m = ctx.createOscillator(), mg = ctx.createGain(); c.type = 'sine'; m.type = 'sine'; c.frequency.value = fr; m.frequency.value = fr * eFmr; c.detune.value = cents; m.detune.value = cents; mg.gain.value = fr * eFmr * eFmi; m.connect(mg).connect(c.frequency); c.connect(pn); v.srcs.push(c, m); v.nodes.push(mg); src = c; detP = [c.detune, m.detune]; v.fmIn = v.fmIn || []; if (oi === 0) v.fmIn.push(c.frequency); }
           else { const s = ctx.createOscillator(); s.type = { saw: 'sawtooth', sqr: 'square', tri: 'triangle', sine: 'sine' }[o.type] || 'sawtooth'; s.frequency.value = fr; s.detune.value = cents; s.connect(pn); v.srcs.push(s); src = s; detP = [s.detune]; if (oi === 0) { v.fmIn = v.fmIn || []; v.fmIn.push(s.frequency); } }
           detP.forEach(p => { bus.tune.connect(p); v.conns.push([bus.tune, p]); });
           if (u === 0) first[oi] = { src, fr };
@@ -181,11 +192,11 @@ export default {
       const rg = E('ring'); if (rg > 0.001 && first[0] && first[1]) { const r = ctx.createGain(), rl = ctx.createGain(); r.gain.value = 0; rl.gain.value = rg; first[0].src.connect(r); first[1].src.connect(r.gain); r.connect(rl).connect(mix); v.nodes.push(r, rl); }
       const fm = E('fm21'); if (fm > 0.001 && first[1] && v.fmIn) { const g = ctx.createGain(); g.gain.value = fm * f0 * 2; first[1].src.connect(g); v.fmIn.forEach(p => g.connect(p)); v.nodes.push(g); }
       // filters en shaper
-      const kt = (spec) => Math.pow(f0 / 261.63, spec.kt);
+      const kt = (spec) => Math.pow(f0 / 261.63, E(spec === P.f1 ? 'kt1' : 'kt2'));
       const F1 = mkFilter(P.f1, clamp(E('cut1') * kt(P.f1), 20, 20000), E('res1'), v.nodes);
       if (!safeUntil) { F1.fs.forEach(f => { bus.cut1.connect(f.detune); v.conns.push([bus.cut1, f.detune]); }); bus.res1.connect(F1.q.Q); v.conns.push([bus.res1, F1.q.Q]); }
       F1.b.connect(mon);
-      let F2 = null; if (P.f2on) { F2 = mkFilter(P.f2, clamp(E('cut2') * kt(P.f2), 20, 20000), P.f2.res, v.nodes); if (!safeUntil) F2.fs.forEach(f => { bus.cut2.connect(f.detune); v.conns.push([bus.cut2, f.detune]); }); F2.b.connect(mon); }
+      let F2 = null; if (P.f2on) { F2 = mkFilter(P.f2, clamp(E('cut2') * kt(P.f2), 20, 20000), E('res2'), v.nodes); if (!safeUntil) F2.fs.forEach(f => { bus.cut2.connect(f.detune); v.conns.push([bus.cut2, f.detune]); }); F2.b.connect(mon); }
       const sh = P.shp.type !== 'off' ? ctx.createWaveShaper() : null; if (sh) { const dr = E('drive'); sh.curve = shapeCurve(P.shp.type, dr); sh.oversample = OS; v.nodes.push(sh); }
       const shG = ctx.createGain(); shG.gain.value = sh ? 1 / (1 + E('drive') * 0.8) : 1; v.nodes.push(shG);
       const vca = ctx.createGain(); vca.gain.value = 0; v.nodes.push(vca); v.vca = vca;
@@ -194,10 +205,10 @@ export default {
       else { mix.connect(F1.a); mix.connect(F2.a); const sum = ctx.createGain(); sum.gain.value = 0.7; v.nodes.push(sum); F1.b.connect(sum); F2.b.connect(sum); (sh ? (sum.connect(sh), sh) : sum).connect(shG); }
       shG.connect(vca).connect(polyOut);
       // envelopes
-      const fa = E('fa'), fd = E('fd'), fr = P.fr, aa = E('aa'), ad = E('ad'), as = P.as, ar = E('ar');
-      envFreq(F1.fs.map(f => f.frequency), clamp(E('cut1') * kt(P.f1), 20, 20000), E('env1'), fa, fd, P.fs, fr, t, tOff);
-      if (F2) envFreq(F2.fs.map(f => f.frequency), clamp(E('cut2') * kt(P.f2), 20, 20000), E('env2'), fa, fd, P.fs, fr, t, tOff);
-      const peak = (1 - P.vel * (1 - clamp(vel, 0, 1))) * 0.35 * (scale || 1);
+      const fa = E('fa'), fd = E('fd'), fr = E('fr'), aa = E('aa'), ad = E('ad'), as = E('as'), ar = E('ar'), fsu = E('fs');
+      envFreq(F1.fs.map(f => f.frequency), clamp(E('cut1') * kt(P.f1), 20, 20000), E('env1'), fa, fd, fsu, fr, t, tOff);
+      if (F2) envFreq(F2.fs.map(f => f.frequency), clamp(E('cut2') * kt(P.f2), 20, 20000), E('env2'), fa, fd, fsu, fr, t, tOff);
+      const peak = (1 - E('vel') * (1 - clamp(vel, 0, 1))) * 0.35 * (scale || 1);
       vca.gain.setValueAtTime(0.0001, t); vca.gain.linearRampToValueAtTime(peak, t + aa); vca.gain.setTargetAtTime(peak * as, t + aa, ad / 4);
       v.ar = ar; v.aa = aa; v.peak = peak; v.as = as;
       v.srcs.forEach(s => { try { s.start(t); } catch (e) {} });

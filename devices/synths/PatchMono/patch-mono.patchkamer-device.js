@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Alle continue regelaars zijn stuurbaar: de vier routehoeveelheden (Route 1 t/m 4, -1 tot +1) stonden niet in params(). Nu wel (standaard uit); een modulator verschuift de
+//   hoeveelheid van de route, de knop en de bewaarde routes blijven je basis. Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Testnoot (werkstand) en de keuzelijsten en schakelaars.
 // 1.11.0 — Nieuw als Patch Mono (nieuwe id nl.patchkamer.patchmono, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Patch Mono
 //   - alleen de code voor dit apparaat zelf: één mono-stem met een of twee oscillatoren en een of twee filters
@@ -211,7 +213,7 @@ const EN = {
   'Nootprioriteit': 'Note priority', 'Laatste': 'Last', 'Laagste': 'Lowest', 'Hoogste': 'Highest',
   'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle', 'LFO-vorm': 'LFO shape', 'Aan': 'On', 'Uit': 'Off',
   'Testnoot MIDI': 'Test note (MIDI)', 'Speel noot': 'Play note', 'Houd noot': 'Hold note', 'Alles uit': 'All off',
-  'Vier interne patchroutes': 'Four internal patch routes', 'Bron': 'Source', 'Doel': 'Target', 'Hoeveelheid': 'Amount',
+  'Route {0} hoeveelheid': 'Route {0} amount', 'Vier interne patchroutes': 'Four internal patch routes', 'Bron': 'Source', 'Doel': 'Target', 'Hoeveelheid': 'Amount',
   'Sample & hold': 'Sample & hold', 'Externe envelope': 'External envelope',
   'Monofone synth met één of twee oscillatoren, resonante filters en vier interne patchroutes.': 'Monophonic synth with one or two oscillators, resonant filters and four internal patch routes.',
   'Audiomotor wordt voorbereid…': 'Audio engine loading…', 'Deze omgeving biedt geen audioprocessor.': 'This environment offers no audio processor.',
@@ -260,6 +262,7 @@ const SPEC = {
 const LANES = { filter: 'Filters', amp: 'Versterker / envelope', source: 'Oscillatoren', motion: 'Modulatie', master: 'Master' };
 // alleen met Opbouw 'dual' bruikbaar: deze regelaars staan dan niet op de kaart
 const DUAL_ONLY = ['osc2', 'osc2Semi', 'osc2Fine', 'fm', 'audioFilter', 'ring', 'hpRes', 'highpass', 'fAttack', 'fDecay', 'fSustain', 'fRelease'];
+const ROUTE_IDS = ['route0', 'route1', 'route2', 'route3'];   // hoeveelheid per patchroute (-1…+1), alleen als sturing; de bewaarde routes zijn state
 const NO_ROUTES = JSON.stringify(Array.from({ length: 4 }, () => ({ source: 'off', dest: 'cutoff', amount: 0 })));
 const DEFAULTS = {
   cutoff: 1300, resonance: 0.55, filterEnv: 3, keytrack: 0.5, attack: 0.008, decay: 0.3, sustain: 0.65, release: 0.3, pw: 0.5, pwm: 0.2, noise: 0, lfoRate: 2,
@@ -310,7 +313,8 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.patchmono',
   name: 'Patch Mono',
-  version: '1.11.0',
+  version: '1.11.1',
+  modExclude: ['testNote'],   // werkstand, geen klank
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
@@ -337,6 +341,7 @@ export default {
     function resolve() {
       const e = { ...state };
       for (const [id, d] of Object.entries(SPEC)) { const x = mod[id] || 0; e[id] = clamp(d.scale === 'log' ? state[id] * (d.max / d.min) ** x : state[id] + x * (d.max - d.min), d.min, d.max); }
+      if (ROUTE_IDS.some(id => mod[id])) { try { const rs = JSON.parse(state.routes); e.routes = JSON.stringify(rs.map((r, i) => (r && typeof r === 'object' ? { ...r, amount: clamp((Number(r.amount) || 0) + (mod['route' + i] || 0) * 2, -1, 1) } : r))); } catch (err) { /* routes blijven zoals ze zijn */ } }
       effective = e; return e;
     }
     resolve();
@@ -445,6 +450,7 @@ export default {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', tx(label));
       const out2 = add(box, 'output', format(value)), el = add(box, 'input');
       el.type = 'range'; [el.min, el.max, el.step] = bounds.map(String); el.value = String(value); if (dflt !== undefined) el.dataset.pkDefault = String(dflt);
+      if (/^route\d$/.test(id)) el.dataset.pkId = id;   // koppelt de routehoeveelheid aan zijn stuurbare parameter
       el.oninput = () => { const n = Number(el.value); out2.textContent = format(n); change(n); };
       return { el, out: out2 };
     }
@@ -536,10 +542,10 @@ export default {
     }
     function control0(parent, ids) { const g = grid(parent); for (const id of ids) control(g, id); }
 
-    const descriptors = () => Object.entries(SPEC).map(([id, d]) => ({ id, name: tx(d.name), lane: d.lane, laneName: tx(LANES[d.lane]), min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role, drift: 0.015, on: d.role !== 'level' && d.role !== 'pitch' }));
+    const descriptors = () => Object.entries(SPEC).map(([id, d]) => ({ id, name: tx(d.name), lane: d.lane, laneName: tx(LANES[d.lane]), min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role, drift: 0.015, on: d.role !== 'level' && d.role !== 'pitch' })).concat(ROUTE_IDS.map((id, i) => ({ id, name: tx('Route {0} hoeveelheid', i + 1), lane: 'motion', laneName: tx(LANES.motion), min: -1, max: 1, scale: 'lin', role: 'depth', drift: 0.08, on: false })));
     function receiveMod(raw) {
       mod = {};
-      if (raw && typeof raw === 'object' && !Array.isArray(raw)) for (const id in SPEC) if (typeof raw[id] === 'number' && Number.isFinite(raw[id])) mod[id] = clamp(raw[id], -1, 1);
+      if (raw && typeof raw === 'object' && !Array.isArray(raw)) for (const id of Object.keys(SPEC).concat(ROUTE_IDS)) if (typeof raw[id] === 'number' && Number.isFinite(raw[id])) mod[id] = clamp(raw[id], -1, 1);
       apply();
     }
 
