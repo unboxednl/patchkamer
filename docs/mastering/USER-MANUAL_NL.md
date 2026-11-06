@@ -142,7 +142,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 ### Presets
 
-Balance EQ heeft het pack **Balance EQ Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/balance-eq.patchkamer-presets.json`](../../presets/balance-eq.patchkamer-presets.json). Laad het pack met het menu **Presets ▾** → **Importeren…**, en kies dan een preset in de lijst op de kaart.
+Balance EQ heeft het pack **Balance EQ Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/balance-eq.patchkamer-presets.json`](../../presets/balance-eq.patchkamer-presets.json). Laad het pack met de tab **Presets** van de bibliotheek → **Importeren…**, en kies dan een preset in de lijst op de kaart.
 
 De mappen **Situations** en **Styles** hebben één preset per situatie en per muziekstijl; de andere mappen hebben de gebruikelijke combinaties van een situatie en een stijl (bijvoorbeeld **Club › Techno**). De waarden volgen dezelfde recepten als de Master Director.
 
@@ -202,7 +202,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 ### Presets
 
-Multiband Balance heeft het pack **Multiband Balance Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/multiband-balance.patchkamer-presets.json`](../../presets/multiband-balance.patchkamer-presets.json). Laad het pack met het menu **Presets ▾** → **Importeren…**, en kies dan een preset in de lijst op de kaart.
+Multiband Balance heeft het pack **Multiband Balance Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/multiband-balance.patchkamer-presets.json`](../../presets/multiband-balance.patchkamer-presets.json). Laad het pack met de tab **Presets** van de bibliotheek → **Importeren…**, en kies dan een preset in de lijst op de kaart.
 
 De mappen **Situations** en **Styles** hebben één preset per situatie en per muziekstijl; de andere mappen hebben de gebruikelijke combinaties van een situatie en een stijl (bijvoorbeeld **Club › Techno**). De waarden volgen dezelfde recepten als de Master Director.
 
@@ -245,7 +245,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 ### Presets
 
-Bus Compressor heeft het pack **Bus Compressor Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/bus-compressor.patchkamer-presets.json`](../../presets/bus-compressor.patchkamer-presets.json). Laad het pack met het menu **Presets ▾** → **Importeren…**, en kies dan een preset in de lijst op de kaart.
+Bus Compressor heeft het pack **Bus Compressor Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/bus-compressor.patchkamer-presets.json`](../../presets/bus-compressor.patchkamer-presets.json). Laad het pack met de tab **Presets** van de bibliotheek → **Importeren…**, en kies dan een preset in de lijst op de kaart.
 
 De mappen **Situations** en **Styles** hebben één preset per situatie en per muziekstijl; de andere mappen hebben de gebruikelijke combinaties van een situatie en een stijl (bijvoorbeeld **Club › Techno**). De waarden volgen dezelfde recepten als de Master Director.
 
@@ -287,7 +287,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 ### Presets
 
-Patina heeft het pack **Patina Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/patina.patchkamer-presets.json`](../../presets/patina.patchkamer-presets.json). Laad het pack met het menu **Presets ▾** → **Importeren…**, en kies dan een preset in de lijst op de kaart.
+Patina heeft het pack **Patina Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/patina.patchkamer-presets.json`](../../presets/patina.patchkamer-presets.json). Laad het pack met de tab **Presets** van de bibliotheek → **Importeren…**, en kies dan een preset in de lijst op de kaart.
 
 De mappen **Situations** en **Styles** hebben één preset per situatie en per muziekstijl; de andere mappen hebben de gebruikelijke combinaties van een situatie en een stijl (bijvoorbeeld **Club › Techno**). De waarden volgen dezelfde recepten als de Master Director.
 
@@ -329,7 +329,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 ### Presets
 
-Stereo Space heeft het pack **Stereo Space Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/stereo-space.patchkamer-presets.json`](../../presets/stereo-space.patchkamer-presets.json). Laad het pack met het menu **Presets ▾** → **Importeren…**, en kies dan een preset in de lijst op de kaart.
+Stereo Space heeft het pack **Stereo Space Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/stereo-space.patchkamer-presets.json`](../../presets/stereo-space.patchkamer-presets.json). Laad het pack met de tab **Presets** van de bibliotheek → **Importeren…**, en kies dan een preset in de lijst op de kaart.
 
 De mappen **Situations** en **Styles** hebben één preset per situatie en per muziekstijl; de andere mappen hebben de gebruikelijke combinaties van een situatie en een stijl (bijvoorbeeld **Club › Techno**). De waarden volgen dezelfde recepten als de Master Director.
 
@@ -380,7 +380,7 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 ### Presets
 
-Master Chain heeft het pack **Master Chain Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/master-chain.patchkamer-presets.json`](../../presets/master-chain.patchkamer-presets.json). Laad het pack met het menu **Presets ▾** → **Importeren…**, en kies dan een preset in de lijst op de kaart.
+Master Chain heeft het pack **Master Chain Situations and Styles**: 128 presets in 10 mappen (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). Het bestand is [`presets/master-chain.patchkamer-presets.json`](../../presets/master-chain.patchkamer-presets.json). Laad het pack met de tab **Presets** van de bibliotheek → **Importeren…**, en kies dan een preset in de lijst op de kaart.
 
 De mappen **Situations** en **Styles** hebben één preset per situatie en per muziekstijl; de andere mappen hebben de gebruikelijke combinaties van een situatie en een stijl (bijvoorbeeld **Club › Techno**). De waarden volgen dezelfde recepten als de Master Director.
 

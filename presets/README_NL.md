@@ -83,7 +83,7 @@ De mappen in elk pack staan in de handleiding: [Presets: gebruikershandleiding](
 
 ## Zo gebruik je ze
 
-- Laad `github.com/unboxednl/patchkamer` als bibliotheek in Patchkamer: de packs komen mee. Of download een bestand uit deze map en gebruik **Presets ▾ → Importeren…**.
+- Laad `github.com/unboxednl/patchkamer` als bibliotheek in Patchkamer: de packs komen mee. Of download een bestand uit deze map en gebruik de tab **Presets** in de bibliotheek (knop **Bibliotheek**) → **Importeren…**.
 - Kies daarna een preset in de lijst op de kaart van het apparaat.
 - Uitleg in het geheel, ook over bewaren, exporteren, delen en je eigen packs maken: [Presets: gebruikershandleiding](../docs/presets/USER-MANUAL_NL.md). De basis van Patchkamer: [basishandleiding](../docs/USER-MANUAL_NL.md).
 

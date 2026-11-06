@@ -29,7 +29,7 @@ A typical patch has three steps, from left to right:
 
 Press **Start** to run the clock. Built-in sequencers, arpeggiators, the trance gate of Supersaw Swarm, the pump and the automatic chords and melody of Mist only move while the clock runs. Notes from Keys and the test buttons on the cards work without it. A sequencer that sends notes to a polyphonic synth should always send a note length (`dur`); a note without a length keeps sounding on some synths.
 
-Every synth has **tunes**: a tune is the complete setting of one synth, and some tunes include a bass line or pattern. Load a pack from a library or with the **Tunes ▾** menu → **Import…**, then pick a tune in the list at the top of the card (it reads `Folder › Name`). See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use, save and share them. The synths have no presets: the choices that look like presets inside a card (a **Sound** list, **Preset** buttons) are starting sounds that set the knobs once.
+Every synth has **tunes**: a tune is the complete setting of one synth, and some tunes include a bass line or pattern. Load a pack from a library or with the **Tunes** tab of the library → **Import…**, then pick a tune in the list at the top of the card (it reads `Folder › Name`). See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use, save and share them. The synths have no presets: the choices that look like presets inside a card (a **Sound** list, **Preset** buttons) are starting sounds that set the knobs once.
 
 ## Which synth for which goal
 

@@ -68,24 +68,31 @@ The icon (a patch cable between two jacks) also shows as the tab icon in the bro
 |---|---|
 | **Start** | Starts and stops the clock. Devices with a sequencer play along. |
 | **BPM**, **Swing** | Tempo (40–200) and swing of the clock. |
-| **Workspace** | Save, open and export your setup (section 8). |
-| **Tunes**, **Presets** | The libraries of sounds and settings (section 7). |
-| **Songs** | Opens a song: the demos from GitHub, your recent songs, or a file (section 8). |
-| **Settings** | Language, audio quality, display and more (section 10). |
-| **Arrange** | Puts your devices neatly in order, from left to right. |
-| **Focus** | Shows the devices you flagged with **F** next to each other (section 9). |
-| **Clear** | Empties the floor (click twice to confirm). |
-| **Library** | Shows or hides the library window. |
-| **Latency** | The delay between a sound being calculated and you hearing it, as reported by your browser. |
-| **Color** | Dark, light or retro (section 10). |
+| **Library** | Shows or hides the library window with the tabs **Devices**, **Tunes**, **Presets**, **Songs** and **Skins** ([the library tabs](#the-library-tabs)). |
 | The name at the top | The name of your workspace. Click it to rename. |
+| **☰** | The menu with everything else, in four groups (the four rows below). The menu closes after a choice. |
+| ☰ → **File** | **Workspace** (save, open and export your setup, section 8), **Arrange** (puts your devices neatly in order, from left to right) and **Clear** (empties the floor; click twice to confirm). |
+| ☰ → **Library** | **Tunes**, **Presets**, **Songs** and **Skins** open the library window on that tab (sections 7 and 8). |
+| ☰ → **View** | **Screen** and **Fit to this screen** (section 9), **Color** (dark, light or retro, section 10), **Focus** (shows the devices you flagged with **F** next to each other, section 9) and **Browse** (Focus with all devices, one at a time). |
+| ☰ → **Other** | **Settings** (language, audio quality, display and more, section 10), **Latency** (shown small: the delay between a sound being calculated and you hearing it, as reported by your browser) and the switch **Offer to connect when placing a device**. |
 | **F1**, **F2**… tabs | The bar under the top bar holds your workspaces. Click a tab or press **F1** to **F10** to switch; **+** adds one and **×** closes one (section 8). |
 
-The big area is the **floor**. Your devices live there. The window on the left is the **library**, the list of devices you can place. Bottom right you find the zoom controls.
+The big area is the **floor**. Your devices live there. The window on the left is the **library**, with the devices you can place. Bottom right you find the zoom controls.
+
+### The library tabs
+
+The library window shows one kind of content at a time. Five tabs at the top switch between them:
+
+- **Devices:** the devices you can place, with the search field, categories, **Layout** and the **Sources** for loading and scanning (section 4);
+- **Tunes** and **Presets:** your tune and preset libraries, with **Load all**, **New library** and **Import…** (section 7);
+- **Songs:** the demos, your recent songs, **Open file…** and **Export as song…**, with a search field (section 8);
+- **Skins:** the skin libraries, with **Import…**, **Load all** and the designer (section 7).
+
+On a wide screen they are tabs. On a narrow screen (under 700 pixels, the bottom sheet), and when the window is too narrow for all the tabs, it is a dropdown list. Your last chosen tab is remembered. The **Tunes**, **Presets**, **Songs** and **Skins** buttons in the ☰ menu, the button next to the tune list on a card and dropping a tune, preset or skin file open the window on the right tab. **Settings** stays a panel of its own through the ☰ menu.
 
 ## 4. Load a library
 
-Patchkamer comes without devices of its own. A **library** is a collection of devices. This repository contains one in the `devices` folder. In the library window, under **Sources**, you add one or more sources. There are three kinds:
+Patchkamer comes without devices of its own. A **library** is a collection of devices. This repository contains one in the `devices` folder. In the library window (the **Devices** tab), under **Sources**, you add one or more sources. There are three kinds:
 
 | Source | How |
 |---|---|
@@ -164,7 +171,7 @@ Point at a cable with the mouse and a small text shows the names of the connecte
 
 ### Offer to connect when placing
 
-Patchkamer can suggest cables after you place a device, so you do not have to drag every cable yourself. The switch **Offer to connect when placing a device** is in the ☰ menu (narrow screen, group **Other**) and in **Settings**; the two switches belong together. Without a choice of your own it is **on for a touch screen** (phone, tablet) and **off for a computer with a mouse**; a narrow window on a computer does not count as mobile. As soon as you set the switch yourself, your browser remembers that choice.
+Patchkamer can suggest cables after you place a device, so you do not have to drag every cable yourself. The switch **Offer to connect when placing a device** is in the ☰ menu (group **Other**) and in **Settings**; the two switches belong together. Without a choice of your own it is **on for a touch screen** (phone, tablet) and **off for a computer with a mouse**; a narrow window on a computer does not count as mobile. As soon as you set the switch yourself, your browser remembers that choice.
 
 When it is on, every device that **you place yourself** (dragging, **Place**, or a tap on a compact library row) opens a window **Connect to devices on the canvas**, if there is anything to connect. Opening a song or workspace, **Arrange**, Ctrl+Z and switching tabs never ask. If you drop the device on a cable, that comes first and no window appears.
 
@@ -208,9 +215,9 @@ On every card you see a bar with ◀ ▶ buttons and a list. Pick a tune or pres
 
 ![Tune libraries](images/en/09-tunes-panel.png)
 
-The **Load all** button at the top of the Tunes and Presets panel loads every tune pack, or every preset pack, from the address you set under **Settings → New workspace** (by default the `tunes` and `presets` folders of this repository on GitHub). Everything below that folder is read.
+The **Load all** button at the top of the Tunes and Presets tabs loads every tune pack, or every preset pack, from the address you set under **Settings → New workspace** (by default the `tunes` and `presets` folders of this repository on GitHub). Everything below that folder is read.
 
-The **Tunes** and **Presets** menus manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. The packs that come with this repository are listed in the [tunes manual](tunes/USER-MANUAL_EN.md) and the [presets manual](presets/USER-MANUAL_EN.md).
+The **Tunes** and **Presets** tabs of the library manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. The packs that come with this repository are listed in the [tunes manual](tunes/USER-MANUAL_EN.md) and the [presets manual](presets/USER-MANUAL_EN.md).
 
 For the whole story, with the list of included packs and how to make your own, see the [presets manual](presets/USER-MANUAL_EN.md) and the [tunes manual](tunes/USER-MANUAL_EN.md).
 
@@ -218,11 +225,11 @@ For the whole story, with the list of included packs and how to make your own, s
 
 A **skin** only changes the **looks** of one device, never its sound, settings or behaviour. It is a separate file (`.patchkamer-skin.json`) with one or more **appearances**, for example a compact and a wide one. Skins are a third kind of library material next to tunes and presets.
 
-**Where do you find skins?** In the `skins/library` folder of this repository on GitHub, with a folder per device (`skins/library/<device-id>/`). Under **Settings → New workspace** there is **Load skins** with that address; the **Load all** button in the Skins panel loads them too. A GitHub, web or local folder that contains `skins/library/<device-id>/*.patchkamer-skin.json` is added as a source like any library; a local folder with devices and skins works as well. A skin for a device you do not have is kept but not offered anywhere.
+**Where do you find skins?** In the `skins/library` folder of this repository on GitHub, with a folder per device (`skins/library/<device-id>/`). Under **Settings → New workspace** there is **Load skins** with that address; the **Load all** button on the Skins tab loads them too. A GitHub, web or local folder that contains `skins/library/<device-id>/*.patchkamer-skin.json` is added as a source like any library; a local folder with devices and skins works as well. A skin for a device you do not have is kept but not offered anywhere.
 
-**Loading.** Open **Skins ▾** (in the ☰ menu under **Sound**) for the **Skin libraries** panel: per device the skins with name, author, version, license and appearances. With **Import…** you choose a file; you can also **drop** it onto the floor or the library window (without confirmation, after devices and tunes and before songs and workspaces). An imported skin stays in your browser until you remove it with **×**; skins from a source are read-only and go away with that source. An invalid file is refused with a message that names the file; the rest keeps loading. A skin with an unknown major version of the skin format, or with CSS that loads from outside (`@import`, a `url(` to a web address), is refused.
+**Loading.** Open the **Skins** tab of the library (or **Skins** in the ☰ menu) for the **Skin libraries**: per device the skins with name, author, version, license and appearances. With **Import…** you choose a file; you can also **drop** it onto the floor or the library window (without confirmation, after devices and tunes and before songs and workspaces). An imported skin stays in your browser until you remove it with **×**; skins from a source are read-only and go away with that source. An invalid file is refused with a message that names the file; the rest keeps loading. A skin with an unknown major version of the skin format, or with CSS that loads from outside (`@import`, a `url(` to a web address), is refused.
 
-**Choosing on the card.** As soon as a device has at least one skin, the card's bar shows two lists: **Skin** (**Default** is the device's own look) and **Appearance**. With **Auto** Patchkamer picks the appearance itself from the **width of the card** and the **screen size** (phone, compact or wide); the list shows which one is active. If you choose an appearance yourself, Auto stays off for that device until you go back to **Auto**. The choice applies immediately. With **Default** everything is gone and the device looks exactly as before. If the bars on the cards are switched off (Settings), choose from the panel with **Apply** and **Choose**.
+**Choosing on the card.** As soon as a device has at least one skin, the card's bar shows two lists: **Skin** (**Default** is the device's own look) and **Appearance**. With **Auto** Patchkamer picks the appearance itself from the **width of the card** and the **screen size** (phone, compact or wide); the list shows which one is active. If you choose an appearance yourself, Auto stays off for that device until you go back to **Auto**. The choice applies immediately. With **Default** everything is gone and the device looks exactly as before. If the bars on the cards are switched off (Settings), choose from the Skins tab with **Apply** and **Choose**.
 
 **Saving.** The choice per device is stored in the workspace and in the song, together with the skins used (at most 20), so a song keeps its looks without the library. When you open one, those skins quietly enter your register (a newer version wins). Workspaces and songs without skins load as always. Skins never touch the sound: the device's settings are the same with and without a skin.
 
@@ -231,9 +238,9 @@ A **skin** only changes the **looks** of one device, never its sound, settings o
 - **Port mode.** *Default* (as now), *Always visible* (the ports in a fixed bar at the top), *On hover or cable* (the ports are hidden; they appear when you put the mouse on the thin strip at the top of the device or drag a cable over the device) and *Strip* (a visible strip; the ports open when you put the mouse on the device). On a touch screen you open and close the strip with a tap, and dragging a cable over the device opens it too; with the keyboard use Enter or space. Cables stay correct: a hidden port hangs its cable on the strip. A device with ports in its own screen keeps the mode *Default* and says so.
 - **Colours.** *Workspace* (the colours of the workspace) or *Custom colours*: background, surface, text, muted text, accent and lines, on that card only. A missing colour falls back to the workspace colour; low contrast between text and background gives a note, not a refusal.
 - **Haptics.** A short vibration on **clicks** (buttons and pads), **turning** (the rotary knob) and **sliding** (one pulse per step, at most 25 per second), each off, light, medium or strong. This only works in a browser that can vibrate (mostly Android; not iOS Safari), not with a reduced-motion preference and not while the page is in the background.
-- **Knobs.** Style (*Workspace*, *Rotary* or *Slider*) and size (S, M or L) of the knobs a device builds through the host. A device's own controls are left alone, so this works on the devices that use the host knob; the Skins panel shows how many there are on your floor.
+- **Knobs.** Style (*Workspace*, *Rotary* or *Slider*) and size (S, M or L) of the knobs a device builds through the host. A device's own controls are left alone, so this works on the devices that use the host knob; the Skins tab shows how many there are on your floor.
 
-**Designing your own.** In the Skins panel pick a device under **New design** and click **Design**, or click **Design a copy** on an existing skin. Give the skin a name (and an author), choose port mode, colour scheme, haptics and knobs, and add a **Compact** (card up to 360 px) or **Full** appearance if needed, which can differ from Standard per choice. The **preview is live on a card** of that device; **Close** restores the card's previous skin. The **colour picker** has a colour area (saturation and brightness), a hue bar, a hex field, sample colours, a list of recently used colours and a contrast note; with the keyboard use the arrow keys (Shift = bigger step), and on a touch screen every target is at least 44 px. **Save** keeps the skin as your own skin in your browser (id `<device>.<name>`); **Export** gives a `.patchkamer-skin.json` file to share. Without an author the skin can be saved, but not shared properly. A copy of a skin with CSS keeps that CSS and its images.
+**Designing your own.** On the Skins tab pick a device under **New design** and click **Design**, or click **Design a copy** on an existing skin. Give the skin a name (and an author), choose port mode, colour scheme, haptics and knobs, and add a **Compact** (card up to 360 px) or **Full** appearance if needed, which can differ from Standard per choice. The **preview is live on a card** of that device; **Close** restores the card's previous skin. The **colour picker** has a colour area (saturation and brightness), a hue bar, a hex field, sample colours, a list of recently used colours and a contrast note; with the keyboard use the arrow keys (Shift = bigger step), and on a touch screen every target is at least 44 px. **Save** keeps the skin as your own skin in your browser (id `<device>.<name>`); **Export** gives a `.patchkamer-skin.json` file to share. Without an author the skin can be saved, but not shared properly. A copy of a skin with CSS keeps that CSS and its images.
 
 **Making a skin?** See [skins/AGENTS.md](https://github.com/unboxednl/patchkamer/blob/main/skins/AGENTS.md) (for people working with an AI agent) and the skins contract ([Nederlands](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_NL.md), [English](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_EN.md)).
 
@@ -249,7 +256,7 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 - **Export as song…** makes a shareable file (`.patchkamer-song.json`) that holds all device code, a title, the author and a license. Someone else can open it without any library.
 - **New empty workspace** starts again.
 
-**Songs.** The **Songs** button in the top bar opens a song in a **new workspace tab** and arranges the devices afterwards (**Ctrl+Z** undoes it). It lists the **demo songs** from the `songs` folder of this repository on GitHub, your **recent songs** (the last twelve, also files you opened) and **Open file…**. If a song needs devices that are not in your library yet, Patchkamer first loads the device library from **Settings → New workspace**. Up to ten workspaces can be open, so close one first when they are all in use.
+**Songs.** The **Songs** tab of the library (or **Songs** in the ☰ menu) opens a song in a **new workspace tab** and arranges the devices afterwards (**Ctrl+Z** undoes it). It lists the **demo songs** from the `songs` folder of this repository on GitHub, your **recent songs** (the last twelve, also files you opened) and **Open file…**. If a song needs devices that are not in your library yet, Patchkamer first loads the device library from **Settings → New workspace**. Up to ten workspaces can be open, so close one first when they are all in use.
 
 **More than one workspace.** The tab bar under the top bar holds up to ten workspaces. Click a tab, or press **F1** to **F10**, to switch. **+** adds a new empty workspace; **×** closes one (Patchkamer asks first if it holds devices, and the last one cannot be closed: use **Clear**). Every workspace has its own devices, cables, tempo and name, and everything in this section works on the workspace you are in. When you switch, the clock stops and you start it again yourself. A new workspace loads what you chose under **Settings → New workspace**. Patchkamer keeps your workspaces in your browser and opens them again the next time.
 
@@ -259,10 +266,10 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 
 With a mouse you can drop files from your file manager onto the **floor** or the **library window**; a frame saying "Drop to load" appears. Patchkamer recognises the kind from the content and loads it without asking:
 
-- a **song** (`.patchkamer-song.json`) or a **workspace file** opens in a **new workspace tab**; your current workspace stays as it is. As with the **Songs** button, the devices are arranged afterwards;
+- a **song** (`.patchkamer-song.json`) or a **workspace file** opens in a **new workspace tab**; your current workspace stays as it is. As with the **Songs** tab, the devices are arranged afterwards;
 - a **device** (`.patchkamer-device.js`) goes into the **library**, not onto the floor. If the same version is already loaded it is replaced. Place it afterwards as usual;
 - a **tune pack** or **preset pack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) goes into your tune or preset libraries, like **Import**;
-- a **skin** (`.patchkamer-skin.json`) goes into your skin library, like **Import** in the Skins panel;
+- a **skin** (`.patchkamer-skin.json`) goes into your skin library, like **Import** on the Skins tab;
 - a **library layout** (`patchkamer-bibliotheek.json`) is applied.
 
 If you drop several files at once (at most 50, each up to 50 MB), devices go first, then tunes and presets, skins, the layout, and finally songs and workspaces, so a song finds the devices from the same drop already in the library. You get one message with the result. Folders and unknown files are not loaded; an image or sound file is left to the device or the browser. A file you drop on a device itself (for example on a sampler's waveform) is for that device. This does not exist on a phone or tablet: use the existing buttons there (**Open file…**, **Import**, **Load instrument**).
@@ -278,7 +285,7 @@ If you drop several files at once (at most 50, each up to 50 MB), devices go fir
 
 ### Touchscreen and phone
 
-On a **narrow screen** (under 700 pixels) the top bar keeps only what you need while playing: **Start**, **BPM**, **Swing** (without text labels; long-press for the name) and a ▤ button for the **Library**. Everything else is behind the **☰** button: a menu with large touch targets in four groups (**Files**, **Sound**, **View**, **Other**), with the name of your workspace at the top. The menu closes after a choice, with **Esc**, with a tap outside it or with the Android back button. On a wide screen everything is back in the bar.
+On every screen the top bar keeps only what you need while playing: the logo, the name of your workspace, **Start**, **BPM**, **Swing**, the **Library** button and **☰**. On a **narrow screen** (under 700 pixels) the logo is only the icon, **Start**, **BPM** and **Swing** have no text labels (long-press for the name) and the **Library** button is a ▤; on a phone **Start**, **BPM** and **Swing** sit on a second line under the name. Everything else is behind the **☰** button: a menu with large touch targets in four groups (**File**, **Library**, **View**, **Other**), the same on every screen. The menu closes after a choice, with **Esc**, with a tap outside it or with the Android back button.
 
 - **Panning:** one finger on empty floor pans, like the mouse. A finger on a port drags a cable, a finger on a card's title bar moves the card.
 - **Zooming:** pinch with two fingers to zoom and drag with two fingers to pan the floor. A cable or card you were dragging with the first finger is cancelled. Two fingers inside one device's controls (for example on pads) do nothing to the floor.
@@ -289,7 +296,7 @@ On a **narrow screen** (under 700 pixels) the top bar keeps only what you need w
 ### Compact library and bottom sheet
 
 - **Cards** or **Compact** (in the library bar): compact is one line per device with name, type and version. Tap a line to place it, or drag it (with a finger: long press first). The small arrow on the right expands the line with ports and choices. Search, categories and folders work in both views. Your choice is remembered; until you choose, compact is the default on a narrow or touch screen.
-- On a **narrow screen** (under 700 pixels) the library is a **bottom sheet**: about 60% of the screen. Open or close it with the **Library** button at the top, with **Alt+B**, with the **×** in the sheet, or by dragging the grip down. The top bar scrolls sideways; **Start** stays visible.
+- On a **narrow screen** (under 700 pixels) the library is a **bottom sheet**: about 60% of the screen. Open or close it with the **Library** button at the top, with **Alt+B**, with the **×** in the sheet, or by dragging the grip down. At the top of the sheet a dropdown list chooses the kind of content (Devices, Tunes, Presets, Songs or Skins).
 
 ### Camera views
 
@@ -297,11 +304,11 @@ With **Views** at the bottom right you save the part of the floor you are lookin
 
 ### Compact layout per screen
 
-A workspace can have a **compact layout** next to the wide one. With **Screen** (top bar) you choose **Auto** (compact under 1100 pixels wide), **Wide** or **Compact**; the choice applies to this browser. **Fit to this screen** makes a first compact layout: the devices in signal order in columns that fit the screen, devices without cables as icons, and then everything is brought into view. Your wide layout is kept: choose **Wide** to go back. Moving and resizing apply to the layout that is on. Both layouts are saved.
+A workspace can have a **compact layout** next to the wide one. With **Screen** (☰ → View) you choose **Auto** (compact under 1100 pixels wide), **Wide** or **Compact**; the choice applies to this browser. **Fit to this screen** makes a first compact layout: the devices in signal order in columns that fit the screen, devices without cables as icons, and then everything is brought into view. Your wide layout is kept: choose **Wide** to go back. Moving and resizing apply to the layout that is on. Both layouts are saved.
 
 ### Focus "One at a time"
 
-In the focus view, **One at a time** shows a single device. Switch with **◀ ▶**, with the tab bar, with the arrow keys, or by swiping the tab bar (only there, so swiping never clashes with sliders inside a device). On a narrow screen this is the default, and the **Browse** button in the top bar opens Focus straight away with all devices of the workspace. The card itself shows its ports with names. When zoomed out (below about 55%) cards show only the title bar and ports; double-click or double-tap such a card to zoom in on it. Turn this off under **Settings** with *Simplify cards when zoomed out*.
+In the focus view, **One at a time** shows a single device. Switch with **◀ ▶**, with the tab bar, with the arrow keys, or by swiping the tab bar (only there, so swiping never clashes with sliders inside a device). On a narrow screen this is the default, and the **Browse** button in the ☰ menu (View) opens Focus straight away with all devices of the workspace. The card itself shows its ports with names. When zoomed out (below about 55%) cards show only the title bar and ports; double-click or double-tap such a card to zoom in on it. Turn this off under **Settings** with *Simplify cards when zoomed out*.
 
 ### Working faster: an overview
 
@@ -323,7 +330,7 @@ The features that speed up your workflow the most, in one list:
 
 - **Language:** automatic (your browser), Nederlands or English. Patchkamer reloads and keeps your workspace.
 - **Audio:** pick **Low**, **Normal** or **High** quality, or set **sample rate**, **latency** and **oversampling** yourself. Higher quality asks more of your computer. A change reloads Patchkamer and keeps your workspace. If you hear crackles, choose a larger latency buffer (*Balanced* or *Stable*).
-- **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**, **Load skins**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts them back. **Load skins** works the same, with the `skins/library` folder as the default; if that folder is not (yet) on GitHub you only get a short message and everything else loads as usual. The **Load all** button in the Tunes, Presets and Skins panel uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
+- **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**, **Load skins**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts them back. **Load skins** works the same, with the `skins/library` folder as the default; if that folder is not (yet) on GitHub you only get a short message and everything else loads as usual. The **Load all** button on the Tunes, Presets and Skins tabs uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
 - **AI assistant:** choose a provider (**Anthropic**, **OpenAI** or a **custom address** for any OpenAI-compatible service, such as your own proxy, OpenRouter or a local model), paste your **API key** and choose a **model** (**Fetch models** fills the list). The key is stored only in this browser (localStorage) and goes only to the provider you chose. Under it you can change which GitHub repository the AI reads its documentation from, or tick **Use my own agent instructions** and write your own: the AI then uses those instead of the GitHub documentation. **Clear keys** removes all keys. See *AI Chat* in section 6.
 - **Songs address:** under **New workspace** you also find the address of the demo songs (by default the `songs` folder on GitHub); **Restore default address** puts it back.
 - **Display:** the style of the cables, their opacity, the cable color (by category or by type), the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.

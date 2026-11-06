@@ -68,24 +68,31 @@ Het icoon (een patchkabel tussen twee aansluitingen) verschijnt ook als tabbladi
 |---|---|
 | **Start** | Start en stopt de klok. Apparaten met een sequencer spelen mee. |
 | **BPM**, **Swing** | Tempo (40–200) en swing van de klok. |
-| **Werkruimte** | Bewaar, open en exporteer je opstelling (onderdeel 8). |
-| **Tunes**, **Presets** | De bibliotheken met klanken en instellingen (onderdeel 7). |
-| **Songs** | Opent een song: de demo's van GitHub, je recente songs of een bestand (onderdeel 8). |
-| **Instellingen** | Taal, audiokwaliteit, weergave en meer (onderdeel 10). |
-| **Herschik** | Zet je apparaten netjes op volgorde, van links naar rechts. |
-| **Focus** | Toont de apparaten die je met **F** hebt gemarkeerd naast elkaar (onderdeel 9). |
-| **Leeg** | Maakt de vloer leeg (klik twee keer om te bevestigen). |
-| **Bibliotheek** | Toont of verbergt het bibliotheekvenster. |
-| **Latency** | De vertraging tussen het berekenen van een geluid en het horen ervan, zoals je browser die meldt. |
-| **Kleur** | Donker, licht of retro (onderdeel 10). |
+| **Bibliotheek** | Toont of verbergt het bibliotheekvenster met de tabs **Apparaten**, **Tunes**, **Presets**, **Songs** en **Skins** ([de tabs van de bibliotheek](#de-tabs-van-de-bibliotheek)). |
 | De naam bovenaan | De naam van je werkruimte. Klik erop om hem te wijzigen. |
+| **☰** | Het menu met al het andere, in vier groepen (de vier rijen hieronder). Het menu sluit na een keuze. |
+| ☰ → **Bestand** | **Werkruimte** (bewaar, open en exporteer je opstelling, onderdeel 8), **Herschik** (zet je apparaten netjes op volgorde, van links naar rechts) en **Leeg** (maakt de vloer leeg; klik twee keer om te bevestigen). |
+| ☰ → **Bibliotheek** | **Tunes**, **Presets**, **Songs** en **Skins** openen het bibliotheekvenster op die tab (onderdeel 7 en 8). |
+| ☰ → **Weergave** | **Scherm** en **Pas aan op dit scherm** (onderdeel 9), **Kleur** (donker, licht of retro, onderdeel 10), **Focus** (toont de apparaten die je met **F** hebt gemarkeerd naast elkaar, onderdeel 9) en **Bladeren** (Focus met alle apparaten, één tegelijk). |
+| ☰ → **Overig** | **Instellingen** (taal, audiokwaliteit, weergave en meer, onderdeel 10), **Latency** (klein weergegeven: de vertraging tussen het berekenen van een geluid en het horen ervan, zoals je browser die meldt) en de schakelaar **Automatisch koppelen bij plaatsen**. |
 | Tabs **F1**, **F2**… | De balk onder de bovenbalk bevat je werkruimtes. Klik op een tab of druk op **F1** t/m **F10** om te wisselen; **+** voegt er een toe en **×** sluit er een (hoofdstuk 8). |
 
-Het grote vlak is de **vloer**. Daar staan je apparaten. Het venster links is de **bibliotheek**, de lijst met apparaten die je kunt plaatsen. Rechtsonder zie je de zoomknoppen.
+Het grote vlak is de **vloer**. Daar staan je apparaten. Het venster links is de **bibliotheek**, met de apparaten die je kunt plaatsen. Rechtsonder zie je de zoomknoppen.
+
+### De tabs van de bibliotheek
+
+Het bibliotheekvenster toont één soort tegelijk. Bovenaan wissel je met vijf tabs:
+
+- **Apparaten:** de apparaten die je kunt plaatsen, met zoekveld, categorieën, **Indeling** en de **Bronnen** om te laden en te scannen (onderdeel 4);
+- **Tunes** en **Presets:** je tune- en presetbibliotheken, met **Alles laden**, **Nieuwe bibliotheek** en **Importeren…** (onderdeel 7);
+- **Songs:** de demo's, je recente songs, **Bestand openen…** en **Exporteer als song…**, met een zoekveld (onderdeel 8);
+- **Skins:** de skinbibliotheken, met **Importeren…**, **Alles laden** en de ontwerper (onderdeel 7).
+
+Op een breed scherm zijn het tabs. Op een smal scherm (onder 700 pixels, de onderlade) en als het venster te smal is voor alle tabs, is het een keuzelijst. Je laatst gekozen tab wordt onthouden. De knoppen **Tunes**, **Presets**, **Songs** en **Skins** in het ☰-menu, de knop naast de tunelijst op een kaart en het loslaten van een tune-, preset- of skinbestand openen het venster op de juiste tab. **Instellingen** blijft een eigen paneel via het ☰-menu.
 
 ## 4. Een bibliotheek laden
 
-Patchkamer heeft zelf geen apparaten. Een **bibliotheek** is een verzameling apparaten. Deze repository bevat er een in de map `devices`. In het bibliotheekvenster voeg je onder **Bronnen** een of meer bronnen toe. Er zijn drie soorten:
+Patchkamer heeft zelf geen apparaten. Een **bibliotheek** is een verzameling apparaten. Deze repository bevat er een in de map `devices`. In het bibliotheekvenster (tab **Apparaten**) voeg je onder **Bronnen** een of meer bronnen toe. Er zijn drie soorten:
 
 | Bron | Hoe |
 |---|---|
@@ -164,7 +171,7 @@ Wijs je met de muis een kabel aan, dan verschijnt er een kleine tekst met de nam
 
 ### Automatisch koppelen bij plaatsen
 
-Patchkamer kan na het plaatsen kabels voorstellen, zodat je niet elke kabel zelf hoeft te slepen. De schakelaar **Automatisch koppelen bij plaatsen** staat in het menu ☰ (smal scherm, groep **Overig**) en onder **Instellingen**; beide schakelaars horen bij elkaar. Zonder eigen keuze staat hij **aan op een aanraakscherm** (telefoon, tablet) en **uit op een computer met muis**; een smal venster op een computer telt dus niet als mobiel. Zodra je de schakelaar zelf zet, onthoudt je browser die keuze.
+Patchkamer kan na het plaatsen kabels voorstellen, zodat je niet elke kabel zelf hoeft te slepen. De schakelaar **Automatisch koppelen bij plaatsen** staat in het menu ☰ (groep **Overig**) en onder **Instellingen**; beide schakelaars horen bij elkaar. Zonder eigen keuze staat hij **aan op een aanraakscherm** (telefoon, tablet) en **uit op een computer met muis**; een smal venster op een computer telt dus niet als mobiel. Zodra je de schakelaar zelf zet, onthoudt je browser die keuze.
 
 Staat hij aan, dan opent na elk apparaat dat **jij zelf plaatst** (slepen, **Plaatsen** of een tik op een compacte bibliotheekregel) een venster **Koppelen met apparaten op het canvas**, als er iets te koppelen valt. Bij het openen van een song of werkruimte, bij **Herschik**, bij Ctrl+Z en bij wisselen van tabblad gebeurt dit nooit. Leg je het apparaat op een kabel, dan krijgt dat voorrang en komt het venster niet.
 
@@ -208,9 +215,9 @@ Op elke kaart zie je een balk met ◀ ▶-knoppen en een lijst. Kies een tune of
 
 ![Tunebibliotheken](images/nl/09-tunes-panel.png)
 
-De knop **Alles laden** bovenaan het Tunes- en Presets-paneel laadt alle tunepacks, of alle presetpacks, van het adres dat je instelt onder **Instellingen → Nieuwe werkruimte** (standaard de mappen `tunes` en `presets` van deze repository op GitHub). Alles onder die map wordt ingelezen.
+De knop **Alles laden** bovenaan de tabs Tunes en Presets laadt alle tunepacks, of alle presetpacks, van het adres dat je instelt onder **Instellingen → Nieuwe werkruimte** (standaard de mappen `tunes` en `presets` van deze repository op GitHub). Alles onder die map wordt ingelezen.
 
-De menu's **Tunes** en **Presets** beheren je bibliotheken: maak een nieuwe, zet tunes in mappen, importeer een pakket (`.patchkamer-tunes.json` of `.patchkamer-presets.json`) en exporteer er een om te delen. Pakketten in een bibliotheek die je van GitHub of uit een map laadt, verschijnen vanzelf. De packs die bij deze repository horen, staan in de [handleiding tunes](tunes/USER-MANUAL_NL.md) en de [handleiding presets](presets/USER-MANUAL_NL.md).
+De tabs **Tunes** en **Presets** van de bibliotheek beheren je bibliotheken: maak een nieuwe, zet tunes in mappen, importeer een pakket (`.patchkamer-tunes.json` of `.patchkamer-presets.json`) en exporteer er een om te delen. Pakketten in een bibliotheek die je van GitHub of uit een map laadt, verschijnen vanzelf. De packs die bij deze repository horen, staan in de [handleiding tunes](tunes/USER-MANUAL_NL.md) en de [handleiding presets](presets/USER-MANUAL_NL.md).
 
 Het hele verhaal, met de lijst van de meegeleverde packs en hoe je een eigen pack maakt, staat in de [handleiding presets](presets/USER-MANUAL_NL.md) en de [handleiding tunes](tunes/USER-MANUAL_NL.md).
 
@@ -218,11 +225,11 @@ Het hele verhaal, met de lijst van de meegeleverde packs en hoe je een eigen pac
 
 Een **skin** verandert alleen het **uiterlijk** van één apparaat, nooit de klank, de instellingen of de werking. Het is een los bestand (`.patchkamer-skin.json`) met een of meer **verschijningsvormen**, bijvoorbeeld een compacte en een brede. Skins zijn een derde soort bibliotheekmateriaal naast tunes en presets.
 
-**Waar vind je skins?** In de map `skins/library` van deze repository op GitHub, met per apparaat een map (`skins/library/<apparaat-id>/`). Onder **Instellingen → Nieuwe werkruimte** staat **Skins laden** met dat adres; de knop **Alles laden** in het Skins-paneel laadt ze ook. Een GitHub-, web- of lokale map die `skins/library/<apparaat-id>/*.patchkamer-skin.json` bevat, voeg je als bron toe zoals elke bibliotheek; een lokale map met apparaten én skins werkt ook. Een skin voor een apparaat dat je niet hebt, wordt wel bewaard maar nergens aangeboden.
+**Waar vind je skins?** In de map `skins/library` van deze repository op GitHub, met per apparaat een map (`skins/library/<apparaat-id>/`). Onder **Instellingen → Nieuwe werkruimte** staat **Skins laden** met dat adres; de knop **Alles laden** op de tab Skins laadt ze ook. Een GitHub-, web- of lokale map die `skins/library/<apparaat-id>/*.patchkamer-skin.json` bevat, voeg je als bron toe zoals elke bibliotheek; een lokale map met apparaten én skins werkt ook. Een skin voor een apparaat dat je niet hebt, wordt wel bewaard maar nergens aangeboden.
 
-**Laden.** Open **Skins ▾** (in het ☰-menu onder **Geluid**) voor het paneel **Skinbibliotheken**: per apparaat de skins met naam, maker, versie, licentie en verschijningsvormen. Met **Importeren…** kies je een bestand; je kunt het ook op de vloer of het bibliotheekvenster **droppen** (zonder bevestiging, na de apparaten en tunes en vóór songs en werkruimtes). Een geïmporteerde skin blijft in je browser staan tot je hem met **×** verwijdert; skins uit een bron zijn alleen-lezen en verdwijnen met die bron. Een ongeldig bestand wordt geweigerd met een melding met de bestandsnaam; de rest laadt door. Een skin met een onbekende hoofdversie van het skinformaat, of met CSS die van buiten laadt (`@import`, een `url(` naar een webadres), wordt geweigerd.
+**Laden.** Open de tab **Skins** van de bibliotheek (of **Skins** in het ☰-menu) voor de **Skinbibliotheken**: per apparaat de skins met naam, maker, versie, licentie en verschijningsvormen. Met **Importeren…** kies je een bestand; je kunt het ook op de vloer of het bibliotheekvenster **droppen** (zonder bevestiging, na de apparaten en tunes en vóór songs en werkruimtes). Een geïmporteerde skin blijft in je browser staan tot je hem met **×** verwijdert; skins uit een bron zijn alleen-lezen en verdwijnen met die bron. Een ongeldig bestand wordt geweigerd met een melding met de bestandsnaam; de rest laadt door. Een skin met een onbekende hoofdversie van het skinformaat, of met CSS die van buiten laadt (`@import`, een `url(` naar een webadres), wordt geweigerd.
 
-**Kiezen op de kaart.** Zodra er voor een apparaat minstens één skin is, staan in de balk van de kaart twee lijsten: **Skin** (**Standaard** is het eigen uiterlijk van het apparaat) en **Verschijning**. Bij **Auto** kiest Patchkamer zelf de verschijningsvorm op de **breedte van de kaart** en de **schermgrootte** (telefoon, compact of breed); de lijst toont welke dat nu is. Kies je zelf een verschijningsvorm, dan staat Auto uit voor dat apparaat tot je terug naar **Auto** gaat. De keuze werkt direct. Bij **Standaard** is alles weg en staat het apparaat precies zoals voorheen. Zijn de balken op de kaarten uitgezet (Instellingen), dan kies je via het paneel met **Toepassen** en **Kies**.
+**Kiezen op de kaart.** Zodra er voor een apparaat minstens één skin is, staan in de balk van de kaart twee lijsten: **Skin** (**Standaard** is het eigen uiterlijk van het apparaat) en **Verschijning**. Bij **Auto** kiest Patchkamer zelf de verschijningsvorm op de **breedte van de kaart** en de **schermgrootte** (telefoon, compact of breed); de lijst toont welke dat nu is. Kies je zelf een verschijningsvorm, dan staat Auto uit voor dat apparaat tot je terug naar **Auto** gaat. De keuze werkt direct. Bij **Standaard** is alles weg en staat het apparaat precies zoals voorheen. Zijn de balken op de kaarten uitgezet (Instellingen), dan kies je via de tab Skins met **Toepassen** en **Kies**.
 
 **Bewaren.** De keuze per apparaat staat in de werkruimte en in de song, samen met de gebruikte skins (hoogstens 20), zodat een song zijn uiterlijk behoudt zonder de bibliotheek. Bij het openen komen die skins stil in je register (een nieuwere versie wint). Werkruimtes en songs zonder skins laden zoals altijd. Skins raken de klank nooit: de instelling van het apparaat is met en zonder skin gelijk.
 
@@ -231,9 +238,9 @@ Een **skin** verandert alleen het **uiterlijk** van één apparaat, nooit de kla
 - **Poortenmodus.** *Standaard* (zoals nu), *Altijd zichtbaar* (de poorten in een vaste balk bovenaan), *Bij hover of kabel* (de poorten zijn verborgen; ze verschijnen als je met de muis op de dunne strook bovenaan het apparaat staat of met een kabel over het apparaat sleept) en *Strook* (een zichtbare strook; de poorten openen als je met de muis op het apparaat staat). Op een aanraakscherm open en sluit je de strook met een tik, en een kabel die je over het apparaat sleept opent hem ook; met het toetsenbord gebruik je Enter of spatie. Kabels blijven kloppen: een verborgen poort hangt de kabel aan de strook. Een apparaat met poorten in een eigen scherm houdt de modus *Standaard* en laat dat weten.
 - **Kleuren.** *Werkruimte* (de kleuren van de werkruimte) of *Eigen kleuren*: achtergrond, vlak, tekst, gedempte tekst, accent en lijnen, alleen op die kaart. Een kleur die ontbreekt valt terug op de werkruimtekleur; weinig contrast tussen tekst en achtergrond geeft een melding, geen weigering.
 - **Haptiek.** Een korte trilling bij **klikken** (knoppen en pads), **draaien** (de draaiknop) en **schuiven** (een puls per stap, hoogstens 25 per seconde), elk uit, licht, middel of sterk. Dit werkt alleen in een browser met trillen (meestal Android; niet in iOS Safari), niet bij een voorkeur voor minder beweging en niet als de pagina op de achtergrond staat.
-- **Knoppen.** Stijl (*Werkruimte*, *Draaiknop* of *Schuifregelaar*) en grootte (S, M of L) van de knoppen die een apparaat via de host maakt. Eigen regelaars van een apparaat blijven ongemoeid, dus dit werkt op de apparaten die de hostknop gebruiken; het Skins-paneel laat zien hoeveel dat er op je vloer zijn.
+- **Knoppen.** Stijl (*Werkruimte*, *Draaiknop* of *Schuifregelaar*) en grootte (S, M of L) van de knoppen die een apparaat via de host maakt. Eigen regelaars van een apparaat blijven ongemoeid, dus dit werkt op de apparaten die de hostknop gebruiken; de tab Skins laat zien hoeveel dat er op je vloer zijn.
 
-**Zelf ontwerpen.** In het Skins-paneel kies je bij **Nieuw ontwerp** een apparaat en klik je op **Ontwerpen**, of je klikt bij een bestaande skin op **Kopie ontwerpen**. Je geeft de skin een naam (en een maker), kiest poortenmodus, kleurenschema, haptiek en knoppen, en voegt zo nodig een verschijningsvorm **Compact** (kaart tot 360 px) of **Full** toe die per keuze van Standard mag afwijken. Het **voorbeeld staat live op een kaart** van dat apparaat; **Sluiten** zet de vorige skin van die kaart terug. De **kleurkiezer** heeft een kleurvlak (verzadiging en helderheid), een tintbalk, een hex-veld, voorbeeldkleuren, een lijst met recent gebruikte kleuren en een contrastmelding; met het toetsenbord gebruik je de pijltjes (Shift = grotere stap), en op een aanraakscherm zijn alle doelen minstens 44 px. **Opslaan** bewaart de skin als eigen skin in je browser (id `<apparaat>.<naam>`); **Exporteren** geeft een bestand `.patchkamer-skin.json` om te delen. Zonder maker kan de skin wel worden opgeslagen, maar niet netjes worden gedeeld. Een kopie van een skin met CSS behoudt die CSS en haar afbeeldingen.
+**Zelf ontwerpen.** Op de tab Skins kies je bij **Nieuw ontwerp** een apparaat en klik je op **Ontwerpen**, of je klikt bij een bestaande skin op **Kopie ontwerpen**. Je geeft de skin een naam (en een maker), kiest poortenmodus, kleurenschema, haptiek en knoppen, en voegt zo nodig een verschijningsvorm **Compact** (kaart tot 360 px) of **Full** toe die per keuze van Standard mag afwijken. Het **voorbeeld staat live op een kaart** van dat apparaat; **Sluiten** zet de vorige skin van die kaart terug. De **kleurkiezer** heeft een kleurvlak (verzadiging en helderheid), een tintbalk, een hex-veld, voorbeeldkleuren, een lijst met recent gebruikte kleuren en een contrastmelding; met het toetsenbord gebruik je de pijltjes (Shift = grotere stap), en op een aanraakscherm zijn alle doelen minstens 44 px. **Opslaan** bewaart de skin als eigen skin in je browser (id `<apparaat>.<naam>`); **Exporteren** geeft een bestand `.patchkamer-skin.json` om te delen. Zonder maker kan de skin wel worden opgeslagen, maar niet netjes worden gedeeld. Een kopie van een skin met CSS behoudt die CSS en haar afbeeldingen.
 
 **Een skin maken?** Zie [skins/AGENTS.md](https://github.com/unboxednl/patchkamer/blob/main/skins/AGENTS.md) (voor wie met een AI-agent werkt) en het skincontract ([Nederlands](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_NL.md), [English](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_EN.md)).
 
@@ -249,7 +256,7 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 - **Exporteer als song…** maakt een deelbaar bestand (`.patchkamer-song.json`) met alle apparaatcode, een titel, de maker en een licentie. Iemand anders kan het openen zonder bibliotheek.
 - **Nieuwe lege werkruimte** begint opnieuw.
 
-**Songs.** De knop **Songs** in de bovenbalk opent een song in een **nieuwe werkruimte-tab** en herschikt daarna de apparaten (**Ctrl+Z** zet terug). Hij toont de **demo-songs** uit de map `songs` van deze repository op GitHub, je **recente songs** (de laatste twaalf, ook bestanden die je opende) en **Bestand openen…**. Heeft een song apparaten nodig die nog niet in je bibliotheek staan, dan laadt Patchkamer eerst de apparatenbibliotheek uit **Instellingen → Nieuwe werkruimte**. Er kunnen tien werkruimtes open zijn: sluit er eerst een als ze allemaal in gebruik zijn.
+**Songs.** De tab **Songs** van de bibliotheek (of **Songs** in het ☰-menu) opent een song in een **nieuwe werkruimte-tab** en herschikt daarna de apparaten (**Ctrl+Z** zet terug). Hij toont de **demo-songs** uit de map `songs` van deze repository op GitHub, je **recente songs** (de laatste twaalf, ook bestanden die je opende) en **Bestand openen…**. Heeft een song apparaten nodig die nog niet in je bibliotheek staan, dan laadt Patchkamer eerst de apparatenbibliotheek uit **Instellingen → Nieuwe werkruimte**. Er kunnen tien werkruimtes open zijn: sluit er eerst een als ze allemaal in gebruik zijn.
 
 **Meer dan één werkruimte.** De tabbalk onder de bovenbalk bevat maximaal tien werkruimtes. Klik op een tab, of druk op **F1** t/m **F10**, om te wisselen. **+** voegt een nieuwe lege werkruimte toe; **×** sluit er een (Patchkamer vraagt eerst als er apparaten in staan, en de laatste kun je niet sluiten: gebruik **Leeg**). Elke werkruimte heeft eigen apparaten, kabels, tempo en naam, en alles in dit hoofdstuk werkt op de werkruimte waarin je zit. Bij het wisselen stopt de klok en start je hem zelf weer. Een nieuwe werkruimte laadt wat je koos onder **Instellingen → Nieuwe werkruimte**. Patchkamer bewaart je werkruimtes in je browser en opent ze de volgende keer weer.
 
@@ -259,10 +266,10 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 
 Met een muis kun je bestanden uit je bestandsbeheer op de **vloer** of het **bibliotheekvenster** loslaten; er verschijnt een kader met "Laat los om te laden". Patchkamer herkent de soort aan de inhoud en laadt zonder te vragen:
 
-- een **song** (`.patchkamer-song.json`) of een **werkruimtebestand** opent in een **nieuwe werkruimte-tab**; je huidige werkruimte blijft zoals ze is. Net als bij de knop **Songs** worden de apparaten herschikt;
+- een **song** (`.patchkamer-song.json`) of een **werkruimtebestand** opent in een **nieuwe werkruimte-tab**; je huidige werkruimte blijft zoals ze is. Net als bij de tab **Songs** worden de apparaten herschikt;
 - een **apparaat** (`.patchkamer-device.js`) komt in de **bibliotheek**, niet op de vloer. Is dezelfde versie al geladen, dan wordt hij vervangen. Plaats hem daarna zoals gewoonlijk;
 - een **tunepack** of **presetpack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) komt in je tune- of presetbibliotheken, zoals **Importeren**;
-- een **skin** (`.patchkamer-skin.json`) komt in je skinbibliotheek, zoals **Importeren** in het Skins-paneel;
+- een **skin** (`.patchkamer-skin.json`) komt in je skinbibliotheek, zoals **Importeren** op de tab Skins;
 - een **bibliotheekindeling** (`patchkamer-bibliotheek.json`) wordt toegepast.
 
 Laat je meerdere bestanden tegelijk los (maximaal 50, elk tot 50 MB), dan gaan eerst de apparaten, dan tunes en presets, skins, de indeling en als laatste songs en werkruimtes, zodat een song de apparaten uit dezelfde drop al in de bibliotheek vindt. Er komt één melding met het resultaat. Mappen en onbekende bestanden worden niet geladen; een afbeelding of geluidsbestand blijft aan het apparaat of de browser. Een bestand dat je op een apparaat zelf loslaat (bijvoorbeeld op de golfvorm van een sampler) is voor dat apparaat. Op een telefoon of tablet bestaat dit niet: gebruik daar de bestaande knoppen (**Bestand openen…**, **Importeren**, **Instrument laden**).
@@ -278,7 +285,7 @@ Laat je meerdere bestanden tegelijk los (maximaal 50, elk tot 50 MB), dan gaan e
 
 ### Touchscreen en telefoon
 
-Op een **smal scherm** (onder 700 pixels) houdt de hoofdbalk alleen over wat je tijdens het spelen nodig hebt: **Start**, **BPM**, **Swing** (zonder tekstlabels; houd ingedrukt voor de naam) en een knop ▤ voor de **Bibliotheek**. De rest staat achter de knop **☰**: een menu met grote tikvlakken in vier groepen (**Bestanden**, **Geluid**, **Weergave**, **Overig**) en bovenaan de naam van je werkruimte. Het menu sluit na een keuze, met **Esc**, met een tik ernaast of met de terugknop van Android. Op een breed scherm staat alles weer in de balk.
+De hoofdbalk houdt op elk scherm alleen over wat je tijdens het spelen nodig hebt: het logo, de naam van je werkruimte, **Start**, **BPM**, **Swing**, de knop **Bibliotheek** en **☰**. Op een **smal scherm** (onder 700 pixels) is het logo alleen het icoon, hebben **Start**, **BPM** en **Swing** geen tekstlabels (houd ingedrukt voor de naam) en is de knop **Bibliotheek** een ▤; op een telefoon staan **Start**, **BPM** en **Swing** op een tweede regel onder de naam. Al het andere staat achter de knop **☰**: een menu met grote tikvlakken in vier groepen (**Bestand**, **Bibliotheek**, **Weergave**, **Overig**), op elk scherm hetzelfde. Het menu sluit na een keuze, met **Esc**, met een tik ernaast of met de terugknop van Android.
 
 - **Schuiven:** één vinger op de lege vloer schuift, net als de muis. Een vinger op een poort trekt een kabel, een vinger op de titelbalk van een kaart sleept de kaart.
 - **Zoomen:** knijp met twee vingers om in of uit te zoomen en schuif met twee vingers om de vloer te verplaatsen. Een kabel of kaart die je met de eerste vinger sleepte, wordt dan afgebroken. Twee vingers in de bediening van één apparaat (bijvoorbeeld op pads) doen niets met de vloer.
@@ -289,7 +296,7 @@ Op een **smal scherm** (onder 700 pixels) houdt de hoofdbalk alleen over wat je 
 ### Bibliotheek compact en onderlade
 
 - **Kaartjes** of **Compact** (in de balk van de bibliotheek): compact is één regel per apparaat met naam, soort en versie. Tik op een regel om hem te plaatsen, of sleep hem (met de vinger: eerst lang indrukken). Het pijltje rechts klapt de regel uit met poorten en keuzes. Zoeken, categorieën en mappen werken in beide weergaven. Je keuze wordt onthouden; zolang je niet koos is het compact op een smal scherm of aanraakscherm.
-- Op een **smal scherm** (onder 700 pixels) is de bibliotheek een **onderlade**: ongeveer 60% van het scherm. Open of sluit hem met de knop **Bibliotheek** bovenin, met **Alt+B**, met de **×** in de lade, of door aan de greep omlaag te slepen. De hoofdbalk bovenin scrolt horizontaal; **Start** blijft zichtbaar.
+- Op een **smal scherm** (onder 700 pixels) is de bibliotheek een **onderlade**: ongeveer 60% van het scherm. Open of sluit hem met de knop **Bibliotheek** bovenin, met **Alt+B**, met de **×** in de lade, of door aan de greep omlaag te slepen. Bovenin de lade kies je met de keuzelijst welke soort je ziet (Apparaten, Tunes, Presets, Songs of Skins).
 
 ### Camerastanden
 
@@ -297,11 +304,11 @@ Met **Standen** rechtsonder bewaar je de uitsnede van de vloer die je nu ziet, o
 
 ### Compacte indeling per scherm
 
-Een werkruimte kan naast de brede indeling een **compacte indeling** hebben. Met **Scherm** (hoofdbalk) kies je **Auto** (compact onder 1100 pixels breed), **Breed** of **Compact**; je keuze geldt voor deze browser. **Pas aan op dit scherm** maakt een eerste compacte indeling: de apparaten in signaalvolgorde in kolommen die op het scherm passen, apparaten zonder kabels als icoon, en daarna past alles in beeld. Je brede indeling blijft bewaard: kies **Breed** om terug te gaan. Verplaatsen en vergroten werkt op de indeling die aan staat. Beide indelingen worden bewaard.
+Een werkruimte kan naast de brede indeling een **compacte indeling** hebben. Met **Scherm** (☰ → Weergave) kies je **Auto** (compact onder 1100 pixels breed), **Breed** of **Compact**; je keuze geldt voor deze browser. **Pas aan op dit scherm** maakt een eerste compacte indeling: de apparaten in signaalvolgorde in kolommen die op het scherm passen, apparaten zonder kabels als icoon, en daarna past alles in beeld. Je brede indeling blijft bewaard: kies **Breed** om terug te gaan. Verplaatsen en vergroten werkt op de indeling die aan staat. Beide indelingen worden bewaard.
 
 ### Focus "Eén tegelijk"
 
-In de focusweergave toont **Eén tegelijk** één apparaat tegelijk. Wissel met **◀ ▶**, met de tabbalk, met de pijltjestoetsen of door op de tabbalk te vegen (alleen daar, zodat vegen niet botst met schuiven in een apparaat). Op een smal scherm is dit de standaard, en de knop **Bladeren** in de hoofdbalk opent Focus meteen met alle apparaten van de werkruimte. Het kaartje zelf toont zijn poorten met namen. Bij uitzoomen (onder ongeveer 55%) tonen kaarten alleen de titelbalk en poorten; dubbelklik of dubbeltik op zo'n kaart zoomt erop in. Dat zet je uit bij **Instellingen** met *Kaarten vereenvoudigen bij uitzoomen*.
+In de focusweergave toont **Eén tegelijk** één apparaat tegelijk. Wissel met **◀ ▶**, met de tabbalk, met de pijltjestoetsen of door op de tabbalk te vegen (alleen daar, zodat vegen niet botst met schuiven in een apparaat). Op een smal scherm is dit de standaard, en de knop **Bladeren** in het ☰-menu (Weergave) opent Focus meteen met alle apparaten van de werkruimte. Het kaartje zelf toont zijn poorten met namen. Bij uitzoomen (onder ongeveer 55%) tonen kaarten alleen de titelbalk en poorten; dubbelklik of dubbeltik op zo'n kaart zoomt erop in. Dat zet je uit bij **Instellingen** met *Kaarten vereenvoudigen bij uitzoomen*.
 
 ### Sneller werken: overzicht
 
@@ -323,7 +330,7 @@ De functies die de werkwijze het meest versnellen, op een rij:
 
 - **Taal:** automatisch (je browser), Nederlands of English. Patchkamer laadt opnieuw en behoudt je werkruimte.
 - **Audio:** kies kwaliteit **Laag**, **Normaal** of **Hoog**, of stel **sample rate**, **latency** en **oversampling** zelf in. Hogere kwaliteit vraagt meer van je computer. Een wijziging laadt Patchkamer opnieuw en behoudt je werkruimte. Hoor je geknetter, kies dan een grotere latencybuffer (*Gebalanceerd* of *Stabiel*).
-- **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**, **Skins laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet ze terug. **Skins laden** werkt hetzelfde, met de map `skins/library` als standaard; staat die map (nog) niet op GitHub, dan krijg je alleen een korte melding en laadt de rest gewoon. De knop **Alles laden** in het Tunes-, Presets- en Skins-paneel gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
+- **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**, **Skins laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet ze terug. **Skins laden** werkt hetzelfde, met de map `skins/library` als standaard; staat die map (nog) niet op GitHub, dan krijg je alleen een korte melding en laadt de rest gewoon. De knop **Alles laden** op de tabs Tunes, Presets en Skins gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
 - **AI-assistent:** kies een aanbieder (**Anthropic**, **OpenAI** of een **eigen adres** voor elke OpenAI-compatibele dienst, zoals je eigen proxy, OpenRouter of een lokaal model), plak je **API-sleutel** en kies een **model** (**Modellen ophalen** vult de lijst). De sleutel staat alleen in deze browser (localStorage) en gaat alleen naar de aanbieder die je koos. Daaronder kun je instellen uit welke GitHub-repository de AI zijn documentatie leest, of **Eigen agent-instructies gebruiken** aanvinken en je eigen tekst schrijven: de AI gebruikt die dan in plaats van de GitHub-documentatie. **Sleutels wissen** haalt alle sleutels weg. Zie *AI Chat* in hoofdstuk 6.
 - **Adres van de songs:** onder **Nieuwe werkruimte** staat ook het adres van de demo-songs (standaard de map `songs` op GitHub); **Standaardadres herstellen** zet het terug.
 - **Weergave:** de stijl van de kabels, hun dekking, de kabelkleur (per categorie of per soort), de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.

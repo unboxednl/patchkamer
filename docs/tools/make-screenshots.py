@@ -60,7 +60,7 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg = browser.new_context(viewport={'width': w, 'height': h}, locale=LOCALE[lang]).new_page(); pg.errs = []
         pg.on('pageerror', lambda e: pg.errs.append(str(e)))
         pg.route('**/*', lambda r: r.continue_() if r.request.url.startswith('http://localhost') else r.abort())
-        init = "localStorage.setItem('patchkamerWsAuto',JSON.stringify({dev:{on:false},pre:{on:false},tun:{on:false}}));" + ("delete window.showDirectoryPicker;" if nopicker else "") + "localStorage.setItem('patchkamerLib',JSON.stringify({x:16,y:16,w:340,h:%d,fs:14,min:false,shown:true,closed:[]}));" % libh
+        init = "localStorage.setItem('patchkamerWsAuto',JSON.stringify({dev:{on:false},pre:{on:false},tun:{on:false}}));" + ("delete window.showDirectoryPicker;" if nopicker else "") + "localStorage.setItem('patchkamerLib',JSON.stringify({x:16,y:16,w:420,h:%d,fs:14,min:false,shown:true,closed:[]}));" % libh
         if skin: init += "localStorage.setItem('patchkamer.skin','%s');" % skin
         pg.add_init_script(init); pg.goto(BASE + '/patchkamer/patchkamer.html')
         pg.add_style_tag(content='*{user-select:none!important}'); pg.wait_for_timeout(700); return pg
@@ -70,18 +70,25 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg.evaluate("document.querySelectorAll('.cat.closed .cathead').forEach(b=>b.click())"); pg.wait_for_timeout(300)   # de host start met alle categorieën ingeklapt
     def place(pg, name):
         pg.locator('.libdev').filter(has=pg.locator('.nm', has_text=re.compile('^\\s*' + re.escape(name) + '\\s*$'))).locator('button').filter(has_text=PLACE).first.click(); pg.wait_for_timeout(500)
+    def menu_click(pg, sel):   # de knoppen Werkruimte, Herschik, Instellingen, Focus enz. staan achter ☰
+        pg.click('#menuBtn'); pg.wait_for_timeout(250); pg.click(sel); pg.wait_for_timeout(250)
+    def lib_tab(pg, tab):   # open het bibliotheekvenster op een tab (tabs, of de keuzelijst als ze niet passen)
+        if pg.evaluate("document.getElementById('libwin').hidden"): pg.click('#libToggle'); pg.wait_for_timeout(300)
+        if pg.is_visible('#libTab_' + tab): pg.click('#libTab_' + tab)
+        else: pg.select_option('#libSel', tab)
+        pg.wait_for_timeout(300)
     def import_tunes(pg):
-        pg.click('#prBtn'); pg.wait_for_timeout(300)
+        lib_tab(pg, 'tunes')
         with pg.expect_file_chooser() as fc: pg.click('#prImport')
         fc.value.set_files(os.path.join(ROOT, 'tunes', 'acid-baselines-classics.patchkamer-tunes.json')); pg.wait_for_timeout(1000)
     def build_patch(pg):
         load_lib(pg)
         for n in ['Keys / MIDI', 'Acid Baselines', 'Speakers']: place(pg, n)
-        pg.click('#libToggle'); pg.wait_for_timeout(300); pg.click('#arrange'); pg.wait_for_timeout(1200)
+        pg.click('#libToggle'); pg.wait_for_timeout(300); menu_click(pg, '#arrange'); pg.wait_for_timeout(1200)
         c = pg.locator('.card')
         drag(pg, c.nth(0).locator('[data-port="notes"][data-dir="out"]'), c.nth(1).locator('[data-port="notes"][data-dir="in"]'))
         drag(pg, c.nth(1).locator('[data-port="out"][data-dir="out"]'), c.nth(2).locator('[data-port="in"][data-dir="in"]'))
-        pg.click('#arrange'); pg.wait_for_timeout(5500)   # wacht tot de melding verdwijnt
+        menu_click(pg, '#arrange'); pg.wait_for_timeout(5500)   # wacht tot de melding verdwijnt
     def shadow_set(card, sel, val):
         card.evaluate("(c,a)=>{const s=[...c.querySelectorAll('*')].find(e=>e.shadowRoot).shadowRoot.querySelector(a[0]); s.value=a[1]; s.dispatchEvent(new Event('change'))}", [sel, val])
     def done(pg):
@@ -92,9 +99,9 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg = newpage(nopicker=True); load_lib(pg); pg.screenshot(path=OUT + '/02-library.png')
     pg.click('#libCfgBtn'); pg.wait_for_timeout(400); pg.locator('#libwin').screenshot(path=OUT + '/10-library-layout.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg); pg.screenshot(path=OUT + '/03-patch.png')
-    pg.click('#wsBtn'); pg.wait_for_timeout(400); pg.locator('#wsPanel').screenshot(path=OUT + '/06-workspace.png'); pg.click('#wsPanel .close'); pg.wait_for_timeout(300)
-    pg.click('#setBtn'); pg.set_viewport_size({'width': 1900, 'height': 1700}); pg.wait_for_timeout(600); pg.locator('#setPanel').screenshot(path=OUT + '/07-settings.png'); pg.set_viewport_size({'width': 1900, 'height': 1060}); pg.click('#setClose'); pg.wait_for_timeout(300)
-    import_tunes(pg); pg.locator('#prPanel').screenshot(path=OUT + '/09-tunes-panel.png'); done(pg)
+    menu_click(pg, '#wsBtn'); pg.wait_for_timeout(400); pg.locator('#wsPanel').screenshot(path=OUT + '/06-workspace.png'); pg.click('#wsPanel .close'); pg.wait_for_timeout(300)
+    menu_click(pg, '#setBtn'); pg.set_viewport_size({'width': 1900, 'height': 1700}); pg.wait_for_timeout(600); pg.locator('#setPanel').screenshot(path=OUT + '/07-settings.png'); pg.set_viewport_size({'width': 1900, 'height': 1060}); pg.click('#setClose'); pg.wait_for_timeout(300)
+    import_tunes(pg); pg.locator('#libwin').screenshot(path=OUT + '/09-tunes-panel.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg)   # meerdere werkruimtes: de tabbalk met drie werkruimtes
     pg.fill('#wsName', 'Acid jam'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)
     pg.fill('#wsName', 'Ideas'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)
@@ -102,12 +109,12 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg.locator('#wsTabs').screenshot(path=OUT + '/11-workspaces.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg)
     for i in (0, 1): pg.locator('.card').nth(i).locator('button', has_text='F').first.click(); pg.wait_for_timeout(200)
-    pg.click('#focusBtn'); pg.wait_for_timeout(800); pg.locator('#focusview button, .focusview button').nth(1).click(); pg.wait_for_timeout(1000)
+    menu_click(pg, '#focusBtn'); pg.wait_for_timeout(800); pg.locator('#focusview button, .focusview button').nth(1).click(); pg.wait_for_timeout(1000)
     pg.screenshot(path=OUT + '/08-focus.png'); done(pg)
     for skin, name in (('light', '03-patch-light'), ('s1000', '03-patch-retro')):
         pg = newpage(nopicker=True, skin=skin); build_patch(pg); pg.screenshot(path=OUT + '/' + name + '.png'); done(pg)
     pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Acid Baselines'); pg.click('#libToggle'); pg.wait_for_timeout(2500)   # hoog scherm: de kaart past er helemaal op
-    import_tunes(pg); pg.click('#prPanel .close'); pg.wait_for_timeout(300)
+    import_tunes(pg); pg.click('#libToggle'); pg.wait_for_timeout(300)   # het bibliotheekvenster weer dicht
     c = pg.locator('.card').first
     c.evaluate("c=>{const s=[...c.querySelectorAll('select')].find(x=>x.options.length>3&&x.options[0].value===''); s.selectedIndex=1; s.dispatchEvent(new Event('change',{bubbles:true}))}"); pg.wait_for_timeout(600)
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)

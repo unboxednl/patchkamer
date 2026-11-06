@@ -159,7 +159,7 @@ De meter toont **IN**, **UIT** en **REGEL** (de correctie in dB), met een lampje
 
 ### Presets
 
-Leveler heeft het pack **Leveler Basics**: 11 presets in drie mappen, **Sources** (Gentle Leveling, Drift Tamer, Pad Smoother, Bass Control, Lead Steady, Quiet Rescue), **Mix** (Mix Bus Safety, Slow Ride, Fast Catch, Loud and Tight) en **Utility** (Meter Only). Het bestand is [`presets/leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met het menu **Presets ▾** → **Importeren…**, en kies daarna een preset in de lijst op de kaart.
+Leveler heeft het pack **Leveler Basics**: 11 presets in drie mappen, **Sources** (Gentle Leveling, Drift Tamer, Pad Smoother, Bass Control, Lead Steady, Quiet Rescue), **Mix** (Mix Bus Safety, Slow Ride, Fast Catch, Loud and Tight) en **Utility** (Meter Only). Het bestand is [`presets/leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met de tab **Presets** van de bibliotheek → **Importeren…**, en kies daarna een preset in de lijst op de kaart.
 
 ### Tips en beperkingen
 

@@ -58,7 +58,7 @@ What I could check in this repository: none of the drum devices that come with i
 
 ## The Tunes menu: libraries and folders
 
-The **Tunes ▾** menu at the top opens the **Tune libraries** panel. It lists the libraries per device. A library belongs to one device and can have folders, and folders can have folders. The panel is the same as the Presets panel; it only shows the sound-making devices.
+The **Tunes** tab of the library window (the **Library** button at the top, or **Tunes** in the ☰ menu) shows the **Tune libraries**. It lists the libraries per device. A library belongs to one device and can have folders, and folders can have folders. The panel is the same as the Presets tab; it only shows the sound-making devices.
 
 ![The Tunes panel with the library Duofone Styles](../images/en/tunes/tunes-panel.png)
 
@@ -81,8 +81,8 @@ Open a library to see its folders and tunes. Next to each tune, **Load** puts it
 
 A **pack** is one library in one file, `name.patchkamer-tunes.json`.
 
-- **Import:** open **Tunes ▾**, click **Import…** and choose one or more pack files. Each pack becomes a library of your own for the device named in the file, so you can edit it. If you already have a library with the same name for that device, the new one gets a number: "Duofone Styles (2)". The tunes show on a card once that device is placed.
-- **Export:** open **Tunes ▾** and click **Export** next to a library. Patchkamer saves it as *Device - Library name.patchkamer-tunes.json*.
+- **Import:** open the **Tunes** tab of the library, click **Import…** and choose one or more pack files. Each pack becomes a library of your own for the device named in the file, so you can edit it. If you already have a library with the same name for that device, the new one gets a number: "Duofone Styles (2)". The tunes show on a card once that device is placed.
+- **Export:** open the **Tunes** tab of the library and click **Export** next to a library. Patchkamer saves it as *Device - Library name.patchkamer-tunes.json*.
 - **Automatically:** a library that you load from GitHub or from a folder brings its pack files along: every `*.patchkamer-tunes.json` and `*.patchkamer-presets.json` in it appears in the panels on its own, as a read-only library. The address `github.com/unboxednl/patchkamer` loads the packs of this repository (see [the main manual](../USER-MANUAL_EN.md#4-load-a-library)).
 
 ## Share a pack: the file and the license

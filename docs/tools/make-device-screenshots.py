@@ -51,15 +51,16 @@ def shoot(browser, base, lang, area, slug, path, out):
     pg.route('**/*', lambda r: r.continue_() if r.request.url.startswith('http://localhost') else r.abort())
     pg.goto(base + '/patchkamer/patchkamer.html'); pg.add_style_tag(content='*{user-select:none!important}'); pg.wait_for_timeout(600)
     pg.set_input_files('#devFile', path); pg.wait_for_timeout(500)
+    pg.evaluate("document.querySelectorAll('.cat.closed .cathead').forEach(b=>b.click())"); pg.wait_for_timeout(300)   # de host start met alle categorieën ingeklapt
     pg.locator('.libdev button').filter(has_text=PLACE).first.click(); pg.wait_for_timeout(700)
     pg.click('#libToggle'); pg.wait_for_timeout(1200)
     kind, pack = pack_for(slug)
     if pack:
         btn = '#psBtn' if kind == 'presets' else '#prBtn'
-        pg.click(btn); pg.wait_for_timeout(300)
+        pg.click('#menuBtn'); pg.wait_for_timeout(250); pg.click(btn); pg.wait_for_timeout(300)   # de knoppen Tunes en Presets staan in het ☰-menu en openen de bibliotheek op die tab
         with pg.expect_file_chooser() as fc: pg.click('#prImport')
         fc.value.set_files(pack); pg.wait_for_timeout(1000)
-        pg.click('#prPanel .close') if pg.locator('#prPanel .close').count() else pg.keyboard.press('Escape'); pg.wait_for_timeout(300)
+        pg.click('#libToggle'); pg.wait_for_timeout(300)   # het bibliotheekvenster weer dicht
         pg.evaluate("""()=>{const c=document.querySelector('.card'); const s=[...c.querySelectorAll('select')].find(x=>x.options.length>3&&x.options[0].value===''); if(s){ s.selectedIndex=1; s.dispatchEvent(new Event('change',{bubbles:true})); }}""")
         pg.wait_for_timeout(700)
     # een hoge kaart (Duofone, Effect Chain) past niet op het scherm: maak het scherm hoog genoeg

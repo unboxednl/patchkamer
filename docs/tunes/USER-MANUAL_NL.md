@@ -58,7 +58,7 @@ Wat ik in deze repository kon controleren: geen van de drumapparaten die erbij z
 
 ## Het menu Tunes: bibliotheken en mappen
 
-Het menu **Tunes ▾** bovenaan opent het paneel **Tunebibliotheken**. Het toont de bibliotheken per apparaat. Een bibliotheek hoort bij één apparaat en kan mappen hebben, en mappen kunnen weer mappen hebben. Het paneel is hetzelfde als het paneel Presets; het toont alleen de apparaten die geluid maken.
+De tab **Tunes** van het bibliotheekvenster (knop **Bibliotheek** bovenaan, of **Tunes** in het ☰-menu) toont de **Tunebibliotheken**. Het toont de bibliotheken per apparaat. Een bibliotheek hoort bij één apparaat en kan mappen hebben, en mappen kunnen weer mappen hebben. Het paneel is hetzelfde als de tab Presets; het toont alleen de apparaten die geluid maken.
 
 ![Het paneel Tunes met de bibliotheek Duofone Styles](../images/nl/tunes/tunes-panel.png)
 
@@ -81,8 +81,8 @@ Open een bibliotheek om zijn mappen en tunes te zien. Naast elke tune zet **Lade
 
 Een **pack** is één bibliotheek in één bestand, `naam.patchkamer-tunes.json`.
 
-- **Importeren:** open **Tunes ▾**, klik op **Importeren…** en kies een of meer packbestanden. Elk pack wordt een eigen bibliotheek van jou voor het apparaat dat in het bestand staat, dus je kunt hem aanpassen. Heb je al een bibliotheek met dezelfde naam voor dat apparaat, dan krijgt de nieuwe een nummer: "Duofone Styles (2)". De tunes verschijnen op een kaart zodra dat apparaat is geplaatst.
-- **Exporteren:** open **Tunes ▾** en klik op **Exporteer** naast een bibliotheek. Patchkamer bewaart hem als *Apparaat - Naam van de bibliotheek.patchkamer-tunes.json*.
+- **Importeren:** open de tab **Tunes** van de bibliotheek, klik op **Importeren…** en kies een of meer packbestanden. Elk pack wordt een eigen bibliotheek van jou voor het apparaat dat in het bestand staat, dus je kunt hem aanpassen. Heb je al een bibliotheek met dezelfde naam voor dat apparaat, dan krijgt de nieuwe een nummer: "Duofone Styles (2)". De tunes verschijnen op een kaart zodra dat apparaat is geplaatst.
+- **Exporteren:** open de tab **Tunes** van de bibliotheek en klik op **Exporteer** naast een bibliotheek. Patchkamer bewaart hem als *Apparaat - Naam van de bibliotheek.patchkamer-tunes.json*.
 - **Vanzelf:** een bibliotheek die je van GitHub of uit een map laadt, brengt zijn packbestanden mee: elk `*.patchkamer-tunes.json` en `*.patchkamer-presets.json` erin verschijnt vanzelf in de panelen, als alleen-lezen bibliotheek. Het adres `github.com/unboxednl/patchkamer` laadt de packs van deze repository (zie [de basishandleiding](../USER-MANUAL_NL.md#4-een-bibliotheek-laden)).
 
 ## Een pack delen: het bestand en de licentie

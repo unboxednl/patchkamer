@@ -24,7 +24,7 @@ Een gewone patch heeft drie stappen, van links naar rechts:
 
 De audio die je laadt, wordt **in de song of werkruimte** bewaard en komt dus terug als je die song weer laadt. De prijs is de grootte: een sampler met lange audio maakt een grote song. Beide samplers hebben grenzen (120 seconden per sample of loop, 50 MiB per bestand dat je laadt).
 
-Samplers hebben **tunes**: een tune is de volledige instelling van één sampler. Laad een pack uit een bibliotheek of met het menu **Tunes ▾** → **Importeren…**, en kies dan een tune in de lijst bovenaan de kaart (er staat `Map › Naam`). Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor gebruiken, bewaren en delen. Samplers hebben geen presets. Wat een tune bevat, verschilt per sampler en staat bij elk apparaat hieronder.
+Samplers hebben **tunes**: een tune is de volledige instelling van één sampler. Laad een pack uit een bibliotheek of met de tab **Tunes** van de bibliotheek → **Importeren…**, en kies dan een tune in de lijst bovenaan de kaart (er staat `Map › Naam`). Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor gebruiken, bewaren en delen. Samplers hebben geen presets. Wat een tune bevat, verschilt per sampler en staat bij elk apparaat hieronder.
 
 ## Welke sampler voor welk doel
 
