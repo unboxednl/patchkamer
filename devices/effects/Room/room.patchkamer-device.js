@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Room en nieuwe id nl.patchkamer.room (voorheen Ruimte, nl.patchkamer.ruimte); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n), setState kapt getallen af op hun bereik en negeert onbekende velden, het tempo wordt op eindigheid gecontroleerd.
@@ -32,7 +33,7 @@ class RoomGuard extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', RoomGuard);`;
 
 export default {
-  id: 'nl.patchkamer.room', name: 'Room', version: '1.11.1', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.room', name: 'Room', version: '1.15.0', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out' } } },
   ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
@@ -86,14 +87,14 @@ export default {
       inputs: { in: input }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
-        ui.sync = host.ui.select(el, T.delay, [['sync', T.sync], ['free', T.free]], state.sync ? 'sync' : 'free', v => { state.sync = v === 'sync'; apply(); });
-        ui.time = host.ui.knob(el, T.time, [0.05, 1.5, 0.005], state.time, v => v.toFixed(3) + ' s', v => { state.time = v; apply(); }, { default: defaults.time });
-        ui.fb = host.ui.knob(el, MODP[1][NI], [0, 0.92, 0.01], state.fb, v => Math.round(v * 100) + '%', v => { state.fb = v; apply(); }, { default: defaults.fb });
-        ui.hp = host.ui.knob(el, MODP[2][NI], [40, 2000, 10], state.hp, v => Math.round(v) + ' Hz', v => { state.hp = v; apply(); }, { default: defaults.hp });
-        ui.dsend = host.ui.knob(el, MODP[3][NI], [0, 1, 0.01], state.dsend, v => Math.round(v * 100) + '%', v => { state.dsend = v; apply(); }, { default: defaults.dsend });
-        ui.size = host.ui.knob(el, T.size, [0.3, 8, 0.1], state.size, v => v.toFixed(1) + ' s', v => { state.size = v; mkRev(); }, { default: defaults.size });
-        ui.tone = host.ui.knob(el, MODP[4][NI], [500, 16000, 50], state.tone, v => Math.round(v) + ' Hz', v => { state.tone = v; apply(); }, { default: defaults.tone });
-        ui.wet = host.ui.knob(el, MODP[5][NI], [0, 1, 0.01], state.wet, v => Math.round(v * 100) + '%', v => { state.wet = v; apply(); }, { default: defaults.wet });
+        ui.sync = host.ui.select(el, T.delay, [['sync', T.sync], ['free', T.free]], state.sync ? 'sync' : 'free', v => { state.sync = v === 'sync'; apply(); }, { id: 'sync', group: 'delay' });
+        ui.time = host.ui.knob(el, T.time, [0.05, 1.5, 0.005], state.time, v => v.toFixed(3) + ' s', v => { state.time = v; apply(); }, { default: defaults.time, id: 'time', group: 'delay' });
+        ui.fb = host.ui.knob(el, MODP[1][NI], [0, 0.92, 0.01], state.fb, v => Math.round(v * 100) + '%', v => { state.fb = v; apply(); }, { default: defaults.fb, id: 'fb', group: 'delay' });
+        ui.hp = host.ui.knob(el, MODP[2][NI], [40, 2000, 10], state.hp, v => Math.round(v) + ' Hz', v => { state.hp = v; apply(); }, { default: defaults.hp, id: 'hp', group: 'delay' });
+        ui.dsend = host.ui.knob(el, MODP[3][NI], [0, 1, 0.01], state.dsend, v => Math.round(v * 100) + '%', v => { state.dsend = v; apply(); }, { default: defaults.dsend, id: 'dsend', group: 'delay' });
+        ui.size = host.ui.knob(el, T.size, [0.3, 8, 0.1], state.size, v => v.toFixed(1) + ' s', v => { state.size = v; mkRev(); }, { default: defaults.size, id: 'size', group: 'reverb' });
+        ui.tone = host.ui.knob(el, MODP[4][NI], [500, 16000, 50], state.tone, v => Math.round(v) + ' Hz', v => { state.tone = v; apply(); }, { default: defaults.tone, id: 'tone', group: 'reverb' });
+        ui.wet = host.ui.knob(el, MODP[5][NI], [0, 1, 0.01], state.wet, v => Math.round(v * 100) + '%', v => { state.wet = v; apply(); }, { default: defaults.wet, id: 'wet', group: 'mix' });
       },
       onStep(info) { if (!info) return; const { stepDur, time } = info; if (!Number.isFinite(stepDur) || stepDur <= 0 || !Number.isFinite(time)) return; lastStepDur = stepDur; if (state.sync) dly.delayTime.setTargetAtTime(Math.min(1.9, stepDur * 3), time, 0.05); },
       params() { return MODP.map(m => ({ id: m[0], name: m[NI], lane: m[9], laneName: m[9] === 'delay' ? T.laneDelay : T.laneReverb, min: m[3], max: m[4], role: m[6], scale: m[5] ? 'log' : 'lin', drift: m[7], on: m[8] })); },

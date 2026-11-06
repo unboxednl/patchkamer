@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.12.0 — Eerste versie. Audio Output stuurt het geluid naar een uitgang van de computer die je zelf kiest: de standaarduitgang, een koptelefoonuitgang of een
 //          audio-interface die het besturingssysteem als uitgang aanbiedt (USB-interfaces, ingebouwde lijnuitgang). De lijst met uitgangen komt van de browser (namen
 //          zoals het systeem ze geeft; er staan geen vaste namen in dit bestand). Naast Speakers kun je zo meerdere uitgangen tegelijk gebruiken, bijvoorbeeld de mix naar
@@ -34,7 +35,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audiooutput', name: 'Audio Output', version: '1.12.0', kind: 'output', category: 'mix', ui: { width: 380, minWidth: 300 },
+  id: 'nl.patchkamer.audiooutput', name: 'Audio Output', version: '1.15.0', kind: 'output', category: 'mix', ui: { width: 380, minWidth: 300 },
   i18n: { nl: { ports: { in: 'In' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -164,7 +165,7 @@ export default {
         dev.onchange = () => { state.device = dev.value; const o = dev.options[dev.selectedIndex]; state.deviceLabel = dev.value ? (o ? o.textContent : '') : ''; route(); };
         const choose_ = el('button', T.choose, r1); choose_.type = 'button'; choose_.onclick = choose; const rf = el('button', T.refresh, r1); rf.type = 'button'; rf.onclick = () => refreshDevices();
         const pairRow = el('div', null, app, 'row'); const lp = el('label', T.pair, pairRow); const pair = el('select', null, lp); pair.setAttribute('aria-label', T.pair); pair.onchange = () => { state.pair = Math.round(num(parseInt(pair.value, 10), 1, 16, 1)); route(); };
-        const gainHost = el('div', null, app, 'gain'); const gain = host.ui.knob(gainHost, T.level, [-60, 6, 0.5], state.level, v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', v => { state.level = v; applyStage(); paint(); }, { default: -6 });
+        const gainHost = el('div', null, app, 'gain'); const gain = host.ui.knob(gainHost, T.level, [-60, 6, 0.5], state.level, v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', v => { state.level = v; applyStage(); paint(); }, { default: -6, id: 'level', group: 'out' });
         const r3 = el('div', null, app, 'row');
         const lm = el('label', null, r3); const mono = el('input', null, lm); mono.type = 'checkbox'; el('span', T.mono, lm); mono.onchange = () => { state.mono = mono.checked; applyStage(); };
         const ll = el('label', null, r3); const limiter = el('input', null, ll); limiter.type = 'checkbox'; el('span', T.limiter, ll); limiter.onchange = () => { state.limiter = limiter.checked; wireLimiter(); applyStage(); };

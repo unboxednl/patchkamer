@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Karplus String (voorheen String); de id nl.patchkamer.string blijft gelijk. Tweetalig (host.lang, namen per taal in i18n).
 //   - setState volgt §13: getallen buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard
 //   - bewaker in de worklet: berichten met een niet-eindige waarde worden genegeerd, en een stem waarvan de uitvoer niet eindig of absurd groot wordt, wordt gewist
@@ -76,7 +77,7 @@ registerProcessor('${WNAME}', PkString);
 export default {
   id: 'nl.patchkamer.string',
   name: 'Karplus String',
-  version: '1.11.0',
+  version: '1.15.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 520, minWidth: 320 },
@@ -100,16 +101,16 @@ export default {
       inputs: {}, outputs: { out },
       mount(el) {
         const pr = document.createElement('div'); pr.style.cssText = 'display:flex;gap:4px;flex-wrap:wrap'; Object.keys(PRESETS).forEach(n => { const b = document.createElement('button'); b.className = 'small'; b.textContent = tx(n); b.onclick = () => { Object.assign(S, PRESETS[n]); apply(); paint(); }; pr.appendChild(b); }); el.appendChild(pr);
-        ui.decay = host.ui.knob(el, tx('Galmtijd'), [0.1, 20, 0.05], S.decay, v => v.toFixed(1) + ' s', v => { S.decay = v; apply(); });
-        ui.damp = host.ui.knob(el, tx('Demping'), [0, 1, 0.01], S.damp, pct, v => { S.damp = v; apply(); });
-        ui.bright = host.ui.knob(el, tx('Helderheid'), [0, 1, 0.01], S.bright, pct, v => { S.bright = v; apply(); });
-        ui.pos = host.ui.knob(el, tx('Plukpositie'), [0.02, 0.5, 0.01], S.pos, v => Math.round(v * 100) + '%', v => { S.pos = v; apply(); });
-        ui.bow = host.ui.knob(el, tx('Strijken'), [0, 1, 0.01], S.bow, pct, v => { S.bow = v; apply(); });
-        ui.stiff = host.ui.knob(el, tx('Stijfheid'), [0, 1, 0.01], S.stiff, pct, v => { S.stiff = v; apply(); });
-        ui.tune = host.ui.knob(el, tx('Stemming'), [-100, 100, 1], S.tune, v => (v > 0 ? '+' : '') + v + ' ct', v => { S.tune = v; apply(); });
-        ui.oct = host.ui.select(el, tx('Octaaf'), [[-2, '−2'], [-1, '−1'], [0, '0'], [1, '+1'], [2, '+2']], S.oct, v => { S.oct = +v; });
-        ui.spread = host.ui.knob(el, tx('Stereo'), [0, 1, 0.01], S.spread, pct, v => { S.spread = v; apply(); });
-        ui.lvl = host.ui.knob(el, tx('Niveau'), [0, 1, 0.01], S.lvl, pct, v => { S.lvl = v; apply(); });
+        ui.decay = host.ui.knob(el, tx('Galmtijd'), [0.1, 20, 0.05], S.decay, v => v.toFixed(1) + ' s', v => { S.decay = v; apply(); }, { id: 'decay', group: 'string' });
+        ui.damp = host.ui.knob(el, tx('Demping'), [0, 1, 0.01], S.damp, pct, v => { S.damp = v; apply(); }, { id: 'damp', group: 'string' });
+        ui.bright = host.ui.knob(el, tx('Helderheid'), [0, 1, 0.01], S.bright, pct, v => { S.bright = v; apply(); }, { id: 'bright', group: 'string' });
+        ui.pos = host.ui.knob(el, tx('Plukpositie'), [0.02, 0.5, 0.01], S.pos, v => Math.round(v * 100) + '%', v => { S.pos = v; apply(); }, { id: 'pos', group: 'excite' });
+        ui.bow = host.ui.knob(el, tx('Strijken'), [0, 1, 0.01], S.bow, pct, v => { S.bow = v; apply(); }, { id: 'bow', group: 'excite' });
+        ui.stiff = host.ui.knob(el, tx('Stijfheid'), [0, 1, 0.01], S.stiff, pct, v => { S.stiff = v; apply(); }, { id: 'stiff', group: 'string' });
+        ui.tune = host.ui.knob(el, tx('Stemming'), [-100, 100, 1], S.tune, v => (v > 0 ? '+' : '') + v + ' ct', v => { S.tune = v; apply(); }, { id: 'tune', group: 'pitch' });
+        ui.oct = host.ui.select(el, tx('Octaaf'), [[-2, '−2'], [-1, '−1'], [0, '0'], [1, '+1'], [2, '+2']], S.oct, v => { S.oct = +v; }, { id: 'oct', group: 'pitch' });
+        ui.spread = host.ui.knob(el, tx('Stereo'), [0, 1, 0.01], S.spread, pct, v => { S.spread = v; apply(); }, { id: 'spread', group: 'out' });
+        ui.lvl = host.ui.knob(el, tx('Niveau'), [0, 1, 0.01], S.lvl, pct, v => { S.lvl = v; apply(); }, { id: 'lvl', group: 'out' });
         const kb = document.createElement('div'); kb.style.cssText = 'display:flex;gap:2px;user-select:none;touch-action:none;margin-top:4px'; kb.setAttribute('aria-label', tx('klavier'));
         for (let n = 48; n < 72; n++) { const b = document.createElement('button'), bl = [1, 3, 6, 8, 10].includes(n % 12); b.title = NOTE[n % 12] + (Math.floor(n / 12) - 1); b.setAttribute('aria-label', b.title);
           b.style.cssText = bl ? 'flex:0 0 14px;margin:0 -8px;z-index:1;height:30px;padding:0;background:#1c2128;border-color:#444' : 'flex:1 0 16px;height:46px;padding:0;background:#e8e6df;border-color:#999';

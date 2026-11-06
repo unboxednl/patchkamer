@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n). setState negeert onbekende velden en kapt getallen af op hun bereik.
 //          Een bewaker bouwt de filterketens opnieuw op als een niet-eindige of ontspoorde waarde (NaN, Infinity, een lus die wegloopt) het geheugen van de terugkoppeling vergiftigt.
@@ -33,7 +34,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.phaser',
   name: 'Phaser',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { name: 'Phaser', ports: { in: 'In', out: 'Out' } } },
@@ -87,14 +88,14 @@ export default {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
-        ui.stages = host.ui.select(el, tx('Trappen'), STAGES.map(n => [n, String(n)]), S.stages, v => { S.stages = +v; build(); });
-        ui.sync = host.ui.select(el, 'Tempo', SYNC.map(([v, n]) => [v, tx(n)]), S.sync, v => { S.sync = v; apply(); });
-        ui.rate = host.ui.knob(el, tx('Snelheid'), [0.02, 10, 0.01], S.rate, v => v.toFixed(2) + ' Hz', v => { S.rate = v; apply(); });
-        ui.depth = host.ui.knob(el, tx('Diepte'), [0, 1, 0.01], S.depth, v => (v * 2).toFixed(1) + ' oct', v => { S.depth = v; apply(); });
-        ui.center = host.ui.knob(el, tx('Midden'), [100, 6000, 10], S.center, v => Math.round(v) + ' Hz', v => { S.center = v; apply(); });
-        ui.fb = host.ui.knob(el, 'Feedback', [-0.95, 0.95, 0.01], S.fb, pct, v => { S.fb = v; apply(); });
-        ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => Math.round(v * 180) + '°', v => { S.stereo = v; apply(); });
-        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); });
+        ui.stages = host.ui.select(el, tx('Trappen'), STAGES.map(n => [n, String(n)]), S.stages, v => { S.stages = +v; build(); }, { id: 'stages', group: 'filter' });
+        ui.sync = host.ui.select(el, 'Tempo', SYNC.map(([v, n]) => [v, tx(n)]), S.sync, v => { S.sync = v; apply(); }, { id: 'sync', group: 'mod' });
+        ui.rate = host.ui.knob(el, tx('Snelheid'), [0.02, 10, 0.01], S.rate, v => v.toFixed(2) + ' Hz', v => { S.rate = v; apply(); }, { id: 'rate', group: 'mod' });
+        ui.depth = host.ui.knob(el, tx('Diepte'), [0, 1, 0.01], S.depth, v => (v * 2).toFixed(1) + ' oct', v => { S.depth = v; apply(); }, { id: 'depth', group: 'mod' });
+        ui.center = host.ui.knob(el, tx('Midden'), [100, 6000, 10], S.center, v => Math.round(v) + ' Hz', v => { S.center = v; apply(); }, { id: 'center', group: 'filter' });
+        ui.fb = host.ui.knob(el, 'Feedback', [-0.95, 0.95, 0.01], S.fb, pct, v => { S.fb = v; apply(); }, { id: 'fb', group: 'feedback' });
+        ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => Math.round(v * 180) + '°', v => { S.stereo = v; apply(); }, { id: 'stereo', group: 'stereo' });
+        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', group: 'mix' });
         const n = document.createElement('div'); n.className = 'note'; n.textContent = tx('Stereo stelt het faseverschil tussen links en rechts in.'); el.appendChild(n);
       },
       onStep({ bpm: b }) { if (Number.isFinite(b) && b > 0 && b !== bpm) { bpm = b; if (S.sync !== 'free') apply(); } },

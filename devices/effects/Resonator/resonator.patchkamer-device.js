@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 290 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
 //   setState volgt §13: onbekende velden genegeerd, ongeldige waarden op de standaard, getallen afgekapt op hun bereik; een ongeldige tijd
@@ -69,7 +70,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.resonator',
   name: 'Resonator',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', notes: 'Notes', mod: 'Mod' } } },
@@ -96,15 +97,15 @@ export default {
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
         el.style.gridTemplateColumns = 'minmax(0, 1fr)';   // lange keuzetekst mag de kaart niet breder maken
-        ui.root = host.ui.knob(el, tx('Grondtoon'), [24, 84, 1], S.root, nn, v => { S.root = v; root = v; apply(); });
-        ui.chord = host.ui.select(el, tx('Akkoord'), CHORDS.map(c => [c[0], tx(c[1])]), S.chord, v => { S.chord = v; apply(); });
-        ui.decay = host.ui.knob(el, tx('Galmtijd'), [0.05, 8, 0.01], S.decay, v => v.toFixed(2) + ' s', v => { S.decay = v; apply(); });
-        ui.damp = host.ui.knob(el, tx('Demping'), [0, 1, 0.01], S.damp, pct, v => { S.damp = v; apply(); });
-        ui.detune = host.ui.knob(el, tx('Ontstemming'), [0, 50, 0.5], S.detune, v => v + ' ct', v => { S.detune = v; apply(); });
-        ui.tune = host.ui.knob(el, tx('Stemming'), [-12, 12, 0.01], S.tune, v => (v > 0 ? '+' : '') + v.toFixed(2) + ' st', v => { S.tune = v; apply(); });
-        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); });
-        ui.gain = host.ui.knob(el, tx('Niveau'), [0, 2, 0.01], S.gain, pct, v => { S.gain = v; apply(); });
-        ui.follow = host.ui.select(el, tx('Noten'), [['0', tx('negeren')], ['1', tx('grondtoon volgt de noten')]], S.follow ? '1' : '0', v => { S.follow = v === '1'; if (!S.follow) { root = S.root; apply(); } });
+        ui.root = host.ui.knob(el, tx('Grondtoon'), [24, 84, 1], S.root, nn, v => { S.root = v; root = v; apply(); }, { id: 'root', group: 'tuning' });
+        ui.chord = host.ui.select(el, tx('Akkoord'), CHORDS.map(c => [c[0], tx(c[1])]), S.chord, v => { S.chord = v; apply(); }, { id: 'chord', group: 'tuning' });
+        ui.decay = host.ui.knob(el, tx('Galmtijd'), [0.05, 8, 0.01], S.decay, v => v.toFixed(2) + ' s', v => { S.decay = v; apply(); }, { id: 'decay', group: 'resonance' });
+        ui.damp = host.ui.knob(el, tx('Demping'), [0, 1, 0.01], S.damp, pct, v => { S.damp = v; apply(); }, { id: 'damp', group: 'resonance' });
+        ui.detune = host.ui.knob(el, tx('Ontstemming'), [0, 50, 0.5], S.detune, v => v + ' ct', v => { S.detune = v; apply(); }, { id: 'detune', group: 'tuning' });
+        ui.tune = host.ui.knob(el, tx('Stemming'), [-12, 12, 0.01], S.tune, v => (v > 0 ? '+' : '') + v.toFixed(2) + ' st', v => { S.tune = v; apply(); }, { id: 'tune', group: 'tuning' });
+        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', group: 'mix' });
+        ui.gain = host.ui.knob(el, tx('Niveau'), [0, 2, 0.01], S.gain, pct, v => { S.gain = v; apply(); }, { id: 'gain', group: 'out' });
+        ui.follow = host.ui.select(el, tx('Noten'), [['0', tx('negeren')], ['1', tx('grondtoon volgt de noten')]], S.follow ? '1' : '0', v => { S.follow = v === '1'; if (!S.follow) { root = S.root; apply(); } }, { id: 'follow', group: 'tuning' });
         note = document.createElement('div'); note.className = 'note'; el.appendChild(note); paintNote();
       },
       unmount() { note = null; ui = {}; },

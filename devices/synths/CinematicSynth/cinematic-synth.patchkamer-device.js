@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Eerste versie. Cinematic Synth: een polyfone synth voor filmische klank: zware koperachtige braams, brede pads en drones, lage pulserende ostinati en orgelachtige
 //          arpeggio's. Per stem een hoofdlaag met tot 5 ontstemde oscillators (met stereospreiding), een tweede laag met een octaafkeuze, een sub-sinus en ruis; een laagdoorlaatfilter met
 //          eigen aanzwelling (aanval, verval, houdniveau en toetsvolging), een versterkingsomhulling tot 12 s aanval en 15 s uitklinken, en een pitchdaling of -stijging aan het begin van elke noot.
@@ -58,7 +59,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.13.0', kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
+  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -161,7 +162,7 @@ export default {
         for (const [k, sp] of Object.entries(SPEC)) { if (sp.g !== g) continue; const lab = T.labels[k];
           if (sp.t === 'enum') { const w = el('label', null, grid, 's'); el('span', lab, w); const s = el('select', null, w); s.setAttribute('aria-label', lab); for (const o of sp.o) { const op = el('option', T.opts[o] || o, s); op.value = o; } s.value = state[k]; s.onchange = () => { state[k] = s.value; if (k === 'pulse') { chord.clear(); } }; ui[k] = { set: v => { s.value = v; } }; }
           else if (sp.t === 'bool') { const w = el('label', null, grid, 'c'); const c = el('input', null, w); c.type = 'checkbox'; c.checked = state[k]; el('span', lab, w); c.setAttribute('aria-label', lab); c.onchange = () => { state[k] = c.checked; if (!c.checked) chord.clear(); }; ui[k] = { set: v => { c.checked = v; } }; }
-          else { const h = el('div', null, grid); const kn = host.ui.knob(h, lab, [sp.min, sp.max, sp.t === 'int' ? 1 : (sp.max - sp.min) / 400], state[k], v => (sp.f ? sp.f(v) : v.toFixed(2)), v => { state[k] = sp.t === 'int' ? Math.round(v) : v; applyMaster(); if (k === 'reverbSize' || k === 'reverbDamp') applyIR(); }, { default: sp.d, scale: sp.scale }); ui[k] = kn; }
+          else { const h = el('div', null, grid); const kn = host.ui.knob(h, lab, [sp.min, sp.max, sp.t === 'int' ? 1 : (sp.max - sp.min) / 400], state[k], v => (sp.f ? sp.f(v) : v.toFixed(2)), v => { state[k] = sp.t === 'int' ? Math.round(v) : v; applyMaster(); if (k === 'reverbSize' || k === 'reverbDamp') applyIR(); }, { default: sp.d, scale: sp.scale, id: k, group: g }); ui[k] = kn; }
         }
       }
       statusEl = el('div', T.status + '0', app, 'status'); root.addEventListener('pointerdown', e => e.stopPropagation());

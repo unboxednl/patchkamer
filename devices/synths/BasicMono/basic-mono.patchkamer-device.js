@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Zachte begrenzer op de uitgang: bij het niveau op 1 met de sub op 1 klipte de uitgang (een volle oscillator plus een volle sub is 2 groot vóór het filter). Tot 0,9 is het geluid bit voor bit ongewijzigd, daarboven buigt het zacht af naar 0,99.
 // 1.11.0 — Nieuw als Basic Mono (nieuwe naam; de id nl.patchkamer.mono blijft gelijk, dus bestaande werkruimtes laden), eigen map, bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Basic Mono
@@ -29,6 +30,7 @@ const P = [
   ['lvl',   'Niveau',   0,    1,   0.01,  0.5,  v => Math.round(v * 100) + '%',                'level',  false, 0.06, false],
 ];
 const BY = Object.fromEntries(P.map(p => [p[0], p]));
+const GRP = { fine: 'osc', sub: 'osc', cut: 'filter', res: 'filter', env: 'env', dec: 'env', glide: 'play', lvl: 'out' };   // sectie per regelaar (voor skins); de golfvorm (wave) hoort ook bij 'osc'
 const WAVES = ['sawtooth', 'square', 'triangle'];
 // zachte begrenzer op de uitgang: een volle oscillator plus een volle sub is samen al 2 groot, en met het niveau op 1 klipt dat. De begrenzer telt een correctie op bij het
 // onveranderde signaal: tot 0,9 is de correctie precies 0 (het signaal blijft bit voor bit gelijk), daarboven buigt hij zacht af naar een plafond van 0,99.
@@ -42,7 +44,7 @@ const FAST = { cut: 1200 * Math.log2(8000 / 80), fine: 200, res: 23.5, sub: 1, l
 export default {
   id: 'nl.patchkamer.mono',
   name: 'Basic Mono',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 340 },
@@ -103,8 +105,8 @@ export default {
     return {
       inputs: {}, outputs: { out: limOut },
       mount(el) {
-        waveSel = host.ui.select(el, tx('Golf'), [['sawtooth', tx('zaag')], ['square', tx('blok')], ['triangle', tx('driehoek')]], state.wave, v => { state.wave = WAVES.includes(v) ? v : 'sawtooth'; apply(); });
-        P.forEach(([k, lab, mn, mx, st, def, fmt]) => { knobs[k] = host.ui.knob(el, tx(lab), [mn, mx, st], state[k], fmt, v => { state[k] = clamp(fin(v, def), mn, mx); apply(); }, { default: def }); });
+        waveSel = host.ui.select(el, tx('Golf'), [['sawtooth', tx('zaag')], ['square', tx('blok')], ['triangle', tx('driehoek')]], state.wave, v => { state.wave = WAVES.includes(v) ? v : 'sawtooth'; apply(); }, { id: 'wave', role: 'select', group: 'osc' });
+        P.forEach(([k, lab, mn, mx, st, def, fmt]) => { knobs[k] = host.ui.knob(el, tx(lab), [mn, mx, st], state[k], fmt, v => { state[k] = clamp(fin(v, def), mn, mx); apply(); }, { default: def, id: k, role: 'param', group: GRP[k] }); });
       },
       onEvent(port, ev) {
         if (!ev || ev.type !== 'note' || !Number.isFinite(ev.note)) return;

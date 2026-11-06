@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.12.2 — Dempen is nu een knop en staat standaard uit (de ingang klinkt meteen); 1.12.1 — bredere kaart. 1.12.0 — Eerste versie. Audio Input haalt geluid van een ingang van de computer in de studio: de standaardingang van de geluidskaart of een
 //          audio-interface die het besturingssysteem als ingang aanbiedt (USB-interfaces, ingebouwde lijn-/microfooningang). De lijst met ingangen
 //          komt van de browser (namen zoals het systeem ze geeft; er staan geen vaste namen in dit bestand). Kies de ingang, het kanaal of kanaalpaar
@@ -41,7 +42,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.12.2', kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
+  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.15.0', kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
   i18n: { nl: { ports: { out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -138,7 +139,7 @@ export default {
         const r3 = el('div', null, app, 'row'); const l3 = el('label', T.mode, r3); const mode = el('select', null, l3); mode.setAttribute('aria-label', T.mode);
         for (const [v, t] of [['stereo', T.modeStereo], ['mono', T.modeMono], ['sum', T.modeSum]]) { const o = el('option', t, mode); o.value = v; } mode.onchange = () => { state.mode = pick(mode.value, MODES, 'stereo'); route(); paint(); };
         const l4 = el('label', null, r3); const chLabel = el('span', T.ch, l4); const chSel = el('select', null, l4); chSel.setAttribute('aria-label', T.ch); chSel.onchange = () => { state.ch = clamp(parseInt(chSel.value, 10) || 1, 1, 32); route(); };
-        const gainHost = el('div', null, app, 'gain'); const gain = host.ui.knob(gainHost, T.gain, [-24, 36, 0.5], state.gain, v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', v => { state.gain = v; applyStage(); }, { default: 0 });
+        const gainHost = el('div', null, app, 'gain'); const gain = host.ui.knob(gainHost, T.gain, [-24, 36, 0.5], state.gain, v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', v => { state.gain = v; applyStage(); }, { default: 0, id: 'gain', group: 'input' });
         const r5 = el('div', null, app, 'row'); const l5 = el('label', T.hp, r5); const hpSel = el('select', null, l5); hpSel.setAttribute('aria-label', T.hp);
         for (const f of HPS) { const o = el('option', f ? f + ' Hz' : T.hpOff, hpSel); o.value = String(f); } hpSel.onchange = () => { state.hp = pick(parseInt(hpSel.value, 10), HPS, 0); applyStage(); };
         const l6 = el('label', null, r5); const inv = el('input', null, l6); inv.type = 'checkbox'; el('span', T.invert, l6); inv.onchange = () => { state.invert = inv.checked; applyStage(); };

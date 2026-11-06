@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Metronome (id nl.patchkamer.klik, voorheen nl.voorbeeld.klik; soort utility in de map tools,
 //   voorheen kind instrument). Zelfde tik, zelfde trigs en zelfde state (div, lvl). Tweetalig (host.lang, namen per taal in i18n).
 //   Ongeldige waarden in setState vallen terug op de standaard (div: 16, 4, 2 of 1; lvl: 0 … 1), tijden en tellers worden gecontroleerd,
@@ -10,7 +11,7 @@ const EN = {
 export default {
   id: 'nl.patchkamer.klik',
   name: 'Metronome',
-  version: '1.11.0',
+  version: '1.15.0',
   kind: 'utility',
   category: 'tool',
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [{ id: 'trigs', name: 'Trigs' }] },
@@ -30,8 +31,8 @@ export default {
     self = {
       inputs: {}, outputs: { out },
       mount(el) {
-        ui.div = host.ui.select(el, tx('Elke'), [[16, tx('maat')], [4, tx('tel')], [2, tx('8e')], [1, tx('16e')]], state.div, v => { const n = +v; if (DIVS.includes(n)) state.div = n; });
-        ui.lvl = host.ui.knob(el, tx('Niveau'), [0, 1, 0.01], state.lvl, v => Math.round(v * 100) + '%', v => { state.lvl = v; out.gain.setTargetAtTime(v, ctx.currentTime, 0.02); });
+        ui.div = host.ui.select(el, tx('Elke'), [[16, tx('maat')], [4, tx('tel')], [2, tx('8e')], [1, tx('16e')]], state.div, v => { const n = +v; if (DIVS.includes(n)) state.div = n; }, { id: 'div', group: 'timing' });
+        ui.lvl = host.ui.knob(el, tx('Niveau'), [0, 1, 0.01], state.lvl, v => Math.round(v * 100) + '%', v => { state.lvl = v; out.gain.setTargetAtTime(v, ctx.currentTime, 0.02); }, { id: 'lvl', group: 'out' });
         cursor = host.ui.steps(el, tx('Stap'), new Array(16).fill(0));
       },
       onStep(info) {

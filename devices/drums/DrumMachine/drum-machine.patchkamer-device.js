@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Swing op patroonniveau (`swing`) en per geluid (`laneSwing`), naast de hostswing: extra vertraging van de oneven zestienden, 0 … 50% van een stap, de som begrensd tot 50%.
 //          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0). Het apparaat heeft geen noten- of triggeringang, dus er is niets om live in te spelen
 //          en er zijn geen noten om door te geven (noteNames).
@@ -34,7 +35,7 @@ const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -87,10 +88,10 @@ export default {
             i.ondblclick = () => { state.v[vk][pk] = d[4]; paintCells(); apply(); };
             cell.append(i, o); g.appendChild(cell); cells[vk + '.' + pk] = { i, o }; }); });
         el.appendChild(g);
-        lvlKnob = host.ui.knob(el, T.lvl, [0, 1, 0.01], state.lvl, pct, v => { state.lvl = v; apply(); });
+        lvlKnob = host.ui.knob(el, T.lvl, [0, 1, 0.01], state.lvl, pct, v => { state.lvl = v; apply(); }, { id: 'lvl', group: 'out' });
         // swing: patroon en per geluid (extra op de oneven zestienden, naast de hostswing)
-        swKnob = host.ui.knob(el, T.swing, [0, 0.5, 0.005], state.swing, pct, v => { state.swing = v; }, { default: 0 });
-        lswKnobs = {}; VOICES.forEach(([k, lab]) => { lswKnobs[k] = host.ui.knob(el, lab + ' ' + T.laneSwing, [0, 0.5, 0.005], state.laneSwing[k], pct, v => { state.laneSwing[k] = v; }, { default: 0 }); });
+        swKnob = host.ui.knob(el, T.swing, [0, 0.5, 0.005], state.swing, pct, v => { state.swing = v; }, { default: 0, id: 'swing', group: 'swing' });
+        lswKnobs = {}; VOICES.forEach(([k, lab]) => { lswKnobs[k] = host.ui.knob(el, lab + ' ' + T.laneSwing, [0, 0.5, 0.005], state.laneSwing[k], pct, v => { state.laneSwing[k] = v; }, { default: 0, id: 'laneSwing.' + k, group: 'swing' }); });
       },
       onStep({ step, time, stepDur, bpm }) { const sd = Number.isFinite(stepDur) && stepDur > 0 ? stepDur : Number.isFinite(bpm) && bpm > 0 ? 15 / bpm : 0, odd = step % 2 === 1;
         VOICES.forEach(([k]) => { if (state.pat[k][step]) { const v = step % 4 === 0 ? 1 : 0.75, t = odd ? time + clamp(state.swing + state.laneSwing[k], 0, 0.5) * sd : time; hit(k, t, v); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: v, time: t }); } }); Object.values(rows).forEach(r => r.cursor(step)); },
