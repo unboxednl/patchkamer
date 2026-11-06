@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.3 — Alle continue regelaars zijn stuurbaar: sub, ruis, osc 2, detune 2, ring, filter 2, F2 octaaf, tight, mix en crush deden al mee in de
+//   modulatie maar stonden niet in params(), dus Drift en andere modulatoren zagen ze niet. Nu staan ze er allemaal in (standaard uit).
+//   Klank en instellingen zijn ongewijzigd.
 // 1.11.2 — Meer vervorming en klankbronnen, en de knoppen in zes secties (Oscillator, Filter, Envelope, Slide, Distortion, Output). Alles wat nieuw is staat
 //   standaard uit, dus bestaande tunes en songs klinken gelijk:
 //   - Vervorming: type (zacht, hard, fold, asym), Tight (bas filteren vóór de vervorming), Mix (nat/droog) en Crush (bitdiepte)
@@ -164,13 +167,23 @@ const MODP = [
   ['muf', 'Toonfilter', 500, 12000, true, 'tone', 0.10, false],
   ['vca', 'VCA decay', 0.1, 4, true, 'decay', 0.10, false],
   ['lvl', 'Niveau', 0, 1, false, 'level', 0.06, false],
+  ['sub', 'Sub', 0, 1, false, 'level', 0.10, false],
+  ['noise', 'Ruis', 0, 1, false, 'level', 0.10, false],
+  ['osc2', 'Osc 2', 0, 1, false, 'level', 0.10, false],
+  ['det2', 'Detune 2', -100, 100, false, 'pitch', 0.04, false],
+  ['ring', 'Ring', 0, 1, false, 'fm', 0.10, false],
+  ['p2', 'Filter 2', 0, 1, false, 'filter', 0.10, false],
+  ['p2o', 'F2 octaaf', -2, 3, false, 'filter', 0.06, false],
+  ['tight', 'Tight', 0, 600, false, 'filter', 0.08, false],
+  ['mix', 'Mix', 0, 1, false, 'level', 0.10, false],
+  ['crush', 'Crush', 2, 16, false, 'drive', 0.10, false],
 ];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 
 export default {
   id: 'nl.patchkamer.acidbaselines',
   name: 'Acid Baselines',
-  version: '1.11.2',
+  version: '1.11.3',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1102, minWidth: 420 },
