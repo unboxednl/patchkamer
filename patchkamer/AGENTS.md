@@ -32,6 +32,10 @@ Alleen als de opdracht dat uitdrukkelijk zegt. De host en het contract horen bij
 - **Elke tekst die de host toont staat in beide talen.** In de HTML een `data-i18n`-sleutel (of `data-i18n-title`, `-ph`, `-aria`, `-html`), in de code `pkt('sleutel', …)` (meervoud: `pktp('sleutel', voorwaarde, …)`), en de tekst in de woordenboeken `I18N.nl` en `I18N.en` bovenin het bestand. Voeg nooit een tekst in maar één taal toe. De bronstaal is Nederlands; Engelse muziekvaktermen (tune, preset, latency, sample rate, oversampling) blijven in beide talen Engels, en de merknaam Patchkamer wordt nergens vertaald.
 - Gebruikers hebben bewaarde werkruimtes en songs die op `id` en `version` van apparaten steunen. Breek dat niet.
 
+## Categorie-iconen in de bibliotheekindeling
+
+Een categorie in `patchkamer-bibliotheek.json` (`categories[]`) mag een veld `icon` hebben: een ingebouwd icoon-id (`synth`, `groove`, `sequencer`, `mod`, `effect`, `mastering`, `mix`, `tool`, `other`, `sampler`, `mic`, `speaker`, `note`, `bolt`, `star`, `folder`), een `data:image/...;base64,...`-adres (hoogstens ±200 kB) of een adres van dezelfde bron als de bibliotheek. Ontbreekt het, dan geldt een bestand `icon.svg`, `icon.png`, `icon.webp` of `icon.jpg` (die volgorde, hoofdletterongevoelig) in de map die als categorie telt (de map direct onder de bron, bijvoorbeeld `devices/synths/`), anders het ingebouwde icoon. Volgorde van winst: keuze van de gebruiker onder Indeling (en `icon` in het indelingsbestand) > `icon.*` in de map > ingebouwd. Een `icon.*` in een andere map doet niets. Afbeeldingen worden alleen als `<img>` getoond, nooit als markup. Voeg geen iconen toe aan `devices/` zonder opdracht.
+
 ## Licentie
 
 `AGPL-3.0-or-later`. Het platform blijft open: ook een betaalde webversie deelt zijn broncode. Zie `LICENSE`.
