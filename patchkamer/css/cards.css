@@ -12,6 +12,8 @@ svg.cables path.hit{pointer-events:stroke;stroke:transparent;stroke-width:14;cur
 .card .bar .led{width:7px;height:7px;border-radius:50%;background:var(--line)}
 .card.active .bar .led{background:var(--event);box-shadow:0 0 6px var(--event)}
 .card .bar button{padding:1px 6px;font-size:11px}
+.card .bar .clipbtn{flex:none}
+.card .bar .clipbtn.dis{opacity:.45}
 .card .body{padding:8px 10px;display:grid;gap:6px;min-width:0;position:relative}
 .card .ui{display:grid;gap:5px;min-width:0}
 /* modulatie zichtbaar: strook met wat er nu gestuurd wordt + stip op de schuifregelaars */
