@@ -87,3 +87,8 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mixer/USER-MANUAL_NL.md) · [EN](../../../docs/mixer/USER-MANUAL_EN.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Rol in een song: hart van de song: alle stemmen komen hier samen (kanalen `ch1…`, returns `r1…`, groepen, master `out`). Zet per kanaal trim, EQ, pan, fader en sends; verbind de losse bron-uitgangen met de kanalen en `out` met de masterketen of een uitgang. De poorten veranderen mee met het aantal kanalen (`nCh`) en groepen (`nGrp`), dus zet die in de `state` vóór je kabels legt.
+
+
+## Namen bij het koppelen aan MIDI
+
+Elke regelaar van een kanaal, groep of de master draagt `data-pk-suffix` (`T3`, `G1`, `Master`, gezet in `tagCtl`). De host toont daardoor `Trim - T3` in de lijst van regelaars bij een MIDI-koppeling. Alleen het label verandert; de sleutel blijft gelijk.
