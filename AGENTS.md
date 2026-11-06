@@ -14,6 +14,7 @@ Patchkamer is een modulaire muziekstudio in de browser op Web Audio: één webpa
 | `devices/<categorie>/<Naam>/` | De meegeleverde apparaten: één map per apparaat binnen een categorie, bijvoorbeeld `devices/synths/Duofone/duofone.patchkamer-device.js` | **Hier zet je je apparaat neer.** Heeft het apparaat een eigen `AGENTS.md`, lees die dan ook |
 | `tunes/` | Klanken van apparaten die geluid maken (`kind: 'instrument'`) | Zie `tunes/AGENTS.md` |
 | `presets/` | Instellingen van apparaten zonder eigen geluid | Contract §13c, licentie `CC0-1.0` |
+| `skins/` | Skins: het uiterlijk van één apparaat, als los bestand (contract, validator en bibliotheek) | Zie `skins/AGENTS.md`. Raakt geen apparaatcode |
 | `songs/` | Meegeleverde songs | Niet aanraken tenzij gevraagd |
 | `docs/` | Gebruikershandleiding (`USER-MANUAL_NL.md` en `_EN.md`, voor mensen), screenshots in `docs/images/` en het script `docs/tools/make-screenshots.py` | Niet aanraken tenzij gevraagd. Een wijziging doe je altijd in beide talen |
 

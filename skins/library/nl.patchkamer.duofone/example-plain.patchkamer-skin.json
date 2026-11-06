@@ -1,0 +1,33 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.1",
+  "id": "nl.patchkamer.duofone.example-plain",
+  "device": "nl.patchkamer.duofone",
+  "name": "Example plain",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A minimal example skin: a thin outline around the device, with one appearance for narrow cards and one for wide cards. It shows the file format only.",
+  "created": "2026-11-06",
+  "icon": null,
+  "default": "normal",
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "For narrow cards.",
+      "when": { "maxWidth": 420 },
+      "css": ":host{outline:2px solid #4fd1b8;outline-offset:-2px}",
+      "assets": {}
+    },
+    {
+      "id": "normal",
+      "name": "Normal",
+      "description": "For wide cards.",
+      "when": { "minWidth": 421 },
+      "css": ":host{outline:2px solid #4fd1b8;outline-offset:-2px;--x-acc:#4fd1b8}",
+      "assets": {}
+    }
+  ]
+}

@@ -15,6 +15,12 @@ Een apparaat in een song is een object in `workspace.devices`: `{ id, def, versi
 
 Een apparaat zonder `AGENTS.md` (nu alleen Cinematic Synth) heeft geen gedocumenteerde state: lees dan de bron (`SPEC` en `getState` in het apparaatbestand) of kies een ander apparaat.
 
+## Het icoon van een apparaat
+
+Een apparaat kan een eigen icoon hebben: een `icon.svg`, `icon.png`, `icon.webp` of `icon.jpg` in de apparaatmap (`devices/<categorie>/<Naam>/`, naast het `*.patchkamer-device.js`). Dat is het icoon waarmee het apparaat wordt gepresenteerd: in de bibliotheek, in de titelbalk van de kaart en overal waar nu het categorie-icoon staat. Een apparaat met een eigen icoon toont dat zoals het is (niet omgekleurd). Heeft het apparaat geen eigen icoon, dan valt de host terug op `icon.*` in `skins/library/<device-id>/`, daarna op het icoon van de categorie (ook een categoriemap, zoals `devices/synths/`, kan zelf een `icon.*` hebben) en ten slotte op het neutrale standaardicoon. Een skin kan het apparaaticoon overschrijven, zolang zij actief is.
+
+Regels voor het icoon: een eigen, eenvoudig icoon met `viewBox="0 0 24 24"` en lijnwerk (`stroke="currentColor"`, afgeronde einden), **geen script** en **geen externe verwijzing**, hoogstens 200 kB, **merkvrij** (geen logo's of afbeeldingen van bestaande producten). Het wordt alleen als afbeelding getoond, nooit als inline markup. Valideer het met `node skins/contract/validate-skin.mjs devices/<categorie>/<Naam>/icon.svg`. Het contract en de volgorde van winst staan in `../skins/contract/SKINS-CONTRACT_NL.md` (§6). Skins (het uiterlijk van een apparaat) bouw je volgens `../skins/AGENTS.md`; dat raakt de apparaatcode niet.
+
 ## Kabelsoorten
 
 De poortsoort bepaalt de `kind` van de kabel. Een uitgang past alleen op een ingang van dezelfde soort (contract §3, §8, §11, §11b, §11c).

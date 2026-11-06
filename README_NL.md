@@ -46,6 +46,7 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README in zijn map en e
 |---|---|---|---|
 | **Tunes** | Complete klanken voor apparaten die geluid maken (de synths, de samplers en de drumapparaten), in packs per stijl | [tunes](tunes/README_NL.md) | [Tunes](docs/tunes/USER-MANUAL_NL.md) |
 | **Presets** | Beginstanden voor apparaten zonder eigen geluid: een pack voor de meeste effecten, de modulatoren, de sequencers, de masteringapparaten, de Metronome, de Leveler, Audio Input en Audio Output. De packs van de Effect Chain zijn complete ketens van vier tot acht effecten, elk gemaakt voor één toepassing | [presets](presets/README_NL.md) | [Presets](docs/presets/USER-MANUAL_NL.md) |
+| **Skins** | Het uiterlijk van één apparaat, als los bestand met een of meer verschijningsvormen die vanzelf wisselen op kaartbreedte en schermgrootte | [skins](skins/README_NL.md) | (handleiding volgt) |
 
 ## Bouw je eigen apparaten, met of zonder AI
 
@@ -67,6 +68,7 @@ Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waa
 | `app/` | De desktop-app (Electron): de host in een eigen venster, met de meegeleverde bibliotheek; bouwt een portable Windows-exe | AGPL-3.0-or-later |
 | `tunes/` | Klanken voor apparaten die geluid maken | CC0-1.0 |
 | `presets/` | Instellingen voor apparaten zonder eigen geluid | CC0-1.0 |
+| `skins/` | Skins: het uiterlijk van één apparaat, als los bestand (contract, validator en bibliotheek) | CC0-1.0 (bibliotheek), MIT (contract) |
 | `songs/` | Meegeleverde songs | CC-BY-4.0 |
 | `docs/` | De gebruikershandleiding, de handleidingen per soort apparaat, hun screenshots en de scripts die ze maken | AGPL-3.0 (de root-licentie) |
 
