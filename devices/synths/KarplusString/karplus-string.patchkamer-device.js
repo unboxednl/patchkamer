@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Alle continue regelaars zijn stuurbaar: Stereo (spreiding) stond niet in params(), dus Drift en andere modulatoren zagen hem niet. Nu wel (standaard uit); klank en instellingen ongewijzigd.
+//   Bewust weggelaten: Octaaf (keuzelijst).
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Karplus String (voorheen String); de id nl.patchkamer.string blijft gelijk. Tweetalig (host.lang, namen per taal in i18n).
 //   - setState volgt §13: getallen buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard
@@ -13,7 +15,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const NOTE = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const MODP = [['decay', 'Galmtijd', 0.1, 20, true, 'decay', 0.1, true], ['damp', 'Demping', 0, 1, false, 'tone', 0.1, true], ['bright', 'Helderheid', 0, 1, false, 'filter', 0.1, true],
   ['pos', 'Plukpositie', 0.02, 0.5, false, 'tone', 0.1, false], ['bow', 'Strijken', 0, 1, false, 'level', 0.1, false], ['stiff', 'Stijfheid', 0, 1, false, 'detune', 0.1, false],
-  ['tune', 'Stemming', -100, 100, false, 'pitch', 0.03, false], ['lvl', 'Niveau', 0, 1, false, 'level', 0.05, false]];
+  ['tune', 'Stemming', -100, 100, false, 'pitch', 0.03, false], ['lvl', 'Niveau', 0, 1, false, 'level', 0.05, false], ['spread', 'Stereo', 0, 1, false, 'stereo', 0.08, false]];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const DEF = () => ({ decay: 3, damp: 0.4, bright: 0.6, pos: 0.15, bow: 0, stiff: 0, tune: 0, spread: 0.5, lvl: 0.7, oct: 0 });
 // snelle instellingen (knoppen bovenaan de kaart); de namen staan in EN voor de Engelse weergave
@@ -77,7 +79,7 @@ registerProcessor('${WNAME}', PkString);
 export default {
   id: 'nl.patchkamer.string',
   name: 'Karplus String',
-  version: '1.15.0',
+  version: '1.15.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 520, minWidth: 320 },
@@ -89,7 +91,7 @@ export default {
     const S = DEF(), mod = {}; let dead = false, ui = {}, node = null, note = null; const pending = [];
     const out = ctx.createGain(); out.gain.value = 1;
     const E = k => { const m = MODBY[k], b = S[k], o = clamp(mod[k] || 0, -1, 1); if (!m || !o) return b; return m[4] ? clamp(b * Math.pow(m[3] / m[2], o), m[2], m[3]) : clamp(b + o * (m[3] - m[2]), m[2], m[3]); };
-    function apply() { if (!node) return; const t = ctx.currentTime, P = node.parameters; ['decay', 'damp', 'bright', 'pos', 'bow', 'stiff', 'tune', 'lvl'].forEach(k => P.get(k).setValueAtTime(E(k), t)); P.get('spread').setValueAtTime(S.spread, t); }
+    function apply() { if (!node) return; const t = ctx.currentTime, P = node.parameters; ['decay', 'damp', 'bright', 'pos', 'bow', 'stiff', 'tune', 'lvl'].forEach(k => P.get(k).setValueAtTime(E(k), t)); P.get('spread').setValueAtTime(E('spread'), t); }
     function send(n, vel, t, dur) { if (!isFinite(n)) return; const m = { type: 'note', note: clamp(n + 12 * S.oct, 0, 135), vel: isFinite(vel) ? clamp(vel, 0.05, 1) : 0.8, t: isFinite(t) ? t : ctx.currentTime, dur: isFinite(dur) ? Math.min(dur, 3600) : 0.3 }; if (node) node.port.postMessage(m); else if (pending.length < 64) pending.push(m); }
     const loader = host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
     loader.then(() => { if (dead || typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet'); node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2] });

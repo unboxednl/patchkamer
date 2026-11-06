@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Alle continue regelaars zijn stuurbaar: Stereospreiding, Pitchdaling en Duur daling, de filteromhulling (aanval, verval, houd), Toetsvolging, de versterkingsomhulling
+//   (aanval, verval, houd, uitklinken), Vibrato-snelheid, Echotijd, Galmlengte, Galmdemping en Accent stonden niet in params(). Nu wel (alle standaard uit); de omhullingen en de
+//   daling werken, net als Ontstemming en Sub al deden, vanaf de volgende noot. Ook Aanzwelling deed niets bij modulatie (de noot las de knopstand): dat is hersteld.
+//   Klank en instellingen zonder modulatie zijn ongewijzigd. Bewust weggelaten: Stemmen per noot, Octaaf tweede laag, Octaven en Transpositie (gehele stappen), en de keuzelijsten en schakelaars.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Eerste versie. Cinematic Synth: een polyfone synth voor filmische klank: zware koperachtige braams, brede pads en drones, lage pulserende ostinati en orgelachtige
 //          arpeggio's. Per stem een hoofdlaag met tot 5 ontstemde oscillators (met stereospreiding), een tweede laag met een octaafkeuze, een sub-sinus en ruis; een laagdoorlaatfilter met
@@ -29,7 +33,7 @@ const SPEC = {
   accent: { t: 'num', min: 0, max: 1, d: 0.3, f: pct, g: 'pulse' }, latch: { t: 'bool', d: false, g: 'pulse' },
   level: { t: 'num', min: 0, max: 1.5, d: 0.6, f: pct, g: 'out' }, transpose: { t: 'int', min: -24, max: 24, d: 0, f: v => (v > 0 ? '+' : '') + v + ' st', g: 'out' }
 };
-const MODS = ['cutoff', 'resonance', 'envAmt', 'detune', 'sub', 'noise', 'layerMix', 'vibDepth', 'lfoFilter', 'drive', 'weight', 'air', 'chorus', 'delayFb', 'delayMix', 'reverbMix', 'gate', 'level'];
+const MODS = ['cutoff', 'resonance', 'envAmt', 'detune', 'sub', 'noise', 'layerMix', 'vibDepth', 'lfoFilter', 'drive', 'weight', 'air', 'chorus', 'delayFb', 'delayMix', 'reverbMix', 'gate', 'level', 'spread', 'bend', 'bendTime', 'fAttack', 'fDecay', 'fSustain', 'keytrack', 'attack', 'decay', 'sustain', 'release', 'vibRate', 'delayTime', 'reverbSize', 'reverbDamp', 'accent'];
 const GROUPS = ['osc', 'filter', 'amp', 'motion', 'space', 'pulse', 'out'];
 const defaults = () => Object.fromEntries(Object.entries(SPEC).map(([k, s]) => [k, s.d]));
 function normalize(raw) {
@@ -59,7 +63,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
+  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.15.1', modExclude: ['unison', 'layerOct', 'octaves', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -97,7 +101,7 @@ export default {
       tc(low.gain, eff('weight')); tc(high.gain, eff('air')); tc(chSend.gain, eff('chorus') > 0 ? 1 : 0); tc(chOut.gain, eff('chorus') * 0.8);
       tc(dL.delayTime, eff('delayTime') * 0.5, undefined, 0.08); tc(dR.delayTime, eff('delayTime') * 0.5, undefined, 0.08); tc(fbL.gain, eff('delayFb')); tc(fbR.gain, eff('delayFb')); tc(dOut.gain, eff('delayMix'));
       tc(rvOut.gain, eff('reverbMix') * 1.2); tc(out.gain, eff('level'));
-      tc(lfoV.gain, eff('vibDepth')); lfo.frequency.value = state.vibRate; tc(lfoF.gain, eff('lfoFilter') * 1200); tc(fcv.offset, (mod.cutoff || 0) * 4800);
+      tc(lfoV.gain, eff('vibDepth')); lfo.frequency.value = eff('vibRate'); tc(lfoF.gain, eff('lfoFilter') * 1200); tc(fcv.offset, (mod.cutoff || 0) * 4800);
     }
     // ---- stemmen ----
     const hzOf = n => 440 * Math.pow(2, (n - 69) / 12);
@@ -108,18 +112,18 @@ export default {
       const live = voices.filter(v => !v.dead && !v.off); if (live.length >= MAXV) killVoice(live[0], t);
       const f0 = hzOf(note + state.transpose), un = state.unison, lw = state.layerWave, lun = Math.min(un, 3), srcs = [], g = ctx.createGain(), mix = ctx.createGain(), fl = ctx.createBiquadFilter();
       fl.type = 'lowpass'; fl.Q.value = eff('resonance'); fcv.connect(fl.detune); lfoF.connect(fl.detune);
-      const kt = Math.pow(f0 / 261.63, state.keytrack), base = clamp(state.cutoff * kt, 30, 18000), peak = clamp(base * Math.pow(2, state.envAmt), 30, 20000), sus = clamp(base * Math.pow(2, state.envAmt * state.fSustain), 30, 20000);
-      const fa = Math.max(0.005, state.fAttack);
-      fl.frequency.setValueAtTime(base, t); fl.frequency.exponentialRampToValueAtTime(peak, t + fa); fl.frequency.setTargetAtTime(sus, t + fa, Math.max(0.02, state.fDecay / 3));
-      const cv = state.bend !== 0 ? ctx.createConstantSource() : null; if (cv) { cv.offset.setValueAtTime(state.bend * 100, t); cv.offset.setTargetAtTime(0, t, state.bendTime / 3); cv.start(t); srcs.push(cv); }
-      const det = eff('detune'), spread = state.spread;
+      const kt = Math.pow(f0 / 261.63, eff('keytrack')), ea = eff('envAmt'), base = clamp(state.cutoff * kt, 30, 18000), peak = clamp(base * Math.pow(2, ea), 30, 20000), sus = clamp(base * Math.pow(2, ea * eff('fSustain')), 30, 20000);
+      const fa = Math.max(0.005, eff('fAttack'));
+      fl.frequency.setValueAtTime(base, t); fl.frequency.exponentialRampToValueAtTime(peak, t + fa); fl.frequency.setTargetAtTime(sus, t + fa, Math.max(0.02, eff('fDecay') / 3));
+      const bnd = eff('bend'), cv = bnd !== 0 ? ctx.createConstantSource() : null; if (cv) { cv.offset.setValueAtTime(bnd * 100, t); cv.offset.setTargetAtTime(0, t, eff('bendTime') / 3); cv.start(t); srcs.push(cv); }
+      const det = eff('detune'), spread = eff('spread');
       const add = (type, freq, cents, pan, gain) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = freq; o.detune.value = cents; lfoV.connect(o.detune); if (cv) cv.connect(o.detune); const gn = ctx.createGain(); gn.gain.value = gain; o.connect(gn); if (pan !== 0) { const p = ctx.createStereoPanner(); p.pan.value = pan; gn.connect(p); p.connect(mix); } else gn.connect(mix); o.start(t); srcs.push(o); };
       for (let i = 0; i < un; i++) { const x = un === 1 ? 0 : (i / (un - 1)) * 2 - 1; add(WAVE[state.wave], f0, x * det, x * spread, 0.5 / Math.sqrt(un)); }
       const lm = eff('layerMix'); if (lw !== 'off' && lm > 0.001) for (let i = 0; i < lun; i++) { const x = lun === 1 ? 0 : (i / (lun - 1)) * 2 - 1; add(WAVE[lw], f0 * Math.pow(2, state.layerOct), x * det * 0.8, -x * spread * 0.8, lm * 0.5 / Math.sqrt(lun)); }
       const sb = eff('sub'); if (sb > 0.001) add('sine', f0 / 2, 0, 0, sb * 0.6);
       const nz = eff('noise'); if (nz > 0.001) { const s = ctx.createBufferSource(); s.buffer = nb; s.loop = true; const gn = ctx.createGain(); gn.gain.value = nz * 0.5; s.connect(gn); gn.connect(mix); s.start(t, Math.random() * 1.5); srcs.push(s); }
       mix.connect(fl); fl.connect(g); g.connect(vsum);
-      const a = Math.max(0.003, state.attack), pk = (0.35 + 0.65 * vel) * 0.5, su = state.sustain * pk, v = { t0: t, g, src: srcs, fl, env: { a, d: Math.max(0.05, state.decay), peak: pk, sus: su }, note, off: false, dead: false, rel: state.release };
+      const a = Math.max(0.003, eff('attack')), pk = (0.35 + 0.65 * vel) * 0.5, su = eff('sustain') * pk, v = { t0: t, g, src: srcs, fl, env: { a, d: Math.max(0.05, eff('decay')), peak: pk, sus: su }, note, off: false, dead: false, rel: eff('release') };
       g.gain.setValueAtTime(0, t);
       if (!hold && dur <= a) { const aE = Math.max(0.003, dur); g.gain.linearRampToValueAtTime(pk * (aE / a), t + aE); } else { g.gain.linearRampToValueAtTime(pk, t + a); g.gain.setTargetAtTime(su, t + a, v.env.d / 3); }
       voices.push(v); srcs[0].onended = () => { v.dead = true; for (const n of [g, mix, fl]) { try { n.disconnect(); } catch (e) { /* ok */ } } try { fcv.disconnect(fl.detune); lfoF.disconnect(fl.detune); } catch (e) { /* ok */ } voices = voices.filter(x => x !== v); };
@@ -140,7 +144,7 @@ export default {
       const all = pulseNotes(); if (!all.length) return; const p = state.pulse, base = chordNotes(); let pick = [];
       if (p === 'eighths' || p === 'sixteenths') pick = [base[0]]; else if (p === 'arpUp' || p === 'organRun') pick = [all[i % all.length]]; else if (p === 'arpDown') pick = [all[all.length - 1 - (i % all.length)]];
       else if (p === 'arpUpDown') { const n = Math.max(1, all.length * 2 - 2), k = i % n; pick = [all[k < all.length ? k : n - k]]; } else if (p === 'arpRandom') pick = [all[Math.floor(rand() * all.length)]]; else if (p === 'chordHits') pick = base;
-      const vel = clamp(0.55 + (i % 4 === 0 ? 0.35 * (0.3 + state.accent) : 0), 0.2, 1);
+      const vel = clamp(0.55 + (i % 4 === 0 ? 0.35 * (0.3 + eff('accent')) : 0), 0.2, 1);
       for (const n of pick) noteOn(n, vel, t, Math.max(0.03, len * eff('gate')), false);
     }
     // ---- gebeurtenissen ----

@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Alle continue regelaars zijn stuurbaar: Marge, Toonvolgen, de filteromhulling (aanval, verval, houd, loslaten), Amp sustain, Aanslag en Stereo stonden niet in params().
+//   Nu wel (alle standaard uit); ze werken vanaf de volgende noot, net als Zweving en de amp-tijden al deden. Klank en instellingen zonder modulatie zijn ongewijzigd.
+//   Bewust weggelaten: Stemmen, Openheid en Noten (gehele aantallen/stappen) en de keuzelijsten en schakelaars.
 // 1.11.0 — Nieuw als Dissonant Cluster (nieuwe id nl.patchkamer.dissonantcluster, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen van apparaat en poorten per taal in i18n); namen van de ingebouwde startklanken zijn Engels
 //   - setState volgt §13: waarden buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard; de knoppen volgen setState
@@ -74,6 +77,9 @@ const MODP = [   // id, naam, min, max, log, rol, bereik, aan, spoor, snel
   ['cut', 'Cutoff', 40, 18000, true, 'filter', 0.08, true, 'filter', true], ['res', 'Reso', 0.3, 20, false, 'res', 0.08, false, 'filter'], ['fenv', 'Env-diepte', -1, 1, false, 'env', 0.1, false, 'filter'], ['drive', 'Drive', 0, 1, false, 'drive', 0.1, false, 'filter'],
   ['aa', 'Amp attack', 0.001, 8, true, 'attack', 0.1, false, 'env'], ['ad', 'Amp decay', 0.01, 8, true, 'decay', 0.1, false, 'env'], ['ar', 'Amp release', 0.01, 10, true, 'decay', 0.1, false, 'env'],
   ['tune', 'Stemming', -100, 100, false, 'pitch', 0.04, false, 'uit', true], ['lvl', 'Niveau', 0, 1, false, 'level', 0.05, false, 'uit', true], ['pan', 'Pan', -1, 1, false, 'pan', 0.15, false, 'uit', true],
+  ['margin', 'Marge', 10, 60, false, 'depth', 0.08, false, 'cluster'], ['kt', 'Toonvolgen', 0, 1, false, 'filter', 0.08, false, 'filter'],
+  ['fa', 'Filter attack', 0.001, 8, true, 'attack', 0.10, false, 'env'], ['fd', 'Filter decay', 0.01, 8, true, 'decay', 0.10, false, 'env'], ['fs', 'Filter sustain', 0, 1, false, 'env', 0.10, false, 'env'], ['fr', 'Filter release', 0.01, 10, true, 'decay', 0.10, false, 'env'],
+  ['as', 'Amp sustain', 0, 1, false, 'env', 0.10, false, 'env'], ['vel', 'Aanslag', 0, 1, false, 'env', 0.10, false, 'env'], ['width', 'Stereo', 0, 1, false, 'pan', 0.10, false, 'uit'],
 ];
 const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const LANES = { cluster: 'Cluster', bron: 'Bron', filter: 'Filter', env: 'Envelopes', uit: 'Uitgang' };
@@ -119,7 +125,8 @@ input[type=checkbox]{accent-color:var(--acc);margin:0}
 export default {
   id: 'nl.patchkamer.dissonantcluster',
   name: 'Dissonant Cluster',
-  version: '1.11.0',
+  version: '1.11.1',
+  modExclude: ['voices', 'open', 'poly'],   // gehele aantallen en stappen
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1180, minWidth: 420 },
@@ -158,7 +165,7 @@ export default {
     // 1) binnen de noot: elke stem de kleinste stap weg van consonantie (gegarandeerd waar het kan)
     // 2) tussen noten: het hele cluster samen hooguit een halve toon schuiven, zodat de binnenkant intact blijft
     function guardCents(cents, others) {
-      if (!P.guard) { ui.moved = 0; ui.cross = null; return cents; } const M = P.margin; let moved = 0; const placed = [];
+      if (!P.guard) { ui.moved = 0; ui.cross = null; return cents; } const M = E('margin'); let moved = 0; const placed = [];
       for (const c of cents) { const b = placed.length ? bestShift(c, placed, M, 600) : { s: 0 }; if (b.s) moved++; placed.push(c + b.s); }
       ui.cross = null;
       if (others.length) { let best = null;
@@ -189,7 +196,7 @@ export default {
       const use = k => E(k) > 0.0005 || (k in mod), useFm = use('fmi'), useRing = use('ring'), useAm = use('rough'), useTwin = use('beatMix');
       g.live = { fm: [], twin: [], dry: [], wet: [], am: [], amR: [], amBase: [] };
       cents.forEach((c, i) => {
-        const f = 440 * Math.pow(2, c / 1200), pn = ctx.createStereoPanner(); pn.pan.value = n > 1 ? (i / (n - 1) * 2 - 1) * P.width : 0; pn.connect(mix); g.nodes.push(pn);
+        const f = 440 * Math.pow(2, c / 1200), pn = ctx.createStereoPanner(); pn.pan.value = n > 1 ? (i / (n - 1) * 2 - 1) * E('width') : 0; pn.connect(mix); g.nodes.push(pn);
         const vg = ctx.createGain(); vg.gain.value = 1 - rough * 0.5; vg.connect(pn); g.nodes.push(vg);
         if (useAm) { const am = ctx.createOscillator(), amg = ctx.createGain(); am.frequency.value = rr * (0.85 + 0.3 * rnd()); amg.gain.value = rough * 0.5; am.connect(amg).connect(vg.gain); g.srcs.push(am); g.nodes.push(amg); g.live.am.push(amg); g.live.amR.push(am); g.live.amBase.push(vg); } else vg.gain.value = 1;
         const dry = ctx.createGain(), wet = ctx.createGain(), rg = ctx.createGain(); dry.gain.value = 1 - ring; wet.gain.value = ring; rg.gain.value = 0; dry.connect(vg); rg.connect(wet).connect(vg); g.nodes.push(dry, wet, rg); g.live.dry.push(dry); g.live.wet.push(wet);
@@ -212,10 +219,10 @@ export default {
       const shp = P.stype !== 'off' ? ctx.createWaveShaper() : null; if (shp) { shp.curve = shapeCurve(P.stype, E('drive')); shp.oversample = '2x'; g.nodes.push(shp); g.live.shp = shp; }
       const vca = ctx.createGain(); vca.gain.value = 0; g.nodes.push(vca); g.vca = vca;
       mix.connect(flt); (shp ? (flt.connect(shp), shp) : flt).connect(vca).connect(polyOut);
-      const base = clamp(E('cut') * Math.pow(f0 / 261.63, P.kt), 30, 18000), pk = clamp(base * Math.pow(2, E('fenv') * 6), 30, 18000), su = clamp(base * Math.pow(2, E('fenv') * 6 * P.fs), 30, 18000);
-      const fa = P.fa, fd = P.fd, aa = E('aa'), ad = E('ad'), ar = E('ar');
-      flt.frequency.setValueAtTime(base, t); flt.frequency.linearRampToValueAtTime(pk, t + fa); flt.frequency.setTargetAtTime(su, t + fa, fd / 4); g.fbase = base; g.fr = P.fr;
-      const peak = (1 - P.vel * (1 - clamp(vel, 0, 1))) * 0.6; vca.gain.setValueAtTime(0.0001, t); vca.gain.linearRampToValueAtTime(peak, t + aa); vca.gain.setTargetAtTime(peak * P.as, t + aa, ad / 4);
+      const base = clamp(E('cut') * Math.pow(f0 / 261.63, E('kt')), 30, 18000), pk = clamp(base * Math.pow(2, E('fenv') * 6), 30, 18000), su = clamp(base * Math.pow(2, E('fenv') * 6 * E('fs')), 30, 18000);
+      const fa = E('fa'), fd = E('fd'), aa = E('aa'), ad = E('ad'), ar = E('ar');
+      flt.frequency.setValueAtTime(base, t); flt.frequency.linearRampToValueAtTime(pk, t + fa); flt.frequency.setTargetAtTime(su, t + fa, fd / 4); g.fbase = base; g.fr = E('fr');
+      const peak = (1 - E('vel') * (1 - clamp(vel, 0, 1))) * 0.6; vca.gain.setValueAtTime(0.0001, t); vca.gain.linearRampToValueAtTime(peak, t + aa); vca.gain.setTargetAtTime(peak * E('as'), t + aa, ad / 4);
       g.ar = ar; g.srcs.forEach(s => { try { s.start(t); } catch (e) {} });
       if (tOff != null) release(g, tOff);
       groups.push(g); return g;

@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — Alle continue regelaars zijn stuurbaar: de fijnstemmingen, alle FM- en PWM-schuiven van de VCO's, Filter fijn, alle filter- en VCA-ingangen en CV-schuiven, S/H-niveau, Volger- en
+//   Voorversterkerniveau, de inverters, de mixer, het volume links/rechts en Portamento, Toonafstand en Stemming van het klavier stonden niet in params(). Nu wel (38 erbij, alle standaard uit).
+//   De knopstand en de bewaarde instellingen blijven je basis; klank en instellingen zonder modulatie zijn ongewijzigd. Bewust weggelaten: de schakelaars en keuzes (VCO-bereik, Ringmod koppeling,
+//   Poortbron, Voorversterker bereik, Portamento aan, Toonafstand aan, Stemming aan).
 // 1.11.1 — Verbeterd: een aangehouden toets (Keys in de stand "Toets vasthouden", of een MIDI-toetsenbord) werd nooit losgelaten, omdat noteoff werd genegeerd en de noot 120 s bleef staan; daardoor bleef de laagste ingedrukte toets de toonhoogte bepalen en klonk elke toets hetzelfde. noteon, noteoff, held en panic worden nu verwerkt.
 // 1.11.0 — Nieuw als Patchbay Synth (nieuwe id nl.patchkamer.patchbaysynth, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Patchbay Synth
@@ -130,6 +134,14 @@ const MODP = [
   ['eA', 'env', 'attack', 0.1, false], ['eD', 'env', 'decay', 0.1, false], ['eS', 'env', 'level', 0.1, false], ['eR', 'env', 'decay', 0.1, false], ['rA', 'env', 'attack', 0.1, false], ['rR', 'env', 'decay', 0.1, false],
   ['nL', 'overig', 'level', 0.1, false], ['nC', 'overig', 'tone', 0.12, false], ['cR', 'overig', 'rate', 0.1, false], ['lT', 'overig', 'time', 0.1, false], ['pP', 'overig', 'pan', 0.15, false],
   ['gL', 'overig', 'send', 0.08, false], ['gR', 'overig', 'send', 0.08, false],
+  ['v1t', 'vco', 'pitch', 0.04, false], ['v2t', 'vco', 'pitch', 0.04, false], ['v3t', 'vco', 'pitch', 0.04, false],
+  ['v1a', 'vco', 'fm', 0.10, false], ['v1b', 'vco', 'fm', 0.10, false], ['v1c', 'vco', 'fm', 0.10, false], ['v2a', 'vco', 'fm', 0.10, false], ['v2b', 'vco', 'fm', 0.10, false], ['v2c', 'vco', 'fm', 0.10, false],
+  ['v3a', 'vco', 'fm', 0.10, false], ['v3b', 'vco', 'fm', 0.10, false], ['v3c', 'vco', 'fm', 0.10, false], ['v2p', 'vco', 'depth', 0.10, false],
+  ['fT', 'filter', 'filter', 0.04, false], ['fa', 'filter', 'level', 0.10, false], ['fb', 'filter', 'level', 0.10, false], ['fc', 'filter', 'level', 0.10, false], ['fd', 'filter', 'level', 0.10, false], ['fe', 'filter', 'level', 0.10, false],
+  ['fx', 'filter', 'depth', 0.10, false], ['fy', 'filter', 'depth', 0.10, false], ['aa', 'filter', 'level', 0.10, false], ['ab', 'filter', 'level', 0.10, false], ['al', 'filter', 'level', 0.10, false], ['ae', 'filter', 'level', 0.10, false],
+  ['sL', 'overig', 'level', 0.10, false], ['efL', 'overig', 'level', 0.10, false], ['pL', 'overig', 'level', 0.10, false], ['qa', 'overig', 'level', 0.10, false], ['qb', 'overig', 'level', 0.10, false], ['qc', 'overig', 'level', 0.10, false],
+  ['xa', 'overig', 'level', 0.10, false], ['xb', 'overig', 'level', 0.10, false], ['oL', 'overig', 'level', 0.05, false], ['oR', 'overig', 'level', 0.05, false],
+  ['kP', 'overig', 'glide', 0.10, false], ['kV', 'overig', 'pitch', 0.04, false], ['kT', 'overig', 'pitch', 0.04, false],
 ];
 const LANES = { vco: 'Oscillatoren', filter: 'Filter en VCA', env: 'Envelopes', overig: 'Ruis, klok en uitgang' };
 const FASTX = { v1f: ['x1', Math.log2(1000)], v2f: ['x2', Math.log2(1000)], v3f: ['x3', Math.log2(1000)], fF: ['xc', Math.log2(1000)], aG: ['xg', 1] };
@@ -356,7 +368,7 @@ svg.cords path.tmp{stroke-dasharray:6 5;pointer-events:none}
 export default {
   id: 'nl.patchkamer.patchbaysynth',
   name: 'Patchbay Synth',
-  version: '1.11.1',
+  version: '1.11.2',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1680, minWidth: 1200 },

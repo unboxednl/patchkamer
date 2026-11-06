@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Gecontroleerd op stuurbaarheid: alle klankregelaars stonden al in params(). Bewust niet stuurbaar: Evolutie (het aantal maten per fase, een compositorische stap
+//   en geen klank; vandaar modExclude). Geluid en instellingen ongewijzigd.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Mist (nieuwe id nl.patchkamer.mist, eigen map; voorheen Nevel, nl.patchkamer.nevel);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
@@ -38,7 +40,7 @@ const EN = {
     'Purple Mod cable → for example Drift. Brightness and times move logarithmically. Root controls the drone and the automatic melody; attack/release apply from the next note. Evolve stays manual.',
 };
 export default {
-  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
+  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.15.1', modExclude: ['evolve'], kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'notes', name: 'Notes / CC' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo uit', notes: 'Noten / CC' } } },
   create(ctx, host) {

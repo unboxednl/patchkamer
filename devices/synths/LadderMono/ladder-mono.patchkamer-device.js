@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Meer regelaars stuurbaar voor modulatoren: toetsvolging, de vier tijden en houdniveaus van beide omhullingen en de LFO-snelheid stonden niet in params().
+//   Nu wel (alle standaard uit). Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Bereik 1-3, Bendbereik en Transpositie (gehele stappen, geen vloeiende regelaars),
+//   en de keuzelijsten en schakelaars.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Eerste versie. Ladder Mono: een monofone analoge synth in de geest van klassieke analoge monosynths, volgens Patchkamer contract v1.13. Drie oscillators (zes golfvormen, bereik in octaven, fijne stemming,
 //          harde sync van oscillator 2 op 1, oscillator 3 los van het klavier), een ruisbron (wit of roze), een mixer die kan overstuurd raken, een vierpolig laddermodel-filter van 24 dB per octaaf met terugkoppeling
@@ -23,7 +26,7 @@ const SPEC = {
   lfoRate: { t: 'num', min: 0.1, max: 30, d: 5, scale: 'log', f: v => v.toFixed(1) + ' Hz', g: 'mod' }, lfoShape: { t: 'enum', o: LFOS, d: 'tri', g: 'mod' }, lfoPitch: { t: 'num', min: 0, max: 100, d: 0, f: v => v.toFixed(0) + ' ct', g: 'mod' }, lfoFilter: { t: 'num', min: 0, max: 3, d: 0, f: oc, g: 'mod' },
   outDrive: { t: 'num', min: 0, max: 1, d: 0.1, f: pct, g: 'out' }, level: { t: 'num', min: 0, max: 1.5, d: 0.4, f: pct, g: 'out' }
 };
-const MODS = ['cutoff', 'emphasis', 'contour', 'lfoPitch', 'lfoFilter', 'drive', 'level1', 'level2', 'level3', 'tune2', 'tune3', 'noise', 'glide', 'outDrive', 'level'];
+const MODS = ['cutoff', 'emphasis', 'contour', 'lfoPitch', 'lfoFilter', 'drive', 'level1', 'level2', 'level3', 'tune2', 'tune3', 'noise', 'glide', 'outDrive', 'level', 'keytrack', 'lfoRate', 'fAttack', 'fDecay', 'fSustain', 'fRelease', 'aAttack', 'aDecay', 'aSustain', 'aRelease'];
 const GROUPS = ['osc', 'mix', 'filter', 'contour', 'loud', 'play', 'mod', 'out'];
 const defaults = () => Object.fromEntries(Object.entries(SPEC).map(([k, s]) => [k, s.d]));
 function normalize(raw) {
@@ -145,7 +148,7 @@ registerProcessor('${WNAME}', class extends AudioWorkletProcessor {
 });`;
 
 export default {
-  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
+  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.15.1', modExclude: ['range1', 'range2', 'range3', 'bendRange', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -157,8 +160,8 @@ export default {
     function params() {
       const idx = (k, list) => Math.max(0, list.indexOf(state[k]));
       return { w1: idx('wave1', WAVES), w2: idx('wave2', WAVES), w3: idx('wave3', WAVES), r1: state.range1, r2: state.range2, r3: state.range3, t2: eff('tune2'), t3: eff('tune3'), l1: eff('level1'), l2: eff('level2'), l3: eff('level3'), sync: state.sync ? 1 : 0, keys3: state.keys3 ? 1 : 0,
-        noise: eff('noise'), pink: state.noiseColor === 'pink' ? 1 : 0, drive: eff('drive'), cutoff: eff('cutoff'), emph: eff('emphasis'), contour: eff('contour'), kt: state.keytrack, fa: state.fAttack, fd: state.fDecay, fs: state.fSustain, fr: state.fRelease, aa: state.aAttack, ad: state.aDecay, as: state.aSustain, ar: state.aRelease,
-        glide: eff('glide'), legato: state.trigger === 'legato' ? 1 : 0, bendRange: state.bendRange, tr: state.transpose, lfoRate: state.lfoRate, lfoShape: idx('lfoShape', LFOS), lfoPitch: eff('lfoPitch'), lfoFilter: eff('lfoFilter'), odrive: eff('outDrive'), level: 1 };
+        noise: eff('noise'), pink: state.noiseColor === 'pink' ? 1 : 0, drive: eff('drive'), cutoff: eff('cutoff'), emph: eff('emphasis'), contour: eff('contour'), kt: eff('keytrack'), fa: eff('fAttack'), fd: eff('fDecay'), fs: eff('fSustain'), fr: eff('fRelease'), aa: eff('aAttack'), ad: eff('aDecay'), as: eff('aSustain'), ar: eff('aRelease'),
+        glide: eff('glide'), legato: state.trigger === 'legato' ? 1 : 0, bendRange: state.bendRange, tr: state.transpose, lfoRate: eff('lfoRate'), lfoShape: idx('lfoShape', LFOS), lfoPitch: eff('lfoPitch'), lfoFilter: eff('lfoFilter'), odrive: eff('outDrive'), level: 1 };
     }
     function sendParams() { if (dead) return; tc(volume.gain, eff('level') * 2); const m = { type: 'params', params: params() }; if (node) node.port.postMessage(m); }
     function tc(p, v) { try { p.setTargetAtTime(v, ctx.currentTime, 0.02); } catch (e) { p.value = v; } }
