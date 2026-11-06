@@ -2,7 +2,7 @@
 
 Dit bestand is voor AI-agents die een **apparaat (device) voor Patchkamer** bouwen. Het is niet geschreven voor mensen. Lees het helemaal voordat je iets maakt of wijzigt.
 
-Patchkamer is een modulaire muziekstudio in de browser op Web Audio: één HTML-pagina (de host) waarin apparaten worden geplaatst en gekoppeld. Een apparaat is **één `.js`-bestand** dat voldoet aan het contract.
+Patchkamer is een modulaire muziekstudio in de browser op Web Audio: één webpagina (de host, `patchkamer/patchkamer.html` met `css/`, `i18n/` en `js/`) waarin apparaten worden geplaatst en gekoppeld. Een apparaat is **één `.js`-bestand** dat voldoet aan het contract.
 
 ## Waar staat wat
 
@@ -10,7 +10,7 @@ Patchkamer is een modulaire muziekstudio in de browser op Web Audio: één HTML-
 |---|---|---|
 | `contract/PATCHKAMER-CONTRACT_NL.md` en `contract/PATCHKAMER-CONTRACT_EN.md` | Het contract in twee talen (Nederlands is de brontekst, Engels de vertaling; zelfde versie en inhoud): de volledige, zelfstandige instructie voor het bouwen van een apparaat | **Lees er één van de twee** (kies de taal van de opdracht). Je hebt geen andere bron nodig |
 | `contract/validate-instrument.mjs` | De validator die controleert of je apparaat aan het contract voldoet; uitvoer in het Nederlands, of met `--lang en` in het Engels | **Draai dit** voor je oplevert |
-| `patchkamer/patchkamer.html` | De host (de studio). Hierin test je wat de validator niet kan zien | Zie `patchkamer/AGENTS.md` |
+| `patchkamer/patchkamer.html` (plus `css/`, `i18n/`, `js/`) | De host (de studio). Hierin test je wat de validator niet kan zien | Zie `patchkamer/AGENTS.md` |
 | `devices/<categorie>/<Naam>/` | De meegeleverde apparaten: één map per apparaat binnen een categorie, bijvoorbeeld `devices/synths/Duofone/duofone.patchkamer-device.js` | **Hier zet je je apparaat neer.** Heeft het apparaat een eigen `AGENTS.md`, lees die dan ook |
 | `tunes/` | Klanken van apparaten die geluid maken (`kind: 'instrument'`) | Zie `tunes/AGENTS.md` |
 | `presets/` | Instellingen van apparaten zonder eigen geluid | Contract §13c, licentie `CC0-1.0` |
@@ -25,7 +25,7 @@ Het contract en de validator horen bij elkaar. Controleer dit **voor je begint**
 head -1 contract/PATCHKAMER-CONTRACT_NL.md contract/PATCHKAMER-CONTRACT_EN.md contract/validate-instrument.mjs
 ```
 
-Alle drie de regels moeten dezelfde versie noemen (nu v1.14: "Instrumentcontract v1.14", "Instrument contract v1.14" en "Patchkamer contract v1.14"). Het getal bij `patchkamer:` in `patchkamer/patchkamer.html` hoort daar ook mee gelijk te zijn.
+Alle drie de regels moeten dezelfde versie noemen (nu v1.14: "Instrumentcontract v1.14", "Instrument contract v1.14" en "Patchkamer contract v1.14"). Het getal bij `patchkamer:` in `patchkamer/js/songs.js` hoort daar ook mee gelijk te zijn.
 
 - Noemen ze verschillende versies, **stop dan** en meld dat. Gok niet welke goed is en meng nooit een contract van de ene met een validator van de andere versie.
 - Heb je bewust een oudere versie nodig, haal dan **beide** uit dezelfde tag: `git show contract/v1.8:contract/PATCHKAMER-CONTRACT.md` en `git show contract/v1.8:contract/validate-instrument.mjs` (tot en met v1.10 was er één contractbestand zonder taalachtervoegsel; vanaf v1.11 zijn het `_NL.md` en `_EN.md`). Zet ze buiten de repo (bijvoorbeeld in je tijdelijke map), niet in `contract/`.

@@ -14,7 +14,7 @@
 - **Bewaar en deel je werk.** Bewaar een werkruimte als bestand of in je browser, of exporteer hem als **song** met alle apparaatcode, een titel, een maker en een licentie, zodat iedereen hem kan openen.
 - **Apparaten laden van overal.** Uit een map op je computer, van GitHub of van een webadres.
 - **Maak het van jou.** Nederlandse en Engelse interface (volgt je browser), donkere, lichte en retro uitstraling, een focusweergave, zoom en een instelling voor audiokwaliteit (sample rate, latency, oversampling).
-- **Privé door ontwerp.** Eén HTML-bestand. Geen installatie, geen account, niets wordt geüpload.
+- **Privé door ontwerp.** Gewone HTML-, CSS- en JavaScript-bestanden, geen build-stap. Geen installatie, geen account, niets wordt geüpload.
 
 ## Snel starten
 
@@ -61,7 +61,7 @@ Wijs je AI-agent naar [AGENTS.md](AGENTS.md). Daar staat wat hij moet lezen, waa
 
 | Map | Inhoud | Licentie |
 |---|---|---|
-| `patchkamer/` | De host: de studio zelf, als één HTML-pagina | AGPL-3.0-or-later |
+| `patchkamer/` | De host: de studio zelf, als gewone HTML-, CSS- en JavaScript-bestanden | AGPL-3.0-or-later |
 | `contract/` | Het contract voor apparaten (Nederlands en Engels) en de validator | MIT |
 | `devices/` | De meegeleverde apparaten, in een map per soort en een map per apparaat | AGPL-3.0-or-later |
 | `app/` | De desktop-app (Electron): de host in een eigen venster, met de meegeleverde bibliotheek; bouwt een portable Windows-exe | AGPL-3.0-or-later |

@@ -33,7 +33,7 @@ There is nothing to install, no account and no upload. Everything runs on your o
 
 ## 2. Open Patchkamer
 
-Patchkamer is one HTML file. The quickest way is to open it online at <https://unboxednl.github.io/patchkamer/>. It always runs the latest version from this repository, works in Chrome and Edge (also on an Android phone), and still runs entirely in your own browser: nothing is uploaded. Because it is served over https, Web MIDI and audio input work there too.
+Patchkamer is a plain web page (`patchkamer.html` with its stylesheets and scripts, no install or build). The quickest way is to open it online at <https://unboxednl.github.io/patchkamer/>. It always runs the latest version from this repository, works in Chrome and Edge (also on an Android phone), and still runs entirely in your own browser: nothing is uploaded. Because it is served over https, Web MIDI and audio input work there too.
 
 To run your own copy instead:
 
@@ -49,6 +49,16 @@ python3 -m http.server 8080
 Then open `http://localhost:8080/patchkamer/patchkamer.html`. Over `localhost` Chrome and Edge give you the proper folder picker (section 4).
 
 Patchkamer follows the language of your browser: Dutch or English. You can change that in Settings (section 10).
+
+### As an app on your phone or computer
+
+You do not have to install anything, but you can keep Patchkamer as an app icon. Open <https://unboxednl.github.io/patchkamer/> and choose:
+
+- **Android (Chrome):** menu ⋮ → **Install app** or **Add to home screen**. Patchkamer then opens without an address bar, full screen.
+- **Computer (Chrome or Edge):** the install icon in the address bar, or menu → **Install Patchkamer**.
+- **iPhone and iPad (Safari):** the Share button → **Add to Home Screen**.
+
+The icon (a patch cable between two jacks) also shows as the tab icon in the browser. The app needs an internet connection to start; your work stays saved in your browser.
 
 ## 3. A tour of the studio
 
@@ -91,7 +101,7 @@ A device is a file that ends in `.patchkamer-device.js`. Sources are remembered,
 
 **Updating.** A scan also loads the changed code of devices that are already on the floor: such a device is rebuilt with its settings, cables and size, and the message says how many were updated.
 
-**New version of Patchkamer.** At startup (over http or https) Patchkamer compares `patchkamer.html` with the version on GitHub (`main`). If it differs, a notice appears at the bottom right with **View on GitHub**, **Later** and **Do not tell me again for this version**. A file opened through `file://` cannot read itself and gets no notice.
+**New version of Patchkamer.** At startup (over http or https) Patchkamer compares `patchkamer.html` and its stylesheets and scripts with the version on GitHub (`main`). If it differs, a notice appears at the bottom right with **View on GitHub**, **Later** and **Do not tell me again for this version**. A file opened through `file://` cannot read itself and gets no notice.
 
 **It can also happen by itself.** Under **Settings → New workspace** Patchkamer can load the device library, the presets and the tunes from GitHub whenever you start with an empty workspace. You can change the three addresses there (section 10). Each one becomes a source of its own in the list, with a **Scan** button.
 
@@ -210,6 +220,17 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 
 ![The tab bar with three workspaces](images/en/11-workspaces.png)
 
+### Dropping files onto the canvas
+
+With a mouse you can drop files from your file manager onto the **floor** or the **library window**; a frame saying "Drop to load" appears. Patchkamer recognises the kind from the content and loads it without asking:
+
+- a **song** (`.patchkamer-song.json`) or a **workspace file** opens in a **new workspace tab**; your current workspace stays as it is. As with the **Songs** button, the devices are arranged afterwards;
+- a **device** (`.patchkamer-device.js`) goes into the **library**, not onto the floor. If the same version is already loaded it is replaced. Place it afterwards as usual;
+- a **tune pack** or **preset pack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) goes into your tune or preset libraries, like **Import**;
+- a **library layout** (`patchkamer-bibliotheek.json`) is applied.
+
+If you drop several files at once (at most 50, each up to 50 MB), devices go first, then tunes and presets, the layout, and finally songs and workspaces, so a song finds the devices from the same drop already in the library. You get one message with the result. Folders and unknown files are not loaded; an image or sound file is left to the device or the browser. A file you drop on a device itself (for example on a sampler's waveform) is for that device. This does not exist on a phone or tablet: use the existing buttons there (**Open file…**, **Import**, **Load instrument**).
+
 ## 9. Find your way around the floor
 
 - **Move around:** drag the floor to pan. **Ctrl + scroll** zooms between 10% and 250%. The buttons bottom right zoom out, zoom in, fit everything (**All**) and go back to the start (⌂).
@@ -246,6 +267,20 @@ A workspace can have a **compact layout** next to the wide one. With **Screen** 
 
 In the focus view, **One at a time** shows a single device. Switch with **◀ ▶**, with the tab bar, with the arrow keys, or by swiping the tab bar (only there, so swiping never clashes with sliders inside a device). On a narrow screen this is the default, and the **Browse** button in the top bar opens Focus straight away with all devices of the workspace. The card itself shows its ports with names. When zoomed out (below about 55%) cards show only the title bar and ports; double-click or double-tap such a card to zoom in on it. Turn this off under **Settings** with *Simplify cards when zoomed out*.
 
+### Working faster: an overview
+
+The features that speed up your workflow the most, in one list:
+
+- **Dropping files:** drag a song, device, tune pack, preset pack or layout file onto the canvas ([Dropping files onto the canvas](#dropping-files-onto-the-canvas)).
+- **Offer to connect:** place a device and choose in one dialog which cables to add, including inserting an effect into an existing cable ([Offer to connect when placing](#offer-to-connect-when-placing)).
+- **Camera views:** save a cut-out and jump to it with **1** to **9** ([Camera views](#camera-views)).
+- **Arrange and Fit to this screen:** let the host order the devices, for the whole screen or for a small screen.
+- **Focus:** work with the devices side by side or one at a time ([Focus "One at a time"](#focus-one-at-a-time)).
+- **Icons and cable colors:** every category has its own icon and color, and a cable takes the color of the category it comes from ([Category icons](#category-icons), [Cable color](#cable-color)). Hover over a cable to see what it connects.
+- **Compact library:** only name, type and version, with a **Compact** button ([Compact library and bottom sheet](#compact-library-and-bottom-sheet)).
+- **Phone and tablet:** pinch, pan, long-press and the ☰ menu ([Touchscreen and phone](#touchscreen-and-phone)).
+- **Updating:** **↻ Scan** in the library updates placed devices, and at startup Patchkamer reports a new version of itself.
+
 ## 10. Settings
 
 ![The Settings panel](images/en/07-settings.png)
@@ -256,6 +291,9 @@ In the focus view, **One at a time** shows a single device. Switch with **◀ �
 - **AI assistant:** choose a provider (**Anthropic**, **OpenAI** or a **custom address** for any OpenAI-compatible service, such as your own proxy, OpenRouter or a local model), paste your **API key** and choose a **model** (**Fetch models** fills the list). The key is stored only in this browser (localStorage) and goes only to the provider you chose. Under it you can change which GitHub repository the AI reads its documentation from, or tick **Use my own agent instructions** and write your own: the AI then uses those instead of the GitHub documentation. **Clear keys** removes all keys. See *AI Chat* in section 6.
 - **Songs address:** under **New workspace** you also find the address of the demo songs (by default the `songs` folder on GitHub); **Restore default address** puts it back.
 - **Display:** the style of the cables, their opacity, the cable color (by category or by type), the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
+- **Offer to connect:** a switch in Settings and in the ☰ menu. On a phone or tablet it is on by default, on a computer off; your own choice always wins.
+- **Simplify cards when zoomed out:** below about 55% zoom, cards show only their header; double-click or double-tap zooms in. Can be switched off.
+- **Links:** at the bottom are links to the GitHub repository and to this user manual, in the language of your screen, and to the contract for device builders.
 - **Color** (top right): dark, light or retro.
 
 ![The light and retro color schemes](images/en/03-patch-light.png)
