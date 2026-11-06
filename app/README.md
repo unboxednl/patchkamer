@@ -32,4 +32,21 @@ Prints the base and output latency that this Chromium reports per `latencyHint` 
 
 - The page is served from `http://127.0.0.1:47318` (fixed port, so settings and workspaces stay in one place). If that port is taken, a random port is used and settings are stored under that address.
 - Only MIDI (no sysex), audio input and fullscreen are allowed as permissions. Links to other sites open in the default browser.
-- Not included yet: ASIO. Chromium plays through WASAPI on Windows.
+
+## ASIO (in progress)
+
+Chromium plays through WASAPI on Windows. For lower latency the app gets a native audio path: a Node addon (`native/`, N-API) that opens an ASIO driver, and a ring buffer that keeps the clock of the host and the clock of the sound card together (`native/ring.h`: reads slightly faster or slower, at most 0.3%, and raises its margin by itself when the writer delivers in bursts).
+
+State: the addon, the ring buffer and a test mode are there. The host does not play through it yet (the next step). Try it on Windows with your interface:
+
+```
+Patchkamer-0.1.0-portable.exe --asio-test
+```
+
+It lists the ASIO drivers, opens the first one (or the one whose name contains the text you give: `--asio-test=name`), plays a soft 440 Hz tone for 2.5 seconds on outputs 1 and 2 and writes `patchkamer-asio.json` next to the exe: buffer size, latencies reported by the driver, underruns and the margin of the ring buffer. Options: `--buffer=<frames>` (default: preferred size of the driver), `--target=<ms>` (ring margin, default 8), `--pair=<n>` (0 = outputs 1-2, 1 = outputs 3-4). A second run with the test clock (no sound card) shows the software side alone.
+
+Build notes:
+- `npm run build:native` builds the addon. With the environment variable `ASIO_SDK_DIR` (the folder `ASIOSDK` of the SDK) on Windows it includes ASIO; without it only the test clock (all platforms).
+- The GitHub Action downloads the SDK 2.3.4 from Steinberg, checks its SHA-256 and uses it under its GPLv3 option, which fits the AGPL of this repo. The SDK is not stored in the repo; its licence text goes into the exe (`resources/licenses`).
+- `npm run test:native` runs the tests of the ring buffer and the sample conversion in simulated time (equal clocks, clock skew up to 1000 ppm, jitter, a stalling writer, bursts, NaN and Infinity).
+- ASIO is a trademark and software of Steinberg Media Technologies GmbH.

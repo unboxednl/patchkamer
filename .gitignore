@@ -5,3 +5,7 @@ __pycache__/
 app/node_modules/
 app/dist/
 patchkamer-probe.json
+app/build/
+app/native/test/ring_test
+patchkamer-asio.json
+app/ASIO-SDK-LICENSE.txt
