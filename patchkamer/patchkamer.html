@@ -251,13 +251,41 @@ button.on{border-color:var(--audio);color:var(--audio)}
 .cat.drop .cathead{color:var(--audio)}
 .libdev{border-left-color:var(--catc,var(--muted))!important}
 .cathead .cdot{width:9px;height:9px;border-radius:50%;background:var(--catc,var(--muted));flex:none}
+/* categorie-iconen: een vakje in de kleur van de categorie met het icoon erin; een eigen afbeelding staat er los, zoals ze is */
+.cicon{display:inline-grid;place-items:center;flex:none;width:20px;height:20px;border-radius:5px;background:var(--ic,var(--catc,var(--muted)));color:var(--glyph-fg);vertical-align:middle;overflow:hidden}
+.cicon svg{width:74%;height:74%;display:block}
+.cicon.img{background:transparent;border-radius:0;overflow:visible}
+.cicon img{width:100%;height:100%;object-fit:contain;display:block}
+.cathead .cicon{width:22px;height:22px}
+.libdev .nm .cicon{margin-right:6px;position:relative;top:-1px}
+#lib.cmp .libdev .nm .cicon{width:18px;height:18px;margin-right:5px}
+.card .bar .cicon{width:20px;height:20px}
+.focusview .fvstrip .cicon{width:16px;height:16px;margin-right:5px;vertical-align:-3px}
+.pkicon .glyph.img{background:transparent;border-radius:0}
+.pkicon .glyph svg{width:30px;height:30px;display:block}
+.pkicon .glyph img{width:48px;height:48px;object-fit:contain;display:block}
+.libcfg .crow button.ibtn{width:30px;height:30px;padding:0;display:grid;place-items:center;min-width:0}
+.libcfg .ipick{display:grid;gap:8px;padding:8px;border:1px dashed var(--line);border-radius:6px}
+.libcfg .igrid{display:flex;flex-wrap:wrap;gap:6px}
+.libcfg .igrid button:not(.small){width:36px;height:36px;padding:0;display:grid;place-items:center;min-width:0!important}
+.libcfg .igrid button .cicon{width:26px;height:26px}
+.libcfg .igrid button.cur{outline:2px solid var(--fg);outline-offset:1px}
+.libcfg .ipick input[type=text]{flex:1;min-width:0;background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:5px 7px;font:inherit;font-size:.9em}
+.cabtip{position:fixed;z-index:70;pointer-events:none;background:var(--overlay);border:1px solid var(--line);color:var(--fg);border-radius:4px;padding:3px 8px;font:11px/1.35 var(--mono);white-space:nowrap;max-width:min(70ch,calc(100vw - 16px));overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 14px var(--shadow)}
+@media (pointer:coarse){
+  .libcfg .crow button.ibtn{width:44px;height:44px}
+  .libcfg .igrid button:not(.small){width:44px;height:44px} .libcfg .igrid button .cicon{width:30px;height:30px}
+  .libcfg .ipick button{min-height:44px}
+}
 .libcfg{display:grid;gap:10px;border:1px solid var(--line);border-radius:6px;padding:10px;background:var(--card-2)}
 .libcfg[hidden]{display:none}
 .libcfg h4{margin:0;font-family:var(--disp);font-size:.85em;letter-spacing:.14em;text-transform:uppercase}
-.libcfg .crow{display:grid;grid-template-columns:22px minmax(0,1fr) auto auto auto auto;gap:5px;align-items:center}
+.libcfg .crow{display:grid;grid-template-columns:22px 30px minmax(0,1fr) auto auto auto auto;gap:5px;align-items:center}
 .libcfg .crow input{min-width:0;background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:5px 7px;font:inherit;font-size:.9em}
 .libcfg .crow .n{font-family:var(--mono);font-size:.75em;color:var(--muted);min-width:2ch;text-align:right}
 .libcfg .crow button{padding:2px 7px;font-size:.8em;min-width:26px}
+.libcfg .crow button.ibtn{width:30px;height:30px;padding:0;display:grid;place-items:center;min-width:0}
+@media (pointer:coarse){ .libcfg .crow{grid-template-columns:22px 44px minmax(0,1fr) auto auto auto auto} .libcfg .crow button.ibtn{width:44px;height:44px} }
 .libcfg .sw{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);padding:0;cursor:pointer;min-width:0!important}
 .libcfg .addrow{display:flex;gap:6px} .libcfg .addrow input{flex:1;min-width:0;background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:5px 7px;font:inherit;font-size:.9em}
 .libcfg .wsrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center} .libcfg select{max-width:100%}
@@ -367,6 +395,21 @@ svg.cables g.cable.drop{opacity:1} svg.cables g.cable.drop path:not(.hit):not(.m
 .pkmodal{position:fixed;inset:0;z-index:90;background:var(--scrim);display:grid;place-items:center;padding:16px}
 .pkmodal .box{width:min(480px,100%);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:12px;font-size:13px;line-height:1.5;box-shadow:0 18px 50px var(--shadow)}
 .pkmodal .box .wsrow{justify-content:flex-end}
+.hdrmenu .hm-al{display:flex;align-items:center;gap:10px;min-height:44px;margin-top:6px}
+.aldlg .box{width:min(580px,100%);max-height:calc(92dvh / var(--pkfs,1));overflow:hidden;grid-template-rows:auto minmax(0,1fr) auto}
+.aldlg h3{margin:0 0 4px;font-size:1.1em}
+.aldlg .albody{overflow:auto;min-height:0;display:grid;gap:10px;align-content:start;overscroll-behavior:contain}
+.aldlg .algrp h4{margin:0 0 4px;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-left:3px solid var(--gc,var(--muted));padding-left:6px}
+.aldlg .alrow{border:1px solid var(--line);border-left:3px solid var(--gc,var(--muted));border-radius:4px;background:var(--card-2);margin-bottom:4px;min-width:0}
+.aldlg .alchk{display:flex;gap:10px;align-items:center;min-height:44px;padding:4px 8px;cursor:pointer}
+.aldlg .alchk input,.aldlg .alask input{width:22px;height:22px;flex:none}
+.aldlg .altxt{min-width:0;overflow-wrap:anywhere}
+.aldlg .alp,.aldlg .altag,.aldlg .alwhy{color:var(--muted)}
+.aldlg .alsel{display:flex;gap:8px;align-items:center;padding:0 8px 6px 40px;color:var(--muted);font-size:.9em}
+.aldlg .alsel select{min-width:0;max-width:100%;flex:1;min-height:36px}
+.aldlg .alfoot{display:grid;gap:8px}
+.aldlg .alask{display:flex;gap:10px;align-items:center;min-height:44px;cursor:pointer}
+.aldlg .alfoot .wsrow button{min-height:44px;min-width:96px}
 .floorempty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:2;padding:16px}
 .floorempty .box{pointer-events:auto;max-width:520px;background:var(--overlay);border:1px solid var(--line);border-radius:10px;padding:22px 24px;display:grid;gap:12px;text-align:center;box-shadow:0 18px 50px var(--shadow)}
 .floorempty h2{margin:0;font-family:var(--disp);font-size:22px;letter-spacing:.12em;text-transform:uppercase}
@@ -524,6 +567,7 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
   .wstabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
   .wstab{flex:none}
   .wspanel{zoom:var(--pkfs,1)!important;left:8px;right:8px;top:calc(56px + env(safe-area-inset-top,0px));width:auto;max-width:none;max-height:calc((100dvh - 72px)/var(--pkfs,1));overflow:auto}
+  .wspanel .wslist,.wspanel .srclist{max-height:none!important;overflow:visible}   /* op een telefoon scrolt alleen het paneel zelf, geen lijst binnen het paneel */
   .pkmodal .box{max-width:100%;max-height:92dvh;overflow:auto}
   .focusview{zoom:1!important}
   .focusview .fvbar .note{display:none}
@@ -570,7 +614,7 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
   <div><h4 data-i18n="ui.t_grp_bestanden">Bestanden</h4><div class="hm-row" id="hmFiles"></div></div>
   <div><h4 data-i18n="ui.t_grp_geluid">Geluid</h4><div class="hm-row" id="hmSound"></div></div>
   <div><h4 data-i18n="ui.t_grp_weergave">Weergave</h4><div class="hm-row" id="hmView"></div></div>
-  <div><h4 data-i18n="ui.t_grp_overig">Overig</h4><div class="hm-row" id="hmMisc"></div></div>
+  <div><h4 data-i18n="ui.t_grp_overig">Overig</h4><div class="hm-row" id="hmMisc"></div><label class="hm-al"><input type="checkbox" id="alMenuCb"> <span data-i18n="ui.t_al_toggle">Automatisch koppelen bij plaatsen</span></label></div>
 </div>
 
 <section class="wspanel" id="wsPanel" hidden aria-label="Werkruimte" data-i18n-aria="attr.werkruimte">
@@ -643,6 +687,8 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
   <div class="wsrow"><label><input type="checkbox" id="prShowBar" checked> <span data-i18n="ui.tune_en_presetbalk_op_de">Tune- en presetbalk op de kaarten tonen</span></label></div>
   <div class="wsrow"><label><input type="checkbox" id="modViewCb" checked> <span data-i18n="ui.modulatie_op_de_apparaten_tonen">Modulatie op de apparaten tonen (strook ∿ mod en paarse stip op de regelaar)</span></label></div>
   <div class="wsrow"><label><input type="checkbox" id="liteCb" checked> <span data-i18n="ui.t_lite">Kaarten vereenvoudigen bij uitzoomen</span></label></div>
+  <div class="wsrow"><label><input type="checkbox" id="alSetCb"> <span data-i18n="ui.t_al_toggle">Automatisch koppelen bij plaatsen</span></label></div>
+  <div class="note" style="margin-bottom:6px" data-i18n="ui.t_al_note">Na het plaatsen van een apparaat stelt Patchkamer kabels voor naar apparaten die al op de vloer staan. Er wordt niets gekoppeld zonder dat je op OK klikt. Zonder eigen keuze staat dit aan op een aanraakscherm en uit op een computer met muis.</div>
   <h3 style="margin-top:12px" data-i18n="ui.nieuwe_werkruimte">Nieuwe werkruimte</h3>
   <div class="note" style="margin-bottom:6px" data-i18n="ui.nieuwe_werkruimte_uitleg">Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden in het Tunes- en Presets-paneel gebruikt hetzelfde adres.</div>
   <div class="wsrow"><label><input type="checkbox" id="wsaDev"> <span data-i18n="ui.apparatenbibliotheek_laden">Apparatenbibliotheek laden</span></label></div>
@@ -657,6 +703,7 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
   <h3 style="margin-top:12px" data-i18n="ui.weergave">Weergave</h3>
   <div class="wsrow"><label><span data-i18n="ui.kabels">Kabels</span>&nbsp;<select id="cabStyle"><option value="curve" data-i18n="ui.in_een_boog">in een boog</option><option value="orth" data-i18n="ui.recht_met_hoeken">recht, met hoeken</option><option value="route" data-i18n="ui.recht_om_de_apparaten_heen">recht, om de apparaten heen</option></select></label></div>
   <div class="wsrow"><label><span data-i18n="ui.kabeldekking">Kabeldekking</span>&nbsp;<input type="range" id="cabOp" min="0.15" max="1" step="0.05" value="1" style="width:140px;vertical-align:middle"> <output id="cabOpV">100%</output></label></div>
+  <div class="wsrow"><label><span data-i18n="ui.kabelkleur_modus">Kabelkleur</span>&nbsp;<select id="cabColor" title="kabels krijgen de kleur van de categorie van het apparaat waar ze vandaan komen, of een kleur per soort kabel" data-i18n-title="attr.t_kabelkleur_modus"><option value="cat" data-i18n="ui.per_categorie">per categorie</option><option value="kind" data-i18n="ui.per_soort">per soort</option></select></label></div>
   <div class="wsrow"><label><span data-i18n="ui.schaal">Schaal</span>&nbsp;<select id="scaleSel"></select></label> <span class="note" id="scaleNote"></span></div>
   <div class="wsrow"><label><span data-i18n="ui.knoppen_van_de_host">Knoppen van de host</span>&nbsp;<select id="knobStyle"><option value="slider" data-i18n="ui.schuif">schuif</option><option value="rotary" data-i18n="ui.draaiknop">draaiknop</option></select></label></div>
   <div class="wsrow"><label><span data-i18n="ui.tekstgrootte_menus">Tekstgrootte menu's en bibliotheek</span></label>&nbsp;<button class="small" id="libFsDown" title="kleinere tekst" data-i18n-title="attr.kleinere_tekst">A−</button> <output id="libFsV" style="min-width:4ch;display:inline-block;text-align:center">14 px</output> <button class="small" id="libFsUp" title="grotere tekst" data-i18n-title="attr.grotere_tekst">A+</button></div>
@@ -700,7 +747,7 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
       <div class="libcfg" id="libCfg" hidden></div>
       <div class="libcats" id="lib"></div>
-      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster. Aanraking: knijp met twee vingers om te zoomen en schuif met twee vingers; één vinger op de lege vloer schuift. Lang indrukken toont uitleg of het kabelmenu, dubbeltik werkt als dubbelklik, en een apparaat sleep je na lang indrukken. Op een smal scherm is dit venster een lade onderaan.</div>
+      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Staat Automatisch koppelen bij plaatsen aan (menu of Instellingen), dan stelt Patchkamer na het plaatsen kabels voor naar apparaten die er al staan; je bevestigt met OK. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster. Aanraking: knijp met twee vingers om te zoomen en schuif met twee vingers; één vinger op de lege vloer schuift. Lang indrukken toont uitleg of het kabelmenu, dubbeltik werkt als dubbelklik, en een apparaat sleep je na lang indrukken. Op een smal scherm is dit venster een lade onderaan.</div>
       <details class="libsec" id="srcSec" open><summary data-i18n="ui.bronnen">Bronnen</summary>
         <div class="srclist" id="srcList"></div>
         <div class="srcadd"><input type="url" id="srcUrl" placeholder="github.com/naam/repo, een map daarin, of URL van een .patchkamer-device.js / patchkamer.json" aria-label="adres van een bron" data-i18n-ph="attr.github_com_naam_repo_een" data-i18n-aria="attr.adres_van_een_bron"><button class="small" id="srcAddUrl" data-i18n="ui.toevoegen">Toevoegen</button></div>
@@ -822,7 +869,7 @@ const I18N={
    "ui.indeling":"Indeling",
    "ui.plaatsen":"Plaatsen",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster. Aanraking: knijp met twee vingers om te zoomen en schuif met twee vingers; één vinger op de lege vloer schuift. Lang indrukken toont uitleg of het kabelmenu, dubbeltik werkt als dubbelklik, en een apparaat sleep je na lang indrukken. Op een smal scherm is dit venster een lade onderaan.",
+   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Staat Automatisch koppelen bij plaatsen aan (menu of Instellingen), dan stelt Patchkamer na het plaatsen kabels voor naar apparaten die er al staan; je bevestigt met OK. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster. Aanraking: knijp met twee vingers om te zoomen en schuif met twee vingers; één vinger op de lege vloer schuift. Lang indrukken toont uitleg of het kabelmenu, dubbeltik werkt als dubbelklik, en een apparaat sleep je na lang indrukken. Op een smal scherm is dit venster een lade onderaan.",
    "ui.bronnen":"Bronnen",
    "ui.toevoegen":"Toevoegen",
    "ui.lokale_map_kiezen":"Lokale map kiezen…",
@@ -1371,6 +1418,28 @@ const I18N={
    "ui.t_grp_weergave":"Weergave",
    "ui.t_grp_overig":"Overig",
    "ui.t_lite":"Kaarten vereenvoudigen bij uitzoomen",
+   "ui.t_al_toggle":"Automatisch koppelen bij plaatsen",
+   "ui.t_al_note":"Na het plaatsen van een apparaat stelt Patchkamer kabels voor naar apparaten die al op de vloer staan. Er wordt niets gekoppeld zonder dat je op OK klikt. Zonder eigen keuze staat dit aan op een aanraakscherm en uit op een computer met muis.",
+   "m.t_al_titel":"Koppelen met apparaten op het canvas",
+   "m.t_al_uitleg":"Je hebt {0} geplaatst. Vink aan wat je wilt koppelen en klik op OK.",
+   "m.t_al_g_audio":"Audio",
+   "m.t_al_g_event":"Gebeurtenissen (MIDI)",
+   "m.t_al_g_mod":"Sturing (modulatie)",
+   "m.t_al_g_multi":"Bundels",
+   "m.t_al_g_mastering":"Mastering",
+   "m.t_al_g_multievent":"Meersporen-gebeurtenissen",
+   "m.t_al_g_insert":"In een bestaande kabel zetten",
+   "m.t_al_tussen":"Tussen {0} en {1}",
+   "m.t_al_ok":"OK",
+   "m.t_al_nietmeer":"Niet meer vragen",
+   "m.t_al_uitgang":"Uitgang",
+   "m.t_al_ingang":"Ingang",
+   "m.t_al_alle_bezet":"alle poorten in gebruik",
+   "m.t_al_drums":"drums",
+   "m.t_al_melodisch":"melodisch",
+   "m.t_al_gemaakt.f":"{0} kabel gemaakt",
+   "m.t_al_gemaakt.t":"{0} kabels gemaakt",
+   "m.t_al_teruggedraaid":"Koppelen ongedaan gemaakt",
    "attr.t_scherm":"schermindeling: automatisch, breed of compact",
    "attr.t_pas_aan":"maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)",
    "attr.t_bladeren":"open Focus met alle apparaten, een tegelijk",
@@ -1399,7 +1468,42 @@ const I18N={
    "m.t_vorig":"Vorig apparaat",
    "m.t_volgend":"Volgend apparaat",
    "m.t_n_van_m":"{0} van {1}",
-   "m.t_bladeren_leeg":"Er zijn geen apparaten om te bladeren"
+   "m.t_bladeren_leeg":"Er zijn geen apparaten om te bladeren",
+   "ui.kabelkleur_modus":"Kabelkleur",
+   "ui.per_categorie":"per categorie",
+   "ui.per_soort":"per soort",
+   "attr.t_kabelkleur_modus":"kabels krijgen de kleur van de categorie van het apparaat waar ze vandaan komen, of een kleur per soort kabel",
+   "m.t_icoon_kies":"Icoon kiezen",
+   "m.t_icoon_van":"icoon van ",
+   "m.t_icoon_standaard":"Standaard",
+   "m.t_icoon_url":"adres van een afbeelding (zelfde bron als de bibliotheek)",
+   "m.t_icoon_url_knop":"Gebruik",
+   "m.t_icoon_bestand":"Bestand kiezen…",
+   "m.t_icoon_groot":"De afbeelding is groter dan 200 kB",
+   "m.t_icoon_ongeldig":"Dit is geen afbeelding die Patchkamer kan tonen (png, svg, webp of jpg)",
+   "m.t_icoon_bron":"Alleen een adres van dezelfde bron als de bibliotheek mag",
+   "m.t_icoon_gezet":"Icoon van {0} gewijzigd",
+   "m.t_icoon_standaard_gezet":"Icoon van {0} teruggezet",
+   "m.t_icoon_noot":"Een eigen icoon: kies er een, of zet een bestand <b>icon.svg</b>, <b>icon.png</b>, <b>icon.webp</b> of <b>icon.jpg</b> in de map van een categorie (vierkant en transparant is het mooist). Je keuze hier wint van het bestand in de map.",
+   "m.t_ic_synth":"toetsen",
+   "m.t_ic_groove":"trommel",
+   "m.t_ic_sequencer":"stappen",
+   "m.t_ic_mod":"golf",
+   "m.t_ic_effect":"draaiknop",
+   "m.t_ic_mastering":"niveaumeter",
+   "m.t_ic_mix":"schuiven",
+   "m.t_ic_tool":"scoop",
+   "m.t_ic_other":"blokjes",
+   "m.t_ic_folder":"map",
+   "m.t_ic_sampler":"samples",
+   "m.t_ic_mic":"microfoon",
+   "m.t_ic_speaker":"luidspreker",
+   "m.t_ic_bolt":"bliksem",
+   "m.t_ic_note":"noot",
+   "m.t_ic_star":"ster",
+   "m.t_kabel_multievent":"(multi-MIDI)",
+   "m.t_kabel_multi":"(bundel)",
+   "m.t_kabel_mastering":"(mastering)"
  },
  en:{
    "ui.patchkamer":"Patchkamer",
@@ -1502,7 +1606,7 @@ const I18N={
    "ui.indeling":"Layout",
    "ui.plaatsen":"Place",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it or drag one end to another port to move it. Drop a new device on a cable to put it in. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window. Touch: pinch with two fingers to zoom and drag with two fingers to pan; one finger on empty floor pans. A long press shows the explanation or the cable menu, a double-tap works as a double-click, and you drag a device after a long press. On a narrow screen this window is a sheet at the bottom.",
+   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it or drag one end to another port to move it. Drop a new device on a cable to put it in. With Offer to connect when placing a device switched on (menu or Settings), Patchkamer suggests cables to devices already on the floor after you place one; you confirm with OK. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window. Touch: pinch with two fingers to zoom and drag with two fingers to pan; one finger on empty floor pans. A long press shows the explanation or the cable menu, a double-tap works as a double-click, and you drag a device after a long press. On a narrow screen this window is a sheet at the bottom.",
    "ui.bronnen":"Sources",
    "ui.toevoegen":"Add",
    "ui.lokale_map_kiezen":"Choose local folder…",
@@ -2051,6 +2155,28 @@ const I18N={
    "ui.t_grp_weergave":"View",
    "ui.t_grp_overig":"Other",
    "ui.t_lite":"Simplify cards when zoomed out",
+   "ui.t_al_toggle":"Offer to connect when placing a device",
+   "ui.t_al_note":"After you place a device, Patchkamer suggests cables to devices that are already on the floor. Nothing is connected until you click OK. Without a choice of your own this is on for a touch screen and off for a computer with a mouse.",
+   "m.t_al_titel":"Connect to devices on the canvas",
+   "m.t_al_uitleg":"You placed {0}. Tick what you want to connect and click OK.",
+   "m.t_al_g_audio":"Audio",
+   "m.t_al_g_event":"Events (MIDI)",
+   "m.t_al_g_mod":"Control (modulation)",
+   "m.t_al_g_multi":"Bundles",
+   "m.t_al_g_mastering":"Mastering",
+   "m.t_al_g_multievent":"Multi-track events",
+   "m.t_al_g_insert":"Insert into an existing cable",
+   "m.t_al_tussen":"Between {0} and {1}",
+   "m.t_al_ok":"OK",
+   "m.t_al_nietmeer":"Don't ask again",
+   "m.t_al_uitgang":"Output",
+   "m.t_al_ingang":"Input",
+   "m.t_al_alle_bezet":"all ports in use",
+   "m.t_al_drums":"drums",
+   "m.t_al_melodisch":"melodic",
+   "m.t_al_gemaakt.f":"{0} cable made",
+   "m.t_al_gemaakt.t":"{0} cables made",
+   "m.t_al_teruggedraaid":"Connecting undone",
    "attr.t_scherm":"screen layout: automatic, wide or compact",
    "attr.t_pas_aan":"make a compact layout that fits this screen (the wide layout is kept)",
    "attr.t_bladeren":"open Focus with all devices, one at a time",
@@ -2079,7 +2205,42 @@ const I18N={
    "m.t_vorig":"Previous device",
    "m.t_volgend":"Next device",
    "m.t_n_van_m":"{0} of {1}",
-   "m.t_bladeren_leeg":"There are no devices to browse"
+   "m.t_bladeren_leeg":"There are no devices to browse",
+   "ui.kabelkleur_modus":"Cable color",
+   "ui.per_categorie":"by category",
+   "ui.per_soort":"by type",
+   "attr.t_kabelkleur_modus":"cables take the color of the category of the device they come from, or one color per type of cable",
+   "m.t_icoon_kies":"Choose icon",
+   "m.t_icoon_van":"icon of ",
+   "m.t_icoon_standaard":"Default",
+   "m.t_icoon_url":"address of an image (same source as the library)",
+   "m.t_icoon_url_knop":"Use",
+   "m.t_icoon_bestand":"Choose file…",
+   "m.t_icoon_groot":"The image is larger than 200 kB",
+   "m.t_icoon_ongeldig":"This is not an image Patchkamer can show (png, svg, webp or jpg)",
+   "m.t_icoon_bron":"Only an address from the same source as the library is allowed",
+   "m.t_icoon_gezet":"Icon of {0} changed",
+   "m.t_icoon_standaard_gezet":"Icon of {0} reset",
+   "m.t_icoon_noot":"Your own icon: choose one, or put a file <b>icon.svg</b>, <b>icon.png</b>, <b>icon.webp</b> or <b>icon.jpg</b> in the folder of a category (square and transparent looks best). Your choice here wins over the file in the folder.",
+   "m.t_ic_synth":"keys",
+   "m.t_ic_groove":"drum",
+   "m.t_ic_sequencer":"steps",
+   "m.t_ic_mod":"wave",
+   "m.t_ic_effect":"knob",
+   "m.t_ic_mastering":"level meter",
+   "m.t_ic_mix":"faders",
+   "m.t_ic_tool":"scope",
+   "m.t_ic_other":"blocks",
+   "m.t_ic_folder":"folder",
+   "m.t_ic_sampler":"samples",
+   "m.t_ic_mic":"microphone",
+   "m.t_ic_speaker":"speaker",
+   "m.t_ic_bolt":"bolt",
+   "m.t_ic_note":"note",
+   "m.t_ic_star":"star",
+   "m.t_kabel_multievent":"(multi-MIDI)",
+   "m.t_kabel_multi":"(bundle)",
+   "m.t_kabel_mastering":"(mastering)"
  }
 };
 const PK_LANGS=['nl','en'];
@@ -2300,7 +2461,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   let inst; try{ inst=def.create(ctx,Host); }catch(e){ status(pkt('m.create_faalde_voor')+def.name+': '+e.message,true); return null; }
   inst._id=id; inst._def=def;
   const el=document.createElement('div'); el.className='card'+((def.ui&&def.ui.jacks)?' keepui':''); el.dataset.id=id; el.style.left=(x||40)+'px'; el.style.top=(y||40)+'px'; el.style.width=clamp((def.ui&&def.ui.width)||300,200,6000)+'px';
-  const bar=document.createElement('div'); bar.className='bar'; bar.innerHTML=`<span class="led"></span><span class="nm">${def.name}</span><span class="dim"></span>`;
+  const bar=document.createElement('div'); bar.className='bar'; bar.innerHTML=`<span class="led"></span>${catIconHTML(categoryOf(def))}<span class="nm">${def.name}</span><span class="dim"></span>`;
   const ver=document.createElement('select'); ver.className='ver'; ver.title=pkt('m.versie_wisselen'); ver.setAttribute('aria-label',pkt('m.versie')); ver.addEventListener('pointerdown',e=>e.stopPropagation()); ver.onchange=()=>switchVersion(id,ver.value); bar.appendChild(ver);
   const bf=document.createElement('button'); bf.className='fbtn'; bf.textContent='f'; bf.title=pkt('m.focus_zet_dit_apparaat_in'); bf.setAttribute('aria-label',pkt('m.focus_3')); bf.setAttribute('aria-pressed','false'); bf.onclick=e=>{e.stopPropagation(); setFocus(id,!Host.devices.get(id).focus);};
   const bm=document.createElement('button'); bm.textContent='–'; bm.title=pkt('m.minimaliseer_tot_icoon'); bm.setAttribute('aria-label',pkt('m.minimaliseer')); bm.onclick=e=>{e.stopPropagation(); setMini(id,true);};
@@ -2311,7 +2472,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   const mb=document.createElement('div'); mb.className='modbar'; mb.hidden=true; body.appendChild(mb);   // onder de poorten: kabelpoorten staan altijd bovenaan
   const ui=document.createElement('div'); ui.className='ui'; body.appendChild(ui);
   const ic=document.createElement('div'); ic.className='pkicon c-ic-'+categoryOf(def); ic.style.setProperty('--ic',catColor(categoryOf(def))); ic.title=def.name+pkt('m.sleep_om_te_verplaatsen_dubbelklik');
-  ic.innerHTML=`<span class="led"></span><span class="glyph">${esc(initials(def.name))}</span><span class="lbl">${esc(def.name)}</span>`;
+  { const m=catIconParts(categoryOf(def)); ic.innerHTML=`<span class="led"></span><span class="glyph${m.img?' img':''}">${m.html}</span><span class="lbl">${esc(def.name)}</span>`; el.style.setProperty('--ic',catColor(categoryOf(def))); }
   const br=document.createElement('button'); br.className='restore'; br.textContent='⤢'; br.title=pkt('m.terug_naar_de_vorige_grootte'); br.setAttribute('aria-label',pkt('m.herstel_grootte')); br.onclick=e=>{e.stopPropagation(); setMini(id,false);}; ic.appendChild(br);
   ic.addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; e.stopPropagation(); setMini(id,false); });
   const pb=document.createElement('div'); pb.className='pbar';
@@ -2493,7 +2654,8 @@ function startWire(id,port,dir,kind,e){
 function drawWire(){
   if(!wire) return; const a=portPos(wire.src.id,wire.src.port,wire.src.dir); if(!a) return;
   const b=wire.hover?portPos(wire.hover.id,wire.hover.port,wire.hover.dir):floorPoint(wire.cx,wire.cy);
-  const fromOut=wire.src.dir==='out'; wire.path.setAttribute('d',curve(a,b,fromOut)); wire.path.classList.toggle('snap',!!wire.hover);
+  const fromOut=wire.src.dir==='out'; wire.path.setAttribute('d',curve(a,b,fromOut));
+  { const sid=fromOut?wire.src.id:(wire.hover?wire.hover.id:null), col=(wire.replace&&wire.replace.color)||(sid?cabSrcColor(sid):null); wire.path.style.stroke=col||''; } wire.path.classList.toggle('snap',!!wire.hover);
   wire.dot.setAttribute('cx',b.x); wire.dot.setAttribute('cy',b.y); wire.dot.style.display=wire.hover?'none':'';
 }
 function hoverAt(cx,cy){
@@ -2646,7 +2808,8 @@ function wavePts(raw){ const pts=[]; let len=0, prev=null; for(const q of raw){ 
   return d; }
 function svgEl(tag,attrs,parent){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
 // ===================== v1.8: regelaars en kabels =====================
-var V18={ cab:'curve', op:1, knob:'slider' };
+var V18={ cab:'curve', op:1, knob:'slider', col:'cat' };
+try{ V18.col=localStorage.getItem('patchkamer.cabColor')==='kind'?'kind':'cat'; }catch(e){}
 try{ V18.cab=localStorage.getItem('patchkamer.cables')||'curve'; V18.op=+(localStorage.getItem('patchkamer.cableOp')||1)||1; V18.knob=localStorage.getItem('patchkamer.knobs')||'slider'; }catch(e){}
 
 // ---------- host.ui.knob: schuif of draaiknop ----------
@@ -2749,6 +2912,7 @@ document.addEventListener('click',e=>{ if(e.button!==0||e.detail>1) return; cons
 document.addEventListener('pointerover',e=>{ const t=e.composedPath()[0]; if(!t||t.nodeType!==1||t.classList.contains('pknum')) return; if(t.children&&t.children.length===0&&ctlLooksNum(t.textContent)){ const rec=ctlCard(e.composedPath()); if(rec&&ctlPair(e.composedPath(),rec)){ t.classList.add('pknum'); if(!t.title) t.title=pkt('m.klik_om_een_waarde_te'); t.style.cursor='text'; } } },true);
 
 // ---------- kabels: boog, recht met hoeken, of om de apparaten heen ----------
+function setCabColor(m){ V18.col=m==='kind'?'kind':'cat'; try{ localStorage.setItem('patchkamer.cabColor',V18.col); }catch(e){} drawCablesNow(); }
 function setCableStyle(m){ V18.cab=['curve','orth','route'].includes(m)?m:'curve'; try{ localStorage.setItem('patchkamer.cables',V18.cab); }catch(e){} _routeCache.clear(); drawCablesNow(); }
 function setCableOp(v){ V18.op=Math.max(0.15,Math.min(1,+v||1)); try{ localStorage.setItem('patchkamer.cableOp',String(V18.op)); }catch(e){} document.documentElement.style.setProperty('--cableOp',String(V18.op)); const o=$('cabOpV'); if(o) o.textContent=Math.round(V18.op*100)+'%'; }
 function polyD(pts,rad){ if(pts.length<2) return ''; let d=`M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
@@ -2795,7 +2959,8 @@ function cableRoute(c,p1,p2){ if(V18.cab==='curve'){ const P=bez(p1,p2); return 
         _routeCache.set(key,pts); if(_routeCache.size>600) _routeCache.clear(); } } }
   if(!pts) pts=simplify(orthPts(p1,p2,ra,rb));
   return {P:bez(p1,p2),d:polyD(pts,9),pts:densify(pts)}; }
-function v18Init(){ const cs=$('cabStyle'); if(cs){ cs.value=V18.cab; cs.onchange=()=>setCableStyle(cs.value); }
+function v18Init(){ const cc=$('cabColor'); if(cc){ cc.value=V18.col; cc.onchange=()=>setCabColor(cc.value); }
+  const cs=$('cabStyle'); if(cs){ cs.value=V18.cab; cs.onchange=()=>setCableStyle(cs.value); }
   const co=$('cabOp'); if(co){ co.value=V18.op; co.oninput=()=>setCableOp(co.value); co.ondblclick=()=>{ co.value=1; setCableOp(1); }; } setCableOp(V18.op);
   const ks=$('knobStyle'); if(ks){ ks.value=V18.knob; ks.onchange=()=>setKnobStyle(ks.value); }
   const sc=$('scaleSel'); if(sc){ paintScaleUI(); sc.onchange=()=>setScale(sc.value); } }
@@ -2862,24 +3027,62 @@ function paintScaleUI(){ const sel=document.getElementById('scaleSel'); if(!sel)
   const n=document.getElementById('scaleNote'); if(n) n.textContent=pkt('m.dit_venster_px_onthouden_per',window.innerWidth,window.innerHeight); }
 var _pksT=0; window.addEventListener('resize',()=>{ if(PKS.mode!=='auto') return; clearTimeout(_pksT); _pksT=setTimeout(()=>{ if(Math.abs(pksAuto()-PKS.f)>=0.05) applyScale(); else paintScaleUI(); },400); });
 
+// ---- kabelkleur per categorie: de kleur van de categorie van het apparaat waar de kabel vandaan komt, per kleurstelling zo bijgesteld dat hij ≥3:1 tegen de vloer haalt ----
+var _ccCache=new Map(), _ccProbe=null;
+function cssRgb(v){ if(!_ccProbe){ _ccProbe=document.createElement('span'); _ccProbe.style.cssText='position:absolute;visibility:hidden;pointer-events:none;width:0;height:0'; document.body.appendChild(_ccProbe); }
+  _ccProbe.style.color=''; _ccProbe.style.color=v; const m=/rgba?\(\s*([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)/.exec(getComputedStyle(_ccProbe).color); return m?[+m[1],+m[2],+m[3]]:null; }
+const relLum=c=>{ const f=x=>{ x/=255; return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4); }; return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2]); };
+const contrastOf=(a,b)=>{ const x=relLum(a), y=relLum(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); };
+function rgb2hsl(c){ const r=c[0]/255,g=c[1]/255,b=c[2]/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn; let h=0,sa=0; if(d){ sa=d/(1-Math.abs(2*l-1)); h=mx===r?((g-b)/d+6)%6:mx===g?(b-r)/d+2:(r-g)/d+4; h*=60; } return [h,sa,l]; }
+function hsl2rgb(h,sa,l){ const k=n=>(n+h/30)%12, a=sa*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1))); return [Math.round(f(0)*255),Math.round(f(8)*255),Math.round(f(4)*255)]; }
+// verschuift de lichtheid (HSL) tot de kleur minstens `min`:1 haalt tegen de achtergrond
+function fitContrast(rgb,bg,min){ if(contrastOf(rgb,bg)>=min) return rgb; const [h,sa,l0]=rgb2hsl(rgb); let best=rgb, bestC=contrastOf(rgb,bg);
+  for(const dir of (relLum(bg)<0.4?[1,-1]:[-1,1])){ for(let l=l0;l>=0&&l<=1;l+=dir*0.02){ const c=hsl2rgb(h,sa,l), q=contrastOf(c,bg); if(q>bestC){ best=c; bestC=q; } if(q>=min) return c; } }
+  return best; }
+function cabCatColor(cat){ if(!cat||cat==='other') return null; const raw=catColor(cat); if(!raw) return null;
+  const key=(document.documentElement.dataset.skin||'dark')+'|'+raw; if(_ccCache.has(key)) return _ccCache.get(key);
+  let out=null; const c=cssRgb(raw), fl=cssRgb('var(--floor)'); if(c&&fl){ const f=fitContrast(c,fl,3); out='rgb('+f[0]+','+f[1]+','+f[2]+')'; }
+  if(_ccCache.size>400) _ccCache.clear(); _ccCache.set(key,out); return out; }
+window.addEventListener('patchkamer-skin',()=>_ccCache.clear());
+// de kleur die een kabel krijgt (of null = de kleur van zijn soort)
+const cabSrcColor=id=>{ if(V18.col!=='cat') return null; const r=Host.devices.get(id); return r?cabCatColor(categoryOf(r.def)):null; };
+// ---- tekst bij een kabel: Bron - Doel ----
+function cableTipText(c){ const a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); if(!a||!b) return '';
+  const pn=(r,dir,port)=>{ const l=portList(r.ports,dir,c.kind); if(l.length<2) return ''; const p=l.find(x=>x.id===port); return p?' ('+p.name+')':''; };
+  let t=a.def.name+pn(a,'out',c.from.port)+' - '+b.def.name+pn(b,'in',c.to.port); if(t.length>60) t=t.slice(0,59)+'…';
+  const kk={multievent:'m.t_kabel_multievent',multi:'m.t_kabel_multi',mastering:'m.t_kabel_mastering'}[c.kind]; return kk?t+' '+pkt(kk):t; }
+var CABTIP={el:null,cable:null,timer:0};
+function cabTipHide(){ clearTimeout(CABTIP.timer); CABTIP.timer=0; CABTIP.cable=null; if(CABTIP.el){ CABTIP.el.remove(); CABTIP.el=null; } }
+function cabTipShow(c,x,y){ if(wire||document.body.classList.contains('wiring')||dropCable){ cabTipHide(); return; } clearTimeout(CABTIP.timer); CABTIP.timer=0;
+  const t=cableTipText(c); if(!t){ cabTipHide(); return; }
+  if(!CABTIP.el){ CABTIP.el=document.createElement('div'); CABTIP.el.className='cabtip'; CABTIP.el.setAttribute('role','tooltip'); document.body.appendChild(CABTIP.el); }
+  const el=CABTIP.el; if(CABTIP.cable!==c||el.textContent!==t){ el.textContent=t; CABTIP.cable=c; }
+  const W=el.offsetWidth, H=el.offsetHeight; el.style.left=Math.max(6,Math.min(x+14,innerWidth-W-6))+'px'; el.style.top=Math.max(6,Math.min(y+18,innerHeight-H-6))+'px'; }
+function cabTipLater(){ if(!CABTIP.el||CABTIP.timer) return; CABTIP.timer=setTimeout(cabTipHide,90); }
+svg.addEventListener('pointermove',e=>{ if(e.pointerType==='touch') return; if(e.buttons){ cabTipHide(); return; } const h=e.target&&e.target._cable?e.target:null; if(h) cabTipShow(h._cable,e.clientX,e.clientY); else cabTipLater(); });
+svg.addEventListener('pointerout',e=>{ if(e.target&&e.target._cable) cabTipLater(); });
+document.addEventListener('pointermove',e=>{ if(CABTIP.el&&!(e.target&&e.target._cable)) cabTipLater(); },true);
+['pointerdown','wheel','keydown','dragstart','blur'].forEach(t=>window.addEventListener(t,()=>cabTipHide(),true));
 let _dcRaf=0;
 function drawCables(){ if(_dcRaf) return; _dcRaf=requestAnimationFrame(()=>{ _dcRaf=0; drawCablesNow(); }); }
 function drawCablesNow(){ if(_dcRaf){ cancelAnimationFrame(_dcRaf); _dcRaf=0; } paintFloorEmpty();
   while(svg.firstChild) svg.removeChild(svg.firstChild);
   floor.querySelectorAll('.port').forEach(p=>{ p.classList.remove('wired'); const d=p.querySelector('.dot'); if(d&&d.dataset.cc){ d.style.background=''; d.style.borderColor=''; delete d.dataset.cc; } });
+  const srcCol=new Map(), colOf=id=>{ if(!srcCol.has(id)) srcCol.set(id,cabSrcColor(id)); return srcCol.get(id); };
+  if(CABTIP.cable&&!Host.cables.includes(CABTIP.cable)) cabTipHide();
   Host.cables.forEach(c=>{ const a=Host.devices.get(c.from.id), b=Host.devices.get(c.to.id); if(!a||!b) return;
     if(wire&&wire.replace===c) return;   // een kabel die je omhangt, tekenen we als de losse kabel van het slepen
     if(a.el.classList.contains('infocus')||b.el.classList.contains('infocus')) return;   // in de focusweergave: geen kabels
     const p1=portPos(c.from.id,c.from.port,'out'), p2=portPos(c.to.id,c.to.port,'in'); if(!p1||!p2) return;
     const R=cableRoute(c,p1,p2), P=R.P, d=R.d;
     const g=svgEl('g',{class:'cable'+(dropCable===c?' drop':'')},svg);
-    const hit=svgEl('path',{d,class:'hit'},g); hit._cable=c; if(PKT.coarse.matches) hit.style.strokeWidth=clamp(28/Host.view.scale,14,120)+'px'; hit.addEventListener('pointerdown',e=>{ if(e.button===0) cgrab={c,x0:e.clientX,y0:e.clientY}; }); svgEl('title',{},hit).textContent=cableLabel(c)+pkt('m.klik_kabel_los_rechtermuisknop_kleur');
+    const hit=svgEl('path',{d,class:'hit'},g); hit._cable=c; if(PKT.coarse.matches) hit.style.strokeWidth=clamp(28/Host.view.scale,14,120)+'px'; hit.addEventListener('pointerdown',e=>{ if(e.button===0) cgrab={c,x0:e.clientX,y0:e.clientY}; }); 
     hit.onclick=()=>{ if(performance.now()-lastRewire<400) return; unpatch(c); }; hit.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); cableMenu(c,e.clientX,e.clientY); });
-    const vis=svgEl('path',{d:c.kind==='mod'||c.kind==='mastering'?(R.pts?wavePts(R.pts):wavePath(P)):d,class:c.kind},g); if(c.color) vis.style.stroke=c.color;
+    const vis=svgEl('path',{d:c.kind==='mod'||c.kind==='mastering'?(R.pts?wavePts(R.pts):wavePath(P)):d,class:c.kind},g); const cc=c.color||colOf(c.from.id); if(cc) vis.style.stroke=cc;
     if(c.kind==='multi') svgEl('path',{d,class:'multicore'},g);
     if(c.kind==='multievent') svgEl('path',{d,class:'eventcore'},g);
     [[p1,c.from.id,c.from.port,'out'],[p2,c.to.id,c.to.port,'in']].forEach(([p,did,port,dir])=>{
-      if(p.clipped){ const ci=svgEl('circle',{cx:p.x,cy:p.y,r:5,class:'clip'},g); ci.style.stroke=c.color||`var(--${c.kind==='event'?'event':c.kind==='mod'?'mod':c.kind==='multi'?'multi':c.kind==='mastering'?'mastering':c.kind==='multievent'?'event':'audio'})`; }
+      if(p.clipped){ const ci=svgEl('circle',{cx:p.x,cy:p.y,r:5,class:'clip'},g); ci.style.stroke=cc||`var(--${c.kind==='event'?'event':c.kind==='mod'?'mod':c.kind==='multi'?'multi':c.kind==='mastering'?'mastering':c.kind==='multievent'?'event':'audio'})`; }
       const pe=Host.devices.get(did).el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`); if(!pe) return; pe.classList.add('wired');
       if(c.color){ const dot=pe.querySelector('.dot'); if(dot){ dot.style.background=c.color; dot.style.borderColor=c.color; dot.dataset.cc='1'; } } }); });
 }
@@ -2943,7 +3146,7 @@ function placeNew(id,version){
   const r=Host.devices.get(nid), w=r.el.offsetWidth, h=r.el.offsetHeight, m=30/Host.view.scale;
   // centred in what you see; a device larger than the view starts at its top-left corner
   moveTo(r, w>va.x1-va.x0-2*m?va.x0+m:va.cx-w/2, h>va.y1-va.y0-2*m?va.y0+m:va.cy-h/2);
-  afterAdd(nid);
+  afterAdd(nid); autoLinkOffer(nid);
 }
 // ---------- bibliotheek: categorieën, zoeken, slepen naar de vloer ----------
 const CAT_DEFAULT=[['synth',pkt('m.synths'),'var(--event)'],['groove',pkt('m.drums_grooveboxen'),'#e4574a'],['sequencer',pkt('m.sequencers'),'#f4d35e'],['mod',pkt('m.modulatie'),'var(--mod)'],['effect',pkt('m.effecten'),'var(--audio)'],['mastering',pkt('m.mastering_categorie'),'var(--mastering)'],['mix',pkt('m.mixen_uitgang'),'var(--sel)'],['tool',pkt('m.meten_hulpmiddelen'),'var(--muted)'],['other',pkt('m.overig'),'var(--muted)']];
@@ -2951,6 +3154,47 @@ const BUILTIN_CATS=new Set(CAT_DEFAULT.map(x=>x[0]));
 var CATS=CAT_DEFAULT.map(x=>[x[0],x[1]]), CATCOL=Object.fromEntries(CAT_DEFAULT.map(x=>[x[0],x[2]]));
 const CAT_PALETTE=['#5f8dff','#ff8fd1','#8bdb6a','#c9b080','#2ec27e','#e76f51','#7fd6ff','#d98cff','#f4a261','#e4574a','#f4d35e','#a0a8b4'];
 const catColor=k=>CATCOL[k]||'var(--muted)';
+// ---- categorie-iconen: eigen ontwerp, 24×24, lijntekening in currentColor; een categorie kan ook een eigen afbeelding hebben (als <img>, nooit als markup) ----
+var CATICON={}, CATDIR={}, DIRICON=new Map(), BADICON=new Set();   // key -> gekozen icoon · key -> ['sid|map',…] · 'sid|map' -> data-adres · afbeeldingen die niet laadden
+const ICONMAX=200*1024;
+var CAT_ICONS={
+ synth:'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M7.25 12.5V19M12 12.5V19M16.75 12.5V19"/><rect x="6.05" y="5" width="2.4" height="7.5" fill="currentColor"/><rect x="10.8" y="5" width="2.4" height="7.5" fill="currentColor"/><rect x="15.55" y="5" width="2.4" height="7.5" fill="currentColor"/>',
+ groove:'<ellipse cx="12" cy="10" rx="8" ry="3"/><path d="M4 10v6.5c0 1.7 3.6 3 8 3s8-1.3 8-3V10"/><path d="M6 3.5l5.2 4.6M18 3.5l-5.2 4.6"/>',
+ sequencer:'<rect x="2" y="8" width="4.2" height="8" rx="1" fill="currentColor"/><rect x="7.4" y="8" width="4.2" height="8" rx="1"/><rect x="12.8" y="8" width="4.2" height="8" rx="1" fill="currentColor"/><rect x="18.2" y="8" width="3.8" height="8" rx="1"/><path d="M2 20h20"/>',
+ mod:'<path d="M2 12c2.2-7.2 4.4-7.2 6.6 0s4.4 7.2 6.6 0 3.2-5.4 6.8-1"/>',
+ effect:'<circle cx="12" cy="13.5" r="6.5"/><path d="M12 13.5l3-3.4M4.6 5.6l1.7 1.5M19.4 5.6l-1.7 1.5M12 2.8v2.2"/>',
+ mastering:'<path d="M2.5 4.5h19"/><rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="12" rx="1"/><rect x="16" y="10.5" width="4" height="9.5" rx="1"/>',
+ mix:'<path d="M6 4v16M12 4v16M18 4v16"/><rect x="3.4" y="13" width="5.2" height="3.4" rx="1" fill="currentColor"/><rect x="9.4" y="6.5" width="5.2" height="3.4" rx="1" fill="currentColor"/><rect x="15.4" y="10" width="5.2" height="3.4" rx="1" fill="currentColor"/>',
+ tool:'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M5.5 13h2.6l1.8-4.2 3 7.4 2-5.2 1.4 2h2.7"/>',
+ other:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>',
+ folder:'<path d="M3 7.5A2 2 0 0 1 5 5.5h4l2 2.2h8a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+ sampler:'<path d="M3.5 10v4M7.7 7v10M11.9 3.5v17M16.1 7.5v9M20.3 10v4"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7"/>',
+ speaker:'<path d="M4 9.5h3.6L13 5v14l-5.4-4.5H4z"/><path d="M16.3 9a4.2 4.2 0 0 1 0 6M19 6.3a8 8 0 0 1 0 11.4"/>',
+ bolt:'<path d="M13.5 2.5 5 13.5h6.2L10.5 21.5 19 10.5h-6.2z"/>',
+ note:'<path d="M9 17.5V5.5l11-2v12"/><circle cx="6.2" cy="17.5" r="2.8"/><circle cx="17.2" cy="15.5" r="2.8"/>',
+ star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'};
+const ICON_ORDER=['synth','groove','sequencer','mod','effect','mastering','mix','tool','other','sampler','mic','speaker','note','bolt','star','folder'];
+const isBuiltinIcon=id=>typeof id==='string'&&Object.prototype.hasOwnProperty.call(CAT_ICONS,id);
+const ICON_DATA_RE=/^data:image\/(png|svg\+xml|webp|jpeg|gif);base64,[A-Za-z0-9+\/=]+$/;
+// een bewaard icoon: een ingebouwd id, een data-adres of een adres (waar het vandaan mag komen controleren we pas bij het tonen)
+function cleanIcon(v){ if(typeof v!=='string') return undefined; v=v.trim(); if(isBuiltinIcon(v)) return v; if(v.length>280000) return undefined; if(ICON_DATA_RE.test(v)) return v;
+  if(v.length<=500&&(/^https?:\/\/[^\s"'<>]+$/i.test(v)||/^[\w.\/-][^\s"'<>:]*$/.test(v))) return v; return undefined; }
+// een afbeelding mag alleen van dezelfde bron als de bibliotheek komen: dezelfde herkomst als deze pagina, of de raw-adressen/herkomst van een bron die je toevoegde
+function iconUrlAllowed(u){ if(typeof u!=='string') return false; if(ICON_DATA_RE.test(u)) return true;
+  let x; try{ x=new URL(u,location.href); }catch(e){ return false; } if(!/^https?:$/.test(x.protocol)) return false;
+  if(sameOrigin(x.href)) return true;
+  return SOURCES.some(src=>{ if(src.kind==='github') return x.hostname==='raw.githubusercontent.com'&&x.pathname.startsWith('/'+src.owner+'/'+src.repo+'/');
+    if(src.kind==='url'){ try{ return new URL(src.url).origin===x.origin; }catch(e){ return false; } } return false; }); }
+function dirIconFor(key){ for(const id of (CATDIR[key]||[])){ const u=DIRICON.get(id); if(u) return u; } return null; }
+// welk icoon een categorie heeft: eigen keuze (Indeling; ook uit het indelingsbestand) > icon.* in de map > ingebouwd icoon > neutraal
+function catIconSrc(key){ const o=CATICON[key]; if(o){ if(isBuiltinIcon(o)) return o; if(!BADICON.has(o)&&iconUrlAllowed(o)) return o; }
+  const d=dirIconFor(key); if(d&&!BADICON.has(d)) return d; return isBuiltinIcon(key)?key:'folder'; }
+const svgOfIcon=id=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+CAT_ICONS[id]+'</svg>';
+function catIconParts(key){ const src=catIconSrc(key); return isBuiltinIcon(src)?{img:false,html:svgOfIcon(src)}:{img:true,html:'<img src="'+esc(src)+'" alt="" decoding="async" draggable="false">'}; }
+function catIconHTML(key,cls){ const m=catIconParts(key); return '<span class="cicon'+(m.img?' img':'')+(cls?' '+cls:'')+'" data-ik="'+esc(key)+'" aria-hidden="true">'+m.html+'</span>'; }
+// een afbeelding die niet laadt: niet meer gebruiken en opnieuw tekenen
+document.addEventListener('error',e=>{ const t=e.target; if(!t||t.tagName!=='IMG'||!t.closest||!t.closest('.cicon, .glyph')) return; const u=t.getAttribute('src'); if(!u||BADICON.has(u)) return; BADICON.add(u); try{ paintLib(); paintIcons(); }catch(x){} },true);
 var LAYOUT_FILE='patchkamer-bibliotheek.json';
 const CAT_HINTS={'nl.patchkamer.drums':'groove','nl.patchkamer.seq':'sequencer','nl.patchkamer.mono':'synth','nl.patchkamer.ruimte':'effect','nl.patchkamer.roest':'effect','nl.patchkamer.mixer':'mix','nl.patchkamer.speakers':'mix','nl.patchkamer.scope':'tool','nl.patchkamer.drone':'synth','nl.patchkamer.acid303':'synth','nl.patchkamer.takt12':'groove','nl.patchkamer.drift':'groove','nl.voorbeeld.tremolo':'effect','nl.voorbeeld.klik':'tool','nl.patchkamer.driftmod':'mod'};
 var CAT_OVR={};   // your own category per device id (kept in the library settings)
@@ -2969,7 +3213,8 @@ function syncDirCats(){ const defs=latestDefs(), per=new Map();
   SRCDEPTH.clear(); per.forEach((o,sid)=>{ if(o.tops.size===1&&o.deep) SRCDEPTH.set(sid,1); });
   CATS=CATS.filter(c=>!c[0].startsWith('dir-')); const found=new Map(); defs.forEach(d=>{ const k=dirCatKey(d); if(k&&k.startsWith('dir-')&&!found.has(k)) found.set(k,dirOf(d)); });
   const i=CATS.findIndex(c=>c[0]==='other'), add=[...found].sort((a,b)=>a[1].localeCompare(b[1],'nl')).map(([k,f],n)=>{ CATCOL[k]=CAT_PALETTE[n%CAT_PALETTE.length]; return [k,f.charAt(0).toUpperCase()+f.slice(1)]; });
-  CATS.splice(i<0?CATS.length:i,0,...add); }
+  CATS.splice(i<0?CATS.length:i,0,...add);
+  CATDIR={}; defs.forEach(d=>{ const k=dirCatKey(d), f=dirOf(d); if(k&&f&&d._src){ const id=d._src.sid+'|'+f, L=CATDIR[k]||(CATDIR[k]=[]); if(!L.includes(id)) L.push(id); } }); }
 function categoryOf(def){ const o=CAT_OVR&&CAT_OVR[def.id]; if(o&&CATS.some(x=>x[0]===o)) return o; const dk=dirCatKey(def); if(dk&&CATS.some(x=>x[0]===dk)) return dk; const b=baseCategory(def); return CATS.some(x=>x[0]===b)?b:'other'; }
 function baseCategory(def){ const c=def.category||CAT_HINTS[def.id]; if(c&&BUILTIN_CATS.has(c)) return c; return {instrument:'synth',effect:'effect',mixer:'mix',output:'mix',utility:'tool',modulator:'mod'}[def.kind]||'other'; }
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -2996,13 +3241,13 @@ LIB.layoutSeen=(LIB.layoutSeen&&typeof LIB.layoutSeen==='object')?LIB.layoutSeen
 // eigen categorieën: LIB.catList = [{key,label,color}] in volgorde; 'other' (Overig) blijft altijd bestaan
 function cleanCatList(list,addMastering){ const out=[], seen=new Set();
   (Array.isArray(list)?list:[]).forEach(c=>{ if(!c||typeof c!=='object') return; const key=String(c.key||'').trim().slice(0,40), label=String(c.label||'').trim().slice(0,60);
-    if(!/^[a-z0-9_-]+$/i.test(key)||!label||seen.has(key)) return; seen.add(key); const color=typeof c.color==='string'&&/^(#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))$/i.test(c.color)?c.color:undefined; out.push({key,label,...(color?{color}:{})}); });
+    if(!/^[a-z0-9_-]+$/i.test(key)||!label||seen.has(key)) return; seen.add(key); const color=typeof c.color==='string'&&/^(#[0-9a-f]{3,8}|var\(--[a-z0-9-]+\))$/i.test(c.color)?c.color:undefined; const icon=cleanIcon(c.icon); out.push({key,label,...(color?{color}:{}),...(icon?{icon}:{})}); });
   if(addMastering&&!seen.has('mastering')){ const m={key:'mastering',label:pkt('m.mastering_categorie')}, i=out.findIndex(c=>c.key==='effect'), o=out.findIndex(c=>c.key==='other'); out.splice(i>=0?i+1:(o>=0?o:out.length),0,m); }   // een oudere opgeslagen indeling kent de categorie Mastering (v1.12) nog niet
   if(!seen.has('other')) out.push({key:'other',label:pkt('m.overig')}); return out; }
 const CAT_KEYS={synth:'m.synths',groove:'m.drums_grooveboxen',sequencer:'m.sequencers',mod:'m.modulatie',effect:'m.effecten',mastering:'m.mastering_categorie',mix:'m.mixen_uitgang',tool:'m.meten_hulpmiddelen',other:'m.overig'};
 function pkCatLabel(c){ const k=CAT_KEYS[c.key]; return k&&Object.values(I18N).some(d=>d[k]===c.label)?pkt(k):c.label; }
 function applyCats(){ const list=LIB.catList&&LIB.catList.length?LIB.catList:CAT_DEFAULT.map(x=>({key:x[0],label:x[1]}));
-  CATS=list.map(c=>[c.key,pkCatLabel(c)]); CATCOL={}; list.forEach((c,i)=>{ CATCOL[c.key]=c.color||(CAT_DEFAULT.find(x=>x[0]===c.key)||[])[2]||CAT_PALETTE[i%CAT_PALETTE.length]; });
+  CATS=list.map(c=>[c.key,pkCatLabel(c)]); CATICON={}; list.forEach(c=>{ if(c.icon) CATICON[c.key]=c.icon; }); CATCOL={}; list.forEach((c,i)=>{ CATCOL[c.key]=c.color||(CAT_DEFAULT.find(x=>x[0]===c.key)||[])[2]||CAT_PALETTE[i%CAT_PALETTE.length]; });
   for(const k of Object.keys(LIB.cats)) if(!String(LIB.cats[k]).startsWith('dir-')&&!CATS.some(x=>x[0]===LIB.cats[k])) delete LIB.cats[k];
   syncDirCats(); }
 LIB.catList=LIB.catList?cleanCatList(LIB.catList,!(LIB.catV>=2)):null; LIB.catV=2; applyCats();
@@ -3021,12 +3266,12 @@ function paintLib(){
     if(!items.length&&(q||BUILTIN_CATS.has(cat)||cat.startsWith('dir-'))) return; shown+=items.length;
     const box=document.createElement('div'); box.className='cat'+(!LIBOPEN.has(cat)&&!q?' closed':''); box.dataset.cat=cat; box.style.setProperty('--catc',catColor(cat));
     const head=document.createElement('button'); head.className='cathead'; head.setAttribute('aria-expanded',String(!box.classList.contains('closed')));
-    head.innerHTML=`<span class="chev">▾</span><span class="cdot"></span>${esc(label)}<span class="n">${items.length}</span>`; head.title=pkt('m.klik_in_of_uitklappen_dubbelklik'); head.addEventListener('dblclick',e=>{ e.preventDefault(); renameCatInline(cat,head); });
+    head.innerHTML=`<span class="chev">▾</span>${catIconHTML(cat)}${esc(label)}<span class="n">${items.length}</span>`; { const ci=head.querySelector('.cicon'); ci.style.setProperty('--ic','var(--catc,var(--muted))'); if(ci.classList.contains('img')) ci.insertAdjacentHTML('beforebegin','<span class="cdot"></span>'); } head.title=pkt('m.klik_in_of_uitklappen_dubbelklik'); head.addEventListener('dblclick',e=>{ e.preventDefault(); renameCatInline(cat,head); });
     head.onclick=()=>{ box.classList.toggle('closed'); const c=box.classList.contains('closed'); head.setAttribute('aria-expanded',String(!c)); if(c) LIBOPEN.delete(cat); else LIBOPEN.add(cat); };
     const devs=document.createElement('div'); devs.className='devs'; if(!items.length){ const e=document.createElement('div'); e.className='note'; e.style.cssText='padding:6px 10px;font-size:11px'; e.textContent=pkt('m.nog_leeg_sleep_een_apparaat'); devs.appendChild(e); }
     items.forEach(def=>{ const vers=Host.versionsOf(def.id);
       const d=document.createElement('div'); d.className='libdev c-'+cat; d.dataset.id=def.id; d.title=pkt('m.sleep_naar_de_vloer');
-      d.innerHTML=`<span class="nm">${esc(def.name)}</span><span class="id">${esc(def.id)} · ${esc(def.kind)}</span><span class="pt">${portsLine(def)}</span>`+(def._src?`<span class="src">${esc(srcLabel(def._src))}</span>`:'')+`<span class="kd">${esc(def.kind)}</span><span class="vr">v${esc(def.version)}</span>`;
+      d.innerHTML=`<span class="nm">${catIconHTML(cat)}${esc(def.name)}</span><span class="id">${esc(def.id)} · ${esc(def.kind)}</span><span class="pt">${portsLine(def)}</span>`+(def._src?`<span class="src">${esc(srcLabel(def._src))}</span>`:'')+`<span class="kd">${esc(def.kind)}</span><span class="vr">v${esc(def.version)}</span>`;
       { const mk=LIBMARK.nw.has(def.id)?'new':LIBMARK.ch.has(def.id)?'changed':''; if(mk){ d.classList.add('mark-'+mk); d.querySelector('.nm').insertAdjacentHTML('beforeend','<span class="lbadge">'+esc(pkt(mk==='new'?'m.badge_nieuw':'m.badge_gewijzigd'))+'</span>'); } }
       const act=document.createElement('div'); act.className='act';
       const vs=document.createElement('select'); vs.setAttribute('aria-label',pkt('m.versie_van')+def.name); vers.forEach(v=>{const o=document.createElement('option'); o.value=v.version; o.textContent='v'+v.version; vs.appendChild(o);}); vs.disabled=vers.length<2;
@@ -3064,7 +3309,7 @@ function catTarget(cx,cy){ const el=document.elementFromPoint(cx,cy); return el&
 document.addEventListener('pointerup',e=>{ if(!libDrag) return; const d=libDrag, dc=dropCable; libDrag=null; document.body.style.cursor=''; setDrop(null);
   if(!d.ghost) return; LIBCLK.drag=performance.now(); d.ghost.remove(); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
   const ct=catTarget(e.clientX,e.clientY); if(ct){ if(ct.dataset.cat!==categoryOf(d.def)) setCategory(d.def.id,ct.dataset.cat); return; }
-  if(overFloor(e.clientX,e.clientY)){ const p=floorPoint(e.clientX,e.clientY); const nid=addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid){ afterAdd(nid); if(dc) insertOnCable(nid,dc); } } });
+  if(overFloor(e.clientX,e.clientY)){ const p=floorPoint(e.clientX,e.clientY); const nid=addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid){ afterAdd(nid); if(dc) insertOnCable(nid,dc); else autoLinkOffer(nid); } } });
 const libwin=$('libwin'), room=$('room');
 function placeLib(){ const sheet=isSheet(); libwin.classList.toggle('sheet',sheet); document.body.classList.toggle('libsheet',sheet&&!!LIB.shown);
   if(sheet){ libwin.style.setProperty('--libfs',LIB.fs+'px'); libwin.classList.remove('min'); libwin.hidden=!LIB.shown; $('libToggle').classList.toggle('on',!!LIB.shown); return; }
@@ -3189,13 +3434,26 @@ function parseSourceUrl(raw){ let u; const t=String(raw||'').trim(); try{ u=new 
 
 // alle modules van één bron laden; geeft het aantal geladen apparaten
 const LIBWS=new Map();   // sid -> [{name, path, load: async()=>werkruimte}]  — startwerkruimtes uit een bibliotheek
+// icon.svg / icon.png / icon.webp / icon.jpg in de map van een categorie (de eerste map onder de bron). find(prefix,naam) geeft een Blob/File of null.
+// De afbeelding wordt een data-adres, alleen getoond via <img> (een SVG draait zo nooit scripts), hoogstens 200 kB en alleen als ze laadt.
+const ICONTYPES={svg:'image/svg+xml',png:'image/png',webp:'image/webp',jpg:'image/jpeg'};
+const blobToDataUrl=b=>new Promise((res,rej)=>{ const fr=new FileReader(); fr.onload=()=>res(String(fr.result)); fr.onerror=()=>rej(fr.error); fr.readAsDataURL(b); });
+const imgLoads=url=>new Promise(res=>{ const im=new Image(), t=setTimeout(()=>res(false),4000); im.onload=()=>{ clearTimeout(t); res(true); }; im.onerror=()=>{ clearTimeout(t); res(false); }; im.src=url; });
+async function iconToDataUrl(blob,ext){ if(!blob||!blob.size||blob.size>ICONMAX) return null; const u=await blobToDataUrl(new Blob([blob],{type:ICONTYPES[ext]})); return (await imgLoads(u))?u:null; }
+async function loadDirIcons(src,find){
+  for(const k of [...DIRICON.keys()]) if(k.startsWith(src.sid+'|')) DIRICON.delete(k);
+  if(!find) return; syncDirCats(); const seen=new Set(), depth=SRCDEPTH.get(src.sid)||0;
+  for(const def of latestDefs()){ if(!def._src||def._src.sid!==src.sid) continue; const f=dirOf(def); if(!f||seen.has(f)||!dirCatKey(def)) continue; seen.add(f);
+    const prefix=pathSegs(def).slice(0,depth+1).join('/')+'/';
+    for(const ext of Object.keys(ICONTYPES)){ let blob=null; try{ blob=await find(prefix,'icon.'+ext); }catch(e){} if(!blob) continue;
+      let u=null; try{ u=await iconToDataUrl(blob,ext); }catch(e){} if(u){ DIRICON.set(src.sid+'|'+f,u); break; } } } }
 const sameOrigin=u=>{ try{ const x=new URL(u,location.href); return location.protocol!=='file:'&&x.origin===location.origin; }catch(e){ return false; } };
 const wsNameOf=pth=>decodeURIComponent(String(pth).split('/').pop()).replace(/\.patchkamer(-song)?\.json$/i,'');
 const prEntry=x=>({path:String(typeof x==='string'?x:(x&&x.path)||'').replace(/^\.\//,''),name:typeof x==='string'?'':((x&&x.name)||'')});
 const wsEntry=x=>typeof x==='string'?{path:x.replace(/^\.\//,''),name:wsNameOf(x)}:{path:String(x&&x.path||'').replace(/^\.\//,''),name:(x&&x.name)||wsNameOf(x&&x.path||'')};
 async function loadSource(src,opts={}){
   if(opts.fresh) _freshUntil=Date.now()+90000;
-  SRCSTATE.set(src.sid,{state:'busy',msg:pkt('m.laden_ellipsis')}); paintSources(); let n=0, skipped=0, cached=0, layoutNote=''; const errs=[], wss=[], prs=[];
+  SRCSTATE.set(src.sid,{state:'busy',msg:pkt('m.laden_ellipsis')}); paintSources(); let n=0, skipped=0, cached=0, layoutNote='', iconFind=null; const errs=[], wss=[], prs=[];
   const one=async(text,origin,imp)=>{ if(!looksLikeDevice(text)){ skipped++; if(/export\s+default/.test(text)) errs.push((origin.path||origin.url)+pkt('m.overgeslagen_geen_apparaat_herkend_export')); return; } try{ await loadDeviceSource(text,origin,true,imp); n++; }catch(e){ errs.push((origin.path||origin.url)+': '+e.message); } };
   const isWs=pth=>/\.patchkamer(-song)?\.json$/i.test(pth), isPr=pth=>/\.patchkamer-(presets|tunes)\.json$/i.test(pth); let layout=null;
   try{
@@ -3205,6 +3463,7 @@ async function loadSource(src,opts={}){
       const tkey=api+'@'+src.ref; if(opts.fresh) TREEMEMO.delete(tkey); if(!TREEMEMO.has(tkey)) TREEMEMO.set(tkey,fetchJSON(`${api}/git/trees/${encodeURIComponent(src.ref)}?recursive=1`).catch(e=>{ TREEMEMO.delete(tkey); throw e; })); const tree=await TREEMEMO.get(tkey); const base=src.path?src.path.replace(/\/$/,'')+'/':'';
       const blobs=(tree.tree||[]).filter(x=>x.type==='blob'&&x.path.startsWith(base)); const rawOf=p=>`https://raw.githubusercontent.com/${src.owner}/${src.repo}/${src.ref}/${p}`;
       let paths, wpaths; const man=blobs.find(x=>x.path===base+'patchkamer.json');
+      { const lc=new Map(blobs.map(x=>[x.path.toLowerCase(),x])); iconFind=async(prefix,name)=>{ const b=lc.get((base+prefix+name).toLowerCase()); if(!b||(b.size||0)>ICONMAX) return null; const r=await fetch(rawBust(rawOf(b.path)),{cache:'no-cache'}); return r.ok?r.blob():null; }; }
       let ppaths;
       if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[])].map(prEntry).map(w=>({...w,path:base+w.path})); if(m.name) src.label=m.name+' · '+src.label; }
       else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,500); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); }
@@ -3215,7 +3474,7 @@ async function loadSource(src,opts={}){
       wpaths.forEach(w=>wss.push({name:w.name,path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
     } else if(src.kind==='url'){
       if(/\.json(\?|$)/i.test(src.url)||!/\.m?js(\?|$)/i.test(src.url)){
-        const murl=/\.json(\?|$)/i.test(src.url)?src.url:src.url.replace(/\/?$/,'/')+'patchkamer.json'; const r=await fetchText(murl); if(r.cached) cached++; const m=JSON.parse(r.text); if(m.name) src.label=m.name;
+        const murl=/\.json(\?|$)/i.test(src.url)?src.url:src.url.replace(/\/?$/,'/')+'patchkamer.json'; iconFind=async(prefix,name)=>{ const u=new URL(prefix+name,murl); if(u.origin!==new URL(murl).origin) return null; const r=await fetch(u.href,{cache:'no-cache'}); return r.ok?r.blob():null; }; const r=await fetchText(murl); if(r.cached) cached++; const m=JSON.parse(r.text); if(m.name) src.label=m.name;
         for(const x of (m.modules||[])){ const u=new URL(x,murl).href; try{ const r2=await fetchText(u); if(r2.cached) cached++; await one(r2.text,{sid:src.sid,kind:'url',url:u,path:String(x),label:src.label},sameOrigin(u)?u:null); }catch(e){ errs.push(e.message); } }
         (m.workspaces||[]).map(wsEntry).forEach(w=>{ const u=new URL(w.path,murl).href; wss.push({name:w.name,path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
         [...(m.presets||[]),...(m.tunes||[])].map(prEntry).forEach(w=>{ const u=new URL(w.path,murl).href; prs.push({path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
@@ -3224,6 +3483,7 @@ async function loadSource(src,opts={}){
     } else if(src.kind==='folder'){
       const files=await folderFiles(src,opts); if(!files){ SRCSTATE.set(src.sid,{state:'warn',msg:pkt('m.opnieuw_verbinden_nodig')}); paintSources(); return {n:0,errs:[]}; }
       const byPath=new Map(files); let mods, wps; const man=byPath.get('patchkamer.json');
+      { const lf=new Map(files.map(f=>[f[0].toLowerCase(),f[2]])); iconFind=async(prefix,name)=>{ const g=lf.get((prefix+name).toLowerCase()); return g?g():null; }; }
       let pps;
       if(man){ const m=JSON.parse(await man()); if(m.name) src.label=m.name; mods=(m.modules||[]).map(x=>String(x).replace(/^\.\//,'')); wps=(m.workspaces||[]).map(wsEntry); pps=[...(m.presets||[]),...(m.tunes||[])].map(prEntry); }
       else { mods=files.map(f=>f[0]).filter(isModulePath); wps=files.map(f=>f[0]).filter(isWs).map(wsEntry); pps=files.map(f=>f[0]).filter(isPr).map(prEntry); }
@@ -3237,14 +3497,15 @@ async function loadSource(src,opts={}){
     await presetsFromSource(src,prs,errs);
     SRCLAYOUT.set(src.sid,{has:!!layout,folders:null});
     if(layout){ try{ const L=await layout(); const r=applyLayout(L,src,false); if(r) layoutNote=r; }catch(e){ errs.push(LAYOUT_FILE+': '+e.message); } }
+    try{ await loadDirIcons(src,iconFind); }catch(e){}
     SRCSTATE.set(src.sid,{state:errs.length&&!n?'err':errs.length?'warn':'ok',n,msg:pktp('m.n_apparaat',n===1,n)+(wss.length?pktp('m.werkruimtes_werkruimte',wss.length>1,wss.length):'')+(prs.length?pktp('m.presetbibliotheken_presetbibliotheek',prs.length>1,prs.length):'')+(cached?pkt('m.uit_eerder_opgehaalde_kopie',cached):'')+(layoutNote?' · '+layoutNote:'')+(skipped?pktp('m.bestanden_overgeslagen_bestand_overgeslagen',skipped>1,skipped):'')+(errs.length?pktp('m.fouten_fout',errs.length>1,errs.length):''),errs});
   }catch(e){ SRCSTATE.set(src.sid,{state:'err',msg:e.message,errs:[e.message]}); errs.push(e.message); }
-  saveSources(); paintLib(); refreshVersionSelects(); paintSources(); if(!$('wsPanel').hidden) paintPatches(); return {n,errs}; }
+  saveSources(); paintLib(); paintIcons(); refreshVersionSelects(); paintSources(); if(!$('wsPanel').hidden) paintPatches(); return {n,errs}; }
 
 // ---- lokale map: File System Access waar het kan (blijft onthouden), anders een mapkiezer die je opnieuw doet ----
 const DIRFILES=new Map();   // sid -> Map(path -> File), voor mappen zonder blijvende handle (deze sessie)
 async function walkDir(h,prefix,out,depth){ for await (const [name,e] of h.entries()){ if(name.startsWith('.')||name==='node_modules') continue; const pth=prefix+name;
-  if(e.kind==='file') out.push([pth,async()=>(await e.getFile()).text()]); else if(depth<3) await walkDir(e,pth+'/',out,depth+1); } return out; }
+  if(e.kind==='file') out.push([pth,async()=>(await e.getFile()).text(),()=>e.getFile()]); else if(depth<3) await walkDir(e,pth+'/',out,depth+1); } return out; }
 async function dirHandle(src,interactive){ const h=await IDB.get('dir:'+src.sid); if(!h||!h.queryPermission) return null;
   let st=await h.queryPermission({mode:'read'}); if(st==='granted') return h;
   if(!interactive) return null;
@@ -3254,13 +3515,13 @@ async function dirHandle(src,interactive){ const h=await IDB.get('dir:'+src.sid)
   return st==='granted'?h:null; }
 async function folderFiles(src,opts){
   const h=await dirHandle(src,!!opts.interactive); if(h) return walkDir(h,'',[],0);
-  const mem=DIRFILES.get(src.sid), asList=m=>[...m.entries()].map(([p,f])=>[p,()=>f.text()]);
+  const mem=DIRFILES.get(src.sid), asList=m=>[...m.entries()].map(([p,f])=>[p,()=>f.text(),()=>f]);
   // zonder blijvende toegang is mem een vaste momentopname: bij Scannen (fresh) vragen we de map opnieuw
   if(mem&&!(opts.fresh&&opts.interactive)) return asList(mem);
   if(!opts.interactive) return null;
   const picked=await pickFolder(pkt(mem?'m.kies_de_map_opnieuw_om_te_scannen':'m.kies_de_map_om_de',esc(src.label))); if(!picked) return mem?asList(mem):null;
   if(picked.handle){ await IDB.set('dir:'+src.sid,picked.handle); return walkDir(picked.handle,'',[],0); }
-  DIRFILES.set(src.sid,picked.files); return [...picked.files.entries()].map(([p,f])=>[p,()=>f.text()]); }
+  DIRFILES.set(src.sid,picked.files); return [...picked.files.entries()].map(([p,f])=>[p,()=>f.text(),()=>f]); }
 // kies een map; geeft {handle,name} of {files:Map,name}
 async function pickFolder(question){
   if(question&&!(await askUser(question,pkt('m.map_kiezen'),pkt('m.overslaan')))) return null;
@@ -3866,7 +4127,11 @@ modViewKick();
 /* =====================================================================
    BIBLIOTHEEK-INDELING · eigen categorieën, bewaren als patchkamer-bibliotheek.json in de bibliotheekmap
    ===================================================================== */
-function paintIcons(){ Host.devices.forEach(r=>{ const c=categoryOf(r.def); r.iconEl.className='pkicon c-ic-'+c; r.iconEl.style.setProperty('--ic',catColor(c)); }); }
+function paintIcons(){ Host.devices.forEach(r=>{ const c=categoryOf(r.def), col=catColor(c); r.iconEl.className='pkicon c-ic-'+c; r.iconEl.style.setProperty('--ic',col); r.el.style.setProperty('--ic',col);
+    const m=catIconParts(c), sig=c+'|'+m.html; if(r._icSig===sig) return; r._icSig=sig;
+    const g=r.iconEl.querySelector('.glyph'); if(g){ g.className='glyph'+(m.img?' img':''); g.innerHTML=m.html; }
+    const b=r.el.querySelector('.bar .cicon'); if(b){ b.className='cicon'+(m.img?' img':''); b.dataset.ik=c; b.innerHTML=m.html; } });
+  if(typeof focusEl!=='undefined'&&focusEl&&FOCUS.layout==='one') try{ focusOneApply(); }catch(e){} }
 function catsChanged(){ LIB.layoutT=Date.now(); LIB.catList=cleanCatList(LIB.catList||CATS.map(([key,label])=>({key,label}))); applyCats(); saveLib(); paintLib(); paintIcons(); }
 function ensureCatList(){ if(!LIB.catList||!LIB.catList.length) LIB.catList=CATS.map(([key,label])=>({key,label})); }
 function catCount(key){ const ids=[...new Set([...Host.registry.values()].map(d=>d.id))]; return ids.filter(id=>categoryOf(Host.versionsOf(id)[0])===key).length; }
@@ -3875,6 +4140,28 @@ function addCat(label){ label=String(label||'').trim().slice(0,60); if(!label) r
   let key=label.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,30)||'cat'; if(BUILTIN_CATS.has(key)||LIB.catList.some(c=>c.key===key)) key=key+'-'+Math.random().toString(36).slice(2,6);
   const i=LIB.catList.findIndex(c=>c.key==='other'); const used=new Set(LIB.catList.map(c=>catColor(c.key))); const color=CAT_PALETTE.find(c=>!used.has(c))||CAT_PALETTE[LIB.catList.length%CAT_PALETTE.length];
   LIB.catList.splice(i<0?LIB.catList.length:i,0,{key,label,color}); catsChanged(); status(pkt('m.categorie_toegevoegd_sleep_apparaten_erop',label)); return key; }
+var ICFG=null;   // categorie waarvan de icoonkiezer openstaat
+function setCatIcon(key,icon){ ensureCatList(); const c=LIB.catList.find(x=>x.key===key); if(!c) return; const v=icon?cleanIcon(icon):undefined; if(icon&&!v) return;
+  if(v) c.icon=v; else delete c.icon; catsChanged(); status(pkt(v?'m.t_icoon_gezet':'m.t_icoon_standaard_gezet',c.label)); }
+async function setCatIconUrl(key,raw){ raw=String(raw||'').trim(); if(!raw){ setCatIcon(key,null); return; }
+  if(!cleanIcon(raw)||isBuiltinIcon(raw)||!iconUrlAllowed(raw)){ status(pkt('m.t_icoon_bron'),true); return; }
+  if(!(await imgLoads(raw))){ status(pkt('m.t_icoon_ongeldig'),true); return; } setCatIcon(key,raw); }
+function pickCatIconFile(key){ const i=document.createElement('input'); i.type='file'; i.accept='.png,.svg,.webp,.jpg,.jpeg,image/png,image/svg+xml,image/webp,image/jpeg';
+  i.onchange=async()=>{ const f=i.files[0]; if(!f) return; if(f.size>ICONMAX){ status(pkt('m.t_icoon_groot'),true); return; }
+    const ext=(/\.([a-z0-9]+)$/i.exec(f.name)||[])[1]; const e=String(ext||'').toLowerCase().replace('jpeg','jpg'); if(!ICONTYPES[e]){ status(pkt('m.t_icoon_ongeldig'),true); return; }
+    let u=null; try{ u=await iconToDataUrl(f,e); }catch(x){} if(!u){ status(pkt('m.t_icoon_ongeldig'),true); return; } setCatIcon(key,u); };
+  i.click(); }
+function iconPicker(c){ const box=document.createElement('div'); box.className='ipick'; box.dataset.for=c.key;
+  const grid=document.createElement('div'); grid.className='igrid';
+  ICON_ORDER.forEach(id=>{ const b=document.createElement('button'); b.type='button'; b.dataset.icon=id; b.className=CATICON[c.key]===id?'cur':''; b.innerHTML='<span class="cicon" aria-hidden="true">'+svgOfIcon(id)+'</span>'; b.firstChild.style.setProperty('--ic',catColor(c.key));
+    b.title=pkt('m.t_ic_'+id); b.setAttribute('aria-label',pkt('m.t_ic_'+id)); b.onclick=()=>setCatIcon(c.key,id); grid.appendChild(b); });
+  const std=document.createElement('button'); std.type='button'; std.className='small'; std.textContent=pkt('m.t_icoon_standaard'); std.onclick=()=>setCatIcon(c.key,null); grid.appendChild(std);
+  const r2=document.createElement('div'); r2.className='addrow'; const u=document.createElement('input'); u.type='text'; u.placeholder=pkt('m.t_icoon_url'); u.setAttribute('aria-label',pkt('m.t_icoon_url')); u.maxLength=500;
+  u.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Enter') setCatIconUrl(c.key,u.value); }); u.addEventListener('pointerdown',e=>e.stopPropagation());
+  const ub=document.createElement('button'); ub.type='button'; ub.className='small'; ub.textContent=pkt('m.t_icoon_url_knop'); ub.onclick=()=>setCatIconUrl(c.key,u.value);
+  const fb=document.createElement('button'); fb.type='button'; fb.className='small'; fb.textContent=pkt('m.t_icoon_bestand'); fb.onclick=()=>pickCatIconFile(c.key);
+  r2.append(u,ub); const r3=document.createElement('div'); r3.className='wsrow'; r3.appendChild(fb);
+  box.append(grid,r2,r3); return box; }
 function renameCat(key,label){ label=String(label||'').trim().slice(0,60); ensureCatList(); const c=LIB.catList.find(x=>x.key===key); if(!c||!label||c.label===label) return; c.label=label; catsChanged(); }
 async function deleteCat(key){ if(key==='other'){ status(pkt('m.overig_blijft_altijd_bestaan_daar'),true); return; } ensureCatList(); const c=LIB.catList.find(x=>x.key===key); if(!c) return; const n=catCount(key);
   if(n&&!(await askUser(pkt('m.categorie_verwijderen_de_apparaten_erin',esc(c.label),n),pkt('m.verwijderen'),pkt('m.annuleren')))) return;
@@ -3886,7 +4173,7 @@ function renameCatInline(key,head){ const lab=CATS.find(x=>x[0]===key); if(!lab)
   head.replaceWith(i); i.focus(); i.select(); let done=false; const fin=ok=>{ if(done) return; done=true; if(ok) renameCat(key,i.value); else paintLib(); };
   i.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Enter') fin(true); if(e.key==='Escape') fin(false); }); i.addEventListener('blur',()=>fin(true)); i.addEventListener('pointerdown',e=>e.stopPropagation()); }
 function layoutState(){ ensureCatList(); return {format:'patchkamer-bibliotheek',formatVersion:1,catV:2,saved:new Date().toISOString(),
-  categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key)})),folders:[...new Set(latestDefs().map(dirOf).filter(Boolean))].sort(),assign:Object.fromEntries(Object.entries(LIB.cats).filter(([,c])=>!String(c).startsWith('dir-'))),closed:CATS.map(x=>x[0]).filter(k=>!LIBOPEN.has(k))}; }
+  categories:LIB.catList.map(c=>({key:c.key,label:c.label,color:catColor(c.key),...(c.icon?{icon:c.icon}:{})})),folders:[...new Set(latestDefs().map(dirOf).filter(Boolean))].sort(),assign:Object.fromEntries(Object.entries(LIB.cats).filter(([,c])=>!String(c).startsWith('dir-'))),closed:CATS.map(x=>x[0]).filter(k=>!LIBOPEN.has(k))}; }
 // L = inhoud van patchkamer-bibliotheek.json. force=false bij het laden van een bron: alleen toepassen als het bestand nieuw of gewijzigd is
 function applyLayout(L,src,force){ if(!L||L.format!=='patchkamer-bibliotheek'||!Array.isArray(L.categories)) throw new Error(pkt('m.geen_bibliotheekindeling_format_patchkamer_bibliotheek'));
   { const o=src&&SRCLAYOUT.get(src.sid); if(o) o.folders=Array.isArray(L.folders)?L.folders.map(String):null; }
@@ -3920,7 +4207,9 @@ function paintLibCfg(){ const box=$('libCfg'); box.innerHTML=''; ensureCatList()
     const up=document.createElement('button'); up.textContent='▲'; up.title=pkt('m.omhoog'); up.disabled=i===0; up.onclick=()=>moveCat(c.key,-1);
     const dn=document.createElement('button'); dn.textContent='▼'; dn.title=pkt('m.omlaag'); dn.disabled=i===LIB.catList.length-1; dn.onclick=()=>moveCat(c.key,1);
     const del=document.createElement('button'); del.textContent='×'; del.title=c.key==='other'?pkt('m.overig_kan_niet_weg'):pkt('m.categorie_verwijderen'); del.disabled=c.key==='other'; del.onclick=()=>deleteCat(c.key);
-    row.append(sw,inp,n,up,dn,del); box.appendChild(row); });
+    const ib=document.createElement('button'); ib.type='button'; ib.className='ibtn'; ib.innerHTML=catIconHTML(c.key); ib.firstChild.style.setProperty('--ic',catColor(c.key)); ib.title=pkt('m.t_icoon_kies'); ib.setAttribute('aria-label',pkt('m.t_icoon_kies')+': '+c.label); ib.setAttribute('aria-expanded',String(ICFG===c.key));
+    ib.onclick=()=>{ ICFG=ICFG===c.key?null:c.key; paintLibCfg(); };
+    row.append(sw,ib,inp,n,up,dn,del); box.appendChild(row); if(ICFG===c.key) box.appendChild(iconPicker(c)); });
   const add=document.createElement('div'); add.className='addrow'; add.innerHTML=pkt('m.toevoegen');
   const ai=add.querySelector('input'); const go=()=>{ if(addCat(ai.value)) ai.value=''; }; add.querySelector('button').onclick=go; ai.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Enter') go(); }); ai.addEventListener('pointerdown',e=>e.stopPropagation()); box.appendChild(add);
   const h2=document.createElement('h4'); h2.textContent=pkt('m.bewaren_en_laden'); box.appendChild(h2);
@@ -3932,7 +4221,8 @@ function paintLibCfg(){ const box=$('libCfg'); box.innerHTML=''; ensureCatList()
   const ld=document.createElement('button'); ld.className='small'; ld.textContent=pkt('m.laden_uit_bestand'); ld.onclick=()=>{ const i=document.createElement('input'); i.type='file'; i.accept='.json,application/json'; i.onchange=async()=>{ const f=i.files[0]; if(!f) return; try{ const r=applyLayout(JSON.parse(await f.text()),null,true); status(pkt('m.geladen',f.name,r)); }catch(e){ status(f.name+': '+e.message,true); } }; i.click(); };
   const rs=document.createElement('button'); rs.className='small'; rs.textContent=pkt('m.standaardindeling'); rs.title=pkt('m.de_oorspronkelijke_categorie_n_eigen'); rs.onclick=async()=>{ if(!(await askUser(pkt('m.terug_naar_de_standaardcategorie_n'),pkt('m.terugzetten'),pkt('m.annuleren')))) return; LIB.catList=null; LIB.cats={}; CAT_OVR=LIB.cats; applyCats(); saveLib(); paintLib(); paintIcons(); };
   r1.append(dl,ld,rs); box.appendChild(r1);
-  const note=document.createElement('div'); note.className='note'; note.innerHTML=pkt('m.de_indeling_categorie_n_namen',LAYOUT_FILE); box.appendChild(note); }
+  const note=document.createElement('div'); note.className='note'; note.innerHTML=pkt('m.de_indeling_categorie_n_namen',LAYOUT_FILE); box.appendChild(note);
+  const note2=document.createElement('div'); note2.className='note'; note2.innerHTML=pkt('m.t_icoon_noot'); box.appendChild(note2); }
 $('libCfgBtn').onclick=()=>{ const b=$('libCfg'); b.hidden=!b.hidden; $('libCfgBtn').classList.toggle('on',!b.hidden); $('libCfgBtn').setAttribute('aria-expanded',String(!b.hidden)); if(!b.hidden) paintLibCfg(); };
 
 /* =====================================================================
@@ -3979,7 +4269,7 @@ function arrangeDevices(){ liteHold(1);
     x+=w+CG; });
   // losse apparaten (zonder kabels): een rij onderaan
   let lx=X0; const ly=bottom+80; ids.filter(i=>!connected.has(i)).sort((a,b)=>R.get(a).x-R.get(b).x).forEach(i=>{ const r=R.get(i); r.el.classList.add('moving'); moveTo(r,lx,ly); lx+=box(i).w+60; });
-  _lastLayout=prev;
+  _lastLayout=prev; _alUndo=null;
   const t0=performance.now(); const tick=()=>{ drawCables(); if(performance.now()-t0<450) requestAnimationFrame(tick); else { R.forEach(r=>r.el.classList.remove('moving')); drawCables(); $('zoomFit').click(); liteHold(-1); } }; requestAnimationFrame(tick);
   const loose=ids.filter(i=>!connected.has(i)).length;
   status(pkt('m.herschikt_in_kolommen',cols.filter(Boolean).length)+(loose?pktp('m.losse_apparaaten_onderaan_los_apparaat',loose>1,loose):'')+pkt('m.ctrl_z_zet_terug'));
@@ -3989,6 +4279,109 @@ function undoArrange(){ if(!_lastLayout) return false; const L=_lastLayout; _las
 $('arrange').onclick=arrangeDevices;
 document.addEventListener('keydown',e=>{ if(typing(e)) return; if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key==='z'||e.key==='Z')&&_lastLayout){ if(undoArrange()) e.preventDefault(); } });
 // handmatig verplaatsen maakt 'ongedaan maken' van herschikken ongeldig
+
+/* =====================================================================
+   AUTOMATISCH KOPPELEN BIJ PLAATSEN · na het plaatsen biedt een dialoog kabels aan naar apparaten die al op de vloer staan.
+   Alleen na een eigen handeling van de gebruiker (slepen, Plaatsen, tik op een compacte regel) en alleen als de schakelaar aan staat.
+   ===================================================================== */
+const AUTOLINK_MAX=7;   // meer mogelijkheden (alle groepen samen, ook uitgevinkte) dan dit: geen dialoog, de gebruiker koppelt zelf
+var _alMem=null, _alUndo=null;
+function autoLinkOn(){ let v=_alMem; try{ const s=localStorage.getItem('patchkamer.autoLink'); if(s==='1'||s==='0') v=s; }catch(e){} if(v==='1') return true; if(v==='0') return false; return !!PKT.coarse.matches; }   // zonder eigen keuze: aan op een aanraakapparaat, uit op een desktop
+function autoLinkSet(on){ _alMem=on?'1':'0'; try{ localStorage.setItem('patchkamer.autoLink',_alMem); }catch(e){} autoLinkPaint(); }
+function autoLinkPaint(){ const on=autoLinkOn(); ['alMenuCb','alSetCb'].forEach(i=>{ const e=$(i); if(e) e.checked=on; }); }
+['alMenuCb','alSetCb'].forEach(i=>{ const e=$(i); if(e) e.onchange=()=>autoLinkSet(e.checked); });
+PKT.coarse.addEventListener('change',autoLinkPaint); autoLinkPaint();
+// rolvolgorde zoals Herschik: bronnen → instrumenten → effecten → mengpaneel → uitgang
+function alRankA(r){ const d=r.def,p=r.ports; if(isOutputDef(d)) return 3; if(isMixerDef(d)) return 2; if(p.audioIn.length&&p.audioOut.length) return 1; if(p.audioIn.length) return 2.5; return 0; }
+function alRankE(r){ const p=r.ports; if(!p.eventOut.length) return 3; if(!p.eventIn.length) return 0; return (r.def.kind==='instrument'||p.audioOut.length)?3:1; }
+function alDirOk(kind,A,B){
+  if(kind==='audio'){ const a=alRankA(A), b=alRankA(B); return a<b||(a===1&&b===1); }
+  if(kind==='event') return alRankE(A)<alRankE(B);
+  if(kind==='mod') return isModDef(A);
+  return true; }
+function alReach(kind,from,to){ const seen=new Set([from]), st=[from]; while(st.length){ const x=st.pop(); if(x===to) return true; Host.cables.forEach(c=>{ if(c.kind===kind&&c.from.id===x&&!seen.has(c.to.id)){ seen.add(c.to.id); st.push(c.to.id); } }); } return false; }
+function alCanReceive(kind,B,port){ const i=B.inst;
+  if(kind==='mastering') return typeof i.configureMastering==='function';
+  if(kind==='multi') return typeof i.onBundle==='function';
+  if(kind==='multievent') return typeof i.onEventBundle==='function';
+  return true; }
+function alCanSend(kind,A,port){ if(kind==='multi') return !!bundleOf(A,port); if(kind==='multievent') return !!eventBundleOf(A,port); return true; }
+const alUse=(kind,id,port,dir)=>Host.cables.filter(c=>c.kind===kind&&(dir==='out'?(c.from.id===id&&c.from.port===port):(c.to.id===id&&c.to.port===port))).length;
+function alNm(id){ const r=Host.devices.get(id); if(!r) return id; const same=[...Host.devices.values()].filter(x=>x.def.id===r.def.id).length>1; return r.def.name+(same?' · '+id:''); }
+function alBuild(nid){
+  const R=Host.devices, N=R.get(nid); if(!N) return null;
+  const items=[], claimed=new Set(); let seq=0;
+  R.forEach((E,eid)=>{ if(eid===nid) return;
+    [[N,nid,E,eid],[E,eid,N,nid]].forEach(([A,aid,B,bid])=>{
+      ['audio','event','mod','multi','mastering','multievent'].forEach(kind=>{
+        const ao=portList(A.ports,'out',kind), bi=portList(B.ports,'in',kind); if(!ao.length||!bi.length) return;
+        if(!alDirOk(kind,A,B)||!alCanReceive(kind,B)) return;
+        if(Host.cables.some(c=>c.kind===kind&&c.from.id===aid&&c.to.id===bid)) return;   // al gekoppeld
+        if(alReach(kind,bid,aid)) return;                                               // zou een lus maken
+        const sendable=ao.filter(p=>alCanSend(kind,A,p.id)); if(!sendable.length) return;
+        const strict=(kind==='event'||kind==='multievent')&&sendable.length>1;           // een sequencer met sporen: één kabel per spoorpoort
+        const freeSrc=sendable.filter(p=>!alUse(kind,aid,p.id,'out')&&!claimed.has(aid+':'+p.id));
+        const sp=freeSrc[0]||(strict?null:sendable[0]);
+        const freeDst=bi.filter(p=>!alUse(kind,bid,p.id,'in')), dp=freeDst[0]||bi[0];
+        const it={n:seq++,type:'plain',kind,aid,bid,A,B,ao:sendable,bi,strict,sp:sp?sp.id:null,dp:dp.id,dstFree:freeDst.length>0,checked:false,reason:'',
+          drum:kind==='event'&&noteNamesOf(B.inst).length>0};
+        if(!sp) it.reason=pkt('m.t_al_alle_bezet'); else if(strict) claimed.add(aid+':'+sp.id);
+        items.push(it); }); }); });
+  // een effect mag ook tussen twee al gekoppelde apparaten (zelfde logica als neerzetten op een kabel)
+  if(N.def.kind==='effect'&&insertPorts(N.ports,'audio')) Host.cables.forEach(c=>{ if(c.kind!=='audio'||c.from.id===nid||c.to.id===nid||!R.get(c.from.id)||!R.get(c.to.id)) return;
+    items.push({n:seq++,type:'insert',kind:'insert',cable:c,aid:c.from.id,bid:c.to.id,A:R.get(c.from.id),B:R.get(c.to.id),checked:false,reason:''}); });
+  if(!items.length||items.length>AUTOLINK_MAX) return null;
+  // standaard aan: per bron-apparaat en soort hoogstens één voor de hand liggend voorstel, het volgende in de keten dat nog vrij is
+  const dist=it=>Math.hypot(it.A.x-it.B.x,it.A.y-it.B.y), rk=it=>it.kind==='audio'?alRankA(it.B):alRankE(it.B);
+  const best=new Map();
+  items.filter(i=>i.type==='plain'&&!i.reason&&i.dstFree&&(i.kind==='audio'||i.kind==='event')&&!(i.kind==='audio'&&alRankA(i.B)===2.5)).forEach(i=>{ const k=i.aid+'|'+i.kind+(i.strict?'|'+i.bid:''), b=best.get(k);
+    if(!b||rk(i)<rk(b)||(rk(i)===rk(b)&&dist(i)<dist(b))) best.set(k,i); });
+  best.forEach(i=>{ i.checked=true; });
+  const ins=items.filter(i=>i.type==='insert'); const pick=ins.find(i=>isOutputDef(i.B.def))||ins.find(i=>isMixerDef(i.B.def));
+  if(pick){ pick.checked=true; items.forEach(i=>{ if(i.type==='plain'&&i.kind==='audio') i.checked=false; }); }
+  return items; }
+const alConflict=(x,y)=>x!==y&&((x.type==='insert'&&y.type==='insert')||(x.type==='insert'&&y.type==='plain'&&y.kind==='audio')||(y.type==='insert'&&x.type==='plain'&&x.kind==='audio'));
+function alDialog(nid,items){
+  const N=Host.devices.get(nid); const GR=[['audio','m.t_al_g_audio','--audio'],['event','m.t_al_g_event','--event'],['mod','m.t_al_g_mod','--mod'],['multi','m.t_al_g_multi','--multi'],['mastering','m.t_al_g_mastering','--mastering'],['multievent','m.t_al_g_multievent','--event'],['insert','m.t_al_g_insert','--sel']];
+  const m=document.createElement('div'); m.className='pkmodal aldlg'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true'); m.setAttribute('aria-labelledby','alTitle');
+  m.innerHTML=`<div class="box"><div><h3 id="alTitle">${esc(pkt('m.t_al_titel'))}</h3><div class="note">${esc(pkt('m.t_al_uitleg',alNm(nid)))}</div></div><div class="albody"></div>
+    <div class="alfoot"><label class="alask"><input type="checkbox" id="alNever"> <span>${esc(pkt('m.t_al_nietmeer'))}</span></label><div class="wsrow"><button class="small" data-a="0" type="button">${esc(pkt('m.overslaan'))}</button><button class="small" data-a="1" type="button" style="border-color:var(--audio)">${esc(pkt('m.t_al_ok'))}</button></div></div></div>`;
+  const body=m.querySelector('.albody'), rows=new Map();
+  const portName=(list,id)=>{ const p=list.find(x=>x.id===id); return p?p.name:(id||'—'); };
+  const paintRow=it=>{ const row=rows.get(it), cb=row.querySelector('input[type=checkbox]');
+    cb.checked=it.checked&&!it.reason; cb.disabled=!!it.reason;
+    let t;
+    if(it.type==='insert') t=pkt('m.t_al_tussen','<b>'+esc(alNm(it.aid))+'</b>','<b>'+esc(alNm(it.bid))+'</b>');
+    else { const comp=isOutputDef(it.B.def), tag=it.ao.length>1&&it.strict?' <span class="altag">('+esc(it.drum?pkt('m.t_al_drums'):pkt('m.t_al_melodisch'))+')</span>':'';
+      t='<b>'+esc(alNm(it.aid))+'</b>'+(comp?'':' · <span class="alp">'+esc(portName(it.ao,it.sp))+'</span>'+tag)+' → <b>'+esc(alNm(it.bid))+'</b>'+(comp?'':' · <span class="alp">'+esc(portName(it.bi,it.dp))+'</span>'); }
+    row.querySelector('.altxt').innerHTML=t+(it.reason?' <span class="alwhy">— '+esc(it.reason)+'</span>':'');
+    const sels=row.querySelectorAll('select'); sels.forEach(s=>{ const side=s.dataset.side; [...s.options].forEach(o=>{ const busy=side==='src'?(alUse(it.kind,it.aid,o.value,'out')>0||items.some(j=>j!==it&&j.type==='plain'&&j.strict&&j.aid===it.aid&&j.sp===o.value)):false; o.disabled=busy&&o.value!==s.value; }); }); };
+  const repaint=()=>items.forEach(paintRow);
+  GR.forEach(([g,key,col])=>{ const list=items.filter(i=>i.kind===g); if(!list.length) return;
+    const sec=document.createElement('section'); sec.className='algrp'; sec.style.setProperty('--gc','var('+col+')');
+    sec.innerHTML=`<h4>${esc(pkt(key))}</h4>`; list.forEach(it=>{
+      const row=document.createElement('div'); row.className='alrow'; row.innerHTML=`<label class="alchk"><input type="checkbox"><span class="altxt"></span></label>`;
+      if(it.type==='plain'){ const mk=(side,list,cur,lab)=>{ if(list.length<2) return; const w=document.createElement('label'); w.className='alsel'; const s=document.createElement('select'); s.dataset.side=side; s.setAttribute('aria-label',lab+': '+alNm(side==='src'?it.aid:it.bid));
+          list.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; s.appendChild(o); }); s.value=cur; w.append(document.createTextNode(lab+' '),s); row.appendChild(w);
+          s.onchange=()=>{ if(side==='src'){ it.sp=s.value; } else it.dp=s.value; repaint(); }; };
+        mk('src',it.ao,it.sp,pkt('m.t_al_uitgang')); mk('dst',it.bi,it.dp,pkt('m.t_al_ingang')); }
+      row.querySelector('input').onchange=e=>{ it.checked=e.target.checked; if(it.checked) items.forEach(j=>{ if(alConflict(it,j)) j.checked=false; }); repaint(); };
+      rows.set(it,row); sec.appendChild(row); }); body.appendChild(sec); });
+  repaint();
+  const done=ok=>{ const never=m.querySelector('#alNever').checked; document.removeEventListener('keydown',key,true); m.remove(); if(never) autoLinkSet(false); if(ok) alApply(nid,items.filter(i=>i.checked&&!i.reason)); };
+  const key=e=>{ if(e.key==='Escape'){ e.stopPropagation(); e.preventDefault(); done(false); } };
+  m.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) done(b.dataset.a==='1'); else if(e.target===m) done(false); });
+  document.addEventListener('keydown',key,true); document.body.appendChild(m); m.querySelector('[data-a="1"]').focus(); }
+function alApply(nid,sel){
+  const made=[], removed=[];
+  sel.forEach(it=>{
+    if(it.type==='insert'){ const c=it.cable; if(!Host.cables.includes(c)) return; const before=new Set(Host.cables); if(insertOnCable(nid,c)){ removed.push(c); Host.cables.forEach(x=>{ if(!before.has(x)) made.push(x); }); } }
+    else { const c={from:{id:it.aid,port:it.sp},to:{id:it.bid,port:it.dp},kind:it.kind}; patch(c); if(Host.cables.includes(c)) made.push(c); } });
+  if(made.length){ _alUndo={made,removed}; _lastLayout=null; }
+  drawCables(); status(pktp('m.t_al_gemaakt',made.length!==1,made.length)+pkt('m.ctrl_z_zet_terug')); }
+function alUndo(){ if(!_alUndo) return false; const U=_alUndo; _alUndo=null; U.made.forEach(c=>{ if(Host.cables.includes(c)) unpatch(c); }); U.removed.forEach(c=>{ if(Host.devices.has(c.from.id)&&Host.devices.has(c.to.id)) patch(c); }); drawCables(); status(pkt('m.t_al_teruggedraaid')); return true; }
+document.addEventListener('keydown',e=>{ if(typing(e)||document.querySelector('.pkmodal')) return; if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key==='z'||e.key==='Z')&&_alUndo){ if(alUndo()) e.preventDefault(); } });
+function autoLinkOffer(nid){ if(!autoLinkOn()||document.querySelector('.pkmodal')) return; const items=alBuild(nid); if(items) alDialog(nid,items); }
 
 /* =====================================================================
    FOCUS · apparaten met [f] naast, onder of in een raster, zonder ze op het canvas te verplaatsen
@@ -4088,7 +4481,7 @@ function lpFire(){ const path=LP.path||[]; LP.timer=0; if(LP.id==null||TOUCH.pin
   if(has(n=>cls(n,'libdev'))) return;   // de bibliotheek heeft zijn eigen lang indrukken (slepen)
   let did=false;
   const hit=path.find(n=>n&&n._cable);
-  if(hit){ if(wire) endWire(false); cgrab=null; cableMenu(hit._cable,LP.x,LP.y); did=true; }
+  if(hit){ if(wire) endWire(false); cgrab=null; cableMenu(hit._cable,LP.x,LP.y); { const t=cableTipText(hit._cable); if(t) status(t); } did=true; }
   else { const pe=has(n=>cls(n,'port'));
     if(pe){ if(wire) endWire(false); if(pe.title) status(pe.title); did=!!pe.title; }
     else { const bar=has(n=>cls(n,'bar')&&n.closest('.card')), ic=has(n=>cls(n,'pkicon')), card=(bar||ic)&&(bar||ic).closest('.card');
@@ -4300,7 +4693,7 @@ function focusOneApply(){ if(!focusEl) return; const one=FOCUS.layout==='one', l
   if(!one){ Host.devices.forEach(r=>r.el.classList.remove('fvoff')); return; }
   list.forEach(([,r],i)=>r.el.classList.toggle('fvoff',i!==FOCUS.idx));
   const strip=tabs.querySelector('.fvstrip'); strip.innerHTML='';
-  list.forEach(([id,r],i)=>{ const b=document.createElement('button'); b.className='small'+(i===FOCUS.idx?' on':''); b.textContent=r.def.name; b.setAttribute('role','tab'); b.setAttribute('aria-selected',String(i===FOCUS.idx)); b.dataset.i=String(i); strip.appendChild(b); });
+  list.forEach(([id,r],i)=>{ const b=document.createElement('button'); b.className='small'+(i===FOCUS.idx?' on':''); b.innerHTML=catIconHTML(categoryOf(r.def))+esc(r.def.name); b.setAttribute('role','tab'); b.setAttribute('aria-selected',String(i===FOCUS.idx)); b.dataset.i=String(i); strip.appendChild(b); });
   tabs.querySelector('.fvcnt').textContent=list.length?pkt('m.t_n_van_m',FOCUS.idx+1,list.length):'';
   const on=strip.querySelector('.on'); if(on) strip.scrollLeft=Math.max(0,on.offsetLeft-strip.clientWidth/2+on.offsetWidth/2); }
 function focusBuildTabs(){ const bar=focusEl.querySelector('.fvbar'), tabs=document.createElement('div'); tabs.className='fvtabs';
