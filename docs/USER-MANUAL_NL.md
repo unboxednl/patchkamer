@@ -103,7 +103,7 @@ Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen word
 
 **Nieuwe versie van Patchkamer.** Bij het starten (via http of https) vergelijkt Patchkamer `patchkamer.html` en zijn stijlbladen en scripts met de versie op GitHub (`main`). Wijkt die af, dan verschijnt rechtsonder een melding met **Bekijk op GitHub**, **Later** en **Niet meer melden voor deze versie**. Een bestand dat je via `file://` opent, kan zichzelf niet lezen en krijgt geen melding.
 
-**Het kan ook vanzelf.** Onder **Instellingen → Nieuwe werkruimte** kan Patchkamer de apparatenbibliotheek, de presets en de tunes van GitHub laden zodra je met een lege werkruimte begint. De drie adressen kun je daar wijzigen (hoofdstuk 10). Elk adres wordt een eigen bron in de lijst, met een knop **Scannen**.
+**Het kan ook vanzelf.** Onder **Instellingen → Nieuwe werkruimte** kan Patchkamer de apparatenbibliotheek, de presets en de tunes van GitHub laden zodra je met een lege werkruimte begint. De adressen kun je daar wijzigen (hoofdstuk 10). Elk adres wordt een eigen bron in de lijst, met een knop **Scannen**.
 
 **Een map kiezen.** Op `localhost` of via https onthouden Chrome en Edge de map en ziet Patchkamer nieuwe apparaten als je terugkomt in het venster. In andere gevallen maakt de browser een eenmalige momentopname van de map en zegt de vraag iets als "7 bestanden uploaden". Er wordt niets geüpload, en het getal telt elk bestand in de map, niet alleen apparaten. Patchkamer leest alleen de bestanden die eindigen op `.patchkamer-device.js` en toont daarna het echte aantal apparaten. Bij een momentopname vraagt **Scannen** je de map opnieuw te kiezen om nieuwe bestanden te zien.
 
@@ -119,7 +119,19 @@ Elke categorie heeft een icoon. Het staat bij de categorienaam in de bibliotheek
 
 ### Een icoon in een bibliotheekmap zetten
 
-Zet een bestand `icon.svg`, `icon.png`, `icon.webp` of `icon.jpg` (in die volgorde gezocht, hoofdletters maken niet uit) in de map die als categorie telt, bijvoorbeeld `devices/synths/`. Dat icoon wordt dan het icoon van die categorie en van alle apparaten erin. Het werkt voor een lokale map, een GitHub-bron en een webadres; **Scannen** neemt een gewijzigd icoon over. Een `icon.*` in een andere map, bijvoorbeeld in de map van één apparaat, doet niets. Wat wint: eerst je eigen keuze onder **Indeling** (en het veld `icon` in het indelingsbestand), dan het bestand in de map, dan het ingebouwde icoon. De afbeelding wordt getoond zoals ze is (niet omgekleurd) en alleen als afbeelding, dus scripts in een svg draaien nooit. Bestanden groter dan 200 kB of die geen afbeelding zijn, worden overgeslagen. Een vierkante, transparante afbeelding (svg, of minstens 64 pixels) ziet er het mooist uit.
+Zet een bestand `icon.svg`, `icon.png`, `icon.webp` of `icon.jpg` (in die volgorde gezocht, hoofdletters maken niet uit) in de map die als categorie telt, bijvoorbeeld `devices/synths/`. Dat icoon wordt dan het icoon van die categorie en van alle apparaten erin. Het werkt voor een lokale map, een GitHub-bron en een webadres; **Scannen** neemt een gewijzigd icoon over. Een `icon.*` in een andere map doet voor de categorie niets (in de map van één apparaat is het het icoon van dat apparaat, zie hieronder). Wat wint: eerst je eigen keuze onder **Indeling** (en het veld `icon` in het indelingsbestand), dan het bestand in de map, dan het ingebouwde icoon. De afbeelding wordt getoond zoals ze is (niet omgekleurd) en alleen als afbeelding, dus scripts in een svg draaien nooit. Bestanden groter dan 200 kB of die geen afbeelding zijn, worden overgeslagen. Een vierkante, transparante afbeelding (svg, of minstens 64 pixels) ziet er het mooist uit. Een `icon.*` in de map van één apparaat is wél een icoon voor dat apparaat: zie hieronder.
+
+### Een eigen icoon voor een apparaat
+
+Behalve de categorie kan ook één **apparaat** een eigen icoon hebben. Patchkamer zoekt in deze volgorde (de eerste die bestaat wint):
+
+1. het `icon` van de **skin** die op die kaart actief is (alleen op die kaart);
+2. een `icon.svg`, `icon.png`, `icon.webp` of `icon.jpg` in de **map van het apparaat** in je apparatenbibliotheek, dus naast het `.patchkamer-device.js`, bijvoorbeeld `devices/synths/Duofone/icon.svg` (alleen voor een lokale map en een GitHub-bron; bij een webadres zoekt Patchkamer niet naar apparaatmappen);
+3. een `icon.*` in `skins/library/<apparaat-id>/`, bijvoorbeeld `skins/library/nl.patchkamer.duofone/icon.svg`, als die bron geladen is. Zo geef je ook een apparaat dat je niet zelf in je bibliotheek hebt een icoon;
+4. het icoon van de **categorie** (zie hierboven), in de kleur van de categorie;
+5. het neutrale standaardicoon.
+
+Een eigen icoon staat op dezelfde plekken als het categorie-icoon: in de bibliotheek (kaartjes en compacte regels), op de titelbalk, in de minimale stand, in de vereenvoudigde kaart bij uitzoomen en in de tabbalk van Focus "Eén tegelijk". Het wordt getoond zoals het is (niet omgekleurd) en alleen als afbeelding, dus scripts in een svg draaien nooit. Dezelfde grenzen gelden als bij categorie-iconen: hoogstens 200 kB, alleen een afbeelding, alleen van dezelfde bron als de bibliotheek. Een apparaat zonder eigen icoon ziet er precies uit als voorheen. De categorie houdt haar eigen icoon bij de categorienaam. **Scannen** neemt een gewijzigd icoon over. Kies je op de kaart weer **Standaard** bij Skin, dan keert het icoon terug naar punt 2, 3 of 4.
 
 
 ## 5. Je eerste patch
@@ -202,6 +214,20 @@ De menu's **Tunes** en **Presets** beheren je bibliotheken: maak een nieuwe, zet
 
 Het hele verhaal, met de lijst van de meegeleverde packs en hoe je een eigen pack maakt, staat in de [handleiding presets](presets/USER-MANUAL_NL.md) en de [handleiding tunes](tunes/USER-MANUAL_NL.md).
 
+### Skins
+
+Een **skin** verandert alleen het **uiterlijk** van één apparaat, nooit de klank, de instellingen of de werking. Het is een los bestand (`.patchkamer-skin.json`) met een of meer **verschijningsvormen**, bijvoorbeeld een compacte en een brede. Skins zijn een derde soort bibliotheekmateriaal naast tunes en presets.
+
+**Waar vind je skins?** In de map `skins/library` van deze repository op GitHub, met per apparaat een map (`skins/library/<apparaat-id>/`). Onder **Instellingen → Nieuwe werkruimte** staat **Skins laden** met dat adres; de knop **Alles laden** in het Skins-paneel laadt ze ook. Een GitHub-, web- of lokale map die `skins/library/<apparaat-id>/*.patchkamer-skin.json` bevat, voeg je als bron toe zoals elke bibliotheek; een lokale map met apparaten én skins werkt ook. Een skin voor een apparaat dat je niet hebt, wordt wel bewaard maar nergens aangeboden.
+
+**Laden.** Open **Skins ▾** (in het ☰-menu onder **Geluid**) voor het paneel **Skinbibliotheken**: per apparaat de skins met naam, maker, versie, licentie en verschijningsvormen. Met **Importeren…** kies je een bestand; je kunt het ook op de vloer of het bibliotheekvenster **droppen** (zonder bevestiging, na de apparaten en tunes en vóór songs en werkruimtes). Een geïmporteerde skin blijft in je browser staan tot je hem met **×** verwijdert; skins uit een bron zijn alleen-lezen en verdwijnen met die bron. Een ongeldig bestand wordt geweigerd met een melding met de bestandsnaam; de rest laadt door. Een skin met een onbekende hoofdversie van het skinformaat, of met CSS die van buiten laadt (`@import`, een `url(` naar een webadres), wordt geweigerd.
+
+**Kiezen op de kaart.** Zodra er voor een apparaat minstens één skin is, staan in de balk van de kaart twee lijsten: **Skin** (**Standaard** is het eigen uiterlijk van het apparaat) en **Verschijning**. Bij **Auto** kiest Patchkamer zelf de verschijningsvorm op de **breedte van de kaart** en de **schermgrootte** (telefoon, compact of breed); de lijst toont welke dat nu is. Kies je zelf een verschijningsvorm, dan staat Auto uit voor dat apparaat tot je terug naar **Auto** gaat. De keuze werkt direct. Bij **Standaard** is alles weg en staat het apparaat precies zoals voorheen. Zijn de balken op de kaarten uitgezet (Instellingen), dan kies je via het paneel met **Toepassen** en **Kies**.
+
+**Bewaren.** De keuze per apparaat staat in de werkruimte en in de song, samen met de gebruikte skins (hoogstens 20), zodat een song zijn uiterlijk behoudt zonder de bibliotheek. Bij het openen komen die skins stil in je register (een nieuwere versie wint). Werkruimtes en songs zonder skins laden zoals altijd. Skins raken de klank nooit: de instelling van het apparaat is met en zonder skin gelijk.
+
+**Een skin maken?** Zie [skins/AGENTS.md](https://github.com/unboxednl/patchkamer/blob/main/skins/AGENTS.md) (voor wie met een AI-agent werkt) en het skincontract ([Nederlands](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_NL.md), [English](https://github.com/unboxednl/patchkamer/blob/main/skins/contract/SKINS-CONTRACT_EN.md)).
+
 ## 8. Bewaren, openen en delen
 
 ![Het menu Werkruimte](images/nl/06-workspace.png)
@@ -227,9 +253,10 @@ Met een muis kun je bestanden uit je bestandsbeheer op de **vloer** of het **bib
 - een **song** (`.patchkamer-song.json`) of een **werkruimtebestand** opent in een **nieuwe werkruimte-tab**; je huidige werkruimte blijft zoals ze is. Net als bij de knop **Songs** worden de apparaten herschikt;
 - een **apparaat** (`.patchkamer-device.js`) komt in de **bibliotheek**, niet op de vloer. Is dezelfde versie al geladen, dan wordt hij vervangen. Plaats hem daarna zoals gewoonlijk;
 - een **tunepack** of **presetpack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) komt in je tune- of presetbibliotheken, zoals **Importeren**;
+- een **skin** (`.patchkamer-skin.json`) komt in je skinbibliotheek, zoals **Importeren** in het Skins-paneel;
 - een **bibliotheekindeling** (`patchkamer-bibliotheek.json`) wordt toegepast.
 
-Laat je meerdere bestanden tegelijk los (maximaal 50, elk tot 50 MB), dan gaan eerst de apparaten, dan tunes en presets, de indeling en als laatste songs en werkruimtes, zodat een song de apparaten uit dezelfde drop al in de bibliotheek vindt. Er komt één melding met het resultaat. Mappen en onbekende bestanden worden niet geladen; een afbeelding of geluidsbestand blijft aan het apparaat of de browser. Een bestand dat je op een apparaat zelf loslaat (bijvoorbeeld op de golfvorm van een sampler) is voor dat apparaat. Op een telefoon of tablet bestaat dit niet: gebruik daar de bestaande knoppen (**Bestand openen…**, **Importeren**, **Instrument laden**).
+Laat je meerdere bestanden tegelijk los (maximaal 50, elk tot 50 MB), dan gaan eerst de apparaten, dan tunes en presets, skins, de indeling en als laatste songs en werkruimtes, zodat een song de apparaten uit dezelfde drop al in de bibliotheek vindt. Er komt één melding met het resultaat. Mappen en onbekende bestanden worden niet geladen; een afbeelding of geluidsbestand blijft aan het apparaat of de browser. Een bestand dat je op een apparaat zelf loslaat (bijvoorbeeld op de golfvorm van een sampler) is voor dat apparaat. Op een telefoon of tablet bestaat dit niet: gebruik daar de bestaande knoppen (**Bestand openen…**, **Importeren**, **Instrument laden**).
 
 ## 9. Je weg vinden op de vloer
 
@@ -287,7 +314,7 @@ De functies die de werkwijze het meest versnellen, op een rij:
 
 - **Taal:** automatisch (je browser), Nederlands of English. Patchkamer laadt opnieuw en behoudt je werkruimte.
 - **Audio:** kies kwaliteit **Laag**, **Normaal** of **Hoog**, of stel **sample rate**, **latency** en **oversampling** zelf in. Hogere kwaliteit vraagt meer van je computer. Een wijziging laadt Patchkamer opnieuw en behoudt je werkruimte. Hoor je geknetter, kies dan een grotere latencybuffer (*Gebalanceerd* of *Stabiel*).
-- **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet de drie terug. De knop **Alles laden** in het Tunes- en Presets-paneel gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
+- **Nieuwe werkruimte:** vink aan wat Patchkamer laadt als je met een lege werkruimte begint: **Apparatenbibliotheek laden**, **Presets laden**, **Tunes laden**, **Skins laden**. Onder elk vinkje staat het adres, standaard de mappen `devices`, `presets` en `tunes` van `github.com/unboxednl/patchkamer`. Alles onder de map wordt ingelezen. **Standaardadressen herstellen** zet ze terug. **Skins laden** werkt hetzelfde, met de map `skins/library` als standaard; staat die map (nog) niet op GitHub, dan krijg je alleen een korte melding en laadt de rest gewoon. De knop **Alles laden** in het Tunes-, Presets- en Skins-paneel gebruikt dezelfde adressen. Alleen GitHub-adressen werken hier; een webadres of lokale map voeg je als bron toe in de bibliotheek.
 - **AI-assistent:** kies een aanbieder (**Anthropic**, **OpenAI** of een **eigen adres** voor elke OpenAI-compatibele dienst, zoals je eigen proxy, OpenRouter of een lokaal model), plak je **API-sleutel** en kies een **model** (**Modellen ophalen** vult de lijst). De sleutel staat alleen in deze browser (localStorage) en gaat alleen naar de aanbieder die je koos. Daaronder kun je instellen uit welke GitHub-repository de AI zijn documentatie leest, of **Eigen agent-instructies gebruiken** aanvinken en je eigen tekst schrijven: de AI gebruikt die dan in plaats van de GitHub-documentatie. **Sleutels wissen** haalt alle sleutels weg. Zie *AI Chat* in hoofdstuk 6.
 - **Adres van de songs:** onder **Nieuwe werkruimte** staat ook het adres van de demo-songs (standaard de map `songs` op GitHub); **Standaardadres herstellen** zet het terug.
 - **Weergave:** de stijl van de kabels, hun dekking, de kabelkleur (per categorie of per soort), de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
