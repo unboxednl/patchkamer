@@ -722,6 +722,7 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
   <div class="note" style="margin-bottom:6px" data-i18n="ui.browsergeheugen_uitleg">Patchkamer onthoudt in deze browser je instellingen, bibliotheekindeling (ook eigen categorieën), bronnen, werkruimte en eigen tunes en presets. Hiermee wis je dat allemaal en begint Patchkamer opnieuw. Bestanden op je computer en op GitHub blijven staan.</div>
   <div class="wsrow"><button class="small" id="wipeBtn" data-i18n="ui.browsergeheugen_wissen">Browsergeheugen wissen…</button></div>
   <h3 style="margin-top:12px" data-i18n="ui.contract_opstelling">Contract &amp; opstelling</h3>
+  <div class="note" id="aboutLinks"><b data-i18n="ui.t_over_patchkamer">Patchkamer</b>: <a href="https://github.com/unboxednl/patchkamer" target="_blank" rel="noopener" data-i18n="ui.t_github_repo">GitHub-repository</a> · <span data-i18n="ui.t_handleiding">Gebruikershandleiding</span>: <a id="manA" href="https://github.com/unboxednl/patchkamer/blob/main/docs/USER-MANUAL_NL.md" target="_blank" rel="noopener" data-i18n="ui.nederlands">Nederlands</a> · <a id="manB" href="https://github.com/unboxednl/patchkamer/blob/main/docs/USER-MANUAL_EN.md" target="_blank" rel="noopener" data-i18n="ui.english">English</a></div>
   <div class="note" id="contractLinks"><b data-i18n="ui.contract">Contract</b>: <a id="ctrA" href="https://github.com/unboxednl/patchkamer/blob/main/contract/PATCHKAMER-CONTRACT_NL.md" target="_blank" rel="noopener" data-i18n="ui.nederlands">Nederlands</a> · <a id="ctrB" href="https://github.com/unboxednl/patchkamer/blob/main/contract/PATCHKAMER-CONTRACT_EN.md" target="_blank" rel="noopener" data-i18n="ui.english">English</a> · <a id="valA" href="https://github.com/unboxednl/patchkamer/blob/main/contract/validate-instrument.mjs" target="_blank" rel="noopener" data-i18n="ui.validator">validator</a> <span data-i18n="ui.op_github">(op GitHub)</span></div>
   <details><summary data-i18n="ui.sjabloon_kopieer_bewaar_als_patchkamer">Sjabloon (kopieer, bewaar als .patchkamer-device.js)</summary><pre id="tmpl"></pre><button class="small" id="copyTmpl" data-i18n="ui.kopieer_sjabloon">Kopieer sjabloon</button></details>
   <details><summary data-i18n="ui.werkruimte_als_tekst">Werkruimte als tekst</summary><textarea id="patchText" rows="4" spellcheck="false"></textarea><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="small" id="exportPatch" data-i18n="ui.exporteer">Exporteer</button><button class="small" id="importPatch" data-i18n="ui.importeer">Importeer</button></div></details>
@@ -852,6 +853,9 @@ const I18N={
    "ui.contract":"Contract",
    "ui.validator":"validator",
    "ui.op_github":"(op GitHub)",
+   "ui.t_over_patchkamer":"Patchkamer",
+   "ui.t_github_repo":"GitHub-repository",
+   "ui.t_handleiding":"Gebruikershandleiding",
    "ui.sjabloon_kopieer_bewaar_als_patchkamer":"Sjabloon (kopieer, bewaar als .patchkamer-device.js)",
    "ui.kopieer_sjabloon":"Kopieer sjabloon",
    "ui.werkruimte_als_tekst":"Werkruimte als tekst",
@@ -1589,6 +1593,9 @@ const I18N={
    "ui.contract":"Contract",
    "ui.validator":"validator",
    "ui.op_github":"(on GitHub)",
+   "ui.t_over_patchkamer":"Patchkamer",
+   "ui.t_github_repo":"GitHub repository",
+   "ui.t_handleiding":"User manual",
    "ui.sjabloon_kopieer_bewaar_als_patchkamer":"Template (copy, save as .patchkamer-device.js)",
    "ui.kopieer_sjabloon":"Copy template",
    "ui.werkruimte_als_tekst":"Workspace as text",
@@ -4067,6 +4074,7 @@ window.addEventListener('resize',drawCables); floorwrap.addEventListener('scroll
   let pend=null; try{ pend=sessionStorage.getItem('patchkamer.reloadWs'); sessionStorage.removeItem('patchkamer.reloadWs'); }catch(e){} PK_PENDING=!!pend;
   if(pend){ setTimeout(async()=>{ try{ await openWorkspace(JSON.parse(pend)); status(pkt('m.werkruimte_teruggezet_na_wijziging')); }catch(e){ status(pkt('m.terugzetten_mislukt')+e.message,true); } },300); }
   // contract: links naar GitHub; eigen taal eerst
+  (function(){ const a=$('manA'), b=$('manB'); if(PK_LANG==='en'){ const h=a.href, x=a.textContent; a.href=b.href; a.textContent=b.textContent; b.href=h; b.textContent=x; } })();
   (function(){ const a=$('ctrA'), b=$('ctrB'); if(PK_LANG==='en'){ const h=a.href, x=a.textContent; a.href=b.href; a.textContent=b.textContent; b.href=h; b.textContent=x; } })();
 })();
 
