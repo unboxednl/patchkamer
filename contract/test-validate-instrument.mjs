@@ -1,6 +1,7 @@
-// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15)
+// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) en het klembord (clipInfo/getClip/setClip, v1.17)
 // Gebruik / Usage:  node contract/test-validate-instrument.mjs      (exit 0 = alles groen / all green)
 // Elk geval is een klein apparaat dat in een tijdelijke map wordt gezet en in beide talen (--lang nl en --lang en) wordt gevalideerd.
+// "err" = fragmenten (nl, en) die in de foutmelding moeten staan (exit 1, geen OK-regel).
 // "warn" = fragmenten (nl, en) die in de OK-regel als let op / warning moeten staan; zonder "warn" mag er geen enkele waarschuwing staan.
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
@@ -34,6 +35,7 @@ const cases = [];
 // [naam, apparaatbron, { warn: [[nl, en], ...], has: [[nl, en]...] (fragmenten in de uitvoer, ook met --controls), controls: true }]
 const ok = (name, src, extra = {}) => cases.push([name, src, extra]);
 const warns = (name, src, w, extra = {}) => cases.push([name, src, { ...extra, warn: w }]);
+const errs = (name, src, e, extra = {}) => cases.push([name, src, { ...extra, err: e }]);
 
 // ---- zonder waarschuwing
 ok('geen host.ui, geen id', dev(`el.appendChild(document.createElement('div'));`));
@@ -164,22 +166,106 @@ ok('--controls: kolom in params() (ja, nee, uitgesloten, ?)', dev2({ def: "modEx
   ['in params()', 'in params()'], ['cut', 'cut'], [' | ja', ' | yes'], [' | nee', ' | no'], [' | uitgesloten', ' | excluded'], [' | ?', ' | ?'], ['Test note', 'Test note']] });
 ok('--controls: keuze krijgt streepje in de kolom in params()', dev2({ plist: ['cut'], body: `knob('cut'); sel({ id: 'shape' });` }), { controls: true, has: [['shape | select | -', 'shape | select | -'], ['| ja', '| yes']] });
 
+
+// ---- klembord (v1.17): clipInfo / getClip / setClip. Een probe-apparaat met een noten-patroon; `mut` past het aan om één regel te schenden.
+const PROBE = {
+  info: `clipInfo() { return { name: 'Probe', copy: ['notes'], paste: ['notes'], length: { min: 12, max: 12288, step: 12, current: S.length, shared: false }, maxEvents: 4096 }; },`,
+  get: `getClip() { return S.notes.length ? { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', name: 'Probe', length: S.length, notes: S.notes.map(n => ({ ...n })) } : null; },`,
+  set: `setClip(c) { try {
+        if (!c || c.format !== 'patchkamer-clip' || c.formatVersion !== 1 || c.kind !== 'notes') return { ok: false, reason: host.lang === 'nl' ? 'Alleen noten' : 'Notes only' };
+        const L = Math.round(+c.length); if (!(L >= 1 && L <= 12288) || !Array.isArray(c.notes)) return { ok: false, reason: host.lang === 'nl' ? 'Ongeldige lengte' : 'Invalid length' };
+        const out = []; for (const n of c.notes.slice(0, 4096)) { if (!n || typeof n !== 'object') continue; const t = Math.round(+n.t), nn = Math.round(+n.n); if (!(t >= 0 && t < L && nn >= 0 && nn <= 127)) continue;
+          let len = Math.round(+n.len); if (!(len >= 1)) len = 12; let v = +n.vel; if (!(v >= 0.01)) v = 0.8; out.push({ t, n: nn, len: Math.min(len, L - t), vel: Math.min(1, v) }); }
+        S.length = L; S.notes = out; return { ok: true }; } catch (e) { return { ok: false, reason: String(e) }; } },`
+};
+const clipDev = (o = {}) => `// SPDX-License-Identifier: MIT
+export default {
+  id: 'nl.test.clip', name: 'Clip', version: '1.0.0', kind: 'effect', modExclude: '*',
+  ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [{ id: 'ev', name: 'Ev' }] },
+  create(ctx, host) {
+    const g = ctx.createGain(); const S = ${o.init ?? '{ length: 192, notes: [{ t: 0, n: 60, len: 12, vel: 0.8 }, { t: 48, n: 64, len: 24, vel: 0.5 }] }'}; const self = {};
+    return Object.assign(self, { inputs: { in: g }, outputs: { out: g },
+      mount(el) {}, getState() { return ${o.raw ? 'S' : 'JSON.parse(JSON.stringify(S))'}; }, setState(s) { Object.assign(S, JSON.parse(JSON.stringify(s || {}))); }, destroy() {},
+      ${o.info ?? PROBE.info}
+      ${o.get ?? PROBE.get}
+      ${o.set ?? PROBE.set} });
+  }
+};
+`;
+const CLIPOK = ', klembord (clipInfo/getClip/setClip)';
+cases.push(['klembord: probe-apparaat (alle drie, geldig)', clipDev(), { has: [[', klembord (clipInfo/getClip/setClip)', ', clipboard (clipInfo/getClip/setClip)']] }]);
+ok('klembord: geen enkele methode (zoals de 86 bestaande apparaten)', clipDev({ info: '', get: '', set: '' }));
+ok('klembord: getClip() geeft null (niets te kopieren)', clipDev({ get: 'getClip() { return null; },' }));
+ok('klembord: clipInfo() geeft null', clipDev({ info: 'clipInfo() { return null; },' }));
+warns('klembord: een drums-clip (de probe neemt alleen noten aan: let op)', clipDev({ get: `getClip() { return { format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', length: 192, lanes: [{ id: 'kick', name: 'Kick', type: 'kick', note: 36 }], hits: [{ t: 0, lane: 0, vel: 0.9 }, { t: 96, lane: 0 }] }; },` }), [['wordt door het apparaat zelf afgewezen', 'rejects setClip(getClip())']]);
+ok('klembord: extreme clip op 12288 tikken en 4096 noten', clipDev({ init: "{ length: 12288, notes: Array.from({ length: 4096 }, (_, i) => ({ t: i * 3, n: i % 128, len: 1, vel: 1 })) }" }));
+warns('klembord: setClip(getClip()) afgewezen door het apparaat zelf', clipDev({ set: 'setClip(c) { return { ok: false, reason: "nee" }; },' }), [['wordt door het apparaat zelf afgewezen', 'rejects setClip(getClip())']]);
+const H = (k) => [`klembord (v1.17): ${k}() ontbreekt; clipInfo, getClip en setClip horen bij elkaar`, `clipboard (v1.17): ${k}() is missing; clipInfo, getClip and setClip belong together`];
+errs('klembord: setClip ontbreekt', clipDev({ set: '' }), [H('setClip')]);
+errs('klembord: getClip ontbreekt', clipDev({ get: '' }), [H('getClip')]);
+errs('klembord: clipInfo ontbreekt', clipDev({ info: '' }), [H('clipInfo')]);
+errs('klembord: clipInfo gooit', clipDev({ info: 'clipInfo() { throw new Error("boem"); },' }), [['clipInfo() gooit: boem', 'clipInfo() throws: boem']]);
+errs('klembord: clipInfo geeft een tekst', clipDev({ info: 'clipInfo() { return "x"; },' }), [['clipInfo() moet null of een JSON-object geven', 'clipInfo() must return null or a JSON object']]);
+errs('klembord: clipInfo verandert de state', clipDev({ info: 'clipInfo() { S.length += 12; return null; },' }), [['clipInfo() verandert de state', 'clipInfo() changes the state']]);
+errs('klembord: clipInfo copy met onbekende soort', clipDev({ info: `clipInfo() { return { copy: ['chords'] }; },` }), [["clipInfo(): copy en paste moeten lijsten zijn", 'clipInfo(): copy and paste must be lists']]);
+errs('klembord: clipInfo length.max te groot', clipDev({ info: `clipInfo() { return { length: { min: 1, max: 99999 } }; },` }), [['clipInfo(): length.min', 'clipInfo(): length.min']]);
+errs('klembord: getClip gooit', clipDev({ get: 'getClip() { throw new Error("kapot"); },' }), [['getClip() gooit: kapot', 'getClip() throws: kapot']]);
+errs('klembord: getClip is geen JSON (BigInt)', clipDev({ get: 'getClip() { return { a: 10n }; },' }), [['getClip() geeft geen JSON', 'getClip() does not return a JSON']]);
+errs('klembord: getClip is een AudioNode-struct', clipDev({ get: 'getClip() { return { format: "patchkamer-clip", formatVersion: 1, kind: "notes", length: 192, notes: [], node: g }; },' }), [['geeft geen JSON-object of null', 'does not return a JSON object or null']]);
+errs('klembord: getClip verandert de state', clipDev({ get: 'getClip() { S.length += 12; return null; },' }), [['getClip() verandert de state', 'getClip() changes the state']]);
+const BADC = (extra) => `getClip() { return { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', length: 192, notes: [{ t: 0, n: 60, len: 12, vel: 0.8 }], ${extra} }; },`;
+errs('klembord: verkeerd format', clipDev({ get: BADC("format: 'x'") }), [['format moet', 'format must']]);
+errs('klembord: formatVersion 2', clipDev({ get: BADC('formatVersion: 2') }), [['formatVersion 1', 'formatVersion 1']]);
+errs('klembord: kind chords', clipDev({ get: BADC("kind: 'chords'") }), [["kind moet 'notes' of 'drums'", "kind must be 'notes' or 'drums'"]]);
+errs('klembord: length 20000', clipDev({ get: BADC('length: 20000') }), [['length moet een geheel getal van 1 tot 12288', 'length must be an integer from 1 to 12288']]);
+errs('klembord: length 0', clipDev({ get: BADC('length: 0') }), [['length moet', 'length must']]);
+errs('klembord: length met komma', clipDev({ get: BADC('length: 192.5') }), [['length moet', 'length must']]);
+errs('klembord: name geen tekst', clipDev({ get: BADC('name: 5') }), [['name moet tekst zijn', 'name must be text']]);
+errs('klembord: noot met n 200', clipDev({ get: BADC('notes: [{ t: 0, n: 200, len: 1 }]') }), [['noot 0:', 'note 0:']]);
+errs('klembord: noot met t buiten length', clipDev({ get: BADC('notes: [{ t: 0, n: 60, len: 1 }, { t: 192, n: 60, len: 1 }]') }), [['noot 1:', 'note 1:']]);
+errs('klembord: noot met kommagetal als t', clipDev({ get: BADC('notes: [{ t: 0.5, n: 60, len: 1 }]') }), [['noot 0:', 'note 0:']]);
+errs('klembord: noot met len 0', clipDev({ get: BADC('notes: [{ t: 0, n: 60, len: 0 }]') }), [['noot 0:', 'note 0:']]);
+errs('klembord: noot met vel 2', clipDev({ get: BADC('notes: [{ t: 0, n: 60, len: 1, vel: 2 }]') }), [['noot 0:', 'note 0:']]);
+errs('klembord: 4097 noten', clipDev({ get: BADC('notes: Array.from({ length: 4097 }, () => ({ t: 0, n: 60, len: 1 }))') }), [["kind 'notes' heeft een lijst notes", "kind 'notes' needs a list notes"]]);
+errs('klembord: notes ontbreekt bij kind notes', clipDev({ get: BADC('notes: undefined') }), [["kind 'notes' heeft een lijst notes", "kind 'notes' needs a list notes"]]);
+const DRUM = (extra) => `getClip() { return { format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', length: 192, lanes: [{ id: 'kick', name: 'Kick', note: 36 }], hits: [{ t: 0, lane: 0, vel: 0.9 }], ${extra} }; },`;
+errs('klembord: slag op een baan die niet bestaat', clipDev({ get: DRUM('hits: [{ t: 0, lane: 1 }]') }), [['slag 0:', 'hit 0:'].map(x => x.replace('slag', 'hit'))].map(([a, b]) => [a, b]));
+errs('klembord: 65 banen', clipDev({ get: DRUM('lanes: Array.from({ length: 65 }, (_, i) => ({ id: "l" + i, name: "L" }))') }), [["kind 'drums' heeft een lijst lanes", "kind 'drums' needs a list lanes"]]);
+errs('klembord: drums zonder hits', clipDev({ get: DRUM('hits: undefined') }), [["kind 'drums' heeft een lijst lanes", "kind 'drums' needs a list lanes"]]);
+errs('klembord: setClip(getClip()) verandert de state', clipDev({ set: PROBE.set.replace('S.length = L;', 'S.length = L + 12;') }), [['setClip(getClip()) verandert de state', 'setClip(getClip()) changes the state']]);
+errs('klembord: setClip gooit op rommel', clipDev({ set: PROBE.set.replace('try {', 'if (!c || typeof c.length !== "number") throw new Error("rommel"); try {') }), [['setClip() gooit bij', 'setClip() throws on']]);
+errs('klembord: setClip geeft niets terug', clipDev({ set: 'setClip(c) { return undefined; },' }), [['setClip() moet { ok: true }', 'setClip() must return { ok: true }']]);
+errs('klembord: ok:false zonder reden', clipDev({ set: 'setClip(c) { return { ok: false }; },' }), [['setClip() moet { ok: true }', 'setClip() must return { ok: true }']]);
+errs('klembord: ok geen boolean', clipDev({ set: 'setClip(c) { return { ok: 1 }; },' }), [['setClip() moet { ok: true }', 'setClip() must return { ok: true }']]);
+errs('klembord: ok:false maar de state is half gezet', clipDev({ set: PROBE.set.replace('const L = Math.round(+c.length);', 'if (c && typeof c.length === "number") S.length = 24; const L = Math.round(+c.length);').replace('{ ok: false, reason: host.lang === \'nl\' ? \'Ongeldige lengte\' : \'Invalid length\' }', '{ ok: false, reason: "x" }') }), [['gaf ok:false maar veranderde toch de state', 'returned ok:false but still changed the state']]);
+errs('klembord: NaN komt in de state', clipDev({ set: 'setClip(c) { S.length = (c && c.length !== undefined) ? +c.length : 192; if (c && Array.isArray(c.notes)) S.notes = c.notes; return { ok: true }; },', raw: true }), [['is de state geen geldige JSON zonder NaN of Infinity', 'the state is not valid JSON without NaN or Infinity']]);
+errs('klembord: setClip stuurt zelf gebeurtenissen', clipDev({ set: PROBE.set.replace('S.length = L;', "host.emit(self, 'ev', { type: 'note', note: 60, vel: 0.8, time: 0, dur: 0.1 }); S.length = L;") }), [['setClip() stuurt zelf gebeurtenissen', 'setClip() sends events itself']]);
+// --clip: toont de uitvoer van clipInfo() en getClip()
+ok('--clip: toont clipInfo en getClip', clipDev(), { clip: true, has: [['Klembord (--clip):', 'Clipboard (--clip):'], ['clipInfo(): {"name":"Probe"', 'clipInfo(): {"name":"Probe"'], ['getClip():  {"format":"patchkamer-clip","formatVersion":1,"kind":"notes"', 'getClip():  {"format":"patchkamer-clip","formatVersion":1,"kind":"notes"']] });
+ok('--clip: apparaat zonder klembord', clipDev({ info: '', get: '', set: '' }), { clip: true, has: [['(geen clipInfo/getClip/setClip)', '(no clipInfo/getClip/setClip)']] });
+ok('--clip: getClip null', clipDev({ get: 'getClip() { return null; },' }), { clip: true, has: [['getClip():  (null)', 'getClip():  (null)']] });
+ok('zonder --clip geen klembordtabel', clipDev(), { no: [['Klembord (--clip):', 'Clipboard (--clip):']] });
+
 let fail = 0, n = 0;
 let idx = 0;
 for (const [name, src, exp] of cases) {
   const f = join(tmp, `case${idx++}.patchkamer-device.js`); writeFileSync(f, src);
   for (const lang of ['nl', 'en']) {
     n++;
-    const args = [V, f, '--lang', lang]; if (exp.controls) args.push('--controls'); if (exp.hostLang) args.push('--host-lang', exp.hostLang);
+    const args = [V, f, '--lang', lang]; if (exp.controls) args.push('--controls'); if (exp.hostLang) args.push('--host-lang', exp.hostLang); if (exp.clip) args.push('--clip');
     let out = '', code = 0;
     try { out = execFileSync('node', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); } catch (e) { code = e.status; out = (e.stdout || '') + (e.stderr || ''); }
     const problems = [], li = lang === 'nl' ? 0 : 1, ok1 = out.split('\n').find(l => l.startsWith('OK')) || '';
+    if (exp.err) { if (code !== 1) problems.push('exit ' + code + ' (verwacht 1)'); if (ok1) problems.push('onverwachte OK-regel'); for (const e of exp.err) if (!out.includes(e[li])) problems.push(`foutmelding mist "${e[li]}"`); }
+    else {
     if (code !== 0) problems.push('exit ' + code);
     if (!ok1) problems.push('geen OK-regel');
     const warnPart = ok1.includes(' · ') ? ok1.slice(ok1.indexOf(' · ')) : '';
     const hasWarn = lang === 'nl' ? /· let op:/.test(ok1) : /· warning:/.test(ok1);
     if (exp.warn) { if (!hasWarn) problems.push('geen waarschuwing'); for (const w of exp.warn) if (!warnPart.includes(w[li])) problems.push(`mist "${w[li]}"`); }
     else if (hasWarn) problems.push('onverwachte waarschuwing: ' + warnPart);
+    }
+    for (const h of exp.no || []) if (out.includes(h[li])) problems.push(`uitvoer bevat onverwacht "${h[li]}"`);
     for (const h of exp.has || []) if (!out.includes(h[li])) problems.push(`uitvoer mist "${h[li]}"`);
     if (/⟦/.test(out)) problems.push('ontbrekende vertaling');
     if (!exp.controls && /\n(Regelaars|Controls) \(/.test(out)) problems.push('tabel zonder --controls');
