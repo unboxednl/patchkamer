@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet meer smaller dan 380 px (minWidth): de titelbalk met versie en de keuzelijsten werden afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
 //   setState volgt §13: onbekende velden genegeerd, ongeldige waarden op de standaard, getallen afgekapt op hun bereik.
@@ -74,7 +75,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.freqshift',
   name: 'Frequency Shifter',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   ui: { width: 380, minWidth: 380 },   // de titel met versie heeft ruim 360 px nodig
@@ -104,11 +105,11 @@ export default {
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
         el.style.gridTemplateColumns = 'minmax(0, 1fr)';   // lange keuzetekst mag de kaart niet breder maken
-        ui.range = host.ui.select(el, tx('Bereik'), [[20, tx('±20 Hz (zweving)')], [200, '±200 Hz'], [2000, tx('±2000 Hz (vervreemding)')]], S.range, v => { S.range = +v; apply(); paint(); });
-        ui.shift = host.ui.knob(el, tx('Shift'), [-1, 1, 0.001], S.shift, v => { const hz = curve(v) * S.range; return (hz > 0 ? '+' : '') + (Math.abs(hz) < 10 ? hz.toFixed(2) : Math.round(hz)) + 'Hz'; }, v => { S.shift = v; apply(); });
-        ui.fb = host.ui.knob(el, tx('Feedback'), [0, 0.95, 0.01], S.fb, pct, v => { S.fb = v; apply(); });
-        ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => v > 0.5 ? tx('rechts omgekeerd') : pct(v), v => { S.stereo = v; apply(); });
-        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); });
+        ui.range = host.ui.select(el, tx('Bereik'), [[20, tx('±20 Hz (zweving)')], [200, '±200 Hz'], [2000, tx('±2000 Hz (vervreemding)')]], S.range, v => { S.range = +v; apply(); paint(); }, { id: 'range', group: 'shift' });
+        ui.shift = host.ui.knob(el, tx('Shift'), [-1, 1, 0.001], S.shift, v => { const hz = curve(v) * S.range; return (hz > 0 ? '+' : '') + (Math.abs(hz) < 10 ? hz.toFixed(2) : Math.round(hz)) + 'Hz'; }, v => { S.shift = v; apply(); }, { id: 'shift', group: 'shift' });
+        ui.fb = host.ui.knob(el, tx('Feedback'), [0, 0.95, 0.01], S.fb, pct, v => { S.fb = v; apply(); }, { id: 'fb', group: 'feedback' });
+        ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => v > 0.5 ? tx('rechts omgekeerd') : pct(v), v => { S.stereo = v; apply(); }, { id: 'stereo', group: 'stereo' });
+        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', group: 'mix' });
         note = document.createElement('div'); note.className = 'note'; el.appendChild(note); paintNote();
       },
       unmount() { note = null; ui = {}; },

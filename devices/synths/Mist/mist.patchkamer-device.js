@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Mist (nieuwe id nl.patchkamer.mist, eigen map; voorheen Nevel, nl.patchkamer.nevel);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Mist; de namen van de klanken in de keuzelijst zijn Engels
@@ -37,13 +38,14 @@ const EN = {
     'Purple Mod cable → for example Drift. Brightness and times move logarithmically. Root controls the drone and the automatic melody; attack/release apply from the next note. Evolve stays manual.',
 };
 export default {
-  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.11.0', kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
+  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'notes', name: 'Notes / CC' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo uit', notes: 'Noten / CC' } } },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
     const defaults = { root: 48, chord: 'open', mode: 'drone', level: 0.65, cutoff: 1800, air: 0.22, motion: 0.45, space: 0.65, echo: 0.3, attack: 4, release: 9, evolve: 4, melody: 0.65, density: 0.35, warmth: 0.65, detune: 5, preset: 'Mist' };
     const ranges = { melody:[0,1,0.01], density:[0,1,0.01], warmth:[0,1,0.01], detune:[0,14,0.1], root:[24,84,1], level:[0,1,0.01], cutoff:[150,8000,10], air:[0,1,0.01], motion:[0,1,0.01], space:[0,1,0.01], echo:[0,0.75,0.01], attack:[0.2,12,0.1], release:[1,24,0.1], evolve:[1,16,1] };
+    const GRP = { root:'voicing', detune:'voicing', warmth:'voicing', melody:'melody', density:'melody', evolve:'melody', cutoff:'tone', air:'tone', motion:'tone', space:'space', echo:'space', attack:'env', release:'env', level:'out' };   // sectie per regelaar (voor skins)
     // Public ids stay identical to the knob/CC ids. evolve is deliberately
     // excluded: changing the measure counter is a compositional action.
     const modulationMeta={
@@ -188,12 +190,12 @@ export default {
     let lastStep=-1;
     const instance={ inputs:{}, outputs:{out:ceiling},
       mount(el){ if(rootEl)instance.unmount();rootEl=el; controls={}; selects={}; const title=document.createElement('div'); title.textContent=tx('MIST · moduleerbare ambient'); title.style.cssText='letter-spacing:1px;color:color-mix(in srgb,#9fd5cc 55%,var(--fg));padding:8px 0;font-size:12px'; el.appendChild(title);
-        selects.preset=host.ui.select(el,tx('Klankbeeld'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen klank')]]),state.preset,v=>{if(presets[v])instance.setState({...defaults,...presets[v],preset:v});});
-        selects.mode=host.ui.select(el,tx('Spel'),[['drone',tx('Drone + noten')],['notes',tx('Alleen noten')]],state.mode,v=>change('mode',v));
-        selects.chord=host.ui.select(el,tx('Akkoord'),[['open',tx('Open kwinten')],['minor',tx('Mineur 7')],['major',tx('Majeur 7')],['suspended',tx('Sus / zwevend')],['add9',tx('Open add9')],['minor9',tx('Mineur 9')],['major9',tx('Majeur 9')],['sixth',tx('Majeur 6')]],state.chord,v=>change('chord',v));
+        selects.preset=host.ui.select(el,tx('Klankbeeld'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen klank')]]),state.preset,v=>{if(presets[v])instance.setState({...defaults,...presets[v],preset:v});}, { id:'preset',group:'preset' });
+        selects.mode=host.ui.select(el,tx('Spel'),[['drone',tx('Drone + noten')],['notes',tx('Alleen noten')]],state.mode,v=>change('mode',v), { id:'mode',group:'play' });
+        selects.chord=host.ui.select(el,tx('Akkoord'),[['open',tx('Open kwinten')],['minor',tx('Mineur 7')],['major',tx('Majeur 7')],['suspended',tx('Sus / zwevend')],['add9',tx('Open add9')],['minor9',tx('Mineur 9')],['major9',tx('Majeur 9')],['sixth',tx('Majeur 6')]],state.chord,v=>change('chord',v), { id:'chord',group:'voicing' });
         const labels={melody:tx('Melodie'),density:tx('Dichtheid'),warmth:tx('Warmte'),detune:tx('Zweving'),root:tx('Grondtoon'),level:tx('Niveau'),cutoff:tx('Helderheid'),air:tx('Wind'),motion:tx('Beweging'),space:tx('Galm'),echo:tx('Echo'),attack:tx('Opkomst'),release:tx('Uitklank'),evolve:tx('Evolutie')};
         const knobs=document.createElement('div');knobs.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:8px;align-items:start';el.appendChild(knobs);
-        for(const k in ranges) controls[k]=host.ui.knob(knobs,labels[k],ranges[k],state[k],v=> k==='root'?['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'][Math.round(v)%12]+(Math.floor(v/12)-1):k==='detune'?v.toFixed(1)+' ct':k==='cutoff'?Math.round(v)+' Hz':k==='attack'||k==='release'?v.toFixed(1)+' s':k==='evolve'?Math.round(v).toString():Math.round(v*100)+'%',v=>change(k,v),{default:defaults[k]});
+        for(const k in ranges) controls[k]=host.ui.knob(knobs,labels[k],ranges[k],state[k],v=> k==='root'?['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'][Math.round(v)%12]+(Math.floor(v/12)-1):k==='detune'?v.toFixed(1)+' ct':k==='cutoff'?Math.round(v)+' Hz':k==='attack'||k==='release'?v.toFixed(1)+' s':k==='evolve'?Math.round(v).toString():Math.round(v*100)+'%',v=>change(k,v),{default:defaults[k], id:k,group:GRP[k] });
         button=document.createElement('button'); button.type='button'; button.addEventListener('click',()=>{manual=!manual; gate(ctx.currentTime); paint();}); el.appendChild(button);
         const tip=document.createElement('p'); tip.className='note'; tip.textContent=tx('Start transport voor akkoorden + melodie. Start drone speelt een stilstaand akkoord zonder klok. Melodieniveau = balans; dichtheid = ruimte tussen tonen. Stereo uit → mixer/output.'); el.appendChild(tip);
         modStatus=document.createElement('p');modStatus.style.cssText='font-size:12px;color:var(--mod);line-height:1.5';el.appendChild(modStatus);

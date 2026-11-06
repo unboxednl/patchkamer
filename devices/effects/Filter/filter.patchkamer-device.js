@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11: eigen map en bestandsnaam zonder versienummer. Tweetalig (host.lang, poortnamen per taal in i18n).
 //   setState volgt §13: onbekende velden genegeerd, ongeldige waarden op de standaard, getallen afgekapt op hun bereik.
@@ -92,7 +93,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.filter',
   name: 'Filter',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   ui: { width: 320, minWidth: 280 },
@@ -171,13 +172,13 @@ export default {
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
         el.style.gridTemplateColumns = 'minmax(0, 1fr)';   // lange keuzetekst mag de kaart niet breder maken
-        ui.type = host.ui.select(el, 'Type', TYPES.map(([v, l]) => [v, tx(l)]), S.type, v => { S.type = v; wire(); });
-        ui.cut = host.ui.knob(el, 'Cutoff', [0, 1, 0.001], Math.log(S.cut / 20) / Math.log(1000), x => Math.round(20 * Math.pow(1000, x)) + ' Hz', x => { S.cut = 20 * Math.pow(1000, x); apply(); });
-        ui.res = host.ui.knob(el, tx('Resonantie'), [0, 1, 0.01], S.res, pct, v => { S.res = v; apply(); });
-        ui.drive = host.ui.knob(el, 'Drive', [0, 1, 0.01], S.drive, pct, v => { S.drive = v; apply(); });
-        ui.vowel = host.ui.knob(el, tx('Klinker'), [0, 4, 0.01], S.vowel, v => 'AEIOU'[Math.round(v)] + (Math.abs(v - Math.round(v)) > 0.05 ? '~' : ''), v => { S.vowel = v; apply(); });
-        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); });
-        ui.gain = host.ui.knob(el, tx('Niveau'), [0, 2, 0.01], S.gain, pct, v => { S.gain = v; apply(); });
+        ui.type = host.ui.select(el, 'Type', TYPES.map(([v, l]) => [v, tx(l)]), S.type, v => { S.type = v; wire(); }, { id: 'type', role: 'select', group: 'filter' });
+        ui.cut = host.ui.knob(el, 'Cutoff', [0, 1, 0.001], Math.log(S.cut / 20) / Math.log(1000), x => Math.round(20 * Math.pow(1000, x)) + ' Hz', x => { S.cut = 20 * Math.pow(1000, x); apply(); }, { id: 'cut', role: 'param', group: 'filter' });
+        ui.res = host.ui.knob(el, tx('Resonantie'), [0, 1, 0.01], S.res, pct, v => { S.res = v; apply(); }, { id: 'res', role: 'param', group: 'filter' });
+        ui.drive = host.ui.knob(el, 'Drive', [0, 1, 0.01], S.drive, pct, v => { S.drive = v; apply(); }, { id: 'drive', role: 'param', group: 'drive' });
+        ui.vowel = host.ui.knob(el, tx('Klinker'), [0, 4, 0.01], S.vowel, v => 'AEIOU'[Math.round(v)] + (Math.abs(v - Math.round(v)) > 0.05 ? '~' : ''), v => { S.vowel = v; apply(); }, { id: 'vowel', role: 'param', group: 'filter' });
+        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', role: 'param', group: 'mix' });
+        ui.gain = host.ui.knob(el, tx('Niveau'), [0, 2, 0.01], S.gain, pct, v => { S.gain = v; apply(); }, { id: 'gain', role: 'param', group: 'out' });
         note = document.createElement('div'); note.className = 'note'; el.appendChild(note); paintNote();
       },
       unmount() { note = null; ui = {}; },

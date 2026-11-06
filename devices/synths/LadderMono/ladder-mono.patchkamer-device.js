@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Eerste versie. Ladder Mono: een monofone analoge synth in de geest van klassieke analoge monosynths, volgens Patchkamer contract v1.13. Drie oscillators (zes golfvormen, bereik in octaven, fijne stemming,
 //          harde sync van oscillator 2 op 1, oscillator 3 los van het klavier), een ruisbron (wit of roze), een mixer die kan overstuurd raken, een vierpolig laddermodel-filter van 24 dB per octaaf met terugkoppeling
 //          (zelfoscillatie bij hoge emphasis), twee omhullingen (filter en volume, elk met aanval, verval, houd en loslaten), toetsvolging, glide, een LFO naar toonhoogte en filter, pitchbend en vibrato
@@ -144,7 +145,7 @@ registerProcessor('${WNAME}', class extends AudioWorkletProcessor {
 });`;
 
 export default {
-  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.13.0', kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
+  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -184,7 +185,7 @@ export default {
         for (const [k, sp] of Object.entries(SPEC)) { if (sp.g !== g) continue; const lab = T.labels[k];
           if (sp.t === 'enum') { const w = el('label', null, grid, 's'); el('span', lab, w); const s = el('select', null, w); s.setAttribute('aria-label', lab); for (const o of sp.o) { const op = el('option', T.opts[o] || o, s); op.value = o; } s.value = state[k]; s.onchange = () => { state[k] = s.value; sendParams(); }; ui[k] = { set: v => { s.value = v; } }; }
           else if (sp.t === 'bool') { const w = el('label', null, grid, 'c'); const c = el('input', null, w); c.type = 'checkbox'; c.checked = state[k]; el('span', lab, w); c.setAttribute('aria-label', lab); c.onchange = () => { state[k] = c.checked; sendParams(); }; ui[k] = { set: v => { c.checked = v; } }; }
-          else { const h = el('div', null, grid); const kn = host.ui.knob(h, (g === 'contour' || g === 'loud') ? lab + ' ' : lab, [sp.min, sp.max, sp.t === 'int' ? 1 : (sp.max - sp.min) / 400], state[k], v => (sp.f ? sp.f(v) : v.toFixed(2)), v => { state[k] = sp.t === 'int' ? Math.round(v) : v; sendParams(); }, { default: sp.d, scale: sp.scale }); ui[k] = kn; }
+          else { const h = el('div', null, grid); const kn = host.ui.knob(h, (g === 'contour' || g === 'loud') ? lab + ' ' : lab, [sp.min, sp.max, sp.t === 'int' ? 1 : (sp.max - sp.min) / 400], state[k], v => (sp.f ? sp.f(v) : v.toFixed(2)), v => { state[k] = sp.t === 'int' ? Math.round(v) : v; sendParams(); }, { default: sp.d, scale: sp.scale, id: k, group: g }); ui[k] = kn; }
         }
       }
       engineEl = el('div', T.engine[engineState], app, 'status'); root.addEventListener('pointerdown', e => e.stopPropagation());

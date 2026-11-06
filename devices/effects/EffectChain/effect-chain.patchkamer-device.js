@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 960 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Effect Chain en nieuwe id nl.patchkamer.effect-chain (voorheen Schakel FX, nl.patchkamer.schakel); songs en presets uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang; poortnamen per taal in i18n), kleuren uit de CSS-variabelen van de host, tekenen via host.frame met een ResizeObserver en een kleurcache (de tekenpoort-omzetting is weg).
@@ -133,7 +134,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.11.1', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
+  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.15.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
   i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',mod:'Mod'}}},
   ports:{audioIn:[{id:'in',name:'Stereo in'}],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   create(ctx,host){
@@ -246,7 +247,7 @@ export default {
     const startDraw=()=>{stopDrawing();if(dead||!root||viewMode==='off')return;stopDraw=tekenLus(host,self,drawVisuals,30);};
     const onSkin=()=>{col=null;};
     function mountOverview(){
-      host.ui.select(root,tx('Weergave'),visualModes.map(([k,n])=>[k,tx(n)]),viewMode,v=>{if(visualModes.some(([key])=>key===v)){viewMode=v;render();}});
+      host.ui.select(root,tx('Weergave'),visualModes.map(([k,n])=>[k,tx(n)]),viewMode,v=>{if(visualModes.some(([key])=>key===v)){viewMode=v;render();}}, { id:'view',group:'view' });
       if(viewMode==='off'){overview=null;return;}
       const title=text('div',tx('UITGANG · ')+tx(visualModes.find(([key])=>key===viewMode)[1]),root,'font:11px system-ui,sans-serif;color:var(--fg);margin-top:6px');
       const c=canvas(root,256,66,tx('Live uitgang: ')+viewMode,viewMode==='spectrogram');
@@ -526,10 +527,10 @@ export default {
     const text=(tag,str,parent,css)=>{const el=document.createElement(tag);el.textContent=str;if(css)el.style.cssText=css;parent.appendChild(el);return el;};
     function render(){if(dead)return;notifyParameters();if(!root)return;stopDrawing();if(ro)ro.disconnect();ro=typeof ResizeObserver==='function'?new ResizeObserver(es=>{for(const e of es)e.target._cw=e.contentRect.width;}):null;root.innerHTML='';ui={};slotViews=[];
       text('div','EFFECT CHAIN · techno / EDM / ambient',root,'font-size:12px;letter-spacing:1px;color:var(--muted);padding:8px 0');
-      ui.preset=host.ui.select(root,tx('Keten'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen keten')]]),config.preset,v=>{if(presets[v]){config=presets[v]();config.preset=v;apply();render();}});
-      host.ui.select(root,tx('Aantal'),Array.from({length:MAX},(_,i)=>[String(i+1),String(i+1)]),String(config.count),v=>{config.count=number(+v,1,MAX,4,1);customized();apply();render();});
+      ui.preset=host.ui.select(root,tx('Keten'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen keten')]]),config.preset,v=>{if(presets[v]){config=presets[v]();config.preset=v;apply();render();}}, { id:'preset',group:'chain' });
+      host.ui.select(root,tx('Aantal'),Array.from({length:MAX},(_,i)=>[String(i+1),String(i+1)]),String(config.count),v=>{config.count=number(+v,1,MAX,4,1);customized();apply();render();}, { id:'count',group:'chain' });
       const levels=text('div','',root,'display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 18px');
-      for(const [k,label,range] of [['input','Ingang',[-12,12,0.5]],['output','Uitgang',[-12,12,0.5]],['blend','Totale mix',[0,1,0.01]]])host.ui.knob(levels,tx(label),range,config[k],v=>fmt(v,k==='blend'?'%':'dB'),v=>{config[k]=number(v,range[0],range[1],config[k],range[2]);customized();apply();});
+      for(const [k,label,range] of [['input','Ingang',[-12,12,0.5]],['output','Uitgang',[-12,12,0.5]],['blend','Totale mix',[0,1,0.01]]])host.ui.knob(levels,tx(label),range,config[k],v=>fmt(v,k==='blend'?'%':'dB'),v=>{config[k]=number(v,range[0],range[1],config[k],range[2]);customized();apply();}, { id:k,group:'master' });
       text('p',tx('Paarse Mod-ingang → Master en effectparameters per slot. Knoppen blijven de basis; keuzelijsten worden niet gemoduleerd.'),root,'font-size:12px;color:var(--mod);line-height:1.5');
       mountOverview();
       text('p',tx('IN → 1 → 2 → … → UIT · schuif horizontaal voor alle slots'),root,'font-size:11px;opacity:.7;margin:8px 0');
@@ -540,16 +541,16 @@ export default {
         const row=text('div','',card,'display:flex;gap:6px;margin:7px 0');
         const bypass=text('button',c.bypass?tx('Bypass aan'):tx('Effect aan'),row);bypass.type='button';bypass.setAttribute('aria-pressed',String(c.bypass));bypass.addEventListener('click',()=>{c.bypass=!c.bypass;customized();applySlot(i);render();});
         for(const [label,delta] of [['←',-1],['→',1]]){const b=text('button',label,row);b.type='button';b.disabled=i+delta<0||i+delta>=config.count;b.setAttribute('aria-label',tx(delta<0?'Verplaats slot {0} links':'Verplaats slot {0} rechts',i+1));b.addEventListener('click',()=>{const j=i+delta;if(j<0||j>=config.count)return;[config.slots[i],config.slots[j]]=[config.slots[j],config.slots[i]];customized();apply();render();});}
-        host.ui.select(card,'Effect',[['reverb',nm('reverb')],...Object.entries(defs).filter(([k])=>k!=='reverb').map(([k,d])=>[k,tx(d.name)])],c.type,v=>{if(!Object.hasOwn(defs,v))return;c.type=v;if(v==='limiter')c.mix=1;if(!c.bank[v])c.bank[v]=params(v);customized();applySlot(i);render();});
+        host.ui.select(card,'Effect',[['reverb',nm('reverb')],...Object.entries(defs).filter(([k])=>k!=='reverb').map(([k,d])=>[k,tx(d.name)])],c.type,v=>{if(!Object.hasOwn(defs,v))return;c.type=v;if(v==='limiter')c.mix=1;if(!c.bank[v])c.bank[v]=params(v);customized();applySlot(i);render();}, { id:prefix(i)+'.type',group:prefix(i) });
         mountSlotView(card,i);
         if(c.type==='none'){text('p',tx('Onbewerkt signaal naar het volgende slot.'),card,'font-size:12px;opacity:.65');continue;}
-        host.ui.knob(card,tx('Effectmix'),[0,1,0.01],c.mix,v=>fmt(v,'%'),v=>{c.mix=number(v,0,1,c.mix,0.01);customized();applySlot(i);});
+        host.ui.knob(card,tx('Effectmix'),[0,1,0.01],c.mix,v=>fmt(v,'%'),v=>{c.mix=number(v,0,1,c.mix,0.01);customized();applySlot(i);}, { id:prefix(i)+'.mix',group:prefix(i) });
                 if(DESC_NL[c.type])text('p',(host.lang==='nl'?DESC_NL:DESC_EN)[c.type],card,'font-size:11px;line-height:1.4;opacity:.7');
         text('div',tx('Parameters')+' · '+nm(c.type),card,'font-size:11px;opacity:.7;border-top:1px solid var(--line);padding-top:8px;margin-top:6px');
         for(const [k,d] of Object.entries(defs[c.type].p)){
           const update=v=>{c.bank[c.type][k]=number(+v,d[1],d[2],d[4],d[3]);customized();applySlot(i);};
-          if(d[5]==='size'||d[5]==='mode'||d[5]==='rpm'||d[5]==='freeze'||d[5]==='chord'||['grid','pattern','division','reverse'].includes(d[5])){const names=d[5]==='grid'?gridNames:d[5]==='pattern'?['Offbeat','Syncopen','Tresillo','Broken']:d[5]==='division'?['1/16','1/8','1/8 gepunt','1/4','1/4 gepunt','1/2','1/2 gepunt','1 maat']:d[5]==='reverse'?['Vooruit','Achteruit']:d[5]==='size'?rooms.map(r=>tx(r[0])+' · '+r[1]+' s'):d[5]==='rpm'?['33⅓ RPM','45 RPM','78 RPM']:d[5]==='freeze'?['Live opnemen','Bevroren']:d[5]==='chord'?['Open / majeur','Mineur 9','Sus','Majeur 9']:['Low-pass','High-pass','Band-pass'];host.ui.select(card,tx(d[0]),names.map((n,j)=>[String(j),d[5]==='size'?n:tx(n)]),String(c.bank[c.type][k]),update);}
-          else host.ui.knob(card,tx(d[0]),[d[1],d[2],d[3]],c.bank[c.type][k],v=>fmt(v,d[5]),update);
+          if(d[5]==='size'||d[5]==='mode'||d[5]==='rpm'||d[5]==='freeze'||d[5]==='chord'||['grid','pattern','division','reverse'].includes(d[5])){const names=d[5]==='grid'?gridNames:d[5]==='pattern'?['Offbeat','Syncopen','Tresillo','Broken']:d[5]==='division'?['1/16','1/8','1/8 gepunt','1/4','1/4 gepunt','1/2','1/2 gepunt','1 maat']:d[5]==='reverse'?['Vooruit','Achteruit']:d[5]==='size'?rooms.map(r=>tx(r[0])+' · '+r[1]+' s'):d[5]==='rpm'?['33⅓ RPM','45 RPM','78 RPM']:d[5]==='freeze'?['Live opnemen','Bevroren']:d[5]==='chord'?['Open / majeur','Mineur 9','Sus','Majeur 9']:['Low-pass','High-pass','Band-pass'];host.ui.select(card,tx(d[0]),names.map((n,j)=>[String(j),d[5]==='size'?n:tx(n)]),String(c.bank[c.type][k]),update, { id:prefix(i)+'.'+c.type+'.'+k,group:prefix(i) });}
+          else host.ui.knob(card,tx(d[0]),[d[1],d[2],d[3]],c.bank[c.type][k],v=>fmt(v,d[5]),update, { id:prefix(i)+'.'+c.type+'.'+k,group:prefix(i) });
         }
       }
       startDraw();

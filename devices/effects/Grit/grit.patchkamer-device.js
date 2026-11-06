@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Grit en nieuwe id nl.patchkamer.grit (voorheen Roest, nl.patchkamer.roest); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n), setState kapt getallen af op hun bereik en negeert onbekende velden, de saturatie volgt host.audio.oversample.
@@ -13,6 +14,7 @@ const MODP = [['drive', 'Drive', 'Drive', 0, 1, false, 'drive', 0.12, true], ['c
   ['rate', 'LFO', 'LFO', 0.02, 8, true, 'rate', 0.12, false], ['depth', 'Diepte', 'Depth', 0, 1, false, 'depth', 0.12, false], ['lvl', 'Niveau', 'Level', 0, 1, false, 'level', 0.06, false]];
 const FMT = { drive: v => Math.round(v * 100) + '%', cut: v => Math.round(v) + ' Hz', res: v => v.toFixed(1), rate: v => v.toFixed(2) + ' Hz', depth: v => Math.round(v * 100) + '%', lvl: v => Math.round(v * 100) + '%' };
 const STEP = { drive: 0.01, cut: 10, res: 0.1, rate: 0.01, depth: 0.01, lvl: 0.01 };
+const GRP = { drive: 'drive', cut: 'filter', res: 'filter', rate: 'mod', depth: 'mod', lvl: 'out' };   // sectie per regelaar (voor skins)
 const NOTE = { nl: 'CC-ingang: {type:"cc", id:"cutoff", value:0..1}.', en: 'CC input: {type:"cc", id:"cutoff", value:0..1}.' };
 
 // Ingangsbeveiliging: NaN wordt 0, alles boven ±16 (+24 dB) wordt begrensd. Een filter achter een foutieve waarde blijft anders voorgoed NaN geven.
@@ -30,7 +32,7 @@ class GritGuard extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', GritGuard);`;
 
 export default {
-  id: 'nl.patchkamer.grit', name: 'Grit', version: '1.11.1', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.grit', name: 'Grit', version: '1.15.0', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out' } } },
   ui: { width: 300, minWidth: 280 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'cc', name: 'CC' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -68,7 +70,7 @@ export default {
       inputs: { in: input }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
-        for (const m of MODP) { const k = m[0]; ui[k] = host.ui.knob(el, m[NI], [m[3], m[4], STEP[k]], state[k], FMT[k], v => { state[k] = v; apply(); }, { default: defaults[k] }); }
+        for (const m of MODP) { const k = m[0]; ui[k] = host.ui.knob(el, m[NI], [m[3], m[4], STEP[k]], state[k], FMT[k], v => { state[k] = v; apply(); }, { default: defaults[k], id: k, group: GRP[k] }); }
         const n = document.createElement('div'); n.className = 'note'; n.textContent = NOTE[nl ? 'nl' : 'en']; el.appendChild(n);
       },
       onEvent(port, ev) { if (port === 'cc' && ev && Number.isFinite(ev.value) && ev.type === 'cc' && ev.id === 'cutoff') { const t = Number.isFinite(ev.time) && ev.time > 0 ? ev.time : ctx.currentTime; f.frequency.setTargetAtTime(100 * Math.pow(160, clamp(ev.value, 0, 1)), t, 0.02); } },

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Versterking (+8 dB) achter de compressor: het apparaat en de tunes waren erg zacht (piek rond −14 tot −7 dBFS bij vierstemmige akkoorden). De uitgangsbegrenzer blijft de pieken afronden.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Bowed Ensemble (nieuwe id nl.patchkamer.bowedensemble, eigen map; voorheen Strijk Ensemble, nl.patchkamer.strijk);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
@@ -32,7 +33,7 @@ const EN = {
     'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Expression makes swells. A purple Mod cable controls sound parameters; the knobs stay the base. Connect MIDI hardware through a keyboard/MIDI device in Patchkamer.'
 };
 export default {
-  id:'nl.patchkamer.bowedensemble',name:'Bowed Ensemble',version:'1.11.1',kind:'instrument',category:'synth',
+  id:'nl.patchkamer.bowedensemble',name:'Bowed Ensemble',version:'1.15.0',kind:'instrument',category:'synth',
   ui:{width:720,minWidth:340},
   ports:{audioIn:[],audioOut:[{id:'out',name:'Stereo strings'}],eventIn:[{id:'notes',name:'Keyboard / notes'}],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   i18n:{nl:{ports:{out:'Stereo strijkers',notes:'Keyboard / noten'}}},
@@ -162,10 +163,10 @@ export default {
     function change(id,value){const d=spec[id];if(!d||!Number.isFinite(+value))return;state[id]=Number(clamp(Math.round(+value/d[3])*d[3],d[1],d[2]).toFixed(6));state.preset='Custom';apply();paint();}
     const self={inputs:{},outputs:{out},
       mount(el){if(root)self.unmount();root=el;const css=document.createElement('style');css.textContent=`.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.sk-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.sk-grid .k label{font-size:10px;letter-spacing:.04em}.sk-grid .k output{font-size:11px;white-space:nowrap}.sk-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}.sk-grid input[type=range]::-webkit-slider-thumb{width:16px;height:16px}.sk-grid input[type=range]::-moz-range-thumb{width:16px;height:16px}`;el.appendChild(css);const heading=document.createElement('div');heading.textContent=tx('BOWED ENSEMBLE · polyfoon strijkersensemble');heading.style.cssText='font-size:14px;letter-spacing:1px;color:color-mix(in srgb,var(--audio) 60%,var(--fg));padding:8px 0';el.appendChild(heading);
-        presetSelect=host.ui.select(el,'Ensemble',Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen klank')]]),state.preset,name=>{if(Object.hasOwn(presets,name))self.setState({...defaults,...presets[name],preset:name});});
-        const groups=[[tx('Klank & articulatie'),['cutoff','resonance','body','bow','attack','decay','sustain','release','velocity']],[tx('Ensemble & ruimte'),['detune','vibrato','rate','human','ensemble','width','space','pan']],[tx('Spel & niveau'),['transpose','expression','level']]];
-        for(const [label,ids] of groups){const h=document.createElement('div');h.textContent=label;h.style.cssText='font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px';el.appendChild(h);const grid=document.createElement('div');grid.className='sk-grid';el.appendChild(grid);
-          for(const id of ids){const d=spec[id];const before=grid.children.length;controls[id]=host.ui.knob(grid,d[0],[d[1],d[2],d[3]],state[id],v=>d[5]==='%'?Math.round(v*100)+'%':d[5]==='s'?(v<0.1?Math.round(v*1000)+' ms':v.toFixed(2)+' s'):d[5]==='pan'?(Math.abs(v)<0.01?tx('Midden'):Math.round(Math.abs(v)*100)+(v<0?' L':' R')):v.toFixed(d[5]==='Hz'&&v>100?0:1)+' '+d[5],v=>change(id,v),{default:defaults[id]});const row=grid.children[before];if(row)row.title=d[0];}
+        presetSelect=host.ui.select(el,'Ensemble',Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen klank')]]),state.preset,name=>{if(Object.hasOwn(presets,name))self.setState({...defaults,...presets[name],preset:name});}, { id:'preset',group:'preset' });
+        const groups=[[tx('Klank & articulatie'),['cutoff','resonance','body','bow','attack','decay','sustain','release','velocity'],'tone'],[tx('Ensemble & ruimte'),['detune','vibrato','rate','human','ensemble','width','space','pan'],'ensemble'],[tx('Spel & niveau'),['transpose','expression','level'],'play']];
+        for(const [label,ids,grp] of groups){const h=document.createElement('div');h.textContent=label;h.style.cssText='font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px';el.appendChild(h);const grid=document.createElement('div');grid.className='sk-grid';el.appendChild(grid);
+          for(const id of ids){const d=spec[id];const before=grid.children.length;controls[id]=host.ui.knob(grid,d[0],[d[1],d[2],d[3]],state[id],v=>d[5]==='%'?Math.round(v*100)+'%':d[5]==='s'?(v<0.1?Math.round(v*1000)+' ms':v.toFixed(2)+' s'):d[5]==='pan'?(Math.abs(v)<0.01?tx('Midden'):Math.round(Math.abs(v)*100)+(v<0?' L':' R')):v.toFixed(d[5]==='Hz'&&v>100?0:1)+' '+d[5],v=>change(id,v),{default:defaults[id], id:id,group:grp });const row=grid.children[before];if(row)row.title=d[0];}
         }
         const actions=document.createElement('div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:6px;margin-top:10px';el.appendChild(actions);
         const button=(label,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',fn);actions.appendChild(b);};

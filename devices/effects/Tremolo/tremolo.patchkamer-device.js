@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe id nl.patchkamer.tremolo (voorheen nl.voorbeeld.tremolo); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang; poortnamen in i18n, namen van de stuurbare parameters per taal). setState negeert onbekende velden en kapt getallen af op hun bereik;
@@ -21,7 +22,7 @@ const DEF = () => Object.fromEntries(MODP.map(m => [m.id, m.def]));
 export default {
   id: 'nl.patchkamer.tremolo',
   name: 'Tremolo',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out' } } },
@@ -44,8 +45,8 @@ export default {
       inputs: { in: inG }, outputs: { out: outG },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
-        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], state.rate, v => v.toFixed(1) + ' Hz', v => { state.rate = v; apply(); }, { default: 4 });
-        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; apply(); }, { default: 0.5 });
+        ui.rate = host.ui.knob(el, T.rate, [0.1, 20, 0.1], state.rate, v => v.toFixed(1) + ' Hz', v => { state.rate = v; apply(); }, { default: 4, id: 'rate', group: 'mod' });
+        ui.depth = host.ui.knob(el, T.depth, [0, 1, 0.01], state.depth, v => Math.round(v * 100) + '%', v => { state.depth = v; apply(); }, { default: 0.5, id: 'depth', group: 'mod' });
       },
       unmount() { ui = {}; },
       params() { return MODP.map(m => ({ id: m.id, name: T[m.id], lane: 'trem', laneName: 'Tremolo', min: m.min, max: m.max, role: m.role, scale: m.log ? 'log' : 'lin', drift: m.drift, on: true })); },

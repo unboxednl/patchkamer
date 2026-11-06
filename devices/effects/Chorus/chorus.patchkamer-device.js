@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n). setState negeert onbekende velden en kapt getallen af op hun bereik.
 //          Een bewaker vervangt het toonfilter als een niet-eindige ingang (NaN, Infinity) het voorgoed zou vergiftigen. De klank is ongewijzigd.
@@ -31,7 +32,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.chorus',
   name: 'Chorus',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { name: 'Chorus', ports: { in: 'In', out: 'Out' } } },
@@ -80,14 +81,14 @@ export default {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
-        ui.mode = host.ui.select(el, tx('Soort'), [['ensemble', tx('Ensemble (3 stemmen)')], ['chorus', tx('Chorus (2 stemmen)')]], S.mode, v => { S.mode = v; apply(); });
-        ui.sync = host.ui.select(el, 'Tempo', SYNC.map(([v, n]) => [v, tx(n)]), S.sync, v => { S.sync = v; apply(); });
-        ui.rate = host.ui.knob(el, tx('Snelheid'), [0.03, 8, 0.01], S.rate, v => v.toFixed(2) + ' Hz', v => { S.rate = v; apply(); });
-        ui.depth = host.ui.knob(el, tx('Diepte'), [0, 1, 0.01], S.depth, pct, v => { S.depth = v; apply(); });
-        ui.delay = host.ui.knob(el, tx('Vertraging'), [3, 30, 0.1], S.delay, v => v.toFixed(1) + ' ms', v => { S.delay = v; apply(); });
-        ui.width = host.ui.knob(el, tx('Breedte'), [0, 1, 0.01], S.width, pct, v => { S.width = v; apply(); });
-        ui.tone = host.ui.knob(el, tx('Toon'), [800, 16000, 10], S.tone, v => Math.round(v) + ' Hz', v => { S.tone = v; apply(); });
-        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); });
+        ui.mode = host.ui.select(el, tx('Soort'), [['ensemble', tx('Ensemble (3 stemmen)')], ['chorus', tx('Chorus (2 stemmen)')]], S.mode, v => { S.mode = v; apply(); }, { id: 'mode', group: 'mod' });
+        ui.sync = host.ui.select(el, 'Tempo', SYNC.map(([v, n]) => [v, tx(n)]), S.sync, v => { S.sync = v; apply(); }, { id: 'sync', group: 'mod' });
+        ui.rate = host.ui.knob(el, tx('Snelheid'), [0.03, 8, 0.01], S.rate, v => v.toFixed(2) + ' Hz', v => { S.rate = v; apply(); }, { id: 'rate', group: 'mod' });
+        ui.depth = host.ui.knob(el, tx('Diepte'), [0, 1, 0.01], S.depth, pct, v => { S.depth = v; apply(); }, { id: 'depth', group: 'mod' });
+        ui.delay = host.ui.knob(el, tx('Vertraging'), [3, 30, 0.1], S.delay, v => v.toFixed(1) + ' ms', v => { S.delay = v; apply(); }, { id: 'delay', group: 'delay' });
+        ui.width = host.ui.knob(el, tx('Breedte'), [0, 1, 0.01], S.width, pct, v => { S.width = v; apply(); }, { id: 'width', group: 'stereo' });
+        ui.tone = host.ui.knob(el, tx('Toon'), [800, 16000, 10], S.tone, v => Math.round(v) + ' Hz', v => { S.tone = v; apply(); }, { id: 'tone', group: 'tone' });
+        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', group: 'mix' });
       },
       onStep({ bpm: b }) { if (Number.isFinite(b) && b > 0 && b !== bpm) { bpm = b; if (S.sync !== 'free') apply(); } },
       params() { return MODP.map(([id, name, min, max, log, role, drift, on]) => ({ id, name: tx(name), lane: 'chorus', laneName: 'Chorus', min, max, role, scale: log ? 'log' : 'lin', drift, on })); },

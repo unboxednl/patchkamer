@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Een niet-eindige of absurd grote ingangswaarde (NaN, ±Infinity, een filter dat ontploft) vergiftigde de meting en de piekvolger voor altijd: na één Infinity-sample bleef alles stil. Nu wordt de ingang begrensd (±16 = +24 dB) en NaN wordt 0, en een bewaker zet een ontspoorde toestand terug. Normaal geluid is bit-identiek aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Leveler en nieuwe id nl.patchkamer.leveler (voorheen Egaal, nl.patchkamer.egaal); presets en songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, poortnamen per taal in i18n). Tekenen via host.frame met een ResizeObserver en een kleurcache
 //          (de tekenpoort-omzetting is weg). setState negeert onbekende velden en kapt getallen af op hun bereik; de klank is ongewijzigd.
@@ -96,6 +97,7 @@ const K = [   // id, tekstsleutel, [min, max, stap], standaard, weergave
   ['gate', 'gate', [-80, -30, 1], -55, v => v.toFixed(0) + ' dB'],
   ['ceiling', 'ceiling', [-12, 0, 0.1], -1, v => v.toFixed(1) + ' dB'],
 ];
+const GRP = { target: 'level', speed: 'timing', window: 'timing', range: 'limits', gate: 'limits', ceiling: 'limits' };   // sectie per regelaar (voor skins)
 const DEF = () => ({ on: true, ...Object.fromEntries(K.map(k => [k[0], k[3]])) });
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 // terugval voor een host zonder host.frame (contract §12b)
@@ -109,7 +111,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.leveler',
   name: 'Leveler',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'mix',
   ui: { width: 420, minWidth: 300 },
@@ -166,8 +168,8 @@ export default {
       inputs: { in: input }, outputs: { out },
       mount(el) {
         ui = {};
-        ui.on = host.ui.select(el, T.mode, [['1', T.lvl], ['0', T.thru]], S.on ? '1' : '0', v => { S.on = v === '1'; send(); });
-        K.forEach(([k, tk, range, , fmt]) => { ui[k] = host.ui.knob(el, T[tk], range, S[k], fmt, v => { S[k] = v; send(); }); });
+        ui.on = host.ui.select(el, T.mode, [['1', T.lvl], ['0', T.thru]], S.on ? '1' : '0', v => { S.on = v === '1'; send(); }, { id: 'on', group: 'mode' });
+        K.forEach(([k, tk, range, , fmt]) => { ui[k] = host.ui.knob(el, T[tk], range, S[k], fmt, v => { S[k] = v; send(); }, { id: k, group: GRP[k] }); });
         const row = document.createElement('div'); row.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin:6px 0';
         const b1 = document.createElement('button'); b1.type = 'button'; b1.textContent = T.b1; b1.title = T.b1t;
         b1.onclick = () => { if (meter.in > -80) { S.target = Math.round(clamp(meter.in, -36, -6) * 2) / 2; ui.target.set(S.target); send(); } };

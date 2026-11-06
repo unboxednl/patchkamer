@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n), nieuwe worklet-naam. setState negeert onbekende velden en kapt getallen af op hun bereik.
 //          Bewaker in de worklet: NaN en ±Infinity op de ingang worden 0 en ±16 (+24 dB), een niet-eindige Manual-stuurwaarde wordt begrensd, en een vertraglijn waarin toch iets niet-eindigs
@@ -84,7 +85,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.flanger',
   name: 'Flanger',
-  version: '1.11.1',
+  version: '1.15.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { name: 'Flanger', ports: { in: 'In', out: 'Out' } } },
@@ -111,14 +112,14 @@ export default {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
-        ui.sync = host.ui.select(el, 'Tempo', SYNC.map(([v, n]) => [v, tx(n)]), S.sync, v => { S.sync = v; apply(); });
-        ui.shape = host.ui.select(el, tx('Golf'), [[0, tx('Sinus')], [1, tx('Driehoek')]], S.shape, v => { S.shape = +v; apply(); });
-        ui.rate = host.ui.knob(el, tx('Snelheid'), [0.02, 10, 0.01], S.rate, v => v.toFixed(2) + ' Hz', v => { S.rate = v; apply(); });
-        ui.depth = host.ui.knob(el, tx('Diepte'), [0, 1, 0.01], S.depth, pct, v => { S.depth = v; apply(); });
-        ui.manual = host.ui.knob(el, 'Manual', [0.2, 12, 0.05], S.manual, v => v.toFixed(2) + ' ms', v => { S.manual = v; apply(); });
-        ui.fb = host.ui.knob(el, 'Feedback', [-0.97, 0.97, 0.01], S.fb, pct, v => { S.fb = v; apply(); });
-        ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => Math.round(v * 180) + '°', v => { S.stereo = v; apply(); });
-        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); });
+        ui.sync = host.ui.select(el, 'Tempo', SYNC.map(([v, n]) => [v, tx(n)]), S.sync, v => { S.sync = v; apply(); }, { id: 'sync', group: 'mod' });
+        ui.shape = host.ui.select(el, tx('Golf'), [[0, tx('Sinus')], [1, tx('Driehoek')]], S.shape, v => { S.shape = +v; apply(); }, { id: 'shape', group: 'mod' });
+        ui.rate = host.ui.knob(el, tx('Snelheid'), [0.02, 10, 0.01], S.rate, v => v.toFixed(2) + ' Hz', v => { S.rate = v; apply(); }, { id: 'rate', group: 'mod' });
+        ui.depth = host.ui.knob(el, tx('Diepte'), [0, 1, 0.01], S.depth, pct, v => { S.depth = v; apply(); }, { id: 'depth', group: 'mod' });
+        ui.manual = host.ui.knob(el, 'Manual', [0.2, 12, 0.05], S.manual, v => v.toFixed(2) + ' ms', v => { S.manual = v; apply(); }, { id: 'manual', group: 'delay' });
+        ui.fb = host.ui.knob(el, 'Feedback', [-0.97, 0.97, 0.01], S.fb, pct, v => { S.fb = v; apply(); }, { id: 'fb', group: 'feedback' });
+        ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => Math.round(v * 180) + '°', v => { S.stereo = v; apply(); }, { id: 'stereo', group: 'stereo' });
+        ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', group: 'mix' });
         note = document.createElement('div'); note.className = 'note'; el.appendChild(note); paintNote();
       },
       unmount() { note = null; },
