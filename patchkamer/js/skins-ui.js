@@ -5,9 +5,8 @@
    Importeren, Alles laden uit de standaardbron, verwijderen (alleen geïmporteerde). Op de kaart staan in .pbar twee keuzelijsten (.pskin), alleen als er voor dit apparaat-id een skin is.
    ===================================================================== */
 const skDev=d=>(PK.Host.latest(d)||{}).name||d;
-function skOpenPanel(){ if(!PK.wsPanel.hidden) PK.closeWs(); PK.prClosePanel(); if(PK.closeSongs) PK.closeSongs(); if(PK.closeSettings) PK.closeSettings();
-  PK.skPanel.hidden=false; PK.$('skBtn').setAttribute('aria-expanded','true'); PK.$('skBtn').classList.add('on'); skPaintPanel(); } PK.skOpenPanel=skOpenPanel;
-function skClosePanel(){ if(PK.skDesigning&&PK.skDesigning()) PK.skDesignClose(); PK.skPanel.hidden=true; PK.$('skBtn').setAttribute('aria-expanded','false'); PK.$('skBtn').classList.remove('on'); } PK.skClosePanel=skClosePanel;
+function skOpenPanel(){ PK.libOpen('skins'); } PK.skOpenPanel=skOpenPanel;
+function skClosePanel(){ if(PK.skDesigning&&PK.skDesigning()) PK.skDesignClose(); if(PK.libTab()==='skins') PK.libClose(); } PK.skClosePanel=skClosePanel;
 function skWhen(a){ const w=a.when; if(!w) return PK.pkt('m.sk_alleen_handmatig'); const p=[]; if(w.minWidth!=null) p.push('≥ '+w.minWidth+' px'); if(w.maxWidth!=null) p.push('≤ '+w.maxWidth+' px'); if(w.screens) p.push(w.screens.join(' / ')); return p.join(' · ')||PK.pkt('m.sk_altijd'); }
 function skOrigin(e){ return e.origin==='user'?PK.pkt('m.sk_bron_import'):e.origin==='src'?(e.src&&e.src.label)||'':PK.pkt('m.sk_bron_ingesloten'); }
 // op welke kaart: de geselecteerde kaart van dit apparaat, anders de eerste, anders een nieuwe op de vloer

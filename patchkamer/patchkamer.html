@@ -36,31 +36,19 @@
 <header>
   <h1 data-i18n-html="ui.patch_kamer"><b data-i18n="ui.patch">Patch</b>kamer</h1>
   <input class="wsname" id="wsName" value="Naamloos" maxlength="60" spellcheck="false" aria-label="naam van je compositie" title="naam van je compositie" data-i18n-title="attr.naam_van_je_compositie" data-i18n-aria="attr.naam_van_je_compositie">
-  <span class="note" style="max-width:40ch" data-i18n="ui.modulaire_browserstudio_laad_instrumenten_trek">Modulaire browserstudio. Laad instrumenten, trek kabels, sla de opstelling op. Kabels: audio, gebeurtenissen, sturing (paars), mastering (geel, gestippeld), multi-MIDI (dubbel, oranje gestreept) en bundels (dik, groen): veel kanalen in één kabel.</span>
   <div class="transport">
     <button class="go" id="play" data-i18n="ui.start">Start</button>
     <span class="tp tpbpm"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
     <span class="tp"><span data-i18n="ui.swing">Swing</span> <input type="range" id="swing" min="0" max="0.5" step="0.01" value="0.08" style="width:80px"></span>
-    <button class="small" id="wsBtn" aria-expanded="false" aria-controls="wsPanel" data-i18n="ui.werkruimte">Werkruimte ▾</button>
-    <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="skBtn" aria-expanded="false" aria-controls="skPanel" title="uiterlijk van apparaten: skins laden en kiezen" data-i18n-title="attr.sk_knop" data-i18n="ui.skins">Skins ▾</button><button class="small" id="songBtn" aria-expanded="false" aria-controls="songPanel" title="songs openen: demo's van GitHub en recente songs" data-i18n-title="attr.songs_open_titel" data-i18n="ui.songs_knop">Songs ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
-    <button class="small" id="arrange" title="apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)" data-i18n-title="attr.apparaten_netjes_van_links_naar" data-i18n="ui.herschik">Herschik</button>
-    <span class="tp"><span data-i18n="ui.t_scherm">Scherm</span> <select id="layoutSel" title="schermindeling: automatisch, breed of compact" aria-label="schermindeling" data-i18n-title="attr.t_scherm" data-i18n-aria="attr.t_scherm"><option value="auto" data-i18n="ui.t_auto">Auto</option><option value="wide" data-i18n="ui.t_breed">Breed</option><option value="compact" data-i18n="ui.t_compact">Compact</option></select></span>
-    <button class="small" id="fitScreen" title="maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)" data-i18n-title="attr.t_pas_aan" data-i18n="ui.t_pas_aan">Pas aan op dit scherm</button>
-    <button class="small" id="focusBtn" title="focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (Alt+F)" data-i18n-title="attr.focusweergave_de_apparaten_met_f" data-i18n="ui.focus">Focus</button>
-    <button class="small narrowonly" id="browseBtn" title="open Focus met alle apparaten, een tegelijk" data-i18n-title="attr.t_bladeren" data-i18n="ui.t_bladeren">Bladeren</button>
-    <button class="small danger" id="clear" data-i18n="ui.leeg">Leeg</button>
     <button class="small on" id="libToggle" title="bibliotheek tonen of verbergen (Alt+B)" data-i18n-title="attr.bibliotheek_tonen_of_verbergen_b" data-i18n="ui.bibliotheek">Bibliotheek</button>
-    <span class="tp" id="latBox" title="vertraging tussen een geluid berekenen en het horen (browser + besturingssysteem + geluidskaart), zoals de browser die opgeeft" data-i18n-title="attr.vertraging_tussen_een_geluid_berekenen"><span data-i18n="ui.latency">Latency</span> <output id="latVal">–</output></span>
-    <span class="tp"><span data-i18n="ui.kleur">Kleur</span> <select id="skin" aria-label="kleurstelling" data-i18n-aria="attr.kleurstelling"><option value="dark" data-i18n="ui.donker">Donker</option><option value="light" data-i18n="ui.licht">Licht</option><option value="s1000" data-i18n="ui.retro">Retro</option></select></span>
   </div>
   <button class="small" id="menuBtn" aria-expanded="false" aria-controls="hdrMenu" title="menu" aria-label="menu" data-i18n-title="attr.t_menu" data-i18n-aria="attr.t_menu">☰</button>
 </header>
 <div class="hdrmenu" id="hdrMenu" hidden role="dialog" aria-label="menu" data-i18n-aria="attr.t_menu">
-  <div class="hm-name" id="hmName"></div>
-  <div><h4 data-i18n="ui.t_grp_bestanden">Bestanden</h4><div class="hm-row" id="hmFiles"></div></div>
-  <div><h4 data-i18n="ui.t_grp_geluid">Geluid</h4><div class="hm-row" id="hmSound"></div></div>
-  <div><h4 data-i18n="ui.t_grp_weergave">Weergave</h4><div class="hm-row" id="hmView"></div></div>
-  <div><h4 data-i18n="ui.t_grp_overig">Overig</h4><div class="hm-row" id="hmMisc"></div><label class="hm-al"><input type="checkbox" id="alMenuCb"> <span data-i18n="ui.t_al_toggle">Automatisch koppelen bij plaatsen</span></label></div>
+  <div><h4 data-i18n="ui.t_grp_werkruimte">Bestand</h4><div class="hm-row" id="hmFiles"><button class="small" id="wsBtn" aria-expanded="false" aria-controls="wsPanel" data-i18n="ui.werkruimte">Werkruimte ▾</button><button class="small" id="arrange" title="apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)" data-i18n-title="attr.apparaten_netjes_van_links_naar" data-i18n="ui.herschik">Herschik</button><button class="small danger" id="clear" data-i18n="ui.leeg">Leeg</button></div></div>
+  <div><h4 data-i18n="ui.t_grp_bibliotheek">Bibliotheek</h4><div class="hm-row" id="hmLib"><button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets</button><button class="small" id="songBtn" aria-expanded="false" aria-controls="songPanel" title="songs openen: demo's van GitHub en recente songs" data-i18n-title="attr.songs_open_titel" data-i18n="ui.songs_knop">Songs</button><button class="small" id="skBtn" aria-expanded="false" aria-controls="skPanel" title="uiterlijk van apparaten: skins laden en kiezen" data-i18n-title="attr.sk_knop" data-i18n="ui.skins">Skins</button></div></div>
+  <div><h4 data-i18n="ui.t_grp_weergave">Weergave</h4><div class="hm-row" id="hmView"><span class="tp"><span data-i18n="ui.t_scherm">Scherm</span> <select id="layoutSel" title="schermindeling: automatisch, breed of compact" aria-label="schermindeling" data-i18n-title="attr.t_scherm" data-i18n-aria="attr.t_scherm"><option value="auto" data-i18n="ui.t_auto">Auto</option><option value="wide" data-i18n="ui.t_breed">Breed</option><option value="compact" data-i18n="ui.t_compact">Compact</option></select></span><span class="tp"><span data-i18n="ui.kleur">Kleur</span> <select id="skin" aria-label="kleurstelling" data-i18n-aria="attr.kleurstelling"><option value="dark" data-i18n="ui.donker">Donker</option><option value="light" data-i18n="ui.licht">Licht</option><option value="s1000" data-i18n="ui.retro">Retro</option></select></span><button class="small" id="fitScreen" title="maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)" data-i18n-title="attr.t_pas_aan" data-i18n="ui.t_pas_aan">Pas aan op dit scherm</button><button class="small" id="focusBtn" title="focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (Alt+F)" data-i18n-title="attr.focusweergave_de_apparaten_met_f" data-i18n="ui.focus">Focus</button><button class="small narrowonly" id="browseBtn" title="open Focus met alle apparaten, een tegelijk" data-i18n-title="attr.t_bladeren" data-i18n="ui.t_bladeren">Bladeren</button></div></div>
+  <div><h4 data-i18n="ui.t_grp_overig">Overig</h4><div class="hm-row" id="hmMisc"><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button><span class="tp" id="latBox" title="vertraging tussen een geluid berekenen en het horen (browser + besturingssysteem + geluidskaart), zoals de browser die opgeeft" data-i18n-title="attr.vertraging_tussen_een_geluid_berekenen"><span data-i18n="ui.latency">Latency</span> <output id="latVal">–</output></span></div><label class="hm-al"><input type="checkbox" id="alMenuCb"> <span data-i18n="ui.t_al_toggle">Automatisch koppelen bij plaatsen</span></label></div>
 </div>
 
 <section class="wspanel" id="wsPanel" hidden aria-label="Werkruimte" data-i18n-aria="attr.werkruimte">
@@ -86,44 +74,6 @@
   </div>
 </section>
 
-<section class="wspanel" id="prPanel" hidden aria-label="Tunes" data-i18n-aria="attr.tunes">
-  <button class="small close" id="prClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
-  <div>
-    <h3 id="prTitle" data-i18n="ui.tunebibliotheken">Tunebibliotheken</h3>
-    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.tunes_zijn_klanken_van_apparaten"><b data-i18n="ui.tunes_2">Tunes</b> zijn klanken van apparaten die geluid maken (synths, drones, drumcomputers); <b data-i18n="ui.presets_2">presets</b> zijn instellingen van apparaten zonder eigen geluid (effecten, mixers, mastering, sequencers, modulatoren, controllers). Elke bibliotheek hoort bij één apparaat en kan mappen in mappen hebben. Vinkje = zichtbaar in de keuzelijst op de kaarten. Bibliotheken uit een bron (map, GitHub) zijn alleen-lezen; maak een kopie om ze aan te passen. <b data-i18n="ui.exporteer">Exporteer</b> maakt een pack (.patchkamer-tunes.json of .patchkamer-presets.json) met maker en licentie; zet het in je bibliotheekmap of op GitHub en het laadt vanzelf mee.</div>
-    <div class="wslist" id="prLibs" style="max-height:min(56vh,520px)"></div>
-  </div>
-  <div class="wsrow"><button class="small" id="prLoadAll">Alles laden</button><button class="small" id="prNew" data-i18n="ui.nieuwe_bibliotheek">Nieuwe bibliotheek</button><button class="small" id="prImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="prFile" accept=".json,application/json" multiple hidden></div>
-  
-  <div class="note" data-i18n-html="ui.een_tune_of_preset_is">Een tune of preset is de instelling van één apparaat (alle knoppen, patronen en keuzes), niet de kabels. Kies op de kaart, of blader met ◀ ▶. <b data-i18n="ui.bewaar">Bewaar</b> legt de huidige instelling vast in een bibliotheek en map, met jouw naam als maker en een licentie (CC-BY-4.0 of alle rechten voorbehouden); een cursieve naam betekent dat je sindsdien iets hebt veranderd. Ieder exemplaar krijgt een eigen kopie. Drumcomputers hebben een tweede regel <b data-i18n="ui.instrument">Instrument</b>: één geluid (bijv. de kick) als tune laden of bewaren. De licentie zie je bij het laden en bij elk item hieronder.</div>
-</section>
-<section class="wspanel" id="skPanel" hidden aria-label="Skins" data-i18n-aria="attr.sk_paneel">
-  <button class="small close" id="skClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
-  <div>
-    <h3 data-i18n="ui.sk_titel">Skinbibliotheken</h3>
-    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.sk_uitleg">Een <b>skin</b> verandert alleen het uiterlijk van één apparaat, nooit de klank of de werking. Elke skin heeft een of meer <b>verschijningsvormen</b>; op de kaart kies je Skin en Verschijning (<b>Auto</b> wisselt vanzelf op kaartbreedte en schermgrootte). Importeer een bestand (.patchkamer-skin.json), laat het op het canvas los, of laad de standaardbibliotheek met Alles laden. Skins uit een bron (map, GitHub) zijn alleen-lezen. Een song of werkruimte neemt de gebruikte skins mee. Een skin kan ook <b>ontwerpkeuzes</b> bevatten (poortenmodus, kleuren, haptiek, knoppen); met <b>Ontwerpen</b> maak je zelf een skin met live voorbeeld.</div>
-    <div class="wslist" id="skLibs"></div>
-    <div id="skDesign" hidden></div>
-  </div>
-  <div class="wsrow"><button class="small" id="skLoadAll" data-i18n="ui.sk_alles_laden">Alles laden</button><button class="small" id="skImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="skFile" accept=".json,application/json" multiple hidden></div>
-</section>
-<section class="wspanel" id="songPanel" hidden aria-label="Songs" data-i18n-aria="attr.songs_paneel">
-  <button class="small close" id="songClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
-  <div>
-    <h3 data-i18n="ui.songs_kop">Songs</h3>
-    <div class="note" style="margin-bottom:6px" data-i18n="ui.songs_uitleg">Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt. Ontbreken er apparaten, dan laadt Patchkamer eerst de apparatenbibliotheek uit Instellingen.</div>
-    <div class="wsrow"><button class="small" id="songFileBtn" data-i18n="ui.songs_bestand">Bestand openen…</button><input type="file" id="songFile" accept=".json,application/json" hidden></div>
-  </div>
-  <div>
-    <h3 data-i18n="ui.songs_recent">Recent</h3>
-    <div class="wslist" id="songRecent"></div>
-  </div>
-  <div>
-    <h3 data-i18n="ui.songs_demos">Demo's op GitHub</h3>
-    <div class="wsrow"><button class="small" id="songRefresh" data-i18n="ui.songs_vernieuwen">Vernieuwen</button></div>
-    <div class="wslist" id="songDemo" style="margin-top:6px"></div>
-  </div>
-</section>
 <section class="wspanel" id="setPanel" hidden aria-label="Instellingen" data-i18n-aria="attr.instellingen">
   <button class="small close" id="setClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
   <div>
@@ -146,7 +96,7 @@
   <div class="wsrow"><label><input type="checkbox" id="alSetCb"> <span data-i18n="ui.t_al_toggle">Automatisch koppelen bij plaatsen</span></label></div>
   <div class="note" style="margin-bottom:6px" data-i18n="ui.t_al_note">Na het plaatsen van een apparaat stelt Patchkamer kabels voor naar apparaten die al op de vloer staan. Er wordt niets gekoppeld zonder dat je op OK klikt. Zonder eigen keuze staat dit aan op een aanraakscherm en uit op een computer met muis.</div>
   <h3 style="margin-top:12px" data-i18n="ui.nieuwe_werkruimte">Nieuwe werkruimte</h3>
-  <div class="note" style="margin-bottom:6px" data-i18n="ui.nieuwe_werkruimte_uitleg">Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden in het Tunes- en Presets-paneel gebruikt hetzelfde adres.</div>
+  <div class="note" style="margin-bottom:6px" data-i18n="ui.nieuwe_werkruimte_uitleg">Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden op de tabs Tunes en Presets van de bibliotheek gebruikt hetzelfde adres.</div>
   <div class="wsrow"><label><input type="checkbox" id="wsaDev"> <span data-i18n="ui.apparatenbibliotheek_laden">Apparatenbibliotheek laden</span></label></div>
   <div class="wsrow"><input type="text" id="wsuDev" class="wsurl" spellcheck="false" aria-label="adres van de apparatenbibliotheek" data-i18n-aria="attr.adres_apparatenbibliotheek"></div>
   <div class="wsrow"><label><input type="checkbox" id="wsaPre"> <span data-i18n="ui.presets_laden">Presets laden</span></label></div>
@@ -202,7 +152,13 @@
   </div>
   <section class="libwin" id="libwin" aria-label="Bibliotheek" data-i18n-aria="attr.bibliotheek">
     <div class="libbar" id="libbar"><span class="t" data-i18n="ui.bibliotheek">Bibliotheek</span><span class="cnt" id="libCount"></span><button id="libCfgBtn" title="categorieën toevoegen, hernoemen, verwijderen en de indeling bewaren of laden" aria-expanded="false" aria-controls="libCfg" data-i18n-title="attr.categorie_n_toevoegen_hernoemen_verwijderen" data-i18n="ui.indeling">Indeling</button><span class="seg" id="libView" role="group" aria-label="weergave van de bibliotheek" title="weergave van de bibliotheek: kaartjes of compact" data-i18n-aria="attr.t_libview" data-i18n-title="attr.t_libview"><button data-v="cards" data-i18n="ui.t_kaartjes">Kaartjes</button><button data-v="compact" data-i18n="ui.t_compact">Compact</button></span><button id="libMin" title="inklappen" data-i18n-title="attr.inklappen">—</button><button id="libClose" title="bibliotheek sluiten" aria-label="bibliotheek sluiten" data-i18n-title="attr.t_libclose" data-i18n-aria="attr.t_libclose">×</button></div>
-    <div class="libbody">
+    <div class="libtabs" id="libTabs">
+      <div class="libtablist" id="libTabList" role="tablist" aria-label="soort in de bibliotheek" data-i18n-aria="attr.lt_tabs">
+        <button type="button" role="tab" id="libTab_devices" data-tab="devices" aria-selected="true" aria-controls="libPaneDev" data-i18n="ui.lt_apparaten">Apparaten</button><button type="button" role="tab" id="libTab_tunes" data-tab="tunes" aria-selected="false" aria-controls="prPanel" data-i18n="ui.lt_tunes">Tunes</button><button type="button" role="tab" id="libTab_presets" data-tab="presets" aria-selected="false" aria-controls="prPanel" data-i18n="ui.lt_presets">Presets</button><button type="button" role="tab" id="libTab_songs" data-tab="songs" aria-selected="false" aria-controls="songPanel" data-i18n="ui.lt_songs">Songs</button><button type="button" role="tab" id="libTab_skins" data-tab="skins" aria-selected="false" aria-controls="skPanel" data-i18n="ui.lt_skins">Skins</button>
+      </div>
+      <select id="libSel" aria-label="soort in de bibliotheek" data-i18n-aria="attr.lt_tabs"><option value="devices" data-i18n="ui.lt_apparaten">Apparaten</option><option value="tunes" data-i18n="ui.lt_tunes">Tunes</option><option value="presets" data-i18n="ui.lt_presets">Presets</option><option value="songs" data-i18n="ui.lt_songs">Songs</option><option value="skins" data-i18n="ui.lt_skins">Skins</option></select>
+    </div>
+    <div class="libbody" id="libPaneDev" role="tabpanel" aria-labelledby="libTab_devices" data-libtab="devices">
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
       <div class="libcfg" id="libCfg" hidden></div>
       <div class="libcats" id="lib"></div>
@@ -220,6 +176,42 @@
         <div class="note" data-i18n="ui.een_instrument_is_n_javascript">Een instrument is één JavaScript-module die het contract volgt. Binnen de artifact-weergave kan het laden van externe code geblokkeerd zijn; in het losse HTML-bestand werkt het altijd.</div>
       </details>
     </div>
+<section class="libbody libpane" id="prPanel" hidden role="tabpanel" aria-label="Tunes" data-i18n-aria="attr.tunes" data-libtab="tunes">
+  <div>
+    <h3 id="prTitle" data-i18n="ui.tunebibliotheken">Tunebibliotheken</h3>
+    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.tunes_zijn_klanken_van_apparaten"><b data-i18n="ui.tunes_2">Tunes</b> zijn klanken van apparaten die geluid maken (synths, drones, drumcomputers); <b data-i18n="ui.presets_2">presets</b> zijn instellingen van apparaten zonder eigen geluid (effecten, mixers, mastering, sequencers, modulatoren, controllers). Elke bibliotheek hoort bij één apparaat en kan mappen in mappen hebben. Vinkje = zichtbaar in de keuzelijst op de kaarten. Bibliotheken uit een bron (map, GitHub) zijn alleen-lezen; maak een kopie om ze aan te passen. <b data-i18n="ui.exporteer">Exporteer</b> maakt een pack (.patchkamer-tunes.json of .patchkamer-presets.json) met maker en licentie; zet het in je bibliotheekmap of op GitHub en het laadt vanzelf mee.</div>
+    <div class="wslist" id="prLibs" style="max-height:min(56vh,520px)"></div>
+  </div>
+  <div class="wsrow"><button class="small" id="prLoadAll">Alles laden</button><button class="small" id="prNew" data-i18n="ui.nieuwe_bibliotheek">Nieuwe bibliotheek</button><button class="small" id="prImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="prFile" accept=".json,application/json" multiple hidden></div>
+  
+  <div class="note" data-i18n-html="ui.een_tune_of_preset_is">Een tune of preset is de instelling van één apparaat (alle knoppen, patronen en keuzes), niet de kabels. Kies op de kaart, of blader met ◀ ▶. <b data-i18n="ui.bewaar">Bewaar</b> legt de huidige instelling vast in een bibliotheek en map, met jouw naam als maker en een licentie (CC-BY-4.0 of alle rechten voorbehouden); een cursieve naam betekent dat je sindsdien iets hebt veranderd. Ieder exemplaar krijgt een eigen kopie. Drumcomputers hebben een tweede regel <b data-i18n="ui.instrument">Instrument</b>: één geluid (bijv. de kick) als tune laden of bewaren. De licentie zie je bij het laden en bij elk item hieronder.</div>
+</section>
+<section class="libbody libpane" id="skPanel" hidden role="tabpanel" aria-label="Skins" data-i18n-aria="attr.sk_paneel" data-libtab="skins">
+  <div>
+    <h3 data-i18n="ui.sk_titel">Skinbibliotheken</h3>
+    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.sk_uitleg">Een <b>skin</b> verandert alleen het uiterlijk van één apparaat, nooit de klank of de werking. Elke skin heeft een of meer <b>verschijningsvormen</b>; op de kaart kies je Skin en Verschijning (<b>Auto</b> wisselt vanzelf op kaartbreedte en schermgrootte). Importeer een bestand (.patchkamer-skin.json), laat het op het canvas los, of laad de standaardbibliotheek met Alles laden. Skins uit een bron (map, GitHub) zijn alleen-lezen. Een song of werkruimte neemt de gebruikte skins mee. Een skin kan ook <b>ontwerpkeuzes</b> bevatten (poortenmodus, kleuren, haptiek, knoppen); met <b>Ontwerpen</b> maak je zelf een skin met live voorbeeld.</div>
+    <div class="wslist" id="skLibs"></div>
+    <div id="skDesign" hidden></div>
+  </div>
+  <div class="wsrow"><button class="small" id="skLoadAll" data-i18n="ui.sk_alles_laden">Alles laden</button><button class="small" id="skImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="skFile" accept=".json,application/json" multiple hidden></div>
+</section>
+<section class="libbody libpane" id="songPanel" hidden role="tabpanel" aria-label="Songs" data-i18n-aria="attr.songs_paneel" data-libtab="songs">
+  <input type="search" class="libsearch" id="songSearch" placeholder="Zoek in songs" aria-label="zoek in songs" data-i18n-ph="attr.songs_zoek" data-i18n-aria="attr.songs_zoek">
+  <div>
+    <h3 data-i18n="ui.songs_kop">Songs</h3>
+    <div class="note" style="margin-bottom:6px" data-i18n="ui.songs_uitleg">Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt. Ontbreken er apparaten, dan laadt Patchkamer eerst de apparatenbibliotheek uit Instellingen.</div>
+    <div class="wsrow"><button class="small" id="songFileBtn" data-i18n="ui.songs_bestand">Bestand openen…</button><button class="small" id="songSave" title="deelbare export met alle apparaatcode, titel, maker en licentie (.patchkamer-song.json)" data-i18n-title="attr.deelbare_export_met_alle_apparaatcode" data-i18n="ui.exporteer_als_song">Exporteer als song…</button><input type="file" id="songFile" accept=".json,application/json" hidden></div>
+  </div>
+  <div>
+    <h3 data-i18n="ui.songs_recent">Recent</h3>
+    <div class="wslist" id="songRecent"></div>
+  </div>
+  <div>
+    <h3 data-i18n="ui.songs_demos">Demo's op GitHub</h3>
+    <div class="wsrow"><button class="small" id="songRefresh" data-i18n="ui.songs_vernieuwen">Vernieuwen</button></div>
+    <div class="wslist" id="songDemo" style="margin-top:6px"></div>
+  </div>
+</section>
     <div class="rz w"></div><div class="rz e"></div><div class="rz s"></div><div class="rz se"></div>
   </section>
 </div>
@@ -276,5 +268,6 @@
 <script src="js/skins.js"></script>
 <script src="js/skins-ui.js"></script>
 <script src="js/skins-design.js"></script>
+<script src="js/library-tabs.js"></script>
 <script src="js/boot.js"></script>
 <script src="js/ns-close.js"></script>

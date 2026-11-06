@@ -1,7 +1,7 @@
 // js/library-window.js — bibliotheekvenster: opslag, tekenen, slepen, formaat, zoeken
 (function(PK){
 const LIBOPEN=new Set(); PK.LIBOPEN=LIBOPEN;   // categorieën die je in deze sessie openklapte: bij elke start staat alles ingeklapt
-const LIBKEY='patchkamerLib'; PK.LIBKEY=LIBKEY; PK.LIB={x:16,y:16,w:340,h:620,fs:14,min:false,shown:true,closed:[]};
+const LIBKEY='patchkamerLib'; PK.LIBKEY=LIBKEY; PK.LIB={x:16,y:16,w:420,h:620,fs:14,min:false,shown:true,closed:[]};
 // eigen categorieën: LIB.catList = [{key,label,color}] in volgorde; 'other' (Overig) blijft altijd bestaan
 function cleanCatList(list,addMastering){ const out=[], seen=new Set();
   (Array.isArray(list)?list:[]).forEach(c=>{ if(!c||typeof c!=='object') return; const key=String(c.key||'').trim().slice(0,40), label=String(c.label||'').trim().slice(0,60);
@@ -63,13 +63,13 @@ PK.libDrag=null;
 function overFloor(cx,cy){ const el=document.elementFromPoint(cx,cy); return !!el&&!!el.closest('#floorwrap')&&!el.closest('#libwin'); } PK.overFloor=overFloor;
 function catTarget(cx,cy){ const el=document.elementFromPoint(cx,cy); return el&&el.closest('#lib .cat'); } PK.catTarget=catTarget;
 function placeLib(){ const sheet=PK.isSheet(); PK.libwin.classList.toggle('sheet',sheet); document.body.classList.toggle('libsheet',sheet&&!!PK.LIB.shown);
-  if(sheet){ PK.libwin.style.setProperty('--libfs',PK.LIB.fs+'px'); PK.libwin.classList.remove('min'); PK.libwin.hidden=!PK.LIB.shown; PK.$('libToggle').classList.toggle('on',!!PK.LIB.shown); return; }
+  if(sheet){ PK.libwin.style.setProperty('--libfs',PK.LIB.fs+'px'); PK.libwin.classList.remove('min'); PK.libwin.hidden=!PK.LIB.shown; PK.$('libToggle').classList.toggle('on',!!PK.LIB.shown); if(PK.libSync) PK.libSync(); return; }
   const r0=PK.room.getBoundingClientRect(), r={width:r0.width/PK.PKS.ui,height:r0.height/PK.PKS.ui};
   PK.LIB.w=PK.clamp(PK.LIB.w,260,Math.max(260,r.width-8)); PK.LIB.h=PK.clamp(PK.LIB.h,160,Math.max(160,r.height-8));
   PK.LIB.x=PK.clamp(PK.LIB.x,-(PK.LIB.w-120),Math.max(0,r.width-120)); PK.LIB.y=PK.clamp(PK.LIB.y,0,Math.max(0,r.height-44));
   Object.assign(PK.libwin.style,{left:PK.LIB.x+'px',top:PK.LIB.y+'px',width:PK.LIB.w+'px',height:PK.LIB.h+'px'});
   PK.libwin.style.setProperty('--libfs',PK.LIB.fs+'px'); PK.libwin.classList.toggle('min',!!PK.LIB.min); PK.libwin.hidden=!PK.LIB.shown;
-  PK.$('libMin').textContent=PK.LIB.min?'▢':'—'; PK.$('libMin').title=PK.LIB.min?PK.pkt('m.uitklappen'):PK.pkt('m.inklappen'); PK.$('libToggle').classList.toggle('on',!!PK.LIB.shown); } PK.placeLib=placeLib;
+  PK.$('libMin').textContent=PK.LIB.min?'▢':'—'; PK.$('libMin').title=PK.LIB.min?PK.pkt('m.uitklappen'):PK.pkt('m.inklappen'); PK.$('libToggle').classList.toggle('on',!!PK.LIB.shown); if(PK.libSync) PK.libSync(); } PK.placeLib=placeLib;
 function libGesture(handle,apply,onEnd){ let st=null;
   handle.addEventListener('pointerdown',e=>{ if(e.button!==0||e.target.closest('button')) return; e.preventDefault(); e.stopPropagation(); st={cx:e.clientX,cy:e.clientY,...PK.LIB}; handle.setPointerCapture(e.pointerId); });
   handle.addEventListener('pointermove',e=>{ if(!st) return; apply(st,(e.clientX-st.cx)/PK.PKS.ui,(e.clientY-st.cy)/PK.PKS.ui); placeLib(); });

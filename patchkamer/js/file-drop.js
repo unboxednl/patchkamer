@@ -45,6 +45,7 @@ async function dropProcess(files,skipped,dirs){
     if(groups.skin.length){ try{ const r=await PK.skinsImport(groups.skin.map(x=>x.f),true); n.skin+=r.n; r.errs.forEach(x=>errs.push(x)); }catch(e){ errs.push(e.message); } }
     for(const {f,text} of groups.layout){ try{ PK.applyLayout(JSON.parse(text),null,true); n.layout++; }catch(e){ errs.push(f.name+': '+e.message); } }
     for(const k of ['song','ws']) for(const {f} of groups[k]){ try{ if(await PK.songOpenFile(f,true)) n[k]++; else errs.push(PK.pkt('m.t_drop_mislukt',f.name)); }catch(e){ errs.push(f.name+': '+e.message); } }
+    if(!n.song&&!n.ws){ const t=n.skin?'skins':n.preset?'presets':n.tune?'tunes':n.device?'devices':''; if(t) PK.libOpen(t); }   // het resultaat staat in de bibliotheek: open die op de juiste tab
     const parts=[]; const one=x=>x===1;
     if(n.device) parts.push(PK.pktp('m.t_drop_dev',one(n.device),n.device)); if(n.tune) parts.push(PK.pktp('m.t_drop_tune',one(n.tune),n.tune)); if(n.preset) parts.push(PK.pktp('m.t_drop_preset',one(n.preset),n.preset));
     if(n.skin) parts.push(PK.pktp('m.t_drop_skin',one(n.skin),n.skin)); if(n.layout) parts.push(PK.pkt('m.t_drop_layout')); if(n.song) parts.push(PK.pktp('m.t_drop_song',one(n.song),n.song)); if(n.ws) parts.push(PK.pktp('m.t_drop_ws',one(n.ws),n.ws));

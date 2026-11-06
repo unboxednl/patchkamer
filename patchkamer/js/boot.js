@@ -145,9 +145,7 @@ PK.CAT_OVR={};   // your own category per device id (kept in the library setting
 /* ---------- skins: register, apparaaticonen en het paneel Skins (js/skins.js, js/skins-ui.js, js/device-icons.js) ---------- */
 PK.SK={user:[],src:[],emb:[]}, PK.SKICON=new Map(), PK.DEVICON=new Map(), PK.skOpen=new Set(), PK.SKFILTER='';   // skins per herkomst · 'bron|apparaat-id' -> icoon uit skins/library · 'bron|map' -> icoon uit de apparaatmap
 { const skPanel=PK.$('skPanel'); PK.skPanel=skPanel; let skRT=0;
-  PK.$('skBtn').onclick=e=>{ e.stopPropagation(); skPanel.hidden?PK.skOpenPanel():PK.skClosePanel(); }; PK.$('skClose').onclick=PK.skClosePanel;
-  document.addEventListener('pointerdown',e=>{ if(!skPanel.hidden&&!(PK.skDesigning&&PK.skDesigning())&&!e.target.closest('#skPanel,#skBtn,.pkmodal')) PK.skClosePanel(); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!skPanel.hidden&&!document.querySelector('.pkmodal')) PK.skClosePanel(); });
+  PK.$('skBtn').onclick=e=>{ e.stopPropagation(); PK.skOpenPanel(); };   // de knop in het ☰-menu opent de bibliotheek op de tab Skins
   PK.$('skImport').onclick=()=>{ PK.$('skFile').value=''; PK.$('skFile').click(); };
   PK.$('skFile').addEventListener('change',async e=>{ await PK.skinsImport(e.target.files); });
   PK.$('skLoadAll').onclick=async()=>{ const b=PK.$('skLoadAll'); b.disabled=true;
@@ -187,6 +185,7 @@ PK.$('libSearch').addEventListener('input',PK.paintLib);
 libwin.addEventListener('pointerdown',e=>e.stopPropagation());
 window.addEventListener('resize',PK.placeLib);
 document.addEventListener('keydown',e=>{ if(PK.textEntry(e)) return; if(e.code==='KeyB'&&e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){ e.preventDefault(); PK.LIB.shown=!PK.LIB.shown; PK.placeLib(); PK.saveLib(); } });
+PK.libTabsInit();
 PK.placeLib();
 PK.paintLib();
 // ===== clock =====
@@ -227,7 +226,7 @@ PK.$('wsSaveLocal').onclick=()=>{ const b=PK.$('wsSaveLocal'), o=PK.readP(), nam
   o[name]={t:Date.now(),p:PK.workspaceState(true)}; if(PK.writeP(o)){ PK.paintPatches(); PK.status(PK.pkt('m.opgeslagen_in_deze_browser',name)); } else PK.status(PK.pkt('m.de_browseropslag_is_vol_of'),true); };
 const wsPanel=PK.$('wsPanel'); PK.wsPanel=wsPanel;
 PK.$('wsBtn').onclick=e=>{ e.stopPropagation(); wsPanel.hidden?PK.openWs():PK.closeWs(); }; PK.$('wsClose').onclick=PK.closeWs;
-document.addEventListener('pointerdown',e=>{ if(!wsPanel.hidden&&!e.target.closest('#wsPanel,#wsBtn,#prBtn,.pkmodal')) PK.closeWs(); });
+document.addEventListener('pointerdown',e=>{ if(!wsPanel.hidden&&!e.target.closest('#wsPanel,#wsBtn,.pkmodal')) PK.closeWs(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!wsPanel.hidden) PK.closeWs(); });
 PK.$('wsNew').onclick=()=>{ const b=PK.$('wsNew'); if(!b.dataset.arm){ b.dataset.arm='1'; b.textContent=PK.pkt('m.zeker_niet_opgeslagen_werk_verdwijnt'); setTimeout(()=>{ b.dataset.arm=''; b.textContent=PK.pkt('m.nieuwe_lege_werkruimte'); },3000); return; }
   b.dataset.arm=''; b.textContent=PK.pkt('m.nieuwe_lege_werkruimte'); PK.clearFloor(); PK.setName(PK.pkt('m.naamloos')); PK.Host.view={x:40,y:40,scale:PK.PKS.f}; PK.applyView(); PK.closeWs(); PK.status(PK.pkt('m.nieuwe_lege_werkruimte')); };
@@ -280,10 +279,7 @@ window.addEventListener('pagehide',()=>{ if(typeof PK.PK_WIPING!=='undefined'&&P
 
 // ---- paneel: tunebibliotheken per apparaat, met mappen ----
 const prPanel=PK.$('prPanel'); PK.prPanel=prPanel;
-PK.$('prBtn').onclick=e=>{ e.stopPropagation(); !prPanel.hidden&&PK.TUMODE==='tune'?PK.prClosePanel():PK.prOpenPanel('tune'); }; PK.$('psBtn').onclick=e=>{ e.stopPropagation(); !prPanel.hidden&&PK.TUMODE==='preset'?PK.prClosePanel():PK.prOpenPanel('preset'); }; PK.$('prClose').onclick=PK.prClosePanel;
-document.addEventListener('pointerdown',e=>{ if(!prPanel.hidden&&!e.target.closest('#prPanel,#prBtn,#psBtn,.pkmodal,.pbrowse')) PK.prClosePanel(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!prPanel.hidden&&!document.querySelector('.pkmodal')) PK.prClosePanel(); });
-PK.$('wsBtn').addEventListener('click',()=>{ if(!prPanel.hidden) PK.prClosePanel(); },true);
+PK.$('prBtn').onclick=e=>{ e.stopPropagation(); PK.prOpenPanel('tune'); }; PK.$('psBtn').onclick=e=>{ e.stopPropagation(); PK.prOpenPanel('preset'); };   // knoppen in het ☰-menu: open de bibliotheek op de tab Tunes of Presets
 PK.$('prNew').onclick=()=>{ const dev=PK.TUFILTER||(PK.selected&&PK.Host.devices.get(PK.selected)&&PK.Host.devices.get(PK.selected).def.id); if(!dev){ PK.status(PK.pkt('m.kies_eerst_een_apparaat_in'),true); return; } const l=PK.tuNewLib(dev); PK.prOpen.add(l.lid); PK.TUFILTER=dev; PK.prPersist(); PK.prPaintPanel(); };
 PK.$('prImport').onclick=()=>{ PK.$('prFile').value=''; PK.$('prFile').click(); };
 PK.$('prFile').addEventListener('change',async e=>{ await PK.importTuneFiles(e.target.files); });
@@ -479,19 +475,16 @@ document.addEventListener('touchmove',e=>{ if(PK.libDrag&&PK.libDrag.touch&&e.ca
 PK.PKT.narrow.addEventListener('change',()=>{ PK.placeLib(); PK.paintLib(); if(typeof PK.FOCUS!=='undefined'&&!PK.FOCUS.open&&!PK.FOCUS_PICKED) PK.FOCUS.layout=PK.focusBase(); });
 PK.PKT.coarse.addEventListener('change',()=>{ PK.paintLib(); PK.hitWidthRefresh(); });
 // ===== header-menu =====
-/* ---------- menu in de hoofdbalk op smal scherm: de balk houdt Start, BPM, Swing en Bibliotheek; de rest staat achter ☰ ---------- */
-const HM={menu:PK.$('hdrMenu'),btn:PK.$('menuBtn'),tr:document.querySelector('header .transport'),open:false,pushed:false}; PK.HM=HM;
-HM.orig=[...HM.tr.children];
+/* ---------- menu achter ☰ op alle schermbreedten: de balk houdt logo, werkruimtenaam, Start, BPM, Swing, Bibliotheek en ☰; al het andere staat in het menu ---------- */
+const HM={menu:PK.$('hdrMenu'),btn:PK.$('menuBtn'),open:false,pushed:false}; PK.HM=HM;
 HM.btn.addEventListener('click',()=>HM.open?PK.hmClose():PK.hmOpen());
 HM.menu.addEventListener('click',e=>{ if(e.target.closest('button')) setTimeout(PK.hmClose,0); },true);
 HM.menu.addEventListener('change',e=>{ if(e.target.closest('select')) PK.hmClose(); });
 document.addEventListener('pointerdown',e=>{ if(HM.open&&!HM.menu.contains(e.target)&&!HM.btn.contains(e.target)) PK.hmClose(); },true);
-document.addEventListener('keydown',e=>{ if(HM.open&&e.key==='Escape'){ e.preventDefault(); PK.hmClose(); } });
+document.addEventListener('keydown',e=>{ if(HM.open&&e.key==='Escape'){ e.preventDefault(); PK.hmClose(); HM.btn.focus(); } });
 window.addEventListener('popstate',()=>{ if(HM.open){ HM.pushed=false; PK.hmClose(true); } });
 (function(){ const lab=(id,span)=>{ const el=PK.$(id), t=span&&span.textContent.trim(); if(el&&t){ el.title=t; el.setAttribute('aria-label',t); } };
   lab('bpm',PK.$('bpm').closest('.tp').firstElementChild); lab('swing',PK.$('swing').closest('.tp').firstElementChild); lab('libToggle',PK.$('libToggle')); })();
-PK.PKT.narrow.addEventListener('change',()=>PK.hmPlace(PK.PKT.narrow.matches));
-if(PK.PKT.narrow.matches) PK.hmPlace(true);
 PK.paintLibView();
 // ===== focus-carousel =====
 PK.$('browseBtn').onclick=()=>{ if(PK.FOCUS.open&&PK.FOCUS.all){ PK.closeFocus(); return; } if(PK.FOCUS.open) PK.closeFocus();
@@ -514,16 +507,17 @@ document.addEventListener('keydown',e=>{ if(!PK.FOCUS.open||PK.FOCUS.layout!=='o
 { const d=PK.pkAiDef(); d._builtin=true; PK.Host.registry.set(PK.Host.key(d.id,d.version),d); PK.paintLib(); }
 // ===== song-panel =====
 const songPanel=PK.$('songPanel'), songBtn=PK.$('songBtn'); PK.songPanel=songPanel; PK.songBtn=songBtn;
-songBtn.onclick=e=>{ e.stopPropagation(); songPanel.hidden?PK.openSongs():PK.closeSongs(); }; PK.$('songClose').onclick=PK.closeSongs;
-document.addEventListener('pointerdown',e=>{ if(!songPanel.hidden&&!e.target.closest('#songPanel,#songBtn,.pkmodal')) PK.closeSongs(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!songPanel.hidden&&!document.querySelector('.pkmodal')) PK.closeSongs(); });
+songBtn.onclick=e=>{ e.stopPropagation(); PK.openSongs(); };
+PK.$('songSearch').addEventListener('input',PK.songPaint);
+PK.$('songSave').onclick=()=>PK.songExportDialog();   // opslaan als song, ook vanaf de tab Songs
 PK.$('songRefresh').onclick=()=>{ PK.SONG_DEMO=null; PK.songPaint(); PK.songDemoLoad(true); };
 PK.$('songFileBtn').onclick=()=>{ PK.$('songFile').value=''; PK.$('songFile').click(); };
 PK.$('songFile').addEventListener('change',async e=>{ const f=e.target.files[0]; if(!f) return; await PK.songOpenFile(f); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!songPanel.hidden) PK.closeSongs(); });
 { const a=PK.$('songAddr'); if(a){ a.value=PK.songAddr(); a.onchange=()=>{ const v=a.value.trim(); try{ if(v&&v!==PK.SONG_ADDR_DEF) localStorage.setItem(PK.SONG_ADDR_KEY,v); else localStorage.removeItem(PK.SONG_ADDR_KEY); }catch(e){} a.value=PK.songAddr(); PK.SONG_DEMO=null; }; }
   const r=PK.$('songAddrReset'); if(r) r.onclick=()=>{ try{ localStorage.removeItem(PK.SONG_ADDR_KEY); }catch(e){} PK.$('songAddr').value=PK.SONG_ADDR_DEF; PK.SONG_DEMO=null; }; }
 PK.IDB.get('songs:recent').then(v=>{ PK.SONGREC=Array.isArray(v)?v.filter(x=>x&&x.key&&x.title).slice(0,PK.SONGREC_MAX):[]; if(!songPanel.hidden) PK.songPaint(); });
+// ===== bibliotheektabs =====
+PK.LIBREADY=true; PK.libSync();   // alle panelen bestaan: teken de tab die vorige keer open stond
 // ===== file-drop =====
 PK.initFileDrop();
 })(window.__PK);
