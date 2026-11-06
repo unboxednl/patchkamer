@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.5.1 — Bij het koppelen aan MIDI heet elke regelaar van een kanaal nu 'Trim - T3', van een groep 'Send - G1' en van de master 'Fader - Master' (voorheen
+//   wist de host het nummer uit de naam, dus alle kanalen heetten hetzelfde). Alleen de zichtbare naam verandert; de koppeling zelf blijft gelijk.
 // 2.5.0 — Alle continue regelaars staan in params() en worden bestuurbaar via modulate(): per kanaal (lane ch1..), groep (g1..) en de master: trim, EQ, send, return, pan en fader. Effectieve waarde = knop + offset × bereik (lineair, geclampt) en gaat alleen naar de audiograaf: de zichtbare regelaar, getState en presets blijven ongewijzigd. Alles staat standaard uit (on: false). Bewust niet: mute, solo, groepstoewijzing, aantal kanalen/groepen, EQ-banden, doelniveau (keuzes, vinkjes en configuratie). Bij een ander aantal kanalen/groepen of EQ-banden meldt de Mixer host.paramsChanged. De sturingsingang 'Mod' staat in de bovenste rij naast de bundelpoorten (de Mixer tekent zijn poorten zelf).
 // 2.4.1 — Bewaker tegen NaN en Infinity: één foute waarde van een apparaat ervoor liet de EQ-filters en de begrenzer voorgoed ontsporen (daarna was de hele uitvoer stil of NaN). Elke 100 ms kijkt de Mixer met de meters of er iets niet-eindigs of absurds uitkomt en vervangt dan de ontspoorde EQ-filters en de begrenzer. Normaal geluid is ongewijzigd.
 // 2.4.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poort- en kaartnamen per taal in i18n). setState negeert onbekende velden,
@@ -122,7 +124,7 @@ const CSS = `
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.5.0',
+  version: '2.5.1',
   kind: 'mixer',
   modExclude: ['target'],   // doelniveau van 'gelijk trekken': geen audioregelaar maar een meetinstelling
   category: 'mix',
@@ -314,6 +316,8 @@ export default {
       w.append(l, i); parent.appendChild(w);
       const r = () => { i.value = get(); b.textContent = fmt(get()); }; ui.refreshers.push(r); return r;
     }
+    // elke regelaar van een strook krijgt het spoor erbij ('Trim - T3'): zo zie je bij het koppelen aan MIDI welk kanaal het is
+    const tagCtl = (strip, tag) => strip.querySelectorAll('input[type=range],select,button').forEach(x => { x.dataset.pkSuffix = tag; });
     function fader(parent, get, set, an) {
       const f = el('div', 'mx2-fad'), i = el('input'), met = el('div', 'mx2-met'), bar = el('i'), pk = el('u');
       i.type = 'range'; i.min = -60; i.max = 6; i.step = 0.5; i.value = get(); i.setAttribute('aria-label', T.fader);
@@ -377,6 +381,7 @@ export default {
         bm.onclick = () => { c.mute = !c.mute; bm.classList.toggle('on', c.mute); applyAll(); }; bs.onclick = () => { c.solo = !c.solo; bs.classList.toggle('on', c.solo); s.classList.toggle('solo', c.solo); applyAll(); };
         ui.refreshers.push(() => { bm.classList.toggle('on', c.mute); bs.classList.toggle('on', c.solo); s.classList.toggle('solo', c.solo); });
         ms.append(bm, bs); bot.appendChild(ms);
+        tagCtl(s, 'T' + k);
       });
       if (S.nGrp) {
         const secG = el('div', 'mx2-sec grp'); secG.appendChild(el('span', 'tag', T.grps)); desk.appendChild(secG);
@@ -392,6 +397,7 @@ export default {
           const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter);
           const ms = el('div', 'mx2-ms'), bm = el('button', 'm', 'M'); bm.title = T.mute; bm.onclick = () => { c.mute = !c.mute; bm.classList.toggle('on', c.mute); applyAll(); };
           ui.refreshers.push(() => bm.classList.toggle('on', c.mute)); ms.appendChild(bm); bot.appendChild(ms);
+          tagCtl(s, 'G' + k);
         });
       }
       const secM = el('div', 'mx2-sec mst'); secM.appendChild(el('span', 'tag', T.master)); desk.appendChild(secM);
@@ -401,7 +407,7 @@ export default {
         eqBlock(s, c);
         mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0);
         mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8);
-        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, mMeter); bot.appendChild(el('div', 'mx2-ms')); }
+        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, mMeter); bot.appendChild(el('div', 'mx2-ms')); tagCtl(s, T.master); }
     }
 
     self = {

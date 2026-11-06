@@ -106,7 +106,8 @@ function ctlKind(x){ return x.tagName==='SELECT'?'select':x.tagName==='BUTTON'?'
 function ctlLabel(x,kind){ let t=''; if(kind==='button') t=x.getAttribute('aria-label')||x.textContent||x.title||''; else t=PK.ctlBase(x); return String(t||'').replace(/\s+/g,' ').trim().slice(0,48); }
 function ctlList(rec){ const els=ctlAllEls(ctlUi(rec)), n=new Map(), list=[]; rec._ctlEls=new Map();
   els.forEach(x=>{ const kind=ctlKind(x); if(kind!=='range'&&(x.disabled||x.hidden)) return; const label=ctlLabel(x,kind); if(kind==='button'&&!label) return; const base=kind+'|'+label, c=n.get(base)||0; n.set(base,c+1); const key=base+'#'+c;
-    const d={key,label:label||(kind+' '+(c+1)),type:kind}; if(kind==='range'){ d.min=+x.min||0; d.max=x.max===''?100:+x.max; d.step=+x.step||0; d.value=+x.value; d.scale=x.dataset&&x.dataset.pkScale==='log'?'log':'lin'; }
+    const sfx=x.dataset&&x.dataset.pkSuffix?String(x.dataset.pkSuffix).replace(/\s+/g,' ').trim().slice(0,16):'';   // zichtbare naam: 'Trim - T3'; de sleutel blijft gelijk, dus bestaande koppelingen blijven werken
+    const d={key,label:(label||(kind+' '+(c+1)))+(sfx?' - '+sfx:''),type:kind}; if(kind==='range'){ d.min=+x.min||0; d.max=x.max===''?100:+x.max; d.step=+x.step||0; d.value=+x.value; d.scale=x.dataset&&x.dataset.pkScale==='log'?'log':'lin'; }
     else if(kind==='select'){ d.options=[...x.options].map(o=>({value:o.value,text:o.textContent})); d.value=x.value; } else if(kind==='check') d.value=!!x.checked;
     rec._ctlEls.set(key,x); list.push({d,el:x}); });
   return list; } PK.ctlList=ctlList;
