@@ -14,7 +14,7 @@
 - **Save and share your work.** Save a workspace as a file or in your browser, or export it as a **song** that carries all device code, a title, an author and a license, so anyone can open it.
 - **Load devices from anywhere.** From a folder on your computer, from GitHub or from a web address.
 - **Make it yours.** Dutch and English interface (follows your browser), dark, light and retro looks, a focus view, zoom and an audio quality setting (sample rate, latency, oversampling).
-- **Private by design.** One HTML file. No install, no account, nothing uploaded.
+- **Private by design.** Plain HTML, CSS and JavaScript files, no build step. No install, no account, nothing uploaded.
 
 ## Quick start
 
@@ -61,7 +61,7 @@ Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, 
 
 | Folder | Contents | License |
 |---|---|---|
-| `patchkamer/` | The host: the studio itself, as one HTML page | AGPL-3.0-or-later |
+| `patchkamer/` | The host: the studio itself, as plain HTML, CSS and JavaScript files | AGPL-3.0-or-later |
 | `contract/` | The device contract (English and Dutch) and the validator | MIT |
 | `devices/` | The included devices, in a folder per kind and a folder per device | AGPL-3.0-or-later |
 | `app/` | The desktop app (Electron): the host in its own window, with the bundled library; builds a portable Windows exe | AGPL-3.0-or-later |

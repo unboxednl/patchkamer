@@ -33,7 +33,7 @@ Je hoeft niets te installeren, er is geen account en er wordt niets geüpload. A
 
 ## 2. Patchkamer openen
 
-Patchkamer is één HTML-bestand. De snelste manier is het online te openen via <https://unboxednl.github.io/patchkamer/>. Dat draait altijd de nieuwste versie uit deze repository, werkt in Chrome en Edge (ook op een Android-telefoon) en draait nog steeds helemaal in je eigen browser: er wordt niets geüpload. Omdat het via https wordt aangeboden, werken Web MIDI en audio-ingang er ook.
+Patchkamer is een gewone webpagina (`patchkamer.html` met zijn stijlbladen en scripts, zonder installatie of build). De snelste manier is het online te openen via <https://unboxednl.github.io/patchkamer/>. Dat draait altijd de nieuwste versie uit deze repository, werkt in Chrome en Edge (ook op een Android-telefoon) en draait nog steeds helemaal in je eigen browser: er wordt niets geüpload. Omdat het via https wordt aangeboden, werken Web MIDI en audio-ingang er ook.
 
 Wil je liever je eigen kopie draaien:
 
@@ -49,6 +49,16 @@ python3 -m http.server 8080
 Open daarna `http://localhost:8080/patchkamer/patchkamer.html`. Via `localhost` geven Chrome en Edge je de echte mapkiezer (onderdeel 4).
 
 Patchkamer volgt de taal van je browser: Nederlands of Engels. Je wijzigt dat onder Instellingen (onderdeel 10).
+
+### Als app op je telefoon of computer
+
+Je hoeft niets te installeren, maar je kunt Patchkamer wel als app-icoon bewaren. Open <https://unboxednl.github.io/patchkamer/> en kies:
+
+- **Android (Chrome):** menu ⋮ → **App installeren** of **Toevoegen aan startscherm**. Patchkamer opent dan zonder adresbalk, schermvullend.
+- **Computer (Chrome of Edge):** het installeericoon in de adresbalk of menu → **Patchkamer installeren**.
+- **iPhone en iPad (Safari):** knop Delen → **Zet op beginscherm**.
+
+Het icoon (een patchkabel tussen twee aansluitingen) verschijnt ook als tabbladicoon in de browser. De app heeft een internetverbinding nodig om te starten; je werk blijft in je browser bewaard.
 
 ## 3. Een rondleiding door de studio
 
@@ -91,7 +101,7 @@ Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen word
 
 **Bijwerken.** Een scan laadt ook de gewijzigde code van apparaten die al op de vloer staan: zo'n apparaat wordt opnieuw gemaakt met zijn instellingen, kabels en grootte, en de melding noemt hoeveel er zijn bijgewerkt.
 
-**Nieuwe versie van Patchkamer.** Bij het starten (via http of https) vergelijkt Patchkamer `patchkamer.html` met de versie op GitHub (`main`). Wijkt die af, dan verschijnt rechtsonder een melding met **Bekijk op GitHub**, **Later** en **Niet meer melden voor deze versie**. Een bestand dat je via `file://` opent, kan zichzelf niet lezen en krijgt geen melding.
+**Nieuwe versie van Patchkamer.** Bij het starten (via http of https) vergelijkt Patchkamer `patchkamer.html` en zijn stijlbladen en scripts met de versie op GitHub (`main`). Wijkt die af, dan verschijnt rechtsonder een melding met **Bekijk op GitHub**, **Later** en **Niet meer melden voor deze versie**. Een bestand dat je via `file://` opent, kan zichzelf niet lezen en krijgt geen melding.
 
 **Het kan ook vanzelf.** Onder **Instellingen → Nieuwe werkruimte** kan Patchkamer de apparatenbibliotheek, de presets en de tunes van GitHub laden zodra je met een lege werkruimte begint. De drie adressen kun je daar wijzigen (hoofdstuk 10). Elk adres wordt een eigen bron in de lijst, met een knop **Scannen**.
 
@@ -210,6 +220,17 @@ Je **werkruimte** is de hele opstelling: apparaten met hun instellingen en patro
 
 ![De tabbalk met drie werkruimtes](images/nl/11-workspaces.png)
 
+### Bestanden op het canvas droppen
+
+Met een muis kun je bestanden uit je bestandsbeheer op de **vloer** of het **bibliotheekvenster** loslaten; er verschijnt een kader met "Laat los om te laden". Patchkamer herkent de soort aan de inhoud en laadt zonder te vragen:
+
+- een **song** (`.patchkamer-song.json`) of een **werkruimtebestand** opent in een **nieuwe werkruimte-tab**; je huidige werkruimte blijft zoals ze is. Net als bij de knop **Songs** worden de apparaten herschikt;
+- een **apparaat** (`.patchkamer-device.js`) komt in de **bibliotheek**, niet op de vloer. Is dezelfde versie al geladen, dan wordt hij vervangen. Plaats hem daarna zoals gewoonlijk;
+- een **tunepack** of **presetpack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) komt in je tune- of presetbibliotheken, zoals **Importeren**;
+- een **bibliotheekindeling** (`patchkamer-bibliotheek.json`) wordt toegepast.
+
+Laat je meerdere bestanden tegelijk los (maximaal 50, elk tot 50 MB), dan gaan eerst de apparaten, dan tunes en presets, de indeling en als laatste songs en werkruimtes, zodat een song de apparaten uit dezelfde drop al in de bibliotheek vindt. Er komt één melding met het resultaat. Mappen en onbekende bestanden worden niet geladen; een afbeelding of geluidsbestand blijft aan het apparaat of de browser. Een bestand dat je op een apparaat zelf loslaat (bijvoorbeeld op de golfvorm van een sampler) is voor dat apparaat. Op een telefoon of tablet bestaat dit niet: gebruik daar de bestaande knoppen (**Bestand openen…**, **Importeren**, **Instrument laden**).
+
 ## 9. Je weg vinden op de vloer
 
 - **Verplaatsen:** sleep de vloer om te schuiven. **Ctrl + scroll** zoomt tussen 10% en 250%. Met de knoppen rechtsonder zoom je uit, zoom je in, zie je alles (**Alles**) en ga je terug naar het begin (⌂).
@@ -246,6 +267,20 @@ Een werkruimte kan naast de brede indeling een **compacte indeling** hebben. Met
 
 In de focusweergave toont **Eén tegelijk** één apparaat tegelijk. Wissel met **◀ ▶**, met de tabbalk, met de pijltjestoetsen of door op de tabbalk te vegen (alleen daar, zodat vegen niet botst met schuiven in een apparaat). Op een smal scherm is dit de standaard, en de knop **Bladeren** in de hoofdbalk opent Focus meteen met alle apparaten van de werkruimte. Het kaartje zelf toont zijn poorten met namen. Bij uitzoomen (onder ongeveer 55%) tonen kaarten alleen de titelbalk en poorten; dubbelklik of dubbeltik op zo'n kaart zoomt erop in. Dat zet je uit bij **Instellingen** met *Kaarten vereenvoudigen bij uitzoomen*.
 
+### Sneller werken: overzicht
+
+De functies die de werkwijze het meest versnellen, op een rij:
+
+- **Bestanden droppen:** sleep een song, apparaat, tunepack, presetpack of indelingsbestand op het canvas ([Bestanden op het canvas droppen](#bestanden-op-het-canvas-droppen)).
+- **Automatisch koppelen:** zet een apparaat neer en kies in één dialoog welke kabels erbij komen, ook als effect in een bestaande kabel ([Automatisch koppelen bij plaatsen](#automatisch-koppelen-bij-plaatsen)).
+- **Camerastanden:** bewaar een uitsnede en spring ernaartoe met **1** tot **9** ([Camerastanden](#camerastanden)).
+- **Herschik en Pas aan op dit scherm:** laat de host de apparaten ordenen, voor het hele scherm of voor een klein scherm.
+- **Focus:** werk met de apparaten naast elkaar of één tegelijk ([Focus "Eén tegelijk"](#focus-eén-tegelijk)).
+- **Iconen en kabelkleuren:** elke categorie heeft een eigen icoon en kleur, en een kabel krijgt de kleur van de categorie waar hij vandaan komt ([Categorie-iconen](#categorie-iconen), [Kabelkleur](#kabelkleur)). Houd de aanwijzer boven een kabel om te zien wat hij verbindt.
+- **Compacte bibliotheek:** alleen naam, type en versie, met een knop **Compact** ([Bibliotheek compact en onderlade](#bibliotheek-compact-en-onderlade)).
+- **Telefoon en tablet:** knijpen, schuiven, lang indrukken en het ☰-menu ([Touchscreen en telefoon](#touchscreen-en-telefoon)).
+- **Bijwerken:** **↻ Scannen** in de bibliotheek werkt geplaatste apparaten bij, en bij het starten meldt Patchkamer een nieuwe versie van zichzelf.
+
 ## 10. Instellingen
 
 ![Het paneel Instellingen](images/nl/07-settings.png)
@@ -256,6 +291,9 @@ In de focusweergave toont **Eén tegelijk** één apparaat tegelijk. Wissel met 
 - **AI-assistent:** kies een aanbieder (**Anthropic**, **OpenAI** of een **eigen adres** voor elke OpenAI-compatibele dienst, zoals je eigen proxy, OpenRouter of een lokaal model), plak je **API-sleutel** en kies een **model** (**Modellen ophalen** vult de lijst). De sleutel staat alleen in deze browser (localStorage) en gaat alleen naar de aanbieder die je koos. Daaronder kun je instellen uit welke GitHub-repository de AI zijn documentatie leest, of **Eigen agent-instructies gebruiken** aanvinken en je eigen tekst schrijven: de AI gebruikt die dan in plaats van de GitHub-documentatie. **Sleutels wissen** haalt alle sleutels weg. Zie *AI Chat* in hoofdstuk 6.
 - **Adres van de songs:** onder **Nieuwe werkruimte** staat ook het adres van de demo-songs (standaard de map `songs` op GitHub); **Standaardadres herstellen** zet het terug.
 - **Weergave:** de stijl van de kabels, hun dekking, de kabelkleur (per categorie of per soort), de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
+- **Automatisch koppelen:** schakelaar in Instellingen en in het ☰-menu. Op een telefoon of tablet staat hij standaard aan, op een computer uit; je eigen keuze wint altijd.
+- **Kaarten vereenvoudigen bij uitzoomen:** onder zo'n 55% zoom tonen kaarten alleen hun kop; dubbelklik of dubbeltik zoomt in. Uit te zetten.
+- **Links:** onderaan staan links naar de GitHub-repository en naar deze gebruikershandleiding, in de taal van je scherm, en naar het contract voor wie apparaten bouwt.
 - **Kleur** (rechtsboven): donker, licht of retro.
 
 ![De kleurstellingen licht en retro](images/nl/03-patch-light.png)

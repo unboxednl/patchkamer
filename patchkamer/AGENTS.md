@@ -4,9 +4,9 @@ Dit bestand is voor AI-agents. Het is niet geschreven voor mensen. Het hoort bij
 
 ## Wat hier staat
 
-`patchkamer.html` is de **host**: de studio zelf, als één HTML-pagina. Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.11** (in de code: `patchkamer:'1.11'`). De host is tweetalig (Nederlands en Engels, standaard de taal van de browser) en heeft onder Instellingen een Audio-gedeelte (kwaliteit, sample rate, latency, oversampling). Het contract staat niet in de host maar op GitHub (links onder Instellingen → Contract & opstelling).
+`patchkamer.html` is de **host**: de studio zelf. De pagina bevat de markup en laadt gewone stijlbladen en scripts uit `css/`, `i18n/` en `js/` (zonder build-stap, zie "Opbouw van de host"). Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.11** (in de code: `patchkamer:'…'` in `js/songs.js`). De host is tweetalig (Nederlands en Engels, standaard de taal van de browser) en heeft onder Instellingen een Audio-gedeelte (kwaliteit, sample rate, latency, oversampling). Het contract staat niet in de host maar op GitHub (links onder Instellingen → Contract & opstelling).
 
-Naast de host staan `manifest.webmanifest` en `icons/` (favicon, `apple-touch-icon.png`, 192 en 512 px voor een app-icoon op een telefoon). De SVG-favicon zit als data-adres in de kop van `patchkamer.html`; de host werkt ook zonder deze bestanden.
+Naast de host staan `manifest.webmanifest` en `icons/` (favicon, `apple-touch-icon.png`, 192 en 512 px voor een app-icoon op een telefoon). De SVG-favicon zit als data-adres in de kop van `patchkamer.html`; de host werkt ook zonder deze bestanden. De host werkt niet meer als losse kopie van alleen `patchkamer.html`: kopieer de hele map `patchkamer/` (met `css/`, `i18n/`, `js/`).
 
 ## Voor het bouwen van een apparaat
 
@@ -14,7 +14,7 @@ De host is hier **alleen om in te testen**. Pas haar niet aan om een apparaat te
 
 Eerst `node ../contract/validate-instrument.mjs ../devices/<categorie>/<Naam>/<naam>.patchkamer-device.js` laten slagen (zie `../AGENTS.md`). Test daarna wat de validator niet kan zien:
 
-1. Start een lokale webserver in de root van de repo, bijvoorbeeld `python3 -m http.server 8080`, en open `http://localhost:8080/patchkamer/patchkamer.html`. Gebruik geen `file://`: dan laadt de host geen bibliotheken.
+1. Start een lokale webserver in de root van de repo, bijvoorbeeld `python3 -m http.server 8080`, en open `http://localhost:8080/patchkamer/patchkamer.html`. Gebruik voor het testen van bibliotheken geen `file://`: dan laadt de host geen bibliotheken (de pagina zelf start via `file://` wel).
 2. Laad het apparaat: gebruik het bestandsveld voor een instrumentbestand (`.js`), of kies een map met een `patchkamer.json` (contract §16).
 3. Zet het apparaat op de vloer en kijk of het doet wat de opdracht vraagt: klinkt het, bewegen de regelaars mee, springen ze terug bij een preset?
 4. Test de presetronde (contract §17, laatste alinea): zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
@@ -27,10 +27,132 @@ Heb je geen browser tot je beschikking, schrijf dan in je oplevering dat de host
 
 Alleen als de opdracht dat uitdrukkelijk zegt. De host en het contract horen bij elkaar:
 
-- Verandert het gedrag dat apparaten zien (`host`-API, poorten, state), dan verandert ook `../contract/PATCHKAMER-CONTRACT_NL.md`, `../contract/PATCHKAMER-CONTRACT_EN.md` (altijd allebei) en `../contract/validate-instrument.mjs`, **alle drie naar dezelfde nieuwe versie**, en het getal bij `patchkamer:` in de HTML.
+- Verandert het gedrag dat apparaten zien (`host`-API, poorten, state), dan verandert ook `../contract/PATCHKAMER-CONTRACT_NL.md`, `../contract/PATCHKAMER-CONTRACT_EN.md` (altijd allebei) en `../contract/validate-instrument.mjs`, **alle drie naar dezelfde nieuwe versie**, en het getal bij `patchkamer:` in `js/songs.js`.
 - Zorg dat bestaande apparaten in `../devices/` nog door de validator komen.
-- **Elke tekst die de host toont staat in beide talen.** In de HTML een `data-i18n`-sleutel (of `data-i18n-title`, `-ph`, `-aria`, `-html`), in de code `pkt('sleutel', …)` (meervoud: `pktp('sleutel', voorwaarde, …)`), en de tekst in de woordenboeken `I18N.nl` en `I18N.en` bovenin het bestand. Voeg nooit een tekst in maar één taal toe. De bronstaal is Nederlands; Engelse muziekvaktermen (tune, preset, latency, sample rate, oversampling) blijven in beide talen Engels, en de merknaam Patchkamer wordt nergens vertaald.
+- **Elke tekst die de host toont staat in beide talen.** In de HTML een `data-i18n`-sleutel (of `data-i18n-title`, `-ph`, `-aria`, `-html`), in de code `pkt('sleutel', …)` (meervoud: `pktp('sleutel', voorwaarde, …)`), en de tekst in de woordenboeken `I18N.nl` (`i18n/nl.js`) en `I18N.en` (`i18n/en.js`). Voeg nooit een tekst in maar één taal toe. De bronstaal is Nederlands; Engelse muziekvaktermen (tune, preset, latency, sample rate, oversampling) blijven in beide talen Engels, en de merknaam Patchkamer wordt nergens vertaald.
 - Gebruikers hebben bewaarde werkruimtes en songs die op `id` en `version` van apparaten steunen. Breek dat niet.
+
+## Opbouw van de host
+
+De host is een gewone webpagina zonder build-stap en zonder npm: `patchkamer.html` laadt klassieke `<link rel=stylesheet>` en `<script src>`-bestanden met relatieve paden. Geen ES-modules, zodat dubbelklikken (`file://`) en GitHub Pages in een submap blijven werken. De hostnamen zijn **niet globaal**: elk bestand zit in een eigen sluiting en deelt namen via een tijdelijke namespace `PK` (zie "De namespace PK").
+
+Mappen: `css/` (stijlbladen per onderwerp, in de volgorde van de cascade), `i18n/` (woordenboeken en vertaalmotor), `js/` (hostcode per onderwerp), `icons/`, `manifest.webmanifest`.
+
+### Twee lagen en de laadvolgorde
+
+De hostcode stond vroeger in één afgesloten functie, waarin alle functies al bestonden voordat de eerste regel uitvoerde. Om dat gedrag exact te behouden zijn er twee lagen:
+
+1. **Definities** (`js/<onderwerp>.js`): alleen functiedeclaraties en zuivere constanten (`const x=…` zonder aanroepen; pijlfuncties, literalen, `new Map()`). Ze voeren bij het laden niets uit. De onderlinge volgorde van deze bestanden doet er niet toe.
+2. **`js/boot.js`**: alle top-level statements die bij het laden iets doen (luisteraars, beginwaarden, `var`/`let`/`const` met aanroepen, de eerste `paint…`-aanroepen), in precies de oorspronkelijke volgorde, per onderwerp gemarkeerd met `// ===== onderwerp =====`. Eén script, dus uitvoering en gebeurtenisvolgorde zijn gelijk aan vroeger (geen `async`/`defer`, geen tussentijdse taak tussen de statements). `boot.js` laadt als laatste.
+
+Volgorde in `patchkamer.html`: `css/*.css` (themes eerst; de volgorde is de cascade), daarna `js/ns-open.js`, `i18n/nl.js`, `i18n/en.js`, `i18n/engine.js`, `js/audio-settings.js`, alle definitiebestanden, `js/boot.js` en als laatste `js/ns-close.js`. Elk bestand begint met één commentaarregel met zijn doel.
+
+### Bestanden droppen op het canvas
+
+`js/file-drop.js` reageert alleen op een drop van bestanden (`dataTransfer.types` bevat `Files`) op `#room` (vloer, kaarten, bibliotheekvenster), in de bubbelfase op `document`. Een gebeurtenis die een apparaat al afhandelde (`defaultPrevented`, bijvoorbeeld een sampler die audiobestanden accepteert) wordt overgeslagen. Alleen `.js`/`.mjs` en `.json`-bestanden met `patchkamer` in de naam worden onderschept (`preventDefault`); alles anders (afbeeldingen, audio, willekeurige json, mappen) blijft aan de browser of het apparaat. Het soort wordt bepaald aan `format` in de inhoud, anders aan de naam. De verwerking hergebruikt de bestaande routes: `openDeviceFile` (zelfde route als `#devFile`), `importTuneFiles` (zelfde als `#prFile`), `applyLayout(L,null,true)`, `songOpenFile` (zelfde als `#songFile`, ook voor werkruimtebestanden: altijd een nieuwe tab). Volgorde bij meerdere bestanden: apparaten, tunes, presets, indeling, songs, werkruimtes; één eindmelding via `status()`. Wil je een bestandstype toevoegen: breid `dropKind` en `dropProcess` uit en geef de bestaande invoerroute een `quiet`-variant.
+
+### De namespace PK
+
+- `js/ns-open.js` maakt `window.__PK={}`; elk volgend js- en i18n-bestand is een eigen sluiting `(function(PK){ … })(window.__PK);`; `js/ns-close.js` doet `delete window.__PK`. Daarna wijst niets op `window` meer naar de namespace; alleen de hostfuncties houden hem vast via hun sluiting. Er is geen asynchrone code die `window.__PK` nodig heeft: alles gebruikt de parameter `PK`.
+- Een naam die alleen in één bestand gebruikt wordt, blijft een gewone lokale declaratie. Een functie of `const` die een ander bestand nodig heeft, staat in zijn eigen bestand als gewone declaratie en wordt direct erachter geëxporteerd (`PK.naam=naam;`); andere bestanden schrijven `PK.naam`.
+- **Gedeelde veranderlijke staat** (top-level `var`/`let` die in meer dan één bestand wordt gelezen of geschreven) leeft alleen als `PK.naam`: er is één opslagplek, ook binnen het eigen bestand (`PK.LIB`, `PK.WS`, enz.). De declaratie is een toewijzing (`PK.naam=beginwaarde`). Een declaratie zonder beginwaarde is gewoon `PK.naam;` (hij is dan `undefined`, zoals een gehoiste `var`).
+- Een host-naam is dus nergens meer bereikbaar als kale naam of via `window` (`typeof Host`, `typeof addDevice` enz. zijn `undefined` voor apparaatcode). Bereikbaar blijft wat al publiek was: de DOM-id's als `window.floor`/`window.room` (browsergedrag voor elementen met een `id`) en alle browser-API's.
+- De gedeelde namespace maakt het bestandsvolgordeprobleem niet anders: functies bestaan nog steeds voordat `boot.js` uitvoert (definities eerst).
+
+### Bestanden
+
+| Bestand | Doel | Regels | KB | Hangt af van | Aanpassen als |
+|---|---|---|---|---|---|
+| `patchkamer.html` | markup (kopbalk, panelen, modals, canvas), `<link>`- en `<script>`-regels in volgorde, PWA- en icoon-tags | 258 | 34.5 | alle bestanden hieronder (via de tags) | je een element, id of laadvolgorde toevoegt of wijzigt |
+| `css/themes.css` | kleurvariabelen en de drie kleurstellingen (donker, licht, retro) met hun overschrijvingen | 46 | 3.8 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/base.css` | basis: reset, body, kopbalk, knoppen, invoervelden, schuiven | 24 | 2.5 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/layout.css` | indeling: werkruimtevak, paneel, vloer en zoombalk | 14 | 1.4 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/cards.css` | apparaatkaarten, modulatiestrook, poorten en kabeltekening op de vloer | 60 | 5.2 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/device-ui.css` | algemene UI-hulpklassen voor apparaten (raster, stappen, meter, strip), formulier- en tekstvelden | 22 | 2.3 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/library.css` | bibliotheekvenster: categorieen, apparaatregels, zijpaneel, sleepspook | 50 | 4.9 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/cards-extra.css` | toast, jackpoorten, miniatuurkaarten, animaties en categorie-iconen | 51 | 4.9 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/libcfg.css` | kabeltip en de bibliotheekindeling (eigen categorieen en iconen) | 20 | 2.1 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/cables.css` | poort- en kabelsoorten (sturing, bundels, multi-MIDI, mastering) en kabelstijlen | 32 | 2.7 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/tabs-menus.css` | tunebalk-onderdelen, werkruimtetabs, instellingenpaneel, bibliotheek binnen de rand, kabelmenu | 37 | 3.0 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/focus.css` | focusweergave | 17 | 1.3 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/panels.css` | werkruimtenaam, zijpanelen, lijsten, bronnen en modale vensters | 23 | 2.6 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/dialogs.css` | menu-onderdeel Automatisch koppelen, koppeldialoog, lege-vloerkaart | 23 | 2.1 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/tunes.css` | tunes en presets: balk, bibliotheken, lijsten, tekstgrootte | 34 | 2.7 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/responsive.css` | aanraking en klein scherm, deel 1: basis, semantisch zoomen en compacte bibliotheek | 37 | 2.7 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/menu.css` | hoofdbalkmenu achter de knop op een smal scherm | 16 | 1.2 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/camera-views.css` | camerastanden (standen-venster) | 12 | 1.1 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/focus-one.css` | focus: een tegelijk (carrousel) | 12 | 1.1 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/touch.css` | aanraking: groter doelvlak (pointer:coarse) | 25 | 1.7 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/narrow.css` | smal scherm (max-width:699px): onderlade, hoofdbalk, panelen | 39 | 2.6 | `css/themes.css` (kleurvariabelen); volgorde = cascade | de stijl van dit onderwerp verandert |
+| `css/file-drop.css` | overlay "Laat los om te laden" bij het slepen van bestanden over het canvas | 5 | 0.6 | `css/themes.css` (kleurvariabelen) | de overlay er anders uit moet zien |
+| `i18n/nl.js` | Nederlands woordenboek `I18N.nl` (bronstaal) | 745 | 53.3 | niets | elke nieuwe of gewijzigde tekst (en ook in `en.js`) |
+| `i18n/en.js` | Engels woordenboek `I18N.en` | 743 | 50.9 | `nl.js` (`const I18N`) | idem, altijd samen met `nl.js` |
+| `i18n/engine.js` | taalkeuze `PK_LANG`, `pkt`, `pktp` en het toepassen van `data-i18n*` | 17 | 1.7 | `nl.js`, `en.js` | de taalkeuze of de vertaalmotor verandert |
+| `js/audio-settings.js` | kwaliteitsniveaus `PK_QUALITY` en bewaarde audio-instellingen `PK_AUDIO` | 7 | 1.1 | niets | de audio-instellingen veranderen |
+| `js/core.js` | schaal per scherm (PKS) en de kleine helpers $, clamp, cmpVer (functies en zuivere constanten) | 9 | 0.8 | niets | het gedrag van dit onderwerp verandert |
+| `js/host-api.js` | het Host-object: klok, apparaten, registry, kabels, view, API voor apparaten (contract) (functies en zuivere constanten) | 126 | 15.4 | op runtime: `audio-settings`, `core`, `device-cards`, `patching`, `cable-draw` en 6 andere | het gedrag van dit onderwerp verandert |
+| `js/device-loader.js` | contracttekst (sjabloon), ingebouwde apparaten en het laden van apparaatcode uit bron, bestand of tekst (functies en zuivere constanten) | 27 | 2.6 | op runtime: `device-cards`, `host-api`, `library-window`, `core` | het gedrag van dit onderwerp verandert |
+| `js/device-cards.js` | vloer, audiocontext, kaarten: toevoegen, verwijderen, formaat, poorten, versies, regelaars (ctl*), frame-klok (functies en zuivere constanten) | 188 | 26.2 | op runtime: `host-api`, `audio-settings`, `device-loader`, `core`, `library-categories` en 7 andere | het gedrag van dit onderwerp verandert |
+| `js/cable-drag.js` | kabel trekken, omhangen en een apparaat op een kabel leggen (functies en zuivere constanten) | 108 | 10.9 | op runtime: `host-api`, `device-cards`, `patching`, `cable-draw`, `touch` en 2 andere | het gedrag van dit onderwerp verandert |
+| `js/patching.js` | koppelen en ontkoppelen, bundels en multi-MIDI, poortposities, SVG-hulpfuncties (functies en zuivere constanten) | 60 | 7.6 | op runtime: `host-api`, `core`, `device-cards`, `cable-draw` | het gedrag van dit onderwerp verandert |
+| `js/knobs.js` | host.ui.knob (schuif of draaiknop), beginwaarden en waarde typen (functies en zuivere constanten) | 87 | 11.4 | op runtime: `cable-draw`, `host-api`, `device-cards`, `device-loader` | het gedrag van dit onderwerp verandert |
+| `js/cable-routing.js` | kabelvormen: boog, rechte hoeken, om apparaten heen (functies en zuivere constanten) | 55 | 7.2 | op runtime: `cable-draw`, `core`, `host-api`, `patching`, `knobs` en 1 andere | het gedrag van dit onderwerp verandert |
+| `js/library-scan.js` | bibliotheekmappen: nieuwe apparaten vanzelf herkennen (functies en zuivere constanten) | 29 | 3.7 | op runtime: `workspace-core`, `host-api`, `sources`, `library-window`, `device-cards` en 3 andere | het gedrag van dit onderwerp verandert |
+| `js/host-version.js` | versiecontrole van de host tegen GitHub bij het opstarten (functies en zuivere constanten) | 24 | 3.8 | op runtime: `core`, `sources` | het gedrag van dit onderwerp verandert |
+| `js/screen-scale.js` | schaal per scherm toepassen (functies en zuivere constanten) | 12 | 1.7 | op runtime: `core`, `floor-view`, `host-api`, `library-window`, `cable-draw` | het gedrag van dit onderwerp verandert |
+| `js/cable-draw.js` | kabelkleur, tooltips, tekenen en het kabelmenu (functies en zuivere constanten) | 68 | 8.7 | op runtime: `library-categories`, `host-api`, `device-cards`, `clock`, `cable-drag` en 3 andere | het gedrag van dit onderwerp verandert |
+| `js/floor-view.js` | schermklassen en vloerweergave: zoomen, pannen, toetsen (functies en zuivere constanten) | 16 | 2.6 | op runtime: `host-api`, `cable-draw`, `core`, `touch` | het gedrag van dit onderwerp verandert |
+| `js/library-categories.js` | plaatsen van een nieuw apparaat, categorieen en categorie-iconen, bronnen van indeling (functies en zuivere constanten) | 71 | 8.6 | op runtime: `device-cards`, `host-api`, `auto-link`, `sources` | het gedrag van dit onderwerp verandert |
+| `js/library-window.js` | bibliotheekvenster: opslag, tekenen, slepen, formaat, zoeken (functies en zuivere constanten) | 79 | 11.1 | op runtime: `library-categories`, `host-api`, `library-layout`, `device-loader`, `core` en 6 andere | het gedrag van dit onderwerp verandert |
+| `js/clock.js` | klok (lookahead-scheduler), start en stop (functies en zuivere constanten) | 18 | 1.6 | op runtime: `host-api`, `device-cards`, `core` | het gedrag van dit onderwerp verandert |
+| `js/workspace-patch.js` | werkruimtetoestand opslaan en laden (patchState, loadPatch) (functies en zuivere constanten) | 23 | 3.4 | op runtime: `host-api`, `screen-layout`, `tunes`, `focus`, `device-cards` en 6 andere | het gedrag van dit onderwerp verandert |
+| `js/workspace-core.js` | werkruimtenaam, kleine IndexedDB-opslag, vraagdialoog (functies en zuivere constanten) | 19 | 2.5 | op runtime: `core`, `workspace-tabs`, `library-categories` | het gedrag van dit onderwerp verandert |
+| `js/sources.js` | bronnen: GitHub, URL en lokale map laden en tonen (functies en zuivere constanten) | 138 | 18.7 | op runtime: `device-loader`, `workspace-core`, `library-categories`, `tunes`, `library-layout` en 5 andere | het gedrag van dit onderwerp verandert |
+| `js/workspace-file.js` | werkruimte opslaan als bestand en openen (functies en zuivere constanten) | 53 | 6.6 | op runtime: `host-api`, `sources`, `workspace-patch`, `device-loader`, `songs` en 3 andere | het gedrag van dit onderwerp verandert |
+| `js/workspace-local.js` | werkruimtes in deze browser en de meegeleverde bibliotheek (functies en zuivere constanten) | 24 | 3.5 | op runtime: `core`, `sources`, `device-cards`, `library-categories`, `workspace-file` en 1 andere | het gedrag van dit onderwerp verandert |
+| `js/workspace-auto.js` | wat een nieuwe werkruimte automatisch laadt (Instellingen) (functies en zuivere constanten) | 18 | 2.1 | op runtime: `sources`, `device-loader`, `core` | het gedrag van dit onderwerp verandert |
+| `js/workspace-tabs.js` | meerdere werkruimtes: tabbalk, wisselen, toevoegen, sluiten, herstel bij opstarten (functies en zuivere constanten) | 32 | 4.2 | op runtime: `host-api`, `workspace-file`, `settings`, `workspace-core`, `core` en 5 andere | het gedrag van dit onderwerp verandert |
+| `js/tunes.js` | tunes en presets: bibliotheken, toepassen, bewaren, paneel (functies en zuivere constanten) | 230 | 34.1 | op runtime: `host-api`, `library-categories`, `workspace-core`, `sources`, `core` en 6 andere | het gedrag van dit onderwerp verandert |
+| `js/songs.js` | songs exporteren en tonen (formaat en dialogen) (functies en zuivere constanten) | 26 | 4.0 | op runtime: `tunes`, `library-categories`, `device-loader`, `workspace-file` | het gedrag van dit onderwerp verandert |
+| `js/settings.js` | instellingenpaneel en browsergeheugen wissen (functies en zuivere constanten) | 6 | 0.6 | op runtime: `core`, `workspace-local`, `tunes`, `screen-scale` | het gedrag van dit onderwerp verandert |
+| `js/mod-view.js` | modulatie zichtbaar op de apparaten (functies en zuivere constanten) | 49 | 6.4 | op runtime: `clock`, `host-api`, `core`, `device-cards` | het gedrag van dit onderwerp verandert |
+| `js/library-layout.js` | bibliotheekindeling: eigen categorieen, iconen, bewaren als bibliotheekbestand (functies en zuivere constanten) | 101 | 16.1 | op runtime: `host-api`, `library-categories`, `focus-carousel`, `library-window`, `device-loader` en 5 andere | het gedrag van dit onderwerp verandert |
+| `js/arrange.js` | herschikken: bronnen, instrumenten, effecten, mengpaneel, uitgang (functies en zuivere constanten) | 50 | 5.6 | op runtime: `floor-view`, `focus`, `host-api`, `device-cards`, `cable-draw` en 2 andere | het gedrag van dit onderwerp verandert |
+| `js/auto-link.js` | automatisch koppelen bij plaatsen (dialoog) (functies en zuivere constanten) | 101 | 11.5 | op runtime: `core`, `arrange`, `host-api`, `patching`, `device-cards` en 5 andere | het gedrag van dit onderwerp verandert |
+| `js/focus.js` | focusweergave: apparaten naast, onder of in een raster (functies en zuivere constanten) | 24 | 3.6 | op runtime: `floor-view`, `host-api`, `clock`, `screen-layout`, `core` en 3 andere | het gedrag van dit onderwerp verandert |
+| `js/touch.js` | aanraking: knijpzoom, tweevingerschuiven, lang indrukken, dubbeltik (functies en zuivere constanten) | 68 | 7.2 | op runtime: `cable-drag`, `host-api`, `core`, `floor-view`, `clock` en 2 andere | het gedrag van dit onderwerp verandert |
+| `js/camera-views.js` | semantisch zoomen en camerastanden (functies en zuivere constanten) | 32 | 4.3 | op runtime: `core`, `host-api`, `touch`, `device-loader`, `device-cards` | het gedrag van dit onderwerp verandert |
+| `js/screen-layout.js` | schermindeling breed of compact, per werkruimte (functies en zuivere constanten) | 60 | 6.7 | op runtime: `device-cards`, `host-api`, `cable-draw`, `floor-view`, `core` en 2 andere | het gedrag van dit onderwerp verandert |
+| `js/library-view.js` | bibliotheek: kaartjes of compact, lang indrukken en slepen, onderlade (functies en zuivere constanten) | 9 | 1.1 | op runtime: `floor-view`, `clock`, `library-window` | het gedrag van dit onderwerp verandert |
+| `js/header-menu.js` | hoofdbalkmenu achter de menuknop op een smal scherm (functies en zuivere constanten) | 22 | 1.5 | op runtime: `core` | het gedrag van dit onderwerp verandert |
+| `js/focus-carousel.js` | focus: een tegelijk (carrousel) (functies en zuivere constanten) | 28 | 3.5 | op runtime: `focus`, `cable-draw`, `host-api`, `library-categories` | het gedrag van dit onderwerp verandert |
+| `js/ai-chat.js` | AI Chat: ingebouwd apparaat, aanbieders, tools, sessie (functies en zuivere constanten) | 117 | 20.2 | op runtime: `device-loader`, `tunes`, `device-cards`, `workspace-core`, `library-categories` en 3 andere | het gedrag van dit onderwerp verandert |
+| `js/song-panel.js` | songs-paneel in de kopbalk: demos en recente songs (functies en zuivere constanten) | 47 | 6.3 | op runtime: `workspace-core`, `device-loader`, `workspace-tabs`, `host-api`, `workspace-auto` en 9 andere | het gedrag van dit onderwerp verandert |
+| `js/file-drop.js` | bestanden (song, werkruimte, apparaat, tunes, presets, indeling) op het canvas of de bibliotheek loslaten: overlay, herkennen, verwerken (functies; `initFileDrop` wordt in `boot.js` aangeroepen) | 64 | 6.8 | op runtime: `device-loader` (`openDeviceFile`, `looksLikeDevice` via `sources`), `tunes` (`importTuneFiles`), `song-panel` (`songOpenFile`), `library-layout` (`applyLayout`), `i18n` | een nieuw bestandstype of ander drop-gedrag erbij komt |
+| `js/ns-open.js` | opent de tijdelijke namespace `window.__PK={}` (laadt als eerste script) | 2 | 0.1 | niets | nooit (alleen als de namespace-opzet verandert) |
+| `js/boot.js` | toestand en bedrading: alle top-level statements die bij het laden uitvoeren, in de oorspronkelijke volgorde, per onderwerp gemarkeerd met `// ===== onderwerp =====` | 520 | 57.9 | alle `js/*.js` hierboven (die al geladen zijn) | je een nieuwe luisteraar, beginwaarde of startaanroep toevoegt |
+| `js/ns-close.js` | sluit de namespace: `delete window.__PK` (laadt als laatste script) | 2 | 0.2 | alle bestanden hierboven | nooit (alleen als de namespace-opzet verandert) |
+
+De definitiebestanden roepen elkaar op runtime wederzijds aan (de hostcode is één onderling verweven geheel; ongeveer 70 bestandsparen verwijzen naar elkaar). Dat is geen probleem voor het laden, want bij het laden gebeurt in de definitiebestanden niets. Overgebleven koppelingen: `boot.js` hangt van alle definities af; `i18n/engine.js` van `nl.js` en `en.js`; `core.js` gebruikt `PKS` (een `var` in `boot.js`).
+
+### Regels voor parallel werken
+
+- Een wijziging in het gedrag van een onderwerp gaat in het bijbehorende `js/<onderwerp>.js` (nieuwe functies) en `css/<onderwerp>.css`. Raak `boot.js` alleen aan voor een nieuwe luisteraar, beginwaarde of startaanroep, en zet die op de plek van het onderwerp (onder zijn `// =====`-markering). De volgorde in `boot.js` is gedrag: verplaats geen bestaande regels.
+- Nieuwe teksten: sleutel in `i18n/nl.js` én `i18n/en.js` (zelfde sleutel, beide talen), gebruik `data-i18n*` in de HTML of `pkt(…)`/`pktp(…)` in de code. Nooit in één taal.
+- Een nieuw bestand toevoegen: maak `js/<onderwerp>.js` met als eerste regel `// js/<naam>.js — <doel>`, wikkel de inhoud in `(function(PK){ … })(window.__PK);`, zet alleen functiedeclaraties en zuivere constanten erin, exporteer wat andere bestanden nodig hebben direct achter de declaratie (`PK.naam=naam;`), verwijs naar andermans functies en constanten met `PK.naam`, voeg een `<script src="js/<naam>.js"></script>` toe in `patchkamer.html` vóór `js/boot.js` en een rij in de tabel hierboven.
+- Gedeelde staat die door twee bestanden gebruikt wordt: alleen als `PK.naam` (eerst gezet in `boot.js` of het bestand dat hem aanmaakt). Maak er geen lokale kopie van. Voor CSS: nieuw bestand op de juiste plek in de cascade en een `<link>` op diezelfde plek.
+- **Namen en ingebouwde eigenschappen.** Hostnamen zijn niet meer globaal, dus een botsing met een `window`-eigenschap speelt niet meer. Het wel kunnen botsen: een lokale of `PK.`-naam die gelijk is aan een andere top-level declaratie in dezelfde sluiting (dubbele `let`/`const` is een SyntaxError). Daarom zijn `pkMoveTo`, `pkScheduler` en `pkStop` (vroeger `moveTo`, `scheduler`, `stop`) blijven staan; terugdraaien kan nu, maar is niet gedaan. `const status` schaduwt `window.status` niet meer buiten zijn sluiting.
+- Houd functie-declaraties vrij van uitvoering bij het laden. Heb je een aanroep nodig bij het opstarten, zet die in `boot.js`.
+- Apparaten zien de host alleen via het `host`-object uit het contract (`../contract/`). De namespace maakt dat technisch waar voor apparaatcode op dezelfde pagina; het is toch geen sandbox (een apparaat kan nog steeds de DOM benaderen).
+- Testen die de hostbron als tekst lezen (`regex` op het bestand) moeten de bestanden in `js/` lezen; een testscript kan `Host` niet meer via `page.evaluate` bereiken. Gebruik de gewone UI (zoals in "Voor het bouwen van een apparaat").
+
+### Versiecontrole van de host
+
+Bij het starten (alleen http/https, na 4 s) leest de host de tekst van `patchkamer.html` en van alle `link[rel=stylesheet]`- en `script[src]`-bestanden van dezelfde map uit de DOM, berekent per bestand de git-blob-sha1 (CRLF genormaliseerd) en vergelijkt een gecombineerde hash met die van `main` op GitHub, met één aanroep van de git trees API (`git/trees/main:patchkamer?recursive=1`). Verschilt er iets, dan komt de bestaande melding. "Niet meer melden voor deze versie" bewaart de gecombineerde GitHub-hash onder de bestaande sleutel `patchkamerHostSeen`. Fouten (offline, rate limit, 404) blijven stil. Nieuwe hostbestanden worden vanzelf meegenomen zolang ze via `<link>` of `<script src>` in de pagina staan.
+
+### Cache bij een update
+
+Meerdere bestanden kunnen op GitHub Pages bij een update tot ongeveer 10 minuten in een gemengde versie geladen worden (nieuwe HTML met oude `js/`-bestanden of omgekeerd). Er is bewust geen versie in de bestandsnamen of query en geen build-stap. Gevolg: kort na een release kan een pagina vreemd doen; harde verversing lost het op. Wil je dit later afdekken, schrijf dan een klein optioneel script dat een inhoudshash als `?v=` in de `<link>`- en `<script>`-regels zet; standaard staat er niets.
 
 ## Categorie-iconen in de bibliotheekindeling
 

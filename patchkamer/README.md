@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-The host of Patchkamer: the web platform in which you make devices, sounds and music, with or without AI agents. It is one HTML page, `patchkamer.html`. See the [user manual](../docs/USER-MANUAL_EN.md) for how to use it.
+The host of Patchkamer: the web platform in which you make devices, sounds and music, with or without AI agents. It is a plain web page, `patchkamer.html`, with its own stylesheets and scripts in `css/`, `i18n/` and `js/` (no build step; see [AGENTS.md](AGENTS.md)). See the [user manual](../docs/USER-MANUAL_EN.md) for how to use it.
 
 Devices, tunes, presets and songs live in their own folders and talk to the host through the [contract](../contract/).
 
