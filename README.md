@@ -46,6 +46,7 @@ Devices come in kinds. Every kind has its own README in its folder and its own u
 |---|---|---|---|
 | **Tunes** | Complete sounds for devices that make sound (the synths, the samplers and the drum devices), in packs per style | [tunes](tunes/README.md) | [Tunes](docs/tunes/USER-MANUAL_EN.md) |
 | **Presets** | Starting settings for devices without a sound of their own: a pack for most effects, the modulators, the sequencers, the mastering devices, the Metronome, the Leveler, Audio Input and Audio Output. The Effect Chain packs are complete chains of four to eight effects, each built for one application | [presets](presets/README.md) | [Presets](docs/presets/USER-MANUAL_EN.md) |
+| **Skins** | The look of a single device, as a separate file with one or more appearances that switch by themselves on card width and screen size | [skins](skins/README.md) | (manual follows) |
 
 ## Build your own devices, with or without AI
 
@@ -67,6 +68,7 @@ Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, 
 | `app/` | The desktop app (Electron): the host in its own window, with the bundled library; builds a portable Windows exe | AGPL-3.0-or-later |
 | `tunes/` | Sounds for devices that make sound | CC0-1.0 |
 | `presets/` | Settings for devices without a sound of their own | CC0-1.0 |
+| `skins/` | Skins: the look of a single device, as a separate file (contract, validator and library) | CC0-1.0 (library), MIT (contract) |
 | `songs/` | Included songs | CC-BY-4.0 |
 | `docs/` | The user manual, the manuals per kind of device, their screenshots and the scripts that make them | AGPL-3.0 (the root license) |
 
