@@ -31,6 +31,7 @@
 <link rel="stylesheet" href="css/touch.css">
 <link rel="stylesheet" href="css/narrow.css">
 <link rel="stylesheet" href="css/file-drop.css">
+<link rel="stylesheet" href="css/skins.css">
 
 <header>
   <h1 data-i18n-html="ui.patch_kamer"><b data-i18n="ui.patch">Patch</b>kamer</h1>
@@ -41,7 +42,7 @@
     <span class="tp tpbpm"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
     <span class="tp"><span data-i18n="ui.swing">Swing</span> <input type="range" id="swing" min="0" max="0.5" step="0.01" value="0.08" style="width:80px"></span>
     <button class="small" id="wsBtn" aria-expanded="false" aria-controls="wsPanel" data-i18n="ui.werkruimte">Werkruimte ▾</button>
-    <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="songBtn" aria-expanded="false" aria-controls="songPanel" title="songs openen: demo's van GitHub en recente songs" data-i18n-title="attr.songs_open_titel" data-i18n="ui.songs_knop">Songs ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
+    <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="skBtn" aria-expanded="false" aria-controls="skPanel" title="uiterlijk van apparaten: skins laden en kiezen" data-i18n-title="attr.sk_knop" data-i18n="ui.skins">Skins ▾</button><button class="small" id="songBtn" aria-expanded="false" aria-controls="songPanel" title="songs openen: demo's van GitHub en recente songs" data-i18n-title="attr.songs_open_titel" data-i18n="ui.songs_knop">Songs ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
     <button class="small" id="arrange" title="apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)" data-i18n-title="attr.apparaten_netjes_van_links_naar" data-i18n="ui.herschik">Herschik</button>
     <span class="tp"><span data-i18n="ui.t_scherm">Scherm</span> <select id="layoutSel" title="schermindeling: automatisch, breed of compact" aria-label="schermindeling" data-i18n-title="attr.t_scherm" data-i18n-aria="attr.t_scherm"><option value="auto" data-i18n="ui.t_auto">Auto</option><option value="wide" data-i18n="ui.t_breed">Breed</option><option value="compact" data-i18n="ui.t_compact">Compact</option></select></span>
     <button class="small" id="fitScreen" title="maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)" data-i18n-title="attr.t_pas_aan" data-i18n="ui.t_pas_aan">Pas aan op dit scherm</button>
@@ -96,6 +97,15 @@
   
   <div class="note" data-i18n-html="ui.een_tune_of_preset_is">Een tune of preset is de instelling van één apparaat (alle knoppen, patronen en keuzes), niet de kabels. Kies op de kaart, of blader met ◀ ▶. <b data-i18n="ui.bewaar">Bewaar</b> legt de huidige instelling vast in een bibliotheek en map, met jouw naam als maker en een licentie (CC-BY-4.0 of alle rechten voorbehouden); een cursieve naam betekent dat je sindsdien iets hebt veranderd. Ieder exemplaar krijgt een eigen kopie. Drumcomputers hebben een tweede regel <b data-i18n="ui.instrument">Instrument</b>: één geluid (bijv. de kick) als tune laden of bewaren. De licentie zie je bij het laden en bij elk item hieronder.</div>
 </section>
+<section class="wspanel" id="skPanel" hidden aria-label="Skins" data-i18n-aria="attr.sk_paneel">
+  <button class="small close" id="skClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
+  <div>
+    <h3 data-i18n="ui.sk_titel">Skinbibliotheken</h3>
+    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.sk_uitleg">Een <b>skin</b> verandert alleen het uiterlijk van één apparaat, nooit de klank of de werking. Elke skin heeft een of meer <b>verschijningsvormen</b>; op de kaart kies je Skin en Verschijning (<b>Auto</b> wisselt vanzelf op kaartbreedte en schermgrootte). Importeer een bestand (.patchkamer-skin.json), laat het op het canvas los, of laad de standaardbibliotheek met Alles laden. Skins uit een bron (map, GitHub) zijn alleen-lezen. Een song of werkruimte neemt de gebruikte skins mee.</div>
+    <div class="wslist" id="skLibs"></div>
+  </div>
+  <div class="wsrow"><button class="small" id="skLoadAll" data-i18n="ui.sk_alles_laden">Alles laden</button><button class="small" id="skImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="skFile" accept=".json,application/json" multiple hidden></div>
+</section>
 <section class="wspanel" id="songPanel" hidden aria-label="Songs" data-i18n-aria="attr.songs_paneel">
   <button class="small close" id="songClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
   <div>
@@ -142,6 +152,8 @@
   <div class="wsrow"><input type="text" id="wsuPre" class="wsurl" spellcheck="false" aria-label="adres van de presets" data-i18n-aria="attr.adres_presets"></div>
   <div class="wsrow"><label><input type="checkbox" id="wsaTun"> <span data-i18n="ui.tunes_laden">Tunes laden</span></label></div>
   <div class="wsrow"><input type="text" id="wsuTun" class="wsurl" spellcheck="false" aria-label="adres van de tunes" data-i18n-aria="attr.adres_tunes"></div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaSki"> <span data-i18n="ui.sk_laden">Skins laden</span></label></div>
+  <div class="wsrow"><input type="text" id="wsuSki" class="wsurl" spellcheck="false" aria-label="adres van de skins" data-i18n-aria="attr.sk_adres"></div>
   <div class="wsrow"><label><span data-i18n="ui.songs_adres">Songs (demo's): adres op GitHub</span>&nbsp;<input type="text" id="songAddr" class="wsurl" spellcheck="false"></label></div>
   <div class="wsrow"><button class="small" id="songAddrReset" data-i18n="ui.songs_adres_herstel">Standaardadres herstellen</button></div>
   <div class="wsrow"><button class="small" id="wsaReset" data-i18n="ui.standaardadressen_herstellen">Standaardadressen herstellen</button></div>
@@ -256,5 +268,8 @@
 <script src="js/ai-chat.js"></script>
 <script src="js/song-panel.js"></script>
 <script src="js/file-drop.js"></script>
+<script src="js/device-icons.js"></script>
+<script src="js/skins.js"></script>
+<script src="js/skins-ui.js"></script>
 <script src="js/boot.js"></script>
 <script src="js/ns-close.js"></script>

@@ -9,7 +9,7 @@ function workspaceState(embedAll){
     if(embedAll||!located) e.code=d._code; return e; });
   const sids=new Set(defs.map(x=>x.src&&x.src.sid).filter(Boolean));
   return {format:'patchkamer-werkruimte',formatVersion:1,name:PK.WS.name,saved:new Date().toISOString(),
-    sources:PK.SOURCES.filter(x=>sids.has(x.sid)).map(publicSrc),defs,...(PK.WS.song?{song:PK.WS.song}:{}),...PK.patchState()}; } PK.workspaceState=workspaceState;
+    sources:PK.SOURCES.filter(x=>sids.has(x.sid)).map(publicSrc),defs,...(PK.WS.song?{song:PK.WS.song}:{}),...PK.skinsEmbed(),...PK.patchState()}; } PK.workspaceState=workspaceState;
 const fileNameOf=n=>(String(n||PK.pkt('m.naamloos')).replace(/[\\/:*?"<>|\u0000-\u001f]+/g,' ').replace(/\s+/g,' ').trim()||PK.pkt('m.naamloos'))+'.patchkamer.json'; PK.fileNameOf=fileNameOf;
 async function saveTextFile(filename,text){ return saveFileData(filename,text); } PK.saveTextFile=saveTextFile;
 async function saveFileData(filename,text){
@@ -46,6 +46,7 @@ async function openWorkspace(ws){
     if(why) notes.push(`${entry.name||id}: ${why}`);
   }
   PK.paintLib(); PK.refreshVersionSelects(); PK.paintSources();
+  PK.skinsFromWorkspace(ws.skins);   // ingesloten skins stil in het register, vóór de kaarten ze zoeken
   PK.setName(ws.name||PK.pkt('m.naamloos')); PK.loadPatch(ws);
   const got=PK.Host.devices.size, want=ws.devices.length, missing=[...new Set(ws.devices.filter(d=>!PK.Host.latest(d.def)).map(d=>(defs.find(x=>x.id===d.def)||{}).name||d.def))];
   const msg=PK.pkt('m.geopend',PK.WS.name,got===want?PK.pktp('m.n_apparaat',want===1,want):PK.pkt('m.n_van_m_apparaten',got,want))+(missing.length?PK.pkt('m.ontbreekt',missing.join(', ')):'')+(notes.length?' · '+notes.join(' · '):'');
