@@ -1,14 +1,10 @@
 // js/knobs.js — host.ui.knob (schuif of draaiknop), beginwaarden en waarde typen
 (function(PK){
-function pkKnob(parent,label,mn,mx,st,val,fmt,onchange,opts){
-  const w=document.createElement('div'); w.className='k'; const l=document.createElement('label'); l.textContent=label;
-  const i=document.createElement('input'); i.type='range'; i.min=mn; i.max=mx; i.step=st; i.value=val; i.setAttribute('aria-label',label);
-  if(opts.default!==undefined&&isFinite(+opts.default)) i.dataset.pkDefault=String(+opts.default);
-  const o=document.createElement('output'); o.textContent=fmt(val);
+// draaiknop-gezicht op een range-input: gedeeld door host.ui.knob en door een skin die een geadopteerde schuif als draaiknop wil tonen. toF/fromF: waarde <-> 0..1 (lineair of log)
+function buildRotary(i,label,mn,mx,st,log){
   const kn=document.createElement('span'); kn.className='kn'; kn.tabIndex=0; kn.setAttribute('role','slider'); kn.setAttribute('aria-label',label); kn.__pkInput=i;
   kn.style.cssText='display:none;width:30px;height:30px;cursor:ns-resize;touch-action:none;justify-self:start;outline-offset:2px';
   kn.innerHTML='<svg viewBox="0 0 30 30" width="30" height="30" aria-hidden="true"><path class="tr" fill="none" stroke="var(--line,#3a404a)" stroke-width="3.2" stroke-linecap="round"/><path class="vl" fill="none" stroke="var(--audio,#4fd1c5)" stroke-width="3.2" stroke-linecap="round"/><circle cx="15" cy="15" r="8.2" fill="var(--panel-2,var(--panel,#1c2027))" stroke="var(--line,#3a404a)"/><line class="pt" x1="15" y1="15" stroke="var(--fg,#ddd)" stroke-width="2" stroke-linecap="round"/></svg>';
-  const log=opts.scale==='log'&&+mn>0&&+mx>+mn; if(log) i.dataset.pkScale='log';
   const toF=v=>{ v=+v; if(log) return Math.log(v/mn)/Math.log(mx/mn); return (v-mn)/((mx-mn)||1); };
   const fromF=f=>{ f=Math.max(0,Math.min(1,f)); let v=log?mn*Math.pow(mx/mn,f):mn+f*(mx-mn); if(+st>0) v=+mn+Math.round((v-mn)/st)*st; return Math.max(mn,Math.min(mx,+v.toFixed(10))); };
   const P=(a,r)=>{ const t=a*Math.PI/180; return [(15+r*Math.cos(t)).toFixed(2),(15+r*Math.sin(t)).toFixed(2)]; };
@@ -16,25 +12,41 @@ function pkKnob(parent,label,mn,mx,st,val,fmt,onchange,opts){
   const svgE=kn.firstChild; svgE.querySelector('.tr').setAttribute('d',arc(135,405,12.5));
   const paint=v=>{ const f=Math.max(0,Math.min(1,toF(v))), a=135+270*f; svgE.querySelector('.vl').setAttribute('d',f>0.002?arc(135,a,12.5):''); const [x,y]=P(a,7); const pt=svgE.querySelector('.pt'); pt.setAttribute('x2',x); pt.setAttribute('y2',y); kn.setAttribute('aria-valuenow',String(v)); };
   const fire=v=>{ i.value=v; i.dispatchEvent(new Event('input',{bubbles:true})); if(PK.hapticTick) PK.hapticTick(kn,'turn'); };
-  i.oninput=()=>{ o.textContent=fmt(+i.value); paint(+i.value); onchange(+i.value); };
+  return {kn,paint,toF,fromF,fire,bind(){
   i.addEventListener('change',()=>paint(+i.value));
   let dr=null;
   kn.addEventListener('pointerdown',e=>{ if(e.button!==0) return; e.preventDefault(); e.stopPropagation(); try{ kn.setPointerCapture(e.pointerId); }catch(_){} kn.focus({preventScroll:true}); dr={y:e.clientY,f:toF(+i.value)}; });
   kn.addEventListener('pointermove',e=>{ if(!dr) return; const k=e.shiftKey?0.1:1; dr.f=Math.max(0,Math.min(1,dr.f+(dr.y-e.clientY)/180*k)); dr.y=e.clientY; const v=fromF(dr.f); if(String(v)!==i.value) fire(v); });
   const end=()=>{ if(dr){ dr=null; i.dispatchEvent(new Event('change',{bubbles:true})); } }; kn.addEventListener('pointerup',end); kn.addEventListener('pointercancel',end);
   kn.addEventListener('keydown',e=>{ const d={ArrowUp:1,ArrowRight:1,ArrowDown:-1,ArrowLeft:-1,PageUp:10,PageDown:-10}[e.key]; if(!d) return; e.preventDefault(); e.stopPropagation(); fire(fromF(toF(+i.value)+d*(e.shiftKey?0.002:0.01))); });
-  kn.addEventListener('wheel',e=>{ if(!kn.matches(':focus')) return; e.preventDefault(); fire(fromF(toF(+i.value)+(e.deltaY<0?1:-1)*(e.shiftKey?0.002:0.01))); },{passive:false});
+  kn.addEventListener('wheel',e=>{ if(!kn.matches(':focus')) return; e.preventDefault(); fire(fromF(toF(+i.value)+(e.deltaY<0?1:-1)*(e.shiftKey?0.002:0.01))); },{passive:false}); }}; } PK.buildRotary=buildRotary;
+function pkKnob(parent,label,mn,mx,st,val,fmt,onchange,opts){
+  const w=document.createElement('div'); w.className='k'; const l=document.createElement('label'); l.textContent=label;
+  const i=document.createElement('input'); i.type='range'; i.min=mn; i.max=mx; i.step=st; i.value=val; i.setAttribute('aria-label',label);
+  if(opts.default!==undefined&&isFinite(+opts.default)) i.dataset.pkDefault=String(+opts.default);
+  const o=document.createElement('output'); o.textContent=fmt(val);
+  const log=opts.scale==='log'&&+mn>0&&+mx>+mn; if(log) i.dataset.pkScale='log';
+  const R=buildRotary(i,label,mn,mx,st,log), kn=R.kn, paint=R.paint;
+  i.oninput=()=>{ o.textContent=fmt(+i.value); paint(+i.value); onchange(+i.value); };
+  R.bind();
   w.append(l,i,kn,o); parent.appendChild(w); paint(val);
+  const id=PK.regTag(w,opts,'param');
   const K={w,i,kn}; PK.PKKNOBS.add(K); knobLook(K);
-  return {set(v){ i.value=v; o.textContent=fmt(v); paint(v); }, el:w, input:i};
+  return {set(v){ i.value=v; o.textContent=fmt(v); paint(v); }, el:w, input:i, id};
 } PK.pkKnob=pkKnob;
+// host.ui.select: dezelfde opbouw als altijd; de optionele opts {id, role, group} zetten alleen data-pk-*-attributen
+function pkSelect(parent,label,opts,val,onchange,o6){ const w=document.createElement('div'); w.className='k'; w.style.gridTemplateColumns='70px minmax(0,1fr)'; const l=document.createElement('label'); l.textContent=label; const s=document.createElement('select'); opts.forEach(([v,t])=>{const o=document.createElement('option'); o.value=v; o.textContent=t; s.appendChild(o);}); s.value=val; s.setAttribute('aria-label',label); s.onchange=()=>onchange(s.value); w.append(l,s); parent.appendChild(w); PK.regTag(w,o6,'select'); return s; } PK.pkSelect=pkSelect;
 // stijl en grootte per kaart: een skin (design.knobs) kan de globale instelling overschrijven (r.skKnob 'rotary'|'slider', r.skKs schaal)
-function knobCard(K){ for(let n=K.w;n;){ if(n.classList&&n.classList.contains('card')&&n.dataset&&PK.Host.devices.has(n.dataset.id)) return PK.Host.devices.get(n.dataset.id); n=n.parentNode&&n.parentNode.nodeType===11?n.parentNode.host:n.parentNode; } return null; }
+function cardOf(el){ for(let n=el;n;){ if(n.classList&&n.classList.contains('card')&&n.dataset&&PK.Host.devices.has(n.dataset.id)) return PK.Host.devices.get(n.dataset.id); n=n.parentNode&&n.parentNode.nodeType===11?n.parentNode.host:n.parentNode; } return null; } PK.cardOf=cardOf;
+function knobCard(K){ return cardOf(K.w); }
 function knobsRefresh(r){ PK.PKKNOBS.forEach(K=>{ if(!K.w.isConnected){ PK.PKKNOBS.delete(K); return; } if(knobCard(K)===r) knobLook(K); }); PK.drawCables(); } PK.knobsRefresh=knobsRefresh;
 function knobCount(r){ let n=0; PK.PKKNOBS.forEach(K=>{ if(K.w.isConnected&&knobCard(K)===r) n++; }); return n; } PK.knobCount=knobCount;
 function knobStats(){ let n=0,m=0; PK.Host.devices.forEach(r=>{ m++; if(knobCount(r)) n++; }); return {n,m}; } PK.knobStats=knobStats;
-function knobLook(K){ const c=knobCard(K); if(!c&&!K.w.isConnected&&PK.SK&&!K.late){ K.late=true; requestAnimationFrame(()=>{ K.late=false; if(K.w.isConnected&&knobCard(K)&&knobCard(K).skKnob) knobLook(K); }); }
-  const r=(c&&c.skKnob?c.skKnob:PK.V18.knob)==='rotary', zs=c&&c.skKs; if(zs) K.w.style.zoom=String(zs); else if(K.w.style.zoom) K.w.style.removeProperty('zoom'); K.kn.style.display=r?'inline-block':'none'; K.i.style.cssText=r?'position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;margin:0':''; K.w.style.position=r?'relative':''; }
+// gezicht en maat van één hostknop: standaard (instelling van de werkruimte) of wat de regels van de skin (r.skCtl, design.controls) voor deze regelaar bepalen
+function knobLook(K){ const c=knobCard(K); if(!c&&!K.w.isConnected&&PK.SK&&!K.late){ K.late=true; requestAnimationFrame(()=>{ K.late=false; if(K.w.isConnected&&knobCard(K)&&knobCard(K).skCtl) knobLook(K); }); }
+  const p=PK.regProps(c,K.w), f=p&&p.face, r=f==='rotary'||(f!=='hslider'&&f!=='vslider'&&PK.V18.knob==='rotary'); 
+  K.kn.style.display=r?'inline-block':'none'; K.i.style.cssText=r?'position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;margin:0':''; K.w.style.position=r?'relative':''; PK.regLook(K.w,K.i,K.kn,p,r); }
+PK.knobLook=knobLook;
 function setKnobStyle(m){ PK.V18.knob=m==='rotary'?'rotary':'slider'; try{ localStorage.setItem('patchkamer.knobs',PK.V18.knob); }catch(e){} PK.PKKNOBS.forEach(K=>{ if(!K.w.isConnected){ PK.PKKNOBS.delete(K); return; } knobLook(K); }); PK.drawCables(); } PK.setKnobStyle=setKnobStyle;
 function ctlRanges(root){ const out=[]; const walk=r=>{ r.querySelectorAll('input[type=range]').forEach(x=>out.push(x)); r.querySelectorAll('*').forEach(e=>{ if(e.shadowRoot) walk(e.shadowRoot); }); }; if(root) walk(root); return out; }
 function ctlBase(inp){ let t=inp.getAttribute('aria-label')||inp.name||inp.id||inp.title||'';
