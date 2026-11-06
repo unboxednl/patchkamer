@@ -1,5 +1,5 @@
-// validate-instrument.mjs — Patchkamer contract v1.14
-// Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en]
+// validate-instrument.mjs — Patchkamer contract v1.15
+// Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
 // destroy aan. Eindigt met één OK-regel (exit 0) of de eerste fout (exit 1).
@@ -13,6 +13,9 @@
 // v1.11: --lang nl|en (taal van de uitvoer; standaard nl); optioneel veld i18n op de definitie; host.lang en host.audio in de nep-host;
 //        tweede doorloop met de andere host.lang, zodat een fout in de taaltak van het apparaat ook wordt gevonden.
 // v1.13: multi-MIDI: ports.multiEventIn/multiEventOut, eventBundles, onEventBundle, host.eventBundleChanged; velden ch en cc op gebeurtenissen; host.controls en host.setControl.
+// v1.15: regelaars herkenbaar voor skins: opties { id, role, group } op host.ui.knob (7e argument) en host.ui.select (6e), host.ui.adopt, host.ui.list,
+//        attributen data-pk-id/-role/-group. Alleen "let op" (nooit een fout) bij een dubbel id, deels ontbrekende id's, een rol buiten de lijst,
+//        een ongeldig id/groep, of een id dat per taal verschilt. --controls drukt de tabel id | rol | groep | label nl/en | bereik | gezicht af.
 // v1.14: nootnamen: optioneel noteNames() op het apparaat (lijst { note, name }) en host.noteNamesChanged; host.peers geeft ze door als noteNames.
 // v1.12: mastering: ports.masteringIn/masteringOut (kabeltype mastering), configureMastering, onMasteringTargets, host.mastering.
 // v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
@@ -21,11 +24,11 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 // ---------- argumenten: bestand, --lang nl|en (taal van de uitvoer), --host-lang nl|en (host.lang voor het apparaat) ----------
-const argv = process.argv.slice(2); let LANG = 'nl', HOSTLANG = 'nl', SUB = false; const rest = [];
+const argv = process.argv.slice(2); let LANG = 'nl', HOSTLANG = 'nl', SUB = false, CONTROLS = false; const rest = [];
 for (let i = 0; i < argv.length; i++) { const a = argv[i];
   if (a === '--lang') LANG = argv[++i] || ''; else if (a.startsWith('--lang=')) LANG = a.slice(7);
   else if (a === '--host-lang') HOSTLANG = argv[++i] || ''; else if (a.startsWith('--host-lang=')) HOSTLANG = a.slice(12);
-  else if (a === '--sub') SUB = true; else rest.push(a); }
+  else if (a === '--sub') SUB = true; else if (a === '--controls') CONTROLS = true; else rest.push(a); }
 const V = {
   nl: {
     "v.fout_prefix": "FOUT:",
@@ -80,6 +83,23 @@ const V = {
     "v.ok_preset": ", eigen preset {0} bytes",
     "v.ok_instrumenten": ", {0} instrumenten voor tunes",
     "v.ok_knoppen": ", {0} host-knoppen volgen setState",
+    "v.ctl_prefix": " · let op: ",
+    "v.ctl_opties": "{0}: de opties van host.ui moeten een object zijn ({ id, role, group }); genegeerd",
+    "v.ctl_id_vorm": "{0}: id \"{1}\" hoort 1 tot 60 tekens uit [A-Za-z0-9._-] te zijn; genegeerd",
+    "v.ctl_id_dubbel": "id \"{0}\" staat bij meer dan één regelaar ({1}); een id is uniek binnen een apparaat",
+    "v.ctl_id_ontbreekt": "{0} regelaar(s) zonder id terwijl andere er wel een hebben: {1}",
+    "v.ctl_rol": "{0}: rol \"{1}\" staat niet in de lijst ({2}); de host behandelt hem als standaardrol",
+    "v.ctl_groep": "{0}: groep \"{1}\" hoort 1 tot 60 tekens uit [A-Za-z0-9._-] te zijn; genegeerd",
+    "v.ctl_adopt_element": "host.ui.adopt() kreeg geen element",
+    "v.ctl_adopt_model": "{0}: dit element heeft geen model (input range/checkbox, select of button); een id zonder regelaar doet niets",
+    "v.ctl_los": "{0}: id \"{1}\" staat op een element dat nergens in de kaart hangt",
+    "v.ctl_id_taal": "de id's verschillen per host.lang ({0}); een id is de state-sleutel, nooit een label",
+    "v.ok_regelaars": ", {0} regelaars met id",
+    "v.ctl_geen": "(geen regelaars via host.ui of data-pk-*)",
+    "v.ctl_titel": "Regelaars ({0}):",
+    "v.ctl_kop": "id | rol | groep | label nl/en | bereik | gezicht",
+    "v.ctl_zonder_id": "(zonder id)",
+    "v.ctl_label_is": "label",
     "v.ok_tekent_frame": ", tekent via host.frame",
     "v.ok_tekent_poort": ", tekent via de tekenpoort",
     "v.ok_besturing": ", besturing (peers/connect)",
@@ -190,7 +210,7 @@ const V = {
     "v.host_modsignal_node_moet_een": "host.modSignal(): node moet een AudioNode zijn",
     "v.host_modulate_offset_moet_een": "host.modulate(): offset {0} moet een getal tussen -1 en 1 zijn",
     "v.host_modulate_offsets_moet_een": "host.modulate(): offsets moet een object zijn",
-    "v.gebruik_node_validate_instrument_mjs": "gebruik: node validate-instrument.mjs bestand.patchkamer-device.js [--lang nl|en]"
+    "v.gebruik_node_validate_instrument_mjs": "gebruik: node validate-instrument.mjs bestand.patchkamer-device.js [--lang nl|en] [--controls]"
   },
   en: {
     "v.fout_prefix": "ERROR:",
@@ -245,6 +265,23 @@ const V = {
     "v.ok_preset": ", own preset {0} bytes",
     "v.ok_instrumenten": ", {0} instruments for tunes",
     "v.ok_knoppen": ", {0} host knobs follow setState",
+    "v.ctl_prefix": " · warning: ",
+    "v.ctl_opties": "{0}: the host.ui options must be an object ({ id, role, group }); ignored",
+    "v.ctl_id_vorm": "{0}: id \"{1}\" must be 1 to 60 characters from [A-Za-z0-9._-]; ignored",
+    "v.ctl_id_dubbel": "id \"{0}\" is used by more than one control ({1}); an id is unique within a device",
+    "v.ctl_id_ontbreekt": "{0} control(s) without an id while others have one: {1}",
+    "v.ctl_rol": "{0}: role \"{1}\" is not in the list ({2}); the host treats it as the default role",
+    "v.ctl_groep": "{0}: group \"{1}\" must be 1 to 60 characters from [A-Za-z0-9._-]; ignored",
+    "v.ctl_adopt_element": "host.ui.adopt() received no element",
+    "v.ctl_adopt_model": "{0}: this element has no model (input range/checkbox, select or button); an id without a control does nothing",
+    "v.ctl_los": "{0}: id \"{1}\" is on an element that is not attached anywhere in the card",
+    "v.ctl_id_taal": "the ids differ per host.lang ({0}); an id is the state key, never a label",
+    "v.ok_regelaars": ", {0} controls with an id",
+    "v.ctl_geen": "(no controls via host.ui or data-pk-*)",
+    "v.ctl_titel": "Controls ({0}):",
+    "v.ctl_kop": "id | role | group | label nl/en | range | face",
+    "v.ctl_zonder_id": "(no id)",
+    "v.ctl_label_is": "label",
     "v.ok_tekent_frame": ", draws via host.frame",
     "v.ok_tekent_poort": ", draws via the drawing gate",
     "v.ok_besturing": ", control (peers/connect)",
@@ -355,7 +392,7 @@ const V = {
     "v.host_modsignal_node_moet_een": "host.modSignal(): node must be an AudioNode",
     "v.host_modulate_offset_moet_een": "host.modulate(): offset {0} must be a number between -1 and 1",
     "v.host_modulate_offsets_moet_een": "host.modulate(): offsets must be an object",
-    "v.gebruik_node_validate_instrument_mjs": "usage: node validate-instrument.mjs file.patchkamer-device.js [--lang nl|en]"
+    "v.gebruik_node_validate_instrument_mjs": "usage: node validate-instrument.mjs file.patchkamer-device.js [--lang nl|en] [--controls]"
   }
 };
 function vt(key, ...a) { const s = (V[LANG] && V[LANG][key]) ?? V.nl[key]; if (s == null) return '\u27e6' + key + '\u27e7'; return a.length ? s.replace(/\{(\d+)\}/g, (m, i) => String(a[+i])) : s; }
@@ -378,6 +415,33 @@ const ctx = { currentTime: 0, sampleRate: 44100, state: 'running', destination: 
   audioWorklet: { addModule: async () => {} } };
 // AudioWorkletNode: parameters als Map van AudioParams, een port die niets doet
 globalThis.AudioWorkletNode = class { constructor(c, name, opts) { Object.assign(this, node()); this.port = { postMessage(){}, onmessage: null, start(){}, close(){}, addEventListener(){} }; const P = new Map(); this.parameters = { get: k => { if (!P.has(k)) P.set(k, param()); return P.get(k); }, has: () => true, forEach(){} }; } };
+
+// ---------- regelaarsregister (v1.15): wat het apparaat via host.ui.* of data-pk-* herkenbaar maakt ----------
+const ALL_EL = [];            // alle elementen die het apparaat (of de nep-host) maakt, voor de attribuutscan
+let ctlBuilt = false;         // true na create()+mount(): daarna gebouwde regelaars (herbouw) tellen niet mee voor "dubbel"
+const CTL = [];               // { id, role, group, label, type, min, max, face, items, via, built, el }
+const CTL_ROLES = ['param', 'fader', 'toggle', 'button', 'pad', 'step', 'display', 'select', 'meter', 'jack'];
+const CTL_WARN = [], CTL_SEEN = new Set();
+const ctlWarn = (key, ...a) => { const t = vt(key, ...a); if (!CTL_SEEN.has(t)) { CTL_SEEN.add(t); CTL_WARN.push(t); } };
+const ID_RE = /^[A-Za-z0-9._-]{1,60}$/;
+const tagOf = e => String(e && e.tagName || '').toUpperCase();
+const typeOf = e => { const t = tagOf(e), ty = String((e && (e.type || (e.attributes && e.attributes.type))) || '').toLowerCase();
+  if (t === 'SELECT') return 'select'; if (t === 'BUTTON') return 'button'; if (t === 'INPUT') return ty === 'range' ? 'range' : ty === 'checkbox' ? 'check' : null; return null; };
+const defRole = type => type === 'range' ? 'param' : type === 'check' ? 'toggle' : type === 'button' ? 'button' : 'select';
+// controleert de opties { id, role, group } van een aanroep; geeft de geldige waarden terug
+function ctlOpts(where, o, type) {
+  const r = { id: null, role: defRole(type), group: null };
+  if (o === undefined || o === null) return r;
+  if (typeof o !== 'object' || Array.isArray(o)) { ctlWarn('v.ctl_opties', where); return r; }
+  if (o.id !== undefined) { if (typeof o.id === 'string' && ID_RE.test(o.id)) r.id = o.id; else ctlWarn('v.ctl_id_vorm', where, String(o.id).slice(0, 40)); }
+  if (o.role !== undefined) { if (CTL_ROLES.includes(o.role)) r.role = o.role; else ctlWarn('v.ctl_rol', where, String(o.role).slice(0, 40), CTL_ROLES.join(', ')); }
+  if (o.group !== undefined) { if (typeof o.group === 'string' && ID_RE.test(o.group)) r.group = o.group; else ctlWarn('v.ctl_groep', where, String(o.group).slice(0, 40)); }
+  return r;
+}
+function ctlAdd(e) { if (e.built === undefined) e.built = !ctlBuilt; if (!e.built && (e.id ? CTL.some(x => x.id === e.id) : CTL.some(x => !x.id && x.label === e.label && x.type === e.type))) return null;   // een herbouw (Mixer-achtig render()) vervangt: niet dubbel melden of tellen
+  CTL.push(e); return e; }
+const lbl = l => String(l == null ? '' : l);
+const ctlLabelOf = e => lbl(e.attributes && e.attributes['aria-label'] || e.title || e.textContent || '');
 
 // ---------- fake DOM (permissive: enough for real device UIs, including shadow roots) ----------
 const classList = () => { const s = new Set(); return { add: (...c) => c.forEach(x => s.add(x)), remove: (...c) => c.forEach(x => s.delete(x)), toggle: (c, f) => { const on = f === undefined ? !s.has(c) : !!f; on ? s.add(c) : s.delete(c); return on; }, contains: c => s.has(c) }; };
@@ -403,6 +467,7 @@ function el(tag = 'div') {
     set innerHTML(v){ this._html = String(v); }, get innerHTML(){ return this._html || ''; },
     options: [], selectedIndex: 0, files: [], add(){},
   };
+  e._built = !ctlBuilt; ALL_EL.push(e);
   return e;
 }
 globalThis.document = { createElement: el, createElementNS: (ns, t) => el(t), createTextNode: t => ({ nodeType: 3, textContent: t }), createDocumentFragment: () => el('#fragment'), getElementById: () => el('div'), querySelector: () => el('div'), querySelectorAll: () => [], addEventListener(){}, removeEventListener(){}, body: el('body'), documentElement: el('html') };
@@ -455,8 +520,24 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
     for (const p of ports.audioOut) if (!inst.outputs[p.id] || !inst.outputs[p.id]._isNode) fail(vt('v.setports_outputs_bestaat_nog_niet',p.id));
     curPorts = ports; portChanges++; },
   ui: { jack(inst, parent, id, dir) { const P = curPorts || d.ports; const L = dir === 'out' ? [...P.audioOut, ...P.eventOut, ...PL(P, 'modOut'), ...PL(P, 'multiOut'), ...PL(P, 'masteringOut'), ...PL(P, 'multiEventOut')] : dir === 'in' ? [...P.audioIn, ...P.eventIn, ...PL(P, 'modIn'), ...PL(P, 'multiIn'), ...PL(P, 'masteringIn'), ...PL(P, 'multiEventIn'), ...(inst && typeof inst.params === 'function' ? [{ id: 'mod' }] : [])] : fail(vt('v.jack_richting_moet_in_of')); if (!L.some(p => p.id === id)) fail(vt('v.jack_poort_bestaat_niet_in',id,dir)); jacks++; const e = el('div'); e.className = 'port jack'; if (parent && parent.appendChild) parent.appendChild(e); return e; },
-    knob: (parent, label) => { const k = { label: 'knop ' + label, sets: 0 }; KNOBS.push(k); return { set(){ k.sets++; }, el: el('div'), input: el('input') }; },
-    select: (parent, label, opts, val) => { const k = { label: vt('v.keuze') + label, sets: 0 }; KNOBS.push(k); const s = el('select'); let v = val; Object.defineProperty(s, 'value', { get: () => v, set: x => { v = x; k.sets++; } }); return s; }, steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
+    knob: (parent, label, range, value, fmt, onchange, o) => { const k = { label: 'knop ' + label, sets: 0 }; KNOBS.push(k);
+      const r = ctlOpts(lbl(label), o, 'range'), box = el('div'), input = el('input'); input.type = 'range'; box._pk = input._pk = true;
+      if (Array.isArray(range)) { input.min = String(range[0]); input.max = String(range[1]); input.step = String(range[2]); }
+      if (parent && parent.appendChild) parent.appendChild(box); box.appendChild(input);
+      ctlAdd({ ...r, label: lbl(label), type: 'range', min: Array.isArray(range) ? range[0] : null, max: Array.isArray(range) ? range[1] : null, face: 'rotary', via: 'knob', el: box });
+      return { set(){ k.sets++; }, el: box, input, id: r.id || undefined }; },
+    select: (parent, label, opts, val, onchange, o) => { const k = { label: vt('v.keuze') + label, sets: 0 }; KNOBS.push(k); const s = el('select'); let v = val; Object.defineProperty(s, 'value', { get: () => v, set: x => { v = x; k.sets++; } });
+      s._pk = true; if (parent && parent.appendChild) parent.appendChild(s); const r = ctlOpts(lbl(label), o, 'select');
+      ctlAdd({ ...r, label: lbl(label), type: 'select', min: null, max: null, face: 'select', items: Array.isArray(opts) ? opts.map(x => Array.isArray(x) ? x[0] : x) : [], via: 'select', el: s }); return s; },
+    adopt(e, o) { if (!e || typeof e !== 'object') { ctlWarn('v.ctl_adopt_element'); return e; }
+      const type = typeOf(e), name = lbl(o && o.label || ctlLabelOf(e)) || (tagOf(e).toLowerCase() + (e.id ? '#' + e.id : ''));
+      const r = ctlOpts(name, o, type || 'range'); if (!type) ctlWarn('v.ctl_adopt_model', name);
+      if (r.id) { e.setAttribute('data-pk-id', r.id); e.dataset.pkId = r.id; } if (r.group) { e.setAttribute('data-pk-group', r.group); e.dataset.pkGroup = r.group; }
+      e.setAttribute('data-pk-role', r.role); e.dataset.pkRole = r.role; e._pk = true;
+      if (type) ctlAdd({ ...r, label: name, type, min: type === 'range' && e.min !== '' ? +e.min : null, max: type === 'range' && e.max !== '' ? +e.max : null, face: type === 'range' ? 'hslider' : type, via: 'adopt', el: e });
+      return e; },
+    list() { return CTL.map(c => ({ id: c.id, role: c.role, group: c.group, label: c.label, type: c.type, min: c.min, max: c.max, face: c.face })); },
+    steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
 
 // ---------- load + static checks ----------
 const src = readFileSync(file, 'utf8');
@@ -498,6 +579,7 @@ for (const p of d.ports.audioOut) if (!inst.outputs[p.id] || !inst.outputs[p.id]
 let pre; try { pre = inst.getState(); JSON.stringify(pre); } catch (e) { fail('getState() vóór mount faalt: ' + e.message); }
 try { inst.mount(el('div')); } catch (e) { fail(vt('v.mount_gooit') + e.message + '\n' + (e.stack || '').split('\n').slice(1, 3).join('\n')); }
 const nMountKnobs = KNOBS.length;
+ctlBuilt = true;
 // ---------- contract v1.3: modulation ----------
 let nParams = 0, nLanes = 0, nFast = 0;
 if (inst.params !== undefined || inst.modulate !== undefined) {
@@ -636,6 +718,20 @@ if (typeof inst.onPeers === 'function') { try { inst.onPeers([]); inst.onPeers(F
 if (typeof inst.noteNames === 'function') { let l; try { l = inst.noteNames(); } catch (e) { fail(vt('v.notenames_gooit') + e.message); } if (!Array.isArray(l) || l.some(x => !x || !Number.isFinite(x.note) || x.note < 0 || x.note > 127 || typeof x.name !== 'string' || !x.name)) fail(vt('v.notenames_ongeldig') + JSON.stringify(l).slice(0, 80)); }
 try { if (inst.unmount) inst.unmount(); inst.destroy(); inst.destroy(); } catch (e) { fail(vt('v.destroy_gooit_moet_idempotent_zijn') + e.message); }
 const openFrames = frames.filter(e => !e.off).length; if (openFrames) fail(vt('v.na_destroy_staan_er_nog',openFrames));
+// v1.15: attributen data-pk-id/-role/-group op eigen elementen (N1-pad) en de eindcontrole van het register
+for (const e of ALL_EL) { if (e._pk) continue; const a = e.attributes || {}, ds = e.dataset || {};
+  const id = a['data-pk-id'] ?? ds.pkId, role = a['data-pk-role'] ?? ds.pkRole, group = a['data-pk-group'] ?? ds.pkGroup;
+  if (id === undefined && role === undefined && group === undefined) continue;
+  const type = typeOf(e), name = ctlLabelOf(e) || (tagOf(e).toLowerCase() + (e.id ? '#' + e.id : '')), r = ctlOpts(name, { id, role, group }, type || 'range');
+  if (!type) { ctlWarn('v.ctl_adopt_model', name); continue; }
+  if (r.id && !e.parentElement && !e.parentNode) { ctlWarn('v.ctl_los', name, r.id); continue; }
+  ctlAdd({ ...r, label: name, type, min: type === 'range' && e.min !== '' ? +e.min : null, max: type === 'range' && e.max !== '' ? +e.max : null, face: type === 'range' ? 'hslider' : type, via: 'attr', el: e, built: e._built });
+}
+{ // dubbele id's (alleen wat bij create()/mount() is gebouwd) en deels ontbrekende id's
+  const by = new Map(); for (const c of CTL) if (c.id && c.built) (by.get(c.id) || by.set(c.id, []).get(c.id)).push(c.label);
+  for (const [id, labels] of by) if (labels.length > 1) ctlWarn('v.ctl_id_dubbel', id, labels.slice(0, 4).join(', '));
+  const withId = CTL.filter(c => c.id), without = CTL.filter(c => !c.id && c.via !== 'attr');
+  if (withId.length && without.length) ctlWarn('v.ctl_id_ontbreekt', without.length, without.slice(0, 5).map(c => c.label || '?').join(', ') + (without.length > 5 ? ', …' : '')); }
 const extWarn = !/\.patchkamer-device\.js$/i.test(file);
 const rafWarn = /requestAnimationFrame\s*\(/.test(src) && !/host\.frame\b|\.frame\s*===\s*'function'|__pkWrap\(/.test(src);
 for (const { port, ev } of emitted) {
@@ -649,14 +745,19 @@ for (const { port, ev } of emitted) {
 }
 if (d.ui && d.ui.jacks && jacks === 0) fail(vt('v.ui_jacks_is_aan_maar'));
 if (modBad) fail(modBad);
-const nKnobs = nMountKnobs;
+const nKnobs = nMountKnobs; let OTHER = null;
 {
   // tweede doorloop met de andere host.lang: vangt fouten in de taaltak van het apparaat (ontbrekende teksten, crashes)
   if (!SUB) {
     const other = HOSTLANG === 'nl' ? 'en' : 'nl';
     const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), file, '--host-lang', other, '--lang', LANG, '--sub'], { encoding: 'utf8' });
     if (r.status !== 0) fail(vt('v.faalt_met_host_lang', other, ((r.stderr || r.stdout || '').trim().split('\n')[0] || '').replace(/^\S+:\s*/, '')));
+    // v1.15: de regelaars uit de andere taalronde (voor de tabel en de controle dat id's niet van de taal afhangen)
+    const m = /^PKCTL (.*)$/m.exec(r.stdout || ''); if (m) { try { OTHER = JSON.parse(m[1]); } catch (e) { OTHER = null; } }
+    if (OTHER) { const a = CTL.filter(c => c.id && c.built).map(c => c.id).sort(), b = OTHER.filter(c => c.id && c.built).map(c => c.id).sort();
+      if (a.join('\n') !== b.join('\n')) { const diff = [...new Set([...a.filter(x => !b.includes(x)), ...b.filter(x => !a.includes(x))])].slice(0, 5).join(', '); ctlWarn('v.ctl_id_taal', diff); } }
   }
+  if (SUB) console.log('PKDEV ' + d.id + '\n' + 'PKCTL ' + JSON.stringify(CTL.map(c => ({ id: c.id, role: c.role, group: c.group, label: c.label, type: c.type, min: c.min, max: c.max, face: c.face, items: c.items, built: c.built }))));
   let line = `OK  ${d.name} ${d.version} (${d.id}) — kind ${d.kind}`;
   if (d.ui && d.ui.width) line += vt('v.ok_breedte', d.ui.width);
   line += vt('v.ok_poorten', d.ports.audioIn.length, d.ports.audioOut.length, d.ports.eventIn.length, d.ports.eventOut.length, json.length, started);
@@ -677,10 +778,24 @@ const nKnobs = nMountKnobs;
   if (presetBytes) line += vt('v.ok_preset', presetBytes);
   if (nParts) line += vt('v.ok_instrumenten', nParts);
   if (nKnobs) line += vt('v.ok_knoppen', nKnobs);
+  { const nid = CTL.filter(c => c.id).length; if (nid) line += vt('v.ok_regelaars', nid); }
   line += frames.length ? vt('v.ok_tekent_frame') : (/__pkWrap\(/.test(src) ? vt('v.ok_tekent_poort') : '');
   if (peerCalls || connects) line += vt('v.ok_besturing');
   if (rafWarn) line += vt('v.waarschuwing_raf');
   if (extWarn) line += vt('v.waarschuwing_naam');
+  for (const w of CTL_WARN) line += vt('v.ctl_prefix') + w;
   if (!SUB) console.log(line);
+  if (!SUB && CONTROLS) {   // v1.15: de tabel id | rol | groep | label nl/en | bereik | gezicht
+    const mine = HOSTLANG, labs = c => { const o = OTHER && (OTHER.find(x => x.id && x.id === c.id && x.type === c.type) || (c.id ? null : OTHER.filter(x => !x.id)[CTL.filter(y => !y.id).indexOf(c)])); const a = c.label, b = o ? o.label : c.label;
+      const [nl, en] = mine === 'nl' ? [a, b] : [b, a]; return nl === en ? nl : nl + ' / ' + en; };
+    const range = c => c.type === 'range' ? (c.min != null && c.max != null ? c.min + '..' + c.max : '-') : c.type === 'select' ? ((c.items || []).join(',').replace(/^(.{37}).{4,}$/, '$1…') || '-') : '-';
+    const rows = CTL.map(c => [c.id || vt('v.ctl_zonder_id'), c.role, c.group || '-', labs(c), range(c), c.face || '-']);
+    const head = vt('v.ctl_kop').split(' | ');
+    console.log(''); console.log(vt('v.ctl_titel', rows.length));
+    if (!rows.length) console.log(vt('v.ctl_geen'));
+    else { const w = head.map((h, i) => Math.max(h.length, ...rows.map(r => String(r[i]).length)));
+      const fmtRow = r => r.map((x, i) => String(x).padEnd(w[i])).join(' | ').trimEnd();
+      console.log(fmtRow(head)); console.log(w.map(n => '-'.repeat(n)).join('-+-')); for (const r of rows) console.log(fmtRow(r)); }
+  }
 }
 process.exit(0);

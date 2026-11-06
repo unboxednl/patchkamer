@@ -1,0 +1,32 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.3",
+  "id": "nl.patchkamer.filter.example-controls",
+  "device": "nl.patchkamer.filter",
+  "name": "Example controls",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Shows design.controls (skins 0.3): every control as a rotary knob, the cutoff extra large, the filter group in amber and the mix as a slider.",
+  "created": "2026-11-06",
+  "icon": null,
+  "default": "main",
+  "design": {
+    "controls": [
+      { "match": "role:param", "face": "rotary", "size": "m" },
+      { "match": "group:filter", "color": "#ffb000" },
+      { "match": "cut", "size": "xl", "showValue": "always" },
+      { "match": "res", "size": "l" },
+      { "match": "mix", "face": "hslider", "length": "long", "thickness": 6, "thumb": "bar", "color": "accent" }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same rules on every card width.",
+      "assets": {}
+    }
+  ]
+}

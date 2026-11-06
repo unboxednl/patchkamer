@@ -1,15 +1,16 @@
-# Patchkamer — Skins contract v0.2 for building agents
+# Patchkamer — Skins contract v0.3 for building agents
 
 This document is the complete, self-contained instruction for building a **skin** for **Patchkamer**: a separate file that changes the look of one device, without touching the device itself or the device contract. An agent that receives this document needs no other context. Deliver a file `name.patchkamer-skin.json` that follows this contract and passes `validate-skin.mjs` without errors.
 
 _This contract exists in two languages: `SKINS-CONTRACT_NL.md` (Dutch, the source text) and `SKINS-CONTRACT_EN.md` (English). Both have the same version and the same content; if they differ, the Dutch text applies. The validator speaks both languages too (`--lang nl|en`)._
 
-_This contract is a contract of its own next to the device contract (`../../contract/PATCHKAMER-CONTRACT_EN.md`, now v1.14) and has its own version number. A skin asks nothing of a device: no change to devices is needed._
+_This contract is a contract of its own next to the device contract (`../../contract/PATCHKAMER-CONTRACT_EN.md`, now v1.15) and has its own version number. A skin asks nothing of a device: no change to devices is needed._
 
 | Version | What was added |
 |---|---|
 | v0.1 | First version, deliberately small: a manifest, appearances with CSS and embedded images, automatic switching on card width and screen class, an icon per skin and per device. The content of a skin is a placeholder; the requirements for artwork, control graphics and layout follow later (§13) |
 | v0.2 | Layer 1: the field `design` with design choices that work on all devices (ports mode, colour scheme, haptics, style and size of the host knob), at skin level and per appearance (§4b). Skins of 0.1 keep working unchanged |
+| v0.3 | Layer 2, release A "ids and roles": `design.controls`, an ordered list of rules that chooses, per id, role or group, the face (rotary knob, horizontal or vertical slider), size, length, thickness, thumb, colour and value display of controls (§4b). Belongs to device contract v1.15. Skins of 0.1 and 0.2 keep working unchanged |
 
 ---
 
@@ -20,7 +21,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 - A skin belongs to **one device id** (the field `device`). For another device it is kept but never offered.
 - A device does not have to do anything to be able to get skins. If the device has no open shadow root (see §4), the host cannot apply the skin and says so; that is not a fault of the skin or of the device.
 - Skins are a new kind of library material next to tunes and presets: they are loaded from sources (a GitHub folder, a local folder, an address), browsed in a panel of their own, chosen per device on the card, saved in the workspace and in the song, and can be dropped on the canvas (§8, §9).
-- Version 0.2 stays deliberately small: CSS plus a small set of design choices (`design`, §4b). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
+- Version 0.3 stays deliberately small: CSS plus a small set of design choices (`design`, §4b), including the face of controls (`controls`). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
 
 ---
 
@@ -34,7 +35,7 @@ A skin is a UTF-8 JSON file with one object, named `name.patchkamer-skin.json`: 
 |---|---|---|---|---|
 | `format` | text | always `"patchkamer-skin"` | | yes |
 | `formatVersion` | integer | now `1` | | yes |
-| `skinsContract` | text | `"major.minor"`, now `"0.2"` (`"0.1"` stays valid); see §10 | | yes |
+| `skinsContract` | text | `"major.minor"`, now `"0.3"` (`"0.1"` and `"0.2"` stay valid); see §10 | | yes |
 | `id` | text | 3 to 100 characters from `[a-z0-9.-]`; recommended `<device-id>.<slug>`; unique: the same `id` is the same skin | | yes |
 | `device` | text | the `id` of the device the skin is for, for example `nl.patchkamer.duofone` | | yes |
 | `name` | text | English name, 1 to 60 characters, brand-free (§11) | | yes |
@@ -124,7 +125,7 @@ Apart from that, ordinary CSS is allowed, including `@media`, `@container` and `
 
 ---
 
-## 4b. Design choices (`design`, from 0.2)
+## 4b. Design choices (`design`, from 0.2; `controls` from 0.3)
 
 Besides CSS, from version 0.2 a skin can bring a set of **validated design choices** in the field `design`. Unlike CSS, these choices work on **all devices** through the host, without the device having to do anything (with the limits below). `design` sits at skin level (the default for all appearances) and can be overridden per appearance with `appearances[].design`.
 
@@ -134,7 +135,8 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
   "colors":  { "scheme": "workspace|custom",
                "custom": { "bg": "#rrggbb", "surface": "#rrggbb", "text": "#rrggbb", "muted": "#rrggbb", "accent": "#rrggbb", "line": "#rrggbb" } },
   "haptics": { "click": "off|light|medium|strong", "turn": "off|light|medium|strong", "slide": "off|light|medium|strong" },
-  "knobs":   { "style": "workspace|rotary|slider", "size": "s|m|l" }
+  "knobs":   { "style": "workspace|rotary|slider", "size": "s|m|l" },
+  "controls": [ { "match": "*|<id>|role:<role>|group:<group>", "face": "rotary|hslider|vslider|default", "size": "xs…xl|0.6..2", "length": "short|medium|long|40..400", "thickness": 2, "thumb": "round|square|bar|none", "color": "accent|#rrggbb", "showValue": "always|hover|never" } ]
 }
 ```
 
@@ -144,7 +146,7 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
 - **Merging:** the host takes the `design` of the skin and lays the `design` of the chosen appearance over it, **per key** (and per colour in `colors.custom`). An appearance only has to repeat what differs.
 - **Lenient in the host, strict in the validator:** the host ignores an invalid value or unknown key (that one key falls back to the default behaviour) and reports it; the validator gives an **error** for an invalid value and a warning for an unknown key. Unknown keys and sections belong to later versions (§13) and are ignored.
 - **Standard clears everything:** if the user picks Standard (no skin) on the card, the card, the device and the cables are exactly as without a skin.
-- `design` belongs to `skinsContract` `"0.2"`. In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there.
+- `design` belongs to `skinsContract` `"0.2"` (`controls` to `"0.3"`). In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there, and also for `controls` in a 0.2 file.
 
 ### Ports mode (`ports.mode`)
 
@@ -233,7 +235,42 @@ Values: `off` (none), `light` (8 ms), `medium` (15 ms), `strong` (30 ms); defaul
 | `style` | `workspace`: the global setting of the workspace; `rotary`: rotary knobs; `slider`: sliders | `workspace` |
 | `size` | `s`, `m`, `l`: the host knob at about 0.8, 1 and 1.3 times the normal size | `m` |
 
-This works **only on what is built through `host.ui.knob`**. A device's own `range` inputs and own drawings are left alone; that is layer 2 (§13). The Skins panel says so honestly: "works on devices that use the host knob", with the number of devices that do.
+This works **only on what is built through `host.ui.knob`**. Since 0.3 this is the short form of a `controls` rule (see below); for a device's own `range` inputs, `controls` are the tool, provided the device registers them. The Skins panel says so honestly: "works on devices that use the host knob", with the number of devices that do.
+
+### Controls (`controls`, from 0.3)
+
+With `design.controls` a skin chooses the **face, size and colour of controls**: rotary knobs instead of sliders (or the other way round), vertical or horizontal sliders, length, thickness, thumb, and whether the value is shown. It is an **ordered list of rules**; each rule has a `match` and one or more properties.
+
+```json
+"design": {
+  "controls": [
+    { "match": "*",            "face": "rotary", "size": "m" },
+    { "match": "role:fader",   "face": "vslider", "length": "long", "thumb": "bar" },
+    { "match": "group:filter", "color": "#ffb000" },
+    { "match": "cut",          "size": "xl", "showValue": "always" }
+  ]
+}
+```
+
+| Key | Values | Meaning |
+|---|---|---|
+| `match` (required) | `"*"`, an id (`"cut"`), `"role:<role>"` or `"group:<group>"` | Which controls the rule touches. Ids, roles and groups are published by the device (device contract §12d). An id is 1 to 60 characters from `[A-Za-z0-9._-]`; roles: `param`, `fader`, `toggle`, `button`, `pad`, `step`, `display`, `select`, `meter`, `jack`. |
+| `face` | `rotary`, `hslider`, `vslider`, `default` | The face: rotary knob, horizontal slider, vertical slider, or what the device itself asked for (`default`). A skin cannot touch the model (value, events), only how the control looks. |
+| `size` | `xs`, `s`, `m`, `l`, `xl`, or a number 0.6 to 2.0 | Scale relative to the normal size. |
+| `length` | `short`, `medium`, `long`, or a number 40 to 400 (px) | Length of a slider. |
+| `thickness` | number 2 to 24 (px) | Thickness of the track of a slider. |
+| `thumb` | `round`, `square`, `bar`, `none` | The thumb (the grip) of a slider. |
+| `color` | `"accent"` or `#rgb` / `#rrggbb` | Colour of the pointer, the filled part or the thumb. |
+| `showValue` | `always`, `hover`, `never` | Whether the number next to the control is visible. |
+
+- **Order:** rules are applied in order; per property the **last matching rule** wins. So put the general rules (`"*"`) first and the special ones (`"cut"`) last.
+- **Merging:** the rules of the `design` of the chosen appearance come **after** those of the skin, and so win. The maximum is **64 rules** per list; anything above is ignored (the validator gives an error).
+- **Short form:** `knobs.style` and `knobs.size` (0.2) keep working and equal a rule `{ "match": "role:param", "face": …, "size": … }` placed before all `controls` rules; a `controls` rule therefore always wins.
+- **A skin never hides a control.** There is no `face: "none"` and no key to leave something out. The validator gives an error for it, the host ignores it.
+- **Reach:** the rules only work on controls the device registers: what is built through `host.ui.knob` and elements the device registered with `host.ui.adopt` or `data-pk-*` (device contract §12d). Devices that register nothing are left alone; the Skins panel reports "n of m controls" so you see how many take part. `length`, `thickness` and `thumb` only touch sliders; with `face: "rotary"` they do nothing (the validator gives a warning).
+- **Unknown ids:** a `match` with an id, role or group the device does not have is silently ignored by the host. The validator cannot see that without the device (a warning for a role that is not in the list); with `--device` it can (see §12).
+- **Default:** without a skin, or without `controls`, the device is exactly as it was.
+- **Accessibility** stays: another face keeps keyboard, touch, double-click (default value) and typing working. A skin cannot turn that off.
 
 ### What "works on all devices" means
 
@@ -243,8 +280,9 @@ This works **only on what is built through `host.ui.knob`**. A device's own `ran
 | `colors` | all devices for the card (title bar, port bar) and for the host element; the UI inside a device only follows where it uses the variables |
 | `haptics` | all devices with an open shadow root or plain UI in the card; not visible inside a closed shadow root |
 | `knobs` | only what is built through `host.ui.knob` |
+| `controls` | only controls the device registers (`host.ui.knob`, `host.ui.adopt`, `data-pk-*`; device contract §12d); the rest is left alone |
 
-**Not yet available** (layers 2 and 3, §13): own building blocks and layout, sections, meters, pads, a small screen, and an editor. Layer 1 changes nothing about how a device is built.
+**Not yet available** (further steps of layer 2 and layer 3, §13): panels and layout, meters, pads, a small screen, and an editor. `design` changes nothing about how a device is built.
 
 ---
 
@@ -333,7 +371,7 @@ skins/
 
 ## 10. Versions
 
-This contract has a version `major.minor` (now **0.2**), recorded in the field `skinsContract` of every skin.
+This contract has a version `major.minor` (now **0.3**), recorded in the field `skinsContract` of every skin.
 
 | Difference with the version of the host | What the host does |
 |---|---|
@@ -345,7 +383,7 @@ This contract has a version `major.minor` (now **0.2**), recorded in the field `
 - Unknown fields, also inside an appearance or in `when`, **are ignored** and not rejected. The validator reports them with a warning to catch typos.
 - `formatVersion` (now `1`) is the version of the file layout itself; `skinsContract` is the version of this contract.
 - Keep `id` and `device` the same in a new version of a skin and raise `version`: the newer `version` wins.
-- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.2".
+- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.3".
 
 **Changes from 0.1 to 0.2:**
 
@@ -359,6 +397,17 @@ This contract has a version `major.minor` (now **0.2**), recorded in the field `
 | Host knob | none | `knobs`: `style` and `size` |
 | Validator | no check on `design` | checks `design` (stricter than the host) and has test cases |
 | Existing 0.1 skins | | keep working unchanged |
+
+**Changes from 0.2 to 0.3:**
+
+| Part | 0.2 | 0.3 |
+|---|---|---|
+| `skinsContract` | `"0.2"` | `"0.3"`; `"0.1"` and `"0.2"` stay valid |
+| `design.controls` | does not exist | new, optional: ordered list of rules `{ match, face, size, length, thickness, thumb, color, showValue }` (§4b) |
+| Pointing at controls | only by label (fragile) | by `id`, `role:<role>` and `group:<group>` that the device publishes (device contract v1.15, §12d) |
+| `knobs.style` / `knobs.size` | style and size of the host knob | keep working as the short form of a `controls` rule on `role:param` |
+| Validator | checks `design` | also checks `controls` (shape, ranges, `face: "none"` is an error, a warning for an unknown role or a property that does not fit) and knows `--device <device>` for ids, roles and groups |
+| Existing 0.1 and 0.2 skins | | keep working unchanged |
 
 ---
 
@@ -376,6 +425,7 @@ This contract has a version `major.minor` (now **0.2**), recorded in the field `
 ```
 node skins/contract/validate-skin.mjs [--lang nl|en] <file.patchkamer-skin.json>
 node skins/contract/validate-skin.mjs [--lang nl|en] --dir <library folder>
+node skins/contract/validate-skin.mjs [--lang nl|en] <file> --device <device.patchkamer-device.js>
 ```
 
 - Node only, no packages. `--lang` chooses the language of the messages (default `nl`).
@@ -415,6 +465,15 @@ What the validator checks:
 | `scheme: "custom"` with missing colours (after merging with the appearance); `colors.custom` while `scheme` is not `custom` | warning |
 | Contrast between `text` and `bg` or `surface` below 3:1 | warning |
 | `design` in a file with `skinsContract` `"0.1"` | warning |
+| `design.controls`: a rule with a wrong shape (not an object, `match` missing or of an invalid form), a value outside the range (`face`, `size`, `length`, `thickness`, `thumb`, `color`, `showValue`), `face: "none"`, the list is not a list or has more than 64 rules | error |
+| `design.controls`: a role in `match` that is not in the list; a rule with no property besides `match`; `length`, `thickness` or `thumb` with `face: "rotary"`; an unknown key in a rule; `controls` in a file with `skinsContract` `"0.2"` or `"0.1"` | warning |
+| With `--device <device>`: an id, group or role in `match` that the device does not publish; a device without ids while rules aim at an id or group; a device that does not load; a skin for another device | warning |
+
+**Checking against a device (`--device`).** With `--device <device.patchkamer-device.js>` the validator loads the device (through `contract/validate-instrument.mjs`, which knows the register of ids, roles and groups) and gives a warning for every `match` that touches nothing: an unknown id, an unknown group, a role the device does not have. It is always a warning and never an error, because a newer device version may add an id later. A table of what a device registers comes from `node contract/validate-instrument.mjs <device> --controls`.
+
+```
+node skins/contract/validate-skin.mjs skins/library/nl.patchkamer.filter/example-controls.patchkamer-skin.json --device devices/effects/Filter/filter.patchkamer-device.js
+```
 
 The validator checks `design` more strictly than the host: the host ignores what it does not understand, the validator rejects it. The test cases are in `skins/contract/test-validate-skin.mjs` (`node skins/contract/test-validate-skin.mjs`; limits, colours, contrast, unknown keys, both languages). Skins of 0.1 stay `OK`.
 
@@ -422,18 +481,19 @@ The validator cannot see whether the CSS looks right or whether a selector match
 
 ---
 
-## 13. What is not in version 0.2 yet
+## 13. What is not in version 0.3 yet
 
-Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b). Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version:
+Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b); version 0.3 (layer 2, release A "ids and roles") adds `design.controls`: face, size and colour of the controls that a device registers. Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version, in this order:
 
+- **meters** (release C): `host.ui.meter` and `design.meters` (bar, LED ladder, round VU panel, length, width, ballistics);
+- **pads and small screen** (release D): `host.ui.pad` and `host.ui.display`, with `design.pads` (shape, colour, feedback) and `design.display` (style, navigation, enlarging);
+- **panels and layout** (release B): `design.layout.panels` with `host.ui.group`: rearranging and grouping controls with a graphic separation. A skin can only **move** controls, never hide them;
 - artwork for front panels, with the positions of the controls on it;
-- a graphic for controls (knobs, sliders), possibly with sprites;
-- other layouts of a device (a different placement of parts);
 - a contract per device for style hooks: which classes, variables and `part` names a device fixes and keeps stable (for now that is to be established per device, §4).
 
 Freek still has to supply the requirements for these. Until then, invent nothing: build a skin with only what is in this contract.
 
-**Outlook (not yet available).** Layer 2 brings building blocks, layout, sections, meters, pads and a small screen: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now; `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics` and `knobs`), and the designer in the Skins panel is a first step. Do not write anything for them.
+**Outlook (not yet available).** Layer 2 further brings building blocks, layout, sections, meters, pads and a small screen: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now (except `design.controls`); `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics`, `knobs` and `controls`), and the designer in the Skins panel is a first step. Do not write anything for them.
 
 ---
 
@@ -482,9 +542,10 @@ This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`
 ## 15. Checklist for delivery
 
 - The file is named `<name>.patchkamer-skin.json` (without a version number) and is in `skins/library/<device-id>/`, with that folder equal to `device`.
-- `skinsContract` is `"0.2"` (or `"0.1"` if the skin has no `design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.3"` (or `"0.2"`/`"0.1"` if the skin has no `controls`/`design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` and the appearance names are English and brand-free; `license` is `CC0-1.0`.
 - Any `design` contains only keys from §4b with valid values; colours are `#rgb` or `#rrggbb`.
+- Any `design.controls` has at most 64 rules, aims only at ids, roles and groups the device publishes (`node skins/contract/validate-skin.mjs <skin> --device <device>` without a warning) and hides nothing.
 - The CSS has no `@import` and no external `url(`; images are in `assets` and used with `var(--skin-asset-<name>)`.
 - It contains only selectors, classes and variables you have seen in the device file.
 - `node skins/contract/validate-skin.mjs <file>` gives one `OK` line without a warning.
