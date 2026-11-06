@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <title data-i18n="ui.patchkamer" data-i18n="ui.patchkamer">Patchkamer</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Fira+Code:wght@400;500&family=Oswald:wght@300;500&family=IBM+Plex+Mono:wght@400;500&family=Chakra+Petch:wght@400;600&family=JetBrains+Mono:wght@400;600&family=Syne:wght@500;700&family=DM+Mono:wght@400;500&family=VT323&display=swap">
@@ -400,6 +400,123 @@ body.nopbar .pbar{display:none}
 :root{--pkfs:1}
 .wspanel{top:calc(60px/var(--pkfs));right:calc(16px/var(--pkfs));max-height:calc((100vh - 80px)/var(--pkfs));width:min(460px,calc((100vw - 32px)/var(--pkfs)))}
 .pkmodal .box,.focusview .fvbar,.floorempty .box,.toast{zoom:var(--pkfs)}
+
+/* =====================================================================
+   TOUCH, KLEIN SCHERM, BIBLIOTHEEK COMPACT/ONDERLADE, CAMERASTANDEN, SCHERMINDELING
+   Muis en breed scherm blijven zoals ze waren: alles hieronder is nieuw, of staat in een media query voor aanraking / smal scherm.
+   ===================================================================== */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+html,body{overscroll-behavior:none}
+@supports (height:100dvh){html,body{height:100dvh}}
+body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px))}
+.floorwrap{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+.floorwrap.pinching{cursor:move}
+.narrowonly{display:none}
+@media (max-width:820px) and (min-height:700px){.room{min-height:560px}}
+/* compacte kaarten bij uitzoomen (semantisch zoomen): binnenkant overgeslagen, state en geluid blijven */
+.floor.lite .card:not(.mini):not(.keepui) .ui,.floor.lite .card:not(.mini) .pbar{content-visibility:hidden}
+.floor.lite .card:not(.mini) .pbar{display:none}
+.floor.lite .card:not(.mini):not(.keepui) .modbar{display:none!important}
+.floor.lite .card:not(.mini):not(.keepui){height:auto!important}
+/* bibliotheek: weergaveschakelaar, compacte regels */
+.libbar .seg{display:inline-flex}
+.libbar .seg button{border-radius:0;padding:3px 8px;font-size:12px;min-width:0}
+.libbar .seg button:first-child{border-radius:3px 0 0 3px}
+.libbar .seg button:last-child{border-radius:0 3px 3px 0;border-left:0}
+.libbar .seg button.on{background:var(--sel);color:#fff;border-color:var(--sel)}
+.libdev>.kd,.libdev>.vr,.libdev>.xp{display:none}
+#lib.cmp .devs{grid-template-columns:minmax(0,1fr);gap:3px}
+#lib.cmp .libdev{grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;gap:2px 10px;padding:6px 6px 6px 10px;min-height:36px}
+#lib.cmp .libdev>.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:1em}
+#lib.cmp .libdev>.kd,#lib.cmp .libdev>.vr{display:block;font-size:.8em;color:var(--muted);white-space:nowrap}
+#lib.cmp .libdev>.vr{font-variant-numeric:tabular-nums}
+#lib.cmp .libdev>.xp{display:block;padding:2px 8px;font-size:.9em;min-width:30px;line-height:1.2}
+#lib.cmp .libdev>.id,#lib.cmp .libdev>.pt,#lib.cmp .libdev>.src,#lib.cmp .libdev>.act{display:none}
+#lib.cmp .libdev.open>.id,#lib.cmp .libdev.open>.pt,#lib.cmp .libdev.open>.src{display:block;grid-column:1/-1}
+#lib.cmp .libdev.open>.act{display:flex;grid-column:1/-1}
+#lib.cmp .libdev.open>.xp{transform:rotate(90deg)}
+#lib.cmp .libdev{cursor:pointer}
+#libClose{display:none}
+/* camerastanden */
+.standpop{position:absolute;right:10px;bottom:52px;z-index:7;width:min(300px,calc(100% - 20px));max-height:min(60%,380px);overflow:auto;background:var(--overlay);border:1px solid var(--line);border-radius:6px;padding:8px;display:grid;gap:6px;box-shadow:0 10px 30px var(--shadow);font-size:12px}
+.standpop h4{margin:0;font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.standpop .strow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:4px;align-items:center}
+.standpop .strow kbd{min-width:1.6ch;text-align:center}
+.standpop .strow .go2{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:none;letter-spacing:0;font-family:var(--mono);font-size:12px}
+.standpop .strow input{min-width:0;width:100%}
+.standpop .strow button{padding:3px 8px;min-width:28px}
+.standpop .note{font-size:10px}
+.viewctl #standBtn{font-size:11px}
+.viewctl #standBtn.on{border-color:var(--audio);color:var(--audio)}
+/* focus: een tegelijk */
+.focusview{grid-template-columns:minmax(0,1fr)}
+.focusview .fvtabs{display:none;flex:1 1 100%;order:10;align-items:center;gap:6px;min-width:0}
+.focusview .fvtabs.show{display:flex}
+.focusview .fvtabs .fvstrip{flex:1 1 auto;min-width:0;overflow:hidden;white-space:nowrap;touch-action:none;display:flex;gap:4px;user-select:none;-webkit-user-select:none;cursor:grab}
+.focusview .fvtabs .fvstrip button{flex:none;max-width:40ch;overflow:hidden;text-overflow:ellipsis}
+.focusview .fvtabs .fvstrip button.on{background:var(--sel);color:#fff;border-color:var(--sel)}
+.focusview .fvtabs .fvcnt{font-size:11px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.focusview .fvbody.one{display:block;position:relative;padding:8px}
+.focusview .fvbody.one .card.infocus{width:min(100%,900px)!important;height:auto!important;margin:0 auto;display:grid}
+.focusview .fvbody.one .card.infocus.fvoff{position:absolute!important;left:0!important;top:0!important;max-height:0;overflow:hidden;visibility:hidden;pointer-events:none}
+/* aanraking: groter doelvlak, geen tekstselectie op de bediening, lang indrukken */
+@media (pointer:coarse){
+  header,header *,.viewctl,.libbar,.cathead,.libdev,.port,.card .bar,.pkicon,.wstab,.wstabs,.focusview .fvbar,.standpop,svg.cables{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  header button,header select,header input[type=number],header .wsname,.viewctl button,.libbar button,.libwin button,.libwin select,.libsearch,.cathead,.wspanel button,.wspanel select,.wspanel input[type=text],.pkmodal button,.pkmodal select,.focusview button,.standpop button,.wstab button,.wstabs .add{min-height:40px}
+  header input[type=range]{height:40px}
+  header input[type=range]::-webkit-slider-thumb{width:20px;height:28px;margin-top:-12.5px}
+  header input[type=range]::-moz-range-thumb{width:20px;height:28px}
+  .viewctl{gap:6px;padding:6px} .viewctl button{min-width:44px}
+  .libdev{touch-action:pan-y}
+  .libbar button{min-width:40px}
+  .card .bar{padding-block:7px;gap:6px}
+  .card .bar button{min-width:34px;min-height:30px;padding:2px 8px}
+  .card .bar select.ver{min-height:30px;font-size:11px}
+  .port{position:relative}
+  .port::before{content:'';position:absolute;left:-12px;right:-12px;top:-7px;bottom:-7px}
+  .ports .col{gap:9px}
+  .card .rz.e::before{content:'';position:absolute;top:0;bottom:0;left:-8px;right:-8px}
+  .card .rz.s::before{content:'';position:absolute;left:0;right:0;top:-8px;bottom:-8px}
+  .card .rz.se{opacity:1}
+  .card .rz.se::before{content:'';position:absolute;inset:-14px}
+  .pkicon .restore{width:34px;height:34px;top:-14px;right:-14px}
+  .wstab button{padding:6px 12px}
+  .toast{max-width:calc(100% - 24px);bottom:62px}
+}
+/* smal scherm: bibliotheek als onderlade, hoofdbalk scrolt horizontaal, panelen passen */
+@media (max-width:699px){
+  body{padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));gap:6px}
+  header{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:8px;scrollbar-width:none;padding-bottom:6px;overscroll-behavior-x:contain;zoom:var(--pkfs,1)!important}
+  header::-webkit-scrollbar{display:none}
+  header>*,.transport>*{flex:none}
+  header>.note{display:none}
+  header h1{font-size:20px}
+  header .wsname{max-width:28vw;font-size:16px;width:12ch}
+  .transport{display:contents}
+  header .go{order:-3;position:sticky;left:0;z-index:3;box-shadow:6px 0 8px var(--bg)}
+  header .tpbpm{order:-2}
+  header h1{order:-1}
+  .narrowonly{display:inline-block}
+  .wstabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .wstab{flex:none}
+  .wspanel{zoom:var(--pkfs,1)!important;left:8px;right:8px;top:calc(56px + env(safe-area-inset-top,0px));width:auto;max-width:none;max-height:calc((100dvh - 72px)/var(--pkfs,1));overflow:auto}
+  .pkmodal .box{max-width:100%;max-height:92dvh;overflow:auto}
+  .focusview{zoom:1!important}
+  .focusview .fvbar .note{display:none}
+  .libwin{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:60dvh!important;min-width:0;z-index:40;zoom:1!important;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px);transition:none}
+  .libwin.min{height:60dvh!important}
+  .libwin.min .libbody{display:grid}
+  .libwin .rz{display:none!important}
+  .libwin .libbar{position:relative;padding-top:20px;border-radius:14px 14px 0 0;cursor:default}
+  .libwin .libbar::before{content:'';position:absolute;top:7px;left:50%;width:48px;height:5px;margin-left:-24px;border-radius:3px;background:var(--muted);opacity:.6}
+  #libMin{display:none}
+  #libClose{display:inline-block}
+  .libwin .libbody{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  body.libsheet .toast{bottom:calc(60dvh + 74px)}
+  body.libsheet .viewctl{bottom:calc(60dvh + 10px)}
+  body.libsheet .standpop{bottom:calc(60dvh + 52px)}
+  .floorempty .box{padding:14px 14px}
+}
 </style>
 
 <header>
@@ -408,12 +525,15 @@ body.nopbar .pbar{display:none}
   <span class="note" style="max-width:40ch" data-i18n="ui.modulaire_browserstudio_laad_instrumenten_trek">Modulaire browserstudio. Laad instrumenten, trek kabels, sla de opstelling op. Kabels: audio, gebeurtenissen, sturing (paars), mastering (geel, gestippeld), multi-MIDI (dubbel, oranje gestreept) en bundels (dik, groen): veel kanalen in één kabel.</span>
   <div class="transport">
     <button class="go" id="play" data-i18n="ui.start">Start</button>
-    <span class="tp"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
+    <span class="tp tpbpm"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
     <span class="tp"><span data-i18n="ui.swing">Swing</span> <input type="range" id="swing" min="0" max="0.5" step="0.01" value="0.08" style="width:80px"></span>
     <button class="small" id="wsBtn" aria-expanded="false" aria-controls="wsPanel" data-i18n="ui.werkruimte">Werkruimte ▾</button>
     <button class="small" id="prBtn" aria-expanded="false" aria-controls="prPanel" title="klanken van apparaten die geluid maken" data-i18n-title="attr.klanken_van_apparaten_die_geluid" data-i18n="ui.tunes">Tunes ▾</button><button class="small" id="psBtn" aria-expanded="false" aria-controls="prPanel" title="instellingen van effecten, mixers, mastering, sequencers en andere apparaten zonder eigen geluid" data-i18n-title="attr.instellingen_van_effecten_mixers_mastering" data-i18n="ui.presets">Presets ▾</button><button class="small" id="songBtn" aria-expanded="false" aria-controls="songPanel" title="songs openen: demo's van GitHub en recente songs" data-i18n-title="attr.songs_open_titel" data-i18n="ui.songs_knop">Songs ▾</button><button class="small" id="setBtn" aria-expanded="false" aria-controls="setPanel" title="instellingen van Patchkamer zelf" data-i18n-title="attr.instellingen_van_patchkamer_zelf" data-i18n="ui.instellingen">Instellingen ▾</button>
     <button class="small" id="arrange" title="apparaten netjes van links naar rechts zetten: bronnen → instrumenten → effecten → mengpaneel → uitgang (Ctrl+Z zet terug)" data-i18n-title="attr.apparaten_netjes_van_links_naar" data-i18n="ui.herschik">Herschik</button>
+    <span class="tp"><span data-i18n="ui.t_scherm">Scherm</span> <select id="layoutSel" title="schermindeling: automatisch, breed of compact" aria-label="schermindeling" data-i18n-title="attr.t_scherm" data-i18n-aria="attr.t_scherm"><option value="auto" data-i18n="ui.t_auto">Auto</option><option value="wide" data-i18n="ui.t_breed">Breed</option><option value="compact" data-i18n="ui.t_compact">Compact</option></select></span>
+    <button class="small" id="fitScreen" title="maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)" data-i18n-title="attr.t_pas_aan" data-i18n="ui.t_pas_aan">Pas aan op dit scherm</button>
     <button class="small" id="focusBtn" title="focusweergave: de apparaten met [f] naast of onder elkaar, zonder ze op het canvas te verplaatsen (Alt+F)" data-i18n-title="attr.focusweergave_de_apparaten_met_f" data-i18n="ui.focus">Focus</button>
+    <button class="small narrowonly" id="browseBtn" title="open Focus met alle apparaten, een tegelijk" data-i18n-title="attr.t_bladeren" data-i18n="ui.t_bladeren">Bladeren</button>
     <button class="small danger" id="clear" data-i18n="ui.leeg">Leeg</button>
     <button class="small on" id="libToggle" title="bibliotheek tonen of verbergen (Alt+B)" data-i18n-title="attr.bibliotheek_tonen_of_verbergen_b" data-i18n="ui.bibliotheek">Bibliotheek</button>
     <span class="tp" id="latBox" title="vertraging tussen een geluid berekenen en het horen (browser + besturingssysteem + geluidskaart), zoals de browser die opgeeft" data-i18n-title="attr.vertraging_tussen_een_geluid_berekenen"><span data-i18n="ui.latency">Latency</span> <output id="latVal">–</output></span>
@@ -490,6 +610,7 @@ body.nopbar .pbar{display:none}
   <h3 style="margin-top:12px" data-i18n="ui.instellingen_2">Instellingen</h3>
   <div class="wsrow"><label><input type="checkbox" id="prShowBar" checked> <span data-i18n="ui.tune_en_presetbalk_op_de">Tune- en presetbalk op de kaarten tonen</span></label></div>
   <div class="wsrow"><label><input type="checkbox" id="modViewCb" checked> <span data-i18n="ui.modulatie_op_de_apparaten_tonen">Modulatie op de apparaten tonen (strook ∿ mod en paarse stip op de regelaar)</span></label></div>
+  <div class="wsrow"><label><input type="checkbox" id="liteCb" checked> <span data-i18n="ui.t_lite">Kaarten vereenvoudigen bij uitzoomen</span></label></div>
   <h3 style="margin-top:12px" data-i18n="ui.nieuwe_werkruimte">Nieuwe werkruimte</h3>
   <div class="note" style="margin-bottom:6px" data-i18n="ui.nieuwe_werkruimte_uitleg">Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden in het Tunes- en Presets-paneel gebruikt hetzelfde adres.</div>
   <div class="wsrow"><label><input type="checkbox" id="wsaDev"> <span data-i18n="ui.apparatenbibliotheek_laden">Apparatenbibliotheek laden</span></label></div>
@@ -525,14 +646,14 @@ body.nopbar .pbar{display:none}
   <div class="note" id="contractLinks"><b data-i18n="ui.contract">Contract</b>: <a id="ctrA" href="https://github.com/unboxednl/patchkamer/blob/main/contract/PATCHKAMER-CONTRACT_NL.md" target="_blank" rel="noopener" data-i18n="ui.nederlands">Nederlands</a> · <a id="ctrB" href="https://github.com/unboxednl/patchkamer/blob/main/contract/PATCHKAMER-CONTRACT_EN.md" target="_blank" rel="noopener" data-i18n="ui.english">English</a> · <a id="valA" href="https://github.com/unboxednl/patchkamer/blob/main/contract/validate-instrument.mjs" target="_blank" rel="noopener" data-i18n="ui.validator">validator</a> <span data-i18n="ui.op_github">(op GitHub)</span></div>
   <details><summary data-i18n="ui.sjabloon_kopieer_bewaar_als_patchkamer">Sjabloon (kopieer, bewaar als .patchkamer-device.js)</summary><pre id="tmpl"></pre><button class="small" id="copyTmpl" data-i18n="ui.kopieer_sjabloon">Kopieer sjabloon</button></details>
   <details><summary data-i18n="ui.werkruimte_als_tekst">Werkruimte als tekst</summary><textarea id="patchText" rows="4" spellcheck="false"></textarea><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="small" id="exportPatch" data-i18n="ui.exporteer">Exporteer</button><button class="small" id="importPatch" data-i18n="ui.importeer">Importeer</button></div></details>
-  <div class="note" data-i18n-html="ui.op_elke_schuif_dubbelklik_terug">Op elke schuif: <b data-i18n="ui.dubbelklik">dubbelklik</b> = terug naar de beginwaarde · <b data-i18n="ui.klik_op_het_getal">klik op het getal</b> = waarde typen en Enter. Draaiknop: slepen omhoog/omlaag, Shift = fijn.</div>
+  <div class="note" data-i18n-html="ui.op_elke_schuif_dubbelklik_terug">Op elke schuif: <b data-i18n="ui.dubbelklik">dubbelklik</b> = terug naar de beginwaarde · <b data-i18n="ui.klik_op_het_getal">klik op het getal</b> = waarde typen en Enter. Draaiknop: slepen omhoog/omlaag, Shift = fijn. Op aanraking: dubbeltik in plaats van dubbelklik.</div>
   </div>
 </section>
 
 <nav class="wstabs" id="wsTabs" aria-label="Werkruimtes" data-i18n-aria="attr.werkruimtes_tabs"></nav>
 <div class="room" id="room">
   <div class="floorwrap" id="floorwrap"><div class="floor" id="floor"><svg class="cables" id="cables"></svg><svg class="cables wire" id="wire"></svg></div>
-    <div class="viewctl"><button id="zoomOut" title="uitzoomen" data-i18n-title="attr.uitzoomen">−</button><output id="zoomOut_v">100%</output><button id="zoomIn" title="inzoomen" data-i18n-title="attr.inzoomen">+</button><button id="zoomFit" title="alles in beeld" data-i18n-title="attr.alles_in_beeld" data-i18n="ui.alles">Alles</button><button id="zoomHome" title="terug naar begin" data-i18n-title="attr.terug_naar_begin">⌂</button></div>
+    <div class="viewctl"><button id="zoomOut" title="uitzoomen" data-i18n-title="attr.uitzoomen">−</button><output id="zoomOut_v">100%</output><button id="zoomIn" title="inzoomen" data-i18n-title="attr.inzoomen">+</button><button id="zoomFit" title="alles in beeld" data-i18n-title="attr.alles_in_beeld" data-i18n="ui.alles">Alles</button><button id="zoomHome" title="terug naar begin" data-i18n-title="attr.terug_naar_begin">⌂</button><button id="standBtn" aria-expanded="false" title="camerastanden: bewaar en spring naar een uitsnede (Shift+1…9 bewaart, 1…9 springt)" data-i18n-title="attr.t_standen" data-i18n="ui.t_standen">Standen ▾</button></div>
     <div class="toast" id="devStatus" role="status" aria-live="polite"></div>
     <div class="floorempty" id="floorEmpty" hidden><div class="box">
       <h2 data-i18n="ui.lege_werkruimte">Lege werkruimte</h2>
@@ -542,12 +663,12 @@ body.nopbar .pbar{display:none}
     </div></div>
   </div>
   <section class="libwin" id="libwin" aria-label="Bibliotheek" data-i18n-aria="attr.bibliotheek">
-    <div class="libbar" id="libbar"><span class="t" data-i18n="ui.bibliotheek">Bibliotheek</span><span class="cnt" id="libCount"></span><button id="libCfgBtn" title="categorieën toevoegen, hernoemen, verwijderen en de indeling bewaren of laden" aria-expanded="false" aria-controls="libCfg" data-i18n-title="attr.categorie_n_toevoegen_hernoemen_verwijderen" data-i18n="ui.indeling">Indeling</button><button id="libMin" title="inklappen" data-i18n-title="attr.inklappen">—</button></div>
+    <div class="libbar" id="libbar"><span class="t" data-i18n="ui.bibliotheek">Bibliotheek</span><span class="cnt" id="libCount"></span><button id="libCfgBtn" title="categorieën toevoegen, hernoemen, verwijderen en de indeling bewaren of laden" aria-expanded="false" aria-controls="libCfg" data-i18n-title="attr.categorie_n_toevoegen_hernoemen_verwijderen" data-i18n="ui.indeling">Indeling</button><span class="seg" id="libView" role="group" aria-label="weergave van de bibliotheek" title="weergave van de bibliotheek: kaartjes of compact" data-i18n-aria="attr.t_libview" data-i18n-title="attr.t_libview"><button data-v="cards" data-i18n="ui.t_kaartjes">Kaartjes</button><button data-v="compact" data-i18n="ui.t_compact">Compact</button></span><button id="libMin" title="inklappen" data-i18n-title="attr.inklappen">—</button><button id="libClose" title="bibliotheek sluiten" aria-label="bibliotheek sluiten" data-i18n-title="attr.t_libclose" data-i18n-aria="attr.t_libclose">×</button></div>
     <div class="libbody">
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
       <div class="libcfg" id="libCfg" hidden></div>
       <div class="libcats" id="lib"></div>
-      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.</div>
+      <div class="note" data-i18n-html="ui.sleep_een_apparaat_naar_de">Sleep een apparaat naar de vloer of gebruik <b data-i18n="ui.plaatsen">Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd data-i18n="ui.ctrl">Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster. Aanraking: knijp met twee vingers om te zoomen en schuif met twee vingers; één vinger op de lege vloer schuift. Lang indrukken toont uitleg of het kabelmenu, dubbeltik werkt als dubbelklik, en een apparaat sleep je na lang indrukken. Op een smal scherm is dit venster een lade onderaan.</div>
       <details class="libsec" id="srcSec" open><summary data-i18n="ui.bronnen">Bronnen</summary>
         <div class="srclist" id="srcList"></div>
         <div class="srcadd"><input type="url" id="srcUrl" placeholder="github.com/naam/repo, een map daarin, of URL van een .patchkamer-device.js / patchkamer.json" aria-label="adres van een bron" data-i18n-ph="attr.github_com_naam_repo_een" data-i18n-aria="attr.adres_van_een_bron"><button class="small" id="srcAddUrl" data-i18n="ui.toevoegen">Toevoegen</button></div>
@@ -658,7 +779,7 @@ const I18N={
    "ui.importeer":"Importeer",
    "ui.dubbelklik":"dubbelklik",
    "ui.klik_op_het_getal":"klik op het getal",
-   "ui.op_elke_schuif_dubbelklik_terug":"Op elke schuif: <b>dubbelklik</b> = terug naar de beginwaarde · <b>klik op het getal</b> = waarde typen en Enter. Draaiknop: slepen omhoog/omlaag, Shift = fijn.",
+   "ui.op_elke_schuif_dubbelklik_terug":"Op elke schuif: <b>dubbelklik</b> = terug naar de beginwaarde · <b>klik op het getal</b> = waarde typen en Enter. Draaiknop: slepen omhoog/omlaag, Shift = fijn. Op aanraking: dubbeltik in plaats van dubbelklik.",
    "ui.alles":"Alles",
    "ui.lege_werkruimte":"Lege werkruimte",
    "ui.patchkamer_bibliotheek":"patchkamer-bibliotheek",
@@ -669,7 +790,7 @@ const I18N={
    "ui.indeling":"Indeling",
    "ui.plaatsen":"Plaatsen",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster.",
+   "ui.sleep_een_apparaat_naar_de":"Sleep een apparaat naar de vloer of gebruik <b>Plaatsen</b> (midden in je beeld; wat in de weg staat schuift opzij). Andere categorie: kies hem in het menu of sleep het apparaat op een categorie. <b>–</b> maakt van een apparaat een icoon, <b>⤢</b> zet het terug op de vorige grootte. Kabels: druk op een poort, sleep naar een passende poort, laat los (Esc annuleert); klik een kabel om hem los te halen of sleep een kant naar een andere poort om hem om te hangen. Leg een nieuw apparaat op een kabel om het erin te zetten. Vloer: slepen verschuift, <kbd>Ctrl</kbd>+scroll zoomt (10–250%). Kaarten en dit venster: sleep aan de titelbalk, rand of hoek; dubbelklik op een kaartrand voor de standaardmaat. <kbd>Alt</kbd>+<kbd>B</kbd> toont of verbergt dit venster. Aanraking: knijp met twee vingers om te zoomen en schuif met twee vingers; één vinger op de lege vloer schuift. Lang indrukken toont uitleg of het kabelmenu, dubbeltik werkt als dubbelklik, en een apparaat sleep je na lang indrukken. Op een smal scherm is dit venster een lade onderaan.",
    "ui.bronnen":"Bronnen",
    "ui.toevoegen":"Toevoegen",
    "ui.lokale_map_kiezen":"Lokale map kiezen…",
@@ -1142,7 +1263,7 @@ const I18N={
    "m.kabels_losgehaald_poort_bestaat_niet":"; kabels losgehaald (poort bestaat niet meer): {0}",
    "m.geen_beginwaarde_bekend_voor_deze":"Geen beginwaarde bekend voor deze schuif",
    "m.github_limiet_bereikt_of_geen":"GitHub-limiet bereikt of geen toegang",
-   "m.focus_naast_elkaar_onder_elkaar":"<div class=\"fvbar\"><h2>Focus</h2><span class=\"seg\"><button class=\"small\" data-l=\"row\" title=\"naast elkaar\">Naast elkaar</button> <button class=\"small\" data-l=\"col\" title=\"onder elkaar\">Onder elkaar</button> <button class=\"small\" data-l=\"grid\" title=\"raster: zoveel als past per rij\">Raster</button></span>\n    <span class=\"note\">Apparaten met <b>[f]</b> op de titelbalk. Op het canvas blijven ze op hun plek; klik [f] om er een uit de focus te halen.</span><button class=\"small\" data-a=\"all\" title=\"haal alle apparaten uit de focus\">Focus wissen</button><button class=\"small go\" data-a=\"close\" title=\"terug naar het canvas (Esc)\">Terug naar canvas</button></div><div class=\"fvbody\"></div>",
+   "m.focus_naast_elkaar_onder_elkaar":"<div class=\"fvbar\"><h2>Focus</h2><span class=\"seg\"><button class=\"small\" data-l=\"row\" title=\"naast elkaar\">Naast elkaar</button> <button class=\"small\" data-l=\"col\" title=\"onder elkaar\">Onder elkaar</button> <button class=\"small\" data-l=\"grid\" title=\"raster: zoveel als past per rij\">Raster</button> <button class=\"small\" data-l=\"one\" title=\"één apparaat tegelijk; wissel met ◀ ▶, de tabbalk of veeg over de tabbalk\">Eén tegelijk</button></span>\n    <span class=\"note\">Apparaten met <b>[f]</b> op de titelbalk. Op het canvas blijven ze op hun plek; klik [f] om er een uit de focus te halen.</span><button class=\"small\" data-a=\"all\" title=\"haal alle apparaten uit de focus\">Focus wissen</button><button class=\"small go\" data-a=\"close\" title=\"terug naar het canvas (Esc)\">Terug naar canvas</button></div><div class=\"fvbody\"></div>",
    "m.opslaan_geannuleerd":"Opslaan geannuleerd.",
    "m.nog_geen_bronnen_de_ingebouwde":"Nog geen bronnen. De ingebouwde apparaten staan altijd in de bibliotheek.",
    "m.create_faalde_voor":"create() faalde voor ",
@@ -1203,7 +1324,45 @@ const I18N={
    "m.apparaten_opgeschoven_apparaat_opgeschoven.t":" · {0} apparaten opgeschoven",
    "m.apparaten_opgeschoven_apparaat_opgeschoven.f":" · {0} apparaat opgeschoven",
    "m.presets_omgezet_naar_tunebibliotheken_n.t":"Presets omgezet naar {0} tunebibliotheken (één per apparaat)",
-   "m.presets_omgezet_naar_tunebibliotheken_n.f":"Presets omgezet naar {0} tunebibliotheek (één per apparaat)"
+   "m.presets_omgezet_naar_tunebibliotheken_n.f":"Presets omgezet naar {0} tunebibliotheek (één per apparaat)",
+   "ui.t_scherm":"Scherm",
+   "ui.t_auto":"Auto",
+   "ui.t_breed":"Breed",
+   "ui.t_compact":"Compact",
+   "ui.t_pas_aan":"Pas aan op dit scherm",
+   "ui.t_bladeren":"Bladeren",
+   "ui.t_kaartjes":"Kaartjes",
+   "ui.t_standen":"Standen ▾",
+   "ui.t_lite":"Kaarten vereenvoudigen bij uitzoomen",
+   "attr.t_scherm":"schermindeling: automatisch, breed of compact",
+   "attr.t_pas_aan":"maak een compacte indeling die op dit scherm past (de brede indeling blijft bewaard)",
+   "attr.t_bladeren":"open Focus met alle apparaten, een tegelijk",
+   "attr.t_libview":"weergave van de bibliotheek: kaartjes of compact",
+   "attr.t_libclose":"bibliotheek sluiten",
+   "attr.t_standen":"camerastanden: bewaar en spring naar een uitsnede (Shift+1…9 bewaart, 1…9 springt)",
+   "m.t_stand_n":"Stand {0}",
+   "m.t_stand_spring":"Stand: {0}",
+   "m.t_stand_bewaard":"Stand bewaard: {0}",
+   "m.t_stand_vol":"Maximaal 30 standen",
+   "m.t_stand_geen":"Geen stand {0}",
+   "m.t_standen_kop":"Camerastanden",
+   "m.t_standen_leeg":"Nog geen standen. Bewaar de huidige uitsnede.",
+   "m.t_stand_spring_titel":"spring naar deze stand",
+   "m.t_stand_hernoem":"Hernoemen",
+   "m.t_stand_verwijder":"Verwijderen",
+   "m.t_stand_overschrijf":"Overschrijf met de huidige uitsnede",
+   "m.t_stand_bewaar_nu":"Huidige uitsnede bewaren",
+   "m.t_standen_toets":"Toetsen: Shift+1…9 bewaart een stand, 1…9 springt ernaartoe.",
+   "m.t_klasse_gewisseld":"Schermindeling: {0}",
+   "m.t_klasse_wide":"breed",
+   "m.t_klasse_compact":"compact",
+   "m.t_tip_pas_aan":"Tip: kies Pas aan op dit scherm voor een indeling die hier past",
+   "m.t_pas_aan_klaar":"Aangepast aan dit scherm · kolommen: {0} · iconen: {1} · kies Breed voor je oorspronkelijke indeling",
+   "m.t_meer_minder":"Meer of minder tonen",
+   "m.t_vorig":"Vorig apparaat",
+   "m.t_volgend":"Volgend apparaat",
+   "m.t_n_van_m":"{0} van {1}",
+   "m.t_bladeren_leeg":"Er zijn geen apparaten om te bladeren"
  },
  en:{
    "ui.patchkamer":"Patchkamer",
@@ -1295,7 +1454,7 @@ const I18N={
    "ui.importeer":"Import",
    "ui.dubbelklik":"double-click",
    "ui.klik_op_het_getal":"click the number",
-   "ui.op_elke_schuif_dubbelklik_terug":"On every slider: <b>double-click</b> = back to the default value · <b>click the number</b> = type a value and press Enter. Rotary knob: drag up/down, Shift = fine.",
+   "ui.op_elke_schuif_dubbelklik_terug":"On every slider: <b>double-click</b> = back to the default value · <b>click the number</b> = type a value and press Enter. Rotary knob: drag up/down, Shift = fine. On touch: double-tap instead of double-click.",
    "ui.alles":"All",
    "ui.lege_werkruimte":"Empty workspace",
    "ui.patchkamer_bibliotheek":"patchkamer-bibliotheek",
@@ -1306,7 +1465,7 @@ const I18N={
    "ui.indeling":"Layout",
    "ui.plaatsen":"Place",
    "ui.ctrl":"Ctrl",
-   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it or drag one end to another port to move it. Drop a new device on a cable to put it in. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window.",
+   "ui.sleep_een_apparaat_naar_de":"Drag a device to the floor or use <b>Place</b> (in the middle of your view; anything in the way moves aside). Another category: choose it in the menu or drag the device onto a category. <b>–</b> turns a device into an icon, <b>⤢</b> restores the previous size. Cables: press a port, drag to a matching port, release (Esc cancels); click a cable to remove it or drag one end to another port to move it. Drop a new device on a cable to put it in. Floor: dragging pans, <kbd>Ctrl</kbd>+scroll zooms (10–250%). Cards and this window: drag the title bar, edge or corner; double-click a card edge for the default size. <kbd>Alt</kbd>+<kbd>B</kbd> shows or hides this window. Touch: pinch with two fingers to zoom and drag with two fingers to pan; one finger on empty floor pans. A long press shows the explanation or the cable menu, a double-tap works as a double-click, and you drag a device after a long press. On a narrow screen this window is a sheet at the bottom.",
    "ui.bronnen":"Sources",
    "ui.toevoegen":"Add",
    "ui.lokale_map_kiezen":"Choose local folder…",
@@ -1805,7 +1964,7 @@ const I18N={
    "m.focus":"Focus",
    "m.in_focus_gezet_open_de":"Put in focus · open the focus view with the Focus button at the top (or F)",
    "m.focusweergave":"focus view",
-   "m.focus_naast_elkaar_onder_elkaar":"<div class=\"fvbar\"><h2>Focus</h2><span class=\"seg\"><button class=\"small\" data-l=\"row\" title=\"side by side\">Side by side</button> <button class=\"small\" data-l=\"col\" title=\"stacked\">Stacked</button> <button class=\"small\" data-l=\"grid\" title=\"grid: as many as fit per row\">Grid</button></span>\n    <span class=\"note\">Devices with <b>[f]</b> on the title bar. On the canvas they stay in place; click [f] to take one out of focus.</span><button class=\"small\" data-a=\"all\" title=\"take all devices out of focus\">Clear focus</button><button class=\"small go\" data-a=\"close\" title=\"back to the canvas (Esc)\">Back to canvas</button></div><div class=\"fvbody\"></div>",
+   "m.focus_naast_elkaar_onder_elkaar":"<div class=\"fvbar\"><h2>Focus</h2><span class=\"seg\"><button class=\"small\" data-l=\"row\" title=\"side by side\">Side by side</button> <button class=\"small\" data-l=\"col\" title=\"stacked\">Stacked</button> <button class=\"small\" data-l=\"grid\" title=\"grid: as many as fit per row\">Grid</button> <button class=\"small\" data-l=\"one\" title=\"one device at a time; switch with ◀ ▶, the tab bar, or swipe the tab bar\">One at a time</button></span>\n    <span class=\"note\">Devices with <b>[f]</b> on the title bar. On the canvas they stay in place; click [f] to take one out of focus.</span><button class=\"small\" data-a=\"all\" title=\"take all devices out of focus\">Clear focus</button><button class=\"small go\" data-a=\"close\" title=\"back to the canvas (Esc)\">Back to canvas</button></div><div class=\"fvbody\"></div>",
    "m.nog_niets_in_focus_klik":"Nothing in focus yet. Click [f] on a device's title bar to show it here.",
    "m.tw_tune_one":"tune",
    "m.tw_tune_many":"tunes",
@@ -1840,7 +1999,45 @@ const I18N={
    "m.apparaten_opgeschoven_apparaat_opgeschoven.t":" · {0} devices moved aside",
    "m.apparaten_opgeschoven_apparaat_opgeschoven.f":" · {0} device moved aside",
    "m.presets_omgezet_naar_tunebibliotheken_n.t":"Presets converted to {0} tune libraries (one per device)",
-   "m.presets_omgezet_naar_tunebibliotheken_n.f":"Presets converted to {0} tune library (one per device)"
+   "m.presets_omgezet_naar_tunebibliotheken_n.f":"Presets converted to {0} tune library (one per device)",
+   "ui.t_scherm":"Screen",
+   "ui.t_auto":"Auto",
+   "ui.t_breed":"Wide",
+   "ui.t_compact":"Compact",
+   "ui.t_pas_aan":"Fit to this screen",
+   "ui.t_bladeren":"Browse",
+   "ui.t_kaartjes":"Cards",
+   "ui.t_standen":"Views ▾",
+   "ui.t_lite":"Simplify cards when zoomed out",
+   "attr.t_scherm":"screen layout: automatic, wide or compact",
+   "attr.t_pas_aan":"make a compact layout that fits this screen (the wide layout is kept)",
+   "attr.t_bladeren":"open Focus with all devices, one at a time",
+   "attr.t_libview":"library view: cards or compact",
+   "attr.t_libclose":"close the library",
+   "attr.t_standen":"camera views: save and jump to a cut-out (Shift+1…9 saves, 1…9 jumps)",
+   "m.t_stand_n":"View {0}",
+   "m.t_stand_spring":"View: {0}",
+   "m.t_stand_bewaard":"View saved: {0}",
+   "m.t_stand_vol":"At most 30 views",
+   "m.t_stand_geen":"No view {0}",
+   "m.t_standen_kop":"Camera views",
+   "m.t_standen_leeg":"No views yet. Save the current view.",
+   "m.t_stand_spring_titel":"jump to this view",
+   "m.t_stand_hernoem":"Rename",
+   "m.t_stand_verwijder":"Delete",
+   "m.t_stand_overschrijf":"Overwrite with the current view",
+   "m.t_stand_bewaar_nu":"Save current view",
+   "m.t_standen_toets":"Keys: Shift+1…9 saves a view, 1…9 jumps to it.",
+   "m.t_klasse_gewisseld":"Screen layout: {0}",
+   "m.t_klasse_wide":"wide",
+   "m.t_klasse_compact":"compact",
+   "m.t_tip_pas_aan":"Tip: choose Fit to this screen for a layout that suits this screen",
+   "m.t_pas_aan_klaar":"Fitted to this screen · columns: {0} · icons: {1} · choose Wide to get your original layout back",
+   "m.t_meer_minder":"Show more or less",
+   "m.t_vorig":"Previous device",
+   "m.t_volgend":"Next device",
+   "m.t_n_van_m":"{0} of {1}",
+   "m.t_bladeren_leeg":"There are no devices to browse"
  }
 };
 const PK_LANGS=['nl','en'];
@@ -2060,7 +2257,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   const id=fixedId||('d'+(Host.nextId++)); if(fixedId){const n=parseInt(fixedId.slice(1)); if(n>=Host.nextId) Host.nextId=n+1;}
   let inst; try{ inst=def.create(ctx,Host); }catch(e){ status(pkt('m.create_faalde_voor')+def.name+': '+e.message,true); return null; }
   inst._id=id; inst._def=def;
-  const el=document.createElement('div'); el.className='card'; el.dataset.id=id; el.style.left=(x||40)+'px'; el.style.top=(y||40)+'px'; el.style.width=clamp((def.ui&&def.ui.width)||300,200,6000)+'px';
+  const el=document.createElement('div'); el.className='card'+((def.ui&&def.ui.jacks)?' keepui':''); el.dataset.id=id; el.style.left=(x||40)+'px'; el.style.top=(y||40)+'px'; el.style.width=clamp((def.ui&&def.ui.width)||300,200,6000)+'px';
   const bar=document.createElement('div'); bar.className='bar'; bar.innerHTML=`<span class="led"></span><span class="nm">${def.name}</span><span class="dim"></span>`;
   const ver=document.createElement('select'); ver.className='ver'; ver.title=pkt('m.versie_wisselen'); ver.setAttribute('aria-label',pkt('m.versie')); ver.addEventListener('pointerdown',e=>e.stopPropagation()); ver.onchange=()=>switchVersion(id,ver.value); bar.appendChild(ver);
   const bf=document.createElement('button'); bf.className='fbtn'; bf.textContent='f'; bf.title=pkt('m.focus_zet_dit_apparaat_in'); bf.setAttribute('aria-label',pkt('m.focus_3')); bf.setAttribute('aria-pressed','false'); bf.onclick=e=>{e.stopPropagation(); setFocus(id,!Host.devices.get(id).focus);};
@@ -2108,7 +2305,7 @@ function moveTo(r,x,y){ r.x=Math.round(x); r.y=Math.round(y); r.el.style.left=r.
 // the part of the floor you are looking at (minus the library window), in floor coordinates
 function viewArea(){ const wr=floorwrap.getBoundingClientRect(); let L=wr.left,R=wr.right,T=wr.top,B=wr.bottom;
   const lw=document.getElementById('libwin');
-  if(lw&&!lw.hidden&&!lw.classList.contains('min')){ const lb=lw.getBoundingClientRect(); if(lb.width&&lb.bottom>T&&lb.top<B&&lb.right>L&&lb.left<R){ if(R-lb.right>=lb.left-L) L=Math.max(L,lb.right); else R=Math.min(R,lb.left); } }
+  if(lw&&!lw.hidden&&!lw.classList.contains('min')){ const lb=lw.getBoundingClientRect(); if(lb.width&&lb.bottom>T&&lb.top<B&&lb.right>L&&lb.left<R){ if(lw.classList.contains('sheet')) B=Math.max(T+60,Math.min(B,lb.top)); else if(R-lb.right>=lb.left-L) L=Math.max(L,lb.right); else R=Math.min(R,lb.left); } }
   const a=floorPoint(L,T), b=floorPoint(R,B); return {x0:a.x,y0:a.y,x1:b.x,y1:b.y,cx:(a.x+b.x)/2,cy:(a.y+b.y)/2}; }
 // push devices out of the way of a newly placed one; whatever gets pushed may push others in turn.
 // Devices that already overlapped each other and are not in the way are left alone.
@@ -2220,7 +2417,8 @@ function portExists(id,port,dir){ const r=Host.devices.get(id); return !!(r&&r.e
 function select(id){ const ch=selected!==id; selected=id; Host.devices.forEach((r,k)=>r.el.classList.toggle('sel',k===id)); if(ch) peersChanged(); }
 let _frameRaf=0, _vis={t:-1,wr:null};
 function deviceVisible(id){ const r=Host.devices.get(id); if(!r||r.mini) return false; if(document.hidden) return false;
-  if(r.el.classList.contains('infocus')) return true; if(typeof FOCUS!=='undefined'&&FOCUS&&FOCUS.open) return false;
+  if(r.el.classList.contains('infocus')) return !r.el.classList.contains('fvoff'); if(typeof FOCUS!=='undefined'&&FOCUS&&FOCUS.open) return false;
+  if(LITE.state&&!r.el.classList.contains('keepui')) return false;
   const now=performance.now(); if(now-_vis.t>100||!_vis.wr){ _vis.wr=floorwrap.getBoundingClientRect(); _vis.t=now; }
   const v=Host.view, k=v.scale, x=v.x+r.x*k, y=v.y+r.y*k, w=(r._w||r.el.offsetWidth)*k, h=(r._h||r.el.offsetHeight)*k, W=_vis.wr.width, H=_vis.wr.height;
   return x<W&&y<H&&x+w>0&&y+h>0; }
@@ -2242,7 +2440,7 @@ function compatible(a,b){ return b&&b.kind===a.kind&&b.dir!==a.dir&&b.id!==a.id;
 function startWire(id,port,dir,kind,e){
   armed=null; paintArmed();
   const src={id,port,dir,kind}; src.el=Host.devices.get(id).el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`);
-  wire={src,cx:e.clientX,cy:e.clientY,x0:e.clientX,y0:e.clientY,moved:false,hover:null,raf:0};
+  wire={src,cx:e.clientX,cy:e.clientY,x0:e.clientX,y0:e.clientY,moved:false,hover:null,raf:0,touch:e.pointerType==='touch'};
   const path=document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('class',kind); wireSvg.appendChild(path);
   const dot=document.createElementNS('http://www.w3.org/2000/svg','circle'); dot.setAttribute('r','4'); wireSvg.appendChild(dot);
   wire.path=path; wire.dot=dot;
@@ -2258,7 +2456,7 @@ function drawWire(){
 }
 function hoverAt(cx,cy){
   const elp=document.elementFromPoint(cx,cy); const pe=elp&&elp.closest?elp.closest('.port'):null; const inf=portInfo(pe);
-  const ok=compatible(wire.src,inf)?inf:null;
+  let ok=compatible(wire.src,inf)?inf:null; if(!ok&&wire.touch) ok=nearCompatiblePort(cx,cy);
   if(wire.hover&&(!ok||ok.el!==wire.hover.el)) wire.hover.el.classList.remove('hover');
   if(ok) ok.el.classList.add('hover'); wire.hover=ok;
 }
@@ -2633,7 +2831,7 @@ function drawCablesNow(){ if(_dcRaf){ cancelAnimationFrame(_dcRaf); _dcRaf=0; } 
     const p1=portPos(c.from.id,c.from.port,'out'), p2=portPos(c.to.id,c.to.port,'in'); if(!p1||!p2) return;
     const R=cableRoute(c,p1,p2), P=R.P, d=R.d;
     const g=svgEl('g',{class:'cable'+(dropCable===c?' drop':'')},svg);
-    const hit=svgEl('path',{d,class:'hit'},g); hit._cable=c; hit.addEventListener('pointerdown',e=>{ if(e.button===0) cgrab={c,x0:e.clientX,y0:e.clientY}; }); svgEl('title',{},hit).textContent=cableLabel(c)+pkt('m.klik_kabel_los_rechtermuisknop_kleur');
+    const hit=svgEl('path',{d,class:'hit'},g); hit._cable=c; if(PKT.coarse.matches) hit.style.strokeWidth=clamp(28/Host.view.scale,14,120)+'px'; hit.addEventListener('pointerdown',e=>{ if(e.button===0) cgrab={c,x0:e.clientX,y0:e.clientY}; }); svgEl('title',{},hit).textContent=cableLabel(c)+pkt('m.klik_kabel_los_rechtermuisknop_kleur');
     hit.onclick=()=>{ if(performance.now()-lastRewire<400) return; unpatch(c); }; hit.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); cableMenu(c,e.clientX,e.clientY); });
     const vis=svgEl('path',{d:c.kind==='mod'||c.kind==='mastering'?(R.pts?wavePts(R.pts):wavePath(P)):d,class:c.kind},g); if(c.color) vis.style.stroke=c.color;
     if(c.kind==='multi') svgEl('path',{d,class:'multicore'},g);
@@ -2661,12 +2859,30 @@ function cableMenu(c,x,y){ closeCableMenu(); const a=Host.devices.get(c.from.id)
   document.body.appendChild(m); paintSw(); const W=m.offsetWidth, Hh=m.offsetHeight; m.style.left=Math.max(8,Math.min(x,innerWidth-W-8))+'px'; m.style.top=Math.max(8,Math.min(y,innerHeight-Hh-8))+'px';
   _cmenu=m; setTimeout(()=>{ document.addEventListener('pointerdown',_cmOut,true); document.addEventListener('keydown',_cmKey,true); },0); }
 floorwrap.addEventListener('click',e=>{ if(e.target===floorwrap||e.target===floor||e.target===svg){ armed=null; paintArmed(); } });
-function applyView(){ const v=Host.view; floor.style.transform=`translate(${v.x}px,${v.y}px) scale(${v.scale})`; floorwrap.style.backgroundSize=`${40*v.scale}px ${40*v.scale}px`; floorwrap.style.backgroundPosition=`${v.x}px ${v.y}px`; $('zoomOut_v').textContent=Math.round(v.scale/PKS.f*100)+'%'; $('zoomOut_v').title=pkt('m.zoom_ten_opzichte_van_de')+Math.round(PKS.f*100)+'%)'; }
+/* =====================================================================
+   AANRAKING EN SCHERMKLASSEN · toestand die al nodig is voor de bibliotheek en het opslaan (de rest staat verderop, bij TOUCH)
+   ===================================================================== */
+var PKT={coarse:matchMedia('(pointer:coarse)'),narrow:matchMedia('(max-width:699px)')};
+const isSheet=()=>PKT.narrow.matches;
+var LIBV={v:null,picked:false}; try{ const v=localStorage.getItem('patchkamer.libView'); if(v==='cards'||v==='compact') LIBV={v,picked:true}; }catch(e){}
+const libViewNow=()=>LIBV.picked?LIBV.v:((window.innerWidth<700||PKT.coarse.matches)?'compact':'cards');
+var LIBEXP=new Set();    // regels die je in de compacte bibliotheek openklapte (per apparaat-id)
+var LAY={mode:'auto',cls:'wide',sets:{wide:{},compact:{}},cam:{wide:null}};   // schermklasse: de brede indeling zit in de apparaten zelf, de andere klasse in LAY.sets
+try{ const m=localStorage.getItem('patchkamer.layoutMode'); if(m==='wide'||m==='compact'||m==='auto') LAY.mode=m; }catch(e){}
+const layoutTarget=()=>LAY.mode==='wide'?'wide':LAY.mode==='compact'?'compact':(window.innerWidth<1100?'compact':'wide');
+LAY.cls=layoutTarget();
+var LITE={on:true,state:false}; try{ LITE.on=localStorage.getItem('patchkamer.liteZoom')!=='0'; }catch(e){}
+Host.views=[];           // camerastanden van deze werkruimte: [{name,x,y,scale}] (x,y = midden van de uitsnede in vloercoördinaten, scale t.o.v. de schermschaal)
+function liteHold(d){ LITE.hold=Math.max(0,(LITE.hold||0)+d); if(d>0&&LITE.state){ LITE.state=false; floor.classList.remove('lite'); } if(!LITE.hold) liteUpdate(); }
+function liteUpdate(){ if(LITE.hold) return; const rel=Host.view.scale/PKS.f, want=LITE.on&&(LITE.state?rel<0.6:rel<0.55);
+  if(want!==LITE.state){ LITE.state=want; floor.classList.toggle('lite',want); drawCables(); requestAnimationFrame(()=>drawCables()); } }
+function applyView(){ const v=Host.view; floor.style.transform=`translate(${v.x}px,${v.y}px) scale(${v.scale})`; floorwrap.style.backgroundSize=`${40*v.scale}px ${40*v.scale}px`; floorwrap.style.backgroundPosition=`${v.x}px ${v.y}px`; $('zoomOut_v').textContent=Math.round(v.scale/PKS.f*100)+'%'; $('zoomOut_v').title=pkt('m.zoom_ten_opzichte_van_de')+Math.round(PKS.f*100)+'%)'; liteUpdate(); hitWidthSoon(); }
 function zoomAt(factor,cx,cy){ const v=Host.view, ns=clamp(v.scale*factor,0.1,2.5), k=ns/v.scale; v.x=cx-(cx-v.x)*k; v.y=cy-(cy-v.y)*k; v.scale=ns; applyView(); }
 function wrapCenter(){ const r=floorwrap.getBoundingClientRect(); return [r.width/2,r.height/2]; }
 $('zoomIn').onclick=()=>zoomAt(1.25,...wrapCenter()); $('zoomOut').onclick=()=>zoomAt(0.8,...wrapCenter());
 $('zoomHome').onclick=()=>{Host.view={x:40,y:40,scale:PKS.f}; applyView();};
-$('zoomFit').onclick=()=>{ const rs=[...Host.devices.values()]; if(!rs.length) return; const minX=Math.min(...rs.map(r=>r.x)), minY=Math.min(...rs.map(r=>r.y)), maxX=Math.max(...rs.map(r=>r.x+r.el.offsetWidth)), maxY=Math.max(...rs.map(r=>r.y+r.el.offsetHeight)); const wr=floorwrap.getBoundingClientRect(); const sc=clamp(Math.min((wr.width-60)/(maxX-minX),(wr.height-60)/(maxY-minY)),0.1,1.5); Host.view={scale:sc,x:(wr.width-(maxX-minX)*sc)/2-minX*sc,y:(wr.height-(maxY-minY)*sc)/2-minY*sc}; applyView(); };
+$('zoomFit').onclick=()=>{ liteHold(1); try{ zoomFitNow(); }finally{ liteHold(-1); } };
+function zoomFitNow(){ const rs=[...Host.devices.values()]; if(!rs.length) return; const minX=Math.min(...rs.map(r=>r.x)), minY=Math.min(...rs.map(r=>r.y)), maxX=Math.max(...rs.map(r=>r.x+r.el.offsetWidth)), maxY=Math.max(...rs.map(r=>r.y+r.el.offsetHeight)); const wr=floorwrap.getBoundingClientRect(); const sc=clamp(Math.min((wr.width-60)/(maxX-minX),(wr.height-60)/(maxY-minY)),0.1,1.5); Host.view={scale:sc,x:(wr.width-(maxX-minX)*sc)/2-minX*sc,y:(wr.height-(maxY-minY)*sc)/2-minY*sc}; applyView(); }
 floorwrap.addEventListener('wheel',e=>{ if(!e.ctrlKey&&!e.metaKey){ const sc=(e.composedPath?e.composedPath():[]).find(n=>n.classList&&n.classList.contains('ui')&&n.closest&&n.closest('.card.sized-h')); if(sc&&sc.scrollHeight>sc.clientHeight){ const atTop=sc.scrollTop<=0&&e.deltaY<0, atEnd=sc.scrollTop+sc.clientHeight>=sc.scrollHeight-1&&e.deltaY>0; if(!atTop&&!atEnd) return; } } e.preventDefault(); const r=floorwrap.getBoundingClientRect(); if(e.ctrlKey||e.metaKey){ zoomAt(e.deltaY<0?1.1:0.9,e.clientX-r.left,e.clientY-r.top); } else { Host.view.x-=e.deltaX; Host.view.y-=e.deltaY; applyView(); } },{passive:false});
 let pan=null;
 floorwrap.addEventListener('pointerdown',e=>{ if(e.target!==floorwrap&&e.target!==floor&&e.target!==svg) return; pan={cx:e.clientX,cy:e.clientY,x0:Host.view.x,y0:Host.view.y}; floorwrap.classList.add('panning'); floorwrap.setPointerCapture(e.pointerId); });
@@ -2732,6 +2948,7 @@ function portsLine(def){ const P=def.ports, nm=a=>esc(a.map(x=>x.name||x.id).joi
 const LIBOPEN=new Set();   // categorieën die je in deze sessie openklapte: bij elke start staat alles ingeklapt
 const LIBKEY='patchkamerLib'; let LIB={x:16,y:16,w:340,h:620,fs:14,min:false,shown:true,closed:[]};
 try{ Object.assign(LIB,JSON.parse(localStorage.getItem(LIBKEY)||'{}')); }catch(e){}
+try{ if(isSheet()&&!localStorage.getItem(LIBKEY)) LIB.shown=false; }catch(e){}
 LIB.cats=(LIB.cats&&typeof LIB.cats==='object')?LIB.cats:{}; CAT_OVR=LIB.cats;
 LIB.layoutSeen=(LIB.layoutSeen&&typeof LIB.layoutSeen==='object')?LIB.layoutSeen:{};
 // eigen categorieën: LIB.catList = [{key,label,color}] in volgorde; 'other' (Overig) blijft altijd bestaan
@@ -2754,7 +2971,7 @@ function setCategory(defId,cat){ const def=Host.latest(defId); if(!def||!CATS.so
   paintIcons();
   status(`${def.name} → ${CATS.find(x=>x[0]===cat)[1]}`); }
 function paintLib(){
-  syncDirCats(); const lib=$('lib'), q=($('libSearch').value||'').trim().toLowerCase(); lib.innerHTML='';
+  syncDirCats(); const lib=$('lib'), q=($('libSearch').value||'').trim().toLowerCase(); lib.innerHTML=''; lib.classList.toggle('cmp',libViewNow()==='compact'); paintLibView();
   const ids=[...new Set([...Host.registry.values()].map(d=>d.id))]; let shown=0;
   CATS.forEach(([cat,label])=>{
     const items=ids.map(id=>Host.versionsOf(id)[0]).filter(def=>categoryOf(def)===cat)
@@ -2767,7 +2984,7 @@ function paintLib(){
     const devs=document.createElement('div'); devs.className='devs'; if(!items.length){ const e=document.createElement('div'); e.className='note'; e.style.cssText='padding:6px 10px;font-size:11px'; e.textContent=pkt('m.nog_leeg_sleep_een_apparaat'); devs.appendChild(e); }
     items.forEach(def=>{ const vers=Host.versionsOf(def.id);
       const d=document.createElement('div'); d.className='libdev c-'+cat; d.dataset.id=def.id; d.title=pkt('m.sleep_naar_de_vloer');
-      d.innerHTML=`<span class="nm">${esc(def.name)}</span><span class="id">${esc(def.id)} · ${esc(def.kind)}</span><span class="pt">${portsLine(def)}</span>`+(def._src?`<span class="src">${esc(srcLabel(def._src))}</span>`:'');
+      d.innerHTML=`<span class="nm">${esc(def.name)}</span><span class="id">${esc(def.id)} · ${esc(def.kind)}</span><span class="pt">${portsLine(def)}</span>`+(def._src?`<span class="src">${esc(srcLabel(def._src))}</span>`:'')+`<span class="kd">${esc(def.kind)}</span><span class="vr">v${esc(def.version)}</span>`;
       { const mk=LIBMARK.nw.has(def.id)?'new':LIBMARK.ch.has(def.id)?'changed':''; if(mk){ d.classList.add('mark-'+mk); d.querySelector('.nm').insertAdjacentHTML('beforeend','<span class="lbadge">'+esc(pkt(mk==='new'?'m.badge_nieuw':'m.badge_gewijzigd'))+'</span>'); } }
       const act=document.createElement('div'); act.className='act';
       const vs=document.createElement('select'); vs.setAttribute('aria-label',pkt('m.versie_van')+def.name); vers.forEach(v=>{const o=document.createElement('option'); o.value=v.version; o.textContent='v'+v.version; vs.appendChild(o);}); vs.disabled=vers.length<2;
@@ -2776,8 +2993,12 @@ function paintLib(){
       const base=baseCategory(def); CATS.forEach(([k,l])=>{ const o=document.createElement('option'); o.value=k; o.textContent=l; o.selected=k===cat; cs.appendChild(o); });
       const baseNow=CATS.some(x=>x[0]===base)?base:'other'; if(cat!==baseNow){ const o=document.createElement('option'); o.value=baseNow; o.textContent=pkt('m.terug_naar')+CATS.find(x=>x[0]===baseNow)[1]; cs.appendChild(o); }
       cs.onchange=()=>setCategory(def.id,cs.value);
-      act.append(vs,cs,b); d.appendChild(act); devs.appendChild(d);
-      d.addEventListener('pointerdown',e=>{ if(e.button!==0||e.target.closest('select,button')) return; libDrag={def,ver:()=>vs.value,x0:e.clientX,y0:e.clientY,ghost:null}; e.preventDefault(); });
+      act.append(vs,cs,b); d.appendChild(act);
+      { const xp=document.createElement('button'); xp.className='xp'; xp.type='button'; xp.textContent='▸'; xp.setAttribute('aria-label',pkt('m.t_meer_minder')); xp.title=pkt('m.t_meer_minder'); const op=LIBEXP.has(def.id); xp.setAttribute('aria-expanded',String(op)); if(op) d.classList.add('open');
+        xp.onclick=e=>{ e.stopPropagation(); const o=d.classList.toggle('open'); if(o) LIBEXP.add(def.id); else LIBEXP.delete(def.id); xp.setAttribute('aria-expanded',String(o)); }; d.appendChild(xp);
+        d.addEventListener('click',e=>{ if(libViewNow()!=='compact'||e.target.closest('select,button,.act')) return; const n=performance.now(); if(n-LIBCLK.drag<400||n-LIBCLK.placed<600) return; LIBCLK.placed=n; placeNew(def.id,vs.value); }); }
+      devs.appendChild(d);
+      d.addEventListener('pointerdown',e=>{ if(e.button!==0||e.target.closest('select,button')) return; if(e.pointerType==='touch'&&PKT.coarse.matches){ libPress(e,def,()=>vs.value,d); return; } libDrag={def,ver:()=>vs.value,x0:e.clientX,y0:e.clientY,ghost:null}; e.preventDefault(); });
     });
     box.append(head,devs); lib.appendChild(box);
   });
@@ -2799,26 +3020,28 @@ document.addEventListener('pointermove',e=>{ if(!libDrag) return;
     g.textContent=libDrag.def.name+(cb?' → '+pkt('m.in_de_kabel'):''); g.classList.toggle('no',!onFloor); } });
 function catTarget(cx,cy){ const el=document.elementFromPoint(cx,cy); return el&&el.closest('#lib .cat'); }
 document.addEventListener('pointerup',e=>{ if(!libDrag) return; const d=libDrag, dc=dropCable; libDrag=null; document.body.style.cursor=''; setDrop(null);
-  if(!d.ghost) return; d.ghost.remove(); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
+  if(!d.ghost) return; LIBCLK.drag=performance.now(); d.ghost.remove(); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
   const ct=catTarget(e.clientX,e.clientY); if(ct){ if(ct.dataset.cat!==categoryOf(d.def)) setCategory(d.def.id,ct.dataset.cat); return; }
   if(overFloor(e.clientX,e.clientY)){ const p=floorPoint(e.clientX,e.clientY); const nid=addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid){ afterAdd(nid); if(dc) insertOnCable(nid,dc); } } });
 const libwin=$('libwin'), room=$('room');
-function placeLib(){ const r0=room.getBoundingClientRect(), r={width:r0.width/PKS.ui,height:r0.height/PKS.ui};
+function placeLib(){ const sheet=isSheet(); libwin.classList.toggle('sheet',sheet); document.body.classList.toggle('libsheet',sheet&&!!LIB.shown);
+  if(sheet){ libwin.style.setProperty('--libfs',LIB.fs+'px'); libwin.classList.remove('min'); libwin.hidden=!LIB.shown; $('libToggle').classList.toggle('on',!!LIB.shown); return; }
+  const r0=room.getBoundingClientRect(), r={width:r0.width/PKS.ui,height:r0.height/PKS.ui};
   LIB.w=clamp(LIB.w,260,Math.max(260,r.width-8)); LIB.h=clamp(LIB.h,160,Math.max(160,r.height-8));
   LIB.x=clamp(LIB.x,-(LIB.w-120),Math.max(0,r.width-120)); LIB.y=clamp(LIB.y,0,Math.max(0,r.height-44));
   Object.assign(libwin.style,{left:LIB.x+'px',top:LIB.y+'px',width:LIB.w+'px',height:LIB.h+'px'});
   libwin.style.setProperty('--libfs',LIB.fs+'px'); libwin.classList.toggle('min',!!LIB.min); libwin.hidden=!LIB.shown;
   $('libMin').textContent=LIB.min?'▢':'—'; $('libMin').title=LIB.min?pkt('m.uitklappen'):pkt('m.inklappen'); $('libToggle').classList.toggle('on',!!LIB.shown); }
-function libGesture(handle,apply){ let st=null;
+function libGesture(handle,apply,onEnd){ let st=null;
   handle.addEventListener('pointerdown',e=>{ if(e.button!==0||e.target.closest('button')) return; e.preventDefault(); e.stopPropagation(); st={cx:e.clientX,cy:e.clientY,...LIB}; handle.setPointerCapture(e.pointerId); });
   handle.addEventListener('pointermove',e=>{ if(!st) return; apply(st,(e.clientX-st.cx)/PKS.ui,(e.clientY-st.cy)/PKS.ui); placeLib(); });
-  const end=()=>{ if(st){ st=null; saveLib(); } }; handle.addEventListener('pointerup',end); handle.addEventListener('pointercancel',end); }
-libGesture($('libbar'),(st,dx,dy)=>{ LIB.x=st.x+dx; LIB.y=st.y+dy; });
+  const end=()=>{ if(st){ st=null; saveLib(); if(onEnd) onEnd(); } }; handle.addEventListener('pointerup',end); handle.addEventListener('pointercancel',end); }
+libGesture($('libbar'),(st,dx,dy)=>{ if(isSheet()){ libwin.style.transform=dy>0?`translateY(${dy}px)`:''; libwin._dy=dy; return; } LIB.x=st.x+dx; LIB.y=st.y+dy; },()=>{ if(isSheet()){ const dy=libwin._dy||0; libwin.style.transform=''; libwin._dy=0; if(dy>90){ LIB.shown=false; placeLib(); saveLib(); } } });
 libGesture(libwin.querySelector('.rz.e'),(st,dx)=>{ LIB.w=st.w+dx; });
 libGesture(libwin.querySelector('.rz.s'),(st,dx,dy)=>{ LIB.h=st.h+dy; });
 libGesture(libwin.querySelector('.rz.se'),(st,dx,dy)=>{ LIB.w=st.w+dx; LIB.h=st.h+dy; });
 libGesture(libwin.querySelector('.rz.w'),(st,dx)=>{ const w=clamp(st.w-dx,260,4000); LIB.x=st.x+(st.w-w); LIB.w=w; });
-$('libbar').addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; LIB.min=!LIB.min; placeLib(); saveLib(); });
+$('libbar').addEventListener('dblclick',e=>{ if(e.target.closest('button')||isSheet()) return; LIB.min=!LIB.min; placeLib(); saveLib(); });
 $('libMin').onclick=()=>{ LIB.min=!LIB.min; placeLib(); saveLib(); };
 function paintLibFs(){ LIB.fs=clamp(+LIB.fs||14,11,18); document.documentElement.style.setProperty('--pkfs',String(LIB.fs/14)); $('libFsV').textContent=LIB.fs+' px'; $('libFsDown').disabled=LIB.fs<=11; $('libFsUp').disabled=LIB.fs>=18; }
 $('libFsUp').onclick=()=>{ LIB.fs=clamp(LIB.fs+1,11,18); placeLib(); saveLib(); paintLibFs(); };
@@ -2856,11 +3079,17 @@ document.addEventListener('keydown',e=>{ if(typing(e)) return; if(e.key===' '){$
 /* =====================================================================
    PATCH SAVE / LOAD
    ===================================================================== */
-function patchState(){ return {v:2,bpm:Host.bpm,swing:Host.swing,view:{...Host.view,scale:Host.view.scale/PKS.f,rel:1},devices:[...Host.devices.entries()].map(([id,r])=>({id,def:r.def.id,version:r.def.version,x:r.x,y:r.y,w:r.w,h:r.h,mini:r.mini||undefined,focus:r.focus||undefined,preset:r.preset&&!presetDirty(r)?{lid:r.preset.lid,pid:r.preset.pid,name:r.preset.name}:undefined,state:r.inst.getState?r.inst.getState():{}})),cables:Host.cables.map(c=>({from:c.from,to:c.to,kind:c.kind,...(c.color?{color:c.color}:{})}))}; }
-function clearFloor(){ closeFocus(); [...Host.devices.keys()].forEach(removeDevice); Host.cables=[]; drawCables(); }
+function patchState(){ const ents=[...Host.devices.entries()], lc={};
+  ents.forEach(([id,r])=>{ const c=layCompactFor(id,r); if(c) lc[id]={x:c.x,y:c.y,w:c.w,h:c.h,...(c.mini?{mini:true}:{})}; });
+  const vw=(LAY.cls==='wide'||!LAY.cam.wide)?Host.view:LAY.cam.wide;   // de gewone velden zijn altijd de brede indeling
+  return {v:2,bpm:Host.bpm,swing:Host.swing,view:{...vw,scale:vw.scale/PKS.f,rel:1},devices:ents.map(([id,r])=>{ const W=layWideFor(id,r); return {id,def:r.def.id,version:r.def.version,x:W.x,y:W.y,w:W.w,h:W.h,mini:W.mini||undefined,focus:r.focus||undefined,preset:r.preset&&!presetDirty(r)?{lid:r.preset.lid,pid:r.preset.pid,name:r.preset.name}:undefined,state:r.inst.getState?r.inst.getState():{}}; }),cables:Host.cables.map(c=>({from:c.from,to:c.to,kind:c.kind,...(c.color?{color:c.color}:{})})),
+    ...(Host.views.length?{views:Host.views.map(v=>({name:v.name,x:v.x,y:v.y,scale:v.scale}))}:{}),...(Object.keys(lc).length?{layouts:{compact:lc}}:{})}; }
+function clearFloor(){ closeFocus(); [...Host.devices.keys()].forEach(removeDevice); Host.cables=[]; Host.views=[]; LAY.sets={wide:{},compact:{}}; LAY.cam.wide=null; LAY.cls=layoutTarget(); drawCables(); }
 function loadPatch(p){ clearFloor(); Host.bpm=p.bpm||126; $('bpm').value=Host.bpm; Host.swing=p.swing??0.08; $('swing').value=Host.swing;
   if(p.view){Host.view={x:+p.view.x||0,y:+p.view.y||0,scale:(+p.view.scale||1)*PKS.f}; applyView();}
+  Host.views=viewsClean(p.views);
   const missing=[], fallback=[]; p.devices.forEach(d=>{ let ver=d.version; if(ver&&!Host.registry.has(Host.key(d.def,ver))){ const l=Host.latest(d.def); if(l){fallback.push(`${l.name} v${ver}→v${l.version}`); ver=l.version;} } if(!Host.latest(d.def)){missing.push(d.def); return;} const nid=addDevice(d.def,d.x,d.y,d.state,d.id,ver); if(nid&&(d.w||d.h)) setSize(nid, d.w||undefined, d.h||undefined); if(nid&&d.mini) setMini(nid,true); if(nid&&d.focus) setFocus(nid,true,+d.focus); if(nid&&d.preset) presetMark(nid,d.preset); });
+  layoutLoad(p);
   if(fallback.length) status(pkt('m.versie_niet_aanwezig_nieuwste_gebruikt')+fallback.join(', '));
   // rAF staat stil in een tab op de achtergrond: dan zouden de kabels (en dus het geluid) ontbreken; een timer vangt dat op
   let cabled=false; const cableUp=()=>{ if(cabled) return; cabled=true; p.cables.forEach(c=>{ if(Host.devices.has(c.from.id)&&Host.devices.has(c.to.id)) patch({from:c.from,to:c.to,kind:c.kind,...(typeof c.color==='string'&&/^#[0-9a-f]{3,8}$/i.test(c.color)?{color:c.color}:{})}); }); drawCables(); setTimeout(drawCables,250); setTimeout(drawCables,1200); };
@@ -3671,7 +3900,7 @@ var _lastLayout=null;
 const isOutputDef=d=>d.kind==='output';
 const isMixerDef=d=>d.kind==='mixer'||/(^|\.)mixer$/.test(d.id);
 const isModDef=(r)=>r.def.kind==='modulator'||(r.ports.modOut.length>0&&!r.ports.audioOut.length&&!r.ports.eventOut.length);
-function arrangeDevices(){
+function arrangeDevices(){ liteHold(1);
   closeFocus(); const R=Host.devices; if(!R.size) return;
   const ids=[...R.keys()], cab=Host.cables.filter(c=>R.has(c.from.id)&&R.has(c.to.id)&&c.from.id!==c.to.id);
   const isOut=id=>isOutputDef(R.get(id).def), isMix=id=>isMixerDef(R.get(id).def), isMod=id=>isModDef(R.get(id));
@@ -3709,7 +3938,7 @@ function arrangeDevices(){
   // losse apparaten (zonder kabels): een rij onderaan
   let lx=X0; const ly=bottom+80; ids.filter(i=>!connected.has(i)).sort((a,b)=>R.get(a).x-R.get(b).x).forEach(i=>{ const r=R.get(i); r.el.classList.add('moving'); moveTo(r,lx,ly); lx+=box(i).w+60; });
   _lastLayout=prev;
-  const t0=performance.now(); const tick=()=>{ drawCables(); if(performance.now()-t0<450) requestAnimationFrame(tick); else { R.forEach(r=>r.el.classList.remove('moving')); drawCables(); $('zoomFit').click(); } }; requestAnimationFrame(tick);
+  const t0=performance.now(); const tick=()=>{ drawCables(); if(performance.now()-t0<450) requestAnimationFrame(tick); else { R.forEach(r=>r.el.classList.remove('moving')); drawCables(); $('zoomFit').click(); liteHold(-1); } }; requestAnimationFrame(tick);
   const loose=ids.filter(i=>!connected.has(i)).length;
   status(pkt('m.herschikt_in_kolommen',cols.filter(Boolean).length)+(loose?pktp('m.losse_apparaaten_onderaan_los_apparaat',loose>1,loose):'')+pkt('m.ctrl_z_zet_terug'));
 }
@@ -3722,31 +3951,301 @@ document.addEventListener('keydown',e=>{ if(typing(e)) return; if((e.ctrlKey||e.
 /* =====================================================================
    FOCUS · apparaten met [f] naast, onder of in een raster, zonder ze op het canvas te verplaatsen
    ===================================================================== */
-var _focusSeq=0, FOCUS={open:false,layout:'row'}; try{ const v=localStorage.getItem('patchkamer.focusLayout'); if(['row','col','grid'].includes(v)) FOCUS.layout=v; }catch(e){}
+var _focusSeq=0, FOCUS={open:false,layout:'row',idx:0,all:false}, FOCUS_PICKED=false; try{ const v=localStorage.getItem('patchkamer.focusLayout'); if(['row','col','grid','one'].includes(v)){ FOCUS.layout=v; FOCUS_PICKED=true; } }catch(e){}
+function focusBase(){ let v=null; try{ v=localStorage.getItem('patchkamer.focusLayout'); }catch(e){} return ['row','col','grid','one'].includes(v)?v:(isSheet()?'one':'row'); }
+if(!FOCUS_PICKED&&isSheet()) FOCUS.layout='one';
 var focusEl=null;
-function focusList(){ return [...Host.devices.entries()].filter(([,r])=>r.focus).sort((a,b)=>a[1].focus-b[1].focus); }
-function paintFocusBtn(){ if(!FOCUS) return; const n=focusList().length, b=$('focusBtn'); b.textContent=n?pkt('m.focus_2',n):pkt('m.focus'); b.classList.toggle('on',FOCUS.open); b.setAttribute('aria-pressed',String(FOCUS.open)); }
+function focusList(){ if(FOCUS.all){ const ents=[...Host.devices.entries()], pos=id=>Host.devices.get(id); const ord=layoutOrder(ents.map(([id])=>id),pos); return ord.map(id=>[id,Host.devices.get(id)]); } return [...Host.devices.entries()].filter(([,r])=>r.focus).sort((a,b)=>a[1].focus-b[1].focus); }
+function paintFocusBtn(){ if(!FOCUS) return; const n=[...Host.devices.values()].filter(r=>r.focus).length, b=$('focusBtn'); b.textContent=n?pkt('m.focus_2',n):pkt('m.focus'); b.classList.toggle('on',FOCUS.open); b.setAttribute('aria-pressed',String(FOCUS.open)); }
 function setFocus(id,on,orderIdx){ const r=Host.devices.get(id); if(!r) return; r.focus=on?(orderIdx||++_focusSeq):0; if(orderIdx) _focusSeq=Math.max(_focusSeq,orderIdx);
   r.focusBtn.classList.toggle('on',!!on); r.focusBtn.setAttribute('aria-pressed',String(!!on));
   if(FOCUS.open){ if(on) fillFocus(); else { putBack(r); fillFocus(); } }
   paintFocusBtn(); if(!FOCUS.open&&on&&focusList().length===1) status(pkt('m.in_focus_gezet_open_de')); }
-function putBack(r){ if(!r.el.classList.contains('infocus')) return; r.el.classList.remove('infocus'); floor.appendChild(r.el); r.el.style.left=r.x+'px'; r.el.style.top=r.y+'px'; }
+function putBack(r){ r.el.classList.remove('fvoff'); if(!r.el.classList.contains('infocus')) return; r.el.classList.remove('infocus'); floor.appendChild(r.el); r.el.style.left=r.x+'px'; r.el.style.top=r.y+'px'; }
 function buildFocusView(){ focusEl=document.createElement('div'); focusEl.className='focusview'; focusEl.setAttribute('role','region'); focusEl.setAttribute('aria-label',pkt('m.focusweergave'));
   focusEl.innerHTML=pkt('m.focus_naast_elkaar_onder_elkaar');
   focusEl.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{ FOCUS.layout=b.dataset.l; try{ localStorage.setItem('patchkamer.focusLayout',FOCUS.layout); }catch(e){} paintLayout(); });
   focusEl.querySelector('[data-a=close]').onclick=closeFocus; focusEl.querySelector('[data-a=all]').onclick=()=>{ focusList().forEach(([k])=>setFocus(k,false)); };
-  focusEl.addEventListener('pointerdown',e=>e.stopPropagation()); $('room').appendChild(focusEl); }
-function paintLayout(){ if(!focusEl) return; const body=focusEl.querySelector('.fvbody'); body.className='fvbody '+FOCUS.layout; focusEl.querySelectorAll('[data-l]').forEach(b=>b.classList.toggle('on',b.dataset.l===FOCUS.layout)); }
+  focusBuildTabs(); focusEl.addEventListener('pointerdown',e=>e.stopPropagation()); $('room').appendChild(focusEl); }
+function paintLayout(){ if(!focusEl) return; const body=focusEl.querySelector('.fvbody'); body.className='fvbody '+FOCUS.layout; focusEl.querySelectorAll('[data-l]').forEach(b=>b.classList.toggle('on',b.dataset.l===FOCUS.layout)); focusOneApply(); }
 function fillFocus(){ if(!focusEl) return; const body=focusEl.querySelector('.fvbody'); const list=focusList();
   body.querySelectorAll('.fvempty').forEach(x=>x.remove());
   list.forEach(([,r])=>{ r.el.classList.add('infocus'); body.appendChild(r.el); });
   if(!list.length){ const p=document.createElement('div'); p.className='fvempty'; p.textContent=pkt('m.nog_niets_in_focus_klik'); body.appendChild(p); }
   paintLayout(); drawCables(); }
 function openFocus(){ if(FOCUS.open) return; FOCUS.open=true; if(!focusEl) buildFocusView(); focusEl.hidden=false; fillFocus(); paintFocusBtn(); }
-function closeFocus(){ if(!FOCUS||!FOCUS.open) return; FOCUS.open=false; Host.devices.forEach(putBack); if(focusEl) focusEl.hidden=true; paintFocusBtn(); drawCables(); }
+function closeFocus(){ if(!FOCUS||!FOCUS.open) return; FOCUS.open=false; Host.devices.forEach(putBack); if(FOCUS.all){ FOCUS.all=false; FOCUS.layout=focusBase(); } if(focusEl) focusEl.hidden=true; paintFocusBtn(); drawCables(); }
 $('focusBtn').onclick=()=>{ FOCUS.open?closeFocus():openFocus(); };
 document.addEventListener('keydown',e=>{ if(!textEntry(e)&&e.code==='KeyF'&&e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){ FOCUS.open?closeFocus():openFocus(); e.preventDefault(); } if(typing(e)) return; if(e.key==='Escape'&&FOCUS.open&&!document.querySelector('.pkmodal')){ closeFocus(); } });
 paintFocusBtn();
+
+/* =====================================================================
+   TOUCH · knijpzoom, tweevingerschuiven, lang indrukken, dubbeltik
+   Eén vinger blijft wat de muis is (schuiven op lege vloer, kabel trekken, kaart slepen). Twee vingers op de vloer = zoomen en schuiven;
+   een lopende sleepactie met de eerste vinger wordt dan netjes afgebroken. Twee vingers in de UI van één apparaat doen niets met de vloer
+   (zodat je met twee vingers op een toetsenbord of pads van een apparaat kunt spelen).
+   ===================================================================== */
+const TOUCH={pts:new Map(),pinch:null,silent:false,last:-1e9,lastDbl:-1e9,tap:null,downs:new Map()};
+const isFormEl=n=>n&&n.nodeType===1&&/^(INPUT|SELECT|TEXTAREA)$/.test(n.tagName);
+function touchEligible(path){ for(const n of path){ if(n===floorwrap) break; if(!n||n.nodeType!==1) continue; if(n.classList.contains('port')) return true;
+    if(n.classList.contains('viewctl')||n.classList.contains('toast')||n.classList.contains('standpop')||isFormEl(n)) return false;
+    if(n.classList.contains('ui')&&n.parentElement&&n.parentElement.classList.contains('body')&&n.closest('.card')) return false; }
+  return true; }
+// de dichtstbijzijnde poort (stip) binnen r schermpixels; filter(info) mag poorten uitsluiten
+function nearestPort(cx,cy,r,filter){ let best=null,bd=r; floor.querySelectorAll('.port').forEach(pe=>{ const dot=pe.querySelector('.dot')||pe, b=dot.getBoundingClientRect(); if(!b.width) return;
+    const d=Math.hypot(b.left+b.width/2-cx,b.top+b.height/2-cy); if(d>=bd) return; const inf=portInfo(pe); if(!inf||(filter&&!filter(inf))) return; bd=d; best=inf; }); return best; }
+// animatie van de camera (zacht, tenzij prefers-reduced-motion)
+var VANIM=0; const reducedMotion=()=>{ try{ return matchMedia('(prefers-reduced-motion:reduce)').matches; }catch(e){ return false; } };
+function viewCancelAnim(){ VANIM=0; }
+function viewTo(x,y,scale,instant){ const v0={...Host.view}; scale=clamp(scale,0.1,2.5);
+  if(instant||reducedMotion()||!window.requestAnimationFrame){ Host.view={x,y,scale}; applyView(); return; }
+  const id=++VANIM, t0=performance.now(), D=280, ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  const step=now=>{ if(VANIM!==id) return; const t=Math.min(1,(now-t0)/D), k=ease(t), s=v0.scale*Math.pow(scale/v0.scale,k);
+    Host.view={x:v0.x+(x-v0.x)*k,y:v0.y+(y-v0.y)*k,scale:t>=1?scale:s}; applyView(); if(t<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step); }
+function pinchStart(){ const ok=[...TOUCH.pts].filter(([,p])=>p.ok).slice(0,2); if(ok.length<2) return;
+  viewCancelAnim(); lpCancel();
+  if(wire) endWire(false); setDrop(null); cgrab=null; pan=null; floorwrap.classList.remove('panning');
+  TOUCH.silent=true;   // laat elke lopende sleepactie (kaart, rand, regelaar) weten dat hij afgebroken is
+  try{ TOUCH.pts.forEach((p,id)=>{ if(p.target&&p.target.dispatchEvent) p.target.dispatchEvent(new PointerEvent('pointercancel',{pointerId:id,pointerType:'touch',bubbles:true,composed:true})); }); }catch(e){}
+  TOUCH.silent=false;
+  const [a,b]=[ok[0][1],ok[1][1]], r=floorwrap.getBoundingClientRect();
+  TOUCH.pinch={ids:[ok[0][0],ok[1][0]],d0:Math.max(12,Math.hypot(a.x-b.x,a.y-b.y)),c0:{x:(a.x+b.x)/2-r.left,y:(a.y+b.y)/2-r.top},v0:{...Host.view}};
+  floorwrap.classList.add('pinching'); document.body.classList.remove('wiring'); }
+function pinchUpdate(){ const pc=TOUCH.pinch; if(!pc) return; const a=TOUCH.pts.get(pc.ids[0]), b=TOUCH.pts.get(pc.ids[1]); if(!a||!b) return; const r=floorwrap.getBoundingClientRect();
+  const d=Math.max(12,Math.hypot(a.x-b.x,a.y-b.y)), cx=(a.x+b.x)/2-r.left, cy=(a.y+b.y)/2-r.top, s0=pc.v0.scale, ns=clamp(s0*d/pc.d0,0.1,2.5);
+  const fx=(pc.c0.x-pc.v0.x)/s0, fy=(pc.c0.y-pc.v0.y)/s0;   // het punt van de vloer onder het beginmidden blijft onder het midden van de vingers
+  Host.view.scale=ns; Host.view.x=cx-fx*ns; Host.view.y=cy-fy*ns; applyView(); }
+function pinchEnd(goneId){ const pc=TOUCH.pinch; TOUCH.pinch=null; floorwrap.classList.remove('pinching');
+  const left=[...TOUCH.pts].filter(([id,p])=>id!==goneId&&p.ok&&pc.ids.includes(id))[0];
+  if(left){ const p=left[1]; pan={cx:p.x,cy:p.y,x0:Host.view.x,y0:Host.view.y}; floorwrap.classList.add('panning'); } }   // de vinger die blijft, schuift verder
+document.addEventListener('pointerdown',e=>{ if(e.pointerType!=='touch') return; const now=performance.now(); TOUCH.last=now; const path=e.composedPath();
+  TOUCH.downs.set(e.pointerId,{x:e.clientX,y:e.clientY,t:now});
+  if(path.includes(floorwrap)){
+    if(TOUCH.pinch){ e.stopPropagation(); e.preventDefault(); return; }   // een derde vinger doet niets
+    viewCancelAnim(); const ok=touchEligible(path); TOUCH.pts.set(e.pointerId,{x:e.clientX,y:e.clientY,target:path[0],ok});
+    if([...TOUCH.pts.values()].filter(p=>p.ok).length>=2){ pinchStart(); e.stopPropagation(); e.preventDefault(); return; }
+    // een vinger naast een poort op de rand van een kaart pakt die poort (de stip is klein onder een vingertop)
+    const t0=path[0];
+    if(ok&&t0&&t0.nodeType===1&&!t0.closest('.port,.rz,button,select,.pbar,.bar')&&t0.closest('.card .body')&&!path.some(n=>n&&n.classList&&n.classList.contains('ui'))){
+      const pi=nearestPort(e.clientX,e.clientY,22); if(pi){ e.stopPropagation(); e.preventDefault(); select(pi.id); startWire(pi.id,pi.port,pi.dir,pi.kind,e); return; } } }
+  lpArm(e,path); },true);
+document.addEventListener('pointermove',e=>{ if(e.pointerType!=='touch') return; const p=TOUCH.pts.get(e.pointerId); if(!p) return; p.x=e.clientX; p.y=e.clientY;
+  if(TOUCH.pinch&&TOUCH.pinch.ids.includes(e.pointerId)){ e.stopPropagation(); pinchUpdate(); } },true);
+function touchGone(e){ if(e.pointerType!=='touch'||TOUCH.silent) return; TOUCH.downs.delete(e.pointerId);
+  if(TOUCH.pinch&&TOUCH.pinch.ids.includes(e.pointerId)){ pinchEnd(e.pointerId); }
+  TOUCH.pts.delete(e.pointerId); }
+document.addEventListener('pointerup',touchGone,true); document.addEventListener('pointercancel',touchGone,true);
+
+/* ---- lang indrukken (±500 ms, zonder bewegen): de contextactie van rechtsklik/hover op aanraking ---- */
+const LP={timer:0,id:null,x:0,y:0,path:null,swallow:false,off:0};
+function lpCancel(){ clearTimeout(LP.timer); LP.timer=0; LP.id=null; }
+function lpArm(e,path){ lpCancel(); if(e.button>0) return; LP.id=e.pointerId; LP.x=e.clientX; LP.y=e.clientY; LP.path=path; LP.timer=setTimeout(lpFire,500); }
+function lpFire(){ const path=LP.path||[]; LP.timer=0; if(LP.id==null||TOUCH.pinch) return;
+  const has=f=>path.find(n=>n&&n.nodeType===1&&f(n)), cls=(n,c)=>n.classList&&n.classList.contains(c);
+  if(has(n=>cls(n,'libdev'))) return;   // de bibliotheek heeft zijn eigen lang indrukken (slepen)
+  let did=false;
+  const hit=path.find(n=>n&&n._cable);
+  if(hit){ if(wire) endWire(false); cgrab=null; cableMenu(hit._cable,LP.x,LP.y); did=true; }
+  else { const pe=has(n=>cls(n,'port'));
+    if(pe){ if(wire) endWire(false); if(pe.title) status(pe.title); did=!!pe.title; }
+    else { const bar=has(n=>cls(n,'bar')&&n.closest('.card')), ic=has(n=>cls(n,'pkicon')), card=(bar||ic)&&(bar||ic).closest('.card');
+      if(card&&Host.devices.has(card.dataset.id)){ const r=Host.devices.get(card.dataset.id); status(`${r.def.name} · v${r.def.version} · ${r.def.id}`); did=true; }
+      else { const t=has(n=>n.getAttribute&&n.getAttribute('title')&&!isFormEl(n)); if(t){ status(t.getAttribute('title')); did=true; } } } }
+  if(did){ LP.swallow=true; try{ navigator.vibrate&&navigator.vibrate(12); }catch(e){} } }
+document.addEventListener('pointermove',e=>{ if(LP.id===e.pointerId&&Math.hypot(e.clientX-LP.x,e.clientY-LP.y)>10) lpCancel(); },true);
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,e=>{ if(LP.id===e.pointerId) lpCancel(); if(LP.swallow&&e.pointerType==='touch'){ clearTimeout(LP.off); LP.off=setTimeout(()=>{ LP.swallow=false; },120); } },true));
+document.addEventListener('click',e=>{ if(LP.swallow){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); LP.swallow=false; } },true);   // het loslaten na lang indrukken telt niet als klik
+// het contextmenu van de browser (aanraking: lang indrukken) alleen onderdrukken waar de host het zelf afhandelt
+document.addEventListener('contextmenu',e=>{ if(performance.now()-TOUCH.last>1500) return; const path=e.composedPath();
+  if(path.some(n=>isFormEl(n)||(n&&n.nodeType===1&&n.classList.contains('ui')))) return;
+  if(path.some(n=>n&&n.nodeType===1&&(n===floorwrap||n.id==='libwin'||n.tagName==='HEADER'||n.classList.contains('focusview')))) e.preventDefault(); },true);
+
+/* ---- dubbeltik: een eigen dblclick, want de browser stuurt hem op aanraking niet altijd ----
+   Alles wat nu op dblclick luistert (beginwaarde van een schuif, kaartrand = standaardmaat, icoon terugzetten, categorie hernoemen,
+   bibliotheekbalk) werkt zo ook met de vinger, ook voor de regelaars van apparaten. Een eigen dblclick van de browser wordt onderdrukt. */
+window.addEventListener('dblclick',e=>{ if(e.isTrusted&&performance.now()-TOUCH.lastDbl<900){ e.stopImmediatePropagation(); e.preventDefault(); } },true);
+document.addEventListener('pointerup',e=>{ if(e.pointerType!=='touch') return; const d=TOUCH.downs.get(e.pointerId); const now=performance.now(); if(!d) return;
+  if(Math.hypot(e.clientX-d.x,e.clientY-d.y)>12||now-d.t>450||TOUCH.pinch||LP.swallow){ TOUCH.tap=null; return; }
+  const path=e.composedPath(), tg=path[0]; if(!tg||tg.nodeType!==1||isFormEl(tg)){ TOUCH.tap=null; return; }
+  const lt=TOUCH.tap;
+  if(lt&&now-lt.t<350&&Math.hypot(e.clientX-lt.x,e.clientY-lt.y)<30){ TOUCH.tap=null; TOUCH.lastDbl=now;
+    try{ tg.dispatchEvent(new MouseEvent('dblclick',{bubbles:true,cancelable:true,composed:true,clientX:e.clientX,clientY:e.clientY,screenX:e.screenX,screenY:e.screenY,detail:2,view:window})); }catch(err){} }
+  else TOUCH.tap={t:now,x:e.clientX,y:e.clientY}; },true);
+
+/* ---- touch-hulp bij kabels: loslaten op een poort mag een stuk ernaast ---- */
+function nearCompatiblePort(cx,cy){ return wire?nearestPort(cx,cy,28,inf=>compatible(wire.src,inf)):null; }
+// vergrote, onzichtbare raakstrook langs kabels (alleen aanraking); de breedte volgt de zoom zodat hij ±28 schermpixels blijft
+function hitWidthRefresh(){ _hwS=Host.view.scale; if(!PKT.coarse.matches) return; const w=clamp(28/Host.view.scale,14,120)+'px'; svg.querySelectorAll('path.hit').forEach(h=>{ h.style.strokeWidth=w; }); }
+var _hwT=0, _hwS=0; function hitWidthSoon(){ if(!PKT.coarse.matches||Host.view.scale===_hwS) return; _hwS=Host.view.scale; clearTimeout(_hwT); _hwT=setTimeout(hitWidthRefresh,120); }
+floorwrap.addEventListener('pointerdown',viewCancelAnim,true); floorwrap.addEventListener('wheel',viewCancelAnim,true);
+
+/* =====================================================================
+   SEMANTISCH ZOOMEN · onder ±55% van de schermschaal tonen de kaarten alleen titelbalk en poorten (CSS .floor.lite)
+   De apparaten blijven bestaan en luisteren door; alleen het tekenen van hun binnenkant wordt overgeslagen en hun host.frame-teken-
+   klok staat stil (zoals bij een kaart buiten beeld). Dubbelklik of dubbeltik op zo'n kaart zoomt erop in.
+   ===================================================================== */
+floorwrap.addEventListener('dblclick',e=>{ if(!LITE.state) return; const path=e.composedPath();
+  if(path.some(n=>n&&n.nodeType===1&&(n.matches&&n.matches('button,select,input,.rz,.viewctl')))) return;
+  const card=path.find(n=>n&&n.nodeType===1&&n.classList.contains('card')); if(!card||card.classList.contains('mini')||!Host.devices.has(card.dataset.id)) return;
+  const r=Host.devices.get(card.dataset.id); e.stopPropagation(); e.preventDefault(); select(card.dataset.id);
+  const wr=floorwrap.getBoundingClientRect(), s=Math.max(Host.view.scale,PKS.f,PKT.coarse.matches?1:0), cx=r.x+(r.el.offsetWidth||300)/2, cy=r.y+Math.min(r.el.offsetHeight||200,wr.height/s)/2;
+  viewTo(wr.width/2-cx*s,wr.height/2-cy*s,s); },true);
+
+/* =====================================================================
+   CAMERASTANDEN · bladwijzers van de vloer, per werkruimte (patchState.views)
+   x,y = het midden van de uitsnede in vloercoördinaten, scale = zoom t.o.v. de schermschaal (1 = 100%). Zo klopt een stand ook op een ander scherm.
+   ===================================================================== */
+function viewsClean(list){ if(!Array.isArray(list)) return []; const out=[]; for(const s of list){ if(out.length>=30) break; if(!s||typeof s!=='object') continue; const x=+s.x, y=+s.y, sc=+s.scale; if(!isFinite(x)||!isFinite(y)||!isFinite(sc)||sc<=0) continue;
+    out.push({name:String(s.name||pkt('m.t_stand_n',out.length+1)).slice(0,40),x:Math.round(clamp(x,-1e6,1e6)),y:Math.round(clamp(y,-1e6,1e6)),scale:+clamp(sc,0.04,10).toFixed(3)}); } return out; }
+function viewNow(){ const wr=floorwrap.getBoundingClientRect(), v=Host.view; return {x:Math.round((wr.width/2-v.x)/v.scale),y:Math.round((wr.height/2-v.y)/v.scale),scale:+(v.scale/PKS.f).toFixed(3)}; }
+function standGo(i){ const s=Host.views[i]; if(!s) return false; const wr=floorwrap.getBoundingClientRect(), sc=clamp(s.scale*PKS.f,0.1,2.5);
+  viewTo(wr.width/2-s.x*sc,wr.height/2-s.y*sc,sc); status(pkt('m.t_stand_spring',s.name)); return true; }
+function standSave(i){ const v=viewNow(); let n;
+  if(i!=null&&i>=0&&i<Host.views.length){ Host.views[i]={...Host.views[i],...v}; n=i; }
+  else { if(Host.views.length>=30){ status(pkt('m.t_stand_vol'),true); return -1; } Host.views.push({name:pkt('m.t_stand_n',Host.views.length+1),...v}); n=Host.views.length-1; }
+  status(pkt('m.t_stand_bewaard',Host.views[n].name)); standPaint(); return n; }
+var STANDPOP=null;
+function standClose(){ if(STANDPOP){ STANDPOP.remove(); STANDPOP=null; $('standBtn').classList.remove('on'); $('standBtn').setAttribute('aria-expanded','false'); } }
+function standPaint(){ if(!STANDPOP) return; const box=STANDPOP; box.innerHTML='';
+  const h=document.createElement('h4'); h.textContent=pkt('m.t_standen_kop'); box.appendChild(h);
+  if(!Host.views.length){ const e=document.createElement('div'); e.className='note'; e.textContent=pkt('m.t_standen_leeg'); box.appendChild(e); }
+  Host.views.forEach((s,i)=>{ const row=document.createElement('div'); row.className='strow'; const k=document.createElement('kbd'); k.textContent=i<9?String(i+1):'·';
+    const go=document.createElement('button'); go.className='go2'; go.textContent=s.name; go.title=pkt('m.t_stand_spring_titel'); go.onclick=()=>standGo(i);
+    const ed=document.createElement('button'); ed.textContent='✎'; ed.title=pkt('m.t_stand_hernoem'); ed.setAttribute('aria-label',pkt('m.t_stand_hernoem'));
+    ed.onclick=()=>{ const inp=document.createElement('input'); inp.type='text'; inp.value=s.name; inp.maxLength=40; inp.setAttribute('aria-label',pkt('m.t_stand_hernoem')); go.replaceWith(inp); inp.focus(); inp.select(); let done=false;
+      const fin=ok=>{ if(done) return; done=true; if(ok&&inp.value.trim()) s.name=inp.value.trim().slice(0,40); standPaint(); };
+      inp.addEventListener('keydown',ev=>{ ev.stopPropagation(); if(ev.key==='Enter') fin(true); else if(ev.key==='Escape') fin(false); }); inp.addEventListener('blur',()=>fin(true)); };
+    const rm=document.createElement('button'); rm.textContent='×'; rm.title=pkt('m.t_stand_verwijder'); rm.setAttribute('aria-label',pkt('m.t_stand_verwijder')); rm.onclick=()=>{ Host.views.splice(i,1); standPaint(); };
+    const ov=document.createElement('button'); ov.textContent='⤓'; ov.title=pkt('m.t_stand_overschrijf'); ov.setAttribute('aria-label',pkt('m.t_stand_overschrijf')); ov.onclick=()=>standSave(i);
+    row.append(k,go,ed,rm); row.appendChild(ov); row.style.gridTemplateColumns='auto minmax(0,1fr) auto auto auto'; box.appendChild(row); });
+  const sv=document.createElement('button'); sv.className='small'; sv.textContent=pkt('m.t_stand_bewaar_nu'); sv.onclick=()=>standSave(); box.appendChild(sv);
+  const n=document.createElement('div'); n.className='note'; n.textContent=pkt('m.t_standen_toets'); box.appendChild(n); }
+$('standBtn').onclick=e=>{ e.stopPropagation(); if(STANDPOP){ standClose(); return; } STANDPOP=document.createElement('div'); STANDPOP.className='standpop'; STANDPOP.setAttribute('role','dialog'); STANDPOP.setAttribute('aria-label',pkt('m.t_standen_kop'));
+  STANDPOP.addEventListener('pointerdown',ev=>ev.stopPropagation()); $('room').appendChild(STANDPOP); $('standBtn').classList.add('on'); $('standBtn').setAttribute('aria-expanded','true'); standPaint(); };
+document.addEventListener('pointerdown',e=>{ if(STANDPOP&&!e.target.closest('.standpop,#standBtn')) standClose(); },true);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&STANDPOP) standClose();
+  const m=/^Digit([1-9])$/.exec(e.code||''); if(!m||e.ctrlKey||e.metaKey||e.altKey||textEntry(e)||document.querySelector('.pkmodal')||(typeof FOCUS!=='undefined'&&FOCUS.open)) return;
+  const path=e.composedPath?e.composedPath():[]; if(path.some(n=>n&&n.nodeType===1&&n.classList.contains('ui'))) return;   // een apparaat met toetsenbordfocus houdt zijn eigen toetsen
+  const n=+m[1]; e.preventDefault();
+  if(e.shiftKey) standSave(n-1<Host.views.length?n-1:-1); else if(!standGo(n-1)) status(pkt('m.t_stand_geen',n),true); });
+
+/* =====================================================================
+   SCHERMINDELING · breed of compact, per werkruimte (patchState.layouts.compact)
+   De apparaten zelf (r.x, r.y, r.w, r.h, r.mini) zijn altijd de indeling van de schermklasse die nu aan staat; de andere klasse staat
+   in LAY.sets. Opslaan zet de brede indeling in de gewone velden en de compacte in layouts.compact.
+   ===================================================================== */
+const layRec=r=>({x:r.x,y:r.y,w:r.w,h:r.h,mini:!!r.mini});
+function layCompactFor(id,r){ return LAY.cls==='compact'?layRec(r):LAY.sets.compact[id]||null; }
+function layWideFor(id,r){ return LAY.cls==='wide'?layRec(r):(LAY.sets.wide[id]||layRec(r)); }
+function layApplyRec(id,r,e){ if(!e) return; r.x=+e.x||0; r.y=+e.y||0; r.el.style.left=r.x+'px'; r.el.style.top=r.y+'px';
+  setSize(id,e.w==null?null:e.w,e.h==null?null:e.h); r.mini=!!e.mini; r.el.classList.toggle('mini',r.mini); }
+function layoutSwitch(target,o){ o=o||{}; if(target===LAY.cls||(target!=='wide'&&target!=='compact')) return false;
+  const from=LAY.cls; LAY.sets[from]={}; Host.devices.forEach((r,id)=>{ LAY.sets[from][id]=layRec(r); });
+  if(from==='wide') LAY.cam.wide={...Host.view};
+  Host.devices.forEach((r,id)=>{ r.el.classList.remove('moving'); layApplyRec(id,r,LAY.sets[target][id]||LAY.sets[from][id]); });
+  LAY.cls=target; drawCables(); requestAnimationFrame(()=>drawCables());
+  if(target==='wide'&&LAY.cam.wide&&!o.fit){ Host.view={...LAY.cam.wide}; applyView(); }
+  else if(o.fit!==false&&Host.devices.size) setTimeout(()=>$('zoomFit').click(),60);
+  if(!o.silent) status(pkt('m.t_klasse_gewisseld',pkt(target==='wide'?'m.t_klasse_wide':'m.t_klasse_compact')));
+  layoutPaintSel(); return true; }
+function layoutSanitize(src){ const out={}; if(!src||typeof src!=='object') return out; for(const id of Object.keys(src)){ const e=src[id]; if(!e||typeof e!=='object'||!/^d\d+$/.test(id)) continue; const x=+e.x, y=+e.y; if(!isFinite(x)||!isFinite(y)) continue;
+    const w=e.w==null?null:(isFinite(+e.w)?clamp(Math.round(+e.w),200,6000):null), h=e.h==null?null:(isFinite(+e.h)?clamp(Math.round(+e.h),120,20000):null);
+    out[id]={x:clamp(Math.round(x),-1e6,1e6),y:clamp(Math.round(y),-1e6,1e6),w,h,mini:!!e.mini}; } return out; }
+function layoutLoad(p){ LAY.cls='wide'; LAY.cam.wide=null; LAY.sets={wide:{},compact:layoutSanitize(p.layouts&&p.layouts.compact)};
+  const tg=layoutTarget(); if(tg==='compact'){ const had=Object.keys(LAY.sets.compact).length>0; layoutSwitch('compact',{silent:true,fit:true}); if(!had&&window.innerWidth<700) setTimeout(()=>status(pkt('m.t_tip_pas_aan')),900); } else layoutPaintSel(); }
+// signaalvolgorde: bronnen eerst, dan wat ze voeden; zonder kabels (of bij een lus) op positie
+function layoutOrder(ids,pos){ const succ=new Map(ids.map(i=>[i,new Set()])), indeg=new Map(ids.map(i=>[i,0]));
+  Host.cables.forEach(c=>{ if(!succ.has(c.from.id)||!succ.has(c.to.id)||c.from.id===c.to.id||succ.get(c.from.id).has(c.to.id)) return; succ.get(c.from.id).add(c.to.id); indeg.set(c.to.id,indeg.get(c.to.id)+1); });
+  const cmp=(a,b)=>(pos(a).x-pos(b).x)||(pos(a).y-pos(b).y), rest=new Set(ids), out=[];
+  while(rest.size){ let ready=[...rest].filter(i=>indeg.get(i)===0).sort(cmp); const nxt=ready.length?ready[0]:[...rest].sort(cmp)[0];
+    rest.delete(nxt); out.push(nxt); succ.get(nxt).forEach(s=>indeg.set(s,indeg.get(s)-1)); }
+  return out; }
+function layoutFitScreen(){ if(!Host.devices.size) return; liteHold(1);
+  if(LAY.cls!=='compact'){ layoutSwitch('compact',{silent:true,fit:false}); }
+  if(LAY.mode!=='compact'){ LAY.mode='compact'; try{ localStorage.setItem('patchkamer.layoutMode','compact'); }catch(e){} }
+  const wr=floorwrap.getBoundingClientRect(), W=wr.width, H=wr.height, M=24, G=28, ents=[...Host.devices.entries()];
+  const connected=new Set(); Host.cables.forEach(c=>{ connected.add(c.from.id); connected.add(c.to.id); });
+  const start=new Map(ents.map(([id,r])=>[id,{x:r.x,y:r.y}]));
+  const cids=ents.map(([id])=>id).filter(id=>connected.has(id)), loose=ents.map(([id])=>id).filter(id=>!connected.has(id));
+  const order=layoutOrder(cids,id=>start.get(id)); loose.sort((a,b)=>(start.get(a).x-start.get(b).x)||(start.get(a).y-start.get(b).y));
+  // unieke breedte: de huidige breedte, nooit breder dan het scherm op schaal 1
+  const full=[], icons=[];
+  order.forEach(id=>{ const r=Host.devices.get(id); const w=clamp(Math.min(r.w??defWidth(r.def),Math.max(200,W-2*M)),minWidth(r.def),6000); setSize(id,w,undefined); full.push(id); });
+  loose.forEach(id=>{ const r=Host.devices.get(id); r.mini=true; r.el.classList.add('mini'); icons.push(id); });
+  const box=id=>{ const r=Host.devices.get(id); return {w:r.el.offsetWidth||300,h:r.el.offsetHeight||200}; };
+  const sim=cols=>{ const sizes=full.map(box), total=sizes.reduce((a,b)=>a+b.h+G,0), target=total/cols, cs=[[]], hs=[0];
+    full.forEach((id,i)=>{ let c=cs.length-1; if(hs[c]>0&&hs[c]+sizes[i].h>target*1.02&&cs.length<cols){ cs.push([]); hs.push(0); c++; } cs[c].push(id); hs[c]+=sizes[i].h+G; });
+    const cw=cs.map(c=>Math.max(...c.map(id=>box(id).w),0)), tw=cw.reduce((a,b)=>a+b,0)+(cs.length-1)*G+2*M;
+    const per=Math.max(1,Math.floor((tw-2*M+G)/(124+G))), irows=icons.length?Math.ceil(icons.length/per):0, th=Math.max(...hs,0)+2*M+irows*(110+G);
+    return {cs,cw,tw,th,per,irows,fit:Math.min(W/tw,H/th,1.5)}; };
+  let best=null; if(full.length){ for(let c=1;c<=Math.min(6,full.length);c++){ const s=sim(c); if(!best||s.fit>best.fit*1.03) best=s; } }
+  else best={cs:[],cw:[],tw:W,th:0,per:Math.max(1,Math.floor((W-2*M+G)/(124+G))),irows:0,fit:1};
+  let x=M, bottom=M;
+  best.cs.forEach((col,ci)=>{ let y=M; col.forEach(id=>{ const r=Host.devices.get(id); r.el.classList.remove('moving'); moveTo(r,x,y); y+=box(id).h+G; }); bottom=Math.max(bottom,y); x+=best.cw[ci]+G; });
+  let ix=M, iy=Math.max(bottom,M), n=0; icons.forEach(id=>{ const r=Host.devices.get(id); r.el.classList.remove('moving'); moveTo(r,ix,iy); n++; ix+=124+G; if(n%best.per===0){ ix=M; iy+=110+G; } });
+  drawCables(); setTimeout(()=>{ $('zoomFit').click(); drawCables(); liteHold(-1); },80);
+  layoutPaintSel(); status(pkt('m.t_pas_aan_klaar',best.cs.length,icons.length)); }
+function layoutPaintSel(){ const s=$('layoutSel'); if(s) s.value=LAY.mode; }
+$('layoutSel').onchange=()=>{ const m=$('layoutSel').value; LAY.mode=(m==='wide'||m==='compact')?m:'auto'; try{ localStorage.setItem('patchkamer.layoutMode',LAY.mode); }catch(e){} layoutSwitch(layoutTarget(),{fit:LAY.mode!=='wide'}); layoutPaintSel(); };
+$('fitScreen').onclick=layoutFitScreen;
+var _layT=0; window.addEventListener('resize',()=>{ clearTimeout(_layT); _layT=setTimeout(()=>{ if(LAY.mode==='auto'&&Host.devices.size&&layoutTarget()!==LAY.cls) layoutSwitch(layoutTarget(),{fit:true}); else if(LAY.mode==='auto'&&!Host.devices.size) LAY.cls=layoutTarget(); },350); });
+layoutPaintSel();
+
+/* ---- instelling: kaarten vereenvoudigen bij uitzoomen ---- */
+(function(){ const cb=$('liteCb'); cb.checked=LITE.on; cb.onchange=()=>{ LITE.on=cb.checked; try{ localStorage.setItem('patchkamer.liteZoom',LITE.on?'1':'0'); }catch(e){} liteUpdate(); }; })();
+
+/* =====================================================================
+   BIBLIOTHEEK · weergave kaartjes/compact, lang indrukken + slepen op aanraking, onderlade op een smal scherm
+   ===================================================================== */
+var LIBCLK={drag:0,placed:0};
+function paintLibView(){ const cur=libViewNow(); document.querySelectorAll('#libView button').forEach(b=>{ const on=b.dataset.v===cur; b.classList.toggle('on',on); b.setAttribute('aria-pressed',String(on)); }); }
+document.querySelectorAll('#libView button').forEach(b=>{ b.onclick=()=>{ LIBV={v:b.dataset.v,picked:true}; try{ localStorage.setItem('patchkamer.libView',LIBV.v); }catch(e){} paintLib(); }; });
+$('libClose').onclick=()=>{ LIB.shown=false; placeLib(); saveLib(); };
+const LIBP={timer:0,id:null,x:0,y:0,on:false,moved:false,def:null};
+// op aanraking: het zachtjes slepen scrolt de lijst; pas na ±500 ms stilhouden pak je het apparaat op om het naar de vloer te slepen
+function libPress(e,def,ver,row){ clearTimeout(LIBP.timer); LIBP.id=e.pointerId; LIBP.x=e.clientX; LIBP.y=e.clientY; LIBP.on=false; LIBP.moved=false; LIBP.def=def;
+  LIBP.timer=setTimeout(()=>{ if(LIBP.id==null) return; LIBP.on=true; libDrag={def,ver,x0:LIBP.x,y0:LIBP.y,ghost:null,touch:true};
+    const g=document.createElement('div'); g.className='libghost'; g.textContent=def.name; document.body.appendChild(g); libDrag.ghost=g; g.style.left=LIBP.x+'px'; g.style.top=LIBP.y+'px'; try{ navigator.vibrate&&navigator.vibrate(12); }catch(_){} },500); }
+document.addEventListener('pointermove',e=>{ if(LIBP.id!==e.pointerId) return; if(Math.hypot(e.clientX-LIBP.x,e.clientY-LIBP.y)>10){ LIBP.moved=true; if(!LIBP.on){ clearTimeout(LIBP.timer); LIBP.id=null; } } },true);
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,e=>{ if(LIBP.id!==e.pointerId) return; clearTimeout(LIBP.timer); const was=LIBP.on&&!LIBP.moved&&t==='pointerup'; const d=LIBP.def; LIBP.id=null; LIBP.on=false;
+  if(was||(t==='pointercancel'&&libDrag&&libDrag.touch)){ if(libDrag&&libDrag.ghost) libDrag.ghost.remove(); libDrag=null; document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop')); setDrop(null);
+    if(was&&d){ status(`${d.name} · v${d.version} · ${d.kind} · ${d.id}`); LIBCLK.drag=performance.now(); } } },true));
+document.addEventListener('touchmove',e=>{ if(libDrag&&libDrag.touch&&e.cancelable) e.preventDefault(); },{passive:false});
+PKT.narrow.addEventListener('change',()=>{ placeLib(); paintLib(); if(typeof FOCUS!=='undefined'&&!FOCUS.open&&!FOCUS_PICKED) FOCUS.layout=focusBase(); });
+PKT.coarse.addEventListener('change',()=>{ paintLib(); hitWidthRefresh(); });
+paintLibView();
+
+/* =====================================================================
+   FOCUS · Een tegelijk (carrousel): wisselen met ◀ ▶, de tabbalk, de pijltjestoetsen of door over de tabbalk te vegen.
+   Bewust alleen de tabbalk: een veeg over de kaart zelf zou botsen met schuiven, knoppen en pads van het apparaat.
+   ===================================================================== */
+function focusStep(d){ const n=focusList().length; if(n<2) return; FOCUS.idx=(FOCUS.idx+d+n)%n; focusOneApply(); const b=focusEl&&focusEl.querySelector('.fvbody'); if(b) b.scrollTop=0; drawCables(); }
+function focusOneApply(){ if(!focusEl) return; const one=FOCUS.layout==='one', list=focusList(), tabs=focusEl.querySelector('.fvtabs'); tabs.classList.toggle('show',one);
+  if(FOCUS.idx>=list.length) FOCUS.idx=Math.max(0,list.length-1);
+  if(!one){ Host.devices.forEach(r=>r.el.classList.remove('fvoff')); return; }
+  list.forEach(([,r],i)=>r.el.classList.toggle('fvoff',i!==FOCUS.idx));
+  const strip=tabs.querySelector('.fvstrip'); strip.innerHTML='';
+  list.forEach(([id,r],i)=>{ const b=document.createElement('button'); b.className='small'+(i===FOCUS.idx?' on':''); b.textContent=r.def.name; b.setAttribute('role','tab'); b.setAttribute('aria-selected',String(i===FOCUS.idx)); b.dataset.i=String(i); strip.appendChild(b); });
+  tabs.querySelector('.fvcnt').textContent=list.length?pkt('m.t_n_van_m',FOCUS.idx+1,list.length):'';
+  const on=strip.querySelector('.on'); if(on) strip.scrollLeft=Math.max(0,on.offsetLeft-strip.clientWidth/2+on.offsetWidth/2); }
+function focusBuildTabs(){ const bar=focusEl.querySelector('.fvbar'), tabs=document.createElement('div'); tabs.className='fvtabs';
+  tabs.innerHTML='<button class="small fvnav" data-d="-1">◀</button><div class="fvstrip" role="tablist"></div><button class="small fvnav" data-d="1">▶</button><span class="fvcnt"></span>';
+  tabs.querySelector('[data-d="-1"]').setAttribute('aria-label',pkt('m.t_vorig')); tabs.querySelector('[data-d="1"]').setAttribute('aria-label',pkt('m.t_volgend'));
+  tabs.querySelector('[data-d="-1"]').title=pkt('m.t_vorig'); tabs.querySelector('[data-d="1"]').title=pkt('m.t_volgend');
+  tabs.querySelectorAll('.fvnav').forEach(b=>b.onclick=()=>focusStep(+b.dataset.d));
+  const strip=tabs.querySelector('.fvstrip'); let sw=null, swiped=false;
+  strip.addEventListener('pointerdown',e=>{ if(e.button!==0) return; sw={id:e.pointerId,x:e.clientX,cap:false}; swiped=false; });
+  strip.addEventListener('pointermove',e=>{ if(!sw||sw.id!==e.pointerId) return; const dx=e.clientX-sw.x; if(!sw.cap&&Math.abs(dx)>10){ sw.cap=true; try{ strip.setPointerCapture(e.pointerId); }catch(_){} } });
+  const fin=e=>{ if(!sw||sw.id!==e.pointerId) return; const dx=e.clientX-sw.x, s=sw; sw=null; if(s.cap&&Math.abs(dx)>=40&&e.type==='pointerup'){ swiped=true; focusStep(dx<0?1:-1); } else if(s.cap) swiped=true; };
+  strip.addEventListener('pointerup',fin); strip.addEventListener('pointercancel',fin);
+  strip.addEventListener('click',e=>{ if(swiped){ swiped=false; return; } const b=e.target.closest('button[data-i]'); if(b){ FOCUS.idx=+b.dataset.i; focusOneApply(); const bd=focusEl.querySelector('.fvbody'); if(bd) bd.scrollTop=0; drawCables(); } });
+  bar.appendChild(tabs); }
+$('browseBtn').onclick=()=>{ if(FOCUS.open&&FOCUS.all){ closeFocus(); return; } if(FOCUS.open) closeFocus();
+  if(!Host.devices.size){ status(pkt('m.t_bladeren_leeg'),true); return; }
+  FOCUS.all=true; FOCUS.layout='one'; const si=focusList().findIndex(([id])=>id===selected); FOCUS.idx=si>=0?si:0; openFocus(); };
+document.addEventListener('keydown',e=>{ if(!FOCUS.open||FOCUS.layout!=='one'||typing(e)||e.ctrlKey||e.metaKey||e.altKey||e.shiftKey) return;
+  if(e.key==='ArrowLeft'){ focusStep(-1); e.preventDefault(); } else if(e.key==='ArrowRight'){ focusStep(1); e.preventDefault(); } });
 
 /* =====================================================================
    AI CHAT · ingebouwd apparaat. Je vraagt in gewone taal om een device, een tunepack, een presetpack of een song.
