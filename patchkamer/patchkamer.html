@@ -101,8 +101,9 @@
   <button class="small close" id="skClose" title="sluiten" data-i18n-title="attr.sluiten">×</button>
   <div>
     <h3 data-i18n="ui.sk_titel">Skinbibliotheken</h3>
-    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.sk_uitleg">Een <b>skin</b> verandert alleen het uiterlijk van één apparaat, nooit de klank of de werking. Elke skin heeft een of meer <b>verschijningsvormen</b>; op de kaart kies je Skin en Verschijning (<b>Auto</b> wisselt vanzelf op kaartbreedte en schermgrootte). Importeer een bestand (.patchkamer-skin.json), laat het op het canvas los, of laad de standaardbibliotheek met Alles laden. Skins uit een bron (map, GitHub) zijn alleen-lezen. Een song of werkruimte neemt de gebruikte skins mee.</div>
+    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.sk_uitleg">Een <b>skin</b> verandert alleen het uiterlijk van één apparaat, nooit de klank of de werking. Elke skin heeft een of meer <b>verschijningsvormen</b>; op de kaart kies je Skin en Verschijning (<b>Auto</b> wisselt vanzelf op kaartbreedte en schermgrootte). Importeer een bestand (.patchkamer-skin.json), laat het op het canvas los, of laad de standaardbibliotheek met Alles laden. Skins uit een bron (map, GitHub) zijn alleen-lezen. Een song of werkruimte neemt de gebruikte skins mee. Een skin kan ook <b>ontwerpkeuzes</b> bevatten (poortenmodus, kleuren, haptiek, knoppen); met <b>Ontwerpen</b> maak je zelf een skin met live voorbeeld.</div>
     <div class="wslist" id="skLibs"></div>
+    <div id="skDesign" hidden></div>
   </div>
   <div class="wsrow"><button class="small" id="skLoadAll" data-i18n="ui.sk_alles_laden">Alles laden</button><button class="small" id="skImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="skFile" accept=".json,application/json" multiple hidden></div>
 </section>
@@ -269,7 +270,11 @@
 <script src="js/song-panel.js"></script>
 <script src="js/file-drop.js"></script>
 <script src="js/device-icons.js"></script>
+<script src="js/colour-picker.js"></script>
+<script src="js/haptics.js"></script>
+<script src="js/skins-ports.js"></script>
 <script src="js/skins.js"></script>
 <script src="js/skins-ui.js"></script>
+<script src="js/skins-design.js"></script>
 <script src="js/boot.js"></script>
 <script src="js/ns-close.js"></script>

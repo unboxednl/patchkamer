@@ -24,6 +24,7 @@ function drawWire(){
   PK.wire.dot.setAttribute('cx',b.x); PK.wire.dot.setAttribute('cy',b.y); PK.wire.dot.style.display=PK.wire.hover?'none':'';
 } PK.drawWire=drawWire;
 function hoverAt(cx,cy){
+  if(PK.skPortsWire) PK.skPortsWire(cx,cy);   // poortenmodus hover/strip van een skin: poorten openen onder de kabel
   const elp=document.elementFromPoint(cx,cy); const pe=elp&&elp.closest?elp.closest('.port'):null; const inf=portInfo(pe);
   let ok=compatible(PK.wire.src,inf)?inf:null; if(!ok&&PK.wire.touch) ok=PK.nearCompatiblePort(cx,cy);
   if(PK.wire.hover&&(!ok||ok.el!==PK.wire.hover.el)) PK.wire.hover.el.classList.remove('hover');
@@ -49,6 +50,7 @@ function endWire(connect){
   while(PK.wireSvg.firstChild) PK.wireSvg.removeChild(PK.wireSvg.firstChild);
   document.body.classList.remove('wiring');
   PK.floor.querySelectorAll('.port').forEach(pe=>pe.classList.remove('target','dim','hover','source'));
+  if(PK.skPortsWire) PK.skPortsWire(0,0);
 } PK.endWire=endWire;
 // ---------- een kabel aan één kant oppakken en omhangen ----------
 // Slepen aan een kabel maakt de dichtstbijzijnde kant los; de andere kant blijft zitten. Loslaten op een passende poort hangt de kabel om,

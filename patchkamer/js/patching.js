@@ -34,7 +34,7 @@ function portPos(id,port,dir){ const r=PK.Host.devices.get(id); if(!r) return nu
   // de stip kan buiten beeld zijn: in een scrollend deel van de kaart (vaste hoogte, interne scroll) of verborgen.
   // Dan hangt de kabel aan de rand van het zichtbare deel, met een open rondje als teken.
   let cx=b.left+b.width/2, cy=b.top+b.height/2, clipped=false; const cb=r.el.getBoundingClientRect();
-  if(!b.width&&!b.height){ cx=dir==='out'?cb.right:cb.left; cy=cb.top+Math.min(cb.height/2,40); clipped=true; }
+  if(!b.width&&!b.height){ const sr=r.skPortsMode&&r.portsEl&&r.portsEl.getBoundingClientRect(); if(sr&&sr.width){ cx=dir==='out'?sr.right-8:sr.left+8; cy=sr.top+sr.height/2; } else { cx=dir==='out'?cb.right:cb.left; cy=cb.top+Math.min(cb.height/2,40); } clipped=true; }   // verborgen poort (poortenmodus van een skin): de kabel hangt aan de poortenstrook
   else { let L=cb.left,T=cb.top,R=cb.right,B=cb.bottom;
     for(const a of clipAncestors(el,r.el)){ const q=a.getBoundingClientRect(); L=Math.max(L,q.left); T=Math.max(T,q.top); R=Math.min(R,q.right); B=Math.min(B,q.bottom); }
     if(R>L&&B>T){ const nx=PK.clamp(cx,L,R), ny=PK.clamp(cy,T,B); if(nx!==cx||ny!==cy){ clipped=true; cx=nx; cy=ny; } } }
