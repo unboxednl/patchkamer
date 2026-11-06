@@ -6,6 +6,8 @@ Dit bestand is voor AI-agents. Het is niet geschreven voor mensen. Het hoort bij
 
 `patchkamer.html` is de **host**: de studio zelf, als één HTML-pagina. Ze plaatst en koppelt apparaten, draait de klok en beheert tunes, presets en songs. De host implementeert het contract in `../contract/PATCHKAMER-CONTRACT.md`. Ze ondersteunt nu contract **v1.11** (in de code: `patchkamer:'1.11'`). De host is tweetalig (Nederlands en Engels, standaard de taal van de browser) en heeft onder Instellingen een Audio-gedeelte (kwaliteit, sample rate, latency, oversampling). Het contract staat niet in de host maar op GitHub (links onder Instellingen → Contract & opstelling).
 
+Naast de host staan `manifest.webmanifest` en `icons/` (favicon, `apple-touch-icon.png`, 192 en 512 px voor een app-icoon op een telefoon). De SVG-favicon zit als data-adres in de kop van `patchkamer.html`; de host werkt ook zonder deze bestanden.
+
 ## Voor het bouwen van een apparaat
 
 De host is hier **alleen om in te testen**. Pas haar niet aan om een apparaat te laten werken. Past het apparaat niet in de host, dan klopt het apparaat niet met het contract.
