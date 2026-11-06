@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.1 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Uitgangsniveau (lvl), Patroonswing (swing) en de swing per geluid (laneSwing.kick, .snare, .hat, .perc); alle standaard uit (drift 0,05 tot 0,08).
+//          Modulatie komt alleen bovenop de knop (effectief = knop + o × bereik, geclampt) en is nooit state; getState/presets/tunes gelijk. Zonder modulatie gelijk aan 1.15.0.
+//          Risico: een gemoduleerd uitgangsniveau gaat via setTargetAtTime (geen tikken); gemoduleerde swing verschuift alleen de timing van nieuwe slagen. Niet beluisterd.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Swing op patroonniveau (`swing`) en per geluid (`laneSwing`), naast de hostswing: extra vertraging van de oneven zestienden, 0 … 50% van een stap, de som begrensd tot 50%.
 //          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0). Het apparaat heeft geen noten- of triggeringang, dus er is niets om live in te spelen
@@ -35,7 +38,7 @@ const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.15.0',
+  version: '1.15.1',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -52,8 +55,11 @@ export default {
     const mod = {};   // 'kick.tune' -> −1..1
     const eff = (vk, pk) => { const d = VP[vk][pk]; const b = state.v[vk][pk], o = mod[vk + '.' + pk] || 0; if (!o) return b;
       return d[5] ? clamp(b * Math.pow(d[2] / d[1], o), d[1], d[2]) : clamp(b + o * (d[2] - d[1]), d[1], d[2]); };
+    // extra bestuurbare regelaars buiten VP: id -> [naam, min, max, rol, drift]
+    const EX = { lvl: [T.lvl, 0, 1, 'level', 0.05], swing: [T.swing, 0, 0.5, 'swing', 0.05] }; VOICES.forEach(([k, lab]) => { EX['laneSwing.' + k] = [lab + ' ' + T.laneSwing, 0, 0.5, 'swing', 0.05]; });
+    const exv = (id, b) => { const o = mod[id]; return o ? clamp(b + o * (EX[id][2] - EX[id][1]), EX[id][1], EX[id][2]) : b; };
     let rows = {}, cells = {}, self, dead = false, lvlKnob = null, swKnob = null, lswKnobs = {};
-    const apply = () => { if (dead) return; const t = ctx.currentTime; VOICES.forEach(([k]) => { bus[k].g.gain.setTargetAtTime(eff(k, 'lvl'), t, 0.03); bus[k].p.pan.setTargetAtTime(eff(k, 'pan'), t, 0.03); }); out.gain.setTargetAtTime(state.lvl, t, 0.02); };
+    const apply = () => { if (dead) return; const t = ctx.currentTime; VOICES.forEach(([k]) => { bus[k].g.gain.setTargetAtTime(eff(k, 'lvl'), t, 0.03); bus[k].p.pan.setTargetAtTime(eff(k, 'pan'), t, 0.03); }); out.gain.setTargetAtTime(exv('lvl', state.lvl), t, 0.02); };
     apply();
     function hit(lane, t, v) {
       const dst = bus[lane].g, dec = eff(lane, 'dec');
@@ -94,11 +100,11 @@ export default {
         lswKnobs = {}; VOICES.forEach(([k, lab]) => { lswKnobs[k] = host.ui.knob(el, lab + ' ' + T.laneSwing, [0, 0.5, 0.005], state.laneSwing[k], pct, v => { state.laneSwing[k] = v; }, { default: 0, id: 'laneSwing.' + k, group: 'swing' }); });
       },
       onStep({ step, time, stepDur, bpm }) { const sd = Number.isFinite(stepDur) && stepDur > 0 ? stepDur : Number.isFinite(bpm) && bpm > 0 ? 15 / bpm : 0, odd = step % 2 === 1;
-        VOICES.forEach(([k]) => { if (state.pat[k][step]) { const v = step % 4 === 0 ? 1 : 0.75, t = odd ? time + clamp(state.swing + state.laneSwing[k], 0, 0.5) * sd : time; hit(k, t, v); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: v, time: t }); } }); Object.values(rows).forEach(r => r.cursor(step)); },
+        VOICES.forEach(([k]) => { if (state.pat[k][step]) { const v = step % 4 === 0 ? 1 : 0.75, t = odd ? time + clamp(exv('swing', state.swing) + exv('laneSwing.' + k, state.laneSwing[k]), 0, 0.5) * sd : time; hit(k, t, v); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: v, time: t }); } }); Object.values(rows).forEach(r => r.cursor(step)); },
       onTransport({ playing }) { if (!playing) Object.values(rows).forEach(r => r.cursor(-1)); },
       // contract v1.3 — elk drumgeluid is een spoor
-      params() { const L = []; VOICES.forEach(([vk, vl]) => Object.entries(VP[vk]).forEach(([pk, d]) => L.push({ id: vk + '.' + pk, name: d[0], lane: vk, laneName: vl, min: d[1], max: d[2], role: d[6], scale: d[5] ? 'log' : 'lin', drift: d[7], on: d[8] }))); return L; },
-      modulate(offsets) { for (const k in mod) delete mod[k]; for (const k in offsets || {}) { const [vk, pk] = k.split('.'); if (VP[vk] && VP[vk][pk] && typeof offsets[k] === 'number' && isFinite(offsets[k])) mod[k] = clamp(offsets[k], -1, 1); } apply(); },
+      params() { const L = []; VOICES.forEach(([vk, vl]) => Object.entries(VP[vk]).forEach(([pk, d]) => L.push({ id: vk + '.' + pk, name: d[0], lane: vk, laneName: vl, min: d[1], max: d[2], role: d[6], scale: d[5] ? 'log' : 'lin', drift: d[7], on: d[8] }))); L.push({ id: 'lvl', name: EX.lvl[0], lane: 'out', laneName: T.lvl, min: 0, max: 1, role: 'level', scale: 'lin', drift: 0.05, on: false }); Object.entries(EX).forEach(([id, d]) => { if (id !== 'lvl') L.push({ id, name: d[0], lane: 'swing', laneName: 'Swing', min: d[1], max: d[2], role: d[3], scale: 'lin', drift: d[4], on: false }); }); return L; },
+      modulate(offsets) { for (const k in mod) delete mod[k]; for (const k in offsets || {}) { const [vk, pk] = k.split('.'); if (((VP[vk] && VP[vk][pk]) || Object.hasOwn(EX, k)) && typeof offsets[k] === 'number' && isFinite(offsets[k])) mod[k] = clamp(offsets[k], -1, 1); } apply(); },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(s) { s = s && typeof s === 'object' ? s : {}; const d = defV();
         // in place: the step rows keep a reference to these arrays

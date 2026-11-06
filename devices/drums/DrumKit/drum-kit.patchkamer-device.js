@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.2 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Humanize (human), Patroonswing A tot D (patternSwing.0 tot .3) en de swing per kanaal (chN.swing); alle standaard uit (drift 0,05, role swing of humanize).
+//          Modulatie komt alleen bovenop de knop (knop + o × bereik, geclampt; swing als som begrensd tot 50%) en is nooit state; getState, presets en tunes gelijk. Zonder modulatie gelijk aan 1.14.1. Niet beluisterd.
+//          Bewust weggelaten: lengte, pagina, patroon, kit/klankmodel (keuzes), de stapdata (velocity, kans, ratchet per stap) en het Auditie-/Opname-gedrag.
 // 1.14.1 — Swing op patroon- en kanaalniveau (patternSwing per patroon A–D, swing per kanaal; 0 … 0,5 van een zestiende, naast de hostswing; de som is begrensd op 0,5), live inspelen (knop Opname: binnenkomende noten en trigs worden als stap in het actieve patroon op het juiste kanaal geschreven, op de dichtstbijzijnde geswingde zestiende), noteNames() geeft alle instrumenten uit de instrumentkeuze door en een instrument zonder kanaal klinkt als gast op een vrij kanaal (zoals Pulse Drums). Met swing 0 en opname uit is het gedrag gelijk aan 1.14.0.
 // 1.14.0 — Patchkamer contract v1.14. Geeft de klanknamen met hun noot door (noteNames, contract v1.14), zodat een sequencer zijn rijen kan benoemen; de volgorde, kit en noten volgen de kanalen.
 // 1.11.3 — De bassdrum klinkt langer door: de body van de kick werd door twee opeenvolgende afbouwen (in de toon en in de envelope) al na ongeveer 60 ms zwak. De toon loopt nu door tot het eind van de envelope en de envelope houdt het niveau even vast (een vijfde van de decay). Andere instrumenten ongewijzigd.
@@ -122,7 +125,7 @@ const CSS=`
 const OUT_TRIM=.36*5.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.14.1',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.14.2',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -147,19 +150,24 @@ const __pkDef = {
   const signature=state.channels.map(c=>c.type+':'+c.model).join('|');
   if(signature===paramSignature)return;
   paramSignature=signature;
-  paramList=[{id:'master',name:T.pMaster,lane:'master',laneName:T.pMasterLane,min:0,max:1,scale:'lin',role:'level',drift:.005,on:false}];
+  paramList=[{id:'master',name:T.pMaster,lane:'master',laneName:T.pMasterLane,min:0,max:1,scale:'lin',role:'level',drift:.005,on:false},
+   {id:'human',name:'Humanize',lane:'master',laneName:T.pMasterLane,min:0,max:.025,scale:'lin',role:'humanize',drift:.05,on:false}];
+  for(let p=0;p<4;p++)paramList.push({id:'patternSwing.'+p,name:T.patSwing+' '+'ABCD'[p],lane:'swing',laneName:'Swing',min:0,max:.5,scale:'lin',role:'swing',drift:.05,on:false});
   state.channels.forEach((c,i)=>{const lane='ch'+(i+1),family=TYPES[c.type][1],laneName=String(i+1).padStart(2,'0')+' · '+TYPES[c.type][0]+' / '+c.model;
    for(const [key,def] of Object.entries(MOD_DEFS)){
     if(key==='sweep'&&!['kick','tom','zap','metal'].includes(family))continue;
     if(key==='noise'&&family==='bell')continue;
     paramList.push({id:lane+'.'+key,...def,name:T.pn[key]||def.name,lane,laneName});
    }
+   paramList.push({id:lane+'.swing',name:T.chSwing,lane,laneName,min:0,max:.5,scale:'lin',role:'swing',drift:.05,on:false});
   });
   paramIds=new Set(paramList.map(p=>p.id));
   for(const key of Object.keys(mod))if(!paramIds.has(key))delete mod[key];
   if(notify&&self&&typeof host.paramsChanged==='function')host.paramsChanged(self);
  }
  function value(base,key,id){const def=key==='master'?{min:0,max:1,scale:'lin'}:MOD_DEFS[key],offset=mod[id]||0;if(!offset)return base;return clamp(def.scale==='log'?base*Math.pow(def.max/def.min,offset):base+offset*(def.max-def.min),def.min,def.max,base);}
+ const swMod=(id,base,range)=>{const o=mod[id]||0;return o?clamp(base+o*range,0,range,base):base;};
+ const chSwing=i=>swMod('ch'+(i+1)+'.swing',state.channels[i].swing,.5),patSwingOf=()=>swMod('patternSwing.'+state.pattern,state.patternSwing[state.pattern],.5),humanOf=()=>swMod('human',state.human,.025);
  function effective(i){const c=state.channels[i],out={...c};for(const key of Object.keys(MOD_DEFS))out[key]=value(c[key],key,'ch'+(i+1)+'.'+key);return out;}
  function apply(){
   if(dead)return;notesNotify();const solo=state.channels.some(c=>c.solo);
@@ -234,7 +242,7 @@ const __pkDef = {
  // Drum Kit kent alleen het zestiende-raster: een ingespeelde noot gaat altijd naar de dichtstbijzijnde (geswingde) zestiende.
  let ref=null;const recSkip=new Set();
  const oddStep=a=>((a%2)+2)%2===1;
- function nearestStep(c,t){const sd=ref.stepDur,loc=Math.min(.5,state.patternSwing[state.pattern]+c.swing),base=ref.time-(oddStep(ref.abs)?ref.hs*sd:0),at=a=>base+(a-ref.abs)*sd+(oddStep(a)?(ref.hs+loc)*sd:0),k0=ref.abs+Math.round((t-base)/sd);let best=k0,bd=Infinity;for(let a=k0-1;a<=k0+1;a++){const d=Math.abs(t-at(a));if(d<bd){bd=d;best=a;}}return best;}
+ function nearestStep(c,t){const sd=ref.stepDur,loc=Math.min(.5,patSwingOf()+chSwing(state.channels.indexOf(c))),base=ref.time-(oddStep(ref.abs)?ref.hs*sd:0),at=a=>base+(a-ref.abs)*sd+(oddStep(a)?(ref.hs+loc)*sd:0),k0=ref.abs+Math.round((t-base)/sd);let best=k0,bd=Infinity;for(let a=k0-1;a<=k0+1;a++){const d=Math.abs(t-at(a));if(d<bd){bd=d;best=a;}}return best;}
  function recordNote(i,t,vel){if(dead||!state.record||!playing||!ref)return;const c=state.channels[i];if(!c||!Number.isFinite(t)||!Number.isFinite(+vel)||!(vel>0)||Math.abs(t-ref.time)>4)return;
   const a=nearestStep(c,t);if(a<0)return;const idx=((a%state.length)+state.length)%state.length;
   c.steps[state.pattern][idx]={...cell(),v:clamp(vel,.05,1,.8)};if(a>ref.abs){if(recSkip.size>64)recSkip.clear();recSkip.add(i+':'+a);}
@@ -283,7 +291,7 @@ const __pkDef = {
  modulate(offsets){if(dead)return;const next=Object.create(null);if(offsets&&typeof offsets==='object'&&!Array.isArray(offsets))for(const p of paramList){const v=offsets[p.id];if(typeof v==='number'&&Number.isFinite(v))next[p.id]=clamp(v,-1,1,0);}mod=next;apply();},
  mount(container){el=container;const wrap=document.createElement('div');el.appendChild(wrap);root=wrap;render();stopLoop();stopDraw=tekenLus(host,self,animate,30);animate();},
  unmount(){stopLoop();root=null;scope=null;status=null;modStatus=null;stepButtons=[];},
- onStep(info){try{if(dead)return;const {step,bar,time,stepDur}=info,absolute=bar*16+step;if(Number.isFinite(time)&&stepDur>0&&Number.isFinite(absolute))ref={abs:absolute,time,stepDur,hs:clamp(info.swing,0,.5,0)};if(!state.run)return;const idx=((absolute%state.length)+state.length)%state.length,odd=oddStep(absolute),patSwing=state.patternSwing[state.pattern];pending.push({step:idx,time});if(pending.length>128)pending.shift();state.channels.forEach((c,i)=>{const z=c.steps[state.pattern][idx];if(recSkip.delete(i+':'+absolute))return;const at=odd?time+Math.min(.5,patSwing+c.swing)*stepDur:time;if(z.v>0&&Math.random()<=z.p)for(let r=0;r<z.r;r++){const offset=state.human*Math.random(),v=z.v*(1-state.human*4*Math.random());hit(i,at+r*stepDur/z.r+offset,v);}});}catch(e){fail(e);}},
+ onStep(info){try{if(dead)return;const {step,bar,time,stepDur}=info,absolute=bar*16+step;if(Number.isFinite(time)&&stepDur>0&&Number.isFinite(absolute))ref={abs:absolute,time,stepDur,hs:clamp(info.swing,0,.5,0)};if(!state.run)return;const idx=((absolute%state.length)+state.length)%state.length,odd=oddStep(absolute),patSwing=patSwingOf(),human=humanOf();pending.push({step:idx,time});if(pending.length>128)pending.shift();state.channels.forEach((c,i)=>{const z=c.steps[state.pattern][idx];if(recSkip.delete(i+':'+absolute))return;const at=odd?time+Math.min(.5,patSwing+chSwing(i))*stepDur:time;if(z.v>0&&Math.random()<=z.p)for(let r=0;r<z.r;r++){const offset=human*Math.random(),v=z.v*(1-human*4*Math.random());hit(i,at+r*stepDur/z.r+offset,v);}});}catch(e){fail(e);}},
  onTransport({playing:p}){playing=!!p;if(!playing){stopAll();pending.length=0;lastStep=-1;ref=null;recSkip.clear();}},
  onEvent(port,ev){try{if(dead||port!=='trigger'||!ev)return;const t=Number.isFinite(ev.time)?ev.time:ctx.currentTime;if(ev.type==='trig'){let i=/^ch\d+$/.test(ev.lane)?+ev.lane.slice(2)-1:state.channels.findIndex(c=>c.type===ev.lane);if(i>=0){hit(i,t,ev.vel??1);recordNote(i,t,ev.vel??1);}else if(Object.hasOwn(TYPES,ev.lane))guestHit(ev.lane,t,ev.vel??1);}else if(ev.type==='note'&&ev.vel>0){let any=false;state.channels.forEach((c,i)=>{if(c.note===Math.round(ev.note)){any=true;hit(i,t,ev.vel);recordNote(i,t,ev.vel);}});if(!any){const gst=fullList().find(x=>x.type&&x.note===Math.round(ev.note));if(gst)guestHit(gst.type,t,ev.vel);}}else if(ev.type==='cc'){const v=clamp(ev.value,0,1),m=/^ch(\d+)\.(cutoff|resonance|level|pan|drive|tune)$/.exec(ev.id);if(m&&state.channels[+m[1]-1]){const c=state.channels[+m[1]-1],k=m[2];c[k]=k==='cutoff'?30*Math.pow(20000/30,v):k==='resonance'?.1+v*11.9:k==='pan'?v*2-1:k==='tune'?v*48-24:v;apply();}else if(ev.id==='master'){state.master=v;apply();}}}catch(e){fail(e);}},
  noteNames(){return noteList();},

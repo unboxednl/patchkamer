@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor Drift (sterkte), Tempo van drift, Samenhang en Eigen (alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state; getState blijft gelijk.
+//          Sterkte, tempo en samenhang zijn van de (gedeelde) klok: een Drift die een master volgt negeert modulatie daarop. Geen lus: modulate() roept zelf geen host.modulate aan, dus een Drift die een andere Drift (of zichzelf) stuurt herhaalt niets.
+//          Een Drift die een andere Drift via de Volg-ingang volgt krijgt in de master nu ook diens vier parameters in de lijst (standaard uit). Bewust weggelaten: groep, volgmodus (keuzes), bevriezen en nieuw zaad (knoppen). Zonder modulatie gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Drift en nieuwe id nl.patchkamer.drift (voorheen Drift · modulator, nl.patchkamer.driftmod); werkruimtes en presets uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n). Tekenen via host.frame met een ResizeObserver en een kleurcache voor de kleuren van de host.
 //          Elke uitgestuurde waarde is eindig (NaN en Infinity worden nul) en een bevroren stand in setState wordt begrensd; de beweging zelf is gelijk aan 1.8.0.
@@ -109,7 +112,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: ID,
   name: 'Drift',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 820, minWidth: 380 },
@@ -121,6 +124,10 @@ export default {
     const defClock = () => ({ t: 0, speed: 1, amount: 0.6, coh: 0.35, seed: newSeed(), frozen: false, wall: null });
     const me = { id: null, own: defClock(), masterId: null, masterName: '', targets: [], followers: [],
       S: { group: '', follow: 'gelijk', eigen: 0, ownSeed: newSeed(), sel: {}, salt: {}, freeze: {} } };
+    // Bestuurbare regelaars: [id, naam, min, max, log, role, drift, aan]; effectief = knop + o × bereik (log: knop × (max/min)^o), geclampt
+    const MODP = [['amount', 'Drift', 0, 1, false, 'depth', 0.05, false], ['speed', 'Tempo van drift', 0.25, 32, true, 'rate', 0.05, false], ['coh', 'Samenhang', 0, 1, false, 'param', 0.05, false], ['eigen', 'Eigen', 0, 1, false, 'param', 0.05, false]];
+    const MODBY = Object.fromEntries(MODP.map(m => [m[0], m])), mod = {};
+    const EFF = (k, b) => { const o = mod[k]; if (!o || (k !== 'eigen' && isSlave())) return b; const m = MODBY[k], mn = m[2], mx = m[3]; return m[4] ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
     let self, dead = false, timer = 0, stopDraw = null, root = null, ui = null, ro = null, col = null, colT = 0;
 
     // ---------- klok ----------
@@ -132,7 +139,7 @@ export default {
     }
     function ensureId() { if (!me.id && self && self._id) { me.id = self._id; INST.set(me.id, me); } }
     const isSlave = () => !!(me.masterId && INST.get(me.masterId));
-    function advance(c) { const now = ctx.currentTime; if (c.wall !== null && !c.frozen) c.t += Math.min(5, Math.max(0, now - c.wall)) * c.speed; c.wall = now; }
+    function advance(c) { const now = ctx.currentTime; if (c.wall !== null && !c.frozen) c.t += Math.min(5, Math.max(0, now - c.wall)) * EFF('speed', c.speed); c.wall = now; }
     function setGroup(g) {
       const was = me.S.group; if (g === was) return;
       if (was) { const gc = GROUPS.get(was); if (gc) Object.assign(me.own, gc, { wall: null }); }
@@ -152,12 +159,12 @@ export default {
       const keyRole = 'r:' + (p.role || p.id), keyLane = 'l:' + (p.lane || '-') + ':' + p.id + (salt ? ':' + salt : '');
       const linked = isSlave() || !!me.S.group;
       const tt = t + (linked && me.S.follow === 'verschoven' ? 240 : 0);
-      const coh = c.coh; let v = (coh * wind(c.seed, keyRole, tt) + (1 - coh) * wind(c.seed, keyLane, tt)) / Math.max(0.6, Math.hypot(coh, 1 - coh));
+      const coh = EFF('coh', c.coh); let v = (coh * wind(c.seed, keyRole, tt) + (1 - coh) * wind(c.seed, keyLane, tt)) / Math.max(0.6, Math.hypot(coh, 1 - coh));
       if (linked && me.S.follow === 'gespiegeld') v = -v;
-      if (linked && me.S.eigen > 0) v = (1 - me.S.eigen) * v + me.S.eigen * wind(me.S.ownSeed, keyLane, t);
+      const eg = EFF('eigen', me.S.eigen); if (linked && eg > 0) v = (1 - eg) * v + eg * wind(me.S.ownSeed, keyLane, t);
       return fin(clamp(v, -1, 1));
     }
-    function offsetAt(T, p, t, c) { const s = selOf(T, p); const fz = me.S.freeze[laneKey(T, p.lane || '-')]; return raw(T, p, fz !== undefined ? fz : t, c) * s.range * c.amount; }
+    function offsetAt(T, p, t, c) { const s = selOf(T, p); const fz = me.S.freeze[laneKey(T, p.lane || '-')]; return raw(T, p, fz !== undefined ? fz : t, c) * s.range * EFF('amount', c.amount); }
 
     // ---------- de modulatie zelf: 20× per seconde ----------
     function tick() {
@@ -314,6 +321,8 @@ export default {
         me.followers = (targets || []).filter(T => T && T.def === ID).map(T => ({ id: T.id, name: T.name }));
         paintAll();
       },
+      params() { return MODP.map(([id, name, min, max, log, role, drift, on]) => ({ id, name: tx(name), lane: 'drift', laneName: 'Drift', min, max, role, scale: log ? 'log' : 'lin', drift, on })); },
+      modulate(offsets) { for (const k in mod) delete mod[k]; for (const k in offsets || {}) if (MODBY[k] && Number.isFinite(+offsets[k])) mod[k] = clamp(+offsets[k], -1, 1); },
       onModSources(sources) {
         ensureId();
         const m = (sources || []).find(s => s.port === 'volg' && s.def === ID && s.id !== me.id);

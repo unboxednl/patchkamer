@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.2 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Master (master), Patroonswing A tot D (patSwing.0 tot .3) en de swing per spoor (l1.swing tot l8.swing); alle standaard uit (drift 0,05, role level of swing).
+//          Modulatie komt alleen bovenop de knop (knop + o × bereik, geclampt; swing als som begrensd tot 50%) en is nooit state; getState, presets en tunes gelijk. Het master-niveau gaat via setTargetAtTime (geen tikken). Zonder modulatie gelijk aan 1.14.1. Niet beluisterd.
+//          Bewust weggelaten: kit, patroon, spoor, modus (keuzes), aan/uit-knoppen, lengte per spoor (discreet) en de stapdata.
 // 1.14.1 — Swing per patroon (A tot D) en per spoor, naast de hostswing (som begrensd tot 50%; standaard 0 = ongewijzigd), en live inspelen: een knop Opname schrijft binnenkomende trigs en noten
 //          (ingang "Trigs / noten") op het juiste spoor in het gekozen patroon, op de huidige stap, met Kwantiseer (dichtstbijzijnde geswingde stap) aan of uit. Nieuwe state-sleutels:
 //          patSwing (4 getallen), lanes[].swing en quantize. Het geluid en het afspelen zijn bij de standaardwaarden ongewijzigd. De instrumenten per spoor waren al volledig doorgegeven (noteNames).
@@ -114,7 +117,7 @@ const pkLoop = (host, getInst, cb, fps) => {   // tekenen via de klok van de hos
   const inst = getInst(); if (host && typeof host.frame === 'function' && inst && inst._id) return host.frame(inst, cb, fps);
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 export default {
-  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.14.1', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.14.2', kind: 'instrument', category: 'groove',
   ui: { width: 1080, minWidth: 560 },
   i18n: { en: { name: 'Click Synth', ports: { out: 'Stereo mix', trigger: 'Trigs / notes', mod: 'Mod', multi: 'Separate lanes (bundle)' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo mix' }], eventIn: [{ id: 'trigger', name: 'Trigs / noten' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiIn: [], multiOut: [{ id: 'multi', name: 'Sporen los (bundel)' }] },
@@ -244,7 +247,7 @@ export default {
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 0, numberOfOutputs: NL + 1, outputChannelCount: Array(NL + 1).fill(2) }); nodes.add(node);
       node.connect(mixIn, 0); for (let i = 0; i < NL; i++) node.connect(laneOut[i], i + 1); workletOk = true; paintStatus(); })
       .catch(() => { workletOk = false; paintStatus(); });
-    function applyMaster() { master.gain.setTargetAtTime(state.master, ctx.currentTime, 0.03); }
+    function applyMaster() { master.gain.setTargetAtTime(clamp(state.master + (mod.master || 0), 0, 1), ctx.currentTime, 0.03); }
     applyMaster();
 
     // ---------- slagen ----------
@@ -252,7 +255,7 @@ export default {
     const flash = new Array(NL).fill(0);
     // ---------- swing per patroon en per spoor, en live inspelen ----------
     let anc = null, playing = false, rec = false;   // anc = de laatste stap van de klok: tijd (met hostswing), stapnummer, stapduur en hostswing
-    const localSw = i => clamp(finite(state.patSwing[state.pattern], 0, 0, 0.5) + finite(state.lanes[i].swing, 0, 0, 0.5), 0, 0.5);
+    const localSw = i => clamp(clamp(finite(state.patSwing[state.pattern], 0, 0, 0.5) + (mod['patSwing.' + state.pattern] || 0) * 0.5, 0, 0.5) + clamp(finite(state.lanes[i].swing, 0, 0, 0.5) + (mod['l' + (i + 1) + '.swing'] || 0) * 0.5, 0, 0.5), 0, 0.5);
     const isOdd = m => ((m % 2) + 2) % 2 === 1;
     const stepTime = (m, i) => anc.base + (m - anc.abs) * anc.sd + (isOdd(m) ? (anc.hs + localSw(i)) * anc.sd : 0);
     function nearestStep(i, tau, quant) { if (!anc || !playing || !Number.isFinite(tau) || Math.abs(tau - anc.t) > 4) return null;
@@ -426,8 +429,11 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           if (type === 'panic' || type === 'allnotesoff') { if (node) node.port.postMessage({ type: 'panic' }); return; }
           if (type === 'cc' && typeof e.id === 'string') { const m = e.id.match(/^l([1-8])\.(\w+)$/); if (m && PS[m[2]] && Number.isFinite(e.value)) { const s = PS[m[2]]; state.lanes[+m[1] - 1].p[m[2]] = s.min + clamp(e.value, 0, 1) * (s.max - s.min); markEigen(); if (+m[1] - 1 === state.sel) paint(); } return; }
           if (!['trig', 'note', 'noteon'].includes(type) || e.vel === 0) return; const i = laneOf(e); if (i < 0 || i >= NL) return; recordHit(i, time, finite(e.vel, 0.8, 0, 1)); if (!audible(i)) return; hit(i, time, finite(e.vel, 0.8, 0, 1)); } catch {} },
-      params() { const list = []; state.lanes.forEach((L, i) => { for (const [id, s] of Object.entries(PS)) list.push({ id: 'l' + (i + 1) + '.' + id, name: s.name, lane: 'l' + (i + 1), laneName: `${i + 1} ${L.name}`, min: s.min, max: s.max, scale: s.scale || 'lin', role: id === 'level' ? 'level' : id === 'pan' ? 'pan' : id === 'pitch' ? 'pitch' : 'color', drift: 0.02, on: !['level', 'pan', 'pitch', 'vari'].includes(id) }); }); return list; },
-      modulate(o) { try { if (dead) return; mod = {}; if (o && typeof o === 'object' && !Array.isArray(o)) for (const [k, v] of Object.entries(o)) if (/^l[1-8]\.\w+$/.test(k) && typeof v === 'number' && Number.isFinite(v)) mod[k] = clamp(v, -1, 1); } catch {} },
+      params() { const list = []; state.lanes.forEach((L, i) => { for (const [id, s] of Object.entries(PS)) list.push({ id: 'l' + (i + 1) + '.' + id, name: s.name, lane: 'l' + (i + 1), laneName: `${i + 1} ${L.name}`, min: s.min, max: s.max, scale: s.scale || 'lin', role: id === 'level' ? 'level' : id === 'pan' ? 'pan' : id === 'pitch' ? 'pitch' : 'color', drift: 0.02, on: !['level', 'pan', 'pitch', 'vari'].includes(id) }); list.push({ id: 'l' + (i + 1) + '.swing', name: T.laneSwing, lane: 'l' + (i + 1), laneName: `${i + 1} ${L.name}`, min: 0, max: 0.5, scale: 'lin', role: 'swing', drift: 0.05, on: false }); });
+        list.push({ id: 'master', name: T.master, lane: 'master', laneName: T.master, min: 0, max: 1, scale: 'lin', role: 'level', drift: 0.05, on: false });
+        for (let p = 0; p < 4; p++) list.push({ id: 'patSwing.' + p, name: T.patSwing + ' ' + 'ABCD'[p], lane: 'swing', laneName: 'Swing', min: 0, max: 0.5, scale: 'lin', role: 'swing', drift: 0.05, on: false });
+        return list; },
+      modulate(o) { try { if (dead) return; mod = {}; if (o && typeof o === 'object' && !Array.isArray(o)) for (const [k, v] of Object.entries(o)) if ((/^l[1-8]\.\w+$/.test(k) || k === 'master' || /^patSwing\.[0-3]$/.test(k)) && typeof v === 'number' && Number.isFinite(v)) mod[k] = clamp(v, -1, 1); applyMaster(); } catch {} },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(raw) { if (dead) return; state = normalize(raw); applyMaster(); listenTo(state.sel); paint(); bundleChanged(); },
       destroy() { if (dead) return; dead = true; unmount(); try { if (node) node.port.postMessage({ type: 'panic' }); } catch {} for (const n of nodes) try { n.disconnect(); } catch {} nodes.clear(); },

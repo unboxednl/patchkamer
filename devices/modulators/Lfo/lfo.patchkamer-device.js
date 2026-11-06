@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de continue regelaars Hz, Vervorm, Fase, Sterkte, Glijden en de envelope-tijden/-niveaus (alle standaard uit). Modulatie is nooit state en komt alleen
+//          bovenop de knop; een tweede modulator die de LFO stuurt geeft geen lus (modulate() roept zelf geen host.modulate aan). Bewust weggelaten: aantal stappen (geheel getal, discreet), vorm/snelheidsdeling (keuzes), vinkjes. De uitvoer zonder modulatie is gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang), kleuren uit de CSS-variabelen van de host, tekenen via host.frame met een ResizeObserver en een kleurcache (de tekenpoort is weg),
 //          schuiven met data-pk-default. De uitvoer is altijd eindig (een ongeldig tempo, tijd of fase geeft 0 in plaats van NaN). setState negeert onbekende velden en kapt getallen af op hun bereik.
 //          De moduleerwaarden zijn gelijk aan 1.8.0.
@@ -24,6 +26,7 @@ const EN = {
     'An LFO at the tempo of the clock. Pull the purple output to the Mod input of a device and choose below what moves along. Parameters with ⚡ are controlled sample-accurately.',
   'Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>LFO</b> naar de ingang <b>Mod</b> van een apparaat. Kies daarna hier welke parameters meebewegen en hoeveel.':
     'Nothing connected yet. Pull a <b>purple cable</b> from the output <b>LFO</b> to the <b>Mod</b> input of a device. Then choose here which parameters move along and by how much.',
+  'LFO': 'LFO', 'Envelope': 'Envelope', 'Sustain': 'Sustain', 'Hz': 'Hz', 'Delay': 'Delay', 'Attack': 'Attack', 'Hold': 'Hold', 'Decay': 'Decay', 'Release': 'Release',
   'zoek parameter': 'search parameter', 'alleen actief': 'active only',
   '{0} van {1} toegewezen': '{0} of {1} assigned', '{0} parameters': '{0} parameters', '{0} actief': '{0} active',
   'snel stuurbaar': 'fast control', 'bron voor {0}': 'source for {0}', 'diepte {0}': 'depth {0}',
@@ -193,12 +196,17 @@ const DEF = () => ({ shape: 'sin', div: '1', hz: 1, deform: 0, phase: 0, amp: 1,
   env: false, eDel: 0, eAtk: 0.01, eHold: 0, eDec: 0.3, eSus: 0.6, eRel: 0.4, sel: {} });
 // bereiken voor setState (§13)
 const LIMITS = { hz: [0.01, 20], deform: [-1, 1], phase: [0, 1], amp: [0, 1], nsteps: [2, 16], glide: [0, 1], eDel: [0, 2], eAtk: [0.001, 4], eHold: [0, 2], eDec: [0.001, 4], eSus: [0, 1], eRel: [0.001, 6] };
+// Bestuurbare regelaars: [id, naam, min, max, log, role, drift, aan]
+const MODP = [['hz', 'Hz', 0.01, 20, true, 'rate', 0.05, false], ['deform', 'Vervorm', -1, 1, false, 'shape', 0.05, false], ['phase', 'Fase', 0, 1, false, 'phase', 0.05, false], ['amp', 'Sterkte', 0, 1, false, 'depth', 0.05, false],
+  ['glide', 'Glijden', 0, 1, false, 'glide', 0.05, false], ['eDel', 'Delay', 0, 2, false, 'env', 0.05, false], ['eAtk', 'Attack', 0.001, 4, true, 'env', 0.05, false], ['eHold', 'Hold', 0, 2, false, 'env', 0.05, false],
+  ['eDec', 'Decay', 0.001, 4, true, 'env', 0.05, false], ['eSus', 'Sustain', 0, 1, false, 'env', 0.05, false], ['eRel', 'Release', 0.001, 6, true, 'env', 0.05, false]];
+const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const hzPos = hz => Math.log(hz / 0.01) / Math.log(2000);
 
 export default {
   id: 'nl.patchkamer.lfo',
   name: 'LFO',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 760, minWidth: 380 },
@@ -207,18 +215,20 @@ export default {
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
     const D = DEF();
-    const S = DEF(); let self, dead = false, ui = null, stopDraw = null, trigT = -1, gateEnd = -1, trigB = 0;
+    const S = DEF(); const mod = {}; let self, dead = false, ui = null, stopDraw = null, trigT = -1, gateEnd = -1, trigB = 0;
     let cw = 0, ch = 0, ro = null, col = null, colT = 0;
     const clock = mkClock(ctx, host);
+    // effectieve waarde = knop + modulatie (lineair: knop + o × bereik; log: knop × (max/min)^o), geclampt; de knop (S) blijft ongemoeid
+    const V = k => { const o = mod[k], b = S[k]; if (!o) return b; const m = MODBY[k], mn = m[2], mx = m[3]; return m[4] ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
     const periodBeats = () => { const d = DIVS.find(x => x[0] === S.div); return d && d[2] ? d[2] : 0; };
     function phaseAt(t) {   // fase in cycli (niet modulo), op tempo of vrij
       const pb = periodBeats(), b = clock.beatsAt(t);
-      let ph = pb ? b / pb : (b * 60 / clock.bpm()) * S.hz;
-      if (S.retrig && trigT >= 0 && t >= trigT) ph = pb ? (b - trigB) / pb : (t - trigT) * S.hz;
-      return ph + S.phase;
+      let ph = pb ? b / pb : (b * 60 / clock.bpm()) * V('hz');
+      if (S.retrig && trigT >= 0 && t >= trigT) ph = pb ? (b - trigB) / pb : (t - trigT) * V('hz');
+      return ph + V('phase');
     }
     function wave(ph) {
-      const cyc = Math.floor(ph), x = ph - cyc, k = S.deform;
+      const cyc = Math.floor(ph), x = ph - cyc, k = V('deform');
       switch (S.shape) {
         case 'sin': { const sk = clamp(0.5 + k * 0.45, 0.05, 0.95), y = x < sk ? x / sk * 0.5 : 0.5 + (x - sk) / (1 - sk) * 0.5; return Math.sin(2 * Math.PI * y); }
         case 'tri': { const sk = clamp(0.5 + k * 0.48, 0.02, 0.98); return x < sk ? -1 + 2 * x / sk : 1 - 2 * (x - sk) / (1 - sk); }
@@ -227,19 +237,19 @@ export default {
         case 'sqr': return x < clamp(0.5 + k * 0.48, 0.02, 0.98) ? 1 : -1;
         case 'sh': return h32(cyc * 7919 + 13) * 2 - 1;
         case 'noise': { const a = h32(cyc * 7919 + 13) * 2 - 1, b = h32((cyc + 1) * 7919 + 13) * 2 - 1, sm = 0.5 - 0.5 * Math.cos(Math.PI * Math.pow(x, Math.pow(2, -k))); return a + (b - a) * sm; }
-        case 'steps': { const n = clamp(S.nsteps | 0, 2, 16), p = x * n, i = Math.floor(p), f = p - i, a = S.steps[i] || 0, b = S.steps[(i + 1) % n] || 0, g = S.glide;
+        case 'steps': { const n = clamp(S.nsteps | 0, 2, 16), p = x * n, i = Math.floor(p), f = p - i, a = S.steps[i] || 0, b = S.steps[(i + 1) % n] || 0, g = V('glide');
           return g > 0 && f > 1 - g ? a + (b - a) * ((f - (1 - g)) / g) : a; }
       }
       return 0;
     }
     function envAt(t) {   // DAHDSR na de laatste trigger; de gate duurt tot gateEnd
-      if (trigT < 0 || t < trigT) return 0; let u = t - trigT; const De = S.eDel, Ak = Math.max(0.001, S.eAtk), H = S.eHold, Dc = Math.max(0.001, S.eDec), Su = S.eSus;
+      if (trigT < 0 || t < trigT) return 0; let u = t - trigT; const De = V('eDel'), Ak = Math.max(0.001, V('eAtk')), H = V('eHold'), Dc = Math.max(0.001, V('eDec')), Su = V('eSus');
       const sustainAt = u2 => { if (u2 < De) return 0; u2 -= De; if (u2 < Ak) return u2 / Ak; u2 -= Ak; if (u2 < H) return 1; u2 -= H; return u2 < Dc ? 1 - (1 - Su) * (u2 / Dc) : Su; };
       if (gateEnd < 0 || t < gateEnd) return sustainAt(u);
-      const lv = sustainAt(gateEnd - trigT), r = (t - gateEnd) / Math.max(0.001, S.eRel); return r >= 1 ? 0 : lv * (1 - r);
+      const lv = sustainAt(gateEnd - trigT), r = (t - gateEnd) / Math.max(0.001, V('eRel')); return r >= 1 ? 0 : lv * (1 - r);
     }
     // de uitvoer is altijd eindig en ligt in −1…+1
-    function valueAt(t) { let v = wave(phaseAt(t)) * S.amp; if (S.uni) v = (v + S.amp) / 2; if (S.env) v *= envAt(t); return Number.isFinite(v) ? clamp(v, -1, 1) : 0; }
+    function valueAt(t) { let v = wave(phaseAt(t)) * V('amp'); if (S.uni) v = (v + V('amp')) / 2; if (S.env) v *= envAt(t); return Number.isFinite(v) ? clamp(v, -1, 1) : 0; }
     const sig = mkSignal(ctx, valueAt);
     const asg = mkAssign(ctx, host, () => self, { sources: [['lfo', 'LFO']], valueAt: (s, t) => valueAt(t), signal: () => sig && sig.node, tx });
     const timer = setInterval(() => { if (dead) return; if (sig) sig.plan(); asg.tick(ctx.currentTime); }, 33);
@@ -257,10 +267,10 @@ export default {
       if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(hh * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(hh * dpr); }
       const g = ui.g; if (!g) return; g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, hh); const mid = hh / 2, yOf = v => mid - v * (mid - 6);
       g.globalAlpha = 0.4; g.strokeStyle = col[2]; g.beginPath(); g.moveTo(0, mid); g.lineTo(w, mid); g.stroke(); g.globalAlpha = 1;
-      const cycles = 2, now = ctx.currentTime, ph = phaseAt(now), base = Math.floor(ph - S.phase);
+      const cycles = 2, now = ctx.currentTime, ph = phaseAt(now), base = Math.floor(ph - V('phase'));
       g.strokeStyle = col[0]; g.lineWidth = 2; g.beginPath();
-      for (let i = 0; i <= w; i += 2) { const p = base + S.phase + (i / w) * cycles; let v = wave(p) * S.amp; if (S.uni) v = (v + S.amp) / 2; if (!Number.isFinite(v)) v = 0; i ? g.lineTo(i, yOf(v)) : g.moveTo(i, yOf(v)); } g.stroke();
-      const x = ((ph - base - S.phase) / cycles) * w, v = valueAt(now); g.fillStyle = col[1]; g.beginPath(); g.arc(Number.isFinite(x) ? x : 0, yOf(v), 4, 0, 6.2832); g.fill();
+      for (let i = 0; i <= w; i += 2) { const p = base + V('phase') + (i / w) * cycles; let v = wave(p) * V('amp'); if (S.uni) v = (v + V('amp')) / 2; if (!Number.isFinite(v)) v = 0; i ? g.lineTo(i, yOf(v)) : g.moveTo(i, yOf(v)); } g.stroke();
+      const x = ((ph - base - V('phase')) / cycles) * w, v = valueAt(now); g.fillStyle = col[1]; g.beginPath(); g.arc(Number.isFinite(x) ? x : 0, yOf(v), 4, 0, 6.2832); g.fill();
       if (S.shape === 'steps') { const n = clamp(S.nsteps | 0, 2, 16); g.fillStyle = col[0]; g.globalAlpha = 0.18; for (let c = 0; c < cycles; c++) for (let i = 0; i < n; i++) { const x0 = ((c + i / n) / cycles) * w, ww = w / cycles / n - 2, y = yOf(S.steps[i] || 0); g.fillRect(x0 + 1, Math.min(y, mid), ww, Math.abs(y - mid)); } g.globalAlpha = 1; }
       ui.val.textContent = (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(0) + '%' + (S.env ? ' · env ' + Math.round(envAt(now) * 100) + '%' : '');
     }
@@ -314,6 +324,8 @@ export default {
       onEvent(port, ev) { if (port !== 'trig' || !ev || (ev.type !== 'note' && ev.type !== 'trig')) return; const t = fin(ev.time, ctx.currentTime);
         trigT = t; trigB = clock.beatsAt(t); gateEnd = t + fin(ev.dur, 60 / clock.bpm() / 4); changed(); },
       onModTargets(list) { asg.setTargets(list); },
+      params() { return MODP.map(([id, name, min, max, log, role, drift, on]) => ({ id, name: tx(name), lane: id.startsWith('e') ? 'env' : 'lfo', laneName: tx(id.startsWith('e') ? 'Envelope' : 'LFO'), min, max, role, scale: log ? 'log' : 'lin', drift, on })); },
+      modulate(offsets) { for (const k in mod) delete mod[k]; for (const k in offsets || {}) if (MODBY[k] && Number.isFinite(+offsets[k])) mod[k] = clamp(+offsets[k], -1, 1); changed(); },
       getState() { const o = {}; Object.keys(DEF()).forEach(k => { if (k !== 'sel') o[k] = Array.isArray(S[k]) ? S[k].slice() : S[k]; }); o.sel = asg.getState(); return o; },
       setState(s) { s = s && typeof s === 'object' ? s : {}; const d = DEF(); Object.keys(d).forEach(k => { if (k === 'sel') return; const v = s[k];
           if (Array.isArray(d[k])) S[k] = Array.isArray(v) ? d[k].map((x, i) => typeof v[i] === 'number' && isFinite(v[i]) ? clamp(v[i], -1, 1) : x) : d[k].slice();
