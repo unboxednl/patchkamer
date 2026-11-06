@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de continue regelaars (versterking, eigen frequentie, aanzet, loslaten, vloer, bereik, aanslag-gevoeligheid, transiënt-verval, minimale afstand, poort; alle standaard uit).
+//          De effectieve waarde gaat naar de worklet; knop en getState blijven ongewijzigd en modulatie is nooit state. Geen lus: modulate() roept zelf geen host.modulate aan. Bewust weggelaten: Noot (geheel getal, discreet), focus/uitslag/richting/aanslagen sturen (keuzes).
+//          Risico: een gemoduleerde poort/vloer/versterking verandert direct de drempel van de aanslagdetectie (kan extra of minder trigs geven), niet het doorgaande geluid. Zonder modulatie gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Follower en nieuwe id nl.patchkamer.follower (voorheen Volger, nl.patchkamer.volger); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n). Tekenen via host.frame met een ResizeObserver en een kleurcache; de kleuren komen uit de host.
 //          De worklet begrenst de ingang (NaN wordt 0, ±16 is het plafond), accepteert alleen eindige parameters en zet een ontspoorde toestand per blok terug; normaal geluid en de drie stuursignalen
@@ -17,6 +20,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const EN = {
   'Alles': 'All', 'Laag (kick, bas)': 'Low (kick, bass)', 'Midden (snare, stem)': 'Mid (snare, voice)', 'Hoog (hats)': 'High (hats)', 'Eigen frequentie': 'Custom frequency',
   'Niveau': 'Level', 'Transiënt': 'Transient', 'Helderheid': 'Brightness',
+  'Detectie': 'Detection', 'Aanslagen': 'Onsets',
   'Focus': 'Focus', 'Versterking': 'Gain', 'Aanzet': 'Attack', 'Loslaten': 'Release', 'Vloer': 'Floor', 'Bereik': 'Range', 'Uitslag': 'Output range',
   '0 … +1 (alleen omhoog)': '0 … +1 (upward only)', '−1 … +1 (rond het midden)': '−1 … +1 (around the centre)',
   'Richting': 'Direction', 'Luider = meer': 'Louder = more', 'Luider = minder (omgekeerd)': 'Louder = less (inverted)',
@@ -206,24 +210,31 @@ registerProcessor('${WNAME}', Follower);`;
 const SRC_IDS = ['niveau', 'transient', 'helder'];   // sleutels in de state (blijven gelijk voor oude presets)
 const SRC_NAMES = ['Niveau', 'Transiënt', 'Helderheid'];
 const FOCUS = [['alles', 'Alles'], ['laag', 'Laag (kick, bas)'], ['midden', 'Midden (snare, stem)'], ['hoog', 'Hoog (hats)'], ['eigen', 'Eigen frequentie']];
+// Bestuurbare regelaars: [id, naam, min, max, log, role, drift, aan, spoor]
+const MODP = [['gain', 'Versterking', -24, 36, false, 'level', 0.05, false, 'det'], ['freq', 'Eigen frequentie', 40, 16000, true, 'freq', 0.05, false, 'det'], ['att', 'Aanzet', 0.1, 200, true, 'env', 0.05, false, 'det'], ['rel', 'Loslaten', 5, 3000, true, 'env', 0.05, false, 'det'],
+  ['floor', 'Vloer', -90, -10, false, 'level', 0.05, false, 'det'], ['range', 'Bereik', 6, 80, false, 'depth', 0.05, false, 'det'],
+  ['tsens', 'Aanslag-gevoeligheid', 0, 1, false, 'param', 0.05, false, 'ons'], ['tdec', 'Transiënt-verval', 10, 1000, true, 'decay', 0.05, false, 'ons'], ['hold', 'Minimale afstand', 10, 500, false, 'time', 0.05, false, 'ons'], ['gate', 'Poort', -90, -10, false, 'level', 0.05, false, 'ons']];
+const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const DEF = () => ({ att: 5, rel: 150, gain: 0, floor: -50, range: 40, focus: 'alles', freq: 1000, pol: 'uni', inv: false, tsens: 0.5, tdec: 120, hold: 60, gate: -60, trigOut: 'ch1', trigNote: 60, sel: {} });
 // bereiken voor setState (§13)
 const RANGE = { att: [0.1, 200], rel: [5, 3000], gain: [-24, 36], floor: [-90, -10], range: [6, 80], freq: [40, 16000], tsens: [0, 1], tdec: [10, 1000], hold: [10, 500], gate: [-90, -10], trigNote: [24, 96] };
 
 export default {
-  id: 'nl.patchkamer.follower', name: 'Follower', version: '1.11.0', kind: 'modulator', category: 'mod',
+  id: 'nl.patchkamer.follower', name: 'Follower', version: '1.11.1', kind: 'modulator', category: 'mod',
   ui: { width: 760, minWidth: 380 },
   i18n: { en: { ports: { in: 'Listens to', out: 'Through', trig: 'Onsets' } } },
   ports: { audioIn: [{ id: 'in', name: 'Luistert naar' }], audioOut: [{ id: 'out', name: 'Door' }], eventIn: [], eventOut: [{ id: 'trig', name: 'Aanslagen' }], modIn: [], modOut: [{ id: 'mod', name: 'Follower' }] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
     const SRC = SRC_IDS.map((id, i) => [id, tx(SRC_NAMES[i])]);
-    const S = DEF(); let self, dead = false, node = null, ok = false, ui = null, stopDraw = null; const last = { niveau: 0, transient: 0, helder: 0 }; const hist = [[], [], []]; let lastFlash = -1e9;
+    const S = DEF(); const mod = {}; let self, dead = false, node = null, ok = false, ui = null, stopDraw = null; const last = { niveau: 0, transient: 0, helder: 0 }; const hist = [[], [], []]; let lastFlash = -1e9;
     let cw = 0, ch = 0, ro = null, col = null, colT = 0;
     const input = ctx.createGain(), out = ctx.createGain(), thru = ctx.createGain(); input.connect(thru).connect(out);
     const sig = [ctx.createGain(), ctx.createGain(), ctx.createGain()];   // vaste bronknopen voor de snelle route
     const asg = mkAssign(ctx, host, () => self, { sources: SRC, valueAt: s => last[s] || 0, signal: s => sig[Math.max(0, SRC.findIndex(x => x[0] === s))], title: 'Follower', tx });
-    const send = () => { if (node) node.port.postMessage({ type: 'set', s: { att: S.att, rel: S.rel, gain: S.gain, floor: S.floor, range: S.range, focus: S.focus, freq: S.freq, pol: S.pol, inv: S.inv, tsens: S.tsens, tdec: S.tdec, hold: S.hold, gate: S.gate } }); };
+    // effectieve waarde = knop + modulatie (lineair: knop + o × bereik; log: knop × (max/min)^o), geclampt; de knop (S) blijft ongemoeid
+    const V = k => { const o = mod[k], b = S[k]; if (!o) return b; const m = MODBY[k], mn = m[2], mx = m[3]; return m[4] ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
+    const send = () => { if (node) node.port.postMessage({ type: 'set', s: { att: V('att'), rel: V('rel'), gain: V('gain'), floor: V('floor'), range: V('range'), focus: S.focus, freq: V('freq'), pol: S.pol, inv: S.inv, tsens: V('tsens'), tdec: V('tdec'), hold: V('hold'), gate: V('gate') } }); };
     const loader = host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
     loader.then(() => { if (dead || typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet');
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 1, numberOfOutputs: 4, outputChannelCount: [2, 1, 1, 1], channelCount: 2, channelCountMode: 'explicit' });
@@ -282,6 +293,8 @@ export default {
       mount(el) { const holder = document.createElement('div'); el.appendChild(holder); const root = holder.attachShadow({ mode: 'open' }); root.addEventListener('pointerdown', e => e.stopPropagation()); const st = document.createElement('style'); st.textContent = CSS; root.appendChild(st); build(root); },
       unmount() { stopLoop(); if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); asg.unmount(); ui = null; },
       onModTargets(list) { asg.setTargets(list); },
+      params() { return MODP.map(([id, name, min, max, log, role, drift, on, lane]) => ({ id, name: tx(name), lane, laneName: tx(lane === 'det' ? 'Detectie' : 'Aanslagen'), min, max, role, scale: log ? 'log' : 'lin', drift, on })); },
+      modulate(offsets) { const had = Object.keys(mod).length; for (const k in mod) delete mod[k]; for (const k in offsets || {}) if (MODBY[k] && Number.isFinite(+offsets[k])) mod[k] = clamp(+offsets[k], -1, 1); if (had || Object.keys(mod).length) send(); },
       getState() { const o = {}; Object.keys(DEF()).forEach(k => { if (k !== 'sel') o[k] = S[k]; }); o.sel = asg.getState(); return o; },
       setState(s) { s = s && typeof s === 'object' ? s : {}; const d = DEF();
         for (const k in RANGE) S[k] = typeof s[k] === 'number' && Number.isFinite(s[k]) ? clamp(s[k], RANGE[k][0], RANGE[k][1]) : d[k];

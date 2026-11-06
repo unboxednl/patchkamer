@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor Sterkte (standaard uit); de knop en getState blijven ongewijzigd, modulatie is nooit state en komt alleen bovenop de knop. Geen lus: modulate() roept zelf geen host.modulate aan.
+//          Bewust weggelaten: Lengte en Afspelen (keuzes), op raster (vinkje), de curvepunten (patroondata). Zonder modulatie gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Multi-Segment Envelope (de id nl.patchkamer.mseg blijft). Tweetalig (host.lang, poortnamen per taal in i18n).
 //          Tekenen via host.frame met een ResizeObserver en een kleurcache; de kleuren komen uit de host. De curve, de klok en elke uitvoer zijn tegen NaN en Infinity beschermd
 //          (een ongeldig tempo, tijdstip of punt kan de sturing niet meer vergiftigen); de uitgestuurde waarden zijn bit-identiek aan 1.8.0.
@@ -15,7 +17,7 @@ const EN = {
   'Curve': 'Curve',
   'Lengte': 'Length', '{0} maat': '{0} bar', '{0} maten': '{0} bars',
   'Afspelen': 'Playback', 'herhalen': 'loop', 'één keer': 'once',
-  'Sterkte': 'Strength', 'Voorbeeld': 'Example', 'kies…': 'choose…',
+  'Sterkte': 'Strength', 'Curve': 'Curve', 'Voorbeeld': 'Example', 'kies…': 'choose…',
   'Opbouw': 'Build-up', 'Golf': 'Wave', 'Trap': 'Steps', 'Ademen': 'Breathing', 'Break': 'Break', 'Plat': 'Flat',
   'op raster (1/16)': 'snap to grid (1/16)',
   'maat {0} van {1}': 'bar {0} of {1}', 'wacht op start': 'waiting for start',
@@ -203,7 +205,7 @@ function segShape(t, c) { if (Math.abs(c) < 0.01) return t; const k = c * 6; ret
 export default {
   id: 'nl.patchkamer.mseg',
   name: 'Multi-Segment Envelope',
-  version: '1.11.0',
+  version: '1.11.1',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 760, minWidth: 380 },
@@ -222,10 +224,11 @@ export default {
     function posAt(t) { const beats = S.len * 4, b = clock.beatsAt(t);
       if (S.mode === 'loop') { const x = (b / beats) % 1; return x < 0 ? x + 1 : x; }
       if (!started) return 0; return clamp((b - startB) / beats, 0, 1); }
-    const valueAt = t => { const v = clamp(curveAt(posAt(t)) * S.amp, -1, 1); return fin(v) ? v : 0; };
+    const valueAt = t => { const v = clamp(curveAt(posAt(t)) * AMP(), -1, 1); return fin(v) ? v : 0; };
     const sig = mkSignal(ctx, valueAt);
     const asg = mkAssign(ctx, host, () => self, { sources: [['mseg', tx('Curve')]], valueAt: (s, t) => valueAt(t), signal: () => sig && sig.node, title: 'Curve', tx });
     const timer = setInterval(() => { if (dead) return; if (sig) sig.plan(); asg.tick(ctx.currentTime); }, 33);
+    const mod = {}; const AMP = () => { const o = mod.amp; return o ? clamp(S.amp + o, 0, 1) : S.amp; };   // effectieve waarde = knop + o × bereik (0..1), geclampt
     const changed = () => { if (sig) sig.reset(); };
     const restart = t => { startB = clock.beatsAt(t); started = true; changed(); };
 
@@ -260,7 +263,7 @@ export default {
       g.strokeStyle = col.mod; g.lineWidth = 2; g.beginPath(); for (let i = 0; i <= w; i += 1) { const v = curveAt(i / w); i ? g.lineTo(i, yOf(v)) : g.moveTo(i, yOf(v)); } g.stroke();
       S.pts.forEach((p, i) => { g.fillStyle = i === 0 || i === S.pts.length - 1 ? col.muted : col.fg; g.beginPath(); g.arc(p.x * w, yOf(p.y), 4.5, 0, 6.2832); g.fill(); });
       const now = ctx.currentTime, x = posAt(now) * w; g.strokeStyle = col.audio; g.lineWidth = 1.5; g.beginPath(); g.moveTo(x, 0); g.lineTo(x, hh); g.stroke();
-      const v = valueAt(now); g.fillStyle = col.audio; g.beginPath(); g.arc(x, yOf(v / (S.amp || 1)), 4, 0, 6.2832); g.fill();
+      const v = valueAt(now); g.fillStyle = col.audio; g.beginPath(); g.arc(x, yOf(v / (AMP() || 1)), 4, 0, 6.2832); g.fill();
       const b = clock.beatsAt(now);
       const txt = S.mode === 'loop' ? tx('maat {0} van {1}', Math.floor(((b / 4) % S.len + S.len) % S.len) + 1, S.len) : (started ? tx('maat {0} van {1}', Math.min(S.len, Math.floor((b - startB) / 4) + 1), S.len) : tx('wacht op start'));
       if (txt !== lastPos) { lastPos = txt; ui.pos.textContent = txt; }
@@ -294,6 +297,8 @@ export default {
       onTransport(info) { clock.transport(!!(info && info.playing)); if (info && info.playing) restart(ctx.currentTime); else changed(); },
       onEvent(port, ev) { if (port === 'trig' && ev && (ev.type === 'note' || ev.type === 'trig')) restart(fin(ev.time) ? ev.time : ctx.currentTime); },
       onModTargets(list) { asg.setTargets(list); },
+      params() { return [{ id: 'amp', name: tx('Sterkte'), lane: 'env', laneName: tx('Curve'), min: 0, max: 1, role: 'depth', scale: 'lin', drift: 0.05, on: false }]; },
+      modulate(offsets) { for (const k in mod) delete mod[k]; const o = offsets && +offsets.amp; if (offsets && Number.isFinite(o)) mod.amp = clamp(o, -1, 1); changed(); },
       getState() { return { pts: S.pts.map(p => ({ x: +p.x.toFixed(5), y: +p.y.toFixed(4), c: +p.c.toFixed(3) })), len: S.len, mode: S.mode, snap: S.snap, amp: S.amp, sel: asg.getState() }; },
       setState(s) { s = s && typeof s === 'object' ? s : {}; const d = DEF();
         let pts = Array.isArray(s.pts) ? s.pts.filter(p => p && fin(p.x) && fin(p.y)).map(p => ({ x: clamp(p.x, 0, 1), y: clamp(p.y, -1, 1), c: fin(p.c) ? clamp(p.c, -1, 1) : 0 })).sort((a, b) => a.x - b.x) : d.pts;

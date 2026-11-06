@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.2 — Swing bestuurbaar via params()/modulate(): Bankswing A tot D (bankSwing.0 tot .3) en Klankswing per klank (laneSwing.0 tot .14), alle standaard uit (drift 0,05, role swing). Modulatie komt alleen bovenop de knop (knop + o × 0,5, som begrensd tot 50%) en is nooit state.
+//          Zonder modulatie gelijk aan 1.14.1. Bewust weggelaten: testnoot, MIDI-basisnoot, lengte, voices, bank, klank, besturing (keuzes/vinkjes). Niet beluisterd.
 // 1.14.1 — Swing per bank (A tot D) en per klank (pad), naast de hostswing (som begrensd tot 50%; standaard 0 = ongewijzigd), en live inspelen: een knop Opname schrijft binnenkomende
 //          trigs en noten (ingang "Noten / trigs") op de juiste klank in de gekozen bank, op de huidige stap, met Kwantiseer (dichtstbijzijnde geswingde stap) aan of uit. Nieuwe state-sleutels:
 //          bankSwing (4 getallen), laneSwing (15 getallen) en quantize. Het geluid en het afspelen zijn bij de standaardwaarden ongewijzigd. De klanknamen waren al volledig doorgegeven (noteNames);
@@ -88,7 +90,7 @@ const buildSpec = T => {
 export default {
   id: 'nl.patchkamer.latinpercussion',
   name: 'Latin Percussion',
-  version: '1.14.1',
+  version: '1.14.2',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 920, minWidth: 380 },
@@ -120,8 +122,10 @@ export default {
     const smooth=(p,v,t=ctx.currentTime,tc=0.025)=>p.setTargetAtTime(v,t,tc);
     function dispose(){for(const n of nodes)try{n.disconnect();}catch{}nodes.clear();}
     function resolve(){const e={...state};for(const [id,d] of Object.entries(spec)){const x=mod[id]||0;e[id]=clamp(d.scale==='log'?state[id]*(d.max/d.min)**x:state[id]+x*(d.max-d.min),d.min,d.max);}effective=e;return e;}
-    function descriptors(){return Object.entries(spec).map(([id,d])=>({id,name:d.name,lane:d.lane||'klank',laneName:d.laneName||'Klank',min:d.min,max:d.max,scale:d.scale||'lin',role:d.role||'color',drift:0.015,on:d.role!=='level'&&d.role!=='pitch'}));}
-    function receiveMod(raw){mod={};if(raw&&typeof raw==='object'&&!Array.isArray(raw))for(const id in spec)if(typeof raw[id]==='number'&&Number.isFinite(raw[id]))mod[id]=clamp(raw[id],-1,1);apply();}
+    let swMod={};const swIds=[...[0,1,2,3].map(b=>'bankSwing.'+b),...Array.from({length:15},(_,i)=>'laneSwing.'+i)];
+    const swDesc=()=>swIds.map(id=>{const [k,n]=id.split('.');return {id,name:k==='bankSwing'?T.bankSwing+' '+'ABCD'[n]:LANE_NAMES[n]+' · '+T.laneSwing,lane:'swing',laneName:'Swing',min:0,max:0.5,scale:'lin',role:'swing',drift:0.05,on:false};});
+    function descriptors(){return Object.entries(spec).map(([id,d])=>({id,name:d.name,lane:d.lane||'klank',laneName:d.laneName||'Klank',min:d.min,max:d.max,scale:d.scale||'lin',role:d.role||'color',drift:0.015,on:d.role!=='level'&&d.role!=='pitch'})).concat(swDesc());}
+    function receiveMod(raw){mod={};swMod={};if(raw&&typeof raw==='object'&&!Array.isArray(raw)){for(const id in spec)if(typeof raw[id]==='number'&&Number.isFinite(raw[id]))mod[id]=clamp(raw[id],-1,1);for(const id of swIds)if(typeof raw[id]==='number'&&Number.isFinite(raw[id]))swMod[id]=clamp(raw[id],-1,1);}apply();}
     const cleanType=e=>String(e?.type||'').toLowerCase().replace(/[_-]/g,'');
     function controls(parent,ids=Object.keys(spec)){for(const id of ids){const d=spec[id],format=v=>d.unit==='%'?Math.round(v*100)+'%':(Math.abs(v)>=100?v.toFixed(0):v.toFixed(2))+(d.unit?' '+d.unit:'');knob(parent,id,d.name,[d.min,d.max,d.step||0.01],state[id],x=>{state[id]=x;apply();},format);}}
 
@@ -159,7 +163,7 @@ export default {
     }
     // swing per bank en per klank, en live inspelen (anc = laatste stap van de klok)
     let anc=null,rec=false;
-    const localSw=lane=>clamp(finite(state.bankSwing?.[state.bank],0,0,0.5)+finite(state.laneSwing?.[lane],0,0,0.5),0,0.5);
+    const localSw=lane=>clamp(clamp(finite(state.bankSwing?.[state.bank],0,0,0.5)+(swMod['bankSwing.'+state.bank]||0)*0.5,0,0.5)+clamp(finite(state.laneSwing?.[lane],0,0,0.5)+(swMod['laneSwing.'+lane]||0)*0.5,0,0.5),0,0.5);
     const isOdd=m=>((m%2)+2)%2===1;
     const stepTime=(m,lane)=>anc.base+(m-anc.step)*anc.sd+(isOdd(m)?(anc.hs+localSw(lane))*anc.sd:0);
     function nearestStep(lane,tau,quant){if(!anc||!Number.isFinite(tau)||Math.abs(tau-anc.t)>4)return null;const k0=Math.round((tau-anc.base)/anc.sd)+anc.step;let best=null,bd=Infinity;

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Swing is nu ook bestuurbaar via params()/modulate() (standaard uit, drift 0,05; role swing). Modulatie komt alleen bovenop de knop (effectief = knop + o × 0,5, geclampt) en is nooit state. De overige continue regelaars (inclusief Mensachtig, Accenten, Spooknoten, Ratchets) zaten er al in.
+//   Bewust weggelaten: Herhaal eerst (geheel getal 1 tot 8, discreet), grondtoon, toonladder, laagste, hoogste, raster, motieflengte, verloop, karakter en de schakelaars (keuzes en vinkjes).
 // 1.14.0 — Extra swing (`swing`, 0 … 0,5 van een zestiende, standaard 0). Een noot (of ratchet-noot) die in een oneven zestiende valt komt swing × stepDur later, bovenop de swing van de host; even zestienden blijven staan.
-//   Rasters van 1/8 en langzamer hebben alleen noten op even zestienden en schuiven dus niet. Met swing 0 speelt een state precies als voorheen (geen extra willekeur). De regelaar is niet te moduleren, zodat de lijst stuurbare parameters gelijk blijft.
+//   Rasters van 1/8 en langzamer hebben alleen noten op even zestienden en schuiven dus niet. Met swing 0 speelt een state precies als voorheen (geen extra willekeur).
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Wanderer (nieuwe id nl.patchkamer.wanderer, eigen map in sequencers; voorheen een Nederlandstalig
 //   apparaat met een andere naam en id, nl.patchkamer.dwaler). Songs en presets uit die tijd verwijzen naar de oude id en laden hier niet in.
 //   Met een ongewijzigde (oude) state, dezelfde klokstappen en dezelfde willekeur geeft dit apparaat dezelfde noten als het oude bestand.
@@ -93,11 +95,11 @@ let ukVarEpoch = 0; try { window.addEventListener('patchkamer-skin', () => { ukV
 const ukVar = (el, name, d) => { const c = el._ukv || (el._ukv = {}), now = performance.now(), e = c[name];
   if (e && now - e.t < 1000 && e.ep === ukVarEpoch) return e.v; let v = d; try { v = getComputedStyle(el).getPropertyValue(name).trim() || d; } catch { } c[name] = { v, t: now, ep: ukVarEpoch }; return v; };
 function ukResolve(spec, state, mod) { const e = { ...state }; for (const [id, d] of Object.entries(spec)) { const x = d.nomod ? 0 : (mod[id] || 0); if (!x) continue; e[id] = ukClamp(d.scale === 'log' ? state[id] * (d.max / d.min) ** x : state[id] + x * (d.max - d.min), d.min, d.max); } return e; }
-function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([, d]) => !d.nomod).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'color', drift: 0.015, on: !d.role || !['level', 'pitch'].includes(d.role) })); }
+function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([, d]) => !d.nomod).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'color', drift: d.drift ?? 0.015, on: d.on ?? (!d.role || !['level', 'pitch'].includes(d.role)) })); }
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.14.0', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.14.1', kind: 'utility', category: 'sequencer',
   ui: { width: 820, minWidth: 400 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'akkoord', name: 'Chord / keys' }], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { akkoord: 'Akkoord / toetsen', notes: 'Noten' } } },
@@ -124,7 +126,7 @@ export default {
       vel: { name: 'Velocity', min: 0.1, max: 1, unit: '%', g: 3 },
       accent: { name: 'Accenten', min: 0, max: 1, unit: '%', g: 3, tip: 'zware tellen harder' },
       ghost: { name: 'Spooknoten', min: 0, max: 1, unit: '%', g: 3, tip: 'kans dat een lichte noot een zachte spooknoot wordt' },
-      swing: { name: 'Swing', min: 0, max: 0.5, step: 0.01, unit: '%', g: 2, nomod: true, tip: 'extra vertraging van noten op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)' },
+      swing: { name: 'Swing', min: 0, max: 0.5, step: 0.01, unit: '%', g: 2, role: 'swing', drift: 0.05, on: false, tip: 'extra vertraging van noten op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)' },
       human: { name: 'Mensachtig', min: 0, max: 1, unit: '%', g: 3, tip: 'willekeurige velocity en lichte vertraging bij het spelen' },
       ratchet: { name: 'Ratchets', min: 0, max: 1, unit: '%', g: 3, tip: 'kans dat een noot een roll van 2 tot 4 noten wordt' },
     };

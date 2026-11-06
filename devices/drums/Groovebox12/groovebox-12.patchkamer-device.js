@@ -1,4 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — Alle continue regelaars bestuurbaar via params()/modulate() (stap 1 per track, stap 2 globaal), alle nieuwe standaard uit (on:false, drift 0,05 tot 0,08), de bestaande 96 ongewijzigd:
+//          per track de overige continue regelaars van de pagina's SYN (machine-afhankelijk: bv. Sweep t/d, Click, Noise, Harm, Hold), FLT (Env depth, Env decay, Env attack, Key track, HP base), AMP (Attack, Hold, Decay, Overdrive, Accent, Vel→vol),
+//          LFO (Speed, Depth, Fade, Phase) en FX (Delay HP, Reverb tone, Chorus, Width), plus de trackswing (tN.swing); patroonswing 1 tot 8 (p1.swing tot p8.swing); globaal Volume (g.vol), Swing (g.swing), FX drive, cutoff en reso (g.fxDrive/fxCut/fxRes),
+//          Delay time en feedback (g.dlyTime/dlyFb). Modulatie komt alleen bovenop de knop en de p-locks (knop + o × bereik, log voor tune/decay/cutoff, geclampt) en is nooit state: getState, tunes en presets zijn gelijk.
+//          Filter, niveau, pan en sends klinken tussen de slagen door mee; de overige klankregelaars werken (net als p-locks) vanaf de volgende slag. Zonder modulatie gelijk aan 1.11.1. Niet beluisterd.
+//          Bewust weggelaten: keuzes en schakelaars (filtertype, golfvorm, LFO-bestemming/golf/modus/sync, FX-blok, akkoordtype, inversie, density), tempo (bpm), reverbgrootte (herbouwt de galmbuffer: kans op tikken), ketting (chain), stapdata en p-locks.
+//          Risico: Volume, FX drive en delay-feedback bewegen via setTargetAtTime (geen sprongen), maar FX drive vervangt bij elke wijziging de vervormingscurve (zelfde pad als de eigen knop); niet beluisterd op zipper-ruis.
 // 1.11.1 — Extra swing op patroonniveau (`pat.swing`) en per track (`track.swing`), 0 … 50% van een stap, naast de bestaande Swing-schuif (G.swing, 50 … 80) en de hostswing. De som van
 //          patroon- en trackswing (begrensd tot 50%) vertraagt de oneven zestienden (stapnummer van de klok) met som × stap; de bestaande swing op het tracklokale stapnummer is ongewijzigd.
 //          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0). Het apparaat heeft geen noten- of triggeringang (geen eventIn): live inspelen en noteNames
@@ -224,7 +231,7 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.11.1',
+  version: '1.11.2',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 1262 },
@@ -408,11 +415,15 @@ function build(){
   });
   applyGlobal(); for(let i=0;i<NT;i++) applyTrack(i);
 }
+const GM={}, MODX={};   // modulatie op de globale regelaars ('vol' …) en op de swing-regelaars ('t1.swing', 'patSwing.1'): −1..1
+const GLOG={fxCut:true};
+const gv=k=>{ const o=GM[k]; if(!o) return G[k]; const [mn,mx]=GSPEC[k]; return GLOG[k]?clamp(G[k]*Math.pow(mx/mn,o),mn,mx):clamp(G[k]+o*(mx-mn),mn,mx); };
+const swv=(id,b)=>{ const o=MODX[id]; return o?clamp(b+o*0.5,0,0.5):b; };
 function applyGlobal(){
   if(!A) return; const t=ctx.currentTime, r=0.03;
-  A.master.gain.setTargetAtTime(G.vol,t,r);
-  A.fxDrv.curve=curve(G.fxDrive); A.fxLp.frequency.setTargetAtTime(G.fxCut,t,r); A.fxLp.Q.setTargetAtTime(G.fxRes,t,r);
-  A.dly.delayTime.setTargetAtTime(Math.min(2.9,60/G.bpm*G.dlyTime),t,r); A.dlyFb.gain.setTargetAtTime(G.dlyFb,t,r);
+  A.master.gain.setTargetAtTime(gv('vol'),t,r);
+  A.fxDrv.curve=curve(gv('fxDrive')); A.fxLp.frequency.setTargetAtTime(gv('fxCut'),t,r); A.fxLp.Q.setTargetAtTime(gv('fxRes'),t,r);
+  A.dly.delayTime.setTargetAtTime(Math.min(2.9,60/G.bpm*gv('dlyTime')),t,r); A.dlyFb.gain.setTargetAtTime(gv('dlyFb'),t,r);
   if(Math.abs((A.revSize||0)-G.revSize)>0.05){A.rev.buffer=mkImpulse(G.revSize,A.revTone); A.revSize=G.revSize;}
 }
 function applyTrack(i,fromStep){
@@ -454,11 +465,26 @@ function mergedParams(tr,step,i){   // track params with this step's p-locks app
 function applyTrackMod(i){ if(!A) return; const t=ctx.currentTime, r=0.05, tr=PP().tracks[i], s=A.tr[i], p=mergedParams(tr,null,i), F=p.flt, M=p.amp, X=p.fx;
   if(!s.envBusy) s.flt.frequency.setTargetAtTime(F.cut,t,r); s.flt.Q.setTargetAtTime(F.res,t,r);
   s.vol.gain.setTargetAtTime(tr.mute?0:M.vol,t,r); s.pan.pan.setTargetAtTime(M.pan,t,r); s.dly.gain.setTargetAtTime(X.dly*0.8,t,r); s.rev.gain.setTargetAtTime(X.rev*0.9,t,r); }
-function modParams(){ const L=[]; P().tracks.forEach((tr,i)=>MODK.forEach(([pg,key,name,role,drift,on])=>{ const sp=specOf(pg,key,tr.machine); if(!sp) return;
-  L.push({id:`t${i+1}.${pg}.${key}`,name,lane:'t'+(i+1),laneName:`${i+1} · ${tr.name}`,min:sp[2],max:sp[3],role,scale:isLog(pg,key,sp)?'log':'lin',drift,on}); })); return L; }
-function modulateAll(o){ const was=MODT.map(m=>Object.keys(m).length>0); MODT.forEach(m=>{ for(const k in m) delete m[k]; });
-  for(const id in o||{}){ const mm=/^t(\d+)\.(syn|flt|amp|fx)\.(\w+)$/.exec(id); if(!mm) continue; const i=+mm[1]-1; if(i<0||i>=NT) continue; if(typeof o[id]==='number'&&Number.isFinite(o[id])) MODT[i][mm[2]+'.'+mm[3]]=clamp(o[id],-1,1); }
-  for(let i=0;i<NT;i++) if(was[i]||Object.keys(MODT[i]).length) applyTrackMod(i); }
+const DISC=['typ','wav','dst','wv1','wv2','inv','mod','mul','blk','den','_'];   // keuzes en schakelaars: bewust niet bestuurbaar
+const PGNAME={syn:'Synth',flt:'Filter',amp:'Amp',lfo:'LFO',fx:'FX'};
+const ROLE={tun:'pitch',dec:'decay',cut:'filter',res:'res',vol:'level',pan:'pan',dly:'send',rev:'send',hld:'env',atk:'attack',eat:'attack',edc:'decay',env:'env',od:'drive',acc:'accent',vel:'level',spd:'rate',dep:'depth',fad:'env',ph:'phase',trk:'param',hpf:'filter',dlw:'filter',rvt:'filter',cho:'mix',wid:'param'};
+const GLOB=[['vol','Level','level'],['swing','Swing','swing'],['fxDrive','FX drive','drive'],['fxCut','FX cutoff','filter'],['fxRes','FX reso','res'],['dlyTime','Delay time','time'],['dlyFb','Delay feedback','level']];
+function modParams(){ const L=[]; P().tracks.forEach((tr,i)=>{ MODK.forEach(([pg,key,name,role,drift,on])=>{ const sp=specOf(pg,key,tr.machine); if(!sp) return;
+    L.push({id:`t${i+1}.${pg}.${key}`,name,lane:'t'+(i+1),laneName:`${i+1} · ${tr.name}`,min:sp[2],max:sp[3],role,scale:isLog(pg,key,sp)?'log':'lin',drift,on}); });
+  ['syn','flt','amp','lfo','fx'].forEach(pg=>{ specList(pg,tr.machine).forEach(sp=>{ const key=sp[0]; if(DISC.includes(key)||MODK.some(m=>m[0]===pg&&m[1]===key)) return;
+    L.push({id:`t${i+1}.${pg}.${key}`,name:sp[1],lane:`t${i+1}.${pg}`,laneName:`${i+1} · ${tr.name} · ${PGNAME[pg]}`,min:sp[2],max:sp[3],role:ROLE[key]||'param',scale:isLog(pg,key,sp)?'log':'lin',drift:0.05,on:false}); }); });
+  L.push({id:`t${i+1}.swing`,name:TX.trkSwing,lane:`t${i+1}.swing`,laneName:`${i+1} · ${tr.name} · Swing`,min:0,max:0.5,role:'swing',scale:'lin',drift:0.05,on:false}); });
+  for(let p=1;p<=NPAT;p++) L.push({id:`p${p}.swing`,name:TX.patSwing+' '+p,lane:'swing',laneName:'Swing',min:0,max:0.5,role:'swing',scale:'lin',drift:0.05,on:false});
+  GLOB.forEach(([k,name,role])=>L.push({id:'g.'+k,name,lane:'global',laneName:'Global',min:GSPEC[k][0],max:GSPEC[k][1],role,scale:GLOG[k]?'log':'lin',drift:0.05,on:false}));
+  return L; }
+function modulateAll(o){ const was=MODT.map(m=>Object.keys(m).length>0), wasG=Object.keys(GM).length>0; MODT.forEach(m=>{ for(const k in m) delete m[k]; }); for(const k in GM) delete GM[k]; for(const k in MODX) delete MODX[k];
+  for(const id in o||{}){ if(typeof o[id]!=='number'||!Number.isFinite(o[id])) continue; const v=clamp(o[id],-1,1);
+    let mm=/^t(\d+)\.(syn|flt|amp|lfo|fx)\.(\w+)$/.exec(id); if(mm){ const i=+mm[1]-1; if(i>=0&&i<NT) MODT[i][mm[2]+'.'+mm[3]]=v; continue; }
+    mm=/^g\.(\w+)$/.exec(id); if(mm){ if(GLOB.some(g=>g[0]===mm[1])) GM[mm[1]]=v; continue; }
+    mm=/^t(\d+)\.swing$/.exec(id); if(mm){ const i=+mm[1]-1; if(i>=0&&i<NT) MODX[id]=v; continue; }
+    mm=/^p(\d+)\.swing$/.exec(id); if(mm){ const p=+mm[1]; if(p>=1&&p<=NPAT) MODX[id]=v; } }
+  for(let i=0;i<NT;i++) if(was[i]||Object.keys(MODT[i]).length) applyTrackMod(i);
+  if(wasG||Object.keys(GM).length) applyGlobal(); }
 let modSig='';
 function notifyParams(){ const sig=P().tracks.map(tr=>tr.machine+':'+tr.name).join('|'); if(sig===modSig) return; const first=!modSig; modSig=sig; try{ host.bundleChanged&&host.bundleChanged(INST,'multi'); }catch(e){} if(!first){ try{ host.paramsChanged&&host.paramsChanged(INST); }catch(e){} } }
 
@@ -541,12 +567,12 @@ function tick(info){
   {
     const cs=chainSeq(), bar=Math.floor(pos/STEPS), pIdx=cs[bar%cs.length];
     if(pIdx!==playPat){playPat=pIdx; for(let k=0;k<NT;k++) applyTrack(k); paintPats();}
-    const pat=pats[pIdx], sw=(G.swing-50)/50*0.66, oddPos=(Number.isInteger(info.step)?info.step:pos)%2===1;
+    const pat=pats[pIdx], sw=(gv('swing')-50)/50*0.66, oddPos=(Number.isInteger(info.step)?info.step:pos)%2===1;
     pat.tracks.forEach((tr,i)=>{
       const st=pos%tr.len; const loop=Math.floor(pos/tr.len), first=pos<tr.len;
       const step=tr.steps[st]; if(!step.on||tr.mute) return;
       if(!condOK(step.cond,loop,first)) return;
-      let t=nextT+(st%2?stepDur()*sw:0)+step.micro*stepDur()+(oddPos?Math.min(0.5,(pat.swing||0)+(tr.swing||0))*stepDur():0);
+      let t=nextT+(st%2?stepDur()*sw:0)+step.micro*stepDur()+(oddPos?Math.min(0.5,swv('p'+(pIdx+1)+'.swing',pat.swing||0)+swv('t'+(i+1)+'.swing',tr.swing||0))*stepDur():0);
       const n=step.retrig; for(let k=0;k<n;k++) trig(pat,i,t+k*stepDur()/n,step,step.vel*(k?0.75:1));
     });
     const curPos=pos; setTimeout(()=>{uiCur=curPos; paintTrigsCursor();},Math.max(0,(nextT-ctx.currentTime)*1000));

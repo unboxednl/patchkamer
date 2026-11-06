@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de zes continue regelaars (Ademgolf, Hoeveelheid, Warmte, Ruimte, Beweging, Variatie; alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state.
+//          Geen lus: modulate() roept zelf geen host.modulate aan, dus een Swell die zichzelf of een andere modulator stuurt leidt niet tot herhaling. Bewust weggelaten: Sfeer, Tempoverdeling (keuzes), Aan/Volg/Op tempo (vinkjes), de bereikregelaars per doel (routes, hangen aan het doel).
+//          Zonder modulatie gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Swell en nieuwe id nl.patchkamer.swell (voorheen Deining, nl.patchkamer.deining); werkruimtes en presets uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnaam per taal in i18n). Tekenen via host.frame met een ResizeObserver en een kleurcache. De regelaars krijgen een beginwaarde (dubbelklik).
 //          Elke uitgestuurde waarde is eindig (NaN en Infinity worden nul), het tempo wordt begrensd, setState negeert onbekende velden en kapt getallen af; de beweging zelf is gelijk aan 1.8.0.
@@ -33,6 +36,10 @@ const PROFILES = {
 const DEF = () => ({ profile: 'rust', on: true, follow: false, sync: false, beats: 32, period: 22, depth: .38, warmth: .62, space: .45, motion: .22, human: .12, routes: {} });
 const LANES = [['breath', 'Adem'], ['warmth', 'Warmte'], ['space', 'Ruimte'], ['sway', 'Zweving']];
 const BEATS = [4, 8, 16, 32, 64, 128];
+// Bestuurbare regelaars: [id, naam, min, max, log, role, drift, aan]
+const MODP = [['period', 'Ademgolf', 4, 120, true, 'rate', 0.05, false], ['depth', 'Hoeveelheid', 0, 1, false, 'depth', 0.05, false], ['warmth', 'Warmte', 0, 1, false, 'param', 0.05, false], ['space', 'Ruimte', 0, 1, false, 'param', 0.05, false],
+  ['motion', 'Beweging', 0, 1, false, 'motion', 0.05, false], ['human', 'Variatie', 0, 1, false, 'param', 0.05, false]];
+const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 const KNOBS = [
   ['period', 'Ademgolf', 4, 120, .1, v => v.toFixed(1) + ' s'],
   ['depth', 'Hoeveelheid', 0, 1, .01, v => Math.round(v * 100) + '%'],
@@ -95,7 +102,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id: 'nl.patchkamer.swell', name: 'Swell', version: '1.11.0', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
+  id: 'nl.patchkamer.swell', name: 'Swell', version: '1.11.1', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [{ id: 'mod', name: 'Swell' }], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -104,13 +111,16 @@ export default {
     let cw = 0, ch = 0, col = null, colT = 0, lastStatus = '';
     const smoothed = {}, trace = { breath: 0, warmth: 0, space: 0, sway: 0 };
     function clear(id) { host.modulate(self, id, {}); delete smoothed[id]; }
+    // effectieve staat = knop + modulatie (lineair: knop + o × bereik; log: knop × (max/min)^o), geclampt; state zelf blijft ongemoeid
+    const mod = {};
+    const eff = () => { const ks = Object.keys(mod); if (!ks.length) return state; const e = { ...state }; for (const k of ks) { const b = state[k], m = MODBY[k], mn = m[2], mx = m[3], o = mod[k]; e[k] = m[4] ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); } return e; };
     function update() {
       if (dead) return; const now = ctx.currentTime, delta = Math.max(0, now - last); last = now;
       const active = state.on && (!state.follow || playing);
-      const period = state.sync ? state.beats * 60 / Math.max(20, bpm) : state.period;
+      const es = eff(), period = es.sync ? es.beats * 60 / Math.max(20, bpm) : es.period;
       if (active) phase += delta / period;
       if (!Number.isFinite(phase)) phase = 0;
-      const w = waves(phase, state); for (const key of Object.keys(trace)) trace[key] = clamp(fin(w[key] * state.depth), -1, 1);
+      const w = waves(phase, es); for (const key of Object.keys(trace)) trace[key] = clamp(fin(w[key] * es.depth), -1, 1);
       const alpha = 1 - Math.exp(-Math.min(delta, .5) / .32);
       for (const target of targets) {
         if (!active) { clear(target.id); continue; }
@@ -153,10 +163,10 @@ export default {
       if (!col || performance.now() - colT > 1000) readColors();
       const d = Math.min(2, globalThis.devicePixelRatio || 1), w = cw, h = ch;
       if (canvas.width !== Math.max(1, Math.round(w * d)) || canvas.height !== Math.max(1, Math.round(h * d))) { canvas.width = Math.max(1, Math.round(w * d)); canvas.height = Math.max(1, Math.round(h * d)); }
-      pen.setTransform(d, 0, 0, d, 0, 0); pen.fillStyle = col.well; pen.fillRect(0, 0, w, h); pen.font = '10px monospace';
+      const es = eff(); pen.setTransform(d, 0, 0, d, 0, 0); pen.fillStyle = col.well; pen.fillRect(0, 0, w, h); pen.font = '10px monospace';
       LANES.forEach(([key, name], index) => {
         const color = col.lanes[index]; pen.strokeStyle = color; pen.fillStyle = color; pen.globalAlpha = .7; pen.beginPath();
-        for (let x = 0; x < w; x++) { const value = waves(phase + x / Math.max(1, w) * 1.8, state)[key] * state.depth * (state.on && (!state.follow || playing) ? 1 : 0), y = h * (.15 + index * .235) - value * h * .085; if (x) pen.lineTo(x, y); else pen.moveTo(x, y); }
+        for (let x = 0; x < w; x++) { const value = waves(phase + x / Math.max(1, w) * 1.8, es)[key] * es.depth * (state.on && (!state.follow || playing) ? 1 : 0), y = h * (.15 + index * .235) - value * h * .085; if (x) pen.lineTo(x, y); else pen.moveTo(x, y); }
         pen.stroke(); pen.globalAlpha = 1; pen.fillText(tx(name), 7, 12 + index * h * .235);
       });
     }
@@ -189,6 +199,8 @@ export default {
         make('div', tx('Doelen · vink parameters aan en kies de beweging. Bereik is een deel van het volledige parameterbereik; negatief keert de richting om.'), app, 'hint'); routeBox = make('div', null, app); status = make('div', null, app, 'status'); shadow.addEventListener('pointerdown', e => e.stopPropagation()); drawRoutes(); syncUI();
       },
       unmount,
+      params() { return MODP.map(([id, name, min, max, log, role, drift, on]) => ({ id, name: tx(name), lane: 'swell', laneName: 'Swell', min, max, role, scale: log ? 'log' : 'lin', drift, on })); },
+      modulate(offsets) { for (const k in mod) delete mod[k]; for (const k in offsets || {}) if (MODBY[k] && Number.isFinite(+offsets[k])) mod[k] = clamp(+offsets[k], -1, 1); },
       onModTargets(list) {
         if (dead) return;
         const next = Array.isArray(list) ? list.filter(t => t && typeof t.id === 'string').map(t => ({ id: t.id, name: typeof t.name === 'string' ? t.name : t.id, params: Array.isArray(t.params) ? t.params.filter(p => p && typeof p.id === 'string' && Number.isFinite(p.min) && Number.isFinite(p.max) && p.max > p.min) : [] })) : [];
