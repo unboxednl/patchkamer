@@ -103,6 +103,15 @@ A device is a file that ends in `.patchkamer-device.js`. Sources are remembered,
 
 ![Library layout](images/en/10-library-layout.png)
 
+### Category icons
+
+Every category has an icon. It shows next to the category name in the library, on every device in that category (cards and compact rows), on a device's title bar, and in a device's compact and minimized states, where the icon replaces the initials. The icon uses the category color. You pick another icon in the **Layout** panel: click the icon left of the category name and choose one from the grid, paste an address of an image (only from the same source as the library) or choose **Choose file…** for your own image (png, svg, webp or jpg, at most 200 kB). **Default** brings back the original icon. Your choice is saved in the layout, so it is also in `patchkamer-bibliotheek.json` (field `icon`).
+
+### Put an icon in a library folder
+
+Put a file `icon.svg`, `icon.png`, `icon.webp` or `icon.jpg` (searched in that order, case does not matter) in the folder that counts as a category, for example `devices/synths/`. That icon then becomes the icon of the category and of all devices in it. It works for a local folder, a GitHub source and a web address; **Scan** picks up a changed icon. An `icon.*` in any other folder, for example the folder of a single device, does nothing. What wins: first your own choice under **Layout** (and the field `icon` in the layout file), then the file in the folder, then the built-in icon. The image is shown as it is (not recolored) and only as an image, so scripts in an svg never run. Files larger than 200 kB or that are not an image are skipped. A square, transparent image (svg, or at least 64 pixels) looks best.
+
+
 ## 5. Your first patch
 
 You will make a keyboard play a bass synth through your speakers.
@@ -122,6 +131,30 @@ You will make a keyboard play a bass synth through your speakers.
 **Move a cable.** Drag a cable by one end to another matching port. The end nearest to where you grab comes loose and the other end stays where it is. Let go on a matching port to hang the cable there. Let go anywhere else, or press **Esc**, and the cable goes back where it was. The old cable stays connected until you let go, so the sound keeps playing.
 
 **Put a device on a cable.** Drag a device from the library, or a device that has no cables yet, onto a cable. The cable lights up, and when you let go it splits: the device sits between the two ends. This works for devices that have both an input and an output of that kind of cable (audio or notes), such as the effects. If a cable does not light up, the device does not fit in it.
+
+### Cable color
+
+A cable takes the color of the category of the device it comes from: a cable from a synth has the color of the Synths category. You tell the type of cable by its line style (audio solid, events dashed, control wavy, bundles thick and double). The color is made a little lighter or darker where needed, so it stays clearly visible on the floor of every color scheme. Under **Settings → Display**, **Cable color** lets you choose **by category** (the default) or **by type** (the colors from before: audio, events, control, mastering and bundles each have their own). A color you gave a cable yourself always wins. A cable from a device in **Other** keeps the color of its type.
+
+### Cable text on hover
+
+Point at a cable with the mouse and a small text shows the names of the connected devices, separated by a dash: `Chord Poly - Pump`. If a device has more ports of that type, the port is added: `Chord Sequencer (Track A) - Chord Poly`. For multi-MIDI, bundles and mastering the type follows in brackets. On a touchscreen, press and hold a cable: you get the same text as a message, next to the color menu.
+
+### Offer to connect when placing
+
+Patchkamer can suggest cables after you place a device, so you do not have to drag every cable yourself. The switch **Offer to connect when placing a device** is in the ☰ menu (narrow screen, group **Other**) and in **Settings**; the two switches belong together. Without a choice of your own it is **on for a touch screen** (phone, tablet) and **off for a computer with a mouse**; a narrow window on a computer does not count as mobile. As soon as you set the switch yourself, your browser remembers that choice.
+
+When it is on, every device that **you place yourself** (dragging, **Place**, or a tap on a compact library row) opens a window **Connect to devices on the canvas**, if there is anything to connect. Opening a song or workspace, **Arrange**, Ctrl+Z and switching tabs never ask. If you drop the device on a cable, that comes first and no window appears.
+
+The example: you place **Speakers** on an empty canvas. Nothing happens. Then you place a synth: the window shows the group **Audio** with the Speakers (compact, one line) already ticked. Then you place a sequencer: now there is a group **Events (MIDI)** with the synth ticked. The window groups the suggestions by cable kind (audio, events, modulation and the other kinds) and you can tick in all groups at once. One click on **OK** makes everything that is ticked; **Skip** (or Esc) does nothing. **Don't ask again** switches the setting off.
+
+Patchkamer only suggests cables that fit the order sources, instruments, effects, mixer, output. For each device and each kind at most one obvious suggestion is ticked (the next device in the chain that has a free input); the rest is in the list but unticked. If you place an **effect**, you can also put it into an existing audio cable: the group **Insert into an existing cable** shows a line "Between A and B" per cable. That line excludes the ordinary audio suggestions for that effect, and you can pick at most one cable.
+
+**Sequencers with tracks.** If a sequencer has several output ports (one port per track, like the Clip Arranger), Patchkamer picks the lowest free port for each target device and shows whether that target is a drum machine (**drums**) or a melodic device (**melodic**). A device does not itself record what type a track has: the choice follows the device you connect. With the **Output** and **Input** lists you pick another free port. If all ports are in use, the suggestion stays off with the reason "all ports in use".
+
+**Not too many.** If there are more than **7** possibilities (all groups together, including unticked ones), no window appears and you connect yourself.
+
+**Undo.** One **Ctrl+Z** after **OK** removes all cables of that one go; for an inserted effect the original cable comes back.
 
 **Volume.** Use the slider on Speakers. It has a limiter, but keep the volume modest at first.
 
@@ -222,7 +255,7 @@ In the focus view, **One at a time** shows a single device. Switch with **◀ �
 - **New workspace:** tick what Patchkamer loads when you start with an empty workspace: **Load the device library**, **Load presets**, **Load tunes**. Under each tick is the address, by default the `devices`, `presets` and `tunes` folders of `github.com/unboxednl/patchkamer`. Everything below the folder is read. **Restore default addresses** puts the three back. The **Load all** button in the Tunes and Presets panel uses the same addresses. Only GitHub addresses work here; a web address or local folder is added as a source in the library instead.
 - **AI assistant:** choose a provider (**Anthropic**, **OpenAI** or a **custom address** for any OpenAI-compatible service, such as your own proxy, OpenRouter or a local model), paste your **API key** and choose a **model** (**Fetch models** fills the list). The key is stored only in this browser (localStorage) and goes only to the provider you chose. Under it you can change which GitHub repository the AI reads its documentation from, or tick **Use my own agent instructions** and write your own: the AI then uses those instead of the GitHub documentation. **Clear keys** removes all keys. See *AI Chat* in section 6.
 - **Songs address:** under **New workspace** you also find the address of the demo songs (by default the `songs` folder on GitHub); **Restore default address** puts it back.
-- **Display:** the style of the cables, their opacity, the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
+- **Display:** the style of the cables, their opacity, the cable color (by category or by type), the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
 - **Color** (top right): dark, light or retro.
 
 ![The light and retro color schemes](images/en/03-patch-light.png)
