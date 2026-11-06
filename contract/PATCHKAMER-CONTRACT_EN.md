@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.16 for building agents
+# Patchkamer — Instrument contract v1.17 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -25,6 +25,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.14 | Note names: a device that maps notes to names (a drum machine) can offer `noteNames()` and call `host.noteNamesChanged`; `host.peers` passes them on as `noteNames`, so a sequencer can name its rows (§13b) |
 | v1.15 | Controls recognisable for skins: `id`, `role` and `group` on `host.ui.knob` (in the `options`) and `host.ui.select` (new 6th argument), the attributes `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` for your own elements and `host.ui.list` for the register; the validator gives a `warning` for duplicate or missing ids and knows `--controls` (§12d). |
 | v1.16 | Coverage of `params()`: every continuous control belongs in `params()` (`modExclude` for deliberate exclusions, `on`/`drift` for whatever would sound wrong when it moves unasked, §8); the validator gives a `warning` for a control that is not in `params()`, for a device with controls but no `params()` and for a param id without a control, and `--controls` shows the column `in params()` |
+| v1.17 | Clipboard: copying and pasting patterns and clips between devices. Optional `clipInfo()`, `getClip()`, `setClip(clip)` (all three or none) and the exchange format `patchkamer-clip` (JSON, time in ticks); the host puts the Copy and Paste buttons in the card bar and translates between devices; the validator checks the three methods and knows `--clip` (§13d) |
 
 ---
 
@@ -663,6 +664,101 @@ Rules: `setPart(id, getPart(id))` leaves the setting unchanged, and `setPart(a, 
 
 ---
 
+## 13d. Clipboard: copying and pasting patterns and clips (v1.17)
+
+For devices that have a pattern or a clip (sequencers, drum machines). Optional: without these methods your device does not take part and nothing changes. The host puts **Copy** and **Paste** buttons in the card bar (and knows Ctrl/Cmd+C and Ctrl/Cmd+V on the selected device) and does all the translating between devices; **your device only supplies and accepts**. So a device contains no translation logic.
+
+| Call | What |
+|---|---|
+| `clipInfo()` | Light, does not throw, changes nothing. Returns `null` (nothing to copy or paste right now) or an object that describes what the device can do **now** with its current pattern. Dynamic: the answer depends on selection and cabling (a keys lane or a drum lane, a connected drum machine). The host calls it often |
+| `getClip()` | A JSON copy of the current pattern as `patchkamer-clip` (see below), or `null`. No side effects. A generator (Euclidean, random walk) may return a snapshot of what it plays now |
+| `setClip(clip)` | Puts the clip (already adapted and sanitised by the host) on the current pattern. Returns `{ ok: true }` or `{ ok: false, reason }` (`reason` is text in the language of `host.lang`, for the message to the user). Never throws, sets nothing halfway, clamps all values again itself, updates the UI like `setState`, and sends **no** events itself |
+
+`clipInfo`, `getClip` and `setClip` belong together: all three or none. The validator says so when one is missing.
+
+**The `patchkamer-clip` format (JSON, `formatVersion` 1).** Time is in whole **ticks**: 12 ticks per sixteenth, so 192 per bar. That is exact for 1/16, 1/32, 1/64 and the three triplet grids, without fractions.
+
+```json
+{ "format": "patchkamer-clip", "formatVersion": 1,
+  "kind": "notes",
+  "name": "Bass A",
+  "length": 192,
+  "grid": 16,
+  "source": { "device": "nl.patchkamer.seq", "name": "Step Sequencer", "version": "1.17.0", "trackType": "notes", "scheme": "gm" },
+  "swing": 0,
+  "notes": [ { "t": 0, "n": 45, "len": 12, "vel": 0.9, "acc": true, "prob": 1, "ratchet": 1 } ],
+  "native": { "device": "nl.patchkamer.seq", "data": { } } }
+```
+
+A clip with `kind: "drums"` has two fields instead of `notes`:
+
+```json
+{ "format": "patchkamer-clip", "formatVersion": 1, "kind": "drums", "length": 192,
+  "lanes": [ { "id": "kick", "name": "Kick", "type": "kick", "note": 36, "length": 192 } ],
+  "hits":  [ { "t": 0, "lane": 0, "vel": 0.9, "acc": true, "prob": 1, "ratchet": 1 } ] }
+```
+
+| Field | Meaning and rules |
+|---|---|
+| `format`, `formatVersion` | Required: `"patchkamer-clip"` and `1`. A newer `formatVersion` or an unknown `kind` is refused by the reader; unknown fields are ignored |
+| `kind` | `"notes"` (pitches, polyphonic or mono) or `"drums"` (lanes with a hit). A chord lane is simply several notes at the same place |
+| `name` | Optional, text. The host shows it with `textContent` and cuts it at 40 characters |
+| `length` | Required: length of the clip in ticks, an integer from 1 to 12288 (64 bars) |
+| `grid` | Optional: 16, 32 or 64, the grid hint of the source (only for the target's editor) |
+| `source` | Optional: who made the clip (`device` = `id`, `name`, `version`, `trackType` for a lane with a type, `scheme` is `"gm"` or `"device"`). Information for the message and for aligning lanes only |
+| `swing` | Optional: clip swing, 0 to 0.5 sixteenths; receivers without swing ignore it |
+| `notes[].t` | Start tick, an integer from 0 to `length`−1. Micro-timing (a step's offset) is folded into `t` |
+| `notes[].n` | MIDI note number, an integer from 0 to 127 |
+| `notes[].len` | Length in ticks, at least 1 (`hits` have no length) |
+| `vel` | 0.01 to 1, default 0.8 |
+| `acc` | Optional, `true` if the source has an accent; `vel` is then also 1. A receiver with an accent uses `acc` or `vel` ≥ 0.9; a receiver without an accent uses only `vel` |
+| `prob`, `ratchet` | Optional (default 1). A receiver that does not know them leaves them out and the host says so |
+| `lanes` | `drums` only: at most 64 lanes `{ id, name, type, note, length }`. `type` is the canonical instrument (like `parts()[].type`, §13c) or empty; `note` is the lane's note number; `length` only for polymeter (the clip is then as long as the longest lane) |
+| `hits[]` | `drums` only: `t` as with notes, `lane` is the index in `lanes` (0 to count−1), plus `vel`, `acc`, `prob`, `ratchet` |
+| `native` | Optional: device-specific extras `{ device, data }`. The host passes them only to a device with the same `id` (`device`); every other device ignores them. Pasting between two copies of the same device is then lossless |
+
+Current pitches are copied **as stored**: the transposition of a lane (octave, `transpose`) belongs to the lane and not to the pattern.
+
+**Limits.** `length` 1 to 12288 ticks; at most 4096 notes or hits; at most 64 lanes; `name` at most 40 characters; the whole clipboard (the JSON text) at most 1 MB. The host keeps to these limits when reading and writing; keep to them in `getClip` and clamp them in `setClip`.
+
+**`clipInfo()` returns** (all fields except `copy` and `paste` optional):
+
+| Field | Meaning |
+|---|---|
+| `name` | What your device calls the current pattern ("Lane 2 · Bass, clip 3") |
+| `copy`, `paste` | Lists with `"notes"` and/or `"drums"`: what you can give now (`getClip`) and what you can receive now (`setClip`). A generator without a step list returns `paste: []`. The kind depends on the device (on a lane type where the lane decides) and can differ from moment to moment |
+| `length` | `{ min, max, step, current, shared }` in ticks: how long the pattern may be. `shared: true` if the length applies to all patterns of the device: the host then adapts the clip to the device's length and does not change the length |
+| `grid` | List of grids the device can handle (16, 32, 64) |
+| `poly` | How many notes at once (1 = mono) |
+| `range` | `[lowest, highest]` MIDI note the device can do |
+| `scheme` | `"gm"` (note numbers per General MIDI) or `"device"` (own numbering: align on `type` or name, not on number) |
+| `vel`, `prob`, `ratchet` | What velocity can do (`"continuous"`, `"accent"` or `"binary"`) and whether `prob` and `ratchet` exist |
+| `lanes` | For drums: `[{ id, name, type, note }]`, the lanes of the target |
+| `maxEvents` | How many notes or hits fit in the pattern |
+
+**What the host does (short).**
+
+- Copying puts the clip in the host's memory and as JSON text on the system clipboard; pasting reads the system clipboard first and falls back on the memory. One pattern or clip at a time.
+- Only between devices of the same kind: `notes` to `notes`, `drums` to `drums`. With a difference in kind the host does nothing and says why. It **never** changes the type of a lane itself.
+- Before `setClip` the host sanitises the clip strictly (ranges, counts, unknown fields removed) and adapts it to the target based on `clipInfo()`: the target keeps its own length (a short clip is repeated if the length is a multiple, otherwise silence follows; a long one is cut), notes go to the nearest grid point, a mono target keeps the loudest note, notes outside `range` are folded in per octave. Drum lanes are aligned on `native.device`, then `type`, then name, and by note number only with `"gm"` on both sides; what does not fit is left out and reported. Never by order and never an automatic transposition.
+- While the clock runs the host pastes at the start of the next bar by default (with Cancel); Ctrl+Shift+V pastes immediately.
+- The host undoes with `getState()` before and `setState()` after pasting. That is why `getState`/`setState` must be exact (§13); an own history is not needed.
+
+**Rules for devices.**
+
+1. All three methods or none. Only a device with a real pattern takes part; if your device only sends chords or an arpeggio without a step list, `getClip` may return a snapshot and `clipInfo().paste` returns an empty list.
+2. `clipInfo()` is light, does not throw and does not change the state. Return `null` when there is nothing now.
+3. `getClip()` returns JSON without AudioNodes, with a valid `kind`, a `length` of 1 to 12288 ticks, notes and hits within range and within the counts above, or `null`. It is a copy: what the host does with it does not touch your state.
+4. `setClip(clip)` is the **only** writer: clamp and sanitise everything yourself, even though the host already did (a device in a song can get a clip from elsewhere). Ignore unknown fields, invalid values to the default or drop the note, never `NaN` or `Infinity` in the state. With `ok: false` the state stays exactly as it was.
+5. `setClip(getClip())` leaves `getState()` unchanged (like `setPart(id, getPart(id))` and `setPreset(getPreset())`).
+6. `setClip` updates the UI like `setState` (all knobs, step rows and the piano roll) and sends no events itself; only the clock makes sound.
+7. With `ok: false` always give a `reason` in the language of `host.lang`.
+8. A clip does not have to fit the current lane: prefer `ok: false` with a clear reason over silently doing something else.
+
+**Safety.** The clipboard is untrusted input: anyone can put text on it. The host sanitises strictly, but your `setClip` trusts nothing: check every number, every type and every length; never evaluate text from a clip; set names only with `textContent` (never `innerHTML`); read `native` only if `native.device` equals your `id`; and build no unbounded lists (at most 4096 notes or hits, 64 lanes).
+
+---
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -695,6 +791,7 @@ Rules: `setPart(id, getPart(id))` leaves the setting unchanged, and `setPart(a, 
 | `host.controls(this, targetId)` | v1.13 | The controls on the card of another device (§11c) |
 | `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
 | `host.noteNamesChanged(this)` | v1.14 | Your `noteNames()` changed; other devices hear it through `onPeers` (§13b) |
+| `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Copy and paste patterns and clips, optional and all three together; format `patchkamer-clip` (§13d) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -737,6 +834,7 @@ A library is a folder (local, on GitHub or at a web address) with modules and a 
 node validate-instrument.mjs my-device.patchkamer-device.js
 node validate-instrument.mjs my-device.patchkamer-device.js --lang en   # output in English (default Dutch)
 node validate-instrument.mjs my-device.patchkamer-device.js --controls  # also print the table of controls (v1.15)
+node validate-instrument.mjs my-device.patchkamer-device.js --clip      # also show the output of clipInfo() and getClip() (v1.17)
 ```
 
 The validator loads your module with a fake AudioContext, a fake DOM (with shadow roots) and a fake host. It ends with one `OK` line (exit 0) or with the first error (exit 1). It checks:
@@ -757,6 +855,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 14. **Note names (v1.14)**: a device with `noteNames()` returns a list of `{ note, name }` (note 0 to 127, a non-empty `name`); `noteNames()` does not throw and `host.noteNamesChanged(this)` may be called without error.
 15. **Controls for skins (v1.15)**: the fake host knows `host.ui.knob(…, options)`, `host.ui.select(…, options)`, `host.ui.adopt` and `host.ui.list`, and also reads `data-pk-*` attributes on your own elements. Only a `warning` (never an error) for a duplicate id, some ids missing, a role outside the list, an invalid id or group, options that are not an object, `adopt` on an element without a model, an id on an element that is not attached anywhere, and ids that differ per `host.lang`. `--controls` prints the table `id | role | group | label nl/en | range | face | in params()` (see §12d).
 16. **Coverage of `params()` (v1.16, §8)**: every continuous control (`<input type="range">`, `host.ui.knob`, `host.ui.adopt`; not the roles `step`, `display`, `meter`, `jack`, `pad`, `button`) is matched to `params()`: first by its `id` (options or `data-pk-id`), then by the `getState` key that changes when the validator moves the value and calls the `input`/`change` handling (numbered keys such as `osc.0.fine` count if they occur at several positions; step data and a single selected position do not), then by a label equal to exactly one parameter name. Only a `warning` (never an error) for: continuous controls that are not in `params()` and not in `modExclude`; an `instrument`, `effect` or `mixer` (not the categories `sequencer` and `tool`) with continuous controls but no `params()`; a `params()` id without a control or state key; a `modExclude` that is not a list of strings (or `'*'`). What the validator cannot match, it leaves silent (`?` in `--controls`). Controls built through `innerHTML` or drawn on a canvas it does not see.
+17. **Clipboard (v1.17, §13d)**: `clipInfo`, `getClip` and `setClip` all three or none. `clipInfo()` returns `null` or a JSON object (`copy`/`paste` with `notes` and/or `drums`, numbers in `length`), does not throw and does not change the state. `getClip()` returns `null` or a valid `patchkamer-clip` as JSON without AudioNodes (`format`, `formatVersion` 1, `kind` `notes` or `drums`, `length` 1 to 12288 whole ticks, at most 4096 notes or hits and 64 lanes, `t`, `n`, `lane` and `vel` in range) and does not change the state. `setClip(getClip())` leaves `getState()` unchanged. `setClip` gets junk, empty and extreme clips (other types, `NaN`, length 0 or 1e9, 100000 notes, lanes that do not exist) and does not throw; it always returns `{ ok, reason }` (`reason` text with `ok: false`); with `ok: false` the state stays the same, with `ok: true` the state is JSON without `NaN`/`Infinity` and stable under `setState(getState())`; it sends no events itself. A device that rejects its own `getClip()` (`ok: false`) gets a `warning`. A device without these methods gets no message. `--clip` shows what `clipInfo()` and `getClip()` return.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -783,7 +882,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 17. All text for the user is chosen on `host.lang` (`'nl'` and `'en'`, otherwise `'en'`); names per language in `i18n`; `oversample` of `host.audio` used where you cause aliasing yourself (§12c).
 18. Controls (v1.15, recommended): every `host.ui.knob`/`select` and every own slider has an `id` (= state/parameter key, never the label), a `role` and a `group`; `node validate-instrument.mjs file.patchkamer-device.js --controls` shows the table without `warning` (§12d).
 19. Coverage (v1.16): `params()` contains every continuous control with `id` = state key, except what is in `modExclude` (test note, base note, length, voices, step data); choices and checkboxes do not belong in it; parameters that must not move unasked (pitch, master, gate, octave, times) have `on: false` (§8). `--controls` shows no `no` in the `in params()` column.
-20. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+20. Clipboard (v1.17, optional): `clipInfo`/`getClip`/`setClip` together; `getClip()` returns a valid `patchkamer-clip` or `null`; `setClip` clamps everything itself, returns `{ ok, reason }`, sets nothing halfway and sends no events; `setClip(getClip())` leaves `getState()` the same (§13d).
+21. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 
@@ -822,7 +922,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.16
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.17
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -881,7 +981,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.16
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.17
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -945,7 +1045,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.16
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.17
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1023,7 +1123,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.16.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.17.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>
