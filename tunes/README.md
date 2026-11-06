@@ -66,7 +66,7 @@ The folders inside each pack are listed in the manual: [Tunes: user manual](../d
 
 ## How to use them
 
-- Load `github.com/unboxednl/patchkamer` as a library in Patchkamer: the packs come with it. Or download a file from this folder and use **Tunes ▾ → Import…**.
+- Load `github.com/unboxednl/patchkamer` as a library in Patchkamer: the packs come with it. Or download a file from this folder and use the **Tunes** tab in the library (the **Library** button) → **Import…**.
 - Then choose a tune in the list on the card of the device.
 - Full explanation, including how to save, export, share and make your own packs: [Tunes: user manual](../docs/tunes/USER-MANUAL_EN.md). The basics of Patchkamer: [main manual](../docs/USER-MANUAL_EN.md).
 

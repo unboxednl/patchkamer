@@ -159,7 +159,7 @@ The meter shows **IN**, **OUT** and **GAIN** (the correction in dB), with a lamp
 
 ### Presets
 
-Leveler has the pack **Leveler Basics**: 11 presets in three folders, **Sources** (Gentle Leveling, Drift Tamer, Pad Smoother, Bass Control, Lead Steady, Quiet Rescue), **Mix** (Mix Bus Safety, Slow Ride, Fast Catch, Loud and Tight) and **Utility** (Meter Only). The file is [`presets/leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets ▾** menu → **Import…**, then pick a preset in the list on the card.
+Leveler has the pack **Leveler Basics**: 11 presets in three folders, **Sources** (Gentle Leveling, Drift Tamer, Pad Smoother, Bass Control, Lead Steady, Quiet Rescue), **Mix** (Mix Bus Safety, Slow Ride, Fast Catch, Loud and Tight) and **Utility** (Meter Only). The file is [`presets/leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
 ### Tips and limits
 

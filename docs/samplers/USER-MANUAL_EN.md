@@ -24,7 +24,7 @@ A typical patch has three steps, from left to right:
 
 The audio you load is saved **inside the song or workspace**, so it comes back when you load that song again. The price is size: a sampler with long audio makes a large song. Both samplers have limits (120 seconds per sample or loop, 50 MiB per file to load).
 
-Samplers have **tunes**: a tune is the complete setting of one sampler. Load a pack from a library or with the **Tunes ▾** menu → **Import…**, then pick a tune in the list at the top of the card (it reads `Folder › Name`). See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use, save and share them. Samplers have no presets. What a tune holds differs per sampler and is explained in each section below.
+Samplers have **tunes**: a tune is the complete setting of one sampler. Load a pack from a library or with the **Tunes** tab of the library → **Import…**, then pick a tune in the list at the top of the card (it reads `Folder › Name`). See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use, save and share them. Samplers have no presets. What a tune holds differs per sampler and is explained in each section below.
 
 ## Which sampler for which goal
 

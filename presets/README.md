@@ -83,7 +83,7 @@ The folders inside each pack are listed in the manual: [Presets: user manual](..
 
 ## How to use them
 
-- Load `github.com/unboxednl/patchkamer` as a library in Patchkamer: the packs come with it. Or download a file from this folder and use **Presets ▾ → Import…**.
+- Load `github.com/unboxednl/patchkamer` as a library in Patchkamer: the packs come with it. Or download a file from this folder and use the **Presets** tab in the library (the **Library** button) → **Import…**.
 - Then choose a preset in the list on the card of the device.
 - Full explanation, including how to save, export, share and make your own packs: [Presets: user manual](../docs/presets/USER-MANUAL_EN.md). The basics of Patchkamer: [main manual](../docs/USER-MANUAL_EN.md).
 

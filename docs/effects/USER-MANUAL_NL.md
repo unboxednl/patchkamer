@@ -42,7 +42,7 @@ Effecten nemen geluid op, veranderen het en sturen het door. Deze handleiding be
 
 - Een effect heeft een audio-ingang (**In**) en een audio-uitgang (**Uit**). Zet het tussen de geluidsbron en het volgende apparaat: bijvoorbeeld Duofone → effect → Mixer of Speakers. Voor de andere manieren om een apparaat aan te sluiten: zie de [basishandleiding](../USER-MANUAL_NL.md) (onderdeel 4 en 5).
 - De paarse **Mod**-poort neemt een modulator aan. Die kan de knoppen van het effect bewegen terwijl het speelt. De knop blijft de basiswaarde; de modulator beweegt eromheen.
-- Effecten zijn apparaten **zonder eigen geluid**, dus ze hebben **presets** en geen tunes. Kies er een in de balk bovenaan de kaart, blader met ◀ ▶ en bewaar je eigen met **Bewaar**. Zie [Presets](../../presets/README_NL.md) voor de pakketten en het importeren: **Presets ▾** → **Importeren…**.
+- Effecten zijn apparaten **zonder eigen geluid**, dus ze hebben **presets** en geen tunes. Kies er een in de balk bovenaan de kaart, blader met ◀ ▶ en bewaar je eigen met **Bewaar**. Zie [Presets](../../presets/README_NL.md) voor de pakketten en het importeren: de tab **Presets** van de bibliotheek → **Importeren…**.
 - Dubbelklik op een schuif om terug te gaan naar de beginwaarde.
 - Een **Mix**-knop mengt het originele (droge) en het bewerkte (natte) geluid. Op 0% hoor je alleen het origineel.
 - Effecten die zwiepen (Chorus, Flanger, Phaser) draaien vrij in Hz of volgen het tempo van de studio (**Tempo**). Start de klok met **Start** om beweging op tempo te horen.
@@ -83,7 +83,7 @@ Voor een paar losse effecten verbind je ze in serie met kabels (**Uit** van effe
 
 **Voorbeeld.** Duofone → Chorus → Speakers. Kies de soort *Chorus (2 stemmen)*, **Snelheid** 0,4 Hz, **Diepte** 25%, **Vertraging** 14 ms, **Mix** 35%: een lichte verdubbeling. Kies voor een pad *Ensemble (3 stemmen)* en een hogere **Breedte**.
 
-**Presets.** Pakket **Chorus Basics** (12 presets) in [`presets/chorus.patchkamer-presets.json`](../../presets/chorus.patchkamer-presets.json), in de mappen **Subtle** (Subtle Double, Classic Chorus, Thick Mono), **Ensemble** (String Section, Wide Pad, Dark Choir), **Movement** (Bar Shimmer, Slow Wash, Eighth Pulse), **Extreme** (Seasick, Tape Warble, Lo-fi Swarm). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Chorus Basics** (12 presets) in [`presets/chorus.patchkamer-presets.json`](../../presets/chorus.patchkamer-presets.json), in de mappen **Subtle** (Subtle Double, Classic Chorus, Thick Mono), **Ensemble** (String Section, Wide Pad, Dark Choir), **Movement** (Bar Shimmer, Slow Wash, Eighth Pulse), **Extreme** (Seasick, Tape Warble, Lo-fi Swarm). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Met **Breedte** op 0% zit elke stem in het midden; gebruik dat als het geluid mono moet blijven. Het toonfilter heeft een bewaker: komt er een foutieve waarde (`NaN` of oneindig) op de ingang, dan wordt het filter binnen een fractie van een seconde vervangen en komt het geluid terug.
 
@@ -194,7 +194,7 @@ Onder het beeld staan de **Piek** en de **RMS** van de uitgang in dBFS.
 
 ### Presets: complete ketens
 
-Pakket **Effect Chain Basics** (14 presets) in [`presets/effect-chain.patchkamer-presets.json`](../../presets/effect-chain.patchkamer-presets.json), in de mappen **Atmosphere** (Drifting Soundscape, Cinematic Dread, Psychedelic Trip, Dream Voice), **Studio** (Tape Slapback, Lo-Fi Tape Memory, Drum Bus Glue, Dub Chamber), **Club** (Basement Techno, Squelch Bus, Neon Nights, Trance Ascent), **Sound Design** (Glitch Lab, Industrial Warehouse). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+Pakket **Effect Chain Basics** (14 presets) in [`presets/effect-chain.patchkamer-presets.json`](../../presets/effect-chain.patchkamer-presets.json), in de mappen **Atmosphere** (Drifting Soundscape, Cinematic Dread, Psychedelic Trip, Dream Voice), **Studio** (Tape Slapback, Lo-Fi Tape Memory, Drum Bus Glue, Dub Chamber), **Club** (Basement Techno, Squelch Bus, Neon Nights, Trance Ascent), **Sound Design** (Glitch Lab, Industrial Warehouse). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 Elke preset is een hele keten, geen los effect. Ze zijn opgebouwd in de volgorde uit het onderdeel "De volgorde van effecten in een keten": klank, vervorming, beweging, ritme, echo, galm, breedte en een limiter. De tabel noemt de effecten in volgorde van de slots, met de **Effectmix** tussen haakjes.
 
@@ -245,7 +245,7 @@ Elke preset is een hele keten, geen los effect. Ze zijn opgebouwd in de volgorde
 
 **Voorbeeld.** Duofone → Filter → Speakers. Kies *LP 24 dB*, **Cutoff** 1200 Hz, **Resonantie** 30%. Sluit een modulator aan op **Mod** om het filter te openen en te sluiten.
 
-**Presets.** Pakket **Filter Basics** (14 presets) in [`presets/filter.patchkamer-presets.json`](../../presets/filter.patchkamer-presets.json), in de mappen **Basics** (Soft Lowpass, Warm Lowpass, Tight Highpass, Telephone, Notch Scoop), **Movement** (Wah Stop, Vowel Choir, Talking Mouth, Comb Pipe, Hollow Comb), **Aggressive** (Ladder Squelch, Screaming Resonance, Fuzz Wall, Razor Comb). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Filter Basics** (14 presets) in [`presets/filter.patchkamer-presets.json`](../../presets/filter.patchkamer-presets.json), in de mappen **Basics** (Soft Lowpass, Warm Lowpass, Tight Highpass, Telephone, Notch Scoop), **Movement** (Wah Stop, Vowel Choir, Talking Mouth, Comb Pipe, Hollow Comb), **Aggressive** (Ladder Squelch, Screaming Resonance, Fuzz Wall, Razor Comb). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Zonder AudioWorklet in je browser geven de drie worklet-typen het geluid ongewijzigd door en meldt de kaart dat. Een foutieve waarde op de ingang vergiftigt het filter niet meer: de ladder en de kamfilters begrenzen hem, de andere typen worden bewaakt en vervangen.
 
@@ -270,7 +270,7 @@ Elke preset is een hele keten, geen los effect. Ze zijn opgebouwd in de volgorde
 
 **Voorbeeld.** Duofone → Flanger → Speakers. **Snelheid** 0,15 Hz, **Diepte** 70%, **Manual** 2,5 ms, **Feedback** 60%, **Mix** 50%: een langzame zwiep.
 
-**Presets.** Pakket **Flanger Basics** (12 presets) in [`presets/flanger.patchkamer-presets.json`](../../presets/flanger.patchkamer-presets.json), in de mappen **Classic** (Gentle Flange, Jet Sweep, Slow Tide, Metal Sweep), **Subtle** (Stereo Shimmer, Soft Doubler), **Tempo** (Bar Sweep, Two-Bar Rise), **Extreme** (Metallic Scream, Laser Drop, Comb Drone, Wild Wobble). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Flanger Basics** (12 presets) in [`presets/flanger.patchkamer-presets.json`](../../presets/flanger.patchkamer-presets.json), in de mappen **Classic** (Gentle Flange, Jet Sweep, Slow Tide, Metal Sweep), **Subtle** (Stereo Shimmer, Soft Doubler), **Tempo** (Bar Sweep, Two-Bar Rise), **Extreme** (Metallic Scream, Laser Drop, Comb Drone, Wild Wobble). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Zonder AudioWorklet geeft de flanger het geluid ongewijzigd door en meldt dat onder de regelaars.
 
@@ -292,7 +292,7 @@ Elke preset is een hele keten, geen los effect. Ze zijn opgebouwd in de volgorde
 
 **Voorbeeld.** Duofone → Frequency Shifter → Speakers. **Bereik** ±20 Hz, **Shift** een kleine positieve waarde, **Mix** 50%: een langzame zweving. Met **Bereik** ±2000 Hz en wat **Feedback** wordt het geluid onharmonisch.
 
-**Presets.** Pakket **Frequency Shifter Basics** (13 presets) in [`presets/frequency-shifter.patchkamer-presets.json`](../../presets/frequency-shifter.patchkamer-presets.json), in de mappen **Subtle** (Gentle Shift, Slow Beat, Stereo Drift, Thick Detune), **Inharmonic** (Metal Shimmer, Bell Warp, Robot Voice, Broken Radio, Alien Down), **Feedback** (Rising Spiral, Falling Spiral, Barber Chaos, Endless Fall). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Frequency Shifter Basics** (13 presets) in [`presets/frequency-shifter.patchkamer-presets.json`](../../presets/frequency-shifter.patchkamer-presets.json), in de mappen **Subtle** (Gentle Shift, Slow Beat, Stereo Drift, Thick Detune), **Inharmonic** (Metal Shimmer, Bell Warp, Robot Voice, Broken Radio, Alien Down), **Feedback** (Rising Spiral, Falling Spiral, Barber Chaos, Endless Fall). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Zonder AudioWorklet geeft het apparaat het geluid ongewijzigd door en meldt dat. Het droge signaal wordt 63 samples vertraagd, zodat het gelijk loopt met het bewerkte.
 
@@ -317,7 +317,7 @@ Grit heeft geen **Mix**-knop: het hele signaal gaat door de vervorming en het fi
 
 **Voorbeeld.** Een bassynth → Grit → Speakers. **Drive** 60%, **Cutoff** 1200 Hz, **Reso** 6; zet **LFO** op 2 Hz en **Diepte** op 30% voor een wobble.
 
-**Presets.** Pakket **Grit Basics** (12 presets) in [`presets/grit.patchkamer-presets.json`](../../presets/grit.patchkamer-presets.json), in de mappen **Warm** (Warm Edge, Dull Blanket, Fuzz Bass), **Motion** (Slow Sweep, Wah Pulse, Underwater, Helicopter), **Extreme** (Bright Razor, Acid Bite, Screamer, Siren, Meltdown). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Grit Basics** (12 presets) in [`presets/grit.patchkamer-presets.json`](../../presets/grit.patchkamer-presets.json), in de mappen **Warm** (Warm Edge, Dull Blanket, Fuzz Bass), **Motion** (Slow Sweep, Wah Pulse, Underwater, Helicopter), **Extreme** (Bright Razor, Acid Bite, Screamer, Siren, Meltdown). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Een kleine bewaker begrenst de ingang op +24 dB en vervangt een filter dat is ontspoord. Grit werkt ook zonder AudioWorklet; alleen de ingangsbewaker ontbreekt dan.
 
@@ -342,7 +342,7 @@ Grit heeft geen **Mix**-knop: het hele signaal gaat door de vervorming en het fi
 
 **Voorbeeld.** Duofone → Phaser → Speakers. **Trappen** 6, **Snelheid** 0,25 Hz, **Diepte** 70%, **Midden** 800 Hz, **Feedback** 50%, **Mix** 50%.
 
-**Presets.** Pakket **Phaser Basics** (11 presets) in [`presets/phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json), in de mappen **Classic** (Soft Phase, Slow Sweep, Swirl, Hollow Notch), **Tempo** (Bar Phase, Long Rise, Stereo Drift), **Extreme** (Rocket, Warp Drive, Wobble Robot, Wide Vortex). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Phaser Basics** (11 presets) in [`presets/phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json), in de mappen **Classic** (Soft Phase, Slow Sweep, Swirl, Hollow Notch), **Tempo** (Bar Phase, Long Rise, Stereo Drift), **Extreme** (Rocket, Warp Drive, Wobble Robot, Wide Vortex). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** De kaart herinnert eraan dat **Stereo** het faseverschil tussen links en rechts instelt. Een bewaker bouwt de filterketens opnieuw op als een foutieve waarde de terugkoppeling zou vergiftigen; in normaal gebruik blijft het geluid gelijk.
 
@@ -376,7 +376,7 @@ De kaart verbergt de regelaars die niet bij de gekozen bron horen.
 
 **Voorbeeld.** Zet Pump achter een bassynth. Kies **Bron** *Klok (vanzelf)*, **Klok: elke** *1/4 (elke tel)* en zet **Release volgt tempo** aan; start de klok: de bas duikt op elke tel, zonder kabels. Voor een sidechain trek je de kick (bijvoorbeeld een losse drumuitgang) naar **Sidechain** en kies je **Bron** *Sidechain (audio)*.
 
-**Presets.** Pakket **Pump Basics** (13 presets) in [`presets/pump.patchkamer-presets.json`](../../presets/pump.patchkamer-presets.json), in de mappen **Clock** (Gentle Pulse, Four on the Floor, Eighth Chop, Sixteenth Gate, Half Time Slam, Bar Breath), **Sidechain** (Kick Duck, Vocal Space, Hat Tickle), **Split and Mix** (Low Duck, Top Duck, Parallel Pump, Note Duck). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Pump Basics** (13 presets) in [`presets/pump.patchkamer-presets.json`](../../presets/pump.patchkamer-presets.json), in de mappen **Clock** (Gentle Pulse, Four on the Floor, Eighth Chop, Sixteenth Gate, Half Time Slam, Bar Breath), **Sidechain** (Kick Duck, Vocal Space, Hat Tickle), **Split and Mix** (Low Duck, Top Duck, Parallel Pump, Note Duck). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Met **Wat duikt** op *Alleen het laag* blijft de bovenkant van een pad staan terwijl de bas wijkt voor de kick. De worklet begrenst zijn ingangen op +24 dB en heeft AudioWorklet nodig; zonder gaat het geluid ongewijzigd door en meldt de kaart dat.
 
@@ -400,7 +400,7 @@ De kaart verbergt de regelaars die niet bij de gekozen bron horen.
 
 **Voorbeeld.** Een drumcomputer → Resonator → Speakers. **Akkoord** *Klein*, **Galmtijd** 0,6 s, **Mix** 20%: een gestemde tint op de drums. Wil je dat een keyboard de toonhoogte bepaalt: sluit Keys aan op **Noten** en kies *grondtoon volgt de noten*.
 
-**Presets.** Pakket **Resonator Basics** (13 presets) in [`presets/resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json), in de mappen **Subtle** (Subtle Tint, Drum Tuner, Sub Ring, Marimba Hit), **Chords** (Minor Haze, Major Shine, Sus Cloud, Jazz Seven, Open Fourths, Note Follower), **Extreme** (Metal Drone, Endless Bells, Scream Pipes). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Resonator Basics** (13 presets) in [`presets/resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json), in de mappen **Subtle** (Subtle Tint, Drum Tuner, Sub Ring, Marimba Hit), **Chords** (Minor Haze, Major Shine, Sus Cloud, Jazz Seven, Open Fourths, Note Follower), **Extreme** (Metal Drone, Endless Bells, Scream Pipes). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Resonator heeft AudioWorklet nodig; zonder gaat het geluid ongewijzigd door en meldt de kaart dat. Het apparaat bewaart bij een preset ook de laatst gespeelde grondtoon (in `noteRoot`).
 
@@ -425,7 +425,7 @@ De kaart verbergt de regelaars die niet bij de gekozen bron horen.
 
 **Voorbeeld.** Duofone → Room → Speakers. Laat **Delay** op *op tempo (3/16)*, **Feedback** 35%, **Delay mix** 25%, **Galm** 3 s en **Galm mix** 25%.
 
-**Presets.** Pakket **Room Basics** (12 presets) in [`presets/room.patchkamer-presets.json`](../../presets/room.patchkamer-presets.json), in de mappen **Spaces** (Small Room, Warm Hall, Bright Plate, Cathedral), **Delays** (Dotted Echo, Slapback, Long Ping, Dub Echo), **Space FX** (Endless Wash, Dark Void, Bright Cloud, Metal Tunnel). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Room Basics** (12 presets) in [`presets/room.patchkamer-presets.json`](../../presets/room.patchkamer-presets.json), in de mappen **Spaces** (Small Room, Warm Hall, Bright Plate, Cathedral), **Delays** (Dotted Echo, Slapback, Long Ping, Dub Echo), **Space FX** (Endless Wash, Dark Void, Bright Cloud, Metal Tunnel). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** De galmstaart wordt uit ruis gemaakt als je **Galm** wijzigt, dus hij verschilt telkens een beetje. De pakketten houden **Feedback** onder 75%. Een bewaker verlaagt de feedback even als de echolus gaat oplopen, en bouwt de lus opnieuw op bij een foutieve waarde.
 
@@ -444,7 +444,7 @@ De kaart verbergt de regelaars die niet bij de gekozen bron horen.
 
 **Voorbeeld.** Een pad → Tremolo → Speakers. **Snelheid** 6 Hz, **Diepte** 15% is een lichte glinstering; **Snelheid** 4 Hz, **Diepte** 50% een duidelijke puls.
 
-**Presets.** Pakket **Tremolo Basics** (13 presets) in [`presets/tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json), in de mappen **Classic** (Subtle Shimmer, Gentle Pulse, Vintage Amp, Deep Throb), **Slow** (Slow Swell, Tidal, Deep Breath), **Rhythmic** (Slow Pump, Eighth Chop, Sixteenth Gate), **Extreme** (Helicopter, Ring Buzz, Seasick Wobble). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Tremolo Basics** (13 presets) in [`presets/tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json), in de mappen **Classic** (Subtle Shimmer, Gentle Pulse, Vintage Amp, Deep Throb), **Slow** (Slow Swell, Tidal, Deep Breath), **Rhythmic** (Slow Pump, Eighth Chop, Sixteenth Gate), **Extreme** (Helicopter, Ring Buzz, Seasick Wobble). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Tremolo verandert alleen het volume. Er is geen tempo-instelling: de snelheid is altijd in Hz.
 
@@ -469,7 +469,7 @@ Schuiven: **Stemgevoeligheid** (hoe sterk de stem de banden opent), **Envelope-r
 
 **Voorbeeld.** Sluit een geluidsbron met spraak aan op **Stem / spraak**, een keyboard (Keys) op **Noten draaggolf** en **Vocoder** op de mixer. Speel noten: de ingebouwde synth spreekt in het ritme van de stem. Voor een externe synth: sluit zijn audio aan op **Externe draaggolf**, zet **Externe draaggolf** op 100% en **Interne draaggolf** op 0%.
 
-**Presets.** Pakket **Vocoder Basics** (14 presets) in [`presets/vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json), in de mappen **Voices** (Classic Robot, Warm Pad Voice, Soft Choir, Voice Doubler), **Textures** (Whisper, Breathy Pad, Ghost Choir, Deep Giant), **Extreme** (Steel Machine, Tiny Alien, Screamer, Gate Chatter), **External** (External Clean, External Edge). Laad het met **Presets ▾** → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
+**Presets.** Pakket **Vocoder Basics** (14 presets) in [`presets/vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json), in de mappen **Voices** (Classic Robot, Warm Pad Voice, Soft Choir, Voice Doubler), **Textures** (Whisper, Breathy Pad, Ghost Choir, Deep Giant), **Extreme** (Steel Machine, Tiny Alien, Screamer, Gate Chatter), **External** (External Clean, External Edge). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶.
 
 **Tips.** Zonder signaal op de stem-ingang blijft de vocoder stil. De Vocoder vraagt zelf geen microfoontoegang; gebruik een ander apparaat of een sample als bron. Alle 16 banden draaien op standaard Web Audio-nodes (geen worklet). Een bewaker vervangt de banden als een foutieve waarde (`NaN` of oneindig), vooral op de externe draaggolf, ze zou vergiftigen.
 

@@ -83,7 +83,7 @@ Switch **BIPOLAR** on for a knob that has to go two ways: at 50% nothing moves, 
 
 ### Presets
 
-Macro has the pack **Macro Basics**: 40 presets in five folders: **Performance Sets**, **Pairs**, **Build-ups**, **Styles** and **Sound Design**. A few names: Core Four, Filter and Resonance, Build-up, Techno Console, Timbre Morph. The file is [`presets/macro.patchkamer-presets.json`](../../presets/macro.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets ▾** menu → **Import…**, then pick a preset in the list on the card. A preset holds the knob positions, the names, which knobs are bipolar and the glide time. The assignments are not part of a preset: you make those yourself.
+Macro has the pack **Macro Basics**: 40 presets in five folders: **Performance Sets**, **Pairs**, **Build-ups**, **Styles** and **Sound Design**. A few names: Core Four, Filter and Resonance, Build-up, Techno Console, Timbre Morph. The file is [`presets/macro.patchkamer-presets.json`](../../presets/macro.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card. A preset holds the knob positions, the names, which knobs are bipolar and the glide time. The assignments are not part of a preset: you make those yourself.
 
 ### Tips and limits
 
@@ -149,7 +149,7 @@ For a vibrato, choose **Vibrato & Tremolo › Gentle Vibrato** and give the pitc
 
 ### Presets
 
-LFO has the pack **LFO Basics**: 60 presets in ten folders: **Vibrato & Tremolo**, **Pan & Space**, **Filter Sweeps**, **Wobble**, **Rhythmic Gates**, **Step Patterns**, **Generative**, **Slow & Ambient**, **Trigger Envelopes** and **By Genre**. A few names: Gentle Vibrato, Slow Auto-Pan, Wobble 1/4, Trance Gate, Pluck Envelope. The file is [`presets/lfo.patchkamer-presets.json`](../../presets/lfo.patchkamer-presets.json). Load it from a library or with the **Presets ▾** menu → **Import…**. A preset holds the shape, rate, warp, phase, amount, the steps and the envelope settings, not the assignments.
+LFO has the pack **LFO Basics**: 60 presets in ten folders: **Vibrato & Tremolo**, **Pan & Space**, **Filter Sweeps**, **Wobble**, **Rhythmic Gates**, **Step Patterns**, **Generative**, **Slow & Ambient**, **Trigger Envelopes** and **By Genre**. A few names: Gentle Vibrato, Slow Auto-Pan, Wobble 1/4, Trance Gate, Pluck Envelope. The file is [`presets/lfo.patchkamer-presets.json`](../../presets/lfo.patchkamer-presets.json). Load it from a library or with the **Presets** tab of the library → **Import…**. A preset holds the shape, rate, warp, phase, amount, the steps and the envelope settings, not the assignments.
 
 ### Tips and limits
 
@@ -198,7 +198,7 @@ A line under the curve shows the position (**bar 3 of 8**), or **waiting for sta
 
 ### Presets
 
-The pack **Multi-Segment Envelope Presets** has 54 presets in nine folders: **Build-ups**, **Drops & Breaks**, **Filter Sweeps**, **Steps**, **Breathing & Swells**, **Gates & Ratchets**, **Pumps & Plucks**, **Generative & Ambient** and **By Style**. A few names: Classic Riser, Tape Stop, Triangle Sweep, Trance Gate, Slow Drift. The file is [`presets/mseg.patchkamer-presets.json`](../../presets/mseg.patchkamer-presets.json). Load it from a library or with the **Presets ▾** menu → **Import…**. A preset holds the curve, the length, the playback mode and the strength, not the assignments.
+The pack **Multi-Segment Envelope Presets** has 54 presets in nine folders: **Build-ups**, **Drops & Breaks**, **Filter Sweeps**, **Steps**, **Breathing & Swells**, **Gates & Ratchets**, **Pumps & Plucks**, **Generative & Ambient** and **By Style**. A few names: Classic Riser, Tape Stop, Triangle Sweep, Trance Gate, Slow Drift. The file is [`presets/mseg.patchkamer-presets.json`](../../presets/mseg.patchkamer-presets.json). Load it from a library or with the **Presets** tab of the library → **Import…**. A preset holds the curve, the length, the playback mode and the strength, not the assignments.
 
 ### Tips and limits
 
@@ -254,7 +254,7 @@ For movement in time with the song, switch on **Tempo sync** and **Follow Start/
 
 ### Presets
 
-The pack **Swell Presets** has 55 presets in eight folders: **Pads & Atmospheres**, **Warm & Close**, **Bright & Open**, **Tempo Synced**, **Subtle & Natural**, **Big & Expressive**, **Generative & Evolving** and **By Application**. A few names: Slow Tide, Warm Blanket, Four Bar Swell, Barely There, Pad Breath. The file is [`presets/swell.patchkamer-presets.json`](../../presets/swell.patchkamer-presets.json). Load it from a library or with the **Presets ▾** menu → **Import…**. A preset holds the mood, the switches and the six sliders. The ticked targets are not part of a preset: they stay as you set them.
+The pack **Swell Presets** has 55 presets in eight folders: **Pads & Atmospheres**, **Warm & Close**, **Bright & Open**, **Tempo Synced**, **Subtle & Natural**, **Big & Expressive**, **Generative & Evolving** and **By Application**. A few names: Slow Tide, Warm Blanket, Four Bar Swell, Barely There, Pad Breath. The file is [`presets/swell.patchkamer-presets.json`](../../presets/swell.patchkamer-presets.json). Load it from a library or with the **Presets** tab of the library → **Import…**. A preset holds the mood, the switches and the six sliders. The ticked targets are not part of a preset: they stay as you set them.
 
 ### Tips and limits
 
@@ -304,7 +304,7 @@ For an ensemble that drifts together, put two Drifts in group **A**, or pull a c
 
 ### Presets
 
-The pack **Drift Presets** has 44 presets in seven folders: **Subtle Life**, **Slow Evolution**, **Wide Wander**, **Restless**, **Together & Apart**, **Per Style** and **Group Ensembles**. A few names: Barely Alive, Glacial, Wide Wander, Shared Breath, Ambient Bed. The file is [`presets/drift.patchkamer-presets.json`](../../presets/drift.patchkamer-presets.json). Load it from a library or with the **Presets ▾** menu → **Import…**. A preset holds only the wind: the amount, the speed, the coherence and the seed (and **Own** with its seed). The ticked controls, the group and the follow mode stay as they are.
+The pack **Drift Presets** has 44 presets in seven folders: **Subtle Life**, **Slow Evolution**, **Wide Wander**, **Restless**, **Together & Apart**, **Per Style** and **Group Ensembles**. A few names: Barely Alive, Glacial, Wide Wander, Shared Breath, Ambient Bed. The file is [`presets/drift.patchkamer-presets.json`](../../presets/drift.patchkamer-presets.json). Load it from a library or with the **Presets** tab of the library → **Import…**. A preset holds only the wind: the amount, the speed, the coherence and the seed (and **Own** with its seed). The ticked controls, the group and the follow mode stay as they are.
 
 ### Tips and limits
 
@@ -386,7 +386,7 @@ A second example: a synth plays along with another sound. Choose the preset **On
 
 ### Presets
 
-Follower has the pack **Follower Basics**: 14 presets in three folders. **Level** (Smooth Envelope, Slow Swell, Bass Follower, Voice Follower, Hat Follower, Kick Ducker), **Onsets** (Kick Trigger, Snare Trigger, Hat Trigger, Note Follower) and **Extreme** (Centered Wobble, Gate Slammer, Hair Trigger, Tuned Band Follower). The file is [`presets/follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets ▾** menu → **Import…**, then pick a preset in the list on the card. **Kick Ducker** uses **Louder = less (inverted)**. A preset does not contain assignments: you choose those yourself.
+Follower has the pack **Follower Basics**: 14 presets in three folders. **Level** (Smooth Envelope, Slow Swell, Bass Follower, Voice Follower, Hat Follower, Kick Ducker), **Onsets** (Kick Trigger, Snare Trigger, Hat Trigger, Note Follower) and **Extreme** (Centered Wobble, Gate Slammer, Hair Trigger, Tuned Band Follower). The file is [`presets/follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json). Load it from a library (see the main manual) or with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card. **Kick Ducker** uses **Louder = less (inverted)**. A preset does not contain assignments: you choose those yourself.
 
 ### Tips and limits
 

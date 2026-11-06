@@ -42,7 +42,7 @@ Effects take sound in, change it and send it on. This manual describes the twelv
 
 - An effect has an audio input (**In**) and an audio output (**Out**). Put it between the sound source and the next device: for example Duofone → effect → Mixer or Speakers. For the other ways to connect a device, see the [basic manual](../USER-MANUAL_EN.md) (sections 4 and 5).
 - The purple **Mod** port takes a modulator. It can move the knobs of the effect while it plays. The knob stays the base value and the modulator moves around it.
-- Effects are devices **without a sound of their own**, so they have **presets**, not tunes. Choose one in the bar at the top of the card, step through them with ◀ ▶ and store your own with **Save**. See [Presets](../../presets/README.md) for the packs and how to import them: **Presets ▾** → **Import…**.
+- Effects are devices **without a sound of their own**, so they have **presets**, not tunes. Choose one in the bar at the top of the card, step through them with ◀ ▶ and store your own with **Save**. See [Presets](../../presets/README.md) for the packs and how to import them: the **Presets** tab of the library → **Import…**.
 - Double-click a slider to go back to its starting value.
 - A **Mix** knob blends the original (dry) and the processed (wet) sound. At 0% you only hear the original.
 - Effects that sweep (Chorus, Flanger, Phaser) can run free in Hz or follow the tempo of the studio (**Tempo**); start the clock with **Start** to hear tempo-synced movement.
@@ -83,7 +83,7 @@ For a few separate effects, connect them in series with cables (effect 1 **Out**
 
 **Example.** Duofone → Chorus → Speakers. Choose the *Chorus (2 voices)* type, **Rate** 0.4 Hz, **Depth** 25%, **Delay** 14 ms, **Mix** 35%: a light doubling. For a pad choose *Ensemble (3 voices)* and a higher **Width**.
 
-**Presets.** Pack **Chorus Basics** (12 presets) in [`presets/chorus.patchkamer-presets.json`](../../presets/chorus.patchkamer-presets.json), in the folders **Subtle** (Subtle Double, Classic Chorus, Thick Mono), **Ensemble** (String Section, Wide Pad, Dark Choir), **Movement** (Bar Shimmer, Slow Wash, Eighth Pulse), **Extreme** (Seasick, Tape Warble, Lo-fi Swarm). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Chorus Basics** (12 presets) in [`presets/chorus.patchkamer-presets.json`](../../presets/chorus.patchkamer-presets.json), in the folders **Subtle** (Subtle Double, Classic Chorus, Thick Mono), **Ensemble** (String Section, Wide Pad, Dark Choir), **Movement** (Bar Shimmer, Slow Wash, Eighth Pulse), **Extreme** (Seasick, Tape Warble, Lo-fi Swarm). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** With **Width** at 0% every voice sits in the middle; use this when the sound must stay mono. The tone filter has a guard: if a faulty value (`NaN` or infinity) reaches the input, the filter is replaced within a fraction of a second and the sound returns.
 
@@ -194,7 +194,7 @@ Under the picture is the **Peak** and **RMS** of the output in dBFS.
 
 ### Presets: complete chains
 
-Pack **Effect Chain Basics** (14 presets) in [`presets/effect-chain.patchkamer-presets.json`](../../presets/effect-chain.patchkamer-presets.json), in the folders **Atmosphere** (Drifting Soundscape, Cinematic Dread, Psychedelic Trip, Dream Voice), **Studio** (Tape Slapback, Lo-Fi Tape Memory, Drum Bus Glue, Dub Chamber), **Club** (Basement Techno, Squelch Bus, Neon Nights, Trance Ascent), **Sound Design** (Glitch Lab, Industrial Warehouse). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+Pack **Effect Chain Basics** (14 presets) in [`presets/effect-chain.patchkamer-presets.json`](../../presets/effect-chain.patchkamer-presets.json), in the folders **Atmosphere** (Drifting Soundscape, Cinematic Dread, Psychedelic Trip, Dream Voice), **Studio** (Tape Slapback, Lo-Fi Tape Memory, Drum Bus Glue, Dub Chamber), **Club** (Basement Techno, Squelch Bus, Neon Nights, Trance Ascent), **Sound Design** (Glitch Lab, Industrial Warehouse). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 Each preset is a whole chain, not a single effect. They are built in the order of the section "The order of effects in a chain": tone, distortion, movement, rhythm, echo, reverb, width and a limiter. The table gives the effects in slot order, with the **Effect mix** between brackets.
 
@@ -245,7 +245,7 @@ Each preset is a whole chain, not a single effect. They are built in the order o
 
 **Example.** Duofone → Filter → Speakers. Choose *LP 24 dB*, **Cutoff** 1200 Hz, **Resonance** 30%. Patch a modulator on **Mod** to open and close the filter.
 
-**Presets.** Pack **Filter Basics** (14 presets) in [`presets/filter.patchkamer-presets.json`](../../presets/filter.patchkamer-presets.json), in the folders **Basics** (Soft Lowpass, Warm Lowpass, Tight Highpass, Telephone, Notch Scoop), **Movement** (Wah Stop, Vowel Choir, Talking Mouth, Comb Pipe, Hollow Comb), **Aggressive** (Ladder Squelch, Screaming Resonance, Fuzz Wall, Razor Comb). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Filter Basics** (14 presets) in [`presets/filter.patchkamer-presets.json`](../../presets/filter.patchkamer-presets.json), in the folders **Basics** (Soft Lowpass, Warm Lowpass, Tight Highpass, Telephone, Notch Scoop), **Movement** (Wah Stop, Vowel Choir, Talking Mouth, Comb Pipe, Hollow Comb), **Aggressive** (Ladder Squelch, Screaming Resonance, Fuzz Wall, Razor Comb). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Without AudioWorklet in your browser, the three worklet types pass the sound through unchanged and the card says so. A faulty value on the input does not poison the filter any more: the ladder and comb filters limit it, the other types are watched and replaced.
 
@@ -270,7 +270,7 @@ Each preset is a whole chain, not a single effect. They are built in the order o
 
 **Example.** Duofone → Flanger → Speakers. **Rate** 0.15 Hz, **Depth** 70%, **Manual** 2.5 ms, **Feedback** 60%, **Mix** 50%: a slow sweep.
 
-**Presets.** Pack **Flanger Basics** (12 presets) in [`presets/flanger.patchkamer-presets.json`](../../presets/flanger.patchkamer-presets.json), in the folders **Classic** (Gentle Flange, Jet Sweep, Slow Tide, Metal Sweep), **Subtle** (Stereo Shimmer, Soft Doubler), **Tempo** (Bar Sweep, Two-Bar Rise), **Extreme** (Metallic Scream, Laser Drop, Comb Drone, Wild Wobble). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Flanger Basics** (12 presets) in [`presets/flanger.patchkamer-presets.json`](../../presets/flanger.patchkamer-presets.json), in the folders **Classic** (Gentle Flange, Jet Sweep, Slow Tide, Metal Sweep), **Subtle** (Stereo Shimmer, Soft Doubler), **Tempo** (Bar Sweep, Two-Bar Rise), **Extreme** (Metallic Scream, Laser Drop, Comb Drone, Wild Wobble). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Without AudioWorklet the flanger passes the sound through unchanged and says so under the controls.
 
@@ -292,7 +292,7 @@ Each preset is a whole chain, not a single effect. They are built in the order o
 
 **Example.** Duofone → Frequency Shifter → Speakers. **Range** ±20 Hz, **Shift** a small positive value, **Mix** 50%: a slow beating. With **Range** ±2000 Hz and some **Feedback** the sound becomes inharmonic.
 
-**Presets.** Pack **Frequency Shifter Basics** (13 presets) in [`presets/frequency-shifter.patchkamer-presets.json`](../../presets/frequency-shifter.patchkamer-presets.json), in the folders **Subtle** (Gentle Shift, Slow Beat, Stereo Drift, Thick Detune), **Inharmonic** (Metal Shimmer, Bell Warp, Robot Voice, Broken Radio, Alien Down), **Feedback** (Rising Spiral, Falling Spiral, Barber Chaos, Endless Fall). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Frequency Shifter Basics** (13 presets) in [`presets/frequency-shifter.patchkamer-presets.json`](../../presets/frequency-shifter.patchkamer-presets.json), in the folders **Subtle** (Gentle Shift, Slow Beat, Stereo Drift, Thick Detune), **Inharmonic** (Metal Shimmer, Bell Warp, Robot Voice, Broken Radio, Alien Down), **Feedback** (Rising Spiral, Falling Spiral, Barber Chaos, Endless Fall). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Without AudioWorklet the device passes the sound through unchanged and says so. The dry signal is delayed by 63 samples, so it lines up with the processed one.
 
@@ -317,7 +317,7 @@ Grit has no **Mix** knob: the whole signal goes through the distortion and the f
 
 **Example.** A bass synth → Grit → Speakers. **Drive** 60%, **Cutoff** 1200 Hz, **Reso** 6; set **LFO** to 2 Hz and **Depth** to 30% for a wobble.
 
-**Presets.** Pack **Grit Basics** (12 presets) in [`presets/grit.patchkamer-presets.json`](../../presets/grit.patchkamer-presets.json), in the folders **Warm** (Warm Edge, Dull Blanket, Fuzz Bass), **Motion** (Slow Sweep, Wah Pulse, Underwater, Helicopter), **Extreme** (Bright Razor, Acid Bite, Screamer, Siren, Meltdown). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Grit Basics** (12 presets) in [`presets/grit.patchkamer-presets.json`](../../presets/grit.patchkamer-presets.json), in the folders **Warm** (Warm Edge, Dull Blanket, Fuzz Bass), **Motion** (Slow Sweep, Wah Pulse, Underwater, Helicopter), **Extreme** (Bright Razor, Acid Bite, Screamer, Siren, Meltdown). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** A small guard limits the input to +24 dB and replaces a filter that has gone off course. Grit also works without AudioWorklet; only the input guard is then missing.
 
@@ -342,7 +342,7 @@ Grit has no **Mix** knob: the whole signal goes through the distortion and the f
 
 **Example.** Duofone → Phaser → Speakers. **Stages** 6, **Rate** 0.25 Hz, **Depth** 70%, **Center** 800 Hz, **Feedback** 50%, **Mix** 50%.
 
-**Presets.** Pack **Phaser Basics** (11 presets) in [`presets/phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json), in the folders **Classic** (Soft Phase, Slow Sweep, Swirl, Hollow Notch), **Tempo** (Bar Phase, Long Rise, Stereo Drift), **Extreme** (Rocket, Warp Drive, Wobble Robot, Wide Vortex). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Phaser Basics** (11 presets) in [`presets/phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json), in the folders **Classic** (Soft Phase, Slow Sweep, Swirl, Hollow Notch), **Tempo** (Bar Phase, Long Rise, Stereo Drift), **Extreme** (Rocket, Warp Drive, Wobble Robot, Wide Vortex). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** The card reminds you that **Stereo** sets the phase difference between left and right. A guard rebuilds the filter chains if a faulty value would poison the feedback; the sound is unchanged in normal use.
 
@@ -376,7 +376,7 @@ The card hides the controls that do not apply to the chosen source.
 
 **Example.** Put Pump after a bass synth. Choose **Source** *Clock (automatic)*, **Clock: every** *1/4 (every beat)* and switch **Release follows tempo** on; start the clock: the bass ducks on every beat, without cables. For a sidechain, patch the kick (for example a separate drum output) into **Sidechain** and choose **Source** *Sidechain (audio)*.
 
-**Presets.** Pack **Pump Basics** (13 presets) in [`presets/pump.patchkamer-presets.json`](../../presets/pump.patchkamer-presets.json), in the folders **Clock** (Gentle Pulse, Four on the Floor, Eighth Chop, Sixteenth Gate, Half Time Slam, Bar Breath), **Sidechain** (Kick Duck, Vocal Space, Hat Tickle), **Split and Mix** (Low Duck, Top Duck, Parallel Pump, Note Duck). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Pump Basics** (13 presets) in [`presets/pump.patchkamer-presets.json`](../../presets/pump.patchkamer-presets.json), in the folders **Clock** (Gentle Pulse, Four on the Floor, Eighth Chop, Sixteenth Gate, Half Time Slam, Bar Breath), **Sidechain** (Kick Duck, Vocal Space, Hat Tickle), **Split and Mix** (Low Duck, Top Duck, Parallel Pump, Note Duck). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** With **What ducks** on *Low end only*, the top of a pad stays while the bass gives way to the kick. The worklet limits its inputs to +24 dB and needs AudioWorklet; without it the sound passes through unchanged and the card says so.
 
@@ -400,7 +400,7 @@ The card hides the controls that do not apply to the chosen source.
 
 **Example.** A drum machine → Resonator → Speakers. **Chord** *Minor*, **Decay** 0.6 s, **Mix** 20%: a tuned tint on the drums. To let a keyboard decide the pitch: patch Keys → **Notes** and choose *root follows the notes*.
 
-**Presets.** Pack **Resonator Basics** (13 presets) in [`presets/resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json), in the folders **Subtle** (Subtle Tint, Drum Tuner, Sub Ring, Marimba Hit), **Chords** (Minor Haze, Major Shine, Sus Cloud, Jazz Seven, Open Fourths, Note Follower), **Extreme** (Metal Drone, Endless Bells, Scream Pipes). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Resonator Basics** (13 presets) in [`presets/resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json), in the folders **Subtle** (Subtle Tint, Drum Tuner, Sub Ring, Marimba Hit), **Chords** (Minor Haze, Major Shine, Sus Cloud, Jazz Seven, Open Fourths, Note Follower), **Extreme** (Metal Drone, Endless Bells, Scream Pipes). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Resonator needs AudioWorklet; without it the sound passes through unchanged and the card says so. The device keeps the last played root (in `noteRoot`) when you save a preset.
 
@@ -425,7 +425,7 @@ The card hides the controls that do not apply to the chosen source.
 
 **Example.** Duofone → Room → Speakers. Keep **Delay** on *to tempo (3/16)*, **Feedback** 35%, **Delay mix** 25%, **Reverb** 3 s and **Reverb mix** 25%.
 
-**Presets.** Pack **Room Basics** (12 presets) in [`presets/room.patchkamer-presets.json`](../../presets/room.patchkamer-presets.json), in the folders **Spaces** (Small Room, Warm Hall, Bright Plate, Cathedral), **Delays** (Dotted Echo, Slapback, Long Ping, Dub Echo), **Space FX** (Endless Wash, Dark Void, Bright Cloud, Metal Tunnel). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Room Basics** (12 presets) in [`presets/room.patchkamer-presets.json`](../../presets/room.patchkamer-presets.json), in the folders **Spaces** (Small Room, Warm Hall, Bright Plate, Cathedral), **Delays** (Dotted Echo, Slapback, Long Ping, Dub Echo), **Space FX** (Endless Wash, Dark Void, Bright Cloud, Metal Tunnel). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** The reverb tail is generated from noise when you change **Reverb**, so it differs a little each time. The packs keep **Feedback** below 75%. A guard lowers the feedback for a moment if the echo loop starts to grow, and rebuilds the loop if it gets a faulty value.
 
@@ -444,7 +444,7 @@ The card hides the controls that do not apply to the chosen source.
 
 **Example.** A pad → Tremolo → Speakers. **Rate** 6 Hz, **Depth** 15% is a light shimmer; **Rate** 4 Hz, **Depth** 50% a clear pulse.
 
-**Presets.** Pack **Tremolo Basics** (13 presets) in [`presets/tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json), in the folders **Classic** (Subtle Shimmer, Gentle Pulse, Vintage Amp, Deep Throb), **Slow** (Slow Swell, Tidal, Deep Breath), **Rhythmic** (Slow Pump, Eighth Chop, Sixteenth Gate), **Extreme** (Helicopter, Ring Buzz, Seasick Wobble). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Tremolo Basics** (13 presets) in [`presets/tremolo.patchkamer-presets.json`](../../presets/tremolo.patchkamer-presets.json), in the folders **Classic** (Subtle Shimmer, Gentle Pulse, Vintage Amp, Deep Throb), **Slow** (Slow Swell, Tidal, Deep Breath), **Rhythmic** (Slow Pump, Eighth Chop, Sixteenth Gate), **Extreme** (Helicopter, Ring Buzz, Seasick Wobble). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Tremolo only changes the volume. There is no tempo setting: the rate is always in Hz.
 
@@ -469,7 +469,7 @@ Sliders: **Voice sensitivity** (how strongly the voice opens the bands), **Envel
 
 **Example.** Patch a sound source with speech into **Voice / speech**, a keyboard (Keys) into **Carrier notes** and **Vocoder** to the mixer. Play notes: the built-in synth speaks with the rhythm of the voice. For an external synth: patch its audio into **External carrier**, set **External carrier** to 100% and **Internal carrier** to 0%.
 
-**Presets.** Pack **Vocoder Basics** (14 presets) in [`presets/vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json), in the folders **Voices** (Classic Robot, Warm Pad Voice, Soft Choir, Voice Doubler), **Textures** (Whisper, Breathy Pad, Ghost Choir, Deep Giant), **Extreme** (Steel Machine, Tiny Alien, Screamer, Gate Chatter), **External** (External Clean, External Edge). Load it with **Presets ▾** → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+**Presets.** Pack **Vocoder Basics** (14 presets) in [`presets/vocoder.patchkamer-presets.json`](../../presets/vocoder.patchkamer-presets.json), in the folders **Voices** (Classic Robot, Warm Pad Voice, Soft Choir, Voice Doubler), **Textures** (Whisper, Breathy Pad, Ghost Choir, Deep Giant), **Extreme** (Steel Machine, Tiny Alien, Screamer, Gate Chatter), **External** (External Clean, External Edge). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Without a signal on the voice input the vocoder stays silent. The Vocoder does not ask for microphone access itself; use another device or sample as the source. All 16 bands run on standard Web Audio nodes (no worklet). A guard replaces the bands if a faulty value (`NaN` or infinity), especially on the external carrier, would poison them.
 

@@ -53,7 +53,7 @@ Je eigen presets worden in je browser onthouden. Exporteer een bibliotheek om he
 
 ## Het menu Presets: bibliotheken en mappen
 
-Het menu **Presets ▾** bovenaan opent het paneel **Presetbibliotheken**. Het toont de bibliotheken per apparaat. Een bibliotheek hoort bij één apparaat en kan mappen hebben, en mappen kunnen weer mappen hebben.
+De tab **Presets** van het bibliotheekvenster (knop **Bibliotheek** bovenaan, of **Presets** in het ☰-menu) toont de **Presetbibliotheken**. Het toont de bibliotheken per apparaat. Een bibliotheek hoort bij één apparaat en kan mappen hebben, en mappen kunnen weer mappen hebben.
 
 ![Het paneel Presets met de bibliotheek Chorus Basics](../images/nl/presets/presets-panel.png)
 
@@ -76,8 +76,8 @@ Open een bibliotheek om zijn mappen en presets te zien. Naast elke preset zet **
 
 Een **pack** is één bibliotheek in één bestand, `naam.patchkamer-presets.json`.
 
-- **Importeren:** open **Presets ▾**, klik op **Importeren…** en kies een of meer packbestanden. Elk pack wordt een eigen bibliotheek van jou voor het apparaat dat in het bestand staat, dus je kunt hem aanpassen. Heb je al een bibliotheek met dezelfde naam voor dat apparaat, dan krijgt de nieuwe een nummer: "Chorus Basics (2)". Het apparaat hoeft niet op de vloer te staan, maar de presets verschijnen pas op een kaart zodra dat apparaat is geplaatst.
-- **Exporteren:** open **Presets ▾** en klik op **Exporteer** naast een bibliotheek. Patchkamer bewaart hem als *Apparaat - Naam van de bibliotheek.patchkamer-presets.json*.
+- **Importeren:** open de tab **Presets** van de bibliotheek, klik op **Importeren…** en kies een of meer packbestanden. Elk pack wordt een eigen bibliotheek van jou voor het apparaat dat in het bestand staat, dus je kunt hem aanpassen. Heb je al een bibliotheek met dezelfde naam voor dat apparaat, dan krijgt de nieuwe een nummer: "Chorus Basics (2)". Het apparaat hoeft niet op de vloer te staan, maar de presets verschijnen pas op een kaart zodra dat apparaat is geplaatst.
+- **Exporteren:** open de tab **Presets** van de bibliotheek en klik op **Exporteer** naast een bibliotheek. Patchkamer bewaart hem als *Apparaat - Naam van de bibliotheek.patchkamer-presets.json*.
 - **Vanzelf:** een bibliotheek die je van GitHub of uit een map laadt, brengt zijn packbestanden mee: elk `*.patchkamer-presets.json` en `*.patchkamer-tunes.json` erin verschijnt vanzelf in de panelen, als alleen-lezen bibliotheek. Het adres `github.com/unboxednl/patchkamer` laadt de packs van deze repository (zie [de basishandleiding](../USER-MANUAL_NL.md#4-een-bibliotheek-laden)).
 
 ## Een pack delen: het bestand en de licentie

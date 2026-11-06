@@ -29,7 +29,7 @@ Een gewone patch heeft drie stappen, van links naar rechts:
 
 Druk op **Start** om de klok te laten lopen. Ingebouwde sequencers, arpeggiators, de trance-gate van Supersaw Swarm, de pomp en de automatische akkoorden en melodie van Mist bewegen alleen als de klok loopt. Noten van Keys en de testknoppen op de kaarten werken wel zonder. Een sequencer die noten naar een polyfone synth stuurt, moet altijd een nootlengte (`dur`) meesturen; een noot zonder lengte blijft bij sommige synths doorklinken.
 
-Elke synth heeft **tunes**: een tune is de volledige instelling van één synth, en sommige tunes bevatten ook een baslijn of patroon. Laad een pack vanuit een bibliotheek of met het menu **Tunes ▾** → **Importeren…**, en kies daarna een tune in de lijst bovenaan de kaart (er staat `Map › Naam`). Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor het gebruiken, bewaren en delen ervan. De synths hebben geen presets: de keuzes die op een preset lijken binnen een kaart (een **Klank**- of **Klankbeeld**-lijst, **Preset**-knoppen) zijn beginklanken die de regelaars één keer zetten.
+Elke synth heeft **tunes**: een tune is de volledige instelling van één synth, en sommige tunes bevatten ook een baslijn of patroon. Laad een pack vanuit een bibliotheek of met de tab **Tunes** van de bibliotheek → **Importeren…**, en kies daarna een tune in de lijst bovenaan de kaart (er staat `Map › Naam`). Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor het gebruiken, bewaren en delen ervan. De synths hebben geen presets: de keuzes die op een preset lijken binnen een kaart (een **Klank**- of **Klankbeeld**-lijst, **Preset**-knoppen) zijn beginklanken die de regelaars één keer zetten.
 
 ## Welke synth voor welk doel
 

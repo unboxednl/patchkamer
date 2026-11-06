@@ -83,7 +83,7 @@ Zet **BIPOLAIR** aan voor een knop die twee kanten op moet: bij 50% beweegt er n
 
 ### Presets
 
-Macro heeft het pack **Macro Basics**: 40 presets in vijf mappen: **Performance Sets**, **Pairs**, **Build-ups**, **Styles** en **Sound Design**. Een paar namen: Core Four, Filter and Resonance, Build-up, Techno Console, Timbre Morph. Het bestand is [`presets/macro.patchkamer-presets.json`](../../presets/macro.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met het menu **Presets ▾** → **Importeren…**, en kies daarna een preset in de lijst op de kaart. Een preset bevat de standen van de knoppen, de namen, welke knoppen bipolair zijn en de glijtijd. De toewijzingen horen niet bij een preset: die maak je zelf.
+Macro heeft het pack **Macro Basics**: 40 presets in vijf mappen: **Performance Sets**, **Pairs**, **Build-ups**, **Styles** en **Sound Design**. Een paar namen: Core Four, Filter and Resonance, Build-up, Techno Console, Timbre Morph. Het bestand is [`presets/macro.patchkamer-presets.json`](../../presets/macro.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met de tab **Presets** van de bibliotheek → **Importeren…**, en kies daarna een preset in de lijst op de kaart. Een preset bevat de standen van de knoppen, de namen, welke knoppen bipolair zijn en de glijtijd. De toewijzingen horen niet bij een preset: die maak je zelf.
 
 ### Tips en beperkingen
 
@@ -149,7 +149,7 @@ Kies voor een vibrato **Vibrato & Tremolo › Gentle Vibrato** en geef de toonho
 
 ### Presets
 
-LFO heeft het pack **LFO Basics**: 60 presets in tien mappen: **Vibrato & Tremolo**, **Pan & Space**, **Filter Sweeps**, **Wobble**, **Rhythmic Gates**, **Step Patterns**, **Generative**, **Slow & Ambient**, **Trigger Envelopes** en **By Genre**. Een paar namen: Gentle Vibrato, Slow Auto-Pan, Wobble 1/4, Trance Gate, Pluck Envelope. Het bestand is [`presets/lfo.patchkamer-presets.json`](../../presets/lfo.patchkamer-presets.json). Laad het vanuit een bibliotheek of met het menu **Presets ▾** → **Importeren…**. Een preset bevat de vorm, snelheid, vervorming, fase, sterkte, de stappen en de envelope-instellingen, niet de toewijzingen.
+LFO heeft het pack **LFO Basics**: 60 presets in tien mappen: **Vibrato & Tremolo**, **Pan & Space**, **Filter Sweeps**, **Wobble**, **Rhythmic Gates**, **Step Patterns**, **Generative**, **Slow & Ambient**, **Trigger Envelopes** en **By Genre**. Een paar namen: Gentle Vibrato, Slow Auto-Pan, Wobble 1/4, Trance Gate, Pluck Envelope. Het bestand is [`presets/lfo.patchkamer-presets.json`](../../presets/lfo.patchkamer-presets.json). Laad het vanuit een bibliotheek of met de tab **Presets** van de bibliotheek → **Importeren…**. Een preset bevat de vorm, snelheid, vervorming, fase, sterkte, de stappen en de envelope-instellingen, niet de toewijzingen.
 
 ### Tips en beperkingen
 
@@ -198,7 +198,7 @@ Een regel onder de curve toont de positie (**maat 3 van 8**), of **wacht op star
 
 ### Presets
 
-Het pack **Multi-Segment Envelope Presets** heeft 54 presets in negen mappen: **Build-ups**, **Drops & Breaks**, **Filter Sweeps**, **Steps**, **Breathing & Swells**, **Gates & Ratchets**, **Pumps & Plucks**, **Generative & Ambient** en **By Style**. Een paar namen: Classic Riser, Tape Stop, Triangle Sweep, Trance Gate, Slow Drift. Het bestand is [`presets/mseg.patchkamer-presets.json`](../../presets/mseg.patchkamer-presets.json). Laad het vanuit een bibliotheek of met het menu **Presets ▾** → **Importeren…**. Een preset bevat de curve, de lengte, de afspeelstand en de sterkte, niet de toewijzingen.
+Het pack **Multi-Segment Envelope Presets** heeft 54 presets in negen mappen: **Build-ups**, **Drops & Breaks**, **Filter Sweeps**, **Steps**, **Breathing & Swells**, **Gates & Ratchets**, **Pumps & Plucks**, **Generative & Ambient** en **By Style**. Een paar namen: Classic Riser, Tape Stop, Triangle Sweep, Trance Gate, Slow Drift. Het bestand is [`presets/mseg.patchkamer-presets.json`](../../presets/mseg.patchkamer-presets.json). Laad het vanuit een bibliotheek of met de tab **Presets** van de bibliotheek → **Importeren…**. Een preset bevat de curve, de lengte, de afspeelstand en de sterkte, niet de toewijzingen.
 
 ### Tips en beperkingen
 
@@ -254,7 +254,7 @@ Voor beweging op het tempo van het nummer zet je **Op tempo** en **Volg Start/St
 
 ### Presets
 
-Het pack **Swell Presets** heeft 55 presets in acht mappen: **Pads & Atmospheres**, **Warm & Close**, **Bright & Open**, **Tempo Synced**, **Subtle & Natural**, **Big & Expressive**, **Generative & Evolving** en **By Application**. Een paar namen: Slow Tide, Warm Blanket, Four Bar Swell, Barely There, Pad Breath. Het bestand is [`presets/swell.patchkamer-presets.json`](../../presets/swell.patchkamer-presets.json). Laad het vanuit een bibliotheek of met het menu **Presets ▾** → **Importeren…**. Een preset bevat de sfeer, de schakelaars en de zes schuiven. De aangevinkte doelen horen niet bij een preset: die blijven staan zoals jij ze hebt ingesteld.
+Het pack **Swell Presets** heeft 55 presets in acht mappen: **Pads & Atmospheres**, **Warm & Close**, **Bright & Open**, **Tempo Synced**, **Subtle & Natural**, **Big & Expressive**, **Generative & Evolving** en **By Application**. Een paar namen: Slow Tide, Warm Blanket, Four Bar Swell, Barely There, Pad Breath. Het bestand is [`presets/swell.patchkamer-presets.json`](../../presets/swell.patchkamer-presets.json). Laad het vanuit een bibliotheek of met de tab **Presets** van de bibliotheek → **Importeren…**. Een preset bevat de sfeer, de schakelaars en de zes schuiven. De aangevinkte doelen horen niet bij een preset: die blijven staan zoals jij ze hebt ingesteld.
 
 ### Tips en beperkingen
 
@@ -304,7 +304,7 @@ Voor een ensemble dat samen drift zet je twee Drifts in groep **A**, of trek je 
 
 ### Presets
 
-Het pack **Drift Presets** heeft 44 presets in zeven mappen: **Subtle Life**, **Slow Evolution**, **Wide Wander**, **Restless**, **Together & Apart**, **Per Style** en **Group Ensembles**. Een paar namen: Barely Alive, Glacial, Wide Wander, Shared Breath, Ambient Bed. Het bestand is [`presets/drift.patchkamer-presets.json`](../../presets/drift.patchkamer-presets.json). Laad het vanuit een bibliotheek of met het menu **Presets ▾** → **Importeren…**. Een preset bevat alleen de wind: de sterkte, het tempo, de samenhang en het zaad (en **Eigen** met zijn zaad). De aangevinkte regelaars, de groep en de volgwijze blijven zoals ze zijn.
+Het pack **Drift Presets** heeft 44 presets in zeven mappen: **Subtle Life**, **Slow Evolution**, **Wide Wander**, **Restless**, **Together & Apart**, **Per Style** en **Group Ensembles**. Een paar namen: Barely Alive, Glacial, Wide Wander, Shared Breath, Ambient Bed. Het bestand is [`presets/drift.patchkamer-presets.json`](../../presets/drift.patchkamer-presets.json). Laad het vanuit een bibliotheek of met de tab **Presets** van de bibliotheek → **Importeren…**. Een preset bevat alleen de wind: de sterkte, het tempo, de samenhang en het zaad (en **Eigen** met zijn zaad). De aangevinkte regelaars, de groep en de volgwijze blijven zoals ze zijn.
 
 ### Tips en beperkingen
 
@@ -386,7 +386,7 @@ Een tweede voorbeeld: een synth speelt mee met een ander geluid. Kies de preset 
 
 ### Presets
 
-Follower heeft het pack **Follower Basics**: 14 presets in drie mappen. **Level** (Smooth Envelope, Slow Swell, Bass Follower, Voice Follower, Hat Follower, Kick Ducker), **Onsets** (Kick Trigger, Snare Trigger, Hat Trigger, Note Follower) en **Extreme** (Centered Wobble, Gate Slammer, Hair Trigger, Tuned Band Follower). Het bestand is [`presets/follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met het menu **Presets ▾** → **Importeren…**, en kies daarna een preset in de lijst op de kaart. **Kick Ducker** gebruikt **Luider = minder (omgekeerd)**. Een preset bevat geen toewijzingen: die kies je zelf.
+Follower heeft het pack **Follower Basics**: 14 presets in drie mappen. **Level** (Smooth Envelope, Slow Swell, Bass Follower, Voice Follower, Hat Follower, Kick Ducker), **Onsets** (Kick Trigger, Snare Trigger, Hat Trigger, Note Follower) en **Extreme** (Centered Wobble, Gate Slammer, Hair Trigger, Tuned Band Follower). Het bestand is [`presets/follower.patchkamer-presets.json`](../../presets/follower.patchkamer-presets.json). Laad het vanuit een bibliotheek (zie de basishandleiding) of met de tab **Presets** van de bibliotheek → **Importeren…**, en kies daarna een preset in de lijst op de kaart. **Kick Ducker** gebruikt **Luider = minder (omgekeerd)**. Een preset bevat geen toewijzingen: die kies je zelf.
 
 ### Tips en beperkingen
 
