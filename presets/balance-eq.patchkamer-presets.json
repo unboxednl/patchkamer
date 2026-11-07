@@ -5,7 +5,7 @@
   "name": "Balance EQ Situations and Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Starting points for Balance EQ for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. Every preset sets its own band frequencies, Q values and gains (a low shelf, three bells and a high shelf; gains stay within about 3.5 dB). A situation adds its own correction to the style, for example more low end for a club or a gentler top for headphones.",
+  "description": "Starting points for Balance EQ for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. Every preset sets its own band frequencies, Q values and gains (a low shelf, three bells and a high shelf; gains stay within about 3.5 dB). A situation adds its own correction to the style, for example more low end for a club or a gentler top for headphones. The shelf and mid-bell Q values follow the style (broad and smooth for classical and ambient, tight for hardstyle and metal), and the dynamic bands (a cut in the lower and upper bell when that band gets loud) are switched on for dense styles, radio and headphones and left off for studio reference. Every preset stores its number of bands (5 here); a preset with up to 12 bands can add f6..f12, g6..g12 and q6..q12.",
   "tree": [
     {
       "folder": "Situations",
@@ -15,9 +15,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.72,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 330,
             "g2": -0.56,
             "q2": 1,
@@ -29,10 +30,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 0.86,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -40,24 +41,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 320,
             "g2": -1.0,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.85,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1.1,
             "f5": 11000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.75,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -65,24 +67,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 2.6,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 280,
             "g2": -1.7,
             "q2": 1.1,
             "f3": 1600,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 5500,
             "g4": 1.0,
             "q4": 1,
             "f5": 12000,
             "g5": 2.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.3
           }
         },
         {
@@ -90,24 +93,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 2.8,
-            "q1": 0.707,
+            "q1": 1.0,
             "f2": 280,
             "g2": -1.8,
             "q2": 1.1,
             "f3": 1600,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 5500,
             "g4": 1.0,
             "q4": 1,
             "f5": 12000,
             "g5": 2.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.6
           }
         },
         {
@@ -115,9 +119,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.61,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 330,
             "g2": -0.63,
             "q2": 1,
@@ -129,10 +134,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 0.88,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.65,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -140,24 +145,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.01,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 330,
             "g2": -0.63,
             "q2": 1,
             "f3": 1500,
             "g3": 0.27,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3000,
             "g4": 0.41,
             "q4": 1,
             "f5": 11000,
             "g5": 0.68,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.6,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -165,9 +171,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": -0.12,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 330,
             "g2": 0.0,
             "q2": 1,
@@ -179,10 +186,10 @@
             "q4": 1,
             "f5": 9500,
             "g5": 0.2,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -190,24 +197,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": -0.1,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 330,
             "g2": -0.7,
             "q2": 1,
             "f3": 1800,
             "g3": 0.7,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 4000,
             "g4": 1.5,
             "q4": 1,
             "f5": 11000,
             "g5": 1.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.5
           }
         },
         {
@@ -215,24 +223,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.7,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 280,
             "g2": -1.1,
             "q2": 1,
             "f3": 1500,
             "g3": 0.3,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 1.4,
             "q4": 1,
             "f5": 11000,
             "g5": 1.5,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.2
           }
         }
       ]
@@ -245,9 +254,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": -0.3,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 330,
             "g2": 0.0,
             "q2": 1,
@@ -259,10 +269,10 @@
             "q4": 1,
             "f5": 9500,
             "g5": 0.5,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -270,24 +280,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 1.2,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 280,
             "g2": 0.6,
             "q2": 1,
             "f3": 1000,
             "g3": 0.0,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3800,
             "g4": -0.8,
             "q4": 1,
             "f5": 9000,
             "g5": -1.2,
-            "q5": 0.707,
+            "q5": 0.5,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -295,9 +306,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 1.6,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 250,
             "g2": -1.4,
             "q2": 1.2,
@@ -309,8 +321,8 @@
             "q4": 1.2,
             "f5": 10000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.75,
+            "dynamic": true,
             "dynThreshold": -30,
             "dynamicMax": 3
           }
@@ -320,24 +332,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 55,
             "g1": 1.4,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 220,
             "g2": -1.8,
             "q2": 1.4,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": -0.8,
             "q4": 1.2,
             "f5": 9000,
             "g5": -0.5,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 4
           }
         },
         {
@@ -345,9 +358,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.4,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 300,
             "g2": -0.9,
             "q2": 1.1,
@@ -359,10 +373,10 @@
             "q4": 1,
             "f5": 8500,
             "g5": 0.6,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -370,24 +384,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 1.2,
-            "q1": 0.707,
+            "q1": 0.75,
             "f2": 320,
             "g2": -1.0,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.85,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1.1,
             "f5": 11000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.75,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -395,9 +410,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 0.9,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 350,
             "g2": -0.8,
             "q2": 1.1,
@@ -409,10 +425,10 @@
             "q4": 1,
             "f5": 12000,
             "g5": 1.2,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -420,24 +436,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 400,
             "g2": -1.2,
             "q2": 1.1,
             "f3": 2000,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 6000,
             "g4": 1.2,
             "q4": 0.9,
             "f5": 12000,
             "g5": 1.4,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -445,24 +462,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.2,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 260,
             "g2": -1.5,
             "q2": 1.3,
             "f3": 1000,
             "g3": 0.7,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3200,
             "g4": 1.0,
             "q4": 1.2,
             "f5": 10000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 3.5
           }
         },
         {
@@ -470,24 +488,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -1.2,
             "q2": 1.2,
             "f3": 1400,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4500,
             "g4": 1.4,
             "q4": 1.3,
             "f5": 10000,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -495,9 +514,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.9,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 350,
             "g2": -0.6,
             "q2": 1,
@@ -509,10 +529,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 1.0,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -520,23 +540,24 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 280,
             "g2": -1.4,
             "q2": 1.1,
             "f3": 1600,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 5500,
             "g4": 1.0,
             "q4": 1,
             "f5": 12000,
             "g5": 1.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
             "dynamicMax": 3
           }
         },
@@ -545,24 +566,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 55,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 240,
             "g2": -2.0,
             "q2": 1.4,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3800,
             "g4": 1.0,
             "q4": 1.1,
             "f5": 9500,
             "g5": -0.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -33,
+            "dynamicMax": 4.5
           }
         },
         {
@@ -570,24 +592,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 50,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 220,
             "g2": -1.6,
             "q2": 1.3,
             "f3": 900,
             "g3": -0.5,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 1.0,
             "q4": 1,
             "f5": 11000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 4
           }
         },
         {
@@ -595,9 +618,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 45,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 200,
             "g2": -1.8,
             "q2": 1.5,
@@ -609,10 +633,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -33,
+            "dynamicMax": 5
           }
         },
         {
@@ -620,22 +644,23 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -0.8,
             "q2": 1,
             "f3": 1500,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 1.0,
             "q4": 1,
             "f5": 10000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.75,
+            "dynamic": true,
             "dynThreshold": -30,
             "dynamicMax": 3
           }
@@ -645,9 +670,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.75,
             "f2": 250,
             "g2": -1.0,
             "q2": 1.1,
@@ -659,10 +685,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.7,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -670,24 +696,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 45,
             "g1": 2.2,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 220,
             "g2": -1.6,
             "q2": 1.3,
             "f3": 1200,
             "g3": -0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1,
             "f5": 10000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 3.5
           }
         },
         {
@@ -695,24 +722,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 1.4,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 300,
             "g2": -0.4,
             "q2": 1,
             "f3": 1000,
             "g3": 0.3,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3000,
             "g4": 0.6,
             "q4": 1,
             "f5": 10000,
             "g5": 0.9,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -720,9 +748,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.9,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 330,
             "g2": -0.7,
             "q2": 1,
@@ -734,10 +763,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 1.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -745,23 +774,24 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 350,
             "g2": -1.0,
             "q2": 1.1,
             "f3": 1400,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": 1.2,
             "q4": 0.9,
             "f5": 8500,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -31,
             "dynamicMax": 3
           }
         },
@@ -770,24 +800,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.8,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 400,
             "g2": -1.6,
             "q2": 1.2,
             "f3": 1500,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 1.3,
             "f4": 3200,
             "g4": -0.8,
             "q4": 1.2,
             "f5": 9000,
             "g5": 0.4,
-            "q5": 0.707,
+            "q5": 0.8,
             "dynamic": true,
-            "dynThreshold": -28,
-            "dynamicMax": 3.5
+            "dynThreshold": -33,
+            "dynamicMax": 4.5
           }
         },
         {
@@ -795,9 +826,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.6,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 300,
             "g2": -0.4,
             "q2": 1,
@@ -809,10 +841,10 @@
             "q4": 1,
             "f5": 9500,
             "g5": 0.7,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -820,9 +852,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 300,
             "g2": -0.5,
             "q2": 1,
@@ -834,10 +867,10 @@
             "q4": 1,
             "f5": 10000,
             "g5": 0.9,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -845,9 +878,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 1.2,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 300,
             "g2": -0.6,
             "q2": 1,
@@ -859,10 +893,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 1.0,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -870,24 +904,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 260,
             "g2": -0.5,
             "q2": 1,
             "f3": 900,
             "g3": -0.4,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3500,
             "g4": -0.6,
             "q4": 1,
             "f5": 8000,
             "g5": -0.4,
-            "q5": 0.707,
+            "q5": 0.55,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -895,24 +930,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.8,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 350,
             "g2": 0.4,
             "q2": 1,
             "f3": 1200,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 4000,
             "g4": -1.0,
             "q4": 1,
             "f5": 7500,
             "g5": -2.0,
-            "q5": 0.707,
+            "q5": 0.5,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -920,24 +956,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.5,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 320,
             "g2": -0.4,
             "q2": 1,
             "f3": 1100,
             "g3": 0.3,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3500,
             "g4": 0.4,
             "q4": 1,
             "f5": 10000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.55,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -945,24 +982,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.5,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 300,
             "g2": -0.3,
             "q2": 1,
             "f3": 1000,
             "g3": 0.15,
-            "q3": 0.8,
+            "q3": 0.6,
             "f4": 3500,
             "g4": 0.3,
             "q4": 1,
             "f5": 10500,
             "g5": 0.6,
-            "q5": 0.707,
+            "q5": 0.55,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -26,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -970,24 +1008,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.3,
-            "q1": 0.707,
+            "q1": 0.45,
             "f2": 300,
             "g2": -0.2,
             "q2": 1,
             "f3": 1000,
             "g3": 0.1,
-            "q3": 0.8,
+            "q3": 0.55,
             "f4": 3500,
             "g4": 0.2,
             "q4": 1,
             "f5": 11000,
             "g5": 0.4,
-            "q5": 0.707,
+            "q5": 0.5,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -26,
+            "dynamicMax": 1
           }
         },
         {
@@ -995,24 +1034,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 0.8,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 280,
             "g2": -0.5,
             "q2": 1,
             "f3": 1200,
             "g3": 0.1,
-            "q3": 0.8,
+            "q3": 0.65,
             "f4": 3500,
             "g4": 0.4,
             "q4": 1,
             "f5": 10000,
             "g5": 0.8,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -1020,24 +1060,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.4,
-            "q1": 0.707,
+            "q1": 0.45,
             "f2": 400,
             "g2": -0.6,
             "q2": 0.8,
             "f3": 1500,
             "g3": 0.1,
-            "q3": 0.8,
+            "q3": 0.6,
             "f4": 4500,
             "g4": -0.5,
             "q4": 1,
             "f5": 10000,
             "g5": 0.8,
-            "q5": 0.7,
+            "q5": 0.5,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         }
       ]
@@ -1050,9 +1091,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 2.2,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 250,
             "g2": -1.4,
             "q2": 1.2,
@@ -1064,8 +1106,8 @@
             "q4": 1.2,
             "f5": 10000,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.75,
+            "dynamic": true,
             "dynThreshold": -30,
             "dynamicMax": 3
           }
@@ -1075,24 +1117,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 1.0,
             "f2": 220,
             "g2": -1.8,
             "q2": 1.4,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": -0.8,
             "q4": 1.2,
             "f5": 9000,
             "g5": -0.7,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 4
           }
         },
         {
@@ -1100,9 +1143,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 300,
             "g2": -0.9,
             "q2": 1.1,
@@ -1114,10 +1158,10 @@
             "q4": 1,
             "f5": 8500,
             "g5": 0.4,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -1125,24 +1169,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 320,
             "g2": -1.0,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.85,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1.1,
             "f5": 11000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.75,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1150,9 +1195,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.5,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 350,
             "g2": -0.8,
             "q2": 1.1,
@@ -1164,10 +1210,10 @@
             "q4": 1,
             "f5": 12000,
             "g5": 1.0,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1175,24 +1221,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.6,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 400,
             "g2": -1.2,
             "q2": 1.1,
             "f3": 2000,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 6000,
             "g4": 1.2,
             "q4": 0.9,
             "f5": 12000,
             "g5": 1.2,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -1200,24 +1247,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 260,
             "g2": -1.5,
             "q2": 1.3,
             "f3": 1000,
             "g3": 0.7,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3200,
             "g4": 1.0,
             "q4": 1.2,
             "f5": 10000,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 3.5
           }
         },
         {
@@ -1225,24 +1273,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.6,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 300,
             "g2": -1.2,
             "q2": 1.2,
             "f3": 1400,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4500,
             "g4": 1.4,
             "q4": 1.3,
             "f5": 10000,
             "g5": 0.4,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -1250,24 +1299,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 2.4,
-            "q1": 0.707,
+            "q1": 1.0,
             "f2": 220,
             "g2": -1.6,
             "q2": 1.3,
             "f3": 900,
             "g3": -0.5,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 1.0,
             "q4": 1,
             "f5": 11000,
             "g5": 0.8,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 4
           }
         },
         {
@@ -1275,9 +1325,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 2.6,
-            "q1": 0.707,
+            "q1": 1.05,
             "f2": 200,
             "g2": -1.8,
             "q2": 1.5,
@@ -1289,10 +1340,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 0.4,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -33,
+            "dynamicMax": 5
           }
         },
         {
@@ -1300,9 +1351,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 2.6,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 250,
             "g2": -1.0,
             "q2": 1.1,
@@ -1314,10 +1366,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 0.4,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.7,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -1325,9 +1377,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -0.6,
             "q2": 1,
@@ -1339,10 +1392,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 0.8,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1350,9 +1403,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.5,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 330,
             "g2": -0.7,
             "q2": 1,
@@ -1364,10 +1418,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1375,9 +1429,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 75,
             "g1": 1.6,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -0.5,
             "q2": 1,
@@ -1389,10 +1444,10 @@
             "q4": 1,
             "f5": 10000,
             "g5": 0.7,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         }
       ]
@@ -1405,24 +1460,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 2.6,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 280,
             "g2": -1.7,
             "q2": 1.1,
             "f3": 1600,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 5500,
             "g4": 1.0,
             "q4": 1,
             "f5": 12000,
             "g5": 2.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.3
           }
         },
         {
@@ -1430,24 +1486,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 400,
             "g2": -1.5,
             "q2": 1.1,
             "f3": 2000,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 6000,
             "g4": 1.2,
             "q4": 0.9,
             "f5": 12000,
             "g5": 2.0,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.8
           }
         },
         {
@@ -1455,24 +1512,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 2.8,
-            "q1": 0.707,
+            "q1": 1.05,
             "f2": 240,
             "g2": -2.3,
             "q2": 1.4,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3800,
             "g4": 1.0,
             "q4": 1.1,
             "f5": 9500,
             "g5": 0.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -33,
+            "dynamicMax": 4.8
           }
         },
         {
@@ -1480,24 +1538,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 260,
             "g2": -1.8,
             "q2": 1.3,
             "f3": 1000,
             "g3": 0.7,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3200,
             "g4": 1.0,
             "q4": 1.2,
             "f5": 10000,
             "g5": 1.4,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 3.8
           }
         },
         {
@@ -1505,24 +1564,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 320,
             "g2": -1.3,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.85,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1.1,
             "f5": 11000,
             "g5": 1.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.75,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.3
           }
         },
         {
@@ -1530,9 +1590,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.7,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 350,
             "g2": -1.1,
             "q2": 1.1,
@@ -1544,10 +1605,10 @@
             "q4": 1,
             "f5": 12000,
             "g5": 1.8,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1555,9 +1616,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 2.8,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 250,
             "g2": -1.3,
             "q2": 1.1,
@@ -1569,10 +1631,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 1.2,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.7,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.8
           }
         },
         {
@@ -1580,24 +1642,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 3.0,
-            "q1": 0.707,
+            "q1": 1.0,
             "f2": 220,
             "g2": -1.9,
             "q2": 1.3,
             "f3": 1200,
             "g3": -0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1,
             "f5": 10000,
             "g5": 1.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 3.8
           }
         },
         {
@@ -1605,24 +1668,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 350,
             "g2": -1.3,
             "q2": 1.1,
             "f3": 1400,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": 1.2,
             "q4": 0.9,
             "f5": 8500,
             "g5": 1.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.3
           }
         },
         {
@@ -1630,9 +1694,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.7,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 330,
             "g2": -1.0,
             "q2": 1,
@@ -1644,10 +1709,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 1.8,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.3
           }
         },
         {
@@ -1655,24 +1720,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 65,
             "g1": 1.6,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 400,
             "g2": -1.9,
             "q2": 1.2,
             "f3": 1500,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 1.3,
             "f4": 3200,
             "g4": -0.8,
             "q4": 1.2,
             "f5": 9000,
             "g5": 1.0,
-            "q5": 0.707,
+            "q5": 0.8,
             "dynamic": true,
-            "dynThreshold": -28,
-            "dynamicMax": 3.5
+            "dynThreshold": -33,
+            "dynamicMax": 4.8
           }
         }
       ]
@@ -1685,24 +1751,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 2.8,
-            "q1": 0.707,
+            "q1": 1.0,
             "f2": 280,
             "g2": -1.8,
             "q2": 1.1,
             "f3": 1600,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 5500,
             "g4": 1.0,
             "q4": 1,
             "f5": 12000,
             "g5": 2.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.6
           }
         },
         {
@@ -1710,24 +1777,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 3.0,
-            "q1": 0.707,
+            "q1": 1.1,
             "f2": 240,
             "g2": -2.4,
             "q2": 1.4,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3800,
             "g4": 1.0,
             "q4": 1.1,
             "f5": 9500,
             "g5": -0.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -33,
+            "dynamicMax": 5.1
           }
         },
         {
@@ -1735,24 +1803,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 400,
             "g2": -1.6,
             "q2": 1.1,
             "f3": 2000,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 6000,
             "g4": 1.2,
             "q4": 0.9,
             "f5": 12000,
             "g5": 1.8,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 3.1
           }
         },
         {
@@ -1760,9 +1829,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 1.9,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 350,
             "g2": -1.2,
             "q2": 1.1,
@@ -1774,10 +1844,10 @@
             "q4": 1,
             "f5": 12000,
             "g5": 1.6,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1785,24 +1855,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 300,
             "g2": -1.6,
             "q2": 1.2,
             "f3": 1400,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4500,
             "g4": 1.4,
             "q4": 1.3,
             "f5": 10000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.8,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 3.1
           }
         },
         {
@@ -1810,24 +1881,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 3.2,
-            "q1": 0.707,
+            "q1": 1.05,
             "f2": 220,
             "g2": -2.0,
             "q2": 1.3,
             "f3": 1200,
             "g3": -0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1,
             "f5": 10000,
             "g5": 1.4,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 4.1
           }
         },
         {
@@ -1835,9 +1907,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 3.0,
-            "q1": 0.707,
+            "q1": 1.1,
             "f2": 200,
             "g2": -2.2,
             "q2": 1.5,
@@ -1849,10 +1922,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -33,
+            "dynamicMax": 5.6
           }
         },
         {
@@ -1860,24 +1933,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 2.2,
-            "q1": 0.707,
+            "q1": 0.9,
             "f2": 320,
             "g2": -1.4,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.85,
             "f4": 4000,
             "g4": 0.8,
             "q4": 1.1,
             "f5": 11000,
             "g5": 1.4,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.75,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.6
           }
         }
       ]
@@ -1890,9 +1964,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.61,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 330,
             "g2": -0.63,
             "q2": 1,
@@ -1904,10 +1979,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 0.88,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.65,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -1915,23 +1990,24 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.7,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 350,
             "g2": -0.9,
             "q2": 1.1,
             "f3": 1400,
             "g3": 0.54,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": 1.08,
             "q4": 0.9,
             "f5": 8500,
             "g5": 0.34,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
+            "q5": 0.65,
+            "dynamic": true,
+            "dynThreshold": -31,
             "dynamicMax": 3
           }
         },
@@ -1940,9 +2016,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.34,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 300,
             "g2": -0.36,
             "q2": 1,
@@ -1954,10 +2031,10 @@
             "q4": 1,
             "f5": 9500,
             "g5": 0.43,
-            "q5": 0.707,
+            "q5": 0.55,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -1965,24 +2042,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 1.06,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 300,
             "g2": -0.36,
             "q2": 1,
             "f3": 1000,
             "g3": 0.27,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3000,
             "g4": 0.54,
             "q4": 1,
             "f5": 10000,
             "g5": 0.61,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -1990,9 +2068,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 1.6,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 250,
             "g2": -0.9,
             "q2": 1.1,
@@ -2004,10 +2083,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 0.34,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.65,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -2015,24 +2094,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.25,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 320,
             "g2": -0.36,
             "q2": 1,
             "f3": 1100,
             "g3": 0.27,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3500,
             "g4": 0.36,
             "q4": 1,
             "f5": 10000,
             "g5": 0.52,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.5,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2040,24 +2120,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.25,
-            "q1": 0.707,
+            "q1": 0.45,
             "f2": 300,
             "g2": -0.27,
             "q2": 1,
             "f3": 1000,
             "g3": 0.14,
-            "q3": 0.8,
+            "q3": 0.6,
             "f4": 3500,
             "g4": 0.27,
             "q4": 1,
             "f5": 10500,
             "g5": 0.34,
-            "q5": 0.707,
+            "q5": 0.5,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -26,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2065,24 +2146,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.07,
-            "q1": 0.707,
+            "q1": 0.4,
             "f2": 300,
             "g2": -0.18,
             "q2": 1,
             "f3": 1000,
             "g3": 0.09,
-            "q3": 0.8,
+            "q3": 0.55,
             "f4": 3500,
             "g4": 0.18,
             "q4": 1,
             "f5": 11000,
             "g5": 0.16,
-            "q5": 0.707,
+            "q5": 0.45,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -26,
+            "dynamicMax": 1
           }
         },
         {
@@ -2090,24 +2172,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 0.52,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 280,
             "g2": -0.45,
             "q2": 1,
             "f3": 1200,
             "g3": 0.09,
-            "q3": 0.8,
+            "q3": 0.65,
             "f4": 3500,
             "g4": 0.36,
             "q4": 1,
             "f5": 10000,
             "g5": 0.52,
-            "q5": 0.707,
+            "q5": 0.55,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -2115,24 +2198,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.16,
-            "q1": 0.707,
+            "q1": 0.4,
             "f2": 400,
             "g2": -0.54,
             "q2": 0.8,
             "f3": 1500,
             "g3": 0.09,
-            "q3": 0.8,
+            "q3": 0.6,
             "f4": 4500,
             "g4": -0.45,
             "q4": 1,
             "f5": 10000,
             "g5": 0.52,
-            "q5": 0.7,
+            "q5": 0.45,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2140,24 +2224,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.52,
-            "q1": 0.707,
+            "q1": 0.45,
             "f2": 350,
             "g2": 0.36,
             "q2": 1,
             "f3": 1200,
             "g3": 0.0,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 4000,
             "g4": -0.9,
             "q4": 1,
             "f5": 7500,
             "g5": -2.0,
-            "q5": 0.707,
+            "q5": 0.45,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2165,9 +2250,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.06,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 300,
             "g2": -0.81,
             "q2": 1.1,
@@ -2179,10 +2265,10 @@
             "q4": 1,
             "f5": 8500,
             "g5": 0.34,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -2190,24 +2276,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.42,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 260,
             "g2": -0.45,
             "q2": 1,
             "f3": 900,
             "g3": -0.36,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3500,
             "g4": -0.54,
             "q4": 1,
             "f5": 8000,
             "g5": -0.56,
-            "q5": 0.707,
+            "q5": 0.5,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2215,9 +2302,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 0.7,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 300,
             "g2": -0.45,
             "q2": 1,
@@ -2229,10 +2317,10 @@
             "q4": 1,
             "f5": 10000,
             "g5": 0.61,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         }
       ]
@@ -2245,24 +2333,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.01,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 330,
             "g2": -0.63,
             "q2": 1,
             "f3": 1500,
             "g3": 0.27,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3000,
             "g4": 0.41,
             "q4": 1,
             "f5": 11000,
             "g5": 0.68,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.6,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -2270,24 +2359,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.75,
             "f2": 250,
             "g2": -0.9,
             "q2": 1.1,
             "f3": 1000,
             "g3": -0.27,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3000,
             "g4": 0.32,
             "q4": 1,
             "f5": 9000,
             "g5": 0.14,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.6,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -2295,24 +2385,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.46,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 300,
             "g2": -0.36,
             "q2": 1,
             "f3": 1000,
             "g3": 0.27,
-            "q3": 0.8,
+            "q3": 0.65,
             "f4": 3000,
             "g4": 0.14,
             "q4": 1,
             "f5": 10000,
             "g5": 0.41,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.55,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2320,24 +2411,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.1,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -1.08,
             "q2": 1.2,
             "f3": 1400,
             "g3": 0.54,
-            "q3": 0.8,
+            "q3": 0.85,
             "f4": 3000,
             "g4": 0.86,
             "q4": 1.3,
             "f5": 10000,
             "g5": 0.14,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.7,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -2345,24 +2437,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.46,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 300,
             "g2": -0.81,
             "q2": 1.1,
             "f3": 900,
             "g3": 0.36,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3000,
             "g4": -1.3,
             "q4": 1,
             "f5": 8500,
             "g5": 0.14,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.55,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2370,24 +2463,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": -0.44,
-            "q1": 0.707,
+            "q1": 0.45,
             "f2": 400,
             "g2": -0.54,
             "q2": 0.8,
             "f3": 1500,
             "g3": 0.09,
-            "q3": 0.8,
+            "q3": 0.55,
             "f4": 3000,
             "g4": -0.85,
             "q4": 1,
             "f5": 10000,
             "g5": 0.32,
-            "q5": 0.7,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.4,
+            "dynamic": true,
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2395,24 +2489,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": -0.08,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 350,
             "g2": 0.36,
             "q2": 1,
             "f3": 1200,
             "g3": 0.0,
-            "q3": 0.8,
+            "q3": 0.65,
             "f4": 3000,
             "g4": -1.3,
             "q4": 1,
             "f5": 7500,
             "g5": -2.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.4,
+            "dynamic": true,
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2420,24 +2515,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": -0.35,
-            "q1": 0.707,
+            "q1": 0.5,
             "f2": 300,
             "g2": -0.27,
             "q2": 1,
             "f3": 1000,
             "g3": 0.14,
-            "q3": 0.8,
+            "q3": 0.55,
             "f4": 3000,
             "g4": -0.13,
             "q4": 1,
             "f5": 10500,
             "g5": 0.14,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.45,
+            "dynamic": true,
+            "dynThreshold": -26,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2445,24 +2541,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": -0.53,
-            "q1": 0.707,
+            "q1": 0.45,
             "f2": 300,
             "g2": -0.18,
             "q2": 1,
             "f3": 1000,
             "g3": 0.09,
-            "q3": 0.8,
+            "q3": 0.5,
             "f4": 3000,
             "g4": -0.22,
             "q4": 1,
             "f5": 11000,
             "g5": -0.04,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.4,
+            "dynamic": true,
+            "dynThreshold": -26,
+            "dynamicMax": 1
           }
         },
         {
@@ -2470,24 +2567,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": -0.08,
-            "q1": 0.707,
+            "q1": 0.55,
             "f2": 280,
             "g2": -0.45,
             "q2": 1,
             "f3": 1200,
             "g3": 0.09,
-            "q3": 0.8,
+            "q3": 0.6,
             "f4": 3000,
             "g4": -0.04,
             "q4": 1,
             "f5": 10000,
             "g5": 0.32,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.5,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2495,24 +2593,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.01,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 350,
             "g2": -0.54,
             "q2": 1,
             "f3": 1100,
             "g3": 0.45,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3000,
             "g4": 0.14,
             "q4": 1,
             "f5": 9000,
             "g5": 0.5,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.5,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         }
       ]
@@ -2525,9 +2624,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": -0.12,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 330,
             "g2": 0.0,
             "q2": 1,
@@ -2539,10 +2639,10 @@
             "q4": 1,
             "f5": 9500,
             "g5": 0.2,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2550,9 +2650,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.36,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 330,
             "g2": -0.28,
             "q2": 1,
@@ -2564,10 +2665,10 @@
             "q4": 1,
             "f5": 11000,
             "g5": 0.48,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -2575,23 +2676,24 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.4,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 350,
             "g2": -0.4,
             "q2": 1.1,
             "f3": 1400,
             "g3": 0.24,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 3500,
             "g4": 0.48,
             "q4": 0.9,
             "f5": 8500,
             "g5": 0.24,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
+            "dynThreshold": -31,
             "dynamicMax": 3
           }
         },
@@ -2600,9 +2702,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 0.8,
-            "q1": 0.707,
+            "q1": 0.73,
             "f2": 250,
             "g2": -0.4,
             "q2": 1.1,
@@ -2614,10 +2717,10 @@
             "q4": 1,
             "f5": 9000,
             "g5": 0.24,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.5
           }
         },
         {
@@ -2625,24 +2728,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 0.48,
-            "q1": 0.707,
+            "q1": 0.73,
             "f2": 320,
             "g2": -0.4,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0.0,
-            "q3": 0.8,
+            "q3": 0.82,
             "f4": 4000,
             "g4": 0.32,
             "q4": 1.1,
             "f5": 11000,
             "g5": 0.4,
-            "q5": 0.707,
+            "q5": 0.73,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -2650,21 +2754,22 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 60,
             "g1": 0.64,
-            "q1": 0.707,
+            "q1": 0.78,
             "f2": 250,
             "g2": -0.56,
             "q2": 1.2,
             "f3": 1500,
             "g3": -0.2,
-            "q3": 0.9,
+            "q3": 0.85,
             "f4": 4500,
             "g4": 0.32,
             "q4": 1.2,
             "f5": 10000,
             "g5": 0.32,
-            "q5": 0.707,
+            "q5": 0.73,
             "dynamic": false,
             "dynThreshold": -30,
             "dynamicMax": 3
@@ -2675,24 +2780,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.2,
-            "q1": 0.707,
+            "q1": 0.6,
             "f2": 300,
             "g2": -0.12,
             "q2": 1,
             "f3": 1000,
             "g3": 0.06,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 3500,
             "g4": 0.12,
             "q4": 1,
             "f5": 10500,
             "g5": 0.24,
-            "q5": 0.707,
+            "q5": 0.63,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -26,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2700,24 +2806,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.12,
-            "q1": 0.707,
+            "q1": 0.58,
             "f2": 300,
             "g2": -0.08,
             "q2": 1,
             "f3": 1000,
             "g3": 0.04,
-            "q3": 0.8,
+            "q3": 0.68,
             "f4": 3500,
             "g4": 0.08,
             "q4": 1,
             "f5": 11000,
             "g5": 0.16,
-            "q5": 0.707,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -26,
+            "dynamicMax": 1
           }
         },
         {
@@ -2725,24 +2832,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 110,
             "g1": 0.2,
-            "q1": 0.707,
+            "q1": 0.63,
             "f2": 320,
             "g2": -0.16,
             "q2": 1,
             "f3": 1100,
             "g3": 0.12,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3500,
             "g4": 0.16,
             "q4": 1,
             "f5": 10000,
             "g5": 0.32,
-            "q5": 0.707,
+            "q5": 0.63,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2750,24 +2858,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 0.32,
-            "q1": 0.707,
+            "q1": 0.63,
             "f2": 280,
             "g2": -0.2,
             "q2": 1,
             "f3": 1200,
             "g3": 0.04,
-            "q3": 0.8,
+            "q3": 0.73,
             "f4": 3500,
             "g4": 0.16,
             "q4": 1,
             "f5": 10000,
             "g5": 0.32,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         },
         {
@@ -2775,24 +2884,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 90,
             "g1": 0.16,
-            "q1": 0.707,
+            "q1": 0.58,
             "f2": 400,
             "g2": -0.24,
             "q2": 0.8,
             "f3": 1500,
             "g3": 0.04,
-            "q3": 0.8,
+            "q3": 0.7,
             "f4": 4500,
             "g4": -0.2,
             "q4": 1,
             "f5": 10000,
             "g5": 0.32,
-            "q5": 0.7,
+            "q5": 0.6,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -27,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2800,24 +2910,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 80,
             "g1": 0.56,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 300,
             "g2": -0.16,
             "q2": 1,
             "f3": 1000,
             "g3": 0.12,
-            "q3": 0.8,
+            "q3": 0.75,
             "f4": 3000,
             "g4": 0.24,
             "q4": 1,
             "f5": 10000,
             "g5": 0.36,
-            "q5": 0.707,
+            "q5": 0.68,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         },
         {
@@ -2825,9 +2936,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 100,
             "g1": 0.24,
-            "q1": 0.707,
+            "q1": 0.65,
             "f2": 300,
             "g2": -0.16,
             "q2": 1,
@@ -2839,10 +2951,10 @@
             "q4": 1,
             "f5": 9500,
             "g5": 0.28,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 2
           }
         }
       ]
@@ -2855,24 +2967,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": -0.1,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 330,
             "g2": -0.7,
             "q2": 1,
             "f3": 1800,
             "g3": 0.7,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 4000,
             "g4": 1.5,
             "q4": 1,
             "f5": 11000,
             "g5": 1.2,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.5
           }
         },
         {
@@ -2880,24 +2993,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": 0.0,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 350,
             "g2": -1.0,
             "q2": 1.1,
             "f3": 1800,
             "g3": 1.0,
-            "q3": 0.8,
+            "q3": 1.2,
             "f4": 3500,
             "g4": 1.8,
             "q4": 0.9,
             "f5": 8500,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.5
           }
         },
         {
@@ -2905,24 +3019,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": 1.0,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 250,
             "g2": -1.0,
             "q2": 1.1,
             "f3": 1800,
             "g3": 0.1,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": 1.4,
             "q4": 1,
             "f5": 9000,
             "g5": 0.6,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.7,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 3.0
           }
         },
         {
@@ -2930,24 +3045,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": 0.4,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 300,
             "g2": -0.4,
             "q2": 1,
             "f3": 1800,
             "g3": 0.7,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 3000,
             "g4": 1.2,
             "q4": 1,
             "f5": 10000,
             "g5": 0.9,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.65,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 2.0
           }
         },
         {
@@ -2955,24 +3071,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": 0.0,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -0.5,
             "q2": 1,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3800,
             "g4": 1.5,
             "q4": 1,
             "f5": 10000,
             "g5": 0.9,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.5
           }
         },
         {
@@ -2980,24 +3097,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": 0.2,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 300,
             "g2": -0.6,
             "q2": 1,
             "f3": 1800,
             "g3": 0.9,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3000,
             "g4": 1.3,
             "q4": 1,
             "f5": 11000,
             "g5": 1.0,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.5
           }
         },
         {
@@ -3005,24 +3123,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": -0.4,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 300,
             "g2": -0.4,
             "q2": 1,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 3500,
             "g4": 1.1,
             "q4": 1,
             "f5": 9500,
             "g5": 0.7,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.6,
+            "dynamic": true,
+            "dynThreshold": -28,
+            "dynamicMax": 2.5
           }
         },
         {
@@ -3030,24 +3149,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 130,
             "g1": 0.8,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 280,
             "g2": -1.4,
             "q2": 1.1,
             "f3": 1800,
             "g3": 0.8,
-            "q3": 0.8,
+            "q3": 1.1,
             "f4": 5500,
             "g4": 1.6,
             "q4": 1,
             "f5": 12000,
             "g5": 1.6,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.5
           }
         }
       ]
@@ -3060,24 +3180,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.7,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 280,
             "g2": -1.1,
             "q2": 1,
             "f3": 1500,
             "g3": 0.3,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 4000,
             "g4": 1.4,
             "q4": 1,
             "f5": 11000,
             "g5": 1.5,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.2
           }
         },
         {
@@ -3085,24 +3206,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 2.8,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 280,
             "g2": -1.4,
             "q2": 1.1,
             "f3": 1000,
             "g3": -0.3,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 3500,
             "g4": 1.3,
             "q4": 1,
             "f5": 9000,
             "g5": 0.9,
-            "q5": 0.707,
-            "dynamic": false,
+            "q5": 0.7,
+            "dynamic": true,
             "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynamicMax": 2.7
           }
         },
         {
@@ -3110,24 +3232,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 280,
             "g2": -1.4,
             "q2": 1.1,
             "f3": 1400,
             "g3": 0.6,
-            "q3": 0.8,
+            "q3": 1.1,
             "f4": 3500,
             "g4": 1.7,
             "q4": 0.9,
             "f5": 8500,
             "g5": 0.9,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.7,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.2
           }
         },
         {
@@ -3135,24 +3258,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 2.6,
-            "q1": 0.707,
+            "q1": 0.95,
             "f2": 280,
             "g2": -1.8,
             "q2": 1.1,
             "f3": 1600,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 5500,
             "g4": 1.5,
             "q4": 1,
             "f5": 12000,
             "g5": 1.9,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.85,
+            "dynamic": true,
+            "dynThreshold": -31,
+            "dynamicMax": 3.2
           }
         },
         {
@@ -3160,24 +3284,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 2.0,
-            "q1": 0.707,
+            "q1": 0.85,
             "f2": 280,
             "g2": -1.4,
             "q2": 1.2,
             "f3": 1000,
             "g3": 0,
-            "q3": 0.8,
+            "q3": 0.95,
             "f4": 4000,
             "g4": 1.3,
             "q4": 1.1,
             "f5": 11000,
             "g5": 1.3,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.75,
+            "dynamic": true,
+            "dynThreshold": -29,
+            "dynamicMax": 2.2
           }
         },
         {
@@ -3185,24 +3310,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 1.8,
-            "q1": 0.707,
+            "q1": 0.8,
             "f2": 280,
             "g2": -0.9,
             "q2": 1,
             "f3": 1200,
             "g3": 0.4,
-            "q3": 0.8,
+            "q3": 0.9,
             "f4": 3800,
             "g4": 1.4,
             "q4": 1,
             "f5": 10000,
             "g5": 1.2,
-            "q5": 0.707,
+            "q5": 0.7,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -29,
+            "dynamicMax": 2
           }
         },
         {
@@ -3210,24 +3336,25 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 3.0,
-            "q1": 0.707,
+            "q1": 1.0,
             "f2": 280,
             "g2": -2.0,
             "q2": 1.3,
             "f3": 1200,
             "g3": -0.4,
-            "q3": 0.8,
+            "q3": 1.0,
             "f4": 4000,
             "g4": 1.3,
             "q4": 1,
             "f5": 10000,
             "g5": 1.3,
-            "q5": 0.707,
-            "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "q5": 0.8,
+            "dynamic": true,
+            "dynThreshold": -32,
+            "dynamicMax": 3.7
           }
         },
         {
@@ -3235,9 +3362,10 @@
           "kind": "set",
           "version": "1.1.0",
           "state": {
+            "bands": 5,
             "f1": 70,
             "g1": 2.2,
-            "q1": 0.707,
+            "q1": 0.7,
             "f2": 280,
             "g2": -0.8,
             "q2": 1,
@@ -3249,10 +3377,10 @@
             "q4": 1,
             "f5": 10000,
             "g5": 1.2,
-            "q5": 0.707,
+            "q5": 0.65,
             "dynamic": false,
-            "dynThreshold": -30,
-            "dynamicMax": 3
+            "dynThreshold": -28,
+            "dynamicMax": 1.5
           }
         }
       ]

@@ -1,1725 +1,1725 @@
 {
- "format": "patchkamer-presets",
- "formatVersion": 2,
- "device": "nl.patchkamer.masterdirector",
- "name": "Master Director Situations and Styles",
- "author": "Freek van Gool",
- "license": "CC0-1.0",
- "description": "Ready-made choices for Master Director: every music style for streaming, every situation (club, festival, big room, home, headphones, studio, radio, car) and common combinations of the two.",
- "tree": [
-  {
-   "folder": "Situations",
-   "items": [
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.masterdirector",
+  "name": "Master Director Situations and Styles",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Ready-made choices for Master Director: every music style for streaming, every situation (club, festival, big room, home, headphones, studio, radio, car) and common combinations of the two. Each choice sets its own style strength (soft for classical, ambient and jazz, full for hardstyle and hard techno; lower in a studio reference, higher for a big room), whether the chain follows the music afterwards (only for loud, loudness-driven material) and whether a choice is applied at once (off for studio reference and careful acoustic styles, so nothing changes until you press Set the chain). Loading a preset only sets the Director itself; the connected devices change when you choose a style or press Set the chain.",
+  "tree": [
     {
-     "name": "Streaming",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Situations",
+      "items": [
+        {
+          "name": "Streaming",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "streaming",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Club",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "club",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Festival",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "festival",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Big room",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "bigroom",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Home / hi-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "home",
+            "strength": 0.8,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Headphones",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "headphones",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Studio / reference",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "transparent",
+            "situation": "studio",
+            "strength": 0.45,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Radio / broadcast",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "radio",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Car",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "car",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Club",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Styles",
+      "items": [
+        {
+          "name": "Transparent",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "transparent",
+            "situation": "streaming",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Warm / organic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "warm",
+            "situation": "streaming",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "techno",
+            "situation": "streaming",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hard techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hard-techno",
+            "situation": "streaming",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "deep-house",
+            "situation": "streaming",
+            "strength": 0.8,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "streaming",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "progressive",
+            "situation": "streaming",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trance",
+            "situation": "streaming",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "psytrance",
+            "situation": "streaming",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "electro",
+            "situation": "streaming",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Synthwave",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "synthwave",
+            "situation": "streaming",
+            "strength": 0.8,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "streaming",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hardstyle",
+            "situation": "streaming",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Drum & bass",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "drum-and-bass",
+            "situation": "streaming",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "dubstep",
+            "situation": "streaming",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Breakbeat",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "breakbeat",
+            "situation": "streaming",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "streaming",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trap",
+            "situation": "streaming",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rnb",
+            "situation": "streaming",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "streaming",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rock",
+            "situation": "streaming",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Metal",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "metal",
+            "situation": "streaming",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "indie",
+            "situation": "streaming",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "latin",
+            "situation": "streaming",
+            "strength": 0.8,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "funk-disco",
+            "situation": "streaming",
+            "strength": 0.8,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Reggae / dub",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "reggae-dub",
+            "situation": "streaming",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "lofi",
+            "situation": "streaming",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "acoustic",
+            "situation": "streaming",
+            "strength": 0.6,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "jazz",
+            "situation": "streaming",
+            "strength": 0.6,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "classical",
+            "situation": "streaming",
+            "strength": 0.5,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "soundtrack",
+            "situation": "streaming",
+            "strength": 0.6,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "ambient",
+            "situation": "streaming",
+            "strength": 0.55,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Festival",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Club",
+      "items": [
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "techno",
+            "situation": "club",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hard techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hard-techno",
+            "situation": "club",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "deep-house",
+            "situation": "club",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "club",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "progressive",
+            "situation": "club",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trance",
+            "situation": "club",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "psytrance",
+            "situation": "club",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "electro",
+            "situation": "club",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Drum & bass",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "drum-and-bass",
+            "situation": "club",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "dubstep",
+            "situation": "club",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "club",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "funk-disco",
+            "situation": "club",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "club",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "latin",
+            "situation": "club",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Big room",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Festival",
+      "items": [
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "festival",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trance",
+            "situation": "festival",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hardstyle",
+            "situation": "festival",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "psytrance",
+            "situation": "festival",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "festival",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "progressive",
+            "situation": "festival",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "festival",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trap",
+            "situation": "festival",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rock",
+            "situation": "festival",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "festival",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Metal",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "metal",
+            "situation": "festival",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Home / hi-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Big Room",
+      "items": [
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "bigroom",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hardstyle",
+            "situation": "bigroom",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trance",
+            "situation": "bigroom",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "progressive",
+            "situation": "bigroom",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "electro",
+            "situation": "bigroom",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trap",
+            "situation": "bigroom",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "dubstep",
+            "situation": "bigroom",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "bigroom",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Headphones",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Home / Hi-Fi",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "home",
+            "strength": 0.8,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rock",
+            "situation": "home",
+            "strength": 0.85,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "indie",
+            "situation": "home",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rnb",
+            "situation": "home",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "home",
+            "strength": 0.85,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "acoustic",
+            "situation": "home",
+            "strength": 0.55,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "jazz",
+            "situation": "home",
+            "strength": 0.55,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "classical",
+            "situation": "home",
+            "strength": 0.45,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "soundtrack",
+            "situation": "home",
+            "strength": 0.55,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "ambient",
+            "situation": "home",
+            "strength": 0.5,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "lofi",
+            "situation": "home",
+            "strength": 0.65,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "deep-house",
+            "situation": "home",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Reggae / dub",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "reggae-dub",
+            "situation": "home",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "latin",
+            "situation": "home",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Studio / reference",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "transparent",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Headphones",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "headphones",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "headphones",
+            "strength": 0.8,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rnb",
+            "situation": "headphones",
+            "strength": 0.65,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "electro",
+            "situation": "headphones",
+            "strength": 0.75,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "deep-house",
+            "situation": "headphones",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "ambient",
+            "situation": "headphones",
+            "strength": 0.45,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "lofi",
+            "situation": "headphones",
+            "strength": 0.6,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "jazz",
+            "situation": "headphones",
+            "strength": 0.5,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "classical",
+            "situation": "headphones",
+            "strength": 0.4,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "soundtrack",
+            "situation": "headphones",
+            "strength": 0.5,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Synthwave",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "synthwave",
+            "situation": "headphones",
+            "strength": 0.7,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Radio / broadcast",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Studio / Reference",
+      "items": [
+        {
+          "name": "Transparent",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "transparent",
+            "situation": "studio",
+            "strength": 0.45,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "studio",
+            "strength": 0.6,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rock",
+            "situation": "studio",
+            "strength": 0.65,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "studio",
+            "strength": 0.65,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "studio",
+            "strength": 0.6,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "techno",
+            "situation": "studio",
+            "strength": 0.65,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "jazz",
+            "situation": "studio",
+            "strength": 0.4,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "classical",
+            "situation": "studio",
+            "strength": 0.4,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "acoustic",
+            "situation": "studio",
+            "strength": 0.4,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "soundtrack",
+            "situation": "studio",
+            "strength": 0.4,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "ambient",
+            "situation": "studio",
+            "strength": 0.4,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rnb",
+            "situation": "studio",
+            "strength": 0.5,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "indie",
+            "situation": "studio",
+            "strength": 0.5,
+            "direct": false,
+            "follow": false,
+            "sameChain": true
+          }
+        }
+      ]
     },
     {
-     "name": "Car",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
+      "folder": "Radio / Broadcast",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "radio",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rock",
+            "situation": "radio",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "radio",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rnb",
+            "situation": "radio",
+            "strength": 0.8,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "latin",
+            "situation": "radio",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "funk-disco",
+            "situation": "radio",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "indie",
+            "situation": "radio",
+            "strength": 0.8,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "radio",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Car",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "pop",
+            "situation": "car",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "hip-hop",
+            "situation": "car",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rock",
+            "situation": "car",
+            "strength": 0.95,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "edm",
+            "situation": "car",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "house",
+            "situation": "car",
+            "strength": 0.9,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "latin",
+            "situation": "car",
+            "strength": 0.85,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "trap",
+            "situation": "car",
+            "strength": 1.0,
+            "direct": true,
+            "follow": true,
+            "sameChain": true
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "style": "rnb",
+            "situation": "car",
+            "strength": 0.8,
+            "direct": true,
+            "follow": false,
+            "sameChain": true
+          }
+        }
+      ]
     }
-   ]
-  },
-  {
-   "folder": "Styles",
-   "items": [
-    {
-     "name": "Transparent",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "transparent",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Warm / organic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "warm",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "techno",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hard techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hard-techno",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "deep-house",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "progressive",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trance",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "psytrance",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "electro",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Synthwave",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "synthwave",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hardstyle",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Drum & bass",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "drum-and-bass",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "dubstep",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Breakbeat",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "breakbeat",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trap",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rnb",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rock",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Metal",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "metal",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "indie",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "latin",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "funk-disco",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Reggae / dub",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "reggae-dub",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "lofi",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "acoustic",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "jazz",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "classical",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "soundtrack",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "ambient",
-      "situation": "streaming",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Club",
-   "items": [
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "techno",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hard techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hard-techno",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "deep-house",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "progressive",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trance",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "psytrance",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "electro",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Drum & bass",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "drum-and-bass",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "dubstep",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "funk-disco",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "latin",
-      "situation": "club",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Festival",
-   "items": [
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trance",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hardstyle",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "psytrance",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "progressive",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trap",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rock",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Metal",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "metal",
-      "situation": "festival",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Big Room",
-   "items": [
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hardstyle",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trance",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "progressive",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "electro",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trap",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "dubstep",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "bigroom",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Home / Hi-Fi",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rock",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "indie",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rnb",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "acoustic",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "jazz",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "classical",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "soundtrack",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "ambient",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "lofi",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "deep-house",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Reggae / dub",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "reggae-dub",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "latin",
-      "situation": "home",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Headphones",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rnb",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "electro",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "deep-house",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "ambient",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "lofi",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "jazz",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "classical",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "soundtrack",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Synthwave",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "synthwave",
-      "situation": "headphones",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Studio / Reference",
-   "items": [
-    {
-     "name": "Transparent",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "transparent",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rock",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "techno",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "jazz",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "classical",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "acoustic",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "soundtrack",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "ambient",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rnb",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "indie",
-      "situation": "studio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Radio / Broadcast",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rock",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rnb",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "latin",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "funk-disco",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "indie",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "radio",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Car",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "pop",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "hip-hop",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rock",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "edm",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "house",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "latin",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "trap",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "style": "rnb",
-      "situation": "car",
-      "strength": 0.8,
-      "direct": true,
-      "follow": false,
-      "sameChain": true
-     }
-    }
-   ]
-  }
- ]
+  ]
 }
