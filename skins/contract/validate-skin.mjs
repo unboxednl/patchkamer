@@ -1,7 +1,7 @@
-// validate-skin.mjs — Patchkamer skins contract v0.5
+// validate-skin.mjs — Patchkamer skins contract v0.6
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
-//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, 0.5: groepen in design.sections, tegen het register van het apparaat; onbekend = let op)
+//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, 0.5: groepen in design.sections, 0.6: id's, rollen en groepen in design.pads.colors en een schermpje zonder keuze in design.display, tegen het register van het apparaat; onbekend = let op)
 // Usage:    same; --dir validates every *.patchkamer-skin.json and icon.* in a library folder (skins/library or one device folder).
 // Controleert een skin (zie SKINS-CONTRACT_NL.md / _EN.md) en eindigt met één OK-regel per bestand (exit 0)
 // of met alle gevonden fouten (exit 1). Waarschuwingen ("let op" / "warning") staan achter de OK-regel en geven exit 0.
@@ -36,7 +36,7 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.5; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.5; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.6; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.6; unknown fields are ignored'],
   controls_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
   controls_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
   controls_rule: ['{0} moet een object zijn', '{0} must be an object'],
@@ -88,6 +88,34 @@ const M = {
   ok_sections: ['{0} sectieregels', '{0} section rules'],
   ok_size: ['verschijningsmaat', 'appearance size'],
   ok_meters: ['{0} meterregels', '{0} meter rules'],
+  pads_object: ['{0} moet een object zijn (zonder lijst regels; een eigen kleur per pad staat in colors)', '{0} must be an object (not a list of rules; a colour per pad goes in colors)'],
+  pads_shape_none: ['{0}: een skin verbergt geen pad (er is geen shape "none"); kies circle, square, rounded of rect', '{0}: a skin does not hide a pad (there is no shape "none"); choose circle, square, rounded or rect'],
+  pads_enum_num: ['{0} moet een van {1} zijn of een getal van {2} tot {3}', '{0} must be one of {1} or a number from {2} to {3}'],
+  pads_palette: ['{0} moet een lijst van 2 tot 16 kleuren #rgb of #rrggbb zijn', '{0} must be a list of 2 to 16 colours #rgb or #rrggbb'],
+  pads_colors: ['{0} moet een object zijn met sleutels (een id, "role:<rol>" of "group:<groep>") en kleuren #rgb of #rrggbb', '{0} must be an object with keys (an id, "role:<role>" or "group:<group>") and colours #rgb or #rrggbb'],
+  pads_colors_max: ['{0} heeft {1} sleutels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} keys; the maximum is {2} (the rest is ignored)'],
+  pads_colors_key: ['{0}: sleutel "{1}" moet een id, "role:<rol>" of "group:<groep>" zijn (1 tot 60 tekens uit [A-Za-z0-9._-]); genegeerd', '{0}: key "{1}" must be an id, "role:<role>" or "group:<group>" (1 to 60 characters from [A-Za-z0-9._-]); ignored'],
+  pads_colors_value: ['{0}: de waarde van "{1}" moet een kleur #rgb of #rrggbb zijn', '{0}: the value of "{1}" must be a colour #rgb or #rrggbb'],
+  pads_colors_role: ['{0}: rol "{1}" bij een pad hoort "pad" of "step" te zijn; de host past de kleur alleen op pads en stappen toe', '{0}: role "{1}" for a pad should be "pad" or "step"; the host only applies the colour to pads and steps'],
+  pads_palette_unused: ['{0}.palette wordt niet gebruikt: color is niet "palette"', '{0}.palette is not used: color is not "palette"'],
+  pads_palette_missing: ['{0}.color is "palette" maar er is geen palette; de pads vallen terug op de kleur van het apparaat', '{0}.color is "palette" but there is no palette; the pads fall back to the device colour'],
+  pads_empty: ['{0} is leeg; het doet niets', '{0} is empty; it does nothing'],
+  pads_contract: ['design.pads en design.display horen bij skinsContract 0.6; een host met 0.5 of lager negeert ze', 'design.pads and design.display belong to skinsContract 0.6; a host on 0.5 or lower ignores them'],
+  display_none: ['{0}: een skin verbergt het schermpje niet (er is geen style "none"); kies dropdown, lcd, oled, segment of paper', '{0}: a skin does not hide the display (there is no style "none"); choose dropdown, lcd, oled, segment or paper'],
+  display_width: ['{0} moet "auto" of een getal van {1} tot {2} zijn', '{0} must be "auto" or a number from {1} to {2}'],
+  display_targets: ['{0} moet een lijst zijn met alleen "select", "preset" en "tune", zonder dubbelen en niet leeg', '{0} must be a list with only "select", "preset" and "tune", without duplicates and not empty'],
+  display_colour: ['{0} moet "accent", "default" of een kleur #rgb of #rrggbb zijn', '{0} must be "accent", "default" or a colour #rgb or #rrggbb'],
+  display_unusable: ['{0}: nav "none" met expand "off" laat het schermpje niet te bedienen; de host houdt het toch bedienbaar (klik opent het paneel), maar kies een van de twee anders', '{0}: nav "none" with expand "off" leaves the display unoperable; the host keeps it operable anyway (a click opens the panel), but choose one of the two differently'],
+  display_dropdown: ['{0}: {1} geldt voor een schermpje, niet bij style "dropdown"', '{0}: {1} applies to a screen, not with style "dropdown"'],
+  display_targets_dropdown: ['{0}: targets noemt "preset" of "tune" maar style is "dropdown"; de kaartkop blijft dan zoals hij is', '{0}: targets names "preset" or "tune" but style is "dropdown"; the card head stays as it is'],
+  dev_no_pads: ['het apparaat meldt geen pads of stappen aan (geen host.ui.pad of host.ui.steps met opts, of data-pk-role pad/step); design.pads doet niets', 'the device registers no pads or steps (no host.ui.pad or host.ui.steps with opts, or data-pk-role pad/step); design.pads does nothing'],
+  dev_no_display: ['het apparaat meldt geen keuzelijst aan (geen host.ui.select of host.ui.display); design.display met "select" in targets doet niets', 'the device registers no choice list (no host.ui.select or host.ui.display); design.display with "select" in targets does nothing'],
+  dev_unknown_pad: ['{0}: id "{1}" staat niet in het register van het apparaat; de host negeert de kleur', '{0}: id "{1}" is not in the device\'s register; the host ignores the colour'],
+  dev_not_pad: ['{0}: "{1}" staat in het register maar is geen pad of stap (rol {2}); de host negeert de kleur', '{0}: "{1}" is in the register but is not a pad or step (role {2}); the host ignores the colour'],
+  dev_unknown_pad_group: ['{0}: groep "{1}" heeft geen pad of stap in het register van het apparaat', '{0}: group "{1}" has no pad or step in the device\'s register'],
+  dev_unknown_pad_role: ['{0}: het apparaat heeft geen pad of stap met rol "{1}"', '{0}: the device has no pad or step with role "{1}"'],
+  ok_pads: ['pads', 'pads'],
+  ok_display: ['schermpje', 'display'],
   design_object: ['{0} moet een object zijn', '{0} must be an object'],
   design_enum: ['{0} moet een van {1} zijn', '{0} must be one of {1}'],
   design_colour: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
@@ -193,8 +221,12 @@ const SEC_FRAME = ['none', 'line', 'raised', 'inset', 'floating', 'default'], SE
 const SEC_KEYS = ['match', 'frame', 'columns', 'gap', 'bare', 'labels', 'align'];
 const MET_KEYS = ['match', 'face', 'orientation', 'length', 'width', 'ballistics', 'peakHold', 'clip', 'scale', 'color', 'segments'];
 const SEC_MAX = 32;
+const PAD_SHAPE = ['circle', 'square', 'rounded', 'rect'], PAD_SIZE = ['xs', 's', 'm', 'l', 'xl'], PAD_COLOR = ['neutral', 'device', 'palette'], PAD_IDLE = ['neutral', 'tint'], PAD_ACTIVE = ['fill', 'border', 'glow', 'none'], PAD_LED = ['none', 'center', 'top', 'bottom', 'left', 'right'], PAD_HIT = ['flash', 'none'], PAD_PRESS = ['depress', 'glow', 'none'], PAD_GAP = ['tight', 'normal', 'wide'];
+const PAD_KEYS = ['shape', 'size', 'color', 'palette', 'colors', 'idle', 'active', 'led', 'hit', 'press', 'gap'], PAD_COLORS_MAX = 64;
+const DSP_STYLE = ['dropdown', 'lcd', 'oled', 'segment', 'paper'], DSP_NAV = ['arrows', 'arrows+ok', 'none'], DSP_COMMIT = ['live', 'ok'], DSP_EXPAND = ['click', 'button', 'off'], DSP_TARGETS = ['select', 'preset', 'tune'];
+const DSP_KEYS = ['style', 'nav', 'commit', 'lines', 'width', 'expand', 'targets', 'color'];
 const CTL_KEYS = ['match', 'face', 'size', 'length', 'thickness', 'thumb', 'color', 'showValue'];
-const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'], size: ['width'] };
+const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'], size: ['width'], pads: PAD_KEYS, display: DSP_KEYS };
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const normColour = v => { if (typeof v !== 'string') return null; const m = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec(v); if (!m) return null; let h = m[1].toLowerCase(); if (h.length === 3) h = [...h].map(c => c + c).join(''); return '#' + h; };
 const lum = hex => { const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
@@ -272,6 +304,49 @@ function checkSections(list, path, E, W, C) {
     if (matchOk && n === 0 && !SEC_KEYS.slice(1).some(k => r[k] !== undefined)) W('sections_empty', P);
     if (matchOk && C) C.push({ p: P, match: m, kind: 'sections' }); });
 }
+// design.pads (0.6): één object (geen lijst); colors geeft een eigen kleur per pad. Streng: fouten bij verkeerde waarden; geldige delen worden onthouden.
+function checkPads(src, path, E, W, C) {
+  const o = {}; if (!isObj(src)) { E('pads_object', path); return o; }
+  for (const k of Object.keys(src)) if (!PAD_KEYS.includes(k)) W('unknown_field', `${path}.${k}`);
+  const en = (k, list) => { if (src[k] === undefined) return; if (list.includes(src[k])) o[k] = src[k]; else E('design_enum', `${path}.${k}`, list.map(x => '"' + x + '"').join(', ')); };
+  if (src.shape === 'none') E('pads_shape_none', path); else en('shape', PAD_SHAPE);
+  if (src.size !== undefined) { if (PAD_SIZE.includes(src.size) || (typeof src.size === 'number' && Number.isFinite(src.size) && src.size >= 0.6 && src.size <= 2)) o.size = src.size; else E('pads_enum_num', `${path}.size`, PAD_SIZE.map(x => '"' + x + '"').join(', '), 0.6, 2); }
+  en('color', PAD_COLOR); en('idle', PAD_IDLE); en('active', PAD_ACTIVE); en('led', PAD_LED); en('hit', PAD_HIT); en('press', PAD_PRESS); en('gap', PAD_GAP);
+  if (src.palette !== undefined) { const l = Array.isArray(src.palette) ? src.palette.map(normColour) : null;
+    if (l && l.length >= 2 && l.length <= 16 && l.every(Boolean)) o.palette = l; else E('pads_palette', `${path}.palette`); }
+  if (src.colors !== undefined) {
+    if (!isObj(src.colors)) E('pads_colors', `${path}.colors`);
+    else { const keys = Object.keys(src.colors); if (keys.length > PAD_COLORS_MAX) E('pads_colors_max', `${path}.colors`, keys.length, PAD_COLORS_MAX);
+      o.colors = {};
+      for (const k of keys.slice(0, PAD_COLORS_MAX)) { const P = `${path}.colors`;
+        if (!/^(role:[a-z]{1,16}|group:[A-Za-z0-9._-]{1,60}|[A-Za-z0-9._-]{1,60})$/.test(k)) { W('pads_colors_key', P, k.slice(0, 40)); continue; }
+        const c = normColour(src.colors[k]); if (!c) { E('pads_colors_value', P, k); continue; }
+        if (k.startsWith('role:') && !['pad', 'step'].includes(k.slice(5))) W('pads_colors_role', P, k.slice(5));
+        o.colors[k] = c; if (C) C.push({ p: `${P}["${k}"]`, match: k, kind: 'pads' }); } } }
+  if (src.palette !== undefined && src.color !== undefined && src.color !== 'palette') W('pads_palette_unused', path);
+  if (src.color === 'palette' && src.palette === undefined) W('pads_palette_missing', path);
+  if (!Object.keys(src).length) W('pads_empty', path);
+  if (C) C.push({ p: path, match: '*', kind: 'pads' });
+  return o;
+}
+// design.display (0.6): één object. Een skin verbergt het schermpje niet (geen style "none").
+function checkDisplay(src, path, E, W, C) {
+  const o = {}; if (!isObj(src)) { E('design_object', path); return o; }
+  for (const k of Object.keys(src)) if (!DSP_KEYS.includes(k)) W('unknown_field', `${path}.${k}`);
+  const en = (k, list) => { if (src[k] === undefined) return; if (list.includes(src[k])) o[k] = src[k]; else E('design_enum', `${path}.${k}`, list.map(x => '"' + x + '"').join(', ')); };
+  if (src.style === 'none') E('display_none', path); else en('style', DSP_STYLE);
+  en('nav', DSP_NAV); en('commit', DSP_COMMIT); en('expand', DSP_EXPAND);
+  if (src.lines !== undefined) { if (Number.isInteger(src.lines) && src.lines >= 1 && src.lines <= 3) o.lines = src.lines; else E('meters_int', `${path}.lines`, 1, 3); }
+  if (src.width !== undefined) { if (src.width === 'auto' || (typeof src.width === 'number' && Number.isFinite(src.width) && src.width >= 80 && src.width <= 400)) o.width = src.width; else E('display_width', `${path}.width`, 80, 400); }
+  if (src.targets !== undefined) { const t = src.targets; if (Array.isArray(t) && t.length && t.length === new Set(t).size && t.every(x => DSP_TARGETS.includes(x))) o.targets = t.slice(); else E('display_targets', `${path}.targets`); }
+  if (src.color !== undefined) { if (src.color === 'accent' || src.color === 'default' || normColour(src.color)) o.color = src.color; else E('display_colour', `${path}.color`); }
+  if (o.nav === 'none' && o.expand === 'off') W('display_unusable', path);
+  if (src.style === 'dropdown') { for (const k of ['nav', 'commit', 'lines', 'width', 'expand', 'color']) if (src[k] !== undefined) W('display_dropdown', path, k);
+    if (Array.isArray(src.targets) && src.targets.some(x => x === 'preset' || x === 'tune')) W('display_targets_dropdown', path); }
+  if (!Object.keys(src).length) W('pads_empty', path);
+  if (C) C.push({ p: path, match: '*', kind: 'display', targets: o.targets || ['select'] });
+  return o;
+}
 function checkDesignShape(d, path, E, W, C) {
   const out = {};
   if (!isObj(d)) { E('design_object', path); return out; }
@@ -280,6 +355,8 @@ function checkDesignShape(d, path, E, W, C) {
   if (d.meters !== undefined) { out.meters = Array.isArray(d.meters) ? d.meters.slice(0, CTL_MAX).filter(isObj) : []; checkMeters(d.meters, `${path}.meters`, E, W, C); }
   if (d.controls !== undefined) { out.controls = Array.isArray(d.controls) ? d.controls.slice(0, CTL_MAX).filter(isObj) : []; checkControls(d.controls, `${path}.controls`, E, W, C); }
   for (const sec of Object.keys(KNOWN_DESIGN)) { if (d[sec] === undefined) continue; const sp = `${path}.${sec}`;
+    if (sec === 'pads') { out.pads = checkPads(d.pads, sp, E, W, C); continue; }
+    if (sec === 'display') { out.display = checkDisplay(d.display, sp, E, W, C); continue; }
     if (!isObj(d[sec])) { E('design_object', sp); continue; }
     for (const k of Object.keys(d[sec])) if (!KNOWN_DESIGN[sec].includes(k)) W('unknown_field', `${sp}.${k}`);
     const o = out[sec] = {}, src = d[sec];
@@ -295,7 +372,7 @@ function checkDesignShape(d, path, E, W, C) {
   }
   return out;
 }
-const mergeDesign = (a, b) => { const r = {}; if (a?.sections?.length || b?.sections?.length) r.sections = [...(a?.sections || []), ...(b?.sections || [])]; if (a?.meters?.length || b?.meters?.length) r.meters = [...(a?.meters || []), ...(b?.meters || [])]; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
+const mergeDesign = (a, b) => { const r = {}; if (a?.sections?.length || b?.sections?.length) r.sections = [...(a?.sections || []), ...(b?.sections || [])]; if (a?.meters?.length || b?.meters?.length) r.meters = [...(a?.meters || []), ...(b?.meters || [])]; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; if (sec === 'pads' && (a?.[sec]?.colors || b?.[sec]?.colors)) r[sec].colors = { ...(a?.[sec]?.colors || {}), ...(b?.[sec]?.colors || {}) }; } } return r; };
 const isInt = v => Number.isInteger(v);
 const isStr = v => typeof v === 'string';
 function dataInfo(s) { // { type, base64, body } of null
@@ -335,13 +412,20 @@ function loadDevice(path) {
 function checkAgainstDevice(s, rules, dev, W) {
   if (dev.error) { W('dev_unreadable', dev.error); return; }
   if (s.device !== dev.id) { W('dev_other', dev.id, s.device); return; }
+  const PL = dev.list.filter(c => c.role === 'pad' || c.role === 'step' || c.type === 'pad' || c.type === 'steps'), SL = dev.list.filter(c => c.type === 'select');
   const CL = dev.list.filter(c => c.role !== 'meter' && c.type !== 'meter'), ML = dev.list.filter(c => c.role === 'meter' || c.type === 'meter');
   const ids = new Set(CL.filter(c => c.id).map(c => c.id)), groups = new Set(CL.filter(c => c.group).map(c => c.group)), roles = new Set(CL.map(c => c.role));
   const mids = new Set(ML.filter(c => c.id).map(c => c.id)), mgroups = new Set(ML.filter(c => c.group).map(c => c.group));
-  const cr = rules.filter(r => r.kind !== 'meters' && r.kind !== 'sections'), mr = rules.filter(r => r.kind === 'meters'), sr = rules.filter(r => r.kind === 'sections');
+  const cr = rules.filter(r => !r.kind), pr = rules.filter(r => r.kind === 'pads'), dr = rules.filter(r => r.kind === 'display'), mr = rules.filter(r => r.kind === 'meters'), sr = rules.filter(r => r.kind === 'sections');
   const allGroups = new Set(dev.list.filter(c => c.group).map(c => c.group));
   if (!ids.size && !groups.size && cr.some(r => !r.match.startsWith('role:') && r.match !== '*')) W('dev_no_ids');
   if (!ML.length && mr.length) W('dev_no_meters');
+  if (!PL.length && pr.length) W('dev_no_pads');
+  if (!SL.length && dr.some(r => r.targets.includes('select'))) W('dev_no_display');
+  if (PL.length) for (const r of pr) { const m = r.match; if (m === '*') continue;
+    if (m.startsWith('role:')) { if (!PL.some(c => c.role === m.slice(5)) && ['pad', 'step'].includes(m.slice(5))) W('dev_unknown_pad_role', r.p, m.slice(5)); }
+    else if (m.startsWith('group:')) { if (!PL.some(c => c.group === m.slice(6))) W('dev_unknown_pad_group', r.p, m.slice(6)); }
+    else { const c = dev.list.find(x => x.id === m); if (!c) W('dev_unknown_pad', r.p, m); else if (!PL.includes(c)) W('dev_not_pad', r.p, m, c.role); } }
   const seen = new Set();
   for (const r of cr) { const m = r.match; if (m === '*') continue;
     const key = r.p; if (seen.has(key)) continue; seen.add(key);
@@ -369,7 +453,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 5) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 6) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -457,6 +541,8 @@ function validateSkin(path, ctx = {}) {
   const nMet = (skinDesign?.meters?.length || 0) + appDesigns.reduce((a, x) => a + (x?.meters?.length || 0), 0);
   if (nMet && /^0\.[0123]$/.test(String(s.skinsContract))) W('meters_contract');
   const nSec = (skinDesign?.sections?.length || 0) + appDesigns.reduce((a, x) => a + (x?.sections?.length || 0), 0);
+  const hasPads = !!(skinDesign?.pads || appDesigns.some(x => x?.pads)), hasDisplay = !!(skinDesign?.display || appDesigns.some(x => x?.display));
+  if ((hasPads || hasDisplay) && /^0\.[012345]$/.test(String(s.skinsContract))) W('pads_contract');
   const hasSize = !!(skinDesign?.size && Object.keys(skinDesign.size).length) || appDesigns.some(x => x?.size && Object.keys(x.size).length);
   if ((nSec || hasSize) && /^0\.[01234]$/.test(String(s.skinsContract))) W('sections_contract');
   if (ctx.device && CR.length) checkAgainstDevice(s, CR, ctx.device, W);
@@ -487,7 +573,7 @@ function validateSkin(path, ctx = {}) {
   else if (!ctx.skipDirWarn) W('dir_elsewhere');
   const n = (apps || []).length;
   const info = [vt('ok_dev', s.device), vt(n === 1 ? 'ok_app' : 'ok_apps', n), vt('ok_css', cssTotal), vt('ok_assets', nAssets)];
-  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); if (nSec) info.push(vt('ok_sections', nSec)); if (hasSize) info.push(vt('ok_size')); info.push(vt('ok_file', size));
+  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); if (nSec) info.push(vt('ok_sections', nSec)); if (hasSize) info.push(vt('ok_size')); if (hasPads) info.push(vt('ok_pads')); if (hasDisplay) info.push(vt('ok_display')); info.push(vt('ok_file', size));
   return { errs, warns, line: `${isStr(s.name) ? s.name : '?'} ${isStr(s.version) ? s.version : '?'} (${isStr(s.id) ? s.id : '?'}) — ${info.join(', ')}`, id: s.id, device: s.device };
 }
 

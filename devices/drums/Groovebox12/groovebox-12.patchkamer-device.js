@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Regelaars en trigpads herkenbaar voor skins (contract v1.22, additief): de 16 trigs krijgen via host.ui.adopt rol pad, groep trigs en id trig.1 tot trig.16, zodat een skin hun vorm, maat, kleur en ledje kiest (eigen .on-, .cur-, .sel-, .lock-klassen en het ledje in de knop blijven van het apparaat);
+//          alle schuiven krijgen als id de sleutel van de state of params() (g.vol, g.swing, g.fxDrive, ..., en per pagina de knoppen als syn.tun, flt.cut, ...), rol param en een groep (global, fx, track, step, pattern, de pagina). Een oudere host heeft geen adopt: het apparaat blijft dan zoals het was.
+//          Geluid, getState(), presets, tunes en uiterlijk zonder skin ongewijzigd.
 // 1.11.2 — Alle continue regelaars bestuurbaar via params()/modulate() (stap 1 per track, stap 2 globaal), alle nieuwe standaard uit (on:false, drift 0,05 tot 0,08), de bestaande 96 ongewijzigd:
 //          per track de overige continue regelaars van de pagina's SYN (machine-afhankelijk: bv. Sweep t/d, Click, Noise, Harm, Hold), FLT (Env depth, Env decay, Env attack, Key track, HP base), AMP (Attack, Hold, Decay, Overdrive, Accent, Vel→vol),
 //          LFO (Speed, Depth, Fade, Phase) en FX (Delay HP, Reverb tone, Chorus, Width), plus de trackswing (tN.swing); patroonswing 1 tot 8 (p1.swing tot p8.swing); globaal Volume (g.vol), Swing (g.swing), FX drive, cutoff en reso (g.fxDrive/fxCut/fxRes),
@@ -231,7 +234,7 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.11.2',
+  version: '1.12.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 1262 },
@@ -247,6 +250,9 @@ export default {
 
 const $=id=>ROOT.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+// contract v1.22: regelaars en pads herkenbaar voor skins (alleen data-pk-*-attributen; een oudere host heeft geen adopt)
+const adopt=(e,o)=>{ try{ if(e&&host&&host.ui&&typeof host.ui.adopt==='function') host.ui.adopt(e,o); }catch(x){ /* oudere host */ } return e; };
+[['swing','g.swing','global','Swing'],['vol','g.vol','global','Vol'],['fxDrive','g.fxDrive','fx','Overdrive'],['fxCut','g.fxCut','fx','Filter'],['fxRes','g.fxRes','fx','Reso'],['dlyTime','g.dlyTime','fx','Delay'],['dlyFb','g.dlyFb','fx','Feedback'],['revSize','g.revSize','fx','Reverb'],['tlen','track.len','track',''],['trkSwing','track.swing','track',''],['patSwing','pattern.swing','pattern',''],['svel','step.vel','step','Vel.']].forEach(([el,id,group,label])=>{ const e=$(el); if(e&&e.type==='range') adopt(e,{id,role:'param',group,label:label||undefined}); else if(e&&e.tagName==='SELECT') adopt(e,{id,role:'select',group,label:label||undefined}); });
 const STEPS=16, NT=12, NPAT=8;
 const NOTE_NAMES=['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
 const nname=m=>NOTE_NAMES[m%12]+(Math.floor(m/12)-1);
@@ -615,7 +621,7 @@ function paintKnobs(){
     if(k==='_') return;
     const locked=step&&step.lock[page]&&(k in step.lock[page]); const val=locked?step.lock[page][k]:tr[page][k];
     const w=document.createElement('div'); w.className='knob'+(locked?' locked':''); const l=document.createElement('div'); l.className='lab'; const sp=document.createElement('span'); sp.textContent=lab+(locked?' ●':''); const o=document.createElement('output'); o.textContent=fmt(val); l.append(sp,o);
-    const inp=document.createElement('input'); inp.type='range'; inp.min=mn; inp.max=mx; inp.step=(mx-mn)>50?1:((mx-mn)>5?0.1:0.001); if(['typ','wav','dst','wv1','wv2','inv','mod','mul','blk','den'].includes(k)) inp.step=1; inp.value=val; inp.id=`k_${page}_${k}`; inp.setAttribute('aria-label',lab); if(locked) inp.classList.add('locked');
+    const inp=document.createElement('input'); inp.type='range'; inp.min=mn; inp.max=mx; inp.step=(mx-mn)>50?1:((mx-mn)>5?0.1:0.001); if(['typ','wav','dst','wv1','wv2','inv','mod','mul','blk','den'].includes(k)) inp.step=1; inp.value=val; inp.id=`k_${page}_${k}`; inp.setAttribute('aria-label',lab); adopt(inp,{id:`${page}.${k}`,role:'param',group:page,label:lab}); if(locked) inp.classList.add('locked');
     inp.oninput=()=>{const nv=+inp.value; o.textContent=fmt(nv);
       if(lockMode&&step){step.lock[page]=step.lock[page]||{}; step.lock[page][k]=nv; w.classList.add('locked'); inp.classList.add('locked'); sp.textContent=lab+' ●'; paintTrigs();}
       else {tr[page][k]=nv; applyTrack(curTrack);}
@@ -627,7 +633,7 @@ function paintKnobs(){
 
 // trigs
 const trigEls=[]; const trigsEl=$('trigs');
-for(let s=0;s<STEPS;s++){const b=document.createElement('button'); b.className='trig'+(s%4===0?' q':''); b.innerHTML=`<span class="flag"></span><span class="led"></span><span class="n">${s+1}</span>`; b.setAttribute('aria-label',TX.stepAria(s+1));
+for(let s=0;s<STEPS;s++){const b=document.createElement('button'); b.className='trig'+(s%4===0?' q':''); b.innerHTML=`<span class="flag"></span><span class="led"></span><span class="n">${s+1}</span>`; b.setAttribute('aria-label',TX.stepAria(s+1)); adopt(b,{id:'trig.'+(s+1),role:'pad',group:'trigs',label:TX.stepAria(s+1)});
   b.onclick=()=>{const tr=T(), st=tr.steps[s];
     if(lockMode){selStep=(selStep===s)?-1:s; if(selStep>=0&&!st.on) st.on=1;}
     else {st.on^=1; selStep=st.on?s:-1;}

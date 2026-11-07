@@ -1,0 +1,37 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.6",
+  "id": "nl.patchkamer.drummachine.example-preset-screen",
+  "device": "nl.patchkamer.drummachine",
+  "name": "Example Preset Screen",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Turns the preset and tune picker in the card head into a three-line LCD (skins 0.6): choose with < and >, confirm with [ok], click the screen to enlarge it. The step pads keep their normal look.",
+  "created": "2026-11-07",
+  "icon": null,
+  "default": "main",
+  "design": {
+    "display": {
+      "style": "lcd",
+      "nav": "arrows+ok",
+      "commit": "ok",
+      "lines": 3,
+      "width": 220,
+      "expand": "click",
+      "targets": [
+        "preset"
+      ],
+      "color": "default"
+    }
+  },
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same rules on every card width.",
+      "assets": {}
+    }
+  ]
+}

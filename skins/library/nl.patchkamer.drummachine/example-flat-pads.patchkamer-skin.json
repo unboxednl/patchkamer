@@ -1,0 +1,36 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.6",
+  "id": "nl.patchkamer.drummachine.example-flat-pads",
+  "device": "nl.patchkamer.drummachine",
+  "name": "Example Flat Pads",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Wide rectangular step pads in a neutral grey (skins 0.6): only the active steps light up, with a coloured edge and a lamp at the top; the pads sit tight together and the playing step flashes.",
+  "created": "2026-11-07",
+  "icon": null,
+  "default": "main",
+  "design": {
+    "pads": {
+      "shape": "rect",
+      "size": 1.1,
+      "color": "neutral",
+      "idle": "neutral",
+      "active": "border",
+      "led": "top",
+      "hit": "flash",
+      "press": "glow",
+      "gap": "tight"
+    }
+  },
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same rules on every card width.",
+      "assets": {}
+    }
+  ]
+}

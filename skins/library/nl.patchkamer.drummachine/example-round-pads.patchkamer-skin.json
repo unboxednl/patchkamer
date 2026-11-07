@@ -1,0 +1,55 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.6",
+  "id": "nl.patchkamer.drummachine.example-round-pads",
+  "device": "nl.patchkamer.drummachine",
+  "name": "Example Round Pads",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Round step pads in one colour per sound (skins 0.6): idle pads are a faint tint of their colour, active pads light up with a lamp in the middle, a hit flashes. The preset bar becomes a small OLED screen with < and >.",
+  "created": "2026-11-07",
+  "icon": null,
+  "default": "main",
+  "design": {
+    "pads": {
+      "shape": "circle",
+      "size": "m",
+      "color": "device",
+      "idle": "tint",
+      "active": "fill",
+      "led": "center",
+      "hit": "flash",
+      "press": "depress",
+      "gap": "normal",
+      "colors": {
+        "group:kick": "#ff5a4f",
+        "group:snare": "#ffc83d",
+        "group:hat": "#3ddcff",
+        "group:perc": "#b57bff"
+      }
+    },
+    "display": {
+      "style": "oled",
+      "nav": "arrows",
+      "commit": "live",
+      "lines": 1,
+      "width": "auto",
+      "expand": "click",
+      "targets": [
+        "preset",
+        "tune"
+      ],
+      "color": "accent"
+    }
+  },
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same rules on every card width.",
+      "assets": {}
+    }
+  ]
+}

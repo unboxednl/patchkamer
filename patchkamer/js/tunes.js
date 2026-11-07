@@ -79,7 +79,8 @@ function presetCardInit(id){ const r=PK.Host.devices.get(id); if(!r||!r.pbarEl) 
   // na een wijziging in de kaart: kijken of de klank nog gelijk is aan de tune
   let t=0; const chk=()=>{ clearTimeout(t); t=setTimeout(()=>presetPaint(id),350); };
   ['input','change','pointerup','keyup'].forEach(ev=>r.el.addEventListener(ev,e=>{ if(!pb.contains(e.target)) chk(); },true));
-  presetPaint(id); } PK.presetCardInit=presetCardInit;
+  presetPaint(id);
+  if(PK.displayAttach){ PK.displayAttach(pb.querySelector('.ps'),{kind:'preset',prev:pb.querySelector('.pp'),next:pb.querySelector('.pn')}); PK.displayAttach(pb.querySelector('.ptune'),{kind:'tune'}); } } PK.presetCardInit=presetCardInit;   // schermpje (skins 0.6): alleen registreren, de DOM blijft zoals hij was
 function tuFillSelect(sel,groups,curPid,dirty,emptyText,usedBy){ sel.innerHTML=''; const o0=document.createElement('option'); o0.value=''; o0.textContent=groups.length?emptyText[0]:emptyText[1]; sel.appendChild(o0); let found=false;
   groups.forEach(({label,items})=>{ const g=document.createElement('optgroup'); g.label=label;
     items.forEach(({l,n,path})=>{ const o=document.createElement('option'); o.value=l.lid+'|'+n.pid; const cur=curPid&&curPid===n.pid; if(cur) found=true;

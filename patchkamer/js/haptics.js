@@ -22,5 +22,7 @@ function hapticsAttach(r){ hapticsDetach(r); const d=e=>onDown(r,e), i=e=>onInpu
 function hapticsDetach(r){ if(!r.skHapL) return; r.el.removeEventListener('pointerdown',r.skHapL[0],true); r.el.removeEventListener('input',r.skHapL[1],true); r.skHapL=null; r.skHap=null; } PK.hapticsDetach=hapticsDetach;
 // vanuit knobs.js: de hostknop is gedraaid
 function hapticTick(el){ const r=PK.ctlCard&&PK.ctlCard(pathUp(el)); if(r&&r.skHap) pulse(r,'turn'); } PK.hapticTick=hapticTick;
+// vanuit display.js: een klik in het schermpje (knoppen < >, keuze in het paneel) valt buiten de kaart
+function hapticClick(el){ const r=PK.ctlCard&&PK.ctlCard(pathUp(el)); if(r&&r.skHap) pulse(r,'click'); } PK.hapticClick=hapticClick;
 function pathUp(el){ const p=[]; for(let n=el;n;){ p.push(n); n=n.parentNode&&n.parentNode.nodeType===11?n.parentNode.host:n.parentNode; } return p; }
 })(window.__PK);

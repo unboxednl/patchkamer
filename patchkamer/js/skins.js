@@ -58,6 +58,28 @@ function skSectionsClean(list,where,note){ const out=[]; if(!Array.isArray(list)
     if(x.bare!=null){ if(typeof x.bare==='boolean') o.bare=x.bare; else note('m.sk_e_veld',P+'.bare'); }
     if(Object.keys(o).length>1) out.push(o); });
   if(list.length>SK_SEC_MAX) note('m.sk_e_veld',where); return out; }
+// design.pads (skins 0.6): één object {shape?, size?, color?, palette?, colors?, idle?, active?, led?, hit?, press?, gap?}; een eigen kleur per pad staat in colors ({"<id>"|"role:<rol>"|"group:<groep>": "#rrggbb"}, hoogstens 64). Ongeldige eigenschap = let-op en weg; een pad verbergen kan niet (geen shape "none").
+const SK_PAD_ENUM={shape:['circle','square','rounded','rect'],color:['neutral','device','palette'],idle:['neutral','tint'],active:['fill','border','glow','none'],led:['none','center','top','bottom','left','right'],hit:['flash','none'],press:['depress','glow','none'],gap:['tight','normal','wide']}, SK_PAD_SIZE=['xs','s','m','l','xl'], SK_PAD_COLORS_MAX=64;
+const SK_PAD_KEY=/^(role:[a-z]{1,16}|group:[A-Za-z0-9._-]{1,60}|[A-Za-z0-9._-]{1,60})$/;
+PK.SK_PAD_ENUM=SK_PAD_ENUM;
+function skPadsClean(x,where,note){ const o={}; if(x==null) return o; if(typeof x!=='object'||Array.isArray(x)){ note('m.sk_e_veld',where); return o; }
+  for(const k of Object.keys(SK_PAD_ENUM)){ if(x[k]==null) continue; if(SK_PAD_ENUM[k].includes(x[k])) o[k]=x[k]; else note('m.sk_e_veld',where+'.'+k); }
+  if(x.size!=null){ if(SK_PAD_SIZE.includes(x.size)||(typeof x.size==='number'&&isFinite(x.size)&&x.size>=0.6&&x.size<=2)) o.size=x.size; else note('m.sk_e_veld',where+'.size'); }
+  if(x.palette!=null){ const l=Array.isArray(x.palette)?x.palette.map(skHex):null; if(l&&l.length>=2&&l.length<=16&&l.every(Boolean)) o.palette=l; else note('m.sk_e_veld',where+'.palette'); }
+  if(x.colors!=null){ if(typeof x.colors==='object'&&!Array.isArray(x.colors)){ const c={}, keys=Object.keys(x.colors); if(keys.length>SK_PAD_COLORS_MAX) note('m.sk_e_veld',where+'.colors');
+      keys.slice(0,SK_PAD_COLORS_MAX).forEach(k=>{ const h=skHex(x.colors[k]); if(SK_PAD_KEY.test(k)&&h) c[k]=h; else note('m.sk_e_veld',where+'.colors.'+k.slice(0,40)); }); if(Object.keys(c).length) o.colors=c; }
+    else note('m.sk_e_veld',where+'.colors'); }
+  return o; }
+// design.display (skins 0.6): één object {style?, nav?, commit?, lines?, width?, expand?, targets?, color?}; een schermpje verbergen kan niet (geen style "none")
+const SK_DSP_ENUM={style:['dropdown','lcd','oled','segment','paper'],nav:['arrows','arrows+ok','none'],commit:['live','ok'],expand:['click','button','off']}, SK_DSP_TARGETS=['select','preset','tune'];
+PK.SK_DSP_ENUM=SK_DSP_ENUM; PK.SK_DSP_TARGETS=SK_DSP_TARGETS;
+function skDisplayClean(x,where,note){ const o={}; if(x==null) return o; if(typeof x!=='object'||Array.isArray(x)){ note('m.sk_e_veld',where); return o; }
+  for(const k of Object.keys(SK_DSP_ENUM)){ if(x[k]==null) continue; if(SK_DSP_ENUM[k].includes(x[k])) o[k]=x[k]; else note('m.sk_e_veld',where+'.'+k); }
+  if(x.lines!=null){ if(Number.isInteger(x.lines)&&x.lines>=1&&x.lines<=3) o.lines=x.lines; else note('m.sk_e_veld',where+'.lines'); }
+  if(x.width!=null){ if(x.width==='auto'||(typeof x.width==='number'&&isFinite(x.width)&&x.width>=80&&x.width<=400)) o.width=x.width; else note('m.sk_e_veld',where+'.width'); }
+  if(x.targets!=null){ if(Array.isArray(x.targets)&&x.targets.length&&x.targets.every(t=>SK_DSP_TARGETS.includes(t))) o.targets=[...new Set(x.targets)]; else note('m.sk_e_veld',where+'.targets'); }
+  if(x.color!=null){ if(x.color==='accent'||x.color==='default') o.color=x.color; else { const h=skHex(x.color); if(h) o.color=h; else note('m.sk_e_veld',where+'.color'); } }
+  return o; }
 function skSizeClean(s,where,note){ if(s==null) return null; if(typeof s!=='object'||Array.isArray(s)){ note('m.sk_e_veld',where); return null; }
   if(s.width==null) return null; if(typeof s.width==='number'&&isFinite(s.width)&&s.width>=200&&s.width<=1600) return {width:Math.round(s.width)}; note('m.sk_e_veld',where+'.width'); return null; }
 // onbekende groepen en sleutels worden stil genegeerd (uitbreidbaar); een bekende sleutel met een ongeldige waarde geeft een let-op en valt weg
@@ -70,6 +92,8 @@ function skDesignClean(d,where,note){ if(d==null) return null; if(typeof d!=='ob
   if(d.controls!=null){ const c=skControlsClean(d.controls,where+'.controls',note); if(c.length) out.controls=c; }
   if(d.meters!=null){ const c=skMetersClean(d.meters,where+'.meters',note); if(c.length) out.meters=c; }
   if(d.sections!=null){ const c=skSectionsClean(d.sections,where+'.sections',note); if(c.length) out.sections=c; }
+  if(d.pads!=null){ const c=skPadsClean(d.pads,where+'.pads',note); if(Object.keys(c).length) out.pads=c; }
+  if(d.display!=null){ const c=skDisplayClean(d.display,where+'.display',note); if(Object.keys(c).length) out.display=c; }
   if(d.size!=null){ const z=skSizeClean(d.size,where+'.size',note); if(z) out.size=z; }
   return Object.keys(out).length?out:null; }
 // skin-niveau en verschijning-niveau samenvoegen: per sleutel wint de verschijning
@@ -77,6 +101,8 @@ function skDesignMerge(a,b){ const o={}; for(const g of Object.keys(SK_ENUM)){ c
   const cx=(a&&a.controls)||[], cy=(b&&b.controls)||[]; const mx=(a&&a.meters)||[], my=(b&&b.meters)||[]; if(mx.length||my.length) o.meters=[...mx,...my];
   const sx=(a&&a.sections)||[], sy=(b&&b.sections)||[]; if(sx.length||sy.length) o.sections=[...sx,...sy];
   if((a&&a.size)||(b&&b.size)) o.size={...(a&&a.size),...(b&&b.size)};   // de verschijning wint
+  if((a&&a.pads)||(b&&b.pads)){ o.pads={...(a&&a.pads),...(b&&b.pads)}; if((a&&a.pads&&a.pads.colors)||(b&&b.pads&&b.pads.colors)) o.pads.colors={...(a&&a.pads&&a.pads.colors),...(b&&b.pads&&b.pads.colors)}; }   // per sleutel; colors per pad
+  if((a&&a.display)||(b&&b.display)) o.display={...(a&&a.display),...(b&&b.display)};
   if(cx.length||cy.length) o.controls=[...cx,...cy];   // regels: eerst die van de skin, daarna die van de verschijning (de laatste passende regel wint)
   return o; } PK.skDesignMerge=skDesignMerge;
 const skEff=(sk,ap)=>skDesignMerge(sk&&sk.design,ap&&ap.design); PK.skEff=skEff;
@@ -173,7 +199,7 @@ function skStrip(r){ (r.skMO||[]).forEach(m=>m.disconnect()); r.skMO=[]; (r.skHo
 const skUiEl=r=>r.el.querySelector(':scope > .body > .ui');
 function skDesignStrip(r){ const d=r.skDes; if(!d) return; if(PK.skPortsOff) PK.skPortsOff(r); if(PK.hapticsDetach) PK.hapticsDetach(r);
   d.card.forEach(p=>r.el.style.removeProperty(p)); const ui=skUiEl(r); if(ui){ d.ui.forEach(p=>ui.style.removeProperty(p)); if(ui.hasAttribute('style')&&!ui.getAttribute('style').trim()) ui.removeAttribute('style'); }
-  const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skHap=null; if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); }
+  const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec, hadP=!!r.skPad, hadD=!!r.skDsp; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skPad=null; r.skDsp=null; r.skHap=null; if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); if(hadP) PK.padApply(r); if(hadD) PK.displayApply(r); }
 function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) return; const rec={card:[],ui:[]}; r.skDes=rec, ui=skUiEl(r);
   const c=d.colors; if(c&&c.scheme==='custom'&&c.custom&&Object.keys(c.custom).length){ const v=PK.skColourVars(c.custom);
     for(const p in v.card){ r.el.style.setProperty(p,v.card[p]); rec.card.push(p); } if(ui) for(const p in v.ui){ ui.style.setProperty(p,v.ui[p]); rec.ui.push(p); } }
@@ -182,7 +208,9 @@ function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) re
   const h=d.haptics; if(h&&(h.click||h.turn||h.slide)){ const o={click:h.click||'off',turn:h.turn||'off',slide:h.slide||'off'}; if(o.click!=='off'||o.turn!=='off'||o.slide!=='off'){ r.skHap=o; if(PK.hapticsAttach) PK.hapticsAttach(r); } }
   { const mr=PK.meterRules(d); r.skMet=mr.length?mr:null; }   // design.meters (0.4): gezicht, richting, maat, ballistiek van de meters
   { const sr=d.sections; r.skSec=sr&&sr.length?sr:null; }   // design.sections (0.5): kader, kolommen, kale regelaars, labelplaats per groep
-  if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); }
+  { const pr=PK.padRules(d); r.skPad=pr; }   // design.pads (0.6): vorm, maat, kleur, ledje, feedback van pads, stappen en geadopteerde knoppen
+  { const dr=PK.displayRules(d); r.skDsp=dr; }   // design.display (0.6): het schermpje voor keuzelijsten en de kaartkop
+  if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); if(r.skPad) PK.padApply(r); if(r.skDsp) PK.displayApply(r); }
 function skClear(r){ skStrip(r); skDesignStrip(r); r.skCur=null; r.skSkin=null; r.el.removeAttribute('data-pk-skin'); r.el.removeAttribute('data-pk-ap'); }
 function skScreen(){ const w=window.innerWidth; return w<700?'phone':w<1100?'compact':'wide'; } PK.skScreen=skScreen;
 // automatisch: de eerste verschijningsvorm waarvan alle voorwaarden kloppen; anders `default`; anders de eerste. Invoer = kaartbreedte in vloercoördinaten (zonder zoom) en schermklasse; beide hangen niet af van wat de skin tekent.

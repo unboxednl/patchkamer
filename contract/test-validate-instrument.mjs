@@ -1,4 +1,4 @@
-// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) het klembord (clipInfo/getClip/setClip, v1.17) en meters (host.ui.meter, v1.18)
+// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) het klembord (clipInfo/getClip/setClip, v1.17) en meters (host.ui.meter, v1.18), pads, steps(opts) en displays (v1.22)
 // Gebruik / Usage:  node contract/test-validate-instrument.mjs      (exit 0 = alles groen / all green)
 // Elk geval is een klein apparaat dat in een tijdelijke map wordt gezet en in beide talen (--lang nl en --lang en) wordt gevalideerd.
 // "err" = fragmenten (nl, en) die in de foutmelding moeten staan (exit 1, geen OK-regel).
@@ -279,6 +279,51 @@ errs('meter: source is geen AnalyserNode (een GainNode)', dev(M('{ id: "a", sour
 errs('meter: source is een getal', dev(M('{ id: "a", source: 5 }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
 errs('meter: source is een lijst van drie', dev(M('{ id: "a", source: [an, an, an] }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
 errs('meter: source is een lege lijst', dev(M('{ id: "a", source: [] }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
+
+// ---- pads, steps(opts) en displays (v1.22)
+const PD = (opts = '{}', pre = '') => `${pre} const p = host.ui.pad(el, T.a, ${opts}); if (!p || !p.el || typeof p.set !== 'function' || typeof p.flash !== 'function' || typeof p.destroy !== 'function') throw new Error('pad onvolledig');`;
+const DS = (opts = '{}', pre = '') => `${pre} const dd = host.ui.display(el, T.c, ${opts}); if (!dd || !dd.el || !dd.el.select || typeof dd.set !== 'function' || typeof dd.get !== 'function' || typeof dd.items !== 'function' || typeof dd.destroy !== 'function') throw new Error('display onvolledig'); ui.s.push(dd.el.select);`;
+ok('pad momentary met onpress', dev(PD('{ id: "kick", group: "pads", onpress: () => {}, onrelease: () => {}, color: "#ff8800", text: "1" }')), { controls: true, has: [['1 pads', '1 pads'], ['kick | pad', 'kick | pad'], ['| pads', '| pads']] });
+ok('pad momentary met alleen onchange (mag)', dev(PD('{ id: "p1", onchange: () => {} }')));
+ok('pad toggle met on en onchange, set() en flash()', dev(PD('{ id: "mute", mode: "toggle", on: true, onchange: on => {} }') + 'p.set(false); p.flash(); p.destroy(); p.destroy(); p.set(true);'));
+ok('pad zonder opties met handler is niet mogelijk, wel met lege opties en id op toggle', dev(PD('{ mode: "toggle" }')));
+ok('pad in een shadow root-ouder', dev(`const sr = el.attachShadow({ mode: 'open' }); host.ui.pad(sr, T.a, { id: 'sh', onpress: () => {} });`));
+ok('pad: herbouw telt niet dubbel', dev(`const build = () => { host.ui.pad(el, 'A', { id: 'a', onpress: () => {} }); }; build(); setTimeout(build, 0);`));
+ok('pad telt niet mee in de dekking van params()', dev2({ plist: ['cut'], body: `knob('cut'); host.ui.pad(el, 'Pad', { id: 'pd', onpress: () => {} });` }));
+ok('steps zonder opties (oud gedrag)', dev(`const r = host.ui.steps(el, T.a, [0, 1, 0, 1], () => {}); if (!r || !Array.isArray(r.btns)) throw new Error('steps');`));
+ok('steps met opts en id per rij', dev(`const r = host.ui.steps(el, 'Kick', [0, 1, 0, 1], () => {}, { id: 'pat.kick', group: 'kick', role: 'step', color: '#ff0000' }); if (r.id !== 'pat.kick' || typeof r.paint !== 'function') throw new Error('steps');
+  host.ui.steps(el, 'Snare', [0, 0, 1, 0], () => {}, { id: 'pat.snare', group: 'snare' });`), { controls: true, has: [['pat.kick  | step', 'pat.kick  | step'], ['pat.snare | step', 'pat.snare | step']] });
+ok('display met items, value en onchange', dev(DS('{ id: "preset", items: [["a", "A"], ["b", "B"]], value: "a", onchange: v => {}, wrap: true, searchAt: 8, kind: "select" }') + 'dd.set("b"); if (dd.get() !== "b" || dd.value !== "b") throw new Error("get"); dd.items([["a", "A"]]); dd.destroy(); dd.destroy();'), { controls: true, has: [['1 schermpjes', '1 displays'], ['preset | select', 'preset | select'], ['dropdown', 'dropdown']] });
+ok('display zonder opties', dev(DS('undefined')));
+ok('display kind preset', dev(DS('{ id: "tune", kind: "preset", items: [["x", "X"]] }')));
+warns('pad: dubbel pad-id', dev(`host.ui.pad(el, 'A', { id: 'dup', onpress: () => {} }); host.ui.pad(el, 'B', { id: 'dup', onpress: () => {} });`), [['id "dup" staat bij meer dan één regelaar', 'id "dup" is used by more than one control']]);
+warns('pad: momentary zonder onpress en zonder onchange', dev(PD('{ id: "a" }')), [['zonder onpress en zonder onchange', 'with neither onpress nor onchange']]);
+warns('pad: ongeldig id', dev(PD('{ id: "no good!", onpress: () => {} }')), [['id "no good!"', 'id "no good!"']]);
+warns('pad: mode onbekend', dev(PD('{ id: "a", mode: "latch", onpress: () => {} }')), [['pad-optie mode is ongeldig', 'pad option mode is invalid']]);
+warns('pad: onpress geen functie', dev(PD('{ id: "a", onpress: 5, onchange: () => {} }')), [['pad-optie onpress is ongeldig', 'pad option onpress is invalid']]);
+warns('pad: on geen boolean', dev(PD('{ id: "a", mode: "toggle", on: 1 }')), [['pad-optie on is ongeldig', 'pad option on is invalid']]);
+warns('pad: opties geen object', dev(`host.ui.pad(el, T.a, "nee");`), [['de opties van host.ui.pad moeten een object zijn', 'the host.ui.pad options must be an object']]);
+warns('pad: rol buiten de lijst', dev(PD('{ id: "a", role: "knopje", onpress: () => {} }')), [['rol "knopje"', 'role "knopje"']]);
+warns('pad naast knoppen met id, pad zonder id', dev(`${K('id: "rate"')} host.ui.pad(el, 'P', { onpress: () => {} });`), [['regelaar(s) zonder id terwijl andere er wel een hebben', 'control(s) without an id while others have one']]);
+warns('steps: opts geen object', dev(`host.ui.steps(el, 'X', [0, 1], () => {}, "nee");`), [['5e argument van host.ui.steps', '5th argument of host.ui.steps']]);
+warns('steps: dubbel id met een pad', dev(`host.ui.pad(el, 'A', { id: 'same', onpress: () => {} }); host.ui.steps(el, 'B', [0, 1], () => {}, { id: 'same' });`), [['id "same" staat bij meer dan één regelaar', 'id "same" is used by more than one control']]);
+warns('display: ongeldige items', dev(DS('{ id: "a", items: ["x", "y"] }')), [['display-optie items is ongeldig', 'display option items is invalid']]);
+warns('display: kind onbekend', dev(DS('{ id: "a", kind: "dial", items: [["a", "A"]] }')), [['display-optie kind is ongeldig', 'display option kind is invalid']]);
+warns('display: wrap geen boolean', dev(DS('{ id: "a", wrap: "ja", items: [["a", "A"]] }')), [['display-optie wrap is ongeldig', 'display option wrap is invalid']]);
+warns('display: searchAt 0', dev(DS('{ id: "a", searchAt: 0, items: [["a", "A"]] }')), [['display-optie searchAt is ongeldig', 'display option searchAt is invalid']]);
+warns('display: value niet in items', dev(DS('{ id: "a", items: [["a", "A"]], value: "zz" }')), [['value "zz" staat niet in items', 'value "zz" is not in items']]);
+warns('display: opties geen object', dev(`const dd = host.ui.display(el, T.c, 5); ui.s.push(dd.el.select);`), [['de opties van host.ui.display moeten een object zijn', 'the host.ui.display options must be an object']]);
+errs('pad: color is geen hex (rgb)', dev(PD('{ id: "a", color: "rgb(1,2,3)", onpress: () => {} }')), [['color moet een hex-kleur #rrggbb zijn', 'color must be a hex colour #rrggbb']]);
+errs('pad: color kort hex (#fff)', dev(PD('{ id: "a", color: "#fff", onpress: () => {} }')), [['color moet een hex-kleur #rrggbb zijn', 'color must be a hex colour #rrggbb']]);
+errs('pad: color is een getal', dev(PD('{ id: "a", color: 255, onpress: () => {} }')), [['color moet een hex-kleur #rrggbb zijn', 'color must be a hex colour #rrggbb']]);
+errs('steps: color is geen hex', dev(`host.ui.steps(el, 'X', [0, 1], () => {}, { id: 'a', color: 'red' });`), [['color moet een hex-kleur #rrggbb zijn', 'color must be a hex colour #rrggbb']]);
+errs('display: setState werkt het schermpje niet bij', `// SPDX-License-Identifier: MIT
+export default { id: 'nl.test.dsp', name: 'Dsp', version: '1.0.0', kind: 'effect', modExclude: '*',
+  ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },
+  create(ctx, host) { const g = ctx.createGain(); return { inputs: { in: g }, outputs: { out: g },
+    mount(el) { host.ui.display(el, 'Kies', { id: 'k', items: [['a', 'A'], ['b', 'B']], value: 'a' }); },
+    getState() { return { v: 1 }; }, setState(s) {}, destroy() {} }; } };
+`, [['werkt deze knoppen niet bij', 'does not update these knobs']]);
 
 let fail = 0, n = 0;
 let idx = 0;

@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.21 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.22 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -30,6 +30,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.19 | Tags voor tunes en presets: `tags` op een tune, map of pack (paden zoals `instrument/guitar/acoustic` en `style/hiphop`); de host toont ze als boom met inspringen (Tunes en Presets, Per instrument en Per stijl). Alleen de packs veranderen, apparaten niet (§13c) |
 | v1.20 | Samples: samplepacks (`*.patchkamer-samples.json`, geluid als base64) met een eigen tab in de bibliotheek, en voor apparaten die audio laden de optionele methode `loadAudio(files, info)` (§13e) |
 | v1.21 | Instellingen opnemen en afspelen: `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` laten een sequencer de regelaars van een ander apparaat volgen (ook wat een modulator doet), absoluut zetten en tegen modulatie vergrendelen (§13f) |
+| v1.22 | Pads en schermpje: `host.ui.pad(parent, label, opts)` laat de host een drukknop tekenen (momentary of aan/uit, met `flash()` voor een raakaanduiding), `host.ui.display(parent, label, opts)` een keuzelijst die een skin als schermpje met < > en [ok] kan tonen, en `host.ui.steps` krijgt een 5e argument `{ id, group, role, color }`; eigen knoppen doen mee met `data-pk-role="pad"` of `"step"`. Pads, stappen en keuzes staan in het register (`pad`, `steps`); de validator kent de nieuwe aanroepen en meldt een kleur die geen `#rrggbb` is als fout (§12f) |
 
 ---
 
@@ -380,10 +381,11 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 - **Hulpmiddelen** in `host.ui`:
   - `knob(parent, label, [min, max, stap], waarde, fmt, onchange, opties?)` → `{ set(v), el, input }`; `opties` (v1.8): `{ default: getal, scale: 'log' }`; sinds v1.15 ook `{ id, role, group }` (§12d)
   - `select(parent, label, [[waarde, tekst], …], waarde, onchange)` → een `<select>`; zet `select.value = v`; sinds v1.15 een 6e argument `{ id, role, group }` (§12d)
-  - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(stap) }`; houdt een verwijzing naar de array
+  - `steps(parent, label, array16, onchange, opties?)` → `{ btns, paint(), cursor(stap) }`; houdt een verwijzing naar de array; sinds v1.22 een 5e argument `{ id, group, role, color }` (§12f)
   - `jack(this, parent, poortId, dir, label)` (zie §3), `noise(ctx)`, `curve(k)`
   - `adopt(el, { id, role, group, label })` en `list(this)` (v1.15, §12d)
   - `meter(parent, label, opts)` → `{ el, set(level), id, destroy() }` (v1.18, §12e)
+  - `pad(parent, label, opts)` → `{ el, set(on), flash(), id, destroy() }` en `display(parent, label, opts)` → `{ el, set(v), get(), value, items(list), id, destroy() }` (v1.22, §12f)
 - **Bewaar wat `knob` en `select` teruggeven.** `setState` moet die bijwerken (§13).
 - Eigen HTML mag ook. Gebruik de CSS-variabelen van de host, dan volgt je apparaat de kleurstelling (donker, licht, retro):
   - kleuren: `--bg --floor --card --card-2 --line --fg --muted`;
@@ -611,6 +613,116 @@ destroy() { if (ui.level) ui.level.destroy(); if (ui.gr) ui.gr.destroy(); if (ui
 
 ---
 
+## 12f. Pads en schermpje (v1.22)
+
+Een **pad** is een drukknop die een geluid, een stap of een stand aanraakt: een drumpad, een mute-knop, een stapknop in een patroon. Een **schermpje** is een keuzelijst zoals op een fysiek apparaat: een klein scherm met de huidige keuze en de knoppen < en >, dat je kunt vergroten. Tekent het apparaat die zelf, dan kan een skin er niets aan veranderen. Laat daarom **de host ze tekenen**: `host.ui.pad` maakt een pad, `host.ui.display` een keuze, en `host.ui.steps` krijgt opties voor een rij stapknoppen. Een skin kiest dan vorm, maat, kleur, ledje en feedback van pads en het gezicht van het schermpje (vorm van de knoppen, rond of vierkant, een eigen kleur per pad, oplichten bij een raak). Een skin **verbergt geen pad en geen keuze** en zet geen waarde; hij toont ze alleen anders. Geluid, state, presets en songs veranderen niet. Alles hieronder is **optioneel en additief**.
+
+### Pads
+
+| Aanroep | Wat |
+|---|---|
+| `host.ui.pad(parent, label, opts)` | Maakt een pad in `parent` (ook een shadow root) en geeft `{ el, set(on), flash(), id, destroy() }`. `label` is de `aria-label` (en de `title` als je geen `title` opgeeft); wil je tekst op het pad, geef dan `opts.text` |
+| `set(on)` | Zet de gemarkeerde (actieve) stand van het pad, zonder `onchange` of `onpress` aan te roepen. Voor `setState` en voor een stand die het apparaat zelf bepaalt |
+| `flash()` | Een korte raakaanduiding (ongeveer 120 ms) zonder dat de stand verandert: een stap die afgaat, een pad dat door MIDI wordt geraakt |
+| `destroy()` | Haalt het pad weg; mag twee keer, en hoort in `destroy()`/`unmount()` van je apparaat |
+| `el` | Het element van het pad (een `<button>`) |
+
+| Optie | Waarden | Betekenis |
+|---|---|---|
+| `id` | tekst, 1 tot 60 tekens uit `[a-z0-9._-]` | Vast adres voor skins (`pad.kick`, `perc.3`); uniek binnen het apparaat. Gelijk aan de state-sleutel waar die er is |
+| `group` | tekst, zoals bij regelaars (§12d) | Sectienaam waarop een skin kan mikken (`pads`, `kick`) |
+| `role` | zoals §12d | Standaard `pad`. Een pad in een rij kan `step` zijn |
+| `mode` | `'momentary'` (standaard) of `'toggle'` | Momentary: actief zolang je indrukt; toggle: elke aanraking schakelt aan of uit |
+| `on` | `true`/`false` | Beginstand (actief) |
+| `onpress(e)` | functie | Momentary: bij indrukken. Bij toggle niet gebruikt |
+| `onrelease(e)` | functie | Bij loslaten (momentary) |
+| `onchange(on)` | functie | Toggle: de nieuwe stand. Bij een momentary pad zonder `onpress` mag je `onchange` gebruiken |
+| `color` | `#rrggbb` | De voorkeurskleur van het apparaat voor dit pad (per spoor of klank). Een skin kan hem gebruiken (`color: "device"`) of een eigen kleur kiezen. Iets anders dan `#rrggbb` is een fout in de validator |
+| `text` | korte tekst | Tekst op het pad, bijvoorbeeld "1" |
+| `title` | tekst | Tooltip |
+
+**Gedrag dat de host regelt.** Aanwijzer (muis en aanraking: `pointerdown`, `pointerup`, `pointercancel`, met pointer capture, dus een pad blijft ingedrukt tot je loslaat, ook buiten het pad) en toetsenbord (Spatie of Enter is indrukken en loslaten; bij toggle schakelt het). Een `<button>` met `role="button"`, bij toggle ook `aria-pressed`. Het standaardgezicht is een **afgerond vierkant** in neutrale kleuren uit het thema (`--panel`, `--well`, `--accent`), actief is lichter of in `color`. Gebruik zelf **geen vaste hex-kleuren**: een pad zonder skin volgt het thema, en met een skin zijn ze van de skin.
+
+```js
+mount(el) {
+  const hasPad = host.ui && typeof host.ui.pad === 'function';
+  if (hasPad) {
+    // momentary: een drumpad dat een noot speelt zolang je indrukt
+    ui.kick = host.ui.pad(el, T.kick, { id: 'pad.kick', group: 'pads', color: '#ff5a4f', text: '1', onpress: () => trigger('kick'), onrelease: () => {} });
+    // toggle: een mute-knop die in de state staat
+    ui.mute = host.ui.pad(el, T.mute, { id: 'mute', group: 'pads', mode: 'toggle', on: S.mute, onchange: on => { S.mute = on; apply(); } });
+  } else {
+    ui.kick = ownPad(el, T.kick);               // oude host: je eigen <button> zoals vóór v1.22 (laat die code in een eigen functie staan)
+    ui.mute = ownToggle(el, T.mute);
+  }
+},
+setState(s) { /* … */ if (ui.mute.set) ui.mute.set(!!S.mute); },    // set() roept onchange niet aan
+onStep(t, step) { if (hit(step)) ui.kick.flash && ui.kick.flash(); },  // flash() = raakaanduiding, de stand verandert niet
+destroy() { if (ui.kick && ui.kick.destroy) ui.kick.destroy(); if (ui.mute && ui.mute.destroy) ui.mute.destroy(); }
+```
+
+### Stappen met opties
+
+`host.ui.steps(parent, label, array, onchange, opts?)` krijgt een optioneel **5e argument** `{ id, group, role, color }`. De stapknoppen (`.st`) krijgen `data-pk-role="step"` en het `id` van de rij (`pat.kick`), `group` en `color`; ze volgen dezelfde skinregels als pads (vorm, maat, kleur, ledje) maar **houden hun gedrag en klassen** (`on`, `q`, `cur`). De terugwaarde blijft `{ btns, paint, cursor }`, plus `id`. Zonder 5e argument gebeurt er niets.
+
+```js
+S.kick.steps = host.ui.steps(el, T.kick, S.pat.kick, v => { S.pat.kick = v; }, { id: 'pat.kick', group: 'kick', role: 'step', color: '#ff5a4f' });
+```
+
+### Eigen pad-knoppen (attributen)
+
+Heeft je apparaat zijn eigen `<button>`s voor pads (een groot raster dat je niet wilt herbouwen), zet dan `data-pk-role="pad"` (of `"step"`), `data-pk-id` en eventueel `data-pk-group` op die knoppen of roep `host.ui.adopt(button, { id, role: 'pad', group })` aan. De host zet alleen CSS-klassen en variabelen op dat element voor **vorm, kleur, ledje en maat**; je DOM, je handlers en je `.on`/`.cur`-klassen blijven van jou. De kleur komt dan van het thema of, met `color: "palette"` of `colors`, van de skin; een voorkeurskleur van het apparaat kan alleen via `host.ui.pad` of `host.ui.steps`. Dit werkt ook als je UI zichzelf herbouwt. Wil je ook een eigen kleur per knop, zet dan `data-pk-color="#rrggbb"` op de knop (de apparaatkleur voor `pads.color: device`).
+
+### Schermpje
+
+| Aanroep | Wat |
+|---|---|
+| `host.ui.display(parent, label, opts)` | Maakt een keuze in `parent` en geeft `{ el, set(v), get(), value, items(list), id, destroy() }`. Het **model** is een verborgen `<select>` (`el.select`, ook `el.querySelector('select')`) |
+| `set(v)`, `get()`, `value` | De huidige waarde; `value` is een getter en setter. Zetten roept `onchange` niet aan |
+| `items(list)` | Vervangt de lijst `[[waarde, tekst], …]` |
+| `destroy()` | Haalt de keuze weg; mag twee keer |
+
+| Optie | Waarden | Betekenis |
+|---|---|---|
+| `id`, `group`, `role` | zoals §12d | De rol is standaard `select` |
+| `items` | `[[waarde, tekst], …]` | De keuzes |
+| `value` | een waarde uit `items` | De beginwaarde |
+| `onchange(v)` | functie | Bij een nieuwe keuze |
+| `kind` | `'select'` (standaard) of `'preset'` | Alleen voor de host-kaartkop; een apparaat gebruikt `select` |
+| `wrap` | `true`/`false` (standaard `false`) | Of < en > rond lopen aan het begin en einde |
+| `searchAt` | geheel getal ≥ 1 (standaard 12) | Vanaf zoveel keuzes toont het vergrote paneel een zoekveld |
+
+**Het standaardgezicht is de gewone keuzelijst** (een label en een `<select>`, zoals `host.ui.select`), dus een gemigreerd apparaat ziet er zonder skin gelijk uit. Het schermpje (LCD, OLED, zevensegment of papier, met < > en [ok], en een groter paneel als je erop klikt) komt alleen van de **skin**. Omdat het model het `<select>` blijft, werken `setState` (`select.value = v`), `host.controls` en `host.ui.list` ongewijzigd. `host.ui.select` (bestaand) kan door een skin óók het schermpje-gezicht krijgen; `host.ui.display` is er vooral voor apparaten die uit zichzelf een lijst `[waarde, tekst]` hebben. Houd het eenvoudig: bewaar wat de aanroep teruggeeft en zet de waarde in `setState`.
+
+```js
+if (host.ui && typeof host.ui.display === 'function') {
+  ui.kit = host.ui.display(el, T.kit, { id: 'kit', group: 'sound', items: KITS.map(k => [k.id, k.name]), value: S.kit, wrap: true, onchange: v => { S.kit = v; load(); } });
+} else {
+  ui.kit = host.ui.select(el, T.kit, KITS.map(k => [k.id, k.name]), S.kit, v => { S.kit = v; load(); });   // oude host
+}
+setState(s) { /* … */ if (ui.kit.set) ui.kit.set(S.kit); else ui.kit.value = S.kit; }
+```
+
+### Verlagen naar een oudere host
+
+Een host zonder v1.22 heeft geen `host.ui.pad` of `host.ui.display`, en negeert het 5e argument van `host.ui.steps`. Controleer daarom `if (!host.ui || typeof host.ui.pad !== 'function')` en bouw dan zelf een `<button>`, zoals je voor v1.22 deed; voor een keuze `if (!host.ui || typeof host.ui.display !== 'function')` → `host.ui.select`. Laat die oude code in een eigen functie staan; schrap haar niet.
+
+### Het register
+
+`host.ui.list(this)` geeft een pad terug met `role: 'pad'`, `type: 'pad'` en `face` = de huidige vorm (`circle`, `square`, `rounded` of `rect`); een rij stappen als één regel met `role: 'step'` en `type: 'steps'` (met het `id` van de rij); een schermpje als `type: 'select'`, `role: 'select'` en `face` = `dropdown`, `lcd`, `oled`, `segment` of `paper`. Eigen knoppen met `data-pk-role="pad"` verschijnen met rol `pad` (of `step`).
+
+### Regels
+
+- Maak per pad één aanroep, in `mount()` of in je eigen `render()`, en roep `destroy()` aan als je hem weghaalt of herbouwt.
+- Een pad of schermpje is een **regelaar met een id**: geef alle pads een id en groep als je er één geeft. Een pad hoort niet in `params()` (het is geen instelling); wel hoort wat het schakelt in `getState()`.
+- Het geluid, de state en de presets veranderen niet door een pad of schermpje. `set(on)` en `flash()` roepen `onchange` en `onpress` **niet** aan.
+- Kleuren zijn altijd `#rrggbb`. De host past niets anders toe.
+- Zet de klassen `on`/`cur`/`q` van eigen knoppen zelf; de host raakt ze niet aan.
+
+**Wat de validator doet.** De nep-host kent `host.ui.pad`, `host.ui.display` en de opties van `host.ui.steps`. Een `color` die geen `#rrggbb` is (bij een pad of bij `steps`) **gooit** en is dus een fout. Een `let op` (nooit een fout) komt er bij: een pad-id dat al bij een andere regelaar staat, een ongeldig id of groep, opties die geen object zijn, een ongeldige `mode`, `on`, `onpress`, `onrelease`, `onchange`, `text` of `title`, een momentary pad zonder `onpress` en zonder `onchange`, een display met ongeldige `items`, `kind`, `wrap` of `searchAt` of een `value` die niet in `items` staat, en een 5e argument van `steps` dat geen object is. Een display telt mee bij de controle dat `setState` de keuzes bijwerkt. De OK-regel noemt het aantal pads en schermpjes en `--controls` toont ze in de tabel met rol `pad`, `step` en `select`.
+
+---
+
 ## 13. State, versies en presets (v1.6)
 
 **State.** `getState()` geeft alles terug wat nodig is om het geluid en het gedrag exact te herstellen: knoppen, patronen en keuzes. Het resultaat moet gewone JSON zijn, zonder AudioNodes.
@@ -684,6 +796,10 @@ Voor controllers (zoals een MIDI-apparaat dat pads aan apparaten koppelt). Gewon
 | `data-pk-id`, `data-pk-role`, `data-pk-group` | v1.15 | Dezelfde gegevens als attributen op eigen elementen (§12d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12e) |
 | `data-pk-suffix` | v1.18 | Tekst (hoogstens 16 tekens) die de host bij het koppelen aan MIDI na het label zet: ` - suffix` (§12d) |
+| `host.ui.pad(parent, label, opts)` | v1.22 | Een pad laten tekenen door de host (momentary of toggle, `flash()`, kleur); geeft `{ el, set, flash, id, destroy }` (§12f) |
+| `host.ui.display(parent, label, opts)` | v1.22 | Een keuze die een skin als schermpje kan tonen; het model is een verborgen `<select>`; geeft `{ el, set, get, value, items, id, destroy }` (§12f) |
+| `host.ui.steps(…, opts)` | v1.22 | 5e argument `{ id, group, role, color }` voor een rij stapknoppen (§12f) |
+| `data-pk-role="pad"` / `"step"` | v1.22 | Eigen knoppen doen mee met vorm, kleur, ledje en maat (§12f) |
 | `peers[].noteNames` | In de lijst van `host.peers(this)`: de gezuiverde lijst van dat apparaat, of `[]` als het er geen heeft |
 
 - Een sequencer of controller vindt het doel met `host.cablesFrom(this, eigenUitgang)` en zoekt het `id` op in `host.peers(this)`. Zonder kabel of zonder lijst gedraagt hij zich zoals altijd.
@@ -950,6 +1066,10 @@ Een apparaat dat alleen doelwit is, doet niets: de dekking van `params()` (§8, 
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Patronen en clips kopiëren en plakken, optioneel en alle drie samen; formaat `patchkamer-clip` (§13d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12e) |
 | `data-pk-suffix` | v1.18 | Tekst (hoogstens 16 tekens) die de host bij het koppelen aan MIDI na het label zet: ` - suffix` (§12d) |
+| `host.ui.pad(parent, label, opts)` | v1.22 | Een pad laten tekenen door de host (momentary of toggle, `flash()`, kleur); geeft `{ el, set, flash, id, destroy }` (§12f) |
+| `host.ui.display(parent, label, opts)` | v1.22 | Een keuze die een skin als schermpje kan tonen; het model is een verborgen `<select>`; geeft `{ el, set, get, value, items, id, destroy }` (§12f) |
+| `host.ui.steps(…, opts)` | v1.22 | 5e argument `{ id, group, role, color }` voor een rij stapknoppen (§12f) |
+| `data-pk-role="pad"` / `"step"` | v1.22 | Eigen knoppen doen mee met vorm, kleur, ledje en maat (§12f) |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -991,7 +1111,7 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 ```
 node validate-instrument.mjs mijn-apparaat.patchkamer-device.js
 node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --lang en   # uitvoer in het Engels (standaard Nederlands)
-node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --controls  # druk ook de tabel van regelaars en meters af (v1.15, v1.18)
+node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --controls  # druk ook de tabel van regelaars, meters, pads en schermpjes af (v1.15, v1.18, v1.22)
 node validate-instrument.mjs mijn-apparaat.patchkamer-device.js --clip      # toon ook de uitvoer van clipInfo() en getClip() (v1.17)
 ```
 
@@ -1017,6 +1137,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 17. **Klembord (v1.17, §13d)**: `clipInfo`, `getClip` en `setClip` alle drie of geen. `clipInfo()` geeft `null` of een JSON-object (`copy`/`paste` met `notes` en/of `drums`, getallen in `length`), gooit niet en verandert de state niet. `getClip()` geeft `null` of een geldige `patchkamer-clip` als JSON zonder AudioNodes (`format`, `formatVersion` 1, `kind` `notes` of `drums`, `length` 1 tot 12288 gehele tikken, hoogstens 4096 noten of slagen en 64 banen, `t`, `n`, `lane` en `vel` binnen het bereik) en verandert de state niet. `setClip(getClip())` laat `getState()` ongewijzigd. `setClip` krijgt rommel, lege en extreme clips (andere typen, `NaN`, lengte 0 of 1e9, 100000 noten, banen die niet bestaan) en gooit niet; het geeft altijd `{ ok, reason }` (`reason` tekst bij `ok: false`); bij `ok: false` blijft de state gelijk, bij `ok: true` is de state JSON zonder `NaN`/`Infinity` en stabiel onder `setState(getState())`; het stuurt zelf geen gebeurtenissen. Een apparaat dat zijn eigen `getClip()` weigert (`ok: false`) geeft een `let op`. Een apparaat zonder deze methoden krijgt geen melding. `--clip` toont wat `clipInfo()` en `getClip()` teruggeven.
 18. **Meters (v1.18, §12e)**: de nep-host kent `host.ui.meter(parent, label, opts)` en geeft `{ el, set, id, destroy }`. Een `source` die geen `AnalyserNode` of lijst van 1 of 2 `AnalyserNode`s is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel meter-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` zonder `source`, een `set()` met iets anders dan een eindig getal of `[l, r]`, `data-pk-role="meter"` op een eigen element en een `data-pk-suffix` van meer dan 16 tekens. Een meter telt niet mee in de dekking van `params()`. `--controls` toont meters met rol `meter`.
 19. **Instellingen opnemen (v1.21, §13f)**: de nep-host kent `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` en geeft `false` (`[]` bij `paramsOf`); de validator controleert er verder niets van (een sequencer die ze gebruikt, test je in de host).
+20. **Pads en schermpje (v1.22, §12f)**: de nep-host kent `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` en het 5e argument van `host.ui.steps`. Een `color` die geen `#rrggbb` is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel pad-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, een momentary pad zonder `onpress` en zonder `onchange`, een display met ongeldige `items`/`kind`/`wrap`/`searchAt` of een `value` buiten `items`, en een 5e argument van `steps` dat geen object is. Een display telt mee in de controle dat `setState` de keuzes bijwerkt; pads en stappen tellen niet mee in de dekking van `params()`. `--controls` toont ze met rol `pad`, `step` en `select`.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1045,7 +1166,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 19. Dekking (v1.16): `params()` bevat elke continue regelaar met `id` = state-sleutel, behalve wat in `modExclude` staat (testnoot, basisnoot, lengte, stemmen, stapdata); keuzes en vinkjes horen er niet in; parameters die niet ongevraagd mogen bewegen (toonhoogte, master, gate, octaaf, tijden) hebben `on: false` (§8). `--controls` toont in de kolom `in params()` geen `nee`.
 20. Klembord (v1.17, optioneel): `clipInfo`/`getClip`/`setClip` samen; `getClip()` geeft een geldige `patchkamer-clip` of `null`; `setClip` klemt alles zelf, geeft `{ ok, reason }`, zet niets half en stuurt geen gebeurtenissen; `setClip(getClip())` laat `getState()` gelijk (§13d).
 21. Meters (v1.18, optioneel): wie een niveau toont, gebruikt `host.ui.meter` (met `source` voor een bestaande `AnalyserNode`, anders met `set()`), met `id` en `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` als terugval op de eigen tekening, geen eigen demping, `destroy()` van de meter in `destroy()` van het apparaat, en een layout die de meter groter mag maken (§12e).
-22. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+22. Pads en schermpje (v1.22, optioneel): wie een drukknop of een keuze toont, gebruikt `host.ui.pad`, `host.ui.display` of `host.ui.steps` met `{ id, group, role, color }` (kleur altijd `#rrggbb`), met `if (!host.ui || typeof host.ui.pad !== 'function')` als terugval op de eigen knop; `set()` en `flash()` roepen geen handlers aan; het model van een keuze blijft het `<select>` en `setState` zet de waarde; `destroy()` van pad en keuze in `destroy()` van het apparaat (§12f).
+23. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -1078,6 +1200,10 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 | `host.ui.meter` zonder te controleren of hij bestaat | Het apparaat gooit op een oude host | `if (!host.ui || typeof host.ui.meter !== 'function')` en teken dan zelf |
 | Het niveau zelf dempen vóór `set()` | Het signaal vertraagt twee keer; een skin met een andere ballistiek helpt niet meer | Geef het ruwe niveau door, de host doet de val |
 | `source` laten vallen en toch een eigen analyser uitlezen in `set()` | Dubbel werk, ook buiten beeld | Geef de `AnalyserNode` als `source`; de host leest alleen als de kaart te zien is |
+| Een eigen pad tekenen terwijl `host.ui.pad` er is | Een skin kan vorm, kleur en ledje niet kiezen | `host.ui.pad` (of `data-pk-role="pad"` op je eigen knop), met je oude knop als terugval voor een oude host (§12f) |
+| `host.ui.pad` of `host.ui.display` zonder te controleren of ze bestaan | Het apparaat gooit op een oude host | `if (!host.ui || typeof host.ui.pad !== 'function')` en bouw dan zelf |
+| Een kleur als `rgb(…)` of `#fff` aan een pad geven | De host kent alleen `#rrggbb`; de validator geeft een fout | Altijd `#rrggbb` |
+| `onchange` verwachten bij `set(on)` of `flash()` | Ze roepen geen handlers aan; de state raakt niet gesynchroniseerd | Zet de state zelf in `setState` en roep `set()` aan om het gezicht bij te werken |
 
 ---
 
@@ -1088,7 +1214,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.21
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.22
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1147,7 +1273,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.21
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.22
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -1211,7 +1337,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.21
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.22
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -1289,7 +1415,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.21.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.22.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

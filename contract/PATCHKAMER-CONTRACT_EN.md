@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.21 for building agents
+# Patchkamer — Instrument contract v1.22 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -30,6 +30,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.19 | Tags for tunes and presets: `tags` on a tune, folder or pack (paths such as `instrument/guitar/acoustic` and `style/hiphop`); the host shows them as an indented tree (Tunes and Presets, By instrument and By style). Only the packs change, not the devices (§13c) |
 | v1.20 | Samples: sample packs (`*.patchkamer-samples.json`, sound as base64) with a tab of their own in the library, and for devices that load audio the optional method `loadAudio(files, info)` (§13e) |
 | v1.21 | Recording and playing settings: `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` let a sequencer follow the controls of another device (including what a modulator does), set them to an absolute value and lock them against modulation (§13f) |
+| v1.22 | Pads and small screen: `host.ui.pad(parent, label, opts)` has the host draw a push button (momentary or on/off, with `flash()` for a hit indication), `host.ui.display(parent, label, opts)` a choice list that a skin can show as a small screen with < > and [ok], and `host.ui.steps` gets a 5th argument `{ id, group, role, color }`; your own buttons take part with `data-pk-role="pad"` or `"step"`. Pads, steps and choices are in the register (`pad`, `steps`); the validator knows the new calls and reports a colour that is not `#rrggbb` as an error (§12f) |
 
 ---
 
@@ -380,10 +381,11 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 - **Helpers** in `host.ui`:
   - `knob(parent, label, [min, max, step], value, fmt, onchange, options?)` → `{ set(v), el, input }`; `options` (v1.8): `{ default: number, scale: 'log' }`; since v1.15 also `{ id, role, group }` (§12d)
   - `select(parent, label, [[value, text], …], value, onchange)` → a `<select>`; set `select.value = v`; since v1.15 a 6th argument `{ id, role, group }` (§12d)
-  - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(step) }`; keeps a reference to the array
+  - `steps(parent, label, array16, onchange, options?)` → `{ btns, paint(), cursor(step) }`; keeps a reference to the array; since v1.22 a 5th argument `{ id, group, role, color }` (§12f)
   - `jack(this, parent, portId, dir, label)` (see §3), `noise(ctx)`, `curve(k)`
   - `adopt(el, { id, role, group, label })` and `list(this)` (v1.15, §12d)
   - `meter(parent, label, opts)` → `{ el, set(level), id, destroy() }` (v1.18, §12e)
+  - `pad(parent, label, opts)` → `{ el, set(on), flash(), id, destroy() }` and `display(parent, label, opts)` → `{ el, set(v), get(), value, items(list), id, destroy() }` (v1.22, §12f)
 - **Keep what `knob` and `select` return.** `setState` must update them (§13).
 - Your own HTML is fine too. Use the CSS variables of the host, then your device follows the color scheme (dark, light, retro):
   - colors: `--bg --floor --card --card-2 --line --fg --muted`;
@@ -611,6 +613,116 @@ destroy() { if (ui.level) ui.level.destroy(); if (ui.gr) ui.gr.destroy(); if (ui
 
 ---
 
+## 12f. Pads and small screen (v1.22)
+
+A **pad** is a push button that touches a sound, a step or a state: a drum pad, a mute button, a step button in a pattern. A **small screen** is a choice list like on a physical device: a small screen with the current choice and the buttons < and >, which you can enlarge. If the device draws these itself, a skin can change nothing about them. So let **the host draw them**: `host.ui.pad` makes a pad, `host.ui.display` a choice, and `host.ui.steps` gets options for a row of step buttons. A skin then chooses the shape, size, colour, lamp and feedback of pads and the face of the small screen (the shape of the buttons, round or square, a colour of its own per pad, lighting up on a hit). A skin **hides no pad and no choice** and sets no value; it only shows them differently. Sound, state, presets and songs do not change. Everything below is **optional and additive**.
+
+### Pads
+
+| Call | What |
+|---|---|
+| `host.ui.pad(parent, label, opts)` | Makes a pad in `parent` (a shadow root too) and returns `{ el, set(on), flash(), id, destroy() }`. `label` is the `aria-label` (and the `title` if you give no `title`); if you want text on the pad, give `opts.text` |
+| `set(on)` | Sets the marked (active) state of the pad, without calling `onchange` or `onpress`. For `setState` and for a state the device decides itself |
+| `flash()` | A short hit indication (about 120 ms) without changing the state: a step that fires, a pad hit by MIDI |
+| `destroy()` | Removes the pad; may be called twice, and belongs in your device's `destroy()`/`unmount()` |
+| `el` | The pad's element (a `<button>`) |
+
+| Option | Values | Meaning |
+|---|---|---|
+| `id` | text, 1 to 60 characters from `[a-z0-9._-]` | Fixed address for skins (`pad.kick`, `perc.3`); unique within the device. Equal to the state key where there is one |
+| `group` | text, as for controls (§12d) | Section name a skin can target (`pads`, `kick`) |
+| `role` | as §12d | Default `pad`. A pad in a row can be `step` |
+| `mode` | `'momentary'` (default) or `'toggle'` | Momentary: active while you press; toggle: every touch switches on or off |
+| `on` | `true`/`false` | Initial state (active) |
+| `onpress(e)` | function | Momentary: on pressing. Not used for toggle |
+| `onrelease(e)` | function | On release (momentary) |
+| `onchange(on)` | function | Toggle: the new state. For a momentary pad without `onpress` you may use `onchange` |
+| `color` | `#rrggbb` | The device's preferred colour for this pad (per track or sound). A skin can use it (`color: "device"`) or choose a colour of its own. Anything other than `#rrggbb` is an error in the validator |
+| `text` | short text | Text on the pad, for example "1" |
+| `title` | text | Tooltip |
+
+**Behaviour the host handles.** Pointer (mouse and touch: `pointerdown`, `pointerup`, `pointercancel`, with pointer capture, so a pad stays pressed until you let go, also outside the pad) and keyboard (Space or Enter is press and release; with toggle it switches). A `<button>` with `role="button"`, and `aria-pressed` for toggle. The default face is a **rounded square** in neutral colours from the theme (`--panel`, `--well`, `--accent`), active is lighter or in `color`. Do **not use fixed hex colours** yourself: a pad without a skin follows the theme, and with a skin they belong to the skin.
+
+```js
+mount(el) {
+  const hasPad = host.ui && typeof host.ui.pad === 'function';
+  if (hasPad) {
+    // momentary: a drum pad that plays a note while you press
+    ui.kick = host.ui.pad(el, T.kick, { id: 'pad.kick', group: 'pads', color: '#ff5a4f', text: '1', onpress: () => trigger('kick'), onrelease: () => {} });
+    // toggle: a mute button that is in the state
+    ui.mute = host.ui.pad(el, T.mute, { id: 'mute', group: 'pads', mode: 'toggle', on: S.mute, onchange: on => { S.mute = on; apply(); } });
+  } else {
+    ui.kick = ownPad(el, T.kick);               // old host: your own <button> as before v1.22 (keep that code in a function of its own)
+    ui.mute = ownToggle(el, T.mute);
+  }
+},
+setState(s) { /* … */ if (ui.mute.set) ui.mute.set(!!S.mute); },    // set() does not call onchange
+onStep(t, step) { if (hit(step)) ui.kick.flash && ui.kick.flash(); },  // flash() = hit indication, the state does not change
+destroy() { if (ui.kick && ui.kick.destroy) ui.kick.destroy(); if (ui.mute && ui.mute.destroy) ui.mute.destroy(); }
+```
+
+### Steps with options
+
+`host.ui.steps(parent, label, array, onchange, opts?)` gets an optional **5th argument** `{ id, group, role, color }`. The step buttons (`.st`) get `data-pk-role="step"` and the `id` of the row (`pat.kick`), `group` and `color`; they follow the same skin rules as pads (shape, size, colour, lamp) but **keep their behaviour and classes** (`on`, `q`, `cur`). The return value stays `{ btns, paint, cursor }`, plus `id`. Without the 5th argument nothing happens.
+
+```js
+S.kick.steps = host.ui.steps(el, T.kick, S.pat.kick, v => { S.pat.kick = v; }, { id: 'pat.kick', group: 'kick', role: 'step', color: '#ff5a4f' });
+```
+
+### Pad buttons of your own (attributes)
+
+If your device has its own `<button>`s for pads (a large grid you do not want to rebuild), put `data-pk-role="pad"` (or `"step"`), `data-pk-id` and possibly `data-pk-group` on those buttons or call `host.ui.adopt(button, { id, role: 'pad', group })`. The host only sets CSS classes and variables on that element for **shape, colour, lamp and size**; your DOM, your handlers and your `.on`/`.cur` classes stay yours. The colour then comes from the theme or, with `color: "palette"` or `colors`, from the skin; a preferred colour of the device is only possible through `host.ui.pad` or `host.ui.steps`. This also works when your UI rebuilds itself. For a colour of your own per button, put `data-pk-color="#rrggbb"` on the button (the device colour for `pads.color: device`).
+
+### Small screen
+
+| Call | What |
+|---|---|
+| `host.ui.display(parent, label, opts)` | Makes a choice in `parent` and returns `{ el, set(v), get(), value, items(list), id, destroy() }`. The **model** is a hidden `<select>` (`el.select`, also `el.querySelector('select')`) |
+| `set(v)`, `get()`, `value` | The current value; `value` is a getter and setter. Setting does not call `onchange` |
+| `items(list)` | Replaces the list `[[value, text], …]` |
+| `destroy()` | Removes the choice; may be called twice |
+
+| Option | Values | Meaning |
+|---|---|---|
+| `id`, `group`, `role` | as §12d | The role defaults to `select` |
+| `items` | `[[value, text], …]` | The choices |
+| `value` | a value from `items` | The initial value |
+| `onchange(v)` | function | On a new choice |
+| `kind` | `'select'` (default) or `'preset'` | Only meaningful for the host's card head; a device uses `select` |
+| `wrap` | `true`/`false` (default `false`) | Whether < and > wrap around at the start and end |
+| `searchAt` | integer ≥ 1 (default 12) | From this many choices the enlarged panel shows a search field |
+
+**The default face is the ordinary choice list** (a label and a `<select>`, like `host.ui.select`), so a migrated device looks the same without a skin. The small screen (LCD, OLED, seven-segment or paper, with < > and [ok], and a larger panel when you click it) comes only from the **skin**. Because the model stays the `<select>`, `setState` (`select.value = v`), `host.controls` and `host.ui.list` work unchanged. A skin can give the existing `host.ui.select` the small-screen face too; `host.ui.display` is mainly for devices that have a list `[value, text]` of their own. Keep it simple: keep what the call returns and set the value in `setState`.
+
+```js
+if (host.ui && typeof host.ui.display === 'function') {
+  ui.kit = host.ui.display(el, T.kit, { id: 'kit', group: 'sound', items: KITS.map(k => [k.id, k.name]), value: S.kit, wrap: true, onchange: v => { S.kit = v; load(); } });
+} else {
+  ui.kit = host.ui.select(el, T.kit, KITS.map(k => [k.id, k.name]), S.kit, v => { S.kit = v; load(); });   // old host
+}
+setState(s) { /* … */ if (ui.kit.set) ui.kit.set(S.kit); else ui.kit.value = S.kit; }
+```
+
+### Falling back to an older host
+
+A host without v1.22 has no `host.ui.pad` or `host.ui.display`, and ignores the 5th argument of `host.ui.steps`. So check `if (!host.ui || typeof host.ui.pad !== 'function')` and then build a `<button>` yourself, as you did before v1.22; for a choice `if (!host.ui || typeof host.ui.display !== 'function')` → `host.ui.select`. Keep that old code in a function of its own; do not delete it.
+
+### The register
+
+`host.ui.list(this)` returns a pad with `role: 'pad'`, `type: 'pad'` and `face` = the current shape (`circle`, `square`, `rounded` or `rect`); a row of steps as one line with `role: 'step'` and `type: 'steps'` (with the row's `id`); a small screen as `type: 'select'`, `role: 'select'` and `face` = `dropdown`, `lcd`, `oled`, `segment` or `paper`. Buttons of your own with `data-pk-role="pad"` appear with role `pad` (or `step`).
+
+### Rules
+
+- Make one call per pad, in `mount()` or in your own `render()`, and call `destroy()` when you remove or rebuild it.
+- A pad or small screen is a **control with an id**: if you give one an id and group, give all of them. A pad does not belong in `params()` (it is not a setting); what it switches does belong in `getState()`.
+- Sound, state and presets do not change because of a pad or small screen. `set(on)` and `flash()` do **not** call `onchange` and `onpress`.
+- Colours are always `#rrggbb`. The host applies nothing else.
+- Set the classes `on`/`cur`/`q` of your own buttons yourself; the host does not touch them.
+
+**What the validator does.** The fake host knows `host.ui.pad`, `host.ui.display` and the options of `host.ui.steps`. A `color` that is not `#rrggbb` (on a pad or on `steps`) **throws** and is therefore an error. A warning (never an error) comes for: a pad id that is already used by another control, an invalid id or group, options that are not an object, an invalid `mode`, `on`, `onpress`, `onrelease`, `onchange`, `text` or `title`, a momentary pad with neither `onpress` nor `onchange`, a display with invalid `items`, `kind`, `wrap` or `searchAt` or a `value` that is not in `items`, and a 5th argument of `steps` that is not an object. A display counts in the check that `setState` updates the choices. The OK line names the number of pads and small screens and `--controls` shows them in the table with role `pad`, `step` and `select`.
+
+---
+
 ## 13. State, versions and presets (v1.6)
 
 **State.** `getState()` returns everything needed to restore the sound and the behavior exactly: knobs, patterns and choices. The result must be plain JSON, without AudioNodes.
@@ -684,6 +796,10 @@ For controllers (such as a MIDI device that couples pads to devices). Ordinary i
 | `data-pk-id`, `data-pk-role`, `data-pk-group` | v1.15 | The same data as attributes on your own elements (§12d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Have the host draw a meter (bar, LED ladder or round VU, chosen by a skin); returns `{ el, set, id, destroy }` (§12e) |
 | `data-pk-suffix` | v1.18 | Text (at most 16 characters) the host puts after the label when linking to MIDI: ` - suffix` (§12d) |
+| `host.ui.pad(parent, label, opts)` | v1.22 | Have the host draw a pad (momentary or toggle, `flash()`, colour); returns `{ el, set, flash, id, destroy }` (§12f) |
+| `host.ui.display(parent, label, opts)` | v1.22 | A choice a skin can show as a small screen; the model is a hidden `<select>`; returns `{ el, set, get, value, items, id, destroy }` (§12f) |
+| `host.ui.steps(…, opts)` | v1.22 | 5th argument `{ id, group, role, color }` for a row of step buttons (§12f) |
+| `data-pk-role="pad"` / `"step"` | v1.22 | Your own buttons take part with shape, colour, lamp and size (§12f) |
 | `peers[].noteNames` | In the list from `host.peers(this)`: the cleaned list of that device, or `[]` if it has none |
 
 - A sequencer or controller finds its target with `host.cablesFrom(this, ownOutput)` and looks the `id` up in `host.peers(this)`. Without a cable or without a list it behaves as always.
@@ -950,6 +1066,10 @@ A device that is only a target does nothing: the coverage of `params()` (§8, v1
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Copy and paste patterns and clips, optional and all three together; format `patchkamer-clip` (§13d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Have the host draw a meter (bar, LED ladder or round VU, chosen by a skin); returns `{ el, set, id, destroy }` (§12e) |
 | `data-pk-suffix` | v1.18 | Text (at most 16 characters) the host puts after the label when linking to MIDI: ` - suffix` (§12d) |
+| `host.ui.pad(parent, label, opts)` | v1.22 | Have the host draw a pad (momentary or toggle, `flash()`, colour); returns `{ el, set, flash, id, destroy }` (§12f) |
+| `host.ui.display(parent, label, opts)` | v1.22 | A choice a skin can show as a small screen; the model is a hidden `<select>`; returns `{ el, set, get, value, items, id, destroy }` (§12f) |
+| `host.ui.steps(…, opts)` | v1.22 | 5th argument `{ id, group, role, color }` for a row of step buttons (§12f) |
+| `data-pk-role="pad"` / `"step"` | v1.22 | Your own buttons take part with shape, colour, lamp and size (§12f) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -991,7 +1111,7 @@ A library is a folder (local, on GitHub or at a web address) with modules and a 
 ```
 node validate-instrument.mjs my-device.patchkamer-device.js
 node validate-instrument.mjs my-device.patchkamer-device.js --lang en   # output in English (default Dutch)
-node validate-instrument.mjs my-device.patchkamer-device.js --controls  # also print the table of controls and meters (v1.15, v1.18)
+node validate-instrument.mjs my-device.patchkamer-device.js --controls  # also print the table of controls, meters, pads and small screens (v1.15, v1.18, v1.22)
 node validate-instrument.mjs my-device.patchkamer-device.js --clip      # also show the output of clipInfo() and getClip() (v1.17)
 ```
 
@@ -1016,6 +1136,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 17. **Clipboard (v1.17, §13d)**: `clipInfo`, `getClip` and `setClip` all three or none. `clipInfo()` returns `null` or a JSON object (`copy`/`paste` with `notes` and/or `drums`, numbers in `length`), does not throw and does not change the state. `getClip()` returns `null` or a valid `patchkamer-clip` as JSON without AudioNodes (`format`, `formatVersion` 1, `kind` `notes` or `drums`, `length` 1 to 12288 whole ticks, at most 4096 notes or hits and 64 lanes, `t`, `n`, `lane` and `vel` in range) and does not change the state. `setClip(getClip())` leaves `getState()` unchanged. `setClip` gets junk, empty and extreme clips (other types, `NaN`, length 0 or 1e9, 100000 notes, lanes that do not exist) and does not throw; it always returns `{ ok, reason }` (`reason` text with `ok: false`); with `ok: false` the state stays the same, with `ok: true` the state is JSON without `NaN`/`Infinity` and stable under `setState(getState())`; it sends no events itself. A device that rejects its own `getClip()` (`ok: false`) gets a `warning`. A device without these methods gets no message. `--clip` shows what `clipInfo()` and `getClip()` return.
 18. **Meters (v1.18, §12e)**: the fake host knows `host.ui.meter(parent, label, opts)` and returns `{ el, set, id, destroy }`. A `source` that is not an `AnalyserNode` or a list of 1 or 2 `AnalyserNode`s throws and is therefore an error. Only a `warning` (never an error) for: a duplicate meter id, an invalid id or group, options that are not an object, an invalid `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` without `source`, a `set()` with anything but a finite number or `[l, r]`, `data-pk-role="meter"` on your own element and a `data-pk-suffix` of more than 16 characters. A meter does not count towards the coverage of `params()`. `--controls` shows meters with role `meter`.
 19. **Recording settings (v1.21, §13f)**: the fake host knows `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` and returns `false` (`[]` for `paramsOf`); the validator checks nothing else about them (test a sequencer that uses them in the host).
+20. **Pads and small screen (v1.22, §12f)**: the fake host knows `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` and the 5th argument of `host.ui.steps`. A `color` that is not `#rrggbb` throws and is therefore an error. Only a warning (never an error) for: a duplicate pad id, an invalid id or group, options that are not an object, an invalid `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, a momentary pad with neither `onpress` nor `onchange`, a display with invalid `items`/`kind`/`wrap`/`searchAt` or a `value` outside `items`, and a 5th argument of `steps` that is not an object. A display counts in the check that `setState` updates the choices; pads and steps do not count in the coverage of `params()`. `--controls` shows them with role `pad`, `step` and `select`.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1044,7 +1165,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 19. Coverage (v1.16): `params()` contains every continuous control with `id` = state key, except what is in `modExclude` (test note, base note, length, voices, step data); choices and checkboxes do not belong in it; parameters that must not move unasked (pitch, master, gate, octave, times) have `on: false` (§8). `--controls` shows no `no` in the `in params()` column.
 20. Clipboard (v1.17, optional): `clipInfo`/`getClip`/`setClip` together; `getClip()` returns a valid `patchkamer-clip` or `null`; `setClip` clamps everything itself, returns `{ ok, reason }`, sets nothing halfway and sends no events; `setClip(getClip())` leaves `getState()` the same (§13d).
 21. Meters (v1.18, optional): whoever shows a level uses `host.ui.meter` (with `source` for an existing `AnalyserNode`, otherwise with `set()`), with `id` and `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` as a fallback to the own drawing, no damping of your own, the meter's `destroy()` in the device's `destroy()`, and a layout that lets the meter grow (§12e).
-22. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+22. Pads and small screen (v1.22, optional): whoever shows a push button or a choice uses `host.ui.pad`, `host.ui.display` or `host.ui.steps` with `{ id, group, role, color }` (colour always `#rrggbb`), with `if (!host.ui || typeof host.ui.pad !== 'function')` as the fallback to the own button; `set()` and `flash()` call no handlers; the model of a choice stays the `<select>` and `setState` sets the value; `destroy()` of the pad and choice in the device's `destroy()` (§12f).
+23. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 
@@ -1077,6 +1199,10 @@ What the validator can *not* see: whether your texts are well translated, whethe
 | `host.ui.meter` without checking that it exists | The device throws on an older host | `if (!host.ui || typeof host.ui.meter !== 'function')` and then draw yourself |
 | Damping the level yourself before `set()` | The signal slows twice; a skin with other ballistics no longer helps | Pass the raw level, the host does the fall |
 | Dropping `source` and still reading your own analyser into `set()` | Double work, also out of view | Pass the `AnalyserNode` as `source`; the host reads only when the card is visible |
+| Drawing your own pad while `host.ui.pad` exists | A skin cannot choose shape, colour and lamp | `host.ui.pad` (or `data-pk-role="pad"` on your own button), with your old button as the fallback for an old host (§12f) |
+| `host.ui.pad` or `host.ui.display` without checking that they exist | The device throws on an old host | `if (!host.ui || typeof host.ui.pad !== 'function')` and then build it yourself |
+| Giving a pad a colour like `rgb(…)` or `#fff` | The host only knows `#rrggbb`; the validator gives an error | Always `#rrggbb` |
+| Expecting `onchange` from `set(on)` or `flash()` | They call no handlers; the state gets out of sync | Set the state yourself in `setState` and call `set()` to update the face |
 
 ---
 
@@ -1087,7 +1213,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.21
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.22
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1146,7 +1272,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.21
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.22
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -1210,7 +1336,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.21
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.22
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1288,7 +1414,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.21.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.22.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>
