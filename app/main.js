@@ -28,7 +28,7 @@ const bundledRoot = app.isPackaged ? path.join(process.resourcesPath, 'library')
 const exeDir = process.env.PORTABLE_EXECUTABLE_DIR || path.dirname(process.execPath);
 const overrideRoot = path.join(exeDir, 'bibliotheek');
 const libRoot = fs.existsSync(overrideRoot) ? overrideRoot : bundledRoot;
-const SERVED = new Set(['devices', 'presets', 'tunes']);
+const SERVED = new Set(['devices', 'presets', 'tunes', 'samples']);
 const TYPES = { '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8' };
 
 function send(res, code, body, type) {

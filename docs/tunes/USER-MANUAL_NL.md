@@ -114,7 +114,7 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 37 packs met samen **2340 tunes**, één per apparaat: 29 packs voor synths (1985 tunes), 2 voor samplers (148 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
+Deze repository heeft 38 packs met samen **2350 tunes**, één per apparaat: 29 packs voor synths (1985 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
 
 ### Synths (29)
 
@@ -150,11 +150,12 @@ Deze repository heeft 37 packs met samen **2340 tunes**, één per apparaat: 29 
 | [Supersaw Swarm](../../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | Trance (7), Hardstyle (6), Progressive (6), Big Room (6), Synthwave (6), Pop (6), Future Bass (6), Eurodance (6), Ambient (6), Cinematic (6) | [`supersaw-swarm-styles.patchkamer-tunes.json`](../../tunes/supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | Trance (7), House (6), Pop (6), Synthwave (7), Ambient (6), Cinematic (6), Future Bass (6), Funk (6), Disco (6), Electro (6), Techno (6), Lo-fi (5) | [`triple-osc-poly-styles.patchkamer-tunes.json`](../../tunes/triple-osc-poly-styles.patchkamer-tunes.json) |
 
-### Samplers (2)
+### Samplers (3)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
 |---|---|---|---|---|
 | [Loop Slicer](../../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | House (6), Techno (6), Breakbeat (6), Drum and Bass (5), Hip-hop (6), Trap (5), Funk (5), Dub (5), Cinematic (5), Glitch (6), Pitched Hits (6), Own Loop (8) | [`loop-slicer-styles.patchkamer-tunes.json`](../../tunes/loop-slicer-styles.patchkamer-tunes.json) |
+| [Loop Slicer](../../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | – | [`loop-slicer-break-chops.patchkamer-tunes.json`](../../tunes/loop-slicer-break-chops.patchkamer-tunes.json) |
 | [Samplebank](../../devices/samplers/Samplebank/) | Samplebank Styles | 79 | Techno (7), House (7), Trance (5), Ambient (5), Synthwave (5), Hip-hop (4), Lo-fi (5), Trap (4), Drum & Bass (5), Dubstep (4), Electro (5), Pop (4), Chiptune (5), Funk & Disco (6), Dub (4), Cinematic (4) | [`samplebank-styles.patchkamer-tunes.json`](../../tunes/samplebank-styles.patchkamer-tunes.json) |
 
 Een Samplebank-tune brengt zijn eigen kleine gegenereerde geluiden mee. Acht Loop Slicer-tunes (map Own Loop) gebruiken de loop die je hebt geladen en blijven daar zonder stil.

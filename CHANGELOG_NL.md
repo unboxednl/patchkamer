@@ -16,6 +16,8 @@ Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versi
 - **Versienummer** onder Instellingen: de versie van Patchkamer, en in de app ook die van de app en de nieuwste uitgave op GitHub, met een downloadlink. Een link naar deze changelog.
 - **Klanken vinden op instrument of stijl.** De tabs Tunes en Presets krijgen **Per instrument** en **Per stijl**: een boom met inspringen (Gitaren → Nylon, Piano's, Koper, …; Hiphop, Jungle, Techno, …) met zoeken en een knop **Laden** die de tune op een kaart zet. De meegeleverde tune- en presetpacks zijn getagd. Nieuw in het contract (v1.19): optionele `tags` op tunes, presets, mappen en packs.
 - **Hiphop-songs en een mappenboom in de tab Songs.** Vier hiphop-songs in verschillende substijlen (boom bap, trap, lo-fi, G-funk) in `songs/hip-hop`, op papier en met metingen gecontroleerd maar niet beluisterd. De tab Songs toont demo-songs in submappen onder een eigen kop met inspringen.
+- **Tab Samples en breakloops.** Een nieuwe bibliotheektab voor samplepacks (`.patchkamer-samples.json`, contract v1.20): blader per stijl of per pack, beluister met ▶ en laad een sample in de Loop Slicer of de Samplebank (beide krijgen een optionele `loadAudio`, versie 1.20.0). Het eerste pack, **Break Loops**, heeft veertien drumloops van twee maten (breakbeat, jungle, drum and bass, boom bap) gerenderd uit onze eigen drumapparaten; de Loop Slicer krijgt tien **Break Chops**-tunes. Gemeten, niet beluisterd.
+- **Jungle-, breakbeat- en drum-and-bass-songs.** Drie songs die een break uit het pack Break Loops via de Loop Slicer spelen: `songs/jungle`, `songs/breakbeat`, `songs/drum-and-bass`. Gemeten, niet beluisterd.
 
 ### Opgelost
 - MIDI verbindt nu in de app.

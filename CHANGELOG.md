@@ -16,6 +16,8 @@ All notable changes to Patchkamer (the host and the desktop app) per version. Th
 - **Version number** under Settings: the version of Patchkamer, and in the app also the version of the app and the latest release on GitHub, with a download link. A link to this changelog.
 - **Find sounds by instrument or style.** The Tunes and Presets tabs get **By instrument** and **By style**: an indented tree (Guitars → Nylon, Pianos, Brass, …; Hip-hop, Jungle, Techno, …) with search and a **Load** button that puts the tune on a card. The bundled tune and preset packs are tagged. New in the contract (v1.19): optional `tags` on tunes, presets, folders and packs.
 - **Hip-hop songs and a folder tree in the Songs tab.** Four hip-hop songs in different sub-styles (boom bap, trap, lo-fi, G-funk) in `songs/hip-hop`, checked on paper and by measurement but not listened to. The Songs tab groups demo songs in subfolders under an indented heading.
+- **Samples tab and break loops.** A new library tab for sample packs (`.patchkamer-samples.json`, contract v1.20): browse by style or by pack, listen with ▶ and load a sample into the Loop Slicer or the Samplebank (both get an optional `loadAudio`, version 1.20.0). The first pack, **Break Loops**, has fourteen two-bar drum loops (breakbeat, jungle, drum and bass, boom bap) rendered from our own drum devices; the Loop Slicer gets ten **Break Chops** tunes. Measured, not listened to.
+- **Jungle, breakbeat and drum and bass songs.** Three songs that play a break from the Break Loops pack through the Loop Slicer: `songs/jungle`, `songs/breakbeat`, `songs/drum-and-bass`. Measured, not listened to.
 
 ### Fixed
 - MIDI now connects in the app.

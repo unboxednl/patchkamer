@@ -98,6 +98,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Groovebox 12](../devices/drums/Groovebox12/) | Groovebox 12 Styles | 38 | 12: Techno, House, Trance, Drum & Bass, Dubstep, Hip-hop, Funk & disco, Electro, Pop, Rock, Jazz, Synthwave | [`groovebox-12-styles.patchkamer-tunes.json`](groovebox-12-styles.patchkamer-tunes.json) | – |
 | [Latin Percussion](../devices/drums/LatinPercussion/) | Latin Percussion Styles | 39 | 13: Salsa, Son, Mambo, Cha-Cha-Cha, Rumba, Bossa Nova, Samba, Merengue, Bachata, Cumbia, Reggaeton, Latin Jazz, Latin Soul | [`latin-percussion-styles.patchkamer-tunes.json`](latin-percussion-styles.patchkamer-tunes.json) | – |
 | [Pulse Drums](../devices/drums/PulseDrums/) | Pulse Drums Techno | 26 | 8: Techno, Minimal, Peak Time, Hard Techno, Dub Techno, Acid, Electro, Breaks | [`pulse-drums-techno.patchkamer-tunes.json`](pulse-drums-techno.patchkamer-tunes.json) | – |
+| [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | 0: geen (alles op het hoogste niveau) | [`loop-slicer-break-chops.patchkamer-tunes.json`](loop-slicer-break-chops.patchkamer-tunes.json) | – |
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | 12: House, Techno, Breakbeat, Drum and Bass, Hip-hop, Trap, Funk, Dub, Cinematic, Glitch, Pitched Hits, Own Loop | [`loop-slicer-styles.patchkamer-tunes.json`](loop-slicer-styles.patchkamer-tunes.json) | – |
 | [Samplebank](../devices/samplers/Samplebank/) | Samplebank Styles | 79 | 16: Techno, House, Trance, Ambient, Synthwave, Hip-hop, Lo-fi, Trap, Drum & Bass, Dubstep, Electro, Pop, Chiptune, Funk & Disco, Dub, Cinematic | [`samplebank-styles.patchkamer-tunes.json`](samplebank-styles.patchkamer-tunes.json) | – |
 | [Acid Baselines](../devices/synths/AcidBaselines/) | Acid Baselines Classics | 49 | 9: Chicago Origins, Frankfurt Rolling, Minimal Acid, Squelch Anthems, Acid Techno, Acid Trance, Electro Acid, Deep Acid, AIcid | [`acid-baselines-classics.patchkamer-tunes.json`](acid-baselines-classics.patchkamer-tunes.json) | – |
@@ -130,7 +131,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 
-Samen 37 packs met 2340 tunes.
+Samen 38 packs met 2350 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet

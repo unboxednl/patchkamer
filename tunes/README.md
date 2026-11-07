@@ -4,7 +4,7 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **37 packs with 2340 tunes**, one pack per device: 29 for synths (1985 tunes), 2 for samplers (148 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **38 packs with 2350 tunes**, one pack per device: 29 for synths (1985 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -42,11 +42,12 @@ This folder has **37 packs with 2340 tunes**, one pack per device: 29 for synths
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10 | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12 | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) |
 
-### Samplers (2)
+### Samplers (3)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | 12 | [`loop-slicer-styles.patchkamer-tunes.json`](loop-slicer-styles.patchkamer-tunes.json) |
+| [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | – | [`loop-slicer-break-chops.patchkamer-tunes.json`](loop-slicer-break-chops.patchkamer-tunes.json) |
 | [Samplebank](../devices/samplers/Samplebank/) | Samplebank Styles | 79 | 16 | [`samplebank-styles.patchkamer-tunes.json`](samplebank-styles.patchkamer-tunes.json) |
 
 A Samplebank tune carries its own small generated sounds. Eight Loop Slicer tunes (folder Own Loop) use the loop you have loaded and stay silent without one.

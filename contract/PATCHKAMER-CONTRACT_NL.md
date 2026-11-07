@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.19 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.20 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -28,6 +28,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.17 | Klembord: patronen en clips kopiëren en plakken tussen apparaten. Optioneel `clipInfo()`, `getClip()`, `setClip(clip)` (alle drie of geen) en het uitwisselformaat `patchkamer-clip` (JSON, tijd in tikken); de host zet de knoppen Kopieer en Plak in de kaartbalk en vertaalt tussen apparaten; de validator controleert de drie methoden en kent `--clip` (§13d) |
 | v1.18 | Meters: `host.ui.meter(parent, label, opts)` laat de host het niveau tekenen (balk, ledladder of ronde VU-meter met wijzer; lengte en breedte instelbaar door een skin), uit een of twee `AnalyserNode`s (`source`) of via `set(level)`; een meter staat in het register met rol `meter`; een apparaat zonder `host.ui.meter` op een oude host valt terug op zijn eigen tekening; het attribuut `data-pk-suffix` (tekst na het label bij MIDI-koppelen); de validator kent `host.ui.meter` en toont meters in `--controls` (§12e) |
 | v1.19 | Tags voor tunes en presets: `tags` op een tune, map of pack (paden zoals `instrument/guitar/acoustic` en `style/hiphop`); de host toont ze als boom met inspringen (Tunes en Presets, Per instrument en Per stijl). Alleen de packs veranderen, apparaten niet (§13c) |
+| v1.20 | Samples: samplepacks (`*.patchkamer-samples.json`, geluid als base64) met een eigen tab in de bibliotheek, en voor apparaten die audio laden de optionele methode `loadAudio(files, info)` (§13e) |
 
 ---
 
@@ -841,6 +842,35 @@ Huidige toonhoogtes worden **zoals opgeslagen** gekopieerd: de transpositie van 
 
 ---
 
+## 13e. Samples (v1.20)
+
+Een **sample** is een stukje geluid (een drumloop, een stab, een enkele klap) in een **samplepack**, `naam.patchkamer-samples.json`. De host toont ze op de tab **Samples** van de bibliotheek, per stijl of per pack, laat ze beluisteren en laadt ze in een apparaat dat daar geluid van maakt (de Loop Slicer, de Samplebank). Een samplepack bevat het geluid zelf, als base64, zodat het één bestand blijft dat overal werkt (GitHub, een map, loslaten op de vloer).
+
+```json
+{ "format": "patchkamer-samples", "formatVersion": 1, "name": "Jungle loops", "author": "…", "license": "CC0-1.0",
+  "description": "…", "tags": ["style/jungle"],
+  "tree": [ { "folder": "Rollers", "tags": ["style/drum-and-bass"],
+              "items": [ { "name": "Rolling Ghost Break", "bpm": 170, "bars": 2, "tags": ["style/jungle"],
+                           "author": "…", "license": "CC0-1.0",
+                           "audio": { "format": "wav", "data": "<base64>" } } ] } ] }
+```
+
+| Veld | Regels |
+|---|---|
+| `format`, `formatVersion` | `"patchkamer-samples"` en `1`; een hoger `formatVersion` weigert de host met een melding |
+| `tree` | mappen (`folder`, `items`, mag in elkaar) en samples; wat niet geldig is, wordt overgeslagen |
+| `name` | hoogstens 80 tekens |
+| `audio` | `format` is `wav`, `mp3`, `ogg` of `flac` (wat `decodeAudioData` van de browser leest), `data` is base64; een bestand is hoogstens 50 MiB |
+| `bpm`, `bars` | optioneel: het tempo (20 tot 400) en de lengte in maten (0,25 tot 64). Een loop die naadloos herhaalt, heeft ze allebei |
+| `tags` | zoals bij tunes (§13c): paden zoals `style/jungle`; op het pack, een map of het sample zelf. Samples gebruiken de wortel `style` |
+| `author`, `license` | zoals bij tunes (SPDX; CC0-1.0 voor eigen samples). Samples van een ander blijven van die ander: zet de licentie van de maker erbij |
+
+**Samples uit een opname van een ander** (een bekende break, een stuk uit een nummer) zijn auteursrechtelijk beschermd. Zet ze alleen in een pack als je de rechten hebt of de licentie het toestaat.
+
+**Voor apparaten (optioneel).** Een apparaat dat audio kan laden, geeft de instance `loadAudio(files, info)`: `files` is een lijst `File`-objecten, zoals de gebruiker ze zou kiezen; `info` is `{ name, bpm, bars }` (alles optioneel). De methode doet hetzelfde als je eigen knop Bestand kiezen, geeft een belofte terug en meldt fouten in de kaart. De host roept hem aan als de gebruiker op → *apparaat* klikt; een apparaat zonder `loadAudio` krijgt geen sample en de host meldt dat. De Loop Slicer laadt het eerste bestand; de Samplebank laadt ze vanaf de geselecteerde pad.
+
+---
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -861,6 +891,7 @@ Huidige toonhoogtes worden **zoals opgeslagen** gekopieerd: de transpositie van 
 | `host.ui.knob(…, opties)` | v1.8 | `{ default, scale: 'log' }`; draaiknop als de gebruiker dat kiest (§12a) |
 | `data-pk-default`, `data-pk-noreset`, `data-pk-for` | v1.8 | Hints op eigen schuiven en getallen (§12a) |
 | `parts()`, `getPart(id)`, `setPart(id, data)` | v1.9 | Instrumenten voor tunes per instrument, optioneel (§13c) |
+| `loadAudio(files, info)` | v1.20 | Een sample uit de bibliotheek laden, zoals Bestand kiezen; optioneel (§13e) |
 | `host.tunes.list / apply / save / applyPart` | v1.9 | Tunes en presets zonder UI (voor tests en controllers); `host.presets` is hetzelfde |
 | `host.frame(this, cb, fps)` | v1.7 | Tekenen op de klok van de host, alleen als je kaart te zien is; geeft een opzeg-functie (§12b) |
 | `host.visible(this)` | v1.7 | Is je kaart nu te zien? |
@@ -1013,7 +1044,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.19
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.20
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1072,7 +1103,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.19
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.20
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -1136,7 +1167,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.19
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.20
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -1214,7 +1245,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.19.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.20.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

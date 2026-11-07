@@ -46,7 +46,7 @@ async function loadSource(src,opts={}){
   if(opts.fresh) _freshUntil=Date.now()+90000;
   SRCSTATE.set(src.sid,{state:'busy',msg:PK.pkt('m.laden_ellipsis')}); paintSources(); let n=0, skipped=0, cached=0, layoutNote='', iconFind=null; const errs=[], wss=[], prs=[], skl=[], ski=[];   // skl: skinbestanden, ski: iconen uit skins/library/<apparaat-id>/
   const one=async(text,origin,imp)=>{ if(!looksLikeDevice(text)){ skipped++; if(/export\s+default/.test(text)) errs.push((origin.path||origin.url)+PK.pkt('m.overgeslagen_geen_apparaat_herkend_export')); return; } try{ await PK.loadDeviceSource(text,origin,true,imp); n++; }catch(e){ errs.push((origin.path||origin.url)+': '+e.message); } };
-  const isWs=pth=>/\.patchkamer(-song)?\.json$/i.test(pth), isPr=pth=>/\.patchkamer-(presets|tunes)\.json$/i.test(pth); let layout=null;
+  const isWs=pth=>/\.patchkamer(-song)?\.json$/i.test(pth), isPr=pth=>/\.patchkamer-(presets|tunes|samples)\.json$/i.test(pth); let layout=null;
   const SKICON_RE=/^([A-Za-z0-9._-]+)\/icon\.(svg|png|webp|jpg)$/i, skIconOf=(p,rel)=>{ let m=/(?:^|\/)skins\/library\/([A-Za-z0-9._-]+)\/icon\.(svg|png|webp|jpg)$/i.exec(p); if(!m&&src.only==='skins') m=SKICON_RE.exec(rel); return m?{dev:m[1],ext:m[2].toLowerCase()}:null; }, isSk=pth=>/\.patchkamer-skin\.json$/i.test(pth);
   try{
     if(src.kind==='github'){
@@ -57,7 +57,7 @@ async function loadSource(src,opts={}){
       let paths, wpaths; const man=blobs.find(x=>x.path===base+'patchkamer.json');
       { const lc=new Map(blobs.map(x=>[x.path.toLowerCase(),x])); iconFind=async(prefix,name)=>{ const b=lc.get((base+prefix+name).toLowerCase()); if(!b||(b.size||0)>PK.ICONMAX) return null; const r=await fetch(rawBust(rawOf(b.path)),{cache:'no-cache'}); return r.ok?r.blob():null; }; }
       let ppaths, skpaths;
-      if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[])].map(prEntry).map(w=>({...w,path:base+w.path})); skpaths=(m.skins||[]).map(prEntry).map(w=>base+w.path); if(m.name) src.label=m.name+' · '+src.label; }
+      if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[]),...(m.samples||[])].map(prEntry).map(w=>({...w,path:base+w.path})); skpaths=(m.skins||[]).map(prEntry).map(w=>base+w.path); if(m.name) src.label=m.name+' · '+src.label; }
       else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,500); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); skpaths=blobs.map(x=>x.path).filter(isSk); }
       if(src.only&&src.only!=='skins') skpaths=[];
       if(src.only){ if(src.only!=='devices') paths=[]; wpaths=[]; ppaths=ppaths.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }   // een bron voor één soort: alleen apparaten, alleen presets of alleen tunes
@@ -76,7 +76,7 @@ async function loadSource(src,opts={}){
             if(dev&&/^[A-Za-z0-9._-]+$/.test(dev)&&!seenDev.has(dev)){ seenDev.add(dev); for(const ext of Object.keys(ICONTYPES)) ski.push({dev,ext,get:async()=>{ const r2=await fetch(new URL('icon.'+ext,u).href,{cache:'no-cache'}); return r2.ok?r2.blob():null; }}); } }); }
         for(const x of (m.modules||[])){ const u=new URL(x,murl).href; try{ const r2=await fetchText(u); if(r2.cached) cached++; await one(r2.text,{sid:src.sid,kind:'url',url:u,path:String(x),label:src.label},sameOrigin(u)?u:null); }catch(e){ errs.push(e.message); } }
         (m.workspaces||[]).map(wsEntry).forEach(w=>{ const u=new URL(w.path,murl).href; wss.push({name:w.name,path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
-        [...(m.presets||[]),...(m.tunes||[])].map(prEntry).forEach(w=>{ const u=new URL(w.path,murl).href; prs.push({path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
+        [...(m.presets||[]),...(m.tunes||[]),...(m.samples||[])].map(prEntry).forEach(w=>{ const u=new URL(w.path,murl).href; prs.push({path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
         if(typeof m.library==='string'){ const u=new URL(m.library,murl).href; layout=async()=>JSON.parse((await fetchText(u)).text); } }
       else { const r=await fetchText(src.url); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'url',url:src.url,label:src.label},sameOrigin(src.url)?src.url:null); }
     } else if(src.kind==='folder'){
@@ -84,7 +84,7 @@ async function loadSource(src,opts={}){
       const byPath=new Map(files); let mods, wps; const man=byPath.get('patchkamer.json');
       { const lf=new Map(files.map(f=>[f[0].toLowerCase(),f[2]])); iconFind=async(prefix,name)=>{ const g=lf.get((prefix+name).toLowerCase()); return g?g():null; }; }
       let pps, sks;
-      if(man){ const m=JSON.parse(await man()); if(m.name) src.label=m.name; sks=(m.skins||[]).map(prEntry).map(w=>w.path); mods=(m.modules||[]).map(x=>String(x).replace(/^\.\//,'')); wps=(m.workspaces||[]).map(wsEntry); pps=[...(m.presets||[]),...(m.tunes||[])].map(prEntry); }
+      if(man){ const m=JSON.parse(await man()); if(m.name) src.label=m.name; sks=(m.skins||[]).map(prEntry).map(w=>w.path); mods=(m.modules||[]).map(x=>String(x).replace(/^\.\//,'')); wps=(m.workspaces||[]).map(wsEntry); pps=[...(m.presets||[]),...(m.tunes||[]),...(m.samples||[])].map(prEntry); }
       else { mods=files.map(f=>f[0]).filter(isModulePath); wps=files.map(f=>f[0]).filter(isWs).map(wsEntry); pps=files.map(f=>f[0]).filter(isPr).map(prEntry); sks=files.map(f=>f[0]).filter(isSk); }
       sks.forEach(pth=>{ const get=byPath.get(pth); if(get) skl.push({path:pth,load:async()=>get()}); });
       files.forEach(f=>{ const k=skIconOf(f[0],f[0]); if(k) ski.push({...k,get:async()=>{ const b=f[2]?await f[2]():null; return b&&b.size<=PK.ICONMAX?b:null; }}); });

@@ -55,6 +55,7 @@ function prNormalize(j,fallbackName){
   return [...by.entries()].map(([device,tree])=>({name:String(j.name||fallbackName||PK.pkt('m.presets')).slice(0,80),device,author:'',license:'',description:'',tree})); } PK.prNormalize=prNormalize;
 function tuExportJSON(l){ const T=libType(l); return JSON.stringify({format:T==='tune'?TUFMT:PRFMT,formatVersion:T==='tune'?1:2,device:l.device,deviceName:devName(l.device),name:l.name,author:l.author||'',license:l.license||'',description:l.description||'',...(l.tags&&l.tags.length?{tags:l.tags}:{}),saved:new Date().toISOString(),tree:l.tree.map(tuNodeOut)},null,1); }
 async function presetsFromSource(src,list,errs){
+  { const sm=list.filter(w=>/\.patchkamer-samples\.json$/i.test(w.path)); list=list.filter(w=>!/\.patchkamer-samples\.json$/i.test(w.path)); if(PK.samplesFromSource) await PK.samplesFromSource(src,sm,errs); }   // samplepacks horen bij de tab Samples
   PK.PR.libs=PK.PR.libs.filter(l=>!(l.ro&&l.src&&l.src.sid===src.sid));
   for(const w of list){ try{ const libs=prNormalize(await w.load(),PK.wsNameOf(w.path).replace(/\.patchkamer-(presets|tunes)$/i,''));
       libs.forEach(n=>{ const lid='b:'+src.sid+':'+w.path+':'+n.device; PK.PR.libs=PK.PR.libs.filter(l=>l.lid!==lid); PK.PR.libs.push({lid,...n,ro:true,src:{sid:src.sid,label:src.label,path:w.path}}); }); }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.20.0 — loadAudio(files): de tab Samples van de host laadt een sample in deze loop (contract v1.20); verder gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Loop Slicer (nieuwe id nl.patchkamer.loopslicer, eigen map; voorheen Snede, nl.patchkamer.snede);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Loop Slicer
@@ -9,7 +10,7 @@
 //   - setState volgt §13: onbekende velden worden genegeerd, ontbrekende of ongeldige waarden krijgen de standaard, getallen worden afgekapt;
 //     een kapotte of te grote PCM-reeks geeft een melding in de kaart in plaats van een fout
 //   - de uitvoerbegrenzer volgt host.audio.oversample; alle ingangen (noten, tempo, sturing) worden op eindigheid gecontroleerd
-/** Loop Slicer 1.11.0. Standalone, no external files.
+/** Loop Slicer 1.20.0. Standalone, no external files.
  * Loads a WAV or MP3 loop (or the built-in demo loop), cuts it into 4, 8, 16 or 32 slices and plays them from keys,
  * trigs or a 16-step pattern on the clock. The audio is saved as PCM16 with the setup (max. 120 s, 16 MiB PCM16, 50 MiB input, 32 voices).
  */
@@ -66,7 +67,7 @@ const LIMIT = 16 * 1024 * 1024;
 const DEMO_OLD_NAME = 'Eigen demo · 120 BPM / 1 maat', DEMO_NAME = 'Demo loop · 120 BPM / 1 bar', NONE_OLD_NAME = 'Geen loop geladen';
 
 export default {
-  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.11.0', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.20.0', kind: 'instrument', category: 'groove',
   ui: { width: 900, minWidth: 380 },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo slices' }], eventIn: [{ id: 'notes', name: 'Slice notes / trigs' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo slices', notes: 'Slice-noten / trigs', mod: 'Mod' } } },
@@ -303,6 +304,7 @@ export default {
         } catch { }
       },
       params: descriptors, modulate: receiveMod,
+      async loadAudio(files) { const f = Array.from(files || [])[0]; if (f) await load(f); },   // v1.20: een sample uit de bibliotheek, zoals Bestand kiezen
       getState() { return { ...state, pattern: state.pattern.slice() }; },
       setState(raw) { if (dead) return; adopt(applyRaw(raw, false), true); },
       getPreset() { const p = self.getState(); for (const k of PRESET_SKIP) delete p[k]; return p; },
