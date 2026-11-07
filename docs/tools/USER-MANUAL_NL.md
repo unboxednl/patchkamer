@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de tien **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de elf **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -12,6 +12,7 @@ Deze handleiding gaat over de tien **tools** van Patchkamer. Tools zijn hulpmidd
 | veel apparaten bespelen vanaf een raster van 40 pads op een MIDI-controller | [Pad Controller](#pad-controller) | een eventingang **MIDI (ruw)**, 40 eventuitgangen **Pad** en een modulatie-uitgang **Knoppen** |
 | akkoorden vinden zonder muziektheorie: toonsoort, stijl, akkoorden die ik speel, ideeën voor het volgende akkoord, 16 pads, bas en stemvoering | [Chord Buddy](#chord-buddy) | een eventingang **In**, eventuitgangen **Akkoorden** en **Bas** |
 | de afgewerkte mix (of ander geluid) in één bestand opnemen | [Recorder](#recorder) | audio **In** en **Door** |
+| een drumloop omzetten in een patroon (kick, snare, hats, toms) en dat naar een sequencer kopiëren | [Drum Listener](#drum-listener) | audio **In** en **Door**, een eventuitgang **Drum trigs** |
 | veel sporen tegelijk opnemen, een bestand per spoor | [Multitrack](#multitrack) | een **Bundel**-ingang |
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
@@ -374,6 +375,37 @@ Het pack **Control Surface Layouts** heeft 28 presets in vijf mappen: **Controll
 - Web MIDI werkt in Chrome en Edge. Control Surface gebruikt geen sysex en kan de ledjes van je controller dus niet laten branden.
 - Een element behoudt zijn toewijzing zolang zijn plek in de indeling gelijk blijft. Verwijder je een sectie, dan krijgen de elementen erna nieuwe nummers.
 - Heeft je controller meerdere pagina's of standen, leer dan elke stand met een eigen indeling, of gebruik één ingang en kanaal per stand.
+
+## Drum Listener
+
+**Waar het voor dient.** Luistert naar een drumloop en schrijft op wat er gespeeld wordt: kick, snare (met clap en rim), gesloten en open hat, toms en overige percussie, elk op een eigen baan, netjes op een raster. Het patroon kun je dan naar een drumcomputer sturen of naar een sequencer kopiëren. Het werkt op je eigen computer; er gaat niets over het internet.
+
+![De kaart van Drum Listener, leeg](../images/nl/tools/drum-listener.png)
+
+**Geluid binnenhalen**
+
+- **Audiobestand laden…** leest een WAV-, MP3-, FLAC- of OGG-bestand (hoogstens 50 MiB; de eerste 90 seconden worden gebruikt). Een sample uit de tab **Samples** van de bibliotheek kan ook, want het apparaat neemt audio uit de bibliotheek aan; het tempo en het aantal maten van dat sample worden dan gebruikt. (Nu biedt de tab Samples alleen knoppen voor de Loop Slicer en de Samplebank.)
+- **Opnemen** neemt een paar maten of seconden op uit de poort **In**: kies de duur bij **Opnameduur**, laat het geluid spelen (bijvoorbeeld de uitgang van **Audio Capture** aangesloten op **In**) en druk op **Opnemen**. **Door** geeft het geluid ongewijzigd door, zodat je het nog hoort.
+
+**Wat je ziet en instelt**
+
+![Drum Listener met een herkend patroon](../images/nl/tools/drum-listener-result.png)
+
+- De regel boven het raster zegt tempo (opgegeven, uit de lengte of geschat), maten, raster, swing en het aantal slagen. Het raster toont een baan per instrument, een kolom per zestiende; een hardere slag is helderder. **Klik in het raster** om een slag toe te voegen of weg te halen; elke baan heeft een lijst met instrumenten (wat de baan heet en welke noot ze speelt), een aantal en **Dempen**.
+- **Tempo (BPM)** is leeg voor automatisch. Is het tempo de helft of het dubbele van wat je verwacht, gebruik dan **÷2** of **×2**. **Maten**, **Raster** (1/16, 1/32, triool 1/8, triool 1/16), **Swing** en **Eerste tel** (slim, zoek de eerste tel, begin van het geluid) staan op automatisch tot je kiest. **Gevoeligheid** bepaalt hoe snel een zachte slag meetelt; **Opnieuw analyseren** herhaalt de analyse met de nieuwe instellingen. **◀ 1/16** en **1/16 ▶** schuiven het hele patroon een zestiende op als de eerste tel op de verkeerde plek zit.
+- **Naar drums sturen (klok)** speelt het patroon op de klok van de studio naar de poort **Drum trigs**: sluit die aan op Drum Kit, Pulse Drums of een andere drumcomputer. **Uitvoer** kiest General MIDI-noten of trigs per soort; **Velocity** schaalt de slagen. **Studiotempo gelijkzetten** zet het tempo van de studio op het herkende tempo. De herkende swing speelt Drum Listener zelf, dus laat de swing van de studio op 0 staan.
+- **Kopieer** in de kaartbalk kopieert het patroon als drumclip; **Plak** het in een drumspoor van de Pattern Tracker, de Clip Arranger of een Step Sequencer die aan een drumcomputer hangt. **Clip bewaren (JSON)** bewaart de clip als bestand.
+
+**Presets.** Een preset bevat de instellingen (tempo, maten, raster, swing, eerste tel, gevoeligheid, opnameduur, uitvoer, velocity), nooit het patroon of het geluid. Er is geen presetpack.
+
+**Tips en beperkingen**
+
+- Gemaakt voor drumloops van één tot zestien maten. Kick, snare en de hats worden redelijk herkend, de rest veel minder: **open hat, rim, clap, toms en overige percussie worden vaak gemist of verward**, en zachte spookslagen van de snare onder drukke hats worden vaak gemist. De velocity is een ruwe aanwijzing (redelijk bij de snare, zwak bij kick en hats).
+- Andere instrumenten in het geluid (bas, akkoorden, zang) maken het resultaat veel slechter, vooral de snare en de hats. Het is gemeten op loops uit de eigen drumapparaten van Patchkamer, **niet op echte opnames**, en niet door te luisteren.
+- Bij een geschat tempo wordt een langzame loop soms op dubbele snelheid gelezen: gebruik **÷2**. Vul bij een opname het tempo in als je het weet.
+- Een opname van meer dan een paar maten wordt niet tot één maat samengevouwen: het patroon heeft dan gewoon zoveel maten.
+
+---
 
 ## Als het niet werkt
 

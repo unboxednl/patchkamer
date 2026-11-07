@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the ten **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the eleven **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -12,6 +12,7 @@ This manual covers the ten **tools** of Patchkamer. Tools are helpers: you use t
 | control many devices from a grid of 40 pads on a MIDI controller | [Pad Controller](#pad-controller) | a **MIDI (raw)** event in, 40 **Pad** event outs and a **Buttons** modulation out |
 | find chords without music theory: key, style, chords I play, next-chord ideas, 16 pads, bass and voice leading | [Chord Buddy](#chord-buddy) | an **In** event in, **Chords** and **Bass** event outs |
 | record the finished mix (or any sound) into one file | [Recorder](#recorder) | **In** and **Through** audio |
+| turn a drum loop into a pattern (kick, snare, hats, toms) and copy it to a sequencer | [Drum Listener](#drum-listener) | audio **In** and **Through**, an event out **Drum trigs** |
 | record many tracks at once, one file per track | [Multitrack](#multitrack) | a **Bundle** in |
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
@@ -374,6 +375,37 @@ The **Control Surface Layouts** pack has 28 presets in five folders: **Controlle
 - Web MIDI works in Chrome and Edge. Control Surface does not use sysex, so it cannot light the LEDs of your controller.
 - An element keeps its assignment as long as its place in the layout stays the same. If you remove a section, the elements after it get new numbers.
 - If your controller has several pages or modes, learn each mode with its own layout, or use one input and channel per mode.
+
+## Drum Listener
+
+**What it is for.** Listens to a drum loop and writes down what is played: kick, snare (with clap and rim), closed and open hat, toms and other percussion, each on its own lane, in time on a grid. You can then send the pattern to a drum machine, or copy it to a sequencer. It works on your own computer, nothing is sent over the internet.
+
+![The Drum Listener card, empty](../images/en/tools/drum-listener.png)
+
+**Getting audio in**
+
+- **Load audio file…** reads a WAV, MP3, FLAC or OGG file (up to 50 MiB; the first 90 seconds are used). A sample from the **Samples** tab of the library works too, as the device accepts audio from the library; the tempo and number of bars of that sample are then used. (Today the Samples tab only offers buttons for the Loop Slicer and the Samplebank.)
+- **Record** takes a few bars or seconds from the **In** port: choose the length in **Record length**, play the sound (for example the output of **Audio Capture** connected to **In**) and press **Record**. **Through** passes the sound on unchanged, so you can still hear it.
+
+**What you see and set**
+
+![Drum Listener with a recognised pattern](../images/en/tools/drum-listener-result.png)
+
+- The line above the grid says tempo (given, from the length or estimated), bars, grid, swing and the number of hits. The grid shows a lane per instrument, one column per sixteenth; a stronger hit is brighter. **Click in the grid** to add or remove a hit; every lane has an instrument list (change what a lane is called and which note it plays), a count and **Mute**.
+- **Tempo (BPM)** is empty for automatic. If the tempo is half or double what you expect, use **÷2** or **×2**. **Bars**, **Grid** (1/16, 1/32, triplet 1/8, triplet 1/16), **Swing** and **Downbeat** (smart, find the downbeat, start of the sound) are automatic until you choose. **Sensitivity** sets how readily a quiet hit counts as a hit; **Analyse again** repeats the analysis with the new settings. **◀ 1/16** and **1/16 ▶** shift the whole pattern by one sixteenth if the first beat is in the wrong place.
+- **Send to drums (clock)** plays the pattern on the studio clock to the **Drum trigs** port: connect it to Drum Kit, Pulse Drums or another drum machine. **Output** chooses General MIDI notes or trigs by instrument; **Velocity** scales the hits. **Set studio tempo to this** sets the tempo of the studio to the recognised tempo. The detected swing is played by Drum Listener, so keep the swing of the studio at 0.
+- **Copy** in the card bar copies the pattern as a drum clip; **Paste** it into a drum track of the Pattern Tracker, the Clip Arranger or a Step Sequencer that is connected to a drum machine. **Save clip (JSON)** keeps the clip as a file.
+
+**Presets.** A preset holds the settings (tempo, bars, grid, swing, downbeat, sensitivity, record length, output, velocity), never the pattern or the audio. No preset pack is included.
+
+**Tips and limits**
+
+- Made for drum loops of one to sixteen bars. It recognises kick, snare and the hats fairly well, and the rest much less: **open hat, rim, clap, toms and other percussion are often missed or mixed up**, and soft ghost notes on the snare under busy hats are often missed. The velocity is a rough indication (reasonable for the snare, weak for kick and hats).
+- Other instruments in the sound (bass, chords, vocals) make the result much worse, most of all the snare and the hats. It was measured on loops from Patchkamer's own drum devices, **not on real recordings**, and not by listening.
+- When the tempo is estimated, a slow loop is sometimes read at double speed: use **÷2**. For a recording, fill in the tempo if you know it.
+- A recording that runs for more than a few bars is not folded into one bar: the pattern then simply has that many bars.
+
+---
 
 ## If it does not work
 
