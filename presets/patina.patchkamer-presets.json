@@ -1,1981 +1,1981 @@
 {
- "format": "patchkamer-presets",
- "formatVersion": 2,
- "device": "nl.patchkamer.patina",
- "name": "Patina Situations and Styles",
- "author": "Freek van Gool",
- "license": "CC0-1.0",
- "description": "Starting points for Patina for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. The Situations folder uses a common style for each situation (house for club, EDM for festival and big room, pop for home, headphones, radio, car and streaming, transparent for studio). The values follow the same recipes as the Master Director.",
- "tree": [
-  {
-   "folder": "Situations",
-   "items": [
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.patina",
+  "name": "Patina Situations and Styles",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Patina for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. Every preset sets its own character, drive, mix, colour, brightness and low protection: tube or tape for energetic styles with a firm protected low end, soft and light for classical and ambient, dark and dirty for lo-fi. A situation adds its own correction to the style (for example more drive for a festival, a gentler top for headphones, less low protection for small radio and car speakers), and the output trim is set per preset so the level stays close to the original.",
+  "tree": [
     {
-     "name": "Streaming",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.5,
-      "mix": 0.23,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Situations",
+      "items": [
+        {
+          "name": "Streaming",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.51,
+            "mix": 0.225,
+            "color": 0.3,
+            "tone": 0.75,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Club",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.28,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.87,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Festival",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 10.0,
+            "mix": 0.33,
+            "color": 0.3,
+            "tone": 0.73,
+            "protect": 0.93,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Big room",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 10.8,
+            "mix": 0.345,
+            "color": 0.27,
+            "tone": 0.75,
+            "protect": 0.94,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Home / hi-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.12,
+            "mix": 0.212,
+            "color": 0.33,
+            "tone": 0.8,
+            "protect": 0.77,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Headphones",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 2.73,
+            "mix": 0.2,
+            "color": 0.32,
+            "tone": 0.7,
+            "protect": 0.88,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Studio / reference",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 0.78,
+            "mix": 0.06,
+            "color": 0.05,
+            "tone": 0.9,
+            "protect": 1,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Radio / broadcast",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.68,
+            "mix": 0.275,
+            "color": 0.3,
+            "tone": 0.67,
+            "protect": 0.65,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Car",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.29,
+            "mix": 0.263,
+            "color": 0.3,
+            "tone": 0.7,
+            "protect": 0.68,
+            "compensate": true,
+            "trim": 0.4
+          }
+        }
+      ]
     },
     {
-     "name": "Club",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Styles",
+      "items": [
+        {
+          "name": "Transparent",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 1.56,
+            "mix": 0.12,
+            "color": 0.1,
+            "tone": 0.8,
+            "protect": 0.9,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Warm / organic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 8.0,
+            "mix": 0.38,
+            "color": 0.6,
+            "tone": 0.45,
+            "protect": 0.75,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.3,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.9,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hard techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 12.8,
+            "mix": 0.36,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.95,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.32,
+            "color": 0.55,
+            "tone": 0.5,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.28,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.85,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.9,
+            "mix": 0.25,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.55,
+            "mix": 0.28,
+            "color": 0.3,
+            "tone": 0.8,
+            "protect": 0.85,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.3,
+            "color": 0.3,
+            "tone": 0.75,
+            "protect": 0.9,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.32,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.85,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Synthwave",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 8.8,
+            "mix": 0.36,
+            "color": 0.6,
+            "tone": 0.5,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 8.0,
+            "mix": 0.3,
+            "color": 0.3,
+            "tone": 0.7,
+            "protect": 0.9,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 7.0,
+            "mix": 0.4,
+            "color": 0.45,
+            "tone": 0.5,
+            "protect": 0.97,
+            "compensate": false,
+            "trim": -1.2
+          }
+        },
+        {
+          "name": "Drum & bass",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 9.6,
+            "mix": 0.3,
+            "color": 0.3,
+            "tone": 0.7,
+            "protect": 0.95,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 6.5,
+            "mix": 0.36,
+            "color": 0.4,
+            "tone": 0.55,
+            "protect": 0.97,
+            "compensate": false,
+            "trim": -0.9
+          }
+        },
+        {
+          "name": "Breakbeat",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 7.2,
+            "mix": 0.3,
+            "color": 0.45,
+            "tone": 0.6,
+            "protect": 0.85,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 9.6,
+            "mix": 0.36,
+            "color": 0.55,
+            "tone": 0.5,
+            "protect": 0.85,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 6.0,
+            "mix": 0.35,
+            "color": 0.4,
+            "tone": 0.55,
+            "protect": 0.95,
+            "compensate": false,
+            "trim": -0.8
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.9,
+            "mix": 0.28,
+            "color": 0.5,
+            "tone": 0.55,
+            "protect": 0.75,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.9,
+            "mix": 0.25,
+            "color": 0.3,
+            "tone": 0.75,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.33,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Metal",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 7.0,
+            "mix": 0.38,
+            "color": 0.45,
+            "tone": 0.55,
+            "protect": 0.75,
+            "compensate": false,
+            "trim": -1.4
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.3,
+            "color": 0.55,
+            "tone": 0.55,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.9,
+            "mix": 0.26,
+            "color": 0.4,
+            "tone": 0.7,
+            "protect": 0.75,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.3,
+            "color": 0.5,
+            "tone": 0.7,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Reggae / dub",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 6.4,
+            "mix": 0.35,
+            "color": 0.6,
+            "tone": 0.4,
+            "protect": 0.9,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 16.0,
+            "mix": 0.55,
+            "color": 0.9,
+            "tone": 0.2,
+            "protect": 0.6,
+            "compensate": true,
+            "trim": 1.6
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.6,
+            "mix": 0.18,
+            "color": 0.5,
+            "tone": 0.6,
+            "protect": 0.6,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 2.6,
+            "mix": 0.18,
+            "color": 0.4,
+            "tone": 0.65,
+            "protect": 0.65,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 1.04,
+            "mix": 0.08,
+            "color": 0.1,
+            "tone": 0.85,
+            "protect": 0.5,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.25,
+            "mix": 0.22,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 1.95,
+            "mix": 0.15,
+            "color": 0.45,
+            "tone": 0.5,
+            "protect": 0.6,
+            "compensate": true,
+            "trim": 0.2
+          }
+        }
+      ]
     },
     {
-     "name": "Festival",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.85,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Club",
+      "items": [
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.3,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.92,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hard techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 12.8,
+            "mix": 0.36,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.97,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.32,
+            "color": 0.55,
+            "tone": 0.5,
+            "protect": 0.82,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.28,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.87,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.9,
+            "mix": 0.25,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.82,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.55,
+            "mix": 0.28,
+            "color": 0.3,
+            "tone": 0.8,
+            "protect": 0.87,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.3,
+            "color": 0.3,
+            "tone": 0.75,
+            "protect": 0.92,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.0,
+            "mix": 0.32,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.87,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Drum & bass",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 9.6,
+            "mix": 0.3,
+            "color": 0.3,
+            "tone": 0.7,
+            "protect": 0.97,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 6.5,
+            "mix": 0.36,
+            "color": 0.4,
+            "tone": 0.55,
+            "protect": 0.99,
+            "compensate": false,
+            "trim": -0.9
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 9.6,
+            "mix": 0.36,
+            "color": 0.55,
+            "tone": 0.5,
+            "protect": 0.87,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.55,
+            "mix": 0.3,
+            "color": 0.5,
+            "tone": 0.7,
+            "protect": 0.72,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.9,
+            "mix": 0.25,
+            "color": 0.3,
+            "tone": 0.75,
+            "protect": 0.82,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.9,
+            "mix": 0.26,
+            "color": 0.4,
+            "tone": 0.7,
+            "protect": 0.77,
+            "compensate": true,
+            "trim": 0.3
+          }
+        }
+      ]
     },
     {
-     "name": "Big room",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.2,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Festival",
+      "items": [
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 10.0,
+            "mix": 0.33,
+            "color": 0.3,
+            "tone": 0.73,
+            "protect": 0.93,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 5.69,
+            "mix": 0.308,
+            "color": 0.3,
+            "tone": 0.83,
+            "protect": 0.88,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.75,
+            "mix": 0.44,
+            "color": 0.45,
+            "tone": 0.53,
+            "protect": 1,
+            "compensate": false,
+            "trim": -1.9
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 10.0,
+            "mix": 0.33,
+            "color": 0.3,
+            "tone": 0.78,
+            "protect": 0.93,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 5.69,
+            "mix": 0.308,
+            "color": 0.4,
+            "tone": 0.63,
+            "protect": 0.88,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.88,
+            "mix": 0.275,
+            "color": 0.35,
+            "tone": 0.73,
+            "protect": 0.83,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 12.0,
+            "mix": 0.396,
+            "color": 0.55,
+            "tone": 0.53,
+            "protect": 0.88,
+            "compensate": true,
+            "trim": 0.7
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 7.5,
+            "mix": 0.385,
+            "color": 0.4,
+            "tone": 0.58,
+            "protect": 0.98,
+            "compensate": false,
+            "trim": -1.3
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 10.0,
+            "mix": 0.363,
+            "color": 0.4,
+            "tone": 0.63,
+            "protect": 0.73,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.88,
+            "mix": 0.275,
+            "color": 0.3,
+            "tone": 0.78,
+            "protect": 0.83,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Metal",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.75,
+            "mix": 0.418,
+            "color": 0.45,
+            "tone": 0.58,
+            "protect": 0.78,
+            "compensate": false,
+            "trim": -2.2
+          }
+        }
+      ]
     },
     {
-     "name": "Home / hi-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.25,
-      "mix": 0.207,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Big Room",
+      "items": [
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 10.8,
+            "mix": 0.345,
+            "color": 0.27,
+            "tone": 0.75,
+            "protect": 0.94,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 9.45,
+            "mix": 0.46,
+            "color": 0.42,
+            "tone": 0.55,
+            "protect": 1,
+            "compensate": false,
+            "trim": -2.3
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 6.14,
+            "mix": 0.322,
+            "color": 0.27,
+            "tone": 0.85,
+            "protect": 0.89,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 5.27,
+            "mix": 0.287,
+            "color": 0.32,
+            "tone": 0.75,
+            "protect": 0.84,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 10.8,
+            "mix": 0.368,
+            "color": 0.37,
+            "tone": 0.65,
+            "protect": 0.89,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.1,
+            "mix": 0.402,
+            "color": 0.37,
+            "tone": 0.6,
+            "protect": 0.99,
+            "compensate": false,
+            "trim": -1.5
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.78,
+            "mix": 0.414,
+            "color": 0.37,
+            "tone": 0.6,
+            "protect": 1,
+            "compensate": false,
+            "trim": -1.8
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 6.14,
+            "mix": 0.322,
+            "color": 0.37,
+            "tone": 0.65,
+            "protect": 0.89,
+            "compensate": true,
+            "trim": 0.4
+          }
+        }
+      ]
     },
     {
-     "name": "Headphones",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.25,
-      "mix": 0.207,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Home / Hi-Fi",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 3.12,
+            "mix": 0.212,
+            "color": 0.33,
+            "tone": 0.8,
+            "protect": 0.77,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 6.4,
+            "mix": 0.281,
+            "color": 0.43,
+            "tone": 0.65,
+            "protect": 0.67,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.64,
+            "mix": 0.255,
+            "color": 0.58,
+            "tone": 0.6,
+            "protect": 0.67,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.12,
+            "mix": 0.238,
+            "color": 0.53,
+            "tone": 0.6,
+            "protect": 0.72,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 7.68,
+            "mix": 0.306,
+            "color": 0.58,
+            "tone": 0.55,
+            "protect": 0.82,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.08,
+            "mix": 0.153,
+            "color": 0.53,
+            "tone": 0.65,
+            "protect": 0.57,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 2.08,
+            "mix": 0.153,
+            "color": 0.43,
+            "tone": 0.7,
+            "protect": 0.62,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 0.83,
+            "mix": 0.068,
+            "color": 0.13,
+            "tone": 0.9,
+            "protect": 0.47,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.6,
+            "mix": 0.187,
+            "color": 0.38,
+            "tone": 0.75,
+            "protect": 0.67,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 1.56,
+            "mix": 0.128,
+            "color": 0.48,
+            "tone": 0.55,
+            "protect": 0.57,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 12.8,
+            "mix": 0.468,
+            "color": 0.93,
+            "tone": 0.25,
+            "protect": 0.57,
+            "compensate": true,
+            "trim": 1.1
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.64,
+            "mix": 0.272,
+            "color": 0.58,
+            "tone": 0.55,
+            "protect": 0.77,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Reggae / dub",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 5.12,
+            "mix": 0.297,
+            "color": 0.63,
+            "tone": 0.45,
+            "protect": 0.87,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.12,
+            "mix": 0.221,
+            "color": 0.43,
+            "tone": 0.75,
+            "protect": 0.72,
+            "compensate": true,
+            "trim": 0.3
+          }
+        }
+      ]
     },
     {
-     "name": "Studio / reference",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.9,
-      "mix": 0.09,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Headphones",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 2.73,
+            "mix": 0.2,
+            "color": 0.32,
+            "tone": 0.7,
+            "protect": 0.88,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 6.72,
+            "mix": 0.288,
+            "color": 0.57,
+            "tone": 0.45,
+            "protect": 0.93,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.73,
+            "mix": 0.224,
+            "color": 0.52,
+            "tone": 0.5,
+            "protect": 0.83,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 5.6,
+            "mix": 0.256,
+            "color": 0.42,
+            "tone": 0.55,
+            "protect": 0.93,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 3.18,
+            "mix": 0.256,
+            "color": 0.57,
+            "tone": 0.45,
+            "protect": 0.88,
+            "compensate": true,
+            "trim": 0.3
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 1.36,
+            "mix": 0.12,
+            "color": 0.47,
+            "tone": 0.45,
+            "protect": 0.68,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 11.2,
+            "mix": 0.44,
+            "color": 0.92,
+            "tone": 0.15,
+            "protect": 0.68,
+            "compensate": true,
+            "trim": 0.9
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 1.82,
+            "mix": 0.144,
+            "color": 0.42,
+            "tone": 0.6,
+            "protect": 0.73,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 0.73,
+            "mix": 0.064,
+            "color": 0.12,
+            "tone": 0.8,
+            "protect": 0.58,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.27,
+            "mix": 0.176,
+            "color": 0.37,
+            "tone": 0.65,
+            "protect": 0.78,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Synthwave",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 6.16,
+            "mix": 0.288,
+            "color": 0.62,
+            "tone": 0.45,
+            "protect": 0.78,
+            "compensate": true,
+            "trim": 0.4
+          }
+        }
+      ]
     },
     {
-     "name": "Radio / broadcast",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.0,
-      "mix": 0.184,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Studio / Reference",
+      "items": [
+        {
+          "name": "Transparent",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 0.78,
+            "mix": 0.06,
+            "color": 0.05,
+            "tone": 0.9,
+            "protect": 1,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 1.95,
+            "mix": 0.125,
+            "color": 0.25,
+            "tone": 0.85,
+            "protect": 0.9,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 4.0,
+            "mix": 0.165,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.8,
+            "mix": 0.18,
+            "color": 0.5,
+            "tone": 0.6,
+            "protect": 0.95,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.27,
+            "mix": 0.14,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 0.95,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 4.0,
+            "mix": 0.15,
+            "color": 0.35,
+            "tone": 0.7,
+            "protect": 1,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 1.3,
+            "mix": 0.09,
+            "color": 0.35,
+            "tone": 0.75,
+            "protect": 0.75,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 0.52,
+            "mix": 0.04,
+            "color": 0.05,
+            "tone": 0.95,
+            "protect": 0.6,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 1.3,
+            "mix": 0.09,
+            "color": 0.45,
+            "tone": 0.7,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 1.62,
+            "mix": 0.11,
+            "color": 0.3,
+            "tone": 0.8,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 0.98,
+            "mix": 0.075,
+            "color": 0.4,
+            "tone": 0.6,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.1
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 1.95,
+            "mix": 0.14,
+            "color": 0.45,
+            "tone": 0.65,
+            "protect": 0.85,
+            "compensate": true,
+            "trim": 0.2
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 2.27,
+            "mix": 0.15,
+            "color": 0.5,
+            "tone": 0.65,
+            "protect": 0.8,
+            "compensate": true,
+            "trim": 0.2
+          }
+        }
+      ]
     },
     {
-     "name": "Car",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.5,
-      "mix": 0.23,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
+      "folder": "Radio / Broadcast",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.68,
+            "mix": 0.275,
+            "color": 0.3,
+            "tone": 0.67,
+            "protect": 0.65,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 9.6,
+            "mix": 0.363,
+            "color": 0.4,
+            "tone": 0.52,
+            "protect": 0.55,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 11.52,
+            "mix": 0.396,
+            "color": 0.55,
+            "tone": 0.42,
+            "protect": 0.7,
+            "compensate": true,
+            "trim": 0.7
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.68,
+            "mix": 0.308,
+            "color": 0.5,
+            "tone": 0.47,
+            "protect": 0.6,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.68,
+            "mix": 0.286,
+            "color": 0.4,
+            "tone": 0.62,
+            "protect": 0.6,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 5.46,
+            "mix": 0.33,
+            "color": 0.5,
+            "tone": 0.62,
+            "protect": 0.55,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 5.46,
+            "mix": 0.33,
+            "color": 0.55,
+            "tone": 0.47,
+            "protect": 0.55,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 9.6,
+            "mix": 0.33,
+            "color": 0.3,
+            "tone": 0.62,
+            "protect": 0.75,
+            "compensate": true,
+            "trim": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Car",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "soft",
+            "drive": 4.29,
+            "mix": 0.263,
+            "color": 0.3,
+            "tone": 0.7,
+            "protect": 0.68,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 10.56,
+            "mix": 0.378,
+            "color": 0.55,
+            "tone": 0.45,
+            "protect": 0.73,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 8.8,
+            "mix": 0.347,
+            "color": 0.4,
+            "tone": 0.55,
+            "protect": 0.58,
+            "compensate": true,
+            "trim": 0.6
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 8.8,
+            "mix": 0.315,
+            "color": 0.3,
+            "tone": 0.65,
+            "protect": 0.78,
+            "compensate": true,
+            "trim": 0.5
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 5.0,
+            "mix": 0.294,
+            "color": 0.4,
+            "tone": 0.55,
+            "protect": 0.73,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.29,
+            "mix": 0.273,
+            "color": 0.4,
+            "tone": 0.65,
+            "protect": 0.63,
+            "compensate": true,
+            "trim": 0.4
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tube",
+            "drive": 6.6,
+            "mix": 0.367,
+            "color": 0.4,
+            "tone": 0.5,
+            "protect": 0.83,
+            "compensate": false,
+            "trim": -1.1
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "character": "tape",
+            "drive": 4.29,
+            "mix": 0.294,
+            "color": 0.5,
+            "tone": 0.5,
+            "protect": 0.63,
+            "compensate": true,
+            "trim": 0.4
+          }
+        }
+      ]
     }
-   ]
-  },
-  {
-   "folder": "Styles",
-   "items": [
-    {
-     "name": "Transparent",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.5,
-      "mix": 0.15,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Warm / organic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 4.0,
-      "mix": 0.32,
-      "color": 0.5,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.5,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hard techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 5.0,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.28,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.8,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.0,
-      "mix": 0.27,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.22,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Synthwave",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.2,
-      "mix": 0.24,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 5.0,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Drum & bass",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.0,
-      "mix": 0.28,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.5,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Breakbeat",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.27,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.27,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 2.8,
-      "mix": 0.22,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.5,
-      "mix": 0.23,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Metal",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.27,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.6,
-      "mix": 0.22,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.8,
-      "mix": 0.24,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.26,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Reggae / dub",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 3.0,
-      "mix": 0.28,
-      "color": 0.5,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 3.5,
-      "mix": 0.35,
-      "color": 0.5,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 1.5,
-      "mix": 0.14,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 1.2,
-      "mix": 0.12,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.8,
-      "mix": 0.08,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.5,
-      "mix": 0.12,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.3,
-      "mix": 0.13,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Club",
-   "items": [
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.5,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hard techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 5.0,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.28,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.8,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.0,
-      "mix": 0.27,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.22,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Drum & bass",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.0,
-      "mix": 0.28,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.5,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.26,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.5,
-      "mix": 0.23,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.8,
-      "mix": 0.24,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Festival",
-   "items": [
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.85,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.18,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 5.5,
-      "mix": 0.33,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.4,
-      "mix": 0.297,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.3,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.3,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.3,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.85,
-      "mix": 0.297,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.3,
-      "mix": 0.275,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.75,
-      "mix": 0.253,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Metal",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.85,
-      "mix": 0.297,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Big Room",
-   "items": [
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.2,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 6.0,
-      "mix": 0.36,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.56,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.6,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.2,
-      "mix": 0.264,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 4.2,
-      "mix": 0.324,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 5.4,
-      "mix": 0.36,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.6,
-      "mix": 0.3,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Home / Hi-Fi",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.25,
-      "mix": 0.207,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.7,
-      "mix": 0.225,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.34,
-      "mix": 0.198,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 2.52,
-      "mix": 0.198,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.7,
-      "mix": 0.225,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 1.35,
-      "mix": 0.126,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 1.08,
-      "mix": 0.108,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.72,
-      "mix": 0.072,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.35,
-      "mix": 0.108,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.17,
-      "mix": 0.117,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 3.15,
-      "mix": 0.315,
-      "color": 0.5,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.15,
-      "mix": 0.252,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Reggae / dub",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 2.7,
-      "mix": 0.252,
-      "color": 0.5,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.52,
-      "mix": 0.216,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Headphones",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.25,
-      "mix": 0.207,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.7,
-      "mix": 0.225,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 2.52,
-      "mix": 0.198,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.15,
-      "mix": 0.198,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.15,
-      "mix": 0.252,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.17,
-      "mix": 0.117,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 3.15,
-      "mix": 0.315,
-      "color": 0.5,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 1.08,
-      "mix": 0.108,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.72,
-      "mix": 0.072,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.35,
-      "mix": 0.108,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Synthwave",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.88,
-      "mix": 0.216,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Studio / Reference",
-   "items": [
-    {
-     "name": "Transparent",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.9,
-      "mix": 0.09,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.5,
-      "mix": 0.138,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.8,
-      "mix": 0.15,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.8,
-      "mix": 0.15,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.8,
-      "mix": 0.15,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.7,
-      "mix": 0.18,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 0.72,
-      "mix": 0.072,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.48,
-      "mix": 0.048,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 0.9,
-      "mix": 0.084,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.9,
-      "mix": 0.072,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 0.78,
-      "mix": 0.078,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 1.68,
-      "mix": 0.132,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 1.56,
-      "mix": 0.132,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Radio / Broadcast",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.0,
-      "mix": 0.184,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.4,
-      "mix": 0.2,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.4,
-      "mix": 0.2,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 2.24,
-      "mix": 0.176,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.24,
-      "mix": 0.192,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.4,
-      "mix": 0.208,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.08,
-      "mix": 0.176,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.8,
-      "mix": 0.2,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Car",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.5,
-      "mix": 0.23,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.0,
-      "mix": 0.25,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 2.8,
-      "mix": 0.24,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tape",
-      "drive": 3.5,
-      "mix": 0.27,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "character": "tube",
-      "drive": 2.8,
-      "mix": 0.22,
-      "color": 0.28,
-      "tone": 0.65,
-      "protect": 0.8,
-      "compensate": true,
-      "trim": 0
-     }
-    }
-   ]
-  }
- ]
+  ]
 }
