@@ -23,7 +23,8 @@ function skPaintPanel(){ const box=PK.$('skLibs'); if(!box) return; box.innerHTM
   // nieuw ontwerp: voor elk geladen apparaat
   { const ids=[...new Set([...PK.Host.registry.values()].map(d=>d.id))].filter(i=>PK.Host.latest(i)).sort((a,b)=>skDev(a).localeCompare(skDev(b),'nl')), nr=mk('div','wsrow'), ns=mk('select','small'), nb=mk('button','small');
     ns.setAttribute('aria-label',PK.pkt('m.dz_nieuw_voor')); ns.innerHTML=ids.map(d=>`<option value="${PK.esc(d)}">${PK.esc(skDev(d))}</option>`).join(''); if(PK.SKFILTER&&ids.includes(PK.SKFILTER)) ns.value=PK.SKFILTER;
-    nb.textContent=PK.pkt('m.dz_ontwerpen'); nb.title=PK.pkt('m.dz_ontwerpen_titel'); nb.disabled=!ids.length; nb.onclick=()=>PK.skDesignOpen(ns.value,null); nr.append(mk('span','note',PK.pkt('m.dz_nieuw')),ns,nb); box.appendChild(nr); }
+    nb.textContent=PK.pkt('m.dz_ontwerpen'); nb.title=PK.pkt('m.dz_ontwerpen_titel'); nb.disabled=!ids.length; nb.onclick=()=>PK.skDesignOpen(ns.value,null);
+    const eb=mk('button','small primary'); eb.textContent=PK.pkt('m.se_open'); eb.title=PK.pkt('m.se_open_titel'); eb.dataset.act='skEdOpen'; eb.disabled=!ids.length; eb.onclick=()=>PK.skEditorOpen(ns.value,null); nr.append(mk('span','note',PK.pkt('m.dz_nieuw')),ns,eb,nb); box.appendChild(nr); }
   if(!all.length){ box.appendChild(mk('div','note',PK.pkt('m.sk_nog_geen'))); return; }
   devs.filter(d=>!PK.SKFILTER||d===PK.SKFILTER).forEach(dev=>{ const h=mk('h4','tudev'); h.textContent=skDev(dev)+(PK.Host.latest(dev)?'':PK.pkt('m.apparaat_niet_geladen')); box.appendChild(h);
     PK.skinsFor(dev).forEach(e=>{ const sk=e.skin, key=sk.id, open=PK.skOpen.has(key), row=mk('div','prlib sklib'), info=mk('div'), b=mk('div','b'); info.style.minWidth='0';
@@ -34,6 +35,7 @@ function skPaintPanel(){ const box=PK.$('skLibs'); if(!box) return; box.innerHTM
       if(e.origin==='user'){ const rm=mk('button','small'); rm.title=PK.pkt('m.sk_verwijderen'); skArm(rm,'×',PK.pkt('m.weg'),()=>{ PK.SK.user=PK.SK.user.filter(x=>x!==e); PK.skPersist(); PK.skinsChanged(); PK.status(PK.pkt('m.sk_verwijderd',sk.name)); }); b.appendChild(rm); }
       row.append(info,b); box.appendChild(row);
       const cp=mk('button','small'); cp.textContent=PK.pkt('m.dz_kopie_knop'); cp.title=PK.pkt('m.dz_kopie_titel'); cp.disabled=!PK.Host.latest(dev); cp.onclick=()=>PK.skDesignOpen(dev,sk); b.insertBefore(cp,b.firstChild);
+      { const ed=mk('button','small'); ed.textContent=PK.pkt('m.se_bewerk'); ed.title=PK.pkt('m.se_bewerk_titel'); ed.dataset.act='skEdEdit'; ed.disabled=!PK.Host.latest(dev); ed.onclick=()=>PK.skEditorOpen(dev,sk,e.origin); b.insertBefore(ed,b.firstChild); }
       if(open){ const dz=sk.design||{}; { const jk=PK.Host.latest(dev); const modes=[(dz.ports||{}).mode,...sk.appearances.map(a=>a.design&&a.design.ports&&a.design.ports.mode)].filter(m=>m&&m!=='default'); if(jk&&jk.ui&&jk.ui.jacks&&modes.length) box.appendChild(mk('div','note',PK.pkt('m.sk_jacks_paneel')));
           const kn=[dz.knobs,...sk.appearances.map(a=>a.design&&a.design.knobs)].filter(Boolean); if(kn.length){ const st=PK.knobStats(); box.appendChild(mk('div','note',PK.pkt('m.sk_knop_stat',st.n,st.m))); }
           const hc=[dz.controls,...sk.appearances.map(a=>a.design&&a.design.controls)].some(c=>c&&c.length); if(hc){ let cr=null; for(const [,r] of PK.Host.devices) if(r.def.id===dev){ cr=r; break; } if(cr){ const st=PK.regStats(cr); box.appendChild(mk('div','note',PK.pkt('m.sk_ctl_stat',st.n,st.m))); } } }
@@ -47,9 +49,10 @@ function skPaintPanel(){ const box=PK.$('skLibs'); if(!box) return; box.innerHTM
         sk.appearances.forEach(a=>item(a.name,[a.description,skWhen(a)].filter(Boolean).join(' · '),()=>skApplyFromPanel(dev,sk.id,a.id))); box.appendChild(list); } }); }); } PK.skPaintPanel=skPaintPanel;
 // ---- kaart: Skin en Verschijning ----
 function skinCardInit(id){ const r=PK.Host.devices.get(id); if(!r||!r.pbarEl) return; const el=document.createElement('div'); el.className='pskin'; el.hidden=true;
-  el.innerHTML='<label><span class="pl"></span><select class="sksel"></select></label><label><span class="pl"></span><select class="skap"></select></label>';
+  el.innerHTML='<label><span class="pl"></span><select class="sksel"></select></label><label><span class="pl"></span><select class="skap"></select></label><button type="button" class="small skedit"></button>';
   const [l1,l2]=el.querySelectorAll('.pl'), s1=el.querySelector('.sksel'), s2=el.querySelector('.skap');
   l1.textContent=PK.pkt('m.sk_skin'); l2.textContent=PK.pkt('m.sk_verschijning'); s1.setAttribute('aria-label',PK.pkt('m.sk_skin')); s2.setAttribute('aria-label',PK.pkt('m.sk_verschijning')); s1.title=PK.pkt('m.sk_skin_titel'); s2.title=PK.pkt('m.sk_verschijning_titel');
+  const eb=el.querySelector('.skedit'); eb.textContent=PK.pkt('m.se_kaart'); eb.title=PK.pkt('m.se_kaart_titel'); eb.onclick=()=>{ const cur=r.skin&&PK.skinFind(r.skin.id), ok=cur&&cur.skin.device===r.def.id; PK.skEditorOpen(r.def.id,ok?cur.skin:null,ok?cur.origin:null); };
   s1.onchange=()=>{ if(!r.skin||s1.value!==r.skin.id) PK.skinSet(id,s1.value,'auto',true); }; s2.onchange=()=>{ if(r.skin) PK.skinSet(id,r.skin.id,s2.value,true); };
   r.pbarEl.appendChild(el); r.skEl=el; skPaintPick(r); } PK.skinCardInit=skinCardInit;
 function skPaintPick(r){ const el=r.skEl; if(!el) return; const list=PK.skinsFor(r.def.id), show=list.length>0||!!r.skin, was=!el.hidden, s1=el.querySelector('.sksel'), s2=el.querySelector('.skap');

@@ -210,7 +210,7 @@ async function skinsFromSource(src,list,icons,errs){
   for(const [dev,xs] of by) for(const ext of Object.keys(PK.ICONTYPES)){ const x=xs.find(y=>y.ext===ext); if(!x) continue; let u=null; try{ const b=await x.get(); u=b?await PK.iconToDataUrl(b,ext):null; }catch(e){} if(u){ PK.SKICON.set(src.sid+'|'+dev,u); break; } }
   skinsChanged(); return n; } PK.skinsFromSource=skinsFromSource;
 // ingesloten skins van een werkruimte of song: stil opnemen (geen melding), nieuwere versie wint
-function skinsEmbed(){ const out=[], seen=new Set(); PK.Host.devices.forEach(r=>{ if(!r.skin||seen.has(r.skin.id)||out.length>=SK_EMBEDMAX) return; const e=skinFind(r.skin.id); if(!e||e===PK.SK.draft) return; seen.add(r.skin.id); if(JSON.stringify(e.skin).length<=SK_FILEMAX) out.push(e.skin); }); return out.length?{skins:out}:{}; } PK.skinsEmbed=skinsEmbed;
+function skinsEmbed(){ const out=[], seen=new Set(); PK.Host.devices.forEach(r=>{ if(r.pvw||!r.skin||seen.has(r.skin.id)||out.length>=SK_EMBEDMAX) return; const e=skinFind(r.skin.id); if(!e||e===PK.SK.draft) return; seen.add(r.skin.id); if(JSON.stringify(e.skin).length<=SK_FILEMAX) out.push(e.skin); }); return out.length?{skins:out}:{}; } PK.skinsEmbed=skinsEmbed;
 function skinsFromWorkspace(list){ if(!Array.isArray(list)) return; let n=0;
   for(const x of list.slice(0,SK_EMBEDMAX)){ try{ if(JSON.stringify(x).length>SK_FILEMAX) continue; if(skAdd('emb',skValidate(x,'skins[]'),'',{})) n++; }catch(e){ console.warn('skin',e.message); } }
   if(n) skinsChanged(); } PK.skinsFromWorkspace=skinsFromWorkspace;
@@ -244,7 +244,7 @@ function skAuto(sk,w,cls){ const hit=sk.appearances.find(a=>a.when&&(a.when.minW
 function skActive(r){ if(!r||!r.skin||!r.skSkin) return null; return r.skSkin; } PK.skinActive=skActive;
 // de verschijningsvorm die nu hoort bij r.skin; null = laten zoals het is
 function skTarget(r,sk){ const st=r.skin; let ap=st.appearance==='auto'?null:sk.appearances.find(a=>a.id===st.appearance);
-  if(ap) return ap; const w=r.el.offsetWidth; if((r.mini||!w)&&r.skCur) return sk.appearances.find(a=>a.id===r.skCur)||null; return skAuto(sk,w,skScreen()); }
+  if(ap) return ap; const w=r.el.offsetWidth; if((r.mini||!w)&&r.skCur) return sk.appearances.find(a=>a.id===r.skCur)||null; return skAuto(sk,w,r.skScr||skScreen()); }
 function skSync(r,force){ const st=r.skin; if(!st){ if(r.skCur||(r.skHosts&&r.skHosts.length)) skClear(r); return; }
   const e=skinFind(st.id); if(!e||e.skin.device!==r.def.id){ if(r.skCur||(r.skHosts&&r.skHosts.length)){ skClear(r); PK.paintIcons(); } return; }
   const sk=e.skin, ap=skTarget(r,sk); if(!ap) return;
