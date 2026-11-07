@@ -45,7 +45,7 @@ function regEntries(r){ const out=[], seen=new Set();
 // het register zoals host.ui.list het geeft: alleen regelaars met een id
 function regList(r){ if(!r) return []; return regEntries(r).map(e=>{ const d=regDesc(e.el); if(!d||!d.id) return null; const p=regProps(r,e.el), range=d.type==='range';
     const face=!range?'default':(p&&p.face&&p.face!=='default'?p.face:((e.K?e.K.kn.style.display!=='none':!!e.m.__pkRot)?'rotary':'hslider'));
-    const L={id:d.id,role:d.role,group:d.group,label:regLabel(e.el,e.m),type:d.type,min:range?(e.m.min===''?0:+e.m.min):null,max:range?(e.m.max===''?100:+e.m.max):null,face}; return L; }).filter(Boolean); } PK.regList=regList;
+    const L={id:d.id,role:d.role,group:d.group,label:regLabel(e.el,e.m),type:d.type,min:range?(e.m.min===''?0:+e.m.min):null,max:range?(e.m.max===''?100:+e.m.max):null,face}; return L; }).filter(Boolean).concat(PK.meterList?PK.meterList(r):[]); } PK.regList=regList;   // + meters (js/meters.js)
 
 // ---- regels ----
 function regMatch(m,d){ if(m==='*') return true; if(m.startsWith('role:')) return d.role===m.slice(5); if(m.startsWith('group:')) return d.group===m.slice(6); return d.id===m; }
