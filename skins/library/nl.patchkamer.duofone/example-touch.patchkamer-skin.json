@@ -1,39 +1,72 @@
 {
   "format": "patchkamer-skin",
   "formatVersion": 1,
-  "skinsContract": "0.2",
+  "skinsContract": "0.4",
   "id": "nl.patchkamer.duofone.example-touch",
   "device": "nl.patchkamer.duofone",
   "name": "Example touch",
   "version": "1.0.0",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Shows the design options of layer 1 for touch screens: ports that appear on hover or tap, haptic feedback and large rotary knobs.",
+  "description": "Shows the design options for touch screens: ports that appear on hover or tap, haptic feedback, large rotary knobs on phones and plain sliders on larger screens.",
   "created": "2026-11-06",
   "icon": null,
   "default": "touch",
   "design": {
-    "ports": { "mode": "hover" },
-    "haptics": { "click": "light", "turn": "light", "slide": "medium" },
-    "knobs": { "style": "rotary", "size": "l" }
+    "ports": {
+      "mode": "hover"
+    },
+    "haptics": {
+      "click": "light",
+      "turn": "light",
+      "slide": "medium"
+    }
   },
   "appearances": [
     {
       "id": "touch",
       "name": "Touch",
       "description": "Large knobs and haptics for phones and tablets.",
-      "when": { "screens": ["phone"] },
-      "assets": {}
+      "when": {
+        "screens": [
+          "phone"
+        ]
+      },
+      "assets": {},
+      "design": {
+        "controls": [
+          {
+            "match": "role:param",
+            "face": "rotary",
+            "size": "l"
+          }
+        ]
+      }
     },
     {
       "id": "desktop",
       "name": "Desktop",
       "description": "Medium knobs and no haptics for larger screens.",
-      "when": { "screens": ["compact", "wide"] },
+      "when": {
+        "screens": [
+          "compact",
+          "wide"
+        ]
+      },
       "assets": {},
       "design": {
-        "haptics": { "click": "off", "turn": "off", "slide": "off" },
-        "knobs": { "size": "m" }
+        "haptics": {
+          "click": "off",
+          "turn": "off",
+          "slide": "off"
+        },
+        "controls": [
+          {
+            "match": "role:param",
+            "face": "hslider",
+            "size": "m"
+          }
+        ]
       }
     }
   ]

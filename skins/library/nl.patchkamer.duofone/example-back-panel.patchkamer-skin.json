@@ -1,44 +1,76 @@
 {
   "format": "patchkamer-skin",
   "formatVersion": 1,
-  "skinsContract": "0.2",
+  "skinsContract": "0.4",
   "id": "nl.patchkamer.duofone.example-back-panel",
   "device": "nl.patchkamer.duofone",
   "name": "Example back panel",
   "version": "1.0.0",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Shows the design options of layer 1: a thin always-visible port strip on top and a custom colour scheme, in a dark compact and a light full appearance.",
+  "description": "Shows the design options of layers 1 and 2: the ports sit as dots in the title bar, a custom dark colour scheme, and two appearances that really differ: compact (small rotary knobs) and full (horizontal sliders).",
   "created": "2026-11-06",
   "icon": null,
   "default": "full",
   "design": {
-    "ports": { "mode": "strip" },
+    "ports": {
+      "mode": "bar"
+    },
     "colors": {
       "scheme": "custom",
-      "custom": { "bg": "#14191f", "surface": "#1d252e", "text": "#e6edf3", "muted": "#8b98a5", "accent": "#4fd1b8", "line": "#2d3a46" }
+      "custom": {
+        "bg": "#14191f",
+        "surface": "#1d252e",
+        "text": "#e6edf3",
+        "muted": "#8b98a5",
+        "accent": "#4fd1b8",
+        "line": "#2d3a46"
+      }
     }
   },
   "appearances": [
     {
       "id": "compact",
       "name": "Compact",
-      "description": "Dark colours for narrow cards.",
-      "when": { "maxWidth": 420 },
+      "description": "Small rotary knobs for narrow cards.",
+      "when": {
+        "maxWidth": 420
+      },
       "css": ":host{--x-acc:#4fd1b8}",
-      "assets": {}
+      "assets": {},
+      "design": {
+        "controls": [
+          {
+            "match": "role:param",
+            "face": "rotary",
+            "size": "s"
+          }
+        ]
+      }
     },
     {
       "id": "full",
       "name": "Full",
-      "description": "Light colours for wide cards.",
-      "when": { "minWidth": 421 },
-      "css": ":host{--x-acc:#0f766e}",
+      "description": "Horizontal sliders and a warmer accent for wide cards.",
+      "when": {
+        "minWidth": 421
+      },
+      "css": ":host{--x-acc:#f0a35e}",
       "assets": {},
       "design": {
         "colors": {
-          "custom": { "bg": "#f4f1ea", "surface": "#ffffff", "text": "#1c2430", "muted": "#5b6672", "accent": "#0f766e", "line": "#cfc8ba" }
-        }
+          "custom": {
+            "accent": "#f0a35e"
+          }
+        },
+        "controls": [
+          {
+            "match": "role:param",
+            "face": "hslider",
+            "length": "long",
+            "thumb": "bar"
+          }
+        ]
       }
     }
   ]

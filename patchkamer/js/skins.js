@@ -10,7 +10,7 @@ const SK_FMT='patchkamer-skin', SK_MAJOR=0, SK_FILEMAX=2*1024*1024, SK_ICONMAX=2
 const SK_IMG_RE=/^data:image\/(?:(?:png|webp|jpeg);base64,[A-Za-z0-9+\/=]+|svg\+xml(?:;charset=[A-Za-z0-9-]+)?(?:;base64,[A-Za-z0-9+\/=]+|,[^\s"\\<>]*))$/i;   // zoals het contract: svg+xml (base64 of procent-gecodeerd), png, webp, jpeg (base64); geen gif
 // ---- design (skins 0.2, laag 1): soepel controleren, samenvoegen, kleuren afleiden ----
 const SK_HEX=/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, SK_COLOUR_KEYS=['bg','surface','text','muted','accent','line'], SK_LVL=['off','light','medium','strong'];
-const SK_ENUM={ports:{mode:['default','always','hover','strip']},colors:{scheme:['workspace','custom']},haptics:{click:SK_LVL,turn:SK_LVL,slide:SK_LVL},knobs:{style:['workspace','rotary','slider'],size:['s','m','l']}};
+const SK_ENUM={ports:{mode:['default','always','hover','strip','bar']},colors:{scheme:['workspace','custom']},haptics:{click:SK_LVL,turn:SK_LVL,slide:SK_LVL},knobs:{style:['workspace','rotary','slider'],size:['s','m','l']}};
 PK.SK_ENUM=SK_ENUM; PK.SK_COLOUR_KEYS=SK_COLOUR_KEYS;
 function skHex(v){ if(typeof v!=='string'||!SK_HEX.test(v)) return null; let h=v.slice(1).toLowerCase(); if(h.length===3) h=h.split('').map(c=>c+c).join(''); return '#'+h; } PK.skHex=skHex;
 // design.controls (skins 0.3): lijst regels {match, face?, size?, length?, thickness?, thumb?, color?, showValue?}. Een ongeldige eigenschap valt weg met een let-op (face:'none' bestaat niet: een skin verbergt nooit een regelaar); een regel zonder geldige eigenschap of met een ongeldige match valt weg.

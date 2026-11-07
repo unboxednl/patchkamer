@@ -170,7 +170,7 @@ const rot13 = t => t.replace(/[a-z]/gi, c => String.fromCharCode((c <= 'Z' ? 90 
 const BRAND_RE = new RegExp(rot13('nec[ _-]?[0-9]|bqlffrl|nkkr|zbbt|xbet|ebynaq|lnznun|frdhragvny|boreurvz|whab|zvavzbbt|cebcurg|whcvgre|zf-?20|fu-?101|ceb-?bar|qk-?7'), 'i');
 const DUTCH = ['de', 'het', 'een', 'voor', 'met', 'van', 'niet', 'geen', 'maar', 'naar', 'wordt', 'deze', 'ook', 'kleur', 'kleuren', 'knop', 'knoppen', 'regelaar', 'regelaars', 'apparaat', 'apparaten', 'geluid', 'standaard', 'gewoon', 'normaal', 'uiterlijk', 'donker', 'licht', 'zwart', 'wit', 'rood', 'groen', 'blauw', 'geel', 'oranje', 'paars', 'grijs', 'bruin', 'roze', 'eenvoudig', 'helder', 'nacht', 'groot', 'klein', 'vloer', 'schuif', 'voorbeeld', 'verschijning', 'kaart', 'hout', 'staal', 'koper', 'zilver', 'goud', 'ouderwets', 'rustig', 'strak'];
 const IMG_RE = /^data:image\/(svg\+xml|png|webp|jpeg)(;[A-Za-z0-9=._+-]+)*,/;
-const PORT_MODES = ['default', 'always', 'hover', 'strip'], HAPTIC_LEVELS = ['off', 'light', 'medium', 'strong'];
+const PORT_MODES = ['default', 'always', 'hover', 'strip', 'bar'], HAPTIC_LEVELS = ['off', 'light', 'medium', 'strong'];
 const KNOB_STYLES = ['workspace', 'rotary', 'slider'], KNOB_SIZES = ['s', 'm', 'l'], COLOUR_SCHEMES = ['workspace', 'custom'];
 const COLOUR_KEYS = ['bg', 'surface', 'text', 'muted', 'accent', 'line'], HAPTIC_KEYS = ['click', 'turn', 'slide'];
 const CTL_ROLES = ['param', 'fader', 'toggle', 'button', 'pad', 'step', 'display', 'select', 'meter', 'jack'];

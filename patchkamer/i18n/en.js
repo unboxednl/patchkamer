@@ -933,6 +933,7 @@ PK.I18N.en={
    "m.dz_p_always":"Always visible (bar)",
    "m.dz_p_hover":"On hover or cable",
    "m.dz_p_strip":"Strip, opens on hover",
+   "m.dz_p_bar":"In the title bar, as dots",
    "m.dz_kleuren":"Colours",
    "m.dz_schema":"Colour scheme",
    "m.dz_s_workspace":"Workspace",

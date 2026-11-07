@@ -935,6 +935,7 @@ I18N.nl={
    "m.dz_p_always":"Altijd zichtbaar (balk)",
    "m.dz_p_hover":"Bij hover of kabel",
    "m.dz_p_strip":"Strook, opent bij hover",
+   "m.dz_p_bar":"In de titelbalk, als stipjes",
    "m.dz_kleuren":"Kleuren",
    "m.dz_schema":"Kleurenschema",
    "m.dz_s_workspace":"Werkruimte",
