@@ -73,6 +73,27 @@ function skPadsClean(x,where,note){ const o={}; if(x==null) return o; if(typeof 
 // design.display (skins 0.6): één object {style?, nav?, commit?, lines?, width?, expand?, targets?, color?}; een schermpje verbergen kan niet (geen style "none")
 const SK_DSP_ENUM={style:['dropdown','lcd','oled','segment','paper'],nav:['arrows','arrows+ok','none'],commit:['live','ok'],expand:['click','button','off']}, SK_DSP_TARGETS=['select','preset','tune'];
 PK.SK_DSP_ENUM=SK_DSP_ENUM; PK.SK_DSP_TARGETS=SK_DSP_TARGETS;
+// design.layout (skins 0.7): {flow?, panels:[{id, title?, titlePos?, items, style?, dir?, cols?, gap?, bare?, labels?, align?, width?, collapsible?, collapsed?}]} (hoogstens 16 panelen, 64 items per paneel).
+// Een skin verbergt nooit een regelaar: wat niet genoemd wordt komt in een restpaneel. Een leeg `panels: []` blijft staan (een verschijning kan zo de layout van de skin opheffen).
+const SK_LAY_ENUM={flow:['rows','columns','auto'],titlePos:['top','left','hidden'],style:['raised','inset','line','floating','plain'],dir:['row','column','grid'],gap:['tight','normal','wide'],labels:['default','above','below'],align:['start','center'],width:['auto','full','half','third']}, SK_LAY_PANELS=16, SK_LAY_ITEMS=64, SK_LAY_ID=/^[a-z0-9._-]{1,40}$/, SK_LAY_ITEM=/^(\*|group:[A-Za-z0-9._-]{1,60}|role:[a-z]{1,20}|[A-Za-z0-9._-]{1,60})$/;
+PK.SK_LAY_ENUM=SK_LAY_ENUM;
+function skLayoutClean(x,where,note){ if(x==null) return null; if(typeof x!=='object'||Array.isArray(x)){ note('m.sk_e_veld',where); return null; }
+  const out={}; if(x.flow!=null){ if(SK_LAY_ENUM.flow.includes(x.flow)) out.flow=x.flow; else note('m.sk_e_veld',where+'.flow'); }
+  if(x.panels!=null){ if(!Array.isArray(x.panels)) note('m.sk_e_veld',where+'.panels'); else { const ids=new Set(), ps=[];
+      x.panels.slice(0,SK_LAY_PANELS).forEach((p,i)=>{ const P=where+'.panels['+i+']';
+        if(!p||typeof p!=='object'||Array.isArray(p)){ note('m.sk_e_veld',P); return; }
+        if(typeof p.id!=='string'||!SK_LAY_ID.test(p.id)){ note('m.sk_e_veld',P+'.id'); return; } if(ids.has(p.id)){ note('m.sk_e_veld',P+'.id'); return; }
+        if(!Array.isArray(p.items)){ note('m.sk_e_veld',P+'.items'); return; }
+        const it=[]; p.items.slice(0,SK_LAY_ITEMS).forEach((v,j)=>{ if(typeof v==='string'&&SK_LAY_ITEM.test(v)){ if(!it.includes(v)) it.push(v); } else note('m.sk_e_veld',P+'.items['+j+']'); }); if(p.items.length>SK_LAY_ITEMS) note('m.sk_e_veld',P+'.items');
+        if(!it.length){ note('m.sk_e_veld',P+'.items'); return; }
+        ids.add(p.id); const o={id:p.id,items:it};
+        if(p.title!=null){ if(typeof p.title==='string'&&p.title.length<=60) o.title=p.title; else if(p.title&&typeof p.title==='object'&&!Array.isArray(p.title)){ const t={}; Object.keys(p.title).slice(0,8).forEach(k=>{ if(/^[a-z]{2}$/.test(k)&&typeof p.title[k]==='string'&&p.title[k].length<=60) t[k]=p.title[k]; else note('m.sk_e_veld',P+'.title.'+k); }); if(Object.keys(t).length) o.title=t; } else note('m.sk_e_veld',P+'.title'); }
+        for(const k of Object.keys(SK_LAY_ENUM)){ if(k==='flow'||p[k]==null) continue; if(SK_LAY_ENUM[k].includes(p[k])) o[k]=p[k]; else note('m.sk_e_veld',P+'.'+k); }
+        if(p.cols!=null){ if(p.cols==='auto'||(Number.isInteger(p.cols)&&p.cols>=1&&p.cols<=16)) o.cols=p.cols; else note('m.sk_e_veld',P+'.cols'); }
+        for(const k of ['bare','collapsible','collapsed']){ if(p[k]==null) continue; if(typeof p[k]==='boolean') o[k]=p[k]; else note('m.sk_e_veld',P+'.'+k); }
+        ps.push(o); });
+      if(x.panels.length>SK_LAY_PANELS) note('m.sk_e_veld',where+'.panels'); out.panels=ps; } }
+  return Object.keys(out).length?out:null; }
 function skDisplayClean(x,where,note){ const o={}; if(x==null) return o; if(typeof x!=='object'||Array.isArray(x)){ note('m.sk_e_veld',where); return o; }
   for(const k of Object.keys(SK_DSP_ENUM)){ if(x[k]==null) continue; if(SK_DSP_ENUM[k].includes(x[k])) o[k]=x[k]; else note('m.sk_e_veld',where+'.'+k); }
   if(x.lines!=null){ if(Number.isInteger(x.lines)&&x.lines>=1&&x.lines<=3) o.lines=x.lines; else note('m.sk_e_veld',where+'.lines'); }
@@ -94,6 +115,7 @@ function skDesignClean(d,where,note){ if(d==null) return null; if(typeof d!=='ob
   if(d.sections!=null){ const c=skSectionsClean(d.sections,where+'.sections',note); if(c.length) out.sections=c; }
   if(d.pads!=null){ const c=skPadsClean(d.pads,where+'.pads',note); if(Object.keys(c).length) out.pads=c; }
   if(d.display!=null){ const c=skDisplayClean(d.display,where+'.display',note); if(Object.keys(c).length) out.display=c; }
+  if(d.layout!=null){ const c=skLayoutClean(d.layout,where+'.layout',note); if(c) out.layout=c; }
   if(d.size!=null){ const z=skSizeClean(d.size,where+'.size',note); if(z) out.size=z; }
   return Object.keys(out).length?out:null; }
 // skin-niveau en verschijning-niveau samenvoegen: per sleutel wint de verschijning
@@ -103,6 +125,7 @@ function skDesignMerge(a,b){ const o={}; for(const g of Object.keys(SK_ENUM)){ c
   if((a&&a.size)||(b&&b.size)) o.size={...(a&&a.size),...(b&&b.size)};   // de verschijning wint
   if((a&&a.pads)||(b&&b.pads)){ o.pads={...(a&&a.pads),...(b&&b.pads)}; if((a&&a.pads&&a.pads.colors)||(b&&b.pads&&b.pads.colors)) o.pads.colors={...(a&&a.pads&&a.pads.colors),...(b&&b.pads&&b.pads.colors)}; }   // per sleutel; colors per pad
   if((a&&a.display)||(b&&b.display)) o.display={...(a&&a.display),...(b&&b.display)};
+  if((a&&a.layout)||(b&&b.layout)) o.layout={...(a&&a.layout),...(b&&b.layout)};   // layout (0.7): per sleutel (flow, panels); de panelen van een verschijning vervangen die van de skin, ook als ze leeg zijn
   if(cx.length||cy.length) o.controls=[...cx,...cy];   // regels: eerst die van de skin, daarna die van de verschijning (de laatste passende regel wint)
   return o; } PK.skDesignMerge=skDesignMerge;
 const skEff=(sk,ap)=>skDesignMerge(sk&&sk.design,ap&&ap.design); PK.skEff=skEff;
@@ -199,7 +222,7 @@ function skStrip(r){ (r.skMO||[]).forEach(m=>m.disconnect()); r.skMO=[]; (r.skHo
 const skUiEl=r=>r.el.querySelector(':scope > .body > .ui');
 function skDesignStrip(r){ const d=r.skDes; if(!d) return; if(PK.skPortsOff) PK.skPortsOff(r); if(PK.hapticsDetach) PK.hapticsDetach(r);
   d.card.forEach(p=>r.el.style.removeProperty(p)); const ui=skUiEl(r); if(ui){ d.ui.forEach(p=>ui.style.removeProperty(p)); if(ui.hasAttribute('style')&&!ui.getAttribute('style').trim()) ui.removeAttribute('style'); }
-  const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec, hadP=!!r.skPad, hadD=!!r.skDsp; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skPad=null; r.skDsp=null; r.skHap=null; if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); if(hadP) PK.padApply(r); if(hadD) PK.displayApply(r); }
+  const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec, hadP=!!r.skPad, hadD=!!r.skDsp, hadL=!!r.skLay; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skPad=null; r.skDsp=null; r.skLay=null; r.skHap=null; if(hadL&&PK.pnlOff) PK.pnlOff(r); if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); if(hadP) PK.padApply(r); if(hadD) PK.displayApply(r); }
 function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) return; const rec={card:[],ui:[]}; r.skDes=rec, ui=skUiEl(r);
   const c=d.colors; if(c&&c.scheme==='custom'&&c.custom&&Object.keys(c.custom).length){ const v=PK.skColourVars(c.custom);
     for(const p in v.card){ r.el.style.setProperty(p,v.card[p]); rec.card.push(p); } if(ui) for(const p in v.ui){ ui.style.setProperty(p,v.ui[p]); rec.ui.push(p); } }
@@ -210,6 +233,8 @@ function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) re
   { const sr=d.sections; r.skSec=sr&&sr.length?sr:null; }   // design.sections (0.5): kader, kolommen, kale regelaars, labelplaats per groep
   { const pr=PK.padRules(d); r.skPad=pr; }   // design.pads (0.6): vorm, maat, kleur, ledje, feedback van pads, stappen en geadopteerde knoppen
   { const dr=PK.displayRules(d); r.skDsp=dr; }   // design.display (0.6): het schermpje voor keuzelijsten en de kaartkop
+  { const ly=d.layout; r.skLay=ly&&ly.panels&&ly.panels.length?ly:null; }   // design.layout (0.7): regelaars in panelen en volgorde; eerst verplaatsen, dan pas secties, pads en schermpje (die zoeken in de nieuwe indeling)
+  if(r.skLay) PK.pnlApply(r);
   if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); if(r.skPad) PK.padApply(r); if(r.skDsp) PK.displayApply(r); }
 function skClear(r){ skStrip(r); skDesignStrip(r); r.skCur=null; r.skSkin=null; r.el.removeAttribute('data-pk-skin'); r.el.removeAttribute('data-pk-ap'); }
 function skScreen(){ const w=window.innerWidth; return w<700?'phone':w<1100?'compact':'wide'; } PK.skScreen=skScreen;

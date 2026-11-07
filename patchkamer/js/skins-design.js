@@ -29,11 +29,14 @@ function build(preview){ const name=D.name.trim()||'Untitled', id=preview?draftI
   const hasCtl=(D.design.controls&&D.design.controls.length)||D.aps.some(a=>a.design&&a.design.controls&&a.design.controls.length);
   const hasMet=(D.design.meters&&D.design.meters.length)||D.aps.some(a=>a.design&&a.design.meters&&a.design.meters.length);
   const hasSec=(D.design.sections&&D.design.sections.length)||D.design.size||D.aps.some(a=>a.design&&((a.design.sections&&a.design.sections.length)||a.design.size));
+  const lay=o=>{ const l=o&&o.layout; return !!(l&&l.panels&&l.panels.some(p=>p.items&&p.items.length)); };
+  const hasLay=lay(D.design)||D.aps.some(a=>lay(a.design));
   const hasPd=(D.design.pads||D.design.display)||D.aps.some(a=>a.design&&(a.design.pads||a.design.display));
-  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasPd?'0.6':hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
+  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasLay?'0.7':hasPd?'0.6':hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
   if(D.author.trim()) j.author=D.author.trim().slice(0,100); j.created=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
-  if(D.dflt) j.default=D.dflt; if(Object.keys(D.design).length) j.design=clone(D.design);
-  j.appearances=D.aps.map(a=>{ const o={id:a.id,name:a.name}; if(a.description) o.description=a.description; if(a.when) o.when=clone(a.when); o.css=a.css||''; if(a.assets&&Object.keys(a.assets).length) o.assets=clone(a.assets); if(a.design&&Object.keys(a.design).length) o.design=clone(a.design); return o; });
+  const fin=d=>{ const c=clone(d); if(c.layout&&c.layout.panels){ const had=c.layout.panels.length; c.layout.panels=c.layout.panels.filter(p=>p.items&&p.items.length); if(!c.layout.panels.length&&had){ delete c.layout.panels; } if(!Object.keys(c.layout).length) delete c.layout; } return c; };   // een paneel zonder items is nog niet af en gaat niet mee
+  if(D.dflt) j.default=D.dflt; { const dd=fin(D.design); if(Object.keys(dd).length) j.design=dd; }
+  j.appearances=D.aps.map(a=>{ const o={id:a.id,name:a.name}; if(a.description) o.description=a.description; if(a.when) o.when=clone(a.when); o.css=a.css||''; if(a.assets&&Object.keys(a.assets).length) o.assets=clone(a.assets); if(a.design){ const dd=fin(a.design); if(Object.keys(dd).length) o.design=dd; } return o; });
   return j; }
 function preview(){ const r=card(); if(!r) return; try{ const sk=PK.skValidate(build(true),'preview',[]); PK.SK.draft={skin:sk,file:'',origin:'draft'};
     const ap=D.tab===0?(D.dflt||D.aps[0].id):ctxAp().id; PK.skinSet(D.cardId,sk.id,ap); }catch(e){ PK.status(e.message,true); } ctlStat(); }
@@ -91,7 +94,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
   selRow(box,pkt('m.dz_k_stijl'),'knobs','style',[['workspace',pkt('m.dz_k_workspace')],['rotary',pkt('m.dz_k_rotary')],['slider',pkt('m.dz_k_slider')]]);
   selRow(box,pkt('m.dz_k_maat'),'knobs','size',[['m','M'],['s','S'],['l','L']]);
   box.appendChild(el('div','dz-hint',pkt('m.dz_k_hint',r?PK.knobCount(r):0)));
-  controlsSection(box); metersSection(box); padsSection(box); displaySection(box); sectionsSection(box);
+  controlsSection(box); panelsSection(box); metersSection(box); padsSection(box); displaySection(box); sectionsSection(box);
   const btns=el('div','dz-btns'), sv=el('button','small',pkt('m.dz_opslaan')), ex=el('button','small',pkt('m.dz_exporteren')), cl=el('button','small',pkt('m.dz_sluiten'));
   sv.type=ex.type=cl.type='button'; sv.disabled=ex.disabled=!D.name.trim(); sv.onclick=save; ex.onclick=exportIt; cl.onclick=()=>skDesignClose(); btns.append(sv,ex,cl); box.appendChild(btns);
   const st=el('div','dz-hint'); st.id='dzStatus'; st.setAttribute('role','status'); box.appendChild(st); }
@@ -99,7 +102,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
 // ---- Regelaars (skins 0.3, design.controls): lijst regels; de laatste passende regel wint; alleen gezicht, maat, lengte, dikte, duim, kleur en waardeweergave, nooit verbergen of waarde zetten ----
 const getCtl=()=>(ctxDesign().controls||[]);
 function setCtl(a){ const d=ctxDesign(); if(a.length) d.controls=a; else delete d.controls; if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }
-function ctlStat(){ const r=card(), n=PK.$('dzCtlStat'); if(n){ const st=r?PK.regStats(r):{n:0,m:0}; n.textContent=PK.pkt('m.dz_r_stat',st.n,st.m); } const sc=PK.$('dzSecStat'); if(sc){ const st=r?PK.secStats(r):{n:0,m:0}; sc.textContent=PK.pkt('m.dz_s_stat',st.n,st.m); } const pd=PK.$('dzPadStat'); if(pd){ const st=r?PK.padStats(r):{n:0,m:0}; pd.textContent=PK.pkt('m.dz_p_stat',st.n,st.m); } const ds=PK.$('dzDspStat'); if(ds){ const st=r?PK.displayStats(r):{n:0,m:0}; ds.textContent=PK.pkt('m.dz_d_stat',st.n,st.m); } const m=PK.$('dzMetStat'); if(m){ const st=r?PK.meterStats(r):{n:0,m:0}; m.textContent=PK.pkt('m.dz_m_stat',st.n,st.m); } }
+function ctlStat(){ const r=card(), n=PK.$('dzCtlStat'); if(n){ const st=r?PK.regStats(r):{n:0,m:0}; n.textContent=PK.pkt('m.dz_r_stat',st.n,st.m); } const sc=PK.$('dzSecStat'); if(sc){ const st=r?PK.secStats(r):{n:0,m:0}; sc.textContent=PK.pkt('m.dz_s_stat',st.n,st.m); } const pd=PK.$('dzPadStat'); if(pd){ const st=r?PK.padStats(r):{n:0,m:0}; pd.textContent=PK.pkt('m.dz_p_stat',st.n,st.m); } const ds=PK.$('dzDspStat'); if(ds){ const st=r?PK.displayStats(r):{n:0,m:0}; ds.textContent=PK.pkt('m.dz_d_stat',st.n,st.m); } const pn=PK.$('dzPnlStat'); if(pn) pn.textContent=r?PK.pnlText(r):''; const m=PK.$('dzMetStat'); if(m){ const st=r?PK.meterStats(r):{n:0,m:0}; m.textContent=PK.pkt('m.dz_m_stat',st.n,st.m); } }
 function controlsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).filter(x=>x.role!=='meter'):[]; box.appendChild(el('h4',null,pkt('m.dz_regelaars')));
   box.appendChild(el('div','dz-hint',pkt('m.dz_r_uitleg')));
   box.appendChild(el('div','dz-hint',reg.length?pkt('m.dz_r_hint',reg.length):pkt('m.dz_r_geen')));
@@ -135,6 +138,70 @@ function controlsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).f
         clr.onclick=()=>{ delete ru.color; if(pk){ pk.destroy(); pk=null; } paintSw(); preview(); }; cell.append(sw,hx,clr); rw.append(lb,cell); row.appendChild(rw); paintSw(); }
       list.appendChild(row); });
     const add=el('button','small',pkt('m.dz_r_toevoegen')); add.type='button'; add.disabled=getCtl().length>=64; add.onclick=()=>{ const a=getCtl(); a.push({match:'*',face:'default'}); setCtl(a); draw(); preview(); }; list.appendChild(add); };
+  draw(); ctlStat(); }
+// ---- Panelen (skins 0.7, design.layout): regelaars in benoemde panelen en volgorde; wat niet genoemd wordt komt in een restpaneel, er wordt niets verborgen ----
+const getLay=()=>(ctxDesign().layout||{});
+function setLay(l){ const d=ctxDesign(), has=l&&((l.panels&&(l.panels.length||D.tab>0))||l.flow); if(has){ if(l.panels&&!l.panels.length&&D.tab===0) delete l.panels; if(Object.keys(l).length) d.layout=l; else delete d.layout; } else delete d.layout; if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }
+function panelsSection(box){ const pkt=PK.pkt, r=card(), ch=PK.pnlChoices(r); box.appendChild(el('h4',null,pkt('m.dz_panelen')));
+  box.appendChild(el('div','dz-hint',pkt('m.dz_pn_uitleg')));
+  box.appendChild(el('div','dz-hint',ch.ids.length?pkt('m.dz_pn_hint',ch.ids.length):pkt('m.dz_pn_geen')));
+  const stat=el('div','dz-hint'); stat.id='dzPnlStat'; stat.setAttribute('role','status'); box.appendChild(stat);
+  const wrap=el('div','dz-rules'); box.appendChild(wrap);
+  const own=()=>D.tab===0||!!ctxDesign().layout, panels=()=>{ const l=getLay(); return l.panels||[]; };
+  const mutate=fn=>{ const l=clone(getLay()); l.panels=l.panels||[]; fn(l); setLay(l); };
+  const uniq=base=>{ const ids=new Set(panels().map(p=>p.id)); let id=base, n=2; while(ids.has(id)) id=base+'-'+(n++); return id; };
+  const labelOf=it=>{ if(it==='*') return pkt('m.dz_pn_rest'); if(it.startsWith('group:')) return pkt('m.dz_r_groep_x',it.slice(6)); if(it.startsWith('role:')) return pkt('m.dz_r_rol_x',it.slice(5)); const x=ch.ids.find(y=>y.id===it); return it+(x&&x.label?' · '+x.label:''); };
+  const draw=()=>{ wrap.innerHTML=''; const l=getLay(), ps=panels();
+    if(D.tab>0){ const note=el('div','dz-hint',own()?pkt('m.dz_pn_eigen'):pkt('m.dz_pn_van_skin')); wrap.appendChild(note);
+      const b=el('button','small',own()?pkt('m.dz_pn_terug'):pkt('m.dz_pn_maak_eigen')); b.type='button';
+      b.onclick=()=>{ const d=ctxDesign(); if(own()){ delete d.layout; if(!Object.keys(d).length) delete ctxAp().design; } else { const sl=D.design.layout; d.layout=sl?clone(sl):{panels:[]}; if(!d.layout.panels) d.layout.panels=[]; } draw(); preview(); }; wrap.appendChild(b); if(!own()) return; }
+    { const rw=el('div','dz-row'), lb=el('label',null,pkt('m.dz_pn_flow')), s=document.createElement('select'); s.className='small'; s.setAttribute('aria-label',pkt('m.dz_pn_flow'));
+      [['auto',pkt('m.dz_pn_f_auto')],['rows',pkt('m.dz_pn_f_rows')],['columns',pkt('m.dz_pn_f_columns')]].forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; s.appendChild(o); }); s.value=l.flow||'auto';
+      s.onchange=()=>{ mutate(x=>{ if(s.value==='auto') delete x.flow; else x.flow=s.value; }); preview(); }; rw.append(lb,s); wrap.appendChild(rw); }
+    ps.forEach((pn,i)=>{ const row=el('div','dz-rule'), head=el('div','dz-rhead'), nm=pkt('m.dz_pn_n',i+1);
+      const idIn=document.createElement('input'); idIn.type='text'; idIn.maxLength=40; idIn.value=pn.id; idIn.className='small'; idIn.setAttribute('aria-label',pkt('m.dz_pn_id')+' ('+nm+')');
+      idIn.onchange=()=>{ let v=idIn.value.toLowerCase().replace(/[^a-z0-9._-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||pn.id; if(v!==pn.id&&ps.some(p=>p!==pn&&p.id===v)){ let n=2; while(ps.some(p=>p!==pn&&p.id===v+'-'+n)) n++; v=v+'-'+n; } mutate(x=>{ x.panels[i].id=v; }); idIn.value=v; preview(); };
+      const mv=d=>{ const j=i+d; if(j<0||j>=ps.length) return; mutate(x=>{ [x.panels[i],x.panels[j]]=[x.panels[j],x.panels[i]]; }); draw(); preview(); };
+      const up=el('button','small','↑'), dn=el('button','small','↓'), rm=el('button','small','×'); [up,dn,rm].forEach(b=>b.type='button');
+      up.title=up.ariaLabel=pkt('m.dz_r_omhoog'); dn.title=dn.ariaLabel=pkt('m.dz_r_omlaag'); rm.title=rm.ariaLabel=pkt('m.dz_pn_weg'); up.disabled=i===0; dn.disabled=i===ps.length-1;
+      up.onclick=()=>mv(-1); dn.onclick=()=>mv(1); rm.onclick=()=>{ mutate(x=>{ x.panels.splice(i,1); }); draw(); preview(); };
+      head.append(el('span','dz-rn',nm),idIn,up,dn,rm); row.appendChild(head);
+      const txt=(label,get,set)=>{ const rw=el('div','dz-row'), lb=el('label',null,label), t=document.createElement('input'); t.type='text'; t.maxLength=60; t.value=get(); t.setAttribute('aria-label',label+' ('+nm+')'); t.onchange=()=>{ mutate(x=>set(x.panels[i],t.value.trim())); preview(); }; rw.append(lb,t); row.appendChild(rw); };
+      const tt=pn.title, tnl=typeof tt==='string'?tt:(tt&&tt.nl)||'', ten=typeof tt==='string'?tt:(tt&&tt.en)||'';
+      const setT=(P,lang,v)=>{ const cur=P.title, o=(cur&&typeof cur==='object')?{...cur}:(typeof cur==='string'&&cur?{nl:cur,en:cur}:{}); if(v) o[lang]=v; else delete o[lang]; if(Object.keys(o).length) P.title=o; else delete P.title; };
+      txt(pkt('m.dz_pn_titel_nl'),()=>tnl,(P,v)=>setT(P,'nl',v)); txt(pkt('m.dz_pn_titel_en'),()=>ten,(P,v)=>setT(P,'en',v));
+      const sel=(label,key,opts,conv)=>{ const rw=el('div','dz-row'), lb=el('label',null,label), s2=document.createElement('select'); s2.className='small'; s2.setAttribute('aria-label',label+' ('+nm+')');
+        [['',pkt('m.dz_r_zoals')],...opts].forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; s2.appendChild(o); }); const cur=pn[key]===undefined?'':String(pn[key]); s2.value=cur;
+        if(s2.value!==cur){ const o=el('option',null,cur); o.value=cur; s2.appendChild(o); s2.value=cur; }
+        s2.onchange=()=>{ mutate(x=>{ if(s2.value==='') delete x.panels[i][key]; else x.panels[i][key]=conv?conv(s2.value):s2.value; }); if(key==='collapsible') draw(); preview(); }; rw.append(lb,s2); row.appendChild(rw); };
+      sel(pkt('m.dz_pn_titelpos'),'titlePos',[['top',pkt('m.dz_pn_tp_top')],['left',pkt('m.dz_pn_tp_left')],['hidden',pkt('m.dz_pn_tp_hidden')]]);
+      sel(pkt('m.dz_pn_stijl'),'style',[['plain',pkt('m.dz_pn_s_plain')],['line',pkt('m.dz_s_k_line')],['raised',pkt('m.dz_s_k_raised')],['inset',pkt('m.dz_s_k_inset')],['floating',pkt('m.dz_s_k_floating')]]);
+      sel(pkt('m.dz_pn_richting'),'dir',[['grid',pkt('m.dz_pn_d_grid')],['row',pkt('m.dz_pn_d_row')],['column',pkt('m.dz_pn_d_column')]]);
+      sel(pkt('m.dz_s_kolommen'),'cols',[['auto',pkt('m.dz_s_auto')],...[1,2,3,4,5,6,8,12,16].map(v=>[String(v),String(v)])],v=>v==='auto'?v:+v);
+      sel(pkt('m.dz_s_ruimte'),'gap',[['tight',pkt('m.dz_s_r_tight')],['normal',pkt('m.dz_s_r_normal')],['wide',pkt('m.dz_s_r_wide')]]);
+      sel(pkt('m.dz_s_kaal'),'bare',[['true',pkt('m.dz_m_aan')],['false',pkt('m.dz_m_uit')]],v=>v==='true');
+      sel(pkt('m.dz_s_labels'),'labels',[['default',pkt('m.dz_r_g_default')],['above',pkt('m.dz_s_l_above')],['below',pkt('m.dz_s_l_below')]]);
+      sel(pkt('m.dz_s_uitlijning'),'align',[['start',pkt('m.dz_s_u_start')],['center',pkt('m.dz_s_u_center')]]);
+      sel(pkt('m.dz_pn_breedte'),'width',[['auto',pkt('m.dz_s_auto')],['full',pkt('m.dz_pn_w_full')],['half',pkt('m.dz_pn_w_half')],['third',pkt('m.dz_pn_w_third')]]);
+      sel(pkt('m.dz_pn_inklap'),'collapsible',[['true',pkt('m.dz_m_aan')],['false',pkt('m.dz_m_uit')]],v=>v==='true');
+      if(pn.collapsible) sel(pkt('m.dz_pn_ingeklapt'),'collapsed',[['true',pkt('m.dz_m_aan')],['false',pkt('m.dz_m_uit')]],v=>v==='true');
+      // inhoud: items in volgorde
+      row.appendChild(el('div','dz-hint',pkt('m.dz_pn_items')));
+      if(!pn.items.length) row.appendChild(el('div','dz-hint',pkt('m.dz_pn_leeg')));
+      pn.items.forEach((it,j)=>{ const ir=el('div','dz-rhead'), nmx=el('span','dz-rn',labelOf(it));
+        const iu=el('button','small','↑'), id2=el('button','small','↓'), ix=el('button','small','×'); [iu,id2,ix].forEach(b=>b.type='button');
+        iu.title=iu.ariaLabel=pkt('m.dz_r_omhoog'); id2.title=id2.ariaLabel=pkt('m.dz_r_omlaag'); ix.title=ix.ariaLabel=pkt('m.dz_pn_item_weg'); iu.disabled=j===0; id2.disabled=j===pn.items.length-1;
+        iu.onclick=()=>{ mutate(x=>{ const a=x.panels[i].items; [a[j],a[j-1]]=[a[j-1],a[j]]; }); draw(); preview(); }; id2.onclick=()=>{ mutate(x=>{ const a=x.panels[i].items; [a[j],a[j+1]]=[a[j+1],a[j]]; }); draw(); preview(); };
+        ix.onclick=()=>{ mutate(x=>{ x.panels[i].items.splice(j,1); }); draw(); preview(); }; ir.append(nmx,iu,id2,ix); row.appendChild(ir); });
+      { const add=document.createElement('select'); add.className='small'; add.setAttribute('aria-label',pkt('m.dz_pn_item_toevoegen')+' ('+nm+')');
+        const o0=el('option',null,pkt('m.dz_pn_item_toevoegen')); o0.value=''; add.appendChild(o0);
+        const have=new Set(pn.items), opts=[]; if(!have.has('*')) opts.push(['*',pkt('m.dz_pn_rest')]); ch.groups.forEach(g=>{ if(!have.has('group:'+g)) opts.push(['group:'+g,pkt('m.dz_r_groep_x',g)]); }); ch.roles.forEach(g=>{ if(!have.has('role:'+g)) opts.push(['role:'+g,pkt('m.dz_r_rol_x',g)]); }); ch.ids.forEach(x=>{ if(!have.has(x.id)) opts.push([x.id,x.id+(x.label?' · '+x.label:'')]); });
+        opts.forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; add.appendChild(o); });
+        add.onchange=()=>{ if(!add.value) return; const v=add.value; mutate(x=>{ const a=x.panels[i].items; if(a.length<64&&!a.includes(v)) a.push(v); }); draw(); preview(); }; row.appendChild(add);
+        const all=el('button','small',pkt('m.dz_pn_rest')); all.type='button'; all.title=all.ariaLabel=pkt('m.dz_pn_rest_titel'); all.disabled=have.has('*'); all.onclick=()=>{ mutate(x=>{ const a=x.panels[i].items; if(!a.includes('*')&&a.length<64) a.push('*'); }); draw(); preview(); }; row.appendChild(all); }
+      wrap.appendChild(row); });
+    const addP=el('button','small',pkt('m.dz_pn_toevoegen')); addP.type='button'; addP.disabled=ps.length>=16;
+    addP.onclick=()=>{ mutate(x=>{ x.panels.push({id:uniq('panel'),items:[],style:'line'}); }); draw(); preview(); }; wrap.appendChild(addP); };
   draw(); ctlStat(); }
 // ---- Meters (skins 0.4, design.meters): gezicht (balk, ledbalk, VU), richting, lengte en breedte, ballistiek, piekstreepje, clip, schaal, kleur; een skin verbergt een meter nooit ----
 const getMet=()=>(ctxDesign().meters||[]);

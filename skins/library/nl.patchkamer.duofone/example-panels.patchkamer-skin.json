@@ -1,0 +1,235 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "created": "2026-11-07",
+  "icon": null,
+  "id": "nl.patchkamer.duofone.example-panels",
+  "device": "nl.patchkamer.duofone",
+  "name": "Example panels",
+  "version": "1.0.0",
+  "description": "Shows design.layout (skins 0.7): the controls regrouped into panels in two ways, a compact card with collapsible panels in a column and a wide card with panels side by side in signal-flow order. Nothing is hidden: whatever is not named lands in a rest panel.",
+  "default": "wide",
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A narrow card (380 px when picked by hand): panels one under the other, small rotary knobs, and the less used panels (motion, master) collapsed to just their heading.",
+      "when": {
+        "maxWidth": 420
+      },
+      "css": "",
+      "assets": {},
+      "design": {
+        "size": {
+          "width": 380
+        },
+        "controls": [
+          {
+            "match": "role:param",
+            "face": "rotary",
+            "size": "s"
+          }
+        ],
+        "layout": {
+          "flow": "rows",
+          "panels": [
+            {
+              "id": "setup",
+              "title": {
+                "nl": "Klankbeeld",
+                "en": "Sound"
+              },
+              "items": [
+                "group:setup"
+              ],
+              "style": "line",
+              "cols": 2,
+              "collapsible": true,
+              "collapsed": true
+            },
+            {
+              "id": "source",
+              "title": {
+                "nl": "Bron",
+                "en": "Source"
+              },
+              "items": [
+                "group:source"
+              ],
+              "style": "raised",
+              "cols": 3,
+              "bare": true,
+              "labels": "below",
+              "collapsible": true
+            },
+            {
+              "id": "filter",
+              "title": "Filter",
+              "items": [
+                "group:filter"
+              ],
+              "style": "raised",
+              "cols": 3,
+              "bare": true,
+              "labels": "below",
+              "collapsible": true
+            },
+            {
+              "id": "amp",
+              "title": "Amp",
+              "items": [
+                "group:amp"
+              ],
+              "style": "raised",
+              "cols": 4,
+              "bare": true,
+              "labels": "below",
+              "collapsible": true
+            },
+            {
+              "id": "motion",
+              "title": {
+                "nl": "Beweging",
+                "en": "Motion"
+              },
+              "items": [
+                "group:motion"
+              ],
+              "style": "inset",
+              "cols": 3,
+              "bare": true,
+              "labels": "below",
+              "collapsible": true,
+              "collapsed": true
+            },
+            {
+              "id": "master",
+              "title": "Master",
+              "items": [
+                "group:master",
+                "group:play"
+              ],
+              "style": "line",
+              "cols": 3,
+              "collapsible": true,
+              "collapsed": true
+            },
+            {
+              "id": "rest",
+              "title": {
+                "nl": "Overige",
+                "en": "Other"
+              },
+              "items": [
+                "*"
+              ],
+              "style": "plain"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "wide",
+      "name": "Wide",
+      "description": "A wide card (920 px when picked by hand): panels side by side in signal-flow order, source and filter first, the output and the test note together in one narrow panel.",
+      "when": {
+        "minWidth": 421
+      },
+      "css": "",
+      "assets": {},
+      "design": {
+        "size": {
+          "width": 920
+        },
+        "layout": {
+          "flow": "columns",
+          "panels": [
+            {
+              "id": "setup",
+              "title": {
+                "nl": "Klankbeeld",
+                "en": "Sound"
+              },
+              "items": [
+                "group:setup"
+              ],
+              "style": "inset",
+              "cols": 3,
+              "width": "full"
+            },
+            {
+              "id": "source",
+              "title": {
+                "nl": "Bron",
+                "en": "Source"
+              },
+              "items": [
+                "osc1",
+                "osc2",
+                "osc2Semi",
+                "osc2Fine",
+                "pw",
+                "noise",
+                "ring",
+                "transpose"
+              ],
+              "style": "raised",
+              "width": "half"
+            },
+            {
+              "id": "filter",
+              "title": "Filter",
+              "items": [
+                "group:filter"
+              ],
+              "style": "raised",
+              "width": "half"
+            },
+            {
+              "id": "amp",
+              "title": "Amp",
+              "items": [
+                "group:amp"
+              ],
+              "style": "raised",
+              "width": "third"
+            },
+            {
+              "id": "motion",
+              "title": {
+                "nl": "Beweging",
+                "en": "Motion"
+              },
+              "items": [
+                "group:motion"
+              ],
+              "style": "raised",
+              "width": "third"
+            },
+            {
+              "id": "master",
+              "title": "Master",
+              "items": [
+                "group:master",
+                "group:play"
+              ],
+              "style": "floating",
+              "width": "third"
+            },
+            {
+              "id": "rest",
+              "items": [
+                "*"
+              ],
+              "style": "plain"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
