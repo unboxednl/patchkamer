@@ -85,7 +85,7 @@ function afterAdd(nid){ const r=PK.Host.devices.get(nid); if(!r) return; toFront
   PK.status(PK.pkt('m.geplaatst',r.def.name)+(n?PK.pktp('m.apparaten_opgeschoven_apparaat_opgeschoven',n>1,n):'')); } PK.afterAdd=afterAdd;
 function modApply(tid){ const r=PK.Host.devices.get(tid); if(!r||typeof r.inst.modulate!=='function') return; const m=PK.Host._modOff.get(tid), sum={};
   if(m) m.forEach(o=>{ for(const k in o){ const v=+o[k]; if(isFinite(v)) sum[k]=(sum[k]||0)+v; } }); for(const k in sum) sum[k]=PK.clamp(sum[k],-1,1);
-  r.modSum=sum; PK.modViewKick();
+  PK.prmFilter(tid,sum); r.modSum=sum; PK.modViewKick(); PK.prmModNotify(tid,sum);
   try{ r.inst.modulate(sum); }catch(e){ console.warn('modulate()',r.def.name,e); } } PK.modApply=modApply;
 function modInfo(id){ const r=PK.Host.devices.get(id); let params=[]; try{ params=typeof r.inst.params==='function'?(r.inst.params()||[]):[]; }catch(e){ console.warn('params()',r.def.name,e); }
   return {id,name:r.def.name,def:r.def.id,version:r.def.version,params}; }
@@ -118,7 +118,7 @@ function ctlSet(rec,key,f){ if(!Number.isFinite(f)) return false; f=Math.max(0,M
   if(kind==='select'){ const o=[...x.options]; if(!o.length) return false; const v=o[Math.min(o.length-1,Math.round(f*(o.length-1)))].value; if(x.value!==v){ x.value=v; x.dispatchEvent(new Event('input',{bubbles:true,composed:true})); x.dispatchEvent(new Event('change',{bubbles:true,composed:true})); } return true; }
   if(kind==='check'){ const want=f>=0.5; if(x.checked!==want) x.click(); return true; }
   if(f>=0.5){ x.click(); return true; } return false; } PK.ctlSet=ctlSet;
-function removeDevice(id){ const r=PK.Host.devices.get(id); if(!r) return; PK.Host.cables.filter(c=>c.from.id===id||c.to.id===id).forEach(PK.unpatch); PK.Host._modOff.delete(id); PK.Host._dropModSig(v=>v.sid===id||v.tid===id); try{r.inst.unmount&&r.inst.unmount(); r.inst.destroy&&r.inst.destroy();}catch(e){} PK.Host.stepSubs.delete(r.inst); r.el.remove(); PK.Host.devices.delete(id); if(PK.selected===id) PK.selected=null; PK.drawCables(); if(typeof PK.paintFocusBtn==='function') PK.paintFocusBtn(); peersChanged(); } PK.removeDevice=removeDevice;
+function removeDevice(id){ const r=PK.Host.devices.get(id); if(!r) return; PK.Host.cables.filter(c=>c.from.id===id||c.to.id===id).forEach(PK.unpatch); PK.Host._modOff.delete(id); PK.Host._dropModSig(v=>v.sid===id||v.tid===id); PK.prmCleanup(id); try{r.inst.unmount&&r.inst.unmount(); r.inst.destroy&&r.inst.destroy();}catch(e){} PK.Host.stepSubs.delete(r.inst); r.el.remove(); PK.Host.devices.delete(id); if(PK.selected===id) PK.selected=null; PK.drawCables(); if(typeof PK.paintFocusBtn==='function') PK.paintFocusBtn(); peersChanged(); } PK.removeDevice=removeDevice;
 // size: null = the device's own default (width from def.ui.width, height follows the content)
 function defWidth(def){ return PK.clamp((def.ui&&def.ui.width)||300,200,6000); } PK.defWidth=defWidth;
 function minWidth(def){ return PK.clamp((def.ui&&def.ui.minWidth)||200,200,defWidth(def)); } PK.minWidth=minWidth;

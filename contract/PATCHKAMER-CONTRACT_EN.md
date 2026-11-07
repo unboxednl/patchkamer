@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.20 for building agents
+# Patchkamer — Instrument contract v1.21 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -29,6 +29,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.18 | Meters: `host.ui.meter(parent, label, opts)` lets the host draw the level (bar, LED ladder or a round VU meter with a needle; length and width adjustable by a skin), from one or two `AnalyserNode`s (`source`) or through `set(level)`; a meter is in the register with role `meter`; a device on an older host without `host.ui.meter` falls back to its own drawing; the attribute `data-pk-suffix` (text after the label when linking to MIDI); the validator knows `host.ui.meter` and shows meters in `--controls` (§12e) |
 | v1.19 | Tags for tunes and presets: `tags` on a tune, folder or pack (paths such as `instrument/guitar/acoustic` and `style/hiphop`); the host shows them as an indented tree (Tunes and Presets, By instrument and By style). Only the packs change, not the devices (§13c) |
 | v1.20 | Samples: sample packs (`*.patchkamer-samples.json`, sound as base64) with a tab of their own in the library, and for devices that load audio the optional method `loadAudio(files, info)` (§13e) |
+| v1.21 | Recording and playing settings: `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` let a sequencer follow the controls of another device (including what a modulator does), set them to an absolute value and lock them against modulation (§13f) |
 
 ---
 
@@ -871,6 +872,44 @@ A **sample** is a piece of sound (a drum loop, a stab, a single hit) in a **samp
 
 ---
 
+## 13f. Recording and playing settings (v1.21)
+
+For sequencers and controllers that record the settings of another device while the user turns them (or a modulator moves them) and play them back exactly. The target device does not have to do anything: the host reads and sets the controls itself.
+
+**What takes part.** Only sliders and rotary knobs (`<input type="range">`, also `host.ui.knob`) with an `id` (§12d) that are also in `params()` (§8), so the controls that Drift, LFO and MSEG work on. Selects, checkboxes and buttons do not take part. A value is always a number from 0 to 1: the part of the control's range, logarithmic for `scale: 'log'`.
+
+| Call | What |
+|---|---|
+| `host.watchParams(this, targetId, fn)` | Reports every change of a control of the target to `fn(paramId, value, by)`. `by` is `'user'` (someone turns or types), `'seq'` (another sequencer set it with `setParam`) or `'mod'` (a modulator; `value` is then the effective value: knob position plus modulation, limited to 0..1). One `fn` per caller per target; a new one replaces the old one. `fn` equal to `null` stops following. Returns `true` if the target exists and is not you, otherwise `false`. |
+| `host.setParam(this, targetId, paramId, value)` | Sets the control visibly (it moves on the card), to `value` from 0 to 1, rounded to the step of the control. Returns `true` if it was set, `false` for an unknown target or id, a control that is not a slider, a disabled control or a value that is not a number. A value outside 0..1 is limited. You do not get the change back through `watchParams`; other followers get `by: 'seq'`. |
+| `host.lockParams(this, targetId, ids)` | While the lock exists, the target ignores modulation on these `paramId`s, the fast kind too (§9: `host.modSignal` then returns `false` and the modulator falls back to `host.modulate`, which is also ignored for these ids). `ids` is a list; a second call replaces your previous list; `null` or `[]` removes your lock. Returns `true` if the target exists and is not you. |
+| `host.paramsOf(this, targetId)` | The parameter list of the target, from its `params()`: `[{ id, name, lane, laneName, min, max, scale, value }]` (at most 256). `value` is the knob position from 0 to 1, or `null` if there is no slider or rotary knob with this `id` (you cannot record or set that parameter). `[]` for an unknown target, yourself or a target without `params()`. Meant for a view with a line per control. |
+
+- **Calls come from you.** The host calls `fn` on the main thread, often: a turn gives many reports per second, and a modulator on every update it sends (about 20 to 30 times per second per modulator). Thin them out before you store them.
+- **Fast control** (§9, audio rate) is not reported. Only what goes through `host.modulate` arrives as `'mod'`.
+- **Cleaning up.** If the target or you disappear, following stops and your lock lapses. Release a lock yourself when you stop playing (`lockParams(this, targetId, null)`), otherwise the modulation stays off.
+- **The user stays in charge.** A control that you set can simply be turned by the user; you see that as `by: 'user'`.
+- **Smooth transitions.** `setParam` jumps to the value. Call it per tick (and send in-between values for a gliding line); the host commits the final change 200 ms after the last call.
+
+Recommended behaviour for a sequencer that uses this:
+
+1. **Record as latch.** A reported value stays until the next change; store the line per control as points (time, value) and leave the rest of the recording (notes, drums, chords) alone.
+2. **Play.** On every tick set the value on the line with `setParam`. A user who turns a control during playback wins until they let go or the recording takes over.
+3. **Who plays the settings.** Let the user choose per song: the sequencer plays them exactly (set `lockParams` on the controls that have a line) or the modulators may steer on top (no lock, the line is the base position). A recording made with a modulator active stores the effective value (`'mod'`) and fits the exact mode.
+4. **Nothing by itself.** Loading, restoring or opening a song sets no lock and sets no control; that only happens when the transport runs.
+
+```js
+// record
+host.watchParams(this, targetId, (id, value, by) => { if (recording) points[id].push({ t: now(), v: value }); });
+// play, exact: modulation on these controls off
+host.lockParams(this, targetId, ['cutoff', 'res']);
+host.setParam(this, targetId, 'cutoff', 0.62);
+// stop
+host.lockParams(this, targetId, null); host.watchParams(this, targetId, null);
+```
+
+A device that is only a target does nothing: the coverage of `params()` (§8, v1.16) decides which controls a sequencer can record.
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -903,6 +942,10 @@ A **sample** is a piece of sound (a drum loop, a stab, a single hit) in a **samp
 | `host.eventBundleChanged(this, port)` | v1.13 | The tracks of your multi-MIDI port have changed (§11c) |
 | `host.controls(this, targetId)` | v1.13 | The controls on the card of another device (§11c) |
 | `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
+| `host.watchParams(this, targetId, fn)` | v1.21 | Follow changes of the controls of another device, also those of modulation; `fn(paramId, value, by)` (§13f) |
+| `host.setParam(this, targetId, paramId, value)` | v1.21 | Set a control (from `params()`) of another device visibly, value 0..1 (§13f) |
+| `host.lockParams(this, targetId, ids)` | v1.21 | Ignore modulation on these controls of another device; `null` removes the lock (§13f) |
+| `host.paramsOf(this, targetId)` | v1.21 | The parameter list of another device with the knob position of every control (§13f) |
 | `host.noteNamesChanged(this)` | v1.14 | Your `noteNames()` changed; other devices hear it through `onPeers` (§13b) |
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Copy and paste patterns and clips, optional and all three together; format `patchkamer-clip` (§13d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Have the host draw a meter (bar, LED ladder or round VU, chosen by a skin); returns `{ el, set, id, destroy }` (§12e) |
@@ -972,6 +1015,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 16. **Coverage of `params()` (v1.16, §8)**: every continuous control (`<input type="range">`, `host.ui.knob`, `host.ui.adopt`; not the roles `step`, `display`, `meter`, `jack`, `pad`, `button`) is matched to `params()`: first by its `id` (options or `data-pk-id`), then by the `getState` key that changes when the validator moves the value and calls the `input`/`change` handling (numbered keys such as `osc.0.fine` count if they occur at several positions; step data and a single selected position do not), then by a label equal to exactly one parameter name. Only a `warning` (never an error) for: continuous controls that are not in `params()` and not in `modExclude`; an `instrument`, `effect` or `mixer` (not the categories `sequencer` and `tool`) with continuous controls but no `params()`; a `params()` id without a control or state key; a `modExclude` that is not a list of strings (or `'*'`). What the validator cannot match, it leaves silent (`?` in `--controls`). Controls built through `innerHTML` or drawn on a canvas it does not see.
 17. **Clipboard (v1.17, §13d)**: `clipInfo`, `getClip` and `setClip` all three or none. `clipInfo()` returns `null` or a JSON object (`copy`/`paste` with `notes` and/or `drums`, numbers in `length`), does not throw and does not change the state. `getClip()` returns `null` or a valid `patchkamer-clip` as JSON without AudioNodes (`format`, `formatVersion` 1, `kind` `notes` or `drums`, `length` 1 to 12288 whole ticks, at most 4096 notes or hits and 64 lanes, `t`, `n`, `lane` and `vel` in range) and does not change the state. `setClip(getClip())` leaves `getState()` unchanged. `setClip` gets junk, empty and extreme clips (other types, `NaN`, length 0 or 1e9, 100000 notes, lanes that do not exist) and does not throw; it always returns `{ ok, reason }` (`reason` text with `ok: false`); with `ok: false` the state stays the same, with `ok: true` the state is JSON without `NaN`/`Infinity` and stable under `setState(getState())`; it sends no events itself. A device that rejects its own `getClip()` (`ok: false`) gets a `warning`. A device without these methods gets no message. `--clip` shows what `clipInfo()` and `getClip()` return.
 18. **Meters (v1.18, §12e)**: the fake host knows `host.ui.meter(parent, label, opts)` and returns `{ el, set, id, destroy }`. A `source` that is not an `AnalyserNode` or a list of 1 or 2 `AnalyserNode`s throws and is therefore an error. Only a `warning` (never an error) for: a duplicate meter id, an invalid id or group, options that are not an object, an invalid `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` without `source`, a `set()` with anything but a finite number or `[l, r]`, `data-pk-role="meter"` on your own element and a `data-pk-suffix` of more than 16 characters. A meter does not count towards the coverage of `params()`. `--controls` shows meters with role `meter`.
+19. **Recording settings (v1.21, §13f)**: the fake host knows `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` and returns `false` (`[]` for `paramsOf`); the validator checks nothing else about them (test a sequencer that uses them in the host).
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1043,7 +1087,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.20
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.21
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1102,7 +1146,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.20
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.21
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -1166,7 +1210,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.20
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.21
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1244,7 +1288,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.20.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.21.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

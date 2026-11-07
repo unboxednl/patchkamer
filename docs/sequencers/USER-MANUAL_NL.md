@@ -647,6 +647,19 @@ Clip Arranger werkt als een sessieweergave. Per spoor (1 tot 16) zijn er 8 **cli
 
 **05 · Instrumenten toewijzen.** Een lijst van de uitgangen met de labels van de sporen, als geheugensteun voor wat je aansluit.
 
+#### Instellingen opnemen en afspelen
+
+Onder de CC-lanes in de clip-editor staat het onderdeel **Instellingen · opnemen en afspelen**. Het toont elke regelaar van het apparaat waar de kabel van het spoor naartoe gaat (het eerste, als het er meer zijn) als een lijn over de lengte van de clip. Zolang er niets is opgenomen, is een lijn vlak en gestippeld op de huidige stand van de knop.
+
+![De instellingen van een clip: een lijn per regelaar](../images/nl/sequencers/clip-arranger-settings.png)
+
+- **Instellingen opnemen bij Opname** (standaard aan). Met **Opname** aan en de klok lopend wordt elke draai aan een regelaar van het aangesloten apparaat als punt op zijn lijn geschreven, naast de noten die je speelt. Een waarde blijft staan tot de volgende wijziging: een knop die van 10 naar 20 gaat, blijft op 20. Instellingen die een modulator beweegt (Drift, LFO, MSEG) worden ook opgenomen, als de waarde die je hoort. De noten, drums en akkoorden die al in de clip staan, blijven ongemoeid: alleen de lijnen waaraan je draait veranderen. Bij **Aanvullen** blijven de punten van een lijn waaraan je draait staan en komen er nieuwe bij; bij **Overschrijven** wordt een lijn die je aanraakt eerst leeggemaakt, één keer per opnameronde.
+- **Wie speelt de instellingen** (een keuze per song). **Sequencer (exact zoals opgenomen)**: de clip speelt zijn lijnen en modulatoren op die regelaars worden genegeerd zolang hij speelt; regelaars zonder lijn worden nog steeds gemoduleerd. **Modulatoren (lijn is de basisstand)**: de lijn zet de knop en Drift of een andere modulator beweegt erbovenop. Tijdens het opnemen zijn de modulatoren altijd actief, zodat ze opgenomen kunnen worden.
+- Afspelen werkt per clip, per scène en in de hele song: elk punt wordt op zijn eigen moment gezet en de knop beweegt zichtbaar mee op de kaart van het apparaat. De clip hoeft niet geselecteerd te zijn.
+- De **×** aan het eind van een lijn maakt hem leeg. **Undo** haalt opgenomen lijnen terug, zoals noten.
+- Alleen schuiven en draaiknoppen die het apparaat aan modulatoren aanbiedt (de regelaars waar Drift, LFO en MSEG op werken) doen mee. Keuzelijsten, vinkjes en knoppen niet. Snelle modulatie (audiosnelheid) wordt niet opgenomen.
+- Draai je zelf aan een knop terwijl zijn lijn speelt, dan neemt de lijn hem bij het volgende punt weer terug.
+
 #### De poorten
 
 | Poort | Soort | Waar je hem op aansluit |

@@ -35,7 +35,7 @@ const Host={
   // (deel van het bereik); de host verbindt die met target.modInput(paramId). Geeft true als het doel dat biedt,
   // anders false: de modulator valt dan terug op host.modulate. node=null maakt de verbinding los.
   _modSig:new Map(),   // 'bron|doel|param' -> {node,input,sid,tid}
-  modSignal(inst,targetId,paramId,node){ const sid=inst&&inst._id; if(!sid) return false; const key=sid+'|'+targetId+'|'+paramId, old=this._modSig.get(key);
+  modSignal(inst,targetId,paramId,node){ const sid=inst&&inst._id; if(!sid) return false; if(node&&PK.prmLocked&&PK.prmLocked(targetId,String(paramId))) return false; const key=sid+'|'+targetId+'|'+paramId, old=this._modSig.get(key);
     if(old){ if(old.node===node) return true; try{ old.node.disconnect(old.input); }catch(e){} if(old.tap) try{ old.node.disconnect(old.tap); }catch(e){} this._modSig.delete(key); }
     if(!node) return false; if(!this.cables.some(c=>c.kind==='mod'&&c.from.id===sid&&c.to.id===targetId)) return false;
     const r=this.devices.get(targetId); if(!r||typeof r.inst.modInput!=='function') return false;
@@ -104,6 +104,11 @@ const Host={
   // op de kaart van een ander apparaat en zet ze met een waarde 0..1. De host vindt ze zelf (ook in open shadow roots); de apparaten hoeven niets te doen.
   controls(inst,targetId){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!r||targetId===me) return []; return PK.ctlList(r).map(x=>({...x.d})); },
   setControl(inst,targetId,key,value){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!r||targetId===me) return false; return PK.ctlSet(r,String(key),+value); },
+  // contract v1.21: instellingen van andere apparaten volgen (voor opnemen), absoluut zetten (voor afspelen) en tegen modulatie vergrendelen. Zie js/param-record.js.
+  watchParams(inst,targetId,fn){ return PK.prmWatch(inst,targetId,fn); },
+  setParam(inst,targetId,paramId,value){ return PK.prmSet(inst,targetId,paramId,+value); },
+  lockParams(inst,targetId,ids){ return PK.prmLock(inst,targetId,ids); },
+  paramsOf(inst,targetId){ return PK.prmList(inst,targetId); },
   // contract v1.5: is deze poort van mij bekabeld? (bv. om een bundel alleen op lege kanalen te zetten)
   isWired(inst,port,dir){ const id=inst&&inst._id; return this.cables.some(c=>dir==='out'?(c.from.id===id&&c.from.port===port):(c.to.id===id&&c.to.port===port)); },
   eventBundleChanged(inst,port){ const sid=inst&&inst._id; if(!sid) return; this.cables.filter(c=>c.kind==='multievent'&&c.from.id===sid&&(port==null||c.from.port===port)).forEach(PK.deliverEventBundle); },
