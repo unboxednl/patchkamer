@@ -54,14 +54,14 @@ Werken via de host op alle apparaten; zonder CSS en zonder dat je de apparaatbro
 
 | Optie | Waarden | Werkt op |
 |---|---|---|
-| `design.ports.mode` | `default`, `always`, `hover`, `strip` | poortenbalk bovenaan elk apparaat (niet bij `ui.jacks`) |
+| `design.ports.mode` | `default`, `always`, `hover`, `strip`, `bar` | poortenbalk bovenaan elk apparaat (niet bij `ui.jacks`) |
 | `design.colors` | `scheme` `workspace` of `custom` met `bg`, `surface`, `text`, `muted`, `accent`, `line` (`#rgb` of `#rrggbb`) | de kaart en het hostelement van elk apparaat |
 | `design.haptics` | `click`, `turn`, `slide`: `off`, `light`, `medium`, `strong` | elke kaart (alleen waar het apparaat of de browser trilt) |
 | `design.knobs` | `style` `workspace`, `rotary`, `slider`; `size` `s`, `m`, `l` | alleen `host.ui.knob`-regelaars (korte vorm van `controls`) |
 | `design.controls` (0.3) | lijst van hoogstens 64 regels `{ match, face, size, length, thickness, thumb, color, showValue }` | alleen regelaars die het apparaat aanmeldt (id/role/group) |
 | `design.meters` (0.4) | lijst van hoogstens 64 regels `{ match, face, orientation, length, width, ballistics, peakHold, clip, scale, color, segments }` | alleen meters die het apparaat met `host.ui.meter` aanmeldt (id/group) |
 
-- `ports.mode`: `default` zoals nu, `always` poortenbalk altijd zichtbaar, `hover` poorten verschijnen bij een kabel boven het apparaat of de muis boven de strook, `strip` een dunne strook die altijd zichtbaar is. Zie het contract, §4b, voor de schets.
+- `ports.mode`: `default` zoals nu, `always` poortenbalk altijd zichtbaar, `hover` poorten verschijnen bij een kabel boven het apparaat of de muis boven de strook, `bar` poorten als stipjes in de titelbalk (tussen naam en versiekeuze, balk groeit niet), `strip` een dunne strook die altijd zichtbaar is. Zie het contract, §4b, voor de schets.
 - Kleuren alleen als `#rgb` of `#rrggbb`. Kies bij `scheme: "custom"` alle zes de kleuren; zorg dat `text` tegen `bg` en `surface` minstens 3:1 haalt (anders een `let op`). Per verschijningsvorm hoef je alleen de kleuren te herhalen die anders zijn.
 - Haptiek en knoppen werken niet overal (geen trilling in elke browser; eigen `range`-invoeren van een apparaat blijven ongemoeid). Beloof dus niet meer in de omschrijving dan het contract zegt.
 - Een skin met `design` krijgt `skinsContract` `"0.2"`; een skin met `design.controls` krijgt `"0.3"`; een skin met `design.meters` krijgt `"0.4"`. Voorbeelden: `library/nl.patchkamer.duofone/example-back-panel.patchkamer-skin.json` en `example-touch.patchkamer-skin.json`.

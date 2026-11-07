@@ -132,7 +132,7 @@ Naast CSS kan een skin vanaf versie 0.2 een set **gevalideerde ontwerpkeuzes** m
 
 ```json
 "design": {
-  "ports":   { "mode": "default|always|hover|strip" },
+  "ports":   { "mode": "default|always|hover|strip|bar" },
   "colors":  { "scheme": "workspace|custom",
                "custom": { "bg": "#rrggbb", "surface": "#rrggbb", "text": "#rrggbb", "muted": "#rrggbb", "accent": "#rrggbb", "line": "#rrggbb" } },
   "haptics": { "click": "off|light|medium|strong", "turn": "off|light|medium|strong", "slide": "off|light|medium|strong" },
@@ -160,6 +160,7 @@ De kabelpoorten staan bovenaan het apparaat, als de achterkant van een apparaat.
 | `always` | de poortenbalk is altijd zichtbaar bovenaan het apparaat (zoals bij het mengpaneel) |
 | `hover` | de poorten zijn verborgen; ze verschijnen bovenaan zodra je met een kabel (tijdens slepen) over het apparaat gaat, of met de muis over de poortenstrook bovenaan |
 | `strip` | een dunne poortenstrook bovenaan is altijd zichtbaar; de muis (met of zonder kabel) over die strook of over het apparaat toont alle poorten |
+| `bar` | de poorten staan altijd zichtbaar als kleine stipjes in de titelbalk, tussen de naam van het apparaat en de versiekeuze; de balk wordt niet groter (de naam krimpt als er te weinig ruimte is) en kabels hangen aan de stipjes |
 
 ```
  default / always              hover or strip, closed         hover or strip, open
@@ -429,7 +430,7 @@ Dit contract heeft een versie `major.minor` (nu **0.4**), vastgelegd in het veld
 |---|---|---|
 | `skinsContract` | `"0.1"` | `"0.2"`; `"0.1"` blijft geldig |
 | Veld `design` (skin en verschijningsvorm) | bestaat niet | nieuw, optioneel (§4b) |
-| Poortenmodus | alleen het gedrag van de host | `ports.mode`: `default`, `always`, `hover`, `strip` |
+| Poortenmodus | alleen het gedrag van de host | `ports.mode`: `default`, `always`, `hover`, `strip`, `bar` |
 | Kleuren | alleen via CSS-variabelen in de skin | `colors`: schema `workspace` of `custom` met zes kleuren |
 | Haptiek | geen | `haptics`: `click`, `turn`, `slide` |
 | Hostknop | geen | `knobs`: `style` en `size` |

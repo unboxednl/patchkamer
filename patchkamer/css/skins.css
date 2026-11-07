@@ -64,3 +64,12 @@
 .cp-rl{display:grid;gap:3px} .cp-rl[hidden]{display:none}
 .cp-rt{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 @media (pointer:coarse){ .cp-s{width:44px;height:44px} .cp-hue{height:44px} .cp-sv{height:180px} .cp-hex,.cp .small{min-height:44px} .cp-svt{width:24px;height:24px;margin:-12px 0 0 -12px} }
+
+/* poortenmodus bar: de poorten staan als stipjes in de titelbalk tussen naam en versiekeuze; de balk wordt niet hoger of breder (de naam krimpt) */
+.card[data-pk-ports="bar"] .bar>.ports{flex:none;display:flex;align-items:center;gap:8px;padding:0;margin:0;min-width:0;max-width:60%;overflow:hidden}
+.card[data-pk-ports="bar"] .bar>.ports .col{display:flex;align-items:center;gap:5px}
+.card[data-pk-ports="bar"] .bar>.ports .port>span:not(.dot){display:none}
+.card[data-pk-ports="bar"] .bar>.ports .port .dot{width:10px;height:10px;border-width:2px}
+.card[data-pk-ports="bar"] .bar>.ports .port.multi .dot,.card[data-pk-ports="bar"] .bar>.ports .port.multievent .dot{width:12px}
+.card[data-pk-ports="bar"] .bar>.ports .port.mastering .dot{width:11px;height:11px}
+@media (pointer:coarse){ .card[data-pk-ports="bar"] .bar>.ports{gap:10px} .card[data-pk-ports="bar"] .bar>.ports .col{gap:9px} .card[data-pk-ports="bar"] .bar>.ports .port .dot{width:14px;height:14px} }

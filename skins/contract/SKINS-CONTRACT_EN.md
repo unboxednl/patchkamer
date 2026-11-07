@@ -132,7 +132,7 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
 
 ```json
 "design": {
-  "ports":   { "mode": "default|always|hover|strip" },
+  "ports":   { "mode": "default|always|hover|strip|bar" },
   "colors":  { "scheme": "workspace|custom",
                "custom": { "bg": "#rrggbb", "surface": "#rrggbb", "text": "#rrggbb", "muted": "#rrggbb", "accent": "#rrggbb", "line": "#rrggbb" } },
   "haptics": { "click": "off|light|medium|strong", "turn": "off|light|medium|strong", "slide": "off|light|medium|strong" },
@@ -160,6 +160,7 @@ The cable ports sit at the top of the device, like the back of a device. The mod
 | `always` | the port bar is always visible at the top of the device (like the mixer panel) |
 | `hover` | the ports are hidden; they appear at the top as soon as you drag a cable over the device, or move the mouse over the port strip at the top |
 | `strip` | a thin port strip at the top is always visible; the mouse (with or without a cable) over that strip or over the device shows all ports |
+| `bar` | the ports are always visible as small dots in the title bar, between the device name and the version selector; the bar does not grow (the name shrinks if space runs out) and cables hang from the dots |
 
 ```
  default / always              hover or strip, closed         hover or strip, open
@@ -429,7 +430,7 @@ This contract has a version `major.minor` (now **0.4**), recorded in the field `
 |---|---|---|
 | `skinsContract` | `"0.1"` | `"0.2"`; `"0.1"` stays valid |
 | Field `design` (skin and appearance) | does not exist | new, optional (§4b) |
-| Ports mode | only the behaviour of the host | `ports.mode`: `default`, `always`, `hover`, `strip` |
+| Ports mode | only the behaviour of the host | `ports.mode`: `default`, `always`, `hover`, `strip`, `bar` |
 | Colours | only via CSS variables in the skin | `colors`: scheme `workspace` or `custom` with six colours |
 | Haptics | none | `haptics`: `click`, `turn`, `slide` |
 | Host knob | none | `knobs`: `style` and `size` |

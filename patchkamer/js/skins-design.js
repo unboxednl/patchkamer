@@ -73,7 +73,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
   const ap=ctxAp(); box.appendChild(el('div','dz-hint',ap?(ap.when?pkt('m.dz_when_hint',ap.name,PK_when(ap.when)):pkt('m.dz_tab_alleen')):pkt('m.dz_tab_skin')));
   // poorten
   box.appendChild(el('h4',null,pkt('m.dz_poorten')));
-  selRow(box,pkt('m.dz_modus'),'ports','mode',[['default',pkt('m.dz_p_default')],['always',pkt('m.dz_p_always')],['hover',pkt('m.dz_p_hover')],['strip',pkt('m.dz_p_strip')]],null,portsDef());
+  selRow(box,pkt('m.dz_modus'),'ports','mode',[['default',pkt('m.dz_p_default')],['always',pkt('m.dz_p_always')],['hover',pkt('m.dz_p_hover')],['strip',pkt('m.dz_p_strip')],['bar',pkt('m.dz_p_bar')]],null,portsDef());
   if(portsDef()) box.appendChild(el('div','dz-warn',pkt('m.sk_jacks_paneel')));
   // kleuren
   box.appendChild(el('h4',null,pkt('m.dz_kleuren')));
