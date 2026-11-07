@@ -77,7 +77,7 @@ This folder has **41 packs with 1902 presets**, one pack per device: 12 for effe
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
 | [Chord Buddy](../devices/tools/ChordBuddy/) | Chord Buddy Starter Sets | 30 | 10 | [`chord-buddy.patchkamer-presets.json`](chord-buddy.patchkamer-presets.json) |
-| [Control Surface](../devices/tools/ControlSurface/) | Control Surface Layouts | 20 | 4 | [`control-surface.patchkamer-presets.json`](control-surface.patchkamer-presets.json) |
+| [Control Surface](../devices/tools/ControlSurface/) | Control Surface Layouts | 28 | 5 | [`control-surface.patchkamer-presets.json`](control-surface.patchkamer-presets.json) |
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4 | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) |
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3 | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) |
 

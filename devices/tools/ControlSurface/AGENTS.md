@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die dit apparaat configureren. Het is niet geschre
 
 ## Wat de Control Surface is
 
-Een paneel voor een MIDI-controller met draaiknoppen, schuiven, pads en knoppen, zonder klavier. Het toont de controller en beweegt mee met de hardware, en stuurt elk element door als `cc`-gebeurtenis met `id` (het slot), `slot` (de naam), `cc` en `ch`. Geen merknamen of modelnamen van controllers in naam, id, teksten of presets; beschrijf de vorm (aantal rijen, kolommen).
+Een paneel voor een MIDI-controller met draaiknoppen, schuiven, pads en knoppen, zonder klavier. Het toont de controller en beweegt mee met de hardware, en stuurt elk element door als `cc`-gebeurtenis met `id` (het slot), `slot` (de naam), `cc` en `ch`. Geen merknamen of modelnamen van controllers in naam, id of teksten van het apparaat. Uitzondering: de presets in de map `Controllers` van het pack mogen de naam van de controller dragen (zie Presets).
 
 | | |
 |---|---|
@@ -35,7 +35,7 @@ Een paneel voor een MIDI-controller met draaiknoppen, schuiven, pads en knoppen,
 | `channel` | 0 = alle kanalen, 1…16 |
 | `assign` | de toewijzingen per element-id |
 
-`getPreset` geeft alleen `sections` en `channel`; `setPreset` zet de indeling en wist de toewijzingen (die horen bij de oude vorm) en laat `input` staan.
+`getPreset` geeft `sections`, `channel` en, als er toewijzingen zijn, `assign`; `setPreset` zet de indeling en de toewijzingen uit de preset (heeft de preset er geen, dan worden ze gewist, want ze horen bij de oude vorm) en laat `input` staan. Zo is een preset indeling plus MIDI-mapping (sinds 1.14.0).
 
 ## Wat getest is en wat niet
 
@@ -43,4 +43,15 @@ Met een nep-Web MIDI in Chromium (twee nep-ingangen): verbinden, ingang kiezen, 
 
 ## Presets
 
-`../../../presets/control-surface.patchkamer-presets.json` (formatVersion 2, CC0-1.0, namen Engels) heeft 20 indelingen in vier mappen: Strips, Faders, Knobs en Pads. Een preset bevat alleen `sections` en `channel`. Voeg geen namen van controllers toe; noem de vorm.
+`../../../presets/control-surface.patchkamer-presets.json` (formatVersion 2, CC0-1.0, namen Engels) heeft 28 presets in vijf mappen: Controllers, Strips, Faders, Knobs en Pads.
+
+- **Strips, Faders, Knobs, Pads:** alleen een vorm (`sections` en `channel`), zonder merknamen; noem de vorm.
+- **Controllers:** indeling plus `assign` voor bestaande MIDI-controllers; de presetnaam noemt het model (uitzondering op de merkregel, zie `CLAUDE.md`). Pad-elementen tellen vanaf de bovenste rij, dus de pad linksonder van een 8×8-raster is `p<sectie>.8.1`. Een toewijzing komt er alleen in als het nummer uit openbare documentatie komt; **getest met echte hardware is niets**, behalve dat de preset laadt en het juiste aantal toewijzingen zet. Kloppen de nummers niet met een ander model of een andere stand van de controller, dan corrigeert de gebruiker dat met Leer en bewaart hij een eigen preset.
+  - `Traktor Kontrol F1`: alleen indeling. De nummers bepaalt de gebruiker zelf in de Controller Editor van de fabrikant (de F1 is een HID-apparaat dat daarmee MIDI gaat sturen).
+  - `Ableton Push 2 and 3`: pads noot 36 + 8·(rij van onder) + kolom (36 … 99), acht draaiknoppen CC 71 … 78 (relatief), gebruikersmodus.
+  - `Akai APC mini`: pads noot 0 … 63 (linksonder 0), schuiven CC 48 … 56. `Akai APC mini MK2`: idem plus de onderste rij knoppen noot 100 … 107.
+  - `Novation Launchpad Mini MK3 Programmer Mode`: pad = 11 + 10·(rij van onder) + kolom, bovenste knoppen CC 91 … 98, rechterknoppen CC 89 … 19.
+  - `Novation Launch Control XL User Template 1`: draaiknoppen CC 13 … 20, 29 … 36, 49 … 56, schuiven CC 77 … 84.
+  - `Akai MPK mini MK3`: acht draaiknoppen CC 70 … 77; de pads staan niet vast en blijven onbewaard (Leer).
+  - `Generic 8 Knobs Sound Controllers CC 70-77`: de geluidsregelaars uit de MIDI-specificatie.
+- Wil je een controller toevoegen: bouw de indeling uit secties, leer of vul de toewijzingen, bewaar het als preset en zet hem in de map `Controllers`. Zonder bron voor de nummers: alleen de indeling.
