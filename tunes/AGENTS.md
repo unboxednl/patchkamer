@@ -133,8 +133,9 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10: Techno, House, Deep House, Acid, Electro, Synthwave, Hip-hop, Dub, Drum & Bass, Trance | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) | – |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
+| [Woodwinds](../devices/synths/Woodwinds/) | Woodwinds | 42 | 12: Flute, Clarinet, Oboe, Bassoon, Sax, Recorder, Pan Flute, Section, Ballad, Jazz, Folk, Ambient | [`woodwinds.patchkamer-tunes.json`](woodwinds.patchkamer-tunes.json) | – |
 
-Samen 41 packs met 2465 tunes.
+Samen 42 packs met 2507 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet

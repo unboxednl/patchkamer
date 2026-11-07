@@ -114,9 +114,9 @@ The packs that come with Patchkamer are **CC0-1.0**: public domain. You may use,
 
 ## The packs that come with Patchkamer
 
-This repository has 41 packs with **2465 tunes** in total, one per device: 32 packs for synths (2100 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. The files have `formatVersion` 1. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
+This repository has 42 packs with **2507 tunes** in total, one per device: 33 packs for synths (2142 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). All are licensed CC0-1.0, and the names of packs, folders and tunes are English. The files have `formatVersion` 1. Most packs are sorted by music style: each folder is a style and holds a handful of tunes for it. Where the pack is made differently (for example the Acid Baselines pack with folders named after eras, or Latin Percussion with folders per rhythm), you see that in the folder names below.
 
-### Synths (32)
+### Synths (33)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
@@ -152,6 +152,7 @@ This repository has 41 packs with **2465 tunes** in total, one per device: 32 pa
 | [Sub Line](../../devices/synths/SubLine/) | Sub Line Styles | 68 | Techno (8), House (7), Deep House (5), Acid (8), Electro (7), Synthwave (8), Hip-hop (7), Dub (6), Drum & Bass (6), Trance (6) | [`subline-styles.patchkamer-tunes.json`](../../tunes/subline-styles.patchkamer-tunes.json) |
 | [Supersaw Swarm](../../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | Trance (7), Hardstyle (6), Progressive (6), Big Room (6), Synthwave (6), Pop (6), Future Bass (6), Eurodance (6), Ambient (6), Cinematic (6) | [`supersaw-swarm-styles.patchkamer-tunes.json`](../../tunes/supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | Trance (7), House (6), Pop (6), Synthwave (7), Ambient (6), Cinematic (6), Future Bass (6), Funk (6), Disco (6), Electro (6), Techno (6), Lo-fi (5) | [`triple-osc-poly-styles.patchkamer-tunes.json`](../../tunes/triple-osc-poly-styles.patchkamer-tunes.json) |
+| [Woodwinds](../../devices/synths/Woodwinds/) | Woodwinds | 42 | Flute (6), Clarinet (4), Oboe (3), Bassoon (3), Sax (5), Recorder (3), Pan Flute (3), Section (3), Ballad (3), Jazz (3), Folk (3), Ambient (3) | [`woodwinds.patchkamer-tunes.json`](../../tunes/woodwinds.patchkamer-tunes.json) |
 
 ### Samplers (3)
 

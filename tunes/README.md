@@ -4,11 +4,11 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **41 packs with 2465 tunes**, one pack per device: 32 for synths (2100 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **42 packs with 2507 tunes**, one pack per device: 33 for synths (2142 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
-### Synths (32)
+### Synths (33)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
@@ -44,6 +44,7 @@ This folder has **41 packs with 2465 tunes**, one pack per device: 32 for synths
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10 | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12 | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) |
+| [Woodwinds](../devices/synths/Woodwinds/) | Woodwinds | 42 | 12 | [`woodwinds.patchkamer-tunes.json`](woodwinds.patchkamer-tunes.json) |
 
 ### Samplers (3)
 

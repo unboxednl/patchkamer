@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 32 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 33 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -10,7 +10,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 3
 2. [Welke synth voor welk doel](#welke-synth-voor-welk-doel)
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
-5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
+5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
@@ -49,6 +49,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Klanken uit filmmuziek: braams, grote pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strijkers en strijkerssecties | [Bowed Ensemble](#bowed-ensemble) |
 | Trompet, trombone, hoorn en koperseccties, stabs en swells | [Brass Section](#brass-section) |
+| Dwarsfluit, klarinet, hobo, fagot, saxofoon, blokfluit en panfluit | [Woodwinds](#woodwinds) |
 | Akoestische piano's (vleugel, pianino, honky-tonk), tine- en riet-e-piano, clavichord | [Piano](#piano) |
 | Gitaren: staalsnarig, nylon, clean en overdrive elektrisch, gedempt, 12-snarig en basgitaar | [Guitar](#guitar) |
 | Elektrische piano's, orgels, vibrafoon | [Stage Keys](#stage-keys) |
@@ -716,6 +717,40 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
 - **Opkomst**, **Uitklank**, **Aanzetglijding**, **Verstemming**, **Inzetverschil** en **Spelers** worden gelezen als een noot begint, dus een wijziging geldt voor de volgende noot.
 - Voor trombone en hoorn staat **Transpositie** op −12; of speel lagere noten.
+
+### Woodwinds
+
+**Waar het voor dient.** De houtblazersfamilie met een eigen motor: **dwarsfluit**, **klarinet**, **hobo**, **fagot**, **alt-** en **tenorsaxofoon**, **blokfluit** en **panfluit**, te kiezen met de lijst **Type**. Elke stem is een harmonische reeks met een exacte toonhoogte, waarvan de sterkte per deeltoon een model van het instrument volgt: een helling die met de blaasdruk opengaat, de alleen-oneven reeks van een cilinder (klarinet, panfluit) of de volle reeks van een kegel (hobo, fagot, saxofoon), formantpieken van de kast (een sterke bij de hobo, een donkere bij de fagot) en een lowpass. Het luchtruis loopt door een kam die op de noot is afgestemd, alsof de buis de lucht laat meeklinken, en elke noot begint met een tong- of lipaanzet. Het vibrato begint na een vertraging en beweegt ook de blaasdruk; noten die op een melodielijn overlappen klinken **legato** met een toonhoogteglijding; **Overblazen** springt naar het tweede register; **Beet** en **Grom** geven riet en saxofoon hun rauwe kant. Elke noot start één tot drie **spelers** (samen 16 stemmen). Het is een bron-filtermodel en geen natuurkundige simulatie van de buis. Er zit geen sequencer en geen galm in: zet er een effect achter.
+
+![De kaart van Woodwinds](../images/nl/synths/woodwinds.png)
+
+**De regelaars.**
+
+- **Type** (Dwarsfluit, Klarinet, Hobo, Fagot, Altsaxofoon, Tenorsaxofoon, Blokfluit, Panfluit) en **Klank** (lijst beginklanken: Concert Flute, Clarinet, Oboe, Bassoon, Alto Sax, Tenor Sax, Recorder, Pan Flute, Woodwind Section; hij toont **Eigen klank** zodra je een regelaar verandert).
+- **Toon & formant:** **Helderheid**, **Formant** (hoeveel je van de kastresonantie van het type hoort), **Riet & straal** (rietstijfheid bij de rietinstrumenten, straalsterkte bij de fluiten), **Beet** (extra hoge deeltonen en een zachte verzadiging), **Grom** (een trage, ruwe modulatie; flatterzunge bij een fluit) en **Overblazen** (springt naar het tweede register: een octaaf hoger, bij klarinet en panfluit een twaalfde).
+- **Adem & aanzet:** **Blaasdruk** (luider, helderder en meer lucht), **Adem** (luchtruis), **Aanzet-tik** (de stoot aan het begin van een noot), **Opkomst**, **Uitklank** en **Aanslaggevoeligheid**.
+- **Vibrato & legato:** **Vibrato**, **Vibratosnelheid**, **Vibratovertraging** (hoe lang het duurt voor het vibrato begint), **Legato-glijtijd**, **Menselijkheid** (trage willekeurige zweving van toonhoogte en niveau) en de lijst **Legato** (Aan of Uit).
+- **Sectie & niveau:** **Spelers** (1 tot 3 per noot), **Verstemming**, **Stereobreedte**, **Stemming**, **Transpositie**, **Expressie** (voor swells) en **Uitgang**. **Proeftoon**, **Proefakkoord** en **Alles uit**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Keyboard / noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer; een sequencer moet de nootlengte meesturen, en noten die legato moeten klinken moeten overlappen (een lengte langer dan de stap). Een buigbericht (`cc` met id `bend` of `pitchbend`, waarde 0 tot 1 met 0,5 in het midden) buigt twee halve tonen omhoog of omlaag. |
+| **Mod** | modulatie in (paars) | Een modulator kan elke regelaar bewegen behalve **Spelers** en **Transpositie**; de lijsten **Type**, **Klank** en **Legato** bewegen niet mee. |
+| **Stereo houtblazers** | audio uit (groenblauw, stereo) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Woodwinds** en **Speakers**. Kies de tune **Sax › Smooth Alto** en speel een melodie waarin de noten overlappen: ze glijden in elkaar over. Kies **Flute › Overblown Flute** voor een luchtige octaafsprong, of **Section › Clarinet Trio** en speel akkoorden voor drie spelers per noot.
+
+**Tunes.** Pack **Woodwinds**: 42 tunes in 12 mappen (Flute, Clarinet, Oboe, Bassoon, Sax, Recorder, Pan Flute, Section, Ballad, Jazz, Folk, Ambient), bestand [`woodwinds.patchkamer-tunes.json`](../../tunes/woodwinds.patchkamer-tunes.json). Een paar namen: **Concert Flute**, **Chalumeau**, **Nasal Oboe**, **Growl Tenor**, **Andean Pan Flute**, **Sax Section**, **Late Night Sax**, **Breath Pad**. De tunes zijn gecontroleerd op bereik en gedrag, niet beluisterd.
+
+**Tips en beperkingen.**
+
+- 16 stemmen: met 3 spelers is er ruimte voor 5 noten tegelijk; een nieuwe noot neemt de zachtste uitklinkende stem over, anders de oudste.
+- Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
+- **Opkomst**, **Uitklank**, **Legato-glijtijd**, **Vibratovertraging**, **Verstemming** en **Spelers** worden gelezen als een noot begint, dus een wijziging geldt voor de volgende noot. **Type** geldt ook voor nieuwe noten.
+- Legato werkt alleen op één lijn: noten die tegelijk aankomen (een akkoord) glijden nooit in elkaar over, en het aantal spelers per noot moet gelijk zijn aan dat van de vorige noot.
+- Klanken in het lage register (fagot, basklarinet, contrafagot) gebruiken **Transpositie** −12 of −24, of speel lagere noten.
 
 ## Toetsen en snaren
 
