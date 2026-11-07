@@ -59,8 +59,8 @@ const Host={
   // contract v1.7: besturing. Een apparaat (bijv. een MIDI-controller) mag de andere apparaten zien (alleen lezen) en
   // kabels leggen of weghalen vanaf zijn EIGEN uitgangen. Het blijven gewone, zichtbare kabels die je ook zelf kunt losmaken.
   // Wie onPeers(lijst) heeft, hoort het als er apparaten bijkomen, verdwijnen, geselecteerd worden of kabels veranderen.
-  peers(inst){ const me=inst&&inst._id, all=[...this.devices.entries()], cnt=new Map(); all.forEach(([,r])=>cnt.set(r.def.id,(cnt.get(r.def.id)||0)+1));
-    return all.filter(([id])=>id!==me).map(([id,r])=>({id,name:r.def.name+(cnt.get(r.def.id)>1?' · '+id:''),def:r.def.id,version:r.def.version,kind:r.def.kind||'',category:PK.categoryOf(r.def),
+  peers(inst){ const me=inst&&inst._id, all=[...this.devices.entries()], cnt=new Map(); all.filter(([,r])=>!r.pvw).forEach(([,r])=>cnt.set(r.def.id,(cnt.get(r.def.id)||0)+1));
+    return all.filter(([id,r])=>id!==me&&!r.pvw).map(([id,r])=>({id,name:r.def.name+(cnt.get(r.def.id)>1?' · '+id:''),def:r.def.id,version:r.def.version,kind:r.def.kind||'',category:PK.categoryOf(r.def),
       eventIn:r.ports.eventIn.map(p=>({id:p.id,name:p.name})),mod:r.ports.modIn.some(p=>p.id==='mod'),selected:id===PK.selected,noteNames:PK.noteNamesOf(r.inst)})); },
   // contract v1.14: een apparaat dat noten op namen afbeeldt (een drumcomputer) meldt dat zijn lijst veranderd is; wie onPeers heeft, krijgt de nieuwe lijst.
   noteNamesChanged(inst){ if(inst&&inst._id) PK.peersChanged(); },

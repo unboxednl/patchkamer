@@ -3,7 +3,7 @@
 /* =====================================================================
    PATCH SAVE / LOAD
    ===================================================================== */
-function patchState(){ const ents=[...PK.Host.devices.entries()], lc={};
+function patchState(){ const ents=[...PK.Host.devices.entries()].filter(([,r])=>!r.pvw), lc={};
   ents.forEach(([id,r])=>{ const c=PK.layCompactFor(id,r); if(c) lc[id]={x:c.x,y:c.y,w:c.w,h:c.h,...(c.mini?{mini:true}:{})}; });
   const vw=(PK.LAY.cls==='wide'||!PK.LAY.cam.wide)?PK.Host.view:PK.LAY.cam.wide;   // de gewone velden zijn altijd de brede indeling
   return {v:2,bpm:PK.Host.bpm,swing:PK.Host.swing,view:{...vw,scale:vw.scale/PK.PKS.f,rel:1},devices:ents.map(([id,r])=>{ const W=PK.layWideFor(id,r); return {id,def:r.def.id,version:r.def.version,x:W.x,y:W.y,w:W.w,h:W.h,mini:W.mini||undefined,focus:r.focus||undefined,preset:r.preset&&!PK.presetDirty(r)?{lid:r.preset.lid,pid:r.preset.pid,name:r.preset.name}:undefined,skin:PK.skinState(r),state:r.inst.getState?r.inst.getState():{}}; }),cables:PK.Host.cables.map(c=>({from:c.from,to:c.to,kind:c.kind,...(c.color?{color:c.color}:{})})),
