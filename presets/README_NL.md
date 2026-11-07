@@ -72,10 +72,11 @@ Deze map heeft **41 packs met 1902 presets**, één pack per apparaat: 12 voor e
 | [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | 6 | [`step-sequencer.patchkamer-presets.json`](step-sequencer.patchkamer-presets.json) |
 | [Wanderer](../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | 9 | [`wanderer.patchkamer-presets.json`](wanderer.patchkamer-presets.json) |
 
-### Tools (3)
+### Tools (4)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
+| [Chord Buddy](../devices/tools/ChordBuddy/) | Chord Buddy Starter Sets | 30 | 10 | [`chord-buddy.patchkamer-presets.json`](chord-buddy.patchkamer-presets.json) |
 | [Control Surface](../devices/tools/ControlSurface/) | Control Surface Layouts | 20 | 4 | [`control-surface.patchkamer-presets.json`](control-surface.patchkamer-presets.json) |
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4 | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) |
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3 | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) |

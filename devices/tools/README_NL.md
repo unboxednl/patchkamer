@@ -6,6 +6,7 @@ Hulpmiddelen om muziek te maken: spelen, opnemen, meten, notities maken en ander
 
 | Apparaat | Wat het doet | Map | Handleiding |
 |---|---|---|---|
+| **Chord Buddy** | Helpt akkoorden te vinden zonder muziektheorie: kies een toonsoort en stijl of speel een akkoord op een MIDI-keyboard, krijg akkoord-, toonsoort- en vervolgsuggesties, bewaar akkoorden in 16 pads, speel de pads als set met een aparte bas en krijg advies over bas en stemvoering | `ChordBuddy/` | [Chord Buddy](../../docs/tools/USER-MANUAL_NL.md#chord-buddy) |
 | **Control Surface** | Toont een MIDI-controller met knoppen, schuiven, pads en drukknoppen als paneel met een indeling die je uit secties bouwt; stuurt wat je doet door als CC | `ControlSurface/` | [Control Surface](../../docs/tools/USER-MANUAL_NL.md#control-surface) |
 | **Keys / MIDI** | Een keyboard (scherm, computertoetsen of MIDI) dat noten naar andere apparaten stuurt | `Keys/` | [Keys / MIDI](../../docs/tools/USER-MANUAL_NL.md#keys--midi) |
 | **MIDI Hub** | Verbindt MIDI-bronnen en sequencersporen met apparaten en zet elke regelaar van een apparaat op een knop, schuif of pad van je MIDI-apparaat; bewaart koppelingen per apparaat | `MidiHub/` | [MIDI Hub](../../docs/tools/USER-MANUAL_NL.md#midi-hub) |
@@ -20,7 +21,7 @@ Hulpmiddelen om muziek te maken: spelen, opnemen, meten, notities maken en ander
 
 - Gebruikershandleiding van de tools: [docs/tools/USER-MANUAL_NL.md](../../docs/tools/USER-MANUAL_NL.md)
 - Basishandleiding: [docs/USER-MANUAL_NL.md](../../docs/USER-MANUAL_NL.md)
-- Presets voor tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets) [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) (MIDI Hub Basics, 15 presets) en [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) (Control Surface Layouts, 20 presets). De andere tools hebben er nog geen; het formaat en hoe je er zelf een maakt staan in [presets/](../../presets/README_NL.md)
+- Presets voor tools: [`chord-buddy.patchkamer-presets.json`](../../presets/chord-buddy.patchkamer-presets.json) (Chord Buddy Starter Sets, 30 sets), [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets) [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) (MIDI Hub Basics, 15 presets) en [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) (Control Surface Layouts, 20 presets). De andere tools hebben er nog geen; het formaat en hoe je er zelf een maakt staan in [presets/](../../presets/README_NL.md)
 
 ## Licentie
 

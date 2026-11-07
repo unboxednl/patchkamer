@@ -1,0 +1,2353 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.chordbuddy",
+  "name": "Chord Buddy Starter Sets",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Thirty ready-made four-chord sets for Chord Buddy, three per style (pop, rock, folk, blues, jazz, classical, soul, hip-hop, house and ambient), in C major and A minor. Use Transpose set to move them to any key.",
+  "tree": [
+    {
+      "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
+      "items": [
+        {
+          "name": "Pop · I V vi IV (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Pop · I V vi IV",
+            "key": 0,
+            "scale": "major",
+            "style": "pop",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Pop · vi IV I V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Pop · vi IV I V",
+            "key": 0,
+            "scale": "major",
+            "style": "pop",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Pop · i bVI bIII bVII (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Pop · i bVI bIII bVII",
+            "key": 9,
+            "scale": "minor",
+            "style": "pop",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Rock",
+      "tags": [
+        "style/rock"
+      ],
+      "items": [
+        {
+          "name": "Rock · I bVII IV I (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Rock · I bVII IV I",
+            "key": 0,
+            "scale": "major",
+            "style": "rock",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 10,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  58,
+                  62,
+                  65
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "pulse",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Rock · I IV V IV (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Rock · I IV V IV",
+            "key": 0,
+            "scale": "major",
+            "style": "rock",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "pulse",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Rock · i bVII bVI bVII (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Rock · i bVII bVI bVII",
+            "key": 9,
+            "scale": "minor",
+            "style": "rock",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "pulse",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Folk",
+      "tags": [
+        "style/folk"
+      ],
+      "items": [
+        {
+          "name": "Folk · I IV I V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Folk · I IV I V",
+            "key": 0,
+            "scale": "major",
+            "style": "folk",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Folk · I vi IV V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Folk · I vi IV V",
+            "key": 0,
+            "scale": "major",
+            "style": "folk",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Folk · i bVII bVI bVII (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Folk · i bVII bVI bVII",
+            "key": 9,
+            "scale": "minor",
+            "style": "folk",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Blues",
+      "tags": [
+        "style/blues"
+      ],
+      "items": [
+        {
+          "name": "Blues · I7 IV7 I7 V7 (C blues)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Blues · I7 IV7 I7 V7",
+            "key": 0,
+            "scale": "blues",
+            "style": "blues",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  58
+                ]
+              },
+              {
+                "r": 5,
+                "q": "7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  63
+                ]
+              },
+              {
+                "r": 0,
+                "q": "7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  58
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "walking",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Blues · I7 IV7 V7 IV7 (C blues)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Blues · I7 IV7 V7 IV7",
+            "key": 0,
+            "scale": "blues",
+            "style": "blues",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  58
+                ]
+              },
+              {
+                "r": 5,
+                "q": "7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  63
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              {
+                "r": 5,
+                "q": "7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  63
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "walking",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Blues · i7 iv7 i7 V7 (A minor blues)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Blues · i7 iv7 i7 V7",
+            "key": 9,
+            "scale": "bluesMinor",
+            "style": "blues",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 2,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 4,
+                "q": "7",
+                "b": null,
+                "n": [
+                  52,
+                  56,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "walking",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jazz",
+      "tags": [
+        "style/jazz"
+      ],
+      "items": [
+        {
+          "name": "Jazz · ii7 V7 Imaj7 vi7 (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Jazz · ii7 V7 Imaj7 vi7",
+            "key": 0,
+            "scale": "major",
+            "style": "jazz",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 2,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "walking",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Jazz · Imaj7 vi7 ii7 V7 (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Jazz · Imaj7 vi7 ii7 V7",
+            "key": 0,
+            "scale": "major",
+            "style": "jazz",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 2,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "walking",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Jazz · iiø7 V7 i7 bVImaj7 (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Jazz · iiø7 V7 i7 bVImaj7",
+            "key": 9,
+            "scale": "minor",
+            "style": "jazz",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 11,
+                "q": "m7b5",
+                "b": null,
+                "n": [
+                  59,
+                  62,
+                  65,
+                  69
+                ]
+              },
+              {
+                "r": 4,
+                "q": "7",
+                "b": null,
+                "n": [
+                  52,
+                  56,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "walking",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Classical",
+      "tags": [
+        "style/classical"
+      ],
+      "items": [
+        {
+          "name": "Classical · I IV V I (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Classical · I IV V I",
+            "key": 0,
+            "scale": "major",
+            "style": "classical",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Classical · I vi ii V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Classical · I vi ii V",
+            "key": 0,
+            "scale": "major",
+            "style": "classical",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55
+                ]
+              },
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 2,
+                "q": "min",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Classical · i iv V i (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Classical · i iv V i",
+            "key": 9,
+            "scale": "minor",
+            "style": "classical",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 2,
+                "q": "min",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57
+                ]
+              },
+              {
+                "r": 4,
+                "q": "maj",
+                "b": null,
+                "n": [
+                  52,
+                  56,
+                  59
+                ]
+              },
+              {
+                "r": 9,
+                "q": "min",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Soul & R&B",
+      "tags": [
+        "style/soul"
+      ],
+      "items": [
+        {
+          "name": "Soul / R&B · Imaj7 iii7 vi7 IVmaj7 (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Soul / R&B · Imaj7 iii7 vi7 IVmaj7",
+            "key": 0,
+            "scale": "major",
+            "style": "soul",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 4,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  52,
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Soul / R&B · ii7 V7 Imaj7 IVmaj7 (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Soul / R&B · ii7 V7 Imaj7 IVmaj7",
+            "key": 0,
+            "scale": "major",
+            "style": "soul",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 2,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Soul / R&B · i7 iv7 bVII7 bIIImaj7 (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Soul / R&B · i7 iv7 bVII7 bIIImaj7",
+            "key": 9,
+            "scale": "minor",
+            "style": "soul",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 2,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  50,
+                  53,
+                  57,
+                  60
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "rootFifth",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Hip-hop",
+      "tags": [
+        "style/hiphop"
+      ],
+      "items": [
+        {
+          "name": "Hip-hop · Imaj7 vi7 IVmaj7 V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Hip-hop · Imaj7 vi7 IVmaj7 V",
+            "key": 0,
+            "scale": "major",
+            "style": "hiphop",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Hip-hop · vi7 IVmaj7 Imaj7 V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Hip-hop · vi7 IVmaj7 Imaj7 V",
+            "key": 0,
+            "scale": "major",
+            "style": "hiphop",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "Hip-hop · i bVI bIII bVII (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Hip-hop · i bVI bIII bVII",
+            "key": 9,
+            "scale": "minor",
+            "style": "hiphop",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  66
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "House & EDM",
+      "tags": [
+        "style/house"
+      ],
+      "items": [
+        {
+          "name": "House / EDM · vi IV I V (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "House / EDM · vi IV I V",
+            "key": 0,
+            "scale": "major",
+            "style": "house",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "pulse",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "House / EDM · I V vi IV (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "House / EDM · I V vi IV",
+            "key": 0,
+            "scale": "major",
+            "style": "house",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 7,
+                "q": "7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  65
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "pulse",
+            "voices": 4,
+            "voicing": "close"
+          }
+        },
+        {
+          "name": "House / EDM · i bVI bIII bVII (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "House / EDM · i bVI bIII bVII",
+            "key": 9,
+            "scale": "minor",
+            "style": "house",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  66
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 4,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "pulse",
+            "voices": 4,
+            "voicing": "close"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Ambient & Cinematic",
+      "tags": [
+        "style/ambient"
+      ],
+      "items": [
+        {
+          "name": "Ambient / cinematic · Imaj7 IVmaj7 vi7 IVmaj7 (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Ambient / cinematic · Imaj7 IVmaj7 vi7 IVmaj7",
+            "key": 0,
+            "scale": "major",
+            "style": "ambient",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 8,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "open"
+          }
+        },
+        {
+          "name": "Ambient / cinematic · Imaj7 iii7 IVmaj7 Imaj7 (C major)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Ambient / cinematic · Imaj7 iii7 IVmaj7 Imaj7",
+            "key": 0,
+            "scale": "major",
+            "style": "ambient",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 4,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  52,
+                  55,
+                  59,
+                  62
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 8,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "open"
+          }
+        },
+        {
+          "name": "Ambient / cinematic · i7 bVImaj7 bIIImaj7 bVII (A minor)",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "name": "Ambient / cinematic · i7 bVImaj7 bIIImaj7 bVII",
+            "key": 9,
+            "scale": "minor",
+            "style": "ambient",
+            "ext": "auto",
+            "pads": [
+              {
+                "r": 9,
+                "q": "m7",
+                "b": null,
+                "n": [
+                  57,
+                  60,
+                  64,
+                  67
+                ]
+              },
+              {
+                "r": 5,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  53,
+                  57,
+                  60,
+                  64
+                ]
+              },
+              {
+                "r": 0,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  48,
+                  52,
+                  55,
+                  59
+                ]
+              },
+              {
+                "r": 7,
+                "q": "maj7",
+                "b": null,
+                "n": [
+                  55,
+                  59,
+                  62,
+                  66
+                ]
+              },
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "beats": 8,
+            "loop": true,
+            "voiceOn": false,
+            "bassOn": true,
+            "bassMode": "hold",
+            "voices": 4,
+            "voicing": "open"
+          }
+        }
+      ]
+    }
+  ]
+}

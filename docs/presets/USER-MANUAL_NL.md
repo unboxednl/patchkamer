@@ -176,10 +176,11 @@ Deze repository heeft 41 packs met samen **1902 presets**, één per apparaat: 1
 | [Step Sequencer](../../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | Bass Lines (14), Arpeggios (12), Drum Triggers (13), Melodic Hooks (17), Long Notes & Pads (6), Polymeter & Feel (8) | [`step-sequencer.patchkamer-presets.json`](../../presets/step-sequencer.patchkamer-presets.json) |
 | [Wanderer](../../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | Lead Lines (9), Basslines (7), Arps and Plucks (8), Ambient and Slow (5), Genre Starters (13), Dynamics (6), Rolls and Ratchets (5), Follow Chord (3), Evolving (4) | [`wanderer.patchkamer-presets.json`](../../presets/wanderer.patchkamer-presets.json) |
 
-### Tools (3)
+### Tools (4)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
+| [Chord Buddy](../../devices/tools/ChordBuddy/) | Chord Buddy Starter Sets | 30 | Pop (3), Rock (3), Folk (3), Blues (3), Jazz (3), Classical (3), Soul & R&B (3), Hip-hop (3), House & EDM (3), Ambient & Cinematic (3) | [`chord-buddy.patchkamer-presets.json`](../../presets/chord-buddy.patchkamer-presets.json) |
 | [Control Surface](../../devices/tools/ControlSurface/) | Control Surface Layouts | 20 | Strips (5), Faders (4), Knobs (5), Pads (6) | [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) |
 | [MIDI Hub](../../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | Sound Controllers (6), Wheels and Pedals (5), Effects (3), Utility (1) | [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) |
 | [Metronome](../../devices/tools/Metronome/) | Metronome Basics | 9 | Practice (4), Subdivisions (3), Loud (2) | [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) |
