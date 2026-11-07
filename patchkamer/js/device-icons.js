@@ -19,10 +19,10 @@ function devIconParts(def,rec){ const u=devIconUrl(def,rec);
   if(u&&svgMono(u)) return {img:true,mono:true,html:'<span class="mono" style="--mask:url(&quot;'+PK.esc(u)+'&quot;);background:'+PK.esc(PK.catColor(PK.categoryOf(def)))+'"></span>'};
   return u?{img:true,html:'<img src="'+PK.esc(u)+'" alt="" decoding="async" draggable="false">'}:PK.catIconParts(PK.categoryOf(def)); } PK.devIconParts=devIconParts;
 function devIconHTML(def,rec,cls){ const m=devIconParts(def,rec); return '<span class="cicon'+(m.img?' img':'')+(cls?' '+cls:'')+'" data-ik="'+PK.esc(PK.categoryOf(def))+'" aria-hidden="true">'+m.html+'</span>'; } PK.devIconHTML=devIconHTML;
-// icon.* in de apparaatmappen van één bron (zoals loadDirIcons voor categorieen); find(prefix,naam) geeft een Blob/File of null. Niet voor URL-bronnen: daar zou elk apparaat vier verzoeken kosten.
+// icon.* in de apparaatmappen van één bron (zoals loadDirIcons voor categorieen); find(prefix,naam) geeft een Blob/File of null. Niet voor URL-bronnen (elk apparaat zou vier verzoeken kosten), behalve de meegeleverde bibliotheek van de app: die is lokaal.
 async function loadDevIcons(src,find){
   for(const k of [...PK.DEVICON.keys()]) if(k.startsWith(src.sid+'|')) PK.DEVICON.delete(k);
-  if(!find||src.kind==='url') return; PK.syncDirCats(); const seen=new Set();
+  if(!find||(src.kind==='url'&&src.url!==PK.BUNDLED_LIB)) return; PK.syncDirCats(); const seen=new Set();
   for(const def of PK.latestDefs()){ if(!def._src||def._src.sid!==src.sid) continue; const d=devDirOf(def); if(!d||seen.has(d)) continue; seen.add(d);
     for(const ext of Object.keys(PK.ICONTYPES)){ let blob=null; try{ blob=await find(d+'/','icon.'+ext); }catch(e){} if(!blob) continue;
       let u=null; try{ u=await PK.iconToDataUrl(blob,ext); }catch(e){} if(u){ PK.DEVICON.set(src.sid+'|'+d,u); break; } } } } PK.loadDevIcons=loadDevIcons;

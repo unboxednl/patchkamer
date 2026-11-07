@@ -311,7 +311,7 @@ PK.I18N.en={
    "ui.lt_samples":"Samples",
    "attr.lt_samples":"Samples",
    "ui.sm_titel":"Sample libraries",
-   "ui.sm_uitleg":"A <b>sample</b> is a piece of sound, for example a two-bar drum loop, in a sample pack (<code>.patchkamer-samples.json</code>). Browse by style or by pack, listen with ▶ and load it into the Loop Slicer or the Samplebank. Packs from a source (folder, GitHub) load by themselves; add one with <b>Import…</b> or by dropping a file.",
+   "ui.sm_uitleg":"A <b>sample</b> is a piece of sound, for example a two-bar drum loop, in a sample pack (<code>.patchkamer-samples.json</code>). Browse by style or by pack, listen with ▶ and load it into the Loop Slicer, the Samplebank or the Drum Listener. Packs from a source (folder, GitHub) load by themselves; add one with <b>Import…</b> or by dropping a file.",
    "m.sm_titel":"Samples",
    "m.sm_geen_pack":"Not a Patchkamer sample pack (format patchkamer-samples with a tree list).",
    "m.sm_nieuwer_formaat":"This sample pack comes from a newer version of Patchkamer.",

@@ -347,7 +347,7 @@ I18N.nl={
    "ui.lt_samples":"Samples",
    "attr.lt_samples":"Samples",
    "ui.sm_titel":"Samplebibliotheken",
-   "ui.sm_uitleg":"Een <b>sample</b> is een stukje geluid, bijvoorbeeld een drumloop van twee maten, in een samplepack (<code>.patchkamer-samples.json</code>). Blader per stijl of per pack, beluister met ▶ en laad het in de Loop Slicer of de Samplebank. Packs uit een bron (map, GitHub) laden vanzelf; met <b>Importeren…</b> of door een bestand los te laten voeg je er een toe.",
+   "ui.sm_uitleg":"Een <b>sample</b> is een stukje geluid, bijvoorbeeld een drumloop van twee maten, in een samplepack (<code>.patchkamer-samples.json</code>). Blader per stijl of per pack, beluister met ▶ en laad het in de Loop Slicer, de Samplebank of de Drum Listener. Packs uit een bron (map, GitHub) laden vanzelf; met <b>Importeren…</b> of door een bestand los te laten voeg je er een toe.",
    "m.sm_titel":"Samples",
    "m.sm_geen_pack":"Geen Patchkamer-samplepack (format patchkamer-samples met een lijst tree).",
    "m.sm_nieuwer_formaat":"Dit samplepack komt uit een nieuwere versie van Patchkamer.",
