@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the nine **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the ten **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -10,6 +10,7 @@ This manual covers the nine **tools** of Patchkamer. Tools are helpers: you use 
 |---|---|---|
 | play notes with the screen keyboard, my computer keys or a MIDI keyboard | [Keys / MIDI](#keys--midi) | a **Notes / CC** event out |
 | control many devices from a grid of 40 pads on a MIDI controller | [Pad Controller](#pad-controller) | a **MIDI (raw)** event in, 40 **Pad** event outs and a **Buttons** modulation out |
+| find chords without music theory: key, style, chords I play, next-chord ideas, 16 pads, bass and voice leading | [Chord Buddy](#chord-buddy) | an **In** event in, **Chords** and **Bass** event outs |
 | record the finished mix (or any sound) into one file | [Recorder](#recorder) | **In** and **Through** audio |
 | record many tracks at once, one file per track | [Multitrack](#multitrack) | a **Bundle** in |
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
@@ -100,6 +101,24 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 - It needs a Patchkamer that can lay cables for devices; an older one says so on the card.
 
 ---
+
+## Chord Buddy
+
+**What it is for.** Chord Buddy helps you find chords when you do not know music theory. Pick a key (and, if you like, a style) and it shows the chords that belong to it. Or play a chord on a MIDI keyboard and it tells you which chord you played, which keys it could belong to and which chord could come next. Chords you like go into one of 16 pads; the pads can be played, saved as a set and played back as a chord progression with a separate bass line. It gives *advice*: styles and suggestions are guidelines, not rules, and the key it finds is shown with how sure it is ("almost certain", "probably", "unclear").
+
+**Connect it.** The **In** event port takes notes from Keys / MIDI, a Pad Controller or a sequencer. **Chords** sends the chord notes and **Bass** the bass notes, separately, so you can pick another synth for the bass. Start the Patchkamer transport to play a set: Chord Buddy follows the clock.
+
+**The sections.**
+- **1 · Key & style.** Choose the key note, the scale (major and minor, the seven modes, major and minor pentatonic, blues), and a style (optional). The chords of the key appear as buttons, coloured by function: green = tonic ("home: feels settled and finished"), blue = subdominant ("on the way"), red = dominant ("tension: wants to go home"). Click one to hear and select it. **Find key** looks at the chords you played (or the pads) and shows the top three keys with what speaks for and against. **Ready-made progressions** gives four-chord progressions for the style; **Use as set** puts one in pads 1 to 4 (you can undo).
+- **2 · Listen (MIDI in).** Shows the notes you play and the recognised chord (inversions, slash chords and incomplete chords such as 1-3-7 included), with alternatives. **Listen** remembers the last four chords you played; **Use this chord** adds the shown chord (or the alternative you picked); **Clear** empties the list. The key is worked out live from those chords, and below it Chord Buddy suggests the next chord: **Safe**, **Tension** and **Colour / surprise**, each with a short explanation. **Follow the key automatically** sets the key when it is probably right.
+- **3 · Pads.** Sixteen pads in a 4 × 4 grid, coloured by function. Click or touch a pad to play it, or play its MIDI note (the first pad is C2 by default; notes in that range are not listened to as a chord; switch it off or move it with **Play pads by MIDI note** and **First pad = note**). **Save to pad** puts the chosen chord in the selected pad; overwriting is allowed and reported ("Pad 3 overwritten: Am → F"); **Undo** takes back the last change; **Clear pad** empties a pad.
+- **4 · Set.** Name, **Length per chord** (1 beat to 4 bars), **Repeat**, **Use voice leading**, **Bass on**, **Start** and **Stop**, **Transpose −1 / +1** (moves the whole set to another key), and **Export / Import (.json)**. A set is a preset: save and load sets with the preset bar on the card. The set is also stored in the workspace and in a song.
+- **5 · Advice: bass and voicing.** Per pad the bass advice: root, fifth and octave, the slash bass of the chord, and a lead-in note to the next chord. Choose the bass pattern (held, root–fifth, walking, pulse). Choose 2 to 6 voices and Close, Open or Drop-2, then **Show proposal only** (compare, with the movement per voice) or **Apply voicing** (rewrites the pad chords). The voicings move as little as possible between chords.
+- **6 · Output.** Velocity, bass velocity, length, gate, strum (0 to 60 ms), octave and MIDI channel for chords and bass. Velocity, bass velocity, length, gate and strum can be modulated.
+
+**Presets.** The pack *Chord Buddy Starter Sets* has 30 sets in C major and A minor, three per style (pop, rock, folk, blues, jazz, classical, soul, hip-hop, house, ambient). Use **Transpose** to play them in any key.
+
+**Tips and limits.** Chord Buddy gives suggestions, not corrections. One chord fits many keys: play a second and a third and the key becomes clearer. Eastern scales and quarter tones are not in this version. Not listened to: check by ear whether the bass and chords sit well together.
 
 ## Recorder
 

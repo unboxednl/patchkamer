@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de negen **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de tien **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -10,6 +10,7 @@ Deze handleiding gaat over de negen **tools** van Patchkamer. Tools zijn hulpmid
 |---|---|---|
 | noten spelen met het schermtoetsenbord, mijn computertoetsen of een MIDI-keyboard | [Keys / MIDI](#keys--midi) | een eventuitgang **Noten / CC** |
 | veel apparaten bespelen vanaf een raster van 40 pads op een MIDI-controller | [Pad Controller](#pad-controller) | een eventingang **MIDI (ruw)**, 40 eventuitgangen **Pad** en een modulatie-uitgang **Knoppen** |
+| akkoorden vinden zonder muziektheorie: toonsoort, stijl, akkoorden die ik speel, ideeën voor het volgende akkoord, 16 pads, bas en stemvoering | [Chord Buddy](#chord-buddy) | een eventingang **In**, eventuitgangen **Akkoorden** en **Bas** |
 | de afgewerkte mix (of ander geluid) in één bestand opnemen | [Recorder](#recorder) | audio **In** en **Door** |
 | veel sporen tegelijk opnemen, een bestand per spoor | [Multitrack](#multitrack) | een **Bundel**-ingang |
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
@@ -100,6 +101,24 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 - Hij heeft een Patchkamer nodig die kabels voor apparaten kan leggen; een oudere meldt dat op de kaart.
 
 ---
+
+## Chord Buddy
+
+**Waar het voor dient.** Chord Buddy helpt je akkoorden te vinden als je geen muziektheorie kent. Kies een toonsoort (en, als je wilt, een stijl) en je ziet de akkoorden die erbij horen. Of speel een akkoord op een MIDI-keyboard: dan hoor je welk akkoord het was, bij welke toonsoorten het kan horen en welk akkoord erna kan komen. Akkoorden die je mooi vindt, gaan in een van de 16 pads; de pads kun je bespelen, bewaren als set en afspelen als akkoordenreeks met een aparte basbaan. Het geeft *advies*: stijlen en suggesties zijn richtlijnen, geen regels, en bij de gevonden toonsoort staat hoe zeker die is ("bijna zeker", "waarschijnlijk", "onduidelijk").
+
+**Verbinden.** De eventingang **In** neemt noten van Keys / MIDI, een Pad Controller of een sequencer. **Akkoorden** stuurt de akkoordnoten en **Bas** de basnoten, apart, zodat je voor de bas een andere synth kunt kiezen. Start de transport van Patchkamer om een set af te spelen: Chord Buddy volgt de klok.
+
+**De onderdelen.**
+- **1 · Toonsoort & stijl.** Kies de grondtoon, de schaal (majeur en mineur, de zeven modi, pentatoon majeur en mineur, blues) en een stijl (niet verplicht). De akkoorden van de toonsoort staan als knoppen, gekleurd naar functie: groen = tonica ("thuis: voelt rustig en af"), blauw = subdominant ("onderweg"), rood = dominant ("spanning: wil naar thuis"). Klik erop om het te horen en te kiezen. **Zoek toonsoort** kijkt naar de akkoorden die je speelde (of de pads) en toont de beste drie toonsoorten met wat voor en tegen spreekt. **Kant-en-klare progressies** geeft progressies van vier akkoorden voor de stijl; **Gebruik als set** zet er een in pad 1 tot 4 (ongedaan maken kan).
+- **2 · Luisteren (MIDI in).** Toont de noten die je speelt en het herkende akkoord (ook omkeringen, slash-akkoorden en onvolledige akkoorden zoals 1-3-7), met alternatieven. **Luisteren** onthoudt de laatste vier akkoorden die je speelde; **Dit akkoord gebruiken** voegt het getoonde akkoord toe (of het alternatief dat je koos); **Wis** maakt de lijst leeg. Uit die akkoorden wordt live de toonsoort bepaald, en eronder stelt Chord Buddy het volgende akkoord voor: **Veilig**, **Spanning** en **Kleur / verrassing**, elk met een korte uitleg. **Toonsoort automatisch volgen** zet de toonsoort als die waarschijnlijk klopt.
+- **3 · Pads.** Zestien pads in een raster van 4 × 4, gekleurd naar functie. Klik of raak een pad aan om het te spelen, of speel zijn MIDI-noot (het eerste pad is standaard C2; noten in dat bereik worden niet als akkoord beluisterd; zet het uit of verschuif het met **Pads spelen via MIDI-noot** en **Eerste pad = noot**). **Bewaar in pad** zet het gekozen akkoord in het gekozen pad; overschrijven mag en wordt gemeld ("Pad 3 overschreven: Am → F"); **Ongedaan maken** neemt de laatste wijziging terug; **Pad leegmaken** maakt een pad leeg.
+- **4 · Set.** Naam, **Duur per akkoord** (1 slag tot 4 maten), **Herhalen**, **Stemvoering gebruiken**, **Bas aan**, **Start** en **Stop**, **Transponeer −1 / +1** (zet de hele set in een andere toonsoort) en **Exporteren / Importeren (.json)**. Een set is een preset: bewaar en laad sets met de presetbalk op de kaart. De set zit ook in de werkruimte en in een song.
+- **5 · Advies: bas en stemvoering.** Per pad het basadvies: grondtoon, kwint en octaaf, de slash-bas van het akkoord en een aanloopnoot naar het volgende akkoord. Kies de basfiguur (liggend, grondtoon–kwint, walking, pulserend). Kies 2 tot 6 stemmen en Dicht, Open of Drop-2, daarna **Alleen voorstel tonen** (vergelijken, met de beweging per stem) of **Pas stemvoering toe** (herschrijft de padakkoorden). De voicings bewegen zo weinig mogelijk tussen akkoorden.
+- **6 · Uitgang.** Velocity, velocity van de bas, lengte, gate, strum (0 tot 60 ms), octaaf en MIDI-kanaal voor akkoorden en bas. Velocity, velocity van de bas, lengte, gate en strum kunnen worden gemoduleerd.
+
+**Presets.** Het pack *Chord Buddy Starter Sets* heeft 30 sets in C majeur en a mineur, drie per stijl (pop, rock, folk, blues, jazz, klassiek, soul, hip-hop, house, ambient). Met **Transponeer** speel je ze in elke toonsoort.
+
+**Tips en grenzen.** Chord Buddy geeft suggesties, geen correcties. Eén akkoord past in veel toonsoorten: speel een tweede en derde akkoord en de toonsoort wordt duidelijker. Oosterse schalen en kwarttonen zitten niet in deze versie. Niet beluisterd: controleer op gehoor of bas en akkoorden goed bij elkaar passen.
 
 ## Recorder
 

@@ -6,6 +6,7 @@ Helpers for making music: play, record, measure, take notes and control other de
 
 | Device | What it does | Folder | Manual |
 |---|---|---|---|
+| **Chord Buddy** | Helps you find chords without music theory: pick a key and style or play a chord on a MIDI keyboard, get chord, key and next-chord suggestions, save chords in 16 pads, play the pads as a set with a separate bass, and get bass and voice-leading advice | `ChordBuddy/` | [Chord Buddy](../../docs/tools/USER-MANUAL_EN.md#chord-buddy) |
 | **Control Surface** | Shows a MIDI controller with knobs, faders, pads and buttons as a panel with a layout you build from sections; sends what you do as CC | `ControlSurface/` | [Control Surface](../../docs/tools/USER-MANUAL_EN.md#control-surface) |
 | **Keys / MIDI** | A keyboard (screen, computer keys or MIDI) that sends notes to other devices | `Keys/` | [Keys / MIDI](../../docs/tools/USER-MANUAL_EN.md#keys--midi) |
 | **MIDI Hub** | Connects MIDI sources and sequencer tracks to devices, and puts any control of a device on a knob, slider or pad of your MIDI device; saves mappings per device | `MidiHub/` | [MIDI Hub](../../docs/tools/USER-MANUAL_EN.md#midi-hub) |
@@ -20,7 +21,7 @@ Helpers for making music: play, record, measure, take notes and control other de
 
 - User manual for the tools: [docs/tools/USER-MANUAL_EN.md](../../docs/tools/USER-MANUAL_EN.md)
 - Main manual: [docs/USER-MANUAL_EN.md](../../docs/USER-MANUAL_EN.md)
-- Presets for tools: [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets) [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) (MIDI Hub Basics, 15 presets) and [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) (Control Surface Layouts, 20 presets). The other tools have none yet; the format and how to make your own are in [presets/](../../presets/README.md)
+- Presets for tools: [`chord-buddy.patchkamer-presets.json`](../../presets/chord-buddy.patchkamer-presets.json) (Chord Buddy Starter Sets, 30 sets), [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) (Metronome Basics, 9 presets) [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) (MIDI Hub Basics, 15 presets) and [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) (Control Surface Layouts, 20 presets). The other tools have none yet; the format and how to make your own are in [presets/](../../presets/README.md)
 
 ## License
 
