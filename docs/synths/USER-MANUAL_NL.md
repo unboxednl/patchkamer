@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 29 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 30 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -10,7 +10,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 2
 2. [Welke synth voor welk doel](#welke-synth-voor-welk-doel)
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
-5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble)
+5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
@@ -48,6 +48,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Akkoorden uit losse noten (stabs, orgelakkoorden, pads) | [Chord Poly](#chord-poly), [Supersaw Swarm](#supersaw-swarm), [Triple Osc Poly](#triple-osc-poly) |
 | Klanken uit filmmuziek: braams, grote pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strijkers en strijkerssecties | [Bowed Ensemble](#bowed-ensemble) |
+| Trompet, trombone, hoorn en koperseccties, stabs en swells | [Brass Section](#brass-section) |
 | Elektrische piano's, orgels, vibrafoon | [Stage Keys](#stage-keys) |
 | Klokken, glas, tines, FM-bassen | [Four-Operator FM](#four-operator-fm) |
 | Geplukte of gestreken losse snaren (gitaar, harp, koto) | [Karplus String](#karplus-string) |
@@ -680,6 +681,39 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Zestien stemmen: een zeventiende noot neemt de stem over die het eerst klaar is. Een lange **Uitklank** met veel noten laat noten afbreken.
 - Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
 - MIDI-hardware sluit je aan via **Keys / MIDI** (zie de [basishandleiding](../USER-MANUAL_NL.md)).
+
+### Brass Section
+
+**Waar het voor dient.** Een polyfoon koperinstrument: trompet, trombone, hoorn of een hele sectie. Elke noot start één tot vier **spelers** en elke speler is een eigen stem (samen 32 stemmen): een bandbegrensde zaagtand door een lowpassfilter dat bij elke noot openzwelt (de kenmerkende *blat*) en verder opengaat als je harder speelt. Bij de aanzet glijdt de toon van iets onderaf omhoog, onder de noot zit adem- en lipruis en het vibrato begint pas na een vertraging. Bij meer dan één speler staan de stemmen een paar cent uit elkaar, beginnen een paar milliseconden na elkaar en staan op verschillende plaatsen in het stereobeeld. Met **Demper** krijg je de klank van een dempkap. Er zit geen sequencer en geen galm in: zet er een effect achter.
+
+![De kaart van Brass Section](../images/nl/synths/brass-section.png)
+
+**De regelaars.**
+
+- **Brass** (lijst beginklanken: Trumpet, Muted Trumpet, Flugelhorn, Trombone, French Horn, Brass Section, Tight Stabs, Slow Swell, Soft Ballad Horn; hij toont **Eigen klank** zodra je een knop verandert).
+- **Toon & blat:** **Helderheid** (cutoff van het filter, 250 tot 9000 Hz), **Blat** (hoever het filter bij elke noot openzwelt), **Opzwellen** (hoe snel het opengaat), **Resonantie**, **Scherpte** (zachte verzadiging die de toon ruwer maakt), **Demper** (dempkapklank: donkerder met een nasale piek) en **Aanslagkleur** (hoeveel harder gespeelde noten helderder klinken).
+- **Aanzet & spel:** **Opkomst**, **Decay**, **Sustain**, **Uitklank**, **Aanzetglijding** (hoeveel cent de noot onder de toonhoogte begint) en **Glijtijd**, **Adem** (adem- en lipruis) en **Aanslaggevoeligheid** (hoeveel de velocity het niveau bepaalt).
+- **Sectie & vibrato:** **Spelers** (1 tot 4 per noot), **Verstemming** (cent tussen de spelers), **Inzetverschil** (de spelers beginnen tot 80 ms na elkaar), **Stereobreedte**, **Vibrato**, **Vibratosnelheid** en **Vibratovertraging** (hoe lang het duurt voor het vibrato begint).
+- **Spel & niveau:** **Transpositie**, **Expressie** (voor swells) en **Uitgang**. **Proeftoon**, **Proefakkoord** en **Alles uit**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Keyboard / noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer. Een sequencer moet de nootlengte meesturen. |
+| **Mod** | modulatie in (paars) | Een modulator kan elke knop bewegen behalve **Spelers** en **Transpositie**; de lijst **Brass** beweegt niet mee. |
+| **Stereo koper** | audio uit (groenblauw, stereo) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Brass Section** en **Speakers**. Kies de tune **Stabs › Funk Stab** en speel korte akkoorden met verschillende kracht: hardere noten klinken helderder en ruwer. Kies daarna **Swells › Slow Swell**, houd een akkoord vast en beweeg **Expressie** voor een langzame swell.
+
+**Tunes.** Pack **Brass Section**: 32 tunes in 8 mappen (Trumpet, Trombone, Horn, Section, Stabs, Swells, Funk, Ballad), bestand [`brass-section.patchkamer-tunes.json`](../../tunes/brass-section.patchkamer-tunes.json). Een paar namen: **Bright Lead**, **Fat Slide**, **Big Band Section**, **Funk Stab**, **Fall Hit**, **Slow Swell**, **Smoky Flugel**. De tunes zijn gecontroleerd op bereik en gedrag, niet beluisterd.
+
+**Tips en beperkingen.**
+
+- 32 stemmen: met 4 spelers is er ruimte voor 8 noten tegelijk; een nieuwe noot neemt de zachtste uitklinkende stem over, anders de oudste.
+- Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
+- **Opkomst**, **Uitklank**, **Aanzetglijding**, **Verstemming**, **Inzetverschil** en **Spelers** worden gelezen als een noot begint, dus een wijziging geldt voor de volgende noot.
+- Voor trombone en hoorn staat **Transpositie** op −12; of speel lagere noten.
 
 ## Toetsen en snaren
 

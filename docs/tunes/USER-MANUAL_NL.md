@@ -114,9 +114,9 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 38 packs met samen **2350 tunes**, één per apparaat: 29 packs voor synths (1985 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
+Deze repository heeft 39 packs met samen **2382 tunes**, één per apparaat: 30 packs voor synths (2017 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
 
-### Synths (29)
+### Synths (30)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
 |---|---|---|---|---|
@@ -125,6 +125,7 @@ Deze repository heeft 38 packs met samen **2350 tunes**, één per apparaat: 29 
 | [Basic Mono](../../devices/synths/BasicMono/) | Basic Mono Styles | 65 | Techno (6), House (6), Electro (6), Hip-hop (5), Funk (6), Synthwave (6), Dub (5), Pop (5), Chiptune (6), Acid (5), Trance (5), Ambient (4) | [`basic-mono-styles.patchkamer-tunes.json`](../../tunes/basic-mono-styles.patchkamer-tunes.json) |
 | [Biotope](../../devices/synths/Biotope/) | Biotope Styles | 86 | Nature (6), Weather (7), Water (6), Ambient (7), Meditation (6), Sleep (6), Cinematic (7), Sci-Fi (7), Dark Ambient (6), Lo-fi (7), Field Recording (7), Interiors (7), Rhythmic (7) | [`biotope-styles.patchkamer-tunes.json`](../../tunes/biotope-styles.patchkamer-tunes.json) |
 | [Bowed Ensemble](../../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 65 | Cinematic (7), Ambient (6), Pop (6), Ballad (6), Trance (6), Synthwave (6), Film Score (6), Lo-fi (6), Neo-classical (6), Disco & Funk (5), Deep House (5) | [`bowed-ensemble-styles.patchkamer-tunes.json`](../../tunes/bowed-ensemble-styles.patchkamer-tunes.json) |
+| [Brass Section](../../devices/synths/BrassSection/) | Brass Section | 32 | Trumpet (4), Trombone (4), Horn (4), Section (5), Stabs (5), Swells (4), Funk (3), Ballad (3) | [`brass-section.patchkamer-tunes.json`](../../tunes/brass-section.patchkamer-tunes.json) |
 | [Celestial Mechanics](../../devices/synths/CelestialMechanics/) | Celestial Mechanics Styles | 74 | Space (7), Cinematic (7), Sci-Fi (7), Ambient (7), Dark Ambient (7), Experimental (7), Sound Design (7), Synthwave (6), Trance (6), Horror (7), Drone (6) | [`celestial-mechanics-styles.patchkamer-tunes.json`](../../tunes/celestial-mechanics-styles.patchkamer-tunes.json) |
 | [Cinematic Synth](../../devices/synths/CinematicSynth/) | Cinematic Synth Scores | 56 | Dream Heist (8), Dark Hero (8), Space Voyage (8), Desert Epic (8), Ancient Battle (8), Quiet Tension (8), Impacts and Risers (8) | [`cinematic-synth-scores.patchkamer-tunes.json`](../../tunes/cinematic-synth-scores.patchkamer-tunes.json) |
 | [Chord Poly](../../devices/synths/ChordPoly/) | Chord Poly Styles | 120 | House (6), Deep House (6), Garage (6), Lo-fi (6), Ambient (6), Pop (6), Soul (6), Synthwave (6), Cinematic (6), Disco & Funk (6), Techno (6), Dub Techno (6), Trance (6), Progressive Trance (6), Big Room (6), Electro House (6), Electro (6), Future Bass (6), Hardstyle (6), Eurodance (6) | [`chord-poly-styles.patchkamer-tunes.json`](../../tunes/chord-poly-styles.patchkamer-tunes.json) |

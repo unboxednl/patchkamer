@@ -2,7 +2,7 @@
 
 *English version: [README.md](README.md)*
 
-Apparaten die uit noten geluid maken: 29 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones, texturen en zang. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
+Apparaten die uit noten geluid maken: 30 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones, texturen en zang. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
 
 Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke synth voor welk doel".
 
@@ -23,6 +23,7 @@ Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke sy
 | **Cinematic Synth** | Een polyfone filmsynth: braams, pads, drones en een pulsmotor voor ostinati en arpeggio's, met echo en een grote galm | [`CinematicSynth/`](CinematicSynth/) | [56](../../tunes/cinematic-synth-scores.patchkamer-tunes.json) | [Cinematic Synth](../../docs/synths/USER-MANUAL_NL.md#cinematic-synth) |
 | **Chord Poly** | Een polyfone akkoordsynth (24 stemmen) die van elke noot een akkoord maakt, met chorus en drive | [`ChordPoly/`](ChordPoly/) | [120](../../tunes/chord-poly-styles.patchkamer-tunes.json) | [Chord Poly](../../docs/synths/USER-MANUAL_NL.md#chord-poly) |
 | **Bowed Ensemble** | Een polyfoon strijkersensemble met 16 stemmen, strijkstokruis, ensemble-chorus en concertgalm | [`BowedEnsemble/`](BowedEnsemble/) | [65](../../tunes/bowed-ensemble-styles.patchkamer-tunes.json) | [Bowed Ensemble](../../docs/synths/USER-MANUAL_NL.md#bowed-ensemble) |
+| **Brass Section** | Een polyfoon koperinstrument met 1 tot 4 spelers per noot: een filter dat openzwelt (de blat), aanzetglijding, ademruis, vibrato met vertraging en een demper | [`BrassSection/`](BrassSection/) | [32](../../tunes/brass-section.patchkamer-tunes.json) | [Brass Section](../../docs/synths/USER-MANUAL_NL.md#brass-section) |
 | **Stage Keys** | Een polyfone toetsensynth met zeven klankmodellen (tine- en reed-piano, orgels, vibrafoon, bas), drive en stereo-tremolo | [`StageKeys/`](StageKeys/) | [66](../../tunes/stage-keys-styles.patchkamer-tunes.json) | [Stage Keys](../../docs/synths/USER-MANUAL_NL.md#stage-keys) |
 | **Four-Operator FM** | Een FM-synth met vier operators, acht algoritmes en acht stemmen | [`FourOperatorFM/`](FourOperatorFM/) | [67](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) | [Four-Operator FM](../../docs/synths/USER-MANUAL_NL.md#four-operator-fm) |
 | **Karplus String** | Een model van geplukte en gestreken snaren met acht stemmen en een eigen klavier van twee octaven | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_NL.md#karplus-string) |

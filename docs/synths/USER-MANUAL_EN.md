@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 29 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 30 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
@@ -10,7 +10,7 @@ Synths are the devices that make sound from notes. This page covers the 29 synth
 2. [Which synth for which goal](#which-synth-for-which-goal)
 3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
-5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble)
+5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
 6. [Keys and strings](#keys-and-strings): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
@@ -48,6 +48,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | Chords from single notes (stabs, organ chords, pads) | [Chord Poly](#chord-poly), [Supersaw Swarm](#supersaw-swarm), [Triple Osc Poly](#triple-osc-poly) |
 | Film-score sounds: braams, big pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strings and string sections | [Bowed Ensemble](#bowed-ensemble) |
+| Trumpet, trombone, horn and brass sections, stabs and swells | [Brass Section](#brass-section) |
 | Electric pianos, organs, vibraphone | [Stage Keys](#stage-keys) |
 | Bells, glass, tines, FM basses | [Four-Operator FM](#four-operator-fm) |
 | Plucked or bowed single strings (guitar, harp, koto) | [Karplus String](#karplus-string) |
@@ -680,6 +681,39 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 - Sixteen voices: a seventeenth note takes over the voice that finishes first. A long **Release** with many notes breaks notes off.
 - A note without a length and without a note-off keeps sounding until the transport stops or a panic arrives: make a sequencer send note lengths.
 - Hardware MIDI connects through **Keys / MIDI** (see the [main manual](../USER-MANUAL_EN.md)).
+
+### Brass Section
+
+**What it is for.** A polyphonic brass instrument: trumpet, trombone, horn or a whole section. Every note starts one to four **players**, and each player is its own voice (32 voices in total): a band-limited sawtooth through a lowpass filter that swells open on every note (the characteristic *blat*) and opens further when you play harder. On the attack the pitch scoops up from slightly below, breath and lip noise sit under the note and the vibrato only starts after a delay. With more than one player the voices are tuned a few cents apart, enter a few milliseconds after each other and stand at different places in the stereo image. A **Mute** control gives a cup-mute tone. It has no sequencer and no reverb: add an effect behind it.
+
+![The Brass Section card](../images/en/synths/brass-section.png)
+
+**Controls.**
+
+- **Brass** (list of starting sounds: Trumpet, Muted Trumpet, Flugelhorn, Trombone, French Horn, Brass Section, Tight Stabs, Slow Swell, Soft Ballad Horn; it shows **Custom sound** once you change a knob).
+- **Tone & blat:** **Brightness** (filter cutoff, 250 to 9000 Hz), **Blat** (how far the filter swells open on every note), **Swell time** (how fast it opens), **Resonance**, **Edge** (soft saturation that makes the tone rougher), **Mute** (cup-mute tone: darker with a nasal peak) and **Velocity colour** (how much harder notes sound brighter).
+- **Attack & playing:** **Attack**, **Decay**, **Sustain**, **Release**, **Scoop** (how many cents the note starts below its pitch) and **Scoop time**, **Breath** (breath and lip noise) and **Touch response** (how much the velocity sets the level).
+- **Section & vibrato:** **Players** (1 to 4 per note), **Section detune** (cents between the players), **Entry spread** (the players start up to 80 ms after each other), **Stereo width**, **Vibrato**, **Vibrato rate** and **Vibrato delay** (how long before the vibrato starts).
+- **Playing & level:** **Transpose**, **Expression** (for swells) and **Output**. **Test note**, **Test chord** and **All off**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Keyboard / notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer. A sequencer must send the note length. |
+| **Mod** | modulation in (purple) | A modulator can move every knob except **Players** and **Transpose**; the **Brass** list is not moved. |
+| **Stereo brass** | audio out (teal, stereo) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Brass Section** and **Speakers**. Choose the tune **Stabs › Funk Stab** and play short chords with different strengths: the harder notes sound brighter and rougher. Then choose **Swells › Slow Swell**, hold a chord and move **Expression** for a slow swell.
+
+**Tunes.** Pack **Brass Section**: 32 tunes in 8 folders (Trumpet, Trombone, Horn, Section, Stabs, Swells, Funk, Ballad), file [`brass-section.patchkamer-tunes.json`](../../tunes/brass-section.patchkamer-tunes.json). A few names: **Bright Lead**, **Fat Slide**, **Big Band Section**, **Funk Stab**, **Fall Hit**, **Slow Swell**, **Smoky Flugel**. The tunes are checked for range and behaviour, not listened to.
+
+**Tips and limits.**
+
+- 32 voices: with 4 players there is room for 8 notes at once; a new note takes over the quietest fading voice or else the oldest one.
+- A note without a length and without a note-off keeps sounding until the transport stops or a panic arrives: make a sequencer send note lengths.
+- **Attack**, **Release**, **Scoop**, **Section detune**, **Entry spread** and **Players** are read when a note starts, so a change affects the next note.
+- Trombone and horn sounds use **Transpose** −12; or play lower notes.
 
 ## Keys and strings
 

@@ -4,11 +4,11 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **38 packs with 2350 tunes**, one pack per device: 29 for synths (1985 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **39 packs with 2382 tunes**, one pack per device: 30 for synths (2017 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
-### Synths (29)
+### Synths (30)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
@@ -17,6 +17,7 @@ This folder has **38 packs with 2350 tunes**, one pack per device: 29 for synths
 | [Basic Mono](../devices/synths/BasicMono/) | Basic Mono Styles | 65 | 12 | [`basic-mono-styles.patchkamer-tunes.json`](basic-mono-styles.patchkamer-tunes.json) |
 | [Biotope](../devices/synths/Biotope/) | Biotope Styles | 86 | 13 | [`biotope-styles.patchkamer-tunes.json`](biotope-styles.patchkamer-tunes.json) |
 | [Bowed Ensemble](../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 65 | 11 | [`bowed-ensemble-styles.patchkamer-tunes.json`](bowed-ensemble-styles.patchkamer-tunes.json) |
+| [Brass Section](../devices/synths/BrassSection/) | Brass Section | 32 | 8 | [`brass-section.patchkamer-tunes.json`](brass-section.patchkamer-tunes.json) |
 | [Celestial Mechanics](../devices/synths/CelestialMechanics/) | Celestial Mechanics Styles | 74 | 11 | [`celestial-mechanics-styles.patchkamer-tunes.json`](celestial-mechanics-styles.patchkamer-tunes.json) |
 | [Cinematic Synth](../devices/synths/CinematicSynth/) | Cinematic Synth Scores | 56 | 7 | [`cinematic-synth-scores.patchkamer-tunes.json`](cinematic-synth-scores.patchkamer-tunes.json) |
 | [Chord Poly](../devices/synths/ChordPoly/) | Chord Poly Styles | 120 | 20 | [`chord-poly-styles.patchkamer-tunes.json`](chord-poly-styles.patchkamer-tunes.json) |

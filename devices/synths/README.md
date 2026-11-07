@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 29 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 30 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -23,6 +23,7 @@ Not sure which one to pick? The manual starts with a table "Which synth for whic
 | **Cinematic Synth** | A polyphonic film-score synth: braams, pads, drones and a pulse engine for ostinati and arpeggios, with echo and a big reverb | [`CinematicSynth/`](CinematicSynth/) | [56](../../tunes/cinematic-synth-scores.patchkamer-tunes.json) | [Cinematic Synth](../../docs/synths/USER-MANUAL_EN.md#cinematic-synth) |
 | **Chord Poly** | A polyphonic chord synth (24 voices) that turns every note into a chord, with chorus and drive | [`ChordPoly/`](ChordPoly/) | [120](../../tunes/chord-poly-styles.patchkamer-tunes.json) | [Chord Poly](../../docs/synths/USER-MANUAL_EN.md#chord-poly) |
 | **Bowed Ensemble** | A polyphonic string ensemble with 16 voices, bow noise, ensemble chorus and hall | [`BowedEnsemble/`](BowedEnsemble/) | [65](../../tunes/bowed-ensemble-styles.patchkamer-tunes.json) | [Bowed Ensemble](../../docs/synths/USER-MANUAL_EN.md#bowed-ensemble) |
+| **Brass Section** | A polyphonic brass instrument with 1 to 4 players per note: a filter that swells open (the blat), pitch scoop, breath noise, delayed vibrato and a mute | [`BrassSection/`](BrassSection/) | [32](../../tunes/brass-section.patchkamer-tunes.json) | [Brass Section](../../docs/synths/USER-MANUAL_EN.md#brass-section) |
 | **Stage Keys** | A polyphonic keys synth with seven sound models (tine and reed piano, organs, vibraphone, bass), drive and stereo tremolo | [`StageKeys/`](StageKeys/) | [66](../../tunes/stage-keys-styles.patchkamer-tunes.json) | [Stage Keys](../../docs/synths/USER-MANUAL_EN.md#stage-keys) |
 | **Four-Operator FM** | An FM synth with four operators, eight algorithms and eight voices | [`FourOperatorFM/`](FourOperatorFM/) | [67](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) | [Four-Operator FM](../../docs/synths/USER-MANUAL_EN.md#four-operator-fm) |
 | **Karplus String** | A plucked and bowed string model with eight voices and its own two-octave keyboard | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_EN.md#karplus-string) |
