@@ -1,4 +1,4 @@
-// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.6) / test cases for the validator
+// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.7) / test cases for the validator
 // Gebruik / Usage:  node skins/contract/test-validate-skin.mjs      (exit 0 = alles groen / all green)
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
@@ -18,7 +18,7 @@ const SK = s => { const o = base(); return Object.assign(o, s); };
 // --- 0.1 en basis
 ok('0.1-bestand zonder design', SK({ skinsContract: '0.1' }));
 ok('0.2-bestand zonder design', base());
-okWarn('minor 7 is nieuwer', SK({ skinsContract: '0.7' }), ['contract_minor']);
+okWarn('minor 8 is nieuwer', SK({ skinsContract: '0.8' }), ['contract_minor']);
 bad('major 1', SK({ skinsContract: '1.0' }), ['contract_major']);
 okWarn('design in een 0.1-bestand', { ...withDesign({ ports: { mode: 'hover' } }), skinsContract: '0.1' }, ['design_contract']);
 // --- ports
@@ -34,7 +34,7 @@ bad('design geen object (tekst)', withDesign('x'), ['design_object']);
 bad('design lijst', withDesign([]), ['design_object']);
 bad('design null', withDesign(null), ['design_object']);
 ok('design leeg object', withDesign({}));
-okWarn('design onbekende sectie (laag 2: layout)', withDesign({ layout: { x: 1 } }), ['unknown_field']);
+okWarn('design.layout onbekende sleutel', withDesign({ layout: { x: 1 } }), ['unknown_field']);
 // --- colors
 const full = { bg: '#14191f', surface: '#1d252e', text: '#e6edf3', muted: '#8b98a5', accent: '#4fd1b8', line: '#2d3a46' };
 ok('colors custom volledig', withDesign({ colors: { scheme: 'custom', custom: full } }), ['design_contrast', 'design_custom_missing']);
@@ -145,7 +145,7 @@ okWarn('rotary met thumb', ctl({ match: 'cut', face: 'rotary', thumb: 'bar' }), 
 okWarn('rotary met thickness', ctl({ match: 'cut', face: 'rotary', thickness: 4 }), ['controls_slider_only']);
 okWarn('controls in een 0.2-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.2' }, ['controls_contract']);
 okWarn('controls in een 0.1-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.1' }, ['controls_contract', 'design_contract']);
-okWarn('0.7 is nieuwer dan 0.6', SK({ skinsContract: '0.7' }), ['contract_minor']);
+okWarn('0.8 is nieuwer dan 0.7', SK({ skinsContract: '0.8' }), ['contract_minor']);
 ok('0.6 is bekend', SK({ skinsContract: '0.6' }), ['contract_minor']);
 ok('0.3 is bekend', SK({ skinsContract: '0.3' }), ['contract_minor']);
 ok('0.4 is bekend', SK({ skinsContract: '0.4' }), ['contract_minor']);
@@ -411,6 +411,74 @@ dev('device: display met alleen preset: geen melding zonder keuzelijst', dsp({ s
 dev('device: display via host.ui.display telt als keuzelijst', dsp({ style: 'lcd' }), DEVPAD, []);
 cases.push(['device: pad bestaat niet', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], devicePath: '/nonexistent/x.patchkamer-device.js' }]);
 cases.push(['device: apparaat faalt in de validator', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], device: 'export default {}' }]);
+// --- design.layout (0.7): flow en panelen
+const lay = (l, c = '0.7') => ({ ...withDesign({ layout: l }), skinsContract: c });
+const layApp = l => ({ ...withAppDesign({ layout: l }), skinsContract: '0.7' });
+const P1 = { id: 'osc', title: { nl: 'Oscillator', en: 'Oscillator' }, items: ['group:osc', 'cut', 'role:meter'], style: 'raised', cols: 4 };
+ok('layout: volledig voorbeeld uit de spec', lay({ flow: 'auto', panels: [P1, { id: 'perf', items: ['cut2', 'res'], style: 'line', dir: 'row' }, { id: 'rest', items: ['*'], style: 'plain' }] }));
+ok('layout: zonder * (impliciet restpaneel) is geen fout', lay({ panels: [{ id: 'a', items: ['cut'] }] }));
+ok('layout: alleen flow', lay({ flow: 'rows' }));
+ok('layout: titel als tekst', lay({ panels: [{ id: 'a', title: 'Filter', items: ['cut'] }] }));
+ok('layout: titel alleen nl', lay({ panels: [{ id: 'a', title: { nl: 'Filter' }, items: ['cut'] }] }));
+ok('layout: alle paneelvelden', lay({ flow: 'columns', panels: [{ id: 'a.b_c-1', title: 'T', titlePos: 'left', items: ['cut'], style: 'floating', dir: 'column', cols: 'auto', gap: 'wide', bare: true, labels: 'below', align: 'center', width: 'third', collapsible: true, collapsed: true }] }));
+ok('layout: cols 1 en 16', lay({ panels: [{ id: 'a', items: ['x'], cols: 1 }, { id: 'b', items: ['y'], cols: 16 }] }));
+ok('layout: in een verschijning', layApp({ panels: [{ id: 'a', items: ['*'] }] }));
+okWarn('layout: leeg object (let op: geen panelen)', lay({}), ['layout_no_panels']);
+okWarn('layout: lege panelenlijst', lay({ panels: [] }), ['layout_no_panels']);
+okWarn('layout: paneel zonder items', lay({ panels: [{ id: 'a', items: [] }] }), ['layout_empty_panel']);
+okWarn('layout: onbekende paneelsleutel', lay({ panels: [{ id: 'a', items: ['x'], hidden: true }] }), ['unknown_field']);
+okWarn('layout: onbekende titeltaal', lay({ panels: [{ id: 'a', title: { nl: 'A', de: 'B' }, items: ['x'] }] }), ['unknown_field']);
+okWarn('layout: item in twee panelen', lay({ panels: [{ id: 'a', items: ['cut'] }, { id: 'b', items: ['cut'] }] }), ['layout_item_twice']);
+okWarn('layout: item tweemaal in een paneel', lay({ panels: [{ id: 'a', items: ['cut', 'cut'] }] }), ['layout_item_twice']);
+okWarn('layout: groep in twee panelen', lay({ panels: [{ id: 'a', items: ['group:osc'] }, { id: 'b', items: ['group:osc'] }] }), ['layout_item_twice']);
+okWarn('layout: * in twee panelen', lay({ panels: [{ id: 'a', items: ['*'] }, { id: 'b', items: ['*'] }] }), ['layout_star_many']);
+ok('layout: id in een paneel en dezelfde via een groep elders is toegestaan (eerste wint)', lay({ panels: [{ id: 'a', items: ['cut'] }, { id: 'b', items: ['group:filter'] }] }));
+okWarn('layout: titlePos zonder titel', lay({ panels: [{ id: 'a', items: ['x'], titlePos: 'left' }] }), ['layout_titlepos_notitle']);
+okWarn('layout: collapsible zonder titel', lay({ panels: [{ id: 'a', items: ['x'], collapsible: true }] }), ['layout_collapse_notitle']);
+okWarn('layout: collapsible met verborgen titel', lay({ panels: [{ id: 'a', title: 'T', titlePos: 'hidden', items: ['x'], collapsible: true }] }), ['layout_collapse_notitle']);
+okWarn('layout: collapsed zonder collapsible', lay({ panels: [{ id: 'a', items: ['x'], collapsed: true }] }), ['layout_collapse_noop']);
+okWarn('layout: in een 0.6-bestand', lay({ panels: [{ id: 'a', items: ['x'] }] }, '0.6'), ['layout_contract']);
+okWarn('layout: in een 0.3-bestand', lay({ panels: [{ id: 'a', items: ['x'] }] }, '0.3'), ['layout_contract']);
+bad('layout: geen object', withDesign({ layout: 'rows' }), ['design_object']);
+bad('layout: lijst', withDesign({ layout: [] }), ['design_object']);
+bad('layout: flow onbekend', lay({ flow: 'grid' }), ['layout_flow']);
+bad('layout: panels geen lijst', lay({ panels: {} }), ['layout_panels_list']);
+bad('layout: 17 panelen', lay({ panels: Array.from({ length: 17 }, (_, i) => ({ id: 'p' + i, items: ['x' + i] })) }), ['layout_panels_max']);
+ok('layout: 16 panelen is goed', lay({ panels: Array.from({ length: 16 }, (_, i) => ({ id: 'p' + i, items: ['x' + i] })) }));
+bad('layout: 65 items', lay({ panels: [{ id: 'a', items: Array.from({ length: 65 }, (_, i) => 'c' + i) }] }), ['layout_items_max']);
+ok('layout: 64 items is goed', lay({ panels: [{ id: 'a', items: Array.from({ length: 64 }, (_, i) => 'c' + i) }] }));
+bad('layout: dubbel paneel-id', lay({ panels: [{ id: 'a', items: ['x'] }, { id: 'a', items: ['y'] }] }), ['layout_panel_dup']);
+bad('layout: paneel zonder id', lay({ panels: [{ items: ['x'] }] }), ['layout_panel_id']);
+bad('layout: paneel-id met hoofdletter', lay({ panels: [{ id: 'Osc', items: ['x'] }] }), ['layout_panel_id']);
+bad('layout: paneel-id te lang', lay({ panels: [{ id: 'a'.repeat(41), items: ['x'] }] }), ['layout_panel_id']);
+bad('layout: paneel geen object', lay({ panels: ['a'] }), ['layout_panel_obj']);
+bad('layout: items ontbreekt', lay({ panels: [{ id: 'a' }] }), ['layout_items']);
+bad('layout: items geen lijst', lay({ panels: [{ id: 'a', items: 'cut' }] }), ['layout_items']);
+bad('layout: item geen tekst', lay({ panels: [{ id: 'a', items: [5] }] }), ['layout_item']);
+bad('layout: item met spatie', lay({ panels: [{ id: 'a', items: ['c ut'] }] }), ['layout_item']);
+bad('layout: item onbekende rol', lay({ panels: [{ id: 'a', items: ['role:knob'] }] }), ['layout_item']);
+bad('layout: item lege groep', lay({ panels: [{ id: 'a', items: ['group:'] }] }), ['layout_item']);
+bad('layout: titel leeg', lay({ panels: [{ id: 'a', title: '', items: ['x'] }] }), ['layout_title']);
+bad('layout: titel te lang', lay({ panels: [{ id: 'a', title: 'x'.repeat(61), items: ['x'] }] }), ['layout_title']);
+bad('layout: titel leeg object', lay({ panels: [{ id: 'a', title: {}, items: ['x'] }] }), ['layout_title']);
+bad('layout: titel getal', lay({ panels: [{ id: 'a', title: 5, items: ['x'] }] }), ['layout_title']);
+bad('layout: titel {nl} te lang', lay({ panels: [{ id: 'a', title: { nl: 'x'.repeat(61) }, items: ['x'] }] }), ['layout_title']);
+for (const [k, v] of [['titlePos', 'middle'], ['style', 'glass'], ['dir', 'diagonal'], ['gap', 'huge'], ['labels', 'inside'], ['align', 'end'], ['width', 'quarter']]) bad('layout: ' + k + ' onbekend', lay({ panels: [{ id: 'a', items: ['x'], [k]: v }] }), ['design_enum']);
+bad('layout: cols 0', lay({ panels: [{ id: 'a', items: ['x'], cols: 0 }] }), ['layout_cols']);
+bad('layout: cols 17', lay({ panels: [{ id: 'a', items: ['x'], cols: 17 }] }), ['layout_cols']);
+bad('layout: cols 2,5', lay({ panels: [{ id: 'a', items: ['x'], cols: 2.5 }] }), ['layout_cols']);
+bad('layout: cols tekst', lay({ panels: [{ id: 'a', items: ['x'], cols: '3' }] }), ['layout_cols']);
+for (const k of ['bare', 'collapsible', 'collapsed']) bad('layout: ' + k + ' geen boolean', lay({ panels: [{ id: 'a', title: 'T', items: ['x'], collapsible: true, [k]: 'yes' }] }), ['layout_bool']);
+bad('layout: fout in verschijning', layApp({ flow: 'x' }), ['layout_flow']);
+// --- layout met --device
+const LAYSKIN = items => lay({ panels: [{ id: 'a', items }] });
+dev('device: layout met bekende id, groep en rol', LAYSKIN(['cut', 'group:filter', 'role:param', 'role:select', 'mode', '*']), DEVSRC, []);
+dev('device: layout met onbekend id', LAYSKIN(['cutoff']), DEVSRC, ['dev_unknown_layout_id']);
+dev('device: layout met onbekende groep', LAYSKIN(['group:osc']), DEVSRC, ['dev_unknown_layout_group']);
+dev('device: layout met rol die het apparaat niet heeft', LAYSKIN(['role:fader']), DEVSRC, ['dev_unknown_layout_role']);
+dev('device: layout met onbekend id in een verschijning', layApp({ panels: [{ id: 'a', items: ['nope'] }] }), DEVSRC, ['dev_unknown_layout_id']);
+dev('device: layout met meter-id telt als bekend', LAYSKIN(['met.master', 'group:meters', 'role:meter']), DEVMET, []);
+dev('device: layout met alleen *', LAYSKIN(['*']), DEVSRC, []);
 // --- 0.1-regels blijven
 bad('nog steeds: merknaam', { ...base(), name: ['M', 'oog'].join('') }, ['brand']);
 bad('nog steeds: @import in css', (() => { const s = base(); s.appearances[0].css = '@import "x";'; return s; })(), ['css_import']);

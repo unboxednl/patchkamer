@@ -1,0 +1,78 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "created": "2026-11-07",
+  "icon": null,
+  "id": "nl.patchkamer.filter.example-panels",
+  "device": "nl.patchkamer.filter",
+  "name": "Example panels",
+  "version": "1.0.0",
+  "description": "Shows design.layout (skins 0.7): the Filter regrouped into a raised filter panel with the type list, a line panel for drive and mix, and the level in its own panel; the order is chosen by the skin, nothing is hidden.",
+  "default": "main",
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same panels on every card width.",
+      "css": "",
+      "assets": {},
+      "design": {
+        "layout": {
+          "flow": "auto",
+          "panels": [
+            {
+              "id": "tone",
+              "title": {
+                "nl": "Toon",
+                "en": "Tone"
+              },
+              "items": [
+                "type",
+                "cut",
+                "res",
+                "vowel"
+              ],
+              "style": "raised",
+              "cols": 2
+            },
+            {
+              "id": "drive",
+              "title": {
+                "nl": "Karakter",
+                "en": "Character"
+              },
+              "items": [
+                "drive",
+                "mix"
+              ],
+              "style": "line",
+              "cols": 2
+            },
+            {
+              "id": "out",
+              "title": {
+                "nl": "Uitgang",
+                "en": "Output"
+              },
+              "items": [
+                "gain"
+              ],
+              "style": "inset",
+              "collapsible": true
+            },
+            {
+              "id": "rest",
+              "items": [
+                "*"
+              ],
+              "style": "plain"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-# Patchkamer — Skins contract v0.6 for building agents
+# Patchkamer — Skins contract v0.7 for building agents
 
 This document is the complete, self-contained instruction for building a **skin** for **Patchkamer**: a separate file that changes the look of one device, without touching the device itself or the device contract. An agent that receives this document needs no other context. Deliver a file `name.patchkamer-skin.json` that follows this contract and passes `validate-skin.mjs` without errors.
 
@@ -14,6 +14,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 | v0.4 | Layer 2, release C "meters": `design.meters`, an ordered list of rules that chooses, per id, group or everywhere, the face of a meter (bar, LED ladder or a round VU with a needle that replaces a bar, never beside it), the direction, the length and the width, the ballistics (fall), the peak line, the clip lamp, the scale, the colour and the number of LEDs (§4b). Belongs to device contract v1.18 (`host.ui.meter`). Skins of 0.1 up to 0.3 keep working unchanged |
 | v0.5 | Layer 2, release B1 "sections": `design.sections`, an ordered list of rules that chooses, per group or everywhere, a frame (line, raised, inset, floating), columns, spacing, "bare" (the controls lose their own frame), the place of the label (above, or below with the value on top) and the alignment, and `design.size`, the card width that belongs to an appearance (§4b). No device change needed: a group becomes a section when the device's DOM allows it. Skins of 0.1 up to 0.4 keep working unchanged |
 | v0.6 | Layer 2, release D "pads and small screen": `design.pads` (shape circle, square, rounded or rectangle; size; colour per pad, per palette or from the device; idle neutral or tinted; active as fill, border, glow or nothing; a lamp in the middle, top, bottom, left or right; click and hit feedback; spacing between step buttons) and `design.display` (the small screen: LCD, OLED, seven-segment or paper instead of a dropdown, with < > and [ok], enlarged by clicking it) (§4b). Belongs to device contract v1.22 (`host.ui.pad`, `host.ui.display`, `host.ui.steps` with options). Skins of 0.1 up to and including 0.5 keep working unchanged |
+| v0.7 | Layer 2, release B2 "panels and order": `design.layout`, with which a skin puts the controls of a device in **panels** and in an **order** (`flow` rows/columns/auto; per panel `id`, `title`, `items` with id, `role:<role>`, `group:<group>` or `*`, `style`, `dir`, `cols`, `gap`, `bare`, `labels`, `align`, `width`, `collapsible`, `collapsed`) (§4b). A skin only rearranges and never hides anything: whatever is not named lands in a rest panel. No device change; the device contract stays v1.22 (the ids and groups a device already publishes are now also the addresses for panels). Skins of 0.1 up to and including 0.6 keep working unchanged |
 
 ---
 
@@ -24,7 +25,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 - A skin belongs to **one device id** (the field `device`). For another device it is kept but never offered.
 - A device does not have to do anything to be able to get skins. If the device has no open shadow root (see §4), the host cannot apply the skin and says so; that is not a fault of the skin or of the device.
 - Skins are a new kind of library material next to tunes and presets: they are loaded from sources (a GitHub folder, a local folder, an address), browsed in a panel of their own, chosen per device on the card, saved in the workspace and in the song, and can be dropped on the canvas (§8, §9).
-- Version 0.6 stays deliberately small: CSS plus a small set of design choices (`design`, §4b), including the face of controls (`controls`), of meters (`meters`), the layout of sections (`sections`, `size`) and the face of pads (`pads`) and small screens (`display`). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
+- Version 0.7 stays deliberately small: CSS plus a small set of design choices (`design`, §4b), including the face of controls (`controls`), of meters (`meters`), the layout of sections (`sections`, `size`) the face of pads (`pads`) and small screens (`display`) and the arrangement into panels (`layout`). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
 
 ---
 
@@ -38,7 +39,7 @@ A skin is a UTF-8 JSON file with one object, named `name.patchkamer-skin.json`: 
 |---|---|---|---|---|
 | `format` | text | always `"patchkamer-skin"` | | yes |
 | `formatVersion` | integer | now `1` | | yes |
-| `skinsContract` | text | `"major.minor"`, now `"0.6"` (`"0.1"` up to and including `"0.5"` stay valid); see §10 | | yes |
+| `skinsContract` | text | `"major.minor"`, now `"0.7"` (`"0.1"` up to and including `"0.6"` stay valid); see §10 | | yes |
 | `id` | text | 3 to 100 characters from `[a-z0-9.-]`; recommended `<device-id>.<slug>`; unique: the same `id` is the same skin | | yes |
 | `device` | text | the `id` of the device the skin is for, for example `nl.patchkamer.duofone` | | yes |
 | `name` | text | English name, 1 to 60 characters, brand-free (§11) | | yes |
@@ -128,7 +129,7 @@ Apart from that, ordinary CSS is allowed, including `@media`, `@container` and `
 
 ---
 
-## 4b. Design choices (`design`, from 0.2; `controls` from 0.3; `meters` from 0.4; `sections` and `size` from 0.5; `pads` and `display` from 0.6)
+## 4b. Design choices (`design`, from 0.2; `controls` from 0.3; `meters` from 0.4; `sections` and `size` from 0.5; `pads` and `display` from 0.6; `layout` from 0.7)
 
 Besides CSS, from version 0.2 a skin can bring a set of **validated design choices** in the field `design`. Unlike CSS, these choices work on **all devices** through the host, without the device having to do anything (with the limits below). `design` sits at skin level (the default for all appearances) and can be overridden per appearance with `appearances[].design`.
 
@@ -144,6 +145,8 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
   "sections": [ { "match": "*|group:<group>", "frame": "none|line|raised|inset|floating|default", "columns": "auto|1..12", "gap": "tight|normal|wide", "bare": false, "labels": "default|above|below", "align": "start|center" } ],
   "pads":    { "shape": "circle|square|rounded|rect", "size": "xs…xl|0.6..2", "color": "neutral|device|palette", "palette": ["#rrggbb", "…"], "colors": { "<id>|role:step|group:<group>": "#rrggbb" }, "idle": "neutral|tint", "active": "fill|border|glow|none", "led": "none|center|top|bottom|left|right", "hit": "flash|none", "press": "depress|glow|none", "gap": "tight|normal|wide" },
   "display": { "style": "dropdown|lcd|oled|segment|paper", "nav": "arrows|arrows+ok|none", "commit": "live|ok", "lines": 1, "width": "auto|80..400", "expand": "click|button|off", "targets": ["select", "preset", "tune"], "color": "accent|default|#rrggbb" },
+  "layout":  { "flow": "auto|rows|columns",
+               "panels": [ { "id": "osc", "title": "text|{nl,en}", "titlePos": "top|left|hidden", "items": ["<id>", "role:<rol>", "group:<groep>", "*"], "style": "raised|inset|line|floating|plain", "dir": "row|column|grid", "cols": "auto|1..16", "gap": "tight|normal|wide", "bare": false, "labels": "default|above|below", "align": "start|center", "width": "auto|full|half|third", "collapsible": false, "collapsed": false } ] },
   "size":    { "width": 380 }
 }
 ```
@@ -154,7 +157,7 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
 - **Merging:** the host takes the `design` of the skin and lays the `design` of the chosen appearance over it, **per key** (and per colour in `colors.custom`). An appearance only has to repeat what differs.
 - **Lenient in the host, strict in the validator:** the host ignores an invalid value or unknown key (that one key falls back to the default behaviour) and reports it; the validator gives an **error** for an invalid value and a warning for an unknown key. Unknown keys and sections belong to later versions (§13) and are ignored.
 - **Standard clears everything:** if the user picks Standard (no skin) on the card, the card, the device and the cables are exactly as without a skin.
-- `design` belongs to `skinsContract` `"0.2"` (`controls` to `"0.3"`, `meters` to `"0.4"`, `sections` and `size` to `"0.5"`, `pads` and `display` to `"0.6"`). In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there, and also for `controls` in a 0.2 file, for `meters` in a 0.3 file and for `sections` or `size` in a 0.4 file or lower and for `pads` or `display` in a 0.5 file or lower.
+- `design` belongs to `skinsContract` `"0.2"` (`controls` to `"0.3"`, `meters` to `"0.4"`, `sections` and `size` to `"0.5"`, `pads` and `display` to `"0.6"`, `layout` to `"0.7"`). In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there, and also for `controls` in a 0.2 file, for `meters` in a 0.3 file and for `sections` or `size` in a 0.4 file or lower and for `pads` or `display` in a 0.5 file or lower and for `layout` in a 0.6 file or lower.
 
 ### Ports mode (`ports.mode`)
 
@@ -420,6 +423,54 @@ With `design.display` a skin chooses the **face of a choice list**: instead of a
 - **Haptics:** < and > and a choice give the skin's `click` haptic (`haptics.click`).
 - **A skin does not hide the choice and sets no value.**
 
+### Panels (`layout`, from 0.7)
+
+With `design.layout` a skin puts the controls of a device in **panels** and decides the **order**: the oscillators in a raised panel, the performance controls and the meter in a row, the rest in a bare rest panel. This is the only part of `design` that **moves** controls (in the DOM, not only in CSS); `sections` (0.5) style a group that already has an element of its own and move nothing.
+
+```json
+"design": {
+  "layout": {
+    "flow": "auto",
+    "panels": [
+      { "id": "osc",  "title": { "nl": "Oscillator", "en": "Oscillator" }, "items": ["group:osc"], "style": "raised", "cols": 4 },
+      { "id": "perf", "items": ["cut", "res", "role:meter"], "style": "line", "dir": "row" },
+      { "id": "rest", "items": ["*"], "style": "plain" }
+    ]
+  }
+}
+```
+
+| Key | Values | Meaning |
+|---|---|---|
+| `flow` | `rows`, `columns`, `auto` (default) | How the panels sit on the card. `rows`: one under the other. `columns`: side by side, wrapping at the card width. `auto`: side by side as long as they fit in the card width, otherwise below; the `width` of the panel steers. |
+| `panels` | list of at most 16 panels | The panels in the order in which they appear on the card. An empty list or a missing key leaves the device as it is. |
+| `panels[].id` (required) | 1 to 40 characters from `[a-z0-9._-]`, unique in the list | The address of the panel (also the key of the collapsed state). A duplicate id is an error. |
+| `panels[].items` (required) | list of at most 64 texts | What goes in the panel, in this order: a control `id` (`"cut"`), `"role:<role>"` (a role from the list under `controls`), `"group:<group>"` or `"*"` (everything not placed yet). For a `role:` or `group:` item the order of the device applies. |
+| `panels[].title` | text of 1 to 60 characters, or an object `{ "nl": …, "en": … }` | The heading of the panel. Without a title there is no heading. The host picks the language of the workspace and falls back to the other language. |
+| `panels[].titlePos` | `top` (default), `left`, `hidden` | The place of the heading. |
+| `panels[].style` | `raised`, `inset`, `line`, `floating`, `plain` | The frame, the same forms as `sections.frame` (`plain` is no frame). The colours come from the active colours of the skin or the workspace. |
+| `panels[].dir` | `row`, `column`, `grid` (default) | The direction of the controls in the panel. |
+| `panels[].cols` | `auto` or a whole number 1 to 16 | The number of columns with `dir: "grid"`. |
+| `panels[].gap` | `tight`, `normal`, `wide` | The spacing. |
+| `panels[].bare` | `true`, `false` | The controls lose their own frame (like `sections.bare`). |
+| `panels[].labels` | `default`, `above`, `below` | The place of the label (like `sections.labels`). |
+| `panels[].align` | `start`, `center` | The alignment of controls in their cell. |
+| `panels[].width` | `auto`, `full`, `half`, `third` | The width of the panel within the row of the flow. |
+| `panels[].collapsible` | `true`, `false` | The panel can be collapsed through its heading. Collapsed, the panel is only made smaller **on screen**: the controls still exist and stay controllable (`host.controls`, `setState`). The collapsed state is a user preference in the browser, per device and panel, and neither state nor preset. |
+| `panels[].collapsed` | `true`, `false` | The initial state of a collapsible panel. |
+
+**Rules.**
+
+- **A skin hides nothing and sets no values.** A control goes in at most **one** panel; the **first match** wins (so an id can be in an earlier panel than its group). Whatever fits nowhere lands in a rest panel by itself. If `"*"` is missing, the host adds a rest panel at the end itself (`id: "rest"`, `style: plain`, title "Overige"/"Other"). Nothing is ever left out.
+- **Lenient in the host, strict in the validator.** An unknown id, an unknown group or role, or an invalid value is silently ignored by the host (the item or the panel falls back); the validator gives an **error** for an invalid form or a value out of range and, with `--device`, a warning for an id, group or role that the device does not publish.
+- **Merging.** `layout` merges per key: `appearances[].design.layout.panels` then replaces the whole list of panels of the skin, `flow` replaces `flow`. That way an appearance can have a layout of its own (compact versus wide). A skin without `layout`, or with an empty `layout`, gives exactly the behaviour of the device.
+- **Moving, not replacing.** The host moves the existing control units (label, input and value together) into the panel; they stay the same elements with the same `id`s, handlers and `host.controls`. Without a skin, after choosing Default, or after switching appearance everything is back at its original place and in its original order.
+- **Devices with a layout of their own.** A device that decides its own layout (Control Surface, devices with functional sections of their own) is not rearranged; the Skins panel says so. For the other behaviours (devices that rebuild their UI, cards in mini view) what the host's Skins panel reports applies: "n of m controls in panels, k in rest".
+- **`layout` and `sections`.** A panel is a container of the host. `sections` (0.5) work inside a panel on a group only if that group still forms an element of its own in the panel; otherwise the host applies the panel's own `bare`, `labels` and `cols`. Prefer one or the other per group.
+- **Scrolling.** A long row of panels one under the other makes a tall card. Limit the height with `flow: "columns"` or `"auto"`, `width` and `collapsible`; the host reports the number of panels.
+- **Ids and groups are contract.** A skin aims at the ids, roles and groups a device publishes (device contract §12d). A device that renames or removes an id or group breaks panels aimed at it; the control then falls into the rest panel and is therefore not lost.
+- Meters (`host.ui.meter`), pads and small screens count as controls and can be in panels.
+
 ### What "works on all devices" means
 
 | Part | Reach in layer 1 |
@@ -432,8 +483,9 @@ With `design.display` a skin chooses the **face of a choice list**: instead of a
 | `meters` | only meters the device has the host draw with `host.ui.meter` (device contract §12e); the rest is left alone |
 | `sections` | only groups whose controls sit in one element of their own (see "What is a section" above); the rest is not styled |
 | `size` | the card width, only for an appearance or skin picked by hand |
+| `layout` | only controls that the device registers (id/role/group); they are moved, not replaced; devices with a layout of their own (Control Surface) are skipped |
 
-**Not yet available** (further steps of layer 2 and layer 3, §13): rearranging controls (panels), pads, a small screen, and an editor. `design` changes nothing about how a device is built.
+**Not yet available** (layer 3, §13): artwork for front panels and a full editor. `design` changes nothing about how a device is built.
 
 ---
 
@@ -522,7 +574,7 @@ skins/
 
 ## 10. Versions
 
-This contract has a version `major.minor` (now **0.6**), recorded in the field `skinsContract` of every skin.
+This contract has a version `major.minor` (now **0.7**), recorded in the field `skinsContract` of every skin.
 
 | Difference with the version of the host | What the host does |
 |---|---|
@@ -534,7 +586,7 @@ This contract has a version `major.minor` (now **0.6**), recorded in the field `
 - Unknown fields, also inside an appearance or in `when`, **are ignored** and not rejected. The validator reports them with a warning to catch typos.
 - `formatVersion` (now `1`) is the version of the file layout itself; `skinsContract` is the version of this contract.
 - Keep `id` and `device` the same in a new version of a skin and raise `version`: the newer `version` wins.
-- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.6".
+- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.7".
 
 **Changes from 0.1 to 0.2:**
 
@@ -594,6 +646,18 @@ This contract has a version `major.minor` (now **0.6**), recorded in the field `
 | Device change | | device contract v1.22 (`host.ui.pad`, `host.ui.display`, `host.ui.steps` with a 5th argument); a device that does nothing keeps working and gets no pad or small-screen face |
 | Validator | checks `design`, `controls`, `meters` and `sections` | also checks `pads` (values, a palette of 2 to 16 colours, `colors` with at most 64 keys, `shape: "none"` is an error) and `display` (values, `style: "none"` is an error), gives a warning for `pads` or `display` in a file below 0.6 and, with `--device`, for unknown ids, groups and roles in `pads.colors` |
 | Existing skins of 0.1 up to and including 0.5 | | keep working unchanged |
+
+**Changes from 0.6 to 0.7:**
+
+| Item | 0.6 | 0.7 |
+|---|---|---|
+| `skinsContract` | `"0.6"` | `"0.7"`; `"0.1"` up to and including `"0.6"` stay valid |
+| `design.layout` | does not exist | new, optional: `{ flow, panels }` with at most 16 panels of at most 64 items each (§4b) |
+| Rearranging controls | not possible | the skin puts controls in panels and decides the order; whatever is not named lands in a rest panel, nothing is ever hidden |
+| Addressing controls | | by id, `role:<role>`, `group:<group>` or `*`, the data a device already publishes |
+| Device change | | none; the device contract stays v1.22 |
+| Validator | checks `design` up to and including `pads` and `display` | also checks `layout` (form, ranges, at most 16 panels and 64 items, a duplicate panel id or an invalid item is an error) and gives a warning for an item in two panels, an empty list of panels, `collapsible` without a heading, `layout` in a file below 0.7 and, with `--device`, for unknown ids, groups and roles in `items` |
+| Existing skins of 0.1 up to and including 0.6 | | keep working unchanged |
 
 ---
 
@@ -666,6 +730,9 @@ What the validator checks:
 | `design.display`: not an object, a value outside the list or range (`style`, `nav`, `commit`, `lines`, `width`, `expand`, `targets`, `color`), `style: "none"`, `targets` empty, with duplicates or with an unknown name | error |
 | `design.display`: an empty object; an unknown key; `nav: "none"` with `expand: "off"`; `nav`, `commit`, `lines`, `width`, `expand` or `color` with `style: "dropdown"`; `targets` with `preset` or `tune` with `style: "dropdown"` | warning |
 | With `--device <device>`: an id, group or role in `pads.colors` that the device does not publish as a pad or step; `pads` for a device without pads or steps; `display` with `select` in `targets` for a device without a choice list | warning |
+| `design.layout`: not an object, `flow` outside the list, `panels` not a list or more than 16 panels, a panel that is not an object or lacks a valid `id` (`[a-z0-9._-]`, 1 to 40) or has a duplicate `id`, `items` missing, not a list or more than 64 items, an item that is not `"*"`, `"role:<role>"` (a role from the list), `"group:<group>"` or an id, a `title` outside 1 to 60 characters or an object without `nl`/`en`, a value outside the list (`titlePos`, `style`, `dir`, `gap`, `labels`, `align`, `width`), `cols` outside `auto` or 1 to 16, `bare`/`collapsible`/`collapsed` not a boolean | error |
+| `design.layout`: an item in two panels or twice in one panel; `"*"` in more than one panel; an empty `layout` or empty list of panels; a panel without items; `titlePos` without `title`; `collapsible` without a heading (or with `titlePos: "hidden"`); `collapsed` without `collapsible`; an unknown key; `layout` in a file with `skinsContract` `"0.6"` or lower. A missing `"*"` is **not** reported: the host adds a rest panel | warning |
+| With `--device <device>`: an id, group or role in `layout.panels[].items` that the device does not publish (every control and meter in the register counts) | warning |
 
 **Checking against a device (`--device`).** With `--device <device.patchkamer-device.js>` the validator loads the device (through `contract/validate-instrument.mjs`, which knows the register of ids, roles and groups) and gives a warning for every `match` that touches nothing: an unknown id, an unknown group, a role the device does not have. For `design.meters` it only looks at the device's meters (role `meter`) and reports an unknown meter id, a group without a meter and a device without meters. It is always a warning and never an error, because a newer device version may add an id later. A table of what a device registers comes from `node contract/validate-instrument.mjs <device> --controls`.
 
@@ -679,23 +746,22 @@ The validator cannot see whether the CSS looks right or whether a selector match
 
 ---
 
-## 13. What is not in version 0.6 yet
+## 13. What is not in version 0.7 yet
 
-Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b); version 0.3 (layer 2, release A "ids and roles") adds `design.controls`: face, size and colour of the controls that a device registers; version 0.4 (layer 2, release C "meters") adds `design.meters`: face (bar, LED ladder, round VU), direction, length, width, ballistics, scale and colour of the meters that a device has the host draw; version 0.5 (layer 2, release B1 "sections") adds `design.sections` and `design.size`: frame, columns, spacing, bare, label place and alignment of the groups of controls of a device, and a card width per appearance; version 0.6 (layer 2, release D "pads and small screen") adds `design.pads` and `design.display`: shape, size, colour and feedback of pads and steps, and a small screen instead of a choice list. Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version, in this order:
+Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b); version 0.3 (layer 2, release A "ids and roles") adds `design.controls`: face, size and colour of the controls that a device registers; version 0.4 (layer 2, release C "meters") adds `design.meters`: face (bar, LED ladder, round VU), direction, length, width, ballistics, scale and colour of the meters that a device has the host draw; version 0.5 (layer 2, release B1 "sections") adds `design.sections` and `design.size`: frame, columns, spacing, bare, label place and alignment of the groups of controls of a device, and a card width per appearance; version 0.6 (layer 2, release D "pads and small screen") adds `design.pads` and `design.display`: shape, size, colour and feedback of pads and steps, and a small screen instead of a choice list; version 0.7 (layer 2, release B2 "panels and order") adds `design.layout`: putting the controls of a device in panels and in an order, without hiding anything. Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version, in this order:
 
-- **panels and layout** (release B2): `design.layout.panels` with `host.ui.group`: **rearranging** and grouping controls with a graphic separation. A skin can only move controls, never hide them. Sections (0.5) rearrange nothing: they only style a group that already has an element of its own;
 - artwork for front panels, with the positions of the controls on it;
 - a contract per device for style hooks: which classes, variables and `part` names a device fixes and keeps stable (for now that is to be established per device, §4).
 
 Freek still has to supply the requirements for these. Until then, invent nothing: build a skin with only what is in this contract.
 
-**Outlook (not yet available).** Layer 2 further brings building blocks and layout: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now (except `design.controls`, `design.meters`, `design.sections`, `design.size`, `design.pads` and `design.display`); `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics`, `knobs` and `controls`), and the designer in the Skins panel is a first step. Do not write anything for them.
+**Outlook (not yet available).** Layer 2 further brings building blocks and layout: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now (except `design.controls`, `design.meters`, `design.sections`, `design.size`, `design.pads`, `design.display` and `design.layout`); `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics`, `knobs` and `controls`), and the designer in the Skins panel is a first step. Do not write anything for them.
 
 ---
 
 ## 14. A minimal example
 
-This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`: two appearances that only put a thin outline around the device and change the accent color of Duofone. It is a 0.1 skin and stays valid. Examples of layer 1 with `design`: `example-back-panel.patchkamer-skin.json` (port strip, a dark colour scheme and two really different appearances: a small Compact with frames around 3 columns of rotary knobs and a wide Full with raised sections and sliders; uses `design.sections` and `design.size`) and `example-touch.patchkamer-skin.json` (`hover`, haptics and large knobs) in the same folder.
+This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`: two appearances that only put a thin outline around the device and change the accent color of Duofone. It is a 0.1 skin and stays valid. Examples of layer 1 with `design`: `example-back-panel.patchkamer-skin.json` (port strip, a dark colour scheme and two really different appearances: a small Compact with frames around 3 columns of rotary knobs and a wide Full with raised sections and sliders; uses `design.sections` and `design.size`) and `example-touch.patchkamer-skin.json` (`hover`, haptics and large knobs) in the same folder. Examples of panels (0.7): `skins/library/nl.patchkamer.duofone/example-panels.patchkamer-skin.json` (a compact layout with collapsible panels one under the other and a wide layout with panels side by side) and `skins/library/nl.patchkamer.filter/example-panels.patchkamer-skin.json`.
 
 ```json
 {
@@ -738,7 +804,7 @@ This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`
 ## 15. Checklist for delivery
 
 - The file is named `<name>.patchkamer-skin.json` (without a version number) and is in `skins/library/<device-id>/`, with that folder equal to `device`.
-- `skinsContract` is `"0.6"` (or `"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` if the skin has no `pads`/`display`/`sections`/`size`/`meters`/`controls`/`design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.7"` (or `"0.6"`/`"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` if the skin has no `layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` and the appearance names are English and brand-free; `license` is `CC0-1.0`.
 - Any `design` contains only keys from §4b with valid values; colours are `#rgb` or `#rrggbb`.
 - Any `design.controls` has at most 64 rules, aims only at ids, roles and groups the device publishes (`node skins/contract/validate-skin.mjs <skin> --device <device>` without a warning) and hides nothing.
