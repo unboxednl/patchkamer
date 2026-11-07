@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.23.1 — De host zet een wav, flac of ogg zelf om naar mp3 als de dienst alleen mp3/m4a aanneemt (voortgang 'mp3'); de kaart zegt dat; teksten voor de nieuwe foutcodes (mp3big, mp3, indecode).
 // 1.23.0 — Eerste versie. Stem Splitter splitst een nummer in stems (zang, drums, bas, rest, soms meer) met een dienst op internet. Het apparaat zelf doet geen netwerkverkeer:
 //          de aanroep loopt via de host (contract v1.23, host.stems), die de sleutel van de gebruiker bewaart, de wachtrij van de dienst afwacht, de zip uitpakt en de stems
 //          decodeert. Invoer: een bestand (kiezen, slepen, of vanuit de tab Samples via loadAudio) of een opname uit de audio-ingang. Het aantal audio-uitgangen volgt het aantal
@@ -37,7 +38,8 @@ const TXT = {
     service: 'Dienst', model: 'Model', modelDefault: 'standaard uit de instellingen', settings: 'Instellingen…', noKey: 'Geen sleutel ingevuld: vul die in bij de instellingen.', noServices: 'Deze versie van Patchkamer kan geen stems splitsen (te oud).',
     cost: p => 'Geschatte kosten: ' + p + ' per nummer.', costUnknown: 'Prijs onbekend; zie de dienst.', accepts: l => 'Neemt aan: ' + l.join(', '),
     split: 'Splitsen', cancel: 'Annuleren',
-    phase: { confirm: 'Wacht op bevestiging…', upload: 'Nummer klaarmaken…', submit: 'Naar de dienst sturen…', queue: q => 'In de wachtrij' + (q != null ? ' (plaats ' + q + ')' : '') + '…', run: 'De dienst splitst het nummer…', download: 'Stems ophalen…', unzip: 'Uitpakken…', decode: 'Decoderen…' },
+    phase: { confirm: 'Wacht op bevestiging…', upload: 'Nummer klaarmaken…', submit: 'Naar de dienst sturen…', queue: q => 'In de wachtrij' + (q != null ? ' (plaats ' + q + ')' : '') + '…', run: 'De dienst splitst het nummer…', download: 'Stems ophalen…', unzip: 'Uitpakken…', decode: 'Decoderen…', mp3: f => 'Omzetten naar mp3… ' + Math.round((f || 0) * 100) + '%' },
+    toMp3: 'Dit bestand wordt eerst naar mp3 omgezet, omdat de dienst alleen mp3 of m4a aanneemt.',
     done: n => 'Klaar: ' + n + (n === 1 ? ' stem' : ' stems') + '.', cost2: p => ' Kosten volgens de instelling: ' + p + '.',
     stems: 'Stems', level: 'Niveau', mute: 'Dempen', solo: 'Solo', bpm: 'Tempo van het nummer', bpmHint: '0 = niet aanpassen; anders loopt het nummer mee met het tempo van de studio (de toonhoogte verandert mee)', loop: 'Herhalen',
     bits: 'WAV', dlStem: 'Bewaar', dlAll: 'Alle stems bewaren (zip)', dlMidi: 'MIDI bewaren (zip)', toDrums: 'Drums → Drum Listener', clear: 'Stems wissen',
@@ -50,7 +52,7 @@ const TXT = {
       size: e => 'Het bestand is te groot voor deze dienst (' + (e.size / 1048576).toFixed(1) + ' MB, hoogstens ' + (e.max / 1048576).toFixed(0) + ' MB). Neem een kortere versie of comprimeer het.',
       network: e => 'De dienst (' + (e.host || '?') + ') was niet te bereiken. Dat kan een netwerkprobleem zijn, of de dienst staat aanroepen vanuit de browser niet toe.',
       auth: 'De dienst weigerde de sleutel. Controleer de sleutel bij de instellingen.', credit: 'Geen tegoed bij de dienst. Vul het saldo aan.', notfound: 'De dienst kent dit eindpunt of deze taak niet.', input: 'De dienst weigerde dit bestand of dit model.', rate: 'Te veel aanvragen bij de dienst. Wacht even.', server: 'De dienst meldt een storing. Probeer het later opnieuw.', http: 'De dienst gaf een fout.',
-      failed: 'De dienst meldde dat het splitsen mislukte.', response: 'Onbegrijpelijk antwoord van de dienst.', zip: e => 'De uitvoer van de dienst is geen bruikbare zip (' + (e.message || '?') + ').', decode: e => 'Een stem was niet te decoderen' + (e.message ? ' (' + e.message + ')' : '') + '.', unsupported: 'Deze browser kan de zip niet uitpakken (DecompressionStream ontbreekt).', read: 'Het bestand was niet te lezen.', other: 'Het splitsen is mislukt.' }
+      failed: 'De dienst meldde dat het splitsen mislukte.', response: 'Onbegrijpelijk antwoord van de dienst.', zip: e => 'De uitvoer van de dienst is geen bruikbare zip (' + (e.message || '?') + ').', mp3big: e => 'Het nummer is te lang voor deze dienst, ook als mp3 met de laagste kwaliteit (' + Math.round((e.seconds || 0) / 60 * 10) / 10 + ' minuten; hoogstens ongeveer ' + Math.floor((e.maxSeconds || 0) / 60) + ' minuten en ' + ((e.maxSeconds || 0) % 60) + ' seconden). Neem een kortere versie.', mp3: e => 'Omzetten naar mp3 mislukte' + (e.message ? ' (' + e.message + ')' : '') + '.', indecode: 'Dit bestand is niet te decoderen om naar mp3 om te zetten.', decode: e => 'Een stem was niet te decoderen' + (e.message ? ' (' + e.message + ')' : '') + '.', unsupported: 'Deze browser kan de zip niet uitpakken (DecompressionStream ontbreekt).', read: 'Het bestand was niet te lezen.', other: 'Het splitsen is mislukt.' }
   },
   en: {
     title: 'Stem Splitter', stemNames: STEM_EN, all: 'All stems', in: 'In',
@@ -61,7 +63,8 @@ const TXT = {
     service: 'Service', model: 'Model', modelDefault: 'default from the settings', settings: 'Settings…', noKey: 'No key entered: enter it in the settings.', noServices: 'This version of Patchkamer cannot split stems (too old).',
     cost: p => 'Estimated cost: ' + p + ' per track.', costUnknown: 'Price unknown; see the service.', accepts: l => 'Accepts: ' + l.join(', '),
     split: 'Split', cancel: 'Cancel',
-    phase: { confirm: 'Waiting for confirmation…', upload: 'Preparing the track…', submit: 'Sending to the service…', queue: q => 'In the queue' + (q != null ? ' (place ' + q + ')' : '') + '…', run: 'The service is splitting the track…', download: 'Fetching stems…', unzip: 'Unpacking…', decode: 'Decoding…' },
+    phase: { confirm: 'Waiting for confirmation…', upload: 'Preparing the track…', submit: 'Sending to the service…', queue: q => 'In the queue' + (q != null ? ' (place ' + q + ')' : '') + '…', run: 'The service is splitting the track…', download: 'Fetching stems…', unzip: 'Unpacking…', decode: 'Decoding…', mp3: f => 'Converting to mp3… ' + Math.round((f || 0) * 100) + '%' },
+    toMp3: 'This file is first converted to mp3, because the service only accepts mp3 or m4a.',
     done: n => 'Done: ' + n + (n === 1 ? ' stem' : ' stems') + '.', cost2: p => ' Cost according to the setting: ' + p + '.',
     stems: 'Stems', level: 'Level', mute: 'Mute', solo: 'Solo', bpm: 'Tempo of the track', bpmHint: '0 = leave as is; otherwise the track follows the studio tempo (the pitch changes with it)', loop: 'Repeat',
     bits: 'WAV', dlStem: 'Save', dlAll: 'Save all stems (zip)', dlMidi: 'Save MIDI (zip)', toDrums: 'Drums → Drum Listener', clear: 'Clear stems',
@@ -74,7 +77,7 @@ const TXT = {
       size: e => 'The file is too large for this service (' + (e.size / 1048576).toFixed(1) + ' MB, at most ' + (e.max / 1048576).toFixed(0) + ' MB). Use a shorter version or compress it.',
       network: e => 'The service (' + (e.host || '?') + ') could not be reached. That may be a network problem, or the service does not allow calls from the browser.',
       auth: 'The service refused the key. Check the key in the settings.', credit: 'No balance at the service. Top it up.', notfound: 'The service does not know this endpoint or job.', input: 'The service refused this file or model.', rate: 'Too many requests at the service. Wait a moment.', server: 'The service reports a fault. Try again later.', http: 'The service returned an error.',
-      failed: 'The service reported that splitting failed.', response: 'Incomprehensible answer from the service.', zip: e => 'The output of the service is not a usable zip (' + (e.message || '?') + ').', decode: e => 'A stem could not be decoded' + (e.message ? ' (' + e.message + ')' : '') + '.', unsupported: 'This browser cannot unpack the zip (DecompressionStream is missing).', read: 'The file could not be read.', other: 'Splitting failed.' }
+      failed: 'The service reported that splitting failed.', response: 'Incomprehensible answer from the service.', zip: e => 'The output of the service is not a usable zip (' + (e.message || '?') + ').', mp3big: e => 'The track is too long for this service, even as mp3 at the lowest quality (' + Math.round((e.seconds || 0) / 60 * 10) / 10 + ' minutes; at most about ' + Math.floor((e.maxSeconds || 0) / 60) + ' minutes and ' + ((e.maxSeconds || 0) % 60) + ' seconds). Use a shorter version.', mp3: e => 'Converting to mp3 failed' + (e.message ? ' (' + e.message + ')' : '') + '.', indecode: 'This file could not be decoded to convert it to mp3.', decode: e => 'A stem could not be decoded' + (e.message ? ' (' + e.message + ')' : '') + '.', unsupported: 'This browser cannot unpack the zip (DecompressionStream is missing).', read: 'The file could not be read.', other: 'Splitting failed.' }
   }
 };
 
@@ -131,7 +134,7 @@ const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,mo
   '.stems{display:grid;gap:4px}.stem{display:grid;grid-template-columns:minmax(80px,140px) auto auto auto auto;gap:8px;align-items:center}.stem b{font-weight:600}';
 
 export default {
-  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
+  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.1', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
   i18n: { nl: { ports: { in: 'In', vocals: 'Zang', drums: 'Drums', bass: 'Bas', other: 'Rest', all: 'Alle stems' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'vocals', name: 'Vocals' }, { id: 'drums', name: 'Drums' }, { id: 'bass', name: 'Bass' }, { id: 'other', name: 'Other' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [{ id: 'all', name: 'All stems' }] },
   create(ctx, host) {
@@ -176,6 +179,9 @@ export default {
       if (blob.size > MAX_FILE) { setMsg(T.errBig, 'err'); return false; }
       source = { blob, name: String(name || blob.name || 'track').slice(0, 80), size: blob.size }; setMsg('', ''); paint(); return true;
     }
+    // de host zet een wav, flac of ogg om naar mp3 als de dienst alleen mp3/m4a aanneemt (zie de bron: naam of soort van het bestand)
+    const srcExt = () => { if (!source) return ''; const m = /\.(wav|flac|ogg|mp3|m4a)$/i.exec(source.name || ''), t = (source.blob.type || '').toLowerCase(); return m ? m[1].toLowerCase() : /wav/.test(t) ? 'wav' : /flac/.test(t) ? 'flac' : /ogg/.test(t) ? 'ogg' : ''; };
+    const needsMp3 = sv => { const x = srcExt(); return !!x && ['wav', 'flac', 'ogg'].includes(x) && !sv.accept.includes(x) && sv.accept.includes('mp3'); };
     const looksAudio = f => /^audio\//.test(f.type) || /\.(mp3|m4a|wav|flac|ogg|aac|opus)$/i.test(f.name || '');
     function takeFile(f) { if (!f) return; if (!looksAudio(f)) { setMsg(T.errDrop, 'err'); return; } setSource(f, f.name); }
 
@@ -218,7 +224,7 @@ export default {
       try {
         const r = await host.stems(self, 'split', {
           audio: source.blob, service: state.service, model: state.model || undefined, signal: ctl.signal,
-          onProgress: p => { if (my !== runId || !p) return; const f = T.phase[p.phase]; setMsg(typeof f === 'function' ? f(p.queue) : f || '', ''); }
+          onProgress: p => { if (my !== runId || !p) return; const f = T.phase[p.phase]; setMsg(typeof f === 'function' ? f(p.phase === 'mp3' ? p.progress : p.queue) : f || '', ''); }
         });
         if (dead || my !== runId) return;
         applyResult(r);
@@ -285,7 +291,7 @@ export default {
       ui.service.textContent = ''; for (const s of svs) { const o = el('option', s.label, ui.service); o.value = s.id; } ui.service.value = state.service;
       ui.model.textContent = ''; { const o = el('option', T.modelDefault, ui.model); o.value = ''; } for (const m of (sv ? sv.models : [])) { const o = el('option', m.label + (m.price != null ? ' · ' + fmtMoney(m.price) : ''), ui.model); o.value = m.id; } ui.model.value = state.model; ui.model.parentElement.hidden = !sv || !sv.models.length;
       const mdl = sv && state.model ? sv.models.find(m => m.id === state.model) : null, price = mdl ? mdl.price : sv ? sv.price : null;
-      ui.info.textContent = !svs.length ? T.noServices : (sv && !sv.configured ? T.noKey + ' ' : '') + (price != null ? T.cost(fmtMoney(price)) : T.costUnknown) + (sv ? ' ' + T.accepts(sv.accept) : '');
+      ui.info.textContent = !svs.length ? T.noServices : (sv && !sv.configured ? T.noKey + ' ' : '') + (price != null ? T.cost(fmtMoney(price)) : T.costUnknown) + (sv ? ' ' + T.accepts(sv.accept) : '') + (sv && needsMp3(sv) ? ' ' + T.toMp3 : '');
       ui.source.textContent = source ? T.source(source.name, (source.size / 1048576).toFixed(1)) : T.noSource;
       ui.rec.textContent = rec ? T.recStop : T.recStart; ui.rec.classList.toggle('on', !!rec); ui.recLen.value = state.rec;
       ui.split.textContent = busy ? T.cancel : T.split; ui.split.disabled = !svs.length || (!busy && !source); ui.split.classList.toggle('on', busy);

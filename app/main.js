@@ -22,7 +22,7 @@ const repoRoot = path.join(__dirname, '..');
 // The host is a folder: patchkamer.html with, when split up, the folders js, css and i18n next to it.
 const hostDir = app.isPackaged ? path.join(process.resourcesPath, 'patchkamer') : path.join(repoRoot, 'patchkamer');
 const hostFile = path.join(hostDir, 'patchkamer.html');
-const HOST_FOLDERS = new Set(['js', 'css', 'i18n', 'fonts', 'img']);
+const HOST_FOLDERS = new Set(['js', 'css', 'i18n', 'vendor', 'fonts', 'img']);
 const bundledRoot = app.isPackaged ? path.join(process.resourcesPath, 'library') : repoRoot;
 // A folder "bibliotheek" next to the exe replaces the bundled library (own devices without a new build).
 const exeDir = process.env.PORTABLE_EXECUTABLE_DIR || path.dirname(process.execPath);

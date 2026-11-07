@@ -1483,6 +1483,7 @@ I18N.nl={
    "m.st_bevestig_titel":"Dit nummer naar een dienst op internet sturen?",
    "m.st_bevestig_tekst":"Het geluid gaat naar {0} ({1}). Dat kost geld per nummer: geschatte kosten {2}. Je kunt tijdens het wachten annuleren, maar een dienst kan de kosten dan toch al hebben gemaakt.",
    "m.st_bevestig_recht":"Gebruik alleen muziek waarvan je de rechten hebt (auteursrecht). Deze vraag komt één keer per sessie, per dienst en model.",
+   "m.st_bevestig_mp3":"Het nummer wordt eerst op je computer naar mp3 omgezet (ongeveer {0} kbps), omdat deze dienst alleen mp3 of m4a aanneemt.",
    "m.st_bevestig_ok":"Verstuur en splits",
    "m.st_sleutels_gewist":"Sleutels voor stems gewist"
 };

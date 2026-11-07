@@ -1481,6 +1481,7 @@ PK.I18N.en={
    "m.st_bevestig_titel":"Send this track to an online service?",
    "m.st_bevestig_tekst":"The sound goes to {0} ({1}). That costs money per track: estimated cost {2}. You can cancel while waiting, but the service may already have incurred the cost.",
    "m.st_bevestig_recht":"Only use music you have the rights to (copyright). This question comes once per session, per service and model.",
+   "m.st_bevestig_mp3":"The track is first converted to mp3 on your computer (about {0} kbps), because this service only accepts mp3 or m4a.",
    "m.st_bevestig_ok":"Send and split",
    "m.st_sleutels_gewist":"Stem service keys cleared"
 };

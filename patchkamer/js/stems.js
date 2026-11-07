@@ -1,4 +1,4 @@
-// js/stems.js — stems splitsen via een dienst op internet (contract v1.23, §13g): register van diensten, instellingen (sleutels), aanroep met wachtrij, zip-lezer
+// js/stems.js — stems splitsen via een dienst op internet (contract v1.23, §13g): register van diensten, instellingen (sleutels), aanroep met wachtrij, mp3-omzetting (lamejs uit vendor/, alleen op aanvraag), zip-lezer
 (function(PK){
 /* =====================================================================
    STEMS · host.stems(inst, actie, opties). Een apparaat mag geen netwerk gebruiken; deze aanroep zit daarom in de host.
@@ -88,6 +88,72 @@ function stemId(raw){ let b=String(raw||'').split('/').pop().replace(/\.[A-Za-z0
 function nameStems(list){ const used=new Set(), out=[]; for(const x of list){ let id=stemId(x.name), k=2; const base=id; while(used.has(id)) id=base+'_'+(k++); used.add(id); out.push({...x,id}); }
   out.sort((a,b)=>{ const ia=ORDER.indexOf(a.id.replace(/_\d+$/,'')), ib=ORDER.indexOf(b.id.replace(/_\d+$/,'')); return (ia<0?99:ia)-(ib<0?99:ib)||(a.id<b.id?-1:a.id>b.id?1:0); }); return out; }
 
+// ---------- omzetten naar mp3 (alleen als de dienst geen wav aanneemt) ----------
+// lamejs 1.2.1 staat ongewijzigd in vendor/lame.min.js (LGPL-3.0) en wordt pas bij de eerste omzetting geladen. Het coderen gebeurt in een worker (blokken 16-bit, per blok een bevestiging),
+// zonder worker in de pagina in kleine stukken met een pauze ertussen. De duur van het nummer bepaalt de bitrate (CBR, dus vooraf te schatten).
+const LAME_URL='vendor/lame.min.js', CONV_FMT=['wav','flac','ogg'], CONV_IN=200*MB, MP3_CHUNK=1152*16;
+const MP3_RATES=[8000,11025,12000,16000,22050,24000,32000,44100,48000];
+const MP3_WORKER=`
+let enc=null;
+onmessage=e=>{ const m=e.data;
+  if(m.t==='init'){ try{ enc=new (new Function(m.lame+';return lamejs;')().Mp3Encoder)(m.ch,m.rate,m.kbps); postMessage({t:'ready'}); }catch(x){ postMessage({t:'error',m:String(x&&x.message||x)}); } }
+  else if(m.t==='pcm'){ try{ const b=m.r?enc.encodeBuffer(new Int16Array(m.l),new Int16Array(m.r)):enc.encodeBuffer(new Int16Array(m.l)); const u=new Uint8Array(b.length); u.set(b); postMessage({t:'mp3',d:u},[u.buffer]); }catch(x){ postMessage({t:'error',m:String(x&&x.message||x)}); } }
+  else if(m.t==='end'){ try{ const b=enc.flush(), u=new Uint8Array(b.length); u.set(b); postMessage({t:'done',d:u},[u.buffer]); }catch(x){ postMessage({t:'error',m:String(x&&x.message||x)}); } }
+};`;
+let lamePromise=null;
+function loadLame(){ if(!lamePromise){ lamePromise=(async()=>{
+    let r; try{ r=await fetch(new URL(LAME_URL,document.baseURI).href,{credentials:'omit',referrerPolicy:'no-referrer'}); }catch(e){ throw fail('mp3','load'); }
+    if(!r.ok) throw fail('mp3','load'); const t=await r.text(); if(t.length<10000||!t.includes('Mp3Encoder')) throw fail('mp3','load'); return t; })();
+    lamePromise.catch(()=>{ lamePromise=null; }); }
+  return lamePromise; }
+const tick=()=>new Promise(r=>setTimeout(r,0));
+function wavRate(u){ if(u.length>=28&&String.fromCharCode(u[0],u[1],u[2],u[3])==='RIFF'){ const r=new DataView(u.buffer,u.byteOffset,u.byteLength).getUint32(24,true); return r>=8000&&r<=96000?r:0; } return 0; }
+// het bronbestand decoderen op zijn eigen samplerate (een wav: uit de kop; anders die van de studio), naar kanalen (1 of 2) die lamejs aankan
+async function decodeSource(blob,fmt,sig){
+  const ab=await blob.arrayBuffer(); if(sig.aborted) throw fail('aborted');
+  const want=fmt==='wav'?wavRate(new Uint8Array(ab,0,Math.min(ab.byteLength,64))):0; let oc;
+  try{ oc=new OfflineAudioContext(1,1,want||PK.ensureCtx().sampleRate); }catch(e){ try{ oc=new OfflineAudioContext(1,1,PK.ensureCtx().sampleRate); }catch(e2){ throw fail('indecode'); } }
+  let buf; try{ buf=await oc.decodeAudioData(ab); }catch(e){ throw fail('indecode'); }
+  if(sig.aborted) throw fail('aborted'); if(!buf||!buf.length||!buf.numberOfChannels) throw fail('indecode');
+  let rate=buf.sampleRate, chs=[buf.getChannelData(0)]; if(buf.numberOfChannels>1) chs.push(buf.getChannelData(1));
+  if(!MP3_RATES.includes(rate)){   // een samplerate die lamejs niet kent (96 kHz, 88,2 kHz, ...): netjes omrekenen
+    const to=rate>48000?48000:(MP3_RATES.find(r=>r>=rate)||48000), n=Math.max(1,Math.ceil(buf.length*to/rate)), o2=new OfflineAudioContext(chs.length,n,to), src=o2.createBufferSource();
+    src.buffer=buf; src.connect(o2.destination); src.start(); let out; try{ out=await o2.startRendering(); }catch(e){ throw fail('indecode'); }
+    rate=to; chs=[out.getChannelData(0)]; if(out.numberOfChannels>1) chs.push(out.getChannelData(1)); if(sig.aborted) throw fail('aborted'); }
+  return {rate,chs,frames:chs[0].length}; }
+// bitrates van hoog naar laag; de grootste die (met wat marge) onder de grens van de dienst blijft
+function ladder(rate,ch){ const a=ch===1?[128,96,64,48,32]:[192,160,128,96,64]; return rate<32000?a.filter(k=>k<=160):a; }
+const mp3Limit=maxBytes=>Math.floor(maxBytes*0.97)-16384;
+function pickKbps(src,maxBytes){ const sec=src.frames/src.rate, lim=mp3Limit(maxBytes), l=ladder(src.rate,src.chs.length), fit=l.filter(k=>k*125*sec<=lim);
+  if(!fit.length) throw fail('mp3big',null,{seconds:Math.round(sec),maxSeconds:Math.max(0,Math.floor(lim/(l[l.length-1]*125)))}); return {sec,fit}; }
+const i16=(x,a,b)=>{ const o=new Int16Array(b-a); for(let i=a;i<b;i++){ const v=x[i]; o[i-a]=v!==v||v===Infinity||v===-Infinity?0:v>=1?32767:v<=-1?-32768:Math.round(v*32767); } return o; };
+async function encodeMp3(src,kbps,sig,progress){
+  const lame=await loadLame(); if(sig.aborted) throw fail('aborted'); const ch=src.chs.length, N=src.frames, parts=[]; let w=null,url='',ac=null;
+  try{ if(typeof Worker==='function'){ url=URL.createObjectURL(new Blob([MP3_WORKER],{type:'text/javascript'})); w=new Worker(url); } }catch(e){ w=null; }
+  const done=()=>{ if(w){ w.terminate(); w=null; } if(url){ URL.revokeObjectURL(url); url=''; } if(ac){ sig.removeEventListener('abort',ac); ac=null; } };
+  try{
+    if(w){
+      const wait=()=>new Promise((res,rej)=>{ w.onmessage=e=>{ const m=e.data||{}; if(m.t==='error') rej(fail('mp3',String(m.m).slice(0,100))); else { if(m.d&&m.d.length) parts.push(m.d); res(m.t); } }; w.onerror=()=>rej(fail('mp3','worker')); ac=()=>rej(fail('aborted')); sig.addEventListener('abort',ac,{once:true}); });
+      const ask=(msg,tr)=>{ const p=wait(); w.postMessage(msg,tr||[]); return p.finally(()=>{ if(ac){ sig.removeEventListener('abort',ac); ac=null; } }); };
+      const init=wait(); w.postMessage({t:'init',lame,ch,rate:src.rate,kbps}); await init; if(sig.aborted) throw fail('aborted');
+      for(let a=0;a<N;a+=MP3_CHUNK){ if(sig.aborted) throw fail('aborted'); const b=Math.min(N,a+MP3_CHUNK), l=i16(src.chs[0],a,b), r=ch>1?i16(src.chs[1],a,b):null;
+        await ask(r?{t:'pcm',l:l.buffer,r:r.buffer}:{t:'pcm',l:l.buffer},r?[l.buffer,r.buffer]:[l.buffer]); progress(b/N); }
+      await ask({t:'end'});
+    } else {
+      let enc; try{ enc=new (new Function(lame+';return lamejs;')().Mp3Encoder)(ch,src.rate,kbps); }catch(e){ throw fail('mp3','init'); }
+      for(let a=0;a<N;a+=MP3_CHUNK){ if(sig.aborted) throw fail('aborted'); const b=Math.min(N,a+MP3_CHUNK);
+        try{ const o=ch>1?enc.encodeBuffer(i16(src.chs[0],a,b),i16(src.chs[1],a,b)):enc.encodeBuffer(i16(src.chs[0],a,b)); if(o.length){ const u=new Uint8Array(o.length); u.set(o); parts.push(u); } }catch(e){ throw fail('mp3','encode'); }
+        progress(b/N); await tick(); }
+      try{ const o=enc.flush(); const u=new Uint8Array(o.length); u.set(o); parts.push(u); }catch(e){ throw fail('mp3','encode'); }
+    }
+  } finally { done(); }
+  if(sig.aborted) throw fail('aborted'); return new Blob(parts,{type:'audio/mpeg'}); }
+// kiest de bitrate en codeert; valt het resultaat toch te groot uit, dan een trap lager
+async function toMp3(src,maxBytes,sig,progress,kbps0){
+  const {fit}=pickKbps(src,maxBytes); const start=Math.max(0,fit.indexOf(kbps0)); const list=fit.slice(start);
+  for(let i=0;i<list.length;i++){ const b=await encodeMp3(src,list[i],sig,progress); if(b.size<=maxBytes) return {blob:b,kbps:list[i]}; }
+  throw fail('mp3big',null,{seconds:Math.round(src.frames/src.rate),maxSeconds:Math.max(0,Math.floor(mp3Limit(maxBytes)/(ladder(src.rate,src.chs.length).slice(-1)[0]*125)))}); }
+
 // ---------- netwerk ----------
 const sleep=(ms,sig)=>new Promise((res,rej)=>{ const t=setTimeout(res,ms); sig.addEventListener('abort',()=>{ clearTimeout(t); rej(fail('aborted')); },{once:true}); });
 async function http(url,init,sig){
@@ -134,17 +200,24 @@ async function split(inst,o){
   const svc=SERVICES[id], conf=cfg().services[id], model=o.model?String(o.model).slice(0,100):modelOf(svc,conf), d=describe(id), sig0=o.signal;
   if(id==='custom'&&!(urlOk(conf.base,true)&&conf.endpoint)) throw fail('config'); if(!conf.key) throw fail('nokey');
   if(id!=='custom'&&!svc.models.some(m=>m.id===model)) throw fail('service');
-  const blob=o.audio; if(!(blob instanceof Blob)) throw fail('format');
-  if(blob.size<=0) throw fail('format'); if(blob.size>d.maxBytes) throw fail('size',null,{max:d.maxBytes,size:blob.size});
-  const head=new Uint8Array(await blob.slice(0,16).arrayBuffer()), fmt=sniff(head); if(!fmt||!d.accept.includes(fmt)) throw fail('format',null,{accept:d.accept,found:fmt});
+  let blob=o.audio; if(!(blob instanceof Blob)) throw fail('format');
+  if(blob.size<=0) throw fail('format');
+  const head=new Uint8Array(await blob.slice(0,16).arrayBuffer()), fmt=sniff(head); if(!fmt) throw fail('format',null,{accept:d.accept,found:fmt});
+  // de dienst neemt alleen mp3/m4a aan, maar de invoer is wav/flac/ogg: eerst naar mp3 omzetten (hier uitgezocht, het coderen zelf start na de bevestiging)
+  const conv=!d.accept.includes(fmt)&&d.accept.includes('mp3')&&CONV_FMT.includes(fmt);
+  if(!conv&&!d.accept.includes(fmt)) throw fail('format',null,{accept:d.accept,found:fmt});
+  if(blob.size>(conv?CONV_IN:d.maxBytes)) throw fail('size',null,{max:conv?CONV_IN:d.maxBytes,size:blob.size});
   const prog=p=>{ try{ if(typeof o.onProgress==='function') o.onProgress(p); }catch(e){} };
-  const ck=id+'|'+model; if(!confirmed.has(ck)){
-    const price=priceOf(svc,conf,model), host=new URL(id==='custom'?conf.base:svc.base).host;
-    const html='<b>'+PK.esc(PK.pkt('m.st_bevestig_titel'))+'</b><br>'+PK.esc(PK.pkt('m.st_bevestig_tekst',d.label,host,money(price)))+'<br><br>'+PK.esc(PK.pkt('m.st_bevestig_recht'));
-    prog({phase:'confirm'}); const yes=await PK.askUser(html,PK.pkt('m.st_bevestig_ok'),PK.pkt('m.annuleren')); if(!yes) throw fail('declined'); confirmed.add(ck); }
-  const ac=new AbortController(), timer=setTimeout(()=>{ ac.abort(fail('timeout')); },LIM.timeoutMs), sig=ac.signal;
-  const link=()=>ac.abort(fail('aborted')); if(sig0){ if(sig0.aborted) link(); else sig0.addEventListener('abort',link,{once:true}); }
+  const ac=new AbortController(), sig=ac.signal, link=()=>ac.abort(fail('aborted')); if(sig0){ if(sig0.aborted) link(); else sig0.addEventListener('abort',link,{once:true}); }
+  let timer=0;
   try{
+    let pre=null; if(conv){ prog({phase:'upload'}); const src=await decodeSource(blob,fmt,sig); pre={src,kbps:pickKbps(src,d.maxBytes).fit[0]}; }
+    const ck=id+'|'+model; if(!confirmed.has(ck)){
+      const price=priceOf(svc,conf,model), host=new URL(id==='custom'?conf.base:svc.base).host;
+      const html='<b>'+PK.esc(PK.pkt('m.st_bevestig_titel'))+'</b><br>'+PK.esc(PK.pkt('m.st_bevestig_tekst',d.label,host,money(price)))+(pre?'<br>'+PK.esc(PK.pkt('m.st_bevestig_mp3',pre.kbps)):'')+'<br><br>'+PK.esc(PK.pkt('m.st_bevestig_recht'));
+      prog({phase:'confirm'}); const yes=await PK.askUser(html,PK.pkt('m.st_bevestig_ok'),PK.pkt('m.annuleren')); if(!yes) throw fail('declined'); if(sig.aborted) throw fail('aborted'); confirmed.add(ck); }
+    timer=setTimeout(()=>{ ac.abort(fail('timeout')); },LIM.timeoutMs);
+    if(pre){ prog({phase:'mp3',progress:0}); const r=await toMp3(pre.src,d.maxBytes,sig,f=>prog({phase:'mp3',progress:f}),pre.kbps); blob=r.blob; pre=null; }
     prog({phase:'upload'}); const uri=await toDataUri(blob); if(sig.aborted) throw fail('aborted');
     const res=await queueRun(svc,conf,model,uri,sig,prog), out=parseOut(res), local=id==='custom';
     prog({phase:'download'}); let items=[];
@@ -157,7 +230,7 @@ async function split(inst,o){
     for(const it of nameStems(items)){ let buffer; try{ buffer=await ctx.decodeAudioData(it.data.buffer.slice(it.data.byteOffset,it.data.byteOffset+it.data.byteLength)); }catch(e){ throw fail('decode',it.base); } if(sig.aborted) throw fail('aborted'); stems.push({id:it.id,file:it.base,buffer}); }
     return {service:id,model,price:priceOf(svc,conf,model),currency:'USD',stems,midi}; }
   catch(e){ if(sig.aborted) throw sig.reason&&sig.reason.code?sig.reason:fail('aborted'); throw e; }
-  finally{ clearTimeout(timer); if(sig0) sig0.removeEventListener('abort',link); }
+  finally{ if(timer) clearTimeout(timer); if(sig0) sig0.removeEventListener('abort',link); }
 }
 
 // geluid aan een ander apparaat geven dat loadAudio heeft (zoals de knop → apparaat in de tab Samples): het gekozen exemplaar, een bestaand of een nieuw

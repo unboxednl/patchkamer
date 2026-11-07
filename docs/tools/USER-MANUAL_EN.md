@@ -153,7 +153,7 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 - WAV and MP3 need AudioWorklet in the browser; if it is missing, pick another format.
 - Whether a recording sounds right depends on what you send in: Recorder does not change it.
 
-**License of the MP3 encoder.** Recorder makes MP3 files with [lamejs](https://github.com/zhuker/lamejs) 1.2.1, a JavaScript version of the LAME encoder. lamejs is free software under the [LGPL-3.0](../../LICENSES/LGPL-3.0-only.txt) and sits unchanged in the Recorder file, as one separate piece of text (`LAME_SRC`, at the bottom). You can replace it with another version or your own build of lamejs. The rest of Recorder is AGPL-3.0-or-later. See [LICENSING.md](../../LICENSING.md) (in Dutch).
+**License of the MP3 encoder.** Recorder makes MP3 files with [lamejs](https://github.com/zhuker/lamejs) 1.2.1, a JavaScript version of the LAME encoder. lamejs is free software under the [LGPL-3.0](../../LICENSES/LGPL-3.0-only.txt) and sits unchanged in the Recorder file, as one separate piece of text (`LAME_SRC`, at the bottom). You can replace it with another version or your own build of lamejs. The rest of Recorder is AGPL-3.0-or-later. The Stem Splitter also uses lamejs, from the host: a separate unchanged file, `patchkamer/vendor/lame.min.js`, loaded only for a conversion to mp3 and replaceable in the same way. See [LICENSING.md](../../LICENSING.md) (in Dutch).
 
 ---
 
@@ -434,7 +434,7 @@ The **Control Surface Layouts** pack has 28 presets in five folders: **Controlle
 - A sample from the **Samples** tab of the library, with the **→ Stem Splitter** button.
 - **Record** takes a piece from the **In** port (for example the output of **Audio Capture**): choose the **Length** (10 seconds to 3 minutes), press **Record** and then **Stop**. The recording becomes a 16-bit WAV.
 
-The service decides what it accepts. If it only takes mp3 or m4a and you have a WAV, Stem Splitter says so; save the track as mp3 (the **Recorder** device can do that) or choose a service that takes WAV.
+The service decides what it accepts. If it only takes mp3 or m4a (**fal.ai · Mureka**) and you have a WAV, FLAC or OGG file (or a recording), Patchkamer first converts it to mp3 on your computer; the card says so and the question before sending mentions it. The conversion keeps stereo or mono as in the source and starts at 192 kbps; if the file would not fit in 10 MB, the quality steps down (160, 128, 96, 64 kbps). A 4-minute track becomes about 6 MB and takes some ten seconds, with a percentage on the card; **Cancel** also works during the conversion. A track that is too large even at 64 kbps (about 20 minutes in stereo) is refused with a message saying how long it may be. An mp3 or m4a file that fits is sent unchanged, and a service that takes WAV gets the WAV as it is. The mp3 encoder (lamejs) is only loaded the first time a conversion is needed. Other types of file (for example AAC) are not converted: save those as mp3 first.
 
 **Splitting.** Choose the **Service** and the **Model** (empty = the model from the settings) and click **Split**. The card shows the state: in the queue, the service is splitting, fetching, unpacking, decoding. **Cancel** aborts. If something goes wrong (no key, key refused, no balance, no connection, broken output), the card says what and what you can do. A service that does not allow calls from the browser gives the message that it could not be reached.
 
@@ -452,6 +452,7 @@ The service decides what it accepts. If it only takes mp3 or m4a and you have a 
 **Tips and limits**
 
 - Stems live in memory: a long track with 6 stems takes a few hundred MB.
+- Converting a WAV to mp3 happens on your computer (sound quality: not listened to yet) and costs nothing; the maximum length for **fal.ai · Mureka** is about 20 minutes in stereo at the lowest quality (64 kbps), 6 to 7 minutes at the best (192 kbps).
 - Splitting takes a few seconds to minutes, depending on the service and the queue; after 20 minutes Patchkamer gives up.
 - The result is only as good as the service: traces of other stems may bleed through.
 

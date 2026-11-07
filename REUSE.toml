@@ -36,3 +36,10 @@ path = "devices/tools/Recorder/recorder.patchkamer-device.js"
 precedence = "aggregate"
 SPDX-FileCopyrightText = ["2026 Freek van Gool", "lamejs en LAME, zie de kop onderaan het bestand"]
 SPDX-License-Identifier = "AGPL-3.0-or-later AND LGPL-3.0-only"
+
+# De host bevat dezelfde lamejs (LGPL-3.0) als los, ongewijzigd bestand; het wordt alleen geladen voor de mp3-omzetting van de Stem Splitter
+[[annotations]]
+path = "patchkamer/vendor/lame.min.js"
+precedence = "override"
+SPDX-FileCopyrightText = ["lamejs en LAME, zie https://github.com/zhuker/lamejs"]
+SPDX-License-Identifier = "LGPL-3.0-only"

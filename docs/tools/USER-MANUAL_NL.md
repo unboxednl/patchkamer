@@ -153,7 +153,7 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 - WAV en MP3 hebben AudioWorklet in de browser nodig; ontbreekt die, kies dan een ander formaat.
 - Of een opname goed klinkt hangt af van wat je erin stuurt: Recorder verandert niets.
 
-**Licentie van de MP3-encoder.** Recorder maakt MP3-bestanden met [lamejs](https://github.com/zhuker/lamejs) 1.2.1, een JavaScript-versie van de LAME-encoder. lamejs is vrije software onder de [LGPL-3.0](../../LICENSES/LGPL-3.0-only.txt) en staat onveranderd in het Recorder-bestand, als één los stuk tekst (`LAME_SRC`, onderaan). Je kunt hem vervangen door een andere versie of je eigen build van lamejs. De rest van Recorder is AGPL-3.0-or-later. Zie [LICENSING.md](../../LICENSING.md).
+**Licentie van de MP3-encoder.** Recorder maakt MP3-bestanden met [lamejs](https://github.com/zhuker/lamejs) 1.2.1, een JavaScript-versie van de LAME-encoder. lamejs is vrije software onder de [LGPL-3.0](../../LICENSES/LGPL-3.0-only.txt) en staat onveranderd in het Recorder-bestand, als één los stuk tekst (`LAME_SRC`, onderaan). Je kunt hem vervangen door een andere versie of je eigen build van lamejs. De rest van Recorder is AGPL-3.0-or-later. Ook de Stem Splitter gebruikt lamejs, vanuit de host: een los, onveranderd bestand `patchkamer/vendor/lame.min.js`, dat alleen voor een omzetting naar mp3 wordt geladen en op dezelfde manier te vervangen is. Zie [LICENSING.md](../../LICENSING.md).
 
 ---
 
@@ -434,7 +434,7 @@ Het pack **Control Surface Layouts** heeft 28 presets in vijf mappen: **Controll
 - Een sample uit de tab **Samples** van de bibliotheek, met de knop **→ Stem Splitter**.
 - **Opnemen** neemt een stuk op uit de poort **In** (bijvoorbeeld de uitgang van **Audio Capture**): kies de **Duur** (10 seconden tot 3 minuten), druk op **Opnemen** en daarna op **Stop**. De opname wordt een 16-bit WAV.
 
-De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan en je hebt een WAV, dan zegt Stem Splitter dat; sla het nummer dan op als mp3 (het apparaat **Recorder** kan dat) of kies een dienst die WAV aanneemt.
+De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan (**fal.ai · Mureka**) en je hebt een WAV-, FLAC- of OGG-bestand (of een opname), dan zet Patchkamer het eerst op je computer om naar mp3; de kaart zegt dat en de vraag voor het versturen noemt het. De omzetting houdt stereo of mono zoals in de bron en begint op 192 kbps; past het bestand dan niet in 10 MB, dan zakt de kwaliteit stapsgewijs (160, 128, 96, 64 kbps). Een nummer van 4 minuten wordt ongeveer 6 MB en kost zo'n tien seconden, met een percentage op de kaart; **Annuleren** werkt ook tijdens het omzetten. Is een nummer ook bij 64 kbps te groot (ongeveer 20 minuten in stereo), dan weigert Patchkamer het met een melding hoe lang het hoogstens mag zijn. Een mp3- of m4a-bestand dat past gaat ongewijzigd door, en een dienst die WAV aanneemt krijgt de WAV zoals hij is. De mp3-encoder (lamejs) wordt pas de eerste keer geladen dat een omzetting nodig is. Andere bestandssoorten (bijvoorbeeld AAC) worden niet omgezet: sla die eerst op als mp3.
 
 **Splitsen.** Kies de **Dienst** en het **Model** (leeg = het model uit de instellingen) en klik op **Splitsen**. De kaart toont de stand: in de wachtrij, de dienst splitst, ophalen, uitpakken, decoderen. **Annuleren** breekt af. Gaat er iets mis (geen sleutel, sleutel geweigerd, geen tegoed, geen verbinding, kapotte uitvoer), dan zegt de kaart wat en wat je kunt doen. Een dienst die aanroepen vanuit de browser niet toestaat, geeft de melding dat hij niet te bereiken is.
 
@@ -452,6 +452,7 @@ De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan en je hebt e
 **Tips en grenzen**
 
 - Stems staan in het geheugen: een lang nummer met 6 stems kost een paar honderd MB.
+- Het omzetten van een WAV naar mp3 gebeurt op je computer (geluidskwaliteit: nog niet beluisterd) en kost niets; de maximale lengte voor **fal.ai · Mureka** is ongeveer 20 minuten in stereo op de laagste kwaliteit (64 kbps), 6 tot 7 minuten op de beste (192 kbps).
 - Het splitsen duurt enkele seconden tot minuten, afhankelijk van de dienst en de wachtrij; na 20 minuten stopt Patchkamer.
 - Het resultaat is zo goed als de dienst: er kunnen sporen van andere stems doorklinken.
 
