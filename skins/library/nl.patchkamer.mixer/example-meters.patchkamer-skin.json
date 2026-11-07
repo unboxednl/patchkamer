@@ -1,0 +1,29 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.4",
+  "id": "nl.patchkamer.mixer.example-meters",
+  "device": "nl.patchkamer.mixer",
+  "name": "Example meters",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Shows design.meters (skins 0.4): the channel and group meters as short LED ladders with the peak line on, the master as a large round VU meter with a needle.",
+  "created": "2026-11-07",
+  "icon": null,
+  "default": "main",
+  "design": {
+    "meters": [
+      { "match": "group:meters", "face": "ledladder", "segments": 16, "width": 8, "length": "medium", "peakHold": "on", "ballistics": "fast" },
+      { "match": "met.master", "face": "vu", "length": 160, "scale": "show", "color": "accent" }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same rules on every card width.",
+      "assets": {}
+    }
+  ]
+}

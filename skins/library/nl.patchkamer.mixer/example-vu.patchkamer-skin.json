@@ -1,0 +1,29 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.4",
+  "id": "nl.patchkamer.mixer.example-vu",
+  "device": "nl.patchkamer.mixer",
+  "name": "Example VU",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Shows round VU meters (skins 0.4): every meter becomes a dial with a needle and classic VU ballistics, the master larger than the others. The mixer strips grow wider to make room.",
+  "created": "2026-11-07",
+  "icon": null,
+  "default": "main",
+  "design": {
+    "meters": [
+      { "match": "*", "face": "vu", "length": 64, "ballistics": "vu", "scale": "hide", "peakHold": "off" },
+      { "match": "met.master", "length": 200, "scale": "show", "clip": "show" }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "main",
+      "name": "Main",
+      "description": "The same rules on every card width.",
+      "assets": {}
+    }
+  ]
+}
