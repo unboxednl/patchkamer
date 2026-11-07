@@ -13,7 +13,7 @@ Een clip-, scène- en songsequencer met 1 tot 16 sporen (tracks). Het maakt **ze
 | Naam | `Clip Arranger` in alle talen; de poortnamen hebben een Nederlandse variant (`MIDI / opname`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input`; eventuitgangen `track1` … `track16` (de statische lijst; via `host.setPorts` en `ui.jacks` toont de kaart in één horizontale rij alleen `track1` … `trackN` voor de N sporen, met alleen het nummer, en rechts altijd `tracks`; minder sporen haalt de kabels van de verdwenen uitgangen weg); geen audio, geen sturing; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.17 (apparaatversie 1.17.0) |
+| Contract | v1.21 (apparaatversie 1.21.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen met vier sporen en scènes van vier sporen; Pattern Playlist en Pattern Tracker bouwen een song van patronen in een playlist of tracker. Clip Arranger werkt zoals een sessieweergave: een matrix van clips per spoor en per scène, plus een lineair song-arrangement erboven.
@@ -24,7 +24,7 @@ Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen m
 
 ## De state
 
-`getPreset()` geeft `getState()` zonder de werkstand: `recordMode`, `selectedTrack`, `selectedClip`, `selectedSection`, `editPage`, `zoom`, `pianoBase`, `drawLength`, `drawVelocity`, `drawProbability`, `drawRatchet`, `selectedNote`, `selectedRow`, `record`, `quantize`, `ccId`, `ccShape`. Een preset laat die velden bij het laden staan. De state is gewone JSON. Een getal buiten het bereik wordt afgekapt; tekst, `NaN`, `null` of een ontbrekende waarde geeft de standaard; onbekende velden worden genegeerd. `setState({})` geeft het lege standaardproject (4 sporen, 8 scènes, een kort arrangement).
+`getPreset()` geeft `getState()` zonder de werkstand: `recordMode`, `selectedTrack`, `selectedClip`, `selectedSection`, `editPage`, `zoom`, `pianoBase`, `drawLength`, `drawVelocity`, `drawProbability`, `drawRatchet`, `selectedNote`, `selectedRow`, `record`, `quantize`, `recordSettings`, `ccId`, `ccShape`. Een preset laat die velden bij het laden staan. De state is gewone JSON. Een getal buiten het bereik wordt afgekapt; tekst, `NaN`, `null` of een ontbrekende waarde geeft de standaard; onbekende velden worden genegeerd. `setState({})` geeft het lege standaardproject (4 sporen, 8 scènes, een kort arrangement).
 
 ### Bovenste niveau
 
@@ -38,6 +38,8 @@ Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen m
 | `songLoop` | Het arrangement begint opnieuw na het einde | `true`/`false` | `true` |
 | `armed` | De sequencer speelt (`false` is stil) | `true`/`false` | `true` |
 | `recordMode` | Opnamemodus (werkstand): `overdub` = Aanvullen, `replace` = Overschrijven (zie Live spelen en inspelen) | `overdub` of `replace` | `overdub` |
+| `automation` | Wie de instellingen van het aangesloten apparaat speelt (sinds 1.21.0, hoort bij de song): `sequencer` = exact zoals opgenomen, modulatie op de regelaars met een lijn wordt genegeerd; `modulators` = de lijn is de basisstand en modulatoren sturen erbovenop | `sequencer` of `modulators` | `sequencer` |
+| `recordSettings` | Werkstand (niet in een preset): bij Opname ook het draaien aan het aangesloten apparaat opnemen | `true`/`false` | `true` |
 
 Een preset die een compositie neerzet, zet `mode` op `"song"` zodat het arrangement meteen speelt.
 
@@ -72,6 +74,7 @@ Standaard drumrijen (index 0 … 15, MIDI-nummer, lane): Kick 36 `ch1`, Snare 38
 | `grid` | **Raster van de editor** voor deze clip: `16` = 1/16, `32` = 1/32, `64` = 1/64 | 16, 32 of 64 | 16 |
 | `notes` | Lijst van noten (zie hieronder), hoogstens 4096 | | `[]` |
 | `cc` | Lijst van hoogstens 8 CC-lanes `{id, shape, points}` | | `[]` |
+| `auto` | Lijst van hoogstens 32 instellingenlijnen `{id, points}` (sinds 1.21.0, zie hieronder) | | `[]` |
 
 Elke clip loopt **op zijn eigen lengte** en herhaalt zichzelf. Dus een drumclip van 1 maat en een akkoordclip van 4 maten bij dezelfde scène lopen naast elkaar (het akkoordpatroon van 4 maten loopt, het drumpatroon herhaalt elke maat). Gebruik dat om notenaantallen klein te houden.
 
@@ -91,6 +94,10 @@ Elke clip loopt **op zijn eigen lengte** en herhaalt zichzelf. Dus een drumclip 
 ### Een CC-lane in `clip.cc[k]`
 
 `{id, shape, points}`: `id` is de parameter-id die het aangesloten apparaat begrijpt (bijvoorbeeld `cutoff`), `shape` is `linear` (tussen de punten) of `hold` (trap), `points` is een lijst `{step, value}` met `step` als heel getal van 0 tot `bars × 16 − 1` en `value` van 0 tot 1. CC wordt per zestiende gestuurd (`{type:'cc', id, value, time}`).
+
+### Een instellingenlijn in `clip.auto[k]`
+
+`{id, points}`: `id` is de parameter-id van de regelaar op het aangesloten apparaat (dezelfde als in zijn `params()`, §8, bijvoorbeeld `cut`; tekens `[A-Za-z0-9._-]`, 1 tot 60, uniek binnen de clip). `points` is een lijst `{step, value}`: `step` in zestienden vanaf het begin van de clip, een veelvoud van 0,25 van 0 tot `bars × 16 − 0,25`; `value` van 0 tot 1, het deel van het bereik van de regelaar (logaritmisch bij een logaritmische knop). Hoogstens 1024 punten per lijn, gesorteerd op `step`, één punt per stap (bij dubbele stappen wint de laatste). **Een waarde blijft staan tot het volgende punt (latch)**; vóór het eerste punt doet de lijn niets. Het verschil met een CC-lane: een CC-lane stuurt `cc`-gebeurtenissen naar het apparaat (dat de id zelf moet begrijpen); een instellingenlijn zet via de host (`host.setParam`) de regelaar zelf en werkt met elk apparaat dat die regelaar in `params()` heeft.
 
 ### Het arrangement
 
@@ -120,6 +127,16 @@ Hangt de uitgang `trackN` van een drumspoor aan een apparaat met `noteNames()` (
 - **Opname**: staat `record` aan (checkbox *Live opname* of de knop **● Opname**), loopt de transport en staat `armed` aan, dan schrijft elke inkomende `note`/`noteon`/`trig` een nootobject in de **geselecteerde clip van het geselecteerde spoor**. `vel` is de velocity van de aanslag, `len` de duur (van noteon tot noteoff, of `dur`), op het raster afgerond en minstens één rasterstap. Het raster is dat van de clip (`grid`); `quantize` (standaard aan) zet de noot op het dichtstbijzijnde rasterpunt, uit op 1/64. Sinds 1.14.0 is dat het dichtstbijzijnde **geswingde** rasterpunt (host-swing + clip + spoor + rij, zoals hierboven), zodat een noot niet naar een buurstap springt. Het kwantiseren loopt rond de loop-rand (een noot net voor het eind van de clip komt op stap 0). Een nieuwe noot op dezelfde plek en rij (drums) of hetzelfde nootnummer vervangt de oude. Er wordt niets geschreven bij opname uit, transport stil, sequencer uit, niet-eindige noot/velocity, of een aanslag meer dan een zestiende van een geplande stap. Elke opgenomen noot is een Undo-stap.
 - **Opnamemodus** (`recordMode`, keuze *Opname*): **Aanvullen** (standaard) laat bestaande noten staan. **Overschrijven** wist de noten van de clip één keer, bij de eerste ingespeelde noot van een opnamerun, en vult daarna aan (meerdere rondes). Een run begint opnieuw bij opname aan/uit, een transportwissel, Undo/Redo en `setState`; wisselt de geselecteerde clip, dan wist de eerste noot in de nieuwe clip die clip. Er wordt dus niets gewist zolang je niets speelt, en Undo herstelt de oude clip.
 - **Speel deze clip** (knoppen *▶ Speel deze clip* en *■ Stop clip* in de clip-editor; ook `playClip()`/`stopClip()` op het apparaat): alleen de geselecteerde clip van het geselecteerde spoor loopt, op zijn eigen lengte, los van scènes en song; andere sporen zijn stil en mute/solo gelden dan niet. Hij start op de volgende maatgrens, of meteen op de eerste stap als de klok stilstaat; kies je een andere clip of spoor, dan volgt de weergave dat op de volgende maatgrens. Stop, een scène of clip lanceren, of het wisselen van Afspelen (Clips / scènes, Song) of `setState` zet de gewone weergave terug. Het is een losse werkstand en staat niet in de state. Samen met Opname loopt de opname rond (loop-opname) in de clip die speelt.
+
+## Instellingen opnemen en afspelen (sinds 1.21.0, contract v1.21 §13f)
+
+- **Doel.** De lijnen van een spoor gelden voor de apparaten waar zijn uitgang `trackN` aan hangt (`host.cablesFrom`); de weergave toont de regelaars van het eerste doel (`host.paramsOf`, alleen regelaars die een schuif of draaiknop zijn), `setParam` gaat naar alle doelen.
+- **Afspelen.** Bij elke zestiende zoekt elk spoor (niet gedempt) in zijn lopende clip de punten die in die zestiende vallen en plant ze op hun eigen moment met `host.setParam(self, doel, id, value)` (via `setTimeout`, op de klok van de host berekend). Wat stopt (transport, `setState`) annuleert de geplande wijzigingen. Het werkt voor clip, scène, sessie, song en Speel deze clip, op dezelfde plek als de CC-lanes.
+- **Wie speelt.** Met `automation: 'sequencer'`, de klok lopend, `armed` en niet tijdens het opnemen van instellingen zet het apparaat `host.lockParams` op alle id's die in een clip van dat spoor een lijn met punten hebben (voor alle doelen van het spoor); modulatie op die regelaars wordt dan genegeerd. Met `modulators` komt er geen slot. Het slot vervalt bij stoppen, bij `destroy` en als het doel verdwijnt.
+- **Opnemen (latch).** Met `record`, `recordSettings`, `armed` en een lopende klok volgt het apparaat (`host.watchParams`) de doelen van het gekozen spoor. Een melding wordt op de positie van dat moment (kwartzestiende, `recordPos` met raster 0,25, onafhankelijk van `quantize`) een punt in de gekozen clip van het gekozen spoor. Een gelijke waarde als het vorige punt (verschil onder 0,002) geeft geen nieuw punt. Tijdens het opnemen staat er geen slot, zodat modulatie wordt opgenomen (`by: 'mod'` is de effectieve waarde). Bij `recordMode: 'replace'` wordt een lijn bij haar eerste punt in een opnameronde leeggemaakt. De eerste opgenomen wijziging van een ronde maakt één Undo-stap. Noten, drums, CC-lanes en andere lijnen blijven ongemoeid.
+- **Niets uit zichzelf.** Laden, `setState`, `setPreset` en een song openen zetten geen slot (dat gebeurt pas als de klok loopt) en nemen niets op. `getPreset` bevat `automation` en de lijnen (ze horen bij de compositie), niet `recordSettings`.
+- **Klembord.** `getClip` neemt de lijnen mee in `native`; `setClip` met een eigen clip zet ze terug en laat de lijnen van de clip anders staan, zoals de CC-lanes.
+- **Niet gemeld:** snelle modulatie (contract §9, audiosnelheid) en regelaars zonder schuif of draaiknop (keuzelijsten, vinkjes, knoppen) doen niet mee.
 
 ## Raster en opslag
 
@@ -335,6 +352,7 @@ Elke preset heeft 3 tot 7 sporen met een rol, een toonsoort en akkoordprogressie
 - Alle 58 presets: geldige JSON, unieke Engelse namen, `setPreset`→`getPreset` gelijk, een hele song afgespeeld (alle gebeurtenissen eindig en binnen bereik), import in de host (nl en en).
 - 1.14.0: met alle nieuwe velden op hun standaard gaven oud en nieuw bij 120 willekeurige states (6 maten klok, 1 tot 6 sporen; 73.954 gebeurtenissen) 0 verschillen, en live doorgeven (noot, trig, noteoff, cc) was gelijk. Swing per niveau, kwantiseren naar het geswingde raster (jitter ± 30 ms; bij clip + spoor samen 0,5 liggen buurpunten dichter dan de jitter, daar zijn missers inherent), loop-opname in Speel deze clip met Aanvullen en Overschrijven, 40 klanken van een drumcomputer en de echte host (nl en en, geen paginafouten) zijn getest.
 - 1.17.0: met de drie nieuwe methoden gaven oud (1.14.0) en nieuw bij 60 willekeurige en ongeldige states (klok, preset, ingespeelde noten, ook met een klanklijst aan een drumspoor, in nl en en) exact dezelfde gebeurtenissen en `getState` (0 afwijkingen).
+- 1.21.0: een song zonder lijnen geeft exact dezelfde gebeurtenissen en state als 1.17.0 (58 presets, 12 maten klok, 42.246 gebeurtenissen, 0 verschillen; de nieuwe velden `auto`, `automation` en `recordSettings` niet meegeteld). Getest met een nep-host in Node (opschonen, afspelen, gedempt spoor, stoppen, sloten, opnemen met latch en dunnen, overschrijven, klembord) en in de echte host in Chromium met Basic Mono (nl en en, geen paginafouten): afspelen zet de knop op 0,1 en 0,9 volgens de lijn en opnemen schrijft de lijn voor Resonance met de waarden 0,25 en 0,75 terwijl de noot en de bestaande lijn blijven staan. Modulatie opnemen en het slot zijn alleen op hostniveau getest (Tremolo met een testmodulator), niet met een echte Drift.
 - Niet beluisterd; er is geen echte synth of drumcomputer aan gekoppeld getest, en geen echt MIDI-toetsenbord.
 
 ## Controleren

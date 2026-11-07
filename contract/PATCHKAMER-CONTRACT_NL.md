@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.20 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.21 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -29,6 +29,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.18 | Meters: `host.ui.meter(parent, label, opts)` laat de host het niveau tekenen (balk, ledladder of ronde VU-meter met wijzer; lengte en breedte instelbaar door een skin), uit een of twee `AnalyserNode`s (`source`) of via `set(level)`; een meter staat in het register met rol `meter`; een apparaat zonder `host.ui.meter` op een oude host valt terug op zijn eigen tekening; het attribuut `data-pk-suffix` (tekst na het label bij MIDI-koppelen); de validator kent `host.ui.meter` en toont meters in `--controls` (§12e) |
 | v1.19 | Tags voor tunes en presets: `tags` op een tune, map of pack (paden zoals `instrument/guitar/acoustic` en `style/hiphop`); de host toont ze als boom met inspringen (Tunes en Presets, Per instrument en Per stijl). Alleen de packs veranderen, apparaten niet (§13c) |
 | v1.20 | Samples: samplepacks (`*.patchkamer-samples.json`, geluid als base64) met een eigen tab in de bibliotheek, en voor apparaten die audio laden de optionele methode `loadAudio(files, info)` (§13e) |
+| v1.21 | Instellingen opnemen en afspelen: `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` laten een sequencer de regelaars van een ander apparaat volgen (ook wat een modulator doet), absoluut zetten en tegen modulatie vergrendelen (§13f) |
 
 ---
 
@@ -871,6 +872,44 @@ Een **sample** is een stukje geluid (een drumloop, een stab, een enkele klap) in
 
 ---
 
+## 13f. Instellingen opnemen en afspelen (v1.21)
+
+Voor sequencers en controllers die de instellingen van een ander apparaat opnemen terwijl de gebruiker eraan draait (of een modulator ze beweegt) en ze later precies zo afspelen. Het doelapparaat hoeft hier niets voor te doen: de host leest en zet de regelaars zelf.
+
+**Wat meedoet.** Alleen schuiven en draaiknoppen (`<input type="range">`, ook `host.ui.knob`) met een `id` (§12d) die ook in `params()` staan (§8), dus de regelaars waar ook Drift, LFO en MSEG op werken. Keuzelijsten, vinkjes en knoppen doen niet mee. Een waarde is altijd een getal van 0 tot 1: het deel van het bereik van de regelaar, logaritmisch bij `scale: 'log'`.
+
+| Aanroep | Wat |
+|---|---|
+| `host.watchParams(this, doelId, fn)` | Meldt elke wijziging van een regelaar van het doel aan `fn(paramId, waarde, door)`. `door` is `'user'` (iemand draait of typt), `'seq'` (een andere sequencer zette hem met `setParam`) of `'mod'` (een modulator; `waarde` is dan de effectieve waarde: knopstand plus modulatie, begrensd op 0..1). Eén `fn` per aanroeper per doel; een nieuwe vervangt de oude. `fn` gelijk aan `null` stopt het volgen. Geeft `true` als het doel er is en je het niet zelf bent, anders `false`. |
+| `host.setParam(this, doelId, paramId, waarde)` | Zet de regelaar zichtbaar (hij beweegt op de kaart mee), op `waarde` van 0 tot 1, afgerond op de stap van de regelaar. Geeft `true` als hij gezet is, `false` bij een onbekend doel of id, een regelaar die geen schuif is, een uitgeschakelde regelaar of een waarde die geen getal is. Een waarde buiten 0..1 wordt begrensd. Jijzelf krijgt de wijziging niet terug via `watchParams`; andere volgers krijgen `door: 'seq'`. |
+| `host.lockParams(this, doelId, ids)` | Zolang het slot er is, negeert het doel de modulatie op deze `paramId`'s, ook de snelle (§9: `host.modSignal` geeft dan `false` en de modulator valt terug op `host.modulate`, dat voor deze id's ook genegeerd wordt). `ids` is een lijst; een tweede aanroep vervangt je vorige lijst; `null` of `[]` haalt je slot weg. Geeft `true` als het doel er is en je het niet zelf bent. |
+| `host.paramsOf(this, doelId)` | De parameterlijst van het doel, uit zijn `params()`: `[{ id, name, lane, laneName, min, max, scale, value }]` (hoogstens 256). `value` is de knopstand van 0 tot 1, of `null` als er geen schuif of draaiknop met dit `id` is (die parameter kun je dan niet opnemen of zetten). `[]` bij een onbekend doel, jijzelf of een doel zonder `params()`. Bedoeld voor een weergave met een lijn per regelaar. |
+
+- **Aanroepen komen van jou.** De host roept `fn` aan op de hoofddraad, vaak: een draai geeft veel meldingen per seconde, en een modulator elke keer dat hij stuurt (ongeveer 20 tot 30 keer per seconde per modulator). Dun ze uit voor je ze bewaart.
+- **Snelle sturing** (§9, audio-snelheid) wordt niet gemeld. Alleen wat via `host.modulate` loopt, komt als `'mod'` binnen.
+- **Opruimen.** Verdwijnt het doel of jijzelf, dan stopt het volgen en vervalt je slot. Geef een slot ook zelf vrij als je stopt met afspelen (`lockParams(this, doelId, null)`), anders blijft de modulatie uit.
+- **De gebruiker blijft de baas.** Een regelaar die jij zet, kan de gebruiker gewoon verdraaien; jij ziet dat als `door: 'user'`.
+- **Zachte overgang.** `setParam` springt naar de waarde. Roep het per tik aan (en stuur tussenwaarden voor een glijdende lijn); de host zet de definitieve wijziging 200 ms na de laatste aanroep vast.
+
+Aanbevolen gedrag voor een sequencer die dit gebruikt:
+
+1. **Opnemen als latch.** Een gemelde waarde blijft staan tot de volgende wijziging; leg de lijn per regelaar vast als punten (tijd, waarde) en laat de rest van de opname (noten, drums, akkoorden) ongemoeid.
+2. **Afspelen.** Zet per tik de waarde op de lijn met `setParam`. Een gebruiker die tijdens het afspelen draait, wint tot hij loslaat of de opname het overneemt.
+3. **Wie speelt de instellingen.** Laat de gebruiker per song kiezen: de sequencer speelt ze exact (zet `lockParams` op de regelaars met een lijn) of de modulatoren mogen er bovenop sturen (geen slot, de lijn is de basisstand). Een opname met modulatie erbij legt de effectieve waarde vast (`'mod'`) en past bij de exacte stand.
+4. **Niets uit zichzelf.** Laden, herstellen of een song openen zet geen slot en zet geen regelaar; dat gebeurt pas als de transport loopt.
+
+```js
+// opnemen
+host.watchParams(this, doelId, (id, waarde, door) => { if (opname) punten[id].push({ t: nu(), v: waarde }); });
+// afspelen, exact: modulatie op deze regelaars uit
+host.lockParams(this, doelId, ['cutoff', 'res']);
+host.setParam(this, doelId, 'cutoff', 0.62);
+// stoppen
+host.lockParams(this, doelId, null); host.watchParams(this, doelId, null);
+```
+
+Een apparaat dat alleen doelwit is, doet niets: de dekking van `params()` (§8, v1.16) bepaalt welke regelaars een sequencer kan opnemen.
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -903,6 +942,10 @@ Een **sample** is een stukje geluid (een drumloop, een stab, een enkele klap) in
 | `host.eventBundleChanged(this, poort)` | v1.13 | De sporen van je multi-MIDI-poort zijn veranderd (§11c) |
 | `host.controls(this, doelId)` | v1.13 | De regelaars op de kaart van een ander apparaat (§11c) |
 | `host.setControl(this, doelId, sleutel, waarde)` | v1.13 | Zet een regelaar van een ander apparaat, waarde 0..1 (§11c) |
+| `host.watchParams(this, doelId, fn)` | v1.21 | Wijzigingen van de regelaars van een ander apparaat volgen, ook die van modulatie; `fn(paramId, waarde, door)` (§13f) |
+| `host.setParam(this, doelId, paramId, waarde)` | v1.21 | Zet een regelaar (uit `params()`) van een ander apparaat zichtbaar, waarde 0..1 (§13f) |
+| `host.lockParams(this, doelId, ids)` | v1.21 | Modulatie op deze regelaars van een ander apparaat negeren; `null` haalt het slot weg (§13f) |
+| `host.paramsOf(this, doelId)` | v1.21 | De parameterlijst van een ander apparaat met de knopstand van elke regelaar (§13f) |
 | `host.noteNamesChanged(this)` | v1.14 | Je `noteNames()` is veranderd; andere apparaten horen het via `onPeers` (§13b) |
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Patronen en clips kopiëren en plakken, optioneel en alle drie samen; formaat `patchkamer-clip` (§13d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12e) |
@@ -973,6 +1016,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 16. **Dekking van `params()` (v1.16, §8)**: elke continue regelaar (`<input type="range">`, `host.ui.knob`, `host.ui.adopt`; niet de rollen `step`, `display`, `meter`, `jack`, `pad`, `button`) wordt aan `params()` gekoppeld: eerst via het `id` (opties of `data-pk-id`), dan via de `getState`-sleutel die verandert als de validator de waarde verzet en de `input`/`change`-afhandeling aanroept (genummerde sleutels als `osc.0.fine` tellen mee als ze op meerdere posities voorkomen; stapdata en een enkele gekozen positie niet), dan via een label dat aan precies één parameternaam gelijk is. Alleen een `let op` (nooit een fout) bij: continue regelaars die niet in `params()` en niet in `modExclude` staan; een `instrument`, `effect` of `mixer` (niet de categorieën `sequencer` en `tool`) met continue regelaars maar zonder `params()`; een `params()`-id zonder regelaar of state-sleutel; een `modExclude` dat geen lijst met tekst (of `'*'`) is. Wat de validator niet kan koppelen, laat hij stil (`?` in `--controls`). Regelaars die als `innerHTML` of op een canvas zijn getekend ziet hij niet.
 17. **Klembord (v1.17, §13d)**: `clipInfo`, `getClip` en `setClip` alle drie of geen. `clipInfo()` geeft `null` of een JSON-object (`copy`/`paste` met `notes` en/of `drums`, getallen in `length`), gooit niet en verandert de state niet. `getClip()` geeft `null` of een geldige `patchkamer-clip` als JSON zonder AudioNodes (`format`, `formatVersion` 1, `kind` `notes` of `drums`, `length` 1 tot 12288 gehele tikken, hoogstens 4096 noten of slagen en 64 banen, `t`, `n`, `lane` en `vel` binnen het bereik) en verandert de state niet. `setClip(getClip())` laat `getState()` ongewijzigd. `setClip` krijgt rommel, lege en extreme clips (andere typen, `NaN`, lengte 0 of 1e9, 100000 noten, banen die niet bestaan) en gooit niet; het geeft altijd `{ ok, reason }` (`reason` tekst bij `ok: false`); bij `ok: false` blijft de state gelijk, bij `ok: true` is de state JSON zonder `NaN`/`Infinity` en stabiel onder `setState(getState())`; het stuurt zelf geen gebeurtenissen. Een apparaat dat zijn eigen `getClip()` weigert (`ok: false`) geeft een `let op`. Een apparaat zonder deze methoden krijgt geen melding. `--clip` toont wat `clipInfo()` en `getClip()` teruggeven.
 18. **Meters (v1.18, §12e)**: de nep-host kent `host.ui.meter(parent, label, opts)` en geeft `{ el, set, id, destroy }`. Een `source` die geen `AnalyserNode` of lijst van 1 of 2 `AnalyserNode`s is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel meter-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` zonder `source`, een `set()` met iets anders dan een eindig getal of `[l, r]`, `data-pk-role="meter"` op een eigen element en een `data-pk-suffix` van meer dan 16 tekens. Een meter telt niet mee in de dekking van `params()`. `--controls` toont meters met rol `meter`.
+19. **Instellingen opnemen (v1.21, §13f)**: de nep-host kent `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` en geeft `false` (`[]` bij `paramsOf`); de validator controleert er verder niets van (een sequencer die ze gebruikt, test je in de host).
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1044,7 +1088,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.20
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.21
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1103,7 +1147,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.20
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.21
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -1167,7 +1211,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.20
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.21
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -1245,7 +1289,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.20.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.21.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>

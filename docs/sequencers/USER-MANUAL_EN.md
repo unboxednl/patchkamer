@@ -645,6 +645,19 @@ Clip Arranger works like a session view. For each track (1 to 16) there are 8 **
 
 **05 · Assign devices.** A list of the outputs with the labels of the tracks, as a reminder for what to connect.
 
+#### Recording and playing settings
+
+Under the CC lanes in the clip editor is the section **Settings · record and play**. It shows every control of the device that the track's cable goes to (the first one, if there are several) as a line over the length of the clip. As long as nothing has been recorded, a line is flat and dashed at the current position of the knob.
+
+![The settings of a clip: a line per control](../images/en/sequencers/clip-arranger-settings.png)
+
+- **Record settings while recording** (on by default). With **Record** on and the clock running, every turn of a control on the connected device is written as a point on its line, next to the notes you play. A value stays until the next change, so a knob that goes from 10 to 20 stays at 20. Settings that a modulator moves (Drift, LFO, MSEG) are recorded too, as the value you hear. The notes, drums and chords that are already in the clip are left alone: only the lines you turn change. With **Overdub** the points of a line you turn stay and new ones are added; with **Replace** a line you touch is first cleared, once per recording round.
+- **Who plays the settings** (a choice per song). **Sequencer (exactly as recorded)**: the clip plays its lines and modulators on those controls are ignored while it plays; controls without a line are still modulated. **Modulators (line is the base position)**: the line sets the knob and Drift or another modulator moves on top of it. While you record, the modulators are always active, so that they can be recorded.
+- Playing works per clip, per scene and in the whole song: each point is set at its own moment and the knob moves visibly on the card of the device. The clip does not have to be selected.
+- The **×** at the end of a line clears it. **Undo** brings recorded lines back, like notes.
+- Only sliders and rotary knobs that the device offers to modulators (the ones Drift, LFO and MSEG can steer) take part. Selects, checkboxes and buttons do not. Fast modulation (audio rate) is not recorded.
+- If you turn a knob yourself while its line is playing, the line takes it back at the next point.
+
 #### The ports
 
 | Port | Kind | What to connect |

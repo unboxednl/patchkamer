@@ -11,7 +11,7 @@ function buildRotary(i,label,mn,mx,st,log){
   const arc=(a0,a1,r)=>{ const [x0,y0]=P(a0,r),[x1,y1]=P(a1,r); return `M${x0},${y0} A${r},${r} 0 ${a1-a0>180?1:0} 1 ${x1},${y1}`; };
   const svgE=kn.firstChild; svgE.querySelector('.tr').setAttribute('d',arc(135,405,12.5));
   const paint=v=>{ const f=Math.max(0,Math.min(1,toF(v))), a=135+270*f; svgE.querySelector('.vl').setAttribute('d',f>0.002?arc(135,a,12.5):''); const [x,y]=P(a,7); const pt=svgE.querySelector('.pt'); pt.setAttribute('x2',x); pt.setAttribute('y2',y); kn.setAttribute('aria-valuenow',String(v)); };
-  const fire=v=>{ i.value=v; i.dispatchEvent(new Event('input',{bubbles:true})); if(PK.hapticTick) PK.hapticTick(kn,'turn'); };
+  const fire=v=>{ i.value=v; i.dispatchEvent(new Event('input',{bubbles:true,composed:true})); if(PK.hapticTick) PK.hapticTick(kn,'turn'); };
   return {kn,paint,toF,fromF,fire,bind(){
   i.addEventListener('change',()=>paint(+i.value));
   let dr=null;
