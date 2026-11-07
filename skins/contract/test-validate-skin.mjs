@@ -1,4 +1,4 @@
-// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.4) / test cases for the validator
+// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.5) / test cases for the validator
 // Gebruik / Usage:  node skins/contract/test-validate-skin.mjs      (exit 0 = alles groen / all green)
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
@@ -18,7 +18,7 @@ const SK = s => { const o = base(); return Object.assign(o, s); };
 // --- 0.1 en basis
 ok('0.1-bestand zonder design', SK({ skinsContract: '0.1' }));
 ok('0.2-bestand zonder design', base());
-okWarn('minor 5 is nieuwer', SK({ skinsContract: '0.5' }), ['contract_minor']);
+okWarn('minor 6 is nieuwer', SK({ skinsContract: '0.6' }), ['contract_minor']);
 bad('major 1', SK({ skinsContract: '1.0' }), ['contract_major']);
 okWarn('design in een 0.1-bestand', { ...withDesign({ ports: { mode: 'hover' } }), skinsContract: '0.1' }, ['design_contract']);
 // --- ports
@@ -145,9 +145,62 @@ okWarn('rotary met thumb', ctl({ match: 'cut', face: 'rotary', thumb: 'bar' }), 
 okWarn('rotary met thickness', ctl({ match: 'cut', face: 'rotary', thickness: 4 }), ['controls_slider_only']);
 okWarn('controls in een 0.2-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.2' }, ['controls_contract']);
 okWarn('controls in een 0.1-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.1' }, ['controls_contract', 'design_contract']);
-okWarn('0.5 is nieuwer dan 0.4', SK({ skinsContract: '0.5' }), ['contract_minor']);
+okWarn('0.6 is nieuwer dan 0.5', SK({ skinsContract: '0.6' }), ['contract_minor']);
 ok('0.3 is bekend', SK({ skinsContract: '0.3' }), ['contract_minor']);
 ok('0.4 is bekend', SK({ skinsContract: '0.4' }), ['contract_minor']);
+ok('0.5 is bekend', SK({ skinsContract: '0.5' }), ['contract_minor']);
+// --- sections en size (0.5)
+const sec = (...rules) => ({ ...withDesign({ sections: rules }), skinsContract: '0.5' });
+const secApp = (...rules) => ({ ...withAppDesign({ sections: rules }), skinsContract: '0.5' });
+const siz = size => ({ ...withDesign({ size }), skinsContract: '0.5' });
+ok('sections: alle matchvormen', sec({ match: '*', frame: 'line' }, { match: 'group:setup', columns: 2 }, { match: 'group:a.b_c-1', gap: 'tight' }));
+for (const f of ['none', 'line', 'raised', 'inset', 'floating', 'default']) ok('sections frame ' + f, sec({ match: '*', frame: f }));
+for (const c of ['auto', 1, 3, 12]) ok('sections columns ' + c, sec({ match: '*', columns: c }));
+for (const g of ['tight', 'normal', 'wide']) ok('sections gap ' + g, sec({ match: '*', gap: g }));
+for (const b of [true, false]) ok('sections bare ' + b, sec({ match: '*', bare: b }));
+for (const l of ['default', 'above', 'below']) ok('sections labels ' + l, sec({ match: '*', labels: l }));
+for (const a of ['start', 'center']) ok('sections align ' + a, sec({ match: '*', align: a }));
+ok('sections alle eigenschappen in een regel', sec({ match: 'group:filter', frame: 'raised', columns: 3, gap: 'wide', bare: true, labels: 'below', align: 'center' }));
+ok('sections per verschijning', secApp({ match: '*', frame: 'inset' }));
+ok('sections leeg is geldig', sec());
+ok('sections precies 32 regels', sec(...Array.from({ length: 32 }, (_, i) => ({ match: 'group:g' + i, frame: 'line' }))));
+ok('sections naast controls en meters', { ...base(), skinsContract: '0.5', design: { sections: [{ match: '*', frame: 'line' }], controls: [{ match: '*', size: 's' }], meters: [{ match: '*', face: 'vu' }] } });
+ok('0.4-bestand zonder sections blijft ok', SK({ skinsContract: '0.4' }));
+bad('sections geen lijst', { ...withDesign({ sections: 'line' }), skinsContract: '0.5' }, ['sections_list']);
+bad('sections regel geen object', sec('line'), ['sections_rule']);
+bad('sections match ontbreekt', sec({ frame: 'line' }), ['sections_match']);
+bad('sections match is een id', sec({ match: 'cutoff', frame: 'line' }), ['sections_match']);
+bad('sections match role:', sec({ match: 'role:param', frame: 'line' }), ['sections_match']);
+bad('sections match group: leeg', sec({ match: 'group:', frame: 'line' }), ['sections_match']);
+bad('sections match met spatie', sec({ match: 'group:a b', frame: 'line' }), ['sections_match']);
+bad('sections match geen tekst', sec({ match: 3, frame: 'line' }), ['sections_match']);
+bad('sections frame onbekend', sec({ match: '*', frame: 'double' }), ['design_enum']);
+bad('sections gap onbekend', sec({ match: '*', gap: 'huge' }), ['design_enum']);
+bad('sections labels onbekend', sec({ match: '*', labels: 'left' }), ['design_enum']);
+bad('sections align onbekend', sec({ match: '*', align: 'end' }), ['design_enum']);
+bad('sections columns 0', sec({ match: '*', columns: 0 }), ['sections_columns']);
+bad('sections columns 13', sec({ match: '*', columns: 13 }), ['sections_columns']);
+bad('sections columns niet geheel', sec({ match: '*', columns: 2.5 }), ['sections_columns']);
+bad('sections columns woord', sec({ match: '*', columns: 'many' }), ['sections_columns']);
+bad('sections bare als tekst', sec({ match: '*', bare: 'yes' }), ['sections_bool']);
+bad('sections bare als getal', sec({ match: '*', bare: 1 }), ['sections_bool']);
+bad('sections meer dan 32 regels', sec(...Array.from({ length: 33 }, (_, i) => ({ match: 'group:g' + i, frame: 'line' }))), ['sections_max']);
+okWarn('sections regel met onbekende sleutel', sec({ match: '*', frame: 'line', shadow: 'big' }), ['unknown_field']);
+okWarn('sections regel zonder eigenschap', sec({ match: '*' }), ['sections_empty']);
+okWarn('sections in een 0.4-bestand', { ...sec({ match: '*', frame: 'line' }), skinsContract: '0.4' }, ['sections_contract']);
+okWarn('sections in een 0.1-bestand', { ...sec({ match: '*', frame: 'line' }), skinsContract: '0.1' }, ['sections_contract', 'design_contract']);
+ok('size.width 200', siz({ width: 200 }));
+ok('size.width 1600', siz({ width: 1600 }));
+ok('size.width 380.5', siz({ width: 380.5 }));
+ok('size per verschijning', { ...withAppDesign({ size: { width: 380 } }), skinsContract: '0.5' });
+bad('size.width 199', siz({ width: 199 }), ['size_width']);
+bad('size.width 1601', siz({ width: 1601 }), ['size_width']);
+bad('size.width als tekst', siz({ width: '380' }), ['size_width']);
+bad('size.width negatief', siz({ width: -5 }), ['size_width']);
+bad('size geen object', { ...withDesign({ size: 380 }), skinsContract: '0.5' }, ['design_object']);
+okWarn('size onbekende sleutel', siz({ width: 380, height: 500 }), ['unknown_field']);
+okWarn('size zonder width', siz({}), ['size_empty']);
+okWarn('size in een 0.3-bestand', { ...siz({ width: 380 }), skinsContract: '0.3' }, ['sections_contract']);
 // --- meters (0.4)
 const met = (...rules) => ({ ...withDesign({ meters: rules }), skinsContract: '0.4' });
 const metApp = (...rules) => ({ ...withAppDesign({ meters: rules }), skinsContract: '0.4' });
@@ -234,6 +287,14 @@ dev('device: onbekend meter-id in een verschijning', metApp({ match: 'nope', fac
 dev('device: apparaat zonder meters', met({ match: 'met.master', face: 'vu' }), DEVSRC, ['dev_no_meters']);
 dev('device: apparaat zonder meters, alleen *: wel melding', met({ match: '*', face: 'vu' }), DEVSRC, ['dev_no_meters']);
 dev('device: controls- en meterregels samen', { ...met({ match: 'met.master', face: 'vu' }), design: { meters: [{ match: 'met.master', face: 'vu' }], controls: [{ match: 'cut', size: 's' }] } }, DEVMET, []);
+dev('device: sectie met bekende groep', sec({ match: 'group:filter', frame: 'line' }, { match: '*', columns: 3 }), DEVSRC, []);
+dev('device: sectie met onbekende groep', sec({ match: 'group:osc', frame: 'line' }), DEVSRC, ['dev_unknown_section_group']);
+dev('device: sectie met een meter-groep telt als groep', sec({ match: 'group:meters', frame: 'line' }), DEVMET, []);
+dev('device: sectie, onbekende groep in een verschijning', secApp({ match: 'group:nope', frame: 'line' }), DEVSRC, ['dev_unknown_section_group']);
+dev('device: sectie, alleen *: geen melding', sec({ match: '*', frame: 'line' }), DEVSRC, []);
+dev('device: sectie naast controls en meters', { ...sec({ match: 'group:filter', frame: 'line' }), design: { sections: [{ match: 'group:filter', frame: 'line' }], controls: [{ match: 'cut', size: 's' }] } }, DEVSRC, []);
+cases.push(['device: Duofone, groepen setup/filter/amp/play', { ...sec({ match: 'group:setup', columns: 2 }, { match: 'group:filter', frame: 'raised' }, { match: 'group:amp', frame: 'raised' }, { match: 'group:play', frame: 'none' }), device: 'nl.patchkamer.duofone', id: 'nl.patchkamer.duofone.sample' }, { ok: true, codes: [], no: ['*'], devicePath: join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'devices', 'synths', 'Duofone', 'duofone.patchkamer-device.js') }]);
+cases.push(['device: Duofone, onbekende groep nope', { ...sec({ match: 'group:nope', frame: 'line' }), device: 'nl.patchkamer.duofone', id: 'nl.patchkamer.duofone.sample' }, { ok: true, codes: ['dev_unknown_section_group'], no: [], devicePath: join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'devices', 'synths', 'Duofone', 'duofone.patchkamer-device.js') }]);
 cases.push(['device: pad bestaat niet', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], devicePath: '/nonexistent/x.patchkamer-device.js' }]);
 cases.push(['device: apparaat faalt in de validator', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], device: 'export default {}' }]);
 // --- 0.1-regels blijven
