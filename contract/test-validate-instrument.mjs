@@ -1,4 +1,4 @@
-// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) en het klembord (clipInfo/getClip/setClip, v1.17)
+// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) het klembord (clipInfo/getClip/setClip, v1.17) en meters (host.ui.meter, v1.18)
 // Gebruik / Usage:  node contract/test-validate-instrument.mjs      (exit 0 = alles groen / all green)
 // Elk geval is een klein apparaat dat in een tijdelijke map wordt gezet en in beide talen (--lang nl en --lang en) wordt gevalideerd.
 // "err" = fragmenten (nl, en) die in de foutmelding moeten staan (exit 1, geen OK-regel).
@@ -245,6 +245,40 @@ ok('--clip: toont clipInfo en getClip', clipDev(), { clip: true, has: [['Klembor
 ok('--clip: apparaat zonder klembord', clipDev({ info: '', get: '', set: '' }), { clip: true, has: [['(geen clipInfo/getClip/setClip)', '(no clipInfo/getClip/setClip)']] });
 ok('--clip: getClip null', clipDev({ get: 'getClip() { return null; },' }), { clip: true, has: [['getClip():  (null)', 'getClip():  (null)']] });
 ok('zonder --clip geen klembordtabel', clipDev(), { no: [['Klembord (--clip):', 'Clipboard (--clip):']] });
+
+
+// ---- meters (v1.18): host.ui.meter(parent, label, opts) -> { el, set, id, destroy }
+const AN = 'const an = ctx.createAnalyser();';
+const M = (opts = '{}', pre = '') => `${AN} ${pre} const m = host.ui.meter(el, T.a, ${opts}); if (!m || !m.el || typeof m.set !== 'function' || typeof m.destroy !== 'function') throw new Error('meter-terugwaarde'); `;
+ok('meter met AnalyserNode (source)', dev(M('{ id: "met.master", group: "meters", source: an, range: [-60, 6], clip: 0 }')), { controls: true, has: [['1 meters', '1 meters'], ['met.master | meter | meters', 'met.master | meter | meters'], ['-60..6', '-60..6']] });
+ok('meter met twee AnalyserNodes (stereo)', dev(M('{ id: "met.out", source: [an, ctx.createAnalyser()], kind: "rms", hold: false }')));
+ok('meter zonder source, met set() (level en [l, r])', dev(M('{ id: "met.in", unit: "db", orientation: "horizontal", length: 120, width: 8 }') + 'm.set(0.4); m.set([0.2, 0.3]); m.set(-12);'));
+ok('meter: destroy() twee keer mag', dev(M('{ id: "m1", source: an }') + 'm.destroy(); m.destroy(); m.set(0.1);'));
+ok('meter zonder opties', dev(M('undefined')));
+ok('meter hoort niet in params(): geen dekkingsmelding', dev2({ plist: ['cut'], body: `knob('cut'); ${AN} host.ui.meter(el, 'Level', { id: 'lvl', source: an });` }));
+ok('meter in een shadow root-ouder', dev(`const sr = el.attachShadow({ mode: 'open' }); ${AN} host.ui.meter(sr, T.a, { id: 'sh', source: an });`));
+ok('meters op meer plekken, elk een eigen id (herbouw telt niet dubbel)', dev(`${AN} const build = () => { host.ui.meter(el, 'A', { id: 'a', source: an }); }; build(); setTimeout(build, 0);`));
+ok('data-pk-suffix van 16 tekens mag', dev(`const d = document.createElement('div'); d.setAttribute('data-pk-suffix', '${'x'.repeat(16)}'); el.appendChild(d);`));
+ok('data-pk-suffix korte tekst', dev(`const i = document.createElement('input'); i.type = 'range'; i.min = '0'; i.max = '1'; i.setAttribute('data-pk-id', 'trim'); i.setAttribute('data-pk-suffix', 'T3'); el.appendChild(i);`));
+warns('meter: dubbel meter-id', dev(`${AN} host.ui.meter(el, 'A', { id: 'dup', source: an }); host.ui.meter(el, 'B', { id: 'dup', source: an });`), [['id "dup" staat bij meer dan één regelaar', 'id "dup" is used by more than one control']]);
+warns('meter: ongeldig id', dev(M('{ id: "no good!" }')), [['id "no good!"', 'id "no good!"']]);
+warns('meter: ongeldige groep', dev(M('{ id: "a", group: "x y" }')), [['groep "x y"', 'group "x y"']]);
+warns('meter: opties geen object', dev(M('"nee"')), [['de opties van host.ui.meter moeten een object zijn', 'the host.ui.meter options must be an object']]);
+warns('meter: range ongeldig (min >= max)', dev(M('{ id: "a", range: [0, -60] }')), [['meter-optie range is ongeldig', 'meter option range is invalid']]);
+warns('meter: unit onbekend', dev(M('{ id: "a", unit: "volt" }')), [['meter-optie unit is ongeldig', 'meter option unit is invalid']]);
+warns('meter: orientation onbekend', dev(M('{ id: "a", orientation: "diagonal" }')), [['meter-optie orientation is ongeldig', 'meter option orientation is invalid']]);
+warns('meter: length negatief', dev(M('{ id: "a", length: -4 }')), [['meter-optie length is ongeldig', 'meter option length is invalid']]);
+warns('meter: hold geen boolean', dev(M('{ id: "a", hold: "ja" }')), [['meter-optie hold is ongeldig', 'meter option hold is invalid']]);
+warns('meter: kind rms zonder source', dev(M('{ id: "a", kind: "rms" }')), [["kind 'rms' werkt alleen met source", "kind 'rms' only works with source"]]);
+warns('meter: set() met rommel', dev(M('{ id: "a" }') + 'm.set(NaN); m.set("x");'), [['set() verwacht een eindig getal', 'set() expects a finite number']]);
+warns('meter: data-pk-role="meter" op een eigen element', dev(`const d = document.createElement('div'); d.setAttribute('data-pk-id', 'mine'); d.setAttribute('data-pk-role', 'meter'); el.appendChild(d);`), [['data-pk-role="meter" op een eigen element wordt niet ondersteund', 'data-pk-role="meter" on your own element is not supported']]);
+warns('meter: adopt met rol meter op een div', dev(`const d = document.createElement('div'); el.appendChild(d); host.ui.adopt(d, { id: 'mine', role: 'meter' });`), [['wordt niet ondersteund', 'is not supported']]);
+warns('data-pk-suffix te lang (17 tekens)', dev(`const d = document.createElement('div'); d.setAttribute('data-pk-suffix', '${'x'.repeat(17)}'); el.appendChild(d);`), [['data-pk-suffix hoort tekst van hoogstens 16 tekens te zijn', 'data-pk-suffix must be text of at most 16 characters']]);
+warns('meter naast knoppen met id, meter zonder id', dev(`${K('id: "rate"')} ${AN} host.ui.meter(el, 'Level', { source: an });`), [['regelaar(s) zonder id terwijl andere er wel een hebben', 'control(s) without an id while others have one']]);
+errs('meter: source is geen AnalyserNode (een GainNode)', dev(M('{ id: "a", source: ctx.createGain() }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
+errs('meter: source is een getal', dev(M('{ id: "a", source: 5 }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
+errs('meter: source is een lijst van drie', dev(M('{ id: "a", source: [an, an, an] }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
+errs('meter: source is een lege lijst', dev(M('{ id: "a", source: [] }')), [['source moet een AnalyserNode zijn', 'source must be an AnalyserNode']]);
 
 let fail = 0, n = 0;
 let idx = 0;
