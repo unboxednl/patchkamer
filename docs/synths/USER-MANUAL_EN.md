@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 32 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 33 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
@@ -10,7 +10,7 @@ Synths are the devices that make sound from notes. This page covers the 32 synth
 2. [Which synth for which goal](#which-synth-for-which-goal)
 3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
-5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
+5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
 6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
@@ -49,6 +49,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | Film-score sounds: braams, big pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strings and string sections | [Bowed Ensemble](#bowed-ensemble) |
 | Trumpet, trombone, horn and brass sections, stabs and swells | [Brass Section](#brass-section) |
+| Flute, clarinet, oboe, bassoon, saxophone, recorder and pan flute | [Woodwinds](#woodwinds) |
 | Acoustic pianos (grand, upright, honky-tonk), tine and reed electric pianos, clavichord | [Piano](#piano) |
 | Guitars: steel-string, nylon, clean and overdriven electric, palm-muted, 12-string and bass guitar | [Guitar](#guitar) |
 | Electric pianos, organs, vibraphone | [Stage Keys](#stage-keys) |
@@ -716,6 +717,40 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 - A note without a length and without a note-off keeps sounding until the transport stops or a panic arrives: make a sequencer send note lengths.
 - **Attack**, **Release**, **Scoop**, **Section detune**, **Entry spread** and **Players** are read when a note starts, so a change affects the next note.
 - Trombone and horn sounds use **Transpose** −12; or play lower notes.
+
+### Woodwinds
+
+**What it is for.** The woodwind family with its own engine: **flute**, **clarinet**, **oboe**, **bassoon**, **alto** and **tenor saxophone**, **recorder** and **pan flute**, chosen with the **Type** list. Every voice is a harmonic series with an exact pitch whose strength per overtone follows a model of the instrument: a slope that opens with the breath pressure, the odd-only series of a cylinder (clarinet, pan flute) or the full series of a cone (oboe, bassoon, saxophone), formant peaks of the body (a strong one for the oboe, a dark one for the bassoon) and a lowpass. The breath noise passes through a comb tuned to the note, as if the tube let the air sound along, and every note starts with a tongue or lip chiff. The vibrato starts after a delay and also moves the breath pressure; notes that overlap on a melodic line play **legato** with a pitch glide; **Overblow** jumps to the second register; **Bite** and **Growl** give reed and saxophone their raw side. Every note starts one to three **players** (16 voices in total). It is a source-filter model and not a physical simulation of the tube. It has no sequencer and no reverb: add an effect behind it.
+
+![The Woodwinds card](../images/en/synths/woodwinds.png)
+
+**Controls.**
+
+- **Type** (Flute, Clarinet, Oboe, Bassoon, Alto saxophone, Tenor saxophone, Recorder, Pan flute) and **Sound** (list of starting sounds: Concert Flute, Clarinet, Oboe, Bassoon, Alto Sax, Tenor Sax, Recorder, Pan Flute, Woodwind Section; it shows **Custom sound** once you change a control).
+- **Tone & formant:** **Brightness**, **Formant** (how much of the body resonance of the type you hear), **Reed & jet** (reed stiffness for the reed types, jet strength for the flutes), **Bite** (extra high overtones and a soft saturation), **Growl** (a slow rough modulation, flutter-tongue on a flute) and **Overblow** (jumps to the second register: an octave up, a twelfth for the clarinet and pan flute).
+- **Breath & attack:** **Breath pressure** (louder, brighter and more air), **Breath** (air noise), **Tongue chiff** (the burst at the start of a note), **Attack**, **Release** and **Touch response**.
+- **Vibrato & legato:** **Vibrato**, **Vibrato rate**, **Vibrato delay** (how long before the vibrato starts), **Legato glide**, **Human drift** (slow random wander of pitch and level) and the **Legato** list (On or Off).
+- **Section & level:** **Players** (1 to 3 per note), **Section detune**, **Stereo width**, **Tuning**, **Transpose**, **Expression** (for swells) and **Output**. **Test note**, **Test chord** and **All off**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Keyboard / notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer; a sequencer must send the note length, and notes that should play legato must overlap (a length longer than the step). A bend message (`cc` with id `bend` or `pitchbend`, value 0 to 1 with 0.5 in the middle) bends two semitones up or down. |
+| **Mod** | modulation in (purple) | A modulator can move every control except **Players** and **Transpose**; the **Type**, **Sound** and **Legato** lists do not move. |
+| **Stereo woodwinds** | audio out (teal, stereo) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Woodwinds** and **Speakers**. Choose the tune **Sax › Smooth Alto** and play a melody in which the notes overlap: they glide into each other. Choose **Flute › Overblown Flute** for a breathy octave jump, or **Section › Clarinet Trio** and play chords for three players per note.
+
+**Tunes.** Pack **Woodwinds**: 42 tunes in 12 folders (Flute, Clarinet, Oboe, Bassoon, Sax, Recorder, Pan Flute, Section, Ballad, Jazz, Folk, Ambient), file [`woodwinds.patchkamer-tunes.json`](../../tunes/woodwinds.patchkamer-tunes.json). A few names: **Concert Flute**, **Chalumeau**, **Nasal Oboe**, **Growl Tenor**, **Andean Pan Flute**, **Sax Section**, **Late Night Sax**, **Breath Pad**. The tunes are checked for range and behaviour, not listened to.
+
+**Tips and limits.**
+
+- 16 voices: with 3 players there is room for 5 notes at once; a new note takes over the quietest fading voice or else the oldest one.
+- A note without a length and without a note-off keeps sounding until the transport stops or a panic arrives: make a sequencer send note lengths.
+- **Attack**, **Release**, **Legato glide**, **Vibrato delay**, **Section detune** and **Players** are read when a note starts, so a change affects the next note. **Type** also applies to new notes.
+- Legato only works on a single line: notes that arrive together (a chord) never glide into each other, and the players per note must be the same as for the previous note.
+- Tenor and bass-register sounds (bassoon, bass clarinet, contra bassoon) use **Transpose** −12 or −24, or play lower notes.
 
 ## Keys and strings
 

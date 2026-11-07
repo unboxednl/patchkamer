@@ -4,11 +4,11 @@
 
 Kant-en-klare klanken voor apparaten die geluid maken (synths, samplers en drumapparaten), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, gebruik hem in een song of in een eigen bibliotheek. Apparaten zonder eigen geluid hebben [presets](../presets/README_NL.md).
 
-Deze map heeft **41 packs met 2465 tunes**, één pack per apparaat: 32 voor synths (2100 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
+Deze map heeft **42 packs met 2507 tunes**, één pack per apparaat: 33 voor synths (2142 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
-### Synths (32)
+### Synths (33)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
 |---|---|---|---|---|
@@ -44,6 +44,7 @@ Deze map heeft **41 packs met 2465 tunes**, één pack per apparaat: 32 voor syn
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10 | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12 | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) |
+| [Woodwinds](../devices/synths/Woodwinds/) | Woodwinds | 42 | 12 | [`woodwinds.patchkamer-tunes.json`](woodwinds.patchkamer-tunes.json) |
 
 ### Samplers (3)
 
