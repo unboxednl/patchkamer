@@ -11,7 +11,7 @@ Nodig: Python 3, `pip install playwright` en `playwright install chromium`.
 Het script zet zelf een webserver op de repo, bouwt een demobibliotheek van alleen de gecommitte
 apparaten (git ls-files) en start de host in een headless Chromium. Alleen localhost wordt toegelaten.
 """
-import os, re, shutil, subprocess, sys, tempfile, threading, functools, http.server
+import os, re, json, shutil, subprocess, sys, tempfile, threading, functools, http.server
 from playwright.sync_api import sync_playwright
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -127,6 +127,16 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg = newpage(nopicker=True); load_lib(pg); lib_tab(pg, 'skins')   # de skin-editor, geopend vanaf de tab Skins met Duofone
     pg.evaluate("(()=>{ const s=[...document.querySelectorAll('#skPanel select')].find(x=>[...x.options].some(o=>o.value==='nl.patchkamer.duofone')); s.value='nl.patchkamer.duofone'; s.dispatchEvent(new Event('change',{bubbles:true})); })()")
     pg.click('#skPanel [data-act=skEdOpen]'); pg.wait_for_timeout(2000); pg.screenshot(path=OUT + '/13-skin-editor.png'); done(pg)
+    # skins uit skins/library op een echt apparaat: panelen, pads, schermpje en meters (14-17), daarna twee apparaten zonder skin (18-19)
+    for dev, skinf, name in (('Duofone', 'nl.patchkamer.duofone/example-panels', '14-skin-panels'), ('Drum Machine', 'nl.patchkamer.drummachine/example-round-pads', '15-skin-pads'),
+                             ('Drum Machine', 'nl.patchkamer.drummachine/example-preset-screen', '16-skin-display'), ('Mixer', 'nl.patchkamer.mixer/example-vu', '17-skin-meters')):
+        pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
+        sf = os.path.join(ROOT, 'skins', 'library', skinf + '.patchkamer-skin.json'); sid = json.load(open(sf))['id']
+        menu_click(pg, '#skBtn'); pg.set_input_files('#skFile', sf); pg.wait_for_timeout(800); pg.is_visible('#skClose') and pg.click('#skClose'); pg.wait_for_timeout(300)
+        pg.select_option('.sksel', sid); pg.wait_for_timeout(1200); pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
+    for dev, name in (('Chord Buddy', '18-chord-buddy'), ('Balance EQ', '19-balance-eq')):
+        pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
+        pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 
 if __name__ == '__main__':
