@@ -26,15 +26,17 @@ const VERREL='unboxednl/patchkamer';
 const okVer=v=>typeof v==='string'&&/^\d+\.\d+\.\d+$/.test(v);
 function cmpVer(a,b){ const x=a.split('.').map(Number), y=b.split('.').map(Number); for(let i=0;i<3;i++){ const d=x[i]-y[i]; if(d) return d>0?1:-1; } return 0; }
 async function initVersion(){
-  const panel=PK.$('setPanel'), inner=panel&&panel.firstElementChild; if(!inner||PK.$('pkVersion')) return;
+  const panel=PK.$('setPanel'), inner=panel&&panel.querySelector(':scope > div'); if(!inner||PK.$('pkVersion')) return;
   const box=document.createElement('div'); box.id='pkVersion';
   const h=document.createElement('h3'); h.style.marginTop='12px'; h.textContent=PK.pkt('m.ver_titel');
-  const row=()=>{ const d=document.createElement('div'); d.className='wsrow'; return d; };
+  const row=()=>{ const d=document.createElement('div'); d.className='note'; return d; }; /* same look as the lines under Contract & setup */
   const rHost=row(), rApp=row(), rNew=row(), rLog=row();
   const link=(href,txt)=>{ const a=document.createElement('a'); a.href=href; a.target='_blank'; a.rel='noopener'; a.textContent=txt; return a; };
   rLog.append(link(`https://github.com/${VERREL}/blob/main/${PK.PK_LANG==='nl'?'CHANGELOG_NL.md':'CHANGELOG.md'}`,PK.pkt('m.ver_changelog')));
   rHost.textContent=PK.pkt('m.ver_host','…'); const nat=window.pkNative&&window.pkNative.app;
-  box.append(h,rHost); if(nat) box.append(rApp,rNew); box.append(rLog); inner.append(box);
+  box.append(h,rHost); if(nat) box.append(rApp,rNew); box.append(rLog);
+  const after=PK.$('wipeBtn'), anchor=after&&after.parentElement&&after.parentElement.nextElementSibling; /* between Browser storage and Contract & setup */
+  if(anchor&&anchor.parentElement) anchor.parentElement.insertBefore(box,anchor); else inner.append(box);
   let hv='–'; try{ const r=await fetch('version.json',{cache:'no-cache'}); if(r.ok){ const j=await r.json(); if(okVer(j.version)) hv=j.version; } }catch(e){}
   rHost.textContent=PK.pkt('m.ver_host',hv);
   if(!nat) return;
