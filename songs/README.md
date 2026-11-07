@@ -14,6 +14,17 @@ Three small songs that show the file format, each built with a different sequenc
 | [example-ambient.patchkamer-song.json](example-ambient.patchkamer-song.json) | ambient, 70 BPM | Clip Arranger | intro, main, break, outro (40 bars) |
 | [example-hip-hop.patchkamer-song.json](example-hip-hop.patchkamer-song.json) | hip-hop, 90 BPM | Pattern Tracker | intro, verse, hook, outro (44 bars) |
 
+## Hip-hop
+
+In the folder [hip-hop](hip-hop/), four songs in different sub-styles, each with a Pattern Tracker for the structure. They have been checked on paper and with measurements (levels, no clipping, every channel makes sound) but **not listened to**.
+
+| File | Style | Structure |
+|---|---|---|
+| [boom-bap](hip-hop/boom-bap.patchkamer-song.json) | boom bap, 90 BPM, C minor | intro, verse, hook, verse, hook, outro (40 bars) |
+| [trap](hip-hop/trap.patchkamer-song.json) | trap, half-time at 140 BPM, F minor | intro, verse, pre, drop, verse, pre, drop, outro (44 bars) |
+| [lo-fi](hip-hop/lo-fi.patchkamer-song.json) | lo-fi, 75 BPM, D minor | intro, A, B, break, A, outro (36 bars) |
+| [g-funk](hip-hop/g-funk.patchkamer-song.json) | G-funk, 95 BPM, G minor | intro, hook, verse, hook, break, hook, outro (44 bars) |
+
 To compose your own song as an AI agent, start at [AGENTS.md](AGENTS.md) (in Dutch).
 
 ## License

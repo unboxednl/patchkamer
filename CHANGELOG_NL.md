@@ -14,6 +14,7 @@ Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versi
 - **ASIO voor de app**: audio kan rechtstreeks naar een ASIO-driver voor lagere latency. Knop **ASIO** linksonder, standaard uit. Kies driver, buffer, uitgangspaar, sample rate en marge; de knop toont de geschatte vertraging. Getest met een audio-interface op ongeveer 17 ms.
 - **Versienummer** onder Instellingen: de versie van Patchkamer, en in de app ook die van de app en de nieuwste uitgave op GitHub, met een downloadlink. Een link naar deze changelog.
 - **Klanken vinden op instrument of stijl.** De tabs Tunes en Presets krijgen **Per instrument** en **Per stijl**: een boom met inspringen (Gitaren → Nylon, Piano's, Koper, …; Hiphop, Jungle, Techno, …) met zoeken en een knop **Laden** die de tune op een kaart zet. De meegeleverde tune- en presetpacks zijn getagd. Nieuw in het contract (v1.19): optionele `tags` op tunes, presets, mappen en packs.
+- **Hiphop-songs en een mappenboom in de tab Songs.** Vier hiphop-songs in verschillende substijlen (boom bap, trap, lo-fi, G-funk) in `songs/hip-hop`, op papier en met metingen gecontroleerd maar niet beluisterd. De tab Songs toont demo-songs in submappen onder een eigen kop met inspringen.
 
 ### Opgelost
 - MIDI verbindt nu in de app.

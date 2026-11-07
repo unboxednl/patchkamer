@@ -14,6 +14,7 @@ All notable changes to Patchkamer (the host and the desktop app) per version. Th
 - **ASIO for the app**: audio can go straight to an ASIO driver for lower latency. Button **ASIO** at the bottom left, off by default. Choose driver, buffer, output pair, sample rate and margin; the button shows the estimated delay. Tested with an audio interface at about 17 ms.
 - **Version number** under Settings: the version of Patchkamer, and in the app also the version of the app and the latest release on GitHub, with a download link. A link to this changelog.
 - **Find sounds by instrument or style.** The Tunes and Presets tabs get **By instrument** and **By style**: an indented tree (Guitars → Nylon, Pianos, Brass, …; Hip-hop, Jungle, Techno, …) with search and a **Load** button that puts the tune on a card. The bundled tune and preset packs are tagged. New in the contract (v1.19): optional `tags` on tunes, presets, folders and packs.
+- **Hip-hop songs and a folder tree in the Songs tab.** Four hip-hop songs in different sub-styles (boom bap, trap, lo-fi, G-funk) in `songs/hip-hop`, checked on paper and by measurement but not listened to. The Songs tab groups demo songs in subfolders under an indented heading.
 
 ### Fixed
 - MIDI now connects in the app.
