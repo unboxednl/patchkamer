@@ -32,7 +32,7 @@ Alle zes bewerkende apparaten meten wat er in en uit gaat: volume (LUFS-I, LUFS-
 
 | Ik wil… | Gebruik |
 |---|---|
-| De toon in balans brengen met vijf banden | [Balance EQ](#balance-eq) |
+| De toon in balans brengen met vijf tot twaalf banden | [Balance EQ](#balance-eq) |
 | Laag, midden en hoog apart beheersen | [Multiband Balance](#multiband-balance) |
 | De mix aan elkaar lijmen | [Bus Compressor](#bus-compressor) |
 | Warmte en kleur toevoegen | [Patina](#patina) |
@@ -103,7 +103,7 @@ Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal
 
 ### Waar het voor dient
 
-Een equalizer met vijf banden: een low shelf, drie bells en een high shelf. Band 2 en 4 kunnen dynamisch werken, zodat ze alleen snijden als het geluid in dat bereik hard wordt. Een analyse van acht seconden stelt een kleine, voorzichtige correctie voor.
+Een equalizer met vijf tot twaalf banden: een low shelf (band 1), bells en een high shelf (band 5); extra banden (6 tot 12) zijn bells. De standaard is vijf banden. Je ziet de instellingen als verticale schuiven in drie secties: **Frequentie**, **Gain** en **Q**, met per band het getal boven de schuif en het bandnummer eronder. Band 2 en 4 kunnen dynamisch werken, zodat ze alleen snijden als het geluid in dat bereik hard wordt. Een analyse van acht seconden stelt een kleine, voorzichtige correctie voor.
 
 ![De kaart van Balance EQ](../images/nl/mastering/balance-eq.png)
 
@@ -113,24 +113,16 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 | Regelaar | Wat hij doet | Bereik (start) |
 |---|---|---|
-| **Band 1 frequentie** | Middenfrequentie van band 1 (een kantelfrequentie bij de shelves). | 25 tot 16000 Hz (90) |
-| **Band 1 gain** | Versterking of demping van band 1. | -12 tot 12 dB (0) |
-| **Band 1 Q** | Breedte van band 1 (hoger is smaller). | 0,3 tot 8 (0,707) |
-| **Band 2 frequentie** | Middenfrequentie van band 2 (een kantelfrequentie bij de shelves). | 25 tot 16000 Hz (330) |
-| **Band 2 gain** | Versterking of demping van band 2. | -12 tot 12 dB (0) |
-| **Band 2 Q** | Breedte van band 2 (hoger is smaller). | 0,3 tot 8 (1) |
-| **Band 3 frequentie** | Middenfrequentie van band 3 (een kantelfrequentie bij de shelves). | 25 tot 16000 Hz (1000) |
-| **Band 3 gain** | Versterking of demping van band 3. | -12 tot 12 dB (0) |
-| **Band 3 Q** | Breedte van band 3 (hoger is smaller). | 0,3 tot 8 (0,8) |
-| **Band 4 frequentie** | Middenfrequentie van band 4 (een kantelfrequentie bij de shelves). | 25 tot 16000 Hz (3300) |
-| **Band 4 gain** | Versterking of demping van band 4. | -12 tot 12 dB (0) |
-| **Band 4 Q** | Breedte van band 4 (hoger is smaller). | 0,3 tot 8 (1) |
-| **Band 5 frequentie** | Middenfrequentie van band 5 (een kantelfrequentie bij de shelves). | 25 tot 16000 Hz (9500) |
-| **Band 5 gain** | Versterking of demping van band 5. | -12 tot 12 dB (0) |
-| **Band 5 Q** | Breedte van band 5 (hoger is smaller). | 0,3 tot 8 (0,707) |
+| **Banden** | Het aantal actieve banden. Extra banden staan op hun standaard; verwijder je banden, dan keren die terug naar de standaard. Dit aantal hoort bij een preset. | 5 tot 12 (5) |
+| **Indeling** | Hoe de drie secties staan: **Automatisch** (naast elkaar als er ruimte is, anders onder elkaar), **Naast elkaar** of **Onder elkaar**. Hoort niet bij een preset. | **Automatisch** / **Naast elkaar** / **Onder elkaar** (Automatisch) |
+| **Frequentie** (band 1 tot 12) | Middenfrequentie van de band (een kantelfrequentie bij de shelves). Logaritmische schuif. | 20 tot 20000 Hz (90, 330, 1000, 3300, 9500; band 6 tot 12: 120, 450, 1500, 2600, 5000, 7500, 14000) |
+| **Gain** (band 1 tot 12) | Versterking of demping van de band. Stap 0,1 dB. | -18 tot 18 dB (0) |
+| **Q** (band 1 tot 12) | Breedte van de band (hoger is smaller). Logaritmische schuif. | 0,1 tot 20 (0,707 / 1 / 0,8 / 1 / 0,707; band 6 tot 12: 1) |
 | **Dynamische banden** | Laat band 2 en 4 alleen werken als het geluid in dat bereik hard wordt. | aan of uit (uit) |
 | **Dynamische threshold** | Niveau waarboven een dynamische band snijdt. | -60 tot -6 dB (-30) |
 | **Maximale dynamische cut** | Het meeste dat een dynamische band mag snijden. | 0 tot 9 dB (3) |
+
+Fijn afstellen: de pijltjestoetsen geven een kleine stap (0,1 dB; ongeveer 1 procent bij frequentie en Q), **Shift** of **Page omhoog/omlaag** een grote stap (1 dB; een derde octaaf; ongeveer 50 procent bij Q). **Home** en **End** gaan naar het minimum en maximum. Klik op het getal boven een schuif om een waarde te typen, dubbelklik op een schuif voor de beginwaarde. Klik op een **bandnummer** onder een schuif om die instelling te vergrendelen: **Volg** en de Master Director laten haar dan staan. De analysevoorstellen (**Volg**, **Pas voorstel toe**) gelden voor band 1 tot 5; extra banden worden nooit automatisch aangepast. Bij een schuifbeweging worden frequentie en Q op drie cijfers afgerond.
 
 ### Poorten
 

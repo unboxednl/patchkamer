@@ -6,7 +6,7 @@ Devices to finish a mix: tone, dynamics, saturation, width, loudness and checkin
 
 | Device | What it does | Folder | Manual |
 |---|---|---|---|
-| **Balance EQ** | Five-band parametric equalizer with dynamic bands and analysis suggestions | [`BalanceEQ/`](BalanceEQ/) | [Balance EQ](../../docs/mastering/USER-MANUAL_EN.md#balance-eq) |
+| **Balance EQ** | Five-to-twelve-band parametric equalizer with dynamic bands and analysis suggestions | [`BalanceEQ/`](BalanceEQ/) | [Balance EQ](../../docs/mastering/USER-MANUAL_EN.md#balance-eq) |
 | **Multiband Balance** | Three-band multiband compressor or broad dynamic EQ | [`MultibandBalance/`](MultibandBalance/) | [Multiband Balance](../../docs/mastering/USER-MANUAL_EN.md#multiband-balance) |
 | **Bus Compressor** | Stereo-linked bus compressor with parallel mix and sidechain | [`BusCompressor/`](BusCompressor/) | [Bus Compressor](../../docs/mastering/USER-MANUAL_EN.md#bus-compressor) |
 | **Patina** | Subtle harmonic saturation: tape, tube or neutral | [`Patina/`](Patina/) | [Patina](../../docs/mastering/USER-MANUAL_EN.md#patina) |
