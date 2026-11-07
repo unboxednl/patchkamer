@@ -13,7 +13,11 @@ function devIconUrl(def,rec){
   const d=devDirOf(def); if(d){ const u=PK.DEVICON.get(def._src.sid+'|'+d); if(iconOk(u)) return u; }
   for(const [k,u] of PK.SKICON) if(k.slice(k.indexOf('|')+1)===def.id&&iconOk(u)) return u;
   return null; } PK.devIconUrl=devIconUrl;
-function devIconParts(def,rec){ const u=devIconUrl(def,rec); return u?{img:true,html:'<img src="'+PK.esc(u)+'" alt="" decoding="async" draggable="false">'}:PK.catIconParts(PK.categoryOf(def)); } PK.devIconParts=devIconParts;
+// een SVG-icoon dat currentColor gebruikt heeft in een <img> geen kleur (wordt zwart): dan tonen we het als masker in de kleur van de categorie
+function svgMono(u){ if(!/^data:image\/svg\+xml/i.test(u)) return false; try{ const i=u.indexOf(','); const t=/;base64/i.test(u.slice(0,i))?atob(u.slice(i+1)):decodeURIComponent(u.slice(i+1)); return /currentColor/i.test(t); }catch(e){ return false; } }
+function devIconParts(def,rec){ const u=devIconUrl(def,rec);
+  if(u&&svgMono(u)) return {img:true,mono:true,html:'<span class="mono" style="--mask:url(&quot;'+PK.esc(u)+'&quot;);background:'+PK.esc(PK.catColor(PK.categoryOf(def)))+'"></span>'};
+  return u?{img:true,html:'<img src="'+PK.esc(u)+'" alt="" decoding="async" draggable="false">'}:PK.catIconParts(PK.categoryOf(def)); } PK.devIconParts=devIconParts;
 function devIconHTML(def,rec,cls){ const m=devIconParts(def,rec); return '<span class="cicon'+(m.img?' img':'')+(cls?' '+cls:'')+'" data-ik="'+PK.esc(PK.categoryOf(def))+'" aria-hidden="true">'+m.html+'</span>'; } PK.devIconHTML=devIconHTML;
 // icon.* in de apparaatmappen van één bron (zoals loadDirIcons voor categorieen); find(prefix,naam) geeft een Blob/File of null. Niet voor URL-bronnen: daar zou elk apparaat vier verzoeken kosten.
 async function loadDevIcons(src,find){
