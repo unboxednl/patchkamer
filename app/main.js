@@ -54,6 +54,7 @@ function handler(req, res) {
   let p;
   try { p = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { return send(res, 400, 'bad request'); }
   if (p === '/' || p === '/patchkamer.html') return sendHost(res);
+  if (p === '/version.json') return sendFile(res, path.join(hostDir, 'version.json'));
   if (p === '/__app/asio.js') return sendFile(res, path.join(__dirname, 'app-asio.js'));
   { const parts = p.split('/').filter(Boolean);
     if (parts.length >= 2 && HOST_FOLDERS.has(parts[0]) && /\.(m?js|css|json|png|svg|woff2?|ico)$/i.test(p)) {
@@ -109,6 +110,7 @@ function openAsio(cfg) {
 let appOrigin = '';
 const trusted = e => !!(e.senderFrame && appOrigin && e.senderFrame.url.startsWith(appOrigin + '/'));
 let audioPort = null, portMsgs = 0, portBad = 0, portType = '';
+ipcMain.on('app:info', e => { e.returnValue = trusted(e) ? { version: app.getVersion(), packaged: app.isPackaged } : null; });
 ipcMain.on('asio:open', e => { e.returnValue = trusted(e) ? openAsio(readCfg()) : { ok: false, reason: 'untrusted' }; });
 ipcMain.handle('asio:list', e => (trusted(e) && nativeAudio ? nativeAudio.list() : []));
 ipcMain.handle('asio:getConfig', e => (trusted(e) ? { cfg: readCfg(), info: asioInfo, built: !!(nativeAudio && nativeAudio.asioAvailable()) } : null));
@@ -166,6 +168,7 @@ app.whenReady().then(async () => {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true, backgroundThrottling: false },
   });
   locked(win, origin);
+  win.setTitle('Patchkamer ' + app.getVersion()); win.on('page-title-updated', e => e.preventDefault());
   if (PROBE) {
     win.webContents.on('console-message', (e, level, msg) => {
       const text = typeof msg === 'string' ? msg : (e && e.message) || '';

@@ -10,6 +10,7 @@
   "scripts": {
     "start": "electron .",
     "probe": "electron . --probe",
+    "predist": "node sync-version.js",
     "dist": "electron-builder --win portable --x64",
     "build:native": "node-gyp rebuild",
     "test:native": "g++ -O2 -std=c++17 -Wall native/test/ring_test.cpp -o native/test/ring_test && native/test/ring_test",
@@ -44,6 +45,7 @@
         "to": "patchkamer",
         "filter": [
           "patchkamer.html",
+          "version.json",
           "js/**",
           "css/**",
           "i18n/**",

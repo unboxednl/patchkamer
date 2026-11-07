@@ -7,7 +7,11 @@ const { contextBridge, ipcRenderer } = require('electron');
 let info = { ok: false, reason: 'unavailable' };
 try { info = ipcRenderer.sendSync('asio:open') || info; } catch (e) {}
 
+let appInfo = null;
+try { appInfo = ipcRenderer.sendSync('app:info'); } catch (e) {}
+
 contextBridge.exposeInMainWorld('pkNative', {
+  app: appInfo,
   asio: {
     info,
     list: () => ipcRenderer.invoke('asio:list'),
