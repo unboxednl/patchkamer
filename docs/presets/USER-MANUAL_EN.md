@@ -149,6 +149,7 @@ This repository has 41 packs with **1902 presets** in total, one per device: 12 
 |---|---|---|---|---|
 | [Audio Output](../../devices/mixer/AudioOutput/) | Audio Output Basics | 16 | Main Out (5), Headphones (4), Interface Pairs (4), Checks (3) | [`audio-output.patchkamer-presets.json`](../../presets/audio-output.patchkamer-presets.json) |
 | [Audio Input](../../devices/mixer/AudioInput/) | Audio Input Basics | 31 | Line Level (7), Voice (6), Instruments (6), Interface Channels (8), Utility (4) | [`audio-input.patchkamer-presets.json`](../../presets/audio-input.patchkamer-presets.json) |
+| [Audio Capture](../../devices/mixer/AudioCapture/) | Audio Capture Basics | 12 | Stereo (5), Mono (3), Cleanup (4) | [`audio-capture.patchkamer-presets.json`](../../presets/audio-capture.patchkamer-presets.json) |
 | [Leveler](../../devices/mixer/Leveler/) | Leveler Basics | 11 | Sources (6), Mix (4), Utility (1) | [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) |
 
 ### Modulators (6)

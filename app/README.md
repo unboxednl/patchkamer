@@ -31,7 +31,7 @@ Prints the base and output latency that this Chromium reports per `latencyHint` 
 ## Notes
 
 - The page is served from `http://127.0.0.1:47318` (fixed port, so settings and workspaces stay in one place). If that port is taken, a random port is used and settings are stored under that address.
-- Only MIDI (no sysex), audio input and fullscreen are allowed as permissions. Links to other sites open in the default browser.
+- Only MIDI (no sysex), audio input, screen sharing for the Audio Capture device and fullscreen are allowed as permissions. Audio Capture shares the first screen (the picture is never used); on Windows it brings in the sound of the whole system, on other systems the app shares no sound. Links to other sites open in the default browser.
 
 ## ASIO (in progress)
 

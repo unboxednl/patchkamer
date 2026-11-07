@@ -11,11 +11,12 @@ Apparaten die geluiden samenbrengen en naar buiten sturen. Ze maken zelf geen ge
 | **Speakers** | De uitgang van de studio: volume, een limiter en een niveaumeter | [`Speakers/`](Speakers/) | [Speakers](../../docs/mixer/USER-MANUAL_NL.md#speakers) |
 | **Audio Output** | Stuurt het geluid naar een uitgang die je kiest, zoals een audio-interface of koptelefoon: volume, mono, begrenzer, meters, kanaalpaar | [`AudioOutput/`](AudioOutput/) | [Audio Output](../../docs/mixer/USER-MANUAL_NL.md#audio-output) |
 | **Audio Input** | Haalt geluid van een ingang van de computer of een audio-interface naar binnen: kanaalkeuze, mono of stereo, versterking, hoogdoorlaat, meters | [`AudioInput/`](AudioInput/) | [Audio Input](../../docs/mixer/USER-MANUAL_NL.md#audio-input) |
+| **Audio Capture** | Haalt het geluid van een ander browsertabblad, een venster of (op Windows) het systeem naar binnen, om te samplen of op te nemen: weergave, versterking, hoogdoorlaat, meters | [`AudioCapture/`](AudioCapture/) | [Audio Capture](../../docs/mixer/USER-MANUAL_NL.md#audio-capture) |
 
 ## Meer
 
 - [Gebruikershandleiding voor de mixerapparaten](../../docs/mixer/USER-MANUAL_NL.md): hoe je ze aansluit, elke regelaar, voorbeelden.
-- Presets: [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) (11 presets) en [`audio-input.patchkamer-presets.json`](../../presets/audio-input.patchkamer-presets.json) (31 presets), [`audio-output.patchkamer-presets.json`](../../presets/audio-output.patchkamer-presets.json) (16 presets). Mixer en Speakers hebben geen presetpack. Zie ook de [map presets](../../presets/).
+- Presets: [`leveler.patchkamer-presets.json`](../../presets/leveler.patchkamer-presets.json) (11 presets) en [`audio-input.patchkamer-presets.json`](../../presets/audio-input.patchkamer-presets.json) (31 presets), [`audio-capture.patchkamer-presets.json`](../../presets/audio-capture.patchkamer-presets.json) (12 presets), [`audio-output.patchkamer-presets.json`](../../presets/audio-output.patchkamer-presets.json) (16 presets). Mixer en Speakers hebben geen presetpack. Zie ook de [map presets](../../presets/).
 - De basis van Patchkamer: de [basishandleiding](../../docs/USER-MANUAL_NL.md).
 
 ## Licentie

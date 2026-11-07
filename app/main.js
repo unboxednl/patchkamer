@@ -2,7 +2,7 @@
 // Patchkamer desktop app: the host in its own window. The page is served from a local server on 127.0.0.1
 // (a fixed port, so settings and workspaces stay in the same place), with the bundled library under /bibliotheek/.
 'use strict';
-const { app, BrowserWindow, session, shell, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, session, shell, Menu, ipcMain, desktopCapturer } = require('electron');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -158,9 +158,22 @@ app.whenReady().then(async () => {
   const { port, fixed } = await listen();
   const origin = 'http://127.0.0.1:' + port; appOrigin = origin;
   // Only what the host needs: MIDI, audio input, fullscreen. The rest is refused. (Electron asks for 'midiSysex' on every MIDI request, even when the page passes sysex:false, so refusing it would block MIDI altogether.)
-  const ok = new Set(['midi', 'midiSysex', 'media', 'fullscreen', 'clipboard-sanitized-write', 'audioCapture']);
+  const ok = new Set(['midi', 'midiSysex', 'media', 'fullscreen', 'clipboard-sanitized-write', 'audioCapture', 'display-capture']);
   session.defaultSession.setPermissionRequestHandler((wc, perm, cb, details) => cb(ok.has(perm)));
   session.defaultSession.setPermissionCheckHandler((wc, perm) => ok.has(perm));
+  // Audio Capture asks the page for screen sharing to get sound (getDisplayMedia). Only our own page may ask. There is no picker: the first screen
+  // is shared (the picture is never used) and, on Windows only (Electron 33), the sound of the whole system as loopback. Elsewhere there is no sound
+  // to share and the device says so.
+  session.defaultSession.setDisplayMediaRequestHandler(async (request, callback) => {
+    try {
+      if (!request.securityOrigin || !request.securityOrigin.startsWith(origin)) { callback({}); return; }
+      const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 0, height: 0 } });
+      if (!sources.length) { callback({}); return; }
+      const grant = { video: sources[0] };
+      if (process.platform === 'win32' && request.audioRequested) grant.audio = 'loopback';
+      callback(grant);
+    } catch (err) { callback({}); }
+  });
   Menu.setApplicationMenu(null);
   const win = new BrowserWindow({
     width: 1440, height: 900, minWidth: 900, minHeight: 600, title: 'Patchkamer', show: !PROBE, backgroundColor: '#14161a',

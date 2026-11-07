@@ -1,0 +1,158 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.audiocapture",
+  "name": "Audio Capture Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Level and mode settings for Audio Capture: stereo or mono, gain steps and a high-pass against rumble. The source and the Mute button are not part of a preset.",
+  "tree": [
+    {
+      "folder": "Stereo",
+      "items": [
+        {
+          "name": "Stereo Flat",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": false
+          }
+        },
+        {
+          "name": "Stereo Boost 6 dB",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": 6,
+            "hp": 0,
+            "invert": false
+          }
+        },
+        {
+          "name": "Stereo Boost 12 dB",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": 12,
+            "hp": 0,
+            "invert": false
+          }
+        },
+        {
+          "name": "Stereo Trim 6 dB",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": -6,
+            "hp": 0,
+            "invert": false
+          }
+        },
+        {
+          "name": "Stereo Trim 12 dB",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": -12,
+            "hp": 0,
+            "invert": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Mono",
+      "items": [
+        {
+          "name": "Mono Sum Flat",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "gain": 0,
+            "hp": 0,
+            "invert": false
+          }
+        },
+        {
+          "name": "Mono Sum Boost 6 dB",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "gain": 6,
+            "hp": 0,
+            "invert": false
+          }
+        },
+        {
+          "name": "Mono Sum Trim 6 dB",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "gain": -6,
+            "hp": 0,
+            "invert": false
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Cleanup",
+      "items": [
+        {
+          "name": "Rumble Cut 40 Hz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": 0,
+            "hp": 40,
+            "invert": false
+          }
+        },
+        {
+          "name": "Rumble Cut 80 Hz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": 0,
+            "hp": 80,
+            "invert": false
+          }
+        },
+        {
+          "name": "Mono Rumble Cut 80 Hz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "mono",
+            "gain": 0,
+            "hp": 80,
+            "invert": false
+          }
+        },
+        {
+          "name": "Polarity Flip",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "stereo",
+            "gain": 0,
+            "hp": 0,
+            "invert": true
+          }
+        }
+      ]
+    }
+  ]
+}

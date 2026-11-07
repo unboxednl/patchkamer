@@ -45,6 +45,7 @@ Deze map heeft **41 packs met 1902 presets**, één pack per apparaat: 12 voor e
 |---|---|---|---|---|
 | [Audio Output](../devices/mixer/AudioOutput/) | Audio Output Basics | 16 | 4 | [`audio-output.patchkamer-presets.json`](audio-output.patchkamer-presets.json) |
 | [Audio Input](../devices/mixer/AudioInput/) | Audio Input Basics | 31 | 5 | [`audio-input.patchkamer-presets.json`](audio-input.patchkamer-presets.json) |
+| [Audio Capture](../devices/mixer/AudioCapture/) | Audio Capture Basics | 12 | 3 | [`audio-capture.patchkamer-presets.json`](audio-capture.patchkamer-presets.json) |
 | [Leveler](../devices/mixer/Leveler/) | Leveler Basics | 11 | 3 | [`leveler.patchkamer-presets.json`](leveler.patchkamer-presets.json) |
 
 ### Modulatoren (6)
