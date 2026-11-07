@@ -1,7 +1,7 @@
-// validate-skin.mjs — Patchkamer skins contract v0.4
+// validate-skin.mjs — Patchkamer skins contract v0.5
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
-//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, tegen het register van het apparaat; onbekend = let op)
+//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, 0.5: groepen in design.sections, tegen het register van het apparaat; onbekend = let op)
 // Usage:    same; --dir validates every *.patchkamer-skin.json and icon.* in a library folder (skins/library or one device folder).
 // Controleert een skin (zie SKINS-CONTRACT_NL.md / _EN.md) en eindigt met één OK-regel per bestand (exit 0)
 // of met alle gevonden fouten (exit 1). Waarschuwingen ("let op" / "warning") staan achter de OK-regel en geven exit 0.
@@ -36,7 +36,7 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.4; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.4; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.5; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.5; unknown fields are ignored'],
   controls_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
   controls_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
   controls_rule: ['{0} moet een object zijn', '{0} must be an object'],
@@ -74,6 +74,19 @@ const M = {
   dev_no_meters: ['het apparaat meldt geen meters aan (geen host.ui.meter); regels in design.meters doen niets', 'the device registers no meters (no host.ui.meter); rules in design.meters do nothing'],
   dev_unknown_meter: ['{0}.match: meter-id "{1}" staat niet in het register van het apparaat; de host negeert de regel', '{0}.match: meter id "{1}" is not in the device\'s register; the host ignores the rule'],
   dev_unknown_meter_group: ['{0}.match: groep "{1}" heeft geen meter in het register van het apparaat', '{0}.match: group "{1}" has no meter in the device\'s register'],
+  sections_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
+  sections_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
+  sections_rule: ['{0} moet een object zijn', '{0} must be an object'],
+  sections_match: ['{0}.match moet "*" of "group:<groep>" zijn (de groepsnaam 1 tot 60 tekens uit [A-Za-z0-9._-]); een id of "role:" bestaat hier niet, want een sectie is een groep', '{0}.match must be "*" or "group:<group>" (group name 1 to 60 characters from [A-Za-z0-9._-]); an id or "role:" does not exist here, a section is a group'],
+  sections_columns: ['{0} moet "auto" of een geheel getal van {1} tot {2} zijn', '{0} must be "auto" or a whole number from {1} to {2}'],
+  sections_bool: ['{0} moet true of false zijn', '{0} must be true or false'],
+  sections_empty: ['{0} heeft naast match geen enkele eigenschap; de regel doet niets', '{0} has no property besides match; the rule does nothing'],
+  sections_contract: ['design.sections en design.size horen bij skinsContract 0.5; een host met 0.4 of lager negeert ze', 'design.sections and design.size belong to skinsContract 0.5; a host on 0.4 or lower ignores them'],
+  size_width: ['{0} moet een getal van {1} tot {2} zijn (pixels)', '{0} must be a number from {1} to {2} (pixels)'],
+  size_empty: ['{0} heeft geen width; het doet niets', '{0} has no width; it does nothing'],
+  dev_unknown_section_group: ['{0}.match: groep "{1}" staat niet in het register van het apparaat; de host negeert de regel', '{0}.match: group "{1}" is not in the device\'s register; the host ignores the rule'],
+  ok_sections: ['{0} sectieregels', '{0} section rules'],
+  ok_size: ['verschijningsmaat', 'appearance size'],
   ok_meters: ['{0} meterregels', '{0} meter rules'],
   design_object: ['{0} moet een object zijn', '{0} must be an object'],
   design_enum: ['{0} moet een van {1} zijn', '{0} must be one of {1}'],
@@ -176,9 +189,12 @@ const COLOUR_KEYS = ['bg', 'surface', 'text', 'muted', 'accent', 'line'], HAPTIC
 const CTL_ROLES = ['param', 'fader', 'toggle', 'button', 'pad', 'step', 'display', 'select', 'meter', 'jack'];
 const CTL_FACE = ['rotary', 'hslider', 'vslider', 'default'], CTL_SIZE = ['xs', 's', 'm', 'l', 'xl'], CTL_LENGTH = ['short', 'medium', 'long'], CTL_THUMB = ['round', 'square', 'bar', 'none'], CTL_SHOW = ['always', 'hover', 'never'], CTL_MAX = 64;
 const MET_FACE = ['bar', 'ledladder', 'vu', 'default'], MET_ORI = ['auto', 'vertical', 'horizontal'], MET_LEN = ['short', 'medium', 'long'], MET_BAL = ['default', 'fast', 'vu', 'slow'], MET_ONOFF = ['on', 'off', 'default'], MET_CLIP = ['show', 'hide', 'default'], MET_SCALE = ['show', 'hide'];
+const SEC_FRAME = ['none', 'line', 'raised', 'inset', 'floating', 'default'], SEC_GAP = ['tight', 'normal', 'wide'], SEC_LABELS = ['default', 'above', 'below'], SEC_ALIGN = ['start', 'center'];
+const SEC_KEYS = ['match', 'frame', 'columns', 'gap', 'bare', 'labels', 'align'];
 const MET_KEYS = ['match', 'face', 'orientation', 'length', 'width', 'ballistics', 'peakHold', 'clip', 'scale', 'color', 'segments'];
+const SEC_MAX = 32;
 const CTL_KEYS = ['match', 'face', 'size', 'length', 'thickness', 'thumb', 'color', 'showValue'];
-const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'] };
+const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'], size: ['width'] };
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const normColour = v => { if (typeof v !== 'string') return null; const m = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec(v); if (!m) return null; let h = m[1].toLowerCase(); if (h.length === 3) h = [...h].map(c => c + c).join(''); return '#' + h; };
 const lum = hex => { const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
@@ -236,10 +252,31 @@ function checkMeters(list, path, E, W, C) {
     if (r.segments !== undefined && r.face !== undefined && r.face !== 'ledladder' && r.face !== 'default') W('meters_segments_face', P);
     if (matchOk && C) C.push({ p: P, match: m, face: r.face, kind: 'meters' }); });
 }
+// design.sections (0.5): geordende lijst regels, de laatste passende regel wint per eigenschap. Streng: fouten bij verkeerde waarden.
+function checkSections(list, path, E, W, C) {
+  if (!Array.isArray(list)) { E('sections_list', path); return; }
+  if (list.length > SEC_MAX) E('sections_max', path, list.length, SEC_MAX);
+  list.slice(0, SEC_MAX).forEach((r, i) => { const P = `${path}[${i}]`;
+    if (!isObj(r)) { E('sections_rule', P); return; }
+    for (const k of Object.keys(r)) if (!SEC_KEYS.includes(k)) W('unknown_field', `${P}.${k}`);
+    const enm = (k, list2) => { if (r[k] === undefined) return false; if (list2.includes(r[k])) return true; E('design_enum', `${P}.${k}`, list2.map(x => '"' + x + '"').join(', ')); return false; };
+    const m = r.match; let matchOk = false;
+    if (typeof m !== 'string' || !/^(\*|group:[A-Za-z0-9._-]{1,60})$/.test(m)) E('sections_match', P); else matchOk = true;
+    let n = 0;
+    if (enm('frame', SEC_FRAME)) n++;
+    if (r.columns !== undefined) { if (r.columns === 'auto' || (Number.isInteger(r.columns) && r.columns >= 1 && r.columns <= 12)) n++; else E('sections_columns', `${P}.columns`, 1, 12); }
+    if (enm('gap', SEC_GAP)) n++;
+    if (r.bare !== undefined) { if (typeof r.bare === 'boolean') n++; else E('sections_bool', `${P}.bare`); }
+    if (enm('labels', SEC_LABELS)) n++;
+    if (enm('align', SEC_ALIGN)) n++;
+    if (matchOk && n === 0 && !SEC_KEYS.slice(1).some(k => r[k] !== undefined)) W('sections_empty', P);
+    if (matchOk && C) C.push({ p: P, match: m, kind: 'sections' }); });
+}
 function checkDesignShape(d, path, E, W, C) {
   const out = {};
   if (!isObj(d)) { E('design_object', path); return out; }
-  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls' && k !== 'meters') W('unknown_field', `${path}.${k}`);
+  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls' && k !== 'meters' && k !== 'sections') W('unknown_field', `${path}.${k}`);
+  if (d.sections !== undefined) { out.sections = Array.isArray(d.sections) ? d.sections.slice(0, SEC_MAX).filter(isObj) : []; checkSections(d.sections, `${path}.sections`, E, W, C); }
   if (d.meters !== undefined) { out.meters = Array.isArray(d.meters) ? d.meters.slice(0, CTL_MAX).filter(isObj) : []; checkMeters(d.meters, `${path}.meters`, E, W, C); }
   if (d.controls !== undefined) { out.controls = Array.isArray(d.controls) ? d.controls.slice(0, CTL_MAX).filter(isObj) : []; checkControls(d.controls, `${path}.controls`, E, W, C); }
   for (const sec of Object.keys(KNOWN_DESIGN)) { if (d[sec] === undefined) continue; const sp = `${path}.${sec}`;
@@ -247,7 +284,8 @@ function checkDesignShape(d, path, E, W, C) {
     for (const k of Object.keys(d[sec])) if (!KNOWN_DESIGN[sec].includes(k)) W('unknown_field', `${sp}.${k}`);
     const o = out[sec] = {}, src = d[sec];
     const en = (k, list) => { if (src[k] === undefined) return; if (list.includes(src[k])) o[k] = src[k]; else E('design_enum', `${sp}.${k}`, list.map(x => '"' + x + '"').join(', ')); };
-    if (sec === 'ports') en('mode', PORT_MODES);
+    if (sec === 'size') { if (src.width !== undefined) { if (typeof src.width === 'number' && Number.isFinite(src.width) && src.width >= 200 && src.width <= 1600) o.width = src.width; else E('size_width', `${sp}.width`, 200, 1600); } else if (!Object.keys(src).length) W('size_empty', sp); }
+    else if (sec === 'ports') en('mode', PORT_MODES);
     else if (sec === 'haptics') HAPTIC_KEYS.forEach(k => en(k, HAPTIC_LEVELS));
     else if (sec === 'knobs') { en('style', KNOB_STYLES); en('size', KNOB_SIZES); }
     else { en('scheme', COLOUR_SCHEMES);
@@ -257,7 +295,7 @@ function checkDesignShape(d, path, E, W, C) {
   }
   return out;
 }
-const mergeDesign = (a, b) => { const r = {}; if (a?.meters?.length || b?.meters?.length) r.meters = [...(a?.meters || []), ...(b?.meters || [])]; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
+const mergeDesign = (a, b) => { const r = {}; if (a?.sections?.length || b?.sections?.length) r.sections = [...(a?.sections || []), ...(b?.sections || [])]; if (a?.meters?.length || b?.meters?.length) r.meters = [...(a?.meters || []), ...(b?.meters || [])]; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
 const isInt = v => Number.isInteger(v);
 const isStr = v => typeof v === 'string';
 function dataInfo(s) { // { type, base64, body } of null
@@ -300,7 +338,8 @@ function checkAgainstDevice(s, rules, dev, W) {
   const CL = dev.list.filter(c => c.role !== 'meter' && c.type !== 'meter'), ML = dev.list.filter(c => c.role === 'meter' || c.type === 'meter');
   const ids = new Set(CL.filter(c => c.id).map(c => c.id)), groups = new Set(CL.filter(c => c.group).map(c => c.group)), roles = new Set(CL.map(c => c.role));
   const mids = new Set(ML.filter(c => c.id).map(c => c.id)), mgroups = new Set(ML.filter(c => c.group).map(c => c.group));
-  const cr = rules.filter(r => r.kind !== 'meters'), mr = rules.filter(r => r.kind === 'meters');
+  const cr = rules.filter(r => r.kind !== 'meters' && r.kind !== 'sections'), mr = rules.filter(r => r.kind === 'meters'), sr = rules.filter(r => r.kind === 'sections');
+  const allGroups = new Set(dev.list.filter(c => c.group).map(c => c.group));
   if (!ids.size && !groups.size && cr.some(r => !r.match.startsWith('role:') && r.match !== '*')) W('dev_no_ids');
   if (!ML.length && mr.length) W('dev_no_meters');
   const seen = new Set();
@@ -309,6 +348,7 @@ function checkAgainstDevice(s, rules, dev, W) {
     if (m.startsWith('role:')) { if (CTL_ROLES.includes(m.slice(5)) && !roles.has(m.slice(5))) W('dev_unknown_role', r.p, m.slice(5)); }
     else if (m.startsWith('group:')) { if ((ids.size || groups.size) && !groups.has(m.slice(6))) W('dev_unknown_group', r.p, m.slice(6)); }
     else if ((ids.size || groups.size) && !ids.has(m)) W('dev_unknown_id', r.p, m); }
+  if (dev.list.length) for (const r of sr) { const m = r.match; if (m === '*') continue; if (!allGroups.has(m.slice(6))) W('dev_unknown_section_group', r.p, m.slice(6)); }
   if (ML.length) for (const r of mr) { const m = r.match; if (m === '*') continue;
     if (m.startsWith('group:')) { if (!mgroups.has(m.slice(6))) W('dev_unknown_meter_group', r.p, m.slice(6)); }
     else if (!mids.has(m)) W('dev_unknown_meter', r.p, m); }
@@ -329,7 +369,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 4) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 5) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -416,6 +456,9 @@ function validateSkin(path, ctx = {}) {
   if (nCtl && /^0\.[012]$/.test(String(s.skinsContract))) W('controls_contract');
   const nMet = (skinDesign?.meters?.length || 0) + appDesigns.reduce((a, x) => a + (x?.meters?.length || 0), 0);
   if (nMet && /^0\.[0123]$/.test(String(s.skinsContract))) W('meters_contract');
+  const nSec = (skinDesign?.sections?.length || 0) + appDesigns.reduce((a, x) => a + (x?.sections?.length || 0), 0);
+  const hasSize = !!(skinDesign?.size && Object.keys(skinDesign.size).length) || appDesigns.some(x => x?.size && Object.keys(x.size).length);
+  if ((nSec || hasSize) && /^0\.[01234]$/.test(String(s.skinsContract))) W('sections_contract');
   if (ctx.device && CR.length) checkAgainstDevice(s, CR, ctx.device, W);
   const seenMsg = new Set();
   const once = (k, ...a) => { const t = vt(k, ...a); if (!seenMsg.has(t)) { seenMsg.add(t); warns.push([k, t]); } };
@@ -444,7 +487,7 @@ function validateSkin(path, ctx = {}) {
   else if (!ctx.skipDirWarn) W('dir_elsewhere');
   const n = (apps || []).length;
   const info = [vt('ok_dev', s.device), vt(n === 1 ? 'ok_app' : 'ok_apps', n), vt('ok_css', cssTotal), vt('ok_assets', nAssets)];
-  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); info.push(vt('ok_file', size));
+  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); if (nSec) info.push(vt('ok_sections', nSec)); if (hasSize) info.push(vt('ok_size')); info.push(vt('ok_file', size));
   return { errs, warns, line: `${isStr(s.name) ? s.name : '?'} ${isStr(s.version) ? s.version : '?'} (${isStr(s.id) ? s.id : '?'}) — ${info.join(', ')}`, id: s.id, device: s.device };
 }
 

@@ -1,14 +1,14 @@
 {
   "format": "patchkamer-skin",
   "formatVersion": 1,
-  "skinsContract": "0.4",
+  "skinsContract": "0.5",
   "id": "nl.patchkamer.duofone.example-back-panel",
   "device": "nl.patchkamer.duofone",
   "name": "Example back panel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Shows the design options of layers 1 and 2: the ports sit as dots in the title bar, a custom dark colour scheme, and two appearances that really differ: compact (small rotary knobs) and full (horizontal sliders).",
+  "description": "Dark scheme with the ports as dots in the title bar and two appearances that really differ: a small Compact card with framed 3-column sections of rotary knobs, and a wide Full card with raised sections and sliders.",
   "created": "2026-11-06",
   "icon": null,
   "default": "full",
@@ -32,18 +32,35 @@
     {
       "id": "compact",
       "name": "Compact",
-      "description": "Small rotary knobs for narrow cards.",
+      "description": "A small card (380 px when picked by hand): small rotary knobs in framed sections of 3 columns, tight and without frames of their own, with the value above and the name below each knob.",
       "when": {
         "maxWidth": 420
       },
       "css": ":host{--x-acc:#4fd1b8}",
       "assets": {},
       "design": {
+        "size": {
+          "width": 380
+        },
         "controls": [
           {
             "match": "role:param",
             "face": "rotary",
             "size": "s"
+          }
+        ],
+        "sections": [
+          {
+            "match": "*",
+            "frame": "line",
+            "columns": 3,
+            "gap": "tight",
+            "bare": true,
+            "labels": "below"
+          },
+          {
+            "match": "group:setup",
+            "columns": 2
           }
         ]
       }
@@ -51,7 +68,7 @@
     {
       "id": "full",
       "name": "Full",
-      "description": "Horizontal sliders and a warmer accent for wide cards.",
+      "description": "A wide card (920 px when picked by hand): raised sections that fill the width, horizontal sliders and a warmer accent.",
       "when": {
         "minWidth": 421
       },
@@ -69,6 +86,22 @@
             "face": "hslider",
             "length": "long",
             "thumb": "bar"
+          }
+        ],
+        "size": {
+          "width": 920
+        },
+        "sections": [
+          {
+            "match": "*",
+            "frame": "raised",
+            "columns": "auto",
+            "gap": "normal",
+            "bare": false
+          },
+          {
+            "match": "group:setup",
+            "columns": 4
           }
         ]
       }
