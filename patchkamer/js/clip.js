@@ -12,6 +12,9 @@ const CLIP_SYN={kick:['kick','bassdrum','bd','bass','kickdrum'],snare:['snare','
   closedhat:['closedhat','hhclosed','closedhihat','hihatclosed','ch','hat','hh','hihat'],openhat:['openhat','hhopen','openhihat','hihatopen','oh'],
   rim:['rim','rimshot','sidestick','rimclick'],lowtom:['lowtom','tomlow','lotom'],midtom:['midtom','tommid','tom'],hightom:['hightom','hitom','tomhigh','tomhi'],
   crash:['crash','crashcymbal'],ride:['ride','ridecymbal'],shaker:['shaker'],tamb:['tamb','tambourine'],cowbell:['cowbell','cow'],conga:['conga'],bongo:['bongo']};
+// Pattern Tracker en Pattern Playlist zijn dezelfde code in twee weergaven met dezelfde native-opmaak: dat zijn zusters
+const CLIP_SISTERS={'nl.patchkamer.patterntracker':'tracker','nl.patchkamer.patternplaylist':'tracker'};
+function clipSameDev(a,b){ return typeof a==='string'&&typeof b==='string'&&(a===b||(!!CLIP_SISTERS[a]&&CLIP_SISTERS[a]===CLIP_SISTERS[b])); }
 const CLIP_SYNMAP=(()=>{ const m={}; for(const g in CLIP_SYN) CLIP_SYN[g].forEach(s=>{ m[s]=g; }); return m; })();
 
 const clipNum=(v,lo,hi,d)=>typeof v==='number'&&isFinite(v)?Math.min(hi,Math.max(lo,v)):d;
@@ -65,7 +68,7 @@ function clipFromText(text){
 // ---- aanpassen aan het doel: {clip,report,count} of {err:'kind'|'none'|'nolanes'|'nomatch', ...} ----
 function clipFit(c,inf,ctx){
   ctx=ctx||{};
-  const rep={cut:0,shortened:0,tiled:0,padded:0,moved:0,merged:0,folded:0,dropped:[],lanesUnplaced:[]};
+  const rep={lenIgn:'',extra:[],cut:0,shortened:0,tiled:0,padded:0,moved:0,merged:0,folded:0,dropped:[],lanesUnplaced:[]};
   if(!inf||typeof inf!=='object') return {err:'none'};
   const paste=Array.isArray(inf.paste)?inf.paste:[];
   if(!paste.includes(c.kind)) return {err:'kind',kind:c.kind,paste};
@@ -74,7 +77,7 @@ function clipFit(c,inf,ctx){
   const origLen=c.length;
   let S=c.length, ev=(c.kind==='notes'?c.notes:c.hits).map(e=>({...e}));
   let outLanes=null;
-  const same=ctx.devId&&c.native&&c.native.device===ctx.devId;
+  const same=!!(ctx.devId&&c.native&&clipSameDev(c.native.device,ctx.devId));   // native alleen bij hetzelfde apparaat (of de zusterweergave, zie clipSameDev)
   // drums: banen van de bron naar de banen van het doel (type, naam, nootnummer; nooit op volgorde, behalve hetzelfde apparaat)
   if(c.kind==='drums'){
     const tl=Array.isArray(inf.lanes)?inf.lanes.slice(0,CLIP_MAXLANES):[]; if(!tl.length) return {err:'nolanes'};
@@ -85,10 +88,11 @@ function clipFit(c,inf,ctx){
       if(ls.some(x=>m%x!==0)) dropAdd('poly',1);
       const out=[]; ev.forEach(e=>{ const ll=ls[e.lane]; for(let t=e.t;t<m;t+=ll) out.push({...e,t}); }); ev=out; S=m; }
     const map=new Array(c.lanes.length).fill(-1), used=new Set(), pass=(fn)=>{ c.lanes.forEach((sl,i)=>{ if(map[i]>=0) return; const j=tl.findIndex((tg,j)=>!used.has(j)&&fn(sl,tg)); if(j>=0){ map[i]=j; used.add(j); } }); };
-    if(same) c.lanes.forEach((sl,i)=>{ if(i<tl.length){ map[i]=i; used.add(i); } });
-    pass((s,t)=>{ const a=clipCanon(s.type), b=clipCanon(t.type); return !!a&&a===b; });
-    pass((s,t)=>{ const a=clipCanon(s.name)||clipCanon(s.type), b=clipCanon(t.name)||clipCanon(t.type); return !!a&&(a===b||a===clipCanon(t.name)||clipCanon(s.name)===clipCanon(t.type)); });
-    if(c.source&&c.source.scheme==='gm'&&inf.scheme==='gm') pass((s,t)=>s.note>=0&&typeof t.note==='number'&&s.note===t.note);
+    if(same||ctx.byOrder) c.lanes.forEach((sl,i)=>{ if(i<tl.length){ map[i]=i; used.add(i); } });   // zelfde apparaat of "uitlijnen op volgorde": op positie
+    if(!ctx.byOrder){
+      pass((s,t)=>{ const a=clipCanon(s.type), b=clipCanon(t.type); return !!a&&a===b; });
+      pass((s,t)=>{ const a=clipCanon(s.name)||clipCanon(s.type), b=clipCanon(t.name)||clipCanon(t.type); return !!a&&(a===b||a===clipCanon(t.name)||clipCanon(s.name)===clipCanon(t.type)); });
+      if(c.source&&c.source.scheme==='gm'&&inf.scheme==='gm') pass((s,t)=>s.note>=0&&typeof t.note==='number'&&s.note===t.note); }
     const hasHits=new Set(ev.map(e=>e.lane)); let placed=0;
     c.lanes.forEach((sl,i)=>{ if(map[i]<0&&hasHits.has(i)) rep.lanesUnplaced.push(sl.name||sl.type||sl.id); });
     ev=ev.filter(e=>map[e.lane]>=0).map(e=>{ placed++; return {...e,lane:map[e.lane]}; });
@@ -101,6 +105,7 @@ function clipFit(c,inf,ctx){
   if(L.shared&&typeof L.current==='number') T=clipInt(L.current,1,CLIP_MAXLEN,S);
   else { T=Math.min(Math.max(S,min),max); if(step>1){ T=Math.ceil(T/step)*step; if(T>max) T=Math.floor(max/step)*step; if(T<min) T=min; } }
   T=Math.max(1,T);
+  if(ctx.matchLen&&T!==S) rep.lenIgn=L.shared?'shared':(min===max?'fixed':'');   // "pas lengte aan de clip aan": kan alleen als het apparaat zijn lengte per patroon volgt (dat doet het al); anders melden
   let tiledNow=false;
   if(T>S){
     if(T%S===0){ const f=T/S, base=ev; ev=[]; for(let k=0;k<f;k++) base.forEach(e=>ev.push({...e,t:e.t+k*S})); tiledNow=true; }
@@ -143,7 +148,7 @@ function clipFit(c,inf,ctx){
   const out={format:'patchkamer-clip',formatVersion:1,kind:c.kind,name:c.name,length:T,grid};
   if(c.source) out.source={...c.source}; if(c.swing) out.swing=c.swing;
   if(c.kind==='notes') out.notes=ev; else { out.lanes=outLanes; out.hits=ev; }
-  if(same&&c.native) out.native={device:c.native.device,data:JSON.parse(JSON.stringify(c.native.data))};
+  if(same&&c.native) out.native={device:ctx.devId,data:JSON.parse(JSON.stringify(c.native.data))};
   return {clip:out,report:rep,count:ev.length};
 } PK.clipFit=clipFit;
 
@@ -162,7 +167,8 @@ function clipSrcErr(e){ return e.err==='newer'?PK.pkt('m.clip_nieuwer'):e.err===
 function clipCountText(c,n){ return c.kind==='drums'?PK.pktp('m.clip_n_slagen',n!==1,n):PK.pktp('m.clip_n_noten',n!==1,n); }
 function clipBars(T){ const b=T/192; const v=Math.round(b*100)/100; return PK.pktp('m.clip_n_maten',v!==1,String(v).replace('.',PK.PK_LANG==='nl'?',':'.')); }
 function clipReportText(rep){
-  const p=[];
+  const p=(rep.extra||[]).slice();
+  if(rep.lenIgn) p.push(PK.pkt(rep.lenIgn==='shared'?'m.clip_r_len_gedeeld':'m.clip_r_len_vast'));
   if(rep.tiled) p.push(PK.pkt('m.clip_r_herhaald',rep.tiled));
   if(rep.padded) p.push(PK.pkt('m.clip_r_stilte'));
   if(rep.cut) p.push(PK.pktp('m.clip_r_afgekapt',rep.cut!==1,rep.cut));
@@ -202,17 +208,22 @@ async function clipPaste(id,o){
   const inf=clipInfoOf(id), t=clipFromText(text); let c=null;
   if(t&&t.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipSrcErr(t)),true); return false; }
   if(t) c=t.clip; else if(CL.mem) c=CL.mem.clip; else { PK.status(PK.pkt('m.clip_leeg'),true); return false; }
-  const f=clipFit(c,inf,{devId:r.def.id}); if(f.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipErrText(f,c,r,inf)),true); return false; }
-  if(PK.Host.running&&!o.direct){
-    CL.pend.set(id,{clip:c});
+  const op=PK.clipOptsPrep?PK.clipOptsPrep(c,o.opts):{clip:c,notes:[],byOrder:false,matchLen:false};   // plakopties (clip-menu.js): octaaf, volgorde, lengte
+  if(op.err){ PK.status(PK.pkt('m.clip_niet_geplakt',op.err),true); return false; }
+  c=op.clip;
+  const f=clipFit(c,inf,{devId:r.def.id,byOrder:op.byOrder,matchLen:op.matchLen}); if(f.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipErrText(f,c,r,inf)),true); return false; }
+  if(PK.Host.running&&!o.direct&&(!PK.clipBarOn||PK.clipBarOn())){
+    CL.pend.set(id,{clip:c,op});
     PK.toastAction(PK.pkt('m.clip_wacht',clipLabel(r,inf)),[{label:PK.pkt('m.annuleren'),fn:()=>{ CL.pend.delete(id); PK.status(PK.pkt('m.clip_geannuleerd')); }}],{ms:0});
     return true; }
-  return clipApply(id,c);
+  return clipApply(id,c,op);
 } PK.clipPaste=clipPaste;
 
-function clipApply(id,c){
+function clipApply(id,c,op){
   const r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return false; const inf=clipInfoOf(id), lbl=clipLabel(r,inf);
-  const f=clipFit(c,inf,{devId:r.def.id}); if(f.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipErrText(f,c,r,inf)),true); return false; }
+  op=op||{};
+  const f=clipFit(c,inf,{devId:r.def.id,byOrder:op.byOrder,matchLen:op.matchLen}); if(f.err){ PK.status(PK.pkt('m.clip_niet_geplakt',clipErrText(f,c,r,inf)),true); return false; }
+  if(op.notes&&op.notes.length) f.report.extra=op.notes.slice();
   let snap=null; try{ snap=JSON.parse(JSON.stringify(r.inst.getState())); }catch(e){ snap=null; }
   let res; try{ res=r.inst.setClip(f.clip); }catch(e){ res={ok:false,reason:e&&e.message}; }
   if(!res||res.ok!==true){ if(res&&res.ok!==false&&snap){ try{ r.inst.setState(snap); }catch(e){} }
@@ -230,7 +241,7 @@ function clipUndo(){
 } PK.clipUndo=clipUndo;
 
 // wachtende plakacties: aan het begin van de maat (haakje in clock.js) of bij stoppen
-function clipFlush(){ if(!CL.pend.size) return; const l=[...CL.pend.entries()]; CL.pend.clear(); let ok=false; l.forEach(([id,p])=>{ try{ if(clipApply(id,p.clip)) ok=true; }catch(e){ console.warn('clip',e); } }); if(!ok&&l.length) PK.status(''); }
+function clipFlush(){ if(!CL.pend.size) return; const l=[...CL.pend.entries()]; CL.pend.clear(); let ok=false; l.forEach(([id,p])=>{ try{ if(clipApply(id,p.clip,p.op)) ok=true; }catch(e){ console.warn('clip',e); } }); if(!ok&&l.length) PK.status(''); }
 function clipBar(info){ if(!CL.pend.size) return; clipFlush(); } PK.clipBar=clipBar;
 function clipOnStop(){ clipFlush(); } PK.clipOnStop=clipOnStop;
 
@@ -245,6 +256,7 @@ function clipRefresh(id){
   else if(CL.mem&&!inf.paste.includes(CL.mem.clip.kind)) why=clipErrText({err:'kind'},CL.mem.clip,r,inf);
   b.paste.setAttribute('aria-disabled',why?'true':'false'); b.paste.classList.toggle('dis',!!why);
   b.paste.title=why?PK.pkt('m.clip_niet_geplakt',why):PK.pkt('m.clip_t_plak',lbl);
+  if(b.more) b.more.title=PK.pkt('m.clip_t_opties',lbl);
 }
 function clipRefreshAll(){ PK.Host.devices.forEach((r,id)=>{ if(r._clipBtns) clipRefresh(id); }); }
 // geeft [] voor een apparaat zonder de drie methoden: de kaartbalk blijft dan precies zoals hij was
@@ -254,9 +266,10 @@ function clipBtns(id,inst){
   const bc=mk('clipcopy','m.clip_kopieer'), bp=mk('clippaste','m.clip_plak');
   bc.onclick=e=>{ e.stopPropagation(); PK.select(id); clipCopy(id); };
   bp.onclick=e=>{ e.stopPropagation(); PK.select(id); clipPaste(id,{direct:e.shiftKey}); };
-  const r=PK.Host.devices.get(id); const hold={copy:bc,paste:bp};
+  const bm=PK.clipMoreBtn?PK.clipMoreBtn(id,bp):null;   // pijl en rechtsklikmenu met plakopties (clip-menu.js)
+  const hold={copy:bc,paste:bp,more:bm};
   requestAnimationFrame(()=>{ const rr=PK.Host.devices.get(id); if(rr){ rr._clipBtns=hold; clipRefresh(id); } });
-  return [bc,bp];
+  return bm?[bc,bp,bm]:[bc,bp];
 } PK.clipBtns=clipBtns;
 
 // ---- sneltoetsen (aangeroepen vanuit boot.js) ----
@@ -284,5 +297,6 @@ function clipInit(){
   });
 } PK.clipInit=clipInit;
 
-PK.clip={clean:clipClean,fit:clipFit,fromText:clipFromText,reportText:clipReportText,copy:clipCopy,paste:clipPaste,undo:clipUndo,canon:clipCanon};
+PK.clipInfoOf=clipInfoOf;
+PK.clip={clean:clipClean,fit:clipFit,sameDev:clipSameDev,fromText:clipFromText,reportText:clipReportText,copy:clipCopy,paste:clipPaste,undo:clipUndo,canon:clipCanon};
 })(window.__PK);
