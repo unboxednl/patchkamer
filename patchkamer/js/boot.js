@@ -111,6 +111,8 @@ floorwrap.addEventListener('wheel',e=>{ if(!e.ctrlKey&&!e.metaKey){ const sc=(e.
 floorwrap.addEventListener('pointerdown',e=>{ if(e.target!==floorwrap&&e.target!==floor&&e.target!==svg) return; PK.pan={cx:e.clientX,cy:e.clientY,x0:PK.Host.view.x,y0:PK.Host.view.y}; floorwrap.classList.add('panning'); floorwrap.setPointerCapture(e.pointerId); });
 floorwrap.addEventListener('pointermove',e=>{ if(!PK.pan) return; PK.Host.view.x=PK.pan.x0+(e.clientX-PK.pan.cx); PK.Host.view.y=PK.pan.y0+(e.clientY-PK.pan.cy); PK.applyView(); });
 floorwrap.addEventListener('pointerup',PK.endPan); floorwrap.addEventListener('pointercancel',PK.endPan);
+// rechtermuisknop ingedrukt houden en slepen verschuift het canvas: bij loslaten op de achtergrond geen contextmenu van de browser (kabels en kaarten houden het hunne)
+floorwrap.addEventListener('contextmenu',e=>{ const path=e.composedPath(); if(path.some(n=>n&&n.nodeType===1&&(n.classList.contains('card')||PK.isFormEl(n)))) return; e.preventDefault(); });
 document.addEventListener('keydown',e=>{ if(PK.typing(e)) return; if(e.key==='+'||e.key==='='){PK.zoomAt(1.25,...PK.wrapCenter());} if(e.key==='-'){PK.zoomAt(0.8,...PK.wrapCenter());} if(e.key==='0'){PK.Host.view={x:40,y:40,scale:PK.PKS.f}; PK.applyView();} });
 PK.applyView();
 // ===== library-categories =====
