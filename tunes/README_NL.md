@@ -4,11 +4,11 @@
 
 Kant-en-klare klanken voor apparaten die geluid maken (synths, samplers en drumapparaten), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, gebruik hem in een song of in een eigen bibliotheek. Apparaten zonder eigen geluid hebben [presets](../presets/README_NL.md).
 
-Deze map heeft **39 packs met 2382 tunes**, één pack per apparaat: 30 voor synths (2017 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
+Deze map heeft **40 packs met 2425 tunes**, één pack per apparaat: 31 voor synths (2060 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
-### Synths (30)
+### Synths (31)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
 |---|---|---|---|---|
@@ -37,6 +37,7 @@ Deze map heeft **39 packs met 2382 tunes**, één pack per apparaat: 30 voor syn
 | [Paradox](../devices/synths/Paradox/) | Paradox Styles | 70 | 10 | [`paradox-styles.patchkamer-tunes.json`](paradox-styles.patchkamer-tunes.json) |
 | [Patch Mono](../devices/synths/PatchMono/) | Patch Mono Styles | 79 | 14 | [`patch-mono-styles.patchkamer-tunes.json`](patch-mono-styles.patchkamer-tunes.json) |
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | 15 | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) |
+| [Piano](../devices/synths/Piano/) | Piano | 43 | 11 | [`piano.patchkamer-tunes.json`](piano.patchkamer-tunes.json) |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | 12 | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) |
 | [Stage Keys](../devices/synths/StageKeys/) | Stage Keys Styles | 66 | 11 | [`stage-keys-styles.patchkamer-tunes.json`](stage-keys-styles.patchkamer-tunes.json) |
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |

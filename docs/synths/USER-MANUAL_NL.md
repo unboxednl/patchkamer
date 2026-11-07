@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 30 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 31 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -11,7 +11,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 3
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
-6. [Toetsen en snaren](#toetsen-en-snaren): [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
+6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
 9. [Zang](#zang): [Formant Singer](#formant-singer)
@@ -49,6 +49,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Klanken uit filmmuziek: braams, grote pads, drones, ostinati, impacts | [Cinematic Synth](#cinematic-synth) |
 | Strijkers en strijkerssecties | [Bowed Ensemble](#bowed-ensemble) |
 | Trompet, trombone, hoorn en koperseccties, stabs en swells | [Brass Section](#brass-section) |
+| Akoestische piano's (vleugel, pianino, honky-tonk), tine- en riet-e-piano, clavichord | [Piano](#piano) |
 | Elektrische piano's, orgels, vibrafoon | [Stage Keys](#stage-keys) |
 | Klokken, glas, tines, FM-bassen | [Four-Operator FM](#four-operator-fm) |
 | Geplukte of gestreken losse snaren (gitaar, harp, koto) | [Karplus String](#karplus-string) |
@@ -716,6 +717,39 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Voor trombone en hoorn staat **Transpositie** op −12; of speel lagere noten.
 
 ## Toetsen en snaren
+
+### Piano
+
+**Waar het voor dient.** De akoestische pianofamilie met een eigen motor: een **vleugel**, een **pianino**, een **honky-tonk**, een **tine-e-piano** (zachte, klokachtige tongen met tremolo), een **riet-e-piano** (met blaf en drive) en een **clavichord** (getokkeld, percussief). Elke noot is een bank van doorklinkende deeltonen: onharmonische boventonen die een beetje scherp lopen (de stijfheid van de snaar), één tot drie licht verstemde snaren per noot, een aanslagpunt dat het spectrum vormt, een hamer waarvan hardheid en geluid meegaan met hoe hard je speelt, een uitklank die voor lage noten langer is dan voor hoge, en een klankbord dat de som kleurt. Het sustainpedaal houdt losgelaten noten klinkend en een demper stopt ze als je loslaat. De noten staan naar toonhoogte in het stereobeeld. Er zit geen sequencer en geen galm in: zet er een effect achter. Stage Keys is de synth voor elektrische toetsen en orgels; Piano is de akoestische pianofamilie, met de e-piano's als varianten.
+
+![De kaart van Piano](../images/nl/synths/piano.png)
+
+**De regelaars.**
+
+- **Type** (Vleugel, Pianino, Honky-tonk, Tine e-piano, Riet e-piano, Clavichord) en **Klank** (lijst beginklanken: Concert Grand, Studio Upright, Honky-tonk, Tine Piano, Reed Piano, Clavichord, Soft Felt Piano, Bright Pop Grand; hij toont **Eigen klank** zodra je een knop verandert).
+- **Toon & snaren:** **Helderheid** (hamerhardheid), **Aanslagkleur** (hoeveel harder gespeelde noten helderder klinken), **Aanslagpunt** (waar de hamer de snaar raakt), **Inharmoniciteit** (snaarstijfheid: de boventonen lopen scherp), **Snaarverstemming** (cent tussen de snaren van een noot; groot bij honky-tonk) en **Hamergeluid**.
+- **Uitklank & klankbord:** **Klankduur**, **Naklank** (hoeveel van de lange staart overblijft na de eerste snelle uitklank), **Dempertijd** (hoe snel een noot stopt als je loslaat), **Klankbord** (hoeveel kastresonantie) en **Kastafstemming** (grootte van de kast).
+- **Elektrisch:** **Tremolo** (diepte, auto-pan tussen links en rechts), **Tremolosnelheid** en **Drive** (de blaf van de riet-e-piano).
+- **Spel & niveau:** **Stereobreedte** (hoe ver de noten over het klavier uitwaaieren), **Aanslaggevoeligheid**, **Stemming**, **Transpositie** en **Uitgang**. **Proeftoon**, **Proefakkoord**, **Pedaal** (zet het sustainpedaal aan of uit) en **Alles uit**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Keyboard / noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer; een sequencer moet de nootlengte meesturen. Een pedaalbericht (`cc` met id `pedal` of `sustain`, of controller 64) bedient het sustainpedaal; **Keys / MIDI** geeft jouw pedaal door. |
+| **Mod** | modulatie in (paars) | Een modulator kan elke knop bewegen behalve **Transpositie**; de lijsten **Type** en **Klank** bewegen niet mee. |
+| **Stereo piano** | audio uit (groenblauw, stereo) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Piano** en **Speakers**. Kies de tune **Grand › Concert Grand**, speel akkoorden met verschillende kracht en druk op **Pedaal**: losgelaten noten blijven klinken tot je weer drukt. Kies daarna **Tine › Suitcase Tremolo** voor een zwevende e-piano, of **Honky-tonk › Saloon Honky-tonk** voor een verstemde kroegpiano.
+
+**Tunes.** Pack **Piano**: 43 tunes in 11 mappen (Grand, Upright, Honky-tonk, Tine, Reed, Clavichord, Layered, Ballad, Pop, Jazz, Lo-fi), bestand [`piano.patchkamer-tunes.json`](../../tunes/piano.patchkamer-tunes.json). Een paar namen: **Concert Grand**, **Dusty Upright**, **Saloon Honky-tonk**, **Suitcase Tremolo**, **Barking Reed**, **Baroque Room**, **Pad Bed Piano**. De tunes zijn gecontroleerd op bereik en gedrag, niet beluisterd.
+
+**Tips en beperkingen.**
+
+- 40 stemmen, één per noot; een nieuwe noot neemt de zachtste uitklinkende stem over. Met het pedaal ingedrukt kunnen veel noten zich opstapelen: de motor stopt dan de zachtste.
+- Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
+- **Helderheid**, **Aanslagpunt**, **Inharmoniciteit**, **Snaarverstemming**, **Klankduur**, **Naklank** en **Hamergeluid** worden gelezen als een noot begint, dus een wijziging geldt voor de volgende noot. **Type** geldt ook voor nieuwe noten.
+- Het sustainpedaal is geen knop en wordt niet in een tune bewaard.
 
 ### Stage Keys
 

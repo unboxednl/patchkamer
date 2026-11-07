@@ -126,13 +126,14 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Paradox](../devices/synths/Paradox/) | Paradox Styles | 70 | 10: Drone, Ambient, Dark Ambient, Cinematic, Sci-Fi, Glitch, Industrial, Experimental, Sound Design, Noise | [`paradox-styles.patchkamer-tunes.json`](paradox-styles.patchkamer-tunes.json) | – |
 | [Patch Mono](../devices/synths/PatchMono/) | Patch Mono Styles | 79 | 14: Techno, Acid, Dubstep, Drum & Bass, Hip-hop, Dub, Synthwave, Ambient, Electro, Funk & Disco, Trance, Chiptune, Patch Routes, External Input | [`patch-mono-styles.patchkamer-tunes.json`](patch-mono-styles.patchkamer-tunes.json) | – |
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | 15: Techno, Acid, House, Synthwave, Ambient, Cinematic, Electro, Hip-hop, Dub, Funk & Disco, Trance, Chiptune, Drum & Bass, Generative, FX | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) | – |
+| [Piano](../devices/synths/Piano/) | Piano | 43 | 11: Grand, Upright, Honky-tonk, Tine, Reed, Clavichord, Layered, Ballad, Pop, Jazz, Lo-fi | [`piano.patchkamer-tunes.json`](piano.patchkamer-tunes.json) | – |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | 12: Synthwave, Ambient, Cinematic, Pop, Trance, House, Deep House, Funk & Disco, Soul, Electro, Lo-fi, Techno | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) | – |
 | [Stage Keys](../devices/synths/StageKeys/) | Stage Keys Styles | 66 | 11: Soul, Funk, Jazz, Pop, Gospel, Rock, Disco, House, Lo-fi, Reggae, Ballad | [`stage-keys-styles.patchkamer-tunes.json`](stage-keys-styles.patchkamer-tunes.json) | – |
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10: Techno, House, Deep House, Acid, Electro, Synthwave, Hip-hop, Dub, Drum & Bass, Trance | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) | – |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 
-Samen 39 packs met 2382 tunes.
+Samen 40 packs met 2425 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet
