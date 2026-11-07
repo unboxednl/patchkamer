@@ -118,6 +118,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Foundry](../devices/synths/Foundry/) | Foundry Styles | 69 | 11: Industrial, Techno, Dark Ambient, Cinematic, Sound Design, Horror, Experimental, Noise, Drone, Metal Percussion, Electro | [`foundry-styles.patchkamer-tunes.json`](foundry-styles.patchkamer-tunes.json) | – |
 | [Four-Operator FM](../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | 11: Synthwave, Electro, Pop, Chiptune, Jazz & Soul, Ambient, Cinematic, Techno & House, Drum & Bass, Hip-hop & Lo-fi, Funk & Disco | [`four-operator-fm-styles.patchkamer-tunes.json`](four-operator-fm-styles.patchkamer-tunes.json) | – |
 | [Grain Cloud](../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | 10: Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Experimental, Glitch/IDM, Lo-fi, Drone, Sound Design | [`grain-cloud-styles.patchkamer-tunes.json`](grain-cloud-styles.patchkamer-tunes.json) | – |
+| [Guitar](../devices/synths/Guitar/) | Guitar | 40 | 11: Acoustic, Nylon, 12-String, Clean, Crunch, Muted, Bass, Strum, Ambient, Funk, Rock | [`guitar.patchkamer-tunes.json`](guitar.patchkamer-tunes.json) | – |
 | [Karplus String](../devices/synths/KarplusString/) | Karplus String Styles | 60 | 10: Folk, Ambient, Cinematic, Pop, World, Lo-fi, Ballad, Flamenco, Jazz, Metallic | [`karplus-string-styles.patchkamer-tunes.json`](karplus-string-styles.patchkamer-tunes.json) | – |
 | [Ladder Mono](../devices/synths/LadderMono/) | Ladder Mono Classics | 58 | 7: Bass, Lead, Brass and Strings, Plucks and Keys, Sequences, Effects, Percussion | [`ladder-mono-classics.patchkamer-tunes.json`](ladder-mono-classics.patchkamer-tunes.json) | – |
 | [Layered Landscape](../devices/synths/LayeredLandscape/) | Layered Landscape Styles | 71 | 11: Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Nature, Space, Drone, Lo-fi, Minimal, Industrial | [`layered-landscape-styles.patchkamer-tunes.json`](layered-landscape-styles.patchkamer-tunes.json) | – |
@@ -133,7 +134,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 
-Samen 40 packs met 2425 tunes.
+Samen 41 packs met 2465 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet
