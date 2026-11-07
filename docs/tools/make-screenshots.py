@@ -124,6 +124,9 @@ def shots(browser, lang, OUT, LIB, BASE):
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)
     pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Keys / MIDI'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
+    pg = newpage(nopicker=True); load_lib(pg); lib_tab(pg, 'skins')   # de skin-editor, geopend vanaf de tab Skins met Duofone
+    pg.evaluate("(()=>{ const s=[...document.querySelectorAll('#skPanel select')].find(x=>[...x.options].some(o=>o.value==='nl.patchkamer.duofone')); s.value='nl.patchkamer.duofone'; s.dispatchEvent(new Event('change',{bubbles:true})); })()")
+    pg.click('#skPanel [data-act=skEdOpen]'); pg.wait_for_timeout(2000); pg.screenshot(path=OUT + '/13-skin-editor.png'); done(pg)
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 
 if __name__ == '__main__':
