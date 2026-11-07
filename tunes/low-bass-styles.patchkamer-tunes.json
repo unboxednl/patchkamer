@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Bass sounds for Low Bass: sub, rolling and detuned basses, dub, trap-style booms, acid, funk, drum & bass, dubstep, garage, synthwave and techno/house. No pattern is stored; play them from a keyboard or a sequencer.",
+ "tags": [
+  "instrument/bass"
+ ],
  "tree": [
   {
    "folder": "Sub",
+   "tags": [
+    "instrument/bass/sub"
+   ],
    "items": [
     {
      "name": "Pure Sub",
@@ -424,6 +430,9 @@
   },
   {
    "folder": "Dub",
+   "tags": [
+    "style/dub"
+   ],
    "items": [
     {
      "name": "Dub Round Bass",
@@ -554,6 +563,9 @@
   },
   {
    "folder": "Booming Sub",
+   "tags": [
+    "instrument/bass/sub"
+   ],
    "items": [
     {
      "name": "Long Boom",
@@ -709,6 +721,9 @@
   },
   {
    "folder": "Acid",
+   "tags": [
+    "style/acid"
+   ],
    "items": [
     {
      "name": "Squelch Mono",
@@ -839,6 +854,9 @@
   },
   {
    "folder": "Funk",
+   "tags": [
+    "style/funk"
+   ],
    "items": [
     {
      "name": "Snappy Funk Bass",
@@ -969,6 +987,9 @@
   },
   {
    "folder": "Drum & Bass",
+   "tags": [
+    "style/drum-and-bass"
+   ],
    "items": [
     {
      "name": "Neuro Growl",
@@ -999,6 +1020,9 @@
      "name": "Jungle Sub Roller",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "style/jungle"
+     ],
      "state": {
       "cutoff": 210,
       "resonance": 0.4,
@@ -1099,6 +1123,9 @@
   },
   {
    "folder": "Dubstep",
+   "tags": [
+    "style/dubstep"
+   ],
    "items": [
     {
      "name": "Half-time Growl Bass",
@@ -1229,6 +1256,9 @@
   },
   {
    "folder": "Garage",
+   "tags": [
+    "style/garage"
+   ],
    "items": [
     {
      "name": "Two-Step Bass",
@@ -1334,6 +1364,9 @@
   },
   {
    "folder": "Trap",
+   "tags": [
+    "style/trap"
+   ],
    "items": [
     {
      "name": "Heavy Trap Sub",
@@ -1439,6 +1472,9 @@
   },
   {
    "folder": "Synthwave",
+   "tags": [
+    "style/synthwave"
+   ],
    "items": [
     {
      "name": "Night Drive Bass",
@@ -1544,6 +1580,10 @@
   },
   {
    "folder": "Techno & House",
+   "tags": [
+    "style/techno",
+    "style/house"
+   ],
    "items": [
     {
      "name": "Offbeat Techno Bass",

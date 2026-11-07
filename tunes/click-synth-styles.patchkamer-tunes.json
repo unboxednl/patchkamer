@@ -6,9 +6,11 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Kits for Click Synth in ten styles: minimal techno, microhouse, techno, glitch, electro, breakbeat, ambient, industrial, dub techno and acid. Each kit has a groove in pattern A, a variation in B, a sparse breakdown in C and the groove with a fill in D. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune.",
+ "tags": ["instrument/drums/kit"],
  "tree": [
   {
    "folder": "Minimal Techno",
+   "tags": ["style/techno", "style/minimal"],
    "items": [
     {
      "name": "Click Minimal",
@@ -803,6 +805,7 @@
   },
   {
    "folder": "Microhouse",
+   "tags": ["style/house", "style/minimal"],
    "items": [
     {
      "name": "Swing Micro",
@@ -1597,6 +1600,7 @@
   },
   {
    "folder": "Techno",
+   "tags": ["style/techno"],
    "items": [
     {
      "name": "Driving",
@@ -2391,6 +2395,7 @@
   },
   {
    "folder": "Glitch",
+   "tags": ["style/glitch"],
    "items": [
     {
      "name": "Clicks and Cuts",
@@ -3185,6 +3190,7 @@
   },
   {
    "folder": "Electro",
+   "tags": ["style/electro"],
    "items": [
     {
      "name": "Robot Funk",
@@ -3979,6 +3985,7 @@
   },
   {
    "folder": "Breakbeat",
+   "tags": ["style/breakbeat"],
    "items": [
     {
      "name": "Big Beat",
@@ -4773,6 +4780,7 @@
   },
   {
    "folder": "Ambient",
+   "tags": ["style/ambient"],
    "items": [
     {
      "name": "Rain Textures",
@@ -5567,6 +5575,7 @@
   },
   {
    "folder": "Industrial",
+   "tags": ["style/industrial"],
    "items": [
     {
      "name": "Factory",
@@ -6361,6 +6370,7 @@
   },
   {
    "folder": "Dub Techno",
+   "tags": ["style/dub-techno"],
    "items": [
     {
      "name": "Chord Haze",
@@ -7155,6 +7165,7 @@
   },
   {
    "folder": "Acid",
+   "tags": ["style/acid"],
    "items": [
     {
      "name": "Squelch",

@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.18
+// validate-instrument.mjs — Patchkamer contract v1.19
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -20,6 +20,7 @@
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
+// v1.19: tags voor tunes en presets (op de packs); de validator controleert apparaten, dus hier verandert niets.
 // v1.18: meters: host.ui.meter(parent, label, opts) -> { el, set, id, destroy }; de nep-host kent het (opts: id, group, source = AnalyserNode of lijst van 1-2, unit, range, kind, hold, clip,
 //        orientation, length, width). Alleen "let op" bij een dubbel meter-id, ongeldige opties, kind 'rms' zonder source, een set() zonder getal, data-pk-role="meter" op een eigen element
 //        en een data-pk-suffix langer dan 16 tekens; een source die geen AnalyserNode is, gooit (fout). Een meter hoort niet in params(). --controls toont meters ook (rol meter).

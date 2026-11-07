@@ -9,11 +9,17 @@
   "tree": [
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Rolling Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "cutoff": 380,
             "resonance": 0.45,
@@ -61,6 +67,9 @@
           "name": "Warehouse Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "cutoff": 900,
             "resonance": 0.5,
@@ -108,6 +117,9 @@
           "name": "Driving Square Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 520,
             "resonance": 0.6,
@@ -155,6 +167,9 @@
           "name": "Detuned Rave Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 3200,
             "resonance": 0.35,
@@ -296,11 +311,17 @@
     },
     {
       "folder": "Acid",
+      "tags": [
+        "style/acid"
+      ],
       "items": [
         {
           "name": "Acid Squelch",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/acid"
+          ],
           "state": {
             "cutoff": 350,
             "resonance": 0.85,
@@ -348,6 +369,9 @@
           "name": "Slide Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 450,
             "resonance": 0.75,
@@ -442,6 +466,9 @@
           "name": "Screaming Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 1800,
             "resonance": 0.85,
@@ -489,6 +516,9 @@
           "name": "Wet Pluck Line",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 500,
             "resonance": 0.8,
@@ -536,6 +566,9 @@
           "name": "Rubber Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 650,
             "resonance": 0.7,
@@ -583,11 +616,17 @@
     },
     {
       "folder": "Dubstep",
+      "tags": [
+        "style/dubstep"
+      ],
       "items": [
         {
           "name": "Growl Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 500,
             "resonance": 0.7,
@@ -635,6 +674,9 @@
           "name": "Wub Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "cutoff": 250,
             "resonance": 0.5,
@@ -682,6 +724,9 @@
           "name": "Screech Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 6000,
             "resonance": 0.6,
@@ -776,6 +821,9 @@
           "name": "Metallic Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "cutoff": 2500,
             "resonance": 0.5,
@@ -823,6 +871,9 @@
           "name": "Half-time Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "cutoff": 250,
             "resonance": 0.35,
@@ -870,11 +921,17 @@
     },
     {
       "folder": "Drum & Bass",
+      "tags": [
+        "style/drum-and-bass"
+      ],
       "items": [
         {
           "name": "Neuro Growl Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 900,
             "resonance": 0.5,
@@ -922,6 +979,9 @@
           "name": "Deep Roller Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "cutoff": 200,
             "resonance": 0.2,
@@ -969,6 +1029,10 @@
           "name": "Jungle Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "style/jungle",
+            "instrument/chords"
+          ],
           "state": {
             "cutoff": 1500,
             "resonance": 0.45,
@@ -1016,6 +1080,9 @@
           "name": "Liquid Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 1800,
             "resonance": 0.2,
@@ -1063,6 +1130,9 @@
           "name": "Wide Slide Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 2200,
             "resonance": 0.4,
@@ -1110,6 +1180,9 @@
           "name": "Click Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 500,
             "resonance": 0.55,
@@ -1157,11 +1230,18 @@
     },
     {
       "folder": "Hip-hop",
+      "tags": [
+        "style/hiphop"
+      ],
       "items": [
         {
           "name": "Boom Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub",
+            "instrument/fx/impact"
+          ],
           "state": {
             "cutoff": 220,
             "resonance": 0.15,
@@ -1209,6 +1289,9 @@
           "name": "Dusty Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "cutoff": 1800,
             "resonance": 0.15,
@@ -1256,6 +1339,9 @@
           "name": "Lazy Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 2200,
             "resonance": 0.25,
@@ -1303,6 +1389,9 @@
           "name": "Muted Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 700,
             "resonance": 0.3,
@@ -1350,6 +1439,9 @@
           "name": "Vinyl Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 1200,
             "resonance": 0.1,
@@ -1397,11 +1489,17 @@
     },
     {
       "folder": "Dub",
+      "tags": [
+        "style/dub"
+      ],
       "items": [
         {
           "name": "Dub Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 300,
             "resonance": 0.3,
@@ -1449,6 +1547,9 @@
           "name": "Skank Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "cutoff": 1400,
             "resonance": 0.3,
@@ -1496,6 +1597,9 @@
           "name": "Siren Rise",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx"
+          ],
           "state": {
             "cutoff": 3000,
             "resonance": 0.2,
@@ -1543,6 +1647,9 @@
           "name": "Echo Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 1000,
             "resonance": 0.4,
@@ -1590,6 +1697,9 @@
           "name": "Reed Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 1600,
             "resonance": 0.3,
@@ -1637,11 +1747,17 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Night Drive Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 700,
             "resonance": 0.35,
@@ -1689,6 +1805,9 @@
           "name": "Neon Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 3500,
             "resonance": 0.3,
@@ -1736,6 +1855,9 @@
           "name": "Sunset Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 1600,
             "resonance": 0.15,
@@ -1783,6 +1905,9 @@
           "name": "Arp Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 1200,
             "resonance": 0.4,
@@ -1830,6 +1955,9 @@
           "name": "Retro Brass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "cutoff": 900,
             "resonance": 0.2,
@@ -1877,6 +2005,9 @@
           "name": "Chrome Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "cutoff": 420,
             "resonance": 0.3,
@@ -1924,11 +2055,17 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Glass Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 2500,
             "resonance": 0.2,
@@ -1976,6 +2113,9 @@
           "name": "Deep Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "cutoff": 500,
             "resonance": 0.4,
@@ -2023,6 +2163,9 @@
           "name": "Wind Texture",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "cutoff": 1500,
             "resonance": 0.65,
@@ -2070,6 +2213,9 @@
           "name": "Soft Bell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "cutoff": 5000,
             "resonance": 0.1,
@@ -2117,6 +2263,9 @@
           "name": "Floating Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 2800,
             "resonance": 0.2,
@@ -2164,6 +2313,9 @@
           "name": "Dark Texture",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "cutoff": 600,
             "resonance": 0.7,
@@ -2211,11 +2363,17 @@
     },
     {
       "folder": "Electro",
+      "tags": [
+        "style/electro"
+      ],
       "items": [
         {
           "name": "Robot Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 500,
             "resonance": 0.5,
@@ -2263,6 +2421,9 @@
           "name": "Square Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 1500,
             "resonance": 0.4,
@@ -2310,6 +2471,9 @@
           "name": "Electro Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "cutoff": 1100,
             "resonance": 0.5,
@@ -2357,6 +2521,9 @@
           "name": "Zap Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 3500,
             "resonance": 0.4,
@@ -2451,11 +2618,18 @@
     },
     {
       "folder": "Funk & Disco",
+      "tags": [
+        "style/funk",
+        "style/disco"
+      ],
       "items": [
         {
           "name": "Funk Pluck Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/pluck"
+          ],
           "state": {
             "cutoff": 600,
             "resonance": 0.35,
@@ -2503,6 +2677,9 @@
           "name": "Disco Octave Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 3000,
             "resonance": 0.25,
@@ -2550,6 +2727,10 @@
           "name": "Pluck Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano",
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 1400,
             "resonance": 0.3,
@@ -2597,6 +2778,9 @@
           "name": "Wah Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 900,
             "resonance": 0.6,
@@ -2644,6 +2828,9 @@
           "name": "Slap Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/pluck"
+          ],
           "state": {
             "cutoff": 450,
             "resonance": 0.4,
@@ -2691,11 +2878,17 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Offbeat Rolling Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 520,
             "resonance": 0.3,
@@ -2743,6 +2936,9 @@
           "name": "Supersaw Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "cutoff": 2200,
             "resonance": 0.25,
@@ -2790,6 +2986,9 @@
           "name": "Gated Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 2000,
             "resonance": 0.2,
@@ -2837,6 +3036,10 @@
           "name": "Pluck Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead",
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 1800,
             "resonance": 0.35,
@@ -2884,6 +3087,9 @@
           "name": "Uplift Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 4500,
             "resonance": 0.2,
@@ -2931,11 +3137,17 @@
     },
     {
       "folder": "Chiptune",
+      "tags": [
+        "style/chiptune"
+      ],
       "items": [
         {
           "name": "Pulse Lead 25",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 9000,
             "resonance": 0,
@@ -2983,6 +3195,9 @@
           "name": "Triangle Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 8000,
             "resonance": 0,
@@ -3030,6 +3245,9 @@
           "name": "Noise Hat Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "cutoff": 9000,
             "resonance": 0.1,
@@ -3077,6 +3295,9 @@
           "name": "Arp Blip",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "cutoff": 9000,
             "resonance": 0,
@@ -3124,6 +3345,9 @@
           "name": "Wide Pulse Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 5000,
             "resonance": 0,
@@ -3176,6 +3400,9 @@
           "name": "Wobble Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 300,
             "resonance": 0.6,
@@ -3364,6 +3591,9 @@
           "name": "Siren Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "cutoff": 3500,
             "resonance": 0.3,
@@ -3458,6 +3688,9 @@
           "name": "Drifting Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "cutoff": 1500,
             "resonance": 0.3,
@@ -3604,6 +3837,9 @@
           "name": "Input Follower Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "cutoff": 300,
             "resonance": 0.5,

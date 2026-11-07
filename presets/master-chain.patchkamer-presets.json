@@ -5,7 +5,7 @@
   "name": "Master Chain Situations and Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Starting points for Master Chain for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. The Situations folder uses a common style for each situation (house for club, EDM for festival and big room, pop for home, headphones, radio, car and streaming, transparent for studio). Target character, target loudness, ceiling, tone and ratio follow the Master Director recipes; every preset also sets its own pre-limiter gain, threshold, attack, release, knee, make-up and compressor mix (fast and tight for hardstyle and techno, slow and light for classical, ambient and jazz), with the make-up tuned so the level does not drop. The soft styles (folk, jazz, classical, soundtrack, ambient) get a little tone colour of their own on top of that. Tone and compression switch off when a preset would leave them at zero.",
+  "description": "Starting points for Master Chain for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. The Situations folder uses a common style for each situation (house for club, EDM for festival and big room, pop for home, headphones, radio, car and streaming, transparent for studio). Target character, target loudness, ceiling, tone and ratio follow the Master Director recipes; every preset also sets its own pre-limiter gain, threshold, attack, release, knee, make-up and compressor mix (fast and tight for hardstyle and techno, slow and light for classical, ambient and jazz), with the make-up tuned so the level does not drop. The target character also shapes the compressor (warm softer and slower, firm and club tighter), and the limiter now holds the ceiling you set; the threshold of every preset is tuned for the same average reduction as before. The soft styles (folk, jazz, classical, soundtrack, ambient) get a little tone colour of their own on top of that. Tone and compression switch off when a preset would leave them at zero.",
   "tree": [
     {
       "folder": "Situations",
@@ -13,7 +13,7 @@
         {
           "name": "Streaming",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -24,12 +24,12 @@
             "mid": -0.17,
             "high": 0.59,
             "compress": true,
-            "threshold": -13.7,
+            "threshold": -13.9,
             "ratio": 1.59,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 3.2,
+            "makeup": 2.6,
             "compMix": 0.85,
             "limit": true
           }
@@ -37,7 +37,7 @@
         {
           "name": "Club",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.5,
@@ -48,12 +48,12 @@
             "mid": -0.36,
             "high": 0.54,
             "compress": true,
-            "threshold": -13.9,
+            "threshold": -13.3,
             "ratio": 1.68,
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 4.2,
+            "makeup": 3.8,
             "compMix": 0.96,
             "limit": true
           }
@@ -61,7 +61,7 @@
         {
           "name": "Festival",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8,
@@ -72,12 +72,12 @@
             "mid": -0.5,
             "high": 0.8,
             "compress": true,
-            "threshold": -13.8,
+            "threshold": -13.2,
             "ratio": 2.3,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 8.6,
+            "makeup": 7.2,
             "compMix": 1.0,
             "limit": true
           }
@@ -85,7 +85,7 @@
         {
           "name": "Big room",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -7.5,
@@ -96,12 +96,12 @@
             "mid": -0.7,
             "high": 0.9,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -13.6,
             "ratio": 2.5,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 8.9,
+            "makeup": 7.5,
             "compMix": 1.0,
             "limit": true
           }
@@ -109,7 +109,7 @@
         {
           "name": "Home / hi-fi",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14,
@@ -120,12 +120,12 @@
             "mid": -0.16,
             "high": 0.4,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -14.4,
             "ratio": 1.42,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 2.6,
+            "makeup": 2.3,
             "compMix": 0.85,
             "limit": true
           }
@@ -133,7 +133,7 @@
         {
           "name": "Headphones",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.1,
@@ -144,12 +144,12 @@
             "mid": -0.15,
             "high": 0.3,
             "compress": true,
-            "threshold": -16.8,
+            "threshold": -16.9,
             "ratio": 1.4,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 3.5,
+            "makeup": 2.9,
             "compMix": 0.85,
             "limit": true
           }
@@ -157,7 +157,7 @@
         {
           "name": "Studio / reference",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -16.9,
@@ -181,7 +181,7 @@
         {
           "name": "Radio / broadcast",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.3,
@@ -192,12 +192,12 @@
             "mid": -0.18,
             "high": 0.81,
             "compress": true,
-            "threshold": -14.6,
+            "threshold": -14.7,
             "ratio": 2.09,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 5,
+            "makeup": 4.2,
             "compMix": 0.93,
             "limit": true
           }
@@ -205,7 +205,7 @@
         {
           "name": "Car",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -12.4,
@@ -216,12 +216,12 @@
             "mid": -0.18,
             "high": 1.08,
             "compress": true,
-            "threshold": -14.3,
+            "threshold": -14.2,
             "ratio": 1.78,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 4.7,
+            "makeup": 3.5,
             "compMix": 0.93,
             "limit": true
           }
@@ -234,7 +234,7 @@
         {
           "name": "Transparent",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.9,
@@ -250,7 +250,7 @@
             "attack": 0.03,
             "release": 0.3,
             "knee": 12,
-            "makeup": 1.5,
+            "makeup": 1.2,
             "compMix": 0.7,
             "limit": true
           }
@@ -258,7 +258,7 @@
         {
           "name": "Warm / organic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "warm",
             "target": -14.5,
@@ -269,12 +269,12 @@
             "mid": -0.23,
             "high": -0.45,
             "compress": true,
-            "threshold": -13.4,
+            "threshold": -14.4,
             "ratio": 1.34,
             "attack": 0.035,
             "release": 0.35,
             "knee": 12,
-            "makeup": 1.8,
+            "makeup": 1.3,
             "compMix": 0.8,
             "limit": true
           }
@@ -282,7 +282,7 @@
         {
           "name": "Techno",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.9,
@@ -293,12 +293,12 @@
             "mid": -0.72,
             "high": 0.36,
             "compress": true,
-            "threshold": -15,
+            "threshold": -14.7,
             "ratio": 1.81,
             "attack": 0.02,
             "release": 0.14,
             "knee": 5,
-            "makeup": 4.7,
+            "makeup": 4.3,
             "compMix": 1.0,
             "limit": true
           }
@@ -306,7 +306,7 @@
         {
           "name": "Hard techno",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.2,
@@ -317,12 +317,12 @@
             "mid": -0.9,
             "high": 0.5,
             "compress": true,
-            "threshold": -15.7,
+            "threshold": -15.3,
             "ratio": 2.1,
             "attack": 0.012,
             "release": 0.11,
             "knee": 3,
-            "makeup": 6.5,
+            "makeup": 5.6,
             "compMix": 1.0,
             "limit": true
           }
@@ -330,7 +330,7 @@
         {
           "name": "Deep house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.1,
@@ -346,7 +346,7 @@
             "attack": 0.028,
             "release": 0.25,
             "knee": 8,
-            "makeup": 2.4,
+            "makeup": 1.9,
             "compMix": 0.9,
             "limit": true
           }
@@ -354,7 +354,7 @@
         {
           "name": "House",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -370,7 +370,7 @@
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 3,
+            "makeup": 2.5,
             "compMix": 0.95,
             "limit": true
           }
@@ -378,7 +378,7 @@
         {
           "name": "Progressive house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -394,7 +394,7 @@
             "attack": 0.024,
             "release": 0.28,
             "knee": 8,
-            "makeup": 2.7,
+            "makeup": 2.1,
             "compMix": 0.9,
             "limit": true
           }
@@ -402,7 +402,7 @@
         {
           "name": "Trance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -12.9,
@@ -413,12 +413,12 @@
             "mid": -0.45,
             "high": 0.63,
             "compress": true,
-            "threshold": -14.1,
+            "threshold": -14.2,
             "ratio": 1.72,
             "attack": 0.018,
             "release": 0.22,
             "knee": 6,
-            "makeup": 4.2,
+            "makeup": 3.3,
             "compMix": 1.0,
             "limit": true
           }
@@ -426,7 +426,7 @@
         {
           "name": "Psytrance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.4,
@@ -437,12 +437,12 @@
             "mid": -0.67,
             "high": 0.57,
             "compress": true,
-            "threshold": -15,
+            "threshold": -14.8,
             "ratio": 1.95,
             "attack": 0.014,
             "release": 0.14,
             "knee": 5,
-            "makeup": 5.7,
+            "makeup": 5,
             "compMix": 1.0,
             "limit": true
           }
@@ -450,7 +450,7 @@
         {
           "name": "Electro",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -466,7 +466,7 @@
             "attack": 0.022,
             "release": 0.18,
             "knee": 7,
-            "makeup": 3.5,
+            "makeup": 2.9,
             "compMix": 0.9,
             "limit": true
           }
@@ -474,7 +474,7 @@
         {
           "name": "Synthwave",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.8,
@@ -490,7 +490,7 @@
             "attack": 0.026,
             "release": 0.3,
             "knee": 8,
-            "makeup": 2.4,
+            "makeup": 1.9,
             "compMix": 0.85,
             "limit": true
           }
@@ -498,7 +498,7 @@
         {
           "name": "EDM",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.4,
@@ -509,12 +509,12 @@
             "mid": -0.47,
             "high": 0.57,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -14,
             "ratio": 1.95,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 5.2,
+            "makeup": 4.4,
             "compMix": 1.0,
             "limit": true
           }
@@ -522,7 +522,7 @@
         {
           "name": "Hardstyle",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.8,
@@ -533,12 +533,12 @@
             "mid": -0.8,
             "high": 0.4,
             "compress": true,
-            "threshold": -15.8,
+            "threshold": -15.6,
             "ratio": 2.2,
             "attack": 0.01,
             "release": 0.12,
             "knee": 3,
-            "makeup": 7.2,
+            "makeup": 6.3,
             "compMix": 1.0,
             "limit": true
           }
@@ -546,7 +546,7 @@
         {
           "name": "Drum & bass",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.4,
@@ -557,12 +557,12 @@
             "mid": -0.57,
             "high": 0.47,
             "compress": true,
-            "threshold": -15.5,
+            "threshold": -14.9,
             "ratio": 1.95,
             "attack": 0.012,
             "release": 0.1,
             "knee": 4,
-            "makeup": 5.7,
+            "makeup": 4.9,
             "compMix": 1.0,
             "limit": true
           }
@@ -570,7 +570,7 @@
         {
           "name": "Dubstep",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.4,
@@ -581,12 +581,12 @@
             "mid": -0.67,
             "high": 0.28,
             "compress": true,
-            "threshold": -14.9,
+            "threshold": -14.4,
             "ratio": 2.04,
             "attack": 0.012,
             "release": 0.14,
             "knee": 4,
-            "makeup": 5.7,
+            "makeup": 4.8,
             "compMix": 1.0,
             "limit": true
           }
@@ -594,7 +594,10 @@
         {
           "name": "Breakbeat",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
+          "tags": [
+            "style/breakbeat"
+          ],
           "state": {
             "profile": "transparent",
             "target": -13.3,
@@ -605,12 +608,12 @@
             "mid": -0.42,
             "high": 0.42,
             "compress": true,
-            "threshold": -15.4,
+            "threshold": -15.5,
             "ratio": 1.68,
             "attack": 0.014,
             "release": 0.12,
             "knee": 5,
-            "makeup": 4.2,
+            "makeup": 3.5,
             "compMix": 0.95,
             "limit": true
           }
@@ -618,7 +621,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -13.1,
@@ -629,12 +632,12 @@
             "mid": -0.36,
             "high": 0.18,
             "compress": true,
-            "threshold": -14,
+            "threshold": -13.5,
             "ratio": 1.81,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 3.8,
+            "makeup": 3.3,
             "compMix": 0.9,
             "limit": true
           }
@@ -642,7 +645,7 @@
         {
           "name": "Trap",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.6,
@@ -653,12 +656,12 @@
             "mid": -0.47,
             "high": 0.38,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -13.7,
             "ratio": 1.95,
             "attack": 0.018,
             "release": 0.18,
             "knee": 5,
-            "makeup": 4.8,
+            "makeup": 4.2,
             "compMix": 1.0,
             "limit": true
           }
@@ -666,7 +669,7 @@
         {
           "name": "R&B / soul",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.1,
@@ -677,12 +680,12 @@
             "mid": -0.23,
             "high": 0.0,
             "compress": true,
-            "threshold": -13.3,
+            "threshold": -13.2,
             "ratio": 1.45,
             "attack": 0.032,
             "release": 0.32,
             "knee": 9,
-            "makeup": 2.3,
+            "makeup": 1.8,
             "compMix": 0.8,
             "limit": true
           }
@@ -690,7 +693,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -701,12 +704,12 @@
             "mid": -0.17,
             "high": 0.59,
             "compress": true,
-            "threshold": -13.7,
+            "threshold": -13.9,
             "ratio": 1.59,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 3.2,
+            "makeup": 2.6,
             "compMix": 0.85,
             "limit": true
           }
@@ -714,7 +717,7 @@
         {
           "name": "Rock",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -13.1,
@@ -725,12 +728,12 @@
             "mid": -0.36,
             "high": 0.45,
             "compress": true,
-            "threshold": -14.7,
+            "threshold": -14.2,
             "ratio": 1.72,
             "attack": 0.028,
             "release": 0.2,
             "knee": 6,
-            "makeup": 4,
+            "makeup": 3.6,
             "compMix": 0.8,
             "limit": true
           }
@@ -738,7 +741,7 @@
         {
           "name": "Metal",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -12.4,
@@ -749,12 +752,12 @@
             "mid": -0.76,
             "high": 0.57,
             "compress": true,
-            "threshold": -14.6,
+            "threshold": -14.5,
             "ratio": 2.14,
             "attack": 0.012,
             "release": 0.14,
             "knee": 3,
-            "makeup": 5.9,
+            "makeup": 4.9,
             "compMix": 0.95,
             "limit": true
           }
@@ -762,7 +765,7 @@
         {
           "name": "Indie / alternative",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.1,
@@ -778,7 +781,7 @@
             "attack": 0.03,
             "release": 0.28,
             "knee": 8,
-            "makeup": 2.4,
+            "makeup": 1.9,
             "compMix": 0.75,
             "limit": true
           }
@@ -786,7 +789,7 @@
         {
           "name": "Latin",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -797,12 +800,12 @@
             "mid": -0.24,
             "high": 0.4,
             "compress": true,
-            "threshold": -13.8,
+            "threshold": -13.9,
             "ratio": 1.56,
             "attack": 0.025,
             "release": 0.24,
             "knee": 7,
-            "makeup": 2.9,
+            "makeup": 2.4,
             "compMix": 0.85,
             "limit": true
           }
@@ -810,7 +813,7 @@
         {
           "name": "Funk / disco",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.6,
@@ -826,7 +829,7 @@
             "attack": 0.03,
             "release": 0.2,
             "knee": 7,
-            "makeup": 3.5,
+            "makeup": 2.8,
             "compMix": 0.8,
             "limit": true
           }
@@ -834,7 +837,7 @@
         {
           "name": "Reggae / dub",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "warm",
             "target": -14.2,
@@ -845,12 +848,12 @@
             "mid": -0.3,
             "high": -0.23,
             "compress": true,
-            "threshold": -14.9,
+            "threshold": -16.3,
             "ratio": 1.38,
             "attack": 0.04,
             "release": 0.35,
             "knee": 9,
-            "makeup": 2.3,
+            "makeup": 1.8,
             "compMix": 0.75,
             "limit": true
           }
@@ -858,7 +861,7 @@
         {
           "name": "Lo-fi",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "warm",
             "target": -14.6,
@@ -869,12 +872,12 @@
             "mid": -0.14,
             "high": -0.7,
             "compress": true,
-            "threshold": -17.4,
+            "threshold": -19.2,
             "ratio": 1.35,
             "attack": 0.03,
             "release": 0.32,
             "knee": 8,
-            "makeup": 2.8,
+            "makeup": 2.4,
             "compMix": 0.8,
             "limit": true
           }
@@ -882,7 +885,7 @@
         {
           "name": "Folk / acoustic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.3,
@@ -893,12 +896,12 @@
             "mid": 0.5,
             "high": 0.48,
             "compress": true,
-            "threshold": -15.5,
+            "threshold": -15.1,
             "ratio": 1.15,
             "attack": 0.05,
             "release": 0.45,
             "knee": 12,
-            "makeup": 0.4,
+            "makeup": 0.2,
             "compMix": 0.65,
             "limit": true
           }
@@ -906,7 +909,7 @@
         {
           "name": "Acoustic / jazz",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.5,
@@ -917,12 +920,12 @@
             "mid": 0.3,
             "high": 0.4,
             "compress": true,
-            "threshold": -15.4,
+            "threshold": -14.9,
             "ratio": 1.12,
             "attack": 0.055,
             "release": 0.5,
             "knee": 14,
-            "makeup": 0.2,
+            "makeup": 0,
             "compMix": 0.6,
             "limit": true
           }
@@ -930,7 +933,7 @@
         {
           "name": "Classical",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -16.2,
@@ -954,7 +957,7 @@
         {
           "name": "Soundtrack / cinematic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.8,
@@ -965,12 +968,12 @@
             "mid": -0.42,
             "high": 0.8,
             "compress": true,
-            "threshold": -14,
+            "threshold": -13.6,
             "ratio": 1.12,
             "attack": 0.06,
             "release": 0.7,
             "knee": 14,
-            "makeup": 0,
+            "makeup": -0.1,
             "compMix": 0.6,
             "limit": true
           }
@@ -978,7 +981,7 @@
         {
           "name": "Ambient",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.8,
@@ -989,7 +992,7 @@
             "mid": -0.5,
             "high": -0.91,
             "compress": true,
-            "threshold": -13.9,
+            "threshold": -13.5,
             "ratio": 1.08,
             "attack": 0.07,
             "release": 1.0,
@@ -1007,7 +1010,7 @@
         {
           "name": "Techno",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -9.8,
@@ -1018,12 +1021,12 @@
             "mid": -0.76,
             "high": 0.38,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -13.8,
             "ratio": 2.04,
             "attack": 0.02,
             "release": 0.14,
             "knee": 5,
-            "makeup": 6.6,
+            "makeup": 5.6,
             "compMix": 1.0,
             "limit": true
           }
@@ -1031,7 +1034,7 @@
         {
           "name": "Hard techno",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8.5,
@@ -1042,12 +1045,12 @@
             "mid": -0.9,
             "high": 0.5,
             "compress": true,
-            "threshold": -15,
+            "threshold": -14.5,
             "ratio": 2.31,
             "attack": 0.012,
             "release": 0.11,
             "knee": 3,
-            "makeup": 8.7,
+            "makeup": 7.6,
             "compMix": 1.0,
             "limit": true
           }
@@ -1055,7 +1058,7 @@
         {
           "name": "Deep house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -12.6,
@@ -1066,12 +1069,12 @@
             "mid": -0.42,
             "high": 0.17,
             "compress": true,
-            "threshold": -13.7,
+            "threshold": -12.9,
             "ratio": 1.55,
             "attack": 0.028,
             "release": 0.25,
             "knee": 8,
-            "makeup": 3.1,
+            "makeup": 2.8,
             "compMix": 0.92,
             "limit": true
           }
@@ -1079,7 +1082,7 @@
         {
           "name": "House",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.5,
@@ -1090,12 +1093,12 @@
             "mid": -0.36,
             "high": 0.54,
             "compress": true,
-            "threshold": -13.9,
+            "threshold": -13.3,
             "ratio": 1.68,
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 4.2,
+            "makeup": 3.8,
             "compMix": 0.96,
             "limit": true
           }
@@ -1103,7 +1106,7 @@
         {
           "name": "Progressive house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.5,
@@ -1114,12 +1117,12 @@
             "mid": -0.36,
             "high": 0.45,
             "compress": true,
-            "threshold": -12.7,
+            "threshold": -12.1,
             "ratio": 1.68,
             "attack": 0.024,
             "release": 0.28,
             "knee": 8,
-            "makeup": 3.6,
+            "makeup": 3.2,
             "compMix": 0.92,
             "limit": true
           }
@@ -1127,7 +1130,7 @@
         {
           "name": "Trance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -9.8,
@@ -1138,12 +1141,12 @@
             "mid": -0.47,
             "high": 0.67,
             "compress": true,
-            "threshold": -13.2,
+            "threshold": -12.9,
             "ratio": 1.93,
             "attack": 0.018,
             "release": 0.22,
             "knee": 6,
-            "makeup": 6.1,
+            "makeup": 5,
             "compMix": 1.0,
             "limit": true
           }
@@ -1151,7 +1154,7 @@
         {
           "name": "Psytrance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8.5,
@@ -1162,12 +1165,12 @@
             "mid": -0.7,
             "high": 0.6,
             "compress": true,
-            "threshold": -14,
+            "threshold": -13.6,
             "ratio": 2.2,
             "attack": 0.014,
             "release": 0.14,
             "knee": 5,
-            "makeup": 8,
+            "makeup": 6.8,
             "compMix": 1.0,
             "limit": true
           }
@@ -1175,7 +1178,7 @@
         {
           "name": "Electro",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.5,
@@ -1186,12 +1189,12 @@
             "mid": -0.45,
             "high": 0.63,
             "compress": true,
-            "threshold": -15.6,
+            "threshold": -14.7,
             "ratio": 1.64,
             "attack": 0.022,
             "release": 0.18,
             "knee": 7,
-            "makeup": 4.8,
+            "makeup": 4.3,
             "compMix": 0.92,
             "limit": true
           }
@@ -1199,7 +1202,7 @@
         {
           "name": "Drum & bass",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8.5,
@@ -1210,12 +1213,12 @@
             "mid": -0.6,
             "high": 0.5,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -13.7,
             "ratio": 2.2,
             "attack": 0.012,
             "release": 0.1,
             "knee": 4,
-            "makeup": 8,
+            "makeup": 6.7,
             "compMix": 1.0,
             "limit": true
           }
@@ -1223,7 +1226,7 @@
         {
           "name": "Dubstep",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8.5,
@@ -1234,12 +1237,12 @@
             "mid": -0.7,
             "high": 0.3,
             "compress": true,
-            "threshold": -13.8,
+            "threshold": -13.3,
             "ratio": 2.31,
             "attack": 0.012,
             "release": 0.14,
             "knee": 4,
-            "makeup": 8,
+            "makeup": 6.7,
             "compMix": 1.0,
             "limit": true
           }
@@ -1247,7 +1250,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -10.3,
@@ -1258,12 +1261,12 @@
             "mid": -0.38,
             "high": 0.19,
             "compress": true,
-            "threshold": -13.4,
+            "threshold": -12.7,
             "ratio": 2.04,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 5.7,
+            "makeup": 4.7,
             "compMix": 0.92,
             "limit": true
           }
@@ -1271,7 +1274,7 @@
         {
           "name": "Funk / disco",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.3,
@@ -1282,12 +1285,12 @@
             "mid": -0.26,
             "high": 0.34,
             "compress": true,
-            "threshold": -15.5,
+            "threshold": -14.4,
             "ratio": 1.65,
             "attack": 0.03,
             "release": 0.2,
             "knee": 7,
-            "makeup": 4.6,
+            "makeup": 4.1,
             "compMix": 0.84,
             "limit": true
           }
@@ -1295,7 +1298,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.5,
@@ -1306,12 +1309,12 @@
             "mid": -0.18,
             "high": 0.63,
             "compress": true,
-            "threshold": -13.3,
+            "threshold": -12.9,
             "ratio": 1.78,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 4.4,
+            "makeup": 3.9,
             "compMix": 0.88,
             "limit": true
           }
@@ -1319,7 +1322,7 @@
         {
           "name": "Latin",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.3,
@@ -1330,12 +1333,12 @@
             "mid": -0.26,
             "high": 0.42,
             "compress": true,
-            "threshold": -13.2,
+            "threshold": -12.7,
             "ratio": 1.74,
             "attack": 0.025,
             "release": 0.24,
             "knee": 7,
-            "makeup": 4.1,
+            "makeup": 3.7,
             "compMix": 0.88,
             "limit": true
           }
@@ -1348,7 +1351,7 @@
         {
           "name": "EDM",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8,
@@ -1359,12 +1362,12 @@
             "mid": -0.5,
             "high": 0.8,
             "compress": true,
-            "threshold": -13.8,
+            "threshold": -13.2,
             "ratio": 2.3,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 8.6,
+            "makeup": 7.2,
             "compMix": 1.0,
             "limit": true
           }
@@ -1372,7 +1375,7 @@
         {
           "name": "Trance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -9.3,
@@ -1383,12 +1386,12 @@
             "mid": -0.47,
             "high": 0.85,
             "compress": true,
-            "threshold": -13.6,
+            "threshold": -13.1,
             "ratio": 2.02,
             "attack": 0.018,
             "release": 0.22,
             "knee": 6,
-            "makeup": 6.9,
+            "makeup": 5.6,
             "compMix": 1.0,
             "limit": true
           }
@@ -1396,7 +1399,7 @@
         {
           "name": "Hardstyle",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -7,
@@ -1407,12 +1410,12 @@
             "mid": -0.8,
             "high": 0.6,
             "compress": true,
-            "threshold": -14.8,
+            "threshold": -14.4,
             "ratio": 2.53,
             "attack": 0.01,
             "release": 0.12,
             "knee": 3,
-            "makeup": 9.7,
+            "makeup": 8.3,
             "compMix": 1.0,
             "limit": true
           }
@@ -1420,7 +1423,7 @@
         {
           "name": "Psytrance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8,
@@ -1431,12 +1434,12 @@
             "mid": -0.7,
             "high": 0.8,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -14,
             "ratio": 2.3,
             "attack": 0.014,
             "release": 0.14,
             "knee": 5,
-            "makeup": 9,
+            "makeup": 7.8,
             "compMix": 1.0,
             "limit": true
           }
@@ -1444,7 +1447,7 @@
         {
           "name": "House",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.1,
@@ -1455,12 +1458,12 @@
             "mid": -0.36,
             "high": 0.72,
             "compress": true,
-            "threshold": -14.1,
+            "threshold": -13.3,
             "ratio": 1.76,
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 4.8,
+            "makeup": 4.1,
             "compMix": 0.97,
             "limit": true
           }
@@ -1468,7 +1471,7 @@
         {
           "name": "Progressive house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.1,
@@ -1479,12 +1482,12 @@
             "mid": -0.36,
             "high": 0.63,
             "compress": true,
-            "threshold": -12.8,
+            "threshold": -12.2,
             "ratio": 1.76,
             "attack": 0.024,
             "release": 0.28,
             "knee": 8,
-            "makeup": 4.3,
+            "makeup": 3.5,
             "compMix": 0.94,
             "limit": true
           }
@@ -1492,7 +1495,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -9.8,
@@ -1503,12 +1506,12 @@
             "mid": -0.38,
             "high": 0.38,
             "compress": true,
-            "threshold": -13.6,
+            "threshold": -12.9,
             "ratio": 2.13,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 6.4,
+            "makeup": 5.3,
             "compMix": 0.94,
             "limit": true
           }
@@ -1516,7 +1519,7 @@
         {
           "name": "Trap",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8.5,
@@ -1527,12 +1530,12 @@
             "mid": -0.5,
             "high": 0.6,
             "compress": true,
-            "threshold": -13.6,
+            "threshold": -12.9,
             "ratio": 2.3,
             "attack": 0.018,
             "release": 0.18,
             "knee": 5,
-            "makeup": 7.8,
+            "makeup": 6.4,
             "compMix": 1.0,
             "limit": true
           }
@@ -1540,7 +1543,7 @@
         {
           "name": "Rock",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -9.8,
@@ -1551,12 +1554,12 @@
             "mid": -0.38,
             "high": 0.67,
             "compress": true,
-            "threshold": -14.3,
+            "threshold": -13.5,
             "ratio": 2.02,
             "attack": 0.028,
             "release": 0.2,
             "knee": 6,
-            "makeup": 6.7,
+            "makeup": 5.4,
             "compMix": 0.88,
             "limit": true
           }
@@ -1564,7 +1567,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -11.1,
@@ -1575,12 +1578,12 @@
             "mid": -0.18,
             "high": 0.81,
             "compress": true,
-            "threshold": -13.5,
+            "threshold": -13,
             "ratio": 1.86,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 4.9,
+            "makeup": 4.3,
             "compMix": 0.91,
             "limit": true
           }
@@ -1588,7 +1591,7 @@
         {
           "name": "Metal",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8,
@@ -1599,12 +1602,12 @@
             "mid": -0.8,
             "high": 0.8,
             "compress": true,
-            "threshold": -14.1,
+            "threshold": -13.7,
             "ratio": 2.53,
             "attack": 0.012,
             "release": 0.14,
             "knee": 3,
-            "makeup": 9.4,
+            "makeup": 8,
             "compMix": 0.97,
             "limit": true
           }
@@ -1613,11 +1616,14 @@
     },
     {
       "folder": "Big Room",
+      "tags": [
+        "style/big-room"
+      ],
       "items": [
         {
           "name": "EDM",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -7.5,
@@ -1628,12 +1634,12 @@
             "mid": -0.7,
             "high": 0.9,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -13.6,
             "ratio": 2.5,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 8.9,
+            "makeup": 7.5,
             "compMix": 1.0,
             "limit": true
           }
@@ -1641,7 +1647,7 @@
         {
           "name": "Hardstyle",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -7,
@@ -1652,12 +1658,12 @@
             "mid": -1.0,
             "high": 0.7,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -14.1,
             "ratio": 2.75,
             "attack": 0.01,
             "release": 0.12,
             "knee": 3,
-            "makeup": 9.5,
+            "makeup": 8.1,
             "compMix": 1.0,
             "limit": true
           }
@@ -1665,7 +1671,7 @@
         {
           "name": "Trance",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8.5,
@@ -1676,12 +1682,12 @@
             "mid": -0.7,
             "high": 1.0,
             "compress": true,
-            "threshold": -13.2,
+            "threshold": -12.8,
             "ratio": 2.25,
             "attack": 0.018,
             "release": 0.22,
             "knee": 6,
-            "makeup": 7.6,
+            "makeup": 6.2,
             "compMix": 1.0,
             "limit": true
           }
@@ -1689,7 +1695,7 @@
         {
           "name": "Progressive house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -10.3,
@@ -1700,12 +1706,12 @@
             "mid": -0.57,
             "high": 0.76,
             "compress": true,
-            "threshold": -12.4,
+            "threshold": -11.9,
             "ratio": 1.95,
             "attack": 0.024,
             "release": 0.28,
             "knee": 8,
-            "makeup": 5.1,
+            "makeup": 4,
             "compMix": 0.95,
             "limit": true
           }
@@ -1713,7 +1719,7 @@
         {
           "name": "Electro",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -10.3,
@@ -1724,12 +1730,12 @@
             "mid": -0.67,
             "high": 0.95,
             "compress": true,
-            "threshold": -15.4,
+            "threshold": -14.5,
             "ratio": 1.89,
             "attack": 0.022,
             "release": 0.18,
             "knee": 7,
-            "makeup": 6.3,
+            "makeup": 5.3,
             "compMix": 0.95,
             "limit": true
           }
@@ -1737,7 +1743,7 @@
         {
           "name": "Trap",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -8,
@@ -1748,12 +1754,12 @@
             "mid": -0.7,
             "high": 0.7,
             "compress": true,
-            "threshold": -13.8,
+            "threshold": -13.1,
             "ratio": 2.5,
             "attack": 0.018,
             "release": 0.18,
             "knee": 5,
-            "makeup": 8.5,
+            "makeup": 7.1,
             "compMix": 1.0,
             "limit": true
           }
@@ -1761,7 +1767,7 @@
         {
           "name": "Dubstep",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -7.5,
@@ -1772,12 +1778,12 @@
             "mid": -0.9,
             "high": 0.6,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -13.8,
             "ratio": 2.62,
             "attack": 0.012,
             "release": 0.14,
             "knee": 4,
-            "makeup": 9.1,
+            "makeup": 7.7,
             "compMix": 1.0,
             "limit": true
           }
@@ -1785,7 +1791,7 @@
         {
           "name": "House",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -10.3,
@@ -1796,12 +1802,12 @@
             "mid": -0.57,
             "high": 0.85,
             "compress": true,
-            "threshold": -13.7,
+            "threshold": -13.1,
             "ratio": 1.95,
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 5.6,
+            "makeup": 4.7,
             "compMix": 0.97,
             "limit": true
           }
@@ -1814,7 +1820,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14,
@@ -1825,12 +1831,12 @@
             "mid": -0.16,
             "high": 0.4,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -14.4,
             "ratio": 1.42,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 2.6,
+            "makeup": 2.3,
             "compMix": 0.85,
             "limit": true
           }
@@ -1838,7 +1844,7 @@
         {
           "name": "Rock",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -13.0,
@@ -1849,12 +1855,12 @@
             "mid": -0.34,
             "high": 0.26,
             "compress": true,
-            "threshold": -14.6,
+            "threshold": -14.1,
             "ratio": 1.53,
             "attack": 0.028,
             "release": 0.2,
             "knee": 6,
-            "makeup": 3.3,
+            "makeup": 3,
             "compMix": 0.8,
             "limit": true
           }
@@ -1862,7 +1868,7 @@
         {
           "name": "Indie / alternative",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.6,
@@ -1878,7 +1884,7 @@
             "attack": 0.03,
             "release": 0.28,
             "knee": 8,
-            "makeup": 2,
+            "makeup": 1.6,
             "compMix": 0.75,
             "limit": true
           }
@@ -1886,7 +1892,7 @@
         {
           "name": "R&B / soul",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.6,
@@ -1902,7 +1908,7 @@
             "attack": 0.032,
             "release": 0.32,
             "knee": 9,
-            "makeup": 1.8,
+            "makeup": 1.5,
             "compMix": 0.8,
             "limit": true
           }
@@ -1910,7 +1916,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -13.0,
@@ -1921,12 +1927,12 @@
             "mid": -0.34,
             "high": 0.0,
             "compress": true,
-            "threshold": -13.9,
+            "threshold": -13.2,
             "ratio": 1.6,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 3.2,
+            "makeup": 2.7,
             "compMix": 0.9,
             "limit": true
           }
@@ -1934,7 +1940,7 @@
         {
           "name": "Folk / acoustic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -16.8,
@@ -1958,7 +1964,7 @@
         {
           "name": "Acoustic / jazz",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.4,
@@ -1982,7 +1988,7 @@
         {
           "name": "Classical",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -18.5,
@@ -2006,7 +2012,7 @@
         {
           "name": "Soundtrack / cinematic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.9,
@@ -2030,7 +2036,7 @@
         {
           "name": "Ambient",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.8,
@@ -2054,7 +2060,7 @@
         {
           "name": "Lo-fi",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "warm",
             "target": -15.7,
@@ -2065,12 +2071,12 @@
             "mid": -0.13,
             "high": -0.78,
             "compress": true,
-            "threshold": -19.3,
+            "threshold": -21.7,
             "ratio": 1.23,
             "attack": 0.03,
             "release": 0.32,
             "knee": 8,
-            "makeup": 2.1,
+            "makeup": 1.9,
             "compMix": 0.8,
             "limit": true
           }
@@ -2078,7 +2084,7 @@
         {
           "name": "Deep house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.9,
@@ -2094,7 +2100,7 @@
             "attack": 0.028,
             "release": 0.25,
             "knee": 8,
-            "makeup": 1.8,
+            "makeup": 1.6,
             "compMix": 0.9,
             "limit": true
           }
@@ -2102,7 +2108,7 @@
         {
           "name": "Reggae / dub",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "warm",
             "target": -14.9,
@@ -2113,12 +2119,12 @@
             "mid": -0.28,
             "high": -0.35,
             "compress": true,
-            "threshold": -16.4,
+            "threshold": -18.2,
             "ratio": 1.25,
             "attack": 0.04,
             "release": 0.35,
             "knee": 9,
-            "makeup": 1.8,
+            "makeup": 1.5,
             "compMix": 0.75,
             "limit": true
           }
@@ -2126,7 +2132,7 @@
         {
           "name": "Latin",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.8,
@@ -2137,12 +2143,12 @@
             "mid": -0.23,
             "high": 0.23,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -14.3,
             "ratio": 1.4,
             "attack": 0.025,
             "release": 0.24,
             "knee": 7,
-            "makeup": 2.5,
+            "makeup": 2.2,
             "compMix": 0.85,
             "limit": true
           }
@@ -2155,7 +2161,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.1,
@@ -2166,12 +2172,12 @@
             "mid": -0.15,
             "high": 0.3,
             "compress": true,
-            "threshold": -16.8,
+            "threshold": -16.9,
             "ratio": 1.4,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 3.5,
+            "makeup": 2.9,
             "compMix": 0.85,
             "limit": true
           }
@@ -2179,7 +2185,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -13.2,
@@ -2190,12 +2196,12 @@
             "mid": -0.32,
             "high": -0.08,
             "compress": true,
-            "threshold": -16.2,
+            "threshold": -15.4,
             "ratio": 1.57,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 4.2,
+            "makeup": 3.6,
             "compMix": 0.9,
             "limit": true
           }
@@ -2203,7 +2209,7 @@
         {
           "name": "R&B / soul",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.7,
@@ -2219,7 +2225,7 @@
             "attack": 0.032,
             "release": 0.32,
             "knee": 9,
-            "makeup": 2.2,
+            "makeup": 2,
             "compMix": 0.8,
             "limit": true
           }
@@ -2227,7 +2233,7 @@
         {
           "name": "Electro",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.1,
@@ -2238,12 +2244,12 @@
             "mid": -0.38,
             "high": 0.3,
             "compress": true,
-            "threshold": -20.6,
+            "threshold": -20.7,
             "ratio": 1.3,
             "attack": 0.022,
             "release": 0.18,
             "knee": 7,
-            "makeup": 3.7,
+            "makeup": 3.1,
             "compMix": 0.9,
             "limit": true
           }
@@ -2251,7 +2257,7 @@
         {
           "name": "Deep house",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.9,
@@ -2267,7 +2273,7 @@
             "attack": 0.028,
             "release": 0.25,
             "knee": 8,
-            "makeup": 2.4,
+            "makeup": 2.1,
             "compMix": 0.9,
             "limit": true
           }
@@ -2275,7 +2281,7 @@
         {
           "name": "Ambient",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.6,
@@ -2299,7 +2305,7 @@
         {
           "name": "Lo-fi",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "warm",
             "target": -15.7,
@@ -2310,12 +2316,12 @@
             "mid": -0.12,
             "high": -0.78,
             "compress": true,
-            "threshold": -23.6,
+            "threshold": -27.3,
             "ratio": 1.21,
             "attack": 0.03,
             "release": 0.32,
             "knee": 8,
-            "makeup": 2.8,
+            "makeup": 2.6,
             "compMix": 0.8,
             "limit": true
           }
@@ -2323,7 +2329,7 @@
         {
           "name": "Acoustic / jazz",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.2,
@@ -2347,7 +2353,7 @@
         {
           "name": "Classical",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -18.2,
@@ -2371,7 +2377,7 @@
         {
           "name": "Soundtrack / cinematic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.8,
@@ -2395,7 +2401,7 @@
         {
           "name": "Synthwave",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.2,
@@ -2411,7 +2417,7 @@
             "attack": 0.026,
             "release": 0.3,
             "knee": 8,
-            "makeup": 2.5,
+            "makeup": 2,
             "compMix": 0.85,
             "limit": true
           }
@@ -2424,7 +2430,7 @@
         {
           "name": "Transparent",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -16.9,
@@ -2448,7 +2454,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.4,
@@ -2464,7 +2470,7 @@
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 1.7,
+            "makeup": 1.5,
             "compMix": 0.81,
             "limit": true
           }
@@ -2472,7 +2478,7 @@
         {
           "name": "Rock",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -14.7,
@@ -2483,12 +2489,12 @@
             "mid": -0.26,
             "high": 0.33,
             "compress": true,
-            "threshold": -15.6,
+            "threshold": -14.8,
             "ratio": 1.29,
             "attack": 0.028,
             "release": 0.2,
             "knee": 6,
-            "makeup": 2.1,
+            "makeup": 1.9,
             "compMix": 0.75,
             "limit": true
           }
@@ -2496,7 +2502,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -14.7,
@@ -2507,12 +2513,12 @@
             "mid": -0.26,
             "high": 0.13,
             "compress": true,
-            "threshold": -14.6,
+            "threshold": -13.8,
             "ratio": 1.34,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 1.9,
+            "makeup": 1.8,
             "compMix": 0.88,
             "limit": true
           }
@@ -2520,7 +2526,7 @@
         {
           "name": "House",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.4,
@@ -2536,7 +2542,7 @@
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 1.5,
+            "makeup": 1.3,
             "compMix": 0.94,
             "limit": true
           }
@@ -2544,7 +2550,7 @@
         {
           "name": "Techno",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14.4,
@@ -2555,12 +2561,12 @@
             "mid": -0.52,
             "high": 0.26,
             "compress": true,
-            "threshold": -15.6,
+            "threshold": -15.8,
             "ratio": 1.34,
             "attack": 0.02,
             "release": 0.14,
             "knee": 5,
-            "makeup": 2.2,
+            "makeup": 2.1,
             "compMix": 1.0,
             "limit": true
           }
@@ -2568,7 +2574,7 @@
         {
           "name": "Acoustic / jazz",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.6,
@@ -2592,7 +2598,7 @@
         {
           "name": "Classical",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -18.8,
@@ -2616,7 +2622,7 @@
         {
           "name": "Folk / acoustic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -17.2,
@@ -2640,7 +2646,7 @@
         {
           "name": "Soundtrack / cinematic",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -18,
@@ -2664,7 +2670,7 @@
         {
           "name": "Ambient",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -18,
@@ -2688,7 +2694,7 @@
         {
           "name": "R&B / soul",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.8,
@@ -2699,12 +2705,12 @@
             "mid": -0.15,
             "high": 0.0,
             "compress": true,
-            "threshold": -16.6,
+            "threshold": -16.5,
             "ratio": 1.14,
             "attack": 0.032,
             "release": 0.32,
             "knee": 9,
-            "makeup": 1.2,
+            "makeup": 1.1,
             "compMix": 0.75,
             "limit": true
           }
@@ -2712,7 +2718,7 @@
         {
           "name": "Indie / alternative",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -15.8,
@@ -2728,7 +2734,7 @@
             "attack": 0.03,
             "release": 0.28,
             "knee": 8,
-            "makeup": 1.2,
+            "makeup": 1.1,
             "compMix": 0.69,
             "limit": true
           }
@@ -2741,7 +2747,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.3,
@@ -2752,12 +2758,12 @@
             "mid": -0.18,
             "high": 0.81,
             "compress": true,
-            "threshold": -14.6,
+            "threshold": -14.7,
             "ratio": 2.09,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 5,
+            "makeup": 4.2,
             "compMix": 0.93,
             "limit": true
           }
@@ -2765,7 +2771,7 @@
         {
           "name": "Rock",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -12.2,
@@ -2776,12 +2782,12 @@
             "mid": -0.38,
             "high": 0.67,
             "compress": true,
-            "threshold": -15.5,
+            "threshold": -15.1,
             "ratio": 2.27,
             "attack": 0.028,
             "release": 0.2,
             "knee": 6,
-            "makeup": 6.5,
+            "makeup": 5.5,
             "compMix": 0.9,
             "limit": true
           }
@@ -2789,7 +2795,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -12.2,
@@ -2800,12 +2806,12 @@
             "mid": -0.38,
             "high": 0.38,
             "compress": true,
-            "threshold": -15,
+            "threshold": -14.5,
             "ratio": 2.4,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 6.3,
+            "makeup": 5.4,
             "compMix": 0.95,
             "limit": true
           }
@@ -2813,7 +2819,7 @@
         {
           "name": "R&B / soul",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14,
@@ -2824,12 +2830,12 @@
             "mid": -0.24,
             "high": 0.16,
             "compress": true,
-            "threshold": -13.8,
+            "threshold": -13.7,
             "ratio": 1.86,
             "attack": 0.032,
             "release": 0.32,
             "knee": 9,
-            "makeup": 3.7,
+            "makeup": 2.9,
             "compMix": 0.9,
             "limit": true
           }
@@ -2837,7 +2843,7 @@
         {
           "name": "Latin",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.0,
@@ -2848,12 +2854,12 @@
             "mid": -0.26,
             "high": 0.59,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -14.5,
             "ratio": 2.03,
             "attack": 0.025,
             "release": 0.24,
             "knee": 7,
-            "makeup": 4.8,
+            "makeup": 3.9,
             "compMix": 0.93,
             "limit": true
           }
@@ -2861,7 +2867,7 @@
         {
           "name": "Funk / disco",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.0,
@@ -2877,7 +2883,7 @@
             "attack": 0.03,
             "release": 0.2,
             "knee": 7,
-            "makeup": 5.7,
+            "makeup": 4.6,
             "compMix": 0.9,
             "limit": true
           }
@@ -2885,7 +2891,7 @@
         {
           "name": "Indie / alternative",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -14,
@@ -2901,7 +2907,7 @@
             "attack": 0.03,
             "release": 0.28,
             "knee": 8,
-            "makeup": 3.8,
+            "makeup": 3.1,
             "compMix": 0.88,
             "limit": true
           }
@@ -2909,7 +2915,7 @@
         {
           "name": "EDM",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -10.5,
@@ -2920,12 +2926,12 @@
             "mid": -0.5,
             "high": 0.8,
             "compress": true,
-            "threshold": -15.2,
+            "threshold": -14.8,
             "ratio": 2.6,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 8.4,
+            "makeup": 7.2,
             "compMix": 1.0,
             "limit": true
           }
@@ -2938,7 +2944,7 @@
         {
           "name": "Pop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -12.4,
@@ -2949,12 +2955,12 @@
             "mid": -0.18,
             "high": 1.08,
             "compress": true,
-            "threshold": -14.3,
+            "threshold": -14.2,
             "ratio": 1.78,
             "attack": 0.022,
             "release": 0.25,
             "knee": 7,
-            "makeup": 4.7,
+            "makeup": 3.5,
             "compMix": 0.93,
             "limit": true
           }
@@ -2962,7 +2968,7 @@
         {
           "name": "Hip-hop",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -11.2,
@@ -2973,12 +2979,12 @@
             "mid": -0.38,
             "high": 0.67,
             "compress": true,
-            "threshold": -14.3,
+            "threshold": -13.6,
             "ratio": 2.04,
             "attack": 0.025,
             "release": 0.22,
             "knee": 6,
-            "makeup": 6.1,
+            "makeup": 4.8,
             "compMix": 0.95,
             "limit": true
           }
@@ -2986,7 +2992,7 @@
         {
           "name": "Rock",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "firm",
             "target": -11.2,
@@ -2997,12 +3003,12 @@
             "mid": -0.38,
             "high": 0.95,
             "compress": true,
-            "threshold": -15,
+            "threshold": -14.3,
             "ratio": 1.93,
             "attack": 0.028,
             "release": 0.2,
             "knee": 6,
-            "makeup": 6.5,
+            "makeup": 5,
             "compMix": 0.9,
             "limit": true
           }
@@ -3010,7 +3016,7 @@
         {
           "name": "EDM",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -9.5,
@@ -3021,12 +3027,12 @@
             "mid": -0.5,
             "high": 1.1,
             "compress": true,
-            "threshold": -14.6,
+            "threshold": -13.8,
             "ratio": 2.2,
             "attack": 0.015,
             "release": 0.16,
             "knee": 5,
-            "makeup": 8.4,
+            "makeup": 6.9,
             "compMix": 1.0,
             "limit": true
           }
@@ -3034,7 +3040,7 @@
         {
           "name": "House",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -12.4,
@@ -3045,12 +3051,12 @@
             "mid": -0.36,
             "high": 0.99,
             "compress": true,
-            "threshold": -14.9,
+            "threshold": -14.8,
             "ratio": 1.68,
             "attack": 0.022,
             "release": 0.2,
             "knee": 7,
-            "makeup": 4.5,
+            "makeup": 3.3,
             "compMix": 0.97,
             "limit": true
           }
@@ -3058,7 +3064,7 @@
         {
           "name": "Latin",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -12.2,
@@ -3069,12 +3075,12 @@
             "mid": -0.26,
             "high": 0.85,
             "compress": true,
-            "threshold": -14.2,
+            "threshold": -14.1,
             "ratio": 1.74,
             "attack": 0.025,
             "release": 0.24,
             "knee": 7,
-            "makeup": 4.5,
+            "makeup": 3.3,
             "compMix": 0.93,
             "limit": true
           }
@@ -3082,7 +3088,7 @@
         {
           "name": "Trap",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "club",
             "target": -10,
@@ -3093,12 +3099,12 @@
             "mid": -0.5,
             "high": 0.9,
             "compress": true,
-            "threshold": -14.4,
+            "threshold": -13.6,
             "ratio": 2.2,
             "attack": 0.018,
             "release": 0.18,
             "knee": 5,
-            "makeup": 7.6,
+            "makeup": 6.2,
             "compMix": 1.0,
             "limit": true
           }
@@ -3106,7 +3112,7 @@
         {
           "name": "R&B / soul",
           "kind": "set",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "state": {
             "profile": "transparent",
             "target": -13.2,
@@ -3117,12 +3123,12 @@
             "mid": -0.24,
             "high": 0.4,
             "compress": true,
-            "threshold": -13.7,
+            "threshold": -13.5,
             "ratio": 1.61,
             "attack": 0.032,
             "release": 0.32,
             "knee": 9,
-            "makeup": 3.2,
+            "makeup": 2.3,
             "compMix": 0.9,
             "limit": true
           }

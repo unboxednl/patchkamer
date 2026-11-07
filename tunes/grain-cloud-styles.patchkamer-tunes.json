@@ -6,9 +6,15 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Granular textures for Grain Cloud, in ten styles. Almost every tune uses the built-in Wave source (choir, organ, saw, glass, noise, sine), so it sounds on its own: Cloud tunes make an endless texture, the others are played with notes (C4 plays at the original pitch; with the Wave source A3 does). A few tunes use the Live source and work as effects: they process the sound on the In (source) input and are silent without a cable (Stutter Cloud, Micro Slicer, Pitch Scatter, Reverse Chop, Warped Cassette, Freeze Echo, Smear Cloud). Every tune sets the whole state.",
+  "tags": [
+    "instrument/texture"
+  ],
   "tree": [
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Choir Mist",
@@ -203,6 +209,9 @@
     },
     {
       "folder": "Dark Ambient",
+      "tags": [
+        "style/dark-ambient"
+      ],
       "items": [
         {
           "name": "Sunken Choir",
@@ -370,6 +379,9 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Epic Choir Rise",
@@ -537,6 +549,9 @@
     },
     {
       "folder": "Meditation",
+      "tags": [
+        "style/meditation"
+      ],
       "items": [
         {
           "name": "Singing Bowl Grains",
@@ -677,6 +692,9 @@
     },
     {
       "folder": "Sci-Fi",
+      "tags": [
+        "style/sci-fi"
+      ],
       "items": [
         {
           "name": "Alien Swarm",
@@ -844,6 +862,9 @@
     },
     {
       "folder": "Experimental",
+      "tags": [
+        "style/experimental"
+      ],
       "items": [
         {
           "name": "Granular Fog",
@@ -1011,6 +1032,9 @@
     },
     {
       "folder": "Glitch/IDM",
+      "tags": [
+        "style/glitch"
+      ],
       "items": [
         {
           "name": "Stutter Cloud",
@@ -1205,6 +1229,9 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Dusty Organ Pool",
@@ -1345,6 +1372,9 @@
     },
     {
       "folder": "Drone",
+      "tags": [
+        "instrument/drone"
+      ],
       "items": [
         {
           "name": "Choir Drone",

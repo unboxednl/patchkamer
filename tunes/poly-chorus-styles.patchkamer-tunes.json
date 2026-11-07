@@ -9,11 +9,17 @@
   "tree": [
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Neon Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.286,
@@ -47,6 +53,9 @@
           "name": "Night Drive Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.5,
@@ -80,6 +89,9 @@
           "name": "Retro Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 0.8,
@@ -113,6 +125,9 @@
           "name": "Chrome Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.9,
             "pulse": 0.5,
@@ -146,6 +161,9 @@
           "name": "Sunset Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 1,
             "pulse": 1,
@@ -179,6 +197,9 @@
           "name": "Laser Brass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.3,
@@ -212,6 +233,9 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Tide",
@@ -250,6 +274,9 @@
           "name": "Glass Air",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "saw": 0,
             "pulse": 0.6,
@@ -283,6 +310,9 @@
           "name": "Deep Hum",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 0,
@@ -316,6 +346,9 @@
           "name": "Breath Cloud",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.5,
@@ -349,6 +382,9 @@
           "name": "Drift Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "saw": 0.4,
             "pulse": 0.5,
@@ -382,6 +418,9 @@
           "name": "Far Shimmer",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "saw": 0,
             "pulse": 0.5,
@@ -415,11 +454,17 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Rising Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "saw": 0.9,
             "pulse": 0,
@@ -453,6 +498,9 @@
           "name": "Dark Brass Swell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.2,
@@ -552,6 +600,9 @@
           "name": "Hero Horns",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.4,
@@ -585,6 +636,9 @@
           "name": "Cold Bells",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "saw": 0,
             "pulse": 0.7,
@@ -618,11 +672,17 @@
     },
     {
       "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
       "items": [
         {
           "name": "Bright Pop Chords",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.8,
             "pulse": 0.5,
@@ -656,6 +716,9 @@
           "name": "Radio Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.7,
             "pulse": 0.5,
@@ -689,6 +752,9 @@
           "name": "Pop Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 1,
             "pulse": 1,
@@ -722,6 +788,9 @@
           "name": "Sugar Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "saw": 0.857,
             "pulse": 0.286,
@@ -755,6 +824,9 @@
           "name": "Candy Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.25,
             "pulse": 0.8,
@@ -788,6 +860,9 @@
           "name": "Hook Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.6,
@@ -821,11 +896,17 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Uplift Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.5,
@@ -859,6 +940,9 @@
           "name": "Rolling Trance Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0,
@@ -892,6 +976,9 @@
           "name": "Gated Chords",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.7,
             "pulse": 0.4,
@@ -925,6 +1012,9 @@
           "name": "Euphoria Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.6,
@@ -958,6 +1048,9 @@
           "name": "Pluck Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 1,
             "pulse": 1,
@@ -991,6 +1084,9 @@
           "name": "Breakdown Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.6,
@@ -1024,11 +1120,17 @@
     },
     {
       "folder": "House",
+      "tags": [
+        "style/house"
+      ],
       "items": [
         {
           "name": "Stab Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.7,
             "pulse": 0.7,
@@ -1062,6 +1164,9 @@
           "name": "Organ Block",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/organ"
+          ],
           "state": {
             "saw": 0,
             "pulse": 1,
@@ -1095,6 +1200,9 @@
           "name": "Warm House Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "saw": 0.75,
             "pulse": 0.438,
@@ -1128,6 +1236,9 @@
           "name": "Bounce Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.8,
             "pulse": 0.5,
@@ -1161,6 +1272,9 @@
           "name": "Soft Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 0.7,
@@ -1194,6 +1308,9 @@
           "name": "Chord Riser",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/riser"
+          ],
           "state": {
             "saw": 0.8,
             "pulse": 0.4,
@@ -1227,11 +1344,17 @@
     },
     {
       "folder": "Deep House",
+      "tags": [
+        "style/deep-house"
+      ],
       "items": [
         {
           "name": "Deep Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "saw": 0.1,
             "pulse": 0,
@@ -1265,6 +1388,9 @@
           "name": "Dub Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.6,
             "pulse": 0.6,
@@ -1298,6 +1424,9 @@
           "name": "Smooth Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "saw": 0.4,
             "pulse": 0.6,
@@ -1331,6 +1460,9 @@
           "name": "Late Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.4,
             "pulse": 0.6,
@@ -1364,6 +1496,9 @@
           "name": "Mellow Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.5,
@@ -1397,6 +1532,9 @@
           "name": "Pluck Pulse",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 0,
             "pulse": 1,
@@ -1430,11 +1568,18 @@
     },
     {
       "folder": "Funk & Disco",
+      "tags": [
+        "style/funk",
+        "style/disco"
+      ],
       "items": [
         {
           "name": "Funk Pluck Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/pluck"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.429,
@@ -1468,6 +1613,9 @@
           "name": "Disco Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "saw": 0.9,
             "pulse": 0,
@@ -1501,6 +1649,9 @@
           "name": "Funk Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.333,
             "pulse": 1,
@@ -1534,6 +1685,10 @@
           "name": "Brass Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass",
+            "instrument/fx/impact"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.3,
@@ -1567,6 +1722,9 @@
           "name": "Slide Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.8,
             "pulse": 0.4,
@@ -1600,6 +1758,9 @@
           "name": "Disco Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "saw": 0.4,
             "pulse": 0.7,
@@ -1633,11 +1794,17 @@
     },
     {
       "folder": "Soul",
+      "tags": [
+        "style/soul"
+      ],
       "items": [
         {
           "name": "Velvet Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.5,
@@ -1671,6 +1838,9 @@
           "name": "Warm Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 0.7,
@@ -1704,6 +1874,9 @@
           "name": "Smooth Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.214,
@@ -1737,6 +1910,9 @@
           "name": "Silky Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.6,
             "pulse": 0.3,
@@ -1770,6 +1946,9 @@
           "name": "Horn Section",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "saw": 0.6,
             "pulse": 0.7,
@@ -1803,6 +1982,9 @@
           "name": "Gentle Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 0.4,
             "pulse": 0.6,
@@ -1836,11 +2018,17 @@
     },
     {
       "folder": "Electro",
+      "tags": [
+        "style/electro"
+      ],
       "items": [
         {
           "name": "Electro Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0,
@@ -1874,6 +2062,9 @@
           "name": "Robot Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 1,
@@ -1907,6 +2098,9 @@
           "name": "Zap Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.8,
@@ -1940,6 +2134,9 @@
           "name": "Cold Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 0.8,
@@ -1973,6 +2170,9 @@
           "name": "Pulse Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 0,
             "pulse": 1,
@@ -2006,6 +2206,9 @@
           "name": "Noise Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0,
@@ -2039,11 +2242,17 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Dusty Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "saw": 0.3,
             "pulse": 0.5,
@@ -2077,6 +2286,9 @@
           "name": "Tape Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.4,
             "pulse": 0.5,
@@ -2110,6 +2322,9 @@
           "name": "Mellow Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "saw": 0.167,
             "pulse": 0,
@@ -2143,6 +2358,9 @@
           "name": "Wobble Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.5,
@@ -2176,6 +2394,9 @@
           "name": "Muted Chords",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.6,
@@ -2209,6 +2430,9 @@
           "name": "Rain Texture",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "saw": 0.1,
             "pulse": 0.2,
@@ -2242,11 +2466,17 @@
     },
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Warehouse Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 1,
             "pulse": 0.6,
@@ -2280,6 +2510,9 @@
           "name": "Rolling Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "saw": 0.75,
             "pulse": 0.438,
@@ -2313,6 +2546,9 @@
           "name": "Hypnotic Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "saw": 0.8,
             "pulse": 0.5,
@@ -2346,6 +2582,9 @@
           "name": "Industrial Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "saw": 0.7,
             "pulse": 0.5,
@@ -2379,6 +2618,9 @@
           "name": "Tech Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "saw": 0,
             "pulse": 1,
@@ -2412,6 +2654,9 @@
           "name": "Dark Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "saw": 0.5,
             "pulse": 0.6,

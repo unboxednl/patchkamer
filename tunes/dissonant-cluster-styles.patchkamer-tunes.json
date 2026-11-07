@@ -9,11 +9,17 @@
   "tree": [
     {
       "folder": "Industrial",
+      "tags": [
+        "style/industrial"
+      ],
       "items": [
         {
           "name": "Rust Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "struct": "sept",
             "voices": 2,
@@ -59,6 +65,9 @@
           "name": "Scrap Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "struct": "trit",
             "voices": 3,
@@ -104,6 +113,9 @@
           "name": "Press Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "struct": "chrom",
             "voices": 4,
@@ -149,6 +161,9 @@
           "name": "Steel Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "struct": "wide",
             "voices": 3,
@@ -194,6 +209,9 @@
           "name": "Furnace Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "struct": "sept",
             "voices": 5,
@@ -239,6 +257,9 @@
           "name": "Grinder Texture",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 4,
@@ -284,6 +305,9 @@
           "name": "Chain Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "struct": "x13",
             "voices": 4,
@@ -329,6 +353,9 @@
           "name": "Hammer Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "struct": "trit",
             "voices": 2,
@@ -374,11 +401,18 @@
     },
     {
       "folder": "Horror & Cinematic",
+      "tags": [
+        "style/horror",
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Dread Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 5,
@@ -424,6 +458,9 @@
           "name": "Tritone Siren",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx"
+          ],
           "state": {
             "struct": "trit",
             "voices": 3,
@@ -469,6 +506,9 @@
           "name": "Violin Sting",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings/violin"
+          ],
           "state": {
             "struct": "chrom",
             "voices": 4,
@@ -514,6 +554,9 @@
           "name": "Ghost Choir",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice/choir"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 6,
@@ -559,6 +602,9 @@
           "name": "Low Rumble",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 3,
@@ -604,6 +650,9 @@
           "name": "Hit Impact",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "struct": "wide",
             "voices": 3,
@@ -649,6 +698,9 @@
           "name": "Glass Whisper",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "struct": "x13",
             "voices": 4,
@@ -694,6 +746,9 @@
           "name": "Stinger Bell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "struct": "wide",
             "voices": 4,
@@ -739,11 +794,17 @@
     },
     {
       "folder": "Dark Ambient",
+      "tags": [
+        "style/dark-ambient"
+      ],
       "items": [
         {
           "name": "Abyss Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "struct": "sept",
             "voices": 4,
@@ -789,6 +850,9 @@
           "name": "Cold Fog",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "struct": "x13",
             "voices": 5,
@@ -924,6 +988,9 @@
           "name": "Slow Hum",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 2,
@@ -969,6 +1036,9 @@
           "name": "Hollow Choir",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice/choir"
+          ],
           "state": {
             "struct": "wide",
             "voices": 4,
@@ -1059,11 +1129,17 @@
     },
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Warehouse Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "struct": "sept",
             "voices": 3,
@@ -1109,6 +1185,9 @@
           "name": "Rumble Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 2,
@@ -1154,6 +1233,9 @@
           "name": "Raw Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "struct": "trit",
             "voices": 2,
@@ -1199,6 +1281,9 @@
           "name": "Tension Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "struct": "wide",
             "voices": 3,
@@ -1289,6 +1374,9 @@
           "name": "Siren Riser",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/riser"
+          ],
           "state": {
             "struct": "trit",
             "voices": 3,
@@ -1334,6 +1422,9 @@
     },
     {
       "folder": "Experimental",
+      "tags": [
+        "style/experimental"
+      ],
       "items": [
         {
           "name": "Bent Glass",
@@ -1384,6 +1475,9 @@
           "name": "Quarter Tone Choir",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice/choir"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 6,
@@ -1429,6 +1523,9 @@
           "name": "Rubber Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "struct": "random",
             "voices": 3,
@@ -1474,6 +1571,9 @@
           "name": "Random Bells",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "struct": "random",
             "voices": 4,
@@ -1519,6 +1619,9 @@
           "name": "Alien Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "struct": "sept",
             "voices": 5,
@@ -1564,6 +1667,9 @@
           "name": "Rough Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "struct": "chrom",
             "voices": 2,
@@ -1609,6 +1715,9 @@
           "name": "Spectral Drift",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "struct": "x13",
             "voices": 5,
@@ -1839,6 +1948,9 @@
           "name": "Robot Voice",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice"
+          ],
           "state": {
             "struct": "chrom",
             "voices": 3,
@@ -1884,6 +1996,9 @@
           "name": "Cracked Chime",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "struct": "wide",
             "voices": 3,
@@ -1929,6 +2044,9 @@
     },
     {
       "folder": "Noise",
+      "tags": [
+        "style/noise"
+      ],
       "items": [
         {
           "name": "Static Wall",
@@ -2159,11 +2277,17 @@
     },
     {
       "folder": "Dubstep",
+      "tags": [
+        "style/dubstep"
+      ],
       "items": [
         {
           "name": "Growl Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "struct": "sept",
             "voices": 3,
@@ -2209,6 +2333,9 @@
           "name": "Rip Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "struct": "trit",
             "voices": 2,
@@ -2254,6 +2381,9 @@
           "name": "Wobble Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 2,
@@ -2344,6 +2474,9 @@
           "name": "Tear Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "struct": "chrom",
             "voices": 4,
@@ -2389,6 +2522,9 @@
           "name": "Sub Drop",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "struct": "cloud",
             "voices": 2,
@@ -2434,6 +2570,9 @@
     },
     {
       "folder": "Drone",
+      "tags": [
+        "instrument/drone"
+      ],
       "items": [
         {
           "name": "Low Beating Drone",

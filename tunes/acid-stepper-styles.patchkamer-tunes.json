@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Basslines, leads, stabs and sequences for Acid Stepper across acid, techno, house, deep house, electro, trance, breakbeat, hip-hop, synthwave, dub, industrial and garage. Sequence tunes bring their own 16-step line; the others are played from a keyboard or an external sequencer.",
+ "tags": [
+  "instrument/bass/acid"
+ ],
  "tree": [
   {
    "folder": "Acid",
+   "tags": [
+    "style/acid"
+   ],
    "items": [
     {
      "name": "Concrete Squelch",
@@ -535,6 +541,9 @@
   },
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Driving Rumble",
@@ -966,6 +975,9 @@
   },
   {
    "folder": "House",
+   "tags": [
+    "style/house"
+   ],
    "items": [
     {
      "name": "Funky Offbeat",
@@ -1397,6 +1409,9 @@
   },
   {
    "folder": "Deep House",
+   "tags": [
+    "style/deep-house"
+   ],
    "items": [
     {
      "name": "Deep Round Bass",
@@ -1805,6 +1820,9 @@
   },
   {
    "folder": "Electro",
+   "tags": [
+    "style/electro"
+   ],
    "items": [
     {
      "name": "Robot Funk",
@@ -2236,6 +2254,9 @@
   },
   {
    "folder": "Trance",
+   "tags": [
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Rolling Trance Bass",
@@ -2667,6 +2688,9 @@
   },
   {
    "folder": "Breakbeat",
+   "tags": [
+    "style/breakbeat"
+   ],
    "items": [
     {
      "name": "Break Bass",
@@ -2767,6 +2791,9 @@
      "name": "Jungle Sub",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "style/jungle"
+     ],
      "state": {
       "cutoff": 230,
       "resonance": 1.5,
@@ -3075,6 +3102,9 @@
   },
   {
    "folder": "Hip-hop",
+   "tags": [
+    "style/hiphop"
+   ],
    "items": [
     {
      "name": "Boom Bass",
@@ -3411,6 +3441,9 @@
   },
   {
    "folder": "Synthwave",
+   "tags": [
+    "style/synthwave"
+   ],
    "items": [
     {
      "name": "Night Drive Bass",
@@ -3747,6 +3780,9 @@
   },
   {
    "folder": "Dub",
+   "tags": [
+    "style/dub"
+   ],
    "items": [
     {
      "name": "Dub Roots",
@@ -4155,6 +4191,9 @@
   },
   {
    "folder": "Industrial",
+   "tags": [
+    "style/industrial"
+   ],
    "items": [
     {
      "name": "Machine Grind",
@@ -4491,6 +4530,9 @@
   },
   {
    "folder": "Garage",
+   "tags": [
+    "style/garage"
+   ],
    "items": [
     {
      "name": "Two-Step Bass",

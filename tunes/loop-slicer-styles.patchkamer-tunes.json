@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Loop Slicer styles: 69 slice setups for the built-in demo loop (a one-bar drum break at 120 BPM): rearranged slice patterns, chops, stutters, reversed and pitched hits, and sparse hits to play from keys. Every folder works directly without loading anything. The 8 tunes in the folder Own Loop keep the loop you have loaded and only change how it is sliced and played: they stay silent until a loop is loaded. Sequencer tunes need the transport running; tunes without a pattern are played with notes from MIDI note 36 upward (one slice per key).",
+ "tags": [
+  "instrument/drums"
+ ],
  "tree": [
   {
    "folder": "House",
+   "tags": [
+    "style/house"
+   ],
    "items": [
     {
      "name": "Four on the Floor",
@@ -254,6 +260,9 @@
   },
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Warehouse Pulse",
@@ -499,6 +508,9 @@
   },
   {
    "folder": "Breakbeat",
+   "tags": [
+    "style/breakbeat"
+   ],
    "items": [
     {
      "name": "Broken Beat",
@@ -744,6 +756,9 @@
   },
   {
    "folder": "Drum and Bass",
+   "tags": [
+    "style/drum-and-bass"
+   ],
    "items": [
     {
      "name": "Two Step Roller",
@@ -829,6 +844,9 @@
      "name": "Rewind Break",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "style/breakbeat"
+     ],
      "state": {
       "level": 1.0,
       "cutoff": 8000,
@@ -949,6 +967,9 @@
   },
   {
    "folder": "Hip-hop",
+   "tags": [
+    "style/hiphop"
+   ],
    "items": [
     {
      "name": "Boom Bap Chop",
@@ -1194,6 +1215,9 @@
   },
   {
    "folder": "Trap",
+   "tags": [
+    "style/trap"
+   ],
    "items": [
     {
      "name": "Hat Roll",
@@ -1399,6 +1423,9 @@
   },
   {
    "folder": "Funk",
+   "tags": [
+    "style/funk"
+   ],
    "items": [
     {
      "name": "Tight Pocket",
@@ -1484,6 +1511,9 @@
      "name": "Disco Break",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "style/breakbeat"
+     ],
      "state": {
       "level": 1.0,
       "cutoff": 10000,
@@ -1604,6 +1634,9 @@
   },
   {
    "folder": "Dub",
+   "tags": [
+    "style/dub"
+   ],
    "items": [
     {
      "name": "Skank Hat Dub",
@@ -1809,6 +1842,9 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Reverse Boom",
@@ -2014,6 +2050,9 @@
   },
   {
    "folder": "Glitch",
+   "tags": [
+    "style/glitch"
+   ],
    "items": [
     {
      "name": "Stutter Gate",

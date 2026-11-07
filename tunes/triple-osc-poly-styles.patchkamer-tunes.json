@@ -9,6 +9,9 @@
   "tree": [
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Supersaw Anthem",
@@ -100,6 +103,9 @@
           "name": "Uplift Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -186,6 +192,9 @@
           "name": "Pluck Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -272,6 +281,9 @@
           "name": "Rolling Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -358,6 +370,9 @@
           "name": "Euphoric Chords",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -444,6 +459,9 @@
           "name": "Gate Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -530,6 +548,9 @@
           "name": "Euphoric Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "osc": [
               {
@@ -616,11 +637,17 @@
     },
     {
       "folder": "House",
+      "tags": [
+        "style/house"
+      ],
       "items": [
         {
           "name": "Piano Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "osc": [
               {
@@ -707,6 +734,9 @@
           "name": "Organ Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/organ"
+          ],
           "state": {
             "osc": [
               {
@@ -793,6 +823,9 @@
           "name": "Deep Chord Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -879,6 +912,9 @@
           "name": "Bouncy Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -965,6 +1001,9 @@
           "name": "Hollow Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -1051,6 +1090,9 @@
           "name": "Funky Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -1137,11 +1179,17 @@
     },
     {
       "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
       "items": [
         {
           "name": "Bright Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "osc": [
               {
@@ -1228,6 +1276,9 @@
           "name": "Warm Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -1314,6 +1365,9 @@
           "name": "Pop Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -1400,6 +1454,9 @@
           "name": "Soft Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "osc": [
               {
@@ -1486,6 +1543,9 @@
           "name": "Synth Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -1572,6 +1632,9 @@
           "name": "Chord Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -1658,11 +1721,17 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Retro Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -1749,6 +1818,9 @@
           "name": "Neon Brass Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "osc": [
               {
@@ -1835,6 +1907,9 @@
           "name": "Night Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -1921,6 +1996,9 @@
           "name": "Pulse Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -2007,6 +2085,9 @@
           "name": "Arp Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -2093,6 +2174,9 @@
           "name": "Warm Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "osc": [
               {
@@ -2179,6 +2263,10 @@
           "name": "Chord Wash",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords",
+            "instrument/texture"
+          ],
           "state": {
             "osc": [
               {
@@ -2265,11 +2353,17 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Drift Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -2356,6 +2450,9 @@
           "name": "Glass Bells",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "osc": [
               {
@@ -2442,6 +2539,9 @@
           "name": "Air Texture",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "osc": [
               {
@@ -2528,6 +2628,10 @@
           "name": "Warm Organ Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/organ",
+            "instrument/drone"
+          ],
           "state": {
             "osc": [
               {
@@ -2614,6 +2718,9 @@
           "name": "Dark Wash",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "osc": [
               {
@@ -2700,6 +2807,9 @@
           "name": "Soft Strings Bed",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "osc": [
               {
@@ -2786,11 +2896,17 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Epic Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "osc": [
               {
@@ -2877,6 +2993,9 @@
           "name": "Low Brass Swell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "osc": [
               {
@@ -2963,6 +3082,9 @@
           "name": "Tension Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "osc": [
               {
@@ -3049,6 +3171,9 @@
           "name": "Deep Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "osc": [
               {
@@ -3135,6 +3260,10 @@
           "name": "Choir Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice/choir",
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -3307,11 +3436,17 @@
     },
     {
       "folder": "Future Bass",
+      "tags": [
+        "style/future-bass"
+      ],
       "items": [
         {
           "name": "Supersaw Chords",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -3398,6 +3533,9 @@
           "name": "Wide Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -3484,6 +3622,9 @@
           "name": "Sub Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "osc": [
               {
@@ -3570,6 +3711,10 @@
           "name": "Bell Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell",
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -3656,6 +3801,9 @@
           "name": "Pad Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -3742,6 +3890,9 @@
           "name": "Detuned Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "osc": [
               {
@@ -3828,11 +3979,17 @@
     },
     {
       "folder": "Funk",
+      "tags": [
+        "style/funk"
+      ],
       "items": [
         {
           "name": "Funk Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -3919,6 +4076,10 @@
           "name": "Pluck Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano",
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -4005,6 +4166,10 @@
           "name": "Squelch Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/acid",
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -4091,6 +4256,9 @@
           "name": "Brass Section",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "osc": [
               {
@@ -4177,6 +4345,9 @@
           "name": "Fat Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -4263,6 +4434,9 @@
           "name": "Wah Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -4349,11 +4523,17 @@
     },
     {
       "folder": "Disco",
+      "tags": [
+        "style/disco"
+      ],
       "items": [
         {
           "name": "String Section",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "osc": [
               {
@@ -4440,6 +4620,9 @@
           "name": "Octave Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -4526,6 +4709,9 @@
           "name": "Brass Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "osc": [
               {
@@ -4612,6 +4798,9 @@
           "name": "Bright Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -4698,6 +4887,9 @@
           "name": "Electric Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "osc": [
               {
@@ -4784,6 +4976,9 @@
           "name": "Disco Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -4870,11 +5065,17 @@
     },
     {
       "folder": "Electro",
+      "tags": [
+        "style/electro"
+      ],
       "items": [
         {
           "name": "Robot Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -4961,6 +5162,9 @@
           "name": "Electro Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -5047,6 +5251,9 @@
           "name": "Zap Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -5133,6 +5340,9 @@
           "name": "Cold Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -5219,6 +5429,9 @@
           "name": "Cold Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -5305,6 +5518,9 @@
           "name": "FM Bell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "osc": [
               {
@@ -5391,11 +5607,17 @@
     },
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Warehouse Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -5482,6 +5704,9 @@
           "name": "Dub Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -5568,6 +5793,9 @@
           "name": "Hypnotic Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "osc": [
               {
@@ -5654,6 +5882,9 @@
           "name": "Dark Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {
@@ -5740,6 +5971,9 @@
           "name": "Detuned Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -5826,6 +6060,9 @@
           "name": "Warehouse Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "osc": [
               {
@@ -5912,11 +6149,17 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Dusty Keys",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/piano"
+          ],
           "state": {
             "osc": [
               {
@@ -6003,6 +6246,9 @@
           "name": "Tape Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "osc": [
               {
@@ -6089,6 +6335,9 @@
           "name": "Mellow Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "osc": [
               {
@@ -6175,6 +6424,9 @@
           "name": "Warm Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "osc": [
               {
@@ -6261,6 +6513,9 @@
           "name": "Soft Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "osc": [
               {

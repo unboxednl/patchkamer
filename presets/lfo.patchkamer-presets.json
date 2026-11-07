@@ -1593,6 +1593,9 @@
     },
     {
       "folder": "Generative",
+      "tags": [
+        "style/generative"
+      ],
       "items": [
         {
           "name": "Sample & Hold 1/16",

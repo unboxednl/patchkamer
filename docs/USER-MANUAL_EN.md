@@ -233,6 +233,8 @@ The **Load all** button at the top of the Tunes and Presets tabs loads every tun
 
 The **Tunes** and **Presets** tabs of the library manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. The packs that come with this repository are listed in the [tunes manual](tunes/USER-MANUAL_EN.md) and the [presets manual](presets/USER-MANUAL_EN.md).
 
+**Searching by instrument or style.** At the top of the Tunes and Presets tabs you choose **By device** (the libraries, as above), **By instrument** (Tunes only) or **By style**. The last two show an indented tree: Guitars → Nylon, Pianos, Brass, … or Hip-hop, Jungle, Techno, …, with the number of tunes behind each. Open a branch with the arrow, search by name, device or tag at the top, and click **Load**: the tune goes on the selected card of that device, on a card already on the floor, or on a new one. Whatever has no tag yet is under **Untagged**. The tags are in the packs themselves (`tags`, contract v1.19), so your own packs and packs from others show up in the tree by themselves.
+
 For the whole story, with the list of included packs and how to make your own, see the [presets manual](presets/USER-MANUAL_EN.md) and the [tunes manual](tunes/USER-MANUAL_EN.md).
 
 ### Skins

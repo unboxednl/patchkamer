@@ -9,6 +9,9 @@
  "tree": [
   {
    "folder": "Trance",
+   "tags": [
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Anthem Supersaw",
@@ -47,6 +50,9 @@
      "name": "Uplifting Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 3600,
       "resonance": 1,
@@ -80,6 +86,9 @@
      "name": "Gated Choir",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/voice/choir"
+     ],
      "state": {
       "cutoff": 4200,
       "resonance": 1,
@@ -113,6 +122,9 @@
      "name": "Rolling Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "cutoff": 1500,
       "resonance": 2,
@@ -146,6 +158,9 @@
      "name": "Heaven Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 3000,
       "resonance": 1,
@@ -179,6 +194,9 @@
      "name": "Sidechain Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 3600,
       "resonance": 1,
@@ -212,6 +230,9 @@
      "name": "Offbeat Saw Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "cutoff": 700,
       "resonance": 1.2,
@@ -245,11 +266,17 @@
   },
   {
    "folder": "Hardstyle",
+   "tags": [
+    "style/hardstyle"
+   ],
    "items": [
     {
      "name": "Euphoric Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 6000,
       "resonance": 1,
@@ -283,6 +310,9 @@
      "name": "Screech Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 2500,
       "resonance": 4,
@@ -316,6 +346,9 @@
      "name": "Kick Bass Rumble",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "cutoff": 300,
       "resonance": 1,
@@ -349,6 +382,9 @@
      "name": "Raw Pump Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 4500,
       "resonance": 2,
@@ -382,6 +418,9 @@
      "name": "Hard Fifth Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 3500,
       "resonance": 1,
@@ -415,6 +454,9 @@
      "name": "Anthem Drop Chord",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 5500,
       "resonance": 1,
@@ -448,11 +490,17 @@
   },
   {
    "folder": "Progressive",
+   "tags": [
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Progressive Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 4800,
       "resonance": 1.4,
@@ -486,6 +534,9 @@
      "name": "Soft Pluck Arp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "cutoff": 1800,
       "resonance": 1,
@@ -519,6 +570,9 @@
      "name": "Evolving Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 2600,
       "resonance": 1,
@@ -552,6 +606,9 @@
      "name": "Deep Chord Stack",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 2400,
       "resonance": 1,
@@ -585,6 +642,9 @@
      "name": "Sub Pulse Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "cutoff": 500,
       "resonance": 1.5,
@@ -618,6 +678,9 @@
      "name": "Gated Sweep Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 3200,
       "resonance": 1,
@@ -651,11 +714,17 @@
   },
   {
    "folder": "Big Room",
+   "tags": [
+    "style/big-room"
+   ],
    "items": [
     {
      "name": "Festival Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 7500,
       "resonance": 1,
@@ -689,6 +758,9 @@
      "name": "Big Room Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 3200,
       "resonance": 1,
@@ -722,6 +794,9 @@
      "name": "Supersaw Drop Chord",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 5000,
       "resonance": 1,
@@ -755,6 +830,10 @@
      "name": "Build Riser Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad",
+      "instrument/fx/riser"
+     ],
      "state": {
       "cutoff": 1500,
       "resonance": 1,
@@ -788,6 +867,9 @@
      "name": "Pump Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 4000,
       "resonance": 1,
@@ -854,11 +936,17 @@
   },
   {
    "folder": "Synthwave",
+   "tags": [
+    "style/synthwave"
+   ],
    "items": [
     {
      "name": "Neon Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 3500,
       "resonance": 1.5,
@@ -892,6 +980,9 @@
      "name": "Retro Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 2000,
       "resonance": 1,
@@ -925,6 +1016,9 @@
      "name": "Night Drive Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 2800,
       "resonance": 1,
@@ -958,6 +1052,9 @@
      "name": "Analog Bass Drive",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "cutoff": 600,
       "resonance": 2,
@@ -991,6 +1088,9 @@
      "name": "Arp Glow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "cutoff": 2200,
       "resonance": 1.6,
@@ -1024,6 +1124,9 @@
      "name": "Brass Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/brass"
+     ],
      "state": {
       "cutoff": 2200,
       "resonance": 1,
@@ -1057,6 +1160,9 @@
   },
   {
    "folder": "Pop",
+   "tags": [
+    "style/pop"
+   ],
    "items": [
     {
      "name": "Pop Supersaw Hook",
@@ -1095,6 +1201,9 @@
      "name": "Bright Chord Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 4500,
       "resonance": 1,
@@ -1128,6 +1237,9 @@
      "name": "Warm Pad Bed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 2800,
       "resonance": 1,
@@ -1161,6 +1273,9 @@
      "name": "Soft Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 4000,
       "resonance": 1,
@@ -1194,6 +1309,9 @@
      "name": "Sparkle Arp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "cutoff": 3000,
       "resonance": 1.3,
@@ -1227,6 +1345,9 @@
      "name": "Piano Style Chord",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano"
+     ],
      "state": {
       "cutoff": 2200,
       "resonance": 1,
@@ -1260,11 +1381,17 @@
   },
   {
    "folder": "Future Bass",
+   "tags": [
+    "style/future-bass"
+   ],
    "items": [
     {
      "name": "Future Chord Stack",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 3500,
       "resonance": 1,
@@ -1298,6 +1425,9 @@
      "name": "Detuned Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 5500,
       "resonance": 1.8,
@@ -1331,6 +1461,9 @@
      "name": "Super Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "cutoff": 2000,
       "resonance": 1.8,
@@ -1364,6 +1497,9 @@
      "name": "Wide Swell Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 2600,
       "resonance": 1,
@@ -1397,6 +1533,9 @@
      "name": "Sub Swell Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "cutoff": 450,
       "resonance": 1,
@@ -1430,6 +1569,9 @@
      "name": "Gated Chord Chop",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 3800,
       "resonance": 1,
@@ -1463,11 +1605,17 @@
   },
   {
    "folder": "Eurodance",
+   "tags": [
+    "style/eurodance"
+   ],
    "items": [
     {
      "name": "Eurodance Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 4800,
       "resonance": 1.8,
@@ -1501,6 +1649,9 @@
      "name": "Rave Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 2600,
       "resonance": 2.5,
@@ -1534,6 +1685,9 @@
      "name": "Wide Sweep Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "cutoff": 3000,
       "resonance": 2.5,
@@ -1567,6 +1721,9 @@
      "name": "Dance Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 3000,
       "resonance": 1,
@@ -1600,6 +1757,9 @@
      "name": "Classic Bass Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
      "state": {
       "cutoff": 800,
       "resonance": 2,
@@ -1633,6 +1793,9 @@
      "name": "Offbeat Chord Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "cutoff": 3200,
       "resonance": 1,
@@ -1666,11 +1829,17 @@
   },
   {
    "folder": "Ambient",
+   "tags": [
+    "style/ambient"
+   ],
    "items": [
     {
      "name": "Slow Bloom Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 2200,
       "resonance": 1,
@@ -1704,6 +1873,9 @@
      "name": "Glass Drift",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "cutoff": 8500,
       "resonance": 1,
@@ -1737,6 +1909,9 @@
      "name": "Deep Space Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "cutoff": 800,
       "resonance": 1.2,
@@ -1770,6 +1945,10 @@
      "name": "Shimmer Chord",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords",
+      "instrument/texture"
+     ],
      "state": {
       "cutoff": 5500,
       "resonance": 1,
@@ -1836,6 +2015,9 @@
      "name": "Dark Texture",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "cutoff": 500,
       "resonance": 2,
@@ -1869,11 +2051,18 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Orchestral Swell Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings",
+      "instrument/pad"
+     ],
      "state": {
       "cutoff": 2400,
       "resonance": 1,
@@ -1940,6 +2129,9 @@
      "name": "Hero Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "cutoff": 4000,
       "resonance": 1,
@@ -1973,6 +2165,10 @@
      "name": "Dark Brass Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/brass",
+      "instrument/fx/impact"
+     ],
      "state": {
       "cutoff": 1600,
       "resonance": 1.4,
@@ -2006,6 +2202,9 @@
      "name": "Low Cluster Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "cutoff": 700,
       "resonance": 1,

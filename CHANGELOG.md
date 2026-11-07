@@ -12,6 +12,7 @@ All notable changes to Patchkamer (the host and the desktop app) per version. Th
 - **Desktop app** (Electron): Patchkamer in its own window, with the bundled library (devices, presets, tunes) and a portable Windows exe that needs no install. Built by the GitHub Action *App*. A folder `bibliotheek` next to the exe replaces the bundled library.
 - **ASIO for the app**: audio can go straight to an ASIO driver for lower latency. Button **ASIO** at the bottom left, off by default. Choose driver, buffer, output pair, sample rate and margin; the button shows the estimated delay. Tested with an audio interface at about 17 ms.
 - **Version number** under Settings: the version of Patchkamer, and in the app also the version of the app and the latest release on GitHub, with a download link. A link to this changelog.
+- **Find sounds by instrument or style.** The Tunes and Presets tabs get **By instrument** and **By style**: an indented tree (Guitars → Nylon, Pianos, Brass, …; Hip-hop, Jungle, Techno, …) with search and a **Load** button that puts the tune on a card. The bundled tune and preset packs are tagged. New in the contract (v1.19): optional `tags` on tunes, presets, folders and packs.
 
 ### Fixed
 - MIDI now connects in the app.

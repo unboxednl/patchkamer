@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Tunes for Formant Singer by style: choir, solo voices, bass voices, whisper and breath, pads and ambient, cinematic, pop leads, robot and FX, chant, lullaby, hymn and syllable study. Every tune is a complete voice with a short original text (about 2 to 9 syllables, in English, Dutch or phonemes) that fits the style. The text expects one note per syllable: a chord counts as one note, and the text starts again after the last syllable. Syllables per text: Choir 4 to 5; Solo Voices 4 to 7; Bass Voices 1 to 4; Whisper and Breath 3 to 6; Pads and Ambient 1 to 4; Cinematic 1 to 6; Pop Leads 4 to 6; Robot and FX 2 to 5; Chant 4 to 6; Lullaby 3 to 7; Hymn 2 to 9; Syllable Study 6 to 8. Tunes with a fixed vowel sing that one vowel on every note. Play a melody with that many notes (the card shows the current syllable); press Restart to start the text again.",
+ "tags": [
+  "instrument/voice"
+ ],
  "tree": [
   {
    "folder": "Choir",
+   "tags": [
+    "instrument/voice/choir"
+   ],
    "items": [
     {
      "name": "Warm Choir",
@@ -667,6 +673,9 @@
   },
   {
    "folder": "Pads and Ambient",
+   "tags": [
+    "instrument/pad"
+   ],
    "items": [
     {
      "name": "Ocean Pad",
@@ -846,6 +855,9 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Epic Chorus",
@@ -1025,6 +1037,9 @@
   },
   {
    "folder": "Pop Leads",
+   "tags": [
+    "instrument/lead"
+   ],
    "items": [
     {
      "name": "Pop Voice",

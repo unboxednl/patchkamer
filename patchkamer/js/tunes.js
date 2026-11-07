@@ -27,7 +27,7 @@ function tuFind(lid,pid){ const scan=l=>{ let hit=null; tuWalk(l.tree,(n,path,ar
 function tuFolderNode(l,fid){ if(!fid) return null; let hit=null; tuWalk(l.tree,n=>{ if(!hit&&n.type==='folder'&&n.fid===fid) hit=n; }); return hit; }
 const tuChildren=(l,fid)=>{ const f=tuFolderNode(l,fid); return f?f.children:l.tree; };
 PK.prPersistT=0;
-const prDump=()=>prUser().map(l=>({lid:l.lid,name:l.name,device:l.device,author:l.author||'',license:l.license||'',description:l.description||'',type:libType(l),tree:l.tree})); PK.prDump=prDump;
+const prDump=()=>prUser().map(l=>({lid:l.lid,name:l.name,device:l.device,author:l.author||'',license:l.license||'',description:l.description||'',tags:l.tags||[],type:libType(l),tree:l.tree})); PK.prDump=prDump;
 // direct wegschrijven (samengevoegd binnen één taak), en nogmaals bij het verlaten van de pagina
 function prPersist(){ if(PK.prPersistT) return; PK.prPersistT=setTimeout(()=>{ PK.prPersistT=0; PK.IDB.set('tunes:user',prDump()); },0); } PK.prPersist=prPersist;
 // de state die een tune bewaart: getPreset() als het apparaat die heeft (bv. zonder routing), anders getState()
@@ -37,20 +37,23 @@ function presetDirty(r){ return !!(r.preset&&r.presetSnap!=null&&presetKey(r)!==
 const tuParts=r=>{ try{ const p=typeof r.inst.parts==='function'?r.inst.parts():null; return Array.isArray(p)?p.filter(x=>x&&typeof x.id==='string'):[]; }catch(e){ return []; } };
 
 // ---- bestanden: tunepack (nieuw) en presetbestand (oud) → bibliotheken per apparaat ----
+// tags (contract v1.19): paden als instrument/guitar/acoustic en style/hiphop, kleine letters, cijfers en streepjes, hoogstens 4 niveaus; een tag op een pack of map geldt voor alles daaronder
+const TAGRE=/^[a-z0-9]+(-[a-z0-9]+)*(\/[a-z0-9]+(-[a-z0-9]+)*){0,3}$/;
+function tuTagsIn(v){ if(!Array.isArray(v)) return []; const out=[]; for(const t of v){ const s=typeof t==='string'?t.trim().toLowerCase():''; if(s.length<=60&&TAGRE.test(s)&&!out.includes(s)) out.push(s); if(out.length>=12) break; } return out; } PK.tuTagsIn=tuTagsIn;
 function tuNodeIn(x,depth=0){ if(!x||typeof x!=='object'||depth>8) return null;
-  if(typeof x.folder==='string'||x.type==='folder') return {type:'folder',fid:prUid('f'),name:String(x.folder||x.name||PK.pkt('m.map')).slice(0,60),children:(Array.isArray(x.items||x.children)?(x.items||x.children):[]).map(y=>tuNodeIn(y,depth+1)).filter(Boolean)};
-  if(x.state&&typeof x.state==='object') return {type:'tune',pid:prUid('p'),name:String(x.name||PK.pkt('m.naamloos')).slice(0,80),kind:x.kind==='part'?'part':'set',ptype:x.kind==='part'?String(x.part||x.ptype||'').slice(0,40):undefined,author:String(x.author||'').slice(0,60),license:String(x.license||'').slice(0,64),basedOn:x.basedOn&&typeof x.basedOn==='object'?{name:String(x.basedOn.name||'').slice(0,80),author:String(x.basedOn.author||'').slice(0,60),license:String(x.basedOn.license||'').slice(0,64)}:undefined,tags:Array.isArray(x.tags)?x.tags.slice(0,12).map(t=>String(t).slice(0,24)):[],ver:String(x.version||x.ver||''),state:x.state,t:+new Date(x.saved||0)||Date.now()};
+  if(typeof x.folder==='string'||x.type==='folder') return {type:'folder',tags:tuTagsIn(x.tags),fid:prUid('f'),name:String(x.folder||x.name||PK.pkt('m.map')).slice(0,60),children:(Array.isArray(x.items||x.children)?(x.items||x.children):[]).map(y=>tuNodeIn(y,depth+1)).filter(Boolean)};
+  if(x.state&&typeof x.state==='object') return {type:'tune',pid:prUid('p'),name:String(x.name||PK.pkt('m.naamloos')).slice(0,80),kind:x.kind==='part'?'part':'set',ptype:x.kind==='part'?String(x.part||x.ptype||'').slice(0,40):undefined,author:String(x.author||'').slice(0,60),license:String(x.license||'').slice(0,64),basedOn:x.basedOn&&typeof x.basedOn==='object'?{name:String(x.basedOn.name||'').slice(0,80),author:String(x.basedOn.author||'').slice(0,60),license:String(x.basedOn.license||'').slice(0,64)}:undefined,tags:tuTagsIn(x.tags),ver:String(x.version||x.ver||''),state:x.state,t:+new Date(x.saved||0)||Date.now()};
   return null; }
-function tuNodeOut(n){ return n.type==='folder'?{folder:n.name,items:n.children.map(tuNodeOut)}:{name:n.name,kind:n.kind,...(n.kind==='part'?{part:n.ptype||''}:{}),...(n.author?{author:n.author}:{}),...(n.license?{license:n.license}:{}),...(n.basedOn?{basedOn:n.basedOn}:{}),...(n.tags&&n.tags.length?{tags:n.tags}:{}),version:n.ver||'',saved:new Date(n.t||Date.now()).toISOString(),state:n.state}; }
+function tuNodeOut(n){ return n.type==='folder'?{folder:n.name,...(n.tags&&n.tags.length?{tags:n.tags}:{}),items:n.children.map(tuNodeOut)}:{name:n.name,kind:n.kind,...(n.kind==='part'?{part:n.ptype||''}:{}),...(n.author?{author:n.author}:{}),...(n.license?{license:n.license}:{}),...(n.basedOn?{basedOn:n.basedOn}:{}),...(n.tags&&n.tags.length?{tags:n.tags}:{}),version:n.ver||'',saved:new Date(n.t||Date.now()).toISOString(),state:n.state}; }
 function prNormalize(j,fallbackName){
   if(j&&j.format===TUFMT){ if(typeof j.device!=='string'||!j.device) throw new Error(PK.pkt('m.tunepack_zonder_apparaat_id_device'));
-    return [{name:String(j.name||fallbackName||PK.pkt('m.tunes')).slice(0,80),device:j.device,type:'tune',author:String(j.author||'').slice(0,80),license:String(j.license||'').slice(0,64),description:String(j.description||'').slice(0,400),tree:(Array.isArray(j.tree)?j.tree:Array.isArray(j.tunes)?j.tunes:[]).map(x=>tuNodeIn(x)).filter(Boolean)}]; }
+    return [{name:String(j.name||fallbackName||PK.pkt('m.tunes')).slice(0,80),device:j.device,type:'tune',author:String(j.author||'').slice(0,80),license:String(j.license||'').slice(0,64),description:String(j.description||'').slice(0,400),tags:tuTagsIn(j.tags),tree:(Array.isArray(j.tree)?j.tree:Array.isArray(j.tunes)?j.tunes:[]).map(x=>tuNodeIn(x)).filter(Boolean)}]; }
   if(j&&j.format===PRFMT&&typeof j.device==='string'&&Array.isArray(j.tree))
-    return [{name:String(j.name||fallbackName||PK.pkt('m.presets')).slice(0,80),device:j.device,type:'preset',author:String(j.author||'').slice(0,80),license:String(j.license||'').slice(0,64),description:String(j.description||'').slice(0,400),tree:j.tree.map(x=>tuNodeIn(x)).filter(Boolean)}];
+    return [{name:String(j.name||fallbackName||PK.pkt('m.presets')).slice(0,80),device:j.device,type:'preset',author:String(j.author||'').slice(0,80),license:String(j.license||'').slice(0,64),description:String(j.description||'').slice(0,400),tags:tuTagsIn(j.tags),tree:j.tree.map(x=>tuNodeIn(x)).filter(Boolean)}];
   if(!j||(j.format&&j.format!==PRFMT)||!Array.isArray(j.presets)) throw new Error(PK.pkt('m.geen_patchkamer_tune_of_presetbestand'));
   const by=new Map(); j.presets.filter(p=>p&&typeof p.device==='string'&&p.state&&typeof p.state==='object').forEach(p=>{ if(!by.has(p.device)) by.set(p.device,[]); by.get(p.device).push(tuNodeIn(p)); });
   return [...by.entries()].map(([device,tree])=>({name:String(j.name||fallbackName||PK.pkt('m.presets')).slice(0,80),device,author:'',license:'',description:'',tree})); } PK.prNormalize=prNormalize;
-function tuExportJSON(l){ const T=libType(l); return JSON.stringify({format:T==='tune'?TUFMT:PRFMT,formatVersion:T==='tune'?1:2,device:l.device,deviceName:devName(l.device),name:l.name,author:l.author||'',license:l.license||'',description:l.description||'',saved:new Date().toISOString(),tree:l.tree.map(tuNodeOut)},null,1); }
+function tuExportJSON(l){ const T=libType(l); return JSON.stringify({format:T==='tune'?TUFMT:PRFMT,formatVersion:T==='tune'?1:2,device:l.device,deviceName:devName(l.device),name:l.name,author:l.author||'',license:l.license||'',description:l.description||'',...(l.tags&&l.tags.length?{tags:l.tags}:{}),saved:new Date().toISOString(),tree:l.tree.map(tuNodeOut)},null,1); }
 async function presetsFromSource(src,list,errs){
   PK.PR.libs=PK.PR.libs.filter(l=>!(l.ro&&l.src&&l.src.sid===src.sid));
   for(const w of list){ try{ const libs=prNormalize(await w.load(),PK.wsNameOf(w.path).replace(/\.patchkamer-(presets|tunes)$/i,''));
@@ -169,7 +172,7 @@ function presetSave(id,name,lid,newLibName,opt={}){ const r=PK.Host.devices.get(
   if(kind==='part'){ if(!r.partTunes) r.partTunes={}; r.partTunes[opt.partId]={lid:l.lid,pid:p.pid,name}; }
   else { r.preset={lid:l.lid,pid:p.pid,name:p.name}; r.presetSnap=JSON.stringify(state); }
   prPersist(); presetRefreshAll(); PK.status(PK.pkt('m.bewaard_in',kind==='part'?'Instrument-tune':PK.TW[libType(l)].One,name,l.name,licName(meta.license))); return p; } PK.presetSave=presetSave;
-PK.prOpen=new Set(), PK.TUFILTER='', PK.TUMODE='tune';
+PK.prOpen=new Set(), PK.TUFILTER='', PK.TUMODE='tune', PK.TUQ=''; PK.TUVIEW='device'; try{ const v=localStorage.getItem('patchkamer.tuView'); if(v==='instrument'||v==='style') PK.TUVIEW=v; }catch(e){}
 // de tabs Tunes en Presets van het bibliotheekvenster delen één paneel (#prPanel); prShowMode zet de soort en tekent hem
 function prShowMode(mode){ if(mode==='tune'||mode==='preset'){ if(mode!==PK.TUMODE&&PK.TUFILTER&&tuTypeOf(PK.TUFILTER)!==mode) PK.TUFILTER=''; PK.TUMODE=mode; }
   const t=PK.$('prTitle'); if(t) t.textContent=PK.TW[PK.TUMODE].libs.replace(/^./,c=>c.toUpperCase()); PK.prPanel.setAttribute('aria-label',PK.TW[PK.TUMODE].Many); prPaintPanel(); } PK.prShowMode=prShowMode;
@@ -203,6 +206,9 @@ function tuPaintTree(box,l,list,depth){
     else { const own=tuLibsFor(l.device,true).filter(x=>!x.ro); if(own.length){ const cp=mbtn('→ '+own[0].name,PK.pkt('m.kopieer_naar_je_eigen_bibliotheek'),()=>{ own[0].tree.push({...prClone(n),pid:prUid('p'),t:Date.now()}); prPersist(); presetRefreshAll(); PK.status(PK.pkt('m.gekopieerd_naar',n.name,own[0].name)); }); bb.appendChild(cp); } }
     it.append(nm,bb); box.appendChild(it); }); }
 function prPaintPanel(){ const box=PK.$('prLibs'); box.innerHTML=''; { const la=PK.$('prLoadAll'); la.textContent=PK.pkt(PK.TUMODE==='tune'?'m.alle_tunes_laden':'m.alle_presets_laden'); la.title=PK.pkt(PK.TUMODE==='tune'?'m.alles_laden_titel_tunes':'m.alles_laden_titel_presets'); } PK.$('prShowBar').checked=PK.PR.prefs.bar!==false;
+  const view=PK.TUMODE==='preset'&&PK.TUVIEW==='instrument'?'style':PK.TUVIEW;   // presets (effecten, mixers, …) hebben geen instrument
+  { const vw=mk('div','wsrow tuview'); [['device','m.tv_apparaat'],['instrument','m.tv_instrument'],['style','m.tv_stijl']].filter(([k])=>k!=='instrument'||PK.TUMODE==='tune').forEach(([k,key])=>{ const b=mbtn(PK.pkt(key),'',()=>{ PK.TUVIEW=k; try{ localStorage.setItem('patchkamer.tuView',k); }catch(e){} prPaintPanel(); }); if(view===k) b.classList.add('on'); b.setAttribute('aria-pressed',String(view===k)); vw.appendChild(b); }); box.appendChild(vw); }
+  if(view!=='device'&&PK.tuBrowse){ PK.tuBrowse(box,view); return; }
   const W=PK.TW[PK.TUMODE];
   const devs=[...new Set([...PK.PR.libs.map(l=>l.device),...[...PK.Host.devices.values()].map(r=>r.def.id)])].filter(d=>tuTypeOf(d,(PK.PR.libs.find(l=>l.device===d)||{}).type)===PK.TUMODE).sort((a,b)=>devName(a).localeCompare(devName(b),'nl'));
   const top=mk('div','wsrow'); const fsel=mk('select','small'); fsel.innerHTML=PK.pkt('m.alle_apparaten')+devs.map(d=>`<option value="${PK.esc(d)}">${PK.esc(devName(d))} (${tuLibsFor(d,true).length})</option>`).join(''); fsel.value=devs.includes(PK.TUFILTER)?PK.TUFILTER:''; fsel.onchange=()=>{ PK.TUFILTER=fsel.value; prPaintPanel(); };
@@ -223,11 +229,13 @@ function prPaintPanel(){ const box=PK.$('prLibs'); box.innerHTML=''; { const la=
         const rm=mbtn('×',PK.pkt('m.bibliotheek_verwijderen')); armBtn(rm,'×','Weg?',()=>{ PK.PR.libs=PK.PR.libs.filter(x=>x!==l); prPersist(); presetRefreshAll(); PK.status(PK.pkt('m.bibliotheek_verwijderd')+l.name); }); b.appendChild(rm); }
       row.append(sp,cb,info,b); box.appendChild(row);
       if(PK.prOpen.has(l.lid)){ const list=mk('div','prlist'); if(!l.tree.length) list.appendChild(mk('div','note',PK.pkt('m.leeg_bewaar')+W.many+PK.pkt('m.via_bewaar_op_een_kaart')+PK.esc(devName(dev))+'.')); else tuPaintTree(list,l,l.tree,0); box.appendChild(list); } }); }); } PK.prPaintPanel=prPaintPanel;
+// alle tunes (of presets, volgens het tabblad) van bibliotheken die aanstaan, met hun geldende tags: die van het pack, van de mappen erboven en van de tune zelf; instrumenten (kind part) tellen niet mee
+function tuTagged(){ const out=[]; PK.PR.libs.filter(l=>libType(l)===PK.TUMODE&&prOn(l)).forEach(l=>{ const walk=(list,inh,path)=>{ for(const n of list){ if(n.type==='folder') walk(n.children,[...inh,...(n.tags||[])],[...path,n.name]); else if(n.kind!=='part') out.push({l,n,path,tags:[...new Set([...inh,...(n.tags||[])])]}); } }; walk(l.tree,l.tags||[],[]); }); return out; } PK.tuTagged=tuTagged; PK.tuDevName=devName;
 function prApplyFromPanel(lid,pid){ const h=tuFind(lid,pid); if(!h) return; const dev=h.l.device;
   let id=PK.selected&&PK.Host.devices.get(PK.selected)&&PK.Host.devices.get(PK.selected).def.id===dev?PK.selected:null;
   if(!id) for(const [k,r] of PK.Host.devices) if(r.def.id===dev){ id=k; break; }
   if(!id){ const before=new Set(PK.Host.devices.keys()); PK.placeNew(dev); id=[...PK.Host.devices.keys()].find(k=>!before.has(k)); }
-  if(id){ presetApply(id,h.l.lid,pid); PK.select(id); } }
+  if(id){ presetApply(id,h.l.lid,pid); PK.select(id); } } PK.prApplyFromPanel=prApplyFromPanel;
 // tune- en presetbestanden importeren (knop Importeren en bestanden die op het canvas worden losgelaten); quiet: geen melding, alleen {n,errs}
 async function importTuneFiles(files,quiet){ let n=0; const errs=[];
   for(const f of files){ try{ const libs=prNormalize(JSON.parse(await f.text()),f.name.replace(/\.patchkamer-(presets|tunes)\.json$|\.json$/i,''));

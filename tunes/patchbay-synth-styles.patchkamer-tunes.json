@@ -9,11 +9,17 @@
  "tree": [
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Rolling Sub",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -90,6 +96,9 @@
      "name": "Warehouse Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -247,6 +256,9 @@
      "name": "Slide Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -323,6 +335,9 @@
      "name": "Industrial Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -399,6 +414,9 @@
      "name": "Dark Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -551,11 +569,17 @@
   },
   {
    "folder": "Acid",
+   "tags": [
+    "style/acid"
+   ],
    "items": [
     {
      "name": "Squelch Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/acid"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -632,6 +656,10 @@
      "name": "Acid Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/acid",
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -784,6 +812,9 @@
      "name": "Rubber Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -860,6 +891,10 @@
      "name": "Sub Acid",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub",
+      "instrument/bass/acid"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -941,6 +976,9 @@
      "name": "Wet Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1017,11 +1055,17 @@
   },
   {
    "folder": "House",
+   "tags": [
+    "style/house"
+   ],
    "items": [
     {
      "name": "Deep Sub",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1103,6 +1147,9 @@
      "name": "Organ Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1179,6 +1226,9 @@
      "name": "Chord Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1255,6 +1305,9 @@
      "name": "Warm Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1331,6 +1384,9 @@
      "name": "Offbeat Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1407,6 +1463,9 @@
      "name": "Formant Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1483,11 +1542,17 @@
   },
   {
    "folder": "Synthwave",
+   "tags": [
+    "style/synthwave"
+   ],
    "items": [
     {
      "name": "Neon Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1564,6 +1629,9 @@
      "name": "Soft Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1640,6 +1708,10 @@
      "name": "Brass Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/brass",
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1716,6 +1788,9 @@
      "name": "Wide Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1792,6 +1867,9 @@
      "name": "Glass Keys",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1868,6 +1946,10 @@
      "name": "Pulse Arp Voice",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/voice",
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -1944,11 +2026,17 @@
   },
   {
    "folder": "Ambient",
+   "tags": [
+    "style/ambient"
+   ],
    "items": [
     {
      "name": "Slow Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2025,6 +2113,9 @@
      "name": "Wind",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2101,6 +2192,9 @@
      "name": "Ocean",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2177,6 +2271,9 @@
      "name": "Shimmer Bell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2253,6 +2350,9 @@
      "name": "Drone Floor",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2329,6 +2429,9 @@
      "name": "Distant Rain",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2405,6 +2508,9 @@
      "name": "Glass Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2481,11 +2587,17 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Rising Swell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2562,6 +2674,9 @@
      "name": "Dark Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2638,6 +2753,9 @@
      "name": "Impact",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.17157253000904804,
@@ -2790,6 +2908,9 @@
      "name": "Metal Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2866,6 +2987,9 @@
      "name": "Low Brass Swell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/brass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -2942,6 +3066,9 @@
      "name": "Alien Texture",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3018,11 +3145,17 @@
   },
   {
    "folder": "Electro",
+   "tags": [
+    "style/electro"
+   ],
    "items": [
     {
      "name": "Robot Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3099,6 +3232,9 @@
      "name": "Zap Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3175,6 +3311,9 @@
      "name": "Electro Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3251,6 +3390,9 @@
      "name": "Square Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3327,6 +3469,9 @@
      "name": "Sweep Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3403,6 +3548,9 @@
      "name": "Vox Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3479,11 +3627,18 @@
   },
   {
    "folder": "Hip-hop",
+   "tags": [
+    "style/hiphop"
+   ],
    "items": [
     {
      "name": "Boom Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass",
+      "instrument/fx/impact"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3565,6 +3720,9 @@
      "name": "Sub Drop",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3646,6 +3804,9 @@
      "name": "Dusty Keys",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3722,6 +3883,9 @@
      "name": "Soft Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3803,6 +3967,9 @@
      "name": "Lo-fi Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3879,11 +4046,17 @@
   },
   {
    "folder": "Dub",
+   "tags": [
+    "style/dub"
+   ],
    "items": [
     {
      "name": "Dub Sub",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -3965,6 +4138,9 @@
      "name": "Dub Chord",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4117,6 +4293,9 @@
      "name": "Siren Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4193,6 +4372,9 @@
      "name": "Round Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4269,11 +4451,18 @@
   },
   {
    "folder": "Funk & Disco",
+   "tags": [
+    "style/funk",
+    "style/disco"
+   ],
    "items": [
     {
      "name": "Funk Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4350,6 +4539,9 @@
      "name": "Pluck Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4426,6 +4618,9 @@
      "name": "Disco Strings",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4502,6 +4697,9 @@
      "name": "Wah Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4578,6 +4776,9 @@
      "name": "Octave Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4654,6 +4855,9 @@
      "name": "Snappy Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4730,11 +4934,17 @@
   },
   {
    "folder": "Trance",
+   "tags": [
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Trance Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4811,6 +5021,9 @@
      "name": "Uplifting Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4887,6 +5100,9 @@
      "name": "Detuned Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -4963,6 +5179,9 @@
      "name": "Rolling Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5039,6 +5258,9 @@
      "name": "Gated Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5115,11 +5337,17 @@
   },
   {
    "folder": "Chiptune",
+   "tags": [
+    "style/chiptune"
+   ],
    "items": [
     {
      "name": "Pulse Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5196,6 +5424,9 @@
      "name": "Square Bass Chip",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5272,6 +5503,9 @@
      "name": "Triangle Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5353,6 +5587,9 @@
      "name": "Noise Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5429,6 +5666,9 @@
      "name": "PWM Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5510,11 +5750,17 @@
   },
   {
    "folder": "Drum & Bass",
+   "tags": [
+    "style/drum-and-bass"
+   ],
    "items": [
     {
      "name": "Detuned Saw Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5591,6 +5837,9 @@
      "name": "Wobble Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5667,6 +5916,9 @@
      "name": "Growl Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5748,6 +6000,9 @@
      "name": "Sub Pressure",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5829,6 +6084,9 @@
      "name": "Rave Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -5981,6 +6239,9 @@
   },
   {
    "folder": "Generative",
+   "tags": [
+    "style/generative"
+   ],
    "items": [
     {
      "name": "S/H Bleeps",
@@ -6062,6 +6323,9 @@
      "name": "Random Bells",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -6138,6 +6402,9 @@
      "name": "Cascade Arp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -6219,6 +6486,9 @@
      "name": "Sample Rain",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -6295,6 +6565,9 @@
      "name": "Gliding Lag Voice",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/voice"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -6388,6 +6661,9 @@
      "name": "Vibrato Voice",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/voice"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,
@@ -6630,6 +6906,9 @@
      "name": "Siren",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx"
+     ],
      "state": {
       "v1r": 0,
       "v1f": 0.27187253000904804,

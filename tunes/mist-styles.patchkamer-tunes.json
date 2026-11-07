@@ -6,9 +6,15 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Drone and ambient sounds for Mist, in eleven styles: slow chord drones that start with the transport, dark pedals, cinematic swells, calm meditation beds, sci-fi atmospheres, experimental textures, lo-fi haze, pure drones, sound-design swells, new age and chillout beds. Most sounds are Drone + notes (press play on the transport; the cloud of chords and melody starts by itself); the ones in Notes only mode wait for notes on the Notes input. Every tune sets the whole state.",
+  "tags": [
+    "instrument/texture"
+  ],
   "tree": [
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Horizon",
@@ -182,6 +188,9 @@
     },
     {
       "folder": "Dark Ambient",
+      "tags": [
+        "style/dark-ambient"
+      ],
       "items": [
         {
           "name": "Sub Cave",
@@ -331,6 +340,9 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Epic Rise",
@@ -480,6 +492,9 @@
     },
     {
       "folder": "Meditation",
+      "tags": [
+        "style/meditation"
+      ],
       "items": [
         {
           "name": "Bowl Drone",
@@ -629,6 +644,9 @@
     },
     {
       "folder": "Sci-Fi",
+      "tags": [
+        "style/sci-fi"
+      ],
       "items": [
         {
           "name": "Deep Station",
@@ -778,6 +796,9 @@
     },
     {
       "folder": "Experimental",
+      "tags": [
+        "style/experimental"
+      ],
       "items": [
         {
           "name": "Thin Ice",
@@ -903,6 +924,9 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Dusty Keys",
@@ -1028,6 +1052,9 @@
     },
     {
       "folder": "Drone",
+      "tags": [
+        "instrument/drone"
+      ],
       "items": [
         {
           "name": "Low Pedal",

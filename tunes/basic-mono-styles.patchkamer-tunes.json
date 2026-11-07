@@ -9,11 +9,17 @@
   "tree": [
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Rolling Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -30,6 +36,9 @@
           "name": "Warehouse Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -46,6 +55,9 @@
           "name": "Dark Pulse Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "square",
             "fine": -6,
@@ -94,6 +106,9 @@
           "name": "Dread Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -110,11 +125,17 @@
     },
     {
       "folder": "House",
+      "tags": [
+        "style/house"
+      ],
       "items": [
         {
           "name": "Deep Sub Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -131,6 +152,9 @@
           "name": "Bouncy Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -147,6 +171,9 @@
           "name": "Organ Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/organ"
+          ],
           "state": {
             "wave": "square",
             "fine": 3,
@@ -163,6 +190,9 @@
           "name": "Offbeat Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -179,6 +209,9 @@
           "name": "Hollow Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -195,6 +228,9 @@
           "name": "Round Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -211,11 +247,17 @@
     },
     {
       "folder": "Electro",
+      "tags": [
+        "style/electro"
+      ],
       "items": [
         {
           "name": "Zap Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -232,6 +274,9 @@
           "name": "Robot Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -248,6 +293,9 @@
           "name": "Pulse Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -264,6 +312,9 @@
           "name": "Laser Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -280,6 +331,9 @@
           "name": "Cold Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "square",
             "fine": -4,
@@ -296,6 +350,9 @@
           "name": "Sweep Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 8,
@@ -312,11 +369,18 @@
     },
     {
       "folder": "Hip-hop",
+      "tags": [
+        "style/hiphop"
+      ],
       "items": [
         {
           "name": "Boom Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub",
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -333,6 +397,9 @@
           "name": "Dusty Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -349,6 +416,9 @@
           "name": "Mellow Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -365,6 +435,9 @@
           "name": "Dark Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -381,6 +454,9 @@
           "name": "Slide Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -397,11 +473,17 @@
     },
     {
       "folder": "Funk",
+      "tags": [
+        "style/funk"
+      ],
       "items": [
         {
           "name": "Slap Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/pluck"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -418,6 +500,9 @@
           "name": "Pocket Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -434,6 +519,9 @@
           "name": "Funk Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -450,6 +538,10 @@
           "name": "Squelch Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/acid",
+            "instrument/lead"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -466,6 +558,9 @@
           "name": "Rubber Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -482,6 +577,9 @@
           "name": "Wah Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 3,
@@ -498,11 +596,17 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Night Drive Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -519,6 +623,9 @@
           "name": "Neon Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": -5,
@@ -535,6 +642,9 @@
           "name": "Retro Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -551,6 +661,9 @@
           "name": "Chrome Pulse Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -567,6 +680,9 @@
           "name": "Soft Square Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "square",
             "fine": 5,
@@ -583,6 +699,9 @@
           "name": "Arp Blip",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -599,11 +718,17 @@
     },
     {
       "folder": "Dub",
+      "tags": [
+        "style/dub"
+      ],
       "items": [
         {
           "name": "Deep Dub Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -620,6 +745,9 @@
           "name": "Echo Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -636,6 +764,9 @@
           "name": "Skank Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -652,6 +783,9 @@
           "name": "Rubber Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -668,6 +802,9 @@
           "name": "Siren Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -684,11 +821,17 @@
     },
     {
       "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
       "items": [
         {
           "name": "Clean Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -705,6 +848,9 @@
           "name": "Warm Saw Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -721,6 +867,9 @@
           "name": "Bright Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -737,6 +886,9 @@
           "name": "Pop Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 4,
@@ -753,6 +905,9 @@
           "name": "Soft Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -769,11 +924,17 @@
     },
     {
       "folder": "Chiptune",
+      "tags": [
+        "style/chiptune"
+      ],
       "items": [
         {
           "name": "Square Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -790,6 +951,9 @@
           "name": "Triangle Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -806,6 +970,9 @@
           "name": "Pulse Arp",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -822,6 +989,9 @@
           "name": "Octave Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -838,6 +1008,9 @@
           "name": "Blip Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -854,6 +1027,9 @@
           "name": "Buzz Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -870,11 +1046,17 @@
     },
     {
       "folder": "Acid",
+      "tags": [
+        "style/acid"
+      ],
       "items": [
         {
           "name": "Squelch Line",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/acid"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -891,6 +1073,9 @@
           "name": "Resonant Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -907,6 +1092,9 @@
           "name": "Wet Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -923,6 +1111,10 @@
           "name": "Sub Acid Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub",
+            "instrument/bass/acid"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -955,11 +1147,17 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Rolling Trance Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -976,6 +1174,9 @@
           "name": "Gate Pluck",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 0,
@@ -992,6 +1193,9 @@
           "name": "Anthem Lead",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": 6,
@@ -1008,6 +1212,9 @@
           "name": "Offbeat Bass",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
           "state": {
             "wave": "sawtooth",
             "fine": -3,
@@ -1024,6 +1231,9 @@
           "name": "Acid Trance Stab",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/acid"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,
@@ -1040,11 +1250,17 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Deep Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "wave": "triangle",
             "fine": 0,
@@ -1093,6 +1309,9 @@
           "name": "Dark Pulse Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "wave": "square",
             "fine": 0,

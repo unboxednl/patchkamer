@@ -9,6 +9,9 @@
   "tree": [
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Four On The Floor",
@@ -1574,6 +1577,9 @@
     },
     {
       "folder": "House",
+      "tags": [
+        "style/house"
+      ],
       "items": [
         {
           "name": "Classic House",
@@ -2944,6 +2950,9 @@
     },
     {
       "folder": "Afro & Latin",
+      "tags": [
+        "style/world"
+      ],
       "items": [
         {
           "name": "Tresillo Roll",
@@ -5094,6 +5103,10 @@
     },
     {
       "folder": "Dub & Reggae",
+      "tags": [
+        "style/dub",
+        "style/world"
+      ],
       "items": [
         {
           "name": "One Drop",
@@ -6269,6 +6282,10 @@
     },
     {
       "folder": "Drum & Bass and Breakbeat",
+      "tags": [
+        "style/drum-and-bass",
+        "style/breakbeat"
+      ],
       "items": [
         {
           "name": "Two-Step Break",
@@ -6859,6 +6876,9 @@
           "name": "Jungle Rush",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "style/jungle"
+          ],
           "state": {
             "preset": "Custom",
             "live": true,

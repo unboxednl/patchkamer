@@ -33,6 +33,10 @@ Eén pack per bestand, in deze map: `naam.patchkamer-presets.json`, zonder versi
 6. Zet je eigen naam in `author`; verzin geen persoon.
 7. Wijzig het apparaat niet om een preset te laten kloppen, en verander nooit de `id` of `kind` van een apparaat: daaraan hangen de presets en songs van gebruikers.
 
+## Tags (contract v1.19)
+
+Een map die een muziekstijl is (Techno, Hip-hop, Ambient, …) krijgt `"tags": ["style/<stijl>"]` naast `folder`, bijvoorbeeld `style/hiphop`, zodat de presets te vinden zijn onder **Per stijl** (tab Presets). Presets hebben geen `instrument/`-tags. Gebruik de standaardnamen uit §13c van het contract; een tag is een pad in kleine letters met streepjes.
+
 ## Controleren
 
 Er is geen aparte validator voor presets. Controleer zelf:

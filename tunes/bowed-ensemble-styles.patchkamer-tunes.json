@@ -6,9 +6,15 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Tunes for Bowed Ensemble by music style: cinematic, ambient, pop, ballad, trance, synthwave, film score, lo-fi, neo-classical, disco & funk and deep house. Six sounds per style: pads, basses, leads and plucks or stabs.",
+  "tags": [
+    "instrument/strings"
+  ],
   "tree": [
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Epic Strings Wide",
@@ -210,6 +216,9 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Bloom",
@@ -383,6 +392,9 @@
     },
     {
       "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
       "items": [
         {
           "name": "Pop Strings Bright",
@@ -556,6 +568,9 @@
     },
     {
       "folder": "Ballad",
+      "tags": [
+        "style/ballad"
+      ],
       "items": [
         {
           "name": "Tender Violins",
@@ -729,6 +744,9 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Anthem Strings",
@@ -902,6 +920,9 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Retro String Machine",
@@ -1075,6 +1096,9 @@
     },
     {
       "folder": "Film Score",
+      "tags": [
+        "style/film-score"
+      ],
       "items": [
         {
           "name": "Orchestral Bed",
@@ -1248,6 +1272,9 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Dusty Strings",
@@ -1421,6 +1448,9 @@
     },
     {
       "folder": "Neo-classical",
+      "tags": [
+        "style/neo-classical"
+      ],
       "items": [
         {
           "name": "Chamber Quartet",
@@ -1594,6 +1624,10 @@
     },
     {
       "folder": "Disco & Funk",
+      "tags": [
+        "style/funk",
+        "style/disco"
+      ],
       "items": [
         {
           "name": "Disco Sweep",
@@ -1739,6 +1773,9 @@
     },
     {
       "folder": "Deep House",
+      "tags": [
+        "style/deep-house"
+      ],
       "items": [
         {
           "name": "Warm House Stab",

@@ -14,6 +14,9 @@
           "name": "Heist Braam",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -64,6 +67,9 @@
           "name": "Slow Brass Horn",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "wave": "saw",
             "unison": 3,
@@ -114,6 +120,9 @@
           "name": "Dream Descent Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -264,6 +273,9 @@
           "name": "Time Dilation Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -314,6 +326,9 @@
           "name": "Impact Kick Layer",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "saw",
             "unison": 3,
@@ -364,6 +379,9 @@
           "name": "Spinning Bell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "wave": "tri",
             "unison": 2,
@@ -419,6 +437,9 @@
           "name": "Rising Fear Swell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -469,6 +490,9 @@
           "name": "Cello Ostinato Pulse",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings/cello"
+          ],
           "state": {
             "wave": "saw",
             "unison": 2,
@@ -519,6 +543,9 @@
           "name": "Dark Brass Statement",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "wave": "saw",
             "unison": 4,
@@ -569,6 +596,9 @@
           "name": "Training Montage Arpeggio",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "saw",
             "unison": 2,
@@ -619,6 +649,9 @@
           "name": "Fear Pulse Sub",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "wave": "sine",
             "unison": 1,
@@ -669,6 +702,9 @@
           "name": "Night Texture",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "wave": "saw",
             "unison": 3,
@@ -719,6 +755,9 @@
           "name": "Hero Theme Horns",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "wave": "saw",
             "unison": 3,
@@ -769,6 +808,9 @@
           "name": "Collapse Impact",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -824,6 +866,10 @@
           "name": "Organ Run Arpeggio",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/organ",
+            "instrument/pluck"
+          ],
           "state": {
             "wave": "square",
             "unison": 2,
@@ -874,6 +920,10 @@
           "name": "Cathedral Organ Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/organ",
+            "instrument/pad"
+          ],
           "state": {
             "wave": "square",
             "unison": 3,
@@ -924,6 +974,9 @@
           "name": "Drifting Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1024,6 +1077,9 @@
           "name": "Wormhole Swell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1074,6 +1130,9 @@
           "name": "Slow Wave Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "wave": "tri",
             "unison": 4,
@@ -1174,6 +1233,9 @@
           "name": "Cosmic Choir Air",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice/choir"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1229,6 +1291,10 @@
           "name": "Desert Horn Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass",
+            "instrument/drone"
+          ],
           "state": {
             "wave": "saw",
             "unison": 4,
@@ -1329,6 +1395,10 @@
           "name": "Caravan Strings Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings",
+            "instrument/pad"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1379,6 +1449,9 @@
           "name": "Oasis Shimmer",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "wave": "tri",
             "unison": 3,
@@ -1429,6 +1502,9 @@
           "name": "War Drum Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "sine",
             "unison": 1,
@@ -1479,6 +1555,9 @@
           "name": "Ancient Choir",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/voice/choir"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1529,6 +1608,9 @@
           "name": "Desert Wind",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "wave": "saw",
             "unison": 1,
@@ -1634,6 +1716,9 @@
           "name": "Heroic Brass Fanfare",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "wave": "saw",
             "unison": 4,
@@ -1734,6 +1819,9 @@
           "name": "Low Brass Rumble",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1784,6 +1872,9 @@
           "name": "Battle Hit Chord",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -1884,6 +1975,9 @@
           "name": "Marching Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "wave": "saw",
             "unison": 3,
@@ -1984,6 +2078,9 @@
           "name": "Victory Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -2039,6 +2136,9 @@
           "name": "Thriller Drone",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/drone"
+          ],
           "state": {
             "wave": "saw",
             "unison": 3,
@@ -2139,6 +2239,9 @@
           "name": "Breath Pad",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
           "state": {
             "wave": "saw",
             "unison": 2,
@@ -2289,6 +2392,9 @@
           "name": "Cold Glass Bell",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/mallet/bell"
+          ],
           "state": {
             "wave": "tri",
             "unison": 2,
@@ -2339,6 +2445,9 @@
           "name": "Slow Dread Strings",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
           "state": {
             "wave": "saw",
             "unison": 4,
@@ -2389,6 +2498,9 @@
           "name": "Distant Hum",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/texture"
+          ],
           "state": {
             "wave": "sine",
             "unison": 2,
@@ -2439,11 +2551,17 @@
     },
     {
       "folder": "Impacts and Risers",
+      "tags": [
+        "instrument/fx"
+      ],
       "items": [
         {
           "name": "Deep Impact",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -2494,6 +2612,10 @@
           "name": "Braam Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/brass",
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -2544,6 +2666,9 @@
           "name": "Long Riser",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/riser"
+          ],
           "state": {
             "wave": "saw",
             "unison": 5,
@@ -2594,6 +2719,9 @@
           "name": "Noise Riser",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/riser"
+          ],
           "state": {
             "wave": "saw",
             "unison": 1,
@@ -2644,6 +2772,9 @@
           "name": "Sub Drop",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
           "state": {
             "wave": "sine",
             "unison": 1,
@@ -2694,6 +2825,9 @@
           "name": "Metal Hit",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "square",
             "unison": 3,
@@ -2794,6 +2928,9 @@
           "name": "Cinematic Boom",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "instrument/fx/impact"
+          ],
           "state": {
             "wave": "saw",
             "unison": 2,

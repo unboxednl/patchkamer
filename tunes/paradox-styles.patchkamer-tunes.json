@@ -6,9 +6,15 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Experimental tunes for Paradox, from drones, dark ambient and cinematic textures to sci-fi, glitch, industrial, sound design and noise. Playable keys, plucks, leads and pads as well as self-playing organisms.",
+  "tags": [
+    "instrument/texture"
+  ],
   "tree": [
     {
       "folder": "Drone",
+      "tags": [
+        "instrument/drone"
+      ],
       "items": [
         {
           "name": "Sub Cathedral",
@@ -231,6 +237,9 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Frozen Lake",
@@ -453,6 +462,9 @@
     },
     {
       "folder": "Dark Ambient",
+      "tags": [
+        "style/dark-ambient"
+      ],
       "items": [
         {
           "name": "Abandoned Hall",
@@ -675,6 +687,9 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Rising Tension",
@@ -897,6 +912,9 @@
     },
     {
       "folder": "Sci-Fi",
+      "tags": [
+        "style/sci-fi"
+      ],
       "items": [
         {
           "name": "Laser Bell",
@@ -1119,6 +1137,9 @@
     },
     {
       "folder": "Glitch",
+      "tags": [
+        "style/glitch"
+      ],
       "items": [
         {
           "name": "Stutter Grid",
@@ -1341,6 +1362,9 @@
     },
     {
       "folder": "Industrial",
+      "tags": [
+        "style/industrial"
+      ],
       "items": [
         {
           "name": "Factory Drone",
@@ -1563,6 +1587,9 @@
     },
     {
       "folder": "Experimental",
+      "tags": [
+        "style/experimental"
+      ],
       "items": [
         {
           "name": "Moebius Mallets",
@@ -2007,6 +2034,9 @@
     },
     {
       "folder": "Noise",
+      "tags": [
+        "style/noise"
+      ],
       "items": [
         {
           "name": "White Rain",

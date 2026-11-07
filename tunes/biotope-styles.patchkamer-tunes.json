@@ -6,6 +6,9 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Tunes for Biotope: natural soundscapes and evolving drones by style. Ambient, Nature, Weather, Water, Meditation, Sleep, Cinematic, Sci-Fi, Dark Ambient, Lo-fi, Field Recording, Interiors and Rhythmic footsteps. Each tune sets all eight layers (rain, drops, bubbles, wind, footsteps, fire, sea, creaks), space and stereo width, and is level-matched.",
+  "tags": [
+    "instrument/texture"
+  ],
   "tree": [
     {
       "folder": "Nature",
@@ -1032,6 +1035,9 @@
           "name": "Surf Break",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "style/breakbeat"
+          ],
           "state": {
             "on": true,
             "follow": false,
@@ -1392,6 +1398,9 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Horizon",
@@ -1901,6 +1910,9 @@
     },
     {
       "folder": "Meditation",
+      "tags": [
+        "style/meditation"
+      ],
       "items": [
         {
           "name": "Still Water",
@@ -2775,6 +2787,9 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Desolate Plain",
@@ -3284,6 +3299,9 @@
     },
     {
       "folder": "Sci-Fi",
+      "tags": [
+        "style/sci-fi"
+      ],
       "items": [
         {
           "name": "Dust Colony",
@@ -3793,6 +3811,9 @@
     },
     {
       "folder": "Dark Ambient",
+      "tags": [
+        "style/dark-ambient"
+      ],
       "items": [
         {
           "name": "Cellar Dripping",
@@ -4230,6 +4251,9 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Rainy Window",

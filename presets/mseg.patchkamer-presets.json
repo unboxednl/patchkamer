@@ -659,6 +659,9 @@
           "name": "Break Dip",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "style/breakbeat"
+          ],
           "state": {
             "pts": [
               {

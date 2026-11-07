@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.18 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.19 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -27,6 +27,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.16 | Dekking van `params()`: elke continue regelaar hoort in `params()` (`modExclude` voor bewust uitgesloten, `on`/`drift` voor wat ongevraagd bewegen vals maakt, §8); de validator geeft een `let op` bij een regelaar die niet in `params()` staat, bij een apparaat met regelaars maar zonder `params()` en bij een param-id zonder regelaar, en `--controls` toont de kolom `in params()` |
 | v1.17 | Klembord: patronen en clips kopiëren en plakken tussen apparaten. Optioneel `clipInfo()`, `getClip()`, `setClip(clip)` (alle drie of geen) en het uitwisselformaat `patchkamer-clip` (JSON, tijd in tikken); de host zet de knoppen Kopieer en Plak in de kaartbalk en vertaalt tussen apparaten; de validator controleert de drie methoden en kent `--clip` (§13d) |
 | v1.18 | Meters: `host.ui.meter(parent, label, opts)` laat de host het niveau tekenen (balk, ledladder of ronde VU-meter met wijzer; lengte en breedte instelbaar door een skin), uit een of twee `AnalyserNode`s (`source`) of via `set(level)`; een meter staat in het register met rol `meter`; een apparaat zonder `host.ui.meter` op een oude host valt terug op zijn eigen tekening; het attribuut `data-pk-suffix` (tekst na het label bij MIDI-koppelen); de validator kent `host.ui.meter` en toont meters in `--controls` (§12e) |
+| v1.19 | Tags voor tunes en presets: `tags` op een tune, map of pack (paden zoals `instrument/guitar/acoustic` en `style/hiphop`); de host toont ze als boom met inspringen (Tunes en Presets, Per instrument en Per stijl). Alleen de packs veranderen, apparaten niet (§13c) |
 
 ---
 
@@ -710,6 +711,14 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
             { "name": "Diepe kick", "kind": "part", "part": "kick", "author": "…", "license": "LicenseRef-All-Rights-Reserved", "state": { } } ] }
 ```
 
+**Tags (v1.19, optioneel).** Een tune of preset mag `tags` hebben, en een map of het hele pack ook; wat op een map of op het pack staat, geldt voor alles daaronder. De host maakt er een boom van op de tabs Tunes en Presets (**Per instrument** en **Per stijl**, met inspringen), zodat een gitaar of een jungle-klank te vinden is zonder te weten in welk apparaat hij zit. Een tag is een pad van kleine letters, cijfers en streepjes, gescheiden door `/` (hoogstens 4 niveaus, 60 tekens, 12 tags per knoop): `instrument/guitar/acoustic`, `style/hiphop`. Een ongeldige tag wordt genegeerd. De wortel is `instrument` (alleen bij tunes) of `style`; de host toont een tune bij de diepste tag van elke tak. Standaardnamen, door de host vertaald (andere namen mogen en worden met een hoofdletter getoond): instrumenten `keys`, `piano` (`acoustic`, `electric`, `toy`, `harpsichord`), `organ`, `mallet` (`vibes`, `marimba`, `bell`), `guitar` (`acoustic`, `nylon`, `steel`, `electric`), `plucked` (`harp`, `koto`, `lute`), `bass` (`sub`, `pluck`, `synth`, `acid`), `strings` (`violin`, `cello`, `ensemble`, `pizzicato`), `brass` (`trumpet`, `trombone`, `section`), `woodwind` (`flute`, `clarinet`, `oboe`, `sax`), `voice` (`choir`), `lead`, `pad`, `pluck`, `drums` (`kit`, `kick`, `snare`, `hat`, `tom`, `cymbal`), `percussion`, `fx` (`riser`, `impact`), `chords`, `texture`, `drone`; stijlen `ambient`, `dark-ambient`, `cinematic`, `film-score`, `neo-classical`, `synthwave`, `techno`, `dub-techno`, `trance`, `electro`, `house`, `deep-house`, `pop`, `lofi`, `hiphop`, `trap`, `drum-and-bass`, `jungle`, `breakbeat`, `big-room`, `acid`, `dub`, `dubstep`, `funk`, `disco`, `soul`, `jazz`, `ballad`, `rock`, `garage`, `future-bass`, `glitch`, `noise`, `minimal`, `industrial`, `chiptune`, `sci-fi`, `experimental`, `hardstyle`, `eurodance`, `folk`, `world`, `flamenco`, `metallic`, `generative`, `meditation`, `horror`, `bass-music`.
+
+```json
+{ "format": "patchkamer-tunes", "formatVersion": 1, "device": "nl.jouwnaam.string", "name": "Strings",
+  "tags": ["instrument/plucked"],
+  "tree": [ { "folder": "Folk", "tags": ["style/folk"], "items": [ { "name": "Open Guitar", "kind": "set", "tags": ["instrument/guitar"], "state": { } } ] } ] }
+```
+
 **Licenties.** Elke tune, preset en song heeft een veld `license` met een [SPDX](https://spdx.org/licenses/)-code, en meestal `author`. In Patchkamer kiest de maker bij het bewaren uit `CC-BY-4.0` (vrij te gebruiken met naamsvermelding) of `LicenseRef-All-Rights-Reserved` (alle rechten voorbehouden). Andere geldige SPDX-codes uit bestanden worden getoond en blijven staan. Op bibliotheekniveau is `license` de standaard voor nieuwe items. Is een tune of song gemaakt op basis van die van een ander, dan bewaart de host dat in `basedOn: { name|title, author, license }`. De host toont de licentie bij het laden of openen.
 
 **Song** (`naam.patchkamer-song.json`), een export van een werkruimte:
@@ -1004,7 +1013,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.18
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.19
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1063,7 +1072,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.18
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.19
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -1127,7 +1136,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.18
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.19
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -1205,7 +1214,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.18.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.19.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
