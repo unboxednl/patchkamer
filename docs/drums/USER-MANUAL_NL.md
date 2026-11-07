@@ -94,6 +94,8 @@ Drum Machine heeft het pack **Drum Machine Styles**: 36 tunes in twaalf mappen (
 - Er is geen geluid zolang de klok niet loopt: druk op **Start**.
 - Met vier geluiden kun je veel doen door **Tune** en **Decay** te bewegen terwijl het speelt, of door een modulator dat te laten doen.
 
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het hele patroon (4 banen van 16 stappen). Een drumcomputer-slag is alleen aan of uit, dus de velocity van een clip gaat verloren. Banen worden op soort uitgelijnd (hat is een gesloten hi-hat); een baan van de clip die niet past, wordt weggelaten en gemeld, en een baan zonder slagen in de clip wordt leeg.
+
 ## Drum Kit
 
 ### Waar het voor dient
@@ -167,6 +169,8 @@ Drum Kit heeft het pack **Drum Kit Styles**: 38 tunes in twaalf mappen (Techno, 
 
 - Zonder klok speelt een patroon niet. De knop **Auditie** en noten op de ingang werken wel.
 - De kick van een kit begint hoger dan een echte bass drum: gebruik een lage **Tuning** (de tunes gebruiken waarden rond −22 st).
+
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op patroon A tot D als drums. Velocity, kans en ratchet gaan mee. De lengte is voor alle patronen gelijk en blijft die van de kit: een kortere clip wordt herhaald, een langere afgekapt. Plakken wist het hele actieve patroon, ook kanalen die niet in de clip staan; Ongedaan maken in de melding herstelt het.
 
 ## Groovebox 12
 
@@ -291,6 +295,8 @@ Pulse Drums heeft het pack **Pulse Drums Techno**: 26 tunes in acht mappen (Tech
 - De kick begint hoog: de tunes gebruiken een lage **Tuning** (rond −22 st). Zet hem zelf lager als een kit die je maakt dun klinkt.
 - Een **Techno DNA** kiezen vervangt de kit en de patronen; bewaar die van jou eerst als tune.
 
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op patroon A tot D als drums, met polymeter (de eigen lengte per kanaal) en microtiming. Every, phase, fill en locks gaan alleen mee naar een ander exemplaar van Pulse Drums; naar andere apparaten gaan ze verloren. Een polymeter-clip in een apparaat met één lengte wordt herhaald tot hij weer uitkomt en kan daardoor zeer lang worden.
+
 ## Latin Percussion
 
 ### Waar het voor dient
@@ -340,6 +346,8 @@ Latin Percussion heeft het pack **Latin Percussion Styles**: 39 tunes in dertien
 
 - De patronen zijn 16 stappen; de ritmes van de stijlen zijn geschreven voor één maat.
 - De pads werken als testtoetsenbord: klik er een om hem te horen.
+
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op de gekozen bank (A tot D) met 15 klanken van 16 stappen. Het accent blijft. De nootnummers zijn hier geen General MIDI en de klanken hebben geen soort, dus uitlijnen gaat alleen op klanknaam: uit een gewone drumkit past bijna niets.
 
 ## Click Synth
 
@@ -403,6 +411,8 @@ Click Synth heeft het pack **Click Synth Styles**: 30 tunes in tien mappen (Mini
 
 - De klank wordt gemaakt in een AudioWorklet. Zonder (een oude browser) meldt de kaart dat en blijft hij stil.
 - Willekeur en de kans per stap zorgen dat het resultaat elke keer anders is; dat is de bedoeling.
+
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het gekozen patroon (A tot D) met 8 sporen, elk met een eigen lengte. Kans en ratchet gaan mee; de toonsprong per stap alleen naar een ander exemplaar van Click Synth. Een clip van elders zet alle sporen op de cliplengte (hoogstens 16 stappen). Uitlijnen gaat op spoornaam; uit een gewone drumkit past weinig.
 
 ## Als het niet werkt
 

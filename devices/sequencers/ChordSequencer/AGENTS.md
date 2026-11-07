@@ -15,7 +15,7 @@ Het verschil met `Pulse Drums` (drumcomputer, geeft geluid): Chord Sequencer is 
 | Naam | `Chord Sequencer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Transpositie`, `Spoor A` … `Spoor D`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `transpose` (Transpose) en `live` (Live, voor een toetsenbord of andere notenbron), modulatie-ingang `mod`, eventuitgangen `a`, `b`, `c`, `d` (Track A–D); geen audio; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.14 (apparaatversie 1.14.0) |
+| Contract | v1.17 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Sequencer, `nl.patchkamer.puls`, stond bij de synths). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -234,6 +234,28 @@ Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 
 
 * Kwantiseren (`rquant`) gaat naar het dichtstbijzijnde geswingde rasterpunt van het spoor (hostswing + spoorswing); uit: 1/64. De lengte komt uit twee rasterpunten (noteon en noteoff) in plaats van seconden gedeeld door een gemiddelde stap, zodat swing de lengte niet vervormt. Loop-rand: een noot vlak voor het einde van de lus rondt af naar positie 0. Bij een zeer fijn raster met veel swing (swing groter dan een rasterstap) kunnen twee rasterpunten overlappen; dan wint het dichtstbijzijnde.
 * `trig`-gebeurtenissen met een `note` op `live` worden als korte noot (0,1 s) doorgegeven en ingespeeld.
+
+## Klembord: spoor kopiëren en plakken (sinds 1.15.0)
+
+De host kopieert en plakt met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V (contract v1.17, formaat `patchkamer-clip`; tijd in **tikken**, 12 per zestiende, 192 per maat; één 1/64-eenheid van `rec` is 3 tikken). Het "huidige patroon" is het gekozen spoor (`editTrack`) in de actieve scène. Niets hiervan verandert `getState()`, de presets of het geluid.
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | `copy` en `paste` zijn altijd `['notes']`; `length` 192 tot 768 in stappen van 192 (1 tot 4 maten, `current` = `bars` × 192, `shared` onwaar); `grid` `[16, 32, 64]`; `range` 0 tot 127; `scheme` `gm`; `vel` `continuous`; `prob` en `ratchet` onwaar; `maxEvents` 256. `name` is "Spoor A · naam". |
+| `getClip()` | Spoorspelwijze `notes`: de opgenomen noten (`rec`) als `notes` (`t` = positie × 3, `len` = lengte × 3), `length` = `bars` × 192, `grid` van het spoor, `swing` van het spoor. Elke andere spelwijze (`chord`, `arp`, `pulse`) wordt **gerenderd**: één cyclus van **vier maten** met de progressie per maat, de stappen, `division`, `ratchet`, `vel`/`len` per stap, de gate en velocity van het spoor, en `prob` als de speelkans onder 1 ligt. Dat is een momentopname: wijzigt het spoor later, dan blijft de kopie staan. De spoortranspositie en de swing zitten er niet in (die horen bij het spoor). |
+| `setClip(clip)` | Alleen `notes`. Zet het gekozen spoor op spelwijze `notes`, met `rec`, `bars` (de lengte omhoog afgerond op hele maten, 1 tot 4) en het raster. Alle andere spooginstellingen (akkoord, progressie, naam, swing, `enabled`, gate, velocity) blijven staan; de akkoordinstellingen klinken alleen niet meer zolang het spoor op `notes` staat. Geeft `{ ok: true }` (met `dropped` als er noten wegvielen) of `{ ok: false, reason }`. |
+
+Wat `setClip` doet: noten met `t` buiten de lengte vallen weg, `t` en `len` worden naar 1/64-eenheden afgerond (3 tikken), `n` 0 tot 127, `vel` 0,01 tot 1, en een noot op dezelfde plek en toon als een andere laat de hardste staan. Hoogstens 256 noten (de rest telt als `dropped`, zoals de grens van `rec`). Het raster blijft dat van het spoor als alles erop past, anders het raster van de clip, anders het fijnste dat nodig is. Geen `native`: de clip is verliesvrij zonder.
+
+**Risico's.**
+
+- Een gerenderd akkoord- of arpeggiospoor wordt na plakken een gewoon notenspoor: de **voortgang per maat** is dan vastgelegd tot vier maten en de speelkans (`prob`) valt weg (dit apparaat heeft geen kans per noot in `notes`). Een patroonlengte van 7 of 5 stappen krijgt in de momentopname zijn vier maten uitgespeeld, dus er is geen eindeloze polymeter meer.
+- De gate en velocity van het bronspoor zitten **in** de noten (velocity en lengte zoals ze klinken); een notenspoor schaalt die bij het spelen nog met de gate en velocity van zijn eigen spoor (standaard 0,7 en 0,8, dan neutraal).
+- Kopiëren van het spoor en terugplakken in hetzelfde, niet-`notes`-spoor doet bewust niets (`ok: true`, state gelijk): anders zou `setClip(getClip())` de spelwijze veranderen. Plak je dezelfde kopie in een ander spoor, dan wordt dat een notenspoor.
+- Een clip van meer dan vier maten wordt door de host afgekapt (dit apparaat neemt hoogstens 4 maten). Swing en `humanize` van de clip worden genegeerd; de swing van het spoor blijft.
+- `setState` stuurt sinds 1.15.0 alleen nog `allnotesoff` als de klok loopt of er live noten vastgehouden worden (bij stilstand deed de transportstop dat al). Anders telt de validator die gebeurtenis bij `setClip` als een eigen gebeurtenis.
+
+Getest: de rondreis `setClip(getClip())` laat `getState()` gelijk voor alle vier de sporen (akkoord, arpeggio, pulse) en voor een notenspoor van 3 maten op 1/32; ongeldige en extreme clips (`NaN`, lengte 1e9, 5000 noten, verkeerde soort, `null`) geven geen fout en laten de state intact; spoor C ⇄ Step Sequencer en Wanderer → Chord Sequencer in de echte host (nl en en), ongedaan maken zet de state exact terug. Oud (1.14.0) en nieuw geven dezelfde gebeurtenissen en `getState` in drie testtoestanden (96 klokstappen).
 
 ## Controleren
 

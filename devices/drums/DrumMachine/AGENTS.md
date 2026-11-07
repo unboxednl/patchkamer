@@ -13,7 +13,7 @@ Een drumcomputer met vier gesynthetiseerde geluiden (kick, snare, hat en perc) e
 | Naam | `Drum Machine` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Uit / Out, de som), eventuitgang `trigs` (Trigs), modulatie-ingang `mod` (Mod), bundel-uitgang `multi` (Losse uit / Separate outs: de vier geluiden apart, na niveau en pan) |
-| Contract | v1.11 |
+| Contract | v1.17 (apparaatversie 1.17.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Drumcomputer, `nl.patchkamer.drums`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -46,6 +46,16 @@ Wat Drum Machine met een state doet (getest):
 - Onbekende velden worden genegeerd. Zet er geen in.
 
 Modulatie: `modulate` neemt alleen eindige getallen tussen −1 en 1 aan; al het andere wordt genegeerd. Modulatie verandert nooit de bewaarde waarden.
+
+## Klembord: patroon kopiëren en plakken (sinds 1.17.0)
+
+De host kopieert en plakt het patroon met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V (contract v1.17, formaat `patchkamer-clip` kind `drums`; tijd in **tikken**, 12 per zestiende, 192 per maat). Het apparaat levert en neemt alleen over: `clipInfo()` (licht, gooit nooit, `null` na `destroy`), `getClip()` en `setClip(clip)` (geeft `{ ok, reason }`, gooit nooit, zet niets half, klemt alles zelf, stuurt geen gebeurtenissen). `getState()`, presets, tunes, geluid en poorten zijn niet veranderd; `setClip(getClip())` laat `getState()` gelijk. Het klembord is onbetrouwbare invoer: `setClip` leest alleen getallen en tekst en evalueert niets.
+
+- **Wat is het patroon**: de vier banen kick, snare, hat en perc van 16 stappen (192 tikken). `clipInfo()`: `copy` en `paste` `['drums']`, `length` vast 192 (`min` = `max` = `step` = 192, `shared` onwaar), `grid` `[16]`, `scheme` `device`, `vel` **`binary`**, `prob` en `ratchet` onwaar, `lanes` met `id` `kick`/`snare`/`hat`/`perc` en `type` `kick`/`snare`/`closedhat`/`perc`, `note` -1 (het apparaat heeft geen nootnummers).
+- **Risico: alleen aan/uit.** Een stap is 0 of 1. Bij plakken vervalt velocity, accent, kans en ratchet (de host meldt kans en ratchet). `getClip()` geeft de velocity zoals het apparaat die speelt: 1 op de tellen (stap 0, 4, 8, 12), anders 0,75.
+- **Risico: banen die niet passen.** De host lijnt uit op `type` en naam, dus een clip uit een GM-kit vult kick, snare en hat (`closedhat`) en perc alleen als de bron een baan `perc` heeft; clap, toms, ride enzovoort worden **weggelaten en gemeld**, nooit samengevoegd in perc. Een baan van het apparaat waar de clip geen slagen voor heeft, wordt **leeg**: plakken vervangt het hele patroon.
+- **`setClip`**: kind moet `drums` zijn, anders `ok: false` met reden. Banen van de clip gaan op `id` (`kick`, `snare`, `hat`, `perc`), anders op `type` (hat = `closedhat`) naar de eigen baan; slagen op een tik worden stap `round(t/12)`; stappen voorbij 15 vallen weg. Swing, geluid en de rest van de state blijven.
+- Getest in een browser: rondreis en `getState` gelijk, GM-clip met cowbell (cowbell gemeld), noten geweigerd, 100000 slagen, `NaN`, lengte 1e9, ongeldige banen, Ongedaan maken, nl en en. Niet beluisterd.
 
 ## Swing (1.11.1)
 

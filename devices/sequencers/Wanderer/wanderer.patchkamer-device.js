@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord, alleen kopiëren. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, 12 tikken per zestiende). Kopiëren geeft het motief zoals het nu klinkt (toonladdertrappen omgezet naar MIDI-noten, met velocity, lengte, verloop en ratchets) als notes-clip; wijzigt het motief later, dan blijft de kopie staan (momentopname, geen koppeling). Plakken kan niet (`paste` is leeg): `setClip` geeft `ok:false` met een reden, behalve voor de eigen momentopname (`native`), die niets verandert. `modExclude: ['reps']` toegevoegd (Herhaal eerst was al bewust buiten `params()` gelaten; de validator meldde dat als let op). Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Swing is nu ook bestuurbaar via params()/modulate() (standaard uit, drift 0,05; role swing). Modulatie komt alleen bovenop de knop (effectief = knop + o × 0,5, geclampt) en is nooit state. De overige continue regelaars (inclusief Mensachtig, Accenten, Spooknoten, Ratchets) zaten er al in.
 //   Bewust weggelaten: Herhaal eerst (geheel getal 1 tot 8, discreet), grondtoon, toonladder, laagste, hoogste, raster, motieflengte, verloop, karakter en de schakelaars (keuzes en vinkjes).
 // 1.14.0 — Extra swing (`swing`, 0 … 0,5 van een zestiende, standaard 0). Een noot (of ratchet-noot) die in een oneven zestiende valt komt swing × stepDur later, bovenop de swing van de host; even zestienden blijven staan.
@@ -23,6 +24,8 @@ const EN = {
     'Invents a motif in the scale, repeats it and changes it little by little. Connect the Notes output to a synth. Play a chord on the input and switch on Follow chord: it then wanders over those notes only.',
   'Karakter': 'Character', 'Grondtoon': 'Root', 'Toonladder': 'Scale', 'Laagste': 'Lowest', 'Hoogste': 'Highest', 'Raster': 'Grid', 'Motieflengte': 'Motif length',
   'Verloop': 'Contour', 'Vlak': 'Flat', 'Crescendo': 'Crescendo', 'Decrescendo': 'Decrescendo', 'Zwelling': 'Swell', 'Dip': 'Dip',
+  'Het apparaat is verwijderd.': 'The device has been removed.', 'Geen geldige clip.': 'Not a valid clip.', 'Motief van {0} stappen': 'Motif of {0} steps', 'Wanderer': 'Wanderer',
+  'Wanderer kan alleen kopiëren: het motief bestaat uit toonladdertrappen en verandert zelf, een clip is daar niet in terug te rekenen.': 'Wanderer can only copy: the motif is made of scale degrees and changes by itself, a clip cannot be turned back into that.',
   'Eigen': 'Own', 'Speelt': 'Playing', 'Stil': 'Stopped', 'Nieuw motief': 'New motif', 'Verander nu': 'Change now', 'Vergrendel': 'Lock', 'Volg akkoord': 'Follow chord',
   'het motief blijft zoals het is': 'the motif stays as it is', 'gebruik alleen de tonen die op de ingang worden vastgehouden': 'use only the notes held on the input',
   'het motief als pianorol; breedte = lengte, hoogte van het blokje en de strook = velocity. Klik om een noot te zetten of te wissen, sleep opzij voor de lengte, sleep in de strook voor de velocity':
@@ -99,7 +102,7 @@ function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([,
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.14.1', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.15.0', kind: 'utility', category: 'sequencer', modExclude: ['reps'],
   ui: { width: 820, minWidth: 400 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'akkoord', name: 'Chord / keys' }], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { akkoord: 'Akkoord / toetsen', notes: 'Noten' } } },
@@ -185,6 +188,22 @@ export default {
     // ---------- UI ----------
     const PH = 150, SH = 46;   // pianorol en velocity-strook
     let root = null, ui = {}, cv = null, raf = null, drag = null;
+    // ---- klembord: momentopname van het motief (zoals het nu klinkt, ook als het zelf verandert) ----
+    function clipBuild() {
+      const m = state.motif; if (!Array.isArray(m) || !m.length) return null;
+      const rate = +state.div, tickT = 12 / rate, L = m.length, length = Math.max(1, Math.min(12288, Math.round(L * tickT))), notes = [], r3 = x => Math.round(clamp(x, 0.01, 1) * 1000) / 1000;
+      for (let j = 0; j < L; j++) {
+        const s = m[j]; if (!s || !s.on) continue; let vel = s.vel; if (state.contour !== 'flat') vel *= contourFactor(j, L); if (!Number.isFinite(vel)) vel = 0.75;
+        const note = outNote(degToNote(s.deg, s.oct)), rat = s.rat > 1 ? Math.min(4, Math.round(s.rat)) : 1, t0 = j * tickT;
+        for (let r = 0; r < rat; r++) {
+          const t = Math.round(t0 + r * tickT / rat); if (t >= length) continue; const slot = rat === 1 ? tickT * s.gate : tickT / rat * clamp(s.gate, 0.1, 1);
+          notes.push({ t, n: note, len: Math.max(1, Math.min(length - t, Math.round(slot))), vel: r3(rat === 1 ? vel : vel * (1 - 0.12 * r)) });
+        }
+      }
+      notes.sort((a, b) => a.t - b.t || a.n - b.n);
+      const clip = { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', name: tx('Motief van {0} stappen', L), length, grid: notes.every(e => e.t % 12 === 0) ? 16 : notes.every(e => e.t % 6 === 0) ? 32 : 64, source: { device: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.15.0', scheme: 'gm' }, notes: notes.slice(0, 4096), native: { device: 'nl.patchkamer.wanderer', data: { snapshot: true } } };
+      const sw = Math.min(0.5, state.swing || 0); if (sw > 0) clip.swing = sw; return clip;
+    }
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS);
       ukEl(app, 'h2', '', tx('WANDERER · kansmelodie'));
       ukEl(app, 'p', 'sub', tx('Verzint een motief in de toonladder, herhaalt het en verandert het beetje bij beetje. Trek de uitgang Noten naar een synth. Speel een akkoord op de ingang en zet Volg akkoord aan: dan dwaalt hij alleen over die tonen.'));
@@ -265,6 +284,14 @@ export default {
           if (root && ui.held) ui.held.textContent = heldText(); } catch {} },
       params() { return ukParams(spec, 'wanderer', 'Wanderer'); },
       modulate(o) { try { mod = {}; if (o && typeof o === 'object') for (const id of Object.keys(spec)) if (typeof o[id] === 'number' && Number.isFinite(o[id])) mod[id] = clamp(o[id], -1, 1); resolve(); } catch {} },
+      // ---- klembord (contract v1.17, §13d): alleen kopiëren, het motief als momentopname; plakken kan niet ----
+      clipInfo() { try { if (dead) return null; const c = clipBuild(); return c ? { name: c.name, copy: ['notes'], paste: [], length: { min: 1, max: 12288, step: 1, current: c.length, shared: false }, grid: [16, 32, 64], range: [0, 127], scheme: 'gm', vel: 'continuous', prob: false, ratchet: false } : { name: tx('Wanderer'), copy: [], paste: [] }; } catch { return null; } },
+      getClip() { try { if (dead) return null; const c = clipBuild(); return c ? JSON.parse(JSON.stringify(c)) : null; } catch { return null; } },
+      setClip(clip) { try { if (dead) return { ok: false, reason: tx('Het apparaat is verwijderd.') };
+          // de eigen momentopname terugplakken laat alles zoals het is; al het andere kan niet (een motief vergrendelen vraagt terugrekenen naar toonladdertrappen)
+          if (clip && typeof clip === 'object' && clip.format === 'patchkamer-clip' && clip.native && typeof clip.native === 'object' && clip.native.device === 'nl.patchkamer.wanderer') return { ok: true };
+          return { ok: false, reason: tx('Wanderer kan alleen kopiëren: het motief bestaat uit toonladdertrappen en verandert zelf, een clip is daar niet in terug te rekenen.') };
+        } catch { return { ok: false, reason: tx('Geen geldige clip.') }; } },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(raw) { if (dead) return; state = normalize(raw); ensure(); resolve(); paint(); },
       getPreset() { const s = self.getState(); delete s.run; return s; },

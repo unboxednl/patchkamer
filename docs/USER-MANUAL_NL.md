@@ -210,7 +210,7 @@ Hun kant-en-klare klanken en instellingen hebben eigen handleidingen: [Tunes](tu
 
 ### Patronen kopiëren en plakken
 
-Een apparaat dat een patroon of clip kan delen, krijgt in de balk van zijn kaart twee knoppen: **Kopieer** en **Plak**. Je ziet ze alleen bij apparaten die dit kunnen (nu bijvoorbeeld de Step Sequencer en de Clip Arranger). Zo neem je een patroon mee van het ene apparaat naar het andere, of naar een ander spoor.
+Een apparaat dat een patroon of clip kan delen, krijgt in de balk van zijn kaart twee knoppen: **Kopieer** en **Plak**. Je ziet ze alleen bij apparaten die dit kunnen (Step Sequencer, Clip Arranger, Pattern Tracker, Pattern Playlist, Chord Sequencer, Drum Kit, Pulse Drums, Latin Percussion, Click Synth en Drum Machine; Euclidean Rhythms en Wanderer kunnen alleen kopiëren, als momentopname). Zo neem je een patroon mee van het ene apparaat naar het andere, of naar een ander spoor.
 
 - **Kopieer** zet het patroon dat het apparaat nu toont op het klembord: in het geheugen van Patchkamer én als tekst op het systeemklembord. Zo kun je het ook in een ander browsertabblad of op een andere computer plakken (dat vraagt een veilige context: `localhost` of https; waar de browser het systeemklembord niet toelaat, werkt alleen het geheugen).
 - **Plak** zet het patroon van het klembord in het apparaat. Staat er geen patchkamer-clip op het systeemklembord, dan gebruikt Plak wat je het laatst in Patchkamer kopieerde.

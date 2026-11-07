@@ -13,7 +13,7 @@ Een kansmelodie-sequencer. Hij verzint een **motief** (2 tot 64 stappen) binnen 
 | Naam | `Wanderer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Akkoord / toetsen`, `Noten`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `akkoord` (Chord / keys), modulatie-ingang `mod`, eventuitgang `notes`; geen audio |
-| Contract | v1.14 (apparaatversie 1.14.0) |
+| Contract | v1.17 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe vorm van een ouder, Nederlandstalig bestand met een andere naam en id (`nl.patchkamer.dwaler`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state (met Nederlandse toonladdernamen zoals `mineur`) wordt bij het laden herkend en omgezet naar de Engelse sleutel.
@@ -158,6 +158,20 @@ Wanderer heeft geen sporen of clips: het toetsenbord is hier de **akkoordbron** 
 Nieuwe sleutel `swing` (0 … 0,5 van een zestiende, standaard 0, schuif "Swing" bij Voordracht; niet te moduleren, zodat de lijst stuurbare parameters gelijk blijft; altijd in de state).
 
 Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.11.0. Een noot (en elke noot van een ratchet) valt in een oneven zestiende als `floor(stap / raster)` oneven is; bij raster 1/8 en 1/4 schuift niets. Er wordt geen extra willekeur gebruikt, dus dezelfde reeks willekeurige getallen geeft met swing 0 dezelfde noten als voorheen. Opnemen/kwantiseren is niet van toepassing: dit apparaat is een generator.
+
+## Klembord: alleen kopiëren (sinds 1.15.0)
+
+De host kopieert met de knop Kopieer in de kaartbalk en met Ctrl/Cmd+C (contract v1.17, formaat `patchkamer-clip`, tijd in **tikken**, 12 per zestiende). Wanderer is een generator: het motief bestaat uit toonladdertrappen (`deg`, `oct`) die bij het spelen met `root`, de toonladder en het bereik naar MIDI worden omgezet, en het verandert zelf. Terugrekenen van een clip naar trappen is niet eenduidig, dus `paste` is altijd `[]` en Plak wordt grijs. Niets hiervan verandert `getState()`, de presets of het geluid.
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | `copy` is `['notes']`, `paste` is `[]`; `length` = motieflengte × stapduur in tikken (`12 / div` per stap). Zonder motief: `copy` leeg. |
+| `getClip()` | Het huidige motief als `notes`: elke stap die aan staat wordt de MIDI-noot die hij nu zou spelen (met `Volg akkoord` aan: op de nu vastgehouden toonhoogten), `vel` met het verloop (`contour`), `len` = `gate` × stapduur, een ratchet als aparte noten met aflopende velocity. `swing` is de knop. Humanize en willekeurige ratchets zitten er niet in. |
+| `setClip(clip)` | Geeft altijd `{ ok: false, reason }`, behalve voor de eigen momentopname (`native.device` = dit `id`): dan `{ ok: true }` zonder wijziging. |
+
+Sinds 1.15.0 staat `modExclude: ['reps']` in de definitie (Herhaal eerst is een geheel getal en bewust niet stuurbaar; de validator meldde dat voorheen als let op). Geen invloed op de state.
+
+**Risico's.** Momentopname van de stand van dat moment: het motief muteert verder, de kopie niet. Een motief dat een ander bereik of een andere toonladder heeft op het moment van plakken, blijft zoals gekopieerd (het zijn gewone noten). Humanize en toevalsratchets kunnen niet vooraf bekeken worden.
 
 ## Controleren
 

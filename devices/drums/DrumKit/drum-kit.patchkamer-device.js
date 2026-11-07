@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het huidige patroon (A tot D) wordt gekopieerd met één baan per kanaal (`chN`, `type` is het instrument, scheme `gm`); velocity, kans en ratchet gaan mee. Plakken zet alleen de stappen van het actieve patroon op de kanalen (kanalen zonder slagen worden leeg); de lengte is gedeeld en blijft van het apparaat, kit, klank, swing en andere patronen blijven. Gastinstrumenten zonder kanaal worden niet gevuld. Verder niets gewijzigd: getState, presets en geluid gelijk aan 1.14.2. De twee stapbewerkwaarden (editVelocity, editProbability) staan nu in `modExclude` (alleen metadata; de validator-melding is weg).
 // 1.14.2 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Humanize (human), Patroonswing A tot D (patternSwing.0 tot .3) en de swing per kanaal (chN.swing); alle standaard uit (drift 0,05, role swing of humanize).
 //          Modulatie komt alleen bovenop de knop (knop + o × bereik, geclampt; swing als som begrensd tot 50%) en is nooit state; getState, presets en tunes gelijk. Zonder modulatie gelijk aan 1.14.1. Niet beluisterd.
 //          Bewust weggelaten: lengte, pagina, patroon, kit/klankmodel (keuzes), de stapdata (velocity, kans, ratchet per stap) en het Auditie-/Opname-gedrag.
@@ -125,7 +126,7 @@ const CSS=`
 const OUT_TRIM=.36*5.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.14.2',kind:'instrument',category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.15.0',kind:'instrument',modExclude:['editVelocity','editProbability'],category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -281,6 +282,31 @@ const __pkDef = {
  function animate(){if(dead||!root)return;const now=ctx.currentTime;while(pending.length&&pending[0].time<=now){const p=pending.shift();lastStep=p.step;lastTime=p.time;}stepButtons.forEach(btns=>btns.forEach((b,j)=>b.classList.toggle('now',playing&&state.run&&state.bank*16+j===lastStep)));if(scope){const g=scope.getContext('2d'),C=colors();mixMeter.getFloatTimeDomainData(scopeData);g.fillStyle=C.screen;g.fillRect(0,0,800,120);g.strokeStyle=C.line;g.beginPath();g.moveTo(0,38);g.lineTo(800,38);g.stroke();g.strokeStyle=C.accent;g.beginPath();for(let j=0;j<512;j++){const x=j/511*800,y=38+scopeData[j]*90;j?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();for(let i=0;i<state.channels.length;i++){meters[i].getFloatTimeDomainData(meterData);let peak=0;for(const x of meterData)peak=Math.max(peak,Math.abs(x));const w=800/state.channels.length;g.fillStyle=C.bar;g.fillRect(i*w+3,82,w-6,20);g.fillStyle=peak>1?C.clip:C.meter;g.fillRect(i*w+3,82,(w-6)*Math.min(1,peak),20);g.fillStyle=C.dim;g.font='9px monospace';g.fillText(String(i+1),i*w+4,115);}}
  if(modStatus){const count=Object.values(mod).filter(v=>v!==0).length;modStatus.textContent=count?T.modActive(count):T.modNone;}
  if(status){status.textContent=error||(playing&&state.run?T.play(lastStep+1,state.length)+(state.record?' · REC':''):T.hostStart);status.className=error?'error':'stats';}}
+ // ---- klembord (contract v1.17, §13d): het actieve patroon als `patchkamer-clip`, kind `drums` ----
+ const CT={nl:{pat:p=>'Patroon '+p,gone:'Het apparaat is verwijderd.',bad:'Geen geldige clip.',kind:'Dit apparaat neemt alleen drums.'},en:{pat:p=>'Pattern '+p,gone:'The device has been removed.',bad:'Not a valid clip.',kind:'This device only takes drums.'}};
+ const CX=CT[host&&host.lang]||CT.en, CLIP_ID='nl.patchkamer.drumkit';
+ const clipLanes=()=>state.channels.map((c,i)=>({id:'ch'+(i+1),name:(TYPES[c.type]||[c.type])[0].slice(0,40),type:c.type,note:Math.round(c.note)}));
+ const clipName=()=>CX.pat('ABCD'[state.pattern]||'A');
+ function clipInfo(){try{if(dead)return null;return {name:clipName(),copy:['drums'],paste:['drums'],length:{min:12,max:768,step:12,current:state.length*12,shared:true},grid:[16],poly:16,range:[0,127],scheme:'gm',vel:'continuous',prob:true,ratchet:true,lanes:clipLanes(),maxEvents:state.channels.length*64};}catch(e){return null;}}
+ function getClip(){try{if(dead)return null;const L=state.length,hits=[];
+  state.channels.forEach((c,i)=>{const st=c.steps[state.pattern];for(let k=0;k<L;k++){const z=st[k];if(!(z.v>=0.01))continue;const h={t:k*12,lane:i,vel:Math.min(1,z.v)};if(z.p<1)h.prob=z.p;if(z.r>1)h.ratchet=z.r;hits.push(h);}});
+  const clip={format:'patchkamer-clip',formatVersion:1,kind:'drums',name:clipName(),length:L*12,grid:16,source:{device:CLIP_ID,name:'Drum Kit',version:'1.15.0',scheme:'gm'},lanes:clipLanes(),hits};
+  if(state.patternSwing[state.pattern]>0)clip.swing=state.patternSwing[state.pattern];
+  return copy(clip);}catch(e){return null;}}
+ function setClip(clip){try{
+  if(dead)return {ok:false,reason:CX.gone};
+  if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1))return {ok:false,reason:CX.bad};
+  if(clip.kind!=='drums')return {ok:false,reason:CX.kind};
+  if(typeof clip.length!=='number'||!Number.isFinite(clip.length))return {ok:false,reason:CX.bad};
+  const lanes=Array.isArray(clip.lanes)?clip.lanes.slice(0,64):[],src=Array.isArray(clip.hits)?clip.hits.slice(0,4096):[],map=lanes.map(l=>{const m=l&&typeof l.id==='string'?/^ch(\d+)$/.exec(l.id):null;const i=m?+m[1]-1:-1;return i>=0&&i<state.channels.length?i:-1;});
+  const next=state.channels.map(()=>Array.from({length:state.length},cell));
+  for(const h of src){if(!h||typeof h!=='object'||typeof h.t!=='number'||!Number.isFinite(h.t)||!Number.isInteger(h.lane)||h.lane<0||h.lane>=map.length)continue;const i=map[h.lane];if(i<0)continue;
+   const k=Math.round(clamp(h.t,0,1e9)/12);if(k>=state.length)continue;const v=h.acc===true?1:clamp(h.vel,0.01,1,0.8),o=next[i][k];if(o.v>=v)continue;
+   next[i][k]={v,p:clamp(h.prob,0,1,1),r:Math.round(clamp(h.ratchet,1,4,1))};}
+  const before=JSON.stringify(state.channels.map(c=>c.steps[state.pattern]));
+  state.channels.forEach((c,i)=>{const st=c.steps[state.pattern];for(let k=0;k<state.length;k++)st[k]=next[i][k];});
+  if(JSON.stringify(state.channels.map(c=>c.steps[state.pattern]))!==before)render();
+  return {ok:true};}catch(e){return {ok:false,reason:CX.bad};}}
  self={inputs:{},outputs,
  // contract v1.5: één bundel met de actieve kanalen (zelfde nodes als de uitgangen ch1…ch16)
  bundles:{multi:()=>({label:T.multi,channels:state.channels.map((c,i)=>({id:'ch'+(i+1),name:String(i+1).padStart(2,'0')+' · '+TYPES[c.type][0],node:buses[i].direct}))})},
@@ -294,6 +320,8 @@ const __pkDef = {
  onStep(info){try{if(dead)return;const {step,bar,time,stepDur}=info,absolute=bar*16+step;if(Number.isFinite(time)&&stepDur>0&&Number.isFinite(absolute))ref={abs:absolute,time,stepDur,hs:clamp(info.swing,0,.5,0)};if(!state.run)return;const idx=((absolute%state.length)+state.length)%state.length,odd=oddStep(absolute),patSwing=patSwingOf(),human=humanOf();pending.push({step:idx,time});if(pending.length>128)pending.shift();state.channels.forEach((c,i)=>{const z=c.steps[state.pattern][idx];if(recSkip.delete(i+':'+absolute))return;const at=odd?time+Math.min(.5,patSwing+chSwing(i))*stepDur:time;if(z.v>0&&Math.random()<=z.p)for(let r=0;r<z.r;r++){const offset=human*Math.random(),v=z.v*(1-human*4*Math.random());hit(i,at+r*stepDur/z.r+offset,v);}});}catch(e){fail(e);}},
  onTransport({playing:p}){playing=!!p;if(!playing){stopAll();pending.length=0;lastStep=-1;ref=null;recSkip.clear();}},
  onEvent(port,ev){try{if(dead||port!=='trigger'||!ev)return;const t=Number.isFinite(ev.time)?ev.time:ctx.currentTime;if(ev.type==='trig'){let i=/^ch\d+$/.test(ev.lane)?+ev.lane.slice(2)-1:state.channels.findIndex(c=>c.type===ev.lane);if(i>=0){hit(i,t,ev.vel??1);recordNote(i,t,ev.vel??1);}else if(Object.hasOwn(TYPES,ev.lane))guestHit(ev.lane,t,ev.vel??1);}else if(ev.type==='note'&&ev.vel>0){let any=false;state.channels.forEach((c,i)=>{if(c.note===Math.round(ev.note)){any=true;hit(i,t,ev.vel);recordNote(i,t,ev.vel);}});if(!any){const gst=fullList().find(x=>x.type&&x.note===Math.round(ev.note));if(gst)guestHit(gst.type,t,ev.vel);}}else if(ev.type==='cc'){const v=clamp(ev.value,0,1),m=/^ch(\d+)\.(cutoff|resonance|level|pan|drive|tune)$/.exec(ev.id);if(m&&state.channels[+m[1]-1]){const c=state.channels[+m[1]-1],k=m[2];c[k]=k==='cutoff'?30*Math.pow(20000/30,v):k==='resonance'?.1+v*11.9:k==='pan'?v*2-1:k==='tune'?v*48-24:v;apply();}else if(ev.id==='master'){state.master=v;apply();}}}catch(e){fail(e);}},
+ 
+ clipInfo(){return clipInfo();},getClip(){return getClip();},setClip(c){return setClip(c);},
  noteNames(){return noteList();},
  getState(){return copy(state);},setState(s){restore(s||{});},
  destroy(){if(dead)return;dead=true;self.unmount();sources.forEach(n=>{try{n.stop();}catch{}});sources.clear();owned.forEach(n=>{try{n.disconnect();}catch{}});owned.clear();voices.clear();pending.length=0;}

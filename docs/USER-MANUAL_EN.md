@@ -210,7 +210,7 @@ Their ready-made sounds and settings have their own manuals: [Tunes](tunes/USER-
 
 ### Copying and pasting patterns
 
-A device that can share a pattern or clip gets two buttons in its card bar: **Copy** and **Paste**. You only see them on devices that can do this (for example the Step Sequencer and the Clip Arranger today). They let you take a pattern from one device to another, or to another track.
+A device that can share a pattern or clip gets two buttons in its card bar: **Copy** and **Paste**. You only see them on devices that can do this (Step Sequencer, Clip Arranger, Pattern Tracker, Pattern Playlist, Chord Sequencer, Drum Kit, Pulse Drums, Latin Percussion, Click Synth and Drum Machine; Euclidean Rhythms and Wanderer can only copy, as a snapshot). They let you take a pattern from one device to another, or to another track.
 
 - **Copy** puts the pattern the device is showing on the clipboard: in Patchkamer's memory and as text on the system clipboard. That also lets you paste it in another browser tab or on another computer (this needs a secure context: `localhost` or https; where the browser does not allow the system clipboard, only the memory works).
 - **Paste** puts the pattern from the clipboard into the device. If the system clipboard holds no Patchkamer clip, Paste uses what you last copied in Patchkamer.

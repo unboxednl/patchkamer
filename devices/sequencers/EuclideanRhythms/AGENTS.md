@@ -15,7 +15,7 @@ Wat een rij speelt, is volledig **gegenereerd uit getallen**; er staat geen lijs
 | Naam | `Euclidean Rhythms` in alle talen; poortnamen hebben een Nederlandse variant (via `i18n`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `reset` (Reset) en `keys` (Notes in / Noten in), eventuitgang `trigs` (Trigs / notes); geen audio, geen modulatie |
-| Contract | v1.14 (apparaatversie 1.14.1) |
+| Contract | v1.17 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Euclides, `nl.patchkamer.euclides`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state die je zelf in dit apparaat zet (zonder de nieuwe velden) klinkt gelijk aan vroeger: alle nieuwe velden hebben als standaard het oude gedrag.
@@ -272,6 +272,23 @@ Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 
 De nootkeuze van een rij (`note`) is nu 0 … 127 (was 12 … 108, zodat een klank van een drumcomputer met een noot buiten dat bereik onbereikbaar was). De keuzelijst toont, als er een drumcomputer aan `trigs` hangt, eerst al zijn klanken in zijn volgorde (groep "Klanken van de drumcomputer", getest met 27 klanken) en daarna alle noten 0 … 127. Een klank zonder eigen kanaal (gast) bereik je dus via `out: "noot"` met zijn noot. De trig-uitgangen blijven `ch1` … `ch8`.
 
 Opnemen/kwantiseren is niet van toepassing: dit apparaat is een generator zonder lijst noten om in te schrijven.
+
+## Klembord: alleen kopiëren (sinds 1.15.0)
+
+De host kopieert met de knop Kopieer in de kaartbalk en met Ctrl/Cmd+C (contract v1.17, formaat `patchkamer-clip`, tijd in **tikken**, 12 per zestiende). Dit apparaat is een generator: het ritme volgt uit getallen (stappen, slagen, rotatie, `div`, fill, mutatie) en er is geen stappenlijst om in te plakken. Daarom is `paste` altijd `[]` en wordt Plak grijs. Niets hiervan verandert `getState()`, de presets of het geluid.
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | `copy` is `['notes']` als de gekozen rij (`sel`) op **Noot** staat en aan is, anders `['drums']` als er minstens één rij aan staat die naar een spoor (`ch1` … `ch8`) gaat; anders `[]`. `paste` is `[]`. |
+| `getClip()` | Een **momentopname van de eerste maat** (de rijen zoals `rowPattern` ze voor maat 0 geeft, dus met rotatie en mutatie van die maat, maar zonder fills, want die vallen pas in latere maten). `notes`: alleen de gekozen rij, `n` = `note` van de rij, `len` = stapduur × `gate`. `drums`: alle rijen die aan staan en naar een spoor gaan (de eerste rij per spoor telt), elke baan met eigen `length` (= `steps` × stapduur in tikken, polymeter); `lanes[].note` en `name` komen van het aangesloten drumapparaat (`noteNames`), anders heet de baan "Spoor n" met `note` -1. Accenten en ghost notes staan als `acc` en `vel`, `prob` als de kans van de rij onder 1 ligt, `swing` is die van de gekozen rij. Ratchets en humanize zitten er niet in. |
+| `setClip(clip)` | Geeft altijd `{ ok: false, reason }` (tweetalig). Alleen de eigen momentopname (`native.device` = dit `id`, zoals `getClip()` hem levert) geeft `{ ok: true }` zonder iets te veranderen, zodat `setClip(getClip())` de state gelijk laat. De host plakt hem nooit (`paste` is leeg). |
+
+**Risico's.**
+
+- Het is een momentopname: de kopie loopt niet mee met latere wijzigingen of met willekeur (kans, mutatie), en alleen maat 0 (bij een fill of mutatie klinkt een latere maat anders).
+- Een drums-clip heeft **polymetrische banen** (lengtes 12 tot 1536 tikken). Een doel met één lengte krijgt ze door de host herhaald tot het kleinste gemene veelvoud (afgekapt op de maximumlengte van het doel); dat kan een melding "afgekapt" geven.
+- Zonder drumapparaat aan `trigs` hebben de banen geen `note` en heten ze "Spoor n": de host kan ze dan niet op naam of type aan een doel koppelen en meldt dat ze niet geplaatst zijn. Sluit eerst het drumapparaat aan als je de banen wilt laten landen.
+- Gelijke uitgang op twee rijen (twee rijen naar `ch1`): alleen de eerste komt mee.
 
 ## Controleren
 

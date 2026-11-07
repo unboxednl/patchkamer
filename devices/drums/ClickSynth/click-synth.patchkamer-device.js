@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is het gekozen patroon (A tot D) met de acht sporen als banen; elk spoor heeft zijn eigen lengte (1 tot 16, `lanes[].length`).
+//          Schema `device`: de nootnummers 36 tot 43 zijn geen General MIDI en de sporen hebben geen `type`, dus de host lijnt uit op naam (de namen hangen van de kit af) en wat niet past wordt weggelaten en gemeld. Per slag gaan velocity, kans en ratchet (1 tot 4) mee. De toonsprong (`t`) heeft geen plaats in het formaat: hij gaat alleen mee in `native` voor een clip uit dit apparaat
+//          en wordt bij een clip van elders 0. Plakken vervangt de stappen binnen de lengte van elk spoor; verborgen stappen voorbij de lengte, klanken, swing en kit blijven. Een clip van elders zet alle sporen op de cliplengte (het doel volgt de clip, tot 16 stappen). getState, presets, tunes, geluid en poorten gelijk aan 1.14.2.
 // 1.14.2 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Master (master), Patroonswing A tot D (patSwing.0 tot .3) en de swing per spoor (l1.swing tot l8.swing); alle standaard uit (drift 0,05, role level of swing).
 //          Modulatie komt alleen bovenop de knop (knop + o × bereik, geclampt; swing als som begrensd tot 50%) en is nooit state; getState, presets en tunes gelijk. Het master-niveau gaat via setTargetAtTime (geen tikken). Zonder modulatie gelijk aan 1.14.1. Niet beluisterd.
 //          Bewust weggelaten: kit, patroon, spoor, modus (keuzes), aan/uit-knoppen, lengte per spoor (discreet) en de stapdata.
@@ -19,7 +22,7 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { title: 'CLICK SYNTH · percussiesynth', sub: 'Acht sporen met elk een eigen klankmotor. Boetseer kliks, tiks, bleeps, zaps, hout, glas, metaal en glitches. Willekeur maakt elke slag net anders; elk spoor kan een eigen lengte hebben (polyritme).',
+  nl: { clipBad: 'Geen geldige clip.', clipKind: 'Dit apparaat neemt alleen drums.', clipGone: 'Het apparaat is verwijderd.', title: 'CLICK SYNTH · percussiesynth', sub: 'Acht sporen met elk een eigen klankmotor. Boetseer kliks, tiks, bleeps, zaps, hout, glas, metaal en glitches. Willekeur maakt elke slag net anders; elk spoor kan een eigen lengte hebben (polyritme).',
     p: { pitch: 'Toonhoogte', penv: 'Pitch-envelope', ptime: 'Pitch-tijd', decay: 'Decay', color: 'Kleur', shape: 'Karakter', noise: 'Ruis', drive: 'Drive', crush: 'Crush', cut: 'Filter', res: 'Resonantie', pan: 'Pan', level: 'Niveau', vari: 'Willekeur' },
     groups: ['Toon en tijd', 'Klankvorm', 'Bewerking', 'Mix en leven'],
     engines: { tick: 'Tik (impuls + resonator)', bleep: 'Bleep (oscillator)', fm: 'FM-metaal', noise: 'Ruis (bandfilter)', modal: 'Modaal (hout → glas → metaal → vel)', string: 'Snaar (plukken)', zap: 'Zap (laser)', glitch: 'Glitch (stotter)' },
@@ -34,7 +37,7 @@ const TXT = {
     surprisePat: 'Verras patroon', surprisePatTitle: 'willekeurig ritme voor dit spoor', clearPat: 'Wis patroon', scopeAria: 'golfvorm van het gekozen spoor', knobTitle: name => name + ' — dubbelklik voor de waarde uit de kit',
     note: 'Klik op een stap volgens de keuze bovenaan; Shift-klik zet een stap zacht, rechtsklik wist hem. Lengte per spoor maakt polyritmes (bijv. 7 tegen 16). Afknijpgroep: een slag kapt de andere sporen in dezelfde groep af (open/dichte hihat). Sequencer uit: speel vanuit een ander apparaat (drumprotocol trig, ch1–ch8) of met noten 36–43. De bundeluitgang geeft elk spoor los aan de Mixer.',
     noWorklet: 'AudioWorklet niet beschikbaar: Click Synth blijft stil (open Patchkamer in Chrome, Edge of Firefox).', bundle: 'Click Synth' },
-  en: { title: 'CLICK SYNTH · percussion synth', sub: 'Eight lanes, each with its own sound engine. Shape clicks, ticks, bleeps, zaps, wood, glass, metal and glitches. Randomness makes every hit a little different; each lane can have its own length (polyrhythm).',
+  en: { clipBad: 'Not a valid clip.', clipKind: 'This device only takes drums.', clipGone: 'The device has been removed.', title: 'CLICK SYNTH · percussion synth', sub: 'Eight lanes, each with its own sound engine. Shape clicks, ticks, bleeps, zaps, wood, glass, metal and glitches. Randomness makes every hit a little different; each lane can have its own length (polyrhythm).',
     p: { pitch: 'Pitch', penv: 'Pitch envelope', ptime: 'Pitch time', decay: 'Decay', color: 'Color', shape: 'Character', noise: 'Noise', drive: 'Drive', crush: 'Crush', cut: 'Filter', res: 'Resonance', pan: 'Pan', level: 'Level', vari: 'Randomness' },
     groups: ['Pitch and time', 'Sound shape', 'Processing', 'Mix and life'],
     engines: { tick: 'Tick (impulse + resonator)', bleep: 'Bleep (oscillator)', fm: 'FM metal', noise: 'Noise (band filter)', modal: 'Modal (wood → glass → metal → skin)', string: 'String (pluck)', zap: 'Zap (laser)', glitch: 'Glitch (stutter)' },
@@ -117,7 +120,7 @@ const pkLoop = (host, getInst, cb, fps) => {   // tekenen via de klok van de hos
   const inst = getInst(); if (host && typeof host.frame === 'function' && inst && inst._id) return host.frame(inst, cb, fps);
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 export default {
-  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.14.2', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.15.0', kind: 'instrument', category: 'groove',
   ui: { width: 1080, minWidth: 560 },
   i18n: { en: { name: 'Click Synth', ports: { out: 'Stereo mix', trigger: 'Trigs / notes', mod: 'Mod', multi: 'Separate lanes (bundle)' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo mix' }], eventIn: [{ id: 'trigger', name: 'Trigs / noten' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiIn: [], multiOut: [{ id: 'multi', name: 'Sporen los (bundel)' }] },
@@ -413,11 +416,58 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     function bundleChanged() { notesNotify(); try { if (host && typeof host.bundleChanged === 'function') host.bundleChanged(self, 'multi'); } catch {} }
     const laneOf = e => { if (typeof e.lane === 'string') { const m = e.lane.match(/(\d+)$/); if (m) return +m[1] - 1; } if (Number.isFinite(e.lane)) return e.lane | 0; if (Number.isFinite(e.note)) { const n = Math.round(e.note); if (n >= 36 && n < 44) return n - 36; if (n >= 60 && n < 68) return n - 60; } return -1; };
 
+    // ---------- klembord (contract v1.17, §13d): het gekozen patroon, 8 sporen met eigen lengte ----------
+    const CLIP_ID = 'nl.patchkamer.clicksynth';
+    const clipLanes = () => state.lanes.map((L, i) => ({ id: 'l' + (i + 1), name: String(L.name || ('Lane ' + (i + 1))).slice(0, 40), type: '', note: 36 + i }));
+    const clipLen = () => Math.max(...state.lanes.map(L => L.len)) * 12;
+    const clipName = () => (T.pattern || 'Pattern') + ' ' + 'ABCD'[state.pattern];
+    function clipInfo() { try { if (dead) return null;
+        return { name: clipName(), copy: ['drums'], paste: ['drums'], length: { min: 12, max: 192, step: 12, current: clipLen(), shared: false }, grid: [16], poly: NL, scheme: 'device', vel: 'continuous', prob: true, ratchet: true, lanes: clipLanes(), maxEvents: NL * NS }; } catch { return null; } }
+    function getClip() { try { if (dead) return null;
+        const length = clipLen(), lanes = clipLanes(), hits = [];
+        state.lanes.forEach((L, i) => { if (L.len * 12 !== length) lanes[i].length = L.len * 12;
+          for (let j = 0; j < L.len; j++) { const S = L.pats[state.pattern][j]; if (!(S.v > 0)) continue; const h = { t: j * 12, lane: i, vel: Math.max(0.01, S.v) }; if (S.v >= 0.9) { h.acc = true; h.vel = 1; } if (S.p < 1) h.prob = S.p; if (S.r > 1) h.ratchet = S.r; hits.push(h); } });
+        hits.sort((a, b) => a.t - b.t || a.lane - b.lane);
+        const native = { lens: state.lanes.map(L => L.len), steps: state.lanes.map(L => L.pats[state.pattern].slice(0, L.len).map(S => ({ v: S.v, p: S.p, r: S.r, t: S.t }))) };
+        return JSON.parse(JSON.stringify({ format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: clipName(), length, grid: 16, source: { device: CLIP_ID, name: 'Click Synth', version: '1.15.0', scheme: 'device' }, lanes, hits, native: { device: CLIP_ID, data: native } })); } catch { return null; } }
+    function setClip(clip) { try {
+        if (dead) return { ok: false, reason: T.clipGone };
+        if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1)) return { ok: false, reason: T.clipBad };
+        if (clip.kind !== 'drums') return { ok: false, reason: T.clipKind };
+        if (typeof clip.length !== 'number' || !Number.isFinite(clip.length) || clip.length < 1) return { ok: false, reason: T.clipBad };
+        const len = Math.round(clamp(clip.length, 1, 12288)), lanes = Array.isArray(clip.lanes) ? clip.lanes.slice(0, 64) : [], src = Array.isArray(clip.hits) ? clip.hits.slice(0, 4096) : [];
+        const num = x => typeof x === 'number' && Number.isFinite(x), norm = x => String(x == null ? '' : x).toLowerCase().replace(/[^a-z0-9]/g, '');
+        // baan van de clip -> spoor: op id (l1 tot l8) met dezelfde naam, anders op naam; nooit op nootnummer of volgorde
+        const names = state.lanes.map(L => norm(L.name));
+        const map = lanes.map(l => { if (!l || typeof l !== 'object') return -1; const m = /^l([1-8])$/.exec(typeof l.id === 'string' ? l.id : ''), nm = norm(l.name);
+          if (m && nm && names[+m[1] - 1] === nm) return +m[1] - 1; return nm ? names.indexOf(nm) : -1; });
+        const lens = state.lanes.map((_, i) => { let ll = len; lanes.forEach((l, k) => { if (map[k] === i && l && num(l.length) && l.length >= 1) ll = Math.round(clamp(l.length, 1, 12288)); }); return Math.round(clamp(Math.ceil(ll / 12), 1, NS)); });
+        const steps = state.lanes.map((_, i) => Array.from({ length: lens[i] }, () => ({ v: 0, p: 1, r: 1, t: 0 })));
+        const raw = [];
+        for (const h of src) { if (!h || typeof h !== 'object' || !num(h.t) || !Number.isInteger(h.lane) || h.lane < 0 || h.lane >= lanes.length) continue;
+          const i = map[h.lane]; if (i < 0 || h.t < 0 || h.t >= len) continue; const j = Math.round(h.t / 12); raw.push({ i, j }); if (j >= lens[i]) continue;
+          const vel = num(h.vel) ? clamp(h.vel, 0.01, 1) : 0.8; steps[i][j] = { v: h.acc === true ? 1 : vel, p: num(h.prob) ? clamp(h.prob, 0, 1) : 1, r: Math.round(num(h.ratchet) ? clamp(h.ratchet, 1, 4) : 1), t: 0 }; }
+        // een clip uit dit apparaat die de hits nog gelijk heeft: de eigen stappen (met toonsprong) komen exact terug
+        const nat = clip.native && typeof clip.native === 'object' && clip.native.device === CLIP_ID && clip.native.data && typeof clip.native.data === 'object' ? clip.native.data : null;
+        if (nat && Array.isArray(nat.lens) && Array.isArray(nat.steps)) { try {
+          const nl = Array.from({ length: NL }, (_, i) => Math.round(finite(nat.lens[i], 0, 0, NS))), ns = nl.map((n, i) => Array.from({ length: n }, (_, j) => cleanStep(nat.steps[i]?.[j])));
+          // de host maakt van een polymeter-clip één lange cyclus (de banen herhaald tot de cliplengte): de eigen stappen gelden als die cyclus gelijk is aan wat er binnenkomt
+          const n = Math.ceil(len / 12), got = new Set(); for (const r of raw) if (r.j < n) got.add(r.i * 100 + r.j);
+          const periodic = (row, i) => { for (let j = 0; j < n; j++) if ((row[j % row.length].v > 0) !== got.has(i * 100 + j)) return false; return true; };
+          const plain = (row, i) => { for (let j = 0; j < n; j++) if ((j < row.length && row[j].v > 0) !== got.has(i * 100 + j)) return false; return true; };
+          if (nl.every(x => x >= 1) && n >= Math.max(...nl) && n <= NS && (ns.every(periodic) || ns.every(plain))) ns.forEach((row, i) => { steps[i] = row; lens[i] = nl[i]; }); } catch {} }
+        const before = JSON.stringify(state.lanes.map(L => [L.len, L.pats[state.pattern]]));
+        state.lanes.forEach((L, i) => { L.len = lens[i]; for (let j = 0; j < lens[i]; j++) L.pats[state.pattern][j] = steps[i][j]; });
+        if (JSON.stringify(state.lanes.map(L => [L.len, L.pats[state.pattern]])) === before) return { ok: true };
+        paint(); return { ok: true };
+      } catch { return { ok: false, reason: T.clipBad }; } }
+
     const self = {
       inputs: {}, outputs: { out },
       bundles: { multi: () => ({ label: T.bundle, channels: state.lanes.map((L, i) => ({ id: 'ch' + (i + 1), name: `${i + 1} ${L.name}`, node: laneOut[i] })) }) },
       mount, unmount,
       noteNames() { return noteList(); },
+      clipInfo, getClip, setClip,
       onStep(info) { try { if (dead || !info) return; const sd = finite(info.stepDur, 0.125, 0.01, 2); stepDur = sd; const t = finite(info.time, ctx.currentTime, 0, 1e9);
           const abs = Number.isFinite(info.bar) ? info.bar * 16 + (info.step | 0) : (absStep + 1); absStep = abs;
           const hs = finite(info.swing, 0, 0, 0.5), odd = isOdd(abs); playing = true; anc = { t, abs, sd, hs, base: t - (odd ? hs * sd : 0) };

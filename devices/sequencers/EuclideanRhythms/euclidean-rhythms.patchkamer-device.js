@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord, alleen kopiëren. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, 12 tikken per zestiende). Kopiëren geeft een momentopname van de eerste maat: staat de gekozen rij op Noot, dan een notes-clip van die rij; anders een drums-clip van alle rijen die aan staan en naar een spoor gaan, elke baan met de eigen lengte (polymeter), accenten, ghost notes en kans meegenomen. Plakken kan niet (`paste` is leeg): `setClip` geeft `ok:false` met een reden, behalve voor de eigen momentopname (`native`), die niets verandert. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Swing per rij en de hele klanklijst van een drumcomputer bereikbaar. Staat de swing van een rij op 0 (de standaard), dan geeft elke state dezelfde gebeurtenissen als voorheen.
 //   - swing per rij (`swing`, 0 … 0,5 van een zestiende, regelaar bij de gekozen rij): een slag die in een oneven zestiende valt (ook een 1/32-slag of de tweede helft van een ratchet daarin) komt (rijswing) × stepDur later, bovenop de swing van de host;
 //     rijen op 1/8 of langzamer hebben alleen slagen op even zestienden en schuiven dus niet
@@ -33,6 +34,8 @@ const EN = {
   'Rij': 'Row', 'Stappen': 'Steps', 'Slagen': 'Pulses', 'Rotatie': 'Rotation', 'Tempo': 'Rate', 'Uitgang': 'Out', 'Velocity': 'Velocity', 'Accent': 'Accents', 'Kans': 'Chance', 'Fill': 'Fill', 'Mutatie': 'Mutation',
   'stappen': 'steps', 'slagen': 'pulses', 'rotatie': 'rotation', 'accenten': 'accents', 'kans': 'chance', 'mutatie': 'mutation', 'velocity': 'velocity', 'rij {0}': 'row {0}',
   'kans per maat dat de rij een stap verspringt': 'chance per bar that the row shifts by one step',
+  'Het apparaat is verwijderd.': 'The device has been removed.', 'Geen geldige clip.': 'Not a valid clip.', 'Rij {0}': 'Row {0}', 'Alle sporen': 'All tracks', 'Euclidean Rhythms': 'Euclidean Rhythms',
+  'Euclidean Rhythms kan alleen kopiëren: het ritme volgt uit getallen (stappen, slagen, rotatie) en heeft geen stappenlijst om te plakken.': 'Euclidean Rhythms can only copy: the rhythm follows from numbers (steps, pulses, rotation) and has no step list to paste into.',
   'Spoor {0}': 'Track {0}', 'Noot': 'Note', 'Geen': 'None', '{0} m · dubbel': '{0} bars · double', '{0} m · ratchet': '{0} bars · ratchet',
   '1/16 triool': '1/16 triplet', '1/8 triool': '1/8 triplet', '1/32 triool': '1/32 triplet',
   'Gekozen rij {0}': 'Selected row {0}', 'Noot van de gekozen rij': 'Note of the selected row',
@@ -99,7 +102,7 @@ const ukVar = (el, name, d) => { const c = el._ukv || (el._ukv = {}), now = perf
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.14.1', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.15.0', kind: 'utility', category: 'sequencer',
   ui: { width: 900, minWidth: 420 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'reset', name: 'Reset' }, { id: 'keys', name: 'Notes in' }], eventOut: [{ id: 'trigs', name: 'Trigs / notes' }], modIn: [], modOut: [] },
   i18n: { nl: { ports: { reset: 'Reset', keys: 'Noten in', trigs: 'Trigs / noten' } } },
@@ -176,6 +179,30 @@ export default {
       if (ui.noteSel) { const v = ui.noteSel.value; ui.noteSel.innerHTML = ''; const lo = 0, hi = 127; let into = ui.noteSel;
         if (byNote.size) { const g1 = ukEl(ui.noteSel, 'optgroup'); g1.label = tx('Klanken van de drumcomputer'); for (const [n, name] of byNote) { const o = ukEl(g1, 'option', '', nn(n) + ' · ' + name); o.value = String(n); } into = ukEl(ui.noteSel, 'optgroup'); into.label = tx('Alle noten'); }
         for (let n = lo; n <= hi; n++) { const o = ukEl(into, 'option', '', byNote.has(n) ? nn(n) + ' · ' + byNote.get(n) : nn(n)); o.value = String(n); } ui.noteSel.value = v; }
+    }
+    // ---- klembord: momentopname van de eerste maat (gekozen rij of alle sporen) ----
+    const clipR3 = x => Math.round(ukClamp(x, 0.01, 1) * 1000) / 1000;
+    function clipRow(r, i) {
+      const rate = +r.div, tickT = 12 / rate, len = Math.max(1, Math.min(12288, Math.round(r.steps * tickT))), { p } = rowPattern(r, i, 0), lv = levels(r, p), hits = [];
+      for (let k = 0; k < r.steps; k++) { if (!p[k]) continue; const t = Math.round(k * tickT); if (t >= len) continue; const h = { t, vel: clipR3(hitVel(r, lv, k)) }; if (lv.acc[k]) h.acc = true; if (r.prob < 1) h.prob = clipR3(r.prob); hits.push(h); }
+      return { len, tickT, hits };
+    }
+    function clipBuild() {
+      const sel = R(state.sel), src = { device: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.15.0', scheme: 'device' }, nat = { device: 'nl.patchkamer.euclidean', data: { snapshot: true } };
+      const gridOf = ev => ev.every(e => e.t % 12 === 0) ? 16 : ev.every(e => e.t % 6 === 0) ? 32 : 64, sw = Math.min(0.5, sel.swing || 0);
+      if (sel.out === 'noot') {
+        if (!sel.on) return null; const c = clipRow(sel, state.sel), notes = c.hits.map(h => { const o = { t: h.t, n: sel.note, len: Math.max(1, Math.round(c.tickT * sel.gate)), vel: h.vel }; if (h.acc) o.acc = true; if (h.prob != null) o.prob = h.prob; return o; });
+        notes.forEach(o => { o.len = Math.min(o.len, c.len - o.t); });
+        const clip = { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', name: tx('Rij {0}', state.sel + 1), length: c.len, grid: gridOf(notes), source: { ...src, scheme: 'gm' }, notes, native: nat }; if (sw > 0) clip.swing = sw; return clip;
+      }
+      const lanes = [], hits = [], seen = new Set(); let max = 1;
+      state.rows.forEach((r, i) => {
+        if (!r.on || !/^ch[1-8]$/.test(r.out) || seen.has(r.out) || r.steps < 1) return; seen.add(r.out); const k = +r.out.slice(2) - 1, pn = peerNames[k], c = clipRow(r, i);
+        const li = lanes.length; lanes.push({ id: r.out, name: (pn && pn.name ? String(pn.name) : tx('Spoor {0}', k + 1)).slice(0, 40), type: '', note: pn && Number.isFinite(pn.note) ? Math.round(ukClamp(pn.note, 0, 127)) : -1, length: c.len });
+        max = Math.max(max, c.len); c.hits.forEach(h => hits.push({ ...h, lane: li }));
+      });
+      if (!lanes.length) return null; hits.sort((a, b) => a.t - b.t || a.lane - b.lane);
+      const clip = { format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: tx('Alle sporen'), length: max, grid: gridOf(hits), source: src, lanes, hits: hits.slice(0, 4096), native: nat }; if (sw > 0) clip.swing = sw; return clip;
     }
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--event,#ffd166)') + `
 .rows{display:grid;gap:4px;margin-top:8px}.rh,.r{display:grid;grid-template-columns:34px 30px 58px 58px 58px 88px 82px minmax(60px,1fr) 58px minmax(60px,1fr) 112px minmax(56px,1fr);gap:5px;align-items:center}
@@ -271,6 +298,15 @@ export default {
       onPeers(list) { if (!dead) readTarget(list); },
       onTransport(info) { try { if (!info?.playing) { cur.fill(-1); offset = 0; lastAbs = -1; } } catch { } },
       onEvent(port, e) { try { if (port === 'reset' && e && ['trig', 'note', 'noteon'].includes(String(e.type).toLowerCase())) offset = lastAbs + 1; else if (port === 'keys') liveIn(e); } catch { } },
+      // ---- klembord (contract v1.17, §13d): alleen kopiëren, als momentopname van de eerste maat; plakken kan niet (het ritme volgt uit getallen) ----
+      // Staat de gekozen rij op Noot, dan is de kopie een notes-clip van die rij; anders een drums-clip van alle rijen die aan staan en naar een spoor (ch1 … ch8) gaan, elke baan met de eigen lengte (polymeter).
+      clipInfo() { try { if (dead) return null; const c = clipBuild(); return c ? { name: c.name, copy: [c.kind], paste: [], length: { min: 1, max: 12288, step: 1, current: c.length, shared: false }, grid: [16, 32, 64], scheme: 'device', vel: 'continuous', prob: true, ratchet: false } : { name: tx('Euclidean Rhythms'), copy: [], paste: [] }; } catch { return null; } },
+      getClip() { try { if (dead) return null; const c = clipBuild(); return c ? JSON.parse(JSON.stringify(c)) : null; } catch { return null; } },
+      setClip(clip) { try { if (dead) return { ok: false, reason: tx('Het apparaat is verwijderd.') };
+          // de eigen momentopname terugplakken laat alles zoals het is; al het andere kan niet (de rijen zijn getallen, geen stappenlijst)
+          if (clip && typeof clip === 'object' && clip.format === 'patchkamer-clip' && clip.native && typeof clip.native === 'object' && clip.native.device === 'nl.patchkamer.euclidean') return { ok: true };
+          return { ok: false, reason: tx('Euclidean Rhythms kan alleen kopiëren: het ritme volgt uit getallen (stappen, slagen, rotatie) en heeft geen stappenlijst om te plakken.') };
+        } catch { return { ok: false, reason: tx('Geen geldige clip.') }; } },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(raw) { if (dead) return; const prev = state.sel; state = normalize(raw); if (state.sel !== prev || !state.live) liveOff(); paint(); },
       getPreset() { const p = self.getState(); for (const k of RUNFIELDS) delete p[k]; return p; },

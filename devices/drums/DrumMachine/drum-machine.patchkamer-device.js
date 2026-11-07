@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is de vier banen (kick, snare, hat, perc) van 16 stappen. Het apparaat kent alleen aan/uit: de velocity wordt bij plakken weggelaten (`vel: 'binary'`), en
+//          banen van een andere drumcomputer die niet op type of naam passen worden door de host weggelaten en gemeld; een baan die in de clip ontbreekt wordt leeg. Stuurt zelf geen gebeurtenissen. Verder niets gewijzigd: getState, presets, tunes, geluid en poorten gelijk aan 1.16.0.
 // 1.16.0 — Stappen en tabelregelaars herkenbaar voor skins (contract v1.22, additief): elke stappenrij roept host.ui.steps aan met opts { id: 'pat.<geluid>', group: <geluid>, role: 'step', color } zodat een skin de vorm, maat, kleur en het ledje van de stapknoppen kiest
 //          (eigen kleur per geluid), en elke schuif van de tabel krijgt via host.ui.adopt als id de params()-sleutel (kick.tune, snare.dec, ...), rol param en als groep het geluid. Een oudere host negeert het 5e argument en heeft geen adopt: het apparaat valt dan terug op de huidige weergave.
 //          Geluid, getState(), presets, tunes, poorten en uiterlijk zonder skin ongewijzigd.
@@ -19,8 +21,8 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { tone: 'Toon', click: 'Klik', lvl: 'Niveau', dbl: 'dubbelklik: standaard', multi: 'Losse uit', swing: 'Patroonswing', laneSwing: 'swing' },
-  en: { tone: 'Tone', click: 'Click', lvl: 'Level', dbl: 'double-click: default', multi: 'Separate outs', swing: 'Pattern swing', laneSwing: 'swing' },
+  nl: { clipPat: 'Patroon', clipBad: 'Geen geldige clip.', clipKind: 'Dit apparaat neemt alleen drums.', clipGone: 'Het apparaat is verwijderd.', tone: 'Toon', click: 'Klik', lvl: 'Niveau', dbl: 'dubbelklik: standaard', multi: 'Losse uit', swing: 'Patroonswing', laneSwing: 'swing' },
+  en: { clipPat: 'Pattern', clipBad: 'Not a valid clip.', clipKind: 'This device only takes drums.', clipGone: 'The device has been removed.', tone: 'Tone', click: 'Click', lvl: 'Level', dbl: 'double-click: default', multi: 'Separate outs', swing: 'Pattern swing', laneSwing: 'swing' },
 };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const VOICES = [['kick', 'Kick'], ['snare', 'Snare'], ['hat', 'Hat'], ['perc', 'Perc']];
@@ -43,7 +45,7 @@ const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.16.0',
+  version: '1.17.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -80,6 +82,41 @@ export default {
       else { const g = ctx.createGain(); g.gain.setValueAtTime(v * 0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dec); const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = eff('perc', 'tone'); bp.Q.value = 3; bp.connect(g).connect(dst);
         const base = eff('perc', 'tune'); [1, 1.5, 2.26].forEach((r, k) => { const o = ctx.createOscillator(); o.type = k ? 'square' : 'triangle'; o.frequency.value = base * r; const og = ctx.createGain(); og.gain.value = 0.5 / (k + 1); o.connect(og).connect(bp); o.start(t); o.stop(t + dec + 0.05); }); }
     }
+    // ---- klembord (contract v1.17, §13d) ----
+    const CLIP_TYPE = { kick: 'kick', snare: 'snare', hat: 'closedhat', perc: 'perc' };
+    const clipLanes = () => VOICES.map(([k, lab]) => ({ id: k, name: lab, type: CLIP_TYPE[k], note: -1 }));
+    function clipInfo() {
+      try { if (dead) return null; return { name: T.clipPat, copy: ['drums'], paste: ['drums'], length: { min: 192, max: 192, step: 192, current: 192, shared: false }, grid: [16], poly: 4, scheme: 'device', vel: 'binary', prob: false, ratchet: false, lanes: clipLanes(), maxEvents: 64 }; } catch (e) { return null; }
+    }
+    function getClip() {
+      try {
+        if (dead) return null;
+        const hits = []; VOICES.forEach(([k], j) => { for (let i = 0; i < 16; i++) if (state.pat[k][i]) { const h = { t: i * 12, lane: j, vel: i % 4 === 0 ? 1 : 0.75 }; hits.push(h); } });
+        hits.sort((a, b) => a.t - b.t || a.lane - b.lane);
+        return JSON.parse(JSON.stringify({ format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: T.clipPat, length: 192, grid: 16, source: { device: 'nl.patchkamer.drummachine', name: 'Drum Machine', version: '1.17.0', scheme: 'device' }, lanes: clipLanes(), hits }));
+      } catch (e) { return null; }
+    }
+    function setClip(clip) {
+      try {
+        if (dead) return { ok: false, reason: T.clipGone };
+        if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1)) return { ok: false, reason: T.clipBad };
+        if (clip.kind !== 'drums') return { ok: false, reason: T.clipKind };
+        if (typeof clip.length !== 'number' || !Number.isFinite(clip.length) || clip.length < 1) return { ok: false, reason: T.clipBad };
+        const len = Math.round(clamp(clip.length, 1, 12288)), lanes = Array.isArray(clip.lanes) ? clip.lanes.slice(0, 64) : [], src = Array.isArray(clip.hits) ? clip.hits.slice(0, 4096) : [];
+        const norm = x => String(x == null ? '' : x).toLowerCase().replace(/[^a-z0-9]/g, '');
+        // baan van de clip -> eigen baan: op id, anders op type (hat = closedhat)
+        const map = lanes.map(l => { if (!l || typeof l !== 'object') return -1; const id = norm(l.id), ty = norm(l.type);
+          let j = VOICES.findIndex(([k]) => k === id); if (j < 0) j = VOICES.findIndex(([k]) => CLIP_TYPE[k] === ty && ty); return j; });
+        const np = {}; VOICES.forEach(([k]) => { np[k] = new Array(16).fill(0); });
+        for (const h of src) { if (!h || typeof h !== 'object' || typeof h.t !== 'number' || !Number.isFinite(h.t) || !Number.isInteger(h.lane) || h.lane < 0 || h.lane >= lanes.length) continue;
+          const j = map[h.lane]; if (j < 0 || h.t < 0 || h.t >= len) continue; const i = Math.round(h.t / 12); if (i < 0 || i > 15) continue; np[VOICES[j][0]][i] = 1; }
+        let same = true; VOICES.forEach(([k]) => { for (let i = 0; i < 16; i++) if (state.pat[k][i] !== np[k][i]) same = false; });
+        if (same) return { ok: true };
+        VOICES.forEach(([k]) => { state.pat[k].splice(0, 16, ...np[k]); });
+        Object.values(rows).forEach(r => r.paint());
+        return { ok: true };
+      } catch (e) { return { ok: false, reason: T.clipBad }; }
+    }
     function paintCells() { VOICES.forEach(([vk]) => COLS.forEach(([pk]) => { const c = cells[vk + '.' + pk]; if (c) { c.i.value = state.v[vk][pk]; c.o.textContent = VP[vk][pk][9](state.v[vk][pk]); } })); }
     self = {
       inputs: {}, outputs: { out },
@@ -111,6 +148,7 @@ export default {
       // contract v1.3 — elk drumgeluid is een spoor
       params() { const L = []; VOICES.forEach(([vk, vl]) => Object.entries(VP[vk]).forEach(([pk, d]) => L.push({ id: vk + '.' + pk, name: d[0], lane: vk, laneName: vl, min: d[1], max: d[2], role: d[6], scale: d[5] ? 'log' : 'lin', drift: d[7], on: d[8] }))); L.push({ id: 'lvl', name: EX.lvl[0], lane: 'out', laneName: T.lvl, min: 0, max: 1, role: 'level', scale: 'lin', drift: 0.05, on: false }); Object.entries(EX).forEach(([id, d]) => { if (id !== 'lvl') L.push({ id, name: d[0], lane: 'swing', laneName: 'Swing', min: d[1], max: d[2], role: d[3], scale: 'lin', drift: d[4], on: false }); }); return L; },
       modulate(offsets) { for (const k in mod) delete mod[k]; for (const k in offsets || {}) { const [vk, pk] = k.split('.'); if (((VP[vk] && VP[vk][pk]) || Object.hasOwn(EX, k)) && typeof offsets[k] === 'number' && isFinite(offsets[k])) mod[k] = clamp(offsets[k], -1, 1); } apply(); },
+      clipInfo() { return clipInfo(); }, getClip() { return getClip(); }, setClip(clip) { return setClip(clip); },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(s) { s = s && typeof s === 'object' ? s : {}; const d = defV();
         // in place: the step rows keep a reference to these arrays

@@ -239,6 +239,8 @@ Een preset bevat geen kabels, en verandert niet welk spoor je bewerkt of of je o
 - Een scènewissel met **Direct** kapt de klinkende noten af. Gebruik **Volgende maat** voor een live wissel.
 - Een toetsenbord dat tegelijk met **Live** en met de synth is verbonden, klinkt dubbel.
 
+**Kopiëren en plakken.** Met **Kopieer** en **Plak** in de kaartbalk neem je het gekozen spoor van de actieve scène mee als noten. Een spoor in de spelwijze Noten is een echte clip (hoogstens 4 maten, 256 noten); een akkoord-, arpeggio- of pulsespoor wordt gerenderd en gekopieerd als momentopname van vier maten noten, zonder koppeling met de instellingen. Plakken zet het spoor op de spelwijze Noten (de akkoordinstellingen blijven staan) en de melding heeft een knop Ongedaan maken.
+
 ## Stap- en melodiesequencers
 
 ### Step Sequencer
@@ -364,6 +366,8 @@ Het pack **Wanderer Melodies** heeft 60 presets in 9 mappen: Lead Lines (9), Bas
 - Noten buiten **Laagste** en **Hoogste** worden in octaven het bereik in geschoven.
 - Een heel snel **Raster** (1/32, 1/64) met hoge **Ratchets** geeft heel veel noten per seconde.
 - De swing van de klok van de studio verschuift de noten; Wanderer heeft geen eigen swing.
+
+**Kopiëren en plakken.** **Kopieer** in de kaartbalk legt het huidige motief (met verloop en ratchets, omgezet naar MIDI-noten) als momentopname op het klembord. **Plak** kan niet: Wanderer verandert het motief zelf.
 
 ## Arpeggiators
 
@@ -495,6 +499,8 @@ Het pack **Euclidean Rhythms Grooves** heeft 65 presets in 8 mappen: Techno (8),
 - Gebruik bij 1/32 of 1/64 **Kans** of een **Verloop**; anders is het een constante vlaag.
 - Swing komt van de klok van de studio; voor een shuffle-gevoel gebruik je 12 stappen met het tempo 1/8 triool.
 
+**Kopiëren en plakken.** **Kopieer** in de kaartbalk legt een momentopname van het ritme op het klembord: de gekozen rij als noten (rij Noot) of alle rijen die spelen als drums, met eigen baanlengtes. **Plak** kan hier niet: de rijen worden berekend uit getallen.
+
 ## Patroon- en clipsequencers
 
 Pattern Playlist, Pattern Tracker en Clip Arranger zijn van een andere soort: ze spelen geen lus maar een hele **song**, opgebouwd uit patronen of clips. Pattern Playlist en Pattern Tracker zijn dezelfde motor met een andere beginweergave.
@@ -572,6 +578,8 @@ Het pack **Pattern Playlist Arrangements** heeft 35 presets in 5 mappen: Dance F
 - Noten die je opneemt worden bij de volgende ronde door het afspelen opgepikt. De schakelaars voor opnemen en kwantiseren worden niet in een preset bewaard.
 - Songs van het eerdere apparaat (Regie Playlist) verwijzen naar de oude id en laden niet; het exportbestandsformaat kun je wel importeren.
 
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol als noten, in de drum-editor als drums. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte blijft (een langere clip wordt afgekapt, een korter veelvoud herhaald). Noten op dezelfde rij delen velocity en lengte. Kans en retrigger gaan mee; arpeggio, gate en CC alleen tussen Tracker en Playlist. Ctrl+Z maakt het plakken ongedaan.
+
 ### Pattern Tracker
 
 #### Waar het voor dient
@@ -618,6 +626,8 @@ Het pack **Pattern Tracker Modules** heeft 34 presets in 4 mappen: Module Classi
 - Een transpositie in de volgorde geldt voor **alle** kanalen van het patroon, drums inbegrepen. Gebruik hem alleen bij patronen zonder drums.
 - Dezelfde beperkingen als bij Pattern Playlist gelden: één cel per rij per spoor, rijposities binnen het patroon, en stel het raster in voordat je schrijft.
 - Inspelen schrijft in het patroon van de huidige volgordestap.
+
+**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol als noten, in de drum-editor als drums. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte blijft (een langere clip wordt afgekapt, een korter veelvoud herhaald). Noten op dezelfde rij delen velocity en lengte. Kans en retrigger gaan mee; arpeggio, gate en CC alleen tussen Tracker en Playlist. Ctrl+Z maakt het plakken ongedaan.
 
 ### Clip Arranger
 

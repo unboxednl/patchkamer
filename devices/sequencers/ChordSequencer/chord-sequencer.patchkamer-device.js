@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, 3 per 1/64-eenheid). Het gekozen spoor van de actieve scène is een `notes`-clip van 1 tot 4 maten. Kopiëren van een akkoord-, arpeggio- of pulsspoor geeft een momentopname van een cyclus van vier maten als noten; plakken zet het gekozen spoor op de spelwijze Noten (de akkoordinstellingen blijven staan). `setState` stuurt alleen nog `allnotesoff` als de klok loopt of er live noten vastgehouden worden (bij stilstaande klok deed de transportstop dat al); de validator telt die gebeurtenis bij `setClip` anders als een eigen gebeurtenis van `setClip`. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.0.
 // 1.14.0 — Extra swing per spoor en inspelen op het geswingde raster. Staat het veld swing niet in een spoor (= 0), dan speelt alles precies als voorheen.
 //   - swing per spoor (`swing`, 0 … 0,5 van een zestiende, alleen in de state als het niet 0 is): een gebeurtenis in een oneven zestiende (stapspoor, ook de 1/32- en 1/64-stappen en ratchets die daarin vallen,
 //     en de noten van de spelwijze `notes`) wordt (spoorswing) × stepDur later gespeeld, bovenop de swing van de host; even zestienden blijven staan
@@ -46,11 +47,12 @@ const EN = {
   'Gekozen noot: velocity': 'Selected note: velocity', 'Gekozen noot: lengte (rasterstappen)': 'Selected note: length (grid steps)',
   'Verwijder noot': 'Delete note', 'Wis alle noten': 'Clear all notes', 'Klik in het rooster om een noot te zetten; klik op een blokje om het te kiezen. Hoogte van het blokje = velocity, breedte = lengte.': 'Click in the grid to place a note; click a block to select it. Block height = velocity, width = length.',
   'Live: sluit een toetsenbord (Keys) aan op de ingang Live. Het gekozen spoor stuurt de noten door naar zijn uitgang; met Opnemen aan en de transport lopend worden ze in het spoor geschreven (spelwijze Noten).': 'Live: connect a keyboard (Keys) to the Live input. The selected track passes the notes to its output; with Record on and the transport running they are written into the track (play mode Notes).',
+  'Het apparaat is verwijderd.': 'The device has been removed.', 'Geen geldige clip.': 'Not a valid clip.', 'De soort past niet: dit apparaat neemt noten.': 'The kind does not fit: this device takes notes.',
   'Pianoroll van de opgenomen noten': 'Piano roll of the recorded notes', 'geen noot gekozen': 'no note selected', 'noot {0} · positie {1}': 'note {0} · position {1}'
 };
 const LEGACY_NAMES = ['Akkoorden', 'Bas', 'Puls', 'Bellen'];
 export default {
-  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.14.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
+  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.15.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'transpose', name: 'Transpose' }, { id: 'live', name: 'Live' }], eventOut: [{ id: 'a', name: 'Track A' }, { id: 'b', name: 'Track B' }, { id: 'c', name: 'Track C' }, { id: 'd', name: 'Track D' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiEventOut: [{ id: 'tracks', name: 'Tracks' }] },
   i18n: { nl: { ports: { transpose: 'Transpositie', live: 'Live', a: 'Spoor A', b: 'Spoor B', c: 'Spoor C', d: 'Spoor D', tracks: 'Sporen' } } },
   create(ctx, host) {
@@ -248,6 +250,78 @@ export default {
     }
     function onSkin() { readColors(); rollDirty = true; }
     function unmount() { if (stopFrame) { stopFrame(); stopFrame = null; } if (ro) { ro.disconnect(); ro = null; } if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); roll = null; noteSliders = null; selInfo = null; clearUI(); }
+    // ---- klembord (contract v1.17, §13d): het gekozen spoor van de actieve scène ----
+    // Een notes-spoor (`rec`) is een echte clip; een akkoord-, arpeggio- of pulsspoor wordt bij kopiëren één cyclus van vier maten als noten gerenderd (momentopname, geen koppeling).
+    // Plakken zet het gekozen spoor op `notes` (de oude akkoordinstellingen blijven staan, maar klinken niet meer). Eenheid: 1/64 = 3 tikken, een maat = 64 eenheden = 192 tikken.
+    const CLIP_ID = 'nl.patchkamer.chordsequencer', CLIP_MAXEV = 256, CLIP_BAR = 192, GRIDUNIT = { 16: 4, 32: 2, 64: 1 };
+    const clipTrackName = () => String.fromCharCode(65 + state.editTrack) + ' · ' + (curTrack().name || defaultName(state.editTrack));
+    function clipInfo() {
+      try {
+        if (dead) return null; const tr = curTrack();
+        return { name: tx('Spoor {0}', clipTrackName()), copy: ['notes'], paste: ['notes'], length: { min: CLIP_BAR, max: 4 * CLIP_BAR, step: CLIP_BAR, current: (tr.bars || 1) * CLIP_BAR, shared: false }, grid: [16, 32, 64], range: [0, 127], scheme: 'gm', vel: 'continuous', prob: false, ratchet: false, maxEvents: CLIP_MAXEV };
+      } catch { return null; }
+    }
+    // één cyclus van vier maten van een akkoord-, arpeggio- of pulsspoor als noten (zonder spoortranspositie en zonder swing: die horen bij het spoor)
+    function renderTrack(tr, i) {
+      const g = tr.grid || 1, ev = [], vel0 = state['t' + i + 'velocity'], gate = state['t' + i + 'gate'];
+      let count = 0;
+      for (let b = 0; b < 4; b++) for (let st = 0; st < 16; st++) for (let s = 0; s < g; s++) {
+        if ((st * g + s) % tr.division) continue; const j = count++ % tr.length;
+        if (!tr.steps[j]) continue;
+        let iv = qualities[tr.quality].slice(); for (let n = 0; n < tr.inversion; n++) iv.push(iv.shift() + 12);
+        const root = tr.root + tr.progression[b % 4], list = iv.map(x => Math.round(clamp(root + x, 0, 127)));
+        const sel = tr.mode === 'chord' ? list : tr.mode === 'pulse' ? [Math.round(clamp(root, 0, 127))] : [list[(count - 1) % list.length]];
+        const dur = tr.division / g / tr.ratchet, vel = r3(clamp(tr.vel ? vel0 * tr.vel[j] : vel0, 0.01, 1)), lenT = dur * 12 * gate * (tr.len ? tr.len[j] : 1);
+        for (let r = 0; r < tr.ratchet; r++) for (const n of sel) {
+          const t = Math.round(((b * 16 + st + s / g + r * dur) * 12) / 3) * 3, len = Math.max(3, Math.round(lenT / 3) * 3);
+          if (t >= 4 * CLIP_BAR) continue; const e = { t, n, len: Math.min(len, 4 * CLIP_BAR - t), vel }; if (tr.probability < 1) e.prob = r3(tr.probability); ev.push(e);
+        }
+      }
+      return ev;
+    }
+    function dedupe(list, key) { const m = new Map(); for (const e of list) { const k = key(e), o = m.get(k); if (!o || e.vel > o.vel) m.set(k, e); } return [...m.values()]; }
+    function clipNotes(tr, i) {
+      if (tr.mode === 'notes') return { length: (tr.bars || 1) * CLIP_BAR, notes: (tr.rec || []).map(x => ({ t: x[0] * 3, n: x[1], len: x[3] * 3, vel: x[2] })) };
+      const ev = dedupe(renderTrack(tr, i), e => e.t + ':' + e.n).sort((a, b) => a.t - b.t || a.n - b.n);
+      return { length: 4 * CLIP_BAR, notes: ev.slice(0, CLIP_MAXEV) };
+    }
+    function getClip() {
+      try {
+        if (dead) return null; const tr = curTrack(), i = state.editTrack, c = clipNotes(tr, i);
+        const clip = { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', name: clipTrackName().slice(0, 40), length: c.length, grid: tr.grid === 4 ? 64 : tr.grid === 2 ? 32 : 16, source: { device: CLIP_ID, name: 'Chord Sequencer', version: '1.15.0', scheme: 'gm' }, notes: c.notes };
+        if (tr.swing > 0) clip.swing = tr.swing;
+        return JSON.parse(JSON.stringify(clip));
+      } catch { return null; }
+    }
+    function setClip(clip) {
+      try {
+        if (dead) return { ok: false, reason: tx('Het apparaat is verwijderd.') };
+        const bad = { ok: false, reason: tx('Geen geldige clip.') }, num = x => typeof x === 'number' && Number.isFinite(x);
+        if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1) || !num(clip.length)) return bad;
+        if (clip.kind !== 'notes') return { ok: false, reason: tx('De soort past niet: dit apparaat neemt noten.') };
+        const tr = curTrack(), i = state.editTrack, length = Math.round(clamp(clip.length, 1, 4 * CLIP_BAR)), bars = clamp(Math.ceil(length / CLIP_BAR), 1, 4), L = bars * 64;
+        const src = Array.isArray(clip.notes) ? clip.notes : [], list = [];
+        for (const x of src.slice(0, 4096)) {
+          if (!x || typeof x !== 'object' || !num(x.t) || !num(x.n) || x.t < 0) continue;
+          const p = Math.round(x.t / 3); if (p >= L || x.t >= clamp(clip.length, 1, 12288)) continue;
+          list.push({ p, n: Math.round(clamp(x.n, 0, 127)), vel: r3(finite(x.vel, 0.8, 0.01, 1)), l: Math.round(clamp(Number.isFinite(x.len) ? x.len / 3 : 4, 1, L - p)) });
+        }
+        const uniq = dedupe(list, e => e.p + ':' + e.n).sort((a, b) => a.p - b.p || a.n - b.n), dropped = Math.max(0, uniq.length - CLIP_MAXEV) + Math.max(0, src.length - 4096), keep = uniq.slice(0, CLIP_MAXEV);
+        const rec = keep.map(e => [e.p, e.n, e.vel, e.l]);
+        // een momentopname van dit spoor zelf (akkoord/arpeggio/pulse) terugplakken doet niets: het spoor blijft zoals het is
+        if (tr.mode !== 'notes') { const mine = JSON.stringify(clipNotes(tr, i).notes.map(e => [e.t / 3, e.n, e.vel, e.len / 3])); if (mine === JSON.stringify(rec) && length === 4 * CLIP_BAR) return { ok: true }; }
+        const old = JSON.stringify([tr.mode, tr.bars, tr.rec, tr.grid]);
+        const same = tr.mode === 'notes' && (tr.bars || 1) === bars && JSON.stringify(tr.rec || []) === JSON.stringify(rec);
+        const unit = GRIDUNIT[clip.grid] || 4, cur = 4 / (tr.grid || 1), aligned = u => rec.every(x => x[0] % u === 0);
+        const gridv = same ? cur : aligned(cur) ? cur : aligned(unit) ? unit : [4, 2, 1].find(aligned) || 1;
+        tr.mode = 'notes'; if (bars !== 1) tr.bars = bars; else delete tr.bars;
+        if (rec.length) tr.rec = rec; else delete tr.rec;
+        if (gridv === 4) delete tr.grid; else tr.grid = gridv === 2 ? 2 : 4;
+        if (JSON.stringify([tr.mode, tr.bars, tr.rec, tr.grid]) === old) return { ok: true, ...(dropped ? { dropped } : {}) };
+        selNote = -1; rollDirty = true; if (mountHost) render(mountHost);
+        return { ok: true, ...(dropped ? { dropped } : {}) };
+      } catch { return { ok: false, reason: tx('Geen geldige clip.') }; }
+    }
     const PRESET_SKIP = ['editTrack', 'editStep', 'record'];  // contract v1.6: werkstand, geen klank — een preset laat dit staan
     const self = {
       inputs: {}, outputs: {}, eventBundles: { tracks: () => bundle() }, mount: render, unmount() { infoText = null; stepButtons = []; unmount(); },
@@ -288,12 +362,13 @@ export default {
           if (infoText) infoText.textContent = tx('Scène {0}', state.scene + 1) + ' · ' + Math.round(15 / sd) + ' BPM' + (queuedScene !== null ? ' · ' + tx('volgende') + ': ' + (queuedScene + 1) : '');
         } catch {}
       },
+      clipInfo() { return clipInfo(); }, getClip() { return getClip(); }, setClip(clip) { return setClip(clip); },
       params: descriptors, modulate: receiveMod,
       getPreset() { const p = self.getState(); for (const k of PRESET_SKIP) delete p[k]; return p; },
       setPreset(p) { if (dead) return; const keep = {}; for (const k of PRESET_SKIP) if (k in state) keep[k] = state[k]; self.setState({ ...(p && typeof p === 'object' ? p : {}), ...keep }); },
       getState() { return { ...state, scenes: scenes.map(s => JSON.stringify(s.map((t, i) => cleanTrack(t, i)))) }; },
       setState(raw) {
-        if (dead) return; const before = state.editTrack; panic(); pending.clear(); const s = raw && typeof raw === 'object' ? raw : {}; state = numeric(s, defaults);
+        if (dead) return; const before = state.editTrack; if (playing === true || held.size) panic(); pending.clear(); const s = raw && typeof raw === 'object' ? raw : {}; state = numeric(s, defaults);
         state.scene = Math.round(finite(s.scene, 0, 0, 3)); state.editTrack = Math.round(finite(s.editTrack, 0, 0, 3)); state.editStep = Math.round(finite(s.editStep, 0, 0, 15));
         state.launch = s.launch === 'now' ? 'now' : 'bar'; state.seed = Math.round(finite(s.seed, 18743, 0, 4294967295));
         if (s.thru === false) state.thru = false; if (s.rquant === false) state.rquant = false; if (s.record === true) state.record = true;

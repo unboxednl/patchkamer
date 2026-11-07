@@ -13,7 +13,7 @@ Vijftien eigen gesynthetiseerde latin-percussieklanken (bongo's, conga's, timbal
 | Naam | `Latin Percussion` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Stereo), eventingang `notes` (Noten / trigs), modulatie-ingang `mod` |
-| Contract | v1.11 |
+| Contract | v1.17 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id. Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De motor bevatte takken voor andere instrumenten; die zijn eruit.
@@ -65,6 +65,17 @@ Let op `patternData`: elke bank is een JSON-tekst, geen lijst. Een bank die ontb
 Wat Latin Percussion met een state doet (getest): getallen buiten het bereik worden afgekapt; een tekst, `null`, `NaN`, `±Infinity` of een ontbrekende waarde geeft de startwaarde; `sequence` en `choke` worden alleen overgenomen als ze een boolean zijn; een onbekend `preset` geeft `Latin Motor`; onbekende velden worden genegeerd.
 
 Modulatie: `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en 1 aan voor bestaande parameter-id's (`d<n>level`, `d<n>tune`, `d<n>decay`, `d<n>pan`, `grit`, `level`); al het andere wordt genegeerd. Modulatie verandert nooit de bewaarde waarden.
+
+## Klembord: bank kopiëren en plakken (sinds 1.15.0)
+
+De host kopieert en plakt het patroon met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V (contract v1.17, formaat `patchkamer-clip` kind `drums`; tijd in **tikken**, 12 per zestiende, 192 per maat). Het apparaat levert en neemt alleen over: `clipInfo()` (licht, gooit nooit, `null` na `destroy`), `getClip()` en `setClip(clip)` (geeft `{ ok, reason }`, gooit nooit, zet niets half, klemt alles zelf, stuurt geen gebeurtenissen). `getState()`, presets, tunes, geluid en poorten zijn niet veranderd; `setClip(getClip())` laat `getState()` gelijk. Het klembord is onbetrouwbare invoer: `setClip` leest alleen getallen en tekst en evalueert niets.
+
+- **Wat is het patroon**: de gekozen bank (A tot D, `state.bank`): 15 klanken van 16 stappen, vast 192 tikken. `clipInfo()`: `copy` en `paste` `['drums']`, `length` vast 192, `grid` `[16]`, `scheme` **`device`**, `vel` `accent`, `prob` en `ratchet` onwaar, `lanes` `p0` tot `p14` met de klanknaam (Engels, zoals `noteNames`), `type` leeg en `note` = `baseNote` + 0 tot 14.
+- **Risico: geen GM.** De nootnummers zijn `baseNote` + n (standaard 36 = High Bongo), geen General MIDI. De banen hebben bewust geen `type`; de host kan dus alleen op **naam** uitlijnen (en op positie bij een clip uit dit apparaat). Een clip uit een gewone drumkit past daardoor bijna nergens op: de host meldt `niet geplaatst: …` of weigert helemaal als niets past. Dat is bedoeld (geen kick op een bongo).
+- **Waarden 0, 1 en 2.** `getClip()`: waarde 1 wordt een slag met `vel` 0,68 (zoals het apparaat speelt), waarde 2 een slag met `acc: true` en `vel` 1. `setClip`: `acc` of `vel` vanaf 0,85 wordt 2, anders 1; kans en ratchet kent het apparaat niet (de host laat ze weg en meldt het).
+- **`patternData` is tekst-JSON** (per bank een string). `setClip` bouwt een nieuwe 15 × 16-tabel van getallen 0 tot 2, schrijft die met `JSON.stringify` in de gekozen bank en parst of evalueert nooit tekst uit de clip. Alleen die ene bank verandert; de andere banen, `bank`, `lane`, swing, klanken en besturing blijven. Het getal na het plakken is altijd 0, 1 of 2, ook bij rommel in de clip. `getClip` leest de bank robuust (ongeldige tekst telt als leeg).
+- **`setClip`**: kind moet `drums` zijn; banen gaan op `id` `p<n>` met dezelfde naam, anders op naam (hoofdletter- en tekenonafhankelijk); op nootnummer of volgorde nooit. Slagen op tik `t` worden stap `round(t/12)`; stap 16 en hoger valt weg.
+- Getest in een browser: rondreis en `getState` gelijk, naamclip (High Bongo accent, Maracas), GM-clip geweigerd met melding, noten geweigerd, 100000 slagen, `NaN`, lengte 1e9, ongeldige banen, Ongedaan maken, nl en en. Niet beluisterd.
 
 ## Nootnamen voor sequencers
 

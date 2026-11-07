@@ -239,6 +239,8 @@ A preset does not hold cables, and it does not change which track you are editin
 - A scene switch with **Immediately** cuts off the notes that are sounding. Use **Next bar** for a live switch.
 - A keyboard that is connected to **Live** and to the synth at the same time sounds twice.
 
+**Copy and paste.** With **Copy** and **Paste** in the card bar you take the selected track of the active scene along as notes. A track in Notes mode is a real clip (at most 4 bars, 256 notes); a chord, arpeggio or pulse track is rendered and copied as a snapshot of four bars of notes, with no link to the settings. Pasting sets the track to Notes mode (the chord settings stay) and the message has an Undo button.
+
 ## Step and melody sequencers
 
 ### Step Sequencer
@@ -364,6 +366,8 @@ The pack **Wanderer Melodies** has 60 presets in 9 folders: Lead Lines (9), Bass
 - Notes outside **Lowest** and **Highest** are moved by octaves into the range.
 - A very fast **Grid** (1/32, 1/64) with a high **Ratchets** gives very many notes per second.
 - The swing of the studio clock moves the notes; Wanderer has no swing of its own.
+
+**Copy and paste.** **Copy** in the card bar puts the current motif (with its drift and ratchets, converted to MIDI notes) on the clipboard as a snapshot. **Paste** is not possible: Wanderer changes the motif itself.
 
 ## Arpeggiators
 
@@ -493,6 +497,8 @@ The pack **Euclidean Rhythms Grooves** has 65 presets in 8 folders: Techno (8), 
 - With 1/32 or 1/64 use **Chance** or a **Contour**; otherwise it is a constant burst.
 - Swing comes from the studio clock; for a shuffle feel use 12 steps at the 1/8 triplet rate.
 
+**Copy and paste.** **Copy** in the card bar puts a snapshot of the rhythm on the clipboard: the selected row as notes (Note row) or all playing rows as drums, with their own lane lengths. **Paste** is not possible here: the rows are calculated from numbers.
+
 ## Pattern and clip sequencers
 
 Pattern Playlist, Pattern Tracker and Clip Arranger are of another kind: they do not play one loop but a whole **song**, built from patterns or clips. Pattern Playlist and Pattern Tracker are the same engine with a different starting view.
@@ -570,6 +576,8 @@ The pack **Pattern Playlist Arrangements** has 35 presets in 5 folders: Dance Fl
 - Notes you record are picked up by the playback on the next round. The record and quantize switches are not stored in a preset.
 - The songs of the earlier device (Regie Playlist) refer to its old id and do not load; its export file format can be imported.
 
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the channel of the selected track in the selected pattern: as notes in the piano roll, as drums in the drum editor. Paste replaces only the cells of that channel; the pattern length stays (a longer clip is cut, a shorter one that divides evenly is repeated). Notes on the same row share velocity and length. Probability and retrigger come along; arpeggio, gate and CC only between Tracker and Playlist. Ctrl+Z undoes the paste.
+
 ### Pattern Tracker
 
 #### What it is for
@@ -616,6 +624,8 @@ The pack **Pattern Tracker Modules** has 34 presets in 4 folders: Module Classic
 - A transposition in the order applies to **all** channels of the pattern, drums included. Use it only on patterns without drums.
 - The same limits as Pattern Playlist apply: one cell per row per track, row positions inside the pattern, and set the grid before you write.
 - Recording writes into the pattern of the current order step.
+
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the channel of the selected track in the selected pattern: as notes in the piano roll, as drums in the drum editor. Paste replaces only the cells of that channel; the pattern length stays (a longer clip is cut, a shorter one that divides evenly is repeated). Notes on the same row share velocity and length. Probability and retrigger come along; arpeggio, gate and CC only between Tracker and Playlist. Ctrl+Z undoes the paste.
 
 ### Clip Arranger
 

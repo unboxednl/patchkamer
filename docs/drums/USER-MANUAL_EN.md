@@ -94,6 +94,8 @@ Drum Machine has the pack **Drum Machine Styles**: 36 tunes in twelve folders (T
 - There is no sound until the clock runs: press **Start**.
 - With four sounds you can do a lot by moving **Tune** and **Decay** while it plays, or by letting a modulator do it.
 
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the whole pattern (4 lanes of 16 steps). A drum machine hit is only on or off, so a clip's velocity is lost. Lanes are matched by kind (hat is a closed hi-hat); a lane in the clip that does not fit is left out and reported, and a lane with no hits in the clip becomes empty.
+
 ## Drum Kit
 
 ### What it is for
@@ -167,6 +169,8 @@ Drum Kit has the pack **Drum Kit Styles**: 38 tunes in twelve folders (Techno, H
 
 - Without the clock a pattern does not play. The **Audition** button and notes on the input do work.
 - The kick of a kit starts higher than a real bass drum: use a low **Tuning** (the tunes use values around −22 st).
+
+**Copy and paste.** **Copy** and **Paste** in the card bar work on pattern A to D as drums. Velocity, probability and ratchet come along. The length is the same for all patterns and stays that of the kit: a shorter clip is repeated, a longer one cut. Paste clears the whole active pattern, also channels that are not in the clip; Undo in the message restores it.
 
 ## Groovebox 12
 
@@ -291,6 +295,8 @@ Pulse Drums has the pack **Pulse Drums Techno**: 26 tunes in eight folders (Tech
 - The kick starts high: the tunes use a low **Tuning** (around −22 st). Lower it yourself if a kit you make sounds thin.
 - Choosing a **Techno DNA** replaces the kit and the patterns; save yours as a tune first.
 
+**Copy and paste.** **Copy** and **Paste** in the card bar work on pattern A to D as drums, with polymeter (each channel's own length) and microtiming. Every, phase, fill and locks only travel to another Pulse Drums; they are lost on other devices. A polymeter clip in a device with one length is repeated until it lines up again and can become very long.
+
 ## Latin Percussion
 
 ### What it is for
@@ -340,6 +346,8 @@ Latin Percussion has the pack **Latin Percussion Styles**: 39 tunes in thirteen 
 
 - The patterns are 16 steps; the rhythms of the styles are written for one bar.
 - The pads work as a test keyboard: click one to hear it.
+
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the selected bank (A to D) with 15 sounds of 16 steps. The accent is kept. The note numbers here are not General MIDI and the sounds have no kind, so lanes are matched by sound name only: almost nothing from an ordinary drum kit will fit.
 
 ## Click Synth
 
@@ -403,6 +411,8 @@ Click Synth has the pack **Click Synth Styles**: 30 tunes in ten folders (Minima
 
 - The sound is made in an AudioWorklet. Without one (an old browser) the card says so and stays silent.
 - Randomness and the chance per step make the result differ every time; that is on purpose.
+
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the selected pattern (A to D) with 8 lanes, each with its own length. Probability and ratchet come along; the pitch jump per step only to another Click Synth. A clip from elsewhere sets all lanes to the clip length (at most 16 steps). Lanes are matched by name; little from an ordinary drum kit will fit.
 
 ## If it does not work
 

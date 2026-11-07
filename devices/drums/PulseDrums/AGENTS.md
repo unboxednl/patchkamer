@@ -13,7 +13,7 @@ Een drumworkstation voor techno. Tot 16 kanalen met 27 instrumenten (de 24 van D
 | Naam | `Pulse Drums` in alle talen; alleen een poortnaam heeft een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgangen `mix` (Stereo mix), `rumble` (Rumble) en `ch1` … `ch16` (Drum 1 … 16); eventingang `trigger` (MIDI / trigs); eventuitgang `trigs` (Drum trigs); modulatie-ingang `mod`; bundel-uitgang `multi` (Losse uit / Separate outs) |
-| Contract | v1.11 |
+| Contract | v1.17 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Drums, `nl.patchkamer.puls-drums`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De twee eerste klankmodellen heten nu `Deep` en `Punch` (in het oude bestand hadden ze een getal als naam).
@@ -80,6 +80,20 @@ Opname: staat `record` aan en loopt de klok (er is dan een `onStep` binnengekome
 **Gastinstrumenten**: een instrument zonder kanaal (uit de instrumentkeuze, zie Nootnamen) klinkt wel als gast maar wordt **niet opgenomen**: een stappenraster heeft alleen rijen voor kanalen en opname voegt nooit zelf een kanaal toe (dat zou kit, bundel en uitgangen veranderen). Wil je het opnemen, voeg dan eerst een kanaal met dat instrument toe.
 
 Bij ingespeelde noten rond een zwaar geswingde stap is de tolerantie kleiner: tussen een oneven en de volgende even stap ligt dan minder dan een stap; bij 50 % extra swing (en hostswing 8 %) ligt het grensvlak op ±0,21 stap (26 ms bij 120 BPM).
+
+## Klembord: patroon kopiëren en plakken (sinds 1.16.0)
+
+De host kopieert en plakt met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V (contract v1.17, §13d; formaat `patchkamer-clip`, tijd in **tikken**: 12 per zestiende, 192 per maat). `getState()`, tunes en geluid zijn niet veranderd.
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | `copy` en `paste` zijn `['drums']`; `name` is "Patroon A" tot "Patroon D"; `length` `{ min 12, max 768, step 12, current: langste seqLength × 12, shared: true }` (de baanlengtes blijven van het apparaat); `grid` `[16]`; `scheme` `gm`; `vel` `continuous`; `prob` en `ratchet` waar; `lanes` = één baan per kanaal (`id` `chN`, `type`, `note`). `null` na `destroy`. |
+| `getClip()` | Het actieve patroon als `drums`-clip. Polymeter: `length` is de langste baan en `lanes[].length` is `seqLength × 12` van elke baan die korter is (de host maakt er bij een doel met één lengte een gemeenste veelvoud van). Per stap met `v` ≥ 0,01 binnen `seqLength` een slag: `t` = stap × 12 + `micro` × 12 (afgerond, binnen de baan), `vel` = `v`, `prob` = `p` als < 1, `ratchet` = `r` als > 1. **Every, phase, fill en locks** (en de exacte `micro`, en stappen met alleen die extra's) staan alleen in `native` `{ device: 'nl.patchkamer.pulsedrums', data: { pattern, ex } }`, met sleutel `kanaal:stap`. |
+| `setClip(clip)` | Zet de stappen van het actieve patroon binnen de `seqLength` van elk kanaal en laat al het andere staan (andere patronen, stappen voorbij `seqLength`, `seqLength` zelf, klank, kit, swing, `length`). Banen worden gevonden via hun `id` `chN`. Per stap wint de hardste slag; `t` gaat naar de dichtstbijzijnde stap en de rest wordt `micro` (hoogstens ± 0,4); `ratchet` hoogstens 4. Een slag voorbij `seqLength` telt als `dropped`. `native` wordt alleen gelezen als `native.device` gelijk is aan het `id` én `native.data.pattern` het actieve patroon is: dan komen every, phase, fill, locks en exacte `micro` terug bij slagen waarvan `t` ongewijzigd is, en blijven stappen met alleen extra's staan. Voor elk ander apparaat gaan every, phase, fill en locks verloren (stappen worden gewone stappen). `{ ok: false, reason }` bij een andere `kind` of een ongeldige clip; de state blijft dan gelijk. |
+
+Risico's: (1) polymeter naar een doel met één lengte wordt door de host herhaald tot het kleinste gemene veelvoud en daarna afgekapt (de standaardkit "Hypnotic" heeft banen van 15 en 11 stappen en geeft een clip van meerdere tientallen maten); (2) naar een apparaat zonder `micro` wordt de microtiming op een stap afgerond; (3) plakken in Pulse Drums wist de stappen van het hele actieve patroon binnen `seqLength`, ook van kanalen die niet in de clip staan, en zet every, phase, fill en locks terug op de standaard; (4) gastinstrumenten zonder kanaal worden nooit gevuld; (5) kanalen met dezelfde noot blijven aparte banen; (6) een micro-verschuiving naar vóór stap 0 wordt op `t` 0 gezet (de exacte waarde staat in `native`).
+
+Getest (Playwright in een echte browser, nl en en): `setClip(getClip())` laat `getState()` gelijk, ook met polymeter (12, 20 en 16 stappen) en met every/phase/fill/locks/micro (die komen na het wissen via `native` exact terug); kopiëren naar Drum Kit en Clip Arranger en terug; ongedaan; geweigerd bij notes; extreme invoer zonder fout of `NaN`. Niet beluisterd.
 
 ## Tunes maken
 

@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is de gekozen bank (A tot D): 15 klanken van 16 stappen met waarden 0, 1 en 2 (accent).
+//          Schema `device`: de nootnummers zijn `baseNote` + 0 tot 14 en geen General MIDI, dus de banen hebben geen `type` en de host lijst ze alleen uit op naam (en op positie bij een clip uit dit apparaat); wat niet past, laat de host weg en meldt hij. De lengte is vast 16 stappen (192 tikken).
+//          Een slag met `acc` of velocity vanaf 0,85 wordt accent. Plakken vervangt alleen de gekozen bank (patternData, tekst-JSON, nooit geëvalueerd, alles gezuiverd en gestold tot 0, 1 of 2); de andere banken, swing, klanken en besturing blijven. getState, presets, tunes, geluid en poorten gelijk aan 1.14.2.
 // 1.14.2 — Swing bestuurbaar via params()/modulate(): Bankswing A tot D (bankSwing.0 tot .3) en Klankswing per klank (laneSwing.0 tot .14), alle standaard uit (drift 0,05, role swing). Modulatie komt alleen bovenop de knop (knop + o × 0,5, som begrensd tot 50%) en is nooit state.
 //          Zonder modulatie gelijk aan 1.14.1. Bewust weggelaten: testnoot, MIDI-basisnoot, lengte, voices, bank, klank, besturing (keuzes/vinkjes). Niet beluisterd.
 // 1.14.1 — Swing per bank (A tot D) en per klank (pad), naast de hostswing (som begrensd tot 50%; standaard 0 = ongewijzigd), en live inspelen: een knop Opname schrijft binnenkomende
@@ -49,7 +52,7 @@ const PRESETS={"Latin Motor":{"patternData":["[[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0]
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { title: 'Latin Percussion', subtitle: 'Vijftien eigen latin-klanken · 15 × 16 stappen · vier banken · pads en externe trigs.',
+  nl: { clipPat: 'Bank', clipBad: 'Geen geldige clip.', clipKind: 'Dit apparaat neemt alleen drums.', clipGone: 'Het apparaat is verwijderd.', title: 'Latin Percussion', subtitle: 'Vijftien eigen latin-klanken · 15 × 16 stappen · vier banken · pads en externe trigs.',
     help: 'Eigen gesynthetiseerde bongos, congas, timbales, agogos, shakers, whistles, quijada en star chime. Stapknoppen wisselen rust → gewone slag → accent. Choke bootst gedeelde klankgroepen na. Trig-lanen staan in de handleiding.',
     note: 'Eigen klanksynthese en eigen klankbeelden. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.',
     level: 'Niveau', grit: '8-bit korrel', master: 'Master', masterLane: 'Master', preset: 'Klankbeeld', bank: 'Bank', control: 'Besturing', controlPads: 'Alleen pads / externe trigs', controlSeq: 'Eigen patroon op interne klok',
@@ -57,7 +60,7 @@ const TXT = {
     loading: 'Audiomotor wordt voorbereid…', unavailable: 'Deze omgeving biedt geen audioprocessor.', ready: playing => 'Audiomotor gereed · ' + (playing ? 'interne klok loopt' : 'keyboard en testknoppen beschikbaar'),
     bankSwing: 'Bankswing', laneSwing: 'Klankswing', swingTitle: 'extra swing op de oneven zestienden, bovenop de swing van de host (dubbelklik: 0)', rec: 'Opname', recTitle: 'aan: binnenkomende trigs en noten worden in de gekozen bank geschreven, op de stap van dat moment (alleen als de klok loopt)', quantize: 'Kwantiseer', quantizeTitle: 'aan: naar de dichtstbijzijnde (geswingde) stap; uit: de stap die op dat moment klinkt', onWord: 'aan', offWord: 'uit',
     clock: (bpm, step) => 'Interne klok · ' + bpm + ' BPM · stap ' + step, padTitle: (name, midi) => name + ' · MIDI ' + midi },
-  en: { title: 'Latin Percussion', subtitle: 'Fifteen original latin sounds · 15 × 16 steps · four banks · pads and external trigs.',
+  en: { clipPat: 'Bank', clipBad: 'Not a valid clip.', clipKind: 'This device only takes drums.', clipGone: 'The device has been removed.', title: 'Latin Percussion', subtitle: 'Fifteen original latin sounds · 15 × 16 steps · four banks · pads and external trigs.',
     help: 'Original synthesized bongos, congas, timbales, agogos, shakers, whistles, quijada and star chime. Step buttons cycle rest → normal hit → accent. Choke imitates shared sound groups. The trig lanes are listed in the manual.',
     note: 'Original sound synthesis and sound sets. The purple Mod input changes the sound without overwriting the base values.',
     level: 'Level', grit: '8-bit grit', master: 'Master', masterLane: 'Master', preset: 'Sound set', bank: 'Bank', control: 'Control', controlPads: 'Pads / external trigs only', controlSeq: 'Own pattern on the internal clock',
@@ -90,7 +93,7 @@ const buildSpec = T => {
 export default {
   id: 'nl.patchkamer.latinpercussion',
   name: 'Latin Percussion',
-  version: '1.14.2',
+  version: '1.15.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 920, minWidth: 380 },
@@ -187,8 +190,30 @@ export default {
       latinUI(panel,el);
       scopeMount(panel,analyser);engineText=add(panel,'p');tellEngine();add(panel,'p',T.help);add(panel,'p',T.note);
     }
+    // ---- klembord (contract v1.17, §13d): de gekozen bank (15 klanken x 16 stappen, waarden 0/1/2) ----
+    const clipLanes=()=>LANE_NAMES.map((name,i)=>({id:'p'+i,name,type:'',note:Math.min(127,Math.round(state.baseNote??36)+i)}));
+    const clipName=()=>T.clipPat+' '+'ABCD'[state.bank];
+    const clipRows=()=>{let a;try{a=JSON.parse(state.patternData[state.bank]);}catch{}return Array.from({length:15},(_,i)=>Array.from({length:16},(_,j)=>Math.round(finite(a?.[i]?.[j],0,0,2))));};
+    function clipInfo(){try{if(dead)return null;return {name:clipName(),copy:['drums'],paste:['drums'],length:{min:192,max:192,step:192,current:192,shared:false},grid:[16],poly:15,scheme:'device',vel:'accent',prob:false,ratchet:false,lanes:clipLanes(),maxEvents:240};}catch{return null;}}
+    function getClip(){try{if(dead)return null;const rows=clipRows(),hits=[];for(let j=0;j<16;j++)for(let i=0;i<15;i++){const v=rows[i][j];if(v)hits.push(v===2?{t:j*12,lane:i,vel:1,acc:true}:{t:j*12,lane:i,vel:0.68});}
+      return JSON.parse(JSON.stringify({format:'patchkamer-clip',formatVersion:1,kind:'drums',name:clipName(),length:192,grid:16,source:{device:'nl.patchkamer.latinpercussion',name:'Latin Percussion',version:'1.15.0',scheme:'device'},lanes:clipLanes(),hits}));}catch{return null;}}
+    function setClip(clip){try{
+      if(dead)return {ok:false,reason:T.clipGone};
+      if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1))return {ok:false,reason:T.clipBad};
+      if(clip.kind!=='drums')return {ok:false,reason:T.clipKind};
+      if(typeof clip.length!=='number'||!Number.isFinite(clip.length)||clip.length<1)return {ok:false,reason:T.clipBad};
+      const len=Math.round(clamp(clip.length,1,12288)),lanes=Array.isArray(clip.lanes)?clip.lanes.slice(0,64):[],src=Array.isArray(clip.hits)?clip.hits.slice(0,4096):[];
+      const norm=x=>String(x==null?'':x).toLowerCase().replace(/[^a-z0-9]/g,'');
+      // baan van de clip -> klank: op id (p0 tot p14, van dit apparaat), anders op naam; nooit op nootnummer of volgorde
+      const map=lanes.map(l=>{if(!l||typeof l!=='object')return -1;const id=typeof l.id==='string'?l.id:'',m=/^p(\d{1,2})$/.exec(id);if(m&&+m[1]<15&&norm(l.name)===norm(LANE_NAMES[+m[1]]))return +m[1];const nm=norm(l.name);return nm?LANE_NAMES.findIndex(n=>norm(n)===nm):-1;});
+      const rows=Array.from({length:15},()=>new Array(16).fill(0));
+      for(const h of src){if(!h||typeof h!=='object'||typeof h.t!=='number'||!Number.isFinite(h.t)||!Number.isInteger(h.lane)||h.lane<0||h.lane>=lanes.length)continue;const j=map[h.lane];if(j<0||h.t<0||h.t>=len)continue;const k=Math.round(h.t/12);if(k>15)continue;
+        const vel=typeof h.vel==='number'&&Number.isFinite(h.vel)?h.vel:0.8;rows[j][k]=Math.max(rows[j][k],h.acc===true||vel>=0.85?2:1);}
+      const json=JSON.stringify(rows);if(json===JSON.stringify(clipRows()))return {ok:true};
+      state.patternData[state.bank]=json;if(mountHost)render(mountHost);return {ok:true};
+    }catch{return {ok:false,reason:T.clipBad};}}
     const PRESET_SKIP=['lane'];  // contract v1.6: werkstand, geen klank — een preset laat dit staan
-    const self={inputs:{},outputs:{out},noteNames(){return noteList();},mount:render,unmount(){engineText=null;stepButtons=[];unmount();},onEvent:event,onStep:step,onTransport(e){if(dead)return;playing=!!e?.playing;lastStep='';if(!playing){panic();anc=null;}tellEngine();},params:descriptors,modulate:receiveMod,getPreset(){const p=self.getState();for(const k of PRESET_SKIP)delete p[k];return p;},setPreset(p){if(dead)return;const keep={};for(const k of PRESET_SKIP)if(k in state)keep[k]=state[k];self.setState({...(p&&typeof p==='object'?p:{}),...keep});},getState(){const copy={...state};for(const k in copy)if(Array.isArray(copy[k]))copy[k]=copy[k].slice();return copy;},setState(raw){if(dead)return;panic();state=numericState(raw);lastStep='';apply();if(mountHost)render(mountHost);},destroy(){if(dead)return;panic();generation++;if(backendType==='worklet'){try{backend.port.postMessage({type:'close'});backend.port.close();}catch{}}if(backend)backend.onaudioprocess=null;pending=[];localEngine.voices=[];localEngine.queue=[];dead=true;self.unmount();dispose();}};
+    const self={inputs:{},outputs:{out},noteNames(){return noteList();},clipInfo,getClip,setClip,mount:render,unmount(){engineText=null;stepButtons=[];unmount();},onEvent:event,onStep:step,onTransport(e){if(dead)return;playing=!!e?.playing;lastStep='';if(!playing){panic();anc=null;}tellEngine();},params:descriptors,modulate:receiveMod,getPreset(){const p=self.getState();for(const k of PRESET_SKIP)delete p[k];return p;},setPreset(p){if(dead)return;const keep={};for(const k of PRESET_SKIP)if(k in state)keep[k]=state[k];self.setState({...(p&&typeof p==='object'?p:{}),...keep});},getState(){const copy={...state};for(const k in copy)if(Array.isArray(copy[k]))copy[k]=copy[k].slice();return copy;},setState(raw){if(dead)return;panic();state=numericState(raw);lastStep='';apply();if(mountHost)render(mountHost);},destroy(){if(dead)return;panic();generation++;if(backendType==='worklet'){try{backend.port.postMessage({type:'close'});backend.port.close();}catch{}}if(backend)backend.onaudioprocess=null;pending=[];localEngine.voices=[];localEngine.queue=[];dead=true;self.unmount();dispose();}};
     apply();init();return self;
   },
 };

@@ -13,7 +13,7 @@ Een percussiesynth voor microgeluiden: kliks, tiks, bleeps, zaps, hout, glas, me
 | Naam | `Click Synth` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Stereo mix), eventingang `trigger` (Trigs / noten), modulatie-ingang `mod`, bundel-uitgang `multi` (Sporen los / Separate lanes: elk spoor apart) |
-| Contract | v1.11 |
+| Contract | v1.17 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Klikwerk, `nl.patchkamer.klikwerk`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De namen in de state zijn nu Engels: de klankmotoren (`tick`, `noise`, `modal` en `string` heetten `tik`, `ruis`, `modaal` en `snaar`), de kits, de namen van de sporen en de standen van "Klik op een stap" (`on`, `accent`, `chance`, `ratchet`, `tone`).
@@ -85,6 +85,18 @@ Wat Click Synth met een state doet (getest): getallen buiten het bereik worden a
 
 - `onEvent` op `trigger`: `{ type: 'trig', lane: 'ch3' (elke tekst die op een cijfer eindigt telt), vel }` slaat dat spoor aan; een noot 36 … 43 of 60 … 67 slaat spoor 1 … 8 aan; `{ type: 'cc', id: 'l2.cut', value }` zet de parameter (`value` loopt van 0 tot 1 over het bereik); `panic` en `allnotesoff` kappen alle klanken af.
 - `modulate` (poort `mod`) neemt alleen eindige getallen tussen −1 en 1 aan voor spoor-id's `l1.pitch` … `l8.vari`; al het andere wordt genegeerd. Modulatie verandert nooit de bewaarde waarden.
+
+## Klembord: patroon kopiëren en plakken (sinds 1.15.0)
+
+De host kopieert en plakt het patroon met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V (contract v1.17, formaat `patchkamer-clip` kind `drums`; tijd in **tikken**, 12 per zestiende, 192 per maat). Het apparaat levert en neemt alleen over: `clipInfo()` (licht, gooit nooit, `null` na `destroy`), `getClip()` en `setClip(clip)` (geeft `{ ok, reason }`, gooit nooit, zet niets half, klemt alles zelf, stuurt geen gebeurtenissen). `getState()`, presets, tunes, geluid en poorten zijn niet veranderd; `setClip(getClip())` laat `getState()` gelijk. Het klembord is onbetrouwbare invoer: `setClip` leest alleen getallen en tekst en evalueert niets.
+
+- **Wat is het patroon**: het gekozen patroon (A tot D, `state.pattern`) met de acht sporen als banen (`l1` tot `l8`, naam = de naam van het spoor, `type` leeg, `note` 36 tot 43). Elk spoor heeft zijn eigen lengte `len` (1 tot 16): `getClip()` geeft `length` = de langste lengte × 12 en zet `lanes[].length` bij sporen die korter zijn (polymeter). `clipInfo()`: `copy` en `paste` `['drums']`, `length` `{ min 12, max 192, step 12, shared onwaar }`, `grid` `[16]`, `scheme` **`device`**, `vel` `continuous`, `prob` en `ratchet` waar, `maxEvents` 128.
+- **Per slag** gaan `vel` (stap `v`; vanaf 0,9 `acc`), `prob` (`p`) en `ratchet` (`r`, 1 tot 4) mee. De **toonsprong** `t` heeft geen plaats in het formaat: hij gaat alleen mee in `native` (alleen voor dit apparaat) en wordt bij een clip van elders 0.
+- **Risico: geen GM, namen hangen van de kit af.** De banen hebben geen `type`; de host lijnt uit op **naam** (Kick, Clap, Hat, Rim, Shaker in de kit Minimal Techno passen op GM; in Micro Click bijna niets). Wat niet past, wordt weggelaten en gemeld; past niets, dan weigert de host.
+- **Risico: het doel houdt niet zijn lengte.** Anders dan bij Drum Kit en Pulse Drums is de lengte hier per spoor: een clip van elders zet **alle** sporen op de cliplengte (hoogstens 16 stappen, afgerond omhoog), ook sporen die eerst korter waren. Wil je de polymeter houden, plak dan een clip uit dit apparaat (`native`).
+- **Polymeter binnen de host.** De host maakt van een polymeter-clip één lange cyclus (banen herhaald tot hoogstens 192 tikken, met de melding `polymeter afgekapt`). `setClip` herkent een clip uit dit apparaat daaraan: komen `native.lens` en de slagen (periodiek of gewoon) overeen met wat binnenkomt, dan komen de eigen lengtes, kans, ratchet en toonsprong **exact** terug. Is de clip aangepast, dan gelden de hits en worden de lengtes de cliplengte.
+- **`setClip`**: kind `drums`; banen op `id` `l<n>` met dezelfde naam, anders op naam; per spoor worden de stappen binnen de nieuwe lengte vervangen. **Verborgen stappen voorbij de lengte, klanken, swing, kit, mute en solo blijven.** Een spoor zonder slagen in de clip wordt binnen zijn lengte leeg.
+- Getest in een browser: rondreis en `getState` gelijk (ook zonder `native` zijn de slagen en lengtes gelijk, alleen de toonsprong gaat verloren), kans en ratchet, 96 tikken naar 8 stappen, polymeter-kopie naar zichzelf, noten geweigerd, 100000 slagen, `NaN`, lengte 1e9, ongeldige banen, Ongedaan maken, nl en en. Niet beluisterd.
 
 ## Nootnamen voor sequencers
 

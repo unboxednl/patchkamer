@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende). Het huidige patroon is het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol een `notes`-clip, in de drum-editor een `drums`-clip met de klanken van de drumcomputer als banen. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte (gedeeld door alle kanalen), `rowsPerBeat`, swing, spoorinstellingen, playlist en volgorde blijven. Kans (PRB) en retrigger (RAT) gaan mee als `prob` en `ratchet`, vertraging (DEL) als tijdverschuiving; ARP, CUT en CC alleen binnen dezelfde apparaatsoort via `native`. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Extra swing op drie niveaus en inspelen op het geswingde raster. Met alle nieuwe velden op 0 (de standaard) spelen state en klokstappen precies als voorheen.
 //   - swing per patroon (pattern.swing), per spoor (tracks[].swing) en per drumrij (tracks[].lanes: nootnummer → swing); 0 … 0,5 van een zestiende. Vertraging van een oneven zestiende = (patroon + spoor + drumrij) × stepDur,
 //     begrensd op 0,5, bovenop de swing van de host. Alle gebeurtenissen van een rij die in een oneven zestiende vallen (ook 1/32-rijen, ratchets en arpeggio-noten binnen een rij) schuiven mee; even zestienden blijven staan
@@ -60,6 +61,7 @@ const EN={
 'Hostklok staat stil.':'Host clock is stopped.','Sequencer uit.':'Sequencer off.','HOST {0} BPM · {1} · rij {2} · {3} rijen':'HOST {0} BPM · {1} · row {2} · {3} rows','wacht op eerste rij':'waiting for first row','Sequencer: {0}':'Sequencer: {0}',
 'Raster omgezet naar {0} rijen per tel; rijen, lengtes en blokken zijn verschaald.':'Grid changed to {0} rows per beat; rows, lengths and blocks were rescaled.','OPNAME':'REC'
 };
+Object.assign(EN,{'Geen geldige clip.':'Not a valid clip.','De soort past niet: dit apparaat neemt nu {0}.':'The kind does not fit: this device now takes {0}.','noten':'notes','drums':'drums','Het apparaat is verwijderd.':'The device was removed.'});
 let LANG='nl';
 const tx=(k,...a)=>{let t=LANG==='nl'?k:(EN[k]??k);a.forEach((v,i)=>{t=t.split('{'+i+'}').join(String(v));});return t;};
 /* ===== helpers ===== */
@@ -258,6 +260,75 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  const stopAnim=()=>{if(stopFrame){stopFrame();stopFrame=null;}};
  const frameLoop=cb=>{if(typeof host.frame==='function')return host.frame(self,cb,30);let id=0,last=0,stop=false;const f=t=>{if(stop)return;id=requestAnimationFrame(f);if(typeof document!=='undefined'&&document.hidden||t-last<1000/30-2)return;last=t;cb(t);};id=requestAnimationFrame(f);return()=>{stop=true;cancelAnimationFrame(id);};};
  const evType=ev=>String(ev?.type||'').toLowerCase().replace(/[_-]/g,'');
+ // ===== klembord (contract v1.17: clipInfo / getClip / setClip) =====
+ // Het huidige patroon = het kanaal (spoor) dat in de patroon-editor staat: S.view.pattern, S.view.track. Editor 'drums' = drums-clip (banen = de klanken van de aangesloten drumcomputer, anders zes GM-klanken), anders notes-clip.
+ // Tijd: rijen naar tikken (12 per zestiende; 48 / rowsPerBeat per rij). De lengte van het patroon is gedeeld met alle kanalen van dat patroon en blijft staan (shared); de host herhaalt of kapt af.
+ // Een clip uit hetzelfde apparaat (native) komt verliesvrij terug, inclusief effecten en CC-cellen, mits de host hem niet aanpaste.
+ const CLIP_ID=VIEW==='tracker'?'nl.patchkamer.patterntracker':'nl.patchkamer.patternplaylist',CLIP_VER='1.15.0',CLIP_MAXEV=4096,CLIP_MAXT=12288;
+ const clipRT=()=>48/S.rowsPerBeat,clipKind=()=>S.view.editor==='drums'?'drums':'notes';
+ const CLIP_GM={36:'kick',38:'snare',39:'clap',42:'closedhat',46:'openhat',37:'rim'};
+ function clipLanes(extra){const named=!!nameMaps[S.view.track]?.size,out=drumRows().map(([note,name])=>({id:'n'+note,name:String(name).slice(0,40),type:named?'':(CLIP_GM[note]||''),note}));
+  if(extra){const have=new Set(out.map(l=>l.note));for(const c of channel())for(const n of c.notes)if(!have.has(n)&&out.length<64){have.add(n);out.push({id:'n'+n,name:pname(n),type:'',note:n});}}
+  return out.slice(0,64);}
+ // gebeurtenissen uit cellen: {t,note,len,vel,prob,ratchet}; met noteSet = drums (alleen die noten, geen lengte)
+ function clipEvents(cells,lenTicks,noteSet){const rt=clipRT(),out=[];
+  for(const c of cells){if(!c||!c.notes||!c.notes.length)continue;let t=c.row*rt;if(c.fx==='DEL')t+=Math.round(num(c.value,0,90,0)/100*rt);if(!(t<lenTicks))continue;
+   for(const n of c.notes){if(noteSet&&!noteSet.has(n))continue;const e={t,note:n,len:noteSet?0:Math.max(1,Math.min(lenTicks-t,Math.round(num(c.len,.125,256,1)*rt))),vel:num(c.vel,.01,1,.8),prob:1,ratchet:1};
+    if(c.fx==='PRB'&&c.value<100)e.prob=num(c.value,0,100,100)/100;else if(c.fx==='RAT'&&c.value>1)e.ratchet=int(c.value,1,8,1);out.push(e);}}
+  out.sort((a,b)=>a.t-b.t||a.note-b.note);return out.slice(0,CLIP_MAXEV);}
+ const clipLen=()=>Math.min(CLIP_MAXT,pattern().length*clipRT());
+ function clipInfo(){try{if(dead)return null;const kind=clipKind(),rt=clipRT(),p=pattern(),drums=kind==='drums',named=!!nameMaps[S.view.track]?.size;
+   const info={name:(pn(p)+' · '+tn(S.view.track)).slice(0,40),copy:[kind],paste:[kind],length:{min:rt,max:Math.min(CLIP_MAXT,MAXLEN*rt),step:rt,current:clipLen(),shared:true},grid:{2:[],4:[16],8:[32],16:[64]}[S.rowsPerBeat]||[],poly:8,range:[0,127],scheme:drums&&named?'device':'gm',vel:'continuous',prob:true,ratchet:true,maxEvents:CLIP_MAXEV};
+   if(drums)info.lanes=clipLanes(false);return info;}catch(e){return null;}}
+ function getClip(){try{if(dead)return null;const kind=clipKind(),rt=clipRT(),p=pattern(),length=clipLen(),drums=kind==='drums',named=!!nameMaps[S.view.track]?.size;
+   const clip={format:'patchkamer-clip',formatVersion:1,kind,name:(pn(p)+' · '+tn(S.view.track)).slice(0,40),length,grid:{2:16,4:16,8:32,16:64}[S.rowsPerBeat]||16,source:{device:CLIP_ID,name:VIEW==='tracker'?'Pattern Tracker':'Pattern Playlist',version:CLIP_VER,scheme:drums&&named?'device':'gm'}};
+   if(p.swing>0)clip.swing=Math.min(.5,p.swing);
+   const fin=(o,e)=>{if(e.vel>=.999)o.acc=true;if(e.prob<1)o.prob=e.prob;if(e.ratchet>1)o.ratchet=e.ratchet;return o;};
+   if(drums){const lanes=clipLanes(true),idx=new Map(lanes.map((l,i)=>[l.note,i])),evs=clipEvents(channel(),length,new Set(idx.keys()));clip.lanes=lanes;clip.hits=evs.map(e=>fin({t:e.t,lane:idx.get(e.note),vel:e.vel},e));}
+   else clip.notes=clipEvents(channel(),length,null).map(e=>fin({t:e.t,n:e.note,len:e.len,vel:e.vel},e));
+   clip.native={device:CLIP_ID,data:{rpb:S.rowsPerBeat,length:p.length,cells:cp(channel())}};
+   return JSON.parse(JSON.stringify(clip));}catch(e){return null;}}
+ // onbetrouwbare invoer: {kind,length,evs:[{t,note,len,vel,prob,ratchet}],noteSet,native,cut} of {err}
+ function clipParse(clip){const bad={err:tx('Geen geldige clip.')};
+  if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1))return bad;
+  const want=clipKind();if(clip.kind!==want)return {err:tx('De soort past niet: dit apparaat neemt nu {0}.',tx(want==='drums'?'drums':'noten'))};
+  if(typeof clip.length!=='number'||!Number.isFinite(clip.length))return bad;
+  const length=int(clip.length,1,CLIP_MAXT,1),evs=[],isn=x=>typeof x==='number'&&Number.isFinite(x);let seen=0,noteSet=null;
+  const fin=(x,e)=>{if(x.acc===true)e.vel=1;return e;};
+  if(want==='notes'){const src=Array.isArray(clip.notes)?clip.notes:[];seen=src.length;
+   for(const x of src.slice(0,CLIP_MAXEV)){if(!x||typeof x!=='object'||!isn(x.t)||!isn(x.n))continue;evs.push(fin(x,{t:int(x.t,0,length-1,0),note:int(x.n,0,127,60),len:int(x.len,1,CLIP_MAXT,12),vel:num(x.vel,.01,1,.8),prob:num(x.prob,0,1,1),ratchet:int(x.ratchet,1,16,1)}));}}
+  else{const lanes=Array.isArray(clip.lanes)?clip.lanes.slice(0,64):[],src=Array.isArray(clip.hits)?clip.hits:[];seen=src.length;noteSet=new Set();
+   lanes.forEach(l=>{if(l&&typeof l==='object'&&isn(l.note)&&l.note>=0&&l.note<=127)noteSet.add(Math.round(l.note));});
+   for(const x of src.slice(0,CLIP_MAXEV)){if(!x||typeof x!=='object'||!isn(x.t)||!Number.isInteger(x.lane)||x.lane<0||x.lane>=lanes.length)continue;const l=lanes[x.lane];if(!l||typeof l!=='object'||!isn(l.note)||l.note<0||l.note>127)continue;
+    evs.push(fin(x,{t:int(x.t,0,length-1,0),note:Math.round(l.note),len:0,vel:num(x.vel,.01,1,.8),prob:num(x.prob,0,1,1),ratchet:int(x.ratchet,1,16,1)}));}}
+  const nat=clip.native&&typeof clip.native==='object'&&clip.native.device===CLIP_ID&&clip.native.data&&typeof clip.native.data==='object'?clip.native.data:null;
+  return {kind:want,length,evs,noteSet,native:nat,cut:Math.max(0,seen-CLIP_MAXEV)};}
+ // kanaal uit onbetrouwbare cellen, met dezelfde zuivering als setState (of null)
+ function clipCleanChannel(raw,length){if(!Array.isArray(raw))return null;try{return clean({patterns:[{id:'p1',length,channels:[raw]}]}).patterns[0].channels[0];}catch(e){return null;}}
+ const clipSame=(A,B)=>{if(A.length!==B.length)return false;const k=(a,b)=>a.t-b.t||a.note-b.note,x=A.slice().sort(k),y=B.slice().sort(k);
+  return x.every((a,i)=>{const b=y[i];return a.t===b.t&&a.note===b.note&&a.len===b.len&&Math.abs(a.vel-b.vel)<1e-9&&Math.abs(a.prob-b.prob)<1e-9&&a.ratchet===b.ratchet;});};
+ function setClip(clip){try{if(dead)return {ok:false,reason:tx('Het apparaat is verwijderd.')};
+   const c=clipParse(clip);if(c.err)return {ok:false,reason:c.err};
+   const rt=clipRT(),P=pattern(),plen=P.length,tr=S.view.track,drums=c.kind==='drums',lenT=clipLen();let dropped=c.cut,cells=null;
+   // eigen clip, niet aangepast: het kanaal komt exact terug (met effecten en CC)
+   const nd=c.native;
+   if(nd&&nd.rpb===S.rowsPerBeat&&c.length===lenT){const nc=clipCleanChannel(nd.cells,plen);
+    if(nc&&clipSame(clipEvents(nc,lenT,c.noteSet),c.evs.slice().sort((a,b)=>a.t-b.t||a.note-b.note).slice(0,CLIP_MAXEV)))cells=nc;}
+   if(!cells){const rows=new Map();
+    for(const e of c.evs){let row=Math.round(e.t/rt);if(row>=plen){if(Math.floor(e.t/rt)>=plen){dropped++;continue;}row=plen-1;}
+     let r=rows.get(row);if(!r){r={row,notes:new Map()};rows.set(row,r);}
+     const o=r.notes.get(e.note);if(o){dropped++;if(e.vel<=o.vel)continue;}else if(r.notes.size>=8){dropped++;continue;}
+     r.notes.set(e.note,e);}
+    cells=[];
+    for(const r of [...rows.values()].sort((a,b)=>a.row-b.row)){const es=[...r.notes.values()],cell=makeCell(r.row,es.map(e=>e.note).sort((a,b)=>a-b));
+     cell.vel=Math.max(...es.map(e=>e.vel));cell.len=drums?.5:num(Math.max(...es.map(e=>e.len))/rt,.125,256,1);
+     const rat=Math.max(...es.map(e=>e.ratchet)),pr=Math.min(...es.map(e=>e.prob));
+     if(rat>1){cell.fx='RAT';cell.value=Math.min(8,rat);if(pr<1)dropped++;}else if(pr<1){cell.fx='PRB';cell.value=Math.round(pr*100);}
+     cells.push(cell);}}
+   const A=clean(cp(S)),T=cp(S),tp=T.patterns.find(p=>p.id===P.id);if(!tp||!tp.channels[tr])return {ok:false,reason:tx('Geen geldige clip.')};
+   tp.channels[tr]=cells;const B=clean(T);
+   if(JSON.stringify(A)===JSON.stringify(B))return {ok:true,...(dropped?{dropped}:{})};
+   remember();S=B;render();return {ok:true,...(dropped?{dropped}:{})};}catch(e){return {ok:false,reason:tx('Geen geldige clip.')};}}
  self={inputs:{},outputs:{},eventBundles:{tracks:()=>bundle()},mount(container){self.unmount();portCount=0;const div=document.createElement('div');wrapper=div;container.appendChild(div);const shadow=div.attachShadow({mode:'open'});element('style',shadow,CSS);root=element('div',shadow);render();stopFrame=frameLoop(animate);},unmount(){stopAnim();wrapper?.remove();wrapper=null;root=null;app=null;refs={};importToken++;},
  onStep(info){try{schedule(info);}catch(e){msg(tx('Sequencer: {0}',e?.message||e));}},
  onPeers(list){if(dead)return;peerCache=list;const had=nameMaps[S.view.track]?.size>0;if(refreshNames(list)&&root){if(!had&&nameMaps[S.view.track]?.size>0&&S.view.editor==='piano')S.view.editor='drums';render();}},
@@ -271,6 +342,7 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
   else if(type==='allnotesoff'||type==='panic')allOff();
   else if(type==='cc'&&typeof ev.id==='string'&&Number.isFinite(ev.value)&&S.view.liveThru)emit(t,{type:'cc',id:ev.id.slice(0,48),value:num(ev.value,0,1),time:num(ev.time,ctx.currentTime,1e12,ctx.currentTime)});
  }catch{}},
+ clipInfo(){return clipInfo();},getClip(){return getClip();},setClip(clip){return setClip(clip);},
  getState(){return cp(S);},
  setState(s){if(dead)return;allOff(false);S=clean(s);S.view.record=false;undo=[];redo=[];seek=0;error='';recTake=false;recHeld.clear();reset();render();},
  getPreset(){const p=cp(S);delete p.view;delete p.armed;return p;},
@@ -278,4 +350,4 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  destroy(){if(dead)return;allOff(false);dead=true;playing=false;self.unmount();queue=[];hist=[];undo=[];redo=[];clipboard=null;}};return self;
 }
 const NL_PORTS={input:'Live noten / CC',tracks:'Sporen',...Object.fromEntries(Array.from({length:32},(_,i)=>['track'+(i+1),'Spoor '+(i+1)]))};
-export default {id:'nl.patchkamer.patterntracker',name:'Pattern Tracker',version:'1.14.1',kind:'utility',category:'sequencer',ui:{width:1260,minWidth:620,jacks:false},ports:portsFor(8,false),i18n:{nl:{ports:Object.fromEntries(Object.entries(NL_PORTS).filter(([k])=>k==='input'||+k.slice(5)<=8))}},create(ctx,host){return createSequencer(ctx,host);}};
+export default {id:'nl.patchkamer.patterntracker',name:'Pattern Tracker',version:'1.15.0',kind:'utility',category:'sequencer',ui:{width:1260,minWidth:620,jacks:false},ports:portsFor(8,false),i18n:{nl:{ports:Object.fromEntries(Object.entries(NL_PORTS).filter(([k])=>k==='input'||+k.slice(5)<=8))}},create(ctx,host){return createSequencer(ctx,host);}};
