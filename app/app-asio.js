@@ -89,11 +89,11 @@
 
   // ---------- 2. button and panel ----------
   window.__pkAsio = { info, get live() { return live; }, get created() { return created; } };
-  const css = `.pkasio-b{position:fixed;left:12px;bottom:12px;z-index:60;font:12px/1.2 var(--mono,ui-monospace,monospace);background:var(--panel,#1b1e24);color:var(--text,#d8dde4);border:1px solid var(--line,#363b44);border-radius:14px;padding:6px 11px;cursor:pointer}
+  const css = `.pkasio-b{position:fixed;left:12px;bottom:12px;z-index:60;font:12px/1.2 var(--mono,ui-monospace,monospace);background:var(--card,#171b22);color:var(--fg,#dce1e8);border:1px solid var(--line,#2a3039);border-radius:14px;padding:6px 11px;cursor:pointer}
   .pkasio-b.on{border-color:var(--go,#5fe0a0)}.pkasio-b:hover{filter:brightness(1.15)}
-  .pkasio-p{position:fixed;left:12px;bottom:46px;z-index:61;width:320px;max-width:calc(100vw - 24px);font:12px/1.4 var(--mono,ui-monospace,monospace);background:var(--panel,#1b1e24);color:var(--text,#d8dde4);border:1px solid var(--line,#363b44);border-radius:10px;padding:12px;box-shadow:0 8px 30px #0008}
+  .pkasio-p{position:fixed;left:12px;bottom:46px;z-index:61;width:320px;max-width:calc(100vw - 24px);font:12px/1.4 var(--mono,ui-monospace,monospace);background:var(--card,#171b22);color:var(--fg,#dce1e8);border:1px solid var(--line,#2a3039);border-radius:10px;padding:12px;box-shadow:0 8px 30px var(--shadow,rgba(0,0,0,.5))}
   .pkasio-p h4{margin:0 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase}.pkasio-p label{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0}
-  .pkasio-p select,.pkasio-p button{font:inherit;color:inherit;background:var(--bg,#12141a);border:1px solid var(--line,#363b44);border-radius:6px;padding:3px 6px}
+  .pkasio-p select,.pkasio-p button{font:inherit;color:inherit;background:var(--field,#1e232c);color:var(--field-fg,#dce1e8);border:1px solid var(--line,#2a3039);border-radius:6px;padding:3px 6px}
   .pkasio-p select{max-width:190px}.pkasio-p .row{display:flex;gap:8px;margin-top:10px}.pkasio-p .note{opacity:.7;margin-top:8px}.pkasio-p .err{color:var(--stop,#ff7a7a);margin-top:6px}
   .pkasio-p .stat{margin-top:8px;opacity:.85;white-space:pre-line}`;
   const el = (tag, props, ...kids) => { const e = document.createElement(tag); Object.assign(e, props || {}); kids.forEach(k => e.append(k)); return e; };
