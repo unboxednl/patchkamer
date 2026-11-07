@@ -367,7 +367,7 @@ Gebruik je ook een klavier, zet dat dan via **Keys / MIDI** op **MIDI in** van d
 
 ### Presets
 
-Het pack **Control Surface Layouts** heeft 20 presets in vier mappen: **Strips**, **Faders**, **Knobs** en **Pads**. Een preset stelt alleen de vorm van het paneel in (en wist de toewijzingen, omdat die bij de oude vorm horen); hij verandert de ingang niet. Zie [Presets](../presets/USER-MANUAL_NL.md).
+Het pack **Control Surface Layouts** heeft 28 presets in vijf mappen: **Controllers**, **Strips**, **Faders**, **Knobs** en **Pads**. De vormen in de laatste vier stellen alleen de vorm van het paneel in (en wissen de toewijzingen, omdat die bij de oude vorm horen). De map **Controllers** heeft indelingen van bekende controllers samen met hun MIDI-mapping: een preset daar zet de vorm en de toewijzingen, zodat de elementen meteen reageren. Geen van beide verandert de ingang. De mappings komen uit openbare documentatie en zijn niet met de hardware geprobeerd: verschilt een nummer op jouw model of stand, corrigeer het dan met **Leer** en bewaar een eigen preset. De Traktor Kontrol F1 heeft alleen zijn vorm, omdat de nummers in de Controller Editor van de fabrikant worden ingesteld. Zie [Presets](../presets/USER-MANUAL_NL.md).
 
 ### Tips en beperkingen
 

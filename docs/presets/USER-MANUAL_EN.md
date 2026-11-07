@@ -181,7 +181,7 @@ This repository has 41 packs with **1902 presets** in total, one per device: 12 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
 | [Chord Buddy](../../devices/tools/ChordBuddy/) | Chord Buddy Starter Sets | 30 | Pop (3), Rock (3), Folk (3), Blues (3), Jazz (3), Classical (3), Soul & R&B (3), Hip-hop (3), House & EDM (3), Ambient & Cinematic (3) | [`chord-buddy.patchkamer-presets.json`](../../presets/chord-buddy.patchkamer-presets.json) |
-| [Control Surface](../../devices/tools/ControlSurface/) | Control Surface Layouts | 20 | Strips (5), Faders (4), Knobs (5), Pads (6) | [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) |
+| [Control Surface](../../devices/tools/ControlSurface/) | Control Surface Layouts | 28 | Controllers (8), Strips (5), Faders (4), Knobs (5), Pads (6) | [`control-surface.patchkamer-presets.json`](../../presets/control-surface.patchkamer-presets.json) |
 | [MIDI Hub](../../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | Sound Controllers (6), Wheels and Pedals (5), Effects (3), Utility (1) | [`midi-hub.patchkamer-presets.json`](../../presets/midi-hub.patchkamer-presets.json) |
 | [Metronome](../../devices/tools/Metronome/) | Metronome Basics | 9 | Practice (4), Subdivisions (3), Loud (2) | [`metronome.patchkamer-presets.json`](../../presets/metronome.patchkamer-presets.json) |
 

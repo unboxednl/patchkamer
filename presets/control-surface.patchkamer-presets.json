@@ -5,8 +5,2003 @@
   "name": "Control Surface Layouts",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Layouts for the Control Surface that match the shape of common MIDI controllers: strips of knobs, faders and buttons, banks of faders, knob grids and pad grids. A layout only sets the shape of the panel; assign the elements to your own controller with Learn.",
+  "description": "Layouts for the Control Surface. The Controllers folder holds layouts of well-known MIDI controllers together with their MIDI mapping (names of products are used here only to say which controller a mapping is for); the other folders hold generic shapes (strips of knobs, faders and buttons, banks of faders, knob grids and pad grids). Where a preset has no mapping, assign the elements to your own controller with Learn.",
   "tree": [
+    {
+      "folder": "Controllers",
+      "items": [
+        {
+          "name": "Traktor Kontrol F1",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 4,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 4,
+                "band": 1
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 4,
+                "band": 2
+              },
+              {
+                "type": "button",
+                "rows": 2,
+                "cols": 4,
+                "band": 3
+              }
+            ],
+            "channel": 0
+          }
+        },
+        {
+          "name": "Ableton Push 2 and 3",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "pad",
+                "rows": 8,
+                "cols": 8,
+                "band": 1
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "p2.1.1": {
+                "kind": "note",
+                "n": 92,
+                "ch": 0
+              },
+              "p2.1.2": {
+                "kind": "note",
+                "n": 93,
+                "ch": 0
+              },
+              "p2.1.3": {
+                "kind": "note",
+                "n": 94,
+                "ch": 0
+              },
+              "p2.1.4": {
+                "kind": "note",
+                "n": 95,
+                "ch": 0
+              },
+              "p2.1.5": {
+                "kind": "note",
+                "n": 96,
+                "ch": 0
+              },
+              "p2.1.6": {
+                "kind": "note",
+                "n": 97,
+                "ch": 0
+              },
+              "p2.1.7": {
+                "kind": "note",
+                "n": 98,
+                "ch": 0
+              },
+              "p2.1.8": {
+                "kind": "note",
+                "n": 99,
+                "ch": 0
+              },
+              "p2.2.1": {
+                "kind": "note",
+                "n": 84,
+                "ch": 0
+              },
+              "p2.2.2": {
+                "kind": "note",
+                "n": 85,
+                "ch": 0
+              },
+              "p2.2.3": {
+                "kind": "note",
+                "n": 86,
+                "ch": 0
+              },
+              "p2.2.4": {
+                "kind": "note",
+                "n": 87,
+                "ch": 0
+              },
+              "p2.2.5": {
+                "kind": "note",
+                "n": 88,
+                "ch": 0
+              },
+              "p2.2.6": {
+                "kind": "note",
+                "n": 89,
+                "ch": 0
+              },
+              "p2.2.7": {
+                "kind": "note",
+                "n": 90,
+                "ch": 0
+              },
+              "p2.2.8": {
+                "kind": "note",
+                "n": 91,
+                "ch": 0
+              },
+              "p2.3.1": {
+                "kind": "note",
+                "n": 76,
+                "ch": 0
+              },
+              "p2.3.2": {
+                "kind": "note",
+                "n": 77,
+                "ch": 0
+              },
+              "p2.3.3": {
+                "kind": "note",
+                "n": 78,
+                "ch": 0
+              },
+              "p2.3.4": {
+                "kind": "note",
+                "n": 79,
+                "ch": 0
+              },
+              "p2.3.5": {
+                "kind": "note",
+                "n": 80,
+                "ch": 0
+              },
+              "p2.3.6": {
+                "kind": "note",
+                "n": 81,
+                "ch": 0
+              },
+              "p2.3.7": {
+                "kind": "note",
+                "n": 82,
+                "ch": 0
+              },
+              "p2.3.8": {
+                "kind": "note",
+                "n": 83,
+                "ch": 0
+              },
+              "p2.4.1": {
+                "kind": "note",
+                "n": 68,
+                "ch": 0
+              },
+              "p2.4.2": {
+                "kind": "note",
+                "n": 69,
+                "ch": 0
+              },
+              "p2.4.3": {
+                "kind": "note",
+                "n": 70,
+                "ch": 0
+              },
+              "p2.4.4": {
+                "kind": "note",
+                "n": 71,
+                "ch": 0
+              },
+              "p2.4.5": {
+                "kind": "note",
+                "n": 72,
+                "ch": 0
+              },
+              "p2.4.6": {
+                "kind": "note",
+                "n": 73,
+                "ch": 0
+              },
+              "p2.4.7": {
+                "kind": "note",
+                "n": 74,
+                "ch": 0
+              },
+              "p2.4.8": {
+                "kind": "note",
+                "n": 75,
+                "ch": 0
+              },
+              "p2.5.1": {
+                "kind": "note",
+                "n": 60,
+                "ch": 0
+              },
+              "p2.5.2": {
+                "kind": "note",
+                "n": 61,
+                "ch": 0
+              },
+              "p2.5.3": {
+                "kind": "note",
+                "n": 62,
+                "ch": 0
+              },
+              "p2.5.4": {
+                "kind": "note",
+                "n": 63,
+                "ch": 0
+              },
+              "p2.5.5": {
+                "kind": "note",
+                "n": 64,
+                "ch": 0
+              },
+              "p2.5.6": {
+                "kind": "note",
+                "n": 65,
+                "ch": 0
+              },
+              "p2.5.7": {
+                "kind": "note",
+                "n": 66,
+                "ch": 0
+              },
+              "p2.5.8": {
+                "kind": "note",
+                "n": 67,
+                "ch": 0
+              },
+              "p2.6.1": {
+                "kind": "note",
+                "n": 52,
+                "ch": 0
+              },
+              "p2.6.2": {
+                "kind": "note",
+                "n": 53,
+                "ch": 0
+              },
+              "p2.6.3": {
+                "kind": "note",
+                "n": 54,
+                "ch": 0
+              },
+              "p2.6.4": {
+                "kind": "note",
+                "n": 55,
+                "ch": 0
+              },
+              "p2.6.5": {
+                "kind": "note",
+                "n": 56,
+                "ch": 0
+              },
+              "p2.6.6": {
+                "kind": "note",
+                "n": 57,
+                "ch": 0
+              },
+              "p2.6.7": {
+                "kind": "note",
+                "n": 58,
+                "ch": 0
+              },
+              "p2.6.8": {
+                "kind": "note",
+                "n": 59,
+                "ch": 0
+              },
+              "p2.7.1": {
+                "kind": "note",
+                "n": 44,
+                "ch": 0
+              },
+              "p2.7.2": {
+                "kind": "note",
+                "n": 45,
+                "ch": 0
+              },
+              "p2.7.3": {
+                "kind": "note",
+                "n": 46,
+                "ch": 0
+              },
+              "p2.7.4": {
+                "kind": "note",
+                "n": 47,
+                "ch": 0
+              },
+              "p2.7.5": {
+                "kind": "note",
+                "n": 48,
+                "ch": 0
+              },
+              "p2.7.6": {
+                "kind": "note",
+                "n": 49,
+                "ch": 0
+              },
+              "p2.7.7": {
+                "kind": "note",
+                "n": 50,
+                "ch": 0
+              },
+              "p2.7.8": {
+                "kind": "note",
+                "n": 51,
+                "ch": 0
+              },
+              "p2.8.1": {
+                "kind": "note",
+                "n": 36,
+                "ch": 0
+              },
+              "p2.8.2": {
+                "kind": "note",
+                "n": 37,
+                "ch": 0
+              },
+              "p2.8.3": {
+                "kind": "note",
+                "n": 38,
+                "ch": 0
+              },
+              "p2.8.4": {
+                "kind": "note",
+                "n": 39,
+                "ch": 0
+              },
+              "p2.8.5": {
+                "kind": "note",
+                "n": 40,
+                "ch": 0
+              },
+              "p2.8.6": {
+                "kind": "note",
+                "n": 41,
+                "ch": 0
+              },
+              "p2.8.7": {
+                "kind": "note",
+                "n": 42,
+                "ch": 0
+              },
+              "p2.8.8": {
+                "kind": "note",
+                "n": 43,
+                "ch": 0
+              },
+              "k1.1.1": {
+                "kind": "cc",
+                "n": 71,
+                "ch": 0
+              },
+              "k1.1.2": {
+                "kind": "cc",
+                "n": 72,
+                "ch": 0
+              },
+              "k1.1.3": {
+                "kind": "cc",
+                "n": 73,
+                "ch": 0
+              },
+              "k1.1.4": {
+                "kind": "cc",
+                "n": 74,
+                "ch": 0
+              },
+              "k1.1.5": {
+                "kind": "cc",
+                "n": 75,
+                "ch": 0
+              },
+              "k1.1.6": {
+                "kind": "cc",
+                "n": 76,
+                "ch": 0
+              },
+              "k1.1.7": {
+                "kind": "cc",
+                "n": 77,
+                "ch": 0
+              },
+              "k1.1.8": {
+                "kind": "cc",
+                "n": 78,
+                "ch": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Akai APC mini",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "pad",
+                "rows": 8,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 9,
+                "band": 2
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "p2.1.1": {
+                "kind": "note",
+                "n": 56,
+                "ch": 0
+              },
+              "p2.1.2": {
+                "kind": "note",
+                "n": 57,
+                "ch": 0
+              },
+              "p2.1.3": {
+                "kind": "note",
+                "n": 58,
+                "ch": 0
+              },
+              "p2.1.4": {
+                "kind": "note",
+                "n": 59,
+                "ch": 0
+              },
+              "p2.1.5": {
+                "kind": "note",
+                "n": 60,
+                "ch": 0
+              },
+              "p2.1.6": {
+                "kind": "note",
+                "n": 61,
+                "ch": 0
+              },
+              "p2.1.7": {
+                "kind": "note",
+                "n": 62,
+                "ch": 0
+              },
+              "p2.1.8": {
+                "kind": "note",
+                "n": 63,
+                "ch": 0
+              },
+              "p2.2.1": {
+                "kind": "note",
+                "n": 48,
+                "ch": 0
+              },
+              "p2.2.2": {
+                "kind": "note",
+                "n": 49,
+                "ch": 0
+              },
+              "p2.2.3": {
+                "kind": "note",
+                "n": 50,
+                "ch": 0
+              },
+              "p2.2.4": {
+                "kind": "note",
+                "n": 51,
+                "ch": 0
+              },
+              "p2.2.5": {
+                "kind": "note",
+                "n": 52,
+                "ch": 0
+              },
+              "p2.2.6": {
+                "kind": "note",
+                "n": 53,
+                "ch": 0
+              },
+              "p2.2.7": {
+                "kind": "note",
+                "n": 54,
+                "ch": 0
+              },
+              "p2.2.8": {
+                "kind": "note",
+                "n": 55,
+                "ch": 0
+              },
+              "p2.3.1": {
+                "kind": "note",
+                "n": 40,
+                "ch": 0
+              },
+              "p2.3.2": {
+                "kind": "note",
+                "n": 41,
+                "ch": 0
+              },
+              "p2.3.3": {
+                "kind": "note",
+                "n": 42,
+                "ch": 0
+              },
+              "p2.3.4": {
+                "kind": "note",
+                "n": 43,
+                "ch": 0
+              },
+              "p2.3.5": {
+                "kind": "note",
+                "n": 44,
+                "ch": 0
+              },
+              "p2.3.6": {
+                "kind": "note",
+                "n": 45,
+                "ch": 0
+              },
+              "p2.3.7": {
+                "kind": "note",
+                "n": 46,
+                "ch": 0
+              },
+              "p2.3.8": {
+                "kind": "note",
+                "n": 47,
+                "ch": 0
+              },
+              "p2.4.1": {
+                "kind": "note",
+                "n": 32,
+                "ch": 0
+              },
+              "p2.4.2": {
+                "kind": "note",
+                "n": 33,
+                "ch": 0
+              },
+              "p2.4.3": {
+                "kind": "note",
+                "n": 34,
+                "ch": 0
+              },
+              "p2.4.4": {
+                "kind": "note",
+                "n": 35,
+                "ch": 0
+              },
+              "p2.4.5": {
+                "kind": "note",
+                "n": 36,
+                "ch": 0
+              },
+              "p2.4.6": {
+                "kind": "note",
+                "n": 37,
+                "ch": 0
+              },
+              "p2.4.7": {
+                "kind": "note",
+                "n": 38,
+                "ch": 0
+              },
+              "p2.4.8": {
+                "kind": "note",
+                "n": 39,
+                "ch": 0
+              },
+              "p2.5.1": {
+                "kind": "note",
+                "n": 24,
+                "ch": 0
+              },
+              "p2.5.2": {
+                "kind": "note",
+                "n": 25,
+                "ch": 0
+              },
+              "p2.5.3": {
+                "kind": "note",
+                "n": 26,
+                "ch": 0
+              },
+              "p2.5.4": {
+                "kind": "note",
+                "n": 27,
+                "ch": 0
+              },
+              "p2.5.5": {
+                "kind": "note",
+                "n": 28,
+                "ch": 0
+              },
+              "p2.5.6": {
+                "kind": "note",
+                "n": 29,
+                "ch": 0
+              },
+              "p2.5.7": {
+                "kind": "note",
+                "n": 30,
+                "ch": 0
+              },
+              "p2.5.8": {
+                "kind": "note",
+                "n": 31,
+                "ch": 0
+              },
+              "p2.6.1": {
+                "kind": "note",
+                "n": 16,
+                "ch": 0
+              },
+              "p2.6.2": {
+                "kind": "note",
+                "n": 17,
+                "ch": 0
+              },
+              "p2.6.3": {
+                "kind": "note",
+                "n": 18,
+                "ch": 0
+              },
+              "p2.6.4": {
+                "kind": "note",
+                "n": 19,
+                "ch": 0
+              },
+              "p2.6.5": {
+                "kind": "note",
+                "n": 20,
+                "ch": 0
+              },
+              "p2.6.6": {
+                "kind": "note",
+                "n": 21,
+                "ch": 0
+              },
+              "p2.6.7": {
+                "kind": "note",
+                "n": 22,
+                "ch": 0
+              },
+              "p2.6.8": {
+                "kind": "note",
+                "n": 23,
+                "ch": 0
+              },
+              "p2.7.1": {
+                "kind": "note",
+                "n": 8,
+                "ch": 0
+              },
+              "p2.7.2": {
+                "kind": "note",
+                "n": 9,
+                "ch": 0
+              },
+              "p2.7.3": {
+                "kind": "note",
+                "n": 10,
+                "ch": 0
+              },
+              "p2.7.4": {
+                "kind": "note",
+                "n": 11,
+                "ch": 0
+              },
+              "p2.7.5": {
+                "kind": "note",
+                "n": 12,
+                "ch": 0
+              },
+              "p2.7.6": {
+                "kind": "note",
+                "n": 13,
+                "ch": 0
+              },
+              "p2.7.7": {
+                "kind": "note",
+                "n": 14,
+                "ch": 0
+              },
+              "p2.7.8": {
+                "kind": "note",
+                "n": 15,
+                "ch": 0
+              },
+              "p2.8.1": {
+                "kind": "note",
+                "n": 0,
+                "ch": 0
+              },
+              "p2.8.2": {
+                "kind": "note",
+                "n": 1,
+                "ch": 0
+              },
+              "p2.8.3": {
+                "kind": "note",
+                "n": 2,
+                "ch": 0
+              },
+              "p2.8.4": {
+                "kind": "note",
+                "n": 3,
+                "ch": 0
+              },
+              "p2.8.5": {
+                "kind": "note",
+                "n": 4,
+                "ch": 0
+              },
+              "p2.8.6": {
+                "kind": "note",
+                "n": 5,
+                "ch": 0
+              },
+              "p2.8.7": {
+                "kind": "note",
+                "n": 6,
+                "ch": 0
+              },
+              "p2.8.8": {
+                "kind": "note",
+                "n": 7,
+                "ch": 0
+              },
+              "f3.1.1": {
+                "kind": "cc",
+                "n": 48,
+                "ch": 0
+              },
+              "f3.1.2": {
+                "kind": "cc",
+                "n": 49,
+                "ch": 0
+              },
+              "f3.1.3": {
+                "kind": "cc",
+                "n": 50,
+                "ch": 0
+              },
+              "f3.1.4": {
+                "kind": "cc",
+                "n": 51,
+                "ch": 0
+              },
+              "f3.1.5": {
+                "kind": "cc",
+                "n": 52,
+                "ch": 0
+              },
+              "f3.1.6": {
+                "kind": "cc",
+                "n": 53,
+                "ch": 0
+              },
+              "f3.1.7": {
+                "kind": "cc",
+                "n": 54,
+                "ch": 0
+              },
+              "f3.1.8": {
+                "kind": "cc",
+                "n": 55,
+                "ch": 0
+              },
+              "f3.1.9": {
+                "kind": "cc",
+                "n": 56,
+                "ch": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Akai APC mini MK2",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "pad",
+                "rows": 8,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 9,
+                "band": 2
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "p2.1.1": {
+                "kind": "note",
+                "n": 56,
+                "ch": 0
+              },
+              "p2.1.2": {
+                "kind": "note",
+                "n": 57,
+                "ch": 0
+              },
+              "p2.1.3": {
+                "kind": "note",
+                "n": 58,
+                "ch": 0
+              },
+              "p2.1.4": {
+                "kind": "note",
+                "n": 59,
+                "ch": 0
+              },
+              "p2.1.5": {
+                "kind": "note",
+                "n": 60,
+                "ch": 0
+              },
+              "p2.1.6": {
+                "kind": "note",
+                "n": 61,
+                "ch": 0
+              },
+              "p2.1.7": {
+                "kind": "note",
+                "n": 62,
+                "ch": 0
+              },
+              "p2.1.8": {
+                "kind": "note",
+                "n": 63,
+                "ch": 0
+              },
+              "p2.2.1": {
+                "kind": "note",
+                "n": 48,
+                "ch": 0
+              },
+              "p2.2.2": {
+                "kind": "note",
+                "n": 49,
+                "ch": 0
+              },
+              "p2.2.3": {
+                "kind": "note",
+                "n": 50,
+                "ch": 0
+              },
+              "p2.2.4": {
+                "kind": "note",
+                "n": 51,
+                "ch": 0
+              },
+              "p2.2.5": {
+                "kind": "note",
+                "n": 52,
+                "ch": 0
+              },
+              "p2.2.6": {
+                "kind": "note",
+                "n": 53,
+                "ch": 0
+              },
+              "p2.2.7": {
+                "kind": "note",
+                "n": 54,
+                "ch": 0
+              },
+              "p2.2.8": {
+                "kind": "note",
+                "n": 55,
+                "ch": 0
+              },
+              "p2.3.1": {
+                "kind": "note",
+                "n": 40,
+                "ch": 0
+              },
+              "p2.3.2": {
+                "kind": "note",
+                "n": 41,
+                "ch": 0
+              },
+              "p2.3.3": {
+                "kind": "note",
+                "n": 42,
+                "ch": 0
+              },
+              "p2.3.4": {
+                "kind": "note",
+                "n": 43,
+                "ch": 0
+              },
+              "p2.3.5": {
+                "kind": "note",
+                "n": 44,
+                "ch": 0
+              },
+              "p2.3.6": {
+                "kind": "note",
+                "n": 45,
+                "ch": 0
+              },
+              "p2.3.7": {
+                "kind": "note",
+                "n": 46,
+                "ch": 0
+              },
+              "p2.3.8": {
+                "kind": "note",
+                "n": 47,
+                "ch": 0
+              },
+              "p2.4.1": {
+                "kind": "note",
+                "n": 32,
+                "ch": 0
+              },
+              "p2.4.2": {
+                "kind": "note",
+                "n": 33,
+                "ch": 0
+              },
+              "p2.4.3": {
+                "kind": "note",
+                "n": 34,
+                "ch": 0
+              },
+              "p2.4.4": {
+                "kind": "note",
+                "n": 35,
+                "ch": 0
+              },
+              "p2.4.5": {
+                "kind": "note",
+                "n": 36,
+                "ch": 0
+              },
+              "p2.4.6": {
+                "kind": "note",
+                "n": 37,
+                "ch": 0
+              },
+              "p2.4.7": {
+                "kind": "note",
+                "n": 38,
+                "ch": 0
+              },
+              "p2.4.8": {
+                "kind": "note",
+                "n": 39,
+                "ch": 0
+              },
+              "p2.5.1": {
+                "kind": "note",
+                "n": 24,
+                "ch": 0
+              },
+              "p2.5.2": {
+                "kind": "note",
+                "n": 25,
+                "ch": 0
+              },
+              "p2.5.3": {
+                "kind": "note",
+                "n": 26,
+                "ch": 0
+              },
+              "p2.5.4": {
+                "kind": "note",
+                "n": 27,
+                "ch": 0
+              },
+              "p2.5.5": {
+                "kind": "note",
+                "n": 28,
+                "ch": 0
+              },
+              "p2.5.6": {
+                "kind": "note",
+                "n": 29,
+                "ch": 0
+              },
+              "p2.5.7": {
+                "kind": "note",
+                "n": 30,
+                "ch": 0
+              },
+              "p2.5.8": {
+                "kind": "note",
+                "n": 31,
+                "ch": 0
+              },
+              "p2.6.1": {
+                "kind": "note",
+                "n": 16,
+                "ch": 0
+              },
+              "p2.6.2": {
+                "kind": "note",
+                "n": 17,
+                "ch": 0
+              },
+              "p2.6.3": {
+                "kind": "note",
+                "n": 18,
+                "ch": 0
+              },
+              "p2.6.4": {
+                "kind": "note",
+                "n": 19,
+                "ch": 0
+              },
+              "p2.6.5": {
+                "kind": "note",
+                "n": 20,
+                "ch": 0
+              },
+              "p2.6.6": {
+                "kind": "note",
+                "n": 21,
+                "ch": 0
+              },
+              "p2.6.7": {
+                "kind": "note",
+                "n": 22,
+                "ch": 0
+              },
+              "p2.6.8": {
+                "kind": "note",
+                "n": 23,
+                "ch": 0
+              },
+              "p2.7.1": {
+                "kind": "note",
+                "n": 8,
+                "ch": 0
+              },
+              "p2.7.2": {
+                "kind": "note",
+                "n": 9,
+                "ch": 0
+              },
+              "p2.7.3": {
+                "kind": "note",
+                "n": 10,
+                "ch": 0
+              },
+              "p2.7.4": {
+                "kind": "note",
+                "n": 11,
+                "ch": 0
+              },
+              "p2.7.5": {
+                "kind": "note",
+                "n": 12,
+                "ch": 0
+              },
+              "p2.7.6": {
+                "kind": "note",
+                "n": 13,
+                "ch": 0
+              },
+              "p2.7.7": {
+                "kind": "note",
+                "n": 14,
+                "ch": 0
+              },
+              "p2.7.8": {
+                "kind": "note",
+                "n": 15,
+                "ch": 0
+              },
+              "p2.8.1": {
+                "kind": "note",
+                "n": 0,
+                "ch": 0
+              },
+              "p2.8.2": {
+                "kind": "note",
+                "n": 1,
+                "ch": 0
+              },
+              "p2.8.3": {
+                "kind": "note",
+                "n": 2,
+                "ch": 0
+              },
+              "p2.8.4": {
+                "kind": "note",
+                "n": 3,
+                "ch": 0
+              },
+              "p2.8.5": {
+                "kind": "note",
+                "n": 4,
+                "ch": 0
+              },
+              "p2.8.6": {
+                "kind": "note",
+                "n": 5,
+                "ch": 0
+              },
+              "p2.8.7": {
+                "kind": "note",
+                "n": 6,
+                "ch": 0
+              },
+              "p2.8.8": {
+                "kind": "note",
+                "n": 7,
+                "ch": 0
+              },
+              "f3.1.1": {
+                "kind": "cc",
+                "n": 48,
+                "ch": 0
+              },
+              "f3.1.2": {
+                "kind": "cc",
+                "n": 49,
+                "ch": 0
+              },
+              "f3.1.3": {
+                "kind": "cc",
+                "n": 50,
+                "ch": 0
+              },
+              "f3.1.4": {
+                "kind": "cc",
+                "n": 51,
+                "ch": 0
+              },
+              "f3.1.5": {
+                "kind": "cc",
+                "n": 52,
+                "ch": 0
+              },
+              "f3.1.6": {
+                "kind": "cc",
+                "n": 53,
+                "ch": 0
+              },
+              "f3.1.7": {
+                "kind": "cc",
+                "n": 54,
+                "ch": 0
+              },
+              "f3.1.8": {
+                "kind": "cc",
+                "n": 55,
+                "ch": 0
+              },
+              "f3.1.9": {
+                "kind": "cc",
+                "n": 56,
+                "ch": 0
+              },
+              "b1.1.1": {
+                "kind": "note",
+                "n": 100,
+                "ch": 0
+              },
+              "b1.1.2": {
+                "kind": "note",
+                "n": 101,
+                "ch": 0
+              },
+              "b1.1.3": {
+                "kind": "note",
+                "n": 102,
+                "ch": 0
+              },
+              "b1.1.4": {
+                "kind": "note",
+                "n": 103,
+                "ch": 0
+              },
+              "b1.1.5": {
+                "kind": "note",
+                "n": 104,
+                "ch": 0
+              },
+              "b1.1.6": {
+                "kind": "note",
+                "n": 105,
+                "ch": 0
+              },
+              "b1.1.7": {
+                "kind": "note",
+                "n": 106,
+                "ch": 0
+              },
+              "b1.1.8": {
+                "kind": "note",
+                "n": 107,
+                "ch": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Novation Launchpad Mini MK3 Programmer Mode",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "button",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "pad",
+                "rows": 8,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "button",
+                "rows": 8,
+                "cols": 1,
+                "band": 1
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "p2.1.1": {
+                "kind": "note",
+                "n": 81,
+                "ch": 0
+              },
+              "p2.1.2": {
+                "kind": "note",
+                "n": 82,
+                "ch": 0
+              },
+              "p2.1.3": {
+                "kind": "note",
+                "n": 83,
+                "ch": 0
+              },
+              "p2.1.4": {
+                "kind": "note",
+                "n": 84,
+                "ch": 0
+              },
+              "p2.1.5": {
+                "kind": "note",
+                "n": 85,
+                "ch": 0
+              },
+              "p2.1.6": {
+                "kind": "note",
+                "n": 86,
+                "ch": 0
+              },
+              "p2.1.7": {
+                "kind": "note",
+                "n": 87,
+                "ch": 0
+              },
+              "p2.1.8": {
+                "kind": "note",
+                "n": 88,
+                "ch": 0
+              },
+              "p2.2.1": {
+                "kind": "note",
+                "n": 71,
+                "ch": 0
+              },
+              "p2.2.2": {
+                "kind": "note",
+                "n": 72,
+                "ch": 0
+              },
+              "p2.2.3": {
+                "kind": "note",
+                "n": 73,
+                "ch": 0
+              },
+              "p2.2.4": {
+                "kind": "note",
+                "n": 74,
+                "ch": 0
+              },
+              "p2.2.5": {
+                "kind": "note",
+                "n": 75,
+                "ch": 0
+              },
+              "p2.2.6": {
+                "kind": "note",
+                "n": 76,
+                "ch": 0
+              },
+              "p2.2.7": {
+                "kind": "note",
+                "n": 77,
+                "ch": 0
+              },
+              "p2.2.8": {
+                "kind": "note",
+                "n": 78,
+                "ch": 0
+              },
+              "p2.3.1": {
+                "kind": "note",
+                "n": 61,
+                "ch": 0
+              },
+              "p2.3.2": {
+                "kind": "note",
+                "n": 62,
+                "ch": 0
+              },
+              "p2.3.3": {
+                "kind": "note",
+                "n": 63,
+                "ch": 0
+              },
+              "p2.3.4": {
+                "kind": "note",
+                "n": 64,
+                "ch": 0
+              },
+              "p2.3.5": {
+                "kind": "note",
+                "n": 65,
+                "ch": 0
+              },
+              "p2.3.6": {
+                "kind": "note",
+                "n": 66,
+                "ch": 0
+              },
+              "p2.3.7": {
+                "kind": "note",
+                "n": 67,
+                "ch": 0
+              },
+              "p2.3.8": {
+                "kind": "note",
+                "n": 68,
+                "ch": 0
+              },
+              "p2.4.1": {
+                "kind": "note",
+                "n": 51,
+                "ch": 0
+              },
+              "p2.4.2": {
+                "kind": "note",
+                "n": 52,
+                "ch": 0
+              },
+              "p2.4.3": {
+                "kind": "note",
+                "n": 53,
+                "ch": 0
+              },
+              "p2.4.4": {
+                "kind": "note",
+                "n": 54,
+                "ch": 0
+              },
+              "p2.4.5": {
+                "kind": "note",
+                "n": 55,
+                "ch": 0
+              },
+              "p2.4.6": {
+                "kind": "note",
+                "n": 56,
+                "ch": 0
+              },
+              "p2.4.7": {
+                "kind": "note",
+                "n": 57,
+                "ch": 0
+              },
+              "p2.4.8": {
+                "kind": "note",
+                "n": 58,
+                "ch": 0
+              },
+              "p2.5.1": {
+                "kind": "note",
+                "n": 41,
+                "ch": 0
+              },
+              "p2.5.2": {
+                "kind": "note",
+                "n": 42,
+                "ch": 0
+              },
+              "p2.5.3": {
+                "kind": "note",
+                "n": 43,
+                "ch": 0
+              },
+              "p2.5.4": {
+                "kind": "note",
+                "n": 44,
+                "ch": 0
+              },
+              "p2.5.5": {
+                "kind": "note",
+                "n": 45,
+                "ch": 0
+              },
+              "p2.5.6": {
+                "kind": "note",
+                "n": 46,
+                "ch": 0
+              },
+              "p2.5.7": {
+                "kind": "note",
+                "n": 47,
+                "ch": 0
+              },
+              "p2.5.8": {
+                "kind": "note",
+                "n": 48,
+                "ch": 0
+              },
+              "p2.6.1": {
+                "kind": "note",
+                "n": 31,
+                "ch": 0
+              },
+              "p2.6.2": {
+                "kind": "note",
+                "n": 32,
+                "ch": 0
+              },
+              "p2.6.3": {
+                "kind": "note",
+                "n": 33,
+                "ch": 0
+              },
+              "p2.6.4": {
+                "kind": "note",
+                "n": 34,
+                "ch": 0
+              },
+              "p2.6.5": {
+                "kind": "note",
+                "n": 35,
+                "ch": 0
+              },
+              "p2.6.6": {
+                "kind": "note",
+                "n": 36,
+                "ch": 0
+              },
+              "p2.6.7": {
+                "kind": "note",
+                "n": 37,
+                "ch": 0
+              },
+              "p2.6.8": {
+                "kind": "note",
+                "n": 38,
+                "ch": 0
+              },
+              "p2.7.1": {
+                "kind": "note",
+                "n": 21,
+                "ch": 0
+              },
+              "p2.7.2": {
+                "kind": "note",
+                "n": 22,
+                "ch": 0
+              },
+              "p2.7.3": {
+                "kind": "note",
+                "n": 23,
+                "ch": 0
+              },
+              "p2.7.4": {
+                "kind": "note",
+                "n": 24,
+                "ch": 0
+              },
+              "p2.7.5": {
+                "kind": "note",
+                "n": 25,
+                "ch": 0
+              },
+              "p2.7.6": {
+                "kind": "note",
+                "n": 26,
+                "ch": 0
+              },
+              "p2.7.7": {
+                "kind": "note",
+                "n": 27,
+                "ch": 0
+              },
+              "p2.7.8": {
+                "kind": "note",
+                "n": 28,
+                "ch": 0
+              },
+              "p2.8.1": {
+                "kind": "note",
+                "n": 11,
+                "ch": 0
+              },
+              "p2.8.2": {
+                "kind": "note",
+                "n": 12,
+                "ch": 0
+              },
+              "p2.8.3": {
+                "kind": "note",
+                "n": 13,
+                "ch": 0
+              },
+              "p2.8.4": {
+                "kind": "note",
+                "n": 14,
+                "ch": 0
+              },
+              "p2.8.5": {
+                "kind": "note",
+                "n": 15,
+                "ch": 0
+              },
+              "p2.8.6": {
+                "kind": "note",
+                "n": 16,
+                "ch": 0
+              },
+              "p2.8.7": {
+                "kind": "note",
+                "n": 17,
+                "ch": 0
+              },
+              "p2.8.8": {
+                "kind": "note",
+                "n": 18,
+                "ch": 0
+              },
+              "b1.1.1": {
+                "kind": "cc",
+                "n": 91,
+                "ch": 0
+              },
+              "b1.1.2": {
+                "kind": "cc",
+                "n": 92,
+                "ch": 0
+              },
+              "b1.1.3": {
+                "kind": "cc",
+                "n": 93,
+                "ch": 0
+              },
+              "b1.1.4": {
+                "kind": "cc",
+                "n": 94,
+                "ch": 0
+              },
+              "b1.1.5": {
+                "kind": "cc",
+                "n": 95,
+                "ch": 0
+              },
+              "b1.1.6": {
+                "kind": "cc",
+                "n": 96,
+                "ch": 0
+              },
+              "b1.1.7": {
+                "kind": "cc",
+                "n": 97,
+                "ch": 0
+              },
+              "b1.1.8": {
+                "kind": "cc",
+                "n": 98,
+                "ch": 0
+              },
+              "b3.1.1": {
+                "kind": "cc",
+                "n": 89,
+                "ch": 0
+              },
+              "b3.2.1": {
+                "kind": "cc",
+                "n": 79,
+                "ch": 0
+              },
+              "b3.3.1": {
+                "kind": "cc",
+                "n": 69,
+                "ch": 0
+              },
+              "b3.4.1": {
+                "kind": "cc",
+                "n": 59,
+                "ch": 0
+              },
+              "b3.5.1": {
+                "kind": "cc",
+                "n": 49,
+                "ch": 0
+              },
+              "b3.6.1": {
+                "kind": "cc",
+                "n": 39,
+                "ch": 0
+              },
+              "b3.7.1": {
+                "kind": "cc",
+                "n": 29,
+                "ch": 0
+              },
+              "b3.8.1": {
+                "kind": "cc",
+                "n": 19,
+                "ch": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Novation Launch Control XL User Template 1",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 3,
+                "cols": 8,
+                "band": 0
+              },
+              {
+                "type": "fader",
+                "rows": 1,
+                "cols": 8,
+                "band": 1
+              },
+              {
+                "type": "button",
+                "rows": 2,
+                "cols": 8,
+                "band": 2
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "k1.1.1": {
+                "kind": "cc",
+                "n": 13,
+                "ch": 0
+              },
+              "k1.2.1": {
+                "kind": "cc",
+                "n": 29,
+                "ch": 0
+              },
+              "k1.3.1": {
+                "kind": "cc",
+                "n": 49,
+                "ch": 0
+              },
+              "f2.1.1": {
+                "kind": "cc",
+                "n": 77,
+                "ch": 0
+              },
+              "k1.1.2": {
+                "kind": "cc",
+                "n": 14,
+                "ch": 0
+              },
+              "k1.2.2": {
+                "kind": "cc",
+                "n": 30,
+                "ch": 0
+              },
+              "k1.3.2": {
+                "kind": "cc",
+                "n": 50,
+                "ch": 0
+              },
+              "f2.1.2": {
+                "kind": "cc",
+                "n": 78,
+                "ch": 0
+              },
+              "k1.1.3": {
+                "kind": "cc",
+                "n": 15,
+                "ch": 0
+              },
+              "k1.2.3": {
+                "kind": "cc",
+                "n": 31,
+                "ch": 0
+              },
+              "k1.3.3": {
+                "kind": "cc",
+                "n": 51,
+                "ch": 0
+              },
+              "f2.1.3": {
+                "kind": "cc",
+                "n": 79,
+                "ch": 0
+              },
+              "k1.1.4": {
+                "kind": "cc",
+                "n": 16,
+                "ch": 0
+              },
+              "k1.2.4": {
+                "kind": "cc",
+                "n": 32,
+                "ch": 0
+              },
+              "k1.3.4": {
+                "kind": "cc",
+                "n": 52,
+                "ch": 0
+              },
+              "f2.1.4": {
+                "kind": "cc",
+                "n": 80,
+                "ch": 0
+              },
+              "k1.1.5": {
+                "kind": "cc",
+                "n": 17,
+                "ch": 0
+              },
+              "k1.2.5": {
+                "kind": "cc",
+                "n": 33,
+                "ch": 0
+              },
+              "k1.3.5": {
+                "kind": "cc",
+                "n": 53,
+                "ch": 0
+              },
+              "f2.1.5": {
+                "kind": "cc",
+                "n": 81,
+                "ch": 0
+              },
+              "k1.1.6": {
+                "kind": "cc",
+                "n": 18,
+                "ch": 0
+              },
+              "k1.2.6": {
+                "kind": "cc",
+                "n": 34,
+                "ch": 0
+              },
+              "k1.3.6": {
+                "kind": "cc",
+                "n": 54,
+                "ch": 0
+              },
+              "f2.1.6": {
+                "kind": "cc",
+                "n": 82,
+                "ch": 0
+              },
+              "k1.1.7": {
+                "kind": "cc",
+                "n": 19,
+                "ch": 0
+              },
+              "k1.2.7": {
+                "kind": "cc",
+                "n": 35,
+                "ch": 0
+              },
+              "k1.3.7": {
+                "kind": "cc",
+                "n": 55,
+                "ch": 0
+              },
+              "f2.1.7": {
+                "kind": "cc",
+                "n": 83,
+                "ch": 0
+              },
+              "k1.1.8": {
+                "kind": "cc",
+                "n": 20,
+                "ch": 0
+              },
+              "k1.2.8": {
+                "kind": "cc",
+                "n": 36,
+                "ch": 0
+              },
+              "k1.3.8": {
+                "kind": "cc",
+                "n": 56,
+                "ch": 0
+              },
+              "f2.1.8": {
+                "kind": "cc",
+                "n": 84,
+                "ch": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Akai MPK mini MK3",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "pad",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              },
+              {
+                "type": "knob",
+                "rows": 2,
+                "cols": 4,
+                "band": 0
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "k2.1.1": {
+                "kind": "cc",
+                "n": 70,
+                "ch": 0
+              },
+              "k2.1.2": {
+                "kind": "cc",
+                "n": 71,
+                "ch": 0
+              },
+              "k2.1.3": {
+                "kind": "cc",
+                "n": 72,
+                "ch": 0
+              },
+              "k2.1.4": {
+                "kind": "cc",
+                "n": 73,
+                "ch": 0
+              },
+              "k2.2.1": {
+                "kind": "cc",
+                "n": 74,
+                "ch": 0
+              },
+              "k2.2.2": {
+                "kind": "cc",
+                "n": 75,
+                "ch": 0
+              },
+              "k2.2.3": {
+                "kind": "cc",
+                "n": 76,
+                "ch": 0
+              },
+              "k2.2.4": {
+                "kind": "cc",
+                "n": 77,
+                "ch": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Generic 8 Knobs Sound Controllers CC 70-77",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "sections": [
+              {
+                "type": "knob",
+                "rows": 1,
+                "cols": 8,
+                "band": 0
+              }
+            ],
+            "channel": 0,
+            "assign": {
+              "k1.1.1": {
+                "kind": "cc",
+                "n": 70,
+                "ch": 0
+              },
+              "k1.1.2": {
+                "kind": "cc",
+                "n": 71,
+                "ch": 0
+              },
+              "k1.1.3": {
+                "kind": "cc",
+                "n": 72,
+                "ch": 0
+              },
+              "k1.1.4": {
+                "kind": "cc",
+                "n": 73,
+                "ch": 0
+              },
+              "k1.1.5": {
+                "kind": "cc",
+                "n": 74,
+                "ch": 0
+              },
+              "k1.1.6": {
+                "kind": "cc",
+                "n": 75,
+                "ch": 0
+              },
+              "k1.1.7": {
+                "kind": "cc",
+                "n": 76,
+                "ch": 0
+              },
+              "k1.1.8": {
+                "kind": "cc",
+                "n": 77,
+                "ch": 0
+              }
+            }
+          }
+        }
+      ]
+    },
     {
       "folder": "Strips",
       "items": [

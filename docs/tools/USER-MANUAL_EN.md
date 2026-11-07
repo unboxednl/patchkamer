@@ -367,7 +367,7 @@ If you also use a keyboard, put it on **MIDI in** of the hub through **Keys / MI
 
 ### Presets
 
-The **Control Surface Layouts** pack has 20 presets in four folders: **Strips**, **Faders**, **Knobs** and **Pads**. A preset only sets the shape of the panel (and clears the assignments, because they belong to the old shape); it does not change the input. See [Presets](../presets/USER-MANUAL_EN.md).
+The **Control Surface Layouts** pack has 28 presets in five folders: **Controllers**, **Strips**, **Faders**, **Knobs** and **Pads**. The shapes in the last four only set the shape of the panel (and clear the assignments, because they belong to the old shape). The **Controllers** folder has layouts of well-known controllers together with their MIDI mapping: a preset there sets the shape and the assignments, so the elements react right away. Neither changes the input. The mappings come from public documentation and have not been tried with the hardware: if a number differs on your model or setting, correct it with **Learn** and save your own preset. The Traktor Kontrol F1 has only its shape, because its numbers are set in the manufacturer's Controller Editor. See [Presets](../presets/USER-MANUAL_EN.md).
 
 ### Tips and limits
 
