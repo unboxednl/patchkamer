@@ -29,7 +29,8 @@ function build(preview){ const name=D.name.trim()||'Untitled', id=preview?draftI
   const hasCtl=(D.design.controls&&D.design.controls.length)||D.aps.some(a=>a.design&&a.design.controls&&a.design.controls.length);
   const hasMet=(D.design.meters&&D.design.meters.length)||D.aps.some(a=>a.design&&a.design.meters&&a.design.meters.length);
   const hasSec=(D.design.sections&&D.design.sections.length)||D.design.size||D.aps.some(a=>a.design&&((a.design.sections&&a.design.sections.length)||a.design.size));
-  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
+  const hasPd=(D.design.pads||D.design.display)||D.aps.some(a=>a.design&&(a.design.pads||a.design.display));
+  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasPd?'0.6':hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
   if(D.author.trim()) j.author=D.author.trim().slice(0,100); j.created=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
   if(D.dflt) j.default=D.dflt; if(Object.keys(D.design).length) j.design=clone(D.design);
   j.appearances=D.aps.map(a=>{ const o={id:a.id,name:a.name}; if(a.description) o.description=a.description; if(a.when) o.when=clone(a.when); o.css=a.css||''; if(a.assets&&Object.keys(a.assets).length) o.assets=clone(a.assets); if(a.design&&Object.keys(a.design).length) o.design=clone(a.design); return o; });
@@ -90,7 +91,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
   selRow(box,pkt('m.dz_k_stijl'),'knobs','style',[['workspace',pkt('m.dz_k_workspace')],['rotary',pkt('m.dz_k_rotary')],['slider',pkt('m.dz_k_slider')]]);
   selRow(box,pkt('m.dz_k_maat'),'knobs','size',[['m','M'],['s','S'],['l','L']]);
   box.appendChild(el('div','dz-hint',pkt('m.dz_k_hint',r?PK.knobCount(r):0)));
-  controlsSection(box); metersSection(box); sectionsSection(box);
+  controlsSection(box); metersSection(box); padsSection(box); displaySection(box); sectionsSection(box);
   const btns=el('div','dz-btns'), sv=el('button','small',pkt('m.dz_opslaan')), ex=el('button','small',pkt('m.dz_exporteren')), cl=el('button','small',pkt('m.dz_sluiten'));
   sv.type=ex.type=cl.type='button'; sv.disabled=ex.disabled=!D.name.trim(); sv.onclick=save; ex.onclick=exportIt; cl.onclick=()=>skDesignClose(); btns.append(sv,ex,cl); box.appendChild(btns);
   const st=el('div','dz-hint'); st.id='dzStatus'; st.setAttribute('role','status'); box.appendChild(st); }
@@ -98,7 +99,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
 // ---- Regelaars (skins 0.3, design.controls): lijst regels; de laatste passende regel wint; alleen gezicht, maat, lengte, dikte, duim, kleur en waardeweergave, nooit verbergen of waarde zetten ----
 const getCtl=()=>(ctxDesign().controls||[]);
 function setCtl(a){ const d=ctxDesign(); if(a.length) d.controls=a; else delete d.controls; if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }
-function ctlStat(){ const r=card(), n=PK.$('dzCtlStat'); if(n){ const st=r?PK.regStats(r):{n:0,m:0}; n.textContent=PK.pkt('m.dz_r_stat',st.n,st.m); } const sc=PK.$('dzSecStat'); if(sc){ const st=r?PK.secStats(r):{n:0,m:0}; sc.textContent=PK.pkt('m.dz_s_stat',st.n,st.m); } const m=PK.$('dzMetStat'); if(m){ const st=r?PK.meterStats(r):{n:0,m:0}; m.textContent=PK.pkt('m.dz_m_stat',st.n,st.m); } }
+function ctlStat(){ const r=card(), n=PK.$('dzCtlStat'); if(n){ const st=r?PK.regStats(r):{n:0,m:0}; n.textContent=PK.pkt('m.dz_r_stat',st.n,st.m); } const sc=PK.$('dzSecStat'); if(sc){ const st=r?PK.secStats(r):{n:0,m:0}; sc.textContent=PK.pkt('m.dz_s_stat',st.n,st.m); } const pd=PK.$('dzPadStat'); if(pd){ const st=r?PK.padStats(r):{n:0,m:0}; pd.textContent=PK.pkt('m.dz_p_stat',st.n,st.m); } const ds=PK.$('dzDspStat'); if(ds){ const st=r?PK.displayStats(r):{n:0,m:0}; ds.textContent=PK.pkt('m.dz_d_stat',st.n,st.m); } const m=PK.$('dzMetStat'); if(m){ const st=r?PK.meterStats(r):{n:0,m:0}; m.textContent=PK.pkt('m.dz_m_stat',st.n,st.m); } }
 function controlsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).filter(x=>x.role!=='meter'):[]; box.appendChild(el('h4',null,pkt('m.dz_regelaars')));
   box.appendChild(el('div','dz-hint',pkt('m.dz_r_uitleg')));
   box.appendChild(el('div','dz-hint',reg.length?pkt('m.dz_r_hint',reg.length):pkt('m.dz_r_geen')));
@@ -177,6 +178,65 @@ function metersSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.meterList(r):[
       list.appendChild(row); });
     const add=el('button','small',pkt('m.dz_r_toevoegen')); add.type='button'; add.disabled=getMet().length>=64; add.onclick=()=>{ const a=getMet(); a.push({match:'*',face:'default'}); setMet(a); draw(); preview(); }; list.appendChild(add); };
   draw(); ctlStat(); }
+// ---- Pads (skins 0.6, design.pads) en Schermpje (design.display): één object per niveau; een skin verbergt nooit een pad of schermpje ----
+const getObj=g=>(ctxDesign()[g]||{});
+function setObj(g,k,v){ const d=ctxDesign(); if(v===''||v==null||(Array.isArray(v)&&!v.length)){ if(d[g]){ delete d[g][k]; if(!Object.keys(d[g]).length) delete d[g]; } } else { d[g]=d[g]||{}; d[g][k]=v; } if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }
+function objSel(box,label,g,k,opts,conv){ const pkt=PK.pkt, row=el('div','dz-row'), lb=el('label',null,label), s=document.createElement('select'); s.className='small'; s.setAttribute('aria-label',label);
+  [['',pkt('m.dz_r_zoals')],...opts].forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; s.appendChild(o); }); const cur=getObj(g)[k], cs=cur===undefined?'':String(cur); s.value=cs; if(s.value!==cs){ const o=el('option',null,cs); o.value=cs; s.appendChild(o); s.value=cs; }
+  s.onchange=()=>{ setObj(g,k,s.value===''?'':(conv?conv(s.value):s.value)); preview(); }; row.append(lb,s); box.appendChild(row); return s; }
+function swatchRow(box,label,get,set,clearable){ const pkt=PK.pkt, rw=el('div','dz-row'), lb=el('label',null,label), cell=el('div','dz-col'), sw=el('button','dz-sw'), hx=el('span','dz-hint'), clr=el('button','small','×'); sw.type=clr.type='button'; sw.setAttribute('aria-label',label); clr.title=clr.ariaLabel=pkt('m.dz_c_leeg');
+  let pk=null; const paintSw=()=>{ const v=get(); sw.style.background=v||''; sw.classList.toggle('empty',!v); hx.textContent=v||pkt('m.dz_r_zoals'); clr.hidden=!v||!clearable; };
+  sw.onclick=()=>{ if(pk){ pk.destroy(); pk=null; return; } pk=PK.colourPicker({value:get()||'#4fd1c5',label,onChange:h=>{ set(h); paintSw(); preview(); },onCommit:h=>{ set(h); paintSw(); preview(); }}); rw.after(pk.el); if(!get()){ set(pk.get()); paintSw(); preview(); } };
+  clr.onclick=()=>{ set(''); if(pk){ pk.destroy(); pk=null; } paintSw(); preview(); }; cell.append(sw,hx,clr); rw.append(lb,cell); box.appendChild(rw); paintSw(); return rw; }
+function padsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).filter(x=>x.role==='pad'||x.role==='step'):[]; box.appendChild(el('h4',null,pkt('m.dz_pads')));
+  box.appendChild(el('div','dz-hint',pkt('m.dz_p_uitleg'))); box.appendChild(el('div','dz-hint',reg.length?pkt('m.dz_p_hint',reg.length):pkt('m.dz_p_geen')));
+  const stat=el('div','dz-hint'); stat.id='dzPadStat'; stat.setAttribute('role','status'); box.appendChild(stat);
+  const E=(k,l)=>l.map(v=>[v,pkt('m.dz_p_'+k+'_'+v)]);
+  objSel(box,pkt('m.dz_p_vorm'),'pads','shape',E('shape',['circle','square','rounded','rect']));
+  objSel(box,pkt('m.dz_r_maat'),'pads','size',['xs','s','m','l','xl'].map(v=>[v,v.toUpperCase()]));
+  const colS=objSel(box,pkt('m.dz_r_kleur'),'pads','color',E('color',['neutral','device','palette']));
+  objSel(box,pkt('m.dz_p_rust'),'pads','idle',E('idle',['neutral','tint']));
+  objSel(box,pkt('m.dz_p_actief'),'pads','active',E('active',['fill','border','glow','none']));
+  objSel(box,pkt('m.dz_p_led'),'pads','led',E('led',['none','center','top','bottom','left','right']));
+  objSel(box,pkt('m.dz_p_hit'),'pads','hit',E('hit',['flash','none']));
+  objSel(box,pkt('m.dz_p_press'),'pads','press',E('press',['depress','glow','none']));
+  objSel(box,pkt('m.dz_p_gap'),'pads','gap',E('gap',['tight','normal','wide']));
+  // palet: 2 tot 16 kleuren
+  { const wrap=el('div','dz-rules'); box.appendChild(el('div','dz-hint',pkt('m.dz_p_palet'))); box.appendChild(wrap);
+    const pal=()=>(getObj('pads').palette||[]);
+    const draw=()=>{ wrap.innerHTML=''; const a=pal();
+      a.forEach((c,i)=>{ const rw=swatchRow(wrap,pkt('m.dz_p_palet_n',i+1),()=>pal()[i],h=>{ const q=pal().slice(); if(h) q[i]=h; setObj('pads','palette',q); },false);
+        const rm=el('button','small','×'); rm.type='button'; rm.title=rm.ariaLabel=pkt('m.dz_r_weg'); rm.onclick=()=>{ const q=pal().slice(); q.splice(i,1); setObj('pads','palette',q.length>=2?q:[]); draw(); preview(); }; rw.querySelector('.dz-col').appendChild(rm); });
+      const add=el('button','small',pkt('m.dz_p_palet_plus')); add.type='button'; add.disabled=a.length>=16; add.onclick=()=>{ const q=pal().slice(); while(q.length<2) q.push('#4fd1c5'); q.push('#e4574a'); setObj('pads','palette',q.slice(0,16)); draw(); preview(); }; wrap.appendChild(add); };
+    draw(); }
+  // eigen kleur per pad (colors): sleutel kiezen uit het register
+  { const wrap=el('div','dz-rules'); box.appendChild(el('div','dz-hint',pkt('m.dz_p_eigen'))); box.appendChild(wrap);
+    const keys=['role:pad','role:step',...[...new Set(reg.map(x=>x.group).filter(Boolean))].map(g=>'group:'+g),...reg.map(x=>x.id)];
+    const cm=()=>(getObj('pads').colors||{});
+    const draw=()=>{ wrap.innerHTML=''; Object.keys(cm()).forEach(k=>{ const row=el('div','dz-rule'), head=el('div','dz-rhead'), ms=document.createElement('select'); ms.className='small'; ms.setAttribute('aria-label',pkt('m.dz_r_match'));
+        const opts=keys.includes(k)?keys:[...keys,k]; opts.forEach(v=>{ const o=el('option',null,v); o.value=v; ms.appendChild(o); }); ms.value=k;
+        ms.onchange=()=>{ const c={...cm()}; const v=c[k]; delete c[k]; c[ms.value]=v; setObj('pads','colors',Object.keys(c).length?c:''); draw(); preview(); };
+        const rm=el('button','small','×'); rm.type='button'; rm.title=rm.ariaLabel=pkt('m.dz_r_weg'); rm.onclick=()=>{ const c={...cm()}; delete c[k]; setObj('pads','colors',Object.keys(c).length?c:''); draw(); preview(); };
+        head.append(ms,rm); row.appendChild(head); swatchRow(row,pkt('m.dz_r_kleur'),()=>cm()[k],h=>{ const c={...cm()}; if(h) c[k]=h; setObj('pads','colors',Object.keys(c).length?c:''); },false); wrap.appendChild(row); });
+      const add=el('button','small',pkt('m.dz_p_eigen_plus')); add.type='button'; add.disabled=Object.keys(cm()).length>=64||!keys.length; add.onclick=()=>{ const c={...cm()}, k=keys.find(x=>!(x in c)); if(!k) return; c[k]='#e4574a'; setObj('pads','colors',c); draw(); preview(); }; wrap.appendChild(add); };
+    draw(); }
+  ctlStat(); }
+function displaySection(box){ const pkt=PK.pkt, r=card(); box.appendChild(el('h4',null,pkt('m.dz_schermpje')));
+  box.appendChild(el('div','dz-hint',pkt('m.dz_d_uitleg'))); const stat=el('div','dz-hint'); stat.id='dzDspStat'; stat.setAttribute('role','status'); box.appendChild(stat);
+  const E=(k,l)=>l.map(v=>[v,pkt('m.dz_d_'+k+'_'+v)]);
+  objSel(box,pkt('m.dz_d_stijl'),'display','style',E('style',['dropdown','lcd','oled','segment','paper']));
+  objSel(box,pkt('m.dz_d_nav'),'display','nav',E('nav',['arrows','arrows+ok','none']));
+  objSel(box,pkt('m.dz_d_commit'),'display','commit',E('commit',['live','ok']));
+  objSel(box,pkt('m.dz_d_regels'),'display','lines',[1,2,3].map(v=>[String(v),String(v)]),v=>+v);
+  objSel(box,pkt('m.dz_d_breedte'),'display','width',[['auto',pkt('m.dz_s_auto')],...[80,120,160,200,260,320,400].map(v=>[String(v),v+' px'])],v=>v==='auto'?v:+v);
+  objSel(box,pkt('m.dz_d_expand'),'display','expand',E('expand',['click','button','off']));
+  { const rw=el('div','dz-row'), lb=el('label',null,pkt('m.dz_d_doel')), cell=el('div','dz-col'); const cur=()=>getObj('display').targets||['select'];
+    ['select','preset','tune'].forEach(t=>{ const l=el('label'), c=document.createElement('input'); c.type='checkbox'; c.checked=cur().includes(t); c.setAttribute('aria-label',pkt('m.dz_d_t_'+t));
+      c.onchange=()=>{ let a=cur().slice(); if(c.checked){ if(!a.includes(t)) a.push(t); } else a=a.filter(x=>x!==t); if(!a.length){ c.checked=true; return; } setObj('display','targets',a.length===1&&a[0]==='select'?'':a); preview(); };
+      l.append(c,document.createTextNode(' '+pkt('m.dz_d_t_'+t)+'  ')); cell.appendChild(l); }); rw.append(lb,cell); box.appendChild(rw); }
+  objSel(box,pkt('m.dz_d_kleur'),'display','color',[['default',pkt('m.dz_r_g_default')],['accent',pkt('m.dz_r_accent')]]);
+  swatchRow(box,pkt('m.dz_d_eigenkleur'),()=>{ const c=getObj('display').color; return /^#/.test(c||'')?c:''; },h=>setObj('display','color',h),true);
+  ctlStat(); }
 // ---- Secties (skins 0.5, design.sections + design.size): kader, kolommen, tussenruimte, kale regelaars, labelplaats per groep; breedte van de kaart bij een verschijning ----
 const getSec=()=>(ctxDesign().sections||[]);
 function setSec(a){ const d=ctxDesign(); if(a.length) d.sections=a; else delete d.sections; if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }

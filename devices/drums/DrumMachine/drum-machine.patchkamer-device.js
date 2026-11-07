@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Stappen en tabelregelaars herkenbaar voor skins (contract v1.22, additief): elke stappenrij roept host.ui.steps aan met opts { id: 'pat.<geluid>', group: <geluid>, role: 'step', color } zodat een skin de vorm, maat, kleur en het ledje van de stapknoppen kiest
+//          (eigen kleur per geluid), en elke schuif van de tabel krijgt via host.ui.adopt als id de params()-sleutel (kick.tune, snare.dec, ...), rol param en als groep het geluid. Een oudere host negeert het 5e argument en heeft geen adopt: het apparaat valt dan terug op de huidige weergave.
+//          Geluid, getState(), presets, tunes, poorten en uiterlijk zonder skin ongewijzigd.
 // 1.15.1 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Uitgangsniveau (lvl), Patroonswing (swing) en de swing per geluid (laneSwing.kick, .snare, .hat, .perc); alle standaard uit (drift 0,05 tot 0,08).
 //          Modulatie komt alleen bovenop de knop (effectief = knop + o × bereik, geclampt) en is nooit state; getState/presets/tunes gelijk. Zonder modulatie gelijk aan 1.15.0.
 //          Risico: een gemoduleerd uitgangsniveau gaat via setTargetAtTime (geen tikken); gemoduleerde swing verschuift alleen de timing van nieuwe slagen. Niet beluisterd.
@@ -33,12 +36,14 @@ return {
   perc:  { tune: ['Tune', 200, 900, 1, 420, true, 'pitch', 0.06, true, hz], dec: ['Decay', 0.05, 0.8, 0.01, 0.25, true, 'decay', 0.12, true, sec], tone: [T.tone, 400, 4000, 10, 1200, true, 'filter', 0.15, true, hz], lvl: lvlP(0.7), pan: panP },
 };
 };
+// kleur per geluid voor de stapknoppen (alleen een voorkeur; de skin beslist of ze worden gebruikt)
+const VCOL = { kick: '#e8603c', snare: '#f0b429', hat: '#3fb8af', perc: '#8e7cf0' };
 const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], hat: [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0], perc: [0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0] };
 
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.15.1',
+  version: '1.16.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -80,7 +85,7 @@ export default {
       inputs: {}, outputs: { out },
       bundles: { multi: () => ({ label: T.multi, channels: VOICES.map(([k, lab]) => ({ id: k, name: lab, node: bus[k].p })) }) },
       mount(el) { lvlKnob = null;
-        VOICES.forEach(([k, lab]) => { rows[k] = host.ui.steps(el, lab, state.pat[k]); });
+        VOICES.forEach(([k, lab]) => { rows[k] = host.ui.steps(el, lab, state.pat[k], undefined, { id: 'pat.' + k, group: k, role: 'step', color: VCOL[k] }); });
         // compact table: one row per drum sound, one column per parameter
         const g = document.createElement('div'); g.style.cssText = 'display:grid;grid-template-columns:44px repeat(5,minmax(0,1fr));gap:2px 8px;align-items:center;margin-top:4px;min-width:0';
         const cap = t => { const s = document.createElement('span'); s.textContent = t; s.style.cssText = 'font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'; return s; };
@@ -92,6 +97,7 @@ export default {
             const o = document.createElement('output'); o.style.cssText = 'font-size:9px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden'; o.textContent = d[9](state.v[vk][pk]);
             i.oninput = () => { state.v[vk][pk] = +i.value; o.textContent = d[9](+i.value); apply(); };
             i.ondblclick = () => { state.v[vk][pk] = d[4]; paintCells(); apply(); };
+            if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(i, { id: vk + '.' + pk, role: 'param', group: vk, label: vl + ' ' + d[0] }); } catch (e) { /* oudere host */ } }
             cell.append(i, o); g.appendChild(cell); cells[vk + '.' + pk] = { i, o }; }); });
         el.appendChild(g);
         lvlKnob = host.ui.knob(el, T.lvl, [0, 1, 0.01], state.lvl, pct, v => { state.lvl = v; apply(); }, { id: 'lvl', group: 'out' });

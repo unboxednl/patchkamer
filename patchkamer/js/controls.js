@@ -25,7 +25,7 @@ function regTag(el,o,dflt){ if(!o||typeof o!=='object') return undefined; let id
 // host.ui.adopt(el, {id, role, group, label}): zelfde als de attributen zetten; alleen elementen met een model; geeft el terug
 function regAdopt(el,o){ if(!el||el.nodeType!==1||!regModel(el)){ warn('adopt: element zonder model (range, checkbox, select of button)'); return el; }
   regTag(el,o); if(o&&typeof o.label==='string'&&o.label) el.setAttribute('data-pk-label',o.label.slice(0,80));
-  const r=PK.cardOf(el); if(r&&r.skCtl) PK.regApply(r);
+  const r=PK.cardOf(el); if(r&&r.skCtl) PK.regApply(r); if(r&&r.skPad&&PK.padSoon) PK.padSoon(r); if(r&&r.skDsp&&PK.displaySoon) PK.displaySoon(r);
   return el; } PK.regAdopt=regAdopt;
 
 // ---- beschrijven ----
@@ -42,11 +42,13 @@ function regEntries(r){ const out=[], seen=new Set();
   const scan=root=>{ root.querySelectorAll('[data-pk-id],[data-pk-role],[data-pk-group]').forEach(e=>{ if(seen.has(e)) return; const m=regModel(e); if(!m) return; seen.add(e); out.push({el:e,m}); }); };
   const ui=regUi(r); scan(ui); regRoots(ui).forEach(scan);
   return out; }
-PK.regUi=regUi; PK.regEntries=regEntries; PK.regDesc=regDesc;   // voor js/sections.js
+PK.regUi=regUi; PK.regEntries=regEntries; PK.regDesc=regDesc; PK.regRoots=regRoots;   // voor js/sections.js, js/pads.js
 // het register zoals host.ui.list het geeft: alleen regelaars met een id
-function regList(r){ if(!r) return []; return regEntries(r).map(e=>{ const d=regDesc(e.el); if(!d||!d.id) return null; const p=regProps(r,e.el), range=d.type==='range';
-    const face=!range?'default':(p&&p.face&&p.face!=='default'?p.face:((e.K?e.K.kn.style.display!=='none':!!e.m.__pkRot)?'rotary':'hslider'));
-    const L={id:d.id,role:d.role,group:d.group,label:regLabel(e.el,e.m),type:d.type,min:range?(e.m.min===''?0:+e.m.min):null,max:range?(e.m.max===''?100:+e.m.max):null,face}; return L; }).filter(Boolean).concat(PK.meterList?PK.meterList(r):[]); } PK.regList=regList;   // + meters (js/meters.js)
+function regList(r){ if(!r) return []; const pads=[];
+  const base=regEntries(r).map(e=>{ const d=regDesc(e.el); if(!d||!d.id) return null; if(d.role==='pad'||d.role==='step'){ pads.push({el:e.el,d,label:regLabel(e.el,e.m)}); return null; } const p=regProps(r,e.el), range=d.type==='range';
+    const face=range?(p&&p.face&&p.face!=='default'?p.face:((e.K?e.K.kn.style.display!=='none':!!e.m.__pkRot)?'rotary':'hslider')):(d.type==='select'&&PK.displayFace?PK.displayFace(e.m):'default');
+    const L={id:d.id,role:d.role,group:d.group,label:regLabel(e.el,e.m),type:d.type,min:range?(e.m.min===''?0:+e.m.min):null,max:range?(e.m.max===''?100:+e.m.max):null,face}; return L; }).filter(Boolean);
+  return base.concat(PK.padList?PK.padList(r,pads):[],PK.meterList?PK.meterList(r):[]); } PK.regList=regList;   // + pads en stappen (js/pads.js), meters (js/meters.js)
 
 // ---- regels ----
 function regMatch(m,d){ if(m==='*') return true; if(m.startsWith('role:')) return d.role===m.slice(5); if(m.startsWith('group:')) return d.group===m.slice(6); return d.id===m; }

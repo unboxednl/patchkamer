@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.21
+// validate-instrument.mjs — Patchkamer contract v1.22
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -21,6 +21,10 @@
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
 // v1.21: instellingen opnemen en afspelen: host.watchParams, host.setParam, host.lockParams en host.paramsOf (voor sequencers); de nep-host kent ze en geeft false, de validator controleert er verder niets van.
+// v1.22: pads en schermpje: host.ui.pad(parent, label, opts) -> { el, set, flash, id, destroy } (opts: id, group, role, mode momentary|toggle, on, onpress, onrelease, onchange, color #rrggbb, text, title),
+//        host.ui.display(parent, label, opts) -> { el, set, get, value, items, id, destroy } (opts: id, group, role, items [[waarde, tekst]], value, onchange, kind, wrap, searchAt; el.select = het model)
+//        en host.ui.steps(parent, label, arr, onchange, opts?) met opts { id, group, role, color }. Een color die geen #rrggbb is, gooit (fout). Alleen "let op" bij een dubbel pad-id,
+//        ongeldige opties, een momentary pad zonder onpress en zonder onchange, een display-value buiten items. --controls toont pads (type pad), steps (type steps) en displays (select, gezicht dropdown).
 // v1.20: samples (tab Samples, samplepacks) en de optionele methode loadAudio(files, info); de validator kent haar niet en weigert haar niet.
 // v1.19: tags voor tunes en presets (op de packs); de validator controleert apparaten, dus hier verandert niets.
 // v1.18: meters: host.ui.meter(parent, label, opts) -> { el, set, id, destroy }; de nep-host kent het (opts: id, group, source = AnalyserNode of lijst van 1-2, unit, range, kind, hold, clip,
@@ -117,6 +121,16 @@ const V = {
     "v.meter_set": "{0}: set() verwacht een eindig getal of een lijst [l, r]; genegeerd",
     "v.meter_attr": "{0}: data-pk-role=\"meter\" op een eigen element wordt niet ondersteund; een meter heeft het gezicht van de host nodig, gebruik host.ui.meter",
     "v.meter_suffix": "{0}: data-pk-suffix hoort tekst van hoogstens 16 tekens te zijn",
+    "v.pad_aantal": ", {0} pads",
+    "v.display_aantal": ", {0} schermpjes",
+    "v.pad_opts": "{0}: de opties van host.ui.pad moeten een object zijn; genegeerd",
+    "v.pad_optie": "{0}: pad-optie {1} is ongeldig (verwacht {2}); de host gebruikt de standaard",
+    "v.pad_color": "{0}: color moet een hex-kleur #rrggbb zijn (kreeg {1}); de host kan geen andere kleurvorm tekenen",
+    "v.pad_geen_handler": "{0}: een pad (momentary) zonder onpress en zonder onchange doet niets; geef een van de twee",
+    "v.steps_opts": "{0}: het 5e argument van host.ui.steps moet een object { id, group, role, color } zijn; genegeerd",
+    "v.display_opts": "{0}: de opties van host.ui.display moeten een object zijn; genegeerd",
+    "v.display_optie": "{0}: display-optie {1} is ongeldig (verwacht {2}); de host gebruikt de standaard",
+    "v.display_waarde": "{0}: value \"{1}\" staat niet in items; de host kiest het eerste item",
     "v.mod_ontbreekt": "{0} continue regelaar(s) staan niet in params(): {1} (§8: neem ze op, of zet ze in modExclude als ze bewust buiten blijven)",
     "v.mod_geen_params": "{0} continue regelaar(s) maar geen params() (kind {1}): modulatoren kunnen dit apparaat niet bedienen: {2} (§8: voeg params() en modulate() toe, of zet modExclude: '*' als dat bewust is)",
     "v.mod_param_zonder": "params(): {0} id('s) zonder regelaar of state-sleutel: {1} (typefout? modulate negeert onbekende ids)",
@@ -343,6 +357,16 @@ const V = {
     "v.meter_set": "{0}: set() expects a finite number or a list [l, r]; ignored",
     "v.meter_attr": "{0}: data-pk-role=\"meter\" on your own element is not supported; a meter needs the host's face, use host.ui.meter",
     "v.meter_suffix": "{0}: data-pk-suffix must be text of at most 16 characters",
+    "v.pad_aantal": ", {0} pads",
+    "v.display_aantal": ", {0} displays",
+    "v.pad_opts": "{0}: the host.ui.pad options must be an object; ignored",
+    "v.pad_optie": "{0}: pad option {1} is invalid (expected {2}); the host uses the default",
+    "v.pad_color": "{0}: color must be a hex colour #rrggbb (got {1}); the host cannot draw any other colour form",
+    "v.pad_geen_handler": "{0}: a momentary pad with neither onpress nor onchange does nothing; give one of the two",
+    "v.steps_opts": "{0}: the 5th argument of host.ui.steps must be an object { id, group, role, color }; ignored",
+    "v.display_opts": "{0}: the host.ui.display options must be an object; ignored",
+    "v.display_optie": "{0}: display option {1} is invalid (expected {2}); the host uses the default",
+    "v.display_waarde": "{0}: value \"{1}\" is not in items; the host picks the first item",
     "v.mod_ontbreekt": "{0} continuous control(s) are not in params(): {1} (§8: add them, or list them in modExclude if they are deliberately left out)",
     "v.mod_geen_params": "{0} continuous control(s) but no params() (kind {1}): modulators cannot control this device: {2} (§8: add params() and modulate(), or set modExclude: '*' if that is deliberate)",
     "v.mod_param_zonder": "params(): {0} id(s) without a control or state key: {1} (a typo? modulate ignores unknown ids)",
@@ -582,7 +606,8 @@ let frames = [], peerCalls = 0, connects = 0;
 const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true, noteNames: [{ note: 36, name: 'Kick' }] },
   { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
 let masteringCalls = 0, masteringBad = null, emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
-let METERS = 0;
+let METERS = 0, PADS = 0;
+const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
 const PL = (P, k) => Array.isArray(P[k]) ? P[k] : [];
 const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal', oversample: '2x', latency: 'interactive' }, bpm: 120, swing: 0, emit(inst, port, ev) { emitted.push({ port, ev }); }, setTempo(b) { tempo = b; },
@@ -663,7 +688,55 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
       return { el: box, id: id || undefined,
         set(level) { if (gone) return; const ok = x => typeof x === 'number' && isFinite(x); if (!(ok(level) || (Array.isArray(level) && level.length >= 1 && level.length <= 2 && level.every(ok)))) ctlWarn('v.meter_set', name); },
         destroy() { gone = true; } }; },
-    steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
+    // v1.22: host.ui.pad(parent, label, opts) -> { el, set, flash, id, destroy }
+    pad(parent, label, o) { const name = lbl(label) || 'pad'; PADS++;
+      if (o !== undefined && o !== null && (typeof o !== 'object' || Array.isArray(o))) { ctlWarn('v.pad_opts', name); o = {}; } o = o || {};
+      const r = ctlOpts(name, { id: o.id, role: o.role !== undefined ? o.role : 'pad', group: o.group }, 'button');
+      const bad = (k, want) => ctlWarn('v.pad_optie', name, k, want);
+      if (o.mode !== undefined && !['momentary', 'toggle'].includes(o.mode)) bad('mode', "'momentary' | 'toggle'");
+      if (o.on !== undefined && typeof o.on !== 'boolean') bad('on', 'true | false');
+      for (const k of ['onpress', 'onrelease', 'onchange']) if (o[k] !== undefined && typeof o[k] !== 'function') bad(k, 'function');
+      for (const k of ['text', 'title']) if (o[k] !== undefined && typeof o[k] !== 'string') bad(k, 'text');
+      if (o.color !== undefined && !(typeof o.color === 'string' && HEX_RE.test(o.color))) throw new Error(vt('v.pad_color', name, JSON.stringify(o.color).slice(0, 40)));
+      const toggle = o.mode === 'toggle';
+      if (!toggle && typeof o.onpress !== 'function' && typeof o.onchange !== 'function') ctlWarn('v.pad_geen_handler', name);
+      const box = el('button'); box._pk = true; box.setAttribute('role', 'button'); box.setAttribute('aria-label', name); if (toggle) box.setAttribute('aria-pressed', String(!!o.on));
+      if (r.id) { box.setAttribute('data-pk-id', r.id); box.dataset.pkId = r.id; } box.setAttribute('data-pk-role', r.role); box.dataset.pkRole = r.role;
+      if (parent && parent.appendChild) parent.appendChild(box);
+      ctlAdd({ ...r, label: name, type: 'pad', min: null, max: null, face: 'rounded', via: 'pad', el: box });
+      let gone = false;
+      return { el: box, id: r.id || undefined,
+        set(on) { if (!gone && toggle) box.setAttribute('aria-pressed', String(!!on)); },
+        flash() {},
+        destroy() { gone = true; } }; },
+    // v1.22: host.ui.display(parent, label, opts) -> { el, set, get, value, items, id, destroy }; het model is een verborgen <select> (el.select)
+    display(parent, label, o) { const name = lbl(label) || 'display';
+      if (o !== undefined && o !== null && (typeof o !== 'object' || Array.isArray(o))) { ctlWarn('v.display_opts', name); o = {}; } o = o || {};
+      const r = ctlOpts(name, { id: o.id, role: o.role !== undefined ? o.role : 'select', group: o.group }, 'select');
+      const bad = (k, want) => ctlWarn('v.display_optie', name, k, want);
+      let items = [];
+      if (o.items !== undefined) { if (Array.isArray(o.items) && o.items.every(x => Array.isArray(x) && x.length >= 2)) items = o.items.map(x => [x[0], x[1]]); else bad('items', '[[waarde, tekst], …]'); }
+      if (o.kind !== undefined && !['select', 'preset'].includes(o.kind)) bad('kind', "'select' | 'preset'");
+      if (o.wrap !== undefined && typeof o.wrap !== 'boolean') bad('wrap', 'true | false');
+      if (o.searchAt !== undefined && !(Number.isInteger(o.searchAt) && o.searchAt >= 1)) bad('searchAt', 'integer >= 1');
+      if (o.onchange !== undefined && typeof o.onchange !== 'function') bad('onchange', 'function');
+      if (o.value !== undefined && items.length && !items.some(x => String(x[0]) === String(o.value))) ctlWarn('v.display_waarde', name, String(o.value).slice(0, 40));
+      const k = { label: vt('v.keuze') + name, sets: 0 }; KNOBS.push(k);
+      const s = el('select'); let v = o.value !== undefined ? o.value : items.length ? items[0][0] : ''; Object.defineProperty(s, 'value', { get: () => v, set: x => { v = x; k.sets++; } });
+      s._pk = true; const box = el('div'); box._pk = true; box.select = s; box.appendChild(s); if (parent && parent.appendChild) parent.appendChild(box);
+      ctlAdd({ ...r, label: name, type: 'select', min: null, max: null, face: 'dropdown', items: items.map(x => x[0]), via: 'display', el: s });
+      let gone = false;
+      return { el: box, id: r.id || undefined, set(x) { if (!gone) s.value = x; }, get() { return s.value; },
+        get value() { return s.value; }, set value(x) { if (!gone) s.value = x; }, items(list) { if (Array.isArray(list)) items = list; }, destroy() { gone = true; } }; },
+    // v1.22: host.ui.steps(parent, label, arr, onchange, opts?) met opts { id, group, role, color }
+    steps: (parent, label, arr, onchange, o) => { const name = lbl(label) || 'steps'; let r = null;
+      if (o !== undefined && o !== null) {
+        if (typeof o !== 'object' || Array.isArray(o)) ctlWarn('v.steps_opts', name);
+        else { r = ctlOpts(name, { id: o.id, role: o.role !== undefined ? o.role : 'step', group: o.group }, 'button');
+          if (o.color !== undefined && !(typeof o.color === 'string' && HEX_RE.test(o.color))) throw new Error(vt('v.pad_color', name, JSON.stringify(o.color).slice(0, 40)));
+          const box = el('div'); box._pk = true; ctlAdd({ ...r, label: name, type: 'steps', min: null, max: null, face: 'rounded', via: 'steps', el: box }); } }
+      return { btns: [], paint(){}, cursor(){}, id: r && r.id || undefined }; },
+    noise: () => node(), curve: () => new Float32Array(16) } };
 
 // ---------- load + static checks ----------
 const src = readFileSync(file, 'utf8');
@@ -1065,6 +1138,8 @@ const nKnobs = nMountKnobs; let OTHER = null;
   if (clipOn) line += vt('v.ok_klembord');
   if (nKnobs) line += vt('v.ok_knoppen', nKnobs);
   if (METERS) line += vt('v.meter_aantal', METERS);
+  if (PADS) line += vt('v.pad_aantal', PADS);
+  { const nd = CTL.filter(c => c.via === 'display').length; if (nd) line += vt('v.display_aantal', nd); }
   { const nid = CTL.filter(c => c.id).length; if (nid) line += vt('v.ok_regelaars', nid); }
   line += frames.length ? vt('v.ok_tekent_frame') : (/__pkWrap\(/.test(src) ? vt('v.ok_tekent_poort') : '');
   if (peerCalls || connects) line += vt('v.ok_besturing');

@@ -128,7 +128,10 @@ const Host={
     // contract v1.18: meter. parent, label, opts {id, group, source (AnalyserNode of lijst van 1-2), unit, range, kind, hold, clip, orientation, length, width}; geeft {el, set(level), id, destroy()}. De host leest alleen; een skin kiest het gezicht (bar, ledladder, vu).
     meter(parent,label,opts){ return PK.meterBuild(parent,label,opts); },
     list(inst){ const r=Host.devices.get(inst&&inst._id); return r?PK.regList(r):[]; },
-    steps(parent,label,arr,onchange){const row=document.createElement('div'); row.className='rowlab'; const l=document.createElement('span'); l.textContent=label; const g=document.createElement('div'); g.className='grid16'; const btns=[]; for(let s=0;s<16;s++){const b=document.createElement('button'); b.className='st'+(s%4===0?' q':'')+(arr[s]?' on':''); b.setAttribute('aria-label',PK.pkt('m.stap',label,s+1)); b.onclick=()=>{arr[s]=arr[s]?0:1; b.classList.toggle('on',!!arr[s]); onchange&&onchange(s,arr[s]);}; g.appendChild(b); btns.push(b);} row.append(l,g); parent.appendChild(row); return {btns,paint(){btns.forEach((b,s)=>b.classList.toggle('on',!!arr[s]));},cursor(s){btns.forEach((b,i)=>b.classList.toggle('cur',i===s));}};},
+    // contract v1.22: pad (knop met vorm, kleur en ledje voor skins), schermpje (keuzelijst met < > en [ok]) en het 5e argument van steps (opts {id, group, role, color})
+    pad(parent,label,opts){ return PK.padBuild(parent,label,opts); },
+    display(parent,label,opts){ return PK.displayBuild(parent,label,opts); },
+    steps(parent,label,arr,onchange,opts){ return PK.stepsBuild(parent,label,arr,onchange,opts); },
     noise(ctx){ if(!Host._nb){const b=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate), d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; Host._nb=b;} const s=ctx.createBufferSource(); s.buffer=Host._nb; s.loop=true; s.loopStart=Math.random(); return s; },
     curve(k){const n=1024,c=new Float32Array(n),a=k*40; for(let i=0;i<n;i++){const x=i*2/n-1; c[i]=a>0?((1+a)*x)/(1+a*Math.abs(x)):x;} return c;},
   },

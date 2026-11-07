@@ -1,10 +1,10 @@
-# Patchkamer — Skins contract v0.5 for building agents
+# Patchkamer — Skins contract v0.6 for building agents
 
 This document is the complete, self-contained instruction for building a **skin** for **Patchkamer**: a separate file that changes the look of one device, without touching the device itself or the device contract. An agent that receives this document needs no other context. Deliver a file `name.patchkamer-skin.json` that follows this contract and passes `validate-skin.mjs` without errors.
 
 _This contract exists in two languages: `SKINS-CONTRACT_NL.md` (Dutch, the source text) and `SKINS-CONTRACT_EN.md` (English). Both have the same version and the same content; if they differ, the Dutch text applies. The validator speaks both languages too (`--lang nl|en`)._
 
-_This contract is a contract of its own next to the device contract (`../../contract/PATCHKAMER-CONTRACT_EN.md`, now v1.18) and has its own version number. A skin asks nothing of a device: no change to devices is needed._
+_This contract is a contract of its own next to the device contract (`../../contract/PATCHKAMER-CONTRACT_EN.md`, now v1.22) and has its own version number. A skin asks nothing of a device: no change to devices is needed._
 
 | Version | What was added |
 |---|---|
@@ -13,6 +13,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 | v0.3 | Layer 2, release A "ids and roles": `design.controls`, an ordered list of rules that chooses, per id, role or group, the face (rotary knob, horizontal or vertical slider), size, length, thickness, thumb, colour and value display of controls (§4b). Belongs to device contract v1.15. Skins of 0.1 and 0.2 keep working unchanged |
 | v0.4 | Layer 2, release C "meters": `design.meters`, an ordered list of rules that chooses, per id, group or everywhere, the face of a meter (bar, LED ladder or a round VU with a needle that replaces a bar, never beside it), the direction, the length and the width, the ballistics (fall), the peak line, the clip lamp, the scale, the colour and the number of LEDs (§4b). Belongs to device contract v1.18 (`host.ui.meter`). Skins of 0.1 up to 0.3 keep working unchanged |
 | v0.5 | Layer 2, release B1 "sections": `design.sections`, an ordered list of rules that chooses, per group or everywhere, a frame (line, raised, inset, floating), columns, spacing, "bare" (the controls lose their own frame), the place of the label (above, or below with the value on top) and the alignment, and `design.size`, the card width that belongs to an appearance (§4b). No device change needed: a group becomes a section when the device's DOM allows it. Skins of 0.1 up to 0.4 keep working unchanged |
+| v0.6 | Layer 2, release D "pads and small screen": `design.pads` (shape circle, square, rounded or rectangle; size; colour per pad, per palette or from the device; idle neutral or tinted; active as fill, border, glow or nothing; a lamp in the middle, top, bottom, left or right; click and hit feedback; spacing between step buttons) and `design.display` (the small screen: LCD, OLED, seven-segment or paper instead of a dropdown, with < > and [ok], enlarged by clicking it) (§4b). Belongs to device contract v1.22 (`host.ui.pad`, `host.ui.display`, `host.ui.steps` with options). Skins of 0.1 up to and including 0.5 keep working unchanged |
 
 ---
 
@@ -23,7 +24,7 @@ _This contract is a contract of its own next to the device contract (`../../cont
 - A skin belongs to **one device id** (the field `device`). For another device it is kept but never offered.
 - A device does not have to do anything to be able to get skins. If the device has no open shadow root (see §4), the host cannot apply the skin and says so; that is not a fault of the skin or of the device.
 - Skins are a new kind of library material next to tunes and presets: they are loaded from sources (a GitHub folder, a local folder, an address), browsed in a panel of their own, chosen per device on the card, saved in the workspace and in the song, and can be dropped on the canvas (§8, §9).
-- Version 0.5 stays deliberately small: CSS plus a small set of design choices (`design`, §4b), including the face of controls (`controls`), of meters (`meters`) and the layout of sections (`sections`, `size`). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
+- Version 0.6 stays deliberately small: CSS plus a small set of design choices (`design`, §4b), including the face of controls (`controls`), of meters (`meters`), the layout of sections (`sections`, `size`) and the face of pads (`pads`) and small screens (`display`). The format is extensible (unknown fields are ignored, §10); what is not in it yet is in §13.
 
 ---
 
@@ -37,7 +38,7 @@ A skin is a UTF-8 JSON file with one object, named `name.patchkamer-skin.json`: 
 |---|---|---|---|---|
 | `format` | text | always `"patchkamer-skin"` | | yes |
 | `formatVersion` | integer | now `1` | | yes |
-| `skinsContract` | text | `"major.minor"`, now `"0.5"` (`"0.1"` up to and including `"0.4"` stay valid); see §10 | | yes |
+| `skinsContract` | text | `"major.minor"`, now `"0.6"` (`"0.1"` up to and including `"0.5"` stay valid); see §10 | | yes |
 | `id` | text | 3 to 100 characters from `[a-z0-9.-]`; recommended `<device-id>.<slug>`; unique: the same `id` is the same skin | | yes |
 | `device` | text | the `id` of the device the skin is for, for example `nl.patchkamer.duofone` | | yes |
 | `name` | text | English name, 1 to 60 characters, brand-free (§11) | | yes |
@@ -127,7 +128,7 @@ Apart from that, ordinary CSS is allowed, including `@media`, `@container` and `
 
 ---
 
-## 4b. Design choices (`design`, from 0.2; `controls` from 0.3; `meters` from 0.4; `sections` and `size` from 0.5)
+## 4b. Design choices (`design`, from 0.2; `controls` from 0.3; `meters` from 0.4; `sections` and `size` from 0.5; `pads` and `display` from 0.6)
 
 Besides CSS, from version 0.2 a skin can bring a set of **validated design choices** in the field `design`. Unlike CSS, these choices work on **all devices** through the host, without the device having to do anything (with the limits below). `design` sits at skin level (the default for all appearances) and can be overridden per appearance with `appearances[].design`.
 
@@ -141,6 +142,8 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
   "controls": [ { "match": "*|<id>|role:<role>|group:<group>", "face": "rotary|hslider|vslider|default", "size": "xs…xl|0.6..2", "length": "short|medium|long|40..400", "thickness": 2, "thumb": "round|square|bar|none", "color": "accent|#rrggbb", "showValue": "always|hover|never" } ],
   "meters": [ { "match": "*|<id>|group:<group>", "face": "bar|ledladder|vu|default", "orientation": "auto|vertical|horizontal", "length": "short|medium|long|24..400", "width": 8, "ballistics": "default|fast|vu|slow", "peakHold": "on|off|default", "clip": "show|hide|default", "scale": "show|hide", "color": "accent|default|#rrggbb", "segments": 20 } ],
   "sections": [ { "match": "*|group:<group>", "frame": "none|line|raised|inset|floating|default", "columns": "auto|1..12", "gap": "tight|normal|wide", "bare": false, "labels": "default|above|below", "align": "start|center" } ],
+  "pads":    { "shape": "circle|square|rounded|rect", "size": "xs…xl|0.6..2", "color": "neutral|device|palette", "palette": ["#rrggbb", "…"], "colors": { "<id>|role:step|group:<group>": "#rrggbb" }, "idle": "neutral|tint", "active": "fill|border|glow|none", "led": "none|center|top|bottom|left|right", "hit": "flash|none", "press": "depress|glow|none", "gap": "tight|normal|wide" },
+  "display": { "style": "dropdown|lcd|oled|segment|paper", "nav": "arrows|arrows+ok|none", "commit": "live|ok", "lines": 1, "width": "auto|80..400", "expand": "click|button|off", "targets": ["select", "preset", "tune"], "color": "accent|default|#rrggbb" },
   "size":    { "width": 380 }
 }
 ```
@@ -151,7 +154,7 @@ Besides CSS, from version 0.2 a skin can bring a set of **validated design choic
 - **Merging:** the host takes the `design` of the skin and lays the `design` of the chosen appearance over it, **per key** (and per colour in `colors.custom`). An appearance only has to repeat what differs.
 - **Lenient in the host, strict in the validator:** the host ignores an invalid value or unknown key (that one key falls back to the default behaviour) and reports it; the validator gives an **error** for an invalid value and a warning for an unknown key. Unknown keys and sections belong to later versions (§13) and are ignored.
 - **Standard clears everything:** if the user picks Standard (no skin) on the card, the card, the device and the cables are exactly as without a skin.
-- `design` belongs to `skinsContract` `"0.2"` (`controls` to `"0.3"`, `meters` to `"0.4"`, `sections` and `size` to `"0.5"`). In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there, and also for `controls` in a 0.2 file, for `meters` in a 0.3 file and for `sections` or `size` in a 0.4 file or lower.
+- `design` belongs to `skinsContract` `"0.2"` (`controls` to `"0.3"`, `meters` to `"0.4"`, `sections` and `size` to `"0.5"`, `pads` and `display` to `"0.6"`). In a file with `"0.1"` a 0.1 host ignores it; the validator gives a warning there, and also for `controls` in a 0.2 file, for `meters` in a 0.3 file and for `sections` or `size` in a 0.4 file or lower and for `pads` or `display` in a 0.5 file or lower.
 
 ### Ports mode (`ports.mode`)
 
@@ -355,6 +358,68 @@ Whatever is not a control (buttons, headings, other text) in the section's eleme
 
 **Card width (`size.width`).** `size` is the card width in pixels that belongs to an appearance (200 to 1600). The host applies it **only** when the user picks the appearance or the skin **by hand**; not with Auto (which switches on width, and would otherwise keep switching) and not again at every sync. After that the user can simply make the card larger or smaller again. So an appearance "Compact" makes the whole device smaller. A `size` at skin level applies to every appearance that has none of its own.
 
+### Pads (`pads`, from 0.6)
+
+With `design.pads` a skin chooses the **shape, size, colour and feedback of pads**: the push buttons a device has the host draw with `host.ui.pad` (device contract §12f), the step buttons of `host.ui.steps` with options and pad buttons of the device's own that it registers with `data-pk-role="pad"` or `"step"`. Unlike `controls` and `meters`, `pads` is **one object** (not a list of rules); a colour of its own per pad goes in `colors`. It only works on pads registered that way; a pad that a device draws entirely by itself stays as it was.
+
+```json
+"design": {
+  "pads": {
+    "shape": "circle", "size": "m", "color": "device", "idle": "tint", "active": "fill", "led": "center", "hit": "flash", "press": "depress", "gap": "normal",
+    "colors": { "pat.kick": "#ff5a4f", "role:step": "#8899aa", "group:hat": "#3ddcff" }
+  }
+}
+```
+
+| Key | Values | Meaning |
+|---|---|---|
+| `shape` | `circle`, `square`, `rounded`, `rect` | The shape: round, square, rounded square (the default face) or a landscape 3 : 2 rectangle. There is no `none`: a skin does not hide a pad. |
+| `size` | `xs`, `s`, `m`, `l`, `xl`, or a number 0.6 to 2.0 | The size relative to the device's default size. For step buttons (`.st`) it multiplies their current dimensions. |
+| `color` | `neutral`, `device`, `palette` | Where a pad's colour comes from: `neutral` is one colour from the theme for all pads, `device` the colour the device gave per pad (for example per sound), `palette` the colours from `palette`, cycling over the pads. A pad without a device colour falls back to the theme. |
+| `palette` | list of 2 to 16 colours `#rgb` / `#rrggbb` | The palette for `color: "palette"`. The validator gives a warning if `color` is anything else. |
+| `colors` | object `{ "<key>": "#rrggbb" }`, at most 64 keys | A colour of its own per pad; it wins over `color` and `palette`. The key is an id (`"pat.kick"`), `"role:<role>"` (`"role:step"`) or `"group:<group>"`. A device's ids and groups come from its register (`node contract/validate-instrument.mjs <device> --controls`). |
+| `idle` | `neutral`, `tint` | The resting colour: `neutral` keeps a pad neutral at rest and lights it up in its own colour when active; `tint` already tints it lightly in its own colour at rest. |
+| `active` | `fill`, `border`, `glow`, `none` | What an active pad (on, or the step is on) looks like: `fill` a fill in the bright colour, `border` a border in the bright colour on a dark fill, `glow` a glow around it, `none` no difference (only the lamp, if one is chosen). |
+| `led` | `none`, `center`, `top`, `bottom`, `left`, `right` | A lamp in the pad that burns when active, in its own colour. |
+| `hit` | `flash`, `none` | Feedback when the device makes a pad light up without its state changing (`flash()`, a step that fires, the play cursor). |
+| `press` | `depress`, `glow`, `none` | Feedback while pressing: the pad sinks, glows or nothing. Visual only. |
+| `gap` | `tight`, `normal`, `wide` | The space between the step buttons of `host.ui.steps`. |
+
+- **Merging:** `design.pads` is merged per key (the appearance over the skin), and `colors` per entry.
+- **Default** (no skin, or no `pads`): the DOM, classes and look of the device itself, also for step buttons and pad buttons of its own. A new pad from `host.ui.pad` then has the neutral default face from the theme.
+- **The host only sets CSS classes, `data-pk-*` and the variables `--pk-pad-color` and `--pk-pad-size`** on the element. The device's classes `on`, `cur` and `q` stay the device's. A skin sets no value and switches nothing.
+- **A skin does not hide a pad.** There is no `shape: "none"`; the validator gives an error for it.
+- **Contrast:** choose colours that can be seen against the colour scheme; the Skins panel checks colours of your own with the designer's colour picker.
+- **Unknown ids:** a key in `colors` that the device does not have is ignored by the host; with `--device` the validator gives a warning (also for an id that is not a pad or step).
+
+### Small screen (`display`, from 0.6)
+
+With `design.display` a skin chooses the **face of a choice list**: instead of a dropdown a small screen like on physical devices, with the current choice and the buttons < and > (and [ok]), and a larger panel when you click it. It works on choices a device has the host draw with `host.ui.select` or `host.ui.display` (device contract §12f) and, if `targets` names it, on the preset and tune picker in the card head. The **model** stays the choice list itself: value, `onchange`, `setState`, presets and songs do not change. Like `pads`, `display` is **one object**.
+
+```json
+"design": {
+  "display": { "style": "lcd", "nav": "arrows+ok", "commit": "ok", "lines": 3, "width": 220, "expand": "click", "targets": ["select", "preset"], "color": "accent" }
+}
+```
+
+| Key | Values | Meaning |
+|---|---|---|
+| `style` | `dropdown`, `lcd`, `oled`, `segment`, `paper` | The face: `dropdown` is the device's ordinary choice list (the default), `lcd` a green-grey LCD with dark text, `oled` light text on black, `segment` seven-segment digits and large letters, `paper` dark text on a light strip. There is no `none`: a skin does not hide the choice. |
+| `nav` | `arrows`, `arrows+ok`, `none` | The controls next to the screen: `arrows` are < and > (the default), `arrows+ok` adds an [ok] button, `none` leaves only the screen; a click on it opens the panel. |
+| `commit` | `live`, `ok` | `live` sets the choice straight away with < and > (the default), `ok` only on [ok] in the panel. |
+| `lines` | integer 1 to 3 | The number of lines on the screen: the current choice, with 2 and 3 also the previous and the next. |
+| `width` | `auto` or a number 80 to 400 (px) | The width of the screen. |
+| `expand` | `click`, `button`, `off` | How the larger panel opens: on a click on the screen (the default), with a button of its own, or not at all. With `nav: "none"` and `expand: "off"` nothing can be operated; the validator gives a warning and the host keeps it operable anyway. |
+| `targets` | list of `select`, `preset`, `tune` (not empty, no duplicates) | Where the screen applies: `select` for the device's choice lists (the default), `preset` for the preset picker and `tune` for the tune picker in the card head. If a skin does not name `preset` or `tune`, the card head stays the ordinary choice list. |
+| `color` | `"accent"`, `"default"` or `#rgb` / `#rrggbb` | The colour of the text or the LCD light; `default` is the style's own screen colour. |
+
+- **Enlarging.** A click opens a floating panel with the list, a search field (from 12 choices, or the number the device gave in `searchAt`), large < and >, [ok] and [cancel]. Escape closes it and returns the focus; arrows and Enter work. The width is at most 32 rem (or the width minus 2 rem), the height at most 70% of the screen or 28 rem; on a phone it fills almost the whole screen, on a computer never.
+- **Accessibility:** the screen is a `combobox` with visible, named < and > buttons; keyboard and screen reader work like with the ordinary choice list.
+- **The card head.** For `preset` and `tune` the skin only replaces the face of the choice list and the previous and next buttons; Save, Browse and the part (`ppart`, `ptune`) keep working as they did. Without a skin or without `targets: ["preset"]` the card head is identical to now.
+- **Merging:** per key, the appearance over the skin. **Default** (no skin, or no `display`, or `style: "dropdown"`) is the current look.
+- **Haptics:** < and > and a choice give the skin's `click` haptic (`haptics.click`).
+- **A skin does not hide the choice and sets no value.**
+
 ### What "works on all devices" means
 
 | Part | Reach in layer 1 |
@@ -457,7 +522,7 @@ skins/
 
 ## 10. Versions
 
-This contract has a version `major.minor` (now **0.5**), recorded in the field `skinsContract` of every skin.
+This contract has a version `major.minor` (now **0.6**), recorded in the field `skinsContract` of every skin.
 
 | Difference with the version of the host | What the host does |
 |---|---|
@@ -469,7 +534,7 @@ This contract has a version `major.minor` (now **0.5**), recorded in the field `
 - Unknown fields, also inside an appearance or in `when`, **are ignored** and not rejected. The validator reports them with a warning to catch typos.
 - `formatVersion` (now `1`) is the version of the file layout itself; `skinsContract` is the version of this contract.
 - Keep `id` and `device` the same in a new version of a skin and raise `version`: the newer `version` wins.
-- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.5".
+- This contract, the validator (`validate-skin.mjs`) and the host belong to the same version. The first lines of `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` and `validate-skin.mjs` each name "v0.6".
 
 **Changes from 0.1 to 0.2:**
 
@@ -517,6 +582,18 @@ This contract has a version `major.minor` (now **0.5**), recorded in the field `
 | Device change | | none; device contract stays v1.18 |
 | Validator | checks `design`, `controls` and `meters` | also checks `sections` (shape, ranges, at most 32 rules, a `match` other than `group:` or `*` is an error) and `size.width` (outside 200 to 1600 is an error), gives a warning for `sections` or `size` in a file below 0.5 and, with `--device`, for an unknown group |
 | Existing skins from 0.1 up to and including 0.4 | | keep working unchanged |
+
+**Changes from 0.5 to 0.6:**
+
+| Item | 0.5 | 0.6 |
+|---|---|---|
+| `skinsContract` | `"0.5"` | `"0.6"`; `"0.1"` up to and including `"0.5"` stay valid |
+| `design.pads` | does not exist | new, optional: one object `{ shape, size, color, palette, colors, idle, active, led, hit, press, gap }` (§4b); `colors` gives a colour of its own per pad (at most 64 keys) |
+| `design.display` | does not exist | new, optional: one object `{ style, nav, commit, lines, width, expand, targets, color }` (§4b): a small screen with < > and [ok] instead of a choice list, with an enlarged panel |
+| Addressing pads and steps | not possible | pads from `host.ui.pad`, step buttons from `host.ui.steps` with options and buttons of its own with `data-pk-role="pad"` or `"step"`; per pad through `colors` (id, `role:<role>` or `group:<group>`) |
+| Device change | | device contract v1.22 (`host.ui.pad`, `host.ui.display`, `host.ui.steps` with a 5th argument); a device that does nothing keeps working and gets no pad or small-screen face |
+| Validator | checks `design`, `controls`, `meters` and `sections` | also checks `pads` (values, a palette of 2 to 16 colours, `colors` with at most 64 keys, `shape: "none"` is an error) and `display` (values, `style: "none"` is an error), gives a warning for `pads` or `display` in a file below 0.6 and, with `--device`, for unknown ids, groups and roles in `pads.colors` |
+| Existing skins of 0.1 up to and including 0.5 | | keep working unchanged |
 
 ---
 
@@ -584,6 +661,11 @@ What the validator checks:
 | `design.size`: not an object, or `width` not a number from 200 to 1600 | error |
 | `design.sections`: a rule without a property besides `match`; an unknown key in a rule; `design.size` without `width`; `sections` or `size` in a file with `skinsContract` `"0.4"` or lower | warning |
 | With `--device <device>`: a group in `design.sections` that the device does not publish (every group in the register counts, meters too) | warning |
+| `design.pads`: not an object (a list too), a value outside the list or range (`shape`, `size`, `color`, `idle`, `active`, `led`, `hit`, `press`, `gap`), `shape: "none"`, a `palette` that is not a list of 2 to 16 colours, `colors` that is not an object, more than 64 keys in `colors` or a value that is not a colour | error |
+| `design.pads`: an empty object; an unknown key; a key in `colors` with an invalid form or a `role:` other than `pad` or `step`; `palette` while `color` is not `palette`; `color: "palette"` without `palette`; `pads` or `display` in a file with `skinsContract` `"0.5"` or lower | warning |
+| `design.display`: not an object, a value outside the list or range (`style`, `nav`, `commit`, `lines`, `width`, `expand`, `targets`, `color`), `style: "none"`, `targets` empty, with duplicates or with an unknown name | error |
+| `design.display`: an empty object; an unknown key; `nav: "none"` with `expand: "off"`; `nav`, `commit`, `lines`, `width`, `expand` or `color` with `style: "dropdown"`; `targets` with `preset` or `tune` with `style: "dropdown"` | warning |
+| With `--device <device>`: an id, group or role in `pads.colors` that the device does not publish as a pad or step; `pads` for a device without pads or steps; `display` with `select` in `targets` for a device without a choice list | warning |
 
 **Checking against a device (`--device`).** With `--device <device.patchkamer-device.js>` the validator loads the device (through `contract/validate-instrument.mjs`, which knows the register of ids, roles and groups) and gives a warning for every `match` that touches nothing: an unknown id, an unknown group, a role the device does not have. For `design.meters` it only looks at the device's meters (role `meter`) and reports an unknown meter id, a group without a meter and a device without meters. It is always a warning and never an error, because a newer device version may add an id later. A table of what a device registers comes from `node contract/validate-instrument.mjs <device> --controls`.
 
@@ -597,18 +679,17 @@ The validator cannot see whether the CSS looks right or whether a selector match
 
 ---
 
-## 13. What is not in version 0.5 yet
+## 13. What is not in version 0.6 yet
 
-Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b); version 0.3 (layer 2, release A "ids and roles") adds `design.controls`: face, size and colour of the controls that a device registers; version 0.4 (layer 2, release C "meters") adds `design.meters`: face (bar, LED ladder, round VU), direction, length, width, ballistics, scale and colour of the meters that a device has the host draw; version 0.5 (layer 2, release B1 "sections") adds `design.sections` and `design.size`: frame, columns, spacing, bare, label place and alignment of the groups of controls of a device, and a card width per appearance. Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version, in this order:
+Version 0.1 fixes the format and the way to the user; version 0.2 (layer 1) adds the design choices that work on all devices (§4b); version 0.3 (layer 2, release A "ids and roles") adds `design.controls`: face, size and colour of the controls that a device registers; version 0.4 (layer 2, release C "meters") adds `design.meters`: face (bar, LED ladder, round VU), direction, length, width, ballistics, scale and colour of the meters that a device has the host draw; version 0.5 (layer 2, release B1 "sections") adds `design.sections` and `design.size`: frame, columns, spacing, bare, label place and alignment of the groups of controls of a device, and a card width per appearance; version 0.6 (layer 2, release D "pads and small screen") adds `design.pads` and `design.display`: shape, size, colour and feedback of pads and steps, and a small screen instead of a choice list. Beyond that, the content of a skin is still a **placeholder**: CSS and images without further requirements. Deliberately later, in a next version, in this order:
 
-- **pads and small screen** (release D): `host.ui.pad` and `host.ui.display`, with `design.pads` (shape, colour, feedback) and `design.display` (style, navigation, enlarging);
 - **panels and layout** (release B2): `design.layout.panels` with `host.ui.group`: **rearranging** and grouping controls with a graphic separation. A skin can only move controls, never hide them. Sections (0.5) rearrange nothing: they only style a group that already has an element of its own;
 - artwork for front panels, with the positions of the controls on it;
 - a contract per device for style hooks: which classes, variables and `part` names a device fixes and keeps stable (for now that is to be established per device, §4).
 
 Freek still has to supply the requirements for these. Until then, invent nothing: build a skin with only what is in this contract.
 
-**Outlook (not yet available).** Layer 2 further brings building blocks, layout, pads and a small screen: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now (except `design.controls`, `design.meters`, `design.sections` and `design.size`); `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics`, `knobs` and `controls`), and the designer in the Skins panel is a first step. Do not write anything for them.
+**Outlook (not yet available).** Layer 2 further brings building blocks and layout: a skin can then also decide how a device is built, not only the colour and behaviour of the host. Layer 3 is an editor in which you compose a skin. Neither exists now (except `design.controls`, `design.meters`, `design.sections`, `design.size`, `design.pads` and `design.display`); `design` stays extensible for them (new sections next to `ports`, `colors`, `haptics`, `knobs` and `controls`), and the designer in the Skins panel is a first step. Do not write anything for them.
 
 ---
 
@@ -657,12 +738,13 @@ This is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`
 ## 15. Checklist for delivery
 
 - The file is named `<name>.patchkamer-skin.json` (without a version number) and is in `skins/library/<device-id>/`, with that folder equal to `device`.
-- `skinsContract` is `"0.5"` (or `"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` if the skin has no `sections`/`size`/`meters`/`controls`/`design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.6"` (or `"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` if the skin has no `pads`/`display`/`sections`/`size`/`meters`/`controls`/`design`), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` and the appearance names are English and brand-free; `license` is `CC0-1.0`.
 - Any `design` contains only keys from §4b with valid values; colours are `#rgb` or `#rrggbb`.
 - Any `design.controls` has at most 64 rules, aims only at ids, roles and groups the device publishes (`node skins/contract/validate-skin.mjs <skin> --device <device>` without a warning) and hides nothing.
 - Any `design.meters` has at most 64 rules, aims only at meter ids and groups the device publishes (`--device` without a warning), uses no `role:`, gives no `width` or `orientation` to a `vu` and hides nothing.
 - Any `design.sections` has at most 32 rules, a `match` of `"*"` or `"group:<group>"` with a group the device publishes (`--device` without a warning) and limits the height of the card by choosing columns; any `design.size.width` is between 200 and 1600.
+- Any `design.pads` is one object (not a list), chooses a `shape` from the list (never `none`), has a `palette` of 2 to 16 colours only with `color: "palette"`, at most 64 keys in `colors` that only target pads, steps and groups that the device publishes (`--device` without a warning); any `design.display` chooses a `style` from the list (never `none`), leaves the small screen operable (not `nav: "none"` with `expand: "off"`) and names `preset` or `tune` in `targets` only with a screen style.
 - The CSS has no `@import` and no external `url(`; images are in `assets` and used with `var(--skin-asset-<name>)`.
 - It contains only selectors, classes and variables you have seen in the device file.
 - `node skins/contract/validate-skin.mjs <file>` gives one `OK` line without a warning.
