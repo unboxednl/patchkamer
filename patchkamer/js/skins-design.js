@@ -28,7 +28,8 @@ const effColour=k=>getc(k)||(D.tab>0&&D.design.colors&&D.design.colors.custom&&D
 function build(preview){ const name=D.name.trim()||'Untitled', id=preview?draftId():D.dev.toLowerCase()+'.'+(slug(name)||'custom'), today=new Date(), pad=n=>String(n).padStart(2,'0');
   const hasCtl=(D.design.controls&&D.design.controls.length)||D.aps.some(a=>a.design&&a.design.controls&&a.design.controls.length);
   const hasMet=(D.design.meters&&D.design.meters.length)||D.aps.some(a=>a.design&&a.design.meters&&a.design.meters.length);
-  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
+  const hasSec=(D.design.sections&&D.design.sections.length)||D.design.size||D.aps.some(a=>a.design&&((a.design.sections&&a.design.sections.length)||a.design.size));
+  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
   if(D.author.trim()) j.author=D.author.trim().slice(0,100); j.created=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
   if(D.dflt) j.default=D.dflt; if(Object.keys(D.design).length) j.design=clone(D.design);
   j.appearances=D.aps.map(a=>{ const o={id:a.id,name:a.name}; if(a.description) o.description=a.description; if(a.when) o.when=clone(a.when); o.css=a.css||''; if(a.assets&&Object.keys(a.assets).length) o.assets=clone(a.assets); if(a.design&&Object.keys(a.design).length) o.design=clone(a.design); return o; });
@@ -89,7 +90,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
   selRow(box,pkt('m.dz_k_stijl'),'knobs','style',[['workspace',pkt('m.dz_k_workspace')],['rotary',pkt('m.dz_k_rotary')],['slider',pkt('m.dz_k_slider')]]);
   selRow(box,pkt('m.dz_k_maat'),'knobs','size',[['m','M'],['s','S'],['l','L']]);
   box.appendChild(el('div','dz-hint',pkt('m.dz_k_hint',r?PK.knobCount(r):0)));
-  controlsSection(box); metersSection(box);
+  controlsSection(box); metersSection(box); sectionsSection(box);
   const btns=el('div','dz-btns'), sv=el('button','small',pkt('m.dz_opslaan')), ex=el('button','small',pkt('m.dz_exporteren')), cl=el('button','small',pkt('m.dz_sluiten'));
   sv.type=ex.type=cl.type='button'; sv.disabled=ex.disabled=!D.name.trim(); sv.onclick=save; ex.onclick=exportIt; cl.onclick=()=>skDesignClose(); btns.append(sv,ex,cl); box.appendChild(btns);
   const st=el('div','dz-hint'); st.id='dzStatus'; st.setAttribute('role','status'); box.appendChild(st); }
@@ -97,7 +98,7 @@ function paint(){ const box=PK.$('skDesign'); if(!box||!D) return; box.innerHTML
 // ---- Regelaars (skins 0.3, design.controls): lijst regels; de laatste passende regel wint; alleen gezicht, maat, lengte, dikte, duim, kleur en waardeweergave, nooit verbergen of waarde zetten ----
 const getCtl=()=>(ctxDesign().controls||[]);
 function setCtl(a){ const d=ctxDesign(); if(a.length) d.controls=a; else delete d.controls; if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }
-function ctlStat(){ const r=card(), n=PK.$('dzCtlStat'); if(n){ const st=r?PK.regStats(r):{n:0,m:0}; n.textContent=PK.pkt('m.dz_r_stat',st.n,st.m); } const m=PK.$('dzMetStat'); if(m){ const st=r?PK.meterStats(r):{n:0,m:0}; m.textContent=PK.pkt('m.dz_m_stat',st.n,st.m); } }
+function ctlStat(){ const r=card(), n=PK.$('dzCtlStat'); if(n){ const st=r?PK.regStats(r):{n:0,m:0}; n.textContent=PK.pkt('m.dz_r_stat',st.n,st.m); } const sc=PK.$('dzSecStat'); if(sc){ const st=r?PK.secStats(r):{n:0,m:0}; sc.textContent=PK.pkt('m.dz_s_stat',st.n,st.m); } const m=PK.$('dzMetStat'); if(m){ const st=r?PK.meterStats(r):{n:0,m:0}; m.textContent=PK.pkt('m.dz_m_stat',st.n,st.m); } }
 function controlsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).filter(x=>x.role!=='meter'):[]; box.appendChild(el('h4',null,pkt('m.dz_regelaars')));
   box.appendChild(el('div','dz-hint',pkt('m.dz_r_uitleg')));
   box.appendChild(el('div','dz-hint',reg.length?pkt('m.dz_r_hint',reg.length):pkt('m.dz_r_geen')));
@@ -176,6 +177,41 @@ function metersSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.meterList(r):[
       list.appendChild(row); });
     const add=el('button','small',pkt('m.dz_r_toevoegen')); add.type='button'; add.disabled=getMet().length>=64; add.onclick=()=>{ const a=getMet(); a.push({match:'*',face:'default'}); setMet(a); draw(); preview(); }; list.appendChild(add); };
   draw(); ctlStat(); }
+// ---- Secties (skins 0.5, design.sections + design.size): kader, kolommen, tussenruimte, kale regelaars, labelplaats per groep; breedte van de kaart bij een verschijning ----
+const getSec=()=>(ctxDesign().sections||[]);
+function setSec(a){ const d=ctxDesign(); if(a.length) d.sections=a; else delete d.sections; if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; }
+function sectionsSection(box){ const pkt=PK.pkt, r=card(), groups=r?PK.secGroups(r):[]; box.appendChild(el('h4',null,pkt('m.dz_secties')));
+  box.appendChild(el('div','dz-hint',pkt('m.dz_s_uitleg')));
+  box.appendChild(el('div','dz-hint',groups.length?pkt('m.dz_s_hint',groups.length):pkt('m.dz_s_geen')));
+  const stat=el('div','dz-hint'); stat.id='dzSecStat'; stat.setAttribute('role','status'); box.appendChild(stat);
+  { const rw=el('div','dz-row'), lb=el('label',null,pkt('m.dz_breedte')), inp=document.createElement('input'); inp.type='number'; inp.min=200; inp.max=1600; inp.step=10; inp.className='small'; inp.setAttribute('aria-label',pkt('m.dz_breedte')); inp.placeholder=pkt('m.dz_r_zoals');
+    const cur=(D.tab===0?D.design:(ctxAp().design||{})).size; inp.value=cur&&cur.width?cur.width:'';
+    inp.onchange=()=>{ const v=Math.round(+inp.value), d=ctxDesign(); if(inp.value===''||!(v>=200&&v<=1600)){ delete d.size; inp.value=''; } else { d.size={width:v}; inp.value=v; const c=card(); if(c){ if(!D.sizeTouched){ D.sizeTouched=true; D.prevW=c.w; } PK.setSize(D.cardId,v); } }
+      if(D.tab>0&&!Object.keys(d).length) delete ctxAp().design; preview(); };
+    rw.append(lb,inp); box.appendChild(rw); box.appendChild(el('div','dz-hint',pkt('m.dz_breedte_hint'))); }
+  const list=el('div','dz-rules'); box.appendChild(list);
+  const draw=()=>{ list.innerHTML=''; const rules=getSec();
+    rules.forEach((ru,i)=>{ const row=el('div','dz-rule'), head=el('div','dz-rhead'), nm=pkt('m.dz_r_n',i+1);
+      const ms=document.createElement('select'); ms.className='small'; ms.setAttribute('aria-label',pkt('m.dz_r_match')); const mo=[['*',pkt('m.dz_s_alle')],...groups.map(x=>['group:'+x,pkt('m.dz_r_groep_x',x)])];
+      if(!mo.some(o=>o[0]===ru.match)) mo.push([ru.match,ru.match]); mo.forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; ms.appendChild(o); }); ms.value=ru.match; ms.onchange=()=>{ ru.match=ms.value; preview(); };
+      const mv=(d)=>{ const a=getSec(), j=i+d; if(j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; draw(); preview(); };
+      const up=el('button','small','↑'), dn=el('button','small','↓'), rm=el('button','small','×'); [up,dn,rm].forEach(b=>b.type='button');
+      up.title=up.ariaLabel=pkt('m.dz_r_omhoog'); dn.title=dn.ariaLabel=pkt('m.dz_r_omlaag'); rm.title=rm.ariaLabel=pkt('m.dz_r_weg'); up.disabled=i===0; dn.disabled=i===rules.length-1;
+      up.onclick=()=>mv(-1); dn.onclick=()=>mv(1); rm.onclick=()=>{ const a=getSec(); a.splice(i,1); setSec(a); draw(); preview(); };
+      head.append(el('span','dz-rn',nm),ms,up,dn,rm); row.appendChild(head);
+      const sel=(label,key,opts,conv)=>{ const rw=el('div','dz-row'), lb=el('label',null,label), s=document.createElement('select'); s.className='small'; s.setAttribute('aria-label',label+' ('+nm+')');
+        [['',pkt('m.dz_r_zoals')],...opts].forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; s.appendChild(o); }); const cur=ru[key]===undefined?'':String(ru[key]); s.value=cur;
+        if(s.value!==cur){ const o=el('option',null,cur); o.value=cur; s.appendChild(o); s.value=cur; }
+        s.onchange=()=>{ if(s.value==='') delete ru[key]; else ru[key]=conv?conv(s.value):s.value; preview(); }; rw.append(lb,s); row.appendChild(rw); };
+      sel(pkt('m.dz_s_kader'),'frame',[['default',pkt('m.dz_r_g_default')],['none',pkt('m.dz_s_k_none')],['line',pkt('m.dz_s_k_line')],['raised',pkt('m.dz_s_k_raised')],['inset',pkt('m.dz_s_k_inset')],['floating',pkt('m.dz_s_k_floating')]]);
+      sel(pkt('m.dz_s_kolommen'),'columns',[['auto',pkt('m.dz_s_auto')],...[1,2,3,4,5,6,8,12].map(v=>[String(v),String(v)])],v=>v==='auto'?v:+v);
+      sel(pkt('m.dz_s_ruimte'),'gap',[['tight',pkt('m.dz_s_r_tight')],['normal',pkt('m.dz_s_r_normal')],['wide',pkt('m.dz_s_r_wide')]]);
+      sel(pkt('m.dz_s_kaal'),'bare',[['true',pkt('m.dz_m_aan')],['false',pkt('m.dz_m_uit')]],v=>v==='true');
+      sel(pkt('m.dz_s_labels'),'labels',[['default',pkt('m.dz_r_g_default')],['above',pkt('m.dz_s_l_above')],['below',pkt('m.dz_s_l_below')]]);
+      sel(pkt('m.dz_s_uitlijning'),'align',[['start',pkt('m.dz_s_u_start')],['center',pkt('m.dz_s_u_center')]]);
+      list.appendChild(row); });
+    const add=el('button','small',pkt('m.dz_r_toevoegen')); add.type='button'; add.disabled=getSec().length>=32; add.onclick=()=>{ const a=getSec(); a.push({match:'*',frame:'line'}); setSec(a); draw(); preview(); }; list.appendChild(add); };
+  draw(); ctlStat(); }
 function PK_when(w){ const p=[]; if(w.minWidth!=null) p.push('≥ '+w.minWidth+' px'); if(w.maxWidth!=null) p.push('≤ '+w.maxWidth+' px'); if(w.screens) p.push(w.screens.join(' / ')); return p.join(' · '); }
 function say(t){ const s=PK.$('dzStatus'); if(s) s.textContent=t; PK.status(t); }
 
@@ -198,7 +234,7 @@ function skDesignOpen(dev,src){ if(D) skDesignClose(true); const def=PK.Host.lat
   PK.$('skLibs').hidden=true; PK.$('skDesign').hidden=false; paint(); preview(); const first=PK.$('skDesign').querySelector('input'); if(first) first.focus({preventScroll:true}); } PK.skDesignOpen=skDesignOpen;
 function finish(){ D=null; const b=PK.$('skDesign'); if(b){ b.hidden=true; b.innerHTML=''; } const l=PK.$('skLibs'); if(l) l.hidden=false; if(PK.skPaintPanel) PK.skPaintPanel(); }
 function skDesignClose(quiet){ if(!D) return; const cid=D.cardId, r=card(), prev=r&&r.skPrev; PK.SK.draft=null;
-  if(r){ r.skPrev=null; PK.skinSet(cid,'',''); if(prev) PK.skinRestore(cid,prev); }
+  if(r){ r.skPrev=null; PK.skinSet(cid,'',''); if(prev) PK.skinRestore(cid,prev); if(D.sizeTouched) PK.setSize(cid,D.prevW===undefined?null:D.prevW); }
   finish(); } PK.skDesignClose=skDesignClose;
 PK.skDesigning=()=>!!D;
 })(window.__PK);

@@ -14,7 +14,7 @@ function skCardFor(dev){ const sel=PK.selected&&PK.Host.devices.get(PK.selected)
   for(const [k,r] of PK.Host.devices) if(r.def.id===dev) return k;
   if(!PK.Host.latest(dev)) return null; const before=new Set(PK.Host.devices.keys()); PK.placeNew(dev); return [...PK.Host.devices.keys()].find(k=>!before.has(k))||null; }
 PK.skCardFor=skCardFor;
-function skApplyFromPanel(dev,skinId,ap){ const id=skCardFor(dev); if(!id){ PK.status(PK.pkt('m.sk_apparaat_ontbreekt'),true); return; } PK.skinSet(id,skinId,ap); PK.select(id); }
+function skApplyFromPanel(dev,skinId,ap){ const id=skCardFor(dev); if(!id){ PK.status(PK.pkt('m.sk_apparaat_ontbreekt'),true); return; } PK.skinSet(id,skinId,ap,true); PK.select(id); }
 function skArm(b,label,ask,fn){ b.textContent=label; b.onclick=()=>{ if(b.dataset.arm){ fn(); } else { b.dataset.arm='1'; b.textContent=ask; setTimeout(()=>{ if(b.isConnected){ b.dataset.arm=''; b.textContent=label; } },2500); } }; }
 function skPaintPanel(){ const box=PK.$('skLibs'); if(!box) return; box.innerHTML=''; const mk=PK.mk, all=PK.skinAll();
   const devs=[...new Set(all.map(e=>e.skin.device))].sort((a,b)=>skDev(a).localeCompare(skDev(b),'nl'));
@@ -38,6 +38,7 @@ function skPaintPanel(){ const box=PK.$('skLibs'); if(!box) return; box.innerHTM
           const kn=[dz.knobs,...sk.appearances.map(a=>a.design&&a.design.knobs)].filter(Boolean); if(kn.length){ const st=PK.knobStats(); box.appendChild(mk('div','note',PK.pkt('m.sk_knop_stat',st.n,st.m))); }
           const hc=[dz.controls,...sk.appearances.map(a=>a.design&&a.design.controls)].some(c=>c&&c.length); if(hc){ let cr=null; for(const [,r] of PK.Host.devices) if(r.def.id===dev){ cr=r; break; } if(cr){ const st=PK.regStats(cr); box.appendChild(mk('div','note',PK.pkt('m.sk_ctl_stat',st.n,st.m))); } } }
         { const hm=[dz.meters,...sk.appearances.map(a=>a.design&&a.design.meters)].some(c=>c&&c.length); if(hm){ let cr=null; for(const [,r] of PK.Host.devices) if(r.def.id===dev){ cr=r; break; } if(cr){ const st=PK.meterStats(cr); box.appendChild(mk('div','note',PK.pkt('m.sk_met_stat',st.n,st.m))); } } }
+        { const hs=[dz.sections,...sk.appearances.map(a=>a.design&&a.design.sections)].some(c=>c&&c.length); if(hs){ let cr=null; for(const [,r] of PK.Host.devices) if(r.def.id===dev){ cr=r; break; } if(cr){ const st=PK.secStats(cr); box.appendChild(mk('div','note',PK.pkt('m.sk_sec_stat',st.n,st.m))); } } }
         const list=mk('div','prlist'); const item=(label,sub,fn,cur)=>{ const it=mk('div','pritem'), nm=mk('span','nm'), bb=mk('div','b'), bt=mk('button','small'); nm.textContent=label; if(sub){ const s=mk('small'); s.textContent=sub; nm.appendChild(s); } bt.textContent=PK.pkt('m.sk_kies'); bt.disabled=!PK.Host.latest(dev); bt.onclick=fn; if(cur) it.classList.add('cur'); bb.appendChild(bt); it.append(nm,bb); list.appendChild(it); };
         item('Auto',PK.pkt('m.sk_auto_uitleg'),()=>skApplyFromPanel(dev,sk.id,'auto'));
         sk.appearances.forEach(a=>item(a.name,[a.description,skWhen(a)].filter(Boolean).join(' · '),()=>skApplyFromPanel(dev,sk.id,a.id))); box.appendChild(list); } }); }); } PK.skPaintPanel=skPaintPanel;
@@ -46,7 +47,7 @@ function skinCardInit(id){ const r=PK.Host.devices.get(id); if(!r||!r.pbarEl) re
   el.innerHTML='<label><span class="pl"></span><select class="sksel"></select></label><label><span class="pl"></span><select class="skap"></select></label>';
   const [l1,l2]=el.querySelectorAll('.pl'), s1=el.querySelector('.sksel'), s2=el.querySelector('.skap');
   l1.textContent=PK.pkt('m.sk_skin'); l2.textContent=PK.pkt('m.sk_verschijning'); s1.setAttribute('aria-label',PK.pkt('m.sk_skin')); s2.setAttribute('aria-label',PK.pkt('m.sk_verschijning')); s1.title=PK.pkt('m.sk_skin_titel'); s2.title=PK.pkt('m.sk_verschijning_titel');
-  s1.onchange=()=>{ if(!r.skin||s1.value!==r.skin.id) PK.skinSet(id,s1.value,'auto'); }; s2.onchange=()=>{ if(r.skin) PK.skinSet(id,r.skin.id,s2.value); };
+  s1.onchange=()=>{ if(!r.skin||s1.value!==r.skin.id) PK.skinSet(id,s1.value,'auto',true); }; s2.onchange=()=>{ if(r.skin) PK.skinSet(id,r.skin.id,s2.value,true); };
   r.pbarEl.appendChild(el); r.skEl=el; skPaintPick(r); } PK.skinCardInit=skinCardInit;
 function skPaintPick(r){ const el=r.skEl; if(!el) return; const list=PK.skinsFor(r.def.id), show=list.length>0||!!r.skin, was=!el.hidden, s1=el.querySelector('.sksel'), s2=el.querySelector('.skap');
   el.hidden=!show; if(!show){ if(was) requestAnimationFrame(PK.drawCables); return; }
