@@ -12,7 +12,7 @@ function showHostUpdate(sha){ if(PK.$('pkHostUpdate')) return; const b=document.
   const later=document.createElement('button'); later.className='small'; later.type='button'; later.textContent=PK.pkt('m.host_later'); later.onclick=()=>b.remove();
   const never=document.createElement('button'); never.className='small'; never.type='button'; never.textContent=PK.pkt('m.host_niet_meer'); never.onclick=()=>{ try{ localStorage.setItem(HOSTCHK.key,sha); }catch(e){} b.remove(); };
   row.append(a,later,never); b.append(t,row); document.body.appendChild(b); }
-async function checkHostVersion(){ try{ if(!/^https?:$/.test(location.protocol)||!(window.crypto&&crypto.subtle)||navigator.onLine===false) return;
+async function checkHostVersion(){ try{ if(window.pkNative) return; /* the app has its own check (Settings > Version) and serves a page with one extra script tag */ if(!/^https?:$/.test(location.protocol)||!(window.crypto&&crypto.subtle)||navigator.onLine===false) return;
   const pageUrl=location.href.split('#')[0].split('?')[0], base=new URL('.',pageUrl).href;
   const own=[...new Set([pageUrl,...[...document.querySelectorAll('link[rel=stylesheet][href],script[src]')].map(e=>new URL(e.getAttribute('href')||e.getAttribute('src'),pageUrl).href)])].filter(u=>u===pageUrl||u.startsWith(base));
   const [mine,remote]=await Promise.all([Promise.all(own.map(u=>fetch(u,{cache:'no-cache'}).then(r=>r.ok?r.arrayBuffer():null))), PK.fetchJSON(`https://api.github.com/repos/${HOSTCHK.repo}/git/trees/${HOSTCHK.ref}:${HOSTCHK.path}?recursive=1`)]);
@@ -21,4 +21,29 @@ async function checkHostVersion(){ try{ if(!/^https?:$/.test(location.protocol)|
   const names=own.map(rel), hashes=await Promise.all(mine.map(gitBlobSha)), all=a=>gitBlobSha(new TextEncoder().encode(a.join('\n')));
   const own1=await all(names.map((n,i)=>n+':'+hashes[i])), rem=await all(names.map(n=>n+':'+(sha.get(n)||''))); if(own1===rem) return;
   let seen=''; try{ seen=localStorage.getItem(HOSTCHK.key)||''; }catch(e){} if(seen===rem) return; showHostUpdate(rem); }catch(e){} } PK.checkHostVersion=checkHostVersion;
+// ---------- Instellingen > Versie: het nummer van deze host; in de app ook dat van de app en de nieuwste uitgave op GitHub ----------
+const VERREL='unboxednl/patchkamer';
+const okVer=v=>typeof v==='string'&&/^\d+\.\d+\.\d+$/.test(v);
+function cmpVer(a,b){ const x=a.split('.').map(Number), y=b.split('.').map(Number); for(let i=0;i<3;i++){ const d=x[i]-y[i]; if(d) return d>0?1:-1; } return 0; }
+async function initVersion(){
+  const panel=PK.$('setPanel'), inner=panel&&panel.firstElementChild; if(!inner||PK.$('pkVersion')) return;
+  const box=document.createElement('div'); box.id='pkVersion';
+  const h=document.createElement('h3'); h.style.marginTop='12px'; h.textContent=PK.pkt('m.ver_titel');
+  const row=()=>{ const d=document.createElement('div'); d.className='wsrow'; return d; };
+  const rHost=row(), rApp=row(), rNew=row(), rLog=row();
+  const link=(href,txt)=>{ const a=document.createElement('a'); a.href=href; a.target='_blank'; a.rel='noopener'; a.textContent=txt; return a; };
+  rLog.append(link(`https://github.com/${VERREL}/blob/main/${PK.PK_LANG==='nl'?'CHANGELOG_NL.md':'CHANGELOG.md'}`,PK.pkt('m.ver_changelog')));
+  rHost.textContent=PK.pkt('m.ver_host','…'); const nat=window.pkNative&&window.pkNative.app;
+  box.append(h,rHost); if(nat) box.append(rApp,rNew); box.append(rLog); inner.append(box);
+  let hv='–'; try{ const r=await fetch('version.json',{cache:'no-cache'}); if(r.ok){ const j=await r.json(); if(okVer(j.version)) hv=j.version; } }catch(e){}
+  rHost.textContent=PK.pkt('m.ver_host',hv);
+  if(!nat) return;
+  const av=okVer(nat.version)?nat.version:'–'; rApp.textContent=PK.pkt('m.ver_app',av); rNew.textContent=PK.pkt('m.ver_zoeken');
+  try{ const j=await PK.fetchJSON(`https://api.github.com/repos/${VERREL}/releases/latest`), nv=String(j.tag_name||'').replace(/^v/,'');
+    if(!okVer(nv)) throw new Error('tag'); rNew.textContent=PK.pkt('m.ver_nieuwste',nv)+' · ';
+    if(okVer(av)&&cmpVer(nv,av)<=0) rNew.append(PK.pkt('m.ver_actueel'));
+    else { const u=String(j.html_url||''); rNew.append(PK.pkt('m.ver_nieuwer')+' '); if(u.startsWith('https://github.com/')) rNew.append(link(u,PK.pkt('m.ver_download'))); }
+  }catch(e){ rNew.textContent=PK.pkt('m.ver_onbekend'); }
+}
+(function(){ const b=PK.$('setBtn'); if(b) b.addEventListener('click',initVersion,{once:true}); })();
 })(window.__PK);

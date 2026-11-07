@@ -1,11 +1,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 # Builds the Patchkamer desktop app (portable Windows exe, with the native ASIO addon). Start it by hand
-# (Actions > App > Run workflow) or by pushing a tag app/vX.Y.Z.
+# (Actions > App > Run workflow) or by pushing a tag vX.Y.Z, which also makes a GitHub Release with the exe and the
+# changelog text of that version. The tag must match patchkamer/version.json.
 name: App
 on:
   workflow_dispatch:
   push:
-    tags: ['app/v*']
+    tags: ['v*']
 env:
   # Official download of the ASIO SDK 2.3.4 (2025-10-15), used under its GPLv3 option. Not stored in this repo.
   ASIO_SDK_URL: https://download.steinberg.net/sdk_downloads/ASIO-SDK_2.3.4_2025-10-15.zip
@@ -24,6 +25,13 @@ jobs:
         working-directory: app
     steps:
       - uses: actions/checkout@v5
+      - name: Tag matches version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        working-directory: .
+        run: |
+          $v = (Get-Content patchkamer/version.json -Raw | ConvertFrom-Json).version
+          if ('v' + $v -ne $env:GITHUB_REF_NAME) { throw "tag $env:GITHUB_REF_NAME does not match patchkamer/version.json ($v)" }
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -47,3 +55,23 @@ jobs:
         with:
           name: Patchkamer-portable
           path: app/dist/*.exe
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: Patchkamer-portable
+          path: dist
+      - name: Release notes from CHANGELOG.md
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '/^## /{p=index($0,"## " v)==1; next} p' CHANGELOG.md > notes.md
+          test -s notes.md || echo "See CHANGELOG.md" > notes.md
+      - run: gh release create "$GITHUB_REF_NAME" dist/*.exe --title "Patchkamer ${GITHUB_REF_NAME#v}" --notes-file notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}

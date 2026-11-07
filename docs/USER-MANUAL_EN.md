@@ -351,6 +351,7 @@ The features that speed up your workflow the most, in one list:
 - **Display:** the style of the cables, their opacity, the cable color (by category or by type), the scale of the whole interface, slider or rotary knobs for the host controls, and the text size of menus and library.
 - **Offer to connect:** a switch in Settings and in the ☰ menu. On a phone or tablet it is on by default, on a computer off; your own choice always wins.
 - **Simplify cards when zoomed out:** below about 55% zoom, cards show only their header; double-click or double-tap zooms in. Can be switched off.
+- **Version:** at the bottom of Settings is the version of Patchkamer and a link to the changelog (what changed per version). In the desktop app it also shows the version of the app, the latest release on GitHub and a download link when yours is older.
 - **Links:** at the bottom are links to the GitHub repository and to this user manual, in the language of your screen, and to the contract for device builders.
 - **Color** (top right): dark, light or retro.
 

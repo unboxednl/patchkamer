@@ -351,6 +351,7 @@ De functies die de werkwijze het meest versnellen, op een rij:
 - **Weergave:** de stijl van de kabels, hun dekking, de kabelkleur (per categorie of per soort), de schaal van de hele interface, schuif of draaiknop voor de knoppen van de host, en de tekstgrootte van menu's en bibliotheek.
 - **Automatisch koppelen:** schakelaar in Instellingen en in het ☰-menu. Op een telefoon of tablet staat hij standaard aan, op een computer uit; je eigen keuze wint altijd.
 - **Kaarten vereenvoudigen bij uitzoomen:** onder zo'n 55% zoom tonen kaarten alleen hun kop; dubbelklik of dubbeltik zoomt in. Uit te zetten.
+- **Versie:** onderaan Instellingen staat de versie van Patchkamer en een link naar de changelog (wat er per versie veranderde). In de desktop-app staat ook de versie van de app, de nieuwste uitgave op GitHub en een downloadlink als jouw versie ouder is.
 - **Links:** onderaan staan links naar de GitHub-repository en naar deze gebruikershandleiding, in de taal van je scherm, en naar het contract voor wie apparaten bouwt.
 - **Kleur** (rechtsboven): donker, licht of retro.
 
