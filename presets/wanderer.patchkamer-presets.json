@@ -9,6 +9,9 @@
   "tree": [
     {
       "folder": "Lead Lines",
+      "tags": [
+        "instrument/lead"
+      ],
       "items": [
         {
           "name": "Calm Minor Line",
@@ -1344,6 +1347,9 @@
     },
     {
       "folder": "Basslines",
+      "tags": [
+        "instrument/bass"
+      ],
       "items": [
         {
           "name": "Root Walker",

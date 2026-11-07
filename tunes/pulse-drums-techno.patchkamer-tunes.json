@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Techno kits for Pulse Drums in eight styles: techno, minimal, peak time, hard techno, dub techno, acid, electro and breaks. The kits use what Pulse adds: the kick layers, FM percussion, polymetric channel lengths, rumble and grit. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune.",
+ "tags": [
+  "instrument/drums/kit"
+ ],
  "tree": [
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Hypnotic",
@@ -1226,6 +1232,9 @@
   },
   {
    "folder": "Minimal",
+   "tags": [
+    "style/minimal"
+   ],
    "items": [
     {
      "name": "Click Minimal",
@@ -1893,6 +1902,9 @@
   },
   {
    "folder": "Peak Time",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Main Room",
@@ -2610,6 +2622,9 @@
   },
   {
    "folder": "Hard Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Rave",
@@ -3214,6 +3229,9 @@
   },
   {
    "folder": "Dub Techno",
+   "tags": [
+    "style/dub-techno"
+   ],
    "items": [
     {
      "name": "Chord Haze",
@@ -3793,6 +3811,9 @@
   },
   {
    "folder": "Acid",
+   "tags": [
+    "style/acid"
+   ],
    "items": [
     {
      "name": "Squelch",
@@ -4493,11 +4514,17 @@
   },
   {
    "folder": "Electro",
+   "tags": [
+    "style/electro"
+   ],
    "items": [
     {
      "name": "Breakbeat",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "style/breakbeat"
+     ],
      "state": {
       "kit": "Custom",
       "rumble": 0.096,
@@ -5136,6 +5163,9 @@
   },
   {
    "folder": "Breaks",
+   "tags": [
+    "style/breakbeat"
+   ],
    "items": [
     {
      "name": "Two-Step",
@@ -5367,6 +5397,9 @@
      "name": "Jungle",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "style/jungle"
+     ],
      "state": {
       "kit": "Custom",
       "rumble": 0.112,

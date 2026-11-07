@@ -9,6 +9,9 @@
   "tree": [
     {
       "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
       "items": [
         {
           "name": "Bright Four",
@@ -182,6 +185,9 @@
     },
     {
       "folder": "Ballad",
+      "tags": [
+        "style/ballad"
+      ],
       "items": [
         {
           "name": "Quiet Room",
@@ -327,6 +333,9 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Epic Rise",
@@ -500,6 +509,9 @@
     },
     {
       "folder": "Film Score",
+      "tags": [
+        "style/film-score"
+      ],
       "items": [
         {
           "name": "Quiet Wonder",
@@ -645,6 +657,9 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Floating Garden",
@@ -818,6 +833,9 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Uplifting Anthem",
@@ -963,6 +981,9 @@
           "name": "Epic Break",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "style/breakbeat"
+          ],
           "state": {
             "scene": 0,
             "launch": "bar",
@@ -991,6 +1012,9 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Neon Drive",
@@ -1164,6 +1188,9 @@
     },
     {
       "folder": "Lo-fi",
+      "tags": [
+        "style/lofi"
+      ],
       "items": [
         {
           "name": "Dusty Keys",
@@ -1309,6 +1336,9 @@
     },
     {
       "folder": "Neo-classical",
+      "tags": [
+        "style/neo-classical"
+      ],
       "items": [
         {
           "name": "Moonlit Etude",
@@ -1454,6 +1484,9 @@
     },
     {
       "folder": "Deep House",
+      "tags": [
+        "style/deep-house"
+      ],
       "items": [
         {
           "name": "Warehouse Warmth",
@@ -1599,6 +1632,10 @@
     },
     {
       "folder": "Funk & Disco",
+      "tags": [
+        "style/funk",
+        "style/disco"
+      ],
       "items": [
         {
           "name": "Mirror Ball",

@@ -6,6 +6,9 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Drones, pads, textures and rhythmic root patterns for Drone Synth in ten styles: Drone, Ambient, Dark Ambient, Techno, Industrial, Cinematic, Meditation, Sci-Fi, Doom and Minimal. Flat tunes sound on their own (hold is on); pattern tunes carry a root sequence and need the transport.",
+ "tags": [
+  "instrument/drone"
+ ],
  "tree": [
   {
    "folder": "Drone",
@@ -2345,6 +2348,9 @@
   },
   {
    "folder": "Ambient",
+   "tags": [
+    "style/ambient"
+   ],
    "items": [
     {
      "name": "Glass Pad",
@@ -4681,6 +4687,9 @@
   },
   {
    "folder": "Dark Ambient",
+   "tags": [
+    "style/dark-ambient"
+   ],
    "items": [
     {
      "name": "Cave Breath",
@@ -7017,6 +7026,9 @@
   },
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Rumble Offbeat",
@@ -9353,6 +9365,9 @@
   },
   {
    "folder": "Industrial",
+   "tags": [
+    "style/industrial"
+   ],
    "items": [
     {
      "name": "Metal Drone",
@@ -11356,6 +11371,9 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Tension Rise",
@@ -13692,6 +13710,9 @@
   },
   {
    "folder": "Meditation",
+   "tags": [
+    "style/meditation"
+   ],
    "items": [
     {
      "name": "Singing Bowl",
@@ -15695,6 +15716,9 @@
   },
   {
    "folder": "Sci-Fi",
+   "tags": [
+    "style/sci-fi"
+   ],
    "items": [
     {
      "name": "Reactor Core",
@@ -18031,6 +18055,9 @@
   },
   {
    "folder": "Doom",
+   "tags": [
+    "style/dark-ambient"
+   ],
    "items": [
     {
      "name": "Fuzz Throne",
@@ -20034,6 +20061,9 @@
   },
   {
    "folder": "Minimal",
+   "tags": [
+    "style/minimal"
+   ],
    "items": [
     {
      "name": "Single Tone",

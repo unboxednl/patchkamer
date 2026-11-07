@@ -6,6 +6,9 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Cosmic pads, drones, bells, impacts, sweeps and textures for Celestial Mechanics, the gravity synth where every note is a planet. Eleven styles: Space, Cinematic, Sci-Fi, Ambient, Dark Ambient, Experimental, Sound Design, Synthwave, Trance, Horror and Drone. Play chords and held notes; the tunes with a pulsar follow the transport clock.",
+  "tags": [
+    "instrument/texture"
+  ],
   "tree": [
     {
       "folder": "Space",
@@ -189,6 +192,9 @@
     },
     {
       "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Tension Bed",
@@ -369,6 +375,9 @@
     },
     {
       "folder": "Sci-Fi",
+      "tags": [
+        "style/sci-fi"
+      ],
       "items": [
         {
           "name": "Doppler Siren",
@@ -549,6 +558,9 @@
     },
     {
       "folder": "Ambient",
+      "tags": [
+        "style/ambient"
+      ],
       "items": [
         {
           "name": "Slow Tide",
@@ -729,6 +741,9 @@
     },
     {
       "folder": "Dark Ambient",
+      "tags": [
+        "style/dark-ambient"
+      ],
       "items": [
         {
           "name": "Black Hole Hum",
@@ -909,6 +924,9 @@
     },
     {
       "folder": "Experimental",
+      "tags": [
+        "style/experimental"
+      ],
       "items": [
         {
           "name": "Chaos Nebula",
@@ -1269,6 +1287,9 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Neon Orbit",
@@ -1424,6 +1445,9 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Supernova Pad",
@@ -1579,6 +1603,9 @@
     },
     {
       "folder": "Horror",
+      "tags": [
+        "style/horror"
+      ],
       "items": [
         {
           "name": "Cold Dread",
@@ -1759,6 +1786,9 @@
     },
     {
       "folder": "Drone",
+      "tags": [
+        "instrument/drone"
+      ],
       "items": [
         {
           "name": "Binary Star Drone",

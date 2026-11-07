@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.18 for building agents
+# Patchkamer — Instrument contract v1.19 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -27,6 +27,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.16 | Coverage of `params()`: every continuous control belongs in `params()` (`modExclude` for deliberate exclusions, `on`/`drift` for whatever would sound wrong when it moves unasked, §8); the validator gives a `warning` for a control that is not in `params()`, for a device with controls but no `params()` and for a param id without a control, and `--controls` shows the column `in params()` |
 | v1.17 | Clipboard: copying and pasting patterns and clips between devices. Optional `clipInfo()`, `getClip()`, `setClip(clip)` (all three or none) and the exchange format `patchkamer-clip` (JSON, time in ticks); the host puts the Copy and Paste buttons in the card bar and translates between devices; the validator checks the three methods and knows `--clip` (§13d) |
 | v1.18 | Meters: `host.ui.meter(parent, label, opts)` lets the host draw the level (bar, LED ladder or a round VU meter with a needle; length and width adjustable by a skin), from one or two `AnalyserNode`s (`source`) or through `set(level)`; a meter is in the register with role `meter`; a device on an older host without `host.ui.meter` falls back to its own drawing; the attribute `data-pk-suffix` (text after the label when linking to MIDI); the validator knows `host.ui.meter` and shows meters in `--controls` (§12e) |
+| v1.19 | Tags for tunes and presets: `tags` on a tune, folder or pack (paths such as `instrument/guitar/acoustic` and `style/hiphop`); the host shows them as an indented tree (Tunes and Presets, By instrument and By style). Only the packs change, not the devices (§13c) |
 
 ---
 
@@ -710,6 +711,14 @@ const t = Math.max(ctx.currentTime, o.contextTime + (midiEvent.timeStamp - o.per
             { "name": "Deep kick", "kind": "part", "part": "kick", "author": "…", "license": "LicenseRef-All-Rights-Reserved", "state": { } } ] }
 ```
 
+**Tags (v1.19, optional).** A tune or preset may have `tags`, and so may a folder or the whole pack; what is on a folder or the pack applies to everything below it. The host builds a tree from them on the Tunes and Presets tabs (**By instrument** and **By style**, indented), so a guitar or a jungle sound can be found without knowing which device it belongs to. A tag is a path of lowercase letters, digits and hyphens, separated by `/` (at most 4 levels, 60 characters, 12 tags per node): `instrument/guitar/acoustic`, `style/hiphop`. An invalid tag is ignored. The root is `instrument` (tunes only) or `style`; the host shows a tune at the deepest tag of each branch. Standard names, translated by the host (other names are allowed and shown with a capital): instruments `keys`, `piano` (`acoustic`, `electric`, `toy`, `harpsichord`), `organ`, `mallet` (`vibes`, `marimba`, `bell`), `guitar` (`acoustic`, `nylon`, `steel`, `electric`), `plucked` (`harp`, `koto`, `lute`), `bass` (`sub`, `pluck`, `synth`, `acid`), `strings` (`violin`, `cello`, `ensemble`, `pizzicato`), `brass` (`trumpet`, `trombone`, `section`), `woodwind` (`flute`, `clarinet`, `oboe`, `sax`), `voice` (`choir`), `lead`, `pad`, `pluck`, `drums` (`kit`, `kick`, `snare`, `hat`, `tom`, `cymbal`), `percussion`, `fx` (`riser`, `impact`), `chords`, `texture`, `drone`; styles `ambient`, `dark-ambient`, `cinematic`, `film-score`, `neo-classical`, `synthwave`, `techno`, `dub-techno`, `trance`, `electro`, `house`, `deep-house`, `pop`, `lofi`, `hiphop`, `trap`, `drum-and-bass`, `jungle`, `breakbeat`, `big-room`, `acid`, `dub`, `dubstep`, `funk`, `disco`, `soul`, `jazz`, `ballad`, `rock`, `garage`, `future-bass`, `glitch`, `noise`, `minimal`, `industrial`, `chiptune`, `sci-fi`, `experimental`, `hardstyle`, `eurodance`, `folk`, `world`, `flamenco`, `metallic`, `generative`, `meditation`, `horror`, `bass-music`.
+
+```json
+{ "format": "patchkamer-tunes", "formatVersion": 1, "device": "nl.yourname.string", "name": "Strings",
+  "tags": ["instrument/plucked"],
+  "tree": [ { "folder": "Folk", "tags": ["style/folk"], "items": [ { "name": "Open Guitar", "kind": "set", "tags": ["instrument/guitar"], "state": { } } ] } ] }
+```
+
 **Licenses.** Every tune, preset and song has a field `license` with an [SPDX](https://spdx.org/licenses/) code, and usually `author`. In Patchkamer the author chooses when saving between `CC-BY-4.0` (free to use with attribution) or `LicenseRef-All-Rights-Reserved` (all rights reserved). Other valid SPDX codes from files are shown and kept. At library level `license` is the default for new items. If a tune or song was made on the basis of someone else's, the host keeps that in `basedOn: { name|title, author, license }`. The host shows the license when loading or opening.
 
 **Song** (`name.patchkamer-song.json`), an export of a workspace:
@@ -1003,7 +1012,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.18
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.19
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1062,7 +1071,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.18
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.19
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -1126,7 +1135,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.18
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.19
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1204,7 +1213,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.18.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.19.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

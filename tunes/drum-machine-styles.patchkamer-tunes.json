@@ -6,9 +6,15 @@
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "Kits for Drum Machine in the most common styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave. Three kits per style, each with a groove and matching sound settings.",
+  "tags": [
+    "instrument/drums/kit"
+  ],
   "tree": [
     {
       "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
       "items": [
         {
           "name": "Warehouse",
@@ -347,6 +353,9 @@
     },
     {
       "folder": "House",
+      "tags": [
+        "style/house"
+      ],
       "items": [
         {
           "name": "Classic",
@@ -685,6 +694,9 @@
     },
     {
       "folder": "Trance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Uplifting",
@@ -1023,6 +1035,9 @@
     },
     {
       "folder": "Drum & Bass",
+      "tags": [
+        "style/drum-and-bass"
+      ],
       "items": [
         {
           "name": "Two-Step",
@@ -1361,6 +1376,9 @@
     },
     {
       "folder": "Dubstep",
+      "tags": [
+        "style/dubstep"
+      ],
       "items": [
         {
           "name": "Half-Time",
@@ -1699,6 +1717,9 @@
     },
     {
       "folder": "Hip-hop",
+      "tags": [
+        "style/hiphop"
+      ],
       "items": [
         {
           "name": "Boom Bap",
@@ -2037,6 +2058,10 @@
     },
     {
       "folder": "Funk & disco",
+      "tags": [
+        "style/funk",
+        "style/disco"
+      ],
       "items": [
         {
           "name": "Disco",
@@ -2375,11 +2400,17 @@
     },
     {
       "folder": "Electro",
+      "tags": [
+        "style/electro"
+      ],
       "items": [
         {
           "name": "Breakbeat",
           "kind": "set",
           "version": "1.0.0",
+          "tags": [
+            "style/breakbeat"
+          ],
           "state": {
             "pat": {
               "kick": [
@@ -2713,6 +2744,9 @@
     },
     {
       "folder": "Pop",
+      "tags": [
+        "style/pop"
+      ],
       "items": [
         {
           "name": "Dance Pop",
@@ -3051,6 +3085,9 @@
     },
     {
       "folder": "Rock",
+      "tags": [
+        "style/rock"
+      ],
       "items": [
         {
           "name": "Straight",
@@ -3389,6 +3426,9 @@
     },
     {
       "folder": "Jazz",
+      "tags": [
+        "style/jazz"
+      ],
       "items": [
         {
           "name": "Bossa",
@@ -3727,6 +3767,9 @@
     },
     {
       "folder": "Synthwave",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Retro Drive",

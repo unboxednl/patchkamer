@@ -6,9 +6,16 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Acid house and acid techno sounds for Acid Baselines, in the spirit of the classic eras: Chicago origins, rolling Frankfurt acid, minimal, squelch anthems, acid techno, acid trance, electro and deep acid. The AIcid folder goes further, with the extra oscillators, filter types and distortions of Acid Baselines 1.11.2. Each tune comes with its own bassline.",
+ "tags": [
+  "instrument/bass/acid"
+ ],
  "tree": [
   {
    "folder": "Chicago Origins",
+   "tags": [
+    "style/acid",
+    "style/house"
+   ],
    "items": [
     {
      "name": "Warehouse Squelch",
@@ -653,6 +660,10 @@
   },
   {
    "folder": "Frankfurt Rolling",
+   "tags": [
+    "style/acid",
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Rolling Thunder",
@@ -1297,6 +1308,10 @@
   },
   {
    "folder": "Minimal Acid",
+   "tags": [
+    "style/acid",
+    "style/minimal"
+   ],
    "items": [
     {
      "name": "Minimal Pulse",
@@ -2511,6 +2526,10 @@
   },
   {
    "folder": "Acid Techno",
+   "tags": [
+    "style/acid",
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Hard Drive",
@@ -3081,6 +3100,10 @@
   },
   {
    "folder": "Acid Trance",
+   "tags": [
+    "style/acid",
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Sunrise Acid",
@@ -3651,6 +3674,10 @@
   },
   {
    "folder": "Electro Acid",
+   "tags": [
+    "style/acid",
+    "style/electro"
+   ],
    "items": [
     {
      "name": "Electro Bounce",
@@ -4221,6 +4248,10 @@
   },
   {
    "folder": "Deep Acid",
+   "tags": [
+    "style/acid",
+    "style/deep-house"
+   ],
    "items": [
     {
      "name": "Deep Roll",

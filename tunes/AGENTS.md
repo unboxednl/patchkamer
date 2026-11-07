@@ -27,6 +27,10 @@ Eén pack per bestand, in deze map: `naam.patchkamer-tunes.json`. De bestandsnaa
 - `kind: 'part'`: de klank van één instrument binnen een drumcomputer. Alleen toegestaan als het apparaat `parts()`, `getPart(id)` en `setPart(id, data)` heeft. `state` is wat `getPart(id)` teruggeeft, en `part` is het `id` of `type` uit `parts()`.
 - `folder` mag in `folder` zitten.
 
+## Tags (contract v1.19)
+
+Geef elke nieuwe tune `tags`, zodat hij in de bibliotheek te vinden is op instrument en stijl (tabs Tunes en Presets, **Per instrument** en **Per stijl**). Zet wat voor alles in een pack of map geldt op het **pack** of de **map** (`"tags": [...]` naast `name` of `folder`), en alleen het afwijkende op de tune zelf. Een tag is een pad in kleine letters met streepjes: `instrument/guitar/acoustic`, `style/hiphop`. Gebruik de standaardnamen uit §13c van het contract (een gitaar is `instrument/guitar`, een koperblazer `instrument/brass`, jungle `style/jungle`); een eigen naam mag, maar wordt dan niet vertaald. Een mapnaam die een stijl is (Techno, Hip-hop) krijgt de bijbehorende `style/...`-tag op de map. Controleer dat elke tag geldig is: `/^[a-z0-9]+(-[a-z0-9]+)*(\/[a-z0-9]+(-[a-z0-9]+)*){0,3}$/`.
+
 ## De `state` moet kloppen
 
 Verzin geen velden. Lees de broncode van het apparaat: welke sleutels geeft `getPreset()`/`getState()`/`getPart()` terug, met welke bereiken en eenheden? Gebruik precies die sleutels met waarden binnen het bereik. Onbekende velden worden genegeerd en ontbrekende krijgen hun standaardwaarde. Zo'n tune klinkt dan anders dan jij bedoelde, zonder foutmelding.

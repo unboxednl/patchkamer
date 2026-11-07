@@ -9,11 +9,17 @@
  "tree": [
   {
    "folder": "Soul",
+   "tags": [
+    "style/soul"
+   ],
    "items": [
     {
      "name": "Warm Tine Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.45,
@@ -30,6 +36,9 @@
      "name": "Velvet Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.5,
@@ -46,6 +55,9 @@
      "name": "Soul Drawbars",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.3,
@@ -62,6 +74,9 @@
      "name": "Honey Vibes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.45,
@@ -78,6 +93,9 @@
      "name": "Round Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.25,
@@ -94,6 +112,9 @@
      "name": "Gentle Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "inst": "combpluck",
       "tone": 0.35,
@@ -110,11 +131,17 @@
   },
   {
    "folder": "Funk",
+   "tags": [
+    "style/funk"
+   ],
    "items": [
     {
      "name": "Funk Comb",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combpluck",
       "tone": 0.7,
@@ -131,6 +158,9 @@
      "name": "Greasy Organ",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.55,
@@ -147,6 +177,9 @@
      "name": "Slap Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.75,
@@ -163,6 +196,9 @@
      "name": "Funky Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.75,
@@ -179,6 +215,9 @@
      "name": "Tight Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.8,
@@ -195,6 +234,9 @@
      "name": "Bark Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.6,
@@ -211,11 +253,17 @@
   },
   {
    "folder": "Jazz",
+   "tags": [
+    "style/jazz"
+   ],
    "items": [
     {
      "name": "Mellow Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.3,
@@ -232,6 +280,9 @@
      "name": "Smoky Vibes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.5,
@@ -248,6 +299,9 @@
      "name": "Jazz Drawbars",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.2,
@@ -264,6 +318,9 @@
      "name": "Walking Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.3,
@@ -280,6 +337,9 @@
      "name": "Dark Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.3,
@@ -296,6 +356,10 @@
      "name": "Bell Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric",
+      "instrument/mallet/bell"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.9,
@@ -312,11 +376,17 @@
   },
   {
    "folder": "Pop",
+   "tags": [
+    "style/pop"
+   ],
    "items": [
     {
      "name": "Pop Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.55,
@@ -333,6 +403,9 @@
      "name": "Bright Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.6,
@@ -349,6 +422,10 @@
      "name": "Pluck Vibes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes",
+      "instrument/pluck"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.65,
@@ -365,6 +442,9 @@
      "name": "Pop Synth Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.5,
@@ -381,6 +461,9 @@
      "name": "Soft Combo Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.4,
@@ -397,6 +480,9 @@
      "name": "Stab Chords",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combpluck",
       "tone": 0.5,
@@ -413,11 +499,17 @@
   },
   {
    "folder": "Gospel",
+   "tags": [
+    "style/soul"
+   ],
    "items": [
     {
      "name": "Church Drawbars",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 1,
@@ -434,6 +526,9 @@
      "name": "Rotary Swell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.7,
@@ -450,6 +545,9 @@
      "name": "Praise Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.5,
@@ -466,6 +564,9 @@
      "name": "Low Pedal",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.1,
@@ -482,6 +583,9 @@
      "name": "Choir Combo",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/voice/choir"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.15,
@@ -498,6 +602,9 @@
      "name": "Soul Stabs",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.55,
@@ -514,11 +621,17 @@
   },
   {
    "folder": "Rock",
+   "tags": [
+    "style/rock"
+   ],
    "items": [
     {
      "name": "Rock Drawbars",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.75,
@@ -535,6 +648,9 @@
      "name": "Driven Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.6,
@@ -551,6 +667,9 @@
      "name": "Crunch Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.7,
@@ -567,6 +686,9 @@
      "name": "Grit Combo",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.8,
@@ -583,6 +705,9 @@
      "name": "Heavy Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.4,
@@ -599,6 +724,9 @@
      "name": "Garage Combo",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.6,
@@ -615,11 +743,17 @@
   },
   {
    "folder": "Disco",
+   "tags": [
+    "style/disco"
+   ],
    "items": [
     {
      "name": "Disco Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "inst": "combpluck",
       "tone": 0.6,
@@ -636,6 +770,9 @@
      "name": "Octave Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.6,
@@ -652,6 +789,9 @@
      "name": "Sparkle Vibes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.85,
@@ -668,6 +808,9 @@
      "name": "Disco Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.7,
@@ -684,6 +827,9 @@
      "name": "Strut Combo",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.25,
@@ -700,6 +846,9 @@
      "name": "Hot Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.65,
@@ -716,11 +865,17 @@
   },
   {
    "folder": "House",
+   "tags": [
+    "style/house"
+   ],
    "items": [
     {
      "name": "Stab Organ",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.5,
@@ -737,6 +892,9 @@
      "name": "Piano Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.6,
@@ -753,6 +911,9 @@
      "name": "Deep Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.3,
@@ -769,6 +930,9 @@
      "name": "Chord Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "inst": "combpluck",
       "tone": 0.4,
@@ -785,6 +949,9 @@
      "name": "Combo Hook",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.7,
@@ -801,6 +968,9 @@
      "name": "Vibe Hook",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.6,
@@ -817,11 +987,17 @@
   },
   {
    "folder": "Lo-fi",
+   "tags": [
+    "style/lofi"
+   ],
    "items": [
     {
      "name": "Dusty Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.35,
@@ -838,6 +1014,9 @@
      "name": "Wobbly Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.4,
@@ -854,6 +1033,9 @@
      "name": "Tape Vibes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.4,
@@ -870,6 +1052,9 @@
      "name": "Mellow Organ",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.15,
@@ -886,6 +1071,9 @@
      "name": "Sleepy Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.15,
@@ -902,6 +1090,9 @@
      "name": "Warbled Combo",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "combo",
       "tone": 0.2,
@@ -923,6 +1114,9 @@
      "name": "Skank Organ",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.5,
@@ -939,6 +1133,9 @@
      "name": "Bubble Organ",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.3,
@@ -955,6 +1152,9 @@
      "name": "Offbeat Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "inst": "combpluck",
       "tone": 0.5,
@@ -971,6 +1171,9 @@
      "name": "Dub Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.15,
@@ -987,6 +1190,9 @@
      "name": "Sunny Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.4,
@@ -1003,6 +1209,9 @@
      "name": "Reed Skank",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.55,
@@ -1019,11 +1228,17 @@
   },
   {
    "folder": "Ballad",
+   "tags": [
+    "style/ballad"
+   ],
    "items": [
     {
      "name": "Soft Tine",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
      "state": {
       "inst": "tine",
       "tone": 0.35,
@@ -1040,6 +1255,9 @@
      "name": "Tender Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/keys"
+     ],
      "state": {
       "inst": "reed",
       "tone": 0.35,
@@ -1056,6 +1274,9 @@
      "name": "Ballad Vibes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.4,
@@ -1072,6 +1293,10 @@
      "name": "Warm Organ Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/organ",
+      "instrument/pad"
+     ],
      "state": {
       "inst": "organ",
       "tone": 0.25,
@@ -1088,6 +1313,9 @@
      "name": "Heart Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "inst": "bass",
       "tone": 0.2,
@@ -1104,6 +1332,9 @@
      "name": "Glass Bells",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "inst": "vibes",
       "tone": 0.9,

@@ -9,11 +9,17 @@
  "tree": [
   {
    "folder": "Industrial",
+   "tags": [
+    "style/industrial"
+   ],
    "items": [
     {
      "name": "Press Line Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -56,6 +62,9 @@
      "name": "Rivet Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -98,6 +107,9 @@
      "name": "Factory Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -140,6 +152,9 @@
      "name": "Anvil Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -182,6 +197,9 @@
      "name": "Grinder Texture",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -224,6 +242,9 @@
      "name": "Furnace Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -266,11 +287,17 @@
   },
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Warehouse Sub",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/sub"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -313,6 +340,9 @@
      "name": "Rolling Rumble",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -355,6 +385,9 @@
      "name": "Peak Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -397,6 +430,10 @@
      "name": "Acid Metal Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/acid",
+      "instrument/lead"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -439,6 +476,9 @@
      "name": "Tension Riser",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/riser"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -481,6 +521,9 @@
      "name": "Rave Siren",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -523,11 +566,17 @@
   },
   {
    "folder": "Dark Ambient",
+   "tags": [
+    "style/dark-ambient"
+   ],
    "items": [
     {
      "name": "Cathedral Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "mode": "drone",
       "wave": "triangle",
@@ -570,6 +619,9 @@
      "name": "Cold Storage Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -654,6 +706,9 @@
      "name": "Hollow Bells",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -738,6 +793,9 @@
      "name": "Night Shift Texture",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -780,11 +838,17 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Impact Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -827,6 +891,9 @@
      "name": "Low Boom",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -911,6 +978,9 @@
      "name": "Brass Metal Swell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/brass"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -995,6 +1065,9 @@
      "name": "Dread Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "mode": "drone",
       "wave": "sawtooth",
@@ -1294,6 +1367,9 @@
   },
   {
    "folder": "Horror",
+   "tags": [
+    "style/horror"
+   ],
    "items": [
     {
      "name": "Creaking Hull",
@@ -1341,6 +1417,9 @@
      "name": "Dissonant Siren",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx"
+     ],
      "state": {
       "mode": "drone",
       "wave": "sine",
@@ -1425,6 +1504,9 @@
      "name": "Hospital Hum",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "mode": "drone",
       "wave": "sine",
@@ -1509,6 +1591,9 @@
      "name": "Whisper Pipes",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/texture"
+     ],
      "state": {
       "mode": "drone",
       "wave": "sine",
@@ -1551,11 +1636,17 @@
   },
   {
    "folder": "Experimental",
+   "tags": [
+    "style/experimental"
+   ],
    "items": [
     {
      "name": "Ratio Bells",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -1682,6 +1773,9 @@
      "name": "Wire Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -1724,6 +1818,9 @@
      "name": "Chaos Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -1808,6 +1905,9 @@
   },
   {
    "folder": "Noise",
+   "tags": [
+    "style/noise"
+   ],
    "items": [
     {
      "name": "White Furnace",
@@ -2023,6 +2123,9 @@
      "name": "Crush Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -2065,6 +2168,9 @@
   },
   {
    "folder": "Drone",
+   "tags": [
+    "instrument/drone"
+   ],
    "items": [
     {
      "name": "Steel Mill Drone",
@@ -2411,6 +2517,9 @@
      "name": "Anvil Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -2621,6 +2730,9 @@
      "name": "Bell Strike",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sine",
@@ -2705,11 +2817,17 @@
   },
   {
    "folder": "Electro",
+   "tags": [
+    "style/electro"
+   ],
    "items": [
     {
      "name": "Cold Wave Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -2752,6 +2870,9 @@
      "name": "Sequence Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "mode": "notes",
       "wave": "square",
@@ -2794,6 +2915,9 @@
      "name": "Steel Arp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "mode": "notes",
       "wave": "triangle",
@@ -2836,6 +2960,9 @@
      "name": "Gate Stab",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
      "state": {
       "mode": "notes",
       "wave": "sawtooth",
@@ -2878,6 +3005,9 @@
      "name": "Robot Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
      "state": {
       "mode": "notes",
       "wave": "square",
@@ -2920,6 +3050,9 @@
      "name": "Pulse Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "mode": "notes",
       "wave": "square",

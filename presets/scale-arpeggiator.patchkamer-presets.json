@@ -584,6 +584,9 @@
     },
     {
       "folder": "Trance and Dance",
+      "tags": [
+        "style/trance"
+      ],
       "items": [
         {
           "name": "Trance Gate 16ths",
@@ -1045,6 +1048,10 @@
     },
     {
       "folder": "House and Disco",
+      "tags": [
+        "style/house",
+        "style/disco"
+      ],
       "items": [
         {
           "name": "Disco Octave Arp",
@@ -1335,6 +1342,9 @@
     },
     {
       "folder": "Synthwave and Retro",
+      "tags": [
+        "style/synthwave"
+      ],
       "items": [
         {
           "name": "Synthwave Eighths",
@@ -1568,6 +1578,10 @@
     },
     {
       "folder": "Ambient and Cinematic",
+      "tags": [
+        "style/ambient",
+        "style/cinematic"
+      ],
       "items": [
         {
           "name": "Slow Harp",
@@ -1972,6 +1986,10 @@
     },
     {
       "folder": "Funk and Jazz",
+      "tags": [
+        "style/funk",
+        "style/jazz"
+      ],
       "items": [
         {
           "name": "Jazz Comp Triplets",
@@ -3013,6 +3031,9 @@
     },
     {
       "folder": "Generative",
+      "tags": [
+        "style/generative"
+      ],
       "items": [
         {
           "name": "Random Walk 16ths",

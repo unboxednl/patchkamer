@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Kits for Latin Percussion in thirteen styles: salsa, son, mambo, cha-cha-cha, rumba, bossa nova, samba, merengue, bachata, cumbia, reggaeton, Latin jazz and Latin soul. Each kit has a groove in bank A, a variation in B, a sparse breakdown in C and the groove with a fill in D. Loading a tune sets Control to pads and external trigs, so you can audition the sounds with your own sequencer; choose the own pattern again to hear the groove stored in the tune.",
+ "tags": [
+  "instrument/percussion"
+ ],
  "tree": [
   {
    "folder": "Salsa",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Montuno",
@@ -251,6 +257,9 @@
   },
   {
    "folder": "Son",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Son Montuno",
@@ -493,6 +502,9 @@
   },
   {
    "folder": "Mambo",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Big Band",
@@ -735,6 +747,9 @@
   },
   {
    "folder": "Cha-Cha-Cha",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Classic",
@@ -977,6 +992,9 @@
   },
   {
    "folder": "Rumba",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Guaguanco",
@@ -1219,6 +1237,10 @@
   },
   {
    "folder": "Bossa Nova",
+   "tags": [
+    "style/world",
+    "style/jazz"
+   ],
    "items": [
     {
      "name": "Classic",
@@ -1461,6 +1483,9 @@
   },
   {
    "folder": "Samba",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Batucada",
@@ -1703,6 +1728,9 @@
   },
   {
    "folder": "Merengue",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Classic",
@@ -1945,6 +1973,9 @@
   },
   {
    "folder": "Bachata",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Classic",

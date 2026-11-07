@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Sounds and patterns for Sub Line, a mono synth with a sub oscillator, a two-stage lowpass filter, a 32-step pattern and an arpeggiator. Nine styles: Techno, House, Deep House, Acid, Electro, Synthwave, Hip-hop, Dub, Drum & Bass and Trance, with basses, leads, pads, plucks, stabs, patterns and arpeggios. Pattern tunes bring their own bassline or sequence; the other tunes are meant to be played from a keyboard or another device.",
+ "tags": [
+  "instrument/bass"
+ ],
  "tree": [
   {
    "folder": "Techno",
+   "tags": [
+    "style/techno"
+   ],
    "items": [
     {
      "name": "Rolling Sub",
@@ -854,6 +860,9 @@
   },
   {
    "folder": "House",
+   "tags": [
+    "style/house"
+   ],
    "items": [
     {
      "name": "Funky Octave Bass",
@@ -1594,6 +1603,9 @@
   },
   {
    "folder": "Deep House",
+   "tags": [
+    "style/deep-house"
+   ],
    "items": [
     {
      "name": "Warm Sub Bass",
@@ -2124,6 +2136,9 @@
   },
   {
    "folder": "Acid",
+   "tags": [
+    "style/acid"
+   ],
    "items": [
     {
      "name": "Squelch Runner",
@@ -2969,6 +2984,9 @@
   },
   {
    "folder": "Electro",
+   "tags": [
+    "style/electro"
+   ],
    "items": [
     {
      "name": "Electro Bass",
@@ -3709,6 +3727,9 @@
   },
   {
    "folder": "Synthwave",
+   "tags": [
+    "style/synthwave"
+   ],
    "items": [
     {
      "name": "Neon Bass",
@@ -4554,6 +4575,9 @@
   },
   {
    "folder": "Hip-hop",
+   "tags": [
+    "style/hiphop"
+   ],
    "items": [
     {
      "name": "Boom Sub",
@@ -5294,6 +5318,9 @@
   },
   {
    "folder": "Dub",
+   "tags": [
+    "style/dub"
+   ],
    "items": [
     {
      "name": "Deep Dub Bass",
@@ -5929,6 +5956,9 @@
   },
   {
    "folder": "Drum & Bass",
+   "tags": [
+    "style/drum-and-bass"
+   ],
    "items": [
     {
      "name": "Growl Bass",
@@ -6564,6 +6594,9 @@
   },
   {
    "folder": "Trance",
+   "tags": [
+    "style/trance"
+   ],
    "items": [
     {
      "name": "Rolling Trance Bass",

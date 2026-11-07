@@ -9,11 +9,17 @@
  "tree": [
   {
    "folder": "Folk",
+   "tags": [
+    "style/folk"
+   ],
    "items": [
     {
      "name": "Open Guitar",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.4,
@@ -31,6 +37,10 @@
      "name": "Steel Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar/steel",
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 2.5,
       "damp": 0.25,
@@ -48,6 +58,9 @@
      "name": "Soft Fingerstyle",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.5,
@@ -65,6 +78,9 @@
      "name": "Tin Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 1.2,
       "damp": 0.3,
@@ -82,6 +98,9 @@
      "name": "Folk Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 6,
       "damp": 0.25,
@@ -99,6 +118,9 @@
      "name": "Gentle Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.5,
@@ -116,11 +138,17 @@
   },
   {
    "folder": "Ambient",
+   "tags": [
+    "style/ambient"
+   ],
    "items": [
     {
      "name": "Glass Strings",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 12,
       "damp": 0.15,
@@ -138,6 +166,10 @@
      "name": "Slow Bow Pad",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings",
+      "instrument/pad"
+     ],
      "state": {
       "decay": 8,
       "damp": 0.4,
@@ -155,6 +187,9 @@
      "name": "Shimmer Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 10,
       "damp": 0.1,
@@ -172,6 +207,10 @@
      "name": "Drone Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings",
+      "instrument/drone"
+     ],
      "state": {
       "decay": 15,
       "damp": 0.3,
@@ -189,6 +228,9 @@
      "name": "Deep Resonance",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
      "state": {
       "decay": 14,
       "damp": 0.3,
@@ -206,6 +248,9 @@
      "name": "Wind Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 6,
       "damp": 0.45,
@@ -223,11 +268,17 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Low Bow Strings",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 6,
       "damp": 0.45,
@@ -245,6 +296,9 @@
      "name": "Tension Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 5,
       "damp": 0.35,
@@ -262,6 +316,9 @@
      "name": "Metal Hit",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/fx/impact"
+     ],
      "state": {
       "decay": 9,
       "damp": 0.1,
@@ -279,6 +336,9 @@
      "name": "Heavy Pizzicato",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings/pizzicato"
+     ],
      "state": {
       "decay": 1,
       "damp": 0.6,
@@ -296,6 +356,9 @@
      "name": "Haunted Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 8,
       "damp": 0.2,
@@ -313,6 +376,9 @@
      "name": "Dark Swell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
      "state": {
       "decay": 10,
       "damp": 0.55,
@@ -330,11 +396,17 @@
   },
   {
    "folder": "Pop",
+   "tags": [
+    "style/pop"
+   ],
    "items": [
     {
      "name": "Pop Guitar",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.35,
@@ -352,6 +424,9 @@
      "name": "Muted Pop Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 1,
       "damp": 0.8,
@@ -369,6 +444,9 @@
      "name": "Bright Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 5,
       "damp": 0.2,
@@ -386,6 +464,10 @@
      "name": "Bell Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell",
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.15,
@@ -403,6 +485,10 @@
      "name": "Soft Bow Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings",
+      "instrument/lead"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.45,
@@ -420,6 +506,9 @@
      "name": "Pluck Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
      "state": {
       "decay": 1.5,
       "damp": 0.6,
@@ -437,11 +526,18 @@
   },
   {
    "folder": "World",
+   "tags": [
+    "style/world"
+   ],
    "items": [
     {
      "name": "Koto Lead",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/koto",
+      "instrument/lead"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.55,
@@ -459,6 +555,10 @@
      "name": "Lute Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/lute",
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 2.5,
       "damp": 0.45,
@@ -476,6 +576,9 @@
      "name": "Thumb Bell",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "decay": 1.2,
       "damp": 0.35,
@@ -493,6 +596,9 @@
      "name": "Buzz String",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.2,
@@ -510,6 +616,9 @@
      "name": "Wide Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 5.5,
       "damp": 0.3,
@@ -527,6 +636,9 @@
      "name": "Bowed Reed",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 3.5,
       "damp": 0.4,
@@ -544,11 +656,17 @@
   },
   {
    "folder": "Lo-fi",
+   "tags": [
+    "style/lofi"
+   ],
    "items": [
     {
      "name": "Dusty Guitar",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.65,
@@ -566,6 +684,9 @@
      "name": "Tape Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 1.8,
       "damp": 0.7,
@@ -583,6 +704,9 @@
      "name": "Muffled Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.6,
@@ -600,6 +724,9 @@
      "name": "Warped Koto",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/koto"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.6,
@@ -617,6 +744,9 @@
      "name": "Sleepy Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.7,
@@ -634,6 +764,9 @@
      "name": "Soft Bass Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
      "state": {
       "decay": 1.2,
       "damp": 0.75,
@@ -651,11 +784,17 @@
   },
   {
    "folder": "Ballad",
+   "tags": [
+    "style/ballad"
+   ],
    "items": [
     {
      "name": "Tender Guitar",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar"
+     ],
      "state": {
       "decay": 3.5,
       "damp": 0.45,
@@ -673,6 +812,9 @@
      "name": "Warm Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 6,
       "damp": 0.3,
@@ -690,6 +832,9 @@
      "name": "Soft Bow Strings",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 5,
       "damp": 0.5,
@@ -707,6 +852,9 @@
      "name": "Intimate Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.55,
@@ -724,6 +872,9 @@
      "name": "Lullaby Bells",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.2,
@@ -741,6 +892,9 @@
      "name": "Low Pluck Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.5,
@@ -758,11 +912,17 @@
   },
   {
    "folder": "Flamenco",
+   "tags": [
+    "style/flamenco"
+   ],
    "items": [
     {
      "name": "Bright Nylon",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar/nylon"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.35,
@@ -780,6 +940,9 @@
      "name": "Sharp Strum",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar"
+     ],
      "state": {
       "decay": 1.4,
       "damp": 0.3,
@@ -797,6 +960,9 @@
      "name": "Hot Bridge",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
      "state": {
       "decay": 1.8,
       "damp": 0.25,
@@ -814,6 +980,9 @@
      "name": "Dry Nylon",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar/nylon"
+     ],
      "state": {
       "decay": 1,
       "damp": 0.5,
@@ -831,6 +1000,9 @@
      "name": "Dark Nylon",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/guitar/nylon"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.55,
@@ -848,6 +1020,9 @@
      "name": "Thumb Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "decay": 1.4,
       "damp": 0.5,
@@ -865,11 +1040,17 @@
   },
   {
    "folder": "Jazz",
+   "tags": [
+    "style/jazz"
+   ],
    "items": [
     {
      "name": "Mellow Archtop",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
      "state": {
       "decay": 2.5,
       "damp": 0.7,
@@ -887,6 +1068,9 @@
      "name": "Warm Comping",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
      "state": {
       "decay": 2,
       "damp": 0.65,
@@ -904,6 +1088,10 @@
      "name": "Bass Pizzicato",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass",
+      "instrument/strings/pizzicato"
+     ],
      "state": {
       "decay": 1.2,
       "damp": 0.65,
@@ -921,6 +1109,9 @@
      "name": "Chord Harp",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
      "state": {
       "decay": 4,
       "damp": 0.35,
@@ -938,6 +1129,9 @@
      "name": "Glassy Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.25,
@@ -955,6 +1149,9 @@
      "name": "Smoky Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.6,
@@ -972,11 +1169,17 @@
   },
   {
    "folder": "Metallic",
+   "tags": [
+    "style/metallic"
+   ],
    "items": [
     {
      "name": "Rust Strings",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 6,
       "damp": 0.15,
@@ -994,6 +1197,9 @@
      "name": "Iron Pluck",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/pluck"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.1,
@@ -1011,6 +1217,9 @@
      "name": "Wire Drone",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/drone"
+     ],
      "state": {
       "decay": 12,
       "damp": 0.1,
@@ -1028,6 +1237,9 @@
      "name": "Clank Bass",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
      "state": {
       "decay": 2.5,
       "damp": 0.2,
@@ -1045,6 +1257,9 @@
      "name": "Bell Cluster",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
      "state": {
       "decay": 9,
       "damp": 0.1,
@@ -1062,6 +1277,9 @@
      "name": "Scrape Bow",
      "kind": "set",
      "version": "1.0.0",
+     "tags": [
+      "instrument/strings"
+     ],
      "state": {
       "decay": 3,
       "damp": 0.4,

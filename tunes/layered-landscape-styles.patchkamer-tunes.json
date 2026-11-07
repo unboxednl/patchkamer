@@ -6,9 +6,15 @@
  "author": "Freek van Gool",
  "license": "CC0-1.0",
  "description": "Long, evolving landscapes for Layered Landscape in eleven styles: Ambient, Dark Ambient, Cinematic, Meditation, Sci-Fi, Nature, Space, Drone, Lo-fi, Minimal and Industrial. Each tune is a complete landscape: start the landscape (or the transport) to hear it. Some tunes carry a slow pattern on one layer and need the transport clock; four tunes (Cloud Keys, Played Strings Bed, Playable Stars, Soft Keys) put one layer in notes mode so you can play it from a keyboard.",
+ "tags": [
+  "instrument/texture"
+ ],
  "tree": [
   {
    "folder": "Ambient",
+   "tags": [
+    "style/ambient"
+   ],
    "items": [
     {
      "name": "Morning Haze",
@@ -1175,6 +1181,9 @@
   },
   {
    "folder": "Dark Ambient",
+   "tags": [
+    "style/dark-ambient"
+   ],
    "items": [
     {
      "name": "Sunken Hall",
@@ -1954,6 +1963,9 @@
   },
   {
    "folder": "Cinematic",
+   "tags": [
+    "style/cinematic"
+   ],
    "items": [
     {
      "name": "Epic Swell",
@@ -2862,6 +2874,9 @@
   },
   {
    "folder": "Meditation",
+   "tags": [
+    "style/meditation"
+   ],
    "items": [
     {
      "name": "Deep Breath",
@@ -3641,6 +3656,9 @@
   },
   {
    "folder": "Sci-Fi",
+   "tags": [
+    "style/sci-fi"
+   ],
    "items": [
     {
      "name": "Orbital Station",
@@ -5978,6 +5996,9 @@
   },
   {
    "folder": "Drone",
+   "tags": [
+    "instrument/drone"
+   ],
    "items": [
     {
      "name": "Single Root",
@@ -6886,6 +6907,9 @@
   },
   {
    "folder": "Lo-fi",
+   "tags": [
+    "style/lofi"
+   ],
    "items": [
     {
      "name": "Dusty Tape",
@@ -7665,6 +7689,9 @@
   },
   {
    "folder": "Minimal",
+   "tags": [
+    "style/minimal"
+   ],
    "items": [
     {
      "name": "Single Breath",
@@ -8444,6 +8471,9 @@
   },
   {
    "folder": "Industrial",
+   "tags": [
+    "style/industrial"
+   ],
    "items": [
     {
      "name": "Factory Hum",

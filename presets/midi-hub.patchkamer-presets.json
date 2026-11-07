@@ -406,6 +406,9 @@
     },
     {
       "folder": "Effects",
+      "tags": [
+        "instrument/fx"
+      ],
       "items": [
         {
           "name": "Effect Mix on CC 91",
