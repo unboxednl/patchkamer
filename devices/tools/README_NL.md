@@ -18,6 +18,7 @@ Hulpmiddelen om muziek te maken: spelen, opnemen, meten, notities maken en ander
 | **Metronome** | Een tik op elke maat, tel, achtste of zestiende van de klok van de studio; dezelfde slagen gaan als trigs naar buiten | `Metronome/` | [Metronome](../../docs/tools/USER-MANUAL_NL.md#metronome) |
 | **Notes** | Een notitieblok met toonsoort, tempo, delen en een takenlijst; geen geluid, geen poorten | `Notes/` | [Notes](../../docs/tools/USER-MANUAL_NL.md#notes) |
 | **Stem Splitter** | Splitst een nummer in stems (zang, drums, bas, rest) met een dienst op internet, wat geld kost per nummer en de rechten op de muziek vraagt; een bestand, een sample uit de bibliotheek of een opname uit de ingang gaat erin, een uitgang per stem en een bundel komen eruit, met de klok van de studio gespeeld; bewaart de stems als WAV en geeft de drums aan de Drum Listener | `StemSplitter/` | [Stem Splitter](../../docs/tools/USER-MANUAL_NL.md#stem-splitter) |
+| **Tune Finder** | Luistert naar een geluid (een noot, een korte frase, een basloopje of een akkoord van één instrument, uit een bestand of een opname) en zoekt de synth en tune uit de bibliotheek die er het dichtst bij komt, gerangschikt op klankkleur, harmonischen, aanzet en verloop; **Laden** zet de gekozen tune op die synth in de werkruimte | `TuneFinder/` | [Tune Finder](../../docs/tools/USER-MANUAL_NL.md#tune-finder) |
 
 ## Meer
 

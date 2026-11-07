@@ -14,6 +14,7 @@ This manual covers the eleven **tools** of Patchkamer. Tools are helpers: you us
 | record the finished mix (or any sound) into one file | [Recorder](#recorder) | **In** and **Through** audio |
 | turn a drum loop into a pattern (kick, snare, hats, toms) and copy it to a sequencer | [Drum Listener](#drum-listener) | audio **In** and **Through**, an event out **Drum trigs** |
 | split a track into stems with an online service (vocals, drums, bass, the rest) and play them with the clock | [Stem Splitter](#stem-splitter) | audio **In**, an output per stem and a bundle **All stems** |
+| find which synth and tune of the library sounds like a note, phrase, bass line or chord I have (a file or a recording) | [Tune Finder](#tune-finder) | audio **In** and **Through** |
 | record many tracks at once, one file per track | [Multitrack](#multitrack) | a **Bundle** in |
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
@@ -453,6 +454,37 @@ The service decides what it accepts. If it only takes mp3 or m4a and you have a 
 - Stems live in memory: a long track with 6 stems takes a few hundred MB.
 - Splitting takes a few seconds to minutes, depending on the service and the queue; after 20 minutes Patchkamer gives up.
 - The result is only as good as the service: traces of other stems may bleed through.
+
+## Tune Finder
+
+**What it is for.** Listens to a sound and finds the synth and tune of the library that comes closest: a single note, a short phrase, a bass line or a chord, from one instrument. You get a list of the nearest tunes and of the nearest instruments, and **Load** puts the chosen tune on that synth in the workspace. It works on your own computer, nothing is sent over the internet.
+
+![The Tune Finder card, empty](../images/en/tools/tune-finder.png)
+
+**How it works.** Every tune of every synth in the library (2211 tunes of 34 instruments) was played on four notes (C2, C3, C4 and C5) and measured: the colour of the sound, its harmonics, the attack, the way it dies away and its stereo width. Tune Finder measures your sound the same way and ranks the tunes by how little they differ. It compares timbre; it does not say that your sound *is* that instrument. Drum machines and the Loop Slicer are not included (use the **Drum Listener** for drums), and neither are a few tunes that need sound on an input (Grain Cloud, Patch Mono).
+
+**Getting audio in**
+
+- **Load audio file…** reads a WAV, MP3, FLAC or OGG file (up to 50 MiB; the loudest 20 seconds are analysed). A sample from the **Samples** tab works too, as the device accepts audio from the library.
+- **Record** takes a few seconds from the **In** port: choose the length in **Record length**, play the sound (for example the output of **Audio Capture** connected to **In**) and press **Record**. **Through** passes the sound on unchanged.
+
+**What you see and set**
+
+![Tune Finder with a result](../images/en/tools/tune-finder-result.png)
+
+- The line under the buttons says what was heard: the pitch (when there is one clear pitch; a chord or noise has none), mono or stereo, and the length. **Closest per instrument** shows the instruments of the best tunes; a ring around a name means that instrument is in the workspace. **Closest tunes** lists the ten best tunes with a bar for how close they are. **Search in** limits the list to a group of instruments (bass and mono, keys and plucked, winds and strings and voice, poly and lead and pad, texture and drone, samples); **Search again** repeats the search.
+- **Load** on a line puts that tune on that synth, if the synth is in the workspace (with two of them, the selected one); otherwise the card says which device to place first. **Load best** does the same for the first line. Or look the tune up by name in the **Tunes** tab.
+
+**Presets.** A preset holds the settings (record length, group), never the sound or the result. No preset pack is included.
+
+**Tips and limits**
+
+- Works best with **one clean note or a short phrase from one instrument**, close to the microphone or straight from a cable, without much room sound. On sounds made by Patchkamer's own synths it finds the right synth first in about 86 % of single notes (right synth in the first five: 93 %), and the exact tune first in about 53 % (in the first ten: 77 %). Many tunes are close neighbours, so the tune you made a sound with is often second or third: look at the whole list.
+- A phrase or a chord is harder (right synth first: about 69 % and 59 %). A recording with a little noise, a low-pass filter, less level and mono together is much harder (about 42 %), most of all because of the noise. Room sound and chorus lower it too.
+- This was measured on sounds from Patchkamer's own synths, **not on real recordings** of people and instruments, and not by listening. A real piano or guitar will only be matched to the nearest synth sound; that is a hint, not an answer.
+- Several instruments at once, drums or vocals in the sound make the result worthless. Split a mix first (see the **Stem Splitter**).
+
+---
 
 ## If it does not work
 

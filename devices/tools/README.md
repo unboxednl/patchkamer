@@ -18,6 +18,7 @@ Helpers for making music: play, record, measure, take notes and control other de
 | **Metronome** | A click on every bar, beat, eighth or sixteenth of the studio clock; the same beats go out as trigs | `Metronome/` | [Metronome](../../docs/tools/USER-MANUAL_EN.md#metronome) |
 | **Notes** | A notepad with key, tempo, sections and a to-do list; no sound, no ports | `Notes/` | [Notes](../../docs/tools/USER-MANUAL_EN.md#notes) |
 | **Stem Splitter** | Splits a track into stems (vocals, drums, bass, the rest) with an online service, which costs money per track and needs the rights to the music; a file, a sample from the library or a recording from the input goes in, an output per stem and a bundle come out, played with the studio clock; saves the stems as WAV and hands the drums to the Drum Listener | `StemSplitter/` | [Stem Splitter](../../docs/tools/USER-MANUAL_EN.md#stem-splitter) |
+| **Tune Finder** | Listens to a sound (one note, a short phrase, a bass line or a chord of one instrument, from a file or a recording) and finds the synth and tune of the library that comes closest, ranked by timbre, harmonics, attack and decay; **Load** puts the chosen tune on that synth in the workspace | `TuneFinder/` | [Tune Finder](../../docs/tools/USER-MANUAL_EN.md#tune-finder) |
 
 ## More
 

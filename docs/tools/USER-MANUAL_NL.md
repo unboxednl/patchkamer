@@ -14,6 +14,7 @@ Deze handleiding gaat over de elf **tools** van Patchkamer. Tools zijn hulpmidde
 | de afgewerkte mix (of ander geluid) in één bestand opnemen | [Recorder](#recorder) | audio **In** en **Door** |
 | een drumloop omzetten in een patroon (kick, snare, hats, toms) en dat naar een sequencer kopiëren | [Drum Listener](#drum-listener) | audio **In** en **Door**, een eventuitgang **Drum trigs** |
 | een nummer door een dienst op internet in stems splitsen (zang, drums, bas, rest) en die met de klok laten spelen | [Stem Splitter](#stem-splitter) | audio **In**, een uitgang per stem en een bundel **Alle stems** |
+| uitzoeken welke synth en tune uit de bibliotheek lijkt op een noot, frase, basloopje of akkoord dat ik heb (een bestand of een opname) | [Tune Finder](#tune-finder) | audio **In** en **Door** |
 | veel sporen tegelijk opnemen, een bestand per spoor | [Multitrack](#multitrack) | een **Bundel**-ingang |
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
@@ -453,6 +454,37 @@ De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan en je hebt e
 - Stems staan in het geheugen: een lang nummer met 6 stems kost een paar honderd MB.
 - Het splitsen duurt enkele seconden tot minuten, afhankelijk van de dienst en de wachtrij; na 20 minuten stopt Patchkamer.
 - Het resultaat is zo goed als de dienst: er kunnen sporen van andere stems doorklinken.
+
+## Tune Finder
+
+**Waar het voor dient.** Luistert naar een geluid en zoekt de synth en de tune uit de bibliotheek die er het dichtst bij komt: een enkele noot, een korte frase, een basloopje of een akkoord, van één instrument. Je krijgt een lijst van de dichtstbijzijnde tunes en van de dichtstbijzijnde instrumenten, en **Laden** zet de gekozen tune op die synth in de werkruimte. Het werkt op je eigen computer, er gaat niets over het internet.
+
+![De kaart van Tune Finder, leeg](../images/nl/tools/tune-finder.png)
+
+**Hoe het werkt.** Elke tune van elke synth in de bibliotheek (2211 tunes van 34 instrumenten) is gespeeld op vier noten (C2, C3, C4 en C5) en opgemeten: de kleur van het geluid, de harmonischen, de aanzet, hoe het uitklinkt en de stereobreedte. Tune Finder meet jouw geluid op dezelfde manier en zet de tunes op volgorde van het kleinste verschil. Het vergelijkt klankkleur; het zegt niet dat jouw geluid dat instrument *is*. Drumcomputers en de Loop Slicer zitten er niet in (voor drums is er de **Drum Listener**), en ook een paar tunes die geluid op een ingang nodig hebben (Grain Cloud, Patch Mono) niet.
+
+**Geluid erin krijgen**
+
+- **Audiobestand laden…** leest een WAV-, MP3-, FLAC- of OGG-bestand (tot 50 MiB; de luidste 20 seconden worden geanalyseerd). Een sample uit de tab **Samples** werkt ook, want het apparaat neemt audio uit de bibliotheek aan.
+- **Opnemen** neemt een paar seconden op uit de poort **In**: kies de lengte bij **Opnameduur**, speel het geluid (bijvoorbeeld de uitgang van **Audio Capture** op **In**) en druk op **Opnemen**. **Door** geeft het geluid ongewijzigd door.
+
+**Wat je ziet en instelt**
+
+![Tune Finder met een resultaat](../images/nl/tools/tune-finder-result.png)
+
+- De regel onder de knoppen zegt wat er gehoord is: de toonhoogte (als er één duidelijke is; een akkoord of ruis heeft er geen), mono of stereo en de lengte. **Dichtstbij per instrument** toont de instrumenten van de beste tunes; een ring om een naam betekent dat dat instrument in de werkruimte staat. **Dichtstbijzijnde tunes** toont de tien beste tunes met een balk voor hoe dichtbij ze zijn. **Zoeken in** beperkt de lijst tot een groep instrumenten (bas en mono, toetsen en getokkeld, blazers en strijkers en stem, poly en lead en pad, textuur en drone, samples); **Opnieuw zoeken** herhaalt het zoeken.
+- **Laden** op een regel zet die tune op die synth, als de synth in de werkruimte staat (bij twee exemplaren het geselecteerde); anders zegt de kaart welk apparaat je eerst moet plaatsen. **Beste laden** doet hetzelfde voor de eerste regel. Of zoek de tune op naam in de tab **Tunes**.
+
+**Presets.** Een preset bevat de instellingen (opnameduur, groep), nooit het geluid of het resultaat. Er is geen presetpack bijgeleverd.
+
+**Tips en grenzen**
+
+- Werkt het best met **één schone noot of een korte frase van één instrument**, dicht bij de microfoon of rechtstreeks uit een kabel, zonder veel ruimtegeluid. Bij geluiden van Patchkamers eigen synths vindt het bij een enkele noot in ongeveer 86 % de juiste synth als eerste (de juiste synth bij de eerste vijf: 93 %), en de precieze tune in ongeveer 53 % als eerste (bij de eerste tien: 77 %). Veel tunes liggen dicht bij elkaar, dus de tune waarmee je het geluid maakte staat vaak tweede of derde: kijk naar de hele lijst.
+- Een frase of een akkoord is moeilijker (juiste synth eerst: ongeveer 69 % en 59 %). Een opname met een beetje ruis, een laagdoorlaatfilter, minder niveau en mono bij elkaar is veel moeilijker (ongeveer 42 %), vooral door de ruis. Ruimtegeluid en chorus drukken het ook.
+- Dit is gemeten op geluiden van Patchkamers eigen synths, **niet op echte opnames** van mensen en instrumenten, en niet door te luisteren. Een echte piano of gitaar wordt hooguit aan het dichtstbijzijnde synthgeluid gekoppeld; dat is een aanwijzing, geen antwoord.
+- Meerdere instrumenten tegelijk, drums of zang in het geluid maken het resultaat waardeloos. Splits een mix eerst (zie de **Stem Splitter**).
+
+---
 
 ## Als het niet werkt
 
