@@ -106,6 +106,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Basic Mono](../devices/synths/BasicMono/) | Basic Mono Styles | 65 | 12: Techno, House, Electro, Hip-hop, Funk, Synthwave, Dub, Pop, Chiptune, Acid, Trance, Ambient | [`basic-mono-styles.patchkamer-tunes.json`](basic-mono-styles.patchkamer-tunes.json) | – |
 | [Biotope](../devices/synths/Biotope/) | Biotope Styles | 86 | 13: Nature, Weather, Water, Ambient, Meditation, Sleep, Cinematic, Sci-Fi, Dark Ambient, Lo-fi, Field Recording, Interiors, Rhythmic | [`biotope-styles.patchkamer-tunes.json`](biotope-styles.patchkamer-tunes.json) | – |
 | [Bowed Ensemble](../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 65 | 11: Cinematic, Ambient, Pop, Ballad, Trance, Synthwave, Film Score, Lo-fi, Neo-classical, Disco & Funk, Deep House | [`bowed-ensemble-styles.patchkamer-tunes.json`](bowed-ensemble-styles.patchkamer-tunes.json) | – |
+| [Brass Section](../devices/synths/BrassSection/) | Brass Section | 32 | 8: Trumpet, Trombone, Horn, Section, Stabs, Swells, Funk, Ballad | [`brass-section.patchkamer-tunes.json`](brass-section.patchkamer-tunes.json) | – |
 | [Celestial Mechanics](../devices/synths/CelestialMechanics/) | Celestial Mechanics Styles | 74 | 11: Space, Cinematic, Sci-Fi, Ambient, Dark Ambient, Experimental, Sound Design, Synthwave, Trance, Horror, Drone | [`celestial-mechanics-styles.patchkamer-tunes.json`](celestial-mechanics-styles.patchkamer-tunes.json) | – |
 | [Chord Poly](../devices/synths/ChordPoly/) | Chord Poly Styles | 120 | 20: House, Deep House, Garage, Lo-fi, Ambient, Pop, Soul, Synthwave, Cinematic, Disco & Funk, Techno, Dub Techno, Trance, Progressive Trance, Big Room, Electro House, Electro, Future Bass, Hardstyle, Eurodance | [`chord-poly-styles.patchkamer-tunes.json`](chord-poly-styles.patchkamer-tunes.json) | – |
 | [Cinematic Synth](../devices/synths/CinematicSynth/) | Cinematic Synth Scores | 56 | 7: Dream Heist, Dark Hero, Space Voyage, Desert Epic, Ancient Battle, Quiet Tension, Impacts and Risers | [`cinematic-synth-scores.patchkamer-tunes.json`](cinematic-synth-scores.patchkamer-tunes.json) | – |
@@ -131,7 +132,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 
-Samen 38 packs met 2350 tunes.
+Samen 39 packs met 2382 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet
