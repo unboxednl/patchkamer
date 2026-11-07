@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.17
+// validate-instrument.mjs — Patchkamer contract v1.18
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -20,6 +20,9 @@
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
+// v1.18: meters: host.ui.meter(parent, label, opts) -> { el, set, id, destroy }; de nep-host kent het (opts: id, group, source = AnalyserNode of lijst van 1-2, unit, range, kind, hold, clip,
+//        orientation, length, width). Alleen "let op" bij een dubbel meter-id, ongeldige opties, kind 'rms' zonder source, een set() zonder getal, data-pk-role="meter" op een eigen element
+//        en een data-pk-suffix langer dan 16 tekens; een source die geen AnalyserNode is, gooit (fout). Een meter hoort niet in params(). --controls toont meters ook (rol meter).
 // v1.14: nootnamen: optioneel noteNames() op het apparaat (lijst { note, name }) en host.noteNamesChanged; host.peers geeft ze door als noteNames.
 // v1.12: mastering: ports.masteringIn/masteringOut (kabeltype mastering), configureMastering, onMasteringTargets, host.mastering.
 // v1.8: de tekenpoort (__pkWrap) telt als soepel tekenen; host.ui.knob accepteert een 7e argument (opties).
@@ -103,6 +106,14 @@ const V = {
     "v.ctl_titel": "Regelaars ({0}):",
     "v.ctl_kop": "id | rol | groep | label nl/en | bereik | gezicht | in params()",
     "v.ctl_zonder_id": "(zonder id)",
+    "v.meter_aantal": ", {0} meters",
+    "v.meter_opts": "{0}: de opties van host.ui.meter moeten een object zijn; genegeerd",
+    "v.meter_optie": "{0}: meter-optie {1} is ongeldig (verwacht {2}); de host gebruikt de standaard",
+    "v.meter_source": "host.ui.meter(): source moet een AnalyserNode zijn of een lijst van 1 of 2 AnalyserNodes (ctx.createAnalyser()); nodes aanmaken of verbinden doet de host niet",
+    "v.meter_rms_zonder_source": "{0}: kind 'rms' werkt alleen met source; zonder source rekent het apparaat zelf en geeft set() het niveau",
+    "v.meter_set": "{0}: set() verwacht een eindig getal of een lijst [l, r]; genegeerd",
+    "v.meter_attr": "{0}: data-pk-role=\"meter\" op een eigen element wordt niet ondersteund; een meter heeft het gezicht van de host nodig, gebruik host.ui.meter",
+    "v.meter_suffix": "{0}: data-pk-suffix hoort tekst van hoogstens 16 tekens te zijn",
     "v.mod_ontbreekt": "{0} continue regelaar(s) staan niet in params(): {1} (§8: neem ze op, of zet ze in modExclude als ze bewust buiten blijven)",
     "v.mod_geen_params": "{0} continue regelaar(s) maar geen params() (kind {1}): modulatoren kunnen dit apparaat niet bedienen: {2} (§8: voeg params() en modulate() toe, of zet modExclude: '*' als dat bewust is)",
     "v.mod_param_zonder": "params(): {0} id('s) zonder regelaar of state-sleutel: {1} (typefout? modulate negeert onbekende ids)",
@@ -321,6 +332,14 @@ const V = {
     "v.ctl_titel": "Controls ({0}):",
     "v.ctl_kop": "id | role | group | label nl/en | range | face | in params()",
     "v.ctl_zonder_id": "(no id)",
+    "v.meter_aantal": ", {0} meters",
+    "v.meter_opts": "{0}: the host.ui.meter options must be an object; ignored",
+    "v.meter_optie": "{0}: meter option {1} is invalid (expected {2}); the host uses the default",
+    "v.meter_source": "host.ui.meter(): source must be an AnalyserNode or a list of 1 or 2 AnalyserNodes (ctx.createAnalyser()); the host never creates or connects nodes",
+    "v.meter_rms_zonder_source": "{0}: kind 'rms' only works with source; without source the device computes the level itself and passes it to set()",
+    "v.meter_set": "{0}: set() expects a finite number or a list [l, r]; ignored",
+    "v.meter_attr": "{0}: data-pk-role=\"meter\" on your own element is not supported; a meter needs the host's face, use host.ui.meter",
+    "v.meter_suffix": "{0}: data-pk-suffix must be text of at most 16 characters",
     "v.mod_ontbreekt": "{0} continuous control(s) are not in params(): {1} (§8: add them, or list them in modExclude if they are deliberately left out)",
     "v.mod_geen_params": "{0} continuous control(s) but no params() (kind {1}): modulators cannot control this device: {2} (§8: add params() and modulate(), or set modExclude: '*' if that is deliberate)",
     "v.mod_param_zonder": "params(): {0} id(s) without a control or state key: {1} (a typo? modulate ignores unknown ids)",
@@ -485,7 +504,7 @@ const node = () => ({ _isNode: true, _to: new Set(), connect(n){ this._to.add(n)
   type: '', fftSize: 2048, frequencyBinCount: 1024, smoothingTimeConstant: 0.8, oversample: 'none', curve: null, buffer: null, loop: false, loopStart: 0, loopEnd: 0, normalize: true,
   getByteTimeDomainData(){}, getByteFrequencyData(){}, getFloatTimeDomainData(){}, getFloatFrequencyData(){} });
 const ctx = { currentTime: 0, sampleRate: 44100, state: 'running', destination: node(), resume: async () => {}, suspend: async () => {},
-  createGain: node, createOscillator: node, createBiquadFilter: node, createDelay: node, createConvolver: node, createDynamicsCompressor: node, createAnalyser: node, createStereoPanner: node, createWaveShaper: node, createBufferSource: node, createConstantSource: node, createChannelMerger: node, createChannelSplitter: node,
+  createGain: node, createOscillator: node, createBiquadFilter: node, createDelay: node, createConvolver: node, createDynamicsCompressor: node, createAnalyser: () => Object.assign(node(), { _isAnalyser: true }), createStereoPanner: node, createWaveShaper: node, createBufferSource: node, createConstantSource: node, createChannelMerger: node, createChannelSplitter: node,
   createBuffer: (ch, len) => ({ numberOfChannels: ch, length: len, getChannelData: () => new Float32Array(Math.min(len || 1024, 1 << 16)) }),
   createMediaStreamDestination: () => Object.assign(node(), { stream: {} }), createPeriodicWave: () => ({}),
   audioWorklet: { addModule: async () => {} } };
@@ -560,6 +579,7 @@ let frames = [], peerCalls = 0, connects = 0;
 const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true, noteNames: [{ note: 36, name: 'Kick' }] },
   { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
 let masteringCalls = 0, masteringBad = null, emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
+let METERS = 0;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
 const PL = (P, k) => Array.isArray(P[k]) ? P[k] : [];
 const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal', oversample: '2x', latency: 'interactive' }, bpm: 120, swing: 0, emit(inst, port, ev) { emitted.push({ port, ev }); }, setTempo(b) { tempo = b; },
@@ -607,12 +627,37 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
       ctlAdd({ ...r, label: lbl(label), type: 'select', min: null, max: null, face: 'select', items: Array.isArray(opts) ? opts.map(x => Array.isArray(x) ? x[0] : x) : [], via: 'select', el: s }); return s; },
     adopt(e, o) { if (!e || typeof e !== 'object') { ctlWarn('v.ctl_adopt_element'); return e; }
       const type = typeOf(e), name = lbl(o && o.label || ctlLabelOf(e)) || (tagOf(e).toLowerCase() + (e.id ? '#' + e.id : ''));
-      const r = ctlOpts(name, o, type || 'range'); if (!type) ctlWarn('v.ctl_adopt_model', name);
+      const r = ctlOpts(name, o, type || 'range'); if (!type) ctlWarn(o && o.role === 'meter' ? 'v.meter_attr' : 'v.ctl_adopt_model', name);
       if (r.id) { e.setAttribute('data-pk-id', r.id); e.dataset.pkId = r.id; } if (r.group) { e.setAttribute('data-pk-group', r.group); e.dataset.pkGroup = r.group; }
       e.setAttribute('data-pk-role', r.role); e.dataset.pkRole = r.role; e._pk = true;
       if (type) ctlAdd({ ...r, label: name, type, min: type === 'range' && e.min !== '' ? +e.min : null, max: type === 'range' && e.max !== '' ? +e.max : null, face: type === 'range' ? 'hslider' : type, via: 'adopt', el: e });
       return e; },
     list() { return CTL.map(c => ({ id: c.id, role: c.role, group: c.group, label: c.label, type: c.type, min: c.min, max: c.max, face: c.face })); },
+    // v1.18: host.ui.meter(parent, label, opts) -> { el, set, id, destroy }
+    meter(parent, label, o) { const name = lbl(label) || 'meter'; METERS++;
+      if (o !== undefined && o !== null && (typeof o !== 'object' || Array.isArray(o))) { ctlWarn('v.meter_opts', name); o = {}; } o = o || {};
+      const bad = (k, want) => ctlWarn('v.meter_optie', name, k, want);
+      let id = null, group = null;
+      if (o.id !== undefined) { if (typeof o.id === 'string' && ID_RE.test(o.id)) id = o.id; else ctlWarn('v.ctl_id_vorm', name, String(o.id).slice(0, 40)); }
+      if (o.group !== undefined) { if (typeof o.group === 'string' && ID_RE.test(o.group)) group = o.group; else ctlWarn('v.ctl_groep', name, String(o.group).slice(0, 40)); }
+      let hasSrc = false;
+      if (o.source !== undefined) { const L = Array.isArray(o.source) ? o.source : [o.source];
+        if (L.length < 1 || L.length > 2 || L.some(x => !x || !x._isAnalyser)) throw new Error(vt('v.meter_source')); hasSrc = true; }
+      let range = [-60, 0];
+      if (o.range !== undefined) { if (Array.isArray(o.range) && o.range.length === 2 && o.range.every(x => typeof x === 'number' && isFinite(x)) && o.range[0] < o.range[1]) range = o.range.slice(); else bad('range', '[minDb, maxDb]'); }
+      if (o.unit !== undefined && !['linear', 'db'].includes(o.unit)) bad('unit', "'linear' | 'db'");
+      if (o.kind !== undefined) { if (!['peak', 'rms'].includes(o.kind)) bad('kind', "'peak' | 'rms'"); else if (o.kind === 'rms' && !hasSrc) ctlWarn('v.meter_rms_zonder_source', name); }
+      if (o.hold !== undefined && typeof o.hold !== 'boolean') bad('hold', 'true | false');
+      if (o.clip !== undefined && !(typeof o.clip === 'number' && isFinite(o.clip))) bad('clip', 'dB');
+      if (o.orientation !== undefined && !['vertical', 'horizontal'].includes(o.orientation)) bad('orientation', "'vertical' | 'horizontal'");
+      for (const k of ['length', 'width']) if (o[k] !== undefined && !(typeof o[k] === 'number' && isFinite(o[k]) && o[k] > 0)) bad(k, 'px > 0');
+      const box = el('div'); box._pk = true; box.setAttribute('role', 'meter'); box.setAttribute('aria-label', name); if (id) { box.setAttribute('data-pk-id', id); box.dataset.pkId = id; } box.setAttribute('data-pk-role', 'meter'); box.dataset.pkRole = 'meter';
+      if (parent && parent.appendChild) parent.appendChild(box);
+      ctlAdd({ id, role: 'meter', group, label: name, type: 'meter', min: range[0], max: range[1], face: 'bar', via: 'meter', el: box });
+      let gone = false;
+      return { el: box, id: id || undefined,
+        set(level) { if (gone) return; const ok = x => typeof x === 'number' && isFinite(x); if (!(ok(level) || (Array.isArray(level) && level.length >= 1 && level.length <= 2 && level.every(ok)))) ctlWarn('v.meter_set', name); },
+        destroy() { gone = true; } }; },
     steps: () => ({ btns: [], paint(){}, cursor(){} }), noise: () => node(), curve: () => new Float32Array(16) } };
 
 // ---------- load + static checks ----------
@@ -952,11 +997,13 @@ const ownLabel = e => { let l = ctlLabelOf(e); if (l) return l; const par = e.pa
 try { if (inst.unmount) inst.unmount(); inst.destroy(); inst.destroy(); } catch (e) { fail(vt('v.destroy_gooit_moet_idempotent_zijn') + e.message); }
 const openFrames = frames.filter(e => !e.off).length; if (openFrames) fail(vt('v.na_destroy_staan_er_nog',openFrames));
 // v1.15: attributen data-pk-id/-role/-group op eigen elementen (N1-pad) en de eindcontrole van het register
+for (const e of ALL_EL) { const a0 = e.attributes || {}, ds0 = e.dataset || {}, sfx = a0['data-pk-suffix'] ?? ds0.pkSuffix;
+  if (sfx !== undefined && !(typeof sfx === 'string' && sfx.length <= 16)) ctlWarn('v.meter_suffix', ctlLabelOf(e) || (tagOf(e).toLowerCase() + (e.id ? '#' + e.id : ''))); }
 for (const e of ALL_EL) { if (e._pk) continue; const a = e.attributes || {}, ds = e.dataset || {};
   const id = a['data-pk-id'] ?? ds.pkId, role = a['data-pk-role'] ?? ds.pkRole, group = a['data-pk-group'] ?? ds.pkGroup;
   if (id === undefined && role === undefined && group === undefined) continue;
   const type = typeOf(e), name = ctlLabelOf(e) || (tagOf(e).toLowerCase() + (e.id ? '#' + e.id : '')), r = ctlOpts(name, { id, role, group }, type || 'range');
-  if (!type) { ctlWarn('v.ctl_adopt_model', name); continue; }
+  if (!type) { ctlWarn(role === 'meter' ? 'v.meter_attr' : 'v.ctl_adopt_model', name); continue; }
   if (r.id && !e.parentElement && !e.parentNode) { ctlWarn('v.ctl_los', name, r.id); continue; }
   ctlAdd({ ...r, label: name, type, min: type === 'range' && e.min !== '' ? +e.min : null, max: type === 'range' && e.max !== '' ? +e.max : null, face: type === 'range' ? 'hslider' : type, via: 'attr', el: e, built: e._built });
 }
@@ -1012,6 +1059,7 @@ const nKnobs = nMountKnobs; let OTHER = null;
   if (nParts) line += vt('v.ok_instrumenten', nParts);
   if (clipOn) line += vt('v.ok_klembord');
   if (nKnobs) line += vt('v.ok_knoppen', nKnobs);
+  if (METERS) line += vt('v.meter_aantal', METERS);
   { const nid = CTL.filter(c => c.id).length; if (nid) line += vt('v.ok_regelaars', nid); }
   line += frames.length ? vt('v.ok_tekent_frame') : (/__pkWrap\(/.test(src) ? vt('v.ok_tekent_poort') : '');
   if (peerCalls || connects) line += vt('v.ok_besturing');
@@ -1029,7 +1077,7 @@ const nKnobs = nMountKnobs; let OTHER = null;
   if (!SUB && CONTROLS) {   // v1.15: de tabel id | rol | groep | label nl/en | bereik | gezicht
     const mine = HOSTLANG, labs = c => { const o = OTHER && (OTHER.find(x => x.id && x.id === c.id && x.type === c.type) || (c.id ? null : OTHER.filter(x => !x.id)[CTL.filter(y => !y.id).indexOf(c)])); const a = c.label, b = o ? o.label : c.label;
       const [nl, en] = mine === 'nl' ? [a, b] : [b, a]; return nl === en ? nl : nl + ' / ' + en; };
-    const range = c => c.type === 'range' ? (c.min != null && c.max != null ? c.min + '..' + c.max : '-') : c.type === 'select' ? ((c.items || []).join(',').replace(/^(.{37}).{4,}$/, '$1…') || '-') : '-';
+    const range = c => c.type === 'range' || c.type === 'meter' ? (c.min != null && c.max != null ? c.min + '..' + c.max : '-') : c.type === 'select' ? ((c.items || []).join(',').replace(/^(.{37}).{4,}$/, '$1…') || '-') : '-';
     const inP = el => { const t = MOD_STAT.get(el); return t === 'ja' ? vt('v.mod_ja') : t === 'nee' ? vt('v.mod_nee') : t === 'uit' ? vt('v.mod_uit') : t === '?' ? '?' : '-'; };
     const rows = CTL.map(c => [c.id || vt('v.ctl_zonder_id'), c.role, c.group || '-', labs(c), range(c), c.face || '-', inP(c.el)]);
     for (const o of MOD_OWN) rows.push([vt('v.ctl_zonder_id'), 'param', '-', o.label || '-', o.min != null && o.max != null ? o.min + '..' + o.max : '-', 'hslider', inP(o.key)]);

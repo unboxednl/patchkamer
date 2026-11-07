@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.17 for building agents
+# Patchkamer — Instrument contract v1.18 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -26,6 +26,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.15 | Controls recognisable for skins: `id`, `role` and `group` on `host.ui.knob` (in the `options`) and `host.ui.select` (new 6th argument), the attributes `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` for your own elements and `host.ui.list` for the register; the validator gives a `warning` for duplicate or missing ids and knows `--controls` (§12d). |
 | v1.16 | Coverage of `params()`: every continuous control belongs in `params()` (`modExclude` for deliberate exclusions, `on`/`drift` for whatever would sound wrong when it moves unasked, §8); the validator gives a `warning` for a control that is not in `params()`, for a device with controls but no `params()` and for a param id without a control, and `--controls` shows the column `in params()` |
 | v1.17 | Clipboard: copying and pasting patterns and clips between devices. Optional `clipInfo()`, `getClip()`, `setClip(clip)` (all three or none) and the exchange format `patchkamer-clip` (JSON, time in ticks); the host puts the Copy and Paste buttons in the card bar and translates between devices; the validator checks the three methods and knows `--clip` (§13d) |
+| v1.18 | Meters: `host.ui.meter(parent, label, opts)` lets the host draw the level (bar, LED ladder or a round VU meter with a needle; length and width adjustable by a skin), from one or two `AnalyserNode`s (`source`) or through `set(level)`; a meter is in the register with role `meter`; a device on an older host without `host.ui.meter` falls back to its own drawing; the attribute `data-pk-suffix` (text after the label when linking to MIDI); the validator knows `host.ui.meter` and shows meters in `--controls` (§12e) |
 
 ---
 
@@ -379,6 +380,7 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
   - `steps(parent, label, array16, onchange)` → `{ paint(), cursor(step) }`; keeps a reference to the array
   - `jack(this, parent, portId, dir, label)` (see §3), `noise(ctx)`, `curve(k)`
   - `adopt(el, { id, role, group, label })` and `list(this)` (v1.15, §12d)
+  - `meter(parent, label, opts)` → `{ el, set(level), id, destroy() }` (v1.18, §12e)
 - **Keep what `knob` and `select` return.** `setState` must update them (§13).
 - Your own HTML is fine too. Use the CSS variables of the host, then your device follows the color scheme (dark, light, retro):
   - colors: `--bg --floor --card --card-2 --line --fg --muted`;
@@ -532,8 +534,77 @@ mount(el) {
 - When you migrate a device, give **all** its knobs and choices an id, not a few: a skin that names a missing id silently does nothing.
 - A device that rebuilds its UI (Mixer, Control Surface) derives ids from its layout (`k1.2.3`, `ch3.vol`) and gives every control its role and group, so a skin can target by role or group.
 - Sound, state and presets do not change because of ids, roles or groups. Do not change them in the same action.
+- **A fixed suffix when linking to MIDI (`data-pk-suffix`).** When many controls on a card share a label (`Trim` on every channel of a mixer), put `data-pk-suffix="T3"` (text, at most 16 characters) on the control or on its enclosing element. When linking to MIDI the host puts the suffix after the visible label (`Trim - T3`). Only the label changes; the `id` (the key) stays the same. An older host ignores the attribute.
 
 **What the validator does.** It only gives a `warning` (never an error) for: an id on two controls (only what is built in `create()`/`mount()`; a later rebuild does not count twice), some controls without an id while others have one (no ids at all = not migrated, no message), a role outside the list, an id or group outside `[A-Za-z0-9._-]{1,60}`, options that are not an object, `adopt` on an element without a model or without an element, a `data-pk-id` on an element that is not attached anywhere in the card, and ids that depend on `host.lang`. With `--controls` it then prints the table `id | role | group | label nl/en | range | face | in params()` (the label from the nl and en rounds; if they are equal it appears once; the last column says whether a continuous control is in `params()`: `yes`, `no`, `excluded`, `?` for cannot be matched and `-` for a choice, checkbox or button).
+
+---
+
+## 12e. Meters (v1.18)
+
+A meter shows a level: a bar with a peak line, a row of LEDs or a round VU meter with a needle. If the device draws it itself, a skin cannot change it. So let **the host draw the meter**: `host.ui.meter` makes it and gives it the face and size the user or the skin chooses (bar, LED ladder, round VU; length and width). A VU face **replaces** the bar in the same place; it does not sit next to it. A meter only reads: it changes no sound, no state and no preset, and a skin cannot hide it, only show it differently. Everything below is **optional and additive**.
+
+| Call | What |
+|---|---|
+| `host.ui.meter(parent, label, opts)` | Makes a meter in `parent` (also a shadow root) and returns `{ el, set(level), id, destroy() }`. `label` is the `aria-label` and, if the device wants, a visible label |
+| `set(level)` | Only without `source`: the level, a number or `[l, r]`; call it from your own draw clock (`host.frame`). Rubbish (`NaN`, not a number) is ignored |
+| `destroy()` | Removes the meter and stops measuring; may be called twice, and belongs in the `destroy()`/`unmount()` of your device |
+| `el` | The meter's element (the host sets `--pk-meter-len` and `--pk-meter-wid` in px on it so your CSS can match the space) |
+
+| Option | Values | Meaning |
+|---|---|---|
+| `id` | text, 1 to 60 characters from `[A-Za-z0-9._-]` | Fixed address for skins (`met.master`, `met.t1`). A meter is not a parameter: the id is **not** in `params()` and need not equal a state key, but it does not change between versions |
+| `group` | text, as for controls (§12d) | Section name (`meters`) a skin can aim at |
+| `source` | an `AnalyserNode`, or a list of 1 or 2 `AnalyserNode`s (left, right) | The host reads them itself (`getFloatTimeDomainData`), only while your card is in view, on the host's draw clock. It **never** creates or connects nodes: the analyser you already have is enough. Without `source` you call `set()` yourself |
+| `unit` | `'linear'` (default) or `'db'` | Unit of what you give `set()`: amplitude 0 to 1 and above, or dB |
+| `range` | `[minDb, maxDb]` (default `[-60, 0]`; the Mixer uses `[-60, 6]`) | The meter's dB scale |
+| `kind` | `'peak'` (default) or `'rms'` | What the host takes from the analyser; `'rms'` only with `source` (over the analysis window) |
+| `hold` | `true` (default) or `false` | The peak line that falls slowly |
+| `clip` | a dB threshold | Above the threshold a clip lamp lights for 1.5 s. No lamp by default |
+| `orientation` | `'vertical'` or `'horizontal'` | Your device's own choice; a skin can override it |
+| `length`, `width` | px | The default size of the meter (length in the direction of the deflection, width as thickness). The host sets them as `--pk-meter-len` / `--pk-meter-wid` on `el` |
+
+**The default face (`bar`)** is the Mixer's bar: a gradient from `--audio` through `--go` to `--stop`, a peak line that falls by 0.4 per 66 ms, on a `--well` background. Without a skin a migrated device looks the same and measures the same as with its own drawing: the same dB scale, the same fall. A skin can choose the face, the direction, the size, the fall (ballistics: fast, classic VU or slow), the peak line, the clip lamp, the scale and the colour. A round VU face needs at least 56 × 36 px; the host enlarges `el` for that and your layout may grow with it (a channel strip of a mixer then becomes wider). So build your layout so that a meter may become larger than its default size.
+
+**The host does the damping and the fall.** So pass the raw level (with `source` the host reads the analyser; with `set()` you pass the measured peak or dB). Do not damp or let anything fall yourself: the signal would be slowed twice and a skin with other ballistics could no longer restore it.
+
+**Two ways to feed it**
+
+1. **With an analyser (`source`).** If your device already has an `AnalyserNode` for its meter (most do), pass it. This is the normal way; you draw nothing.
+2. **With `set()`.** If you compute the level yourself (a gain reduction, a limiter, an internal peak), call `set(level)` from your own draw clock, with `host.frame` (§12b), at no more than 30 frames per second. There is then no `source`.
+
+```js
+mount(el) {
+  // 1. with an analyser: the host reads it only while the card is visible
+  const an = ctx.createAnalyser(); an.fftSize = 1024; out.connect(an);      // you create and connect the analyser, the host does not
+  if (host.ui && typeof host.ui.meter === 'function') {
+    ui.level = host.ui.meter(el, T.level, { id: 'met.out', group: 'meters', source: an, range: [-60, 6], clip: 0, orientation: 'vertical', length: 90, width: 8 });
+  } else {
+    ui.oldMeter = ownMeter(el, an);          // older host: your own drawing as before v1.18 (keep that code in a function of its own)
+  }
+  // 2. with set(): you compute the level yourself
+  if (host.ui && typeof host.ui.meter === 'function') {
+    ui.gr = host.ui.meter(el, T.reduction, { id: 'met.gr', group: 'meters', unit: 'db', range: [-24, 0], hold: false, orientation: 'horizontal' });
+    ui.off = host.frame(this, () => ui.gr.set(reductionDb()), 30);          // reductionDb() returns dB, 0 or lower
+  }
+},
+destroy() { if (ui.level) ui.level.destroy(); if (ui.gr) ui.gr.destroy(); if (ui.off) ui.off(); }
+```
+
+**Degrading for an older host.** A host without v1.18 has no `host.ui.meter`. So always check `if (!host.ui || typeof host.ui.meter !== 'function')` and then draw yourself, as you did before v1.18. Keep that old drawing in a function of its own; do not delete it. That way the same file works on every host.
+
+**The register.** A meter is in `host.ui.list(this)` with `role: 'meter'`, `type: 'meter'`, `min` and `max` from `range`, and `face` = the face it has now (`bar`, `ledladder` or `vu`). `id`, `group` and `label` are those of the call. The attribute path (`data-pk-role="meter"` on an element you draw yourself) is **not** supported: a meter needs the host's face, so use the call.
+
+**Shadow root.** `parent` may sit in a shadow root (a device that builds with `attachShadow`). The host puts its meter CSS in the root of `parent` (`getRootNode()`), as it does for knobs; you need not copy anything.
+
+**Rules**
+
+- Make one call per meter, in `mount()` or in your own `render()`; call the meter's `destroy()` when you remove or rebuild it.
+- A meter is not a control: no coverage rule, not in `params()`, not in `getState()`. Sound, state and presets do not change because of a meter.
+- Do not create or connect nodes for the host. The `AnalyserNode`s your device already has are enough; a new analyser in the audio path is a change to your device, not to the meter.
+- A guard against a broken analyser (silence or `NaN` at an output) stays yours; the host only reads.
+
+**What the validator does.** The fake host knows `host.ui.meter`. A `source` that is not an `AnalyserNode` (or a list of 1 or 2) **throws** and is therefore an error. A `warning` (never an error) comes for: a meter id already used by another control, an invalid id or group, options that are not an object, an invalid `range`, `unit`, `kind`, `hold`, `clip`, `orientation`, `length` or `width`, `kind: 'rms'` without `source`, a `set()` with anything but a finite number or `[l, r]`, `data-pk-role="meter"` on your own element (or `host.ui.adopt` with role `meter`) and a `data-pk-suffix` of more than 16 characters. A `host.ui.meter` without `source` and without `set()` it cannot see. The OK line mentions the number of meters and `--controls` shows them in the table with role `meter`.
 
 ---
 
@@ -608,6 +679,8 @@ For controllers (such as a MIDI device that couples pads to devices). Ordinary i
 | `host.ui.adopt(el, { id, role, group, label })` | v1.15 | Register your own element as a control; returns `el` (§12d) |
 | `host.ui.list(this)` | v1.15 | The register: `[{ id, role, group, label, type, min, max, face }]` (§12d) |
 | `data-pk-id`, `data-pk-role`, `data-pk-group` | v1.15 | The same data as attributes on your own elements (§12d) |
+| `host.ui.meter(parent, label, opts)` | v1.18 | Have the host draw a meter (bar, LED ladder or round VU, chosen by a skin); returns `{ el, set, id, destroy }` (§12e) |
+| `data-pk-suffix` | v1.18 | Text (at most 16 characters) the host puts after the label when linking to MIDI: ` - suffix` (§12d) |
 | `peers[].noteNames` | In the list from `host.peers(this)`: the cleaned list of that device, or `[]` if it has none |
 
 - A sequencer or controller finds its target with `host.cablesFrom(this, ownOutput)` and looks the `id` up in `host.peers(this)`. Without a cable or without a list it behaves as always.
@@ -792,6 +865,8 @@ Current pitches are copied **as stored**: the transposition of a lane (octave, `
 | `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
 | `host.noteNamesChanged(this)` | v1.14 | Your `noteNames()` changed; other devices hear it through `onPeers` (§13b) |
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Copy and paste patterns and clips, optional and all three together; format `patchkamer-clip` (§13d) |
+| `host.ui.meter(parent, label, opts)` | v1.18 | Have the host draw a meter (bar, LED ladder or round VU, chosen by a skin); returns `{ el, set, id, destroy }` (§12e) |
+| `data-pk-suffix` | v1.18 | Text (at most 16 characters) the host puts after the label when linking to MIDI: ` - suffix` (§12d) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -833,7 +908,7 @@ A library is a folder (local, on GitHub or at a web address) with modules and a 
 ```
 node validate-instrument.mjs my-device.patchkamer-device.js
 node validate-instrument.mjs my-device.patchkamer-device.js --lang en   # output in English (default Dutch)
-node validate-instrument.mjs my-device.patchkamer-device.js --controls  # also print the table of controls (v1.15)
+node validate-instrument.mjs my-device.patchkamer-device.js --controls  # also print the table of controls and meters (v1.15, v1.18)
 node validate-instrument.mjs my-device.patchkamer-device.js --clip      # also show the output of clipInfo() and getClip() (v1.17)
 ```
 
@@ -856,6 +931,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 15. **Controls for skins (v1.15)**: the fake host knows `host.ui.knob(…, options)`, `host.ui.select(…, options)`, `host.ui.adopt` and `host.ui.list`, and also reads `data-pk-*` attributes on your own elements. Only a `warning` (never an error) for a duplicate id, some ids missing, a role outside the list, an invalid id or group, options that are not an object, `adopt` on an element without a model, an id on an element that is not attached anywhere, and ids that differ per `host.lang`. `--controls` prints the table `id | role | group | label nl/en | range | face | in params()` (see §12d).
 16. **Coverage of `params()` (v1.16, §8)**: every continuous control (`<input type="range">`, `host.ui.knob`, `host.ui.adopt`; not the roles `step`, `display`, `meter`, `jack`, `pad`, `button`) is matched to `params()`: first by its `id` (options or `data-pk-id`), then by the `getState` key that changes when the validator moves the value and calls the `input`/`change` handling (numbered keys such as `osc.0.fine` count if they occur at several positions; step data and a single selected position do not), then by a label equal to exactly one parameter name. Only a `warning` (never an error) for: continuous controls that are not in `params()` and not in `modExclude`; an `instrument`, `effect` or `mixer` (not the categories `sequencer` and `tool`) with continuous controls but no `params()`; a `params()` id without a control or state key; a `modExclude` that is not a list of strings (or `'*'`). What the validator cannot match, it leaves silent (`?` in `--controls`). Controls built through `innerHTML` or drawn on a canvas it does not see.
 17. **Clipboard (v1.17, §13d)**: `clipInfo`, `getClip` and `setClip` all three or none. `clipInfo()` returns `null` or a JSON object (`copy`/`paste` with `notes` and/or `drums`, numbers in `length`), does not throw and does not change the state. `getClip()` returns `null` or a valid `patchkamer-clip` as JSON without AudioNodes (`format`, `formatVersion` 1, `kind` `notes` or `drums`, `length` 1 to 12288 whole ticks, at most 4096 notes or hits and 64 lanes, `t`, `n`, `lane` and `vel` in range) and does not change the state. `setClip(getClip())` leaves `getState()` unchanged. `setClip` gets junk, empty and extreme clips (other types, `NaN`, length 0 or 1e9, 100000 notes, lanes that do not exist) and does not throw; it always returns `{ ok, reason }` (`reason` text with `ok: false`); with `ok: false` the state stays the same, with `ok: true` the state is JSON without `NaN`/`Infinity` and stable under `setState(getState())`; it sends no events itself. A device that rejects its own `getClip()` (`ok: false`) gets a `warning`. A device without these methods gets no message. `--clip` shows what `clipInfo()` and `getClip()` return.
+18. **Meters (v1.18, §12e)**: the fake host knows `host.ui.meter(parent, label, opts)` and returns `{ el, set, id, destroy }`. A `source` that is not an `AnalyserNode` or a list of 1 or 2 `AnalyserNode`s throws and is therefore an error. Only a `warning` (never an error) for: a duplicate meter id, an invalid id or group, options that are not an object, an invalid `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` without `source`, a `set()` with anything but a finite number or `[l, r]`, `data-pk-role="meter"` on your own element and a `data-pk-suffix` of more than 16 characters. A meter does not count towards the coverage of `params()`. `--controls` shows meters with role `meter`.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -883,7 +959,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 18. Controls (v1.15, recommended): every `host.ui.knob`/`select` and every own slider has an `id` (= state/parameter key, never the label), a `role` and a `group`; `node validate-instrument.mjs file.patchkamer-device.js --controls` shows the table without `warning` (§12d).
 19. Coverage (v1.16): `params()` contains every continuous control with `id` = state key, except what is in `modExclude` (test note, base note, length, voices, step data); choices and checkboxes do not belong in it; parameters that must not move unasked (pitch, master, gate, octave, times) have `on: false` (§8). `--controls` shows no `no` in the `in params()` column.
 20. Clipboard (v1.17, optional): `clipInfo`/`getClip`/`setClip` together; `getClip()` returns a valid `patchkamer-clip` or `null`; `setClip` clamps everything itself, returns `{ ok, reason }`, sets nothing halfway and sends no events; `setClip(getClip())` leaves `getState()` the same (§13d).
-21. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+21. Meters (v1.18, optional): whoever shows a level uses `host.ui.meter` (with `source` for an existing `AnalyserNode`, otherwise with `set()`), with `id` and `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` as a fallback to the own drawing, no damping of your own, the meter's `destroy()` in the device's `destroy()`, and a layout that lets the meter grow (§12e).
+22. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 
@@ -912,6 +989,10 @@ What the validator can *not* see: whether your texts are well translated, whethe
 | The label as the `id` of a control | The label is translated and changes: a skin no longer hits the control; the validator gives a `warning` if it differs per language | `id` = the key in `getState()`/`params()` (§12d) |
 | A few controls with an id, the rest without | A skin can only target the registered ones; the rest stays default | Give all knobs, choices and sliders an id |
 | `host.ui.adopt` on a `div` or a drawing | No model: the host cannot put another face on it | Only on `input` (range/checkbox), `select` or `button` |
+| Drawing your own meter while `host.ui.meter` exists | A skin cannot choose the face and size; the meter stays a bar | `host.ui.meter`, with your old drawing as the fallback for an old host (§12e) |
+| `host.ui.meter` without checking that it exists | The device throws on an older host | `if (!host.ui || typeof host.ui.meter !== 'function')` and then draw yourself |
+| Damping the level yourself before `set()` | The signal slows twice; a skin with other ballistics no longer helps | Pass the raw level, the host does the fall |
+| Dropping `source` and still reading your own analyser into `set()` | Double work, also out of view | Pass the `AnalyserNode` as `source`; the host reads only when the card is visible |
 
 ---
 
@@ -922,7 +1003,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.17
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.18
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -981,7 +1062,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.17
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.18
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -1045,7 +1126,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.17
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.18
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1123,7 +1204,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.17.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.18.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>
