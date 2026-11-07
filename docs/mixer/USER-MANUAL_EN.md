@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This page covers the devices that bring your sounds together and send them out: **Mixer**, **Leveler**, **Speakers**, **Audio Input** and **Audio Output**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/mixer](../../devices/mixer/README.md).
+This page covers the devices that bring your sounds together and send them out: **Mixer**, **Leveler**, **Speakers**, **Audio Input**, **Audio Capture** and **Audio Output**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/mixer](../../devices/mixer/README.md).
 
 ## Contents
 
@@ -12,8 +12,9 @@ This page covers the devices that bring your sounds together and send them out: 
 4. [Leveler](#leveler)
 5. [Speakers](#speakers)
 6. [Audio Input](#audio-input)
-7. [Audio Output](#audio-output)
-8. [If it does not work](#if-it-does-not-work)
+7. [Audio Capture](#audio-capture)
+8. [Audio Output](#audio-output)
+9. [If it does not work](#if-it-does-not-work)
 
 ## What these devices do
 
@@ -38,6 +39,7 @@ All cables here are teal audio cables. The Mixer also has a green **bundle** cab
 | Keep a source that slowly gets louder and softer at a steady volume | [Leveler](#leveler) |
 | Hear the result and set the final volume | [Speakers](#speakers) |
 | Bring in a microphone, an instrument or an audio interface | [Audio Input](#audio-input) |
+| Bring in the sound of another tab, a window or (on Windows) the system, to sample or record it | [Audio Capture](#audio-capture) |
 | Send sound to a chosen output, such as an audio interface or headphones | [Audio Output](#audio-output) |
 
 ## Mixer
@@ -252,6 +254,54 @@ The **Audio Input Basics** pack has 31 presets in five folders: **Line Level**, 
 - A microphone in a room with speakers gives feedback. Use headphones, or press **Mute** until you have set the volume.
 - The sample rate of the input can differ from the sample rate of Patchkamer. The browser converts it.
 - If another program has the input, the browser may not be able to open it. Close that program and click **Start input** again.
+
+## Audio Capture
+
+### What it is for
+
+Audio Capture brings the sound of another browser tab, a window or (on Windows) the whole system into the studio, so you can sample it, record it or run it through effects. It has one audio output, **Out**, that fits every audio input in Patchkamer: connect it to the **Recorder**, a sampler, an effect, a Mixer channel or **Speakers**. After you click **Start capture** the browser shows its own dialog where you choose the source and tick sharing sound.
+
+![The Audio Capture card](../images/en/mixer/audio-capture.png)
+
+### The controls
+
+| Control | What it does | Range (start) |
+|---|---|---|
+| **Start capture** / **Stop capture** | Opens the share dialog of the browser, or ends the capture. Nothing starts by itself, also not when you load a song or a preset. | off |
+| **Mode** | **Stereo** keeps left and right. **Mono (channels summed)** puts both channels together on left and right. | Stereo |
+| **Gain** | Raises or lowers the captured sound. | −24 to +36 dB (0 dB) |
+| **High-pass** | Cuts low rumble: off, 40, 80 or 120 Hz. | off |
+| **Invert polarity** | Turns the signal upside down. | off |
+| **Mute** | A button that silences the output; it lights up while it is on. It is off at first, so the capture sounds right away. | off |
+| **L** / **R** meters | The level after the gain. **clip** lights up for a moment when the signal reaches full scale. | |
+
+### Ports
+
+| Port | Kind | Use |
+|---|---|---|
+| **Out** | audio out | Stereo sound of the chosen source. Connect to the **Recorder**, a sampler, an effect, a Mixer channel or **Speakers**. |
+
+### An example
+
+1. Open the music or video you want to capture in another tab and start it.
+2. Place **Audio Capture** and **Recorder** in Patchkamer and connect **Out** to the **In** of the Recorder. Use headphones.
+3. Click **Start capture**, choose the **tab**, tick **Share tab audio** and confirm. The status line names the source and the meters move.
+4. Record a part with the Recorder and save it as WAV. Load that file in a sampler such as Samplebank, where you can cut and edit it.
+5. Click **Stop capture** (or end the sharing in the browser) when you are done.
+
+### Presets
+
+The **Audio Capture Basics** pack has 12 presets in three folders: **Stereo**, **Mono** and **Cleanup**. A preset sets the mode, the gain, the high-pass and the polarity. It does not choose the source and does not unmute. See [Presets](../presets/USER-MANUAL_EN.md).
+
+### Tips and limits
+
+- The browser always shares a picture together with the sound. Patchkamer does not use or show that picture. Ending the sharing, for example with the button of the browser, also ends the capture.
+- **Tab sound** works in browsers based on Chromium (such as Chrome and Edge) on every system. Choose the tab and tick sharing sound. Firefox and Safari do not share sound.
+- **System sound** (the whole screen) only works on Windows, also in the desktop app. On Linux and macOS choose a tab, or use **Audio Input** with a loopback input of your sound system.
+- A capture of Patchkamer itself, or of the whole system sound while this device is connected to **Speakers**, plays itself back and gives feedback. Choose another tab, use headphones, or keep the output away from Speakers.
+- The browser cannot capture the sound of one single program. Use a tab for that.
+- Sound that you capture can be protected. Use it only for what you are allowed to do with it.
+- The sound goes through the browser, so there is a delay. It does not matter for sampling.
 
 ## Audio Output
 

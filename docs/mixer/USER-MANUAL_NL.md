@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten sturen: **Mixer**, **Leveler**, **Speakers**, **Audio Input** en **Audio Output**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/mixer](../../devices/mixer/README_NL.md).
+Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten sturen: **Mixer**, **Leveler**, **Speakers**, **Audio Input**, **Audio Capture** en **Audio Output**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/mixer](../../devices/mixer/README_NL.md).
 
 ## Inhoud
 
@@ -12,8 +12,9 @@ Deze pagina beschrijft de apparaten die je geluiden samenbrengen en naar buiten 
 4. [Leveler](#leveler)
 5. [Speakers](#speakers)
 6. [Audio Input](#audio-input)
-7. [Audio Output](#audio-output)
-8. [Als het niet werkt](#als-het-niet-werkt)
+7. [Audio Capture](#audio-capture)
+8. [Audio Output](#audio-output)
+9. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat deze apparaten doen
 
@@ -38,6 +39,7 @@ Alle kabels hier zijn groenblauwe audiokabels. De Mixer heeft ook een groene **b
 | Een bron die langzaam harder en zachter wordt op een gelijk volume houden | [Leveler](#leveler) |
 | Het resultaat horen en het eindvolume instellen | [Speakers](#speakers) |
 | Een microfoon, een instrument of een audio-interface naar binnen halen | [Audio Input](#audio-input) |
+| Het geluid van een ander tabblad, een venster of (op Windows) het systeem naar binnen halen, om te samplen of op te nemen | [Audio Capture](#audio-capture) |
 | Geluid naar een gekozen uitgang sturen, zoals een audio-interface of koptelefoon | [Audio Output](#audio-output) |
 
 ## Mixer
@@ -252,6 +254,54 @@ Het pack **Audio Input Basics** heeft 31 presets in vijf mappen: **Line Level**,
 - Een microfoon in een kamer met luidsprekers geeft rondzingen. Gebruik een koptelefoon, of druk op **Dempen** tot je het volume hebt ingesteld.
 - De sample rate van de ingang kan afwijken van die van Patchkamer. De browser rekent dat om.
 - Gebruikt een ander programma de ingang, dan kan de browser hem soms niet openen. Sluit dat programma en klik opnieuw op **Start ingang**.
+
+## Audio Capture
+
+### Waar het voor dient
+
+Audio Capture haalt het geluid van een ander browsertabblad, een venster of (op Windows) het hele systeem de studio in, zodat je het kunt samplen, opnemen of door effecten kunt halen. Het heeft één audio-uitgang, **Uit**, die op elke audio-ingang in Patchkamer past: verbind hem met de **Recorder**, een sampler, een effect, een Mixer-kanaal of **Speakers**. Na een klik op **Start capture** toont de browser een eigen venster waarin je de bron kiest en het delen van geluid aanvinkt.
+
+![De kaart van Audio Capture](../images/nl/mixer/audio-capture.png)
+
+### De regelaars
+
+| Regelaar | Wat hij doet | Bereik (start) |
+|---|---|---|
+| **Start capture** / **Stop capture** | Opent het deelvenster van de browser, of beëindigt de capture. Er start niets uit zichzelf, ook niet als je een song of preset laadt. | uit |
+| **Weergave** | **Stereo** houdt links en rechts. **Mono (kanalen samengeteld)** zet beide kanalen samen op links en rechts. | Stereo |
+| **Versterking** | Maakt het opgevangen geluid harder of zachter. | −24 tot +36 dB (0 dB) |
+| **Hoogdoorlaat** | Snijdt lage dreun weg: uit, 40, 80 of 120 Hz. | uit |
+| **Polariteit omkeren** | Draait het signaal om. | uit |
+| **Dempen** | Een knop die de uitgang stil maakt; hij licht op zolang hij aan staat. Staat eerst uit, zodat de capture meteen klinkt. | uit |
+| Meters **L** / **R** | Het niveau na de versterking. **clip** licht even op als het signaal vol uitgestuurd is. | |
+
+### Poorten
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Uit** | audio uit | Stereogeluid van de gekozen bron. Verbind met de **Recorder**, een sampler, een effect, een Mixer-kanaal of **Speakers**. |
+
+### Een voorbeeld
+
+1. Open de muziek of video die je wilt opvangen in een ander tabblad en start hem.
+2. Plaats **Audio Capture** en **Recorder** in Patchkamer en verbind **Uit** met **In** van de Recorder. Gebruik een koptelefoon.
+3. Klik op **Start capture**, kies het **tabblad**, vink **Tabgeluid delen** aan en bevestig. De statusregel noemt de bron en de meters bewegen.
+4. Neem een stuk op met de Recorder en bewaar het als WAV. Laad dat bestand in een sampler zoals Samplebank, waar je het kunt knippen en bewerken.
+5. Klik op **Stop capture** (of beëindig het delen in de browser) als je klaar bent.
+
+### Presets
+
+Het pack **Audio Capture Basics** heeft 12 presets in drie mappen: **Stereo**, **Mono** en **Cleanup**. Een preset stelt de weergave, de versterking, de hoogdoorlaat en de polariteit in. Hij kiest de bron niet en haalt de demping niet weg. Zie [Presets](../presets/USER-MANUAL_NL.md).
+
+### Tips en beperkingen
+
+- De browser deelt altijd een beeld mee met het geluid. Patchkamer gebruikt en toont dat beeld niet. Beëindig je het delen, bijvoorbeeld met de knop van de browser, dan stopt ook de capture.
+- **Tabgeluid** werkt in browsers op basis van Chromium (zoals Chrome en Edge) op elk systeem. Kies het tabblad en vink het delen van geluid aan. Firefox en Safari delen geen geluid.
+- **Systeemgeluid** (het hele scherm) werkt alleen op Windows, ook in de desktop-app. Kies op Linux en macOS een tabblad, of gebruik **Audio Input** met een loopback-ingang van je geluidssysteem.
+- Een capture van Patchkamer zelf, of van het hele systeemgeluid terwijl dit apparaat op **Speakers** is aangesloten, speelt zichzelf terug en geeft rondzingen. Kies een ander tabblad, gebruik een koptelefoon, of houd de uitgang van Speakers af.
+- De browser kan het geluid van één los programma niet opvangen. Gebruik daarvoor een tabblad.
+- Geluid dat je opvangt kan beschermd zijn. Gebruik het alleen waarvoor je het mag gebruiken.
+- Het geluid loopt door de browser, dus er is vertraging. Voor samplen maakt dat niet uit.
 
 ## Audio Output
 

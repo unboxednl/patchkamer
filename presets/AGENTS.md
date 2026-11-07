@@ -93,6 +93,7 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [Multiband Balance](../devices/mastering/MultibandBalance/) | Multiband Balance Situations and Styles | 128 | 10: Situations, Styles, Club, Festival, Big Room, Home / Hi-Fi, Headphones, Studio / Reference, Radio / Broadcast, Car | [`multiband-balance.patchkamer-presets.json`](multiband-balance.patchkamer-presets.json) | 2 |
 | [Patina](../devices/mastering/Patina/) | Patina Situations and Styles | 128 | 10: Situations, Styles, Club, Festival, Big Room, Home / Hi-Fi, Headphones, Studio / Reference, Radio / Broadcast, Car | [`patina.patchkamer-presets.json`](patina.patchkamer-presets.json) | 2 |
 | [Stereo Space](../devices/mastering/StereoSpace/) | Stereo Space Situations and Styles | 128 | 10: Situations, Styles, Club, Festival, Big Room, Home / Hi-Fi, Headphones, Studio / Reference, Radio / Broadcast, Car | [`stereo-space.patchkamer-presets.json`](stereo-space.patchkamer-presets.json) | 2 |
+| [Audio Capture](../devices/mixer/AudioCapture/) | Audio Capture Basics | 12 | 3: Stereo, Mono, Cleanup | [`audio-capture.patchkamer-presets.json`](audio-capture.patchkamer-presets.json) | 2 |
 | [Audio Input](../devices/mixer/AudioInput/) | Audio Input Basics | 31 | 5: Line Level, Voice, Instruments, Interface Channels, Utility | [`audio-input.patchkamer-presets.json`](audio-input.patchkamer-presets.json) | 2 |
 | [Audio Output](../devices/mixer/AudioOutput/) | Audio Output Basics | 16 | 4: Main Out, Headphones, Interface Pairs, Checks | [`audio-output.patchkamer-presets.json`](audio-output.patchkamer-presets.json) | 2 |
 | [Leveler](../devices/mixer/Leveler/) | Leveler Basics | 11 | 3: Sources, Mix, Utility | [`leveler.patchkamer-presets.json`](leveler.patchkamer-presets.json) | 2 |
@@ -114,7 +115,7 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3: Practice, Subdivisions, Loud | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) | 2 |
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4: Sound Controllers, Wheels and Pedals, Effects, Utility | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) | 2 |
 
-Samen 41 packs met 1902 presets.
+Samen 42 packs met 1914 presets.
 <!-- list-devices:end presets -->
 
 ## Wat je niet doet
