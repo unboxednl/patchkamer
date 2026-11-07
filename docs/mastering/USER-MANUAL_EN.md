@@ -136,7 +136,7 @@ Fine adjustment: the arrow keys give a small step (0.1 dB; about 1 percent for f
 
 Balance EQ has the pack **Balance EQ Situations and Styles**: 128 presets in 10 folders (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). The file is [`presets/balance-eq.patchkamer-presets.json`](../../presets/balance-eq.patchkamer-presets.json). Load the pack with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
-The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The values follow the same recipes as the Master Director.
+The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The Master Director loads exactly these presets when its choice (style, situation and strength) is one of its own presets; for any other combination or strength it works out its own, coarser values.
 
 ### Tips and limits
 
@@ -196,7 +196,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 Multiband Balance has the pack **Multiband Balance Situations and Styles**: 128 presets in 10 folders (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). The file is [`presets/multiband-balance.patchkamer-presets.json`](../../presets/multiband-balance.patchkamer-presets.json). Load the pack with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
-The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The values follow the same recipes as the Master Director.
+The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The Master Director loads exactly these presets when its choice (style, situation and strength) is one of its own presets; for any other combination or strength it works out its own, coarser values.
 
 ### Tips and limits
 
@@ -239,7 +239,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 Bus Compressor has the pack **Bus Compressor Situations and Styles**: 128 presets in 10 folders (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). The file is [`presets/bus-compressor.patchkamer-presets.json`](../../presets/bus-compressor.patchkamer-presets.json). Load the pack with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
-The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The values follow the same recipes as the Master Director.
+The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The Master Director loads exactly these presets when its choice (style, situation and strength) is one of its own presets; for any other combination or strength it works out its own, coarser values.
 
 ### Tips and limits
 
@@ -281,7 +281,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 Patina has the pack **Patina Situations and Styles**: 128 presets in 10 folders (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). The file is [`presets/patina.patchkamer-presets.json`](../../presets/patina.patchkamer-presets.json). Load the pack with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
-The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The values follow the same recipes as the Master Director.
+The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The Master Director loads exactly these presets when its choice (style, situation and strength) is one of its own presets; for any other combination or strength it works out its own, coarser values.
 
 ### Tips and limits
 
@@ -323,7 +323,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 Stereo Space has the pack **Stereo Space Situations and Styles**: 128 presets in 10 folders (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). The file is [`presets/stereo-space.patchkamer-presets.json`](../../presets/stereo-space.patchkamer-presets.json). Load the pack with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
-The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The values follow the same recipes as the Master Director.
+The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The Master Director loads exactly these presets when its choice (style, situation and strength) is one of its own presets; for any other combination or strength it works out its own, coarser values.
 
 ### Tips and limits
 
@@ -374,7 +374,7 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 Master Chain has the pack **Master Chain Situations and Styles**: 128 presets in 10 folders (Situations (9), Styles (32), Club (14), Festival (11), Big Room (8), Home / Hi-Fi (14), Headphones (11), Studio / Reference (13), Radio / Broadcast (8), Car (8)). The file is [`presets/master-chain.patchkamer-presets.json`](../../presets/master-chain.patchkamer-presets.json). Load the pack with the **Presets** tab of the library → **Import…**, then pick a preset in the list on the card.
 
-The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The values follow the same recipes as the Master Director.
+The folders **Situations** and **Styles** have one preset per situation and per music style; the other folders have the usual combinations of a situation and a style (for example **Club › Techno**). The Master Director loads exactly these presets when its choice (style, situation and strength) is one of its own presets; for any other combination or strength it works out its own, coarser values.
 
 ### Tips and limits
 
@@ -458,7 +458,7 @@ Master Director has the pack **Master Director Situations and Styles**: 128 pres
 ### Tips and limits
 
 - **The host must support the Master Director protocol.** In a host without it the card says "Host extension required" and nothing changes. You can still set every device by hand or with its own presets.
-- Nothing changes automatically when you load a song or connect a cable: the Director only acts when you choose or press a button. **Loading a preset** counts as choosing: it also sets the connected chain, like **Set the chain** (only when **Apply directly when you choose** is on, and only for the devices on the yellow cable). The devices then also load their own preset with the same folder and name (for example **Situations › Club**), so it shows in their preset box and their settings are that preset's. A device without a preset of that name keeps what the Director's recipe set. Choosing a style or situation by hand does not load presets.
+- Nothing changes automatically when you load a song or connect a cable: the Director only acts when you choose or press a button. **Loading a preset** counts as choosing: it also sets the connected chain, like **Set the chain** (only when **Apply directly when you choose** is on, and only for the devices on the yellow cable). The devices then also load their own preset with the same folder and name (for example **Situations › Club**), so it shows in their preset box and their settings are that preset's. A device without a preset of that name keeps what the Director's recipe set. The same happens when you press **Set the chain** or choose a style or situation by hand and the result is exactly one of the Director's presets (same style, situation and strength). For any other combination or strength the Director sets its own calculated values and the preset boxes show the last preset with an asterisk.
 - Locked controls and devices without **Allow Master Director** are skipped.
 
 ## Listening Output

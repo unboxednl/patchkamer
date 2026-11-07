@@ -107,15 +107,16 @@ function presetPaint(id){ const r=PK.Host.devices.get(id); if(!r||!r.pbarEl) ret
     const cur=r.partTunes&&r.partTunes[r.partSel]; pt.value=cur?(tuFind(cur.lid,cur.pid)?.l.lid||cur.lid)+'|'+cur.pid:''; } }
 function presetRefreshAll(){ PK.Host.devices.forEach((r,id)=>presetPaint(id)); if(!PK.$('prPanel').hidden) prPaintPanel(); } PK.presetRefreshAll=presetRefreshAll;
 function presetMark(id,p){ const r=PK.Host.devices.get(id); if(!r||!p) return; const h=tuFind(p.lid,p.pid); r.preset={lid:h?h.l.lid:p.lid,pid:p.pid,name:h?h.n.name:p.name}; r.presetSnap=presetKey(r); presetPaint(id); } PK.presetMark=presetMark;
-// Master Director: kiest iemand een preset in de Director (bijvoorbeeld "Situations › Club"), dan laden de apparaten aan zijn gele kabels ook hun eigen preset met dezelfde mapnaam en naam,
-// zodat die in hun presetvak staat en hun waarden die van de preset zijn. Alleen als de Director "Direct toepassen" aan heeft, voor de geselecteerde apparaten (niet de uitgesloten, niet Mix Check)
-// en alleen als zo'n apparaat een gelijknamige preset heeft; de rest houdt wat het recept van de Director instelde.
-function presetFollowMastering(did){ const d=PK.Host.devices.get(did); if(!d||!d.preset) return 0; let st={}; try{ st=d.inst.getState()||{}; }catch(e){ return 0; } if(st.direct===false) return 0;
-  const h=tuFind(d.preset.lid,d.preset.pid); if(!h) return 0; const want=[...h.path,h.n.name].join('/'); let n=0;
-  PK.masteringTargets(did).forEach(tg=>{ const r=PK.Host.devices.get(tg.id); if(!r||r.def.id==='nl.patchkamer.mixcheck'||(st.excluded&&st.excluded[tg.id])) return; let hit=null;
+// Master Director: staat de Director op een stijl, situatie en sterkte die precies een preset uit zijn eigen pack is (bijvoorbeeld "Situations › Club", na een preset laden of door dezelfde keuzes te maken),
+// dan laden de doelen aan zijn gele kabels (ids in `ids`) hun eigen preset met dezelfde mapnaam en naam in plaats van het rekenrecept, zodat die in hun presetvak staat en hun waarden die van de preset zijn.
+// Geeft de ids terug die zo zijn ingesteld; een doel zonder gelijknamige preset (en elke andere keuze of sterkte) valt terug op het recept van de Director.
+function presetFollowMastering(did,ids){ const d=PK.Host.devices.get(did), done=[]; if(!d) return done; let st={}; try{ st=d.inst.getState()||{}; }catch(e){ return done; }
+  let want=null; for(const l of PK.PR.libs){ if(l.device!==d.def.id) continue; tuWalk(l.tree,(m,path)=>{ const s=m.state; if(!want&&m.type==='tune'&&m.kind==='set'&&s&&s.style===st.style&&s.situation===st.situation&&Math.abs((+s.strength)-(+st.strength))<1e-9) want=[...path,m.name].join('/'); }); if(want) break; }
+  if(!want) return done;
+  (ids||[]).forEach(id=>{ const r=PK.Host.devices.get(id); if(!r||r.def.id==='nl.patchkamer.mixcheck') return; let hit=null;
     for(const l of PK.PR.libs){ if(l.device!==r.def.id) continue; tuWalk(l.tree,(m,path)=>{ if(!hit&&m.type==='tune'&&m.kind==='set'&&[...path,m.name].join('/')===want) hit={l,m}; }); if(hit) break; }
-    if(hit&&presetApply(tg.id,hit.l.lid,hit.m.pid,true)) n++; });
-  return n; } PK.presetFollowMastering=presetFollowMastering;
+    if(hit&&presetApply(id,hit.l.lid,hit.m.pid,true)) done.push(id); });
+  return done; } PK.presetFollowMastering=presetFollowMastering;
 function presetApply(id,lid,pid,quiet){
   const r=PK.Host.devices.get(id), h=tuFind(lid,pid); if(!r||!h) return false; const p=h.n;
   if(h.l.device!==r.def.id){ PK.status(PK.pkt('m.is_een_tune_voor_niet',p.name,devName(h.l.device),r.def.name),true); return false; }
@@ -125,7 +126,6 @@ function presetApply(id,lid,pid,quiet){
   catch(e){ PK.status(PK.pkt('m.tune_laden_mislukt',r.def.name,p.name,e.message),true); return false; }
   r.preset={lid:h.l.lid,pid,name:p.name}; r.presetSnap=presetKey(r); r.partTunes={}; presetPaint(id); PK.Host.devices.forEach((x,k)=>{ if(k!==id&&x.def.id===r.def.id) presetPaint(k); }); requestAnimationFrame(PK.drawCables);
   if(typeof PK.Host.paramsChanged==='function') PK.Host.paramsChanged(r.inst);
-  if(PK.portList(r.ports,'out','mastering').length) presetFollowMastering(id);
   const others=tuOthers(id,pid);
   if(!quiet) PK.status(`${r.def.name}: “${p.name}” · ${licLine(p,h.l)}`+(p.ver&&p.ver!==r.def.version?PK.pkt('m.gemaakt_met_v',p.ver):'')+(others.length?PK.pktp('m.ook_geladen_op_andere_exemplaren',others.length>1,others.length):''));
   return true; } PK.presetApply=presetApply;

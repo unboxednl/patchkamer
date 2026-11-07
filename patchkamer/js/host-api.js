@@ -94,7 +94,8 @@ const Host={
       return {changed,results}; }
     if(action==='apply'){ const set=opts&&opts.settings&&typeof opts.settings==='object'?opts.settings:null; if(!set) return {error:PK.pkt('m.mastering_geen_instellingen')};
       const mine=ids.filter(id=>set[id]&&typeof set[id]==='object'), snap=[]; mine.forEach(id=>{ const r=this.devices.get(id); try{ if(typeof r.inst.getState==='function') snap.push([id,JSON.parse(JSON.stringify(r.inst.getState()))]); }catch(e){} });
-      mine.forEach(id=>note(id,call(id,'configureMastering',set[id]))); push(snap); return {changed,results}; }
+      const viaPreset=typeof PK.presetFollowMastering==='function'?PK.presetFollowMastering(sid,mine):[];   // staat de Director op een preset uit zijn pack: de doelen laden hun gelijknamige preset
+      mine.forEach(id=>note(id,viaPreset.includes(id)?{ok:true,changed:['*'],skipped:[]}:call(id,'configureMastering',set[id]))); push(snap); return {changed,results}; }
     if(action==='accept'){ const snap=snapshot(); ids.forEach(id=>note(id,call(id,'acceptMasteringProposal'))); push(snap); return {changed,results}; }
     if(action==='analyse'){ ids.forEach(id=>note(id,call(id,'analyseMastering'))); return {changed,results}; }
     ids.forEach(id=>note(id,{ok:true,report:call(id,'getMasteringReport')})); return {changed:0,results};
