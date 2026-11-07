@@ -25,6 +25,16 @@ In de map [hip-hop](hip-hop/) staan vier songs in verschillende substijlen, elk 
 | [lo-fi](hip-hop/lo-fi.patchkamer-song.json) | lo-fi, 75 BPM, D mineur | intro, A, B, break, A, outro (36 maten) |
 | [g-funk](hip-hop/g-funk.patchkamer-song.json) | G-funk, 95 BPM, G mineur | intro, hook, couplet, hook, break, hook, outro (44 maten) |
 
+## Jungle, breakbeat en drum and bass
+
+Drie songs waarvan de drums uit een **sample** komen: een break uit het pack [Break Loops](../samples/README_NL.md) staat in de Loop Slicer, en een Pattern Tracker speelt de slices (de patronen van de tunes Loop Slicer Break Chops) samen met de bas en de akkoorden. Het songtempo is gelijk aan het tempo van de break. Op papier en met metingen gecontroleerd (niveaus, geen clipping, elk kanaal geeft geluid), **niet beluisterd**.
+
+| Bestand | Stijl | Break | Opbouw |
+|---|---|---|---|
+| [rolling-jungle](jungle/rolling-jungle.patchkamer-song.json) | jungle, 168 BPM, E mineur | Skittering Hat Break | intro, build, drop, break, drop, outro (64 maten) |
+| [funk-breakbeat](breakbeat/funk-breakbeat.patchkamer-song.json) | breakbeat, 128 BPM, D dorisch | Big Stomp Break | intro, build, main, break, main, outro (64 maten) |
+| [liquid-roller](drum-and-bass/liquid-roller.patchkamer-song.json) | liquid drum and bass, 175 BPM, F mineur | Liquid Roller | intro, build, drop, break, build, drop, outro (84 maten) |
+
 Zelf een song componeren als AI-agent? Begin bij [AGENTS.md](AGENTS.md).
 
 ## Licentie

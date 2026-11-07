@@ -154,9 +154,9 @@
     <div class="libbar" id="libbar"><span class="t" data-i18n="ui.bibliotheek">Bibliotheek</span><span class="cnt" id="libCount"></span><button id="libCfgBtn" title="categorieën toevoegen, hernoemen, verwijderen en de indeling bewaren of laden" aria-expanded="false" aria-controls="libCfg" data-i18n-title="attr.categorie_n_toevoegen_hernoemen_verwijderen" data-i18n="ui.indeling">Indeling</button><span class="seg" id="libView" role="group" aria-label="weergave van de bibliotheek" title="weergave van de bibliotheek: kaartjes of compact" data-i18n-aria="attr.t_libview" data-i18n-title="attr.t_libview"><button data-v="cards" data-i18n="ui.t_kaartjes">Kaartjes</button><button data-v="compact" data-i18n="ui.t_compact">Compact</button></span><button id="libMin" title="inklappen" data-i18n-title="attr.inklappen">—</button><button id="libClose" title="bibliotheek sluiten" aria-label="bibliotheek sluiten" data-i18n-title="attr.t_libclose" data-i18n-aria="attr.t_libclose">×</button></div>
     <div class="libtabs" id="libTabs">
       <div class="libtablist" id="libTabList" role="tablist" aria-label="soort in de bibliotheek" data-i18n-aria="attr.lt_tabs">
-        <button type="button" role="tab" id="libTab_devices" data-tab="devices" aria-selected="true" aria-controls="libPaneDev" data-i18n="ui.lt_apparaten">Apparaten</button><button type="button" role="tab" id="libTab_tunes" data-tab="tunes" aria-selected="false" aria-controls="prPanel" data-i18n="ui.lt_tunes">Tunes</button><button type="button" role="tab" id="libTab_presets" data-tab="presets" aria-selected="false" aria-controls="prPanel" data-i18n="ui.lt_presets">Presets</button><button type="button" role="tab" id="libTab_songs" data-tab="songs" aria-selected="false" aria-controls="songPanel" data-i18n="ui.lt_songs">Songs</button><button type="button" role="tab" id="libTab_skins" data-tab="skins" aria-selected="false" aria-controls="skPanel" data-i18n="ui.lt_skins">Skins</button>
+        <button type="button" role="tab" id="libTab_devices" data-tab="devices" aria-selected="true" aria-controls="libPaneDev" data-i18n="ui.lt_apparaten">Apparaten</button><button type="button" role="tab" id="libTab_tunes" data-tab="tunes" aria-selected="false" aria-controls="prPanel" data-i18n="ui.lt_tunes">Tunes</button><button type="button" role="tab" id="libTab_presets" data-tab="presets" aria-selected="false" aria-controls="prPanel" data-i18n="ui.lt_presets">Presets</button><button type="button" role="tab" id="libTab_samples" data-tab="samples" aria-selected="false" aria-controls="samPanel" data-i18n="ui.lt_samples">Samples</button><button type="button" role="tab" id="libTab_songs" data-tab="songs" aria-selected="false" aria-controls="songPanel" data-i18n="ui.lt_songs">Songs</button><button type="button" role="tab" id="libTab_skins" data-tab="skins" aria-selected="false" aria-controls="skPanel" data-i18n="ui.lt_skins">Skins</button>
       </div>
-      <select id="libSel" aria-label="soort in de bibliotheek" data-i18n-aria="attr.lt_tabs"><option value="devices" data-i18n="ui.lt_apparaten">Apparaten</option><option value="tunes" data-i18n="ui.lt_tunes">Tunes</option><option value="presets" data-i18n="ui.lt_presets">Presets</option><option value="songs" data-i18n="ui.lt_songs">Songs</option><option value="skins" data-i18n="ui.lt_skins">Skins</option></select>
+      <select id="libSel" aria-label="soort in de bibliotheek" data-i18n-aria="attr.lt_tabs"><option value="devices" data-i18n="ui.lt_apparaten">Apparaten</option><option value="tunes" data-i18n="ui.lt_tunes">Tunes</option><option value="presets" data-i18n="ui.lt_presets">Presets</option><option value="samples" data-i18n="ui.lt_samples">Samples</option><option value="songs" data-i18n="ui.lt_songs">Songs</option><option value="skins" data-i18n="ui.lt_skins">Skins</option></select>
     </div>
     <div class="libbody" id="libPaneDev" role="tabpanel" aria-labelledby="libTab_devices" data-libtab="devices">
       <input type="search" class="libsearch" id="libSearch" placeholder="Zoek op naam, soort of id" aria-label="zoek in de bibliotheek" data-i18n-ph="attr.zoek_op_naam_soort_of" data-i18n-aria="attr.zoek_in_de_bibliotheek">
@@ -185,6 +185,14 @@
   <div class="wsrow"><button class="small" id="prLoadAll">Alles laden</button><button class="small" id="prNew" data-i18n="ui.nieuwe_bibliotheek">Nieuwe bibliotheek</button><button class="small" id="prImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="prFile" accept=".json,application/json" multiple hidden></div>
   
   <div class="note" data-i18n-html="ui.een_tune_of_preset_is">Een tune of preset is de instelling van één apparaat (alle knoppen, patronen en keuzes), niet de kabels. Kies op de kaart, of blader met ◀ ▶. <b data-i18n="ui.bewaar">Bewaar</b> legt de huidige instelling vast in een bibliotheek en map, met jouw naam als maker en een licentie (CC-BY-4.0 of alle rechten voorbehouden); een cursieve naam betekent dat je sindsdien iets hebt veranderd. Ieder exemplaar krijgt een eigen kopie. Drumcomputers hebben een tweede regel <b data-i18n="ui.instrument">Instrument</b>: één geluid (bijv. de kick) als tune laden of bewaren. De licentie zie je bij het laden en bij elk item hieronder.</div>
+</section>
+<section class="libbody libpane" id="samPanel" hidden role="tabpanel" aria-label="Samples" data-i18n-aria="attr.lt_samples" data-libtab="samples">
+  <div>
+    <h3 data-i18n="ui.sm_titel">Samplebibliotheken</h3>
+    <div class="note" style="margin-bottom:6px" data-i18n-html="ui.sm_uitleg">Een <b>sample</b> is een stukje geluid, bijvoorbeeld een drumloop van twee maten, in een samplepack (<code>.patchkamer-samples.json</code>). Blader per stijl of per pack, beluister met ▶ en laad het in de Loop Slicer of de Samplebank. Packs uit een bron (map, GitHub) laden vanzelf; met <b>Importeren…</b> of door een bestand los te laten voeg je er een toe.</div>
+    <div class="wslist" id="samLibs" style="max-height:min(56vh,520px)"></div>
+  </div>
+  <div class="wsrow"><button class="small" id="samImport" data-i18n="ui.importeren">Importeren…</button><input type="file" id="samFile" accept=".json,application/json" multiple hidden></div>
 </section>
 <section class="libbody libpane" id="skPanel" hidden role="tabpanel" aria-label="Skins" data-i18n-aria="attr.sk_paneel" data-libtab="skins">
   <div>
@@ -251,6 +259,7 @@
 <script src="js/tunes.js"></script>
 <script src="js/tune-browse.js"></script>
 <script src="js/songs.js"></script>
+<script src="js/samples.js"></script>
 <script src="js/settings.js"></script>
 <script src="js/mod-view.js"></script>
 <script src="js/library-layout.js"></script>

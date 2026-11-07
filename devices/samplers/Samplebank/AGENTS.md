@@ -120,3 +120,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Tunes (klanken, `kind: set`): [samplebank-styles.patchkamer-tunes.json](../../../tunes/samplebank-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Rol in een song: sampler met vier banken van zestien pads (drums, one-shots, klanken). Noten of pad-trigs op `notes`; audio uit `out`. De samples laad je in de app en zitten niet in een song, dus benoem die afhankelijkheid of kies een apparaat zonder samples.
+
+## Samples uit de bibliotheek (v1.20)
+
+De instance heeft `loadAudio(files, info)` (contract §13e): de tab Samples van de host geeft een of meer bestanden door, geladen vanaf de geselecteerde pad (zoals Laad WAV of MP3 in een pad).

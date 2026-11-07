@@ -159,3 +159,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Tunes (klanken, `kind: set`): [loop-slicer-styles.patchkamer-tunes.json](../../../tunes/loop-slicer-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Rol in een song: loop-afspeler in plakken (4, 8, 16 of 32 slices) voor ritme en breaks. Noten of trigs op `notes` spelen de slices, of gebruik het eigen patroon van 16 stappen op de klok; audio uit `out`. De loop zelf (WAV/MP3) laad je in de app: een song kan dat bestand niet meebrengen, dus houd je aan de ingebouwde demo-loop of benoem de afhankelijkheid.
+
+## Samples uit de bibliotheek (v1.20)
+
+De instance heeft `loadAudio(files, info)` (contract §13e): de tab Samples van de host geeft het eerste bestand door, met dezelfde verwerking als Bestand kiezen (maximaal 50 MiB en 120 seconden). Een samplepack levert zo een loop; kies daarna een tune uit `tunes/loop-slicer-break-chops.patchkamer-tunes.json` of eigen slices.

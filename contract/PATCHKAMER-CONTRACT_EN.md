@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.19 for building agents
+# Patchkamer — Instrument contract v1.20 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -28,6 +28,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.17 | Clipboard: copying and pasting patterns and clips between devices. Optional `clipInfo()`, `getClip()`, `setClip(clip)` (all three or none) and the exchange format `patchkamer-clip` (JSON, time in ticks); the host puts the Copy and Paste buttons in the card bar and translates between devices; the validator checks the three methods and knows `--clip` (§13d) |
 | v1.18 | Meters: `host.ui.meter(parent, label, opts)` lets the host draw the level (bar, LED ladder or a round VU meter with a needle; length and width adjustable by a skin), from one or two `AnalyserNode`s (`source`) or through `set(level)`; a meter is in the register with role `meter`; a device on an older host without `host.ui.meter` falls back to its own drawing; the attribute `data-pk-suffix` (text after the label when linking to MIDI); the validator knows `host.ui.meter` and shows meters in `--controls` (§12e) |
 | v1.19 | Tags for tunes and presets: `tags` on a tune, folder or pack (paths such as `instrument/guitar/acoustic` and `style/hiphop`); the host shows them as an indented tree (Tunes and Presets, By instrument and By style). Only the packs change, not the devices (§13c) |
+| v1.20 | Samples: sample packs (`*.patchkamer-samples.json`, sound as base64) with a tab of their own in the library, and for devices that load audio the optional method `loadAudio(files, info)` (§13e) |
 
 ---
 
@@ -841,6 +842,35 @@ Current pitches are copied **as stored**: the transposition of a lane (octave, `
 
 ---
 
+## 13e. Samples (v1.20)
+
+A **sample** is a piece of sound (a drum loop, a stab, a single hit) in a **sample pack**, `name.patchkamer-samples.json`. The host shows them on the **Samples** tab of the library, by style or by pack, lets you listen to them and loads them into a device that makes sound from them (the Loop Slicer, the Samplebank). A sample pack carries the sound itself, as base64, so it stays one file that works anywhere (GitHub, a folder, dropped on the floor).
+
+```json
+{ "format": "patchkamer-samples", "formatVersion": 1, "name": "Jungle loops", "author": "…", "license": "CC0-1.0",
+  "description": "…", "tags": ["style/jungle"],
+  "tree": [ { "folder": "Rollers", "tags": ["style/drum-and-bass"],
+              "items": [ { "name": "Rolling Ghost Break", "bpm": 170, "bars": 2, "tags": ["style/jungle"],
+                           "author": "…", "license": "CC0-1.0",
+                           "audio": { "format": "wav", "data": "<base64>" } } ] } ] }
+```
+
+| Field | Rules |
+|---|---|
+| `format`, `formatVersion` | `"patchkamer-samples"` and `1`; the host refuses a higher `formatVersion` with a message |
+| `tree` | folders (`folder`, `items`, may be nested) and samples; whatever is not valid is skipped |
+| `name` | at most 80 characters |
+| `audio` | `format` is `wav`, `mp3`, `ogg` or `flac` (what the browser's `decodeAudioData` reads), `data` is base64; a file is at most 50 MiB |
+| `bpm`, `bars` | optional: the tempo (20 to 400) and the length in bars (0.25 to 64). A loop that repeats seamlessly has both |
+| `tags` | as for tunes (§13c): paths such as `style/jungle`; on the pack, a folder or the sample itself. Samples use the root `style` |
+| `author`, `license` | as for tunes (SPDX; CC0-1.0 for your own samples). Samples from someone else stay theirs: add the maker's license |
+
+**Samples from someone else's recording** (a well-known break, a piece of a song) are protected by copyright. Only put them in a pack if you own the rights or the license allows it.
+
+**For devices (optional).** A device that can load audio gives the instance `loadAudio(files, info)`: `files` is a list of `File` objects, as the user would choose them; `info` is `{ name, bpm, bars }` (all optional). The method does the same as your own Choose file button, returns a promise and reports errors in the card. The host calls it when the user clicks → *device*; a device without `loadAudio` gets no sample and the host says so. The Loop Slicer loads the first file; the Samplebank loads them from the selected pad.
+
+---
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -861,6 +891,7 @@ Current pitches are copied **as stored**: the transposition of a lane (octave, `
 | `host.ui.knob(…, options)` | v1.8 | `{ default, scale: 'log' }`; rotary knob if the user chooses so (§12a) |
 | `data-pk-default`, `data-pk-noreset`, `data-pk-for` | v1.8 | Hints on your own sliders and numbers (§12a) |
 | `parts()`, `getPart(id)`, `setPart(id, data)` | v1.9 | Instruments for tunes per instrument, optional (§13c) |
+| `loadAudio(files, info)` | v1.20 | Load a sample from the library, like Choose file; optional (§13e) |
 | `host.tunes.list / apply / save / applyPart` | v1.9 | Tunes and presets without UI (for tests and controllers); `host.presets` is the same |
 | `host.frame(this, cb, fps)` | v1.7 | Draw on the host's clock, only if your card is visible; returns a cancel function (§12b) |
 | `host.visible(this)` | v1.7 | Is your card visible now? |
@@ -1012,7 +1043,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.19
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.20
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1071,7 +1102,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.19
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.20
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -1135,7 +1166,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.19
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.20
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1213,7 +1244,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.19.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.20.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

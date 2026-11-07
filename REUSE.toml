@@ -19,7 +19,7 @@ SPDX-FileCopyrightText = "2026 Freek van Gool"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = ["tunes/**", "presets/**", "skins/library/**"]
+path = ["tunes/**", "presets/**", "samples/**", "skins/library/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 Freek van Gool"
 SPDX-License-Identifier = "CC0-1.0"

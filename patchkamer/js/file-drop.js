@@ -23,9 +23,9 @@ function dropKind(name,text){
   if(/\.m?js$/i.test(name)) return PK.looksLikeDevice(text)?'device':null;
   let j; try{ j=JSON.parse(text); }catch(e){ return null; } if(!j||typeof j!=='object') return null;
   const fm=j.format;
-  if(fm==='patchkamer-skin') return 'skin'; if(fm==='patchkamer-song') return 'song'; if(fm==='patchkamer-werkruimte') return 'ws'; if(fm==='patchkamer-tunes') return 'tune'; if(fm==='patchkamer-presets') return 'preset'; if(fm==='patchkamer-bibliotheek') return 'layout';
+  if(fm==='patchkamer-skin') return 'skin'; if(fm==='patchkamer-song') return 'song'; if(fm==='patchkamer-werkruimte') return 'ws'; if(fm==='patchkamer-samples') return 'sample'; if(fm==='patchkamer-tunes') return 'tune'; if(fm==='patchkamer-presets') return 'preset'; if(fm==='patchkamer-bibliotheek') return 'layout';
   if(fm) return null;
-  if(/\.patchkamer-tunes\.json$/i.test(name)) return 'tune'; if(/\.patchkamer-presets\.json$/i.test(name)||Array.isArray(j.presets)) return 'preset';
+  if(/\.patchkamer-samples\.json$/i.test(name)) return 'sample'; if(/\.patchkamer-tunes\.json$/i.test(name)) return 'tune'; if(/\.patchkamer-presets\.json$/i.test(name)||Array.isArray(j.presets)) return 'preset';
   if(Array.isArray(j.devices)) return 'ws'; return null; }
 const dropCandidate=f=>/\.m?js$/i.test(f.name)||(/\.json$/i.test(f.name)&&/patchkamer/i.test(f.name));
 async function dropProcess(files,skipped,dirs){
@@ -34,21 +34,22 @@ async function dropProcess(files,skipped,dirs){
     if(dirs.length) errs.push(PK.pkt('m.t_drop_map',dirs.join(', ')));
     skipped.forEach(n=>errs.push(PK.pkt('m.t_drop_onbekend',n)));
     if(files.length>DROP_MAX_FILES){ many=files.length-DROP_MAX_FILES; files=files.slice(0,DROP_MAX_FILES); errs.push(PK.pkt('m.t_drop_veel',DROP_MAX_FILES)); }
-    const groups={device:[],tune:[],preset:[],skin:[],layout:[],song:[],ws:[]};
+    const groups={device:[],tune:[],preset:[],sample:[],skin:[],layout:[],song:[],ws:[]};
     for(const f of files){
       if(f.size>DROP_MAX_BYTES){ errs.push(PK.pkt('m.t_drop_groot',f.name)); continue; }
       let text; try{ text=await f.text(); }catch(e){ errs.push(f.name+': '+e.message); continue; }
       const k=dropKind(f.name,text); if(!k){ errs.push(PK.pkt('m.t_drop_onbekend',f.name)); continue; } groups[k].push({f,text}); }
-    const n={device:0,tune:0,preset:0,skin:0,layout:0,song:0,ws:0};
+    const n={device:0,tune:0,preset:0,sample:0,skin:0,layout:0,song:0,ws:0};
     for(const {f} of groups.device){ const r=await PK.openDeviceFile(f,true); if(r.def) n.device++; else errs.push(f.name+': '+(r.err&&r.err.message||'?')); }
     for(const k of ['tune','preset']) for(const {f} of groups[k]){ try{ const r=await PK.importTuneFiles([f],true); n[k]+=r.n; r.errs.forEach(x=>errs.push(x)); }catch(e){ errs.push(f.name+': '+e.message); } }
+    if(groups.sample.length){ try{ const r=await PK.importSampleFiles(groups.sample.map(x=>x.f),true); n.sample+=r.n; r.errs.forEach(x=>errs.push(x)); }catch(e){ errs.push(e.message); } }
     if(groups.skin.length){ try{ const r=await PK.skinsImport(groups.skin.map(x=>x.f),true); n.skin+=r.n; r.errs.forEach(x=>errs.push(x)); }catch(e){ errs.push(e.message); } }
     for(const {f,text} of groups.layout){ try{ PK.applyLayout(JSON.parse(text),null,true); n.layout++; }catch(e){ errs.push(f.name+': '+e.message); } }
     for(const k of ['song','ws']) for(const {f} of groups[k]){ try{ if(await PK.songOpenFile(f,true)) n[k]++; else errs.push(PK.pkt('m.t_drop_mislukt',f.name)); }catch(e){ errs.push(f.name+': '+e.message); } }
-    if(!n.song&&!n.ws){ const t=n.skin?'skins':n.preset?'presets':n.tune?'tunes':n.device?'devices':''; if(t) PK.libOpen(t); }   // het resultaat staat in de bibliotheek: open die op de juiste tab
+    if(!n.song&&!n.ws){ const t=n.skin?'skins':n.sample?'samples':n.preset?'presets':n.tune?'tunes':n.device?'devices':''; if(t) PK.libOpen(t); }   // het resultaat staat in de bibliotheek: open die op de juiste tab
     const parts=[]; const one=x=>x===1;
     if(n.device) parts.push(PK.pktp('m.t_drop_dev',one(n.device),n.device)); if(n.tune) parts.push(PK.pktp('m.t_drop_tune',one(n.tune),n.tune)); if(n.preset) parts.push(PK.pktp('m.t_drop_preset',one(n.preset),n.preset));
-    if(n.skin) parts.push(PK.pktp('m.t_drop_skin',one(n.skin),n.skin)); if(n.layout) parts.push(PK.pkt('m.t_drop_layout')); if(n.song) parts.push(PK.pktp('m.t_drop_song',one(n.song),n.song)); if(n.ws) parts.push(PK.pktp('m.t_drop_ws',one(n.ws),n.ws));
+    if(n.sample) parts.push(PK.pktp('m.sm_geimporteerd',one(n.sample),n.sample)); if(n.skin) parts.push(PK.pktp('m.t_drop_skin',one(n.skin),n.skin)); if(n.layout) parts.push(PK.pkt('m.t_drop_layout')); if(n.song) parts.push(PK.pktp('m.t_drop_song',one(n.song),n.song)); if(n.ws) parts.push(PK.pktp('m.t_drop_ws',one(n.ws),n.ws));
     const msg=parts.concat(errs.slice(0,6)).join(' · ')+(errs.length>6?' · …':''); if(msg) setTimeout(()=>PK.status(msg,!parts.length),(n.song||n.ws)?1600:0);   // een geopende song herschikt de kaarten na 1,3 s en meldt dat: de eindmelding komt daarna
   }catch(e){ PK.status(PK.pkt('m.t_drop_mislukt',e&&e.message||'?'),true); } }
 function initFileDrop(){

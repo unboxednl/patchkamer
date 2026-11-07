@@ -97,6 +97,13 @@
         ]
       },
       {
+        "from": "../samples",
+        "to": "library/samples",
+        "filter": [
+          "**/*.json"
+        ]
+      },
+      {
         "from": ".",
         "to": "licenses",
         "filter": [

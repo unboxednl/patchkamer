@@ -6,8 +6,8 @@
    tabs niet passen een keuzelijst (#libSel). De laatst gekozen tab staat in localStorage 'patchkamer.libTab'.
    Elke ingang (menuknoppen Tunes/Presets/Songs/Skins, de knop Bladeren op een kaart, bestanden loslaten) opent het venster via libOpen(tab).
    ===================================================================== */
-const TABS=['devices','tunes','presets','songs','skins'], KEY='patchkamer.libTab';
-const PANE={devices:'libPaneDev',tunes:'prPanel',presets:'prPanel',songs:'songPanel',skins:'skPanel'};
+const TABS=['devices','tunes','presets','samples','songs','skins'], KEY='patchkamer.libTab';
+const PANE={devices:'libPaneDev',tunes:'prPanel',presets:'prPanel',samples:'samPanel',songs:'songPanel',skins:'skPanel'};
 const MENU={tunes:'prBtn',presets:'psBtn',songs:'songBtn',skins:'skBtn'};
 let tab='devices', lastKey='';
 try{ const v=localStorage.getItem(KEY); if(TABS.includes(v)) tab=v; }catch(e){}
@@ -16,7 +16,7 @@ PK.libTab=()=>tab; PK.LIBTABS=TABS;
 function activate(){
   if(tab==='devices') PK.paintLib();
   else if(tab==='tunes') PK.prShowMode('tune'); else if(tab==='presets') PK.prShowMode('preset');
-  else if(tab==='songs') PK.songShow(); else if(tab==='skins') PK.skPaintPanel();
+  else if(tab==='samples') PK.samShow(); else if(tab==='songs') PK.songShow(); else if(tab==='skins') PK.skPaintPanel();
 }
 // tabs of keuzelijst: een smal scherm altijd een keuzelijst; anders alleen als de tabs niet passen
 function libFit(){ const bar=PK.$('libTabs'), tl=PK.$('libTabList'); if(!bar||!tl) return;

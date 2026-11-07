@@ -8,6 +8,7 @@ Elke map heeft een eigen licentie. De volledige tekst staat in het `LICENSE`-bes
 | `contract/` | MIT | Iedereen, mens of AI, bouwt apparaten zonder voorwaarden en kiest zelf een licentie. Daarmee is de vraag weg of een apparaat een afgeleid werk van de host is. |
 | `devices/` (apparaten) | AGPL-3.0-or-later | Deze apparaten kan niemand gesloten doorverkopen. Wie liever wil dat anderen ze vrij hergebruiken in eigen apparaten, kiest MIT. Apparaten die anderen in hun eigen bron publiceren, hebben hun eigen licentie. |
 | `tunes/` | CC0-1.0 | Instellingen zijn data. Of ze auteursrechtelijk beschermd zijn is twijfelachtig, en met AI gemaakt nog meer. CC0 haalt elke twijfel weg: een tune kan zonder naamsvermelding in een song of in andermans bibliotheek. |
+| `samples/` | CC0-1.0 | Een sample is geluid dat met de apparaten van deze repository is gerenderd, zonder bestaande opname. Zelfde reden als bij tunes en presets: een sample kan zonder naamsvermelding in een song of in andermans bibliotheek. Samples uit andermans opname zijn en blijven van die ander. |
 | `presets/` | CC0-1.0 | Zelfde reden. |
 | `skins/library/` | CC0-1.0 | Een skin is data (een uiterlijk in CSS en afbeeldingen). Zelfde reden als bij tunes en presets: een skin kan zonder naamsvermelding in een song of in andermans bibliotheek. |
 | `skins/contract/` | MIT | Zoals `contract/`: iedereen, mens of AI, maakt skins zonder voorwaarden. |

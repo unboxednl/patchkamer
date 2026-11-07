@@ -102,6 +102,10 @@ def shots(browser, lang, OUT, LIB, BASE):
     menu_click(pg, '#wsBtn'); pg.wait_for_timeout(400); pg.locator('#wsPanel').screenshot(path=OUT + '/06-workspace.png'); pg.click('#wsPanel .close'); pg.wait_for_timeout(300)
     menu_click(pg, '#setBtn'); pg.set_viewport_size({'width': 1900, 'height': 1700}); pg.wait_for_timeout(600); pg.locator('#setPanel').screenshot(path=OUT + '/07-settings.png'); pg.set_viewport_size({'width': 1900, 'height': 1060}); pg.click('#setClose'); pg.wait_for_timeout(300)
     import_tunes(pg); pg.locator('#libwin').screenshot(path=OUT + '/09-tunes-panel.png'); done(pg)
+    pg = newpage(nopicker=True); load_lib(pg); lib_tab(pg, 'samples')   # de tab Samples met het meegeleverde pack
+    pg.set_input_files('#samFile', os.path.join(ROOT, 'samples', 'break-loops.patchkamer-samples.json')); pg.wait_for_timeout(1500)
+    pg.evaluate("[...document.querySelectorAll('#samLibs .pritem.fold .nm')].forEach(n=>{ if(/jungle/i.test(n.textContent)) n.click(); })"); pg.wait_for_timeout(500)
+    pg.locator('#libwin').screenshot(path=OUT + '/12-samples-panel.png'); done(pg)
     pg = newpage(nopicker=True); build_patch(pg)   # meerdere werkruimtes: de tabbalk met drie werkruimtes
     pg.fill('#wsName', 'Acid jam'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)
     pg.fill('#wsName', 'Ideas'); pg.press('#wsName', 'Enter'); pg.click('#wsTabs .add'); pg.wait_for_timeout(1200)

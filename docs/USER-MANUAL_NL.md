@@ -68,7 +68,7 @@ Het icoon (een patchkabel tussen twee aansluitingen) verschijnt ook als tabbladi
 |---|---|
 | **Start** | Start en stopt de klok. Apparaten met een sequencer spelen mee. |
 | **BPM**, **Swing** | Tempo (40–200) en swing van de klok. |
-| **Bibliotheek** | Toont of verbergt het bibliotheekvenster met de tabs **Apparaten**, **Tunes**, **Presets**, **Songs** en **Skins** ([de tabs van de bibliotheek](#de-tabs-van-de-bibliotheek)). |
+| **Bibliotheek** | Toont of verbergt het bibliotheekvenster met de tabs **Apparaten**, **Tunes**, **Presets**, **Samples**, **Songs** en **Skins** ([de tabs van de bibliotheek](#de-tabs-van-de-bibliotheek)). |
 | De naam bovenaan | De naam van je werkruimte. Klik erop om hem te wijzigen. |
 | **☰** | Het menu met al het andere, in vier groepen (de vier rijen hieronder). Het menu sluit na een keuze. |
 | ☰ → **Bestand** | **Werkruimte** (bewaar, open en exporteer je opstelling, onderdeel 8), **Herschik** (zet je apparaten netjes op volgorde, van links naar rechts) en **Leeg** (maakt de vloer leeg; klik twee keer om te bevestigen). |
@@ -85,6 +85,7 @@ Het bibliotheekvenster toont één soort tegelijk. Bovenaan wissel je met vijf t
 
 - **Apparaten:** de apparaten die je kunt plaatsen, met zoekveld, categorieën, **Indeling** en de **Bronnen** om te laden en te scannen (onderdeel 4);
 - **Tunes** en **Presets:** je tune- en presetbibliotheken, met **Alles laden**, **Nieuwe bibliotheek** en **Importeren…** (onderdeel 7);
+- **Samples:** samplepacks per stijl of per pack, met ▶ om te beluisteren en knoppen om een sample in de Loop Slicer of de Samplebank te laden (onderdeel 7);
 - **Songs:** de demo's, je recente songs, **Bestand openen…** en **Exporteer als song…**, met een zoekveld (onderdeel 8);
 - **Skins:** de skinbibliotheken, met **Importeren…**, **Alles laden** en de ontwerper (onderdeel 7).
 
@@ -234,6 +235,10 @@ De knop **Alles laden** bovenaan de tabs Tunes en Presets laadt alle tunepacks, 
 De tabs **Tunes** en **Presets** van de bibliotheek beheren je bibliotheken: maak een nieuwe, zet tunes in mappen, importeer een pakket (`.patchkamer-tunes.json` of `.patchkamer-presets.json`) en exporteer er een om te delen. Pakketten in een bibliotheek die je van GitHub of uit een map laadt, verschijnen vanzelf. De packs die bij deze repository horen, staan in de [handleiding tunes](tunes/USER-MANUAL_NL.md) en de [handleiding presets](presets/USER-MANUAL_NL.md).
 
 **Zoeken op instrument of stijl.** Bovenaan de tabs Tunes en Presets kies je **Per apparaat** (de bibliotheken, zoals hierboven), **Per instrument** (alleen bij Tunes) of **Per stijl**. De laatste twee tonen een boom met inspringen: Gitaren → Nylon, Piano's, Koper, … of Hiphop, Jungle, Techno, …, met het aantal tunes erachter. Open een tak met de pijl, zoek bovenin op naam, apparaat of tag, en klik **Laden**: de tune komt op de geselecteerde kaart van dat apparaat, op een kaart die al op de vloer staat, of op een nieuwe. Wat nog geen tag heeft, staat onder **Zonder tag**. De tags zitten in de packs zelf (`tags`, contract v1.19), dus eigen packs en packs van anderen verschijnen vanzelf in de boom.
+
+**Samples.** De tab **Samples** toont samplepacks (`.patchkamer-samples.json`): stukjes geluid zoals drumloops van twee maten, met het geluid zelf erin. Kies **Per stijl** (een boom met inspringen: Jungle, Breakbeat, Drum & Bass, …) of **Per pack**, zoek op naam, pack, tag of tempo, beluister een sample met **▶** (nogmaals klikken stopt) en laad hem met **→ Loop Slicer** of **→ Samplebank**: het sample komt in de geselecteerde kaart van dat apparaat, in een kaart die al op de vloer staat, of in een nieuwe. Packs uit een bron (map, GitHub) laden vanzelf; **Importeren…** of een bestand loslaten voegt er een toe. Bij een sample staan tempo en aantal maten, zodat je de song op hetzelfde tempo zet. De packs die meekomen staan in de [samples-map](../samples/README_NL.md).
+
+![De tab Samples met het pack Break Loops, per stijl](images/nl/12-samples-panel.png)
 
 Het hele verhaal, met de lijst van de meegeleverde packs en hoe je een eigen pack maakt, staat in de [handleiding presets](presets/USER-MANUAL_NL.md) en de [handleiding tunes](tunes/USER-MANUAL_NL.md).
 

@@ -68,7 +68,7 @@ The icon (a patch cable between two jacks) also shows as the tab icon in the bro
 |---|---|
 | **Start** | Starts and stops the clock. Devices with a sequencer play along. |
 | **BPM**, **Swing** | Tempo (40–200) and swing of the clock. |
-| **Library** | Shows or hides the library window with the tabs **Devices**, **Tunes**, **Presets**, **Songs** and **Skins** ([the library tabs](#the-library-tabs)). |
+| **Library** | Shows or hides the library window with the tabs **Devices**, **Tunes**, **Presets**, **Samples**, **Songs** and **Skins** ([the library tabs](#the-library-tabs)). |
 | The name at the top | The name of your workspace. Click it to rename. |
 | **☰** | The menu with everything else, in four groups (the four rows below). The menu closes after a choice. |
 | ☰ → **File** | **Workspace** (save, open and export your setup, section 8), **Arrange** (puts your devices neatly in order, from left to right) and **Clear** (empties the floor; click twice to confirm). |
@@ -85,6 +85,7 @@ The library window shows one kind of content at a time. Five tabs at the top swi
 
 - **Devices:** the devices you can place, with the search field, categories, **Layout** and the **Sources** for loading and scanning (section 4);
 - **Tunes** and **Presets:** your tune and preset libraries, with **Load all**, **New library** and **Import…** (section 7);
+- **Samples:** sample packs by style or by pack, with ▶ to listen and buttons to load a sample into the Loop Slicer or the Samplebank (section 7);
 - **Songs:** the demos, your recent songs, **Open file…** and **Export as song…**, with a search field (section 8);
 - **Skins:** the skin libraries, with **Import…**, **Load all** and the designer (section 7).
 
@@ -234,6 +235,10 @@ The **Load all** button at the top of the Tunes and Presets tabs loads every tun
 The **Tunes** and **Presets** tabs of the library manage your libraries: create a new one, put tunes in folders, import a pack (`.patchkamer-tunes.json` or `.patchkamer-presets.json`) and export one to share. Packs in a library you load from GitHub or a folder appear automatically. The packs that come with this repository are listed in the [tunes manual](tunes/USER-MANUAL_EN.md) and the [presets manual](presets/USER-MANUAL_EN.md).
 
 **Searching by instrument or style.** At the top of the Tunes and Presets tabs you choose **By device** (the libraries, as above), **By instrument** (Tunes only) or **By style**. The last two show an indented tree: Guitars → Nylon, Pianos, Brass, … or Hip-hop, Jungle, Techno, …, with the number of tunes behind each. Open a branch with the arrow, search by name, device or tag at the top, and click **Load**: the tune goes on the selected card of that device, on a card already on the floor, or on a new one. Whatever has no tag yet is under **Untagged**. The tags are in the packs themselves (`tags`, contract v1.19), so your own packs and packs from others show up in the tree by themselves.
+
+**Samples.** The **Samples** tab shows sample packs (`.patchkamer-samples.json`): pieces of sound such as two-bar drum loops, with the sound inside. Choose **By style** (an indented tree: Jungle, Breakbeat, Drum & Bass, …) or **By pack**, search by name, pack, tag or tempo, listen to a sample with **▶** (click again to stop) and load it with **→ Loop Slicer** or **→ Samplebank**: the sample goes into the selected card of that device, a card already on the floor, or a new one. Packs from a source (folder, GitHub) load by themselves; **Import…** or dropping a file adds one. A sample shows its tempo and number of bars, so you can set the song to the same tempo. The packs that come with Patchkamer are in the [samples folder](../samples/README.md).
+
+![The Samples tab with the Break Loops pack, by style](images/en/12-samples-panel.png)
 
 For the whole story, with the list of included packs and how to make your own, see the [presets manual](presets/USER-MANUAL_EN.md) and the [tunes manual](tunes/USER-MANUAL_EN.md).
 

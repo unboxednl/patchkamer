@@ -8,6 +8,7 @@ const KINDS = [
   ['modules', /\.patchkamer-device\.js$/i, 'devices'],
   ['presets', /\.patchkamer-presets\.json$/i, 'presets'],
   ['tunes', /\.patchkamer-tunes\.json$/i, 'tunes'],
+  ['samples', /\.patchkamer-samples\.json$/i, 'samples'],
 ];
 
 function walk(dir, out) {
@@ -22,7 +23,7 @@ function walk(dir, out) {
 }
 
 function manifest(root) {
-  const m = { name: 'Patchkamer', modules: [], presets: [], tunes: [] };
+  const m = { name: 'Patchkamer', modules: [], presets: [], tunes: [], samples: [] };
   for (const [key, re, sub] of KINDS) {
     const base = path.join(root, sub);
     m[key] = walk(base, []).filter(f => re.test(f)).map(f => path.relative(root, f).split(path.sep).join('/')).sort();

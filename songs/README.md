@@ -25,6 +25,16 @@ In the folder [hip-hop](hip-hop/), four songs in different sub-styles, each with
 | [lo-fi](hip-hop/lo-fi.patchkamer-song.json) | lo-fi, 75 BPM, D minor | intro, A, B, break, A, outro (36 bars) |
 | [g-funk](hip-hop/g-funk.patchkamer-song.json) | G-funk, 95 BPM, G minor | intro, hook, verse, hook, break, hook, outro (44 bars) |
 
+## Jungle, breakbeat and drum and bass
+
+Three songs whose drums come from a **sample**: a break from the [Break Loops](../samples/README.md) pack sits in the Loop Slicer, and a Pattern Tracker plays its slices (the patterns of the Loop Slicer Break Chops tunes) together with the bass and the chords. The song tempo equals the tempo of the break. Checked on paper and by measurement (levels, no clipping, every channel makes sound), **not listened to**.
+
+| File | Style | Break | Structure |
+|---|---|---|---|
+| [rolling-jungle](jungle/rolling-jungle.patchkamer-song.json) | jungle, 168 BPM, E minor | Skittering Hat Break | intro, build, drop, break, drop, outro (64 bars) |
+| [funk-breakbeat](breakbeat/funk-breakbeat.patchkamer-song.json) | breakbeat, 128 BPM, D dorian | Big Stomp Break | intro, build, main, break, main, outro (64 bars) |
+| [liquid-roller](drum-and-bass/liquid-roller.patchkamer-song.json) | liquid drum and bass, 175 BPM, F minor | Liquid Roller | intro, build, drop, break, build, drop, outro (84 bars) |
+
 To compose your own song as an AI agent, start at [AGENTS.md](AGENTS.md) (in Dutch).
 
 ## License
