@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — Regelaars herkenbaar voor skins: elke schuif en keuze krijgt via host.ui.adopt een id (de state-sleutel), rol en groep, zodat een skin er draaiknoppen of andere schuiven van kan maken. Geluid, state en gedrag ongewijzigd.
 // 1.11.1 — Het Nederlandse label Modelstand heet nu Stand (Engels: Mode); het gaat om de keuze Duofoon of Mono, niet om een model. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Teksten in de UI per taal (host.lang: nl en en, anders en) en de uitgangsbegrenzer volgt host.audio.oversample;
 //   namen van poorten per taal via i18n. Geluid en state ongewijzigd.
@@ -78,7 +79,7 @@ const EN = {   // Nederlands is de brontekst; host.lang 'nl' toont hem ongewijzi
   'Zelfstandige Patchkamer-synth. Eigen presets en klanksynthese. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.':
     'Standalone Patchkamer synth. Own presets and sound synthesis. The purple Mod input changes the sound without overwriting base values.',
 };
-const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1.11.1", "kind": "instrument", "category": "synth", "ui": {"width": 920, "minWidth": 380}, "i18n": {"en": {"ports": {"notes": "Keyboard / notes"}}}, "ports": {"audioIn": [], "audioOut": [{"id": "out", "name": "Stereo"}], "eventIn": [{"id": "notes", "name": "Keyboard / noten"}], "eventOut": [], "modIn": [{"id": "mod", "name": "Mod"}], "modOut": []},create(ctx,host){
+const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1.11.2", "kind": "instrument", "category": "synth", "ui": {"width": 920, "minWidth": 380}, "i18n": {"en": {"ports": {"notes": "Keyboard / notes"}}}, "ports": {"audioIn": [], "audioOut": [{"id": "out", "name": "Stereo"}], "eventIn": [{"id": "notes", "name": "Keyboard / noten"}], "eventOut": [], "modIn": [{"id": "mod", "name": "Mod"}], "modOut": []},create(ctx,host){
     const tr=host.lang==='nl'?x=>x:x=>EN[x]??x;   // teksten in de UI: kies op host.lang (contract §12c)
     let mountHost=null,panel=null,uiHandles={};
     const add=(parent,tag,text,css)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(css)el.style.cssText=css;parent.appendChild(el);return el;};
@@ -90,8 +91,8 @@ const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1
     const row=parent=>{const el=add(parent,'div');el.className='row';return el;};
     const grid=parent=>{const el=add(parent,'div');el.className='grid';return el;};
     const button=(parent,label,fn)=>{const b=add(parent,'button',label);b.type='button';b.onclick=fn;return b;};
-    function select(parent,label,options,value,change){const box=add(parent,'label');box.className='control';add(box,'span',label);const el=add(box,'select');for(const [v,label] of options){const o=add(el,'option',label);o.value=String(v);}el.value=String(value);el.onchange=()=>change(el.value);return el;}
-    function knob(parent,id,label,bounds,value,change,format=v=>Number(v).toFixed(2)){const box=add(parent,'label');box.className='control';add(box,'span',label);const out=add(box,'output',format(value)),input=add(box,'input');input.type='range';[input.min,input.max,input.step]=bounds.map(String);input.value=String(value);input.oninput=()=>{const n=Number(input.value);out.textContent=format(n);change(n);};uiHandles[id]={set(v){input.value=String(v);out.textContent=format(v);}};return input;}
+    function select(parent,label,options,value,change,id){const box=add(parent,'label');box.className='control';add(box,'span',label);const el=add(box,'select');for(const [v,label] of options){const o=add(el,'option',label);o.value=String(v);}el.value=String(value);el.onchange=()=>change(el.value);if(id&&host.ui&&host.ui.adopt)host.ui.adopt(el,{id,role:'select',group:'setup',label});return el;}
+    function knob(parent,id,label,bounds,value,change,format=v=>Number(v).toFixed(2)){const box=add(parent,'label');box.className='control';add(box,'span',label);const out=add(box,'output',format(value)),input=add(box,'input');input.type='range';[input.min,input.max,input.step]=bounds.map(String);input.value=String(value);input.oninput=()=>{const n=Number(input.value);out.textContent=format(n);change(n);};if(host.ui&&host.ui.adopt)host.ui.adopt(input,{id,role:'param',group:(spec[id]&&spec[id].lane)||'play',label});uiHandles[id]={set(v){input.value=String(v);out.textContent=format(v);}};return input;}
 
     const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
     const finite=(x,d,a,b)=>typeof x==='number'&&Number.isFinite(x)?clamp(x,a,b):d;
@@ -150,9 +151,9 @@ const __pkDef = {"id": "nl.patchkamer.duofone", "name": "Duofone", "version": "1
         const normalized={type:type==='noteoff'||e.vel===0?'noteoff':type,note:Math.round(clamp(e.note,0,127)),vel:finite(e.vel,0.8,0,1),time,held:e.held===true||type==='noteon'&&!Number.isFinite(e.dur),dur:Number.isFinite(e.dur)?clamp(e.dur,0.005,120):1};
         send(normalized);
       }catch{}}
-    function render(el){unmount();mountUI(el,title,subtitle);const top=row(panel);select(top,tr('Klankbeeld'),Object.keys(presets).map(k=>[k,k]),state.preset,v=>self.setState({...defaults,...presets[v],preset:v}));
-      for(const [id,values] of Object.entries(options)){if(state.variant==='mono'&&['wave2','filterType','ampMode'].includes(id))continue;select(top,labels[id]||id,values,state[id],v=>{state[id]=typeof defaults[id]==='number'?Number(v):v;apply();if(id==='variant')render(el);});}
-      for(const id of booleanFields)if(!(id==='sync'&&state.variant==='mono'))select(top,labels[id]||id,[[0,tr('Uit')],[1,tr('Aan')]],+state[id],v=>{state[id]=v==='1';apply();});
+    function render(el){unmount();mountUI(el,title,subtitle);const top=row(panel);select(top,tr('Klankbeeld'),Object.keys(presets).map(k=>[k,k]),state.preset,v=>self.setState({...defaults,...presets[v],preset:v}),'preset');
+      for(const [id,values] of Object.entries(options)){if(state.variant==='mono'&&['wave2','filterType','ampMode'].includes(id))continue;select(top,labels[id]||id,values,state[id],v=>{state[id]=typeof defaults[id]==='number'?Number(v):v;apply();if(id==='variant')render(el);},id);}
+      for(const id of booleanFields)if(!(id==='sync'&&state.variant==='mono'))select(top,labels[id]||id,[[0,tr('Uit')],[1,tr('Aan')]],+state[id],v=>{state[id]=v==='1';apply();},id);
       const play=row(panel);knob(play,'testNote',tr('Testnoot MIDI'),[24,96,1],state.testNote,v=>state.testNote=v,v=>String(v));button(play,tr('Speel noot'),()=>note(state.testNote,0.85,ctx.currentTime,1));button(play,tr('Houd noot'),()=>{heldDemo=!heldDemo;if(heldDemo)note(state.testNote,0.8,ctx.currentTime,undefined,true);else panic();});button(play,tr('Test akkoord'),()=>{for(const n of [0,3,7])note(state.testNote+n,0.7,ctx.currentTime,1.6);});button(play,tr('Alles uit'),()=>panic());
       for(const lane of [...new Set(Object.values(spec).map(d=>d.lane||'klank'))]){add(panel,'h3',Object.values(spec).find(d=>(d.lane||'klank')===lane).laneName||tr('Klank'));controls(grid(panel),Object.keys(spec).filter(id=>(spec[id].lane||'klank')===lane&&!(state.variant==='mono'&&['osc2','osc2Semi','osc2Fine','fm','audioFilter','ring','highpass','fAttack','fDecay','fSustain','fRelease'].includes(id))));}
       scopeMount(panel,analyser);engineText=add(panel,'p');tellEngine();add(panel,'p',helpText);add(panel,'p',tr('Zelfstandige Patchkamer-synth. Eigen presets en klanksynthese. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.'));
