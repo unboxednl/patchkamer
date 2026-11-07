@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — De L/R-meter via host.ui.meter (contract v1.18, additief): één stereometer met twee analysers en een clip-lampje; de host tekent hem (ook in deze shadow root) en een skin kan er een VU-meter of ledlader van maken. Zonder host.ui.meter blijven de twee eigen balken met clip-knoppen. Geluid, bewaking, state, presets en poorten ongewijzigd.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.12.0 — Eerste versie. Audio Output stuurt het geluid naar een uitgang van de computer die je zelf kiest: de standaarduitgang, een koptelefoonuitgang of een
 //          audio-interface die het besturingssysteem als uitgang aanbiedt (USB-interfaces, ingebouwde lijnuitgang). De lijst met uitgangen komt van de browser (namen
@@ -35,12 +36,12 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audiooutput', name: 'Audio Output', version: '1.15.0', kind: 'output', category: 'mix', ui: { width: 380, minWidth: 300 },
+  id: 'nl.patchkamer.audiooutput', name: 'Audio Output', version: '1.16.0', kind: 'output', category: 'mix', ui: { width: 380, minWidth: 300 },
   i18n: { nl: { ports: { in: 'In' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en;
-    let state = { ...DEFAULTS }, dead = false, devices = [], shell = null, ui = null, stopFrame = null, peak = [0, 0], clipUntil = [0, 0], note = '', guardUntil = 0, destChanged = false, audioEl = null, mediaDest = null, sinkReq = 0;
+    let state = { ...DEFAULTS }, dead = false, devices = [], shell = null, ui = null, stopFrame = null, hm = null, peak = [0, 0], clipUntil = [0, 0], note = '', guardUntil = 0, destChanged = false, audioEl = null, mediaDest = null, sinkReq = 0;
     // Keten: in -> toegangspoort -> kruismatrix (stereo/mono) -> volume -> begrenzer -> uitgang; meters zitten achter de begrenzer.
     const input = ctx.createGain(), entry = ctx.createGain(), spl = ctx.createChannelSplitter(2), mrg = ctx.createChannelMerger(2), trim = ctx.createGain(), sink = ctx.createGain();
     const gLL = ctx.createGain(), gLR = ctx.createGain(), gRL = ctx.createGain(), gRR = ctx.createGain();
@@ -150,7 +151,7 @@ export default {
     }
     function frame() {
       guard();
-      if (!ui) return; const now = performance.now();
+      if (!ui || !ui.bars.length) return; const now = performance.now();
       [[anL, bufL], [anR, bufR]].forEach(([an, buf], i) => { an.getFloatTimeDomainData(buf); let p = 0; for (let k = 0; k < buf.length; k++) { const a = Math.abs(buf[k]); if (a > p) p = a; } if (!Number.isFinite(p)) p = 0; peak[i] = Math.max(p, peak[i] * 0.85); if (p >= 0.98) clipUntil[i] = now + 1500;
         const db = peak[i] > 0 ? 20 * Math.log10(peak[i]) : -90, w = Math.round(clamp((db + 60) / 60, 0, 1) * 100) + '%'; if (ui.bars[i].style.width !== w) ui.bars[i].style.width = w; ui.clips[i].classList.toggle('on', now < clipUntil[i]); });
       if (guardUntil && now > guardUntil) { guardUntil = 0; paint(); }
@@ -170,12 +171,14 @@ export default {
         const lm = el('label', null, r3); const mono = el('input', null, lm); mono.type = 'checkbox'; el('span', T.mono, lm); mono.onchange = () => { state.mono = mono.checked; applyStage(); };
         const ll = el('label', null, r3); const limiter = el('input', null, ll); limiter.type = 'checkbox'; el('span', T.limiter, ll); limiter.onchange = () => { state.limiter = limiter.checked; wireLimiter(); applyStage(); };
         const lmu = el('label', null, r3); const mute = el('input', null, lmu); mute.type = 'checkbox'; el('span', T.mute, lmu); mute.onchange = () => { state.mute = mute.checked; applyStage(); };
-        const bars = [], clips = []; for (const side of [T.left, T.right]) { const m = el('div', null, app, 'meter'); el('span', side, m); const b = el('div', null, m, 'bar'); bars.push(el('i', null, b)); clips.push(el('span', T.clip, m, 'clip')); }
+        const bars = [], clips = [];
+        if (host.ui && typeof host.ui.meter === 'function') { try { hm = host.ui.meter(app, T.left + '/' + T.right, { id: 'met.out', group: 'meters', source: [anL, anR], kind: 'peak', unit: 'linear', range: [-60, 0], hold: false, clip: -0.2, orientation: 'horizontal', length: 300, width: 8 }); } catch (e) { hm = null; } }
+        if (!hm) for (const side of [T.left, T.right]) { const m = el('div', null, app, 'meter'); el('span', side, m); const b = el('div', null, m, 'bar'); bars.push(el('i', null, b)); clips.push(el('span', T.clip, m, 'clip')); }
         const status = el('div', null, app, 'status'); sh.addEventListener('pointerdown', e => e.stopPropagation());
         ui = { dev, choose: choose_, pair, pairRow, gain, mono, limiter, mute, bars, clips, status }; paint(); refreshDevices();
         stopFrame = host.frame(self, frame, 30);
       },
-      unmount() { if (typeof stopFrame === 'function') stopFrame(); stopFrame = null; if (shell) shell.remove(); shell = ui = null; },
+      unmount() { if (typeof stopFrame === 'function') stopFrame(); stopFrame = null; if (hm) { try { hm.destroy(); } catch (e) { /* ok */ } hm = null; } if (shell) shell.remove(); shell = ui = null; },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(s) {
         if (dead) return; s = s && typeof s === 'object' ? s : {}; const was = state;

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.6.0 — Niveaumeters van kanalen, groepen en master via host.ui.meter (contract v1.18, additief): de host tekent ze, een skin kan er een VU-meter of ledlader van maken en de lengte en breedte aanpassen. Standaardgezicht, maat, dB-schaal (−60 tot +6) en val zijn gelijk aan de eigen meter van voorheen; een oudere host valt terug op die eigen meter. De 100 ms-bewaker, geluid, getState, presets en poorten ongewijzigd.
 // 2.5.1 — Bij het koppelen aan MIDI heet elke regelaar van een kanaal nu 'Trim - T3', van een groep 'Send - G1' en van de master 'Fader - Master' (voorheen
 //   wist de host het nummer uit de naam, dus alle kanalen heetten hetzelfde). Alleen de zichtbare naam verandert; de koppeling zelf blijft gelijk.
 // 2.5.0 — Alle continue regelaars staan in params() en worden bestuurbaar via modulate(): per kanaal (lane ch1..), groep (g1..) en de master: trim, EQ, send, return, pan en fader. Effectieve waarde = knop + offset × bereik (lineair, geclampt) en gaat alleen naar de audiograaf: de zichtbare regelaar, getState en presets blijven ongewijzigd. Alles staat standaard uit (on: false). Bewust niet: mute, solo, groepstoewijzing, aantal kanalen/groepen, EQ-banden, doelniveau (keuzes, vinkjes en configuratie). Bij een ander aantal kanalen/groepen of EQ-banden meldt de Mixer host.paramsChanged. De sturingsingang 'Mod' staat in de bovenste rij naast de bundelpoorten (de Mixer tekent zijn poorten zelf).
@@ -36,7 +37,7 @@ const TXT = {
     bunIn: 'bundel in', bunOut: 'kanalen uit', bunAll: '+ groepen en mix', bunAllT: 'stuur ook de groepen en de totale mix mee in "kanalen uit"',
     chNameT: 'naam van dit kanaal', chNameA: k => `naam kanaal ${k}`, grpNameT: 'naam van deze groep', grpNameA: k => `naam groep ${k}`,
     srcA: k => `bron kanaal ${k}`, srcT: k => 'bron: een kanaal uit een bundel (groene kabel), of alleen de kabel op ' + k, cable: '— kabel', lost: '(niet verbonden)',
-    jSend: 'send', jRet: 'ret', jOut: 'uit', trim: 'Trim', send: 'Send', ret: 'Return', pan: 'Pan', fader: 'fader',
+    jSend: 'send', jRet: 'ret', jOut: 'uit', trim: 'Trim', send: 'Send', ret: 'Return', pan: 'Pan', fader: 'fader', level: 'niveau',
     toA: k => `kanaal ${k} naar`, toM: '→ M', toMT: 'naar de master', toT: n => 'naar ' + n, mute: 'mute', solo: 'solo',
     measuring: 'meten… (4 s)', matched: n => `${n} kanaal${n > 1 ? 'en' : ''} gelijkgetrokken`, noSignal: 'geen signaal: start de klok en meet opnieuw',
     chN: n => 'Kanaal ' + n, grpN: n => 'Groep ' + n,
@@ -49,7 +50,7 @@ const TXT = {
     bunIn: 'bundle in', bunOut: 'channels out', bunAll: '+ groups and mix', bunAllT: 'also send the groups and the total mix in "channels out"',
     chNameT: 'name of this channel', chNameA: k => `name of channel ${k}`, grpNameT: 'name of this group', grpNameA: k => `name of group ${k}`,
     srcA: k => `source of channel ${k}`, srcT: k => 'source: a channel from a bundle (green cable), or just the cable on ' + k, cable: '— cable', lost: '(not connected)',
-    jSend: 'send', jRet: 'ret', jOut: 'out', trim: 'Trim', send: 'Send', ret: 'Return', pan: 'Pan', fader: 'fader',
+    jSend: 'send', jRet: 'ret', jOut: 'out', trim: 'Trim', send: 'Send', ret: 'Return', pan: 'Pan', fader: 'fader', level: 'level',
     toA: k => `channel ${k} to`, toM: '→ M', toMT: 'to the master', toT: n => 'to ' + n, mute: 'mute', solo: 'solo',
     measuring: 'measuring… (4 s)', matched: n => `${n} channel${n > 1 ? 's' : ''} matched`, noSignal: 'no signal: start the clock and measure again',
     chN: n => 'Channel ' + n, grpN: n => 'Group ' + n,
@@ -106,6 +107,7 @@ const CSS = `
 .mx2 select{font-size:10px;padding:2px 3px;width:100%}
 .mx2-fad{display:grid;grid-template-columns:1fr 8px;gap:4px;height:130px;align-items:stretch}
 .mx2-fad input[type=range]{writing-mode:vertical-lr;direction:rtl;height:130px;width:100%;margin:0}
+.mx2-fad.hm{grid-template-columns:1fr auto}
 .mx2-met{background:var(--well,#0b0d10);border:1px solid var(--line);border-radius:2px;position:relative;overflow:hidden}
 .mx2-met i{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(0deg,var(--audio) 0%,var(--audio) 60%,var(--go) 80%,var(--stop) 96%)}
 .mx2-met u{position:absolute;left:0;right:0;height:2px;background:var(--fg);bottom:0;text-decoration:none}
@@ -124,7 +126,7 @@ const CSS = `
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.5.1',
+  version: '2.6.0',
   kind: 'mixer',
   modExclude: ['target'],   // doelniveau van 'gelijk trekken': geen audioregelaar maar een meetinstelling
   category: 'mix',
@@ -318,13 +320,25 @@ export default {
     }
     // elke regelaar van een strook krijgt het spoor erbij ('Trim - T3'): zo zie je bij het koppelen aan MIDI welk kanaal het is
     const tagCtl = (strip, tag) => strip.querySelectorAll('input[type=range],select,button').forEach(x => { x.dataset.pkSuffix = tag; });
-    function fader(parent, get, set, an) {
-      const f = el('div', 'mx2-fad'), i = el('input'), met = el('div', 'mx2-met'), bar = el('i'), pk = el('u');
+    // niveaumeter: de host tekent hem (host.ui.meter, v1.18) en leest de analyser zelf; zonder host.ui.meter de eigen tekening
+    let hostMeters = [];
+    const hasHostMeter = () => !!(host && host.ui && typeof host.ui.meter === 'function');
+    // een skin kan de meter breder maken (VU-meter): de strook groeit mee, zonder skin blijft ze 66 px (master 76 px)
+    function growStrip(f, hm) {
+      if (typeof ResizeObserver !== 'function' || !hm.el) return;
+      const ro = new ResizeObserver(() => { const s = f.closest('.mx2-strip'); if (!s) return; if (!s.dataset.w0) s.dataset.w0 = parseFloat(s.style.width) || 66; const w = Math.ceil(hm.el.getBoundingClientRect().width); if (w) s.style.width = Math.max(+s.dataset.w0, w + 34) + 'px'; });
+      ro.observe(hm.el); const d0 = hm.destroy; hm.destroy = () => { ro.disconnect(); return d0.call(hm); };
+    }
+    function fader(parent, get, set, an, mid) {
+      const f = el('div', 'mx2-fad'), i = el('input');
+      let met, bar, pk, hm = null;
+      if (hasHostMeter() && mid) { try { hm = host.ui.meter(f, T.level + ' ' + mid.slice(4).toUpperCase(), { id: mid, group: 'meters', source: an, kind: 'peak', unit: 'linear', range: [-60, 6], hold: true, orientation: 'vertical', length: 130, width: 8 }); } catch (e) { hm = null; } }
+      if (hm) { f.classList.add('hm'); hostMeters.push(hm); growStrip(f, hm); } else { met = el('div', 'mx2-met'); bar = el('i'); pk = el('u'); }
       i.type = 'range'; i.min = -60; i.max = 6; i.step = 0.5; i.value = get(); i.setAttribute('aria-label', T.fader);
       const v = el('div', 'mx2-db', fmtDb(get()));
       i.oninput = () => { set(+i.value); v.textContent = fmtDb(+i.value); applyAll(); };
       i.ondblclick = () => { set(0); i.value = 0; v.textContent = fmtDb(0); applyAll(); };
-      met.append(bar, pk); f.append(i, met); parent.append(f, v); ui.meters.push({ an, bar, pk, hold: 0 });
+      if (hm) { f.insertBefore(i, f.firstChild); parent.append(f, v); } else { met.append(bar, pk); f.append(i, met); parent.append(f, v); ui.meters.push({ an, bar, pk, hold: 0 }); }
       ui.refreshers.push(() => { i.value = get(); v.textContent = fmtDb(get()); });
     }
     function jack(parent, id, dir, label, big) { if (!host.ui || !host.ui.jack) return; const j = host.ui.jack(self, parent, id, dir, label); if (big) j.classList.add('big'); return j; }
@@ -333,7 +347,7 @@ export default {
     function refresh() { if (ui) ui.refreshers.forEach(r => r()); }
 
     function render() {
-      if (!root) return; root.innerHTML = ''; ui = { refreshers: [], meters: [], trims: [], msg: null };
+      if (!root) return; root.innerHTML = ''; hostMeters.forEach(m => { try { m.destroy(); } catch (e) {} }); hostMeters = []; ui = { refreshers: [], meters: [], trims: [], msg: null };
       const st = el('style'); st.textContent = CSS; root.appendChild(st);
       const app = el('div', 'mx2'); root.appendChild(app);
       // configuration row
@@ -376,7 +390,7 @@ export default {
         for (let q = 1; q <= S.nGrp; q++) { const o = el('option', null, '→ ' + (S.grp[q - 1].name || 'G' + q)); o.value = q; o.title = T.toT(grpName(q - 1)); g.appendChild(o); }
         g.value = c.grp <= S.nGrp ? c.grp : 0; g.onchange = () => { c.grp = +g.value; route(i); }; s.appendChild(g); ui.refreshers.push(() => { [...g.options].forEach(o => { const q = +o.value; if (q) { o.textContent = '→ ' + (S.grp[q - 1].name || 'G' + q); o.title = T.toT(grpName(q - 1)); } }); g.value = c.grp <= S.nGrp ? c.grp : 0; });
         mini(s, T.pan, [-1, 1, 0.01], () => c.pan, v => c.pan = v, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100), 0);
-        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter);
+        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter, 'met.t' + k);
         const ms = el('div', 'mx2-ms'), bm = el('button', 'm', 'M'), bs = el('button', 's', 'S'); bm.title = T.mute; bs.title = T.solo;
         bm.onclick = () => { c.mute = !c.mute; bm.classList.toggle('on', c.mute); applyAll(); }; bs.onclick = () => { c.solo = !c.solo; bs.classList.toggle('on', c.solo); s.classList.toggle('solo', c.solo); applyAll(); };
         ui.refreshers.push(() => { bm.classList.toggle('on', c.mute); bs.classList.toggle('on', c.solo); s.classList.toggle('solo', c.solo); });
@@ -394,7 +408,7 @@ export default {
           eqBlock(s, c);
           mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0);
           mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8);
-          const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter);
+          const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter, 'met.g' + k);
           const ms = el('div', 'mx2-ms'), bm = el('button', 'm', 'M'); bm.title = T.mute; bm.onclick = () => { c.mute = !c.mute; bm.classList.toggle('on', c.mute); applyAll(); };
           ui.refreshers.push(() => bm.classList.toggle('on', c.mute)); ms.appendChild(bm); bot.appendChild(ms);
           tagCtl(s, 'G' + k);
@@ -407,7 +421,7 @@ export default {
         eqBlock(s, c);
         mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0);
         mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8);
-        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, mMeter); bot.appendChild(el('div', 'mx2-ms')); tagCtl(s, T.master); }
+        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, mMeter, 'met.master'); bot.appendChild(el('div', 'mx2-ms')); tagCtl(s, T.master); }
     }
 
     self = {
@@ -427,7 +441,7 @@ export default {
         for (const k in mod) delete mod[k]; Object.assign(mod, next); applyAll();
       },
       mount(e) { root = el('div'); e.appendChild(root); render(); lastT = performance.now(); startLoops(); },
-      unmount() { stopLoops(); root = null; ui = null; },
+      unmount() { stopLoops(); hostMeters.forEach(m => { try { m.destroy(); } catch (e) {} }); hostMeters = []; root = null; ui = null; },
       getPreset() { const s = self.getState(); s.ch.forEach(c => { delete c.src; }); return s; },
       setPreset(p) { p = p && typeof p === 'object' ? JSON.parse(JSON.stringify(p)) : {}; p.ch = Array.from({ length: MAXCH }, (_, i) => ({ ...((Array.isArray(p.ch) && p.ch[i] && typeof p.ch[i] === 'object') ? p.ch[i] : chDef()), src: S.ch[i].src })); self.setState(p); },
       getState() {
@@ -451,7 +465,7 @@ export default {
         applyAll(); announce(); if (root) render();
       },
       destroy() {
-        stopLoops(); clearTimeout(bundleT); clearInterval(guardT);
+        stopLoops(); hostMeters.forEach(m => { try { m.destroy(); } catch (e) {} }); hostMeters = []; clearTimeout(bundleT); clearInterval(guardT);
         chans.forEach(n => { if (n.srcNode) { try { n.srcNode.disconnect(n.in); } catch (e) {} n.srcNode = null; } kill([n.in, n.trim, ...n.eq, n.fader, n.pan, n.mute, n.send, n.retIn, n.ret, n.tap]); });
         groups.forEach(n => kill([n.sum, ...n.eq, n.post, n.fader, n.mute, n.send, n.retIn, n.ret, n.tap]));
         kill([mSum, ...M.eq, mPost, mFader, mSend, mRetIn, mRet, lim, out]);
