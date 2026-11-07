@@ -1,4 +1,4 @@
-// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.3) / test cases for the validator
+// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.4) / test cases for the validator
 // Gebruik / Usage:  node skins/contract/test-validate-skin.mjs      (exit 0 = alles groen / all green)
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
@@ -18,7 +18,7 @@ const SK = s => { const o = base(); return Object.assign(o, s); };
 // --- 0.1 en basis
 ok('0.1-bestand zonder design', SK({ skinsContract: '0.1' }));
 ok('0.2-bestand zonder design', base());
-okWarn('minor 4 is nieuwer', SK({ skinsContract: '0.4' }), ['contract_minor']);
+okWarn('minor 5 is nieuwer', SK({ skinsContract: '0.5' }), ['contract_minor']);
 bad('major 1', SK({ skinsContract: '1.0' }), ['contract_major']);
 okWarn('design in een 0.1-bestand', { ...withDesign({ ports: { mode: 'hover' } }), skinsContract: '0.1' }, ['design_contract']);
 // --- ports
@@ -145,8 +145,59 @@ okWarn('rotary met thumb', ctl({ match: 'cut', face: 'rotary', thumb: 'bar' }), 
 okWarn('rotary met thickness', ctl({ match: 'cut', face: 'rotary', thickness: 4 }), ['controls_slider_only']);
 okWarn('controls in een 0.2-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.2' }, ['controls_contract']);
 okWarn('controls in een 0.1-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.1' }, ['controls_contract', 'design_contract']);
-okWarn('0.4 is nieuwer dan 0.3', SK({ skinsContract: '0.4' }), ['contract_minor']);
+okWarn('0.5 is nieuwer dan 0.4', SK({ skinsContract: '0.5' }), ['contract_minor']);
 ok('0.3 is bekend', SK({ skinsContract: '0.3' }), ['contract_minor']);
+ok('0.4 is bekend', SK({ skinsContract: '0.4' }), ['contract_minor']);
+// --- meters (0.4)
+const met = (...rules) => ({ ...withDesign({ meters: rules }), skinsContract: '0.4' });
+const metApp = (...rules) => ({ ...withAppDesign({ meters: rules }), skinsContract: '0.4' });
+ok('meters: alle matchvormen', met({ match: '*', face: 'vu' }, { match: 'met.master', face: 'ledladder' }, { match: 'group:meters', length: 'long' }, { match: 'met.t1-a_b', width: 6 }));
+for (const f of ['bar', 'ledladder', 'vu', 'default']) ok('meters face ' + f, met({ match: '*', face: f }));
+for (const o of ['auto', 'vertical', 'horizontal']) ok('meters orientation ' + o, met({ match: '*', face: 'bar', orientation: o }));
+for (const l of ['short', 'medium', 'long', 24, 400, 120.5]) ok('meters length ' + l, met({ match: '*', length: l }));
+for (const w of [3, 48, 10.5]) ok('meters width ' + w, met({ match: '*', face: 'bar', width: w }));
+for (const b of ['default', 'fast', 'vu', 'slow']) ok('meters ballistics ' + b, met({ match: '*', ballistics: b }));
+for (const v of ['on', 'off', 'default']) ok('meters peakHold ' + v, met({ match: '*', peakHold: v }));
+for (const v of ['show', 'hide', 'default']) ok('meters clip ' + v, met({ match: '*', clip: v }));
+for (const v of ['show', 'hide']) ok('meters scale ' + v, met({ match: '*', face: 'vu', scale: v }));
+for (const c of ['accent', 'default', '#ff8800', '#F80']) ok('meters color ' + c, met({ match: '*', color: c }));
+for (const n of [8, 20, 40]) ok('meters segments ' + n, met({ match: '*', face: 'ledladder', segments: n }));
+ok('meters per verschijning', metApp({ match: 'met.master', face: 'vu' }));
+ok('meters leeg is geldig', met());
+ok('meters naast controls', { ...met({ match: '*', face: 'vu' }), design: { meters: [{ match: '*', face: 'vu' }], controls: [{ match: '*', size: 's' }] } });
+ok('0.3-bestand zonder meters blijft ok', SK({ skinsContract: '0.3' }));
+bad('meters geen lijst', { ...withDesign({ meters: 'vu' }), skinsContract: '0.4' }, ['meters_list']);
+bad('meters regel geen object', met('vu'), ['meters_rule']);
+bad('meters match ontbreekt', met({ face: 'vu' }), ['meters_match']);
+bad('meters match role: bestaat niet', met({ match: 'role:meter', face: 'vu' }), ['meters_match']);
+bad('meters match met spatie', met({ match: 'met master', face: 'vu' }), ['meters_match']);
+bad('meters face none', met({ match: '*', face: 'none' }), ['meters_none']);
+bad('meters face onbekend', met({ match: '*', face: 'needle' }), ['design_enum']);
+bad('meters orientation onbekend', met({ match: '*', orientation: 'diagonal' }), ['design_enum']);
+bad('meters length te klein', met({ match: '*', length: 10 }), ['meters_enum_num']);
+bad('meters length te groot', met({ match: '*', length: 500 }), ['meters_enum_num']);
+bad('meters length onbekend woord', met({ match: '*', length: 'huge' }), ['meters_enum_num']);
+bad('meters width te klein', met({ match: '*', width: 2 }), ['meters_num']);
+bad('meters width te groot', met({ match: '*', width: 49 }), ['meters_num']);
+bad('meters width als woord', met({ match: '*', width: 'm' }), ['meters_num']);
+bad('meters ballistics onbekend', met({ match: '*', ballistics: 'medium' }), ['design_enum']);
+bad('meters peakHold waar', met({ match: '*', peakHold: true }), ['design_enum']);
+bad('meters clip onbekend', met({ match: '*', clip: 'always' }), ['design_enum']);
+bad('meters scale default bestaat niet', met({ match: '*', scale: 'default' }), ['design_enum']);
+bad('meters color ongeldig', met({ match: '*', color: 'red' }), ['meters_colour']);
+bad('meters segments te klein', met({ match: '*', face: 'ledladder', segments: 7 }), ['meters_int']);
+bad('meters segments te groot', met({ match: '*', face: 'ledladder', segments: 41 }), ['meters_int']);
+bad('meters segments niet geheel', met({ match: '*', face: 'ledladder', segments: 12.5 }), ['meters_int']);
+bad('meters meer dan 64 regels', met(...Array.from({ length: 65 }, (_, i) => ({ match: 'm' + i, face: 'vu' }))), ['meters_max']);
+okWarn('meters regel met onbekende sleutel', met({ match: '*', face: 'vu', needle: 'red' }), ['unknown_field']);
+okWarn('meters regel zonder eigenschap', met({ match: 'met.master' }), ['meters_empty']);
+okWarn('meters vu met width', met({ match: '*', face: 'vu', width: 10 }), ['meters_vu_width']);
+okWarn('meters vu met orientation vertical', met({ match: '*', face: 'vu', orientation: 'vertical' }), ['meters_vu_orientation']);
+ok('meters vu met orientation auto is stil', met({ match: '*', face: 'vu', orientation: 'auto' }), ['meters_vu_orientation']);
+okWarn('meters bar met scale', met({ match: '*', face: 'bar', scale: 'show' }), ['meters_scale_bar']);
+okWarn('meters segments bij vu', met({ match: '*', face: 'vu', segments: 12 }), ['meters_segments_face']);
+okWarn('meters in een 0.3-bestand', { ...withDesign({ meters: [{ match: '*', face: 'vu' }] }), skinsContract: '0.3' }, ['meters_contract']);
+okWarn('meters in een 0.1-bestand', { ...withDesign({ meters: [{ match: '*', face: 'vu' }] }), skinsContract: '0.1' }, ['meters_contract', 'design_contract']);
 // --- --device: register van een apparaat (id's, groepen, rollen)
 const DEVSRC = `export default { id: 'nl.test.dev', name: 'D', version: '1.0.0', kind: 'effect',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },
@@ -167,6 +218,22 @@ dev('device: niet gemigreerd (geen id\'s)', ctl({ match: 'cut', size: 's' }), DE
 dev('device: niet gemigreerd, alleen * en rol: geen melding behalve rol', ctl({ match: '*', size: 's' }, { match: 'role:param', face: 'rotary' }), DEVSRC_PLAIN, []);
 dev('device: ander apparaat dan de skin', SK({ device: 'nl.test.other', id: 'nl.test.other.sample', design: { controls: [{ match: 'zzz', size: 's' }] } }), DEVSRC, ['dev_other']);
 dev('device: onbekend id zonder controls in de skin', base(), DEVSRC, []);
+const DEVMET = `export default { id: 'nl.test.dev', name: 'D', version: '1.0.0', kind: 'effect', modExclude: '*',
+  ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },
+  create(ctx, host) { const g = ctx.createGain(); const ui = [];
+    return { inputs: { in: g }, outputs: { out: g },
+      mount(el) { ui.push(host.ui.knob(el, 'Cut', [0, 1, 0.01], 0.5, v => v, v => {}, { id: 'cut', role: 'param', group: 'filter' })); const an = ctx.createAnalyser(); host.ui.meter(el, 'Master', { id: 'met.master', group: 'meters', source: an }); host.ui.meter(el, 'T1', { id: 'met.t1', group: 'meters', source: an }); },
+      getState() { return { v: 1 }; }, setState() { ui[0].set(0); }, destroy() {} }; } };`;
+dev('device: bekend meter-id en groep', met({ match: 'met.master', face: 'vu' }, { match: 'group:meters', length: 'long' }, { match: '*', ballistics: 'vu' }), DEVMET, []);
+dev('device: onbekend meter-id', met({ match: 'met.nope', face: 'vu' }), DEVMET, ['dev_unknown_meter']);
+dev('device: onbekende meter-groep', met({ match: 'group:levels', face: 'vu' }), DEVMET, ['dev_unknown_meter_group']);
+dev('device: een regelaar-id is geen meter-id', met({ match: 'cut', face: 'vu' }), DEVMET, ['dev_unknown_meter']);
+dev('device: een meter-id is geen regelaar-id', ctl({ match: 'met.master', size: 's' }), DEVMET, ['dev_unknown_id']);
+dev('device: een regelaar-groep is geen meter-groep', met({ match: 'group:filter', face: 'vu' }), DEVMET, ['dev_unknown_meter_group']);
+dev('device: onbekend meter-id in een verschijning', metApp({ match: 'nope', face: 'vu' }), DEVMET, ['dev_unknown_meter']);
+dev('device: apparaat zonder meters', met({ match: 'met.master', face: 'vu' }), DEVSRC, ['dev_no_meters']);
+dev('device: apparaat zonder meters, alleen *: wel melding', met({ match: '*', face: 'vu' }), DEVSRC, ['dev_no_meters']);
+dev('device: controls- en meterregels samen', { ...met({ match: 'met.master', face: 'vu' }), design: { meters: [{ match: 'met.master', face: 'vu' }], controls: [{ match: 'cut', size: 's' }] } }, DEVMET, []);
 cases.push(['device: pad bestaat niet', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], devicePath: '/nonexistent/x.patchkamer-device.js' }]);
 cases.push(['device: apparaat faalt in de validator', ctl({ match: 'cut', size: 's' }), { ok: true, codes: ['dev_unreadable'], no: [], device: 'export default {}' }]);
 // --- 0.1-regels blijven

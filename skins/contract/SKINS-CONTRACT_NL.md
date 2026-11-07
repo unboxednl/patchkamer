@@ -1,16 +1,17 @@
-# Patchkamer — Skinscontract v0.3 voor bouwende agents
+# Patchkamer — Skinscontract v0.4 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een **skin** te bouwen voor **Patchkamer**: een los bestand dat het uiterlijk van één apparaat verandert, zonder het apparaat zelf of het apparaatcontract aan te raken. Een agent die dit document krijgt, heeft geen andere context nodig. Lever een bestand `naam.patchkamer-skin.json` op dat aan dit contract voldoet en zonder fouten door `validate-skin.mjs` komt.
 
 _Dit contract staat in twee talen: `SKINS-CONTRACT_NL.md` (Nederlands, de brontekst) en `SKINS-CONTRACT_EN.md` (English). Beide hebben dezelfde versie en dezelfde inhoud; verschillen ze, dan geldt de Nederlandse tekst. De validator spreekt ook beide talen (`--lang nl|en`)._
 
-_Dit contract is een eigen contract naast het apparaatcontract (`../../contract/PATCHKAMER-CONTRACT_NL.md`, nu v1.15) en heeft een eigen versienummer. Een skin stelt niets van een apparaat voor: er is geen wijziging aan apparaten nodig._
+_Dit contract is een eigen contract naast het apparaatcontract (`../../contract/PATCHKAMER-CONTRACT_NL.md`, nu v1.18) en heeft een eigen versienummer. Een skin stelt niets van een apparaat voor: er is geen wijziging aan apparaten nodig._
 
 | Versie | Wat erbij kwam |
 |---|---|
 | v0.1 | Eerste versie, bewust klein: een manifest, verschijningsvormen met CSS en ingesloten afbeeldingen, automatisch wisselen op kaartbreedte en schermklasse, een icoon per skin en per apparaat. De inhoud van een skin is een placeholder; de eisen voor artwork, regelaargrafiek en indeling volgen later (§13) |
 | v0.2 | Laag 1: het veld `design` met ontwerpkeuzes die op alle apparaten werken (poortenmodus, kleurenschema, haptiek, stijl en grootte van de hostknop), op skinniveau en per verschijningsvorm (§4b). Skins van 0.1 blijven ongewijzigd werken |
 | v0.3 | Laag 2, release A "id's en rollen": `design.controls`, een geordende lijst regels die per id, rol of groep het gezicht (draaiknop, horizontale of verticale schuif), de maat, de lengte, de dikte, de duim, de kleur en de waardeweergave van regelaars kiest (§4b). Hoort bij apparaatcontract v1.15. Skins van 0.1 en 0.2 blijven ongewijzigd werken |
+| v0.4 | Laag 2, release C "meters": `design.meters`, een geordende lijst regels die per id, groep of overal het gezicht van een meter kiest (balk, ledladder of rond VU met wijzer die een balk vervangt, nooit ernaast), de richting, de lengte en de breedte, de ballistiek (val), het piekstreepje, het clip-lampje, de schaal, de kleur en het aantal ledjes (§4b). Hoort bij apparaatcontract v1.18 (`host.ui.meter`). Skins van 0.1 tot en met 0.3 blijven ongewijzigd werken |
 
 ---
 
@@ -21,7 +22,7 @@ _Dit contract is een eigen contract naast het apparaatcontract (`../../contract/
 - Een skin hoort bij **één apparaat-id** (het veld `device`). Voor een ander apparaat wordt hij bewaard maar nergens aangeboden.
 - Een apparaat hoeft niets te doen om skins te kunnen krijgen. Heeft het apparaat geen open shadow root (zie §4), dan kan de host de skin niet toepassen en meldt dat; dat is geen fout van de skin of van het apparaat.
 - Skins zijn een nieuw soort bibliotheekmateriaal naast tunes en presets: ze worden geladen uit bronnen (een GitHub-map, een lokale map, een adres), bekeken in een eigen paneel, gekozen per apparaat op de kaart, bewaard in de werkruimte en in de song, en kunnen op het canvas worden gedropt (§8, §9).
-- Versie 0.3 blijft bewust klein: CSS plus een kleine set ontwerpkeuzes (`design`, §4b), waaronder het gezicht van regelaars (`controls`). Het formaat is uitbreidbaar (onbekende velden worden genegeerd, §10); wat er nog niet in zit staat in §13.
+- Versie 0.4 blijft bewust klein: CSS plus een kleine set ontwerpkeuzes (`design`, §4b), waaronder het gezicht van regelaars (`controls`) en van meters (`meters`). Het formaat is uitbreidbaar (onbekende velden worden genegeerd, §10); wat er nog niet in zit staat in §13.
 
 ---
 
@@ -35,7 +36,7 @@ Een skin is een UTF-8 JSON-bestand met één object, genaamd `naam.patchkamer-sk
 |---|---|---|---|---|
 | `format` | tekst | altijd `"patchkamer-skin"` | | ja |
 | `formatVersion` | geheel getal | nu `1` | | ja |
-| `skinsContract` | tekst | `"major.minor"`, nu `"0.3"` (`"0.1"` en `"0.2"` blijven geldig); zie §10 | | ja |
+| `skinsContract` | tekst | `"major.minor"`, nu `"0.4"` (`"0.1"`, `"0.2"` en `"0.3"` blijven geldig); zie §10 | | ja |
 | `id` | tekst | 3 tot 100 tekens uit `[a-z0-9.-]`; aanbevolen `<device-id>.<slug>`; uniek: dezelfde `id` is dezelfde skin | | ja |
 | `device` | tekst | de `id` van het apparaat waarvoor de skin is, bijvoorbeeld `nl.patchkamer.duofone` | | ja |
 | `name` | tekst | Engelse naam, 1 tot 60 tekens, merkvrij (§11) | | ja |
@@ -125,7 +126,7 @@ Daarbuiten is gewone CSS toegestaan, ook `@media`, `@container` en `@keyframes`.
 
 ---
 
-## 4b. Ontwerpkeuzes (`design`, vanaf 0.2; `controls` vanaf 0.3)
+## 4b. Ontwerpkeuzes (`design`, vanaf 0.2; `controls` vanaf 0.3; `meters` vanaf 0.4)
 
 Naast CSS kan een skin vanaf versie 0.2 een set **gevalideerde ontwerpkeuzes** meebrengen in het veld `design`. Anders dan CSS werken die keuzes op **alle apparaten** via de host, zonder dat een apparaat iets hoeft te doen (met de beperkingen hieronder). `design` staat op skinniveau (de standaard voor alle verschijningsvormen) en mag per verschijningsvorm worden overschreven met `appearances[].design`.
 
@@ -136,7 +137,8 @@ Naast CSS kan een skin vanaf versie 0.2 een set **gevalideerde ontwerpkeuzes** m
                "custom": { "bg": "#rrggbb", "surface": "#rrggbb", "text": "#rrggbb", "muted": "#rrggbb", "accent": "#rrggbb", "line": "#rrggbb" } },
   "haptics": { "click": "off|light|medium|strong", "turn": "off|light|medium|strong", "slide": "off|light|medium|strong" },
   "knobs":   { "style": "workspace|rotary|slider", "size": "s|m|l" },
-  "controls": [ { "match": "*|<id>|role:<rol>|group:<groep>", "face": "rotary|hslider|vslider|default", "size": "xs…xl|0.6..2", "length": "short|medium|long|40..400", "thickness": 2, "thumb": "round|square|bar|none", "color": "accent|#rrggbb", "showValue": "always|hover|never" } ]
+  "controls": [ { "match": "*|<id>|role:<rol>|group:<groep>", "face": "rotary|hslider|vslider|default", "size": "xs…xl|0.6..2", "length": "short|medium|long|40..400", "thickness": 2, "thumb": "round|square|bar|none", "color": "accent|#rrggbb", "showValue": "always|hover|never" } ],
+  "meters": [ { "match": "*|<id>|group:<groep>", "face": "bar|ledladder|vu|default", "orientation": "auto|vertical|horizontal", "length": "short|medium|long|24..400", "width": 8, "ballistics": "default|fast|vu|slow", "peakHold": "on|off|default", "clip": "show|hide|default", "scale": "show|hide", "color": "accent|default|#rrggbb", "segments": 20 } ]
 }
 ```
 
@@ -146,7 +148,7 @@ Naast CSS kan een skin vanaf versie 0.2 een set **gevalideerde ontwerpkeuzes** m
 - **Samenvoegen:** de host neemt het `design` van de skin en legt daar het `design` van de gekozen verschijningsvorm overheen, **per sleutel** (en in `colors.custom` per kleur). Een verschijningsvorm hoeft dus alleen te herhalen wat anders is.
 - **Soepel in de host, streng in de validator:** de host negeert een ongeldige waarde of onbekende sleutel (die ene sleutel valt terug op het standaardgedrag) en meldt het; de validator geeft bij een ongeldige waarde een **fout** en bij een onbekende sleutel een `let op`. Onbekende sleutels en secties horen bij latere versies (§13) en worden genegeerd.
 - **Standaard wist alles:** kiest de gebruiker op de kaart Standaard (geen skin), dan zijn kaart, apparaat en kabels exact zoals zonder skin.
-- `design` hoort bij `skinsContract` `"0.2"` (`controls` bij `"0.3"`). In een bestand met `"0.1"` negeert een 0.1-host het; de validator geeft daar een `let op`, en ook voor `controls` in een 0.2-bestand.
+- `design` hoort bij `skinsContract` `"0.2"` (`controls` bij `"0.3"`, `meters` bij `"0.4"`). In een bestand met `"0.1"` negeert een 0.1-host het; de validator geeft daar een `let op`, en ook voor `controls` in een 0.2-bestand en voor `meters` in een 0.3-bestand.
 
 ### Poortenmodus (`ports.mode`)
 
@@ -272,6 +274,41 @@ Met `design.controls` kiest een skin het **gezicht, de maat en de kleur van rege
 - **Standaard:** zonder skin, of zonder `controls`, is het apparaat exact zoals het was.
 - **Toegankelijkheid** blijft: een ander gezicht houdt toetsenbord, aanraking, dubbelklik (beginwaarde) en typen werkend. Een skin kan dat niet uitzetten.
 
+### Meters (`meters`, vanaf 0.4)
+
+Met `design.meters` kiest een skin het **gezicht en de maat van meters**: een balk, een rij ledjes of een ronde VU-meter met een wijzer die van links naar rechts uitslaat, en hoe lang, hoe breed en hoe snel hij reageert. Een **VU-gezicht vervangt de balk op dezelfde plek**; het komt er niet naast. Net als bij `controls` is het een **geordende lijst regels** met een `match` en een of meer eigenschappen. Het werkt alleen op meters die het apparaat door de host laat tekenen met `host.ui.meter` (apparaatcontract §12e); een meter die een apparaat zelf tekent, blijft zoals hij was.
+
+```json
+"design": {
+  "meters": [
+    { "match": "*",            "face": "ledladder", "segments": 16, "ballistics": "fast" },
+    { "match": "group:meters", "orientation": "vertical", "length": "long", "width": 8 },
+    { "match": "met.master",   "face": "vu", "length": 180, "scale": "show", "color": "accent" }
+  ]
+}
+```
+
+| Sleutel | Waarden | Betekenis |
+|---|---|---|
+| `match` (verplicht) | `"*"`, een id (`"met.master"`) of `"group:<groep>"` | Welke meters de regel raakt. Id's en groepen publiceert het apparaat (apparaatcontract §12e). Er is geen `role:`; elke meter heeft rol `meter`. Een id is 1 tot 60 tekens uit `[A-Za-z0-9._-]`. |
+| `face` | `bar`, `ledladder`, `vu`, `default` | Het gezicht: balk (de gewone look van het apparaat), een rij losse ledjes (groen, geel, rood volgens dezelfde drempels als de balk), een halve ronde schaal met een wijzer (`vu`; rood vanaf 3 dB onder het maximum; bij twee kanalen twee wijzers in een verschillende tint op één schaal), of wat het apparaat zelf vroeg (`default`). |
+| `orientation` | `auto`, `vertical`, `horizontal` | De richting van een balk of ledladder; `auto` is de keuze van het apparaat. Een `vu` negeert het, want zijn schaal is altijd horizontaal. |
+| `length` | `short`, `medium`, `long`, of een getal 24 tot 400 (px) | De lengte in de uitslagrichting: de hoogte bij `vertical`, de breedte bij `horizontal`; bij `vu` de breedte van de wijzerplaat (de hoogte is dan 0,6 keer de lengte). |
+| `width` | getal 3 tot 48 (px) | De dikte van een balk of ledladder. Bij `vu` genegeerd (de validator geeft een `let op`). |
+| `ballistics` | `default`, `fast`, `vu`, `slow` | Hoe de uitslag valt: `default` is het apparaat, `fast` springt direct omhoog en valt met ongeveer 24 dB per seconde (de huidige Mixer-look), `vu` is een klassieke VU (300 ms integratie, rustige aanloop en terugval), `slow` springt direct omhoog en valt met ongeveer 6 dB per seconde. Bij gezicht `vu` zonder opgegeven waarde is dat `vu`, anders `default`. De host rekent dit op één plek uit; het geluid verandert niet. |
+| `peakHold` | `on`, `off`, `default` | Het piekstreepje dat langzaam valt. |
+| `clip` | `show`, `hide`, `default` | Het clip-lampje. Het blijft alleen zichtbaar als het apparaat een clip-drempel heeft gezet, of als de skin `show` kiest (de drempel is dan het maximum van de schaal). |
+| `scale` | `show`, `hide` | Streepjes en dB-cijfers. Alleen bij `vu` en `ledladder`; standaard is de schaal bij `vu` te zien en bij `bar` niet. |
+| `color` | `"accent"`, `"default"` of `#rgb` / `#rrggbb` | Kleur van het gewone deel van de meter. De drempels voor geel en rood blijven. |
+| `segments` | geheel getal 8 tot 40 | Het aantal ledjes van een `ledladder` (standaard 20). |
+
+- **Volgorde en samenvoegen** zijn als bij `controls`: de **laatste passende regel wint per eigenschap**; de regels van de verschijningsvorm komen achter die van de skin; hoogstens **64 regels** per lijst (de validator geeft een fout bij meer).
+- **Een skin verbergt of zet nooit iets.** Er is geen `face: "none"` en geen sleutel om een meter weg te laten; een skin raakt ook geen waarde. De validator geeft er een fout voor, de host negeert het.
+- **Standaard:** zonder skin, of zonder `meters`, is het gezicht en de maat die van het apparaat zelf.
+- **Ruimte:** een `vu` heeft minstens 56 × 36 px nodig. De host vergroot daarvoor het element van de meter, en de layout van het apparaat groeit mee (een kanaalstrook van de Mixer wordt dan breder). Het Skins-paneel meldt dat. Kies bij een mixer met veel kanalen liever `ledladder` of een korte `bar` als de kaart te breed wordt.
+- **Onbekende id's:** een `match` met een id of groep die het apparaat niet heeft, wordt door de host stil genegeerd. De validator ziet dat niet zonder het apparaat; met `--device` wel, als `let op` (zie §12). Het Skins-paneel meldt "n van m meters".
+- **Toegankelijkheid:** elk gezicht blijft een `role="meter"` met waarde, minimum, maximum en label voor schermlezers.
+
 ### Wat "werkt op alle apparaten" betekent
 
 | Onderdeel | Bereik in laag 1 |
@@ -281,8 +318,9 @@ Met `design.controls` kiest een skin het **gezicht, de maat en de kleur van rege
 | `haptics` | alle apparaten met een open shadow root of gewone UI in de kaart; niet te zien in een gesloten shadow root |
 | `knobs` | alleen wat via `host.ui.knob` is gebouwd |
 | `controls` | alleen regelaars die het apparaat aanmeldt (`host.ui.knob`, `host.ui.adopt`, `data-pk-*`; apparaatcontract §12d); de rest blijft ongemoeid |
+| `meters` | alleen meters die het apparaat met `host.ui.meter` laat tekenen (apparaatcontract §12e); de rest blijft ongemoeid |
 
-Nog **niet beschikbaar** (verdere stappen van laag 2 en laag 3, §13): panelen en indeling, meters, pads, een schermpje, en een editor. `design` verandert niets aan de bouw van een apparaat.
+Nog **niet beschikbaar** (verdere stappen van laag 2 en laag 3, §13): panelen en indeling, pads, een schermpje, en een editor. `design` verandert niets aan de bouw van een apparaat.
 
 ---
 
@@ -371,7 +409,7 @@ skins/
 
 ## 10. Versies
 
-Dit contract heeft een versie `major.minor` (nu **0.3**), vastgelegd in het veld `skinsContract` van elke skin.
+Dit contract heeft een versie `major.minor` (nu **0.4**), vastgelegd in het veld `skinsContract` van elke skin.
 
 | Verschil met de versie van de host | Wat de host doet |
 |---|---|
@@ -383,7 +421,7 @@ Dit contract heeft een versie `major.minor` (nu **0.3**), vastgelegd in het veld
 - Onbekende velden, ook in een verschijningsvorm of in `when`, **worden genegeerd** en niet geweigerd. De validator meldt ze met een `let op` om typefouten te vangen.
 - `formatVersion` (nu `1`) is de versie van de bestandsopbouw zelf; `skinsContract` is de versie van dit contract.
 - Houd `id` en `device` gelijk bij een nieuwe versie van een skin en verhoog `version`: de nieuwere `version` wint.
-- Dit contract, de validator (`validate-skin.mjs`) en de host horen bij dezelfde versie. De eerste regels van `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` en `validate-skin.mjs` noemen elk "v0.3".
+- Dit contract, de validator (`validate-skin.mjs`) en de host horen bij dezelfde versie. De eerste regels van `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` en `validate-skin.mjs` noemen elk "v0.4".
 
 **Wijzigingen van 0.1 naar 0.2:**
 
@@ -408,6 +446,17 @@ Dit contract heeft een versie `major.minor` (nu **0.3**), vastgelegd in het veld
 | `knobs.style` / `knobs.size` | stijl en grootte van de hostknop | blijven werken als korte vorm van een `controls`-regel op `role:param` |
 | Validator | controleert `design` | controleert ook `controls` (vorm, bereiken, `face: "none"` is een fout, `let op` bij onbekende rol of een eigenschap die niet past) en kent `--device <apparaat>` voor id's, rollen en groepen |
 | Bestaande 0.1- en 0.2-skins | | blijven ongewijzigd werken |
+
+**Wijzigingen van 0.3 naar 0.4:**
+
+| Onderdeel | 0.3 | 0.4 |
+|---|---|---|
+| `skinsContract` | `"0.3"` | `"0.4"`; `"0.1"`, `"0.2"` en `"0.3"` blijven geldig |
+| `design.meters` | bestaat niet | nieuw, optioneel: geordende lijst regels `{ match, face, orientation, length, width, ballistics, peakHold, clip, scale, color, segments }` (§4b) |
+| Meters aanwijzen | niet mogelijk | via `id` of `group:<groep>` die het apparaat met `host.ui.meter` publiceert (apparaatcontract v1.18, §12e); `role:` bestaat hier niet |
+| Gezichten van een meter | alleen wat het apparaat tekent | `bar`, `ledladder` en `vu` (rond, met wijzer; vervangt de balk op dezelfde plek) |
+| Validator | controleert `design` en `controls` | controleert ook `meters` (vorm, bereiken, `face: "none"` is een fout, `let op` bij een eigenschap die niet past bij het gezicht) en kent in `--device` de meters van het apparaat |
+| Bestaande skins van 0.1 tot en met 0.3 | | blijven ongewijzigd werken |
 
 ---
 
@@ -468,8 +517,11 @@ Wat de validator controleert:
 | `design.controls`: een regel met een verkeerde vorm (geen object, `match` ontbreekt of heeft een ongeldige vorm), een waarde buiten het bereik (`face`, `size`, `length`, `thickness`, `thumb`, `color`, `showValue`), `face: "none"`, de lijst is geen lijst of heeft meer dan 64 regels | fout |
 | `design.controls`: een rol in `match` die niet in de lijst staat; een regel zonder eigenschap naast `match`; `length`, `thickness` of `thumb` bij `face: "rotary"`; een onbekende sleutel in een regel; `controls` in een bestand met `skinsContract` `"0.2"` of `"0.1"` | let op |
 | Met `--device <apparaat>`: een id, groep of rol in `match` die het apparaat niet publiceert; een apparaat zonder id's terwijl regels op id of groep mikken; een apparaat dat niet laadt; een skin voor een ander apparaat | let op |
+| `design.meters`: een regel met een verkeerde vorm (geen object, `match` ontbreekt, heeft een ongeldige vorm of begint met `role:`), een waarde buiten het bereik (`face`, `orientation`, `length`, `width`, `ballistics`, `peakHold`, `clip`, `scale`, `color`, `segments`), `face: "none"`, de lijst is geen lijst of heeft meer dan 64 regels | fout |
+| `design.meters`: een regel zonder eigenschap naast `match`; `width` bij `face: "vu"`; `orientation` anders dan `auto` bij `face: "vu"`; `scale` bij `face: "bar"`; `segments` bij een ander gezicht dan `ledladder`; een onbekende sleutel in een regel; `meters` in een bestand met `skinsContract` `"0.3"` of lager | let op |
+| Met `--device <apparaat>`: een meter-id of groep in `design.meters` die het apparaat niet publiceert; meterregels voor een apparaat zonder meters (geen `host.ui.meter`); een regelaar-id in een meterregel en andersom | let op |
 
-**Controleren tegen een apparaat (`--device`).** Met `--device <apparaat.patchkamer-device.js>` laadt de validator het apparaat (via `contract/validate-instrument.mjs`, dat het register van id's, rollen en groepen kent) en geeft een `let op` voor elke `match` die niets raakt: een onbekend id, een onbekende groep, een rol die het apparaat niet heeft. Het is altijd een `let op` en nooit een fout, want een nieuwere apparaatversie kan een id later toevoegen. Een tabel van wat een apparaat aanmeldt krijg je met `node contract/validate-instrument.mjs <apparaat> --controls`.
+**Controleren tegen een apparaat (`--device`).** Met `--device <apparaat.patchkamer-device.js>` laadt de validator het apparaat (via `contract/validate-instrument.mjs`, dat het register van id's, rollen en groepen kent) en geeft een `let op` voor elke `match` die niets raakt: een onbekend id, een onbekende groep, een rol die het apparaat niet heeft. Voor `design.meters` kijkt hij alleen naar de meters van het apparaat (rol `meter`) en meldt een onbekend meter-id, een groep zonder meter en een apparaat zonder meters. Het is altijd een `let op` en nooit een fout, want een nieuwere apparaatversie kan een id later toevoegen. Een tabel van wat een apparaat aanmeldt krijg je met `node contract/validate-instrument.mjs <apparaat> --controls`.
 
 ```
 node skins/contract/validate-skin.mjs skins/library/nl.patchkamer.filter/example-controls.patchkamer-skin.json --device devices/effects/Filter/filter.patchkamer-device.js
@@ -481,11 +533,10 @@ De validator kan niet zien of de CSS er goed uitziet of een selector iets raakt,
 
 ---
 
-## 13. Wat nog niet in versie 0.3 zit
+## 13. Wat nog niet in versie 0.4 zit
 
-Versie 0.1 legt het formaat en de weg naar de gebruiker vast; versie 0.2 (laag 1) voegt de ontwerpkeuzes toe die op alle apparaten werken (§4b); versie 0.3 (laag 2, release A "id's en rollen") voegt `design.controls` toe: gezicht, maat en kleur van regelaars die het apparaat aanmeldt. Daarbuiten is de inhoud van een skin nog een **placeholder**: CSS en afbeeldingen zonder verdere eisen. Bewust later, in een volgende versie, in deze volgorde:
+Versie 0.1 legt het formaat en de weg naar de gebruiker vast; versie 0.2 (laag 1) voegt de ontwerpkeuzes toe die op alle apparaten werken (§4b); versie 0.3 (laag 2, release A "id's en rollen") voegt `design.controls` toe: gezicht, maat en kleur van regelaars die het apparaat aanmeldt; versie 0.4 (laag 2, release C "meters") voegt `design.meters` toe: gezicht (balk, ledladder, rond VU), richting, lengte, breedte, ballistiek, schaal en kleur van meters die het apparaat door de host laat tekenen. Daarbuiten is de inhoud van een skin nog een **placeholder**: CSS en afbeeldingen zonder verdere eisen. Bewust later, in een volgende versie, in deze volgorde:
 
-- **meters** (release C): `host.ui.meter` en `design.meters` (balk, ledladder, rond VU-paneel, lengte, breedte, ballistiek);
 - **pads en schermpje** (release D): `host.ui.pad` en `host.ui.display`, met `design.pads` (vorm, kleur, feedback) en `design.display` (stijl, navigatie, vergroten);
 - **panelen en indeling** (release B): `design.layout.panels` met `host.ui.group`: regelaars herschikken en groeperen met een grafische scheiding. Een skin kan regelaars daarbij alleen **verplaatsen**, nooit verbergen;
 - artwork voor frontplaten, met de posities van de regelaars erop;
@@ -493,7 +544,7 @@ Versie 0.1 legt het formaat en de weg naar de gebruiker vast; versie 0.2 (laag 1
 
 Freek levert de eisen daarvoor nog aan. Verzin tot die tijd niets: bouw een skin met alleen wat in dit contract staat.
 
-**Vooruitblik (nog niet beschikbaar).** Laag 2 brengt verder bouwstenen, indeling, secties, meters, pads en een schermpje: een skin kan dan ook de opbouw van een apparaat bepalen, niet alleen kleur en gedrag van de host. Laag 3 is een editor waarin je een skin samenstelt. Beide ontbreken nu (op `design.controls` na); `design` blijft daarvoor uitbreidbaar (nieuwe secties naast `ports`, `colors`, `haptics`, `knobs` en `controls`), en de ontwerper in het Skins-paneel is een eerste stap. Schrijf er niets voor.
+**Vooruitblik (nog niet beschikbaar).** Laag 2 brengt verder bouwstenen, indeling, secties, pads en een schermpje: een skin kan dan ook de opbouw van een apparaat bepalen, niet alleen kleur en gedrag van de host. Laag 3 is een editor waarin je een skin samenstelt. Beide ontbreken nu (op `design.controls` en `design.meters` na); `design` blijft daarvoor uitbreidbaar (nieuwe secties naast `ports`, `colors`, `haptics`, `knobs` en `controls`), en de ontwerper in het Skins-paneel is een eerste stap. Schrijf er niets voor.
 
 ---
 
@@ -542,10 +593,11 @@ Dit is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`:
 ## 15. Checklist voor oplevering
 
 - Het bestand heet `<naam>.patchkamer-skin.json` (zonder versienummer) en staat in `skins/library/<device-id>/`, met die map gelijk aan `device`.
-- `skinsContract` is `"0.3"` (of `"0.2"`/`"0.1"` als de skin geen `controls`/`design` heeft), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.4"` (of `"0.3"`/`"0.2"`/`"0.1"` als de skin geen `meters`/`controls`/`design` heeft), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` en de verschijningsnamen zijn Engels en merkvrij; `license` is `CC0-1.0`.
 - Een eventueel `design` bevat alleen sleutels uit §4b met geldige waarden; kleuren zijn `#rgb` of `#rrggbb`.
 - Een eventueel `design.controls` heeft hoogstens 64 regels, mikt alleen op id's, rollen en groepen die het apparaat publiceert (`node skins/contract/validate-skin.mjs <skin> --device <apparaat>` zonder `let op`) en verbergt niets.
+- Een eventueel `design.meters` heeft hoogstens 64 regels, mikt alleen op meter-id's en groepen die het apparaat publiceert (`--device` zonder `let op`), gebruikt geen `role:`, geeft geen `width` of `orientation` aan een `vu` en verbergt niets.
 - De CSS bevat geen `@import` en geen externe `url(`; afbeeldingen staan in `assets` en worden met `var(--skin-asset-<naam>)` gebruikt.
 - Er staan alleen selectors, klassen en variabelen in die je in het apparaatbestand hebt gezien.
 - `node skins/contract/validate-skin.mjs <bestand>` geeft één `OK`-regel zonder `let op`.

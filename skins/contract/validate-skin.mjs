@@ -1,7 +1,7 @@
-// validate-skin.mjs — Patchkamer skins contract v0.3
+// validate-skin.mjs — Patchkamer skins contract v0.4
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
-//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls tegen het register van het apparaat; onbekend = let op)
+//           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, tegen het register van het apparaat; onbekend = let op)
 // Usage:    same; --dir validates every *.patchkamer-skin.json and icon.* in a library folder (skins/library or one device folder).
 // Controleert een skin (zie SKINS-CONTRACT_NL.md / _EN.md) en eindigt met één OK-regel per bestand (exit 0)
 // of met alle gevonden fouten (exit 1). Waarschuwingen ("let op" / "warning") staan achter de OK-regel en geven exit 0.
@@ -36,7 +36,7 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.3; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.3; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.4; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.4; unknown fields are ignored'],
   controls_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
   controls_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
   controls_rule: ['{0} moet een object zijn', '{0} must be an object'],
@@ -56,6 +56,25 @@ const M = {
   dev_unknown_group: ['{0}.match: groep "{1}" staat niet in het register van het apparaat', '{0}.match: group "{1}" is not in the device\'s register'],
   dev_unknown_role: ['{0}.match: het apparaat heeft geen regelaar met rol "{1}"', '{0}.match: the device has no control with role "{1}"'],
   ok_controls: ['{0} regelaarregels', '{0} control rules'],
+  meters_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
+  meters_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
+  meters_rule: ['{0} moet een object zijn', '{0} must be an object'],
+  meters_match: ['{0}.match moet "*", "group:<groep>" of een id zijn (1 tot 60 tekens uit [A-Za-z0-9._-]); "role:" bestaat hier niet, want elke meter heeft rol meter', '{0}.match must be "*", "group:<group>" or an id (1 to 60 characters from [A-Za-z0-9._-]); "role:" does not exist here, every meter has role meter'],
+  meters_enum_num: ['{0} moet een van {1} zijn of een getal van {2} tot {3}', '{0} must be one of {1} or a number from {2} to {3}'],
+  meters_num: ['{0} moet een getal van {1} tot {2} zijn', '{0} must be a number from {1} to {2}'],
+  meters_int: ['{0} moet een geheel getal van {1} tot {2} zijn', '{0} must be a whole number from {1} to {2}'],
+  meters_colour: ['{0} moet "accent", "default" of een kleur #rgb of #rrggbb zijn', '{0} must be "accent", "default" or a colour #rgb or #rrggbb'],
+  meters_none: ['{0}: een skin verbergt geen meter (er is geen face "none"); kies bar, ledladder, vu of default', '{0}: a skin does not hide a meter (there is no face "none"); choose bar, ledladder, vu or default'],
+  meters_empty: ['{0} heeft naast match geen enkele eigenschap; de regel doet niets', '{0} has no property besides match; the rule does nothing'],
+  meters_vu_width: ['{0}: width geldt voor bar en ledladder en wordt bij face "vu" genegeerd (de hoogte volgt uit length)', '{0}: width applies to bar and ledladder and is ignored with face "vu" (the height follows from length)'],
+  meters_vu_orientation: ['{0}: orientation geldt voor bar en ledladder; een vu-schaal is altijd horizontaal', '{0}: orientation applies to bar and ledladder; a vu scale is always horizontal'],
+  meters_scale_bar: ['{0}: scale geldt alleen voor vu en ledladder, niet bij face "bar"', '{0}: scale only applies to vu and ledladder, not with face "bar"'],
+  meters_segments_face: ['{0}: segments geldt alleen voor face "ledladder"', '{0}: segments only applies to face "ledladder"'],
+  meters_contract: ['design.meters hoort bij skinsContract 0.4; een host met 0.3 of lager negeert het', 'design.meters belongs to skinsContract 0.4; a host on 0.3 or lower ignores it'],
+  dev_no_meters: ['het apparaat meldt geen meters aan (geen host.ui.meter); regels in design.meters doen niets', 'the device registers no meters (no host.ui.meter); rules in design.meters do nothing'],
+  dev_unknown_meter: ['{0}.match: meter-id "{1}" staat niet in het register van het apparaat; de host negeert de regel', '{0}.match: meter id "{1}" is not in the device\'s register; the host ignores the rule'],
+  dev_unknown_meter_group: ['{0}.match: groep "{1}" heeft geen meter in het register van het apparaat', '{0}.match: group "{1}" has no meter in the device\'s register'],
+  ok_meters: ['{0} meterregels', '{0} meter rules'],
   design_object: ['{0} moet een object zijn', '{0} must be an object'],
   design_enum: ['{0} moet een van {1} zijn', '{0} must be one of {1}'],
   design_colour: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
@@ -156,6 +175,8 @@ const KNOB_STYLES = ['workspace', 'rotary', 'slider'], KNOB_SIZES = ['s', 'm', '
 const COLOUR_KEYS = ['bg', 'surface', 'text', 'muted', 'accent', 'line'], HAPTIC_KEYS = ['click', 'turn', 'slide'];
 const CTL_ROLES = ['param', 'fader', 'toggle', 'button', 'pad', 'step', 'display', 'select', 'meter', 'jack'];
 const CTL_FACE = ['rotary', 'hslider', 'vslider', 'default'], CTL_SIZE = ['xs', 's', 'm', 'l', 'xl'], CTL_LENGTH = ['short', 'medium', 'long'], CTL_THUMB = ['round', 'square', 'bar', 'none'], CTL_SHOW = ['always', 'hover', 'never'], CTL_MAX = 64;
+const MET_FACE = ['bar', 'ledladder', 'vu', 'default'], MET_ORI = ['auto', 'vertical', 'horizontal'], MET_LEN = ['short', 'medium', 'long'], MET_BAL = ['default', 'fast', 'vu', 'slow'], MET_ONOFF = ['on', 'off', 'default'], MET_CLIP = ['show', 'hide', 'default'], MET_SCALE = ['show', 'hide'];
+const MET_KEYS = ['match', 'face', 'orientation', 'length', 'width', 'ballistics', 'peakHold', 'clip', 'scale', 'color', 'segments'];
 const CTL_KEYS = ['match', 'face', 'size', 'length', 'thickness', 'thumb', 'color', 'showValue'];
 const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'] };
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -187,10 +208,39 @@ function checkControls(list, path, E, W, C) {
     if (r.face === 'rotary' && (r.length !== undefined || r.thickness !== undefined || r.thumb !== undefined)) W('controls_slider_only', P);
     if (matchOk && C) C.push({ p: P, match: m, face: r.face }); });
 }
+// design.meters (0.4): geordende lijst regels, de laatste passende regel wint per eigenschap. Streng: fouten bij verkeerde waarden.
+function checkMeters(list, path, E, W, C) {
+  if (!Array.isArray(list)) { E('meters_list', path); return; }
+  if (list.length > CTL_MAX) E('meters_max', path, list.length, CTL_MAX);
+  list.slice(0, CTL_MAX).forEach((r, i) => { const P = `${path}[${i}]`;
+    if (!isObj(r)) { E('meters_rule', P); return; }
+    for (const k of Object.keys(r)) if (!MET_KEYS.includes(k)) W('unknown_field', `${P}.${k}`);
+    const enm = (k, list2) => { if (r[k] === undefined) return false; if (list2.includes(r[k])) return true; E('design_enum', `${P}.${k}`, list2.map(x => '"' + x + '"').join(', ')); return false; };
+    const m = r.match; let matchOk = false;
+    if (typeof m !== 'string' || !/^(\*|group:[A-Za-z0-9._-]{1,60}|[A-Za-z0-9._-]{1,60})$/.test(m)) E('meters_match', P); else matchOk = true;
+    let n = 0;
+    if (r.face === 'none') E('meters_none', P); else if (enm('face', MET_FACE)) n++;
+    if (enm('orientation', MET_ORI)) n++;
+    if (r.length !== undefined) { if (MET_LEN.includes(r.length) || (typeof r.length === 'number' && Number.isFinite(r.length) && r.length >= 24 && r.length <= 400)) n++; else E('meters_enum_num', `${P}.length`, MET_LEN.map(x => '"' + x + '"').join(', '), 24, 400); }
+    if (r.width !== undefined) { if (typeof r.width === 'number' && Number.isFinite(r.width) && r.width >= 3 && r.width <= 48) n++; else E('meters_num', `${P}.width`, 3, 48); }
+    if (enm('ballistics', MET_BAL)) n++;
+    if (enm('peakHold', MET_ONOFF)) n++;
+    if (enm('clip', MET_CLIP)) n++;
+    if (enm('scale', MET_SCALE)) n++;
+    if (r.color !== undefined) { if (r.color === 'accent' || r.color === 'default' || normColour(r.color)) n++; else E('meters_colour', `${P}.color`); }
+    if (r.segments !== undefined) { if (Number.isInteger(r.segments) && r.segments >= 8 && r.segments <= 40) n++; else E('meters_int', `${P}.segments`, 8, 40); }
+    if (matchOk && n === 0 && !MET_KEYS.slice(1).some(k => r[k] !== undefined)) W('meters_empty', P);
+    if (r.face === 'vu' && r.width !== undefined) W('meters_vu_width', P);
+    if (r.face === 'vu' && r.orientation !== undefined && r.orientation !== 'auto') W('meters_vu_orientation', P);
+    if (r.face === 'bar' && r.scale !== undefined) W('meters_scale_bar', P);
+    if (r.segments !== undefined && r.face !== undefined && r.face !== 'ledladder' && r.face !== 'default') W('meters_segments_face', P);
+    if (matchOk && C) C.push({ p: P, match: m, face: r.face, kind: 'meters' }); });
+}
 function checkDesignShape(d, path, E, W, C) {
   const out = {};
   if (!isObj(d)) { E('design_object', path); return out; }
-  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls') W('unknown_field', `${path}.${k}`);
+  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls' && k !== 'meters') W('unknown_field', `${path}.${k}`);
+  if (d.meters !== undefined) { out.meters = Array.isArray(d.meters) ? d.meters.slice(0, CTL_MAX).filter(isObj) : []; checkMeters(d.meters, `${path}.meters`, E, W, C); }
   if (d.controls !== undefined) { out.controls = Array.isArray(d.controls) ? d.controls.slice(0, CTL_MAX).filter(isObj) : []; checkControls(d.controls, `${path}.controls`, E, W, C); }
   for (const sec of Object.keys(KNOWN_DESIGN)) { if (d[sec] === undefined) continue; const sp = `${path}.${sec}`;
     if (!isObj(d[sec])) { E('design_object', sp); continue; }
@@ -207,7 +257,7 @@ function checkDesignShape(d, path, E, W, C) {
   }
   return out;
 }
-const mergeDesign = (a, b) => { const r = {}; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
+const mergeDesign = (a, b) => { const r = {}; if (a?.meters?.length || b?.meters?.length) r.meters = [...(a?.meters || []), ...(b?.meters || [])]; if (a?.controls?.length || b?.controls?.length) r.controls = [...(a?.controls || []), ...(b?.controls || [])]; for (const sec of Object.keys(KNOWN_DESIGN)) { if (a?.[sec] || b?.[sec]) { r[sec] = { ...(a?.[sec] || {}), ...(b?.[sec] || {}) }; if (sec === 'colors' && (a?.[sec]?.custom || b?.[sec]?.custom)) r[sec].custom = { ...(a?.[sec]?.custom || {}), ...(b?.[sec]?.custom || {}) }; } } return r; };
 const isInt = v => Number.isInteger(v);
 const isStr = v => typeof v === 'string';
 function dataInfo(s) { // { type, base64, body } of null
@@ -247,14 +297,21 @@ function loadDevice(path) {
 function checkAgainstDevice(s, rules, dev, W) {
   if (dev.error) { W('dev_unreadable', dev.error); return; }
   if (s.device !== dev.id) { W('dev_other', dev.id, s.device); return; }
-  const ids = new Set(dev.list.filter(c => c.id).map(c => c.id)), groups = new Set(dev.list.filter(c => c.group).map(c => c.group)), roles = new Set(dev.list.map(c => c.role));
-  if (!ids.size && !groups.size && rules.some(r => !r.match.startsWith('role:') && r.match !== '*')) W('dev_no_ids');
+  const CL = dev.list.filter(c => c.role !== 'meter' && c.type !== 'meter'), ML = dev.list.filter(c => c.role === 'meter' || c.type === 'meter');
+  const ids = new Set(CL.filter(c => c.id).map(c => c.id)), groups = new Set(CL.filter(c => c.group).map(c => c.group)), roles = new Set(CL.map(c => c.role));
+  const mids = new Set(ML.filter(c => c.id).map(c => c.id)), mgroups = new Set(ML.filter(c => c.group).map(c => c.group));
+  const cr = rules.filter(r => r.kind !== 'meters'), mr = rules.filter(r => r.kind === 'meters');
+  if (!ids.size && !groups.size && cr.some(r => !r.match.startsWith('role:') && r.match !== '*')) W('dev_no_ids');
+  if (!ML.length && mr.length) W('dev_no_meters');
   const seen = new Set();
-  for (const r of rules) { const m = r.match; if (m === '*') continue;
+  for (const r of cr) { const m = r.match; if (m === '*') continue;
     const key = r.p; if (seen.has(key)) continue; seen.add(key);
     if (m.startsWith('role:')) { if (CTL_ROLES.includes(m.slice(5)) && !roles.has(m.slice(5))) W('dev_unknown_role', r.p, m.slice(5)); }
     else if (m.startsWith('group:')) { if ((ids.size || groups.size) && !groups.has(m.slice(6))) W('dev_unknown_group', r.p, m.slice(6)); }
     else if ((ids.size || groups.size) && !ids.has(m)) W('dev_unknown_id', r.p, m); }
+  if (ML.length) for (const r of mr) { const m = r.match; if (m === '*') continue;
+    if (m.startsWith('group:')) { if (!mgroups.has(m.slice(6))) W('dev_unknown_meter_group', r.p, m.slice(6)); }
+    else if (!mids.has(m)) W('dev_unknown_meter', r.p, m); }
 }
 
 // ---------- één skin ----------
@@ -272,7 +329,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 3) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 4) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -357,6 +414,8 @@ function validateSkin(path, ctx = {}) {
   if (hasDesign && /^0\.1$/.test(String(s.skinsContract))) W('design_contract');
   const nCtl = (skinDesign?.controls?.length || 0) + appDesigns.reduce((a, x) => a + (x?.controls?.length || 0), 0);
   if (nCtl && /^0\.[012]$/.test(String(s.skinsContract))) W('controls_contract');
+  const nMet = (skinDesign?.meters?.length || 0) + appDesigns.reduce((a, x) => a + (x?.meters?.length || 0), 0);
+  if (nMet && /^0\.[0123]$/.test(String(s.skinsContract))) W('meters_contract');
   if (ctx.device && CR.length) checkAgainstDevice(s, CR, ctx.device, W);
   const seenMsg = new Set();
   const once = (k, ...a) => { const t = vt(k, ...a); if (!seenMsg.has(t)) { seenMsg.add(t); warns.push([k, t]); } };
@@ -385,7 +444,7 @@ function validateSkin(path, ctx = {}) {
   else if (!ctx.skipDirWarn) W('dir_elsewhere');
   const n = (apps || []).length;
   const info = [vt('ok_dev', s.device), vt(n === 1 ? 'ok_app' : 'ok_apps', n), vt('ok_css', cssTotal), vt('ok_assets', nAssets)];
-  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); info.push(vt('ok_file', size));
+  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); info.push(vt('ok_file', size));
   return { errs, warns, line: `${isStr(s.name) ? s.name : '?'} ${isStr(s.version) ? s.version : '?'} (${isStr(s.id) ? s.id : '?'}) — ${info.join(', ')}`, id: s.id, device: s.device };
 }
 
