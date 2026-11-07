@@ -155,9 +155,9 @@ app.whenReady().then(async () => {
   }
   const { port, fixed } = await listen();
   const origin = 'http://127.0.0.1:' + port; appOrigin = origin;
-  // Only what the host needs: MIDI (no sysex), audio input, fullscreen. The rest is refused.
-  const ok = new Set(['midi', 'media', 'fullscreen', 'clipboard-sanitized-write', 'audioCapture']);
-  session.defaultSession.setPermissionRequestHandler((wc, perm, cb, details) => cb(ok.has(perm) && !(perm === 'midi' && details && details.midiSysex)));
+  // Only what the host needs: MIDI, audio input, fullscreen. The rest is refused. (Electron asks for 'midiSysex' on every MIDI request, even when the page passes sysex:false, so refusing it would block MIDI altogether.)
+  const ok = new Set(['midi', 'midiSysex', 'media', 'fullscreen', 'clipboard-sanitized-write', 'audioCapture']);
+  session.defaultSession.setPermissionRequestHandler((wc, perm, cb, details) => cb(ok.has(perm)));
   session.defaultSession.setPermissionCheckHandler((wc, perm) => ok.has(perm));
   Menu.setApplicationMenu(null);
   const win = new BrowserWindow({
