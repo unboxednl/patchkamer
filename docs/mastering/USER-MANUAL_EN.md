@@ -32,7 +32,7 @@ All six processing devices measure what comes in and goes out: loudness (LUFS-I,
 
 | I want to… | Use |
 |---|---|
-| Balance the tone with five bands | [Balance EQ](#balance-eq) |
+| Balance the tone with five to twelve bands | [Balance EQ](#balance-eq) |
 | Control the lows, mids and highs separately | [Multiband Balance](#multiband-balance) |
 | Glue the mix together | [Bus Compressor](#bus-compressor) |
 | Add warmth and colour | [Patina](#patina) |
@@ -103,7 +103,7 @@ Double-click a slider to go back to its starting value. Click the number to type
 
 ### What it is for
 
-An equalizer with five bands: a low shelf, three bells and a high shelf. Bands 2 and 4 can work dynamically, so they cut only when the sound in that range gets loud. An analysis of eight seconds suggests a small, careful correction.
+An equalizer with five to twelve bands: a low shelf (band 1), bells and a high shelf (band 5); extra bands (6 to 12) are bells. The default is five bands. You see the settings as vertical faders in three sections: **Frequency**, **Gain** and **Q**, with the number above each fader and the band number below it. Bands 2 and 4 can work dynamically, so they cut only when the sound in that range gets loud. An analysis of eight seconds suggests a small, careful correction.
 
 ![The Balance EQ card](../images/en/mastering/balance-eq.png)
 
@@ -113,24 +113,16 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 | Control | What it does | Range (start) |
 |---|---|---|
-| **Band 1 frequency** | Centre frequency of band 1 (a corner frequency for the shelves). | 25 to 16000 Hz (90) |
-| **Band 1 gain** | Boost or cut of band 1. | -12 to 12 dB (0) |
-| **Band 1 Q** | Width of band 1 (higher is narrower). | 0.3 to 8 (0.707) |
-| **Band 2 frequency** | Centre frequency of band 2 (a corner frequency for the shelves). | 25 to 16000 Hz (330) |
-| **Band 2 gain** | Boost or cut of band 2. | -12 to 12 dB (0) |
-| **Band 2 Q** | Width of band 2 (higher is narrower). | 0.3 to 8 (1) |
-| **Band 3 frequency** | Centre frequency of band 3 (a corner frequency for the shelves). | 25 to 16000 Hz (1000) |
-| **Band 3 gain** | Boost or cut of band 3. | -12 to 12 dB (0) |
-| **Band 3 Q** | Width of band 3 (higher is narrower). | 0.3 to 8 (0.8) |
-| **Band 4 frequency** | Centre frequency of band 4 (a corner frequency for the shelves). | 25 to 16000 Hz (3300) |
-| **Band 4 gain** | Boost or cut of band 4. | -12 to 12 dB (0) |
-| **Band 4 Q** | Width of band 4 (higher is narrower). | 0.3 to 8 (1) |
-| **Band 5 frequency** | Centre frequency of band 5 (a corner frequency for the shelves). | 25 to 16000 Hz (9500) |
-| **Band 5 gain** | Boost or cut of band 5. | -12 to 12 dB (0) |
-| **Band 5 Q** | Width of band 5 (higher is narrower). | 0.3 to 8 (0.707) |
+| **Bands** | The number of active bands. Extra bands sit at their defaults; if you remove bands they return to the default. This number is part of a preset. | 5 to 12 (5) |
+| **Layout** | How the three sections are placed: **Automatic** (side by side when there is room, otherwise stacked), **Side by side** or **Stacked**. Not part of a preset. | **Automatic** / **Side by side** / **Stacked** (Automatic) |
+| **Frequency** (bands 1 to 12) | Centre frequency of the band (a corner frequency for the shelves). Logarithmic fader. | 20 to 20000 Hz (90, 330, 1000, 3300, 9500; bands 6 to 12: 120, 450, 1500, 2600, 5000, 7500, 14000) |
+| **Gain** (bands 1 to 12) | Boost or cut of the band. Step 0.1 dB. | -18 to 18 dB (0) |
+| **Q** (bands 1 to 12) | Width of the band (higher is narrower). Logarithmic fader. | 0.1 to 20 (0.707 / 1 / 0.8 / 1 / 0.707; bands 6 to 12: 1) |
 | **Dynamic bands** | Makes bands 2 and 4 work only when the sound in that range gets loud. | on or off (off) |
 | **Dynamic threshold** | Level above which a dynamic band cuts. | -60 to -6 dB (-30) |
 | **Maximum dynamic cut** | The most a dynamic band may cut. | 0 to 9 dB (3) |
+
+Fine adjustment: the arrow keys give a small step (0.1 dB; about 1 percent for frequency and Q), **Shift** or **Page Up/Down** a large step (1 dB; a third of an octave; about 50 percent for Q). **Home** and **End** go to the minimum and maximum. Click the number above a fader to type a value, double-click a fader for its starting value. Click a **band number** below a fader to lock that setting: **Follow** and the Master Director then leave it alone. The analysis suggestions (**Follow**, **Apply suggestion**) apply to bands 1 to 5; extra bands are never adjusted automatically. When you move a fader, frequency and Q are rounded to three digits.
 
 ### Ports
 

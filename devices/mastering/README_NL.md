@@ -6,7 +6,7 @@ Apparaten om een mix af te maken: toon, dynamiek, saturatie, breedte, volume en 
 
 | Apparaat | Wat het doet | Map | Handleiding |
 |---|---|---|---|
-| **Balance EQ** | Parametrische equalizer met vijf banden, dynamische banden en analysevoorstellen | [`BalanceEQ/`](BalanceEQ/) | [Balance EQ](../../docs/mastering/USER-MANUAL_NL.md#balance-eq) |
+| **Balance EQ** | Parametrische equalizer met vijf tot twaalf banden, dynamische banden en analysevoorstellen | [`BalanceEQ/`](BalanceEQ/) | [Balance EQ](../../docs/mastering/USER-MANUAL_NL.md#balance-eq) |
 | **Multiband Balance** | Multibandcompressor met drie banden of brede dynamische EQ | [`MultibandBalance/`](MultibandBalance/) | [Multiband Balance](../../docs/mastering/USER-MANUAL_NL.md#multiband-balance) |
 | **Bus Compressor** | Stereo-linked buscompressor met parallelmix en sidechain | [`BusCompressor/`](BusCompressor/) | [Bus Compressor](../../docs/mastering/USER-MANUAL_NL.md#bus-compressor) |
 | **Patina** | Subtiele harmonische saturatie: tape, buis of neutraal | [`Patina/`](Patina/) | [Patina](../../docs/mastering/USER-MANUAL_NL.md#patina) |
