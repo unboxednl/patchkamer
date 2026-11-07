@@ -5,7 +5,7 @@
  "name": "Mix Check Monitoring",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Starting points for Mix Check: stereo, mono, left, right and side monitoring, quiet-check levels for late hours and neighbours, and a monitoring setting for each situation (club, festival, big room, home, headphones, studio, radio, car and streaming).",
+ "description": "Starting points for Mix Check. Monitoring: stereo, mono sum, left, right and side only (at full level, the side signal is already the weakest part of a mix), three quiet-listening levels (-6, -12 and -18 dB) and a level-matched reference. Situations: how a mix survives a mono club or PA (against the reference), a radio or kitchen speaker, a phone speaker, a car where you mostly hear the nearest speaker and a neighbouring room, each as a mono or one-sided monitor at a fitting level; the presets marked 'matched' also play the reference (Reference input or loaded file) at the same loudness as your mix, all others leave the reference level alone.",
  "tree": [
   {
    "folder": "Monitoring",
@@ -13,91 +13,91 @@
     {
      "name": "Stereo",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "stereo",
       "dim": 0,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
-     "name": "Mono check",
+     "name": "Mono sum",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "mono",
       "dim": 0,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
      "name": "Left only",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "left",
       "dim": 0,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
      "name": "Right only",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "right",
       "dim": 0,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
      "name": "Side only",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "side",
-      "dim": -3,
-      "refMatch": true
+      "dim": 0,
+      "refMatch": false
      }
     },
     {
      "name": "Quiet check (-6 dB)",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "stereo",
       "dim": -6,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
      "name": "Quiet check (-12 dB)",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "stereo",
       "dim": -12,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
      "name": "Neighbour level (-18 dB)",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "stereo",
       "dim": -18,
-      "refMatch": true
+      "refMatch": false
      }
     },
     {
-     "name": "Reference at its own level",
+     "name": "Reference, level-matched",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "stereo",
       "dim": 0,
-      "refMatch": false
+      "refMatch": true
      }
     }
    ]
@@ -106,93 +106,93 @@
    "folder": "Situations",
    "items": [
     {
-     "name": "Club (mono compatibility)",
+     "name": "Late night against reference (-12 dB, matched)",
      "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "monitor": "mono",
-      "dim": 0,
-      "refMatch": true
-     }
-    },
-    {
-     "name": "Festival PA (mono compatibility)",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "monitor": "mono",
-      "dim": -3,
-      "refMatch": true
-     }
-    },
-    {
-     "name": "Big room (mono compatibility)",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "monitor": "mono",
-      "dim": -3,
-      "refMatch": true
-     }
-    },
-    {
-     "name": "Home hi-fi (stereo)",
-     "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "stereo",
+      "dim": -12,
+      "refMatch": true
+     }
+    },
+    {
+     "name": "Club against reference (mono, matched)",
+     "kind": "set",
+     "version": "1.1.0",
+     "state": {
+      "monitor": "mono",
       "dim": 0,
       "refMatch": true
      }
     },
     {
-     "name": "Headphones (side check)",
+     "name": "Radio / kitchen speaker (mono, -6 dB)",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
-      "monitor": "side",
+      "monitor": "mono",
+      "dim": -6,
+      "refMatch": false
+     }
+    },
+    {
+     "name": "Radio against reference (mono, -6 dB, matched)",
+     "kind": "set",
+     "version": "1.1.0",
+     "state": {
+      "monitor": "mono",
       "dim": -6,
       "refMatch": true
      }
     },
     {
-     "name": "Studio reference",
+     "name": "Phone speaker (mono, -12 dB)",
      "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "monitor": "stereo",
-      "dim": 0,
-      "refMatch": true
-     }
-    },
-    {
-     "name": "Radio (mono, quiet)",
-     "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
       "monitor": "mono",
-      "dim": -9,
+      "dim": -12,
+      "refMatch": false
+     }
+    },
+    {
+     "name": "Phone against reference (mono, -12 dB, matched)",
+     "kind": "set",
+     "version": "1.1.0",
+     "state": {
+      "monitor": "mono",
+      "dim": -12,
       "refMatch": true
      }
     },
     {
-     "name": "Car (quiet stereo)",
+     "name": "Car, driver's side (left, -6 dB)",
      "kind": "set",
-     "version": "1.0.0",
+     "version": "1.1.0",
      "state": {
-      "monitor": "stereo",
-      "dim": -9,
-      "refMatch": true
-     }
-    },
-    {
-     "name": "Streaming (quiet stereo)",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "monitor": "stereo",
+      "monitor": "left",
       "dim": -6,
-      "refMatch": true
+      "refMatch": false
+     }
+    },
+    {
+     "name": "Car, passenger side (right, -6 dB)",
+     "kind": "set",
+     "version": "1.1.0",
+     "state": {
+      "monitor": "right",
+      "dim": -6,
+      "refMatch": false
+     }
+    },
+    {
+     "name": "Next room (mono, -18 dB)",
+     "kind": "set",
+     "version": "1.1.0",
+     "state": {
+      "monitor": "mono",
+      "dim": -18,
+      "refMatch": false
      }
     }
    ]

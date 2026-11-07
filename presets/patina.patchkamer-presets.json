@@ -551,11 +551,11 @@
             "character": "tape",
             "drive": 16.0,
             "mix": 0.55,
-            "color": 0.9,
+            "color": 0.7,
             "tone": 0.2,
             "protect": 0.6,
             "compensate": true,
-            "trim": -0.7
+            "trim": -0.04
           }
         },
         {
@@ -1309,11 +1309,11 @@
             "character": "tape",
             "drive": 12.8,
             "mix": 0.468,
-            "color": 0.93,
+            "color": 0.73,
             "tone": 0.25,
             "protect": 0.57,
             "compensate": true,
-            "trim": -0.9
+            "trim": -0.4
           }
         },
         {
@@ -1464,11 +1464,11 @@
             "character": "tape",
             "drive": 11.2,
             "mix": 0.44,
-            "color": 0.92,
+            "color": 0.72,
             "tone": 0.15,
             "protect": 0.68,
             "compensate": true,
-            "trim": -1
+            "trim": -0.5
           }
         },
         {

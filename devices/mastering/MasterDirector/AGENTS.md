@@ -29,6 +29,8 @@ Voorganger: Masterregie (`nl.patchkamer.mastering.director`, acht stijlen, geen 
 
 Een preset (`getPreset()`) bevat dezelfde velden zonder `excluded` (de lijst van uitgesloten apparaten is werkstand). Ongeldige waarden geven de startwaarde; onbekende velden worden genegeerd.
 
+**Een preset laden stelt de keten ook in (sinds 1.12.3).** `setPreset` (de gebruikersactie *preset laden*) zet de state en voert daarna dezelfde opdracht uit als de knop *Stel keten in* (`host.mastering` `apply`): alleen als `direct` in de geladen preset `true` is, alleen voor de geselecteerde apparaten aan de gele `setup`-kabel (Mix Check blijft ongemoeid), met `strength`, `follow` en `sameChain` uit de preset, en niets als er geen doelen zijn. `setState` (werkruimte of song laden, undo) stelt de keten **niet** in. Houd daar rekening mee bij een preset met `direct: true`: laden overschrijft de instellingen van de aangesloten apparaten (terug te draaien met *Vorige groepswijziging terug*).
+
 ## Het recept
 
 De formules staan in `recipe()` in het bestand en zijn gelijk aan die van de presetgenerator (40 896 waarden vergeleken, geen verschil). De presetpacks van de andere mastering-apparaten komen uit dezelfde recepten.
