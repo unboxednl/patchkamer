@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Patchkamer contract v1.24: klembord, scènes met meerdere sporen. `clipInfo()` meldt nu ook `multi` en `tracks` (de vier sporen van de actieve scène, allemaal `notes`), `getClip({ kind: 'multi' })` geeft de actieve scène als clip met vier sporen (akkoord-, arpeggio- en pulssporen als momentopname van vier maten, zoals bij één spoor) en `setClip` neemt een multi-clip: elk toegewezen spoor wordt een `notes`-spoor, niet toegewezen sporen blijven staan. Een scène van Chord Sequencer zelf die niet is aangepast komt via `native` exact terug (akkoorden, arpeggio's en instellingen). De gewone clip van het gekozen spoor, `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.15.0. Niet beluisterd.
 // 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, 3 per 1/64-eenheid). Het gekozen spoor van de actieve scène is een `notes`-clip van 1 tot 4 maten. Kopiëren van een akkoord-, arpeggio- of pulsspoor geeft een momentopname van een cyclus van vier maten als noten; plakken zet het gekozen spoor op de spelwijze Noten (de akkoordinstellingen blijven staan). `setState` stuurt alleen nog `allnotesoff` als de klok loopt of er live noten vastgehouden worden (bij stilstaande klok deed de transportstop dat al); de validator telt die gebeurtenis bij `setClip` anders als een eigen gebeurtenis van `setClip`. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.0.
 // 1.14.0 — Extra swing per spoor en inspelen op het geswingde raster. Staat het veld swing niet in een spoor (= 0), dan speelt alles precies als voorheen.
 //   - swing per spoor (`swing`, 0 … 0,5 van een zestiende, alleen in de state als het niet 0 is): een gebeurtenis in een oneven zestiende (stapspoor, ook de 1/32- en 1/64-stappen en ratchets die daarin vallen,
@@ -52,7 +53,7 @@ const EN = {
 };
 const LEGACY_NAMES = ['Akkoorden', 'Bas', 'Puls', 'Bellen'];
 export default {
-  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.15.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
+  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.16.0', kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'transpose', name: 'Transpose' }, { id: 'live', name: 'Live' }], eventOut: [{ id: 'a', name: 'Track A' }, { id: 'b', name: 'Track B' }, { id: 'c', name: 'Track C' }, { id: 'd', name: 'Track D' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiEventOut: [{ id: 'tracks', name: 'Tracks' }] },
   i18n: { nl: { ports: { transpose: 'Transpositie', live: 'Live', a: 'Spoor A', b: 'Spoor B', c: 'Spoor C', d: 'Spoor D', tracks: 'Sporen' } } },
   create(ctx, host) {
@@ -253,12 +254,16 @@ export default {
     // ---- klembord (contract v1.17, §13d): het gekozen spoor van de actieve scène ----
     // Een notes-spoor (`rec`) is een echte clip; een akkoord-, arpeggio- of pulsspoor wordt bij kopiëren één cyclus van vier maten als noten gerenderd (momentopname, geen koppeling).
     // Plakken zet het gekozen spoor op `notes` (de oude akkoordinstellingen blijven staan, maar klinken niet meer). Eenheid: 1/64 = 3 tikken, een maat = 64 eenheden = 192 tikken.
-    const CLIP_ID = 'nl.patchkamer.chordsequencer', CLIP_MAXEV = 256, CLIP_BAR = 192, GRIDUNIT = { 16: 4, 32: 2, 64: 1 };
-    const clipTrackName = () => String.fromCharCode(65 + state.editTrack) + ' · ' + (curTrack().name || defaultName(state.editTrack));
+    const CLIP_ID = 'nl.patchkamer.chordsequencer', CLIP_MAXEV = 256, CLIP_BAR = 192, GRIDUNIT = { 16: 4, 32: 2, 64: 1 }, CLIP_VER = '1.16.0';
+    const clipNameOf = i => String.fromCharCode(65 + i) + ' · ' + (scenes[state.scene][i].name || defaultName(i));
+    const clipTrackName = () => clipNameOf(state.editTrack);
+    // wat een spoor nu kan ontvangen en geven (notes), voor één spoor van de actieve scène
+    const clipTrackInfo = (tr, i) => ({ length: { min: CLIP_BAR, max: 4 * CLIP_BAR, step: CLIP_BAR, current: (tr.bars || 1) * CLIP_BAR, shared: false }, grid: [16, 32, 64], range: [0, 127], scheme: 'gm', vel: 'continuous', prob: false, ratchet: false, maxEvents: CLIP_MAXEV });
     function clipInfo() {
       try {
         if (dead) return null; const tr = curTrack();
-        return { name: tx('Spoor {0}', clipTrackName()), copy: ['notes'], paste: ['notes'], length: { min: CLIP_BAR, max: 4 * CLIP_BAR, step: CLIP_BAR, current: (tr.bars || 1) * CLIP_BAR, shared: false }, grid: [16, 32, 64], range: [0, 127], scheme: 'gm', vel: 'continuous', prob: false, ratchet: false, maxEvents: CLIP_MAXEV };
+        return { name: tx('Spoor {0}', clipTrackName()), copy: ['notes', 'multi'], paste: ['notes', 'multi'], ...clipTrackInfo(tr, state.editTrack),
+          tracks: scenes[state.scene].map((t, i) => ({ id: PORTS[i], name: (t.name || defaultName(i)).slice(0, 40), kind: 'notes', ...clipTrackInfo(t, i) })) };
       } catch { return null; }
     }
     // één cyclus van vier maten van een akkoord-, arpeggio- of pulsspoor als noten (zonder spoortranspositie en zonder swing: die horen bij het spoor)
@@ -285,41 +290,83 @@ export default {
       const ev = dedupe(renderTrack(tr, i), e => e.t + ':' + e.n).sort((a, b) => a.t - b.t || a.n - b.n);
       return { length: 4 * CLIP_BAR, notes: ev.slice(0, CLIP_MAXEV) };
     }
-    function getClip() {
+    const clipOne = (tr, i) => {
+      const c = clipNotes(tr, i), clip = { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', name: clipNameOf(i).slice(0, 40), length: c.length, grid: tr.grid === 4 ? 64 : tr.grid === 2 ? 32 : 16, source: { device: CLIP_ID, name: 'Chord Sequencer', version: CLIP_VER, scheme: 'gm' }, notes: c.notes };
+      if (tr.swing > 0) clip.swing = tr.swing; return clip;
+    };
+    // de actieve scène: vier sporen als notes-clips; native = de vier sporen zoals ze zijn (akkoorden, arpeggio's en instellingen), alleen voor Chord Sequencer zelf
+    function getMulti() {
+      const sc = scenes[state.scene], tracks = sc.map((tr, i) => ({ slot: i, name: (tr.name || defaultName(i)).slice(0, 40), kind: 'notes', role: tr.mode, clip: clipOne(tr, i) }));
+      return { format: 'patchkamer-clip', formatVersion: 1, kind: 'multi', name: tx('Scène {0}', state.scene + 1).slice(0, 40), length: Math.max(...tracks.map(t => t.clip.length)), grid: 16, source: { device: CLIP_ID, name: 'Chord Sequencer', version: CLIP_VER, scheme: 'gm' }, tracks, native: { device: CLIP_ID, data: { tracks: sc.map((t, i) => cleanTrack(t, i)) } } };
+    }
+    function getClip(o) {
       try {
-        if (dead) return null; const tr = curTrack(), i = state.editTrack, c = clipNotes(tr, i);
-        const clip = { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', name: clipTrackName().slice(0, 40), length: c.length, grid: tr.grid === 4 ? 64 : tr.grid === 2 ? 32 : 16, source: { device: CLIP_ID, name: 'Chord Sequencer', version: '1.15.0', scheme: 'gm' }, notes: c.notes };
-        if (tr.swing > 0) clip.swing = tr.swing;
-        return JSON.parse(JSON.stringify(clip));
+        if (dead) return null;
+        return JSON.parse(JSON.stringify(o && o.kind === 'multi' ? getMulti() : clipOne(curTrack(), state.editTrack)));
       } catch { return null; }
+    }
+    const isNum = x => typeof x === 'number' && Number.isFinite(x);
+    // een notes-clip op een kopie van een spoor: geeft { tr (nieuw spoor), dropped } of { err }
+    function clipToTrack(tr0, i, clip) {
+      const bad = { err: tx('Geen geldige clip.') };
+      if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1) || !isNum(clip.length)) return bad;
+      if (clip.kind !== 'notes') return { err: tx('De soort past niet: dit apparaat neemt noten.') };
+      const tr = JSON.parse(JSON.stringify(tr0)), length = Math.round(clamp(clip.length, 1, 4 * CLIP_BAR)), bars = clamp(Math.ceil(length / CLIP_BAR), 1, 4), L = bars * 64;
+      const src = Array.isArray(clip.notes) ? clip.notes : [], list = [];
+      for (const x of src.slice(0, 4096)) {
+        if (!x || typeof x !== 'object' || !isNum(x.t) || !isNum(x.n) || x.t < 0) continue;
+        const p = Math.round(x.t / 3); if (p >= L || x.t >= clamp(clip.length, 1, 12288)) continue;
+        list.push({ p, n: Math.round(clamp(x.n, 0, 127)), vel: r3(finite(x.vel, 0.8, 0.01, 1)), l: Math.round(clamp(Number.isFinite(x.len) ? x.len / 3 : 4, 1, L - p)) });
+      }
+      const uniq = dedupe(list, e => e.p + ':' + e.n).sort((a, b) => a.p - b.p || a.n - b.n), dropped = Math.max(0, uniq.length - CLIP_MAXEV) + Math.max(0, src.length - 4096), keep = uniq.slice(0, CLIP_MAXEV);
+      const rec = keep.map(e => [e.p, e.n, e.vel, e.l]);
+      // een momentopname van dit spoor zelf (akkoord/arpeggio/pulse) terugplakken doet niets: het spoor blijft zoals het is
+      if (tr.mode !== 'notes') { const mine = JSON.stringify(clipNotes(tr, i).notes.map(e => [e.t / 3, e.n, e.vel, e.len / 3])); if (mine === JSON.stringify(rec) && length === 4 * CLIP_BAR) return { tr: tr0, dropped: 0 }; }
+      const same = tr.mode === 'notes' && (tr.bars || 1) === bars && JSON.stringify(tr.rec || []) === JSON.stringify(rec);
+      const unit = GRIDUNIT[clip.grid] || 4, cur = 4 / (tr.grid || 1), aligned = u => rec.every(x => x[0] % u === 0);
+      const gridv = same ? cur : aligned(cur) ? cur : aligned(unit) ? unit : [4, 2, 1].find(aligned) || 1;
+      tr.mode = 'notes'; if (bars !== 1) tr.bars = bars; else delete tr.bars;
+      if (rec.length) tr.rec = rec; else delete tr.rec;
+      if (gridv === 4) delete tr.grid; else tr.grid = gridv === 2 ? 2 : 4;
+      return { tr, dropped };
+    }
+    const clipSig = tr => JSON.stringify([tr.mode, tr.bars, tr.rec, tr.grid]);
+    const clipShow = () => { selNote = -1; rollDirty = true; if (mountHost) render(mountHost); };
+    // de actieve scène uit een multi-clip; een clip van Chord Sequencer zelf die niet is aangepast zet de vier sporen exact terug
+    function setMulti(clip) {
+      const bad = { ok: false, reason: tx('Geen geldige clip.') }, entries = new Map();
+      for (const x of (Array.isArray(clip.tracks) ? clip.tracks.slice(0, 64) : [])) if (x && typeof x === 'object' && Number.isInteger(x.slot) && x.slot >= 0 && x.slot < 4 && x.clip && typeof x.clip === 'object') entries.set(x.slot, x.clip);
+      if (!entries.size) return bad;
+      const sc = scenes[state.scene]; let next = null, dropped = 0;
+      const nd = clip.native && typeof clip.native === 'object' && clip.native.device === CLIP_ID && clip.native.data && Array.isArray(clip.native.data.tracks) ? clip.native.data.tracks : null;
+      if (nd && entries.size === 4) {
+        const cand = [0, 1, 2, 3].map(i => cleanTrack(nd[i], i));
+        const key = (len, ev) => JSON.stringify([len, ev.map(e => [e.t, e.n, e.len, Math.round(e.vel * 1e3)]).sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2])]);
+        const fits = cand.every((tr, i) => {
+          const tc = entries.get(i); if (!tc || tc.kind !== 'notes' || !isNum(tc.length) || !Array.isArray(tc.notes)) return false;
+          const c = clipNotes(tr, i), got = tc.notes.filter(x => x && isNum(x.t) && isNum(x.n)).map(x => ({ t: Math.round(x.t), n: Math.round(x.n), len: Math.round(Number.isFinite(x.len) ? x.len : 12), vel: r3(finite(x.vel, 0.8, 0.01, 1)) }));
+          return got.length === tc.notes.length && Math.round(tc.length) === c.length && key(c.length, c.notes) === key(c.length, got);
+        });
+        if (fits) next = cand;
+      }
+      if (!next) {
+        next = sc.slice(); let used = 0, errText = '';
+        entries.forEach((tc, i) => { const r = clipToTrack(sc[i], i, tc); if (r.err) { errText = r.err; return; } used++; dropped += r.dropped; next[i] = r.tr; });
+        if (!used) return { ok: false, reason: errText || bad.reason };
+      }
+      if (next.every((t, i) => JSON.stringify(t) === JSON.stringify(sc[i]))) return { ok: true, ...(dropped ? { dropped } : {}) };
+      scenes[state.scene] = next; clipShow();
+      return { ok: true, ...(dropped ? { dropped } : {}) };
     }
     function setClip(clip) {
       try {
         if (dead) return { ok: false, reason: tx('Het apparaat is verwijderd.') };
-        const bad = { ok: false, reason: tx('Geen geldige clip.') }, num = x => typeof x === 'number' && Number.isFinite(x);
-        if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1) || !num(clip.length)) return bad;
-        if (clip.kind !== 'notes') return { ok: false, reason: tx('De soort past niet: dit apparaat neemt noten.') };
-        const tr = curTrack(), i = state.editTrack, length = Math.round(clamp(clip.length, 1, 4 * CLIP_BAR)), bars = clamp(Math.ceil(length / CLIP_BAR), 1, 4), L = bars * 64;
-        const src = Array.isArray(clip.notes) ? clip.notes : [], list = [];
-        for (const x of src.slice(0, 4096)) {
-          if (!x || typeof x !== 'object' || !num(x.t) || !num(x.n) || x.t < 0) continue;
-          const p = Math.round(x.t / 3); if (p >= L || x.t >= clamp(clip.length, 1, 12288)) continue;
-          list.push({ p, n: Math.round(clamp(x.n, 0, 127)), vel: r3(finite(x.vel, 0.8, 0.01, 1)), l: Math.round(clamp(Number.isFinite(x.len) ? x.len / 3 : 4, 1, L - p)) });
-        }
-        const uniq = dedupe(list, e => e.p + ':' + e.n).sort((a, b) => a.p - b.p || a.n - b.n), dropped = Math.max(0, uniq.length - CLIP_MAXEV) + Math.max(0, src.length - 4096), keep = uniq.slice(0, CLIP_MAXEV);
-        const rec = keep.map(e => [e.p, e.n, e.vel, e.l]);
-        // een momentopname van dit spoor zelf (akkoord/arpeggio/pulse) terugplakken doet niets: het spoor blijft zoals het is
-        if (tr.mode !== 'notes') { const mine = JSON.stringify(clipNotes(tr, i).notes.map(e => [e.t / 3, e.n, e.vel, e.len / 3])); if (mine === JSON.stringify(rec) && length === 4 * CLIP_BAR) return { ok: true }; }
-        const old = JSON.stringify([tr.mode, tr.bars, tr.rec, tr.grid]);
-        const same = tr.mode === 'notes' && (tr.bars || 1) === bars && JSON.stringify(tr.rec || []) === JSON.stringify(rec);
-        const unit = GRIDUNIT[clip.grid] || 4, cur = 4 / (tr.grid || 1), aligned = u => rec.every(x => x[0] % u === 0);
-        const gridv = same ? cur : aligned(cur) ? cur : aligned(unit) ? unit : [4, 2, 1].find(aligned) || 1;
-        tr.mode = 'notes'; if (bars !== 1) tr.bars = bars; else delete tr.bars;
-        if (rec.length) tr.rec = rec; else delete tr.rec;
-        if (gridv === 4) delete tr.grid; else tr.grid = gridv === 2 ? 2 : 4;
-        if (JSON.stringify([tr.mode, tr.bars, tr.rec, tr.grid]) === old) return { ok: true, ...(dropped ? { dropped } : {}) };
-        selNote = -1; rollDirty = true; if (mountHost) render(mountHost);
-        return { ok: true, ...(dropped ? { dropped } : {}) };
+        if (clip && typeof clip === 'object' && !Array.isArray(clip) && clip.format === 'patchkamer-clip' && (clip.formatVersion === undefined || clip.formatVersion === 1) && clip.kind === 'multi') return setMulti(clip);
+        const i = state.editTrack, tr = curTrack(), r = clipToTrack(tr, i, clip);
+        if (r.err) return { ok: false, reason: r.err };
+        if (clipSig(r.tr) === clipSig(tr) && r.tr.mode === tr.mode) return { ok: true, ...(r.dropped ? { dropped: r.dropped } : {}) };
+        scenes[state.scene][i] = r.tr; clipShow();
+        return { ok: true, ...(r.dropped ? { dropped: r.dropped } : {}) };
       } catch { return { ok: false, reason: tx('Geen geldige clip.') }; }
     }
     const PRESET_SKIP = ['editTrack', 'editStep', 'record'];  // contract v1.6: werkstand, geen klank — een preset laat dit staan
@@ -362,7 +409,7 @@ export default {
           if (infoText) infoText.textContent = tx('Scène {0}', state.scene + 1) + ' · ' + Math.round(15 / sd) + ' BPM' + (queuedScene !== null ? ' · ' + tx('volgende') + ': ' + (queuedScene + 1) : '');
         } catch {}
       },
-      clipInfo() { return clipInfo(); }, getClip() { return getClip(); }, setClip(clip) { return setClip(clip); },
+      clipInfo() { return clipInfo(); }, getClip(o) { return getClip(o); }, setClip(clip) { return setClip(clip); },
       params: descriptors, modulate: receiveMod,
       getPreset() { const p = self.getState(); for (const k of PRESET_SKIP) delete p[k]; return p; },
       setPreset(p) { if (dead) return; const keep = {}; for (const k of PRESET_SKIP) if (k in state) keep[k] = state[k]; self.setState({ ...(p && typeof p === 'object' ? p : {}), ...keep }); },

@@ -13,7 +13,7 @@ Een clip-, scène- en songsequencer met 1 tot 16 sporen (tracks). Het maakt **ze
 | Naam | `Clip Arranger` in alle talen; de poortnamen hebben een Nederlandse variant (`MIDI / opname`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input`; eventuitgangen `track1` … `track16` (de statische lijst; via `host.setPorts` en `ui.jacks` toont de kaart in één horizontale rij alleen `track1` … `trackN` voor de N sporen, met alleen het nummer, en rechts altijd `tracks`; minder sporen haalt de kabels van de verdwenen uitgangen weg); geen audio, geen sturing; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.21 (apparaatversie 1.21.0) |
+| Contract | v1.24 (apparaatversie 1.22.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Verschil met de andere sequencers: Chord Sequencer maakt akkoorden en patronen met vier sporen en scènes van vier sporen; Pattern Playlist en Pattern Tracker bouwen een song van patronen in een playlist of tracker. Clip Arranger werkt zoals een sessieweergave: een matrix van clips per spoor en per scène, plus een lineair song-arrangement erboven.
@@ -325,6 +325,17 @@ Wat `setClip` doet:
 6. **Weergave.** De kaart wordt opnieuw opgebouwd, zoals na `setState`. De afspeellus loopt door; de nieuwe noten klinken vanaf de volgende stap.
 
 Getest met een nep-host in Node en in een echte browser (Chromium, de apparaatbestanden direct geladen): de rondreis `setClip(getClip())` laat `getState()` gelijk (2880 gevallen: drie tracktypen, drie van de acht clips, 120 willekeurige states, met en zonder klanklijst aan een drumspoor, ook via JSON-tekst), zonder `native` blijven noten en lengte gelijk; extreme en ongeldige clips (`NaN`, lengtes tot 1e9, 100000 noten, onbekende velden, verkeerde soort, onzin-banen) geven geen fout en laten de state intact of binnen het bereik; 100000 noten geven er 4096; Undo, Redo en Ctrl+Z herstellen; kopiëren van en naar Step Sequencer behoudt noten en lengte voor zover het formaat het toelaat (CC-lanes alleen binnen dit apparaat). Niet beluisterd.
+
+## Klembord: de hele scène kopiëren en plakken (sinds 1.22.0, contract v1.24)
+
+Naast de clip van het gekozen spoor geeft het apparaat de **scène** als één clip van de soort `multi` (contract §13d): de gekozen clip (`selectedClip`, een kolom van de matrix) van **elk** spoor. De host kopieert hem met **Shift-klik** op Kopieer of met **Kopieer alle sporen** in het plakmenu; Kopieer en Ctrl+C pakken de clip van het gekozen spoor, zoals voorheen.
+
+- **`clipInfo()`**: `copy` en `paste` zijn `[soort, 'multi']`; nieuw is `tracks`: een item per spoor `{ id: 't<n>', name, kind, role: tracktype, length, grid, scheme, lanes (drums), … }`, met de soort uit het tracktype (toetsen en drone `notes`, drums `drums`) en de clip van dat spoor op de plaats `selectedClip`.
+- **`getClip({ kind: 'multi' })`**: per spoor `{ slot, name, kind, role, clip }`, met als `clip` precies wat `getClip()` voor dat spoor zou geven (inclusief eigen `native`: noten, CC-lanes en auto-lijnen). `getClip()` zonder argument is ongewijzigd.
+- **`setClip(multi)`**: elk toegewezen spoor (`slot` 0 tot aantal sporen − 1) krijgt zijn clip op de plaats `selectedClip`, met dezelfde regels als bij één clip (naam, CC-lanes en auto-lijnen blijven, tenzij `native` ze exact terugbrengt; het tracktype verandert nooit). **Eén** `remember()` voor de hele scène, dus één Undo-stap. Een spoor van een andere soort dan de clip of een spoor zonder clip op die plaats wordt overgeslagen en telt als `dropped`; geen enkel spoor toegepast: `ok: false`. De rondreis `setClip(getClip({ kind: 'multi' }))` laat `getState()` gelijk.
+- Het gedrag van één clip is verplaatst naar `clipBuild(t, ci, cur, clip)` en `clipOne(t, c)` zonder gedragsverandering; `getState`, presets en geluid zijn gelijk aan 1.21.0 (byte voor byte vergeleken).
+
+**Risico's.** Plak je een scène van een ander apparaat, dan vervangt elke toegewezen clip de noten van de gekozen kolom; sporen zonder bron (meer sporen dan de clip heeft) en drumsporen die geen enkele baan kunnen plaatsen, blijven ongemoeid en staan in de melding.
 
 ## Het presetpack
 

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Patchkamer contract v1.24: klembord, het hele patroon. `clipInfo()` meldt nu ook `multi` en `tracks` (alle kanalen van het gekozen patroon; een kanaal met een aangesloten drumapparaat is `drums`, de rest `notes`), `getClip({ kind: 'multi' })` geeft het patroon als clip met een spoor per kanaal (elk met zijn eigen cellen in `native`) en `setClip` neemt een multi-clip: elk toegewezen kanaal krijgt zijn cellen, in één Ongedaan-stap; patroonlengte, rowsPerBeat, spoorinstellingen en niet toegewezen kanalen blijven staan. De gewone kanaalclip, `getState`, presets en het geluid zijn gelijk aan 1.15.0.
 // 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende). Het huidige patroon is het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol een `notes`-clip, in de drum-editor een `drums`-clip met de klanken van de drumcomputer als banen. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte (gedeeld door alle kanalen), `rowsPerBeat`, swing, spoorinstellingen, playlist en volgorde blijven. Kans (PRB) en retrigger (RAT) gaan mee als `prob` en `ratchet`, vertraging (DEL) als tijdverschuiving; ARP, CUT en CC alleen binnen dezelfde apparaatsoort via `native`. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Extra swing op drie niveaus en inspelen op het geswingde raster. Met alle nieuwe velden op 0 (de standaard) spelen state en klokstappen precies als voorheen.
 //   - swing per patroon (pattern.swing), per spoor (tracks[].swing) en per drumrij (tracks[].lanes: nootnummer → swing); 0 … 0,5 van een zestiende. Vertraging van een oneven zestiende = (patroon + spoor + drumrij) × stepDur,
@@ -61,7 +62,7 @@ const EN={
 'Hostklok staat stil.':'Host clock is stopped.','Sequencer uit.':'Sequencer off.','HOST {0} BPM · {1} · rij {2} · {3} rijen':'HOST {0} BPM · {1} · row {2} · {3} rows','wacht op eerste rij':'waiting for first row','Sequencer: {0}':'Sequencer: {0}',
 'Raster omgezet naar {0} rijen per tel; rijen, lengtes en blokken zijn verschaald.':'Grid changed to {0} rows per beat; rows, lengths and blocks were rescaled.','OPNAME':'REC'
 };
-Object.assign(EN,{'Geen geldige clip.':'Not a valid clip.','De soort past niet: dit apparaat neemt nu {0}.':'The kind does not fit: this device now takes {0}.','noten':'notes','drums':'drums','Het apparaat is verwijderd.':'The device was removed.'});
+Object.assign(EN,{'Geen enkel kanaal van de clip past op een kanaal van dit patroon.':'No channel of the clip fits a channel of this pattern.','Geen geldige clip.':'Not a valid clip.','De soort past niet: dit apparaat neemt nu {0}.':'The kind does not fit: this device now takes {0}.','noten':'notes','drums':'drums','Het apparaat is verwijderd.':'The device was removed.'});
 let LANG='nl';
 const tx=(k,...a)=>{let t=LANG==='nl'?k:(EN[k]??k);a.forEach((v,i)=>{t=t.split('{'+i+'}').join(String(v));});return t;};
 /* ===== helpers ===== */
@@ -230,7 +231,7 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  const setVel=(e,c)=>{const r=strip.getBoundingClientRect();c.vel=Math.max(.01,Math.round(num(1-(e.clientY-r.top)/r.height,.01,1,c.vel)*100)/100);drawBar(c);};
  strip.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();e.stopPropagation();const r=strip.getBoundingClientRect(),row=offset+int(Math.floor((e.clientX-r.left)/r.width*count),0,count-1),c=channel().find(c=>c.row===row&&c.notes.length);if(!c)return;remember();busy=true;S.view.row=row;let changed=false;setVel(e,c);changed=true;strip.setPointerCapture?.(e.pointerId);strip.onpointermove=ev=>{setVel(ev,c);};strip.onpointerup=ev=>{busy=false;strip.onpointermove=null;strip.onpointerup=null;try{strip.releasePointerCapture(ev.pointerId);}catch{}S.view.drawVel=c.vel;S=clean(S);render();};strip.onpointercancel=()=>{busy=false;undo.pop();render();};};
  element('p',sec,tx('Klik = noot tekenen/wissen · sleep = cel verplaatsen/toon wijzigen · rechterrand = lengte · rechtsklik = noot wissen. De breedte van een blokje is de lengte, de hoogte is de velocity; sleep in de velocity-strook eronder om de velocity te wijzigen. Noten op dezelfde rij vormen één akkoordcel en delen lengte, velocity en effect.'),'small');}
- function drumRows(){const m=nameMaps[S.view.track];return m&&m.size?[...m]:[[36,'Kick'],[38,'Snare'],[39,'Clap'],[42,'Closed hat'],[46,'Open hat'],[37,'Rim']];}
+ function drumRows(t=S.view.track){const m=nameMaps[t];return m&&m.size?[...m]:[[36,'Kick'],[38,'Snare'],[39,'Clap'],[42,'Closed hat'],[46,'Open hat'],[37,'Rim']];}
  function renderDrums(sec){const offset=S.view.editPage*32,scroll=element('div',sec,undefined,'scroll');for(let page=0;page<2;page++){if(offset+page*16>=pattern().length)break;element('p',scroll,tx('Rijen {0}–{1}',offset+page*16+1,Math.min(pattern().length,offset+page*16+16)),'small');for(const[note,name]of drumRows()){const r=element('div',scroll,undefined,'drumrow');r.style.setProperty('--track',colors[S.view.track%colors.length]);button(r,name,()=>audition([note],S.view.track));swingSlider(r,tx('SWING DRUMRIJ'),()=>S.tracks[S.view.track].lanes[note]||0,v=>{const tl=S.tracks[S.view.track];if(v>0)tl.lanes[note]=v;else delete tl.lanes[note];},true);for(let j=0;j<16;j++){const row=offset+page*16+j,c=channel().find(c=>c.row===row),active=c?.notes.includes(note),b=button(r,String(j+1),()=>change(()=>{let c=channel().find(c=>c.row===row);if(!c){c=makeCell(row,[]);c.vel=S.view.drawVel;c.len=.5;channel().push(c);}c.notes=c.notes.includes(note)?c.notes.filter(n=>n!==note):[...c.notes,note].slice(0,8);if(!c.notes.length)pattern().channels[S.view.track]=channel().filter(a=>a!==c);S.view.row=row;}),active?'hit':'');b.disabled=row>=pattern().length;}}}element('p',sec,tx(nameMaps[S.view.track]?.size?'Deze rijen komen van de aangesloten drumcomputer en volgen zijn kit en volgorde. Staat de eigen sequencer van de drumcomputer aan, zet die dan uit.':'Deze rijen versturen MIDI-noten (GM). Voor andere drumtoewijzingen bewerk je de noten in de celinspecteur. Schakel de interne sequencer van de drumcomputer uit.'),'small');}
  function renderOrder(parent){const sec=panel(parent,tx('TRACKER-VOLGORDE · PATRONEN ARRANGEREN')),orders=element('div',sec,undefined,'orders');refs.orders=[];S.order.forEach((o,i)=>{const b=button(orders,`${String(i).padStart(2,'0')} · ${pn(patternById(o.pattern))} ×${o.repeats}`,()=>{S.view.selectedOrder=i;S.view.pattern=o.pattern;S.view.row=0;S.view.editPage=0;render();},i===S.view.selectedOrder?'active':'');refs.orders.push(b);});const bar=element('div',sec,undefined,'toolbar');button(bar,tx('Voeg gekozen patroon toe'),()=>change(()=>{if(S.order.length<256){S.order.push({pattern:pattern().id,repeats:1,transpose:0});S.view.selectedOrder=S.order.length-1;}}));const o=S.order[S.view.selectedOrder];if(o){select(bar,tx('VOLGORDEPATROON'),S.patterns.map(p=>[p.id,pn(p)]),o.pattern,v=>change(()=>{o.pattern=v;S.view.pattern=v;}));field(bar,tx('HERHALINGEN'),o.repeats,v=>change(()=>o.repeats=int(v,1,32,1)),'number',1,32);field(bar,tx('TRANSPOSITIE'),o.transpose,v=>change(()=>o.transpose=int(v,-48,48,0)),'number',-48,48);button(bar,'↑',()=>change(()=>{const i=S.view.selectedOrder;if(i>0){[S.order[i-1],S.order[i]]=[S.order[i],S.order[i-1]];S.view.selectedOrder--;}}));button(bar,'↓',()=>change(()=>{const i=S.view.selectedOrder;if(i<S.order.length-1){[S.order[i+1],S.order[i]]=[S.order[i],S.order[i+1]];S.view.selectedOrder++;}}));button(bar,tx('Verwijder volgordestap'),()=>change(()=>{S.order.splice(S.view.selectedOrder,1);S.view.selectedOrder=Math.max(0,S.view.selectedOrder-1);}));}
  button(bar,tx('Volgorde → nieuwe playlist'),()=>{const rows=S.order.reduce((a,o)=>a+patternById(o.pattern).length*o.repeats,0),clips=S.order.reduce((a,o)=>a+patternById(o.pattern).channels.slice(0,S.trackCount).filter(c=>c.length).length*o.repeats,0);if(rows>65535||clips>2048){msg(tx('Volgorde is te groot voor de playlist (max. 65535 rijen / 2048 blokken).'));return;}change(()=>{S.playlist=[];let a=0;for(const o of S.order){const p=patternById(o.pattern);for(let j=0;j<o.repeats;j++){for(let ch=0;ch<S.trackCount;ch++)if(p.channels[ch].length&&S.playlist.length<2048)S.playlist.push({pattern:p.id,track:ch,start:a,length:p.length,offset:0,transpose:o.transpose});a+=p.length;if(a>65535)break;}if(a>65535)break;}S.view.selectedClip=-1;});});element('p',sec,tx('Een volgordestap speelt het volledige patroon op alle actieve kanalen. Volgorde → playlist vervangt de huidige playlist; Ongedaan herstelt hem.'),'small');}
@@ -264,11 +265,12 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  // Het huidige patroon = het kanaal (spoor) dat in de patroon-editor staat: S.view.pattern, S.view.track. Editor 'drums' = drums-clip (banen = de klanken van de aangesloten drumcomputer, anders zes GM-klanken), anders notes-clip.
  // Tijd: rijen naar tikken (12 per zestiende; 48 / rowsPerBeat per rij). De lengte van het patroon is gedeeld met alle kanalen van dat patroon en blijft staan (shared); de host herhaalt of kapt af.
  // Een clip uit hetzelfde apparaat (native) komt verliesvrij terug, inclusief effecten en CC-cellen, mits de host hem niet aanpaste.
- const CLIP_ID=VIEW==='tracker'?'nl.patchkamer.patterntracker':'nl.patchkamer.patternplaylist',CLIP_VER='1.15.0',CLIP_MAXEV=4096,CLIP_MAXT=12288;
+ const CLIP_ID=VIEW==='tracker'?'nl.patchkamer.patterntracker':'nl.patchkamer.patternplaylist',CLIP_VER='1.16.0',CLIP_MAXEV=4096,CLIP_MAXT=12288;
  const clipRT=()=>48/S.rowsPerBeat,clipKind=()=>S.view.editor==='drums'?'drums':'notes';
  const CLIP_GM={36:'kick',38:'snare',39:'clap',42:'closedhat',46:'openhat',37:'rim'};
- function clipLanes(extra){const named=!!nameMaps[S.view.track]?.size,out=drumRows().map(([note,name])=>({id:'n'+note,name:String(name).slice(0,40),type:named?'':(CLIP_GM[note]||''),note}));
-  if(extra){const have=new Set(out.map(l=>l.note));for(const c of channel())for(const n of c.notes)if(!have.has(n)&&out.length<64){have.add(n);out.push({id:'n'+n,name:pname(n),type:'',note:n});}}
+ const chan=t=>pattern().channels[t],chKind=t=>nameMaps[t]?.size?'drums':'notes';
+ function clipLanes(extra,t=S.view.track){const named=!!nameMaps[t]?.size,out=drumRows(t).map(([note,name])=>({id:'n'+note,name:String(name).slice(0,40),type:named?'':(CLIP_GM[note]||''),note}));
+  if(extra){const have=new Set(out.map(l=>l.note));for(const c of chan(t))for(const n of c.notes)if(!have.has(n)&&out.length<64){have.add(n);out.push({id:'n'+n,name:pname(n),type:'',note:n});}}
   return out.slice(0,64);}
  // gebeurtenissen uit cellen: {t,note,len,vel,prob,ratchet}; met noteSet = drums (alleen die noten, geen lengte)
  function clipEvents(cells,lenTicks,noteSet){const rt=clipRT(),out=[];
@@ -277,21 +279,30 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
     if(c.fx==='PRB'&&c.value<100)e.prob=num(c.value,0,100,100)/100;else if(c.fx==='RAT'&&c.value>1)e.ratchet=int(c.value,1,8,1);out.push(e);}}
   out.sort((a,b)=>a.t-b.t||a.note-b.note);return out.slice(0,CLIP_MAXEV);}
  const clipLen=()=>Math.min(CLIP_MAXT,pattern().length*clipRT());
- function clipInfo(){try{if(dead)return null;const kind=clipKind(),rt=clipRT(),p=pattern(),drums=kind==='drums',named=!!nameMaps[S.view.track]?.size;
-   const info={name:(pn(p)+' · '+tn(S.view.track)).slice(0,40),copy:[kind],paste:[kind],length:{min:rt,max:Math.min(CLIP_MAXT,MAXLEN*rt),step:rt,current:clipLen(),shared:true},grid:{2:[],4:[16],8:[32],16:[64]}[S.rowsPerBeat]||[],poly:8,range:[0,127],scheme:drums&&named?'device':'gm',vel:'continuous',prob:true,ratchet:true,maxEvents:CLIP_MAXEV};
-   if(drums)info.lanes=clipLanes(false);return info;}catch(e){return null;}}
- function getClip(){try{if(dead)return null;const kind=clipKind(),rt=clipRT(),p=pattern(),length=clipLen(),drums=kind==='drums',named=!!nameMaps[S.view.track]?.size;
-   const clip={format:'patchkamer-clip',formatVersion:1,kind,name:(pn(p)+' · '+tn(S.view.track)).slice(0,40),length,grid:{2:16,4:16,8:32,16:64}[S.rowsPerBeat]||16,source:{device:CLIP_ID,name:VIEW==='tracker'?'Pattern Tracker':'Pattern Playlist',version:CLIP_VER,scheme:drums&&named?'device':'gm'}};
+ // wat kanaal t nu kan ontvangen en geven, als soort kind (de lengte van het patroon is gedeeld met alle kanalen)
+ function clipTrackInfo(t,kind){const rt=clipRT(),drums=kind==='drums',named=!!nameMaps[t]?.size;
+  const info={length:{min:rt,max:Math.min(CLIP_MAXT,MAXLEN*rt),step:rt,current:clipLen(),shared:true},grid:{2:[],4:[16],8:[32],16:[64]}[S.rowsPerBeat]||[],poly:8,range:[0,127],scheme:drums&&named?'device':'gm',vel:'continuous',prob:true,ratchet:true,maxEvents:CLIP_MAXEV};
+  if(drums)info.lanes=clipLanes(false,t);return info;}
+ function clipInfo(){try{if(dead)return null;const kind=clipKind(),p=pattern();
+   return {name:(pn(p)+' · '+tn(S.view.track)).slice(0,40),copy:[kind,'multi'],paste:[kind,'multi'],...clipTrackInfo(S.view.track,kind),
+    tracks:Array.from({length:S.trackCount},(_,t)=>({id:'t'+(t+1),name:tn(t).slice(0,40),kind:chKind(t),...clipTrackInfo(t,chKind(t))}))};}catch(e){return null;}}
+ // het kanaal t van het gekozen patroon als clip van de soort kind
+ function clipOne(t,kind){const rt=clipRT(),p=pattern(),length=clipLen(),drums=kind==='drums',named=!!nameMaps[t]?.size;
+   const clip={format:'patchkamer-clip',formatVersion:1,kind,name:(pn(p)+' · '+tn(t)).slice(0,40),length,grid:{2:16,4:16,8:32,16:64}[S.rowsPerBeat]||16,source:{device:CLIP_ID,name:VIEW==='tracker'?'Pattern Tracker':'Pattern Playlist',version:CLIP_VER,scheme:drums&&named?'device':'gm'}};
    if(p.swing>0)clip.swing=Math.min(.5,p.swing);
    const fin=(o,e)=>{if(e.vel>=.999)o.acc=true;if(e.prob<1)o.prob=e.prob;if(e.ratchet>1)o.ratchet=e.ratchet;return o;};
-   if(drums){const lanes=clipLanes(true),idx=new Map(lanes.map((l,i)=>[l.note,i])),evs=clipEvents(channel(),length,new Set(idx.keys()));clip.lanes=lanes;clip.hits=evs.map(e=>fin({t:e.t,lane:idx.get(e.note),vel:e.vel},e));}
-   else clip.notes=clipEvents(channel(),length,null).map(e=>fin({t:e.t,n:e.note,len:e.len,vel:e.vel},e));
-   clip.native={device:CLIP_ID,data:{rpb:S.rowsPerBeat,length:p.length,cells:cp(channel())}};
-   return JSON.parse(JSON.stringify(clip));}catch(e){return null;}}
- // onbetrouwbare invoer: {kind,length,evs:[{t,note,len,vel,prob,ratchet}],noteSet,native,cut} of {err}
- function clipParse(clip){const bad={err:tx('Geen geldige clip.')};
+   if(drums){const lanes=clipLanes(true,t),idx=new Map(lanes.map((l,i)=>[l.note,i])),evs=clipEvents(chan(t),length,new Set(idx.keys()));clip.lanes=lanes;clip.hits=evs.map(e=>fin({t:e.t,lane:idx.get(e.note),vel:e.vel},e));}
+   else clip.notes=clipEvents(chan(t),length,null).map(e=>fin({t:e.t,n:e.note,len:e.len,vel:e.vel},e));
+   clip.native={device:CLIP_ID,data:{rpb:S.rowsPerBeat,length:p.length,cells:cp(chan(t))}};
+   return clip;}
+ // het hele patroon: alle kanalen, een kanaal met een aangesloten drumapparaat (klanknamen) als drums, de rest als noten
+ function clipMulti(){const p=pattern(),tracks=Array.from({length:S.trackCount},(_,t)=>({slot:t,name:tn(t).slice(0,40),kind:chKind(t),clip:clipOne(t,chKind(t))}));
+   return {format:'patchkamer-clip',formatVersion:1,kind:'multi',name:pn(p).slice(0,40),length:clipLen(),grid:{2:16,4:16,8:32,16:64}[S.rowsPerBeat]||16,source:{device:CLIP_ID,name:VIEW==='tracker'?'Pattern Tracker':'Pattern Playlist',version:CLIP_VER,scheme:'gm'},tracks};}
+ function getClip(o){try{if(dead)return null;return JSON.parse(JSON.stringify(o&&o.kind==='multi'?clipMulti():clipOne(S.view.track,clipKind())));}catch(e){return null;}}
+ // onbetrouwbare invoer: {kind,length,evs:[{t,note,len,vel,prob,ratchet}],noteSet,native,cut} of {err}; want = de soort die dit kanaal nu neemt
+ function clipParse(clip,want=clipKind()){const bad={err:tx('Geen geldige clip.')};
   if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1))return bad;
-  const want=clipKind();if(clip.kind!==want)return {err:tx('De soort past niet: dit apparaat neemt nu {0}.',tx(want==='drums'?'drums':'noten'))};
+  if(clip.kind!==want)return {err:tx('De soort past niet: dit apparaat neemt nu {0}.',tx(want==='drums'?'drums':'noten'))};
   if(typeof clip.length!=='number'||!Number.isFinite(clip.length))return bad;
   const length=int(clip.length,1,CLIP_MAXT,1),evs=[],isn=x=>typeof x==='number'&&Number.isFinite(x);let seen=0,noteSet=null;
   const fin=(x,e)=>{if(x.acc===true)e.vel=1;return e;};
@@ -307,9 +318,8 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  function clipCleanChannel(raw,length){if(!Array.isArray(raw))return null;try{return clean({patterns:[{id:'p1',length,channels:[raw]}]}).patterns[0].channels[0];}catch(e){return null;}}
  const clipSame=(A,B)=>{if(A.length!==B.length)return false;const k=(a,b)=>a.t-b.t||a.note-b.note,x=A.slice().sort(k),y=B.slice().sort(k);
   return x.every((a,i)=>{const b=y[i];return a.t===b.t&&a.note===b.note&&a.len===b.len&&Math.abs(a.vel-b.vel)<1e-9&&Math.abs(a.prob-b.prob)<1e-9&&a.ratchet===b.ratchet;});};
- function setClip(clip){try{if(dead)return {ok:false,reason:tx('Het apparaat is verwijderd.')};
-   const c=clipParse(clip);if(c.err)return {ok:false,reason:c.err};
-   const rt=clipRT(),P=pattern(),plen=P.length,tr=S.view.track,drums=c.kind==='drums',lenT=clipLen();let dropped=c.cut,cells=null;
+ // de cellen van een geparseerde clip voor een kanaal: {cells,dropped}
+ function clipBuildCells(c){const rt=clipRT(),P=pattern(),plen=P.length,drums=c.kind==='drums',lenT=clipLen();let dropped=c.cut,cells=null;
    // eigen clip, niet aangepast: het kanaal komt exact terug (met effecten en CC)
    const nd=c.native;
    if(nd&&nd.rpb===S.rowsPerBeat&&c.length===lenT){const nc=clipCleanChannel(nd.cells,plen);
@@ -325,10 +335,26 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
      const rat=Math.max(...es.map(e=>e.ratchet)),pr=Math.min(...es.map(e=>e.prob));
      if(rat>1){cell.fx='RAT';cell.value=Math.min(8,rat);if(pr<1)dropped++;}else if(pr<1){cell.fx='PRB';cell.value=Math.round(pr*100);}
      cells.push(cell);}}
-   const A=clean(cp(S)),T=cp(S),tp=T.patterns.find(p=>p.id===P.id);if(!tp||!tp.channels[tr])return {ok:false,reason:tx('Geen geldige clip.')};
-   tp.channels[tr]=cells;const B=clean(T);
+   return {cells,dropped};}
+ // zet de cellen op de kanalen (slot -> cellen) van het gekozen patroon; één Ongedaan-stap; niets veranderd = geen wijziging
+ function clipCommit(map,dropped){const P=pattern(),A=clean(cp(S)),T=cp(S),tp=T.patterns.find(p=>p.id===P.id);if(!tp)return {ok:false,reason:tx('Geen geldige clip.')};
+   for(const [t,cells] of map){if(!tp.channels[t])return {ok:false,reason:tx('Geen geldige clip.')};tp.channels[t]=cells;}
+   const B=clean(T);
    if(JSON.stringify(A)===JSON.stringify(B))return {ok:true,...(dropped?{dropped}:{})};
-   remember();S=B;render();return {ok:true,...(dropped?{dropped}:{})};}catch(e){return {ok:false,reason:tx('Geen geldige clip.')};}}
+   remember();S=B;render();return {ok:true,...(dropped?{dropped}:{})};}
+ function setMulti(clip){const bad={ok:false,reason:tx('Geen geldige clip.')},entries=new Map();
+   for(const x of(Array.isArray(clip.tracks)?clip.tracks.slice(0,64):[]))if(x&&typeof x==='object'&&Number.isInteger(x.slot)&&x.slot>=0&&x.slot<S.trackCount&&x.clip&&typeof x.clip==='object'&&(x.clip.kind==='notes'||x.clip.kind==='drums'))entries.set(x.slot,x.clip);
+   if(!entries.size)return bad;
+   const map=new Map();let dropped=0;
+   for(const [t,tc] of entries){const c=clipParse(tc,tc.kind);if(c.err){dropped++;continue;}
+    if(c.kind!==chKind(t)&&!c.native){dropped+=Math.max(1,c.evs.length);continue;}   // een andere soort kan alleen als het kanaal zijn eigen cellen (native) meebrengt
+    const r=clipBuildCells(c);dropped+=r.dropped;map.set(t,r.cells);}
+   if(!map.size)return {ok:false,reason:tx('Geen enkel kanaal van de clip past op een kanaal van dit patroon.')};
+   return clipCommit(map,dropped);}
+ function setClip(clip){try{if(dead)return {ok:false,reason:tx('Het apparaat is verwijderd.')};
+   if(clip&&typeof clip==='object'&&!Array.isArray(clip)&&clip.format==='patchkamer-clip'&&(clip.formatVersion===undefined||clip.formatVersion===1)&&clip.kind==='multi')return setMulti(clip);
+   const c=clipParse(clip);if(c.err)return {ok:false,reason:c.err};
+   const r=clipBuildCells(c);return clipCommit(new Map([[S.view.track,r.cells]]),r.dropped);}catch(e){return {ok:false,reason:tx('Geen geldige clip.')};}}
  self={inputs:{},outputs:{},eventBundles:{tracks:()=>bundle()},mount(container){self.unmount();portCount=0;const div=document.createElement('div');wrapper=div;container.appendChild(div);const shadow=div.attachShadow({mode:'open'});element('style',shadow,CSS);root=element('div',shadow);render();stopFrame=frameLoop(animate);},unmount(){stopAnim();wrapper?.remove();wrapper=null;root=null;app=null;refs={};importToken++;},
  onStep(info){try{schedule(info);}catch(e){msg(tx('Sequencer: {0}',e?.message||e));}},
  onPeers(list){if(dead)return;peerCache=list;const had=nameMaps[S.view.track]?.size>0;if(refreshNames(list)&&root){if(!had&&nameMaps[S.view.track]?.size>0&&S.view.editor==='piano')S.view.editor='drums';render();}},
@@ -342,7 +368,7 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
   else if(type==='allnotesoff'||type==='panic')allOff();
   else if(type==='cc'&&typeof ev.id==='string'&&Number.isFinite(ev.value)&&S.view.liveThru)emit(t,{type:'cc',id:ev.id.slice(0,48),value:num(ev.value,0,1),time:num(ev.time,ctx.currentTime,1e12,ctx.currentTime)});
  }catch{}},
- clipInfo(){return clipInfo();},getClip(){return getClip();},setClip(clip){return setClip(clip);},
+ clipInfo(){return clipInfo();},getClip(o){return getClip(o);},setClip(clip){return setClip(clip);},
  getState(){return cp(S);},
  setState(s){if(dead)return;allOff(false);S=clean(s);S.view.record=false;undo=[];redo=[];seek=0;error='';recTake=false;recHeld.clear();reset();render();},
  getPreset(){const p=cp(S);delete p.view;delete p.armed;return p;},
@@ -350,4 +376,4 @@ function createSequencer(ctx,host){LANG=host&&host.lang==='nl'?'nl':'en';
  destroy(){if(dead)return;allOff(false);dead=true;playing=false;self.unmount();queue=[];hist=[];undo=[];redo=[];clipboard=null;}};return self;
 }
 const NL_PORTS={input:'Live noten / CC',tracks:'Sporen',...Object.fromEntries(Array.from({length:32},(_,i)=>['track'+(i+1),'Spoor '+(i+1)]))};
-export default {id:'nl.patchkamer.patternplaylist',name:'Pattern Playlist',version:'1.15.0',kind:'utility',category:'sequencer',ui:{width:1260,minWidth:620,jacks:false},ports:portsFor(8,false),i18n:{nl:{ports:Object.fromEntries(Object.entries(NL_PORTS).filter(([k])=>k==='input'||+k.slice(5)<=8))}},create(ctx,host){return createSequencer(ctx,host);}};
+export default {id:'nl.patchkamer.patternplaylist',name:'Pattern Playlist',version:'1.16.0',kind:'utility',category:'sequencer',ui:{width:1260,minWidth:620,jacks:false},ports:portsFor(8,false),i18n:{nl:{ports:Object.fromEntries(Object.entries(NL_PORTS).filter(([k])=>k==='input'||+k.slice(5)<=8))}},create(ctx,host){return createSequencer(ctx,host);}};

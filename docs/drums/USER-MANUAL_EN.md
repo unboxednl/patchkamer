@@ -241,6 +241,7 @@ Groovebox 12 has the pack **Groovebox 12 Styles**: 38 tunes in twelve folders (T
 
 - The clock is that of the host: Groovebox 12 has no play button of its own. Press **Start** at the top.
 - A pattern holds the 12 tracks. **Clear trigs** and **Random** work on the pattern you are editing, so copy it first with **Copy →** if you want to keep it.
+- **Copy and paste.** **Copy** and **Paste** in the card bar work on the pattern you are editing, with all 12 tracks in one go: the drum tracks as drum tracks and the synth tracks as note tracks, each with its own length (polymeter), probability (the conditions 25%, 50% and 75%), ratchet (retrig) and micro-timing. Between two Groovebox 12s the whole pattern comes along, with sound, p-locks and all conditions. To another device (Pattern Tracker, Clip Arranger, Chord Sequencer) the tracks go by kind and in order; what does not fit is left out and reported. If you paste into Groovebox 12 from another device, the assigned tracks get the steps and the length (their steps and p-locks are cleared first), sound and settings stay; tracks without a source stay as they are. You cannot paste a single track (for example from Step Sequencer) into it. The pattern you are editing stays selected, also after **Undo**.
 
 ## Pulse Drums
 

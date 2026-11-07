@@ -13,7 +13,7 @@ Een groovebox met 12 tracks. Elke track heeft een klankmachine (7 drums en 4 syn
 | Naam | `Groovebox 12` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Uit / Out, de som), modulatie-ingang `mod`, bundel-uitgang `multi` (Losse uit / Separate outs: de twaalf tracks apart, na niveau en pan, vóór de sends en het FX-blok) |
-| Contract | v1.11 |
+| Contract | v1.24 (apparaatversie 1.13.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Takt Twaalf, `nl.patchkamer.takt12`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De bron van het oude bestand (een HTML-pagina met een bouwscript) is niet beschikbaar; dit bestand wordt rechtstreeks bewerkt.
@@ -310,6 +310,22 @@ Groovebox 12 heeft geen eventingang en dus geen `noteNames`: er is geen live ins
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.groovebox12`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **kit met groove**: de machines en klankinstellingen van de tracks plus de patronen. Houd hem klein (zie hierboven). Geef elke tune en elke track een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Maak alleen tunes als de opdracht dat vraagt.
+
+## Klembord: het patroon kopiëren en plakken (sinds 1.13.0, contract v1.24)
+
+De host kopieert en plakt met de knoppen Kopieer en Plak in de kaartbalk en met Ctrl/Cmd+C en Ctrl/Cmd+V (formaat `patchkamer-clip`, tijd in **tikken**: 12 per zestiende, dus 12 per stap). Het "huidige patroon" is het patroon dat je bewerkt (`curPat`, de patroonknop met de rand); het is een clip van de soort `multi` met 12 sporen, een per track. Er is alleen `multi`: `copy` en `paste` zijn `['multi']`, dus een gewone notenclip of drumclip past er niet in (de host weigert die met een melding).
+
+| Methode | Wat |
+|---|---|
+| `clipInfo()` | Licht, `null` zolang de UI niet is aangekoppeld of na `destroy`. `tracks`: 12 items `{ id: 't1'..'t12', name, kind, role: machine, length, lanes }`. `kind` volgt de machine van de track nu: een synthmachine (`tone`, `chord`, `dual`, `raw`) is `notes`, de rest `drums` met één baan (`type` kick, snare, rim, clap, closedhat/openhat (naam met "closed" of `dec` onder 0,15), ride, cowbell en het GM-nummer 36, 38, 37, 39, 42/46, 51, 56). `length`: 12 tot 192 tikken in stappen van 12 (1 tot 16 stappen), `shared` onwaar (elke track heeft zijn eigen lengte); `grid` `[16, 32, 64]`; `poly` 1; `vel` `continuous`; `prob` en `ratchet` waar; `maxEvents` 16. |
+| `getClip()` | Het patroon als `multi`: per track een spoor met `clip.length` = `len` × 12, de gebeurtenissen van de stappen die aan staan binnen de tracklengte (`t` = stap × 12 + `micro` × 12, `vel` boven 0,9 is `acc` met `vel` 1, `retrig` is `ratchet`, de condities `25%`, `50%` en `75%` zijn `prob`, `note` is `n`). `native` bovenaan = het hele patroon (`pats[curPat]`) met klank, p-locks, condities en stappen buiten de tracklengte. |
+| `setClip(clip)` | Alleen `kind: 'multi'`. Een clip van Groovebox 12 zelf die niet is aangepast (alle 12 sporen, per spoor dezelfde gebeurtenissen en lengte als wat `native` opwekt) zet `pats[curPat]` **exact** terug (`cleanPattern` over `native`): klank, p-locks, condities, micro en alle andere velden. Anders schrijft het per toegewezen spoor (`slot` 0 tot 11, de soort moet bij de machine van de track passen, anders overgeslagen) alleen de stappen en de tracklengte: de 16 stappen van die track worden eerst op de beginwaarde gezet (**p-locks, condities en micro van die track gaan verloren**), `micro` wordt de dichtstbijzijnde 1/8 stap (hoogstens ±¼), `prob` wordt de dichtstbijzijnde conditie 25%, 50% of 75%, `ratchet` wordt `retrig` (1 tot 8) en twee gebeurtenissen in dezelfde stap laten de hardste staan (`dropped`). Klank en parameters van de track blijven. Niet toegewezen tracks blijven. Geen enkel spoor toegepast: `ok: false`. |
+
+- **`curPat` en Ongedaan maken.** `curPat` zit niet in `getState()` en `setState` zet hem op 0. Om Ongedaan maken van de host (dat `setState` met de state van vóór het plakken doet) de patroonkeuze te laten behouden, onthoudt `setClip` bij een wijziging `{ pat, json }` (de patroonindex en de state-tekst vóór de wijziging); `loadSong` houdt de patroonkeuze alleen als de binnenkomende state letterlijk die tekst is, en wist de aantekening bij elke aanroep. Elke andere `setState` (een tune, een song) zet het patroon nog steeds op 1.
+- `setClip` werkt de UI bij (alle tracks, trigs en knoppen) en past de klank van de tracks opnieuw toe (`applyTrack`); het stuurt zelf geen gebeurtenissen.
+- `getState`, `setState` (behalve de aantekening hierboven), `params()`, het geluid en de bundel zijn gelijk aan 1.12.0 (byte voor byte vergeleken in 33 stappen met tunes, demo's, wissen, willekeurig en kopiëren).
+
+**Risico's.** Een patroon van 12 tracks is groot (ongeveer 150 KB `native`); zonder `native` (tussen verschillende apparaten) is er veel minder dan er is. Stappen achter de tracklengte klinken niet en gaan dus niet mee zonder `native`. Een klankinstelling hoort bij een patroon: plak je een patroon in Groovebox 12 mét `native`, dan verandert ook de klank van dat patroon.
 
 ## Controleren
 

@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.23
+// validate-instrument.mjs — Patchkamer contract v1.24
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -20,6 +20,7 @@
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
+// v1.24: klembord, scènes met meerdere sporen: clipInfo().copy/paste mogen 'multi' bevatten, clipInfo().tracks beschrijft de doelsporen, getClip({ kind: 'multi' }) geeft kind 'multi' met tracks (1 tot 64, elk { slot, kind, clip }), setClip(multi) rondreis en rommel-multi's.
 // v1.21: instellingen opnemen en afspelen: host.watchParams, host.setParam, host.lockParams en host.paramsOf (voor sequencers); de nep-host kent ze en geeft false, de validator controleert er verder niets van.
 // v1.23: stems splitsen: host.stems(inst, actie, opts) (services / split / settings); de nep-host geeft [] bij services en weigert split; een aanroep van split tijdens de test is een fout (een netwerkaanroep start alleen op een klik).
 // v1.22: pads en schermpje: host.ui.pad(parent, label, opts) -> { el, set, flash, id, destroy } (opts: id, group, role, mode momentary|toggle, on, onpress, onrelease, onchange, color #rrggbb, text, title),
@@ -155,14 +156,22 @@ const V = {
     "v.clipinfo_gooit": "clipInfo() gooit: ",
     "v.clipinfo_ongeldig": "clipInfo() moet null of een JSON-object geven, kreeg: ",
     "v.clipinfo_state": "clipInfo() verandert de state (hij moet licht zijn en geen bijwerkingen hebben)",
-    "v.clipinfo_soorten": "clipInfo(): copy en paste moeten lijsten zijn met 'notes' en/of 'drums', kreeg: ",
+    "v.clipinfo_tracks": "clipInfo(): tracks moet een lijst zijn van hoogstens 64 sporen { id, name, kind: 'notes' of 'drums' }, kreeg: ",
+    "v.clipinfo_multi_sporen": "clipInfo(): copy of paste bevat 'multi' maar tracks ontbreekt of is leeg",
+    "v.clipf_multi": "kind 'multi' heeft een lijst tracks nodig (1 tot 64)",
+    "v.clipf_multi_spoor": "spoor {0}: slot (geheel getal 0 tot 63), kind ('notes' of 'drums') en een clip van diezelfde soort zijn verplicht",
+    "v.clipf_multi_ongeldig": "spoor {0}: ",
+    "v.clipf_multi_lengte": "length van een multi-clip moet gelijk zijn aan de lengte van de langste spoorclip",
+    "v.getclip_multi_ontbreekt": "clipInfo().copy bevat 'multi' maar getClip({ kind: 'multi' }) geeft geen geldige multi-clip: ",
+    "v.getclip_alleen_multi": "clipInfo().copy is alleen 'multi', dus getClip() zonder argument moet een multi-clip geven",
+    "v.clipinfo_soorten": "clipInfo(): copy en paste moeten lijsten zijn met 'notes', 'drums' en/of 'multi', kreeg: ",
     "v.clipinfo_lengte": "clipInfo(): length.min, max, step en current moeten getallen zijn (1 tot 12288 tikken), kreeg: ",
     "v.getclip_gooit": "getClip() gooit: ",
     "v.getclip_json": "getClip() geeft geen JSON-object of null (of bevat AudioNodes): ",
     "v.getclip_state": "getClip() verandert de state (geen bijwerkingen)",
     "v.clip_ongeldig": "getClip() geeft geen geldige patchkamer-clip: ",
     "v.clipf_format": "format moet 'patchkamer-clip' zijn en formatVersion 1",
-    "v.clipf_kind": "kind moet 'notes' of 'drums' zijn",
+    "v.clipf_kind": "kind moet 'notes', 'drums' of 'multi' zijn",
     "v.clipf_length": "length moet een geheel getal van 1 tot 12288 tikken zijn (12 tikken per zestiende)",
     "v.clipf_notes": "kind 'notes' heeft een lijst notes nodig (hoogstens 4096)",
     "v.clipf_note": "noot {0}: t (0 tot length-1), n (0 tot 127), len (>= 1) en vel (0,01 tot 1) moeten kloppende gehele getallen/getallen zijn",
@@ -392,14 +401,22 @@ const V = {
     "v.clipinfo_gooit": "clipInfo() throws: ",
     "v.clipinfo_ongeldig": "clipInfo() must return null or a JSON object, got: ",
     "v.clipinfo_state": "clipInfo() changes the state (it must be light and free of side effects)",
-    "v.clipinfo_soorten": "clipInfo(): copy and paste must be lists of 'notes' and/or 'drums', got: ",
+    "v.clipinfo_tracks": "clipInfo(): tracks must be a list of at most 64 tracks { id, name, kind: 'notes' or 'drums' }, got: ",
+    "v.clipinfo_multi_sporen": "clipInfo(): copy or paste contains 'multi' but tracks is missing or empty",
+    "v.clipf_multi": "kind 'multi' needs a list tracks (1 to 64)",
+    "v.clipf_multi_spoor": "track {0}: slot (integer 0 to 63), kind ('notes' or 'drums') and a clip of that same kind are required",
+    "v.clipf_multi_ongeldig": "track {0}: ",
+    "v.clipf_multi_lengte": "length of a multi clip must equal the length of its longest track clip",
+    "v.getclip_multi_ontbreekt": "clipInfo().copy contains 'multi' but getClip({ kind: 'multi' }) does not return a valid multi clip: ",
+    "v.getclip_alleen_multi": "clipInfo().copy is only 'multi', so getClip() without an argument must return a multi clip",
+    "v.clipinfo_soorten": "clipInfo(): copy and paste must be lists of 'notes', 'drums' and/or 'multi', got: ",
     "v.clipinfo_lengte": "clipInfo(): length.min, max, step and current must be numbers (1 to 12288 ticks), got: ",
     "v.getclip_gooit": "getClip() throws: ",
     "v.getclip_json": "getClip() does not return a JSON object or null (or contains AudioNodes): ",
     "v.getclip_state": "getClip() changes the state (no side effects)",
     "v.clip_ongeldig": "getClip() does not return a valid patchkamer-clip: ",
     "v.clipf_format": "format must be 'patchkamer-clip' and formatVersion 1",
-    "v.clipf_kind": "kind must be 'notes' or 'drums'",
+    "v.clipf_kind": "kind must be 'notes', 'drums' or 'multi'",
     "v.clipf_length": "length must be an integer from 1 to 12288 ticks (12 ticks per sixteenth)",
     "v.clipf_notes": "kind 'notes' needs a list notes (at most 4096)",
     "v.clipf_note": "note {0}: t (0 to length-1), n (0 to 127), len (>= 1) and vel (0.01 to 1) must be proper integers/numbers",
@@ -921,7 +938,7 @@ if (typeof inst.onPeers === 'function') { try { inst.onPeers([]); inst.onPeers(F
 // v1.14: noteNames() is optioneel; als hij er is, een lijst van { note 0..127, name } en hij gooit niet
 if (typeof inst.noteNames === 'function') { let l; try { l = inst.noteNames(); } catch (e) { fail(vt('v.notenames_gooit') + e.message); } if (!Array.isArray(l) || l.some(x => !x || !Number.isFinite(x.note) || x.note < 0 || x.note > 127 || typeof x.name !== 'string' || !x.name)) fail(vt('v.notenames_ongeldig') + JSON.stringify(l).slice(0, 80)); }
 // v1.17 (§13d): klembord. clipInfo/getClip/setClip: alle drie of geen; JSON; setClip(getClip()) laat de state gelijk; rommel gooit niet en zet niets half.
-let clipOn = false, clipWarn = false, clipOutInfo, clipOutClip;
+let clipOn = false, clipWarn = false, clipOutInfo, clipOutClip, clipOutMulti;
 if (inst.clipInfo !== undefined || inst.getClip !== undefined || inst.setClip !== undefined) {
   clipOn = true;
   for (const k of ['clipInfo', 'getClip', 'setClip']) if (typeof inst[k] !== 'function') fail(vt('v.clip_horen_bij', k));
@@ -935,17 +952,31 @@ if (inst.clipInfo !== undefined || inst.getClip !== undefined || inst.setClip !=
   if (ci !== null && (typeof ci !== 'object' || Array.isArray(ci))) fail(vt('v.clipinfo_ongeldig') + short(ci));
   if (ci) {
     let cj; try { cj = JSON.stringify(ci); } catch (e) { fail(vt('v.clipinfo_ongeldig') + e.message); } if (cj.includes('_isNode')) fail(vt('v.clipinfo_ongeldig') + 'AudioNode');
-    for (const k of ['copy', 'paste']) if (ci[k] !== undefined && (!Array.isArray(ci[k]) || ci[k].some(x => x !== 'notes' && x !== 'drums'))) fail(vt('v.clipinfo_soorten') + short(ci[k]));
+    for (const k of ['copy', 'paste']) if (ci[k] !== undefined && (!Array.isArray(ci[k]) || ci[k].some(x => x !== 'notes' && x !== 'drums' && x !== 'multi'))) fail(vt('v.clipinfo_soorten') + short(ci[k]));
+    const multiInfo = [...(ci.copy || []), ...(ci.paste || [])].includes('multi');
+    if (ci.tracks !== undefined && (!Array.isArray(ci.tracks) || ci.tracks.length > 64 || ci.tracks.some(t => !t || typeof t !== 'object' || (t.kind !== 'notes' && t.kind !== 'drums')))) fail(vt('v.clipinfo_tracks') + short(ci.tracks));
+    if (multiInfo && !(Array.isArray(ci.tracks) && ci.tracks.length)) fail(vt('v.clipinfo_multi_sporen'));
     if (ci.length !== undefined) { const L = ci.length; if (!L || typeof L !== 'object' || ['min', 'max', 'step', 'current'].some(k => L[k] !== undefined && !(Number.isFinite(L[k]) && L[k] >= 1 && L[k] <= 12288))) fail(vt('v.clipinfo_lengte') + short(L)); }
   }
   if (stateNow() !== s0) fail(vt('v.clipinfo_state'));
   // getClip(): geen bijwerkingen; null of een geldige patchkamer-clip
   const checkClip = c => {
     if (!c || typeof c !== 'object' || Array.isArray(c) || c.format !== 'patchkamer-clip' || c.formatVersion !== 1) return vt('v.clipf_format');
-    if (c.kind !== 'notes' && c.kind !== 'drums') return vt('v.clipf_kind');
+    if (c.kind !== 'notes' && c.kind !== 'drums' && c.kind !== 'multi') return vt('v.clipf_kind');
     if (!isInt(c.length, 1, 12288)) return vt('v.clipf_length');
     if (c.name !== undefined && typeof c.name !== 'string') return vt('v.clipf_name');
     const velOk = v => v === undefined || (typeof v === 'number' && v >= 0.01 && v <= 1);
+    if (c.kind === 'multi') {   // v1.24: een scène met meerdere sporen; elk spoor is een gewone clip (geen multi in multi)
+      if (!Array.isArray(c.tracks) || c.tracks.length < 1 || c.tracks.length > 64) return vt('v.clipf_multi');
+      let longest = 0;
+      for (let i = 0; i < c.tracks.length; i++) {
+        const t = c.tracks[i];
+        if (!t || typeof t !== 'object' || !isInt(t.slot, 0, 63) || (t.kind !== 'notes' && t.kind !== 'drums') || !t.clip || typeof t.clip !== 'object' || t.clip.kind !== t.kind) return vt('v.clipf_multi_spoor', i);
+        const bad = checkClip(t.clip); if (bad) return vt('v.clipf_multi_ongeldig', i) + bad;
+        longest = Math.max(longest, t.clip.length);
+      }
+      return longest === c.length ? null : vt('v.clipf_multi_lengte');
+    }
     if (c.kind === 'notes') {
       if (!Array.isArray(c.notes) || c.notes.length > 4096) return vt('v.clipf_notes');
       for (let i = 0; i < c.notes.length; i++) { const n = c.notes[i]; if (!n || typeof n !== 'object' || !isInt(n.t, 0, c.length - 1) || !isInt(n.n, 0, 127) || !(n.len === undefined || (Number.isInteger(n.len) && n.len >= 1)) || !velOk(n.vel)) return vt('v.clipf_note', i); }
@@ -962,11 +993,24 @@ if (inst.clipInfo !== undefined || inst.getClip !== undefined || inst.setClip !=
     const bad = checkClip(JSON.parse(gj)); if (bad) fail(vt('v.clip_ongeldig') + bad);
   }
   if (stateNow() !== s0) fail(vt('v.getclip_state'));
+  // v1.24: een apparaat dat 'multi' kopieert geeft die op verzoek: getClip({ kind: 'multi' }); met alleen 'multi' in copy is ook getClip() zelf een multi-clip
+  let gm = null, gmj;
+  if (ci && Array.isArray(ci.copy) && ci.copy.includes('multi')) {
+    try { gm = inst.getClip({ kind: 'multi' }); } catch (e) { fail(vt('v.getclip_gooit') + e.message); }
+    if (gm !== null) { try { gmj = JSON.stringify(gm); } catch (e) { fail(vt('v.getclip_json') + e.message); } if (gmj === undefined || gmj.includes('_isNode')) fail(vt('v.getclip_json') + short(gm)); const badm = gm.kind === 'multi' ? checkClip(JSON.parse(gmj)) : 'kind'; if (badm) fail(vt('v.getclip_multi_ontbreekt') + badm); }
+    if (stateNow() !== s0) fail(vt('v.getclip_state'));
+    if (ci.copy.every(k => k === 'multi') && gc !== null && gc.kind !== 'multi') fail(vt('v.getclip_alleen_multi'));
+  }
   // setClip(getClip()): de state blijft gelijk; het resultaat is { ok, reason }
   const result = (r, what) => { if (!r || typeof r !== 'object' || typeof r.ok !== 'boolean' || (!r.ok && (typeof r.reason !== 'string' || !r.reason))) fail(vt('v.setclip_resultaat', short(r), what)); return r; };
   if (gc !== null) {
     let r; try { r = inst.setClip(JSON.parse(gj)); } catch (e) { fail(vt('v.setclip_gooit', 'getClip()') + e.message); }
     result(r, 'getClip()'); if (!r.ok) clipWarn = true;
+    if (stateNow() !== s0) fail(vt('v.setclip_rondreis'));
+  }
+  if (gm !== null) {
+    let r; try { r = inst.setClip(JSON.parse(gmj)); } catch (e) { fail(vt('v.setclip_gooit', "getClip({ kind: 'multi' })") + e.message); }
+    result(r, "getClip({ kind: 'multi' })"); if (!r.ok) clipWarn = true;
     if (stateNow() !== s0) fail(vt('v.setclip_rondreis'));
   }
   // rommel, lege en extreme clips: gooit niet, ok:false laat de state ongemoeid, ok:true laat een bruikbare state achter
@@ -986,7 +1030,17 @@ if (inst.clipInfo !== undefined || inst.getClip !== undefined || inst.setClip !=
     ['100 lanes', { ...base, kind: 'drums', length: 192, lanes: Array.from({ length: 100 }, (_, i) => ({ id: 'l' + i, name: 'L' + i, note: 36 + (i % 40) })), hits: [{ t: 0, lane: 99, vel: 0.9 }] }],
     ['long names', { ...base, kind: 'notes', name: 'x'.repeat(100000), length: 192, notes: [{ t: 0, n: 60, len: 12, vel: 0.8 }] }],
     ['max length', { ...base, kind: 'notes', length: 12288, notes: [{ t: 12287, n: 127, len: 12288, vel: 1 }, { t: 0, n: 0, len: 1, vel: 0.01 }] }],
-    ['unknown fields', { ...base, kind: 'notes', length: 192, zzz: { a: 1 }, notes: [{ t: 0, n: 60, len: 12, vel: 0.8, q: 1 }] }]];
+    ['unknown fields', { ...base, kind: 'notes', length: 192, zzz: { a: 1 }, notes: [{ t: 0, n: 60, len: 12, vel: 0.8, q: 1 }] }],
+    // v1.24: multi-clips
+    ['multi without tracks', { ...base, kind: 'multi', length: 192 }], ['multi empty tracks', { ...base, kind: 'multi', length: 192, tracks: [] }], ['multi tracks not a list', { ...base, kind: 'multi', length: 192, tracks: 'x' }],
+    ['multi junk tracks', { ...base, kind: 'multi', length: 192, tracks: [null, 7, 'a', [], {}, { slot: 'a', clip: 5 }, { slot: -1, kind: 'notes', clip: { ...base, kind: 'notes', length: 192, notes: [] } }, { slot: 1e9, kind: 'drums', clip: null }] }],
+    ['multi nested multi', { ...base, kind: 'multi', length: 192, tracks: [{ slot: 0, kind: 'multi', clip: { ...base, kind: 'multi', length: 192, tracks: [] } }] }],
+    ['multi 1000 tracks', { ...base, kind: 'multi', length: 192, tracks: Array.from({ length: 1000 }, (_, i) => ({ slot: i % 70, name: 'T' + i, kind: i % 2 ? 'drums' : 'notes', clip: i % 2 ? { ...base, kind: 'drums', length: 192, lanes: [{ id: 'a', name: 'A', note: 36 }], hits: [{ t: 0, lane: 0, vel: 1 }] } : { ...base, kind: 'notes', length: 192, notes: many(4) } })) }],
+    ['multi kind mismatch', { ...base, kind: 'multi', length: 192, tracks: [{ slot: 0, kind: 'drums', clip: { ...base, kind: 'notes', length: 192, notes: many(3) } }, { slot: 0, kind: 'notes', clip: { ...base, kind: 'drums', length: 192, lanes: [], hits: [{ t: 0, lane: 4 }] } }] }],
+    ['multi NaN lengths', { ...base, kind: 'multi', length: NaN, tracks: [{ slot: 0, kind: 'notes', clip: { ...base, kind: 'notes', length: NaN, notes: [{ t: NaN, n: NaN, len: NaN, vel: NaN }] } }] }],
+    ['multi duplicate slots', { ...base, kind: 'multi', length: 192, tracks: [0, 0, 0, 1, 1].map(i => ({ slot: i, kind: 'notes', clip: { ...base, kind: 'notes', length: 192, notes: many(30) } })) }],
+    ['multi 100000 notes', { ...base, kind: 'multi', length: 12288, tracks: [{ slot: 0, kind: 'notes', clip: { ...base, kind: 'notes', length: 12288, notes: many(100000) } }, { slot: 1, kind: 'notes', clip: { ...base, kind: 'notes', length: 12288, notes: many(5000) } }] }],
+    ['multi slot beyond', { ...base, kind: 'multi', length: 192, tracks: [{ slot: 99, kind: 'notes', clip: { ...base, kind: 'notes', length: 192, notes: many(3) } }] }]];
   const finite = (x, seen = 0) => x === null || typeof x !== 'object' ? (typeof x !== 'number' || Number.isFinite(x)) : Object.values(x).every(y => finite(y));
   for (const [what, c] of junk) {
     const before = stateNow(); let r;
@@ -999,7 +1053,7 @@ if (inst.clipInfo !== undefined || inst.getClip !== undefined || inst.setClip !=
   }
   if (emitted.length !== e0) fail(vt('v.setclip_events'));
   try { inst.setState(JSON.parse(json)); } catch (e) { fail(vt('v.setstate_getstate_gooit') + e.message); }
-  clipOutInfo = ci; clipOutClip = gc;
+  clipOutInfo = ci; clipOutClip = gc; clipOutMulti = gm;
 }
 // v1.16 (§8): dekking van params(). Welke continue regelaars (range/knop/schuif) zitten in params()? Alleen "let op", nooit een fout.
 // Koppeling regelaar -> param: id (host.ui-opties of data-pk-id) > de getState-sleutel die verandert als de waarde wordt verzet > het label. Wat niet te koppelen is, blijft stil.
@@ -1158,7 +1212,8 @@ const nKnobs = nMountKnobs; let OTHER = null;
     console.log(''); console.log(vt('v.clip_titel'));
     if (!clipOn) console.log(vt('v.clip_geen'));
     else { console.log('clipInfo(): ' + (clipOutInfo == null ? vt('v.clip_nul') : JSON.stringify(clipOutInfo)));
-      console.log('getClip():  ' + (clipOutClip == null ? vt('v.clip_nul') : JSON.stringify(clipOutClip))); }
+      console.log('getClip():  ' + (clipOutClip == null ? vt('v.clip_nul') : JSON.stringify(clipOutClip)));
+      if (clipOutMulti) console.log("getClip({ kind: 'multi' }): " + JSON.stringify(clipOutMulti)); }
   }
   if (!SUB && CONTROLS) {   // v1.15: de tabel id | rol | groep | label nl/en | bereik | gezicht
     const mine = HOSTLANG, labs = c => { const o = OTHER && (OTHER.find(x => x.id && x.id === c.id && x.type === c.type) || (c.id ? null : OTHER.filter(x => !x.id)[CTL.filter(y => !y.id).indexOf(c)])); const a = c.label, b = o ? o.label : c.label;

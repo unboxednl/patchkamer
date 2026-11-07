@@ -1,12 +1,12 @@
-// js/clip.js — klembord voor patronen en clips: controleren (sanitize), aanpassen aan het doel (fit), kopiëren, plakken, ongedaan maken, kaartbalkknoppen
+// js/clip.js — klembord voor patronen en clips (ook scènes met meerdere sporen, kind 'multi'): controleren (sanitize), aanpassen aan het doel (fit), kopiëren, plakken, ongedaan maken, kaartbalkknoppen
 (function(PK){
 /* =====================================================================
-   KLEMBORD · formaat `patchkamer-clip` (contract v1.17: clipInfo / getClip / setClip)
+   KLEMBORD · formaat `patchkamer-clip` (contract v1.24: clipInfo / getClip / setClip, kind notes, drums en multi)
    Het klembord is onbetrouwbare invoer: alles gaat eerst door clipClean (grenzen, 1 MB, 4096 gebeurtenissen,
    64 banen, namen hoogstens 40 tekens, onbekende velden weg). Namen komen alleen als textContent op het scherm.
    Tijd in tikken: 12 per zestiende, 192 per maat.
    ===================================================================== */
-const CLIP_TICK={16:12,32:6,64:3}, CLIP_MAXTEXT=1000000, CLIP_MAXEV=4096, CLIP_MAXLANES=64, CLIP_MAXLEN=12288, CLIP_UNDO_MS=15000;
+const CLIP_TICK={16:12,32:6,64:3}, CLIP_MAXTEXT=1000000, CLIP_MAXEV=4096, CLIP_MAXLANES=64, CLIP_MAXLEN=12288, CLIP_MAXTRACKS=64, CLIP_MAXEV_ALL=16384, CLIP_UNDO_MS=15000;
 // naamgroepen voor het uitlijnen van drumbanen (genormaliseerde naam of type -> groep)
 const CLIP_SYN={kick:['kick','bassdrum','bd','bass','kickdrum'],snare:['snare','sd','snaredrum'],clap:['clap','handclap','cp'],
   closedhat:['closedhat','hhclosed','closedhihat','hihatclosed','ch','hat','hh','hihat'],openhat:['openhat','hhopen','openhihat','hihatopen','oh'],
@@ -30,6 +30,7 @@ function clipClean(o){
   if(!o||typeof o!=='object'||Array.isArray(o)||o.format!=='patchkamer-clip') return {err:'bad'};
   if(typeof o.formatVersion!=='number'||!(o.formatVersion>=1)) return {err:'bad'};
   if(Math.floor(o.formatVersion)>1) return {err:'newer'};
+  if(o.kind==='multi') return clipCleanMulti(o);
   if(o.kind!=='notes'&&o.kind!=='drums') return {err:'kind',kind:clipStr(o.kind,20)};
   if(typeof o.length!=='number'||!isFinite(o.length)||o.length<1) return {err:'bad'};
   const len=clipInt(o.length,1,CLIP_MAXLEN,1);
@@ -50,10 +51,32 @@ function clipClean(o){
     for(let i=0;i<h.length&&c.hits.length<CLIP_MAXEV;i++){ const e=ev(h[i]); if(!e) continue; const ln=h[i].lane; if(typeof ln!=='number'||!Number.isInteger(ln)||ln<0||ln>=c.lanes.length) continue; e.lane=ln; c.hits.push(e); }
     c.hits.sort((p,q)=>p.t-q.t||p.lane-q.lane);
   }
-  if(o.native&&typeof o.native==='object'&&typeof o.native.device==='string'&&o.native.data&&typeof o.native.data==='object'){
-    try{ c.native={device:clipStr(o.native.device,80),data:JSON.parse(JSON.stringify(o.native.data))}; }catch(e){} }
+  clipCleanNative(o,c);
   return {clip:c};
 } PK.clipClean=clipClean;
+function clipCleanNative(o,c){
+  if(o.native&&typeof o.native==='object'&&typeof o.native.device==='string'&&o.native.data&&typeof o.native.data==='object'){
+    try{ c.native={device:clipStr(o.native.device,80),data:JSON.parse(JSON.stringify(o.native.data))}; }catch(e){} }
+}
+const clipEvs=c=>c.kind==='notes'?c.notes:c.hits;
+const clipEvTotal=c=>c.kind==='multi'?c.tracks.reduce((a,t)=>a+clipEvs(t.clip).length,0):clipEvs(c).length;
+// multi: hoogstens 64 sporen, elk een gewone clip (geen multi in multi), 16384 gebeurtenissen samen; `slot` wordt de plaats in de lijst
+function clipCleanMulti(o){
+  if(typeof o.length!=='number'||!isFinite(o.length)||o.length<1) return {err:'bad'};
+  const arr=Array.isArray(o.tracks)?o.tracks:[], tracks=[]; let total=0;
+  for(let i=0;i<arr.length&&tracks.length<CLIP_MAXTRACKS;i++){
+    const x=arr[i]; if(!x||typeof x!=='object'||!x.clip||typeof x.clip!=='object'||Array.isArray(x.clip)||x.clip.kind==='multi') continue;
+    const s=clipClean(x.clip); if(s.err) continue; const c=s.clip;
+    if(x.kind!==undefined&&x.kind!==c.kind) continue;
+    const key=c.kind==='notes'?'notes':'hits', room=Math.max(0,CLIP_MAXEV_ALL-total); if(c[key].length>room) c[key]=c[key].slice(0,room); total+=c[key].length;
+    tracks.push({slot:tracks.length,name:clipStr(x.name,40)||c.name,kind:c.kind,role:clipStr(x.role,30),clip:c});
+  }
+  if(!tracks.length) return {err:'bad'};
+  const m={format:'patchkamer-clip',formatVersion:1,kind:'multi',name:clipStr(o.name,40),length:Math.max(...tracks.map(t=>t.clip.length)),grid:[16,32,64].includes(o.grid)?o.grid:16};
+  if(o.source&&typeof o.source==='object'){ const s=o.source; m.source={device:clipStr(s.device,80),name:clipStr(s.name,60),version:clipStr(s.version,20),trackType:clipStr(s.trackType,20),scheme:s.scheme==='gm'?'gm':'device'}; }
+  m.tracks=tracks; clipCleanNative(o,m);
+  return {clip:m};
+}
 
 // tekst van het systeemklembord: null = geen clip (negeren), {err} = een clip die we weigeren, {clip}
 function clipFromText(text){
@@ -68,6 +91,7 @@ function clipFromText(text){
 // ---- aanpassen aan het doel: {clip,report,count} of {err:'kind'|'none'|'nolanes'|'nomatch', ...} ----
 function clipFit(c,inf,ctx){
   ctx=ctx||{};
+  if(c.kind==='multi') return clipFitMulti(c,inf,ctx);
   const rep={lenIgn:'',extra:[],cut:0,shortened:0,tiled:0,padded:0,moved:0,merged:0,folded:0,dropped:[],lanesUnplaced:[]};
   if(!inf||typeof inf!=='object') return {err:'none'};
   const paste=Array.isArray(inf.paste)?inf.paste:[];
@@ -77,7 +101,7 @@ function clipFit(c,inf,ctx){
   const origLen=c.length;
   let S=c.length, ev=(c.kind==='notes'?c.notes:c.hits).map(e=>({...e}));
   let outLanes=null;
-  const same=!!(ctx.devId&&c.native&&clipSameDev(c.native.device,ctx.devId));   // native alleen bij hetzelfde apparaat (of de zusterweergave, zie clipSameDev)
+  const same=!!(ctx.same||(ctx.devId&&c.native&&clipSameDev(c.native.device,ctx.devId)));   // native alleen bij hetzelfde apparaat (of de zusterweergave, zie clipSameDev)
   // drums: banen van de bron naar de banen van het doel (type, naam, nootnummer; nooit op volgorde, behalve hetzelfde apparaat)
   if(c.kind==='drums'){
     const tl=Array.isArray(inf.lanes)?inf.lanes.slice(0,CLIP_MAXLANES):[]; if(!tl.length) return {err:'nolanes'};
@@ -152,19 +176,70 @@ function clipFit(c,inf,ctx){
   return {clip:out,report:rep,count:ev.length};
 } PK.clipFit=clipFit;
 
+// ---- multi: sporen van de bron toewijzen aan de sporen van het doel (per soort, op volgorde), elk paar door clipFit ----
+// geeft {clip (multi, slot = index in clipInfo().tracks),report,count,nTracks} of {err:'none'|'multi1'|'notracks'|'multinone', ...}
+function clipFitMulti(c,inf,ctx){
+  ctx=ctx||{};
+  if(!inf||typeof inf!=='object') return {err:'none'};
+  const paste=Array.isArray(inf.paste)?inf.paste:[];
+  if(!paste.includes('multi')) return {err:'multi1',n:c.tracks.length,paste};
+  const tt=Array.isArray(inf.tracks)?inf.tracks.slice(0,CLIP_MAXTRACKS).filter(x=>x&&typeof x==='object'):[];
+  if(!tt.length) return {err:'notracks'};
+  const same=!!(ctx.devId&&((c.native&&clipSameDev(c.native.device,ctx.devId))||c.tracks.some(t=>t.clip.native&&clipSameDev(t.clip.native.device,ctx.devId))));
+  const tk=j=>tt[j].kind==='drums'?'drums':'notes', trName=(t,i)=>t.name||t.role||('#'+(i+1));
+  const pairs=[], usedS=new Set(), usedT=new Set(), take=(i,j)=>{ pairs.push([i,j]); usedS.add(i); usedT.add(j); };
+  if(same){ for(let i=0;i<c.tracks.length&&i<tt.length;i++) take(i,i); }
+  else for(const kind of ['notes','drums']){
+    const S=[], T=[]; c.tracks.forEach((t,i)=>{ if(t.clip.kind===kind) S.push(i); }); tt.forEach((t,j)=>{ if(tk(j)===kind) T.push(j); });
+    if(kind==='drums'){   // eerst een spoor met één baan op gelijk type of gelijke naam, de rest op volgorde
+      const keys=(t,l)=>[t.name,t.role,l&&l.type,l&&l.name].map(clipCanon).filter(Boolean);
+      S.forEach(i=>{ const st=c.tracks[i]; if(st.clip.lanes.length!==1) return; const a=keys(st,st.clip.lanes[0]);
+        const j=T.find(j=>!usedT.has(j)&&Array.isArray(tt[j].lanes)&&tt[j].lanes.length===1&&keys(tt[j],tt[j].lanes[0]).some(k=>a.includes(k))); if(j!==undefined) take(i,j); }); }
+    const S2=S.filter(i=>!usedS.has(i)), T2=T.filter(j=>!usedT.has(j)); for(let k=0;k<S2.length&&k<T2.length;k++) take(S2[k],T2[k]);
+  }
+  pairs.sort((a,b)=>a[1]-b[1]);
+  const base={grid:inf.grid,poly:inf.poly,range:inf.range,scheme:inf.scheme,vel:inf.vel,prob:inf.prob,ratchet:inf.ratchet,maxEvents:inf.maxEvents,length:inf.length};
+  const rep={lenIgn:'',extra:[],cut:0,shortened:0,tiled:0,padded:0,moved:0,merged:0,folded:0,dropped:[],lanesUnplaced:[],tracksDropped:[],tracksKept:0};
+  const out=[]; let count=0;
+  const addDropped=(k,n)=>{ if(!(n>0)) return; const d=rep.dropped.find(x=>x.kind===k); if(d) d.n+=n; else rep.dropped.push({kind:k,n}); };
+  c.tracks.forEach((st,i)=>{ if(!usedS.has(i)&&clipEvs(st.clip).length) rep.tracksDropped.push(trName(st,i)); });
+  for(const [i,j] of pairs){
+    const st=c.tracks[i], t=tt[j], ti={...base,...t,paste:same?[...new Set([tk(j),st.clip.kind])]:[tk(j)]};
+    if(same&&st.clip.kind==='drums'&&tk(j)!=='drums') ti.lanes=st.clip.lanes;
+    const cl={...st.clip}; if(cl.native&&!(ctx.devId&&clipSameDev(cl.native.device,ctx.devId))) delete cl.native;
+    const f=clipFit(cl,ti,{devId:ctx.devId,byOrder:ctx.byOrder,matchLen:ctx.matchLen,same});
+    if(f.err){ if(clipEvs(st.clip).length||f.err==='nolanes') rep.tracksDropped.push(trName(st,i)); continue; }
+    const r=f.report; ['cut','shortened','padded','moved','merged','folded'].forEach(k=>{ rep[k]+=r[k]; }); rep.tiled=Math.max(rep.tiled,r.tiled);
+    if(!rep.lenIgn&&r.lenIgn) rep.lenIgn=r.lenIgn; r.dropped.forEach(d=>addDropped(d.kind,d.n));
+    r.lanesUnplaced.forEach(n=>rep.lanesUnplaced.push(trName(st,i)+': '+n));
+    out.push({slot:j,name:st.name,kind:st.clip.kind,role:st.role||'',clip:f.clip}); count+=f.count;
+  }
+  if(!out.length) return {err:'multinone',names:rep.tracksDropped.slice()};
+  rep.tracksKept=tt.length-out.length;
+  const res={format:'patchkamer-clip',formatVersion:1,kind:'multi',name:c.name,length:Math.max(...out.map(o=>o.clip.length)),grid:out[0].clip.grid,tracks:out};
+  if(c.source) res.source={...c.source};
+  if(c.native&&ctx.devId&&clipSameDev(c.native.device,ctx.devId)) res.native={device:ctx.devId,data:JSON.parse(JSON.stringify(c.native.data))};
+  return {clip:res,report:rep,count,nTracks:out.length};
+} PK.clipFitMulti=clipFitMulti;
+
 // ---- meldingen ----
-function clipKindText(k){ return PK.pkt('m.clip_k_'+(k==='drums'?'drums':'notes')); }
+function clipKindText(k){ return PK.pkt('m.clip_k_'+(k==='drums'?'drums':k==='multi'?'multi':'notes')); }
+// de soorten die een doel kan ontvangen: paste, plus de soorten van zijn sporen als het multi neemt
+function clipPasteKinds(inf){ const s=new Set(Array.isArray(inf&&inf.paste)?inf.paste:[]); if(s.has('multi')&&Array.isArray(inf.tracks)) inf.tracks.forEach(t=>{ if(t&&(t.kind==='drums'||t.kind==='notes')) s.add(t.kind); }); return s; } PK.clipPasteKinds=clipPasteKinds;
 function clipAcceptText(inf){ const p=inf&&Array.isArray(inf.paste)?inf.paste:[]; return p.length?p.map(clipKindText).join(' / '):PK.pkt('m.clip_niets'); }
 function clipLabel(r,inf){ return inf&&inf.name?r.def.name+' · '+inf.name:r.def.name; }
 function clipErrText(f,c,r,inf){
   const lbl=clipLabel(r,inf);
   if(f.err==='kind') return PK.pkt('m.clip_niet_soort',clipKindText(c.kind),lbl,clipAcceptText(inf));
   if(f.err==='nolanes') return PK.pkt('m.clip_geen_banen',lbl);
+  if(f.err==='multi1') return PK.pkt('m.clip_multi_enkel',f.n==null?(c.tracks?c.tracks.length:0):f.n,lbl);
+  if(f.err==='notracks') return PK.pkt('m.clip_geen_sporen',lbl);
+  if(f.err==='multinone') return PK.pkt('m.clip_geen_spoor_past',f.names&&f.names.length?f.names.slice(0,6).join(', '):'-');
   if(f.err==='nomatch') return PK.pkt('m.clip_geen_baan_past',f.names&&f.names.length?f.names.slice(0,6).join(', '):'-');
   return PK.pkt('m.clip_kan_niets',lbl);
 }
 function clipSrcErr(e){ return e.err==='newer'?PK.pkt('m.clip_nieuwer'):e.err==='big'?PK.pkt('m.clip_te_groot'):e.err==='kind'?PK.pkt('m.clip_onbekende_soort',e.kind||'?'):PK.pkt('m.clip_ongeldig'); }
-function clipCountText(c,n){ return c.kind==='drums'?PK.pktp('m.clip_n_slagen',n!==1,n):PK.pktp('m.clip_n_noten',n!==1,n); }
+function clipCountText(c,n){ if(c.kind==='multi') return PK.pktp('m.clip_n_sporen',c.tracks.length!==1,c.tracks.length)+', '+PK.pktp('m.clip_n_gebeurt',n!==1,n); return c.kind==='drums'?PK.pktp('m.clip_n_slagen',n!==1,n):PK.pktp('m.clip_n_noten',n!==1,n); }
 function clipBars(T){ const b=T/192; const v=Math.round(b*100)/100; return PK.pktp('m.clip_n_maten',v!==1,String(v).replace('.',PK.PK_LANG==='nl'?',':'.')); }
 function clipReportText(rep){
   const p=(rep.extra||[]).slice();
@@ -176,6 +251,8 @@ function clipReportText(rep){
   if(rep.merged) p.push(PK.pktp('m.clip_r_samengevallen',rep.merged!==1,rep.merged));
   if(rep.folded) p.push(PK.pktp('m.clip_r_octaaf',rep.folded!==1,rep.folded));
   rep.dropped.forEach(d=>{ p.push(d.kind==='mono'?PK.pktp('m.clip_r_mono',d.n!==1,d.n):d.kind==='range'?PK.pktp('m.clip_r_bereik',d.n!==1,d.n):d.kind==='poly'?PK.pkt('m.clip_r_poly'):d.kind==='prob'?PK.pktp('m.clip_r_kans',d.n!==1,d.n):PK.pktp('m.clip_r_ratchet',d.n!==1,d.n)); });
+  if(rep.tracksDropped&&rep.tracksDropped.length){ const l=rep.tracksDropped; p.push(PK.pkt('m.clip_r_sporen_weg',l.slice(0,6).join(', ')+(l.length>6?'…':''))); }
+  if(rep.tracksKept) p.push(PK.pktp('m.clip_r_sporen_blijven',rep.tracksKept!==1,rep.tracksKept));
   if(rep.lanesUnplaced.length){ const l=rep.lanesUnplaced; p.push(PK.pkt('m.clip_r_banen',l.slice(0,6).join(', ')+(l.length>6?'…':''))); }
   return p.join('; ');
 } PK.clipReportText=clipReportText;
@@ -186,16 +263,23 @@ const clipHasApi=i=>!!i&&typeof i.clipInfo==='function'&&typeof i.getClip==='fun
 function clipInfoOf(id){ const r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return null; try{ const i=r.inst.clipInfo(); return i&&typeof i==='object'?i:null; }catch(e){ return null; } }
 
 // ---- kopiëren ----
-function clipCopy(id){
+function clipCopy(id,o){
   const r=PK.Host.devices.get(id); if(!r||!clipHasApi(r.inst)) return false; const inf=clipInfoOf(id), lbl=clipLabel(r,inf);
   if(!inf||!(Array.isArray(inf.copy)&&inf.copy.length)){ PK.status(PK.pkt('m.clip_niet_kopieerbaar',lbl),true); return false; }
-  let raw=null; try{ raw=r.inst.getClip(); }catch(e){ raw=null; }
+  // alle sporen: bij Shift-klik of de menuknop, of altijd als het apparaat alleen multi geeft; anders de gewone aanroep (zonder argument)
+  const multi=inf.copy.includes('multi')&&((o&&o.multi)||!inf.copy.some(k=>k!=='multi'));
+  let raw=null; try{ raw=multi?r.inst.getClip({kind:'multi'}):r.inst.getClip(); }catch(e){ raw=null; }
   if(!raw){ PK.status(PK.pkt('m.clip_niets_te_kopieren',lbl),true); return false; }
   const s=clipClean(raw); if(s.err){ PK.status(PK.pkt('m.clip_kopie_ongeldig',lbl),true); return false; }
-  const json=JSON.stringify(s.clip); CL.mem={json,clip:s.clip,from:id};
+  let json=JSON.stringify(s.clip), stripped=false;
+  if(json.length>CLIP_MAXTEXT){   // te groot voor het systeemklembord: eerst de apparaat-eigen gegevens (native) weglaten
+    const w={...s.clip}; delete w.native; if(w.tracks) w.tracks=w.tracks.map(t=>{ const c={...t.clip}; delete c.native; return {...t,clip:c}; });
+    const j2=JSON.stringify(w); if(j2.length>CLIP_MAXTEXT){ PK.status(PK.pkt('m.clip_kopie_te_groot',lbl),true); return false; }
+    s.clip=w; json=j2; stripped=true; }
+  CL.mem={json,clip:s.clip,from:id};
   try{ if(navigator.clipboard&&navigator.clipboard.writeText){ const p=navigator.clipboard.writeText(json); if(p&&p.catch) p.catch(()=>{}); } }catch(e){}
-  const n=(s.clip.kind==='notes'?s.clip.notes:s.clip.hits).length;
-  PK.status(PK.pkt('m.clip_gekopieerd',s.clip.name||lbl,clipCountText(s.clip,n),clipBars(s.clip.length)));
+  const n=clipEvTotal(s.clip);
+  PK.status(PK.pkt('m.clip_gekopieerd',s.clip.name||lbl,clipCountText(s.clip,n),clipBars(s.clip.length))+(stripped?' ('+PK.pkt('m.clip_kopie_zonder_native')+')':''));
   clipRefreshAll(); return true;
 } PK.clipCopy=clipCopy;
 
@@ -250,10 +334,11 @@ function clipRefresh(id){
   const r=PK.Host.devices.get(id); if(!r||!r._clipBtns) return; const inf=clipInfoOf(id), lbl=clipLabel(r,inf), b=r._clipBtns;
   const cp=!!(inf&&Array.isArray(inf.copy)&&inf.copy.length);
   b.copy.setAttribute('aria-disabled',cp?'false':'true'); b.copy.classList.toggle('dis',!cp);
-  b.copy.title=cp?PK.pkt('m.clip_t_kopieer',lbl):PK.pkt('m.clip_niet_kopieerbaar',lbl);
+  const both=cp&&inf.copy.includes('multi')&&inf.copy.some(k=>k!=='multi');
+  b.copy.title=cp?PK.pkt('m.clip_t_kopieer',lbl)+(both?' · '+PK.pkt('m.clip_t_kopieer_alle'):''):PK.pkt('m.clip_niet_kopieerbaar',lbl);
   let why='';
   if(!inf||!(Array.isArray(inf.paste)&&inf.paste.length)) why=PK.pkt('m.clip_kan_niets',lbl);
-  else if(CL.mem&&!inf.paste.includes(CL.mem.clip.kind)) why=clipErrText({err:'kind'},CL.mem.clip,r,inf);
+  else if(CL.mem&&!inf.paste.includes(CL.mem.clip.kind)) why=clipErrText({err:CL.mem.clip.kind==='multi'?'multi1':'kind'},CL.mem.clip,r,inf);
   b.paste.setAttribute('aria-disabled',why?'true':'false'); b.paste.classList.toggle('dis',!!why);
   b.paste.title=why?PK.pkt('m.clip_niet_geplakt',why):PK.pkt('m.clip_t_plak',lbl);
   if(b.more) b.more.title=PK.pkt('m.clip_t_opties',lbl);
@@ -264,7 +349,7 @@ function clipBtns(id,inst){
   if(!clipHasApi(inst)) return [];
   const mk=(cls,txt)=>{ const b=document.createElement('button'); b.type='button'; b.className='clipbtn '+cls; b.textContent=PK.pkt(txt); ['pointerenter','focus','pointerdown'].forEach(ev=>b.addEventListener(ev,()=>clipRefresh(id))); return b; };
   const bc=mk('clipcopy','m.clip_kopieer'), bp=mk('clippaste','m.clip_plak');
-  bc.onclick=e=>{ e.stopPropagation(); PK.select(id); clipCopy(id); };
+  bc.onclick=e=>{ e.stopPropagation(); PK.select(id); clipCopy(id,{multi:e.shiftKey}); };
   bp.onclick=e=>{ e.stopPropagation(); PK.select(id); clipPaste(id,{direct:e.shiftKey}); };
   const bm=PK.clipMoreBtn?PK.clipMoreBtn(id,bp):null;   // pijl en rechtsklikmenu met plakopties (clip-menu.js)
   const hold={copy:bc,paste:bp,more:bm};
@@ -298,5 +383,5 @@ function clipInit(){
 } PK.clipInit=clipInit;
 
 PK.clipInfoOf=clipInfoOf;
-PK.clip={clean:clipClean,fit:clipFit,sameDev:clipSameDev,fromText:clipFromText,reportText:clipReportText,copy:clipCopy,paste:clipPaste,undo:clipUndo,canon:clipCanon};
+PK.clip={clean:clipClean,fit:clipFit,fitMulti:clipFitMulti,pasteKinds:clipPasteKinds,sameDev:clipSameDev,fromText:clipFromText,reportText:clipReportText,copy:clipCopy,paste:clipPaste,undo:clipUndo,canon:clipCanon};
 })(window.__PK);

@@ -1,4 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Patchkamer contract v1.24: klembord voor het bewerkte patroon. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` met de soort `multi` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, dus 12 per stap):
+//          het patroon dat je bewerkt (`curPat`) is een clip met 12 sporen. Een drumtrack is een `drums`-spoor met één baan (type en GM-nummer volgen de machine), een synthtrack een `notes`-spoor; de lengte van een track (1 tot 16 stappen) is de lengte
+//          van zijn spoor (polymetrie blijft). `micro` wordt tikken (hoogstens 3), `retrig` ratchet, de condities 25%, 50% en 75% kans; p-locks, de overige condities, de klankinstellingen en alles van een track gaan alleen mee via `native` (het hele patroon): tussen
+//          twee exemplaren van Groovebox 12 is plakken dus verliesvrij. Zonder `native` schrijft plakken alleen de stappen en de lengte van de toegewezen tracks (stappen, p-locks en condities van die tracks worden eerst gewist); klank en parameters blijven staan.
+//          `curPat` zit niet in `getState()`; Ongedaan maken van de host zet de state terug met `setState`, dat het patroon normaal op 1 zet: `setClip` onthoudt daarom (patroon, tekst van de state ervoor) en `loadSong` houdt de patroonkeuze alleen als precies
+//          die tekst terugkomt. `getState`, `setState`, het geluid, tunes en presets zijn verder gelijk aan 1.12.0. Niet beluisterd.
 // 1.12.0 — Regelaars en trigpads herkenbaar voor skins (contract v1.22, additief): de 16 trigs krijgen via host.ui.adopt rol pad, groep trigs en id trig.1 tot trig.16, zodat een skin hun vorm, maat, kleur en ledje kiest (eigen .on-, .cur-, .sel-, .lock-klassen en het ledje in de knop blijven van het apparaat);
 //          alle schuiven krijgen als id de sleutel van de state of params() (g.vol, g.swing, g.fxDrive, ..., en per pagina de knoppen als syn.tun, flt.cut, ...), rol param en een groep (global, fx, track, step, pattern, de pagina). Een oudere host heeft geen adopt: het apparaat blijft dan zoals het was.
 //          Geluid, getState(), presets, tunes en uiterlijk zonder skin ongewijzigd.
@@ -34,13 +40,13 @@ const TXT = {
     name: 'Naam', exportSum: 'Exporteren / importeren als tekst', toText: 'Naar tekst', copyText: 'Kopieer', import: 'Importeer',
     stepAria: n => `stap ${n}`, lenWord: 'lengte', lockStep: n => `P-lock stap ${n}: knoppen gelden alleen voor deze stap (dubbelklik = lock wissen)`, lockPick: 'P-lock: kies een stap', stepSel: n => `stap ${n} geselecteerd`,
     patSwing: 'Pat. swing', trkSwing: 'Trackswing', swingTitle: 'extra swing op de oneven zestienden, bovenop Swing en de swing van de host (dubbelklik: 0)',
-    importFail: 'Kon deze tekst niet lezen als song.', multi: 'Losse uit', songNight: 'Nachtstad', songBasic: 'Basis' },
+    importFail: 'Kon deze tekst niet lezen als song.', clipPat: 'Patroon', clipBad: 'Geen geldige clip.', clipKind: 'De soort past niet: dit apparaat neemt een patroon met sporen (multi).', clipNoTrack: 'Geen enkel spoor van de clip past op een track van dit patroon.', clipGone: 'Het apparaat is nog niet geladen of verwijderd.', multi: 'Losse uit', songNight: 'Nachtstad', songBasic: 'Basis' },
   en: { lockTitle: 'Parameter locks: pick a step and turn a knob', length: 'Length', note: 'Note', off: 'off', on: 'on', patSong: 'Patterns &amp; song', chain: 'Chain', copy: 'Copy →', clearTrigs: 'Clear trigs', random: 'Random',
     chainNote: 'Chain = pattern numbers in order, e.g. <code>1 1 2 3</code>.', fxSends: 'FX block &amp; sends', reverb: 'Reverb', fxBlock: 'FX block', songs: 'Songs', demoNight: 'Demo: Night City', demoBasic: 'Demo: Basic',
     name: 'Name', exportSum: 'Export / import as text', toText: 'To text', copyText: 'Copy', import: 'Import',
     stepAria: n => `step ${n}`, lenWord: 'length', lockStep: n => `P-lock step ${n}: knobs only apply to this step (double-click = clear lock)`, lockPick: 'P-lock: pick a step', stepSel: n => `step ${n} selected`,
     patSwing: 'Pat. swing', trkSwing: 'Track swing', swingTitle: 'extra swing on the odd sixteenths, on top of Swing and the host swing (double-click: 0)',
-    importFail: 'Could not read this text as a song.', multi: 'Separate outs', songNight: 'Night City', songBasic: 'Basic' },
+    importFail: 'Could not read this text as a song.', clipPat: 'Pattern', clipBad: 'Not a valid clip.', clipKind: 'The kind does not fit: this device takes a pattern with tracks (multi).', clipNoTrack: 'No track of the clip fits a track of this pattern.', clipGone: 'The device is not loaded yet or was removed.', multi: 'Separate outs', songNight: 'Night City', songBasic: 'Basic' },
 };
 const __CSS = `
 /* Layout: one hardware face. Header strip, then a three-column deck — track column, work surface (display · knobs · trig keys · step options), side column (patterns · FX · songs). Dark, single committed look. */
@@ -234,7 +240,7 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 1262 },
@@ -686,12 +692,78 @@ function paintAll(){paintTracks(); paintPages(); paintKnobs(); paintTrigs(); pai
 
 // ---------- songs ----------
 const songState=()=>({v:1,G:{...G},pats});
-function loadSong(st){cleanG(st.G); if(Array.isArray(st.pats)) pats=Array.from({length:NPAT},(_,i)=>st.pats[i]?cleanPattern(st.pats[i]):newPattern()); curPat=0; selStep=-1; paintGlobals(); paintAll(); applyGlobal(); for(let k=0;k<NT;k++) applyTrack(k);}
+let clipBack=null;   // klembord: (patroon, state-tekst vóór de laatste plak), zodat Ongedaan maken van de host de patroonkeuze behoudt
+function loadSong(st){const keep=clipBack&&clipBack.json===JSON.stringify(st)?clipBack.pat:0; clipBack=null; cleanG(st.G); if(Array.isArray(st.pats)) pats=Array.from({length:NPAT},(_,i)=>st.pats[i]?cleanPattern(st.pats[i]):newPattern()); curPat=keep; selStep=-1; paintGlobals(); paintAll(); applyGlobal(); for(let k=0;k<NT;k++) applyTrack(k);}
 $('songExport').onclick=()=>{$('songText').value=JSON.stringify({name:$('songName').value.trim()||'Song',t:Date.now(),s:songState()});};
 $('songCopy').onclick=()=>{const ta=$('songText'); if(!ta.value) $('songExport').onclick(); navigator.clipboard.writeText(ta.value).catch(()=>{ta.focus(); ta.select();});};
 $('songImport').onclick=()=>{try{const j=JSON.parse($('songText').value); if(!j.s||!j.s.pats) throw 0; loadSong(j.s); if(j.name) $('songName').value=j.name; $('songText').value='';}catch(e){$('songText').value=TX.importFail+'\n\n'+$('songText').value;}};
 $('demoNacht').onclick=()=>{loadSong(demoNight()); $('songName').value=TX.songNight; host.setTempo&&host.setTempo(G.bpm);};
 $('demoBasis').onclick=()=>{loadSong(demoBasis()); $('songName').value=TX.songBasic; host.setTempo&&host.setTempo(G.bpm);};
+// ---------- klembord (contract v1.24, §13d): het bewerkte patroon (curPat) als clip van de soort 'multi' ----------
+// 12 sporen = 12 tracks. Tijd in tikken: 12 per zestiende, dus een stap is 12 tikken en een track van len stappen is len × 12 tikken lang (polymetrie blijft).
+// Drumtrack = `drums`-spoor met één baan (type en GM-nummer van de machine), synthtrack = `notes`-spoor. `native` (het hele patroon, mét klank) alleen voor Groovebox 12 zelf.
+const CLIP_ID='nl.patchkamer.groovebox12', CLIP_VER='1.13.0', CT=12;
+const CLIP_TYPE={bd:'kick',sd:'snare',rs:'rim',cp:'clap',cy:'ride',cb:'cowbell'}, CLIP_NOTE={bd:36,sd:38,rs:37,cp:39,cy:51,cb:56};
+const clipSynth=tr=>!!MACH[tr.machine].synth, clipClosed=tr=>/closed/i.test(tr.name)||tr.syn.dec<0.15;
+let clipGone=false;
+function clipLane(tr,i){ const hh=tr.machine==='hh'; return {id:'t'+(i+1),name:String(tr.name).slice(0,40),type:hh?(clipClosed(tr)?'closedhat':'openhat'):(CLIP_TYPE[tr.machine]||''),note:hh?(clipClosed(tr)?42:46):(CLIP_NOTE[tr.machine]!==undefined?CLIP_NOTE[tr.machine]:-1)}; }
+// de gebeurtenissen van een track in tikken; stappen achter de tracklengte klinken niet en blijven in native
+function clipEvents(tr){ const L=tr.len*CT, syn=clipSynth(tr), out=[];
+  for(let k=0;k<tr.len;k++){ const st=tr.steps[k]; if(!st.on) continue;
+    const t=clamp(Math.round(k*CT+st.micro*CT),0,L-1), acc=st.vel>0.9, e={t,vel:acc?1:Math.max(0.01,Math.min(1,st.vel))}; if(acc) e.acc=true;
+    const pr=st.cond===9?0.25:st.cond===10?0.5:st.cond===11?0.75:1; if(pr<1) e.prob=pr; if(st.retrig>1) e.ratchet=st.retrig;
+    if(syn){ e.n=st.note; e.len=Math.max(1,Math.min(CT,L-t)); } else e.lane=0;
+    out.push(e); }
+  return out.sort((a,b)=>a.t-b.t); }
+function clipTrack(tr,i){ const syn=clipSynth(tr), L=tr.len*CT, ev=clipEvents(tr);
+  const c={format:'patchkamer-clip',formatVersion:1,kind:syn?'notes':'drums',name:String(tr.name).slice(0,40),length:L,grid:ev.some(e=>e.t%CT)?64:16,source:{device:CLIP_ID,name:'Groovebox 12',version:CLIP_VER,scheme:'gm'}};
+  if(syn) c.notes=ev; else { c.lanes=[clipLane(tr,i)]; c.hits=ev; }
+  return c; }
+const clipPatName=()=>(TX.clipPat+' '+(curPat+1)).slice(0,40);
+function clipInfo(){ try{ if(clipGone) return null; const P0=P();
+  return {name:clipPatName(),copy:['multi'],paste:['multi'],length:{min:CT,max:STEPS*CT,step:CT,current:Math.max(...P0.tracks.map(t=>t.len))*CT,shared:false},grid:[16,32,64],poly:1,range:[0,127],scheme:'gm',vel:'continuous',prob:true,ratchet:true,maxEvents:STEPS,
+    tracks:P0.tracks.map((tr,i)=>{ const syn=clipSynth(tr), o={id:'t'+(i+1),name:String(tr.name).slice(0,40),kind:syn?'notes':'drums',role:tr.machine,length:{min:CT,max:STEPS*CT,step:CT,current:tr.len*CT,shared:false}}; if(!syn) o.lanes=[clipLane(tr,i)]; return o; })};
+} catch(e){ return null; } }
+function getClip(){ try{ if(clipGone) return null; const P0=P(), tracks=P0.tracks.map((tr,i)=>({slot:i,name:String(tr.name).slice(0,40),kind:clipSynth(tr)?'notes':'drums',role:tr.machine,clip:clipTrack(tr,i)}));
+  return JSON.parse(JSON.stringify({format:'patchkamer-clip',formatVersion:1,kind:'multi',name:clipPatName(),length:Math.max(...tracks.map(t=>t.clip.length)),grid:tracks.some(t=>t.clip.grid===64)?64:16,source:{device:CLIP_ID,name:'Groovebox 12',version:CLIP_VER,scheme:'gm'},tracks,native:{device:CLIP_ID,data:{pattern:P0}}}));
+} catch(e){ return null; } }
+// een spoorclip uit onbetrouwbare invoer als genormaliseerde gebeurtenissen (zelfde vorm als clipEvents, voor de vergelijking met native)
+function clipParse(tc,syn){ const L=int(tc.length,1,12288,CT), isn=x=>typeof x==='number'&&Number.isFinite(x), src=syn?tc.notes:tc.hits, out=[]; let bad=0;
+  if(!Array.isArray(src)) return {L,out,bad:0};
+  for(const x of src.slice(0,4096)){ if(!x||typeof x!=='object'||!isn(x.t)||x.t<0||x.t>=L){ bad++; continue; }
+    if(syn){ if(!isn(x.n)){ bad++; continue; } } else if(x.lane!==0){ bad++; continue; }
+    const acc=x.acc===true, e={t:Math.round(x.t),vel:acc?1:num(x.vel,0.01,1,0.8),prob:num(x.prob,0,1,1),ratchet:int(x.ratchet,1,8,1)}; if(syn) e.n=int(x.n,0,127,48); out.push(e); }
+  bad+=Math.max(0,(src.length)-4096); return {L,out,bad}; }
+const clipPrint=(L,ev)=>JSON.stringify([L,ev.map(e=>[e.t,e.n===undefined?0:e.n,Math.round(e.vel*1e6),Math.round((e.prob===undefined?1:e.prob)*1e6),e.ratchet===undefined?1:e.ratchet]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2]||a[3]-b[3]||a[4]-b[4])]);
+function setClip(clip){ try{
+  if(clipGone) return {ok:false,reason:TX.clipGone};
+  if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1)) return {ok:false,reason:TX.clipBad};
+  if(clip.kind!=='multi') return {ok:false,reason:TX.clipKind};
+  const entries=new Map();
+  for(const x of (Array.isArray(clip.tracks)?clip.tracks.slice(0,64):[])){ if(!x||typeof x!=='object'||!Number.isInteger(x.slot)||x.slot<0||x.slot>=NT) continue; const tc=x.clip;
+    if(!tc||typeof tc!=='object'||Array.isArray(tc)||tc.format!=='patchkamer-clip'||(tc.kind!=='notes'&&tc.kind!=='drums')||typeof tc.length!=='number'||!Number.isFinite(tc.length)||tc.length<1) continue; entries.set(x.slot,tc); }
+  if(!entries.size) return {ok:false,reason:TX.clipBad};
+  const before=JSON.stringify(songState()), cur=P();
+  let np=null, dropped=0;
+  // een clip van Groovebox 12 zelf, niet aangepast: het hele patroon komt exact terug (klank, p-locks, condities)
+  const nd=clip.native&&typeof clip.native==='object'&&clip.native.device===CLIP_ID&&clip.native.data&&typeof clip.native.data==='object'?clip.native.data.pattern:null;
+  if(nd&&typeof nd==='object'){ const cand=cleanPattern(nd); let all=entries.size===NT;
+    for(let i=0;all&&i<NT;i++){ const tc=entries.get(i), tr=cand.tracks[i], syn=clipSynth(tr); if(!tc||tc.kind!==(syn?'notes':'drums')){ all=false; break; }
+      const p=clipParse(tc,syn); if(p.bad||clipPrint(p.L,p.out)!==clipPrint(tr.len*CT,clipEvents(tr).map(e=>({...e,vel:e.vel,prob:e.prob===undefined?1:e.prob,ratchet:e.ratchet===undefined?1:e.ratchet})))) all=false; }
+    if(all) np=cand; }
+  if(!np){ np=JSON.parse(JSON.stringify(cur)); let used=0;
+    entries.forEach((tc,slot)=>{ const tr=np.tracks[slot], syn=clipSynth(tr); if(tc.kind!==(syn?'notes':'drums')) { dropped++; return; }
+      const p=clipParse(tc,syn), n=clamp(Math.ceil(p.L/CT),1,STEPS); dropped+=p.bad; used++;
+      tr.len=n; tr.steps=Array.from({length:STEPS},newStep);
+      for(const e of p.out){ if(e.t>=n*CT){ dropped++; continue; } const k=Math.min(n-1,Math.round(e.t/CT)), o=tr.steps[k];
+        if(o.on){ dropped++; if(e.vel<=o.vel) continue; }
+        const micro=clamp(Math.round((e.t-k*CT)/CT*8)/8,-0.25,0.25), cond=e.prob<1?(e.prob<0.375?9:e.prob<0.625?10:11):0;
+        tr.steps[k]={on:1,vel:e.vel,note:syn?e.n:48,cond,retrig:e.ratchet,micro,lock:{}}; } });
+    if(!used) return {ok:false,reason:TX.clipNoTrack}; np=cleanPattern(np); }
+  if(JSON.stringify(np)===JSON.stringify(cur)) return {ok:true,...(dropped?{dropped}:{})};
+  clipBack={pat:curPat,json:before}; pats[curPat]=np; selStep=-1; paintAll(); for(let k=0;k<NT;k++) applyTrack(k);
+  return {ok:true,...(dropped?{dropped}:{})};
+} catch(e){ return {ok:false,reason:TX.clipBad}; } }
 paintGlobals(); paintAll(); $('songName').value=TX.songNight;
 build(); for(let k=0;k<NT;k++) applyTrack(k);
 return {
@@ -700,9 +772,10 @@ return {
   params:modParams, modulate:modulateAll,
   // contract v1.5: elke track apart, na level en pan (s.pan), vóór de sends en het FX-blok
   bundle(){ return {label:TX.multi, channels:A?A.tr.map((s,i)=>({id:'t'+(i+1), name:`${i+1} · ${P().tracks[i].name}`, node:s.pan})):[]}; },
+  clipInfo, getClip, setClip,
   getState(){ return JSON.parse(JSON.stringify(songState())); },
   setState(s){ if(s&&typeof s==='object') loadSong(JSON.parse(JSON.stringify(s))); },
-  destroy(){ running=false; },
+  destroy(){ running=false; clipGone=true; },
 };
 
     }
@@ -724,6 +797,10 @@ return {
       // contract v1.3 — twaalf sporen, één per track
       params() { return api ? api.params() : []; },
       modulate(o) { if (api) { try { api.modulate(o); } catch (e) { console.warn('Groovebox 12', e); } } else pendingMod = o; },
+      // klembord (contract v1.24): het bewerkte patroon met zijn 12 tracks (kind multi)
+      clipInfo() { return api ? api.clipInfo() : null; },
+      getClip() { return api ? api.getClip() : null; },
+      setClip(c) { return api ? api.setClip(c) : { ok: false, reason: TX.clipGone }; },
       getState() { return api ? api.getState() : (pending || {}); },
       setState(s) { if (api) api.setState(s); else pending = s; },
       destroy() {

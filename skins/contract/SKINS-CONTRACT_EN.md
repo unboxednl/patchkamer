@@ -4,7 +4,7 @@ This document is the complete, self-contained instruction for building a **skin*
 
 _This contract exists in two languages: `SKINS-CONTRACT_NL.md` (Dutch, the source text) and `SKINS-CONTRACT_EN.md` (English). Both have the same version and the same content; if they differ, the Dutch text applies. The validator speaks both languages too (`--lang nl|en`)._
 
-_This contract is a contract of its own next to the device contract (`../../contract/PATCHKAMER-CONTRACT_EN.md`, now v1.22) and has its own version number. A skin asks nothing of a device: no change to devices is needed._
+_This contract is a contract of its own next to the device contract (`../../contract/PATCHKAMER-CONTRACT_EN.md`, now v1.24) and has its own version number. A skin asks nothing of a device: no change to devices is needed._
 
 | Version | What was added |
 |---|---|

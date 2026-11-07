@@ -18,6 +18,19 @@ function clipBarSet(on){ mem=on?'1':'0'; try{ localStorage.setItem(KEY,mem); }ca
 function clipOptsPrep(c,o){
   o=o||{}; const r={clip:c,notes:[],byOrder:false,matchLen:false};
   const oct=Math.max(-OCT_MAX,Math.min(OCT_MAX,Math.round(+o.octave||0)));
+  if(c.kind==='multi'){   // octaaf op alle notes-sporen, uitlijnen op volgorde op alle drums-sporen
+    const hasN=c.tracks.some(t=>t.clip.kind==='notes'), hasD=c.tracks.some(t=>t.clip.kind==='drums');
+    if(oct){
+      if(!hasN) r.notes.push(PK.pkt('m.clip_o_oct_drums'));
+      else { let out=0, tot=0, kept=0;
+        const tracks=c.tracks.map(t=>{ if(t.clip.kind!=='notes') return t; const keep=[]; t.clip.notes.forEach(e=>{ tot++; const n=e.n+oct*12; if(n<0||n>127) out++; else keep.push({...e,n}); }); kept+=keep.length; return {...t,clip:{...t.clip,notes:keep}}; });
+        if(!kept&&tot) return {err:PK.pkt('m.clip_o_oct_alles',(oct>0?'+':'−')+Math.abs(oct))};
+        r.clip={...c,tracks}; r.notes.push(PK.pkt('m.clip_o_oct_gedaan',(oct>0?'+':'−')+Math.abs(oct)));
+        if(out) r.notes.push(PK.pktp('m.clip_o_oct_buiten',out!==1,out)); }
+    }
+    if(o.byOrder){ if(hasD) r.byOrder=true; else r.notes.push(PK.pkt('m.clip_o_volgorde_noten')); }
+    r.matchLen=!!o.matchLen; return r;
+  }
   if(oct){
     if(c.kind!=='notes') r.notes.push(PK.pkt('m.clip_o_oct_drums'));
     else {
@@ -46,12 +59,14 @@ function menuOpen(id,anchor,btn){
   const m=document.createElement('div'); m.className='clipmenu'; m.setAttribute('role','dialog'); m.setAttribute('aria-label',PK.pkt('m.clip_o_titel')); m._id=id; m._btn=btn;
   const mkBtn=(txt,cls,fn,label)=>{ const b=document.createElement('button'); b.type='button'; b.className=cls||''; b.textContent=txt; if(label) b.setAttribute('aria-label',label); b.onclick=e=>{ e.stopPropagation(); fn(); }; return b; };
   const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=PK.pkt('m.clip_o_voor',r.def.name+(inf&&inf.name?' · '+inf.name:'')); m.appendChild(ttl);
+  // alle sporen kopiëren (alleen zinvol als de gewone Kopieer iets anders pakt)
+  if(inf&&Array.isArray(inf.copy)&&inf.copy.includes('multi')&&inf.copy.some(k=>k!=='multi')){ const rc=document.createElement('div'); rc.className='row'; rc.appendChild(mkBtn(PK.pkt('m.clip_o_kopieer_alle'),'copyall',()=>{ menuClose(true); PK.select(id); PK.clipCopy(id,{multi:true}); })); m.appendChild(rc); }
   // octaafstapper
   const row=document.createElement('div'); row.className='row oct'; const lab=document.createElement('span'); lab.textContent=PK.pkt('m.clip_o_octaaf'); const val=document.createElement('output'); val.setAttribute('aria-live','polite');
   const show=()=>{ val.textContent=st.octave?(st.octave>0?'+':'−')+Math.abs(st.octave):'0'; dn.disabled=st.octave<=-OCT_MAX; up.disabled=st.octave>=OCT_MAX; };
   const dn=mkBtn('−','',()=>{ st.octave=Math.max(-OCT_MAX,st.octave-1); show(); },PK.pkt('m.clip_o_oct_lager')), up=mkBtn('+','',()=>{ st.octave=Math.min(OCT_MAX,st.octave+1); show(); },PK.pkt('m.clip_o_oct_hoger'));
   row.append(lab,dn,val,up); m.appendChild(row); show();
-  const noNotes=!paste.includes('notes'), noDrums=!paste.includes('drums');
+  const kinds=PK.clipPasteKinds(inf), noNotes=!kinds.has('notes'), noDrums=!kinds.has('drums');
   if(noNotes){ dn.disabled=up.disabled=true; row.classList.add('dis'); row.title=PK.pkt('m.clip_o_alleen_noten'); }
   const chk=(key,txt,dis,why)=>{ const l=document.createElement('label'); const c=document.createElement('input'); c.type='checkbox'; c.onchange=()=>{ st[key]=c.checked; }; const s=document.createElement('span'); s.textContent=txt; l.append(c,s); if(dis){ c.disabled=true; l.classList.add('dis'); l.title=why; } m.appendChild(l); return c; };
   chk('byOrder',PK.pkt('m.clip_o_volgorde'),noDrums,PK.pkt('m.clip_o_alleen_drums'));

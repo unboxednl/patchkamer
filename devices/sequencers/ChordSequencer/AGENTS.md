@@ -15,7 +15,7 @@ Het verschil met `Pulse Drums` (drumcomputer, geeft geluid): Chord Sequencer is 
 | Naam | `Chord Sequencer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Transpositie`, `Spoor A` … `Spoor D`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `transpose` (Transpose) en `live` (Live, voor een toetsenbord of andere notenbron), modulatie-ingang `mod`, eventuitgangen `a`, `b`, `c`, `d` (Track A–D); geen audio; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.17 (apparaatversie 1.15.0) |
+| Contract | v1.24 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Sequencer, `nl.patchkamer.puls`, stond bij de synths). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -256,6 +256,18 @@ Wat `setClip` doet: noten met `t` buiten de lengte vallen weg, `t` en `len` word
 - `setState` stuurt sinds 1.15.0 alleen nog `allnotesoff` als de klok loopt of er live noten vastgehouden worden (bij stilstand deed de transportstop dat al). Anders telt de validator die gebeurtenis bij `setClip` als een eigen gebeurtenis.
 
 Getest: de rondreis `setClip(getClip())` laat `getState()` gelijk voor alle vier de sporen (akkoord, arpeggio, pulse) en voor een notenspoor van 3 maten op 1/32; ongeldige en extreme clips (`NaN`, lengte 1e9, 5000 noten, verkeerde soort, `null`) geven geen fout en laten de state intact; spoor C ⇄ Step Sequencer en Wanderer → Chord Sequencer in de echte host (nl en en), ongedaan maken zet de state exact terug. Oud (1.14.0) en nieuw geven dezelfde gebeurtenissen en `getState` in drie testtoestanden (96 klokstappen).
+
+
+## Klembord: de hele scène kopiëren en plakken (sinds 1.16.0, contract v1.24)
+
+Naast de spoorclip geeft het apparaat de actieve scène (vier sporen A tot D) als één clip van de soort `multi` (contract §13d). De host kopieert hem met **Shift-klik** op Kopieer of met **Kopieer alle sporen** in het plakmenu; gewoon Kopieer en Ctrl+C pakken het gekozen spoor, zoals voorheen.
+
+- **`clipInfo()`**: `copy` en `paste` zijn `['notes', 'multi']`; nieuw is `tracks`: vier items `{ id: 'a'..'d', name, kind: 'notes', length, grid, range, scheme, vel, prob: false, ratchet: false, maxEvents: 256 }`, met de lengte van elk spoor zelf (`bars` × 192).
+- **`getClip({ kind: 'multi' })`**: vier sporen `{ slot, name, kind: 'notes', role: spelwijze, clip }`; elke spoorclip is wat `getClip()` voor dat spoor zou geven (akkoord-, arpeggio- en pulssporen als momentopname van vier maten, notensporen als hun `rec`). `native` bovenaan = de vier sporen van de scène zoals ze zijn (`cleanTrack`), alleen voor Chord Sequencer zelf.
+- **`setClip(multi)`**: elk toegewezen spoor (`slot` 0 tot 3) krijgt `setClip`-gedrag van één spoor (spelwijze `notes`, `rec`, `bars`, raster); niet toegewezen sporen blijven. Een clip van Chord Sequencer zelf die niet is aangepast (alle vier de sporen, noten en lengtes gelijk aan wat `native` opwekt) zet de vier sporen **exact** terug, dus ook de akkoorden, arpeggio's en alle instellingen: een scène naar een andere scène kopiëren verliest niets. Anders wordt elk spoor een notenspoor. Eén keer opnieuw tekenen; geen enkel spoor toegepast: `ok: false`.
+- Het gedrag van de spoorclip is verplaatst naar `clipToTrack` (werkt op een kopie van het spoor en geeft het nieuwe spoor terug) zonder gedragsverandering; `getState`, presets en geluid zijn gelijk aan 1.15.0 (byte voor byte vergeleken).
+
+**Risico's.** Plakken op een scène met `native` vervangt ook de spoornamen, `enabled`, gate/velocity per stap enzovoort van die vier sporen: dat is bedoeld (scène kopiëren) maar een andere schaal dan een enkel spoor. De transpositie en gate/velocity van de spoorinstellingen (`t<n>gate` enzovoort in de state, buiten de scène) blijven staan.
 
 ## Controleren
 

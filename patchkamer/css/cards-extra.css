@@ -59,6 +59,7 @@ button.on{border-color:var(--audio);color:var(--audio)}
 .clipmenu .row.oct span{flex:1}
 .clipmenu .row output{min-width:3ch;text-align:center;font-family:var(--mono)}
 .clipmenu .row.act button{flex:1}
+.clipmenu .row .copyall{flex:1}
 .clipmenu label{display:flex;gap:6px;align-items:center;cursor:pointer}
 .clipmenu .dis{opacity:.5}
 .clipmenu button{min-height:30px;min-width:30px}

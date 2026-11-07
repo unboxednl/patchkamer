@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.23 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.24 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -32,6 +32,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.21 | Instellingen opnemen en afspelen: `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` laten een sequencer de regelaars van een ander apparaat volgen (ook wat een modulator doet), absoluut zetten en tegen modulatie vergrendelen (§13f) |
 | v1.22 | Pads en schermpje: `host.ui.pad(parent, label, opts)` laat de host een drukknop tekenen (momentary of aan/uit, met `flash()` voor een raakaanduiding), `host.ui.display(parent, label, opts)` een keuzelijst die een skin als schermpje met < > en [ok] kan tonen, en `host.ui.steps` krijgt een 5e argument `{ id, group, role, color }`; eigen knoppen doen mee met `data-pk-role="pad"` of `"step"`. Pads, stappen en keuzes staan in het register (`pad`, `steps`); de validator kent de nieuwe aanroepen en meldt een kleur die geen `#rrggbb` is als fout (§12f) |
 | v1.23 | Stems splitsen: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` laat de host een nummer door een dienst op internet in stems splitsen (wachtrij, zip uitpakken, decoderen) en geeft AudioBuffers terug; sleutels staan alleen in de browser van de gebruiker; de host vraagt bevestiging met de kosten; een apparaat zet het aantal uitgangen met `host.setPorts` (§13g) |
+| v1.24 | Klembord, scènes met meerdere sporen: de clip-soort `multi` (`tracks` met per spoor een gewone clip), `clipInfo().tracks`, `getClip({ kind: 'multi' })`; de host wijst sporen toe per soort en op volgorde, laat weg en meldt wat niet past, en kopieert alle sporen met Shift-klik op Kopieer; de validator kent `multi` (§13d) |
 
 ---
 
@@ -866,14 +867,14 @@ Regels: `setPart(id, getPart(id))` laat de instelling ongewijzigd, en `setPart(a
 
 ---
 
-## 13d. Klembord: patronen en clips kopiëren en plakken (v1.17)
+## 13d. Klembord: patronen en clips kopiëren en plakken (v1.17, scènes met meerdere sporen v1.24)
 
 Voor apparaten met een patroon of een clip (sequencers, drumcomputers). Optioneel: zonder deze methoden doet je apparaat niet mee en verandert er niets. De host zet de knoppen **Kopieer** en **Plak** in de kaartbalk (en kent Ctrl/Cmd+C en Ctrl/Cmd+V op het gekozen apparaat) en doet al het vertalen tussen apparaten; **jouw apparaat levert en neemt alleen over**. Er zit dus geen vertaallogica in een apparaat.
 
 | Aanroep | Wat |
 |---|---|
 | `clipInfo()` | Licht, gooit niet, verandert niets. Geeft `null` (nu niets te kopiëren of te plakken) of een object dat beschrijft wat het apparaat **nu** met het huidige patroon kan. Dynamisch: het antwoord hangt af van selectie en bekabeling (een toetsenspoor of een drumspoor, een aangesloten drumcomputer). De host roept hem vaak aan |
-| `getClip()` | Een JSON-kopie van het huidige patroon als `patchkamer-clip` (zie onder), of `null`. Geen bijwerkingen. Een generator (euclidisch, willekeurig lopend) mag hier een momentopname van wat hij nu speelt geven |
+| `getClip(opts)` | Een JSON-kopie van het huidige patroon als `patchkamer-clip` (zie onder), of `null`. Geen bijwerkingen. Het argument is optioneel (v1.24): `getClip({ kind: "multi" })` geeft het hele patroon met al zijn sporen (zie "Scènes met meerdere sporen"). Een generator (euclidisch, willekeurig lopend) mag hier een momentopname van wat hij nu speelt geven |
 | `setClip(clip)` | Zet het (al door de host aangepaste en gezuiverde) clipje op het huidige patroon. Geeft `{ ok: true }` of `{ ok: false, reason }` (`reason` is tekst in de taal van `host.lang`, voor de melding aan de gebruiker). Gooit nooit, zet niets half, klemt alle waarden zelf nog eens, werkt de UI bij zoals `setState` en stuurt zelf **geen** gebeurtenissen |
 
 `clipInfo`, `getClip` en `setClip` horen bij elkaar: alle drie of geen. De validator zegt het als er een ontbreekt.
@@ -903,7 +904,7 @@ Een clip met `kind: "drums"` heeft in plaats van `notes` twee velden:
 | Veld | Betekenis en regels |
 |---|---|
 | `format`, `formatVersion` | Verplicht: `"patchkamer-clip"` en `1`. Een nieuwere `formatVersion` of een onbekende `kind` weigert de lezer; onbekende velden negeert hij |
-| `kind` | `"notes"` (hoogtes, polyfoon of mono) of `"drums"` (banen met een slag). Een akkoordspoor is gewoon meerdere noten op dezelfde plek |
+| `kind` | `"notes"` (hoogtes, polyfoon of mono), `"drums"` (banen met een slag) of, sinds v1.24, `"multi"` (meerdere sporen, zie onder). Een akkoordspoor is gewoon meerdere noten op dezelfde plek |
 | `name` | Optioneel, tekst. De host toont hem met `textContent` en kapt hem op 40 tekens af |
 | `length` | Verplicht: lengte van de clip in tikken, een geheel getal van 1 tot 12288 (64 maten) |
 | `grid` | Optioneel: 16, 32 of 64, het rasterhint van de bron (alleen voor de editor van het doel) |
@@ -928,7 +929,7 @@ Huidige toonhoogtes worden **zoals opgeslagen** gekopieerd: de transpositie van 
 | Veld | Betekenis |
 |---|---|
 | `name` | Hoe je apparaat het huidige patroon noemt ("Spoor 2 · Bas, clip 3") |
-| `copy`, `paste` | Lijsten met `"notes"` en/of `"drums"`: wat je nu kunt geven (`getClip`) en wat je nu kunt ontvangen (`setClip`). Een generator zonder stappenlijst geeft `paste: []`. De soort hangt van het apparaat af (bij een spoortype dat het spoor bepaalt) en kan per moment verschillen |
+| `copy`, `paste` | Lijsten met `"notes"`, `"drums"` en/of `"multi"`: wat je nu kunt geven (`getClip`) en wat je nu kunt ontvangen (`setClip`). Een generator zonder stappenlijst geeft `paste: []`. De soort hangt van het apparaat af (bij een spoortype dat het spoor bepaalt) en kan per moment verschillen |
 | `length` | `{ min, max, step, current, shared }` in tikken: hoe lang het patroon mag zijn. `shared: true` als de lengte voor alle patronen van het apparaat geldt: de host past de clip dan aan aan de lengte van het apparaat, en wijzigt de lengte niet |
 | `grid` | Lijst met rasters die het apparaat aankan (16, 32, 64) |
 | `poly` | Hoeveel noten tegelijk (1 = mono) |
@@ -937,6 +938,7 @@ Huidige toonhoogtes worden **zoals opgeslagen** gekopieerd: de transpositie van 
 | `vel`, `prob`, `ratchet` | Wat de velocity kan (`"continuous"`, `"accent"` of `"binary"`) en of `prob` en `ratchet` bestaan |
 | `lanes` | Bij drums: `[{ id, name, type, note }]`, de banen van het doel |
 | `maxEvents` | Hoeveel noten of slagen er in het patroon passen |
+| `tracks` | Alleen bij `multi` (v1.24): de doelsporen nu, zie "Scènes met meerdere sporen" |
 
 **Wat de host doet (kort).**
 
@@ -956,6 +958,41 @@ Huidige toonhoogtes worden **zoals opgeslagen** gekopieerd: de transpositie van 
 6. `setClip` werkt de UI bij zoals `setState` (alle knoppen, stappenrijen en de pianorol) en stuurt zelf geen gebeurtenissen; alleen de klok laat geluid horen.
 7. Geef bij `ok: false` altijd een `reason` in de taal van `host.lang`.
 8. Een clip hoeft niet bij het huidige spoor te passen: kies liever `ok: false` met een duidelijke reden dan stil iets anders te doen.
+9. Een apparaat dat `multi` ondersteunt: `clipInfo().tracks` is een lijst van 1 tot 64 sporen met `kind`; `getClip({ kind: "multi" })` geeft een geldige multi-clip (elk spoor een gewone clip van die `kind`, `length` = het langste spoor); `setClip(multi)` neemt wat past, laat de rest ongemoeid en geeft `ok: false` alleen als niets past; de rondreis `setClip(getClip({ kind: "multi" }))` laat `getState()` gelijk.
+
+**Scènes met meerdere sporen: `kind: "multi"` (v1.24).** Een apparaat waarvan het huidige patroon uit meerdere sporen bestaat (een scène, een patroon met kanalen, een groovebox met tracks) kan dat als één clip geven en nemen. Optioneel, bovenop de gewone soorten; een apparaat zonder `multi` verandert niet.
+
+```json
+{ "format": "patchkamer-clip", "formatVersion": 1, "kind": "multi", "name": "Patroon 1", "length": 192, "grid": 16,
+  "source": { "device": "nl.patchkamer.groovebox12", "name": "Groovebox 12", "version": "1.13.0", "scheme": "gm" },
+  "tracks": [ { "slot": 0, "name": "Kick", "kind": "drums", "role": "bd", "clip": { "format": "patchkamer-clip", "formatVersion": 1, "kind": "drums", "length": 192, "lanes": [], "hits": [] } } ],
+  "native": { "device": "nl.patchkamer.groovebox12", "data": { } } }
+```
+
+| Veld | Betekenis en regels |
+|---|---|
+| `tracks` | Verplicht, 1 tot 64 sporen, in volgorde. De lijst is de volgorde waarin de host toewijst |
+| `tracks[].clip` | Een volledige gewone clip van de soort `notes` of `drums` (met `format`, `formatVersion`, `length`, `lanes` enzovoort). Geen `multi` in `multi` |
+| `tracks[].kind` | `"notes"` of `"drums"`, gelijk aan `clip.kind` |
+| `tracks[].name`, `role` | Optioneel, tekst (hoogstens 40 en 30 tekens). Alleen informatie voor de melding; `role` mag ook helpen bij het toewijzen (een drumspoor met één baan wordt eerst op gelijk type of gelijke naam gezet) |
+| `tracks[].slot` | Wat `getClip` geeft: de plaats van het spoor (0, 1, 2, …). Wat `setClip` krijgt: de index van het **doelspoor** in `clipInfo().tracks`; de host zet hem na het toewijzen. Hoogstens 63 |
+| `length` | Verplicht: de lengte van het langste spoor in tikken (1 tot 12288). Elk spoor houdt zijn eigen `clip.length`; een korter spoor herhaalt zichzelf (polymetrie) |
+| `native`, `grid`, `source`, `name` | Zoals bij een gewone clip; `native` bovenaan en `native` in een spoor volgen dezelfde regel: alleen voor een apparaat met dezelfde `id` |
+
+Grenzen: 64 sporen, 4096 gebeurtenissen per spoor en 16384 samen, het hele klembord hoogstens 1 MB. Past een kopie niet, dan laat de host eerst alle `native` weg (en meldt dat); past het dan nog niet, dan kopieert hij niets.
+
+**`clipInfo()` voor `multi`.** `copy` en/of `paste` bevatten `"multi"` (naast, of in plaats van, `"notes"` en `"drums"`) en `tracks` beschrijft de doelsporen **nu**, in volgorde (hoogstens 64): `{ id, name, kind: "notes" of "drums", role?, length, grid, poly, range, scheme, vel, prob, ratchet, lanes?, maxEvents }`. Dat zijn de velden van een gewone `clipInfo()` per spoor; wat ontbreekt erft van het bovenste niveau. `length.shared` geldt per spoor (een patroon met één gedeelde lengte meldt `shared: true` bij elk spoor).
+
+**`getClip(opts)`.** `getClip({ kind: "multi" })` geeft de multi-clip. `getClip()` zonder argument geeft de gewone clip, zoals altijd; een apparaat met alleen `copy: ["multi"]` geeft dan ook de multi-clip. `setClip(clip)` kiest op `clip.kind`. Een apparaat dat `multi` neemt, mag elk spoor weigeren dat niet bij zijn doelspoor past (andere soort) en moet de rest toepassen; alleen als **geen** spoor past, geeft het `ok: false`.
+
+**Wat de host doet bij `multi`.**
+
+- Een apparaat zonder `multi` in `paste` weigert de host een multi-clip (de melding noemt het aantal sporen); er is geen spoorkeuze. Een gewone clip in een apparaat met alleen `multi` wordt geweigerd als soortverschil.
+- Toewijzen per soort, op volgorde: eerst de `notes`-sporen van de bron aan de `notes`-sporen van het doel, daarna de `drums`-sporen; een drumspoor met één baan gaat eerst naar een doelspoor met gelijk type of gelijke naam, de rest op volgorde. Bij `native` van hetzelfde apparaat (of een zuster) gaat spoor i naar spoor i. Elk paar gaat door dezelfde aanpassing als een gewone clip (lengte, raster, bereik, mono, kans, ratchet, velocity, banen); een paar dat niet past valt weg.
+- Bronsporen zonder doelspoor worden weggelaten en met naam gemeld, doelsporen zonder bronspoor blijven zoals ze waren (ook gemeld). Past geen enkel spoor, dan doet de host niets en zegt waarom.
+- Kopiëren: de knop Kopieer pakt `getClip()`; **Shift-klik** op Kopieer of de menuknop **Kopieer alle sporen** (in het plakmenu) pakt `getClip({ kind: "multi" })`. Een apparaat met alleen `multi` geeft altijd de multi-clip. Octaaf en Uitlijnen op volgorde uit het plakmenu gelden voor alle `notes`- respectievelijk `drums`-sporen.
+- Ongedaan maken is één stap voor het hele apparaat (`getState()`/`setState()` vóór en na).
+- Heeft een apparaat een patroonkeuze die niet in `getState()` staat (de bewerkte patroonindex), dan moet `setClip` die kunnen schrijven en moet Ongedaan maken de keuze niet verliezen: onthoud bij een wijziging de keuze en de state ervoor, en behoud de keuze in `setState` alleen als precies die state terugkomt.
 
 **Veiligheid.** Het klembord is onbetrouwbare invoer: iedereen kan er tekst op zetten. De host zuivert strikt, maar jouw `setClip` vertrouwt niets: controleer elk getal, elk type en elke lengte; evalueer nooit tekst uit een clip; zet namen alleen met `textContent` (nooit `innerHTML`); lees `native` alleen als `native.device` gelijk is aan jouw `id`; en bouw geen onbegrensde lijsten (hoogstens 4096 noten of slagen, 64 banen).
 
@@ -1093,6 +1130,7 @@ Wat de host niet doet: hij hoort het resultaat niet af, rekent geen kosten af en
 | `host.paramsOf(this, doelId)` | v1.21 | De parameterlijst van een ander apparaat met de knopstand van elke regelaar (§13f) |
 | `host.noteNamesChanged(this)` | v1.14 | Je `noteNames()` is veranderd; andere apparaten horen het via `onPeers` (§13b) |
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Patronen en clips kopiëren en plakken, optioneel en alle drie samen; formaat `patchkamer-clip` (§13d) |
+| `getClip({ kind: "multi" })`, `clipInfo().tracks` | v1.24 | Een scène of patroon met meerdere sporen als één clip (`kind: "multi"`), optioneel (§13d) |
 | `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12e) |
 | `data-pk-suffix` | v1.18 | Tekst (hoogstens 16 tekens) die de host bij het koppelen aan MIDI na het label zet: ` - suffix` (§12d) |
 | `host.ui.pad(parent, label, opts)` | v1.22 | Een pad laten tekenen door de host (momentary of toggle, `flash()`, kleur); geeft `{ el, set, flash, id, destroy }` (§12f) |
@@ -1164,7 +1202,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 14. **Nootnamen (v1.14)**: een apparaat met `noteNames()` geeft een lijst `{ note, name }` (noot 0 tot 127, `name` niet leeg); `noteNames()` gooit niet en `host.noteNamesChanged(this)` mag zonder fout worden aangeroepen.
 15. **Regelaars voor skins (v1.15)**: de nep-host kent `host.ui.knob(…, opties)`, `host.ui.select(…, opties)`, `host.ui.adopt` en `host.ui.list`, en leest ook `data-pk-*`-attributen op eigen elementen. Alleen een `let op` (nooit een fout) bij een dubbel id, deels ontbrekende id's, een rol buiten de lijst, een ongeldig id of groep, opties die geen object zijn, `adopt` op een element zonder model, een id op een element dat nergens hangt, en id's die per `host.lang` verschillen. `--controls` drukt de tabel `id | rol | groep | label nl/en | bereik | gezicht | in params()` af (zie §12d).
 16. **Dekking van `params()` (v1.16, §8)**: elke continue regelaar (`<input type="range">`, `host.ui.knob`, `host.ui.adopt`; niet de rollen `step`, `display`, `meter`, `jack`, `pad`, `button`) wordt aan `params()` gekoppeld: eerst via het `id` (opties of `data-pk-id`), dan via de `getState`-sleutel die verandert als de validator de waarde verzet en de `input`/`change`-afhandeling aanroept (genummerde sleutels als `osc.0.fine` tellen mee als ze op meerdere posities voorkomen; stapdata en een enkele gekozen positie niet), dan via een label dat aan precies één parameternaam gelijk is. Alleen een `let op` (nooit een fout) bij: continue regelaars die niet in `params()` en niet in `modExclude` staan; een `instrument`, `effect` of `mixer` (niet de categorieën `sequencer` en `tool`) met continue regelaars maar zonder `params()`; een `params()`-id zonder regelaar of state-sleutel; een `modExclude` dat geen lijst met tekst (of `'*'`) is. Wat de validator niet kan koppelen, laat hij stil (`?` in `--controls`). Regelaars die als `innerHTML` of op een canvas zijn getekend ziet hij niet.
-17. **Klembord (v1.17, §13d)**: `clipInfo`, `getClip` en `setClip` alle drie of geen. `clipInfo()` geeft `null` of een JSON-object (`copy`/`paste` met `notes` en/of `drums`, getallen in `length`), gooit niet en verandert de state niet. `getClip()` geeft `null` of een geldige `patchkamer-clip` als JSON zonder AudioNodes (`format`, `formatVersion` 1, `kind` `notes` of `drums`, `length` 1 tot 12288 gehele tikken, hoogstens 4096 noten of slagen en 64 banen, `t`, `n`, `lane` en `vel` binnen het bereik) en verandert de state niet. `setClip(getClip())` laat `getState()` ongewijzigd. `setClip` krijgt rommel, lege en extreme clips (andere typen, `NaN`, lengte 0 of 1e9, 100000 noten, banen die niet bestaan) en gooit niet; het geeft altijd `{ ok, reason }` (`reason` tekst bij `ok: false`); bij `ok: false` blijft de state gelijk, bij `ok: true` is de state JSON zonder `NaN`/`Infinity` en stabiel onder `setState(getState())`; het stuurt zelf geen gebeurtenissen. Een apparaat dat zijn eigen `getClip()` weigert (`ok: false`) geeft een `let op`. Een apparaat zonder deze methoden krijgt geen melding. `--clip` toont wat `clipInfo()` en `getClip()` teruggeven.
+17. **Klembord (v1.17, §13d)**: `clipInfo`, `getClip` en `setClip` alle drie of geen. `clipInfo()` geeft `null` of een JSON-object (`copy`/`paste` met `notes` en/of `drums`, getallen in `length`), gooit niet en verandert de state niet. `getClip()` geeft `null` of een geldige `patchkamer-clip` als JSON zonder AudioNodes (`format`, `formatVersion` 1, `kind` `notes` of `drums`, `length` 1 tot 12288 gehele tikken, hoogstens 4096 noten of slagen en 64 banen, `t`, `n`, `lane` en `vel` binnen het bereik) en verandert de state niet. `setClip(getClip())` laat `getState()` ongewijzigd. `setClip` krijgt rommel, lege en extreme clips (andere typen, `NaN`, lengte 0 of 1e9, 100000 noten, banen die niet bestaan) en gooit niet; het geeft altijd `{ ok, reason }` (`reason` tekst bij `ok: false`); bij `ok: false` blijft de state gelijk, bij `ok: true` is de state JSON zonder `NaN`/`Infinity` en stabiel onder `setState(getState())`; het stuurt zelf geen gebeurtenissen. Een apparaat dat zijn eigen `getClip()` weigert (`ok: false`) geeft een `let op`. Een apparaat zonder deze methoden krijgt geen melding. `--clip` toont wat `clipInfo()` en `getClip()` teruggeven. Sinds v1.24: `copy` en `paste` mogen ook `multi` bevatten; dan hoort `clipInfo().tracks` een lijst van 1 tot 64 sporen met `kind` te zijn, geeft `getClip({ kind: "multi" })` een geldige multi-clip (1 tot 64 sporen `{ slot, kind, clip }`, elk een geldige gewone clip van diezelfde `kind`, `length` = de langste spoorclip), laat `setClip(getClip({ kind: "multi" }))` de state gelijk, en gooit `setClip` niet bij rommel-multi's (geen sporen, geneste multi, 1000 sporen, `NaN`, 100000 gebeurtenissen, sporen met de verkeerde soort).
 18. **Meters (v1.18, §12e)**: de nep-host kent `host.ui.meter(parent, label, opts)` en geeft `{ el, set, id, destroy }`. Een `source` die geen `AnalyserNode` of lijst van 1 of 2 `AnalyserNode`s is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel meter-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` zonder `source`, een `set()` met iets anders dan een eindig getal of `[l, r]`, `data-pk-role="meter"` op een eigen element en een `data-pk-suffix` van meer dan 16 tekens. Een meter telt niet mee in de dekking van `params()`. `--controls` toont meters met rol `meter`.
 19. **Instellingen opnemen (v1.21, §13f)**: de nep-host kent `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` en geeft `false` (`[]` bij `paramsOf`); de validator controleert er verder niets van (een sequencer die ze gebruikt, test je in de host).
 20. **Pads en schermpje (v1.22, §12f)**: de nep-host kent `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` en het 5e argument van `host.ui.steps`. Een `color` die geen `#rrggbb` is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel pad-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, een momentary pad zonder `onpress` en zonder `onchange`, een display met ongeldige `items`/`kind`/`wrap`/`searchAt` of een `value` buiten `items`, en een 5e argument van `steps` dat geen object is. Een display telt mee in de controle dat `setState` de keuzes bijwerkt; pads en stappen tellen niet mee in de dekking van `params()`. `--controls` toont ze met rol `pad`, `step` en `select`.
@@ -1195,7 +1233,7 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 17. Alle tekst voor de gebruiker kiest op `host.lang` (`'nl'` en `'en'`, anders `'en'`); namen per taal in `i18n`; `oversample` van `host.audio` gebruikt waar je zelf aliasing veroorzaakt (§12c).
 18. Regelaars (v1.15, aanbevolen): elke `host.ui.knob`/`select` en elke eigen schuif heeft een `id` (= state-/parametersleutel, nooit het label), een `role` en een `group`; `node validate-instrument.mjs bestand.patchkamer-device.js --controls` toont de tabel zonder `let op` (§12d).
 19. Dekking (v1.16): `params()` bevat elke continue regelaar met `id` = state-sleutel, behalve wat in `modExclude` staat (testnoot, basisnoot, lengte, stemmen, stapdata); keuzes en vinkjes horen er niet in; parameters die niet ongevraagd mogen bewegen (toonhoogte, master, gate, octaaf, tijden) hebben `on: false` (§8). `--controls` toont in de kolom `in params()` geen `nee`.
-20. Klembord (v1.17, optioneel): `clipInfo`/`getClip`/`setClip` samen; `getClip()` geeft een geldige `patchkamer-clip` of `null`; `setClip` klemt alles zelf, geeft `{ ok, reason }`, zet niets half en stuurt geen gebeurtenissen; `setClip(getClip())` laat `getState()` gelijk (§13d).
+20. Klembord (v1.17, optioneel; `multi` v1.24): `clipInfo`/`getClip`/`setClip` samen; wie meerdere sporen levert, meldt `multi` en `tracks` en geeft `getClip({ kind: "multi" })`; `getClip()` geeft een geldige `patchkamer-clip` of `null`; `setClip` klemt alles zelf, geeft `{ ok, reason }`, zet niets half en stuurt geen gebeurtenissen; `setClip(getClip())` laat `getState()` gelijk (§13d).
 21. Meters (v1.18, optioneel): wie een niveau toont, gebruikt `host.ui.meter` (met `source` voor een bestaande `AnalyserNode`, anders met `set()`), met `id` en `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` als terugval op de eigen tekening, geen eigen demping, `destroy()` van de meter in `destroy()` van het apparaat, en een layout die de meter groter mag maken (§12e).
 22. Pads en schermpje (v1.22, optioneel): wie een drukknop of een keuze toont, gebruikt `host.ui.pad`, `host.ui.display` of `host.ui.steps` met `{ id, group, role, color }` (kleur altijd `#rrggbb`), met `if (!host.ui || typeof host.ui.pad !== 'function')` als terugval op de eigen knop; `set()` en `flash()` roepen geen handlers aan; het model van een keuze blijft het `<select>` en `setState` zet de waarde; `destroy()` van pad en keuze in `destroy()` van het apparaat (§12f).
 23. Stems (v1.23, optioneel): `split` alleen op een klik; `typeof host.stems === 'function'` gecontroleerd; zichtbaar gezegd dat het geluid naar een dienst op internet gaat, geld kost en rechten vraagt; annuleren via `signal`; tekst per foutcode in `host.lang`; stems en buffers niet in `getState()`/`getPreset()`; na het splitsen `host.setPorts` met de nieuwe AudioNodes al in `outputs` (§13g).

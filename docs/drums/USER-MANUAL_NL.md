@@ -241,6 +241,7 @@ Groovebox 12 heeft het pack **Groovebox 12 Styles**: 38 tunes in twaalf mappen (
 
 - De klok is die van de host: Groovebox 12 heeft geen eigen afspeelknop. Druk bovenin op **Start**.
 - Een patroon bevat de 12 tracks. **Wis trigs** en **Willekeurig** werken op het patroon dat je bewerkt, dus kopieer het eerst met **Kopieer →** als je het wilt bewaren.
+- **Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het patroon dat je bewerkt, met alle 12 tracks in één keer: de drumtracks als drumsporen en de synthtracks als notensporen, elk met zijn eigen lengte (polymeter), kans (de condities 25%, 50% en 75%), ratchet (retrig) en microtiming. Tussen twee Groovebox 12's gaat het hele patroon mee, mét klank, p-locks en alle condities. Naar een ander apparaat (Pattern Tracker, Clip Arranger, Chord Sequencer) gaan de tracks per soort en op volgorde; wat niet past, blijft weg en wordt gemeld. Plak je in Groovebox 12 vanuit een ander apparaat, dan krijgen de toegewezen tracks de stappen en de lengte (hun stappen en p-locks worden eerst gewist), klank en instellingen blijven; tracks zonder bron blijven staan. Een enkel spoor (bijvoorbeeld uit Step Sequencer) kun je er niet in plakken. Het patroon dat je bewerkt blijft gekozen, ook na **Ongedaan maken**.
 
 ## Pulse Drums
 

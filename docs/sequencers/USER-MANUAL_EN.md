@@ -239,7 +239,7 @@ A preset does not hold cables, and it does not change which track you are editin
 - A scene switch with **Immediately** cuts off the notes that are sounding. Use **Next bar** for a live switch.
 - A keyboard that is connected to **Live** and to the synth at the same time sounds twice.
 
-**Copy and paste.** With **Copy** and **Paste** in the card bar you take the selected track of the active scene along as notes. A track in Notes mode is a real clip (at most 4 bars, 256 notes); a chord, arpeggio or pulse track is rendered and copied as a snapshot of four bars of notes, with no link to the settings. Pasting sets the track to Notes mode (the chord settings stay) and the message has an Undo button.
+**Copy and paste.** With **Copy** and **Paste** in the card bar you take the selected track of the active scene along as notes. A track in Notes mode is a real clip (at most 4 bars, 256 notes); a chord, arpeggio or pulse track is rendered and copied as a snapshot of four bars of notes, with no link to the settings. Pasting sets the track to Notes mode (the chord settings stay) and the message has an Undo button. **Shift-click** on Copy (or **Copy all tracks** in the menu next to Paste) takes the whole active scene along, all four tracks; if you paste it into another Chord Sequencer or into another scene, the chords, arpeggios and settings come back exactly. In another kind of device the four tracks arrive as notes.
 
 ## Step and melody sequencers
 
@@ -576,7 +576,7 @@ The pack **Pattern Playlist Arrangements** has 35 presets in 5 folders: Dance Fl
 - Notes you record are picked up by the playback on the next round. The record and quantize switches are not stored in a preset.
 - The songs of the earlier device (Regie Playlist) refer to its old id and do not load; its export file format can be imported.
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on the channel of the selected track in the selected pattern: as notes in the piano roll, as drums in the drum editor. Paste replaces only the cells of that channel; the pattern length stays (a longer clip is cut, a shorter one that divides evenly is repeated). Notes on the same row share velocity and length. Probability and retrigger come along; arpeggio, gate and CC only between Tracker and Playlist. Ctrl+Z undoes the paste.
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the channel of the selected track in the selected pattern: as notes in the piano roll, as drums in the drum editor. Paste replaces only the cells of that channel; the pattern length stays (a longer clip is cut, a shorter one that divides evenly is repeated). Notes on the same row share velocity and length. Probability and retrigger come along; arpeggio, gate and CC only between Tracker and Playlist. Ctrl+Z undoes the paste. **Shift-click** on Copy (or **Copy all tracks** in the menu) takes the whole pattern along, all channels: a channel with a connected drum machine as drums, the others as notes. When pasting they go to the channels of the target by kind and in order; channels that do not fit are left out and reported, channels of the target without a source stay as they are. Between Tracker and Playlist everything comes along without loss.
 
 ### Pattern Tracker
 
@@ -625,7 +625,7 @@ The pack **Pattern Tracker Modules** has 34 presets in 4 folders: Module Classic
 - The same limits as Pattern Playlist apply: one cell per row per track, row positions inside the pattern, and set the grid before you write.
 - Recording writes into the pattern of the current order step.
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on the channel of the selected track in the selected pattern: as notes in the piano roll, as drums in the drum editor. Paste replaces only the cells of that channel; the pattern length stays (a longer clip is cut, a shorter one that divides evenly is repeated). Notes on the same row share velocity and length. Probability and retrigger come along; arpeggio, gate and CC only between Tracker and Playlist. Ctrl+Z undoes the paste.
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the channel of the selected track in the selected pattern: as notes in the piano roll, as drums in the drum editor. Paste replaces only the cells of that channel; the pattern length stays (a longer clip is cut, a shorter one that divides evenly is repeated). Notes on the same row share velocity and length. Probability and retrigger come along; arpeggio, gate and CC only between Tracker and Playlist. Ctrl+Z undoes the paste. **Shift-click** on Copy (or **Copy all tracks** in the menu) takes the whole pattern along, all channels: a channel with a connected drum machine as drums, the others as notes. When pasting they go to the channels of the target by kind and in order; channels that do not fit are left out and reported, channels of the target without a source stay as they are. Between Tracker and Playlist everything comes along without loss.
 
 ### Clip Arranger
 
@@ -650,6 +650,8 @@ Clip Arranger works like a session view. For each track (1 to 16) there are 8 **
 **02 · Track.** **Track name**, **Target device (label)** (only a label for you; the cable decides), **Track type** (**Keys / melody**, **Drum machine**, **Drone / pad / ambient**), **Colour**, **Drum protocol** (**Trig → channel name** or **MIDI → note number**, for drum tracks), **Velocity scale**, **Audition track**, and **Live record → this clip**. A drum track has 16 drum rows with a name, a note and a channel.
 
 **03 · Clip editor.** **Clip name**, **Clip length (bars)** (1 to 64), **Grid** (**1/16**, **1/32** or **1/64**), **Quantize live input**, **Zoom**, **Page**, **Copy clip**, **Paste clip**, **To next slot**, **Clear notes**. For new notes: **New note length**, **New velocity**, **New probability**, **New ratchet** (drum tracks). Click in the roll to draw a note, drag to move it, drag the right edge for the length, right-click deletes. The **width** of a block is the length and the **height** is the velocity; a **velocity strip** below the roll changes the velocity per note by dragging. For a selected note you can set start, length, MIDI note, velocity and probability exactly. **CC automation**: lanes (up to 8 per clip) with a **Parameter ID** and a **Shape** (**Linear** or **Steps / hold**), for example a rising cutoff.
+
+**Copy and paste.** **Copy** and **Paste** in the card bar work on the selected clip of the selected track (keys and drone as notes, a drum track as drums). **Shift-click** on Copy (or **Copy all tracks** in the menu next to Paste) takes the whole scene along: the selected clip of every track. Paste assigns the tracks by kind and in order, in one go and with one Undo; tracks that do not fit stay as they are and are reported.
 
 **04 · Song arrangement.** The sections are buttons. **Play from section**, **Add section**, **Duplicate scene → next**. For each section: **Scene**, **Bars** and **Repeats**. A section lasts bars × repeats bars, and every clip repeats inside it. A clip that is longer than its section is cut off at the section's end. **Edit scene names** names the 8 scenes.
 

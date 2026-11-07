@@ -17,7 +17,7 @@ Het verschil met **Regie** (de clip/scene-sequencer): Regie bewaart per track va
 | Naam | `Pattern Tracker` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Live noten / CC`, `Spoor 1` … `Spoor 8`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `input` (Live notes / CC), eventuitgangen `track1` … `track8` (meer tot 32 via `trackCount`); geen audio, geen modulatie; multi-MIDI-uitgang `tracks` (Tracks: alle sporen met hun namen in één dubbele gestreepte oranje kabel, elke gebeurtenis met `track` en `ch` = spoornummer; de losse spooruitgangen blijven ongewijzigd) |
-| Contract | v1.17 (apparaatversie 1.15.0) |
+| Contract | v1.24 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Regie Tracker, `nl.patchkamer.regie.tracker`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in; de oude compositie-export (`patchkamer-regie-duo`) kun je wel importeren.
@@ -188,6 +188,17 @@ Wat `setClip` doet:
 - Het apparaat heeft zijn eigen Ongedaan-geschiedenis; de host maakt bovendien een momentopname met `getState()` voor Ongedaan maken in de toast.
 
 Getest (nep-host in een echte browser, nl en en, beide apparaten): rondreis `setClip(getClip())` laat `getState()` gelijk bij `rowsPerBeat` 2, 4, 8 en 16 en bij 1024 rijen; de rondreis zonder `native` houdt rijen, akkoorden, kans en ratchet; `native` herstelt `ARP`, `CC` en `DEL` exact; de soortweigering werkt in beide richtingen; rommel (`NaN`, `Infinity`, lengte 0 en 1e9, 100000 noten of slagen, banen die niet bestaan, tekst waar een getal hoort, `null`) geeft nooit een fout en nooit `NaN` in de state; `getState` en `getPreset` zijn gelijk aan versie 1.14.1. In de echte host: kopiëren uit de Tracker en plakken in de Playlist, Ongedaan met Ctrl+Z en de weigering bij verkeerde soort. Niet beluisterd.
+
+## Klembord: het hele patroon kopiëren en plakken (sinds 1.16.0, contract v1.24)
+
+Naast de kanaalclip hierboven geeft het apparaat het hele gekozen patroon als één clip van de soort `multi` (zie het contract, §13d). De host kopieert hem met **Shift-klik** op Kopieer of met **Kopieer alle sporen** in het plakmenu; gewoon Kopieer en Ctrl+C blijven het kanaal pakken. Bestaande aanroepen veranderen niet.
+
+- **`clipInfo()`** meldt nu `copy` en `paste` als `[soort, 'multi']` en het veld `tracks`: één item per kanaal (`S.trackCount`, 1 tot 32) met `id` `t<n>`, `name`, `kind` (`drums` als er via `nameMaps` klanknamen van een aangesloten drumapparaat zijn, anders `notes`) en de gewone velden van het kanaal (gedeelde lengte, raster, `poly` 8, `lanes` bij drums). Zonder `multi`-aanroep is het antwoord voor het gekozen kanaal gelijk aan 1.15.0.
+- **`getClip({ kind: 'multi' })`** geeft per kanaal een spoor `{ slot, name, kind, clip }`; elke spoorclip is de kanaalclip zoals hierboven, met de cellen van dat kanaal in zijn eigen `native` (dus ook `ARP`, `CC`, `DEL`). `length` is de patroonlengte in tikken. `getClip()` zonder argument is de kanaalclip, ongewijzigd.
+- **`setClip(multi)`** zet per toegewezen spoor (`slot` 0 tot `trackCount − 1`) de cellen van dat kanaal, in één geschiedenisstap. Een spoor van een andere soort dan het kanaal nu neemt wordt overgeslagen en telt als `dropped`, tenzij het zijn eigen cellen (`native`) meebrengt; dan komen die exact terug (ook als het kanaal nog geen klanknamen heeft). Patroonlengte, `rowsPerBeat`, spoorinstellingen en niet toegewezen kanalen blijven. Geen enkel kanaal toegepast: `ok: false`. De rondreis `setClip(getClip({ kind: 'multi' }))` laat `getState()` gelijk.
+- Het enkelvoudige pad (kanaal) is verplaatst naar kleine functies (`clipOne`, `clipBuildCells`, `clipCommit`) zonder gedragsverandering; `getState`, presets en geluid zijn gelijk aan 1.15.0 (byte voor byte vergeleken).
+
+**Risico's.** Een patroon van 32 kanalen met veel cellen kan boven de 1 MB van het klembord uitkomen door de `native`-cellen; de host laat dan alle `native` weg (Tracker ↔ Playlist is dan niet meer verliesvrij). Welke kanalen `drums` zijn hangt van de bekabeling af; koppel je later een drumcomputer aan, dan verandert de toewijzing van een volgende plak.
 
 ## Controleren
 

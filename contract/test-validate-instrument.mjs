@@ -1,4 +1,4 @@
-// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) het klembord (clipInfo/getClip/setClip, v1.17) en meters (host.ui.meter, v1.18), pads, steps(opts) en displays (v1.22)
+// test-validate-instrument.mjs — testgevallen voor de regelaarscontroles en de dekking van params() van validate-instrument.mjs (contract v1.15) het klembord (clipInfo/getClip/setClip, v1.17; scènes met meerdere sporen, v1.24) en meters (host.ui.meter, v1.18), pads, steps(opts) en displays (v1.22)
 // Gebruik / Usage:  node contract/test-validate-instrument.mjs      (exit 0 = alles groen / all green)
 // Elk geval is een klein apparaat dat in een tijdelijke map wordt gezet en in beide talen (--lang nl en --lang en) wordt gevalideerd.
 // "err" = fragmenten (nl, en) die in de foutmelding moeten staan (exit 1, geen OK-regel).
@@ -216,7 +216,7 @@ errs('klembord: getClip verandert de state', clipDev({ get: 'getClip() { S.lengt
 const BADC = (extra) => `getClip() { return { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', length: 192, notes: [{ t: 0, n: 60, len: 12, vel: 0.8 }], ${extra} }; },`;
 errs('klembord: verkeerd format', clipDev({ get: BADC("format: 'x'") }), [['format moet', 'format must']]);
 errs('klembord: formatVersion 2', clipDev({ get: BADC('formatVersion: 2') }), [['formatVersion 1', 'formatVersion 1']]);
-errs('klembord: kind chords', clipDev({ get: BADC("kind: 'chords'") }), [["kind moet 'notes' of 'drums'", "kind must be 'notes' or 'drums'"]]);
+errs('klembord: kind chords', clipDev({ get: BADC("kind: 'chords'") }), [["kind moet 'notes', 'drums' of 'multi'", "kind must be 'notes', 'drums' or 'multi'"]]);
 errs('klembord: length 20000', clipDev({ get: BADC('length: 20000') }), [['length moet een geheel getal van 1 tot 12288', 'length must be an integer from 1 to 12288']]);
 errs('klembord: length 0', clipDev({ get: BADC('length: 0') }), [['length moet', 'length must']]);
 errs('klembord: length met komma', clipDev({ get: BADC('length: 192.5') }), [['length moet', 'length must']]);
@@ -245,6 +245,47 @@ ok('--clip: toont clipInfo en getClip', clipDev(), { clip: true, has: [['Klembor
 ok('--clip: apparaat zonder klembord', clipDev({ info: '', get: '', set: '' }), { clip: true, has: [['(geen clipInfo/getClip/setClip)', '(no clipInfo/getClip/setClip)']] });
 ok('--clip: getClip null', clipDev({ get: 'getClip() { return null; },' }), { clip: true, has: [['getClip():  (null)', 'getClip():  (null)']] });
 ok('zonder --clip geen klembordtabel', clipDev(), { no: [['Klembord (--clip):', 'Clipboard (--clip):']] });
+
+
+// ---- klembord, scènes met meerdere sporen (v1.24): copy/paste 'multi', clipInfo().tracks, getClip({ kind: 'multi' }), setClip(multi)
+const MP = {
+  init: "{ tr: [{ kind: 'notes', length: 192, notes: [{ t: 0, n: 60, len: 12, vel: 0.8 }, { t: 48, n: 64, len: 24, vel: 0.5 }] }, { kind: 'drums', length: 96, hits: [{ t: 0, lane: 0, vel: 0.9 }, { t: 24, lane: 0, vel: 0.7 }] }] }",
+  info: `clipInfo() { return { name: 'Probe', copy: ['notes', 'multi'], paste: ['notes', 'multi'], length: { min: 12, max: 12288, step: 12, current: 192, shared: false }, maxEvents: 4096,
+        tracks: S.tr.map((t, i) => ({ id: 't' + i, name: 'T' + i, kind: t.kind })) }; },`,
+  get: `getClip(o) {
+        const one = t => t.kind === 'notes' ? { format: 'patchkamer-clip', formatVersion: 1, kind: 'notes', length: t.length, notes: t.notes.map(n => ({ ...n })) }
+          : { format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', length: t.length, lanes: [{ id: 'k', name: 'Kick', type: 'kick', note: 36 }], hits: t.hits.map(h => ({ ...h })) };
+        if (o && o.kind === 'multi') return { format: 'patchkamer-clip', formatVersion: 1, kind: 'multi', name: 'M', length: Math.max(...S.tr.map(t => t.length)), tracks: S.tr.map((t, i) => ({ slot: i, name: 'T' + i, kind: t.kind, clip: one(t) })) };
+        return one(S.tr[0]); },`,
+  set: `setClip(c) { try {
+        const no = { ok: false, reason: host.lang === 'nl' ? 'Past niet' : 'Does not fit' };
+        if (!c || c.format !== 'patchkamer-clip' || c.formatVersion !== 1) return no;
+        const apply = (t, x) => { if (!x || typeof x !== 'object' || x.kind !== t.kind || !(x.length >= 1)) return false; const L = Math.min(12288, Math.round(x.length));
+          if (t.kind === 'notes') { if (!Array.isArray(x.notes)) return false; t.notes = x.notes.slice(0, 4096).filter(n => n && n.t >= 0 && n.t < L && n.n >= 0 && n.n <= 127).map(n => ({ t: Math.round(n.t), n: Math.round(n.n), len: Math.max(1, Math.min(Math.round(n.len) || 12, L - Math.round(n.t))), vel: Math.min(1, Math.max(0.01, +n.vel || 0.8)) })); }
+          else { if (!Array.isArray(x.hits)) return false; t.hits = x.hits.slice(0, 4096).filter(h => h && h.t >= 0 && h.t < L && h.lane === 0).map(h => ({ t: Math.round(h.t), lane: 0, vel: Math.min(1, Math.max(0.01, +h.vel || 0.8)) })); }
+          t.length = L; return true; };
+        if (c.kind === 'multi') { if (!Array.isArray(c.tracks)) return no; let used = 0; for (const x of c.tracks.slice(0, 64)) { if (x && Number.isInteger(x.slot) && x.slot >= 0 && x.slot < S.tr.length && apply(S.tr[x.slot], x.clip)) used++; } return used ? { ok: true } : no; }
+        return apply(S.tr[0], c) ? { ok: true } : no; } catch (e) { return { ok: false, reason: String(e) }; } },`
+};
+const multiDev = (o = {}) => clipDev({ init: MP.init, info: MP.info, get: MP.get, set: MP.set, ...o });
+cases.push(['klembord multi: probe-apparaat (geldig)', multiDev(), { has: [[', klembord (clipInfo/getClip/setClip)', ', clipboard (clipInfo/getClip/setClip)']] }]);
+ok('klembord multi: alleen multi in copy en paste (getClip() zonder argument is dan ook multi)', multiDev({ info: MP.info.replace("copy: ['notes', 'multi'], paste: ['notes', 'multi']", "copy: ['multi'], paste: ['multi']"), get: MP.get.replace("return one(S.tr[0]); }", "return this.getClip({ kind: 'multi' }); }").replace('getClip(o) {', 'getClip(o) { if (!o) o = { kind: "multi" };') }));
+errs('klembord multi: copy bevat multi maar tracks ontbreekt', multiDev({ info: MP.info.replace(/tracks: S\.tr\.map\(.*\}\)\) \}; \},/s, '}; },').replace('maxEvents: 4096,', 'maxEvents: 4096') }), [["tracks ontbreekt of is leeg", "tracks is missing or empty"]]);
+errs('klembord multi: tracks met onbekende soort', multiDev({ info: MP.info.replace("kind: t.kind", "kind: 'chords'") }), [['clipInfo(): tracks moet een lijst zijn', 'clipInfo(): tracks must be a list']]);
+errs('klembord multi: getClip({kind:multi}) geeft geen multi', multiDev({ get: MP.get.replace("if (o && o.kind === 'multi') return", "if (false) return") }), [["getClip({ kind: 'multi' }) geeft geen geldige multi-clip", "getClip({ kind: 'multi' }) does not return a valid multi clip"]]);
+errs('klembord multi: alleen multi maar getClip() zonder argument is enkelvoudig', multiDev({ info: MP.info.replace("copy: ['notes', 'multi'], paste: ['notes', 'multi']", "copy: ['multi'], paste: ['multi']") }), [["getClip() zonder argument moet een multi-clip geven", "getClip() without an argument must return a multi clip"]]);
+const MG = (rep) => ({ get: MP.get.replace("tracks: S.tr.map((t, i) => ({ slot: i, name: 'T' + i, kind: t.kind, clip: one(t) })) };", rep) });
+errs('klembord multi: lege tracks', multiDev(MG("tracks: [] };")), [["kind 'multi' heeft een lijst tracks nodig", "kind 'multi' needs a list tracks"]]);
+errs('klembord multi: 65 sporen', multiDev(MG("tracks: Array.from({ length: 65 }, (_, i) => ({ slot: i % 64, kind: 'notes', clip: one(S.tr[0]) })) };")), [["kind 'multi' heeft een lijst tracks nodig", "kind 'multi' needs a list tracks"]]);
+errs('klembord multi: spoor zonder clip', multiDev(MG("tracks: [{ slot: 0, kind: 'notes' }] };")), [['spoor 0: slot', 'track 0: slot']]);
+errs('klembord multi: soort van het spoor wijkt af van zijn clip', multiDev(MG("tracks: [{ slot: 0, kind: 'drums', clip: one(S.tr[0]) }] };")), [['spoor 0: slot', 'track 0: slot']]);
+errs('klembord multi: multi in multi', multiDev(MG("tracks: [{ slot: 0, kind: 'notes', clip: { format: 'patchkamer-clip', formatVersion: 1, kind: 'multi', length: 192, tracks: [] } }] };")), [['spoor 0: slot', 'track 0: slot']]);
+errs('klembord multi: slot buiten 0 tot 63', multiDev(MG("tracks: [{ slot: 64, kind: 'notes', clip: one(S.tr[0]) }] };")), [['spoor 0: slot', 'track 0: slot']]);
+errs('klembord multi: ongeldige noot in een spoor', multiDev(MG("tracks: [{ slot: 0, kind: 'notes', clip: { ...one(S.tr[0]), notes: [{ t: 0, n: 200, len: 1 }] } }] };")), [['spoor 0: noot 0:', 'track 0: note 0:']]);
+errs('klembord multi: length is niet de langste spoorclip', multiDev({ get: MP.get.replace("length: Math.max(...S.tr.map(t => t.length)),", "length: 12,") }), [['length van een multi-clip moet gelijk zijn aan de lengte van de langste spoorclip', 'length of a multi clip must equal the length of its longest track clip']]);
+errs('klembord multi: rondreis verandert de state', multiDev({ set: MP.set.replace("t.length = L; return true;", "t.length = L + 12; return true;") }), [['setClip(getClip()) verandert de state', 'setClip(getClip()) changes the state']]);
+errs('klembord multi: setClip gooit op een rommel-multi', multiDev({ set: MP.set.replace('try {', "if (c && c.tracks && c.tracks.length === 1000) throw new Error('duizend'); try {") }), [['setClip() gooit bij', 'setClip() throws on']]);
+errs('klembord multi: setClip zet half (ok:false maar state veranderd)', multiDev({ set: MP.set.replace("if (c.kind === 'multi') { if (!Array.isArray(c.tracks)) return no;", "if (c.kind === 'multi') { if (!Array.isArray(c.tracks)) { S.tr[0].length = 24; return no; }") }), [['ok:false maar veranderde toch de state', 'returned ok:false but still changed the state']]);
 
 
 // ---- meters (v1.18): host.ui.meter(parent, label, opts) -> { el, set, id, destroy }
