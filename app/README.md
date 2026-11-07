@@ -37,7 +37,11 @@ Prints the base and output latency that this Chromium reports per `latencyHint` 
 
 Chromium plays through WASAPI on Windows. For lower latency the app gets a native audio path: a Node addon (`native/`, N-API) that opens an ASIO driver, and a ring buffer that keeps the clock of the host and the clock of the sound card together (`native/ring.h`: reads slightly faster or slower, at most 0.3%, and raises its margin by itself when the writer delivers in bursts).
 
-State: the addon, the ring buffer and a test mode are there. The host does not play through it yet (the next step). Try it on Windows with your interface:
+The host plays through it, in the app only (the page in a browser is not touched). The wrapper adds one script to the page it serves (`app-asio.js`; the file in the repo stays as it is). With ASIO on, the `AudioContext` of the host runs on a silent output; everything that is connected to its destination goes to a worklet that writes into shared memory, a worker passes it over a message channel to the main process, and the addon plays it through the driver. A button at the bottom left (**ASIO**) opens a panel: driver, buffer, output pair, sample rate and the margin of the ring buffer, with the delay the driver reports and the estimated delay. It is off by default; applying reloads the audio (the host asks first and keeps your workspace). The settings are in `asio.json` in the data folder of the app.
+
+The page is cross-origin isolated (needed for shared memory), so a library or font from another site must send CORS headers, which GitHub does.
+
+Test the sound card without the host (Windows, with your interface):
 
 ```
 Patchkamer-0.1.0-portable.exe --asio-test

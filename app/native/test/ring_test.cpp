@@ -78,7 +78,16 @@ int main() {
       uint64_t want = (uint64_t)(tr * fs) + 1024; while (sent < want) sent += ring.write(in.data(), 1024);
       ring.read(L.data(), R.data(), 128); tr += 128 / fs; if (tr > 10) { static uint32_t u10 = ~0u; if (u10 == ~0u) u10 = ring.underruns(); uLate = ring.underruns() - u10; } }
     std::printf("bursts 1024: under=%u (after 10 s: %u) target=%.0f\n", ring.underruns(), uLate, ring.target());
-    CHECK(ring.target() > 384 && uLate == 0, "target grows and settles"); }
+    CHECK(ring.target() > 1024 && uLate == 0 && ring.underruns() <= 3, "target follows the burst and settles with few gaps"); }
+  // 9. when the bursts become small again the margin comes down
+  { DriftRing ring; const double fs = 48000; ring.configure(fs, 384); std::vector<float> in(2048, 0.1f), L(128), R(128);
+    double tr = 0; uint64_t sent = 0; double t1 = 0;
+    for (int blk = 0; tr < 120; blk++) {
+      const uint32_t chunk = tr < 10 ? 1024 : 128; const uint64_t want = (uint64_t)(tr * fs) + chunk;
+      while (sent < want) sent += ring.write(in.data(), chunk);
+      ring.read(L.data(), R.data(), 128); tr += 128 / fs; if (tr >= 10 && t1 == 0) t1 = ring.target(); }
+    std::printf("bursts back to 128: target %.0f -> %.0f\n", t1, ring.target());
+    CHECK(t1 > 1000 && ring.target() < 420, "margin comes down (%.0f -> %.0f)", t1, ring.target()); }
   // 7. conversion
   { int32_t i32[3]; float s[3] = {1.f, -1.f, NAN}; pkconv::write(i32, pkconv::Int32LSB, s, 3);
     CHECK(i32[0] == 2147483647 && i32[1] == -2147483647 && i32[2] == 0, "int32 %d %d %d", i32[0], i32[1], i32[2]);

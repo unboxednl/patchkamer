@@ -24,12 +24,13 @@ public:
     reset();
   }
   void reset() {
-    target_ = base_; w_.store(0); r_.store(0); pos_ = 0; fillAvg_ = base_; prefill_ = true; ratio_ = 1.0;
+    target_ = base_; w_.store(0); r_.store(0); pos_ = 0; fillAvg_ = base_; prefill_ = true; ratio_ = 1.0; winMax_.store(0); maxChunk_ = 0; sinceUnder_ = 0;
     underruns_.store(0); overruns_.store(0); skips_.store(0);
   }
 
   // Writer thread. Interleaved stereo. NaN and Infinity become 0. Returns the number of frames taken.
   uint32_t write(const float* inter, uint32_t frames) {
+    if (frames > winMax_.load(std::memory_order_relaxed)) winMax_.store(frames, std::memory_order_relaxed);
     const uint64_t w = w_.load(std::memory_order_relaxed), r = r_.load(std::memory_order_acquire);
     const uint32_t freeFrames = cap_ - uint32_t(w - r);
     uint32_t n = frames < freeFrames ? frames : freeFrames;
@@ -49,6 +50,7 @@ public:
   void read(float* L, float* R, uint32_t n) {
     const uint64_t w = w_.load(std::memory_order_acquire);
     double avail = double(w) - pos_;
+    adaptTarget(n);
     if (prefill_) {
       if (avail < target_) { silence(L, R, 0, n); return; }
       prefill_ = false; fillAvg_ = avail;
@@ -65,7 +67,7 @@ public:
       if (pos_ + 1.0 >= double(w)) { // not enough: silence and wait for a new prefill
         // the writer delivers in bursts that are larger than the target: ask for a larger margin (auto latency)
         underruns_.fetch_add(1, std::memory_order_relaxed); prefill_ = true; silence(L, R, i, n);
-        target_ = target_ + 128 > maxTarget_ ? maxTarget_ : target_ + 128; break;
+        target_ = target_ + 128 > maxTarget_ ? maxTarget_ : target_ + 128; sinceUnder_ = 0; break;
       }
       const uint64_t i0 = uint64_t(pos_); const double f = pos_ - double(i0);
       const size_t a = size_t(i0 & mask_) * 2, b = size_t((i0 + 1) & mask_) * 2;
@@ -86,6 +88,20 @@ public:
   uint32_t queued() const { return uint32_t(w_.load(std::memory_order_acquire) - r_.load(std::memory_order_acquire)); }
 
 private:
+  // The writer delivers in bursts (the audio of the host is made in blocks of the size of its device buffer). The margin must
+  // hold one burst: go up at once when a larger burst is seen, and come down slowly (64 frames per 5 seconds) when it was a one-off.
+  void adaptTarget(uint32_t n) {
+    uint32_t seen = winMax_.load(std::memory_order_relaxed); if (maxChunk_ > seen) seen = maxChunk_;
+    double need = seen * 1.1 + 64; if (need > maxTarget_) need = maxTarget_;
+    double t = target_;
+    if (need > t) { target_ = need; return; }
+    sinceUnder_ += n;
+    if (sinceUnder_ >= uint64_t(fs_ * 5)) {
+      sinceUnder_ = 0; maxChunk_ = winMax_.exchange(0, std::memory_order_relaxed);
+      double floorT = need > base_ ? need : base_;
+      if (t > floorT) { t -= 64; target_ = t < floorT ? floorT : t; }
+    }
+  }
   static void silence(float* L, float* R, uint32_t from, uint32_t to) { for (uint32_t i = from; i < to; i++) L[i] = R[i] = 0.f; }
   std::vector<float> buf_;
   uint32_t cap_, mask_;
@@ -93,6 +109,9 @@ private:
   std::atomic<double> target_{384.0};
   std::atomic<uint64_t> w_{0}, r_{0};
   std::atomic<uint32_t> underruns_{0}, overruns_{0}, skips_{0};
+  std::atomic<uint32_t> winMax_{0};   // largest write of this window (writer thread), taken over by the reader
+  uint32_t maxChunk_ = 0;             // largest write of the previous window (reader thread)
+  uint64_t sinceUnder_ = 0;           // frames read without an underrun (reader thread)
   double pos_ = 0, fillAvg_ = 384.0, ratio_ = 1.0; // reader thread only
   bool prefill_ = true;
 };

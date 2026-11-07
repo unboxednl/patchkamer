@@ -2,7 +2,7 @@
 // Patchkamer desktop app: the host in its own window. The page is served from a local server on 127.0.0.1
 // (a fixed port, so settings and workspaces stay in the same place), with the bundled library under /bibliotheek/.
 'use strict';
-const { app, BrowserWindow, session, shell, Menu } = require('electron');
+const { app, BrowserWindow, session, shell, Menu, ipcMain } = require('electron');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -32,8 +32,18 @@ const SERVED = new Set(['devices', 'presets', 'tunes']);
 const TYPES = { '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json; charset=utf-8', '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8' };
 
 function send(res, code, body, type) {
-  res.writeHead(code, { 'Content-Type': type || 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' });
+  res.writeHead(code, { 'Content-Type': type || 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff',
+    // cross-origin isolated: shared memory between the audio thread and a worker (native audio). "credentialless" keeps other sites loadable.
+    'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'credentialless' });
   res.end(body);
+}
+// The page of the host gets one extra script (the audio of the app); the file in the repo stays as it is.
+function sendHost(res) {
+  fs.readFile(hostFile, 'utf8', (err, html) => {
+    if (err) return send(res, 404, 'not found');
+    const tag = '<script src="/__app/asio.js"></script>';
+    send(res, 200, /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, m => m + tag) : tag + html, TYPES['.html']);
+  });
 }
 function sendFile(res, file) {
   fs.readFile(file, (err, buf) => err ? send(res, 404, 'not found') : send(res, 200, buf, TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream'));
@@ -43,7 +53,8 @@ function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'method not allowed');
   let p;
   try { p = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { return send(res, 400, 'bad request'); }
-  if (p === '/' || p === '/patchkamer.html') return sendFile(res, hostFile);
+  if (p === '/' || p === '/patchkamer.html') return sendHost(res);
+  if (p === '/__app/asio.js') return sendFile(res, path.join(__dirname, 'app-asio.js'));
   { const parts = p.split('/').filter(Boolean);
     if (parts.length >= 2 && HOST_FOLDERS.has(parts[0]) && /\.(m?js|css|json|png|svg|woff2?|ico)$/i.test(p)) {
       const file = path.resolve(hostDir, ...parts);
@@ -67,6 +78,55 @@ function handler(req, res) {
   }
   send(res, 404, 'not found');
 }
+
+
+// ---- native audio (ASIO): settings, the device, and the audio from the page ----
+let nativeAudio = null; try { nativeAudio = require('./asio').native; } catch (e) {}
+const TEST_CLOCK = 'Test clock (no sound)';
+const cfgFile = () => path.join(app.getPath('userData'), 'asio.json');
+function cleanCfg(c) {
+  c = c && typeof c === 'object' ? c : {};
+  const n = (v, lo, hi, d) => { v = +v; return Number.isFinite(v) ? Math.min(hi, Math.max(lo, Math.round(v))) : d; };
+  return { enabled: c.enabled === true, driver: String(c.driver || '').slice(0, 120), buffer: n(c.buffer, 0, 8192, 0), pair: n(c.pair, 0, 15, 0),
+           targetMs: n(c.targetMs, 2, 60, 8), sampleRate: [44100, 48000, 88200, 96000].includes(+c.sampleRate) ? +c.sampleRate : 48000 };
+}
+function readCfg() { try { return cleanCfg(JSON.parse(fs.readFileSync(cfgFile(), 'utf8'))); } catch (e) { return cleanCfg({}); } }
+function writeCfg(c) { try { fs.mkdirSync(path.dirname(cfgFile()), { recursive: true }); fs.writeFileSync(cfgFile(), JSON.stringify(c, null, 1)); } catch (e) {} }
+let asioInfo = { ok: false, reason: 'off' };
+function openAsio(cfg) {
+  if (nativeAudio) { try { nativeAudio.close(); } catch (e) {} }
+  if (!nativeAudio) return (asioInfo = { ok: false, reason: 'unavailable' });
+  if (!cfg.enabled) return (asioInfo = { ok: false, reason: 'off' });
+  const drivers = nativeAudio.list();
+  const driver = drivers.includes(cfg.driver) ? cfg.driver : drivers.find(d => d !== TEST_CLOCK);
+  if (!driver) return (asioInfo = { ok: false, reason: 'nodriver' });
+  const info = nativeAudio.open({ driver, sampleRate: cfg.sampleRate, bufferSize: cfg.buffer, pair: cfg.pair, targetMs: cfg.targetMs });
+  if (!info.ok) return (asioInfo = { ok: false, reason: 'open', driver, error: info.error });
+  const st = nativeAudio.start();
+  if (!st.ok) { nativeAudio.close(); return (asioInfo = { ok: false, reason: 'start', driver, error: st.error }); }
+  return (asioInfo = info);
+}
+let appOrigin = '';
+const trusted = e => !!(e.senderFrame && appOrigin && e.senderFrame.url.startsWith(appOrigin + '/'));
+let audioPort = null, portMsgs = 0, portBad = 0, portType = '';
+ipcMain.on('asio:open', e => { e.returnValue = trusted(e) ? openAsio(readCfg()) : { ok: false, reason: 'untrusted' }; });
+ipcMain.handle('asio:list', e => (trusted(e) && nativeAudio ? nativeAudio.list() : []));
+ipcMain.handle('asio:getConfig', e => (trusted(e) ? { cfg: readCfg(), info: asioInfo, built: !!(nativeAudio && nativeAudio.asioAvailable()) } : null));
+ipcMain.handle('asio:setConfig', (e, c) => { if (!trusted(e)) return null; const cfg = cleanCfg(c); writeCfg(cfg); return { cfg, info: openAsio(cfg) }; });
+ipcMain.handle('asio:stats', e => (trusted(e) && nativeAudio ? { info: asioInfo, stats: nativeAudio.stats(), port: { messages: portMsgs, bad: portBad, type: portType } } : null));
+ipcMain.handle('asio:panel', e => (trusted(e) && nativeAudio ? nativeAudio.controlPanel() : false));
+ipcMain.on('asio:port', e => {
+  if (!trusted(e) || !nativeAudio || !e.ports[0]) return;
+  if (audioPort) { try { audioPort.close(); } catch (err) {} }
+  audioPort = e.ports[0];
+  audioPort.on('message', m => {
+    const d = m.data; portMsgs++; if (!d) { portBad++; return; } if (!portType) portType = Object.prototype.toString.call(d) + ' ' + (d.constructor && d.constructor.name);
+    const f = d instanceof Float32Array ? d : (d.buffer instanceof ArrayBuffer ? new Float32Array(d.buffer, d.byteOffset || 0, (d.byteLength || 0) >> 2) : null);
+    if (f && f.length >= 2) nativeAudio.write(f); else portBad++;
+  });
+  audioPort.start();
+});
+app.on('before-quit', () => { if (nativeAudio) { try { nativeAudio.close(); } catch (e) {} } });
 
 function listen() {
   return new Promise((resolve, reject) => {
@@ -94,7 +154,7 @@ app.whenReady().then(async () => {
     app.exit(0); return;
   }
   const { port, fixed } = await listen();
-  const origin = 'http://127.0.0.1:' + port;
+  const origin = 'http://127.0.0.1:' + port; appOrigin = origin;
   // Only what the host needs: MIDI (no sysex), audio input, fullscreen. The rest is refused.
   const ok = new Set(['midi', 'media', 'fullscreen', 'clipboard-sanitized-write', 'audioCapture']);
   session.defaultSession.setPermissionRequestHandler((wc, perm, cb, details) => cb(ok.has(perm) && !(perm === 'midi' && details && details.midiSysex)));
