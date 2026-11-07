@@ -43,7 +43,7 @@ async function toDevice(n,def){ const dev=PK.Host.latest(def); if(!dev){ PK.stat
   if(!id){ const before=new Set(PK.Host.devices.keys()); PK.placeNew(def); id=[...PK.Host.devices.keys()].find(k=>!before.has(k)); }
   const r=id&&PK.Host.devices.get(id); if(!r||!r.inst||typeof r.inst.loadAudio!=='function'){ PK.status(PK.pkt('m.sm_geen_loadaudio',dev.name),true); return; }
   try{ await r.inst.loadAudio([fileOf(n)],{name:n.name,bpm:n.bpm,bars:n.bars}); PK.select(id); PK.status(PK.pkt('m.sm_geladen',n.name,dev.name)); }catch(e){ PK.status(PK.pkt('m.sm_laden_mislukt',e.message),true); } }
-const TARGETS=[['nl.patchkamer.loopslicer','Loop Slicer'],['nl.patchkamer.samplebank','Samplebank'],['nl.patchkamer.drum-listener','Drum Listener']];
+const TARGETS=[['nl.patchkamer.loopslicer','Loop Slicer'],['nl.patchkamer.samplebank','Samplebank'],['nl.patchkamer.drum-listener','Drum Listener'],['nl.patchkamer.stemsplitter','Stem Splitter']];
 function leaf(e){ const n=e.n, it=mk('div','pritem'), nm=mk('span','nm',n.name), sm=document.createElement('small'); sm.textContent=' · '+[n.bpm?Math.round(n.bpm*10)/10+' BPM':'',n.bars?n.bars+' '+PK.pkt(n.bars===1?'m.sm_maat':'m.sm_maten'):'',n.license||e.l.license||''].filter(Boolean).join(' · '); nm.appendChild(sm);
   const bb=mk('div','b'), pv=mk('button','small',prev&&prev.sid===n.sid?'■':'▶'); pv.title=PK.pkt('m.sm_beluister'); pv.onclick=()=>preview(n,pv); bb.appendChild(pv);
   TARGETS.forEach(([def,label])=>{ const b=mk('button','small','→ '+label); b.title=PK.pkt('m.sm_laad_in',label); b.disabled=!PK.Host.latest(def); b.onclick=()=>toDevice(n,def); bb.appendChild(b); }); it.append(nm,bb); return it; }

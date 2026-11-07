@@ -13,6 +13,7 @@ This manual covers the eleven **tools** of Patchkamer. Tools are helpers: you us
 | find chords without music theory: key, style, chords I play, next-chord ideas, 16 pads, bass and voice leading | [Chord Buddy](#chord-buddy) | an **In** event in, **Chords** and **Bass** event outs |
 | record the finished mix (or any sound) into one file | [Recorder](#recorder) | **In** and **Through** audio |
 | turn a drum loop into a pattern (kick, snare, hats, toms) and copy it to a sequencer | [Drum Listener](#drum-listener) | audio **In** and **Through**, an event out **Drum trigs** |
+| split a track into stems with an online service (vocals, drums, bass, the rest) and play them with the clock | [Stem Splitter](#stem-splitter) | audio **In**, an output per stem and a bundle **All stems** |
 | record many tracks at once, one file per track | [Multitrack](#multitrack) | a **Bundle** in |
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
@@ -406,6 +407,52 @@ The **Control Surface Layouts** pack has 28 presets in five folders: **Controlle
 - A recording that runs for more than a few bars is not folded into one bar: the pattern then simply has that many bars.
 
 ---
+
+## Stem Splitter
+
+**What it is for.** Splits a track into **stems** (vocals, drums, bass, the rest, sometimes guitar, piano and more) and plays them along with the studio clock, each stem on its own output. Useful to remix a track, process the drums separately or leave a part out. The splitting is done by an **online service**: Stem Splitter sends the track there and gets the stems back.
+
+![The Stem Splitter card, empty](../images/en/tools/stem-splitter.png)
+
+**Note, before you start**
+
+- The sound **leaves your computer** and goes to the chosen service on the internet.
+- It costs **money per track**. The card and the confirmation question show the estimated cost; prices are an indication, check them with the service. You can cancel, but the service may then already have incurred the cost.
+- You must have the **rights** to the music (copyright). Only use your own recordings or music you have the rights to.
+- Nothing is sent when you load a song or workspace, or choose a preset: only a click on **Split** does it. The first time per session (per service and model) Patchkamer asks for confirmation.
+
+**Set up first.** You need an account and a **key** (API key) at the service. Enter it in **Settings**, under **Stem splitting (online service)** (the **Settings…** button on the card takes you there). Per service you find the key, the model and the price per track (the first service gives a price per model, for the second you can enter one yourself). The key is stored only in this browser and goes only to the service it belongs to; it never ends up in a song, workspace or preset. There are three services:
+
+- **fal.ai · Mureka**: accepts mp3 or m4a (at most 10 MB) and returns a zip of stems, sometimes with MIDI. Models `audio-separation-1`, `-2` and `-3`; the number of stems depends on the model.
+- **fal.ai · Demucs**: accepts mp3, m4a, wav, flac and ogg and returns separate stems: 4 (`htdemucs`, `htdemucs_ft`) or 6 with guitar and piano (`htdemucs_6s`). The price is not known; fill it in yourself if you want a cost estimate.
+- **Own service**: another service with the same queue protocol (base address, endpoint, key and model, and a largest file size). An address with `http` is only allowed on your own computer.
+
+**Getting audio in**
+
+- **Choose file…**, or **drop** a file on the card.
+- A sample from the **Samples** tab of the library, with the **→ Stem Splitter** button.
+- **Record** takes a piece from the **In** port (for example the output of **Audio Capture**): choose the **Length** (10 seconds to 3 minutes), press **Record** and then **Stop**. The recording becomes a 16-bit WAV.
+
+The service decides what it accepts. If it only takes mp3 or m4a and you have a WAV, Stem Splitter says so; save the track as mp3 (the **Recorder** device can do that) or choose a service that takes WAV.
+
+**Splitting.** Choose the **Service** and the **Model** (empty = the model from the settings) and click **Split**. The card shows the state: in the queue, the service is splitting, fetching, unpacking, decoding. **Cancel** aborts. If something goes wrong (no key, key refused, no balance, no connection, broken output), the card says what and what you can do. A service that does not allow calls from the browser gives the message that it could not be reached.
+
+**The stems**
+
+- The **number of audio outputs follows the number of stems** the service returned, named after the stem (Vocals, Drums, Bass, Other, Guitar, ...). There is also one bundle output **All stems** with all stems, for the Multitrack or the Mixer. Cables to outputs that disappear are detached by Patchkamer, which tells you.
+- The stems **play with the clock**: they start and stop with the studio transport (and begin on the first beat of a bar). Each stem has a **level**, **M** (mute) and **S** (solo).
+- **Tempo of the track**: leave it at 0 and the track plays at its own tempo. Enter the tempo of the track and it follows the tempo of the studio (the pitch changes with it). **Repeat** makes the track start over and over.
+- **WAV** chooses 16 or 24 bit; **Save** on a stem saves that stem as WAV, **Save all stems (zip)** saves all stems in one zip file. If the service gives MIDI there is **Save MIDI (zip)**.
+- **Drums → Drum Listener** hands the drum stem to the Drum Listener (the selected card, an existing one or a new one) to turn it into a pattern.
+- **Clear stems** removes the result from memory; the outputs stay.
+
+**Presets and songs.** A preset and a song keep only the settings (service, model, WAV depth, record length, repeat, tempo, and level, mute and solo per stem name), never the stems or the key. A song does remember the outputs of the last result, so cables stay in place; the stems themselves only come back when you split again.
+
+**Tips and limits**
+
+- Stems live in memory: a long track with 6 stems takes a few hundred MB.
+- Splitting takes a few seconds to minutes, depending on the service and the queue; after 20 minutes Patchkamer gives up.
+- The result is only as good as the service: traces of other stems may bleed through.
 
 ## If it does not work
 

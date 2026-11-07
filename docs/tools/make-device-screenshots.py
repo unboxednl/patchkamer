@@ -52,7 +52,7 @@ def shoot(browser, base, lang, area, slug, path, out):
     pg.goto(base + '/patchkamer/patchkamer.html'); pg.add_style_tag(content='*{user-select:none!important}'); pg.wait_for_timeout(600)
     pg.set_input_files('#devFile', path); pg.wait_for_timeout(500)
     pg.evaluate("document.querySelectorAll('.cat.closed .cathead').forEach(b=>b.click())"); pg.wait_for_timeout(300)   # de host start met alle categorieën ingeklapt
-    pg.locator('.libdev button').filter(has_text=PLACE).first.click(); pg.wait_for_timeout(700)
+    pg.locator('.libdev').filter(has_not=pg.locator('.nm', has_text='AI Chat')).locator('button').filter(has_text=PLACE).first.click()   # de bibliotheek heeft zelf al het apparaat AI Chat: dat niet; pg.wait_for_timeout(700)
     pg.click('#libToggle'); pg.wait_for_timeout(1200)
     kind, pack = pack_for(slug)
     if pack:

@@ -17,6 +17,7 @@ Hulpmiddelen om muziek te maken: spelen, opnemen, meten, notities maken en ander
 | **Scope** | Toont het geluid (spectrum, golfvorm, spectrogram, stereobeeld, peak/RMS); geeft het ongewijzigd door | `Scope/` | [Scope](../../docs/tools/USER-MANUAL_NL.md#scope) |
 | **Metronome** | Een tik op elke maat, tel, achtste of zestiende van de klok van de studio; dezelfde slagen gaan als trigs naar buiten | `Metronome/` | [Metronome](../../docs/tools/USER-MANUAL_NL.md#metronome) |
 | **Notes** | Een notitieblok met toonsoort, tempo, delen en een takenlijst; geen geluid, geen poorten | `Notes/` | [Notes](../../docs/tools/USER-MANUAL_NL.md#notes) |
+| **Stem Splitter** | Splitst een nummer in stems (zang, drums, bas, rest) met een dienst op internet, wat geld kost per nummer en de rechten op de muziek vraagt; een bestand, een sample uit de bibliotheek of een opname uit de ingang gaat erin, een uitgang per stem en een bundel komen eruit, met de klok van de studio gespeeld; bewaart de stems als WAV en geeft de drums aan de Drum Listener | `StemSplitter/` | [Stem Splitter](../../docs/tools/USER-MANUAL_NL.md#stem-splitter) |
 
 ## Meer
 

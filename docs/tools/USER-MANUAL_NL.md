@@ -13,6 +13,7 @@ Deze handleiding gaat over de elf **tools** van Patchkamer. Tools zijn hulpmidde
 | akkoorden vinden zonder muziektheorie: toonsoort, stijl, akkoorden die ik speel, ideeën voor het volgende akkoord, 16 pads, bas en stemvoering | [Chord Buddy](#chord-buddy) | een eventingang **In**, eventuitgangen **Akkoorden** en **Bas** |
 | de afgewerkte mix (of ander geluid) in één bestand opnemen | [Recorder](#recorder) | audio **In** en **Door** |
 | een drumloop omzetten in een patroon (kick, snare, hats, toms) en dat naar een sequencer kopiëren | [Drum Listener](#drum-listener) | audio **In** en **Door**, een eventuitgang **Drum trigs** |
+| een nummer door een dienst op internet in stems splitsen (zang, drums, bas, rest) en die met de klok laten spelen | [Stem Splitter](#stem-splitter) | audio **In**, een uitgang per stem en een bundel **Alle stems** |
 | veel sporen tegelijk opnemen, een bestand per spoor | [Multitrack](#multitrack) | een **Bundel**-ingang |
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
@@ -406,6 +407,52 @@ Het pack **Control Surface Layouts** heeft 28 presets in vijf mappen: **Controll
 - Een opname van meer dan een paar maten wordt niet tot één maat samengevouwen: het patroon heeft dan gewoon zoveel maten.
 
 ---
+
+## Stem Splitter
+
+**Waar het voor dient.** Splitst een nummer in **stems** (zang, drums, bas, rest, soms ook gitaar, piano en meer) en laat ze met de klok van de studio meespelen, elke stem op een eigen uitgang. Dat is handig om een nummer te remixen, de drums apart te bewerken of een stem weg te laten. Het splitsen doet een **dienst op internet**: Stem Splitter stuurt het nummer erheen en krijgt de stems terug.
+
+![De kaart van Stem Splitter, leeg](../images/nl/tools/stem-splitter.png)
+
+**Let op, voordat je begint**
+
+- Het geluid **verlaat je computer** en gaat naar de gekozen dienst op internet.
+- Het kost **geld per nummer**. De kaart en de vraag om bevestiging tonen de geschatte kosten; de prijzen zijn een indicatie, controleer ze bij de dienst. Annuleren kan, maar de dienst kan dan al kosten hebben gemaakt.
+- Je moet de **rechten** hebben op de muziek (auteursrecht). Gebruik alleen eigen opnamen of muziek waarvan je de rechten hebt.
+- Er gaat niets weg bij het laden van een song of werkruimte, of door een preset: alleen een klik op **Splitsen** doet het. De eerste keer per sessie (per dienst en model) vraagt Patchkamer om bevestiging.
+
+**Eerst instellen.** Je hebt een account en een **sleutel** (API-sleutel) bij de dienst nodig. Vul die in bij **Instellingen**, onder **Stems splitsen (dienst op internet)** (de knop **Instellingen…** op de kaart brengt je er). Per dienst staan daar de sleutel, het model en de prijs per nummer (de eerste dienst geeft een prijs per model, bij de tweede kun je er zelf een invullen). De sleutel staat alleen in deze browser en gaat alleen naar de dienst waar hij bij hoort; hij komt nooit in een song, werkruimte of preset. Er zijn drie diensten:
+
+- **fal.ai · Mureka**: neemt mp3 of m4a aan (hoogstens 10 MB) en geeft een zip met stems terug, soms met MIDI. Modellen `audio-separation-1`, `-2` en `-3`; het aantal stems hangt van het model af.
+- **fal.ai · Demucs**: neemt mp3, m4a, wav, flac en ogg aan en geeft losse stems terug: 4 (`htdemucs`, `htdemucs_ft`) of 6 met gitaar en piano (`htdemucs_6s`). De prijs is niet bekend; vul hem zelf in als je een kostenschatting wilt.
+- **Eigen dienst**: een andere dienst met hetzelfde wachtrijprotocol (basisadres, eindpunt, sleutel en model, en een grootste bestandsgrootte). Een adres met `http` mag alleen op je eigen computer.
+
+**Geluid binnenhalen**
+
+- **Bestand kiezen…** of een bestand op de kaart **slepen**.
+- Een sample uit de tab **Samples** van de bibliotheek, met de knop **→ Stem Splitter**.
+- **Opnemen** neemt een stuk op uit de poort **In** (bijvoorbeeld de uitgang van **Audio Capture**): kies de **Duur** (10 seconden tot 3 minuten), druk op **Opnemen** en daarna op **Stop**. De opname wordt een 16-bit WAV.
+
+De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan en je hebt een WAV, dan zegt Stem Splitter dat; sla het nummer dan op als mp3 (het apparaat **Recorder** kan dat) of kies een dienst die WAV aanneemt.
+
+**Splitsen.** Kies de **Dienst** en het **Model** (leeg = het model uit de instellingen) en klik op **Splitsen**. De kaart toont de stand: in de wachtrij, de dienst splitst, ophalen, uitpakken, decoderen. **Annuleren** breekt af. Gaat er iets mis (geen sleutel, sleutel geweigerd, geen tegoed, geen verbinding, kapotte uitvoer), dan zegt de kaart wat en wat je kunt doen. Een dienst die aanroepen vanuit de browser niet toestaat, geeft de melding dat hij niet te bereiken is.
+
+**De stems**
+
+- Het **aantal audio-uitgangen volgt het aantal stems** dat de dienst gaf, met de naam van de stem (Zang, Drums, Bas, Rest, Gitaar, ...). Daarnaast is er één bundeluitgang **Alle stems** met alle stems, voor de Multitrack of de Mixer. Kabels naar uitgangen die verdwijnen, haalt Patchkamer los en meldt dat.
+- De stems **spelen met de klok**: ze starten en stoppen met het transport van de studio (en beginnen op de eerste tel van een maat). Elke stem heeft een **niveau**, **M** (dempen) en **S** (solo).
+- **Tempo van het nummer**: laat je dit op 0, dan speelt het nummer op zijn eigen tempo. Vul je het tempo van het nummer in, dan loopt het mee met het tempo van de studio (de toonhoogte verandert dan mee). **Herhalen** laat het nummer steeds opnieuw beginnen.
+- **WAV** kiest 16 of 24 bit; **Bewaar** bij een stem bewaart die stem als WAV, **Alle stems bewaren (zip)** alle stems in één zipbestand. Geeft de dienst MIDI, dan is er **MIDI bewaren (zip)**.
+- **Drums → Drum Listener** geeft de drumstem aan de Drum Listener (het geselecteerde exemplaar, een bestaand of een nieuw) om er een patroon van te maken.
+- **Stems wissen** haalt het resultaat uit het geheugen; de uitgangen blijven.
+
+**Presets en songs.** Een preset en een song bewaren alleen de instellingen (dienst, model, WAV-diepte, opnameduur, herhalen, tempo, en niveau, dempen en solo per stemnaam), nooit de stems of de sleutel. De uitgangen van het laatste resultaat worden in een song wel onthouden, zodat kabels blijven zitten; de stems zelf komen pas terug als je opnieuw splitst.
+
+**Tips en grenzen**
+
+- Stems staan in het geheugen: een lang nummer met 6 stems kost een paar honderd MB.
+- Het splitsen duurt enkele seconden tot minuten, afhankelijk van de dienst en de wachtrij; na 20 minuten stopt Patchkamer.
+- Het resultaat is zo goed als de dienst: er kunnen sporen van andere stems doorklinken.
 
 ## Als het niet werkt
 

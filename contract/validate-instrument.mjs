@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.22
+// validate-instrument.mjs — Patchkamer contract v1.23
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -21,6 +21,7 @@
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
 // v1.21: instellingen opnemen en afspelen: host.watchParams, host.setParam, host.lockParams en host.paramsOf (voor sequencers); de nep-host kent ze en geeft false, de validator controleert er verder niets van.
+// v1.23: stems splitsen: host.stems(inst, actie, opts) (services / split / settings); de nep-host geeft [] bij services en weigert split; een aanroep van split tijdens de test is een fout (een netwerkaanroep start alleen op een klik).
 // v1.22: pads en schermpje: host.ui.pad(parent, label, opts) -> { el, set, flash, id, destroy } (opts: id, group, role, mode momentary|toggle, on, onpress, onrelease, onchange, color #rrggbb, text, title),
 //        host.ui.display(parent, label, opts) -> { el, set, get, value, items, id, destroy } (opts: id, group, role, items [[waarde, tekst]], value, onchange, kind, wrap, searchAt; el.select = het model)
 //        en host.ui.steps(parent, label, arr, onchange, opts?) met opts { id, group, role, color }. Een color die geen #rrggbb is, gooit (fout). Alleen "let op" bij een dubbel pad-id,
@@ -88,6 +89,7 @@ const V = {
     "v.ok_mastering_in": ", mastering in (doel)",
     "v.host_mastering_onbekende_actie": "host.mastering(): onbekende actie \"{0}\" (kies inspect, apply, analyse, accept of undo)",
     "v.host_mastering_geen_masteringout": "host.mastering(): het apparaat heeft geen masteringOut-poort",
+    "v.stems_zonder_klik": "host.stems('split') is aangeroepen zonder klik: create, mount, setState, setPreset, onStep, onEvent, onTransport en destroy starten nooit een netwerkaanroep",
     "v.masteringout_instance_onmasteringtargets_ontbreekt": "masteringOut: instance.onMasteringTargets(targets) ontbreekt",
     "v.onmasteringtargets_gooit": "onMasteringTargets() gooit: ",
     "v.masteringin_instance_configuremastering_ontbreekt": "masteringIn: instance.configureMastering(patch) ontbreekt",
@@ -324,6 +326,7 @@ const V = {
     "v.ok_mastering_in": ", mastering in (target)",
     "v.host_mastering_onbekende_actie": "host.mastering(): unknown action \"{0}\" (choose inspect, apply, analyse, accept or undo)",
     "v.host_mastering_geen_masteringout": "host.mastering(): the device has no masteringOut port",
+    "v.stems_zonder_klik": "host.stems('split') was called without a click: create, mount, setState, setPreset, onStep, onEvent, onTransport and destroy never start a network call",
     "v.masteringout_instance_onmasteringtargets_ontbreekt": "masteringOut: instance.onMasteringTargets(targets) is missing",
     "v.onmasteringtargets_gooit": "onMasteringTargets() throws: ",
     "v.masteringin_instance_configuremastering_ontbreekt": "masteringIn: instance.configureMastering(patch) is missing",
@@ -606,7 +609,7 @@ let frames = [], peerCalls = 0, connects = 0;
 const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true, noteNames: [{ note: 36, name: 'Kick' }] },
   { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
 let masteringCalls = 0, masteringBad = null, emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
-let METERS = 0, PADS = 0;
+let METERS = 0, PADS = 0, stemsCalls = 0;
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
 const PL = (P, k) => Array.isArray(P[k]) ? P[k] : [];
@@ -623,6 +626,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   // v1.13
   eventBundleChanged(inst, port) { if (!PL(curPorts || d.ports, 'multiEventOut').some(p => p.id === port)) modBad = vt('v.host_eventbundlechanged_is_geen_multieventout',port); },
   controls() { return []; }, setControl() { return false; },
+  // v1.23
+  stems(inst, action) { if (action === 'services') return []; if (action === 'split') stemsCalls++; return action === 'settings' ? true : Promise.reject(Object.assign(new Error('test'), { code: 'network' })); },
   // v1.21
   watchParams() { return false; }, setParam() { return false; }, lockParams() { return false; }, paramsOf() { return []; },
   // v1.14
@@ -1133,6 +1138,7 @@ const nKnobs = nMountKnobs; let OTHER = null;
   if (d.ports.multiEventOut.length) line += vt('v.ok_multievent_uit', nTracks);
   if (d.ports.multiEventIn.length) line += vt('v.ok_multievent_in');
   if (masteringBad) fail(masteringBad);
+  if (stemsCalls) fail(vt('v.stems_zonder_klik'));
   if (presetBytes) line += vt('v.ok_preset', presetBytes);
   if (nParts) line += vt('v.ok_instrumenten', nParts);
   if (clipOn) line += vt('v.ok_klembord');

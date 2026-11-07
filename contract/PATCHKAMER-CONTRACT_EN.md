@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.22 for building agents
+# Patchkamer — Instrument contract v1.23 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -31,6 +31,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.20 | Samples: sample packs (`*.patchkamer-samples.json`, sound as base64) with a tab of their own in the library, and for devices that load audio the optional method `loadAudio(files, info)` (§13e) |
 | v1.21 | Recording and playing settings: `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` let a sequencer follow the controls of another device (including what a modulator does), set them to an absolute value and lock them against modulation (§13f) |
 | v1.22 | Pads and small screen: `host.ui.pad(parent, label, opts)` has the host draw a push button (momentary or on/off, with `flash()` for a hit indication), `host.ui.display(parent, label, opts)` a choice list that a skin can show as a small screen with < > and [ok], and `host.ui.steps` gets a 5th argument `{ id, group, role, color }`; your own buttons take part with `data-pk-role="pad"` or `"step"`. Pads, steps and choices are in the register (`pad`, `steps`); the validator knows the new calls and reports a colour that is not `#rrggbb` as an error (§12f) |
+| v1.23 | Stem splitting: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` has the host split a track into stems with an online service (queue, unpack the zip, decode) and returns AudioBuffers; keys are kept only in the user's browser; the host asks for confirmation with the cost; a device sets its number of outputs with `host.setPorts` (§13g) |
 
 ---
 
@@ -1027,6 +1028,32 @@ host.lockParams(this, targetId, null); host.watchParams(this, targetId, null);
 
 A device that is only a target does nothing: the coverage of `params()` (§8, v1.16) decides which controls a sequencer can record.
 
+## 13g. Splitting stems with an online service (v1.23)
+
+A device may not use the network (§15). A device that wants an online service to split a track into stems (vocals, drums, bass, the rest) therefore asks the **host**: `host.stems`. The host has a small registry of services (the user can add an own service), keeps the user's keys, makes the call with a queue (submit, status, result), unpacks the output (a zip or separate files) and decodes the stems. The device gets AudioBuffers back.
+
+| Call | What |
+|---|---|
+| `host.stems(this, 'services')` | Synchronous. A list `[{ id, label, configured, models: [{ id, label, price }], model, price, currency, accept, maxBytes, midi }]`: the services the user can choose. `id` is `'a'`, `'b'` or `'custom'`; `label` is in the user's language; `configured` says whether a key is set (you never see the key itself); `model` is the model chosen in the settings and `price` its price per track, or `null` when unknown; `accept` is the list of file types (`mp3`, `m4a`, `wav`, `flac`, `ogg`) and `maxBytes` the largest input; `midi` says whether the service can supply MIDI. |
+| `host.stems(this, 'split', opts)` | Returns a promise. `opts`: `audio` (required: a `Blob` or `File`), `service` (required: an `id` from the list), `model` (optional; without it the model from the settings applies), `signal` (optional: an `AbortSignal` to cancel), `onProgress(p)` (optional). The result is `{ service, model, price, currency, stems: [{ id, file, buffer }], midi }`: `buffer` is an `AudioBuffer`, `midi` a `Blob` with the MIDI zip or `null`. |
+| `host.stems(this, 'settings')` | Opens the settings panel at the stems section (where the user enters their key). Returns `true`. |
+| `host.stems(this, 'send', opts)` | Gives sound to another device that has `loadAudio` (§13e), like the → *device* button in the Samples tab. `opts`: `def` (the `id` of the target device), `file` (a `Blob` or `File`), `info` (optional: `{ name, bpm, bars }`). The host picks the selected card of that device, otherwise an existing one, otherwise a new one. Returns a promise with `true` if the target accepted the sound, otherwise `false`. |
+
+**Progress.** `onProgress` gets `{ phase, queue? }` where `phase` is one of `confirm` (the host asks the user to confirm), `upload`, `submit`, `queue` (with `queue` = place in the queue or `null`), `run`, `download`, `unzip` and `decode`. If your `onProgress` throws, the host ignores it.
+
+**Errors.** The promise rejects with an `Error` with a `code` (and sometimes `status`, `max`, `size`, `accept`, `found`, `host`): `declined` (the user refused the confirmation), `aborted`, `timeout` (after 20 minutes), `nokey` (no key entered), `config` (the own service is not filled in), `service` (unknown service or model), `format` (the input is not a type the service accepts; the host looks at the bytes, not the name), `size` (the input is too large for the service), `network` (the call did not arrive: no connection, or the service does not allow the call from the browser), `auth` (the key was refused), `credit` (no balance), `notfound`, `input` (the service refused the input), `rate`, `server`, `http`, `failed` (the service reported a failed job), `response` (an incomprehensible answer), `zip` (the output is not a valid or is a too large zip; `message` says which part), `decode` (a stem cannot be decoded) and `unsupported` (the browser lacks `DecompressionStream`). The device writes the text for the user itself, per `code`, in `host.lang`.
+
+**What the host does, and what you must do.**
+- **Only after a click.** Call `split` only on a click by the user. `create`, `mount`, `setState`, `setPreset`, `onStep` and `onTransport` never start a call; the validator reports an error if that happens. The host additionally asks for confirmation itself the first time per session, per service and model, with the estimated cost and a copyright warning; nothing starts without that consent.
+- **Keys.** They are kept only in the user's browser (`localStorage`, key `patchkamerStems`), never in a song, workspace or preset, and go only to the address of the chosen service. The device never sees them.
+- **The output is not state.** Stems are large buffers: do not keep them in `getState()` or `getPreset()`. Keep only settings (service, model, level per stem name).
+- **Stem names.** The `id` of a stem consists of `[a-z0-9_-]` (at most 24 characters) and is unique in the result; the host recognises `vocals`, `drums`, `bass`, `guitar`, `piano`, `strings`, `synth`, `brass`, `wind`, `other` and `instrumental` from the file name, and otherwise uses the file name itself. The order is fixed (vocals, drums, bass, ...). The number of stems depends on the service and the model (1 to 12): set the number of audio outputs with `host.setPorts` (§3) after splitting, with a bundle output (§11) for all stems, and put the new AudioNodes in `outputs` first. Make sure the port ids `in` and `all` of the device are not used as stem names; the host avoids that.
+- **Zip.** The host reads the zip itself (stored and deflate, no zip64, no encryption), refuses a zip with a path outside (`..`, an absolute path), too many files (64), too large files (250 MB per file, 800 MB in total) or a broken checksum, and ignores anything that is not audio.
+- **Old host.** A host without v1.23 has no `host.stems`. Check `typeof host.stems === 'function'` and show a message otherwise.
+- **No rights, no money.** The device says visibly that the sound goes to an online service, costs money per track and that the user needs the rights.
+
+What the host does not do: it does not listen to the result, does not settle costs and does not guarantee that a service is reachable or that the browser allows the call (CORS). A service that does not allow it gives the error `network`.
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -1071,6 +1098,7 @@ A device that is only a target does nothing: the coverage of `params()` (§8, v1
 | `host.ui.display(parent, label, opts)` | v1.22 | A choice a skin can show as a small screen; the model is a hidden `<select>`; returns `{ el, set, get, value, items, id, destroy }` (§12f) |
 | `host.ui.steps(…, opts)` | v1.22 | 5th argument `{ id, group, role, color }` for a row of step buttons (§12f) |
 | `data-pk-role="pad"` / `"step"` | v1.22 | Your own buttons take part with shape, colour, lamp and size (§12f) |
+| `host.stems(this, action, opts)` | v1.23 | Have an online service split a track into stems: `'services'`, `'split'` (promise with AudioBuffers), `'send'` (give sound to another device) or `'settings'` (§13g) |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -1081,7 +1109,7 @@ Use nothing else of the host. What is not listed here may change without notice.
 - `destroy()` stops oscillators and sources, disconnects your nodes (`disconnect()`), stops timers, animations and subscriptions on `host.frame`, and disconnects bundle channels that you connected. Calling `destroy()` twice must not throw.
 - No global variables. Multiple instances of your device must be able to exist side by side. If you deliberately want to share between instances, such as the groups of Drift, do that in a variable at module level and clean it up.
 - No browser storage (`localStorage`, `sessionStorage`, `indexedDB`): state goes via `getState`/`setState`.
-- No network (`fetch`, `XMLHttpRequest`, `WebSocket`), no `import`, no own AudioContext.
+- No network (`fetch`, `XMLHttpRequest`, `WebSocket`; for an online stem service ask the host, §13g), no `import`, no own AudioContext.
 - Do not throw errors from `onStep`, `onEvent`, `onBundle` or `modulate`.
 
 ---
@@ -1138,6 +1166,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 18. **Meters (v1.18, §12e)**: the fake host knows `host.ui.meter(parent, label, opts)` and returns `{ el, set, id, destroy }`. A `source` that is not an `AnalyserNode` or a list of 1 or 2 `AnalyserNode`s throws and is therefore an error. Only a `warning` (never an error) for: a duplicate meter id, an invalid id or group, options that are not an object, an invalid `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` without `source`, a `set()` with anything but a finite number or `[l, r]`, `data-pk-role="meter"` on your own element and a `data-pk-suffix` of more than 16 characters. A meter does not count towards the coverage of `params()`. `--controls` shows meters with role `meter`.
 19. **Recording settings (v1.21, §13f)**: the fake host knows `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` and returns `false` (`[]` for `paramsOf`); the validator checks nothing else about them (test a sequencer that uses them in the host).
 20. **Pads and small screen (v1.22, §12f)**: the fake host knows `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` and the 5th argument of `host.ui.steps`. A `color` that is not `#rrggbb` throws and is therefore an error. Only a warning (never an error) for: a duplicate pad id, an invalid id or group, options that are not an object, an invalid `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, a momentary pad with neither `onpress` nor `onchange`, a display with invalid `items`/`kind`/`wrap`/`searchAt` or a `value` outside `items`, and a 5th argument of `steps` that is not an object. A display counts in the check that `setState` updates the choices; pads and steps do not count in the coverage of `params()`. `--controls` shows them with role `pad`, `step` and `select`.
+21. **Stems (v1.23, §13g)**: the fake host has `host.stems(this, action, opts)`: `'services'` returns `[]`, `'split'` rejects. A call of `'split'` during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call starts only on a click by the user.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1167,7 +1196,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 20. Clipboard (v1.17, optional): `clipInfo`/`getClip`/`setClip` together; `getClip()` returns a valid `patchkamer-clip` or `null`; `setClip` clamps everything itself, returns `{ ok, reason }`, sets nothing halfway and sends no events; `setClip(getClip())` leaves `getState()` the same (§13d).
 21. Meters (v1.18, optional): whoever shows a level uses `host.ui.meter` (with `source` for an existing `AnalyserNode`, otherwise with `set()`), with `id` and `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` as a fallback to the own drawing, no damping of your own, the meter's `destroy()` in the device's `destroy()`, and a layout that lets the meter grow (§12e).
 22. Pads and small screen (v1.22, optional): whoever shows a push button or a choice uses `host.ui.pad`, `host.ui.display` or `host.ui.steps` with `{ id, group, role, color }` (colour always `#rrggbb`), with `if (!host.ui || typeof host.ui.pad !== 'function')` as the fallback to the own button; `set()` and `flash()` call no handlers; the model of a choice stays the `<select>` and `setState` sets the value; `destroy()` of the pad and choice in the device's `destroy()` (§12f).
-23. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+23. Stems (v1.23, optional): `split` only on a click; `typeof host.stems === 'function'` checked; visibly said that the sound goes to an online service, costs money and needs rights; cancel via `signal`; text per error code in `host.lang`; stems and buffers not in `getState()`/`getPreset()`; after splitting `host.setPorts` with the new AudioNodes already in `outputs` (§13g).
+24. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 
@@ -1214,7 +1244,7 @@ All three pass the validator.
 ### 20a. Effect with knobs, choice, modulation and fast modulation — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.22
+// tremolo.patchkamer-device.js — example effect · Patchkamer contract v1.23
 // Shows: audio in/out, knobs and a choice that follow setState (presets), modulatable (params + modulate),
 // one fast parameter (fast + modInput), cleaning up in destroy, and texts per language (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1273,7 +1303,7 @@ export default {
 ### 20b. Instrument with clock, events and a bundle output — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.22
+// tweeklank.patchkamer-device.js — example instrument · Patchkamer contract v1.23
 // Shows: scheduling on the clock (onStep), sending events (host.emit), a bundle output with every
 // voice separately (ports.multiOut + bundles), step patterns that follow setState (presets), texts per language.
 const VOICES = ['tik', 'toon'];
@@ -1337,7 +1367,7 @@ export default {
 ### 20c. Receiver of a bundle, with a choice per output and its own preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.22
+// bundelkeuze.patchkamer-device.js — example receiver · Patchkamer contract v1.23
 // Shows: receiving a bundle (ports.multiIn + onBundle), choosing per output which bundle channel goes to it,
 // keeping the choice as "key|channel-id" so that it comes back after loading, disconnecting everything on null,
 // keeping routing out of presets (getPreset/setPreset), and texts per language.
@@ -1415,7 +1445,7 @@ Try them together: put Two-tone and Bundle chooser on the floor, draw a bundle c
 Always give a build assignment to an agent in this form, with this document attached:
 
 ```
-ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.22.
+ASSIGNMENT: build a Patchkamer device according to PATCHKAMER-CONTRACT_EN.md v1.23.
 Name / id:        <Readable name> / nl.<yourname>.<device>
 Kind:             instrument | effect | mixer | output | utility | modulator   (category: …)
 What it does:     <one paragraph: sound, behavior, purpose>

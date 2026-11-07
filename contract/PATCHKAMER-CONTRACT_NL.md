@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.22 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.23 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -31,6 +31,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.20 | Samples: samplepacks (`*.patchkamer-samples.json`, geluid als base64) met een eigen tab in de bibliotheek, en voor apparaten die audio laden de optionele methode `loadAudio(files, info)` (§13e) |
 | v1.21 | Instellingen opnemen en afspelen: `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` laten een sequencer de regelaars van een ander apparaat volgen (ook wat een modulator doet), absoluut zetten en tegen modulatie vergrendelen (§13f) |
 | v1.22 | Pads en schermpje: `host.ui.pad(parent, label, opts)` laat de host een drukknop tekenen (momentary of aan/uit, met `flash()` voor een raakaanduiding), `host.ui.display(parent, label, opts)` een keuzelijst die een skin als schermpje met < > en [ok] kan tonen, en `host.ui.steps` krijgt een 5e argument `{ id, group, role, color }`; eigen knoppen doen mee met `data-pk-role="pad"` of `"step"`. Pads, stappen en keuzes staan in het register (`pad`, `steps`); de validator kent de nieuwe aanroepen en meldt een kleur die geen `#rrggbb` is als fout (§12f) |
+| v1.23 | Stems splitsen: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` laat de host een nummer door een dienst op internet in stems splitsen (wachtrij, zip uitpakken, decoderen) en geeft AudioBuffers terug; sleutels staan alleen in de browser van de gebruiker; de host vraagt bevestiging met de kosten; een apparaat zet het aantal uitgangen met `host.setPorts` (§13g) |
 
 ---
 
@@ -1027,6 +1028,32 @@ host.lockParams(this, doelId, null); host.watchParams(this, doelId, null);
 
 Een apparaat dat alleen doelwit is, doet niets: de dekking van `params()` (§8, v1.16) bepaalt welke regelaars een sequencer kan opnemen.
 
+## 13g. Stems splitsen via een dienst (v1.23)
+
+Een apparaat mag geen netwerk gebruiken (§15). Een apparaat dat een nummer door een dienst op internet in stems wil laten splitsen (zang, drums, bas, rest), vraagt dat daarom aan de **host**: `host.stems`. De host kent een klein register van diensten (waarvan de gebruiker zelf een eigen dienst kan toevoegen), bewaart de sleutels van de gebruiker, doet de aanroep met een wachtrij (indienen, status, resultaat), pakt de uitvoer (een zip of losse bestanden) uit en decodeert de stems. Het apparaat krijgt AudioBuffers terug.
+
+| Aanroep | Wat |
+|---|---|
+| `host.stems(this, 'services')` | Synchroon. Een lijst `[{ id, label, configured, models: [{ id, label, price }], model, price, currency, accept, maxBytes, midi }]`: de diensten die de gebruiker kan kiezen. `id` is `'a'`, `'b'` of `'custom'`; `label` staat in de taal van de gebruiker; `configured` zegt of er een sleutel staat (de sleutel zelf zie je nooit); `model` is het gekozen model uit de instellingen en `price` de prijs per nummer daarvan, of `null` als die onbekend is; `accept` is de lijst bestandssoorten (`mp3`, `m4a`, `wav`, `flac`, `ogg`) en `maxBytes` de grootste invoer; `midi` zegt of de dienst MIDI kan meegeven. |
+| `host.stems(this, 'split', opts)` | Geeft een belofte. `opts`: `audio` (verplicht: een `Blob` of `File`), `service` (verplicht: een `id` uit de lijst), `model` (optioneel; zonder model geldt dat uit de instellingen), `signal` (optioneel: een `AbortSignal` om te annuleren), `onProgress(p)` (optioneel). Het resultaat is `{ service, model, price, currency, stems: [{ id, file, buffer }], midi }`: `buffer` is een `AudioBuffer`, `midi` een `Blob` met de MIDI-zip of `null`. |
+| `host.stems(this, 'settings')` | Opent het instellingenpaneel bij het onderdeel voor stems (de gebruiker vult daar zijn sleutel in). Geeft `true`. |
+| `host.stems(this, 'send', opts)` | Geeft geluid aan een ander apparaat dat `loadAudio` heeft (§13e), zoals de knop → *apparaat* in de tab Samples. `opts`: `def` (het `id` van het doelapparaat), `file` (een `Blob` of `File`), `info` (optioneel: `{ name, bpm, bars }`). De host kiest het geselecteerde exemplaar van dat apparaat, anders een bestaand, anders een nieuw. Geeft een belofte met `true` als het doel het geluid aannam, anders `false`. |
+
+**Voortgang.** `onProgress` krijgt `{ phase, queue? }` met `phase` een van `confirm` (de host vraagt de gebruiker om bevestiging), `upload`, `submit`, `queue` (met `queue` = plaats in de wachtrij of `null`), `run`, `download`, `unzip` en `decode`. Gooit je `onProgress` een fout, dan negeert de host die.
+
+**Fouten.** De belofte weigert met een `Error` met `code` (en soms `status`, `max`, `size`, `accept`, `found`, `host`): `declined` (de gebruiker weigerde de bevestiging), `aborted`, `timeout` (na 20 minuten), `nokey` (geen sleutel ingevuld), `config` (de eigen dienst is niet ingevuld), `service` (onbekende dienst of model), `format` (de invoer is geen soort die de dienst aanneemt; de host kijkt naar de bytes, niet naar de naam), `size` (de invoer is te groot voor de dienst), `network` (de aanroep kwam niet aan: geen verbinding, of de dienst staat de aanroep vanuit de browser niet toe), `auth` (de sleutel werd geweigerd), `credit` (geen tegoed), `notfound`, `input` (de dienst weigerde de invoer), `rate`, `server`, `http`, `failed` (de dienst meldde een mislukte taak), `response` (een onbegrijpelijk antwoord), `zip` (de uitvoer is geen geldige of een te grote zip; `message` zegt welk deel), `decode` (een stem is niet te decoderen) en `unsupported` (de browser mist `DecompressionStream`). Tekst voor de gebruiker maakt het apparaat zelf, per `code`, in `host.lang`.
+
+**Wat de host regelt, en wat jij moet doen.**
+- **Alleen na een klik.** Roep `split` alleen aan op een klik van de gebruiker. `create`, `mount`, `setState`, `setPreset`, `onStep` en `onTransport` starten nooit een aanroep; de validator geeft een fout als dat gebeurt. De host vraagt daarnaast zelf de eerste keer per sessie, per dienst en model, om bevestiging met de geschatte kosten en een waarschuwing over auteursrecht; zonder dat akkoord start er niets.
+- **Sleutels.** Die staan alleen in de browser van de gebruiker (`localStorage`, sleutel `patchkamerStems`), nooit in een song, werkruimte of preset, en gaan alleen naar het adres van de gekozen dienst. Het apparaat ziet ze nooit.
+- **De uitvoer zit niet in de state.** Stems zijn grote buffers: bewaar ze niet in `getState()` of `getPreset()`. Bewaar alleen instellingen (dienst, model, niveau per stemnaam).
+- **Stemnamen.** `id` van een stem bestaat uit `[a-z0-9_-]` (hoogstens 24 tekens) en is uniek in het resultaat; de host herkent `vocals`, `drums`, `bass`, `guitar`, `piano`, `strings`, `synth`, `brass`, `wind`, `other` en `instrumental` aan de bestandsnaam, en gebruikt anders de bestandsnaam zelf. De volgorde is vast (zang, drums, bas, ...). Het aantal stems hangt van de dienst en het model af (1 tot en met 12): zet het aantal audio-uitgangen met `host.setPorts` (§3) na het splitsen, met een bundeluitgang (§11) voor alle stems, en zet eerst de nieuwe AudioNodes in `outputs`. Let op dat de poort-id's `in` en `all` van het apparaat niet gebruikt worden als stemnaam; de host vermijdt dat.
+- **Zip.** De host leest de zip zelf (opgeslagen en deflate, geen zip64, geen versleuteling), weigert een zip met een pad naar buiten (`..`, een absoluut pad), te veel bestanden (64), te grote bestanden (250 MB per bestand, 800 MB samen) of een kapotte controlesom, en negeert wat geen audio is.
+- **Oude host.** Een host zonder v1.23 heeft geen `host.stems`. Controleer `typeof host.stems === 'function'` en toon anders een melding.
+- **Geen rechten, geen geld.** Het apparaat zegt zichtbaar dat het geluid naar een dienst op internet gaat, geld kost per nummer en dat de gebruiker de rechten moet hebben.
+
+Wat de host niet doet: hij hoort het resultaat niet af, rekent geen kosten af en garandeert niet dat een dienst bereikbaar is of dat de browser de aanroep toestaat (CORS). Een dienst die dat niet toestaat, geeft de fout `network`.
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -1071,6 +1098,7 @@ Een apparaat dat alleen doelwit is, doet niets: de dekking van `params()` (§8, 
 | `host.ui.display(parent, label, opts)` | v1.22 | Een keuze die een skin als schermpje kan tonen; het model is een verborgen `<select>`; geeft `{ el, set, get, value, items, id, destroy }` (§12f) |
 | `host.ui.steps(…, opts)` | v1.22 | 5e argument `{ id, group, role, color }` voor een rij stapknoppen (§12f) |
 | `data-pk-role="pad"` / `"step"` | v1.22 | Eigen knoppen doen mee met vorm, kleur, ledje en maat (§12f) |
+| `host.stems(this, actie, opts)` | v1.23 | Een nummer door een dienst op internet in stems laten splitsen: `'services'`, `'split'` (belofte met AudioBuffers), `'send'` (geluid aan een ander apparaat geven) of `'settings'` (§13g) |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -1081,7 +1109,7 @@ Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging v
 - `destroy()` stopt oscillators en bronnen, ontkoppelt je nodes (`disconnect()`), stopt timers, animaties en abonnementen op `host.frame`, en ontkoppelt bundelkanalen die je verbond. Twee keer `destroy()` mag niet gooien.
 - Geen globale variabelen. Meerdere exemplaren van je apparaat moeten naast elkaar kunnen bestaan. Wil je bewust delen tussen exemplaren, zoals de groepen van Drift, doe dat dan in een variabele op moduleniveau en ruim die op.
 - Geen browseropslag (`localStorage`, `sessionStorage`, `indexedDB`): state gaat via `getState`/`setState`.
-- Geen netwerk (`fetch`, `XMLHttpRequest`, `WebSocket`), geen `import`, geen eigen AudioContext.
+- Geen netwerk (`fetch`, `XMLHttpRequest`, `WebSocket`; een dienst op internet voor stems vraag je aan de host, §13g), geen `import`, geen eigen AudioContext.
 - Gooi geen fouten uit `onStep`, `onEvent`, `onBundle` of `modulate`.
 
 ---
@@ -1139,6 +1167,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 18. **Meters (v1.18, §12e)**: de nep-host kent `host.ui.meter(parent, label, opts)` en geeft `{ el, set, id, destroy }`. Een `source` die geen `AnalyserNode` of lijst van 1 of 2 `AnalyserNode`s is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel meter-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `range`/`unit`/`kind`/`hold`/`clip`/`orientation`/`length`/`width`, `kind: 'rms'` zonder `source`, een `set()` met iets anders dan een eindig getal of `[l, r]`, `data-pk-role="meter"` op een eigen element en een `data-pk-suffix` van meer dan 16 tekens. Een meter telt niet mee in de dekking van `params()`. `--controls` toont meters met rol `meter`.
 19. **Instellingen opnemen (v1.21, §13f)**: de nep-host kent `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` en geeft `false` (`[]` bij `paramsOf`); de validator controleert er verder niets van (een sequencer die ze gebruikt, test je in de host).
 20. **Pads en schermpje (v1.22, §12f)**: de nep-host kent `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` en het 5e argument van `host.ui.steps`. Een `color` die geen `#rrggbb` is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel pad-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, een momentary pad zonder `onpress` en zonder `onchange`, een display met ongeldige `items`/`kind`/`wrap`/`searchAt` of een `value` buiten `items`, en een 5e argument van `steps` dat geen object is. Een display telt mee in de controle dat `setState` de keuzes bijwerkt; pads en stappen tellen niet mee in de dekking van `params()`. `--controls` toont ze met rol `pad`, `step` en `select`.
+21. **Stems (v1.23, §13g)**: de nep-host kent `host.stems(this, actie, opts)`: `'services'` geeft `[]`, `'split'` weigert. Een aanroep van `'split'` tijdens de test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` of `destroy`) is een fout: een netwerkaanroep start alleen op een klik van de gebruiker.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1168,7 +1197,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 20. Klembord (v1.17, optioneel): `clipInfo`/`getClip`/`setClip` samen; `getClip()` geeft een geldige `patchkamer-clip` of `null`; `setClip` klemt alles zelf, geeft `{ ok, reason }`, zet niets half en stuurt geen gebeurtenissen; `setClip(getClip())` laat `getState()` gelijk (§13d).
 21. Meters (v1.18, optioneel): wie een niveau toont, gebruikt `host.ui.meter` (met `source` voor een bestaande `AnalyserNode`, anders met `set()`), met `id` en `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` als terugval op de eigen tekening, geen eigen demping, `destroy()` van de meter in `destroy()` van het apparaat, en een layout die de meter groter mag maken (§12e).
 22. Pads en schermpje (v1.22, optioneel): wie een drukknop of een keuze toont, gebruikt `host.ui.pad`, `host.ui.display` of `host.ui.steps` met `{ id, group, role, color }` (kleur altijd `#rrggbb`), met `if (!host.ui || typeof host.ui.pad !== 'function')` als terugval op de eigen knop; `set()` en `flash()` roepen geen handlers aan; het model van een keuze blijft het `<select>` en `setState` zet de waarde; `destroy()` van pad en keuze in `destroy()` van het apparaat (§12f).
-23. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+23. Stems (v1.23, optioneel): `split` alleen op een klik; `typeof host.stems === 'function'` gecontroleerd; zichtbaar gezegd dat het geluid naar een dienst op internet gaat, geld kost en rechten vraagt; annuleren via `signal`; tekst per foutcode in `host.lang`; stems en buffers niet in `getState()`/`getPreset()`; na het splitsen `host.setPorts` met de nieuwe AudioNodes al in `outputs` (§13g).
+24. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
@@ -1215,7 +1245,7 @@ Alle drie komen door de validator.
 ### 20a. Effect met knoppen, keuze, sturing en snelle sturing — `tremolo.patchkamer-device.js`
 
 ```js
-// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.22
+// tremolo.patchkamer-device.js — voorbeeld-effect · Patchkamer contract v1.23
 // Laat zien: audio in/uit, knoppen en een keuze die setState volgen (presets) en herkenbaar zijn voor skins (id/role/group, §12d), stuurbaar (params + modulate),
 // één snelle parameter (fast + modInput), opruimen in destroy, en teksten per taal (host.lang + i18n).
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -1274,7 +1304,7 @@ export default {
 ### 20b. Instrument met klok, gebeurtenissen en een bundel-uitgang — `tweeklank.patchkamer-device.js`
 
 ```js
-// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.22
+// tweeklank.patchkamer-device.js — voorbeeld-instrument · Patchkamer contract v1.23
 // Laat zien: plannen op de klok (onStep), gebeurtenissen uitsturen (host.emit), een bundel-uitgang met elke
 // stem apart (ports.multiOut + bundles), stappenpatronen die setState volgen (presets), teksten per taal.
 const VOICES = ['tik', 'toon'];
@@ -1338,7 +1368,7 @@ export default {
 ### 20c. Ontvanger van een bundel, met keuze per uitgang en eigen preset — `bundelkeuze.patchkamer-device.js`
 
 ```js
-// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.22
+// bundelkeuze.patchkamer-device.js — voorbeeld-ontvanger · Patchkamer contract v1.23
 // Laat zien: een bundel ontvangen (ports.multiIn + onBundle), per uitgang kiezen welk bundelkanaal erop komt,
 // de keuze bewaren als "sleutel|kanaal-id" zodat hij na laden terugkomt, alles ontkoppelen bij null,
 // routing buiten presets houden (getPreset/setPreset), en teksten per taal.
@@ -1416,7 +1446,7 @@ Probeer ze samen: zet Tweeklank en Bundelkeuze op de vloer, trek een bundelkabel
 Geef een bouwopdracht aan een agent altijd in deze vorm, met dit document erbij:
 
 ```
-OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.22.
+OPDRACHT: bouw een Patchkamer-apparaat volgens PATCHKAMER-CONTRACT_NL.md v1.23.
 Naam / id:        <Leesbare naam> / nl.<jouwnaam>.<apparaat>
 Soort:            instrument | effect | mixer | output | utility | modulator   (category: …)
 Wat het doet:     <één alinea: klank, gedrag, waarvoor>
