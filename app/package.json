@@ -35,7 +35,8 @@
       "asio.js",
       "asio-test.js",
       "package.json",
-      "build/Release/*.node"
+      "build/Release/*.node",
+      "app-asio.js"
     ],
     "extraResources": [
       {
