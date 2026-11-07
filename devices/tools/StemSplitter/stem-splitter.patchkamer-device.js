@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // 1.23.1 — De host zet een wav, flac of ogg zelf om naar mp3 als de dienst alleen mp3/m4a aanneemt (voortgang 'mp3'); de kaart zegt dat; teksten voor de nieuwe foutcodes (mp3big, mp3, indecode).
+// 1.23.2 — Gemeten met de echte dienst (07-11): een stem 'instrumental' (alles behalve de zang) staat standaard gedempt, omdat hij met de andere stems samen dubbel klinkt; de host laat de meegestuurde invoer ('song') weg.
 // 1.23.0 — Eerste versie. Stem Splitter splitst een nummer in stems (zang, drums, bas, rest, soms meer) met een dienst op internet. Het apparaat zelf doet geen netwerkverkeer:
 //          de aanroep loopt via de host (contract v1.23, host.stems), die de sleutel van de gebruiker bewaart, de wachtrij van de dienst afwacht, de zip uitpakt en de stems
 //          decodeert. Invoer: een bestand (kiezen, slepen, of vanuit de tab Samples via loadAudio) of een opname uit de audio-ingang. Het aantal audio-uitgangen volgt het aantal
@@ -134,7 +135,7 @@ const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,mo
   '.stems{display:grid;gap:4px}.stem{display:grid;grid-template-columns:minmax(80px,140px) auto auto auto auto;gap:8px;align-items:center}.stem b{font-weight:600}';
 
 export default {
-  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.1', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
+  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.2', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
   i18n: { nl: { ports: { in: 'In', vocals: 'Zang', drums: 'Drums', bass: 'Bas', other: 'Rest', all: 'Alle stems' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'vocals', name: 'Vocals' }, { id: 'drums', name: 'Drums' }, { id: 'bass', name: 'Bass' }, { id: 'other', name: 'Other' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [{ id: 'all', name: 'All stems' }] },
   create(ctx, host) {
@@ -149,13 +150,13 @@ export default {
     const outs = new Map();         // stemId -> GainNode (de uitgang)
     const stemName = id => T.stemNames[id] || id.charAt(0).toUpperCase() + id.slice(1).replace(/[_-]+/g, ' ');
     const el = (tag, text, parent, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
-    const mixOf = id => (state.mix[id] || (state.mix[id] = { level: 1, mute: false, solo: false }));
+    const mixOf = id => (state.mix[id] || (state.mix[id] = { level: 1, mute: id === 'instrumental', solo: false }));   // 'instrumental' is alles behalve de zang: standaard gedempt, anders klinkt alles dubbel
     const curIds = () => state.layout.slice();
     const ensureOut = id => { let g = outs.get(id); if (!g) { g = ctx.createGain(); outs.set(id, g); } return g; };
     const self = { inputs: { in: inG }, outputs: {} };
     for (const id of DEF_IDS) { self.outputs[id] = ensureOut(id); }
 
-    function gainFor(id) { const m = state.mix[id] || { level: 1, mute: false, solo: false }, anySolo = Object.keys(state.mix).some(k => outs.has(k) && state.mix[k].solo); return m.mute || (anySolo && !m.solo) ? 0 : m.level; }
+    function gainFor(id) { const m = state.mix[id] || { level: 1, mute: id === 'instrumental', solo: false }, anySolo = Object.keys(state.mix).some(k => outs.has(k) && state.mix[k].solo); return m.mute || (anySolo && !m.solo) ? 0 : m.level; }
     function applyMix() { const t = ctx.currentTime; for (const [id, g] of outs) { try { g.gain.setTargetAtTime(gainFor(id), t, 0.01); } catch (e) { /* ok */ } } }
     function portsFor(ids) {
       return { audioIn: [{ id: 'in', name: T.in }], audioOut: ids.map(id => ({ id, name: stemName(id) })), eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [{ id: 'all', name: T.all }] };

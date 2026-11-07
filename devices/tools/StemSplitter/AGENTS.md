@@ -19,6 +19,8 @@ Een gereedschap dat een nummer door een **dienst op internet** in stems laat spl
 
 ## Uitzondering op de merkregel (Freek, 07-11)
 
+Gemeten met de echte dienst (07-11, fal.ai · Mureka, model 1, een drumloop van 2,8 s): CORS staat browseraanroepen toe; het zip bevat `vocals`, `drums`, `bass`, `other`, `instrumental` (alles behalve zang, wav) plus `song.wav` en `song.mp3` (de invoer zelf, die de host weglaat); de wachtrij meldt `IN_QUEUE`, daarna `COMPLETED`; `x-fal-billable-units` was 3 (de prijs in dollars staat nergens in het antwoord). Een aanroep met een ongeldige `audio_url` komt toch in de wachtrij maar faalt met 422 en kost niets (0 eenheden).
+
 In de **host-instellingen, de adapterlijst, de kaart (keuzelijst van diensten en modellen) en de documentatie** mogen de diensten waarmee Stem Splitter integreert bij hun naam genoemd worden (nu: fal.ai met de modellen van Mureka en Demucs). Reden: we kopiëren die diensten niet, we leveren hun omzet op. Dit geldt ALLEEN voor die namen van diensten en modellen; apparaat-id, apparaatnaam, poortnamen en alle overige tekst blijven merkvrij, en er komen geen namen van andere producten bij. De namen staan in `patchkamer/i18n/nl.js` en `en.js` (`m.st_svc_*`, `m.st_a*`, `m.st_b*`) en de adres- en eindpuntgegevens in `SERVICES` in `patchkamer/js/stems.js` (daar staan de adressen alleen waar het strikt moet). Het apparaatbestand zelf noemt geen dienst.
 
 ## Hoe het werkt

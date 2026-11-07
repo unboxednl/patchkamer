@@ -424,7 +424,7 @@ The **Control Surface Layouts** pack has 28 presets in five folders: **Controlle
 
 **Set up first.** You need an account and a **key** (API key) at the service. Enter it in **Settings**, under **Stem splitting (online service)** (the **Settings…** button on the card takes you there). Per service you find the key, the model and the price per track (the first service gives a price per model, for the second you can enter one yourself). The key is stored only in this browser and goes only to the service it belongs to; it never ends up in a song, workspace or preset. There are three services:
 
-- **fal.ai · Mureka**: accepts mp3 or m4a (at most 10 MB) and returns a zip of stems, sometimes with MIDI. Models `audio-separation-1`, `-2` and `-3`; the number of stems depends on the model.
+- **fal.ai · Mureka**: accepts mp3 or m4a (at most 10 MB) and returns a zip of stems, sometimes with MIDI. Models `audio-separation-1`, `-2` and `-3`. Tried with a real track (model 1, 07-11): vocals, drums, bass, other and **instrumental** (everything except the vocals, so it overlaps the others: it starts muted so nothing sounds double). Patchkamer leaves out the copy of your own track that the service sends along. The browser may call the service directly (no extra step needed). Other models were not tried; the number of stems can differ.
 - **fal.ai · Demucs**: accepts mp3, m4a, wav, flac and ogg and returns separate stems: 4 (`htdemucs`, `htdemucs_ft`) or 6 with guitar and piano (`htdemucs_6s`). The price is not known; fill it in yourself if you want a cost estimate.
 - **Own service**: another service with the same queue protocol (base address, endpoint, key and model, and a largest file size). An address with `http` is only allowed on your own computer.
 

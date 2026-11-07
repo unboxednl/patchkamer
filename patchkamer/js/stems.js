@@ -85,6 +85,10 @@ const ALIAS={vocal:'vocals',vocals:'vocals',voice:'vocals',voices:'vocals',singe
 const ORDER=['vocals','drums','bass','guitar','piano','strings','synth','brass','wind','other','instrumental'];
 function stemId(raw){ let b=String(raw||'').split('/').pop().replace(/\.[A-Za-z0-9]{2,5}$/,'').toLowerCase().replace(/[^a-z0-9_-]+/g,'_').replace(/^_+|_+$/g,''); if(!b) b='stem';
   if(ALIAS[b]) return ALIAS[b]; const t=b.split(/[_-]/); for(let i=t.length-1;i>=0;i--) if(ALIAS[t[i]]) return ALIAS[t[i]]; b=b.slice(0,24); return b==='all'||b==='in'?b+'_stem':b; }
+// Een dienst stuurt soms de invoer zelf mee ("song.wav" en "song.mp3" bij de Mureka-dienst, gemeten 07-11) en hetzelfde stem in twee formaten: de invoer is geen stem, en van twee formaten blijft het verliesvrije over.
+function cleanItems(list){ const key=n=>String(n).split('/').pop().replace(/\.[A-Za-z0-9]{2,5}$/,'').toLowerCase(), ext=n=>((/\.([A-Za-z0-9]{2,5})$/.exec(String(n))||[])[1]||'').toLowerCase(), rank={wav:0,flac:1,ogg:2,m4a:3,mp3:4}, drop=new Set(['song','original','mix','input']), best=new Map();
+  for(const x of list){ const k=key(x.name); if(drop.has(k)) continue; const r=rank[ext(x.name)]??9, b=best.get(k); if(!b||r<b.r) best.set(k,{x,r}); }
+  const out=[...best.values()].map(v=>v.x); return out.length?out:list; }
 function nameStems(list){ const used=new Set(), out=[]; for(const x of list){ let id=stemId(x.name), k=2; const base=id; while(used.has(id)) id=base+'_'+(k++); used.add(id); out.push({...x,id}); }
   out.sort((a,b)=>{ const ia=ORDER.indexOf(a.id.replace(/_\d+$/,'')), ib=ORDER.indexOf(b.id.replace(/_\d+$/,'')); return (ia<0?99:ia)-(ib<0?99:ib)||(a.id<b.id?-1:a.id>b.id?1:0); }); return out; }
 
@@ -227,7 +231,7 @@ async function split(inst,o){
     if(!items.length) throw fail('zip','empty'); if(items.length>LIM.stems) throw fail('zip','many');
     let midi=null; if(out.midi&&svc.midi){ try{ const mb=await bytesOf(out.midi,sig,50*MB,local); midi=new Blob([mb],{type:'application/zip'}); }catch(e){ if(isAbort(e)) throw e; midi=null; } }
     prog({phase:'decode'}); const ctx=PK.ensureCtx(), stems=[];
-    for(const it of nameStems(items)){ let buffer; try{ buffer=await ctx.decodeAudioData(it.data.buffer.slice(it.data.byteOffset,it.data.byteOffset+it.data.byteLength)); }catch(e){ throw fail('decode',it.base); } if(sig.aborted) throw fail('aborted'); stems.push({id:it.id,file:it.base,buffer}); }
+    for(const it of nameStems(cleanItems(items))){ let buffer; try{ buffer=await ctx.decodeAudioData(it.data.buffer.slice(it.data.byteOffset,it.data.byteOffset+it.data.byteLength)); }catch(e){ throw fail('decode',it.base); } if(sig.aborted) throw fail('aborted'); stems.push({id:it.id,file:it.base,buffer}); }
     return {service:id,model,price:priceOf(svc,conf,model),currency:'USD',stems,midi}; }
   catch(e){ if(sig.aborted) throw sig.reason&&sig.reason.code?sig.reason:fail('aborted'); throw e; }
   finally{ if(timer) clearTimeout(timer); if(sig0) sig0.removeEventListener('abort',link); }
