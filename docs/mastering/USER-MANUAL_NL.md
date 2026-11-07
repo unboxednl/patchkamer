@@ -458,7 +458,7 @@ Master Director heeft het pack **Master Director Situations and Styles**: 128 pr
 ### Tips en beperkingen
 
 - **De host moet het Master Director-protocol ondersteunen.** In een host zonder dat meldt de kaart "Hostuitbreiding vereist" en verandert er niets. Je kunt elk apparaat nog steeds met de hand of met zijn eigen presets instellen.
-- Er verandert niets automatisch als je een song laadt of een kabel verbindt: de Director doet alleen iets als je kiest of op een knop drukt. Een **preset laden** telt als kiezen: dat stelt de aangesloten keten ook in, net als **Stel keten in** (alleen als **Direct toepassen bij keuze** aanstaat, en alleen voor de apparaten aan de gele kabel).
+- Er verandert niets automatisch als je een song laadt of een kabel verbindt: de Director doet alleen iets als je kiest of op een knop drukt. Een **preset laden** telt als kiezen: dat stelt de aangesloten keten ook in, net als **Stel keten in** (alleen als **Direct toepassen bij keuze** aanstaat, en alleen voor de apparaten aan de gele kabel). De apparaten laden dan ook hun eigen preset met dezelfde map en naam (bijvoorbeeld **Situations › Club**), zodat die in hun presetvak staat en hun instellingen die van die preset zijn. Een apparaat zonder preset met die naam houdt wat het recept van de Director instelde. Een stijl of situatie los kiezen laadt geen presets.
 - Vergrendelde regelaars en apparaten zonder **Masterregie toestaan** worden overgeslagen.
 
 ## Listening Output

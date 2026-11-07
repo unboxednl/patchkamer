@@ -2,7 +2,7 @@
   "format": "patchkamer-bibliotheek",
   "formatVersion": 1,
   "catV": 2,
-  "saved": "2026-11-05T21:06:07.000Z",
+  "saved": "2026-11-07T17:02:05.000Z",
   "categories": [
     {
       "key": "synth",
@@ -15,6 +15,11 @@
     {
       "key": "groove",
       "label": "Drums & grooveboxen"
+    },
+    {
+      "key": "sampler",
+      "label": "Samplers",
+      "icon": "sampler"
     },
     {
       "key": "sequencer",
@@ -64,7 +69,9 @@
     "nl.patchkamer.paradox": "drone",
     "nl.patchkamer.foundry": "drone",
     "nl.patchkamer.mist": "drone",
-    "nl.patchkamer.graincloud": "drone"
+    "nl.patchkamer.graincloud": "drone",
+    "nl.patchkamer.samplebank": "sampler",
+    "nl.patchkamer.loopslicer": "sampler"
   },
   "closed": []
 }

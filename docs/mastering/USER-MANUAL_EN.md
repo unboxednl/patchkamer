@@ -458,7 +458,7 @@ Master Director has the pack **Master Director Situations and Styles**: 128 pres
 ### Tips and limits
 
 - **The host must support the Master Director protocol.** In a host without it the card says "Host extension required" and nothing changes. You can still set every device by hand or with its own presets.
-- Nothing changes automatically when you load a song or connect a cable: the Director only acts when you choose or press a button. **Loading a preset** counts as choosing: it also sets the connected chain, like **Set the chain** (only when **Apply directly when you choose** is on, and only for the devices on the yellow cable).
+- Nothing changes automatically when you load a song or connect a cable: the Director only acts when you choose or press a button. **Loading a preset** counts as choosing: it also sets the connected chain, like **Set the chain** (only when **Apply directly when you choose** is on, and only for the devices on the yellow cable). The devices then also load their own preset with the same folder and name (for example **Situations › Club**), so it shows in their preset box and their settings are that preset's. A device without a preset of that name keeps what the Director's recipe set. Choosing a style or situation by hand does not load presets.
 - Locked controls and devices without **Allow Master Director** are skipped.
 
 ## Listening Output
