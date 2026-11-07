@@ -42,6 +42,7 @@ function regEntries(r){ const out=[], seen=new Set();
   const scan=root=>{ root.querySelectorAll('[data-pk-id],[data-pk-role],[data-pk-group]').forEach(e=>{ if(seen.has(e)) return; const m=regModel(e); if(!m) return; seen.add(e); out.push({el:e,m}); }); };
   const ui=regUi(r); scan(ui); regRoots(ui).forEach(scan);
   return out; }
+PK.regUi=regUi; PK.regEntries=regEntries; PK.regDesc=regDesc;   // voor js/sections.js
 // het register zoals host.ui.list het geeft: alleen regelaars met een id
 function regList(r){ if(!r) return []; return regEntries(r).map(e=>{ const d=regDesc(e.el); if(!d||!d.id) return null; const p=regProps(r,e.el), range=d.type==='range';
     const face=!range?'default':(p&&p.face&&p.face!=='default'?p.face:((e.K?e.K.kn.style.display!=='none':!!e.m.__pkRot)?'rotary':'hslider'));

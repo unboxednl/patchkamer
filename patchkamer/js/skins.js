@@ -46,6 +46,20 @@ function skMetersClean(list,where,note){ const out=[]; if(!Array.isArray(list)){
     if(x.segments!=null){ if(Number.isInteger(x.segments)&&x.segments>=8&&x.segments<=40) o.segments=x.segments; else note('m.sk_e_veld',P+'.segments'); }
     if(Object.keys(o).length>1) out.push(o); });
   if(list.length>SK_CTL_MAX) note('m.sk_e_veld',where); return out; }
+// design.sections (skins 0.5): lijst regels {match, frame?, columns?, gap?, bare?, labels?, align?}; match = "group:<groep>" of "*" (hoogstens 32). design.size = {width?: 200..1600}. Ongeldige eigenschap = let-op en weg; een sectie verbergt nooit iets.
+const SK_SEC_ENUM={frame:['none','line','raised','inset','floating','default'],gap:['tight','normal','wide'],labels:['default','above','below'],align:['start','center']}, SK_SEC_MAX=32, SK_SEC_MATCH=/^(\*|group:[A-Za-z0-9._-]{1,60})$/;
+PK.SK_SEC_ENUM=SK_SEC_ENUM;
+function skSectionsClean(list,where,note){ const out=[]; if(!Array.isArray(list)){ note('m.sk_e_veld',where); return out; }
+  list.slice(0,SK_SEC_MAX).forEach((x,i)=>{ const P=where+'['+i+']';
+    if(!x||typeof x!=='object'||Array.isArray(x)||typeof x.match!=='string'||!SK_SEC_MATCH.test(x.match)){ note('m.sk_e_veld',P+'.match'); return; }
+    const o={match:x.match};
+    for(const k of Object.keys(SK_SEC_ENUM)){ if(x[k]==null) continue; if(SK_SEC_ENUM[k].includes(x[k])) o[k]=x[k]; else note('m.sk_e_veld',P+'.'+k); }
+    if(x.columns!=null){ if(x.columns==='auto'||(Number.isInteger(x.columns)&&x.columns>=1&&x.columns<=12)) o.columns=x.columns; else note('m.sk_e_veld',P+'.columns'); }
+    if(x.bare!=null){ if(typeof x.bare==='boolean') o.bare=x.bare; else note('m.sk_e_veld',P+'.bare'); }
+    if(Object.keys(o).length>1) out.push(o); });
+  if(list.length>SK_SEC_MAX) note('m.sk_e_veld',where); return out; }
+function skSizeClean(s,where,note){ if(s==null) return null; if(typeof s!=='object'||Array.isArray(s)){ note('m.sk_e_veld',where); return null; }
+  if(s.width==null) return null; if(typeof s.width==='number'&&isFinite(s.width)&&s.width>=200&&s.width<=1600) return {width:Math.round(s.width)}; note('m.sk_e_veld',where+'.width'); return null; }
 // onbekende groepen en sleutels worden stil genegeerd (uitbreidbaar); een bekende sleutel met een ongeldige waarde geeft een let-op en valt weg
 function skDesignClean(d,where,note){ if(d==null) return null; if(typeof d!=='object'||Array.isArray(d)){ note('m.sk_e_veld',where); return null; }
   const out={};
@@ -55,10 +69,14 @@ function skDesignClean(d,where,note){ if(d==null) return null; if(typeof d!=='ob
     if(Object.keys(o).length) out[g]=o; }
   if(d.controls!=null){ const c=skControlsClean(d.controls,where+'.controls',note); if(c.length) out.controls=c; }
   if(d.meters!=null){ const c=skMetersClean(d.meters,where+'.meters',note); if(c.length) out.meters=c; }
+  if(d.sections!=null){ const c=skSectionsClean(d.sections,where+'.sections',note); if(c.length) out.sections=c; }
+  if(d.size!=null){ const z=skSizeClean(d.size,where+'.size',note); if(z) out.size=z; }
   return Object.keys(out).length?out:null; }
 // skin-niveau en verschijning-niveau samenvoegen: per sleutel wint de verschijning
 function skDesignMerge(a,b){ const o={}; for(const g of Object.keys(SK_ENUM)){ const x=a&&a[g], y=b&&b[g]; if(!x&&!y) continue; o[g]={...x,...y}; if(g==='colors'&&((x&&x.custom)||(y&&y.custom))) o[g].custom={...(x&&x.custom),...(y&&y.custom)}; }
   const cx=(a&&a.controls)||[], cy=(b&&b.controls)||[]; const mx=(a&&a.meters)||[], my=(b&&b.meters)||[]; if(mx.length||my.length) o.meters=[...mx,...my];
+  const sx=(a&&a.sections)||[], sy=(b&&b.sections)||[]; if(sx.length||sy.length) o.sections=[...sx,...sy];
+  if((a&&a.size)||(b&&b.size)) o.size={...(a&&a.size),...(b&&b.size)};   // de verschijning wint
   if(cx.length||cy.length) o.controls=[...cx,...cy];   // regels: eerst die van de skin, daarna die van de verschijning (de laatste passende regel wint)
   return o; } PK.skDesignMerge=skDesignMerge;
 const skEff=(sk,ap)=>skDesignMerge(sk&&sk.design,ap&&ap.design); PK.skEff=skEff;
@@ -155,7 +173,7 @@ function skStrip(r){ (r.skMO||[]).forEach(m=>m.disconnect()); r.skMO=[]; (r.skHo
 const skUiEl=r=>r.el.querySelector(':scope > .body > .ui');
 function skDesignStrip(r){ const d=r.skDes; if(!d) return; if(PK.skPortsOff) PK.skPortsOff(r); if(PK.hapticsDetach) PK.hapticsDetach(r);
   d.card.forEach(p=>r.el.style.removeProperty(p)); const ui=skUiEl(r); if(ui){ d.ui.forEach(p=>ui.style.removeProperty(p)); if(ui.hasAttribute('style')&&!ui.getAttribute('style').trim()) ui.removeAttribute('style'); }
-  const had=!!r.skCtl, hadM=!!r.skMet; r.skDes=null; r.skCtl=null; r.skMet=null; r.skHap=null; if(had) PK.regApply(r); if(hadM) PK.meterApply(r); }
+  const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skHap=null; if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); }
 function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) return; const rec={card:[],ui:[]}; r.skDes=rec, ui=skUiEl(r);
   const c=d.colors; if(c&&c.scheme==='custom'&&c.custom&&Object.keys(c.custom).length){ const v=PK.skColourVars(c.custom);
     for(const p in v.card){ r.el.style.setProperty(p,v.card[p]); rec.card.push(p); } if(ui) for(const p in v.ui){ ui.style.setProperty(p,v.ui[p]); rec.ui.push(p); } }
@@ -163,7 +181,8 @@ function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) re
   { const rules=PK.regRules(d); r.skCtl=rules.length?rules:null; }   // knobs.style/size = korte vorm (role:param), design.controls erna
   const h=d.haptics; if(h&&(h.click||h.turn||h.slide)){ const o={click:h.click||'off',turn:h.turn||'off',slide:h.slide||'off'}; if(o.click!=='off'||o.turn!=='off'||o.slide!=='off'){ r.skHap=o; if(PK.hapticsAttach) PK.hapticsAttach(r); } }
   { const mr=PK.meterRules(d); r.skMet=mr.length?mr:null; }   // design.meters (0.4): gezicht, richting, maat, ballistiek van de meters
-  if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); }
+  { const sr=d.sections; r.skSec=sr&&sr.length?sr:null; }   // design.sections (0.5): kader, kolommen, kale regelaars, labelplaats per groep
+  if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); }
 function skClear(r){ skStrip(r); skDesignStrip(r); r.skCur=null; r.skSkin=null; r.el.removeAttribute('data-pk-skin'); r.el.removeAttribute('data-pk-ap'); }
 function skScreen(){ const w=window.innerWidth; return w<700?'phone':w<1100?'compact':'wide'; } PK.skScreen=skScreen;
 // automatisch: de eerste verschijningsvorm waarvan alle voorwaarden kloppen; anders `default`; anders de eerste. Invoer = kaartbreedte in vloercoördinaten (zonder zoom) en schermklasse; beide hangen niet af van wat de skin tekent.
@@ -195,8 +214,10 @@ function skUnwatch(r){ if(skWatched.delete(r)&&skRO) skRO.unobserve(r.el); }
 let skCls=''; function skEvalAll(){ skCls=skScreen(); skWatched.forEach(r=>{ if(!r.el.isConnected||!r.skin){ skUnwatch(r); return; } skSync(r); }); } PK.skEvalAll=skEvalAll;
 function skScreenCheck(){ if(skScreen()!==skCls) skEvalAll(); } PK.skScreenCheck=skScreenCheck;
 // keuze van de gebruiker: skinId '' = Standaard (eigen uiterlijk); appearance 'auto' of een verschijning-id
-function skinSet(id,skinId,appearance){ const r=PK.Host.devices.get(id); if(!r) return;
-  if(!skinId){ r.skin=null; skUnwatch(r); skClear(r); } else { r.skin={id:skinId,appearance:appearance||'auto'}; r.skWarn=false; skWatch(r); skSync(r,true); }
+// design.size.width: alleen bij een handmatige keuze (kaartlijsten, paneel), niet bij Auto-wissel op breedte en niet in het ontwerpvoorbeeld; bij Auto telt alleen de maat van de skin zelf
+function skSizeApply(r){ const e=r.skin&&skinFind(r.skin.id); if(!e||e.skin.device!==r.def.id) return; const sk=e.skin, ap=r.skin.appearance==='auto'?null:sk.appearances.find(a=>a.id===r.skin.appearance), z=(ap?skEff(sk,ap):(sk.design||{})).size; if(z&&z.width) PK.setSize(r.el.dataset.id,z.width); }
+function skinSet(id,skinId,appearance,manual){ const r=PK.Host.devices.get(id); if(!r) return;
+  if(!skinId){ r.skin=null; skUnwatch(r); skClear(r); } else { r.skin={id:skinId,appearance:appearance||'auto'}; r.skWarn=false; if(manual) skSizeApply(r); skWatch(r); skSync(r,true); }
   if(PK.skPaintPick) PK.skPaintPick(r); PK.paintIcons(); PK.drawCables(); } PK.skinSet=skinSet;
 // uit een bewaarde werkruimte of song: {id, appearance}; een skin die (nog) niet bestaat blijft staan en wordt bij het opslaan weer meegenomen
 function skinRestore(id,st){ const r=PK.Host.devices.get(id); if(!r||!st||typeof st.id!=='string'||st.id.length>100) return;

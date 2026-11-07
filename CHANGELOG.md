@@ -7,6 +7,7 @@ All notable changes to Patchkamer (the host and the desktop app) per version. Th
 ## 0.1.0 (not released yet)
 
 ### New
+- **Skins: sections.** A skin can now give the controls of one group (for example the filter) a frame, lay them out in columns (3 columns = 3×3), make them bare (no frame of their own) and put the name under the control, and an appearance can set the card width so "Compact" makes the whole device smaller (skins contract 0.5; only when you pick the skin or appearance yourself, not with Auto). The mini designer has a Sections part and a Width field. Nothing is moved or hidden; sound and settings do not change.
 - **Skins: meters.** A skin can now show a meter as a bar, an LED ladder or a round VU meter with a needle swinging from left to right, in the same place, with the length and width you choose (skins contract 0.4, device contract v1.18). The sound and settings do not change.
 - **Desktop app** (Electron): Patchkamer in its own window, with the bundled library (devices, presets, tunes) and a portable Windows exe that needs no install. Built by the GitHub Action *App*. A folder `bibliotheek` next to the exe replaces the bundled library.
 - **ASIO for the app**: audio can go straight to an ASIO driver for lower latency. Button **ASIO** at the bottom left, off by default. Choose driver, buffer, output pair, sample rate and margin; the button shows the estimated delay. Tested with an audio interface at about 17 ms.
