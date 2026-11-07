@@ -114,9 +114,9 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 40 packs met samen **2425 tunes**, één per apparaat: 31 packs voor synths (2060 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
+Deze repository heeft 41 packs met samen **2465 tunes**, één per apparaat: 32 packs voor synths (2100 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
 
-### Synths (31)
+### Synths (32)
 
 | Apparaat | Pack | Tunes | Mappen | Bestand |
 |---|---|---|---|---|
@@ -138,6 +138,7 @@ Deze repository heeft 40 packs met samen **2425 tunes**, één per apparaat: 31 
 | [Four-Operator FM](../../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 67 | Synthwave (7), Electro (6), Pop (6), Chiptune (6), Jazz & Soul (6), Ambient (6), Cinematic (6), Techno & House (6), Drum & Bass (6), Hip-hop & Lo-fi (6), Funk & Disco (6) | [`four-operator-fm-styles.patchkamer-tunes.json`](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) |
 | [Grain Cloud](../../devices/synths/GrainCloud/) | Grain Cloud Styles | 61 | Ambient (7), Dark Ambient (6), Cinematic (6), Meditation (5), Sci-Fi (6), Experimental (6), Glitch/IDM (7), Lo-fi (5), Drone (6), Sound Design (7) | [`grain-cloud-styles.patchkamer-tunes.json`](../../tunes/grain-cloud-styles.patchkamer-tunes.json) |
 | [Ladder Mono](../../devices/synths/LadderMono/) | Ladder Mono Classics | 58 | Bass (12), Lead (12), Brass and Strings (6), Plucks and Keys (8), Sequences (8), Effects (8), Percussion (4) | [`ladder-mono-classics.patchkamer-tunes.json`](../../tunes/ladder-mono-classics.patchkamer-tunes.json) |
+| [Guitar](../../devices/synths/Guitar/) | Guitar | 40 | Acoustic (5), Nylon (4), 12-String (3), Clean (5), Crunch (4), Muted (3), Bass (5), Strum (3), Ambient (3), Funk (2), Rock (3) | [`guitar.patchkamer-tunes.json`](../../tunes/guitar.patchkamer-tunes.json) |
 | [Karplus String](../../devices/synths/KarplusString/) | Karplus String Styles | 60 | Folk (6), Ambient (6), Cinematic (6), Pop (6), World (6), Lo-fi (6), Ballad (6), Flamenco (6), Jazz (6), Metallic (6) | [`karplus-string-styles.patchkamer-tunes.json`](../../tunes/karplus-string-styles.patchkamer-tunes.json) |
 | [Layered Landscape](../../devices/synths/LayeredLandscape/) | Layered Landscape Styles | 71 | Ambient (9), Dark Ambient (6), Cinematic (7), Meditation (6), Sci-Fi (6), Nature (6), Space (6), Drone (7), Lo-fi (6), Minimal (6), Industrial (6) | [`layered-landscape-styles.patchkamer-tunes.json`](../../tunes/layered-landscape-styles.patchkamer-tunes.json) |
 | [Low Bass](../../devices/synths/LowBass/) | Low Bass Styles | 64 | Sub (6), Rolling Bass (5), Detuned Wide (5), Dub (5), Booming Sub (6), Acid (5), Funk (5), Drum & Bass (5), Dubstep (5), Garage (4), Trap (4), Synthwave (4), Techno & House (5) | [`low-bass-styles.patchkamer-tunes.json`](../../tunes/low-bass-styles.patchkamer-tunes.json) |

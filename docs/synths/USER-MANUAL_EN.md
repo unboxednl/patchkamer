@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 31 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 32 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
@@ -11,7 +11,7 @@ Synths are the devices that make sound from notes. This page covers the 31 synth
 3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
-6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
+6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
 9. [Voice](#voice): [Formant Singer](#formant-singer)
@@ -50,6 +50,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | Strings and string sections | [Bowed Ensemble](#bowed-ensemble) |
 | Trumpet, trombone, horn and brass sections, stabs and swells | [Brass Section](#brass-section) |
 | Acoustic pianos (grand, upright, honky-tonk), tine and reed electric pianos, clavichord | [Piano](#piano) |
+| Guitars: steel-string, nylon, clean and overdriven electric, palm-muted, 12-string and bass guitar | [Guitar](#guitar) |
 | Electric pianos, organs, vibraphone | [Stage Keys](#stage-keys) |
 | Bells, glass, tines, FM basses | [Four-Operator FM](#four-operator-fm) |
 | Plucked or bowed single strings (guitar, harp, koto) | [Karplus String](#karplus-string) |
@@ -750,6 +751,39 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 - A note without a length and without a note-off keeps sounding until the transport stops or a panic arrives: make a sequencer send note lengths.
 - **Brightness**, **Strike point**, **Inharmonicity**, **String detune**, **Sustain length**, **Aftersound** and **Hammer noise** are read when a note starts, so a change affects the next note. **Type** also applies to new notes.
 - The sustain pedal is not a knob and is not saved in a tune.
+
+### Guitar
+
+**What it is for.** The plucked-string family with its own engine: a **steel-string**, a **nylon** classical guitar, a **clean electric**, an **overdriven electric**, a **palm-muted** electric, a **12-string** and a **bass guitar**. Every string is a small physical model (a digital waveguide, an extended Karplus-Strong loop): a pluck whose position shapes the spectrum, a loop that damps the highs faster when you play softer, a string stiffness that makes the overtones run a little sharp, and string noise. The acoustic types add a body resonance; the electric types add a pickup position and an amp with drive. There are six strings with one voice each: notes are given to strings by pitch, so a chord spreads over the strings, and a note that overlaps a sounding note on the same string becomes a hammer-on or pull-off (the pitch glides, the string is not plucked again). A strum helper spreads the notes of a chord in time, down, up or alternating, and the pitch can be bent. There is no sequencer, reverb or delay: put an effect behind it. Karplus String is the single-string plucked and bowed model with its own keyboard, and Low Bass and Sub Line are synthesizer basses; Guitar is the guitar and bass-guitar family with playing technique.
+
+![The Guitar card](../images/en/synths/guitar.png)
+
+**Controls.**
+
+- **Type** (Steel-string, Nylon, Clean electric, Overdriven electric, Muted (palm mute), 12-string, Bass guitar) and **Sound** (list of starting sounds: Steel Strummer, Nylon Classic, Clean Electric, Crunch Lead, Palm Mute Chug, Twelve-String Shimmer, Fingerstyle Bass; it shows **Custom sound** once you change a control).
+- **Pluck & string:** **Brightness**, **Velocity colour** (how much harder notes sound brighter), **Pick hardness** (soft finger to hard pick), **Pick position** (near the bridge is thin and sharp, further away is round), **String stiffness** (the overtones run sharp), **Pair detune** (cents between the two strings of a 12-string pair) and **String noise** (pick noise and the squeak of gliding and bending).
+- **Decay & body:** **Sustain length**, **Damper time** (how fast a note stops when you release it), **Palm mute** (shorter and duller), **Body** (the body resonance of the acoustic types, the cabinet of the electric types) and **Body tuning**.
+- **Pickup & amp:** **Pickup position** (from the bridge to the neck; for the acoustic types it is where the sound is picked up), **Drive** and **Amp tone**. **Drive** and **Amp tone** work for the electric types (clean, overdriven, muted and bass); the overdriven type always has some drive.
+- **Playing & level:** **Strum spread** (0 to 80 ms between the notes of a chord), **Direction** (Down, Up, Alternating), **Hammer-ons** (On or Off), **Legato glide** (how long a hammer-on or pull-off glides), **Bend** (semitones), **Bend range** (what a bend controller moves), **Touch response**, **Stereo width**, **Tuning**, **Transpose** and **Output**. **Test note**, **Test chord** and **All off**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Keyboard / notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer; a sequencer must send the note length, and notes that should become a hammer-on must overlap (a length longer than the step). A bend message (`cc` with id `bend` or `pitchbend`, value 0 to 1 with 0.5 in the middle) bends all strings. |
+| **Mod** | modulation in (purple) | A modulator can move every control except **Transpose**, **Strum spread** and **Bend range**; the **Type**, **Sound**, **Direction** and **Hammer-ons** lists do not move. |
+| **Stereo guitar** | audio out (teal, stereo) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys / MIDI**, **Guitar** and **Speakers**. Choose the tune **Acoustic › Steel Strummer** and press **Test chord**: the six notes sound one after the other. Play a melody with overlapping notes for hammer-ons, or choose **Bass › Fingerstyle Bass** and play low notes. **Crunch › Classic Crunch** gives an overdriven electric and **Strum › Alternating Strum** strums chords up and down.
+
+**Tunes.** Pack **Guitar**: 40 tunes in 11 folders (Acoustic, Nylon, 12-String, Clean, Crunch, Muted, Bass, Strum, Ambient, Funk, Rock), file [`guitar.patchkamer-tunes.json`](../../tunes/guitar.patchkamer-tunes.json). A few names: **Steel Strummer**, **Classical Concert**, **Shimmer Twelve**, **Edge of Breakup**, **Palm Mute Chug**, **Fingerstyle Bass**, **Glass Pad Guitar**, **Power Chord Drive**. The tunes are checked for range and behaviour, not listened to.
+
+**Tips and limits.**
+
+- Six strings with one voice each, plus a few voices that are still dying out after a new pluck on the same string. Notes above about MIDI note 100 are limited in pitch.
+- A note without a length and without a note-off keeps sounding until the transport stops or a panic arrives: make a sequencer send note lengths.
+- **Brightness**, **Pick hardness**, **Pick position**, **String stiffness**, **Pair detune**, **Sustain length** and **String noise** are read when a note starts, so a change affects the next note. **Type** also applies to new notes; changing between an acoustic and an electric type may make a short click in notes that are sounding.
+- The strum helper and the string assignment work on notes that arrive at the same moment; the notes of a chord are given to different strings and are never hammer-ons.
 
 ### Stage Keys
 

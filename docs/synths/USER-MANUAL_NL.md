@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 31 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 32 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -11,7 +11,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 3
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section)
-6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
+6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
 9. [Zang](#zang): [Formant Singer](#formant-singer)
@@ -50,6 +50,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Strijkers en strijkerssecties | [Bowed Ensemble](#bowed-ensemble) |
 | Trompet, trombone, hoorn en koperseccties, stabs en swells | [Brass Section](#brass-section) |
 | Akoestische piano's (vleugel, pianino, honky-tonk), tine- en riet-e-piano, clavichord | [Piano](#piano) |
+| Gitaren: staalsnarig, nylon, clean en overdrive elektrisch, gedempt, 12-snarig en basgitaar | [Guitar](#guitar) |
 | Elektrische piano's, orgels, vibrafoon | [Stage Keys](#stage-keys) |
 | Klokken, glas, tines, FM-bassen | [Four-Operator FM](#four-operator-fm) |
 | Geplukte of gestreken losse snaren (gitaar, harp, koto) | [Karplus String](#karplus-string) |
@@ -750,6 +751,39 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
 - **Helderheid**, **Aanslagpunt**, **Inharmoniciteit**, **Snaarverstemming**, **Klankduur**, **Naklank** en **Hamergeluid** worden gelezen als een noot begint, dus een wijziging geldt voor de volgende noot. **Type** geldt ook voor nieuwe noten.
 - Het sustainpedaal is geen knop en wordt niet in een tune bewaard.
+
+### Guitar
+
+**Waar het voor dient.** De geplukte-snarenfamilie met een eigen motor: een **staalsnarige**, een **nylon** klassieke gitaar, een **clean elektrische**, een **overdrive elektrische**, een **gedempte (palm mute)** elektrische, een **12-snarige** en een **basgitaar**. Elke snaar is een klein fysisch model (een digitale golfgeleider, een uitgebreide Karplus-Strong-lus): een pluk waarvan de positie het spectrum vormt, een lus die de hoge tonen sneller dempt als je zachter speelt, een snaarstijfheid die de boventonen een beetje scherp laat lopen, en snaarruis. De akoestische typen hebben daarbij een klankkast; de elektrische typen een pickuppositie en een versterker met drive. Er zijn zes snaren met elk één stem: noten worden naar toonhoogte aan snaren gegeven, zodat een akkoord zich over de snaren verdeelt, en een noot die een klinkende noot op dezelfde snaar overlapt wordt een hammer-on of pull-off (de toonhoogte glijdt, de snaar wordt niet opnieuw geplukt). Een strum-hulp spreidt de noten van een akkoord in de tijd, omlaag, omhoog of afwisselend, en de toonhoogte kan worden gebogen. Er zit geen sequencer, galm of delay in: zet er een effect achter. Karplus String is het enkelsnarige geplukte en gestreken model met een eigen klavier, en Low Bass en Sub Line zijn synthesizerbassen; Guitar is de gitaar- en basgitaarfamilie met speeltechniek.
+
+![De kaart van Guitar](../images/nl/synths/guitar.png)
+
+**De regelaars.**
+
+- **Type** (Staalsnarig, Nylon, Clean elektrisch, Overdrive elektrisch, Gedempt (palm mute), 12-snarig, Basgitaar) en **Klank** (lijst beginklanken: Steel Strummer, Nylon Classic, Clean Electric, Crunch Lead, Palm Mute Chug, Twelve-String Shimmer, Fingerstyle Bass; hij toont **Eigen klank** zodra je een regelaar verandert).
+- **Pluk & snaar:** **Helderheid**, **Aanslagkleur** (hoeveel harder gespeelde noten helderder klinken), **Plukhardheid** (zachte vinger tot harde plectrum), **Plukpositie** (dicht bij de brug is dun en scherp, verder weg is rond), **Snaarstijfheid** (de boventonen lopen scherp), **Paarverstemming** (cent tussen de twee snaren van een 12-snarig paar) en **Snaarruis** (plukruis en het piepen van glijden en buigen).
+- **Uitklank & kast:** **Klankduur**, **Dempertijd** (hoe snel een noot stopt als je loslaat), **Palm mute** (korter en doffer), **Klankkast** (de klankkast van de akoestische typen, de kast van de elektrische typen) en **Kastafstemming**.
+- **Pickup & versterker:** **Pickuppositie** (van de brug naar de hals; bij de akoestische typen is het waar het geluid wordt opgenomen), **Drive** en **Versterkertoon**. **Drive** en **Versterkertoon** werken bij de elektrische typen (clean, overdrive, gedempt en bas); het type overdrive heeft altijd wat drive.
+- **Spel & niveau:** **Strum-spreiding** (0 tot 80 ms tussen de noten van een akkoord), **Richting** (Omlaag, Omhoog, Afwisselend), **Hammer-ons** (Aan of Uit), **Legato-glijtijd** (hoe lang een hammer-on of pull-off glijdt), **Buiging** (halve tonen), **Buigbereik** (wat een buigregelaar beweegt), **Aanslaggevoeligheid**, **Stereobreedte**, **Stemming**, **Transpositie** en **Uitgang**. **Proeftoon**, **Proefakkoord** en **Alles uit**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Keyboard / noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer; een sequencer moet de nootlengte meesturen, en noten die een hammer-on moeten worden, moeten overlappen (een lengte langer dan de stap). Een buigbericht (`cc` met id `bend` of `pitchbend`, waarde 0 tot 1 met 0,5 in het midden) buigt alle snaren. |
+| **Mod** | modulatie in (paars) | Een modulator kan elke regelaar bewegen behalve **Transpositie**, **Strum-spreiding** en **Buigbereik**; de lijsten **Type**, **Klank**, **Richting** en **Hammer-ons** bewegen niet mee. |
+| **Stereo gitaar** | audio uit (groenblauw, stereo) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys / MIDI**, **Guitar** en **Speakers**. Kies de tune **Acoustic › Steel Strummer** en druk op **Proefakkoord**: de zes noten klinken na elkaar. Speel een melodie met overlappende noten voor hammer-ons, of kies **Bass › Fingerstyle Bass** en speel lage noten. **Crunch › Classic Crunch** geeft een overdrive elektrische en **Strum › Alternating Strum** strumt akkoorden omhoog en omlaag.
+
+**Tunes.** Pack **Guitar**: 40 tunes in 11 mappen (Acoustic, Nylon, 12-String, Clean, Crunch, Muted, Bass, Strum, Ambient, Funk, Rock), bestand [`guitar.patchkamer-tunes.json`](../../tunes/guitar.patchkamer-tunes.json). Een paar namen: **Steel Strummer**, **Classical Concert**, **Shimmer Twelve**, **Edge of Breakup**, **Palm Mute Chug**, **Fingerstyle Bass**, **Glass Pad Guitar**, **Power Chord Drive**. De tunes zijn gecontroleerd op bereik en gedrag, niet beluisterd.
+
+**Tips en beperkingen.**
+
+- Zes snaren met elk één stem, plus een paar stemmen die nog uitsterven na een nieuwe pluk op dezelfde snaar. Noten boven ongeveer MIDI-noot 100 worden in toonhoogte begrensd.
+- Een noot zonder lengte en zonder note-off klinkt door tot de transportklok stopt of er een panic komt: laat een sequencer nootlengtes sturen.
+- **Helderheid**, **Plukhardheid**, **Plukpositie**, **Snaarstijfheid**, **Paarverstemming**, **Klankduur** en **Snaarruis** worden gelezen als een noot begint, dus een wijziging geldt voor de volgende noot. **Type** geldt ook voor nieuwe noten; wisselen tussen een akoestisch en een elektrisch type kan een korte klik geven in noten die klinken.
+- De strum-hulp en de snaartoewijzing werken op noten die op hetzelfde moment aankomen; de noten van een akkoord krijgen verschillende snaren en zijn nooit hammer-ons.
 
 ### Stage Keys
 

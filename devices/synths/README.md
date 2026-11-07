@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 31 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 32 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -26,6 +26,7 @@ Not sure which one to pick? The manual starts with a table "Which synth for whic
 | **Brass Section** | A polyphonic brass instrument with 1 to 4 players per note: a filter that swells open (the blat), pitch scoop, breath noise, delayed vibrato and a mute | [`BrassSection/`](BrassSection/) | [32](../../tunes/brass-section.patchkamer-tunes.json) | [Brass Section](../../docs/synths/USER-MANUAL_EN.md#brass-section) |
 | **Stage Keys** | A polyphonic keys synth with seven sound models (tine and reed piano, organs, vibraphone, bass), drive and stereo tremolo | [`StageKeys/`](StageKeys/) | [66](../../tunes/stage-keys-styles.patchkamer-tunes.json) | [Stage Keys](../../docs/synths/USER-MANUAL_EN.md#stage-keys) |
 | **Four-Operator FM** | An FM synth with four operators, eight algorithms and eight voices | [`FourOperatorFM/`](FourOperatorFM/) | [67](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) | [Four-Operator FM](../../docs/synths/USER-MANUAL_EN.md#four-operator-fm) |
+| **Guitar** | A plucked-string family with its own engine: steel-string, nylon, clean and overdriven electric, palm-muted, 12-string and bass guitar, with one voice per string, a strum helper, hammer-ons and bend | [`Guitar/`](Guitar/) | [40](../../tunes/guitar.patchkamer-tunes.json) | [Guitar](../../docs/synths/USER-MANUAL_EN.md#guitar) |
 | **Karplus String** | A plucked and bowed string model with eight voices and its own two-octave keyboard | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_EN.md#karplus-string) |
 | **Dissonant Cluster** | A polyphonic synth that only sounds dissonant: every note becomes a cluster of 2 to 6 voices | [`DissonantCluster/`](DissonantCluster/) | [60](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) | [Dissonant Cluster](../../docs/synths/USER-MANUAL_EN.md#dissonant-cluster) |
 | **Patchbay Synth** | A semi-modular synth with a patch panel: three VCOs, ring modulator, filter, envelopes, sample & hold and cables | [`PatchbaySynth/`](PatchbaySynth/) | [89](../../tunes/patchbay-synth-styles.patchkamer-tunes.json) | [Patchbay Synth](../../docs/synths/USER-MANUAL_EN.md#patchbay-synth) |
