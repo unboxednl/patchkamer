@@ -2,7 +2,7 @@
 
 *English version: [README.md](README.md)*
 
-Apparaten die uit noten geluid maken: 30 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones, texturen en zang. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
+Apparaten die uit noten geluid maken: 31 synths voor bassen, leads, pads, akkoorden, toetsen, strijkers, sound design, modulair patchen, drones, texturen en zang. Elke synth heeft **tunes** (een tune is de volledige instelling van één synth) en geen presets.
 
 Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke synth voor welk doel".
 
@@ -29,6 +29,7 @@ Weet je niet welke je moet kiezen? De handleiding begint met een tabel "Welke sy
 | **Karplus String** | Een model van geplukte en gestreken snaren met acht stemmen en een eigen klavier van twee octaven | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_NL.md#karplus-string) |
 | **Dissonant Cluster** | Een polyfone synth die alleen dissonant klinkt: elke noot wordt een cluster van 2 tot 6 stemmen | [`DissonantCluster/`](DissonantCluster/) | [60](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) | [Dissonant Cluster](../../docs/synths/USER-MANUAL_NL.md#dissonant-cluster) |
 | **Patchbay Synth** | Een halfmodulaire synth met een patchpaneel: drie VCO's, ringmodulator, filter, envelopes, sample & hold en kabels | [`PatchbaySynth/`](PatchbaySynth/) | [89](../../tunes/patchbay-synth-styles.patchkamer-tunes.json) | [Patchbay Synth](../../docs/synths/USER-MANUAL_NL.md#patchbay-synth) |
+| **Piano** | Een pianofamilie met eigen motor: vleugel, pianino, honky-tonk, tine- en riet-e-piano en clavichord, met onharmonische deeltonen, verstemde snaren, hamergeluid, sustainpedaal en klankbord | [`Piano/`](Piano/) | [43](../../tunes/piano.patchkamer-tunes.json) | [Piano](../../docs/synths/USER-MANUAL_NL.md#piano) |
 
 ## Drone- en textuursynths
 

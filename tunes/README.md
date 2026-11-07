@@ -4,11 +4,11 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **39 packs with 2382 tunes**, one pack per device: 30 for synths (2017 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **40 packs with 2425 tunes**, one pack per device: 31 for synths (2060 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
-### Synths (30)
+### Synths (31)
 
 | Device | Pack | Tunes | Folders | File |
 |---|---|---|---|---|
@@ -37,6 +37,7 @@ This folder has **39 packs with 2382 tunes**, one pack per device: 30 for synths
 | [Paradox](../devices/synths/Paradox/) | Paradox Styles | 70 | 10 | [`paradox-styles.patchkamer-tunes.json`](paradox-styles.patchkamer-tunes.json) |
 | [Patch Mono](../devices/synths/PatchMono/) | Patch Mono Styles | 79 | 14 | [`patch-mono-styles.patchkamer-tunes.json`](patch-mono-styles.patchkamer-tunes.json) |
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | 15 | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) |
+| [Piano](../devices/synths/Piano/) | Piano | 43 | 11 | [`piano.patchkamer-tunes.json`](piano.patchkamer-tunes.json) |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | 12 | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) |
 | [Stage Keys](../devices/synths/StageKeys/) | Stage Keys Styles | 66 | 11 | [`stage-keys-styles.patchkamer-tunes.json`](stage-keys-styles.patchkamer-tunes.json) |
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |

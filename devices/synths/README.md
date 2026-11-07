@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 30 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 31 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -29,6 +29,7 @@ Not sure which one to pick? The manual starts with a table "Which synth for whic
 | **Karplus String** | A plucked and bowed string model with eight voices and its own two-octave keyboard | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_EN.md#karplus-string) |
 | **Dissonant Cluster** | A polyphonic synth that only sounds dissonant: every note becomes a cluster of 2 to 6 voices | [`DissonantCluster/`](DissonantCluster/) | [60](../../tunes/dissonant-cluster-styles.patchkamer-tunes.json) | [Dissonant Cluster](../../docs/synths/USER-MANUAL_EN.md#dissonant-cluster) |
 | **Patchbay Synth** | A semi-modular synth with a patch panel: three VCOs, ring modulator, filter, envelopes, sample & hold and cables | [`PatchbaySynth/`](PatchbaySynth/) | [89](../../tunes/patchbay-synth-styles.patchkamer-tunes.json) | [Patchbay Synth](../../docs/synths/USER-MANUAL_EN.md#patchbay-synth) |
+| **Piano** | A piano family with its own engine: grand, upright, honky-tonk, tine and reed electric pianos and a clavichord, with inharmonic partials, detuned strings, hammer noise, sustain pedal and soundboard | [`Piano/`](Piano/) | [43](../../tunes/piano.patchkamer-tunes.json) | [Piano](../../docs/synths/USER-MANUAL_EN.md#piano) |
 
 ## Drone & texture synths
 
