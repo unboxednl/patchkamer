@@ -1,1981 +1,1981 @@
 {
- "format": "patchkamer-presets",
- "formatVersion": 2,
- "device": "nl.patchkamer.buscompressor",
- "name": "Bus Compressor Situations and Styles",
- "author": "Freek van Gool",
- "license": "CC0-1.0",
- "description": "Starting points for Bus Compressor for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. The Situations folder uses a common style for each situation (house for club, EDM for festival and big room, pop for home, headphones, radio, car and streaming, transparent for studio). The values follow the same recipes as the Master Director.",
- "tree": [
-  {
-   "folder": "Situations",
-   "items": [
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "device": "nl.patchkamer.buscompressor",
+  "name": "Bus Compressor Situations and Styles",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Bus Compressor for mixing down and mastering in many music styles and situations: club, festival, big room, home hi-fi, headphones, studio reference, radio and car, plus 32 music styles for streaming. The Situations folder uses a common style for each situation (house for club, EDM for festival and big room, pop for home, headphones, radio, car and streaming, transparent for studio), set a little gentler. Every preset sets its own threshold, ratio, attack, release, knee, parallel mix and make-up (about half of the lost level is brought back); a situation changes how much is compressed, more for radio and big room, less for studio and home. The detector stays internal because the sidechain input needs a cable.",
+  "tree": [
     {
-     "name": "Streaming",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.7,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Situations",
+      "items": [
+        {
+          "name": "Streaming",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.3,
+            "ratio": 2.03,
+            "attack": 0.032,
+            "release": 0.262,
+            "knee": 10.3,
+            "makeup": 1,
+            "compMix": 0.92,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Club",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.0,
+            "ratio": 2.19,
+            "attack": 0.028,
+            "release": 0.222,
+            "knee": 8.1,
+            "makeup": 1.5,
+            "compMix": 0.98,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Festival",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.7,
+            "ratio": 2.97,
+            "attack": 0.023,
+            "release": 0.177,
+            "knee": 6.2,
+            "makeup": 2,
+            "compMix": 0.98,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Big room",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.3,
+            "ratio": 3.05,
+            "attack": 0.029,
+            "release": 0.177,
+            "knee": 5.7,
+            "makeup": 2,
+            "compMix": 0.98,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Home / hi-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.5,
+            "ratio": 1.92,
+            "attack": 0.035,
+            "release": 0.327,
+            "knee": 11.3,
+            "makeup": 1,
+            "compMix": 0.92,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Headphones",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.4,
+            "ratio": 1.97,
+            "attack": 0.044,
+            "release": 0.301,
+            "knee": 11.3,
+            "makeup": 1,
+            "compMix": 0.92,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Studio / reference",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.4,
+            "ratio": 1.44,
+            "attack": 0.038,
+            "release": 0.342,
+            "knee": 13.0,
+            "makeup": 0.5,
+            "compMix": 0.98,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Radio / broadcast",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.4,
+            "ratio": 2.4,
+            "attack": 0.027,
+            "release": 0.209,
+            "knee": 8.3,
+            "makeup": 1.5,
+            "compMix": 0.95,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Car",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.8,
+            "ratio": 2.24,
+            "attack": 0.032,
+            "release": 0.236,
+            "knee": 9.3,
+            "makeup": 1.5,
+            "compMix": 0.92,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Club",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.76,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Styles",
+      "items": [
+        {
+          "name": "Transparent",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.5,
+            "ratio": 1.5,
+            "attack": 0.03,
+            "release": 0.25,
+            "knee": 9,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Warm / organic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.4,
+            "ratio": 1.7,
+            "attack": 0.035,
+            "release": 0.3,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.5,
+            "ratio": 2.4,
+            "attack": 0.022,
+            "release": 0.18,
+            "knee": 6,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hard techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.2,
+            "ratio": 3.0,
+            "attack": 0.015,
+            "release": 0.14,
+            "knee": 5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.0,
+            "ratio": 2.0,
+            "attack": 0.03,
+            "release": 0.28,
+            "knee": 8,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.6,
+            "ratio": 2.2,
+            "attack": 0.025,
+            "release": 0.2,
+            "knee": 7,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.0,
+            "ratio": 2.0,
+            "attack": 0.028,
+            "release": 0.3,
+            "knee": 8,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.4,
+            "attack": 0.02,
+            "release": 0.22,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.0,
+            "ratio": 2.8,
+            "attack": 0.012,
+            "release": 0.13,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.2,
+            "attack": 0.018,
+            "release": 0.16,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Synthwave",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.2,
+            "ratio": 1.9,
+            "attack": 0.035,
+            "release": 0.3,
+            "knee": 9,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.0,
+            "ratio": 3.0,
+            "attack": 0.018,
+            "release": 0.15,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.7,
+            "ratio": 3.5,
+            "attack": 0.01,
+            "release": 0.12,
+            "knee": 4,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Drum & bass",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.2,
+            "ratio": 2.8,
+            "attack": 0.014,
+            "release": 0.11,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.3,
+            "ratio": 3.0,
+            "attack": 0.016,
+            "release": 0.2,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Breakbeat",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.4,
+            "attack": 0.02,
+            "release": 0.12,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.0,
+            "ratio": 2.8,
+            "attack": 0.03,
+            "release": 0.16,
+            "knee": 6,
+            "makeup": 1,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.9,
+            "ratio": 2.8,
+            "attack": 0.02,
+            "release": 0.2,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.5,
+            "ratio": 1.8,
+            "attack": 0.035,
+            "release": 0.3,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.1,
+            "ratio": 2.2,
+            "attack": 0.03,
+            "release": 0.22,
+            "knee": 8,
+            "makeup": 1,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.2,
+            "ratio": 2.6,
+            "attack": 0.028,
+            "release": 0.17,
+            "knee": 5,
+            "makeup": 1.5,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Metal",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.1,
+            "ratio": 3.2,
+            "attack": 0.012,
+            "release": 0.13,
+            "knee": 4,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.5,
+            "ratio": 1.8,
+            "attack": 0.035,
+            "release": 0.28,
+            "knee": 9,
+            "makeup": 1,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.0,
+            "ratio": 2.0,
+            "attack": 0.025,
+            "release": 0.2,
+            "knee": 7,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.2,
+            "attack": 0.02,
+            "release": 0.14,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Reggae / dub",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.6,
+            "ratio": 1.9,
+            "attack": 0.04,
+            "release": 0.35,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.2,
+            "ratio": 3.0,
+            "attack": 0.008,
+            "release": 0.3,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.2,
+            "ratio": 1.4,
+            "attack": 0.045,
+            "release": 0.4,
+            "knee": 12,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.3,
+            "ratio": 1.3,
+            "attack": 0.05,
+            "release": 0.45,
+            "knee": 14,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.8,
+            "ratio": 1.15,
+            "attack": 0.06,
+            "release": 0.6,
+            "knee": 16,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.9,
+            "ratio": 1.3,
+            "attack": 0.055,
+            "release": 0.55,
+            "knee": 14,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.0,
+            "ratio": 1.25,
+            "attack": 0.07,
+            "release": 0.8,
+            "knee": 16,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Festival",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.3,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Club",
+      "items": [
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.2,
+            "ratio": 2.54,
+            "attack": 0.022,
+            "release": 0.162,
+            "knee": 5.5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hard techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.0,
+            "ratio": 3.2,
+            "attack": 0.015,
+            "release": 0.126,
+            "knee": 4.5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.4,
+            "ratio": 2.1,
+            "attack": 0.03,
+            "release": 0.252,
+            "knee": 7.5,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.1,
+            "ratio": 2.32,
+            "attack": 0.025,
+            "release": 0.18,
+            "knee": 6.5,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.1,
+            "attack": 0.028,
+            "release": 0.27,
+            "knee": 7.5,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.1,
+            "ratio": 2.54,
+            "attack": 0.02,
+            "release": 0.198,
+            "knee": 5.5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.8,
+            "ratio": 2.98,
+            "attack": 0.012,
+            "release": 0.117,
+            "knee": 4.5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.1,
+            "ratio": 2.32,
+            "attack": 0.018,
+            "release": 0.144,
+            "knee": 5.5,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Drum & bass",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.9,
+            "ratio": 2.98,
+            "attack": 0.014,
+            "release": 0.099,
+            "knee": 4.5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.0,
+            "ratio": 3.2,
+            "attack": 0.016,
+            "release": 0.18,
+            "knee": 4.5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.98,
+            "attack": 0.03,
+            "release": 0.144,
+            "knee": 5.5,
+            "makeup": 1.5,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.1,
+            "ratio": 2.32,
+            "attack": 0.02,
+            "release": 0.126,
+            "knee": 5.5,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.7,
+            "ratio": 2.32,
+            "attack": 0.03,
+            "release": 0.198,
+            "knee": 7.5,
+            "makeup": 1.5,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.1,
+            "attack": 0.025,
+            "release": 0.18,
+            "knee": 6.5,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Big room",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Festival",
+      "items": [
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.4,
+            "ratio": 3.4,
+            "attack": 0.018,
+            "release": 0.128,
+            "knee": 4,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.6,
+            "ratio": 2.68,
+            "attack": 0.02,
+            "release": 0.187,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.0,
+            "ratio": 4.0,
+            "attack": 0.01,
+            "release": 0.102,
+            "knee": 3,
+            "makeup": 3,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Psytrance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.6,
+            "ratio": 3.16,
+            "attack": 0.012,
+            "release": 0.111,
+            "knee": 4,
+            "makeup": 3,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.5,
+            "ratio": 2.44,
+            "attack": 0.025,
+            "release": 0.17,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.0,
+            "ratio": 2.2,
+            "attack": 0.028,
+            "release": 0.255,
+            "knee": 7,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.1,
+            "ratio": 3.16,
+            "attack": 0.03,
+            "release": 0.136,
+            "knee": 5,
+            "makeup": 1.5,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.2,
+            "ratio": 3.16,
+            "attack": 0.02,
+            "release": 0.17,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.3,
+            "ratio": 2.92,
+            "attack": 0.028,
+            "release": 0.145,
+            "knee": 4,
+            "makeup": 1.5,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.2,
+            "ratio": 2.44,
+            "attack": 0.03,
+            "release": 0.187,
+            "knee": 7,
+            "makeup": 1.5,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Metal",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.5,
+            "ratio": 3.64,
+            "attack": 0.012,
+            "release": 0.111,
+            "knee": 3,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Home / hi-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.53,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Big Room",
+      "items": [
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.1,
+            "ratio": 3.5,
+            "attack": 0.022,
+            "release": 0.128,
+            "knee": 3.5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hardstyle",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.9,
+            "ratio": 4.12,
+            "attack": 0.013,
+            "release": 0.102,
+            "knee": 2.5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trance",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.3,
+            "ratio": 2.75,
+            "attack": 0.025,
+            "release": 0.187,
+            "knee": 4.5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Progressive house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.5,
+            "ratio": 2.25,
+            "attack": 0.035,
+            "release": 0.255,
+            "knee": 6.5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.2,
+            "ratio": 2.5,
+            "attack": 0.022,
+            "release": 0.136,
+            "knee": 4.5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.0,
+            "ratio": 3.25,
+            "attack": 0.025,
+            "release": 0.17,
+            "knee": 4.5,
+            "makeup": 2,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Dubstep",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.4,
+            "ratio": 3.5,
+            "attack": 0.02,
+            "release": 0.17,
+            "knee": 3.5,
+            "makeup": 3,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.0,
+            "ratio": 2.5,
+            "attack": 0.031,
+            "release": 0.17,
+            "knee": 5.5,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Headphones",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.53,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Home / Hi-Fi",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.6,
+            "ratio": 2.02,
+            "attack": 0.033,
+            "release": 0.275,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.6,
+            "ratio": 2.36,
+            "attack": 0.031,
+            "release": 0.213,
+            "knee": 7,
+            "makeup": 1,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.2,
+            "ratio": 1.68,
+            "attack": 0.039,
+            "release": 0.35,
+            "knee": 11,
+            "makeup": 0.5,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.2,
+            "ratio": 1.68,
+            "attack": 0.039,
+            "release": 0.375,
+            "knee": 12,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.4,
+            "ratio": 2.53,
+            "attack": 0.033,
+            "release": 0.2,
+            "knee": 8,
+            "makeup": 1,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.1,
+            "ratio": 1.34,
+            "attack": 0.05,
+            "release": 0.5,
+            "knee": 14,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.2,
+            "ratio": 1.25,
+            "attack": 0.055,
+            "release": 0.562,
+            "knee": 16,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.9,
+            "ratio": 1.13,
+            "attack": 0.066,
+            "release": 0.75,
+            "knee": 18,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.9,
+            "ratio": 1.25,
+            "attack": 0.061,
+            "release": 0.688,
+            "knee": 16,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.2,
+            "ratio": 1.21,
+            "attack": 0.077,
+            "release": 1.0,
+            "knee": 18,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.6,
+            "ratio": 2.7,
+            "attack": 0.009,
+            "release": 0.375,
+            "knee": 8,
+            "makeup": 1,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.8,
+            "ratio": 1.85,
+            "attack": 0.033,
+            "release": 0.35,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Reggae / dub",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.3,
+            "ratio": 1.76,
+            "attack": 0.044,
+            "release": 0.438,
+            "knee": 12,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.5,
+            "ratio": 1.85,
+            "attack": 0.028,
+            "release": 0.25,
+            "knee": 9,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Studio / reference",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.04,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Headphones",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.6,
+            "ratio": 2.08,
+            "attack": 0.042,
+            "release": 0.253,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.4,
+            "ratio": 2.62,
+            "attack": 0.042,
+            "release": 0.184,
+            "knee": 8,
+            "makeup": 1,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.1,
+            "ratio": 1.72,
+            "attack": 0.049,
+            "release": 0.345,
+            "knee": 12,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Electro",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.9,
+            "ratio": 2.08,
+            "attack": 0.025,
+            "release": 0.184,
+            "knee": 8,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Deep house",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.6,
+            "ratio": 1.9,
+            "attack": 0.042,
+            "release": 0.322,
+            "knee": 10,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.8,
+            "ratio": 1.23,
+            "attack": 0.098,
+            "release": 0.92,
+            "knee": 18,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.6,
+            "ratio": 2.8,
+            "attack": 0.011,
+            "release": 0.345,
+            "knee": 8,
+            "makeup": 1.5,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -13.0,
+            "ratio": 1.27,
+            "attack": 0.07,
+            "release": 0.517,
+            "knee": 16,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.6,
+            "ratio": 1.14,
+            "attack": 0.084,
+            "release": 0.69,
+            "knee": 18,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.6,
+            "ratio": 1.27,
+            "attack": 0.077,
+            "release": 0.632,
+            "knee": 16,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Synthwave",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.8,
+            "ratio": 1.81,
+            "attack": 0.049,
+            "release": 0.345,
+            "knee": 11,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Radio / broadcast",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.21,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Studio / Reference",
+      "items": [
+        {
+          "name": "Transparent",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.5,
+            "ratio": 1.38,
+            "attack": 0.036,
+            "release": 0.3,
+            "knee": 12,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.7,
+            "ratio": 1.9,
+            "attack": 0.036,
+            "release": 0.264,
+            "knee": 11,
+            "makeup": 0.5,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.6,
+            "ratio": 2.2,
+            "attack": 0.034,
+            "release": 0.204,
+            "knee": 8,
+            "makeup": 0.5,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.5,
+            "ratio": 2.35,
+            "attack": 0.036,
+            "release": 0.192,
+            "knee": 9,
+            "makeup": 0.5,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.4,
+            "ratio": 1.9,
+            "attack": 0.03,
+            "release": 0.24,
+            "knee": 10,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Techno",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -12.3,
+            "ratio": 2.05,
+            "attack": 0.026,
+            "release": 0.216,
+            "knee": 9,
+            "makeup": 1,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Acoustic / jazz",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.4,
+            "ratio": 1.23,
+            "attack": 0.06,
+            "release": 0.54,
+            "knee": 17,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Classical",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.2,
+            "ratio": 1.11,
+            "attack": 0.072,
+            "release": 0.72,
+            "knee": 18,
+            "makeup": 0,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Folk / acoustic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.3,
+            "ratio": 1.3,
+            "attack": 0.054,
+            "release": 0.48,
+            "knee": 15,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Soundtrack / cinematic",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.2,
+            "ratio": 1.23,
+            "attack": 0.066,
+            "release": 0.66,
+            "knee": 17,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Ambient",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -10.7,
+            "ratio": 1.19,
+            "attack": 0.084,
+            "release": 0.96,
+            "knee": 18,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.4,
+            "ratio": 1.6,
+            "attack": 0.042,
+            "release": 0.36,
+            "knee": 13,
+            "makeup": 0.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -11.4,
+            "ratio": 1.6,
+            "attack": 0.042,
+            "release": 0.336,
+            "knee": 12,
+            "makeup": 0.5,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        }
+      ]
     },
     {
-     "name": "Car",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.87,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
+      "folder": "Radio / Broadcast",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.7,
+            "ratio": 2.56,
+            "attack": 0.025,
+            "release": 0.176,
+            "knee": 7,
+            "makeup": 2,
+            "compMix": 0.95,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.9,
+            "ratio": 3.08,
+            "attack": 0.024,
+            "release": 0.136,
+            "knee": 4,
+            "makeup": 2,
+            "compMix": 0.95,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.6,
+            "ratio": 3.34,
+            "attack": 0.025,
+            "release": 0.128,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 0.95,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.7,
+            "ratio": 2.04,
+            "attack": 0.03,
+            "release": 0.24,
+            "knee": 9,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.4,
+            "ratio": 2.3,
+            "attack": 0.021,
+            "release": 0.16,
+            "knee": 6,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Funk / disco",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.1,
+            "ratio": 2.56,
+            "attack": 0.017,
+            "release": 0.112,
+            "knee": 5,
+            "makeup": 2,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Indie / alternative",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.7,
+            "ratio": 2.04,
+            "attack": 0.03,
+            "release": 0.224,
+            "knee": 8,
+            "makeup": 1.5,
+            "compMix": 0.95,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -17.0,
+            "ratio": 3.6,
+            "attack": 0.015,
+            "release": 0.12,
+            "knee": 4,
+            "makeup": 3,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Car",
+      "items": [
+        {
+          "name": "Pop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.0,
+            "ratio": 2.38,
+            "attack": 0.03,
+            "release": 0.198,
+            "knee": 8,
+            "makeup": 1.5,
+            "compMix": 0.9,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Hip-hop",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.9,
+            "ratio": 3.07,
+            "attack": 0.03,
+            "release": 0.144,
+            "knee": 6,
+            "makeup": 1.5,
+            "compMix": 0.8,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Rock",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -15.2,
+            "ratio": 2.84,
+            "attack": 0.028,
+            "release": 0.153,
+            "knee": 5,
+            "makeup": 1.5,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "EDM",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.2,
+            "ratio": 3.3,
+            "attack": 0.018,
+            "release": 0.135,
+            "knee": 5,
+            "makeup": 2.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "House",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.4,
+            "ratio": 2.38,
+            "attack": 0.025,
+            "release": 0.18,
+            "knee": 7,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Latin",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.8,
+            "ratio": 2.15,
+            "attack": 0.025,
+            "release": 0.18,
+            "knee": 7,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "Trap",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -16.0,
+            "ratio": 3.07,
+            "attack": 0.02,
+            "release": 0.18,
+            "knee": 6,
+            "makeup": 2,
+            "compMix": 0.85,
+            "detector": "internal"
+          }
+        },
+        {
+          "name": "R&B / soul",
+          "kind": "set",
+          "version": "1.1.0",
+          "state": {
+            "threshold": -14.2,
+            "ratio": 1.92,
+            "attack": 0.035,
+            "release": 0.27,
+            "knee": 10,
+            "makeup": 1.5,
+            "compMix": 1,
+            "detector": "internal"
+          }
+        }
+      ]
     }
-   ]
-  },
-  {
-   "folder": "Styles",
-   "items": [
-    {
-     "name": "Transparent",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.3,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Warm / organic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.45,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.9,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hard techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.1,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.6,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.6,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.8,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.0,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.55,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Synthwave",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.0,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.2,
-      "attack": 0.025,
-      "release": 0.15,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Drum & bass",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.0,
-      "attack": 0.025,
-      "release": 0.15,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.1,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Breakbeat",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.8,
-      "attack": 0.025,
-      "release": 0.15,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.9,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.0,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.6,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.7,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.8,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Metal",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.2,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.7,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.6,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Reggae / dub",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.25,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.2,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.1,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.2,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.15,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Club",
-   "items": [
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.09,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hard techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.31,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.65,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.76,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.76,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.98,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.2,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.705,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Drum & bass",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.2,
-      "attack": 0.025,
-      "release": 0.15,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.31,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.09,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.76,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.87,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.87,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Festival",
-   "items": [
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.3,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.07,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.53,
-      "attack": 0.025,
-      "release": 0.15,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Psytrance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.3,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.84,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.84,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.185,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.3,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.07,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.955,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Metal",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.53,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Big Room",
-   "items": [
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hardstyle",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.75,
-      "attack": 0.025,
-      "release": 0.15,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trance",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.25,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Progressive house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.0,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.938,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.5,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Dubstep",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.625,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.0,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Home / Hi-Fi",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.53,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.62,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.44,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.71,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.125,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.08,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.08,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.035,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Reggae / dub",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.53,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Headphones",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.53,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.71,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.44,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Electro",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.395,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Deep house",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.035,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Lo-fi",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.08,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.08,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Synthwave",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.35,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Studio / Reference",
-   "items": [
-    {
-     "name": "Transparent",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.04,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.36,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.44,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.52,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.28,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Techno",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.52,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Acoustic / jazz",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Classical",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Folk / acoustic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Soundtrack / cinematic",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Ambient",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1,
-      "attack": 0.045,
-      "release": 0.45,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.28,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.2,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Radio / Broadcast",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.21,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.34,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.47,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.08,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.21,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Funk / disco",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.08,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Indie / alternative",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.95,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.6,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  },
-  {
-   "folder": "Car",
-   "items": [
-    {
-     "name": "Pop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.87,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Hip-hop",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.09,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Rock",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.98,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "EDM",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.2,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "House",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.76,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Latin",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.87,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "Trap",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 2.2,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    },
-    {
-     "name": "R&B / soul",
-     "kind": "set",
-     "version": "1.0.0",
-     "state": {
-      "threshold": -22.0,
-      "ratio": 1.76,
-      "attack": 0.025,
-      "release": 0.22,
-      "knee": 6,
-      "makeup": 0,
-      "compMix": 1,
-      "detector": "internal"
-     }
-    }
-   ]
-  }
- ]
+  ]
 }
