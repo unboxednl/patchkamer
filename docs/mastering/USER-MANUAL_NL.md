@@ -263,8 +263,8 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 | **Karakter** | Tape (warm en afgerond), Buis (asymmetrisch, met even harmonischen) of Neutraal zacht. | **Tape** / **Buis** / **Neutraal zacht** (Tape) |
 | **Drive** | Hoe hard het signaal in de saturatie wordt geduwd. | 0 tot 18 dB (3) |
 | **Mix** | Gesatureerd geluid tegenover het schone geluid (parallel). | 0 tot 1 (0,28) |
-| **Kleur** | Hoeveel van de kleuring van het gekozen karakter erbij komt. | 0 tot 1 (0,35) |
-| **Helderheid** | Helderheid van het gesatureerde deel. | 0 tot 1 (0,65) |
+| **Kleur** | Hoeveel warmte en even-harmonisch karakter het gesatureerde deel krijgt: een scheve (asymmetrische) saturatie plus een warmtebel rond 250 Hz op het gesatureerde pad. Per karakter anders: Buis het meest, Tape veel warmte, Neutraal zacht het minst. Schaalt mee met **Mix**. | 0 tot 1 (0,35) |
+| **Helderheid** | Helling van het gesatureerde deel: laag is donkerder (tot 9 dB minder boven ongeveer 3,5 kHz), 0,65 is neutraal, hoog is helderder (tot 6 dB meer). Schaalt mee met **Mix**. | 0 tot 1 (0,65) |
 | **Laagbescherming** | Houdt het laag schoon: hoger betekent minder saturatie op de bas. | 0 tot 1 (0,7) |
 | **Gaincompensatie** | Houdt het volume ongeveer gelijk als je Drive verandert. | aan of uit (aan) |
 | **Uitgangstrim** | Uitgangsversterking. | -12 tot 6 dB (0) |
@@ -344,10 +344,10 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 | Regelaar | Wat hij doet | Bereik (start) |
 |---|---|---|
-| **Doelkarakter** | Beginkarakter: Transparent, Warm, Firm of Club. Het bepaalt hoe de compressor en de voorstellen zich gedragen. | **Transparant** / **Warm** / **Stevig** / **Club** (Transparant) |
-| **Doel LUFS-I** | Het volume (LUFS-I) waar de meting en het voorstel naar mikken. | -24 tot -7 LUFS (-14) |
+| **Doelkarakter** | Karakter van de buscompressor, ook als **Volg** uit staat (en alleen als **Buscompressie** aan staat en de ratio boven 1 ligt): Transparent is neutraal, Warm zachter en langzamer (iets minder compressie), Firm strakker en Club het stevigst. Het stuurt ook de voorstellen van Analyseer en Volg. | **Transparant** / **Warm** / **Stevig** / **Club** (Transparant) |
+| **Doel LUFS-I** | Het volume (LUFS-I) waar de meting en het voorstel naar mikken. Het verandert het geluid niet zelf: de meter toont het doel en de afwijking (regel **DOEL**), en **Analyseer 8 s** en **Volg** gebruiken het om de gain voor te stellen. | -24 tot -7 LUFS (-14) |
 | **Gain voor limiter** | Versterking vóór de limiter: verhoog hem om de limiter harder te laten werken en de master luider te maken. | -12 tot 18 dB (0) |
-| **Maximaal TP** | Hoogste true peak die de limiter doorlaat. | -6 tot -0,1 dBTP (-1) |
+| **Maximaal TP** | Hoogste true peak die de limiter doorlaat; de uitgangspiek komt op dit niveau uit (gemeten zoals de kaart toont, 4×). | -6 tot -0,1 dBTP (-1) |
 | **Toonregeling** | Zet de drie toonregelaars aan. | aan of uit (aan) |
 | **Laag** | Versterking of demping van het laag (een low shelf). | -4 tot 4 dB (0) |
 | **Midden** | Versterking of demping van het midden (een bell). | -4 tot 4 dB (0) |
@@ -412,6 +412,10 @@ Naast de regelaars van [de kaart](#de-kaart-van-een-mastering-apparaat):
 
 Mix Check heeft het pack **Mix Check Monitoring**: 18 presets in 2 mappen (Monitoring (9), Situations (9)). Het bestand is [`presets/mix-check.patchkamer-presets.json`](../../presets/mix-check.patchkamer-presets.json).
 
+- **Monitoring** (9): **Stereo**, **Mono sum** (de controle op clubs en PA's die alles optellen), **Left only**, **Right only**, **Side only** (het Side-signaal op volle sterkte; dempen maakt dit al zwakke signaal alleen maar zwakker), drie stille niveaus (**Quiet check (-6 dB)**, **(-12 dB)** en **Neighbour level (-18 dB)**) en **Reference, level-matched**.
+- **Situations** (9): hoe de mix klinkt waar hij gespeeld wordt, steeds als mono- of eenzijdige monitor met een passend niveau: radio of keukenspeaker (mono, -6 dB), telefoonspeaker (mono, -12 dB), een auto waar je vooral de dichtstbijzijnde speaker hoort (**Car, driver's side** links, **Car, passenger side** rechts, beide -6 dB) en de kamer ernaast (mono, -18 dB). Vijf presets met **matched** in de naam spelen de referentie op hetzelfde volume als je mix (club in mono, radio, telefoon, laat in de avond).
+- **Referentie volumematch** staat alleen aan in de presets die over de referentie gaan. Alle andere zetten hem uit, zodat een preset het referentieniveau niet ongemerkt verandert. Het maakt niets uit zolang er geen referentie is.
+
 ### Tips en beperkingen
 
 - Zet Mix Check helemaal aan het eind, na de Master Chain, om te horen wat de luisteraar hoort. Het verandert het signaal dat je exporteert niet.
@@ -454,7 +458,7 @@ Master Director heeft het pack **Master Director Situations and Styles**: 128 pr
 ### Tips en beperkingen
 
 - **De host moet het Master Director-protocol ondersteunen.** In een host zonder dat meldt de kaart "Hostuitbreiding vereist" en verandert er niets. Je kunt elk apparaat nog steeds met de hand of met zijn eigen presets instellen.
-- Er verandert niets automatisch als je een song laadt of een kabel verbindt: de Director doet alleen iets als je kiest of op een knop drukt.
+- Er verandert niets automatisch als je een song laadt of een kabel verbindt: de Director doet alleen iets als je kiest of op een knop drukt. Een **preset laden** telt als kiezen: dat stelt de aangesloten keten ook in, net als **Stel keten in** (alleen als **Direct toepassen bij keuze** aanstaat, en alleen voor de apparaten aan de gele kabel).
 - Vergrendelde regelaars en apparaten zonder **Masterregie toestaan** worden overgeslagen.
 
 ## Listening Output
@@ -491,4 +495,4 @@ Listening Output heeft het pack **Listening Output Levels**: 5 presets (Quiet, L
 - **De meter zegt "Laat audio door het apparaat lopen om te meten".** Er komt nog geen audio binnen.
 - **De kaart meldt "Nood-bypass".** De browser heeft geen AudioWorklet: open Patchkamer in Chrome, Edge of Firefox. Het geluid gaat ongewijzigd door.
 - **De Master Director verandert niets.** De host moet het Master Director-protocol bieden; zie de sectie Master Director. Stel de apparaten dan met de hand of met presets in.
-- **Een preset klinkt te luid of te zacht.** De presets mikken op een volume voor de situatie. Verander **Doel LUFS-I** in de Master Chain, of het **Luistervolume**.
+- **Een preset klinkt te luid of te zacht.** De presets mikken op een volume voor de situatie. Zet **Volg** aan in de Master Chain (dan stuurt **Doel LUFS-I** de gain) of verander **Gain voor limiter**, of het **Luistervolume**.

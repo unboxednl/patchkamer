@@ -52,12 +52,18 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Transparent`, `Warm`, `
 - Extreme instellingen (alles op het minimum of maximum) en een burst van `NaN`, `±Infinity` en 1e9 op de ingang geven geen niet-eindige samples en het geluid komt daarna terug.
 - De Master Director zet via `configureMastering` echte instellingen; een vergrendelde besturing (`locks`) wordt overgeslagen.
 
+## Wat `profile`, `target` en `ceiling` doen (getest, versie 1.13.0)
+
+- `ceiling` (Maximaal TP): de limiter houdt de uitgangspiek op `ceiling`, gemeten met dezelfde 4×-true-peakmeting die de kaart toont (TP 4×). Tot 1.12 lag de piek 0,9 dB lager dan ingesteld. Een onafhankelijke meting met 16× oversampling kan bij scherpe transiënten tot ongeveer 0,4 dB hoger uitkomen dan de 4×-meting van de kaart; dat is eigen aan een 4×-meter.
+- `profile` werkt altijd op de buscompressor (ook handmatig, zonder Volg), alleen als `compress` aan staat en `ratio` boven 1 ligt. `transparent` is exact het oude gedrag (bit-gelijk). `warm`: attack ×1,8, release ×1,6, knee +4 dB, ratio-boven-1 ×0,75 (zachter en langzamer, ongeveer 0,5 dB minder gain reduction en 0,8 dB luider dan transparent bij de beginstand). `firm`: ×0,6, ×0,7, knee -3 dB, ×1,3. `club`: ×0,45, ×0,55, knee -4 dB, ×1,5 (ongeveer 0,7 tot 1,1 dB meer gain reduction en zachter dan transparent). Dit komt bovenop de waarden van de regelaars `attack`, `release`, `knee` en `ratio`, die in de state ongewijzigd blijven. De Volg-voorstellen houden hun eigen `ratio` (club 2,2, anders 1,5) en `high` (warm -0,6); het profiel schaalt het resultaat nog eens.
+- `target` (Doel LUFS-I) verandert zonder Volg het geluid niet. Het staat in de meter (regel DOEL met de afwijking in LU van het gemeten LUFS-I, anders -S of -M) en bepaalt de `gain` van het voorstel van Analyseer 8 s, en van Volg. Het handboek en de hint in de kaart zeggen dat nu.
+
 ## Presets maken
 
 - Een pack heet `<naam>.patchkamer-presets.json` en staat in `../../../presets/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.masterchain`, elke preset is `kind: "set"`. Gebruik formaat 2 (`formatVersion: 2`, zie een bestaand pack in `../../../presets/`).
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Zet **geen** `bypass`, `match`, `auto`, `remote` of `locks` in een preset.
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
-- Het pack voor dit apparaat is gegenereerd uit de recepten van de Master Director (stijl × situatie); wijzig het niet met de hand maar via de generator, anders lopen apparaat en Director uiteen.
+- Het pack heeft eigen waarden en is **niet** één-op-één de Director-recepten: `profile`, `target`, `ceiling`, `low`, `mid`, `high` en `ratio` komen uit de recepten van de Master Director (stijl × situatie); `gain`, `threshold`, `attack`, `release`, `knee`, `makeup` en `compMix` zijn per stijl en situatie met een eigen generator gezet (`mpresets/p3/master_chain.py`, buiten de repo) en daarna per preset met de motor gekalibreerd: de drempel voor een vaste gemiddelde gain reduction per stijl (de motor zelf gemeten, dus inclusief het profiel), de make-up zodat een loop van -16 dB RMS 0 tot +3 dB luider uitkomt (stevige stijlen tot +4) en de piek niet boven `ceiling` komt. Pas je het geluid van het apparaat aan (limiter, compressor, profiel), kalibreer `threshold` en `makeup` dan opnieuw. Wijzig je `profile`, `target`, `ceiling`, toon of `ratio` van een preset, houd dan Director en pack gelijk.
 
 ## Controleren
 

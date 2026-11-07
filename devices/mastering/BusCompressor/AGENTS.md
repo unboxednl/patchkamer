@@ -43,12 +43,19 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Soft bus`, `Drums`, `Ki
 - Extreme instellingen (alles op het minimum of maximum) en een burst van `NaN`, `±Infinity` en 1e9 op de ingang geven geen niet-eindige samples en het geluid komt daarna terug.
 - De Master Director zet via `configureMastering` echte instellingen; een vergrendelde besturing (`locks`) wordt overgeslagen.
 
+## Wat `attack` en `release` doen (gemeten 07-11-2026, DSP ongewijzigd)
+
+- Signaalweg: de detector neemt de grootste absolute waarde van links en rechts (stereo-gelinkt) of van de Sidechain-ingang en maakt er een piekomhullende van met een **vaste** aanval van 1 ms en een vaste terugval van 45 ms. Threshold, knee en ratio rekenen op die omhullende en geven een gewenste gain reduction in dB. Die reductie wordt daarna gladgestreken met een eenpolig filter: met de tijd `attack` zolang de reductie toeneemt, met de tijd `release` zolang ze afneemt (tijdconstanten, 63 %). `attack` en `release` sturen dus de gain, niet de detector; de drempel hangt aan de piekomhullende, niet aan RMS.
+- Effect op een drumloop (120 bpm, -16 dB RMS, threshold -20, ratio 2,4, knee 6): attack 1 ms → 100 ms verlaagt de gemiddelde gain reduction van 6,3 naar 4,9 dB (95e percentiel 8,9 → 6,5 dB), het niveau gaat 2,4 dB omhoog en de crestfactor daalt 0,8 dB; release 30 ms → 800 ms verhoogt de gemiddelde reductie van 4,6 naar 7,1 dB (1,5 s: 7,5 dB) en het niveau gaat 2,0 dB omlaag (800 ms). Beide werken dus duidelijk hoorbaar (meer dan 1 dB); er is niets aan de DSP veranderd.
+- Grens: omdat de detector zelf 45 ms nodig heeft om terug te vallen, zijn release-waarden onder ongeveer 50 ms bijna gelijk (30 ms tegen 50 ms: 0,2 dB verschil in gemiddelde reductie). Een attack onder ongeveer 5 ms verschilt weinig van 1 ms (6,2 tegen 6,3 dB). Hoor je geen verschil tussen twee zulke waarden, dan ligt dat hieraan en is het geen fout.
+- Een stapsignaal (1 kHz, van -30 naar -6 dB) laat het zien: bij attack 100 ms is de gain 100 ms na de stap nog niet ingezet (-14,3 dB piek), bij 1 ms en 20 ms wel (-19,2 en -19,1 dB).
+
 ## Presets maken
 
 - Een pack heet `<naam>.patchkamer-presets.json` en staat in `../../../presets/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.buscompressor`, elke preset is `kind: "set"`. Gebruik formaat 2 (`formatVersion: 2`, zie een bestaand pack in `../../../presets/`).
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Zet **geen** `bypass`, `match`, `auto`, `remote` of `locks` in een preset.
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
-- Het pack voor dit apparaat is gegenereerd uit de recepten van de Master Director (stijl × situatie); wijzig het niet met de hand maar via de generator, anders lopen apparaat en Director uiteen.
+- Het pack is gegenereerd (stijl × situatie, eigen waarden voor alle instellingen; generator `mpresets/buscomp.py`, buiten de repo) en daarna per preset met de motor gekalibreerd (make-up). Wijzig je het geluid van het apparaat, kalibreer `makeup` dan opnieuw; verander je waarden met de hand, controleer dan dat de piek niet hoger wordt dan de invoer.
 
 ## Controleren
 

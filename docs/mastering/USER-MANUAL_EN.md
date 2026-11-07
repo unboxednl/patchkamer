@@ -263,8 +263,8 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 | **Character** | Tape (warm and rounded), Tube (asymmetric, with even harmonics) or Neutral soft. | **Tape** / **Tube** / **Neutral soft** (Tape) |
 | **Drive** | How hard the signal is pushed into the saturation. | 0 to 18 dB (3) |
 | **Mix** | Saturated sound against the clean sound (parallel). | 0 to 1 (0.28) |
-| **Color** | How much of the colouring of the chosen character is added. | 0 to 1 (0.35) |
-| **Brightness** | Brightness of the saturated part. | 0 to 1 (0.65) |
+| **Color** | How much warmth and even-harmonic character the saturated part gets: an asymmetric saturation plus a warmth bell around 250 Hz on the saturated path. It differs per character: Tube the most even harmonics, Tape a lot of warmth, Neutral soft the least. Scales with **Mix**. | 0 to 1 (0.35) |
+| **Brightness** | Tilt of the saturated part: low is darker (up to 9 dB less above about 3.5 kHz), 0.65 is neutral, high is brighter (up to 6 dB more). Scales with **Mix**. | 0 to 1 (0.65) |
 | **Low protection** | Keeps the low end clean: higher means less saturation on the bass. | 0 to 1 (0.7) |
 | **Gain compensation** | Keeps the loudness about the same when you change Drive. | on or off (on) |
 | **Output trim** | Output gain. | -12 to 6 dB (0) |
@@ -344,10 +344,10 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 | Control | What it does | Range (start) |
 |---|---|---|
-| **Target character** | Starting character: Transparent, Warm, Firm or Club. It sets how the compressor and the suggestions behave. | **Transparent** / **Warm** / **Firm** / **Club** (Transparent) |
-| **Target LUFS-I** | The loudness (LUFS-I) that the measurement and the suggestion aim at. | -24 to -7 LUFS (-14) |
+| **Target character** | Character of the bus compressor, also when **Follow** is off (and only when **Bus compression** is on and the ratio is above 1): Transparent is neutral, Warm softer and slower (a little less compression), Firm tighter and Club the firmest. It also steers the suggestions of Analyse and Follow. | **Transparent** / **Warm** / **Firm** / **Club** (Transparent) |
+| **Target LUFS-I** | The loudness (LUFS-I) that the measurement and the suggestion aim at. It does not change the sound by itself: the meter shows the target and the deviation (the **TARGET** line), and **Analyse 8 s** and **Follow** use it to suggest the gain. | -24 to -7 LUFS (-14) |
 | **Gain before limiter** | Gain before the limiter: raise it to push the limiter harder and make the master louder. | -12 to 18 dB (0) |
-| **Maximum TP** | Highest true peak that the limiter lets through. | -6 to -0.1 dBTP (-1) |
+| **Maximum TP** | Highest true peak that the limiter lets through; the output peak comes out at this level (measured as the card shows it, 4×). | -6 to -0.1 dBTP (-1) |
 | **Tone control** | Switches the three tone controls on. | on or off (on) |
 | **Low** | Boost or cut of the low end (a low shelf). | -4 to 4 dB (0) |
 | **Mid** | Boost or cut of the middle (a bell). | -4 to 4 dB (0) |
@@ -412,6 +412,10 @@ Besides the controls of [the card](#the-card-of-a-mastering-device):
 
 Mix Check has the pack **Mix Check Monitoring**: 18 presets in 2 folders (Monitoring (9), Situations (9)). The file is [`presets/mix-check.patchkamer-presets.json`](../../presets/mix-check.patchkamer-presets.json).
 
+- **Monitoring** (9): **Stereo**, **Mono sum** (the check for clubs and PAs that sum everything), **Left only**, **Right only**, **Side only** (the side signal at full level; turning it down only weakens an already weak signal), three quiet levels (**Quiet check (-6 dB)**, **(-12 dB)** and **Neighbour level (-18 dB)**) and **Reference, level-matched**.
+- **Situations** (9): how the mix holds up where it is played, each as a mono or one-sided monitor at a fitting level: radio or kitchen speaker (mono, -6 dB), phone speaker (mono, -12 dB), a car where you mostly hear the nearest speaker (**Car, driver's side** left, **Car, passenger side** right, both -6 dB) and the room next door (mono, -18 dB). Five presets with **matched** in the name play the reference at the same loudness as your mix (club in mono, radio, phone, late night).
+- **Reference level match** is only on in the presets about the reference. All others switch it off, so a preset never changes the reference level unnoticed. It makes no difference while there is no reference.
+
 ### Tips and limits
 
 - Put Mix Check at the very end, after the Master Chain, to hear what the listener hears. It does not change the signal that you export.
@@ -454,7 +458,7 @@ Master Director has the pack **Master Director Situations and Styles**: 128 pres
 ### Tips and limits
 
 - **The host must support the Master Director protocol.** In a host without it the card says "Host extension required" and nothing changes. You can still set every device by hand or with its own presets.
-- Nothing changes automatically when you load a song or connect a cable: the Director only acts when you choose or press a button.
+- Nothing changes automatically when you load a song or connect a cable: the Director only acts when you choose or press a button. **Loading a preset** counts as choosing: it also sets the connected chain, like **Set the chain** (only when **Apply directly when you choose** is on, and only for the devices on the yellow cable).
 - Locked controls and devices without **Allow Master Director** are skipped.
 
 ## Listening Output
@@ -491,4 +495,4 @@ Listening Output has the pack **Listening Output Levels**: 5 presets (Quiet, Low
 - **The meter says "Play audio through the device to measure".** No audio reaches the input yet.
 - **The card says "Emergency bypass".** The browser has no AudioWorklet: open Patchkamer in Chrome, Edge or Firefox. The sound passes through unchanged.
 - **The Master Director changes nothing.** The host must offer the Master Director protocol; see the Master Director section. Set the devices by hand or with presets instead.
-- **A preset sounds too loud or too quiet.** The presets aim at a loudness for the situation. Change **Target LUFS-I** in the Master Chain, or the **Listening volume**.
+- **A preset sounds too loud or too quiet.** The presets aim at a loudness for the situation. Turn on **Follow** in the Master Chain (then **Target LUFS-I** steers the gain) or change **Gain before limiter**, or the **Listening volume**.

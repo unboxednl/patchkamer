@@ -42,8 +42,8 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Stereo`, `Mono`, `Check
 
 - Een pack heet `<naam>.patchkamer-presets.json` en staat in `../../../presets/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.mixcheck`, elke preset is `kind: "set"`. Gebruik formaat 2 (`formatVersion: 2`, zie een bestaand pack in `../../../presets/`).
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Zet **geen** `bypass`, `match`, `auto`, `remote` of `locks` in een preset.
-- Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
-- Het pack voor dit apparaat is gegenereerd uit de recepten van de Master Director (stijl × situatie); wijzig het niet met de hand maar via de generator, anders lopen apparaat en Director uiteen.
+- Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Monitoring` (stereo, mono sum, links, rechts, side en stille niveaus, plus een niveau-gelijkgemaakte referentie) en `Situations` (mono of eenzijdig bij een passend niveau; die met `matched` in de naam hebben `refMatch: true`). Elke preset moet een eigen combinatie van `monitor`, `dim` en `refMatch` hebben (geen tweelingen); `refMatch` staat alleen aan in presets die over de referentie gaan. Er is geen verband met de stijl- en situatierecepten van de Director: Mix Check heeft maar drie velden en geen stijlen.
+- Dit pack komt niet uit de recepten van de Master Director (Mix Check heeft geen stijlen, zie de regel hierboven): het is een eigen, met de hand samengestelde set en mag met de hand worden aangepast, zolang elke preset een eigen combinatie van `monitor`, `dim` en `refMatch` houdt.
 
 ## Controleren
 

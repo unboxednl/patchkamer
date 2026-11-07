@@ -16,7 +16,7 @@ Een subtiele harmonische saturatie (tape, buis of neutraal zacht) met ADAA-alias
 | Contract | v1.12 |
 | Licentie apparaat | AGPL-3.0-or-later |
 
-Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Patina, `nl.patchkamer.mastering.sat`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De DSP is sample voor sample gelijk aan het oude bestand (bewezen met een offline render); alleen de meldingen uit de DSP zijn codes geworden die de kaart vertaalt, en de waarden van de keuze "Doelkarakter" heten nu Engels (`transparent`, `firm`).
+Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Patina, `nl.patchkamer.mastering.sat`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Sinds 1.13.0 is de DSP bewust veranderd: Helderheid en Kleur werken hoorbaar en de vaste hoogverzwakking van de ADAA is weg (zie hieronder). De meldingen uit de DSP zijn codes die de kaart vertaalt, en de waarden van de keuze "Doelkarakter" heten Engels (`transparent`, `firm`). Het geluid is dus niet meer sample voor sample gelijk aan het oude bestand; `Mix = 0` en bypass blijven bit-gelijk aan de invoer.
 
 ## De state
 
@@ -36,6 +36,14 @@ Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere
 
 Startprofielen in de kaart (keuzelijst "Startprofiel"): `Subtle`, `Tape warmth`, `Soft tube`, `Parallel character`. Ze zetten een paar waarden; ze zijn geen apart veld in de state.
 
+## Wat Helderheid en Kleur doen (1.13.0)
+
+Beide werken op het natte pad, vóór het mengen, en schalen dus met `mix`.
+
+- `tone` (Helderheid): hoge plank bij 3,5 kHz op het natte pad, -9 dB bij 0, 0 dB (neutraal) bij 0,65 (de start), +6 dB bij 1. Op roze ruis (drive 6, mix 0,3) is het verschil tussen tone 0 en 1 ongeveer 4 dB in 6 tot 20 kHz.
+- `color` (Kleur): (1) even-harmonische asymmetrie: een bias van `color` x 0,45 (tube), x 0,28 (tape) of x 0,12 (soft) in de saturatie (tweede harmonische bij 1 kHz, drive 6, -14 dB invoer: tape -36 dB bij 0,35 en -28 dB bij 1, tube -32 en -24, soft -43 en -35; bij 0 geen tweede harmonische); (2) een warmtebel bij 250 Hz op het natte pad van +10 dB (tape), +9 (tube) of +7 dB (soft) bij `color` 1. Verschil `color` 0 tegen 1 op roze ruis (drive 6, mix 0,3): 3,7 dB (tape), 3,3 dB (tube) en 2,4 dB (soft) in 150 tot 400 Hz.
+- Het lineaire pad is vlak: met `mix` 1, `drive` 0, `color` 0 en `tone` 0,65 is de versterking van 1 kHz tot 20 kHz gelijk (afwijking < 0,05 dB). Voor 1.13.0 was die -2 dB bij 10 kHz, -5 dB bij 15 kHz en -12 dB bij 20 kHz, doordat de eerste-orde ADAA twee samples middelde.
+
 ## Wat het apparaat met een state doet (getest)
 
 - `setState({})` geeft alle startwaarden; `setState(getState())` geeft dezelfde state terug.
@@ -48,7 +56,7 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Subtle`, `Tape warmth`,
 - Een pack heet `<naam>.patchkamer-presets.json` en staat in `../../../presets/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.patina`, elke preset is `kind: "set"`. Gebruik formaat 2 (`formatVersion: 2`, zie een bestaand pack in `../../../presets/`).
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Zet **geen** `bypass`, `match`, `auto`, `remote` of `locks` in een preset.
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
-- Het pack voor dit apparaat is gegenereerd uit de recepten van de Master Director (stijl × situatie); wijzig het niet met de hand maar via de generator, anders lopen apparaat en Director uiteen.
+- Het pack voor dit apparaat is gegenereerd door een eigen generator (`patina.py`: stijl × situatie, met waarden voor karakter, drive, mix, kleur, helderheid en laagbescherming) en daarna per preset in niveau gekalibreerd met `trim` (|dRms| < 1 dB op loop en roze ruis). Dit zijn eigen Patina-waarden, geen kopie van de Director-recepten; verander je het geluid van het apparaat, kalibreer `trim` dan opnieuw.
 
 ## Controleren
 
