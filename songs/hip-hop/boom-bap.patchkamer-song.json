@@ -1,0 +1,3920 @@
+{
+ "format": "patchkamer-song",
+ "formatVersion": 1,
+ "title": "Boom Bap Loop",
+ "author": "",
+ "license": "CC-BY-4.0",
+ "description": "A boom bap beat in C minor at 90 BPM, swing 0.2: a four-bar loop (Cm7, Fm7, Cm7, G7) with kick on 1, 6 and 10, snare on 2 and 4 slightly behind the grid, ghost snares, swung hats, a sub bass that follows the kick, dusty electric piano and a short pentatonic lead hook. Arranged as intro, verse, hook, verse B, hook and outro (40 bars, about 1 minute 47). Checked on paper and with measurements only; not listened to.",
+ "created": "2026-11-07T00:00:00.000Z",
+ "patchkamer": "1.19",
+ "workspace": {
+  "format": "patchkamer-werkruimte",
+  "formatVersion": 1,
+  "name": "Boom Bap Loop",
+  "defs": [],
+  "sources": [],
+  "bpm": 90,
+  "swing": 0.2,
+  "view": {
+   "x": 0,
+   "y": 0,
+   "scale": 1
+  },
+  "devices": [
+   {
+    "id": "d1",
+    "def": "nl.patchkamer.patterntracker",
+    "version": "1.14.1",
+    "x": 0,
+    "y": 0,
+    "state": {
+     "title": "Boom Bap Loop",
+     "trackCount": 6,
+     "mode": "order",
+     "loop": true,
+     "rowsPerBeat": 4,
+     "seed": 17,
+     "tracks": [
+      {
+       "name": "Kick",
+       "velocity": 1,
+       "gate": 0.9
+      },
+      {
+       "name": "Snare",
+       "velocity": 1,
+       "gate": 0.9
+      },
+      {
+       "name": "Hats",
+       "velocity": 1,
+       "gate": 0.9
+      },
+      {
+       "name": "Bass",
+       "velocity": 1,
+       "gate": 0.9
+      },
+      {
+       "name": "Keys",
+       "velocity": 0.8,
+       "gate": 0.9
+      },
+      {
+       "name": "Lead",
+       "velocity": 0.8,
+       "gate": 0.9
+      },
+      {},
+      {}
+     ],
+     "patterns": [
+      {
+       "id": "intro",
+       "name": "Intro",
+       "length": 64,
+       "channels": [
+        [],
+        [],
+        [
+         {
+          "row": 0,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 4,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 8,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 24,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 40,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 56,
+          "notes": [
+           42
+          ],
+          "vel": 0.4,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           42
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [],
+        [
+         {
+          "row": 0,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        []
+       ]
+      },
+      {
+       "id": "verse",
+       "name": "Verse",
+       "length": 64,
+       "channels": [
+        [
+         {
+          "row": 0,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 45,
+          "notes": [
+           36
+          ],
+          "vel": 0.45,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 4,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 23,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 31,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 55,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 62,
+          "notes": [
+           38
+          ],
+          "vel": 0.5,
+          "len": 0.5,
+          "fx": "RAT",
+          "value": 2,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 2,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 4,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 8,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 14,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 18,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 24,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 30,
+          "notes": [
+           46
+          ],
+          "vel": 0.5,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 34,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 40,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 46,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 50,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 56,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 62,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           36
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           36
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           39
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           41
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           41
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           44
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           36
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           36
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           39
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           31
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           31
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           34
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.5,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.36,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        []
+       ]
+      },
+      {
+       "id": "verseb",
+       "name": "Verse B",
+       "length": 64,
+       "channels": [
+        [
+         {
+          "row": 0,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 45,
+          "notes": [
+           36
+          ],
+          "vel": 0.45,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 4,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 7,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 15,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 23,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 31,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 39,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 47,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 55,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 62,
+          "notes": [
+           38
+          ],
+          "vel": 0.5,
+          "len": 0.5,
+          "fx": "RAT",
+          "value": 2,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 2,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 4,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 8,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 14,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 18,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 24,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 30,
+          "notes": [
+           46
+          ],
+          "vel": 0.5,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 34,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 40,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 46,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 50,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 56,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 62,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           36
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           36
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           39
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           41
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           41
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           44
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           36
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           36
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           39
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           31
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           31
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           34
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.55,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.396,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.55,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.396,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.55,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.396,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.55,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.396,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        []
+       ]
+      },
+      {
+       "id": "hook",
+       "name": "Hook",
+       "length": 64,
+       "channels": [
+        [
+         {
+          "row": 0,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           36
+          ],
+          "vel": 0.8,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 45,
+          "notes": [
+           36
+          ],
+          "vel": 0.45,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           36
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           36
+          ],
+          "vel": 0.85,
+          "len": 1,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 4,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 23,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 31,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 55,
+          "notes": [
+           38
+          ],
+          "vel": 0.3,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           38
+          ],
+          "vel": 1.0,
+          "len": 1,
+          "fx": "DEL",
+          "value": 12,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 62,
+          "notes": [
+           38
+          ],
+          "vel": 0.5,
+          "len": 0.5,
+          "fx": "RAT",
+          "value": 2,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 2,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 4,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 8,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 14,
+          "notes": [
+           46
+          ],
+          "vel": 0.5,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 18,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 24,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 30,
+          "notes": [
+           46
+          ],
+          "vel": 0.5,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 34,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 40,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 46,
+          "notes": [
+           46
+          ],
+          "vel": 0.5,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 50,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 52,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 56,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           42
+          ],
+          "vel": 0.45,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 60,
+          "notes": [
+           42
+          ],
+          "vel": 0.7,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 62,
+          "notes": [
+           46
+          ],
+          "vel": 0.5,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           36
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 6,
+          "notes": [
+           36
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           39
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           41
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 22,
+          "notes": [
+           41
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           44
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           36
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 38,
+          "notes": [
+           36
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           39
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           31
+          ],
+          "vel": 0.9,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           31
+          ],
+          "vel": 0.75,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           34
+          ],
+          "vel": 0.8,
+          "len": 5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.62,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 10,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.446,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.62,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 26,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.446,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.62,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 42,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.446,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.62,
+          "len": 7,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.446,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [
+         {
+          "row": 0,
+          "notes": [
+           79
+          ],
+          "vel": 0.8,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 4,
+          "notes": [
+           77
+          ],
+          "vel": 0.7,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 8,
+          "notes": [
+           75
+          ],
+          "vel": 0.7,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           72
+          ],
+          "vel": 0.65,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           77
+          ],
+          "vel": 0.8,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           75
+          ],
+          "vel": 0.7,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 24,
+          "notes": [
+           72
+          ],
+          "vel": 0.7,
+          "len": 6,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           79
+          ],
+          "vel": 0.8,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 36,
+          "notes": [
+           82
+          ],
+          "vel": 0.8,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 40,
+          "notes": [
+           79
+          ],
+          "vel": 0.7,
+          "len": 2,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 44,
+          "notes": [
+           77
+          ],
+          "vel": 0.7,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           75
+          ],
+          "vel": 0.7,
+          "len": 4,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 54,
+          "notes": [
+           72
+          ],
+          "vel": 0.65,
+          "len": 3,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 58,
+          "notes": [
+           67
+          ],
+          "vel": 0.7,
+          "len": 6,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ]
+       ]
+      },
+      {
+       "id": "outro",
+       "name": "Outro",
+       "length": 64,
+       "channels": [
+        [],
+        [],
+        [
+         {
+          "row": 0,
+          "notes": [
+           42
+          ],
+          "vel": 0.35,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 4,
+          "notes": [
+           42
+          ],
+          "vel": 0.35,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 8,
+          "notes": [
+           42
+          ],
+          "vel": 0.35,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 12,
+          "notes": [
+           42
+          ],
+          "vel": 0.35,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           42
+          ],
+          "vel": 0.25,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 20,
+          "notes": [
+           42
+          ],
+          "vel": 0.25,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 24,
+          "notes": [
+           42
+          ],
+          "vel": 0.25,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 28,
+          "notes": [
+           42
+          ],
+          "vel": 0.25,
+          "len": 0.5,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        [],
+        [
+         {
+          "row": 0,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.5,
+          "len": 12,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 16,
+          "notes": [
+           53,
+           56,
+           60,
+           63
+          ],
+          "vel": 0.42,
+          "len": 12,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 32,
+          "notes": [
+           48,
+           51,
+           55,
+           58
+          ],
+          "vel": 0.34,
+          "len": 12,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         },
+         {
+          "row": 48,
+          "notes": [
+           55,
+           59,
+           62,
+           65
+          ],
+          "vel": 0.26,
+          "len": 12,
+          "fx": "---",
+          "value": 0,
+          "ccId": "cutoff"
+         }
+        ],
+        []
+       ]
+      }
+     ],
+     "order": [
+      {
+       "pattern": "intro",
+       "repeats": 1,
+       "transpose": 0
+      },
+      {
+       "pattern": "verse",
+       "repeats": 2,
+       "transpose": 0
+      },
+      {
+       "pattern": "hook",
+       "repeats": 2,
+       "transpose": 0
+      },
+      {
+       "pattern": "verseb",
+       "repeats": 2,
+       "transpose": 0
+      },
+      {
+       "pattern": "hook",
+       "repeats": 2,
+       "transpose": 0
+      },
+      {
+       "pattern": "outro",
+       "repeats": 1,
+       "transpose": 0
+      }
+     ],
+     "playlist": []
+    }
+   },
+   {
+    "id": "d2",
+    "def": "nl.patchkamer.drumkit",
+    "version": "1.14.2",
+    "x": 360,
+    "y": -250,
+    "state": {
+     "kit": "Custom",
+     "channels": [
+      {
+       "type": "kick",
+       "model": "Lo-fi",
+       "level": 0.9,
+       "steps": [
+        [
+         {
+          "v": 1.0
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       ],
+       "tune": -17,
+       "drive": 0.3,
+       "noise": 0.4
+      },
+      {
+       "type": "snare",
+       "model": "Funk",
+       "level": 0.85,
+       "steps": [
+        [
+         null,
+         null,
+         null,
+         null,
+         {
+          "v": 1.0
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         {
+          "v": 1.0
+         },
+         null,
+         null,
+         null
+        ]
+       ]
+      },
+      {
+       "type": "closedhat",
+       "model": "Lo-fi",
+       "level": 0.45,
+       "pan": 0.2,
+       "steps": [
+        [
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null,
+         {
+          "v": 0.85
+         },
+         null
+        ]
+       ]
+      },
+      {
+       "type": "openhat",
+       "model": "Lo-fi",
+       "level": 0.4,
+       "pan": -0.2,
+       "steps": [
+        [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         {
+          "v": 0.85
+         }
+        ]
+       ]
+      },
+      {
+       "type": "rim",
+       "model": "Lo-fi",
+       "level": 0.4,
+       "pan": 0.3,
+       "steps": [
+        [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         {
+          "v": 0.3
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         {
+          "v": 0.3
+         }
+        ]
+       ]
+      },
+      {
+       "type": "shaker",
+       "model": "Lo-fi",
+       "level": 0.25,
+       "pan": -0.3,
+       "steps": [
+        [
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         },
+         null,
+         {
+          "v": 0.55
+         }
+        ]
+       ]
+      }
+     ],
+     "length": 16,
+     "master": 0.6726,
+     "human": 0.008,
+     "run": false
+    }
+   },
+   {
+    "id": "d3",
+    "def": "nl.patchkamer.mono",
+    "version": "1.15.0",
+    "x": 360,
+    "y": 120,
+    "state": {
+     "wave": "sawtooth",
+     "fine": 0,
+     "cut": 200,
+     "res": 3,
+     "env": 0.3,
+     "dec": 0.3,
+     "sub": 0.4,
+     "glide": 0.02,
+     "lvl": 0.59
+    }
+   },
+   {
+    "id": "d4",
+    "def": "nl.patchkamer.stagekeys",
+    "version": "1.11.1",
+    "x": 360,
+    "y": 420,
+    "state": {
+     "inst": "tine",
+     "tone": 0.35,
+     "drive": 0.15,
+     "tremRate": 0.9,
+     "tremDepth": 0.5,
+     "tune": -18,
+     "rotaryFast": false,
+     "oct": 0,
+     "lvl": 0.971
+    }
+   },
+   {
+    "id": "d5",
+    "def": "nl.patchkamer.mono",
+    "version": "1.15.0",
+    "x": 360,
+    "y": 720,
+    "state": {
+     "wave": "triangle",
+     "fine": 0,
+     "cut": 1800,
+     "res": 2,
+     "env": 0.3,
+     "dec": 0.6,
+     "sub": 0.1,
+     "glide": 0.03,
+     "lvl": 0.58
+    }
+   },
+   {
+    "id": "d6",
+    "def": "nl.patchkamer.room",
+    "version": "1.15.1",
+    "x": 720,
+    "y": 420,
+    "state": {
+     "sync": true,
+     "time": 0.375,
+     "fb": 0.3,
+     "hp": 200,
+     "dsend": 0,
+     "size": 3.5,
+     "tone": 4000,
+     "wet": 0.3
+    }
+   },
+   {
+    "id": "d7",
+    "def": "nl.patchkamer.mixer",
+    "version": "2.6.0",
+    "x": 1080,
+    "y": 300,
+    "state": {
+     "v": 2,
+     "nCh": 4,
+     "nGrp": 0,
+     "eq": 3,
+     "ch": [
+      {
+       "name": "Drums",
+       "lvl": -10,
+       "pan": 0,
+       "send": 0
+      },
+      {
+       "name": "Bass",
+       "lvl": -11,
+       "pan": 0,
+       "send": 0
+      },
+      {
+       "name": "Keys",
+       "lvl": -13,
+       "pan": -0.2,
+       "send": 0
+      },
+      {
+       "name": "Lead",
+       "lvl": -15,
+       "pan": 0.2,
+       "send": 0
+      }
+     ],
+     "master": {
+      "lvl": 0.0
+     }
+    }
+   },
+   {
+    "id": "d8",
+    "def": "nl.patchkamer.masterchain",
+    "version": "1.13.0",
+    "x": 1410,
+    "y": 300,
+    "state": {
+     "profile": "firm",
+     "target": -13.1,
+     "gain": 1.4,
+     "ceiling": -1.1,
+     "eq": true,
+     "low": 0.45,
+     "mid": -0.36,
+     "high": 0.18,
+     "compress": true,
+     "threshold": -13.5,
+     "ratio": 1.81,
+     "attack": 0.025,
+     "release": 0.22,
+     "knee": 6,
+     "makeup": 3.3,
+     "compMix": 0.9,
+     "limit": true
+    }
+   },
+   {
+    "id": "d9",
+    "def": "nl.patchkamer.speakers",
+    "version": "1.16.0",
+    "x": 1740,
+    "y": 300,
+    "state": {
+     "lvl": 0.8
+    }
+   }
+  ],
+  "cables": [
+   {
+    "from": {
+     "id": "d1",
+     "port": "track1"
+    },
+    "to": {
+     "id": "d2",
+     "port": "trigger"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d1",
+     "port": "track2"
+    },
+    "to": {
+     "id": "d2",
+     "port": "trigger"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d1",
+     "port": "track3"
+    },
+    "to": {
+     "id": "d2",
+     "port": "trigger"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d1",
+     "port": "track4"
+    },
+    "to": {
+     "id": "d3",
+     "port": "notes"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d1",
+     "port": "track5"
+    },
+    "to": {
+     "id": "d4",
+     "port": "notes"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d1",
+     "port": "track6"
+    },
+    "to": {
+     "id": "d5",
+     "port": "notes"
+    },
+    "kind": "event"
+   },
+   {
+    "from": {
+     "id": "d2",
+     "port": "mix"
+    },
+    "to": {
+     "id": "d7",
+     "port": "ch1"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d3",
+     "port": "out"
+    },
+    "to": {
+     "id": "d7",
+     "port": "ch2"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d4",
+     "port": "out"
+    },
+    "to": {
+     "id": "d6",
+     "port": "in"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d6",
+     "port": "out"
+    },
+    "to": {
+     "id": "d7",
+     "port": "ch3"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d5",
+     "port": "out"
+    },
+    "to": {
+     "id": "d7",
+     "port": "ch4"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d7",
+     "port": "out"
+    },
+    "to": {
+     "id": "d8",
+     "port": "in"
+    },
+    "kind": "audio"
+   },
+   {
+    "from": {
+     "id": "d8",
+     "port": "out"
+    },
+    "to": {
+     "id": "d9",
+     "port": "in"
+    },
+    "kind": "audio"
+   }
+  ]
+ }
+}

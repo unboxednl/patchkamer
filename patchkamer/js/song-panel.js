@@ -27,7 +27,7 @@ async function songDemoLoad(force){ PK.SONG_DEMO_ERR=''; try{ let p=null; try{ p
     if(!p.ref){ const j=await PK.fetchJSON(`https://api.github.com/repos/${p.owner}/${p.repo}`); p.ref=j.default_branch||'main'; }
     if(force) PK.PKAI_TREE.delete(p.owner+'/'+p.repo+'@'+p.ref);
     const t=await PK.pkAiTree({owner:p.owner,repo:p.repo,ref:p.ref}), base=p.path?p.path.replace(/\/$/,'')+'/':'';
-    PK.SONG_DEMO=(t.tree||[]).filter(n=>n.type==='blob'&&n.path.startsWith(base)&&/\.patchkamer(-song)?\.json$/i.test(n.path)).map(n=>({path:n.path,url:`https://raw.githubusercontent.com/${p.owner}/${p.repo}/${p.ref}/${n.path.split('/').map(encodeURIComponent).join('/')}`,name:PK.wsNameOf(n.path).replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())})).sort((a,b)=>a.name.localeCompare(b.name)); }
+    PK.SONG_DEMO=(t.tree||[]).filter(n=>n.type==='blob'&&n.path.startsWith(base)&&/\.patchkamer(-song)?\.json$/i.test(n.path)).map(n=>({path:n.path,url:`https://raw.githubusercontent.com/${p.owner}/${p.repo}/${p.ref}/${n.path.split('/').map(encodeURIComponent).join('/')}`,dir:n.path.slice(base.length).split('/').slice(0,-1),name:PK.wsNameOf(n.path).replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase())})).sort((a,b)=>a.name.localeCompare(b.name)); }
   catch(e){ PK.SONG_DEMO=[]; PK.SONG_DEMO_ERR=e.message; } songPaint(); } PK.songDemoLoad=songDemoLoad;
 function songPaint(){
   const rec=PK.$('songRecent'), demo=PK.$('songDemo'); rec.innerHTML=''; demo.innerHTML=''; const q=((PK.$('songSearch')||{}).value||'').trim().toLowerCase(), hit=(...t)=>!q||t.join(' ').toLowerCase().includes(q); const lang=(typeof PK.PK_LANG!=='undefined'&&PK.PK_LANG)||'en';
@@ -41,7 +41,15 @@ function songPaint(){
   if(PK.SONG_DEMO===null){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_laden'); demo.appendChild(e); }
   else if(PK.SONG_DEMO_ERR){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_ophalen_mislukt',PK.SONG_DEMO_ERR); demo.appendChild(e); }
   else if(!PK.SONG_DEMO.length){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_geen_demos'); demo.appendChild(e); }
-  (PK.SONG_DEMO||[]).filter(d=>hit(d.name,d.path)).forEach(d=>demo.appendChild(item(d.name,d.path,[btn(PK.pkt('m.openen'),'',()=>songOpenUrl(d.url,d.name))])));
+  // demo's: songs in de hoofdmap eerst, daarna een boom met inspringen per map (songs/hip-hop/…); bij zoeken staat alles open
+  { const tree={kids:new Map(),songs:[]}; (PK.SONG_DEMO||[]).filter(d=>hit(d.name,d.path)).forEach(d=>{ let n=tree; (d.dir||[]).forEach(g=>{ if(!n.kids.has(g)) n.kids.set(g,{kids:new Map(),songs:[]}); n=n.kids.get(g); }); n.songs.push(d); });
+    const count=n=>n.songs.length+[...n.kids.values()].reduce((a,k)=>a+count(k),0), dictL=(PK.I18N&&PK.I18N[PK.PK_LANG])||{};
+    const label=g=>dictL['m.tag_style_'+g.replace(/-/g,'_')]||dictL['m.tag_style_'+g.replace(/-/g,'')]||g.replace(/-/g,' ').replace(/^./,c=>c.toUpperCase());
+    const paint=(n,depth,key)=>{ n.songs.forEach(d=>{ const it=item(d.name,d.path,[btn(PK.pkt('m.openen'),'',()=>songOpenUrl(d.url,d.name))]); if(depth) it.style.paddingLeft=(depth*14)+'px'; demo.appendChild(it); });
+      [...n.kids.entries()].sort((a,b)=>label(a[0]).localeCompare(label(b[0]),lang)).forEach(([g,k])=>{ const kk=key+'/'+g, open=!!q||PK.prOpen.has(kk); const h=document.createElement('div'); h.className='wsitem'; h.style.paddingLeft=(depth*14)+'px'; h.style.cursor='pointer';
+        const nm=document.createElement('span'); nm.className='nm'; nm.textContent=(open?'▾ ':'▸ ')+label(g); const c=document.createElement('small'); c.textContent=' '+count(k); nm.appendChild(c); h.appendChild(nm);
+        h.onclick=()=>{ open?PK.prOpen.delete(kk):PK.prOpen.add(kk); songPaint(); }; demo.appendChild(h); if(open) paint(k,depth+1,kk); }); };
+    paint(tree,0,'sg'); }
   if(q&&!rec.querySelector('.wsitem')&&!demo.querySelector('.wsitem')&&(PK.SONGREC.length||(PK.SONG_DEMO||[]).length)){ const e=document.createElement('div'); e.className='note'; e.textContent=PK.pkt('m.songs_niets_gevonden',PK.$('songSearch').value.trim()); rec.appendChild(e); } } PK.songPaint=songPaint;
 function songShow(){ songPaint(); if(PK.SONG_DEMO===null) songDemoLoad(false); } PK.songShow=songShow;
 function openSongs(){ PK.libOpen('songs'); } PK.openSongs=openSongs;
