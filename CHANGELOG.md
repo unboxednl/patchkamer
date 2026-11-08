@@ -4,9 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
-## 0.1.0 (not released yet)
+## 0.2.0 (2026-11-08)
+
+*From this version on, every change a user notices gets its own version number (SemVer, see AGENTS.md). What used to be under 0.1.0 is listed here.*
 
 ### New
+- **Versions with SemVer.** The host, the device contract, the skins, the presets, the tunes and the samples each have a version number (`x.y.z`) that moves with every change. `patchkamer/version.json` now also holds `contract` and `skinsContract`. Every tune, preset and sample pack has a `version` (contract v1.27; the host ignores it). New is `docs/tools/check-versions.py`, which checks that all versions are right and belong together, and a check on GitHub (Actions) that does so on every push. The README shows the versions.
 - **Load automatically at start-up, with a start screen** (host). Under Settings → Load automatically (formerly New workspace) you choose which libraries Patchkamer loads by itself: devices, presets, tunes, skins and now also samples (off by default). New is **Also load at start-up with a saved workspace** (on by default): the libraries then load first, then the workspace. While loading, a start screen floats above the canvas with the logo, the version, a progress bar and below it what is being loaded ("Loading devices · 49 of 96 · name"). It disappears by itself, or you click it away (click, × or Esc); loading continues. Turn it off with **Show the start screen with progress**.
 - **Mixer 2.6.1: VU meters at the top of the channel strip** (skin *Example VU* 1.1.0). With a skin that gives the meters a VU face, the round meter sits at the top of each channel, group and master strip instead of beside the fader; the card is wider with that skin (1060 px). For this the host sets `data-face` on the meter element and the Mixer follows it. Without a skin, or with bars and LED ladders, nothing changes.
 - **Dragging a section by its empty area.** Besides the title, an empty spot in the section is now a handle too: all devices on it move along. Inside a section you move the canvas with the right or middle mouse button. The floor menu no longer appears after right-dragging the canvas.

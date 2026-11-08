@@ -243,3 +243,7 @@ Kolommen: **Poorten** zijn de poorten uit de definitie van het apparaat, met `id
 ## Controleren
 
 Valideer elke song met `python3 docs/tools/check-song.py <song.patchkamer-song.json>` (laadt de song in de echte host, controleert apparaten en kabels en meet het uitgangsniveau). Dat zegt niets over hoe het klinkt; schrijf in je oplevering dat je niet hebt geluisterd.
+
+## Versie van een apparaat
+
+Elk apparaat heeft een `version` (SemVer) die bij elke wijziging van het apparaat omhoog gaat. Een nieuw of gewijzigd apparaat is voor de host een wijziging (nieuw apparaat = MINOR, een fout hersteld = PATCH): verhoog dan ook `patchkamer/version.json` en zet een regel in beide changelogs. Alle regels: [root `AGENTS.md`, Regel 2](../AGENTS.md#regel-2-elke-wijziging-krijgt-een-nieuw-versienummer-semver).

@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.26
+// validate-instrument.mjs — Patchkamer contract v1.27
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en

@@ -42,12 +42,32 @@ Het contract en de validator horen bij elkaar. Controleer dit **voor je begint**
 head -1 contract/PATCHKAMER-CONTRACT_NL.md contract/PATCHKAMER-CONTRACT_EN.md contract/validate-instrument.mjs
 ```
 
-Alle drie de regels moeten dezelfde versie noemen (nu v1.26: "Instrumentcontract v1.26", "Instrument contract v1.26" en "Patchkamer contract v1.26"). Het getal bij `patchkamer:` in `patchkamer/js/songs.js` hoort daar ook mee gelijk te zijn.
+Alle drie de regels moeten dezelfde versie noemen (nu v1.27: "Instrumentcontract v1.27", "Instrument contract v1.27" en "Patchkamer contract v1.27"). Het getal bij `patchkamer:` in `patchkamer/js/songs.js` hoort daar ook mee gelijk te zijn.
 
 - Noemen ze verschillende versies, **stop dan** en meld dat. Gok niet welke goed is en meng nooit een contract van de ene met een validator van de andere versie.
 - Heb je bewust een oudere versie nodig, haal dan **beide** uit dezelfde tag: `git show contract/v1.8:contract/PATCHKAMER-CONTRACT.md` en `git show contract/v1.8:contract/validate-instrument.mjs` (tot en met v1.10 was er één contractbestand zonder taalachtervoegsel; vanaf v1.11 zijn het `_NL.md` en `_EN.md`). Zet ze buiten de repo (bijvoorbeeld in je tijdelijke map), niet in `contract/`.
 - Bouw standaard voor de versie die in de repo staat.
 - Noem in je oplevering de versie waarvoor je gebouwd hebt.
+
+## Regel 2: elke wijziging krijgt een nieuw versienummer (SemVer)
+
+Sinds 08-11 (Freek) gaat **elke wijziging** met een versienummer mee. We gebruiken [SemVer](https://semver.org/lang/nl/) (`MAJOR.MINOR.PATCH`) voor vijf soorten dingen. Eén plek per soort, en `docs/tools/check-versions.py` controleert dat alles klopt (draai hem vóór je oplevert; GitHub draait hem bij elke push):
+
+| Wat | Waar staat de versie | Wanneer verhoog je |
+|---|---|---|
+| **Patchkamer (de host)** | `patchkamer/version.json` (`version`, daarnaast `contract` en `skinsContract`); de app-versie volgt (`node app/sync-version.js`) | **Elke wijziging die een gebruiker merkt of die de host verandert.** PATCH: een fout hersteld, een tekst, iets kleins. MINOR: een nieuwe functie of een duidelijke gedragsverandering, en elke contractwijziging. MAJOR: pas vanaf 1.0.0 voor wat bestaande werkruimtes, songs of apparaten breekt; zolang we onder 1.0.0 zitten telt een breuk als MINOR met "let op" in de changelog. |
+| **Apparaatcontract** | kop van `contract/PATCHKAMER-CONTRACT_NL.md` en `_EN.md`, `contract/validate-instrument.mjs`, `patchkamer:'…'` in `patchkamer/js/songs.js` en `contract` in `patchkamer/version.json` (alle gelijk, zie Regel 1) | MINOR voor iets nieuws dat apparaten mogen of moeten (`x.y`, dus v1.27 is 1.27.0); MAJOR voor een breuk. Een verduidelijking zonder nieuw gedrag hoeft geen nieuw nummer, maar de host krijgt dan wel een PATCH. **Een contractwijziging verhoogt altijd ook de host (minstens MINOR)** en krijgt een regel in de versietabel. |
+| **Skins** | per skin `version` in het bestand; het formaat `skinsContract` in `skins/contract/` (kop NL, EN en `validate-skin.mjs`, en `skinsContract` in `patchkamer/version.json`) | Skin: PATCH voor een kleurtje of tekst, MINOR voor nieuwe regels of een nieuwe verschijning, MAJOR voor een ander uiterlijk dat bestaande keuzes breekt. Skinscontract: zoals het apparaatcontract (`0.x`). |
+| **Presets en tunes** (en samples) | per pack `version` op het hoogste niveau van het bestand (contract v1.27) | PATCH voor een verbeterde instelling of tekst, MINOR voor nieuwe presets, tunes of samples, MAJOR voor verwijderd of hernoemd (bewaarde songs kunnen ernaar verwijzen). De `version` bij een los preset of tune is de **apparaatversie** waarvoor hij is gemaakt, niet de packversie. |
+| **Apparaten** | `version` in het apparaatbestand (zie Regel 1 en "Een bestaand apparaat wijzigen") | Zoals SemVer; `id`, poort-id's en state-velden blijven gelijk. |
+
+Hoe je het doet, bij een commit die iets wijzigt:
+
+1. **Bepaal de soort** (PATCH, MINOR of MAJOR) en verhoog het nummer **ten opzichte van wat op `origin/main` staat** (`git show origin/main:patchkamer/version.json`), niet van wat in je werkmap staat: meerdere agents werken tegelijk. Na een `git pull --rebase` met een nieuwere `version.json`: verhoog opnieuw vanaf het nummer dat er nu staat (twee commits met hetzelfde nummer mag niet).
+2. **Zet de wijziging in de changelog onder het nieuwe nummer**: `CHANGELOG.md` én `CHANGELOG_NL.md`, met een kopje `## x.y.z (JJJJ-MM-DD)`, dezelfde inhoud in beide talen. Het bovenste kopje is altijd het nummer in `version.json`.
+3. **Verhoog ook de versie van wat je wijzigde** buiten de host: een skin, een pack, een apparaat. Een wijziging in een pack of skin is voor de host zelf een PATCH of MINOR (nieuwe skin of pack = MINOR).
+4. **Draai** `python3 docs/tools/check-versions.py`. Het moet `OK` geven. Een tag `vX.Y.Z` (die de App-workflow een Release laat bouwen) zet alleen Freek of ik na zijn akkoord; zie `CLAUDE.md`. De versie staat ook op GitHub in de README (badges), de changelog en de controle (Actions).
+5. Raak je gedeelde bestanden (changelog, `version.json`) terwijl een andere agent ook bezig is: stage alleen je eigen regels en los een conflict op door **het hoogste nummer te nemen en daarbovenop te tellen**.
 
 ## Werkwijze
 

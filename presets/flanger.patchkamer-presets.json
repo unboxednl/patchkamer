@@ -1,6 +1,7 @@
 {
   "format": "patchkamer-presets",
   "formatVersion": 2,
+  "version": "1.0.0",
   "device": "nl.patchkamer.flanger",
   "name": "Flanger Basics",
   "author": "Freek van Gool",

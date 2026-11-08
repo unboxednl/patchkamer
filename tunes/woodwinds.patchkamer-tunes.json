@@ -1,6 +1,7 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
+ "version": "1.0.0",
  "device": "nl.patchkamer.woodwinds",
  "name": "Woodwinds",
  "author": "Freek van Gool",

@@ -1,6 +1,7 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
+ "version": "1.0.0",
  "device": "nl.patchkamer.crossmodmono",
  "name": "Cross Mod Mono Styles",
  "author": "Freek van Gool",

@@ -1,6 +1,7 @@
 {
   "format": "patchkamer-presets",
   "formatVersion": 2,
+  "version": "1.0.0",
   "device": "nl.patchkamer.drift",
   "name": "Drift Presets",
   "author": "Freek van Gool",

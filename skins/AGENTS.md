@@ -143,3 +143,7 @@ Alles in `library/` is `CC0-1.0` (publiek domein): zet `"license": "CC0-1.0"` op
 - [README (Engels)](README.md) en [README (Nederlands)](README_NL.md) van deze map.
 - [Algemene agent-instructies voor apparaten](../AGENTS.md), [tunes](../tunes/AGENTS.md), [presets](../presets/AGENTS.md) en [songs](../songs/AGENTS.md).
 - [Apparaatcontract](../contract/PATCHKAMER-CONTRACT_NL.md) ([English](../contract/PATCHKAMER-CONTRACT_EN.md)) en [licenties](../LICENSING.md).
+
+## Versies
+
+Elke skin heeft een `version` (SemVer): verhoog hem bij elke wijziging van de skin (PATCH een kleurtje of tekst, MINOR nieuwe regels of verschijning, MAJOR een uiterlijk dat bestaande keuzes breekt). Een nieuwe of gewijzigde skin is voor de host een wijziging: verhoog dan ook `patchkamer/version.json` en zet een regel in beide changelogs. Het formaat (`skinsContract`, nu in `patchkamer/version.json`) heeft een eigen nummer: verandert het, dan gaan skinscontract (NL, EN, validator), `skinsContract` in `version.json` en de host samen omhoog. Draai `python3 docs/tools/check-versions.py`. Alle regels: [root `AGENTS.md`, Regel 2](../AGENTS.md#regel-2-elke-wijziging-krijgt-een-nieuw-versienummer-semver).

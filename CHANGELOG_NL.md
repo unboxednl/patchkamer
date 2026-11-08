@@ -4,9 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
-## 0.1.0 (nog niet uitgebracht)
+## 0.2.0 (2026-11-08)
+
+*Vanaf deze versie krijgt elke wijziging die een gebruiker merkt een eigen versienummer (SemVer, zie AGENTS.md). Wat eerder onder 0.1.0 stond, staat hier.*
 
 ### Nieuw
+- **Versies met SemVer.** De host, het apparaatcontract, de skins, de presets, de tunes en de samples hebben elk een versienummer (`x.y.z`) dat bij elke wijziging meegaat. `patchkamer/version.json` bevat nu ook `contract` en `skinsContract`. Elk tune-, preset- en samplepack heeft een `version` (contract v1.27; de host negeert hem). Nieuw is `docs/tools/check-versions.py`, dat controleert of alle versies kloppen en bij elkaar horen, en een controle op GitHub (Actions) die dat bij elke push doet. De README toont de versies.
 - **Automatisch laden bij het opstarten, met een startscherm** (host). Onder Instellingen → Automatisch laden (voorheen Nieuwe werkruimte) kies je welke bibliotheken Patchkamer vanzelf laadt: apparaten, presets, tunes, skins en nieuw ook samples (standaard uit). Nieuw is de keuze **Ook bij het opstarten met een bewaarde werkruimte laden** (standaard aan): de bibliotheken laden dan eerst, daarna de werkruimte. Tijdens het laden zweeft een startscherm boven het canvas met het logo, de versie, een voortgangsbalk en eronder wat er geladen wordt ("Apparaten laden · 49 van 96 · naam"). Het verdwijnt vanzelf, of je klikt het weg (klik, × of Esc); het laden gaat door. Uit te zetten met **Startscherm met voortgang tonen**.
 - **Mixer 2.6.1: VU-meters bovenaan de kanaalstrook** (skin *Example VU* 1.1.0). Met een skin die de meters een VU-gezicht geeft, staat de ronde meter bovenaan elke kanaal-, groeps- en masterstrook in plaats van naast de fader; de kaart is bij die skin breder (1060 px). De host zet daarvoor `data-face` op het meterelement, de Mixer volgt dat. Zonder skin of met balken en ledladders verandert er niets.
 - **Een sectie slepen op het lege vlak.** Naast de titel is nu ook een lege plek in de sectie een handvat: alle apparaten erop schuiven mee. Het canvas verschuiven binnen een sectie kan met de rechter- of middelste muisknop. Het menu van de vloer verschijnt niet meer na het rechts verslepen van het canvas.

@@ -1,6 +1,7 @@
 {
   "format": "patchkamer-presets",
   "formatVersion": 2,
+  "version": "1.0.0",
   "device": "nl.patchkamer.balanceeq",
   "name": "Balance EQ Situations and Styles",
   "author": "Freek van Gool",

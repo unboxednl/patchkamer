@@ -28,3 +28,7 @@ Importeer het pack in de host (tab Samples, **Importeren…**), controleer dat e
 | Pack | Samples | Inhoud |
 |---|---|---|
 | `break-loops.patchkamer-samples.json` | 14 | tweemaats drumloops uit Drum Kit en Pulse Drums: breakbeat (4), jungle (6), drum and bass (2), boom bap (2) |
+
+## Versies
+
+Elk samplepack heeft een `version` op het hoogste niveau (`"version": "1.0.0"`, SemVer, contract v1.27): PATCH voor een verbeterde tekst of tag, MINOR voor nieuwe samples, MAJOR voor verwijderde of hernoemde samples. Een gewijzigd pack is voor de host een wijziging: verhoog `patchkamer/version.json` en zet een regel in beide changelogs. Draai `python3 docs/tools/check-versions.py`. Alle regels: [root `AGENTS.md`, Regel 2](../AGENTS.md#regel-2-elke-wijziging-krijgt-een-nieuw-versienummer-semver).

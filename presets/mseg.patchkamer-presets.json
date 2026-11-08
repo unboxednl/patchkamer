@@ -1,6 +1,7 @@
 {
   "format": "patchkamer-presets",
   "formatVersion": 2,
+  "version": "1.0.0",
   "device": "nl.patchkamer.mseg",
   "name": "Multi-Segment Envelope Presets",
   "author": "Freek van Gool",

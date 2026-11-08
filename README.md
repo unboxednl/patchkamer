@@ -2,6 +2,8 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
+[![Patchkamer](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Funboxednl%2Fpatchkamer%2Fmain%2Fpatchkamer%2Fversion.json&query=%24.version&label=Patchkamer&color=4fd1c5)](CHANGELOG.md) [![Device contract](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Funboxednl%2Fpatchkamer%2Fmain%2Fpatchkamer%2Fversion.json&query=%24.contract&label=device%20contract&color=9b8cff)](contract/PATCHKAMER-CONTRACT_EN.md) [![Skins contract](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Funboxednl%2Fpatchkamer%2Fmain%2Fpatchkamer%2Fversion.json&query=%24.skinsContract&label=skins%20contract&color=f4a261)](skins/contract/SKINS-CONTRACT_EN.md) [![Versions](https://github.com/unboxednl/patchkamer/actions/workflows/versions.yml/badge.svg)](https://github.com/unboxednl/patchkamer/actions/workflows/versions.yml)
+
 **Patchkamer is a modular music studio in your browser.** Place devices on a floor, connect them with cables, press Start and make music. Synths, sequencers, effects and outputs are small plug-in files that follow an open contract, so people and AI agents can build new ones.
 
 ![Keys, Acid Baselines and Speakers connected in Patchkamer](docs/images/en/03-patch.png)

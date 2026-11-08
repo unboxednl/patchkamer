@@ -146,3 +146,7 @@ Samen 42 packs met 2507 tunes.
 
 - Wijzig het apparaat niet om je tune te laten kloppen. Verander nooit `id` of `kind` van een apparaat, daaraan hangen de tunes van gebruikers.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Versies
+
+Elk pack heeft een `version` op het hoogste niveau (`"version": "1.0.0"`, SemVer, contract v1.27): PATCH voor een verbeterde tune of tekst, MINOR voor nieuwe tunes, MAJOR voor verwijderde of hernoemde tunes (bewaarde songs kunnen ernaar verwijzen). Het is niet de `version` bij een losse tune: die is de apparaatversie waarvoor hij is gemaakt. Een gewijzigd pack is voor de host een wijziging: verhoog `patchkamer/version.json` en zet een regel in beide changelogs. Een nieuw pack begint op `1.0.0`. Draai `python3 docs/tools/check-versions.py`. Alle regels: [root `AGENTS.md`, Regel 2](../AGENTS.md#regel-2-elke-wijziging-krijgt-een-nieuw-versienummer-semver).

@@ -128,3 +128,7 @@ Samen 43 packs met 1952 presets.
 - Geen tunes in deze map en geen presets in `../tunes/`.
 - Geen geheimen of persoonlijke gegevens in een bestand.
 - Commit of push niet, tenzij de opdracht dat vraagt.
+
+## Versies
+
+Elk pack heeft een `version` op het hoogste niveau (`"version": "1.0.0"`, SemVer, contract v1.27): PATCH voor een verbeterde instelling of tekst, MINOR voor nieuwe presets, MAJOR voor verwijderde of hernoemde presets (bewaarde songs kunnen ernaar verwijzen). Het is niet de `version` bij een los preset: die is de apparaatversie waarvoor het is gemaakt. Een gewijzigd pack is voor de host een wijziging: verhoog `patchkamer/version.json` en zet een regel in beide changelogs. Een nieuw pack begint op `1.0.0`. Draai `python3 docs/tools/check-versions.py`. Alle regels: [root `AGENTS.md`, Regel 2](../AGENTS.md#regel-2-elke-wijziging-krijgt-een-nieuw-versienummer-semver).

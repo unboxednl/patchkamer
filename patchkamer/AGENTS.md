@@ -259,3 +259,7 @@ Een categorie in `patchkamer-bibliotheek.json` (`categories[]`) mag een veld `ic
 ## Licentie
 
 `AGPL-3.0-or-later`. Het platform blijft open: ook een betaalde webversie deelt zijn broncode. Zie `LICENSE`.
+
+## Versies van de host
+
+`patchkamer/version.json` bevat `version` (de host, SemVer), `contract` (het apparaatcontract waar de host aan voldoet) en `skinsContract`. **Elke wijziging aan de host verhoogt `version`** en komt in beide changelogs onder een kopje met dat nummer; een contractwijziging verhoogt de host altijd minstens MINOR. De host toont het nummer onder Instellingen en op het startscherm (`js/startup.js`), en de README op GitHub toont het in badges. Regels en werkwijze: [root `AGENTS.md`, Regel 2](../AGENTS.md#regel-2-elke-wijziging-krijgt-een-nieuw-versienummer-semver). Controle: `python3 docs/tools/check-versions.py`.

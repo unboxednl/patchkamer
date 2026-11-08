@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Checks that all version numbers in the repo are right and belong together (host, device contract, skins contract,
+# changelogs, skins, packs, devices). See AGENTS.md, "Regel 2". Runs on every push and pull request.
+name: Versions
+on:
+  push:
+  pull_request:
+jobs:
+  versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: python3 docs/tools/check-versions.py
