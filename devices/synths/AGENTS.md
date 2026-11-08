@@ -59,6 +59,7 @@ Dit overzicht komt uit `devices/AGENTS.md` en wordt gegenereerd door `docs/tools
 | [Patchbay Synth](PatchbaySynth/AGENTS.md) | `nl.patchkamer.patchbaysynth` | Een halfmodulaire synth met een patchpaneel: drie VCO's, ringmodulator, filter, envelopes, sample & hold en kabels |
 | [Piano](Piano/AGENTS.md) | `nl.patchkamer.piano` | Een pianofamilie met eigen motor: vleugel, pianino, honky-tonk, tine- en riet-e-piano en clavichord, met onharmonische deeltonen, verstemde snaren, hamergeluid, sustainpedaal en klankbord |
 | [Poly Chorus](PolyChorus/AGENTS.md) | `nl.patchkamer.polychorus` | Een zesstemmige polyfone synth met zaagtand, puls, sub, ruis en een ingebouwde stereo-chorus |
+| [Squelch Box](SquelchBox/AGENTS.md) | `nl.patchkamer.squelchbox` | Een getrouwe acid-bassynth, geïnspireerd op klassieke acid-bassmachines: één oscillator, een resonant diode-ladderfilter van 18 dB/oct, accent-sweep, slide en een sequencer van 16 stappen met tie |
 | [Stage Keys](StageKeys/AGENTS.md) | `nl.patchkamer.stagekeys` | Een polyfone toetsensynth met zeven klankmodellen (tine- en reed-piano, orgels, vibrafoon, bas), drive en stereo-tremolo |
 | [Sub Line](SubLine/AGENTS.md) | `nl.patchkamer.subline` | Een monosynth voor baslijnen en leads met een patroon van 32 stappen, een arpeggiator en een suboscillator |
 | [Supersaw Swarm](SupersawSwarm/AGENTS.md) | `nl.patchkamer.supersawswarm` | Een polyfone supersaw: tot negen verstemde zagen per noot, chorus, ping-pongdelay, galm, trance-gate en pomp |

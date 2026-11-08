@@ -8,7 +8,7 @@ Synths are the devices that make sound from notes. This page covers the 33 synth
 
 1. [What synths do](#what-synths-do)
 2. [Which synth for which goal](#which-synth-for-which-goal)
-3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
+3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
 6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
@@ -35,7 +35,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 
 | I want to… | Use |
 |---|---|
-| A bass line that plays by itself, with accent and slide per step | [Acid Baselines](#acid-baselines) (16 steps, 16 patterns), [Acid Stepper](#acid-stepper) (simpler) |
+| A bass line that plays by itself, with accent and slide per step | [Acid Baselines](#acid-baselines) (16 steps, 16 patterns), [Acid Stepper](#acid-stepper) (simpler), [Squelch Box](#squelch-box) (a faithful classic acid bass) |
 | A bass or lead that plays its own pattern or arpeggio | [Sub Line](#sub-line), [Cross Mod Mono](#cross-mod-mono) |
 | A bass played from my own keyboard or sequencer | [Low Bass](#low-bass), [Basic Mono](#basic-mono), [Sub Line](#sub-line) |
 | A simple, direct mono sound with few knobs | [Basic Mono](#basic-mono) |
@@ -158,6 +158,37 @@ The sequencer under the controls:
 - With every start or stop of the clock the line begins again at step 1.
 - A rest closes the note before it. A slide on the next active step ties the current note to it, so you can build long gliding phrases.
 - The **Pattern** list only names the start line you chose; a tune that sets only knobs does not change the line.
+
+### Squelch Box
+
+**What it is for.** The faithful acid bass: one oscillator (sawtooth or a square derived from it), a three-pole (18 dB/oct) resonant diode-ladder low-pass with a feedback that thins out the lows and rings at high resonance, a filter envelope with an accent circuit (the accent sweep builds up over consecutive accents), slide with a fixed glide time that does not retrigger the envelopes, and a 16-step sequencer with note, octave up/down, accent, slide and tie. It is inspired by classic acid bass synths and has few controls on purpose. Compared with Acid Baselines (more sections, second filter, distortions) and Acid Stepper (simpler) it aims at the character of the original. The host clock sets tempo and swing.
+
+![The Squelch Box card](../images/en/synths/squelch-box.png)
+
+**Controls.**
+
+- **Sound:** **Tuning** (±100 cents), **Cutoff** (100 to 5000 Hz), **Resonance** (at the top of the range the filter rings by itself at higher cutoffs), **Env Mod** (how far each note opens the filter), **Decay** (0.2 to 2 s; an accented note always uses a short fixed decay), **Accent** and **Waveform** (Sawtooth or Square). **Volume** sets the level.
+- **Extras (default = original):** **Slide time** (60 ms), **Gate length** (55% of a step), **Drive**, **Transpose** and **Drift** (slow pitch wander).
+- **Cutoff trace:** a small live graph of the filter cutoff.
+- **Sequencer:** **Internal on**, **Length** (1 to 16 steps), 16 pattern buttons, then a piano roll of 13 notes (C up to the C above) with rows **Up**, **Down**, **Accent**, **Slide** and **Tie**, and a **Library…** of 16 patterns, **Random**, **Mutate**, **Transpose +/−**, **Shift ←/→** and **Clear**. **Slide** on a step glides into the next step; **Tie** keeps the gate of the previous step open at the pitch of the tied step. **Test note**, **Test accent** and **All off**.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Notes from another sequencer. A velocity above 0.85 counts as accent; `slide: true` or an overlapping note glides. Switch **Internal on** off to hear only these notes. |
+| **Mod** | modulation in (purple) | A modulator can move 10 controls: **Tuning**, **Cutoff**, **Resonance**, **Env Mod**, **Decay**, **Accent**, **Volume**, **Slide time**, **Drive** and **Drift**. |
+| **Out** | audio out (teal) | The same mono signal on both channels. Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.**
+
+1. Place **Squelch Box** and **Speakers** and connect **Out** to **In**.
+2. Press **Start**: the pattern plays on the clock.
+3. Turn **Cutoff** down and **Resonance** and **Env Mod** up while it plays; click an **Accent** step and hear the sweep build up.
+
+**Tunes.** Pack **Squelch Box Styles**: 31 tunes in 8 folders (Acid House, Acid Techno, Electro, Trance, House, Minimal, Deep Acid, Breakbeat), file [`squelch-box-styles.patchkamer-tunes.json`](../../tunes/squelch-box-styles.patchkamer-tunes.json). Every tune brings its own line in pattern 1 and a variation in pattern 2. A few names: **Warehouse Squelch**, **Hard Drive**, **Slow Lava**, **Robot Walk**.
+
+**Tips and limits.** It models one voice (mono). Not modelled: the exact waveform curvature, the interaction between the filter stages and the time constants are approximations from public descriptions of this type of circuit, not measured on hardware; the sound has not been compared with a real machine or listened to.
 
 ### Low Bass
 

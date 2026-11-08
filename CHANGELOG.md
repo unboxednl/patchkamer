@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.4.0 (2026-11-08)
+
+### Added
+- **Squelch Box (Synths).** A faithful acid bass synth inspired by classic acid bass synths: one oscillator, a three-pole (18 dB/oct) resonant diode-ladder filter, accent circuit with accent sweep, slide with a fixed glide time and a built-in 16-step sequencer with octave up/down, accent, slide and tie, 16 patterns and a pattern library. With the tune pack **Squelch Box Styles** (31 tunes, each with its own bassline), an icon, a section in the synths manual and a device guide for agents. Not compared with real hardware and not listened to.
+
 ## 0.3.1 (2026-11-08)
 
 ### Changed

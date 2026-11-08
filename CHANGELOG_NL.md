@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.4.0 (2026-11-08)
+
+### Toegevoegd
+- **Squelch Box (Synths).** Een getrouwe acid-bassynth, geïnspireerd op klassieke acid-bassynths: één oscillator, een driepolig (18 dB/oct) resonant diode-ladderfilter, accentcircuit met accent-sweep, slide met een vaste glijtijd en een ingebouwde sequencer van 16 stappen met octaaf omhoog/omlaag, accent, slide en tie, 16 patronen en een patroonbibliotheek. Met het tunepack **Squelch Box Styles** (31 tunes, elk met een eigen baslijn), een icoon, een sectie in de synths-handleiding en een apparaatgids voor agents. Niet vergeleken met echte hardware en niet beluisterd.
+
 ## 0.3.1 (2026-11-08)
 
 ### Gewijzigd

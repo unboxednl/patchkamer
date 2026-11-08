@@ -134,13 +134,14 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | 15: Techno, Acid, House, Synthwave, Ambient, Cinematic, Electro, Hip-hop, Dub, Funk & Disco, Trance, Chiptune, Drum & Bass, Generative, FX | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) | – |
 | [Piano](../devices/synths/Piano/) | Piano | 43 | 11: Grand, Upright, Honky-tonk, Tine, Reed, Clavichord, Layered, Ballad, Pop, Jazz, Lo-fi | [`piano.patchkamer-tunes.json`](piano.patchkamer-tunes.json) | – |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | 12: Synthwave, Ambient, Cinematic, Pop, Trance, House, Deep House, Funk & Disco, Soul, Electro, Lo-fi, Techno | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) | – |
+| [Squelch Box](../devices/synths/SquelchBox/) | Squelch Box Styles | 31 | 8: Acid House, Acid Techno, Electro, Trance, House, Minimal, Deep Acid, Breakbeat | [`squelch-box-styles.patchkamer-tunes.json`](squelch-box-styles.patchkamer-tunes.json) | – |
 | [Stage Keys](../devices/synths/StageKeys/) | Stage Keys Styles | 66 | 11: Soul, Funk, Jazz, Pop, Gospel, Rock, Disco, House, Lo-fi, Reggae, Ballad | [`stage-keys-styles.patchkamer-tunes.json`](stage-keys-styles.patchkamer-tunes.json) | – |
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10: Techno, House, Deep House, Acid, Electro, Synthwave, Hip-hop, Dub, Drum & Bass, Trance | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) | – |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10: Trance, Hardstyle, Progressive, Big Room, Synthwave, Pop, Future Bass, Eurodance, Ambient, Cinematic | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) | – |
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 | [Woodwinds](../devices/synths/Woodwinds/) | Woodwinds | 42 | 12: Flute, Clarinet, Oboe, Bassoon, Sax, Recorder, Pan Flute, Section, Ballad, Jazz, Folk, Ambient | [`woodwinds.patchkamer-tunes.json`](woodwinds.patchkamer-tunes.json) | – |
 
-Samen 43 packs met 2522 tunes.
+Samen 44 packs met 2553 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet

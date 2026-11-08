@@ -8,7 +8,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 3
 
 1. [Wat synths doen](#wat-synths-doen)
 2. [Welke synth voor welk doel](#welke-synth-voor-welk-doel)
-3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
+3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
@@ -35,7 +35,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 
 | Ik wil… | Gebruik |
 |---|---|
-| Een baslijn die vanzelf speelt, met accent en slide per stap | [Acid Baselines](#acid-baselines) (16 stappen, 16 patronen), [Acid Stepper](#acid-stepper) (eenvoudiger) |
+| Een baslijn die vanzelf speelt, met accent en slide per stap | [Acid Baselines](#acid-baselines) (16 stappen, 16 patronen), [Acid Stepper](#acid-stepper) (eenvoudiger), [Squelch Box](#squelch-box) (een getrouwe klassieke acid-bas) |
 | Een bas of lead die zijn eigen patroon of arpeggio speelt | [Sub Line](#sub-line), [Cross Mod Mono](#cross-mod-mono) |
 | Een bas die ik vanaf mijn eigen toetsenbord of sequencer speel | [Low Bass](#low-bass), [Basic Mono](#basic-mono), [Sub Line](#sub-line) |
 | Een eenvoudige, directe monoklank met weinig knoppen | [Basic Mono](#basic-mono) |
@@ -158,6 +158,37 @@ De sequencer onder de regelaars:
 - Bij elke start of stop van de klok begint de lijn weer bij stap 1.
 - Een rust sluit de noot ervoor. Een slide op de volgende actieve stap bindt de huidige noot eraan vast, zodat je lange glijdende frasen maakt.
 - De lijst **Patroon** noemt alleen de beginlijn die je koos; een tune die alleen knoppen zet verandert de lijn niet.
+
+### Squelch Box
+
+**Waar het voor dient.** De getrouwe acid-bas: één oscillator (zaagtand of een daarvan afgeleide blokgolf), een driepolig (18 dB/oct) resonant diode-ladderfilter met een terugkoppeling die het laag dunner maakt en bij veel resonantie zelf gaat zingen, een filter-envelope met accentcircuit (de accent-sweep loopt op bij opeenvolgende accenten), slide met een vaste glijtijd die de envelopes niet opnieuw start, en een sequencer van 16 stappen met noot, octaaf omhoog/omlaag, accent, slide en tie. Het is geïnspireerd op klassieke acid-bassynths en heeft bewust weinig knoppen. Vergeleken met Acid Baselines (meer secties, tweede filter, vervormingen) en Acid Stepper (eenvoudiger) mikt het op het karakter van het origineel. De klok van de host bepaalt tempo en swing.
+
+![De kaart van Squelch Box](../images/nl/synths/squelch-box.png)
+
+**Knoppen.**
+
+- **Klank:** **Stemming** (±100 cent), **Cutoff** (100 tot 5000 Hz), **Resonantie** (bovenaan het bereik zingt het filter bij hogere cutoff vanzelf), **Env mod** (hoe ver elke noot het filter opent), **Decay** (0,2 tot 2 s; een noot met accent gebruikt altijd een korte vaste decay), **Accent** en **Golfvorm** (Zaagtand of Blok). **Volume** bepaalt het niveau.
+- **Extra's (standaard = origineel):** **Slide-tijd** (60 ms), **Gate-lengte** (55% van een stap), **Drive**, **Transpositie** en **Drift** (trage zweving in toonhoogte).
+- **Cutoff-verloop:** een klein live grafiekje van de filter-cutoff.
+- **Sequencer:** **Intern aan**, **Lengte** (1 tot 16 stappen), 16 patroonknoppen, daarna een pianorol van 13 noten (C tot de C erboven) met de rijen **Omhoog**, **Omlaag**, **Accent**, **Slide** en **Tie**, en een **Bibliotheek…** met 16 patronen, **Willekeurig**, **Muteer**, **Transponeer +/−**, **Schuif ←/→** en **Leeg**. **Slide** op een stap glijdt naar de volgende stap; **Tie** houdt de gate van de vorige stap open op de toonhoogte van de tie-stap. **Proeftoon**, **Proef-accent** en **Alles uit**.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Noten van een andere sequencer. Een velocity boven 0,85 telt als accent; `slide: true` of een overlappende noot glijdt. Zet **Intern aan** uit om alleen deze noten te horen. |
+| **Mod** | sturing in (paars) | Een modulator kan 10 regelaars bewegen: **Stemming**, **Cutoff**, **Resonantie**, **Env mod**, **Decay**, **Accent**, **Volume**, **Slide-tijd**, **Drive** en **Drift**. |
+| **Uit** | audio uit (blauwgroen) | Hetzelfde mono signaal op beide kanalen. Verbind met **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.**
+
+1. Plaats **Squelch Box** en **Speakers** en verbind **Uit** met **In**.
+2. Druk op **Start**: het patroon speelt op de klok.
+3. Draai **Cutoff** omlaag en **Resonantie** en **Env mod** omhoog terwijl het speelt; klik een stap bij **Accent** en hoor de sweep oplopen.
+
+**Tunes.** Pack **Squelch Box Styles**: 31 tunes in 8 mappen (Acid House, Acid Techno, Electro, Trance, House, Minimal, Deep Acid, Breakbeat), bestand [`squelch-box-styles.patchkamer-tunes.json`](../../tunes/squelch-box-styles.patchkamer-tunes.json). Elke tune brengt zijn eigen lijn mee in patroon 1 en een variatie in patroon 2. Een paar namen: **Warehouse Squelch**, **Hard Drive**, **Slow Lava**, **Robot Walk**.
+
+**Tips en grenzen.** Het modelleert één stem (mono). Niet gemodelleerd: de precieze kromming van de golfvormen, de interactie tussen de filtertrappen en de tijdconstanten zijn benaderingen uit openbare beschrijvingen van dit soort schakeling, niet gemeten aan hardware; het geluid is niet vergeleken met een echte machine en niet beluisterd.
 
 ### Low Bass
 

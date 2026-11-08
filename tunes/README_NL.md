@@ -40,6 +40,7 @@ Deze map heeft **43 packs met 2522 tunes**, één pack per apparaat: 33 voor syn
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 89 | 15 | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) |
 | [Piano](../devices/synths/Piano/) | Piano | 43 | 11 | [`piano.patchkamer-tunes.json`](piano.patchkamer-tunes.json) |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 72 | 12 | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) |
+| [Squelch Box](../devices/synths/SquelchBox/) | Squelch Box Styles | 31 | 8 | [`squelch-box-styles.patchkamer-tunes.json`](squelch-box-styles.patchkamer-tunes.json) |
 | [Stage Keys](../devices/synths/StageKeys/) | Stage Keys Styles | 66 | 11 | [`stage-keys-styles.patchkamer-tunes.json`](stage-keys-styles.patchkamer-tunes.json) |
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 68 | 10 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |
 | [Supersaw Swarm](../devices/synths/SupersawSwarm/) | Supersaw Swarm Styles | 61 | 10 | [`supersaw-swarm-styles.patchkamer-tunes.json`](supersaw-swarm-styles.patchkamer-tunes.json) |
