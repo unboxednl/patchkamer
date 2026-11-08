@@ -4,7 +4,7 @@
 
 Ready-made sounds for devices that make sound (synths, samplers and drum devices), saved as data. Choose one from the list on a device's card, use it in a song or in your own library. Devices without a sound of their own have [presets](../presets/README.md) instead.
 
-This folder has **42 packs with 2507 tunes**, one pack per device: 33 for synths (2142 tunes), 3 for samplers (158 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
+This folder has **43 packs with 2522 tunes**, one pack per device: 33 for synths (2142 tunes), 4 for samplers (173 tunes) and 6 for drum devices (207 tunes). A drum device loads a whole machine (sounds and pattern) as one tune. The column **Folders** is the number of style folders in the pack; their names are in the manual.
 
 ## The packs
 
@@ -52,6 +52,7 @@ This folder has **42 packs with 2507 tunes**, one pack per device: 33 for synths
 |---|---|---|---|---|
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | 12 | [`loop-slicer-styles.patchkamer-tunes.json`](loop-slicer-styles.patchkamer-tunes.json) |
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | – | [`loop-slicer-break-chops.patchkamer-tunes.json`](loop-slicer-break-chops.patchkamer-tunes.json) |
+| [Pad Sampler](../devices/samplers/PadSampler/) | Pad Sampler Demos | 15 | 2 | [`pad-sampler-demos.patchkamer-tunes.json`](pad-sampler-demos.patchkamer-tunes.json) |
 | [Samplebank](../devices/samplers/Samplebank/) | Samplebank Styles | 79 | 16 | [`samplebank-styles.patchkamer-tunes.json`](samplebank-styles.patchkamer-tunes.json) |
 
 A Samplebank tune carries its own small generated sounds. Eight Loop Slicer tunes (folder Own Loop) use the loop you have loaded and stay silent without one.

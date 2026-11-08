@@ -2,15 +2,16 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Samplers spelen opgenomen geluid af in plaats van het met oscillatoren te maken. Deze pagina beschrijft de twee samplers die bij Patchkamer horen: **Samplebank** en **Loop Slicer**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/samplers](../../devices/samplers/README_NL.md).
+Samplers spelen opgenomen geluid af in plaats van het met oscillatoren te maken. Deze pagina beschrijft de drie samplers die bij Patchkamer horen: **Samplebank**, **Pad Sampler** en **Loop Slicer**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/samplers](../../devices/samplers/README_NL.md).
 
 ## Inhoud
 
 1. [Wat samplers doen](#wat-samplers-doen)
 2. [Welke sampler voor welk doel](#welke-sampler-voor-welk-doel)
 3. [Samplebank](#samplebank)
-4. [Loop Slicer](#loop-slicer)
-5. [Als het niet werkt](#als-het-niet-werkt)
+4. [Pad Sampler](#pad-sampler)
+5. [Loop Slicer](#loop-slicer)
+6. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat samplers doen
 
@@ -36,7 +37,8 @@ Samplers hebben **tunes**: een tune is de volledige instelling van één sampler
 | Een drumloop of een andere loop in stukken knippen en die spelen | [Loop Slicer](#loop-slicer) |
 | Een loop herschikken met een patroon van 16 stappen op de klok | [Loop Slicer](#loop-slicer) |
 | De slices van een loop laten stotteren, omkeren of willekeurig spelen | [Loop Slicer](#loop-slicer) |
-| Meteen beginnen zonder een bestand te laden | Beide: hun tunes brengen hun eigen kleine geluiden mee (zie elke sectie) |
+| Drumkits en instrumenten met lagen op velocity, keygroups, een aparte uitgang per pad, envelope en filter | [Pad Sampler](#pad-sampler) |
+| Meteen beginnen zonder een bestand te laden | Alle drie: Pad Sampler heeft een ingebouwde demo-kit, de tunes van de andere brengen hun eigen kleine geluiden mee (zie elke sectie) |
 
 ## Samplebank
 
@@ -83,6 +85,48 @@ Samplers hebben **tunes**: een tune is de volledige instelling van één sampler
 - Een ingehouden noot op een **One-shot**-pad speelt tot het einde van de sample; het loslaten van de toets doet niets. Gebruik **Gate / noteoff** of **Loop tot noteoff** als je de lengte met de toets wilt bepalen.
 - Als het transport stopt, vallen alle pads stil.
 - De uitgang gaat als vangnet door een compressor.
+
+## Pad Sampler
+
+**Waar is het voor.** Een grotere sampler voor drumkits en instrumenten. Hij heeft vier banken van 16 pads; elk pad heeft vier **lagen** (samples die klinken op velocity, om de beurt, willekeurig of allemaal tegelijk), een envelope, een filter, een mutegroep en een eigen audio-uitgang. Een pad is een **drum**-pad (één noot, één slag) of een **keygroup** (samples met een toetsbereik en een grondtoon, chromatisch te spelen vanaf een keyboard). Hij begint met een ingebouwde demo-kit in bank A en klinkt dus meteen. Dit is stap 1 van het apparaat: de golfvorm wordt getoond maar kan nog niet bewerkt worden (de editor, knippen en renderen naar een nieuw sample volgen).
+
+![De kaart van Pad Sampler](../images/nl/samplers/pad-sampler.png)
+
+**Regelaars.** Dubbelklik op een schuif om terug te gaan naar de beginwaarde.
+
+- **Banken A t/m D** en de banknaam; **Stop alles** brengt alles tot zwijgen; **Stemmen** toont hoeveel van de 64 stemmen klinken.
+- **De 16 pads.** Klik, tik of druk Enter of spatie op een pad: het wordt gekozen en speelt met de **Aanslag van pads** (tab Programma). Met het toetsenbord van je computer spelen de vier rijen `1234`, `qwer`, `asdf` en `zxcv` de pads 1 tot 16; met de pijltjes ga je van pad naar pad. Sleep een audiobestand op een pad om het daar te laden. Een keygroup-pad toont een ♪ en een toetsenbord op het scherm (twee octaven, met − en + voor het octaaf; de toetsen `a w s e d f t g y h u j k o l p` spelen de noten van dat toetsenbord).
+- **Tab Pad:** de naam; **Soort** (**Drum** of **Keygroup**; wisselen zet ook One-shot en de polyfonie op zinnige waarden); **Spelen** (hoe de lagen gekozen worden: **Op velocity**, **Om de beurt**, **Willekeurig** of **Alle lagen**); **Uitgang** (**Stereomix** of **Uitgang 1** t/m **16**); **One-shot** (negeer noteoff; het sample speelt uit) en **Omgekeerd**; **Toonhoogte** (±24 halve tonen), **Fijn** (±100 cent), **Niveau** (dB), **Panorama**, **Polyfonie** (1 tot 16; 1 is mono: een nieuwe slag kapt de vorige af), **Mutegroep** (0 is geen: een slag kapt de andere pads in dezelfde groep af, met een fade van 5 ms) en **Noot bij tikken** (de noot die een keygroup-pad speelt als je erop klikt).
+- **Envelope:** **ADSR** of **AD** (alleen attack en decay: een percussieve vorm die na de decay uitsterft; een noteoff laat hem dan nog steeds eerder los). **Attack**, **Decay**, **Sustain**, **Release**. De release geldt bij noteoff als One-shot uit staat.
+- **Filter:** **Uit**, **Laagdoorlaat**, **Hoogdoorlaat** of **Banddoorlaat**, met **Cutoff**, **Resonantie**, **Envelop-diepte** (hoever de envelope het filter opent of sluit; hij heeft geen eigen release) en **Velocity-diepte** (positief: zachte slagen klinken donkerder).
+- **Tab Lagen:** vier lagen per pad. Kies het **Sample** (de ingebouwde demo-samples beginnen met een punt) of **Bestand laden…** (WAV, FLAC, OGG of MP3; meerdere bestanden vullen de volgende pads). Per laag: **Halve tonen**, **Fijn**, **Niveau**, **Panorama**, **Offset** (negatief vertraagt de laag zoveel milliseconden, positief begint zo ver in het sample), **Grondtoon**, **Velocity vanaf / tot** (1 tot 127), **Start** en **Einde** (als deel van het sample), **Gain** en een **Lus** met start en einde (de crossfade van de lus werkt nog niet). Een lus werkt alleen als One-shot uit staat. Een WAV-bestand met een `smpl`-blok geeft zijn grondtoon en eerste lus vanzelf.
+- **Tab Zones:** voor een keygroup-pad. Een zone is een sample met een **Grondtoon**, een toetsbereik (**Toets vanaf / tot**), een velocity-bereik, een **Stemming** en een optionele lus; tot 16 zones. Zonder zones speelt het pad zijn lagen chromatisch rond de grondtoon van elke laag.
+- **Tab Programma:** **Mastervolume** (alleen de stereomix), **Eerste pad (MIDI)** (de noot van bank A pad 1; bank B, C en D volgen na telkens 16 noten), **Aanslag van pads**, **Demo-kit herstellen**, **Leeg programma** en het gebruikte samplegeheugen.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten / pad-trigs** | noten in (oranje) | Een noot speelt het drum-pad met die noot (pad 1 van bank A staat op **Eerste pad**, standaard 36, tot bank D pad 16). Een noot die geen drum-pad met een sample opeist, speelt de keygroup-pads. Een vastgehouden toets (`held`) eindigt bij noteoff; andere noten eindigen na hun lengte. Een *trig* met de lane `pad3` of `3` speelt pad 3 van de gekozen bank, `b1` pad 1 van bank B. Events worden op de audioklok gepland. `allnotesoff` brengt alles tot zwijgen. |
+| **Mod** | sturing in (paars) | **Mastervolume**, en per pad **Niveau**, **Cutoff** en **Toonhoogte** (193 parameters, geen enkele staat bij het begin aan). |
+| **Stereomix** | audio uit (blauwgroen) | De som van alle pads die naar de mix gaan, via een zachte begrenzer. |
+| **Uitgang 1** t/m **16** | audio uit (blauwgroen) | Een pad dat op een uitgang staat, klinkt alleen daar en niet in de mix. Verbind ze met kanalen van een **Mixer** om elk pad zelf af te mixen. |
+
+**Voorbeeld: een kit met een eigen kanaal per drum.**
+
+1. Plaats **Pad Sampler**, een **Mixer**, **Keys / MIDI** en **Speakers**. Verbind de noten van Keys met **Noten / pad-trigs**, **Uitgang 1** t/m **Uitgang 3** met kanaal 1 t/m 3 van de Mixer en de uitgang daarvan met Speakers.
+2. Kies pad 1 en zet **Uitgang** op **Uitgang 1**; doe hetzelfde voor de snare (pad 2, **Uitgang 2**) en de hat (pad 5, **Uitgang 3**). Pads die op **Stereomix** blijven staan, komen niet in de Mixer; verbind ook **Stereomix** als je ze wilt horen.
+3. Zet de open hat (pad 6) en de gesloten hat (pad 5) op dezelfde **Mutegroep**, zodat een gesloten hat de open afkapt.
+4. Voor een toetsenbordinstrument: kies een pad, zet **Soort** op **Keygroup**, laad een sample, stel zijn **Grondtoon** in en zet de **Lus** aan als het een lustoon is.
+
+**Tunes.** Pack **Pad Sampler Demos**: 15 tunes in twee mappen (**Kits**: Demo Kit, Tight Kit, Soft Kit, Lo-fi Kit, Velocity Kick, Round Robin Kit, Random Toms, Eight Outputs, Mute Group Hats; **Keygroups**: Saw Keys, Sine Sub, Square Lead, Pluck Keys, Split Keys, Soft Pad), bestand [`pad-sampler-demos.patchkamer-tunes.json`](../../tunes/pad-sampler-demos.patchkamer-tunes.json). Ze gebruiken alleen de ingebouwde, gesynthetiseerde samples, zijn dus klein en klinken meteen. Een tune vervangt het hele programma, ook je banken.
+
+**Tips en grenzen.**
+
+- 64 stemmen tegelijk (de oudste wordt afgekapt), 120 seconden per sample, 50 MiB per bestand om te laden en 64 MiB audio (PCM16) in totaal; identieke samples worden één keer bewaard. Audio die je laadt wordt gedecodeerd op de sample rate van de studio en met de song bewaard.
+- De losse uitgangen hebben geen begrenzer; let op de niveaus als je ze zelf afmixt.
+- Veranderingen van toonhoogte en cutoff (en sturing) bewegen ook stemmen die al klinken; envelope, filtersoort en de rest gelden vanaf de volgende slag.
+- Bluetooth-uitvoer is traag. Gebruik een kabel of een audio-interface voor lage latency.
 
 ## Loop Slicer
 

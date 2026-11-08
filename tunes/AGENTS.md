@@ -104,6 +104,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Pulse Drums](../devices/drums/PulseDrums/) | Pulse Drums Techno | 26 | 8: Techno, Minimal, Peak Time, Hard Techno, Dub Techno, Acid, Electro, Breaks | [`pulse-drums-techno.patchkamer-tunes.json`](pulse-drums-techno.patchkamer-tunes.json) | – |
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | 0: geen (alles op het hoogste niveau) | [`loop-slicer-break-chops.patchkamer-tunes.json`](loop-slicer-break-chops.patchkamer-tunes.json) | – |
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | 12: House, Techno, Breakbeat, Drum and Bass, Hip-hop, Trap, Funk, Dub, Cinematic, Glitch, Pitched Hits, Own Loop | [`loop-slicer-styles.patchkamer-tunes.json`](loop-slicer-styles.patchkamer-tunes.json) | – |
+| [Pad Sampler](../devices/samplers/PadSampler/) | Pad Sampler Demos | 15 | 2: Kits, Keygroups | [`pad-sampler-demos.patchkamer-tunes.json`](pad-sampler-demos.patchkamer-tunes.json) | – |
 | [Samplebank](../devices/samplers/Samplebank/) | Samplebank Styles | 79 | 16: Techno, House, Trance, Ambient, Synthwave, Hip-hop, Lo-fi, Trap, Drum & Bass, Dubstep, Electro, Pop, Chiptune, Funk & Disco, Dub, Cinematic | [`samplebank-styles.patchkamer-tunes.json`](samplebank-styles.patchkamer-tunes.json) | – |
 | [Acid Baselines](../devices/synths/AcidBaselines/) | Acid Baselines Classics | 49 | 9: Chicago Origins, Frankfurt Rolling, Minimal Acid, Squelch Anthems, Acid Techno, Acid Trance, Electro Acid, Deep Acid, AIcid | [`acid-baselines-classics.patchkamer-tunes.json`](acid-baselines-classics.patchkamer-tunes.json) | – |
 | [Acid Stepper](../devices/synths/AcidStepper/) | Acid Stepper Styles | 65 | 12: Acid, Techno, House, Deep House, Electro, Trance, Breakbeat, Hip-hop, Synthwave, Dub, Industrial, Garage | [`acid-stepper-styles.patchkamer-tunes.json`](acid-stepper-styles.patchkamer-tunes.json) | – |
@@ -139,7 +140,7 @@ Hij werkt ook `devices/AGENTS.md` en `presets/AGENTS.md` bij. De stijlmappen zij
 | [Triple Osc Poly](../devices/synths/TripleOscPoly/) | Triple Osc Poly Styles | 73 | 12: Trance, House, Pop, Synthwave, Ambient, Cinematic, Future Bass, Funk, Disco, Electro, Techno, Lo-fi | [`triple-osc-poly-styles.patchkamer-tunes.json`](triple-osc-poly-styles.patchkamer-tunes.json) | – |
 | [Woodwinds](../devices/synths/Woodwinds/) | Woodwinds | 42 | 12: Flute, Clarinet, Oboe, Bassoon, Sax, Recorder, Pan Flute, Section, Ballad, Jazz, Folk, Ambient | [`woodwinds.patchkamer-tunes.json`](woodwinds.patchkamer-tunes.json) | – |
 
-Samen 42 packs met 2507 tunes.
+Samen 43 packs met 2522 tunes.
 <!-- list-devices:end tunes -->
 
 ## Wat je niet doet

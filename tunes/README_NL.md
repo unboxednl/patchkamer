@@ -4,7 +4,7 @@
 
 Kant-en-klare klanken voor apparaten die geluid maken (synths, samplers en drumapparaten), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, gebruik hem in een song of in een eigen bibliotheek. Apparaten zonder eigen geluid hebben [presets](../presets/README_NL.md).
 
-Deze map heeft **42 packs met 2507 tunes**, één pack per apparaat: 33 voor synths (2142 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
+Deze map heeft **43 packs met 2522 tunes**, één pack per apparaat: 33 voor synths (2142 tunes), 4 voor samplers (173 tunes) en 6 voor drumapparaten (207 tunes). Een drumapparaat laadt een hele machine (klanken en patroon) als één tune. De kolom **Mappen** is het aantal stijlmappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
@@ -52,6 +52,7 @@ Deze map heeft **42 packs met 2507 tunes**, één pack per apparaat: 33 voor syn
 |---|---|---|---|---|
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | 12 | [`loop-slicer-styles.patchkamer-tunes.json`](loop-slicer-styles.patchkamer-tunes.json) |
 | [Loop Slicer](../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | – | [`loop-slicer-break-chops.patchkamer-tunes.json`](loop-slicer-break-chops.patchkamer-tunes.json) |
+| [Pad Sampler](../devices/samplers/PadSampler/) | Pad Sampler Demos | 15 | 2 | [`pad-sampler-demos.patchkamer-tunes.json`](pad-sampler-demos.patchkamer-tunes.json) |
 | [Samplebank](../devices/samplers/Samplebank/) | Samplebank Styles | 79 | 16 | [`samplebank-styles.patchkamer-tunes.json`](samplebank-styles.patchkamer-tunes.json) |
 
 Een Samplebank-tune brengt zijn eigen kleine gegenereerde geluiden mee. Acht Loop Slicer-tunes (map Own Loop) gebruiken de loop die je hebt geladen en blijven daar zonder stil.

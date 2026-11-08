@@ -114,7 +114,7 @@ De packs die met Patchkamer meekomen zijn **CC0-1.0**: publiek domein. Je mag ze
 
 ## De packs die met Patchkamer meekomen
 
-Deze repository heeft 42 packs met samen **2507 tunes**, één per apparaat: 33 packs voor synths (2142 tunes), 3 voor samplers (158 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
+Deze repository heeft 43 packs met samen **2522 tunes**, één per apparaat: 33 packs voor synths (2142 tunes), 4 voor samplers (173 tunes) en 6 voor drumapparaten (207 tunes). Alle hebben de licentie CC0-1.0, en de namen van packs, mappen en tunes zijn Engels. De bestanden hebben `formatVersion` 1. De meeste packs zijn gesorteerd op muziekstijl: elke map is een stijl en bevat een handvol tunes daarvoor. Waar een pack anders is opgebouwd (bijvoorbeeld het pack van Acid Baselines met mappen naar tijdperk, of Latin Percussion met mappen per ritme), zie je dat aan de mapnamen hieronder.
 
 ### Synths (33)
 
@@ -160,6 +160,7 @@ Deze repository heeft 42 packs met samen **2507 tunes**, één per apparaat: 33 
 |---|---|---|---|---|
 | [Loop Slicer](../../devices/samplers/LoopSlicer/) | Loop Slicer Styles | 69 | House (6), Techno (6), Breakbeat (6), Drum and Bass (5), Hip-hop (6), Trap (5), Funk (5), Dub (5), Cinematic (5), Glitch (6), Pitched Hits (6), Own Loop (8) | [`loop-slicer-styles.patchkamer-tunes.json`](../../tunes/loop-slicer-styles.patchkamer-tunes.json) |
 | [Loop Slicer](../../devices/samplers/LoopSlicer/) | Loop Slicer Break Chops | 10 | – | [`loop-slicer-break-chops.patchkamer-tunes.json`](../../tunes/loop-slicer-break-chops.patchkamer-tunes.json) |
+| [Pad Sampler](../../devices/samplers/PadSampler/) | Pad Sampler Demos | 15 | Kits (9), Keygroups (6) | [`pad-sampler-demos.patchkamer-tunes.json`](../../tunes/pad-sampler-demos.patchkamer-tunes.json) |
 | [Samplebank](../../devices/samplers/Samplebank/) | Samplebank Styles | 79 | Techno (7), House (7), Trance (5), Ambient (5), Synthwave (5), Hip-hop (4), Lo-fi (5), Trap (4), Drum & Bass (5), Dubstep (4), Electro (5), Pop (4), Chiptune (5), Funk & Disco (6), Dub (4), Cinematic (4) | [`samplebank-styles.patchkamer-tunes.json`](../../tunes/samplebank-styles.patchkamer-tunes.json) |
 
 Een Samplebank-tune brengt zijn eigen kleine gegenereerde geluiden mee. Acht Loop Slicer-tunes (map Own Loop) gebruiken de loop die je hebt geladen en blijven daar zonder stil.

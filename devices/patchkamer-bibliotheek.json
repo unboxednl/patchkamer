@@ -71,6 +71,7 @@
     "nl.patchkamer.mist": "drone",
     "nl.patchkamer.graincloud": "drone",
     "nl.patchkamer.samplebank": "sampler",
+    "nl.patchkamer.padsampler": "sampler",
     "nl.patchkamer.loopslicer": "sampler"
   },
   "closed": []

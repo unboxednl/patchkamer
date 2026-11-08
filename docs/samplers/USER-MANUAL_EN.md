@@ -2,15 +2,16 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Samplers play back recorded sound instead of making it from oscillators. This page covers the two samplers that come with Patchkamer: **Samplebank** and **Loop Slicer**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/samplers](../../devices/samplers/README.md).
+Samplers play back recorded sound instead of making it from oscillators. This page covers the three samplers that come with Patchkamer: **Samplebank**, **Pad Sampler** and **Loop Slicer**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/samplers](../../devices/samplers/README.md).
 
 ## Contents
 
 1. [What samplers do](#what-samplers-do)
 2. [Which sampler for which goal](#which-sampler-for-which-goal)
 3. [Samplebank](#samplebank)
-4. [Loop Slicer](#loop-slicer)
-5. [If it does not work](#if-it-does-not-work)
+4. [Pad Sampler](#pad-sampler)
+5. [Loop Slicer](#loop-slicer)
+6. [If it does not work](#if-it-does-not-work)
 
 ## What samplers do
 
@@ -33,10 +34,11 @@ Samplers have **tunes**: a tune is the complete setting of one sampler. Load a p
 | Play my own sounds on pads (drums, one-shots, vocal hits) | [Samplebank](#samplebank) |
 | Play one sample chromatically from a keyboard | [Samplebank](#samplebank) (note mode **Selected sample chromatic**) |
 | Keep several kits or instruments ready in four banks | [Samplebank](#samplebank) |
+| Drum kits and instruments with layers by velocity, keygroups, a separate output per pad, envelope and filter | [Pad Sampler](#pad-sampler) |
 | Cut a drum loop or any other loop into pieces and play them | [Loop Slicer](#loop-slicer) |
 | Rearrange a loop with a 16-step pattern on the clock | [Loop Slicer](#loop-slicer) |
 | Stutter, reverse or randomise the slices of a loop | [Loop Slicer](#loop-slicer) |
-| Start straight away without loading a file | Both: their tunes bring their own small sounds (see each section) |
+| Start straight away without loading a file | All three: Pad Sampler has a built-in demo kit, the others' tunes bring their own small sounds (see each section) |
 
 ## Samplebank
 
@@ -83,6 +85,48 @@ Samplers have **tunes**: a tune is the complete setting of one sampler. Load a p
 - A note that is held on a **One-shot** pad plays to the end of the sample; the key release does nothing. Use **Gate / noteoff** or **Loop until noteoff** when you want to control the length with the key.
 - When the transport stops, all pads fall silent.
 - The output goes through a compressor as a safety net.
+
+## Pad Sampler
+
+**What it is for.** A larger sampler for drum kits and instruments. It has four banks of 16 pads; every pad has four **layers** (samples that sound by velocity, in turn, at random or all together), an envelope, a filter, a mute group and its own audio output. A pad is either a **drum** pad (one note, one hit) or a **keygroup** (samples with a key range and a root note, played chromatically from a keyboard). It starts with a built-in demo kit in bank A, so it sounds straight away. This is step 1 of the device: the waveform is shown but cannot be edited yet (the editor, chopping and rendering to a new sample follow).
+
+![The Pad Sampler card](../images/en/samplers/pad-sampler.png)
+
+**Controls.** Double-click a slider to go back to its starting value.
+
+- **Banks A to D** and the bank name; **Stop all** silences everything; **Voices** shows how many of the 64 voices sound.
+- **The 16 pads.** Click, tap or press Enter or space on a pad: it is selected and plays at the **Pad velocity** (program tab). With the keyboard of your computer the four rows `1234`, `qwer`, `asdf` and `zxcv` play pads 1 to 16; the arrow keys move between pads. Drop an audio file on a pad to load it there. A keygroup pad shows a ♪ and an on-screen keyboard (two octaves, with − and + for the octave; the keys `a w s e d f t g y h u j k o l p` play the notes of that keyboard).
+- **Tab Pad:** the name; **Type** (**Drum** or **Keygroup**; changing it also sets One-shot and the polyphony to sensible values); **Play** (how the layers are chosen: **By velocity**, **Cycle**, **Random** or **All layers**); **Output** (**Stereo mix** or **Output 1** to **16**); **One-shot** (ignore note-off; the sample plays to its end) and **Reverse**; **Pitch** (±24 semitones), **Fine** (±100 cents), **Level** (dB), **Pan**, **Polyphony** (1 to 16; 1 is mono: a new hit cuts the previous one), **Mute group** (0 is none: a hit cuts the other pads in the same group, with a 5 ms fade) and **Note when tapped** (the note a keygroup pad plays when you click it).
+- **Envelope:** **ADSR** or **AD** (attack and decay only: a percussive shape that dies out after the decay; a note-off then still releases early). **Attack**, **Decay**, **Sustain**, **Release**. The release applies on note-off when One-shot is off.
+- **Filter:** **Off**, **Low-pass**, **High-pass** or **Band-pass**, with **Cutoff**, **Resonance**, **Envelope amount** (how far the envelope opens or closes the filter; it has no release of its own) and **Velocity amount** (positive: soft hits are darker).
+- **Tab Layers:** four layers per pad. Choose the **Sample** (the built-in demo samples start with a dot) or **Load file…** (WAV, FLAC, OGG or MP3; several files fill the next pads). Per layer: **Semitones**, **Fine**, **Level**, **Pan**, **Offset** (negative delays the layer by that many milliseconds, positive starts that far into the sample), **Root note**, **Velocity from / to** (1 to 127), **Start** and **End** (as a part of the sample), **Gain** and a **Loop** with start and end (the loop crossfade is not active yet). A loop only works when One-shot is off. A WAV file with a `smpl` block gives its root note and first loop automatically.
+- **Tab Zones:** for a keygroup pad. A zone is a sample with a **Root note**, a key range (**Key from / to**), a velocity range, a **Tuning** and an optional loop; up to 16 zones. Without zones, the pad plays its layers chromatically around the root note of each layer.
+- **Tab Program:** **Master volume** (the stereo mix only), **First pad (MIDI)** (the note of bank A pad 1; banks B, C and D continue after 16 notes each), **Pad velocity**, **Restore demo kit**, **Empty program** and the sample memory in use.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes / pad triggers** | notes in (orange) | A note plays the drum pad with that note (pad 1 of bank A is on **First pad**, 36 by default, up to bank D pad 16). A note that no drum pad with a sample claims plays the keygroup pads. A held key (`held`) ends at note-off; other notes end after their length. A *trig* with the lane `pad3` or `3` plays pad 3 of the chosen bank, `b1` pad 1 of bank B. Events are planned on the audio clock. `allnotesoff` silences everything. |
+| **Mod** | modulation in (purple) | **Master volume**, and per pad **Level**, **Cutoff** and **Pitch** (193 parameters, none switched on at the start). |
+| **Stereo mix** | audio out (teal) | The sum of all pads that go to the mix, through a soft limiter. |
+| **Output 1** to **16** | audio out (teal) | A pad that is set to an output sounds only there, not in the mix. Connect them to channels of a **Mixer** to mix each pad yourself. |
+
+**Example: a kit with its own channel per drum.**
+
+1. Place **Pad Sampler**, a **Mixer**, **Keys / MIDI** and **Speakers**. Connect the notes of Keys to **Notes / pad triggers**, **Output 1** to **Output 3** to channels 1 to 3 of the Mixer and its output to Speakers.
+2. Select pad 1 and set **Output** to **Output 1**; do the same for the snare (pad 2, **Output 2**) and the hat (pad 5, **Output 3**). Pads that stay on **Stereo mix** do not reach the Mixer; connect **Stereo mix** as well if you want them.
+3. Set the open hat (pad 6) and the closed hat (pad 5) to the same **Mute group** so a closed hat cuts the open one.
+4. For a keyboard instrument: choose a pad, set **Type** to **Keygroup**, load a sample, set its **Root note** and turn on the **Loop** if it is a looped tone.
+
+**Tunes.** Pack **Pad Sampler Demos**: 15 tunes in two folders (**Kits**: Demo Kit, Tight Kit, Soft Kit, Lo-fi Kit, Velocity Kick, Round Robin Kit, Random Toms, Eight Outputs, Mute Group Hats; **Keygroups**: Saw Keys, Sine Sub, Square Lead, Pluck Keys, Split Keys, Soft Pad), file [`pad-sampler-demos.patchkamer-tunes.json`](../../tunes/pad-sampler-demos.patchkamer-tunes.json). They use only the built-in synthesised samples, so they are small and sound at once. A tune replaces the whole program, including your banks.
+
+**Tips and limits.**
+
+- 64 voices at the same time (the oldest is cut), 120 seconds per sample, 50 MiB per file to load and 64 MiB of audio (PCM16) in total; identical samples are stored once. Audio you load is decoded at the sample rate of the studio and saved with the song.
+- The separate outputs have no limiter; keep an eye on the levels when you mix them yourself.
+- Pitch and cutoff changes (and modulation) also move voices that are already sounding; envelope, filter type and other settings apply from the next hit.
+- Bluetooth output is slow. Use a cable or an audio interface for low latency.
 
 ## Loop Slicer
 

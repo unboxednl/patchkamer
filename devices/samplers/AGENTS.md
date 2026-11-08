@@ -31,6 +31,7 @@ Dit overzicht komt uit `devices/AGENTS.md` en wordt gegenereerd door `docs/tools
 | Apparaat | `id` | Wat het doet |
 |---|---|---|
 | [Loop Slicer](LoopSlicer/AGENTS.md) | `nl.patchkamer.loopslicer` | Knipt een loop in 4, 8, 16 of 32 slices en speelt ze vanaf toetsen of een patroon van 16 stappen op de klok; met een ingebouwde demo-loop |
+| [Pad Sampler](PadSampler/AGENTS.md) | `nl.patchkamer.padsampler` | Een grotere padsampler: 4 banken van 16 pads, 4 lagen per pad (op velocity, om de beurt, willekeurig, alle), drum- en keygroup-pads, envelope, filter, mutegroepen en een aparte uitgang per pad; met een ingebouwde demo-kit |
 | [Samplebank](Samplebank/AGENTS.md) | `nl.patchkamer.samplebank` | Een sampler met 4 banken van 16 pads: laad WAV of MP3, bewerk de selectie, speel vanaf pads of chromatisch, importeer en exporteer banken |
 
 <!-- agents-tree:end -->

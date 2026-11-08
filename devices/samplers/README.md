@@ -2,13 +2,14 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that play back audio you load yourself: 2 samplers, one for pads and one for loops. Both have **tunes** (a tune is the complete setting of one sampler) and no presets.
+Devices that play back audio you load yourself: 3 samplers: two for pads and one for loops. All have **tunes** (a tune is the complete setting of one sampler) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which sampler for which goal".
 
 | Device | What it does | Folder | Tunes | Manual |
 |---|---|---|---|---|
 | **Samplebank** | A sampler with 4 banks of 16 pads: load WAV or MP3, edit the selection, play from pads or chromatically, import and export banks | [`Samplebank/`](Samplebank/) | [79](../../tunes/samplebank-styles.patchkamer-tunes.json) | [Samplebank](../../docs/samplers/USER-MANUAL_EN.md#samplebank) |
+| **Pad Sampler** | A larger pad sampler: 4 banks of 16 pads, 4 layers per pad (by velocity, cycle, random, all), drum and keygroup pads, envelope, filter, mute groups and a separate output per pad; with a built-in demo kit | [`PadSampler/`](PadSampler/) | [15](../../tunes/pad-sampler-demos.patchkamer-tunes.json) | [Pad Sampler](../../docs/samplers/USER-MANUAL_EN.md#pad-sampler) |
 | **Loop Slicer** | Cuts a loop into 4, 8, 16 or 32 slices and plays them from keys or a 16-step pattern on the clock; with a built-in demo loop | [`LoopSlicer/`](LoopSlicer/) | [69](../../tunes/loop-slicer-styles.patchkamer-tunes.json) | [Loop Slicer](../../docs/samplers/USER-MANUAL_EN.md#loop-slicer) |
 
 The **Tunes** column links to the pack of that sampler and gives the number of tunes in it.
