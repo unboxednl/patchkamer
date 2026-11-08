@@ -15,16 +15,19 @@
 .secnm{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px var(--shadow)}
 .secn{display:grid;place-items:center;flex:none;width:1.1em;height:1.1em;border-radius:50%;background:var(--sel);color:#fff;font-family:var(--mono);font-size:.6em}
 .secn[hidden]{display:none}
-.sechd button{flex:none;min-width:28px;padding:1px 7px;font-size:15px;opacity:.55}
-.sec:hover .sechd button,.sechd button:focus-visible{opacity:1}
-.secrz{position:absolute;z-index:1;pointer-events:auto;touch-action:none}
-.secrz.n{top:-6px;left:22px;right:22px;height:12px;cursor:ns-resize}
-.secrz.s{bottom:-6px;left:22px;right:22px;height:12px;cursor:ns-resize}
-.secrz.e{right:-6px;top:22px;bottom:22px;width:12px;cursor:ew-resize}
-.secrz.w{left:-6px;top:22px;bottom:22px;width:12px;cursor:ew-resize}
-.secrz.ne,.secrz.nw,.secrz.se,.secrz.sw{width:22px;height:22px}
-.secrz.ne{top:-6px;right:-6px;cursor:nesw-resize}.secrz.nw{top:-6px;left:-6px;cursor:nwse-resize}.secrz.se{bottom:-6px;right:-6px;cursor:nwse-resize}.secrz.sw{bottom:-6px;left:-6px;cursor:nesw-resize}
-.secrz.se{border-right:3px solid color-mix(in srgb,var(--c) 85%,transparent);border-bottom:3px solid color-mix(in srgb,var(--c) 85%,transparent);border-radius:0 0 22px 0;opacity:.7}
+.secbt{position:absolute;z-index:2;right:16px;top:12px;display:flex;gap:6px;pointer-events:auto}
+.sec.min .secbt{top:0;height:var(--hh,48px);align-items:center;right:10px}
+.secbt button{flex:none;min-width:28px;padding:1px 7px;font-size:15px;opacity:.55}
+.sec:hover .secbt button,.secbt button:focus-visible{opacity:1}
+.secrz{position:absolute;z-index:3;pointer-events:auto;touch-action:none}
+.secrz.n{top:-8px;left:32px;right:32px;height:16px;cursor:ns-resize}
+.secrz.s{bottom:-8px;left:32px;right:32px;height:16px;cursor:ns-resize}
+.secrz.e{right:-8px;top:32px;bottom:32px;width:16px;cursor:ew-resize}
+.secrz.w{left:-8px;top:32px;bottom:32px;width:16px;cursor:ew-resize}
+.secrz.ne,.secrz.nw,.secrz.se,.secrz.sw{width:34px;height:34px}
+.secrz.ne{top:-10px;right:-10px;cursor:nesw-resize}.secrz.nw{top:-10px;left:-10px;cursor:nwse-resize}.secrz.se{bottom:-10px;right:-10px;cursor:nwse-resize}.secrz.sw{bottom:-10px;left:-10px;cursor:nesw-resize}
+/* zichtbare grijp rechtsonder: twee schuine streepjes binnen de hoek */
+.secrz.se::after{content:"";position:absolute;right:13px;bottom:13px;width:14px;height:14px;opacity:.75;background:linear-gradient(135deg,transparent 0 38%,color-mix(in srgb,var(--c) 90%,var(--fg)) 38% 50%,transparent 50% 66%,color-mix(in srgb,var(--c) 90%,var(--fg)) 66% 78%,transparent 78%)}
 .sec.min .secrz{display:none}
 .jp{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:8px;padding:4px 12px 4px 5px;border-radius:999px;background:var(--card);border:2px solid var(--sel);color:var(--fg);box-shadow:0 2px 6px var(--shadow);cursor:pointer;user-select:none;touch-action:none;white-space:nowrap;font-size:20px}
 .jp b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sel);color:#fff;font-family:var(--mono);font-size:18px}

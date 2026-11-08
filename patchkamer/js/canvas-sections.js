@@ -26,8 +26,10 @@ function rectOf(r){ const b=r.el.getBoundingClientRect(); if(!b.width) return nu
 function bbox(s){ let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,n=0; alive(s).forEach(id=>{ const b=rectOf(H.devices.get(id)); if(!b) return; n++; x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.w); y1=Math.max(y1,b.y+b.h); }); return n?{x0,y0,x1,y1}:null; }
 
 /* ---------- tekenen ---------- */
+// een geminimaliseerde sectie is zo breed als zijn titel en knoppen (hoogstens de eigen breedte of 640)
+function chipW(s){ const hd=s.el&&s.el.querySelector('.sechd'); return Math.max(220,Math.min(s.w,640,hd&&hd.offsetWidth?hd.offsetWidth+22+90:460)); }
 function paint(s){ if(!s.el) return; const e=s.el, h=hh(s), top=s.min?0:-Math.round(h/2);
-  e.style.left=s.x+'px'; e.style.top=s.y+'px'; e.style.width=(s.min?Math.min(s.w,460):s.w)+'px'; e.style.height=(s.min?h:s.h)+'px';
+  e.style.left=s.x+'px'; e.style.top=s.y+'px'; e.style.width=(s.min?chipW(s):s.w)+'px'; e.style.height=(s.min?h:s.h)+'px';
   e.style.setProperty('--c',s.color); e.style.setProperty('--a',String(s.alpha)); e.style.setProperty('--fs',s.fs+'px'); e.style.setProperty('--hh',h+'px'); e.style.setProperty('--ht',top+'px');
   e.classList.add('sec'); LINES.forEach(l=>e.classList.toggle('line-'+l,l===s.line)); e.classList.toggle('min',!!s.min);
   e.querySelector('.secnm').textContent=s.name; const nb=e.querySelector('.secn'); nb.hidden=!s.n; nb.textContent=s.n||''; nb.title=PK.pkt('m.sc_vp_titel',s.n||'');
@@ -38,7 +40,7 @@ function sync(){ if(!layer) return; const on=wideOn(); layer.hidden=!on; if(!on)
   H.devices.forEach(r=>r.el.classList.remove('secmin')); H.secs.forEach(s=>{ if(s.min) alive(s).forEach(id=>H.devices.get(id).el.classList.add('secmin')); }); }
 function layerAdd(el){ layer.appendChild(el); }
 function build(s){ const e=document.createElement('div'); s.el=e;
-  e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<i class="secrz '+d+'"></i>').join('');
+  e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<i class="secrz '+d+'"></i>').join('');
   const mn=e.querySelector('.secmenu'); mn.textContent='⋯'; mn.title=PK.pkt('m.sc_menu_titel'); mn.setAttribute('aria-label',mn.title);
   e.querySelector('.secminb').onclick=ev=>{ ev.stopPropagation(); toggleMin(s); };
   mn.onclick=ev=>{ ev.stopPropagation(); const b=mn.getBoundingClientRect(); menu(s,b.left,b.bottom+4); };
@@ -129,7 +131,7 @@ function jpBuild(j){ const e=document.createElement('div'); j.el=e; e.className=
   layerAdd(e); jpPaint(j); }
 function jump(j){ if(!wideOn()) return; const wr=PK.floorwrap.getBoundingClientRect(), s=j.scale*PK.PKS.f; PK.viewTo(wr.width/2-j.x*s,wr.height/2-j.y*s,s); }
 // een sectie in beeld: het midden van het scherm op de sectie, ingezoomd tot hij met wat marge past (hoogstens 100%)
-function frame(s){ if(!wideOn()) return; const wr=PK.floorwrap.getBoundingClientRect(), h=s.min?hh(s):s.h+hh(s)/2, w=s.min?Math.min(s.w,460):s.w, M=80;
+function frame(s){ if(!wideOn()) return; const wr=PK.floorwrap.getBoundingClientRect(), h=s.min?hh(s):s.h+hh(s)/2, w=s.min?chipW(s):s.w, M=80;
   const sc=PK.clamp(Math.min((wr.width-M)/w,(wr.height-M)/h),0.1,Math.max(PK.PKS.f,1)), cx=s.x+w/2, cy=s.min?s.y+h/2:s.y-hh(s)/4+h/2; PK.viewTo(wr.width/2-cx*sc,wr.height/2-cy*sc,sc); }
 function jpFields(j){ const free=numOpts(j).slice(1);
   return [{k:'name',type:'text',label:PK.pkt('m.sc_naam'),value:j.name,max:40},{k:'n',type:'select',label:PK.pkt('m.jp_nummer'),value:String(j.n),opts:free}]; }
