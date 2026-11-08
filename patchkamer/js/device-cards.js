@@ -49,7 +49,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   let drag=null; [bar,ic].forEach(h=>{   // the title bar, or the whole icon when minimised, moves the device
     h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select,.dmbtn')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
     h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/PK.Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/PK.Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; PK.setDrop(PK.cableThroughRect({x:rec.x,y:rec.y,w:el.offsetWidth,h:el.offsetHeight},rec.ports,id,k=>!PK.hasCable(id,k))); if(PK.secHover) PK.secHover(id); PK.drawCables();});
-    h.addEventListener('pointerup',()=>{ const c=drag&&PK.dropCable, was=!!drag; drag=null; if(was&&PK.secDrop) PK.secDrop(id); if(c){ PK.setDrop(null); PK.insertOnCable(id,c); } else PK.setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; PK.setDrop(null); if(PK.secHover) PK.secHover(null);}); });
+    h.addEventListener('pointerup',()=>{ const c=drag&&PK.dropCable, was=!!drag&&Math.hypot(rec.x-drag.x0,rec.y-drag.y0)>4; drag=null; if(was&&!c){ makeRoom(id); } if(was&&PK.secDrop) PK.secDrop(id); if(c){ PK.setDrop(null); PK.insertOnCable(id,c); } else PK.setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; PK.setDrop(null); if(PK.secHover) PK.secHover(null);}); });
   el.addEventListener('pointerdown',e=>{select(id); e.stopPropagation();});
   new ResizeObserver(en=>{ for(const x of en){ rec._w=el.offsetWidth; rec._h=el.offsetHeight; } PK.drawCables(); }).observe(el);
   PK.drawCables(); peersChanged(); return id;
@@ -75,10 +75,11 @@ function makeRoom(startId){
   while(queue.length&&guard++<600){
     const mid=queue.shift(), M=box(PK.Host.devices.get(mid));
     PK.Host.devices.forEach((c,cid)=>{ if(cid===mid||cid===startId) return; const C=box(c); if(!hit(M,C)) return;
-      const right=C.x+C.w/2>=M.x+M.w/2, down=C.y+C.h/2>=M.y+M.h/2;
-      const opt=[{x:right?M.x+M.w+G:M.x-G-C.w,y:C.y},{x:C.x,y:down?M.y+M.h+G:M.y-G-C.h}]
-        .map(o=>({...o,d:Math.abs(o.x-C.x)+Math.abs(o.y-C.y),back:mid!==startId&&hit({...C,x:o.x,y:o.y},S)}))
-        .sort((a,b)=>(a.back-b.back)||(a.d-b.d));
+      // het geraakte apparaat gaat de kant op waar zijn midden ten opzichte van het midden van het verplaatste apparaat zit: links van het midden naar links,
+      // rechts naar rechts, erboven omhoog, eronder omlaag. Zijwaarts is de standaard; omhoog of omlaag alleen als de middens (naar verhouding van de afmetingen) in hoogte meer dan twee keer zo ver uit elkaar liggen als in breedte.
+      const dxn=(C.x+C.w/2)-(M.x+M.w/2), dyn=(C.y+C.h/2)-(M.y+M.h/2), horFirst=Math.abs(dyn)/((M.h+C.h)/2)<=2*Math.abs(dxn)/((M.w+C.w)/2);   // zijwaarts is de standaard; omhoog of omlaag alleen als het midden duidelijk boven of onder ligt
+      const hor={x:dxn>=0?M.x+M.w+G:M.x-G-C.w,y:C.y}, ver={x:C.x,y:dyn>=0?M.y+M.h+G:M.y-G-C.h};
+      const opt=(horFirst?[hor,ver]:[ver,hor]).map(o=>({...o,back:mid!==startId&&hit({...C,x:o.x,y:o.y},S)})).sort((a,b)=>(a.back-b.back));   // nooit terug op het apparaat waar het om begon, als de andere kant vrij is
       c.el.classList.add('moving'); pkMoveTo(c,opt[0].x,opt[0].y); moved.add(cid); queue.push(cid); });
   }
   if(moved.size){ const t0=performance.now(); const tick=()=>{ PK.drawCables(); if(performance.now()-t0<450) requestAnimationFrame(tick); else moved.forEach(k=>{const r=PK.Host.devices.get(k); r&&r.el.classList.remove('moving');}); }; requestAnimationFrame(tick); }

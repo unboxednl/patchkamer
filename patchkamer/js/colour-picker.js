@@ -19,6 +19,11 @@ const PRESETS=['#0c0e11','#171b22','#2a3039','#7d8794','#dce1e8','#ffffff','#4fd
 const RECKEY='patchkamer.recentColours';
 function recentGet(){ try{ const a=JSON.parse(localStorage.getItem(RECKEY)||'[]'); return Array.isArray(a)?a.map(cpParse).filter(Boolean).slice(0,8):[]; }catch(e){ return []; } }
 function recentAdd(hex){ try{ const a=[hex,...recentGet().filter(x=>x!==hex)].slice(0,8); localStorage.setItem(RECKEY,JSON.stringify(a)); }catch(e){} }
+// voorbeeldkleuren: eerst de kleuren van de categorieën van de bibliotheek, dan de vaste reeks
+// een CSS-kleur (ook var(--naam)) als #rrggbb, zoals de browser hem nu toont
+function cssHex(v){ if(typeof v!=='string') return null; const h=cpParse(v); if(h) return h; try{ const e=document.createElement('span'); e.style.cssText='position:absolute;visibility:hidden;color:'+v; document.body.appendChild(e); const c=getComputedStyle(e).color; e.remove(); const m=/rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c); return m?cpHex([+m[1],+m[2],+m[3]]):null; }catch(x){ return null; } }
+function presetList(){ const out=[], seen=new Set(), add=(c,t)=>{ const h=cssHex(c); if(h&&!seen.has(h)){ seen.add(h); out.push([h,t]); } };
+  if(PK.CATS&&PK.CATCOL) PK.CATS.forEach(([k,n])=>add(PK.CATCOL[k],n)); PRESETS.forEach(c=>add(c)); return out; }
 let cpSeq=0;
 function colourPicker(o){ o=o||{}; const id='cp'+(++cpSeq), pkt=PK.pkt;
   let hex=cpParse(o.value)||'#808080', [H,S,V]=rgb2hsv(cpRgb(hex)), dead=false;
@@ -30,8 +35,8 @@ function colourPicker(o){ o=o||{}; const id='cp'+(++cpSeq), pkt=PK.pkt;
     <div class="cp-sw" role="group" aria-label="${PK.esc(pkt('m.cp_voorbeeld'))}"></div>
     <div class="cp-rl"><span class="cp-rt">${PK.esc(pkt('m.cp_recent'))}</span><div class="cp-sw cp-rec" role="group" aria-label="${PK.esc(pkt('m.cp_recent'))}"></div></div>`;
   const sv=root.querySelector('.cp-sv'), svt=root.querySelector('.cp-svt'), hu=root.querySelector('.cp-hue'), hut=root.querySelector('.cp-hut'), inp=root.querySelector('.cp-hex'), prev=root.querySelector('.cp-prev'), msg=root.querySelector('.cp-msg'), eye=root.querySelector('.cp-eye'), swBox=root.querySelector('.cp-sw'), recBox=root.querySelector('.cp-rec'), recRow=root.querySelector('.cp-rl');
-  const swBtn=(c)=>{ const b=document.createElement('button'); b.type='button'; b.className='cp-s'; b.style.background=c; b.title=c; b.setAttribute('aria-label',c); b.onclick=()=>{ set(c,true); commit(); }; return b; };
-  PRESETS.forEach(c=>swBox.appendChild(swBtn(c)));
+  const swBtn=(c,t)=>{ const b=document.createElement('button'); b.type='button'; b.className='cp-s'; b.style.background=c; b.title=t?t+' · '+c:c; b.setAttribute('aria-label',c); b.onclick=()=>{ set(c,true); commit(); }; return b; };
+  presetList().forEach(([c,t])=>swBox.appendChild(swBtn(c,t)));
   const paintRecent=()=>{ recBox.innerHTML=''; const a=recentGet(); recRow.hidden=!a.length; a.forEach(c=>recBox.appendChild(swBtn(c))); };
   function paint(skipInput){ hex=cpHex(hsv2rgb(H,S,V));
     sv.style.background=`linear-gradient(to top,#000,transparent),linear-gradient(to right,#fff,hsl(${H.toFixed(1)} 100% 50%))`; svt.style.left=(S*100)+'%'; svt.style.top=((1-V)*100)+'%';

@@ -146,7 +146,7 @@ An icon of its own appears in the same places as the category icon: in the libra
 
 You will make a keyboard play a bass synth through your speakers.
 
-1. In the library, click **Place** on **Keys / MIDI**, on **Acid Baselines** and on **Speakers**. Each device lands in the middle of your view. Anything in the way moves aside. You can also drag a device from the library onto the floor.
+1. In the library, click **Place** on **Keys / MIDI**, on **Acid Baselines** and on **Speakers**. Each device lands in the middle of your view. Anything in the way moves aside: a device that lies left of the middle of the new one goes left, right of it goes right, and clearly above or below goes up or down. This also holds when you drag a device yourself onto another one: that is how you swap two devices. You can also drag a device from the library onto the floor.
 2. Click **Arrange** to put them in a tidy row.
 3. Connect them with cables. Press on a port (the little circle on a card) and drag to a matching port on another card, then release:
    - from **Notes / CC** on Keys to **Notes** on Acid Baselines;
@@ -351,6 +351,7 @@ Click with the **right mouse button** on an empty spot of the floor. Next to **P
 
 - **Create section…** draws a coloured area with nicely rounded corners, where you clicked. You give a **name**, the **font size** of that name, a **colour**, the **opacity** of the fill (0 is fully transparent), a **line style** (solid, dashed, dotted or no line) and optionally a **viewpoint** (see below). The name sits large at the top left, **half outside the area**, and the line does not run through where the name is. That way you can read it when zoomed far out. The area lies above the canvas and below the devices.
   - **Devices on a section.** Drop a device with its middle on a section and it belongs to it. A device that mostly covers a small section belongs to it too. If it does not fit, the section grows with it, leaving some room around. Drop it outside all sections and it no longer belongs. A section cannot shrink below what its devices need.
+  - **Dragging from the library.** The section under the mouse lights up; if you let go, the new device belongs to it. If it lies over another device, that one moves aside and the section grows so both fit. A selected section lights up like a selected device. **Arrange** (☰ → File) lays out each section by itself in columns, gives the section exactly its size, and puts the sections below what belongs to no section.
   - **Moving.** Drag the section by its title: all devices on it move along, as if they were stuck on it.
   - **Size.** Drag a side or a corner, also on the left and top.
   - **Viewpoint.** Give a section a number from 1 to 9. **Alt+number** then brings the section into view, zoomed so it fits with some margin (at most 100%). The number sits as a dot before the name.

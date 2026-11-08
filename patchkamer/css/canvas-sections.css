@@ -6,7 +6,8 @@
   -webkit-mask-image:linear-gradient(#000 0 0),linear-gradient(#000 0 0);mask-image:linear-gradient(#000 0 0),linear-gradient(#000 0 0);-webkit-mask-size:100% 100%,var(--gw,0px) var(--gh,0px);mask-size:100% 100%,var(--gw,0px) var(--gh,0px);
   -webkit-mask-position:0 0,var(--gx,14px) var(--gy,0px);mask-position:0 0,var(--gx,14px) var(--gy,0px);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-composite:xor;mask-composite:exclude}
 .sec.line-dashed .secfr{border-style:dashed}.sec.line-dotted .secfr{border-style:dotted}.sec.line-none .secfr{border-color:transparent}
-.sec.target .secfr{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 70%,transparent),0 0 24px color-mix(in srgb,var(--c) 60%,transparent)}
+.sec.target{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 70%,transparent),0 0 28px 4px color-mix(in srgb,var(--c) 60%,transparent)}
+.sec.sel{box-shadow:0 0 0 1px var(--sel),0 0 16px 2px color-mix(in srgb,var(--sel) 60%,transparent)}
 .sec.min{border-radius:16px;background:color-mix(in srgb,var(--c) calc(max(var(--a),.22)*100%),var(--card))}
 .sec.min .secfr{-webkit-mask-image:none;mask-image:none;border-radius:16px}
 .sechd{position:absolute;z-index:2;left:22px;top:var(--ht,0);height:var(--hh,48px);max-width:calc(100% - 44px);box-sizing:border-box;pointer-events:auto;display:flex;align-items:center;gap:10px;padding:0 12px;cursor:grab;user-select:none;touch-action:none;font-family:var(--disp);font-size:var(--fs,32px);font-weight:700;letter-spacing:.05em;color:var(--fg);line-height:1}
@@ -34,6 +35,9 @@
 .jp span{font-family:var(--disp);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .jp:hover,.jp:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--sel) 45%,transparent),0 2px 6px var(--shadow);outline:none}
 .card.secmin{display:none!important}
+.scform{max-height:92vh;overflow:auto}
+.sccol{display:grid;gap:4px}
+.sccol>span{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
 .scform label{display:grid;gap:4px;font-size:12px}
 .scform label>span{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
 .scform output{font-family:var(--mono);font-size:11px;color:var(--muted)}

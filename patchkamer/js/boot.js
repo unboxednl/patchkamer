@@ -165,12 +165,12 @@ document.addEventListener('pointermove',e=>{ if(!PK.libDrag) return;
   const g=PK.libDrag.ghost; g.style.left=e.clientX+'px'; g.style.top=e.clientY+'px';
   const ct=PK.catTarget(e.clientX,e.clientY), cur=PK.categoryOf(PK.libDrag.def); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
   if(ct&&ct.dataset.cat!==cur){ ct.classList.add('drop'); g.textContent=`${PK.libDrag.def.name} → ${PK.CATS.find(x=>x[0]===ct.dataset.cat)[1]}`; g.classList.remove('no'); }
-  else { const onFloor=PK.overFloor(e.clientX,e.clientY), cb=onFloor?PK.cableNearPoint(PK.floorPoint(e.clientX,e.clientY),18/PK.Host.view.scale,PK.libDrag.def.ports,null):null; PK.setDrop(cb);
-    g.textContent=PK.libDrag.def.name+(cb?' → '+PK.pkt('m.in_de_kabel'):''); g.classList.toggle('no',!onFloor); } });
-document.addEventListener('pointerup',e=>{ if(!PK.libDrag) return; const d=PK.libDrag, dc=PK.dropCable; PK.libDrag=null; document.body.style.cursor=''; PK.setDrop(null);
+  else { const onFloor=PK.overFloor(e.clientX,e.clientY), cb=onFloor?PK.cableNearPoint(PK.floorPoint(e.clientX,e.clientY),18/PK.Host.view.scale,PK.libDrag.def.ports,null):null; PK.setDrop(cb); const sc=PK.secHoverPoint&&onFloor?PK.secHoverPoint(e.clientX,e.clientY):(PK.secHoverPoint&&PK.secHoverPoint(null),null);
+    g.textContent=PK.libDrag.def.name+(cb?' → '+PK.pkt('m.in_de_kabel'):sc?' → '+sc.name:''); g.classList.toggle('no',!onFloor); } });
+document.addEventListener('pointerup',e=>{ if(!PK.libDrag) return; const d=PK.libDrag, dc=PK.dropCable; PK.libDrag=null; document.body.style.cursor=''; PK.setDrop(null); if(PK.secHoverPoint) PK.secHoverPoint(null);
   if(!d.ghost) return; PK.LIBCLK.drag=performance.now(); d.ghost.remove(); document.querySelectorAll('#lib .cat.drop').forEach(x=>x.classList.remove('drop'));
   const ct=PK.catTarget(e.clientX,e.clientY); if(ct){ if(ct.dataset.cat!==PK.categoryOf(d.def)) PK.setCategory(d.def.id,ct.dataset.cat); return; }
-  if(PK.overFloor(e.clientX,e.clientY)){ const p=PK.floorPoint(e.clientX,e.clientY); const nid=PK.addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid){ PK.afterAdd(nid); if(dc) PK.insertOnCable(nid,dc); else PK.autoLinkOffer(nid); } } });
+  if(PK.overFloor(e.clientX,e.clientY)){ const p=PK.floorPoint(e.clientX,e.clientY); const nid=PK.addDevice(d.def.id,Math.round(p.x-20),Math.round(p.y-14),null,null,d.ver()); if(nid){ PK.afterAdd(nid); if(PK.secAssignAt) PK.secAssignAt(nid,e.clientX,e.clientY); if(dc) PK.insertOnCable(nid,dc); else PK.autoLinkOffer(nid); } } });
 const libwin=PK.$('libwin'), room=PK.$('room'); PK.libwin=libwin; PK.room=room;
 PK.libGesture(PK.$('libbar'),(st,dx,dy)=>{ if(PK.isSheet()){ libwin.style.transform=dy>0?`translateY(${dy}px)`:''; libwin._dy=dy; return; } PK.LIB.x=st.x+dx; PK.LIB.y=st.y+dy; },()=>{ if(PK.isSheet()){ const dy=libwin._dy||0; libwin.style.transform=''; libwin._dy=0; if(dy>90){ PK.LIB.shown=false; PK.placeLib(); PK.saveLib(); } } });
 PK.libGesture(libwin.querySelector('.rz.e'),(st,dx)=>{ PK.LIB.w=st.w+dx; });

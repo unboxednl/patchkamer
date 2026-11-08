@@ -22,7 +22,8 @@ const num=(v,lo,hi,d)=>{ v=+v; return isFinite(v)?Math.min(hi,Math.max(lo,v)):d;
 const str=(v,n,d)=>{ const s=typeof v==='string'?v.replace(/[\u0000-\u001f\u007f-\u009f]/g,' ').trim().slice(0,n):''; return s||d; };
 const alive=s=>s.members.filter(id=>H.devices.has(id));
 // het vak van een apparaat in vloercoördinaten (uit de getekende kaart: ook goed voor een icoon)
-function rectOf(r){ const b=r.el.getBoundingClientRect(); if(!b.width) return null; const a=PK.floorPoint(b.left,b.top), c=PK.floorPoint(b.right,b.bottom); return {x:a.x,y:a.y,w:c.x-a.x,h:c.y-a.y}; }
+// (uit r.x/r.y en de afmeting, niet uit de getekende rand: die loopt achter terwijl apparaten opschuiven)
+function rectOf(r){ const w=r.el.offsetWidth, h=r.el.offsetHeight; if(!w||!h) return null; return {x:r.x,y:r.y,w,h}; }
 function bbox(s){ let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,n=0; alive(s).forEach(id=>{ const b=rectOf(H.devices.get(id)); if(!b) return; n++; x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.w); y1=Math.max(y1,b.y+b.h); }); return n?{x0,y0,x1,y1}:null; }
 
 /* ---------- tekenen ---------- */
@@ -39,11 +40,14 @@ function paint(s){ if(!s.el) return; const e=s.el, h=hh(s), top=s.min?0:-Math.ro
 function sync(){ if(!layer) return; const on=wideOn(); layer.hidden=!on; if(!on) return;
   H.devices.forEach(r=>r.el.classList.remove('secmin')); H.secs.forEach(s=>{ if(s.min) alive(s).forEach(id=>H.devices.get(id).el.classList.add('secmin')); }); }
 function layerAdd(el){ layer.appendChild(el); }
+// een sectie kiezen: hij licht op zoals een apparaat; kies je een apparaat, dan is de sectie weer losgelaten
+function selectSec(s){ H.secs.forEach(x=>x.el&&x.el.classList.toggle('sel',x===s)); if(s&&PK.selected) PK.select(null); }
 function build(s){ const e=document.createElement('div'); s.el=e;
   e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<i class="secrz '+d+'"></i>').join('');
   const mn=e.querySelector('.secmenu'); mn.textContent='⋯'; mn.title=PK.pkt('m.sc_menu_titel'); mn.setAttribute('aria-label',mn.title);
   e.querySelector('.secminb').onclick=ev=>{ ev.stopPropagation(); toggleMin(s); };
   mn.onclick=ev=>{ ev.stopPropagation(); const b=mn.getBoundingClientRect(); menu(s,b.left,b.bottom+4); };
+  e.addEventListener('pointerdown',ev=>{ if(ev.button===0||ev.button===2) selectSec(s); },true);
   const hd=e.querySelector('.sechd'); hd.addEventListener('contextmenu',ev=>{ ev.preventDefault(); ev.stopPropagation(); menu(s,ev.clientX,ev.clientY); }); hd.addEventListener('dblclick',ev=>{ if(!ev.target.closest('button')) edit(s); });
   // titel slepen: sectie en leden samen
   let d=null; hd.addEventListener('pointerdown',ev=>{ if(ev.button!==0||ev.target.closest('button')) return; ev.stopPropagation(); ev.preventDefault();
@@ -71,9 +75,22 @@ function under(cx,cy,r){ let best=null; H.secs.forEach(s=>{ if(s.min||cx<s.x||cx
 function centre(id){ const r=H.devices.get(id), b=r&&rectOf(r); return b?{x:b.x+b.w/2,y:b.y+b.h/2}:null; }
 // een apparaat is neergezet of van grootte veranderd: lid van de sectie eronder (of van geen)
 function drop(id){ hover(null); if(!wideOn()||!layer) return; const c=centre(id); if(!c) return; const t=under(c.x,c.y,rectOf(H.devices.get(id)));
-  H.secs.forEach(s=>{ s.members=s.members.filter(m=>m!==id); }); if(t){ t.members.push(id); fit(t); } sync(); PK.drawCables(); }
+  H.secs.forEach(s=>{ s.members=s.members.filter(m=>m!==id); }); if(t){ t.members.push(id); } refit(); sync(); PK.drawCables(); }
+// alle secties groeien mee met hun leden (ook leden die door een nieuw apparaat zijn opgeschoven)
+function refit(){ H.secs.forEach(s=>{ if(s.members.length) fit(s); }); }
 function hover(id){ if(!layer) return; let t=null; if(id&&wideOn()){ const c=centre(id); if(c) t=under(c.x,c.y,rectOf(H.devices.get(id))); } H.secs.forEach(s=>s.el&&s.el.classList.toggle('target',s===t)); }
-PK.secDrop=drop; PK.secHover=hover;
+PK.secDrop=drop; PK.secHover=hover; PK.secRefit=refit;
+// slepen vanuit de bibliotheek: de sectie onder de muis licht op, en bij loslaten hoort het nieuwe apparaat erbij (op de muis, niet op het midden van de kaart)
+PK.secHoverPoint=function(x,y){ let t=null; if(layer&&wideOn()&&x!=null){ const p=PK.floorPoint(x,y); t=under(p.x,p.y,null); } H.secs.forEach(s=>s.el&&s.el.classList.toggle('target',s===t)); return t; };
+PK.secAssignAt=function(id,x,y){ PK.secHoverPoint(null); if(!layer||!wideOn()) return; const p=PK.floorPoint(x,y), t=under(p.x,p.y,null);
+  H.secs.forEach(s=>{ s.members=s.members.filter(m=>m!==id); }); if(t) t.members.push(id); refit(); sync(); PK.drawCables(); };
+// voor Herschikken (arrange.js): elke sectie is een eigen groep, de rest een groep; de sectie krijgt daarna precies de maat van zijn groep
+PK.secGroups=function(){ if(!layer||!wideOn()) return []; const seen=new Set(); return [...H.secs].sort((a,b)=>(a.y-b.y)||(a.x-b.x)).map(s=>({s,ids:alive(s).filter(id=>!seen.has(id)&&seen.add(id))})); };
+PK.secOrigin=s=>({x:PAD,y:topPad(s)});
+PK.secPlace=function(s,x0,y0,w,h){ s.x=Math.round(x0-PAD); s.y=Math.round(y0-topPad(s)); s.w=Math.round(Math.max(MINW,w+2*PAD)); s.h=Math.round(Math.max(MINH,h+topPad(s)+PAD)); paint(s); };
+PK.secSnapshot=()=>H.secs.map(s=>({s,x:s.x,y:s.y,w:s.w,h:s.h}));
+PK.secRestore=l=>{ (l||[]).forEach(o=>{ if(H.secs.includes(o.s)){ o.s.x=o.x; o.s.y=o.y; o.s.w=o.w; o.s.h=o.h; paint(o.s); } }); };
+PK.secUnhide=()=>{ H.devices.forEach(r=>r.el.classList.remove('secmin')); };
 // een apparaat in een geminimaliseerde sectie: de kabel hangt aan de titelbalk (links voor ingangen, rechts voor uitgangen)
 const minOf=id=>H.secs.find(s=>s.min&&s.members.includes(id))||null;
 PK.secAnchor=function(id,dir,kind){ if(!wideOn()) return null; const s=minOf(id); if(!s||!s.el) return null; const w=s.el.offsetWidth, h=hh(s), f=kind==='event'?0.62:kind==='mod'?0.84:kind==='multi'?0.5:kind==='mastering'?0.7:kind==='multievent'?0.62:0.38;
@@ -83,12 +100,14 @@ PK.secSame=(a,b)=>{ if(!wideOn()) return false; const s=minOf(a); return !!s&&s.
 /* ---------- formulier en menu ---------- */
 function form(title,fields,okTxt){ return new Promise(res=>{ const m=document.createElement('div'); m.className='pkmodal'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true');
   const box=document.createElement('form'); box.className='box scform'; const h=document.createElement('div'); h.className='scttl'; h.textContent=title; box.appendChild(h); const els={};
-  fields.forEach(f=>{ const l=document.createElement('label'), t=document.createElement('span'); t.textContent=f.label; let i;
+  const cps=[];
+  fields.forEach(f=>{ if(f.type==='colour'){ const w=document.createElement('div'), t=document.createElement('span'), cp=PK.colourPicker({value:f.value,label:f.label}); w.className='sccol'; t.textContent=f.label; cps.push(cp); els[f.k]={get value(){ return cp.get(); }}; w.append(t,cp.el); box.appendChild(w); return; }
+    const l=document.createElement('label'), t=document.createElement('span'); t.textContent=f.label; let i;
     if(f.type==='select'){ i=document.createElement('select'); f.opts.forEach(([v,tx])=>{ const o=document.createElement('option'); o.value=v; o.textContent=tx; i.appendChild(o); }); i.value=f.value; }
     else { i=document.createElement('input'); i.type=f.type; i.value=f.value; if(f.type==='text') i.maxLength=f.max||40; if(f.type==='range'){ i.min=f.min; i.max=f.max; i.step=f.step; } }
     els[f.k]=i; l.append(t,i); if(f.type==='range'){ const o=document.createElement('output'); o.textContent=f.value; i.addEventListener('input',()=>{ o.textContent=i.value; }); l.appendChild(o); } box.appendChild(l); });
   const row=document.createElement('div'); row.className='wsrow'; const no=document.createElement('button'), ok=document.createElement('button'); no.type='button'; no.className='small'; no.textContent=PK.pkt('m.annuleren'); ok.type='submit'; ok.className='small'; ok.style.borderColor='var(--audio)'; ok.textContent=okTxt; row.append(no,ok); box.appendChild(row); m.appendChild(box);
-  const done=v=>{ m.remove(); document.removeEventListener('keydown',key,true); res(v); }, key=e=>{ if(e.key==='Escape'){ e.stopPropagation(); done(null); } };
+  const done=v=>{ cps.forEach(c=>{ try{ c.destroy(); }catch(e){} }); m.remove(); document.removeEventListener('keydown',key,true); res(v); }, key=e=>{ if(e.key==='Escape'){ e.stopPropagation(); done(null); } };
   box.onsubmit=e=>{ e.preventDefault(); const o={}; fields.forEach(f=>{ o[f.k]=els[f.k].value; }); done(o); }; no.onclick=()=>done(null); m.addEventListener('pointerdown',e=>{ if(e.target===m) done(null); });
   document.addEventListener('keydown',key,true); document.body.appendChild(m); const f0=els[fields[0].k]; f0.focus(); if(f0.select) f0.select(); }); }
 function popClose(){ if(!popup) return; document.removeEventListener('pointerdown',popup._o,true); document.removeEventListener('keydown',popup._k,true); popup.remove(); popup=null; }
@@ -99,7 +118,7 @@ function pop(x,y,items){ popClose(); const m=document.createElement('div'); m.cl
 const secFields=s=>[
   {k:'name',type:'text',label:PK.pkt('m.sc_naam'),value:s.name,max:40},
   {k:'fs',type:'range',label:PK.pkt('m.sc_lettergrootte'),value:String(s.fs),min:16,max:96,step:2},
-  {k:'color',type:'color',label:PK.pkt('m.sc_kleur'),value:s.color},
+  {k:'color',type:'colour',label:PK.pkt('m.sc_kleur'),value:s.color},
   {k:'alpha',type:'range',label:PK.pkt('m.sc_dekking'),value:String(Math.round(s.alpha*100)),min:0,max:60,step:1},
   {k:'line',type:'select',label:PK.pkt('m.sc_lijn'),value:s.line,opts:LINES.map(l=>[l,PK.pkt('m.sc_l_'+l)])},
   {k:'n',type:'select',label:PK.pkt('m.sc_viewpoint'),value:String(s.n||0),opts:numOpts(s)}];
@@ -155,7 +174,8 @@ function secLoad(p){ secClear(); if(!layer||!p) return; const seen=new Set(), nn
     const j={n,name:str(x.name,40,PK.pkt('m.jp_standaardnaam')),x:Math.round(num(x.x,-1e6,1e6,0)),y:Math.round(num(x.y,-1e6,1e6,0)),scale:num(x.scale,0.04,10,1)}; H.jumps.push(j); jpBuild(j); });
   sync(); } PK.secLoad=secLoad;
 
-function init(){ layer=document.createElement('div'); layer.className='seclayer'; PK.floor.insertBefore(layer,PK.floor.firstChild);
+function init(){ document.addEventListener('pointerdown',e=>{ const t=e.target; if(t&&t.closest&&t.closest('.card')) H.secs.forEach(x=>x.el&&x.el.classList.remove('sel')); },true);
+  layer=document.createElement('div'); layer.className='seclayer'; PK.floor.insertBefore(layer,PK.floor.firstChild);
   const pf=PK.paintFloorEmpty; PK.paintFloorEmpty=function(){ pf.apply(this,arguments); sync(); };   // loopt mee met elke kabeltekening: indeling gewisseld, apparaat vervangen
   document.addEventListener('keydown',e=>{ if(!e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||PK.typing(e)||document.querySelector('.pkmodal')) return; const m=/^Digit([1-9])$/.exec(e.code||''); if(!m) return;
     e.preventDefault(); const n=+m[1], j=H.jumps.find(x=>x.n===n), sc=H.secs.find(x=>x.n===n); if(j) jump(j); else if(sc) frame(sc); else PK.status(PK.pkt('m.jp_geen',n),true); }); }
