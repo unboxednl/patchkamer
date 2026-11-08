@@ -42,7 +42,7 @@ Het contract en de validator horen bij elkaar. Controleer dit **voor je begint**
 head -1 contract/PATCHKAMER-CONTRACT_NL.md contract/PATCHKAMER-CONTRACT_EN.md contract/validate-instrument.mjs
 ```
 
-Alle drie de regels moeten dezelfde versie noemen (nu v1.30: "Instrumentcontract v1.30", "Instrument contract v1.30" en "Patchkamer contract v1.30"). Het getal bij `patchkamer:` in `patchkamer/js/songs.js` hoort daar ook mee gelijk te zijn.
+Alle drie de regels moeten dezelfde versie noemen (nu v1.31: "Instrumentcontract v1.31", "Instrument contract v1.31" en "Patchkamer contract v1.31"). Het getal bij `patchkamer:` in `patchkamer/js/songs.js` hoort daar ook mee gelijk te zijn.
 
 - Noemen ze verschillende versies, **stop dan** en meld dat. Gok niet welke goed is en meng nooit een contract van de ene met een validator van de andere versie.
 - Heb je bewust een oudere versie nodig, haal dan **beide** uit dezelfde tag: `git show contract/v1.8:contract/PATCHKAMER-CONTRACT.md` en `git show contract/v1.8:contract/validate-instrument.mjs` (tot en met v1.10 was er één contractbestand zonder taalachtervoegsel; vanaf v1.11 zijn het `_NL.md` en `_EN.md`). Zet ze buiten de repo (bijvoorbeeld in je tijdelijke map), niet in `contract/`.

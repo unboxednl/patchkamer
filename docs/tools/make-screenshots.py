@@ -83,7 +83,7 @@ def shots(browser, lang, OUT, LIB, BASE):
         fc.value.set_files(os.path.join(ROOT, 'tunes', 'acid-baselines-classics.patchkamer-tunes.json')); pg.wait_for_timeout(1000)
     def build_patch(pg):
         load_lib(pg)
-        for n in ['Keys / MIDI', 'Acid Baselines', 'Speakers']: place(pg, n)
+        for n in ['Keyboard', 'Acid Baselines', 'Speakers']: place(pg, n)
         pg.click('#libToggle'); pg.wait_for_timeout(300); menu_click(pg, '#arrange'); pg.wait_for_timeout(1200)
         c = pg.locator('.card')
         drag(pg, c.nth(0).locator('[data-port="notes"][data-dir="out"]'), c.nth(1).locator('[data-port="notes"][data-dir="in"]'))
@@ -122,7 +122,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     c = pg.locator('.card').first
     c.evaluate("c=>{const s=[...c.querySelectorAll('select')].find(x=>x.options.length>3&&x.options[0].value===''); s.selectedIndex=1; s.dispatchEvent(new Event('change',{bubbles:true}))}"); pg.wait_for_timeout(600)
     shadow_set(c, 'select.pat', 'Squelch'); pg.wait_for_timeout(300); c.screenshot(path=OUT + '/04-acid-baselines.png'); done(pg)
-    pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Keys / MIDI'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
+    pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Keyboard'); pg.click('#libToggle'); pg.wait_for_timeout(2500)
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
     pg = newpage(nopicker=True); load_lib(pg); lib_tab(pg, 'skins')   # de skin-editor, geopend vanaf de tab Skins met Duofone
     pg.evaluate("(()=>{ const s=[...document.querySelectorAll('#skPanel select')].find(x=>[...x.options].some(o=>o.value==='nl.patchkamer.duofone')); s.value='nl.patchkamer.duofone'; s.dispatchEvent(new Event('change',{bubbles:true})); })()")

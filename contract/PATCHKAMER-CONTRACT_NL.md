@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.30 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.31 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -39,6 +39,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.28 | Teruggetrokken apparaten en kiezen op afstand: de optionele definitieregel `status: 'retired'` (de bibliotheek verbergt het apparaat tenzij de gebruiker teruggetrokken apparaten toont; bestaande werkruimtes en songs laden het gewoon) en `host.show(this, doelId, { select, center })`, waarmee een apparaat een ander apparaat kiest en midden in het scherm zet (zonder het te verplaatsen of te zoomen). |
 | v1.29 | AI-vraag voor een apparaat: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. Een apparaat stelt één vraag aan de AI-aanbieder die de gebruiker bij Instellingen heeft gekozen (de sleutel blijft bij de host; het apparaat zelf doet geen netwerkaanroep). De gebruiker moet de vraag per apparaat bevestigen. Voor voorstellen zonder dat de gebruiker hoeft te chatten, zoals een koppelvoorstel van de MIDI Controller. |
 | v1.30 | Bestanden van internet: `host.fetchFile(this, url, opts)` haalt voor een apparaat één https-bestand op (`as`, `maxBytes`, `signal`, `onProgress`), alleen na een klik van de gebruiker, zonder inloggegevens en zonder `Referer`, met een grens aan de grootte en foutcodes `url`, `aborted`, `network`, `http`, `size`, `response` (§13i). Optioneel; een oude host heeft de functie niet. De validator kent de functie en geeft een fout bij een aanroep zonder klik. |
+| v1.31 | Subcategorieën in de bibliotheekindeling: een categorie in `patchkamer-bibliotheek.json` mag een optioneel veld `parent` hebben (de `key` van een andere categorie), zodat een categorie onderliggende subcategorieën kan hebben (§16). Een apparaat wordt aan een subcategorie toegewezen met dezelfde `assign`; het `category`-veld van een apparaat verandert niet |
 
 ---
 
@@ -1225,6 +1226,18 @@ Een bibliotheek is een map (lokaal, op GitHub of op een webadres) met modules en
 - Patchkamer laadt alleen de modules die in `modules` staan.
 - Werkruimtes (`*.patchkamer.json`) en presetbibliotheken (`*.patchkamer-presets.json`) zijn optioneel. Presetbibliotheken uit een bibliotheek zijn alleen-lezen; de gebruiker kan er een kopie van maken.
 - Zonder `patchkamer.json` zoekt Patchkamer zelf naar `*.patchkamer-device.js`, `*.patchkamer.json`, `*.patchkamer-presets.json` en `*.patchkamer-tunes.json`. Andere `.js`-bestanden in de map, zoals hulpscripts, worden dan genegeerd. Modules die in `patchkamer.json` staan, mogen elke bestandsnaam hebben.
+- **Indeling (`patchkamer-bibliotheek.json`, optioneel, in de hoofdmap van de bibliotheek).** Bepaalt hoe de host de apparaten in categorieën toont: `categories` is een lijst van `{ "key", "label", "color"?, "icon"?, "parent"? }` in de volgorde waarin ze staan, `assign` wijst een apparaat-id aan een categorie-`key` toe. Het veld **`parent`** (v1.31) is de `key` van de bovenliggende categorie: zo is een categorie een subcategorie van een andere (bijvoorbeeld `{ "key": "dynamica", "label": "Dynamica", "parent": "effect" }`). Er is één niveau: een `parent` die onbekend is, de categorie zelf, of zelf al een `parent` heeft (dus ook een cyclus) wordt door de host genegeerd en gemeld, en de categorie blijft een gewone categorie. Subcategorieën staan in de volgorde van `categories` onder hun parent; een apparaat dat aan een subcategorie is toegewezen hoort ook bij de teller van de parent. Een bestand zonder `parent` werkt precies als voorheen, `catV` en `formatVersion` blijven ongewijzigd, en een host die het veld niet kent toont de subcategorieën als gewone categorieën.
+
+```json
+{ "format": "patchkamer-bibliotheek", "formatVersion": 1, "catV": 2,
+  "categories": [
+    { "key": "effect",   "label": "Effecten" },
+    { "key": "dynamica", "label": "Dynamica",  "parent": "effect" },
+    { "key": "ruimte",   "label": "Tijd & ruimte", "parent": "effect" }
+  ],
+  "assign": { "nl.patchkamer.pump": "dynamica", "nl.patchkamer.room": "ruimte" } }
+```
+
 - Wijzig je een bestaand apparaat: verhoog `version` en houd `id`, poort-id's en bestandsnaam gelijk. Dan vinden bewaarde werkruimtes en presets het terug.
 
 ---

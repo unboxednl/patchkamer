@@ -28,10 +28,10 @@ body{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:max(16px,
 #lib.cmp .libdev>.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:1em}
 #lib.cmp .libdev>.kd,#lib.cmp .libdev>.vr{display:block;font-size:.8em;color:var(--muted);white-space:nowrap}
 #lib.cmp .libdev>.vr{font-variant-numeric:tabular-nums}
-#lib.cmp .libdev>.xp{display:block;padding:2px 8px;font-size:.9em;min-width:30px;line-height:1.2}
+#lib.cmp .libdev>.xp{display:block;padding:2px 8px;font-size:.9em;min-width:30px;line-height:1.2;justify-self:end;align-self:center}
 #lib.cmp .libdev>.id,#lib.cmp .libdev>.pt,#lib.cmp .libdev>.src,#lib.cmp .libdev>.act{display:none}
 #lib.cmp .libdev.open>.id,#lib.cmp .libdev.open>.pt,#lib.cmp .libdev.open>.src{display:block;grid-column:1/-1}
 #lib.cmp .libdev.open>.act{display:flex;grid-column:1/-1}
-#lib.cmp .libdev.open>.xp{transform:rotate(90deg)}
+#lib.cmp .libdev.open>.xp{transform:rotate(90deg);grid-row:1;grid-column:4}
 #lib.cmp .libdev{cursor:pointer}
 #libClose{display:none}

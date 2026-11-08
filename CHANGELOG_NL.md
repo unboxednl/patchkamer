@@ -4,6 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.12.0 (2026-11-08)
+
+### Gewijzigd
+- **Apparaatcontract v1.31: subcategorieën in de bibliotheekindeling.** Een categorie in `patchkamer-bibliotheek.json` mag een optioneel veld `parent` hebben (de `key` van een andere categorie), zodat een categorie subcategorieën kan hebben (één niveau; een onbekende, zichzelf of geneste `parent` wordt genegeerd en gemeld). Het contract (§16 en de versietabel) beschrijft het indelingsbestand daarmee voor het eerst. Een bestand zonder `parent` werkt als voorheen en het `category`-veld van een apparaat verandert niet.
+- **Screenshots ververst** in de gebruikershandleiding (bibliotheek, instellingen, patchweergaven en skin-editor) voor het huidige uiterlijk.
+
+### Hersteld
+- **Bibliotheek, compacte weergave:** een apparaat uitklappen met het driehoekje rekt de driehoekknop niet meer uit over de hele kaart en sloopt de layout niet meer; hij blijft klein, rechtsboven.
+
 ## 0.11.0 (2026-11-08)
 
 ### Toegevoegd

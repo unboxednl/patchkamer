@@ -4,6 +4,15 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.12.0 (2026-11-08)
+
+### Changed
+- **Device contract v1.31: subcategories in the library layout.** A category in `patchkamer-bibliotheek.json` may have an optional field `parent` (the `key` of another category), so a category can have subcategories (one level; an unknown, self or nested `parent` is ignored and reported). The contract (§16 and the version table) now also describes the layout file for the first time. A file without `parent` works as before and a device's `category` field does not change.
+- **Screenshots refreshed** in the user manual (library, settings, patch views and skin editor) for the current look.
+
+### Fixed
+- **Library, compact view:** unfolding a device with the triangle no longer stretches the triangle button over the whole card and breaks the layout; it stays small at the top right.
+
 ## 0.11.0 (2026-11-08)
 
 ### Added

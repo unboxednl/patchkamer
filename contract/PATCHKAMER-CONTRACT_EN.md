@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.30 for building agents
+# Patchkamer — Instrument contract v1.31 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -39,6 +39,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.28 | Retired devices and selecting remotely: the optional definition field `status: 'retired'` (the library hides the device unless the user shows retired devices; existing workspaces and songs load it as usual) and `host.show(this, targetId, { select, center })`, with which a device selects another device and puts it in the middle of the screen (without moving or zooming it). |
 | v1.29 | AI question for a device: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. A device asks one question to the AI provider the user chose in the settings (the key stays with the host; the device itself makes no network call). The user must confirm the question per device. For suggestions without the user having to chat, like a mapping suggestion from the MIDI Controller. |
 | v1.30 | Files from the internet: `host.fetchFile(this, url, opts)` fetches one https file for a device (`as`, `maxBytes`, `signal`, `onProgress`), only after a user click, without credentials and without `Referer`, with a limit on the size and error codes `url`, `aborted`, `network`, `http`, `size`, `response` (§13i). Optional; an old host does not have the function. The validator knows the function and gives an error for a call without a click. |
+| v1.31 | Subcategories in the library layout: a category in `patchkamer-bibliotheek.json` may have an optional field `parent` (the `key` of another category), so a category can have subcategories (§16). A device is assigned to a subcategory with the same `assign`; the `category` field of a device does not change |
 
 ---
 
@@ -1225,6 +1226,18 @@ A library is a folder (local, on GitHub or at a web address) with modules and a 
 - Patchkamer only loads the modules listed in `modules`.
 - Workspaces (`*.patchkamer.json`) and preset libraries (`*.patchkamer-presets.json`) are optional. Preset libraries from a library are read-only; the user can make a copy.
 - Without `patchkamer.json`, Patchkamer itself looks for `*.patchkamer-device.js`, `*.patchkamer.json`, `*.patchkamer-presets.json` and `*.patchkamer-tunes.json`. Other `.js` files in the folder, such as helper scripts, are then ignored. Modules listed in `patchkamer.json` may have any file name.
+- **Layout (`patchkamer-bibliotheek.json`, optional, in the root folder of the library).** Determines how the host shows the devices in categories: `categories` is a list of `{ "key", "label", "color"?, "icon"?, "parent"? }` in the order in which they are listed, `assign` maps a device id to a category `key`. The field **`parent`** (v1.31) is the `key` of the category above: this makes a category a subcategory of another (for example `{ "key": "dynamics", "label": "Dynamics", "parent": "effect" }`). There is one level: a `parent` that is unknown, the category itself, or itself already has a `parent` (so also a cycle) is ignored by the host and reported, and the category stays an ordinary category. Subcategories are listed under their parent in the order of `categories`; a device assigned to a subcategory also counts toward the counter of the parent. A file without `parent` works exactly as before, `catV` and `formatVersion` stay unchanged, and a host that does not know the field shows the subcategories as ordinary categories.
+
+```json
+{ "format": "patchkamer-bibliotheek", "formatVersion": 1, "catV": 2,
+  "categories": [
+    { "key": "effect",   "label": "Effects" },
+    { "key": "dynamics", "label": "Dynamics",  "parent": "effect" },
+    { "key": "space",    "label": "Time & space", "parent": "effect" }
+  ],
+  "assign": { "nl.patchkamer.pump": "dynamics", "nl.patchkamer.room": "space" } }
+```
+
 - If you change an existing device: raise `version` and keep `id`, port ids and file name the same. Then saved workspaces and presets find it again.
 
 ---
