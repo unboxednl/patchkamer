@@ -69,3 +69,7 @@
 .libpane h3{margin:0 0 6px;font-family:var(--disp);font-size:.95em;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .libpane .wslist{max-height:none!important;overflow:visible}   /* het paneel zelf scrolt, geen lijst binnen het paneel */
 .libpane>.libsearch{position:sticky;top:-10px;z-index:1}
+
+.libretired{display:flex;align-items:center;gap:6px;margin:-2px 0 6px;font-size:.8em;color:var(--muted);cursor:pointer}
+.libdev.retired{opacity:.72}
+.libdev .lbadge.ret{background:var(--muted);color:var(--card)}

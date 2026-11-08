@@ -184,6 +184,7 @@ PK.$('libFsDown').onclick=()=>{ PK.LIB.fs=PK.clamp(PK.LIB.fs-1,11,18); PK.placeL
 PK.paintLibFs();
 PK.$('libToggle').onclick=()=>{ PK.LIB.shown=!PK.LIB.shown; PK.placeLib(); PK.saveLib(); };
 PK.$('libSearch').addEventListener('input',PK.paintLib);
+PK.$('libRetired').checked=!!PK.LIB.retired; PK.$('libRetired').onchange=()=>{ PK.LIB.retired=PK.$('libRetired').checked; PK.saveLib(); PK.paintLib(); };
 libwin.addEventListener('pointerdown',e=>e.stopPropagation());
 window.addEventListener('resize',PK.placeLib);
 document.addEventListener('keydown',e=>{ if(PK.textEntry(e)) return; if(e.code==='KeyB'&&e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){ e.preventDefault(); PK.LIB.shown=!PK.LIB.shown; PK.placeLib(); PK.saveLib(); } });

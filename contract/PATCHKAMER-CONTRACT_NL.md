@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.27 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.28 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -36,6 +36,8 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.25 | Opnamelampje: `host.recording(this, aan)` laat de host naast Start een rood, langzaam knipperend lampje met de opnametijd (mm:ss) tonen; een klik erop schuift het canvas zodat het apparaat midden in beeld staat. Optioneel; een oude host heeft de functie niet. |
 | v1.26 | Klembord, lengte volgen: `clipInfo().length.settable`; een apparaat met een gedeelde lengte laat `setClip` die lengte zetten uit `clip.length` als de gebruiker "Pas lengte aan de clip aan" kiest (§13d) |
 | v1.27 | Versies van packs: een tune-, preset- of samplepack mag op het hoogste niveau een `version` hebben (SemVer `x.y.z`, de versie van de inhoud van het pack, los van de `version` bij een tune of preset: dat is de apparaatversie). De host negeert hem. Verder de versieregels: elke wijziging krijgt een nieuw SemVer-nummer (host, contract, skins, packs). |
+| v1.28 | Teruggetrokken apparaten en kiezen op afstand: de optionele definitieregel `status: 'retired'` (de bibliotheek verbergt het apparaat tenzij de gebruiker teruggetrokken apparaten toont; bestaande werkruimtes en songs laden het gewoon) en `host.show(this, doelId, { select, center })`, waarmee een apparaat een ander apparaat kiest en midden in het scherm zet (zonder het te verplaatsen of te zoomen). |
+| v1.28 | Teruggetrokken apparaten en kiezen op afstand: de optionele definitieregel `status: 'retired'` (de bibliotheek verbergt het apparaat tenzij de gebruiker teruggetrokken apparaten toont; bestaande werkruimtes en songs laden het gewoon) en `host.show(this, doelId, { select, center })`, waarmee een apparaat een ander apparaat kiest en midden in het scherm zet (zonder het te verplaatsen of te zoomen). |
 
 ---
 
@@ -83,6 +85,8 @@ export default {
   version: '1.0.0',              // semver x.y.z
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
   category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool' | 'mastering'
+  status: 'active',              // optioneel (v1.28): 'active' (standaard) of 'retired': een teruggetrokken apparaat staat niet in de bibliotheek (tenzij de gebruiker ze toont) maar laadt nog in oude werkruimtes en songs
+  status: 'active',              // optioneel (v1.28): 'active' (standaard) of 'retired': een teruggetrokken apparaat staat niet in de bibliotheek (tenzij de gebruiker ze toont) maar laadt nog in oude werkruimtes en songs
   ui: { width: 360, minWidth: 260, jacks: false },   // optioneel, zie §12
   i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optioneel (v1.11): namen per taal, zie §12c
   ports: {
@@ -372,6 +376,8 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 |---|---|
 | `host.controls(this, doelId)` | Een lijst `{ key, label, type, … }`: `type` is `'range'` (met `min`, `max`, `step`, `value`, `scale`), `'select'` (met `options: [{ value, text }]`), `'check'` of `'button'`. `scale` is `'log'` voor een draaiknop van `host.ui.knob` met `{ scale: 'log' }` en anders `'lin'`. |
 | `host.setControl(this, doelId, sleutel, waarde)` | Zet de regelaar. `waarde` is 0..1: een schuif of knop krijgt dat deel van zijn bereik (logaritmisch als `scale` `'log'` is), een keuzelijst de optie op die plaats, een vinkje is aan vanaf 0,5 en een knop wordt vanaf 0,5 ingedrukt. Geeft `true` als de regelaar er is. |
+| `host.show(this, doelId, opts)` | Kiest het apparaat met id `doelId` en zet het midden in het scherm (v1.28): alleen het canvas schuift, het apparaat en de zoom blijven. `opts`: `{ select: true, center: true }` (beide standaard aan; `false` slaat die actie over). Geeft `true`, of `false` bij een onbekend apparaat of het apparaat zelf. Een apparaat in een geminimaliseerde sectie wordt niet zichtbaar. Roep het alleen aan op een handeling van de gebruiker of op een bericht dat hij zelf gaf (een MIDI-knop), nooit uit zichzelf bij laden of herstellen. |
+| `host.show(this, doelId, opts)` | (v1.28) Kiest het apparaat met id `doelId` en zet het midden in het scherm: alleen het canvas schuift, het apparaat en de zoom blijven. `opts`: `{ select: true, center: true }` (beide standaard aan; `false` slaat die actie over). Geeft `true`, of `false` bij een onbekend apparaat of het apparaat zelf. Een apparaat in een geminimaliseerde sectie wordt niet zichtbaar. Roep het alleen aan op een handeling van de gebruiker of op een bericht dat hij zelf gaf (een MIDI-knop), nooit uit zichzelf bij laden of herstellen. |
 
 - De `key` heeft de vorm `type|naam#n` en blijft gelijk zolang de kaart dezelfde regelaars heeft. Bewaar sleutels in je state, maar reken erop dat ze niet meer bestaan als het doelapparaat zijn UI verandert; `setControl` geeft dan `false`. Vraag `controls` opnieuw aan bij `onPeers`.
 - Je kunt jezelf niet besturen. Een onbekend apparaat of een onbekende sleutel geeft `[]` of `false`.
@@ -1145,6 +1151,8 @@ Een apparaat dat opneemt (de Recorder) laat dat de host weten, zodat de gebruike
 | `host.eventBundleChanged(this, poort)` | v1.13 | De sporen van je multi-MIDI-poort zijn veranderd (§11c) |
 | `host.controls(this, doelId)` | v1.13 | De regelaars op de kaart van een ander apparaat (§11c) |
 | `host.setControl(this, doelId, sleutel, waarde)` | v1.13 | Zet een regelaar van een ander apparaat, waarde 0..1 (§11c) |
+| `host.show(this, doelId, opts)` | v1.28 | Een ander apparaat kiezen en midden in het scherm zetten (§11c) |
+| `host.show(this, doelId, opts)` | v1.28 | Een ander apparaat kiezen en midden in het scherm zetten (§11c) |
 | `host.watchParams(this, doelId, fn)` | v1.21 | Wijzigingen van de regelaars van een ander apparaat volgen, ook die van modulatie; `fn(paramId, waarde, door)` (§13f) |
 | `host.setParam(this, doelId, paramId, waarde)` | v1.21 | Zet een regelaar (uit `params()`) van een ander apparaat zichtbaar, waarde 0..1 (§13f) |
 | `host.lockParams(this, doelId, ids)` | v1.21 | Modulatie op deze regelaars van een ander apparaat negeren; `null` haalt het slot weg (§13f) |
@@ -1230,6 +1238,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 20. **Pads en schermpje (v1.22, §12f)**: de nep-host kent `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` en het 5e argument van `host.ui.steps`. Een `color` die geen `#rrggbb` is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel pad-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, een momentary pad zonder `onpress` en zonder `onchange`, een display met ongeldige `items`/`kind`/`wrap`/`searchAt` of een `value` buiten `items`, en een 5e argument van `steps` dat geen object is. Een display telt mee in de controle dat `setState` de keuzes bijwerkt; pads en stappen tellen niet mee in de dekking van `params()`. `--controls` toont ze met rol `pad`, `step` en `select`.
 21. **Stems (v1.23, §13g)**: de nep-host kent `host.stems(this, actie, opts)`: `'services'` geeft `[]`, `'split'` weigert. Een aanroep van `'split'` tijdens de test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` of `destroy`) is een fout: een netwerkaanroep start alleen op een klik van de gebruiker.
 22. **Opnamelampje (v1.25, §13h)**: de nep-host kent `host.recording(this, aan)` en negeert de aanroep.
+23. **Kiezen op afstand (v1.28, §11c)**: de nep-host kent `host.show(this, doelId, opts)` en geeft `false`; `status` is `'active'` of `'retired'`.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1261,7 +1270,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 22. Pads en schermpje (v1.22, optioneel): wie een drukknop of een keuze toont, gebruikt `host.ui.pad`, `host.ui.display` of `host.ui.steps` met `{ id, group, role, color }` (kleur altijd `#rrggbb`), met `if (!host.ui || typeof host.ui.pad !== 'function')` als terugval op de eigen knop; `set()` en `flash()` roepen geen handlers aan; het model van een keuze blijft het `<select>` en `setState` zet de waarde; `destroy()` van pad en keuze in `destroy()` van het apparaat (§12f).
 23. Stems (v1.23, optioneel): `split` alleen op een klik; `typeof host.stems === 'function'` gecontroleerd; zichtbaar gezegd dat het geluid naar een dienst op internet gaat, geld kost en rechten vraagt; annuleren via `signal`; tekst per foutcode in `host.lang`; stems en buffers niet in `getState()`/`getPreset()`; na het splitsen `host.setPorts` met de nieuwe AudioNodes al in `outputs` (§13g).
 24. Opnamelampje (v1.25, optioneel): `host.recording(this, true/false)` bij begin en einde van een opname en in `destroy`; `typeof host.recording === 'function'` gecontroleerd.
-25. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+25. Kiezen op afstand (v1.28, optioneel): `host.show` alleen op een handeling van de gebruiker of een bericht dat hij zelf gaf; `typeof host.show === 'function'` gecontroleerd.
+26. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 

@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.8.0 (2026-11-08)
+
+### Nieuw
+- **Nieuw MIDI-ontwerp: MIDI Controller en Keyboard, en teruggetrokken apparaten** (contract v1.28). De **MIDI Controller** is één apparaat voor al je MIDI-controllers en -keyboards: alle aangesloten ingangen werken tegelijk, je kiest welk Patchkamer-apparaat je bedient, en met een knop op je controller schakel je naar een ander apparaat; dezelfde draaiknoppen werken dan voor dat apparaat. Optioneel zet het gekozen apparaat midden in beeld. Koppelen gaat snel: **Leer indeling** (eenmalig), **Voorstel** (zet de knoppen automatisch op de regelaars) en **Snel koppelen**. Koppelingen en schakelknoppen bewaar je als preset. Het nieuwe **Keyboard** heeft een instelbaar aantal toetsen (25 tot 88), computertoetsen, pitch bend, modulatie, sustain, snelheid, transponeren en kanaal. **MIDI Hub, Control Surface, Pad Controller en Keys / MIDI zijn teruggetrokken** (`status: 'retired'`): ze staan standaard niet meer in de bibliotheek (vinkje **Teruggetrokken apparaten tonen**) maar laden nog in oude werkruimtes en songs. Nieuw in het contract: de optionele regel `status: 'retired'` en `host.show(this, doelId, { select, center })`.
+
 ## 0.7.0 (2026-11-08)
 
 ### Nieuw

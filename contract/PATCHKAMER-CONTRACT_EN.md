@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.27 for building agents
+# Patchkamer — Instrument contract v1.28 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -36,6 +36,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.25 | Recording lamp: `host.recording(this, on)` makes the host show a red, slowly blinking lamp with the recording time (mm:ss) next to Start; clicking it moves the canvas so the device sits in the middle of the screen. Optional; an old host does not have the function. |
 | v1.26 | Clipboard, match length: `clipInfo().length.settable`; a device with a shared length lets `setClip` set that length from `clip.length` when the user picks "Match the clip's length" (§13d) |
 | v1.27 | Pack versions: a tune, preset or sample pack may have a top-level `version` (SemVer `x.y.z`, the version of the pack's content, separate from the `version` on a tune or preset, which is the device version). The host ignores it. Also the version rules: every change gets a new SemVer number (host, contract, skins, packs). |
+| v1.28 | Retired devices and selecting remotely: the optional definition field `status: 'retired'` (the library hides the device unless the user shows retired devices; existing workspaces and songs load it as usual) and `host.show(this, targetId, { select, center })`, with which a device selects another device and puts it in the middle of the screen (without moving or zooming it). |
 
 ---
 
@@ -83,6 +84,7 @@ export default {
   version: '1.0.0',              // semver x.y.z
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
   category: 'effect',            // optional: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool' | 'mastering'
+  status: 'active',              // optional (v1.28): 'active' (default) or 'retired': a retired device is not in the library (unless the user shows them) but still loads in old workspaces and songs
   ui: { width: 360, minWidth: 260, jacks: false },   // optional, see §12
   i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optional (v1.11): names per language, see §12c
   ports: {
@@ -372,6 +374,7 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 |---|---|
 | `host.controls(this, targetId)` | A list `{ key, label, type, … }`: `type` is `'range'` (with `min`, `max`, `step`, `value`, `scale`), `'select'` (with `options: [{ value, text }]`), `'check'` or `'button'`. `scale` is `'log'` for a knob from `host.ui.knob` with `{ scale: 'log' }` and otherwise `'lin'`. |
 | `host.setControl(this, targetId, key, value)` | Sets the control. `value` is 0..1: a slider or knob gets that part of its range (logarithmic if `scale` is `'log'`), a list gets the option at that position, a checkbox is on from 0.5 and a button is pressed from 0.5. Returns `true` if the control is there. |
+| `host.show(this, targetId, opts)` | Selects the device with id `targetId` and puts it in the middle of the screen (v1.28): only the canvas slides, the device and the zoom stay. `opts`: `{ select: true, center: true }` (both on by default; `false` skips that action). Returns `true`, or `false` for an unknown device or the device itself. A device in a minimised section does not become visible. Call it only on a user action or on a message the user gave himself (a MIDI button), never by itself on load or restore. |
 
 - The `key` has the form `type|name#n` and stays the same as long as the card has the same controls. Keep keys in your state, but expect them to be gone when the target device changes its UI; `setControl` then returns `false`. Ask for `controls` again on `onPeers`.
 - You cannot control yourself. An unknown device or key gives `[]` or `false`.
@@ -1145,6 +1148,7 @@ A device that records (the Recorder) tells the host, so the user also sees that 
 | `host.eventBundleChanged(this, port)` | v1.13 | The tracks of your multi-MIDI port have changed (§11c) |
 | `host.controls(this, targetId)` | v1.13 | The controls on the card of another device (§11c) |
 | `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
+| `host.show(this, targetId, opts)` | v1.28 | Select another device and put it in the middle of the screen (§11c) |
 | `host.watchParams(this, targetId, fn)` | v1.21 | Follow changes of the controls of another device, also those of modulation; `fn(paramId, value, by)` (§13f) |
 | `host.setParam(this, targetId, paramId, value)` | v1.21 | Set a control (from `params()`) of another device visibly, value 0..1 (§13f) |
 | `host.lockParams(this, targetId, ids)` | v1.21 | Ignore modulation on these controls of another device; `null` removes the lock (§13f) |
@@ -1229,6 +1233,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 20. **Pads and small screen (v1.22, §12f)**: the fake host knows `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` and the 5th argument of `host.ui.steps`. A `color` that is not `#rrggbb` throws and is therefore an error. Only a warning (never an error) for: a duplicate pad id, an invalid id or group, options that are not an object, an invalid `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, a momentary pad with neither `onpress` nor `onchange`, a display with invalid `items`/`kind`/`wrap`/`searchAt` or a `value` outside `items`, and a 5th argument of `steps` that is not an object. A display counts in the check that `setState` updates the choices; pads and steps do not count in the coverage of `params()`. `--controls` shows them with role `pad`, `step` and `select`.
 21. **Stems (v1.23, §13g)**: the fake host has `host.stems(this, action, opts)`: `'services'` returns `[]`, `'split'` rejects. A call of `'split'` during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call starts only on a click by the user.
 22. **Recording lamp (v1.25, §13h)**: the fake host knows `host.recording(this, on)` and ignores the call.
+23. **Selecting remotely (v1.28, §11c)**: the fake host knows `host.show(this, targetId, opts)` and returns `false`; `status` is `'active'` or `'retired'`.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1260,7 +1265,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 22. Pads and small screen (v1.22, optional): whoever shows a push button or a choice uses `host.ui.pad`, `host.ui.display` or `host.ui.steps` with `{ id, group, role, color }` (colour always `#rrggbb`), with `if (!host.ui || typeof host.ui.pad !== 'function')` as the fallback to the own button; `set()` and `flash()` call no handlers; the model of a choice stays the `<select>` and `setState` sets the value; `destroy()` of the pad and choice in the device's `destroy()` (§12f).
 23. Stems (v1.23, optional): `split` only on a click; `typeof host.stems === 'function'` checked; visibly said that the sound goes to an online service, costs money and needs rights; cancel via `signal`; text per error code in `host.lang`; stems and buffers not in `getState()`/`getPreset()`; after splitting `host.setPorts` with the new AudioNodes already in `outputs` (§13g).
 24. Recording lamp (v1.25, optional): `host.recording(this, true/false)` at the start and end of a recording and in `destroy`; `typeof host.recording === 'function'` checked.
-25. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+25. Selecting remotely (v1.28, optional): `host.show` only on a user action or on a message he gave himself; `typeof host.show === 'function'` checked.
+26. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 

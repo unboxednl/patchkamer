@@ -104,6 +104,8 @@ const Host={
   // contract v1.13: regelaars van andere apparaten. Een controller (bijvoorbeeld de MIDI Hub) ziet alle schuiven, draaiknoppen, keuzelijsten, vinkjes en knoppen
   // op de kaart van een ander apparaat en zet ze met een waarde 0..1. De host vindt ze zelf (ook in open shadow roots); de apparaten hoeven niets te doen.
   controls(inst,targetId){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!r||targetId===me) return []; return PK.ctlList(r).map(x=>({...x.d})); },
+  // een ander apparaat kiezen en in het midden van het scherm zetten (v1.28); opts.select en opts.center zijn standaard aan, de zoom en het apparaat blijven
+  show(inst,targetId,opts){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!me||!r||targetId===me||r.pvw) return false; const o=opts&&typeof opts==='object'?opts:{}; if(o.select!==false) PK.select(targetId); if(o.center!==false&&PK.showDevice) PK.showDevice(targetId); return true; },
   setControl(inst,targetId,key,value){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!r||targetId===me) return false; return PK.ctlSet(r,String(key),+value); },
   // contract v1.21: instellingen van andere apparaten volgen (voor opnemen), absoluut zetten (voor afspelen) en tegen modulatie vergrendelen. Zie js/param-record.js.
   watchParams(inst,targetId,fn){ return PK.prmWatch(inst,targetId,fn); },

@@ -35,7 +35,7 @@ function paintLib(){
   const par=PK.CATPARENT||{};
   const drawCat=([cat,label])=>{   // tekent een (sub)categorie met zijn subcategorieën; geeft {box,total} of null als hij niet getoond wordt
     const items=ids.map(id=>PK.Host.versionsOf(id)[0]).filter(def=>PK.categoryOf(def)===cat)
-      .filter(def=>!q||[def.name,def.id,def.kind,label].some(t=>String(t).toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name,'nl'));
+      .filter(def=>def.status!=='retired'||PK.LIB.retired).filter(def=>!q||[def.name,def.id,def.kind,label].some(t=>String(t).toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name,'nl'));
     const subs=PK.CATS.filter(x=>par[x[0]]===cat).map(drawCat).filter(Boolean), total=items.length+subs.reduce((a,x)=>a+x.total,0), short=PK.CATLABEL[cat]||label;
     if(!items.length&&!subs.length&&(q||PK.BUILTIN_CATS.has(cat)||cat.startsWith('dir-'))) return null; shown+=items.length;
     const box=document.createElement('div'); box.className='cat'+(par[cat]?' sub':'')+(!LIBOPEN.has(cat)&&!q?' closed':''); box.dataset.cat=cat; box.style.setProperty('--catc',PK.catColor(cat));
@@ -46,6 +46,7 @@ function paintLib(){
     items.forEach(def=>{ const vers=PK.Host.versionsOf(def.id);
       const d=document.createElement('div'); d.className='libdev c-'+cat; d.dataset.id=def.id; d.title=PK.pkt('m.sleep_naar_de_vloer');
       d.innerHTML=`<span class="nm">${PK.devIconHTML(def,null)}${PK.esc(def.name)}</span><span class="id">${PK.esc(def.id)} · ${PK.esc(def.kind)}</span><span class="pt">${PK.portsLine(def)}</span>`+(def._src?`<span class="src">${PK.esc(PK.srcLabel(def._src))}</span>`:'')+`<span class="kd">${PK.esc(def.kind)}</span><span class="vr">v${PK.esc(def.version)}</span>`;
+      if(def.status==='retired'){ d.classList.add('retired'); d.querySelector('.nm').insertAdjacentHTML('beforeend','<span class="lbadge ret">'+PK.esc(PK.pkt('m.badge_retired'))+'</span>'); }   // teruggetrokken: staat standaard niet in de lijst, maar werkruimtes en songs laden hem nog
       { const mk=PK.LIBMARK.nw.has(def.id)?'new':PK.LIBMARK.ch.has(def.id)?'changed':''; if(mk){ d.classList.add('mark-'+mk); d.querySelector('.nm').insertAdjacentHTML('beforeend','<span class="lbadge">'+PK.esc(PK.pkt(mk==='new'?'m.badge_nieuw':'m.badge_gewijzigd'))+'</span>'); } }
       const act=document.createElement('div'); act.className='act';
       const vs=document.createElement('select'); vs.setAttribute('aria-label',PK.pkt('m.versie_van')+def.name); vers.forEach(v=>{const o=document.createElement('option'); o.value=v.version; o.textContent='v'+v.version; vs.appendChild(o);}); vs.disabled=vers.length<2;

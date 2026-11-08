@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.27
+// validate-instrument.mjs — Patchkamer contract v1.28
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -644,6 +644,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   // v1.13
   eventBundleChanged(inst, port) { if (!PL(curPorts || d.ports, 'multiEventOut').some(p => p.id === port)) modBad = vt('v.host_eventbundlechanged_is_geen_multieventout',port); },
   controls() { return []; }, setControl() { return false; },
+  // v1.28
+  show() { return false; },
   // v1.25
   recording() { return true; },
   // v1.23
@@ -772,6 +774,7 @@ if (!/^[a-z0-9]+(\.[a-z0-9-]+)+$/.test(d.id)) fail(vt('v.id_moet_reverse_dns_zij
 if (!/^\d+\.\d+\.\d+$/.test(d.version)) fail(vt('v.version_moet_semver_zijn_x'));
 if (!['instrument', 'effect', 'mixer', 'output', 'utility', 'modulator'].includes(d.kind)) fail('onbekende kind');
 if (d.ui !== undefined && (typeof d.ui !== 'object' || (d.ui.width !== undefined && !(d.ui.width >= 200 && d.ui.width <= 6000)))) fail(vt('v.ui_width_moet_tussen_200'));
+if (d.status !== undefined && !['active', 'retired'].includes(d.status)) fail("status moet 'active' of 'retired' zijn");   // v1.28
 if (d.category !== undefined && !['synth', 'groove', 'sequencer', 'mod', 'effect', 'mix', 'tool', 'mastering'].includes(d.category)) fail('onbekende category (synth, groove, sequencer, mod, effect, mix, tool of mastering)');
 if (d.ui && d.ui.minWidth !== undefined && !(d.ui.minWidth >= 200 && d.ui.minWidth <= (d.ui.width || 300))) fail(vt('v.ui_minwidth_moet_tussen_200'));
 for (const k of ['modIn', 'modOut', 'multiIn', 'multiOut', 'masteringIn', 'masteringOut', 'multiEventIn', 'multiEventOut']) if (d.ports[k] === undefined) d.ports[k] = [];

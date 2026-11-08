@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.8.0 (2026-11-08)
+
+### New
+- **New MIDI design: MIDI Controller and Keyboard, and retired devices** (contract v1.28). The **MIDI Controller** is one device for all your MIDI controllers and keyboards: all connected inputs work at once, you choose which Patchkamer device you control, and with a button on your controller you switch to another device; the same knobs then work for that device. Optionally the selected device is put in the middle of the screen. Mapping is quick: **Learn layout** (once), **Suggest** (puts the knobs on the controls automatically) and **Quick map**. You save mappings and switch buttons as a preset. The new **Keyboard** has a settable number of keys (25 to 88), computer keys, pitch bend, modulation, sustain, velocity, transpose and channel. **MIDI Hub, Control Surface, Pad Controller and Keys / MIDI are retired** (`status: 'retired'`): they are no longer in the library by default (tick **Show retired devices**) but still load in old workspaces and songs. New in the contract: the optional field `status: 'retired'` and `host.show(this, targetId, { select, center })`.
+
 ## 0.7.0 (2026-11-08)
 
 ### New
