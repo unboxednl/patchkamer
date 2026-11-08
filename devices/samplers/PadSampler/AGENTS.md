@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die **tunes voor Pad Sampler** maken, een song met
 
 ## Wat Pad Sampler is
 
-Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); stap 3 (sinds 1.2.0) is chop, Process en Flatten/Resample (zie "Chop, Process en Flatten"); de catalogus volgt (de state is daar al op voorbereid: `license`, `loop.xfade`, `sends`).
+Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); stap 3 (sinds 1.2.0) is chop, Process en Flatten/Resample (zie "Chop, Process en Flatten"); stap 4 (sinds 1.3.0) is de tab Banken met catalogus en importers (zie "Banken en catalogus"); nog open: `loop.xfade` en `sends` zonder effect.
 
 | | |
 |---|---|
@@ -12,7 +12,7 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 | `id` | `nl.patchkamer.padsampler`. Verander die nooit |
 | Soort | `instrument` (`category: 'synth'`; de bibliotheek zet hem bij Samplers): **tunes**, geen presets |
 | Poorten | audio uit `mix` (Stereomix) en `out1` t/m `out16`; event in `notes`; sturing in `mod`; geen audio-ingang |
-| Versie | 1.2.0 |
+| Versie | 1.3.0 |
 | Contract | v1.27 (gebouwd voor v1.26, gevalideerd tegen v1.27) |
 | Pack | `../../../tunes/pad-sampler-demos.patchkamer-tunes.json` (15 tunes, CC0-1.0) |
 
@@ -90,6 +90,17 @@ De tab **Bewerken** heeft vier soorten bewerking (knoppen onder de golfvorm, all
 - **Ongedaan** voor deze bewerkingen is een stap met `prog: true` in dezelfde geschiedenis: de JSON van de geraakte pads, de slices van de samples en de bijbehorende records. Ongedaan zet ook de gekozen bank, pad en laag terug zoals ze waren. Past het resultaat niet in 64 MiB, dan gebeurt er niets en komt er een melding.
 - **Toetsen** in Chop: 1 t/m 9 beluistert slice 1..9, pijl links en rechts vorige en volgende slice, M of Enter marker op cursor, Delete haalt de gekozen marker weg.
 - Niet beluisterd; wel gemeten (zie Controleren). Flatten en Process zijn niet getest met Bluetooth-uitvoer of in andere browsers dan Chromium.
+
+## Banken en catalogus (sinds 1.3.0)
+
+De tab **Banken** (zesde tab) laadt banken in een doelbank (A t/m D, optioneel eerst leegmaken). Alles loopt via een **plan** (pads met lagen of zones, zonder audio) en een **rapport** (`importReport()` op de instance: `ok`, `ignored`, `warn`, `stats`, `loaded`, `missing`, `notFit`, `aborted`); `runPlan` laadt de bestanden en schrijft de pads als één programmastap die ongedaan te maken is. De state krijgt **geen nieuwe verplichte velden**.
+
+- **Catalogus** = de constante `CATALOG` in het apparaat (contract §2: één bestand, geen externe bestanden; `bankCatalog()` geeft een kopie). Per bank: `id`, `name`/`desc` (nl, en), `status` (`green` of `yellow`; **nooit rood**), `license` (`spdx`, `text`, `url`, `checked`), `author`, `attribution`, `credit` (vermelding verplicht), `src` (`name`, `home`, `pin` = commit, `base` = jsDelivr-adres op die commit), `format`, `bytes`, `n`, en `pads` (drumpads met lagen `f`, `lo`, `hi`), `keys` (zones) of `preset` (een SFZ). Geverifieerd op 2026-11-08: LICENSE op de gepinde commit gelezen, elk bestand HEAD-gecontroleerd (200, `access-control-allow-origin: *`, grootte). Een bank toevoegen: alleen groen of geel uit `samplebanks.md`, commit pinnen, bestanden controleren, dan pas opnemen. Geen merknamen van instrumenten in teksten (bronnamen en -adressen voor de vermelding mogen).
+- **Netwerk:** het apparaat gebruikt nooit zelf netwerk (§15). Het roept `host.fetchFile(this, url, { as, signal, maxBytes })` aan, alleen na een klik, en controleert eerst of die bestaat (**niet in contract v1.28**; zie CHANGELOG 0.9.0). Zonder die functie toont de tab een uitleg en blijven lokaal laden en slepen werken. Het Freesound-token blijft in het invoerveld; het staat nooit in state, opslag of rapport.
+- **Importers:** WAV (`smpl`: root en lus), FLAC/OGG/MP3 via `decodeAudioData` (MP3 met lus: waarschuwing), SFZ-subset (`region`, `sample`, `default_path`, `lokey`/`hikey`/`key`, `lovel`/`hivel`, `pitch_keycenter`, `tune`, `transpose`, `loop_mode`, `loop_start`/`loop_end`, `group`/`off_by`, `seq_length`/`seq_position`, `volume`, `pan`; `<global>`/`<master>`/`<group>`-overerving, `#define`; regio's met `sw_*` of `trigger=release` worden overgeslagen) en Decent Sampler (groepsenvelope, `loNote`/`hiNote`/`rootNote`, `loVel`/`hiVel`, `tuning`, `loop*`, `seqMode`). Alles wat niet in de lijst staat, komt met aantallen in het rapport als genegeerd. Bestandsinhoud is data: er wordt niets uitgevoerd.
+- **Abbildung:** enkelvoudige toetsen worden drum-pads (hoogstens 16, per toets lagen op velocity; `seq_*` = `cycle`, overlap = `random`), bereiken één keygroep-pad (hoogstens 16 zones; daarboven eerst één dynamiek per bereik). `off_by` wordt een gedeelde mutegroep. Wat niet past (pads, lagen, zones, 64 MiB) staat in het rapport.
+- **`credits`** in `getState()` (alleen als er is) is **afgeleid** van `samples[].license` (`source`, `license`, `author`, `attribution`, `samples` = aantal) en volgt dus de inhoud; `setState` negeert een meegegeven `credits`. Oude states en `setState(getState())` blijven exact.
+- Alleen lokaal en via een klik; getest met nagebootst netwerk (route-onderschepping) en synthetische WAV/FLAC/OGG/MP3, SFZ- en dspreset-fixtures.
 
 ## Ingebouwde demo-samples (geen audio in de state)
 

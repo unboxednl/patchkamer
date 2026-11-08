@@ -259,6 +259,35 @@ PK.Host.stems=function(inst,action,opts){
   }
 };
 
+// ---------- bestanden van internet voor een apparaat: host.fetchFile(inst, url, opts) (nog niet in het contract; een apparaat controleert eerst of de functie bestaat) ----------
+// Een apparaat mag geen netwerk gebruiken (contract §15). Deze aanroep haalt één https-bestand op, alleen als het apparaat het na een klik van de gebruiker vraagt: zonder inloggegevens,
+// zonder referrer, zonder adressen op het eigen netwerk, met een grens aan de grootte en annuleren via een AbortSignal. opts: { as: 'arraybuffer' | 'text' | 'json', maxBytes, signal, onProgress(ontvangen, totaal) }.
+// Fouten hebben een `code`: url, aborted, network (geen verbinding, of de server staat de aanroep vanuit de browser niet toe), http (met status), size, response.
+PK.Host.fetchFile=async function(inst,url,opts){
+  const fail=(code,extra)=>Object.assign(new Error(code),{code},extra||{});
+  if(!inst||!inst._id) throw fail('url');
+  opts=opts&&typeof opts==='object'?opts:{};
+  let u; try{ u=new URL(String(url)); }catch(e){ throw fail('url'); }
+  const h=u.hostname.toLowerCase();
+  if(u.protocol!=='https:'||u.username||u.password||h==='localhost'||h.endsWith('.localhost')||h.endsWith('.local')||/^\d+\.\d+\.\d+\.\d+$/.test(h)||h.indexOf(':')>=0||h.charAt(0)==='[') throw fail('url');
+  const as=opts.as==='json'||opts.as==='text'?opts.as:'arraybuffer', max=numOr(opts.maxBytes,1,250*MB,50*MB), sig=typeof AbortSignal!=='undefined'&&opts.signal instanceof AbortSignal?opts.signal:undefined;
+  if(sig&&sig.aborted) throw fail('aborted');
+  let res; try{ res=await fetch(u.href,{credentials:'omit',referrerPolicy:'no-referrer',redirect:'follow',signal:sig}); }catch(e){ throw fail(sig&&sig.aborted?'aborted':'network'); }
+  if(!res.ok) throw fail('http',{status:res.status});
+  const total=+res.headers.get('content-length')||0; if(total>max) throw fail('size',{max});
+  const chunks=[]; let got=0;
+  try{
+    if(res.body&&res.body.getReader){ const rd=res.body.getReader();
+      for(;;){ const r=await rd.read(); if(r.done) break; got+=r.value.length; if(got>max){ try{ rd.cancel(); }catch(e){} throw fail('size',{max}); } chunks.push(r.value); if(typeof opts.onProgress==='function'){ try{ opts.onProgress(got,total); }catch(e){} } } }
+    else { const b=new Uint8Array(await res.arrayBuffer()); if(b.length>max) throw fail('size',{max}); chunks.push(b); got=b.length; }
+  }catch(e){ if(e&&e.code) throw e; throw fail(sig&&sig.aborted?'aborted':'network'); }
+  const all=new Uint8Array(got); let o=0; for(const c of chunks){ all.set(c,o); o+=c.length; }
+  if(as==='arraybuffer') return all.buffer;
+  const text=new TextDecoder('utf-8').decode(all);
+  if(as==='text') return text;
+  try{ return JSON.parse(text); }catch(e){ throw fail('response'); }
+};
+
 // ---------- instellingen (Instellingen, onder de AI-assistent) ----------
 function mkEl(tag,txt,cls,parent){ const e=document.createElement(tag); if(txt!=null) e.textContent=txt; if(cls) e.className=cls; if(parent) parent.appendChild(e); return e; }
 function buildSettings(){ const box=PK.$('stemsSet'); if(!box||box.dataset.built) return; box.dataset.built='1';

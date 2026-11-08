@@ -102,6 +102,7 @@ Samplers have **tunes**: a tune is the complete setting of one sampler. Load a p
 - **Tab Layers:** four layers per pad. Choose the **Sample** (the built-in demo samples start with a dot) or **Load file…** (WAV, FLAC, OGG or MP3; several files fill the next pads). Per layer: **Semitones**, **Fine**, **Level**, **Pan**, **Offset** (negative delays the layer by that many milliseconds, positive starts that far into the sample), **Root note**, **Velocity from / to** (1 to 127), **Start** and **End** (as a part of the sample), **Gain** and a **Loop** with start and end (the loop crossfade is not active yet). A loop only works when One-shot is off. A WAV file with a `smpl` block gives its root note and first loop automatically.
 - **Tab Zones:** for a keygroup pad. A zone is a sample with a **Root note**, a key range (**Key from / to**), a velocity range, a **Tuning** and an optional loop; up to 16 zones. Without zones, the pad plays its layers chromatically around the root note of each layer.
 - **Tab Edit:** the waveform editor, see below.
+- **Tab Banks:** load a whole bank of sounds, see below.
 - **Tab Program:** **Master volume** (the stereo mix only), **First pad (MIDI)** (the note of bank A pad 1; banks B, C and D continue after 16 notes each), **Pad velocity**, **Restore demo kit**, **Empty program** and the sample memory in use.
 
 **The waveform editor (tab Edit).**
@@ -153,6 +154,17 @@ At the top, choose which layer or zone you edit. Everything you do works on a co
 4. For a keyboard instrument: choose a pad, set **Type** to **Keygroup**, load a sample, set its **Root note** and turn on the **Loop** if it is a looped tone.
 
 **Tunes.** Pack **Pad Sampler Demos**: 15 tunes in two folders (**Kits**: Demo Kit, Tight Kit, Soft Kit, Lo-fi Kit, Velocity Kick, Round Robin Kit, Random Toms, Eight Outputs, Mute Group Hats; **Keygroups**: Saw Keys, Sine Sub, Square Lead, Pluck Keys, Split Keys, Soft Pad), file [`pad-sampler-demos.patchkamer-tunes.json`](../../tunes/pad-sampler-demos.patchkamer-tunes.json). They use only the built-in synthesised samples, so they are small and sound at once. A tune replaces the whole program, including your banks.
+
+**Banks and catalogue.** The **Banks** tab loads sounds into the **Target bank** (with **Empty the bank first** you replace the bank; without it the free pads are filled). Loading a bank is one step that you undo with **Undo** (Edit tab).
+
+![The Banks tab of Pad Sampler](../images/en/samplers/pad-sampler-banks.png)
+
+- **Catalogue:** seven free banks (VCSL conga, darbuka and cowbells, a VCSL glockenspiel as a keygroup, a cut-down jazz drum kit, an SFZ program and a classic drum machine). Only banks whose licence has been read; every file comes from a pinned version of the source. Every bank always shows its **licence**, **author**, **credit**, size and source. **Green** is free to use; **yellow** shows a warning first and you must accept the risk before Load works. Nothing goes over the network until you press **Load** yourself.
+- **Local:** **Choose files…** or **Choose folder…** (WAV, FLAC, OGG, MP3, or an SFZ or Decent Sampler program with its samples). You enter your own **Author**, **Licence** and **Credit** at the top; they are stored with the samples.
+- **Web address:** an https address of an audio file, a `.sfz` or a `.dspreset`. The server must allow access from the browser. **Freesound:** enter your own token (it stays in the window and never goes into the song), search, and load the preview of a CC0 or CC-BY sound into the selected layer.
+- **Importers:** WAV with root and loop from the `smpl` chunk; FLAC, OGG and MP3 through the browser (MP3 is not accurate for loops: you get a warning); an SFZ subset (`region`, `sample`, `lokey`/`hikey`/`key`, `lovel`/`hivel`, `pitch_keycenter`, `tune`, `transpose`, `loop_mode`, `loop_start`/`loop_end`, `group`/`off_by`, `seq_length`/`seq_position`, `volume`, `pan`) and Decent Sampler (`.dspreset`). The **Import report** says what was imported, what was ignored (with counts) and what did not fit (16 pads, four layers, 16 zones, 64 MiB). NKI, EXS, Battery and Ableton are not read.
+- **Credits** at the bottom of the tab are the licences of the samples that are actually in the program; they are also in the state (`credits`) and so travel with the song.
+- This Patchkamer fetches files from the internet for a device through the host (`host.fetchFile`). If that is missing you see an explanation: download the files through **Open source** and choose them under **Local**.
 
 **Tips and limits.**
 

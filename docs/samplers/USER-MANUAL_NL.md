@@ -134,6 +134,7 @@ Kies bovenaan welke laag of zone je bewerkt. Alles wat je doet werkt op een kopi
 - **Tab Lagen:** vier lagen per pad. Kies het **Sample** (de ingebouwde demo-samples beginnen met een punt) of **Bestand laden…** (WAV, FLAC, OGG of MP3; meerdere bestanden vullen de volgende pads). Per laag: **Halve tonen**, **Fijn**, **Niveau**, **Panorama**, **Offset** (negatief vertraagt de laag zoveel milliseconden, positief begint zo ver in het sample), **Grondtoon**, **Velocity vanaf / tot** (1 tot 127), **Start** en **Einde** (als deel van het sample), **Gain** en een **Lus** met start en einde (de crossfade van de lus werkt nog niet). Een lus werkt alleen als One-shot uit staat. Een WAV-bestand met een `smpl`-blok geeft zijn grondtoon en eerste lus vanzelf.
 - **Tab Zones:** voor een keygroup-pad. Een zone is een sample met een **Grondtoon**, een toetsbereik (**Toets vanaf / tot**), een velocity-bereik, een **Stemming** en een optionele lus; tot 16 zones. Zonder zones speelt het pad zijn lagen chromatisch rond de grondtoon van elke laag.
 - **Tab Bewerken:** de golfvormeditor, zie hieronder.
+- **Tab Banken:** laad een hele bank geluiden, zie hieronder.
 - **Tab Programma:** **Mastervolume** (alleen de stereomix), **Eerste pad (MIDI)** (de noot van bank A pad 1; bank B, C en D volgen na telkens 16 noten), **Aanslag van pads**, **Demo-kit herstellen**, **Leeg programma** en het gebruikte samplegeheugen.
 
 **Poorten.**
@@ -153,6 +154,17 @@ Kies bovenaan welke laag of zone je bewerkt. Alles wat je doet werkt op een kopi
 4. Voor een toetsenbordinstrument: kies een pad, zet **Soort** op **Keygroup**, laad een sample, stel zijn **Grondtoon** in en zet de **Lus** aan als het een lustoon is.
 
 **Tunes.** Pack **Pad Sampler Demos**: 15 tunes in twee mappen (**Kits**: Demo Kit, Tight Kit, Soft Kit, Lo-fi Kit, Velocity Kick, Round Robin Kit, Random Toms, Eight Outputs, Mute Group Hats; **Keygroups**: Saw Keys, Sine Sub, Square Lead, Pluck Keys, Split Keys, Soft Pad), bestand [`pad-sampler-demos.patchkamer-tunes.json`](../../tunes/pad-sampler-demos.patchkamer-tunes.json). Ze gebruiken alleen de ingebouwde, gesynthetiseerde samples, zijn dus klein en klinken meteen. Een tune vervangt het hele programma, ook je banken.
+
+**Banken en catalogus.** De tab **Banken** laadt geluiden in de **Doelbank** (met **Bank eerst leegmaken** vervang je de bank; zonder vul je de vrije pads). Een bank laden is één stap die je met **Ongedaan** (tab Bewerken) terugdraait.
+
+![De tab Banken van Pad Sampler](../images/nl/samplers/pad-sampler-banks.png)
+
+- **Catalogus:** zeven gratis banken (VCSL conga, darbuka en koebellen, een VCSL-glockenspiel als keygroup, een uitgekleed jazzdrumstel, een SFZ-programma en een klassieke ritmemachine). Alleen banken waarvan de licentie is gelezen; elk bestand komt van een vastgepinde versie van de bron. Bij elke bank staan altijd de **licentie**, de **auteur**, de **vermelding**, de grootte en de bron. **Groen** is vrij te gebruiken; **geel** toont eerst een waarschuwing en je moet het risico bevestigen voor Laden werkt. Er gaat niets over het net voor je zelf op **Laden** drukt.
+- **Lokaal:** **Bestanden kiezen…** of **Map kiezen…** (WAV, FLAC, OGG, MP3, of een SFZ- of Decent Sampler-programma met zijn samples). Eigen **Auteur**, **Licentie** en **Vermelding** vul je boven in; ze worden bij de samples bewaard.
+- **Webadres:** een https-adres van een audiobestand, een `.sfz` of een `.dspreset`. De server moet toegang vanuit de browser toestaan. **Freesound:** vul je eigen token in (dat blijft alleen in het venster en gaat nooit in de song), zoek, en laad het voorbeeld van een CC0- of CC-BY-geluid in de gekozen laag.
+- **Importers:** WAV met root en lus uit het `smpl`-blok; FLAC, OGG en MP3 via de browser (MP3 is niet nauwkeurig voor lussen: je krijgt een waarschuwing); een SFZ-subset (`region`, `sample`, `lokey`/`hikey`/`key`, `lovel`/`hivel`, `pitch_keycenter`, `tune`, `transpose`, `loop_mode`, `loop_start`/`loop_end`, `group`/`off_by`, `seq_length`/`seq_position`, `volume`, `pan`) en Decent Sampler (`.dspreset`). Het **Importrapport** zegt wat is overgenomen, wat is genegeerd (met aantallen) en wat niet past (16 pads, vier lagen, 16 zones, 64 MiB). NKI, EXS, Battery en Ableton worden niet gelezen.
+- **Vermeldingen** onder in de tab zijn de licenties van de samples die er echt in zitten; ze staan ook in de state (`credits`) en gaan dus mee in de song.
+- Deze Patchkamer haalt bestanden van internet voor een apparaat via de host (`host.fetchFile`). Ontbreekt dat, dan zie je een uitleg: download dan de bestanden via **Bron openen** en kies ze onder **Lokaal**.
 
 **Tips en grenzen.**
 

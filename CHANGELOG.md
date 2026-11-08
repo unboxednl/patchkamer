@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.9.0 (2026-11-08)
+
+### Added
+- **Pad Sampler 1.3.0: banks and catalogue** (step 4 of the device). New **Banks** tab: a catalogue of seven free banks (only sources whose licence has been read, every file pinned to a version; licence, author and required credit always visible), local loading (files or folder), a web address and Freesound with the user's own token. Importers for WAV (root and loop from the `smpl` chunk), FLAC, OGG, MP3 (with a loop warning), an SFZ subset and Decent Sampler, with an import report. Loading a bank is one undoable step. The state gets an optional `credits` (derived from the samples it contains); old states load unchanged.
+- **Host: `host.fetchFile(inst, url, opts)`** in `js/stems.js`: fetches one https file for a device, only when a device asks after a click, without credentials, without addresses on the local network, with a size limit and cancelling through an `AbortSignal`. **Note:** this is not in the contract yet (v1.28, §15 forbids network in a device); a device checks that the function exists first. A contract proposal (v1.29) follows if Freek wants it.
 ## 0.8.0 (2026-11-08)
 
 ### New

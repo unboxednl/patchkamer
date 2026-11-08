@@ -1,4 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.3.0 — Pad Sampler, stap 4 (banken en catalogus), Patchkamer contract v1.27 (gevalideerd tegen v1.28). Nieuw: tab Banken met een catalogus van gratis banken (alleen bronnen waarvan de licentie is gelezen; elk bestand vastgepind op een
+//          versie van de bron; licentie, auteur en vereiste vermelding altijd zichtbaar), lokaal laden (bestanden of map), een webadres en Freesound met het eigen token van de gebruiker. Importers voor WAV (root en lus uit het
+//          smpl-blok), FLAC, OGG en MP3 (met waarschuwing voor lussen), een SFZ-subset en Decent Sampler (.dspreset), met een importrapport van wat is overgenomen en wat genegeerd. Een bank laden is een stap die ongedaan te maken is.
+//          Netwerk doet het apparaat niet zelf (contract §15): het vraagt het aan de host (host.fetchFile, alleen na een klik). State: optioneel `credits` (afgeleid van de licentiegegevens van de samples die er echt in zitten);
+//          oude states laden ongewijzigd en setState(getState()) blijft exact.
 // 1.2.0 — Pad Sampler, stap 3 (chop, Flatten/Resample en Process), Patchkamer contract v1.27. Nieuw in de tab Bewerken: de soorten Chop (slices maken met gelijke delen, op drempel, handmatig of op BPM en maten;
 //          markers op de golfvorm slepen met muis en aanraking, beluisteren per slice, slices naar pads zonder kopieën van het sample), Process (filter, drive, bitcrusher, EQ, compressor en
 //          tempo-afstemming als echte bewerking van het sample, met beluisteren) en Flatten (een pad of de selectie met OfflineAudioContext naar een nieuw sample). Programma-stappen
@@ -17,7 +22,7 @@
 const TXT = {
   nl: {
     bank: 'Bank', bankName: 'Banknaam', stopAll: 'Stop alles', octDown: 'Octaaf lager', octUp: 'Octaaf hoger',
-    tabPad: 'Pad', tabLayers: 'Lagen', tabZones: 'Zones', tabEdit: 'Bewerken', tabProgram: 'Programma',
+    tabPad: 'Pad', tabLayers: 'Lagen', tabZones: 'Zones', tabEdit: 'Bewerken', tabProgram: 'Programma', tabBanks: 'Banken',
     padName: 'Naam van het pad', clearPad: 'Wis pad', mode: 'Soort', modeDrum: 'Drum (pad)', modeKey: 'Keygroup (toetsen)', play: 'Spelen',
     pVelocity: 'Op velocity', pCycle: 'Om de beurt', pRandom: 'Willekeurig', pAll: 'Alle lagen', output: 'Uitgang', outMix: 'Stereomix', outN: 'Uitgang',
     oneShot: 'One-shot', reverse: 'Omgekeerd', envelope: 'Envelope', envShape: 'Vorm', filter: 'Filter', filterType: 'Soort filter', off: 'Uit',
@@ -73,6 +78,35 @@ const TXT = {
       flGo: 'Flatten', flPrev: 'Beluisteren', flBusy: 'Bezig met renderen…', flNoSound: 'Dit pad heeft bij deze noot en velocity geen geluid.', flNoRoom: 'Alle vier de lagen van dit pad zijn bezet; kies een andere bestemming.', noOffline: 'Offline renderen is niet beschikbaar in deze omgeving.',
       flChanged: 'Het sample is veranderd tijdens het renderen; er is niets toegepast.', flName: 'Flatten {0}', flSelName: 'Selectie {0}', flDone: 'Flatten: {0} s, {1} Hz.', flOverlong: 'Het resultaat zou langer zijn dan 120 seconden.',
     },
+    bk: {
+      intro: 'Laad een bank met geluiden: uit de catalogus (gratis banken, vastgepind op een versie), van bestanden of een map op je computer, of van een webadres. Licentie en vermelding staan altijd bij de bank; wat je laadt komt onder Vermeldingen en gaat mee in de song. Niets wordt van internet gehaald voordat je zelf op Laden drukt.',
+      noNet: 'Deze Patchkamer kan geen bestanden van internet halen voor een apparaat. Download de bestanden van de bron (knop Bron openen) en kies ze onder Lokaal.',
+      target: 'Doelbank', clearFirst: 'Bank eerst leegmaken', licHeader: 'Gegevens voor je eigen bestanden', licHelp: 'Optioneel: wordt bij de samples bewaard als herkomst en in Vermeldingen getoond. Bij de catalogus staan ze al.', lfAuthor: 'Auteur', lfLicense: 'Licentie (bijvoorbeeld CC-BY-4.0)', lfAttr: 'Vermelding',
+      catalog: 'Catalogus', catHelp: 'Alleen banken waarvan de licentie is gelezen. Elk bestand komt van een vastgepinde versie van de bron. Groen: vrij te gebruiken. Geel: lees de waarschuwing.',
+      license: 'Licentie', author: 'Auteur', credit: 'Vermelding', creditReq: 'Vermelding verplicht', creditNo: 'Geen vermelding verplicht (wel netjes)', size: 'Grootte', format: 'Formaat', files: 'bestanden', source: 'Bron', pinned: 'Vastgepind op', checked: 'Gecontroleerd',
+      openSrc: 'Bron openen', load: 'Laden', cancel: 'Annuleren', accept: 'Ik begrijp dit en accepteer het risico', green: 'Vrij', yellow: 'Let op', loadBank: 'Laad {0}', openOf: 'Bron openen: {0}',
+      local: 'Lokaal', localHelp: 'Kies audiobestanden (WAV, FLAC, OGG, MP3), een SFZ- of Decent Sampler-programma met zijn samples, of een hele map. Een programma met samples gaat in de doelbank; losse audio gaat op het gekozen pad.', chooseFiles: 'Bestanden kiezen…', chooseDir: 'Map kiezen…',
+      urlTitle: 'Webadres', urlHelp: 'Een https-adres van een audiobestand, een .sfz of een .dspreset (de samples worden op dezelfde plek gezocht). De server moet toegang vanuit de browser toestaan (CORS).', urlLabel: 'Webadres (https)', urlGo: 'Laden van webadres', badUrl: 'Geen geldig https-adres.',
+      fsTitle: 'Freesound', fsHelp: 'Zoek geluiden met je eigen Freesound-token (aan te vragen op freesound.org). Je token blijft alleen in dit venster en wordt nooit in de song bewaard. Alleen CC0 en CC-BY worden getoond; van een geluid wordt het voorbeeld (lossy ogg of mp3) geladen, niet het origineel.', fsToken: 'Eigen token', fsQuery: 'Zoekterm', fsGo: 'Zoeken', fsNeed: 'Vul een zoekterm en je token in.', fsAuth: 'Freesound weigerde het token.', fsNone: 'Geen geschikte resultaten.', fsLoad: 'Laden in gekozen laag', fsOf: '{0} door {1}, {2}, {3} s',
+      progress: 'Voortgang', jobLine: '{0}: {1} van {2}', done: 'Klaar.',
+      reportTitle: 'Importrapport', rOk: 'Overgenomen', rIgn: 'Genegeerd', rWarn: 'Let op', rNone: 'Nog niets geladen.', rEmpty: '–',
+      creditsTitle: 'Vermeldingen', creditsHelp: 'De licenties en vermeldingen van de samples in dit programma. Ze gaan mee in de song.', creditsNone: 'Geen vermeldingen: er zijn geen samples met een licentie geladen.', copy: 'Kopieer als tekst', copied: 'Gekopieerd.', samplesN: '{0} sample(s)',
+      undoLabel: 'Bank laden: {0}', busy: 'Er loopt al een import.', errNetwork: 'Geen verbinding, of de server staat toegang vanuit de browser niet toe.', errHttp: 'De server antwoordde met fout {0}.', errSize: 'Het bestand is te groot.', errAudio: 'Dit is geen audio, SFZ of Decent Sampler-bestand.',
+      r: {
+        regions: '{0} regio(\'s) gevonden, {1} overgenomen.', pads: '{0} drum-pad(s) en {1} zone(s) in een keygroup-pad.', layers: '{0} laag/lagen; {1} pad(s) met velocity-lagen, {2} met afwisselende opnamen (om de beurt), {3} met willekeurige keuze.',
+        roots: 'Grondtoon uit het bestand overgenomen bij {0} regio(\'s); stemming bij {1}.', loops: '{0} lus(sen) overgenomen.', panvol: 'Volume overgenomen bij {0} laag/lagen, balans bij {1}.', mute: '{0} pad(s) in een mutegroep (uit group en off_by).', samples: '{0} sample(s) geladen ({1} MiB PCM16).',
+      },
+      i: { item: '{0}: in {1} regio(\'s)', more: '… en nog {0} andere opcodes', header: 'Onderdeel {0} ({1}×)' },
+      s: { keyswitch: '{0} regio(\'s) met een toetsschakelaar (sw_*) overgeslagen', release: '{0} regio(\'s) die bij het loslaten klinken (release) overgeslagen', range: '{0} regio(\'s) met een ongeldig bereik overgeslagen', nosample: '{0} regio(\'s) zonder sample overgeslagen', pads: '{0} regio(\'s) pasten niet in 16 pads', layers: '{0} regio(\'s) pasten niet in vier lagen per pad', zones: '{0} zone(s) pasten niet in 16 zones', other: '{0} overgeslagen' },
+      w: {
+        thin: 'Er waren meer dan 16 zones: per toetsbereik is één dynamiek gebleven ({0} zone(s) minder).', mute: 'off_by is overgenomen als gedeelde mutegroep: groepen die elkaar afkappen delen één nummer, ook als het in het origineel maar één kant op ging.',
+        missing: '{0} bestand(en) niet gevonden of niet te laden: {1}', decode: '{0} bestand(en) niet te decoderen: {1}', notFit: '{0} sample(s) pasten niet in het samplegeheugen (maximaal {1} MiB) en zijn niet geladen.',
+        lost: '{0} pad(s) en {1} laag/lagen/zone(s) zijn niet gemaakt omdat hun samples ontbreken of er geen vrij pad was.', mp3Loop: 'MP3 is niet geschikt voor lussen: een mp3 heeft een beginvertraging en het lusgat is niet nauwkeurig tot op het sample ({0}×). Gebruik liever WAV of FLAC.',
+        loopFmt: 'Lusposities zijn alleen omgerekend voor WAV; bij {0} sample(s) in een ander formaat loopt de lus over het hele sample.', rootDef: 'Bij {0} zone(s) ontbrak een grondtoon; 60 (C4) is gebruikt.', aborted: 'Geannuleerd: er is niets veranderd.',
+        badXml: 'Dit is geen geldig Decent Sampler-bestand.', noRegions: 'Er is geen bruikbare regio in dit bestand.', presetBig: 'Het programmabestand is te groot (maximaal 5 MiB).', morePresets: '{0} ander(e) programma(\'s) in de keuze zijn niet geladen; kies ze één voor één.',
+        fsLossy: 'Een Freesound-voorbeeld is lossy gecodeerd (geen origineel).',
+      },
+    },
     k: {
       level: 'Mastervolume', baseNote: 'Eerste pad (MIDI)', padVel: 'Aanslag van pads', 'pad.tune': 'Toonhoogte', 'pad.fine': 'Fijn', 'pad.level': 'Niveau', 'pad.pan': 'Panorama', 'pad.poly': 'Polyfonie', 'pad.mute': 'Mutegroep', 'pad.baseNote': 'Noot bij tikken',
       'env.attack': 'Attack', 'env.decay': 'Decay', 'env.sustain': 'Sustain', 'env.release': 'Release',
@@ -84,7 +118,7 @@ const TXT = {
   },
   en: {
     bank: 'Bank', bankName: 'Bank name', stopAll: 'Stop all', octDown: 'Octave down', octUp: 'Octave up',
-    tabPad: 'Pad', tabLayers: 'Layers', tabZones: 'Zones', tabEdit: 'Edit', tabProgram: 'Program',
+    tabPad: 'Pad', tabLayers: 'Layers', tabZones: 'Zones', tabEdit: 'Edit', tabProgram: 'Program', tabBanks: 'Banks',
     padName: 'Pad name', clearPad: 'Clear pad', mode: 'Type', modeDrum: 'Drum (pad)', modeKey: 'Keygroup (keys)', play: 'Play',
     pVelocity: 'By velocity', pCycle: 'Cycle', pRandom: 'Random', pAll: 'All layers', output: 'Output', outMix: 'Stereo mix', outN: 'Output',
     oneShot: 'One-shot', reverse: 'Reverse', envelope: 'Envelope', envShape: 'Shape', filter: 'Filter', filterType: 'Filter type', off: 'Off',
@@ -139,6 +173,35 @@ const TXT = {
       flBank: 'Bank', flPadN: 'Pad', flWarn: 'Note: Pad Sampler has no insert effects yet. What you hear comes from the layers, the envelope, the filter, the tune and the level and pan of the pad. Reverb and delay of other devices are not baked in. You can save filter, drive, bitcrusher, EQ and compressor as a sample with Process.',
       flGo: 'Flatten', flPrev: 'Listen', flBusy: 'Rendering…', flNoSound: 'This pad makes no sound at this note and velocity.', flNoRoom: 'All four layers of this pad are in use; choose another destination.', noOffline: 'Offline rendering is not available in this environment.',
       flChanged: 'The sample changed while rendering; nothing was applied.', flName: 'Flatten {0}', flSelName: 'Selection {0}', flDone: 'Flatten: {0} s, {1} Hz.', flOverlong: 'The result would be longer than 120 seconds.',
+    },
+    bk: {
+      intro: 'Load a bank of sounds: from the catalogue (free banks, pinned to a version), from files or a folder on your computer, or from a web address. The licence and credit always show with the bank; what you load appears under Credits and travels with the song. Nothing is fetched from the internet until you press Load yourself.',
+      noNet: 'This Patchkamer cannot fetch files from the internet for a device. Download the files from the source (button Open source) and choose them under Local.',
+      target: 'Target bank', clearFirst: 'Empty the bank first', licHeader: 'Details for your own files', licHelp: 'Optional: stored with the samples as their origin and shown under Credits. Catalogue banks already have them.', lfAuthor: 'Author', lfLicense: 'Licence (for example CC-BY-4.0)', lfAttr: 'Credit',
+      catalog: 'Catalogue', catHelp: 'Only banks whose licence has been read. Every file comes from a pinned version of the source. Green: free to use. Yellow: read the warning.',
+      license: 'Licence', author: 'Author', credit: 'Credit', creditReq: 'Credit required', creditNo: 'No credit required (but polite)', size: 'Size', format: 'Format', files: 'files', source: 'Source', pinned: 'Pinned at', checked: 'Checked',
+      openSrc: 'Open source', load: 'Load', cancel: 'Cancel', accept: 'I understand this and accept the risk', green: 'Free', yellow: 'Caution', loadBank: 'Load {0}', openOf: 'Open source: {0}',
+      local: 'Local', localHelp: 'Choose audio files (WAV, FLAC, OGG, MP3), an SFZ or Decent Sampler program with its samples, or a whole folder. A program with samples goes into the target bank; plain audio goes on the selected pad.', chooseFiles: 'Choose files…', chooseDir: 'Choose folder…',
+      urlTitle: 'Web address', urlHelp: 'An https address of an audio file, a .sfz or a .dspreset (the samples are looked up in the same place). The server must allow access from the browser (CORS).', urlLabel: 'Web address (https)', urlGo: 'Load from web address', badUrl: 'Not a valid https address.',
+      fsTitle: 'Freesound', fsHelp: 'Search sounds with your own Freesound token (request one at freesound.org). Your token stays in this window only and is never saved in the song. Only CC0 and CC-BY results are shown; a sound loads its preview (lossy ogg or mp3), not the original.', fsToken: 'Your token', fsQuery: 'Search term', fsGo: 'Search', fsNeed: 'Enter a search term and your token.', fsAuth: 'Freesound rejected the token.', fsNone: 'No suitable results.', fsLoad: 'Load into selected layer', fsOf: '{0} by {1}, {2}, {3} s',
+      progress: 'Progress', jobLine: '{0}: {1} of {2}', done: 'Done.',
+      reportTitle: 'Import report', rOk: 'Imported', rIgn: 'Ignored', rWarn: 'Note', rNone: 'Nothing loaded yet.', rEmpty: '–',
+      creditsTitle: 'Credits', creditsHelp: 'The licences and credits of the samples in this program. They travel with the song.', creditsNone: 'No credits: no samples with a licence are loaded.', copy: 'Copy as text', copied: 'Copied.', samplesN: '{0} sample(s)',
+      undoLabel: 'Load bank: {0}', busy: 'An import is already running.', errNetwork: 'No connection, or the server does not allow access from the browser.', errHttp: 'The server answered with error {0}.', errSize: 'The file is too large.', errAudio: 'This is not an audio, SFZ or Decent Sampler file.',
+      r: {
+        regions: '{0} region(s) found, {1} imported.', pads: '{0} drum pad(s) and {1} zone(s) in a keygroup pad.', layers: '{0} layer(s); {1} pad(s) with velocity layers, {2} with alternating takes (cycle), {3} with random choice.',
+        roots: 'Root note taken from the file for {0} region(s); tuning for {1}.', loops: '{0} loop(s) imported.', panvol: 'Volume imported for {0} layer(s), pan for {1}.', mute: '{0} pad(s) in a mute group (from group and off_by).', samples: '{0} sample(s) loaded ({1} MiB PCM16).',
+      },
+      i: { item: '{0}: in {1} region(s)', more: '… and {0} more opcodes', header: 'Section {0} ({1}×)' },
+      s: { keyswitch: '{0} region(s) with a key switch (sw_*) skipped', release: '{0} release-triggered region(s) skipped', range: '{0} region(s) with an invalid range skipped', nosample: '{0} region(s) without a sample skipped', pads: '{0} region(s) did not fit in 16 pads', layers: '{0} region(s) did not fit in four layers per pad', zones: '{0} zone(s) did not fit in 16 zones', other: '{0} skipped' },
+      w: {
+        thin: 'There were more than 16 zones: one dynamic per key range was kept ({0} fewer zone(s)).', mute: 'off_by was imported as a shared mute group: groups that cut each other off share one number, even when the original only worked one way.',
+        missing: '{0} file(s) not found or not loadable: {1}', decode: '{0} file(s) could not be decoded: {1}', notFit: '{0} sample(s) did not fit in the sample memory (maximum {1} MiB) and were not loaded.',
+        lost: '{0} pad(s) and {1} layer(s)/zone(s) were not created because their samples are missing or there was no free pad.', mp3Loop: 'MP3 is not suited to loops: an mp3 has a start delay and the loop point is not sample accurate ({0}×). Prefer WAV or FLAC.',
+        loopFmt: 'Loop positions are only converted for WAV; for {0} sample(s) in another format the loop spans the whole sample.', rootDef: '{0} zone(s) had no root note; 60 (C4) was used.', aborted: 'Cancelled: nothing was changed.',
+        badXml: 'This is not a valid Decent Sampler file.', noRegions: 'There is no usable region in this file.', presetBig: 'The program file is too large (maximum 5 MiB).', morePresets: '{0} other program(s) in the selection were not loaded; choose them one at a time.',
+        fsLossy: 'A Freesound preview is lossy encoded (not the original).',
+      },
     },
     k: {
       level: 'Master volume', baseNote: 'First pad (MIDI)', padVel: 'Pad velocity', 'pad.tune': 'Pitch', 'pad.fine': 'Fine', 'pad.level': 'Level', 'pad.pan': 'Pan', 'pad.poly': 'Polyphony', 'pad.mute': 'Mute group', 'pad.baseNote': 'Note when tapped',
@@ -206,6 +269,31 @@ canvas.wave{display:block;width:100%;height:110px;background:var(--well);border:
 .edit .chips{gap:4px}
 .edit .warn{color:var(--muted);line-height:1.4}
 .edit select{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);border-radius:6px;padding:6px;min-height:36px;max-width:100%}
+.banks{gap:10px}
+.banks *{min-width:0;overflow-wrap:anywhere}
+.banks .btn,.banks select,.banks .txt,.banks input[type=url],.banks input[type=password],.banks input[type=search]{min-height:46px;box-sizing:border-box}
+.banks .btn.lnk{display:inline-flex;align-items:center;text-decoration:none}
+.banks .btn:disabled{opacity:.4;cursor:default}
+.banks label.f{display:flex;align-items:center;gap:8px;min-height:46px;color:var(--muted)}
+.banks input[type=checkbox]{width:24px;height:24px;flex:none}
+.banks select{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);border-radius:6px;padding:6px}
+.banks .bgrp{display:flex;flex-direction:column;gap:6px;padding:8px;border:1px solid var(--line);border-radius:8px}
+.banks .bgrp h4{margin:0}
+.banks .bgrp .txt{flex:none;width:100%}
+.banks .bcard{display:flex;flex-direction:column;gap:6px;padding:8px 10px;border:1px solid var(--line);border-left-width:6px;border-radius:8px}
+.banks .bcard.green{border-left-color:#2e9e5b}.banks .bcard.yellow{border-left-color:#d9a400}
+.banks .bhead{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between}
+.banks .chip{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
+.banks .chip.green{border-color:#2e9e5b}.banks .chip.yellow{border-color:#d9a400}
+.banks .meta{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:2px 10px;margin:0}
+.banks .meta dt{color:var(--muted)}.banks .meta dd{margin:0}
+@container (max-width:520px){.banks .meta{grid-template-columns:minmax(0,1fr)}.banks .meta dd{margin-bottom:4px}}
+.banks .warnbox{padding:8px;border:1px solid #d9a400;border-radius:8px;line-height:1.4;margin:0}
+.banks .report ul,.banks .credits,.banks .fslist{margin:4px 0;padding-left:18px}
+.banks .fslist li{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:4px 0}
+.banks .hide,.banks [hidden]{display:none!important}
+.banks progress{width:100%;height:14px}
+.banks h5{margin:8px 0 0;font-size:12px}
 `;
 // ---------- constanten en hulpfuncties ----------
 const NBANK = 4, NPAD = 16, NLAYER = 4, MAXZONE = 16;
@@ -629,10 +717,228 @@ const CEILING = (() => { const n = 2049, c = new Float32Array(n); for (let i = 0
 const AUDIO_OUTS = Array.from({ length: 16 }, (_, i) => ({ id: 'out' + (i + 1), name: 'Uitgang ' + (i + 1) }));
 const EN_PORTS = { mix: 'Stereo mix', notes: 'Notes / pad triggers' }; AUDIO_OUTS.forEach((o, i) => { EN_PORTS[o.id] = 'Output ' + (i + 1); });
 
+const CATALOG = [
+  {"id":"vcsl-conga","name":{"nl":"VCSL conga, quinto en tumba","en":"VCSL conga, quinto and tumba"},"desc":{"nl":"Zes pads met open slagen en slaps in 2 tot 4 velocity-lagen.","en":"Six pads with open tones and slaps in 2 to 4 velocity layers."},"status":"green","kind":"pads","license":{"spdx":"CC0-1.0","text":"CC0 1.0 Universal (publiek domein)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE op de vastgepinde commit gelezen (CC0 1.0 Universal) en README: \"no royalties, no credit, no special terms\"","en":"LICENSE read at the pinned commit (CC0 1.0 Universal) and README: \"no royalties, no credit, no special terms\""}},"author":"Versilian Studios LLC","credit":false,"attribution":"Versilian Community Sample Library (VCSL), Versilian Studios LLC, CC0 1.0","src":{"name":"Versilian Community Sample Library","home":"https://github.com/sgossner/VCSL","pin":"c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e","base":"https://cdn.jsdelivr.net/gh/sgossner/VCSL@c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e/"},"format":"wav","pads":[{"name":"Conga open","layers":[{"f":"Membranophones/Struck Membranophones/Conga/Conga_HitN_v1_rr1_Sum.wav","lo":1,"hi":42},{"f":"Membranophones/Struck Membranophones/Conga/Conga_HitN_v2_rr1_Sum.wav","lo":43,"hi":85},{"f":"Membranophones/Struck Membranophones/Conga/Conga_HitN_v3_rr1_Sum.wav","lo":86,"hi":127}]},{"name":"Conga slap","layers":[{"f":"Membranophones/Struck Membranophones/Conga/Conga_HitFM_v1_rr1_Sum.wav","lo":1,"hi":64},{"f":"Membranophones/Struck Membranophones/Conga/Conga_HitFM_v2_rr1_Sum.wav","lo":65,"hi":127}]},{"name":"Quinto open","layers":[{"f":"Membranophones/Struck Membranophones/Conga/Quinto_HitN_v1_rr1_Sum.wav","lo":1,"hi":42},{"f":"Membranophones/Struck Membranophones/Conga/Quinto_HitN_v2_rr1_Sum.wav","lo":43,"hi":85},{"f":"Membranophones/Struck Membranophones/Conga/Quinto_HitN_v3_rr1_Sum.wav","lo":86,"hi":127}]},{"name":"Quinto slap","layers":[{"f":"Membranophones/Struck Membranophones/Conga/Quinto_HitFM1_v1_rr1_Sum.wav","lo":1,"hi":64},{"f":"Membranophones/Struck Membranophones/Conga/Quinto_HitFM1_v2_rr1_Sum.wav","lo":65,"hi":127}]},{"name":"Tumba open","layers":[{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitN_v1_rr1_Sum.wav","lo":1,"hi":32},{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitN_v2_rr1_Sum.wav","lo":33,"hi":64},{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitN_v3_rr1_Sum.wav","lo":65,"hi":95},{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitN_v4_rr1_Sum.wav","lo":96,"hi":127}]},{"name":"Tumba slap","layers":[{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitFM_v2_rr1_Sum.wav","lo":1,"hi":42},{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitFM_v3_rr1_Sum.wav","lo":43,"hi":85},{"f":"Membranophones/Struck Membranophones/Conga/Tumba_HitFM_v4_rr1_Sum.wav","lo":86,"hi":127}]}],"bytes":2484680,"n":17},
+  {"id":"vcsl-darbuka","name":{"nl":"VCSL darbuka","en":"VCSL darbuka"},"desc":{"nl":"Vijf darbuka-slagen, elk met twee dynamieken en twee afwisselende opnamen (om de beurt).","en":"Five darbuka hits, each with two dynamics and two alternating takes (cycle)."},"status":"green","kind":"pads","license":{"spdx":"CC0-1.0","text":"CC0 1.0 Universal (publiek domein)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE op de vastgepinde commit gelezen (CC0 1.0 Universal) en README: \"no royalties, no credit, no special terms\"","en":"LICENSE read at the pinned commit (CC0 1.0 Universal) and README: \"no royalties, no credit, no special terms\""}},"author":"Versilian Studios LLC","credit":false,"attribution":"Versilian Community Sample Library (VCSL), Versilian Studios LLC, CC0 1.0","src":{"name":"Versilian Community Sample Library","home":"https://github.com/sgossner/VCSL","pin":"c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e","base":"https://cdn.jsdelivr.net/gh/sgossner/VCSL@c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e/"},"format":"wav","pads":[{"name":"Darbuka 1","play":"cycle","layers":[{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_1_hit_vl1_rr1.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_1_hit_vl1_rr2.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_1_hit_vl2_rr1.wav","lo":64,"hi":127},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_1_hit_vl2_rr2.wav","lo":64,"hi":127}]},{"name":"Darbuka 2","play":"cycle","layers":[{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_2_hit_vl1_rr1.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_2_hit_vl1_rr2.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_2_hit_vl2_rr1.wav","lo":64,"hi":127},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_2_hit_vl2_rr2.wav","lo":64,"hi":127}]},{"name":"Darbuka 3","play":"cycle","layers":[{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_3_hit_vl1_rr1.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_3_hit_vl1_rr2.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_3_hit_vl2_rr1.wav","lo":64,"hi":127},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_3_hit_vl2_rr2.wav","lo":64,"hi":127}]},{"name":"Darbuka 4","play":"cycle","layers":[{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_4_hit_vl1_rr1.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_4_hit_vl1_rr2.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_4_hit_vl2_rr1.wav","lo":64,"hi":127},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_4_hit_vl2_rr2.wav","lo":64,"hi":127}]},{"name":"Darbuka 5","play":"cycle","layers":[{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_5_hit_vl1_rr1.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_5_hit_vl1_rr2.wav","lo":1,"hi":63},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_5_hit_vl2_rr1.wav","lo":64,"hi":127},{"f":"Membranophones/Struck Membranophones/Darbuka/Darbuka_5_hit_vl2_rr2.wav","lo":64,"hi":127}]}],"bytes":2512276,"n":20},
+  {"id":"vcsl-cowbells","name":{"nl":"VCSL koebellen","en":"VCSL cowbells"},"desc":{"nl":"Twee koebellen in vijf spelwijzen (open, gedempt, normaal, dubbel) met twee of drie dynamieken.","en":"Two cowbells in several articulations (hit, muted, normal, double) with two or three dynamics."},"status":"green","kind":"pads","license":{"spdx":"CC0-1.0","text":"CC0 1.0 Universal (publiek domein)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE op de vastgepinde commit gelezen (CC0 1.0 Universal) en README: \"no royalties, no credit, no special terms\"","en":"LICENSE read at the pinned commit (CC0 1.0 Universal) and README: \"no royalties, no credit, no special terms\""}},"author":"Versilian Studios LLC","credit":false,"attribution":"Versilian Community Sample Library (VCSL), Versilian Studios LLC, CC0 1.0","src":{"name":"Versilian Community Sample Library","home":"https://github.com/sgossner/VCSL","pin":"c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e","base":"https://cdn.jsdelivr.net/gh/sgossner/VCSL@c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e/"},"format":"wav","pads":[{"name":"Cowbell 1 hit","layers":[{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Hit_v2_rr1_Mid.wav","lo":1,"hi":42},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Hit_v3_rr1_Mid.wav","lo":43,"hi":85},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Hit_v4_rr1_Mid.wav","lo":86,"hi":127}]},{"name":"Cowbell 1 muted","layers":[{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Muted_v2_rr1_Mid.wav","lo":1,"hi":64},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Muted_v3_rr1_Mid.wav","lo":65,"hi":127}]},{"name":"Cowbell 1 normal","layers":[{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Normal_v2_rr1_Mid.wav","lo":1,"hi":64},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell1_Normal_v3_rr1_Mid.wav","lo":65,"hi":127}]},{"name":"Cowbell 2 double","layers":[{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell2_Double_v2_rr1_Mid.wav","lo":1,"hi":64},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell2_Double_v3_rr1_Mid.wav","lo":65,"hi":127}]},{"name":"Cowbell 2 muted","layers":[{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell2_Muted_v2_rr1_Mid.wav","lo":1,"hi":64},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell2_Muted_v3_rr1_Mid.wav","lo":65,"hi":127}]},{"name":"Cowbell 2 normal","layers":[{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell2_Normal_v2_rr1_Mid.wav","lo":1,"hi":64},{"f":"Idiophones/Struck Idiophones/Cowbells/Cowbell2_Normal_v3_rr1_Mid.wav","lo":65,"hi":127}]}],"bytes":2737192,"n":13},
+  {"id":"vcsl-glockenspiel","name":{"nl":"VCSL glockenspiel (toetsen)","en":"VCSL glockenspiel (keys)"},"desc":{"nl":"Eén keygroup-pad: vijf grondtonen in drie dynamieken (15 zones), speelbaar over het hele toetsenbord.","en":"One keygroup pad: five root notes in three dynamics (15 zones), playable across the keyboard."},"status":"green","kind":"keys","license":{"spdx":"CC0-1.0","text":"CC0 1.0 Universal (publiek domein)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE op de vastgepinde commit gelezen (CC0 1.0 Universal) en README: \"no royalties, no credit, no special terms\"","en":"LICENSE read at the pinned commit (CC0 1.0 Universal) and README: \"no royalties, no credit, no special terms\""}},"author":"Versilian Studios LLC","credit":false,"attribution":"Versilian Community Sample Library (VCSL), Versilian Studios LLC, CC0 1.0","src":{"name":"Versilian Community Sample Library","home":"https://github.com/sgossner/VCSL","pin":"c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e","base":"https://cdn.jsdelivr.net/gh/sgossner/VCSL@c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e/"},"format":"wav","bytes":14828754,"keys":{"name":"Glockenspiel","zones":[{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_soft_G4_01.wav","root":67,"lo":0,"hi":69,"vlo":1,"vhi":50},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_soft_C5_02.wav","root":72,"lo":70,"hi":75,"vlo":1,"vhi":50},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_soft_G5_01.wav","root":79,"lo":76,"hi":81,"vlo":1,"vhi":50},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_soft_C6_01.wav","root":84,"lo":82,"hi":90,"vlo":1,"vhi":50},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_soft_C7_03.wav","root":96,"lo":91,"hi":127,"vlo":1,"vhi":50},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_medium_G4_01.wav","root":67,"lo":0,"hi":69,"vlo":51,"vhi":95},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_medium_C5_01.wav","root":72,"lo":70,"hi":75,"vlo":51,"vhi":95},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_medium_G5_01.wav","root":79,"lo":76,"hi":81,"vlo":51,"vhi":95},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_medium_C6_01.wav","root":84,"lo":82,"hi":90,"vlo":51,"vhi":95},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_medium_C7_01.wav","root":96,"lo":91,"hi":127,"vlo":51,"vhi":95},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_loud_G4_01.wav","root":67,"lo":0,"hi":69,"vlo":96,"vhi":127},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_loud_C5_01.wav","root":72,"lo":70,"hi":75,"vlo":96,"vhi":127},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_loud_G5_01.wav","root":79,"lo":76,"hi":81,"vlo":96,"vhi":127},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_loud_C6_01.wav","root":84,"lo":82,"hi":90,"vlo":96,"vhi":127},{"f":"Idiophones/Struck Idiophones/Glockenspiel/glock_loud_C7_01.wav","root":96,"lo":91,"hi":127,"vlo":96,"vhi":127}]},"n":15},
+  {"id":"virtuosity-drums-mid","name":{"nl":"Virtuosity Drums, uitgekleed (midden-microfoon)","en":"Virtuosity Drums, cut down (mid mic)"},"desc":{"nl":"Jazzdrumstel uit een clubopname: kick, snare, gesloten en open hi-hat, twee toms en een crash. Eén microfoon, 4 velocity-lagen per pad (een uitsnede uit de 1,49 GB-bank).","en":"Jazz drum kit from a live-style recording: kick, snare, closed and open hi-hat, two toms and a crash. One mic, 4 velocity layers per pad (a cut-down of the 1.49 GB bank)."},"status":"green","kind":"pads","license":{"spdx":"CC0-1.0","text":"CC0 1.0 Universal (publiek domein)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE op de vastgepinde commit gelezen (CC0 1.0 Universal)","en":"LICENSE read at the pinned commit (CC0 1.0 Universal)"}},"author":"Versilian Studios; drummer Austin McMahon","credit":false,"attribution":"Virtuosity Drums, Versilian Studios, drums performed by Austin McMahon, CC0 1.0","src":{"name":"Virtuosity Drums","home":"https://github.com/sfzinstruments/virtuosity_drums","pin":"9f04cf9a734527edfbb0a4eee1f674e45bbf71bc","base":"https://cdn.jsdelivr.net/gh/sfzinstruments/virtuosity_drums@9f04cf9a734527edfbb0a4eee1f674e45bbf71bc/"},"format":"flac","pads":[{"name":"Kick","layers":[{"f":"Samples/mid/kick/mid_kick_snoff_vl1_rr1.flac","lo":1,"hi":32},{"f":"Samples/mid/kick/mid_kick_snoff_vl2_rr1.flac","lo":33,"hi":64},{"f":"Samples/mid/kick/mid_kick_snoff_vl3_rr1.flac","lo":65,"hi":95},{"f":"Samples/mid/kick/mid_kick_snoff_vl4_rr1.flac","lo":96,"hi":127}]},{"name":"Snare","layers":[{"f":"Samples/mid/snare/mid_snare_center_vl4.flac","lo":1,"hi":32},{"f":"Samples/mid/snare/mid_snare_center_vl12.flac","lo":33,"hi":64},{"f":"Samples/mid/snare/mid_snare_center_vl22.flac","lo":65,"hi":95},{"f":"Samples/mid/snare/mid_snare_center_vl32.flac","lo":96,"hi":127}]},{"name":"Hat closed","layers":[{"f":"Samples/mid/hh/mid_hh_closed_vl1_rr1.flac","lo":1,"hi":32},{"f":"Samples/mid/hh/mid_hh_closed_vl2_rr1.flac","lo":33,"hi":64},{"f":"Samples/mid/hh/mid_hh_closed_vl3_rr1.flac","lo":65,"hi":95},{"f":"Samples/mid/hh/mid_hh_closed_vl4_rr1.flac","lo":96,"hi":127}],"mute":1},{"name":"Hat open","layers":[{"f":"Samples/mid/hh/mid_hh_open_vl1_rr1.flac","lo":1,"hi":32},{"f":"Samples/mid/hh/mid_hh_open_vl2_rr1.flac","lo":33,"hi":64},{"f":"Samples/mid/hh/mid_hh_open_vl3_rr1.flac","lo":65,"hi":95},{"f":"Samples/mid/hh/mid_hh_open_vl4_rr1.flac","lo":96,"hi":127}],"mute":1},{"name":"Tom high","layers":[{"f":"Samples/mid/htom/mid_htom_center_vl4.flac","lo":1,"hi":32},{"f":"Samples/mid/htom/mid_htom_center_vl8.flac","lo":33,"hi":64},{"f":"Samples/mid/htom/mid_htom_center_vl12.flac","lo":65,"hi":95},{"f":"Samples/mid/htom/mid_htom_center_vl16.flac","lo":96,"hi":127}]},{"name":"Tom low","layers":[{"f":"Samples/mid/ltom/mid_ltom_center_vl2.flac","lo":1,"hi":32},{"f":"Samples/mid/ltom/mid_ltom_center_vl6.flac","lo":33,"hi":64},{"f":"Samples/mid/ltom/mid_ltom_center_vl10.flac","lo":65,"hi":95},{"f":"Samples/mid/ltom/mid_ltom_center_vl14.flac","lo":96,"hi":127}]},{"name":"Crash","layers":[{"f":"Samples/mid/crash/mid_crash_crash_vl1_rr1.flac","lo":1,"hi":127}]}],"bytes":11248641,"n":25},
+  {"id":"cowsynth-lonely-pad","name":{"nl":"Cowsynth Lonely Pad (SFZ)","en":"Cowsynth Lonely Pad (SFZ)"},"desc":{"nl":"Een SFZ-programma van een gesamplede doedelzak als synth-oscillator: acht zones over het toetsenbord. Laadt via de SFZ-importer.","en":"An SFZ program of sampled bagpipes used as a synth oscillator: eight zones across the keyboard. Loads through the SFZ importer."},"status":"green","kind":"preset","license":{"spdx":"CC0-1.0","text":"CC0 1.0 Universal (publiek domein)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE op de vastgepinde commit gelezen (CC0 1.0 Universal); de readme zegt \"Royalty-free for all commercial and non-commercial use\"","en":"LICENSE read at the pinned commit (CC0 1.0 Universal); the readme says \"Royalty-free for all commercial and non-commercial use\""}},"author":"Karoryfer Lecolds","credit":false,"attribution":"Cowsynth by Karoryfer Samples (Karoryfer Lecolds), CC0 1.0","src":{"name":"Karoryfer Cowsynth","home":"https://github.com/sfzinstruments/karoryfer.cowsynth","pin":"5a5b5afc2dabbe54cf9d75ab64711ce01862b42c","base":"https://cdn.jsdelivr.net/gh/sfzinstruments/karoryfer.cowsynth@5a5b5afc2dabbe54cf9d75ab64711ce01862b42c/"},"format":"sfz","preset":{"f":"cowsynth_lonely_pad.sfz","fmt":"sfz"},"bytes":6618947,"n":9},
+  {"id":"drumcomputer-fischer","name":{"nl":"Klassieke ritmemachine (Fischer)","en":"Classic drum machine (Fischer)"},"desc":{"nl":"16 geluiden van een klassieke ritmemachine, gesampled door Michael Fischer (Technopolis), 1994.","en":"16 sounds from a classic drum machine, sampled by Michael Fischer (Technopolis), 1994."},"status":"yellow","warn":{"nl":"Let op: de CC0-verklaring is door een derde (TidalCycles) op de bestanden gezet, niet door de maker; de rechten van de fabrikant op de klank zelf zijn een grijs gebied. Alleen laden als je dat risico accepteert.","en":"Note: the CC0 statement was put on the files by a third party (TidalCycles), not by the author; the manufacturer's rights in the sound itself are a grey area. Only load if you accept that risk."},"kind":"pads","license":{"spdx":"CC0-1.0","text":"CC0 1.0 (verklaring door een derde)","url":"https://creativecommons.org/publicdomain/zero/1.0/","checked":{"nl":"LICENSE (CC0 1.0) en _soundmeta/*.json (\"license\": \"cc0\", \"(c) Michael Fischer / Technopolis\") op de vastgepinde commit gelezen","en":"LICENSE (CC0 1.0) and _soundmeta/*.json (\"license\": \"cc0\", \"(c) Michael Fischer / Technopolis\") read at the pinned commit"}},"author":"Michael Fischer / Technopolis (CC0-verklaring door TidalCycles)","credit":false,"attribution":"Drum machine samples (c) Michael Fischer / Technopolis, via TidalCycles (Fischer sample set), CC0 1.0","src":{"name":"TidalCycles (Fischer sample set)","home":"https://github.com/tidalcycles/sounds-tr808-fischer","pin":"85fbecf1bec32553395625ea659e2a56dfd7c0e1","base":"https://cdn.jsdelivr.net/gh/tidalcycles/sounds-tr808-fischer@85fbecf1bec32553395625ea659e2a56dfd7c0e1/"},"format":"wav","pads":[{"name":"Kick","layers":[{"f":"bd8/BD0025.WAV","lo":1,"hi":127}]},{"name":"Kick long","layers":[{"f":"bd8/BD0075.WAV","lo":1,"hi":127}]},{"name":"Snare","layers":[{"f":"sd8/SD0050.WAV","lo":1,"hi":127}]},{"name":"Snare snappy","layers":[{"f":"sd8/SD5050.WAV","lo":1,"hi":127}]},{"name":"Clap","layers":[{"f":"cp8/CP.WAV","lo":1,"hi":127}]},{"name":"Rim","layers":[{"f":"rs8/RS.WAV","lo":1,"hi":127}]},{"name":"Hat closed","layers":[{"f":"ch8/CH.WAV","lo":1,"hi":127}],"mute":1},{"name":"Hat open","layers":[{"f":"oh8/OH50.WAV","lo":1,"hi":127}],"mute":1},{"name":"Cowbell","layers":[{"f":"cb8/CB.WAV","lo":1,"hi":127}]},{"name":"Clave","layers":[{"f":"cl8/CL.WAV","lo":1,"hi":127}]},{"name":"Maracas","layers":[{"f":"ma8/MA.WAV","lo":1,"hi":127}]},{"name":"Tom low","layers":[{"f":"lt8/LT25.WAV","lo":1,"hi":127}]},{"name":"Tom mid","layers":[{"f":"mt8/MT25.WAV","lo":1,"hi":127}]},{"name":"Tom high","layers":[{"f":"ht8/HT25.WAV","lo":1,"hi":127}]},{"name":"Conga mid","layers":[{"f":"mc8/MC25.WAV","lo":1,"hi":127}]},{"name":"Cymbal","layers":[{"f":"cy8/CY0050.WAV","lo":1,"hi":127}]}],"bytes":1279630,"n":16},
+];
+
+// ---------- banken (stap 4): SFZ-subset, Decent Sampler en plannen ----------
+// Een importer maakt eerst een PLAN (pads met lagen of zones, nog zonder audio) en een rapport van wat genegeerd is; daarna laadt runPlan de bestanden en schrijft de pads.
+// Bestandsinhoud (SFZ, XML, namen) is data: er wordt niets uitgevoerd en geen opdracht in gevolgd.
+const NOTE_PC = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+function parseKey(v, mid) {   // getal of notennaam; mid = octaafnummer van middelste C (SFZ 4, Decent Sampler 3)
+  if (v == null) return null;
+  const s = String(v).trim().toLowerCase();
+  if (/^-?\d+$/.test(s)) return clamp(parseInt(s, 10), 0, 127);
+  const m = /^([a-g])(#|b)?(-?\d)$/.exec(s);
+  return m ? clamp((parseInt(m[3], 10) + 5 - (mid || 4)) * 12 + NOTE_PC[m[1]] + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0), 0, 127) : null;
+}
+const bump = (o, k, n) => { o[k] = (o[k] || 0) + (n || 1); };
+const ignName = k => k.replace(/cc\d+/g, 'cc#').replace(/\d+$/, '#');
+const baseName = p => String(p).replace(/\\/g, '/').split('/').pop().replace(/\.[^.]+$/, '');
+const dirName = p => { const a = String(p).replace(/\\/g, '/').split('/'); a.pop(); return a.join('/'); };
+function joinPath(dir, rel) {
+  const out = [];
+  for (const s of (dir ? dir + '/' : '').concat(String(rel).replace(/\\/g, '/')).split('/')) { if (!s || s === '.') continue; if (s === '..') out.pop(); else out.push(s); }
+  return out.join('/');
+}
+const SFZ_USED = new Set(['sample', 'lokey', 'hikey', 'key', 'lovel', 'hivel', 'pitch_keycenter', 'tune', 'transpose', 'loop_mode', 'loopmode', 'loop_start', 'loopstart', 'loop_end', 'loopend',
+  'group', 'off_by', 'offby', 'seq_length', 'seq_position', 'volume', 'pan', 'trigger', 'default_path']);
+function sfzOps(seg) {
+  const ops = Object.create(null), re = /([A-Za-z_][A-Za-z0-9_$]*)=/g, hit = [];
+  let m; while ((m = re.exec(seg))) hit.push([m[1], m.index, re.lastIndex]);
+  hit.forEach(([k, , e], i) => { ops[k.toLowerCase()] = seg.slice(e, i + 1 < hit.length ? hit[i + 1][1] : seg.length).trim(); });
+  return ops;
+}
+const numOp = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : null; };
+function parseSfz(text) {
+  const out = { regions: [], ignored: Object.create(null), headers: Object.create(null), skipped: Object.create(null), found: 0 };
+  let t = String(text).replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+  const vars = {};
+  t = t.replace(/^[ \t]*#define[ \t]+(\$\w+)[ \t]+(.+)$/gm, (_, k, v) => { vars[k] = v.trim(); return ''; });
+  t = t.replace(/^[ \t]*#include[^\n]*$/gm, () => { bump(out.headers, '#include'); return ''; });
+  for (const k of Object.keys(vars).sort((a, b) => b.length - a.length)) t = t.split(k).join(vars[k]);
+  const hre = /<(\w+)>/g, marks = []; let m;
+  while ((m = hre.exec(t))) marks.push([m[1].toLowerCase(), m.index, hre.lastIndex]);
+  let glob = {}, master = {}, group = {}, defPath = '';
+  marks.forEach(([name, , e], i) => {
+    const ops = sfzOps(t.slice(e, i + 1 < marks.length ? marks[i + 1][1] : t.length));
+    if (name === 'control') { if (ops.default_path) defPath = ops.default_path.replace(/\\/g, '/'); for (const k of Object.keys(ops)) if (k !== 'default_path') bump(out.ignored, ignName(k)); return; }
+    if (name === 'global') { glob = ops; master = {}; group = {}; return; }
+    if (name === 'master') { master = ops; group = {}; return; }
+    if (name === 'group') { group = ops; return; }
+    if (name !== 'region') { bump(out.headers, '<' + name + '>'); return; }
+    out.found++;
+    const o = Object.assign({}, glob, master, group, ops);
+    if (!o.sample) { bump(out.skipped, 'nosample'); return; }
+    for (const k of Object.keys(o)) if (!SFZ_USED.has(k) && !/^sw_(last|previous|down|up)$/.test(k)) bump(out.ignored, ignName(k));
+    if (o.sw_last != null || o.sw_previous != null || o.sw_down != null || o.sw_up != null) { bump(out.skipped, 'keyswitch'); return; }
+    const trig = String(o.trigger || 'attack').toLowerCase();
+    if (trig === 'release' || trig === 'release_key') { bump(out.skipped, 'release'); return; }
+    let lo = 0, hi = 127, root = null;
+    if (o.key != null) { const k = parseKey(o.key, 4); if (k != null) { lo = hi = root = k; } }
+    if (o.lokey != null) { const k = parseKey(o.lokey, 4); if (k != null) lo = k; }
+    if (o.hikey != null) { const k = parseKey(o.hikey, 4); if (k != null) hi = k; }
+    if (o.pitch_keycenter != null) { const k = parseKey(o.pitch_keycenter, 4); if (k != null) root = k; }
+    const vlo = clamp(Math.round(numOp(o.lovel) == null ? 1 : numOp(o.lovel)), 1, 127), vhi = clamp(Math.round(numOp(o.hivel) == null ? 127 : numOp(o.hivel)), 1, 127);
+    if (hi < lo || vhi < vlo) { bump(out.skipped, 'range'); return; }
+    const lm = String(o.loop_mode || o.loopmode || '').toLowerCase();
+    out.regions.push({
+      path: (defPath + o.sample).replace(/\\/g, '/'), lo, hi, vlo, vhi, root, tune: (numOp(o.transpose) || 0) + (numOp(o.tune) || 0) / 100,
+      vol: numOp(o.volume) || 0, pan: clamp((numOp(o.pan) || 0) / 100, -1, 1),
+      loop: lm === 'loop_continuous' || lm === 'loop_sustain' ? 'on' : lm === 'no_loop' ? 'off' : lm === 'one_shot' ? 'one' : 'auto',
+      ls: numOp(o.loop_start != null ? o.loop_start : o.loopstart), le: numOp(o.loop_end != null ? o.loop_end : o.loopend),
+      group: int(numOp(o.group) == null ? 0 : numOp(o.group), 0, 0, 100000), offBy: int(numOp(o.off_by != null ? o.off_by : o.offby) == null ? 0 : numOp(o.off_by != null ? o.off_by : o.offby), 0, 0, 100000),
+      seqLen: int(numOp(o.seq_length) == null ? 1 : numOp(o.seq_length), 1, 1, 64), seqPos: int(numOp(o.seq_position) == null ? 1 : numOp(o.seq_position), 1, 1, 64), random: false,
+    });
+  });
+  return out;
+}
+function parseDs(text) {   // Decent Sampler (.dspreset): XML
+  const out = { regions: [], ignored: Object.create(null), headers: Object.create(null), skipped: Object.create(null), found: 0, env: null, error: '' };
+  let doc;
+  try { doc = new DOMParser().parseFromString(String(text), 'application/xml'); } catch (e) { out.error = 'xml'; return out; }
+  const rootEl = doc && doc.documentElement;
+  if (!rootEl || rootEl.nodeName !== 'DecentSampler' || doc.getElementsByTagName('parsererror').length) { out.error = 'xml'; return out; }
+  const kids = Array.from(rootEl.children);
+  for (const k of kids) if (k.nodeName !== 'groups') bump(out.headers, '<' + k.nodeName + '>');
+  const GA = new Set(['loNote', 'hiNote', 'rootNote', 'loVel', 'hiVel', 'tuning', 'pan', 'loopEnabled', 'loopStart', 'loopEnd', 'seqMode', 'seqLength', 'trigger', 'attack', 'decay', 'sustain', 'release']);
+  const SA = new Set(['path', 'loNote', 'hiNote', 'rootNote', 'loVel', 'hiVel', 'tuning', 'pan', 'loopEnabled', 'loopStart', 'loopEnd', 'seqPosition', 'trigger']);
+  const gnum = (a, n) => { const v = a[n]; return v == null || v === '' ? null : numOp(v); };
+  for (const gs of kids.filter(k => k.nodeName === 'groups')) {
+    const gsa = {}; for (const k of Array.from(gs.attributes)) { if (['attack', 'decay', 'sustain', 'release'].includes(k.name)) gsa[k.name] = k.value; else bump(out.ignored, 'groups@' + k.name); }
+    for (const g of Array.from(gs.children).filter(k => k.nodeName === 'group')) {
+      const ga = Object.assign({}, gsa); for (const a of Array.from(g.attributes)) { ga[a.name] = a.value; if (!GA.has(a.name)) bump(out.ignored, 'group@' + a.name); }
+      for (const c of Array.from(g.children)) if (c.nodeName !== 'sample') bump(out.headers, '<' + c.nodeName + '>');
+      if (!out.env && ['attack', 'decay', 'sustain', 'release'].some(n => ga[n] != null)) out.env = { attack: numOp(ga.attack), decay: numOp(ga.decay), sustain: numOp(ga.sustain), release: numOp(ga.release) };
+      for (const s of Array.from(g.children).filter(k => k.nodeName === 'sample')) {
+        out.found++;
+        const sa = Object.assign({}, ga); for (const a of Array.from(s.attributes)) { sa[a.name] = a.value; if (!SA.has(a.name)) bump(out.ignored, 'sample@' + a.name); }
+        if (!sa.path) { bump(out.skipped, 'nosample'); continue; }
+        const trig = String(sa.trigger || 'attack').toLowerCase();
+        if (trig === 'release') { bump(out.skipped, 'release'); continue; }
+        const key = (n, d) => { const k2 = parseKey(sa[n], 3); return k2 == null ? d : k2; };
+        let lo = key('loNote', 0), hi = key('hiNote', 127); const root = sa.rootNote != null ? parseKey(sa.rootNote, 3) : null;
+        const vlo = clamp(Math.round(gnum(sa, 'loVel') == null ? 1 : gnum(sa, 'loVel')), 1, 127), vhi = clamp(Math.round(gnum(sa, 'hiVel') == null ? 127 : gnum(sa, 'hiVel')), 1, 127);
+        if (hi < lo || vhi < vlo) { bump(out.skipped, 'range'); continue; }
+        const mode = String(sa.seqMode || 'always').toLowerCase();
+        out.regions.push({
+          path: String(sa.path).replace(/\\/g, '/'), lo, hi, vlo, vhi, root, tune: gnum(sa, 'tuning') || 0, vol: 0, pan: clamp((gnum(sa, 'pan') || 0) / 100, -1, 1),
+          loop: String(sa.loopEnabled).toLowerCase() === 'true' ? 'on' : 'auto', ls: gnum(sa, 'loopStart'), le: gnum(sa, 'loopEnd'), group: 0, offBy: 0,
+          seqLen: mode === 'round_robin' ? int(gnum(sa, 'seqLength') == null ? 2 : gnum(sa, 'seqLength'), 2, 1, 64) : 1, seqPos: int(gnum(sa, 'seqPosition') == null ? 1 : gnum(sa, 'seqPosition'), 1, 1, 64), random: mode === 'random',
+        });
+      }
+    }
+  }
+  return out;
+}
+function muteIds(regs) {   // off_by: groepen die elkaar afkappen worden een gedeelde mutegroep (1..32)
+  const par = new Map(), find = x => { while (par.get(x) !== x) { par.set(x, par.get(par.get(x))); x = par.get(x); } return x; };
+  const add = x => { if (!par.has(x)) par.set(x, x); };
+  let any = false;
+  for (const r of regs) if (r.group > 0 && r.offBy > 0) { add(r.group); add(r.offBy); par.set(find(r.group), find(r.offBy)); any = true; }
+  const ids = new Map(); let n = 0;
+  return { any, of(g) { if (!(g > 0) || !par.has(g)) return 0; const f = find(g); if (!ids.has(f)) ids.set(f, ++n); return Math.min(32, ids.get(f)); } };
+}
+// plan = { pads: [{ name, mode, play, mute, one, env, layers: [{ f, lo, hi, semi, fine, gain, pan, loop }], zones: [{ f, root, lo, hi, vlo, vhi, tune, loop }] }], stats, skipped }
+// loop = { m: 'on' | 'off' | 'one' | 'auto', ls, le } (posities in samples van het bronbestand)
+function planRegions(regs, preset, env) {
+  const st = { regions: regs.length, drumPads: 0, zones: 0, layers: 0, vel: 0, rr: 0, rand: 0, mute: 0, loops: 0, roots: 0, tuned: 0, pans: 0, vols: 0, thinned: 0 }, sk = Object.create(null);
+  const mutes = muteIds(regs), notes = [];
+  const mkLoop = r => ({ m: r.loop, ls: r.ls, le: r.le });
+  const single = regs.filter(r => r.lo === r.hi), ranged = regs.filter(r => r.lo !== r.hi), keys = [...new Set(single.map(r => r.lo))].sort((a, b) => a - b);
+  const manyKeys = keys.length > NPAD && single.every(r => r.root == null || r.root === r.lo);
+  const asDrums = manyKeys ? [] : single, asZones = manyKeys ? regs.slice() : ranged;
+  const pads = [];
+  const dkeys = [...new Set(asDrums.map(r => r.lo))].sort((a, b) => a - b);
+  for (const k of dkeys) {
+    if (pads.length >= NPAD) { bump(sk, 'pads', asDrums.filter(r => r.lo === k).length); continue; }
+    let rs = asDrums.filter(r => r.lo === k).sort((a, b) => a.vlo - b.vlo || a.seqPos - b.seqPos);
+    if (rs.length > NLAYER) { bump(sk, 'layers', rs.length - NLAYER); rs = rs.slice(0, NLAYER); }
+    const seq = rs.some(r => r.seqLen > 1), rnd = rs.some(r => r.random);
+    let overlap = false; for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) if (rs[i].vlo <= rs[j].vhi && rs[j].vlo <= rs[i].vhi) overlap = true;
+    const play = rnd ? 'random' : seq ? 'cycle' : overlap ? 'random' : 'velocity';
+    if (play === 'cycle') st.rr++; else if (play === 'random') st.rand++; else if (rs.length > 1) st.vel++;
+    const mute = mutes.of(rs[0].group); if (mute) st.mute++;
+    const looped = rs.some(r => r.loop === 'on');
+    pads.push({
+      name: baseName(rs[0].path).slice(0, 40), mode: 'drum', play, mute, one: !looped, env: env || null,
+      layers: rs.map(r => { if (r.root != null) st.roots++; if (r.tune) st.tuned++; if (r.pan) st.pans++; if (r.vol) st.vols++; if (r.loop === 'on') st.loops++; const sm = Math.round(clamp(r.tune, -48, 48)); return { f: r.path, lo: r.vlo, hi: r.vhi, semi: sm, fine: clamp(Math.round((r.tune - sm) * 100), -100, 100), gain: clamp(r.vol, -24, 24), pan: r.pan, loop: mkLoop(r) }; }),
+      zones: [],
+    });
+    st.drumPads++; st.layers += rs.length;
+  }
+  if (asZones.length) {
+    let zs = asZones.slice().sort((a, b) => a.lo - b.lo || a.vlo - b.vlo);
+    if (zs.length > MAXZONE) {   // eerst één dynamiek per toetsbereik houden (de dichtst bij velocity 100)
+      const by = new Map(); for (const r of zs) { const k = r.lo + '-' + r.hi; const c = by.get(k); if (!c || Math.abs((r.vlo + r.vhi) / 2 - 100) < Math.abs((c.vlo + c.vhi) / 2 - 100)) by.set(k, r); }
+      const thin = [...by.values()].map(r => Object.assign({}, r, { vlo: 1, vhi: 127 })).sort((a, b) => a.lo - b.lo);
+      if (thin.length < zs.length) { st.thinned = zs.length - thin.length; notes.push('thin'); zs = thin; }
+    }
+    if (zs.length > MAXZONE) { bump(sk, 'zones', zs.length - MAXZONE); zs = zs.slice(0, MAXZONE); }
+    if (pads.length >= NPAD) { bump(sk, 'pads', zs.length); } else {
+      if (new Set(zs.map(r => r.seqPos)).size > 1 && zs.some(r => r.seqLen > 1)) { st.rr++; }
+      zs.forEach(r => { if (r.root != null) st.roots++; if (r.tune) st.tuned++; if (r.loop === 'on') st.loops++; if (r.vol) st.vols++; if (r.pan) st.pans++; });
+      st.zones = zs.length;
+      pads.push({
+        name: String(preset || 'Keygroup').slice(0, 40), mode: 'key', play: 'velocity', mute: mutes.of(zs[0].group), one: false, env: env || null, layers: [],
+        zones: zs.map(r => ({ f: r.path, root: r.root, lo: r.lo, hi: r.hi, vlo: r.vlo, vhi: r.vhi, tune: clamp(r.tune, -24, 24), loop: mkLoop(r) })),
+      });
+    }
+  }
+  if (mutes.any) notes.push('mute');
+  return { pads, stats: st, skipped: sk, notes };
+}
+function planCatalog(b) {
+  const lp = { m: 'auto', ls: null, le: null };
+  if (b.kind === 'keys') {
+    const k = b.keys;
+    return { pads: [{ name: k.name, mode: 'key', play: 'velocity', mute: 0, one: false, env: null, layers: [], zones: k.zones.map(z => ({ f: z.f, root: z.root, lo: z.lo, hi: z.hi, vlo: z.vlo, vhi: z.vhi, tune: 0, loop: lp })) }],
+      stats: { regions: k.zones.length, drumPads: 0, zones: k.zones.length, layers: 0, vel: 0, rr: 0, rand: 0, mute: 0, loops: 0, roots: k.zones.length, tuned: 0, pans: 0, vols: 0, thinned: 0 }, skipped: Object.create(null), notes: [] };
+  }
+  const pads = b.pads.slice(0, NPAD).map(p => ({ name: p.name, mode: 'drum', play: p.play || 'velocity', mute: p.mute || 0, one: true, env: null, layers: p.layers.map(l => ({ f: l.f, lo: l.lo, hi: l.hi, semi: 0, fine: 0, gain: 0, pan: 0, loop: lp })), zones: [] }));
+  let n = 0; for (const p of pads) n += p.layers.length;
+  return { pads, stats: { regions: n, drumPads: pads.length, zones: 0, layers: n, vel: pads.filter(p => p.layers.length > 1 && p.play === 'velocity').length, rr: pads.filter(p => p.play === 'cycle').length, rand: 0, mute: pads.filter(p => p.mute).length, loops: 0, roots: 0, tuned: 0, pans: 0, vols: 0, thinned: 0 }, skipped: Object.create(null), notes: [] };
+}
+const isMp3 = ab => { const u = new Uint8Array(ab, 0, Math.min(4, ab.byteLength)); return (u[0] === 0x49 && u[1] === 0x44 && u[2] === 0x33) || (u[0] === 0xff && (u[1] & 0xe0) === 0xe0); };
+function wavHead(ab) {   // samplefrequentie en aantal frames van een WAV, of null
+  try {
+    const dv = new DataView(ab); if (dv.byteLength < 44 || dv.getUint32(0, false) !== 0x52494646 || dv.getUint32(8, false) !== 0x57415645) return null;
+    let pos = 12, block = 0, rate = 0, len = 0;
+    while (pos + 8 <= dv.byteLength) {
+      const id = dv.getUint32(pos, false), l = dv.getUint32(pos + 4, true), body = pos + 8;
+      if (id === 0x666d7420 && body + 16 <= dv.byteLength) { rate = dv.getUint32(body + 4, true); block = dv.getUint16(body + 12, true); } else if (id === 0x64617461) len = Math.min(l, dv.byteLength - body);
+      pos = body + l + (l & 1);
+    }
+    return block > 0 && rate > 0 ? { rate, frames: len / block } : null;
+  } catch (e) { return null; }
+}
+const encPath = p => String(p).split('/').map(encodeURIComponent).join('/');
+const licOfUrl = u => {   // Freesound: licentie-adres naar SPDX; alleen CC0 en CC-BY zijn toegestaan
+  const s = String(u || '');
+  if (/creativecommons\.org\/publicdomain\/zero\/1\.0/.test(s)) return 'CC0-1.0';
+  const m = /creativecommons\.org\/licenses\/by\/(\d\.\d)\/?$/.exec(s);
+  return m ? 'CC-BY-' + m[1] : '';
+};
+function creditsOf(store) {   // vermeldingen volgen de samples die er echt in zitten (nooit een lijst die kan liegen)
+  const m = new Map();
+  for (const r of store.values()) {
+    const L = r.license; if (!L || !(L.license || L.attribution || L.author || L.source)) continue;
+    const k = [L.source, L.license, L.author, L.attribution].join('\u0001'), c = m.get(k) || { source: L.source, license: L.license, author: L.author, attribution: L.attribution, samples: 0 };
+    c.samples++; m.set(k, c);
+  }
+  return [...m.values()].sort((a, b) => (a.attribution + a.source < b.attribution + b.source ? -1 : a.attribution + a.source > b.attribution + b.source ? 1 : 0));
+}
+
 export default {
   id: 'nl.patchkamer.padsampler',
   name: 'Pad Sampler',
-  version: '1.2.0',
+  version: '1.3.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 700, minWidth: 340 },
@@ -934,8 +1240,10 @@ export default {
       l.loop = info && info.loop ? { on: pad.mode === 'key', start: info.loop.start, end: info.loop.end, xfade: 0 } : defLoop();
       if (!pad.name && name) pad.name = str(name, 40);
     }
-    async function loadFiles(files) {
-      const my = ++token; let loaded = 0, firstErr = '';
+    async function loadFiles(files, lic) {
+      const arr0 = Array.from(files || []);
+      if (arr0.some(f => /\.(sfz|dspreset)$/i.test(f.name))) { await importFromFiles(arr0, {}); return; }
+      const my = ++token; let loaded = 0, firstErr = '', mp3n = 0;
       try {
         if (typeof ctx.decodeAudioData !== 'function') throw new Error(T.noDecode);
         const list = Array.from(files || []).slice(0, NPAD);
@@ -946,22 +1254,295 @@ export default {
             if (f.size > 50 * 1048576) throw new Error(T.fileBig);
             say(T.loading.replace('{0}', f.name));
             const ab = await f.arrayBuffer(); if (dead || my !== token) return;
-            const meta = readSmpl(ab);
+            const meta = readSmpl(ab); if (isMp3(ab)) mp3n++;
             let audio; try { audio = await ctx.decodeAudioData(ab.slice(0)); } catch (e) { throw new Error(T.decodeFail.replace('{0}', f.name)); }
             if (dead || my !== token) return;
             if (!audio || !(audio.length > 0)) throw new Error(T.noAudio.replace('{0}', f.name));
             if (audio.length / audio.sampleRate > MAX_SEC) throw new Error(T.tooLong);
-            const name = String(f.name || 'sample').replace(/\.[^.]+$/, ''), id = addRecord(toRecord(audio, name, meta));
+            const name = String(f.name || 'sample').replace(/\.[^.]+$/, ''), rec0 = toRecord(audio, name, meta); if (lic) rec0.license = lic; const id = addRecord(rec0);
             const target = k === 0 ? prog.bank * NPAD + prog.pad : Math.min(NBANK * NPAD - 1, prog.bank * NPAD + prog.pad + k);
             if (padOf(target).mode === 'drum' || k === 0) assignSample(target, k === 0 ? prog.layer : 0, id, name);
             loaded++;
           } catch (e) { if (!firstErr) firstErr = e && e.message ? e.message : String(e); }
         }
         gcStore(); if (ui) ui.refreshAll(); notesNotify();
-        say(firstErr ? firstErr : T.loaded.replace('{0}', loaded));
+        say((firstErr ? firstErr : T.loaded.replace('{0}', loaded)) + (mp3n && (curPad().mode === 'key' || curLayer().loop.on) ? ' ' + fillT(B.w.mp3Loop, mp3n) : ''));
+        bkUi('credits');
       } catch (e) { say(e && e.message ? e.message : String(e)); }
     }
     const say = msg => { if (ui) ui.say(msg); };
+
+    // ---------- banken: bronnen, importeren, rapport (stap 4) ----------
+    // Netwerk doet het apparaat niet zelf (contract §15): bestanden van internet vraagt het aan de host (host.fetchFile, alleen na een klik van de gebruiker).
+    const B = T.bk;
+    let lastReport = null, job = null;
+    const canNet = () => typeof host.fetchFile === 'function';
+    const netGet = (url, o) => host.fetchFile(selfRef, url, o);
+    const abortErr = () => Object.assign(new Error('aborted'), { code: 'aborted' });
+    const bkUi = (m, ...a) => { if (ui && ui.bk && ui.bk[m]) { try { ui.bk[m](...a); } catch (e) { /* de UI mag een import niet breken */ } } };
+    const fmtMiB = n => (n / 1048576).toFixed(1);
+    function newReport(title, src) { return { title, src, ok: [], ignored: [], warn: [], stats: null, loaded: 0, bytes: 0, missing: [], failed: [], notFit: 0, mp3Loops: 0, loopFmt: 0, rootDef: 0, aborted: false, error: '' }; }
+    function stageSample(key, ab, lic) {
+      const head = wavHead(ab), meta = readSmpl(ab), mp3 = isMp3(ab), name = baseName(key);
+      return ctx.decodeAudioData(ab.slice(0)).then(audio => {
+        if (!audio || !(audio.length > 0)) throw new Error(fillT(T.noAudio, name));
+        if (audio.length / audio.sampleRate > MAX_SEC) throw new Error(T.tooLong);
+        const rec = toRecord(audio, name, meta); rec.license = lic;
+        return { rec, id: recId(rec), meta, head, mp3 };
+      }, () => { throw Object.assign(new Error(fillT(T.decodeFail, name)), { code: 'decode' }); });
+    }
+    function loopFor(lp, s, keyMode, rep) {
+      const rec = s.rec, frames = s.head ? s.head.frames : 0;
+      const on = lp.m === 'on' || (lp.m === 'auto' && keyMode && !!rec.loop);
+      if (!on) return defLoop();
+      if (s.mp3) rep.mp3Loops++;
+      if (lp.ls != null && lp.le != null && lp.le >= lp.ls) {
+        if (frames > 0) return { on: true, start: clamp(lp.ls / frames, 0, 0.9999), end: clamp((lp.le + 1) / frames, 0.0001, 1), xfade: 0 };
+        rep.loopFmt++; return { on: true, start: 0, end: 1, xfade: 0 };
+      }
+      return rec.loop ? { on: true, start: rec.loop.start, end: rec.loop.end, xfade: 0 } : { on: true, start: 0, end: 1, xfade: 0 };
+    }
+    // Laadt de bestanden van een plan (resolve(sleutel, signal) geeft een ArrayBuffer) en schrijft de pads in een bank, als één stap die ongedaan te maken is.
+    async function runPlan(plan, resolve, o) {
+      const rep = o.rep, sig = o.sig, uniq = [], seen = new Set();
+      for (const p of plan.pads) { for (const l of p.layers) if (!seen.has(l.f)) { seen.add(l.f); uniq.push(l.f); } for (const z of p.zones) if (!seen.has(z.f)) { seen.add(z.f); uniq.push(z.f); } }
+      const idxs = Array.from({ length: NPAD }, (_, k) => o.bank * NPAD + k), inBank = new Set(idxs), keep = new Set();
+      for (let i = 0; i < NBANK * NPAD; i++) { if (o.clear && inBank.has(i)) continue; const p = padOf(i); for (const l of p.layers) if (l.sampleId) keep.add(l.sampleId); for (const z of p.zones) if (z.sampleId) keep.add(z.sampleId); }
+      let budget = MAX_PCM; for (const id of keep) { const r = store.get(id); if (r) budget -= r.bytes; }
+      const staged = new Map(), ids = new Set(); let used = 0, stop = false;
+      for (let i = 0; i < uniq.length; i++) {
+        if (sig.aborted || dead) throw abortErr();
+        o.progress(i, uniq.length, uniq[i]);
+        if (stop) { rep.notFit++; continue; }
+        try {
+          const ab = await resolve(uniq[i], sig); if (sig.aborted || dead) throw abortErr();
+          const s = await stageSample(uniq[i], ab, o.lic); if (sig.aborted || dead) throw abortErr();
+          const cost = keep.has(s.id) || ids.has(s.id) ? 0 : s.rec.bytes;
+          if (used + cost > budget) { stop = true; rep.notFit++; continue; }
+          ids.add(s.id); used += cost; staged.set(uniq[i], s);
+        } catch (e) {
+          if (e && e.code === 'aborted') throw e;
+          if (e && e.code === 'decode') rep.failed.push(baseName(uniq[i])); else rep.missing.push(baseName(uniq[i]));
+        }
+      }
+      o.progress(uniq.length, uniq.length, '');
+      if (!staged.size) return false;
+      if (sig.aborted || dead) throw abortErr();
+      const layersLost = { n: 0 }, padsLost = { n: 0 };
+      let ok;
+      try {
+        ok = progRun(fillT(B.undoLabel, o.title), idxs, () => {
+          if (o.clear) for (const i of idxs) prog.banks[o.bank].pads[i & 15] = defPad();
+          for (const s of staged.values()) { const id = addRecord(s.rec); const ex = store.get(id); if (ex && !ex.license.license && !ex.license.attribution && s.rec.license.license) ex.license = s.rec.license; s.id = id; }
+          const free = idxs.filter(i => !hasSound(padOf(i)));
+          let w = 0;
+          for (const p of plan.pads) {
+            const obj = { name: p.name, mode: p.mode, play: p.play, polyphony: p.mode === 'key' ? 16 : 4, muteGroup: p.mute, oneShot: p.one, layers: [], zones: [] };
+            if (p.env) obj.env = { shape: 'adsr', attack: p.env.attack, decay: p.env.decay, sustain: p.env.sustain, release: p.env.release };
+            for (const l of p.layers) { const s = staged.get(l.f); if (!s) { layersLost.n++; continue; } obj.layers.push({ sampleId: s.id, semi: l.semi, fine: l.fine, level: 1, pan: l.pan, offset: 0, root: null, velLo: l.lo, velHi: l.hi, start: 0, end: 1, loop: loopFor(l.loop, s, false, rep), gain: l.gain }); }
+            for (const z of p.zones) {
+              const s = staged.get(z.f); if (!s) { layersLost.n++; continue; }
+              let root = z.root; if (root == null) { if (s.rec.root != null) root = s.rec.root; else { root = 60; rep.rootDef++; } }
+              obj.zones.push({ sampleId: s.id, root, keyLo: z.lo, keyHi: z.hi, velLo: z.vlo, velHi: z.vhi, tune: z.tune, loop: loopFor(z.loop, s, true, rep) });
+            }
+            if (!obj.layers.length && !obj.zones.length) { padsLost.n++; continue; }
+            if (p.mode === 'key') obj.baseNote = obj.zones[Math.floor(obj.zones.length / 2)].root;
+            if (w >= free.length) { padsLost.n++; continue; }
+            const i = free[w++]; prog.banks[o.bank].pads[i & 15] = nPad(obj, hasSample); if (prt[i]) padLive(i);
+          }
+          if (o.clear && o.name) prog.banks[o.bank].name = str(o.name, 40) || prog.banks[o.bank].name;
+          prog.bank = o.bank; prog.pad = 0; prog.layer = 0; selZone = 0;
+          return w > 0;
+        }, true);
+      } catch (e) { rep.notFit += staged.size; staged.clear(); gcStore(); ok = false; }
+      rep.loaded = ok ? staged.size : 0; rep.bytes = 0;
+      if (ok) { const sid = new Set(); for (const s of staged.values()) sid.add(s.id); for (const id of sid) { const r = store.get(id); if (r) rep.bytes += r.bytes; } }
+      rep.layersLost = layersLost.n; rep.padsLost = padsLost.n;
+      return ok;
+    }
+    function finishReport(rep, parsed, plan) {
+      const st = plan ? plan.stats : null; rep.stats = st;
+      const f = fillT, R = B.r;
+      if (st) {
+        rep.ok.push(f(R.regions, st.regions, plan.pads.reduce((n, p) => n + p.layers.length + p.zones.length, 0)));
+        rep.ok.push(f(R.pads, st.drumPads, st.zones));
+        if (st.drumPads) rep.ok.push(f(R.layers, st.layers, st.vel, st.rr, st.rand));
+        if (st.roots || st.tuned) rep.ok.push(f(R.roots, st.roots, st.tuned));
+        if (st.loops) rep.ok.push(f(R.loops, st.loops));
+        if (st.pans || st.vols) rep.ok.push(f(R.panvol, st.vols, st.pans));
+        if (st.mute) rep.ok.push(f(R.mute, st.mute));
+      }
+      if (rep.loaded) rep.ok.push(f(R.samples, rep.loaded, fmtMiB(rep.bytes)));
+      if (parsed) {
+        const ig = Object.entries(parsed.ignored).sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1)), hd = Object.entries(parsed.headers).sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+        for (const [k, n] of ig.slice(0, 24)) rep.ignored.push(f(B.i.item, k, n));
+        if (ig.length > 24) rep.ignored.push(f(B.i.more, ig.length - 24));
+        for (const [k, n] of hd) rep.ignored.push(f(B.i.header, k, n));
+        for (const [k, n] of Object.entries(parsed.skipped)) rep.ignored.push(f(B.s[k] || B.s.other, n));
+      }
+      if (plan) {
+        for (const [k, n] of Object.entries(plan.skipped)) rep.ignored.push(f(B.s[k] || B.s.other, n));
+        if (plan.notes.includes('thin')) rep.warn.push(f(B.w.thin, st.thinned));
+        if (plan.notes.includes('mute')) rep.warn.push(B.w.mute);
+      }
+      if (rep.missing.length) rep.warn.push(f(B.w.missing, rep.missing.length, rep.missing.slice(0, 6).join(', ') + (rep.missing.length > 6 ? ' …' : '')));
+      if (rep.failed.length) rep.warn.push(f(B.w.decode, rep.failed.length, rep.failed.slice(0, 6).join(', ') + (rep.failed.length > 6 ? ' …' : '')));
+      if (rep.notFit) rep.warn.push(f(B.w.notFit, rep.notFit, MAX_PCM / 1048576));
+      if (rep.padsLost || rep.layersLost) rep.warn.push(f(B.w.lost, rep.padsLost || 0, rep.layersLost || 0));
+      if (rep.mp3Loops) rep.warn.push(f(B.w.mp3Loop, rep.mp3Loops));
+      if (rep.loopFmt) rep.warn.push(f(B.w.loopFmt, rep.loopFmt));
+      if (rep.rootDef) rep.warn.push(f(B.w.rootDef, rep.rootDef));
+      if (rep.aborted) rep.warn.push(B.w.aborted);
+      if (rep.error) rep.warn.push(rep.error);
+      lastReport = rep; bkUi('report', rep); bkUi('credits');
+    }
+    async function runJob(label, fn) {
+      if (job) { say(B.busy); return false; }
+      job = { ctl: new AbortController(), label, done: 0, total: 0, name: '' }; bkUi('job');
+      const my = job, o = { sig: my.ctl.signal, progress: (i, n, name) => { my.done = i; my.total = n; my.name = name; bkUi('job'); } };
+      try { return await fn(o); } finally { if (job === my) job = null; bkUi('job'); }
+    }
+    function cancelJob() { if (job) job.ctl.abort(); }
+    // --- resolvers
+    function localResolver(files, presetPath) {
+      const idx = new Map(), byName = new Map();
+      for (const f of files) { const p = String(f.webkitRelativePath || f.name).replace(/\\/g, '/').toLowerCase(); idx.set(p, f); const b = p.split('/').pop(); byName.set(b, byName.has(b) ? null : f); }
+      const dir = dirName(presetPath);
+      return async rel => {
+        const want = joinPath(dir, rel).toLowerCase();
+        let f = idx.get(want);
+        if (!f) for (const [k, v] of idx) if (k.endsWith('/' + want) || want.endsWith('/' + k)) { f = v; break; }
+        if (!f) f = byName.get(want.split('/').pop());
+        if (!f) throw new Error('missing');
+        if (f.size > 50 * 1048576) throw new Error(T.fileBig);
+        return f.arrayBuffer();
+      };
+    }
+    function urlResolver(baseUrl) { return async (rel, sig) => netGet(new URL(encPath(rel), baseUrl).href, { as: 'arraybuffer', signal: sig, maxBytes: 50 * 1048576 }); }
+    function licOf(src, fields) {
+      return { source: str(src, 200), license: str(fields.license, 200), author: str(fields.author, 200), attribution: str(fields.attribution, 200) };
+    }
+    async function importPresetText(fmt, text, presetName, resolve, o) {
+      const rep = o.rep; rep.fmt = fmt;
+      const parsed = fmt === 'ds' ? parseDs(text) : parseSfz(text);
+      if (parsed.error) { rep.error = B.w.badXml; finishReport(rep, parsed, null); return false; }
+      if (!parsed.regions.length) { rep.error = B.w.noRegions; finishReport(rep, parsed, null); return false; }
+      const env = parsed.env ? parsed.env : null;
+      const plan = planRegions(parsed.regions, presetName, env);
+      let ok = false;
+      try { ok = await runPlan(plan, resolve, o); } catch (e) { if (e && e.code === 'aborted') rep.aborted = true; else rep.error = String(e && e.message || e); }
+      finishReport(rep, parsed, plan);
+      return ok;
+    }
+    // --- ingangen: lokale bestanden, webadres, catalogus, Freesound
+    async function importFromFiles(arr, o0) {
+      const presets = arr.filter(f => /\.(sfz|dspreset)$/i.test(f.name)).sort((a, b) => (a.webkitRelativePath || a.name) < (b.webkitRelativePath || b.name) ? -1 : 1);
+      const pf = presets[0], fmt = /\.dspreset$/i.test(pf.name) ? 'ds' : 'sfz', name = baseName(pf.name);
+      return runJob(name, async o => {
+        const rep = newReport(name, 'local'); o.rep = rep; o.bank = o0.bank == null ? prog.bank : o0.bank; o.clear = o0.clear !== false; o.title = name; o.name = name; o.lic = licOf('', o0.lic || {});
+        if (presets.length > 1) rep.warn.push(fillT(B.w.morePresets, presets.length - 1));
+        if (pf.size > 5 * 1048576) { rep.error = B.w.presetBig; finishReport(rep, null, null); return false; }
+        const text = await pf.text();
+        return importPresetText(fmt, text, name, localResolver(arr, pf.webkitRelativePath || pf.name), o);
+      });
+    }
+    async function importFromUrl(url, o0) {
+      let u; try { u = new URL(String(url).trim()); } catch (e) { say(B.badUrl); return false; }
+      if (u.protocol !== 'https:' || u.username || u.password) { say(B.badUrl); return false; }
+      if (!canNet()) { say(B.noNet); return false; }
+      const name = baseName(decodeURIComponent(u.pathname) || 'url') || u.hostname;
+      return runJob(name, async o => {
+        const rep = newReport(name, u.href); o.rep = rep; o.bank = o0.bank == null ? prog.bank : o0.bank; o.clear = o0.clear !== false; o.title = name; o.name = name; o.lic = licOf(u.href, o0.lic || {});
+        try {
+          o.progress(0, 1, name);
+          const ab = await netGet(u.href, { as: 'arraybuffer', signal: o.sig, maxBytes: 50 * 1048576 });
+          const h = new Uint8Array(ab, 0, Math.min(16, ab.byteLength)), txt = () => new TextDecoder('utf-8').decode(ab);
+          const bin = isMp3(ab) || !!wavHead(ab) || (h[0] === 0x66 && h[1] === 0x4c && h[2] === 0x61 && h[3] === 0x43) || (h[0] === 0x4f && h[1] === 0x67 && h[2] === 0x67 && h[3] === 0x53);
+          if (!bin) {
+            const t = txt();
+            if (/\.dspreset$/i.test(u.pathname) || /<DecentSampler/.test(t.slice(0, 2000))) return await importPresetText('ds', t, name, urlResolver(u.href), o);
+            if (/\.sfz$/i.test(u.pathname) || /<region>|<group>|<global>/.test(t.slice(0, 4000))) return await importPresetText('sfz', t, name, urlResolver(u.href), o);
+            throw Object.assign(new Error('audio'), { code: 'audio' });
+          }
+          // gewoon audio: één sample in het gekozen pad
+          const s = await stageSample(u.pathname, ab, o.lic); rep.stats = null;
+          const id = addRecord(s.rec); assignSample(curI(), prog.layer, id, s.rec.name); gcStore(); if (ui) ui.refreshAll(); notesNotify();
+          rep.loaded = 1; rep.bytes = s.rec.bytes; rep.ok.push(fillT(B.r.samples, 1, fmtMiB(s.rec.bytes))); if (s.mp3 && curPad().mode === 'key') rep.warn.push(fillT(B.w.mp3Loop, 1));
+          lastReport = rep; bkUi('report', rep); bkUi('credits'); return true;
+        } catch (e) {
+          const rep2 = o.rep; if (e && e.code === 'aborted') rep2.aborted = true; else rep2.error = netMsg(e);
+          finishReport(rep2, null, null); return false;
+        }
+      });
+    }
+    function netMsg(e) {
+      const c = e && e.code;
+      if (c === 'nonet') return B.noNet;
+      if (c === 'network') return B.errNetwork;
+      if (c === 'http') return fillT(B.errHttp, e.status || '?');
+      if (c === 'size') return B.errSize;
+      if (c === 'url') return B.badUrl;
+      if (c === 'audio') return B.errAudio;
+      return String(e && e.message || e);
+    }
+    async function loadCatalogBank(id, o0) {
+      const b = CATALOG.find(x => x.id === id);
+      if (!b) return false;
+      if (b.status !== 'green' && b.status !== 'yellow') return false;
+      if (!canNet()) { say(B.noNet); return false; }
+      const name = b.name[lang] || b.name.en;
+      return runJob(name, async o => {
+        const rep = newReport(name, b.src.home); o.rep = rep; o.bank = o0.bank == null ? prog.bank : o0.bank; o.clear = o0.clear !== false; o.title = name; o.name = name;
+        o.lic = { source: str(b.src.home, 200), license: str(b.license.spdx, 200), author: str(b.author, 200), attribution: str(b.attribution, 200) };
+        const resolve = async (f, sig) => netGet(new URL(encPath(f), b.src.base).href, { as: 'arraybuffer', signal: sig, maxBytes: 50 * 1048576 });
+        try {
+          if (b.kind === 'preset') {
+            o.progress(0, 1, b.preset.f);
+            const ab = await netGet(new URL(encPath(b.preset.f), b.src.base).href, { as: 'arraybuffer', signal: o.sig, maxBytes: 5 * 1048576 });
+            const text = new TextDecoder('utf-8').decode(ab);
+            return await importPresetText(b.preset.fmt, text, name, resolve, o);
+          }
+          const plan = planCatalog(b);
+          let ok = false;
+          try { ok = await runPlan(plan, resolve, o); } catch (e) { if (e && e.code === 'aborted') rep.aborted = true; else rep.error = netMsg(e); }
+          finishReport(rep, null, plan); return ok;
+        } catch (e) {
+          if (e && e.code === 'aborted') o.rep.aborted = true; else o.rep.error = netMsg(e);
+          finishReport(o.rep, null, null); return false;
+        }
+      });
+    }
+    // Freesound: eigen token van de gebruiker, alleen zoeken en een voorbeeld (mp3) laden van geluiden met CC0 of CC-BY; het token blijft alleen in het geheugen
+    async function fsSearch(query, token) {
+      if (!canNet()) { say(B.noNet); return []; }
+      query = String(query || '').trim().slice(0, 100); token = String(token || '').trim();
+      if (!query || !/^[A-Za-z0-9]{10,64}$/.test(token)) { say(B.fsNeed); return []; }
+      const url = 'https://freesound.org/apiv2/search/text/?query=' + encodeURIComponent(query) + '&page_size=15&fields=id,name,username,license,duration,previews&filter=' + encodeURIComponent('license:("Creative Commons 0" OR "Attribution")') + '&token=' + encodeURIComponent(token);
+      const r = await runJob('Freesound', async o => {
+        try { o.progress(0, 1, 'Freesound'); return await netGet(url, { as: 'json', signal: o.sig, maxBytes: 2 * 1048576 }); } catch (e) { say(e && e.code === 'aborted' ? B.w.aborted : (e && e.code === 'http' && (e.status === 401 || e.status === 403) ? B.fsAuth : netMsg(e))); return null; }
+      });
+      const list = r && Array.isArray(r.results) ? r.results : [];
+      return list.filter(x => x && Number.isFinite(x.id) && licOfUrl(x.license) && x.previews && (x.previews['preview-hq-mp3'] || x.previews['preview-hq-ogg']) && x.duration <= MAX_SEC)
+        .map(x => ({ id: x.id, name: str(x.name, 80), user: str(x.username, 60), license: licOfUrl(x.license), duration: x.duration, url: x.previews['preview-hq-ogg'] || x.previews['preview-hq-mp3'] }));
+    }
+    async function fsLoad(item) {
+      if (!canNet()) { say(B.noNet); return false; }
+      if (!item || !/^https:\/\/([a-z0-9-]+\.)?freesound\.org\//.test(String(item.url))) return false;
+      return runJob(item.name, async o => {
+        const rep = newReport(item.name, 'https://freesound.org/s/' + item.id + '/'); o.rep = rep;
+        try {
+          o.progress(0, 1, item.name);
+          const ab = await netGet(item.url, { as: 'arraybuffer', signal: o.sig, maxBytes: 20 * 1048576 });
+          const lic = { source: 'https://freesound.org/s/' + item.id + '/', license: item.license, author: str(item.user, 200), attribution: str('"' + item.name + '" by ' + item.user + ', freesound.org/s/' + item.id + ', ' + item.license, 200) };
+          const s = await stageSample('freesound-' + item.id + '.' + (isMp3(ab) ? 'mp3' : 'ogg'), ab, lic);
+          s.rec.name = str(item.name, 80);
+          const id = addRecord(s.rec); assignSample(curI(), prog.layer, id, item.name); gcStore(); if (ui) ui.refreshAll(); notesNotify();
+          rep.loaded = 1; rep.bytes = s.rec.bytes; rep.ok.push(fillT(B.r.samples, 1, fmtMiB(s.rec.bytes))); rep.warn.push(B.w.fsLossy);
+          if (s.mp3 && curPad().mode === 'key') rep.warn.push(fillT(B.w.mp3Loop, 1));
+          lastReport = rep; bkUi('report', rep); bkUi('credits'); return true;
+        } catch (e) { if (e && e.code === 'aborted') rep.aborted = true; else rep.error = e && e.code === 'decode' ? e.message : netMsg(e); finishReport(rep, null, null); return false; }
+      });
+    }
 
     // ---------- editor: model, bewerkingen, ongedaan/opnieuw ----------
     // De editor werkt op de laag (of zone) die gekozen is. Een bewerking leest het sample als Float32, maakt een nieuwe kopie, slaat die als PCM16 op onder een nieuw id
@@ -1584,7 +2165,7 @@ export default {
 
       // --- tabs en panelen
       const tabs = H('div', 'row tabs', right), panels = {};
-      const TABS = [['pad', T.tabPad], ['layer', T.tabLayers], ['zone', T.tabZones], ['edit', T.tabEdit], ['prog', T.tabProgram]];
+      const TABS = [['pad', T.tabPad], ['layer', T.tabLayers], ['zone', T.tabZones], ['edit', T.tabEdit], ['prog', T.tabProgram], ['banks', T.tabBanks]];
       const tabBtns = TABS.map(([id, label]) => {
         const bt = H('button', 'tabbtn', tabs, label); bt.type = 'button'; bt.setAttribute('role', 'tab');
         on(bt, 'click', () => showTab(id)); panels[id] = H('div', 'panel', right); return bt;
@@ -1727,6 +2308,143 @@ export default {
         button(r, T.clearAll, () => { token++; panicAt(ctx.currentTime); prog.banks = Array.from({ length: NBANK }, (_, i) => defBank(i)); store.clear(); bufs.clear(); selZone = 0; refreshAll(); notesNotify(); say(T.clearDone); });
         memEl = H('p', 'muted', P, '');
         H('p', 'muted', P, T.help);
+      }
+      // --- paneel Banken: catalogus, lokaal, webadres, Freesound, voortgang, importrapport, vermeldingen
+      let bkUiApi = null;
+      {
+        const P = panels.banks; P.classList.add('banks');
+        const lab = (parent, text, input) => { const l = H('label', 'f', parent); l.appendChild(document.createTextNode(text)); l.appendChild(input); return l; };
+        const stop = el => on(el, 'pointerdown', e => e.stopPropagation());
+        H('p', 'muted', P, B.intro);
+        const noNetEl = H('p', 'warnbox', P, B.noNet); noNetEl.setAttribute('data-bk', 'nonet'); noNetEl.hidden = canNet();
+        // doel en vermeldingsgegevens
+        const r0 = H('div', 'row', P);
+        const tgt = H('select', null, r0); tgt.setAttribute('data-bk', 'target'); tgt.setAttribute('aria-label', B.target);
+        BANK_LETTER.forEach((L, b) => { const o = H('option', null, tgt, T.bank + ' ' + L); o.value = String(b); });
+        let tgtTouched = false; on(tgt, 'change', () => { tgtTouched = true; }); stop(tgt);
+        lab(r0, B.target, tgt);
+        const clr = H('input', null, r0); clr.type = 'checkbox'; clr.checked = true; clr.setAttribute('data-bk', 'clear'); stop(clr);
+        lab(r0, B.clearFirst, clr);
+        const lf = H('div', 'bgrp', P); H('h4', null, lf, B.licHeader); H('p', 'muted', lf, B.licHelp);
+        const lfIn = {};
+        for (const [k, t, ph] of [['author', B.lfAuthor], ['license', B.lfLicense], ['attribution', B.lfAttr]]) {
+          const i = H('input', 'txt', lf); i.type = 'text'; i.maxLength = 200; i.setAttribute('data-bk', 'lic-' + k); i.setAttribute('aria-label', t); i.placeholder = t; stop(i); lfIn[k] = i;
+        }
+        const licFields = () => ({ author: lfIn.author.value, license: lfIn.license.value, attribution: lfIn.attribution.value });
+        const opts = () => ({ bank: int(+tgt.value, 0, 0, NBANK - 1), clear: clr.checked, lic: licFields() });
+        // voortgang
+        const jb = H('div', 'bgrp jobbox', P); jb.setAttribute('data-bk', 'job'); jb.hidden = true;
+        const jbTxt = H('div', 'info', jb, ''); jbTxt.setAttribute('role', 'status');
+        const jbBar = H('progress', null, jb); jbBar.max = 1; jbBar.value = 0; jbBar.setAttribute('aria-label', B.progress);
+        const jbCancel = H('button', 'btn', jb, B.cancel); jbCancel.type = 'button'; jbCancel.setAttribute('data-bk', 'cancel'); on(jbCancel, 'click', () => cancelJob());
+        // catalogus
+        H('h4', null, P, B.catalog); H('p', 'muted', P, B.catHelp);
+        const cards = [];
+        for (const b of CATALOG) {
+          const nm = b.name[lang] || b.name.en;
+          const c = H('div', 'bcard ' + b.status, P); c.setAttribute('data-bank', b.id); c.setAttribute('role', 'group'); c.setAttribute('aria-label', nm);
+          const hd = H('div', 'bhead', c); H('strong', null, hd, nm);
+          H('span', 'chip ' + b.status, hd, (b.status === 'green' ? B.green : B.yellow) + ' · ' + b.license.spdx).setAttribute('data-bk', 'chip');
+          H('p', null, c, b.desc[lang] || b.desc.en);
+          const dl = H('dl', 'meta', c);
+          const row = (k, v, link) => { H('dt', null, dl, k); const d = H('dd', null, dl); if (link) { const a = H('a', null, d, v); a.href = link; a.target = '_blank'; a.rel = 'noopener noreferrer'; } else d.textContent = v; return d; };
+          row(B.license, b.license.text + ' (' + b.license.spdx + ')', b.license.url).setAttribute('data-bk', 'license');
+          row(B.author, b.author).setAttribute('data-bk', 'author');
+          row(B.credit, (b.credit ? B.creditReq : B.creditNo) + ': ' + b.attribution).setAttribute('data-bk', 'credit');
+          row(B.size, fmtMiB(b.bytes) + ' MiB · ' + b.n + ' ' + B.files + ' · ' + b.format.toUpperCase());
+          row(B.source, b.src.name, b.src.home);
+          row(B.pinned, b.src.pin.slice(0, 12));
+          row(B.checked, b.license.checked[lang] || b.license.checked.en);
+          let acc = null;
+          if (b.status === 'yellow') {
+            H('p', 'warnbox', c, b.warn[lang] || b.warn.en).setAttribute('data-bk', 'warn');
+            acc = H('input', null, c); acc.type = 'checkbox'; acc.setAttribute('data-bk', 'accept'); stop(acc);
+            lab(c, B.accept, acc);
+          }
+          const r = H('div', 'row', c);
+          const ld = H('button', 'btn', r, B.load); ld.type = 'button'; ld.setAttribute('data-bk', 'load'); ld.setAttribute('aria-label', fillT(B.loadBank, nm)); stop(ld);
+          on(ld, 'click', () => { loadCatalogBank(b.id, opts()); });
+          const op = H('a', 'btn lnk', r, B.openSrc); op.href = b.src.home; op.target = '_blank'; op.rel = 'noopener noreferrer'; op.setAttribute('aria-label', fillT(B.openOf, nm));
+          if (acc) on(acc, 'change', sync);
+          cards.push({ b, ld, acc });
+        }
+        // lokaal
+        H('h4', null, P, B.local); H('p', 'muted', P, B.localHelp);
+        const lr = H('div', 'row', P);
+        const fin = H('input', 'hide', lr); fin.type = 'file'; fin.multiple = true; fin.accept = '.wav,.flac,.ogg,.oga,.mp3,.sfz,.dspreset,audio/*'; fin.setAttribute('data-bk', 'files'); fin.tabIndex = -1;
+        const din = H('input', 'hide', lr); din.type = 'file'; din.multiple = true; din.setAttribute('webkitdirectory', ''); din.setAttribute('data-bk', 'dir'); din.tabIndex = -1;
+        const bf = H('button', 'btn', lr, B.chooseFiles); bf.type = 'button'; on(bf, 'click', () => fin.click()); stop(bf);
+        const bd = H('button', 'btn', lr, B.chooseDir); bd.type = 'button'; on(bd, 'click', () => din.click()); stop(bd);
+        const pick = inp => on(inp, 'change', () => { const arr = Array.from(inp.files || []); inp.value = ''; if (!arr.length) return; if (arr.some(f => /\.(sfz|dspreset)$/i.test(f.name))) importFromFiles(arr, opts()); else loadFiles(arr.filter(f => /\.(wav|flac|ogg|oga|mp3)$/i.test(f.name) || /^audio\//.test(f.type)), licOf('', licFields())); });
+        pick(fin); pick(din);
+        // webadres
+        H('h4', null, P, B.urlTitle); H('p', 'muted', P, B.urlHelp);
+        const ur = H('div', 'row', P);
+        const uin = H('input', 'txt', ur); uin.type = 'url'; uin.setAttribute('data-bk', 'url'); uin.placeholder = 'https://…'; uin.setAttribute('aria-label', B.urlLabel); stop(uin);
+        const ugo = H('button', 'btn', ur, B.urlGo); ugo.type = 'button'; ugo.setAttribute('data-bk', 'urlgo'); stop(ugo);
+        on(ugo, 'click', () => { importFromUrl(uin.value, opts()); });
+        on(uin, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); importFromUrl(uin.value, opts()); } });
+        // Freesound
+        H('h4', null, P, B.fsTitle); H('p', 'muted', P, B.fsHelp);
+        const fr = H('div', 'row', P);
+        const ftk = H('input', 'txt', fr); ftk.type = 'password'; ftk.autocomplete = 'off'; ftk.setAttribute('data-bk', 'fstoken'); ftk.placeholder = B.fsToken; ftk.setAttribute('aria-label', B.fsToken); stop(ftk);
+        const fq = H('input', 'txt', fr); fq.type = 'search'; fq.setAttribute('data-bk', 'fsquery'); fq.placeholder = B.fsQuery; fq.setAttribute('aria-label', B.fsQuery); stop(fq);
+        const fgo = H('button', 'btn', fr, B.fsGo); fgo.type = 'button'; fgo.setAttribute('data-bk', 'fsgo'); stop(fgo);
+        const fres = H('ul', 'fslist', P); fres.setAttribute('data-bk', 'fsresults');
+        const doSearch = async () => {
+          const list = await fsSearch(fq.value, ftk.value); fres.textContent = '';
+          if (!list.length) { const li = H('li', 'muted', fres, B.fsNone); return; }
+          for (const it of list) {
+            const li = H('li', null, fres); H('span', null, li, fillT(B.fsOf, it.name, it.user, it.license, it.duration.toFixed(1)));
+            const lb = H('button', 'btn', li, B.fsLoad); lb.type = 'button'; lb.setAttribute('data-bk', 'fsload'); lb.setAttribute('data-id', String(it.id)); stop(lb); on(lb, 'click', () => { fsLoad(it); });
+          }
+        };
+        on(fgo, 'click', doSearch); on(fq, 'keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
+        // importrapport
+        H('h4', null, P, B.reportTitle);
+        const rep = H('div', 'report', P); rep.setAttribute('data-bk', 'report'); rep.setAttribute('role', 'region'); rep.setAttribute('aria-label', B.reportTitle); rep.tabIndex = -1;
+        H('p', 'muted', rep, B.rNone);
+        // vermeldingen
+        H('h4', null, P, B.creditsTitle); H('p', 'muted', P, B.creditsHelp);
+        const crd = H('ul', 'credits', P); crd.setAttribute('data-bk', 'credits');
+        const cp = H('button', 'btn', P, B.copy); cp.type = 'button'; cp.setAttribute('data-bk', 'copy'); stop(cp);
+        function creditText() { return creditsOf(store).map(c => (c.attribution || c.license) + (c.author ? ' - ' + c.author : '') + (c.license ? ' [' + c.license + ']' : '') + (c.source ? ' ' + c.source : '')).join('\n'); }
+        on(cp, 'click', () => { const t = creditText(); try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(() => say(B.copied), () => say(t)); else say(t); } catch (e) { say(t); } });
+        function sync() {
+          const busy = !!job;
+          for (const { b, ld, acc } of cards) ld.disabled = busy || !canNet() || (b.status === 'yellow' && !(acc && acc.checked));
+          for (const x of [ugo, fgo, bf, bd]) x.disabled = busy && x !== bf && x !== bd;
+          jb.hidden = !busy; jbCancel.disabled = !busy;
+        }
+        function paintJob() {
+          sync(); if (!job) return;
+          jbTxt.textContent = fillT(B.jobLine, job.label, job.done, job.total || 1) + (job.name ? ' · ' + baseName(job.name) : '');
+          jbBar.max = Math.max(1, job.total); jbBar.value = job.done;
+        }
+        function paintReport(r) {
+          rep.textContent = '';
+          if (!r) { H('p', 'muted', rep, B.rNone); return; }
+          H('p', null, rep, r.title + (r.aborted ? ' · ' + B.w.aborted : '')).style.fontWeight = '600';
+          for (const [cls, title, lines] of [['ok', B.rOk, r.ok], ['ign', B.rIgn, r.ignored], ['warn', B.rWarn, r.warn]]) {
+            if (!lines.length) continue;
+            const h = H('h5', null, rep, title + ' (' + lines.length + ')'); const ul = H('ul', cls, rep); for (const l of lines) H('li', null, ul, l);
+          }
+        }
+        function paintCredits() {
+          crd.textContent = ''; const list = creditsOf(store);
+          if (!list.length) H('li', 'muted', crd, B.creditsNone);
+          for (const c of list) {
+            const li = H('li', null, crd), req = /\bBY\b/i.test(c.license) && !/CC0/i.test(c.license);
+            H('strong', null, li, c.attribution || c.license);
+            H('span', null, li, ' · ' + c.license + (c.author ? ' · ' + c.author : '') + ' · ' + fillT(B.samplesN, c.samples));
+            if (req) H('span', 'chip yellow', li, ' ' + B.creditReq);
+            if (/^https:\/\//.test(c.source)) { const a = H('a', null, li, ' ' + c.source); a.href = c.source; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+          }
+          cp.disabled = !list.length;
+        }
+        ctl.push(() => { if (!tgtTouched) tgt.value = String(prog.bank); paintCredits(); sync(); });
+        bkUiApi = { job: paintJob, report: paintReport, credits: paintCredits };
+        sync(); paintCredits();
       }
       // --- paneel Bewerken: golfvormeditor
       const EH = 230, RULER = 22;
@@ -2298,7 +3016,7 @@ export default {
       stopFrame = tekenLus(host, selfRef, tick, 30);
 
       ui = {
-        refreshAll, refreshCtl, say(m) { if (statusEl) statusEl.textContent = m || ''; }, drawWave,
+        bk: bkUiApi, refreshAll, refreshCtl, say(m) { if (statusEl) statusEl.textContent = m || ''; }, drawWave,
         ed: { view() { ed.dirty = true; esig = ''; }, refresh() { esig = ''; edRefresh(false); } },
         destroy() {
           if (stopFrame) { stopFrame(); stopFrame = null; }
@@ -2358,11 +3076,15 @@ export default {
       },
       noteNames() { try { return noteList(); } catch (e) { return []; } },
       async loadAudio(files) { await loadFiles(files); },
+      importReport() { return lastReport ? JSON.parse(JSON.stringify(lastReport)) : null; },
+      bankCatalog() { return JSON.parse(JSON.stringify(CATALOG)); },
       getState() {
         const samples = {}; for (const [id, r] of store) samples[id] = serSample(r);
+        const cr = creditsOf(store);
         return {
           v: 1, bank: prog.bank, pad: prog.pad, layer: prog.layer, baseNote: prog.baseNote, level: prog.level, padVel: prog.padVel,
           banks: prog.banks.map(bk => ({ name: bk.name, pads: bk.pads.map(serPad) })), samples,
+          ...(cr.length ? { credits: cr } : {}),
         };
       },
       setState(raw) {
@@ -2390,6 +3112,7 @@ export default {
       },
       destroy() {
         if (dead) return; dead = true; token++;
+        if (job) { try { job.ctl.abort(); } catch (e) { /* ok */ } job = null; }
         if (warmTimer) { clearTimeout(warmTimer); warmTimer = 0; }
         if (ui) { ui.destroy(); ui = null; }
         for (const x of [...trigs]) for (const v of x.voices) { try { v.source.onended = null; v.source.stop(); } catch (e) { /* al gestopt */ } }

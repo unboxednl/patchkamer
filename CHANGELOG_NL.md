@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.9.0 (2026-11-08)
+
+### Toegevoegd
+- **Pad Sampler 1.3.0: banken en catalogus** (stap 4 van het apparaat). Nieuwe tab **Banken**: een catalogus van zeven gratis banken (alleen bronnen waarvan de licentie is gelezen, elk bestand vastgepind op een versie; licentie, auteur en vereiste vermelding altijd zichtbaar), lokaal laden (bestanden of map), een webadres en Freesound met het eigen token van de gebruiker. Importers voor WAV (root en lus uit het `smpl`-blok), FLAC, OGG, MP3 (met waarschuwing voor lussen), een SFZ-subset en Decent Sampler, met een importrapport. Een bank laden is één stap die ongedaan te maken is. De state krijgt optioneel `credits` (afgeleid van de samples die erin zitten); oude states laden ongewijzigd.
+- **Host: `host.fetchFile(inst, url, opts)`** in `js/stems.js`: haalt één https-bestand op voor een apparaat, alleen op aanvraag van een apparaat na een klik, zonder inloggegevens, zonder adressen op het eigen netwerk, met een grens aan de grootte en annuleren via een `AbortSignal`. **Let op:** dit staat nog niet in het contract (v1.28, §15 verbiedt netwerk in een apparaat); een apparaat controleert eerst of de functie bestaat. Een contractvoorstel (v1.29) volgt als Freek dat wil.
 ## 0.8.0 (2026-11-08)
 
 ### Nieuw
