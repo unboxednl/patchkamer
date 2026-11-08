@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.25 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.26 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -34,6 +34,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.23 | Stems splitsen: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` laat de host een nummer door een dienst op internet in stems splitsen (wachtrij, zip uitpakken, decoderen) en geeft AudioBuffers terug; sleutels staan alleen in de browser van de gebruiker; de host vraagt bevestiging met de kosten; een apparaat zet het aantal uitgangen met `host.setPorts` (§13g) |
 | v1.24 | Klembord, scènes met meerdere sporen: de clip-soort `multi` (`tracks` met per spoor een gewone clip), `clipInfo().tracks`, `getClip({ kind: 'multi' })`; de host wijst sporen toe per soort en op volgorde, laat weg en meldt wat niet past, en kopieert alle sporen met Shift-klik op Kopieer; de validator kent `multi` (§13d) |
 | v1.25 | Opnamelampje: `host.recording(this, aan)` laat de host naast Start een rood, langzaam knipperend lampje met de opnametijd (mm:ss) tonen; een klik erop schuift het canvas zodat het apparaat midden in beeld staat. Optioneel; een oude host heeft de functie niet. |
+| v1.26 | Klembord, lengte volgen: `clipInfo().length.settable`; een apparaat met een gedeelde lengte laat `setClip` die lengte zetten uit `clip.length` als de gebruiker "Pas lengte aan de clip aan" kiest (§13d) |
 
 ---
 
@@ -931,7 +932,7 @@ Huidige toonhoogtes worden **zoals opgeslagen** gekopieerd: de transpositie van 
 |---|---|
 | `name` | Hoe je apparaat het huidige patroon noemt ("Spoor 2 · Bas, clip 3") |
 | `copy`, `paste` | Lijsten met `"notes"`, `"drums"` en/of `"multi"`: wat je nu kunt geven (`getClip`) en wat je nu kunt ontvangen (`setClip`). Een generator zonder stappenlijst geeft `paste: []`. De soort hangt van het apparaat af (bij een spoortype dat het spoor bepaalt) en kan per moment verschillen |
-| `length` | `{ min, max, step, current, shared }` in tikken: hoe lang het patroon mag zijn. `shared: true` als de lengte voor alle patronen van het apparaat geldt: de host past de clip dan aan aan de lengte van het apparaat, en wijzigt de lengte niet |
+| `length` | `{ min, max, step, current, shared, settable }` in tikken: hoe lang het patroon mag zijn. `shared: true` als de lengte voor alle patronen van het apparaat geldt: de host past de clip dan aan aan de lengte van het apparaat, en wijzigt de lengte niet. `settable: true` (v1.26, optioneel, alleen zinvol bij `shared`) zegt dat `setClip` die gedeelde lengte mag zetten uit `clip.length`; de host doet dat alleen als de gebruiker "Pas lengte aan de clip aan" aanzet, anders blijft `clip.length` gelijk aan `current` |
 | `grid` | Lijst met rasters die het apparaat aankan (16, 32, 64) |
 | `poly` | Hoeveel noten tegelijk (1 = mono) |
 | `range` | `[laagste, hoogste]` MIDI-noot die het apparaat kan |

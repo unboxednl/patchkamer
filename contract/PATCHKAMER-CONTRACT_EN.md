@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.25 for building agents
+# Patchkamer — Instrument contract v1.26 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -34,6 +34,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.23 | Stem splitting: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` has the host split a track into stems with an online service (queue, unpack the zip, decode) and returns AudioBuffers; keys are kept only in the user's browser; the host asks for confirmation with the cost; a device sets its number of outputs with `host.setPorts` (§13g) |
 | v1.24 | Clipboard, scenes with several tracks: the clip kind `multi` (`tracks`, each a plain clip), `clipInfo().tracks`, `getClip({ kind: 'multi' })`; the host assigns tracks by kind and in order, leaves out and reports what does not fit, and copies all tracks with Shift-click on Copy; the validator knows `multi` (§13d) |
 | v1.25 | Recording lamp: `host.recording(this, on)` makes the host show a red, slowly blinking lamp with the recording time (mm:ss) next to Start; clicking it moves the canvas so the device sits in the middle of the screen. Optional; an old host does not have the function. |
+| v1.26 | Clipboard, match length: `clipInfo().length.settable`; a device with a shared length lets `setClip` set that length from `clip.length` when the user picks "Match the clip's length" (§13d) |
 
 ---
 
@@ -931,7 +932,7 @@ Current pitches are copied **as stored**: the transposition of a lane (octave, `
 |---|---|
 | `name` | What your device calls the current pattern ("Lane 2 · Bass, clip 3") |
 | `copy`, `paste` | Lists with `"notes"`, `"drums"` and/or `"multi"`: what you can give now (`getClip`) and what you can receive now (`setClip`). A generator without a step list returns `paste: []`. The kind depends on the device (on a lane type where the lane decides) and can differ from moment to moment |
-| `length` | `{ min, max, step, current, shared }` in ticks: how long the pattern may be. `shared: true` if the length applies to all patterns of the device: the host then adapts the clip to the device's length and does not change the length |
+| `length` | `{ min, max, step, current, shared, settable }` in ticks: how long the pattern may be. `shared: true` if the length applies to all patterns of the device: the host then adapts the clip to the device's length and does not change the length. `settable: true` (v1.26, optional, only meaningful with `shared`) says `setClip` may set that shared length from `clip.length`; the host only does so when the user switches on "Match the clip's length", otherwise `clip.length` equals `current` |
 | `grid` | List of grids the device can handle (16, 32, 64) |
 | `poly` | How many notes at once (1 = mono) |
 | `range` | `[lowest, highest]` MIDI note the device can do |

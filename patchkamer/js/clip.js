@@ -126,10 +126,11 @@ function clipFit(c,inf,ctx){
   // lengte: eigen lengte volgen (binnen min/max/stap), gedeelde lengte houden
   const min=clipInt(L.min,1,CLIP_MAXLEN,1), max=clipInt(L.max,min,CLIP_MAXLEN,CLIP_MAXLEN), step=clipInt(L.step,1,CLIP_MAXLEN,1);
   let T;
-  if(L.shared&&typeof L.current==='number') T=clipInt(L.current,1,CLIP_MAXLEN,S);
+  const follow=!!(ctx.matchLen&&L.settable);   // v1.26: het apparaat laat zijn gedeelde lengte door de clip zetten
+  if(L.shared&&!follow&&typeof L.current==='number') T=clipInt(L.current,1,CLIP_MAXLEN,S);
   else { T=Math.min(Math.max(S,min),max); if(step>1){ T=Math.ceil(T/step)*step; if(T>max) T=Math.floor(max/step)*step; if(T<min) T=min; } }
   T=Math.max(1,T);
-  if(ctx.matchLen&&T!==S) rep.lenIgn=L.shared?'shared':(min===max?'fixed':'');   // "pas lengte aan de clip aan": kan alleen als het apparaat zijn lengte per patroon volgt (dat doet het al); anders melden
+  if(ctx.matchLen&&T!==S&&!follow) rep.lenIgn=L.shared?'shared':(min===max?'fixed':'');   // "pas lengte aan de clip aan": kan alleen als het apparaat zijn lengte per patroon volgt (dat doet het al); anders melden
   let tiledNow=false;
   if(T>S){
     if(T%S===0){ const f=T/S, base=ev; ev=[]; for(let k=0;k<f;k++) base.forEach(e=>ev.push({...e,t:e.t+k*S})); tiledNow=true; }

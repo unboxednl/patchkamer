@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Patchkamer contract v1.26: `clipInfo().length.settable`; `setClip` zet de gedeelde lengte uit `clip.length` (de host vraagt dat alleen met "Pas lengte aan de clip aan").
 // 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het huidige patroon (A tot D) wordt gekopieerd met één baan per kanaal (`chN`, `type` is het instrument, scheme `gm`); velocity, kans en ratchet gaan mee. Plakken zet alleen de stappen van het actieve patroon op de kanalen (kanalen zonder slagen worden leeg); de lengte is gedeeld en blijft van het apparaat, kit, klank, swing en andere patronen blijven. Gastinstrumenten zonder kanaal worden niet gevuld. Verder niets gewijzigd: getState, presets en geluid gelijk aan 1.14.2. De twee stapbewerkwaarden (editVelocity, editProbability) staan nu in `modExclude` (alleen metadata; de validator-melding is weg).
 // 1.14.2 — Ontbrekende continue regelaars bestuurbaar via params()/modulate(): Humanize (human), Patroonswing A tot D (patternSwing.0 tot .3) en de swing per kanaal (chN.swing); alle standaard uit (drift 0,05, role swing of humanize).
 //          Modulatie komt alleen bovenop de knop (knop + o × bereik, geclampt; swing als som begrensd tot 50%) en is nooit state; getState, presets en tunes gelijk. Zonder modulatie gelijk aan 1.14.1. Niet beluisterd.
@@ -126,7 +127,7 @@ const CSS=`
 const OUT_TRIM=.36*5.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.15.0',kind:'instrument',modExclude:['editVelocity','editProbability'],category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.drumkit',name:'Drum Kit',version:'1.16.0',kind:'instrument',modExclude:['editVelocity','editProbability'],category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -287,10 +288,10 @@ const __pkDef = {
  const CX=CT[host&&host.lang]||CT.en, CLIP_ID='nl.patchkamer.drumkit';
  const clipLanes=()=>state.channels.map((c,i)=>({id:'ch'+(i+1),name:(TYPES[c.type]||[c.type])[0].slice(0,40),type:c.type,note:Math.round(c.note)}));
  const clipName=()=>CX.pat('ABCD'[state.pattern]||'A');
- function clipInfo(){try{if(dead)return null;return {name:clipName(),copy:['drums'],paste:['drums'],length:{min:12,max:768,step:12,current:state.length*12,shared:true},grid:[16],poly:16,range:[0,127],scheme:'gm',vel:'continuous',prob:true,ratchet:true,lanes:clipLanes(),maxEvents:state.channels.length*64};}catch(e){return null;}}
+ function clipInfo(){try{if(dead)return null;return {name:clipName(),copy:['drums'],paste:['drums'],length:{min:12,max:768,step:12,current:state.length*12,shared:true,settable:true},grid:[16],poly:16,range:[0,127],scheme:'gm',vel:'continuous',prob:true,ratchet:true,lanes:clipLanes(),maxEvents:state.channels.length*64};}catch(e){return null;}}
  function getClip(){try{if(dead)return null;const L=state.length,hits=[];
   state.channels.forEach((c,i)=>{const st=c.steps[state.pattern];for(let k=0;k<L;k++){const z=st[k];if(!(z.v>=0.01))continue;const h={t:k*12,lane:i,vel:Math.min(1,z.v)};if(z.p<1)h.prob=z.p;if(z.r>1)h.ratchet=z.r;hits.push(h);}});
-  const clip={format:'patchkamer-clip',formatVersion:1,kind:'drums',name:clipName(),length:L*12,grid:16,source:{device:CLIP_ID,name:'Drum Kit',version:'1.15.0',scheme:'gm'},lanes:clipLanes(),hits};
+  const clip={format:'patchkamer-clip',formatVersion:1,kind:'drums',name:clipName(),length:L*12,grid:16,source:{device:CLIP_ID,name:'Drum Kit',version:'1.16.0',scheme:'gm'},lanes:clipLanes(),hits};
   if(state.patternSwing[state.pattern]>0)clip.swing=state.patternSwing[state.pattern];
   return copy(clip);}catch(e){return null;}}
  function setClip(clip){try{
@@ -298,6 +299,8 @@ const __pkDef = {
   if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1))return {ok:false,reason:CX.bad};
   if(clip.kind!=='drums')return {ok:false,reason:CX.kind};
   if(typeof clip.length!=='number'||!Number.isFinite(clip.length))return {ok:false,reason:CX.bad};
+  const oldLen=state.length,newLen=Math.round(clamp(clip.length,12,768,state.length*12)/12);   // v1.26: length.settable, de gedeelde lengte volgt de clip
+  state.length=newLen;
   const lanes=Array.isArray(clip.lanes)?clip.lanes.slice(0,64):[],src=Array.isArray(clip.hits)?clip.hits.slice(0,4096):[],map=lanes.map(l=>{const m=l&&typeof l.id==='string'?/^ch(\d+)$/.exec(l.id):null;const i=m?+m[1]-1:-1;return i>=0&&i<state.channels.length?i:-1;});
   const next=state.channels.map(()=>Array.from({length:state.length},cell));
   for(const h of src){if(!h||typeof h!=='object'||typeof h.t!=='number'||!Number.isFinite(h.t)||!Number.isInteger(h.lane)||h.lane<0||h.lane>=map.length)continue;const i=map[h.lane];if(i<0)continue;
@@ -305,7 +308,7 @@ const __pkDef = {
    next[i][k]={v,p:clamp(h.prob,0,1,1),r:Math.round(clamp(h.ratchet,1,4,1))};}
   const before=JSON.stringify(state.channels.map(c=>c.steps[state.pattern]));
   state.channels.forEach((c,i)=>{const st=c.steps[state.pattern];for(let k=0;k<state.length;k++)st[k]=next[i][k];});
-  if(JSON.stringify(state.channels.map(c=>c.steps[state.pattern]))!==before)render();
+  if(oldLen!==newLen||JSON.stringify(state.channels.map(c=>c.steps[state.pattern]))!==before)render();
   return {ok:true};}catch(e){return {ok:false,reason:CX.bad};}}
  self={inputs:{},outputs,
  // contract v1.5: één bundel met de actieve kanalen (zelfde nodes als de uitgangen ch1…ch16)

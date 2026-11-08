@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Patchkamer contract v1.26: `clipInfo().length.settable`; een clip met een andere lengte zet de lengte van alle kanalen op die lengte (de polymeter vervalt; de host vraagt dat alleen met "Pas lengte aan de clip aan").
 // 1.16.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het huidige patroon (A tot D) gaat mee met één baan per kanaal (`chN`, `type`, scheme `gm`); polymeter staat in `lanes[].length` (de clip is zo lang als de langste baan), microtiming in `t` (±0,4 stap). Kans en ratchet gaan mee. Every, phase, fill en locks zijn niet te vertalen en gaan alleen via `native` mee naar een ander exemplaar van dit apparaat; elk ander apparaat negeert ze. Plakken zet de stappen van het actieve patroon binnen de lengte van elke baan; de banenlengtes (seqLength), klank, kit, swing en andere patronen blijven. Gastinstrumenten zonder kanaal worden niet gevuld. getState, presets en geluid zijn gelijk aan 1.15.0.
 // 1.15.0 — Regelaars en stappen herkenbaar voor skins (contract v1.22, additief): elke stapknop krijgt via host.ui.adopt rol step, groep chN en als id chN.step.K (K = stapnummer) en dus een unieke sleutel, zodat een skin vorm, maat, kleur en ledje van de stappen kiest; de klassen step, quarter, on en now blijven van het apparaat
 //          (paintStep zet ze nu met classList in plaats van className, zodat klassen van de host blijven staan). Alle schuiven krijgen als id de params()-sleutel (master, rumble, ch1.decay, ...) of een vaste naam voor de bewerkregelaars (step.velocity, step.micro, edit.velocity, ...), rol param en een groep; de bewerkregelaars staan bewust in modExclude (geen stuurbare parameters, zoals al in 1.14.3).
@@ -152,7 +153,7 @@ const CSS=`
 const OUT_TRIM=.36*4.5;
 const CEIL_T=.8,CEIL_CURVE=(()=>{const n=4097,c=new Float32Array(n);for(let i=0;i<n;i++){const x=(i/(n-1)*2-1)*2,a=Math.abs(x),y=a<=CEIL_T?a:CEIL_T+(1-CEIL_T)*Math.tanh((a-CEIL_T)/(1-CEIL_T));c[i]=Math.sign(x)*y/2;}return c;})();  // plafond: onder 0,8 ongewijzigd, daarboven zacht naar 1,0 (geen harde clip)
 const __pkDef = {
- id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.16.0',kind:'instrument',modExclude:['edit.velocity','edit.probability','step.velocity','step.micro'],category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
+ id:'nl.patchkamer.pulsedrums',name:'Pulse Drums',version:'1.17.0',kind:'instrument',modExclude:['edit.velocity','edit.probability','step.velocity','step.micro'],category:'groove',ui:{width:1180,minWidth:480,jacks:true},ports:PORTS,
  i18n:{en:{ports:{multi:'Separate outs (bundle)'}}},
  create(ctx,host){
  const T=TXT[host&&host.lang]||TXT.en;
@@ -337,12 +338,12 @@ const __pkDef = {
  const clipName=()=>CX.pat('ABCD'[state.pattern]||'A');
  const clipLen=()=>Math.max(1,...state.channels.map(c=>c.seqLength))*12;
  const clipLanes=withLen=>{const T=clipLen();return state.channels.map((c,i)=>{const l={id:'ch'+(i+1),name:(TYPES[c.type]||[c.type])[0].slice(0,40),type:c.type,note:Math.round(c.note)};if(withLen&&c.seqLength*12!==T)l.length=c.seqLength*12;return l;});};
- function clipInfo(){try{if(dead)return null;return {name:clipName(),copy:['drums'],paste:['drums'],length:{min:12,max:768,step:12,current:clipLen(),shared:true},grid:[16],poly:16,range:[0,127],scheme:'gm',vel:'continuous',prob:true,ratchet:true,lanes:clipLanes(false),maxEvents:state.channels.length*64};}catch(e){return null;}}
+ function clipInfo(){try{if(dead)return null;return {name:clipName(),copy:['drums'],paste:['drums'],length:{min:12,max:768,step:12,current:clipLen(),shared:true,settable:true},grid:[16],poly:16,range:[0,127],scheme:'gm',vel:'continuous',prob:true,ratchet:true,lanes:clipLanes(false),maxEvents:state.channels.length*64};}catch(e){return null;}}
  function getClip(){try{if(dead)return null;const T=clipLen(),hits=[],ex={};
   state.channels.forEach((c,i)=>{const st=c.steps[state.pattern],LL=c.seqLength*12;for(let k=0;k<c.seqLength;k++){const z=st[k],extra=z.every!==1||z.phase!==1||z.fill!==0||Object.keys(z.locks||{}).length>0||z.micro!==0;
    if(z.v>=0.01){const t=Math.max(0,Math.min(LL-1,k*12+Math.round(z.micro*12)));const h={t,lane:i,vel:Math.min(1,z.v)};if(z.p<1)h.prob=z.p;if(z.r>1)h.ratchet=z.r;hits.push(h);if(extra)ex[i+':'+k]={t,micro:z.micro,every:z.every,phase:z.phase,fill:z.fill,locks:copy(z.locks||{})};}
    else if(extra||z.v>0||z.p!==1||z.r!==1)ex[i+':'+k]={off:1,v:z.v,p:z.p,r:z.r,micro:z.micro,every:z.every,phase:z.phase,fill:z.fill,locks:copy(z.locks||{})};}});
-  const clip={format:'patchkamer-clip',formatVersion:1,kind:'drums',name:clipName(),length:T,grid:16,source:{device:CLIP_ID,name:'Pulse Drums',version:'1.16.0',scheme:'gm'},lanes:clipLanes(true),hits,native:{device:CLIP_ID,data:{pattern:state.pattern,ex}}};
+  const clip={format:'patchkamer-clip',formatVersion:1,kind:'drums',name:clipName(),length:T,grid:16,source:{device:CLIP_ID,name:'Pulse Drums',version:'1.17.0',scheme:'gm'},lanes:clipLanes(true),hits,native:{device:CLIP_ID,data:{pattern:state.pattern,ex}}};
   if(state.patternSwing[state.pattern]>0)clip.swing=state.patternSwing[state.pattern];
   return copy(clip);}catch(e){return null;}}
  function setClip(clip){try{
@@ -350,6 +351,8 @@ const __pkDef = {
   if(!clip||typeof clip!=='object'||Array.isArray(clip)||clip.format!=='patchkamer-clip'||(clip.formatVersion!==undefined&&clip.formatVersion!==1))return {ok:false,reason:CX.bad};
   if(clip.kind!=='drums')return {ok:false,reason:CX.kind};
   if(typeof clip.length!=='number'||!Number.isFinite(clip.length))return {ok:false,reason:CX.bad};
+  const oldLen=clipLen(),newLen=Math.round(clamp(clip.length,12,768,oldLen)/12)*12;   // v1.26: length.settable; een andere lengte zet alle kanalen op die lengte (polymeter vervalt), dezelfde lengte laat alles staan
+  if(newLen!==oldLen)state.channels.forEach(c=>{c.seqLength=newLen/12;});
   const lanes=Array.isArray(clip.lanes)?clip.lanes.slice(0,64):[],src=Array.isArray(clip.hits)?clip.hits.slice(0,4096):[],map=lanes.map(l=>{const m=l&&typeof l.id==='string'?/^ch(\d+)$/.exec(l.id):null;const i=m?+m[1]-1:-1;return i>=0&&i<state.channels.length?i:-1;});
   const nat=clip.native&&typeof clip.native==='object'&&clip.native.device===CLIP_ID&&clip.native.data&&typeof clip.native.data==='object'&&clip.native.data.pattern===state.pattern&&clip.native.data.ex&&typeof clip.native.data.ex==='object'?clip.native.data.ex:null;
   const next=state.channels.map(c=>Array.from({length:c.seqLength},cell));let dropped=0;
@@ -364,7 +367,7 @@ const __pkDef = {
    next[i][k]={...cell(),v:clamp(e.v,0,1,0),p:clamp(e.p,0,1,1),r:Math.round(clamp(e.r,1,4,1)),micro:clamp(e.micro,-.4,.4,0),every:Math.round(clamp(e.every,1,8,1)),phase:Math.round(clamp(e.phase,1,8,1)),fill:Math.round(clamp(e.fill,0,2,0)),locks:cleanLocks(e.locks)};}
   const before=JSON.stringify(state.channels.map(c=>c.steps[state.pattern]));
   state.channels.forEach((c,i)=>{const st=c.steps[state.pattern];for(let k=0;k<c.seqLength;k++)st[k]=next[i][k];});
-  if(JSON.stringify(state.channels.map(c=>c.steps[state.pattern]))!==before)render();
+  if(newLen!==oldLen||JSON.stringify(state.channels.map(c=>c.steps[state.pattern]))!==before)render();
   return {ok:true,...(dropped?{dropped}:{})};}catch(e){return {ok:false,reason:CX.bad};}}
  self={inputs:{},outputs,
  params(){return paramList.map(p=>({...p}));},
