@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.12.1 (2026-11-08)
+
+### Opgelost
+- **MIDI Controller 1.4.0: pads.** Een pad zonder koppeling speelt een noot op het actieve apparaat; een pad dat een CC stuurt (zet de rij op **pads**) speelt noot 36 en omhoog. Nieuwe optie **Vaste pad-velocity** voor pads die niet op aanslag reageren. **Laatste invoer** toont nu waar elk bericht heen gaat (koppeling, noot naar apparaat of geen nootingang), en de nootingang van een apparaat wordt opnieuw gekozen als het apparaat verandert. Aan de Pad Sampler is niets veranderd.
+
 ## 0.12.0 (2026-11-08)
 
 ### Gewijzigd

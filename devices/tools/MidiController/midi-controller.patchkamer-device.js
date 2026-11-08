@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.4.0 — Pads: een pad dat een CC stuurt (rij op 'pads' zetten) speelt een noot (36 voor het eerste pad, daarna omhoog); vaste pad-velocity voor pads die niet op aanslag reageren; bij elke invoer staat waar die heen ging (koppeling, noot naar apparaat of geen nootingang); de nootingang van een doel wordt bij wijzigingen opnieuw gekozen.
 // 1.3.0 — Kalibratie: de knop 'Kalibreer bereik' onthoudt per schuif of draaiknop het laagste en hoogste geziene bereik; stuurt een element maar een deel van 0..127, dan wordt dat bereik naar de hele slag geschaald (bereik in de indelingsrij te zien).
 // 1.2.0 — AI-voorstel (contract v1.29, host.ai): een knop vraagt de AI-aanbieder van de gebruiker om koppelingen op basis van de regelaars van het apparaat en de indeling van de controller; elk paar wordt gecontroleerd en het resultaat is met één klik ongedaan te maken.
 // 1.1.0 — Beter voorstel: de indeling wordt als rijen herkend (draaiknoppen, schuiven, knoppen; per rij te wijzigen) en bij een apparaat met kanaalstroken (zoals de Mixer) krijgt kolom i van de controller strook i, met de schuif op de fader van die strook. Pads worden niet meer op regelaars gezet.
@@ -26,7 +27,7 @@ const TXT = {
     maps: 'Koppelingen van', unmapped: 'nog geen knop', learn: 'Leer', learning: 'Draai of druk…', pick: 'Kies een regelaar', missing: 'niet gevonden', min: 'min', max: 'max', invert: 'omkeren', toggle: 'wissel', del: 'Wis',
     addMap: '+ koppeling', clearMaps: 'Alles wissen', suggest: 'Voorstel', ai: 'AI-voorstel', aiTip: 'Laat een AI een koppelvoorstel maken van de regelaars van dit apparaat en je indeling (vraagt een AI-aanbieder in Instellingen)', aiBusy: 'AI denkt na…', aiNone: 'De AI gaf geen bruikbaar voorstel.', aiDone: n => 'AI: ' + n + (n === 1 ? ' koppeling toegevoegd' : ' koppelingen toegevoegd'), aiUndo: 'AI ongedaan', aiOff: 'Stel eerst een AI-aanbieder, sleutel en model in bij Instellingen.', aiDeclined: 'Geannuleerd.', aiErr: m => 'AI-fout: ' + m, suggestTip: 'Zet je knoppen automatisch op de regelaars van dit apparaat', quick: 'Snel koppelen', quickStop: 'Stop snel koppelen', quickNext: n => 'Draai een knop: die wordt gekoppeld aan ' + n,
     surface: 'Indeling van je controller', surfaceN: n => n + ' elementen geleerd', surfaceLearn: 'Leer indeling', surfaceStop: 'Klaar', surfaceHint: 'Raak elke knop, schuif en pad één keer aan. Daarna kan Patchkamer een koppeling voorstellen.', surfaceClear: 'Wis indeling', kKnob: 'draaiknoppen', kFader: 'schuiven', kBtn: 'knoppen', kPad: 'pads', cal: 'Kalibreer bereik', calStop: 'Klaar met kalibreren', calHint: 'Beweeg elke schuif en draaiknop één keer helemaal van laag naar hoog. Stuurt een element maar een deel van het bereik, dan schaalt Patchkamer dat naar de hele slag.', rangeReset: 'Wis het bereik van deze rij', rangeTxt: (a, b) => 'bereik ' + a + '–' + b + ' (geschaald)',
-    options: 'Opties', center: 'Zet het gekozen apparaat midden in beeld', notes: 'Noten van een keyboard naar het actieve apparaat', refresh: 'Ververs regelaars', counts: n => n + (n === 1 ? ' regelaar' : ' regelaars'),
+    options: 'Opties', padVel: 'Vaste pad-velocity (voor pads die niet op aanslag reageren)', noPort: n => n + ' heeft geen ingang voor noten: pads en keyboard doen niets', notesOffTxt: 'noten staan uit', toMap: l => 'koppeling ' + l, toNote: (n, d) => 'noot ' + n + ' naar ' + d, center: 'Zet het gekozen apparaat midden in beeld', notes: 'Noten van een keyboard naar het actieve apparaat', refresh: 'Ververs regelaars', counts: n => n + (n === 1 ? ' regelaar' : ' regelaars'),
     srcCc: n => 'CC ' + n, srcNote: n => 'Noot ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Kanaaldruk', ch: 'kanaal', mapped: n => n + (n === 1 ? ' koppeling' : ' koppelingen'),
     sugDone: n => n + (n === 1 ? ' koppeling toegevoegd' : ' koppelingen toegevoegd'), sugNone: 'Niets toe te voegen: leer eerst je indeling, of alle knoppen zijn al gekoppeld.', needSurface: 'Leer eerst de indeling van je controller.' },
   en: { title: 'MIDI Controller', hint: 'Connect your MIDI controllers and keyboards, pick a Patchkamer device and control it. A button switches to another device; the same knobs then work for that device.',
@@ -37,7 +38,7 @@ const TXT = {
     maps: 'Mappings of', unmapped: 'no knob yet', learn: 'Learn', learning: 'Turn or press…', pick: 'Pick a control', missing: 'not found', min: 'min', max: 'max', invert: 'invert', toggle: 'toggle', del: 'Delete',
     addMap: '+ mapping', clearMaps: 'Clear all', suggest: 'Suggest', ai: 'AI suggestion', aiTip: 'Let an AI propose a mapping from the controls of this device and your layout (needs an AI provider in Settings)', aiBusy: 'AI is thinking…', aiNone: 'The AI gave no usable suggestion.', aiDone: n => 'AI: ' + n + (n === 1 ? ' mapping added' : ' mappings added'), aiUndo: 'Undo AI', aiOff: 'First set an AI provider, key and model in Settings.', aiDeclined: 'Cancelled.', aiErr: m => 'AI error: ' + m, suggestTip: 'Put your knobs on the controls of this device automatically', quick: 'Quick map', quickStop: 'Stop quick map', quickNext: n => 'Turn a knob: it gets mapped to ' + n,
     surface: 'Layout of your controller', surfaceN: n => n + ' elements learned', surfaceLearn: 'Learn layout', surfaceStop: 'Done', surfaceHint: 'Touch every knob, slider and pad once. Then Patchkamer can suggest a mapping.', surfaceClear: 'Clear layout', kKnob: 'knobs', kFader: 'faders', kBtn: 'buttons', kPad: 'pads', cal: 'Calibrate range', calStop: 'Done calibrating', calHint: 'Move every slider and knob once all the way from low to high. If an element only sends part of the range, Patchkamer scales that to the whole travel.', rangeReset: 'Clear the range of this row', rangeTxt: (a, b) => 'range ' + a + '–' + b + ' (scaled)',
-    options: 'Options', center: 'Put the selected device in the middle of the screen', notes: 'Notes from a keyboard to the active device', refresh: 'Refresh controls', counts: n => n + (n === 1 ? ' control' : ' controls'),
+    options: 'Options', padVel: 'Fixed pad velocity (for pads that are not velocity sensitive)', noPort: n => n + ' has no input for notes: pads and keyboard do nothing', notesOffTxt: 'notes are off', toMap: l => 'mapping ' + l, toNote: (n, d) => 'note ' + n + ' to ' + d, center: 'Put the selected device in the middle of the screen', notes: 'Notes from a keyboard to the active device', refresh: 'Refresh controls', counts: n => n + (n === 1 ? ' control' : ' controls'),
     srcCc: n => 'CC ' + n, srcNote: n => 'Note ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Channel pressure', ch: 'channel', mapped: n => n + (n === 1 ? ' mapping' : ' mappings'),
     sugDone: n => n + (n === 1 ? ' mapping added' : ' mappings added'), sugNone: 'Nothing to add: learn your layout first, or all knobs are already mapped.', needSurface: 'Learn the layout of your controller first.' },
 };
@@ -47,18 +48,18 @@ const normMap = m => { m = m && typeof m === 'object' ? m : {}; const lo = typeo
   return { src: normSrc(m.src), ctl: str(m.ctl, '', 120), label: str(m.label, '', 60), min: lo, max: hi, inv: m.inv === true, toggle: m.toggle === true }; };
 const normTarget = t => { t = t && typeof t === 'object' ? t : {}; return { id: str(t.id, '', 40), def: str(t.def, '', 120), name: str(t.name, '', 80), port: str(t.port, '', 40), sw: normSrc(t.sw), maps: (Array.isArray(t.maps) ? t.maps : []).slice(0, MAXM).map(normMap) }; };
 const normSurf = e => { const s = normSrc(e); if (!s) return null; const r = { ...s, kind: e.kind === 'button' ? 'button' : e.kind === 'pad' ? 'pad' : e.kind === 'fader' ? 'fader' : 'knob' }; if (Number.isFinite(e.lo) && Number.isFinite(e.hi)) { r.lo = int(e.lo, 0, 127, 0); r.hi = int(e.hi, 0, 127, 127); } return r; };
-const defaults = () => ({ targets: [], active: '', surface: [], center: true, notes: true });
+const defaults = () => ({ targets: [], active: '', surface: [], center: true, notes: true, padVel: 0 });
 function normalize(s) {
   s = s && typeof s === 'object' ? s : {}; const o = defaults(), seen = new Set();
   for (const t of (Array.isArray(s.targets) ? s.targets : []).slice(0, MAXT)) { const n = normTarget(t); if (/^[a-z0-9_-]+$/i.test(n.id) && !seen.has(n.id)) { seen.add(n.id); o.targets.push(n); } }
   o.active = typeof s.active === 'string' && seen.has(s.active) ? s.active : '';
   o.surface = (Array.isArray(s.surface) ? s.surface : []).slice(0, MAXS).map(normSurf).filter(Boolean);
-  o.center = s.center !== false; o.notes = s.notes !== false; return o;
+  o.center = s.center !== false; o.notes = s.notes !== false; o.padVel = int(s.padVel, 0, 127, 0); return o;
 }
 const sameSrc = (a, b) => !!a && !!b && a.k === b.k && (a.k === 'cc' || a.k === 'note' ? a.n === b.n : true) && (!a.ch || !b.ch || a.ch === b.ch);
 
 export default {
-  id: 'nl.patchkamer.midicontroller', name: 'MIDI Controller', version: '1.3.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
+  id: 'nl.patchkamer.midicontroller', name: 'MIDI Controller', version: '1.4.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en;
@@ -75,9 +76,10 @@ export default {
     function ensureCable(t) { if (!t.port || cableOf(t)) return; try { host.connect(self, pid(t), t.id, t.port, 'event'); } catch (e) { /* geen kabel mogelijk */ } }
     const emit = (t, ev) => { if (t && t.port) { try { host.emit(self, pid(t), ev); } catch (e) { /* ok */ } } };
     // ---- apparaten ----
+    const pickPort = p => { const l = (p && p.eventIn) || []; const g = l.find(x => /^(notes?|trigger|midi|in)$/i.test(x.id)); return g ? g.id : l.length ? l[0].id : ''; };
     function addTarget(id) {
       const p = peerOf(id); if (!p || target(id) || state.targets.length >= MAXT) return;
-      const t = normTarget({ id, def: p.def, name: p.name, port: p.eventIn && p.eventIn.length ? p.eventIn[0].id : '' }); state.targets.push(t); if (!state.active) state.active = id; syncPorts();
+      const t = normTarget({ id, def: p.def, name: p.name, port: pickPort(p) }); state.targets.push(t); if (!state.active) state.active = id; syncPorts();
       if (t.port) setTimeout(() => { if (!dead) ensureCable(t); }, 0); controlsOf(t, true); render();
     }
     function removeTarget(id) { const t = target(id); if (!t) return; try { host.disconnect(self, pid(t)); } catch (e) { /* ok */ } state.targets = state.targets.filter(x => x !== t); ctlCache.delete(id); if (state.active === id) state.active = state.targets[0] ? state.targets[0].id : ''; syncPorts(); render(); }
@@ -106,7 +108,7 @@ export default {
     function noteSurface(s) { const key = s.k + ':' + s.n + ':' + s.ch; let set = seenVals.get(s.k + s.n); if (!set) seenVals.set(s.k + s.n, set = new Set()); set.add(Math.round(s.val * 127));
       if (!learnSurface && learnCal && s.k === 'cc') { const c = state.surface.find(x => sameSrc(x, s) && x.ch === s.ch); if (c && (c.kind === 'knob' || c.kind === 'fader')) { const raw = Math.round(s.val * 127); c.lo = Number.isFinite(c.lo) ? Math.min(c.lo, raw) : raw; c.hi = Number.isFinite(c.hi) ? Math.max(c.hi, raw) : raw; } }
       if (!learnSurface) return; let e = state.surface.find(x => sameSrc(x, s) && x.ch === s.ch); if (!e && state.surface.length < MAXS) { e = { k: s.k, n: s.n, ch: s.ch, kind: 'knob' }; state.surface.push(e); }
-      if (e) e.kind = s.k === 'note' ? (e.kind === 'button' ? 'button' : 'pad') : set.size <= 2 ? 'button' : e.kind === 'fader' ? 'fader' : 'knob'; }
+      if (e) e.kind = s.k === 'note' ? (e.kind === 'button' ? 'button' : 'pad') : set.size <= 2 ? (e.kind === 'pad' ? 'pad' : 'button') : e.kind === 'fader' ? 'fader' : 'knob'; }
     // kalibratie: stuurt een schuif of draaiknop bij het leren van de indeling maar een deel van 0..127 (bijvoorbeeld 0..40), dan schalen we dat bereik naar de hele slag
     const restricted = e => !!e && e.k === 'cc' && (e.kind === 'knob' || e.kind === 'fader') && Number.isFinite(e.lo) && Number.isFinite(e.hi) && e.hi - e.lo >= 4 && (e.lo > 1 || e.hi < 126);
     function calib(s) { if (s.k !== 'cc') return s; const e = state.surface.find(x => x.k === 'cc' && x.n === s.n && (!x.ch || !s.ch || x.ch === s.ch)); if (!restricted(e)) return s; return { ...s, val: clamp((s.val * 127 - e.lo) / (e.hi - e.lo), 0, 1) }; }
@@ -120,10 +122,16 @@ export default {
       if (quick && !(s.k === 'note' && !s.on)) { quickTake(s); return; }
       // een schakelknop kiest een apparaat
       for (const t of state.targets) if (t.sw && sameSrc(t.sw, s) && (!t.sw.ch || t.sw.ch === s.ch)) { const key = 'sw:' + t.id, was = prev.get(key) || 0; prev.set(key, down ? 1 : 0); if (down && !was) { activate(t.id, { center: state.center }); } return; }
-      const t = target(state.active); if (!t) return; let mapped = false;
+      const t = target(state.active); if (!t) return; let mapped = false; const trace = txt => { lastText += ' → ' + txt; if (lastEl) lastEl.textContent = lastText; };
       t.maps.forEach((m, mi) => { if (m.src && m.ctl && sameSrc(m.src, s) && (!m.src.ch || m.src.ch === s.ch)) { mapped = true; try { apply(t, m, mi, calib(s)); } catch (e) { /* de regelaar is weg */ } } });
-      if (mapped || !state.notes || !t.port) return;
-      if (s.k === 'note') emit(t, s.on ? { type: 'note', note: s.n, vel: s.val, time: ctx.currentTime, held: true, ch: s.ch } : { type: 'noteoff', note: s.n, vel: 0, time: ctx.currentTime, ch: s.ch });
+      if (mapped) { trace(T.toMap(t.maps.filter(m => m.src && sameSrc(m.src, s)).map(m => m.label || m.ctl).join(', '))); return; }
+      if (!state.notes) { trace(T.notesOffTxt); return; } if (!t.port) { trace(T.noPort(t.name || t.id)); return; }
+      const se = surfOf(s), pad = !!se && se.kind === 'pad', pv = pad && state.padVel ? state.padVel / 127 : 0;
+      if (pad && s.k === 'cc') {   // een pad dat een CC stuurt speelt een noot: 36 voor het eerste pad, daarna omhoog
+        const note = clamp(36 + state.surface.filter(e => e.kind === 'pad').sort(srt).indexOf(se), 0, 127), key = 'pad:' + s.n + ':' + s.ch, was = prev.get(key) || 0, dn = s.val >= 0.5; prev.set(key, dn ? 1 : 0);
+        if (dn && !was) { emit(t, { type: 'note', note, vel: pv || Math.max(0.3, s.val), time: ctx.currentTime, held: true, ch: s.ch }); trace(T.toNote(noteName(note), t.name || t.id)); } else if (!dn && was) emit(t, { type: 'noteoff', note, vel: 0, time: ctx.currentTime, ch: s.ch }); return;
+      }
+      if (s.k === 'note') { emit(t, s.on ? { type: 'note', note: s.n, vel: pv || s.val, time: ctx.currentTime, held: true, ch: s.ch } : { type: 'noteoff', note: s.n, vel: 0, time: ctx.currentTime, ch: s.ch }); if (s.on) trace(T.toNote(noteName(s.n), t.name || t.id)); }
       else if (s.k === 'bend') emit(t, { type: 'cc', id: 'bend', value: s.val, time: ctx.currentTime, ch: s.ch });
       else if (s.k === 'pressure') emit(t, { type: 'cc', id: 'pressure', value: s.val, time: ctx.currentTime, ch: s.ch });
       else if (s.k === 'cc') emit(t, { type: 'cc', id: s.n === 1 ? 'vibrato' : s.n === 64 ? 'pedal' : 'cc' + s.n, cc: s.n, value: s.val, time: ctx.currentTime, ch: s.ch });
@@ -148,8 +156,10 @@ export default {
       if (t.maps.length < MAXM) t.maps.push(newMapFor(t, c, s)); render();
     }
     // de indeling als rijen: opeenvolgende CC's (of knoppen) vormen een rij van hoogstens 8; zo herkennen we rijen draaiknoppen, een rij schuiven en rijen knoppen
+    const srt = (a, b) => (a.k < b.k ? -1 : a.k > b.k ? 1 : (a.ch || 0) - (b.ch || 0) || a.n - b.n);
+    const surfOf = s => state.surface.find(x => sameSrc(x, s) && (!x.ch || !s.ch || x.ch === s.ch)) || null;
     function runs() {
-      const out = [], srt = (a, b) => (a.k < b.k ? -1 : a.k > b.k ? 1 : (a.ch || 0) - (b.ch || 0) || a.n - b.n);
+      const out = [];
       for (const grp of [['knob', 'fader'], ['button'], ['pad']]) {
         const L = state.surface.filter(e => grp.includes(e.kind) && e.k !== 'bend' && e.k !== 'pressure').sort(srt); let cur = null;
         for (const e of L) { const last = cur && cur.items[cur.items.length - 1]; if (!cur || e.k !== last.k || (e.ch || 0) !== (last.ch || 0) || e.n !== last.n + 1 || cur.items.length >= 8) out.push(cur = { grp: grp[0], items: [] }); cur.items.push(e); }
@@ -251,7 +261,7 @@ export default {
       // koppelingen van het actieve apparaat
       const t = target(state.active);
       if (t) {
-        mapBox = el('div', null, m, 'box'); el('h4', T.maps + ' ' + (t.name || t.id), mapBox); const L = controlsOf(t);
+        mapBox = el('div', null, m, 'box'); el('h4', T.maps + ' ' + (t.name || t.id), mapBox); if (!t.port) el('div', T.noPort(t.name || t.id), mapBox, 'msg'); const L = controlsOf(t);
         const bar = el('div', null, mapBox, 'row'); btn(T.suggest, () => suggest(t), bar).title = T.suggestTip; if (aiHas()) { const ab = btn(T.ai, () => aiSuggest(t), bar); ab.title = T.aiTip; ab.disabled = aiBusy; }
         btn(quick ? T.quickStop : T.quick, () => { quick = quick ? null : { t: t.id }; learn = null; learnSw = ''; render(); }, bar).classList.toggle('learning', !!quick);
         btn(T.addMap, () => { if (t.maps.length < MAXM) { t.maps.push(normMap({})); render(); } }, bar); btn(T.refresh, () => { controlsOf(t, true); render(); }, bar); btn(T.clearMaps, () => { t.maps = []; prev.clear(); render(); }, bar);
@@ -275,10 +285,11 @@ export default {
       btn(learnCal ? T.calStop : T.cal, () => { learnCal = !learnCal; learnSurface = false; learn = null; learnSw = ''; quick = null; render(); }, sr).classList.toggle('learning', learnCal);
       btn(T.surfaceClear, () => { state.surface = []; seenVals.clear(); render(); }, sr); surfLine = el('span', T.surfaceN(state.surface.length), sr, 'muted'); if (learnSurface) el('div', T.surfaceHint, sb, 'hint'); if (learnCal) el('div', T.calHint, sb, 'hint');
       if (!learnSurface) for (const r of runs()) { const a = r.items[0], z = r.items[r.items.length - 1], rw = el('div', null, sb, 'row'); el('span', srcLabel(a) + (r.items.length > 1 ? ' – ' + z.n : '') + ' · ' + r.items.length + '×', rw); const rs = r.items.filter(restricted); if (rs.length) { el('span', T.rangeTxt(Math.min(...rs.map(e => e.lo)), Math.max(...rs.map(e => e.hi))), rw, 'muted'); btn('×', () => { r.items.forEach(e => { delete e.lo; delete e.hi; }); render(); }, rw).title = T.rangeReset; }
-        const opts = r.grp === 'knob' ? [['knob', T.kKnob], ['fader', T.kFader]] : r.items[0].k === 'note' ? [['pad', T.kPad], ['button', T.kBtn]] : [['button', T.kBtn]]; if (opts.length === 1) { el('span', T.kBtn, rw, 'muted'); continue; }
+        const opts = r.grp === 'knob' ? [['knob', T.kKnob], ['fader', T.kFader]] : [['pad', T.kPad], ['button', T.kBtn]];
         const sel = el('select', null, rw); for (const [v, tx] of opts) { const o = el('option', tx, sel); o.value = v; } sel.value = runKind(r) === 'fader' ? 'fader' : r.grp; sel.onchange = () => { r.items.forEach(e => { e.kind = sel.value; }); render(); }; }
       // opties
       const ob = el('div', null, m, 'box'); el('h4', T.options, ob);
+      { const lb = el('label', null, ob, 'row'), c = el('input', null, lb), n = el('input', null, lb); c.type = 'checkbox'; c.checked = state.padVel > 0; n.type = 'number'; n.min = 1; n.max = 127; n.step = 1; n.style.width = '56px'; n.value = state.padVel || 100; n.disabled = !c.checked; c.onchange = () => { state.padVel = c.checked ? int(+n.value, 1, 127, 100) : 0; n.disabled = !c.checked; }; n.onchange = () => { if (c.checked) state.padVel = int(+n.value, 1, 127, 100); }; el('span', T.padVel, lb); }
       for (const [k, tx] of [['center', T.center], ['notes', T.notes]]) { const lb = el('label', null, ob, 'row'); const c = el('input', null, lb); c.type = 'checkbox'; c.checked = state[k]; c.onchange = () => { state[k] = c.checked; }; el('span', tx, lb); }
     }
     function renderInputs() { if (!inBox) return; inBox.innerHTML = ''; el('h4', T.inputs, inBox); const L = inputsList(); if (!L.length) { el('div', status === 3 ? T.noInputs : '', inBox, 'muted'); return; }
@@ -288,12 +299,12 @@ export default {
       inputs: {}, outputs: {},
       mount(parent) { root = parent; sh = parent.attachShadow ? (parent.shadowRoot || parent.attachShadow({ mode: 'open' })) : parent; render(); },
       unmount() { if (sh) sh.innerHTML = ''; sh = null; devBox = mapBox = inBox = surfLine = lastEl = null; },
-      onPeers(list) { peers = Array.isArray(list) ? list : []; for (const t of state.targets) { const p = peerOf(t.id); if (p) { t.name = p.name; t.def = p.def; } } syncPorts(); ctlCache.clear(); if (sh) render(); },
+      onPeers(list) { peers = Array.isArray(list) ? list : []; for (const t of state.targets) { const p = peerOf(t.id); if (p) { t.name = p.name; t.def = p.def; if (!t.port || !(p.eventIn || []).some(x => x.id === t.port)) { t.port = pickPort(p); if (t.port) setTimeout(() => { if (!dead) ensureCable(t); }, 0); } } } syncPorts(); ctlCache.clear(); if (sh) render(); },
       getState() { return JSON.parse(JSON.stringify(state)); },
       setState(s) { state = normalize(s); learn = null; learnSw = ''; learnSurface = false; quick = null; prev.clear(); ctlCache.clear(); syncPorts(); for (const t of state.targets) if (t.port && peerOf(t.id)) setTimeout(() => { if (!dead) ensureCable(t); }, 0); if (sh) render(); },
       // preset: de koppelingen en schakelknoppen per apparaatsoort, de indeling van de controller en de opties; geen apparaten of kabels
-      getPreset() { const maps = {}, sw = {}; for (const t of state.targets) if (t.def && t.maps.length) { maps[t.def] = t.maps; if (t.sw) sw[t.def] = t.sw; } return JSON.parse(JSON.stringify({ maps, switches: sw, surface: state.surface, center: state.center, notes: state.notes })); },
-      setPreset(p) { p = p && typeof p === 'object' ? p : {}; if (Array.isArray(p.surface)) state.surface = p.surface.slice(0, MAXS).map(normSurf).filter(Boolean); if (typeof p.center === 'boolean') state.center = p.center; if (typeof p.notes === 'boolean') state.notes = p.notes;
+      getPreset() { const maps = {}, sw = {}; for (const t of state.targets) if (t.def && t.maps.length) { maps[t.def] = t.maps; if (t.sw) sw[t.def] = t.sw; } return JSON.parse(JSON.stringify({ maps, switches: sw, surface: state.surface, center: state.center, notes: state.notes, padVel: state.padVel })); },
+      setPreset(p) { p = p && typeof p === 'object' ? p : {}; if (Array.isArray(p.surface)) state.surface = p.surface.slice(0, MAXS).map(normSurf).filter(Boolean); if (typeof p.center === 'boolean') state.center = p.center; if (typeof p.padVel === 'number') state.padVel = int(p.padVel, 0, 127, 0); if (typeof p.notes === 'boolean') state.notes = p.notes;
         const maps = p.maps && typeof p.maps === 'object' ? p.maps : {}, sw = p.switches && typeof p.switches === 'object' ? p.switches : {};
         for (const t of state.targets) { const rows = maps[t.def] || maps['*']; if (Array.isArray(rows)) t.maps = rows.slice(0, MAXM).map(normMap); if (sw[t.def]) t.sw = normSrc(sw[t.def]); }
         prev.clear(); if (sh) render(); },

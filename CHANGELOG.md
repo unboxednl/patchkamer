@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.12.1 (2026-11-08)
+
+### Fixed
+- **MIDI Controller 1.4.0: pads.** A pad without a mapping plays a note on the active device; a pad that sends a CC (set its row to **pads**) plays note 36 and up. New option **Fixed pad velocity** for pads that are not velocity sensitive. **Last input** now shows where each message goes (mapping, note to device, or no note input), and the note input of a device is chosen again when the device changes. Nothing changed in the Pad Sampler.
+
 ## 0.12.0 (2026-11-08)
 
 ### Changed

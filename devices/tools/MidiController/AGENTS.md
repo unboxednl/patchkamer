@@ -29,6 +29,7 @@ Eén apparaat voor alle MIDI-controllers en -keyboards. Het opent alle aangeslot
   - `Voorstel`: heeft het apparaat kanaalstroken (regelaars met een achtervoegsel ` - T1`, zoals de Mixer), dan is kolom i van de controller strook i en rij r de r-de regelaar van de strook (schuiven op de fader, draaiknoppen op pan, send, hoog, mid, laag, trim, return; knoppen op mute en solo). Anders krijgen de schuiven de niveauregelaars en de draaiknoppen de rest in de volgorde van het apparaat, en de knoppen de vinkjes en knoppen. Pads worden nooit gekoppeld (die spelen noten).
   - `Snel koppelen`: elke nieuwe knop die de gebruiker aanraakt, krijgt de volgende vrije regelaar.
   - `Leer` per rij en `Leer knop` per apparaat zetten één bron.
+- **Pads.** Een pad (`kind: 'pad'`) zonder koppeling speelt een noot op het actieve apparaat: een pad dat een noot stuurt speelt die noot, een pad dat een CC stuurt (de gebruiker zet de rij op `pads`) speelt noot 36 + zijn volgnummer. Met `padVel` > 0 is de velocity vast. Bij elke invoer toont `Laatste invoer` de route (koppeling, noot naar apparaat, geen nootingang). De nootingang van een doel is de ingang met id `notes`, `trigger`, `midi` of `in`, anders de eerste; hij wordt bij `onPeers` opnieuw gekozen als hij ontbreekt.
 - **Noten.** Met `notes` aan gaan noten (en pitch bend, kanaaldruk en CC's die geen koppeling zijn) van elke ingang naar het actieve apparaat, als `note` met `held: true` en `noteoff` (zoals Keys deed), `cc` `bend`, `pressure`, `vibrato`, `pedal` of `ccN`.
 - **Niets uit zichzelf.** Laden, aansluiten en herstellen veranderen niets aan andere apparaten; het apparaat reageert alleen op MIDI en klikken. `host.show` wordt alleen door een schakelknop of een klik aangeroepen.
 
@@ -41,6 +42,7 @@ Eén apparaat voor alle MIDI-controllers en -keyboards. Het opent alle aangeslot
 | `surface` | de geleerde indeling van de controller (hoogstens 256 elementen) | lijst | leeg |
 | `center` | het gekozen apparaat midden in beeld zetten | aan/uit | aan |
 | `notes` | noten van een keyboard naar het actieve apparaat | aan/uit | aan |
+| `padVel` | vaste velocity voor pads die niet op aanslag reageren; 0 = die van de controller | 0 … 127 | 0 |
 
 `setState` negeert onbekende velden, geeft ongeldige waarden de standaard en bindt de kabels opnieuw; kabels en MIDI-toegang staan niet in de state.
 
