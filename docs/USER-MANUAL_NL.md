@@ -81,7 +81,7 @@ Het grote vlak is de **vloer**. Daar staan je apparaten. Het venster links is de
 
 ### De tabs van de bibliotheek
 
-Het bibliotheekvenster toont één soort tegelijk. Bovenaan wissel je met vijf tabs:
+Het bibliotheekvenster toont één soort tegelijk. Bovenaan wissel je met zes tabs:
 
 - **Apparaten:** de apparaten die je kunt plaatsen, met zoekveld, categorieën, **Indeling** en de **Bronnen** om te laden en te scannen (onderdeel 4);
 - **Tunes** en **Presets:** je tune- en presetbibliotheken, met **Alles laden**, **Nieuwe bibliotheek** en **Importeren…** (onderdeel 7);

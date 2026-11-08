@@ -60,7 +60,7 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg = browser.new_context(viewport={'width': w, 'height': h}, locale=LOCALE[lang]).new_page(); pg.errs = []
         pg.on('pageerror', lambda e: pg.errs.append(str(e)))
         pg.route('**/*', lambda r: r.continue_() if r.request.url.startswith('http://localhost') else r.abort())
-        init = "localStorage.setItem('patchkamerWsAuto',JSON.stringify({dev:{on:false},pre:{on:false},tun:{on:false}}));" + ("delete window.showDirectoryPicker;" if nopicker else "") + "localStorage.setItem('patchkamerLib',JSON.stringify({x:16,y:16,w:420,h:%d,fs:14,min:false,shown:true,closed:[]}));" % libh
+        init = "localStorage.setItem('patchkamerWsAuto',JSON.stringify({dev:{on:false},pre:{on:false},tun:{on:false}}));" + ("delete window.showDirectoryPicker;" if nopicker else "") + "localStorage.setItem('patchkamerLib',JSON.stringify({x:16,y:16,w:520,h:%d,fs:14,min:false,shown:true,closed:[]}));" % libh
         if skin: init += "localStorage.setItem('patchkamer.skin','%s');" % skin
         pg.add_init_script(init); pg.goto(BASE + '/patchkamer/patchkamer.html')
         pg.add_style_tag(content='*{user-select:none!important}'); pg.wait_for_timeout(700); return pg
@@ -133,7 +133,7 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
         sf = os.path.join(ROOT, 'skins', 'library', skinf + '.patchkamer-skin.json'); sid = json.load(open(sf))['id']
         menu_click(pg, '#skBtn'); pg.set_input_files('#skFile', sf); pg.wait_for_timeout(800); pg.is_visible('#skClose') and pg.click('#skClose'); pg.wait_for_timeout(300)
-        pg.select_option('.sksel', sid); pg.wait_for_timeout(1200); pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
+        pg.evaluate("sid=>{const s=document.querySelector('.sksel'); s.value=sid; s.dispatchEvent(new Event('change',{bubbles:true}))}", sid); pg.wait_for_timeout(1200)   # de keuzelijst Skin staat in het kaartmenu: zet hem direct; pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
     for dev, name in (('Chord Buddy', '18-chord-buddy'), ('Balance EQ', '19-balance-eq')):
         pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
         pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)

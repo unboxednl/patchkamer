@@ -81,7 +81,7 @@ The big area is the **floor**. Your devices live there. The window on the left i
 
 ### The library tabs
 
-The library window shows one kind of content at a time. Five tabs at the top switch between them:
+The library window shows one kind of content at a time. Six tabs at the top switch between them:
 
 - **Devices:** the devices you can place, with the search field, categories, **Layout** and the **Sources** for loading and scanning (section 4);
 - **Tunes** and **Presets:** your tune and preset libraries, with **Load all**, **New library** and **Import…** (section 7);
