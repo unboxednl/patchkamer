@@ -55,7 +55,7 @@ function startupBegin(){
       +'<div class="spprog"><div class="spbar"><i></i></div><span class="sppct">0%</span></div><div class="spsteps"></div>'
       +'<div class="spwell"><div class="sptxt" aria-live="polite"></div><div class="spsub"></div></div><div class="sphint"></div></div>');
     const x=el.querySelector('.spx'); x.textContent='×'; x.title=PK.pkt('m.su_sluiten'); x.setAttribute('aria-label',PK.pkt('m.su_sluiten'));
-    el.addEventListener('click',()=>S.close());   // ook een klik naast de kaart
+    el.addEventListener('click',()=>S.close(false));   // ook een klik naast de kaart
     S.key=e=>{ if(e.key==='Escape'&&S.el) S.close(); }; document.addEventListener('keydown',S.key);
     S.el=el; S.bar=el.querySelector('.spbar i'); S.txt=el.querySelector('.sptxt'); S.sub=el.querySelector('.spsub'); S.ver=el.querySelector('.spver'); S.pct=el.querySelector('.sppct'); el.querySelector('.sphint').textContent=PK.pkt('m.su_hint'); S.ver.hidden=true;
     (room()||document.body).appendChild(el); if(room()) room().classList.add('splashing');
@@ -83,8 +83,9 @@ function startupBegin(){
     try{ const o={}; for(const k of KINDS){ const t=segsOf(k).reduce((a,x)=>a+x.total,0); if(t>0) o[k]=t; } localStorage.setItem(COUNTS_KEY,JSON.stringify({...S.est,...o})); }catch(e){}   // voor de schatting van de volgende start
     const {done:n}=totals(); if(S.cab) S.cab.grow(Math.floor(n)); S.bar.style.width='100%'; S.pct.textContent='100%'; S.txt.textContent=S.warns?PK.pkt('m.su_klaar_let_op'):PK.pkt('m.su_klaar'); S.sub.textContent='';
     // even laten zien dat alles is aangesloten, dan faden de kabels weg en daarna het scherm
-    setTimeout(()=>{ if(S.cab&&!S.gone) S.cab.leave(); },S.warns?1800:400); setTimeout(()=>S.close(),S.warns?3000:1400); };
-  S.close=()=>{ if(S.gone||!S.el) return; S.gone=true; PK.loadNote=null; document.removeEventListener('keydown',S.key); const el=S.el; el.classList.add('out'); if(room()) room().classList.remove('splashing'); setTimeout(()=>el.remove(),450); };
+    setTimeout(()=>{ if(S.cab&&!S.gone) S.cab.leave(); },S.warns?1800:400); setTimeout(()=>S.close(true),S.warns?2800:1000); };
+  // zacht (slow) als het vanzelf klaar is, snel als je het zelf wegklikt
+  S.close=slow=>{ if(S.gone||!S.el) return; S.gone=true; PK.loadNote=null; document.removeEventListener('keydown',S.key); const el=S.el; if(slow===true) el.classList.add('slow'); el.classList.add('out'); if(room()) room().classList.remove('splashing'); setTimeout(()=>el.remove(),slow===true?1500:450); };
   if(PK.WSA_START.splash&&something){ build(); PK.loadNote=S.note; }
   return S;
 }

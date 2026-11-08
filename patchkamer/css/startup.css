@@ -2,6 +2,8 @@
 #splash{position:absolute;inset:0;z-index:70;display:grid;place-items:center;padding:16px;box-sizing:border-box;cursor:pointer;
   background:color-mix(in srgb,var(--floor,#0b0d10) 62%,transparent);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);transition:opacity .4s ease}
 #splash.out{opacity:0;pointer-events:none}
+#splash.slow{transition:opacity 1.3s cubic-bezier(.4,0,.2,1)}
+#splash.slow .spcard{transition:transform 1.3s cubic-bezier(.4,0,.2,1);transform:translateY(-6px) scale(.985)}
 #room.splashing #floorEmpty{visibility:hidden}
 .spcables{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.75}
 .spcab path{fill:none;stroke:var(--c);stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .7s ease var(--d,0s)}
@@ -11,7 +13,7 @@
 .spcables.leave{opacity:0;transition:opacity 1.1s ease}
 .spcard{position:relative;width:min(640px,100%);max-height:100%;overflow:auto;box-sizing:border-box;padding:34px 40px 24px;display:grid;gap:22px;cursor:default;color:var(--fg);
   background:linear-gradient(180deg,var(--card-2),var(--card) 38%);border:1px solid var(--line);border-radius:20px;
-  box-shadow:0 2px 6px var(--shadow),0 12px 28px var(--shadow),0 36px 80px var(--shadow);animation:spin-in .45s cubic-bezier(.2,.8,.2,1) both}
+  box-shadow:0 2px 6px var(--shadow),0 12px 28px var(--shadow),0 36px 80px var(--shadow);animation:spin-in .45s cubic-bezier(.2,.8,.2,1) backwards}
 .spcard::before{content:"";position:absolute;left:28px;right:28px;top:0;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--audio),var(--sel))}
 .spx{position:absolute;right:14px;top:12px;min-width:32px;padding:0 9px;font-size:22px;line-height:1.3;border:0;background:transparent;color:var(--muted);cursor:pointer;border-radius:8px}
 .spx:hover,.spx:focus-visible{color:var(--fg);background:var(--card)}
