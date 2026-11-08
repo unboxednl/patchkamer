@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.29
+// validate-instrument.mjs — Patchkamer contract v1.30
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -92,6 +92,7 @@ const V = {
     "v.host_mastering_onbekende_actie": "host.mastering(): onbekende actie \"{0}\" (kies inspect, apply, analyse, accept of undo)",
     "v.host_mastering_geen_masteringout": "host.mastering(): het apparaat heeft geen masteringOut-poort",
     "v.ai_zonder_klik": "host.ai('ask') is aangeroepen zonder klik: create, mount, setState, setPreset, onStep, onEvent, onTransport en destroy sturen nooit een vraag naar een AI-aanbieder",
+    "v.fetchfile_zonder_klik": "host.fetchFile is aangeroepen zonder klik: create, mount, setState, setPreset, onStep, onEvent, onTransport en destroy starten nooit een netwerkaanroep",
     "v.stems_zonder_klik": "host.stems('split') is aangeroepen zonder klik: create, mount, setState, setPreset, onStep, onEvent, onTransport en destroy starten nooit een netwerkaanroep",
     "v.masteringout_instance_onmasteringtargets_ontbreekt": "masteringOut: instance.onMasteringTargets(targets) ontbreekt",
     "v.onmasteringtargets_gooit": "onMasteringTargets() gooit: ",
@@ -338,6 +339,7 @@ const V = {
     "v.host_mastering_onbekende_actie": "host.mastering(): unknown action \"{0}\" (choose inspect, apply, analyse, accept or undo)",
     "v.host_mastering_geen_masteringout": "host.mastering(): the device has no masteringOut port",
     "v.ai_zonder_klik": "host.ai('ask') was called without a click: create, mount, setState, setPreset, onStep, onEvent, onTransport and destroy never send a question to an AI provider",
+    "v.fetchfile_zonder_klik": "host.fetchFile was called without a click: create, mount, setState, setPreset, onStep, onEvent, onTransport and destroy never start a network call",
     "v.stems_zonder_klik": "host.stems('split') was called without a click: create, mount, setState, setPreset, onStep, onEvent, onTransport and destroy never start a network call",
     "v.masteringout_instance_onmasteringtargets_ontbreekt": "masteringOut: instance.onMasteringTargets(targets) is missing",
     "v.onmasteringtargets_gooit": "onMasteringTargets() throws: ",
@@ -629,7 +631,7 @@ let frames = [], peerCalls = 0, connects = 0;
 const FAKE_PEERS = [{ id: 'd90', name: 'Testsynth', def: 'nl.test.synth', version: '1.0.0', kind: 'instrument', category: 'synth', eventIn: [{ id: 'notes', name: 'Noten' }], mod: true, selected: true, noteNames: [{ note: 36, name: 'Kick' }] },
   { id: 'd91', name: 'Testeffect', def: 'nl.test.fx', version: '1.0.0', kind: 'effect', category: 'effect', eventIn: [], mod: true, selected: false }];
 let masteringCalls = 0, masteringBad = null, emitted = [], tempo = null, curPorts = null, jacks = 0, portChanges = 0, modSent = 0, modBad = null, sigCalls = 0, worklets = 0, bundleCalls = 0;
-let METERS = 0, PADS = 0, stemsCalls = 0, aiCalls = 0;
+let METERS = 0, PADS = 0, stemsCalls = 0, aiCalls = 0, fetchFileCalls = 0;
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 const KNOBS = [];   // {label, sets} — alles wat via host.ui.knob/select gemaakt is
 const PL = (P, k) => Array.isArray(P[k]) ? P[k] : [];
@@ -648,6 +650,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   controls() { return []; }, setControl() { return false; },
   // v1.28
   show() { return false; },
+  // v1.30
+  fetchFile() { fetchFileCalls++; return Promise.reject(Object.assign(new Error('test'), { code: 'network' })); },
   ai(inst, action) { if (action === 'available') return false; if (action === 'ask') aiCalls++; return action === 'settings' ? true : Promise.reject(Object.assign(new Error('nokey'), { code: 'nokey' })); },
   // v1.25
   recording() { return true; },
@@ -1203,6 +1207,7 @@ const nKnobs = nMountKnobs; let OTHER = null;
   if (masteringBad) fail(masteringBad);
   if (stemsCalls) fail(vt('v.stems_zonder_klik'));
   if (aiCalls) fail(vt('v.ai_zonder_klik'));
+  if (fetchFileCalls) fail(vt('v.fetchfile_zonder_klik'));
   if (presetBytes) line += vt('v.ok_preset', presetBytes);
   if (nParts) line += vt('v.ok_instrumenten', nParts);
   if (clipOn) line += vt('v.ok_klembord');

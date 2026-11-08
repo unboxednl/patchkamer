@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.4.0 — Pad Sampler, fase 2a, Patchkamer contract v1.30 (gebouwd voor v1.26). Nieuw: twee aux-sends (reverb en delay, retour naar de mix of een eigen uitgang), lus-crossfade bij het afspelen (loop.xfade) en een Autosampler
+//          (tab Bewerken: een pad of laag over noten en velocity-lagen naar zones). State: optioneel `aux`; tot 128 zones per pad; oude states laden ongewijzigd en setState(getState()) blijft exact.
 // 1.3.0 — Pad Sampler, stap 4 (banken en catalogus), Patchkamer contract v1.27 (gevalideerd tegen v1.28). Nieuw: tab Banken met een catalogus van gratis banken (alleen bronnen waarvan de licentie is gelezen; elk bestand vastgepind op een
 //          versie van de bron; licentie, auteur en vereiste vermelding altijd zichtbaar), lokaal laden (bestanden of map), een webadres en Freesound met het eigen token van de gebruiker. Importers voor WAV (root en lus uit het
 //          smpl-blok), FLAC, OGG en MP3 (met waarschuwing voor lussen), een SFZ-subset en Decent Sampler (.dspreset), met een importrapport van wat is overgenomen en wat genegeerd. Een bank laden is een stap die ongedaan te maken is.
@@ -28,10 +30,12 @@ const TXT = {
     oneShot: 'One-shot', reverse: 'Omgekeerd', envelope: 'Envelope', envShape: 'Vorm', filter: 'Filter', filterType: 'Soort filter', off: 'Uit',
     lp: 'Laagdoorlaat', hp: 'Hoogdoorlaat', bp: 'Banddoorlaat', layer: 'Laag', sample: 'Sample', none: '– geen –', loadFile: 'Bestand laden…', clearLayer: 'Wis laag',
     waveform: 'Golfvorm van het sample (alleen weergave)', loop: 'Lus', loopOn: 'Lus aan',
-    layerHelp: 'Een pad heeft vier lagen. Bij Op velocity klinkt elke laag waarvan het velocity-bereik de aanslag bevat; bij Om de beurt en Willekeurig kiest het pad er één; bij Alle lagen klinken ze allemaal. Een lus werkt alleen als One-shot uit staat. De crossfade van de lus volgt in een volgende versie.',
+    layerHelp: 'Een pad heeft vier lagen. Bij Op velocity klinkt elke laag waarvan het velocity-bereik de aanslag bevat; bij Om de beurt en Willekeurig kiest het pad er één; bij Alle lagen klinken ze allemaal. Een lus werkt alleen als One-shot uit staat. De crossfade van de lus (0 tot 100% van de halve lus) werkt direct bij het afspelen: het eind van de lus gaat over in het stuk vlak voor het lusbegin. Er moet dus geluid vóór het lusbegin zijn.',
     zoneHelp: 'Zones gelden voor een pad van het soort Keygroup: elk sample krijgt een toetsbereik en een grondtoon, en klinkt getransponeerd. Zonder zones speelt het pad zijn lagen chromatisch rond de grondtoon van elke laag.',
     zone: 'Zone', zoneAdd: 'Zone toevoegen', zoneDel: 'Zone verwijderen', zoneNotKey: 'Zet het pad op Keygroup (tabblad Pad) om zones te gebruiken.', zoneCount: '{0} zone(s).', zoneNone: 'Nog geen zones: de lagen klinken chromatisch rond hun grondtoon.',
     demoKit: 'Demo-kit herstellen', demoKitDone: 'Demo-kit teruggezet in bank A.', clearAll: 'Leeg programma', clearDone: 'Alle banken zijn leeg.',
+    auxTitle: 'Sends: reverb en delay', revTitle: 'Reverb', dlyTitle: 'Delay', revOutL: 'Reverb-retour naar', dlyOutL: 'Delay-retour naar', syncL: 'Tempo', syncFree: 'Vrij (tijd)', sendsTitle: 'Sends', 
+    auxHelp: 'Elk pad heeft twee sends (tab Pad): Send 1 gaat naar de reverb, Send 2 naar de delay. De retouren klinken in de stereomix of op een eigen uitgang (die kan een pad delen: de retour komt erbij). Een send neemt het signaal na niveau en panorama van het pad, ook als het pad zelf een eigen uitgang heeft. Bij een tempo-keuze volgt de delay het tempo van de studio. Flatten en de Autosampler bakken de sends niet in.',
     help: 'Pads: klik, tik of gebruik het toetsenbord (Enter of spatie; 1234, qwer, asdf, zxcv; pijltjes verplaatsen). Een bestand slepen op een pad laadt het daar. Drum-pads luisteren naar de noten vanaf Eerste pad (bank A pad 1 tot bank D pad 16); een keygroup luistert naar de toetsbereiken van zijn zones. Elke uitgang (Uitgang 1 tot 16) is los te mixen; de stereomix heeft een zachte begrenzer, de losse uitgangen niet. Bluetooth-uitvoer is traag: gebruik een kabel of een audio-interface voor lage latency.',
     dropHint: 'Geen sample: sleep een bestand hierheen of kies Bestand laden', keys: 'toetsen', empty: 'leeg', pad: 'Pad', builtin: 'ingebouwd', noSample: 'Geen sample in deze laag.',
     mem: 'Samplegeheugen: {0} van {1} MiB PCM.', voices: 'Stemmen', master: 'Master',
@@ -57,7 +61,7 @@ const TXT = {
       noRoom: 'Er is te weinig ruimte vóór het lusbegin voor deze crossfade.', needLayer: 'Start en einde bestaan alleen voor een laag, niet voor een zone.', badValue: 'Dat getal kan niet.',
       kbd: 'Toetsen: X knippen · C kopiëren · V plakken · I invoegen · Delete verwijderen · Ctrl+A alles · spatie afspelen (Shift+spatie lus) · plus en min zoomen · pijltjes cursor (Shift: selectie) · Ctrl+Z ongedaan · Ctrl+Shift+Z of Ctrl+Y opnieuw. Alles werkt op een kopie; het resultaat wordt een nieuw sample van 16 bit.',
       hist: 'Ongedaan: {0} stappen, opnieuw: {1}.', marker: 'Markering verplaatsen',
-      mEdit: 'Bewerken', mChop: 'Chop', mProc: 'Process', mFlat: 'Flatten', modes: 'Soort bewerking',
+      mEdit: 'Bewerken', mChop: 'Chop', mProc: 'Process', mFlat: 'Flatten', mAuto: 'Autosampler', modes: 'Soort bewerking',
       grpChop: 'Chop: slices maken', chopEq: 'Gelijke delen', chopParts: 'Aantal delen', chopThr: 'Op drempel', thrDb: 'Drempel (dB onder de piek)', minMs: 'Minimale tijd (ms)',
       chopBpm: 'Op BPM en maten', bpm: 'BPM', perUnit: 'Eén slice per', uBar: 'maat (4 tellen)', uBeat: 'tel', uEighth: 'achtste', uSixteenth: 'zestiende', beats: 'Tellen in het sample',
       bpmFromBeats: 'BPM uit tellen', half: '/2', double: '×2', slAdd: 'Marker op cursor', slDel: 'Marker verwijderen', slClear: 'Alle markers wissen', link: 'Eind van een slice gekoppeld aan het begin van de volgende',
@@ -74,9 +78,15 @@ const TXT = {
       fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo-afstemming' },
       grpFlat: 'Flatten en resample', flSrc: 'Bron', flSrcPad: 'Gekozen pad (alle lagen, envelope, filter, tune)', flSrcSel: 'Selectie van de editor', flNote: 'Noot', flVel: 'Velocity', flTail: 'Staart (s)', flHold: 'Notenlengte (s, 0 = automatisch)',
       flCh: 'Kanalen', flStereo: 'Stereo', flMono: 'Mono', flNorm: 'Normaliseren', flTrim: 'Stilte aan het eind afsnijden', flDest: 'Resultaat', dNew: 'Nieuwe laag in dit pad', dLayer: 'Vervang de gekozen laag', dReplace: 'Vervang dit pad (instellingen terug naar standaard)', dOther: 'Op een ander pad',
-      flBank: 'Bank', flPadN: 'Pad', flWarn: 'Let op: Pad Sampler heeft nog geen insert-effecten. Wat je hoort komt uit de lagen, de envelope, het filter, de tune en het niveau en panorama van het pad. Reverb en delay van andere apparaten worden niet ingebakken. Filter, drive, bitcrusher, EQ en compressor kun je met Process wel als sample opslaan.',
+      flBank: 'Bank', flPadN: 'Pad', flWarn: 'Let op: Pad Sampler heeft geen insert-effecten. Wat je hoort komt uit de lagen, de envelope, het filter, de tune en het niveau en panorama van het pad. De sends (reverb en delay van dit apparaat) en de reverb en delay van andere apparaten worden niet ingebakken. Filter, drive, bitcrusher, EQ en compressor kun je met Process wel als sample opslaan.',
       flGo: 'Flatten', flPrev: 'Beluisteren', flBusy: 'Bezig met renderen…', flNoSound: 'Dit pad heeft bij deze noot en velocity geen geluid.', flNoRoom: 'Alle vier de lagen van dit pad zijn bezet; kies een andere bestemming.', noOffline: 'Offline renderen is niet beschikbaar in deze omgeving.',
       flChanged: 'Het sample is veranderd tijdens het renderen; er is niets toegepast.', flName: 'Flatten {0}', flSelName: 'Selectie {0}', flDone: 'Flatten: {0} s, {1} Hz.', flOverlong: 'Het resultaat zou langer zijn dan 120 seconden.',
+      grpAuto: 'Autosampler: een pad bemonsteren over een toetsbereik', auHelp: 'Rendert het geluid van het gekozen pad (lagen, envelope, filter, tune, niveau en panorama) per noot en per velocity-laag met OfflineAudioContext en maakt er zones van op een keygroup-pad. Het is één stap die ongedaan te maken is. De sends worden niet meegenomen en geluid van buiten kan niet worden opgenomen.',
+      auSrc: 'Bron', auSrcPad: 'Gekozen pad (alle lagen)', auSrcLayer: 'Alleen de gekozen laag', auLo: 'Laagste noot', auHi: 'Hoogste noot', auStep: 'Stap (halve tonen)', auVels: 'Velocity-lagen', auVel: 'Velocity bij één laag', auHold: 'Notenlengte (s)', auTail: 'Staart (s)',
+      auRoot: 'Grondtoon van de zone', auRootMid: 'Midden van de zone', auRootLow: 'Onderste toets', auMono: 'Mono', auNorm: 'Gelijk normaliseren (verhoudingen blijven)', auTrim: 'Stilte aan het eind afsnijden',
+      auGo: 'Autosample', auPrev: 'Proefnoot beluisteren', auStop: 'Stop', auPlan: '{0} zone(s), ongeveer {1} MiB. Doel: pad {2}{3}.', auReplace: ' (heeft geluid en wordt vervangen)', auTooMany: 'Te veel zones: {0} (hoogstens {1}). Kies een grotere stap of minder velocity-lagen.',
+      auNoMem: 'Dat past niet in het samplegeheugen: ongeveer {0} MiB nodig, {1} MiB vrij.', auSame: 'Kies een ander pad als doel dan de bron.', auName: '{0} Auto', auProgress: 'Autosampler: {0} van {1}…', auDone: 'Autosampler: {0} zone(s), {1} sample(s), {2} MiB.',
+      auAborted: 'Autosampler gestopt: er is niets veranderd.', auLic: 'De bronsamples hebben verschillende licenties; alleen de licentie van het eerste sample is overgenomen. Controleer de vermelding.', auSkipped: '{0} combinatie(s) van noot en velocity hadden geen geluid en zijn overgeslagen.', auLabel: 'Autosampler', auBadRange: 'De laagste noot ligt boven de hoogste.', auLong: 'Notenlengte plus staart is langer dan 120 seconden.',
     },
     bk: {
       intro: 'Laad een bank met geluiden: uit de catalogus (gratis banken, vastgepind op een versie), van bestanden of een map op je computer, of van een webadres. Licentie en vermelding staan altijd bij de bank; wat je laadt komt onder Vermeldingen en gaat mee in de song. Niets wordt van internet gehaald voordat je zelf op Laden drukt.',
@@ -113,6 +123,7 @@ const TXT = {
       'filt.cutoff': 'Cutoff', 'filt.res': 'Resonantie', 'filt.envAmt': 'Envelop-diepte', 'filt.velAmt': 'Velocity-diepte',
       'layer.semi': 'Halve tonen', 'layer.fine': 'Fijn', 'layer.level': 'Niveau', 'layer.pan': 'Panorama', 'layer.offset': 'Offset', 'layer.root': 'Grondtoon', 'layer.velLo': 'Velocity vanaf', 'layer.velHi': 'Velocity tot',
       'layer.start': 'Start', 'layer.end': 'Einde', 'layer.gain': 'Gain', 'layer.loopStart': 'Lus start', 'layer.loopEnd': 'Lus einde', 'layer.xfade': 'Lus crossfade',
+      'pad.send1': 'Send 1 (reverb)', 'pad.send2': 'Send 2 (delay)', 'aux.revLevel': 'Reverb-retour', 'aux.revSize': 'Reverb grootte', 'aux.revDamp': 'Reverb demping', 'aux.dlyLevel': 'Delay-retour', 'aux.dlyTime': 'Delay tijd', 'aux.dlyFb': 'Delay feedback', 'aux.dlyTone': 'Delay toon',
       'zone.root': 'Grondtoon', 'zone.keyLo': 'Toets vanaf', 'zone.keyHi': 'Toets tot', 'zone.velLo': 'Velocity vanaf', 'zone.velHi': 'Velocity tot', 'zone.tune': 'Stemming', 'zone.loopStart': 'Lus start', 'zone.loopEnd': 'Lus einde',
     },
   },
@@ -124,10 +135,12 @@ const TXT = {
     oneShot: 'One-shot', reverse: 'Reverse', envelope: 'Envelope', envShape: 'Shape', filter: 'Filter', filterType: 'Filter type', off: 'Off',
     lp: 'Low-pass', hp: 'High-pass', bp: 'Band-pass', layer: 'Layer', sample: 'Sample', none: '– none –', loadFile: 'Load file…', clearLayer: 'Clear layer',
     waveform: 'Waveform of the sample (display only)', loop: 'Loop', loopOn: 'Loop on',
-    layerHelp: 'A pad has four layers. With By velocity every layer whose velocity range contains the hit sounds; Cycle and Random pick one; All layers plays them all. A loop only works when One-shot is off. The loop crossfade follows in a later version.',
+    layerHelp: 'A pad has four layers. With By velocity every layer whose velocity range contains the hit sounds; Cycle and Random pick one; All layers plays them all. A loop only works when One-shot is off. The loop crossfade (0 to 100% of half the loop) works while playing: the end of the loop blends into the stretch just before the loop start, so there must be sound before the loop start.',
     zoneHelp: 'Zones apply to a pad of the type Keygroup: each sample gets a key range and a root note and sounds transposed. Without zones the pad plays its layers chromatically around the root of each layer.',
     zone: 'Zone', zoneAdd: 'Add zone', zoneDel: 'Remove zone', zoneNotKey: 'Set the pad to Keygroup (Pad tab) to use zones.', zoneCount: '{0} zone(s).', zoneNone: 'No zones yet: the layers sound chromatically around their root.',
     demoKit: 'Restore demo kit', demoKitDone: 'Demo kit restored in bank A.', clearAll: 'Empty program', clearDone: 'All banks are empty.',
+    auxTitle: 'Sends: reverb and delay', revTitle: 'Reverb', dlyTitle: 'Delay', revOutL: 'Reverb return to', dlyOutL: 'Delay return to', syncL: 'Tempo', syncFree: 'Free (time)', sendsTitle: 'Sends',
+    auxHelp: 'Every pad has two sends (Pad tab): Send 1 goes to the reverb, Send 2 to the delay. The returns sound in the stereo mix or on an output of their own (a pad can share it: the return is added). A send takes the signal after the level and pan of the pad, even if the pad has an output of its own. With a tempo choice the delay follows the tempo of the studio. Flatten and the Autosampler do not bake the sends in.',
     help: 'Pads: click, tap or use the keyboard (Enter or space; 1234, qwer, asdf, zxcv; arrows move). Dragging a file onto a pad loads it there. Drum pads listen to the notes from First pad (bank A pad 1 up to bank D pad 16); a keygroup listens to the key ranges of its zones. Every output (Output 1 to 16) can be mixed separately; the stereo mix has a soft limiter, the separate outputs do not. Bluetooth output is slow: use a cable or an audio interface for low latency.',
     dropHint: 'No sample: drop a file here or choose Load file', keys: 'keys', empty: 'empty', pad: 'Pad', builtin: 'built in', noSample: 'No sample in this layer.',
     mem: 'Sample memory: {0} of {1} MiB PCM.', voices: 'Voices', master: 'Master',
@@ -153,7 +166,7 @@ const TXT = {
       noRoom: 'There is too little room before the loop start for this crossfade.', needLayer: 'Start and end exist for a layer only, not for a zone.', badValue: 'That number is not possible.',
       kbd: 'Keys: X cut · C copy · V paste · I insert · Delete delete · Ctrl+A select all · space plays (Shift+space loops) · plus and minus zoom · arrows move the cursor (Shift: select) · Ctrl+Z undo · Ctrl+Shift+Z or Ctrl+Y redo. Everything works on a copy; the result becomes a new 16-bit sample.',
       hist: 'Undo: {0} steps, redo: {1}.', marker: 'Move marker',
-      mEdit: 'Edit', mChop: 'Chop', mProc: 'Process', mFlat: 'Flatten', modes: 'Kind of edit',
+      mEdit: 'Edit', mChop: 'Chop', mProc: 'Process', mFlat: 'Flatten', mAuto: 'Autosampler', modes: 'Kind of edit',
       grpChop: 'Chop: make slices', chopEq: 'Equal parts', chopParts: 'Number of parts', chopThr: 'By threshold', thrDb: 'Threshold (dB below peak)', minMs: 'Minimum time (ms)',
       chopBpm: 'By BPM and bars', bpm: 'BPM', perUnit: 'One slice per', uBar: 'bar (4 beats)', uBeat: 'beat', uEighth: 'eighth', uSixteenth: 'sixteenth', beats: 'Beats in the sample',
       bpmFromBeats: 'BPM from beats', half: '/2', double: '×2', slAdd: 'Marker at cursor', slDel: 'Delete marker', slClear: 'Clear all markers', link: 'End of a slice linked to the start of the next',
@@ -170,9 +183,15 @@ const TXT = {
       fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo match' },
       grpFlat: 'Flatten and resample', flSrc: 'Source', flSrcPad: 'Chosen pad (all layers, envelope, filter, tune)', flSrcSel: 'Selection of the editor', flNote: 'Note', flVel: 'Velocity', flTail: 'Tail (s)', flHold: 'Note length (s, 0 = automatic)',
       flCh: 'Channels', flStereo: 'Stereo', flMono: 'Mono', flNorm: 'Normalize', flTrim: 'Trim silence at the end', flDest: 'Result', dNew: 'New layer in this pad', dLayer: 'Replace the chosen layer', dReplace: 'Replace this pad (settings back to default)', dOther: 'On another pad',
-      flBank: 'Bank', flPadN: 'Pad', flWarn: 'Note: Pad Sampler has no insert effects yet. What you hear comes from the layers, the envelope, the filter, the tune and the level and pan of the pad. Reverb and delay of other devices are not baked in. You can save filter, drive, bitcrusher, EQ and compressor as a sample with Process.',
+      flBank: 'Bank', flPadN: 'Pad', flWarn: 'Note: Pad Sampler has no insert effects. What you hear comes from the layers, the envelope, the filter, the tune and the level and pan of the pad. The sends (reverb and delay of this device) and the reverb and delay of other devices are not baked in. You can save filter, drive, bitcrusher, EQ and compressor as a sample with Process.',
       flGo: 'Flatten', flPrev: 'Listen', flBusy: 'Rendering…', flNoSound: 'This pad makes no sound at this note and velocity.', flNoRoom: 'All four layers of this pad are in use; choose another destination.', noOffline: 'Offline rendering is not available in this environment.',
       flChanged: 'The sample changed while rendering; nothing was applied.', flName: 'Flatten {0}', flSelName: 'Selection {0}', flDone: 'Flatten: {0} s, {1} Hz.', flOverlong: 'The result would be longer than 120 seconds.',
+      grpAuto: 'Autosampler: sample a pad across a key range', auHelp: 'Renders the sound of the chosen pad (layers, envelope, filter, tune, level and pan) per note and per velocity layer with OfflineAudioContext and makes zones of it on a keygroup pad. It is one step that can be undone. The sends are not included and sound from outside cannot be recorded.',
+      auSrc: 'Source', auSrcPad: 'Chosen pad (all layers)', auSrcLayer: 'Only the chosen layer', auLo: 'Lowest note', auHi: 'Highest note', auStep: 'Step (semitones)', auVels: 'Velocity layers', auVel: 'Velocity for one layer', auHold: 'Note length (s)', auTail: 'Tail (s)',
+      auRoot: 'Root of the zone', auRootMid: 'Middle of the zone', auRootLow: 'Lowest key', auMono: 'Mono', auNorm: 'Normalize together (proportions stay)', auTrim: 'Trim silence at the end',
+      auGo: 'Autosample', auPrev: 'Listen to a test note', auStop: 'Stop', auPlan: '{0} zone(s), about {1} MiB. Target: pad {2}{3}.', auReplace: ' (has sound and will be replaced)', auTooMany: 'Too many zones: {0} (at most {1}). Choose a larger step or fewer velocity layers.',
+      auNoMem: 'That does not fit in the sample memory: about {0} MiB needed, {1} MiB free.', auSame: 'Choose another pad as the target than the source.', auName: '{0} Auto', auProgress: 'Autosampler: {0} of {1}…', auDone: 'Autosampler: {0} zone(s), {1} sample(s), {2} MiB.',
+      auAborted: 'Autosampler stopped: nothing was changed.', auLic: 'The source samples have different licenses; only the license of the first sample was kept. Check the attribution.', auSkipped: '{0} combination(s) of note and velocity had no sound and were skipped.', auLabel: 'Autosampler', auBadRange: 'The lowest note is above the highest.', auLong: 'Note length plus tail is longer than 120 seconds.',
     },
     bk: {
       intro: 'Load a bank of sounds: from the catalogue (free banks, pinned to a version), from files or a folder on your computer, or from a web address. The licence and credit always show with the bank; what you load appears under Credits and travels with the song. Nothing is fetched from the internet until you press Load yourself.',
@@ -209,6 +228,7 @@ const TXT = {
       'filt.cutoff': 'Cutoff', 'filt.res': 'Resonance', 'filt.envAmt': 'Envelope amount', 'filt.velAmt': 'Velocity amount',
       'layer.semi': 'Semitones', 'layer.fine': 'Fine', 'layer.level': 'Level', 'layer.pan': 'Pan', 'layer.offset': 'Offset', 'layer.root': 'Root note', 'layer.velLo': 'Velocity from', 'layer.velHi': 'Velocity to',
       'layer.start': 'Start', 'layer.end': 'End', 'layer.gain': 'Gain', 'layer.loopStart': 'Loop start', 'layer.loopEnd': 'Loop end', 'layer.xfade': 'Loop crossfade',
+      'pad.send1': 'Send 1 (reverb)', 'pad.send2': 'Send 2 (delay)', 'aux.revLevel': 'Reverb return', 'aux.revSize': 'Reverb size', 'aux.revDamp': 'Reverb damping', 'aux.dlyLevel': 'Delay return', 'aux.dlyTime': 'Delay time', 'aux.dlyFb': 'Delay feedback', 'aux.dlyTone': 'Delay tone',
       'zone.root': 'Root note', 'zone.keyLo': 'Key from', 'zone.keyHi': 'Key to', 'zone.velLo': 'Velocity from', 'zone.velHi': 'Velocity to', 'zone.tune': 'Tuning', 'zone.loopStart': 'Loop start', 'zone.loopEnd': 'Loop end',
     },
   },
@@ -296,7 +316,8 @@ canvas.wave{display:block;width:100%;height:110px;background:var(--well);border:
 .banks h5{margin:8px 0 0;font-size:12px}
 `;
 // ---------- constanten en hulpfuncties ----------
-const NBANK = 4, NPAD = 16, NLAYER = 4, MAXZONE = 16;
+const NBANK = 4, NPAD = 16, NLAYER = 4, MAXZONE = 16;   // MAXZONE: de grens voor wat een importer in één keygroep-pad zet
+const ZONE_CAP = 128;                 // zones per pad in de state, in de zone-keuze en voor de Autosampler
 const MAX_PCM = 64 * 1048576;          // totaal PCM16 in de samplestore
 const MAX_SEC = 120;                   // langste sample
 const MAX_VOICES = 64;                 // stemmen (laagstemmen) tegelijk
@@ -323,7 +344,8 @@ const RG = {
   semi: [-48, 48, 1, 0], lfine: [-100, 100, 1, 0], llevel: [0, 1, 0.01, 1], lpan: [-1, 1, 0.01, 0],
   offset: [-500, 500, 1, 0], root: [0, 127, 1, 60], vel: [1, 127, 1, 1], start: [0, 0.9999, 0.0001, 0], end: [0.0001, 1, 0.0001, 1],
   gain: [-24, 24, 0.5, 0], loopS: [0, 0.9999, 0.0001, 0], loopE: [0.0001, 1, 0.0001, 1], xfade: [0, 1, 0.01, 0],
-  key: [0, 127, 1, 0], ztune: [-24, 24, 0.01, 0], baseNote: [0, 63, 1, 36], level: [0, 1, 0.01, 0.8], padVel: [1, 127, 1, 100],
+  key: [0, 127, 1, 0], ztune: [-24, 24, 0.01, 0],
+  send: [0, 1, 0.01, 0], auxLvl: [0, 1, 0.01, 0.7], revSize: [0, 1, 0.01, 0.4], revDamp: [0, 1, 0.01, 0.5], dlyTime: [0.01, 1.5, 0.001, 0.3], dlyFb: [0, 0.95, 0.01, 0.4], dlyTone: [0, 1, 0.01, 0.6], baseNote: [0, 63, 1, 36], level: [0, 1, 0.01, 0.8], padVel: [1, 127, 1, 100],
 };
 
 // ---------- ingebouwde demo-samples (gesynthetiseerd, CC0; staan niet in de state) ----------
@@ -550,6 +572,37 @@ const defPad = () => ({
 });
 const defBank = i => ({ name: 'Bank ' + BANK_LETTER[i], pads: Array.from({ length: NPAD }, defPad) });
 
+// ---------- aux-sends (sinds 1.4.0): twee interne bussen, reverb en delay; de state krijgt `aux` alleen als de instellingen niet standaard zijn ----------
+const SYNC_BEATS = { off: 0, '1/2': 2, '1/4d': 1.5, '1/4': 1, '1/8d': 0.75, '1/8': 0.5, '1/8t': 1 / 3, '1/16': 0.25 };   // tempo-keuze -> aantal tellen (kwartnoten)
+const SYNC_NAMES = Object.keys(SYNC_BEATS);
+const defAux = () => ({ rev: { level: 0.7, size: 0.4, damp: 0.5, out: 0 }, dly: { level: 0.7, time: 0.3, sync: 'off', fb: 0.4, tone: 0.6, out: 0 } });
+function nAux(s) {
+  s = isObj(s) ? s : {}; const r = isObj(s.rev) ? s.rev : {}, d = isObj(s.dly) ? s.dly : {};
+  return {
+    rev: { level: num(r.level, 0.7, 0, 1), size: num(r.size, 0.4, 0, 1), damp: num(r.damp, 0.5, 0, 1), out: int(r.out, 0, 0, 16) },
+    dly: { level: num(d.level, 0.7, 0, 1), time: num(d.time, 0.3, 0.01, 1.5), sync: SYNC_NAMES.includes(d.sync) ? d.sync : 'off', fb: num(d.fb, 0.4, 0, 0.95), tone: num(d.tone, 0.6, 0, 1), out: int(d.out, 0, 0, 16) },
+  };
+}
+const serAux = a => ({ rev: { level: a.rev.level, size: a.rev.size, damp: a.rev.damp, out: a.rev.out }, dly: { level: a.dly.level, time: a.dly.time, sync: a.dly.sync, fb: a.dly.fb, tone: a.dly.tone, out: a.dly.out } });
+const DEF_AUX_JSON = JSON.stringify(serAux(defAux()));
+// de reverb is een convolver met een gegenereerde impuls: stereo-ruis met een e-macht-afname, een lagedoorlaat die met de tijd donkerder wordt, en een vaste voorvertraging van 8 ms
+function makeIR(rate, size, damp) {
+  const rt = 0.3 + size * 5.7, n = Math.max(256, Math.round(rt * 1.05 * rate)), pre = Math.round(0.008 * rate), fc0 = 18000 * Math.pow(0.08, damp), top = rate * 0.45;
+  return [0, 1].map(c => {
+    const out = new Float32Array(n), r = rng(1234 + c * 7919); let lp = 0, e = 0;
+    for (let i = pre; i < n; i++) {
+      const t = (i - pre) / rate, env = Math.exp(-6.9078 * t / rt) * Math.min(1, t / 0.004), fc = Math.min(top, fc0 * (0.3 + 0.7 * Math.exp(-2.5 * t / rt)));
+      lp += (1 - Math.exp(-TAU * fc / rate)) * (r() - lp); const v = lp * env; out[i] = v; e += v * v;
+    }
+    const g = e > 0 ? Math.sqrt(0.6 / e) : 0; for (let i = pre; i < n; i++) out[i] *= g;
+    return out;
+  });
+}
+
+// ---------- lus-crossfade (zuiver): het eind van de lus gaat over in het stuk vlak voor het lusbegin (gelijk vermogen); dezelfde formule als de bewerking Loop-crossfade inbakken ----------
+const loopXfadeLen = (xf, ls, le) => Math.min(Math.round(xf * (le - ls) / 2), ls, Math.floor((le - ls) / 2));
+function loopXfadeApply(c, src, ls, le, X) { for (let i = 0; i < X; i++) { const w = (i + 1) / X; c[le - X + i] = src[le - X + i] * Math.cos(w * Math.PI / 2) + src[ls - X + i] * Math.sin(w * Math.PI / 2); } }
+
 function nLoop(s) {
   s = isObj(s) ? s : {}; const st = num(s.start, 0, 0, 0.9999);
   return { on: s.on === true, start: st, end: endOf(s.end, st), xfade: num(s.xfade, 0, 0, 1) };
@@ -571,7 +624,7 @@ function nPad(s, has) {
   if (!isObj(s)) return defPad();
   const mode = s.mode === 'key' ? 'key' : 'drum', e = isObj(s.env) ? s.env : {}, f = isObj(s.filter) ? s.filter : {};
   const L = Array.isArray(s.layers) ? s.layers : [], Z = Array.isArray(s.zones) ? s.zones : [], sd = Array.isArray(s.sends) ? s.sends : [];
-  const zones = []; for (const z of Z) { if (zones.length >= MAXZONE) break; if (isObj(z)) zones.push(nZone(z, has)); }
+  const zones = []; for (const z of Z) { if (zones.length >= ZONE_CAP) break; if (isObj(z)) zones.push(nZone(z, has)); }
   return {
     name: str(s.name, 40), mode, play: ['velocity', 'cycle', 'random', 'all'].includes(s.play) ? s.play : 'velocity',
     polyphony: int(s.polyphony, 4, 1, 16), muteGroup: int(s.muteGroup, 0, 0, 32), output: int(s.output, 0, 0, 16),
@@ -669,6 +722,8 @@ const KNOBS = [
   ['pad.poly', 'pad', ['polyphony'], 'poly', fInt, 'lin', 'pad'],
   ['pad.mute', 'pad', ['muteGroup'], 'mute', fMute, 'lin', 'pad'],
   ['pad.baseNote', 'pad', ['baseNote'], 'baseNoteP', fNote, 'lin', 'pad'],
+  ['pad.send1', 'pad', ['sends', 0], 'send', fPct, 'lin', 'pad'],
+  ['pad.send2', 'pad', ['sends', 1], 'send', fPct, 'lin', 'pad'],
   ['env.attack', 'pad', ['env', 'attack'], 'attack', fSec, 'log', 'env'],
   ['env.decay', 'pad', ['env', 'decay'], 'decay', fSec, 'log', 'env'],
   ['env.sustain', 'pad', ['env', 'sustain'], 'sustain', fPct, 'lin', 'env'],
@@ -691,6 +746,13 @@ const KNOBS = [
   ['layer.loopStart', 'layer', ['loop', 'start'], 'loopS', fFrac, 'lin', 'loop'],
   ['layer.loopEnd', 'layer', ['loop', 'end'], 'loopE', fFrac, 'lin', 'loop'],
   ['layer.xfade', 'layer', ['loop', 'xfade'], 'xfade', fPct, 'lin', 'loop'],
+  ['aux.revLevel', 'aux', ['rev', 'level'], 'auxLvl', fPct, 'lin', 'rev'],
+  ['aux.revSize', 'aux', ['rev', 'size'], 'revSize', fPct, 'lin', 'rev'],
+  ['aux.revDamp', 'aux', ['rev', 'damp'], 'revDamp', fPct, 'lin', 'rev'],
+  ['aux.dlyLevel', 'aux', ['dly', 'level'], 'auxLvl', fPct, 'lin', 'dly'],
+  ['aux.dlyTime', 'aux', ['dly', 'time'], 'dlyTime', fSec, 'log', 'dly'],
+  ['aux.dlyFb', 'aux', ['dly', 'fb'], 'dlyFb', fPct, 'lin', 'dly'],
+  ['aux.dlyTone', 'aux', ['dly', 'tone'], 'dlyTone', fPct, 'lin', 'dly'],
   ['zone.root', 'zone', ['root'], 'root', fNote, 'lin', 'zone'],
   ['zone.keyLo', 'zone', ['keyLo'], 'key', fNote, 'lin', 'zone'],
   ['zone.keyHi', 'zone', ['keyHi'], 'key', fNote, 'lin', 'zone'],
@@ -938,7 +1000,7 @@ function creditsOf(store) {   // vermeldingen volgen de samples die er echt in z
 export default {
   id: 'nl.patchkamer.padsampler',
   name: 'Pad Sampler',
-  version: '1.3.0',
+  version: '1.4.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 700, minWidth: 340 },
@@ -956,7 +1018,7 @@ export default {
   create(ctx, host) {
     const lang = host.lang === 'nl' ? 'nl' : 'en', T = TXT[lang];
     let dead = false, token = 0, root = null, ui = null, warmTimer = 0, stopFrame = null, notesSig = '', selfRef = null;
-    const prog = { bank: 0, pad: 0, layer: 0, baseNote: 36, level: 0.8, padVel: 100, banks: defaultBanks() };
+    const prog = { bank: 0, pad: 0, layer: 0, baseNote: 36, level: 0.8, padVel: 100, banks: defaultBanks(), aux: defAux() };
     const store = new Map();                 // sampleId -> record (PCM16 base64)
     const bufs = new Map();                  // sampleId -> { fwd, rev, peaks }
     const nodes = new Set();                 // alle AudioNodes die dit apparaat verbindt (voor destroy)
@@ -986,10 +1048,62 @@ export default {
     function padRt(i) {
       let r = prt[i];
       if (!r) {
-        r = prt[i] = { gain: own(ctx.createGain()), pan: own(ctx.createStereoPanner()), dest: null };
-        r.gain.gain.value = effLevel(i); r.pan.pan.value = padOf(i).pan; r.gain.connect(r.pan); route(i);
+        r = prt[i] = { gain: own(ctx.createGain()), pan: own(ctx.createStereoPanner()), dest: null, sd: [null, null] };
+        r.gain.gain.value = effLevel(i); r.pan.pan.value = padOf(i).pan; r.gain.connect(r.pan); route(i); sendLive(i, true);
       }
       return r;
+    }
+    // ---------- aux-sends: send 1 naar de reverb, send 2 naar de delay; de bussen bestaan pas als een pad iets verstuurt ----------
+    // Per pad: padbus (niveau, panorama) -> send-gain -> auxBus. Retour: reverb (convolver met gegenereerde impuls) en delay (met feedback en toon) naar de mix (voor de begrenzer) of een eigen uitgang.
+    let auxBus = null; const auxTimers = new Set();
+    const auxDest = o => (o > 0 ? outNodes[o - 1] : master);
+    function dlyTime() {
+      const a = prog.aux.dly, beats = SYNC_BEATS[a.sync], bpm = Number.isFinite(host.bpm) && host.bpm >= 20 && host.bpm <= 400 ? host.bpm : 120;
+      return clamp(beats > 0 ? beats * 60 / bpm : a.time, 0.01, 2);
+    }
+    function auxBuild() {
+      if (auxBus) return auxBus;
+      const b = auxBus = { rIn: own(ctx.createGain()), rRet: own(ctx.createGain()), dIn: own(ctx.createGain()), dDly: own(ctx.createDelay(2)), dLoop: own(ctx.createDelay(2)), dInj: own(ctx.createDelay(0.1)), dTone: own(ctx.createBiquadFilter()), dFb: own(ctx.createGain()), dRet: own(ctx.createGain()), cur: null, irKey: '', irTimer: 0, rDest: null, dDest: null };
+      // de eerste echo komt uit dDly (precies de ingestelde tijd); de herhalingen lopen door de feedbacklus dLoop. Een DelayNode in een lus telt in Chromium één rendersegment (128 samples) extra mee,
+      // dus dLoop is daar zoveel korter en dInj (buiten de lus) zoveel langer, zodat elke herhaling op een veelvoud van de tijd valt.
+      b.dTone.type = 'lowpass'; b.dIn.connect(b.dDly); b.dDly.connect(b.dRet); b.dDly.connect(b.dInj); b.dInj.connect(b.dTone); b.dInj.delayTime.value = 128 / ctx.sampleRate; b.dTone.connect(b.dFb); b.dFb.connect(b.dLoop); b.dLoop.connect(b.dRet); b.dLoop.connect(b.dTone);
+      auxApply(true); auxIR(); auxRoute(); return b;
+    }
+    function auxApply(now0) {
+      if (!auxBus) return; const a = prog.aux, t = ctx.currentTime, k = now0 ? 0 : 0.02, set = (p, v) => { if (now0) p.value = v; else p.setTargetAtTime(v, t, k); };
+      set(auxBus.rRet.gain, a.rev.level); set(auxBus.dRet.gain, a.dly.level); set(auxBus.dDly.delayTime, dlyTime()); set(auxBus.dLoop.delayTime, Math.max(dlyTime() - 128 / ctx.sampleRate, 128 / ctx.sampleRate)); set(auxBus.dFb.gain, a.dly.fb);
+      set(auxBus.dTone.frequency, clamp(400 * Math.pow(30, a.dly.tone), 100, Math.min(20000, ctx.sampleRate * 0.45)));
+    }
+    function auxRoute() {
+      if (!auxBus) return;
+      for (const [node, key, o] of [[auxBus.rRet, 'rDest', prog.aux.rev.out], [auxBus.dRet, 'dDest', prog.aux.dly.out]]) {
+        const d = auxDest(o); if (auxBus[key] === d) continue;
+        if (auxBus[key]) { try { node.disconnect(auxBus[key]); } catch (e) { /* al los */ } }
+        node.connect(d); auxBus[key] = d;
+      }
+    }
+    function auxIR() {   // een nieuwe impuls wordt op een tweede convolver gezet en daar overgefade, zonder klik
+      if (!auxBus) return; auxBus.irTimer = 0;
+      const a = prog.aux.rev, key = a.size.toFixed(3) + '|' + a.damp.toFixed(3) + '|' + ctx.sampleRate;
+      if (key === auxBus.irKey) return; auxBus.irKey = key;
+      const [L, R] = makeIR(ctx.sampleRate, a.size, a.damp), buf = ctx.createBuffer(2, L.length, ctx.sampleRate);
+      buf.getChannelData(0).set(L); buf.getChannelData(1).set(R);
+      const cv = own(ctx.createConvolver()); cv.normalize = false; cv.buffer = buf; const g = own(ctx.createGain()), old = auxBus.cur, t = ctx.currentTime;
+      g.gain.value = old ? 0 : 1; if (old) { g.gain.setTargetAtTime(1, t, 0.03); old.g.gain.setTargetAtTime(0, t, 0.03); }
+      auxBus.rIn.connect(cv); cv.connect(g); g.connect(auxBus.rRet); auxBus.cur = { cv, g };
+      if (old) { const tm = setTimeout(() => { auxTimers.delete(tm); for (const n of [old.cv, old.g]) { try { n.disconnect(); } catch (e) { /* los */ } nodes.delete(n); } }, 700); auxTimers.add(tm); }
+    }
+    function auxLive(slow) {   // na een wijziging van de instellingen (slow: tijdens het slepen, de impuls wordt dan pas even later vervangen)
+      if (!auxBus) return; auxApply(false); auxRoute();
+      if (slow) { if (auxBus.irTimer) { clearTimeout(auxBus.irTimer); auxTimers.delete(auxBus.irTimer); } const tm = setTimeout(() => { auxTimers.delete(tm); if (auxBus) auxIR(); }, 150); auxBus.irTimer = tm; auxTimers.add(tm); } else auxIR();
+    }
+    function sendLive(i, first) {
+      const r = prt[i]; if (!r) return; const sd = padOf(i).sends, t = ctx.currentTime;
+      for (let k = 0; k < 2; k++) {
+        const v = sd[k];
+        if (!r.sd[k]) { if (!(v > 0)) continue; const b = auxBuild(), g = own(ctx.createGain()); g.gain.value = v; r.pan.connect(g); g.connect(k ? b.dIn : b.rIn); r.sd[k] = g; }
+        else if (first) r.sd[k].gain.value = v; else r.sd[k].gain.setTargetAtTime(v, t, 0.01);
+      }
     }
     function applyMaster() { master.gain.setTargetAtTime(clamp(prog.level + (mod.level || 0), 0, 1), ctx.currentTime, 0.01); }
 
@@ -1023,6 +1137,20 @@ export default {
       if (!c.rev) c.rev = reversed(c.fwd);
       return c.rev;
     }
+    // lus-crossfade bij het afspelen: een voorgebakken buffer (alleen tot het lus-eind) per sample, omgekeerd, lus en lengte; bakken kost één keer een kopie, daarna niets
+    const xbufs = new Map(), XBUF_BYTES = 256 * 1048576;
+    function loopBuf(sid, rev, buf, l0, l1, xf) {
+      const N = buf.length, ls = Math.round(l0 * N), le = Math.min(N, Math.round(l1 * N)), X = loopXfadeLen(xf, ls, le);
+      if (X < 2) return buf;
+      const key = sid + '|' + (rev ? 1 : 0) + '|' + ls + '|' + le + '|' + X; let b = xbufs.get(key);
+      if (b) { xbufs.delete(key); xbufs.set(key, b); return b; }
+      b = ctx.createBuffer(buf.numberOfChannels, Math.min(N, le + 2), buf.sampleRate);
+      for (let c = 0; c < buf.numberOfChannels; c++) { const src = buf.getChannelData(c), d = b.getChannelData(c); d.set(src.subarray(0, d.length)); loopXfadeApply(d, src, ls, le, X); }
+      xbufs.set(key, b);
+      let tot = 0; for (const v of xbufs.values()) tot += v.length * v.numberOfChannels * 4;
+      for (const k of [...xbufs.keys()]) { if (tot <= XBUF_BYTES || xbufs.size <= 1) break; const v = xbufs.get(k); tot -= v.length * v.numberOfChannels * 4; xbufs.delete(k); }
+      return b;
+    }
     function peaksOf(id, cols) {
       const b = bufferFor(id, false); if (!b) return null;
       const c = bufs.get(id); if (c.peaks && c.peaks.length === cols * 2) return c.peaks;
@@ -1046,14 +1174,24 @@ export default {
       const used = usedIds();
       for (const id of [...store.keys()]) if (!used.has(id)) { store.delete(id); bufs.delete(id); }
       for (const id of [...bufs.keys()]) if (!DEMO_BY_ID[id] && !store.has(id)) bufs.delete(id);
+      xbufs.clear();
     }
     function warm() {
       if (warmTimer) { clearTimeout(warmTimer); warmTimer = 0; }
       const ids = []; const seen = new Set();
       for (const bk of prog.banks) for (const p of bk.pads) for (const l of p.layers) if (l.sampleId && !seen.has(l.sampleId)) { seen.add(l.sampleId); ids.push(l.sampleId); }
-      const my = token; let k = 0;
-      const step = () => { warmTimer = 0; if (dead || my !== token || k >= ids.length) return; bufferFor(ids[k++], false); warmTimer = setTimeout(step, 0); };
-      if (ids.length) warmTimer = setTimeout(step, 0);
+      const jobs = [];   // lus-crossfade: de voorgebakken buffers alvast maken
+      for (const bk of prog.banks) for (const p of bk.pads) {
+        if (p.oneShot) continue;
+        for (const q of [...p.layers, ...p.zones]) {
+          if (!q.sampleId || !q.loop.on || !(q.loop.xfade > 0)) continue;
+          const lp = p.reverse ? [1 - q.loop.end, 1 - q.loop.start] : [q.loop.start, q.loop.end];
+          jobs.push(() => { const b = bufferFor(q.sampleId, p.reverse); if (b) loopBuf(q.sampleId, p.reverse, b, lp[0], lp[1], q.loop.xfade); });
+        }
+      }
+      const my = token; let k = 0, j = 0;
+      const step = () => { warmTimer = 0; if (dead || my !== token) return; if (k < ids.length) bufferFor(ids[k++], false); else if (j < jobs.length) { try { jobs[j++](); } catch (e) { /* ok */ } } else return; warmTimer = setTimeout(step, 0); };
+      if (ids.length || jobs.length) warmTimer = setTimeout(step, 0);
     }
 
     // ---------- stemmen ----------
@@ -1109,7 +1247,7 @@ export default {
       const looped = src.loop.on && !trg.oneShot && (l1 - l0) * D >= 0.002;
       const base = src.cents + pad.fine, cents = base + effTune(i) * 100, rate = Math.pow(2, cents / 1200);
       if (looped) { if (startSec >= l1 * D) startSec = l0 * D; } else if (endSec - startSec < 0.0003) return null;
-      const source = own(ctx.createBufferSource()); source.buffer = buf;
+      const source = own(ctx.createBufferSource()); source.buffer = looped && src.loop.xfade > 0 ? loopBuf(src.sid, pad.reverse, buf, l0, l1, src.loop.xfade) : buf;
       try { source.detune.value = cents; } catch (err) { source.playbackRate.value = rate; }
       const lg = own(ctx.createGain()); lg.gain.value = v01 * src.level * Math.pow(10, src.gain / 20);
       const v = { source, lg, pn: null, bq: null, eg: null, ended: false, base, stopAt: undefined };
@@ -1152,6 +1290,7 @@ export default {
       if (pad.muteGroup > 0) for (const x of trigs) if (x.i !== i && x.group === pad.muteGroup && !x.killed) killTrig(x, t);
       const liveVoices = () => { let n = 0; for (const x of trigs) if (!x.killed) n += x.alive; return n; };
       while (liveVoices() + srcs.length > MAX_VOICES) { let old = null; for (const x of trigs) if (!x.killed && (!old || x.id < old.id)) old = x; if (!old) break; killTrig(old, t); }
+      if (auxBus && prog.aux.dly.sync !== 'off') auxApply(false);   // volgt het tempo van de studio
       const rt = padRt(i), trg = { id: ++trigSeq, i, group: pad.muteGroup, t0: t, note: note == null ? -1 : note, held: !!held, oneShot: pad.oneShot, relTime: pad.env.release, released: false, killed: false, alive: 0, voices: [], rel: own(ctx.createGain()), kill: own(ctx.createGain()) };
       trg.rel.connect(trg.kill); trg.kill.connect(rt.gain);
       trigs.add(trg);
@@ -1179,7 +1318,7 @@ export default {
     // ---------- wijzigingen aan een pad die direct hoorbaar zijn ----------
     function padLive(i) {
       const r = prt[i], now = ctx.currentTime; if (!r) return;
-      r.gain.gain.setTargetAtTime(effLevel(i), now, 0.01); r.pan.pan.setTargetAtTime(padOf(i).pan, now, 0.01); route(i);
+      r.gain.gain.setTargetAtTime(effLevel(i), now, 0.01); r.pan.pan.setTargetAtTime(padOf(i).pan, now, 0.01); route(i); sendLive(i, false);
       for (const x of trigs) if (x.i === i) for (const v of x.voices) {
         if (v.ended) continue;
         try { v.source.detune.setTargetAtTime(v.base + effTune(i) * 100, now, 0.01); if (v.bq) v.bq.frequency.setTargetAtTime(effCut(i), now, 0.01); } catch (e) { /* ok */ }
@@ -1760,7 +1899,7 @@ export default {
           const lp = t.obj.loop; if (!lp.on) { say(E.needLoop); return; }
           const ls = Math.round(lp.start * N), le = Math.round(lp.end * N), X = Math.min(Math.round(num(arg, 20, 1, 5000) / 1000 * rate), ls, Math.floor((le - ls) / 2));
           if (X < 2) { say(E.noRoom); return; }
-          same(edit(nc => { for (const c of nc) { const src = c.slice(); for (let i = 0; i < X; i++) { const w = (i + 1) / X; c[le - X + i] = src[le - X + i] * Math.cos(w * Math.PI / 2) + src[ls - X + i] * Math.sin(w * Math.PI / 2); } } })); return;
+          same(edit(nc => { for (const c of nc) loopXfadeApply(c, c.slice(), ls, le, X) })); return;
         }
         case 'proc': {
           const P2 = procSeg(arg.fx, arg.p, sliceCh(ch, a, b), rate); if (!P2) { say(E.badValue); return; }
@@ -1955,7 +2094,7 @@ export default {
 
     // Flatten en resample: een pad (alle lagen, envelope, filter, tune, niveau en panorama; zonder uitgangskeuze) of de selectie naar een nieuw sample, met OfflineAudioContext
     const offDest = oc => oc['destination'];   // de uitgang van de eigen offline-context (niet die van de host)
-    function offlineVoice(oc, bus, pad, src, v01, hold) {
+    function offlineVoice(oc, bus, pad, src, v01, hold, ampV) {
       const buf = bufferFor(src.sid, pad.reverse); if (!buf) return 0;
       const D = buf.duration || (buf.length / buf.sampleRate), e = pad.env, f = pad.filter;
       let s0 = src.start, s1 = src.end, l0 = src.loop.start, l1 = src.loop.end;
@@ -1964,9 +2103,9 @@ export default {
       const tStart = Math.max(0, -src.offsetMs) / 1000, endSec = s1 * D, looped = src.loop.on && !pad.oneShot && (l1 - l0) * D >= 0.002;
       const cents = src.cents + pad.fine + clamp(pad.tune, -24, 24) * 100, rate = Math.pow(2, cents / 1200);
       if (looped) { if (startSec >= l1 * D) startSec = l0 * D; } else if (endSec - startSec < 0.0003) return 0;
-      const source = oc.createBufferSource(); source.buffer = buf;
+      const source = oc.createBufferSource(); source.buffer = looped && src.loop.xfade > 0 ? loopBuf(src.sid, pad.reverse, buf, l0, l1, src.loop.xfade) : buf;
       try { source.detune.value = cents; } catch (err) { source.playbackRate.value = rate; }
-      const lg = oc.createGain(), gain0 = v01 * src.level * Math.pow(10, src.gain / 20); lg.gain.value = gain0; let tail = lg; source.connect(lg);
+      const lg = oc.createGain(), gain0 = (ampV == null ? v01 : ampV) * src.level * Math.pow(10, src.gain / 20); lg.gain.value = gain0; let tail = lg; source.connect(lg);
       if (Math.abs(src.pan) > 0.001) { const pn = oc.createStereoPanner(); pn.pan.value = src.pan; tail.connect(pn); tail = pn; }
       const A = Math.max(e.attack, 0.0005), Dc = Math.max(e.decay, 0.005);
       if (f.type !== 'off') {
@@ -1992,9 +2131,24 @@ export default {
       if (stopAt < Infinity) { try { source.stop(stopAt); } catch (err) { /* ok */ } }
       return looped ? Infinity : tStart + endSec / rate - startSec / rate;   // natuurlijke lengte van deze laag in seconden
     }
-    function trimTail(ch, rate) {   // stilte (onder -80 dB) aan het eind weg, minstens 1 ms houden
+    function trimTail(ch, rate, extra) {   // stilte (onder -80 dB) aan het eind weg, minstens 1 ms houden (plus `extra` samples stilte, zodat het korte uitfaden aan het eind van een slag geen geluid opeet)
       let last = 0; const thr = 1e-4; for (const c of ch) for (let i = c.length - 1; i >= last; i--) if (Math.abs(c[i]) > thr) { last = i + 1; break; }
-      const keep = Math.max(Math.round(rate * 0.001), last); return keep >= ch[0].length ? ch : sliceCh(ch, 0, keep);
+      const keep = Math.max(Math.round(rate * 0.001), last + (extra || 0)); return keep >= ch[0].length ? ch : sliceCh(ch, 0, keep);
+    }
+    function holdAuto(pad, srcs) {   // automatisch: de langste laag (een lus zonder one-shot telt als 2 s)
+      let hold = 0.05;
+      for (const src of srcs) { const b = bufferFor(src.sid, pad.reverse); if (!b) continue; const D = b.duration || (b.length / b.sampleRate), r = Math.pow(2, (src.cents + pad.fine + pad.tune * 100) / 1200), lp = src.loop.on && !pad.oneShot; hold = Math.max(hold, lp ? 2 : Math.max(0, -src.offsetMs) / 1000 + Math.max(0, (src.end - src.start) * D - Math.max(0, src.offsetMs) / 1000) / r); }
+      return hold;
+    }
+    async function renderPadSrcs(OAC, pad, srcs, v01, hold, tail, ampV) {   // alle lagen van een slag naar twee kanalen, met het niveau en panorama van het pad; ampV: aanslag voor de amplitude (null = v01)
+      let rate = Math.round(ctx.sampleRate);   // zoals je het hoort: de samplefrequentie van de studio (een laag met een lagere frequentie wordt dan netjes omgezet)
+      const total = hold + (pad.oneShot ? 0 : pad.env.release + 0.03) + Math.max(0, tail);
+      if (total > MAX_SEC + 0.0001) throw new Error(E.flOverlong);
+      const len = Math.max(64, Math.ceil(total * rate));
+      let oc; try { oc = new OAC(2, len, rate); } catch (err) { rate = ctx.sampleRate; oc = new OAC(2, Math.max(64, Math.ceil(total * rate)), rate); }
+      const bus = oc.createGain(), pn = oc.createStereoPanner(); bus.gain.value = Math.pow(10, clamp(pad.level, -60, 12) / 20); pn.pan.value = pad.pan; bus.connect(pn); pn.connect(offDest(oc));
+      for (const src of srcs) { try { offlineVoice(oc, bus, pad, src, v01, hold, ampV); } catch (err) { /* een kapotte laag mag de rest niet stoppen */ } }
+      const r = await oc.startRendering(); return { ch: [Float32Array.from(r.getChannelData(0)), Float32Array.from(r.getChannelData(1))], rate: oc.sampleRate };
     }
     async function flatRender(o) {
       const OAC = globalThis.OfflineAudioContext || globalThis.webkitOfflineAudioContext; if (!OAC) throw new Error(E.noOffline);
@@ -2010,18 +2164,8 @@ export default {
         const i = o.padIdx, pad = padOf(i), v127 = clamp(o.vel, 1, 127), v01 = v127 / 127;
         const srcs = pickSources(pad.play === 'cycle' || pad.play === 'random' ? { ...pad, play: 'velocity' } : pad, i, v127, o.note);
         if (!srcs.length) throw new Error(E.flNoSound);
-        rate = Math.round(ctx.sampleRate);   // zoals je het hoort: de samplefrequentie van de studio (een laag met een lagere frequentie wordt dan netjes omgezet)
-        let hold = o.hold;
-        if (!(hold > 0)) {   // automatisch: de langste laag (een lus zonder one-shot telt als 2 s)
-          hold = 0.05; for (const src of srcs) { const b = bufferFor(src.sid, pad.reverse); if (!b) continue; const D = b.duration || (b.length / b.sampleRate), r = Math.pow(2, (src.cents + pad.fine + pad.tune * 100) / 1200), lp = src.loop.on && !pad.oneShot; hold = Math.max(hold, lp ? 2 : Math.max(0, -src.offsetMs) / 1000 + Math.max(0, (src.end - src.start) * D - Math.max(0, src.offsetMs) / 1000) / r); }
-        }
-        const total = hold + (pad.oneShot ? 0 : pad.env.release + 0.03) + Math.max(0, o.tail);
-        if (total > MAX_SEC + 0.0001) throw new Error(E.flOverlong);
-        const len = Math.max(64, Math.ceil(total * rate));
-        let oc; try { oc = new OAC(2, len, rate); } catch (err) { rate = ctx.sampleRate; oc = new OAC(2, Math.max(64, Math.ceil(total * rate)), rate); }
-        const bus = oc.createGain(), pn = oc.createStereoPanner(); bus.gain.value = Math.pow(10, clamp(pad.level, -60, 12) / 20); pn.pan.value = pad.pan; bus.connect(pn); pn.connect(offDest(oc));
-        for (const src of srcs) { try { offlineVoice(oc, bus, pad, src, v01, hold); } catch (err) { /* een kapotte laag mag de rest niet stoppen */ } }
-        const r = await oc.startRendering(); ch = [Float32Array.from(r.getChannelData(0)), Float32Array.from(r.getChannelData(1))]; rate = oc.sampleRate;
+        const hold = o.hold > 0 ? o.hold : holdAuto(pad, srcs);
+        ({ ch, rate } = await renderPadSrcs(OAC, pad, srcs, v01, hold, o.tail, null));
       }
       if (o.mono && ch.length === 2) { const m = new Float32Array(ch[0].length); for (let k = 0; k < m.length; k++) m[k] = (ch[0][k] + ch[1][k]) / 2; ch = [m]; }
       if (o.src === 'pad' && o.trim) ch = trimTail(ch, rate);
@@ -2064,6 +2208,85 @@ export default {
       } catch (err) { say(err && err.message ? err.message : String(err)); }
       finally { ed.busy = false; }
     }
+
+    // ---------- Autosampler (sinds 1.4.0): het geluid van een pad of laag per noot en velocity-laag naar de zones van een keygroep-pad ----------
+    // Elke noot en elke velocity-laag wordt met OfflineAudioContext gerenderd (zelfde keten als Flatten: lagen, envelope, filter, tune, niveau en panorama; de sends niet). De aanslag stuurt de laagkeuze en
+    // het filter (velocity-diepte), maar de amplitude wordt op 1 gerenderd: de zone krijgt bij het spelen zelf de aanslag mee, zodat de zone bij de gerenderde aanslag klinkt als het bronpad.
+    function autoPlan(o) {
+      const lo = int(o.lo, 36, 0, 127), hi = int(o.hi, 84, 0, 127), step = int(o.step, 3, 1, 24), nv = int(o.vels, 1, 1, 4), notes = [], vels = [];
+      for (let a = lo; a <= hi; a += step) { const b = Math.min(hi, a + step - 1); notes.push({ lo: a, hi: b, root: o.root === 'low' ? a : a + Math.floor((b - a) / 2) }); }
+      for (let k = 0; k < nv; k++) { const a = k === 0 ? 1 : Math.floor(127 * k / nv) + 1, b = k === nv - 1 ? 127 : Math.floor(127 * (k + 1) / nv); vels.push({ lo: a, hi: b, v: nv === 1 ? int(o.vel, 100, 1, 127) : Math.round((a + b) / 2) }); }
+      return { lo, hi, notes, vels, zones: lo <= hi ? notes.length * nv : 0 };
+    }
+    function autoSource(t, mode) {   // het bronpad als keygroep (chromatisch rond de grondtoon van elke laag); voor "alleen de laag" de andere lagen leeg
+      const pad = padOf(t.loc.b * NPAD + t.loc.p), li = t.kind === 'l' ? t.loc.l : prog.layer;
+      if (mode === 'layer') return { ...pad, mode: 'key', play: 'all', zones: [], layers: pad.layers.map((l, k) => (k === li ? l : defLayer())) };
+      return { ...pad, mode: 'key', play: pad.play === 'cycle' || pad.play === 'random' ? 'velocity' : pad.play };
+    }
+    function autoTarget(o) {   // doelpad: index, of -1 als het niet kan
+      return int(o.dBank, 0, 0, NBANK - 1) * NPAD + int(o.dPad, 0, 0, NPAD - 1);
+    }
+    function autoEstimate(o, srcPad) {   // ongeveer zoveel bytes PCM16 gaan de zones kosten
+      const plan = autoPlan(o), srcs = pickSources(srcPad, 0, 100, plan.notes.length ? plan.notes[0].root : 60);
+      const hold = o.hold > 0 ? o.hold : holdAuto(srcPad, srcs), sec = hold + (srcPad.oneShot ? 0 : srcPad.env.release + 0.03) + Math.max(0, o.tail);
+      return { plan, sec, bytes: Math.round(plan.zones * sec * ctx.sampleRate * (o.mono ? 1 : 2) * 2) };
+    }
+    async function autosample(o, preview) {
+      if (ed.busy) return; const t = edTarget(); if (!t) return;
+      const srcIdx = t.loc.b * NPAD + t.loc.p, pad0 = padOf(srcIdx);
+      if (!hasSound(pad0)) { say(E.flNoSound); return; }
+      const srcPad = autoSource(t, o.src), plan = autoPlan(o), dIdx = autoTarget(o);
+      if (plan.lo > plan.hi) { say(E.auBadRange); return; }
+      if (plan.zones > ZONE_CAP) { say(fillT(E.auTooMany, plan.zones, ZONE_CAP)); return; }
+      if (!preview && dIdx === srcIdx) { say(E.auSame); return; }
+      const OAC = globalThis.OfflineAudioContext || globalThis.webkitOfflineAudioContext; if (!OAC) { say(E.noOffline); return; }
+      if (o.hold + o.tail > MAX_SEC) { say(E.auLong); return; }
+      const est = autoEstimate(o, srcPad);
+      if (!preview && est.bytes > MAX_PCM - liveBytes() + padBytes(dIdx)) { say(fillT(E.auNoMem, (est.bytes / 1048576).toFixed(1), Math.max(0, (MAX_PCM - liveBytes() + padBytes(dIdx)) / 1048576).toFixed(1))); return; }
+      ed.busy = true; ed.autoStop = false; ed.autoOn = true; uiEd('auto'); const my = token;
+      try {
+        const out = [], lics = new Set(); let lic = null, skipped = 0;
+        const list = preview ? [{ n: plan.notes[Math.floor(plan.notes.length / 2)], v: plan.vels[plan.vels.length - 1] }] : plan.notes.flatMap(n => plan.vels.map(v => ({ n, v })));
+        for (let k = 0; k < list.length; k++) {
+          if (dead || my !== token) return;
+          if (ed.autoStop) { say(E.auAborted); return; }
+          const { n, v } = list[k]; say(fillT(E.auProgress, k + 1, list.length));
+          const srcs = pickSources(srcPad, srcIdx, v.v, n.root); if (!srcs.length) { skipped++; continue; }
+          for (const q of srcs) { const r = store.get(q.sid); if (r && r.license && (r.license.license || r.license.attribution || r.license.author || r.license.source)) { lics.add(JSON.stringify(r.license)); if (!lic) lic = r.license; } }
+          const hold = o.hold > 0 ? o.hold : holdAuto(srcPad, srcs);
+          let { ch, rate } = await renderPadSrcs(OAC, srcPad, srcs, v.v / 127, hold, o.tail, 1);
+          if (dead || my !== token) return;
+          if (o.mono) { const m = new Float32Array(ch[0].length); for (let i = 0; i < m.length; i++) m[i] = (ch[0][i] + ch[1][i]) / 2; ch = [m]; }
+          if (o.trim) ch = trimTail(ch, rate, Math.round(rate * 0.005));
+          out.push({ n, v, ch, rate });
+        }
+        if (!out.length) { say(E.flNoSound); return; }
+        if (preview) { edPlayBuf(out[0].ch, out[0].rate, 0); say(fillT(E.flDone, (out[0].ch[0].length / out[0].rate).toFixed(2), out[0].rate)); return; }
+        if (o.norm) { let pk = 0; for (const x of out) pk = Math.max(pk, rangePeak(x.ch, 0, x.ch[0].length)); if (pk > 1e-6) { const g = 1 / pk; for (const x of out) x.ch = x.ch.map(c => c.map(val => val * g)); } }
+        const nm = pad0.name || (sampleInfo(pad0.layers.find(l => l.sampleId).sampleId) || {}).name || padId(t.loc.b, t.loc.p).toUpperCase();
+        const zones = [], recs = new Map();
+        for (const x of out) {
+          const rec = packRec(x.ch, x.rate, str(nm + ' ' + noteName(x.n.root) + (plan.vels.length > 1 ? ' v' + x.v.v : ''), 80), { root: x.n.root, license: lic }), id = recId(rec);
+          if (!recs.has(id)) recs.set(id, rec);   // identieke klanken (bijvoorbeeld bij één velocity-laag in het bronpad) delen één sample
+          const z = defZone(); z.sampleId = id; z.root = x.n.root; z.keyLo = x.n.lo; z.keyHi = x.n.hi; z.velLo = x.v.lo; z.velHi = x.v.hi; zones.push(z);
+        }
+        zones.sort((a, b) => a.keyLo - b.keyLo || a.velLo - b.velLo);
+        const old = padOf(dIdx);
+        const ok = progRun(E.auLabel, [dIdx], () => {
+          for (const [id, rec] of recs) if (!store.has(id)) store.set(id, rec);
+          const p = defPad(); p.name = str(fillT(E.auName, nm), 40); p.mode = 'key'; p.oneShot = true; p.polyphony = 8; p.output = old.output; p.muteGroup = old.muteGroup;
+          p.zones = zones; p.baseNote = zones[Math.floor(zones.length / 2)].root; prog.banks[dIdx >> 4].pads[dIdx & 15] = p; if (prt[dIdx]) padLive(dIdx);
+          return true;
+        }, true);
+        if (ok) {
+          prog.bank = dIdx >> 4; prog.pad = dIdx & 15; selZone = 0; if (ui) ui.refreshAll();
+          let bytes = 0; for (const r of recs.values()) bytes += r.bytes;
+          say(fillT(E.auDone, zones.length, recs.size, (bytes / 1048576).toFixed(1)) + (skipped ? ' ' + fillT(E.auSkipped, skipped) : '') + (lics.size > 1 ? ' ' + E.auLic : ''));
+        }
+      } catch (err) { say(err && err.message ? err.message : String(err)); }
+      finally { ed.busy = false; ed.autoOn = false; uiEd('auto'); }
+    }
+    const padBytes = i => { const s = new Set(); for (const l of padOf(i).layers) if (l.sampleId) s.add(l.sampleId); for (const z of padOf(i).zones) if (z.sampleId) s.add(z.sampleId); let n = 0; for (const id of s) { const r = store.get(id); if (r) n += r.bytes; } return n; };
 
     // ---------- UI ----------
     const downs = new Map();
@@ -2178,7 +2401,7 @@ export default {
       }
 
       // --- helpers voor regelaars
-      const scopeObj = sc => (sc === 'prog' ? prog : sc === 'pad' ? curPad() : sc === 'layer' ? curLayer() : curZone());
+      const scopeObj = sc => (sc === 'prog' ? prog : sc === 'aux' ? prog.aux : sc === 'pad' ? curPad() : sc === 'layer' ? curLayer() : curZone());
       const getV = k => { const o = scopeObj(k[1]); if (!o) return RG[k[3]][3]; let v = o; for (const p of k[2]) v = v[p]; return v == null ? RG[k[3]][3] : v; };
       function constrain(id) {
         const l = curLayer(), z = curZone(), E = 0.0001;
@@ -2197,6 +2420,7 @@ export default {
       }
       function after(id, sc) {
         if (sc === 'pad') padLive(curI());
+        if (sc === 'aux') auxLive(id === 'aux.revSize' || id === 'aux.revDamp');
         if (id === 'level') applyMaster();
         if (sc === 'layer' || sc === 'zone') { drawWave(); fillZones(); }
         if (id === 'baseNote' || id === 'pad.baseNote') { paintPads(); notesNotify(); }
@@ -2248,6 +2472,8 @@ export default {
         toggle(g2, 'pad.oneshot', 'pad', T.oneShot, () => curPad().oneShot, v => { curPad().oneShot = v; });
         toggle(g2, 'pad.reverse', 'pad', T.reverse, () => curPad().reverse, v => { curPad().reverse = v; });
         knobs(P, ['pad.tune', 'pad.fine', 'pad.level', 'pad.pan', 'pad.poly', 'pad.mute', 'pad.baseNote']);
+        H('h4', null, P, T.sendsTitle);
+        knobs(P, ['pad.send1', 'pad.send2']);
         H('h4', null, P, T.envelope);
         selectBox(P, 'env.shape', 'env', T.envShape, [['adsr', 'ADSR'], ['ad', 'AD']], () => curPad().env.shape, v => { curPad().env.shape = v === 'ad' ? 'ad' : 'adsr'; });
         knobs(P, ['env.attack', 'env.decay', 'env.sustain', 'env.release']);
@@ -2282,9 +2508,9 @@ export default {
         const P = panels.zone;
         H('p', 'muted', P, T.zoneHelp);
         const r1 = H('div', 'row', P);
-        zoneSel = host.ui.select(r1, T.zone, [['0', '–']], '0', v => { selZone = int(+v, 0, 0, MAXZONE - 1); refreshAll(); }, { id: 'zone.select', group: 'zone' });
+        zoneSel = host.ui.select(r1, T.zone, [['0', '–']], '0', v => { selZone = int(+v, 0, 0, ZONE_CAP - 1); refreshAll(); }, { id: 'zone.select', group: 'zone' });
         button(r1, T.zoneAdd, () => {
-          const p = curPad(); if (p.zones.length >= MAXZONE) return;
+          const p = curPad(); if (p.zones.length >= ZONE_CAP) return;
           const last = p.zones[p.zones.length - 1], l = curLayer();
           const z = defZone(); z.sampleId = l.sampleId; z.root = l.root == null ? 60 : l.root; if (last && last.keyHi < 127) { z.keyLo = last.keyHi + 1; z.keyHi = 127; }
           p.zones.push(z); selZone = p.zones.length - 1; refreshAll(); notesNotify();
@@ -2303,6 +2529,16 @@ export default {
       {
         const P = panels.prog;
         knobs(P, ['level', 'baseNote', 'padVel']);
+        // sends: reverb en delay
+        const outOpts = [['0', T.outMix], ...Array.from({ length: 16 }, (_, i) => [String(i + 1), T.outN + ' ' + (i + 1)])];
+        H('h4', null, P, T.auxTitle); H('p', 'muted', P, T.auxHelp);
+        H('h5', null, P, T.revTitle);
+        knobs(P, ['aux.revLevel', 'aux.revSize', 'aux.revDamp']);
+        selectBox(P, 'aux.revOut', 'rev', T.revOutL, outOpts, () => String(prog.aux.rev.out), v => { prog.aux.rev.out = int(+v, 0, 0, 16); auxLive(false); });
+        H('h5', null, P, T.dlyTitle);
+        knobs(P, ['aux.dlyLevel', 'aux.dlyTime', 'aux.dlyFb', 'aux.dlyTone']);
+        selectBox(P, 'aux.dlySync', 'dly', T.syncL, SYNC_NAMES.map(n => [n, n === 'off' ? T.syncFree : n]), () => prog.aux.dly.sync, v => { prog.aux.dly.sync = SYNC_NAMES.includes(v) ? v : 'off'; auxLive(false); });
+        selectBox(P, 'aux.dlyOut', 'dly', T.dlyOutL, outOpts, () => String(prog.aux.dly.out), v => { prog.aux.dly.out = int(+v, 0, 0, 16); auxLive(false); });
         const r = H('div', 'row', P);
         button(r, T.demoKit, () => { token++; panicAt(ctx.currentTime); prog.banks = defaultBanks(); store.clear(); bufs.clear(); selZone = 0; gcStore(); refreshAll(); notesNotify(); say(T.demoKitDone); });
         button(r, T.clearAll, () => { token++; panicAt(ctx.currentTime); prog.banks = Array.from({ length: NBANK }, (_, i) => defBank(i)); store.clear(); bufs.clear(); selZone = 0; refreshAll(); notesNotify(); say(T.clearDone); });
@@ -2455,7 +2691,7 @@ export default {
         const P = panels.edit; P.classList.add('edit');
         const r0 = H('div', 'row', P);
         tgtSel = H('select', null, r0); tgtSel.setAttribute('aria-label', E.target);
-        on(tgtSel, 'change', () => { const v = tgtSel.value; if (v[0] === 'z') { ed.useZone = true; selZone = int(+v.slice(1), 0, 0, MAXZONE - 1); } else { ed.useZone = false; prog.layer = int(+v.slice(1), 0, 0, NLAYER - 1); } refreshAll(); });
+        on(tgtSel, 'change', () => { const v = tgtSel.value; if (v[0] === 'z') { ed.useZone = true; selZone = int(+v.slice(1), 0, 0, ZONE_CAP - 1); } else { ed.useZone = false; prog.layer = int(+v.slice(1), 0, 0, NLAYER - 1); } refreshAll(); });
         on(tgtSel, 'pointerdown', e => e.stopPropagation());
         infoEd = H('div', 'info', P, '');
         const eb = (parent, text, fn, op, needs) => {
@@ -2506,9 +2742,9 @@ export default {
         on(curIn, 'change', () => { const D = edData(); if (!D) return; ed.cur = int(+curIn.value, 0, 0, D.frames); ed.dirty = true; edReveal(ed.cur); edRefresh(false); });
         selInfo = H('div', 'info', P, ''); lvlEl = H('div', 'info', P, '');
 
-        const G = { edit: [], chop: [], proc: [], flat: [] };
+        const G = { edit: [], chop: [], proc: [], flat: [], auto: [] };
         const modeRow = H('div', 'row modes', P); modeRow.setAttribute('role', 'group'); modeRow.setAttribute('aria-label', E.modes);
-        const modeBtns = [['edit', E.mEdit], ['chop', E.mChop], ['proc', E.mProc], ['flat', E.mFlat]].map(([m, tx]) => {
+        const modeBtns = [['edit', E.mEdit], ['chop', E.mChop], ['proc', E.mProc], ['flat', E.mFlat], ['auto', E.mAuto]].map(([m, tx]) => {
           const b = H('button', 'tabbtn', modeRow, tx); b.type = 'button'; b.setAttribute('data-mode', m); on(b, 'click', () => setMode(m)); on(b, 'pointerdown', e => e.stopPropagation()); return b;
         });
         function setMode(m, quiet) {
@@ -2630,6 +2866,39 @@ export default {
         const flOpts = () => ({ src: fget('flSrc'), note: int(+fget('flNote'), 60, 0, 127), vel: int(+fget('flVel'), 100, 1, 127), tail: num(+fget('flTail'), 0.1, 0, 10), hold: num(+fget('flHold'), 0, 0, 120), mono: fget('flCh') === 'mono', norm: !!fget('flNorm'), trim: !!fget('flTrim'), dest: fget('flDest'), dBank: int(+fget('flBank'), 0, 0, 3), dPad: int(+fget('flPadN'), 0, 0, 15) });
         const rf5 = H('div', 'row', gFl);
         eb(rf5, '▶ ' + E.flPrev, () => flatten(flOpts(), true), 'flPrev', 'sample'); eb(rf5, E.flGo, () => flatten(flOpts(), false), 'flGo', 'sample');
+        // autosampler: een pad over een toetsbereik en velocity-lagen naar zones van een keygroep-pad
+        const gAu = H('div', 'grp', P); H('h4', null, gAu, E.grpAuto); G.auto.push(gAu); H('p', 'muted', gAu, E.auHelp);
+        sel2(H('div', 'row', gAu), E.auSrc, 'auSrc', [['pad', E.auSrcPad], ['layer', E.auSrcLayer]], 'pad');
+        const ra2 = H('div', 'row', gAu);
+        numIn(ra2, E.auLo, 36, 0, 127, 1, 'auLo'); numIn(ra2, E.auHi, 84, 0, 127, 1, 'auHi'); numIn(ra2, E.auStep, 3, 1, 24, 1, 'auStep'); numIn(ra2, E.auVels, 1, 1, 4, 1, 'auVels'); numIn(ra2, E.auVel, 100, 1, 127, 1, 'auVel');
+        const ra3 = H('div', 'row', gAu);
+        numIn(ra3, E.auHold, 1, 0, 120, 0.1, 'auHold'); numIn(ra3, E.auTail, 0.5, 0, 10, 0.05, 'auTail'); sel2(ra3, E.auRoot, 'auRoot', [['mid', E.auRootMid], ['low', E.auRootLow]], 'mid');
+        const ra4 = H('div', 'row', gAu);
+        chk2(ra4, E.auMono, 'auMono', false); chk2(ra4, E.auNorm, 'auNorm', false); chk2(ra4, E.auTrim, 'auTrim', true);
+        const ra5 = H('div', 'row', gAu);
+        sel2(ra5, E.flBank, 'auBank', BANK_LETTER.map((L, b) => [b, L]), 0); sel2(ra5, E.flPadN, 'auPadN', Array.from({ length: NPAD }, (_, p) => [p, p + 1]), 1);
+        const auInfo = H('div', 'info', gAu, '');
+        const auOpts = () => ({ src: fget('auSrc') === 'layer' ? 'layer' : 'pad', lo: int(+fget('auLo'), 36, 0, 127), hi: int(+fget('auHi'), 84, 0, 127), step: int(+fget('auStep'), 3, 1, 24), vels: int(+fget('auVels'), 1, 1, 4), vel: int(+fget('auVel'), 100, 1, 127),
+          hold: num(+fget('auHold'), 1, 0, 120), tail: num(+fget('auTail'), 0.5, 0, 10), root: fget('auRoot') === 'low' ? 'low' : 'mid', mono: !!fget('auMono'), norm: !!fget('auNorm'), trim: !!fget('auTrim'), dBank: int(+fget('auBank'), 0, 0, 3), dPad: int(+fget('auPadN'), 1, 0, 15) });
+        const ra6 = H('div', 'row', gAu);
+        eb(ra6, '▶ ' + E.auPrev, () => autosample(auOpts(), true), 'auPrev'); eb(ra6, E.auGo, () => autosample(auOpts(), false), 'auGo');
+        const auStopB = H('button', 'btn', ra6, E.auStop); auStopB.type = 'button'; auStopB.setAttribute('data-op', 'auStop'); auStopB.hidden = true; on(auStopB, 'click', () => { ed.autoStop = true; }); on(auStopB, 'pointerdown', e => e.stopPropagation());
+        ed.autoPaint = () => {
+          auStopB.hidden = !ed.autoOn;
+          const t = edTarget(); if (!t) { auInfo.textContent = ''; return; }
+          if (!P.querySelector('[data-f="auBank"]').getAttribute('data-user')) {   // standaard: het eerste lege pad na het bronpad
+            const si = t.loc.b * NPAD + t.loc.p; let pick = (si + 1) % (NBANK * NPAD);
+            for (let k = 1; k < NBANK * NPAD; k++) { const q = (si + k) % (NBANK * NPAD); if (!hasSound(padOf(q))) { pick = q; break; } }
+            P.querySelector('[data-f="auBank"]').value = String(pick >> 4); P.querySelector('[data-f="auPadN"]').value = String(pick & 15);
+          }
+          const o = auOpts(), si = t.loc.b * NPAD + t.loc.p;
+          if (!hasSound(padOf(si))) { auInfo.textContent = E.flNoSound; return; }
+          if (o.lo > o.hi) { auInfo.textContent = E.auBadRange; return; }
+          try { const e = autoEstimate(o, autoSource(t, o.src)), d = autoTarget(o); auInfo.textContent = e.plan.zones > ZONE_CAP ? fillT(E.auTooMany, e.plan.zones, ZONE_CAP) : fillT(E.auPlan, e.plan.zones, (e.bytes / 1048576).toFixed(1), padId(d >> 4, d & 15).toUpperCase(), hasSound(padOf(d)) ? E.auReplace : ''); } catch (err) { auInfo.textContent = ''; }
+        };
+        for (const id of ['auBank', 'auPadN']) for (const ev of ['input', 'change']) on(P.querySelector('[data-f="' + id + '"]'), ev, () => P.querySelector('[data-f="auBank"]').setAttribute('data-user', '1'));
+        on(P, 'input', e => { const f = e.target && e.target.getAttribute && e.target.getAttribute('data-f'); if (f && f.slice(0, 2) === 'au') ed.autoPaint(); });
+        on(P, 'change', e => { const f = e.target && e.target.getAttribute && e.target.getAttribute('data-f'); if (f && f.slice(0, 2) === 'au') ed.autoPaint(); });
         const gU = H('div', 'grp', P); H('h4', null, gU, E.grpUndo);
         const rU = H('div', 'row', gU);
         eb(rU, '↶ ' + E.undo, () => edStep(true), 'undo', 'undo'); eb(rU, '↷ ' + E.redo, () => edStep(false), 'redo', 'redo');
@@ -2898,6 +3167,7 @@ export default {
           }
           const fn = P0.querySelector('[data-f="flNote"]'); if (fn && fn.getAttribute('data-user') !== '1') { const pd = curPad(), ly = pd.layers.find(l => l.sampleId); fn.value = String(ly && ly.root != null ? ly.root : pd.mode === 'key' ? pd.baseNote : 60); }
         }
+        if (ed.mode === 'auto' && ed.autoPaint) ed.autoPaint();
         const sig = [ed.dec && ed.dec.id, N, ed.sel ? ed.sel.join('-') : '', ed.cur, ed.v0.toFixed(2), ed.vn.toFixed(2), ed.undo.length, ed.redo.length, !!ed.clip, ed.play ? 1 : 0, ed.mode, ed.slSel, rec ? sliceJson(rec) : ''].join('|');
         if (sig === esig) return; esig = sig;
         const sampleOk = !!D, hasSel = !!ed.sel, stereo = !!D && D.channels === 2;
@@ -3017,9 +3287,9 @@ export default {
 
       ui = {
         bk: bkUiApi, refreshAll, refreshCtl, say(m) { if (statusEl) statusEl.textContent = m || ''; }, drawWave,
-        ed: { view() { ed.dirty = true; esig = ''; }, refresh() { esig = ''; edRefresh(false); } },
+        ed: { view() { ed.dirty = true; esig = ''; }, refresh() { esig = ''; edRefresh(false); }, auto() { if (ed.autoPaint) ed.autoPaint(); } },
         destroy() {
-          if (stopFrame) { stopFrame(); stopFrame = null; }
+          ed.autoPaint = null; if (stopFrame) { stopFrame(); stopFrame = null; }
           if (lvlTimer) { clearTimeout(lvlTimer); lvlTimer = 0; }
           if (ro) { try { ro.disconnect(); } catch (e) { /* ok */ } ro = null; }
           for (const [t, ty, fn, o] of listeners) { try { t.removeEventListener(ty, fn, o); } catch (e) { /* ok */ } } listeners.length = 0;
@@ -3084,6 +3354,7 @@ export default {
         return {
           v: 1, bank: prog.bank, pad: prog.pad, layer: prog.layer, baseNote: prog.baseNote, level: prog.level, padVel: prog.padVel,
           banks: prog.banks.map(bk => ({ name: bk.name, pads: bk.pads.map(serPad) })), samples,
+          ...(JSON.stringify(serAux(prog.aux)) !== DEF_AUX_JSON ? { aux: serAux(prog.aux) } : {}),
           ...(cr.length ? { credits: cr } : {}),
         };
       },
@@ -3101,12 +3372,12 @@ export default {
         const has = id => !!DEMO_BY_ID[id] || next.has(id);
         prog.banks = Array.isArray(s.banks) ? Array.from({ length: NBANK }, (_, i) => nBank(s.banks[i], i, has)) : defaultBanks();
         prog.bank = int(s.bank, 0, 0, NBANK - 1); prog.pad = int(s.pad, 0, 0, NPAD - 1); prog.layer = int(s.layer, 0, 0, NLAYER - 1);
-        prog.baseNote = int(s.baseNote, 36, 0, 63); prog.level = num(s.level, 0.8, 0, 1); prog.padVel = int(s.padVel, 100, 1, 127);
+        prog.baseNote = int(s.baseNote, 36, 0, 63); prog.level = num(s.level, 0.8, 0, 1); prog.padVel = int(s.padVel, 100, 1, 127); prog.aux = nAux(s.aux);
         store.clear(); for (const [k, v] of next) store.set(k, v);
         for (const id of [...bufs.keys()]) if (!DEMO_BY_ID[id]) bufs.delete(id);   // een id met andere inhoud mag geen oude buffer erven
         edStop(); clearHistory(); ed.dec = null; ed.key = ''; ed.sel = null; ed.cur = 0; ed.useZone = false;
         gcStore(); rr.fill(0); lastPick.fill(-1); selZone = 0;
-        allLive(); notesNotify(); warm();
+        allLive(); auxLive(false); notesNotify(); warm();
         if (ui) ui.refreshAll();
         if (dropped) say(T.dropped.replace('{0}', dropped));
       },
@@ -3116,7 +3387,7 @@ export default {
         if (warmTimer) { clearTimeout(warmTimer); warmTimer = 0; }
         if (ui) { ui.destroy(); ui = null; }
         for (const x of [...trigs]) for (const v of x.voices) { try { v.source.onended = null; v.source.stop(); } catch (e) { /* al gestopt */ } }
-        trigs.clear();
+        trigs.clear(); for (const tm of auxTimers) clearTimeout(tm); auxTimers.clear(); auxBus = null;
         for (const n of nodes) { try { n.disconnect(); } catch (e) { /* los */ } }
         nodes.clear(); bufs.clear(); store.clear(); clearHistory(); ed.clip = null; ed.dec = null; ed.play = null;
       },

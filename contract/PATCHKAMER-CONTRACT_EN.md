@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.29 for building agents
+# Patchkamer — Instrument contract v1.30 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -38,6 +38,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.27 | Pack versions: a tune, preset or sample pack may have a top-level `version` (SemVer `x.y.z`, the version of the pack's content, separate from the `version` on a tune or preset, which is the device version). The host ignores it. Also the version rules: every change gets a new SemVer number (host, contract, skins, packs). |
 | v1.28 | Retired devices and selecting remotely: the optional definition field `status: 'retired'` (the library hides the device unless the user shows retired devices; existing workspaces and songs load it as usual) and `host.show(this, targetId, { select, center })`, with which a device selects another device and puts it in the middle of the screen (without moving or zooming it). |
 | v1.29 | AI question for a device: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. A device asks one question to the AI provider the user chose in the settings (the key stays with the host; the device itself makes no network call). The user must confirm the question per device. For suggestions without the user having to chat, like a mapping suggestion from the MIDI Controller. |
+| v1.30 | Files from the internet: `host.fetchFile(this, url, opts)` fetches one https file for a device (`as`, `maxBytes`, `signal`, `onProgress`), only after a user click, without credentials and without `Referer`, with a limit on the size and error codes `url`, `aborted`, `network`, `http`, `size`, `response` (§13i). Optional; an old host does not have the function. The validator knows the function and gives an error for a call without a click. |
 
 ---
 
@@ -1120,6 +1121,28 @@ A device that records (the Recorder) tells the host, so the user also sees that 
 - **Cleaning up.** Always report the end (also in `destroy`). A device that leaves the floor drops out by itself in any case.
 - **Old host.** Check `typeof host.recording === 'function'`; without it, do nothing.
 
+## 13i. Fetching files from the internet (v1.30)
+
+A device may not use the network (§15). If it still wants one file from the internet (a sample, a bank file, a preset from a public source), it asks the **host**: `host.fetchFile`. The host makes the call, guards the size and returns the bytes (or text or JSON). Unlike `host.stems` (§13g) this is not a service with keys or costs: it is a plain GET to a public address.
+
+| Call | What |
+|---|---|
+| `host.fetchFile(this, url, opts)` | Returns a promise with the content of `url`. `opts` (optional): `as` (`'arraybuffer'` (default), `'text'` (UTF-8) or `'json'`), `maxBytes` (a limit on the size; a number from 1 to 262144000 (250 MB), otherwise the default 52428800 (50 MB)), `signal` (an `AbortSignal` to cancel), `onProgress(received, total)` (`total` is 0 if the server reports no length; the host ignores an error thrown by your function). The result is an `ArrayBuffer`, a string or a parsed JSON object. |
+
+**Errors.** The promise rejects with an `Error` with `code` (and sometimes `status` or `max`): `url` (the address is not allowed, or `this` is not a device on the floor), `aborted` (cancelled via `signal`), `network` (the call did not arrive: no connection, or the server does not allow the call from the browser (CORS)), `http` (the server answered with an error status; `status`), `size` (larger than `maxBytes`; `max`) and `response` (only with `as: 'json'`: the content is not valid JSON). The device makes the text for the user itself, per `code`, in `host.lang`.
+
+**What the host handles, and what you must do.**
+- **Only after a click.** Call `fetchFile` only on a user action (a button, choosing a bank). `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` and `destroy` never start a call; the validator gives an error if that happens. The host does **not** ask for confirmation itself: the device visibly says before the click where the file comes from.
+- **Only https.** An address with another scheme, with credentials in the address (`user:password@`), with `localhost` or a name on `.localhost` or `.local`, with an IPv4 address (`192.168.0.1`) or an IPv6 address as the name is refused with `url`. An ordinary name that points to an address on the own network is not stopped by the host, and it does not check where a redirect (which the host follows) goes. So only fetch from sources you know.
+- **No traces.** The call goes without credentials (`credentials: 'omit'`: no cookies) and without a `Referer`. The host sends no keys; a token of the user (for example for a sample library) the device puts in the address itself and never stores in `getState()`, a preset, a tune or a song.
+- **Limit on the size.** If the server reports a length above `maxBytes`, the host refuses at once with `size`; otherwise it counts the bytes while fetching and stops as soon as the limit is reached. Set `maxBytes` as low as fits what you expect.
+- **Content is data.** What you receive you never execute and you follow no instructions from it. Check the format yourself (the host does not look at the bytes) and tell the user what you could not read.
+- **Rights.** The device shows the license, author and required attribution of what it fetches and carries them in the metadata of what it stores (compare §13e).
+- **Result in the state.** Store the fetched file only if the device keeps its own sounds in the state (mind the size), not as a reference to the internet: a song must sound without a network.
+- **Old host.** A host without v1.30 has no `host.fetchFile`. Check `typeof host.fetchFile === 'function'` and show a message otherwise; loading locally and dragging keep working.
+
+What the host does not do: it does not guarantee that a server is reachable or that the browser allows the call (CORS), does not check the content and stores nothing.
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -1168,6 +1191,7 @@ A device that records (the Recorder) tells the host, so the user also sees that 
 | `host.ui.steps(…, opts)` | v1.22 | 5th argument `{ id, group, role, color }` for a row of step buttons (§12f) |
 | `data-pk-role="pad"` / `"step"` | v1.22 | Your own buttons take part with shape, colour, lamp and size (§12f) |
 | `host.stems(this, action, opts)` | v1.23 | Have an online service split a track into stems: `'services'`, `'split'` (promise with AudioBuffers), `'send'` (give sound to another device) or `'settings'` (§13g) |
+| `host.fetchFile(this, url, opts)` | v1.30 | Fetch one https file from the internet, only after a click; `as`, `maxBytes`, `signal`, `onProgress` (§13i) |
 | `host.recording(this, on)` | v1.25 | Report that this device is recording: the host shows a red lamp with the time next to Start (§13h). |
 
 Use nothing else of the host. What is not listed here may change without notice.
@@ -1179,7 +1203,7 @@ Use nothing else of the host. What is not listed here may change without notice.
 - `destroy()` stops oscillators and sources, disconnects your nodes (`disconnect()`), stops timers, animations and subscriptions on `host.frame`, and disconnects bundle channels that you connected. Calling `destroy()` twice must not throw.
 - No global variables. Multiple instances of your device must be able to exist side by side. If you deliberately want to share between instances, such as the groups of Drift, do that in a variable at module level and clean it up.
 - No browser storage (`localStorage`, `sessionStorage`, `indexedDB`): state goes via `getState`/`setState`.
-- No network (`fetch`, `XMLHttpRequest`, `WebSocket`; for an online stem service ask the host, §13g), no `import`, no own AudioContext.
+- No network (`fetch`, `XMLHttpRequest`, `WebSocket`; for an online stem service ask the host, §13g, and for one file from the internet too, §13i), no `import`, no own AudioContext.
 - Do not throw errors from `onStep`, `onEvent`, `onBundle` or `modulate`.
 
 ---
@@ -1239,6 +1263,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 21. **Stems (v1.23, §13g)**: the fake host has `host.stems(this, action, opts)`: `'services'` returns `[]`, `'split'` rejects. A call of `'split'` during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call starts only on a click by the user.
 22. **Recording lamp (v1.25, §13h)**: the fake host knows `host.recording(this, on)` and ignores the call.
 23. **Selecting remotely (v1.28, §11c)**: the fake host knows `host.show(this, targetId, opts)` and returns `false`; `status` is `'active'` or `'retired'`.
+24. **Files from the internet (v1.30, §13i)**: the fake host knows `host.fetchFile(this, url, opts)` and rejects with `network`. A call during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call only starts on a click of the user. The check for `fetch(` does not see `host.fetchFile(` as network traffic.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1272,7 +1297,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 24. Recording lamp (v1.25, optional): `host.recording(this, true/false)` at the start and end of a recording and in `destroy`; `typeof host.recording === 'function'` checked.
 25. Selecting remotely (v1.28, optional): `host.show` only on a user action or on a message he gave himself; `typeof host.show === 'function'` checked.
 26. **AI question (v1.29, §11c, optional)**: `host.ai(this, 'ask', …)` only after a click; `typeof host.ai === 'function'` and `host.ai(this, 'available')` checked first; the answer is untrusted text and every value is checked before you set anything; the user sees what was proposed before it is applied; the fake host returns `false` for `available` and refuses `ask`.
-27. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+27. Files from the internet (v1.30, optional): `host.fetchFile` only on a click; `typeof host.fetchFile === 'function'` checked; visibly said where the file comes from; `maxBytes` set low; cancelling via `signal`; text per error code in `host.lang`; license and attribution of what you fetch kept; no token in the state; content never executed (§13i).
+28. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 

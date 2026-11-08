@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.11.0 (2026-11-08)
+
+### Toegevoegd
+- **Contract v1.30: bestanden van internet** (§13i). `host.fetchFile(this, url, opts)` (`as`, `maxBytes`, `signal`, `onProgress`) is nu vastgelegd: alleen https, na een klik, zonder inloggegevens en `Referer`, met een grens aan de grootte en de foutcodes `url`, `aborted`, `network`, `http`, `size`, `response`. De validator kent de functie en geeft een fout bij een aanroep zonder klik (met tests).
+- **Pad Sampler 1.4.0** (fase 2a): twee **aux-sends** (reverb met een gegenereerde convolver-impuls, delay met feedback, toon en tempo-keuze; retour naar de mix of een eigen uitgang; de state krijgt `aux` alleen als de instellingen niet standaard zijn), een **lus-crossfade** (`loop.xfade`) die direct bij het afspelen werkt met een voorgebakken buffer, en een **Autosampler** (tab Bewerken, naast Flatten): een pad of laag over een bereik van noten en 1 tot 4 velocity-lagen naar zones van een keygroup-pad, met sample-dedupe, 64 MiB-limiet, meldingen en één stap Ongedaan. Het maximum aantal zones per pad gaat van 16 naar 128 (importers houden 16). Oude states laden ongewijzigd en `setState(getState())` blijft exact.
+
 ## 0.10.0 (2026-11-08)
 
 ### Nieuw

@@ -259,7 +259,7 @@ PK.Host.stems=function(inst,action,opts){
   }
 };
 
-// ---------- bestanden van internet voor een apparaat: host.fetchFile(inst, url, opts) (nog niet in het contract; een apparaat controleert eerst of de functie bestaat) ----------
+// ---------- bestanden van internet voor een apparaat: host.fetchFile(inst, url, opts) (contract v1.30, §13i; een apparaat controleert eerst of de functie bestaat) ----------
 // Een apparaat mag geen netwerk gebruiken (contract §15). Deze aanroep haalt één https-bestand op, alleen als het apparaat het na een klik van de gebruiker vraagt: zonder inloggegevens,
 // zonder referrer, zonder adressen op het eigen netwerk, met een grens aan de grootte en annuleren via een AbortSignal. opts: { as: 'arraybuffer' | 'text' | 'json', maxBytes, signal, onProgress(ontvangen, totaal) }.
 // Fouten hebben een `code`: url, aborted, network (geen verbinding, of de server staat de aanroep vanuit de browser niet toe), http (met status), size, response.

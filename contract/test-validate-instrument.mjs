@@ -361,6 +361,9 @@ errs('steps: color is geen hex', dev(`host.ui.steps(el, 'X', [0, 1], () => {}, {
 // ---- stems (v1.23): een netwerkaanroep start nooit zonder klik
 ok('stems: services en settings mogen, split pas op een klik (hier alleen in een handler)', dev(`const b = document.createElement('button'); b.onclick = () => host.stems(this, 'split', {}); el.appendChild(b); host.stems(null, 'services');`));
 errs('stems: split in mount (zonder klik)', dev(`Promise.resolve(host.stems(null, 'split', {})).catch(() => {});`), [['zonder klik', 'without a click']]);
+// ---- fetchFile (v1.29): idem
+ok('fetchFile: pas op een klik (hier alleen in een handler)', dev(`const b = document.createElement('button'); b.onclick = () => host.fetchFile(this, 'https://example.org/a.wav', { as: 'arraybuffer', maxBytes: 1e6 }).catch(() => {}); el.appendChild(b);`));
+errs('fetchFile: aanroep in mount (zonder klik)', dev(`Promise.resolve(host.fetchFile(this, 'https://example.org/a.wav', {})).catch(() => {});`), [['zonder klik', 'without a click']]);
 errs('display: setState werkt het schermpje niet bij', `// SPDX-License-Identifier: MIT
 export default { id: 'nl.test.dsp', name: 'Dsp', version: '1.0.0', kind: 'effect', modExclude: '*',
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [] },

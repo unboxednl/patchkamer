@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die **tunes voor Pad Sampler** maken, een song met
 
 ## Wat Pad Sampler is
 
-Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); stap 3 (sinds 1.2.0) is chop, Process en Flatten/Resample (zie "Chop, Process en Flatten"); stap 4 (sinds 1.3.0) is de tab Banken met catalogus en importers (zie "Banken en catalogus"); nog open: `loop.xfade` en `sends` zonder effect.
+Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); stap 3 (sinds 1.2.0) is chop, Process en Flatten/Resample (zie "Chop, Process en Flatten"); stap 4 (sinds 1.3.0) is de tab Banken met catalogus en importers (zie "Banken en catalogus"); sinds 1.4.0 werken `sends` (reverb en delay), `loop.xfade` en de Autosampler (zie "Sends, lus-crossfade en Autosampler").
 
 | | |
 |---|---|
@@ -12,8 +12,8 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 | `id` | `nl.patchkamer.padsampler`. Verander die nooit |
 | Soort | `instrument` (`category: 'synth'`; de bibliotheek zet hem bij Samplers): **tunes**, geen presets |
 | Poorten | audio uit `mix` (Stereomix) en `out1` t/m `out16`; event in `notes`; sturing in `mod`; geen audio-ingang |
-| Versie | 1.3.0 |
-| Contract | v1.27 (gebouwd voor v1.26, gevalideerd tegen v1.27) |
+| Versie | 1.4.0 |
+| Contract | v1.30 (gebouwd voor v1.26; gebruikt het optionele `host.fetchFile` van v1.30) |
 | Pack | `../../../tunes/pad-sampler-demos.patchkamer-tunes.json` (15 tunes, CC0-1.0) |
 
 ## Geluid en routing
@@ -37,6 +37,7 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 | `level` | mastervolume (alleen mix) | 0..1 | 0,8 |
 | `padVel` | velocity bij klikken op een pad | geheel 1..127 | 100 |
 | `banks` | lijst van vier banken `{ name, pads }`; `pads` heeft 16 items; een leeg standaardpad is `null` | zie onder | demo-kit in bank A |
+| `aux` | alleen als niet standaard: `{ rev: { level 0..1 (0,7), size 0..1 (0,4), damp 0..1 (0,5), out 0..16 }, dly: { level (0,7), time 0,01..1,5 s (0,3), sync `off`/`1/2`/`1/4d`/`1/4`/`1/8d`/`1/8`/`1/8t`/`1/16`, fb 0..0,95 (0,4), tone 0..1 (0,6), out 0..16 } }`; `setState` negeert wat ontbreekt | zie links | niet aanwezig |
 | `samples` | object `id -> sample` (alleen geladen samples; de demo-samples staan hier niet in) | zie onder | `{}` |
 
 **Ontbreekt `banks` (of is het geen lijst), dan geldt het standaardprogramma met de demo-kit in bank A.** Is `banks` een lijst, dan zijn ontbrekende banken en pads leeg. `setState({})` geeft dus de demo-kit; een tune die alleen bank A vult, laat de rest leeg.
@@ -58,12 +59,12 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 | `filter` | `{ type: 'off'/'lp'/'hp'/'bp', cutoff 20..20000 Hz, res 0..1, envAmt −1..1, velAmt −1..1 }` | | off, 8000, 0,2, 0, 0 |
 | `oneShot` | negeer noteoff | boolean | `true` bij `drum`, anders `false` |
 | `reverse` | omgekeerd | boolean | `false` |
-| `sends` | gereserveerd voor aux-sends (geen effect in stap 1) | twee getallen 0..1 | `[0,0]` |
+| `sends` | send 1 (reverb) en send 2 (delay), lineair | twee getallen 0..1 | `[0,0]` |
 | `baseNote` | noot als je een keygroup-pad aanklikt | geheel 0..127 | 60 |
 | `layers` | altijd vier items; een lege laag is `null` | | |
-| `zones` | 0 tot 16 zones (alleen bij `key`) | | `[]` |
+| `zones` | 0 tot 128 zones (alleen bij `key`; sinds 1.4.0, daarvoor 16) | | `[]` |
 
-**Laag:** `sampleId` (`demo:...`, een id uit `samples` of leeg), `semi` (−48..48), `fine` (−100..100 ct), `level` (0..1), `pan`, `offset` (−500..500 ms), `root` (`null` of 0..127), `velLo`, `velHi` (1..127), `start`, `end` (deel van het sample, `start` 0..0,9999, `end` ≥ `start`+0,0001), `loop` `{ on, start, end, xfade }` (fracties; `xfade` heeft in stap 1 geen effect), `gain` (−24..24 dB).
+**Laag:** `sampleId` (`demo:...`, een id uit `samples` of leeg), `semi` (−48..48), `fine` (−100..100 ct), `level` (0..1), `pan`, `offset` (−500..500 ms), `root` (`null` of 0..127), `velLo`, `velHi` (1..127), `start`, `end` (deel van het sample, `start` 0..0,9999, `end` ≥ `start`+0,0001), `loop` `{ on, start, end, xfade }` (fracties; `xfade` 0..1 = deel van de halve lus, werkt sinds 1.4.0 bij het afspelen), `gain` (−24..24 dB).
 **Zone:** `sampleId`, `root`, `keyLo`, `keyHi`, `velLo`, `velHi`, `tune` (halve tonen, −24..24), `loop`.
 **Sample** in `samples`: `{ name, rate (3000..192000), channels (1 of 2), root, loop, slices, [sliceEnds], license{source,license,author,attribution}, data }`; `slices` zijn beginposities in samples (oplopend, hoogstens 128), het eind van slice n is standaard het begin van n+1 (gekoppeld); `sliceEnds` bestaat alleen als een slice een eigen eind heeft (zelfde lengte als `slices`, 0 = standaard, anders een positie > begin en <= lengte); `data` is PCM16 little-endian als base64 (lengte deelbaar door 4); het id is een hash van de inhoud. Samples die geen enkele laag of zone gebruikt, verdwijnen bij `setState`.
 
@@ -96,11 +97,18 @@ De tab **Bewerken** heeft vier soorten bewerking (knoppen onder de golfvorm, all
 De tab **Banken** (zesde tab) laadt banken in een doelbank (A t/m D, optioneel eerst leegmaken). Alles loopt via een **plan** (pads met lagen of zones, zonder audio) en een **rapport** (`importReport()` op de instance: `ok`, `ignored`, `warn`, `stats`, `loaded`, `missing`, `notFit`, `aborted`); `runPlan` laadt de bestanden en schrijft de pads als één programmastap die ongedaan te maken is. De state krijgt **geen nieuwe verplichte velden**.
 
 - **Catalogus** = de constante `CATALOG` in het apparaat (contract §2: één bestand, geen externe bestanden; `bankCatalog()` geeft een kopie). Per bank: `id`, `name`/`desc` (nl, en), `status` (`green` of `yellow`; **nooit rood**), `license` (`spdx`, `text`, `url`, `checked`), `author`, `attribution`, `credit` (vermelding verplicht), `src` (`name`, `home`, `pin` = commit, `base` = jsDelivr-adres op die commit), `format`, `bytes`, `n`, en `pads` (drumpads met lagen `f`, `lo`, `hi`), `keys` (zones) of `preset` (een SFZ). Geverifieerd op 2026-11-08: LICENSE op de gepinde commit gelezen, elk bestand HEAD-gecontroleerd (200, `access-control-allow-origin: *`, grootte). Een bank toevoegen: alleen groen of geel uit `samplebanks.md`, commit pinnen, bestanden controleren, dan pas opnemen. Geen merknamen van instrumenten in teksten (bronnamen en -adressen voor de vermelding mogen).
-- **Netwerk:** het apparaat gebruikt nooit zelf netwerk (§15). Het roept `host.fetchFile(this, url, { as, signal, maxBytes })` aan, alleen na een klik, en controleert eerst of die bestaat (**niet in contract v1.28**; zie CHANGELOG 0.9.0). Zonder die functie toont de tab een uitleg en blijven lokaal laden en slepen werken. Het Freesound-token blijft in het invoerveld; het staat nooit in state, opslag of rapport.
+- **Netwerk:** het apparaat gebruikt nooit zelf netwerk (§15). Het roept `host.fetchFile(this, url, { as, signal, maxBytes })` aan, alleen na een klik, en controleert eerst of die bestaat (contract v1.30, §13i). Zonder die functie toont de tab een uitleg en blijven lokaal laden en slepen werken. Het Freesound-token blijft in het invoerveld; het staat nooit in state, opslag of rapport.
 - **Importers:** WAV (`smpl`: root en lus), FLAC/OGG/MP3 via `decodeAudioData` (MP3 met lus: waarschuwing), SFZ-subset (`region`, `sample`, `default_path`, `lokey`/`hikey`/`key`, `lovel`/`hivel`, `pitch_keycenter`, `tune`, `transpose`, `loop_mode`, `loop_start`/`loop_end`, `group`/`off_by`, `seq_length`/`seq_position`, `volume`, `pan`; `<global>`/`<master>`/`<group>`-overerving, `#define`; regio's met `sw_*` of `trigger=release` worden overgeslagen) en Decent Sampler (groepsenvelope, `loNote`/`hiNote`/`rootNote`, `loVel`/`hiVel`, `tuning`, `loop*`, `seqMode`). Alles wat niet in de lijst staat, komt met aantallen in het rapport als genegeerd. Bestandsinhoud is data: er wordt niets uitgevoerd.
 - **Abbildung:** enkelvoudige toetsen worden drum-pads (hoogstens 16, per toets lagen op velocity; `seq_*` = `cycle`, overlap = `random`), bereiken één keygroep-pad (hoogstens 16 zones; daarboven eerst één dynamiek per bereik). `off_by` wordt een gedeelde mutegroep. Wat niet past (pads, lagen, zones, 64 MiB) staat in het rapport.
 - **`credits`** in `getState()` (alleen als er is) is **afgeleid** van `samples[].license` (`source`, `license`, `author`, `attribution`, `samples` = aantal) en volgt dus de inhoud; `setState` negeert een meegegeven `credits`. Oude states en `setState(getState())` blijven exact.
 - Alleen lokaal en via een klik; getest met nagebootst netwerk (route-onderschepping) en synthetische WAV/FLAC/OGG/MP3, SFZ- en dspreset-fixtures.
+
+## Sends, lus-crossfade en Autosampler (sinds 1.4.0)
+
+- **Sends.** Per pad: padbus (niveau, panorama) -> send-gain -> bus, los van de uitgangskeuze van het pad. Bus 1 = reverb (`ConvolverNode`, `normalize = false`, stereo-impuls uit `makeIR`: ruis met e-macht-afname, een lagedoorlaat die met de tijd donkerder wordt, 8 ms voorvertraging; `size` = RT60 0,3..6 s; een nieuwe impuls gaat via een tweede convolver met een overfade). Bus 2 = delay (`dDly` voor de eerste echo, feedbacklus `dLoop` met toon-filter; een DelayNode in een lus telt in Chromium 128 samples extra mee, dus `dLoop` is zoveel korter en `dInj` zoveel langer; gemeten echo's op 0,2503/0,5003/0,7503 s bij 0,25 s). Tempo-keuze leest `host.bpm` bij elke slag. Retour: `master` (voor de begrenzer) of `outN`; geen extra poorten (het schema blijft `mix` + `out1..out16`), een retour deelt dus een uitgang met pads. De bussen bestaan pas bij de eerste send > 0 (lui). Niet in `params()`. Flatten, Autosampler en Process bakken de sends niet in.
+- **Lus-crossfade.** `loopXfadeLen(xf, ls, le) = min(round(xf * (le-ls)/2), ls, floor((le-ls)/2))`; de bewerking Loop-crossfade inbakken gebruikt dezelfde `loopXfadeApply`. Bij het afspelen (en in `offlineVoice`) komt een voorgebakken buffer tot het lus-eind (+2 samples) uit `loopBuf` (cache per sample, omgekeerd, lus en lengte; hoogstens 256 MiB; leeg bij `gcStore`/`setState`); `warm()` bakt ze alvast. Zonder materiaal voor het lusbegin (`ls` = 0) of bij one-shot geen effect.
+- **Autosampler.** `autosample(o, preview)`: bronpad als keygroep (`autoSource`), per noot (stap, root midden of onder) en velocity-laag (gelijk verdeeld) `renderPadSrcs(..., ampV = 1)`: de aanslag stuurt laagkeuze en filter, de amplitude blijft 1 (de zone krijgt hem bij het spelen). Doelpad: keygroep, `oneShot: true`, polyfonie 8, uitgang en mutegroep van het oude doelpad blijven, `baseNote` = root van de middelste zone; sample-dedupe via `recId`; `trimTail` met 5 ms marge; één `progRun`-stap. Grenzen: 128 zones (`ZONE_CAP`), 64 MiB (schatting vooraf), 120 s. Importers gebruiken nog `MAXZONE` = 16.
+- Getest (scratchpad ps5): aux (reverb-staart, grootte, demping, retourniveau, uitgangen, delay-timing en -sync, state), xfade (gelijk aan numpy-referentie binnen 6e-8, sprong bij de lus-overgang 0,32 -> 0,012), Autosampler (zone = bronpad binnen 1,2e-5 na 3 ms aanzet, dedupe, grenzen, stop, undo/redo).
 
 ## Ingebouwde demo-samples (geen audio in de state)
 
