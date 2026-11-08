@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.2.1 (2026-11-08)
+
+### Gewijzigd
+- **Startscherm: per soort een groen vinkje, geen bronnenstap meer, kabels op de achtergrond.** Het startscherm toont nu per soort (Apparaten, Tunes, Presets, Skins, Samples, Werkruimte) bezig of klaar, met een groen vinkje zodra die soort klaar is, in plaats van alles tegelijk aan het eind. De stap "Bronnen laden" is weg: een onthouden bron telt mee voor zijn soort. De achtergrond is een patchpaneel met kabels in de echte kabelkleuren, dat rustig meebeweegt.
+
 ## 0.2.0 (2026-11-08)
 
 *Vanaf deze versie krijgt elke wijziging die een gebruiker merkt een eigen versienummer (SemVer, zie AGENTS.md). Wat eerder onder 0.1.0 stond, staat hier.*

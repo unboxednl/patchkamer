@@ -265,7 +265,7 @@ document.addEventListener('keydown',e=>{ if(e.altKey||e.ctrlKey||e.metaKey||e.sh
   e.preventDefault(); if(document.querySelector('.pkmodal')) return; PK.wslSwitch(n-1); });
 setInterval(PK.wslSave,15000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') PK.wslSave(); }); window.addEventListener('pagehide',()=>{ PK.wslSave(); });
 PK.paintSources(); (async()=>{ const SP=PK.startupBegin();   // het startscherm met voortgang (js/startup.js)
-  for(const src of PK.SOURCES){ SP.step(PK.pkt('m.su_bron',PK.srcLabel?PK.srcLabel(src):src.label||src.url||''),'src'); try{ await PK.loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await PK.folderSig(src); if(sg) PK.FOLDERSIG.set(src.sid,sg); } }catch(e){ SP.warn(); } }
+  for(const src of PK.SOURCES){ SP.src(src); try{ await PK.loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await PK.folderSig(src); if(sg) PK.FOLDERSIG.set(src.sid,sg); } }catch(e){ SP.warn(); } SP.srcEnd(src); }
   await PK.wslInit({auto:()=>SP.auto(),always:PK.WSA_START.always,ws:()=>SP.step(PK.pkt('m.su_werkruimte'),'ws')}); SP.finish(); })();
 PK.paintPatches();
 // ===== tunes =====

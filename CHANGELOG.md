@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.2.1 (2026-11-08)
+
+### Changed
+- **Start screen: a green tick per kind, no sources step any more, cables in the background.** The start screen now shows per kind (Devices, Tunes, Presets, Skins, Samples, Workspace) busy or done, with a green tick as soon as that kind is done, instead of everything at once at the end. The step "Loading source" is gone: a remembered source counts for its kind. The background is a patch panel with cables in the real cable colours, gently moving.
+
 ## 0.2.0 (2026-11-08)
 
 *From this version on, every change a user notices gets its own version number (SemVer, see AGENTS.md). What used to be under 0.1.0 is listed here.*
