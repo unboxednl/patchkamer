@@ -68,8 +68,12 @@ PK.deviceMenuBind=bind;
 
 function init(){
   // rechtsklik op de lege vloer: alleen Plak, op die plek
+  let rd=null; PK.floorwrap.addEventListener('pointerdown',e=>{ rd={x:e.clientX,y:e.clientY}; },true);   // rechts slepen verschuift het canvas: dan geen menu bij loslaten
   PK.floorwrap.addEventListener('contextmenu',e=>{ const path=e.composedPath(); if(path.some(n=>n&&n.nodeType===1&&(n.classList.contains('card')||PK.isFormEl(n)))) return;
-    e.preventDefault(); open(null,{left:e.clientX,top:e.clientY,right:e.clientX,bottom:e.clientY},null,PK.floorPoint(e.clientX,e.clientY)); });
+    e.preventDefault(); const show=(x,y)=>open(null,{left:x,top:y,right:x,bottom:y},null,PK.floorPoint(x,y));
+    // Windows geeft de contextmenu-gebeurtenis bij loslaten, Linux en Mac al bij indrukken: dan wachten we op het loslaten, en bij slepen (canvas verschuiven) geen menu
+    if(e.buttons&2){ const x=e.clientX, y=e.clientY, up=ev=>{ document.removeEventListener('pointerup',up,true); if(Math.hypot(ev.clientX-x,ev.clientY-y)<=5) show(ev.clientX,ev.clientY); }; document.addEventListener('pointerup',up,true); return; }
+    if(rd&&Math.hypot(e.clientX-rd.x,e.clientY-rd.y)>5) return; show(e.clientX,e.clientY); });
   // Ctrl/Cmd+C en +V op het gekozen apparaat. Heeft het apparaat een eigen klembord voor patronen en clips (clip.js), dan blijft
   // gewoon Ctrl+C/V daarvoor; het apparaat zelf kopieer je dan met Shift+Ctrl+C en plak je met het menu of op een apparaat zonder clips.
   document.addEventListener('keydown',e=>{ if(!(e.ctrlKey||e.metaKey)||e.altKey||PK.textEntry(e)||document.querySelector('.pkmodal')) return; const k=(e.key||'').toLowerCase(); if(k!=='c'&&k!=='v') return;

@@ -1,7 +1,7 @@
 /* css/canvas-sections.css — secties en jump points (js/canvas-sections.js) */
 .seclayer{position:absolute;left:0;top:0;width:0;height:0;z-index:0}
 .seclayer[hidden]{display:none}
-.sec{position:absolute;box-sizing:border-box;border-radius:22px;pointer-events:none;background:color-mix(in srgb,var(--c) calc(var(--a)*100%),transparent)}
+.sec{position:absolute;box-sizing:border-box;border-radius:22px;pointer-events:auto;cursor:grab;background:color-mix(in srgb,var(--c) calc(var(--a)*100%),transparent)}
 .secfr{position:absolute;inset:0;box-sizing:border-box;border-radius:22px;border:3px solid color-mix(in srgb,var(--c) 85%,transparent);pointer-events:none;
   -webkit-mask-image:linear-gradient(#000 0 0),linear-gradient(#000 0 0);mask-image:linear-gradient(#000 0 0),linear-gradient(#000 0 0);-webkit-mask-size:100% 100%,var(--gw,0px) var(--gh,0px);mask-size:100% 100%,var(--gw,0px) var(--gh,0px);
   -webkit-mask-position:0 0,var(--gx,14px) var(--gy,0px);mask-position:0 0,var(--gx,14px) var(--gy,0px);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-composite:xor;mask-composite:exclude}
@@ -12,7 +12,7 @@
 .sec.min .secfr{-webkit-mask-image:none;mask-image:none;border-radius:16px}
 .sechd{position:absolute;z-index:2;left:22px;top:var(--ht,0);height:var(--hh,48px);max-width:calc(100% - 44px);box-sizing:border-box;pointer-events:auto;display:flex;align-items:center;gap:10px;padding:0 12px;cursor:grab;user-select:none;touch-action:none;font-family:var(--disp);font-size:var(--fs,32px);font-weight:700;letter-spacing:.05em;color:var(--fg);line-height:1}
 .sec.min .sechd{left:6px}
-.sec.drag .sechd{cursor:grabbing}
+.sec.drag,.sec.drag .sechd{cursor:grabbing}
 .secnm{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px var(--shadow)}
 .secn{display:grid;place-items:center;flex:none;width:1.1em;height:1.1em;border-radius:50%;background:var(--sel);color:#fff;font-family:var(--mono);font-size:.6em}
 .secn[hidden]{display:none}

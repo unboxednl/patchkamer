@@ -49,12 +49,18 @@ function build(s){ const e=document.createElement('div'); s.el=e;
   mn.onclick=ev=>{ ev.stopPropagation(); const b=mn.getBoundingClientRect(); menu(s,b.left,b.bottom+4); };
   e.addEventListener('pointerdown',ev=>{ if(ev.button===0||ev.button===2) selectSec(s); },true);
   const hd=e.querySelector('.sechd'); hd.addEventListener('contextmenu',ev=>{ ev.preventDefault(); ev.stopPropagation(); menu(s,ev.clientX,ev.clientY); }); hd.addEventListener('dblclick',ev=>{ if(!ev.target.closest('button')) edit(s); });
-  // titel slepen: sectie en leden samen
-  let d=null; hd.addEventListener('pointerdown',ev=>{ if(ev.button!==0||ev.target.closest('button')) return; ev.stopPropagation(); ev.preventDefault();
-    d={cx:ev.clientX,cy:ev.clientY,x:s.x,y:s.y,m:alive(s).map(id=>{ const r=H.devices.get(id); return {r,x:r.x,y:r.y}; })}; hd.setPointerCapture(ev.pointerId); e.classList.add('drag'); });
-  hd.addEventListener('pointermove',ev=>{ if(!d) return; const k=H.view.scale, dx=(ev.clientX-d.cx)/k, dy=(ev.clientY-d.cy)/k; s.x=Math.round(d.x+dx); s.y=Math.round(d.y+dy);
-    d.m.forEach(m=>PK.pkMoveTo(m.r,m.x+dx,m.y+dy)); paint(s); PK.drawCables(); });
-  const end=()=>{ if(d){ d=null; e.classList.remove('drag'); PK.drawCables(); if(PK.wslSave) PK.wslSave(); } }; hd.addEventListener('pointerup',end); hd.addEventListener('pointercancel',end);
+  // slepen aan de titel of aan het lege vlak: sectie en leden samen. Middelste of rechtermuisknop op het vlak verschuift het canvas, zoals daarbuiten.
+  let d=null;
+  const begin=(ev,cap)=>{ ev.stopPropagation(); ev.preventDefault(); const gs=window.getSelection&&window.getSelection(); if(gs&&!gs.isCollapsed) gs.removeAllRanges();
+    d={cx:ev.clientX,cy:ev.clientY,x:s.x,y:s.y,m:alive(s).map(id=>{ const r=H.devices.get(id); return {r,x:r.x,y:r.y}; })}; cap.setPointerCapture(ev.pointerId); e.classList.add('drag'); };
+  hd.addEventListener('pointerdown',ev=>{ if(ev.button!==0||ev.target.closest('button')) return; begin(ev,hd); });
+  e.addEventListener('pointerdown',ev=>{ if(ev.target!==e) return;
+    if(ev.button===0){ begin(ev,e); return; }
+    if(ev.button===1||ev.button===2){ ev.stopPropagation(); PK.pan={cx:ev.clientX,cy:ev.clientY,x0:H.view.x,y0:H.view.y}; PK.floorwrap.classList.add('panning'); PK.floorwrap.setPointerCapture(ev.pointerId); } });
+  const mv=ev=>{ if(!d) return; const k=H.view.scale, dx=(ev.clientX-d.cx)/k, dy=(ev.clientY-d.cy)/k; s.x=Math.round(d.x+dx); s.y=Math.round(d.y+dy);
+    d.m.forEach(m=>PK.pkMoveTo(m.r,m.x+dx,m.y+dy)); paint(s); PK.drawCables(); };
+  const end=()=>{ if(d){ d=null; e.classList.remove('drag'); PK.drawCables(); if(PK.wslSave) PK.wslSave(); } };
+  e.addEventListener('pointermove',mv); e.addEventListener('pointerup',end); e.addEventListener('pointercancel',end);
   // grootte, aan elke kant en hoek: nooit kleiner dan nodig is voor de leden
   ['n','s','e','w','ne','nw','se','sw'].forEach(dir=>{ const g=e.querySelector('.secrz.'+dir); let st=null;
     g.addEventListener('pointerdown',ev=>{ if(ev.button!==0) return; ev.stopPropagation(); ev.preventDefault(); st={cx:ev.clientX,cy:ev.clientY,x:s.x,y:s.y,w:s.w,h:s.h,b:bbox(s)}; g.setPointerCapture(ev.pointerId); });
