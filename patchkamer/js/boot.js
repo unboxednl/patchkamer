@@ -243,12 +243,15 @@ PK.BUNDLED_LIB=null;   // var: paintLib kan eerder draaien
 PK.$('feLib').onclick=()=>PK.$('srcAddDir').click(); PK.$('feBundled').onclick=PK.loadBundled; PK.$('feOpen').onclick=()=>{ PK.$('wsFileInput').value=''; PK.$('wsFileInput').click(); };
 // bij het openen: onthouden bronnen weer laden (mappen alleen als de browser de toestemming nog heeft)
 // ===== workspace-auto =====
-PK.WSA=JSON.parse(JSON.stringify(PK.WSA_DEF));
+PK.WSA=JSON.parse(JSON.stringify(PK.WSA_DEF)); PK.WSA_START={always:true,splash:true};
+try{ const o=JSON.parse(localStorage.getItem(PK.WSA_START_KEY)||'null'); if(o&&typeof o==='object'){ PK.WSA_START={always:o.always!==false,splash:o.splash!==false}; } }catch(e){}
 try{ const o=JSON.parse(localStorage.getItem(PK.WSAKEY)||'null'); if(o&&typeof o==='object') for(const k of Object.keys(PK.WSA)) if(o[k]&&typeof o[k]==='object') PK.WSA[k]={on:o[k].on!==false,url:typeof o[k].url==='string'&&o[k].url.trim()?o[k].url.trim().slice(0,400):PK.WSA_DEF[k].url}; }catch(e){}
-for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun'],['ski','Ski']]){
+for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun'],['ski','Ski'],['sam','Sam']]){
   PK.$('wsa'+id).onchange=()=>{ PK.WSA[k].on=PK.$('wsa'+id).checked; PK.saveWsa(); };
   PK.$('wsu'+id).onchange=()=>{ const v=PK.$('wsu'+id).value.trim(); PK.WSA[k].url=v||PK.WSA_DEF[k].url; PK.$('wsu'+id).value=PK.WSA[k].url; PK.saveWsa(); }; }
-PK.$('wsaReset').onclick=()=>{ PK.WSA=JSON.parse(JSON.stringify(PK.WSA_DEF)); PK.saveWsa(); PK.wsaPaint(); };
+PK.$('wsaStart').onchange=()=>{ PK.WSA_START.always=PK.$('wsaStart').checked; PK.saveWsaStart(); };
+PK.$('wsaSplash').onchange=()=>{ PK.WSA_START.splash=PK.$('wsaSplash').checked; PK.saveWsaStart(); };
+PK.$('wsaReset').onclick=()=>{ PK.WSA=JSON.parse(JSON.stringify(PK.WSA_DEF)); PK.WSA_START={always:true,splash:true}; PK.saveWsa(); PK.saveWsaStart(); PK.wsaPaint(); };
 PK.wsaPaint();
 PK.$('prLoadAll').onclick=async()=>{ const k=PK.TUMODE==='tune'?'tun':'pre', b=PK.$('prLoadAll'); b.disabled=true;
   try{ const src=await PK.wsaLoad(k,true); if(src){ const st=PK.SRCSTATE.get(src.sid)||{}; PK.status(`${PK.srcLabel(src)}: ${st.msg||''}`,st.state==='err'); } }catch(e){ PK.status(e.message,true); } finally{ b.disabled=false; PK.prPaintPanel(); } };
@@ -261,8 +264,9 @@ PK.WSL={ready:false,busy:false,cur:0,slots:[]};
 document.addEventListener('keydown',e=>{ if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||!PK.WSL.ready) return; const m=/^F(\d{1,2})$/.exec(e.key); if(!m) return; const n=+m[1]; if(n<1||n>PK.WSL.slots.length) return;
   e.preventDefault(); if(document.querySelector('.pkmodal')) return; PK.wslSwitch(n-1); });
 setInterval(PK.wslSave,15000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') PK.wslSave(); }); window.addEventListener('pagehide',()=>{ PK.wslSave(); });
-PK.paintSources(); (async()=>{ for(const src of PK.SOURCES){ try{ await PK.loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await PK.folderSig(src); if(sg) PK.FOLDERSIG.set(src.sid,sg); } }catch(e){} }
-  await PK.wslInit(); })();
+PK.paintSources(); (async()=>{ const SP=PK.startupBegin();   // het startscherm met voortgang (js/startup.js)
+  for(const src of PK.SOURCES){ SP.step(PK.pkt('m.su_bron',PK.srcLabel?PK.srcLabel(src):src.label||src.url||'')); try{ await PK.loadSource(src,{interactive:false}); if(src.kind==='folder'){ const sg=await PK.folderSig(src); if(sg) PK.FOLDERSIG.set(src.sid,sg); } }catch(e){ SP.warn(); } }
+  await PK.wslInit({auto:()=>SP.auto(),always:PK.WSA_START.always}); SP.finish(); })();
 PK.paintPatches();
 // ===== tunes =====
 /* =====================================================================

@@ -60,12 +60,12 @@ async function loadSource(src,opts={}){
       if(man){ const m=JSON.parse((await fetchText(rawOf(man.path))).text); paths=(m.modules||[]).map(x=>base+String(x).replace(/^\.\//,'')); wpaths=(m.workspaces||[]).map(wsEntry).map(w=>({...w,path:base+w.path})); ppaths=[...(m.presets||[]),...(m.tunes||[]),...(m.samples||[])].map(prEntry).map(w=>({...w,path:base+w.path})); skpaths=(m.skins||[]).map(prEntry).map(w=>base+w.path); if(m.name) src.label=m.name+' · '+src.label; }
       else { paths=blobs.map(x=>x.path).filter(isModulePath).slice(0,500); wpaths=blobs.map(x=>x.path).filter(isWs).map(wsEntry); ppaths=blobs.map(x=>x.path).filter(isPr).map(prEntry); skpaths=blobs.map(x=>x.path).filter(isSk); }
       if(src.only&&src.only!=='skins') skpaths=[];
-      if(src.only){ if(src.only!=='devices') paths=[]; wpaths=[]; ppaths=ppaths.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }   // een bron voor één soort: alleen apparaten, alleen presets of alleen tunes
+      if(src.only){ if(src.only!=='devices') paths=[]; wpaths=[]; ppaths=ppaths.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):src.only==='samples'?/\.patchkamer-samples\.json$/i.test(w.path):false); }   // een bron voor één soort: alleen apparaten, alleen presets of alleen tunes
       { const lb=blobs.find(x=>x.path===base+PK.LAYOUT_FILE)||blobs.find(x=>x.path===base+'devices/'+PK.LAYOUT_FILE); if(lb) layout=async()=>JSON.parse((await fetchText(rawOf(lb.path))).text); }
       ppaths.forEach(w=>prs.push({path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
       { const bz=new Map(blobs.map(x=>[x.path,x.size])); skpaths.forEach(p=>skl.push({path:p.slice(base.length),size:bz.get(p),load:async()=>(await fetchText(rawOf(p))).text}));
         if(!src.only||src.only==='skins') blobs.forEach(x=>{ const k=skIconOf(x.path,x.path.slice(base.length)); if(k&&(x.size||0)<=PK.ICONMAX) ski.push({...k,get:async()=>{ const r=await fetch(rawBust(rawOf(x.path)),{cache:'no-cache'}); return r.ok?r.blob():null; }}); }); }
-      for(const pth of paths){ try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
+      let pdone=0; for(const pth of paths){ if(PK.loadNote) PK.loadNote(pdone++,paths.length,pth.split('/').pop()); try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
       wpaths.forEach(w=>wss.push({name:w.name,path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
     } else if(src.kind==='url'){
       if(/\.json(\?|$)/i.test(src.url)||!/\.m?js(\?|$)/i.test(src.url)){
@@ -89,7 +89,7 @@ async function loadSource(src,opts={}){
       sks.forEach(pth=>{ const get=byPath.get(pth); if(get) skl.push({path:pth,load:async()=>get()}); });
       files.forEach(f=>{ const k=skIconOf(f[0],f[0]); if(k) ski.push({...k,get:async()=>{ const b=f[2]?await f[2]():null; return b&&b.size<=PK.ICONMAX?b:null; }}); });
       { const lg=byPath.get(PK.LAYOUT_FILE); if(lg) layout=async()=>JSON.parse(await lg()); }
-      if(src.only){ if(src.only!=='devices') mods=[]; wps=[]; pps=pps.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):false); }
+      if(src.only){ if(src.only!=='devices') mods=[]; wps=[]; pps=pps.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):src.only==='samples'?/\.patchkamer-samples\.json$/i.test(w.path):false); }
       pps.forEach(w=>{ const get=byPath.get(w.path); if(get) prs.push({path:w.path,load:async()=>JSON.parse(await get())}); });
       for(const pth of mods){ const get=byPath.get(pth); if(!get){ errs.push(pth+PK.pkt('m.staat_in_patchkamer_json_maar')); continue; } try{ await one(await get(),{sid:src.sid,kind:'folder',path:pth,label:src.label}); }catch(e){ errs.push(pth+': '+e.message); } }
       wps.forEach(w=>{ const get=byPath.get(w.path); if(get) wss.push({name:w.name,path:w.path,load:async()=>JSON.parse(await get())}); });

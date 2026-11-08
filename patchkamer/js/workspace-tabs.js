@@ -22,11 +22,11 @@ async function wslClose(i){ if(PK.WSL.busy) return; if(PK.WSL.slots.length<2){ P
   if(full&&!(await PK.askUser(PK.pkt('m.werkruimte_sluiten_vraag',PK.esc(name)),PK.pkt('m.sluiten_knop'),PK.pkt('m.annuleren')))) return;
   PK.WSL.busy=true; try{ if(i===PK.WSL.cur){ const next=i>0?i-1:1; wslSnap(); const keep=PK.WSL.slots[next]; PK.WSL.slots.splice(i,1); PK.WSL.cur=-1; await wslShow(PK.WSL.slots.indexOf(keep)); }
     else { wslSnap(); const keep=PK.WSL.slots[PK.WSL.cur]; PK.WSL.slots.splice(i,1); PK.WSL.cur=PK.WSL.slots.indexOf(keep); wslPaint(); } }finally{ PK.WSL.busy=false; } wslSave(); }
-async function wslInit(){ let saved=await PK.IDB.get('wslots');
+async function wslInit(o){ const auto=o&&o.auto?o.auto:()=>PK.wsaAutoLoad(); let saved=await PK.IDB.get('wslots');
   if(saved&&Array.isArray(saved.slots)&&saved.slots.length){ PK.WSL.slots=saved.slots.filter(x=>x&&x.id).slice(0,WSL_MAX).map(x=>({id:x.id,name:String(x.name||'').slice(0,60),state:x.state||null})); PK.WSL.cur=Math.min(Math.max(0,saved.cur|0),PK.WSL.slots.length-1); }
   if(!PK.WSL.slots.length){ PK.WSL.slots=[{id:wslUid(),name:PK.pkt('m.naamloos'),state:null}]; PK.WSL.cur=0; }
   const t=PK.WSL.slots[PK.WSL.cur];
-  if(!PK.PK_PENDING&&PK.Host.devices.size===0&&t.state&&Array.isArray(t.state.devices)&&t.state.devices.length) await PK.openWorkspace(t.state);
-  else if(PK.Host.devices.size===0) await PK.wsaAutoLoad();
+  if(!PK.PK_PENDING&&PK.Host.devices.size===0&&t.state&&Array.isArray(t.state.devices)&&t.state.devices.length){ if(o&&o.always) await auto(); await PK.openWorkspace(t.state); }   // eerst de bibliotheken (devices, skins, presets), dan de werkruimte die ze gebruikt
+  else if(PK.Host.devices.size===0) await auto();
   PK.WSL.ready=true; wslPaint(); } PK.wslInit=wslInit;
 })(window.__PK);

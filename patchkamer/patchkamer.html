@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="css/file-drop.css">
 <link rel="stylesheet" href="css/skins.css">
 <link rel="stylesheet" href="css/canvas-sections.css">
+<link rel="stylesheet" href="css/startup.css">
 <link rel="stylesheet" href="css/skin-editor.css">
 
 <header>
@@ -100,8 +101,10 @@
   <div class="note" style="margin-bottom:6px" data-i18n="ui.t_al_note">Na het plaatsen van een apparaat stelt Patchkamer kabels voor naar apparaten die al op de vloer staan. Er wordt niets gekoppeld zonder dat je op OK klikt. Zonder eigen keuze staat dit aan op een aanraakscherm en uit op een computer met muis.</div>
   <div class="wsrow"><label><input type="checkbox" id="clipBarCb" checked> <span data-i18n="ui.t_clip_bar">Plakken op de maatgrens</span></label></div>
   <div class="note" style="margin-bottom:6px" data-i18n="ui.t_clip_bar_note">Terwijl de klok loopt, wacht Plak tot de volgende maat. Uit: Plak werkt meteen. Ctrl+Shift+V, Shift-klik en de keuze Plak direct in het plakmenu werken altijd meteen.</div>
-  <h3 style="margin-top:12px" data-i18n="ui.nieuwe_werkruimte">Nieuwe werkruimte</h3>
+  <h3 style="margin-top:12px" data-i18n="ui.nieuwe_werkruimte">Automatisch laden</h3>
   <div class="note" style="margin-bottom:6px" data-i18n="ui.nieuwe_werkruimte_uitleg">Wat Patchkamer laadt als je met een lege werkruimte begint. Per soort kies je een GitHub-map of een ander adres; alles daaronder wordt ingelezen. De knop Alles laden op de tabs Tunes en Presets van de bibliotheek gebruikt hetzelfde adres.</div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaStart"> <span data-i18n="ui.su_altijd">Ook bij het opstarten met een bewaarde werkruimte laden</span></label></div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaSplash"> <span data-i18n="ui.su_scherm">Startscherm met voortgang tonen</span></label></div>
   <div class="wsrow"><label><input type="checkbox" id="wsaDev"> <span data-i18n="ui.apparatenbibliotheek_laden">Apparatenbibliotheek laden</span></label></div>
   <div class="wsrow"><input type="text" id="wsuDev" class="wsurl" spellcheck="false" aria-label="adres van de apparatenbibliotheek" data-i18n-aria="attr.adres_apparatenbibliotheek"></div>
   <div class="wsrow"><label><input type="checkbox" id="wsaPre"> <span data-i18n="ui.presets_laden">Presets laden</span></label></div>
@@ -110,6 +113,8 @@
   <div class="wsrow"><input type="text" id="wsuTun" class="wsurl" spellcheck="false" aria-label="adres van de tunes" data-i18n-aria="attr.adres_tunes"></div>
   <div class="wsrow"><label><input type="checkbox" id="wsaSki"> <span data-i18n="ui.sk_laden">Skins laden</span></label></div>
   <div class="wsrow"><input type="text" id="wsuSki" class="wsurl" spellcheck="false" aria-label="adres van de skins" data-i18n-aria="attr.sk_adres"></div>
+  <div class="wsrow"><label><input type="checkbox" id="wsaSam"> <span data-i18n="ui.su_sam_laden">Samples laden</span></label></div>
+  <div class="wsrow"><input type="text" id="wsuSam" class="wsurl" spellcheck="false" aria-label="adres van de sample-bibliotheken" data-i18n-aria="attr.su_sam_adres"></div>
   <div class="wsrow"><label><span data-i18n="ui.songs_adres">Songs (demo's): adres op GitHub</span>&nbsp;<input type="text" id="songAddr" class="wsurl" spellcheck="false"></label></div>
   <div class="wsrow"><button class="small" id="songAddrReset" data-i18n="ui.songs_adres_herstel">Standaardadres herstellen</button></div>
   <div class="wsrow"><button class="small" id="wsaReset" data-i18n="ui.standaardadressen_herstellen">Standaardadressen herstellen</button></div>
@@ -297,6 +302,7 @@
 <script src="js/device-menu.js"></script>
 <script src="js/rec-lamp.js"></script>
 <script src="js/canvas-sections.js"></script>
+<script src="js/startup.js"></script>
 <script src="js/skins-design.js"></script>
 <script src="js/skin-editor-model.js"></script>
 <script src="js/skin-editor-fields.js"></script>

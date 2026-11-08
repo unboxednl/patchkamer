@@ -204,7 +204,7 @@ async function skinsImport(files,quiet){ let n=0; const errs=[];
 // uit een bron: list = [{path,size?,load}], icons = [{dev,ext,get}] (uit skins/library/<apparaat-id>/icon.*); geeft het aantal geladen skins
 async function skinsFromSource(src,list,icons,errs){
   PK.SK.src=PK.SK.src.filter(e=>e.src.sid!==src.sid); let n=0;
-  for(const w of list){ try{ if(w.size&&w.size>SK_FILEMAX) throw new Error(w.path+': '+PK.pkt('m.sk_e_groot','2 MB')); const notes=[], sk=skParse(await w.load(),w.path,notes,errs); if(skAdd('src',sk,w.path,{notes,src:{sid:src.sid,label:src.label,path:w.path}})) n++; }catch(e){ errs.push(e.message); } }
+  let pdone=0; for(const w of list){ if(PK.loadNote) PK.loadNote(pdone++,list.length,String(w.path).split('/').pop()); try{ if(w.size&&w.size>SK_FILEMAX) throw new Error(w.path+': '+PK.pkt('m.sk_e_groot','2 MB')); const notes=[], sk=skParse(await w.load(),w.path,notes,errs); if(skAdd('src',sk,w.path,{notes,src:{sid:src.sid,label:src.label,path:w.path}})) n++; }catch(e){ errs.push(e.message); } }
   for(const k of [...PK.SKICON.keys()]) if(k.startsWith(src.sid+'|')) PK.SKICON.delete(k);
   const by=new Map(); (icons||[]).forEach(x=>{ if(!by.has(x.dev)) by.set(x.dev,[]); by.get(x.dev).push(x); });
   for(const [dev,xs] of by) for(const ext of Object.keys(PK.ICONTYPES)){ const x=xs.find(y=>y.ext===ext); if(!x) continue; let u=null; try{ const b=await x.get(); u=b?await PK.iconToDataUrl(b,ext):null; }catch(e){} if(u){ PK.SKICON.set(src.sid+'|'+dev,u); break; } }

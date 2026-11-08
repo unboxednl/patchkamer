@@ -1,0 +1,18 @@
+/* css/startup.css — startscherm met voortgang (js/startup.js) */
+#splash{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:70;width:min(560px,calc(100% - 32px));box-sizing:border-box;padding:30px 36px 26px;display:grid;gap:18px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:16px;
+  box-shadow:0 2px 6px var(--shadow),0 10px 24px var(--shadow),0 28px 64px var(--shadow);cursor:pointer;transition:opacity .35s ease,transform .35s ease}
+#splash.out{opacity:0;transform:translate(-50%,-46%);pointer-events:none}
+#splash .spx{position:absolute;right:12px;top:10px;min-width:30px;padding:0 8px;font-size:20px;line-height:1.3;border:0;background:transparent;color:var(--muted);cursor:pointer;border-radius:6px}
+#splash .spx:hover,#splash .spx:focus-visible{color:var(--fg);background:var(--card-2)}
+#splash>*{min-width:0}
+#splash .spmark{display:flex;align-items:center;gap:20px;min-width:0}
+#splash .spname{min-width:0}
+#splash .spmark img{flex:none;width:96px;height:96px;border-radius:20px;box-shadow:0 2px 6px var(--shadow),0 8px 20px var(--shadow)}
+#splash .splogo{font-family:var(--disp);font-weight:700;font-size:38px;line-height:1;letter-spacing:.12em;white-space:nowrap;text-transform:uppercase;margin:0}
+#splash .splogo b{color:var(--audio)}
+#splash .spver{margin-top:8px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:var(--muted)}
+#splash .spbar{height:10px;border-radius:999px;background:var(--well,var(--card-2));border:1px solid var(--line);overflow:hidden}
+#splash .spbar i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--audio),var(--sel));transition:width .25s ease}
+#splash .sptxt{min-height:1.5em;font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (prefers-reduced-motion:reduce){#splash,#splash .spbar i{transition:none}}
+@media (max-width:520px){#splash{padding:24px 20px 20px}#splash .splogo{font-size:25px}#splash .spmark img{width:64px;height:64px}}

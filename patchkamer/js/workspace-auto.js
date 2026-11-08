@@ -2,8 +2,11 @@
 (function(PK){
 // ---- nieuwe werkruimte: wat er automatisch wordt geladen (Instellingen) en de knop Alles laden in het Tunes- en Presets-paneel ----
 // Per soort (apparaten, presets, tunes, skins) één adres; een GitHub-map met alles daaronder. Elk adres is een gewone bron met `only`, dus ze staan ook in de lijst Bronnen.
-const WSAKEY='patchkamerWsAuto', WSA_KINDS={dev:'devices',pre:'presets',tun:'tunes',ski:'skins'}; PK.WSAKEY=WSAKEY;
-const WSA_DEF={dev:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/devices'},pre:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/presets'},tun:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/tunes'},ski:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/skins/library'}}; PK.WSA_DEF=WSA_DEF;
+const WSAKEY='patchkamerWsAuto', WSA_KINDS={dev:'devices',pre:'presets',tun:'tunes',ski:'skins',sam:'samples'}; PK.WSAKEY=WSAKEY;
+const WSA_DEF={dev:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/devices'},pre:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/presets'},tun:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/tunes'},ski:{on:true,url:'github.com/unboxednl/patchkamer/tree/main/skins/library'},sam:{on:false,url:'github.com/unboxednl/patchkamer/tree/main/samples'}};
+// opstarten: ook met een bewaarde werkruimte alles laden (always) en het startscherm met voortgang tonen (splash)
+const WSA_START_KEY='patchkamerStartAuto'; PK.WSA_START_KEY=WSA_START_KEY;
+const saveWsaStart=()=>{ try{ localStorage.setItem(WSA_START_KEY,JSON.stringify(PK.WSA_START)); }catch(e){} }; PK.saveWsaStart=saveWsaStart; PK.WSA_DEF=WSA_DEF;
 const saveWsa=()=>{ try{ localStorage.setItem(WSAKEY,JSON.stringify(PK.WSA)); }catch(e){} }; PK.saveWsa=saveWsa;
 function wsaSource(k){ let p; try{ p=PK.parseSourceUrl(PK.WSA[k].url); }catch(e){ p=null; }
   if(!p||p.kind!=='github'){ PK.status(PK.pkt('m.werkruimte_laden_adres',WSA_KINDS[k]),true); return null; }
@@ -14,5 +17,6 @@ async function wsaLoad(k,force){ const src=wsaSource(k); if(!src) return null; c
   if(!force&&st&&(st.state==='ok'||st.state==='warn'||st.state==='busy')) return src;
   await PK.loadSource(src,{interactive:false,fresh:!!force}); return src; } PK.wsaLoad=wsaLoad;
 async function wsaAutoLoad(){ for(const k of Object.keys(PK.WSA)) if(PK.WSA[k].on){ try{ await wsaLoad(k,false); }catch(e){} } } PK.wsaAutoLoad=wsaAutoLoad;
-function wsaPaint(){ for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun'],['ski','Ski']]){ PK.$('wsa'+id).checked=PK.WSA[k].on; PK.$('wsu'+id).value=PK.WSA[k].url; PK.$('wsu'+id).disabled=false; } } PK.wsaPaint=wsaPaint;
+function wsaPaint(){ for(const [k,id] of [['dev','Dev'],['pre','Pre'],['tun','Tun'],['ski','Ski'],['sam','Sam']]){ PK.$('wsa'+id).checked=PK.WSA[k].on; PK.$('wsu'+id).value=PK.WSA[k].url; PK.$('wsu'+id).disabled=false; }
+  PK.$('wsaStart').checked=PK.WSA_START.always; PK.$('wsaSplash').checked=PK.WSA_START.splash; } PK.wsaPaint=wsaPaint;
 })(window.__PK);
