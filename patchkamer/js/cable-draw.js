@@ -38,6 +38,7 @@ function drawCablesNow(){ if(_dcRaf){ cancelAnimationFrame(_dcRaf); _dcRaf=0; } 
   PK.Host.cables.forEach(c=>{ const a=PK.Host.devices.get(c.from.id), b=PK.Host.devices.get(c.to.id); if(!a||!b) return;
     if(PK.wire&&PK.wire.replace===c) return;   // een kabel die je omhangt, tekenen we als de losse kabel van het slepen
     if(a.el.classList.contains('infocus')||b.el.classList.contains('infocus')) return;   // in de focusweergave: geen kabels
+    if(PK.secSame&&PK.secSame(c.from.id,c.to.id)) return;   // beide uiteinden in dezelfde geminimaliseerde sectie: niets te tekenen
     const p1=PK.portPos(c.from.id,c.from.port,'out'), p2=PK.portPos(c.to.id,c.to.port,'in'); if(!p1||!p2) return;
     const R=PK.cableRoute(c,p1,p2), P=R.P, d=R.d;
     const g=PK.svgEl('g',{class:'cable'+(PK.dropCable===c?' drop':'')},PK.svg);

@@ -29,7 +29,7 @@ function unpatch(c){
   if(c.kind==='mastering') PK.masteringNotify(c.from.id);
   PK.drawCables(); PK.peersChanged();
 } PK.unpatch=unpatch;
-function portPos(id,port,dir){ const r=PK.Host.devices.get(id); if(!r) return null; const el=r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"] .dot`); if(!el) return null; const fr=PK.floor.getBoundingClientRect(), b=el.getBoundingClientRect(), k=PK.Host.view.scale;
+function portPos(id,port,dir){ const r=PK.Host.devices.get(id); if(!r) return null; if(r.el.classList.contains('secmin')&&PK.secAnchor){ const pe=r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`), a=pe&&PK.secAnchor(id,dir,pe.dataset.kind); if(a) return a; } const el=r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"] .dot`); if(!el) return null; const fr=PK.floor.getBoundingClientRect(), b=el.getBoundingClientRect(), k=PK.Host.view.scale;
   if(r.mini){ const ib=r.iconEl.getBoundingClientRect(), kd=el.closest('.port').dataset.kind; return {x:((dir==='out'?ib.right:ib.left)-fr.left)/k,y:(ib.top-fr.top+ib.height*(kd==='event'?0.62:kd==='mod'?0.84:kd==='multi'?0.5:kd==='mastering'?0.7:kd==='multievent'?0.62:0.38))/k}; }
   // de stip kan buiten beeld zijn: in een scrollend deel van de kaart (vaste hoogte, interne scroll) of verborgen.
   // Dan hangt de kabel aan de rand van het zichtbare deel, met een open rondje als teken.

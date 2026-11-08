@@ -345,18 +345,19 @@ On every screen the top bar keeps only what you need while playing: the logo, th
 
 With **Views** at the bottom right you save the part of the floor you are looking at, under a name, and jump back to it later (smoothly, unless your computer asks for less motion). **Shift+1** to **Shift+9** saves a view, **1** to **9** jumps to it (not while you type in a text field). You can rename, overwrite and delete in the list. Views belong to the workspace and go along in a file or song.
 
-### Canvas sections and jump points
+### Sections and jump points
 
 Click with the **right mouse button** on an empty spot of the floor. Next to **Paste device** you find two choices.
 
-- **Create canvas…** draws a coloured area with nicely rounded corners, where you clicked. You give a **name**, a **colour**, the **opacity** of the fill (0 is fully transparent) and a **line style** (solid, dashed, dotted or no line). The name sits at the top left in a large font, so you can still read it when zoomed far out. The area lies above the canvas and below the devices.
-  - **Devices on a canvas.** Drop a device with its middle on a canvas and it belongs to it. If it does not fit, the canvas grows with it, leaving some room around. Drop it outside all canvases and it no longer belongs. A canvas cannot shrink below what its devices need.
-  - **Moving.** Drag the canvas by its title: all devices on it move along, as if they were stuck on it.
-  - **Size.** Drag the right edge, the bottom edge or the bottom right corner.
-  - **Edit, minimise, delete.** Double-click the title or choose **⋯** (or right-click the title) to change name, colour, opacity and line, or to delete the canvas; the devices stay. **–** minimises the canvas to just its title; the devices on it disappear while it is like that, and so do their cables. This does not happen by itself when you zoom out.
-- **Create jump point…** puts a marker on the floor with a **name** and a **number from 1 to 9**. Press **Alt+number** (or click the marker) and the screen jumps to that point, at the zoom you had when you made it. Drag the marker to move it; right-click to edit or delete it. If you pick a number already in use, it replaces that jump point.
+- **Create section…** draws a coloured area with nicely rounded corners, where you clicked. You give a **name**, the **font size** of that name, a **colour**, the **opacity** of the fill (0 is fully transparent), a **line style** (solid, dashed, dotted or no line) and optionally a **viewpoint** (see below). The name sits large at the top left, **half outside the area**, and the line does not run through where the name is. That way you can read it when zoomed far out. The area lies above the canvas and below the devices.
+  - **Devices on a section.** Drop a device with its middle on a section and it belongs to it. A device that mostly covers a small section belongs to it too. If it does not fit, the section grows with it, leaving some room around. Drop it outside all sections and it no longer belongs. A section cannot shrink below what its devices need.
+  - **Moving.** Drag the section by its title: all devices on it move along, as if they were stuck on it.
+  - **Size.** Drag a side or a corner, also on the left and top.
+  - **Viewpoint.** Give a section a number from 1 to 9. **Alt+number** then brings the section into view, zoomed so it fits with some margin (at most 100%). The number sits as a dot before the name.
+  - **Edit, minimise, delete.** Double-click the title or choose **⋯** (or right-click the title) to change everything or to delete the section; the devices stay. **–** minimises the section to just its title. The devices on it disappear while it is like that, but **their cables keep running, to the title** (inputs on the left, outputs on the right). This does not happen by itself when you zoom out.
+- **Create jump point…** puts a marker on the floor with a **name** and a **number from 1 to 9**. Press **Alt+number** (or click the marker) and the screen jumps to that point, at the zoom you had when you made it. Drag the marker to move it; right-click to edit or delete it. The numbers are shared by jump points and sections: if you pick a number already in use, you take it over (the jump point disappears; a section just loses its number).
 
-Canvases and jump points are saved with the workspace. They belong to the wide layout; in the compact layout they are hidden. They are something else than the camera views above (Shift+digit and digit): those you save in the **Views** menu and they are not on the floor.
+Sections and jump points are saved with the workspace. They belong to the wide layout; in the compact layout they are hidden. They are something else than the camera views above (Shift+digit and digit): those you save in the **Views** menu and they are not on the floor.
 
 ### Compact layout per screen
 
@@ -411,7 +412,7 @@ The features that speed up your workflow the most, in one list:
 | **F1** to **F10** | Switch to workspace 1 to 10 (tab bar) |
 | **Alt+F** | Open or close the focus view |
 | **Alt+B** | Show or hide the library |
-| **Alt+1** to **Alt+9** | Jump to the jump point with that number |
+| **Alt+1** to **Alt+9** | Jump to the jump point or section with that number |
 | **+** / **−** / **0** | Zoom in / zoom out / reset zoom |
 | **Shift+1** to **Shift+9** / **1** to **9** | Save a camera view / jump to it |
 | **← →** | In the focus view "One at a time": previous or next device |

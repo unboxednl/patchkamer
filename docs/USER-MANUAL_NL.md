@@ -345,18 +345,19 @@ De hoofdbalk houdt op elk scherm alleen over wat je tijdens het spelen nodig heb
 
 Met **Standen** rechtsonder bewaar je de uitsnede van de vloer die je nu ziet, onder een naam, en spring je er later naartoe (zacht, tenzij je computer minder beweging vraagt). **Shift+1** t/m **Shift+9** bewaart een stand, **1** t/m **9** springt ernaartoe (niet terwijl je in een tekstveld typt). Hernoemen, overschrijven en verwijderen kan in de lijst. De standen horen bij de werkruimte en gaan mee in een bestand of song.
 
-### Canvassecties en jump points
+### Secties en jump points
 
 Klik met de **rechtermuisknop** op een lege plek van de vloer. Daar vind je naast **Plak apparaat** twee keuzes.
 
-- **Canvas maken…** tekent een gekleurd vlak met mooi afgeronde hoeken, op de plek waar je klikte. Je geeft een **naam**, een **kleur**, de **dekking** van het vlak (0 is volledig transparant) en een **lijnstijl** (doorgetrokken, streepjes, stippen of geen lijn). De naam staat linksboven in een groot lettertype, zodat je hem ook leest als je ver uitzoomt. Het vlak ligt boven het canvas en onder de apparaten.
-  - **Apparaten op een canvas.** Zet je een apparaat neer met zijn midden op een canvas, dan hoort het erbij. Past het niet, dan groeit het canvas mee, met wat ruimte rondom. Zet je het buiten alle canvassen neer, dan hoort het er niet meer bij. Een canvas kan zonder zijn apparaten niet krimpen onder wat erop past.
-  - **Verschuiven.** Sleep het canvas aan zijn titel: alle apparaten erop schuiven mee, alsof ze erop geplakt zitten.
-  - **Grootte.** Sleep de rechterrand, de onderrand of de hoek rechtsonder.
-  - **Bewerken, minimaliseren, verwijderen.** Dubbelklik op de titel of kies **⋯** (of rechtsklik op de titel) om naam, kleur, dekking en lijn te wijzigen of het canvas te verwijderen; de apparaten blijven dan staan. Met **–** minimaliseer je het canvas tot alleen de titel; de apparaten erop verdwijnen zolang het zo staat, en hun kabels ook. Dat gebeurt niet vanzelf bij uitzoomen.
-- **Jump point maken…** zet een markering op de vloer met een **naam** en een **nummer van 1 tot en met 9**. Druk op **Alt+nummer** (of klik op de markering) en het scherm springt naar dat punt, met de zoom waarop je het maakte. Sleep de markering om hem te verplaatsen; rechtsklik om hem te wijzigen of te verwijderen. Kies je een nummer dat al in gebruik is, dan vervangt het dat jump point.
+- **Sectie maken…** tekent een gekleurd vlak met mooi afgeronde hoeken, op de plek waar je klikte. Je geeft een **naam**, de **lettergrootte** van die naam, een **kleur**, de **dekking** van het vlak (0 is volledig transparant), een **lijnstijl** (doorgetrokken, streepjes, stippen of geen lijn) en eventueel een **viewpoint** (zie onder). De naam staat groot linksboven, **half buiten het vlak**, en de lijn loopt niet door waar de naam staat. Zo lees je hem ook als je ver uitzoomt. Het vlak ligt boven het canvas en onder de apparaten.
+  - **Apparaten op een sectie.** Zet je een apparaat neer met zijn midden op een sectie, dan hoort het erbij. Bedekt een apparaat een kleine sectie grotendeels, dan hoort het er ook bij. Past het niet, dan groeit de sectie mee, met wat ruimte rondom. Zet je het buiten alle secties neer, dan hoort het er niet meer bij. Een sectie kan niet kleiner worden dan zijn apparaten nodig hebben.
+  - **Verschuiven.** Sleep de sectie aan zijn titel: alle apparaten erop schuiven mee, alsof ze erop geplakt zitten.
+  - **Grootte.** Sleep aan een zijkant of aan een hoek, ook links en boven.
+  - **Viewpoint.** Geef een sectie een nummer van 1 tot en met 9. **Alt+nummer** brengt de sectie dan in beeld, ingezoomd tot hij met wat marge past (hoogstens 100%). Het nummer staat als bolletje voor de naam.
+  - **Bewerken, minimaliseren, verwijderen.** Dubbelklik op de titel of kies **⋯** (of rechtsklik op de titel) om alles te wijzigen of de sectie te verwijderen; de apparaten blijven dan staan. Met **–** minimaliseer je de sectie tot alleen de titel. De apparaten erop verdwijnen zolang het zo staat, maar **hun kabels blijven lopen, naar de titel** (ingangen links, uitgangen rechts). Dat gebeurt niet vanzelf bij uitzoomen.
+- **Jump point maken…** zet een markering op de vloer met een **naam** en een **nummer van 1 tot en met 9**. Druk op **Alt+nummer** (of klik op de markering) en het scherm springt naar dat punt, met de zoom waarop je het maakte. Sleep de markering om hem te verplaatsen; rechtsklik om hem te wijzigen of te verwijderen. De nummers delen jump points en secties: kies je een nummer dat al in gebruik is, dan neem je het over (de jump point verdwijnt, bij een sectie wordt het nummer leeg).
 
-Canvassen en jump points worden met de werkruimte bewaard. Ze horen bij de brede indeling; in de compacte indeling zijn ze verborgen. Het zijn iets anders dan de camerastanden hierboven (Shift+cijfer en cijfer): die bewaar je in het menu **Views** en staan niet op de vloer.
+Secties en jump points worden met de werkruimte bewaard. Ze horen bij de brede indeling; in de compacte indeling zijn ze verborgen. Het zijn iets anders dan de camerastanden hierboven (Shift+cijfer en cijfer): die bewaar je in het menu **Views** en staan niet op de vloer.
 
 ### Compacte indeling per scherm
 
@@ -411,7 +412,7 @@ De functies die de werkwijze het meest versnellen, op een rij:
 | **F1** t/m **F10** | Wisselen naar werkruimte 1 t/m 10 (tabbalk) |
 | **Alt+F** | Focusweergave openen of sluiten |
 | **Alt+B** | Bibliotheek tonen of verbergen |
-| **Alt+1** t/m **Alt+9** | Naar het jump point met dat nummer springen |
+| **Alt+1** t/m **Alt+9** | Naar het jump point of de sectie met dat nummer springen |
 | **+** / **−** / **0** | Inzoomen / uitzoomen / zoom herstellen |
 | **Shift+1** t/m **Shift+9** / **1** t/m **9** | Camerastand bewaren / ernaartoe springen |
 | **← →** | In de focusweergave "Eén tegelijk": vorig of volgend apparaat |
