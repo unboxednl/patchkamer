@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.6.1 — Een VU-meter (skin) staat bovenaan de kanaalstrook, boven het kanaalnummer, in plaats van naast de fader. Het apparaat leest daarvoor het attribuut data-face van het meterelement (bar, ledladder of vu, door de host gezet) en zet de meter erheen of terug. Zonder skin, of met balken of ledladders, verandert er niets.
 // 2.6.0 — Niveaumeters van kanalen, groepen en master via host.ui.meter (contract v1.18, additief): de host tekent ze, een skin kan er een VU-meter of ledlader van maken en de lengte en breedte aanpassen. Standaardgezicht, maat, dB-schaal (−60 tot +6) en val zijn gelijk aan de eigen meter van voorheen; een oudere host valt terug op die eigen meter. De 100 ms-bewaker, geluid, getState, presets en poorten ongewijzigd.
 // 2.5.1 — Bij het koppelen aan MIDI heet elke regelaar van een kanaal nu 'Trim - T3', van een groep 'Send - G1' en van de master 'Fader - Master' (voorheen
 //   wist de host het nummer uit de naam, dus alle kanalen heetten hetzelfde). Alleen de zichtbare naam verandert; de koppeling zelf blijft gelijk.
@@ -105,6 +106,7 @@ const CSS = `
 .mx2-m.trim .l b{color:var(--audio)}
 .mx2-eq{display:grid;gap:1px;padding:3px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
 .mx2 select{font-size:10px;padding:2px 3px;width:100%}
+.mx2-vutop{display:flex;justify-content:center;padding:2px 0 4px}
 .mx2-fad{display:grid;grid-template-columns:1fr 8px;gap:4px;height:130px;align-items:stretch}
 .mx2-fad input[type=range]{writing-mode:vertical-lr;direction:rtl;height:130px;width:100%;margin:0}
 .mx2-fad.hm{grid-template-columns:1fr auto}
@@ -126,7 +128,7 @@ const CSS = `
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.6.0',
+  version: '2.6.1',
   kind: 'mixer',
   modExclude: ['target'],   // doelniveau van 'gelijk trekken': geen audioregelaar maar een meetinstelling
   category: 'mix',
@@ -326,14 +328,26 @@ export default {
     // een skin kan de meter breder maken (VU-meter): de strook groeit mee, zonder skin blijft ze 66 px (master 76 px)
     function growStrip(f, hm) {
       if (typeof ResizeObserver !== 'function' || !hm.el) return;
-      const ro = new ResizeObserver(() => { const s = f.closest('.mx2-strip'); if (!s) return; if (!s.dataset.w0) s.dataset.w0 = parseFloat(s.style.width) || 66; const w = Math.ceil(hm.el.getBoundingClientRect().width); if (w) s.style.width = Math.max(+s.dataset.w0, w + 34) + 'px'; });
+      const ro = new ResizeObserver(() => { const s = f.closest('.mx2-strip'); if (!s) return; if (!s.dataset.w0) s.dataset.w0 = parseFloat(s.style.width) || 66; const w = Math.ceil(hm.el.getBoundingClientRect().width); if (w) s.style.width = Math.max(+s.dataset.w0, w + (hm.el.parentNode === f ? 34 : 10)) + 'px'; });
       ro.observe(hm.el); const d0 = hm.destroy; hm.destroy = () => { ro.disconnect(); return d0.call(hm); };
+    }
+    // een VU-meter staat bovenaan de strook (boven de kop), alle andere gezichten naast de fader; data-face zet de host op het meterelement
+    function watchFace(f, hm) {
+      if (typeof MutationObserver !== 'function' || !hm.el) return;
+      const place = () => {
+        const s = f.closest('.mx2-strip'); if (!s) return; let top = s.querySelector(':scope > .mx2-vutop');
+        if (hm.el.dataset.face === 'vu') { if (!top) { top = el('div', 'mx2-vutop'); s.insertBefore(top, s.firstChild); } if (hm.el.parentNode !== top) top.appendChild(hm.el); }
+        else { if (hm.el.parentNode !== f) f.appendChild(hm.el); if (top && !top.firstChild) top.remove(); }
+      };
+      const mo = new MutationObserver(place); mo.observe(hm.el, { attributes: true, attributeFilter: ['data-face'] });
+      const d0 = hm.destroy; hm.destroy = () => { mo.disconnect(); return d0.call(hm); };
+      Promise.resolve().then(place);
     }
     function fader(parent, get, set, an, mid) {
       const f = el('div', 'mx2-fad'), i = el('input');
       let met, bar, pk, hm = null;
       if (hasHostMeter() && mid) { try { hm = host.ui.meter(f, T.level + ' ' + mid.slice(4).toUpperCase(), { id: mid, group: 'meters', source: an, kind: 'peak', unit: 'linear', range: [-60, 6], hold: true, orientation: 'vertical', length: 130, width: 8 }); } catch (e) { hm = null; } }
-      if (hm) { f.classList.add('hm'); hostMeters.push(hm); growStrip(f, hm); } else { met = el('div', 'mx2-met'); bar = el('i'); pk = el('u'); }
+      if (hm) { f.classList.add('hm'); hostMeters.push(hm); growStrip(f, hm); watchFace(f, hm); } else { met = el('div', 'mx2-met'); bar = el('i'); pk = el('u'); }
       i.type = 'range'; i.min = -60; i.max = 6; i.step = 0.5; i.value = get(); i.setAttribute('aria-label', T.fader);
       const v = el('div', 'mx2-db', fmtDb(get()));
       i.oninput = () => { set(+i.value); v.textContent = fmtDb(+i.value); applyAll(); };

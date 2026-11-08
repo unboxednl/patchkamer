@@ -561,6 +561,8 @@ Een meter toont een niveau: een balk met een piekstreepje, een rij ledjes of een
 | `destroy()` | Haalt de meter weg en stopt het meten; mag twee keer, en moet in `destroy()`/`unmount()` van je apparaat |
 | `el` | Het element van de meter (de host zet `--pk-meter-len` en `--pk-meter-wid` in px erop, zodat je CSS de plek kan afstemmen) |
 
+- **Het huidige gezicht.** De host zet het attribuut `data-face` (`bar`, `ledladder` of `vu`) op `el` en houdt het bij als een skin komt of gaat. Een apparaat mag daarop reageren (de Mixer zet een VU-meter bovenaan de kanaalstrook, anders naast de fader) met een `MutationObserver` op dat attribuut. Het apparaat verandert het gezicht zelf nooit.
+
 | Optie | Waarden | Betekenis |
 |---|---|---|
 | `id` | tekst, 1 tot 60 tekens uit `[A-Za-z0-9._-]` | Vast adres voor skins (`met.master`, `met.t1`). Een meter is geen parameter: het id staat **niet** in `params()` en hoeft niet aan een state-sleutel gelijk te zijn, maar hij verandert niet tussen versies |

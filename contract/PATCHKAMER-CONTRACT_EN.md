@@ -561,6 +561,8 @@ A meter shows a level: a bar with a peak line, a row of LEDs or a round VU meter
 | `destroy()` | Removes the meter and stops measuring; may be called twice, and belongs in the `destroy()`/`unmount()` of your device |
 | `el` | The meter's element (the host sets `--pk-meter-len` and `--pk-meter-wid` in px on it so your CSS can match the space) |
 
+- **The current face.** The host sets the attribute `data-face` (`bar`, `ledladder` or `vu`) on `el` and keeps it up to date when a skin comes or goes. A device may react to it (the Mixer puts a VU meter at the top of the channel strip, otherwise beside the fader) with a `MutationObserver` on that attribute. The device never changes the face itself.
+
 | Option | Values | Meaning |
 |---|---|---|
 | `id` | text, 1 to 60 characters from `[A-Za-z0-9._-]` | Fixed address for skins (`met.master`, `met.t1`). A meter is not a parameter: the id is **not** in `params()` and need not equal a state key, but it does not change between versions |

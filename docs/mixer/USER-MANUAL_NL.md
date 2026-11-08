@@ -81,7 +81,7 @@ Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal
 | **RETURN** | Hoeveel van het geluid op de return-ingang erbij komt, 0 tot 100% (80%). |
 | **→ M** | Waar het kanaal heen gaat: naar de master (**→ M**) of naar een groep. |
 | **PAN** | Links (−1) tot rechts (+1), midden is **C**. |
-| Fader en meter | Het kanaalvolume, −60 tot +6 dB (−6). De balk ernaast is een niveaumeter. |
+| Fader en meter | Het kanaalvolume, −60 tot +6 dB (−6). De balk ernaast is een niveaumeter. Met een skin met VU-meters (bijvoorbeeld *Example VU*) staat de ronde meter niet naast de fader maar **bovenaan de kanaalstrook**, boven het nummer; dat geldt ook voor de groepen en de master. |
 | **M**, **S** | Mute en solo. Staat bij een kanaal solo aan, dan zijn de kanalen zonder solo stil. |
 
 **Groepen** hebben een naam, send- en returnpoorten, een EQ, **SEND**, **RETURN**, een fader (bij het begin 0 dB) en **M**. De **Master** heeft de uitgangspoort **UIT**, send- en returnpoorten, een EQ, **SEND**, **RETURN** en een fader. Achter de master zit een limiter.

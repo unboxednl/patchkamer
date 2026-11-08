@@ -81,7 +81,8 @@ function layout(M){ const e=M.eff, o=M.o, s=M.el.style, px=v=>v+'px', devV=o.ori
   const nw=M.el.clientWidth, nh=M.el.clientHeight, dLen=(devV?nh:nw)||DEF_LEN, dWid=(devV?nw:nh)||DEF_WID;
   const along=e.len!=null?e.len:(turned?dLen:(o.length||0)), across=e.wid!=null?e.wid:(turned?dWid:(o.width||0)), v=e.orient==='vertical';
   s.flex='none'; s.width=v?(across?px(across):'100%'):(along?px(along):'100%'); s.height=v?(along?px(along):'100%'):(across?px(across):'100%'); vars(along,across); }
-function restyle(M){ if(M.dead) return; const r=PK.cardOf(M.el); M.rev=r?(r.skMetRev||0):0; M.eff=resolve(M,r); layout(M); M.col=null; M.dirty=true; M.sig=''; }
+function restyle(M){ if(M.dead) return; const r=PK.cardOf(M.el); M.rev=r?(r.skMetRev||0):0; M.eff=resolve(M,r); if(M.el.dataset.face!==M.eff.face) M.el.dataset.face=M.eff.face;   // het huidige gezicht (bar, ledladder, vu), zodat een apparaat zijn indeling erop kan afstemmen
+  layout(M); M.col=null; M.dirty=true; M.sig=''; }
 // een skin kwam of ging: alle meters van deze kaart opnieuw stylen
 function meterApply(r){ if(!r) return; r.skMetRev=(r.skMetRev||0)+1; METERS.forEach(M=>{ if(PK.cardOf(M.el)===r) restyle(M); }); } PK.meterApply=meterApply;
 PK.meterRules=d=>(d&&Array.isArray(d.meters))?d.meters:[];

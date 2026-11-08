@@ -81,7 +81,7 @@ Double-click a slider to go back to its starting value. Click the number to type
 | **RETURN** | How much of the sound on the return input is added, 0 to 100% (80%). |
 | **→ M** | Where the channel goes: to the master (**→ M**) or to a group. |
 | **PAN** | Left (−1) to right (+1), centre is **C**. |
-| Fader and meter | The channel volume, −60 to +6 dB (−6). The bar next to it is a level meter. |
+| Fader and meter | The channel volume, −60 to +6 dB (−6). The bar next to it is a level meter. With a skin with VU meters (for example *Example VU*) the round meter is not next to the fader but **at the top of the channel strip**, above the number; the same for the groups and the master. |
 | **M**, **S** | Mute and solo. If any channel has solo on, the channels without solo are silent. |
 
 **Groups** have a name, send and return ports, an EQ, **SEND**, **RETURN**, a fader (0 dB at the start) and **M**. **Master** has the output port **OUT**, send and return ports, an EQ, **SEND**, **RETURN** and a fader. There is a limiter behind the master.
