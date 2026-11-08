@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de elf **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de veertien **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -15,6 +15,7 @@ Deze handleiding gaat over de elf **tools** van Patchkamer. Tools zijn hulpmidde
 | een drumloop omzetten in een patroon (kick, snare, hats, toms) en dat naar een sequencer kopiëren | [Drum Listener](#drum-listener) | audio **In** en **Door**, een eventuitgang **Drum trigs** |
 | een nummer door een dienst op internet in stems splitsen (zang, drums, bas, rest) en die met de klok laten spelen | [Stem Splitter](#stem-splitter) | audio **In**, een uitgang per stem en een bundel **Alle stems** |
 | uitzoeken welke synth en tune uit de bibliotheek lijkt op een noot, frase, basloopje of akkoord dat ik heb (een bestand of een opname) | [Tune Finder](#tune-finder) | audio **In** en **Door** |
+| de noten van een monofone baslijn opschrijven (een bestand of een opname) en kopiëren naar een sequencer | [Bass Finder](#bass-finder) | audio **In** en **Door**, een event uit **Noten** |
 | veel sporen tegelijk opnemen, een bestand per spoor | [Multitrack](#multitrack) | een **Bundel**-ingang |
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
@@ -484,6 +485,38 @@ De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan (**fal.ai ·
 - Een frase of een akkoord is moeilijker (juiste synth eerst: ongeveer 69 % en 59 %). Een opname met een beetje ruis, een laagdoorlaatfilter, minder niveau en mono bij elkaar is veel moeilijker (ongeveer 42 %), vooral door de ruis. Ruimtegeluid en chorus drukken het ook.
 - Dit is gemeten op geluiden van Patchkamers eigen synths, **niet op echte opnames** van mensen en instrumenten, en niet door te luisteren. Een echte piano of gitaar wordt hooguit aan het dichtstbijzijnde synthgeluid gekoppeld; dat is een aanwijzing, geen antwoord.
 - Meerdere instrumenten tegelijk, drums of zang in het geluid maken het resultaat waardeloos. Splits een mix eerst (zie de **Stem Splitter**).
+
+---
+
+## Bass Finder
+
+**Waar het voor dient.** Luistert naar een monofone baslijn (een bas, een sub of een synthbas: één noot tegelijk, **geen akkoorden**) en schrijft de noten op: toonhoogte, start, lengte en velocity, op tijd op een raster. Je kunt de noten corrigeren op een pianorol, met de klok van de studio op een synth spelen, of als clip in een sequencer kopiëren. Het werkt op je eigen computer, er gaat niets over het internet.
+
+![De kaart van Bass Finder, leeg](../images/nl/tools/bass-finder.png)
+
+**Geluid erin krijgen**
+
+- **Audiobestand laden…** leest een WAV-, MP3-, FLAC- of OGG-bestand (tot 50 MiB; de eerste 90 seconden worden gebruikt). Een sample uit de tab **Samples** van de bibliotheek werkt ook, want het apparaat neemt audio uit de bibliotheek aan; het tempo en het aantal maten van dat sample worden dan gebruikt. (Nu heeft de tab Samples alleen knoppen voor de Loop Slicer, de Samplebank, de Drum Listener en de Stem Splitter.)
+- **Opnemen** neemt een paar maten of seconden op uit de poort **In**: kies de lengte bij **Opnameduur**, speel het geluid (bijvoorbeeld de uitgang van **Audio Capture** op **In**) en druk op **Opnemen**. Bij een lengte in maten is het tempo het **Tempo (BPM)** dat je invult, anders het studiotempo, en de opname wordt een loop van dat aantal maten. **Door** geeft het geluid ongewijzigd door, dus je hoort het nog.
+
+**Wat je ziet en instelt**
+
+![Bass Finder met een herkende baslijn](../images/nl/tools/bass-finder-result.png)
+
+- De regel boven de pianorol zegt tempo (opgegeven, uit de lengte of geschat), maten, raster, swing, het aantal noten en, als de opname niet op A = 440 Hz gestemd is, de stemming die gecorrigeerd is. De pianorol toont de noten; een sterkere noot is helderder, en de dunne omtrekken zijn wat er gevonden is voordat de noten op het raster zijn gezet.
+- **Tempo (BPM)** is leeg voor automatisch. Is het tempo de helft of het dubbele van wat je verwacht, gebruik dan **÷2** of **×2**. **Maten**, **Raster** (1/8, 1/16, triool 1/16, of **uit** voor het exacte moment), **Swing** en **Eerste tel** (slim, eerste noot op de maat, begin van het geluid) zijn automatisch tot je kiest; bij **auto** wordt het grofste raster gebruikt dat past. **Gevoeligheid** bepaalt hoe snel een zachte of onduidelijke noot als noot telt; **Opnieuw analyseren** herhaalt de analyse met de nieuwe instellingen, en **◀ 1/16** en **1/16 ▶** verschuiven het hele patroon een zestiende.
+- **Corrigeren.** Klik op een noot om hem te kiezen, sleep hem om hem te verplaatsen (in stappen van het raster, en een halve toon per rij) en sleep zijn rechterrand om de lengte te veranderen. Dubbelklik op een lege plek om een noot toe te voegen. De knoppen onder de rol doen hetzelfde met een gekozen noot: wissen (✕), eerder en later (◀ ▶), een halve toon omlaag en omhoog (♭ ♯), een octaaf omlaag en omhoog (**8vb**, **8va**), korter en langer (− +), en ＋ voegt een noot toe. Met de rol in focus kun je Delete, de pijltjestoetsen (Shift voor een octaaf) en **[** en **]** voor de lengte gebruiken. Een nieuwe analyse, of een wijziging van tempo, maten, raster, swing of eerste tel, maakt de correcties ongedaan.
+- **Naar een synth sturen (klok)** speelt de noten met de klok van de studio naar de poort **Noten**: verbind hem met Low Bass, Sub Line of een andere synth. **Velocity** schaalt de noten. **Studiotempo gelijkzetten** zet het tempo van de studio op het herkende tempo. De herkende swing wordt door Bass Finder zelf gespeeld, houd de swing van de studio dus op 0.
+- **Kopieer** in de kaartbalk kopieert de noten als clip; **Plak** ze in een notenspoor van de Pattern Tracker, de Clip Arranger, een Step Sequencer of een andere sequencer. **Clip bewaren (JSON)** bewaart de clip als bestand.
+
+**Presets.** Een preset bevat de instellingen (tempo, maten, raster, swing, eerste tel, gevoeligheid, opnameduur, velocity), nooit de noten of de audio. Er is geen presetpack bijgeleverd.
+
+**Tips en grenzen**
+
+- Gemaakt voor **één baslijn, één noot tegelijk**, van een tot zestien maten (tot 64 voor een lang bestand). Akkoorden en meer instrumenten tegelijk geven verkeerde noten; splits eerst een mix (zie de **Stem Splitter**). Het volgt toonhoogtes van ongeveer 27 Hz (een lage B op een vijfsnarige bas is 31 Hz) tot 500 Hz.
+- Op baslijnen van Patchkamers eigen synths vindt het de juiste noot (toonhoogte op de halve toon, start binnen 50 ms) met een F1 van ongeveer 0,95 voor schoon geluid en ongeveer 0,92 over tien situaties, waaronder zacht, met ruis, met laagdoorlaat, mono, staccato, legato en glide. Geluid met veel **ruimte** (galm) is veel moeilijker (ongeveer 0,80: de staart van een noot wordt soms voor een nieuwe noot gelezen), en een **chorus** kost een beetje (ongeveer 0,92). Op het raster gezet met een bekend tempo heeft ongeveer 90 % van de noten de juiste stap, toonhoogte en lengte (binnen een stap).
+- De **lengte** is de lengte van het geluid, niet van de toetsaanslag: een bas met een lange release krijgt langere noten dan er gespeeld zijn (meestal 20 tot 45 ms te lang, bij een bas met een lange uitklinking 100 tot 170 ms). **Octaaf:** heeft een geluid een zwakke suboctaaf of twee oscillators op een octaaf of een kwint van elkaar, dan wordt de laagste toon die je hoort opgeschreven; verschuif het octaaf met **8va** of **8vb** als je iets anders wilt. Een heel trage aanzet (een padachtige bas) wordt te laat gehoord.
+- Dit is gemeten op baslijnen van Patchkamers eigen synths, **niet op echte opnames** (een elektrische bas, een microfoon, een plaat) en niet door te luisteren. Echt spel heeft ruis, brom, grepen en glijders die niet in de meting zaten.
 
 ---
 

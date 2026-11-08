@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the eleven **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the fourteen **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -15,6 +15,7 @@ This manual covers the eleven **tools** of Patchkamer. Tools are helpers: you us
 | turn a drum loop into a pattern (kick, snare, hats, toms) and copy it to a sequencer | [Drum Listener](#drum-listener) | audio **In** and **Through**, an event out **Drum trigs** |
 | split a track into stems with an online service (vocals, drums, bass, the rest) and play them with the clock | [Stem Splitter](#stem-splitter) | audio **In**, an output per stem and a bundle **All stems** |
 | find which synth and tune of the library sounds like a note, phrase, bass line or chord I have (a file or a recording) | [Tune Finder](#tune-finder) | audio **In** and **Through** |
+| write down the notes of a monophonic bass line (a file or a recording) and copy them to a sequencer | [Bass Finder](#bass-finder) | audio **In** and **Through**, an event out **Notes** |
 | record many tracks at once, one file per track | [Multitrack](#multitrack) | a **Bundle** in |
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
@@ -484,6 +485,38 @@ The service decides what it accepts. If it only takes mp3 or m4a (**fal.ai · Mu
 - A phrase or a chord is harder (right synth first: about 69 % and 59 %). A recording with a little noise, a low-pass filter, less level and mono together is much harder (about 42 %), most of all because of the noise. Room sound and chorus lower it too.
 - This was measured on sounds from Patchkamer's own synths, **not on real recordings** of people and instruments, and not by listening. A real piano or guitar will only be matched to the nearest synth sound; that is a hint, not an answer.
 - Several instruments at once, drums or vocals in the sound make the result worthless. Split a mix first (see the **Stem Splitter**).
+
+---
+
+## Bass Finder
+
+**What it is for.** Listens to a monophonic bass line (a bass, a sub or a synth bass: one note at a time, **no chords**) and writes down the notes: pitch, start, length and velocity, in time on a grid. You can correct the notes on a piano roll, play them on a synth with the studio clock, or copy them as a clip into a sequencer. It works on your own computer, nothing is sent over the internet.
+
+![The Bass Finder card, empty](../images/en/tools/bass-finder.png)
+
+**Getting audio in**
+
+- **Load audio file…** reads a WAV, MP3, FLAC or OGG file (up to 50 MiB; the first 90 seconds are used). A sample from the **Samples** tab of the library works too, as the device accepts audio from the library; the tempo and number of bars of that sample are then used. (Today the Samples tab only offers buttons for the Loop Slicer, the Samplebank, the Drum Listener and the Stem Splitter.)
+- **Record** takes a few bars or seconds from the **In** port: choose the length in **Record length**, play the sound (for example the output of **Audio Capture** connected to **In**) and press **Record**. With a length in bars the tempo is the **Tempo (BPM)** you set, or else the studio tempo, and the recording becomes a loop of that many bars. **Through** passes the sound on unchanged, so you can still hear it.
+
+**What you see and set**
+
+![Bass Finder with a recognised bass line](../images/en/tools/bass-finder-result.png)
+
+- The line above the piano roll says tempo (given, from the length or estimated), bars, grid, swing, the number of notes and, when the recording is not in tune with A = 440 Hz, the tuning that was corrected. The piano roll shows the notes; a stronger note is brighter, and the thin outlines are what was found before the notes were put on the grid.
+- **Tempo (BPM)** is empty for automatic. If the tempo is half or double what you expect, use **÷2** or **×2**. **Bars**, **Grid** (1/8, 1/16, triplet 1/16, or **off** for the exact moment), **Swing** and **Downbeat** (smart, first note on the bar, start of the sound) are automatic until you choose; with **auto** the coarsest grid that fits is used. **Sensitivity** sets how readily a quiet or unclear note counts as a note; **Analyse again** repeats the analysis with the new settings, and **◀ 1/16** and **1/16 ▶** shift the whole pattern by a sixteenth.
+- **Correcting.** Click a note to select it, drag it to move it (in steps of the grid, and a semitone per row) and drag its right edge to change the length. Double-click an empty spot to add a note. The buttons under the roll do the same with a selected note: delete (✕), earlier and later (◀ ▶), a semitone down and up (♭ ♯), an octave down and up (**8vb**, **8va**), shorter and longer (− +), and ＋ adds a note. With the roll focused you can use Delete, the arrow keys (Shift for an octave) and **[** and **]** for the length. A new analysis, or a change of tempo, bars, grid, swing or downbeat, throws the corrections away.
+- **Send to a synth (clock)** plays the notes on the studio clock to the **Notes** port: connect it to Low Bass, Sub Line or another synth. **Velocity** scales the notes. **Set studio tempo to this** sets the tempo of the studio to the recognised tempo. The detected swing is played by Bass Finder, so keep the swing of the studio on 0.
+- **Copy** in the card bar copies the notes as a clip; **Paste** it into a notes track of the Pattern Tracker, the Clip Arranger, a Step Sequencer or another sequencer. **Save clip (JSON)** keeps the clip as a file.
+
+**Presets.** A preset holds the settings (tempo, bars, grid, swing, downbeat, sensitivity, record length, velocity), never the notes or the audio. No preset pack is included.
+
+**Tips and limits**
+
+- Made for **one bass line, one note at a time**, from one to sixteen bars (up to 64 for a long file). Chords and several instruments at once give wrong notes; split a mix first (see the **Stem Splitter**). It follows pitches from about 27 Hz (a low B on a five-string bass is 31 Hz) up to 500 Hz.
+- On bass lines played by Patchkamer's own synths it finds the right note (pitch to the nearest semitone, start within 50 ms) with an F1 of about 0.95 for clean sound and about 0.92 over ten situations, including soft, noisy, low-passed, mono, staccato, legato and glide. Sound with a lot of **room** (reverb) is much harder (about 0.80: the tail of a note is sometimes read as a new note), and a **chorus** costs a little (about 0.92). Put on the grid with a known tempo, about 90 % of the notes have the right step, pitch and length (within one step).
+- The **length** is the length of the sound, not of the key press: a bass with a long release gets longer notes than were played (typically 20 to 45 ms too long, for bass with a long fade 100 to 170 ms). **Octave:** when a sound has a weak sub-octave or two oscillators an octave or a fifth apart, the lowest tone you hear is what is written; shift the octave with **8va** or **8vb** if you want something else. A very slow attack (a pad-like bass) is heard late.
+- This was measured on bass lines from Patchkamer's own synths, **not on real recordings** (an electric bass, a microphone, a record) and not by listening. Real playing has noise, hum, fretting and slides that were not part of the measurement.
 
 ---
 

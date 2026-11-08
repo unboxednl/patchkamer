@@ -19,6 +19,7 @@ Helpers for making music: play, record, measure, take notes and control other de
 | **Notes** | A notepad with key, tempo, sections and a to-do list; no sound, no ports | `Notes/` | [Notes](../../docs/tools/USER-MANUAL_EN.md#notes) |
 | **Stem Splitter** | Splits a track into stems (vocals, drums, bass, the rest) with an online service, which costs money per track and needs the rights to the music; a file, a sample from the library or a recording from the input goes in, an output per stem and a bundle come out, played with the studio clock; saves the stems as WAV and hands the drums to the Drum Listener | `StemSplitter/` | [Stem Splitter](../../docs/tools/USER-MANUAL_EN.md#stem-splitter) |
 | **Tune Finder** | Listens to a sound (one note, a short phrase, a bass line or a chord of one instrument, from a file or a recording) and finds the synth and tune of the library that comes closest, ranked by timbre, harmonics, attack and decay; **Load** puts the chosen tune on that synth in the workspace | `TuneFinder/` | [Tune Finder](../../docs/tools/USER-MANUAL_EN.md#tune-finder) |
+| **Bass Finder** | Listens to a monophonic bass line (a file, a sample from the library or a recording from the input) and writes down the notes: pitch, start, length and velocity, on a grid of 1/8, 1/16 or triplet 1/16 or free; you can correct the notes, play them on a synth with the studio clock, or **Copy** them as a clip and **Paste** them into a sequencer | `BassFinder/` | [Bass Finder](../../docs/tools/USER-MANUAL_EN.md#bass-finder) |
 
 ## More
 
