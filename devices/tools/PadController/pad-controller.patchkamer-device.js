@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pad Controller en nieuwe id nl.patchkamer.padcontroller; songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, apparaat- en poortnamen per taal in i18n).
 //          Het apparaat herkent zijn controller niet meer aan de naam van de MIDI-poort: je kiest zelf per ingang wat die stuurt (toetsen, pads + knoppen of negeren) en de uitgang voor de lampjes (standaard geen).
 //          setState negeert onbekende velden en geeft ongeldige waarden de standaard. getPreset/setPreset bewaren alleen de timing; koppelingen, rollen en poortkeuze horen niet in een preset.
@@ -52,7 +53,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.padcontroller', name: 'Pad Controller', version: '1.11.0', kind: 'utility', category: 'tool',
+  id: 'nl.patchkamer.padcontroller', name: 'Pad Controller', version: '1.12.0', status: 'retired', kind: 'utility', category: 'tool',
   ui: { width: 940, minWidth: 520, jacks: true },
   i18n: { nl: { ports: { midi: 'MIDI (ruw)', knoppen: 'Knoppen' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'midi', name: 'MIDI (raw)' }],

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.14.0 — Een preset neemt nu ook de toewijzingen (CC's en noten) mee, niet alleen de indeling: een controllerpreset is indeling plus MIDI-mapping. Een preset zonder toewijzingen wist ze nog steeds.
 // 1.13.0 — Eerste versie. Control Surface toont een MIDI-controller met draaiknoppen, schuiven, pads en knoppen als paneel dat live meebeweegt, en stuurt wat je op de hardware doet door als CC-berichten (met nummer en
 //          kanaal) naar andere apparaten, zoals de MIDI Hub. De indeling bestaat uit secties: elke sectie heeft een soort (draaiknoppen, schuiven, pads of knoppen), een aantal rijen, een aantal elementen per rij en een
@@ -54,7 +55,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.controlsurface', name: 'Control Surface', version: '1.14.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 340 },
+  id: 'nl.patchkamer.controlsurface', name: 'Control Surface', version: '1.15.0', status: 'retired', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 340 },
   i18n: { nl: { ports: { out: 'CC uit' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [{ id: 'out', name: 'CC out' }], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {

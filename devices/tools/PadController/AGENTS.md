@@ -2,6 +2,8 @@
 
 Dit bestand is voor AI-agents die dit apparaat configureren of er presets voor maken. Het is niet geschreven voor mensen. Het hoort bij `../../../AGENTS.md` (algemeen); lees die eerst. Hier staat wat alleen voor Pad Controller geldt.
 
+> **Teruggetrokken (`status: 'retired'`).** Dit apparaat is vervangen door de [MIDI Controller](../MidiController/AGENTS.md) en het [Keyboard](../Keyboard/AGENTS.md). De bibliotheek toont het standaard niet meer; werkruimtes en songs die het gebruiken laden gewoon. Bouw er niets nieuws mee en pas het alleen aan voor een fout.
+
 ## Wat Pad Controller is
 
 Een besturingsapparaat zonder eigen geluid voor een MIDI-controller met een raster van 8 × 5 pads, een rij knoppen en een toetsenbord. Je koppelt een apparaat aan een pad en Patchkamer legt zelf de kabels (een gebeurteniskabel van `Pad N` naar de noten- of triggeringang, en een paarse kabel van `Knoppen` naar `Mod`). Met Shift + pad kies je welk apparaat je bespeelt; de toetsen sturen noten naar dat apparaat. De pads lichten op in de kleur van de categorie van hun apparaat; het gekozen pad pulseert. De knoppen worden alleen getoond; ze sturen nog geen parameters (stap 2, nog niet gebouwd).

@@ -2,6 +2,8 @@
 
 Dit bestand is voor AI-agents die dit apparaat configureren. Het is niet geschreven voor mensen. Het hoort bij `../../../AGENTS.md` (algemeen); lees die eerst. Hier staat wat alleen voor de MIDI Hub geldt.
 
+> **Teruggetrokken (`status: 'retired'`).** Dit apparaat is vervangen door de [MIDI Controller](../MidiController/AGENTS.md) en het [Keyboard](../Keyboard/AGENTS.md). De bibliotheek toont het standaard niet meer; werkruimtes en songs die het gebruiken laden gewoon. Bouw er niets nieuws mee en pas het alleen aan voor een fout.
+
 ## Wat de MIDI Hub is
 
 Een controller tussen MIDI-bronnen en de apparaten in de werkruimte (contract v1.13, §11c). Hij doet drie dingen: (1) de apparaten van de werkruimte zien (`onPeers`) en toevoegen aan zijn actieve apparaten; (2) per apparaat de noten routeren: van het keyboard (poort `in`, met een kanaalfilter) of van een spoor van een sequencer (multi-MIDI-poort `tracks`, met de spoornaam uit `onEventBundle`); (3) elke regelaar op de kaart van een apparaat koppelen aan een knop, schuif, pad of toets (`host.controls` en `host.setControl`), met Leer.

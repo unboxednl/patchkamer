@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.12.0 — Patchkamer contract v1.13: elke gebeurtenis draagt het MIDI-kanaal (ch); elke MIDI-CC gaat nu door met zijn nummer (cc, naam ccN als er geen vaste naam is; het sustainpedaal als pedal), en kanaaldruk als pressure. De bestaande namen (cutoff, level, vibrato, expression, bend) en het gedrag van noten blijven gelijk. Daarmee kan de MIDI Hub elke knop van een keyboard koppelen.
 // 1.11.2 — De hulptekst noemt geen apparaten meer bij naam (Nevel, Laag, Strijk, Samplebank bestaan niet in de bibliotheek) maar beschrijft het soort instrument. Geluid, state en gedrag ongewijzigd.
 // 1.11.1 — Hernoemd van Toets naar Keys: nieuwe id nl.patchkamer.keys, naam Keys / MIDI (Engelstalig, zoals de andere apparaten). Poort-id, state en gedrag ongewijzigd.
@@ -22,7 +23,7 @@ const EN={
   'Puls werkt met instrumenten die bij elke noot een vaste duur krijgen. Vasthouden is voor instrumenten die weten wanneer je een toets loslaat, zoals een bas of een pad, en voor een arpeggiator. Sustainpedaal werkt in Vasthouden. MIDI CC 1/11/74/7 → vibrato/expressie/cutoff/volume.':'Pulse works with instruments that get a fixed length for every note. Hold is for instruments that know when you release a key, such as a bass or a pad, and for an arpeggiator. The sustain pedal works in Hold. MIDI CC 1/11/74/7 → vibrato/expression/cutoff/volume.',
   'Web MIDI is hier niet beschikbaar. Gebruik schermtoetsen/computertoetsen of een browser met Web MIDI.':'Web MIDI is not available here. Use the on-screen keys, the computer keys or a browser with Web MIDI.'
 };
-export default {id:'nl.patchkamer.keys',name:'Keys / MIDI',version:'1.12.0',kind:'utility',category:'tool',ui:{width:760,minWidth:360},ports:{audioIn:[],audioOut:[],eventIn:[],eventOut:[{id:'notes',name:'Notes / CC'}],modIn:[],modOut:[]},i18n:{nl:{ports:{notes:'Noten / CC'}}},create(ctx,host){
+export default {id:'nl.patchkamer.keys',name:'Keys / MIDI',version:'1.13.0',status:'retired',kind:'utility',category:'tool',ui:{width:760,minWidth:360},ports:{audioIn:[],audioOut:[],eventIn:[],eventOut:[{id:'notes',name:'Notes / CC'}],modIn:[],modOut:[]},i18n:{nl:{ports:{notes:'Noten / CC'}}},create(ctx,host){
     const tr=(k,...a)=>{let t=host.lang==='nl'?k:(EN[k]??k);a.forEach((v,i)=>{t=t.replace('{'+i+'}',v);});return t;};
     const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
     const finite=(v,d,a,b)=>typeof v==='number'&&Number.isFinite(v)?clamp(v,a,b):d;

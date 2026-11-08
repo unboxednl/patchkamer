@@ -8,6 +8,8 @@ Deze handleiding gaat over de veertien **tools** van Patchkamer. Tools zijn hulp
 
 | Ik wil… | Gebruik | Het heeft |
 |---|---|---|
+| mijn MIDI-controllers en -keyboards tegelijk gebruiken, met een knop schakelen tussen apparaten en snel koppelen | [MIDI Controller](#midi-controller) | de eventuitgangen naar de apparaten die je toevoegt |
+| noten spelen met een klavier op het scherm, met instelbaar aantal toetsen | [Keyboard](#keyboard) | een eventuitgang **Noten** |
 | noten spelen met het schermtoetsenbord, mijn computertoetsen of een MIDI-keyboard | [Keys / MIDI](#keys--midi) | een eventuitgang **Noten / CC** |
 | veel apparaten bespelen vanaf een raster van 40 pads op een MIDI-controller | [Pad Controller](#pad-controller) | een eventingang **MIDI (ruw)**, 40 eventuitgangen **Pad** en een modulatie-uitgang **Knoppen** |
 | akkoorden vinden zonder muziektheorie: toonsoort, stijl, akkoorden die ik speel, ideeën voor het volgende akkoord, 16 pads, bas en stemvoering | [Chord Buddy](#chord-buddy) | een eventingang **In**, eventuitgangen **Akkoorden** en **Bas** |
@@ -35,7 +37,50 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 
 ---
 
+## MIDI Controller
+
+**Waarvoor.** Eén apparaat voor al je MIDI-controllers en -keyboards. Je sluit ze aan, kiest welk Patchkamer-apparaat je wilt bedienen en draait aan je knoppen. Met een knop op de controller schakel je naar een ander apparaat; dezelfde draaiknoppen werken dan voor dat apparaat. Het vervangt de MIDI Hub, de Control Surface, de Pad Controller en Keys / MIDI.
+
+![De kaart van de MIDI Controller](../images/nl/tools/midi-controller.png)
+
+**Aansluiten.** Klik op **MIDI verbinden** en geef de browser toestemming. Alle aangesloten MIDI-apparaten staan onder **MIDI-ingangen** en werken tegelijk; het lampje licht op als er iets binnenkomt. Een apparaat dat je later aansluit, verschijnt vanzelf.
+
+**Apparaten kiezen.** Kies bij **Apparaten** met *Apparaat toevoegen…* de Patchkamer-apparaten die je wilt bedienen (bijvoorbeeld Acid Baselines en de Mixer). Het apparaat dat actief is, heeft een rand en het label *actief*; klik op een apparaat om het actief te maken.
+
+**Schakelen met een knop.** Klik bij een apparaat op **Leer knop** en druk op een knop van je controller. Vanaf nu kiest die knop dat apparaat. Staat **Zet het gekozen apparaat midden in beeld** aan, dan schuift het canvas zodat het apparaat midden in je scherm staat (het apparaat zelf en de zoom blijven). Zet dat vinkje uit als je dat niet wilt.
+
+**Snel koppelen.** Je hoeft niet elke knop los te koppelen:
+1. **Leer indeling** (eenmalig per controller): raak elke knop, schuif en pad één keer aan en klik op **Klaar**.
+2. Kies een actief apparaat en klik op **Voorstel**: de knoppen worden automatisch op de regelaars van dat apparaat gezet, de draaiknoppen en schuiven op schuiven en draaiknoppen, de pads en knoppen op vinkjes, knoppen en keuzelijsten.
+3. Of klik op **Snel koppelen** en draai de knoppen na elkaar: elke knop krijgt de volgende regelaar.
+4. Pas daarna aan wat je anders wilt: kies een andere regelaar, **Leer** (een andere knop), **omkeren**, of het bereik (min en max).
+
+**Noten.** Met **Noten van een keyboard naar het actieve apparaat** aan gaan de noten van een MIDI-keyboard (ook pitch bend, aanslagdruk en pedaal) naar het actieve apparaat, via de kabel die het apparaat zelf legt. Een knop die een koppeling of schakelknop is, stuurt geen noot.
+
+**Bewaren en laden.** Alle koppelingen, schakelknoppen en de indeling bewaar je als **preset** van de MIDI Controller (de balk bovenin de kaart). Een preset hoort bij een soort apparaat, niet bij een kaart: de koppeling voor Acid Baselines geldt voor elke Acid Baselines in elke werkruimte.
+
+**Niet mogelijk.** Lampjes van de controller aansturen (dat vraagt sysex, en dat gebruikt Patchkamer niet).
+
+## Keyboard
+
+**Waarvoor.** Een klavier voor andere apparaten, zonder eigen geluid. Je stelt in hoeveel toetsen het heeft (25, 37, 49, 61, 76 of 88). Verbind de uitgang **Noten** met een synth, sampler of arpeggiator. Een fysiek MIDI-keyboard sluit je aan op de [MIDI Controller](#midi-controller); het Keyboard hoeft zelf geen MIDI te kennen.
+
+![De kaart van het Keyboard](../images/nl/tools/keyboard.png)
+
+**Bedienen.** Klik of tik op de toetsen (lager op de toets is harder), of gebruik de computertoetsen: **A W S E D F T G Y H U J K O L P** zijn de toetsen vanaf de C van het gekozen octaaf, en **Z** en **X** schuiven het octaaf omlaag of omhoog. In een invoerveld doen de toetsen hun gewone werk.
+
+**Instellingen.**
+- **Aantal toetsen** en **Laagste toets** bepalen het bereik.
+- **Speelmodus:** *Vasthouden* (de noot klinkt zolang je de toets vasthoudt) of *Puls* (een noot met een vaste **Lengte**).
+- **Aanslag**, **Transponeren** (± 2 octaven) en **Kanaal** (MIDI-kanaal 1 tot 16).
+- **Pitch bend** (veert terug naar het midden) en **Modulatie**.
+- **Sustain** houdt losgelaten noten vast tot je het weer uitzet; **Alles uit** laat alles los.
+
+De instellingen bewaar je als **preset**.
+
 ## Keys / MIDI
+
+> **Teruggetrokken.** Dit apparaat is vervangen door de [MIDI Controller](#midi-controller) en het [Keyboard](#keyboard). Het staat standaard niet meer in de bibliotheek (zet **Teruggetrokken apparaten tonen** aan, boven de lijst) maar laadt nog in oude werkruimtes en songs.
 
 **Waar het voor dient.** Een keyboard dat zelf geen geluid maakt. Je speelt erop en het stuurt de noten naar een ander apparaat: een synth, een sampler of een arpeggiator. Je kunt spelen op de piano op het scherm, met de toetsen van je computertoetsenbord of met een MIDI-keyboard.
 
@@ -66,6 +111,8 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 ---
 
 ## Pad Controller
+
+> **Teruggetrokken.** Dit apparaat is vervangen door de [MIDI Controller](#midi-controller) en het [Keyboard](#keyboard). Het staat standaard niet meer in de bibliotheek (zet **Teruggetrokken apparaten tonen** aan, boven de lijst) maar laadt nog in oude werkruimtes en songs.
 
 **Waar het voor dient.** Een besturingsapparaat voor een MIDI-controller met een raster van 40 pads (8 breed, 5 hoog), een rij knoppen en toetsen. Je koppelt een apparaat aan een pad. Met **Shift** + pad op de controller kies je welk apparaat je bespeelt; de toetsen spelen dan dat apparaat. De pads lichten op in de kleur van de categorie van het apparaat. De MIDI-ingang en de uitgang voor de lampjes kies je zelf; Pad Controller kijkt niet naar de naam van de MIDI-poort.
 
@@ -263,6 +310,8 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 
 ## MIDI Hub
 
+> **Teruggetrokken.** Dit apparaat is vervangen door de [MIDI Controller](#midi-controller) en het [Keyboard](#keyboard). Het staat standaard niet meer in de bibliotheek (zet **Teruggetrokken apparaten tonen** aan, boven de lijst) maar laadt nog in oude werkruimtes en songs.
+
 ### Waar het voor dient
 
 De MIDI Hub staat tussen je MIDI-bronnen en de apparaten in je werkruimte. Verbind een keyboard of controller (via **Keys / MIDI**) en een sequencer ermee, en de hub doet drie dingen:
@@ -330,6 +379,8 @@ Het pack **MIDI Hub Basics** heeft 15 presets in vier mappen: **Sound Controller
 - De hub speelt geen geluid.
 
 ## Control Surface
+
+> **Teruggetrokken.** Dit apparaat is vervangen door de [MIDI Controller](#midi-controller) en het [Keyboard](#keyboard). Het staat standaard niet meer in de bibliotheek (zet **Teruggetrokken apparaten tonen** aan, boven de lijst) maar laadt nog in oude werkruimtes en songs.
 
 ### Waar het voor dient
 

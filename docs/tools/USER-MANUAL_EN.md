@@ -8,6 +8,8 @@ This manual covers the fourteen **tools** of Patchkamer. Tools are helpers: you 
 
 | I want to… | Use | It has |
 |---|---|---|
+| use my MIDI controllers and keyboards at once, switch between devices with a button and map quickly | [MIDI Controller](#midi-controller) | event outs to the devices you add |
+| play notes with an on-screen keyboard with a settable number of keys | [Keyboard](#keyboard) | an event out **Notes** |
 | play notes with the screen keyboard, my computer keys or a MIDI keyboard | [Keys / MIDI](#keys--midi) | a **Notes / CC** event out |
 | control many devices from a grid of 40 pads on a MIDI controller | [Pad Controller](#pad-controller) | a **MIDI (raw)** event in, 40 **Pad** event outs and a **Buttons** modulation out |
 | find chords without music theory: key, style, chords I play, next-chord ideas, 16 pads, bass and voice leading | [Chord Buddy](#chord-buddy) | an **In** event in, **Chords** and **Bass** event outs |
@@ -35,7 +37,50 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 
 ---
 
+## MIDI Controller
+
+**What it is for.** One device for all your MIDI controllers and keyboards. You connect them, choose which Patchkamer device you want to control and turn your knobs. With a button on the controller you switch to another device; the same knobs then work for that device. It replaces the MIDI Hub, the Control Surface, the Pad Controller and Keys / MIDI.
+
+![The MIDI Controller card](../images/en/tools/midi-controller.png)
+
+**Connect.** Click **Connect MIDI** and give the browser permission. All connected MIDI devices are listed under **MIDI inputs** and work at the same time; the lamp lights up when something comes in. A device you connect later shows up by itself.
+
+**Choose devices.** Under **Devices**, use *Add a device…* to choose the Patchkamer devices you want to control (for example Acid Baselines and the Mixer). The active device has a border and the label *active*; click a device to make it active.
+
+**Switch with a button.** On a device, click **Learn button** and press a button on your controller. From now on that button selects that device. If **Put the selected device in the middle of the screen** is on, the canvas slides so the device is in the middle of your screen (the device itself and the zoom stay). Turn that tick off if you do not want that.
+
+**Map quickly.** You do not have to map each knob separately:
+1. **Learn layout** (once per controller): touch every knob, slider and pad once and click **Done**.
+2. Choose an active device and click **Suggest**: the knobs are put on the controls of that device automatically, the knobs and sliders on sliders and knobs, the pads and buttons on ticks, buttons and lists.
+3. Or click **Quick map** and turn the knobs one after the other: each knob gets the next control.
+4. Then adjust what you want different: pick another control, **Learn** (another knob), **invert**, or the range (min and max).
+
+**Notes.** With **Notes from a keyboard to the active device** on, the notes of a MIDI keyboard (also pitch bend, aftertouch and pedal) go to the active device, over the cable the device lays itself. A knob that is a mapping or a switch button does not send a note.
+
+**Save and load.** All mappings, switch buttons and the layout are saved as a **preset** of the MIDI Controller (the bar at the top of the card). A preset belongs to a kind of device, not to one card: the mapping for Acid Baselines applies to every Acid Baselines in every workspace.
+
+**Not possible.** Driving the lights of the controller (that needs sysex, which Patchkamer does not use).
+
+## Keyboard
+
+**What it is for.** A keyboard for other devices, without sound of its own. You set how many keys it has (25, 37, 49, 61, 76 or 88). Connect the **Notes** output to a synth, sampler or arpeggiator. A physical MIDI keyboard you connect to the [MIDI Controller](#midi-controller); the Keyboard does not need to know MIDI itself.
+
+![The Keyboard card](../images/en/tools/keyboard.png)
+
+**Play.** Click or tap the keys (lower on the key is harder), or use the computer keys: **A W S E D F T G Y H U J K O L P** are the keys from the C of the chosen octave, and **Z** and **X** move the octave down or up. In an input field the keys do their normal work.
+
+**Settings.**
+- **Number of keys** and **Lowest key** set the range.
+- **Play mode:** *Hold* (the note sounds as long as you hold the key) or *Pulse* (a note with a fixed **Length**).
+- **Velocity**, **Transpose** (± 2 octaves) and **Channel** (MIDI channel 1 to 16).
+- **Pitch bend** (springs back to the middle) and **Modulation**.
+- **Sustain** holds released notes until you turn it off again; **All off** releases everything.
+
+You save the settings as a **preset**.
+
 ## Keys / MIDI
+
+> **Retired.** This device has been replaced by the [MIDI Controller](#midi-controller) and the [Keyboard](#keyboard). It is no longer in the library by default (turn on **Show retired devices**, above the list) but still loads in old workspaces and songs.
 
 **What it is for.** A keyboard that makes no sound of its own. You play with it and it sends the notes to another device: a synth, a sampler or an arpeggiator. You can play on the on-screen piano, with the keys of your computer keyboard, or with a MIDI keyboard.
 
@@ -66,6 +111,8 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 ---
 
 ## Pad Controller
+
+> **Retired.** This device has been replaced by the [MIDI Controller](#midi-controller) and the [Keyboard](#keyboard). It is no longer in the library by default (turn on **Show retired devices**, above the list) but still loads in old workspaces and songs.
 
 **What it is for.** A control device for a MIDI controller that has a grid of 40 pads (8 across, 5 high), a row of knobs, and keys. You link a device to a pad. Pressing **Shift** and a pad on the controller picks which device you play; the keys then play that device. The pads light up in the colour of the device's category. You choose the MIDI input and the output for the lights yourself; Pad Controller does not look at the name of the MIDI port.
 
@@ -263,6 +310,8 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 
 ## MIDI Hub
 
+> **Retired.** This device has been replaced by the [MIDI Controller](#midi-controller) and the [Keyboard](#keyboard). It is no longer in the library by default (turn on **Show retired devices**, above the list) but still loads in old workspaces and songs.
+
 ### What it is for
 
 The MIDI Hub sits between your MIDI sources and the devices in your workspace. Connect a keyboard or controller (through **Keys / MIDI**) and a sequencer to it, and the hub does three things:
@@ -330,6 +379,8 @@ The **MIDI Hub Basics** pack has 15 presets in four folders: **Sound Controllers
 - The hub does not play audio.
 
 ## Control Surface
+
+> **Retired.** This device has been replaced by the [MIDI Controller](#midi-controller) and the [Keyboard](#keyboard). It is no longer in the library by default (turn on **Show retired devices**, above the list) but still loads in old workspaces and songs.
 
 ### What it is for
 

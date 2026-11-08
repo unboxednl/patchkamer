@@ -2,6 +2,8 @@
 
 Dit bestand is voor AI-agents die dit apparaat configureren. Het is niet geschreven voor mensen. Het hoort bij `../../../AGENTS.md` (algemeen); lees die eerst. Hier staat wat alleen voor de Control Surface geldt.
 
+> **Teruggetrokken (`status: 'retired'`).** Dit apparaat is vervangen door de [MIDI Controller](../MidiController/AGENTS.md) en het [Keyboard](../Keyboard/AGENTS.md). De bibliotheek toont het standaard niet meer; werkruimtes en songs die het gebruiken laden gewoon. Bouw er niets nieuws mee en pas het alleen aan voor een fout.
+
 ## Wat de Control Surface is
 
 Een paneel voor een MIDI-controller met draaiknoppen, schuiven, pads en knoppen, zonder klavier. Het toont de controller en beweegt mee met de hardware, en stuurt elk element door als `cc`-gebeurtenis met `id` (het slot), `slot` (de naam), `cc` en `ch`. Geen merknamen of modelnamen van controllers in naam, id of teksten van het apparaat. Uitzondering: de presets in de map `Controllers` van het pack mogen de naam van de controller dragen (zie Presets).

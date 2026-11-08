@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.13.2 — Een koppeling onthoudt de naam van het element van een Control Surface (bijvoorbeeld "Filter 1") en toont die in plaats van alleen het CC-nummer.
 // 1.13.1 — Vier MIDI-ingangen (MIDI in, 2, 3 en 4) in plaats van één, zodat je meer dan één fysiek MIDI-apparaat tegelijk kunt gebruiken: zet per apparaat een Keys / MIDI op zijn eigen ingang (kies daar de MIDI-ingang) en verbind elk met een eigen ingang van de hub. Een koppeling en een noteroute kunnen op één ingang gelden of op alle; oude koppelingen en routes gelden op alle ingangen en werken dus als voorheen.
 // 1.13.0 — Eerste versie. De MIDI Hub staat tussen je MIDI-bronnen (Keys / MIDI, een controller) en de apparaten in de werkruimte. Hij ziet welke apparaten er staan en laat je er een
@@ -59,7 +60,7 @@ function normalize(s) {
 }
 
 export default {
-  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.13.2', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
+  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.14.0', status: 'retired', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
   i18n: { nl: { ports: { in: 'MIDI in', in2: 'MIDI in 2', in3: 'MIDI in 3', in4: 'MIDI in 4', tracks: 'Sporen in' } } },
   ports: { audioIn: [], audioOut: [], eventIn: INS.map((id, i) => ({ id, name: i ? 'MIDI in ' + (i + 1) : 'MIDI in' })), eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] },
   create(ctx, host) {
