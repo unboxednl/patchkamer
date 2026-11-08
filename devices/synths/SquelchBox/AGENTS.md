@@ -65,7 +65,7 @@ Een tune bevat alle velden behalve eventueel een deel van `patterns`; elke tune 
 
 ## Meetscripts en controles
 
-Draai na elke wijziging `node contract/validate-instrument.mjs devices/synths/SquelchBox/squelch-box.patchkamer-device.js` (ook met `--lang en` en `--lang nl`). Er is geen eigen tunecheck in de repo: laad het pack in de host en controleer dat elk veld van `getState()` door `setState()` terugkomt en dat de motor bij elke tune alleen eindige samples geeft (laad `WORKLET` met een nep-`host.loadWorklet` en render `SquelchEngine` in blokken van 128). Een geluidswijziging is niet beluisterd tenzij de oplevering dat zegt.
+Draai na elke wijziging `node contract/validate-instrument.mjs devices/synths/SquelchBox/squelch-box.patchkamer-device.js` (ook met `--lang en` en `--lang nl`). Voor een tunepack draai je `node devices/synths/SquelchBox/check-tune.mjs tunes/<pack>.patchkamer-tunes.json`: die haalt elke tune door `setState()` en `getState()` en meldt een ontbrekend of onbekend veld, een waarde die het apparaat verandert (bijvoorbeeld buiten het bereik) en een fout in `format`, `device`, `kind` of de licentie. De patronenlijst vult het apparaat aan tot 16 plekken; de tunecheck eist dat de ontbrekende plekken leeg zijn. Dat controleert de state, niet het geluid: of de motor bij elke tune alleen eindige samples geeft, test je apart (laad `WORKLET` met een nep-`host.loadWorklet` en render `SquelchEngine` in blokken van 128). Een geluidswijziging is niet beluisterd tenzij de oplevering dat zegt.
 
 ## Documentatie en songs
 
