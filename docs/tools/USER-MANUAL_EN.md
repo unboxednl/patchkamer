@@ -446,6 +446,7 @@ The service decides what it accepts. If it only takes mp3 or m4a (**fal.ai · Mu
 - **Tempo of the track**: leave it at 0 and the track plays at its own tempo. Enter the tempo of the track and it follows the tempo of the studio (the pitch changes with it). **Repeat** makes the track start over and over.
 - **WAV** chooses 16 or 24 bit; **Save** on a stem saves that stem as WAV, **Save all stems (zip)** saves all stems in one zip file. If the service gives MIDI there is **Save MIDI (zip)**.
 - **Drums → Drum Listener** hands the drum stem to the Drum Listener (the selected card, an existing one or a new one) to turn it into a pattern.
+- **Bass → Bass Finder** hands the bass stem to the Bass Finder in the same way, to write down its notes.
 - **Clear stems** removes the result from memory; the outputs stay.
 
 **Presets and songs.** A preset and a song keep only the settings (service, model, WAV depth, record length, repeat, tempo, and level, mute and solo per stem name), never the stems or the key. A song does remember the outputs of the last result, so cables stay in place; the stems themselves only come back when you split again.

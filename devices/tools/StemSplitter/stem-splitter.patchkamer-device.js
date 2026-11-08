@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.23.3 — Knop 'Bas → Bass Finder': de basstem gaat als wav naar de Bass Finder, net als de drums naar de Drum Listener.
 // 1.23.1 — De host zet een wav, flac of ogg zelf om naar mp3 als de dienst alleen mp3/m4a aanneemt (voortgang 'mp3'); de kaart zegt dat; teksten voor de nieuwe foutcodes (mp3big, mp3, indecode).
 // 1.23.2 — Gemeten met de echte dienst (07-11): een stem 'instrumental' (alles behalve de zang) staat standaard gedempt, omdat hij met de andere stems samen dubbel klinkt; de host laat de meegestuurde invoer ('song') weg.
 // 1.23.0 — Eerste versie. Stem Splitter splitst een nummer in stems (zang, drums, bas, rest, soms meer) met een dienst op internet. Het apparaat zelf doet geen netwerkverkeer:
@@ -43,8 +44,8 @@ const TXT = {
     toMp3: 'Dit bestand wordt eerst naar mp3 omgezet, omdat de dienst alleen mp3 of m4a aanneemt.',
     done: n => 'Klaar: ' + n + (n === 1 ? ' stem' : ' stems') + '.', cost2: p => ' Kosten volgens de instelling: ' + p + '.',
     stems: 'Stems', level: 'Niveau', mute: 'Dempen', solo: 'Solo', bpm: 'Tempo van het nummer', bpmHint: '0 = niet aanpassen; anders loopt het nummer mee met het tempo van de studio (de toonhoogte verandert mee)', loop: 'Herhalen',
-    bits: 'WAV', dlStem: 'Bewaar', dlAll: 'Alle stems bewaren (zip)', dlMidi: 'MIDI bewaren (zip)', toDrums: 'Drums → Drum Listener', clear: 'Stems wissen',
-    playHint: 'De stems starten en stoppen met het transport van de studio.', sentDrums: 'Drums naar de Drum Listener gestuurd.', noDrums: 'Er is geen drumstem.', noDrumTarget: 'De Drum Listener is niet beschikbaar.',
+    bits: 'WAV', dlStem: 'Bewaar', dlAll: 'Alle stems bewaren (zip)', dlMidi: 'MIDI bewaren (zip)', toDrums: 'Drums → Drum Listener', toBass: 'Bas → Bass Finder', clear: 'Stems wissen',
+    playHint: 'De stems starten en stoppen met het transport van de studio.', sentDrums: 'Drums naar de Drum Listener gestuurd.', noDrums: 'Er is geen drumstem.', noDrumTarget: 'De Drum Listener is niet beschikbaar.', sentBass: 'Bas naar de Bass Finder gestuurd.', noBass: 'Er is geen basstem.', noBassTarget: 'De Bass Finder is niet beschikbaar.',
     errOldHost: 'Deze versie van Patchkamer kan geen stems splitsen.', errDrop: 'Dit lijkt geen audiobestand.', errBig: 'Bestand te groot (hoogstens 100 MB).', errWavBig: 'Te lang voor een WAV-bestand.', errNoWorklet: 'Opnemen uit de ingang heeft AudioWorklet nodig, en dat is hier niet beschikbaar.', errNoAudio: 'Geen geluid ontvangen. Verbind een bron met de ingang.', errNoSource: 'Kies eerst een nummer.',
     err: {
       declined: 'Geannuleerd: er is niets verstuurd.', aborted: 'Geannuleerd.', timeout: 'De dienst deed er te lang over (meer dan 20 minuten). Probeer het later opnieuw.',
@@ -68,8 +69,8 @@ const TXT = {
     toMp3: 'This file is first converted to mp3, because the service only accepts mp3 or m4a.',
     done: n => 'Done: ' + n + (n === 1 ? ' stem' : ' stems') + '.', cost2: p => ' Cost according to the setting: ' + p + '.',
     stems: 'Stems', level: 'Level', mute: 'Mute', solo: 'Solo', bpm: 'Tempo of the track', bpmHint: '0 = leave as is; otherwise the track follows the studio tempo (the pitch changes with it)', loop: 'Repeat',
-    bits: 'WAV', dlStem: 'Save', dlAll: 'Save all stems (zip)', dlMidi: 'Save MIDI (zip)', toDrums: 'Drums → Drum Listener', clear: 'Clear stems',
-    playHint: 'The stems start and stop with the studio transport.', sentDrums: 'Drums sent to the Drum Listener.', noDrums: 'There is no drum stem.', noDrumTarget: 'The Drum Listener is not available.',
+    bits: 'WAV', dlStem: 'Save', dlAll: 'Save all stems (zip)', dlMidi: 'Save MIDI (zip)', toDrums: 'Drums → Drum Listener', toBass: 'Bass → Bass Finder', clear: 'Clear stems',
+    playHint: 'The stems start and stop with the studio transport.', sentDrums: 'Drums sent to the Drum Listener.', noDrums: 'There is no drum stem.', noDrumTarget: 'The Drum Listener is not available.', sentBass: 'Bass sent to the Bass Finder.', noBass: 'There is no bass stem.', noBassTarget: 'The Bass Finder is not available.',
     errOldHost: 'This version of Patchkamer cannot split stems.', errDrop: 'This does not look like an audio file.', errBig: 'File too large (100 MB at most).', errWavBig: 'Too long for a WAV file.', errNoWorklet: 'Recording from the input needs AudioWorklet, which is not available here.', errNoAudio: 'No sound received. Connect a source to the input.', errNoSource: 'Choose a track first.',
     err: {
       declined: 'Cancelled: nothing was sent.', aborted: 'Cancelled.', timeout: 'The service took too long (more than 20 minutes). Try again later.',
@@ -135,7 +136,7 @@ const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,mo
   '.stems{display:grid;gap:4px}.stem{display:grid;grid-template-columns:minmax(80px,140px) auto auto auto auto;gap:8px;align-items:center}.stem b{font-weight:600}';
 
 export default {
-  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.2', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
+  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.3', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
   i18n: { nl: { ports: { in: 'In', vocals: 'Zang', drums: 'Drums', bass: 'Bas', other: 'Rest', all: 'Alle stems' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'vocals', name: 'Vocals' }, { id: 'drums', name: 'Drums' }, { id: 'bass', name: 'Bass' }, { id: 'other', name: 'Other' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [{ id: 'all', name: 'All stems' }] },
   create(ctx, host) {
@@ -284,6 +285,14 @@ export default {
       setMsg(ok ? T.sentDrums : T.noDrumTarget, ok ? 'ok' : 'err');
     }
 
+    async function toBass() {
+      const st = result && result.stems.find(s => s.id === 'bass'); if (!st) { setMsg(T.noBass, 'err'); return; }
+      const b = wavBlob(bufChannels(st.buffer), st.buffer.sampleRate, 16); if (!b) { setMsg(T.errWavBig, 'err'); return; }
+      let ok = false;
+      try { ok = typeof host.stems === 'function' && await host.stems(self, 'send', { def: 'nl.patchkamer.bass-finder', file: new File([b], baseName() + ' - bass.wav', { type: 'audio/wav' }), info: { name: baseName() + ' - bass', bpm: state.bpm > 0 ? state.bpm : undefined } }); } catch (e) { ok = false; }
+      setMsg(ok ? T.sentBass : T.noBassTarget, ok ? 'ok' : 'err');
+    }
+
     // ---------- UI ----------
     function mkSelect(parent, label, items, onchange) { const l = el('label', label, parent); const s = el('select', null, l); s.setAttribute('aria-label', label); for (const [v, t] of items) { const o = el('option', t, s); o.value = String(v); } s.onchange = () => onchange(s.value); return s; }
     function paint() {
@@ -335,6 +344,7 @@ export default {
         const allB = el('button', T.dlAll, r5); allB.type = 'button'; allB.onclick = () => { saveAll(); };
         const midiB = el('button', T.dlMidi, r5); midiB.type = 'button'; midiB.onclick = saveMidi;
         const drumsB = el('button', T.toDrums, r5); drumsB.type = 'button'; drumsB.onclick = () => { toDrums(); };
+        const bassB = el('button', T.toBass, r5); bassB.type = 'button'; bassB.onclick = () => { toBass(); };
         const clrB = el('button', T.clear, r5); clrB.type = 'button'; clrB.onclick = clearResult;
         const r6 = el('div', null, stemsBox, 'row');
         const bpmL = el('label', T.bpm, r6); const bpm = el('input', null, bpmL); bpm.type = 'number'; bpm.min = '0'; bpm.max = '300'; bpm.step = '0.1'; bpm.title = T.bpmHint; bpm.setAttribute('aria-label', T.bpm);

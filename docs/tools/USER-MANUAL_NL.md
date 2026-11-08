@@ -446,6 +446,7 @@ De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan (**fal.ai ·
 - **Tempo van het nummer**: laat je dit op 0, dan speelt het nummer op zijn eigen tempo. Vul je het tempo van het nummer in, dan loopt het mee met het tempo van de studio (de toonhoogte verandert dan mee). **Herhalen** laat het nummer steeds opnieuw beginnen.
 - **WAV** kiest 16 of 24 bit; **Bewaar** bij een stem bewaart die stem als WAV, **Alle stems bewaren (zip)** alle stems in één zipbestand. Geeft de dienst MIDI, dan is er **MIDI bewaren (zip)**.
 - **Drums → Drum Listener** geeft de drumstem aan de Drum Listener (het geselecteerde exemplaar, een bestaand of een nieuw) om er een patroon van te maken.
+- **Bas → Bass Finder** geeft de basstem op dezelfde manier aan de Bass Finder, om er de noten van uit te schrijven.
 - **Stems wissen** haalt het resultaat uit het geheugen; de uitgangen blijven.
 
 **Presets en songs.** Een preset en een song bewaren alleen de instellingen (dienst, model, WAV-diepte, opnameduur, herhalen, tempo, en niveau, dempen en solo per stemnaam), nooit de stems of de sleutel. De uitgangen van het laatste resultaat worden in een song wel onthouden, zodat kabels blijven zitten; de stems zelf komen pas terug als je opnieuw splitst.
