@@ -635,6 +635,8 @@ Het pack **Pattern Tracker Modules** heeft 34 presets in 4 mappen: Module Classi
 
 Clip Arranger werkt als een sessieweergave. Per spoor (1 tot 16) zijn er 8 **clips**: patronen met noten en stuurlijnen. Een **scène** start de clips van alle sporen tegelijk. Daarboven staat een lineair **song-arrangement**: een lijst secties, elk met een scène, een aantal maten en een aantal herhalingen. Je kunt clips lanceren terwijl de klok loopt, of het arrangement als song afspelen.
 
+**Los van de rest van het canvas spelen.** Staat de klok van de pagina (de groene **Start**-knop) stil, dan hoef je hem niet aan te zetten. **▶ Speel deze clip**, de **▶** bij een scène en de **▶** bij een clip in het raster laten de Clip Arranger op zijn **eigen klok** lopen, met het tempo en de swing van de pagina. Alleen deze clip of scène speelt, en de lijn in de editor loopt mee (bij een lange clip volgt de weergave de lijn naar de volgende pagina). Alle andere apparaten blijven stil. **■ Stop** stopt de eigen klok. Druk je op **Start** van de pagina, dan neemt die klok het over en speelt alles mee.
+
 ![De kaart van Clip Arranger](../images/nl/sequencers/clip-arranger.png)
 
 #### De regelaars

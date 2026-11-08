@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.1 — Eigen klok: staat de klok van de pagina stil, dan spelen "Speel deze clip", een scène starten (▶) en een clip starten (▶ in het raster) toch, los van de rest van het canvas; het apparaat loopt dan op zijn eigen klok (tempo en swing van de pagina). Start de pagina de klok, dan neemt die het over. Nieuwe knop "■ Stop" stopt de eigen klok. Geen contractwijziging.
 // 1.22.0 — Patchkamer contract v1.24: klembord, scènes met meerdere sporen. `clipInfo()` meldt nu ook `multi` en `tracks` (alle sporen met hun soort: toetsen en drone `notes`, drums `drums`), `getClip({ kind: 'multi' })` geeft de scène (de gekozen clip van elk spoor, de kolom `selectedClip`) en `setClip` neemt een multi-clip: elk toegewezen spoor krijgt zijn clip op die plaats (naam, CC-lanes en auto-lijnen blijven, of komen via `native` exact terug), in één Undo-stap; sporen van een andere soort of zonder clip blijven staan. De gewone clip van het gekozen spoor, `getState`, presets en het geluid zijn gelijk aan 1.21.0.
 // 1.21.0 — Patchkamer contract v1.21: instellingen opnemen en afspelen. Nieuw: per clip `auto` (hoogstens 32 lijnen `{ id, points: [{ step, value }] }`, value 0 … 1, een waarde blijft staan tot het volgende punt), in de state `automation` (`sequencer` = exact zoals opgenomen, de modulatie op die regelaars wordt genegeerd; `modulators` = de lijn is de basisstand) en `recordSettings` (werkstand). Met Opname aan en de klok lopend schrijft elke draai aan het aangesloten apparaat (of beweging van een modulator) een punt in de gekozen clip van het gekozen spoor; noten, drums en akkoorden blijven ongemoeid. Afspelen zet de regelaars per zestiende met `host.setParam`. De weergave Instellingen onder de CC-lanes toont een lijn per regelaar. Een song zonder lijnen geeft exact dezelfde gebeurtenissen als 1.17.0 (58 presets, 42246 gebeurtenissen, 0 verschillen).
 // 1.17.0 — Patchkamer contract v1.17: klembord voor clips. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, dus 192 per maat). Het tracktype bepaalt de soort: toetsen en drone zijn `notes`, drums is `drums` (de banen zijn de rijen van het spoor, ook die van een aangesloten apparaat met klanknamen). Plakken vervangt de noten van de gekozen clip en zet lengte (hele maten), raster en clipswing; naam, CC-lanes en de rest van de compositie blijven staan; de noot-nummers worden opnieuw uitgedeeld; de grens van 4096 noten geldt; Undo en Redo werken. Een clip uit dit apparaat komt via `native` verliesvrij terug (ook CC-lanes). Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.0.
@@ -51,7 +52,7 @@ const EN = {
   'SCÈNE': 'SCENE', 'Patch → track': 'Patch → track', 'Track stoppen op volgende maat': 'Stop track at next bar',
   'Start scène {0}': 'Start scene {0}', 'Start track {0} clip {1}': 'Start track {0} clip {1}',
   '{0} maten · {1} noten · {2} CC-lanes': '{0} bars · {1} notes · {2} CC lanes', '{0}m · {1} events': '{0}b · {1} events',
-  '01 · CLIPMATRIX': '01 · CLIP MATRIX',
+  '01 · CLIPMATRIX': '01 · CLIP MATRIX', '■ Stop': '■ Stop', 'Eigen klok: de rest van het canvas speelt niet mee': 'Own clock: the rest of the canvas does not play along',
   '▶ lanceert op de volgende maat · clipnaam opent de editor · M/S werkt op events · lege clips sturen geen noten': '▶ launches on the next bar · clip name opens the editor · M/S act on events · empty clips send no notes',
   '02 · TRACK {0} — {1}': '02 · TRACK {0} — {1}', 'TRACKNAAM': 'TRACK NAME', 'DOELAPPARAAT (LABEL)': 'TARGET DEVICE (LABEL)', 'TRACKTYPE': 'TRACK TYPE',
   'Toetsen / melodie': 'Keys / melody', 'Drumcomputer': 'Drum machine', 'Drone / pad / ambient': 'Drone / pad / ambient', 'KLEUR': 'COLOUR', 'Kleur {0}': 'Colour {0}',
@@ -163,7 +164,7 @@ const frameLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.cliparranger', name: 'Clip Arranger', version: '1.22.0', kind: 'utility', category: 'sequencer', ui: { width: 1340, minWidth: 560, jacks: true }, ports: PORTS,
+  id: 'nl.patchkamer.cliparranger', name: 'Clip Arranger', version: '1.22.1', kind: 'utility', category: 'sequencer', ui: { width: 1340, minWidth: 560, jacks: true }, ports: PORTS,
   i18n: { nl: { ports: Object.assign({ input: 'MIDI / opname', tracks: 'Sporen' }, ...Array.from({ length: 16 }, (_, i) => ({ ['track' + (i + 1)]: 'Track ' + (i + 1) }))) } },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.split('{' + i + '}').join(v); }); return t; };
@@ -205,8 +206,16 @@ export default {
     function totalSteps() { return state.arrangement.reduce((sum, a) => sum + a.bars * 16 * a.repeats, 0); }
     function locate(tick) { const total = totalSteps(); if (!state.songLoop && tick >= total) return null; let at = ((tick % total) + total) % total, start = 0; for (let i = 0; i < state.arrangement.length; i++) { const a = state.arrangement[i], len = a.bars * 16 * a.repeats; if (at < start + len) return { index: i, scene: a.scene, local: (at - start) % (a.bars * 16), remaining: a.bars * 16 - (at - start) % (a.bars * 16), start, total }; start += len; } return null; }
     function sectionStart(index) { return state.arrangement.slice(0, index).reduce((n, a) => n + a.bars * 16 * a.repeats, 0); }
-    function launchScene(sc) { soloRun = null; if (state.mode !== 'session') change(() => { state.mode = 'session'; }); if (playing) { queueScene = sc; queueClips.clear(); } else { state.tracks.forEach(t => t.liveClip = sc); reset(); } render(); }
-    function launchClip(ti, ci) { soloRun = null; if (state.mode !== 'session') change(() => { state.mode = 'session'; }); if (playing) queueClips.set(ti, ci); else { state.tracks[ti].liveClip = ci; reset(); } render(); }
+    // ---- eigen klok: staat de klok van de pagina stil, dan loopt dit apparaat zelf (alleen na een klik of pad) zodat een clip of scène los van de rest speelt ----
+    let ownRun = null;
+    function ownTick() { const o = ownRun; if (!o || dead) return; const bpm = lim(host.bpm, 40, 200, 120), sd = 60 / bpm / 4, sw = lim(host.swing, 0, .5, 0);
+      while (o.nextT < ctx.currentTime + .1) { const step = o.pos % 16, time = o.nextT + (step % 2 ? sd * sw : 0); try { schedule({ step, bar: Math.floor(o.pos / 16), time: Math.max(time, ctx.currentTime + .001), stepDur: sd, bpm, swing: sw }); } catch (e) { error = tx('Sequencer: {0}', e?.message || e); } o.pos++; o.nextT += sd; }
+      o.timer = setTimeout(ownTick, 25); }
+    function ownStart() { if (dead || playing || ownRun) return; try { if (ctx.state === 'suspended') ctx.resume(); } catch (e) { /* de eerste klik hierna lukt het wel */ }
+      playing = true; recRun = null; autoRun = null; reset(); ownRun = { pos: 0, nextT: ctx.currentTime + .05, timer: 0 }; syncAuto(); ownTick(); }
+    function ownStop(quiet) { if (!ownRun) return; clearTimeout(ownRun.timer); ownRun = null; playing = false; recRun = null; autoRun = null; soloRun = null; reset(); syncAuto(); if (!quiet) render(); }
+    function launchScene(sc) { soloRun = null; if (state.mode !== 'session') change(() => { state.mode = 'session'; }); if (playing) { queueScene = sc; queueClips.clear(); } else { state.tracks.forEach(t => t.liveClip = sc); reset(); ownStart(); } render(); }
+    function launchClip(ti, ci) { soloRun = null; if (state.mode !== 'session') change(() => { state.mode = 'session'; }); if (playing) queueClips.set(ti, ci); else { state.tracks[ti].liveClip = ci; reset(); ownStart(); } render(); }
     function stopTrack(ti) { launchClip(ti, -1); }
     function readCC(a, step) { if (!a.points.length) return null; let left = null, right = null; for (const p of a.points) { if (p.step <= step) left = p; else { right = p; break; } } if (!left) return null; if (a.shape === 'hold' || !right || right.step === left.step) return left.value; return left.value + (right.value - left.value) * (step - left.step) / (right.step - left.step); }
     // ---- instellingen opnemen en afspelen (contract v1.21, §13f) ----
@@ -291,8 +300,8 @@ export default {
     function addNote(step, n, row) { const c = currentClip(); if (c.notes.length >= MAXNOTES) return; change(() => { const z = note(nextId(c), step, n, state.drawLength, state.drawVelocity, row); z.prob = state.drawProbability; z.ratchet = state.drawRatchet; c.notes.push(z); state.selectedNote = z.id; }); }
     function selected() { return currentClip().notes.find(n => n.id === state.selectedNote); }
     // 'Speel deze clip': de gekozen clip van het gekozen spoor loopt op zijn eigen lengte, los van scènes en song; start op de volgende maat (meteen als de klok stilstaat)
-    function playClip() { if (dead) return; soloRun = { ti: state.selectedTrack, ci: state.selectedClip, origin: null, now: !playing }; queueScene = null; queueClips.clear(); }
-    function stopClip() { soloRun = null; }
+    function playClip() { if (dead) return; soloRun = { ti: state.selectedTrack, ci: state.selectedClip, origin: null, now: !playing }; queueScene = null; queueClips.clear(); ownStart(); }
+    function stopClip() { soloRun = null; if (ownRun) ownStop(true); }
     function copyClip() { clipboard = clone(currentClip()); }
     function pasteClip() { if (clipboard) change(() => { currentTrack().clips[state.selectedClip] = clone(clipboard); state.selectedNote = -1; }); }
     function setTrackCount(n) { releaseLive(); change(() => { while (state.tracks.length < n) state.tracks.push(track(state.tracks.length)); state.tracks.length = n; state.selectedTrack = Math.min(state.selectedTrack, n - 1); reset(); }); }
@@ -411,7 +420,7 @@ export default {
     }
     function clipOne(t, c) {
       const kind = clipKind(t), drums = kind === 'drums', evs = eventsOf(t, c);
-      const clip = { format: 'patchkamer-clip', formatVersion: 1, kind, name: String(c.name).slice(0, 40), length: c.bars * 192, grid: c.grid, source: { device: CLIP_ID, name: 'Clip Arranger', version: '1.22.0', trackType: t.type, scheme: drums && !defaultRows(t) ? 'device' : 'gm' } };
+      const clip = { format: 'patchkamer-clip', formatVersion: 1, kind, name: String(c.name).slice(0, 40), length: c.bars * 192, grid: c.grid, source: { device: CLIP_ID, name: 'Clip Arranger', version: '1.22.1', trackType: t.type, scheme: drums && !defaultRows(t) ? 'device' : 'gm' } };
       if (c.swing > 0) clip.swing = c.swing;
       const extra = (o, e) => { if (e.prob !== 1) o.prob = e.prob; if (e.ratchet !== 1) o.ratchet = e.ratchet; return o; };
       if (drums) { clip.lanes = laneList(t); clip.hits = evs.map(e => extra({ t: e.t, lane: e.row, vel: e.vel }, e)); }
@@ -424,7 +433,7 @@ export default {
         if (dead || !state.tracks.length) return null;
         if (o && o.kind === 'multi') {
           const ci = state.selectedClip, tracks = state.tracks.map((t, i) => ({ slot: i, name: trackName(i).slice(0, 40), kind: clipKind(t), role: t.type, clip: clipOne(t, t.clips[ci]) }));
-          return clone({ format: 'patchkamer-clip', formatVersion: 1, kind: 'multi', name: sceneName(ci).slice(0, 40), length: Math.max(...tracks.map(t => t.clip.length)), grid: 16, source: { device: CLIP_ID, name: 'Clip Arranger', version: '1.22.0', scheme: 'gm' }, tracks });
+          return clone({ format: 'patchkamer-clip', formatVersion: 1, kind: 'multi', name: sceneName(ci).slice(0, 40), length: Math.max(...tracks.map(t => t.clip.length)), grid: 16, source: { device: CLIP_ID, name: 'Clip Arranger', version: '1.22.1', scheme: 'gm' }, tracks });
         }
         return clone(clipOne(currentTrack(), currentClip()));
       } catch (e) { return null; }
@@ -501,7 +510,7 @@ export default {
       // klembord (contract v1.17): de gekozen clip van het gekozen spoor kopiëren en plakken
       clipInfo() { return clipInfo(); }, getClip(o) { return getClip(o); }, setClip(clip) { return setClip(clip); },
       onStep(info) { try { schedule(info); } catch (e) { error = tx('Sequencer: {0}', e?.message || e); } },
-      onTransport(info) { if (dead) return; const cue = seek; playing = !!info?.playing; recRun = null; autoRun = null; reset(); if (playing) seek = cue; syncAuto(); },
+      onTransport(info) { if (dead) return; if (ownRun) { clearTimeout(ownRun.timer); ownRun = null; } const cue = seek; playing = !!info?.playing; recRun = null; autoRun = null; reset(); if (playing) seek = cue; syncAuto(); },
       onEvent(port, ev) {
         try {
           if (dead || port !== 'input' || !ev || typeof ev !== 'object') return; const type = ev.type, time = timeOf(ev), t = currentTrack();
@@ -521,8 +530,8 @@ export default {
       getPreset() { const p = clone(state); PRESET_SKIP.forEach(k => delete p[k]); return p; },
       setPreset(p) { if (dead) return; const keep = {}; PRESET_SKIP.forEach(k => keep[k] = state[k]); self.setState({ ...(p && typeof p === 'object' ? p : {}), ...keep }); },
       getState() { return clone(state); },
-      setState(s) { if (dead) return; releaseLive(); soloRun = null; recRun = null; autoRun = null; state = sanitize(s && typeof s === 'object' ? s : {}); history = []; future = []; namesSig = ''; refreshTargets(); reset(); render(); },
-      destroy() { if (dead) return; releaseLive(); soloRun = null; recRun = null; autoRun = null; dead = true; playing = false; autoRelease(); self.unmount(); pending = []; queueClips.clear(); live.clear(); history = []; future = []; clipboard = null; }
+      setState(s) { if (dead) return; ownStop(true); releaseLive(); soloRun = null; recRun = null; autoRun = null; state = sanitize(s && typeof s === 'object' ? s : {}); history = []; future = []; namesSig = ''; refreshTargets(); reset(); render(); },
+      destroy() { if (dead) return; if (ownRun) clearTimeout(ownRun.timer); ownRun = null; releaseLive(); soloRun = null; recRun = null; autoRun = null; dead = true; playing = false; autoRelease(); self.unmount(); pending = []; queueClips.clear(); live.clear(); history = []; future = []; clipboard = null; }
     };
     self = instance;
     // ---- UI ----
@@ -599,6 +608,7 @@ export default {
       const play = el('div', sec, undefined, 'toolbar'); el('div', play, tx('CLIP SPELEN EN OPNEMEN'), 'kicker');
       btn(play, tx('▶ Speel deze clip'), () => { playClip(); render(); }, soloRun ? 'active' : '');
       btn(play, tx('■ Stop clip'), () => { stopClip(); render(); }).disabled = !soloRun;
+      btn(play, tx('■ Stop'), () => ownStop()).disabled = !ownRun; if (ownRun) el('span', play, tx('Eigen klok: de rest van het canvas speelt niet mee'), 'small');
       btn(play, tx('● Opname'), () => { state.record = !state.record; recRun = null; autoRun = null; render(); }, state.record ? 'active' : '').setAttribute('aria-pressed', String(state.record));
       sel(play, tx('OPNAME'), [['overdub', tx('Aanvullen')], ['replace', tx('Overschrijven')]], state.recordMode, v => { state.recordMode = v === 'replace' ? 'replace' : 'overdub'; recRun = null; autoRun = null; render(); });
       if (soloRun) el('span', play, tx('Clip speelt los van scènes en song'), 'small');
@@ -716,7 +726,8 @@ export default {
       viewRefs.slots?.forEach(({ el, ti, ci }) => { el.classList.toggle('running', playing && state.armed && visual?.clips[ti] === ci); el.classList.toggle('queued', queueScene === ci || queueClips.get(ti) === ci); });
       viewRefs.scenes?.forEach((el, i) => { el.classList.toggle('running', playing && state.armed && visual?.clips.length > 0 && visual.clips.every(c => c === i)); el.classList.toggle('queued', queueScene === i); });
       viewRefs.song?.forEach((el, i) => el.classList.toggle('running', playing && state.mode === 'song' && visual?.section === i));
-      const p = viewRefs.playline; if (p) { const local = visual?.local[state.selectedTrack], visible = playing && state.armed && visual?.clips[state.selectedTrack] === state.selectedClip && local >= p.offset && local < p.offset + p.cols; p.el.style.display = visible ? 'block' : 'none'; if (visible) p.el.style.left = (local - p.offset) / p.cols * 100 + '%'; }
+      const p = viewRefs.playline; if (p && soloRun && playing && state.armed && visual?.clips[state.selectedTrack] === state.selectedClip) { const lc = visual?.local[state.selectedTrack]; if (Number.isFinite(lc) && lc >= 0 && (lc < p.offset || lc >= p.offset + p.cols)) { const pg = Math.floor(lc / state.zoom); if (pg !== state.editPage) { state.editPage = pg; render(); return; } } }   // één clip: de weergave volgt de lijn naar de volgende pagina
+      if (p) { const local = visual?.local[state.selectedTrack], visible = playing && state.armed && visual?.clips[state.selectedTrack] === state.selectedClip && local >= p.offset && local < p.offset + p.cols; p.el.style.display = visible ? 'block' : 'none'; if (visible) p.el.style.left = (local - p.offset) / p.cols * 100 + '%'; }
     }
     return self;
   }

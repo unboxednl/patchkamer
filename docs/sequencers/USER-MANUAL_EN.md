@@ -633,6 +633,8 @@ The pack **Pattern Tracker Modules** has 34 presets in 4 folders: Module Classic
 
 Clip Arranger works like a session view. For each track (1 to 16) there are 8 **clips**: patterns with notes and control lanes. A **scene** starts the clips of all tracks together. On top of that is a linear **song arrangement**: a list of sections, each with a scene, a number of bars and a number of repeats. You can launch clips while the clock runs, or play the arrangement as a song.
 
+**Playing apart from the rest of the canvas.** If the page clock (the green **Start** button) is stopped, you do not need to turn it on. **▶ Play this clip**, the **▶** next to a scene and the **▶** on a clip in the grid make the Clip Arranger run on its **own clock**, at the tempo and swing of the page. Only this clip or scene plays, and the line in the editor moves along (for a long clip the view follows the line to the next page). All other devices stay silent. **■ Stop** stops the own clock. If you press the page's **Start**, that clock takes over and everything plays along.
+
 ![The Clip Arranger card](../images/en/sequencers/clip-arranger.png)
 
 #### The controls
