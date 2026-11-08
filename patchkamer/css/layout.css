@@ -12,3 +12,10 @@
 .viewctl button{padding:3px 8px;font-size:12px;min-width:30px}
 .viewctl output{font-size:10px;color:var(--muted);min-width:4ch;text-align:center;font-variant-numeric:tabular-nums}
 .card .bar select.ver{font-size:9px;padding:1px 2px;max-width:70px}
+/* opnamelampje naast Start (rec-lamp.js) */
+.reclamp{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--fg);font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;cursor:pointer}
+.reclamp[hidden]{display:none}
+.reclamp i{width:11px;height:11px;border-radius:50%;background:var(--stop);box-shadow:0 0 7px var(--stop);animation:reclamp 2.4s ease-in-out infinite}
+.reclamp:hover,.reclamp:focus-visible{border-color:var(--stop)}
+@keyframes reclamp{0%,100%{opacity:1}50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.reclamp i{animation:none}}

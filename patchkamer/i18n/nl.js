@@ -949,6 +949,7 @@ I18N.nl={
    "m.sk_verwijderd":"Skin verwijderd: {0}",
    "m.sk_kies":"Kies",
    "m.sk_auto_uitleg":"wisselt vanzelf op kaartbreedte en schermgrootte",
+   "m.reclamp_titel":"%1 neemt op (%2). Klik om het in het midden van het scherm te zetten",
    "m.dm_kopie_mislukt":"Kopiëren mislukt: het apparaat gaf zijn instellingen niet af of is te groot",
    "m.dm_gekopieerd":"%1 gekopieerd. Plak het hier of in een andere werkruimte (menu achter het icoontje, of Ctrl+V).",
    "m.dm_niets_gekopieerd":"Er is nog geen apparaat gekopieerd",

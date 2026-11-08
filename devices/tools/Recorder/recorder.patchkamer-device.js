@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.11.2 — Patchkamer contract v1.25: meldt met host.recording(this, true/false) dat hij opneemt, zodat de host een rood lampje met de tijd naast Start toont.
+//          Op een oudere host (zonder host.recording) gebeurt er niets. Verder ongewijzigd.
 // 1.11.1 — Opslaan als WAV (16 of 24 bit) of MP3 (128–320 kbps), naast het bestaande webm/mp4. Voor WAV en MP3 wordt het ruwe geluid opgevangen met een
 //          AudioWorklet (geen compressie onderweg) en pas bij "Bewaar" omgezet; MP3 gaat in een worker, met een terugval in kleine stukken. Nieuwe
 //          state-velden format en bitrate (ontbrekend = webm en 192 kbps, dus oude presets en songs gedragen zich zoals voorheen). De MP3-encoder
@@ -120,7 +122,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.recorder',
   name: 'Recorder',
-  version: '1.11.1',
+  version: '1.11.2',
   kind: 'utility',
   category: 'tool',
   ui: { width: 340, minWidth: 260 },
@@ -138,7 +140,7 @@ export default {
     const DEF = () => ({ name: 'Recording', withTransport: false, format: 'webm', bitrate: 192 });
     const state = DEF();
     const fmtName = f => f === 'webm' ? (ext === 'mp4' ? 'MP4/AAC' : 'WebM/Opus') : f === 'wav16' ? 'WAV 16-bit' : f === 'wav24' ? 'WAV 24-bit' : 'MP3';
-    let rec = null, cap = null, chunks = [], t0 = 0, takes = [], el = null, f = {}, stopDraw = null, dead = false, n = 0, lastW = '', lastT = '';
+    let lamp = false, rec = null, cap = null, chunks = [], t0 = 0, takes = [], el = null, f = {}, stopDraw = null, dead = false, n = 0, lastW = '', lastT = '';
     // opvang voor WAV en MP3 (AudioWorklet): wordt geladen terwijl je werkt; tot dan zijn alleen de gecomprimeerde formaten bruikbaar
     let node = null, pcmReady = false;
     const data = new Uint8Array(512);
@@ -189,8 +191,9 @@ export default {
     function msg(t) { if (f.msg) f.msg.textContent = t; }
     const sizeOf = tk => tk.pcm ? (tk.fmt === 'mp3' ? tk.kbps * 125 * tk.dur : tk.pcm.frames * 2 * (tk.fmt === 'wav24' ? 3 : 2)) : tk.blob.size;
     function playBlob(tk) { const b = tk.pcm ? wavBlob(tk.pcm, 16) : tk.blob; const a = new Audio(URL.createObjectURL(b)); a.onended = () => URL.revokeObjectURL(a.src); a.play().catch(() => {}); }
+    function lampSync() { const on = !!(rec || cap); if (on === lamp) return; lamp = on; if (host && typeof host.recording === 'function') { try { host.recording(self, on); } catch (e) { /* de lamp is bijzaak */ } } }
     function paint() {
-      if (!el) return; const on = !!(rec || cap);
+      lampSync(); if (!el) return; const on = !!(rec || cap);
       f.btn.textContent = on ? T.stop : T.rec; f.btn.style.background = on ? 'var(--stop,#e4574a)' : ''; f.btn.style.color = on ? '#140707' : ''; f.btn.disabled = false;
       f.fmt.disabled = on; f.kb.disabled = on; f.fmt.value = state.format; f.kb.value = String(state.bitrate); f.kbRow.style.display = state.format === 'mp3' ? '' : 'none';
       f.list.innerHTML = '';
@@ -242,7 +245,7 @@ export default {
         state.bitrate = typeof s.bitrate === 'number' && isFinite(s.bitrate) ? nearest(s.bitrate, BITRATES) : d.bitrate;
         if (f.name) { f.name.value = state.name; f.wt.checked = state.withTransport; f.fmt.value = state.format; f.kb.value = String(state.bitrate); f.kbRow.style.display = state.format === 'mp3' ? '' : 'none'; }
       },
-      destroy() { if (dead) return; dead = true; stopLoop(); if (rec && rec.state !== 'inactive') rec.stop(); cap = null; try { if (node) { node.port.onmessage = null; node.port.postMessage({ t: 'stop' }); node.disconnect(); } inG.disconnect(); out.disconnect(); } catch (e) {} },
+      destroy() { if (dead) return; dead = true; stopLoop(); if (rec && rec.state !== 'inactive') rec.stop(); cap = null; lampSync(); try { if (node) { node.port.onmessage = null; node.port.postMessage({ t: 'stop' }); node.disconnect(); } inG.disconnect(); out.disconnect(); } catch (e) {} },
     };
     return self;
   },

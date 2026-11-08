@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.24
+// validate-instrument.mjs — Patchkamer contract v1.25
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -20,6 +20,7 @@
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
+// v1.25: opnamelampje: host.recording(inst, aan) bestaat op de nep-host en doet niets
 // v1.24: klembord, scènes met meerdere sporen: clipInfo().copy/paste mogen 'multi' bevatten, clipInfo().tracks beschrijft de doelsporen, getClip({ kind: 'multi' }) geeft kind 'multi' met tracks (1 tot 64, elk { slot, kind, clip }), setClip(multi) rondreis en rommel-multi's.
 // v1.21: instellingen opnemen en afspelen: host.watchParams, host.setParam, host.lockParams en host.paramsOf (voor sequencers); de nep-host kent ze en geeft false, de validator controleert er verder niets van.
 // v1.23: stems splitsen: host.stems(inst, actie, opts) (services / split / settings); de nep-host geeft [] bij services en weigert split; een aanroep van split tijdens de test is een fout (een netwerkaanroep start alleen op een klik).
@@ -643,6 +644,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   // v1.13
   eventBundleChanged(inst, port) { if (!PL(curPorts || d.ports, 'multiEventOut').some(p => p.id === port)) modBad = vt('v.host_eventbundlechanged_is_geen_multieventout',port); },
   controls() { return []; }, setControl() { return false; },
+  // v1.25
+  recording() { return true; },
   // v1.23
   stems(inst, action) { if (action === 'services') return []; if (action === 'split') stemsCalls++; return action === 'settings' ? true : Promise.reject(Object.assign(new Error('test'), { code: 'network' })); },
   // v1.21

@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.24 for building agents
+# Patchkamer — Instrument contract v1.25 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -33,6 +33,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.22 | Pads and small screen: `host.ui.pad(parent, label, opts)` has the host draw a push button (momentary or on/off, with `flash()` for a hit indication), `host.ui.display(parent, label, opts)` a choice list that a skin can show as a small screen with < > and [ok], and `host.ui.steps` gets a 5th argument `{ id, group, role, color }`; your own buttons take part with `data-pk-role="pad"` or `"step"`. Pads, steps and choices are in the register (`pad`, `steps`); the validator knows the new calls and reports a colour that is not `#rrggbb` as an error (§12f) |
 | v1.23 | Stem splitting: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` has the host split a track into stems with an online service (queue, unpack the zip, decode) and returns AudioBuffers; keys are kept only in the user's browser; the host asks for confirmation with the cost; a device sets its number of outputs with `host.setPorts` (§13g) |
 | v1.24 | Clipboard, scenes with several tracks: the clip kind `multi` (`tracks`, each a plain clip), `clipInfo().tracks`, `getClip({ kind: 'multi' })`; the host assigns tracks by kind and in order, leaves out and reports what does not fit, and copies all tracks with Shift-click on Copy; the validator knows `multi` (§13d) |
+| v1.25 | Recording lamp: `host.recording(this, on)` makes the host show a red, slowly blinking lamp with the recording time (mm:ss) next to Start; clicking it moves the canvas so the device sits in the middle of the screen. Optional; an old host does not have the function. |
 
 ---
 
@@ -1092,6 +1093,20 @@ A device may not use the network (§15). A device that wants an online service t
 
 What the host does not do: it does not listen to the result, does not settle costs and does not guarantee that a service is reachable or that the browser allows the call (CORS). A service that does not allow it gives the error `network`.
 
+## 13h. Recording lamp (v1.25)
+
+A device that records (the Recorder) tells the host, so the user also sees that a recording is running when the device is off screen.
+
+| Call | What |
+|---|---|
+| `host.recording(this, true)` | This device is recording now. The host shows a red, slowly blinking lamp next to the Start button, with the time since this call as `mm:ss`. Returns `true`, or `false` if the caller is not a device on the floor. |
+| `host.recording(this, false)` | The recording has ended: the lamp disappears (unless another device is recording). |
+
+- **Click.** A click on the lamp or the time moves the whole canvas so the device sits in the middle of the screen. The device itself and the zoom stay as they are.
+- **More than one.** If more than one device is recording, the host shows the oldest.
+- **Cleaning up.** Always report the end (also in `destroy`). A device that leaves the floor drops out by itself in any case.
+- **Old host.** Check `typeof host.recording === 'function'`; without it, do nothing.
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -1138,6 +1153,7 @@ What the host does not do: it does not listen to the result, does not settle cos
 | `host.ui.steps(…, opts)` | v1.22 | 5th argument `{ id, group, role, color }` for a row of step buttons (§12f) |
 | `data-pk-role="pad"` / `"step"` | v1.22 | Your own buttons take part with shape, colour, lamp and size (§12f) |
 | `host.stems(this, action, opts)` | v1.23 | Have an online service split a track into stems: `'services'`, `'split'` (promise with AudioBuffers), `'send'` (give sound to another device) or `'settings'` (§13g) |
+| `host.recording(this, on)` | v1.25 | Report that this device is recording: the host shows a red lamp with the time next to Start (§13h). |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -1206,6 +1222,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 19. **Recording settings (v1.21, §13f)**: the fake host knows `host.watchParams`, `host.setParam`, `host.lockParams` and `host.paramsOf` and returns `false` (`[]` for `paramsOf`); the validator checks nothing else about them (test a sequencer that uses them in the host).
 20. **Pads and small screen (v1.22, §12f)**: the fake host knows `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` and the 5th argument of `host.ui.steps`. A `color` that is not `#rrggbb` throws and is therefore an error. Only a warning (never an error) for: a duplicate pad id, an invalid id or group, options that are not an object, an invalid `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, a momentary pad with neither `onpress` nor `onchange`, a display with invalid `items`/`kind`/`wrap`/`searchAt` or a `value` outside `items`, and a 5th argument of `steps` that is not an object. A display counts in the check that `setState` updates the choices; pads and steps do not count in the coverage of `params()`. `--controls` shows them with role `pad`, `step` and `select`.
 21. **Stems (v1.23, §13g)**: the fake host has `host.stems(this, action, opts)`: `'services'` returns `[]`, `'split'` rejects. A call of `'split'` during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call starts only on a click by the user.
+22. **Recording lamp (v1.25, §13h)**: the fake host knows `host.recording(this, on)` and ignores the call.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1236,7 +1253,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 21. Meters (v1.18, optional): whoever shows a level uses `host.ui.meter` (with `source` for an existing `AnalyserNode`, otherwise with `set()`), with `id` and `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` as a fallback to the own drawing, no damping of your own, the meter's `destroy()` in the device's `destroy()`, and a layout that lets the meter grow (§12e).
 22. Pads and small screen (v1.22, optional): whoever shows a push button or a choice uses `host.ui.pad`, `host.ui.display` or `host.ui.steps` with `{ id, group, role, color }` (colour always `#rrggbb`), with `if (!host.ui || typeof host.ui.pad !== 'function')` as the fallback to the own button; `set()` and `flash()` call no handlers; the model of a choice stays the `<select>` and `setState` sets the value; `destroy()` of the pad and choice in the device's `destroy()` (§12f).
 23. Stems (v1.23, optional): `split` only on a click; `typeof host.stems === 'function'` checked; visibly said that the sound goes to an online service, costs money and needs rights; cancel via `signal`; text per error code in `host.lang`; stems and buffers not in `getState()`/`getPreset()`; after splitting `host.setPorts` with the new AudioNodes already in `outputs` (§13g).
-24. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+24. Recording lamp (v1.25, optional): `host.recording(this, true/false)` at the start and end of a recording and in `destroy`; `typeof host.recording === 'function'` checked.
+25. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 

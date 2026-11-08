@@ -947,6 +947,7 @@ PK.I18N.en={
    "m.sk_verwijderd":"Skin removed: {0}",
    "m.sk_kies":"Choose",
    "m.sk_auto_uitleg":"switches by itself on card width and screen size",
+   "m.reclamp_titel":"%1 is recording (%2). Click to bring it to the middle of the screen",
    "m.dm_kopie_mislukt":"Copy failed: the device did not return its settings, or it is too large",
    "m.dm_gekopieerd":"Copied %1. Paste it here or in another workspace (menu behind the icon, or Shift+Ctrl+V).",
    "m.dm_niets_gekopieerd":"No device has been copied yet",

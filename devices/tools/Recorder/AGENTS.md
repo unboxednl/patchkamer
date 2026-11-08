@@ -13,7 +13,7 @@ Een opnemer: neemt op wat er binnenkomt (bijvoorbeeld de mix) en laat het ongewi
 | Naam | `Recorder` in alle talen; alleen de poortnaam `Door` (Engels `Through`) hangt van de taal af (via `i18n`) |
 | Soort | `utility`: Recorder krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in` (In), audio-uitgang `out` (Door / Through); geen events of sturing |
-| Contract | v1.11 |
+| Contract | v1.25 (alleen voor `host.recording`; de rest is v1.11) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Opname, `nl.patchkamer.opname`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De standaardnaam van een opname is nu `Recording` (was `Opname`).
@@ -65,3 +65,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Rol in een song: opnemer die het signaal ongewijzigd doorgeeft (`in` naar `out`). Zet hem op de mix om een opname te maken; hij verandert niets aan het geluid.
+
+## Opnamelampje (v1.25)
+
+Bij het begin van een opname meldt het apparaat `host.recording(this, true)` en bij het einde (ook in `destroy`) `host.recording(this, false)`; dat gebeurt in `paint()` via `lampSync()`. De host toont dan een rood lampje met de tijd naast Start en schuift bij een klik het canvas naar dit apparaat (contract §13h). Op een host zonder de functie gebeurt er niets. De tijd telt de host zelf, vanaf de melding.

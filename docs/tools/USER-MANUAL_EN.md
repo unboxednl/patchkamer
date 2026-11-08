@@ -138,6 +138,7 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
   - **WAV 16-bit** and **WAV 24-bit**: lossless.
   - **MP3**: small files. A **Bitrate** list appears with 128, 192, 256 or 320 kbps (start 192).
 - **● Record** and **■ Stop** control the recording. A level meter and the time show what is happening.
+- **Red lamp next to Start.** While a recording runs, a slowly blinking red lamp with the time (mm:ss) appears next to the **Start** button of the page, wherever the Recorder is on the canvas. Click the lamp or the time and the whole canvas slides so the Recorder sits in the middle of the screen. The Recorder itself does not move and the zoom stays.
 - **Record with Start/Stop of the clock** makes the recording follow Start and Stop of the clock.
 - Every take appears in a list with its length, format and size, with a button to listen (**▶**) and **Save**. Takes stay in memory until you close the page. **Save** gives you the audio file.
 

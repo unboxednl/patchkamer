@@ -39,6 +39,7 @@
   <input class="wsname" id="wsName" value="Naamloos" maxlength="60" spellcheck="false" aria-label="naam van je compositie" title="naam van je compositie" data-i18n-title="attr.naam_van_je_compositie" data-i18n-aria="attr.naam_van_je_compositie">
   <div class="transport">
     <button class="go" id="play" data-i18n="ui.start">Start</button>
+    <button class="reclamp" id="recLamp" type="button" hidden><i aria-hidden="true"></i><span class="t">00:00</span></button>
     <span class="tp tpbpm"><span data-i18n="ui.bpm">BPM</span> <input type="number" id="bpm" min="40" max="200" value="126"></span>
     <span class="tp"><span data-i18n="ui.swing">Swing</span> <input type="range" id="swing" min="0" max="0.5" step="0.01" value="0.08" style="width:80px"></span>
     <button class="small on" id="libToggle" title="bibliotheek tonen of verbergen (Alt+B)" data-i18n-title="attr.bibliotheek_tonen_of_verbergen_b" data-i18n="ui.bibliotheek">Bibliotheek</button>
@@ -293,6 +294,7 @@
 <script src="js/skins.js"></script>
 <script src="js/skins-ui.js"></script>
 <script src="js/device-menu.js"></script>
+<script src="js/rec-lamp.js"></script>
 <script src="js/skins-design.js"></script>
 <script src="js/skin-editor-model.js"></script>
 <script src="js/skin-editor-fields.js"></script>

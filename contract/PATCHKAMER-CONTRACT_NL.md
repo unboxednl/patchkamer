@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.24 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.25 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -33,6 +33,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.22 | Pads en schermpje: `host.ui.pad(parent, label, opts)` laat de host een drukknop tekenen (momentary of aan/uit, met `flash()` voor een raakaanduiding), `host.ui.display(parent, label, opts)` een keuzelijst die een skin als schermpje met < > en [ok] kan tonen, en `host.ui.steps` krijgt een 5e argument `{ id, group, role, color }`; eigen knoppen doen mee met `data-pk-role="pad"` of `"step"`. Pads, stappen en keuzes staan in het register (`pad`, `steps`); de validator kent de nieuwe aanroepen en meldt een kleur die geen `#rrggbb` is als fout (§12f) |
 | v1.23 | Stems splitsen: `host.stems(this, 'services' / 'split' / 'send' / 'settings', opts)` laat de host een nummer door een dienst op internet in stems splitsen (wachtrij, zip uitpakken, decoderen) en geeft AudioBuffers terug; sleutels staan alleen in de browser van de gebruiker; de host vraagt bevestiging met de kosten; een apparaat zet het aantal uitgangen met `host.setPorts` (§13g) |
 | v1.24 | Klembord, scènes met meerdere sporen: de clip-soort `multi` (`tracks` met per spoor een gewone clip), `clipInfo().tracks`, `getClip({ kind: 'multi' })`; de host wijst sporen toe per soort en op volgorde, laat weg en meldt wat niet past, en kopieert alle sporen met Shift-klik op Kopieer; de validator kent `multi` (§13d) |
+| v1.25 | Opnamelampje: `host.recording(this, aan)` laat de host naast Start een rood, langzaam knipperend lampje met de opnametijd (mm:ss) tonen; een klik erop schuift het canvas zodat het apparaat midden in beeld staat. Optioneel; een oude host heeft de functie niet. |
 
 ---
 
@@ -1092,6 +1093,20 @@ Een apparaat mag geen netwerk gebruiken (§15). Een apparaat dat een nummer door
 
 Wat de host niet doet: hij hoort het resultaat niet af, rekent geen kosten af en garandeert niet dat een dienst bereikbaar is of dat de browser de aanroep toestaat (CORS). Een dienst die dat niet toestaat, geeft de fout `network`.
 
+## 13h. Opnamelampje (v1.25)
+
+Een apparaat dat opneemt (de Recorder) laat dat de host weten, zodat de gebruiker ook ziet dat er een opname loopt als het apparaat buiten beeld staat.
+
+| Aanroep | Wat |
+|---|---|
+| `host.recording(this, true)` | Dit apparaat neemt nu op. De host toont naast de knop Start een rood lampje dat langzaam knippert, met de tijd sinds deze melding als `mm:ss`. Geeft `true`, of `false` als de aanroeper geen apparaat op de vloer is. |
+| `host.recording(this, false)` | De opname is afgelopen: het lampje verdwijnt (als geen ander apparaat opneemt). |
+
+- **Klik.** Een klik op het lampje of de tijd schuift het hele canvas zodat het apparaat midden in het scherm staat. Het apparaat zelf en de zoom blijven zoals ze zijn.
+- **Meer dan één.** Neemt meer dan één apparaat op, dan toont de host het oudste.
+- **Opruimen.** Meld altijd af (ook in `destroy`). Een apparaat dat van de vloer verdwijnt, valt in elk geval vanzelf weg.
+- **Oude host.** Controleer `typeof host.recording === 'function'`; zonder die functie doe je niets.
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -1138,6 +1153,7 @@ Wat de host niet doet: hij hoort het resultaat niet af, rekent geen kosten af en
 | `host.ui.steps(…, opts)` | v1.22 | 5e argument `{ id, group, role, color }` voor een rij stapknoppen (§12f) |
 | `data-pk-role="pad"` / `"step"` | v1.22 | Eigen knoppen doen mee met vorm, kleur, ledje en maat (§12f) |
 | `host.stems(this, actie, opts)` | v1.23 | Een nummer door een dienst op internet in stems laten splitsen: `'services'`, `'split'` (belofte met AudioBuffers), `'send'` (geluid aan een ander apparaat geven) of `'settings'` (§13g) |
+| `host.recording(this, aan)` | v1.25 | Melden dat dit apparaat opneemt: de host toont een rood lampje met de tijd naast Start (§13h). |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -1207,6 +1223,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 19. **Instellingen opnemen (v1.21, §13f)**: de nep-host kent `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` en geeft `false` (`[]` bij `paramsOf`); de validator controleert er verder niets van (een sequencer die ze gebruikt, test je in de host).
 20. **Pads en schermpje (v1.22, §12f)**: de nep-host kent `host.ui.pad(parent, label, opts)`, `host.ui.display(parent, label, opts)` en het 5e argument van `host.ui.steps`. Een `color` die geen `#rrggbb` is, gooit en is dus een fout. Alleen een `let op` (nooit een fout) bij: een dubbel pad-id, een ongeldig id of groep, opties die geen object zijn, een ongeldige `mode`/`on`/`onpress`/`onrelease`/`onchange`/`text`/`title`, een momentary pad zonder `onpress` en zonder `onchange`, een display met ongeldige `items`/`kind`/`wrap`/`searchAt` of een `value` buiten `items`, en een 5e argument van `steps` dat geen object is. Een display telt mee in de controle dat `setState` de keuzes bijwerkt; pads en stappen tellen niet mee in de dekking van `params()`. `--controls` toont ze met rol `pad`, `step` en `select`.
 21. **Stems (v1.23, §13g)**: de nep-host kent `host.stems(this, actie, opts)`: `'services'` geeft `[]`, `'split'` weigert. Een aanroep van `'split'` tijdens de test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` of `destroy`) is een fout: een netwerkaanroep start alleen op een klik van de gebruiker.
+22. **Opnamelampje (v1.25, §13h)**: de nep-host kent `host.recording(this, aan)` en negeert de aanroep.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1237,7 +1254,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 21. Meters (v1.18, optioneel): wie een niveau toont, gebruikt `host.ui.meter` (met `source` voor een bestaande `AnalyserNode`, anders met `set()`), met `id` en `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` als terugval op de eigen tekening, geen eigen demping, `destroy()` van de meter in `destroy()` van het apparaat, en een layout die de meter groter mag maken (§12e).
 22. Pads en schermpje (v1.22, optioneel): wie een drukknop of een keuze toont, gebruikt `host.ui.pad`, `host.ui.display` of `host.ui.steps` met `{ id, group, role, color }` (kleur altijd `#rrggbb`), met `if (!host.ui || typeof host.ui.pad !== 'function')` als terugval op de eigen knop; `set()` en `flash()` roepen geen handlers aan; het model van een keuze blijft het `<select>` en `setState` zet de waarde; `destroy()` van pad en keuze in `destroy()` van het apparaat (§12f).
 23. Stems (v1.23, optioneel): `split` alleen op een klik; `typeof host.stems === 'function'` gecontroleerd; zichtbaar gezegd dat het geluid naar een dienst op internet gaat, geld kost en rechten vraagt; annuleren via `signal`; tekst per foutcode in `host.lang`; stems en buffers niet in `getState()`/`getPreset()`; na het splitsen `host.setPorts` met de nieuwe AudioNodes al in `outputs` (§13g).
-24. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+24. Opnamelampje (v1.25, optioneel): `host.recording(this, true/false)` bij begin en einde van een opname en in `destroy`; `typeof host.recording === 'function'` gecontroleerd.
+25. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
 
 ---
 
