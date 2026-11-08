@@ -57,7 +57,7 @@ function tuExportJSON(l){ const T=libType(l); return JSON.stringify({format:T===
 async function presetsFromSource(src,list,errs){
   { const sm=list.filter(w=>/\.patchkamer-samples\.json$/i.test(w.path)); list=list.filter(w=>!/\.patchkamer-samples\.json$/i.test(w.path)); if(PK.samplesFromSource) await PK.samplesFromSource(src,sm,errs); }   // samplepacks horen bij de tab Samples
   PK.PR.libs=PK.PR.libs.filter(l=>!(l.ro&&l.src&&l.src.sid===src.sid));
-  let pdone=0; for(const w of list){ if(PK.loadNote) PK.loadNote(pdone++,list.length,String(w.path).split('/').pop()); try{ const libs=prNormalize(await w.load(),PK.wsNameOf(w.path).replace(/\.patchkamer-(presets|tunes)$/i,''));
+  let pdone=0; for(const w of list){ if(PK.loadNote) PK.loadNote(pdone++,list.length,String(w.path).split('/').pop(),src); try{ const libs=prNormalize(await w.load(),PK.wsNameOf(w.path).replace(/\.patchkamer-(presets|tunes)$/i,''));
       libs.forEach(n=>{ const lid='b:'+src.sid+':'+w.path+':'+n.device; PK.PR.libs=PK.PR.libs.filter(l=>l.lid!==lid); PK.PR.libs.push({lid,...n,ro:true,src:{sid:src.sid,label:src.label,path:w.path}}); }); }
     catch(e){ errs.push(w.path+': '+e.message); } }
   presetRefreshAll(); } PK.presetsFromSource=presetsFromSource;

@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.2.3 (2026-11-08)
+
+### Changed
+- **Start-up: load two kinds at once, and a soft fade at the end.** Libraries and remembered sources now load two at a time (the long list of devices next to the tunes, presets, skins and samples), which was about 13% faster in a test; the result is the same. The start screen then shows both kinds at once. The cables in the background no longer pull back but fade out gently, and then the screen.
+
 ## 0.2.2 (2026-11-08)
 
 ### Changed

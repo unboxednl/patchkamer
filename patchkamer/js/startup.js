@@ -28,18 +28,18 @@ function cableLayer(){
       for(const [c,q] of [[c1,p1],[c2,p2]]){ c.setAttribute('cx',q[0].toFixed(0)); c.setAttribute('cy',q[1].toFixed(0)); c.setAttribute('r','8'); }
       g.setAttribute('class','spcab'); g.style.setProperty('--c','var('+CABS[i%CABS.length]+')'); g.style.setProperty('--d',(k++*0.025).toFixed(3)+'s'); g.append(path,c1,c2); svg.appendChild(g); L.els.push(g);
       requestAnimationFrame(()=>requestAnimationFrame(()=>g.classList.add('in'))); } };
-  // alle kabels trekken zich terug, in willekeurige volgorde, binnen ruim een halve seconde
-  L.leave=()=>{ const r=rng(99); L.els.forEach(g=>{ g.style.setProperty('--o',(r()*.7).toFixed(2)+'s'); g.classList.add('out'); }); };
+  // aan het eind faden alle kabels samen rustig weg
+  L.leave=()=>{ svg.classList.add('leave'); };
   return L; }
 const COUNTS_KEY='patchkamerStartCounts', EST_DEF={dev:96,tun:42,pre:43,ski:12,sam:1};
 function startupBegin(){
-  const S={el:null,bar:null,txt:null,sub:null,ver:null,pct:null,cab:null,chips:new Map(),cur:null,seg:null,segs:[],warns:0,gone:false,frac:0,est:{...EST_DEF}};
+  const S={el:null,bar:null,txt:null,sub:null,ver:null,pct:null,cab:null,chips:new Map(),segs:new Map(),pend:{},last:'',warns:0,gone:false,est:{...EST_DEF}};
   try{ const o=JSON.parse(localStorage.getItem(COUNTS_KEY)||'null'); if(o&&typeof o==='object') for(const k of KINDS) if(Number.isFinite(o[k])&&o[k]>=0&&o[k]<=5000) S.est[k]=o[k]; }catch(e){}   // wat de vorige start laadde, als schatting voor wat nog komt
   const kindsOn=()=>KINDS.filter(k=>PK.WSA[k]&&PK.WSA[k].on);
   const something=PK.SOURCES.length>0||kindsOn().length>0;
   const room=()=>PK.$('room');
   // voortgang = geladen items (apparaten, tunes, presets, skins, samples) gedeeld door alle items; wat nog niet geteld is, schat de vorige start
-  function totals(){ let tot=0,done=0; for(const [k,c] of S.chips){ if(k==='ws') continue; const ss=S.segs.filter(x=>x.key===k), t=ss.reduce((a,x)=>a+x.total,0); tot+=t>0?t:S.est[k]; done+=ss.reduce((a,x)=>a+x.done,0); }
+  function totals(){ let tot=0,done=0; for(const [k,c] of S.chips){ if(k==='ws') continue; const ss=[...S.segs.values()].filter(x=>x.key===k), t=ss.reduce((a,x)=>a+x.total,0); tot+=t>0?t:S.est[k]; done+=ss.reduce((a,x)=>a+x.done,0); }
     return {tot:Math.max(tot,1),done}; }
   function paint(){ if(!S.el) return; const {tot,done}=totals(), p=Math.min(1,done/tot); S.bar.style.width=(p*100).toFixed(1)+'%'; S.pct.textContent=Math.round(p*100)+'%'; S.el.setAttribute('aria-valuenow',String(Math.round(p*100))); if(S.cab) S.cab.grow(Math.floor(done)); }
   function chip(key){ let c=S.chips.get(key); if(c||!S.el) return c;
@@ -61,24 +61,29 @@ function startupBegin(){
     (room()||document.body).appendChild(el); if(room()) room().classList.add('splashing');
     new Set([...kindsOn(),...PK.SOURCES.map(kindOf)]).forEach(k=>chip(k)); chip('ws'); S.txt.textContent=PK.pkt('m.su_start'); S.cab.grow(3); paint();
     fetch('version.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{ if(j&&typeof j.version==='string'&&/^[0-9A-Za-z.+-]{1,32}$/.test(j.version)&&S.ver){ S.ver.textContent=PK.pkt('m.su_versie',j.version); S.ver.hidden=false; } }).catch(()=>{}); }
-  const done=key=>{ const c=key&&S.chips.get(key); if(c&&c.e.dataset.s!=='done'){ S.segs.forEach(x=>{ if(x.key===key) x.done=x.total; }); mark(key,'done',c.total?String(c.total):''); paint(); } };
-  // een stap voor een soort (dev, tun, pre, ski, sam, ws): de vorige soort is klaar; een soort die al klaar is blijft klaar
-  S.step=(label,key,newSeg)=>{ if(!S.el) return; const c=key?chip(key):null; if(c&&c.e.dataset.s==='done') return;
-    if(S.cur&&S.cur!==key) done(S.cur); S.cur=key||null; S.frac=0; if(key&&key!=='ws'&&(newSeg||!S.seg||S.seg.key!==key)){ S.seg={key,done:0,total:0}; S.segs.push(S.seg); }
-    if(c&&c.e.dataset.s!=='act') mark(key,'act',''); S.txt.textContent=label; S.sub.textContent=''; paint(); };
-  S.note=(klaar,totaal,naam)=>{ if(!S.el||!(totaal>0)) return; S.frac=Math.min(1,klaar/totaal); const c=S.cur&&S.chips.get(S.cur); if(c){ c.total=S.segs.filter(x=>x.key===S.cur).reduce((a,x)=>a+(x===S.seg?totaal:x.total),0); c.n.textContent=(klaar+1)+'/'+totaal; }
-    if(S.seg){ S.seg.total=totaal; S.seg.done=klaar; } S.sub.textContent=PK.pkt('m.su_telt',klaar+1,totaal)+(naam?' · '+naam:''); paint(); };
+  const segsOf=k=>[...S.segs.values()].filter(x=>x.key===k);
+  const done=key=>{ const c=key&&S.chips.get(key); if(c&&c.e.dataset.s!=='done'){ segsOf(key).forEach(x=>{ x.done=x.total; }); mark(key,'done',c.total?String(c.total):''); say(); paint(); } };
+  // wat er nu geladen wordt: de soorten die bezig zijn (er kunnen er twee tegelijk zijn)
+  function say(){ if(!S.txt) return; const act=[...S.chips].filter(([k,c])=>c.e.dataset.s==='act').map(([k])=>PK.pkt('m.su_laden_'+k)); if(act.length) S.txt.textContent=act.join(' · '); }
+  // een soort is bezig (dev, tun, pre, ski, sam, ws); andere soorten blijven zoals ze zijn, want er kunnen er twee tegelijk bezig zijn
+  S.step=(label,key)=>{ if(!S.el) return; const c=key?chip(key):null; if(c&&c.e.dataset.s==='done') return; if(c&&c.e.dataset.s!=='act') mark(key,'act',''); say(); paint(); };
+  S.note=(klaar,totaal,naam,src)=>{ if(!S.el||!(totaal>0)||!src) return; const k=kindOf(src); let g=S.segs.get(src.sid); if(!g){ g={key:k,done:0,total:0}; S.segs.set(src.sid,g); } g.total=totaal; g.done=klaar;
+    const c=S.chips.get(k); if(c){ const ss=segsOf(k); c.total=ss.reduce((a,x)=>a+x.total,0); c.n.textContent=(ss.reduce((a,x)=>a+x.done,0)+1)+'/'+c.total; if(c.e.dataset.s==='wait') mark(k,'act'); }
+    S.sub.textContent=PK.pkt('m.su_telt',klaar+1,totaal)+(naam?' · '+naam:''); say(); paint(); };
   S.warn=key=>{ S.warns++; const c=key&&S.chips.get(key); if(c) c.e.dataset.w='1'; };
-  // een onthouden bron telt voor zijn soort; het vinkje komt als er geen latere bron van die soort meer is
-  S.src=src=>{ const k=kindOf(src); S.step(PK.pkt('m.su_laden_'+k),k,true); };
-  S.srcEnd=src=>{ if(!S.el) return; const k=kindOf(src), i=PK.SOURCES.indexOf(src); if(PK.SOURCES.slice(i+1).some(x=>kindOf(x)===k)) return; done(k); };
-  // de bibliotheken van Instellingen (alleen als ze aan staan); elke soort krijgt zijn vinkje zodra hij klaar is
-  S.auto=async()=>{ for(const k of kindsOn()){ S.step(PK.pkt('m.su_laden_'+k),k,true); try{ const src=await PK.wsaLoad(k,false); const st=src&&PK.SRCSTATE.get(src.sid); if(st&&st.state==='err') S.warn(k); }catch(e){ S.warn(k); } done(k); } };
+  // een lijst met hoogstens `limit` tegelijk afwerken (twee soorten parallel: de lange lijst apparaten naast de rest)
+  S.each=async(list,limit,fn)=>{ const q=[...list]; await Promise.all(Array.from({length:Math.min(limit,q.length)},async()=>{ while(q.length){ await fn(q.shift()); } })); };
+  PK.SOURCES.forEach(x=>{ const k=kindOf(x); S.pend[k]=(S.pend[k]||0)+1; });
+  // een onthouden bron telt voor zijn soort; het vinkje komt als alle bronnen van die soort klaar zijn
+  S.src=src=>{ const k=kindOf(src); S.step(PK.pkt('m.su_laden_'+k),k); };
+  S.srcEnd=src=>{ if(!S.el) return; const k=kindOf(src); if(--S.pend[k]<=0) done(k); };
+  // de bibliotheken van Instellingen (alleen als ze aan staan), twee soorten tegelijk; elke soort krijgt zijn vinkje zodra hij klaar is
+  S.auto=async()=>{ await S.each(kindsOn(),2,async k=>{ S.step(PK.pkt('m.su_laden_'+k),k); try{ const src=await PK.wsaLoad(k,false); const st=src&&PK.SRCSTATE.get(src.sid); if(st&&st.state==='err') S.warn(k); }catch(e){ S.warn(k); } done(k); }); };
   S.finish=()=>{ PK.loadNote=null; if(!S.el) return; S.chips.forEach((c,k)=>{ if(c.e.dataset.s==='act') done(k); else if(c.e.dataset.s==='wait') c.e.remove(); }); S.chips.forEach((c,k)=>{ if(!c.e.isConnected) S.chips.delete(k); });
-    try{ const o={}; for(const k of KINDS){ const t=S.segs.filter(x=>x.key===k).reduce((a,x)=>a+x.total,0); if(t>0) o[k]=t; } localStorage.setItem(COUNTS_KEY,JSON.stringify({...S.est,...o})); }catch(e){}   // voor de schatting van de volgende start
-    const {done:n}=totals(); if(S.cab) S.cab.grow(Math.floor(n)); S.cur=null; S.bar.style.width='100%'; S.pct.textContent='100%'; S.txt.textContent=S.warns?PK.pkt('m.su_klaar_let_op'):PK.pkt('m.su_klaar'); S.sub.textContent='';
-    // even laten zien dat alles is aangesloten, dan trekken de kabels zich terug en verdwijnt het scherm
-    setTimeout(()=>{ if(S.cab&&!S.gone) S.cab.leave(); },S.warns?1800:500); setTimeout(()=>S.close(),S.warns?3000:1500); };
+    try{ const o={}; for(const k of KINDS){ const t=segsOf(k).reduce((a,x)=>a+x.total,0); if(t>0) o[k]=t; } localStorage.setItem(COUNTS_KEY,JSON.stringify({...S.est,...o})); }catch(e){}   // voor de schatting van de volgende start
+    const {done:n}=totals(); if(S.cab) S.cab.grow(Math.floor(n)); S.bar.style.width='100%'; S.pct.textContent='100%'; S.txt.textContent=S.warns?PK.pkt('m.su_klaar_let_op'):PK.pkt('m.su_klaar'); S.sub.textContent='';
+    // even laten zien dat alles is aangesloten, dan faden de kabels weg en daarna het scherm
+    setTimeout(()=>{ if(S.cab&&!S.gone) S.cab.leave(); },S.warns?1800:400); setTimeout(()=>S.close(),S.warns?3000:1400); };
   S.close=()=>{ if(S.gone||!S.el) return; S.gone=true; PK.loadNote=null; document.removeEventListener('keydown',S.key); const el=S.el; el.classList.add('out'); if(room()) room().classList.remove('splashing'); setTimeout(()=>el.remove(),450); };
   if(PK.WSA_START.splash&&something){ build(); PK.loadNote=S.note; }
   return S;

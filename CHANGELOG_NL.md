@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.2.3 (2026-11-08)
+
+### Gewijzigd
+- **Opstarten: twee soorten tegelijk laden, en een zachte fade aan het eind.** Bibliotheken en onthouden bronnen laden nu met twee tegelijk (de lange lijst apparaten naast de tunes, presets, skins en samples), wat in een test ongeveer 13% sneller was; de uitkomst is gelijk. Het startscherm laat dan beide soorten tegelijk zien. De kabels op de achtergrond trekken zich niet meer terug maar faden rustig weg, en daarna het scherm.
+
 ## 0.2.2 (2026-11-08)
 
 ### Gewijzigd

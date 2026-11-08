@@ -65,7 +65,7 @@ async function loadSource(src,opts={}){
       ppaths.forEach(w=>prs.push({path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
       { const bz=new Map(blobs.map(x=>[x.path,x.size])); skpaths.forEach(p=>skl.push({path:p.slice(base.length),size:bz.get(p),load:async()=>(await fetchText(rawOf(p))).text}));
         if(!src.only||src.only==='skins') blobs.forEach(x=>{ const k=skIconOf(x.path,x.path.slice(base.length)); if(k&&(x.size||0)<=PK.ICONMAX) ski.push({...k,get:async()=>{ const r=await fetch(rawBust(rawOf(x.path)),{cache:'no-cache'}); return r.ok?r.blob():null; }}); }); }
-      let pdone=0; for(const pth of paths){ if(PK.loadNote) PK.loadNote(pdone++,paths.length,pth.split('/').pop()); try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
+      let pdone=0; for(const pth of paths){ if(PK.loadNote) PK.loadNote(pdone++,paths.length,pth.split('/').pop(),src); try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
       wpaths.forEach(w=>wss.push({name:w.name,path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
     } else if(src.kind==='url'){
       if(/\.json(\?|$)/i.test(src.url)||!/\.m?js(\?|$)/i.test(src.url)){
