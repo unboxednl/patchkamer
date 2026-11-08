@@ -1,0 +1,562 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.bitcrusher",
+  "name": "Bitcrusher Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Bitcrusher: lo-fi, retro sampler and 8-bit sounds, industrial destruction, radio and telephone bands, and parallel crunch for drums.",
+  "tree": [
+    {
+      "folder": "Lo-fi",
+      "items": [
+        {
+          "name": "Lo-fi",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 10,
+            "rate": 22050,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.08,
+            "hp": 20,
+            "post": 9000,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Dusty Lo-fi",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 9,
+            "rate": 18000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.25,
+            "hp": 60,
+            "post": 6000,
+            "out": -1,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Subtle Crunch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 12,
+            "rate": 36000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0.5,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 20000,
+            "out": 0,
+            "mix": 0.6
+          }
+        },
+        {
+          "name": "Warm Lo-fi Mix",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 8,
+            "rate": 14000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 7000,
+            "out": 0,
+            "mix": 0.4
+          }
+        },
+        {
+          "name": "Smooth Decimator",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 12,
+            "rate": 16000,
+            "style": "tread",
+            "interp": "linear",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 10000,
+            "out": 0,
+            "mix": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Retro",
+      "items": [
+        {
+          "name": "8-bit",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 8,
+            "rate": 11025,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 20000,
+            "out": -2,
+            "mix": 1
+          }
+        },
+        {
+          "name": "4-bit Arcade",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 4,
+            "rate": 12000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 9000,
+            "out": -4,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Vintage Sampler",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 12,
+            "rate": 26000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.05,
+            "hp": 20,
+            "post": 12000,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Early Sampler",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 8,
+            "rate": 22050,
+            "style": "mulaw",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.06,
+            "hp": 20,
+            "post": 9000,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Cheap Converter",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 7,
+            "rate": 20000,
+            "style": "floor",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 8000,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Dithered Crush",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 6,
+            "rate": 16000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 1,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 20000,
+            "out": 0,
+            "mix": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Industrial",
+      "items": [
+        {
+          "name": "Industrial",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 5,
+            "rate": 6000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0.3,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.2,
+            "hp": 100,
+            "post": 20000,
+            "out": -3,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Digital Shred",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 3,
+            "rate": 3000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 20000,
+            "out": -5,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Glitch Jitter",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 7,
+            "rate": 8000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0.8,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 20000,
+            "out": -2,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Noise Floor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 2,
+            "rate": 20000,
+            "style": "rise",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.5,
+            "hp": 20,
+            "post": 6000,
+            "out": -6,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Sub Crusher",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 6,
+            "rate": 4000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 6,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 1500,
+            "out": -4,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Shaped Hiss",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 5,
+            "rate": 12000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 1,
+            "dtype": "shaped",
+            "noise": 0,
+            "hp": 200,
+            "post": 20000,
+            "out": -3,
+            "mix": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Communication",
+      "items": [
+        {
+          "name": "Radio",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 9,
+            "rate": 11000,
+            "style": "mulaw",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.12,
+            "hp": 300,
+            "post": 3500,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Telephone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 8,
+            "rate": 8000,
+            "style": "mulaw",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.05,
+            "hp": 300,
+            "post": 3400,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Walkie Talkie",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 6,
+            "rate": 8000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 6,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.2,
+            "hp": 400,
+            "post": 2800,
+            "out": -3,
+            "mix": 1
+          }
+        },
+        {
+          "name": "AM Radio",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 10,
+            "rate": 11025,
+            "style": "tread",
+            "interp": "hold",
+            "aa": true,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.15,
+            "hp": 150,
+            "post": 5000,
+            "out": 0,
+            "mix": 1
+          }
+        },
+        {
+          "name": "Old Intercom",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 5,
+            "rate": 6000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0.3,
+            "hp": 500,
+            "post": 2500,
+            "out": -3,
+            "mix": 1
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Drums and Bus",
+      "items": [
+        {
+          "name": "Crushed Drums",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 6,
+            "rate": 12000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 20,
+            "post": 20000,
+            "out": -2,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Parallel Crunch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 7,
+            "rate": 22050,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 150,
+            "post": 20000,
+            "out": 0,
+            "mix": 0.3
+          }
+        },
+        {
+          "name": "Crushed Snare",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "bits": 5,
+            "rate": 16000,
+            "style": "tread",
+            "interp": "hold",
+            "aa": false,
+            "jitter": 0,
+            "input": 0,
+            "dither": 0,
+            "dtype": "tpdf",
+            "noise": 0,
+            "hp": 300,
+            "post": 10000,
+            "out": 0,
+            "mix": 0.4
+          }
+        }
+      ]
+    }
+  ]
+}

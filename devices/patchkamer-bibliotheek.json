@@ -34,6 +34,36 @@
       "label": "Effecten"
     },
     {
+      "key": "fx-mod",
+      "label": "Modulatie",
+      "parent": "effect"
+    },
+    {
+      "key": "fx-space",
+      "label": "Tijd & ruimte",
+      "parent": "effect"
+    },
+    {
+      "key": "fx-dyn",
+      "label": "Dynamica",
+      "parent": "effect"
+    },
+    {
+      "key": "fx-drive",
+      "label": "Vervorming & lo-fi",
+      "parent": "effect"
+    },
+    {
+      "key": "fx-pitch",
+      "label": "Toonhoogte & spectrum",
+      "parent": "effect"
+    },
+    {
+      "key": "fx-chain",
+      "label": "Ketens",
+      "parent": "effect"
+    },
+    {
       "key": "mastering",
       "label": "Mastering"
     },
@@ -72,7 +102,30 @@
     "nl.patchkamer.graincloud": "drone",
     "nl.patchkamer.samplebank": "sampler",
     "nl.patchkamer.padsampler": "sampler",
-    "nl.patchkamer.loopslicer": "sampler"
+    "nl.patchkamer.loopslicer": "sampler",
+    "nl.patchkamer.chorus": "fx-mod",
+    "nl.patchkamer.flanger": "fx-mod",
+    "nl.patchkamer.phaser": "fx-mod",
+    "nl.patchkamer.tremolo": "fx-mod",
+    "nl.patchkamer.room": "fx-space",
+    "nl.patchkamer.delay": "fx-space",
+    "nl.patchkamer.reverb": "fx-space",
+    "nl.patchkamer.convolutionreverb": "fx-space",
+    "nl.patchkamer.compressor": "fx-dyn",
+    "nl.patchkamer.gate": "fx-dyn",
+    "nl.patchkamer.deesser": "fx-dyn",
+    "nl.patchkamer.pump": "fx-dyn",
+    "nl.patchkamer.grit": "fx-drive",
+    "nl.patchkamer.distortion": "fx-drive",
+    "nl.patchkamer.bitcrusher": "fx-drive",
+    "nl.patchkamer.pitchshifter": "fx-pitch",
+    "nl.patchkamer.harmonizer": "fx-pitch",
+    "nl.patchkamer.pitchcorrection": "fx-pitch",
+    "nl.patchkamer.freqshift": "fx-pitch",
+    "nl.patchkamer.vocoder": "fx-pitch",
+    "nl.patchkamer.resonator": "fx-pitch",
+    "nl.patchkamer.filter": "fx-pitch",
+    "nl.patchkamer.effect-chain": "fx-chain"
   },
   "closed": []
 }

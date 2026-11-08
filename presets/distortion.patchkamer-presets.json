@@ -1,0 +1,597 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.distortion",
+  "name": "Distortion Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Distortion: warm saturation, crunch, fuzz and wavefolding, parallel drums and bass, and lo-fi grit. Level compensation is on, so presets stay close to the input level.",
+  "tree": [
+    {
+      "folder": "Warmth",
+      "items": [
+        {
+          "name": "808 Saturation",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "soft",
+            "drive": 0.45,
+            "bias": 0.15,
+            "lowcut": 20,
+            "tilt": -0.1,
+            "gate": 0,
+            "touch": 0,
+            "tone": 6000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.8,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Subtle Warmth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tube",
+            "drive": 0.18,
+            "bias": 0.15,
+            "lowcut": 20,
+            "tilt": -0.15,
+            "gate": 0,
+            "touch": 0,
+            "tone": 12000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.6,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Tape-like Saturation",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tape",
+            "drive": 0.35,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": -0.1,
+            "gate": 0,
+            "touch": 0,
+            "tone": 10000,
+            "presence": -0.1,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Tube Glow",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tube",
+            "drive": 0.3,
+            "bias": 0.3,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 9000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.7,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Mix Bus Colour",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tape",
+            "drive": 0.12,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 16000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Vocal Presence",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tube",
+            "drive": 0.25,
+            "bias": 0,
+            "lowcut": 120,
+            "tilt": 0.3,
+            "gate": 0,
+            "touch": 0,
+            "tone": 14000,
+            "presence": 0.3,
+            "out": 0,
+            "mix": 0.45,
+            "os": 2,
+            "auto": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Crunch",
+      "items": [
+        {
+          "name": "Crunch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tube",
+            "drive": 0.6,
+            "bias": 0,
+            "lowcut": 90,
+            "tilt": 0.2,
+            "gate": 0,
+            "touch": 0,
+            "tone": 6500,
+            "presence": 0.15,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Overdrive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "soft",
+            "drive": 0.55,
+            "bias": 0,
+            "lowcut": 120,
+            "tilt": 0.25,
+            "gate": 0,
+            "touch": 0.5,
+            "tone": 5500,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Diode Drive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "diode",
+            "drive": 0.6,
+            "bias": 0,
+            "lowcut": 100,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 7000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Heavy Distortion",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "hard",
+            "drive": 0.85,
+            "bias": 0,
+            "lowcut": 140,
+            "tilt": 0.15,
+            "gate": 0.3,
+            "touch": 0,
+            "tone": 5000,
+            "presence": 0.2,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Wall of Clip",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "hard",
+            "drive": 1,
+            "bias": 0,
+            "lowcut": 200,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 4500,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Dynamic Edge",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "diode",
+            "drive": 0.5,
+            "bias": 0,
+            "lowcut": 80,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0.8,
+            "tone": 8000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Fuzz and Fold",
+      "items": [
+        {
+          "name": "Fuzz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "fuzz",
+            "drive": 0.6,
+            "bias": 0,
+            "lowcut": 60,
+            "tilt": 0,
+            "gate": 0.15,
+            "touch": 0,
+            "tone": 5500,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Gated Fuzz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "fuzz",
+            "drive": 0.85,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0.55,
+            "touch": 0,
+            "tone": 4800,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Octave Fuzz",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "rect",
+            "drive": 0.3,
+            "bias": 0,
+            "lowcut": 120,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 6000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.5,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Folder",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "fold",
+            "drive": 0.35,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 12000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Wavefolder Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "fold",
+            "drive": 0.55,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0.5,
+            "tone": 9000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Asymmetric Fold",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "fold",
+            "drive": 0.3,
+            "bias": 0.6,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 10000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 4,
+            "auto": true
+          }
+        },
+        {
+          "name": "Rectifier Octave",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "rect",
+            "drive": 0.15,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 8000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.6,
+            "os": 4,
+            "auto": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Drums and Bass",
+      "items": [
+        {
+          "name": "Parallel Drums",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "hard",
+            "drive": 0.7,
+            "bias": 0,
+            "lowcut": 150,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 9000,
+            "presence": 0.1,
+            "out": 0,
+            "mix": 0.35,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Parallel Snare Crack",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "diode",
+            "drive": 0.65,
+            "bias": 0,
+            "lowcut": 250,
+            "tilt": 0.3,
+            "gate": 0,
+            "touch": 0,
+            "tone": 20000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.3,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Kick Thump",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "tape",
+            "drive": 0.4,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": -0.25,
+            "gate": 0,
+            "touch": 0,
+            "tone": 8000,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.6,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Bass Distortion",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "diode",
+            "drive": 0.55,
+            "bias": 0,
+            "lowcut": 30,
+            "tilt": -0.2,
+            "gate": 0,
+            "touch": 0,
+            "tone": 3500,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.7,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Sub Enhancer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "rect",
+            "drive": 0.1,
+            "bias": 0,
+            "lowcut": 20,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 1500,
+            "presence": 0,
+            "out": 0,
+            "mix": 0.3,
+            "os": 2,
+            "auto": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Lo-fi",
+      "items": [
+        {
+          "name": "Lo-fi Crunch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "hard",
+            "drive": 0.5,
+            "bias": 0,
+            "lowcut": 200,
+            "tilt": -0.2,
+            "gate": 0,
+            "touch": 0,
+            "tone": 3500,
+            "presence": -0.3,
+            "out": 0,
+            "mix": 1,
+            "os": 1,
+            "auto": true
+          }
+        },
+        {
+          "name": "Radio Mid",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "diode",
+            "drive": 0.5,
+            "bias": 0,
+            "lowcut": 400,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 3500,
+            "presence": 0.3,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        },
+        {
+          "name": "Broken Speaker",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "fuzz",
+            "drive": 0.7,
+            "bias": 0,
+            "lowcut": 300,
+            "tilt": 0,
+            "gate": 0.4,
+            "touch": 0,
+            "tone": 2500,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 1,
+            "auto": true
+          }
+        },
+        {
+          "name": "Telephone Drive",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "type": "hard",
+            "drive": 0.4,
+            "bias": 0,
+            "lowcut": 500,
+            "tilt": 0,
+            "gate": 0,
+            "touch": 0,
+            "tone": 3000,
+            "presence": 0,
+            "out": 0,
+            "mix": 1,
+            "os": 2,
+            "auto": true
+          }
+        }
+      ]
+    }
+  ]
+}

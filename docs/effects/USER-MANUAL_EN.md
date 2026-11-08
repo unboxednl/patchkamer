@@ -2,26 +2,39 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Effects take sound in, change it and send it on. This manual describes the twelve effects in [`devices/effects/`](../../devices/effects/README.md): Chorus, Effect Chain, Filter, Flanger, Frequency Shifter, Grit, Phaser, Pump, Resonator, Room, Tremolo and Vocoder. For starting Patchkamer, loading a library and drawing cables, see the [basic manual](../USER-MANUAL_EN.md).
+Effects take sound in, change it and send it on. This manual describes the 23 effects in [`devices/effects/`](../../devices/effects/README.md): Bitcrusher, Chorus, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Effect Chain, Filter, Flanger, Frequency Shifter, Gate, Grit, Harmonizer, Phaser, Pitch Correction, Pitch Shifter, Pump, Resonator, Reverb, Room, Tremolo and Vocoder. For starting Patchkamer, loading a library and drawing cables, see the [basic manual](../USER-MANUAL_EN.md).
 
 ## Contents
 
 1. [Which effect for which goal](#which-effect-for-which-goal)
 2. [Using effects](#using-effects)
 3. [The order of effects in a chain](#the-order-of-effects-in-a-chain)
-4. [Chorus](#chorus)
-5. [Effect Chain](#effect-chain)
-6. [Filter](#filter)
-7. [Flanger](#flanger)
-8. [Frequency Shifter](#frequency-shifter)
-9. [Grit](#grit)
-10. [Phaser](#phaser)
-11. [Pump](#pump)
-12. [Resonator](#resonator)
-13. [Room](#room)
-14. [Tremolo](#tremolo)
-15. [Vocoder](#vocoder)
-16. [If it does not work](#if-it-does-not-work)
+4. [Serial and parallel](#serial-and-parallel)
+5. [Recipes per music style](#recipes-per-music-style)
+6. [Bitcrusher](#bitcrusher)
+7. [Chorus](#chorus)
+8. [Compressor](#compressor)
+9. [Convolution Reverb](#convolution-reverb)
+10. [De-esser](#de-esser)
+11. [Delay](#delay)
+12. [Distortion](#distortion)
+13. [Effect Chain](#effect-chain)
+14. [Filter](#filter)
+15. [Flanger](#flanger)
+16. [Frequency Shifter](#frequency-shifter)
+17. [Gate](#gate)
+18. [Grit](#grit)
+19. [Harmonizer](#harmonizer)
+20. [Phaser](#phaser)
+21. [Pitch Correction](#pitch-correction)
+22. [Pitch Shifter](#pitch-shifter)
+23. [Pump](#pump)
+24. [Resonator](#resonator)
+25. [Reverb](#reverb)
+26. [Room](#room)
+27. [Tremolo](#tremolo)
+28. [Vocoder](#vocoder)
+29. [If it does not work](#if-it-does-not-work)
 
 ## Which effect for which goal
 
@@ -37,6 +50,17 @@ Effects take sound in, change it and send it on. This manual describes the twelv
 | Shape the tone, remove or emphasize a band | [Filter](#filter) | Ten filter types, from low-pass to vowel and comb filters. |
 | Make a voice talk through a synth | [Vocoder](#vocoder) | 16 bands; the voice opens them on a carrier. |
 | Build a whole chain (ambient, cinematic, techno, dub, lo-fi…) | [Effect Chain](#effect-chain) | Up to 8 effects in a row from a list of 33, with ready-made chains as presets. |
+| Make a sound lo-fi, 8-bit or digitally broken | [Bitcrusher](#bitcrusher) | Lowers bit depth and sample rate; aliasing, dither and noise are choices. Also good for telephone and radio sounds. |
+| Even out the loud and soft parts of a voice, bass or mix | [Compressor](#compressor) | Threshold, ratio, knee, attack and release; automatic release and make-up; peak or RMS; lookahead; parallel mix; sidechain filter; mid/side. |
+| Put a sound in a specific space or device (church, cave, steel plate, spring, tube) or in your own impulse response | [Convolution Reverb](#convolution-reverb) | 15 built-in impulse responses and your own files, with trim, stretch and early/tail balance. |
+| Tame harsh s sounds in a voice | [De-esser](#de-esser) | Reduces only the band where the s sits (or everything), with listening to the band; also tames bright cymbals and strings. |
+| Add echoes locked to the tempo (dotted eighth, triplets, swing) or free in milliseconds | [Delay](#delay) | Sync from 1/64 to 2 bars or free time; ping-pong, filters in the loop, ducking, tape wow and reverse echoes. |
+| Add warmth, crunch, fuzz or heavy distortion | [Distortion](#distortion) | Eight characters with oversampling, tone controls and a dry/wet mix for parallel saturation. |
+| Remove noise, hum or spill between notes | [Gate](#gate) | A gate or soft expander with hold, hysteresis and lookahead; also ducks a track under a voice. |
+| Add harmony voices to a vocal or melody | [Harmonizer](#harmonizer) | Up to four voices at fixed intervals or in a scale, following the pitch of the input or the notes on the event input. |
+| Tune an out-of-tune voice or line to a scale | [Pitch Correction](#pitch-correction) | Monophonic detection, twelve note switches, retune speed from hard to slow, vibrato kept or flattened. |
+| Shift the pitch of a sound up or down without changing its tempo | [Pitch Shifter](#pitch-shifter) | Three engines: percussive for drums, grain for voices and instruments, vocoder when formants matter. Also octave layers and shimmer. |
+| Add a believable space to a vocal, drums, strings or a pad (hall, plate, spring, room) | [Reverb](#reverb) | Five reverb models with decay, damping, pre-delay, ducking and freeze. |
 
 ## Using effects
 
@@ -49,18 +73,75 @@ Effects take sound in, change it and send it on. This manual describes the twelv
 
 ## The order of effects in a chain
 
-The order matters, because every effect works on what the previous one made. A common order is:
+The order matters, because every effect works on what the previous one made. A common order, from source to output:
 
-1. **Tone cleanup** first: a filter or an equalizer that takes away what you do not need.
-2. **Distortion** (Grit, or the distortion effects in Effect Chain).
-3. **Movement**: Chorus, Flanger, Phaser, Tremolo.
-4. **Rhythm**: Pump or a gate.
-5. **Echo** and then **reverb**, so the echoes also get a room.
-6. **Width** and **dynamics** (compressor, limiter) at the end.
+1. **Clean up** first: a [Filter](#filter) set as a high-pass takes away rumble that the next effects would otherwise react to.
+2. **Dynamics**: a [Gate](#gate) to remove noise between phrases, then a [Compressor](#compressor); a [De-esser](#de-esser) on a voice goes after the compressor, because compression makes the hiss louder.
+3. **Tone**: shape the sound again with a Filter once the level is steady.
+4. **Pitch**: [Pitch Shifter](#pitch-shifter), [Harmonizer](#harmonizer) or [Pitch Correction](#pitch-correction) work best on a clean, dry sound, so before the effects that smear it.
+5. **Character**: [Distortion](#distortion), [Grit](#grit) or [Bitcrusher](#bitcrusher). Saturation adds weight to thin sounds; a little distortion helps an instrument cut through a busy mix.
+6. **Movement**: [Chorus](#chorus), [Flanger](#flanger), [Phaser](#phaser), [Tremolo](#tremolo).
+7. **Rhythm**: [Pump](#pump), or the trance gate in [Effect Chain](#effect-chain).
+8. **Echo** ([Delay](#delay)), then **space** ([Reverb](#reverb), [Room](#room) or [Convolution Reverb](#convolution-reverb)), so the echoes also get a room. Time-based effects are often best on a send (see [Serial and parallel](#serial-and-parallel)).
+9. **Width** and a **limiter** at the end, because a chain of many effects can get louder than its input.
 
-This is a starting point, not a rule. Distortion after a reverb sounds different from distortion before it; try both. Put a **limiter** last, because a chain of many effects can get louder than its input. Effect Chain follows this order in most of its presets (see [Effect Chain](#effect-chain)).
+This is a starting point, not a rule. Distortion after a reverb sounds different from distortion before it; try both. [Effect Chain](#effect-chain) follows this order in most of its presets.
 
 For a few separate effects, connect them in series with cables (effect 1 **Out** to effect 2 **In**). For more than three or four, [Effect Chain](#effect-chain) does it in one card.
+
+## Serial and parallel
+
+- **Serial** means one effect after the other, as above: each effect processes the output of the previous one.
+- **Parallel** means you blend the original (dry) sound with a heavily processed copy. That lets you process hard without losing the character of the original. In Patchkamer you do it in three ways:
+  - With the **Mix** knob of the effect itself. [Compressor](#compressor) has a parallel mix for parallel compression (a strongly squeezed copy under the original); [Distortion](#distortion) has one for parallel saturation.
+  - With a **send and return on the Mixer**: send a part of a channel to one effect, and bring the effect back on a return channel. One Delay or Reverb can then serve many channels. Set the effect itself to 100% wet in this case.
+  - With cables: split the output of a source to two cables, one to the effect and one to a Mixer channel.
+- Use parallel for reverb, delay and heavy compression or distortion; use serial for cleaning up, shaping and everything that should change the sound completely.
+
+## Recipes per music style
+
+These are starting points. Every effect has presets in the preset bar of its card; start there and adjust.
+
+| Style | Idea | Effects |
+|---|---|---|
+| Hip-hop, 808 bass | Add mid harmonics so the bass is audible on small speakers, and duck the bass under the kick | [Distortion](#distortion) (soft or tape type, mix to taste), [Pump](#pump) or [Compressor](#compressor) with an external sidechain |
+| EDM, build-ups and drops | Filter sweeps for tension, a delay on the beat, a wide space | [Filter](#filter) with a modulator on the cutoff, [Delay](#delay) synced to the beat, [Reverb](#reverb) on a send |
+| Rock, drums and guitar | Drum room energy and slapback on guitar or voice | [Compressor](#compressor) in parallel on the drum bus, [Delay](#delay) with a short sync or free time (40 to 120 ms), [Reverb](#reverb) in the spring model |
+| Voice | Even level, no harsh s sounds, space around it | [Gate](#gate), [Compressor](#compressor), [De-esser](#de-esser), then [Reverb](#reverb) (plate) on a send |
+| Lo-fi | Crunch, narrow band, a little movement | [Bitcrusher](#bitcrusher), [Filter](#filter) as a low-pass, [Tremolo](#tremolo) or [Chorus](#chorus) |
+| Ambient and cinematic | Long spaces, evolving echoes | [Reverb](#reverb) in the hall model or [Convolution Reverb](#convolution-reverb), [Delay](#delay) with a long feedback and modulation |
+| Dub | Echoes that fade into the room | [Delay](#delay) with the tape time change and a low-pass in the loop, [Reverb](#reverb) |
+| Harmonies and vocals | Add voices in the scale, correct the pitch | [Harmonizer](#harmonizer), [Pitch Correction](#pitch-correction) |
+
+## Bitcrusher
+
+**What it is for.** Bitcrusher makes a sound digitally rough in two ways: it lowers the **bit depth** (fewer volume steps, so quantisation noise) and the **sample rate** (fewer snapshots per second, so aliasing). Both are independent, and the things that usually happen in the background (anti-alias filter, dither, noise) are controls you can choose.
+
+![The Bitcrusher card](../images/en/effects/bitcrusher.png)
+
+**Controls.**
+
+- The **screen** at the top shows a calculated sine wave through your settings: the thin line is the original, the bright line is the crushed wave. A faint trace on top is the real signal, when there is one. The screen does not show dither, noise or jitter.
+- **Quantiser:** *Mid-tread* (zero is a level; at 1 bit only two levels remain), *Mid-rise* (no zero level; 1 bit gives a clean square wave), *Truncate* (rounds down, like cheap converters) and *µ-law* (compands first, so quiet sounds keep finer steps).
+- **Hold mode:** *Hold* keeps each sample until the next one (steps); *Linear* draws straight lines between samples, which is smoother and one hold period later than the dry sound.
+- **Anti-alias:** *off* lets everything above half the sample rate fold back (the typical rough sound); *on* filters it away first (4th order, at 0.45 × the sample rate).
+- **Dither PDF:** the type of dither: *RPDF*, *TPDF* (the standard) or *Shaped* (TPDF with its noise moved to the highs).
+- **Bits** (1 to 16, in steps of 0.1) is the bit depth. Fractions work too: 7.5 bits has 2^7.5 levels.
+- **Sample rate** (100 to 48000 Hz) is the target rate. At or above the rate of the audio engine nothing is reduced.
+- **Jitter** (0 to 100%) makes the sample clock irregular (100% is ±50% of the period).
+- **Input** (−12 to +24 dB) is the gain in front of the quantiser. A weaker input uses fewer steps.
+- **Dither** (off, then 0 to 100%) adds the noise that makes quantisation sound smoother.
+- **Noise** (off up to −20 dB, the peak level) adds white noise before the quantiser.
+- **Highpass** (20 to 4000 Hz) and **Lowpass** (500 to 20000 Hz) filter after the crush. *off* at the edges.
+- **Level** (−24 to +12 dB) and **Mix** (dry against wet).
+
+**Ports.** **In**, **Out**, **Mod** (ten parameters).
+
+**Example.** Drum machine → Bitcrusher → Mixer. For a radio or telephone voice: preset **Telephone** (*µ-law*, 8 bit, 8 kHz, **Anti-alias** on, **Highpass** 300 Hz, **Lowpass** 3.4 kHz). For classic sampler grit: preset **Vintage Sampler**.
+
+**Presets.** Pack **Bitcrusher Basics** (25 presets) in [`presets/bitcrusher.patchkamer-presets.json`](../../presets/bitcrusher.patchkamer-presets.json), in the folders **Lo-fi** (Lo-fi, Dusty Lo-fi, Subtle Crunch, Warm Lo-fi Mix, Smooth Decimator), **Retro** (8-bit, 4-bit Arcade, Vintage Sampler, Early Sampler, Cheap Converter, Dithered Crush), **Industrial** (Industrial, Digital Shred, Glitch Jitter, Noise Floor, Sub Crusher, Shaped Hiss), **Communication** (Radio, Telephone, Walkie Talkie, AM Radio, Old Intercom) and **Drums and Bus** (Crushed Drums, Parallel Crunch, Crushed Snare). I have not listened to them.
+
+**Tips and limits.** Measured with a 1 kHz tone at −0.9 dBFS and no sample-rate reduction: the signal-to-noise ratio is 49.9 dB at 8 bit and 98.0 dB at 16 bit (theory 49.0 and 97.2 dB), with *Mid-tread*. With a quiet tone (−40 dBFS, 8 bit) the harmonic distortion falls from −11 dB without dither to about −36 dB with TPDF dither, at the price of some noise. At a sample rate of 12 kHz a 9 kHz tone folds to 3 kHz: −6.9 dBFS with **Anti-alias** off and −27.5 dBFS with it on. Jitter costs signal quality at high frequencies: a 1 kHz tone at 24 kHz sample rate keeps 30 dB signal-to-noise at 25% jitter and 24 dB at 100%. **Noise** at 100% is −24.8 dBFS RMS. A mid-rise quantiser has a constant offset in silence; it is blocked by an 8 Hz DC blocker. Computing load in Node on this machine: 0.4% to 0.5% of the time budget of a block on average (p99 0.7%). A guard limits the input at ±16 (+24 dB), turns NaN into 0 and resets the filters if one goes wrong.
 
 ## Chorus
 
@@ -86,6 +167,167 @@ For a few separate effects, connect them in series with cables (effect 1 **Out**
 **Presets.** Pack **Chorus Basics** (12 presets) in [`presets/chorus.patchkamer-presets.json`](../../presets/chorus.patchkamer-presets.json), in the folders **Subtle** (Subtle Double, Classic Chorus, Thick Mono), **Ensemble** (String Section, Wide Pad, Dark Choir), **Movement** (Bar Shimmer, Slow Wash, Eighth Pulse), **Extreme** (Seasick, Tape Warble, Lo-fi Swarm). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** With **Width** at 0% every voice sits in the middle; use this when the sound must stay mono. The tone filter has a guard: if a faulty value (`NaN` or infinity) reaches the input, the filter is replaced within a fraction of a second and the sound returns.
+
+## Compressor
+
+**What it is for.** Compressor makes the difference between soft and loud smaller. Everything above the **Threshold** is turned down: with a **Ratio** of 4:1, a signal 8 dB over the threshold comes out 2 dB over it. It is the tool for evening out a voice or bass, for gluing drums together, for catching peaks, and (with **Mix**) for parallel compression. For a pumping effect on the beat there is also [Pump](#pump); with an external sidechain the Compressor can do that too.
+
+![The Compressor card](../images/en/effects/compressor.png)
+
+**Controls.**
+
+At the top:
+
+- **Detection:** *Peak* follows the top of every wave, *RMS* follows the average level over 10 ms (smoother, closer to how loud it sounds).
+- **Channels:** *Stereo (L/R)* or *Mid/Side*. With *Mid/Side* the middle (what both channels share) and the sides are compressed separately, which is handy for controlling width.
+- **Sidechain:** *Internal* (the detector listens to the input) or *External (Sidechain input)* (it listens to what you patch into the **Sidechain** port, for example a kick). Without a cable on that port nothing is compressed.
+- **On** / **Off (pass through)**, **Auto release** (two releases at once, 30 ms and 400 ms: fast recovery after a peak, slow after sustained sound), **Auto make-up** (adds the reduction at an input of −12 dB to the make-up) and **Listen to sidechain** (hear what the detector hears, after the filters).
+- The **curve** shows the input level against the output level, with the knee shaded and a dot at the live level. Next to it: the **Reduction** in dB, a meter that fills as the reduction grows, the **Detector** level and the **Latency**.
+
+**Compression:** **Threshold** (−60 to 0 dB), **Ratio** (1:1 to ∞:1; at the far right it is infinite, a limiter), **Knee** (0 to 24 dB: 0 is hard, more gives a gentle start around the threshold), **Attack** (0.05 to 200 ms) and **Release** (5 to 2000 ms).
+
+**Output:** **Make-up** (0 to 24 dB), **Mix** (the share of the compressed signal; below 100% it is parallel compression), **Lookahead** (0 to 10 ms) and **Link** (100%: both channels get the same reduction, so the stereo image stays put; 0%: each channel on its own).
+
+**Sidechain:** **Highpass** (20 to 1000 Hz; 20 Hz is off) and **Lowpass** (1 to 20 kHz; 20 kHz is off) on the detector only, not on the sound. A highpass of 80 to 150 Hz stops the bass from triggering the compression.
+
+**Ports.** **In**, **Sidechain** (audio), **Out** and **Mod** (ten parameters; Lookahead is not controllable on purpose).
+
+**Example.** Voice → Compressor → Mixer. Choose the preset **Vocals › Gentle Vocal**, lower the **Threshold** until the reduction shows 3 to 6 dB on the loud words, and set **Make-up** (or **Auto make-up**) so that the level before and after is about equal. For a drum bus: preset **Drums › Drum Bus Glue**. For parallel compression on drums: preset **Parallel › Parallel Punch** (a hard compressed copy mixed in at 35%). For a kick pump: patch the kick into **Sidechain**, preset **Pumping › Kick Pump**.
+
+**Presets.** Pack **Compressor Basics** (30 presets) in [`presets/compressor.patchkamer-presets.json`](../../presets/compressor.patchkamer-presets.json), in the folders **Vocals** (Gentle Vocal, Vocal Leveler, Vocal Presence, Vocal Peak Catcher, Spoken Word), **Drums** (Drum Bus Glue, Punchy Drums, Snare Snap, Tight Kick, Room Crush), **Bass** (Bass Control, Bass Sustain, Slap Tamer), **Instruments** (Guitar Even, Piano Smooth, Synth Lead Hold, Pad Level), **Mix** (Mix Bus Glue, Gentle Master, Width Control, Stereo Linked Glue), **Parallel** (Parallel Punch, Parallel Smash, Parallel Vocal Lift), **Limiter** (Soft Limiter, Peak Catcher), **Pumping** (Kick Pump, Soft Pump, Voice Ducker, Bass Breath). I have not listened to them. The thresholds assume a signal that peaks around −6 to −3 dBFS; lower the threshold if yours is quieter.
+
+**Tips and limits.** *Attack* and *Release* are time constants of the reduction in dB: after one attack time 63% of the reduction is reached, after one release time 63% of the recovery is done (measured with a step: attack 10 ms gives 63% after 10 ms, release 100 ms after 98 ms; 10% to 90% takes about 2.2 times as long). The static curve is exact: with threshold −20 dB, ratio 4:1 and a 0 dB input the reduction is 15.0 dB (formula 15.0); with a 12 dB knee 1.1 dB at the threshold (formula 1.13). **Lookahead** delays the sound (and the dry part of **Mix**) by exactly that many ms (measured 2, 5 and 10 ms) so the compressor sees a peak before it arrives; Patchkamer does not compensate for that latency, so other tracks stay 'early' by that amount. Moving the slider shifts the pitch a tiny bit for a moment. A peak at 0 dBFS gets slightly more reduction with *Peak* than with *RMS* (13.8 against 12.8 dB for a sine). With a very short attack on low tones the reduction can follow the wave itself: use *RMS* or a longer attack. Computing load in Node on this machine: 0.5% to 0.7% of the time budget of a block on average (p99 below 1.2%). A guard limits the input and the sidechain at ±16 (+24 dB), turns NaN into 0 and resets a state that goes wrong; after bursts of NaN, Infinity, 1e9 and 1e30 the sound is exactly the same as without them. It needs AudioWorklet; without it the sound passes through unchanged and the card says so.
+
+## Convolution Reverb
+
+**What it is for.** Convolution Reverb puts a sound in a space or a device by multiplying it with an **impulse response** (IR): the sound a space gives to a single click. It has **15 built-in impulse responses** (church, concert hall, studio room, small booth, tiled bathroom, stairwell, cave, tunnel, steel plate, spring tank, metal tube, metal bin, gated burst, reverse swell, water tank) and you can load **your own IR** from a file. The built-in ones are **synthetic**: they are generated by the device itself from noise and decay curves, so they are approximations of a kind of space and not recordings of a specific one.
+
+![The Convolution Reverb card](../images/en/effects/convolution-reverb.png)
+
+**Controls.**
+
+- **IR:** the impulse response. **Own file** is the IR you loaded yourself.
+- **Load file…** (Own IR) loads an audio file (WAV, MP3, OGG or FLAC; at most 12 s are used) as impulse response, or use → *device* on the **Samples** tab of the library. The audio is not saved in presets or in a song; a song only remembers that it uses *Own file*, so load the file again after opening it. Until then Concert Hall plays.
+- **Pre-delay** (0 to 250 ms) is the time before the reverb starts.
+- **Start** (0 to 1000 ms) cuts the first part off the IR; **Length** (0.05 s to full) shortens the end.
+- **Stretch** (×0.5 to ×2) stretches the IR in time. This resamples it: shorter is also brighter, longer is also darker.
+- **Early/tail** goes from only early reflections (-100%) through unchanged (0) to only the tail (100%), split around 80 ms.
+- **HP** and **LP** filter the reverb. **Tilt** (±12 dB) makes it darker or brighter.
+- **Width** (0 to 200%) is the stereo width. A mono IR gives a mono reverb.
+- **Mix** is the balance between dry and reverb (equal power).
+
+**Ports.** **In**, **Out**, **Mod** (10 parameters, in three lanes: impulse response, tone, output). The ones that change the IR (**Start**, **Length**, **Stretch**, **Early/tail**) are rebuilt a few times per second when modulated.
+
+**Example.** Duofone → Convolution Reverb → Speakers. Choose **Church** at 30% mix for a pad, or **Steel Plate** with **Pre-delay** 15 ms for a voice. Try your own IR: load a file with **Load file…**.
+
+**Presets.** Pack **Convolution Spaces** (30 presets) in [`presets/convolution-reverb.patchkamer-presets.json`](../../presets/convolution-reverb.patchkamer-presets.json), in the folders **Rooms**, **Halls**, **Devices** and **Creative**, with at least one preset for every built-in IR. Load it with the **Presets** tab of the library → **Import…**, then choose a preset in the bar at the top of the card.
+
+**Tips and limits.** These are measurements of the real convolution engine in Chromium, offline; they were **not listened to**.
+
+- Engine: two native convolvers that fade into each other (60 ms) when you change IR, Start, Length, Stretch or Early/tail, so it does not click (largest jump between two samples with three IR changes during a sine: 0.020, without changes 0.015). A change takes about 0.1 to 0.3 s to be heard while the new IR is built.
+- **Latency 0 samples**: a test IR with a unit impulse puts the output peak on the same sample as the input; the dry path has no delay either.
+- Every IR is normalised to the same energy, so changing IR does not change the loudness much (measured energy 1.00 for all 15).
+- Reverb times per band (T20) of the built-in IRs follow their design: for example Church 5.9 s at 1 kHz and 4.8 s at 8 kHz, Concert Hall 2.4 s, Studio Room 0.37 s, Spring Tank 1.7 s at 1 kHz and 0.6 s at 8 kHz.
+- Load: about 1.5% of a processor core with a 0.14 s IR, 5 to 9% with Concert Hall, about 8% with Church and about 14% with an own IR of 12 s (offline render, 20 s of stereo noise).
+- A NaN, infinity or enormous value on the input is limited by a small guard before the convolution.
+- Tilt, HP, LP and width were measured as set (tilt ±6 dB gives ±3.0 dB at the extremes of the spectrum, HP 200 Hz gives -10.6 dB at 100 Hz).
+
+## De-esser
+
+**What it is for.** De-esser tames the sharp, hissing s and t sounds (sibilants) in a voice, which a compressor makes even louder. It listens to one frequency band, the **Frequency** (3 to 10 kHz) with a **Bandwidth**, and turns down when that band gets above the **Threshold**. Because it only looks at the s sounds, the rest of the voice stays untouched. It is also useful on bright cymbals, strings and synths.
+
+![The De-esser card](../images/en/effects/deesser.png)
+
+**Controls.**
+
+At the top:
+
+- **Mode:** *Split-band (band only)* turns down only the detection band, so the voice below it keeps its body. *Wideband (everything)* turns down the whole signal while an s sounds, like a compressor that only reacts to the s.
+- **On** / **Off (pass through)** and **Listen to detection band** (hear only the band the detector hears: sweep the **Frequency** until the s sounds sharpest, then put the band there).
+- The **display** shows the frequency response of the device as it is now: the shaded bell is the detection band, the line is what the device does to the sound at this moment (flat when nothing is reduced, a dip in the band while it reduces). Next to it: the **Reduction** in dB, a meter, and the **Band** level the detector reads.
+
+**Detection:** **Frequency** (3 to 10 kHz), **Bandwidth** (0.25 to 3 octaves: small is narrow and focused, large is wide) and **Threshold** (−60 to 0 dB: the level of the band above which it turns down).
+
+**Reduction:** **Ratio** (1:1 to ∞:1), **Max reduction** (0 to 24 dB), **Attack** (0.05 to 20 ms), **Release** (5 to 500 ms) and **Mix** (the share of the processed signal).
+
+**Ports.** **In**, **Out** and **Mod** (eight parameters).
+
+**Example.** Voice → De-esser → Mixer (after the compressor if you use one). Choose **Vocals › Male Vocal** or **Female Vocal**, turn on **Listen to detection band** and adjust the **Frequency** until the s sounds sharpest; turn it off and lower the **Threshold** until the reduction meter only moves on s sounds, 2 to 6 dB. For a podcast: the presets in the folder **Speech**.
+
+**Presets.** Pack **De-esser Basics** (21 presets) in [`presets/deesser.patchkamer-presets.json`](../../presets/deesser.patchkamer-presets.json), in the folders **Vocals** (Male Vocal, Deep Male Vocal, Female Vocal, Bright Female Vocal, Gentle Vocal, Strong Vocal, Narrow Sibilant, Backing Vocals), **Speech** (Podcast Male, Podcast Female, Voice-over, Phone Interview), **Wideband** (Wideband Soft, Wideband Fast, Wideband Parallel), **Top End** (Tame Cymbals, Hi-Hat Tamer, Tame Top End, Harsh Strings, Sharp Synth, Light Parallel). I have not listened to them. Voices differ: the **Frequency** and **Threshold** of a preset are a starting point.
+
+**Tips and limits.** Measured on the centre frequency: the reduction follows the formula within 0.1 dB (threshold −30 dB, ratio 4:1, knee 6 dB: 7.4 dB at −20 dB, 12.0 dB at −10 dB with 12 dB maximum). In *Split-band* a 1-octave band reduced by 12 dB at its centre reduces 4.6 kHz by 2.9 dB at a 6.5 kHz centre, 3 kHz by 0.7 dB and 1 kHz by 0.06 dB; a voice at 200 Hz stays exactly the same, in *Wideband* it goes down the full 12 dB. *Attack* and *Release* are time constants of the reduction in dB (attack 5 ms: 63% after 6 ms; release 100 ms: 63% after 99 ms). There is no latency. The threshold is absolute: a voice recorded much quieter or louder needs another threshold. Computing load in Node on this machine: 0.3% to 0.4% of the time budget of a block on average (p99 below 0.7%). A guard limits the input at ±16 (+24 dB), turns NaN into 0 and resets a state that goes wrong; after bursts of NaN, Infinity, 1e9 and 1e30 the sound is exactly the same as without them. It needs AudioWorklet; without it the sound passes through unchanged and the card says so.
+
+## Delay
+
+**What it is for.** Delay repeats a sound. It is the bigger sibling of the delay half of [Room](#room): the time can be free (in milliseconds), locked to the host clock (note values from 2 bars to 1/64, straight, dotted or triplet, or a number of sixteenths such as 3/16 or 5/16) or based on an own tempo that you tap in. Left and right can have their own time, and the repeats can ping-pong, be darkened or saturated like tape, smeared, modulated, ducked under the source, frozen or played backwards.
+
+![The Delay card](../images/en/effects/delay.png)
+
+**Controls.** A screen at the top shows the current time left and right in milliseconds, with the note value and the tempo in use. *Limiter* lights up when the limiter in the feedback loop is working.
+
+**Time:**
+
+- **Time source:** *Host clock* (the note values follow the tempo of the studio, also while the clock is stopped and when you change the tempo), *Own tempo (tap)* (the same, with a tempo of its own) or *Free (ms)*.
+- **Mode:** *Stereo* (left and right separate), *Ping-pong* (the repeats jump from left to right; the input is summed to mono), *Mono* or *Dual (own feedback)*.
+- **Tap** sets **Own tempo** (30 to 300 BPM) from your taps and selects *Own tempo (tap)*. A pause of more than 2 s starts over.
+- **Swing** (0 to 100%) is the share of the studio swing that is applied to the repeats. It only works with *Host clock* and only for an odd number of sixteenths (1/16, dotted 1/8, 5/16, …): the repeats then stay on the swung grid. **Stereo offset** (−100 to +100 ms) is added to the time on the right. **Right = left** lets the right side use the note value or time of the left side.
+
+**Left** and **Right** (the right side is only used when **Right = left** is off):
+
+- **Note value:** *2 bars*, *1 bar (1/1)*, 1/2, 1/4, 1/8, 1/16, 1/32, 1/64 or *x/16 (number of sixteenths)*. **Feel:** *Straight*, *Dotted* or *Triplet*. **Sixteenths** (1 to 32) is the number for *x/16*, for example 3 for 3/16.
+- **Time L** / **Time R** (1 to 4000 ms) is the time for *Free (ms)*.
+
+**Feedback:**
+
+- **Feedback** (0 to 120%) is how much of each repeat goes back in. Above 100% the repeats grow until the limiter holds them at about 0 dBFS. **Feedback R (dual)** is the right side in *Dual* mode. **Cross feedback** (0 to 100%) sends the repeats to the other side (stereo and dual).
+- **Freeze** holds the echo: the input leaves the loop and the feedback goes to 100%. **Reverse** plays the repeats backwards in blocks as long as the delay time.
+
+**Tone in the loop:** **High-pass** (20 to 2000 Hz) and **Low-pass** (500 to 20000 Hz) act on every repeat, so each repeat gets darker and thinner. **Saturation** *Off*, *Tape* or *Tube* with **Drive**. **Diffusion** smears the repeats into a cloud.
+
+**Motion:** **Modulation** *Sine (wow)*, *Tape (wow and flutter)* or *Chorus (stereo)*, with **Mod rate** (0.05 to 10 Hz) and **Mod depth** (up to 10 ms).
+
+**Ducking:** **Ducking** lowers the repeats while the input plays (the repeats in the loop keep going); **Threshold** (−60 to −6 dB) and **Release** (50 to 1500 ms).
+
+**Output:** **Time change** is what happens when the time or the tempo changes: *Crossfade* (a click-free 20 ms crossfade, the pitch stays) or *Tape* (the time glides, so the pitch of the repeats glides with it; **Glide time** 20 to 2000 ms). **Mix** (0 to 100%): from 50% the dry signal goes down, at 100% there is no dry signal left, which is what you want on a send. **Output** (−24 to +12 dB).
+
+**Ports.** **In**, **Out** and **Mod** (seventeen parameters in one lane).
+
+**Example.** A synth lead → Delay → Mixer. Choose the preset **Dotted Eighth** in the bar at the top of the card: the repeats follow the tempo of the studio. On a send: put Delay in the return, set **Mix** to 100% and send the sounds you want to repeat.
+
+**Presets.** Pack **Delay Basics** (35 presets) in [`presets/delay.patchkamer-presets.json`](../../presets/delay.patchkamer-presets.json), in the folders **Slapback** (Slapback Short, Slapback Wide, Tape Slap, Haas Widener), **Dub** (Dub Echo, Dub Throw, Dub Ducked, Dub Long Tail), **Ping-pong** (Ping-pong Eighths, Ping-pong Quarters, Ping-pong Dotted, Ping-pong Free), **Rhythmic** (Dotted Eighth, Triplet Eighths, Swung Sixteenths, Three Against Five, Triplet Against Straight, Gated Sixteenths), **Ambient** (Ambient Wash, Bar Echo, Cloud Ping-pong, Endless Smear), **Tape** (Tape Echo, Slow Wow, Worn Tape, Tube Repeats), **Modulated** (Chorus Echo, Vibrato Repeats, Seasick) and **Creative** (Reverse Echo, Reverse Ping-pong, Runaway Feedback, Dual Offset, Stutter Thirty-seconds, Cross Weave). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶. I have not listened to them.
+
+**Tips and limits.** Measured offline with the real worklet code: the time is exact to within 0.09 of a sample (under 2 µs) for free times from 1 to 4000 ms and for all note values, feels and tempi from 60 to 200 BPM that I tried; 1/8 stays exact after a tempo change, with the clock running (through the tempo of the step) and with the clock stopped (through the tempo of the studio, picked up by a timer of 40 ms). A tempo change with *Crossfade* gives no jumps in a 1 kHz sine (the largest step is 1.01 times that of the pure sine, where a hard jump of the delay time gives 59 times). With *Tape* the pitch glides (300 to 200 ms with a glide time of 250 ms: 1330 Hz for a 1 kHz tone at the start, back to 1000 Hz after about a second). The decay per repeat equals 20 log(feedback) within 0.01 dB (−6.02 dB at 50%). The filters follow the digital second-order Butterworth design within 0.02 dB (checked at 21 combinations of frequency and setting). With feedback up to 120%, for 60 s and in all modes the output stays below 1.4 (+2.9 dBFS) and finite; a burst of NaN, ±Infinity, 1e9 or 1e30 at the input is limited, and the sound comes back. At most 8 s per delay line: 2 bars at 40 BPM (12 s) is halved and the screen says so. With *Crossfade* a time that you modulate continuously (Drift, LFO) gets a crossfade for every change; use *Tape* for that. Switching **Mode** mutes the repeats for 15 ms; switching **Saturation** is abrupt. **Reverse** and **Diffusion** change how the repeats sound, not when they come. CPU in Node on this machine: 0.6 to 3.4% of the time budget of a block on average, 5.4% at p99, for the heaviest setting (tube, diffusion, tape modulation, ducking and reverse) 2.8% on average. Delay needs AudioWorklet; without it the sound passes through unchanged and the card says so.
+
+## Distortion
+
+**What it is for.** Distortion adds harmonics by squeezing the sound through a curve. It has eight types, from a gentle warmth to fuzz and wavefolding, tone controls before and after the distortion, and a dry/wet mix so you can use it for parallel saturation. A DC blocker is always on.
+
+![The Distortion card](../images/en/effects/distortion.png)
+
+**Controls.**
+
+- **Type:** *Soft* (smooth knee, odd harmonics), *Hard* (flat clip), *Tube* (asymmetric, adds even harmonics), *Tape* (soft clip with a small bump at 110 Hz), *Diode* (a clipper with a sharper knee; the cleanest at high drive), *Fuzz* (two stages that sputter and close with the gate), *Folder* (a wavefolder: the wave folds over at high drive) and *Rectifier* (full-wave rectification: an octave up).
+- **Drive** (0 to +40 dB) is how hard the sound hits the curve. *Fuzz* starts 12 dB lower, because it is hard already.
+- **Bias** (−100 to +100%) shifts the sound along the curve, so the top and bottom are treated differently. That adds even harmonics. The static offset is corrected and the DC blocker removes the rest.
+- **Tight** (20 to 1000 Hz) is a high-pass filter *before* the distortion. Raise it to keep the bass from turning to mud.
+- **Tilt** (−100 to +100%) is a tone control before the distortion: positive makes the highs hit the curve harder (±9 dB).
+- **Gate** (off, then −80 to −30 dB) is a gate in front of the distortion, so hiss is not amplified.
+- **Touch** (−100 to +100%) lets the input level change the drive (±12 dB): positive means playing harder gives more distortion, negative the other way round (compressing).
+- **Tone** (500 to 20000 Hz; *off* at the top) is a low-pass filter after the distortion.
+- **Presence** (−100 to +100%) is a shelf at 4 kHz after the distortion (±9 dB).
+- **Level** (−24 to +12 dB) is the output level.
+- **Mix** is dry against wet. Under 100% you get parallel saturation; the dry path is delayed to match the wet path.
+- **Oversample:** *off*, *2x* or *4x*. It runs the distortion at a higher sample rate to reduce aliasing. The default follows the audio quality in Settings.
+- **Auto level:** *automatic* brings the level back to what went in (measured on a tone at −12 dBFS), so you can compare settings fairly. *free* leaves the level as it is.
+
+**Ports.** **In**, **Out**, **Mod** (ten parameters).
+
+**Example.** Drum bus → Distortion → Mixer. Choose the preset **Parallel Drums**: *Hard* clip with **Drive** 70%, **Tight** 150 Hz and **Mix** 35%. For a fat bass: preset **Bass Distortion**.
+
+**Presets.** Pack **Distortion Basics** (28 presets) in [`presets/distortion.patchkamer-presets.json`](../../presets/distortion.patchkamer-presets.json), in the folders **Warmth** (808 Saturation, Subtle Warmth, Tape-like Saturation, Tube Glow, Mix Bus Colour, Vocal Presence), **Crunch** (Crunch, Overdrive, Diode Drive, Heavy Distortion, Wall of Clip, Dynamic Edge), **Fuzz and Fold** (Fuzz, Gated Fuzz, Octave Fuzz, Folder, Wavefolder Lead, Asymmetric Fold, Rectifier Octave), **Drums and Bass** (Parallel Drums, Parallel Snare Crack, Kick Thump, Bass Distortion, Sub Enhancer) and **Lo-fi** (Lo-fi Crunch, Radio Mid, Broken Speaker, Telephone Drive). I have not listened to them.
+
+**Tips and limits.** Measured with a 3 kHz tone at −12 dBFS and drive +20 dB (4x): the harmonics make up about 16% (*Diode*) to 28% (*Fuzz*) of the sound. *Soft*, *Hard* and *Tape* are almost pure odd harmonics; *Tube* has its second harmonic 22.6 dB below the fundamental, and *Fuzz* 54 dB. With drive at +40 dB, *Hard* aliasing is −14.5 dB (off), −23.7 dB (2x) and −38.9 dB (4x) relative to the total; at +20 dB it is −31, −45 and −57 dB. *Folder* and *Rectifier* alias the most; use 4x. The oversampling filters add a delay of 24 samples (2x) or 32 samples (4x), 0.5 and 0.67 ms at 48 kHz; the dry path follows. Computing load in Node on this machine: *Soft* 0.7% of the time budget of a block (1x) to 2.5% (4x); *Diode* 4x 10.5% on average (p99 16.5%). A guard limits the input at ±16 (+24 dB), turns NaN into 0 and resets the filters if one goes wrong.
 
 ## Effect Chain
 
@@ -296,6 +538,36 @@ Each preset is a whole chain, not a single effect. They are built in the order o
 
 **Tips.** Without AudioWorklet the device passes the sound through unchanged and says so. The dry signal is delayed by 63 samples, so it lines up with the processed one.
 
+## Gate
+
+**What it is for.** Gate mutes what falls below the **Threshold**: the hiss between the notes of a guitar, the spill of a snare in the room microphone, the hum of an amplifier. Three types: **Gate** (closes completely, down to the **Range**), **Expander** (a soft gate: the quieter the sound, the more it is turned down) and **Ducker** (the other way round: it mutes the main signal when the sidechain gets loud, for example a bass under a kick or music under a voice).
+
+![The Gate card](../images/en/effects/gate.png)
+
+**Controls.**
+
+At the top:
+
+- **Type:** *Gate (closed)*, *Expander (soft)* or *Ducker (loud sidechain = mute)*.
+- **Detection:** *Peak* (fast, follows the tops) or *RMS* (average over 15 ms, steadier on sustained tones).
+- **Sidechain:** *Internal* (the detector listens to the input) or *External (Sidechain input)* (it listens to what you patch into the **Sidechain** port; required for the Ducker). Without a cable on that port a gate stays closed and a ducker does nothing.
+- **On** / **Off (pass through)** and **Listen to sidechain** (hear what the detector hears, after the filters). The **OPEN** / **CLOSED** lamp (for the Ducker **DUCKING** / **IDLE**) shows the state.
+- The **curve** shows the input level against the output level, with the hysteresis shaded and a dot at the live level (for the Ducker the reduction against the sidechain level). Next to it: the **Gate (gain)** in dB, a meter that is full when the gate is open, the **Detector** level and the **Latency**.
+
+**Gate:** **Threshold** (−90 to 0 dB), **Ratio** (1:1 to ∞:1; only for *Expander* and *Ducker*, a gate is always infinite), **Range** (0 to 90 dB: the most it mutes) and **Hysteresis** (0 to 24 dB: once open, the gate closes only this much below the threshold, which stops chattering around the threshold; not for the Ducker).
+
+**Time:** **Attack** (0.05 to 100 ms: how fast it opens, for the Ducker how fast it mutes), **Hold** (0 to 500 ms: how long it stays open after the sound falls below the threshold), **Release** (5 to 3000 ms: how fast it closes, for the Ducker how fast it recovers) and **Lookahead** (0 to 10 ms: the sound is delayed so the gate opens before the start of a note).
+
+**Sidechain:** **Highpass** (20 to 1000 Hz; 20 Hz is off), **Lowpass** (1 to 20 kHz; 20 kHz is off) and **Link** (100%: both channels open and close together; 0%: each on its own). The filters work on the detector only, not on the sound.
+
+**Ports.** **In**, **Sidechain** (audio), **Out** and **Mod** (ten parameters; Lookahead is not controllable on purpose).
+
+**Example.** Snare track → Gate → Mixer. Choose the preset **Drums › Snare Gate**, play, and raise the **Threshold** until the spill is gone but every hit still opens the gate; use **Listen to sidechain** and the **Highpass** if low bleed opens it. For a voice-over: patch the speech into **Sidechain** of a Gate on the music, preset **Ducker › Voice-over Duck**. For an over-compressed track that you want to bring back to life: preset **Expander › Squash Recover**.
+
+**Presets.** Pack **Gate Basics** (26 presets) in [`presets/gate.patchkamer-presets.json`](../../presets/gate.patchkamer-presets.json), in the folders **Drums** (Tight Kick, Snare Gate, Tom Gate, Hi-Hat Bleed, Room Mic Tighten, Drum Bus Cleanup), **Instruments** (Guitar Hum, Distorted Chop, Bass Gate, Synth Noise Cut), **Vocals** (Breath Reducer, Vocal Gate Gentle, Spoken Cleanup, Backing Vocal Bleed), **Noise** (Hiss Away, Hum Away, Noise Floor Lower, Room Tone Keep), **Expander** (Gentle Expander, Squash Recover, Dynamics Restore), **Ducker** (Voice-over Duck, Bass Duck, Soft Duck), **Effects** (Hard Chop, Gated Tail). I have not listened to them. Set the **Threshold** to your own material first: a good value lies just above the noise.
+
+**Tips and limits.** *Attack* and *Release* are time constants of the gain (amplitude): after one attack 63% of the way to open is done; after one release the gain is at 37% (−8.7 dB). Muting by 60 dB therefore takes about 7 times the release (measured with release 100 ms: −20 dB after 239 ms, −60 dB after 928 ms). The gate itself reacts after the **Hold** plus the run-out of the peak follower (about 7 ms for a 20 dB fall): with hold 50 ms it starts muting after 59 ms. The expander is exact: threshold −40 dB and ratio 4:1 give −12.0 dB at −44 dB and −30.0 dB at −50 dB. **Lookahead** delays the sound by exactly that many ms (measured 2, 5 and 10 ms); Patchkamer does not compensate for that latency. With a hysteresis of 6 dB a gate that opened at −30 dB stays open at −43 dB and closes at −49 dB. Low tones make the *Peak* detector ripple within one wave: use **Hold**, *RMS* or a **Highpass** on the sidechain. Computing load in Node on this machine: 0.3% to 0.4% of the time budget of a block on average (p99 below 0.8%). A guard limits the input and the sidechain at ±16 (+24 dB), turns NaN into 0 and resets a state that goes wrong; after bursts of NaN, Infinity, 1e9 and 1e30 the sound is exactly the same as without them. It needs AudioWorklet; without it the sound passes through unchanged and the card says so.
+
 ## Grit
 
 **What it is for.** Grit distorts a sound and runs it through a resonant low-pass filter, with an LFO on the cutoff. It makes a source rougher and darker.
@@ -321,6 +593,30 @@ Grit has no **Mix** knob: the whole signal goes through the distortion and the f
 
 **Tips.** A small guard limits the input to +24 dB and replaces a filter that has gone off course. Grit also works without AudioWorklet; only the input guard is then missing.
 
+## Harmonizer
+
+**What it is for.** Harmonizer makes up to four extra voices from one input. Each voice has its own interval, level, pan, detune and delay. The intervals can be fixed (semitones) or stay inside a scale: then the voices follow the pitch of the source and land on notes of the chosen key and scale. The dry sound stays in the mix.
+
+![The Harmonizer card](../images/en/effects/harmonizer.png)
+
+**Controls.**
+
+- **Engine:** *Grain (fast)* or *Vocoder (formants)* (a phase vocoder that can keep the vowel colour of a voice). **Window:** *Fast*, *Normal* or *High* (more latency, cleaner low notes).
+- **Follow** decides what the **Interval** knobs mean. *Semitones (fixed)*: every voice moves the sound by that number of semitones, whatever is played. *Scale, pitch of the input*: the intervals are **scale steps**; the pitch of the input (a single voice or line) is measured and every voice goes that many notes up or down in the scale. *Scale, notes (event)*: the same, but the source is the last note that arrives on the **Notes** port, for example from a melody or chord player, so you can also use it on a sound whose pitch cannot be measured.
+- **Key** and **Scale** (Major, Minor, Harmonic minor, Melodic minor, Dorian, Phrygian, Lydian, Mixolydian, Major pentatonic, Minor pentatonic, Blues, Whole tone) decide which notes are allowed in the *Scale* settings. The source is first snapped to the nearest note of the scale (the higher one if two are equally close); then **Interval** counts notes of the scale. A step of 0 snaps the voice to the scale. The voice moves the sound by the distance to that note, so the intonation and the vibrato of the source stay.
+- **Voice 1 to 4:** the pad **On** switches the voice, **Interval** (−24 to +24, in semitones or scale steps), **Level**, **Pan** (L to R), **Detune** (−100 to +100 ct) and **Delay** (0 to 100 ms; it adds to the compensation that keeps the voices in time).
+- **Dry** is the level of the original, **Voices** the level of all voices together, **Glide** (0 to 1000 ms) how fast the voices move to a new note, **Formant %** (only in the *Vocoder*) how much of the vowel colour is kept, and **Humanize** a slow, random drift of the voices (up to about ±14 ct).
+
+**Ports.** **In**, **Out**, **Notes** (event input), **Mod** (15 parameters: **Dry**, **Voices**, **Formant %** and per voice **Level**, **Pan**, **Detune**; the intervals, delays, glide and humanize are not modulated).
+
+**Latency.** The card shows it: *Grain* 26.1 / 36.0 / 50.9 ms and *Vocoder* 21.3 / 42.6 / 85.3 ms for *Fast* / *Normal* / *High*, at 48 kHz. The dry sound and all voices are held in time (measured with noise: dry 36.0 ms and a voice at unison 36.0 ms in *Grain* *Normal*; 42.6 and 43.1 ms in the *Vocoder* *Normal*).
+
+**Example.** A vocal line → Harmonizer → Mixer. Set **Follow** to *Scale, pitch of the input*, **Key** C and **Scale** Major, voice 1 at **Interval** +2 and voice 2 at +4: the voices sing thirds and fifths in the scale (preset **C Major Thirds**). For a pad or a synth lead without a measurable pitch: connect a melody to **Notes** and choose *Scale, notes (event)* (preset **Notes C Major Triad**).
+
+**Presets.** Pack **Harmonizer Basics** (23 presets) in [`presets/harmonizer.patchkamer-presets.json`](../../presets/harmonizer.patchkamer-presets.json), in the folders **Fixed Intervals** (Thirds Up, Power Fifth, Octave Doubles, Low Octave Support, Fourths Stack, Sixths, Minor Third Pair, Triad Cloud), **In Scale (Pitch of Input)** (C Major Thirds, A Minor Thirds, G Major Below, Pentatonic Choir, Dorian Lead, Lydian Glow, Blues Backing, Harmonic Minor Drama), **Driven by Notes** (Notes C Major Triad, Notes A Minor Stack, Notes Pentatonic Pad) and **Choirs** (Detuned Choir, Whisper Doubles, Barbershop, Robot Chord).
+
+**Tips and limits.** The measurement of the pitch is monophonic: use a single voice or line. With chords or noise the source is unreliable; use *Notes (event)* or *Semitones (fixed)*. Measured offline (`docs/tools/measure-pitch.mjs harmonizer`), over 21 combinations of intervals (−12 to +12 st) and base tones (110, 220, 440 Hz): the pitch error of a voice is on average 0.02 ct in the *Vocoder* (largest 0.06 ct) and 0.7 ct in *Grain* (largest 2.2 ct). The scale steps landed on the expected note (within 5 ct) in 8 of 8 test cases, both with the notes and with the measured pitch. Computing load per block of 128 samples (budget 2.67 ms) with four voices on, average / 99th percentile / maximum on this test machine: *Grain* *Normal* 2.9% / 4.1% / 15.0% (with pitch detection 4.5% / 6.1% / 20.7%), *Vocoder* *Fast* 5.2% / 9.9% / 15.1%, *Normal* 5.5% / 20.6% / 29.5% (with detection 7.0% / 21.7% / 30.8%), *High* 5.5% / 38.1% / 45.9%; one voice in the *Vocoder* *Normal* 4.0% / 13.1% / 19.5%. All voices share one analysis, so extra voices are cheap. Formant keeping on a pure tone lowers the level of the voices, because a sine has no formants. A guard limits the input at ±16 and replaces NaN by 0; with 40 random and extreme settings and bursts of NaN, ±Infinity and 1e30 there were no invalid samples and the sound came back every time. Nothing here has been listened to.
+
 ## Phaser
 
 **What it is for.** A phaser sweeps a series of notches through the sound with a slow movement. It adds a swirling, passing character.
@@ -345,6 +641,62 @@ Grit has no **Mix** knob: the whole signal goes through the distortion and the f
 **Presets.** Pack **Phaser Basics** (11 presets) in [`presets/phaser.patchkamer-presets.json`](../../presets/phaser.patchkamer-presets.json), in the folders **Classic** (Soft Phase, Slow Sweep, Swirl, Hollow Notch), **Tempo** (Bar Phase, Long Rise, Stereo Drift), **Extreme** (Rocket, Warp Drive, Wobble Robot, Wide Vortex). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** The card reminds you that **Stereo** sets the phase difference between left and right. A guard rebuilds the filter chains if a faulty value would poison the feedback; the sound is unchanged in normal use.
+
+## Pitch Correction
+
+**What it is for.** Pitch Correction tunes a single voice or melody line. It measures the pitch, picks the nearest allowed note and moves the sound there. You choose which of the twelve notes are allowed, how fast the correction acts (from hard and robotic to slow and natural), how much of the vibrato stays, and whether the vowel colour of the voice is kept.
+
+![The Pitch Correction card](../images/en/effects/pitch-correction.png)
+
+**Controls.**
+
+- The **screen** at the top shows the last four seconds: the grey line is the pitch that is heard, the bright line the corrected pitch, the horizontal lines the notes (bright when allowed). Below it: **Heard** and **Corrected** show the note and the distance in cents.
+- **Key** and **Scale** are a shortcut that sets the twelve **note switches** (C to B). Choose a key and a scale (Chromatic, Major, Minor, Harmonic minor, Melodic minor, Dorian, Phrygian, Lydian, Mixolydian, Major pentatonic, Minor pentatonic, Blues, Whole tone), or switch single notes on and off yourself: **Scale** then shows *Custom*. Only the switches decide what is corrected. If no switch is on, nothing is corrected.
+- **Speed** (0 to 400 ms) is how quickly the pitch goes to the target note. 0 is hard (internally never faster than 3 ms) and gives the robotic effect; 40 to 120 ms sounds natural.
+- **Amount** (0 to 100%) is how far the pitch is moved towards the target. **Vibrato** (0 to 100%) keeps that part of the singer's own vibrato and drift (0% flattens it, 100% leaves it).
+- **Mix** is dry against corrected. The dry sound is delayed by the latency, so both stay in time.
+- **Engine:** *Grain (fast)* has a low latency; the vowel colour moves a little with the pitch. *Vocoder (formants)* is a phase vocoder that keeps the vowel colour (**Formant %**, only in this engine) and has more latency. **Window:** *Fast*, *Normal* or *High*.
+- **Range** limits the search for the pitch: *Low* (62 to 420 Hz), *Normal* (75 to 800 Hz) or *High* (90 to 1100 Hz). A narrower range gives fewer octave mistakes.
+- **Threshold** (−70 to −20 dB) is the level below which no pitch is looked for, and **Hold** (0 to 500 ms) is how long the last correction stays when the pitch disappears. Parts without a clear pitch (silence, breath, consonants, noise) pass through **unprocessed**.
+- **Tuning A** (430 to 450 Hz) is the reference pitch of the A.
+
+**Ports.** **In**, **Out**, **Mod** (four parameters: **Speed**, **Amount**, **Vibrato**, **Mix**; nothing moves by itself).
+
+**Latency.** The card shows it. At 48 kHz: *Grain* 11.1 / 12.0 / 14.0 ms and *Vocoder* 21.3 / 42.6 / 85.3 ms for *Fast* / *Normal* / *High*. Add about 20 ms for the pitch measurement before a correction has an effect (a jump of 40 ct is corrected 13 ms after the measurement with **Speed** 0). Use *Grain* with *Fast* to monitor yourself while singing; use the *Vocoder* when you tune a recording.
+
+**Example.** A vocal track → Pitch Correction → Mixer. Choose preset **C Major Vocal** (**Speed** 40 ms, **Vibrato** 50%) in a song in C major. For a hard, robotic effect: preset **Hard Chromatic** (**Speed** 0, **Vibrato** 0%).
+
+**Presets.** Pack **Pitch Correction Basics** (24 presets) in [`presets/pitch-correction.patchkamer-presets.json`](../../presets/pitch-correction.patchkamer-presets.json), in the folders **Natural** (Gentle Fix, Natural Vocal, Subtle Polish, Live Safe), **Hard Tune** (Hard Chromatic, Robot Voice, Stepped Glide, Slow Glide), **In Key** (C Major Vocal, A Minor Vocal, G Major Vocal, E Minor Pentatonic, Blues In G, D Dorian, F Lydian, Whole Tone Dream), **Instruments** (Bass Line, Guitar Lead, Whistle High, Violin Fix) and **Special** (Half Correction, Vibrato Smoother, Low Latency Monitor, High Quality Window).
+
+**Tips and limits.** It is **monophonic**: use it on a single voice or line, never on chords or a mix. Consonants, breath and noise are not corrected. Strong octave jumps and a very noisy recording can fool the detection. The correction sounds robotic at **Speed** 0 with a changing pitch; that is the intended effect. The *Grain* engine adds roughness at large shifts; the *Vocoder* is smoother but has more latency and lowers the level of noise by about 3 dB (0.72 in amplitude) when it passes it through unprocessed.
+
+Measured offline (`docs/tools/measure-pitch.mjs correction`). **Detection**, with 36 base tones per range (tested spans: 70 to 420 Hz for *Low*, 80 to 800 Hz for *Normal*, 150 to 1000 Hz for *High*), spread logarithmically with a random offset of ±50 ct, frames after 0.35 s: a clean sine, sawtooth or a vowel-like sound is within 10 ct in 100% of the frames in the ranges *Low* and *Normal* (the sawtooth in *High*: 97.2%, with 2.8% octave mistakes). With noise at 20 dB signal-to-noise: 100% within 10 ct. With noise at 10 dB: 97.9% (*Low*), 86.7% (*Normal*) and 77.1% (*High*) within 10 ct; octave mistakes 0%, 2.7% and 5.9%. With a vibrato of ±50 ct at 5.5 Hz: 100% within 50 ct and 80% (*Low*), 72% (*Normal*), 60% (*High*) within 10 ct, because the detection lags the moving pitch by the length of its window. **Correction** (chromatic, **Speed** 0, **Vibrato** 0%): the pitch after the correction is on average 0.00 ct (sine), 0.08 ct (sawtooth) and 0.05 ct (vowel-like) from the nearest note in the *Vocoder*, and 1.0, 0.9 and 0.5 ct in *Grain*, where it was 15.3 ct off on average; the largest error is 2.3 ct. **Scale:** in C major 20 of 20 test pitches (between the notes, not exactly halfway) went to the expected scale note within 10 ct. **Speed:** a 40 ct step is 90% corrected after 13 ms (**Speed** 0), 53 ms (20 ms), 120 ms (50 ms), 237 ms (100 ms) and 467 ms (200 ms). **Vibrato:** with a ±60 ct vibrato (spread 42 ct), **Vibrato** 0% leaves 7% (at **Speed** 0; 53% at **Speed** 20 ms, because a slower correction also follows the vibrato less), 50% leaves 50% and 100% leaves 98%. On Piano, Guitar and Formant Singer notes (chromatic, **Speed** 0, **Vibrato** 0%, *Vocoder*): the share of the frames within 10 ct of a semitone went from 49% to 99% (Piano), 89% to 100% (Guitar) and 32% to 73% (Formant Singer, which has a vibrato and a scoop at the start of a note); the detection of the input is within 50 ct of the played note in 93%, 100% and 100% of the frames. Computing load per block of 128 samples (budget 2.67 ms), average / 99th percentile / maximum on this test machine: *Grain* *Normal* 2.1% / 3.8% / 14.8%, *Vocoder* *Fast* 4.2% / 8.0% / 25.3%, *Normal* 5.8% / 21.1% / 33.1%, *High* 4.6% / 25.6% / 42.3%. A guard limits the input at ±16 and replaces NaN by 0; with 40 random and extreme settings and bursts of NaN, ±Infinity and 1e30 there were no invalid samples and the sound came back every time. Silence stays silent. Nothing here has been listened to.
+
+## Pitch Shifter
+
+**What it is for.** Pitch Shifter moves the pitch of a sound up or down, from −24 to +24 semitones plus ±100 cents, and keeps the tempo the same. It has three engines for different material, a mix, a feedback for octave echoes and shimmer, and a glide time.
+
+![The Pitch Shifter card](../images/en/effects/pitch-shifter.png)
+
+**Controls.**
+
+- **Engine:** *Percussive (grains, fast)* uses very short grains and has almost no delay: for drums and short sounds (a sustained tone becomes rough). *Grain (voice, instruments)* uses longer grains and lines up the waveforms, which is smoother for voices, bass and instruments; formants move with the pitch. *Vocoder (formants)* is a phase vocoder with formant control; it needs the most latency and sounds the cleanest on voices and pads.
+- **Window:** *Fast*, *Normal* or *High*. A bigger window gives more latency and a cleaner result, especially on low notes.
+- **Pitch** (−24 to +24 st) is the interval in semitones and **Fine** (−100 to +100 ct) is the fine tuning.
+- **Glide** (0 to 500 ms) is how long the pitch takes to move when you change **Pitch**, **Fine** or a modulation.
+- **Formant %** (0 to 100%, only in the *Vocoder*) keeps the vowel colour of a voice when the pitch changes. At 0% the formants move with the pitch (the chipmunk effect). **Formant st** (−12 to +12 st) moves the formants on their own, for example to make a voice sound smaller or larger.
+- **Mix** is dry against shifted. The dry sound is delayed by the minimum latency, so both stay in time.
+- **Feedback** (0 to 90%) sends the shifted sound back into the input: with +12 st you get a rising shimmer, with −12 st octave echoes that sink. **Feedback tone** (500 to 16000 Hz) is a low-pass filter in that loop. The loop is limited softly, so it cannot run away.
+
+**Ports.** **In**, **Out**, **Mod** (six parameters: **Pitch**, **Fine**, **Formant keep**, **Formant shift**, **Mix**, **Feedback**; nothing moves by itself, because a moving pitch is easily out of tune).
+
+**Latency.** The card shows it. At 48 kHz: *Percussive* 1.3 / 2.0 / 3.0 ms, *Grain* 14.1 / 16.0 / 18.9 ms and *Vocoder* 21.3 / 42.6 / 85.3 ms for the window *Fast* / *Normal* / *High*. In the two grain engines the delay grows with the interval by about half a window times the distance from the original speed (octave up: about +10 to +26 ms; measured: *Grain* *Normal* +12 st 37 ms against 16 ms at 0 st). Use *Percussive* or *Grain* with *Fast* when you play along live; use the *Vocoder* when you can compensate the latency.
+
+**Example.** A vocal → Pitch Shifter → Mixer. Preset **Natural Octave Down** (*Vocoder*, −12 st, **Formant %** 100%, **Mix** 60%) adds a low octave without a deep "monster" voice. A drum bus → Pitch Shifter with preset **Kick Drop** (*Percussive*, −12 st) for a lower kick. For shimmer: preset **Shimmer** (*Vocoder*, +12 st, **Feedback** 60%, **Feedback tone** 5 kHz, **Mix** 50%) on a send bus after a reverb.
+
+**Presets.** Pack **Pitch Shifter Basics** (30 presets) in [`presets/pitch-shifter.patchkamer-presets.json`](../../presets/pitch-shifter.patchkamer-presets.json), in the folders **Intervals** (Octave Up, Octave Down, Fifth Up Layer, Fourth Down Layer, Major Third Up, Minor Third Down, Two Octaves Up, Two Octaves Down, Tritone), **Voice** (Chipmunk, Deep Voice, Gender Up, Gender Down, Natural Octave Down, Giant), **Doubling** (Subtle Doubler, Wide Detune, Slightly Flat, Micro Thickener), **Drums** (Kick Drop, Snare Up, Tom Down, Hat Up, Drum Octave Layer) and **Effects** (Shimmer, Octave Echo Down, Rising Echoes, Alien, Dark Layer, Smooth Glide).
+
+**Tips and limits.** Measured offline (see `docs/tools/measure-pitch.mjs`), over 13 intervals from −24 to +24 st and the base tones 110, 220 and 440 Hz: the pitch error of a sine, a sawtooth and a chord is on average 0.02 ct in the *Vocoder* (largest 0.06 ct) and 0.8 ct in *Grain* *Normal* (largest 3.8 ct; *Fast* 1.5 ct, largest 7.7 ct). The leftover noise and distortion (THD+N) of a shifted sine is on average −53 dB in the *Vocoder* *Normal* (worst case −41 dB) and −46 dB in *Grain* *Normal* (worst case −30 dB). On Piano, Guitar and Formant Singer notes shifted +7 st the median pitch is within 5.7 ct in *Grain* and within 11.8 ct in the *Vocoder* (Piano; the others within 5.6 ct). The *Percussive* engine does not keep a tone clean: with a sine the mean frequency is within 40 ct, but the sound is rough. For a chord of three sines the *Vocoder* cannot separate the tones when they lie closer than about four FFT bins (at 110 Hz with the window *Fast* or *Normal*); the window *High* does. **Formant %** on a pure tone lowers the level (−8 dB at 100% for +7 st), because a sine has no formants: lower it, or use *Grain*, for such sounds. A formant test with an "a" vowel (first formant 650 Hz) moved by +7 st gives a strongest harmonic at 974 Hz without formant keeping and at 584 Hz with **Formant %** at 100%. Computing load per block of 128 samples (budget 2.67 ms), average / 99th percentile / maximum on this test machine: *Percussive* 0.4% / 0.7% / 12.7%, *Grain* *Normal* 0.8% / 3.6% / 7.7%, *Vocoder* *Fast* 4.2% / 12.4% / 16.8%, *Normal* 4.7% / 25.8% / 29.6%, *High* 4.2% / 33.0% / 40.9%. A guard limits the input at ±16 and replaces NaN by 0; with 40 random and extreme settings and bursts of NaN, ±Infinity and 1e30 there were no invalid samples and the sound came back every time. Nothing here has been listened to.
 
 ## Pump
 
@@ -403,6 +755,43 @@ The card hides the controls that do not apply to the chosen source.
 **Presets.** Pack **Resonator Basics** (13 presets) in [`presets/resonator.patchkamer-presets.json`](../../presets/resonator.patchkamer-presets.json), in the folders **Subtle** (Subtle Tint, Drum Tuner, Sub Ring, Marimba Hit), **Chords** (Minor Haze, Major Shine, Sus Cloud, Jazz Seven, Open Fourths, Note Follower), **Extreme** (Metal Drone, Endless Bells, Scream Pipes). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
 
 **Tips.** Resonator needs AudioWorklet; without it the sound passes through unchanged and the card says so. The device keeps the last played root (in `noteRoot`) when you save a preset.
+
+## Reverb
+
+**What it is for.** Reverb gives a sound a believable space. It has five models in one effect: **Hall** (large, long decay, rich), **Plate** (bright, smooth, dense almost at once), **Spring** (the "boing" of a spring tank, lo-fi), **Room** (small and intimate) and **Chamber** (in between). Everything runs in one audio worklet, so the dry signal stays free of delay.
+
+![The Reverb card](../images/en/effects/reverb.png)
+
+**Controls.**
+
+- **Model:** Hall, Plate, Spring, Room or Chamber. Each model has its own delay lengths, diffusers and early reflections. Changing the model fades between the two (80 ms), without a click.
+- **Size** (0 to 100%) scales the space: from half to twice the delay lengths. For Spring it is the length of the spring.
+- **Decay** (0.1 to 30 s) is the reverb time (RT60) around 1 kHz.
+- **Pre sync:** *free* or *to tempo*. **Pre-delay** (0 to 250 ms) is the time before the reverb starts; with *to tempo* the **Note** value sets it instead (1/32, 1/16, 1/8, 1/4 or 1/2, at most 500 ms).
+- **Damping** (1 to 20 kHz) is the frequency at which the reverb time is half as long: lower is darker. **Low decay** (×0.25 to ×2) makes the low end die out faster or slower than the rest.
+- **Diffusion** is how smooth the start of the reverb is; for Spring it is the dispersion, which sets how strong the "boing" is.
+- **Modulation** moves the delay lengths slightly, which prevents a metallic ring.
+- **Early/late** goes from only the tail (0%) to only early reflections (100%).
+- **Input HP** and **Input LP** filter what goes into the reverb (the dry signal stays whole).
+- **Width** (0 to 200%) is the stereo width of the reverb; 0 makes it mono.
+- **Ducking** lowers the reverb while the source plays (it starts around -36 dB and is complete at -12 dB) and lets it bloom in the pauses.
+- **Freeze:** *hold* closes the input and keeps the tail going. Use it on a pad or chord that has just ended.
+- **Mix** is the balance between dry and reverb (equal power). On a send bus put it at 100%.
+
+**Ports.** **In**, **Out**, **Mod** (13 parameters, in four lanes: space, tone, input, output).
+
+**Example.** Duofone → Reverb → Speakers. Choose the preset **Pad Hall** for a pad, **Vocal Plate** for a voice and **Tight Drum Room** for drums. Raise **Pre-delay** to 30 to 50 ms to keep a voice clear in front of the space.
+
+**Presets.** Pack **Reverb Rooms** (31 presets) in [`presets/reverb.patchkamer-presets.json`](../../presets/reverb.patchkamer-presets.json), in the folders **Hall**, **Plate**, **Spring**, **Room**, **Chamber** and **Creative** (Frozen Hall, Ducked Vocal Hall, Tempo Pre-delay Hall, Infinite Cloud, Metal Tank, Telephone Room, Dark Void), with settings for vocals, drums, strings, synths, pads and film. Load it with the **Presets** tab of the library → **Import…**, then choose a preset in the bar at the top of the card or step through them with ◀ ▶.
+
+**Tips and limits.** These are offline measurements; they were **not listened to**, and these are approximations of kinds of spaces and not copies of a specific one.
+
+- The reverb time follows **Decay** within about 5% (measured at 1 kHz with damping off: set 2.5 s gives 2.40 to 2.47 s on all models; 15 s gives 14.0 to 14.9 s). With **Damping** the high end decays faster as set (hall, 3 s: 3.0 s at 125 Hz, 2.6 s at 1 kHz, 1.6 s at 4 kHz with damping 3 kHz). **Low decay** works as a rough shelf: ×0.5 gives about 2.1 s at 125 Hz instead of 3.0 s.
+- The tail gets as dense as noise after about 35 ms (Room) to 265 ms (Hall) with the default **Diffusion** and **Modulation**. At **Diffusion** 0 and **Modulation** 0 the Hall takes 700 ms and sounds more metallic; Spring is on purpose a ringing, combed sound.
+- Left and right of the tail are well decorrelated (stereo correlation 0.04 to 0.1 for Hall, Plate, Room and Chamber).
+- Rendering takes about 2 to 3% of the audio budget of one processor core per instance (worst case in a block: under 15%).
+- **Freeze** does not make the tail grow: after 60 s the level is 0.9 dB (Hall) to 4.7 dB (Spring) lower, so a frozen tail is not literally endless.
+- A NaN, infinity or enormous value on the input is limited and cannot make the reverb run away; a model that does break is wiped and restarts.
 
 ## Room
 

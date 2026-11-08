@@ -76,15 +76,26 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 <!-- list-devices:begin presets -->
 | Apparaat | Pack | Presets | Mappen op het hoogste niveau | Bestand | formatVersion |
 |---|---|---|---|---|---|
+| [Bitcrusher](../devices/effects/Bitcrusher/) | Bitcrusher Basics | 25 | 5: Lo-fi, Retro, Industrial, Communication, Drums and Bus | [`bitcrusher.patchkamer-presets.json`](bitcrusher.patchkamer-presets.json) | 2 |
 | [Chorus](../devices/effects/Chorus/) | Chorus Basics | 12 | 4: Subtle, Ensemble, Movement, Extreme | [`chorus.patchkamer-presets.json`](chorus.patchkamer-presets.json) | 2 |
+| [Compressor](../devices/effects/Compressor/) | Compressor Basics | 30 | 8: Vocals, Drums, Bass, Instruments, Mix, Parallel, Limiter, Pumping | [`compressor.patchkamer-presets.json`](compressor.patchkamer-presets.json) | 2 |
+| [Convolution Reverb](../devices/effects/ConvolutionReverb/) | Convolution Spaces | 30 | 4: Rooms, Halls, Devices, Creative | [`convolution-reverb.patchkamer-presets.json`](convolution-reverb.patchkamer-presets.json) | 2 |
+| [De-esser](../devices/effects/DeEsser/) | De-esser Basics | 21 | 4: Vocals, Speech, Wideband, Top End | [`deesser.patchkamer-presets.json`](deesser.patchkamer-presets.json) | 2 |
+| [Delay](../devices/effects/Delay/) | Delay Basics | 35 | 8: Slapback, Dub, Ping-pong, Rhythmic, Ambient, Tape, Modulated, Creative | [`delay.patchkamer-presets.json`](delay.patchkamer-presets.json) | 2 |
+| [Distortion](../devices/effects/Distortion/) | Distortion Basics | 28 | 5: Warmth, Crunch, Fuzz and Fold, Drums and Bass, Lo-fi | [`distortion.patchkamer-presets.json`](distortion.patchkamer-presets.json) | 2 |
 | [Effect Chain](../devices/effects/EffectChain/) | Effect Chain Basics | 14 | 4: Atmosphere, Studio, Club, Sound Design | [`effect-chain.patchkamer-presets.json`](effect-chain.patchkamer-presets.json) | 2 |
 | [Filter](../devices/effects/Filter/) | Filter Basics | 14 | 3: Basics, Movement, Aggressive | [`filter.patchkamer-presets.json`](filter.patchkamer-presets.json) | 2 |
 | [Flanger](../devices/effects/Flanger/) | Flanger Basics | 12 | 4: Classic, Subtle, Tempo, Extreme | [`flanger.patchkamer-presets.json`](flanger.patchkamer-presets.json) | 2 |
 | [Frequency Shifter](../devices/effects/FrequencyShifter/) | Frequency Shifter Basics | 13 | 3: Subtle, Inharmonic, Feedback | [`frequency-shifter.patchkamer-presets.json`](frequency-shifter.patchkamer-presets.json) | 2 |
+| [Gate](../devices/effects/Gate/) | Gate Basics | 26 | 7: Drums, Instruments, Vocals, Noise, Expander, Ducker, Effects | [`gate.patchkamer-presets.json`](gate.patchkamer-presets.json) | 2 |
 | [Grit](../devices/effects/Grit/) | Grit Basics | 12 | 3: Warm, Motion, Extreme | [`grit.patchkamer-presets.json`](grit.patchkamer-presets.json) | 2 |
+| [Harmonizer](../devices/effects/Harmonizer/) | Harmonizer Basics | 23 | 4: Fixed Intervals, In Scale (Pitch of Input), Driven by Notes, Choirs | [`harmonizer.patchkamer-presets.json`](harmonizer.patchkamer-presets.json) | 2 |
 | [Phaser](../devices/effects/Phaser/) | Phaser Basics | 11 | 3: Classic, Tempo, Extreme | [`phaser.patchkamer-presets.json`](phaser.patchkamer-presets.json) | 2 |
+| [Pitch Correction](../devices/effects/PitchCorrection/) | Pitch Correction Basics | 24 | 5: Natural, Hard Tune, In Key, Instruments, Special | [`pitch-correction.patchkamer-presets.json`](pitch-correction.patchkamer-presets.json) | 2 |
+| [Pitch Shifter](../devices/effects/PitchShifter/) | Pitch Shifter Basics | 30 | 5: Intervals, Voice, Doubling, Drums, Effects | [`pitch-shifter.patchkamer-presets.json`](pitch-shifter.patchkamer-presets.json) | 2 |
 | [Pump](../devices/effects/Pump/) | Pump Basics | 13 | 3: Clock, Sidechain, Split and Mix | [`pump.patchkamer-presets.json`](pump.patchkamer-presets.json) | 2 |
 | [Resonator](../devices/effects/Resonator/) | Resonator Basics | 13 | 3: Subtle, Chords, Extreme | [`resonator.patchkamer-presets.json`](resonator.patchkamer-presets.json) | 2 |
+| [Reverb](../devices/effects/Reverb/) | Reverb Rooms | 31 | 6: Hall, Plate, Spring, Room, Chamber, Creative | [`reverb.patchkamer-presets.json`](reverb.patchkamer-presets.json) | 2 |
 | [Room](../devices/effects/Room/) | Room Basics | 12 | 3: Spaces, Delays, Space FX | [`room.patchkamer-presets.json`](room.patchkamer-presets.json) | 2 |
 | [Tremolo](../devices/effects/Tremolo/) | Tremolo Basics | 13 | 4: Classic, Slow, Rhythmic, Extreme | [`tremolo.patchkamer-presets.json`](tremolo.patchkamer-presets.json) | 2 |
 | [Vocoder](../devices/effects/Vocoder/) | Vocoder Basics | 14 | 4: Voices, Textures, Extreme, External | [`vocoder.patchkamer-presets.json`](vocoder.patchkamer-presets.json) | 2 |
@@ -120,7 +131,7 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3: Practice, Subdivisions, Loud | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) | 2 |
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4: Sound Controllers, Wheels and Pedals, Effects, Utility | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) | 2 |
 
-Samen 43 packs met 1952 presets.
+Samen 54 packs met 2255 presets.
 <!-- list-devices:end presets -->
 
 ## Wat je niet doet

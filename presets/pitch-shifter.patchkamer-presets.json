@@ -1,0 +1,547 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.pitchshifter",
+  "name": "Pitch Shifter Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Pitch Shifter: musical intervals, voice and gender shifts with formant control, subtle doubling and detune, drum shifts with the percussive engine, and feedback effects such as shimmer and octave echoes.",
+  "tree": [
+    {
+      "folder": "Intervals",
+      "items": [
+        {
+          "name": "Octave Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": 12,
+            "cents": 0,
+            "formant": 0,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Octave Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -12,
+            "cents": 0,
+            "formant": 0,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Fifth Up Layer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 7,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Fourth Down Layer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": -5,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Major Third Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": 4,
+            "cents": 0,
+            "formant": 0.6,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Minor Third Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -3,
+            "cents": 0,
+            "formant": 0.6,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Two Octaves Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 24,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.4,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Two Octaves Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": -24,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Tritone",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 6,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.45,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Voice",
+      "items": [
+        {
+          "name": "Chipmunk",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": 9,
+            "cents": 0,
+            "formant": 0,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Deep Voice",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -7,
+            "cents": 0,
+            "formant": 0,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Gender Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": 3,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 4,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Gender Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -3,
+            "cents": 0,
+            "formant": 1,
+            "fshift": -4,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Natural Octave Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -12,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.6,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Giant",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -5,
+            "cents": 0,
+            "formant": 1,
+            "fshift": -7,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Doubling",
+      "items": [
+        {
+          "name": "Subtle Doubler",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "fast",
+            "semi": 0,
+            "cents": 9,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.4,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Wide Detune",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 0,
+            "cents": 18,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Slightly Flat",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 0,
+            "cents": -12,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.45,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Micro Thickener",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "fast",
+            "semi": 0,
+            "cents": 6,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.35,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Drums",
+      "items": [
+        {
+          "name": "Kick Drop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "perc",
+            "win": "fast",
+            "semi": -12,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Snare Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "perc",
+            "win": "fast",
+            "semi": 5,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.6,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Tom Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "perc",
+            "win": "normal",
+            "semi": -7,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Hat Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "perc",
+            "win": "fast",
+            "semi": 12,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Drum Octave Layer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "perc",
+            "win": "fast",
+            "semi": -12,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Effects",
+      "items": [
+        {
+          "name": "Shimmer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": 12,
+            "cents": 0,
+            "formant": 0,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0.6,
+            "fbtone": 5000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Octave Echo Down",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": -12,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0.5,
+            "fbtone": 3000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Rising Echoes",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 7,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 0.5,
+            "fb": 0.55,
+            "fbtone": 4000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Alien",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": 24,
+            "cents": 0,
+            "formant": 0,
+            "fshift": -8,
+            "mix": 0.8,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Dark Layer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "vocoder",
+            "win": "normal",
+            "semi": -24,
+            "cents": 0,
+            "formant": 0,
+            "fshift": 0,
+            "mix": 0.4,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 20
+          }
+        },
+        {
+          "name": "Smooth Glide",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "grain",
+            "win": "normal",
+            "semi": 5,
+            "cents": 0,
+            "formant": 1,
+            "fshift": 0,
+            "mix": 1,
+            "fb": 0,
+            "fbtone": 6000,
+            "glide": 400
+          }
+        }
+      ]
+    }
+  ]
+}

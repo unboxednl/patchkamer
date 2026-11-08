@@ -1,0 +1,274 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.0.0 — Patchkamer contract v1.28. Eerste versie: noise gate, expander en ducker in één: drempel, ratio (gate = oneindig, expander = zacht), attack, hold, release, range (hoeveel er gedempt wordt),
+//          hysterese, sidechain-filters (hoog- en laagdoorlaat), meeluisteren met de sidechain, externe sidechain-ingang, lookahead tot 10 ms, stereo-koppeling en een meter die toont hoe open de poort is.
+//          Tweetalig (host.lang), tekenen via host.frame, meter door de host (host.ui.meter).
+//          Bewaker: de worklet begrenst de ingangen (±16 = +24 dB), zet NaN op 0, accepteert alleen eindige parameters en zet een ontspoorde toestand terug.
+/** Gate — demp wat onder de drempel zakt (gate en expander), of demp wat de sidechain luid maakt (ducker).
+ * Signaalweg: ingang -> (vertraging voor lookahead) -> versterking -> uitgang.
+ * Detector: peak (volger met 3 ms release) of RMS (15 ms) van de ingang of van de externe sidechain, door een hoog- en laagdoorlaatfilter, per kanaal, gekoppeld met 'Link'.
+ * Poort: zakt het niveau onder de drempel, dan blijft de poort nog 'hold' ms open en wordt daarna gedempt, hoogstens 'range' dB. Hysterese: eenmaal open sluit de poort pas
+ * 'hyst' dB onder de drempel. Gate = ratio oneindig; expander: (ratio - 1) dB dempen per dB onder de drempel. Ducker: omgekeerd, dempt als het niveau boven de drempel komt.
+ * Attack en release zijn tijdconstanten (63%) van de versterking (amplitude): attack bij openen (ducker: bij dempen), release bij sluiten (ducker: bij herstel).
+ * Latency: gelijk aan de lookahead (de host compenseert dat niet); met lookahead 0 is er geen vertraging.
+ */
+
+// Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
+const NL = {
+  title: 'GATE', sub: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.',
+  mode: 'Soort', gate: 'Gate (dicht)', expander: 'Expander (zacht)', ducker: 'Ducker (sidechain luid = dempen)', detect: 'Detectie', peak: 'Peak', rms: 'RMS', src: 'Sidechain', int: 'Intern', ext: 'Extern (ingang Sidechain)',
+  on: 'Aan', off: 'Uit (doorlaten)', listen: 'Luister naar sidechain', listenTip: 'Hoor wat de detector hoort (na de filters), om ze in te stellen', aria: 'Overdrachtscurve van de poort', gain: 'Poort (versterking)', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Door de lookahead loopt het geluid achter; de host compenseert dat niet',
+  open: 'OPEN', closed: 'DICHT', duckOn: 'DEMPT', duckOff: 'LOS', extNone: 'Extern: zonder kabel op de ingang Sidechain gebeurt er niets.', failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
+  note: 'Tip: zet de drempel net boven de ruis en kies Peak. Een korte attack (0,2 tot 2 ms) houdt de aanzet van een noot; met Lookahead opent de poort al voor de aanzet. Hold en Hysterese voorkomen ratelen bij nootstaarten. Een hoogdoorlaat van 100 Hz op de sidechain voorkomt dat rommel van laag de poort opent. Voor Ducker: trek een spraakkanaal naar de ingang Sidechain en kies Extern.',
+  g0: 'Poort', g1: 'Tijd', g2: 'Sidechain',
+  thr: 'Drempel', thr_t: 'boven dit niveau gaat de poort open (ducker: boven dit niveau wordt gedempt)', ratio: 'Ratio', ratio_t: 'Expander en ducker: hoe steil er gedempt wordt (dB per dB); 100 = oneindig; de gate zelf is altijd oneindig', range: 'Range', range_t: 'de grootste demping in dB',
+  hyst: 'Hysterese', hyst_t: 'eenmaal open sluit de poort pas zoveel dB onder de drempel (niet bij Ducker)',
+  att: 'Attack', att_t: 'tijdconstante van het openen (ducker: van het dempen)', hold: 'Hold', hold_t: 'zo lang blijft de poort open nadat het niveau onder de drempel zakte', rel: 'Release', rel_t: 'tijdconstante van het sluiten (ducker: van het herstel); 60 dB dempen duurt ongeveer 7 keer zoveel',
+  look: 'Lookahead', look_t: 'het geluid wordt zoveel vertraagd, zodat de poort opent voor de aanzet', link: 'Link', link_t: '100% = beide kanalen gaan samen open en dicht, 0% = elk kanaal apart',
+  hpf: 'Hoogdoorlaat', hpf_t: 'laag onder deze frequentie telt niet mee voor de detector; 20 Hz = uit', lpf: 'Laagdoorlaat', lpf_t: 'hoog boven deze frequentie telt niet mee voor de detector; 20 kHz = uit',
+};
+const EN = {
+  title: 'GATE', sub: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.',
+  mode: 'Type', gate: 'Gate (closed)', expander: 'Expander (soft)', ducker: 'Ducker (loud sidechain = mute)', detect: 'Detection', peak: 'Peak', rms: 'RMS', src: 'Sidechain', int: 'Internal', ext: 'External (Sidechain input)',
+  on: 'On', off: 'Off (pass through)', listen: 'Listen to sidechain', listenTip: 'Hear what the detector hears (after the filters), to set them', aria: 'Transfer curve of the gate', gain: 'Gate (gain)', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Lookahead delays the sound; the host does not compensate for it',
+  open: 'OPEN', closed: 'CLOSED', duckOn: 'DUCKING', duckOff: 'IDLE', extNone: 'External: without a cable on the Sidechain input nothing happens.', failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
+  note: 'Tip: set the threshold just above the noise and choose Peak. A short attack (0.2 to 2 ms) keeps the start of a note; with Lookahead the gate opens before the start. Hold and Hysteresis stop chattering on note tails. A highpass of 100 Hz on the sidechain stops low rumble from opening the gate. For Ducker: patch a speech channel into the Sidechain input and choose External.',
+  g0: 'Gate', g1: 'Time', g2: 'Sidechain',
+  thr: 'Threshold', thr_t: 'above this level the gate opens (ducker: above this level it mutes)', ratio: 'Ratio', ratio_t: 'Expander and ducker: how steeply it mutes (dB per dB); 100 = infinite; the gate itself is always infinite', range: 'Range', range_t: 'the largest reduction in dB',
+  hyst: 'Hysteresis', hyst_t: 'once open, the gate closes only this many dB below the threshold (not for Ducker)',
+  att: 'Attack', att_t: 'time constant of opening (ducker: of muting)', hold: 'Hold', hold_t: 'how long the gate stays open after the level fell below the threshold', rel: 'Release', rel_t: 'time constant of closing (ducker: of recovery); a 60 dB drop takes about 7 times as long',
+  look: 'Lookahead', look_t: 'the sound is delayed by this much so the gate opens before the start', link: 'Link', link_t: '100% = both channels open and close together, 0% = each channel on its own',
+  hpf: 'Highpass', hpf_t: 'low end below this frequency does not count for the detector; 20 Hz = off', lpf: 'Lowpass', lpf_t: 'high end above this frequency does not count for the detector; 20 kHz = off',
+};
+
+// ---------- UI-hulpjes ----------
+const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
+*{box-sizing:border-box}
+.app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
+h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
+.top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
+.sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
+select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
+button{cursor:pointer} button:hover{border-color:var(--u-acc)} button.on{background:var(--u-acc);border-color:var(--u-acc);color:var(--well,#14100a)}
+canvas{display:block;width:100%;border-radius:6px;background:var(--well,#0c0f13)}
+.disp{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,230px);gap:10px;align-items:stretch;margin:4px 0 2px}
+@container (max-width:430px){.disp{grid-template-columns:minmax(0,1fr)}}
+.side{display:flex;flex-direction:column;gap:6px;justify-content:center;min-width:0}
+h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted,#97a1ad);font-weight:600;margin:12px 0 4px;padding-top:8px;border-top:1px solid var(--line,#30363f)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:8px 14px}
+.c{display:flex;flex-direction:column;gap:3px;min-width:0}
+.c .lab{display:flex;justify-content:space-between;gap:6px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted,#97a1ad)}
+.c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
+.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
+.big{font-family:var(--mono,monospace);font-size:22px;color:var(--u-ink)} .small{font-size:11px;color:var(--muted,#97a1ad);line-height:1.4}
+.lamp{display:inline-block;min-width:64px;text-align:center;padding:3px 8px;border-radius:5px;border:1px solid var(--line,#39424e);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#97a1ad)} .lamp.lit{background:var(--go,#7ee0a1);border-color:var(--go,#7ee0a1);color:var(--well,#14100a)}`;
+const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
+const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
+const ukStop = e => e.stopPropagation();
+function ukShadow(hostEl, css) { const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); ukEl(sh, 'style').textContent = css; sh.addEventListener('pointerdown', ukStop); sh.addEventListener('keydown', ukStop); return ukEl(sh, 'div', 'app'); }
+function ukSelect(p, label, opts, value, change, id) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); if (id) s.setAttribute('data-pk-id', id); return s; }
+function ukButton(p, label, tip, id, click) { const b = ukEl(p, 'button', '', label); b.type = 'button'; if (tip) b.title = tip; if (id) b.setAttribute('data-pk-id', id); b.onclick = click; return b; }
+const ukToS = (d, v) => d.scale === 'log' ? Math.log(v / d.min) / Math.log(d.max / d.min) : (v - d.min) / (d.max - d.min);
+const ukFromS = (d, x) => { const v = d.scale === 'log' ? d.min * (d.max / d.min) ** x : d.min + x * (d.max - d.min); return d.step ? Math.round(v / d.step) * d.step : v; };
+function ukFmt(d, v) { const u = d.unit || ''; if (u === '%') return Math.round(v * 100) + '%'; if (u === 'ms') return v < 1 ? v.toFixed(2) + ' ms' : v < 100 ? v.toFixed(1) + ' ms' : Math.round(v) + ' ms';
+  if (u === 'Hz') return v >= 1000 ? (v / 1000).toFixed(2) + ' kHz' : Math.round(v) + ' Hz'; if (u === 'dB') return (v > 0 && !d.noplus ? '+' : '') + v.toFixed(1) + ' dB'; if (u === ':1') return v >= 99.5 ? '∞:1' : v.toFixed(1) + ':1'; if (u === 'oct') return v.toFixed(2) + ' oct'; return v.toFixed(2) + (u ? ' ' + u : ''); }
+// schuifregelaars voor een spec {id:{name,min,max,scale,unit,g}} in groepen (groep = {key,label}); set krijgt de nieuwe waarde; elk element krijgt een vast id (contract 12d)
+function ukSliders(parent, spec, groups, set, defaults, dbl) { const handles = {};
+  groups.forEach((grp, gi) => { ukEl(parent, 'h3', '', grp.label); const g = ukEl(parent, 'div', 'grid');
+    for (const [id, d] of Object.entries(spec)) { if (d.g !== gi) continue; const c = ukEl(g, 'div', 'c'), lab = ukEl(c, 'div', 'lab'); ukEl(lab, 'span', '', d.name).title = d.name; const o = ukEl(lab, 'output');
+      const inp = ukEl(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); inp.setAttribute('data-pk-id', id); inp.setAttribute('data-pk-group', grp.key); inp.title = d.name + (d.tip ? ' — ' + d.tip : '') + ' · ' + dbl;
+      inp.oninput = () => { const v = ukFromS(d, +inp.value); set(id, v); o.textContent = ukFmt(d, v); };
+      inp.ondblclick = () => { set(id, defaults[id]); handles[id].set(defaults[id]); };
+      handles[id] = { set(v) { inp.value = String(ukToS(d, v)); o.textContent = ukFmt(d, v); }, el: c }; } });
+  return handles; }
+// canvas zonder layout-werk per frame: de breedte komt van een ResizeObserver, de hoogte wordt één keer gezet
+function ukCanvas(cv, h) { const dpr = ukClamp(globalThis.devicePixelRatio || 1, 1, 3);
+  if (!cv._ro) { cv._cw = cv.clientWidth || 300; try { cv._ro = new ResizeObserver(() => { cv._cw = cv.clientWidth || cv._cw; }); cv._ro.observe(cv); } catch { } }
+  if (cv._h !== h) { cv.style.height = h + 'px'; cv._h = h; } const w = Math.max(120, cv._cw || 300);
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); } const g = cv._g || (cv._g = cv.getContext('2d')); if (g) g.setTransform(dpr, 0, 0, dpr, 0, 0); return { g, w, h }; }
+// CSS-kleuren hooguit één keer per seconde opvragen (en meteen opnieuw na een wissel van kleurstelling)
+let ukVarEpoch = 0; try { window.addEventListener('patchkamer-skin', () => { ukVarEpoch++; }); } catch { }
+const ukVar = (el, name, d) => { const c = el._ukv || (el._ukv = {}), now = performance.now(), e = c[name];
+  if (e && now - e.t < 1000 && e.ep === ukVarEpoch) return e.v; let v = d; try { v = getComputedStyle(el).getPropertyValue(name).trim() || d; } catch { } c[name] = { v, t: now, ep: ukVarEpoch }; return v; };
+// tekenen via de klok van de host (alleen als de kaart in beeld is); terugval voor een host zonder host.frame (contract 12b)
+const ukLoop = (host, inst, cb, fps) => {
+  if (host && typeof host.frame === 'function') return host.frame(inst, cb, fps);
+  let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
+// reductiemeter door de host laten tekenen (contract 12e); zonder host.ui.meter blijft het getal over
+function ukMeter(host, parent, label, id, range, len) { if (!(host && host.ui && typeof host.ui.meter === 'function')) return null;
+  try { return host.ui.meter(parent, label, { id, group: 'meters', unit: 'db', range, hold: false, orientation: 'horizontal', length: len || 150, width: 10 }); } catch { return null; } }
+function ukResolve(spec, state, mod) { const e = { ...state }; for (const [id, d] of Object.entries(spec)) { const x = d.nomod ? 0 : (mod[id] || 0); if (!x) continue; e[id] = ukClamp(d.scale === 'log' ? state[id] * (d.max / d.min) ** x : state[id] + x * (d.max - d.min), d.min, d.max); } return e; }
+function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([, d]) => !d.nomod).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'color', drift: d.drift ?? 0.015, on: d.on ?? (!d.role || !['level', 'pitch'].includes(d.role)) })); }
+
+// de statische reductie (dB, >= 0) bij een niveau d; gelijk aan die in de worklet
+function gtAtt(d, mode, T, slope, range) { if (mode === 'ducker') return d > T ? Math.min(range, (d - T) * slope) : 0; return d > T ? 0 : Math.min(range, (T - d) * slope); }
+
+const WNAME = 'nl-patchkamer-gate-1-0-0';
+const WORKLET = `
+const IN_MAX = 16, LN = 20 / Math.LN10, DB2LIN = Math.LN10 / 20;
+const cl = v => (v > -IN_MAX && v < IN_MAX) ? v : (v !== v ? 0 : v > 0 ? IN_MAX : -IN_MAX);
+const fin = (v, lo, hi) => v > lo ? (v < hi ? v : hi) : lo;
+// RBJ-biquads (Q vast); coefficienten {b0,b1,b2,a1,a2}
+function bqHP(f, sr, Q) { const w = 2 * Math.PI * f / sr, c = Math.cos(w), al = Math.sin(w) / (2 * Q), a0 = 1 + al; return { b0: (1 + c) / 2 / a0, b1: -(1 + c) / a0, b2: (1 + c) / 2 / a0, a1: -2 * c / a0, a2: (1 - al) / a0 }; }
+function bqLP(f, sr, Q) { const w = 2 * Math.PI * f / sr, c = Math.cos(w), al = Math.sin(w) / (2 * Q), a0 = 1 + al; return { b0: (1 - c) / 2 / a0, b1: (1 - c) / a0, b2: (1 - c) / 2 / a0, a1: -2 * c / a0, a2: (1 - al) / a0 }; }
+function bqBP(f, sr, bwOct) { const w = 2 * Math.PI * f / sr, s = Math.sin(w), al = s * Math.sinh(Math.LN2 / 2 * bwOct * w / s), a0 = 1 + al; return { b0: al / a0, b1: 0, b2: -al / a0, a1: -2 * Math.cos(w) / a0, a2: (1 - al) / a0 }; }
+const BND = { thr: [-100, 0], ratio: [1, 100], range: [0, 100], att: [0.02, 500], hold: [0, 1000], rel: [2, 5000], hyst: [0, 36], look: [0, 10], hpf: [20, 4000], lpf: [200, 20000], link: [0, 1] };
+const ENUM = { mode: ['gate', 'expander', 'ducker'], detect: ['peak', 'rms'], sc: ['int', 'ext'] };
+class Gate extends AudioWorkletProcessor{
+  constructor(){ super(); const sr=sampleRate;
+    this.s={mode:'gate',thr:-45,ratio:4,range:60,att:1,hold:50,rel:150,hyst:4,look:0,hpf:20,lpf:20000,sc:'int',detect:'peak',link:1,on:true,listen:false};
+    this.Nb=Math.ceil(sr*0.0125)+8; this.bl=new Float32Array(this.Nb); this.br=new Float32Array(this.Nb); this.w=0; this.dly=0; this.init=false;
+    this.g=[1,1]; this.env=[0,0]; this.m=[0,0]; this.op=[false,false]; this.hc=[0,0]; this.hl=[-180,-180]; this.z=new Float64Array(8); this.dirty=true; this.hp=null; this.lp=null; this.hpOn=false; this.lpOn=false;
+    this.grMax=0; this.opAny=0; this.lvMax=-180; this.n=0;
+    this.port.onmessage=e=>{ const m=e.data||{}; if(m.type!=='set') return; const o=m.s||{}; for(const k in o){ if(!(k in this.s)) continue; const v=o[k], cur=this.s[k];
+        if(typeof cur==='number'){ if(typeof v==='number'&&Number.isFinite(v)){ const b=BND[k]; this.s[k]=b?fin(v,b[0],b[1]):v; if(k==='hpf'||k==='lpf') this.dirty=true; } }
+        else if(typeof cur==='boolean'){ if(typeof v==='boolean') this.s[k]=v; }
+        else if(ENUM[k]&&ENUM[k].includes(v)) this.s[k]=v; }
+      if(!this.init){ this.dly=this.s.look*0.001*sampleRate; this.init=true; } }; }
+  coefs(){ const s=this.s, sr=sampleRate; this.hpOn=s.hpf>20.5; this.lpOn=s.lpf<19500&&s.lpf<0.45*sr;
+    this.hp=bqHP(Math.min(s.hpf,0.45*sr),sr,0.7071); this.lp=bqLP(Math.min(s.lpf,0.45*sr),sr,0.7071); this.dirty=false; }
+  process(ins,outs){ const s=this.s, sr=sampleRate, I=ins[0], S=ins[1], O=outs[0], N=O[0].length;
+    if(this.dirty) this.coefs();
+    const iL=I&&I[0]?I[0]:null, iR=I&&I[1]?I[1]:iL, oL=O[0], oR=O[1]||O[0];
+    const ext=s.sc==='ext', dL=ext?(S&&S[0]?S[0]:null):iL, dR=ext?(S&&S[1]?S[1]:(S&&S[0]?S[0]:null)):iR;
+    const ca=Math.exp(-1/(Math.max(0.02,s.att)*0.001*sr)), cr=Math.exp(-1/(Math.max(2,s.rel)*0.001*sr)), dk=Math.exp(-1/(0.003*sr)), kr=1-Math.exp(-1/(0.015*sr));
+    const duck=s.mode==='ducker', gateM=s.mode==='gate', slope=gateM||s.ratio>=99.5?1000:Math.max(0,s.ratio-1), T=s.thr, Hy=duck?0:s.hyst, rg=s.range, rms=s.detect==='rms', link=s.link, listen=s.listen, on=s.on;
+    const holdS=Math.round(s.hold*0.001*sr), dT=s.look*0.001*sr;
+    const bl=this.bl, br=this.br, Nb=this.Nb, z=this.z, hp=this.hp, lp=this.lp, hpOn=this.hpOn, lpOn=this.lpOn, g=this.g, env=this.env, m=this.m, op=this.op, hc=this.hc, hl=this.hl;
+    let w=this.w, dly=this.dly, grMax=this.grMax, opAny=this.opAny, lvMax=this.lvMax;
+    for(let t=0;t<N;t++){
+      const xl=iL?cl(iL[t]):0, xr=iR?cl(iR[t]):0;
+      bl[w]=xl; br[w]=xr;
+      if(dly<dT) dly=Math.min(dT,dly+0.004); else if(dly>dT) dly=Math.max(dT,dly-0.004);
+      let rp=w-dly; if(rp<0) rp+=Nb; const i0=rp|0, fr=rp-i0, i1=i0+1>=Nb?0:i0+1;
+      const yl=bl[i0]+(bl[i1]-bl[i0])*fr, yr=br[i0]+(br[i1]-br[i0])*fr;
+      w=w+1>=Nb?0:w+1;
+      let a=ext?(dL?cl(dL[t]):0):xl, b=ext?(dR?cl(dR[t]):0):xr;
+      if(hpOn){ let y=hp.b0*a+z[0]; z[0]=hp.b1*a-hp.a1*y+z[1]; z[1]=hp.b2*a-hp.a2*y; a=y; y=hp.b0*b+z[2]; z[2]=hp.b1*b-hp.a1*y+z[3]; z[3]=hp.b2*b-hp.a2*y; b=y; }
+      if(lpOn){ let y=lp.b0*a+z[4]; z[4]=lp.b1*a-lp.a1*y+z[5]; z[5]=lp.b2*a-lp.a2*y; a=y; y=lp.b0*b+z[6]; z[6]=lp.b1*b-lp.a1*y+z[7]; z[7]=lp.b2*b-lp.a2*y; b=y; }
+      let la,lb;
+      if(rms){ m[0]+=(a*a-m[0])*kr; m[1]+=(b*b-m[1])*kr; la=LN*0.5*Math.log(m[0]>1e-18?m[0]:1e-18); lb=LN*0.5*Math.log(m[1]>1e-18?m[1]:1e-18); }
+      else { const pa=a<0?-a:a, pb=b<0?-b:b; env[0]=pa>env[0]?pa:env[0]*dk; env[1]=pb>env[1]?pb:env[1]*dk; la=LN*Math.log(env[0]+1e-9); lb=LN*Math.log(env[1]+1e-9); }
+      const hi=la>lb?la:lb; la+=(hi-la)*link; lb+=(hi-lb)*link; if(hi>lvMax) lvMax=hi;
+      let gm=0;
+      for(let c=0;c<2;c++){ const lv=c?lb:la, Te=op[c]?T-Hy:T; let used;
+        if(lv>Te){ hl[c]=lv; hc[c]=holdS; op[c]=true; used=lv; }
+        else if(hc[c]>0){ hc[c]--; used=hl[c]; op[c]=true; }
+        else { op[c]=false; used=lv; }
+        let tA; if(!on) tA=0; else if(duck) tA=used>T?Math.min(rg,(used-T)*slope):0; else tA=used>Te?0:Math.min(rg,(Te-used)*slope);
+        const gT=Math.exp(-tA*DB2LIN), gc=g[c];
+        if(duck) g[c]=gT<gc?gT+(gc-gT)*ca:gT+(gc-gT)*cr; else g[c]=gT>gc?gT+(gc-gT)*ca:gT+(gc-gT)*cr;
+        gm+=g[c]; }
+      const gr=-LN*Math.log((gm*0.5)+1e-9); if(gr>grMax) grMax=gr; if(op[0]||op[1]) opAny=1;
+      if(listen){ oL[t]=a; oR[t]=b; } else { oL[t]=yl*g[0]; oR[t]=yr*g[1]; } }
+    this.w=w; this.dly=dly; this.grMax=grMax; this.opAny=opAny; this.lvMax=lvMax;
+    // bewaker: een ontspoorde toestand herstelt zichzelf in plaats van het geluid voorgoed te stoppen
+    let bad=false; for(let i=0;i<8;i++) if(!(Math.abs(z[i])<1e6)){ z[i]=0; bad=true; }
+    for(let i=0;i<2;i++){ if(!(g[i]>=0&&g[i]<=1.0001)) g[i]=1; if(!(env[i]>=0&&env[i]<1e6)) env[i]=0; if(!(m[i]>=0&&m[i]<1e6)) m[i]=0; if(!(hc[i]>=0&&hc[i]<1e9)) hc[i]=0; if(!(hl[i]>-1e4&&hl[i]<1e4)) hl[i]=-180; }
+    if(!(this.dly>=0&&this.dly<this.Nb-2)) this.dly=0; if(!(this.grMax>=-1&&this.grMax<400)) this.grMax=0; if(!(this.lvMax>-1e4&&this.lvMax<1e4)) this.lvMax=-180;
+    if(bad) for(let i=0;i<this.Nb;i++){ this.bl[i]=0; this.br[i]=0; }
+    if((this.n+=1)%10===0){ this.port.postMessage({gr:Math.max(0,this.grMax),lv:this.lvMax,open:this.opAny}); this.grMax=0; this.lvMax=-180; this.opAny=0; }
+    return true; } }
+registerProcessor('${WNAME}', Gate);`;
+
+export default {
+  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.0.0', kind: 'effect', category: 'effect',
+  ui: { width: 720, minWidth: 360 },
+  i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
+  modExclude: ['look'],
+  ports: { audioIn: [{ id: 'in', name: 'In' }, { id: 'sc', name: 'Sidechain' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
+  create(ctx, host) {
+    const D = host && host.lang === 'nl' ? NL : EN;
+    const tx = (k, ...a) => { let s = D[k] !== undefined ? D[k] : k; a.forEach((v, i) => { s = s.replace('{' + i + '}', v); }); return s; };
+    const clamp = ukClamp;
+    let dead = false, node = null, ok = false, mod = {}, eff = {}, meter = { gr: 0, lv: -120, open: 0 }, listen = false;
+    const input = ctx.createGain(), sc = ctx.createGain(), out = ctx.createGain(), bypass = ctx.createGain(); bypass.gain.value = 1; input.connect(bypass).connect(out);
+    const spec = {
+      thr: { name: tx('thr'), min: -90, max: 0, unit: 'dB', g: 0, tip: tx('thr_t'), role: 'level', on: true, drift: 0.1 },
+      ratio: { name: tx('ratio'), min: 1, max: 100, scale: 'log', unit: ':1', g: 0, tip: tx('ratio_t'), drift: 0.1 },
+      range: { name: tx('range'), min: 0, max: 90, unit: 'dB', noplus: true, g: 0, tip: tx('range_t'), role: 'level', on: false },
+      hyst: { name: tx('hyst'), min: 0, max: 24, unit: 'dB', noplus: true, g: 0, tip: tx('hyst_t') },
+      att: { name: tx('att'), min: 0.05, max: 100, scale: 'log', unit: 'ms', g: 1, tip: tx('att_t') },
+      hold: { name: tx('hold'), min: 0, max: 500, unit: 'ms', g: 1, tip: tx('hold_t'), role: 'decay', on: false },
+      rel: { name: tx('rel'), min: 5, max: 3000, scale: 'log', unit: 'ms', g: 1, tip: tx('rel_t'), role: 'decay', drift: 0.1 },
+      look: { name: tx('look'), min: 0, max: 10, unit: 'ms', g: 1, tip: tx('look_t'), nomod: true },
+      hpf: { name: tx('hpf'), min: 20, max: 1000, scale: 'log', unit: 'Hz', g: 2, tip: tx('hpf_t'), role: 'filter', drift: 0.1, on: false },
+      lpf: { name: tx('lpf'), min: 1000, max: 20000, scale: 'log', unit: 'Hz', g: 2, tip: tx('lpf_t'), role: 'filter', drift: 0.1, on: false },
+      link: { name: tx('link'), min: 0, max: 1, unit: '%', g: 2, tip: tx('link_t') },
+    };
+    const defaults = { mode: 'gate', thr: -45, ratio: 4, range: 60, hyst: 4, att: 1, hold: 50, rel: 150, look: 0, hpf: 20, lpf: 20000, link: 1, sc: 'int', detect: 'peak', on: true };
+    const ENUMS = { mode: ['gate', 'expander', 'ducker'], detect: ['peak', 'rms'], sc: ['int', 'ext'] }, BOOLS = ['on'];
+    function normalize(raw) { const s = raw && typeof raw === 'object' ? raw : {}, n = { ...defaults };
+      for (const [id, d] of Object.entries(spec)) n[id] = ukFinite(s[id], defaults[id], d.min, d.max);
+      for (const k of Object.keys(ENUMS)) n[k] = ENUMS[k].includes(s[k]) ? s[k] : defaults[k];
+      for (const k of BOOLS) n[k] = typeof s[k] === 'boolean' ? s[k] : defaults[k];
+      return n; }
+    let state = normalize({});
+    function apply() { eff = ukResolve(spec, state, mod);
+      if (node) node.port.postMessage({ type: 'set', s: { mode: state.mode, thr: eff.thr, ratio: eff.ratio, range: eff.range, hyst: eff.hyst, att: eff.att, hold: eff.hold, rel: eff.rel, look: eff.look, hpf: eff.hpf, lpf: eff.lpf, sc: state.sc, detect: state.detect, link: eff.link, on: state.on, listen } }); }
+    const loader = host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
+    loader.then(() => { if (dead || typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet');
+      node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 2, numberOfOutputs: 1, outputChannelCount: [2], channelCount: 2, channelCountMode: 'explicit' });
+      input.connect(node, 0, 0); sc.connect(node, 0, 1); input.disconnect(bypass); node.connect(out); ok = true;
+      node.port.onmessage = e => { const m = e.data; if (!m || !Number.isFinite(m.gr) || !Number.isFinite(m.lv)) return; meter = m; }; apply(); paintStatus(); })
+      .catch(() => { ok = false; paintStatus(); });
+    // ---------- UI ----------
+    let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, grM = null;
+    function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--audio,#7ee0a1)'));
+      ukEl(app, 'h2', '', tx('title'));
+      ukEl(app, 'p', 'sub', tx('sub'));
+      const top = ukEl(app, 'div', 'top');
+      ui.mode = ukSelect(top, tx('mode'), [['gate', tx('gate')], ['expander', tx('expander')], ['ducker', tx('ducker')]], state.mode, v => { state.mode = v; apply(); paint(); }, 'mode');
+      ui.detect = ukSelect(top, tx('detect'), [['peak', tx('peak')], ['rms', tx('rms')]], state.detect, v => { state.detect = v; apply(); }, 'detect');
+      ui.sc = ukSelect(top, tx('src'), [['int', tx('int')], ['ext', tx('ext')]], state.sc, v => { state.sc = v; apply(); paint(); }, 'sc');
+      const t2 = ukEl(app, 'div', 'top');
+      ui.on = ukButton(t2, '', '', 'on', () => { state.on = !state.on; apply(); paint(); });
+      ui.listen = ukButton(t2, tx('listen'), tx('listenTip'), 'listen', () => { listen = !listen; apply(); paint(); });
+      ui.lamp = ukEl(t2, 'span', 'lamp', tx('closed'));
+      const disp = ukEl(app, 'div', 'disp');
+      cv = ukEl(disp, 'canvas'); cv.setAttribute('aria-label', tx('aria'));
+      const side = ukEl(disp, 'div', 'side');
+      ukEl(side, 'div', 'small', tx('gain')); ui.gr = ukEl(side, 'div', 'big', '0.0 dB');
+      grM = ukMeter(host, side, tx('gain'), 'met.gate', [-60, 0], 150);
+      ui.lvl = ukEl(side, 'div', 'small', ''); ui.lat = ukEl(side, 'div', 'small', ''); ui.lat.title = tx('latencyTip'); ui.ext = ukEl(side, 'div', 'small', tx('extNone'));
+      statusEl = ukEl(app, 'p', 'stt');
+      ui.k = ukSliders(app, spec, [{ key: 'gate', label: tx('g0') }, { key: 'time', label: tx('g1') }, { key: 'sidechain', label: tx('g2') }], (id, v) => { state[id] = v; apply(); paint(true); }, defaults, tx('dbl'));
+      ukEl(app, 'p', 'note', tx('note'));
+      paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
+    function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }
+    function paint(light) { if (!root) return; if (!light) { ui.mode.value = state.mode; ui.detect.value = state.detect; ui.sc.value = state.sc;
+        ui.on.textContent = state.on ? tx('on') : tx('off'); ui.on.classList.toggle('on', state.on); ui.listen.classList.toggle('on', listen);
+        for (const [id, k] of Object.entries(ui.k)) k.set(state[id]); ui.ext.style.display = state.sc === 'ext' ? '' : 'none'; }
+      ui.k.ratio.el.style.opacity = state.mode === 'gate' ? 0.35 : 1; ui.k.hyst.el.style.opacity = state.mode === 'ducker' ? 0.35 : 1; ui.lat.textContent = tx('latency', (eff.look !== undefined ? eff.look : state.look).toFixed(1)); }
+    let grTxt = '', lvTxt = '', lampTxt = '';
+    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, 190); const T = eff.thr !== undefined ? eff.thr : state.thr, R = eff.ratio !== undefined ? eff.ratio : state.ratio, RG = eff.range !== undefined ? eff.range : state.range, HY = eff.hyst !== undefined ? eff.hyst : state.hyst, duck = state.mode === 'ducker';
+      const slope = state.mode === 'gate' || R >= 99.5 ? 1000 : Math.max(0, R - 1);
+      if (g) { const acc = ukVar(cv, '--u-acc', '#7ee0a1'), line = ukVar(cv, '--line', '#333'), mut = ukVar(cv, '--muted', '#888'); g.clearRect(0, 0, w, h);
+        const L = 30, B = 16, pw = w - L - 8, ph = h - B - 8, lo = -90, hi = 0, X = d => L + (d - lo) / (hi - lo) * pw, ylo = duck ? -60 : -90, Y = d => 8 + (hi - d) / (hi - ylo) * ph;
+        g.strokeStyle = line; g.lineWidth = 1; g.fillStyle = mut; g.font = '9px monospace';
+        for (let d = -90; d <= 0; d += 18) { g.beginPath(); g.moveTo(X(d), Y(ylo)); g.lineTo(X(d), Y(hi)); g.stroke(); g.fillText(String(d), X(d) - 6, h - 4); }
+        for (let d = duck ? -60 : -90; d <= 0; d += duck ? 12 : 18) { g.beginPath(); g.moveTo(X(lo), Y(d)); g.lineTo(X(hi), Y(d)); g.stroke(); g.fillText(String(d), 2, Y(d) + 3); }
+        if (!duck) { g.setLineDash([3, 3]); g.beginPath(); g.moveTo(X(lo), Y(lo)); g.lineTo(X(hi), Y(hi)); g.stroke(); g.setLineDash([]); }
+        if (HY > 0 && !duck) { g.fillStyle = acc; g.globalAlpha = 0.12; g.fillRect(X(T - HY), 8, X(T) - X(T - HY), ph); g.globalAlpha = 1; }
+        g.strokeStyle = acc; g.lineWidth = 2; g.beginPath(); for (let i = 0; i <= 180; i++) { const d = lo + (hi - lo) * i / 180, a = gtAtt(d, state.mode, T, slope, RG), o = duck ? -a : d - a; const x = X(d), y = Y(Math.max(ylo, o)); i ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke();
+        const lv = clamp(meter.lv, lo, hi), gr = clamp(meter.gr || 0, 0, 90); g.fillStyle = ukVar(cv, '--fg', '#eee'); g.beginPath(); g.arc(X(lv), Y(Math.max(ylo, duck ? -gr : lv - gr)), 4, 0, 6.2832); g.fill(); }
+      const t = (meter.gr || 0).toFixed(1) + ' dB'; if (ui.gr && t !== grTxt) { grTxt = t; ui.gr.textContent = (meter.gr >= 0.05 ? '−' : '') + t; }
+      if (grM) grM.set(-clamp(meter.gr || 0, 0, 60));
+      const l = tx('lvl') + ': ' + (meter.lv > -150 ? meter.lv.toFixed(1) + ' dB' : '−∞'); if (ui.lvl && l !== lvTxt) { lvTxt = l; ui.lvl.textContent = l; }
+      const lamp = duck ? (meter.open ? tx('duckOn') : tx('duckOff')) : ((meter.gr || 0) < 3 ? tx('open') : tx('closed')); if (ui.lamp && lamp !== lampTxt) { lampTxt = lamp; ui.lamp.textContent = lamp; ui.lamp.classList.toggle('lit', duck ? !!meter.open : (meter.gr || 0) < 3); } }
+    function unmount() { if (stopDraw) { stopDraw(); stopDraw = null; } if (grM) { try { grM.destroy(); } catch { } grM = null; } if (cv && cv._ro) { try { cv._ro.disconnect(); } catch { } } if (root) root.innerHTML = ''; root = null; ui = {}; cv = null; statusEl = null; }
+    const self = {
+      inputs: { in: input, sc }, outputs: { out },
+      mount, unmount,
+      params() { return ukParams(spec, 'gate', 'Gate'); },
+      modulate(o) { try { mod = {}; if (o && typeof o === 'object') for (const id of Object.keys(spec)) if (typeof o[id] === 'number' && Number.isFinite(o[id])) mod[id] = clamp(o[id], -1, 1); apply(); } catch {} },
+      getState() { return { ...state }; },
+      setState(raw) { if (dead) return; state = normalize(raw); apply(); paint(); },
+      destroy() { if (dead) return; dead = true; unmount(); try { input.disconnect(); sc.disconnect(); bypass.disconnect(); if (node) { node.port.onmessage = null; node.disconnect(); } out.disconnect(); } catch {} },
+    };
+    apply();
+    return self;
+  },
+};

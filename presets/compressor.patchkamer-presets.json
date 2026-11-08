@@ -1,0 +1,772 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.compressor",
+  "name": "Compressor Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Compressor: vocals, drums and drum bus, bass, instruments, mix glue, parallel compression, limiter-like settings and sidechain pumping. Thresholds assume a signal peaking around -6 to -3 dBFS; lower the threshold until the reduction meter moves a few dB.",
+  "tree": [
+    {
+      "folder": "Vocals",
+      "items": [
+        {
+          "name": "Gentle Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -20,
+            "ratio": 2.5,
+            "knee": 12,
+            "att": 15,
+            "rel": 160,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 80,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Vocal Leveler",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -26,
+            "ratio": 3,
+            "knee": 10,
+            "att": 20,
+            "rel": 120,
+            "auto": true,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 100,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Vocal Presence",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -18,
+            "ratio": 4,
+            "knee": 6,
+            "att": 5,
+            "rel": 80,
+            "auto": false,
+            "makeup": 3,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 120,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Vocal Peak Catcher",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -14,
+            "ratio": 8,
+            "knee": 3,
+            "att": 1,
+            "rel": 60,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 1,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Spoken Word",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -24,
+            "ratio": 3.5,
+            "knee": 8,
+            "att": 8,
+            "rel": 120,
+            "auto": true,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 90,
+            "lpf": 12000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Drums",
+      "items": [
+        {
+          "name": "Drum Bus Glue",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -16,
+            "ratio": 2,
+            "knee": 6,
+            "att": 30,
+            "rel": 120,
+            "auto": true,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 60,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Punchy Drums",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -20,
+            "ratio": 4,
+            "knee": 3,
+            "att": 30,
+            "rel": 80,
+            "auto": false,
+            "makeup": 2,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 100,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Snare Snap",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -22,
+            "ratio": 6,
+            "knee": 2,
+            "att": 3,
+            "rel": 70,
+            "auto": false,
+            "makeup": 3,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Tight Kick",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -18,
+            "ratio": 5,
+            "knee": 3,
+            "att": 8,
+            "rel": 50,
+            "auto": false,
+            "makeup": 2,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 40,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Room Crush",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -36,
+            "ratio": 10,
+            "knee": 6,
+            "att": 1,
+            "rel": 100,
+            "auto": false,
+            "makeup": 6,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 0.4,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Bass",
+      "items": [
+        {
+          "name": "Bass Control",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -22,
+            "ratio": 4,
+            "knee": 6,
+            "att": 20,
+            "rel": 120,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 30,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Bass Sustain",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -30,
+            "ratio": 6,
+            "knee": 8,
+            "att": 30,
+            "rel": 120,
+            "auto": true,
+            "makeup": 4,
+            "autoMk": false,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Slap Tamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -16,
+            "ratio": 6,
+            "knee": 4,
+            "att": 2,
+            "rel": 90,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 2,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Instruments",
+      "items": [
+        {
+          "name": "Guitar Even",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -22,
+            "ratio": 3,
+            "knee": 8,
+            "att": 12,
+            "rel": 120,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Piano Smooth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -26,
+            "ratio": 2.5,
+            "knee": 12,
+            "att": 25,
+            "rel": 120,
+            "auto": true,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Synth Lead Hold",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -20,
+            "ratio": 4,
+            "knee": 6,
+            "att": 5,
+            "rel": 100,
+            "auto": false,
+            "makeup": 2,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Pad Level",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -28,
+            "ratio": 2,
+            "knee": 15,
+            "att": 40,
+            "rel": 300,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Mix",
+      "items": [
+        {
+          "name": "Mix Bus Glue",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -14,
+            "ratio": 2,
+            "knee": 8,
+            "att": 30,
+            "rel": 120,
+            "auto": true,
+            "makeup": 1,
+            "autoMk": false,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 100,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Gentle Master",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -12,
+            "ratio": 1.5,
+            "knee": 12,
+            "att": 40,
+            "rel": 250,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 60,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Width Control",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -20,
+            "ratio": 3,
+            "knee": 8,
+            "att": 15,
+            "rel": 150,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": true,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 0.3,
+            "chmode": "ms",
+            "on": true
+          }
+        },
+        {
+          "name": "Stereo Linked Glue",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -16,
+            "ratio": 2.5,
+            "knee": 8,
+            "att": 25,
+            "rel": 140,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 80,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Parallel",
+      "items": [
+        {
+          "name": "Parallel Punch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -40,
+            "ratio": 8,
+            "knee": 4,
+            "att": 5,
+            "rel": 120,
+            "auto": false,
+            "makeup": 8,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 0.35,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Parallel Smash",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -45,
+            "ratio": 20,
+            "knee": 2,
+            "att": 0.5,
+            "rel": 60,
+            "auto": false,
+            "makeup": 10,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 0.25,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Parallel Vocal Lift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -38,
+            "ratio": 6,
+            "knee": 6,
+            "att": 3,
+            "rel": 100,
+            "auto": false,
+            "makeup": 8,
+            "autoMk": false,
+            "detect": "rms",
+            "look": 0,
+            "hpf": 150,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 0.3,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Limiter",
+      "items": [
+        {
+          "name": "Soft Limiter",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -6,
+            "ratio": 100,
+            "knee": 3,
+            "att": 0.5,
+            "rel": 80,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 5,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Peak Catcher",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -3,
+            "ratio": 100,
+            "knee": 0,
+            "att": 0.05,
+            "rel": 50,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 5,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Pumping",
+      "items": [
+        {
+          "name": "Kick Pump",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -30,
+            "ratio": 6,
+            "knee": 4,
+            "att": 2,
+            "rel": 160,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 1000,
+            "sc": "ext",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Soft Pump",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -34,
+            "ratio": 3,
+            "knee": 8,
+            "att": 5,
+            "rel": 220,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 1000,
+            "sc": "ext",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Voice Ducker",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -34,
+            "ratio": 4,
+            "knee": 6,
+            "att": 20,
+            "rel": 400,
+            "auto": false,
+            "makeup": 0,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 120,
+            "lpf": 8000,
+            "sc": "ext",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        },
+        {
+          "name": "Bass Breath",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "thr": -30,
+            "ratio": 8,
+            "knee": 2,
+            "att": 0.5,
+            "rel": 200,
+            "auto": false,
+            "makeup": 4,
+            "autoMk": false,
+            "detect": "peak",
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "sc": "int",
+            "mix": 1,
+            "link": 1,
+            "chmode": "stereo",
+            "on": true
+          }
+        }
+      ]
+    }
+  ]
+}

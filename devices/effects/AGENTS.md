@@ -30,15 +30,26 @@ Dit overzicht komt uit `devices/AGENTS.md` en wordt gegenereerd door `docs/tools
 
 | Apparaat | `id` | Wat het doet |
 |---|---|---|
+| [Bitcrusher](Bitcrusher/AGENTS.md) | `nl.patchkamer.bitcrusher` | Verlaagt bitdiepte en samplerate, met vier kwantiseerstijlen, dither, ruis, een optioneel anti-alias-filter en een golfvormscherm. |
 | [Chorus](Chorus/AGENTS.md) | `nl.patchkamer.chorus` | Verdubbelt een geluid met kleine bewegende vertragingen; twee stemmen of drie (ensemble). |
+| [Compressor](Compressor/AGENTS.md) | `nl.patchkamer.compressor` | Compressor met drempel, ratio tot oneindig, zachte knee, attack en release (ook automatisch), make-up, peak- of RMS-detectie, lookahead, sidechain-filter en externe sidechain, parallelle mix, mid/side, een reductiemeter en een overdrachtscurve. |
+| [Convolution Reverb](ConvolutionReverb/AGENTS.md) | `nl.patchkamer.convolutionreverb` | Een convolutiegalm met 15 ingebouwde impulsresponsies en je eigen bestanden. |
+| [De-esser](DeEsser/AGENTS.md) | `nl.patchkamer.deesser` | Dempt scherpe s-klanken in een stem: detectieband van 3 tot 10 kHz, drempel, ratio, maximale reductie, split-band of wideband, meeluisteren met de band, mix en een reductiemeter. |
+| [Delay](Delay/AGENTS.md) | `nl.patchkamer.delay` | Een uitgebreid delay: vrije tijd in ms, sync met de klok van de host (1/64 tot 2 maten, recht, punt, triool, x/16), eigen tempo (tap), stereo, ping-pong, mono en dual, met filters, verzadiging, diffusie, modulatie, ducking, freeze en reverse. |
+| [Distortion](Distortion/AGENTS.md) | `nl.patchkamer.distortion` | Acht vervormingssoorten van zachte clip tot fuzz en wavefolder, met oversampling, toonregelaars en een parallelle mix. |
 | [Effect Chain](EffectChain/AGENTS.md) | `nl.patchkamer.effect-chain` | Tot 8 effecten achter elkaar, gekozen uit 33, met een analyzer. |
 | [Filter](Filter/AGENTS.md) | `nl.patchkamer.filter` | Tien filtertypen, van laagdoorlaat tot klinkers en kamfilters. |
 | [Flanger](Flanger/AGENTS.md) | `nl.patchkamer.flanger` | Een zwiepende flanger met feedback, vrij of op het tempo. |
 | [Frequency Shifter](FrequencyShifter/AGENTS.md) | `nl.patchkamer.freqshift` | Verschuift alle frequenties een vast aantal Hz. |
+| [Gate](Gate/AGENTS.md) | `nl.patchkamer.gate` | Noise gate, expander en ducker in één: drempel, ratio, attack, hold, release, range, hysterese, sidechain-filters en meeluisteren, externe sidechain, lookahead en een meter die toont hoe open de poort is. |
 | [Grit](Grit/AGENTS.md) | `nl.patchkamer.grit` | Vervorming in een resonant laagdoorlaatfilter met een LFO. |
+| [Harmonizer](Harmonizer/AGENTS.md) | `nl.patchkamer.harmonizer` | Tot vier extra stemmen op vaste intervallen of binnen een toonladder, die de toonhoogte van de ingang of de noten op de eventingang volgen, met niveau, pan, detune en vertraging per stem. |
 | [Phaser](Phaser/AGENTS.md) | `nl.patchkamer.phaser` | Een phaser met 4 tot 12 trappen, vrij of op het tempo. |
+| [Pitch Correction](PitchCorrection/AGENTS.md) | `nl.patchkamer.pitchcorrection` | Monofone toonhoogtecorrectie: meet de toonhoogte van een stem of lijn en schuift die naar de dichtstbijzijnde toegestane noot van een toonladder, met snelheid, mate, vibratobehoud en een scherm met de gehoorde en gecorrigeerde noot. |
+| [Pitch Shifter](PitchShifter/AGENTS.md) | `nl.patchkamer.pitchshifter` | Verschuift de toonhoogte van −24 tot +24 halve tonen plus cents met behoud van tempo, met een percussieve korrelmotor, een korrelmotor voor stemmen en een vocoder met formantbesturing, plus terugkoppeling voor shimmer en octaaf-echo's. |
 | [Pump](Pump/AGENTS.md) | `nl.patchkamer.pump` | Laat een bron op de tel wijken: sidechain, trigger of klok. |
 | [Resonator](Resonator/AGENTS.md) | `nl.patchkamer.resonator` | Vier resonatoren gestemd op een grondtoon en een akkoord. |
+| [Reverb](Reverb/AGENTS.md) | `nl.patchkamer.reverb` | Een algoritmische galm met vijf modellen: Hall, Plate, Spring, Room en Chamber. |
 | [Room](Room/AGENTS.md) | `nl.patchkamer.room` | Een delay en een galm in één effect. |
 | [Tremolo](Tremolo/AGENTS.md) | `nl.patchkamer.tremolo` | Laat het volume op en neer gaan. |
 | [Vocoder](Vocoder/AGENTS.md) | `nl.patchkamer.vocoder` | Een vocoder met 16 banden: een stem bespeelt een synth. |

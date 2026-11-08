@@ -1,0 +1,619 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.gate",
+  "name": "Gate Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Gate: gates for drums, guitar, bass and vocals, noise removal, expanders for over-compressed or noisy material, duckers for voice-over and bass, and hard chopping settings. Set the threshold just above the noise first.",
+  "tree": [
+    {
+      "folder": "Drums",
+      "items": [
+        {
+          "name": "Tight Kick",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -35,
+            "ratio": 4,
+            "range": 60,
+            "hyst": 5,
+            "att": 0.3,
+            "hold": 60,
+            "rel": 90,
+            "look": 1,
+            "hpf": 30,
+            "lpf": 6000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Snare Gate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -32,
+            "ratio": 4,
+            "range": 60,
+            "hyst": 6,
+            "att": 0.2,
+            "hold": 80,
+            "rel": 120,
+            "look": 1,
+            "hpf": 150,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Tom Gate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -34,
+            "ratio": 4,
+            "range": 60,
+            "hyst": 6,
+            "att": 0.5,
+            "hold": 150,
+            "rel": 220,
+            "look": 0,
+            "hpf": 60,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Hi-Hat Bleed",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -38,
+            "ratio": 4,
+            "range": 60,
+            "hyst": 5,
+            "att": 0.1,
+            "hold": 20,
+            "rel": 60,
+            "look": 0,
+            "hpf": 600,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Room Mic Tighten",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -40,
+            "ratio": 2,
+            "range": 24,
+            "hyst": 3,
+            "att": 1,
+            "hold": 40,
+            "rel": 200,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Drum Bus Cleanup",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -50,
+            "ratio": 1.5,
+            "range": 12,
+            "hyst": 2,
+            "att": 2,
+            "hold": 40,
+            "rel": 200,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Instruments",
+      "items": [
+        {
+          "name": "Guitar Hum",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -48,
+            "ratio": 4,
+            "range": 60,
+            "hyst": 5,
+            "att": 2,
+            "hold": 40,
+            "rel": 200,
+            "look": 0,
+            "hpf": 100,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Distorted Chop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -38,
+            "ratio": 4,
+            "range": 80,
+            "hyst": 6,
+            "att": 0.5,
+            "hold": 15,
+            "rel": 50,
+            "look": 2,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Bass Gate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -44,
+            "ratio": 4,
+            "range": 60,
+            "hyst": 5,
+            "att": 3,
+            "hold": 100,
+            "rel": 250,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 2000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Synth Noise Cut",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -55,
+            "ratio": 4,
+            "range": 40,
+            "hyst": 3,
+            "att": 3,
+            "hold": 30,
+            "rel": 300,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Vocals",
+      "items": [
+        {
+          "name": "Breath Reducer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -42,
+            "ratio": 2,
+            "range": 12,
+            "hyst": 3,
+            "att": 3,
+            "hold": 60,
+            "rel": 200,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Vocal Gate Gentle",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -50,
+            "ratio": 4,
+            "range": 24,
+            "hyst": 4,
+            "att": 3,
+            "hold": 80,
+            "rel": 300,
+            "look": 3,
+            "hpf": 100,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Spoken Cleanup",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -48,
+            "ratio": 3,
+            "range": 30,
+            "hyst": 3,
+            "att": 5,
+            "hold": 100,
+            "rel": 250,
+            "look": 0,
+            "hpf": 80,
+            "lpf": 10000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Backing Vocal Bleed",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -44,
+            "ratio": 4,
+            "range": 30,
+            "hyst": 5,
+            "att": 4,
+            "hold": 120,
+            "rel": 350,
+            "look": 0,
+            "hpf": 120,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Noise",
+      "items": [
+        {
+          "name": "Hiss Away",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -60,
+            "ratio": 4,
+            "range": 30,
+            "hyst": 3,
+            "att": 5,
+            "hold": 30,
+            "rel": 400,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 12000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Hum Away",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -58,
+            "ratio": 4,
+            "range": 30,
+            "hyst": 3,
+            "att": 5,
+            "hold": 50,
+            "rel": 400,
+            "look": 0,
+            "hpf": 200,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Noise Floor Lower",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -60,
+            "ratio": 1.5,
+            "range": 12,
+            "hyst": 2,
+            "att": 5,
+            "hold": 50,
+            "rel": 300,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Room Tone Keep",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -50,
+            "ratio": 4,
+            "range": 12,
+            "hyst": 4,
+            "att": 4,
+            "hold": 60,
+            "rel": 300,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Expander",
+      "items": [
+        {
+          "name": "Gentle Expander",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -45,
+            "ratio": 1.5,
+            "range": 20,
+            "hyst": 2,
+            "att": 5,
+            "hold": 30,
+            "rel": 200,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Squash Recover",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -30,
+            "ratio": 1.8,
+            "range": 10,
+            "hyst": 2,
+            "att": 5,
+            "hold": 20,
+            "rel": 120,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Dynamics Restore",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "expander",
+            "thr": -24,
+            "ratio": 1.3,
+            "range": 6,
+            "hyst": 0,
+            "att": 10,
+            "hold": 10,
+            "rel": 100,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "rms",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Ducker",
+      "items": [
+        {
+          "name": "Voice-over Duck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ducker",
+            "thr": -35,
+            "ratio": 100,
+            "range": 10,
+            "hyst": 4,
+            "att": 15,
+            "hold": 200,
+            "rel": 500,
+            "look": 0,
+            "hpf": 150,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "ext",
+            "detect": "rms",
+            "on": true
+          }
+        },
+        {
+          "name": "Bass Duck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ducker",
+            "thr": -30,
+            "ratio": 100,
+            "range": 14,
+            "hyst": 4,
+            "att": 3,
+            "hold": 40,
+            "rel": 120,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 1000,
+            "link": 1,
+            "sc": "ext",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Soft Duck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "ducker",
+            "thr": -32,
+            "ratio": 3,
+            "range": 6,
+            "hyst": 4,
+            "att": 20,
+            "hold": 100,
+            "rel": 400,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "ext",
+            "detect": "rms",
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Effects",
+      "items": [
+        {
+          "name": "Hard Chop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -30,
+            "ratio": 4,
+            "range": 90,
+            "hyst": 3,
+            "att": 0.05,
+            "hold": 100,
+            "rel": 5,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        },
+        {
+          "name": "Gated Tail",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "gate",
+            "thr": -36,
+            "ratio": 4,
+            "range": 90,
+            "hyst": 4,
+            "att": 0.2,
+            "hold": 300,
+            "rel": 20,
+            "look": 0,
+            "hpf": 20,
+            "lpf": 20000,
+            "link": 1,
+            "sc": "int",
+            "detect": "peak",
+            "on": true
+          }
+        }
+      ]
+    }
+  ]
+}

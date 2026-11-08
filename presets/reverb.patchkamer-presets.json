@@ -1,0 +1,813 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.reverb",
+  "name": "Reverb Rooms",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Reverb in six folders: Hall, Plate, Spring, Room and Chamber with settings for vocals, drums, strings, synths and pads, plus a Creative folder with freeze, ducking, tempo pre-delay and long clouds. Made for use as an insert at moderate mix; raise Mix to 100% on a send.",
+  "tree": [
+    {
+      "folder": "Hall",
+      "items": [
+        {
+          "name": "Vocal Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.5,
+            "decay": 2.2,
+            "predelay": 28,
+            "sync": false,
+            "div": "16",
+            "dampHi": 7000,
+            "dampLo": 1,
+            "diff": 0.75,
+            "mod": 0.35,
+            "early": 0.25,
+            "hp": 150,
+            "lp": 14000,
+            "width": 1.1,
+            "duck": 0.35,
+            "freeze": false,
+            "mix": 0.22
+          }
+        },
+        {
+          "name": "Drum Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.45,
+            "decay": 1.6,
+            "predelay": 12,
+            "sync": false,
+            "div": "16",
+            "dampHi": 5000,
+            "dampLo": 0.9,
+            "diff": 0.8,
+            "mod": 0.3,
+            "early": 0.35,
+            "hp": 200,
+            "lp": 10000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.2
+          }
+        },
+        {
+          "name": "Big Snare Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.6,
+            "decay": 2.8,
+            "predelay": 8,
+            "sync": false,
+            "div": "16",
+            "dampHi": 3500,
+            "dampLo": 0.8,
+            "diff": 0.85,
+            "mod": 0.25,
+            "early": 0.15,
+            "hp": 250,
+            "lp": 9000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        },
+        {
+          "name": "String Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.65,
+            "decay": 3.2,
+            "predelay": 35,
+            "sync": false,
+            "div": "16",
+            "dampHi": 6500,
+            "dampLo": 1.1,
+            "diff": 0.8,
+            "mod": 0.4,
+            "early": 0.2,
+            "hp": 120,
+            "lp": 20000,
+            "width": 1.2,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.28
+          }
+        },
+        {
+          "name": "Synth Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.55,
+            "decay": 3.5,
+            "predelay": 20,
+            "sync": false,
+            "div": "16",
+            "dampHi": 9000,
+            "dampLo": 1,
+            "diff": 0.85,
+            "mod": 0.5,
+            "early": 0.2,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1.3,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        },
+        {
+          "name": "Pad Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/ambient"
+          ],
+          "state": {
+            "model": "hall",
+            "size": 0.75,
+            "decay": 6,
+            "predelay": 40,
+            "sync": false,
+            "div": "16",
+            "dampHi": 5500,
+            "dampLo": 0.9,
+            "diff": 0.9,
+            "mod": 0.6,
+            "early": 0.1,
+            "hp": 100,
+            "lp": 12000,
+            "width": 1.4,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.4
+          }
+        },
+        {
+          "name": "Cathedral",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/cinematic"
+          ],
+          "state": {
+            "model": "hall",
+            "size": 1,
+            "decay": 11,
+            "predelay": 60,
+            "sync": false,
+            "div": "16",
+            "dampHi": 3500,
+            "dampLo": 1.3,
+            "diff": 0.9,
+            "mod": 0.4,
+            "early": 0.15,
+            "hp": 120,
+            "lp": 12000,
+            "width": 1.2,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.35
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Plate",
+      "items": [
+        {
+          "name": "Bright Plate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "plate",
+            "size": 0.4,
+            "decay": 1.8,
+            "predelay": 10,
+            "sync": false,
+            "div": "16",
+            "dampHi": 12000,
+            "dampLo": 1,
+            "diff": 0.9,
+            "mod": 0.3,
+            "early": 0.1,
+            "hp": 200,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.22
+          }
+        },
+        {
+          "name": "Vocal Plate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "plate",
+            "size": 0.5,
+            "decay": 2.2,
+            "predelay": 18,
+            "sync": false,
+            "div": "16",
+            "dampHi": 9000,
+            "dampLo": 1,
+            "diff": 0.9,
+            "mod": 0.35,
+            "early": 0.1,
+            "hp": 180,
+            "lp": 16000,
+            "width": 1,
+            "duck": 0.25,
+            "freeze": false,
+            "mix": 0.2
+          }
+        },
+        {
+          "name": "Drum Plate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "plate",
+            "size": 0.35,
+            "decay": 1.2,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 8000,
+            "dampLo": 1,
+            "diff": 0.85,
+            "mod": 0.2,
+            "early": 0.2,
+            "hp": 250,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.25
+          }
+        },
+        {
+          "name": "Snare Plate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "plate",
+            "size": 0.3,
+            "decay": 1,
+            "predelay": 4,
+            "sync": false,
+            "div": "16",
+            "dampHi": 10000,
+            "dampLo": 1,
+            "diff": 0.9,
+            "mod": 0.2,
+            "early": 0.1,
+            "hp": 300,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        },
+        {
+          "name": "Long Plate",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "plate",
+            "size": 0.8,
+            "decay": 4.5,
+            "predelay": 25,
+            "sync": false,
+            "div": "16",
+            "dampHi": 7000,
+            "dampLo": 0.9,
+            "diff": 1,
+            "mod": 0.5,
+            "early": 0.05,
+            "hp": 150,
+            "lp": 20000,
+            "width": 1.3,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Spring",
+      "items": [
+        {
+          "name": "Surf Spring",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "spring",
+            "size": 0.5,
+            "decay": 2.2,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 4500,
+            "dampLo": 1,
+            "diff": 0.75,
+            "mod": 0.3,
+            "early": 0.3,
+            "hp": 120,
+            "lp": 8000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        },
+        {
+          "name": "Short Spring",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "spring",
+            "size": 0.2,
+            "decay": 1.2,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 5000,
+            "dampLo": 1,
+            "diff": 0.6,
+            "mod": 0.2,
+            "early": 0.4,
+            "hp": 150,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.25
+          }
+        },
+        {
+          "name": "Boingy Spring",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "spring",
+            "size": 0.9,
+            "decay": 3,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 6000,
+            "dampLo": 1,
+            "diff": 1,
+            "mod": 0.15,
+            "early": 0.55,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.35
+          }
+        },
+        {
+          "name": "Dub Spring",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/dub"
+          ],
+          "state": {
+            "model": "spring",
+            "size": 0.7,
+            "decay": 3.5,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 3000,
+            "dampLo": 0.7,
+            "diff": 0.85,
+            "mod": 0.4,
+            "early": 0.2,
+            "hp": 250,
+            "lp": 6000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.4
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Room",
+      "items": [
+        {
+          "name": "Tight Drum Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "room",
+            "size": 0.3,
+            "decay": 0.35,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 8000,
+            "dampLo": 1,
+            "diff": 0.7,
+            "mod": 0.2,
+            "early": 0.55,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.2
+          }
+        },
+        {
+          "name": "Live Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "room",
+            "size": 0.5,
+            "decay": 0.8,
+            "predelay": 5,
+            "sync": false,
+            "div": "16",
+            "dampHi": 7000,
+            "dampLo": 1,
+            "diff": 0.75,
+            "mod": 0.25,
+            "early": 0.45,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.22
+          }
+        },
+        {
+          "name": "Vocal Booth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "room",
+            "size": 0.15,
+            "decay": 0.5,
+            "predelay": 2,
+            "sync": false,
+            "div": "16",
+            "dampHi": 5000,
+            "dampLo": 1,
+            "diff": 0.8,
+            "mod": 0.2,
+            "early": 0.35,
+            "hp": 150,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.15
+          }
+        },
+        {
+          "name": "Wooden Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "room",
+            "size": 0.6,
+            "decay": 1.1,
+            "predelay": 8,
+            "sync": false,
+            "div": "16",
+            "dampHi": 4000,
+            "dampLo": 1.1,
+            "diff": 0.8,
+            "mod": 0.3,
+            "early": 0.4,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.25
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Chamber",
+      "items": [
+        {
+          "name": "Vocal Chamber",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "chamber",
+            "size": 0.5,
+            "decay": 1.6,
+            "predelay": 15,
+            "sync": false,
+            "div": "16",
+            "dampHi": 6000,
+            "dampLo": 1,
+            "diff": 0.8,
+            "mod": 0.3,
+            "early": 0.3,
+            "hp": 150,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.22
+          }
+        },
+        {
+          "name": "Drum Chamber",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "chamber",
+            "size": 0.4,
+            "decay": 1.2,
+            "predelay": 6,
+            "sync": false,
+            "div": "16",
+            "dampHi": 5000,
+            "dampLo": 1,
+            "diff": 0.8,
+            "mod": 0.25,
+            "early": 0.35,
+            "hp": 200,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.25
+          }
+        },
+        {
+          "name": "String Chamber",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "chamber",
+            "size": 0.65,
+            "decay": 2.2,
+            "predelay": 22,
+            "sync": false,
+            "div": "16",
+            "dampHi": 5500,
+            "dampLo": 1.1,
+            "diff": 0.85,
+            "mod": 0.35,
+            "early": 0.25,
+            "hp": 120,
+            "lp": 20000,
+            "width": 1.2,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.28
+          }
+        },
+        {
+          "name": "Stone Chamber",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/cinematic"
+          ],
+          "state": {
+            "model": "chamber",
+            "size": 0.85,
+            "decay": 3,
+            "predelay": 30,
+            "sync": false,
+            "div": "16",
+            "dampHi": 3500,
+            "dampLo": 1.2,
+            "diff": 0.9,
+            "mod": 0.3,
+            "early": 0.2,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Creative",
+      "items": [
+        {
+          "name": "Frozen Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/ambient"
+          ],
+          "state": {
+            "model": "hall",
+            "size": 0.8,
+            "decay": 20,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 8000,
+            "dampLo": 1,
+            "diff": 0.9,
+            "mod": 0.7,
+            "early": 0,
+            "hp": 100,
+            "lp": 20000,
+            "width": 1.5,
+            "duck": 0,
+            "freeze": true,
+            "mix": 0.55
+          }
+        },
+        {
+          "name": "Ducked Vocal Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.6,
+            "decay": 3.5,
+            "predelay": 30,
+            "sync": false,
+            "div": "16",
+            "dampHi": 6500,
+            "dampLo": 1,
+            "diff": 0.8,
+            "mod": 0.4,
+            "early": 0.2,
+            "hp": 200,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0.8,
+            "freeze": false,
+            "mix": 0.4
+          }
+        },
+        {
+          "name": "Tempo Pre-delay Hall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "model": "hall",
+            "size": 0.55,
+            "decay": 2.8,
+            "predelay": 20,
+            "sync": true,
+            "div": "8",
+            "dampHi": 6000,
+            "dampLo": 1,
+            "diff": 0.8,
+            "mod": 0.4,
+            "early": 0.2,
+            "hp": 150,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.28
+          }
+        },
+        {
+          "name": "Infinite Cloud",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/ambient"
+          ],
+          "state": {
+            "model": "hall",
+            "size": 1,
+            "decay": 30,
+            "predelay": 50,
+            "sync": false,
+            "div": "16",
+            "dampHi": 3000,
+            "dampLo": 1.2,
+            "diff": 1,
+            "mod": 1,
+            "early": 0,
+            "hp": 80,
+            "lp": 20000,
+            "width": 1.6,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.5
+          }
+        },
+        {
+          "name": "Metal Tank",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/metallic"
+          ],
+          "state": {
+            "model": "spring",
+            "size": 0.2,
+            "decay": 4,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 14000,
+            "dampLo": 1,
+            "diff": 0,
+            "mod": 0,
+            "early": 0.3,
+            "hp": 200,
+            "lp": 20000,
+            "width": 1,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.4
+          }
+        },
+        {
+          "name": "Telephone Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/lofi"
+          ],
+          "state": {
+            "model": "room",
+            "size": 0.35,
+            "decay": 0.9,
+            "predelay": 0,
+            "sync": false,
+            "div": "16",
+            "dampHi": 3000,
+            "dampLo": 1,
+            "diff": 0.6,
+            "mod": 0.1,
+            "early": 0.4,
+            "hp": 600,
+            "lp": 3500,
+            "width": 0,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.3
+          }
+        },
+        {
+          "name": "Dark Void",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "style/dark-ambient"
+          ],
+          "state": {
+            "model": "chamber",
+            "size": 1,
+            "decay": 14,
+            "predelay": 70,
+            "sync": false,
+            "div": "16",
+            "dampHi": 1200,
+            "dampLo": 1.5,
+            "diff": 0.95,
+            "mod": 0.6,
+            "early": 0,
+            "hp": 40,
+            "lp": 8000,
+            "width": 1.4,
+            "duck": 0,
+            "freeze": false,
+            "mix": 0.45
+          }
+        }
+      ]
+    }
+  ]
+}

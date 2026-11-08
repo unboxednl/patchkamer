@@ -1,0 +1,389 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.deesser",
+  "name": "De-esser Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for De-esser: male and female vocals, speech and podcast voices, wideband settings, and settings that tame bright cymbals, strings and synths. Use Listen to detection band to fine-tune the frequency, then set the threshold so the reduction meter only moves on s sounds.",
+  "tree": [
+    {
+      "folder": "Vocals",
+      "items": [
+        {
+          "name": "Male Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 5500,
+            "bw": 1.2,
+            "thr": -32,
+            "ratio": 4,
+            "range": 10,
+            "att": 0.5,
+            "rel": 50,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Deep Male Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 4500,
+            "bw": 1,
+            "thr": -32,
+            "ratio": 4,
+            "range": 10,
+            "att": 0.5,
+            "rel": 50,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Female Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 7500,
+            "bw": 1.2,
+            "thr": -32,
+            "ratio": 4,
+            "range": 10,
+            "att": 0.5,
+            "rel": 50,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Bright Female Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 8500,
+            "bw": 1,
+            "thr": -30,
+            "ratio": 5,
+            "range": 12,
+            "att": 0.5,
+            "rel": 50,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Gentle Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6500,
+            "bw": 1.5,
+            "thr": -34,
+            "ratio": 2.5,
+            "range": 6,
+            "att": 1,
+            "rel": 60,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Strong Vocal",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6500,
+            "bw": 1,
+            "thr": -36,
+            "ratio": 8,
+            "range": 16,
+            "att": 0.5,
+            "rel": 50,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Narrow Sibilant",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 7000,
+            "bw": 0.5,
+            "thr": -30,
+            "ratio": 6,
+            "range": 12,
+            "att": 0.3,
+            "rel": 40,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Backing Vocals",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6000,
+            "bw": 1.5,
+            "thr": -34,
+            "ratio": 3,
+            "range": 8,
+            "att": 0.5,
+            "rel": 70,
+            "mix": 1,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Speech",
+      "items": [
+        {
+          "name": "Podcast Male",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 5000,
+            "bw": 1.5,
+            "thr": -32,
+            "ratio": 4,
+            "range": 10,
+            "att": 0.8,
+            "rel": 70,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Podcast Female",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6500,
+            "bw": 1.5,
+            "thr": -32,
+            "ratio": 4,
+            "range": 10,
+            "att": 0.8,
+            "rel": 70,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Voice-over",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6000,
+            "bw": 1.2,
+            "thr": -34,
+            "ratio": 5,
+            "range": 12,
+            "att": 0.5,
+            "rel": 60,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Phone Interview",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 4500,
+            "bw": 2,
+            "thr": -34,
+            "ratio": 3,
+            "range": 8,
+            "att": 1,
+            "rel": 80,
+            "mix": 1,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Wideband",
+      "items": [
+        {
+          "name": "Wideband Soft",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "wide",
+            "freq": 6500,
+            "bw": 1.5,
+            "thr": -32,
+            "ratio": 2,
+            "range": 6,
+            "att": 0.5,
+            "rel": 60,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Wideband Fast",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "wide",
+            "freq": 7000,
+            "bw": 1,
+            "thr": -30,
+            "ratio": 4,
+            "range": 8,
+            "att": 0.2,
+            "rel": 30,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Wideband Parallel",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "wide",
+            "freq": 6500,
+            "bw": 1.2,
+            "thr": -34,
+            "ratio": 6,
+            "range": 12,
+            "att": 0.3,
+            "rel": 50,
+            "mix": 0.5,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Top End",
+      "items": [
+        {
+          "name": "Tame Cymbals",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 9000,
+            "bw": 1.5,
+            "thr": -28,
+            "ratio": 3,
+            "range": 6,
+            "att": 1,
+            "rel": 80,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Hi-Hat Tamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 9500,
+            "bw": 1,
+            "thr": -28,
+            "ratio": 4,
+            "range": 8,
+            "att": 0.3,
+            "rel": 40,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Tame Top End",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 8000,
+            "bw": 2,
+            "thr": -30,
+            "ratio": 2.5,
+            "range": 5,
+            "att": 2,
+            "rel": 100,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Harsh Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 4000,
+            "bw": 1.5,
+            "thr": -30,
+            "ratio": 3,
+            "range": 6,
+            "att": 3,
+            "rel": 120,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Sharp Synth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6000,
+            "bw": 1.2,
+            "thr": -30,
+            "ratio": 3,
+            "range": 8,
+            "att": 1,
+            "rel": 80,
+            "mix": 1,
+            "on": true
+          }
+        },
+        {
+          "name": "Light Parallel",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "mode": "split",
+            "freq": 6500,
+            "bw": 1.2,
+            "thr": -34,
+            "ratio": 6,
+            "range": 12,
+            "att": 0.5,
+            "rel": 50,
+            "mix": 0.5,
+            "on": true
+          }
+        }
+      ]
+    }
+  ]
+}

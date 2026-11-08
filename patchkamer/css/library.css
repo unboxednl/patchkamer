@@ -20,6 +20,10 @@
 .cat.closed .cathead .chev{transform:rotate(-90deg)}
 .cathead .n{margin-left:auto;color:var(--muted);font-family:var(--mono);font-size:.8em;letter-spacing:0;font-weight:400}
 .cat.closed .devs{display:none}
+/* subcategorieën: een .cat in .subcats van de parent; ingesprongen met een lijn in de kleur van de categorie */
+.cat>.subcats{display:grid;gap:10px;margin:2px 0 0 10px;padding-left:10px;border-left:2px solid var(--catc,var(--line))}
+.cat.closed>.subcats{display:none}
+.cat.sub>.cathead{font-size:.92em;letter-spacing:.1em}
 .devs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
 .libdev{display:grid;gap:4px;border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:4px;padding:8px 10px;background:var(--card-2);cursor:grab;touch-action:none;min-width:0}
 .libdev:hover{border-color:var(--audio)}
