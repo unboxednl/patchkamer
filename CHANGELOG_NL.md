@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.2.2 (2026-11-08)
+
+### Gewijzigd
+- **Startscherm: voortgang op aantal items, en een kabel per item.** De balk telt nu alle items samen (apparaten, tunes, presets, skins en samples): 96 apparaten tellen dus zwaarder dan 12 skins, in plaats van vijf gelijke stukken. Wat nog niet is geteld, schat de vorige start. Elk geladen item is één kabel op de achtergrond; de kabels komen er tijdens het laden bij, in alle richtingen (links naar rechts, boven naar onder, rechts naar links, onder naar boven en schuin). Als het laden klaar is, trekken ze zich terug en verdwijnt het scherm.
+
 ## 0.2.1 (2026-11-08)
 
 ### Gewijzigd

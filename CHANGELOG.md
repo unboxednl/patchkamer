@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.2.2 (2026-11-08)
+
+### Changed
+- **Start screen: progress by number of items, and one cable per item.** The bar now counts all items together (devices, tunes, presets, skins and samples): 96 devices weigh more than 12 skins, instead of five equal parts. What has not been counted yet is estimated from the previous start. Every loaded item is one cable in the background; the cables are added while loading, in every direction (left to right, top to bottom, right to left, bottom to top and diagonally). When loading is done, they pull back and the screen disappears.
+
 ## 0.2.1 (2026-11-08)
 
 ### Changed
