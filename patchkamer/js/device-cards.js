@@ -40,10 +40,10 @@ function addDevice(defId,x,y,state,fixedId,version){
   });
   try{ inst.mount&&inst.mount(ui); PK.ctlSnapshot(rec,ui); if(state&&inst.setState) inst.setState(state); }catch(e){ PK.status(PK.pkt('m.mount_faalde_voor')+def.name+': '+e.message,true); }
   if(inst.onStep) PK.Host.stepSubs.add(inst);
-  PK.presetCardInit(id); PK.skinCardInit(id);
+  PK.presetCardInit(id); PK.skinCardInit(id); PK.deviceMenuBind(id);
   // drag
   let drag=null; [bar,ic].forEach(h=>{   // the title bar, or the whole icon when minimised, moves the device
-    h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
+    h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select,.dmbtn')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
     h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/PK.Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/PK.Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; PK.setDrop(PK.cableThroughRect({x:rec.x,y:rec.y,w:el.offsetWidth,h:el.offsetHeight},rec.ports,id,k=>!PK.hasCable(id,k))); PK.drawCables();});
     h.addEventListener('pointerup',()=>{ const c=drag&&PK.dropCable; drag=null; if(c){ PK.setDrop(null); PK.insertOnCable(id,c); } else PK.setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; PK.setDrop(null);}); });
   el.addEventListener('pointerdown',e=>{select(id); e.stopPropagation();});

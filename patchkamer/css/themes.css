@@ -8,7 +8,7 @@
   --disp:'Barlow Condensed',system-ui,sans-serif; --mono:'Fira Code',ui-monospace,Menlo,monospace;
   --mod:#b48cff; --multi:#8bdb6a; --mastering:#f2cf3b;          /* sturing, bundels */
   --well:#090b0e; --well-fg:#b9c3d0;       /* verzonken vlakken: code, meters, schermen */
-  --overlay:rgba(16,19,24,.9); --scrim:rgba(5,7,10,.6); --shadow:var(--shadow); --step-q:#242a34; --glyph-fg:#11151b;
+  --overlay:rgba(16,19,24,.9); --scrim:rgba(5,7,10,.6); --shadow:rgba(0,0,0,.55); --step-q:#242a34; --glyph-fg:#11151b;
   --bar:var(--card-2); --bar-fg:var(--fg); --field:var(--card-2); --field-fg:var(--fg); --lcd-font:var(--mono);
   color-scheme:dark;
 }

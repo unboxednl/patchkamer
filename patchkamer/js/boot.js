@@ -196,7 +196,7 @@ PK.$('bpm').addEventListener('input',()=>{PK.Host.bpm=PK.clamp(+PK.$('bpm').valu
 PK.$('swing').addEventListener('input',()=>{PK.Host.swing=+PK.$('swing').value;});
 document.addEventListener('keydown',e=>{ if(PK.typing(e)) return; if(e.key===' '){PK.$('play').click(); e.preventDefault();} if((e.key==='Delete'||e.key==='Backspace')&&PK.selected&&!['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)){PK.removeDevice(PK.selected);} });
 // ===== clip =====
-PK.clipInit(); PK.clipMenuInit();   // Ctrl/Cmd+C, Ctrl/Cmd+V en Ctrl+Z (kort na plakken) op het gekozen apparaat; plus de instelling en het plakmenu (clip-menu.js)
+PK.deviceMenuInit(); PK.clipInit(); PK.clipMenuInit();   // Ctrl/Cmd+C, Ctrl/Cmd+V en Ctrl+Z (kort na plakken) op het gekozen apparaat; plus de instelling en het plakmenu (clip-menu.js)
 // ===== workspace-core =====
 /* =====================================================================
    WERKRUIMTE · naam, bestand, browser — en BRONNEN · GitHub, URL, lokale map
