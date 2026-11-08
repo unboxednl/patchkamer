@@ -4,6 +4,18 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.10.0 (2026-11-08)
+
+### Nieuw
+- **AI-vraag voor apparaten (contract v1.29).** Een apparaat kan met `host.ai(this, 'ask', …)` één vraag stellen aan de AI-aanbieder die bij Instellingen is gekozen; de sleutel blijft bij de host, de gebruiker bevestigt per apparaat en het antwoord is onbetrouwbare tekst. De **MIDI Controller 1.2.0** gebruikt het voor een **AI-voorstel**: de AI krijgt de regelaars van het actieve apparaat en de indeling van je controller en stelt de koppeling voor; elk paar wordt gecontroleerd en met één klik is het ongedaan te maken.
+
+- **Mixer 2.7.0: instelbare fadercurve.** Een nieuwe instelling **Fadercurve** (1 tot 5, begin 3) vormt alle faders: de schuif loopt over een positie van 0 tot 1 en het niveau volgt −60 + 66 · positie^(1/curve) dB, zodat het bovenste deel van de slag meer ruimte krijgt (bij 3 ligt 0 dB op 75%; 1 is de oude lineaire schuif). De niveaus in de state blijven in dB, dus bestaande songs klinken hetzelfde, en een MIDI-schuif volgt dezelfde curve.
+- **MIDI Controller 1.3.0: kalibratie.** **Kalibreer bereik** onthoudt hoever elke schuif en draaiknop echt gaat en schaalt dat naar de hele slag, voor controllers die maar een deel van 0 tot 127 sturen.
+
+### Opgelost
+- **Contract (Nederlandse versie):** vier regels van de v1.28-tekst stonden er dubbel in; weggehaald.
+- **MIDI Controller 1.1.0: beter voorstel.** De indeling die je leert zie je nu als rijen (draaiknoppen, schuiven, knoppen, pads; per rij te wijzigen). **Voorstel** zet kolom i van je controller op kanaalstrook i van een apparaat met stroken (de Mixer): schuiven op de fader van elke strook, rijen draaiknoppen op pan, send, EQ enzovoort, knoppen op mute en solo. Eerder vulde het voorstel alleen de eerste acht regelaars, waardoor de fader van de Mixer nooit werd gekoppeld. Pads worden niet meer op regelaars gezet.
+
 ## 0.9.0 (2026-11-08)
 
 ### Toegevoegd

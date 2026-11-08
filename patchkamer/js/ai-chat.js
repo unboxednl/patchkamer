@@ -62,6 +62,26 @@ async function pkAiTurn(c,sys,msgs,signal){   // één beurt; geeft {text,calls:
   const j=await pkAiHttp(base+'/chat/completions',{method:'POST',signal,headers:{'content-type':'application/json',authorization:'Bearer '+key},body:JSON.stringify({model,messages:m,tools:PKAI_TOOLS.map(t=>({type:'function',function:{name:t.name,description:t.description,parameters:t.schema}}))})});
   const g=j.choices&&j.choices[0]&&j.choices[0].message; if(!g) throw new Error('Empty response'); msgs.push({role:'assistant',content:g.content||null,...(g.tool_calls&&g.tool_calls.length?{tool_calls:g.tool_calls}:{})});
   return {text:g.content||'',calls:(g.tool_calls||[]).map(t=>{ let a={}; try{ a=JSON.parse(t.function.arguments||'{}'); }catch(e){} return {id:t.id,name:t.function.name,args:a}; })}; }
+// ---- één vraag voor een apparaat (contract v1.29): host.ai(this, 'available' | 'settings' | 'ask', opts) ----
+const aiFail=(code,msg)=>{ const e=new Error(msg||code); e.code=code; return e; }, aiOk=new Set();
+async function pkAiOnce(c,system,prompt,maxTokens,signal){ const key=c.keys[c.provider], model=c.models[c.provider], base=pkAiEndpoint(c);
+  if(c.provider==='anthropic'){ const j=await pkAiHttp(base+'/v1/messages',{method:'POST',signal,headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model,max_tokens:maxTokens,system,messages:[{role:'user',content:prompt}]})}); return (j.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('\n'); }
+  const j=await pkAiHttp(base+'/chat/completions',{method:'POST',signal,headers:{'content-type':'application/json',authorization:'Bearer '+key},body:JSON.stringify({model,max_tokens:maxTokens,messages:[{role:'system',content:system},{role:'user',content:prompt}]})}); const g=j.choices&&j.choices[0]&&j.choices[0].message; return g&&g.content||''; }
+const aiReady=c=>!!(c.keys[c.provider]&&c.models[c.provider]&&(c.provider!=='compat'||c.base));
+async function aiAsk(inst,o){ o=o&&typeof o==='object'?o:{}; const c=pkAiCfg(); if(!aiReady(c)) throw aiFail('nokey',PK.pkt('m.ai_nokey'));
+  const prompt=typeof o.prompt==='string'?o.prompt.slice(0,60000):'', system=typeof o.system==='string'?o.system.slice(0,8000):''; if(!prompt) throw aiFail('prompt');
+  const mt=Number.isFinite(+o.maxTokens)?Math.max(16,Math.min(8000,Math.round(+o.maxTokens))):4000, r=PK.Host.devices.get(inst._id), name=r?r.def.name:'?', ck=inst._id+'|'+c.provider+'|'+c.models[c.provider];
+  if(!aiOk.has(ck)){ let host='?'; try{ host=new URL(c.provider==='anthropic'?PKAI_PROV.anthropic.base:c.provider==='openai'?PKAI_PROV.openai.base:c.base).host; }catch(e){}
+    const html='<b>'+PK.esc(PK.pkt('m.ai_vraag_titel'))+'</b><br>'+PK.esc(PK.pkt('m.ai_vraag_tekst',name,host,c.models[c.provider])); const yes=await PK.askUser(html,PK.pkt('m.ai_vraag_ok'),PK.pkt('m.annuleren')); if(!yes) throw aiFail('declined'); aiOk.add(ck); }
+  const sig=o.signal&&typeof o.signal==='object'&&'aborted' in o.signal?o.signal:undefined;
+  try{ return String(await pkAiOnce(c,system,prompt,mt,sig)||''); }catch(e){ if(e&&e.code) throw e; if(e&&e.name==='AbortError') throw aiFail('aborted'); const m=String(e&&e.message||''); throw aiFail(/HTTP 40[13]/.test(m)?'auth':/HTTP/.test(m)?'service':'network',m); } }
+PK.Host.ai=function(inst,action,opts){
+  if(!inst||!inst._id) return action==='available'?false:Promise.reject(aiFail('action'));
+  switch(String(action)){
+    case 'available': return aiReady(pkAiCfg());
+    case 'settings': try{ PK.openSettings(); }catch(e){} return true;
+    case 'ask': return aiAsk(inst,opts);
+    default: return Promise.reject(aiFail('action')); } };
 function pkAiAddResults(c,msgs,res){ if(c.provider==='anthropic') msgs.push({role:'user',content:res.map(r=>({type:'tool_result',tool_use_id:r.id,content:r.content}))}); else res.forEach(r=>msgs.push({role:'tool',tool_call_id:r.id,content:r.content})); }
 async function pkAiModels(c){ const key=c.keys[c.provider], base=pkAiEndpoint(c); if(!key) throw new Error(PK.pkt('m.ai_nokey'));
   const h=c.provider==='anthropic'?{'x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}:{authorization:'Bearer '+key};

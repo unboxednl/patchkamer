@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.28 for building agents
+# Patchkamer — Instrument contract v1.29 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -37,6 +37,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.26 | Clipboard, match length: `clipInfo().length.settable`; a device with a shared length lets `setClip` set that length from `clip.length` when the user picks "Match the clip's length" (§13d) |
 | v1.27 | Pack versions: a tune, preset or sample pack may have a top-level `version` (SemVer `x.y.z`, the version of the pack's content, separate from the `version` on a tune or preset, which is the device version). The host ignores it. Also the version rules: every change gets a new SemVer number (host, contract, skins, packs). |
 | v1.28 | Retired devices and selecting remotely: the optional definition field `status: 'retired'` (the library hides the device unless the user shows retired devices; existing workspaces and songs load it as usual) and `host.show(this, targetId, { select, center })`, with which a device selects another device and puts it in the middle of the screen (without moving or zooming it). |
+| v1.29 | AI question for a device: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. A device asks one question to the AI provider the user chose in the settings (the key stays with the host; the device itself makes no network call). The user must confirm the question per device. For suggestions without the user having to chat, like a mapping suggestion from the MIDI Controller. |
 
 ---
 
@@ -375,6 +376,9 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 | `host.controls(this, targetId)` | A list `{ key, label, type, … }`: `type` is `'range'` (with `min`, `max`, `step`, `value`, `scale`), `'select'` (with `options: [{ value, text }]`), `'check'` or `'button'`. `scale` is `'log'` for a knob from `host.ui.knob` with `{ scale: 'log' }` and otherwise `'lin'`. |
 | `host.setControl(this, targetId, key, value)` | Sets the control. `value` is 0..1: a slider or knob gets that part of its range (logarithmic if `scale` is `'log'`), a list gets the option at that position, a checkbox is on from 0.5 and a button is pressed from 0.5. Returns `true` if the control is there. |
 | `host.show(this, targetId, opts)` | Selects the device with id `targetId` and puts it in the middle of the screen (v1.28): only the canvas slides, the device and the zoom stay. `opts`: `{ select: true, center: true }` (both on by default; `false` skips that action). Returns `true`, or `false` for an unknown device or the device itself. A device in a minimised section does not become visible. Call it only on a user action or on a message the user gave himself (a MIDI button), never by itself on load or restore. |
+| `host.ai(this, 'available')` | Synchronous. `true` if the user has set a provider, key and model (v1.29). You never see the key. |
+| `host.ai(this, 'ask', opts)` | Returns a promise with the text of the answer (v1.29). `opts`: `prompt` (required, up to 60000 characters), `system` (up to 8000), `maxTokens` (16 to 8000, default 4000), `signal` (an `AbortSignal`). **Only after a user action** (a click), never in `create`, `mount`, `setState`, `setPreset` or a clock. The host asks the user to confirm the first time per device and names the provider and model. Do not send sound or anything the user does not expect; the question may cost money. Errors: an `Error` with `code` `nokey`, `declined`, `aborted`, `auth`, `service`, `network` or `prompt`. The answer is text, so treat it as untrusted input: check every key and value before you set anything. |
+| `host.ai(this, 'settings')` | Opens the settings panel (where the user enters provider and key). Returns `true`. |
 
 - The `key` has the form `type|name#n` and stays the same as long as the card has the same controls. Keep keys in your state, but expect them to be gone when the target device changes its UI; `setControl` then returns `false`. Ask for `controls` again on `onPeers`.
 - You cannot control yourself. An unknown device or key gives `[]` or `false`.
@@ -1149,6 +1153,7 @@ A device that records (the Recorder) tells the host, so the user also sees that 
 | `host.controls(this, targetId)` | v1.13 | The controls on the card of another device (§11c) |
 | `host.setControl(this, targetId, key, value)` | v1.13 | Set a control of another device, value 0..1 (§11c) |
 | `host.show(this, targetId, opts)` | v1.28 | Select another device and put it in the middle of the screen (§11c) |
+| `host.ai(this, action, opts)` | v1.29 | One AI question for a device: `'available'`, `'ask'`, `'settings'` (§11c) |
 | `host.watchParams(this, targetId, fn)` | v1.21 | Follow changes of the controls of another device, also those of modulation; `fn(paramId, value, by)` (§13f) |
 | `host.setParam(this, targetId, paramId, value)` | v1.21 | Set a control (from `params()`) of another device visibly, value 0..1 (§13f) |
 | `host.lockParams(this, targetId, ids)` | v1.21 | Ignore modulation on these controls of another device; `null` removes the lock (§13f) |
@@ -1266,7 +1271,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 23. Stems (v1.23, optional): `split` only on a click; `typeof host.stems === 'function'` checked; visibly said that the sound goes to an online service, costs money and needs rights; cancel via `signal`; text per error code in `host.lang`; stems and buffers not in `getState()`/`getPreset()`; after splitting `host.setPorts` with the new AudioNodes already in `outputs` (§13g).
 24. Recording lamp (v1.25, optional): `host.recording(this, true/false)` at the start and end of a recording and in `destroy`; `typeof host.recording === 'function'` checked.
 25. Selecting remotely (v1.28, optional): `host.show` only on a user action or on a message he gave himself; `typeof host.show === 'function'` checked.
-26. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+26. **AI question (v1.29, §11c, optional)**: `host.ai(this, 'ask', …)` only after a click; `typeof host.ai === 'function'` and `host.ai(this, 'available')` checked first; the answer is untrusted text and every value is checked before you set anything; the user sees what was proposed before it is applied; the fake host returns `false` for `available` and refuses `ask`.
+27. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 

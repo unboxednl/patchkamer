@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.28 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.29 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -37,7 +37,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.26 | Klembord, lengte volgen: `clipInfo().length.settable`; een apparaat met een gedeelde lengte laat `setClip` die lengte zetten uit `clip.length` als de gebruiker "Pas lengte aan de clip aan" kiest (§13d) |
 | v1.27 | Versies van packs: een tune-, preset- of samplepack mag op het hoogste niveau een `version` hebben (SemVer `x.y.z`, de versie van de inhoud van het pack, los van de `version` bij een tune of preset: dat is de apparaatversie). De host negeert hem. Verder de versieregels: elke wijziging krijgt een nieuw SemVer-nummer (host, contract, skins, packs). |
 | v1.28 | Teruggetrokken apparaten en kiezen op afstand: de optionele definitieregel `status: 'retired'` (de bibliotheek verbergt het apparaat tenzij de gebruiker teruggetrokken apparaten toont; bestaande werkruimtes en songs laden het gewoon) en `host.show(this, doelId, { select, center })`, waarmee een apparaat een ander apparaat kiest en midden in het scherm zet (zonder het te verplaatsen of te zoomen). |
-| v1.28 | Teruggetrokken apparaten en kiezen op afstand: de optionele definitieregel `status: 'retired'` (de bibliotheek verbergt het apparaat tenzij de gebruiker teruggetrokken apparaten toont; bestaande werkruimtes en songs laden het gewoon) en `host.show(this, doelId, { select, center })`, waarmee een apparaat een ander apparaat kiest en midden in het scherm zet (zonder het te verplaatsen of te zoomen). |
+| v1.29 | AI-vraag voor een apparaat: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. Een apparaat stelt één vraag aan de AI-aanbieder die de gebruiker bij Instellingen heeft gekozen (de sleutel blijft bij de host; het apparaat zelf doet geen netwerkaanroep). De gebruiker moet de vraag per apparaat bevestigen. Voor voorstellen zonder dat de gebruiker hoeft te chatten, zoals een koppelvoorstel van de MIDI Controller. |
 
 ---
 
@@ -85,7 +85,6 @@ export default {
   version: '1.0.0',              // semver x.y.z
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
   category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool' | 'mastering'
-  status: 'active',              // optioneel (v1.28): 'active' (standaard) of 'retired': een teruggetrokken apparaat staat niet in de bibliotheek (tenzij de gebruiker ze toont) maar laadt nog in oude werkruimtes en songs
   status: 'active',              // optioneel (v1.28): 'active' (standaard) of 'retired': een teruggetrokken apparaat staat niet in de bibliotheek (tenzij de gebruiker ze toont) maar laadt nog in oude werkruimtes en songs
   ui: { width: 360, minWidth: 260, jacks: false },   // optioneel, zie §12
   i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optioneel (v1.11): namen per taal, zie §12c
@@ -377,7 +376,9 @@ host.emit(this, 'tracks', { type: 'note', note: 36, vel: 0.9, time, dur: 0.2, tr
 | `host.controls(this, doelId)` | Een lijst `{ key, label, type, … }`: `type` is `'range'` (met `min`, `max`, `step`, `value`, `scale`), `'select'` (met `options: [{ value, text }]`), `'check'` of `'button'`. `scale` is `'log'` voor een draaiknop van `host.ui.knob` met `{ scale: 'log' }` en anders `'lin'`. |
 | `host.setControl(this, doelId, sleutel, waarde)` | Zet de regelaar. `waarde` is 0..1: een schuif of knop krijgt dat deel van zijn bereik (logaritmisch als `scale` `'log'` is), een keuzelijst de optie op die plaats, een vinkje is aan vanaf 0,5 en een knop wordt vanaf 0,5 ingedrukt. Geeft `true` als de regelaar er is. |
 | `host.show(this, doelId, opts)` | Kiest het apparaat met id `doelId` en zet het midden in het scherm (v1.28): alleen het canvas schuift, het apparaat en de zoom blijven. `opts`: `{ select: true, center: true }` (beide standaard aan; `false` slaat die actie over). Geeft `true`, of `false` bij een onbekend apparaat of het apparaat zelf. Een apparaat in een geminimaliseerde sectie wordt niet zichtbaar. Roep het alleen aan op een handeling van de gebruiker of op een bericht dat hij zelf gaf (een MIDI-knop), nooit uit zichzelf bij laden of herstellen. |
-| `host.show(this, doelId, opts)` | (v1.28) Kiest het apparaat met id `doelId` en zet het midden in het scherm: alleen het canvas schuift, het apparaat en de zoom blijven. `opts`: `{ select: true, center: true }` (beide standaard aan; `false` slaat die actie over). Geeft `true`, of `false` bij een onbekend apparaat of het apparaat zelf. Een apparaat in een geminimaliseerde sectie wordt niet zichtbaar. Roep het alleen aan op een handeling van de gebruiker of op een bericht dat hij zelf gaf (een MIDI-knop), nooit uit zichzelf bij laden of herstellen. |
+| `host.ai(this, 'available')` | Synchroon. `true` als de gebruiker een aanbieder, sleutel en model heeft ingesteld (v1.29). Je ziet de sleutel nooit. |
+| `host.ai(this, 'ask', opts)` | Geeft een belofte met de tekst van het antwoord (v1.29). `opts`: `prompt` (verplicht, tot 60000 tekens), `system` (tot 8000), `maxTokens` (16 tot 8000, standaard 4000), `signal` (een `AbortSignal`). **Alleen na een handeling van de gebruiker** (een klik), nooit in `create`, `mount`, `setState`, `setPreset` of een klok. De host vraagt de gebruiker de eerste keer per apparaat om bevestiging en noemt de aanbieder en het model. Stuur geen geluid en niets wat de gebruiker niet verwacht; de vraag kan geld kosten. Fouten: een `Error` met `code` `nokey`, `declined`, `aborted`, `auth`, `service`, `network` of `prompt`. Het antwoord is tekst, dus behandel het als onbetrouwbare invoer: controleer elke sleutel en waarde voor je iets zet. |
+| `host.ai(this, 'settings')` | Opent het instellingenpaneel (waar de gebruiker aanbieder en sleutel invult). Geeft `true`. |
 
 - De `key` heeft de vorm `type|naam#n` en blijft gelijk zolang de kaart dezelfde regelaars heeft. Bewaar sleutels in je state, maar reken erop dat ze niet meer bestaan als het doelapparaat zijn UI verandert; `setControl` geeft dan `false`. Vraag `controls` opnieuw aan bij `onPeers`.
 - Je kunt jezelf niet besturen. Een onbekend apparaat of een onbekende sleutel geeft `[]` of `false`.
@@ -1152,7 +1153,7 @@ Een apparaat dat opneemt (de Recorder) laat dat de host weten, zodat de gebruike
 | `host.controls(this, doelId)` | v1.13 | De regelaars op de kaart van een ander apparaat (§11c) |
 | `host.setControl(this, doelId, sleutel, waarde)` | v1.13 | Zet een regelaar van een ander apparaat, waarde 0..1 (§11c) |
 | `host.show(this, doelId, opts)` | v1.28 | Een ander apparaat kiezen en midden in het scherm zetten (§11c) |
-| `host.show(this, doelId, opts)` | v1.28 | Een ander apparaat kiezen en midden in het scherm zetten (§11c) |
+| `host.ai(this, action, opts)` | v1.29 | Eén AI-vraag voor een apparaat: `'available'`, `'ask'`, `'settings'` (§11c) |
 | `host.watchParams(this, doelId, fn)` | v1.21 | Wijzigingen van de regelaars van een ander apparaat volgen, ook die van modulatie; `fn(paramId, waarde, door)` (§13f) |
 | `host.setParam(this, doelId, paramId, waarde)` | v1.21 | Zet een regelaar (uit `params()`) van een ander apparaat zichtbaar, waarde 0..1 (§13f) |
 | `host.lockParams(this, doelId, ids)` | v1.21 | Modulatie op deze regelaars van een ander apparaat negeren; `null` haalt het slot weg (§13f) |
@@ -1271,7 +1272,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 23. Stems (v1.23, optioneel): `split` alleen op een klik; `typeof host.stems === 'function'` gecontroleerd; zichtbaar gezegd dat het geluid naar een dienst op internet gaat, geld kost en rechten vraagt; annuleren via `signal`; tekst per foutcode in `host.lang`; stems en buffers niet in `getState()`/`getPreset()`; na het splitsen `host.setPorts` met de nieuwe AudioNodes al in `outputs` (§13g).
 24. Opnamelampje (v1.25, optioneel): `host.recording(this, true/false)` bij begin en einde van een opname en in `destroy`; `typeof host.recording === 'function'` gecontroleerd.
 25. Kiezen op afstand (v1.28, optioneel): `host.show` alleen op een handeling van de gebruiker of een bericht dat hij zelf gaf; `typeof host.show === 'function'` gecontroleerd.
-26. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `let op`.
+26. **AI-vraag (v1.29, §11c, optioneel)**: `host.ai(this, 'ask', …)` alleen na een klik; eerst `typeof host.ai === 'function'` en `host.ai(this, 'available')` gecontroleerd; het antwoord is onbetrouwbare tekst en elke waarde wordt gecontroleerd voor je iets zet; de gebruiker ziet wat er is voorgesteld voor het wordt toegepast; de nep-host geeft `false` bij `available` en weigert `ask`.
+27. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
 
 ---
 

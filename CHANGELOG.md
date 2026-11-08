@@ -4,6 +4,18 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.10.0 (2026-11-08)
+
+### Added
+- **AI question for devices (contract v1.29).** A device can ask the AI provider chosen in the settings one question with `host.ai(this, 'ask', …)`; the key stays with the host, the user confirms per device and the answer is untrusted text. The **MIDI Controller 1.2.0** uses it for an **AI suggestion**: the AI gets the controls of the active device and your controller layout and proposes the mapping; every pair is checked and one click undoes it.
+
+- **Mixer 2.7.0: configurable fader curve.** A new setting **Fader curve** (1 to 5, start 3) shapes all faders: the slider runs over a position from 0 to 1 and the level follows −60 + 66 · position^(1/curve) dB, so the upper part of the travel gets more room (at 3, 0 dB sits at 75%; 1 is the old linear slider). Levels in the state stay in dB, so existing songs sound the same, and a MIDI fader follows the same curve.
+- **MIDI Controller 1.3.0: calibration.** **Calibrate range** remembers how far each slider and knob really goes and scales that to the whole travel, for controllers that only send part of 0 to 127.
+
+### Fixed
+- **Contract (Dutch version):** four lines of the v1.28 text were in there twice; removed.
+- **MIDI Controller 1.1.0: better suggestion.** The layout you learn is now shown as rows (knobs, faders, buttons, pads; changeable per row). **Suggest** puts column i of your controller on channel strip i of a device with strips (the Mixer): faders on the fader of each strip, knob rows on pan, send, EQ and so on, buttons on mute and solo. Before, the suggestion filled only the first eight controls, so the Mixer fader was never mapped. Pads are no longer mapped to controls.
+
 ## 0.9.0 (2026-11-08)
 
 ### Added
