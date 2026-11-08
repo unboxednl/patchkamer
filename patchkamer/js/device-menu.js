@@ -73,11 +73,15 @@ function init(){
   // Ctrl/Cmd+C en +V op het gekozen apparaat. Heeft het apparaat een eigen klembord voor patronen en clips (clip.js), dan blijft
   // gewoon Ctrl+C/V daarvoor; het apparaat zelf kopieer je dan met Shift+Ctrl+C en plak je met het menu of op een apparaat zonder clips.
   document.addEventListener('keydown',e=>{ if(!(e.ctrlKey||e.metaKey)||e.altKey||PK.textEntry(e)||document.querySelector('.pkmodal')) return; const k=(e.key||'').toLowerCase(); if(k!=='c'&&k!=='v') return;
-    const r=PK.selected&&PK.Host.devices.get(PK.selected), clipDev=!!(r&&typeof r.inst.clipInfo==='function');
-    if(k==='c'){ if(!r||(clipDev&&!e.shiftKey)) return; const sel=window.getSelection&&window.getSelection(); if(sel&&!sel.isCollapsed&&String(sel).length) return;
-      e.preventDefault(); copyDevice(PK.selected); return; }
-    if(clipDev) return;   // patroon plakken (en Shift: direct) is van clip.js
+    const id=PK.selected, r=id&&PK.Host.devices.get(id), inf=r&&PK.clipInfoOf?(()=>{ try{ return PK.clipInfoOf(id); }catch(x){ return null; } })():null,
+      canCopyClip=!!(inf&&Array.isArray(inf.copy)&&inf.copy.length), canPasteClip=!!(inf&&Array.isArray(inf.paste)&&inf.paste.length);
+    if(k==='c'){ if(!r||(canCopyClip&&!e.shiftKey)) return;
+      const sel=window.getSelection&&window.getSelection(); if(sel&&!sel.isCollapsed){ try{ sel.removeAllRanges(); }catch(x){} }   // een achtergebleven tekstselectie (bijvoorbeeld na het slepen van een kaart) houdt het kopiëren van het apparaat niet tegen
+      e.preventDefault(); copyDevice(id); return; }
+    if(canPasteClip) return;   // patroon plakken (en Shift: direct) is van clip.js
     if(mem){ e.preventDefault(); pasteDevice(null); } else load().then(o=>{ if(o) pasteDevice(null); }); });
+  // een klik op een kaart kiest het apparaat, ook als een regelaar erin de klik zelf afhandelt (anders blijft het vorige apparaat gekozen en kopieer je dat)
+  document.addEventListener('pointerdown',e=>{ if(e.button!==0&&e.button!==2) return; const c=e.target&&e.target.closest&&e.target.closest('.card'); if(!c||!c.dataset||!PK.Host.devices.has(c.dataset.id)||PK.selected===c.dataset.id) return; PK.select(c.dataset.id); },true);
 }
 PK.deviceMenuInit=init;
 })(window.__PK);
