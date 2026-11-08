@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.5.0 (2026-11-08)
+
+### Toegevoegd
+- **Pad Sampler 1.1.0: golfvormeditor en sample-bewerkingen** (stap 2 van het apparaat). Een nieuwe tab **Bewerken** met een golfvorm waarop je zoomt (scrollwiel, pinch, knoppen; van het hele sample tot één sample), scrolt en een selectie sleept met zichtbare handvatten (muis en aanraking), met snappen op nuldoorgang, een afspeelkop, **Selectie afspelen**, **Lus afspelen** en scrubben op de liniaal; stereo staat L en R boven elkaar of als som. Bewerkingen op de selectie (of het hele sample): afsnijden, verwijderen, knippen, kopiëren, plakken en invoegen (een eigen klembord, ook over pads heen), stilte invoegen en een selectie dempen, normaliseren, gain, fade in en uit (lineair, logaritmisch of exponentieel), omkeren, DC-offset weg, mono maken, toonhoogte (hersamplen, met lengteverandering), bit-reductie en sample-rate-reductie, een selectie als start, einde of lus, en een loop-crossfade in het sample bakken. Alles werkt op een kopie en het resultaat wordt een nieuw sample van 16 bit. **Ongedaan en Opnieuw** (minstens 100 stappen, begrensd op 128 MiB, ook met Ctrl+Z, Ctrl+Shift+Z en Ctrl+Y); de geschiedenis zit niet in de state. Bediening met het toetsenbord (X, C, V, I, Delete, Ctrl+A, spatie, plus en min, pijltjes met Shift). De state blijft compatibel.
+
 ## 0.4.0 (2026-11-08)
 
 ### Toegevoegd

@@ -60,6 +60,22 @@ Samplers hebben **tunes**: een tune is de volledige instelling van één sampler
 - **Banken en bestanden:** **Bewaar bank (.json)** schrijft de gekozen bank, met audio, naar een bestand; de bestandskiezer eronder (**Bankbestand importeren**) leest zo'n bestand terug in de gekozen bank. **Export bewerkte WAV** schrijft het geselecteerde pad, met selectie, omkering, fades, volume en stemming verwerkt, als WAV-bestand. **Kopieer pad naar bank** (kies de bank in de lijst en druk dan op **Kopieer pad**) kopieert het geselecteerde pad naar dezelfde plek in een andere bank.
 - **Geheugen:** een regel onder de kaart toont hoeveel van de 32 MiB samplegeheugen (gedeeld door alle vier de banken) in gebruik is.
 
+**De golfvormeditor (tab Bewerken).**
+
+![De golfvormeditor van Pad Sampler](../images/nl/samplers/pad-sampler-editor.png)
+
+Kies bovenaan welke laag of zone je bewerkt. Alles wat je doet werkt op een kopie en het resultaat wordt een nieuw sample van 16 bit; de laag wijst er daarna naar. Andere pads die hetzelfde sample gebruiken, houden het oude.
+
+- **Golfvorm.** Sleep om een selectie te maken; sleep de handvatten om start of einde te verplaatsen (ook met een vinger). Een tik zet de cursor. Zoom met het scrollwiel, met twee vingers (pinch) of met **−**, **+**, **Alles** en **Naar selectie**, tot je de losse samples ziet; scroll met de balk eronder, Shift+scrollwiel of met de rechter muisknop slepen. Sleep op de liniaal om te **scrubben** (een kort stukje klinkt). **Snap op nuldoorgang** laat start, einde en cursor naar de dichtstbijzijnde nuldoorgang springen tegen kliks. Bij stereo staan **L en R boven elkaar** of als **Som**; eronder staan piek en RMS van de selectie. **Start**, **Einde** en **Cursor** (in samples) kun je ook intikken.
+- **Beluisteren.** **Selectie afspelen** (zonder selectie vanaf de cursor), **Lus afspelen** en **Stop**; een lijn loopt als afspeelkop mee.
+- **Bewerken:** **Alles selecteren**, **Afsnijden** (alleen de selectie blijft, en blijft geselecteerd), **Verwijderen** (de rest sluit aan). **Knippen**, **Kopiëren**, **Plakken** (vervangt de selectie, of komt op de cursor) en **Invoegen** (altijd op de cursor) gebruiken een klembord dat over pads heen werkt. **Stilte invoegen** (ms) op de cursor, **Selectie dempen**.
+- **Niveau en fades:** **Normaliseren** (piek naar 0 dBFS), **Gain** (dB, met een melding als het afkapt), **Fade in** en **Fade uit** over de selectie of het hele sample, **lineair**, **logaritmisch** (snel omhoog, daarna rustig) of **exponentieel** (eerst rustig).
+- **Klank:** **Omkeren** (blijvend; los van de schakelaar Omgekeerd van het pad), **DC-offset weg**, **Mono maken**, **Toonhoogte wijzigen** (halve tonen; het geluid wordt korter of langer), **Bit-reductie** (2 tot 15 bits) en **Sample-rate-reductie** (Hz). Zonder selectie gelden ze voor het hele sample.
+- **Start, einde en lus:** **Selectie als start en einde** en **Selectie als lus** (de lus gaat aan); de markeringen S, E en L staan in de golfvorm en zijn te slepen. **Loop-crossfade toepassen** rekent een crossfade (ms) in het sample, vlak voor het lusbegin, zodat de naad niet klikt. De realtime crossfade van de lus volgt in een volgende versie.
+- **Ongedaan en Opnieuw.** Minstens 100 stappen (begrensd op 128 MiB aan geheugen; de oudste vervalt). Ctrl+Z, Ctrl+Shift+Z of Ctrl+Y. De geschiedenis wordt niet bewaard met de song en is leeg na het laden.
+- **Toetsenbord** (in de editor): **X** knippen, **C** kopiëren, **V** plakken, **I** invoegen, **Delete** verwijderen, **Ctrl+A** alles, **spatie** speelt de selectie (Shift+spatie: lus), **+** en **−** zoomen, pijltjes verplaatsen de cursor (met Shift maak je een selectie).
+- **Grenzen.** Past het resultaat niet meer in de 64 MiB (of is het langer dan 120 s), dan gebeurt de bewerking niet en krijg je een melding. Het geluid is niet beluisterd door de bouwer maar met metingen gecontroleerd.
+
 **Poorten.**
 
 | Poort | Soort | Gebruik |
@@ -88,7 +104,7 @@ Samplers hebben **tunes**: een tune is de volledige instelling van één sampler
 
 ## Pad Sampler
 
-**Waar is het voor.** Een grotere sampler voor drumkits en instrumenten. Hij heeft vier banken van 16 pads; elk pad heeft vier **lagen** (samples die klinken op velocity, om de beurt, willekeurig of allemaal tegelijk), een envelope, een filter, een mutegroep en een eigen audio-uitgang. Een pad is een **drum**-pad (één noot, één slag) of een **keygroup** (samples met een toetsbereik en een grondtoon, chromatisch te spelen vanaf een keyboard). Hij begint met een ingebouwde demo-kit in bank A en klinkt dus meteen. Dit is stap 1 van het apparaat: de golfvorm wordt getoond maar kan nog niet bewerkt worden (de editor, knippen en renderen naar een nieuw sample volgen).
+**Waar is het voor.** Een grotere sampler voor drumkits en instrumenten. Hij heeft vier banken van 16 pads; elk pad heeft vier **lagen** (samples die klinken op velocity, om de beurt, willekeurig of allemaal tegelijk), een envelope, een filter, een mutegroep en een eigen audio-uitgang. Een pad is een **drum**-pad (één noot, één slag) of een **keygroup** (samples met een toetsbereik en een grondtoon, chromatisch te spelen vanaf een keyboard). Hij begint met een ingebouwde demo-kit in bank A en klinkt dus meteen. Sinds versie 1.1.0 heeft hij een **golfvormeditor** (tab Bewerken); chop en renderen naar een nieuw sample volgen.
 
 ![De kaart van Pad Sampler](../images/nl/samplers/pad-sampler.png)
 
@@ -101,6 +117,7 @@ Samplers hebben **tunes**: een tune is de volledige instelling van één sampler
 - **Filter:** **Uit**, **Laagdoorlaat**, **Hoogdoorlaat** of **Banddoorlaat**, met **Cutoff**, **Resonantie**, **Envelop-diepte** (hoever de envelope het filter opent of sluit; hij heeft geen eigen release) en **Velocity-diepte** (positief: zachte slagen klinken donkerder).
 - **Tab Lagen:** vier lagen per pad. Kies het **Sample** (de ingebouwde demo-samples beginnen met een punt) of **Bestand laden…** (WAV, FLAC, OGG of MP3; meerdere bestanden vullen de volgende pads). Per laag: **Halve tonen**, **Fijn**, **Niveau**, **Panorama**, **Offset** (negatief vertraagt de laag zoveel milliseconden, positief begint zo ver in het sample), **Grondtoon**, **Velocity vanaf / tot** (1 tot 127), **Start** en **Einde** (als deel van het sample), **Gain** en een **Lus** met start en einde (de crossfade van de lus werkt nog niet). Een lus werkt alleen als One-shot uit staat. Een WAV-bestand met een `smpl`-blok geeft zijn grondtoon en eerste lus vanzelf.
 - **Tab Zones:** voor een keygroup-pad. Een zone is een sample met een **Grondtoon**, een toetsbereik (**Toets vanaf / tot**), een velocity-bereik, een **Stemming** en een optionele lus; tot 16 zones. Zonder zones speelt het pad zijn lagen chromatisch rond de grondtoon van elke laag.
+- **Tab Bewerken:** de golfvormeditor, zie hieronder.
 - **Tab Programma:** **Mastervolume** (alleen de stereomix), **Eerste pad (MIDI)** (de noot van bank A pad 1; bank B, C en D volgen na telkens 16 noten), **Aanslag van pads**, **Demo-kit herstellen**, **Leeg programma** en het gebruikte samplegeheugen.
 
 **Poorten.**

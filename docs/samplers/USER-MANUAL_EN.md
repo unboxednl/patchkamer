@@ -88,7 +88,7 @@ Samplers have **tunes**: a tune is the complete setting of one sampler. Load a p
 
 ## Pad Sampler
 
-**What it is for.** A larger sampler for drum kits and instruments. It has four banks of 16 pads; every pad has four **layers** (samples that sound by velocity, in turn, at random or all together), an envelope, a filter, a mute group and its own audio output. A pad is either a **drum** pad (one note, one hit) or a **keygroup** (samples with a key range and a root note, played chromatically from a keyboard). It starts with a built-in demo kit in bank A, so it sounds straight away. This is step 1 of the device: the waveform is shown but cannot be edited yet (the editor, chopping and rendering to a new sample follow).
+**What it is for.** A larger sampler for drum kits and instruments. It has four banks of 16 pads; every pad has four **layers** (samples that sound by velocity, in turn, at random or all together), an envelope, a filter, a mute group and its own audio output. A pad is either a **drum** pad (one note, one hit) or a **keygroup** (samples with a key range and a root note, played chromatically from a keyboard). It starts with a built-in demo kit in bank A, so it sounds straight away. Since version 1.1.0 it has a **waveform editor** (tab Edit); chopping and rendering to a new sample follow.
 
 ![The Pad Sampler card](../images/en/samplers/pad-sampler.png)
 
@@ -101,7 +101,24 @@ Samplers have **tunes**: a tune is the complete setting of one sampler. Load a p
 - **Filter:** **Off**, **Low-pass**, **High-pass** or **Band-pass**, with **Cutoff**, **Resonance**, **Envelope amount** (how far the envelope opens or closes the filter; it has no release of its own) and **Velocity amount** (positive: soft hits are darker).
 - **Tab Layers:** four layers per pad. Choose the **Sample** (the built-in demo samples start with a dot) or **Load file…** (WAV, FLAC, OGG or MP3; several files fill the next pads). Per layer: **Semitones**, **Fine**, **Level**, **Pan**, **Offset** (negative delays the layer by that many milliseconds, positive starts that far into the sample), **Root note**, **Velocity from / to** (1 to 127), **Start** and **End** (as a part of the sample), **Gain** and a **Loop** with start and end (the loop crossfade is not active yet). A loop only works when One-shot is off. A WAV file with a `smpl` block gives its root note and first loop automatically.
 - **Tab Zones:** for a keygroup pad. A zone is a sample with a **Root note**, a key range (**Key from / to**), a velocity range, a **Tuning** and an optional loop; up to 16 zones. Without zones, the pad plays its layers chromatically around the root note of each layer.
+- **Tab Edit:** the waveform editor, see below.
 - **Tab Program:** **Master volume** (the stereo mix only), **First pad (MIDI)** (the note of bank A pad 1; banks B, C and D continue after 16 notes each), **Pad velocity**, **Restore demo kit**, **Empty program** and the sample memory in use.
+
+**The waveform editor (tab Edit).**
+
+![The Pad Sampler waveform editor](../images/en/samplers/pad-sampler-editor.png)
+
+At the top, choose which layer or zone you edit. Everything you do works on a copy and the result becomes a new 16-bit sample; the layer then points to it. Other pads that use the same sample keep the old one.
+
+- **Waveform.** Drag to make a selection; drag the handles to move the start or the end (also with a finger). A tap places the cursor. Zoom with the mouse wheel, with two fingers (pinch) or with **−**, **+**, **All** and **To selection**, down to single samples; scroll with the bar below, Shift+wheel or by dragging with the right mouse button. Drag on the ruler to **scrub** (a short piece sounds). **Snap to zero crossing** makes the start, end and cursor jump to the nearest zero crossing against clicks. A stereo sample shows **L and R stacked** or as a **Sum**; below it are the peak and RMS of the selection. You can also type **Start**, **End** and **Cursor** (in samples).
+- **Listening.** **Play selection** (from the cursor when nothing is selected), **Play loop** and **Stop**; a line follows as the play head.
+- **Edit:** **Select all**, **Trim** (only the selection stays, and stays selected), **Delete** (the rest closes up). **Cut**, **Copy**, **Paste** (replaces the selection, or goes at the cursor) and **Insert** (always at the cursor) use a clipboard that works across pads. **Insert silence** (ms) at the cursor, **Silence selection**.
+- **Level and fades:** **Normalize** (peak to 0 dBFS), **Gain** (dB, with a message if it clips), **Fade in** and **Fade out** over the selection or the whole sample, **linear**, **logarithmic** (fast up, then gentle) or **exponential** (gentle first).
+- **Sound:** **Reverse** (permanent; separate from the pad's Reverse switch), **Remove DC offset**, **Make mono**, **Change pitch** (semitones; the sound gets shorter or longer), **Bit reduction** (2 to 15 bits) and **Sample-rate reduction** (Hz). Without a selection they apply to the whole sample.
+- **Start, end and loop:** **Selection as start and end** and **Selection as loop** (the loop switches on); the markers S, E and L are in the waveform and can be dragged. **Apply loop crossfade** calculates a crossfade (ms) into the sample, just before the loop start, so the seam does not click. The real-time loop crossfade follows in a later version.
+- **Undo and Redo.** At least 100 steps (limited to 128 MiB of memory; the oldest expires). Ctrl+Z, Ctrl+Shift+Z or Ctrl+Y. The history is not saved with the song and is empty after loading.
+- **Keyboard** (in the editor): **X** cut, **C** copy, **V** paste, **I** insert, **Delete** delete, **Ctrl+A** select all, **space** plays the selection (Shift+space: loop), **+** and **−** zoom, the arrows move the cursor (with Shift you make a selection).
+- **Limits.** If the result no longer fits in the 64 MiB (or is longer than 120 s), the edit does not happen and you get a message. The builder did not listen to the sound but checked it with measurements.
 
 **Ports.**
 

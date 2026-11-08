@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.5.0 (2026-11-08)
+
+### Added
+- **Pad Sampler 1.1.0: waveform editor and sample edits** (step 2 of the device). A new tab **Edit** with a waveform you zoom (mouse wheel, pinch, buttons; from the whole sample down to a single sample), scroll and drag a selection on with visible handles (mouse and touch), with snap to zero crossing, a play head, **Play selection**, **Play loop** and scrubbing on the ruler; stereo shows L and R stacked or as a sum. Edits on the selection (or the whole sample): trim, delete, cut, copy, paste and insert (its own clipboard, also across pads), insert silence and silence a selection, normalize, gain, fade in and out (linear, logarithmic or exponential), reverse, remove DC offset, make mono, pitch (resampling, with a change of length), bit reduction and sample-rate reduction, a selection as start, end or loop, and baking a loop crossfade into the sample. Everything works on a copy and the result becomes a new 16-bit sample. **Undo and Redo** (at least 100 steps, limited to 128 MiB, also with Ctrl+Z, Ctrl+Shift+Z and Ctrl+Y); the history is not in the state. Keyboard control (X, C, V, I, Delete, Ctrl+A, space, plus and minus, arrows with Shift). The state stays compatible.
+
 ## 0.4.0 (2026-11-08)
 
 ### Added

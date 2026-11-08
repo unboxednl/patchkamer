@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die **tunes voor Pad Sampler** maken, een song met
 
 ## Wat Pad Sampler is
 
-Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp: kern en weergave van de golfvorm; de editor, chop, Flatten/Resample en de catalogus volgen (de state is daar al op voorbereid: `slices`, `license`, `loop.xfade`, `sends`).
+Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); chop, Flatten/Resample en de catalogus volgen (de state is daar al op voorbereid: `slices`, `license`, `loop.xfade`, `sends`).
 
 | | |
 |---|---|
@@ -12,7 +12,8 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 | `id` | `nl.patchkamer.padsampler`. Verander die nooit |
 | Soort | `instrument` (`category: 'synth'`; de bibliotheek zet hem bij Samplers): **tunes**, geen presets |
 | Poorten | audio uit `mix` (Stereomix) en `out1` t/m `out16`; event in `notes`; sturing in `mod`; geen audio-ingang |
-| Contract | v1.26 |
+| Versie | 1.1.0 |
+| Contract | v1.27 (gebouwd voor v1.26, gevalideerd tegen v1.27) |
 | Pack | `../../../tunes/pad-sampler-demos.patchkamer-tunes.json` (15 tunes, CC0-1.0) |
 
 ## Geluid en routing
@@ -66,6 +67,18 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 **Zone:** `sampleId`, `root`, `keyLo`, `keyHi`, `velLo`, `velHi`, `tune` (halve tonen, −24..24), `loop`.
 **Sample** in `samples`: `{ name, rate (3000..192000), channels (1 of 2), root, loop, slices, license{source,license,author,attribution}, data }`; `data` is PCM16 little-endian als base64 (lengte deelbaar door 4); het id is een hash van de inhoud. Samples die geen enkele laag of zone gebruikt, verdwijnen bij `setState`.
 
+## De editor (sinds 1.1.0)
+
+De tab **Bewerken** werkt op de gekozen laag of zone. De state krijgt **geen nieuwe velden**: een bewerking maakt een nieuw sample in `samples` (nieuw id, zelfde record) en laat de laag of zone daarheen wijzen. Een oude state laadt dus gewoon en `setState(getState())` blijft byte-gelijk.
+
+- **Bewerkingen** (Float32-kopie, resultaat PCM16, op de selectie of, zonder selectie, op het hele sample): afsnijden, verwijderen, knippen, kopiëren, plakken (vervangt een selectie, anders op de cursor), invoegen (altijd op de cursor), stilte invoegen, selectie dempen, normaliseren (piek 0 dBFS), gain (dB, afkappen op ±1 met melding), fade in en uit (`lin`: t, `log`: log10(1+9t), `exp`: (10^t-1)/9), omkeren, DC-offset weg, mono maken (gemiddelde; het hele sample), toonhoogte (halve tonen, hersamplen met een gevensterde sinc; het stuk wordt korter of langer), bit-reductie (2 tot 15 bits: 2^bits-1 niveaus), sample-rate-reductie (vasthouden, lengte blijft), selectie als start en einde (alleen laag), selectie als lus (zet `loop.on`), loop-crossfade inbakken (de `xfade`-regelaar van de lus blijft zonder effect; de crossfade wordt in het sample gerekend, gelijk vermogen, op het stuk vlak voor het lusbegin).
+- **Posities volgen mee.** Verandert de lengte, dan worden `start`, `end`, `loop.start` en `loop.end` van de laag (of zone), en `loop` en `slices` van het sample, mee verplaatst; blijft er niets over van zo'n bereik, dan wordt het 0 tot 1.
+- **Klembord** staat in het apparaat (niet in de state), werkt over pads heen en wordt omgerekend naar sample rate en kanalen van het doel.
+- **Ongedaan en Opnieuw** staan alleen in het geheugen: hoogstens 500 stappen en 128 MiB aan samples (de oudste vervalt); `setState` leegt ze. Het geheugen daarvoor valt buiten de 64 MiB van de state: die geldt voor wat na de bewerking in `samples` zou staan. Past dat niet, dan gebeurt de bewerking niet en komt er een melding. Een resultaat langer dan 120 s wordt geweigerd. Een bewerking zonder verschil maakt geen stap.
+- **Toetsen** (focus in de tab Bewerken): X knippen, C kopiëren, V plakken, I invoegen, Delete verwijderen, Ctrl+A alles, spatie speelt de selectie (of vanaf de cursor; Shift+spatie lust), + en − zoomen, 0 alles, pijltjes en PageUp/PageDown de cursor (Shift maakt een selectie), Home en End, Escape, Ctrl+Z ongedaan, Ctrl+Shift+Z of Ctrl+Y opnieuw. In die tab spelen de letters niet de pads.
+- Beluisteren loopt via de stereomix van het apparaat (mastervolume en begrenzer). Niet beluisterd: alleen gemeten met numerieke controles op het resultaat.
+- Een editor-bewerking loopt in de hoofdthread (sinc-hersamplen van 120 s duurt merkbaar).
+
 ## Ingebouwde demo-samples (geen audio in de state)
 
 `demo:kick`, `demo:kick-soft`, `demo:kick-hard`, `demo:snare`, `demo:clap`, `demo:hat-closed`, `demo:hat-open`, `demo:tom-lo`, `demo:tom-mid`, `demo:tom-hi`, `demo:rim`, `demo:cowbell`, `demo:shaker`, `demo:crash`, `demo:perc`, `demo:sub` (drums, 44100 Hz, mono) en de tonen `demo:saw`, `demo:sine`, `demo:square` (lussen over een geheel aantal perioden, root 60, sample rate 33488 Hz; zet `loop: { on: true, start: 0, end: 1 }`, `oneShot: false`) en `demo:pluck` (een aanslag, root 60). Een tune met alleen demo-samples bevat dus geen audio.
@@ -80,7 +93,7 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/samplers/PadSampler/pad-sampler.patchkamer-device.js` in gewoon, `--lang nl` en `--lang en`: `OK`, zonder `let op`.
-- Niet beluisterd: alleen gemeten (offline renders: energie per uitgang, velocity-lagen, cycle, mutegroep, frequentie van een keygroup, filter, envelope, polyfonie).
+- Niet beluisterd: alleen gemeten (offline renders: energie per uitgang, velocity-lagen, cycle, mutegroep, frequentie van een keygroup, filter, envelope, polyfonie; voor de editor het resultaat van elke bewerking, ongedaan/opnieuw, selecteren met muis en aanraking).
 
 ## Wat je niet doet
 
