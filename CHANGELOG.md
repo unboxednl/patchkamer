@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.6.0 (2026-11-08)
+
+### Added
+- **Pad Sampler 1.2.0: chop, Process and Flatten** (step 3 of the device). In the **Edit** tab you now choose the kind of edit **Edit**, **Chop**, **Process** or **Flatten**. **Chop** makes slices (markers in the sample, not copies) with equal parts, by threshold, by hand or by BPM and bars; the markers are numbered flags on the waveform that you drag with mouse and finger (with snap to zero crossing), the start and end of a slice are linked or separate, and you listen to a slice with a click or the keys 1 to 9 and the arrows. **Slices to pads** puts slice n on pad n with the same sample (start and end per layer, optionally a tail of 100 ms). **Process** really saves filter (also as a sweep), drive, bitcrusher, three-band EQ, compressor and tempo match (resampling to a target BPM, with BPM from the number of beats) in the sample, with a listen first. **Flatten** renders a pad (all layers, envelope, filter, tune, level and pan) or the selection with an offline render to a new sample, at a chosen note and velocity, as a new layer, replacing layer, replacing pad or on another pad; reverb and delay are not baked in. Everything can be undone in the same history and stays within 64 MiB. The state gets an optional field `sliceEnds` per sample; old states load unchanged.
+
 ## 0.5.0 (2026-11-08)
 
 ### Added

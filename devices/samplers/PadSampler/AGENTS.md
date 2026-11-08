@@ -4,7 +4,7 @@ Dit bestand is voor AI-agents die **tunes voor Pad Sampler** maken, een song met
 
 ## Wat Pad Sampler is
 
-Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); chop, Flatten/Resample en de catalogus volgen (de state is daar al op voorbereid: `slices`, `license`, `loop.xfade`, `sends`).
+Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samples), een envelope, een filter, een mutegroep, polyfonie en een uitgang (stereomix of een van 16 losse uitgangen). Een pad is `drum` (één noot) of `key` (keygroup: zones met toetsbereik en grondtoon, chromatisch). Stap 1 van het ontwerp was de kern, stap 2 (sinds 1.1.0) is de golfvormeditor met sample-bewerkingen (tab Bewerken, zie hieronder); stap 3 (sinds 1.2.0) is chop, Process en Flatten/Resample (zie "Chop, Process en Flatten"); de catalogus volgt (de state is daar al op voorbereid: `license`, `loop.xfade`, `sends`).
 
 | | |
 |---|---|
@@ -12,7 +12,7 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 | `id` | `nl.patchkamer.padsampler`. Verander die nooit |
 | Soort | `instrument` (`category: 'synth'`; de bibliotheek zet hem bij Samplers): **tunes**, geen presets |
 | Poorten | audio uit `mix` (Stereomix) en `out1` t/m `out16`; event in `notes`; sturing in `mod`; geen audio-ingang |
-| Versie | 1.1.0 |
+| Versie | 1.2.0 |
 | Contract | v1.27 (gebouwd voor v1.26, gevalideerd tegen v1.27) |
 | Pack | `../../../tunes/pad-sampler-demos.patchkamer-tunes.json` (15 tunes, CC0-1.0) |
 
@@ -65,7 +65,7 @@ Een sampler met vier banken van elk zestien pads. Een pad heeft vier lagen (samp
 
 **Laag:** `sampleId` (`demo:...`, een id uit `samples` of leeg), `semi` (−48..48), `fine` (−100..100 ct), `level` (0..1), `pan`, `offset` (−500..500 ms), `root` (`null` of 0..127), `velLo`, `velHi` (1..127), `start`, `end` (deel van het sample, `start` 0..0,9999, `end` ≥ `start`+0,0001), `loop` `{ on, start, end, xfade }` (fracties; `xfade` heeft in stap 1 geen effect), `gain` (−24..24 dB).
 **Zone:** `sampleId`, `root`, `keyLo`, `keyHi`, `velLo`, `velHi`, `tune` (halve tonen, −24..24), `loop`.
-**Sample** in `samples`: `{ name, rate (3000..192000), channels (1 of 2), root, loop, slices, license{source,license,author,attribution}, data }`; `data` is PCM16 little-endian als base64 (lengte deelbaar door 4); het id is een hash van de inhoud. Samples die geen enkele laag of zone gebruikt, verdwijnen bij `setState`.
+**Sample** in `samples`: `{ name, rate (3000..192000), channels (1 of 2), root, loop, slices, [sliceEnds], license{source,license,author,attribution}, data }`; `slices` zijn beginposities in samples (oplopend, hoogstens 128), het eind van slice n is standaard het begin van n+1 (gekoppeld); `sliceEnds` bestaat alleen als een slice een eigen eind heeft (zelfde lengte als `slices`, 0 = standaard, anders een positie > begin en <= lengte); `data` is PCM16 little-endian als base64 (lengte deelbaar door 4); het id is een hash van de inhoud. Samples die geen enkele laag of zone gebruikt, verdwijnen bij `setState`.
 
 ## De editor (sinds 1.1.0)
 
@@ -78,6 +78,18 @@ De tab **Bewerken** werkt op de gekozen laag of zone. De state krijgt **geen nie
 - **Toetsen** (focus in de tab Bewerken): X knippen, C kopiëren, V plakken, I invoegen, Delete verwijderen, Ctrl+A alles, spatie speelt de selectie (of vanaf de cursor; Shift+spatie lust), + en − zoomen, 0 alles, pijltjes en PageUp/PageDown de cursor (Shift maakt een selectie), Home en End, Escape, Ctrl+Z ongedaan, Ctrl+Shift+Z of Ctrl+Y opnieuw. In die tab spelen de letters niet de pads.
 - Beluisteren loopt via de stereomix van het apparaat (mastervolume en begrenzer). Niet beluisterd: alleen gemeten met numerieke controles op het resultaat.
 - Een editor-bewerking loopt in de hoofdthread (sinc-hersamplen van 120 s duurt merkbaar).
+
+## Chop, Process en Flatten (sinds 1.2.0)
+
+De tab **Bewerken** heeft vier soorten bewerking (knoppen onder de golfvorm, alleen UI-toestand): Bewerken, Chop, Process, Flatten. Nieuw in de state is alleen het optionele `sliceEnds` per sample (zie boven); oude states laden ongewijzigd en `setState(getState())` blijft byte-gelijk.
+
+- **Slices** zijn markeringen in het sample, geen kopieën. Maken: gelijke delen (2..64), op drempel (omhullende per ms; drempel in dB onder de piek, opnieuw scherp na terugval onder de helft, minimale tijd; flams tellen als één), op BPM en maten (stap = 60/BPM x tellen), of handmatig (marker op cursor, slepen, verwijderen). Een demo-sample wordt bij de eerste chop een eigen sample (de laag wijst er daarna naar).
+- **Slices naar pads** (`slToPads`): slice n naar pad (startpad + n); het pad wordt een nieuw standaardpad (uitgang blijft) met laag 1 = hetzelfde sample, `start`/`end` van de slice, `root` uit het sample; optioneel `end` + staart. Geen kopieën van het sample.
+- **Process** werkt met directe DSP op de selectie (of het hele sample) en slaat het resultaat als nieuw sample op: filter (RBJ-biquad, 12 of 24 dB/okt, optionele sweep van cutoff over de selectie), drive (tanh met mix), bitcrusher, EQ (laagshelf 200 Hz, piek 1 kHz Q 1, hoogshelf 5 kHz), compressor (gekoppeld, attack/release op de omhullende) en tempo-afstemming (hersamplen, ratio = doel-BPM / huidig BPM, 0,25..4; echte time-stretch is fase 2). Beluisteren rekent hetzelfde uit zonder iets te wijzigen.
+- **Flatten** rendert met `OfflineAudioContext` (stereo, samplefrequentie van de studio): per laag dezelfde keten als een slag (laagniveau, pan, filter, envelope, tune, omkeren, lus, release na de notenlengte), daarna padniveau en -panorama; zonder uitgangskeuze, mastervolume en begrenzer. Gemeten gelijk aan de realtime slag op `out1` (verschil 1,5e-5, de 16-bit afronding). Opties: noot (bepaalt ook de zone en de root van het resultaat), velocity, staart, notenlengte (0 = langste laag, een lus telt als 2 s), mono, normaliseren, stilte afsnijden (onder -80 dB). Bestemming: nieuwe laag (eerste lege), de gekozen laag vervangen, dit pad vervangen (tune, envelope, filter, niveau en pan terug naar standaard; uitgang, mutegroep, polyfonie en soort blijven) of een ander pad. Reverb en delay worden niet ingebakken (er zijn geen insert-effecten).
+- **Ongedaan** voor deze bewerkingen is een stap met `prog: true` in dezelfde geschiedenis: de JSON van de geraakte pads, de slices van de samples en de bijbehorende records. Ongedaan zet ook de gekozen bank, pad en laag terug zoals ze waren. Past het resultaat niet in 64 MiB, dan gebeurt er niets en komt er een melding.
+- **Toetsen** in Chop: 1 t/m 9 beluistert slice 1..9, pijl links en rechts vorige en volgende slice, M of Enter marker op cursor, Delete haalt de gekozen marker weg.
+- Niet beluisterd; wel gemeten (zie Controleren). Flatten en Process zijn niet getest met Bluetooth-uitvoer of in andere browsers dan Chromium.
 
 ## Ingebouwde demo-samples (geen audio in de state)
 

@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.6.0 (2026-11-08)
+
+### Toegevoegd
+- **Pad Sampler 1.2.0: chop, Process en Flatten** (stap 3 van het apparaat). In de tab **Bewerken** kies je nu de soort bewerking **Bewerken**, **Chop**, **Process** of **Flatten**. **Chop** maakt slices (markeringen in het sample, geen kopieën) met gelijke delen, op drempel, handmatig of op BPM en maten; de markers staan als genummerde vlaggetjes op de golfvorm en zijn te slepen met muis en vinger (met snappen op nuldoorgang), begin en eind van een slice zijn gekoppeld of los, een slice beluister je met een klik of de toetsen 1 t/m 9 en de pijltjes. **Slices naar pads** zet slice n op pad n met hetzelfde sample (start en einde per laag, optioneel een staart van 100 ms). **Process** slaat filter (ook als sweep), drive, bitcrusher, EQ met drie banden, compressor en tempo-afstemming (hersamplen naar een doel-BPM, met BPM uit het aantal tellen) echt op in het sample, met beluisteren vooraf. **Flatten** rendert een pad (alle lagen, envelope, filter, tune, niveau en panorama) of de selectie met een offline-render naar een nieuw sample, op een gekozen noot en velocity, als nieuwe laag, vervangende laag, vervangend pad of op een ander pad; reverb en delay worden niet ingebakken. Alles is ongedaan te maken in dezelfde geschiedenis en blijft binnen de 64 MiB. De state krijgt per sample een optioneel veld `sliceEnds`; oude states laden ongewijzigd.
+
 ## 0.5.0 (2026-11-08)
 
 ### Toegevoegd

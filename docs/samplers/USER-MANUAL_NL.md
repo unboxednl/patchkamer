@@ -76,6 +76,22 @@ Kies bovenaan welke laag of zone je bewerkt. Alles wat je doet werkt op een kopi
 - **Toetsenbord** (in de editor): **X** knippen, **C** kopiëren, **V** plakken, **I** invoegen, **Delete** verwijderen, **Ctrl+A** alles, **spatie** speelt de selectie (Shift+spatie: lus), **+** en **−** zoomen, pijltjes verplaatsen de cursor (met Shift maak je een selectie).
 - **Grenzen.** Past het resultaat niet meer in de 64 MiB (of is het langer dan 120 s), dan gebeurt de bewerking niet en krijg je een melding. Het geluid is niet beluisterd door de bouwer maar met metingen gecontroleerd.
 
+**Chop, Process en Flatten (tab Bewerken, soort bewerking).** Onder de golfvorm kies je de soort bewerking: **Bewerken** (hierboven), **Chop**, **Process** of **Flatten**.
+
+![Chop in Pad Sampler](../images/nl/samplers/pad-sampler-chop.png)
+
+- **Chop: slices maken.** Een slice is een markering in het sample (geen kopie). **Gelijke delen** (2 tot 64, standaard 16), **Op drempel** (aanslagen zoeken: **Drempel** in dB onder de piek en **Minimale tijd** tussen twee aanslagen; flams worden één slag), **Op BPM en maten** (een slice per maat, tel, achtste of zestiende; **BPM uit tellen** rekent het tempo uit het aantal tellen in het sample, met **/2** en **×2** voor een verkeerde schatting) en handmatig: **Marker op cursor**, **Marker verwijderen**, **Alle markers wissen**. De markers staan als genummerde vlaggetjes onderin de golfvorm; sleep een vlaggetje om hem te verplaatsen (muis en vinger, met snappen op nuldoorgang als die aan staat). Standaard is het eind van een slice het begin van de volgende; zet **Eind van een slice gekoppeld aan het begin van de volgende** uit om ook eindpunten los te slepen. Een demo-sample wordt bij de eerste chop een eigen sample.
+- **Slices beluisteren.** Klik of tik op een nummer (knop of vlaggetje), of druk op **1** t/m **9**; pijl links en rechts gaan naar de vorige en volgende slice, **M** of **Enter** zet een marker op de cursor en **Delete** haalt de gekozen marker weg. **Slice als selectie** maakt van de slice een selectie.
+- **Slices naar pads.** Kies bank en pad waar slice 1 heen gaat; slice n gaat naar het n-de pad daarna. Elk pad krijgt laag 1 met hetzelfde sample en het begin en einde van de slice (geen kopieën). **Vervangen** maakt van bestaande pads een nieuw pad, **Alleen lege pads vullen** laat bezette pads staan. **Staart toevoegen** rekt het einde van elk pad op met 0 tot 5000 ms (advies 100 ms) zodat een afgekapte slag zachter eindigt. Het is één stap voor Ongedaan.
+- **Process: als sample opslaan.** **Filter** (laagdoorlaat, hoogdoorlaat of banddoorlaat; 12 of 24 dB per octaaf; **Cutoff**, **Resonantie** en een **Sweep over de selectie** naar een eindcutoff), **Drive** (zacht afknijpen, met **Mix**), **Bitcrusher** (bits en sample rate), **EQ met drie banden** (laag 200 Hz, midden 1 kHz, hoog 5 kHz, ±18 dB), **Compressor** (drempel, ratio, attack, release en make-up) en **Tempo-afstemming** (een lus op een doel-BPM brengen door te hersamplen: **Tellen in het sample** geeft het huidige tempo, **/2** en **×2** corrigeren een verkeerde schatting; de toonhoogte verandert mee, echte time-stretch volgt later). **Beluisteren** rekent het resultaat uit en speelt het af zonder iets te wijzigen; **Toepassen** slaat het echt in het sample op (op de selectie, of het hele sample zonder selectie) en is ongedaan te maken.
+
+![Process in Pad Sampler](../images/nl/samplers/pad-sampler-process.png)
+
+![Flatten in Pad Sampler](../images/nl/samplers/pad-sampler-flatten.png)
+
+- **Flatten en resample.** Rendert het gekozen pad (alle lagen, envelope, filter, tune, omkeren, niveau en panorama; zonder de keuze van de uitgang) of de selectie van de editor, sneller dan realtime, naar een nieuw sample. Kies de **Noot** en **Velocity** (standaard de grondtoon en 100), de **Staart** (standaard 0,1 s), de **Notenlengte** (0 is automatisch), **Stereo** of **Mono**, **Normaliseren**, **Stilte aan het eind afsnijden** en het **Resultaat**: een nieuwe laag in dit pad, de gekozen laag vervangen, dit pad vervangen (de ingebakken instellingen gaan terug naar standaard) of een ander pad. Reverb en delay van andere apparaten worden niet ingebakken, want Pad Sampler heeft nog geen insert-effecten; gebruik Process voor filter, drive, bitcrusher, EQ en compressor.
+- **Ongedaan en Opnieuw** gelden ook voor chop, slices naar pads, Process en Flatten (het zijn stappen in dezelfde geschiedenis). Een bewerking die niet meer in de 64 MiB past, wordt geweigerd met een melding.
+
 **Poorten.**
 
 | Poort | Soort | Gebruik |
@@ -104,7 +120,7 @@ Kies bovenaan welke laag of zone je bewerkt. Alles wat je doet werkt op een kopi
 
 ## Pad Sampler
 
-**Waar is het voor.** Een grotere sampler voor drumkits en instrumenten. Hij heeft vier banken van 16 pads; elk pad heeft vier **lagen** (samples die klinken op velocity, om de beurt, willekeurig of allemaal tegelijk), een envelope, een filter, een mutegroep en een eigen audio-uitgang. Een pad is een **drum**-pad (één noot, één slag) of een **keygroup** (samples met een toetsbereik en een grondtoon, chromatisch te spelen vanaf een keyboard). Hij begint met een ingebouwde demo-kit in bank A en klinkt dus meteen. Sinds versie 1.1.0 heeft hij een **golfvormeditor** (tab Bewerken); chop en renderen naar een nieuw sample volgen.
+**Waar is het voor.** Een grotere sampler voor drumkits en instrumenten. Hij heeft vier banken van 16 pads; elk pad heeft vier **lagen** (samples die klinken op velocity, om de beurt, willekeurig of allemaal tegelijk), een envelope, een filter, een mutegroep en een eigen audio-uitgang. Een pad is een **drum**-pad (één noot, één slag) of een **keygroup** (samples met een toetsbereik en een grondtoon, chromatisch te spelen vanaf een keyboard). Hij begint met een ingebouwde demo-kit in bank A en klinkt dus meteen. Sinds versie 1.1.0 heeft hij een **golfvormeditor** (tab Bewerken); sinds 1.2.0 ook **chop**, **Process** en **Flatten** (renderen naar een nieuw sample).
 
 ![De kaart van Pad Sampler](../images/nl/samplers/pad-sampler.png)
 

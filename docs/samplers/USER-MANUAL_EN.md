@@ -88,7 +88,7 @@ Samplers have **tunes**: a tune is the complete setting of one sampler. Load a p
 
 ## Pad Sampler
 
-**What it is for.** A larger sampler for drum kits and instruments. It has four banks of 16 pads; every pad has four **layers** (samples that sound by velocity, in turn, at random or all together), an envelope, a filter, a mute group and its own audio output. A pad is either a **drum** pad (one note, one hit) or a **keygroup** (samples with a key range and a root note, played chromatically from a keyboard). It starts with a built-in demo kit in bank A, so it sounds straight away. Since version 1.1.0 it has a **waveform editor** (tab Edit); chopping and rendering to a new sample follow.
+**What it is for.** A larger sampler for drum kits and instruments. It has four banks of 16 pads; every pad has four **layers** (samples that sound by velocity, in turn, at random or all together), an envelope, a filter, a mute group and its own audio output. A pad is either a **drum** pad (one note, one hit) or a **keygroup** (samples with a key range and a root note, played chromatically from a keyboard). It starts with a built-in demo kit in bank A, so it sounds straight away. Since version 1.1.0 it has a **waveform editor** (tab Edit); since 1.2.0 also **chop**, **Process** and **Flatten** (rendering to a new sample).
 
 ![The Pad Sampler card](../images/en/samplers/pad-sampler.png)
 
@@ -119,6 +119,22 @@ At the top, choose which layer or zone you edit. Everything you do works on a co
 - **Undo and Redo.** At least 100 steps (limited to 128 MiB of memory; the oldest expires). Ctrl+Z, Ctrl+Shift+Z or Ctrl+Y. The history is not saved with the song and is empty after loading.
 - **Keyboard** (in the editor): **X** cut, **C** copy, **V** paste, **I** insert, **Delete** delete, **Ctrl+A** select all, **space** plays the selection (Shift+space: loop), **+** and **−** zoom, the arrows move the cursor (with Shift you make a selection).
 - **Limits.** If the result no longer fits in the 64 MiB (or is longer than 120 s), the edit does not happen and you get a message. The builder did not listen to the sound but checked it with measurements.
+
+**Chop, Process and Flatten (tab Edit, kind of edit).** Below the waveform you choose the kind of edit: **Edit** (above), **Chop**, **Process** or **Flatten**.
+
+![Chop in Pad Sampler](../images/en/samplers/pad-sampler-chop.png)
+
+- **Chop: make slices.** A slice is a marker in the sample (not a copy). **Equal parts** (2 to 64, default 16), **By threshold** (finds hits: **Threshold** in dB below the peak and **Minimum time** between two hits; flams count as one hit), **By BPM and bars** (one slice per bar, beat, eighth or sixteenth; **BPM from beats** works out the tempo from the number of beats in the sample, with **/2** and **×2** for a wrong guess) and by hand: **Marker at cursor**, **Delete marker**, **Clear all markers**. The markers are numbered flags at the bottom of the waveform; drag a flag to move it (mouse and finger, snapping to a zero crossing when that is on). By default the end of a slice is the start of the next; turn off **End of a slice linked to the start of the next** to drag end points separately too. A demo sample becomes a sample of its own at the first chop.
+- **Listening to slices.** Click or tap a number (button or flag), or press **1** to **9**; left and right arrow go to the previous and next slice, **M** or **Enter** puts a marker at the cursor and **Delete** removes the chosen marker. **Slice as selection** turns the slice into a selection.
+- **Slices to pads.** Choose the bank and pad where slice 1 goes; slice n goes to the n-th pad after it. Every pad gets layer 1 with the same sample and the start and end of the slice (no copies). **Replace** turns existing pads into a new pad, **Fill empty pads only** leaves occupied pads alone. **Add a tail** stretches the end of every pad by 0 to 5000 ms (advice 100 ms) so a cut-off hit ends more softly. It is one step for Undo.
+- **Process: save as sample.** **Filter** (low-pass, high-pass or band-pass; 12 or 24 dB per octave; **Cutoff**, **Resonance** and a **Sweep over the selection** to an end cutoff), **Drive** (soft clipping, with **Mix**), **Bitcrusher** (bits and sample rate), **Three-band EQ** (low 200 Hz, mid 1 kHz, high 5 kHz, ±18 dB), **Compressor** (threshold, ratio, attack, release and make-up) and **Tempo match** (bring a loop to a target BPM by resampling: **Beats in the sample** gives the current tempo, **/2** and **×2** correct a wrong guess; the pitch changes with it, real time-stretch follows later). **Listen** calculates the result and plays it without changing anything; **Apply** really saves it in the sample (on the selection, or the whole sample without a selection) and can be undone.
+
+![Process in Pad Sampler](../images/en/samplers/pad-sampler-process.png)
+
+![Flatten in Pad Sampler](../images/en/samplers/pad-sampler-flatten.png)
+
+- **Flatten and resample.** Renders the chosen pad (all layers, envelope, filter, tune, reverse, level and pan; without the output choice) or the selection of the editor, faster than real time, to a new sample. Choose the **Note** and **Velocity** (default the root and 100), the **Tail** (default 0.1 s), the **Note length** (0 is automatic), **Stereo** or **Mono**, **Normalize**, **Trim silence at the end** and the **Result**: a new layer in this pad, replace the chosen layer, replace this pad (the baked-in settings go back to default) or another pad. Reverb and delay of other devices are not baked in, because Pad Sampler has no insert effects yet; use Process for filter, drive, bitcrusher, EQ and compressor.
+- **Undo and Redo** also apply to chop, slices to pads, Process and Flatten (they are steps in the same history). An edit that no longer fits in the 64 MiB is refused with a message.
 
 **Ports.**
 

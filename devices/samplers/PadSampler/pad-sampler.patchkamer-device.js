@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Pad Sampler, stap 3 (chop, Flatten/Resample en Process), Patchkamer contract v1.27. Nieuw in de tab Bewerken: de soorten Chop (slices maken met gelijke delen, op drempel, handmatig of op BPM en maten;
+//          markers op de golfvorm slepen met muis en aanraking, beluisteren per slice, slices naar pads zonder kopieën van het sample), Process (filter, drive, bitcrusher, EQ, compressor en
+//          tempo-afstemming als echte bewerking van het sample, met beluisteren) en Flatten (een pad of de selectie met OfflineAudioContext naar een nieuw sample). Programma-stappen
+//          (pads en slices) zijn ongedaan te maken in dezelfde geschiedenis. State: optioneel `sliceEnds` per sample (eigen eindposities van slices); oude states laden ongewijzigd.
 // 1.1.0 — Pad Sampler, stap 2 (golfvormeditor en sample-bewerkingen), Patchkamer contract v1.27. Nieuw: tab Bewerken met een golfvormeditor (zoomen, scrollen, selectie
 //          met handvatten, snappen op nuldoorgang, afspeelkop, selectie of lus beluisteren, scrubben), bewerkingen op een Float32-kopie met PCM16-resultaat (afsnijden,
 //          verwijderen, knippen, kopiëren, plakken, invoegen, stilte, normaliseren, gain, fades, omkeren, DC weg, mono, toonhoogte, bit- en sample-rate-reductie,
@@ -48,6 +52,26 @@ const TXT = {
       noRoom: 'Er is te weinig ruimte vóór het lusbegin voor deze crossfade.', needLayer: 'Start en einde bestaan alleen voor een laag, niet voor een zone.', badValue: 'Dat getal kan niet.',
       kbd: 'Toetsen: X knippen · C kopiëren · V plakken · I invoegen · Delete verwijderen · Ctrl+A alles · spatie afspelen (Shift+spatie lus) · plus en min zoomen · pijltjes cursor (Shift: selectie) · Ctrl+Z ongedaan · Ctrl+Shift+Z of Ctrl+Y opnieuw. Alles werkt op een kopie; het resultaat wordt een nieuw sample van 16 bit.',
       hist: 'Ongedaan: {0} stappen, opnieuw: {1}.', marker: 'Markering verplaatsen',
+      mEdit: 'Bewerken', mChop: 'Chop', mProc: 'Process', mFlat: 'Flatten', modes: 'Soort bewerking',
+      grpChop: 'Chop: slices maken', chopEq: 'Gelijke delen', chopParts: 'Aantal delen', chopThr: 'Op drempel', thrDb: 'Drempel (dB onder de piek)', minMs: 'Minimale tijd (ms)',
+      chopBpm: 'Op BPM en maten', bpm: 'BPM', perUnit: 'Eén slice per', uBar: 'maat (4 tellen)', uBeat: 'tel', uEighth: 'achtste', uSixteenth: 'zestiende', beats: 'Tellen in het sample',
+      bpmFromBeats: 'BPM uit tellen', half: '/2', double: '×2', slAdd: 'Marker op cursor', slDel: 'Marker verwijderen', slClear: 'Alle markers wissen', link: 'Eind van een slice gekoppeld aan het begin van de volgende',
+      slSelect: 'Slice als selectie', slNone: 'Nog geen slices. Maak ze met een van de knoppen hierboven.', slInfo: 'Slice {0} van {1}: {2} tot {3} ({4} samples)', slN: 'Slice {0}', slPlay: 'Slice {0} beluisteren',
+      chopDone: 'Chop: {0} slices.', slFull: 'Meer dan 128 slices kan niet.', slExists: 'Daar staat al een marker.', slNoSel: 'Kies eerst een slice.',
+      kbdChop: 'Chop: 1 t/m 9 beluistert slice 1 t/m 9 · pijl links en rechts vorige en volgende slice · M of Enter zet een marker op de cursor · Delete haalt de gekozen marker weg. Sleep een nummer onderin de golfvorm om een marker te verplaatsen.',
+      grpPads: 'Slices naar pads', spBank: 'Eerste pad: bank', spPad: 'pad', spMode: 'Bestaande pads', spReplace: 'Vervangen', spEmpty: 'Alleen lege pads vullen', spTailOn: 'Staart toevoegen', spTailMs: 'Staart (ms, advies 100)', spGo: 'Slices naar pads',
+      spDone: '{0} slices op pads gezet ({1} overgeslagen, {2} pasten niet).', spLabel: 'Slices naar pads', spNeed: 'Maak eerst slices.',
+      grpProc: 'Process: als sample opslaan', procOp: 'Bewerking', fxFilter: 'Filter', fxDrive: 'Drive', fxCrush: 'Bitcrusher', fxEq: 'EQ met drie banden', fxComp: 'Compressor', fxTempo: 'Tempo-afstemming',
+      fType: 'Soort', fCut: 'Cutoff (Hz)', fQ: 'Resonantie (Q)', fSlope: 'Helling', fSweep: 'Sweep over de selectie', fCutEnd: 'Cutoff aan het eind (Hz)', sl12: '12 dB per octaaf', sl24: '24 dB per octaaf',
+      drDb: 'Drive (dB)', drMix: 'Mix (%)', crBits: 'Bits', crHz: 'Sample rate (Hz)', eqLow: 'Laag (dB, 200 Hz)', eqMid: 'Midden (dB, 1 kHz)', eqHigh: 'Hoog (dB, 5 kHz)',
+      cpThr: 'Drempel (dB)', cpRatio: 'Ratio', cpAtk: 'Attack (ms)', cpRel: 'Release (ms)', cpMk: 'Make-up (dB)', tmTarget: 'Doel-BPM', tmNow: 'Huidig tempo: {0} BPM', tmSt: 'Hersamplen: de toonhoogte verandert mee ({0} halve tonen); echte time-stretch volgt later.',
+      procPrev: 'Beluisteren', procApply: 'Toepassen', procHelp: 'Werkt op de selectie, of op het hele sample als er geen selectie is. Het resultaat wordt echt in het sample opgeslagen (geen effect-apparaat) en is ongedaan te maken.',
+      fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo-afstemming' },
+      grpFlat: 'Flatten en resample', flSrc: 'Bron', flSrcPad: 'Gekozen pad (alle lagen, envelope, filter, tune)', flSrcSel: 'Selectie van de editor', flNote: 'Noot', flVel: 'Velocity', flTail: 'Staart (s)', flHold: 'Notenlengte (s, 0 = automatisch)',
+      flCh: 'Kanalen', flStereo: 'Stereo', flMono: 'Mono', flNorm: 'Normaliseren', flTrim: 'Stilte aan het eind afsnijden', flDest: 'Resultaat', dNew: 'Nieuwe laag in dit pad', dLayer: 'Vervang de gekozen laag', dReplace: 'Vervang dit pad (instellingen terug naar standaard)', dOther: 'Op een ander pad',
+      flBank: 'Bank', flPadN: 'Pad', flWarn: 'Let op: Pad Sampler heeft nog geen insert-effecten. Wat je hoort komt uit de lagen, de envelope, het filter, de tune en het niveau en panorama van het pad. Reverb en delay van andere apparaten worden niet ingebakken. Filter, drive, bitcrusher, EQ en compressor kun je met Process wel als sample opslaan.',
+      flGo: 'Flatten', flPrev: 'Beluisteren', flBusy: 'Bezig met renderen…', flNoSound: 'Dit pad heeft bij deze noot en velocity geen geluid.', flNoRoom: 'Alle vier de lagen van dit pad zijn bezet; kies een andere bestemming.', noOffline: 'Offline renderen is niet beschikbaar in deze omgeving.',
+      flChanged: 'Het sample is veranderd tijdens het renderen; er is niets toegepast.', flName: 'Flatten {0}', flSelName: 'Selectie {0}', flDone: 'Flatten: {0} s, {1} Hz.', flOverlong: 'Het resultaat zou langer zijn dan 120 seconden.',
     },
     k: {
       level: 'Mastervolume', baseNote: 'Eerste pad (MIDI)', padVel: 'Aanslag van pads', 'pad.tune': 'Toonhoogte', 'pad.fine': 'Fijn', 'pad.level': 'Niveau', 'pad.pan': 'Panorama', 'pad.poly': 'Polyfonie', 'pad.mute': 'Mutegroep', 'pad.baseNote': 'Noot bij tikken',
@@ -95,6 +119,26 @@ const TXT = {
       noRoom: 'There is too little room before the loop start for this crossfade.', needLayer: 'Start and end exist for a layer only, not for a zone.', badValue: 'That number is not possible.',
       kbd: 'Keys: X cut · C copy · V paste · I insert · Delete delete · Ctrl+A select all · space plays (Shift+space loops) · plus and minus zoom · arrows move the cursor (Shift: select) · Ctrl+Z undo · Ctrl+Shift+Z or Ctrl+Y redo. Everything works on a copy; the result becomes a new 16-bit sample.',
       hist: 'Undo: {0} steps, redo: {1}.', marker: 'Move marker',
+      mEdit: 'Edit', mChop: 'Chop', mProc: 'Process', mFlat: 'Flatten', modes: 'Kind of edit',
+      grpChop: 'Chop: make slices', chopEq: 'Equal parts', chopParts: 'Number of parts', chopThr: 'By threshold', thrDb: 'Threshold (dB below peak)', minMs: 'Minimum time (ms)',
+      chopBpm: 'By BPM and bars', bpm: 'BPM', perUnit: 'One slice per', uBar: 'bar (4 beats)', uBeat: 'beat', uEighth: 'eighth', uSixteenth: 'sixteenth', beats: 'Beats in the sample',
+      bpmFromBeats: 'BPM from beats', half: '/2', double: '×2', slAdd: 'Marker at cursor', slDel: 'Delete marker', slClear: 'Clear all markers', link: 'End of a slice linked to the start of the next',
+      slSelect: 'Slice as selection', slNone: 'No slices yet. Make them with one of the buttons above.', slInfo: 'Slice {0} of {1}: {2} to {3} ({4} samples)', slN: 'Slice {0}', slPlay: 'Play slice {0}',
+      chopDone: 'Chop: {0} slices.', slFull: 'More than 128 slices is not possible.', slExists: 'There is already a marker there.', slNoSel: 'Choose a slice first.',
+      kbdChop: 'Chop: 1 to 9 plays slice 1 to 9 · left and right arrow previous and next slice · M or Enter puts a marker at the cursor · Delete removes the chosen marker. Drag a number at the bottom of the waveform to move a marker.',
+      grpPads: 'Slices to pads', spBank: 'First pad: bank', spPad: 'pad', spMode: 'Existing pads', spReplace: 'Replace', spEmpty: 'Fill empty pads only', spTailOn: 'Add a tail', spTailMs: 'Tail (ms, advice 100)', spGo: 'Slices to pads',
+      spDone: '{0} slices put on pads ({1} skipped, {2} did not fit).', spLabel: 'Slices to pads', spNeed: 'Make slices first.',
+      grpProc: 'Process: save as sample', procOp: 'Edit', fxFilter: 'Filter', fxDrive: 'Drive', fxCrush: 'Bitcrusher', fxEq: 'Three-band EQ', fxComp: 'Compressor', fxTempo: 'Tempo match',
+      fType: 'Type', fCut: 'Cutoff (Hz)', fQ: 'Resonance (Q)', fSlope: 'Slope', fSweep: 'Sweep over the selection', fCutEnd: 'Cutoff at the end (Hz)', sl12: '12 dB per octave', sl24: '24 dB per octave',
+      drDb: 'Drive (dB)', drMix: 'Mix (%)', crBits: 'Bits', crHz: 'Sample rate (Hz)', eqLow: 'Low (dB, 200 Hz)', eqMid: 'Mid (dB, 1 kHz)', eqHigh: 'High (dB, 5 kHz)',
+      cpThr: 'Threshold (dB)', cpRatio: 'Ratio', cpAtk: 'Attack (ms)', cpRel: 'Release (ms)', cpMk: 'Make-up (dB)', tmTarget: 'Target BPM', tmNow: 'Current tempo: {0} BPM', tmSt: 'Resampling: the pitch changes with it ({0} semitones); real time-stretch follows later.',
+      procPrev: 'Listen', procApply: 'Apply', procHelp: 'Works on the selection, or on the whole sample when there is no selection. The result is really saved in the sample (not an effect device) and can be undone.',
+      fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo match' },
+      grpFlat: 'Flatten and resample', flSrc: 'Source', flSrcPad: 'Chosen pad (all layers, envelope, filter, tune)', flSrcSel: 'Selection of the editor', flNote: 'Note', flVel: 'Velocity', flTail: 'Tail (s)', flHold: 'Note length (s, 0 = automatic)',
+      flCh: 'Channels', flStereo: 'Stereo', flMono: 'Mono', flNorm: 'Normalize', flTrim: 'Trim silence at the end', flDest: 'Result', dNew: 'New layer in this pad', dLayer: 'Replace the chosen layer', dReplace: 'Replace this pad (settings back to default)', dOther: 'On another pad',
+      flBank: 'Bank', flPadN: 'Pad', flWarn: 'Note: Pad Sampler has no insert effects yet. What you hear comes from the layers, the envelope, the filter, the tune and the level and pan of the pad. Reverb and delay of other devices are not baked in. You can save filter, drive, bitcrusher, EQ and compressor as a sample with Process.',
+      flGo: 'Flatten', flPrev: 'Listen', flBusy: 'Rendering…', flNoSound: 'This pad makes no sound at this note and velocity.', flNoRoom: 'All four layers of this pad are in use; choose another destination.', noOffline: 'Offline rendering is not available in this environment.',
+      flChanged: 'The sample changed while rendering; nothing was applied.', flName: 'Flatten {0}', flSelName: 'Selection {0}', flDone: 'Flatten: {0} s, {1} Hz.', flOverlong: 'The result would be longer than 120 seconds.',
     },
     k: {
       level: 'Master volume', baseNote: 'First pad (MIDI)', padVel: 'Pad velocity', 'pad.tune': 'Pitch', 'pad.fine': 'Fine', 'pad.level': 'Level', 'pad.pan': 'Pan', 'pad.poly': 'Polyphony', 'pad.mute': 'Mute group', 'pad.baseNote': 'Note when tapped',
@@ -154,6 +198,13 @@ canvas.wave{display:block;width:100%;height:110px;background:var(--well);border:
 .edit .grp h4{margin:0}
 .edit .btn:disabled{opacity:.4;cursor:default}
 .edit .info{color:var(--muted);line-height:1.4}
+.edit [hidden]{display:none!important}
+.edit .modes{gap:6px}
+.edit .slchip{min-width:40px;padding:6px 8px}
+@media (pointer:coarse){.edit .slchip{min-width:46px}}
+.edit .slchip.sel{background:var(--go);border-color:var(--audio)}
+.edit .chips{gap:4px}
+.edit .warn{color:var(--muted);line-height:1.4}
 .edit select{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);border-radius:6px;padding:6px;min-height:36px;max-width:100%}
 `;
 // ---------- constanten en hulpfuncties ----------
@@ -313,6 +364,90 @@ function zeroSnap(ch, f, W) {   // dichtstbijzijnde nuldoorgang van het gemiddel
   return f;
 }
 
+// ---------- chop: slices uit een signaal (zuiver) ----------
+const MAX_SLICES = 128;
+function detectOnsets(ch, rate, thrDb, minMs) {   // aanslagen: de omhullende (pieken per milliseconde) gaat boven een drempel t.o.v. de piek; opnieuw scherp na terugval onder de helft
+  const n = ch[0].length, hop = Math.max(1, Math.round(rate * 0.001)), nb = Math.ceil(n / hop), env = new Float32Array(nb); let pk = 0;
+  for (let b = 0; b < nb; b++) { let m = 0; const e = Math.min(n, (b + 1) * hop); for (const c of ch) for (let i = b * hop; i < e; i++) { const v = c[i] < 0 ? -c[i] : c[i]; if (v > m) m = v; } env[b] = m; if (m > pk) pk = m; }
+  if (pk < 1e-5) return [];
+  const T = pk * Math.pow(10, thrDb / 20), minB = Math.max(1, Math.round(minMs)), out = []; let armed = true, last = -1e9;
+  for (let b = 0; b < nb; b++) {
+    if (!armed) { if (env[b] < T * 0.5) armed = true; continue; }
+    if (env[b] >= T && b - last >= minB) {
+      let s = b; const lim = Math.max(0, b - 15); while (s > lim && env[s - 1] < env[s] * 0.8) s--;
+      let f = s * hop; const lvl = env[b] * 0.15, end = Math.min(n, (b + 1) * hop);
+      search: for (let i = f; i < end; i++) for (const c of ch) if (Math.abs(c[i]) >= lvl) { f = i; break search; }
+      out.push(f); armed = false; last = b;
+    }
+  }
+  return out;
+}
+function mapSlices(slices, ends, map, M) {   // posities door een lengteverandering heen; begin en (optioneel) eind blijven bij elkaar
+  const pairs = [];
+  for (let k = 0; k < slices.length; k++) {
+    const s = clamp(Math.round(map(slices[k])), 0, M - 1), e0 = ends && ends[k] > 0 ? clamp(Math.round(map(ends[k])), 0, M) : 0;
+    pairs.push([s, e0 > s ? e0 : 0]);
+  }
+  return pairsOut(pairs);
+}
+function pairsOut(pairs) {   // sorteren, dubbelen weg, hoogstens MAX_SLICES; ends alleen als er een eigen eind is
+  pairs.sort((a, b) => a[0] - b[0]); const o = [];
+  for (const p of pairs) if (!o.length || o[o.length - 1][0] !== p[0]) o.push(p);
+  const cut = o.slice(0, MAX_SLICES);
+  return { slices: cut.map(p => p[0]), ends: cut.some(p => p[1] > 0) ? cut.map(p => p[1]) : [] };
+}
+function sliceRanges(slices, ends, N) {   // [begin, eind) per slice; het eind van slice n is standaard het begin van n+1
+  return slices.map((s, i) => { let e = ends && ends[i] > s ? ends[i] : (i + 1 < slices.length ? slices[i + 1] : N); e = clamp(e, s + 1, N); return [s, e]; });
+}
+
+// ---------- process: directe DSP op Float32-kanalen (zuiver) ----------
+function biquadCoef(type, f, q, gDb, sr) {   // RBJ-formules; geeft [b0,b1,b2,a1,a2] genormeerd op a0
+  const w = 2 * Math.PI * clamp(f, 10, sr * 0.45) / sr, cw = Math.cos(w), sw = Math.sin(w), A = Math.pow(10, gDb / 40);
+  let b0, b1, b2, a0, a1, a2; const al = sw / (2 * Math.max(0.05, q)), sq = 2 * Math.sqrt(A) * (sw / 2) * Math.SQRT2;
+  if (type === 'lp') { b0 = (1 - cw) / 2; b1 = 1 - cw; b2 = b0; a0 = 1 + al; a1 = -2 * cw; a2 = 1 - al; }
+  else if (type === 'hp') { b0 = (1 + cw) / 2; b1 = -(1 + cw); b2 = b0; a0 = 1 + al; a1 = -2 * cw; a2 = 1 - al; }
+  else if (type === 'bp') { b0 = al; b1 = 0; b2 = -al; a0 = 1 + al; a1 = -2 * cw; a2 = 1 - al; }
+  else if (type === 'peak') { b0 = 1 + al * A; b1 = -2 * cw; b2 = 1 - al * A; a0 = 1 + al / A; a1 = -2 * cw; a2 = 1 - al / A; }
+  else if (type === 'ls') { b0 = A * ((A + 1) - (A - 1) * cw + sq); b1 = 2 * A * ((A - 1) - (A + 1) * cw); b2 = A * ((A + 1) - (A - 1) * cw - sq); a0 = (A + 1) + (A - 1) * cw + sq; a1 = -2 * ((A - 1) + (A + 1) * cw); a2 = (A + 1) + (A - 1) * cw - sq; }
+  else { b0 = A * ((A + 1) + (A - 1) * cw + sq); b1 = -2 * A * ((A - 1) + (A + 1) * cw); b2 = A * ((A + 1) + (A - 1) * cw - sq); a0 = (A + 1) - (A - 1) * cw + sq; a1 = 2 * ((A - 1) - (A + 1) * cw); a2 = (A + 1) - (A - 1) * cw - sq; }   // 'hs'
+  return [b0 / a0, b1 / a0, b2 / a0, a1 / a0, a2 / a0];
+}
+function biquadRun(x, sr, type, f0, f1, q, gDb, passes) {   // cutoff mag exponentieel van f0 naar f1 lopen (sweep); elke 32 samples nieuwe coëfficiënten
+  const n = x.length, out = Float32Array.from(x);
+  for (let p = 0; p < passes; p++) {
+    let x1 = 0, x2 = 0, y1 = 0, y2 = 0, c = null;
+    for (let i = 0; i < n; i++) {
+      if (c === null || (f0 !== f1 && (i & 31) === 0)) c = biquadCoef(type, f0 === f1 ? f0 : f0 * Math.pow(f1 / f0, i / Math.max(1, n - 1)), q, gDb, sr);
+      const xv = out[i], yv = c[0] * xv + c[1] * x1 + c[2] * x2 - c[3] * y1 - c[4] * y2;
+      x2 = x1; x1 = xv; y2 = y1; y1 = Number.isFinite(yv) ? yv : 0; out[i] = y1;
+    }
+  }
+  return out;
+}
+function compress(seg, sr, p) {   // feed-forward, stereo gekoppeld; omhullende met attack en release, gain reduction volgens drempel en ratio
+  const n = seg[0].length, atk = Math.exp(-1 / Math.max(1, p.atk / 1000 * sr)), rel = Math.exp(-1 / Math.max(1, p.rel / 1000 * sr)), out = seg.map(() => new Float32Array(n)); let env = 0;
+  for (let i = 0; i < n; i++) {
+    let m = 0; for (const c of seg) { const v = Math.abs(c[i]); if (v > m) m = v; }
+    env = m > env ? m + atk * (env - m) : m + rel * (env - m);
+    const lev = 20 * Math.log10(Math.max(env, 1e-9)), over = lev - p.thr, gr = over > 0 ? over * (1 - 1 / p.ratio) : 0, g = Math.pow(10, (p.makeup - gr) / 20);
+    for (let k = 0; k < seg.length; k++) out[k][i] = seg[k][i] * g;
+  }
+  return out;
+}
+function crushSeg(x, sr, bits, hz) {   // bitdiepte en sample-rate-reductie (vasthouden), zoals de bewerkingen Bit-reductie en Sample-rate-reductie
+  const n = x.length, out = new Float32Array(n), m = Math.pow(2, bits - 1) - 1, f = hz < sr ? sr / hz : 1;
+  for (let i = 0; i < n; i++) { const v = x[Math.min(n - 1, Math.round(Math.floor(i / f) * f))]; out[i] = bits >= 16 ? v : Math.round(clamp(v, -1, 1) * m) / m; }
+  return out;
+}
+function procSeg(fx, p, seg, sr) {   // seg: lijst kanalen van de selectie; geeft nieuwe kanalen (zelfde lengte)
+  if (fx === 'filter') return seg.map(x => biquadRun(x, sr, p.type, p.f0, p.sweep ? p.f1 : p.f0, p.q, 0, p.slope === 24 ? 2 : 1));
+  if (fx === 'drive') { const g = dB2g(p.db), mix = p.mix / 100; return seg.map(x => x.map(v => (1 - mix) * v + mix * Math.tanh(g * v))); }
+  if (fx === 'crush') return seg.map(x => crushSeg(x, sr, p.bits, p.hz));
+  if (fx === 'eq') return seg.map(x => { let y = x; if (p.low) y = biquadRun(y, sr, 'ls', 200, 200, 0.7071, p.low, 1); if (p.mid) y = biquadRun(y, sr, 'peak', 1000, 1000, 1, p.mid, 1); if (p.high) y = biquadRun(y, sr, 'hs', 5000, 5000, 0.7071, p.high, 1); return y === x ? Float32Array.from(x) : y; });
+  if (fx === 'comp') return compress(seg, sr, p);
+  return null;
+}
+
 // ---------- datamodel: standaard, normalisatie, serialisatie ----------
 const endOf = (v, st) => num(v, 1, Math.min(st + 0.0001, 1), 1);
 const defLoop = () => ({ on: false, start: 0, end: 1, xfade: 0 });
@@ -389,13 +524,15 @@ function nSample(id, r) {
   if (frames / rate > MAX_SEC) return null;
   let loop = null;
   if (isObj(r.loop)) { const st = num(r.loop.start, 0, 0, 0.9999); loop = { start: st, end: endOf(r.loop.end, st) }; }
-  const sl = []; if (Array.isArray(r.slices)) for (const v of r.slices) { if (sl.length >= 128) break; if (typeof v === 'number' && Number.isFinite(v)) sl.push(int(v, 0, 0, frames - 1)); }
-  sl.sort((a, b) => a - b); const slices = sl.filter((v, i) => i === 0 || v !== sl[i - 1]);
+  const pr = [], se = Array.isArray(r.sliceEnds) ? r.sliceEnds : [];
+  if (Array.isArray(r.slices)) for (let k = 0; k < r.slices.length; k++) { const v = r.slices[k]; if (pr.length >= MAX_SLICES) break; if (typeof v === 'number' && Number.isFinite(v)) { const s0 = int(v, 0, 0, frames - 1), e0 = typeof se[k] === 'number' && Number.isFinite(se[k]) ? int(se[k], 0, 0, frames) : 0; pr.push([s0, e0 > s0 ? e0 : 0]); } }
+  const { slices, ends: sliceEnds } = pairsOut(pr);
   const lic = isObj(r.license) ? r.license : {}, license = {}; for (const k of LICENSE_KEYS) license[k] = str(lic[k], 200);
-  return { name: str(r.name, 80), rate, channels, root: typeof r.root === 'number' && Number.isFinite(r.root) ? int(r.root, 60, 0, 127) : null, loop, slices, license, data, bytes, frames };
+  return { name: str(r.name, 80), rate, channels, root: typeof r.root === 'number' && Number.isFinite(r.root) ? int(r.root, 60, 0, 127) : null, loop, slices, sliceEnds, license, data, bytes, frames };
 }
 const serSample = r => ({
   name: r.name, rate: r.rate, channels: r.channels, root: r.root, loop: r.loop ? { start: r.loop.start, end: r.loop.end } : null, slices: r.slices.slice(),
+  ...(r.sliceEnds && r.sliceEnds.some(v => v > 0) ? { sliceEnds: r.sliceEnds.slice() } : {}),
   license: { source: r.license.source, license: r.license.license, author: r.license.author, attribution: r.license.attribution }, data: r.data,
 });
 
@@ -495,7 +632,7 @@ const EN_PORTS = { mix: 'Stereo mix', notes: 'Notes / pad triggers' }; AUDIO_OUT
 export default {
   id: 'nl.patchkamer.padsampler',
   name: 'Pad Sampler',
-  version: '1.1.0',
+  version: '1.2.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 700, minWidth: 340 },
@@ -782,7 +919,7 @@ export default {
       const u = new Uint8Array(frames * channels * 2), dv = new DataView(u.buffer);
       for (let ch = 0; ch < channels; ch++) { const a = audio.getChannelData(ch); for (let i = 0; i < frames; i++) { const x = Number.isFinite(a[i]) ? clamp(a[i], -1, 1) : 0; dv.setInt16((i * channels + ch) * 2, Math.round(x * (x < 0 ? 32768 : 32767)), true); } }
       const data = b64encode(u);
-      return { name: str(name, 80), rate, channels, root: meta && meta.root != null ? meta.root : null, loop: meta && meta.loop ? { start: meta.loop.start, end: meta.loop.end } : null, slices: [], license: { source: '', license: '', author: '', attribution: '' }, data, bytes: u.length, frames };
+      return { name: str(name, 80), rate, channels, root: meta && meta.root != null ? meta.root : null, loop: meta && meta.loop ? { start: meta.loop.start, end: meta.loop.end } : null, slices: [], sliceEnds: [], license: { source: '', license: '', author: '', attribution: '' }, data, bytes: u.length, frames };
     }
     const recId = rec => 's' + hash53(rec.data).toString(36) + '-' + rec.frames.toString(36) + '-' + rec.rate.toString(36) + rec.channels;
     function addRecord(rec) {   // dedupliceren op hash van de PCM; geeft het id of gooit een melding
@@ -861,7 +998,7 @@ export default {
       const channels = ch.length, frames = ch[0].length, u = new Uint8Array(frames * channels * 2), dv = new DataView(u.buffer);
       for (let c = 0; c < channels; c++) { const a = ch[c]; for (let i = 0; i < frames; i++) { const x = a[i]; let v = Number.isFinite(x) ? Math.round(clamp(x, -1, 1) * 32768) : 0; if (v > 32767) v = 32767; dv.setInt16((i * channels + c) * 2, v, true); } }
       const lic = meta.license || {}, license = {}; for (const k of LICENSE_KEYS) license[k] = str(lic[k], 200);
-      return { name: str(name, 80), rate, channels, root: meta.root == null ? null : meta.root, loop: meta.loop || null, slices: meta.slices || [], license, data: b64encode(u), bytes: u.length, frames };
+      return { name: str(name, 80), rate, channels, root: meta.root == null ? null : meta.root, loop: meta.loop || null, slices: meta.slices || [], sliceEnds: meta.ends || [], license, data: b64encode(u), bytes: u.length, frames };
     }
     const minVn = () => Math.max(8, Math.floor(ed.W / 12));
     function clampView(N) { const lo = Math.min(N, minVn()); ed.vn = clamp(ed.vn, lo, N); ed.v0 = clamp(ed.v0, 0, N - ed.vn); if (ed.vn >= N) { ed.full = true; ed.v0 = 0; } }
@@ -898,10 +1035,11 @@ export default {
     function setFields(t, s) { const o = t.obj; o.sampleId = s.id; o.loop.on = s.on; o.loop.start = s.ls; o.loop.end = s.le; if (t.kind === 'l') { o.start = s.st; o.end = s.en; } }
     const poolRef = (rec, d) => { if (!rec) return; const n = (ed.pool.get(rec) || 0) + d; if (n > 0) ed.pool.set(rec, n); else ed.pool.delete(rec); };
     const poolBytes = () => { let t = 0; for (const r of ed.pool.keys()) t += r.bytes; return t; };
-    const dropEntry = en => { poolRef(en.b.rec, -1); poolRef(en.a.rec, -1); };
+    const entRecs = en => (en.prog ? en.recs.map(x => x[1]) : [en.b.rec, en.a.rec]);
+    const dropEntry = en => { for (const r of entRecs(en)) poolRef(r, -1); };
     function pushUndo(en) {
       for (const x of ed.redo) dropEntry(x); ed.redo.length = 0;
-      ed.undo.push(en); poolRef(en.b.rec, 1); poolRef(en.a.rec, 1);
+      ed.undo.push(en); for (const r of entRecs(en)) poolRef(r, 1);
       while (ed.undo.length > UNDO_MAX || (poolBytes() > UNDO_BYTES && ed.undo.length > 1)) dropEntry(ed.undo.shift());
     }
     function clearHistory() { ed.undo.length = 0; ed.redo.length = 0; ed.pool.clear(); }
@@ -909,6 +1047,13 @@ export default {
     function edStep(undo) {
       const from = undo ? ed.undo : ed.redo, to = undo ? ed.redo : ed.undo;
       if (!from.length) { say(undo ? E.noUndo : E.noRedo); return; }
+      if (from[from.length - 1].prog) {   // programma-stap: pads en/of slices
+        const en = from[from.length - 1], side = undo ? 'b' : 'a', other = undo ? 'a' : 'b';
+        progApply(en, side);
+        if (liveBytes() > MAX_PCM) { progApply(en, other); gcStore(); say(T.memFull); return; }
+        from.pop(); to.push(en); prog.bank = en.at[0]; prog.pad = en.at[1]; prog.layer = en.at[2]; ed.dec = null;
+        edAfter(); say(fillT(undo ? E.undone : E.redone, en.label)); return;
+      }
       const en = from[from.length - 1], t = locTarget(en.loc);
       if (!t) { dropEntry(from.pop()); say(E.gone); return; }
       const s = undo ? en.b : en.a, prev = snapOf(t), added = !!(s.rec && !store.has(s.id));
@@ -930,7 +1075,7 @@ export default {
       const oldId = t.obj.sampleId, oldRec = store.get(oldId) || null, info = sampleInfo(oldId), before = snapOf(t), map = fr || (f => f);
       const meta = { root: info ? info.root : null, license: oldRec ? oldRec.license : null, loop: null, slices: [] };
       if (oldRec && oldRec.loop) { const ls = clamp(map(oldRec.loop.start * N) / M, 0, 0.9999), le = clamp(map(oldRec.loop.end * N) / M, 0, 1); if (le - ls >= 0.0002) meta.loop = { start: ls, end: le }; }
-      if (oldRec) meta.slices = [...new Set(oldRec.slices.map(v => clamp(Math.round(map(v)), 0, M - 1)))].sort((a, b) => a - b);
+      if (oldRec) { const ms = mapSlices(oldRec.slices, oldRec.sliceEnds, map, M); meta.slices = ms.slices; meta.ends = ms.ends; }
       const rec = packRec(res.ch, res.rate, info ? info.name : '', meta), id = recId(rec), had = store.has(id);
       if (!had) store.set(id, rec);
       const fields = { id, on: t.obj.loop.on, ls: t.obj.loop.start, le: t.obj.loop.end, st: t.kind === 'l' ? t.obj.start : 0, en: t.kind === 'l' ? t.obj.end : 1 };
@@ -1036,6 +1181,17 @@ export default {
           if (X < 2) { say(E.noRoom); return; }
           same(edit(nc => { for (const c of nc) { const src = c.slice(); for (let i = 0; i < X; i++) { const w = (i + 1) / X; c[le - X + i] = src[le - X + i] * Math.cos(w * Math.PI / 2) + src[ls - X + i] * Math.sin(w * Math.PI / 2); } } })); return;
         }
+        case 'proc': {
+          const P2 = procSeg(arg.fx, arg.p, sliceCh(ch, a, b), rate); if (!P2) { say(E.badValue); return; }
+          let clipped = 0; const nc = edit(n2 => { n2.forEach((c, k) => { for (let i = 0; i < P2[k].length; i++) { const v = P2[k][i]; if (v > 1 || v < -1) clipped++; c[a + i] = v; } }); });
+          if (edCommit(E.fxNames[arg.fx], { ch: nc, rate }, {}) && clipped) say(fillT(E.clipped, clipped)); return;
+        }
+        case 'tempo': {   // een lus op een doel-BPM brengen door te hersamplen (de toonhoogte verandert mee)
+          const cur = arg.beats * 60 / ((b - a) / rate), ratio = arg.target / cur;
+          if (!(ratio >= 0.25 && ratio <= 4)) { say(E.badValue); return; } if (Math.abs(ratio - 1) < 1e-6) { say(E.nothing); return; }
+          const seg = sliceCh(ch, a, b).map(c => resample(c, ratio)), m = seg[0].length;
+          edCommit(E.fxNames.tempo, { ch: joinCh([sliceCh(ch, 0, a), seg, sliceCh(ch, b, N)], D.channels), rate }, { fr: f => (f <= a ? f : f >= b ? f - (b - a) + m : a + (f - a) / ratio), sel: hasSel ? [a, a + m] : null }); return;
+        }
         default: return;
       }
     }
@@ -1048,8 +1204,12 @@ export default {
     const edEnd = (src, g, p) => { try { src.disconnect(); g.disconnect(); } catch (e) { /* los */ } nodes.delete(src); nodes.delete(g); if (p && ed.play === p) { ed.play = null; ed.dirty = true; } };
     function edPlay(loop) {
       edStop(); const D = edData(); if (!D) { say(E.needSample); return; }
-      const buf = bufferFor(D.id, false); if (!buf) return;
       let a, b; if (ed.sel) { a = ed.sel[0]; b = ed.sel[1]; } else if (loop) { a = 0; b = D.frames; } else { a = clamp(ed.cur, 0, D.frames - 1); b = D.frames; }
+      edPlayRange(a, b, loop);
+    }
+    function edPlayRange(a, b, loop) {   // een stuk van het gekozen sample beluisteren (selectie, lus, slice)
+      edStop(); const D = edData(); if (!D) return;
+      const buf = bufferFor(D.id, false); if (!buf) return;
       if (b - a < 2) return;
       const now = ctx.currentTime, src = own(ctx.createBufferSource()), g = own(ctx.createGain()), r = D.rate;
       src.buffer = buf; g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(1, now + 0.003); src.connect(g); g.connect(master);
@@ -1066,6 +1226,263 @@ export default {
       src.connect(g); g.connect(master); src.start(now, clamp(f, 0, D.frames - 1) / D.rate, 0.1); src.onended = () => edEnd(src, g, null);
     }
     const edPos = () => { const p = ed.play; if (!p) return -1; const f = (ctx.currentTime - p.t0) * p.rate; return p.loop ? p.a + (f % (p.b - p.a)) : Math.min(p.b, p.a + f); };
+
+    // ---------- stap 3: programma-stappen met ongedaan, chop (slices), Process en Flatten ----------
+    // Een programma-stap legt de pads die hij raakt vast (als JSON) en de slices van de samples; ongedaan/opnieuw zet ze terug. Samples die erbij horen blijven in de stap bewaard.
+    Object.assign(ed, { mode: 'edit', slSel: 0, link: true, busy: false });
+    const recOf = () => { const D = edData(); return D ? store.get(D.id) || null : null; };
+    const sliceJson = r => JSON.stringify([r.slices, r.sliceEnds || []]);
+    const padJson = i => JSON.stringify(serPadFull(padOf(i)));
+    function padIdsOf(json) {
+      const o = JSON.parse(json), s = new Set();
+      for (const l of o.layers) if (l && l.sampleId) s.add(l.sampleId);
+      for (const z of o.zones) if (z.sampleId) s.add(z.sampleId);
+      return s;
+    }
+    function progBegin(idxs) {
+      const h = { idxs: idxs.slice(), at: [prog.bank, prog.pad, prog.layer], pads: idxs.map(padJson), sl: new Map(), recs: new Map() };
+      for (const [id, r] of store) h.sl.set(id, sliceJson(r));
+      for (const j of h.pads) for (const id of padIdsOf(j)) { const r = store.get(id); if (r) h.recs.set(id, r); }
+      return h;
+    }
+    function progApply(en, side) {
+      for (const [id, r] of en.recs) if (!store.has(id)) store.set(id, r);
+      const s = en[side];
+      en.idxs.forEach((i, k) => { prog.banks[i >> 4].pads[i & 15] = nPad(JSON.parse(s.pads[k]), hasSample); if (prt[i]) padLive(i); });
+      for (const [id, j] of s.sl) { const r = store.get(id); if (r) { const v = JSON.parse(j); r.slices = v[0]; r.sliceEnds = v[1]; } }
+    }
+    function progRollback(h) { progApply({ idxs: h.idxs, recs: h.recs, b: { pads: h.pads, sl: [...h.sl] } }, 'b'); gcStore(); }
+    function progEnd(h, label, quiet) {   // legt de wijziging sinds progBegin vast als één stap; geeft false als er niets veranderde of het niet past
+      const aPads = h.idxs.map(padJson), bSl = [], aSl = [];
+      for (const [id, r] of store) { const j = sliceJson(r), bj = h.sl.get(id); if (bj !== undefined && bj !== j) { bSl.push([id, bj]); aSl.push([id, j]); } }
+      if (aPads.every((j, k) => j === h.pads[k]) && !bSl.length) { gcStore(); if (!quiet) say(E.nothing); return false; }
+      const recs = new Map(h.recs);
+      for (const j of aPads) for (const id of padIdsOf(j)) { const r = store.get(id); if (r) recs.set(id, r); }
+      for (const [id] of aSl) recs.set(id, store.get(id));
+      const en = { label, prog: true, idxs: h.idxs, at: h.at, b: { pads: h.pads, sl: bSl }, a: { pads: aPads, sl: aSl }, recs: [...recs] };
+      if (liveBytes() > MAX_PCM) { progRollback(h); say(T.memFull); return false; }
+      pushUndo(en); return true;
+    }
+    function progRun(label, idxs, mutate, quiet) {
+      const h = progBegin(idxs); let ok = false;
+      try { ok = mutate() !== false; } catch (err) { progRollback(h); throw err; }
+      if (!ok) { progRollback(h); return false; }
+      const done = progEnd(h, label, quiet);
+      if (done) { edAfter(); say(fillT(E.done, label)); } else if (ui) ui.refreshAll();
+      return done;
+    }
+
+    // slices zijn markeringen in het sample (beginposities in samples, plus optioneel eigen eindposities); een demo-sample wordt bij de eerste chop een eigen sample
+    const pairsOf = cur => cur.slices.map((s, k) => [s, cur.ends && cur.ends[k] > 0 ? cur.ends[k] : 0]);
+    function sliceOp(label, fn) {
+      const t = edTarget(), D = edData(); if (!t || !D) { say(E.needSample); return false; }
+      const rec0 = store.get(D.id), r = fn(rec0 ? { slices: rec0.slices, ends: rec0.sliceEnds || [] } : { slices: [], ends: [] }, D); if (!r) return false;
+      return progRun(label, [t.loc.b * NPAD + t.loc.p], () => {
+        let rec = store.get(D.id);
+        if (!rec) {
+          const inf = sampleInfo(D.id); rec = packRec(D.ch, D.rate, D.name, { root: inf ? inf.root : null, loop: inf && inf.loop ? { start: inf.loop.start, end: inf.loop.end } : null });
+          const id = recId(rec); if (store.has(id)) rec = store.get(id); else store.set(id, rec); t.obj.sampleId = id;
+        }
+        rec.slices = r.slices; rec.sliceEnds = r.ends || []; return true;
+      });
+    }
+    function chopEqual(n) {
+      n = int(n, 16, 2, 64);
+      return sliceOp(E.chopEq, (cur, D) => pairsOut(Array.from({ length: n }, (_, k) => [Math.min(D.frames - 1, Math.round(k * D.frames / n)), 0])));
+    }
+    function chopThreshold(thrDb, minMs) {
+      thrDb = num(thrDb, -24, -80, -1); minMs = num(minMs, 60, 1, 2000);
+      return sliceOp(E.chopThr, (cur, D) => {
+        const on = detectOnsets(D.ch, D.rate, thrDb, minMs).map(f => (ed.snap ? zeroSnap(D.ch, f, 32) : f));
+        if (!on.length) { say(E.nothing); return null; }
+        return pairsOut(on.map(f => [clamp(f, 0, D.frames - 1), 0]));
+      });
+    }
+    function chopBpm(bpm, perBeats) {
+      bpm = num(bpm, NaN, 20, 400); if (!Number.isFinite(bpm)) { say(E.badValue); return false; }
+      return sliceOp(E.chopBpm, (cur, D) => {
+        const step = D.rate * 60 / bpm * perBeats, pr = []; for (let k = 0; k * step < D.frames - 2 && pr.length < MAX_SLICES; k++) pr.push([Math.round(k * step), 0]);
+        return pairsOut(pr);
+      });
+    }
+    function slAddAt(f) {
+      const D = edData(); if (!D) { say(E.needSample); return false; }
+      const rec = store.get(D.id); if (rec && rec.slices.length >= MAX_SLICES) { say(E.slFull); return false; }
+      f = clamp(Math.round(f), 0, D.frames - 1);
+      if (rec && rec.slices.some(v => Math.abs(v - f) < 1)) { say(E.slExists); return false; }
+      const ok = sliceOp(E.slAdd, cur => { const pr = pairsOf(cur); pr.push([f, 0]); return pairsOut(pr); });
+      if (ok) { const r2 = recOf(); if (r2) ed.slSel = Math.max(0, r2.slices.indexOf(f)); }
+      return ok;
+    }
+    function slDelSel() {
+      const rec = recOf(); if (!rec || !rec.slices.length) { say(E.slNoSel); return false; }
+      const i = clamp(ed.slSel, 0, rec.slices.length - 1);
+      const ok = sliceOp(E.slDel, cur => { const pr = pairsOf(cur); pr.splice(i, 1); return pairsOut(pr); });
+      if (ok) ed.slSel = clamp(i - 1, 0, 999);
+      return ok;
+    }
+    function slClearAll() { const rec = recOf(); if (!rec || !rec.slices.length) { say(E.nothing); return false; } return sliceOp(E.slClear, () => ({ slices: [], ends: [] })); }
+    function slSetLink(on) { ed.link = on; if (on) { const rec = recOf(); if (rec && rec.sliceEnds && rec.sliceEnds.some(v => v > 0)) sliceOp(E.link, cur => ({ slices: cur.slices.slice(), ends: [] })); } ed.dirty = true; }
+    function slPlay(i) {
+      const rec = recOf(), D = edData(); if (!rec || !D || !rec.slices.length) return;
+      i = clamp(i, 0, rec.slices.length - 1); ed.slSel = i; const [s, e] = sliceRanges(rec.slices, rec.sliceEnds, D.frames)[i];
+      ed.cur = s; edReveal(s); edPlayRange(s, e, false); ed.dirty = true; uiEd('refresh');
+    }
+    function slToPads(o) {   // slice n naar pad (start + n); laag 1 = hetzelfde sample met start en einde van de slice; één stap
+      const t = edTarget(), D = edData(), rec = recOf(); if (!t || !D || !rec || !rec.slices.length) { say(E.spNeed); return false; }
+      const first = int(o.bank, 0, 0, NBANK - 1) * NPAD + int(o.pad, 0, 0, NPAD - 1), ranges = sliceRanges(rec.slices, rec.sliceEnds, D.frames), tail = o.tail ? Math.round(num(o.tailMs, 100, 0, 5000) / 1000 * D.rate) : 0;
+      const idxs = []; let skipped = 0, nofit = 0;
+      ranges.forEach((_, k) => { const i = first + k; if (i >= NBANK * NPAD) { nofit++; return; } if (o.onlyEmpty && hasSound(padOf(i))) { skipped++; return; } idxs.push(i); });
+      if (!idxs.length) { say(fillT(E.spDone, 0, skipped, nofit)); return false; }
+      const sid = D.id, info = sampleInfo(sid);
+      const ok = progRun(E.spLabel, idxs, () => {
+        for (const i of idxs) {
+          const k = i - first, [s, e] = ranges[k], old = padOf(i), p = defPad(), l = p.layers[0];
+          p.name = fillT(E.slN, k + 1); p.output = old.output;
+          l.sampleId = sid; l.start = clamp(s / D.frames, 0, 0.9999); l.end = clamp(Math.min(D.frames, e + tail) / D.frames, l.start + 0.0001, 1); l.root = info && info.root != null ? info.root : null;
+          prog.banks[i >> 4].pads[i & 15] = p; if (prt[i]) padLive(i);
+        }
+        return true;
+      });
+      if (ok) say(fillT(E.spDone, idxs.length, skipped, nofit));
+      return ok;
+    }
+
+    // Process: filter, drive, bitcrusher, EQ en compressor als echte bewerking van het sample (directe DSP), met beluisteren
+    function procParams(fx, g) {   // g(id) geeft de waarde van een veld
+      if (fx === 'filter') return { type: ['lp', 'hp', 'bp'].includes(g('fType')) ? g('fType') : 'lp', f0: num(+g('fCut'), 1000, 20, 20000), f1: num(+g('fCutEnd'), 4000, 20, 20000), q: num(+g('fQ'), 0.71, 0.1, 30), slope: +g('fSlope') === 24 ? 24 : 12, sweep: !!g('fSweep') };
+      if (fx === 'drive') return { db: num(+g('drDb'), 12, 0, 48), mix: num(+g('drMix'), 100, 0, 100) };
+      if (fx === 'crush') return { bits: int(+g('crBits'), 8, 2, 16), hz: num(+g('crHz'), 11025, 100, 192000) };
+      if (fx === 'eq') return { low: num(+g('eqLow'), 0, -18, 18), mid: num(+g('eqMid'), 0, -18, 18), high: num(+g('eqHigh'), 0, -18, 18) };
+      if (fx === 'comp') return { thr: num(+g('cpThr'), -18, -60, 0), ratio: num(+g('cpRatio'), 4, 1, 40), atk: num(+g('cpAtk'), 5, 0.1, 500), rel: num(+g('cpRel'), 100, 5, 5000), makeup: num(+g('cpMk'), 0, -24, 24) };
+      return null;
+    }
+    function edPlayBuf(chs, rate, at) {   // een berekend stuk beluisteren (preview), via de stereomix
+      edStop(); const len = chs[0].length; if (len < 2) return;
+      const buf = ctx.createBuffer(chs.length, len, rate); chs.forEach((c, k) => buf.getChannelData(k).set(c));
+      const now = ctx.currentTime, src = own(ctx.createBufferSource()), g = own(ctx.createGain()), dur = len / rate;
+      src.buffer = buf; g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(1, now + 0.003); src.connect(g); g.connect(master);
+      src.start(now); g.gain.setValueAtTime(1, now + Math.max(0.004, dur - 0.004)); g.gain.linearRampToValueAtTime(0, now + dur);
+      const p = { src, g, t0: now, a: at, b: at + len, loop: false, rate }; src.onended = () => edEnd(src, g, p); ed.play = p; ed.dirty = true;
+    }
+    function procPreview(fx, p) {
+      const D = edData(); if (!D) { say(E.needSample); return; }
+      const a = ed.sel ? ed.sel[0] : 0, b = ed.sel ? ed.sel[1] : D.frames;
+      const seg = sliceCh(D.ch, a, b), out = fx === 'tempo' ? seg.map(c => resample(c, p.ratio)) : procSeg(fx, p, seg, D.rate);
+      if (out) edPlayBuf(out, D.rate, a);
+    }
+
+    // Flatten en resample: een pad (alle lagen, envelope, filter, tune, niveau en panorama; zonder uitgangskeuze) of de selectie naar een nieuw sample, met OfflineAudioContext
+    const offDest = oc => oc['destination'];   // de uitgang van de eigen offline-context (niet die van de host)
+    function offlineVoice(oc, bus, pad, src, v01, hold) {
+      const buf = bufferFor(src.sid, pad.reverse); if (!buf) return 0;
+      const D = buf.duration || (buf.length / buf.sampleRate), e = pad.env, f = pad.filter;
+      let s0 = src.start, s1 = src.end, l0 = src.loop.start, l1 = src.loop.end;
+      if (pad.reverse) { const a0 = s0, b0 = l0; s0 = 1 - s1; s1 = 1 - a0; l0 = 1 - l1; l1 = 1 - b0; }
+      let startSec = s0 * D + Math.max(0, src.offsetMs) / 1000;
+      const tStart = Math.max(0, -src.offsetMs) / 1000, endSec = s1 * D, looped = src.loop.on && !pad.oneShot && (l1 - l0) * D >= 0.002;
+      const cents = src.cents + pad.fine + clamp(pad.tune, -24, 24) * 100, rate = Math.pow(2, cents / 1200);
+      if (looped) { if (startSec >= l1 * D) startSec = l0 * D; } else if (endSec - startSec < 0.0003) return 0;
+      const source = oc.createBufferSource(); source.buffer = buf;
+      try { source.detune.value = cents; } catch (err) { source.playbackRate.value = rate; }
+      const lg = oc.createGain(), gain0 = v01 * src.level * Math.pow(10, src.gain / 20); lg.gain.value = gain0; let tail = lg; source.connect(lg);
+      if (Math.abs(src.pan) > 0.001) { const pn = oc.createStereoPanner(); pn.pan.value = src.pan; tail.connect(pn); tail = pn; }
+      const A = Math.max(e.attack, 0.0005), Dc = Math.max(e.decay, 0.005);
+      if (f.type !== 'off') {
+        const bq = oc.createBiquadFilter(); bq.type = f.type === 'lp' ? 'lowpass' : f.type === 'hp' ? 'highpass' : 'bandpass';
+        bq.frequency.value = clamp(f.cutoff, 20, Math.min(20000, oc.sampleRate * 0.45)); bq.Q.value = f.type === 'bp' ? 0.5 + f.res * 12 : f.res * 20;
+        const vd = f.velAmt * (v01 - 1) * 4800; bq.detune.setValueAtTime(vd, tStart);
+        if (f.envAmt !== 0) { const sus = e.shape === 'ad' ? 0 : e.sustain; bq.detune.linearRampToValueAtTime(vd + f.envAmt * 6000, tStart + A); bq.detune.linearRampToValueAtTime(vd + f.envAmt * 6000 * sus, tStart + A + Dc); }
+        tail.connect(bq); tail = bq;
+      }
+      const eg = oc.createGain(); eg.gain.setValueAtTime(0, tStart); eg.gain.linearRampToValueAtTime(1, tStart + A);
+      let stopAt = Infinity;
+      if (e.shape === 'ad') { eg.gain.exponentialRampToValueAtTime(0.0001, tStart + A + Dc); stopAt = tStart + A + Dc + 0.02; }
+      else if (e.sustain < 0.999) eg.gain.exponentialRampToValueAtTime(Math.max(e.sustain, 0.0001), tStart + A + Dc);
+      tail.connect(eg);
+      let end = eg;
+      if (!pad.oneShot) { const rel = oc.createGain(); rel.gain.setValueAtTime(1, hold); rel.gain.linearRampToValueAtTime(0, hold + e.release); eg.connect(rel); end = rel; stopAt = Math.min(stopAt, hold + e.release + 0.03); }
+      end.connect(bus);
+      if (looped) { source.loop = true; source.loopStart = l0 * D; source.loopEnd = l1 * D; source.start(tStart, startSec); }
+      else {
+        const dur = endSec - startSec, real = dur / rate; source.start(tStart, startSec, dur);
+        if (real > 0.008) { lg.gain.setValueAtTime(gain0, tStart + real - 0.003); lg.gain.linearRampToValueAtTime(0, tStart + real); }
+      }
+      if (stopAt < Infinity) { try { source.stop(stopAt); } catch (err) { /* ok */ } }
+      return looped ? Infinity : tStart + endSec / rate - startSec / rate;   // natuurlijke lengte van deze laag in seconden
+    }
+    function trimTail(ch, rate) {   // stilte (onder -80 dB) aan het eind weg, minstens 1 ms houden
+      let last = 0; const thr = 1e-4; for (const c of ch) for (let i = c.length - 1; i >= last; i--) if (Math.abs(c[i]) > thr) { last = i + 1; break; }
+      const keep = Math.max(Math.round(rate * 0.001), last); return keep >= ch[0].length ? ch : sliceCh(ch, 0, keep);
+    }
+    async function flatRender(o) {
+      const OAC = globalThis.OfflineAudioContext || globalThis.webkitOfflineAudioContext; if (!OAC) throw new Error(E.noOffline);
+      let ch, rate;
+      if (o.src === 'sel') {
+        const D = edData(); if (!D) throw new Error(E.needSample);
+        const a = ed.sel ? ed.sel[0] : 0, b = ed.sel ? ed.sel[1] : D.frames, part = sliceCh(D.ch, a, b), len = part[0].length;
+        if (len < 1) throw new Error(E.needSel);
+        const oc = new OAC(part.length, len, D.rate), buf = oc.createBuffer(part.length, len, D.rate); part.forEach((c, k) => buf.getChannelData(k).set(c));
+        const s = oc.createBufferSource(); s.buffer = buf; s.connect(offDest(oc)); s.start(0);
+        const r = await oc.startRendering(); ch = Array.from({ length: r.numberOfChannels }, (_, k) => Float32Array.from(r.getChannelData(k))); rate = D.rate;
+      } else {
+        const i = o.padIdx, pad = padOf(i), v127 = clamp(o.vel, 1, 127), v01 = v127 / 127;
+        const srcs = pickSources(pad.play === 'cycle' || pad.play === 'random' ? { ...pad, play: 'velocity' } : pad, i, v127, o.note);
+        if (!srcs.length) throw new Error(E.flNoSound);
+        rate = Math.round(ctx.sampleRate);   // zoals je het hoort: de samplefrequentie van de studio (een laag met een lagere frequentie wordt dan netjes omgezet)
+        let hold = o.hold;
+        if (!(hold > 0)) {   // automatisch: de langste laag (een lus zonder one-shot telt als 2 s)
+          hold = 0.05; for (const src of srcs) { const b = bufferFor(src.sid, pad.reverse); if (!b) continue; const D = b.duration || (b.length / b.sampleRate), r = Math.pow(2, (src.cents + pad.fine + pad.tune * 100) / 1200), lp = src.loop.on && !pad.oneShot; hold = Math.max(hold, lp ? 2 : Math.max(0, -src.offsetMs) / 1000 + Math.max(0, (src.end - src.start) * D - Math.max(0, src.offsetMs) / 1000) / r); }
+        }
+        const total = hold + (pad.oneShot ? 0 : pad.env.release + 0.03) + Math.max(0, o.tail);
+        if (total > MAX_SEC + 0.0001) throw new Error(E.flOverlong);
+        const len = Math.max(64, Math.ceil(total * rate));
+        let oc; try { oc = new OAC(2, len, rate); } catch (err) { rate = ctx.sampleRate; oc = new OAC(2, Math.max(64, Math.ceil(total * rate)), rate); }
+        const bus = oc.createGain(), pn = oc.createStereoPanner(); bus.gain.value = Math.pow(10, clamp(pad.level, -60, 12) / 20); pn.pan.value = pad.pan; bus.connect(pn); pn.connect(offDest(oc));
+        for (const src of srcs) { try { offlineVoice(oc, bus, pad, src, v01, hold); } catch (err) { /* een kapotte laag mag de rest niet stoppen */ } }
+        const r = await oc.startRendering(); ch = [Float32Array.from(r.getChannelData(0)), Float32Array.from(r.getChannelData(1))]; rate = oc.sampleRate;
+      }
+      if (o.mono && ch.length === 2) { const m = new Float32Array(ch[0].length); for (let k = 0; k < m.length; k++) m[k] = (ch[0][k] + ch[1][k]) / 2; ch = [m]; }
+      if (o.src === 'pad' && o.trim) ch = trimTail(ch, rate);
+      if (o.norm) { const pk = rangePeak(ch, 0, ch[0].length); if (pk > 1e-6) { const g = 1 / pk; ch = ch.map(c => c.map(v => v * g)); } }
+      return { ch, rate };
+    }
+    function flatCommit(res, o, tgt) {   // tgt: { loc, sampleId } van toen het renderen begon
+      const t = locTarget(tgt.loc); if (!t || t.obj.sampleId !== tgt.sampleId) { say(E.flChanged); return false; }
+      const srcIdx = tgt.loc.b * NPAD + tgt.loc.p, oldPad = padOf(srcIdx), srcInfo = sampleInfo(tgt.sampleId), srcRec = store.get(tgt.sampleId);
+      const baseName = o.src === 'pad' ? (oldPad.name || (srcInfo && srcInfo.name) || padId(tgt.loc.b, tgt.loc.p).toUpperCase()) : (srcInfo ? srcInfo.name : '');
+      const name = str(fillT(o.src === 'pad' ? E.flName : E.flSelName, baseName), 80);
+      const rec = packRec(res.ch, res.rate, name, { root: o.note, license: srcRec ? srcRec.license : null }), id = recId(rec);
+      let dest = o.dest; if (o.src !== 'pad' && dest === 'replace') dest = 'layer';
+      const dIdx = dest === 'other' ? o.dBank * NPAD + o.dPad : srcIdx, idxs = dIdx === srcIdx ? [srcIdx] : [srcIdx, dIdx];
+      if (dest === 'newlayer' && !oldPad.layers.some(l => !l.sampleId)) { say(E.flNoRoom); return false; }
+      const fresh = () => { const l = defLayer(); l.sampleId = id; l.root = o.note; return l; };
+      const ok = progRun(E.flGo, idxs, () => {
+        if (!store.has(id)) store.set(id, rec);
+        if (dest === 'newlayer') { const k = oldPad.layers.findIndex(l => !l.sampleId); oldPad.layers[k] = fresh(); }
+        else if (dest === 'layer') { const k = t.kind === 'l' ? t.loc.l : prog.layer; oldPad.layers[k] = fresh(); if (t.kind === 'l') { const nl = oldPad.layers[k]; nl.velLo = t.obj.velLo; nl.velHi = t.obj.velHi; } }
+        else {
+          const p = defPad(); p.name = str(dest === 'replace' ? oldPad.name : name, 40); p.layers[0] = fresh();
+          if (dest === 'replace') { p.mode = oldPad.mode; p.oneShot = oldPad.mode === 'drum'; p.output = oldPad.output; p.muteGroup = oldPad.muteGroup; p.polyphony = oldPad.polyphony; p.baseNote = oldPad.baseNote; }   // niveau, panorama, tune, envelope en filter zijn ingebakken: terug naar standaard
+          prog.banks[dIdx >> 4].pads[dIdx & 15] = p; if (prt[dIdx]) padLive(dIdx);
+        }
+        return true;
+      }, true);
+      if (ok) say(fillT(E.flDone, (res.ch[0].length / res.rate).toFixed(2), res.rate));
+      return ok;
+    }
+    async function flatten(o, preview) {
+      if (ed.busy) return; const t = edTarget(); if (!t) return;
+      o.padIdx = t.loc.b * NPAD + t.loc.p; const tgt = { loc: t.loc, sampleId: t.obj.sampleId };
+      if (o.src === 'pad' && !hasSound(padOf(o.padIdx))) { say(E.flNoSound); return; }
+      if (o.src === 'sel' && !tgt.sampleId) { say(E.needSample); return; }
+      ed.busy = true; say(E.flBusy); const my = token;
+      try {
+        const res = await flatRender(o); if (dead || my !== token) return;
+        if (preview) { edPlayBuf(res.ch, res.rate, 0); say(fillT(E.flDone, (res.ch[0].length / res.rate).toFixed(2), res.rate)); } else flatCommit(res, o, tgt);
+      } catch (err) { say(err && err.message ? err.message : String(err)); }
+      finally { ed.busy = false; }
+    }
 
     // ---------- UI ----------
     const downs = new Map();
@@ -1314,8 +1731,8 @@ export default {
       // --- paneel Bewerken: golfvormeditor
       const EH = 230, RULER = 22;
       let ecv = null, ectx = null, wcv = null, wctx = null, ecol = null, wkey = '', esig = '', lvlTimer = 0, scr = null, infoEd = null, selInfo = null, lvlEl = null, histEl = null, tgtSel = null, selA = null, selB = null, curIn = null;
-      const edBtns = [], ptrs = new Map();
-      let drag = null, pinch = null;
+      const edBtns = [], ptrs = new Map(), P0 = panels.edit;
+      let drag = null, pinch = null, linkCb = null, slBox = null, slInfoEl = null, tmNowEl = null, chipSig = '', bpmOut = null;
       {
         const P = panels.edit; P.classList.add('edit');
         const r0 = H('div', 'row', P);
@@ -1371,6 +1788,23 @@ export default {
         on(curIn, 'change', () => { const D = edData(); if (!D) return; ed.cur = int(+curIn.value, 0, 0, D.frames); ed.dirty = true; edReveal(ed.cur); edRefresh(false); });
         selInfo = H('div', 'info', P, ''); lvlEl = H('div', 'info', P, '');
 
+        const G = { edit: [], chop: [], proc: [], flat: [] };
+        const modeRow = H('div', 'row modes', P); modeRow.setAttribute('role', 'group'); modeRow.setAttribute('aria-label', E.modes);
+        const modeBtns = [['edit', E.mEdit], ['chop', E.mChop], ['proc', E.mProc], ['flat', E.mFlat]].map(([m, tx]) => {
+          const b = H('button', 'tabbtn', modeRow, tx); b.type = 'button'; b.setAttribute('data-mode', m); on(b, 'click', () => setMode(m)); on(b, 'pointerdown', e => e.stopPropagation()); return b;
+        });
+        function setMode(m, quiet) {
+          ed.mode = m; for (const kk of Object.keys(G)) for (const g of G[kk]) g.hidden = kk !== m;
+          modeBtns.forEach(b => { const o = b.getAttribute('data-mode') === m; b.classList.toggle('sel', o); b.setAttribute('aria-pressed', o ? 'true' : 'false'); });
+          if (!quiet) { ed.dirty = true; esig = ''; edRefresh(false); }
+        }
+        const sel2 = (parent, text, id, opts, def) => {
+          const s2 = mkE('select'); s2.setAttribute('aria-label', text); s2.setAttribute('data-f', id);
+          for (const [v, t2] of opts) { const o = H('option', null, s2, t2); o.value = String(v); }
+          s2.value = String(def); on(s2, 'pointerdown', e => e.stopPropagation()); lab(parent, text, s2); return s2;
+        };
+        const chk2 = (parent, text, id, def) => { const c = mkE('input'); c.type = 'checkbox'; c.checked = def; c.setAttribute('data-f', id); lab(parent, text, c); return c; };
+        const fget = id => { const i = P.querySelector('[data-f="' + id + '"]'); return !i ? undefined : i.type === 'checkbox' ? i.checked : i.value; };
         // bewerkingen
         const gE = H('div', 'grp', P); H('h4', null, gE, E.grpEdit);
         const rE = H('div', 'row', gE);
@@ -1403,11 +1837,88 @@ export default {
         eb(rP, E.toStartEnd, () => edOp('toStartEnd'), 'toStartEnd', 'sel'); eb(rP, E.toLoop, () => edOp('toLoop'), 'toLoop', 'sel');
         const rP2 = H('div', 'row', gP);
         numIn(rP2, E.xfade, ed.xf, 1, 5000, 1, 'xfadeMs'); eb(rP2, E.xfadeDo, () => { ed.xf = clamp(fnum('xfadeMs') || 20, 1, 5000); edOp('xfade', ed.xf); }, 'xfade', 'sample');
+        G.edit.push(gE, gC, gL, gK, gP);
+
+        // chop
+        const gCh = H('div', 'grp', P); H('h4', null, gCh, E.grpChop); G.chop.push(gCh);
+        const rc1 = H('div', 'row', gCh);
+        numIn(rc1, E.chopParts, 16, 2, 64, 1, 'chopN'); eb(rc1, E.chopEq, () => chopEqual(fnum('chopN')), 'chopEq', 'sample');
+        const rc2 = H('div', 'row', gCh);
+        numIn(rc2, E.thrDb, 24, 1, 80, 1, 'chopThr'); numIn(rc2, E.minMs, 60, 1, 2000, 1, 'chopMin'); eb(rc2, E.chopThr, () => chopThreshold(-Math.abs(fnum('chopThr')), fnum('chopMin')), 'chopThr', 'sample');
+        const rc3 = H('div', 'row', gCh);
+        numIn(rc3, E.bpm, 120, 20, 400, 0.01, 'chopBpm'); sel2(rc3, E.perUnit, 'chopUnit', [[4, E.uBar], [1, E.uBeat], [0.5, E.uEighth], [0.25, E.uSixteenth]], 1);
+        eb(rc3, E.chopBpm, () => chopBpm(fnum('chopBpm'), +fget('chopUnit')), 'chopBpm', 'sample');
+        const rc4 = H('div', 'row', gCh);
+        const beatsBpm = () => { const D = edData(); if (!D) return NaN; const secs = (ed.sel ? ed.sel[1] - ed.sel[0] : D.frames) / D.rate, bt = fnum('chopBeats'); return secs > 0 && bt > 0 ? bt * 60 / secs : NaN; };
+        const setBpmField = () => { const v = beatsBpm(); if (Number.isFinite(v)) { const f2 = P.querySelector('[data-f="chopBpm"]'); f2.value = String(Math.round(clamp(v, 20, 400) * 100) / 100); bpmOut.textContent = '= ' + v.toFixed(2) + ' BPM'; } };
+        numIn(rc4, E.beats, 4, 0.25, 512, 0.25, 'chopBeats'); on(P.querySelector('[data-f="chopBeats"]'), 'input', () => { const v = beatsBpm(); if (bpmOut) bpmOut.textContent = Number.isFinite(v) ? '= ' + v.toFixed(2) + ' BPM' : ''; });
+        eb(rc4, E.bpmFromBeats, setBpmField, 'bpmFromBeats', 'sample');
+        eb(rc4, E.half, () => { const i2 = P.querySelector('[data-f="chopBeats"]'); i2.value = String(Math.max(0.25, +i2.value / 2)); setBpmField(); }, 'beatsHalf', 'sample');
+        eb(rc4, E.double, () => { const i2 = P.querySelector('[data-f="chopBeats"]'); i2.value = String(Math.min(512, +i2.value * 2)); setBpmField(); }, 'beatsDouble', 'sample');
+        bpmOut = H('span', 'muted', rc4, '');
+        const rc5 = H('div', 'row', gCh);
+        eb(rc5, E.slAdd, () => slAddAt(ed.cur), 'slAdd', 'sample'); eb(rc5, E.slDel, () => slDelSel(), 'slDel', 'slices'); eb(rc5, E.slClear, () => slClearAll(), 'slClear', 'slices');
+        linkCb = chk2(rc5, E.link, 'link', true); on(linkCb, 'change', () => slSetLink(linkCb.checked));
+        slBox = H('div', 'row chips', gCh); slInfoEl = H('div', 'info', gCh, '');
+        const rc6 = H('div', 'row', gCh);
+        eb(rc6, E.slSelect, () => { const rec = recOf(), D = edData(); if (rec && D && rec.slices.length) { const [s0, e0] = sliceRanges(rec.slices, rec.sliceEnds, D.frames)[ed.slSel]; ed.sel = [s0, e0]; ed.cur = s0; ed.anchor = e0; } }, 'slSelect', 'slices');
+        H('p', 'muted', gCh, E.kbdChop);
+        const gPd = H('div', 'grp', P); H('h4', null, gPd, E.grpPads); G.chop.push(gPd);
+        const rp1 = H('div', 'row', gPd);
+        sel2(rp1, E.spBank, 'spBank', BANK_LETTER.map((L, b) => [b, L]), prog.bank); sel2(rp1, E.spPad, 'spPad', Array.from({ length: NPAD }, (_, p) => [p, p + 1]), prog.pad);
+        const rp2 = H('div', 'row', gPd);
+        sel2(rp2, E.spMode, 'spMode', [['replace', E.spReplace], ['empty', E.spEmpty]], 'replace'); chk2(rp2, E.spTailOn, 'spTailOn', false); numIn(rp2, E.spTailMs, 100, 0, 5000, 10, 'spTailMs');
+        const rp3 = H('div', 'row', gPd);
+        eb(rp3, E.spGo, () => slToPads({ bank: +fget('spBank'), pad: +fget('spPad'), onlyEmpty: fget('spMode') === 'empty', tail: !!fget('spTailOn'), tailMs: fnum('spTailMs') }), 'slToPads', 'slices');
+
+        // process
+        const gPr = H('div', 'grp', P); H('h4', null, gPr, E.grpProc); G.proc.push(gPr);
+        const rq = H('div', 'row', gPr);
+        sel2(rq, E.procOp, 'procOp', [['filter', E.fxFilter], ['drive', E.fxDrive], ['crush', E.fxCrush], ['eq', E.fxEq], ['comp', E.fxComp], ['tempo', E.fxTempo]], 'filter');
+        const pb = {}; for (const k2 of ['filter', 'drive', 'crush', 'eq', 'comp', 'tempo']) pb[k2] = H('div', 'row', gPr);
+        sel2(pb.filter, E.fType, 'fType', [['lp', T.lp], ['hp', T.hp], ['bp', T.bp]], 'lp'); numIn(pb.filter, E.fCut, 1000, 20, 20000, 1, 'fCut'); numIn(pb.filter, E.fQ, 0.71, 0.1, 30, 0.01, 'fQ');
+        sel2(pb.filter, E.fSlope, 'fSlope', [[12, E.sl12], [24, E.sl24]], 12); chk2(pb.filter, E.fSweep, 'fSweep', false); numIn(pb.filter, E.fCutEnd, 4000, 20, 20000, 1, 'fCutEnd');
+        numIn(pb.drive, E.drDb, 12, 0, 48, 1, 'drDb'); numIn(pb.drive, E.drMix, 100, 0, 100, 1, 'drMix');
+        numIn(pb.crush, E.crBits, 8, 2, 16, 1, 'crBits'); numIn(pb.crush, E.crHz, 11025, 100, 192000, 100, 'crHz');
+        numIn(pb.eq, E.eqLow, 0, -18, 18, 0.5, 'eqLow'); numIn(pb.eq, E.eqMid, 0, -18, 18, 0.5, 'eqMid'); numIn(pb.eq, E.eqHigh, 0, -18, 18, 0.5, 'eqHigh');
+        numIn(pb.comp, E.cpThr, -18, -60, 0, 1, 'cpThr'); numIn(pb.comp, E.cpRatio, 4, 1, 40, 0.1, 'cpRatio'); numIn(pb.comp, E.cpAtk, 5, 0.1, 500, 0.1, 'cpAtk'); numIn(pb.comp, E.cpRel, 100, 5, 5000, 1, 'cpRel'); numIn(pb.comp, E.cpMk, 0, -24, 24, 0.5, 'cpMk');
+        numIn(pb.tempo, E.beats, 4, 0.25, 512, 0.25, 'tmBeats'); numIn(pb.tempo, E.tmTarget, Number.isFinite(host.bpm) && host.bpm >= 20 && host.bpm <= 400 ? Math.round(host.bpm * 100) / 100 : 120, 20, 400, 0.01, 'tmTarget');
+        const tmCur = () => { const D = edData(); if (!D) return NaN; const secs = (ed.sel ? ed.sel[1] - ed.sel[0] : D.frames) / D.rate; return secs > 0 ? fnum('tmBeats') * 60 / secs : NaN; };
+        eb(pb.tempo, E.half, () => { const i2 = P.querySelector('[data-f="tmBeats"]'); i2.value = String(Math.max(0.25, +i2.value / 2)); }, 'tmHalf', 'sample');
+        eb(pb.tempo, E.double, () => { const i2 = P.querySelector('[data-f="tmBeats"]'); i2.value = String(Math.min(512, +i2.value * 2)); }, 'tmDouble', 'sample');
+        tmNowEl = H('div', 'info', gPr, '');
+        const fxShow = () => { const cur = fget('procOp'); for (const k2 of Object.keys(pb)) pb[k2].hidden = k2 !== cur; tmNowEl.hidden = cur !== 'tempo'; };
+        on(P.querySelector('[data-f="procOp"]'), 'change', () => { fxShow(); esig = ''; edRefresh(false); }); fxShow();
+        const tmArg = () => ({ beats: num(fnum('tmBeats'), 4, 0.25, 512), target: num(fnum('tmTarget'), 120, 20, 400) });
+        const rq2 = H('div', 'row', gPr);
+        eb(rq2, '▶ ' + E.procPrev, () => { const fx = fget('procOp'); if (fx === 'tempo') { const a = tmArg(), cur = tmCur(); if (Number.isFinite(cur)) procPreview('tempo', { ratio: clamp(a.target / cur, 0.25, 4) }); } else procPreview(fx, procParams(fx, fget)); }, 'procPrev', 'sample');
+        eb(rq2, E.procApply, () => { const fx = fget('procOp'); if (fx === 'tempo') edOp('tempo', tmArg()); else edOp('proc', { fx, p: procParams(fx, fget) }); }, 'procApply', 'sample');
+        H('p', 'muted', gPr, E.procHelp);
+        ed.tmUpdate = () => { const c = tmCur(), a = tmArg(); if (tmNowEl) tmNowEl.textContent = Number.isFinite(c) ? fillT(E.tmNow, c.toFixed(2)) + ' · ' + fillT(E.tmSt, (12 * Math.log2(a.target / c)).toFixed(2)) : ''; };
+
+        // flatten en resample
+        const gFl = H('div', 'grp', P); H('h4', null, gFl, E.grpFlat); G.flat.push(gFl);
+        const rf1 = H('div', 'row', gFl);
+        sel2(rf1, E.flSrc, 'flSrc', [['pad', E.flSrcPad], ['sel', E.flSrcSel]], 'pad');
+        const rf2 = H('div', 'row', gFl);
+        numIn(rf2, E.flNote, 60, 0, 127, 1, 'flNote'); on(P.querySelector('[data-f="flNote"]'), 'input', () => P.querySelector('[data-f="flNote"]').setAttribute('data-user', '1'));
+        numIn(rf2, E.flVel, 100, 1, 127, 1, 'flVel'); numIn(rf2, E.flTail, 0.1, 0, 10, 0.05, 'flTail'); numIn(rf2, E.flHold, 0, 0, 120, 0.1, 'flHold');
+        const rf3 = H('div', 'row', gFl);
+        sel2(rf3, E.flCh, 'flCh', [['stereo', E.flStereo], ['mono', E.flMono]], 'stereo'); chk2(rf3, E.flNorm, 'flNorm', false); chk2(rf3, E.flTrim, 'flTrim', true);
+        const rf4 = H('div', 'row', gFl);
+        sel2(rf4, E.flDest, 'flDest', [['newlayer', E.dNew], ['layer', E.dLayer], ['replace', E.dReplace], ['other', E.dOther]], 'newlayer');
+        sel2(rf4, E.flBank, 'flBank', BANK_LETTER.map((L, b) => [b, L]), 0); sel2(rf4, E.flPadN, 'flPadN', Array.from({ length: NPAD }, (_, p) => [p, p + 1]), 0);
+        H('p', 'warn', gFl, E.flWarn);
+        const flOpts = () => ({ src: fget('flSrc'), note: int(+fget('flNote'), 60, 0, 127), vel: int(+fget('flVel'), 100, 1, 127), tail: num(+fget('flTail'), 0.1, 0, 10), hold: num(+fget('flHold'), 0, 0, 120), mono: fget('flCh') === 'mono', norm: !!fget('flNorm'), trim: !!fget('flTrim'), dest: fget('flDest'), dBank: int(+fget('flBank'), 0, 0, 3), dPad: int(+fget('flPadN'), 0, 0, 15) });
+        const rf5 = H('div', 'row', gFl);
+        eb(rf5, '▶ ' + E.flPrev, () => flatten(flOpts(), true), 'flPrev', 'sample'); eb(rf5, E.flGo, () => flatten(flOpts(), false), 'flGo', 'sample');
         const gU = H('div', 'grp', P); H('h4', null, gU, E.grpUndo);
         const rU = H('div', 'row', gU);
         eb(rU, '↶ ' + E.undo, () => edStep(true), 'undo', 'undo'); eb(rU, '↷ ' + E.redo, () => edStep(false), 'redo', 'redo');
         histEl = H('span', 'muted', rU, '');
         H('p', 'muted', P, E.kbd);
+        for (const id of ['tmBeats', 'tmTarget']) on(P.querySelector('[data-f="' + id + '"]'), 'input', () => ed.tmUpdate());
+        setMode('edit', true);
 
         // aanwijzer: selecteren, handvatten, scrubben, pinch en slepen
         const xOf = e => { const r = ecv.getBoundingClientRect(); return e.clientX - r.left; };
@@ -1418,6 +1929,8 @@ export default {
           if (ed.sel) m.push({ k: 'sa', f: ed.sel[0] }, { k: 'sb', f: ed.sel[1] });
           if (t.kind === 'l') m.push({ k: 'ys', f: t.obj.start * D.frames }, { k: 'ye', f: t.obj.end * D.frames });
           if (t.obj.loop.on) m.push({ k: 'ls', f: t.obj.loop.start * D.frames }, { k: 'le', f: t.obj.loop.end * D.frames });
+          const rec = ed.mode === 'chop' ? store.get(D.id) : null;
+          if (rec) { rec.slices.forEach((sv, i) => m.push({ k: 'm' + i, f: sv })); if (!ed.link || (rec.sliceEnds && rec.sliceEnds.some(v => v > 0))) sliceRanges(rec.slices, rec.sliceEnds, D.frames).forEach(([, ev], i) => m.push({ k: 'n' + i, f: ev })); }
           return m;
         }
         function startPinch() {
@@ -1437,7 +1950,10 @@ export default {
           e.preventDefault();
           if (y < RULER) { const f = clamp(Math.round(fOf(x)), 0, D.frames); ed.cur = f; drag = { kind: 'scrub' }; edGrain(f); ed.dirty = true; return; }
           const reach = e.pointerType === 'touch' ? 22 : 10; let best = null;
-          for (const m of markers(D, t)) { if (m.k !== 'sa' && m.k !== 'sb' && y > RULER + 44) continue; const d = Math.abs((m.f - ed.v0) / ed.vn * ed.W - x); if (d <= reach && (!best || d < best.d - 0.5)) best = { m, d }; }
+          for (const m of markers(D, t)) { if (m.k[0] === 'm') { if (y < (ed.link ? EH - 52 : EH - 36)) continue; } else if (m.k[0] === 'n') { if (y < EH - 52 || y >= EH - 36) continue; } else if (m.k !== 'sa' && m.k !== 'sb' && y > RULER + 44) continue; const d = Math.abs((m.f - ed.v0) / ed.vn * ed.W - x); if (d <= reach && (!best || d < best.d - 0.5)) best = { m, d }; }
+          if (best && (best.m.k[0] === 'm' || best.m.k[0] === 'n')) {
+            const si = +best.m.k.slice(1); ed.slSel = si; drag = { kind: 'slice', k: best.m.k, i: si, h: progBegin([t.loc.b * NPAD + t.loc.p]), moved: false, off: best.m.f - fOf(x) }; ed.dirty = true; return;
+          }
           if (best) {
             const k = best.m.k;
             drag = { kind: 'handle', k, before: k[0] === 's' ? null : snapOf(t), anchor: k === 'sa' && ed.sel ? ed.sel[1] : k === 'sb' && ed.sel ? ed.sel[0] : 0 };
@@ -1460,6 +1976,13 @@ export default {
             if (!drag.moved && Math.abs(x - drag.x0) < 4) return; drag.moved = true;
             const f1 = edSnap(fOf(x)), a = Math.min(drag.f0, f1), b = Math.max(drag.f0, f1); ed.sel = b - a >= 1 ? [a, b] : null; ed.cur = a; ed.anchor = drag.f0; ed.dirty = true; return;
           }
+          if (drag.kind === 'slice') {
+            const rec = store.get(D.id); if (!rec || !rec.slices.length) return; const f = edSnap(fOf(x) + drag.off), N = D.frames, i = drag.i; if (!drag.moved && Math.abs(x - (((drag.k[0] === 'm' ? rec.slices[i] : (rec.sliceEnds || [])[i]) - ed.v0) / ed.vn * ed.W)) < 3) return;
+            drag.moved = true;
+            if (drag.k[0] === 'm') { const lo = i > 0 ? rec.slices[i - 1] + 1 : 0, hi = i + 1 < rec.slices.length ? rec.slices[i + 1] - 1 : N - 1; rec.slices[i] = clamp(f, lo, Math.max(lo, hi)); }
+            else { if (!rec.sliceEnds || rec.sliceEnds.length !== rec.slices.length) rec.sliceEnds = new Array(rec.slices.length).fill(0); rec.sliceEnds[i] = clamp(f, rec.slices[i] + 1, N); }
+            ed.cur = rec.slices[i]; ed.dirty = true; return;
+          }
           if (drag.kind === 'handle') {
             const f = edSnap(fOf(x)), N = D.frames, o = t.obj, k = drag.k;
             if (k === 'sa' || k === 'sb') { const a = Math.min(drag.anchor, f), b = Math.max(drag.anchor, f); ed.sel = b - a >= 1 ? [a, b] : null; ed.cur = a; ed.anchor = drag.anchor; }
@@ -1476,6 +1999,7 @@ export default {
           if (ptrs.size === 0 && drag) {
             const d = drag; drag = null;
             if (d.kind === 'sel' && !d.moved) { ed.sel = null; ed.cur = d.f0; ed.anchor = d.f0; }
+            if (d.kind === 'slice') { if (d.moved) { if (progEnd(d.h, E.marker, true)) { edAfter(); say(fillT(E.done, E.marker)); } else if (ui) ui.refreshAll(); } else slPlay(d.i); }
             if (d.kind === 'handle' && d.before) {
               const t = edTarget(), after = snapOf(t);
               if (JSON.stringify([d.before.on, d.before.ls, d.before.le, d.before.st, d.before.en]) !== JSON.stringify([after.on, after.ls, after.le, after.st, after.en])) { pushUndo({ label: E.marker, loc: t.loc, b: d.before, a: after }); refreshAll(); }
@@ -1504,6 +2028,14 @@ export default {
             edReveal(to); ed.dirty = true;
           };
           const px = D ? Math.max(1, Math.round(ed.vn / ed.W)) : 1;
+          if (ed.mode === 'chop' && !ctl && !e.altKey && (!e.shiftKey || k === 'M') && (/^[1-9]$/.test(k) || k === 'ArrowLeft' || k === 'ArrowRight' || k === 'm' || k === 'M' || (k === 'Enter' && tg !== 'BUTTON') || k === 'Delete' || k === 'Backspace')) {
+            const rec = recOf(), ns = rec ? rec.slices.length : 0;
+            if (/^[1-9]$/.test(k)) { if (+k - 1 < ns) slPlay(+k - 1); }
+            else if (k === 'ArrowLeft' || k === 'ArrowRight') { if (ns) slPlay(ed.slSel + (k === 'ArrowLeft' ? -1 : 1)); }
+            else if (k === 'Delete' || k === 'Backspace') slDelSel();
+            else slAddAt(ed.cur);
+            e.preventDefault(); e.stopPropagation(); edRefresh(false); return;
+          }
           if (ctl && !e.altKey) {
             if (k === 'z' || k === 'Z') edStep(!e.shiftKey);
             else if (k === 'y' || k === 'Y') edStep(false);
@@ -1595,6 +2127,22 @@ export default {
           g.fillStyle = k.sel; g.fillRect(x0 - 1, RULER, 2, EH - RULER); g.fillRect(x1 - 1, RULER, 2, EH - RULER);
           for (const x of [x0, x1]) { g.fillRect(x - 6, RULER, 12, 16); g.fillRect(x - 6, EH - 16, 12, 16); }
         }
+        // slices: begin (doorgetrokken) en eigen eind (gestippeld, alleen als begin en eind niet gekoppeld zijn)
+        const srec = store.get(D.id);
+        if (srec && srec.slices.length) {
+          const rg = sliceRanges(srec.slices, srec.sliceEnds, N), unl = !ed.link || !!(srec.sliceEnds && srec.sliceEnds.some(v => v > 0)), cur = rg[ed.slSel];
+          if (cur) { g.globalAlpha = 0.16; g.fillStyle = k.go; g.fillRect(fx(cur[0]), RULER, fx(cur[1]) - fx(cur[0]), EH - RULER); g.globalAlpha = 1; }
+          g.font = '10px system-ui'; g.lineWidth = 1;
+          rg.forEach(([s0, e0], i) => {
+            const x = Math.round(fx(s0)) + 0.5, on_ = i === ed.slSel, txt = String(i + 1), tw = txt.length * 6 + 8;
+            if (x >= -40 && x <= w + 40) {
+              g.strokeStyle = on_ ? k.fg : k.go; g.lineWidth = on_ ? 2 : 1; g.beginPath(); g.moveTo(x, RULER); g.lineTo(x, EH); g.stroke();
+              g.fillStyle = on_ ? k.fg : k.go; g.fillRect(x, EH - 34, tw, 16); g.fillStyle = k.bg; g.fillText(txt, x + 4, EH - 22);
+            }
+            if (unl) { const x2 = Math.round(fx(e0)) + 0.5; if (x2 >= -40 && x2 <= w + 40) { g.strokeStyle = on_ ? k.fg : k.go; g.lineWidth = 1; g.setLineDash([3, 3]); g.beginPath(); g.moveTo(x2, RULER); g.lineTo(x2, EH); g.stroke(); g.setLineDash([]); g.fillStyle = on_ ? k.fg : k.go; g.fillRect(x2 - tw, EH - 52, tw, 16); g.fillStyle = k.bg; g.fillText(txt, x2 - tw + 4, EH - 40); } }
+          });
+          g.lineWidth = 1;
+        }
         // start en einde van de laag, lus
         g.strokeStyle = k.ev; g.fillStyle = k.ev; g.font = '10px system-ui'; g.lineWidth = 1.5;
         const mk = (f, txt, dash, side) => { const x = Math.round(fx(f)) + 0.5; if (x < -20 || x > w + 20) return; g.setLineDash(dash ? [4, 3] : []); g.beginPath(); g.moveTo(x, RULER); g.lineTo(x, EH); g.stroke(); g.setLineDash([]); g.fillRect(side > 0 ? x : x - 12, RULER + 18, 12, 12); g.fillStyle = k.bg; g.fillText(txt, side > 0 ? x + 3 : x - 9, RULER + 28); g.fillStyle = k.ev; };
@@ -1623,12 +2171,20 @@ export default {
           fillSelect(tgtSel, opts, ed.useZone && pad.zones[selZone] ? 'z' + selZone : 'l' + prog.layer);
           wkey = ''; esig = '';
         }
-        const D = edData(), N = D ? D.frames : 0;
-        const sig = [ed.dec && ed.dec.id, N, ed.sel ? ed.sel.join('-') : '', ed.cur, ed.v0.toFixed(2), ed.vn.toFixed(2), ed.undo.length, ed.redo.length, !!ed.clip, ed.play ? 1 : 0].join('|');
+        const D = edData(), N = D ? D.frames : 0, rec = D ? store.get(D.id) || null : null, ns = rec ? rec.slices.length : 0;
+        ed.slSel = clamp(ed.slSel, 0, Math.max(0, ns - 1));
+        if (full) {
+          if (ed.key !== ed.linkKey) {   // ander sample: schakelaar en startpad voor Slices naar pads opnieuw bepalen
+            ed.linkKey = ed.key; ed.link = !(rec && rec.sliceEnds && rec.sliceEnds.some(v => v > 0)); if (linkCb) linkCb.checked = ed.link;
+            const sb = P0.querySelector('[data-f="spBank"]'), sp = P0.querySelector('[data-f="spPad"]'); if (sb) sb.value = String(prog.bank); if (sp) sp.value = String(prog.pad);
+          }
+          const fn = P0.querySelector('[data-f="flNote"]'); if (fn && fn.getAttribute('data-user') !== '1') { const pd = curPad(), ly = pd.layers.find(l => l.sampleId); fn.value = String(ly && ly.root != null ? ly.root : pd.mode === 'key' ? pd.baseNote : 60); }
+        }
+        const sig = [ed.dec && ed.dec.id, N, ed.sel ? ed.sel.join('-') : '', ed.cur, ed.v0.toFixed(2), ed.vn.toFixed(2), ed.undo.length, ed.redo.length, !!ed.clip, ed.play ? 1 : 0, ed.mode, ed.slSel, rec ? sliceJson(rec) : ''].join('|');
         if (sig === esig) return; esig = sig;
         const sampleOk = !!D, hasSel = !!ed.sel, stereo = !!D && D.channels === 2;
         for (const x of edBtns) {
-          const n = x.needs; x.b.disabled = (n === 'sample' && !sampleOk) || (n === 'sel' && (!sampleOk || !hasSel)) || (n === 'clip' && (!sampleOk || !ed.clip)) || (n === 'stereo' && !stereo) || (n === 'undo' && !ed.undo.length) || (n === 'redo' && !ed.redo.length);
+          const n = x.needs; x.b.disabled = (n === 'slices' && !ns) || (n === 'sample' && !sampleOk) || (n === 'sel' && (!sampleOk || !hasSel)) || (n === 'clip' && (!sampleOk || !ed.clip)) || (n === 'stereo' && !stereo) || (n === 'undo' && !ed.undo.length) || (n === 'redo' && !ed.redo.length);
         }
         const sn = i => ((i == null || Number.isNaN(i)) ? '' : String(i));
         selA.value = hasSel ? sn(ed.sel[0]) : ''; selB.value = hasSel ? sn(ed.sel[1]) : ''; curIn.value = sn(ed.cur);
@@ -1638,7 +2194,20 @@ export default {
           scr.disabled = ed.vn >= N; scr.value = N - ed.vn > 0 ? String(Math.round(ed.v0 / (N - ed.vn) * 1000)) : '0';
         } else { infoEd.textContent = E.needSample; selInfo.textContent = ''; scr.disabled = true; }
         histEl.textContent = fillT(E.hist, ed.undo.length, ed.redo.length);
+        paintChips(rec, D);
         if (lvlTimer) clearTimeout(lvlTimer); lvlTimer = setTimeout(edLevels, 120);
+      }
+      function paintChips(rec, D) {   // knoppen 1..n voor de slices, de tekst bij de gekozen slice en het huidige tempo
+        const ns = rec ? rec.slices.length : 0, sig = ns + '|' + ed.slSel;
+        if (slBox && sig !== chipSig) {
+          chipSig = sig; slBox.textContent = '';
+          for (let i = 0; i < ns; i++) { const b = H('button', 'btn slchip' + (i === ed.slSel ? ' sel' : ''), slBox, String(i + 1)); b.type = 'button'; b.setAttribute('aria-label', fillT(E.slPlay, i + 1)); b.setAttribute('data-slice', String(i)); b.onclick = () => { slPlay(i); }; b.onpointerdown = e => e.stopPropagation(); }
+        }
+        if (slInfoEl) {
+          if (!ns || !D) slInfoEl.textContent = E.slNone;
+          else { const [s0, e0] = sliceRanges(rec.slices, rec.sliceEnds, D.frames)[ed.slSel]; slInfoEl.textContent = fillT(E.slInfo, ed.slSel + 1, ns, fSec(s0 / D.rate), fSec(e0 / D.rate), e0 - s0); }
+        }
+        if (ed.tmUpdate) ed.tmUpdate();
       }
       function edMeasure() { const w = ecv ? Math.round(ecv.clientWidth) : 0; if (w > 0 && w !== ed.W) { ed.W = Math.max(120, w); wkey = ''; ed.dirty = true; } }
       statusEl = H('div', 'status', app); statusEl.setAttribute('role', 'status'); statusEl.setAttribute('aria-live', 'polite');
@@ -1812,6 +2381,7 @@ export default {
         prog.bank = int(s.bank, 0, 0, NBANK - 1); prog.pad = int(s.pad, 0, 0, NPAD - 1); prog.layer = int(s.layer, 0, 0, NLAYER - 1);
         prog.baseNote = int(s.baseNote, 36, 0, 63); prog.level = num(s.level, 0.8, 0, 1); prog.padVel = int(s.padVel, 100, 1, 127);
         store.clear(); for (const [k, v] of next) store.set(k, v);
+        for (const id of [...bufs.keys()]) if (!DEMO_BY_ID[id]) bufs.delete(id);   // een id met andere inhoud mag geen oude buffer erven
         edStop(); clearHistory(); ed.dec = null; ed.key = ''; ed.sel = null; ed.cur = 0; ed.useZone = false;
         gcStore(); rr.fill(0); lastPick.fill(-1); selZone = 0;
         allLive(); notesNotify(); warm();
