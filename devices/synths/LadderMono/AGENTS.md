@@ -38,3 +38,11 @@ Motor in Node: filterhelling ongeveer 24 dB per octaaf bij hoge frequenties, zel
 ## Tunes
 
 `../../../tunes/ladder-mono-classics.patchkamer-tunes.json` (formatVersion 1, CC0-1.0, namen Engels, geen merk- of modelnamen): 58 tunes in 7 mappen. De niveaus (`level`) zijn zo gezet dat een noot een piek van ongeveer 0,8 geeft (een paar ruis- en pad-geluiden komen tot 0,57).
+
+## Documentatie en songs
+
+Hier vind je de omgeving van dit apparaat: de soort, de overzichten en de handleiding voor mensen.
+
+- Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
+- Handleiding van de soort (voor mensen): [NL](../../../docs/synths/USER-MANUAL_NL.md) · [EN](../../../docs/synths/USER-MANUAL_EN.md); overzicht: [README](../README.md).
+- Een song componeren met dit apparaat: [songs/AGENTS.md](../../../songs/AGENTS.md).

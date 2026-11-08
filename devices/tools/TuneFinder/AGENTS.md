@@ -84,3 +84,11 @@ Hoe het per apparaat gaat (schone noot en Room, apparaat 1): Biotope, Celestial 
 - Het analysegedeelte niet wijzigen zonder `TA.VERSION` te verhogen, de index opnieuw te maken en opnieuw te meten (`eval-tune-finder.py gen`, `tune`, `score`; meld de getallen). Stel de gewichten af op de validatiesteekproef en meet op de test.
 - De audio niet in de state of in een preset zetten.
 - Een Bass Finder is een eigen apparaat met een eigen (kleinere) index: hergebruik `TA`, maak de index met `build-tune-index.py` (`--only <deel van de id> --target <apparaatbestand>` schrijft een index van een deel van de apparaten in een ander apparaatbestand met dezelfde markeringen; zonder `--target` gaat het naar Tune Finder).
+
+## Documentatie en songs
+
+Hier vind je de omgeving van dit apparaat: de soort, de overzichten en de handleiding voor mensen.
+
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
+- Handleiding van de soort (voor mensen): [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md); overzicht: [README](../README.md).
+- Een song componeren met dit apparaat: [songs/AGENTS.md](../../../songs/AGENTS.md).

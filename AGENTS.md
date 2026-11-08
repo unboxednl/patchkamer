@@ -10,13 +10,29 @@ Patchkamer is een modulaire muziekstudio in de browser op Web Audio: één webpa
 |---|---|---|
 | `contract/PATCHKAMER-CONTRACT_NL.md` en `contract/PATCHKAMER-CONTRACT_EN.md` | Het contract in twee talen (Nederlands is de brontekst, Engels de vertaling; zelfde versie en inhoud): de volledige, zelfstandige instructie voor het bouwen van een apparaat | **Lees er één van de twee** (kies de taal van de opdracht). Je hebt geen andere bron nodig |
 | `contract/validate-instrument.mjs` | De validator die controleert of je apparaat aan het contract voldoet; uitvoer in het Nederlands, of met `--lang en` in het Engels | **Draai dit** voor je oplevert |
-| `patchkamer/patchkamer.html` (plus `css/`, `i18n/`, `js/`) | De host (de studio). Hierin test je wat de validator niet kan zien | Zie `patchkamer/AGENTS.md` |
-| `devices/<categorie>/<Naam>/` | De meegeleverde apparaten: één map per apparaat binnen een categorie, bijvoorbeeld `devices/synths/Duofone/duofone.patchkamer-device.js` | **Hier zet je je apparaat neer.** Heeft het apparaat een eigen `AGENTS.md`, lees die dan ook |
-| `tunes/` | Klanken van apparaten die geluid maken (`kind: 'instrument'`) | Zie `tunes/AGENTS.md` |
-| `presets/` | Instellingen van apparaten zonder eigen geluid | Contract §13c, licentie `CC0-1.0` |
-| `skins/` | Skins: het uiterlijk van één apparaat, als los bestand (contract, validator en bibliotheek) | Zie `skins/AGENTS.md`. Raakt geen apparaatcode |
-| `songs/` | Meegeleverde songs | Niet aanraken tenzij gevraagd |
+| `patchkamer/patchkamer.html` (plus `css/`, `i18n/`, `js/`) | De host (de studio). Hierin test je wat de validator niet kan zien | Zie [patchkamer/AGENTS.md](patchkamer/AGENTS.md) |
+| `devices/<categorie>/<Naam>/` | De meegeleverde apparaten: één map per apparaat binnen een categorie, bijvoorbeeld `devices/synths/Duofone/duofone.patchkamer-device.js` | **Hier zet je je apparaat neer.** Zie [devices/AGENTS.md](devices/AGENTS.md); elke soort en elk apparaat heeft een eigen `AGENTS.md` (zie de boom hieronder), lees die dan ook |
+| `tunes/` | Klanken van apparaten die geluid maken (`kind: 'instrument'`) | Zie [tunes/AGENTS.md](tunes/AGENTS.md) |
+| `presets/` | Instellingen van apparaten zonder eigen geluid | Zie [presets/AGENTS.md](presets/AGENTS.md); contract §13c, licentie `CC0-1.0` |
+| `skins/` | Skins: het uiterlijk van één apparaat, als los bestand (contract, validator en bibliotheek) | Zie [skins/AGENTS.md](skins/AGENTS.md). Raakt geen apparaatcode |
+| `songs/` | Meegeleverde songs | Zie [songs/AGENTS.md](songs/AGENTS.md) om een song te componeren; niet aanraken tenzij gevraagd |
 | `docs/` | Gebruikershandleiding (`USER-MANUAL_NL.md` en `_EN.md`, voor mensen), screenshots in `docs/images/` en het script `docs/tools/make-screenshots.py` | Niet aanraken tenzij gevraagd. Een wijziging doe je altijd in beide talen |
+
+## De boom van AGENTS.md-bestanden
+
+Alles wat je nodig hebt om te componeren of een apparaat, tune of preset te maken, bereik je via links tussen `AGENTS.md`-bestanden. Begin hier en volg de tak die bij je opdracht past. De handleidingen in `docs/` zijn voor mensen; je hebt ze niet nodig.
+
+| Je wilt | Ga naar | Daarna |
+|---|---|---|
+| Een **apparaat** bouwen of wijzigen | [devices/AGENTS.md](devices/AGENTS.md) | de soort ([synths](devices/synths/AGENTS.md), [samplers](devices/samplers/AGENTS.md), [sequencers](devices/sequencers/AGENTS.md), [drums](devices/drums/AGENTS.md), [effects](devices/effects/AGENTS.md), [mastering](devices/mastering/AGENTS.md), [mixer](devices/mixer/AGENTS.md), [modulators](devices/modulators/AGENTS.md), [tools](devices/tools/AGENTS.md)), dan de `AGENTS.md` van het apparaat |
+| **Tunes** maken (klanken van synths, samplers en drums) | [tunes/AGENTS.md](tunes/AGENTS.md) | de `AGENTS.md` van het apparaat waarvoor je maakt |
+| **Presets** maken (effecten, sequencers, mixer, modulatoren, mastering, tools) | [presets/AGENTS.md](presets/AGENTS.md) | de `AGENTS.md` van het apparaat |
+| Een **song componeren** | [songs/AGENTS.md](songs/AGENTS.md) | [devices/AGENTS.md](devices/AGENTS.md) voor kabels, klok en signaalketens, en de soort van elk apparaat dat je gebruikt |
+| Een **samplepack** maken | [samples/AGENTS.md](samples/AGENTS.md) | contract §13e |
+| Een **skin** maken (het uiterlijk van één apparaat) | [skins/AGENTS.md](skins/AGENTS.md) | het skincontract |
+| De **host** wijzigen of testen | [patchkamer/AGENTS.md](patchkamer/AGENTS.md) | |
+
+Elk bestand in de boom verwijst omhoog naar zijn bovenliggende `AGENTS.md` en omlaag naar de bestanden eronder. Na een wijziging in de boom draai je `python3 docs/tools/agents-tree.py --check`: dat meldt elk `AGENTS.md` dat vanaf deze root niet bereikbaar is, en elk overzicht per soort dat verouderd is (herstel met `--write`).
 
 ## Regel 1: contract en validator hebben dezelfde versie
 

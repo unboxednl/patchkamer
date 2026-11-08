@@ -60,3 +60,11 @@ In de **host-instellingen, de adapterlijst, de kaart (keuzelijst van diensten en
 ## Getest en niet getest
 
 Getest in Chromium met een nepdienst (zie het eindrapport van de bouw): zip met 2, 4 en 6 stems, variabel aantal uitgangen, bundel, afspelen met de klok (offline render, sample-gelijk), mute en solo, WAV-header en -lengte (16 en 24 bit), zip-uitpakken en kapotte, te grote en onveilige zips, fouten (401, 402, 429, 422, netwerk, geannuleerd, time-out), sleutel alleen naar de eigen dienst. Mp3-omzetting (host, Chromium, nepdienst): wav/stereo/mono 44,1 en 48 kHz, 96 kHz en 88,2 kHz (naar 48 kHz), 22,05 kHz, 37,8 kHz (naar 44,1 kHz), 4 minuten onder 10 MB, bitrate zakt bij 7 en 10 minuten, weigering bij 22 minuten op 11,025 kHz, annuleren tijdens het coderen, NaN/Infinity in de bron, mp3 ongewijzigd, Demucs zonder omzetting, terugval zonder worker. **Niet getest:** de klank van de omgezette mp3 (niet beluisterd), de echte diensten (CORS vanuit de browser, echte zip-inhoud en bestandsnamen, doorlooptijd, prijs), luisteren, de Windows-app. Of de diensten data-URI's als invoer en directe browseraanroepen toestaan, is niet bevestigd.
+
+## Documentatie en songs
+
+Hier vind je de omgeving van dit apparaat: de soort, de overzichten en de handleiding voor mensen.
+
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
+- Handleiding van de soort (voor mensen): [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md); overzicht: [README](../README.md).
+- Een song componeren met dit apparaat: [songs/AGENTS.md](../../../songs/AGENTS.md).

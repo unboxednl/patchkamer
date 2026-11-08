@@ -55,3 +55,11 @@ Met een nep-Web MIDI in Chromium (twee nep-ingangen): verbinden, ingang kiezen, 
   - `Akai MPK mini MK3`: acht draaiknoppen CC 70 … 77; de pads staan niet vast en blijven onbewaard (Leer).
   - `Generic 8 Knobs Sound Controllers CC 70-77`: de geluidsregelaars uit de MIDI-specificatie.
 - Wil je een controller toevoegen: bouw de indeling uit secties, leer of vul de toewijzingen, bewaar het als preset en zet hem in de map `Controllers`. Zonder bron voor de nummers: alleen de indeling.
+
+## Documentatie en songs
+
+Hier vind je de omgeving van dit apparaat: de soort, de overzichten en de handleiding voor mensen.
+
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
+- Handleiding van de soort (voor mensen): [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md); overzicht: [README](../README.md).
+- Een song componeren met dit apparaat: [songs/AGENTS.md](../../../songs/AGENTS.md).

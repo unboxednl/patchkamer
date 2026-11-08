@@ -86,6 +86,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Handleiding van Mixer: [NL](../../../docs/mixer/USER-MANUAL_NL.md#mixer) · [EN](../../../docs/mixer/USER-MANUAL_EN.md#mixer).
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/mixer/USER-MANUAL_NL.md) · [EN](../../../docs/mixer/USER-MANUAL_EN.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Route voor agents: [soort Mixer](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: hart van de song: alle stemmen komen hier samen (kanalen `ch1…`, returns `r1…`, groepen, master `out`). Zet per kanaal trim, EQ, pan, fader en sends; verbind de losse bron-uitgangen met de kanalen en `out` met de masterketen of een uitgang. De poorten veranderen mee met het aantal kanalen (`nCh`) en groepen (`nGrp`), dus zet die in de `state` vóór je kabels legt.
 
 

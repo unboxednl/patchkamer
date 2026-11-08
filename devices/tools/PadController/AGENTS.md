@@ -80,4 +80,5 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Handleiding van Pad Controller: [NL](../../../docs/tools/USER-MANUAL_NL.md#pad-controller) · [EN](../../../docs/tools/USER-MANUAL_EN.md#pad-controller).
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: besturing met een MIDI-pad-controller (8 × 5 pads, knoppen, toetsenbord); legt zelf kabels naar gekoppelde apparaten (events `pad1` … `pad40`, sturing `knoppen`). Voor live spelen; in een song met vaste kabels zelden nodig.

@@ -158,6 +158,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/samplers/USER-MANUAL_NL.md) · [EN](../../../docs/samplers/USER-MANUAL_EN.md).
 - Tunes (klanken, `kind: set`): [loop-slicer-styles.patchkamer-tunes.json](../../../tunes/loop-slicer-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Route voor agents: [soort Samplers](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: loop-afspeler in plakken (4, 8, 16 of 32 slices) voor ritme en breaks. Noten of trigs op `notes` spelen de slices, of gebruik het eigen patroon van 16 stappen op de klok; audio uit `out`. De loop zelf (WAV/MP3) laad je in de app: een song kan dat bestand niet meebrengen, dus houd je aan de ingebouwde demo-loop of benoem de afhankelijkheid.
 
 ## Samples uit de bibliotheek (v1.20)

@@ -33,3 +33,11 @@ Offline renders in Chromium (`OfflineAudioContext`): 56 tunes, 30 willekeurige e
 ## Tunes
 
 `../../../tunes/cinematic-synth-scores.patchkamer-tunes.json` (formatVersion 1, CC0-1.0, namen Engels, geen titels van films of namen van personen): 56 tunes in 7 sets. De niveaus (`level`) zijn zo gezet dat een akkoord of een slag een piek van ongeveer 0,8 geeft.
+
+## Documentatie en songs
+
+Hier vind je de omgeving van dit apparaat: de soort, de overzichten en de handleiding voor mensen.
+
+- Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
+- Handleiding van de soort (voor mensen): [NL](../../../docs/synths/USER-MANUAL_NL.md) · [EN](../../../docs/synths/USER-MANUAL_EN.md); overzicht: [README](../README.md).
+- Een song componeren met dit apparaat: [songs/AGENTS.md](../../../songs/AGENTS.md).

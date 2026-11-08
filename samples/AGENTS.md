@@ -2,6 +2,10 @@
 
 Dit bestand is voor AI-agents die samplepacks maken voor Patchkamer. Het hoort bij de algemene instructies in `../AGENTS.md`; lees die eerst. Het formaat staat in het contract, §13e (`../contract/PATCHKAMER-CONTRACT_NL.md`).
 
+## Plaats in de boom
+
+Omhoog: de [root AGENTS.md](../AGENTS.md). Omlaag: de apparaten die samples laden en spelen, [samplers](../devices/samplers/AGENTS.md) (Samplebank, Loop Slicer) en de [tools](../devices/tools/AGENTS.md) die audio uit de tab Samples aannemen (Drum Listener, Bass Finder, Tune Finder, Stem Splitter). Opzij: [tunes/AGENTS.md](../tunes/AGENTS.md) (een tune van een sampler bevat nooit audio) en [devices/AGENTS.md](../devices/AGENTS.md).
+
 ## Wat een samplepack is
 
 Eén bestand `naam.patchkamer-samples.json` met `format: "patchkamer-samples"`, `formatVersion: 1`, `name`, `author`, `license`, `description`, optioneel `tags` en een `tree` van mappen (`folder`, `items`) en samples (`name`, `bpm`, `bars`, `tags`, `audio: { format, data }`). `data` is base64 van een WAV-, MP3-, OGG- of FLAC-bestand. Kies voor eigen loops FLAC (verliesloos, ongeveer de helft van WAV).

@@ -2,6 +2,10 @@
 
 Dit bestand is voor AI-agents die presets **maken** voor Patchkamer-apparaten, en voor agents die presets **gebruiken** in een song. Het is niet geschreven voor mensen. Het hoort bij de algemene instructies in `../AGENTS.md`; lees die eerst. Songs: begin bij `../songs/AGENTS.md`; de apparaten staan in `../devices/AGENTS.md`.
 
+## Plaats in de boom
+
+Omhoog: de [root AGENTS.md](../AGENTS.md). Omlaag, de soorten die presets hebben: [sequencers](../devices/sequencers/AGENTS.md), [effects](../devices/effects/AGENTS.md), [mastering](../devices/mastering/AGENTS.md), [mixer](../devices/mixer/AGENTS.md), [modulators](../devices/modulators/AGENTS.md) en [tools](../devices/tools/AGENTS.md); elk heeft een tabel met de `AGENTS.md` van elk apparaat. Opzij: [tunes/AGENTS.md](../tunes/AGENTS.md) (voor synths, samplers en drums), [songs/AGENTS.md](../songs/AGENTS.md) en [devices/AGENTS.md](../devices/AGENTS.md).
+
 ## Wat een preset is
 
 Een preset is de instelling van een apparaat **zonder eigen geluid**: `kind` `effect`, `mixer`, `output`, `utility` of `modulator` (effecten, mastering, mixer, sequencers, modulators, tools). Apparaten die geluid maken (`kind: 'instrument'`) krijgen **tunes**, die staan in `../tunes/` (zie `../tunes/AGENTS.md`). Contract: `../contract/PATCHKAMER-CONTRACT_NL.md` §0 en §13c. Handleiding voor mensen: [Presets: gebruikershandleiding](../docs/presets/USER-MANUAL_NL.md) (Engels: `../docs/presets/USER-MANUAL_EN.md`).

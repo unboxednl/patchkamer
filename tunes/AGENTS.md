@@ -2,6 +2,10 @@
 
 Dit bestand is voor AI-agents die tunes maken voor Patchkamer-apparaten. Het is niet geschreven voor mensen. Het hoort bij de algemene instructies in `../AGENTS.md`; lees die eerst.
 
+## Plaats in de boom
+
+Omhoog: de [root AGENTS.md](../AGENTS.md). Omlaag, de soorten die tunes hebben: [synths](../devices/synths/AGENTS.md), [samplers](../devices/samplers/AGENTS.md) en [drums](../devices/drums/AGENTS.md); elk heeft een tabel met de `AGENTS.md` van elk apparaat, waar de velden en bereiken van zijn `state` staan. Opzij: [presets/AGENTS.md](../presets/AGENTS.md) (voor de overige apparaten), [songs/AGENTS.md](../songs/AGENTS.md) en [devices/AGENTS.md](../devices/AGENTS.md).
+
 ## Wat een tune is
 
 Een tune is de **klank** van een apparaat dat geluid maakt (`kind: 'instrument'`: synths, drones, drumcomputers), bewaard als data. Apparaten zonder eigen geluid (`effect`, `mixer`, `output`, `utility`, `modulator`) krijgen **presets** en geen tunes: die horen in `../presets/`. Welke van de twee past, volgt uit de `kind` van het apparaat. De uitleg staat in het contract, §0 en §13c.

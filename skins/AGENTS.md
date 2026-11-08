@@ -6,6 +6,10 @@ Dit bestand is voor AI-agents die **skins** maken voor Patchkamer-apparaten. Het
 
 **Skin-editor (laag 3).** De host heeft een editor (`patchkamer/js/skin-editor*.js`) die dezelfde bestanden schrijft als je met de hand zou maken: een skin voor één apparaat-id, `skinsContract` 0.7 of lager, niets nieuws in het formaat. Wat de editor exporteert komt door `validate-skin.mjs --device <apparaat>` zolang `author`, `license`, `description` en `icon` (mag `null`) ingevuld zijn; namen van verschijningen die hij zelf aanmaakt zijn Engels (Standard, Compact, Wide, Phone, Touch, Custom). Een agent kan een skin dus gewoon als bestand schrijven; de editor is voor mensen.
 
+## Plaats in de boom
+
+Omhoog: de [root AGENTS.md](../AGENTS.md). Opzij: [patchkamer/AGENTS.md](../patchkamer/AGENTS.md) (hoe de host skins laadt, sectie Skins) en [devices/AGENTS.md](../devices/AGENTS.md) (de apparaten waarvoor je een skin maakt, per soort, en hun `AGENTS.md`).
+
 ## Wat een skin is
 
 Een skin is **één JSON-bestand** dat het uiterlijk van **één apparaat** verandert: een manifest met een of meer **verschijningsvormen** (bijvoorbeeld compact en breed), elk met CSS die in de shadow root van het apparaat wordt gezet en optioneel ingesloten afbeeldingen. Een skin verandert nooit de state, het geluid of het gedrag van een apparaat, en een apparaat hoeft er niets voor te doen.

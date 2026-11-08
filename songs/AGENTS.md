@@ -4,6 +4,10 @@ Dit bestand is voor AI-agents die een **song** componeren voor Patchkamer. Het i
 
 Licenties: een song is `CC-BY-4.0`, tunes en presets `CC0-1.0`, apparaten `AGPL-3.0-or-later`. Je kunt niet luisteren. Alles wat je over een song zegt, is gemeten of op papier gecontroleerd, nooit gehoord.
 
+## Plaats in de boom
+
+Omhoog: de [root AGENTS.md](../AGENTS.md). Omlaag, welke apparaten je kunt gebruiken: [devices/AGENTS.md](../devices/AGENTS.md) (kabels, klok, signaalketens) en de soorten [synths](../devices/synths/AGENTS.md), [samplers](../devices/samplers/AGENTS.md), [sequencers](../devices/sequencers/AGENTS.md), [drums](../devices/drums/AGENTS.md), [effects](../devices/effects/AGENTS.md), [mastering](../devices/mastering/AGENTS.md), [mixer](../devices/mixer/AGENTS.md), [modulators](../devices/modulators/AGENTS.md) en [tools](../devices/tools/AGENTS.md). Klanken en instellingen: [tunes/AGENTS.md](../tunes/AGENTS.md) en [presets/AGENTS.md](../presets/AGENTS.md); samples: [samples/AGENTS.md](../samples/AGENTS.md).
+
 ## Inhoud
 
 1. [Wat een song is](#1-wat-een-song-is)

@@ -85,4 +85,5 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Handleiding van Keys / MIDI: [NL](../../../docs/tools/USER-MANUAL_NL.md#keys--midi) · [EN](../../../docs/tools/USER-MANUAL_EN.md#keys--midi).
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: live toetsenbord/MIDI-bron zonder geluid; één eventuitgang `notes`. In een song is dit apparaat meestal niet nodig, want de noten komen uit een sequencer.

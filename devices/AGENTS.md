@@ -80,6 +80,12 @@ Patchkamer heeft één klok (**Start**, tempo `workspace.bpm`, `workspace.swing`
 - Klanken: tunes in `../tunes/`, presets in `../presets/`.
 - De samenhang met het songbestand zelf: `../songs/AGENTS.md`.
 
+## Per soort
+
+Elke soort heeft een eigen `AGENTS.md` met wat voor die soort geldt en een overzicht van zijn apparaten, die op hun beurt een eigen `AGENTS.md` hebben. Omhoog: de [root AGENTS.md](../AGENTS.md). Opzij: [tunes/AGENTS.md](../tunes/AGENTS.md), [presets/AGENTS.md](../presets/AGENTS.md) en [songs/AGENTS.md](../songs/AGENTS.md).
+
+[synths](synths/AGENTS.md) · [samplers](samplers/AGENTS.md) · [sequencers](sequencers/AGENTS.md) · [drums](drums/AGENTS.md) · [effects](effects/AGENTS.md) · [mastering](mastering/AGENTS.md) · [mixer](mixer/AGENTS.md) · [modulators](modulators/AGENTS.md) · [tools](tools/AGENTS.md)
+
 ## De apparaten
 
 De tabellen worden gegenereerd uit de apparaatbestanden en de README's per soort. Verander ze niet met de hand. Opnieuw genereren, vanuit de root van de repo:

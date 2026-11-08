@@ -106,3 +106,11 @@ Robuustheid (`node docs/tools/check-bass-finder.mjs`, 861 controles): stilte, vr
 - De audio niet in de state of in een preset zetten.
 - Het analysegedeelte niet wijzigen zonder opnieuw te meten (`eval-bass-finder.py`, op de teststeekproef; stel drempels alleen af op `--split dev`) en `check-bass-finder.mjs` te draaien; meld de getallen.
 - Geen modelnamen of merknamen in naam, teksten of commentaar.
+
+## Documentatie en songs
+
+Hier vind je de omgeving van dit apparaat: de soort, de overzichten en de handleiding voor mensen.
+
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
+- Handleiding van de soort (voor mensen): [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md); overzicht: [README](../README.md).
+- Een song componeren met dit apparaat: [songs/AGENTS.md](../../../songs/AGENTS.md).

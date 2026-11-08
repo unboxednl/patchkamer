@@ -63,4 +63,5 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Handleiding van Notes: [NL](../../../docs/tools/USER-MANUAL_NL.md#notes) · [EN](../../../docs/tools/USER-MANUAL_EN.md#notes).
 - Overzicht van de soort: [README](../README.md); handleiding van de hele soort: [NL](../../../docs/tools/USER-MANUAL_NL.md) · [EN](../../../docs/tools/USER-MANUAL_EN.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
+- Route voor agents: [soort Tools](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: notitieblok op de vloer (toonsoort, structuur, tempo/gevoel). Geen poorten. Zet er in een song de toonsoort en de opbouw (Intro, Opbouw, Break, Drop, Outro) in zodat de volgende lezer ze ziet.
