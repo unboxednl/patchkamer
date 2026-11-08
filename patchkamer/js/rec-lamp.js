@@ -17,8 +17,9 @@ function paint(){ const b=el(); if(!b) return; const f=first(); b.hidden=!f;
 PK.Host.recording=function(inst,on){ const id=inst&&inst._id; if(!id||!PK.Host.devices.has(id)) return false;
   if(on){ if(!REC.has(id)) REC.set(id,Date.now()); } else REC.delete(id); paint(); return true; };
 // het canvas schuift; het apparaat en de zoom blijven zoals ze zijn
-function show(){ const f=first(); if(!f) return; const r=PK.Host.devices.get(f.id); if(!r) return; PK.select(f.id);
+function showDevice(id){ const r=PK.Host.devices.get(id); if(!r) return; PK.select(id);
   const wr=PK.floorwrap.getBoundingClientRect(), s=PK.Host.view.scale, w=r.el.offsetWidth||300, h=r.el.offsetHeight||200, cx=r.x+w/2, cy=r.y+Math.min(h,wr.height/s)/2;
   PK.viewTo(wr.width/2-cx*s,wr.height/2-cy*s,s); }
-PK.recLampInit=function(){ const b=el(); if(b) b.addEventListener('click',show); };
+PK.showDevice=showDevice;
+PK.recLampInit=function(){ const b=el(); if(b) b.addEventListener('click',()=>{ const f=first(); if(f) showDevice(f.id); }); };
 })(window.__PK);

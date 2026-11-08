@@ -7,8 +7,12 @@ function ensureCtx(){ if(!PK.Host.ctx){ const AC=window.AudioContext||window.web
 function pkResumeCtx(){ const c=PK.Host.ctx; if(c&&c.state!=='running'&&c.state!=='closed'){ try{ c.resume().catch(()=>{}); }catch(e){} } } PK.pkResumeCtx=pkResumeCtx;
 function pkCtxState(){ const c=PK.Host.ctx; if(!c||c.state==='running'||c.state==='closed'||document.hidden) return; PK.status(PK.pkt('m.audio_staat_uit'),true); pkResumeCtx(); }
 
+// apparaten die maar één keer op de vloer mogen staan (de lamp naast Start hoort bij één opname); een werkruimte die er al meer heeft, laadt gewoon (fixedId)
+const SINGLE=new Set(['nl.patchkamer.recorder']);
 function addDevice(defId,x,y,state,fixedId,version){
-  const def=version?PK.Host.registry.get(PK.Host.key(defId,version)):PK.Host.latest(defId); if(!def) return null; const ctx=ensureCtx();
+  const def=version?PK.Host.registry.get(PK.Host.key(defId,version)):PK.Host.latest(defId); if(!def) return null;
+  if(!fixedId&&SINGLE.has(def.id)){ for(const [k,r] of PK.Host.devices) if(r.def.id===def.id){ PK.select(k); if(PK.showDevice) PK.showDevice(k); PK.status(PK.pkt('m.maar_een',def.name),true); return null; } }
+  const ctx=ensureCtx();
   const id=fixedId||('d'+(PK.Host.nextId++)); if(fixedId){const n=parseInt(fixedId.slice(1)); if(n>=PK.Host.nextId) PK.Host.nextId=n+1;}
   let inst; try{ inst=def.create(ctx,PK.Host); }catch(e){ PK.status(PK.pkt('m.create_faalde_voor')+def.name+': '+e.message,true); return null; }
   inst._id=id; inst._def=def;

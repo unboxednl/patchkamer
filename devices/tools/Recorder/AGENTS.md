@@ -70,3 +70,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 ## Opnamelampje (v1.25)
 
 Bij het begin van een opname meldt het apparaat `host.recording(this, true)` en bij het einde (ook in `destroy`) `host.recording(this, false)`; dat gebeurt in `paint()` via `lampSync()`. De host toont dan een rood lampje met de tijd naast Start en schuift bij een klik het canvas naar dit apparaat (contract §13h). Op een host zonder de functie gebeurt er niets. De tijd telt de host zelf, vanaf de melding.
+
+## Maar één exemplaar
+
+De host laat maar één Recorder tegelijk op de vloer plaatsen (plaatsen, slepen en plakken; `SINGLE` in `js/device-cards.js`). Een werkruimte die er al meer heeft, laadt ze gewoon. Een song heeft dus ook maar één Recorder nodig.

@@ -139,6 +139,7 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
   - **MP3**: kleine bestanden. Er verschijnt een lijst **Bitrate** met 128, 192, 256 of 320 kbps (start 192).
 - **● Opnemen** en **■ Stop** bedienen de opname. Een niveaumeter en de tijd laten zien wat er gebeurt.
 - **Rood lampje naast Start.** Zolang een opname loopt, staat naast de knop **Start** van de pagina een rood lampje dat langzaam knippert, met de tijd (mm:ss), waar de Recorder ook staat op het canvas. Klik op het lampje of de tijd en het hele canvas schuift zodat de Recorder midden in het scherm staat. De Recorder zelf verplaatst niet en de zoom blijft.
+- **Maar één Recorder.** Er past maar één Recorder op de vloer. Plaats of plak je een tweede, dan krijg je een melding en wordt de bestaande gekozen. Een oudere werkruimte die er toch meer heeft, laadt gewoon.
 - **Opnemen met Start/Stop van de klok** laat de opname Start en Stop van de klok volgen.
 - Elke take komt in een lijst met lengte, formaat en grootte, met een knop om te beluisteren (**▶**) en **Bewaar**. Takes blijven in het geheugen tot je de pagina sluit. **Bewaar** geeft je het audiobestand.
 
