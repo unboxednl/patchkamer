@@ -64,6 +64,7 @@ Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal
 | **GELIJK TREKKEN** | Meet 4 seconden en zet de **TRIM** van elk kanaal zo dat alle bronnen op het **DOEL**-niveau binnenkomen. Er moet geluid binnenkomen, dus druk eerst op **Start**. Is er geen signaal, dan meldt de Mixer dat. |
 | **DOORLOPEND** | Houdt de trims langzaam op het doelniveau (hoogstens 3 dB per seconde). |
 | **DOEL** | Het niveau waar **GELIJK TREKKEN** naartoe werkt, −30 tot −6 dB (begin: −18). |
+| **FADERCURVE** | De vorm van alle faders, 1 tot 5 (begin: 3). Bij 1 is de schuif lineair in dB: de onderste helft van de slag is dan bijna stil. Hoger geeft het bovenste deel van de slag meer ruimte, zoals op een echte mengtafel (bij 3 ligt 0 dB op 75% van de slag). Het geldt ook voor een MIDI-schuif die een fader bestuurt. De opgeslagen niveaus blijven in dB, dus bestaande songs klinken hetzelfde. |
 | **BUNDEL IN**, **KANALEN UIT** | De twee bundelpoorten (zie hieronder). |
 | **+ GROEPEN EN MIX** | Voegt de groepen en de totale mix toe aan de bundel **KANALEN UIT**. |
 

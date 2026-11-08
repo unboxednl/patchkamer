@@ -51,9 +51,11 @@ Apart from the click of Metronome, none of these tools adds to your sound: they 
 
 **Map quickly.** You do not have to map each knob separately:
 1. **Learn layout** (once per controller): touch every knob, slider and pad once and click **Done**.
-2. Choose an active device and click **Suggest**: the knobs are put on the controls of that device automatically, the knobs and sliders on sliders and knobs, the pads and buttons on ticks, buttons and lists.
-3. Or click **Quick map** and turn the knobs one after the other: each knob gets the next control.
-4. Then adjust what you want different: pick another control, **Learn** (another knob), **invert**, or the range (min and max).
+2. After learning, the device shows your layout as rows (for example 3 rows of 8 knobs, 1 row of 8 faders and a row of buttons). If a row is wrong, choose **knobs**, **faders**, **buttons** or **pads** for that row. Choose an active device and click **Suggest**: if the device has channel strips (like the Mixer), column 1 of your controller belongs to strip 1, and so on; the faders go to the fader of each strip and the knobs, row by row, to pan, send, EQ and so on. With another device the faders get the level controls and the knobs the rest in the order of the device. Buttons go to ticks and buttons (for example mute and solo); pads keep playing notes.
+3. Want a smarter suggestion? Click **AI suggestion** (visible as soon as you have set an AI provider, key and model in Settings). You confirm the question once per device; only the names and ranges of the controls and your layout go to the provider, no sound, and it may cost money. The AI picks which controls are handiest under your hands; Patchkamer checks every proposal and you remove it with **Undo AI** in one click.
+4. If a slider or knob only sends part of the range (for example only the first millimetres, values 0 to 40), click **Calibrate range** and move each element once all the way from low to high. Patchkamer then scales that range to the whole travel; the range is shown on the row (with × to clear it).
+5. Or click **Quick map** and turn the knobs one after the other: each knob gets the next control.
+6. Then adjust what you want different: pick another control, **Learn** (another knob), **invert**, or the range (min and max).
 
 **Notes.** With **Notes from a keyboard to the active device** on, the notes of a MIDI keyboard (also pitch bend, aftertouch and pedal) go to the active device, over the cable the device lays itself. A knob that is a mapping or a switch button does not send a note.
 

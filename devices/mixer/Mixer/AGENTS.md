@@ -36,6 +36,7 @@ Bovenste niveau:
 | `eq` | EQ-banden | `3` of `5` | 3 |
 | `target` | Doelniveau voor level match (dB) | −30 … −6 | −18 |
 | `auto` | Doorlopend gelijktrekken | boolean | `false` |
+| `curve` | Fadercurve: de schuif loopt over positie 0…1, niveau = −60 + 66 · positie^(1/curve) dB (1 = lineair in dB; 3 = 0 dB op 75%). Het niveau per kanaal (`lvl`) blijft in dB, dus de curve verandert alleen waar de schuif staat | 1 … 5 | 3 |
 | `bundleAll` | Groepen en mix ook in de bundeluitgang | boolean | `false` |
 | `ch` | Lijst met `nCh` kanalen | zie onder | – |
 | `grp` | Lijst met `nGrp` groepen | zie onder | – |

@@ -64,6 +64,7 @@ Double-click a slider to go back to its starting value. Click the number to type
 | **Level match** | Measures for 4 seconds and sets the **Trim** of every channel so that all sources arrive at the **Target** level. It needs sound coming in, so press **Start** first. If there is no signal the Mixer says so. |
 | **Continuous** | Keeps the trims at the target level, slowly (at most 3 dB per second). |
 | **Target** | The level that **Level match** aims for, −30 to −6 dB (start: −18). |
+| **Fader curve** | The shape of all faders, 1 to 5 (start: 3). At 1 the slider is linear in dB: the lower half of the travel is then almost silent. Higher gives the upper part of the travel more room, like on a real console (at 3, 0 dB sits at 75% of the travel). It also applies to a MIDI fader that controls a fader. The stored levels stay in dB, so existing songs sound the same. |
 | **bundle in**, **channels out** | The two bundle ports (see below). |
 | **+ groups and mix** | Adds the groups and the total mix to the **channels out** bundle. |
 

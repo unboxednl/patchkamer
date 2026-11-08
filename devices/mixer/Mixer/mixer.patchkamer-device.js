@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.7.0 — Instelbare fadercurve (Fadercurve, 1 tot 5; standaard 3): de schuif loopt over een positie van 0 tot 1 en het niveau volgt −60 + 66 · positie^(1/curve) dB, zodat het bovenste deel van de slag meer ruimte krijgt (curve 1 is de oude lineaire schuif; 0 dB ligt bij 3 op 75%). Het niveau in de state blijft in dB, dus bestaande songs klinken hetzelfde; de regelaar die een MIDI-schuif bestuurt heeft nu het bereik 0 tot 1 en volgt dezelfde curve.
 // 2.6.1 — Een VU-meter (skin) staat bovenaan de kanaalstrook, boven het kanaalnummer, in plaats van naast de fader. Het apparaat leest daarvoor het attribuut data-face van het meterelement (bar, ledladder of vu, door de host gezet) en zet de meter erheen of terug. Zonder skin, of met balken of ledladders, verandert er niets.
 // 2.6.0 — Niveaumeters van kanalen, groepen en master via host.ui.meter (contract v1.18, additief): de host tekent ze, een skin kan er een VU-meter of ledlader van maken en de lengte en breedte aanpassen. Standaardgezicht, maat, dB-schaal (−60 tot +6) en val zijn gelijk aan de eigen meter van voorheen; een oudere host valt terug op die eigen meter. De 100 ms-bewaker, geluid, getState, presets en poorten ongewijzigd.
 // 2.5.1 — Bij het koppelen aan MIDI heet elke regelaar van een kanaal nu 'Trim - T3', van een groep 'Send - G1' en van de master 'Fader - Master' (voorheen
@@ -27,14 +28,16 @@ const EQ5 = [{ t: 'lowshelf', f: 80, lab: 'low' }, { t: 'peaking', f: 300, q: 1,
 const chDef = () => ({ name: '', src: '', trim: 0, eq3: [0, 0, 0], eq5: [0, 0, 0, 0, 0], send: 0, ret: 0.8, grp: 0, pan: 0, lvl: -6, mute: false, solo: false });
 const grpDef = () => ({ name: '', eq3: [0, 0, 0], eq5: [0, 0, 0, 0, 0], send: 0, ret: 0.8, lvl: 0, mute: false });
 const mstDef = () => ({ eq3: [0, 0, 0], eq5: [0, 0, 0, 0, 0], send: 0, ret: 0.8, lvl: 0 });
-const DEF = { nCh: 8, nGrp: 2, eq: 3, target: -18, auto: false, bundleAll: false };
+const DEF = { nCh: 8, nGrp: 2, eq: 3, target: -18, auto: false, bundleAll: false, curve: 3 };
+// faderkromme: de schuif loopt van 0 tot 1 (positie), het niveau is −60 + 66 · positie^(1/curve) dB; curve 1 is lineair in dB, hoger geeft meer slag aan het bovenste deel (0 dB ligt bij curve 3 op 75%)
+const posToDb = (p, g) => -60 + 66 * Math.pow(Math.max(0, Math.min(1, p)), 1 / g), dbToPos = (d, g) => Math.pow(Math.max(0, Math.min(1, (d + 60) / 66)), g);
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
   nl: { chs: 'Kanalen', grps: 'Groepen', master: 'Master', eq: 'EQ', bands3: '3 banden', bands5: '5 banden',
     low: 'Laag', mid: 'Mid', high: 'Hoog', lmid: 'L-mid', hmid: 'H-mid',
     match: 'Gelijk trekken', matchT: 'meet 4 seconden en zet de trim van elk kanaal zodat alle bronnen op het doelniveau binnenkomen',
-    cont: 'doorlopend', contT: 'houdt de trims langzaam (max 3 dB/s) op het doelniveau', goal: 'Doel', goalA: 'doelniveau',
+    cont: 'doorlopend', contT: 'houdt de trims langzaam (max 3 dB/s) op het doelniveau', goal: 'Doel', goalA: 'doelniveau', curve: 'Fadercurve', curveA: 'fadercurve', curveT: 'Vorm van de faders: 1 is lineair in dB, hoger geeft meer slag aan het bovenste deel (ook voor een MIDI-schuif)', curveAt: n => '0 dB op ' + n + '%',
     bunIn: 'bundel in', bunOut: 'kanalen uit', bunAll: '+ groepen en mix', bunAllT: 'stuur ook de groepen en de totale mix mee in "kanalen uit"',
     chNameT: 'naam van dit kanaal', chNameA: k => `naam kanaal ${k}`, grpNameT: 'naam van deze groep', grpNameA: k => `naam groep ${k}`,
     srcA: k => `bron kanaal ${k}`, srcT: k => 'bron: een kanaal uit een bundel (groene kabel), of alleen de kabel op ' + k, cable: '— kabel', lost: '(niet verbonden)',
@@ -47,7 +50,7 @@ const TXT = {
   en: { chs: 'Channels', grps: 'Groups', master: 'Master', eq: 'EQ', bands3: '3 bands', bands5: '5 bands',
     low: 'Low', mid: 'Mid', high: 'High', lmid: 'Lo-mid', hmid: 'Hi-mid',
     match: 'Level match', matchT: 'measures for 4 seconds and sets the trim of each channel so all sources arrive at the target level',
-    cont: 'continuous', contT: 'slowly (max 3 dB/s) keeps the trims at the target level', goal: 'Target', goalA: 'target level',
+    cont: 'continuous', contT: 'slowly (max 3 dB/s) keeps the trims at the target level', goal: 'Target', goalA: 'target level', curve: 'Fader curve', curveA: 'fader curve', curveT: 'Shape of the faders: 1 is linear in dB, higher gives more travel to the upper part (also for a MIDI fader)', curveAt: n => '0 dB at ' + n + '%',
     bunIn: 'bundle in', bunOut: 'channels out', bunAll: '+ groups and mix', bunAllT: 'also send the groups and the total mix in "channels out"',
     chNameT: 'name of this channel', chNameA: k => `name of channel ${k}`, grpNameT: 'name of this group', grpNameA: k => `name of group ${k}`,
     srcA: k => `source of channel ${k}`, srcT: k => 'source: a channel from a bundle (green cable), or just the cable on ' + k, cable: '— cable', lost: '(not connected)',
@@ -128,7 +131,7 @@ const CSS = `
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.6.1',
+  version: '2.7.0',
   kind: 'mixer',
   modExclude: ['target'],   // doelniveau van 'gelijk trekken': geen audioregelaar maar een meetinstelling
   category: 'mix',
@@ -348,12 +351,13 @@ export default {
       let met, bar, pk, hm = null;
       if (hasHostMeter() && mid) { try { hm = host.ui.meter(f, T.level + ' ' + mid.slice(4).toUpperCase(), { id: mid, group: 'meters', source: an, kind: 'peak', unit: 'linear', range: [-60, 6], hold: true, orientation: 'vertical', length: 130, width: 8 }); } catch (e) { hm = null; } }
       if (hm) { f.classList.add('hm'); hostMeters.push(hm); growStrip(f, hm); watchFace(f, hm); } else { met = el('div', 'mx2-met'); bar = el('i'); pk = el('u'); }
-      i.type = 'range'; i.min = -60; i.max = 6; i.step = 0.5; i.value = get(); i.setAttribute('aria-label', T.fader);
+      i.type = 'range'; i.min = 0; i.max = 1; i.step = 0.001; i.value = dbToPos(get(), S.curve); i.setAttribute('aria-label', T.fader);
       const v = el('div', 'mx2-db', fmtDb(get()));
-      i.oninput = () => { set(+i.value); v.textContent = fmtDb(+i.value); applyAll(); };
-      i.ondblclick = () => { set(0); i.value = 0; v.textContent = fmtDb(0); applyAll(); };
+      const fromPos = () => { const p = +i.value; let d = p <= 0.0005 ? -60 : Math.round(posToDb(p, S.curve) * 10) / 10; if (Math.abs(d) < 0.3) d = 0; return d; };
+      i.oninput = () => { const d = fromPos(); set(d); v.textContent = fmtDb(d); applyAll(); };
+      i.ondblclick = () => { set(0); i.value = dbToPos(0, S.curve); v.textContent = fmtDb(0); applyAll(); };
       if (hm) { f.insertBefore(i, f.firstChild); parent.append(f, v); } else { met.append(bar, pk); f.append(i, met); parent.append(f, v); ui.meters.push({ an, bar, pk, hold: 0 }); }
-      ui.refreshers.push(() => { i.value = get(); v.textContent = fmtDb(get()); });
+      ui.refreshers.push(() => { i.value = dbToPos(get(), S.curve); v.textContent = fmtDb(get()); });
     }
     function jack(parent, id, dir, label, big) { if (!host.ui || !host.ui.jack) return; const j = host.ui.jack(self, parent, id, dir, label); if (big) j.classList.add('big'); return j; }
     function eqBlock(s, c) { const eqb = el('div', 'mx2-eq'); s.appendChild(eqb); const arr = S.eq === 5 ? 'eq5' : 'eq3'; (S.eq === 5 ? EQ5 : EQ3).forEach((b, q) => mini(eqb, T[b.lab], [-15, 15, 0.5], () => c[arr][q], v => c[arr][q] = v, fmtDb, 0)); }
@@ -376,6 +380,8 @@ export default {
       { const l = el('label'), c = el('input'); c.type = 'checkbox'; c.checked = S.auto; c.onchange = () => { S.auto = c.checked; chans.forEach(n => n.ema = null); }; l.append(c, T.cont); l.title = T.contT; cfg.appendChild(l); }
       { const l = el('label'), i = el('input'), o = el('b', null, S.target + ' dB'); i.type = 'range'; i.min = -30; i.max = -6; i.step = 1; i.value = S.target; i.setAttribute('aria-label', T.goalA);
         i.oninput = () => { S.target = +i.value; o.textContent = S.target + ' dB'; }; o.style.fontWeight = '400'; o.style.color = 'var(--fg)'; l.append(T.goal, i, o); cfg.appendChild(l); }
+      { const l = el('label'), i = el('input'), o = el('b', null, T.curveAt(Math.round(dbToPos(0, S.curve) * 100))); i.type = 'range'; i.min = 1; i.max = 5; i.step = 0.1; i.value = S.curve; i.setAttribute('aria-label', T.curveA); l.title = T.curveT;
+        i.oninput = () => { S.curve = +i.value; o.textContent = T.curveAt(Math.round(dbToPos(0, S.curve) * 100)); refresh(); }; o.style.fontWeight = '400'; o.style.color = 'var(--fg)'; l.append(T.curve, i, o); cfg.appendChild(l); }
       ui.msg = el('span', 'msg', msg); cfg.appendChild(ui.msg);
       cfg.appendChild(el('span', 'sep'));
       { const b = el('div', 'mx2-bun'); jack(b, 'multi', 'in', T.bunIn); jack(b, 'post', 'out', T.bunOut); jack(b, 'mod', 'in', 'Mod'); cfg.appendChild(b);
@@ -459,7 +465,7 @@ export default {
       getPreset() { const s = self.getState(); s.ch.forEach(c => { delete c.src; }); return s; },
       setPreset(p) { p = p && typeof p === 'object' ? JSON.parse(JSON.stringify(p)) : {}; p.ch = Array.from({ length: MAXCH }, (_, i) => ({ ...((Array.isArray(p.ch) && p.ch[i] && typeof p.ch[i] === 'object') ? p.ch[i] : chDef()), src: S.ch[i].src })); self.setState(p); },
       getState() {
-        return { v: 2, nCh: S.nCh, nGrp: S.nGrp, eq: S.eq, target: S.target, auto: S.auto, bundleAll: S.bundleAll,
+        return { v: 2, nCh: S.nCh, nGrp: S.nGrp, eq: S.eq, target: S.target, auto: S.auto, bundleAll: S.bundleAll, curve: S.curve,
           ch: S.ch.slice(0, S.nCh).map(c => ({ ...c, eq3: c.eq3.slice(), eq5: c.eq5.slice() })), grp: S.grp.slice(0, S.nGrp).map(c => ({ ...c, eq3: c.eq3.slice(), eq5: c.eq5.slice() })), master: { ...S.master, eq3: S.master.eq3.slice(), eq5: S.master.eq5.slice() } };
       },
       setState(s) {
@@ -469,7 +475,7 @@ export default {
           s = { nCh: Math.max(4, s.ch.length), nGrp: 0, ch: s.ch.map(c => { c = c || {}; return { lvl: toDb(c.lvl ?? 0.8), pan: c.pan ?? 0, mute: !!c.mute, solo: !!c.solo }; }), master: { lvl: toDb(s.master ?? 1) } };
         }
         const eqWas = S.eq;
-        S.eq = s.eq === 5 ? 5 : 3; S.target = num(s.target, -30, -6, DEF.target); S.auto = bool(s.auto, DEF.auto); S.bundleAll = bool(s.bundleAll, DEF.bundleAll);
+        S.eq = s.eq === 5 ? 5 : 3; S.target = num(s.target, -30, -6, DEF.target); S.auto = bool(s.auto, DEF.auto); S.bundleAll = bool(s.bundleAll, DEF.bundleAll); S.curve = num(s.curve, 1, 5, DEF.curve);
         S.ch = Array.from({ length: MAXCH }, (_, i) => cleanCh(Array.isArray(s.ch) ? s.ch[i] : null));
         S.grp = Array.from({ length: MAXGRP }, (_, i) => cleanGrp(Array.isArray(s.grp) ? s.grp[i] : null));
         S.master = cleanMst(s.master);

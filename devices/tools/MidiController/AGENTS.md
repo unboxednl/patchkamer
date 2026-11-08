@@ -12,7 +12,7 @@ Eén apparaat voor alle MIDI-controllers en -keyboards. Het opent alle aangeslot
 | `id` | `nl.patchkamer.midicontroller`. Verander die nooit: daaraan hangen presets en songs van gebruikers |
 | Soort | `utility` (categorie `tool`); krijgt dus **presets** en nooit tunes |
 | Poorten | geen vaste poorten; per toegevoegd apparaat met een eventingang één eventuitgang `o_<apparaat-id>` (noten van het keyboard naar het actieve apparaat), gezet met `host.setPorts` en gekoppeld met `host.connect` |
-| Contract | v1.28 (`host.show`, optioneel gebruikt) |
+| Contract | v1.29 (`host.show` en `host.ai`, beide optioneel gebruikt) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Hoe het werkt
@@ -23,7 +23,10 @@ Eén apparaat voor alle MIDI-controllers en -keyboards. Het opent alle aangeslot
 - **Koppelingen.** Alleen de koppelingen van het **actieve** apparaat reageren (`maps[]`: `src`, `ctl` (de `key` van `host.controls`), `label`, `min`, `max`, `inv`, `toggle`). De waarde gaat via `host.setControl`; een vinkje volgt of wisselt (`toggle`), een knop reageert op de flank. Een `ctl` die niet meer bestaat wordt op dezelfde naam zonder volgnummer gezocht.
 - **Snel koppelen.**
   - `Leer indeling` (`surface[]`: bron + `kind` `knob`, `button` of `pad`): de gebruiker raakt elk element één keer aan; een CC met meer dan twee verschillende waarden is een knop of schuif, anders een knop (`button`), een noot is een `pad`.
-  - `Voorstel`: zet de ongekoppelde knoppen in volgorde op de ongebruikte bereikregelaars (`type: 'range'`) van het actieve apparaat en de knoppen/pads op de vinkjes, knoppen en keuzelijsten.
+  - De indeling (`surface`) wordt als rijen getoond: opeenvolgende CC's of noten (hoogstens 8). Per rij kies je draaiknoppen, schuiven, knoppen of pads (`kind`: `knob`, `fader`, `button`, `pad`). Na `Leer indeling` is bij twee of meer CC-rijen van minstens 4 de rij met de hoogste nummers een rij schuiven (gok; wijzigbaar). Een noterij is standaard pads en kun je op knoppen zetten.
+  - `Kalibreer bereik`: tijdens dit leren onthoudt het apparaat per schuif of draaiknop (CC) het laagste en hoogste geziene bereik in `surface` (`lo`, `hi`, 0…127). Is het bereik smaller dan 0…127 (minstens 4 breed), dan wordt het bij het ontvangen naar 0…1 geschaald. Zonder kalibratie geen schaling (een korte aanraking bij `Leer indeling` telt niet mee). De rij toont het bereik; × wist het.
+  - `AI-voorstel` (alleen zichtbaar als `host.ai` bestaat): na een klik en een bevestiging van de gebruiker (eerste keer per apparaat) gaat een vraag naar de AI-aanbieder uit Instellingen met de regelaars van het actieve apparaat (index, naam, type, bereik) en de rijen van de indeling (bronindex, naam). De AI antwoordt met JSON `{"maps":[{"s":bron,"c":regelaar,"inv":false}]}`. Elk paar wordt gecontroleerd (bestaande index, bron en regelaar nog vrij, draaiknop of schuif alleen op een bereikregelaar, knop alleen op een vinkje of knop, nooit een pad) en daarna toegevoegd; `AI ongedaan` haalt ze met één klik weg. Er gaat geen geluid mee.
+  - `Voorstel`: heeft het apparaat kanaalstroken (regelaars met een achtervoegsel ` - T1`, zoals de Mixer), dan is kolom i van de controller strook i en rij r de r-de regelaar van de strook (schuiven op de fader, draaiknoppen op pan, send, hoog, mid, laag, trim, return; knoppen op mute en solo). Anders krijgen de schuiven de niveauregelaars en de draaiknoppen de rest in de volgorde van het apparaat, en de knoppen de vinkjes en knoppen. Pads worden nooit gekoppeld (die spelen noten).
   - `Snel koppelen`: elke nieuwe knop die de gebruiker aanraakt, krijgt de volgende vrije regelaar.
   - `Leer` per rij en `Leer knop` per apparaat zetten één bron.
 - **Noten.** Met `notes` aan gaan noten (en pitch bend, kanaaldruk en CC's die geen koppeling zijn) van elke ingang naar het actieve apparaat, als `note` met `held: true` en `noteoff` (zoals Keys deed), `cc` `bend`, `pressure`, `vibrato`, `pedal` of `ccN`.

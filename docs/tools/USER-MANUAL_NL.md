@@ -51,9 +51,11 @@ Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze 
 
 **Snel koppelen.** Je hoeft niet elke knop los te koppelen:
 1. **Leer indeling** (eenmalig per controller): raak elke knop, schuif en pad één keer aan en klik op **Klaar**.
-2. Kies een actief apparaat en klik op **Voorstel**: de knoppen worden automatisch op de regelaars van dat apparaat gezet, de draaiknoppen en schuiven op schuiven en draaiknoppen, de pads en knoppen op vinkjes, knoppen en keuzelijsten.
-3. Of klik op **Snel koppelen** en draai de knoppen na elkaar: elke knop krijgt de volgende regelaar.
-4. Pas daarna aan wat je anders wilt: kies een andere regelaar, **Leer** (een andere knop), **omkeren**, of het bereik (min en max).
+2. Na het leren toont het apparaat je indeling als rijen (bijvoorbeeld 3 rijen van 8 draaiknoppen, 1 rij van 8 schuiven en een rij knoppen). Klopt een rij niet, kies dan per rij **draaiknoppen**, **schuiven**, **knoppen** of **pads**. Kies een actief apparaat en klik op **Voorstel**: heeft het apparaat kanaalstroken (zoals de Mixer), dan hoort kolom 1 van je controller bij strook 1, en zo verder; de schuiven gaan op de fader van elke strook en de draaiknoppen per rij op pan, send, EQ enzovoort. Bij een ander apparaat krijgen de schuiven de niveauregelaars en de draaiknoppen de rest in de volgorde van het apparaat. Knoppen gaan op vinkjes en knoppen (bijvoorbeeld mute en solo); pads blijven noten spelen.
+3. Liever een slimmer voorstel? Klik op **AI-voorstel** (zichtbaar zodra je bij Instellingen een AI-aanbieder, sleutel en model hebt ingesteld). Je bevestigt de vraag één keer per apparaat; er gaan alleen de namen en bereiken van de regelaars en je indeling naar de aanbieder, geen geluid, en het kan geld kosten. De AI kiest welke regelaars het handigst onder je handen liggen; Patchkamer controleert elk voorstel en je haalt het met **AI ongedaan** in één klik weg.
+4. Stuurt een schuif of draaiknop maar een deel van het bereik (bijvoorbeeld alleen de eerste millimeters, waarden 0 tot 40), klik dan op **Kalibreer bereik** en beweeg elk element één keer helemaal van laag naar hoog. Patchkamer schaalt dat bereik daarna naar de hele slag; het bereik staat bij de rij (met × om het te wissen).
+5. Of klik op **Snel koppelen** en draai de knoppen na elkaar: elke knop krijgt de volgende regelaar.
+6. Pas daarna aan wat je anders wilt: kies een andere regelaar, **Leer** (een andere knop), **omkeren**, of het bereik (min en max).
 
 **Noten.** Met **Noten van een keyboard naar het actieve apparaat** aan gaan de noten van een MIDI-keyboard (ook pitch bend, aanslagdruk en pedaal) naar het actieve apparaat, via de kabel die het apparaat zelf legt. Een knop die een koppeling of schakelknop is, stuurt geen noot.
 
