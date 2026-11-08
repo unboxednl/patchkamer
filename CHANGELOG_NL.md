@@ -4,15 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.3.1 (2026-11-08)
+
+### Gewijzigd
+- **Startscherm verdwijnt subtieler.** Als het laden klaar is, faden eerst de kabels weg en daarna de kaart en de achtergrond, in ruim een seconde, met een heel lichte beweging omhoog. Klik je het zelf weg, dan gaat het sneller.
+
 ## 0.3.0 (2026-11-08)
 
 ### Veranderd
 - **Skin-editor als zwevend venster met het origineel naast de nieuwe skin.** De editor is niet meer fullscreen maar een venster dat je versleept aan de titelbalk en vergroot aan de hoek (plaats en maat worden onthouden; op een smal scherm vult het venster het scherm, op een breed scherm kan dat met een knop). Drie kolommen: links de structuurboom (skin, verschijningen, panelen, elementen; een klik in het voorbeeld klapt de bijbehorende knoop open en geeft hem focus), in het midden het originele apparaat naast de live nieuwe skin, rechts de eigenschappen. Sleep een regelaar, schuif, meter, pad of schermpje uit het origineel naar een paneel van de nieuwe skin, herschik erbinnen, voeg panelen toe, hernoem, verplaats en verwijder ze, en sleep aan de rechterrand of hoek van de nieuwe kaart om de kaartbreedte te zetten (`design.size.width` van de gekozen verschijning). Een element krijgt vanzelf een eigen regel als je een eigenschap wijzigt. Bij een geselecteerd schermpje bladeren pijltjes ernaast in het voorbeeld door de opties, zonder de werkruimte aan te raken. Geen wijziging in het skincontract (0.7); bestaande skins openen en slaan ongewijzigd op.
-
-## 0.2.4 (2026-11-08)
-
-### Gewijzigd
-- **Startscherm verdwijnt subtieler.** Als het laden klaar is, faden eerst de kabels weg en daarna de kaart en de achtergrond, in ruim een seconde, met een heel lichte beweging omhoog. Klik je het zelf weg, dan gaat het sneller.
 
 ## 0.2.3 (2026-11-08)
 
