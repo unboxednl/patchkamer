@@ -46,5 +46,6 @@ All notable changes to Patchkamer (the host and the desktop app) per version. Th
 
 ### Fixed
 - MIDI now connects in the app.
+- **Grey block in the corner of cards and the library window.** The resize handle in the bottom-right corner sat in the top-left corner as a dark square, because the skin editor used the same style name. The skin editor now has its own.
 - The ASIO panel is readable in the light and retro looks.
 - In the app, the message "another version on GitHub" no longer appears by mistake.

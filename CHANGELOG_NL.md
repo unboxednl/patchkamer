@@ -46,5 +46,6 @@ Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versi
 
 ### Opgelost
 - MIDI verbindt nu in de app.
+- **Grijs blokje in de hoek van kaarten en het bibliotheekvenster.** De sleepgreep voor het formaat rechtsonder stond als donker vierkantje linksboven, omdat de skin-editor dezelfde stijlnaam gebruikte. De skin-editor heeft nu een eigen naam.
 - Het ASIO-paneel is leesbaar in de lichte en retro-uitstraling.
 - In de app verschijnt de melding "andere versie op GitHub" niet meer ten onrechte.
