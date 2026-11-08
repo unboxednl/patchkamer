@@ -345,6 +345,19 @@ On every screen the top bar keeps only what you need while playing: the logo, th
 
 With **Views** at the bottom right you save the part of the floor you are looking at, under a name, and jump back to it later (smoothly, unless your computer asks for less motion). **Shift+1** to **Shift+9** saves a view, **1** to **9** jumps to it (not while you type in a text field). You can rename, overwrite and delete in the list. Views belong to the workspace and go along in a file or song.
 
+### Canvas sections and jump points
+
+Click with the **right mouse button** on an empty spot of the floor. Next to **Paste device** you find two choices.
+
+- **Create canvas…** draws a coloured area with nicely rounded corners, where you clicked. You give a **name**, a **colour**, the **opacity** of the fill (0 is fully transparent) and a **line style** (solid, dashed, dotted or no line). The name sits at the top left in a large font, so you can still read it when zoomed far out. The area lies above the canvas and below the devices.
+  - **Devices on a canvas.** Drop a device with its middle on a canvas and it belongs to it. If it does not fit, the canvas grows with it, leaving some room around. Drop it outside all canvases and it no longer belongs. A canvas cannot shrink below what its devices need.
+  - **Moving.** Drag the canvas by its title: all devices on it move along, as if they were stuck on it.
+  - **Size.** Drag the right edge, the bottom edge or the bottom right corner.
+  - **Edit, minimise, delete.** Double-click the title or choose **⋯** (or right-click the title) to change name, colour, opacity and line, or to delete the canvas; the devices stay. **–** minimises the canvas to just its title; the devices on it disappear while it is like that, and so do their cables. This does not happen by itself when you zoom out.
+- **Create jump point…** puts a marker on the floor with a **name** and a **number from 1 to 9**. Press **Alt+number** (or click the marker) and the screen jumps to that point, at the zoom you had when you made it. Drag the marker to move it; right-click to edit or delete it. If you pick a number already in use, it replaces that jump point.
+
+Canvases and jump points are saved with the workspace. They belong to the wide layout; in the compact layout they are hidden. They are something else than the camera views above (Shift+digit and digit): those you save in the **Views** menu and they are not on the floor.
+
 ### Compact layout per screen
 
 A workspace can have a **compact layout** next to the wide one. With **Screen** (☰ → View) you choose **Auto** (compact under 1100 pixels wide), **Wide** or **Compact**; the choice applies to this browser. **Fit to this screen** makes a first compact layout: the devices in signal order in columns that fit the screen, devices without cables as icons, and then everything is brought into view. Your wide layout is kept: choose **Wide** to go back. Moving and resizing apply to the layout that is on. Both layouts are saved.
@@ -398,6 +411,7 @@ The features that speed up your workflow the most, in one list:
 | **F1** to **F10** | Switch to workspace 1 to 10 (tab bar) |
 | **Alt+F** | Open or close the focus view |
 | **Alt+B** | Show or hide the library |
+| **Alt+1** to **Alt+9** | Jump to the jump point with that number |
 | **+** / **−** / **0** | Zoom in / zoom out / reset zoom |
 | **Shift+1** to **Shift+9** / **1** to **9** | Save a camera view / jump to it |
 | **← →** | In the focus view "One at a time": previous or next device |

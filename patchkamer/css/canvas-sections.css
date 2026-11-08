@@ -1,0 +1,26 @@
+/* css/canvas-sections.css — canvassecties en jump points (js/canvas-sections.js) */
+.seclayer{position:absolute;left:0;top:0;width:0;height:0;z-index:0}
+.seclayer[hidden]{display:none}
+.sec{position:absolute;box-sizing:border-box;border-radius:22px;pointer-events:none;background:color-mix(in srgb,var(--c) calc(var(--a)*100%),transparent);border:3px solid color-mix(in srgb,var(--c) 85%,transparent)}
+.sec.line-dashed{border-style:dashed}.sec.line-dotted{border-style:dotted}.sec.line-none{border-color:transparent}
+.sec.target{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 70%,transparent),0 0 24px color-mix(in srgb,var(--c) 60%,transparent)}
+.sec.min{border-radius:16px;background:color-mix(in srgb,var(--c) calc(max(var(--a),.22)*100%),var(--card))}
+.sechd{pointer-events:auto;display:flex;align-items:center;gap:8px;height:54px;padding:0 14px 0 20px;cursor:grab;user-select:none;touch-action:none;font-family:var(--disp);font-size:32px;font-weight:700;letter-spacing:.05em;color:var(--fg)}
+.sec.drag .sechd{cursor:grabbing}
+.secnm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px var(--shadow)}
+.sechd button{flex:none;min-width:28px;padding:1px 7px;font-size:15px;opacity:.55}
+.sec:hover .sechd button,.sechd button:focus-visible{opacity:1}
+.secrz{position:absolute;pointer-events:auto;touch-action:none}
+.secrz.e{top:54px;right:-6px;bottom:20px;width:12px;cursor:ew-resize}
+.secrz.s{left:20px;right:20px;bottom:-6px;height:12px;cursor:ns-resize}
+.secrz.se{right:-4px;bottom:-4px;width:22px;height:22px;cursor:nwse-resize;border-right:3px solid color-mix(in srgb,var(--c) 85%,transparent);border-bottom:3px solid color-mix(in srgb,var(--c) 85%,transparent);border-radius:0 0 22px 0;opacity:.7}
+.sec.min .secrz{display:none}
+.jp{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:8px;padding:4px 12px 4px 5px;border-radius:999px;background:var(--card);border:2px solid var(--sel);color:var(--fg);box-shadow:0 2px 6px var(--shadow);cursor:pointer;user-select:none;touch-action:none;white-space:nowrap;font-size:20px}
+.jp b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sel);color:#fff;font-family:var(--mono);font-size:18px}
+.jp span{font-family:var(--disp);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.jp:hover,.jp:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--sel) 45%,transparent),0 2px 6px var(--shadow);outline:none}
+.card.secmin{display:none!important}
+.scform label{display:grid;gap:4px;font-size:12px}
+.scform label>span{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
+.scform input[type=color]{width:64px;height:30px;padding:0;border:1px solid var(--line);background:transparent}
+.scttl{font-family:var(--disp);font-size:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}

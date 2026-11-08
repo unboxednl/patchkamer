@@ -39,7 +39,7 @@ function addDevice(defId,x,y,state,fixedId,version){
     let st=null;
     hd.addEventListener('pointerdown',e=>{ e.stopPropagation(); e.preventDefault(); select(id); st={cx:e.clientX,cy:e.clientY,w:el.offsetWidth,h:el.offsetHeight}; hd.setPointerCapture(e.pointerId); el.classList.add('resizing'); showDim(rec); });
     hd.addEventListener('pointermove',e=>{ if(!st) return; const k=PK.Host.view.scale; setSize(id, dir!=='s'?st.w+(e.clientX-st.cx)/k:undefined, dir!=='e'?st.h+(e.clientY-st.cy)/k:undefined); showDim(rec); });
-    const end=()=>{ st=null; el.classList.remove('resizing'); }; hd.addEventListener('pointerup',end); hd.addEventListener('pointercancel',end);
+    const end=()=>{ const was=!!st; st=null; el.classList.remove('resizing'); if(was&&PK.secDrop) PK.secDrop(id); }; hd.addEventListener('pointerup',end); hd.addEventListener('pointercancel',end);
     hd.addEventListener('dblclick',e=>{ e.stopPropagation(); setSize(id, dir!=='s'?null:undefined, dir!=='e'?null:undefined); });
   });
   try{ inst.mount&&inst.mount(ui); PK.ctlSnapshot(rec,ui); if(state&&inst.setState) inst.setState(state); }catch(e){ PK.status(PK.pkt('m.mount_faalde_voor')+def.name+': '+e.message,true); }
@@ -48,8 +48,8 @@ function addDevice(defId,x,y,state,fixedId,version){
   // drag
   let drag=null; [bar,ic].forEach(h=>{   // the title bar, or the whole icon when minimised, moves the device
     h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select,.dmbtn')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
-    h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/PK.Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/PK.Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; PK.setDrop(PK.cableThroughRect({x:rec.x,y:rec.y,w:el.offsetWidth,h:el.offsetHeight},rec.ports,id,k=>!PK.hasCable(id,k))); PK.drawCables();});
-    h.addEventListener('pointerup',()=>{ const c=drag&&PK.dropCable; drag=null; if(c){ PK.setDrop(null); PK.insertOnCable(id,c); } else PK.setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; PK.setDrop(null);}); });
+    h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/PK.Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/PK.Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; PK.setDrop(PK.cableThroughRect({x:rec.x,y:rec.y,w:el.offsetWidth,h:el.offsetHeight},rec.ports,id,k=>!PK.hasCable(id,k))); if(PK.secHover) PK.secHover(id); PK.drawCables();});
+    h.addEventListener('pointerup',()=>{ const c=drag&&PK.dropCable, was=!!drag; drag=null; if(was&&PK.secDrop) PK.secDrop(id); if(c){ PK.setDrop(null); PK.insertOnCable(id,c); } else PK.setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; PK.setDrop(null); if(PK.secHover) PK.secHover(null);}); });
   el.addEventListener('pointerdown',e=>{select(id); e.stopPropagation();});
   new ResizeObserver(en=>{ for(const x of en){ rec._w=el.offsetWidth; rec._h=el.offsetHeight; } PK.drawCables(); }).observe(el);
   PK.drawCables(); peersChanged(); return id;
@@ -84,7 +84,7 @@ function makeRoom(startId){
   if(moved.size){ const t0=performance.now(); const tick=()=>{ PK.drawCables(); if(performance.now()-t0<450) requestAnimationFrame(tick); else moved.forEach(k=>{const r=PK.Host.devices.get(k); r&&r.el.classList.remove('moving');}); }; requestAnimationFrame(tick); }
   return moved.size;
 }
-function afterAdd(nid){ const r=PK.Host.devices.get(nid); if(!r) return; toFront(r); const n=makeRoom(nid); select(nid);
+function afterAdd(nid){ const r=PK.Host.devices.get(nid); if(!r) return; toFront(r); const n=makeRoom(nid); select(nid); if(PK.secDrop) PK.secDrop(nid);
   r.el.classList.remove('fresh'); void r.el.offsetWidth; r.el.classList.add('fresh'); setTimeout(()=>r.el.classList.remove('fresh'),1700); PK.drawCables();
   PK.status(PK.pkt('m.geplaatst',r.def.name)+(n?PK.pktp('m.apparaten_opgeschoven_apparaat_opgeschoven',n>1,n):'')); } PK.afterAdd=afterAdd;
 function modApply(tid){ const r=PK.Host.devices.get(tid); if(!r||typeof r.inst.modulate!=='function') return; const m=PK.Host._modOff.get(tid), sum={};

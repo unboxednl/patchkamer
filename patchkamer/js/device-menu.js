@@ -46,6 +46,7 @@ async function open(id,anchor,btn,floorAt){
   if(r){ const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=r.def.name; m.appendChild(ttl);
     item(PK.pkt('m.dm_kopieer'),r.inst&&typeof r.inst.clipInfo==='function'?'⇧Ctrl C':'Ctrl C',()=>{ PK.select(id); copyDevice(id); }); }
   item(PK.pkt('m.dm_plak'),'Ctrl V',()=>{ pasteDevice(floorAt||null); },!mem,mem?PK.pkt('m.dm_plak_titel',mem.name):PK.pkt('m.dm_niets_gekopieerd'));
+  if(!r&&floorAt&&PK.secCreate){ item(PK.pkt('m.sc_maken'),'',()=>PK.secCreate(floorAt)); item(PK.pkt('m.jp_maken'),'',()=>PK.jumpCreate(floorAt)); }
   if(r&&r.skEl&&!r.skEl.hidden){ const h=document.createElement('div'); h.className='sec'; h.textContent=PK.pkt('m.sk_skin'); m.appendChild(h); m.appendChild(r.skEl); }
   document.body.appendChild(m);
   const b=anchor.getBoundingClientRect?anchor.getBoundingClientRect():anchor, W=m.offsetWidth, H=m.offsetHeight;
