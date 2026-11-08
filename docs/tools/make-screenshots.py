@@ -126,7 +126,14 @@ def shots(browser, lang, OUT, LIB, BASE):
     pg.locator('.card').first.screenshot(path=OUT + '/05-keys.png'); done(pg)
     pg = newpage(nopicker=True); load_lib(pg); lib_tab(pg, 'skins')   # de skin-editor, geopend vanaf de tab Skins met Duofone
     pg.evaluate("(()=>{ const s=[...document.querySelectorAll('#skPanel select')].find(x=>[...x.options].some(o=>o.value==='nl.patchkamer.duofone')); s.value='nl.patchkamer.duofone'; s.dispatchEvent(new Event('change',{bubbles:true})); })()")
-    pg.click('#skPanel [data-act=skEdOpen]'); pg.wait_for_timeout(2000); pg.screenshot(path=OUT + '/13-skin-editor.png'); done(pg)
+    pg.click('#skPanel [data-act=skEdOpen]'); pg.wait_for_timeout(2000)
+    def sk_center(sel):
+        pg.locator(sel).first.scroll_into_view_if_needed(); bx = pg.locator(sel).first.bounding_box(); return bx['x'] + bx['width'] / 2, bx['y'] + bx['height'] / 2
+    for i, pid in enumerate(('cutoff', 'resonance')):   # sleep twee regelaars uit het origineel naar de nieuwe skin
+        o = sk_center('.se-pane.orig [data-pk-id="%s"]' % pid); nb = pg.locator('.se-pane.new .se-fit').bounding_box()
+        pg.mouse.move(*o); pg.mouse.down(); pg.mouse.move(nb['x'] + nb['width'] / 2, nb['y'] + (nb['height'] / 2 if i == 0 else 40), steps=15); pg.mouse.up(); pg.wait_for_timeout(500)
+        if i == 0: pg.locator('.se-pane.new [data-pk-pn]').first.scroll_into_view_if_needed()
+    pg.locator('#skEd .se-trow[data-key="c:*:resonance"]').click(); pg.wait_for_timeout(600); pg.screenshot(path=OUT + '/13-skin-editor.png'); done(pg)
     # skins uit skins/library op een echt apparaat: panelen, pads, schermpje en meters (14-17), daarna twee apparaten zonder skin (18-19)
     for dev, skinf, name in (('Duofone', 'nl.patchkamer.duofone/example-panels', '14-skin-panels'), ('Drum Machine', 'nl.patchkamer.drummachine/example-round-pads', '15-skin-pads'),
                              ('Drum Machine', 'nl.patchkamer.drummachine/example-preset-screen', '16-skin-display'), ('Mixer', 'nl.patchkamer.mixer/example-vu', '17-skin-meters')):

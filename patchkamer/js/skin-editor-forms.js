@@ -19,9 +19,9 @@ const regLabel=x=>x.id+(x.label&&x.label!==x.id?' · '+x.label:'');
 const isDisp=x=>x.role==='display'||x.role==='select';
 // ---- skin en verschijningen ----
 function formSkin(box){ const m=E.m; head(box,pkt('m.se_skin'),pkt('m.se_skin_uitleg'));
-  F.txt(box,{k:'name',label:pkt('m.dz_naam'),max:60,get:()=>m.name,set:v=>{ E.m.name=v; }}); F.txt(box,{k:'author',label:pkt('m.dz_auteur'),max:60,get:()=>m.author,set:v=>{ E.m.author=v; }});
+  F.txt(box,{tree:false,k:'name',label:pkt('m.dz_naam'),max:60,get:()=>m.name,set:v=>{ E.m.name=v; }}); F.txt(box,{tree:false,k:'author',label:pkt('m.dz_auteur'),max:60,get:()=>m.author,set:v=>{ E.m.author=v; }});
   if(!m.author.trim()) box.appendChild(el('div','dz-hint',pkt('m.dz_auteur_leeg')));
-  F.txt(box,{k:'desc',label:pkt('m.se_omschrijving'),max:300,get:()=>m.description,set:v=>{ E.m.description=v; }});
+  F.txt(box,{tree:false,k:'desc',label:pkt('m.se_omschrijving'),max:300,get:()=>m.description,set:v=>{ E.m.description=v; }});
   F.sel(box,{k:'license',label:pkt('m.se_licentie'),blank:false,get:()=>m.license,set:v=>{ if(v) E.m.license=v; },opts:['CC0-1.0','CC-BY-4.0','CC-BY-SA-4.0','MIT','AGPL-3.0-or-later'].map(x=>[x,x])});
   F.sel(box,{k:'dflt',label:pkt('m.se_standaardvorm'),blank:false,get:()=>m.dflt,set:v=>{ if(v) E.m.dflt=v; },opts:m.aps.map(a=>[a.id,a.name])});
   box.appendChild(el('div','dz-hint',pkt('m.se_id_hint',m.dev.toLowerCase()+'.'+(M.slug(m.name)||'custom')))); }
@@ -45,6 +45,7 @@ function formAp(box,ap){ const a=E.m.aps.find(x=>x.id===ap); if(ap==='*'||!a){ h
   if(!a.when) box.appendChild(el('div','dz-hint',pkt('m.sk_alleen_handmatig')));
   box.appendChild(el('h4',null,pkt('m.dz_breedte')));
   F.num(box,{k:'size',label:pkt('m.dz_breedte'),min:200,max:1600,step:10,get:()=>(read(ap).size||{}).width,set:v=>{ if(v>=200&&v<=1600) layer(ap).size={width:v}; else if(layer(ap)) delete layer(ap).size; }}); box.appendChild(el('div','dz-hint',pkt('m.dz_breedte_hint')));
+  { const bb=el('div','se-bar'); btn(bb,pkt('m.se_gebruik_breedte',E.view.w),()=>E.edit(()=>{ const w=E.view.w; if(w<200||w>1600) return false; layer(ap).size={width:w}; }),{fk:'usew',dis:E.view.w<200||E.view.w>1600}); box.appendChild(bb); box.appendChild(el('div','dz-hint',pkt('m.se_breedte_sleep_hint'))); }
   box.appendChild(el('div','dz-hint',a.css?pkt('m.se_css_aanwezig',a.css.length):pkt('m.se_css_geen'))); }
 // ---- kleuren, poorten, haptiek ----
 function formColors(box,ap){ const d=()=>layer(ap), rd=()=>read(ap), base=()=>E.m.design; head(box,pkt('m.dz_kleuren'),apName(ap));
@@ -95,8 +96,14 @@ function ruleBlocks(box,kind,reg,ap,mkSpecs,own){ const d=read(ap), arr=d[kind]|
   matching.forEach(({ru,i})=>{ const b=el('div','se-rule'), h=el('div','se-rhead'); h.appendChild(el('span','dz-rn',pkt('m.se_regel_n',i+1)+' · '+ru.match+(ru.match===own?' ★':'')));
     btn(h,'↑',()=>E.edit(()=>{ const a=layer(ap)[kind]; [a[i-1],a[i]]=[a[i],a[i-1]]; }),{title:pkt('m.dz_r_omhoog'),dis:i===0}); btn(h,'↓',()=>E.edit(()=>{ const a=layer(ap)[kind]; [a[i+1],a[i]]=[a[i],a[i+1]]; }),{title:pkt('m.dz_r_omlaag'),dis:i===arr.length-1});
     btn(h,'× '+pkt('m.se_regel_weg'),()=>E.edit(()=>{ layer(ap)[kind].splice(i,1); }),{title:pkt('m.se_regel_weg'),fk:'rmrule'+i}); b.appendChild(h); F.specs(b,ru,mkSpecs(ru),pkt('m.dz_r_n',i+1)); box.appendChild(b); }); }
+// een regel voor alleen dit element, zonder dat de gebruiker regels hoeft te kennen: toont wat nu geldt (alle passende regels samen) en schrijft elke wijziging in de eigen regel van het element (die wordt zo nodig aangemaakt)
+function ruleSimple(box,kind,reg,ap,mkSpecs,own){ const rd=()=>{ const o={}; chainOf(kind,reg,ap).forEach(c=>Object.keys(c.ru).forEach(k=>{ if(k!=='match') o[k]=c.ru[k]; })); return o; };
+  const mine=()=>(read(ap)[kind]||[]).find(r=>r.match===own);
+  const wr=()=>{ const dd=layer(ap), a=dd[kind]=dd[kind]||[]; let r=a.find(x=>x.match===own); if(!r){ if(a.length>=64) throw new Error('max'); r={match:own}; a.push(r); } return r; };
+  const px=new Proxy({},{get:(_,k)=>rd()[k],set:(_,k,v)=>{ wr()[k]=v; return true; },deleteProperty:(_,k)=>{ const r=mine(); if(!r) return true; delete r[k]; if(Object.keys(r).length===1){ const a=layer(ap)[kind]; a.splice(a.indexOf(r),1); } return true; }});
+  box.appendChild(el('h4',null,pkt('m.se_dit_element'))); box.appendChild(el('div','dz-hint',pkt('m.se_dit_uitleg'))); F.specs(box,px,mkSpecs(px)); }
 function sectionBlock(box,g,ap){ const arr=read(ap).sections||[], key='group:'+g; box.appendChild(el('h4',null,pkt('m.se_sectie',g)));
-  const ru={group:g}, matching=arr.map((r,i)=>({r,i})).filter(x=>x.r.match===key||x.r.match==='*'); if(!matching.some(x=>x.r.match===key)) btn(box,pkt('m.se_maak_regel'),()=>E.edit(()=>{ const dd=layer(ap), a=dd.sections=dd.sections||[]; if(a.length>=32) return false; a.push({match:key,frame:'line'}); }),{fk:'mksec'});
+  const ru={group:g}, matching=arr.map((r,i)=>({r,i})).filter(x=>x.r.match===key||x.r.match==='*'); if(!matching.some(x=>x.r.match===key)) btn(box,pkt('m.se_maak_sectie'),()=>E.edit(()=>{ const dd=layer(ap), a=dd.sections=dd.sections||[]; if(a.length>=32) return false; a.push({match:key,frame:'line'}); }),{fk:'mksec'});
   matching.forEach(({r,i})=>{ const b=el('div','se-rule'), h=el('div','se-rhead'); h.appendChild(el('span','dz-rn',pkt('m.se_regel_n',i+1)+' · '+r.match)); btn(h,'× '+pkt('m.se_regel_weg'),()=>E.edit(()=>{ layer(ap).sections.splice(i,1); }),{fk:'rmsec'+i}); b.appendChild(h); F.specs(b,r,F.S.sections(),pkt('m.dz_r_n',i+1)); box.appendChild(b); }); }
 function padBlock(box,reg,ap){ const o=()=>layer(ap).pads||(layer(ap).pads={}), rd=()=>read(ap).pads||{}; box.appendChild(el('div','dz-hint',pkt('m.se_pads_een')));
   F.specs(box,proxy(rd,o),F.S.pads()); box.appendChild(el('h4',null,pkt('m.dz_p_eigen')));
@@ -112,16 +119,18 @@ function formCtl(box,ap,id){ const regs=E.regs(), reg=regs.find(x=>x.id===id); i
   head(box,regLabel(reg),pkt('m.se_ctl_kop',reg.role,reg.group||'-',reg.type)); const lo=M.layoutOf(E.m,ap), A=M.assign(lo.panels,regs), q=A.get(id);
   { const opts=[['',pkt('m.se_rest')],...lo.panels.map((p,i)=>[String(i),p.id+(typeof p.title==='string'&&p.title?' · '+p.title:(p.title&&(p.title[PK.PK_LANG]||p.title.nl))?' · '+(p.title[PK.PK_LANG]||p.title.nl):'')])];
     F.sel(box,{k:'moveto',label:pkt('m.se_naar_paneel'),blank:false,opts,get:()=>q&&!q.star?String(q.pi):'',set:v=>{ const r=M.moveCtl(E.m,ap,regs,id,v===''||v==null?null:+v,null); return r?undefined:false; }}); }
-  if(reg.role==='meter') ruleBlocks(box,'meters',reg,ap,F.S.meters,id);
+  const adv=(kind,mk)=>{ const d=document.createElement('details'); d.className='se-adv'; d.appendChild(el('summary',null,pkt('m.se_geavanceerd'))); ruleBlocks(d,kind,reg,ap,mk,id); box.appendChild(d); };
+  if(reg.role==='meter'){ ruleSimple(box,'meters',reg,ap,F.S.meters,id); adv('meters',F.S.meters); }
   else if(reg.role==='pad'||reg.role==='step') padBlock(box,reg,ap);
-  else if(isDisp(reg)) displayBlock(box,ap);
-  else if(reg.type==='range') ruleBlocks(box,'controls',reg,ap,F.S.controls,id);
+  else if(isDisp(reg)){ box.appendChild(el('h4',null,pkt('m.se_schermpje'))); box.appendChild(el('div','dz-hint',pkt('m.se_dsp_uitleg'))); displayBlock(box,ap); }
+  else if(reg.type==='range'){ ruleSimple(box,'controls',reg,ap,F.S.controls,id); adv('controls',F.S.controls); }
   else box.appendChild(el('div','dz-hint',pkt('m.se_alleen_register')));
   if(reg.group) sectionBlock(box,reg.group,ap); }
+function formDisplay(box,ap,kind){ head(box,pkt('m.se_dsp_kop',pkt('m.dz_d_t_'+kind)),pkt('m.se_dsp_uitleg')); displayBlock(box,ap); }
 function formGroup(box,ap,g){ head(box,pkt('m.dz_r_groep_x',g),pkt('m.se_groep_uitleg')); sectionBlock(box,g,ap); }
 function render(e,box){ E=e; F.init(e); const s=e.sel; box.innerHTML='';
   switch(s.k){ case 'skin': formSkin(box); break; case 'aps': formAps(box); break; case 'ap': formAp(box,s.ap); break; case 'colors': formColors(box,s.ap); break; case 'ports': formPorts(box,s.ap); break; case 'haptics': formHaptics(box,s.ap); break;
-    case 'ctls': case 'rest': formCtls(box,s.ap); break; case 'panel': formPanel(box,s.ap,s.pid); break; case 'ctl': formCtl(box,s.ap,s.id); break; case 'group': formGroup(box,s.ap,s.g); break; default: formSkin(box); } }
+    case 'ctls': case 'rest': formCtls(box,s.ap); break; case 'panel': formPanel(box,s.ap,s.pid); break; case 'ctl': formCtl(box,s.ap,s.id); break; case 'group': formGroup(box,s.ap,s.g); break; case 'display': formDisplay(box,s.ap,s.kind); break; default: formSkin(box); } }
 // Delete op de selectie: de eigen regel van dit element (of het paneel); nooit het element zelf
 function removeRule(e){ E=e; const s=e.sel; if(s.k==='panel'){ e.edit(()=>{ const lay=M.ensureLayout(e.m,s.ap), i=lay.panels.findIndex(p=>p.id===s.pid); if(i<0) return false; lay.panels.splice(i,1); }); e.select({k:'ctls',ap:s.ap}); return true; }
   if(s.k==='ctl'||s.k==='group'){ const key=s.k==='group'?'group:'+s.g:s.id, d=M.layerOf(e.m,s.ap)||{}, kinds=s.k==='group'?['sections']:['controls','meters']; let hit=false;

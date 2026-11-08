@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.3.0 (2026-11-08)
+
+### Changed
+- **Skin editor as a floating window with the original next to the new skin.** The editor is no longer full screen: it is a window you can drag by its title bar and resize by the corner (position and size are remembered; on a narrow screen it fills the screen, and a button fills it on a wide one). Three columns: on the left the structure tree (skin, appearances, panels, elements; clicking in the preview opens and focuses the matching node), in the middle the original device next to the live new skin, on the right the properties. Drag a control, slider, meter, pad or display from the original onto a panel of the new skin, rearrange inside it, add, rename, reorder and remove panels, and drag the right edge or corner of the new card to set the card width (`design.size.width` of the chosen appearance). Elements get their own rule automatically when you change a property. For a selected display, arrows next to it in the preview step through the options without touching the workspace. No change to the skins contract (0.7); existing skins open and save unchanged.
+
 ## 0.2.3 (2026-11-08)
 
 ### Changed
