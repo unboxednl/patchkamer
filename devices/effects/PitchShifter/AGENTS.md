@@ -19,7 +19,7 @@ Verder: een mix met een droog signaal dat in de tijd gelijk is gemaakt, een teru
 | Naam | `Pitch Shifter` in alle talen; alleen de poortnamen `Uit` en `Out` verschillen per taal (via `i18n`) |
 | Soort | `effect` (categorie `effect`): Pitch Shifter krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in`, audio-uitgang `out`, sturing `mod` |
-| Contract | v1.28 |
+| Contract | v1.28 (`latency()` sinds 1.1.0: v1.34) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Geen tunes, wel presets
@@ -43,7 +43,7 @@ Alleen apparaten met `kind: 'instrument'` hebben tunes. Pitch Shifter is een `ef
 | `fbtone` | Laagdoorlaat in de terugkoppeling | 500 … 16000 | 6000 | Hz |
 | `glide` | Glijtijd van het interval | 0 … 500 | 20 | ms |
 
-Latentie (bij 48 kHz, gemeten met `docs/tools/measure-pitch.mjs`): Percussief 1,3 / 2,0 / 3,0 ms; Korrel 14,1 / 16,0 / 18,9 ms; Vocoder 21,3 / 42,6 / 85,3 ms (venster `fast` / `normal` / `high`). In de korrelmotoren komt er bij een interval ongeveer `venster/2 × |1 − verhouding|` bij (octaaf omhoog: + ca. 20 ms bij `normal`). De UI toont de latentie. Het droge signaal wordt op de minimale latentie gezet.
+Latentie (bij 48 kHz, gemeten met `docs/tools/measure-pitch.mjs`): Percussief 1,3 / 2,0 / 3,0 ms; Korrel 14,1 / 16,0 / 18,9 ms; Vocoder 21,3 / 42,6 / 85,3 ms (venster `fast` / `normal` / `high`). In de korrelmotoren komt er bij een interval ongeveer `venster/2 × |1 − verhouding|` bij (octaaf omhoog: + ca. 20 ms bij `normal`). De UI toont de latentie en het apparaat meldt hem sinds 1.1.0 met `latency()` (seconden, de waarde in rust zonder de toeslag voor een interval; contract v1.34), zodat de host hem op de titelbalk en bij de kabels toont. Het droge signaal wordt op de minimale latentie gezet.
 
 Wat het apparaat met een state doet (getest): getallen buiten het bereik worden afgekapt, een tekst, `null`, `NaN` of een ontbrekende waarde geeft de startwaarde, een onbekende `mode` of `win` geeft de startwaarde, onbekende velden worden genegeerd.
 

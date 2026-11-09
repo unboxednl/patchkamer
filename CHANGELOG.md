@@ -4,6 +4,16 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.23.1 (2026-11-09)
+
+### Added
+- **Reporting delay (contract v1.34) by seven effects:** Compressor 1.2.0 and Gate 1.2.0 (lookahead), Distortion 1.1.0 (oversampling: 0, 24 or 32 samples), Pitch Shifter 1.1.0, Harmonizer 1.1.0 and Pitch Correction 1.1.0 (the measured delay of the grain or phase-vocoder engine). Convolution Reverb, Reverb and De-esser do not delay the sound and report nothing. Master Chain and Effect Chain (lookahead limiter) report nothing yet: their delay has not been measured separately.
+
+### Fixed
+- **De-esser 1.1.1:** the reduction meter and the curve on screen showed the full, unapplied reduction when **Off** or with a mix below 100%; they now show the real one. The sound is unchanged (difference 0 against 1.0.0). New test `docs/tools/test-deesser.mjs` and a sibilant-noise measurement in `measure-deesser.mjs`.
+- **Distortion 1.1.1:** when switching type while playing, the DC of the new type sounded as a 20 ms bump through the DC blocker (soft to rect: mean 0.72 in the first 20 ms); the blocker is now set to the expected DC of the new type (0.008). With a fixed type the output is identical to 1.1.0 (difference 0). Test: `docs/tools/test-distortion-dc.mjs`.
+- **Convolution Reverb 1.0.1:** the card was 460 px wide while its title bar needed 474 px; the right-hand side (values such as "0 ms", "20 Hz", the buttons on the bar) was cut off. Width is now 520 px (minimum 490) and the value column is wider.
+
 ## 0.23.0 (2026-11-09)
 
 ### Added

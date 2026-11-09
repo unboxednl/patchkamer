@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Patchkamer contract v1.34: latency() meldt de lookahead aan de host (alleen weergave; de host compenseert niet).
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: compressor met drempel, ratio (1:1 tot oneindig), knee, attack, release (ook automatisch), make-up (ook automatisch),
 //          peak- of RMS-detectie, lookahead tot 10 ms, sidechain-filter (hoog- en laagdoorlaat), externe sidechain-ingang, parallelle mix, stereo-koppeling en mid/side,
@@ -178,7 +179,7 @@ class Comp extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Comp);`;
 
 export default {
-  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.1.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.2.0', kind: 'effect', category: 'effect',
   about: { nl: 'Maakt het verschil tussen zacht en luid kleiner. Drempel, ratio en knee bepalen hoeveel, attack en release hoe snel; met sidechain-filter, lookahead, parallelle mix en mid/side.', en: 'Narrows the gap between soft and loud. Threshold, ratio and knee set how much, attack and release how fast; with a sidechain filter, lookahead, parallel mix and mid/side.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
@@ -211,8 +212,12 @@ export default {
       for (const k of BOOLS) n[k] = typeof s[k] === 'boolean' ? s[k] : defaults[k];
       return n; }
     let state = normalize({});
+    // contract v1.34: vertraging = lookahead (seconden); alleen als de worklet draait, anders gaat het geluid onvertraagd door
+    let latLast = 0;
+    const latNow = () => ok ? (eff.look !== undefined ? eff.look : state.look) / 1000 : 0;
+    function latNote() { const l = latNow(); if (l !== latLast) { latLast = l; if (host && typeof host.latencyChanged === 'function') { try { host.latencyChanged(self); } catch { } } } }
     function apply() { eff = ukResolve(spec, state, mod);
-      if (node) node.port.postMessage({ type: 'set', s: { thr: eff.thr, ratio: eff.ratio, knee: eff.knee, att: eff.att, rel: eff.rel, auto: state.auto, makeup: eff.makeup, autoMk: state.autoMk, detect: state.detect, look: eff.look, hpf: eff.hpf, lpf: eff.lpf, sc: state.sc, mix: eff.mix, link: eff.link, chmode: state.chmode, on: state.on, listen } }); }
+      if (node) node.port.postMessage({ type: 'set', s: { thr: eff.thr, ratio: eff.ratio, knee: eff.knee, att: eff.att, rel: eff.rel, auto: state.auto, makeup: eff.makeup, autoMk: state.autoMk, detect: state.detect, look: eff.look, hpf: eff.hpf, lpf: eff.lpf, sc: state.sc, mix: eff.mix, link: eff.link, chmode: state.chmode, on: state.on, listen } }); latNote(); }
     const loader = host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
     loader.then(() => { if (dead || typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet');
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 2, numberOfOutputs: 1, outputChannelCount: [2], channelCount: 2, channelCountMode: 'explicit' });
@@ -265,6 +270,7 @@ export default {
       mount, unmount,
       params() { return ukParams(spec, 'compressor', 'Compressor'); },
       modulate(o) { try { mod = {}; if (o && typeof o === 'object') for (const id of Object.keys(spec)) if (typeof o[id] === 'number' && Number.isFinite(o[id])) mod[id] = clamp(o[id], -1, 1); apply(); } catch {} },
+      latency() { return latNow(); },
       getState() { return { ...state }; },
       setState(raw) { if (dead) return; state = normalize(raw); apply(); paint(); },
       destroy() { if (dead) return; dead = true; unmount(); try { input.disconnect(); sc.disconnect(); bypass.disconnect(); if (node) { node.port.onmessage = null; node.disconnect(); } out.disconnect(); } catch {} },

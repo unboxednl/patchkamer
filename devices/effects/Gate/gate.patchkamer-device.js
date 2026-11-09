@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Patchkamer contract v1.34: latency() meldt de lookahead aan de host (alleen weergave; de host compenseert niet).
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: noise gate, expander en ducker in één: drempel, ratio (gate = oneindig, expander = zacht), attack, hold, release, range (hoeveel er gedempt wordt),
 //          hysterese, sidechain-filters (hoog- en laagdoorlaat), meeluisteren met de sidechain, externe sidechain-ingang, lookahead tot 10 ms, stereo-koppeling en een meter die toont hoe open de poort is.
@@ -172,7 +173,7 @@ class Gate extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Gate);`;
 
 export default {
-  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.1.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.2.0', kind: 'effect', category: 'effect',
   about: { nl: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.', en: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
@@ -205,8 +206,12 @@ export default {
       for (const k of BOOLS) n[k] = typeof s[k] === 'boolean' ? s[k] : defaults[k];
       return n; }
     let state = normalize({});
+    // contract v1.34: vertraging = lookahead (seconden); alleen als de worklet draait, anders gaat het geluid onvertraagd door
+    let latLast = 0;
+    const latNow = () => ok ? (eff.look !== undefined ? eff.look : state.look) / 1000 : 0;
+    function latNote() { const l = latNow(); if (l !== latLast) { latLast = l; if (host && typeof host.latencyChanged === 'function') { try { host.latencyChanged(self); } catch { } } } }
     function apply() { eff = ukResolve(spec, state, mod);
-      if (node) node.port.postMessage({ type: 'set', s: { mode: state.mode, thr: eff.thr, ratio: eff.ratio, range: eff.range, hyst: eff.hyst, att: eff.att, hold: eff.hold, rel: eff.rel, look: eff.look, hpf: eff.hpf, lpf: eff.lpf, sc: state.sc, detect: state.detect, link: eff.link, on: state.on, listen } }); }
+      if (node) node.port.postMessage({ type: 'set', s: { mode: state.mode, thr: eff.thr, ratio: eff.ratio, range: eff.range, hyst: eff.hyst, att: eff.att, hold: eff.hold, rel: eff.rel, look: eff.look, hpf: eff.hpf, lpf: eff.lpf, sc: state.sc, detect: state.detect, link: eff.link, on: state.on, listen } }); latNote(); }
     const loader = host && typeof host.loadWorklet === 'function' ? host.loadWorklet(WNAME, WORKLET) : Promise.reject(new Error('host.loadWorklet ontbreekt'));
     loader.then(() => { if (dead || typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet');
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 2, numberOfOutputs: 1, outputChannelCount: [2], channelCount: 2, channelCountMode: 'explicit' });
@@ -261,6 +266,7 @@ export default {
       mount, unmount,
       params() { return ukParams(spec, 'gate', 'Gate'); },
       modulate(o) { try { mod = {}; if (o && typeof o === 'object') for (const id of Object.keys(spec)) if (typeof o[id] === 'number' && Number.isFinite(o[id])) mod[id] = clamp(o[id], -1, 1); apply(); } catch {} },
+      latency() { return latNow(); },
       getState() { return { ...state }; },
       setState(raw) { if (dead) return; state = normalize(raw); apply(); paint(); },
       destroy() { if (dead) return; dead = true; unmount(); try { input.disconnect(); sc.disconnect(); bypass.disconnect(); if (node) { node.port.onmessage = null; node.disconnect(); } out.disconnect(); } catch {} },

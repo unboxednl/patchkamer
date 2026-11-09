@@ -13,7 +13,7 @@ Een noise gate, expander en ducker in één. Drie soorten (`mode`): **gate** (ra
 | Naam | `Gate` in alle talen; alleen de poortnamen `Uit` en `Out` verschillen per taal (via `i18n`) |
 | Soort | `effect` (categorie `effect`): Gate krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingangen `in` en `sc` (sidechain), audio-uitgang `out`, sturing `mod`; geen events |
-| Contract | v1.28 |
+| Contract | v1.28 (`latency()` sinds 1.2.0: v1.34) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Geen tunes, wel presets
@@ -48,7 +48,7 @@ Definities (gemeten, zie `docs/tools/measure-gate.mjs`):
 - Attack en release zijn **tijdconstanten van de versterking (amplitude)**: na één attack is 63% van de weg naar open gedaan; na één release staat de gain op 37% (−8,7 dB). Dempen over 60 dB duurt dus ongeveer 7 keer de release (release 100 ms: gain −20 dB na 239 ms, −60 dB na 928 ms). Bij de ducker is attack de tijd van het dempen en release die van het herstel.
 - Hold houdt de poort open nadat het niveau onder de drempel zakte. Daarbovenop komt de nalooptijd van de piekvolger (3 ms release): het niveau moet eerst vanaf de piek tot de drempel zakken, bij 20 dB ongeveer 7 ms. Gemeten: hold 50 ms begint te dempen na 59 ms.
 - Hysterese: de poort sluit pas bij drempel − `hyst`; bij `ducker` telt de hysterese niet.
-- Latency = lookahead (zoals bij Compressor): het geluid wordt `look` ms vertraagd, de detector niet; de poort opent dus vóór de aanzet. De host compenseert niet.
+- Latency = lookahead (zoals bij Compressor): het geluid wordt `look` ms vertraagd, de detector niet; de poort opent dus vóór de aanzet. De host compenseert niet; het apparaat meldt de waarde sinds 1.2.0 met `latency()` (seconden, contract v1.34, §13j) en de host toont hem.
 - Externe sidechain (`sc: 'ext'`) zonder kabel geeft een stil signaal: een gate blijft dicht, een ducker dempt niet.
 - De uitgang is nooit hoger dan de ingang (de gain is 1 of lager); er is geen make-up of mix.
 

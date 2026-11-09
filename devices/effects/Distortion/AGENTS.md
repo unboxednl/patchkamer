@@ -13,7 +13,7 @@ Een vervormer met acht karakters, in één AudioWorklet (stereo, één gedeelde 
 | Naam | `Distortion` in alle talen; alleen de poortnamen `Uit` en `Out` verschillen per taal (via `i18n`) |
 | Soort | `effect`: Distortion krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in`, audio-uitgang `out`, sturing `mod` |
-| Contract | v1.28 |
+| Contract | v1.28 (`latency()` sinds 1.1.0: v1.34) |
 | Licentie apparaat | AGPL-3.0-or-later |
 | Controle van een pack | `node devices/effects/Distortion/check-preset.mjs presets/distortion.patchkamer-presets.json` |
 | Metingen | `node docs/tools/measure-distortion.mjs` (harmonischen, aliasing, niveau, DC, stabiliteit, rekenlast) |
@@ -59,11 +59,12 @@ Wat Distortion met een state doet (getest met `check-preset.mjs`): getallen buit
 - Met `auto: true` blijft het niveau binnen enkele dB van de ingang (gemeten: −3,6 … +1,7 dB bij de meegeleverde presets, behalve waar `lowcut` of `tone` de testtoon wegfilteren). Zet `auto` uit voor een bewust luider resultaat.
 - Voor bas en kick: lage `lowcut` en `mix` onder 100%. Voor drums parallel: `mix` 25 … 40%. `rect` met `mix` < 60% geeft een octaaf erbij zonder het origineel te verliezen.
 - Een DC-blokkering van 8 Hz staat altijd aan; `bias` geeft dus nooit een blijvende gelijkspanning.
-- Vertraging (latency) van de oversampling: 0 / 24 / 32 samples voor 1x / 2x / 4x. Het droge deel loopt mee.
+- Vertraging (latency) van de oversampling: 0 / 24 / 32 samples voor 1x / 2x / 4x. Het droge deel loopt mee. Sinds 1.1.0 meldt het apparaat dit met `latency()` (seconden, contract v1.34; 0 zonder worklet) en toont de host het.
+- DC-blokkering: hoogdoorlaat van 8 Hz (tijdconstante 20 ms) na de vervorming en het terugbrengen naar het basistempo. In rust is de DC van de uitgang onder 1e-9 voor alle acht soorten met bias +60% (`node docs/tools/test-distortion-dc.mjs`). Bij een wissel van soort wordt de blokkering (sinds 1.1.1) meteen op de verwachte DC van de nieuwe soort gezet; de bult van de eerste 20 ms zakte bij soft naar rect van 0,72 naar 0,008. Een abrupt einde van een signaal met veel asymmetrie laat nog een uitloper van 20 ms van de blokkering horen: dat is eigen aan een DC-blokkering en niet gewijzigd.
 
 ## Bewaker (NaN en Infinity)
 
-De ingang wordt begrensd op ±16 en NaN wordt 0. Per blok worden envelope, filters, DC-blokkering en de oversamplingfilters op eindigheid gecontroleerd; bij een ontsporing worden ze teruggezet. De uitgang wordt begrensd op ±64 (anders 0). Gemeten: 160 willekeurige en extreme instellingen en een burst van NaN, ±Infinity, ±1e9 en 1e30 geven geen enkele niet-eindige sample, en het geluid is direct daarna weer gelijk aan een run zonder burst. De worklet-naam bevat de versie (`nl-patchkamer-distortion-1-0-0`): verander je de code, verhoog dan de versie in die naam.
+De ingang wordt begrensd op ±16 en NaN wordt 0. Per blok worden envelope, filters, DC-blokkering en de oversamplingfilters op eindigheid gecontroleerd; bij een ontsporing worden ze teruggezet. De uitgang wordt begrensd op ±64 (anders 0). Gemeten: 160 willekeurige en extreme instellingen en een burst van NaN, ±Infinity, ±1e9 en 1e30 geven geen enkele niet-eindige sample, en het geluid is direct daarna weer gelijk aan een run zonder burst. De worklet-naam bevat de versie (`nl-patchkamer-distortion-1-1-1`): verander je de code, verhoog dan de versie in die naam.
 
 ## Controleren
 

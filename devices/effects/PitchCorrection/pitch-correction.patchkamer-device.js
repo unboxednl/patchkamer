@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Pitch Correction: monofone toonhoogtedetectie (YIN, ca. 62 tot 1100 Hz, kiesbaar bereik) en correctie naar de dichtstbijzijnde toegestane noot
 //   van een toonladder (12 schakelaars per toonhoogteklasse, grondtoon en toonladder als snelkeuze), met snelheid (0 = hard), mate, vibratobehoud en een instelbare
 //   referentietoonhoogte (A). Motor: korrel (snel, ca. 14 ms latentie) of fasevocoder met formantbehoud (21 tot 85 ms). Onstemhebbende stukken (stilte, ruis, medeklinkers)
@@ -407,7 +408,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.pitchcorrection',
   name: 'Pitch Correction',
-  version: '1.0.0',
+  version: '1.1.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
@@ -435,7 +436,7 @@ export default {
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
       node.port.onmessage = e => {
         const d = e && e.data; if (!d) return;
-        if (d.type === 'latency' && Number.isFinite(d.ms)) { latMs = d.ms; paintNote(); }
+        if (d.type === 'latency' && Number.isFinite(d.ms)) { latMs = d.ms; paintNote(); latNote(); }
         else if (d.type === 'ui' && Number.isFinite(d.det)) { hist.push([d.det, Number.isFinite(d.out) ? d.out : -1, Number.isFinite(d.tgt) ? d.tgt : -1]); if (hist.length > 150) hist.shift(); }
       };
       inG.connect(node).connect(out); try { inG.disconnect(bypass); } catch { } apply(); paintNote();
@@ -469,7 +470,11 @@ export default {
       [[0, mut], [1, acc]].forEach(([idx, c]) => { g.strokeStyle = c; g.beginPath(); let pen = false; hist.forEach((p, i) => { const m = p[idx]; if (m < 0) { pen = false; return; } const x = x0 + (i + 150 - hist.length) * dx, y = Y(m); if (!pen) { g.moveTo(x, y); pen = true; } else g.lineTo(x, y); }); g.stroke(); });
       if (readout) readout.textContent = last && last[0] >= 0 ? fmt(T.det, noteName(last[0]) + ' ' + cents(last[0])) + '   ' + fmt(T.corr, noteName(last[1]) + ' ' + cents(last[1])) : fmt(T.det, T.none);
     }
-    return {
+    // contract v1.34: vertraging van de hoofdweg (het droge deel loopt gelijk mee): door de worklet gemeld, anders de tabel; zonder worklet geen vertraging
+    const latNow = () => node ? (latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr) / 1000 : 0;
+    let latLast = 0;
+    function latNote() { const l = latNow(); if (l !== latLast) { latLast = l; if (host && typeof host.latencyChanged === 'function') { try { host.latencyChanged(self); } catch { } } } }
+    const self = {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         root = el; el.addEventListener('pointerdown', e => e.stopPropagation());
@@ -497,9 +502,11 @@ export default {
       unmount() { if (stop) { stop(); stop = null; } note = null; cv = null; readout = null; ui = {}; },
       params() { return MODP.map(([id, n1, n2, min, max, role, drift, on]) => ({ id, name: nl ? n1 : n2, lane: 'corr', laneName: 'Pitch Correction', min, max, role, scale: 'lin', drift, on, fast: false })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (Object.hasOwn(MODBY, k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); },
+      latency() { return latNow(); },
       getState() { return { ...S, notes: S.notes.slice() }; },
       setState(s) { restoreValues(S, s); latMs = null; apply(); paint(); paintNote(); },
       destroy() { if (dead) return; dead = true; if (stop) { stop(); stop = null; } [inG, out, bypass, node].forEach(x => { if (x) try { x.disconnect(); } catch { } }); },
     };
+    return self;
   }
 };

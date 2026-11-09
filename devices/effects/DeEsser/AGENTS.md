@@ -13,7 +13,7 @@ Een de-esser die scherpe s-klanken in een stem dempt. Een detectieband (3 tot 10
 | Naam | `De-esser` in alle talen; alleen de poortnamen `Uit` en `Out` verschillen per taal (via `i18n`) |
 | Soort | `effect` (categorie `effect`): De-esser krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in`, audio-uitgang `out`, sturing `mod`; geen sidechain en geen events |
-| Contract | v1.28 |
+| Contract | v1.28 (apparaat 1.1.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Geen tunes, wel presets
@@ -44,6 +44,7 @@ Definities (gemeten, zie `docs/tools/measure-deesser.mjs`):
 - Attack en release zijn tijdconstanten van de reductie in dB (63%). Gemeten: attack 5 ms: 63% na 6 ms; release 100 ms: 63% hersteld na ongeveer 100 ms.
 - `split`: uitgang = ingang + (g − 1) × band(ingang); op de middenfrequentie is de demping dus precies g, ernaast minder (bij 1 oktaaf: −2,9 dB op 4,6 kHz als het midden 12 dB wordt gedempt, −0,7 dB op 3 kHz, 0,0 dB op 1 kHz). `wide`: uitgang = ingang × g (ook de stem eronder wordt gedempt: −12,0 dB bij g = −12 dB).
 - Latency: geen (er is geen lookahead).
+- De reductiemeter (`gr`, ook de kromme in het scherm) toont de werkelijke reductie op de middenfrequentie: bij `on: false` is dat 0 en bij `mix` onder 1 de gemengde reductie (1.1.1; eerst toonde hij de volle, niet toegepaste reductie). Test: `node docs/tools/test-deesser.mjs`.
 - Luister naar detectieband (`listen`) is geen state: het geeft de band zelf als uitgang.
 
 Wat De-esser met zijn ingang doet (getest): `NaN`, `±Infinity` en absurd grote waarden (1e9, 1e30) worden begrensd (boven ±16, +24 dB), zodat één foutieve waarde van een apparaat ervoor het geheugen van de detector en de filters niet voorgoed vergiftigt. De worklet accepteert alleen eindige parameters en zet een ontspoorde toestand per blok terug. Na een burst klinkt het geluid weer precies als zonder burst.
@@ -60,7 +61,7 @@ Wat De-esser met een state doet (getest):
 - Metingen (drempel, attack/release, latency, stabiliteit, rekenlast): `node docs/tools/measure-deesser.mjs` vanuit de root. Dat laadt de worklet uit het apparaatbestand in Node, blok voor blok van 128 samples.
 - Je kunt niet horen hoe een preset klinkt. Heb je geen browser, schrijf dan in je oplevering dat de preset **niet beluisterd** is.
 - Alle tekst in het apparaat staat in de woordenboeken `NL` en `EN` bovenin het bestand. Een nieuwe tekst krijgt altijd nl én en.
-- De worklet-naam bevat de versie (`nl-patchkamer-deesser-1-0-0`): de host onthoudt code per naam. Verander je de worklet, verhoog dan de versie in die naam.
+- De worklet-naam bevat de versie (`nl-patchkamer-deesser-1-0-1`): de host onthoudt code per naam. Verander je de worklet, verhoog dan de versie in die naam.
 
 ## Wat je niet doet
 

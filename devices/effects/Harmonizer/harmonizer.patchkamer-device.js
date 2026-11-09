@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Harmonizer: tot 4 stemmen die de toonhoogte van de ingang volgen op een eigen interval (halve tonen, of toonladdertrappen
 //   binnen een gekozen toonladder en grondtoon), met niveau, pan, detune en vertraging per stem, een glijtijd, zacht levend gemaakt met 'humanize'.
 //   De toonladdertrappen volgen de toon van het ingangsgeluid (monofoon, toonhoogtedetectie) of de noten op de eventingang. Motor: korrel of fasevocoder
@@ -423,7 +424,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.harmonizer',
   name: 'Harmonizer',
-  version: '1.0.0',
+  version: '1.1.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', notes: 'Notes', mod: 'Mod' } } },
@@ -454,7 +455,7 @@ export default {
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
       node.port.onmessage = e => {
         const d = e && e.data; if (!d) return;
-        if (d.type === 'latency' && Number.isFinite(d.ms)) { latMs = d.ms; paintNote(); }
+        if (d.type === 'latency' && Number.isFinite(d.ms)) { latMs = d.ms; paintNote(); latNote(); }
         else if (d.type === 'ui' && Number.isFinite(d.src)) { srcTxt = d.voiced || S.follow === 'notes' ? fmt(T.src, noteName(d.src) + ' → ' + (d.st || []).map((s, k) => S['on' + (k + 1)] ? noteName(d.src + s) : '–').join(' ')) : null; if (info && S.follow !== 'off') info.textContent = srcTxt || T.nosrc; }
       };
       inG.connect(node).connect(out); try { inG.disconnect(bypass); } catch { } apply(); paintNote();
@@ -473,7 +474,11 @@ export default {
       const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', String(get())); b.onclick = () => { const on = !get(); set(on); b.setAttribute('aria-pressed', String(on)); };
       el.appendChild(b); return { set(on) { b.setAttribute('aria-pressed', String(!!on)); }, el: b };
     }
-    return {
+    // contract v1.34: vertraging van de hoofdweg (het droge deel loopt gelijk mee): door de worklet gemeld, anders de tabel; zonder worklet geen vertraging
+    const latNow = () => node ? (latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr) / 1000 : 0;
+    let latLast = 0;
+    function latNote() { const l = latNow(); if (l !== latLast) { latLast = l; if (host && typeof host.latencyChanged === 'function') { try { host.latencyChanged(self); } catch { } } } }
+    const self = {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
@@ -511,10 +516,12 @@ export default {
       },
       params() { return MODP.map(([id, n1, n2, min, max, role, drift, on, lane]) => ({ id, name: nl ? n1 : n2, lane, laneName: lane === 'mix' ? 'Harmonizer' : (nl ? 'Stem ' : 'Voice ') + lane.slice(1), min, max, role, scale: 'lin', drift, on, fast: false })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (Object.hasOwn(MODBY, k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); },
+      latency() { return latNow(); },
       getState() { return { ...S }; },
       setState(s) { restoreValues(S, s); latMs = null; apply(); paint(); paintVoices(); paintNote(); },
       destroy() { if (dead) return; dead = true; timers.forEach(t => clearTimeout(t)); timers.clear(); [inG, out, bypass, node].forEach(n => { if (n) try { n.disconnect(); } catch { } }); },
     };
+    return self;
     function paintVoices() { if (!ui.iv1) return; V.forEach(i => ui['iv' + i].set(S['iv' + i])); }
   }
 };

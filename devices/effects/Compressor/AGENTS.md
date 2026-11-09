@@ -13,7 +13,7 @@ Een compressor die het verschil tussen zacht en luid kleiner maakt. Drempel, rat
 | Naam | `Compressor` in alle talen; alleen de poortnamen `Uit` en `Out` verschillen per taal (via `i18n`) |
 | Soort | `effect` (categorie `effect`): Compressor krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingangen `in` en `sc` (sidechain), audio-uitgang `out`, sturing `mod`; geen events |
-| Contract | v1.28 |
+| Contract | v1.28 (`latency()` sinds 1.2.0: v1.34) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Geen tunes, wel presets
@@ -49,7 +49,7 @@ Definities (gemeten, zie `docs/tools/measure-compressor.mjs`):
 - Attack en release zijn **tijdconstanten** van de reductie in dB: na één attack is 63% van de uiteindelijke reductie bereikt, na één release is 63% van het herstel gedaan (10% tot 90% duurt ongeveer 2,2 keer zo lang). Gemeten met een stap in een blokgolf, afwijking minder dan 2 ms of 2%.
 - De statische curve is die met een kwadratische knee: reductie = (1 − 1/ratio)(over + knee/2)² / (2 knee) binnen de knee, daarboven (1 − 1/ratio) × over. Gemeten bij 1 kHz met RMS-detectie: binnen 0,1 dB van de formule. Ratio 100 telt als oneindig.
 - Peak-detectie leest per sample, RMS met een venster van 10 ms. Peak ziet de top van elke periode en reageert daardoor op een hoger niveau dan RMS (een sinus met piek 0 dBFS: 13,8 dB reductie tegen 12,8 dB).
-- Latency = lookahead: het geluid (en de droge mix) wordt `look` ms vertraagd, de detector niet. Contract en host kennen geen latencyveld, dus de host compenseert het niet; de kaart toont de waarde. Een wijziging van `look` loopt langzaam (hoogstens 0,004 sample per sample), zodat er geen tik is; dat geeft tijdens het schuiven een heel kleine toonhoogteverschuiving.
+- Latency = lookahead: het geluid (en de droge mix) wordt `look` ms vertraagd, de detector niet. Het apparaat meldt de waarde sinds 1.2.0 met `latency()` (seconden, contract v1.34, §13j); de host toont hem op de titelbalk en bij de kabels maar compenseert niet; de kaart toont de waarde ook zelf. Een wijziging van `look` loopt langzaam (hoogstens 0,004 sample per sample), zodat er geen tik is; dat geeft tijdens het schuiven een heel kleine toonhoogteverschuiving.
 - Auto make-up telt de statische reductie bij −12 dB ingang bij de make-up op (0 als de drempel boven −12 dB ligt).
 - Externe sidechain (`sc: 'ext'`) zonder kabel op de ingang `sc` geeft een stil signaal voor de detector: er wordt niet gecomprimeerd.
 - `link` werkt op de detectorniveaus in dB (grootste van de twee kanalen); in `ms` zijn de twee kanalen mid en side.

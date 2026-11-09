@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Pitch Shifter: verschuift de toonhoogte (−24 … +24 halve tonen plus cents) met behoud van tempo, in drie motoren:
 //   Percussief (korte korrels zonder zoeker, ca. 3 tot 12 ms latentie, voor drums), Korrel (korrels met correlatiezoeker voor aansluitende golfvormen,
 //   ca. 14 tot 19 ms) en Vocoder (faseverankerde fasevocoder met formantbehoud en -verschuiving, 21 tot 85 ms). Mix met tijdgelijk gemaakt droog signaal,
@@ -371,7 +372,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.pitchshifter',
   name: 'Pitch Shifter',
-  version: '1.0.0',
+  version: '1.1.0',
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
@@ -402,7 +403,7 @@ export default {
     loader.then(() => {
       if (dead) return; if (typeof AudioWorkletNode === 'undefined') throw new Error('geen AudioWorklet');
       node = new AudioWorkletNode(ctx, WNAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
-      node.port.onmessage = e => { const d = e && e.data; if (d && d.type === 'latency' && Number.isFinite(d.ms)) { latMs = d.ms; paintNote(); } };
+      node.port.onmessage = e => { const d = e && e.data; if (d && d.type === 'latency' && Number.isFinite(d.ms)) { latMs = d.ms; paintNote(); latNote(); } };
       inG.connect(node).connect(out); try { inG.disconnect(bypass); } catch { } apply(); paintNote();
     }).catch(() => { if (dead) return; failed = true; paintNote(); });
     const pct = v => Math.round(v * 100) + '%', sgn = (v, u) => (v > 0 ? '+' : '') + v + u;
@@ -410,7 +411,11 @@ export default {
       if (!ui.pitch) return;
       ui.mode.value = S.mode; ui.win.value = S.win; ui.pitch.set(S.semi); ui.fine.set(S.cents); ui.formant.set(S.formant); ui.fshift.set(S.fshift); ui.mix.set(S.mix); ui.fb.set(S.fb); ui.tone.set(S.fbtone); ui.glide.set(S.glide);
     }
-    return {
+    // contract v1.34: vertraging van de hoofdweg (het droge deel loopt gelijk mee): door de worklet gemeld, anders de tabel; zonder worklet geen vertraging
+    const latNow = () => node ? (latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr) / 1000 : 0;
+    let latLast = 0;
+    function latNote() { const l = latNow(); if (l !== latLast) { latLast = l; if (host && typeof host.latencyChanged === 'function') { try { host.latencyChanged(self); } catch { } } } }
+    const self = {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
@@ -430,9 +435,11 @@ export default {
       unmount() { note = null; ui = {}; },
       params() { return MODP.map(([id, nl, en, min, max, log, role, drift, on]) => ({ id, name: host && host.lang === 'nl' ? nl : en, lane: 'pitch', laneName: 'Pitch Shifter', min, max, role, scale: 'lin', drift, on, fast: false })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (Object.hasOwn(MODBY, k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); },
+      latency() { return latNow(); },
       getState() { return { ...S }; },
       setState(s) { restoreValues(S, s); latMs = null; apply(); paint(); paintNote(); },
       destroy() { if (dead) return; dead = true; [inG, out, bypass, node].forEach(n => { if (n) try { n.disconnect(); } catch { } }); },
     };
+    return self;
   }
 };

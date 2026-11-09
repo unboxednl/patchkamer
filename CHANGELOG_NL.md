@@ -4,6 +4,16 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.23.1 (2026-11-09)
+
+### Toegevoegd
+- **Vertraging melden (contract v1.34) door zeven effecten:** Compressor 1.2.0 en Gate 1.2.0 (lookahead), Distortion 1.1.0 (oversampling: 0, 24 of 32 samples), Pitch Shifter 1.1.0, Harmonizer 1.1.0 en Pitch Correction 1.1.0 (de gemeten vertraging van de korrel- of fasevocoder-motor). Convolution Reverb, Reverb en De-esser vertragen het geluid niet en melden niets. Master Chain en Effect Chain (lookahead-limiter) melden nog niets: de vertraging is daar niet apart gemeten.
+
+### Opgelost
+- **De-esser 1.1.1:** de reductiemeter en de kromme in het scherm toonden bij **Uit** en bij een mix onder 100% de volle, niet toegepaste reductie; nu de werkelijke. Het geluid is ongewijzigd (verschil 0 in een vergelijking met 1.0.0). Nieuwe test `docs/tools/test-deesser.mjs` en een sibilantruis-meting in `measure-deesser.mjs`.
+- **Distortion 1.1.1:** bij een wissel van soort tijdens het spelen klonk de DC van de nieuwe soort 20 ms als een bult door de DC-blokkering (soft naar rect: gemiddelde 0,72 in de eerste 20 ms); de blokkering wordt nu op de verwachte DC van de nieuwe soort gezet (0,008). Bij een vast type is de uitgang identiek aan 1.1.0 (verschil 0). Test: `docs/tools/test-distortion-dc.mjs`.
+- **Convolution Reverb 1.0.1:** de kaart was 460 px breed terwijl zijn titelbalk 474 px nodig had; de rechterkant (waarden als "0 ms", "20 Hz", de knoppen op de balk) werd afgekapt. Breedte nu 520 px (minimaal 490) en een bredere waardekolom.
+
 ## 0.23.0 (2026-11-09)
 
 ### Toegevoegd

@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.1 — DC-blokkering: bij een wissel van soort wordt de blokkering meteen op de verwachte DC van de nieuwe soort gezet (geen bult van 20 ms meer); in rust en bij een vast signaal is niets veranderd.
+// 1.1.0 — Patchkamer contract v1.34: latency() meldt de vertraging van de oversampling (0 / 24 / 32 samples) aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Patchkamer contract v1.28. Distortion: acht vervormingskarakters (soft, hard, tube, tape, diode, fuzz, folder, rectifier) in een AudioWorklet,
 //         met drive, bias (asymmetrie), tight (hoogdoorlaat voor de vervorming), tilt (voor-toonkleur), tone (laagdoorlaat) en presence (na-toonkleur),
 //         gate en touch (gevoeligheid voor het ingangsniveau), niveau, mix (parallelle verzadiging), automatische niveaucorrectie,
@@ -30,7 +32,7 @@ const TXT = {
     types: ['Soft', 'Hard', 'Tube', 'Tape', 'Diode', 'Fuzz', 'Folder', 'Rectifier'], lane: 'Distortion' },
 };
 
-const WNAME = 'nl-patchkamer-distortion-1-0-0';
+const WNAME = 'nl-patchkamer-distortion-1-1-1';
 const WORKLET = `
 const IN_MAX = 16, OUT_MAX = 64, TYPES = 8;
 const fin = (v, d, a, b) => (typeof v === 'number' && v >= a && v <= b) ? v : (v > b ? b : v < a ? a : d);
@@ -103,7 +105,7 @@ class PkDistortion extends AudioWorkletProcessor {
     this.sm = 1 - Math.exp(-1 / (sampleRate * 0.006)); this.ea = 1 - Math.exp(-1 / (sampleRate * 0.002)); this.er = 1 - Math.exp(-1 / (sampleRate * 0.08));
     this.dcR = 1 - 2 * Math.PI * 8 / sampleRate;
     this.port.onmessage = e => { const d = e.data || {};
-      if (typeof d.type === 'number' && d.type >= 0 && d.type < TYPES) { this.type = d.type | 0; this.key = ''; }
+      if (typeof d.type === 'number' && d.type >= 0 && d.type < TYPES) { if ((d.type | 0) !== this.type) this.seedDc = true; this.type = d.type | 0; this.key = ''; }
       if (d.os === 1 || d.os === 2 || d.os === 4) { if (d.os !== this.os) for (const c of this.ch) c.resetOs(); this.os = d.os; }
       if (typeof d.auto === 'boolean') this.auto = d.auto; };
   }
@@ -144,6 +146,10 @@ class PkDistortion extends AudioWorkletProcessor {
     const gT = g0 * Math.pow(10, touchDb / 20);
     gate = gateP > 0 ? (envDb > thr ? 1 : envDb < thr - 4 ? 0 : (this.gateOpen ? 1 : 0)) : 1; this.gateOpen = gate > 0.5;
     if (gS === 0 && this.init === true) { gS = gT; cS = 1; oS = outG; mS = mix; this.init = 2; }
+    // wissel van soort: de nieuwe soort heeft een andere DC (asymmetrie). De blokkering (8 Hz, 20 ms) liet die als een bult doorklinken; zet haar daarom meteen op de verwachte DC
+    // van de nieuwe soort bij het huidige ingangsniveau (een sinus met de amplitude van de omhullende), zodat er alleen nog het verschil met de werkelijkheid overblijft
+    if (this.seedDc) { this.seedDc = false; const A = env * gS; let m = 0; const N = 64; for (let k = 0; k < N; k++) m += shape(t, A * Math.sin(2 * Math.PI * k / N) + off) - f0; m /= N;
+      if (Number.isFinite(m)) for (const C of ch) C.dcy = C.dcx - m; }
     let bad = false;
     for (let i = 0; i < len; i++) {
       let a = inp.length ? (inp[0][i] || 0) : 0; let b = inp.length > 1 ? (inp[1][i] || 0) : a;
@@ -185,7 +191,7 @@ registerProcessor('${WNAME}', PkDistortion);
 `;
 
 export default {
-  id: 'nl.patchkamer.distortion', name: 'Distortion', version: '1.0.0', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.distortion', name: 'Distortion', version: '1.1.1', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ui: { width: 340, minWidth: 300 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
@@ -198,7 +204,11 @@ export default {
     const inG = ctx.createGain(), out = ctx.createGain(); inG.connect(out);   // zonder worklet gaat het geluid onbewerkt door
     const E = k => { const m = MODBY[k], b = S[k], o = mod[k] || 0; if (!o) return b; return m[5] ? clamp(b * Math.pow(m[4] / m[3], o), m[3], m[4]) : clamp(b + o * (m[4] - m[3]), m[3], m[4]); };
     function paintNote() { if (note) note.textContent = node ? '' : failed ? T.fail : T.note; }
-    function post() { if (node) try { node.port.postMessage({ type: TYPES.indexOf(S.type), os: S.os, auto: S.auto }); } catch { } }
+    // contract v1.34: de oversampling vertraagt het geluid (de droge weg loopt gelijk mee): 0 / 24 / 32 samples voor 1x / 2x / 4x; zonder worklet geen vertraging
+    const latNow = () => node && S.os > 1 ? (S.os === 2 ? 24 : 32) / (ctx.sampleRate || 48000) : 0;
+    let latLast = 0;
+    function latNote() { const l = latNow(); if (l !== latLast) { latLast = l; if (host && typeof host.latencyChanged === 'function') { try { host.latencyChanged(self); } catch { } } } }
+    function post() { if (node) try { node.port.postMessage({ type: TYPES.indexOf(S.type), os: S.os, auto: S.auto }); } catch { } latNote(); }
     function apply() {
       if (!node) return; const t = ctx.currentTime, r = 0.02;
       for (const m of MODP) { const p = node.parameters.get(m[0]); if (p) p.setTargetAtTime(E(m[0]), t, r); }
@@ -214,7 +224,7 @@ export default {
       tone: v => v >= 19990 ? T.off : (v >= 10000 ? Math.round(v / 1000) + ' kHz' : v >= 1000 ? (v / 1000).toFixed(1) + ' kHz' : Math.round(v) + ' Hz'), presence: sgn, out: v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', mix: pct };
     const STEP = { drive: 0.01, bias: 0.01, lowcut: 1, tilt: 0.01, gate: 0.01, touch: 0.01, tone: 10, presence: 0.01, out: 0.1, mix: 0.01 };
     function paint() { if (!ui.drive) return; ui.type.value = S.type; ui.os.value = String(S.os); ui.auto.value = S.auto ? 'on' : 'off'; for (const m of MODP) ui[m[0]].set(S[m[0]]); }
-    return {
+    const self = {
       inputs: { in: inG }, outputs: { out },
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
@@ -228,6 +238,7 @@ export default {
       unmount() { note = null; for (const k of Object.keys(ui)) delete ui[k]; },
       params() { return MODP.map(m => ({ id: m[0], name: m[NI], lane: 'distortion', laneName: T.lane, min: m[3], max: m[4], role: m[6], scale: m[5] ? 'log' : 'lin', drift: m[7], on: m[8] })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (Object.hasOwn(MODBY, k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); },
+      latency() { return latNow(); },
       getState() { return { ...S }; },
       setState(s) {
         s = s && typeof s === 'object' ? s : {};
@@ -239,5 +250,6 @@ export default {
       },
       destroy() { if (dead) return; dead = true; [inG, out, node].forEach(n => { try { if (n) n.disconnect(); } catch { } }); },
     };
+    return self;
   }
 };

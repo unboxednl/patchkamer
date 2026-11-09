@@ -13,7 +13,7 @@ Maakt tot vier extra stemmen bij een invoersignaal. Elke stem heeft een eigen in
 | Naam | `Harmonizer` in alle talen; alleen de poortnamen (`Uit`/`Out`, `Noten`/`Notes`) verschillen per taal (via `i18n`) |
 | Soort | `effect` (categorie `effect`): Harmonizer krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in`, audio-uitgang `out`, eventingang `notes`, sturing `mod` |
-| Contract | v1.28 |
+| Contract | v1.28 (`latency()` sinds 1.1.0: v1.34) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Geen tunes, wel presets
@@ -82,3 +82,5 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Effects](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: harmoniestemmen bij een zanglijn of melodie als insert; audio in `in`, uit `out`. Voor stemmen binnen de toonladder: verbind een melodiebron met de eventingang `notes` en zet `follow` op `notes`, of laat de toon van de ingang volgen met `detect`.
+
+Vertraging: de worklet meldt de gemeten vertraging van de hoofdweg (het droge deel loopt gelijk mee); het apparaat geeft hem sinds 1.1.0 door met `latency()` (seconden, contract v1.34), zodat de host hem op de titelbalk en bij de kabels toont.

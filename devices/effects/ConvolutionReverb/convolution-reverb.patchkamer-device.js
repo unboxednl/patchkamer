@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.0.1 — Kaartbreedte 520 px (minimaal 490): de titelbalk (naam, poorten, versiekeuze, knoppen) was 474 px breed en duwde de kaart van 460 px uit zijn voegen, waardoor de rechterkant ("0 ms", "20 Hz", "alles", de knoppen) werd afgekapt. De waardekolom van de knoppen is 84 px.
 // 1.0.0 — Nieuw apparaat (contract v1.28): convolutiegalm. De ingebouwde impulsresponsies worden bij het laden deterministisch gegenereerd (gezaaide ruis met een decaycurve per frequentieband, vroege reflecties, flutterecho,
 //          een dispersieve veerlus en modale resonanties; geen audiobestanden in het apparaat). Eigen impulsresponsies laden kan met loadAudio(files, info) (contract §13e): de audio komt nooit in de state.
 //          Motor: twee ConvolverNodes (A/B) voor een kruisfade bij elke wissel van impulsrespons, trim (begin en lengte), stretch (hersampled), balans vroeg/staart en eigen normalisatie op energie;
@@ -144,9 +145,9 @@ class ConvGuard extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', ConvGuard);`;
 
 export default {
-  id: 'nl.patchkamer.convolutionreverb', name: 'Convolution Reverb', version: '1.0.0', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.convolutionreverb', name: 'Convolution Reverb', version: '1.0.1', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
-  ui: { width: 460, minWidth: 400 },
+  ui: { width: 520, minWidth: 490 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
   create(ctx, host) {
     const nl = !!host && host.lang === 'nl', T = nl ? TXT.nl : TXT.en, NI = nl ? 1 : 2, sr = ctx.sampleRate || 48000;
@@ -236,6 +237,8 @@ export default {
         ui.hp = knob(el, 'hp', hz, 5); ui.lp = knob(el, 'lp', hz, 50);
         ui.tilt = knob(el, 'tilt', v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', 0.1);
         ui.width = knob(el, 'width', pct, 0.01); ui.mix = knob(el, 'mix', pct, 0.01);
+        // de waardekolom van een hostknop is 44 px: "0 ms", "20 Hz", "alles" en "vroeg 100%" werden afgekapt; geef haar de breedte van de langste tekst
+        el.querySelectorAll('.k').forEach(r => { if (!r.style.gridTemplateColumns) r.style.gridTemplateColumns = '70px minmax(0,1fr) 84px'; });
         lenNote = document.createElement('div'); lenNote.style.cssText = 'font-size:11px;color:var(--muted,#97a1ad);margin-top:4px'; lenNote.textContent = fmt(T.nodes, builtLen.toFixed(2)); el.appendChild(lenNote);
         note = document.createElement('div'); note.style.cssText = 'font-size:11px;color:var(--muted,#97a1ad);margin-top:2px'; el.appendChild(note); showNote();
         if (typeof AudioWorkletNode === 'undefined') note.textContent = T.noworklet;

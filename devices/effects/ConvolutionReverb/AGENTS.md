@@ -66,3 +66,5 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Effects](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: galm van een ruimte of apparaat als insert of op een send-bus. Audio in `in`, uit `out`; geen latency. De IR en `mix` bepalen de ruimte en de hoeveelheid.
+
+Kaartbreedte (1.0.1): `ui.width` 520, `minWidth` 490. De titelbalk (naam, poorten, versiekeuze en knoppen) is 474 px breed; bij 460 px rekte hij de kaart uit zijn voegen en werd de waardekolom afgekapt. De waardekolom van de knoppen is 84 px. Geen `latency()`: een galm die het droge deel niet vertraagt, meldt geen vertraging (contract §13j).

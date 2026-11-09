@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.1 — De reductiemeter (en de kromme in het scherm) toont de werkelijke reductie: bij Uit of mix onder 100% meldde hij nog de volle, niet toegepaste reductie. Het geluid is ongewijzigd.
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: de-esser met sibilantendetectie in een instelbare band (3 tot 10 kHz, bandbreedte in octaven), drempel, ratio, maximale reductie,
 //          attack en release, de modi split-band (alleen die band wordt gedempt) en wideband (het hele signaal), luistermodus voor de detectieband, parallelle mix en een reductiemeter.
@@ -99,7 +100,7 @@ function deBand(f, f0, bw, sr) { const w0 = 2 * Math.PI * Math.min(f0, 0.45 * sr
   const w = 2 * Math.PI * f / sr, c1 = Math.cos(w), s1 = Math.sin(w), c2 = Math.cos(2 * w), s2 = Math.sin(2 * w);
   const nr = b0 + b2 * c2, ni = -b2 * s2, dr = 1 + a1 * c1 + a2 * c2, di = -a1 * s1 - a2 * s2, dd = dr * dr + di * di; return [(nr * dr + ni * di) / dd, (ni * dr - nr * di) / dd]; }
 
-const WNAME = 'nl-patchkamer-deesser-1-0-0';
+const WNAME = 'nl-patchkamer-deesser-1-0-1';
 const WORKLET = `
 const IN_MAX = 16, LN = 20 / Math.LN10, DB2LIN = Math.LN10 / 20;
 const cl = v => (v > -IN_MAX && v < IN_MAX) ? v : (v !== v ? 0 : v > 0 ? IN_MAX : -IN_MAX);
@@ -144,12 +145,13 @@ class DeEss extends AudioWorkletProcessor{
     for(let i=0;i<4;i++) if(!(Math.abs(z[i])<1e6)) z[i]=0;
     for(let i=0;i<2;i++) if(!(env[i]>=0&&env[i]<1e6)) env[i]=0;
     if(!(this.g>=0&&this.g<400)) this.g=0; if(!(this.mx>=0&&this.mx<=1.0001)) this.mx=0; if(!(this.grMax>=0&&this.grMax<400)) this.grMax=0; if(!(this.lvMax>-1e4&&this.lvMax<1e4)) this.lvMax=-180;
-    if((this.n+=1)%10===0){ this.port.postMessage({gr:this.grMax,lv:this.lvMax}); this.grMax=0; this.lvMax=-180; }
+    // de meter toont wat er werkelijk met het geluid gebeurt: bij mix < 100% of Uit is de reductie op de middenfrequentie kleiner dan de berekende
+    if((this.n+=1)%10===0){ const gE=-20*Math.log10(Math.max(1e-6,1+this.mx*(Math.exp(-this.grMax*DB2LIN)-1))); this.port.postMessage({gr:gE>0?gE:0,lv:this.lvMax}); this.grMax=0; this.lvMax=-180; }
     return true; } }
 registerProcessor('${WNAME}', DeEss);`;
 
 export default {
-  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.1.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.1.1', kind: 'effect', category: 'effect',
   about: { nl: 'Dempt scherpe s-klanken in een stem. Een detectieband (3 tot 10 kHz) bepaalt wanneer; in split-band dempt alleen die band, in wideband het hele signaal.', en: 'Tames harsh s sounds in a voice. A detection band (3 to 10 kHz) decides when; in split-band only that band is reduced, in wideband the whole signal.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
