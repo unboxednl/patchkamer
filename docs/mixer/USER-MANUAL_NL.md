@@ -144,7 +144,7 @@ Leveler houdt het gemiddelde volume van een bron gelijk. Hij meet het niveau ove
 
 Twee knoppen: **Huidig niveau = doel** zet het doelniveau op wat er nu binnenkomt, en **Regeling op 0** zet de correctie terug op 0.
 
-De meter toont **IN**, **UIT** en **REGEL** (de correctie in dB), met een lampje voor de limiter (**limiter rust** als hij niet werkt).
+De meter toont **IN**, **UIT** en **REGEL** (de correctie in dB), met een lampje voor de limiter (**limiter rust** als hij niet werkt). **IN** en **UIT** zijn gewone meters: een skin kan er een ronde VU-meter of een ledlader van maken. Het streepje van het doelniveau staat dan alleen nog over een balk of ledlader; **REGEL** en het limiterlampje blijven zoals ze zijn.
 
 ### Poorten
 

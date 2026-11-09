@@ -95,7 +95,7 @@ The six processing devices (Balance EQ, Multiband Balance, Bus Compressor, Patin
 | **Reset meters** | Starts the measurements again. |
 | **Auto / suggestion strength** | How far a suggestion or Follow moves a control (0 to 100%). |
 | **Lock** (under each control) | Protects a control from suggestions, Follow and the Master Director. |
-| The meter and the spectrum | The measurements of the input and the output, and the spectrum of the input. A warning appears for sample clipping, a bad phase, an unbalanced left/right and heavy limiting. |
+| The meter and the spectrum | Master Chain and Patina show meters above the text block for the momentary loudness (LUFS-M) of **IN** and **OUT**, and Master Chain also **GR** (bus compression) and **Limiter**; a skin can turn them into a round VU meter or an LED ladder. The numbers below (LUFS-I, TP, LRA, correlation) stay text, because they run since the last reset. The measurements of the input and the output, and the spectrum of the input. A warning appears for sample clipping, a bad phase, an unbalanced left/right and heavy limiting. |
 
 Double-click a slider to go back to its starting value. Click the number to type a value.
 

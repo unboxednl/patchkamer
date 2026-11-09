@@ -13,7 +13,7 @@ Een subtiele harmonische saturatie (tape, buis of neutraal zacht) met ADAA-alias
 | Naam | `Patina` in alle talen; de kaart, de besturingen, de opties, de startprofielen, de meldingen en de poortnamen zijn tweetalig (`host.lang`, `LOC` en `TXT` bovenin) |
 | Soort | `effect`: dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in` (Stereo in); audio-uitgang `out` (Stereo uit); mastering-ingang `setup` (Master Director: driehoekpoort voor de gele, gestippelde mastering-kabel van de Master Director) |
-| Contract | v1.12 |
+| Contract | v1.12; v1.18 voor de meters (`host.ui.meter`, alleen als de host het kent) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Patina, `nl.patchkamer.mastering.sat`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Sinds 1.13.0 is de DSP bewust veranderd: Helderheid en Kleur werken hoorbaar en de vaste hoogverzwakking van de ADAA is weg (zie hieronder). De meldingen uit de DSP zijn codes die de kaart vertaalt, en de waarden van de keuze "Doelkarakter" heten Engels (`transparent`, `firm`). Het geluid is dus niet meer sample voor sample gelijk aan het oude bestand; `Mix = 0` en bypass blijven bit-gelijk aan de invoer.
@@ -63,6 +63,11 @@ Beide werken op het natte pad, vóór het mengen, en schalen dus met `mix`.
 - `node contract/validate-instrument.mjs devices/mastering/Patina/patina.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
 - Je kunt niet horen hoe een preset klinkt. Schrijf in je oplevering dat het **niet beluisterd** is.
 - Alle tekst in het apparaat staat in `TXT` en `LOC` bovenin het bestand (Nederlands en Engels). Een nieuwe tekst krijgt altijd nl én en.
+
+## Meters (sinds 1.14.0)
+
+Boven het tekstblok staan host-meters (`host.ui.meter`, contract v1.18): `met.in` en `met.out`, groep `meters`, `unit: 'db'`, horizontaal, zonder piekstreepje, gevoed met `set(db)` uit de laatste statistieken (20 beelden per seconde). `met.in` en `met.out` tonen het momentane volume (LUFS-M, bereik −50 tot 0). Een skin kan er een ronde VU-meter of ledlader van maken (`design.meters`). Een host zonder `host.ui.meter` toont de balken niet; alles daaronder werkt dan zoals voorheen.
+Bewust **niet** omgezet: het tekstblok (LUFS-I, S, LRA, TP, correlatie en L/R: ze lopen sinds de laatste reset, dus ze zijn geen live niveau) en het spectrumcanvas (een grafiek). Geluid, worklet-berichten, `getState()`, presets en Masterregie zijn ongewijzigd.
 
 ## Documentatie en songs
 

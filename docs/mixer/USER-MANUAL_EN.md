@@ -144,7 +144,7 @@ Leveler keeps the average volume of a source steady. It measures the level over 
 
 Two buttons: **Current level = target** sets the target to the level that comes in now, and **Reset gain** sets the correction back to 0.
 
-The meter shows **IN**, **OUT** and **GAIN** (the correction in dB), with a lamp for the limiter (**limiter idle** when it is not working).
+The meter shows **IN**, **OUT** and **GAIN** (the correction in dB), with a lamp for the limiter (**limiter idle** when it is not working). **IN** and **OUT** are ordinary meters: a skin can turn them into a round VU meter or an LED ladder. The target-level mark then only stays over a bar or LED ladder; **GAIN** and the limiter lamp stay as they are.
 
 ### Ports
 

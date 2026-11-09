@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.16.3 (2026-11-09)
+
+### Changed
+- **Meters of Leveler, Master Chain and Patina drawn by the host** (Leveler 1.16.0, Master Chain 1.14.0, Patina 1.14.0): a skin can now turn them into a round VU meter, an LED ladder or another bar. Leveler: **IN** and **OUT** (`met.in`, `met.out`; the target-level mark stays over a bar or ladder); **GAIN** and the limiter lamp stay as they were. Master Chain and Patina get new bars above the text block for the momentary loudness (LUFS-M) of **IN** and **OUT**, and Master Chain also **GR** (bus compression) and **Limiter**; the text block and the spectrum stay as they are, because their figures run since the last reset or are a graph. Sound, state, presets and ports are unchanged; a host without meters falls back to the old drawing (Leveler) or shows no bars (Master Chain, Patina). Manual and device notes updated.
+
 ## 0.16.2 (2026-11-09)
 
 ### Changed

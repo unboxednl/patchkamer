@@ -13,7 +13,7 @@ Een niveaubewaker: houdt het gemiddelde volume van een bron gelijk. Een leveler 
 | Naam | `Leveler` in alle talen; alleen de poortnamen `In` en `Out` hebben een Nederlandse variant (via `i18n`) |
 | Soort | `effect`: Leveler krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in`, audio-uitgang `out`; geen events of sturing |
-| Contract | v1.11 |
+| Contract | v1.11; v1.18 voor de meters (`host.ui.meter`, terugval op de eigen tekening) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (`nl.patchkamer.egaal`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -42,6 +42,11 @@ Wat Leveler met een state doet (getest):
 - Getallen buiten het bereik worden afgekapt; een tekst, `null`, `NaN` of een ontbrekende waarde geeft de startwaarde.
 - `on` die geen boolean is, geeft de startwaarde.
 - Onbekende velden worden genegeerd. Zet er geen in.
+
+## Meters (sinds 1.16.0)
+
+IN en UIT zijn host-meters (`host.ui.meter`, contract v1.18): ids `met.in` en `met.out`, groep `meters`, `unit: 'db'`, bereik −60 tot 0 dB, horizontaal, zonder piekstreepje; ze worden gevoed met `set(db)` vanuit de eigen tekenklok (30 beelden per seconde) uit de worklet-berichten. Een skin kan er een ronde VU-meter, ledlader of andere balk van maken (`design.meters`, `match: "met.in"` of `"group:meters"`). Het doelniveau staat als streepje over een horizontale balk of ledlader; bij een VU-gezicht of een andere richting is het weg.
+Bewust **niet** omgezet: de REGEL-balk (een correctie rond nul, dus geen niveaumeter), het limiterlampje met de getalweergave en de getallen naast de meters; die blijven canvas of tekst. Een host zonder `host.ui.meter` tekent alles zoals voor 1.16.0 in één canvas. Geluid, worklet-berichten, `getState()` en presets zijn ongewijzigd.
 
 ## Controleren
 

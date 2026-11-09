@@ -13,7 +13,7 @@ Een masterketen: toonregeling (laag, midden, hoog) → buscompressie → lookahe
 | Naam | `Master Chain` in alle talen; de kaart, de besturingen, de opties, de startprofielen, de meldingen en de poortnamen zijn tweetalig (`host.lang`, `LOC` en `TXT` bovenin) |
 | Soort | `effect`: dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in` (Stereo in); audio-uitgang `out` (Stereo uit); mastering-ingang `setup` (Master Director: driehoekpoort voor de gele, gestippelde mastering-kabel van de Master Director) |
-| Contract | v1.12 |
+| Contract | v1.12; v1.18 voor de meters (`host.ui.meter`, alleen als de host het kent) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Eindbeeld, `nl.patchkamer.mastering.master`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De DSP is sample voor sample gelijk aan het oude bestand (bewezen met een offline render); alleen de meldingen uit de DSP zijn codes geworden die de kaart vertaalt, en de waarden van de keuze "Doelkarakter" heten nu Engels (`transparent`, `firm`).
@@ -70,6 +70,11 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Transparent`, `Warm`, `
 - `node contract/validate-instrument.mjs devices/mastering/MasterChain/master-chain.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
 - Je kunt niet horen hoe een preset klinkt. Schrijf in je oplevering dat het **niet beluisterd** is.
 - Alle tekst in het apparaat staat in `TXT` en `LOC` bovenin het bestand (Nederlands en Engels). Een nieuwe tekst krijgt altijd nl én en.
+
+## Meters (sinds 1.14.0)
+
+Boven het tekstblok staan host-meters (`host.ui.meter`, contract v1.18): `met.in`, `met.out`, `met.gr` en `met.lim`, groep `meters`, `unit: 'db'`, horizontaal, zonder piekstreepje, gevoed met `set(db)` uit de laatste statistieken (20 beelden per seconde). `met.in` en `met.out` tonen het momentane volume (LUFS-M, bereik −50 tot 0). `met.gr` is de reductie van de buscompressor (bereik −24 tot 0: de balk groeit naar rechts naarmate er meer gereduceerd wordt) en `met.lim` die van de limiter (−12 tot 0). Een skin kan er een ronde VU-meter of ledlader van maken (`design.meters`). Een host zonder `host.ui.meter` toont de balken niet; alles daaronder werkt dan zoals voorheen.
+Bewust **niet** omgezet: het tekstblok (LUFS-I, S, LRA, TP, correlatie en L/R: ze lopen sinds de laatste reset, dus ze zijn geen live niveau) en het spectrumcanvas (een grafiek). Geluid, worklet-berichten, `getState()`, presets en Masterregie zijn ongewijzigd.
 
 ## Documentatie en songs
 

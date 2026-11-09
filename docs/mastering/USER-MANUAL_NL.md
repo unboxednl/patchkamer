@@ -95,7 +95,7 @@ De zes bewerkende apparaten (Balance EQ, Multiband Balance, Bus Compressor, Pati
 | **Reset meters** | Begint de metingen opnieuw. |
 | **Auto-/voorstelsterkte** | Hoe ver een voorstel of Volg een regelaar verschuift (0 tot 100%). |
 | **Vast** (onder elke regelaar) | Beschermt een regelaar tegen voorstellen, Volg en de Master Director. |
-| De meter en het spectrum | De metingen van de ingang en de uitgang, en het spectrum van de ingang. Er verschijnt een waarschuwing bij sampleclipping, een slechte fase, een scheve links/rechts en veel limiting. |
+| De meter en het spectrum | Master Chain en Patina tonen boven het tekstblok meters voor het momentane volume (LUFS-M) van **IN** en **UIT**, Master Chain ook **GR** (buscompressie) en **Limiter**; een skin kan er een ronde VU-meter of ledlader van maken. De getallen eronder (LUFS-I, TP, LRA, correlatie) blijven tekst, want ze lopen sinds de laatste reset. De metingen van de ingang en de uitgang, en het spectrum van de ingang. Er verschijnt een waarschuwing bij sampleclipping, een slechte fase, een scheve links/rechts en veel limiting. |
 
 Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal om een waarde te typen.
 

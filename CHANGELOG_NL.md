@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.16.3 (2026-11-09)
+
+### Gewijzigd
+- **Meters van Leveler, Master Chain en Patina door de host getekend** (Leveler 1.16.0, Master Chain 1.14.0, Patina 1.14.0): een skin kan er nu een ronde VU-meter, een ledlader of een andere balk van maken. Leveler: **IN** en **UIT** (`met.in`, `met.out`; het streepje van het doelniveau blijft over een balk of ladder staan); **REGEL** en het limiterlampje blijven zoals ze waren. Master Chain en Patina krijgen nieuwe balken boven het tekstblok voor het momentane volume (LUFS-M) van **IN** en **UIT**, en Master Chain ook **GR** (buscompressie) en **Limiter**; het tekstblok en het spectrum blijven zoals ze zijn, omdat hun cijfers sinds de laatste reset lopen of een grafiek zijn. Geluid, state, presets en poorten zijn ongewijzigd; een host zonder meters valt terug op de oude tekening (Leveler) of toont geen balken (Master Chain, Patina). Handleiding en apparaatnotities bijgewerkt.
+
 ## 0.16.2 (2026-11-09)
 
 ### Gewijzigd

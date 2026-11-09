@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — De IN- en UIT-meter via host.ui.meter (contract v1.18, additief): de host tekent ze (ids met.in en met.out, groep meters, dB-schaal −60 tot 0, horizontaal) en een skin kan er een VU-meter, ledlader of andere balk van maken. Het doelniveau blijft als streepje over beide meters staan zolang het gezicht een horizontale balk of ledlader is. De REGEL-balk en het limiterlampje blijven een eigen canvas (een regeling rond nul en een lampje passen niet in een niveaumeter) en de getallen blijven tekst. Een oudere host valt terug op het canvas met alle vier de rijen zoals voorheen. Geluid, worklet-berichten, state, presets en poorten ongewijzigd.
 // 1.15.1 — Alle zes continue regelaars (Target, Response, Window, Range ±, Gate, Ceiling) zijn nu stuurbaar via params/modulate; het apparaat krijgt daarmee automatisch een mod-ingang. Alles staat standaard uit in Drift. Knopwaarden, getState, presets en geluid zonder modulatie ongewijzigd. Bewust niet: het keuzemenu Stand (Regelen/Doorlaten) en de twee knoppen.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Een niet-eindige of absurd grote ingangswaarde (NaN, ±Infinity, een filter dat ontploft) vergiftigde de meting en de piekvolger voor altijd: na één Infinity-sample bleef alles stil. Nu wordt de ingang begrensd (±16 = +24 dB) en NaN wordt 0, en een bewaker zet een ontspoorde toestand terug. Normaal geluid is bit-identiek aan 1.11.0.
@@ -116,7 +117,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.leveler',
   name: 'Leveler',
-  version: '1.15.1',
+  version: '1.16.0',
   kind: 'effect',
   category: 'mix',
   ui: { width: 420, minWidth: 300 },
@@ -130,6 +131,7 @@ export default {
     input.connect(out);                                   // doorlaten tot de worklet er is (en als terugval)
     let node = null, dead = false, ui = {}, meter = { in: -120, gain: 0, out: -120, lim: 0 }, canvas = null, g2 = null, note = null, stopDraw = null, ready = false;
     let cw = 300, ro = null, col = null, colT = 0;
+    let hm = null;   // host-meters { in, out } met hun markeringen en getallen; null = eigen canvas met alle rijen (oude host)
     const mod = {};
     const E = k => { const b = S[k], o = mod[k] || 0, r = K.find(x => x[0] === k)[2]; if (!o) return b; const mn = r[0], mx = r[1]; return MODP[k][2] ? clamp(b * Math.pow(mx / mn, o), mn, mx) : clamp(b + o * (mx - mn), mn, mx); };
     const send = () => { if (node) node.port.postMessage({ type: 'set', s: { ...S, ...Object.fromEntries(Object.keys(mod).map(k => [k, E(k)])) } }); };
@@ -150,23 +152,37 @@ export default {
     // meters: In, Regeling, Uit, met doellijn; kleuren uit de host (één keer per seconde opgevraagd)
     function draw() {
       if (dead || !canvas || !g2) return;
+      drawHostMeters();
       if (!col || performance.now() - colT > 1000) readColors();
-      const w = Math.max(240, cw), h = 74, dpr = Math.min(3, globalThis.devicePixelRatio || 1);
+      const hostM = !!hm, w = Math.max(240, cw), h = hostM ? 38 : 74, dpr = Math.min(3, globalThis.devicePixelRatio || 1);
       if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
       const g = g2; g.setTransform(dpr, 0, 0, dpr, 0, 0);
       const { bg, fg, au, ev, st, ln } = col;
       g.fillStyle = bg; g.fillRect(0, 0, w, h); g.font = '10px ui-monospace,monospace'; g.textBaseline = 'middle';
       const L = 46, R = w - 54, X = db => L + (R - L) * (clamp(db, -60, 0) + 60) / 60;
       const row = (y, label, db, c, txt) => { g.fillStyle = fg; g.fillText(label, 6, y + 6); g.fillStyle = ln; g.fillRect(L, y, R - L, 12); g.fillStyle = c; g.fillRect(L, y, Math.max(0, X(db) - L), 12); g.fillStyle = fg; g.fillText(txt, R + 6, y + 6); };
-      row(6, T.rIn, meter.in, au, meter.in > -100 ? meter.in.toFixed(1) : '—');
-      row(24, T.rOut, meter.out, au, meter.out > -100 ? meter.out.toFixed(1) : '—');
+      if (!hostM) {
+        row(6, T.rIn, meter.in, au, meter.in > -100 ? meter.in.toFixed(1) : '—');
+        row(24, T.rOut, meter.out, au, meter.out > -100 ? meter.out.toFixed(1) : '—');
+      }
       // regeling: balk vanuit het midden, ±bereik
-      const y = 44, mid = (L + R) / 2, span = (R - L) / 2, gr = E('range') > 0 ? clamp(meter.gain / E('range'), -1, 1) : 0;
+      const y = hostM ? 6 : 44, mid = (L + R) / 2, span = (R - L) / 2, gr = E('range') > 0 ? clamp(meter.gain / E('range'), -1, 1) : 0;
       g.fillStyle = fg; g.fillText(T.rGain, 6, y + 6); g.fillStyle = ln; g.fillRect(L, y, R - L, 12); g.fillStyle = ev; g.fillRect(Math.min(mid, mid + gr * span), y, Math.abs(gr * span), 12);
       g.fillStyle = fg; g.fillRect(mid - 0.5, y - 2, 1, 16); g.fillText((meter.gain >= 0 ? '+' : '') + meter.gain.toFixed(1), R + 6, y + 6);
-      // doellijn op IN/UIT en limiter-lampje
-      g.fillStyle = fg; g.fillRect(X(E('target')) - 1, 3, 2, 36);
-      const limOn = meter.lim < -0.3; g.fillStyle = limOn ? st : ln; g.fillRect(L, 62, 8, 8); g.fillStyle = fg; g.fillText(limOn ? T.lim + meter.lim.toFixed(1) + ' dB' : T.limIdle, L + 12, 66);
+      // doellijn op IN/UIT (met een host-meter staat ze als streepje over de meter) en limiter-lampje
+      if (!hostM) { g.fillStyle = fg; g.fillRect(X(E('target')) - 1, 3, 2, 36); }
+      const ly = hostM ? 26 : 62, limOn = meter.lim < -0.3; g.fillStyle = limOn ? st : ln; g.fillRect(L, ly, 8, 8); g.fillStyle = fg; g.fillText(limOn ? T.lim + meter.lim.toFixed(1) + ' dB' : T.limIdle, L + 12, ly + 4);
+    }
+    // IN/UIT via de host: het niveau geven, het getal bijwerken en de doellijn zetten
+    function drawHostMeters() {
+      if (!hm) return;
+      const tf = (clamp(E('target'), -60, 0) + 60) / 60;
+      ['in', 'out'].forEach(k => {
+        const m = hm[k], db = meter[k]; m.m.set(db);
+        const t = db > -100 ? db.toFixed(1) : '—'; if (t !== m.txt) { m.txt = t; m.v.textContent = t; }
+        const el = m.m.el, vis = el.dataset.face !== 'vu' && el.clientWidth > el.clientHeight, x = el.offsetLeft + 1 + (el.clientWidth - 2) * tf - 1, sig = vis ? Math.round(x * 2) : -1;
+        if (sig !== m.sig) { m.sig = sig; m.t.style.display = vis ? 'block' : 'none'; if (vis) m.t.style.left = x.toFixed(1) + 'px'; }
+      });
     }
     const stopLoop = () => { if (stopDraw) { stopDraw(); stopDraw = null; } };
     const onSkin = () => { col = null; };
@@ -182,15 +198,34 @@ export default {
         b1.onclick = () => { if (meter.in > -80) { S.target = Math.round(clamp(meter.in, -36, -6) * 2) / 2; ui.target.set(S.target); send(); } };
         const b2 = document.createElement('button'); b2.type = 'button'; b2.textContent = T.b2; b2.onclick = () => { if (node) node.port.postMessage({ type: 'reset' }); };
         row.append(b1, b2); el.appendChild(row);
-        canvas = document.createElement('canvas'); canvas.style.cssText = 'display:block;width:100%;height:74px;border:1px solid var(--line,#39434c);border-radius:4px;background:var(--well,#0b171d)';
-        canvas.setAttribute('aria-label', T.aria); el.appendChild(canvas); g2 = canvas.getContext('2d'); cw = canvas.clientWidth || 300; col = null;
+        canvas = document.createElement('canvas');
+        let box = el;
+        if (host.ui && typeof host.ui.meter === 'function') {   // IN en UIT door de host; de rest van de meter (REGEL en limiter) blijft canvas
+          box = document.createElement('div'); box.style.cssText = 'border:1px solid var(--line,#39434c);border-radius:4px;background:var(--well,#0b171d);color:var(--well-fg,#c7dbe0);font:10px ui-monospace,monospace;padding-top:3px'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', T.aria); el.appendChild(box);
+          hm = {};
+          try {
+            [['in', T.rIn], ['out', T.rOut]].forEach(([k, lab]) => {
+              const row = document.createElement('div'); row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:0 6px;min-height:18px';
+              const l = document.createElement('span'); l.textContent = lab; l.style.cssText = 'flex:none;width:34px';
+              const wrap = document.createElement('div'); wrap.style.cssText = 'position:relative;flex:1 1 0;min-width:0;display:flex;align-items:center';
+              const m = host.ui.meter(wrap, lab, { id: 'met.' + k, group: 'meters', unit: 'db', range: [-60, 0], hold: false, orientation: 'horizontal', width: 12 });
+              const t = document.createElement('div'); t.style.cssText = 'position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--well-fg,#c7dbe0);pointer-events:none;display:none';
+              const v = document.createElement('span'); v.style.cssText = 'flex:none;width:42px'; wrap.appendChild(t); row.append(l, wrap, v); box.appendChild(row);
+              hm[k] = { m, t, v, txt: null, sig: null };
+            });
+          } catch (e) { hm = null; }
+          if (!hm) { box.remove(); box = el; }
+        }
+        canvas.style.cssText = hm ? 'display:block;width:100%;height:38px' : 'display:block;width:100%;height:74px;border:1px solid var(--line,#39434c);border-radius:4px;background:var(--well,#0b171d)';
+        if (!hm) canvas.setAttribute('aria-label', T.aria);
+        box.appendChild(canvas); g2 = canvas.getContext('2d'); cw = canvas.clientWidth || 300; col = null;
         if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) cw = w; }); ro.observe(canvas); }
         if (typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
         note = document.createElement('div'); note.className = 'note'; el.appendChild(note); paintNote();
         const tip = document.createElement('div'); tip.className = 'note'; tip.textContent = T.tip; el.appendChild(tip);
         paintAll(); stopLoop(); stopDraw = tekenLus(host, self, draw, 30);
       },
-      unmount() { stopLoop(); if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); canvas = null; g2 = null; note = null; ui = {}; },
+      unmount() { stopLoop(); if (hm) { ['in', 'out'].forEach(k => { try { hm[k].m.destroy(); } catch (e) {} }); hm = null; } if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); canvas = null; g2 = null; note = null; ui = {}; },
       params() { return K.map(([id, tk, range]) => ({ id, name: T[tk], lane: GRP[id], laneName: T['g' + GRP[id][0].toUpperCase() + GRP[id].slice(1)], min: range[0], max: range[1], role: MODP[id][0], scale: MODP[id][2] ? 'log' : 'lin', drift: MODP[id][1], on: false })); },
       modulate(o) { for (const k in mod) delete mod[k]; for (const k in o || {}) if (Object.hasOwn(MODP, k) && typeof o[k] === 'number' && Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); send(); },
       getState() { return { ...S }; },
@@ -202,6 +237,7 @@ export default {
       },
       destroy() {
         if (dead) return; dead = true; stopLoop(); if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin);
+        if (hm) { ['in', 'out'].forEach(k => { try { hm[k].m.destroy(); } catch (e) {} }); hm = null; }
         try { if (node) { node.port.onmessage = null; node.disconnect(); } input.disconnect(); out.disconnect(); } catch (e) {}
       },
     };
