@@ -4,6 +4,18 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.17.0 (2026-11-09)
+
+### Added
+- **Clip Arranger 1.24.0: clip matrix and editor improved (part 1).**
+  - **Playing:** above the matrix it says which song section and bar the sequencer is in (or the bar in the session). Every playing clip has a vertical line that moves along, and clips of more than one bar show a tick per bar.
+  - **Drag and drop:** drag a clip to another slot to move it, or hold **Ctrl** to copy, also to another track of the same kind (drums to drums, keys or drone to keys or drone). Buttons **Copy clip**, **Paste clip**, **Duplicate** and **Delete clip** sit above the matrix.
+  - A clip shows only its length in bars (the time and number of events are gone). **✎** in a track header renames the track.
+  - The track is chosen in 02 (and in the matrix), no longer in 03. Another clip or track puts the keyboard and the octave choice on the notes of that clip.
+  - Notes in the piano roll are easier to stretch: the grip on the right edge is wider (12 px) and a note stays within its clip.
+  - **05 · Assign devices is gone** (it was only a list of labels).
+  - No new state fields: existing songs and presets load as before.
+
 ## 0.16.3 (2026-11-09)
 
 ### Changed

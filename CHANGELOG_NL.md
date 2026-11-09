@@ -4,6 +4,18 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.17.0 (2026-11-09)
+
+### Toegevoegd
+- **Clip Arranger 1.24.0: clipmatrix en editor verbeterd (deel 1).**
+  - **Afspelen:** boven de matrix staat in welke songsectie en maat de sequencer is (of de maat in de sessie). Elke spelende clip heeft een verticale lijn die meeloopt, en clips van meer dan één maat hebben een streepje per maat.
+  - **Slepen:** sleep een clip naar een ander slot om hem te verplaatsen, of houd **Ctrl** ingedrukt om te kopiëren, ook naar een ander spoor van dezelfde soort (drums naar drums, toetsen of drone naar toetsen of drone). Boven de matrix staan de knoppen **Kopieer clip**, **Plak clip**, **Dupliceer** en **Verwijder clip**.
+  - Een clip toont alleen zijn lengte in maten (tijd en aantal events zijn weg). Met **✎** in een spoorkop hernoem je het spoor.
+  - Het spoor kies je in 02 (en in de matrix), niet meer in 03. Een andere clip of een ander spoor zet het klavier en de octaafkeuze op de noten van die clip.
+  - Noten in de pianorol zijn makkelijker te verlengen: de greep aan de rechterrand is breder (12 px) en een noot blijft binnen zijn clip.
+  - **05 · Instrumenten toewijzen is vervallen** (het was alleen een lijst met labels).
+  - Geen nieuwe state-velden: bestaande songs en presets laden als voorheen.
+
 ## 0.16.3 (2026-11-09)
 
 ### Gewijzigd
