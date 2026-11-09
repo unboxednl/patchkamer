@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.5.0 — Pad Sampler, fase 2b, Patchkamer contract v1.31 (gebouwd voor v1.26). Nieuw: Time-stretch (tempo zonder toonhoogte en toonhoogte zonder tempo; WSOLA met een ritmische en een tonale stand, in een Blob-worker met
+//          annuleren en voortgang, anders in brokken op de hoofdthread), SoundFonts laden (SF2 en SF3: keuze van preset of instrument, slagwerkpresets naar drum-pads, stereopaar, lus, envelope, filter, toonhoogte, balans,
+//          rapport van het genegeerde) en XPM-programma’s laden (drum en keygroup), alles in de tab Banken (lokaal). Geen nieuwe state-velden: oude states laden ongewijzigd en setState(getState()) blijft exact.
 // 1.4.0 — Pad Sampler, fase 2a, Patchkamer contract v1.30 (gebouwd voor v1.26). Nieuw: twee aux-sends (reverb en delay, retour naar de mix of een eigen uitgang), lus-crossfade bij het afspelen (loop.xfade) en een Autosampler
 //          (tab Bewerken: een pad of laag over noten en velocity-lagen naar zones). State: optioneel `aux`; tot 128 zones per pad; oude states laden ongewijzigd en setState(getState()) blijft exact.
 // 1.3.0 — Pad Sampler, stap 4 (banken en catalogus), Patchkamer contract v1.27 (gevalideerd tegen v1.28). Nieuw: tab Banken met een catalogus van gratis banken (alleen bronnen waarvan de licentie is gelezen; elk bestand vastgepind op een
@@ -73,9 +76,14 @@ const TXT = {
       grpProc: 'Process: als sample opslaan', procOp: 'Bewerking', fxFilter: 'Filter', fxDrive: 'Drive', fxCrush: 'Bitcrusher', fxEq: 'EQ met drie banden', fxComp: 'Compressor', fxTempo: 'Tempo-afstemming',
       fType: 'Soort', fCut: 'Cutoff (Hz)', fQ: 'Resonantie (Q)', fSlope: 'Helling', fSweep: 'Sweep over de selectie', fCutEnd: 'Cutoff aan het eind (Hz)', sl12: '12 dB per octaaf', sl24: '24 dB per octaaf',
       drDb: 'Drive (dB)', drMix: 'Mix (%)', crBits: 'Bits', crHz: 'Sample rate (Hz)', eqLow: 'Laag (dB, 200 Hz)', eqMid: 'Midden (dB, 1 kHz)', eqHigh: 'Hoog (dB, 5 kHz)',
-      cpThr: 'Drempel (dB)', cpRatio: 'Ratio', cpAtk: 'Attack (ms)', cpRel: 'Release (ms)', cpMk: 'Make-up (dB)', tmTarget: 'Doel-BPM', tmNow: 'Huidig tempo: {0} BPM', tmSt: 'Hersamplen: de toonhoogte verandert mee ({0} halve tonen); echte time-stretch volgt later.',
+      cpThr: 'Drempel (dB)', cpRatio: 'Ratio', cpAtk: 'Attack (ms)', cpRel: 'Release (ms)', cpMk: 'Make-up (dB)', tmTarget: 'Doel-BPM', tmNow: 'Huidig tempo: {0} BPM', tmSt: 'Hersamplen: de toonhoogte verandert mee ({0} halve tonen); kies Time-stretch voor tempo zonder toonhoogte.',
       procPrev: 'Beluisteren', procApply: 'Toepassen', procHelp: 'Werkt op de selectie, of op het hele sample als er geen selectie is. Het resultaat wordt echt in het sample opgeslagen (geen effect-apparaat) en is ongedaan te maken.',
-      fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo-afstemming' },
+      fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo-afstemming', stretch: 'Time-stretch', pitchKeep: 'Toonhoogte zonder tempo' },
+      fxStretch: 'Time-stretch (tempo of toonhoogte los van elkaar)', stMode: 'Wat verandert', stBpm: 'Tempo naar doel-BPM', stFactor: 'Tempo met een factor', stPitch: 'Toonhoogte, tempo blijft', stFactorL: 'Tempofactor (×, 2 = twee keer zo snel)', stSemi: 'Halve tonen', stCents: 'Cent',
+      stQual: 'Kwaliteit', stRhythm: 'Ritmisch (drums, korte vensters, aanslagen blijven scherp)', stTonal: 'Tonaal (lange vensters, voor klank en melodie)', stGo: 'Time-stretch toepassen', stPrev: 'Beluisteren', stCancel: 'Annuleren',
+      stBusy: 'Er loopt al een time-stretch.', stRange: 'De factor moet tussen 0,5 en 2 liggen (tempo: doel-BPM tussen de helft en het dubbele van het huidige tempo; toonhoogte: hoogstens 12 halve tonen).',
+      stInfoT: 'Tempofactor {0}× · de lengte wordt {1} s (nu {2} s)', stInfoP: 'Toonhoogte {0} halve tonen · de lengte blijft {1} s', stProg: 'Time-stretch: {0}%…', stAborted: 'Time-stretch gestopt: er is niets veranderd.', stChanged: 'Het sample is tijdens de bewerking gewisseld: er is niets veranderd.',
+      stHelp: 'Werkt op de selectie of het hele sample en slaat het resultaat in het sample op (ongedaan te maken). Ritmisch kiest korte vensters en laat elke aanslag op zijn plek beginnen; Tonaal gebruikt lange vensters. Toonhoogte rekt eerst en hersamplet daarna terug naar de oorspronkelijke lengte. Het rekenwerk draait in een achtergrond-thread als de browser dat toestaat.',
       grpFlat: 'Flatten en resample', flSrc: 'Bron', flSrcPad: 'Gekozen pad (alle lagen, envelope, filter, tune)', flSrcSel: 'Selectie van de editor', flNote: 'Noot', flVel: 'Velocity', flTail: 'Staart (s)', flHold: 'Notenlengte (s, 0 = automatisch)',
       flCh: 'Kanalen', flStereo: 'Stereo', flMono: 'Mono', flNorm: 'Normaliseren', flTrim: 'Stilte aan het eind afsnijden', flDest: 'Resultaat', dNew: 'Nieuwe laag in dit pad', dLayer: 'Vervang de gekozen laag', dReplace: 'Vervang dit pad (instellingen terug naar standaard)', dOther: 'Op een ander pad',
       flBank: 'Bank', flPadN: 'Pad', flWarn: 'Let op: Pad Sampler heeft geen insert-effecten. Wat je hoort komt uit de lagen, de envelope, het filter, de tune en het niveau en panorama van het pad. De sends (reverb en delay van dit apparaat) en de reverb en delay van andere apparaten worden niet ingebakken. Filter, drive, bitcrusher, EQ en compressor kun je met Process wel als sample opslaan.',
@@ -95,7 +103,7 @@ const TXT = {
       catalog: 'Catalogus', catHelp: 'Alleen banken waarvan de licentie is gelezen. Elk bestand komt van een vastgepinde versie van de bron. Groen: vrij te gebruiken. Geel: lees de waarschuwing.',
       license: 'Licentie', author: 'Auteur', credit: 'Vermelding', creditReq: 'Vermelding verplicht', creditNo: 'Geen vermelding verplicht (wel netjes)', size: 'Grootte', format: 'Formaat', files: 'bestanden', source: 'Bron', pinned: 'Vastgepind op', checked: 'Gecontroleerd',
       openSrc: 'Bron openen', load: 'Laden', cancel: 'Annuleren', accept: 'Ik begrijp dit en accepteer het risico', green: 'Vrij', yellow: 'Let op', loadBank: 'Laad {0}', openOf: 'Bron openen: {0}',
-      local: 'Lokaal', localHelp: 'Kies audiobestanden (WAV, FLAC, OGG, MP3), een SFZ- of Decent Sampler-programma met zijn samples, of een hele map. Een programma met samples gaat in de doelbank; losse audio gaat op het gekozen pad.', chooseFiles: 'Bestanden kiezen…', chooseDir: 'Map kiezen…',
+      local: 'Lokaal', localHelp: 'Kies audiobestanden (WAV, FLAC, OGG, MP3), een SFZ-, Decent Sampler- of XPM-programma met zijn samples, of een hele map. Een SoundFont (SF2 of SF3) kies je als bestand; daarna kies je welke preset of welk instrument erin moet. Een programma met samples gaat in de doelbank; losse audio gaat op het gekozen pad.', chooseFiles: 'Bestanden kiezen…', chooseDir: 'Map kiezen…',
       urlTitle: 'Webadres', urlHelp: 'Een https-adres van een audiobestand, een .sfz of een .dspreset (de samples worden op dezelfde plek gezocht). De server moet toegang vanuit de browser toestaan (CORS).', urlLabel: 'Webadres (https)', urlGo: 'Laden van webadres', badUrl: 'Geen geldig https-adres.',
       fsTitle: 'Freesound', fsHelp: 'Zoek geluiden met je eigen Freesound-token (aan te vragen op freesound.org). Je token blijft alleen in dit venster en wordt nooit in de song bewaard. Alleen CC0 en CC-BY worden getoond; van een geluid wordt het voorbeeld (lossy ogg of mp3) geladen, niet het origineel.', fsToken: 'Eigen token', fsQuery: 'Zoekterm', fsGo: 'Zoeken', fsNeed: 'Vul een zoekterm en je token in.', fsAuth: 'Freesound weigerde het token.', fsNone: 'Geen geschikte resultaten.', fsLoad: 'Laden in gekozen laag', fsOf: '{0} door {1}, {2}, {3} s',
       progress: 'Voortgang', jobLine: '{0}: {1} van {2}', done: 'Klaar.',
@@ -104,12 +112,30 @@ const TXT = {
       undoLabel: 'Bank laden: {0}', busy: 'Er loopt al een import.', errNetwork: 'Geen verbinding, of de server staat toegang vanuit de browser niet toe.', errHttp: 'De server antwoordde met fout {0}.', errSize: 'Het bestand is te groot.', errAudio: 'Dit is geen audio, SFZ of Decent Sampler-bestand.',
       r: {
         regions: '{0} regio(\'s) gevonden, {1} overgenomen.', pads: '{0} drum-pad(s) en {1} zone(s) in een keygroup-pad.', layers: '{0} laag/lagen; {1} pad(s) met velocity-lagen, {2} met afwisselende opnamen (om de beurt), {3} met willekeurige keuze.',
-        roots: 'Grondtoon uit het bestand overgenomen bij {0} regio(\'s); stemming bij {1}.', loops: '{0} lus(sen) overgenomen.', panvol: 'Volume overgenomen bij {0} laag/lagen, balans bij {1}.', mute: '{0} pad(s) in een mutegroep (uit group en off_by).', samples: '{0} sample(s) geladen ({1} MiB PCM16).',
+        roots: 'Grondtoon uit het bestand overgenomen bij {0} regio(\'s); stemming bij {1}.', loops: '{0} lus(sen) overgenomen.', panvol: 'Volume overgenomen bij {0} laag/lagen, balans bij {1}.', mute: '{0} pad(s) in een mutegroep (uit group en off_by, exclusieve klasse of MuteGroup).', samples: '{0} sample(s) geladen ({1} MiB PCM16).',
       },
       i: { item: '{0}: in {1} regio(\'s)', more: '… en nog {0} andere opcodes', header: 'Onderdeel {0} ({1}×)' },
-      s: { keyswitch: '{0} regio(\'s) met een toetsschakelaar (sw_*) overgeslagen', release: '{0} regio(\'s) die bij het loslaten klinken (release) overgeslagen', range: '{0} regio(\'s) met een ongeldig bereik overgeslagen', nosample: '{0} regio(\'s) zonder sample overgeslagen', pads: '{0} regio(\'s) pasten niet in 16 pads', layers: '{0} regio(\'s) pasten niet in vier lagen per pad', zones: '{0} zone(s) pasten niet in 16 zones', other: '{0} overgeslagen' },
+      s: { keyswitch: '{0} regio(\'s) met een toetsschakelaar (sw_*) overgeslagen', release: '{0} regio(\'s) die bij het loslaten klinken (release) overgeslagen', range: '{0} regio(\'s) met een ongeldig bereik overgeslagen', nosample: '{0} regio(\'s) zonder sample overgeslagen', pads: '{0} regio(\'s) pasten niet in {1} pads', layers: '{0} regio(\'s) pasten niet in vier lagen per pad', zones: '{0} zone(s) pasten niet in {1} zones', other: '{0} overgeslagen',
+        rom: '{0} zone(s) met een ROM-sample overgeslagen', badsample: '{0} zone(s) met een onbruikbaar sample (bereik buiten het bestand) overgeslagen', badloop: '{0} zone(s) met een ongeldige lus zijn zonder lus overgenomen', collapsed: '{0} zone(s) met een toetsbereik in een slagwerkpreset: alleen de laagste toets is gebruikt',
+        zonemix: 'Volume of balans verschilt per zone; een keygroep-pad heeft er één voor het hele pad, dus is het niet overgenomen ({0}×)', beyond: '{0} instrument(en) voorbij het aantal keygroepen overgeslagen', inactive: '{0} niet-actieve laag/lagen overgeslagen', zoneplay: '{0} keygroep(en) met afwisselen of willekeurig kiezen: dat is bij zones niet overgenomen' },
+      sf: {
+        title: 'SoundFont (SF2 of SF3)', pick: 'Preset of instrument', gPre: 'Presets', gIns: 'Instrumenten', perc: 'slagwerk',
+        head: '{0} · versie {1} · {2} preset(s), {3} instrument(en), {4} sample(s) · bestand {5} MiB, gelezen voor de lijst {6} MiB', lic: 'Gegevens uit het bestand: {0}', noLic: 'Het bestand noemt geen auteursrecht of licentie. Controleer zelf of je het mag gebruiken.',
+        prevKey: '{0}: {1} zone(s) in een keygroep-pad uit {2} sample(s), ongeveer {3} MiB PCM16.', prevDrum: '{0}: {1} drum-pad(s) in {2} bank(en) uit {3} sample(s), ongeveer {4} MiB PCM16.', prevSf3: ' (SF3: de grootte na decoderen is pas na het laden bekend)', prevNone: '{0}: geen bruikbare zones.',
+        imp: 'Importeer in de doelbank', close: 'Sluiten', opened: 'SoundFont geopend: {0}. Kies onder Lokaal een preset of instrument.', big: 'Het bestand is te groot (hoogstens 3 GiB).',
+        err: { riff: 'Dit is geen SoundFont (geen RIFF sfbk).', pdta: 'De SoundFont is beschadigd of onvolledig (tabellen ontbreken).', size: 'De tabellen van deze SoundFont zijn te groot.', other: 'De SoundFont kon niet worden gelezen.' },
+        ok: 'SoundFont {0}: {1} zone(s) uit {2} sample(s); {3} stereopaar/paren samengevoegd; {4} zone(s) met een volume-envelope, {5} met een filter (afkapfrequentie en resonantie, grof).',
+        mem: 'Geheugen: {0} MiB gelezen voor de tabellen en {1} MiB PCM16 geladen (het bestand is {2} MiB; alleen de gekozen samples zijn gelezen).',
+        warnMod: 'Modulatoren en de standaardmodulatoren (velocity naar volume en filter, pitch- en modulatiewiel, enz.) zijn niet toegepast; vertraging en hold van de envelope zijn genegeerd.',
+        sm24: 'De 24-bit uitbreiding (sm24) is genegeerd: de samples zijn 16 bit.', sf3: 'SF3: de Ogg-samples zijn door de browser gedecodeerd (op de samplefrequentie van de studio); de lusposities zijn relatief aan het sample gelezen.',
+      },
+      x: {
+        badXml: 'Dit is geen geldig XPM-programma (XML).', noProgram: 'In dit XML-bestand staat geen programma.',
+        unverified: 'De opbouw van het XPM-programma is gelezen uit openbare beschrijvingen van andere programma\'s en alleen getest met zelfgemaakte bestanden: controleer het resultaat. Filter, pitch-envelope, sample-start en -einde per laag, richting en mutedoelen zijn niet overgenomen.',
+        ok: 'XPM-programma {0} ({1}): {2} instrument(en), {3} laag/lagen met een sample; {4} met een volume-envelope.', padmap: 'Drum-pads staan in de volgorde van het instrumentnummer; de toetstoewijzing van de pads (PadNoteMap) is niet gebruikt.',
+      },
       w: {
-        thin: 'Er waren meer dan 16 zones: per toetsbereik is één dynamiek gebleven ({0} zone(s) minder).', mute: 'off_by is overgenomen als gedeelde mutegroep: groepen die elkaar afkappen delen één nummer, ook als het in het origineel maar één kant op ging.',
+        thin: 'Er waren meer dan {1} zones: per toetsbereik is één dynamiek gebleven ({0} zone(s) minder).', mute: 'off_by (SFZ) en exclusiveClass (SoundFont) zijn overgenomen als gedeelde mutegroep: groepen die elkaar afkappen delen één nummer, ook als het in het origineel maar één kant op ging.',
         missing: '{0} bestand(en) niet gevonden of niet te laden: {1}', decode: '{0} bestand(en) niet te decoderen: {1}', notFit: '{0} sample(s) pasten niet in het samplegeheugen (maximaal {1} MiB) en zijn niet geladen.',
         lost: '{0} pad(s) en {1} laag/lagen/zone(s) zijn niet gemaakt omdat hun samples ontbreken of er geen vrij pad was.', mp3Loop: 'MP3 is niet geschikt voor lussen: een mp3 heeft een beginvertraging en het lusgat is niet nauwkeurig tot op het sample ({0}×). Gebruik liever WAV of FLAC.',
         loopFmt: 'Lusposities zijn alleen omgerekend voor WAV; bij {0} sample(s) in een ander formaat loopt de lus over het hele sample.', rootDef: 'Bij {0} zone(s) ontbrak een grondtoon; 60 (C4) is gebruikt.', aborted: 'Geannuleerd: er is niets veranderd.',
@@ -178,9 +204,14 @@ const TXT = {
       grpProc: 'Process: save as sample', procOp: 'Edit', fxFilter: 'Filter', fxDrive: 'Drive', fxCrush: 'Bitcrusher', fxEq: 'Three-band EQ', fxComp: 'Compressor', fxTempo: 'Tempo match',
       fType: 'Type', fCut: 'Cutoff (Hz)', fQ: 'Resonance (Q)', fSlope: 'Slope', fSweep: 'Sweep over the selection', fCutEnd: 'Cutoff at the end (Hz)', sl12: '12 dB per octave', sl24: '24 dB per octave',
       drDb: 'Drive (dB)', drMix: 'Mix (%)', crBits: 'Bits', crHz: 'Sample rate (Hz)', eqLow: 'Low (dB, 200 Hz)', eqMid: 'Mid (dB, 1 kHz)', eqHigh: 'High (dB, 5 kHz)',
-      cpThr: 'Threshold (dB)', cpRatio: 'Ratio', cpAtk: 'Attack (ms)', cpRel: 'Release (ms)', cpMk: 'Make-up (dB)', tmTarget: 'Target BPM', tmNow: 'Current tempo: {0} BPM', tmSt: 'Resampling: the pitch changes with it ({0} semitones); real time-stretch follows later.',
+      cpThr: 'Threshold (dB)', cpRatio: 'Ratio', cpAtk: 'Attack (ms)', cpRel: 'Release (ms)', cpMk: 'Make-up (dB)', tmTarget: 'Target BPM', tmNow: 'Current tempo: {0} BPM', tmSt: 'Resampling: the pitch changes with it ({0} semitones); choose Time-stretch for tempo without pitch change.',
       procPrev: 'Listen', procApply: 'Apply', procHelp: 'Works on the selection, or on the whole sample when there is no selection. The result is really saved in the sample (not an effect device) and can be undone.',
-      fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo match' },
+      fxNames: { filter: 'Filter', drive: 'Drive', crush: 'Bitcrusher', eq: 'EQ', comp: 'Compressor', tempo: 'Tempo match', stretch: 'Time-stretch', pitchKeep: 'Pitch without tempo change' },
+      fxStretch: 'Time-stretch (tempo and pitch independent)', stMode: 'What changes', stBpm: 'Tempo to a target BPM', stFactor: 'Tempo by a factor', stPitch: 'Pitch, tempo stays', stFactorL: 'Tempo factor (×, 2 = twice as fast)', stSemi: 'Semitones', stCents: 'Cents',
+      stQual: 'Quality', stRhythm: 'Rhythmic (drums, short windows, attacks stay sharp)', stTonal: 'Tonal (long windows, for tone and melody)', stGo: 'Apply time-stretch', stPrev: 'Listen', stCancel: 'Cancel',
+      stBusy: 'A time-stretch is already running.', stRange: 'The factor must be between 0.5 and 2 (tempo: target BPM between half and double the current tempo; pitch: at most 12 semitones).',
+      stInfoT: 'Tempo factor {0}× · the length becomes {1} s (now {2} s)', stInfoP: 'Pitch {0} semitones · the length stays {1} s', stProg: 'Time-stretch: {0}%…', stAborted: 'Time-stretch stopped: nothing changed.', stChanged: 'The sample changed during the operation: nothing was changed.',
+      stHelp: 'Works on the selection or the whole sample and stores the result in the sample (undoable). Rhythmic uses short windows and starts every attack in its place; Tonal uses long windows. Pitch stretches first and then resamples back to the original length. The work runs in a background thread when the browser allows it.',
       grpFlat: 'Flatten and resample', flSrc: 'Source', flSrcPad: 'Chosen pad (all layers, envelope, filter, tune)', flSrcSel: 'Selection of the editor', flNote: 'Note', flVel: 'Velocity', flTail: 'Tail (s)', flHold: 'Note length (s, 0 = automatic)',
       flCh: 'Channels', flStereo: 'Stereo', flMono: 'Mono', flNorm: 'Normalize', flTrim: 'Trim silence at the end', flDest: 'Result', dNew: 'New layer in this pad', dLayer: 'Replace the chosen layer', dReplace: 'Replace this pad (settings back to default)', dOther: 'On another pad',
       flBank: 'Bank', flPadN: 'Pad', flWarn: 'Note: Pad Sampler has no insert effects. What you hear comes from the layers, the envelope, the filter, the tune and the level and pan of the pad. The sends (reverb and delay of this device) and the reverb and delay of other devices are not baked in. You can save filter, drive, bitcrusher, EQ and compressor as a sample with Process.',
@@ -200,7 +231,7 @@ const TXT = {
       catalog: 'Catalogue', catHelp: 'Only banks whose licence has been read. Every file comes from a pinned version of the source. Green: free to use. Yellow: read the warning.',
       license: 'Licence', author: 'Author', credit: 'Credit', creditReq: 'Credit required', creditNo: 'No credit required (but polite)', size: 'Size', format: 'Format', files: 'files', source: 'Source', pinned: 'Pinned at', checked: 'Checked',
       openSrc: 'Open source', load: 'Load', cancel: 'Cancel', accept: 'I understand this and accept the risk', green: 'Free', yellow: 'Caution', loadBank: 'Load {0}', openOf: 'Open source: {0}',
-      local: 'Local', localHelp: 'Choose audio files (WAV, FLAC, OGG, MP3), an SFZ or Decent Sampler program with its samples, or a whole folder. A program with samples goes into the target bank; plain audio goes on the selected pad.', chooseFiles: 'Choose files…', chooseDir: 'Choose folder…',
+      local: 'Local', localHelp: 'Choose audio files (WAV, FLAC, OGG, MP3), an SFZ, Decent Sampler or XPM program with its samples, or a whole folder. Choose a SoundFont (SF2 or SF3) as a file; you then pick which preset or instrument to load. A program with samples goes into the target bank; plain audio goes on the selected pad.', chooseFiles: 'Choose files…', chooseDir: 'Choose folder…',
       urlTitle: 'Web address', urlHelp: 'An https address of an audio file, a .sfz or a .dspreset (the samples are looked up in the same place). The server must allow access from the browser (CORS).', urlLabel: 'Web address (https)', urlGo: 'Load from web address', badUrl: 'Not a valid https address.',
       fsTitle: 'Freesound', fsHelp: 'Search sounds with your own Freesound token (request one at freesound.org). Your token stays in this window only and is never saved in the song. Only CC0 and CC-BY results are shown; a sound loads its preview (lossy ogg or mp3), not the original.', fsToken: 'Your token', fsQuery: 'Search term', fsGo: 'Search', fsNeed: 'Enter a search term and your token.', fsAuth: 'Freesound rejected the token.', fsNone: 'No suitable results.', fsLoad: 'Load into selected layer', fsOf: '{0} by {1}, {2}, {3} s',
       progress: 'Progress', jobLine: '{0}: {1} of {2}', done: 'Done.',
@@ -209,12 +240,30 @@ const TXT = {
       undoLabel: 'Load bank: {0}', busy: 'An import is already running.', errNetwork: 'No connection, or the server does not allow access from the browser.', errHttp: 'The server answered with error {0}.', errSize: 'The file is too large.', errAudio: 'This is not an audio, SFZ or Decent Sampler file.',
       r: {
         regions: '{0} region(s) found, {1} imported.', pads: '{0} drum pad(s) and {1} zone(s) in a keygroup pad.', layers: '{0} layer(s); {1} pad(s) with velocity layers, {2} with alternating takes (cycle), {3} with random choice.',
-        roots: 'Root note taken from the file for {0} region(s); tuning for {1}.', loops: '{0} loop(s) imported.', panvol: 'Volume imported for {0} layer(s), pan for {1}.', mute: '{0} pad(s) in a mute group (from group and off_by).', samples: '{0} sample(s) loaded ({1} MiB PCM16).',
+        roots: 'Root note taken from the file for {0} region(s); tuning for {1}.', loops: '{0} loop(s) imported.', panvol: 'Volume imported for {0} layer(s), pan for {1}.', mute: '{0} pad(s) in a mute group (from group and off_by, exclusive class or MuteGroup).', samples: '{0} sample(s) loaded ({1} MiB PCM16).',
       },
       i: { item: '{0}: in {1} region(s)', more: '… and {0} more opcodes', header: 'Section {0} ({1}×)' },
-      s: { keyswitch: '{0} region(s) with a key switch (sw_*) skipped', release: '{0} release-triggered region(s) skipped', range: '{0} region(s) with an invalid range skipped', nosample: '{0} region(s) without a sample skipped', pads: '{0} region(s) did not fit in 16 pads', layers: '{0} region(s) did not fit in four layers per pad', zones: '{0} zone(s) did not fit in 16 zones', other: '{0} skipped' },
+      s: { keyswitch: '{0} region(s) with a key switch (sw_*) skipped', release: '{0} release-triggered region(s) skipped', range: '{0} region(s) with an invalid range skipped', nosample: '{0} region(s) without a sample skipped', pads: '{0} region(s) did not fit in {1} pads', layers: '{0} region(s) did not fit in four layers per pad', zones: '{0} zone(s) did not fit in {1} zones', other: '{0} skipped',
+        rom: '{0} zone(s) with a ROM sample skipped', badsample: '{0} zone(s) with an unusable sample (range outside the file) skipped', badloop: '{0} zone(s) with an invalid loop were imported without a loop', collapsed: '{0} zone(s) with a key range in a percussion preset: only the lowest key was used',
+        zonemix: 'Level or pan differs per zone; a keygroup pad has one for the whole pad, so it was not carried over ({0}×)', beyond: '{0} instrument(s) beyond the number of keygroups skipped', inactive: '{0} inactive layer(s) skipped', zoneplay: '{0} keygroup(s) with cycling or random choice: that is not carried over for zones' },
+      sf: {
+        title: 'SoundFont (SF2 or SF3)', pick: 'Preset or instrument', gPre: 'Presets', gIns: 'Instruments', perc: 'percussion',
+        head: '{0} · version {1} · {2} preset(s), {3} instrument(s), {4} sample(s) · file {5} MiB, read for the list {6} MiB', lic: 'Details from the file: {0}', noLic: 'The file names no copyright or licence. Check for yourself that you may use it.',
+        prevKey: '{0}: {1} zone(s) in a keygroup pad from {2} sample(s), about {3} MiB PCM16.', prevDrum: '{0}: {1} drum pad(s) in {2} bank(s) from {3} sample(s), about {4} MiB PCM16.', prevSf3: ' (SF3: the size after decoding is known only after loading)', prevNone: '{0}: no usable zones.',
+        imp: 'Import into the target bank', close: 'Close', opened: 'SoundFont opened: {0}. Choose a preset or instrument under Local.', big: 'The file is too large (3 GiB at most).',
+        err: { riff: 'This is not a SoundFont (no RIFF sfbk).', pdta: 'The SoundFont is damaged or incomplete (tables missing).', size: 'The tables of this SoundFont are too large.', other: 'The SoundFont could not be read.' },
+        ok: 'SoundFont {0}: {1} zone(s) from {2} sample(s); {3} stereo pair(s) merged; {4} zone(s) with a volume envelope, {5} with a filter (cutoff and resonance, roughly).',
+        mem: 'Memory: {0} MiB read for the tables and {1} MiB PCM16 loaded (the file is {2} MiB; only the chosen samples were read).',
+        warnMod: 'Modulators and the default modulators (velocity to level and filter, pitch and mod wheel, etc.) were not applied; envelope delay and hold were ignored.',
+        sm24: 'The 24-bit extension (sm24) was ignored: the samples are 16 bit.', sf3: 'SF3: the Ogg samples were decoded by the browser (at the studio sample rate); loop positions were read relative to the sample.',
+      },
+      x: {
+        badXml: 'This is not a valid XPM program (XML).', noProgram: 'This XML file contains no program.',
+        unverified: 'The structure of the XPM program was read from public descriptions in other programs and tested only with home-made files: check the result. Filter, pitch envelope, sample start and end per layer, direction and mute targets were not carried over.',
+        ok: 'XPM program {0} ({1}): {2} instrument(s), {3} layer(s) with a sample; {4} with a volume envelope.', padmap: 'Drum pads follow the instrument number; the key assignment of the pads (PadNoteMap) was not used.',
+      },
       w: {
-        thin: 'There were more than 16 zones: one dynamic per key range was kept ({0} fewer zone(s)).', mute: 'off_by was imported as a shared mute group: groups that cut each other off share one number, even when the original only worked one way.',
+        thin: 'There were more than {1} zones: one dynamic per key range was kept ({0} fewer zone(s)).', mute: 'off_by (SFZ) and exclusiveClass (SoundFont) were imported as a shared mute group: groups that cut each other off share one number, even when the original only worked one way.',
         missing: '{0} file(s) not found or not loadable: {1}', decode: '{0} file(s) could not be decoded: {1}', notFit: '{0} sample(s) did not fit in the sample memory (maximum {1} MiB) and were not loaded.',
         lost: '{0} pad(s) and {1} layer(s)/zone(s) were not created because their samples are missing or there was no free pad.', mp3Loop: 'MP3 is not suited to loops: an mp3 has a start delay and the loop point is not sample accurate ({0}×). Prefer WAV or FLAC.',
         loopFmt: 'Loop positions are only converted for WAV; for {0} sample(s) in another format the loop spans the whole sample.', rootDef: '{0} zone(s) had no root note; 60 (C4) was used.', aborted: 'Cancelled: nothing was changed.',
@@ -449,6 +498,119 @@ function resample(src, ratio) {   // ratio = bronstappen per uitvoersample (2^(s
     out[j] = ws > 1e-9 ? acc / ws : 0;
   }
   return out;
+}
+// Time-stretch (WSOLA, tijdsdomein). Zelfstandige generatorfunctie: geen verwijzingen naar buiten, zodat de bron in een Blob-worker kan draaien.
+// chs: lijst Float32Array (zelfde lengte), ratio = uitvoerlengte / invoerlengte (0,5..2), rhythmic: korte vensters en synchroon houden op aanslagen.
+// Yield: voortgang 0..1. Returns (return-waarde van de generator): lijst Float32Array.
+function* stretchGen(chs, rate, ratio, rhythmic) {
+  const nc = chs.length, N = chs[0].length, M = Math.max(1, Math.round(N * ratio));
+  const out = chs.map(() => new Float32Array(M + 8192));
+  const mono = new Float32Array(N);
+  for (let i = 0; i < N; i++) { let s = 0; for (let c = 0; c < nc; c++) s += chs[c][i]; mono[i] = s / nc; }
+  const pw = x => Math.pow(2, Math.round(Math.log2(Math.max(64, x))));
+  const win = pw(rate * (rhythmic ? 0.012 : 0.046)), Hs = win >> 1, tol = win >> 2, D = 4;
+  const hann = new Float32Array(win); for (let i = 0; i < win; i++) hann[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / win);
+  const nd = Math.ceil(N / D), xd = new Float32Array(nd);
+  for (let i = 0; i < nd; i++) { let s = 0; for (let k = 0; k < D; k++) { const j = i * D + k; s += j < N ? mono[j] : 0; } xd[i] = s / D; }
+  // segmenten: bij ritmisch beginnen ze op aanslagen
+  const bounds = [0];
+  if (rhythmic) {
+    const B = 128, nb = Math.floor(N / B), e = new Float32Array(nb); let pk = 0;
+    for (let b = 0; b < nb; b++) { let s = 0; for (let i = 0; i < B; i++) s += Math.abs(mono[b * B + i]); e[b] = s / B; if (e[b] > pk) pk = e[b]; }
+    const minGap = Math.round(rate * 0.04 / B), thr = pk * 0.01; let last = -1e9;
+    for (let b = 4; b < nb; b++) {
+      let m = 0; for (let k = 1; k <= 4; k++) m += e[b - k]; m /= 4;
+      if (e[b] > thr && e[b] > 3.5 * m + 1e-9 && b - last >= minGap) { bounds.push(Math.max(bounds[bounds.length - 1] + win, (b - 1) * B)); last = b; }
+    }
+  }
+  bounds.push(N);
+  const segs = []; for (let i = 0; i + 1 < bounds.length; i++) if (bounds[i + 1] > bounds[i]) segs.push([bounds[i], bounds[i + 1]]);
+  if (segs.length > 1 && segs[segs.length - 1][1] - segs[segs.length - 1][0] < win) { const l = segs.pop(); segs[segs.length - 1][1] = l[1]; }
+  let doneFrames = 0, lastY = 0;
+  for (let si = 0; si < segs.length; si++) {
+    const s = segs[si][0], e = segs[si][1], os = Math.round(s * ratio), oe = si === segs.length - 1 ? M : Math.round(e * ratio), L = e - s;
+    const fadeN = Math.min(64, L >> 2);
+    const rd = (c, p) => { if (p >= e || p < 0) return 0; const v = chs[c][p]; return p >= e - fadeN ? v * (e - 1 - p) / fadeN : v; };
+    if (L < win * 2) {   // te kort voor vensters: lineair uitrekken
+      for (let c = 0; c < nc; c++) for (let o = os; o < oe; o++) { const f = s + (o - os) / ratio, i0 = Math.floor(f), t = f - i0; const a = i0 < N ? chs[c][i0] : 0, b = i0 + 1 < e ? chs[c][i0 + 1] : a; out[c][o] += a + (b - a) * t; }
+      continue;
+    }
+    let prevP = -1;
+    for (let k = 0; ; k++) {
+      const op = os + k * Hs; if (op >= oe) break;
+      let p;
+      if (k === 0) p = s;
+      else {
+        const pn = Math.round(s + k * Hs / ratio), tgt = prevP + Hs;
+        const lo = Math.max(s, pn - tol), hi = Math.min(e - 1, pn + tol);
+        let best = pn < lo ? lo : pn > hi ? hi : pn;
+        if (hi > lo) {
+          const cl = Math.floor(Hs / D), t0 = Math.floor(tgt / D);
+          let bs = -1e30, bp = best;
+          for (let q = Math.ceil(lo / D); q <= Math.floor(hi / D); q++) {
+            let xy = 0, yy = 1e-9;
+            for (let i = 0; i < cl; i++) { const a = xd[q + i] || 0, b = xd[t0 + i] || 0; xy += a * b; yy += a * a; }
+            const sc = xy > 0 ? xy * xy / yy : xy;
+            if (sc > bs) { bs = sc; bp = q * D; }
+          }
+          bs = -1e30; let rp = bp;
+          for (let q = Math.max(lo, bp - D); q <= Math.min(hi, bp + D); q++) {
+            let xy = 0, yy = 1e-9;
+            for (let i = 0; i < Hs; i += 2) { const a = q + i < N ? mono[q + i] : 0, b = tgt + i < N ? mono[tgt + i] : 0; xy += a * b; yy += a * a; }
+            const sc = xy > 0 ? xy * xy / yy : xy;
+            if (sc > bs) { bs = sc; rp = q; }
+          }
+          best = rp;
+        }
+        p = best;
+      }
+      prevP = p;
+      for (let c = 0; c < nc; c++) {
+        const oc = out[c];
+        for (let i = 0; i < win; i++) {
+          const o = op + i; if (o >= M + 8192) break;
+          const w = k === 0 && i < Hs ? 1 : hann[i];
+          oc[o] += rd(c, p + i) * w;
+        }
+      }
+      if (++doneFrames % 64 === 0) { const y = Math.min(1, (si + Math.min(1, k * Hs / Math.max(1, oe - os))) / segs.length); if (y - lastY >= 0.02) { lastY = y; yield y; } }
+    }
+  }
+  return out.map(a => a.slice(0, M));
+}
+
+// Draait stretchGen in een Blob-worker (de hoofdthread blijft vrij); lukt dat niet (geen Worker, geblokkeerd), dan in de hoofdthread in brokken van ~25 ms met een yield.
+// ctl = { cancelled, worker, abort }: annuleren zet cancelled en roept abort() aan (stopt de worker). Geeft een lijst Float32Array of gooit { code: 'aborted' }.
+async function stretchRun(chs, rate, ratio, rhythmic, onProg, ctl) {
+  const aborted = () => Object.assign(new Error('aborted'), { code: 'aborted' });
+  if (typeof Worker === 'function' && typeof Blob === 'function' && typeof URL === 'function' && typeof URL.createObjectURL === 'function') {
+    let url = '';
+    try {
+      const src = stretchGen.toString() + ';onmessage=function(e){var d=e.data,g=stretchGen(d.chs,d.rate,d.ratio,d.rh),r;while(!(r=g.next()).done)postMessage({p:r.value});postMessage({done:r.value},r.value.map(function(a){return a.buffer}));};';
+      url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+      const res = await new Promise((ok, no) => {
+        const w = new Worker(url); ctl.worker = w; ctl.abort = () => { try { w.terminate(); } catch (e) { /* ok */ } no(Object.assign(new Error('aborted'), { code: 'aborted' })); };
+        w.onmessage = e => { const d = e.data; if (d && d.done) ok(d.done); else if (d && typeof d.p === 'number') onProg(d.p); };
+        w.onerror = e => { if (e && e.preventDefault) e.preventDefault(); no(Object.assign(new Error('worker'), { code: 'worker' })); };
+        const cp = chs.map(c => c.slice()); w.postMessage({ chs: cp, rate, ratio, rh: rhythmic }, cp.map(c => c.buffer));
+      });
+      try { URL.revokeObjectURL(url); } catch (e) { /* ok */ }
+      if (ctl.worker) { try { ctl.worker.terminate(); } catch (e) { /* ok */ } ctl.worker = null; }
+      return res;
+    } catch (e) {
+      if (url) { try { URL.revokeObjectURL(url); } catch (e2) { /* ok */ } }
+      if (ctl.worker) { try { ctl.worker.terminate(); } catch (e2) { /* ok */ } ctl.worker = null; }
+      if (ctl.cancelled) throw aborted();
+      if (!e || e.code !== 'worker') throw e;
+    }
+  }
+  const g = stretchGen(chs, rate, ratio, rhythmic); let r = g.next(), t0 = Date.now();
+  while (!r.done) {
+    if (ctl.cancelled) throw aborted();
+    if (Date.now() - t0 > 25) { onProg(r.value); await new Promise(ok => setTimeout(ok, 0)); t0 = Date.now(); }
+    r = g.next();
+  }
+  return r.value;
 }
 function convertClip(clip, rate, channels) {   // klembord naar het formaat van het doel-sample
   let ch = clip.ch;
@@ -909,17 +1071,19 @@ function muteIds(regs) {   // off_by: groepen die elkaar afkappen worden een ged
 }
 // plan = { pads: [{ name, mode, play, mute, one, env, layers: [{ f, lo, hi, semi, fine, gain, pan, loop }], zones: [{ f, root, lo, hi, vlo, vhi, tune, loop }] }], stats, skipped }
 // loop = { m: 'on' | 'off' | 'one' | 'auto', ls, le } (posities in samples van het bronbestand)
-function planRegions(regs, preset, env) {
+function planRegions(regs, preset, env, o) {
+  o = o || {}; const padCap = o.padCap || NPAD, zoneCap = o.cap || MAXZONE;
   const st = { regions: regs.length, drumPads: 0, zones: 0, layers: 0, vel: 0, rr: 0, rand: 0, mute: 0, loops: 0, roots: 0, tuned: 0, pans: 0, vols: 0, thinned: 0 }, sk = Object.create(null);
+  if (o.mode === 'drum') regs = regs.map(r => (r.lo === r.hi ? r : (bump(sk, 'collapsed'), Object.assign({}, r, { hi: r.lo }))));
   const mutes = muteIds(regs), notes = [];
   const mkLoop = r => ({ m: r.loop, ls: r.ls, le: r.le });
   const single = regs.filter(r => r.lo === r.hi), ranged = regs.filter(r => r.lo !== r.hi), keys = [...new Set(single.map(r => r.lo))].sort((a, b) => a - b);
-  const manyKeys = keys.length > NPAD && single.every(r => r.root == null || r.root === r.lo);
-  const asDrums = manyKeys ? [] : single, asZones = manyKeys ? regs.slice() : ranged;
+  const manyKeys = !o.mode && keys.length > NPAD && single.every(r => r.root == null || r.root === r.lo);
+  const asDrums = o.mode === 'key' || manyKeys ? [] : o.mode === 'drum' ? regs : single, asZones = o.mode === 'drum' ? [] : o.mode === 'key' || manyKeys ? regs.slice() : ranged;
   const pads = [];
   const dkeys = [...new Set(asDrums.map(r => r.lo))].sort((a, b) => a - b);
   for (const k of dkeys) {
-    if (pads.length >= NPAD) { bump(sk, 'pads', asDrums.filter(r => r.lo === k).length); continue; }
+    if (pads.length >= padCap) { bump(sk, 'pads', asDrums.filter(r => r.lo === k).length); continue; }
     let rs = asDrums.filter(r => r.lo === k).sort((a, b) => a.vlo - b.vlo || a.seqPos - b.seqPos);
     if (rs.length > NLAYER) { bump(sk, 'layers', rs.length - NLAYER); rs = rs.slice(0, NLAYER); }
     const seq = rs.some(r => r.seqLen > 1), rnd = rs.some(r => r.random);
@@ -929,7 +1093,7 @@ function planRegions(regs, preset, env) {
     const mute = mutes.of(rs[0].group); if (mute) st.mute++;
     const looped = rs.some(r => r.loop === 'on');
     pads.push({
-      name: baseName(rs[0].path).slice(0, 40), mode: 'drum', play, mute, one: !looped, env: env || null,
+      name: (rs[0].label || baseName(rs[0].path)).slice(0, 40), mode: 'drum', play, mute, one: rs.every(r => r.oneShot === false) ? false : !looped, env: rs[0].env || env || null, filter: rs[0].filter || null, poly: rs[0].poly || 0,
       layers: rs.map(r => { if (r.root != null) st.roots++; if (r.tune) st.tuned++; if (r.pan) st.pans++; if (r.vol) st.vols++; if (r.loop === 'on') st.loops++; const sm = Math.round(clamp(r.tune, -48, 48)); return { f: r.path, lo: r.vlo, hi: r.vhi, semi: sm, fine: clamp(Math.round((r.tune - sm) * 100), -100, 100), gain: clamp(r.vol, -24, 24), pan: r.pan, loop: mkLoop(r) }; }),
       zones: [],
     });
@@ -937,24 +1101,29 @@ function planRegions(regs, preset, env) {
   }
   if (asZones.length) {
     let zs = asZones.slice().sort((a, b) => a.lo - b.lo || a.vlo - b.vlo);
-    if (zs.length > MAXZONE) {   // eerst één dynamiek per toetsbereik houden (de dichtst bij velocity 100)
+    if (zs.length > zoneCap) {   // eerst één dynamiek per toetsbereik houden (de dichtst bij velocity 100)
       const by = new Map(); for (const r of zs) { const k = r.lo + '-' + r.hi; const c = by.get(k); if (!c || Math.abs((r.vlo + r.vhi) / 2 - 100) < Math.abs((c.vlo + c.vhi) / 2 - 100)) by.set(k, r); }
       const thin = [...by.values()].map(r => Object.assign({}, r, { vlo: 1, vhi: 127 })).sort((a, b) => a.lo - b.lo);
       if (thin.length < zs.length) { st.thinned = zs.length - thin.length; notes.push('thin'); zs = thin; }
     }
-    if (zs.length > MAXZONE) { bump(sk, 'zones', zs.length - MAXZONE); zs = zs.slice(0, MAXZONE); }
-    if (pads.length >= NPAD) { bump(sk, 'pads', zs.length); } else {
+    if (zs.length > zoneCap) { bump(sk, 'zones', zs.length - zoneCap); zs = zs.slice(0, zoneCap); }
+    if (pads.length >= padCap) { bump(sk, 'pads', zs.length); } else {
       if (new Set(zs.map(r => r.seqPos)).size > 1 && zs.some(r => r.seqLen > 1)) { st.rr++; }
       zs.forEach(r => { if (r.root != null) st.roots++; if (r.tune) st.tuned++; if (r.loop === 'on') st.loops++; if (r.vol) st.vols++; if (r.pan) st.pans++; });
       st.zones = zs.length;
       pads.push({
-        name: String(preset || 'Keygroup').slice(0, 40), mode: 'key', play: 'velocity', mute: mutes.of(zs[0].group), one: false, env: env || null, layers: [],
+        name: String(preset || 'Keygroup').slice(0, 40), mode: 'key', play: 'velocity', mute: mutes.of(zs[0].group), one: zs.every(r => r.oneShot === true), env: zs[0].env || env || null, filter: zs[0].filter || null, poly: zs[0].poly || 0, layers: [],
+        pan: o.padMix ? uniform(zs, 'pan', 0.01, sk) : 0, level: o.padMix ? uniform(zs, 'vol', 0.5, sk) : 0,
         zones: zs.map(r => ({ f: r.path, root: r.root, lo: r.lo, hi: r.hi, vlo: r.vlo, vhi: r.vhi, tune: clamp(r.tune, -24, 24), loop: mkLoop(r) })),
       });
     }
   }
   if (mutes.any) notes.push('mute');
-  return { pads, stats: st, skipped: sk, notes };
+  return { pads, stats: st, skipped: sk, notes, caps: { pads: padCap, zones: zoneCap } };
+}
+function uniform(zs, k, tol, sk) {   // waarde van een veld als alle zones het (bijna) gelijk hebben; anders 0 en de zones worden als gemengd gemeld
+  const v = zs[0][k] || 0; for (const r of zs) if (Math.abs((r[k] || 0) - v) > tol) { bump(sk, 'zonemix'); return 0; }
+  return v;
 }
 function planCatalog(b) {
   const lp = { m: 'auto', ls: null, le: null };
@@ -997,10 +1166,241 @@ function creditsOf(store) {   // vermeldingen volgen de samples die er echt in z
   return [...m.values()].sort((a, b) => (a.attribution + a.source < b.attribution + b.source ? -1 : a.attribution + a.source > b.attribution + b.source ? 1 : 0));
 }
 
+// ---------- SoundFont 2/3 (RIFF sfbk): lezen, en een instrument of preset omzetten naar regio's voor planRegions ----------
+// De bron is een { size, read(offset, n) -> Promise<ArrayBuffer> }: een File wordt met slice() gelezen, zodat een groot bestand niet helemaal in het geheugen komt.
+const SF_GEN_NAMES = { 5: 'modLfoToPitch', 6: 'vibLfoToPitch', 7: 'modEnvToPitch', 10: 'modLfoToFilterFc', 11: 'modEnvToFilterFc', 13: 'modLfoToVolume', 15: 'chorusEffectsSend', 16: 'reverbEffectsSend', 21: 'delayModLFO', 22: 'freqModLFO', 23: 'delayVibLFO', 24: 'freqVibLFO',
+  25: 'delayModEnv', 26: 'attackModEnv', 27: 'holdModEnv', 28: 'decayModEnv', 29: 'sustainModEnv', 30: 'releaseModEnv', 31: 'keynumToModEnvHold', 32: 'keynumToModEnvDecay', 33: 'delayVolEnv', 35: 'holdVolEnv', 39: 'keynumToVolEnvHold', 40: 'keynumToVolEnvDecay',
+  46: 'keynum', 47: 'velocity', 56: 'scaleTuning' };
+const sfErr = c => Object.assign(new Error(c), { code: c });
+const sfStr = (dv, o, n) => { let s = ''; for (let i = 0; i < n && o + i < dv.byteLength; i++) { const c = dv.getUint8(o + i); if (!c) break; s += String.fromCharCode(c); } return s.trim(); };
+function sfChunks(dv) {   // lijst { id, off, len } van de kinderen van een blok
+  const out = []; let p = 0;
+  while (p + 8 <= dv.byteLength) { const len = dv.getUint32(p + 4, true), id = sfStr(dv, p, 4); out.push({ id, off: p + 8, len: Math.min(len, dv.byteLength - p - 8) }); p += 8 + len + (len & 1); }
+  return out;
+}
+async function sf2Open(src) {
+  if (!src || src.size < 12) throw sfErr('riff');
+  const h = new DataView(await src.read(0, 12));
+  if (h.getUint32(0, false) !== 0x52494646 || h.getUint32(8, false) !== 0x7366626b) throw sfErr('riff');
+  const M = { info: {}, smpl: null, sm24: false, size: src.size, tableBytes: 0, ph: [], pbag: [], pmod: 0, pgen: [], ins: [], ibag: [], imod: 0, igen: [], shdr: [], sf3: false };
+  let pos = 12; const end = Math.min(src.size, 8 + h.getUint32(4, true)); let pdta = null;
+  while (pos + 12 <= end) {
+    const c = new DataView(await src.read(pos, 12)), id = c.getUint32(0, false), len = c.getUint32(4, true), typ = c.getUint32(8, false);
+    if (id === 0x4c495354) {   // LIST
+      if (typ === 0x494e464f && len <= 1048576) {   // INFO
+        const dv = new DataView(await src.read(pos + 12, len - 4));
+        for (const k of sfChunks(dv)) {
+          if (k.id === 'ifil' && k.len >= 4) M.info.ver = dv.getUint16(k.off, true) + '.' + dv.getUint16(k.off + 2, true);
+          else if (['INAM', 'ICOP', 'ICMT', 'IENG', 'IPRD', 'ISFT', 'ICRD', 'isng'].includes(k.id)) M.info[k.id] = sfStr(dv, k.off, k.len);
+        }
+      } else if (typ === 0x73647461) {   // sdta
+        let p = pos + 12; const e2 = pos + 8 + len;
+        while (p + 8 <= e2) {
+          const k = new DataView(await src.read(p, 8)), kid = k.getUint32(0, false), kl = k.getUint32(4, true);
+          if (kid === 0x736d706c) M.smpl = { off: p + 8, len: Math.min(kl, src.size - p - 8) }; else if (kid === 0x736d3234) M.sm24 = true;
+          p += 8 + kl + (kl & 1);
+        }
+      } else if (typ === 0x70647461) {   // pdta
+        if (len > 96 * 1048576) throw sfErr('size');
+        pdta = new DataView(await src.read(pos + 12, len - 4)); M.tableBytes = len;
+      }
+    }
+    pos += 8 + len + (len & 1);
+  }
+  if (!pdta) throw sfErr('pdta');
+  const T = {}; for (const k of sfChunks(pdta)) T[k.id] = k;
+  const need = { phdr: 38, pbag: 4, pmod: 10, pgen: 4, inst: 22, ibag: 4, imod: 10, igen: 4, shdr: 46 };
+  for (const [n, sz] of Object.entries(need)) if (!T[n] || T[n].len % sz || T[n].len < sz) throw sfErr('pdta');
+  const cnt = (n) => T[n].len / need[n];
+  for (let i = 0; i < cnt('phdr'); i++) { const o = T.phdr.off + i * 38; M.ph.push({ name: sfStr(pdta, o, 20), prog: pdta.getUint16(o + 20, true), bank: pdta.getUint16(o + 22, true), bag: pdta.getUint16(o + 24, true) }); }
+  for (let i = 0; i < cnt('inst'); i++) { const o = T.inst.off + i * 22; M.ins.push({ name: sfStr(pdta, o, 20), bag: pdta.getUint16(o + 20, true) }); }
+  for (const [k, tn] of [['pbag', 'pbag'], ['ibag', 'ibag']]) for (let i = 0; i < cnt(tn); i++) { const o = T[tn].off + i * 4; M[k].push({ gen: pdta.getUint16(o, true), mod: pdta.getUint16(o + 2, true) }); }
+  for (const [k, tn] of [['pgen', 'pgen'], ['igen', 'igen']]) for (let i = 0; i < cnt(tn); i++) { const o = T[tn].off + i * 4; M[k].push({ op: pdta.getUint16(o, true), lo: pdta.getUint8(o + 2), hi: pdta.getUint8(o + 3), s: pdta.getInt16(o + 2, true), u: pdta.getUint16(o + 2, true) }); }
+  M.pmod = cnt('pmod') - 1; M.imod = cnt('imod') - 1;
+  for (let i = 0; i < cnt('shdr') - 1; i++) {
+    const o = T.shdr.off + i * 46;
+    M.shdr.push({ name: sfStr(pdta, o, 20), start: pdta.getUint32(o + 20, true), end: pdta.getUint32(o + 24, true), ls: pdta.getUint32(o + 28, true), le: pdta.getUint32(o + 32, true), rate: pdta.getUint32(o + 36, true), orig: pdta.getUint8(o + 40), corr: pdta.getInt8(o + 41), link: pdta.getUint16(o + 42, true), type: pdta.getUint16(o + 44, true) });
+  }
+  M.sf3 = M.shdr.some(s => (s.type & 0x10) !== 0);
+  M.ph.pop(); M.ins.pop();   // de afsluitende regels (EOP, EOI)
+  M.ph = M.ph.filter(p => p.name !== undefined);
+  return M;
+}
+function sfZones(M, kind, idx) {   // { glob: {op -> gen} of null, zones: [{ g: {op -> gen}, mods }] }
+  const list = kind === 'p' ? M.ph : M.ins, bags = kind === 'p' ? M.pbag : M.ibag, gens = kind === 'p' ? M.pgen : M.igen, term = kind === 'p' ? 41 : 53;
+  const e = list[idx]; if (!e) return { glob: null, zones: [] };
+  const b0 = e.bag, b1 = idx + 1 < list.length ? list[idx + 1].bag : bags.length - 1;
+  let glob = null; const zones = [];
+  for (let b = b0; b < b1 && b + 1 < bags.length; b++) {
+    const g = Object.create(null);
+    for (let k = bags[b].gen; k < bags[b + 1].gen && k < gens.length; k++) g[gens[k].op] = gens[k];
+    const mods = Math.max(0, bags[b + 1].mod - bags[b].mod);
+    if (g[term]) zones.push({ g, mods }); else if (b === b0) glob = { g, mods };
+  }
+  return { glob, zones };
+}
+const tcSec = tc => Math.pow(2, tc / 1200);
+// Zet een preset (kind 'p') of instrument (kind 'i') om in regio's. Geeft { regs, ignored, headers, skipped, info{...} }.
+function sf2Regions(M, kind, idx) {
+  const out = { regs: [], ignored: Object.create(null), headers: Object.create(null), skipped: Object.create(null), found: 0, units: new Map(), stereo: 0, filt: 0, env: 0, fixedRoot: 0, drums: false, extraOk: [], extraWarn: [] };
+  const rng = (g, op) => (g[op] ? [g[op].lo, g[op].hi] : null);
+  const inter = (a, b) => (a && b ? [Math.max(a[0], b[0]), Math.min(a[1], b[1])] : a || b || null);
+  const zonesOfInst = ii => sfZones(M, 'i', ii);
+  const combos = [];   // { pg (preset global gens), pz (preset zone gens), inst index }
+  if (kind === 'p') {
+    const P = sfZones(M, 'p', idx), pe = M.ph[idx]; out.drums = !!pe && pe.bank === 128;
+    if (P.glob && P.glob.mods) bump(out.headers, 'pmod', P.glob.mods);
+    for (const z of P.zones) { if (z.mods) bump(out.headers, 'pmod', z.mods); combos.push({ pg: P.glob ? P.glob.g : {}, pz: z.g, ii: z.g[41].u }); }
+  } else combos.push({ pg: {}, pz: {}, ii: idx });
+  const pv = (c, op) => (c.pz[op] ? c.pz[op].s : c.pg[op] ? c.pg[op].s : 0);
+  for (const c of combos) {
+    if (c.ii >= M.ins.length) { bump(out.skipped, 'nosample'); continue; }
+    const I = zonesOfInst(c.ii), pkr = inter(rng(c.pg, 43), rng(c.pz, 43)), pvr = inter(rng(c.pg, 44), rng(c.pz, 44));
+    if (I.glob && I.glob.mods) bump(out.headers, 'imod', I.glob.mods);
+    const regs = [];
+    for (const z of I.zones) {
+      out.found++;
+      if (z.mods) bump(out.headers, 'imod', z.mods);
+      const g = Object.assign(Object.create(null), I.glob ? I.glob.g : {}, z.g), sid = g[53].u, S = M.shdr[sid];
+      if (!S) { bump(out.skipped, 'nosample'); continue; }
+      if ((S.type & 0x8000) || S.type === 0x8001 || S.type === 0x8002 || S.type === 0x8004 || S.type === 0x8008) { bump(out.skipped, 'rom'); continue; }
+      const kr = inter(inter(rng(g, 43) || [0, 127], pkr), null), vr = inter(rng(g, 44) || [0, 127], pvr);
+      const lo = Math.max(0, kr[0]), hi = Math.min(127, kr[1]), vlo = Math.max(1, vr[0]), vhi = Math.min(127, vr[1]);
+      if (hi < lo || vhi < vlo) { bump(out.skipped, 'range'); continue; }
+      const gv = (op, def) => (g[op] ? g[op].s : def);
+      for (const k of new Set([...Object.keys(g), ...Object.keys(c.pg), ...Object.keys(c.pz)])) {
+        const op = +k, nm = SF_GEN_NAMES[op]; if (!nm) continue;
+        const val = g[op] ? g[op].s : c.pz[op] ? c.pz[op].s : c.pg[op] ? c.pg[op].s : 0;
+        if ((op === 33 || op === 35) && val <= -10000) continue;
+        if (op === 56 && val === 100) continue;
+        bump(out.ignored, nm);
+      }
+      // sample-eenheid: begin en eind met de offsets
+      const so = gv(0, 0) + gv(4, 0) * 32768, eo = gv(1, 0) + gv(12, 0) * 32768, sf3 = (S.type & 0x10) !== 0;
+      let s0 = S.start + (sf3 ? 0 : so), e0 = S.end + (sf3 ? 0 : eo);
+      const total = M.smpl ? (sf3 ? M.smpl.len : Math.floor(M.smpl.len / 2)) : 0;
+      if (!(e0 > s0) || e0 > total || S.rate < 1) { bump(out.skipped, 'badsample'); continue; }
+      const mode = gv(54, 0) & 3, loopOn = mode === 1 || mode === 3;
+      let ls = null, le = null, lm = 'off';
+      if (loopOn) {
+        const lsA = S.ls + gv(2, 0) + gv(45, 0) * 32768, leA = S.le + gv(3, 0) + gv(50, 0) * 32768;
+        const a = sf3 ? lsA : lsA - s0, b = sf3 ? leA : leA - s0, len = sf3 ? Infinity : e0 - s0;
+        if (a >= 0 && b > a + 1 && b <= len) { ls = a; le = b - 1; lm = 'on'; } else bump(out.skipped, 'badloop');
+      }
+      let root = g[58] && g[58].s >= 0 && g[58].s <= 127 ? g[58].s : (S.orig <= 127 ? S.orig : null);
+      if (g[58] && g[58].s >= 0 && g[58].s <= 127) out.fixedRoot++;
+      const cents = gv(51, 0) * 100 + pv(c, 51) * 100 + gv(52, 0) + pv(c, 52) + S.corr;
+      const atten = clamp(gv(48, 0) + pv(c, 48), 0, 1440), pan = clamp((gv(17, 0) + pv(c, 17)) / 500, -1, 1);
+      const sum = op => gv(op, op === 37 ? 0 : -12000) + pv(c, op);
+      const att = tcSec(sum(34)), dec = tcSec(sum(36)), rel = tcSec(sum(38)), susCb = clamp(sum(37), 0, 1440), sus = Math.pow(10, -susCb / 200);
+      const envOn = g[34] || g[36] || g[37] || g[38] || c.pz[34] || c.pz[36] || c.pz[37] || c.pz[38] || c.pg[34] || c.pg[36] || c.pg[37] || c.pg[38];
+      const env = envOn ? { attack: clamp(att, 0.0005, 5), decay: clamp(dec, 0.005, 10), sustain: clamp(sus, 0, 1), release: clamp(rel, 0.005, 10), shape: sus < 0.001 && lm !== 'on' ? 'ad' : 'adsr' } : null;
+      const fcOn = gv(8, 13500) + pv(c, 8) < 13000;
+      const filter = fcOn ? { type: 'lp', cutoff: clamp(8.176 * Math.pow(2, (gv(8, 13500) + pv(c, 8)) / 1200), 20, 20000), res: clamp((gv(9, 0) + pv(c, 9)) / 200, 0, 1), envAmt: 0, velAmt: 0 } : null;
+      const cls = gv(57, 0);
+      regs.push({
+        path: 'sf:' + sid + ':' + s0 + ':' + e0, label: S.name, sid, lo, hi, vlo, vhi, root, tune: clamp(cents / 100, -48, 48), vol: -atten / 10, pan, loop: lm, ls, le, group: cls > 0 ? cls : 0, offBy: cls > 0 ? cls : 0,
+        seqLen: 1, seqPos: 1, random: false, env, filter, sType: S.type & 0x0f, link: S.link, unit: [sid, s0, e0, sf3],
+      });
+    }
+    // stereo-paren: links + rechts met hetzelfde bereik worden één stereo-sample
+    const used = new Set();
+    for (const r of regs) {
+      if (used.has(r)) continue;
+      if ((r.sType === 4 || r.sType === 2) && r.link < M.shdr.length) {
+        const mate = regs.find(x => x !== r && !used.has(x) && x.sid === r.link && x.lo === r.lo && x.hi === r.hi && x.vlo === r.vlo && x.vhi === r.vhi && x.sType === (r.sType === 4 ? 2 : 4));
+        if (mate) {
+          const L = r.sType === 4 ? r : mate, R = r.sType === 4 ? mate : r;
+          used.add(R); used.add(L); const m = Object.assign({}, L, { path: 'sf:' + L.unit[0] + '+' + R.unit[0] + ':' + L.unit[1] + ':' + L.unit[2] + ':' + R.unit[1] + ':' + R.unit[2], pan: 0, unit: [L.unit[0], L.unit[1], L.unit[2], L.unit[3], R.unit[0], R.unit[1], R.unit[2]] });
+          out.regs.push(m); out.stereo++; continue;
+        }
+      }
+      used.add(r); out.regs.push(r);
+    }
+  }
+  for (const r of out.regs) { if (r.filter) out.filt++; if (r.env) out.env++; out.units.set(r.path, r.unit); }
+  return out;
+}
+
+// ---------- XPM-programma (.xpm, XML) ----------
+// Gebouwd op de publiek beschreven structuur van open conversieprogramma's (zie PadSampler/AGENTS.md); zonder echte voorbeeldbestanden alleen getest met zelfgemaakte fixtures.
+// Tolerant: onbekende elementen worden geteld en genegeerd, ontbrekende velden krijgen een standaard, een kapot bestand geeft een foutcode in plaats van een uitzondering.
+const XPM_INSTR = new Set(['lownote', 'highnote', 'zoneplay', 'triggermode', 'oneshot', 'layers', 'volumeattack', 'volumedecay', 'volumesustain', 'volumerelease', 'mutegroup', 'polyphony']);
+const XPM_LAYER = new Set(['active', 'volume', 'pan', 'pitch', 'tunecoarse', 'tunefine', 'rootnote', 'velstart', 'velend', 'samplename', 'samplefile', 'sliceloop', 'sliceloopstart', 'sliceend']);
+function parseXpm(text) {
+  const out = { regions: [], ignored: Object.create(null), headers: Object.create(null), skipped: Object.create(null), found: 0, env: null, error: '', kind: '', name: '', extraOk: [], extraWarn: [] };
+  let doc;
+  try { doc = new DOMParser().parseFromString(String(text), 'application/xml'); } catch (e) { out.error = 'xml'; return out; }
+  if (!doc || !doc.documentElement || doc.getElementsByTagName('parsererror').length) { out.error = 'xml'; return out; }
+  const lc = n => String(n.localName || n.nodeName).toLowerCase();
+  const kids = (el, name) => Array.from(el.children).filter(c => lc(c) === name);
+  const first = (el, name) => kids(el, name)[0] || null;
+  const raw = (el, name) => { const k = first(el, name); return k ? k.textContent : null; };
+  const val = (el, name) => { const t = raw(el, name); return t == null ? null : t.trim(); };
+  const numv = (el, name) => { const t = val(el, name); if (t == null || t === '') return null; const n = parseFloat(t); return Number.isFinite(n) ? n : null; };
+  const boolv = (el, name) => { const t = val(el, name); return t == null ? null : /^(true|1|yes)$/i.test(t); };
+  let prog = lc(doc.documentElement) === 'program' ? doc.documentElement : null;
+  if (!prog) for (const e of Array.from(doc.getElementsByTagName('*'))) if (lc(e) === 'program') { prog = e; break; }
+  if (!prog) { out.error = 'noprogram'; return out; }
+  const instrs = first(prog, 'instruments');
+  const ilist = instrs ? kids(instrs, 'instrument') : [];
+  let type = String(prog.getAttribute('type') || '').toLowerCase();
+  if (type !== 'drum' && type !== 'keygroup') type = numv(prog, 'keygroupnumkeygroups') != null || ilist.some(i => first(i, 'lownote') && first(i, 'highnote') && (numv(i, 'lownote') !== numv(i, 'highnote'))) ? 'keygroup' : 'drum';
+  out.kind = type; out.name = (val(prog, 'programname') || '').slice(0, 80);
+  for (const k of Array.from(prog.children)) { const n = lc(k); if (!['programname', 'instruments', 'keygroupnumkeygroups', 'padnotemap'].includes(n)) bump(out.headers, '<' + k.localName + '>'); }
+  if (first(prog, 'padnotemap')) bump(out.headers, '<PadNoteMap>');
+  const nk = numv(prog, 'keygroupnumkeygroups');
+  const timeOf = v => 0.001 * Math.exp(clamp(v, 0, 1) * Math.log(100 / 0.001));   // genormeerd 0..1 -> 1 ms tot 100 s (logaritmisch)
+  const dbOf = v => clamp((v - 0.353) * 18 / 0.647 - 12, -60, 12);               // 0,353 = -12 dB, 1 = +6 dB
+  let envN = 0, mixN = 0;
+  ilist.forEach((ins, ii) => {
+    const num = int(parseInt(ins.getAttribute('number'), 10), ii + 1, 1, 128);
+    if (type === 'keygroup' && nk != null && num > nk) { bump(out.skipped, 'beyond'); return; }
+    for (const k of Array.from(ins.children)) if (!XPM_INSTR.has(lc(k))) bump(out.ignored, k.localName);
+    let lo = num, hi = num;
+    if (type === 'keygroup') { lo = int(numv(ins, 'lownote'), 0, 0, 127); hi = int(numv(ins, 'highnote'), 127, 0, 127); }
+    const trig = numv(ins, 'triggermode'); if (trig === 1) { bump(out.skipped, 'release'); return; }
+    let one = trig === 0 ? true : trig === 2 ? false : boolv(ins, 'oneshot'); if (one == null) one = undefined;
+    const zp = numv(ins, 'zoneplay'), cyc = zp === 1, rnd = zp === 2;
+    const mute = type === 'drum' ? int(numv(ins, 'mutegroup'), 0, 0, 32) : 0, poly = int(numv(ins, 'polyphony'), 0, 0, 16);
+    let env = null;
+    if (['volumeattack', 'volumedecay', 'volumesustain', 'volumerelease'].some(n => numv(ins, n) != null)) {
+      const sus = clamp(numv(ins, 'volumesustain') == null ? 1 : numv(ins, 'volumesustain'), 0, 1);
+      env = { attack: clamp(timeOf(numv(ins, 'volumeattack') == null ? 0 : numv(ins, 'volumeattack')), 0.0005, 5), decay: clamp(timeOf(numv(ins, 'volumedecay') == null ? 0 : numv(ins, 'volumedecay')), 0.005, 10), sustain: sus, release: clamp(timeOf(numv(ins, 'volumerelease') == null ? 0 : numv(ins, 'volumerelease')), 0.005, 10), shape: sus < 0.001 && one !== false ? 'ad' : 'adsr' };
+      envN++;
+    }
+    const layers = first(ins, 'layers') ? kids(first(ins, 'layers'), 'layer') : [];
+    const act = layers.filter(l => (raw(l, 'samplename') || '').trim() !== '');
+    if (zp != null && zp !== 0 && type === 'keygroup' && act.length > 1) bump(out.skipped, 'zoneplay');
+    layers.forEach((ly, li) => {
+      const nm = raw(ly, 'samplename'); if (nm == null || nm.trim() === '') return;
+      out.found++;
+      for (const k of Array.from(ly.children)) if (!XPM_LAYER.has(lc(k))) bump(out.ignored, k.localName);
+      if (boolv(ly, 'active') === false) { bump(out.skipped, 'inactive'); return; }
+      let vlo = clamp(Math.round(numv(ly, 'velstart') == null ? 1 : numv(ly, 'velstart')), 1, 127), vhi = Math.round(numv(ly, 'velend') == null ? 127 : numv(ly, 'velend')); vhi = vhi < 1 ? 127 : clamp(vhi, 1, 127);
+      if (vhi < vlo) { bump(out.skipped, 'range'); return; }
+      const rn = numv(ly, 'rootnote'), root = rn != null && rn > 0 ? clamp(Math.round(rn) - 1, 0, 127) : null;   // in het bestand staat de grondtoon een hoger dan de toets
+      let tune = numv(ly, 'pitch');
+      if (tune == null) { const c = numv(ly, 'tunecoarse') || 0, f = numv(ly, 'tunefine') || 0; tune = c + (Math.abs(f) > 1 ? f / 100 : f); }
+      const vol = numv(ly, 'volume') == null ? 0 : dbOf(numv(ly, 'volume')), pan = numv(ly, 'pan') == null ? 0 : clamp(numv(ly, 'pan') * 2 - 1, -1, 1);
+      if (Math.abs(vol) > 0.01 || Math.abs(pan) > 0.01) mixN++;
+      const sl = numv(ly, 'sliceloop'), se = numv(ly, 'sliceend'), ls = numv(ly, 'sliceloopstart');
+      const loop = sl == null ? 'auto' : sl > 0 ? 'on' : 'off';
+      const file = (val(ly, 'samplefile') || '').replace(/\\/g, '/'), name = nm.trim();
+      out.regions.push({
+        path: file || (name + '.wav'), label: name, lo, hi, vlo, vhi, root, tune: clamp(tune, -48, 48), vol, pan, loop, ls: loop === 'on' ? (ls != null && ls >= 0 ? ls : 0) : null, le: loop === 'on' && se != null && se > 1 ? se - 1 : null,
+        group: mute, offBy: mute, seqLen: type === 'drum' && cyc ? Math.max(2, act.length) : 1, seqPos: li + 1, random: type === 'drum' && rnd, env, oneShot: one, poly,
+      });
+    });
+  });
+  if (envN) out.extraOk.push({ k: 'env', n: envN });
+  return out;
+}
+
 export default {
   id: 'nl.patchkamer.padsampler',
   name: 'Pad Sampler',
-  version: '1.4.0',
+  version: '1.5.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 700, minWidth: 340 },
@@ -1381,6 +1781,8 @@ export default {
     }
     async function loadFiles(files, lic) {
       const arr0 = Array.from(files || []);
+      const sfF = arr0.find(f => /\.(sf2|sf3)$/i.test(f.name)); if (sfF) { await sf2Pick(sfF); return; }
+      if (arr0.some(f => /\.xpm$/i.test(f.name))) { await importXpm(arr0, {}); return; }
       if (arr0.some(f => /\.(sfz|dspreset)$/i.test(f.name))) { await importFromFiles(arr0, {}); return; }
       const my = ++token; let loaded = 0, firstErr = '', mp3n = 0;
       try {
@@ -1421,7 +1823,30 @@ export default {
     const bkUi = (m, ...a) => { if (ui && ui.bk && ui.bk[m]) { try { ui.bk[m](...a); } catch (e) { /* de UI mag een import niet breken */ } } };
     const fmtMiB = n => (n / 1048576).toFixed(1);
     function newReport(title, src) { return { title, src, ok: [], ignored: [], warn: [], stats: null, loaded: 0, bytes: 0, missing: [], failed: [], notFit: 0, mp3Loops: 0, loopFmt: 0, rootDef: 0, aborted: false, error: '' }; }
+    function stageSf(key, sf, lic) {   // een sample uit een SoundFont: ruwe PCM16 (SF2) of Ogg Vorbis-bytes (SF3, door de browser gedecodeerd)
+      const name = sf.name || baseName(key), tooLong = () => Object.assign(new Error(T.tooLong), { code: 'decode' });
+      if (sf.pcm) {
+        const ch = sf.channels, frames = Math.floor(sf.pcm.length / ch);
+        if (!(frames > 0)) return Promise.reject(Object.assign(new Error(fillT(T.noAudio, name)), { code: 'decode' }));
+        if (frames / sf.rate > MAX_SEC) return Promise.reject(tooLong());
+        const u = new Uint8Array(frames * ch * 2), dv = new DataView(u.buffer); for (let i = 0; i < frames * ch; i++) dv.setInt16(i * 2, sf.pcm[i], true);
+        const rec = { name: str(name, 80), rate: sf.rate, channels: ch, root: null, loop: null, slices: [], sliceEnds: [], license: lic, data: b64encode(u), bytes: u.length, frames };
+        return Promise.resolve({ rec, id: recId(rec), meta: null, head: { rate: sf.rate, frames }, mp3: false });
+      }
+      const dec = ab2 => ctx.decodeAudioData(ab2.slice(0));
+      return Promise.all([dec(sf.ogg)].concat(sf.ogg2 ? [dec(sf.ogg2)] : [])).then(([a, b2]) => {
+        if (!a || !(a.length > 0)) throw new Error(fillT(T.noAudio, name));
+        let audio = a;
+        if (b2 && b2.length > 0) {   // stereopaar: links en rechts als twee mono-bestanden
+          const n = Math.min(a.length, b2.length), st = ctx.createBuffer(2, n, a.sampleRate); st.getChannelData(0).set(a.getChannelData(0).subarray(0, n)); st.getChannelData(1).set(b2.getChannelData(0).subarray(0, n)); audio = st;
+        }
+        if (audio.length / audio.sampleRate > MAX_SEC) throw tooLong();
+        const rec = toRecord(audio, name, null); rec.license = lic;
+        return { rec, id: recId(rec), meta: null, head: { rate: sf.rate, frames: audio.length * sf.rate / audio.sampleRate }, mp3: false };
+      }, () => { throw Object.assign(new Error(fillT(T.decodeFail, name)), { code: 'decode' }); });
+    }
     function stageSample(key, ab, lic) {
+      if (ab && ab.sf) return stageSf(key, ab.sf, lic);
       const head = wavHead(ab), meta = readSmpl(ab), mp3 = isMp3(ab), name = baseName(key);
       return ctx.decodeAudioData(ab.slice(0)).then(audio => {
         if (!audio || !(audio.length > 0)) throw new Error(fillT(T.noAudio, name));
@@ -1443,15 +1868,15 @@ export default {
     }
     // Laadt de bestanden van een plan (resolve(sleutel, signal) geeft een ArrayBuffer) en schrijft de pads in een bank, als één stap die ongedaan te maken is.
     async function runPlan(plan, resolve, o) {
-      const rep = o.rep, sig = o.sig, uniq = [], seen = new Set();
+      const rep = o.rep, sig = o.sig, uniq = [], seen = new Set(), lab = k => (o.label ? o.label(k) : baseName(k));
       for (const p of plan.pads) { for (const l of p.layers) if (!seen.has(l.f)) { seen.add(l.f); uniq.push(l.f); } for (const z of p.zones) if (!seen.has(z.f)) { seen.add(z.f); uniq.push(z.f); } }
-      const idxs = Array.from({ length: NPAD }, (_, k) => o.bank * NPAD + k), inBank = new Set(idxs), keep = new Set();
+      const idxs = Array.from({ length: NPAD * Math.max(1, Math.min(o.span || 1, NBANK - o.bank)) }, (_, k) => o.bank * NPAD + k), inBank = new Set(idxs), keep = new Set();
       for (let i = 0; i < NBANK * NPAD; i++) { if (o.clear && inBank.has(i)) continue; const p = padOf(i); for (const l of p.layers) if (l.sampleId) keep.add(l.sampleId); for (const z of p.zones) if (z.sampleId) keep.add(z.sampleId); }
       let budget = MAX_PCM; for (const id of keep) { const r = store.get(id); if (r) budget -= r.bytes; }
       const staged = new Map(), ids = new Set(); let used = 0, stop = false;
       for (let i = 0; i < uniq.length; i++) {
         if (sig.aborted || dead) throw abortErr();
-        o.progress(i, uniq.length, uniq[i]);
+        o.progress(i, uniq.length, lab(uniq[i]));
         if (stop) { rep.notFit++; continue; }
         try {
           const ab = await resolve(uniq[i], sig); if (sig.aborted || dead) throw abortErr();
@@ -1461,7 +1886,7 @@ export default {
           ids.add(s.id); used += cost; staged.set(uniq[i], s);
         } catch (e) {
           if (e && e.code === 'aborted') throw e;
-          if (e && e.code === 'decode') rep.failed.push(baseName(uniq[i])); else rep.missing.push(baseName(uniq[i]));
+          if (e && e.code === 'decode') rep.failed.push(lab(uniq[i])); else rep.missing.push(lab(uniq[i]));
         }
       }
       o.progress(uniq.length, uniq.length, '');
@@ -1471,13 +1896,14 @@ export default {
       let ok;
       try {
         ok = progRun(fillT(B.undoLabel, o.title), idxs, () => {
-          if (o.clear) for (const i of idxs) prog.banks[o.bank].pads[i & 15] = defPad();
+          if (o.clear) for (const i of idxs) prog.banks[i >> 4].pads[i & 15] = defPad();
           for (const s of staged.values()) { const id = addRecord(s.rec); const ex = store.get(id); if (ex && !ex.license.license && !ex.license.attribution && s.rec.license.license) ex.license = s.rec.license; s.id = id; }
           const free = idxs.filter(i => !hasSound(padOf(i)));
           let w = 0;
           for (const p of plan.pads) {
             const obj = { name: p.name, mode: p.mode, play: p.play, polyphony: p.mode === 'key' ? 16 : 4, muteGroup: p.mute, oneShot: p.one, layers: [], zones: [] };
-            if (p.env) obj.env = { shape: 'adsr', attack: p.env.attack, decay: p.env.decay, sustain: p.env.sustain, release: p.env.release };
+            if (p.env) obj.env = { shape: p.env.shape === 'ad' ? 'ad' : 'adsr', attack: p.env.attack, decay: p.env.decay, sustain: p.env.sustain, release: p.env.release };
+            if (p.filter) obj.filter = p.filter; if (p.pan) obj.pan = p.pan; if (p.level) obj.level = p.level; if (p.poly) obj.polyphony = p.poly;
             for (const l of p.layers) { const s = staged.get(l.f); if (!s) { layersLost.n++; continue; } obj.layers.push({ sampleId: s.id, semi: l.semi, fine: l.fine, level: 1, pan: l.pan, offset: 0, root: null, velLo: l.lo, velHi: l.hi, start: 0, end: 1, loop: loopFor(l.loop, s, false, rep), gain: l.gain }); }
             for (const z of p.zones) {
               const s = staged.get(z.f); if (!s) { layersLost.n++; continue; }
@@ -1487,7 +1913,7 @@ export default {
             if (!obj.layers.length && !obj.zones.length) { padsLost.n++; continue; }
             if (p.mode === 'key') obj.baseNote = obj.zones[Math.floor(obj.zones.length / 2)].root;
             if (w >= free.length) { padsLost.n++; continue; }
-            const i = free[w++]; prog.banks[o.bank].pads[i & 15] = nPad(obj, hasSample); if (prt[i]) padLive(i);
+            const i = free[w++]; prog.banks[i >> 4].pads[i & 15] = nPad(obj, hasSample); if (prt[i]) padLive(i);
           }
           if (o.clear && o.name) prog.banks[o.bank].name = str(o.name, 40) || prog.banks[o.bank].name;
           prog.bank = o.bank; prog.pad = 0; prog.layer = 0; selZone = 0;
@@ -1520,10 +1946,13 @@ export default {
         for (const [k, n] of Object.entries(parsed.skipped)) rep.ignored.push(f(B.s[k] || B.s.other, n));
       }
       if (plan) {
-        for (const [k, n] of Object.entries(plan.skipped)) rep.ignored.push(f(B.s[k] || B.s.other, n));
-        if (plan.notes.includes('thin')) rep.warn.push(f(B.w.thin, st.thinned));
+        const caps = plan.caps || { pads: NPAD, zones: MAXZONE };
+        for (const [k, n] of Object.entries(plan.skipped)) rep.ignored.push(f(B.s[k] || B.s.other, n, k === 'pads' ? caps.pads : caps.zones));
+        if (plan.notes.includes('thin')) rep.warn.push(f(B.w.thin, st.thinned, plan.caps ? plan.caps.zones : MAXZONE));
         if (plan.notes.includes('mute')) rep.warn.push(B.w.mute);
       }
+      if (parsed && parsed.extraOk) for (const l of parsed.extraOk) rep.ok.push(l);
+      if (parsed && parsed.extraWarn) for (const l of parsed.extraWarn) rep.warn.push(l);
       if (rep.missing.length) rep.warn.push(f(B.w.missing, rep.missing.length, rep.missing.slice(0, 6).join(', ') + (rep.missing.length > 6 ? ' …' : '')));
       if (rep.failed.length) rep.warn.push(f(B.w.decode, rep.failed.length, rep.failed.slice(0, 6).join(', ') + (rep.failed.length > 6 ? ' …' : '')));
       if (rep.notFit) rep.warn.push(f(B.w.notFit, rep.notFit, MAX_PCM / 1048576));
@@ -1683,6 +2112,98 @@ export default {
       });
     }
 
+    // --- SoundFont (SF2/SF3) en XPM-programma: lokale bestanden, in de tab Banken
+    const SF_MAX = 3 * 1024 * 1048576;
+    const sf = { M: null, file: null, name: '' };
+    const fileSrc = f => ({ size: f.size, read: (o, n) => f.slice(o, o + n).arrayBuffer() });
+    const toI16 = ab => { const dv = new DataView(ab), n = ab.byteLength >> 1, o = new Int16Array(n); for (let i = 0; i < n; i++) o[i] = dv.getInt16(i * 2, true); return o; };
+    function sfResolver(M, src) {   // sleutel 'sf:<id>:<begin>:<eind>' of 'sf:<links>+<rechts>:<beginL>:<eindL>:<beginR>:<eindR>' (posities in samples, bij SF3 in bytes van het smpl-blok)
+      return async key => {
+        const p = String(key).split(':'), ids = p[1].split('+').map(Number), spans = [[+p[2], +p[3]]]; if (p.length > 5) spans.push([+p[4], +p[5]]);
+        const S = M.shdr[ids[0]]; if (!S || !M.smpl) throw new Error('missing');
+        const sf3 = (S.type & 0x10) !== 0, name = ids.length > 1 ? S.name.replace(/[ _-]?[LR]$/i, '') || S.name : S.name;
+        const rd = async ([a, b]) => src.read(M.smpl.off + (sf3 ? a : a * 2), sf3 ? b - a : (b - a) * 2);
+        const parts = []; for (const sp of spans) parts.push(await rd(sp));
+        if (sf3) return { sf: { ogg: parts[0], ogg2: parts[1] || null, rate: S.rate, name } };
+        const a = toI16(parts[0]);
+        if (parts.length === 1) return { sf: { pcm: a, rate: S.rate, channels: 1, name } };
+        const b = toI16(parts[1]), n = Math.min(a.length, b.length), pcm = new Int16Array(n * 2);
+        for (let i = 0; i < n; i++) { pcm[i * 2] = a[i]; pcm[i * 2 + 1] = b[i]; }
+        return { sf: { pcm, rate: S.rate, channels: 2, name } };
+      };
+    }
+    function sfLicense(M, user) {   // alleen wat in INFO staat (ICOP, ICMT, IENG), tenzij de gebruiker zelf iets invult
+      const i = M.info, txt = (i.ICOP || '') + ' ' + (i.ICMT || ''), m = /\b(CC0(?:-1\.0)?|CC[- ]BY(?:[- ]SA|[- ]NC)?(?:[- ]\d\.\d)?|public domain|MIT|GPL[- ]?(?:v?\d(?:\.\d)?)?)\b/i.exec(txt);
+      return { source: '', license: str(user.license || (m ? m[1] : ''), 200), author: str(user.author || i.IENG || '', 200), attribution: str(user.attribution || [i.INAM, i.ICOP].filter(Boolean).join(' — '), 200) };
+    }
+    function sfPlanFor(choice, bank) {
+      const M = sf.M, parsed = sf2Regions(M, choice.kind, choice.i), ent = choice.kind === 'p' ? M.ph[choice.i] : M.ins[choice.i], name = (ent && ent.name) || 'SoundFont';
+      const nkeys = new Set(parsed.regs.map(r => r.lo)).size, span = parsed.drums ? clamp(Math.ceil(nkeys / NPAD), 1, NBANK - bank) : 1;
+      const plan = planRegions(parsed.regs, name, null, { mode: parsed.drums ? 'drum' : 'key', padCap: NPAD * span, cap: ZONE_CAP, padMix: true });
+      const used = new Set(); for (const p of plan.pads) { for (const l of p.layers) used.add(l.f); for (const z of p.zones) used.add(z.f); }
+      let bytes = 0; for (const k of used) { const u = parsed.units.get(k); if (u && !u[3]) bytes += (u[2] - u[1]) * 2 + (u.length > 4 ? (u[6] - u[5]) * 2 : 0); }
+      return { parsed, plan, name, span, used, bytes };
+    }
+    async function sf2Pick(f) {
+      if (job) { say(B.busy); return false; }
+      if (f.size > SF_MAX) { say(B.sf.big); return false; }
+      const nm = f.name || 'soundfont';
+      return runJob(nm, async o => {
+        try {
+          o.progress(0, 1, nm); const M = await sf2Open(fileSrc(f)); if (dead) return false;
+          sf.M = M; sf.file = f; sf.name = nm; say(fillT(B.sf.opened, M.info.INAM || nm)); bkUi('sf', true); return true;
+        } catch (e) { say(e && e.code ? (B.sf.err[e.code] || B.sf.err.other) : B.sf.err.other); return false; }
+      });
+    }
+    function sf2Close() { sf.M = null; sf.file = null; bkUi('sf'); }
+    async function importSf2(choice, o0) {
+      if (!sf.M || !choice) return false;
+      const M = sf.M, bank = o0.bank == null ? prog.bank : o0.bank; let P;
+      try { P = sfPlanFor(choice, bank); } catch (e) { say(B.sf.err.other); return false; }
+      if (!P.plan.pads.length) { say(B.w.noRegions); return false; }
+      return runJob(P.name, async o => {
+        const rep = newReport(P.name, 'local'); o.rep = rep; o.bank = bank; o.clear = o0.clear !== false; o.title = P.name; o.name = P.name; o.span = P.span; o.lic = sfLicense(M, o0.lic || {}); rep.fmt = 'sf2';
+        o.label = k => { const u = P.parsed.units.get(k); const S = u && M.shdr[u[0]]; return S ? S.name : baseName(k); };
+        const parsed = P.parsed, R = B.sf, st = P.plan.stats;
+        const nsm = P.used.size;
+        parsed.extraOk = [fillT(R.ok, P.name, st.zones + st.layers, nsm, parsed.stereo, parsed.env, parsed.filt)];
+        parsed.extraWarn = [R.warnMod]; if (M.sm24) parsed.extraWarn.push(R.sm24); if (M.sf3) parsed.extraWarn.push(R.sf3);
+        let ok = false;
+        try { ok = await runPlan(P.plan, sfResolver(M, fileSrc(sf.file)), o); } catch (e) { if (e && e.code === 'aborted') rep.aborted = true; else rep.error = String(e && e.message || e); }
+        if (ok) parsed.extraOk.push(fillT(R.mem, fmtMiB(M.tableBytes), fmtMiB(rep.bytes), fmtMiB(M.size)));
+        finishReport(rep, parsed, P.plan); return ok;
+      });
+    }
+    function xpmResolver(files, xpmPath) {   // samples zoeken op naam (met of zonder extensie, hoofdletters maken niet uit), bij voorkeur naast het programma
+      const dir = dirName(String(xpmPath).replace(/\\/g, '/').toLowerCase()), byFull = new Map(), byStem = new Map();
+      for (const f of files.filter(x => /\.(wav|flac|ogg|oga|mp3|aif|aiff)$/i.test(x.name))) {
+        const p = String(f.webkitRelativePath || f.name).replace(/\\/g, '/').toLowerCase(), b = p.split('/').pop(), near = dirName(p) === dir;
+        for (const [m, k] of [[byFull, b], [byStem, b.replace(/\.[^.]+$/, '')]]) { const c = m.get(k); if (!c || (near && !c.near)) m.set(k, { f, near }); }
+      }
+      return async rel => {
+        const b = String(rel).replace(/\\/g, '/').split('/').pop().toLowerCase(), hit = byFull.get(b) || byStem.get(b.replace(/\.[^.]+$/, ''));
+        if (!hit) throw new Error('missing'); if (hit.f.size > 50 * 1048576) throw new Error(T.fileBig); return hit.f.arrayBuffer();
+      };
+    }
+    async function importXpm(arr, o0) {
+      const xs = arr.filter(f => /\.xpm$/i.test(f.name)).sort((a, b) => ((a.webkitRelativePath || a.name) < (b.webkitRelativePath || b.name) ? -1 : 1)), xf = xs[0], name = baseName(xf.name);
+      return runJob(name, async o => {
+        const rep = newReport(name, 'local'); o.rep = rep; o.bank = o0.bank == null ? prog.bank : o0.bank; o.clear = o0.clear !== false; o.title = name; o.name = name; o.lic = licOf('', o0.lic || {}); rep.fmt = 'xpm';
+        if (xs.length > 1) rep.warn.push(fillT(B.w.morePresets, xs.length - 1));
+        if (xf.size > 5 * 1048576) { rep.error = B.w.presetBig; finishReport(rep, null, null); return false; }
+        let parsed; try { parsed = parseXpm(await xf.text()); } catch (e) { parsed = { error: 'xml', ignored: {}, headers: {}, skipped: {}, regions: [] }; }
+        if (parsed.error) { rep.error = parsed.error === 'noprogram' ? B.x.noProgram : B.x.badXml; finishReport(rep, parsed, null); return false; }
+        if (!parsed.regions.length) { rep.error = B.w.noRegions; finishReport(rep, parsed, null); return false; }
+        const drum = parsed.kind === 'drum', nkeys = new Set(parsed.regions.map(r => r.lo)).size; o.span = drum ? clamp(Math.ceil(nkeys / NPAD), 1, NBANK - o.bank) : 1;
+        const plan = planRegions(parsed.regions, parsed.name || name, null, { mode: drum ? 'drum' : 'key', padCap: NPAD * o.span, cap: ZONE_CAP, padMix: true });
+        const nIns = new Set(parsed.regions.map(r => r.lo + '-' + r.hi)).size, envN = parsed.regions.filter(r => r.env).length;
+        parsed.extraOk = [fillT(B.x.ok, parsed.name || name, parsed.kind, nIns, parsed.regions.length, envN)]; if (drum) parsed.extraOk.push(B.x.padmap); parsed.extraWarn = [B.x.unverified];
+        let ok = false;
+        try { ok = await runPlan(plan, xpmResolver(arr, xf.webkitRelativePath || xf.name), o); } catch (e) { if (e && e.code === 'aborted') rep.aborted = true; else rep.error = String(e && e.message || e); }
+        finishReport(rep, parsed, plan); return ok;
+      });
+    }
+
     // ---------- editor: model, bewerkingen, ongedaan/opnieuw ----------
     // De editor werkt op de laag (of zone) die gekozen is. Een bewerking leest het sample als Float32, maakt een nieuwe kopie, slaat die als PCM16 op onder een nieuw id
     // en laat de laag daarheen wijzen. Ongedaan/opnieuw zit alleen in het geheugen (niet in getState): de oude en nieuwe samples blijven daarvoor bewaard, apart van de 64 MiB.
@@ -1823,6 +2344,7 @@ export default {
       pushUndo({ label, loc: t.loc, b: before, a: after }); ed.dirty = true; if (ui) ui.refreshAll(); say(fillT(E.done, label)); return true;
     }
     function edOp(op, arg) {
+      if (stretchState.ctl) { say(E.stBusy); return; }
       try { edRun(op, arg); } catch (err) { say(err && err.message ? err.message : String(err)); }
     }
     function edRun(op, arg) {
@@ -1915,6 +2437,38 @@ export default {
         default: return;
       }
     }
+    // Time-stretch en toonhoogte zonder tempo: WSOLA (stretchGen), in een worker als de browser dat toestaat; asynchroon en dus los van edRun
+    const stretchState = { ctl: null };
+    function stretchPlan(arg) {   // { a, b, ratio (uitvoer/invoer), st (halve tonen bij toonhoogte), len (s) } of null als de invoer niet klopt
+      const D = edData(); if (!D) return null;
+      const a = ed.sel ? ed.sel[0] : 0, b = ed.sel ? ed.sel[1] : D.frames, len = (b - a) / D.rate; let ratio, st = 0;
+      if (arg.kind === 'bpm') ratio = arg.beats * 60 / len / arg.target;
+      else if (arg.kind === 'factor') ratio = 1 / arg.factor;
+      else { st = arg.semi + arg.cents / 100; ratio = Math.pow(2, st / 12); }
+      if (!Number.isFinite(ratio) || ratio < 0.5 - 1e-9 || ratio > 2 + 1e-9 || (arg.kind === 'pitch' && Math.abs(st) > 12 + 1e-9)) return { bad: true };
+      return { a, b, ratio, st, len };
+    }
+    async function edStretch(arg, preview) {
+      if (stretchState.ctl) { say(E.stBusy); return false; }
+      const t = edTarget(), D = edData(); if (!t || !D) { say(E.needSample); return false; }
+      const p = stretchPlan(arg); if (!p || p.bad) { say(E.stRange); return false; }
+      if (Math.abs(p.ratio - 1) < 1e-4) { say(E.nothing); return false; }
+      const N = D.frames, a = p.a, b = p.b, m0 = b - a, newLen = arg.kind === 'pitch' ? N : N - m0 + Math.round(m0 * p.ratio);
+      if (newLen / D.rate > MAX_SEC) { say(T.tooLong); return false; }
+      const key = ed.key, id = D.id, ctl = { cancelled: false, worker: null, abort: null }; let seg;
+      stretchState.ctl = ctl; uiEd('stretch'); uiEd('stretchProg', 0);
+      try {
+        seg = await stretchRun(sliceCh(D.ch, a, b), D.rate, p.ratio, arg.quality !== 'tonal', pr => { if (!dead) uiEd('stretchProg', pr); }, ctl);
+        if (arg.kind === 'pitch') seg = seg.map(c => { const r = resample(c, p.ratio), f = new Float32Array(m0); f.set(r.subarray(0, Math.min(m0, r.length))); return f; });
+      } catch (e) { stretchState.ctl = null; if (!dead) { uiEd('stretch'); say(e && e.code === 'aborted' ? E.stAborted : (e && e.message ? e.message : String(e))); } return false; }
+      stretchState.ctl = null; if (dead) return false; uiEd('stretch');
+      const t2 = edTarget(), D2 = edData(); if (!t2 || !D2 || D2.id !== id || ed.key !== key) { say(E.stChanged); return false; }
+      if (preview) { edPlayBuf(seg, D.rate, a); return true; }
+      const m = seg[0].length;
+      return edCommit(E.fxNames[arg.kind === 'pitch' ? 'pitchKeep' : 'stretch'], { ch: joinCh([sliceCh(D.ch, 0, a), seg, sliceCh(D.ch, b, N)], D.channels), rate: D.rate },
+        { fr: f => (f <= a ? f : f >= b ? f - (b - a) + m : a + (f - a) * m / (b - a)), sel: ed.sel ? [a, a + m] : null });
+    }
+    function stretchCancel() { const c = stretchState.ctl; if (c) { c.cancelled = true; if (c.abort) c.abort(); } }
     // beluisteren: selectie (of vanaf de cursor), lus, scrubben; alles via de stereomix van het apparaat
     function edStop() {
       const p = ed.play; if (!p) return; ed.play = null; const now = ctx.currentTime;
@@ -2607,12 +3161,42 @@ export default {
         // lokaal
         H('h4', null, P, B.local); H('p', 'muted', P, B.localHelp);
         const lr = H('div', 'row', P);
-        const fin = H('input', 'hide', lr); fin.type = 'file'; fin.multiple = true; fin.accept = '.wav,.flac,.ogg,.oga,.mp3,.sfz,.dspreset,audio/*'; fin.setAttribute('data-bk', 'files'); fin.tabIndex = -1;
+        const fin = H('input', 'hide', lr); fin.type = 'file'; fin.multiple = true; fin.accept = '.wav,.flac,.ogg,.oga,.mp3,.sfz,.dspreset,.sf2,.sf3,.xpm,audio/*'; fin.setAttribute('data-bk', 'files'); fin.tabIndex = -1;
         const din = H('input', 'hide', lr); din.type = 'file'; din.multiple = true; din.setAttribute('webkitdirectory', ''); din.setAttribute('data-bk', 'dir'); din.tabIndex = -1;
         const bf = H('button', 'btn', lr, B.chooseFiles); bf.type = 'button'; on(bf, 'click', () => fin.click()); stop(bf);
         const bd = H('button', 'btn', lr, B.chooseDir); bd.type = 'button'; on(bd, 'click', () => din.click()); stop(bd);
-        const pick = inp => on(inp, 'change', () => { const arr = Array.from(inp.files || []); inp.value = ''; if (!arr.length) return; if (arr.some(f => /\.(sfz|dspreset)$/i.test(f.name))) importFromFiles(arr, opts()); else loadFiles(arr.filter(f => /\.(wav|flac|ogg|oga|mp3)$/i.test(f.name) || /^audio\//.test(f.type)), licOf('', licFields())); });
+        const pick = inp => on(inp, 'change', () => { const arr = Array.from(inp.files || []); inp.value = ''; if (!arr.length) return; const sfF = arr.find(f => /\.(sf2|sf3)$/i.test(f.name)); if (sfF) { sf2Pick(sfF); return; } if (arr.some(f => /\.xpm$/i.test(f.name))) { importXpm(arr, opts()); return; } if (arr.some(f => /\.(sfz|dspreset)$/i.test(f.name))) importFromFiles(arr, opts()); else loadFiles(arr.filter(f => /\.(wav|flac|ogg|oga|mp3)$/i.test(f.name) || /^audio\//.test(f.type)), licOf('', licFields())); });
         pick(fin); pick(din);
+        // SoundFont: lijst van presets en instrumenten, keuze, voorbeeldregel en importeren
+        const sb = H('div', 'bgrp sfbox', P); sb.setAttribute('data-bk', 'sf'); sb.hidden = true;
+        H('h4', null, sb, B.sf.title);
+        const sbHead = H('div', 'info', sb, ''); sbHead.setAttribute('data-bk', 'sf-head');
+        const sbLic = H('div', 'info', sb, ''); sbLic.setAttribute('data-bk', 'sf-info');
+        const sbSel = H('select', null, sb); sbSel.setAttribute('data-bk', 'sf-pick'); sbSel.setAttribute('aria-label', B.sf.pick); stop(sbSel);
+        const sbPrev = H('div', 'info', sb, ''); sbPrev.setAttribute('data-bk', 'sf-preview'); sbPrev.setAttribute('role', 'status');
+        const sbRow = H('div', 'row', sb);
+        const sbGo = H('button', 'btn', sbRow, B.sf.imp); sbGo.type = 'button'; sbGo.setAttribute('data-bk', 'sf-import'); stop(sbGo);
+        const sbClose = H('button', 'btn', sbRow, B.sf.close); sbClose.type = 'button'; sbClose.setAttribute('data-bk', 'sf-close'); stop(sbClose);
+        const sfCh = () => { const m = /^([pi])(\d+)$/.exec(sbSel.value); return m ? { kind: m[1], i: +m[2] } : null; };
+        const paintSfPrev = () => {
+          if (!sf.M) { sbPrev.textContent = ''; return; }
+          const ch = sfCh(); if (!ch) { sbPrev.textContent = ''; return; }
+          let P2; try { P2 = sfPlanFor(ch, int(+tgt.value, 0, 0, NBANK - 1)); } catch (e) { sbPrev.textContent = B.sf.err.other; sbGo.setAttribute('data-nop', '1'); sbGo.disabled = true; return; }
+          const st = P2.plan.stats, n = P2.used.size; sbGo.setAttribute('data-nop', P2.plan.pads.length ? '0' : '1'); sbGo.disabled = !P2.plan.pads.length || !!job;
+          sbPrev.textContent = !P2.plan.pads.length ? fillT(B.sf.prevNone, P2.name) : P2.parsed.drums ? fillT(B.sf.prevDrum, P2.name, st.drumPads, P2.span, n, fmtMiB(P2.bytes)) + (sf.M.sf3 ? B.sf.prevSf3 : '') : fillT(B.sf.prevKey, P2.name, st.zones, n, fmtMiB(P2.bytes)) + (sf.M.sf3 ? B.sf.prevSf3 : '');
+        };
+        const paintSf = (focus) => {
+          const M = sf.M; sb.hidden = !M; sbSel.textContent = '';
+          if (!M) { return; }
+          sbHead.textContent = fillT(B.sf.head, M.info.INAM || sf.name, M.info.ver || '?', M.ph.length, M.ins.length, M.shdr.length, fmtMiB(M.size), fmtMiB(M.tableBytes));
+          const lic = [M.info.ICOP, M.info.ICMT].filter(Boolean).join(' · '); sbLic.textContent = lic ? fillT(B.sf.lic, lic.slice(0, 400)) : B.sf.noLic;
+          const g1 = H('optgroup', null, sbSel); g1.label = B.sf.gPre; M.ph.forEach((p, i) => { const o2 = H('option', null, g1, String(p.bank).padStart(3, '0') + ':' + String(p.prog).padStart(3, '0') + ' ' + (p.name || '?') + (p.bank === 128 ? ' (' + B.sf.perc + ')' : '')); o2.value = 'p' + i; });
+          const g2 = H('optgroup', null, sbSel); g2.label = B.sf.gIns; M.ins.forEach((p, i) => { const o2 = H('option', null, g2, p.name || '?'); o2.value = 'i' + i; });
+          sbSel.value = M.ph.length ? 'p0' : 'i0'; paintSfPrev(); if (focus) { try { sb.scrollIntoView({ block: 'nearest' }); } catch (e) { /* ok */ } }
+        };
+        on(sbSel, 'change', paintSfPrev); on(tgt, 'change', paintSfPrev);
+        on(sbGo, 'click', () => { const ch = sfCh(); if (ch) importSf2(ch, opts()); });
+        on(sbClose, 'click', () => sf2Close());
         // webadres
         H('h4', null, P, B.urlTitle); H('p', 'muted', P, B.urlHelp);
         const ur = H('div', 'row', P);
@@ -2651,6 +3235,7 @@ export default {
           for (const { b, ld, acc } of cards) ld.disabled = busy || !canNet() || (b.status === 'yellow' && !(acc && acc.checked));
           for (const x of [ugo, fgo, bf, bd]) x.disabled = busy && x !== bf && x !== bd;
           jb.hidden = !busy; jbCancel.disabled = !busy;
+          sbGo.disabled = busy || sbGo.getAttribute('data-nop') === '1';
         }
         function paintJob() {
           sync(); if (!job) return;
@@ -2679,7 +3264,7 @@ export default {
           cp.disabled = !list.length;
         }
         ctl.push(() => { if (!tgtTouched) tgt.value = String(prog.bank); paintCredits(); sync(); });
-        bkUiApi = { job: paintJob, report: paintReport, credits: paintCredits };
+        bkUiApi = { job: paintJob, report: paintReport, credits: paintCredits, sf: paintSf };
         sync(); paintCredits();
       }
       // --- paneel Bewerken: golfvormeditor
@@ -2828,8 +3413,8 @@ export default {
         // process
         const gPr = H('div', 'grp', P); H('h4', null, gPr, E.grpProc); G.proc.push(gPr);
         const rq = H('div', 'row', gPr);
-        sel2(rq, E.procOp, 'procOp', [['filter', E.fxFilter], ['drive', E.fxDrive], ['crush', E.fxCrush], ['eq', E.fxEq], ['comp', E.fxComp], ['tempo', E.fxTempo]], 'filter');
-        const pb = {}; for (const k2 of ['filter', 'drive', 'crush', 'eq', 'comp', 'tempo']) pb[k2] = H('div', 'row', gPr);
+        sel2(rq, E.procOp, 'procOp', [['filter', E.fxFilter], ['drive', E.fxDrive], ['crush', E.fxCrush], ['eq', E.fxEq], ['comp', E.fxComp], ['tempo', E.fxTempo], ['stretch', E.fxStretch]], 'filter');
+        const pb = {}; for (const k2 of ['filter', 'drive', 'crush', 'eq', 'comp', 'tempo', 'stretch']) pb[k2] = H('div', 'row', gPr);
         sel2(pb.filter, E.fType, 'fType', [['lp', T.lp], ['hp', T.hp], ['bp', T.bp]], 'lp'); numIn(pb.filter, E.fCut, 1000, 20, 20000, 1, 'fCut'); numIn(pb.filter, E.fQ, 0.71, 0.1, 30, 0.01, 'fQ');
         sel2(pb.filter, E.fSlope, 'fSlope', [[12, E.sl12], [24, E.sl24]], 12); chk2(pb.filter, E.fSweep, 'fSweep', false); numIn(pb.filter, E.fCutEnd, 4000, 20, 20000, 1, 'fCutEnd');
         numIn(pb.drive, E.drDb, 12, 0, 48, 1, 'drDb'); numIn(pb.drive, E.drMix, 100, 0, 100, 1, 'drMix');
@@ -2837,18 +3422,44 @@ export default {
         numIn(pb.eq, E.eqLow, 0, -18, 18, 0.5, 'eqLow'); numIn(pb.eq, E.eqMid, 0, -18, 18, 0.5, 'eqMid'); numIn(pb.eq, E.eqHigh, 0, -18, 18, 0.5, 'eqHigh');
         numIn(pb.comp, E.cpThr, -18, -60, 0, 1, 'cpThr'); numIn(pb.comp, E.cpRatio, 4, 1, 40, 0.1, 'cpRatio'); numIn(pb.comp, E.cpAtk, 5, 0.1, 500, 0.1, 'cpAtk'); numIn(pb.comp, E.cpRel, 100, 5, 5000, 1, 'cpRel'); numIn(pb.comp, E.cpMk, 0, -24, 24, 0.5, 'cpMk');
         numIn(pb.tempo, E.beats, 4, 0.25, 512, 0.25, 'tmBeats'); numIn(pb.tempo, E.tmTarget, Number.isFinite(host.bpm) && host.bpm >= 20 && host.bpm <= 400 ? Math.round(host.bpm * 100) / 100 : 120, 20, 400, 0.01, 'tmTarget');
+        {   // time-stretch
+          const tg = Number.isFinite(host.bpm) && host.bpm >= 20 && host.bpm <= 400 ? Math.round(host.bpm * 100) / 100 : 120;
+          sel2(pb.stretch, E.stMode, 'stMode', [['bpm', E.stBpm], ['factor', E.stFactor], ['pitch', E.stPitch]], 'bpm');
+          numIn(pb.stretch, E.beats, 4, 0.25, 512, 0.25, 'stBeats'); numIn(pb.stretch, E.tmTarget, tg, 20, 400, 0.01, 'stTarget'); numIn(pb.stretch, E.stFactorL, 1, 0.5, 2, 0.01, 'stFactor');
+          numIn(pb.stretch, E.stSemi, 0, -12, 12, 1, 'stSemi'); numIn(pb.stretch, E.stCents, 0, -100, 100, 1, 'stCents');
+          sel2(pb.stretch, E.stQual, 'stQual', [['rhythm', E.stRhythm], ['tonal', E.stTonal]], 'rhythm');
+        }
         const tmCur = () => { const D = edData(); if (!D) return NaN; const secs = (ed.sel ? ed.sel[1] - ed.sel[0] : D.frames) / D.rate; return secs > 0 ? fnum('tmBeats') * 60 / secs : NaN; };
         eb(pb.tempo, E.half, () => { const i2 = P.querySelector('[data-f="tmBeats"]'); i2.value = String(Math.max(0.25, +i2.value / 2)); }, 'tmHalf', 'sample');
         eb(pb.tempo, E.double, () => { const i2 = P.querySelector('[data-f="tmBeats"]'); i2.value = String(Math.min(512, +i2.value * 2)); }, 'tmDouble', 'sample');
         tmNowEl = H('div', 'info', gPr, '');
-        const fxShow = () => { const cur = fget('procOp'); for (const k2 of Object.keys(pb)) pb[k2].hidden = k2 !== cur; tmNowEl.hidden = cur !== 'tempo'; };
+        const stArg = () => { const m = fget('stMode'); return { kind: m, beats: num(fnum('stBeats'), 4, 0.25, 512), target: num(fnum('stTarget'), 120, 20, 400), factor: num(fnum('stFactor'), 1, 0.5, 2), semi: num(fnum('stSemi'), 0, -12, 12), cents: num(fnum('stCents'), 0, -100, 100), quality: fget('stQual') }; };
+        let rq2 = null, stRow = null, stInfo = null, stGoBtn = null, stPrevBtn = null, stCancelBtn = null, stProgEl = null;
+        const fxShow = () => {
+          const cur = fget('procOp'); for (const k2 of Object.keys(pb)) pb[k2].hidden = k2 !== cur; tmNowEl.hidden = cur !== 'tempo';
+          if (rq2) rq2.hidden = cur === 'stretch'; if (stRow) { stRow.hidden = cur !== 'stretch'; stInfo.hidden = cur !== 'stretch'; stProgEl.hidden = cur !== 'stretch' || !stretchState.ctl; }
+          if (cur === 'stretch') { const m = fget('stMode'); for (const [id, vis] of [['stBeats', m === 'bpm'], ['stTarget', m === 'bpm'], ['stFactor', m === 'factor'], ['stSemi', m === 'pitch'], ['stCents', m === 'pitch']]) { const l = P.querySelector('[data-f="' + id + '"]'); if (l && l.parentNode) l.parentNode.hidden = !vis; } }
+        };
         on(P.querySelector('[data-f="procOp"]'), 'change', () => { fxShow(); esig = ''; edRefresh(false); }); fxShow();
         const tmArg = () => ({ beats: num(fnum('tmBeats'), 4, 0.25, 512), target: num(fnum('tmTarget'), 120, 20, 400) });
-        const rq2 = H('div', 'row', gPr);
+        rq2 = H('div', 'row', gPr);
         eb(rq2, '▶ ' + E.procPrev, () => { const fx = fget('procOp'); if (fx === 'tempo') { const a = tmArg(), cur = tmCur(); if (Number.isFinite(cur)) procPreview('tempo', { ratio: clamp(a.target / cur, 0.25, 4) }); } else procPreview(fx, procParams(fx, fget)); }, 'procPrev', 'sample');
         eb(rq2, E.procApply, () => { const fx = fget('procOp'); if (fx === 'tempo') edOp('tempo', tmArg()); else edOp('proc', { fx, p: procParams(fx, fget) }); }, 'procApply', 'sample');
-        H('p', 'muted', gPr, E.procHelp);
-        ed.tmUpdate = () => { const c = tmCur(), a = tmArg(); if (tmNowEl) tmNowEl.textContent = Number.isFinite(c) ? fillT(E.tmNow, c.toFixed(2)) + ' · ' + fillT(E.tmSt, (12 * Math.log2(a.target / c)).toFixed(2)) : ''; };
+        stRow = H('div', 'row', gPr);
+        stPrevBtn = eb(stRow, '▶ ' + E.stPrev, () => { edStretch(stArg(), true); }, 'stPrev', 'sample');
+        stGoBtn = eb(stRow, E.stGo, () => { edStretch(stArg(), false); }, 'stGo', 'sample');
+        stCancelBtn = H('button', 'btn', stRow, E.stCancel); stCancelBtn.type = 'button'; stCancelBtn.setAttribute('data-op', 'stCancel'); on(stCancelBtn, 'pointerdown', e => e.stopPropagation()); on(stCancelBtn, 'click', () => stretchCancel());
+        stProgEl = H('div', 'info', gPr, ''); stProgEl.setAttribute('data-f', 'stProg'); stProgEl.setAttribute('role', 'status'); stInfo = H('div', 'info', gPr, ''); stInfo.setAttribute('data-f', 'stInfo');
+        const stPaint = () => { const busy = !!stretchState.ctl; stCancelBtn.disabled = !busy; stCancelBtn.hidden = !busy; stProgEl.hidden = !busy || fget('procOp') !== 'stretch'; for (const b2 of [stGoBtn, stPrevBtn]) if (busy) b2.disabled = true; };
+        ed.stUi = () => { stPaint(); edRefresh(false); }; ed.stProg = p => { stProgEl.textContent = fillT(E.stProg, Math.round(clamp(p, 0, 1) * 100)); };
+        for (const id of ['stMode', 'stBeats', 'stTarget', 'stFactor', 'stSemi', 'stCents', 'stQual']) { const el = P.querySelector('[data-f="' + id + '"]'); on(el, 'input', () => { fxShow(); if (ed.tmUpdate) ed.tmUpdate(); }); on(el, 'change', () => { fxShow(); if (ed.tmUpdate) ed.tmUpdate(); }); }
+        stPaint(); fxShow();
+        H('p', 'muted', gPr, E.procHelp); H('p', 'muted', gPr, E.stHelp);
+        ed.tmUpdate = () => {
+          const c = tmCur(), a = tmArg();
+          if (stInfo) { const D = edData(), pl = D ? stretchPlan(stArg()) : null; stInfo.textContent = !pl ? '' : pl.bad ? E.stRange : fget('stMode') === 'pitch' ? fillT(E.stInfoP, (pl.st >= 0 ? '+' : '') + pl.st.toFixed(2), pl.len.toFixed(2)) : fillT(E.stInfoT, (1 / pl.ratio).toFixed(3), (pl.len * pl.ratio).toFixed(2), pl.len.toFixed(2)); }
+          if (tmNowEl) tmNowEl.textContent = Number.isFinite(c) ? fillT(E.tmNow, c.toFixed(2)) + ' · ' + fillT(E.tmSt, (12 * Math.log2(a.target / c)).toFixed(2)) : '';
+        };
 
         // flatten en resample
         const gFl = H('div', 'grp', P); H('h4', null, gFl, E.grpFlat); G.flat.push(gFl);
@@ -3287,7 +3898,7 @@ export default {
 
       ui = {
         bk: bkUiApi, refreshAll, refreshCtl, say(m) { if (statusEl) statusEl.textContent = m || ''; }, drawWave,
-        ed: { view() { ed.dirty = true; esig = ''; }, refresh() { esig = ''; edRefresh(false); }, auto() { if (ed.autoPaint) ed.autoPaint(); } },
+        ed: { stretch() { if (ed.stUi) ed.stUi(); }, stretchProg(p) { if (ed.stProg) ed.stProg(p); }, view() { ed.dirty = true; esig = ''; }, refresh() { esig = ''; edRefresh(false); }, auto() { if (ed.autoPaint) ed.autoPaint(); } },
         destroy() {
           ed.autoPaint = null; if (stopFrame) { stopFrame(); stopFrame = null; }
           if (lvlTimer) { clearTimeout(lvlTimer); lvlTimer = 0; }
@@ -3347,6 +3958,8 @@ export default {
       noteNames() { try { return noteList(); } catch (e) { return []; } },
       async loadAudio(files) { await loadFiles(files); },
       importReport() { return lastReport ? JSON.parse(JSON.stringify(lastReport)) : null; },
+      soundFont() { const M = sf.M; return M ? { name: M.info.INAM || sf.name, info: JSON.parse(JSON.stringify(M.info)), sf3: M.sf3, presets: M.ph.map((p, i) => ({ sel: 'p' + i, name: p.name, bank: p.bank, prog: p.prog })), instruments: M.ins.map((p, i) => ({ sel: 'i' + i, name: p.name })) } : null; },
+      async importSoundFont(sel, o) { const m = /^([pi])(\d+)$/.exec(String(sel)); return m ? importSf2({ kind: m[1], i: +m[2] }, o || {}) : false; },
       bankCatalog() { return JSON.parse(JSON.stringify(CATALOG)); },
       getState() {
         const samples = {}; for (const [id, r] of store) samples[id] = serSample(r);
@@ -3384,6 +3997,7 @@ export default {
       destroy() {
         if (dead) return; dead = true; token++;
         if (job) { try { job.ctl.abort(); } catch (e) { /* ok */ } job = null; }
+        try { stretchCancel(); } catch (e) { /* ok */ }
         if (warmTimer) { clearTimeout(warmTimer); warmTimer = 0; }
         if (ui) { ui.destroy(); ui = null; }
         for (const x of [...trigs]) for (const v of x.voices) { try { v.source.onended = null; v.source.stop(); } catch (e) { /* al gestopt */ } }

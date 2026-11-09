@@ -4,6 +4,15 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.13.0 (2026-11-09)
+
+### Added
+- **Pad Sampler 1.5.0** (phase 2b): three new things.
+  - **Time-stretch** (tab Edit, **Process**, next to Tempo match): change the tempo without changing the pitch (to a target BPM using the beat count, or by a factor of 0.5 to 2) or the pitch without changing the tempo (semitones and cents, at most 12). The method is WSOLA in the time domain with two settings: **Rhythmic** (short windows; every attack is detected and starts exactly in its place, so drums stay sharp) and **Tonal** (long windows, for tone and melody). The result is stored in the sample (selection or the whole sample), is one Undo step and obeys the 64 MiB and 120 s limits. The work runs in a background thread (Blob worker) with progress and a Cancel button; where the browser does not allow that it runs in slices on the main thread. Listen first with **Listen**.
+  - **SoundFont import (SF2 and SF3)** in the tab Banks (Local): choose a `.sf2` or `.sf3` file, pick a **preset or instrument** from the list and see the zones and memory before loading. Only the tables are read up front; only the samples of the chosen preset are read from the file and decoded, so a large file does not have to fit in memory. Taken over: key and velocity ranges (with preset and instrument ranges intersected), root note, coarse and fine tuning (and the sample correction), loops, volume envelope (attack, decay, sustain, release) as AD or ADSR, pan, attenuation, filter cutoff and resonance (roughly, low-pass), exclusive classes as mute groups and linked left and right samples as one stereo sample. A percussion preset (bank 128) becomes drum pads, over up to four banks. The report lists what was ignored (generators and modulators). The licence comes only from the INFO block of the file (copyright and comment) and is shown; SF3 samples are decoded with the browser decoder.
+  - **XPM program import** (`.xpm`, XML) in the tab Banks: drum and keygroup programs with instruments and layers, sample name, key and velocity range, root note, tuning, level, pan, loop, one-shot, mute groups, polyphony and volume envelope; the samples are looked up by name among the files or the folder you choose, as with SFZ. Unknown parts are ignored and counted in the report. Written from public descriptions and tested only with home-made files: check the result.
+  - The state gets no new fields: old states load unchanged and `setState(getState())` stays exact. Importers can now fill up to 128 zones (SoundFont and XPM; SFZ and Decent Sampler keep 16).
+
 ## 0.12.1 (2026-11-08)
 
 ### Fixed

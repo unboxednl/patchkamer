@@ -4,6 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.13.0 (2026-11-09)
+
+### Toegevoegd
+- **Pad Sampler 1.5.0** (fase 2b): drie nieuwe dingen.
+  - **Time-stretch** (tab Bewerken, **Process**, naast Tempo-afstemming): het tempo veranderen zonder de toonhoogte (naar een doel-BPM met het aantal tellen, of met een factor van 0,5 tot 2) of de toonhoogte zonder het tempo (halve tonen en cent, hoogstens 12). De methode is WSOLA in het tijdsdomein met twee standen: **Ritmisch** (korte vensters; elke aanslag wordt herkend en begint precies op zijn plek, zodat drums scherp blijven) en **Tonaal** (lange vensters, voor klank en melodie). Het resultaat wordt in het sample opgeslagen (selectie of heel sample), is één stap Ongedaan en houdt zich aan de grenzen van 64 MiB en 120 s. Het rekenwerk draait in een achtergrond-thread (Blob-worker) met voortgang en een knop Annuleren; waar de browser dat niet toestaat gaat het in brokken op de hoofdthread. Eerst luisteren kan met **Beluisteren**.
+  - **SoundFont-import (SF2 en SF3)** in de tab Banken (Lokaal): kies een `.sf2`- of `.sf3`-bestand, kies een **preset of instrument** uit de lijst en zie de zones en het geheugen voordat je laadt. Vooraf worden alleen de tabellen gelezen; alleen de samples van de gekozen preset worden uit het bestand gelezen en gedecodeerd, zodat een groot bestand niet in het geheugen hoeft te passen. Overgenomen: toets- en velocity-bereiken (preset- en instrumentbereik worden doorsneden), grondtoon, grove en fijne stemming (en de samplecorrectie), lussen, volume-envelope (attack, decay, sustain, release) als AD of ADSR, balans, demping, afkapfrequentie en resonantie van het filter (grof, laagdoorlaat), exclusieve klassen als mutegroepen en gekoppelde linker en rechter samples als één stereosample. Een slagwerkpreset (bank 128) wordt drum-pads, over hoogstens vier banken. Het rapport noemt wat genegeerd is (generators en modulatoren). De licentie komt alleen uit het INFO-blok van het bestand (copyright en opmerking) en wordt getoond; SF3-samples worden met de decoder van de browser gedecodeerd.
+  - **XPM-programma-import** (`.xpm`, XML) in de tab Banken: drum- en keygroup-programma's met instrumenten en lagen, samplenaam, toets- en velocity-bereik, grondtoon, stemming, niveau, balans, lus, one-shot, mutegroepen, polyfonie en volume-envelope; de samples worden op naam gezocht tussen de bestanden of de map die je kiest, zoals bij SFZ. Onbekende onderdelen worden genegeerd en in het rapport geteld. Geschreven naar openbare beschrijvingen en alleen getest met zelfgemaakte bestanden: controleer het resultaat.
+  - De state krijgt geen nieuwe velden: oude states laden ongewijzigd en `setState(getState())` blijft exact. Importers vullen nu tot 128 zones (SoundFont en XPM; SFZ en Decent Sampler houden 16).
+
 ## 0.12.1 (2026-11-08)
 
 ### Opgelost
