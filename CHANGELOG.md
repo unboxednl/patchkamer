@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.25.1 (2026-11-09)
+
+### Changed
+- **Skin screenshots 14 to 17 refreshed (NL and EN)** (Duofone with panels, Drum Machine with round pads and with a display, Mixer with meters): the cards are lower because the ports are now in the title bar. The screenshot script never remade these four, because the line that saves them was inside a comment; that is fixed.
+
 ## 0.25.0 (2026-11-09)
 
 ### Changed

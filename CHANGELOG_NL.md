@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.25.1 (2026-11-09)
+
+### Gewijzigd
+- **Skin-screenshots 14 tot 17 ververst (NL en EN)** (Duofone met panelen, Drum Machine met ronde pads en met schermpje, Mixer met meters): de kaarten zijn lager doordat de poorten nu in de titelbalk staan. Het schermafbeeldingenscript maakte deze vier nooit opnieuw, omdat de regel die ze opslaat in een commentaar stond; dat is hersteld.
+
 ## 0.25.0 (2026-11-09)
 
 ### Gewijzigd

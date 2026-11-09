@@ -160,7 +160,8 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
         sf = os.path.join(ROOT, 'skins', 'library', skinf + '.patchkamer-skin.json'); sid = json.load(open(sf))['id']
         menu_click(pg, '#skBtn'); pg.set_input_files('#skFile', sf); pg.wait_for_timeout(800); pg.is_visible('#skClose') and pg.click('#skClose'); pg.wait_for_timeout(300)
-        pg.evaluate("sid=>{const s=document.querySelector('.sksel'); s.value=sid; s.dispatchEvent(new Event('change',{bubbles:true}))}", sid); pg.wait_for_timeout(1200)   # de keuzelijst Skin staat in het kaartmenu: zet hem direct; pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
+        pg.evaluate("sid=>{const s=document.querySelector('.sksel'); s.value=sid; s.dispatchEvent(new Event('change',{bubbles:true}))}", sid); pg.wait_for_timeout(1200)
+        pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)   # de keuzelijst Skin staat in het kaartmenu: zet hem direct
     clip_docs()
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 
