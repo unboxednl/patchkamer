@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.14.0 (2026-11-09)
+
+### Added
+- **Canvas sections push each other aside.** When a section grows (dragging a handle, or a device that no longer fits) and overlaps another section or comes within 48 points of it, that section moves away with its devices, along the axis where it lies farthest from the growing one. The same then applies to the sections around it, so a whole row shifts along. While dragging a handle everything is calculated from the starting position, so dragging back puts all sections back. Moving a section yourself pushes nothing away.
+
 ## 0.13.1 (2026-11-09)
 
 ### Fixed

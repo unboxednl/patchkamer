@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.14.0 (2026-11-09)
+
+### Toegevoegd
+- **Canvas-secties schuiven elkaar opzij.** Groeit een sectie (aan een greep slepen, of een apparaat dat er niet meer in past) en komt hij daardoor over een andere sectie heen of binnen 48 punten ervan, dan schuift die sectie met zijn apparaten weg, langs de as waar hij het verst van de groeiende sectie ligt. Voor de secties daaromheen geldt daarna hetzelfde, zodat een hele rij meeschuift. Tijdens het slepen aan een greep wordt steeds vanaf de beginstand gerekend, dus terug slepen zet alle secties terug. Zelf een sectie verslepen schuift niets weg.
+
 ## 0.13.1 (2026-11-09)
 
 ### Opgelost
