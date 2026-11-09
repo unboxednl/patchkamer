@@ -4,6 +4,14 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.18.0 (2026-11-09)
+
+### Added
+- **Clip Arranger 1.25.0: songbalk in the clip matrix (part 2).** Section 04 is gone; the song arrangement now sits in 01.
+  - **Song bar** above the matrix: the sections as blocks, as wide as their number of bars (scene and bars in the label), with a line that moves through the block that is playing. Under it the settings of the chosen section: scene, bars, repeats, **Play from section**, **Add section** (a copy right after), move left or right and delete.
+  - **Section row in the matrix:** per track the clip the chosen section plays (the clip of the scene, another clip, or **Silent**), its number of bars, and **Restart** or **Continue**. With **Continue** a clip that also played in the previous section carries on from where it was, so a long clip runs across several sections while other tracks keep looping. The clips of the chosen section have a gold outline.
+  - Songs and presets from before work unchanged: a section may now also hold `clips` and `cont` (per track); without them it behaves as before. Manual (NL and EN) and device notes updated.
+
 ## 0.17.0 (2026-11-09)
 
 ### Added

@@ -4,6 +4,14 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.18.0 (2026-11-09)
+
+### Toegevoegd
+- **Clip Arranger 1.25.0: songbalk in de clipmatrix (deel 2).** Sectie 04 is vervallen; het songarrangement staat nu in 01.
+  - **Songbalk** boven de matrix: de secties als blokken, breed naar hun aantal maten (scène en maten in het label), met een lijn die door het blok loopt dat speelt. Daaronder de instellingen van de gekozen sectie: scène, maten, herhalingen, **Speel vanaf sectie**, **Sectie toevoegen** (een kopie direct erna), naar links of rechts verplaatsen en verwijderen.
+  - **Sectierij in de matrix:** per spoor de clip die de gekozen sectie speelt (de clip van de scène, een andere clip of **Stil**), het aantal maten ervan, en **Opnieuw** of **Doorlopen**. Bij **Doorlopen** gaat een clip die ook in de vorige sectie speelde verder waar hij was, zodat een lange clip over meerdere secties loopt terwijl andere sporen blijven herhalen. De clips van de gekozen sectie hebben een gouden rand.
+  - Songs en presets van eerder werken ongewijzigd: een sectie mag nu ook `clips` en `cont` (per spoor) hebben; zonder die velden speelt hij zoals voorheen. Handleiding (NL en EN) en apparaatnotities bijgewerkt.
+
 ## 0.17.0 (2026-11-09)
 
 ### Toegevoegd
