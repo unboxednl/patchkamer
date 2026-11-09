@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.16.0 (2026-11-09)
+
+### Added
+- **Skin editor: type, colour at rest and colour in use per control (skins contract 0.8, device contract v1.32).** Select a single knob, fader or pad in the editor and set only its look. A **knob or slider** gets a *colour at rest* and a new *colour in use*, the colour the pointer, the filled part or the thumb takes while you press or drag it (`activeColor` in `design.controls`). A **pad** gets a **type**: *On/off* (stays on until you press again), *Pad (no velocity)* (sounds while you press) or *Pad (with velocity)* (the host measures how hard you press: the pressure on a touch screen, with a mouse the place of the click, top soft and bottom hard), a *colour at rest* (lightly tinted), a *colour in use* (on or pressed) and an *LED* (`design.pads.rules`, per id, role or group). The face of a control (rotary, horizontal or vertical slider) was already per control and stays.
+- **The type is the first thing in a skin that changes what a control does.** It works on pads that the host draws (`host.ui.pad`); pads a device draws itself and step buttons get the colours but keep their behaviour. A pad that is latched when the skin takes the type away is released. A device receives the velocity as a second argument: `onpress(e, velocity)` and `onchange(on, velocity)` (1 to 127, 100 by default), so a device that ignores it sounds the same.
+- **Contract.** Skins contract 0.8 (`activeColor`, `pads.rules`) and device contract v1.32 (the `velocity` argument), both in Dutch and English; the skins validator checks the new fields (+16 test cases).
 ## 0.15.0 (2026-11-09)
 
 ### Added

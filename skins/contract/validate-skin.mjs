@@ -1,4 +1,4 @@
-// validate-skin.mjs — Patchkamer skins contract v0.7
+// validate-skin.mjs — Patchkamer skins contract v0.8
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
 //           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, 0.5: groepen in design.sections, 0.6: id's, rollen en groepen in design.pads.colors en een schermpje zonder keuze in design.display, 0.7: id's, rollen en groepen in design.layout.panels[].items, tegen het register van het apparaat; onbekend = let op)
@@ -36,7 +36,7 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.7; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.7; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.8; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.8; unknown fields are ignored'],
   controls_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
   controls_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
   controls_rule: ['{0} moet een object zijn', '{0} must be an object'],
@@ -99,6 +99,13 @@ const M = {
   pads_colors_role: ['{0}: rol "{1}" bij een pad hoort "pad" of "step" te zijn; de host past de kleur alleen op pads en stappen toe', '{0}: role "{1}" for a pad should be "pad" or "step"; the host only applies the colour to pads and steps'],
   pads_palette_unused: ['{0}.palette wordt niet gebruikt: color is niet "palette"', '{0}.palette is not used: color is not "palette"'],
   pads_palette_missing: ['{0}.color is "palette" maar er is geen palette; de pads vallen terug op de kleur van het apparaat', '{0}.color is "palette" but there is no palette; the pads fall back to the device colour'],
+  pads_rules: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
+  pads_rules_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
+  pads_rule: ['{0} moet een object zijn met een match', '{0} must be an object with a match'],
+  pads_rule_match: ['{0} moet "*", een id, "role:<rol>" of "group:<groep>" zijn (1 tot 60 tekens uit [A-Za-z0-9._-])', '{0} must be "*", an id, "role:<role>" or "group:<group>" (1 to 60 characters from [A-Za-z0-9._-])'],
+  pads_rule_colour: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
+  pads_rule_empty: ['{0} heeft alleen een match; het doet niets', '{0} has only a match; it does nothing'],
+  v08_contract: ['activeColor bij controls en design.pads.rules horen bij skinsContract 0.8; een host met 0.7 of lager negeert ze', 'activeColor in controls and design.pads.rules belong to skinsContract 0.8; a host on 0.7 or lower ignores them'],
   pads_empty: ['{0} is leeg; het doet niets', '{0} is empty; it does nothing'],
   pads_contract: ['design.pads en design.display horen bij skinsContract 0.6; een host met 0.5 of lager negeert ze', 'design.pads and design.display belong to skinsContract 0.6; a host on 0.5 or lower ignores them'],
   display_none: ['{0}: een skin verbergt het schermpje niet (er is geen style "none"); kies dropdown, lcd, oled, segment of paper', '{0}: a skin does not hide the display (there is no style "none"); choose dropdown, lcd, oled, segment or paper'],
@@ -250,10 +257,10 @@ const SEC_MAX = 32;
 const LAY_FLOW = ['rows', 'columns', 'auto'], LAY_TITLEPOS = ['top', 'left', 'hidden'], LAY_STYLE = ['raised', 'inset', 'line', 'floating', 'plain'], LAY_DIR = ['row', 'column', 'grid'], LAY_GAP = ['tight', 'normal', 'wide'], LAY_LABELS = ['default', 'above', 'below'], LAY_ALIGN = ['start', 'center'], LAY_WIDTH = ['auto', 'full', 'half', 'third'];
 const LAY_PANEL_KEYS = ['id', 'title', 'titlePos', 'items', 'style', 'dir', 'cols', 'gap', 'bare', 'labels', 'align', 'width', 'collapsible', 'collapsed'], LAY_MAX_PANELS = 16, LAY_MAX_ITEMS = 64;
 const PAD_SHAPE = ['circle', 'square', 'rounded', 'rect'], PAD_SIZE = ['xs', 's', 'm', 'l', 'xl'], PAD_COLOR = ['neutral', 'device', 'palette'], PAD_IDLE = ['neutral', 'tint'], PAD_ACTIVE = ['fill', 'border', 'glow', 'none'], PAD_LED = ['none', 'center', 'top', 'bottom', 'left', 'right'], PAD_HIT = ['flash', 'none'], PAD_PRESS = ['depress', 'glow', 'none'], PAD_GAP = ['tight', 'normal', 'wide'];
-const PAD_KEYS = ['shape', 'size', 'color', 'palette', 'colors', 'idle', 'active', 'led', 'hit', 'press', 'gap'], PAD_COLORS_MAX = 64;
+const PAD_KEYS = ['shape', 'size', 'color', 'palette', 'colors', 'idle', 'active', 'led', 'hit', 'press', 'gap', 'rules'], PAD_KIND = ['toggle', 'pad', 'velocity'], PAD_COLORS_MAX = 64;
 const DSP_STYLE = ['dropdown', 'lcd', 'oled', 'segment', 'paper'], DSP_NAV = ['arrows', 'arrows+ok', 'none'], DSP_COMMIT = ['live', 'ok'], DSP_EXPAND = ['click', 'button', 'off'], DSP_TARGETS = ['select', 'preset', 'tune'];
 const DSP_KEYS = ['style', 'nav', 'commit', 'lines', 'width', 'expand', 'targets', 'color'];
-const CTL_KEYS = ['match', 'face', 'size', 'length', 'thickness', 'thumb', 'color', 'showValue'];
+const CTL_KEYS = ['match', 'face', 'size', 'length', 'thickness', 'thumb', 'color', 'showValue', 'activeColor'];
 const KNOWN_DESIGN = { ports: ['mode'], colors: ['scheme', 'custom'], haptics: HAPTIC_KEYS, knobs: ['style', 'size'], size: ['width'], pads: PAD_KEYS, display: DSP_KEYS };
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const normColour = v => { if (typeof v !== 'string') return null; const m = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec(v); if (!m) return null; let h = m[1].toLowerCase(); if (h.length === 3) h = [...h].map(c => c + c).join(''); return '#' + h; };
@@ -280,6 +287,7 @@ function checkControls(list, path, E, W, C) {
     if (enm('thumb', CTL_THUMB)) n++;
     if (r.color !== undefined) { if (r.color === 'accent' || normColour(r.color)) n++; else E('controls_colour', `${P}.color`); }
     if (enm('showValue', CTL_SHOW)) n++;
+    if (r.activeColor !== undefined) { if (normColour(r.activeColor)) n++; else E('pads_rule_colour', `${P}.activeColor`); }
     if (matchOk && n === 0 && !CTL_KEYS.slice(1).some(k => r[k] !== undefined)) W('controls_empty', P);
     if (r.face === 'rotary' && (r.length !== undefined || r.thickness !== undefined || r.thumb !== undefined)) W('controls_slider_only', P);
     if (matchOk && C) C.push({ p: P, match: m, face: r.face }); });
@@ -351,6 +359,21 @@ function checkPads(src, path, E, W, C) {
         const c = normColour(src.colors[k]); if (!c) { E('pads_colors_value', P, k); continue; }
         if (k.startsWith('role:') && !['pad', 'step'].includes(k.slice(5))) W('pads_colors_role', P, k.slice(5));
         o.colors[k] = c; if (C) C.push({ p: `${P}["${k}"]`, match: k, kind: 'pads' }); } } }
+  if (src.rules !== undefined) {
+    if (!Array.isArray(src.rules)) E('pads_rules', `${path}.rules`);
+    else { if (src.rules.length > CTL_MAX) E('pads_rules_max', `${path}.rules`, src.rules.length, CTL_MAX);
+      const RK = ['match', 'kind', 'color', 'activeColor', 'led'];
+      src.rules.slice(0, CTL_MAX).forEach((r, i) => { const P = `${path}.rules[${i}]`;
+        if (!isObj(r)) { E('pads_rule', P); return; }
+        for (const k of Object.keys(r)) if (!RK.includes(k)) W('unknown_field', `${P}.${k}`);
+        const ok = typeof r.match === 'string' && /^(\*|role:[a-z]{1,16}|group:[A-Za-z0-9._-]{1,60}|[A-Za-z0-9._-]{1,60})$/.test(r.match);
+        if (!ok) E('pads_rule_match', `${P}.match`); else if (r.match.startsWith('role:') && !['pad', 'step'].includes(r.match.slice(5))) W('pads_colors_role', P, r.match.slice(5));
+        let n = 0;
+        if (r.kind !== undefined) { if (PAD_KIND.includes(r.kind)) n++; else E('design_enum', `${P}.kind`, PAD_KIND.map(x => '"' + x + '"').join(', ')); }
+        if (r.led !== undefined) { if (PAD_LED.includes(r.led)) n++; else E('design_enum', `${P}.led`, PAD_LED.map(x => '"' + x + '"').join(', ')); }
+        for (const k of ['color', 'activeColor']) if (r[k] !== undefined) { if (normColour(r[k])) n++; else E('pads_rule_colour', `${P}.${k}`); }
+        if (ok && n === 0) W('pads_rule_empty', P);
+        if (ok) { (o.rules = o.rules || []).push({ ...r }); if (C) C.push({ p: `${P}.match`, match: r.match, kind: 'pads' }); } }); } }
   if (src.palette !== undefined && src.color !== undefined && src.color !== 'palette') W('pads_palette_unused', path);
   if (src.color === 'palette' && src.palette === undefined) W('pads_palette_missing', path);
   if (!Object.keys(src).length) W('pads_empty', path);
@@ -526,7 +549,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 7) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 8) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -616,6 +639,8 @@ function validateSkin(path, ctx = {}) {
   const nSec = (skinDesign?.sections?.length || 0) + appDesigns.reduce((a, x) => a + (x?.sections?.length || 0), 0);
   const hasPads = !!(skinDesign?.pads || appDesigns.some(x => x?.pads)), hasDisplay = !!(skinDesign?.display || appDesigns.some(x => x?.display));
   if ((hasPads || hasDisplay) && /^0\.[012345]$/.test(String(s.skinsContract))) W('pads_contract');
+  const hasV8 = [skinDesign, ...appDesigns].some(x => x && ((x.controls || []).some(c => c && c.activeColor !== undefined) || (x.pads && Array.isArray(x.pads.rules) && x.pads.rules.length)));
+  if (hasV8 && /^0\.[0-7]$/.test(String(s.skinsContract))) W('v08_contract');
   const hasLayout = !!(skinDesign?.layout?.panels?.length || appDesigns.some(x => x?.layout?.panels?.length)), nPanels = (skinDesign?.layout?.panels?.length || 0) + appDesigns.reduce((a, x) => a + (x?.layout?.panels?.length || 0), 0);
   if (hasLayout && /^0\.[0-6]$/.test(String(s.skinsContract))) W('layout_contract');
   const hasSize = !!(skinDesign?.size && Object.keys(skinDesign.size).length) || appDesigns.some(x => x?.size && Object.keys(x.size).length);

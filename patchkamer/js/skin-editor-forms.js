@@ -105,7 +105,16 @@ function ruleSimple(box,kind,reg,ap,mkSpecs,own){ const rd=()=>{ const o={}; cha
 function sectionBlock(box,g,ap){ const arr=read(ap).sections||[], key='group:'+g; box.appendChild(el('h4',null,pkt('m.se_sectie',g)));
   const ru={group:g}, matching=arr.map((r,i)=>({r,i})).filter(x=>x.r.match===key||x.r.match==='*'); if(!matching.some(x=>x.r.match===key)) btn(box,pkt('m.se_maak_sectie'),()=>E.edit(()=>{ const dd=layer(ap), a=dd.sections=dd.sections||[]; if(a.length>=32) return false; a.push({match:key,frame:'line'}); }),{fk:'mksec'});
   matching.forEach(({r,i})=>{ const b=el('div','se-rule'), h=el('div','se-rhead'); h.appendChild(el('span','dz-rn',pkt('m.se_regel_n',i+1)+' · '+r.match)); btn(h,'× '+pkt('m.se_regel_weg'),()=>E.edit(()=>{ layer(ap).sections.splice(i,1); }),{fk:'rmsec'+i}); b.appendChild(h); F.specs(b,r,F.S.sections(),pkt('m.dz_r_n',i+1)); box.appendChild(b); }); }
-function padBlock(box,reg,ap){ const o=()=>layer(ap).pads||(layer(ap).pads={}), rd=()=>read(ap).pads||{}; box.appendChild(el('div','dz-hint',pkt('m.se_pads_een')));
+// een regel voor alleen dit pad (design.pads.rules, skins 0.8): type, kleur in rust, kleur bij gebruik en ledje; de eigen regel van het pad wordt zo nodig aangemaakt en weer weggehaald als hij leeg is
+function padRuleBlock(box,reg,ap){ const own=reg.id, host=reg.role==='pad'&&reg.type==='pad';
+  const list=()=>{ const a=[]; (((E.m.design.pads||{}).rules)||[]).forEach(r=>a.push(r)); if(ap!=='*') (((read(ap).pads||{}).rules)||[]).forEach(r=>a.push(r)); return a.filter(r=>matchRule(r.match,reg)); };
+  const rd=()=>{ const o={}; list().forEach(r=>Object.keys(r).forEach(k=>{ if(k!=='match') o[k]=r[k]; })); return o; };
+  const mine=()=>(((read(ap).pads||{}).rules)||[]).find(r=>r.match===own);
+  const wr=()=>{ const pd=layer(ap).pads=layer(ap).pads||{}, a=pd.rules=pd.rules||[]; let r=a.find(x=>x.match===own); if(!r){ if(a.length>=64) throw new Error('max'); r={match:own}; a.push(r); } return r; };
+  const px=new Proxy({},{get:(_,k)=>rd()[k],set:(_,k,v)=>{ wr()[k]=v; return true; },deleteProperty:(_,k)=>{ const r=mine(); if(!r) return true; delete r[k]; if(Object.keys(r).length===1){ const pd=layer(ap).pads, a=pd.rules; a.splice(a.indexOf(r),1); if(!a.length) delete pd.rules; if(!Object.keys(pd).length) delete layer(ap).pads; } return true; }});
+  box.appendChild(el('h4',null,pkt('m.se_dit_pad'))); box.appendChild(el('div','dz-hint',pkt(host?'m.se_dit_pad_uitleg':'m.se_dit_pad_uitleg2')));
+  F.specs(box,px,F.S.padrule().filter(s=>host||s.k!=='kind'),null,null,'pr.'); }
+function padBlock(box,reg,ap){ const o=()=>layer(ap).pads||(layer(ap).pads={}), rd=()=>read(ap).pads||{}; padRuleBlock(box,reg,ap); box.appendChild(el('h4',null,pkt('m.se_alle_pads'))); box.appendChild(el('div','dz-hint',pkt('m.se_pads_een')));
   F.specs(box,proxy(rd,o),F.S.pads()); box.appendChild(el('h4',null,pkt('m.dz_p_eigen')));
   [reg.id,...(reg.group?['group:'+reg.group]:[])].forEach(k=>F.swatch(box,{k:'pc-'+k,label:k,get:()=>(rd().colors||{})[k]||'',set:v=>{ setIn(layer(ap),['pads','colors',k],v||undefined); }}));
   const pal=rd().palette||[]; box.appendChild(el('div','dz-hint',pkt('m.dz_p_palet'))); pal.forEach((c,i)=>{ F.swatch(box,{k:'pal'+i,label:pkt('m.dz_p_palet_n',i+1),clearable:false,get:()=>(rd().palette||[])[i],set:v=>{ const q=(rd().palette||[]).slice(); if(v) q[i]=v; setIn(layer(ap),['pads','palette'],q); }}); });
@@ -134,8 +143,8 @@ function render(e,box){ E=e; F.init(e); const s=e.sel; box.innerHTML='';
 // Delete op de selectie: de eigen regel van dit element (of het paneel); nooit het element zelf
 function removeRule(e){ E=e; const s=e.sel; if(s.k==='panel'){ e.edit(()=>{ const lay=M.ensureLayout(e.m,s.ap), i=lay.panels.findIndex(p=>p.id===s.pid); if(i<0) return false; lay.panels.splice(i,1); }); e.select({k:'ctls',ap:s.ap}); return true; }
   if(s.k==='ctl'||s.k==='group'){ const key=s.k==='group'?'group:'+s.g:s.id, d=M.layerOf(e.m,s.ap)||{}, kinds=s.k==='group'?['sections']:['controls','meters']; let hit=false;
-    kinds.forEach(kd=>{ if((d[kd]||[]).some(r=>r.match===key)) hit=true; }); const pc=d.pads&&d.pads.colors&&d.pads.colors[key]; if(!hit&&!pc) return false;
-    e.edit(()=>{ const dd=M.layerMake(e.m,s.ap); kinds.forEach(kd=>{ if(dd[kd]) dd[kd]=dd[kd].filter(r=>r.match!==key); }); if(pc) delete dd.pads.colors[key]; }); return true; }
+    kinds.forEach(kd=>{ if((d[kd]||[]).some(r=>r.match===key)) hit=true; }); const pc=d.pads&&d.pads.colors&&d.pads.colors[key], pr=d.pads&&d.pads.rules&&d.pads.rules.some(r=>r.match===key); if(!hit&&!pc&&!pr) return false;
+    e.edit(()=>{ const dd=M.layerMake(e.m,s.ap); kinds.forEach(kd=>{ if(dd[kd]) dd[kd]=dd[kd].filter(r=>r.match!==key); }); if(pc) delete dd.pads.colors[key]; if(pr){ dd.pads.rules=dd.pads.rules.filter(r=>r.match!==key); if(!dd.pads.rules.length) delete dd.pads.rules; } }); return true; }
   return false; }
 PK.ske_forms={render,removeRule,regLabel,itemLabel};
 })(window.__PK);

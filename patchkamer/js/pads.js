@@ -10,8 +10,8 @@
 const ID_RE=/^[A-Za-z0-9._-]{1,60}$/, HEX_RE=/^#[0-9a-fA-F]{6}$/;
 const SIZES={xs:0.6,s:0.8,m:1,l:1.3,xl:1.6};
 const KEYS=['shape','size','color','idle','active','led','hit','press'];
-const AT=['data-pk-skp','data-pk-ps','data-pk-psz','data-pk-pi','data-pk-pa','data-pk-pl','data-pk-ph','data-pk-pp','data-pk-pgap'];
-const VARS=['--pk-pad-color','--pk-pad-fg','--pk-pad-size','--pk-pad-h0'];
+const AT=['data-pk-skp','data-pk-ps','data-pk-psz','data-pk-pi','data-pk-pa','data-pk-pl','data-pk-ph','data-pk-pp','data-pk-pgap','data-pk-kd','data-pk-pr','data-pk-pd'];
+const VARS=['--pk-pad-color','--pk-pad-fg','--pk-pad-size','--pk-pad-h0','--pk-pad-rest'];
 PK.PAD_SIZES=SIZES;
 let warned=false;
 const warn=m=>{ if(!warned){ warned=true; try{ console.warn('Patchkamer host.ui.pad: '+m); }catch(e){} } };
@@ -59,6 +59,8 @@ const CSS=`
 [data-pk-skp][data-pk-pp=depress]:active,[data-pk-skp][data-pk-pp=depress].pk-down{transform:translateY(1px) scale(.94);filter:none}
 [data-pk-skp][data-pk-pp=glow]:active,[data-pk-skp][data-pk-pp=glow].pk-down{box-shadow:0 0 12px 2px var(--pk-pad-color,var(--accent,#4fd1c5));filter:none}
 [data-pk-skp][data-pk-pp=none]:active,[data-pk-skp][data-pk-pp=none].pk-down{transform:none;filter:none}
+[data-pk-skp][data-pk-pr]:not(.on){background:color-mix(in srgb,var(--pk-pad-rest) 70%,var(--card-2,var(--panel-2,#1c2027)));border-color:var(--pk-pad-rest)}
+[data-pk-skp][data-pk-pd].pk-down,[data-pk-skp][data-pk-pd]:active{background:var(--pk-pad-color);border-color:var(--pk-pad-color);color:var(--pk-pad-fg,#111111)}
 [data-pk-pgap=tight][data-pk-pgap]{gap:1px}
 [data-pk-pgap=normal][data-pk-pgap]{gap:2px}
 [data-pk-pgap=wide][data-pk-pgap]{gap:6px}
@@ -77,17 +79,27 @@ const devColour=el=>hexOf(el.getAttribute('data-pk-color'));
 // ---- host.ui.pad ----
 function padBuild(parent,label,o){
   o=o&&typeof o==='object'?o:{};
-  const mode=o.mode==='toggle'?'toggle':'momentary';
+  const mode=o.mode==='toggle'?'toggle':'momentary', devToggle=mode==='toggle';
   const el=document.createElement('button'); el.type='button'; el.className='pk-pad'; el.setAttribute('role','button');
   const lab=String(label==null?'':label); el.setAttribute('aria-label',lab); el.title=typeof o.title==='string'?o.title:lab;
   if(typeof o.text==='string'&&o.text){ const t=document.createElement('span'); t.className='pk-pad-t'; t.textContent=o.text.slice(0,8); el.appendChild(t); }
   const id=PK.regTag(el,{id:o.id,role:o.role===undefined?'pad':o.role,group:o.group},'pad');
   if(o.color!==undefined){ const h=hexOf(o.color); if(h){ el.setAttribute('data-pk-color',h); setColour(el,h); } else warn('color moet #rrggbb zijn'); }
   let on=false, down=false, ptr=null, kdown=false, lastPtr=-1e9, ft=0, dead=false;
-  const paint=()=>{ el.classList.toggle('on',on); if(mode==='toggle') el.setAttribute('aria-pressed',on?'true':'false'); };
+  // type van een skin (data-pk-kd, skins 0.8): toggle = vastklikken, pad = indrukken zonder velocity, velocity = indrukken met velocity; zonder skin het gedrag van het apparaat (mode)
+  const kd=()=>el.getAttribute('data-pk-kd'), asToggle=()=>{ const k=kd(); return k?k==='toggle':devToggle; };
+  const paint=()=>{ el.classList.toggle('on',on); if(asToggle()) el.setAttribute('aria-pressed',on?'true':'false'); else el.removeAttribute('aria-pressed'); };
   const set=v=>{ if(dead) return; on=!!v; paint(); };
-  const press=e=>{ if(dead) return; el.classList.add('pk-down'); if(mode==='toggle'){ on=!on; paint(); call(o.onchange,on); } else { down=true; call(o.onpress,e); } };
-  const release=e=>{ el.classList.remove('pk-down'); if(mode==='toggle'||!down) return; down=false; call(o.onrelease,e); };
+  // velocity 1..127: aanraakdruk van een touch of pen als die echt gemeten wordt, anders de plek van de klik (boven zacht, onder hard); toetsenbord en overige 100
+  const velOf=e=>{ if(!e||e.pointerId===undefined) return 100; if((e.pointerType==='touch'||e.pointerType==='pen')&&e.pressure>0&&e.pressure!==0.5) return Math.max(1,Math.min(127,Math.round(e.pressure*126)+1));
+    const r=el.getBoundingClientRect(); if(!(r.height>0)) return 100; return Math.max(1,Math.min(127,Math.round(20+Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))*107))); };
+  const press=e=>{ if(dead) return; el.classList.add('pk-down'); const v=kd()==='velocity'?velOf(e):100;
+    if(asToggle()){ on=!on; paint(); if(devToggle) call(o.onchange,on,v); else if(on) call(o.onpress,e,v); else call(o.onrelease,e); }
+    else { down=true; if(devToggle){ on=true; paint(); call(o.onchange,true,v); } else call(o.onpress,e,v); } };
+  const release=e=>{ el.classList.remove('pk-down'); if(asToggle()||!down) return; down=false; if(devToggle){ on=false; paint(); call(o.onchange,false); } else call(o.onrelease,e); };
+  // een skin die het type wisselt of wegvalt terwijl het pad vastzit: laat het los (alleen een pad dat het apparaat als indrukken kent; een aan/uit-pad houdt zijn stand)
+  el.__pkRelax=()=>{ if(!devToggle&&on){ on=false; paint(); call(o.onrelease,{type:'skin'}); } down=false; };
+  el.__pkRepaint=paint;
   el.addEventListener('pointerdown',e=>{ if(dead||ptr!==null) return; if(e.pointerType==='mouse'&&e.button!==0) return; ptr=e.pointerId; lastPtr=performance.now(); try{ el.setPointerCapture(e.pointerId); }catch(x){} e.preventDefault(); try{ el.focus({preventScroll:true}); }catch(x){} press(e); });
   const up=e=>{ if(e.pointerId!==ptr) return; ptr=null; lastPtr=performance.now(); release(e); };
   el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up); el.addEventListener('lostpointercapture',e=>{ if(e.pointerId===ptr) up(e); });
@@ -144,13 +156,16 @@ function colourOf(P,p,d,e,idx){ const cm=P.colors||{}; let h=null;
   return devColour(e); }   // device (standaard)
 
 // ---- toepassen en terugzetten ----
+// regels van een skin (design.pads.rules, skins 0.8): de laatste passende regel wint per eigenschap
+function ruleOf(P,d){ const q={}; (Array.isArray(P.rules)?P.rules:[]).forEach(ru=>{ const m=ru.match; if(m==='*'||(m.startsWith('role:')?d.role===m.slice(5):m.startsWith('group:')?d.group===m.slice(6):d.id===m)) for(const k of ['kind','color','activeColor','led']) if(ru[k]!==undefined) q[k]=ru[k]; }); return q; }
+function kindSync(e,kd){ if(e.__pkKd==='toggle'&&kd!=='toggle'&&e.__pkRelax) e.__pkRelax(); e.__pkKd=kd; }
 function padStrip(r){ (r.padMarked||[]).forEach(e=>{ AT.forEach(a=>e.removeAttribute(a)); VARS.forEach(v=>e.style.removeProperty(v)); delete e.__pkH0; if(e.classList.contains('pk-pad')){ const h=devColour(e); if(h) setColour(e,h); }
     if(e.hasAttribute('style')&&!(e.getAttribute('style')||'').trim()) e.removeAttribute('style'); }); r.padMarked=[]; }
-function padOff(r){ padStrip(r); if(r.padMO){ r.padMO.disconnect(); r.padMO=null; }
+function padOff(r){ (r.padMarked||[]).forEach(e=>kindSync(e,null)); padStrip(r); if(r.padMO){ r.padMO.disconnect(); r.padMO=null; }
   (r.padRoots||[]).forEach(rt=>{ if(rt.nodeType===11) [...rt.children].forEach(x=>{ if(x.tagName==='STYLE'&&x.hasAttribute('data-pk-pads')&&!(r.padHost&&r.padHost.has(rt))) x.remove(); }); }); r.padRoots=[]; }
-function padApply(r){ if(!r||!r.el) return; const P=r.skPad; padStrip(r);
+function padApply(r){ if(!r||!r.el) return; const P=r.skPad, prev=r.padMarked||[]; padStrip(r);
   const els=padEls(r); const roots=new Set(); els.forEach(e=>{ const rt=e.getRootNode(); if(rt) roots.add(rt); });
-  if(!P||!Object.keys(P).length){ if(r.padMO){ r.padMO.disconnect(); r.padMO=null; } return; }
+  if(!P||!Object.keys(P).length){ prev.forEach(e=>kindSync(e,null)); if(r.padMO){ r.padMO.disconnect(); r.padMO=null; } return; }
   roots.forEach(ensureCss); r.padRoots=[...roots];
   const marked=[], seen=new Map(); r.padStat={n:0,m:0};
   // eerst alle h0 meten (de huidige hoogte van stappen, zonder onze maat) zodat de maat de huidige afmeting vermenigvuldigt
@@ -160,8 +175,10 @@ function padApply(r){ if(!r||!r.el) return; const P=r.skPad; padStrip(r);
     if(p.shape) e.setAttribute('data-pk-ps',p.shape);
     if(p.size!==undefined){ const z=typeof p.size==='number'?p.size:(SIZES[p.size]||1); e.style.setProperty('--pk-pad-size',String(z)); e.setAttribute('data-pk-psz',''); if(e.__pkH0) e.style.setProperty('--pk-pad-h0',e.__pkH0+'px'); }
     else if(d.role==='step'&&e.__pkH0&&p.shape&&p.shape!=='rounded') e.style.setProperty('--pk-pad-h0',e.__pkH0+'px');
-    e.setAttribute('data-pk-pi',p.idle||'neutral'); e.setAttribute('data-pk-pa',p.active||'fill'); e.setAttribute('data-pk-pl',p.led||'none'); e.setAttribute('data-pk-ph',p.hit||'flash'); e.setAttribute('data-pk-pp',p.press||'depress');
-    const h=colourOf(P,p,d,e,idx); setColour(e,h); r.padStat.n++;
+    const q=ruleOf(P,d); e.setAttribute('data-pk-pi',p.idle||'neutral'); e.setAttribute('data-pk-pa',p.active||'fill'); e.setAttribute('data-pk-pl',q.led||p.led||'none'); e.setAttribute('data-pk-ph',p.hit||'flash'); e.setAttribute('data-pk-pp',p.press||'depress');
+    let h=colourOf(P,p,d,e,idx); if(q.color) e.style.setProperty('--pk-pad-rest',q.color); if(q.color||q.activeColor){ h=q.activeColor||q.color; if(q.color) e.setAttribute('data-pk-pr',''); if(q.activeColor) e.setAttribute('data-pk-pd',''); }
+    setColour(e,h); r.padStat.n++;
+    { const kd=e.classList.contains('pk-pad')?(q.kind||null):null; if(kd) e.setAttribute('data-pk-kd',kd); kindSync(e,kd); if(e.classList.contains('pk-pad')&&e.__pkRepaint) e.__pkRepaint(); }
     if(d.role==='step'&&P.gap&&e.parentElement&&!marked.includes(e.parentElement)){ e.parentElement.setAttribute('data-pk-pgap',P.gap); marked.push(e.parentElement); } });
   r.padMarked=marked;
   // een herbouwde UI (nieuwe elementen) volgt: alleen toegevoegde elementen tellen

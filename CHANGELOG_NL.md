@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.16.0 (2026-11-09)
+
+### Toegevoegd
+- **Skin-editor: type, kleur in rust en kleur bij gebruik per regelaar (skinscontract 0.8, apparaatcontract v1.32).** Kies in de editor één knop, fader of pad en stel alleen daarvan het uiterlijk in. Een **knop of fader** krijgt een *kleur in rust* en een nieuwe *kleur bij gebruik*: de kleur die de wijzer, het gevulde deel of de duim aanneemt terwijl je indrukt of sleept (`activeColor` bij `design.controls`). Een **pad** krijgt een **type**: *Aan/uit* (blijft aan tot je weer drukt), *Pad (zonder velocity)* (klinkt zolang je drukt) of *Pad (met velocity)* (de host meet hoe hard je drukt: de druk op een aanraakscherm, met een muis de plek van de klik, boven zacht en onder hard), een *kleur in rust* (licht getint), een *kleur bij gebruik* (aan of ingedrukt) en een *ledje* (`design.pads.rules`, per id, rol of groep). Het gezicht van een regelaar (draaiknop, horizontale of verticale fader) kon al per regelaar en blijft.
+- **Het type is het eerste in een skin dat verandert wat een regelaar doet.** Het werkt op pads die de host tekent (`host.ui.pad`); pads die een apparaat zelf tekent en stapknoppen krijgen de kleuren maar houden hun gedrag. Een pad dat vastklikt terwijl de skin het type weghaalt, wordt losgelaten. Een apparaat krijgt de velocity als tweede argument: `onpress(e, velocity)` en `onchange(on, velocity)` (1 tot 127, standaard 100), dus een apparaat dat het negeert klinkt gelijk.
+- **Contract.** Skinscontract 0.8 (`activeColor`, `pads.rules`) en apparaatcontract v1.32 (het argument `velocity`), beide in het Nederlands en Engels; de skins-validator controleert de nieuwe velden (+16 testgevallen).
 ## 0.15.0 (2026-11-09)
 
 ### Toegevoegd

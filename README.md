@@ -59,7 +59,7 @@ A device is a single `.patchkamer-device.js` file. The **contract** says exactly
 node contract/validate-instrument.mjs devices/synths/Duofone/duofone.patchkamer-device.js
 ```
 
-Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, where to put the files and what to check. The current contract is **v1.31**. Every version is tagged (`contract/vX.Y`).
+Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, where to put the files and what to check. The current contract is **v1.32**. Every version is tagged (`contract/vX.Y`).
 
 ## What is in this repository
 

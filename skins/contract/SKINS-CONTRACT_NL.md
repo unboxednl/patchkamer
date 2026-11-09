@@ -1,4 +1,4 @@
-# Patchkamer — Skinscontract v0.7 voor bouwende agents
+# Patchkamer — Skinscontract v0.8 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een **skin** te bouwen voor **Patchkamer**: een los bestand dat het uiterlijk van één apparaat verandert, zonder het apparaat zelf of het apparaatcontract aan te raken. Een agent die dit document krijgt, heeft geen andere context nodig. Lever een bestand `naam.patchkamer-skin.json` op dat aan dit contract voldoet en zonder fouten door `validate-skin.mjs` komt.
 
@@ -15,6 +15,7 @@ _Dit contract is een eigen contract naast het apparaatcontract (`../../contract/
 | v0.5 | Laag 2, release B1 "secties": `design.sections`, een geordende lijst regels die per groep of overal een kader (lijn, verhoogd, inzet, zwevend), kolommen, tussenruimte, "kaal" (de regelaars verliezen hun eigen kader), de plaats van het label (boven, onder met de waarde erboven) en de uitlijning kiest, en `design.size`, de kaartbreedte die bij een verschijningsvorm hoort (§4b). Geen apparaatwijziging nodig: een groep wordt een sectie als de apparaat-DOM dat toelaat. Skins van 0.1 tot en met 0.4 blijven ongewijzigd werken |
 | v0.6 | Laag 2, release D "pads en schermpje": `design.pads` (vorm cirkel, vierkant, afgerond of rechthoek; maat; kleur per pad, per palet of van het apparaat; rust neutraal of getint; actief als vlak, rand, gloed of niets; een ledje in het midden, boven, onder, links of rechts; klik- en raakfeedback; tussenruimte tussen stapknoppen) en `design.display` (het schermpje: LCD, OLED, zevensegment of papier in plaats van een keuzelijst, met < > en [ok], vergroten door erop te klikken) (§4b). Hoort bij apparaatcontract v1.22 (`host.ui.pad`, `host.ui.display`, `host.ui.steps` met opties). Skins van 0.1 tot en met 0.5 blijven ongewijzigd werken |
 | v0.7 | Laag 2, release B2 "panelen en volgorde": `design.layout`, waarmee een skin de regelaars van een apparaat in **panelen** zet en in een **volgorde** (`flow` rows/columns/auto; per paneel `id`, `title`, `items` met id, `role:<rol>`, `group:<groep>` of `*`, `style`, `dir`, `cols`, `gap`, `bare`, `labels`, `align`, `width`, `collapsible`, `collapsed`) (§4b). Een skin herschikt alleen en verbergt nooit iets: wat niet genoemd wordt komt in een restpaneel. Geen apparaatwijziging; apparaatcontract blijft v1.22 (de id's en groepen die een apparaat al publiceert zijn nu ook de adressen voor panelen). Skins van 0.1 tot en met 0.6 blijven ongewijzigd werken |
+| v0.8 | Gezichten met type en gebruikskleur: `activeColor` bij `design.controls` (de kleur van wijzer, gevuld deel of duim terwijl je de regelaar gebruikt, naast `color` voor de rust) en `design.pads.rules`, een lijst regels per pad (id, `role:<rol>` of `group:<groep>`) met `kind` (`toggle` blijft aan tot je weer drukt, `pad` klinkt zolang je drukt, `velocity` zoals `pad` maar de host meet de aanslag), `color` (kleur in rust), `activeColor` (kleur als het pad aan staat of ingedrukt is) en `led` (§4b). Een skin die `kind` kiest, verandert voor het eerst wat een knop **doet** en niet alleen hoe hij eruitziet; dat geldt alleen voor pads die de host tekent (`host.ui.pad`). Apparaatcontract v1.32: `onpress(e, velocity)` en `onchange(on, velocity)` krijgen een tweede argument (1 tot 127). Skins van 0.1 tot en met 0.7 blijven ongewijzigd werken |
 
 ---
 
@@ -25,7 +26,7 @@ _Dit contract is een eigen contract naast het apparaatcontract (`../../contract/
 - Een skin hoort bij **één apparaat-id** (het veld `device`). Voor een ander apparaat wordt hij bewaard maar nergens aangeboden.
 - Een apparaat hoeft niets te doen om skins te kunnen krijgen. Heeft het apparaat geen open shadow root (zie §4), dan kan de host de skin niet toepassen en meldt dat; dat is geen fout van de skin of van het apparaat.
 - Skins zijn een nieuw soort bibliotheekmateriaal naast tunes en presets: ze worden geladen uit bronnen (een GitHub-map, een lokale map, een adres), bekeken in een eigen paneel, gekozen per apparaat op de kaart, bewaard in de werkruimte en in de song, en kunnen op het canvas worden gedropt (§8, §9).
-- Versie 0.7 blijft bewust klein: CSS plus een kleine set ontwerpkeuzes (`design`, §4b), waaronder het gezicht van regelaars (`controls`), van meters (`meters`), de opmaak van secties (`sections`, `size`) het gezicht van pads (`pads`) en schermpjes (`display`) en de indeling in panelen (`layout`). Het formaat is uitbreidbaar (onbekende velden worden genegeerd, §10); wat er nog niet in zit staat in §13.
+- Versie 0.8 blijft bewust klein: CSS plus een kleine set ontwerpkeuzes (`design`, §4b), waaronder het gezicht van regelaars (`controls`), van meters (`meters`), de opmaak van secties (`sections`, `size`) het gezicht van pads (`pads`) en schermpjes (`display`) en de indeling in panelen (`layout`). Het formaat is uitbreidbaar (onbekende velden worden genegeerd, §10); wat er nog niet in zit staat in §13.
 
 ---
 
@@ -39,7 +40,7 @@ Een skin is een UTF-8 JSON-bestand met één object, genaamd `naam.patchkamer-sk
 |---|---|---|---|---|
 | `format` | tekst | altijd `"patchkamer-skin"` | | ja |
 | `formatVersion` | geheel getal | nu `1` | | ja |
-| `skinsContract` | tekst | `"major.minor"`, nu `"0.7"` (`"0.1"` tot en met `"0.6"` blijven geldig); zie §10 | | ja |
+| `skinsContract` | tekst | `"major.minor"`, nu `"0.8"` (`"0.1"` tot en met `"0.7"` blijven geldig); zie §10 | | ja |
 | `id` | tekst | 3 tot 100 tekens uit `[a-z0-9.-]`; aanbevolen `<device-id>.<slug>`; uniek: dezelfde `id` is dezelfde skin | | ja |
 | `device` | tekst | de `id` van het apparaat waarvoor de skin is, bijvoorbeeld `nl.patchkamer.duofone` | | ja |
 | `name` | tekst | Engelse naam, 1 tot 60 tekens, merkvrij (§11) | | ja |
@@ -157,7 +158,7 @@ Naast CSS kan een skin vanaf versie 0.2 een set **gevalideerde ontwerpkeuzes** m
 - **Samenvoegen:** de host neemt het `design` van de skin en legt daar het `design` van de gekozen verschijningsvorm overheen, **per sleutel** (en in `colors.custom` per kleur). Een verschijningsvorm hoeft dus alleen te herhalen wat anders is.
 - **Soepel in de host, streng in de validator:** de host negeert een ongeldige waarde of onbekende sleutel (die ene sleutel valt terug op het standaardgedrag) en meldt het; de validator geeft bij een ongeldige waarde een **fout** en bij een onbekende sleutel een `let op`. Onbekende sleutels en secties horen bij latere versies (§13) en worden genegeerd.
 - **Standaard wist alles:** kiest de gebruiker op de kaart Standaard (geen skin), dan zijn kaart, apparaat en kabels exact zoals zonder skin.
-- `design` hoort bij `skinsContract` `"0.2"` (`controls` bij `"0.3"`, `meters` bij `"0.4"`, `sections` en `size` bij `"0.5"`, `pads` en `display` bij `"0.6"`, `layout` bij `"0.7"`). In een bestand met `"0.1"` negeert een 0.1-host het; de validator geeft daar een `let op`, en ook voor `controls` in een 0.2-bestand, voor `meters` in een 0.3-bestand en voor `sections` of `size` in een 0.4-bestand of lager en voor `pads` of `display` in een 0.5-bestand of lager en voor `layout` in een 0.6-bestand of lager.
+- `design` hoort bij `skinsContract` `"0.2"` (`controls` bij `"0.3"`, `meters` bij `"0.4"`, `sections` en `size` bij `"0.5"`, `pads` en `display` bij `"0.6"`, `layout` bij `"0.7"`, `activeColor` en `pads.rules` bij `"0.8"`). In een bestand met `"0.1"` negeert een 0.1-host het; de validator geeft daar een `let op`, en ook voor `controls` in een 0.2-bestand, voor `meters` in een 0.3-bestand en voor `sections` of `size` in een 0.4-bestand of lager en voor `pads` of `display` in een 0.5-bestand of lager en voor `layout` in een 0.6-bestand of lager.
 
 ### Poortenmodus (`ports.mode`)
 
@@ -272,7 +273,8 @@ Met `design.controls` kiest een skin het **gezicht, de maat en de kleur van rege
 | `length` | `short`, `medium`, `long`, of een getal 40 tot 400 (px) | Lengte van een schuif. |
 | `thickness` | getal 2 tot 24 (px) | Dikte van het spoor van een schuif. |
 | `thumb` | `round`, `square`, `bar`, `none` | De duim (het grijpstuk) van een schuif. |
-| `color` | `"accent"` of `#rgb` / `#rrggbb` | Kleur van de wijzer, het gevulde deel of de duim. |
+| `color` | `"accent"` of `#rgb` / `#rrggbb` | Kleur van de wijzer, het gevulde deel of de duim, in rust. |
+| `activeColor` | `#rgb` / `#rrggbb` | Kleur van dezelfde onderdelen terwijl je de regelaar gebruikt (muis of aanraking ingedrukt; bij een draaiknop ook met het toetsenbord). Zonder `activeColor` blijft de kleur gelijk (0.8). |
 | `showValue` | `always`, `hover`, `never` | Of het getal naast de regelaar zichtbaar is. |
 
 - **Volgorde:** de regels worden op volgorde toegepast; per eigenschap wint de **laatste passende regel**. Zet dus de algemene regels (`"*"`) bovenaan en de bijzondere (`"cut"`) onderaan.
@@ -387,6 +389,26 @@ Met `design.pads` kiest een skin **vorm, maat, kleur en feedback van pads**: de 
 | `hit` | `flash`, `none` | Feedback als het apparaat een pad laat oplichten zonder dat zijn stand verandert (`flash()`, een stap die afgaat, de afspeelcursor). |
 | `press` | `depress`, `glow`, `none` | Feedback tijdens het indrukken: het pad zakt in, gloeit of niets. Alleen visueel. |
 | `gap` | `tight`, `normal`, `wide` | De ruimte tussen de stapknoppen van `host.ui.steps`. |
+
+**Per pad (`rules`, vanaf 0.8).** Naast de instellingen voor alle pads kan `rules` een lijst regels bevatten (hoogstens 64): per regel een `match` (`"*"`, een id, `"role:<rol>"` of `"group:<groep>"`) met een of meer van deze eigenschappen. De laatste passende regel wint per eigenschap; regels van de verschijningsvorm komen na die van de skin.
+
+```json
+"pads": { "rules": [
+  { "match": "group:drums", "kind": "velocity", "color": "#2a3a4a", "activeColor": "#ff5a4f" },
+  { "match": "pad.mute",    "kind": "toggle",   "led": "top" }
+] }
+```
+
+| Sleutel | Waarden | Betekenis |
+|---|---|---|
+| `kind` | `toggle`, `pad`, `velocity` | Het type: `toggle` is aan/uit (klikt vast en blijft aan tot je weer drukt), `pad` klinkt zolang je drukt, zonder velocity, `velocity` is een pad waarbij de host de aanslag meet en meegeeft. Zonder `kind` doet het pad wat het apparaat vraagt. |
+| `color` | `#rgb` / `#rrggbb` | De kleur in rust: het pad is licht in deze kleur getint. |
+| `activeColor` | `#rgb` / `#rrggbb` | De kleur als het pad aan staat of wordt ingedrukt (de vulling, rand, gloed en het ledje). Zonder `activeColor` is het `color`. |
+| `led` | `none`, `center`, `top`, `bottom`, `left`, `right` | Het ledje van dit pad (wint van `led` in de rest van `pads`). |
+
+- **`kind` verandert gedrag, de enige plek waar een skin dat doet.** Het werkt alleen op pads die de host tekent met `host.ui.pad`; een pad dat het apparaat zelf tekent (ook met `data-pk-role="pad"`) en stapknoppen krijgen de kleuren maar houden hun gedrag. Het apparaat merkt het via zijn eigen aanroepen (device contract §12f): een `toggle` op een pad dat het apparaat als indrukken kent, roept `onpress` aan bij aanzetten en `onrelease` bij uitzetten; `pad` of `velocity` op een aan/uit-pad roept `onchange(true)` aan bij indrukken en `onchange(false)` bij loslaten. Haalt de skin het type weg terwijl een pad vastzit, dan laat de host het los.
+- **Velocity** is een getal van 1 tot 127 als tweede argument van `onpress(e, velocity)` en `onchange(on, velocity)`: de aanraakdruk bij touch of pen als het scherm die meet, anders de plek van de klik in het pad (boven zacht, onder hard); het toetsenbord en `toggle` en `pad` geven 100. Een apparaat dat het argument negeert, klinkt gelijk.
+- **Een skin verbergt of schakelt geen pad uit.** `kind` kiest alleen hoe je het pad bedient.
 
 - **Samenvoegen:** `design.pads` wordt per sleutel samengevoegd (de verschijningsvorm over de skin), en `colors` per entry.
 - **Standaard** (geen skin, of geen `pads`): de DOM, klassen en het uiterlijk van het apparaat zelf, ook bij stapknoppen en eigen pad-knoppen. Een nieuw pad van `host.ui.pad` heeft dan het neutrale standaardgezicht uit het thema.
@@ -574,7 +596,7 @@ skins/
 
 ## 10. Versies
 
-Dit contract heeft een versie `major.minor` (nu **0.7**), vastgelegd in het veld `skinsContract` van elke skin.
+Dit contract heeft een versie `major.minor` (nu **0.8**), vastgelegd in het veld `skinsContract` van elke skin.
 
 | Verschil met de versie van de host | Wat de host doet |
 |---|---|
@@ -586,7 +608,7 @@ Dit contract heeft een versie `major.minor` (nu **0.7**), vastgelegd in het veld
 - Onbekende velden, ook in een verschijningsvorm of in `when`, **worden genegeerd** en niet geweigerd. De validator meldt ze met een `let op` om typefouten te vangen.
 - `formatVersion` (nu `1`) is de versie van de bestandsopbouw zelf; `skinsContract` is de versie van dit contract.
 - Houd `id` en `device` gelijk bij een nieuwe versie van een skin en verhoog `version`: de nieuwere `version` wint.
-- Dit contract, de validator (`validate-skin.mjs`) en de host horen bij dezelfde versie. De eerste regels van `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` en `validate-skin.mjs` noemen elk "v0.7".
+- Dit contract, de validator (`validate-skin.mjs`) en de host horen bij dezelfde versie. De eerste regels van `SKINS-CONTRACT_NL.md`, `SKINS-CONTRACT_EN.md` en `validate-skin.mjs` noemen elk "v0.8".
 
 **Wijzigingen van 0.1 naar 0.2:**
 
@@ -658,6 +680,18 @@ Dit contract heeft een versie `major.minor` (nu **0.7**), vastgelegd in het veld
 | Apparaatwijziging | | geen; apparaatcontract blijft v1.22 |
 | Validator | controleert `design` tot en met `pads` en `display` | controleert ook `layout` (vorm, bereiken, hoogstens 16 panelen en 64 items, een dubbel paneel-id of een ongeldig item is een fout) en geeft een `let op` voor een item dat in twee panelen staat, een lege paneellijst, `collapsible` zonder kop, `layout` in een bestand onder 0.7 en, met `--device`, voor onbekende id's, groepen en rollen in `items` |
 | Bestaande skins van 0.1 tot en met 0.6 | | blijven ongewijzigd werken |
+
+**Wijzigingen van 0.7 naar 0.8:**
+
+| Onderdeel | 0.7 | 0.8 |
+|---|---|---|
+| `skinsContract` | `"0.7"` | `"0.8"`; `"0.1"` tot en met `"0.7"` blijven geldig |
+| `controls[].activeColor` | bestaat niet | nieuw, optioneel: kleur terwijl je de regelaar gebruikt (§4b) |
+| `design.pads.rules` | bestaat niet | nieuw, optioneel: lijst van hoogstens 64 regels per pad met `kind`, `color`, `activeColor`, `led` (§4b) |
+| Gedrag door een skin | nooit | alleen `kind` bij pads van `host.ui.pad`: aan/uit, pad of pad met velocity |
+| Apparaatwijziging | | apparaatcontract v1.32: tweede argument `velocity` bij `onpress` en `onchange` |
+| Validator | controleert `design` tot en met `layout` | controleert ook `activeColor` en `pads.rules` (vorm, `kind`, kleuren, `led`; een ongeldige waarde is een fout) en geeft een `let op` voor een regel met alleen een `match`, een onbekende sleutel en beide nieuwe velden in een bestand onder 0.8 |
+| Bestaande skins van 0.1 tot en met 0.7 | | blijven ongewijzigd werken |
 
 ---
 
@@ -746,7 +780,7 @@ De validator kan niet zien of de CSS er goed uitziet of een selector iets raakt,
 
 ---
 
-## 13. Wat nog niet in versie 0.7 zit
+## 13. Wat nog niet in versie 0.8 zit
 
 Versie 0.1 legt het formaat en de weg naar de gebruiker vast; versie 0.2 (laag 1) voegt de ontwerpkeuzes toe die op alle apparaten werken (§4b); versie 0.3 (laag 2, release A "id's en rollen") voegt `design.controls` toe: gezicht, maat en kleur van regelaars die het apparaat aanmeldt; versie 0.4 (laag 2, release C "meters") voegt `design.meters` toe: gezicht (balk, ledladder, rond VU), richting, lengte, breedte, ballistiek, schaal en kleur van meters die het apparaat door de host laat tekenen; versie 0.5 (laag 2, release B1 "secties") voegt `design.sections` en `design.size` toe: kader, kolommen, tussenruimte, kaal, labelplaats en uitlijning van de groepen regelaars van een apparaat, en een kaartbreedte per verschijningsvorm; versie 0.6 (laag 2, release D "pads en schermpje") voegt `design.pads` en `design.display` toe: vorm, maat, kleur en feedback van pads en stappen, en een schermpje in plaats van een keuzelijst; versie 0.7 (laag 2, release B2 "panelen en volgorde") voegt `design.layout` toe: de regelaars van een apparaat in panelen zetten en in een volgorde, zonder iets te verbergen. Daarbuiten is de inhoud van een skin nog een **placeholder**: CSS en afbeeldingen zonder verdere eisen. Bewust later, in een volgende versie, in deze volgorde:
 
@@ -804,7 +838,7 @@ Dit is `skins/library/nl.patchkamer.duofone/example-plain.patchkamer-skin.json`:
 ## 15. Checklist voor oplevering
 
 - Het bestand heet `<naam>.patchkamer-skin.json` (zonder versienummer) en staat in `skins/library/<device-id>/`, met die map gelijk aan `device`.
-- `skinsContract` is `"0.7"` (of `"0.6"`/`"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` als de skin geen `layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design` heeft), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
+- `skinsContract` is `"0.8"` (of `"0.7"`/`"0.6"`/`"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` als de skin geen `layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design` heeft), `format` is `"patchkamer-skin"`, `formatVersion` is `1`.
 - `id`, `name`, `description` en de verschijningsnamen zijn Engels en merkvrij; `license` is `CC0-1.0`.
 - Een eventueel `design` bevat alleen sleutels uit §4b met geldige waarden; kleuren zijn `#rgb` of `#rrggbb`.
 - Een eventueel `design.controls` heeft hoogstens 64 regels, mikt alleen op id's, rollen en groepen die het apparaat publiceert (`node skins/contract/validate-skin.mjs <skin> --device <apparaat>` zonder `let op`) en verbergt niets.

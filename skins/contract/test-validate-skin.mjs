@@ -1,4 +1,4 @@
-// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.7) / test cases for the validator
+// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.8) / test cases for the validator
 // Gebruik / Usage:  node skins/contract/test-validate-skin.mjs      (exit 0 = alles groen / all green)
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
@@ -18,7 +18,7 @@ const SK = s => { const o = base(); return Object.assign(o, s); };
 // --- 0.1 en basis
 ok('0.1-bestand zonder design', SK({ skinsContract: '0.1' }));
 ok('0.2-bestand zonder design', base());
-okWarn('minor 8 is nieuwer', SK({ skinsContract: '0.8' }), ['contract_minor']);
+okWarn('minor 9 is nieuwer', SK({ skinsContract: '0.9' }), ['contract_minor']);
 bad('major 1', SK({ skinsContract: '1.0' }), ['contract_major']);
 okWarn('design in een 0.1-bestand', { ...withDesign({ ports: { mode: 'hover' } }), skinsContract: '0.1' }, ['design_contract']);
 // --- ports
@@ -145,7 +145,8 @@ okWarn('rotary met thumb', ctl({ match: 'cut', face: 'rotary', thumb: 'bar' }), 
 okWarn('rotary met thickness', ctl({ match: 'cut', face: 'rotary', thickness: 4 }), ['controls_slider_only']);
 okWarn('controls in een 0.2-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.2' }, ['controls_contract']);
 okWarn('controls in een 0.1-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.1' }, ['controls_contract', 'design_contract']);
-okWarn('0.8 is nieuwer dan 0.7', SK({ skinsContract: '0.8' }), ['contract_minor']);
+okWarn('0.9 is nieuwer dan 0.8', SK({ skinsContract: '0.9' }), ['contract_minor']);
+ok('0.8 is bekend', SK({ skinsContract: '0.8' }), ['contract_minor']);
 ok('0.6 is bekend', SK({ skinsContract: '0.6' }), ['contract_minor']);
 ok('0.3 is bekend', SK({ skinsContract: '0.3' }), ['contract_minor']);
 ok('0.4 is bekend', SK({ skinsContract: '0.4' }), ['contract_minor']);
@@ -485,6 +486,23 @@ bad('nog steeds: @import in css', (() => { const s = base(); s.appearances[0].cs
 bad('nog steeds: externe url', (() => { const s = base(); s.appearances[0].css = ':host{background:url(http://x/y.png)}'; return s; })(), ['css_url']);
 bad('nog steeds: default onbekend', SK({ default: 'zzz' }), ['default_ref']);
 
+// --- activeColor en pads.rules (0.8)
+const v8 = d => ({ ...withDesign(d), skinsContract: '0.8' });
+ok('controls activeColor', v8({ controls: [{ match: '*', color: '#336699', activeColor: '#ff0' }] }));
+ok('controls alleen activeColor', v8({ controls: [{ match: 'cut', activeColor: '#ffb000' }] }));
+bad('controls activeColor geen kleur', v8({ controls: [{ match: '*', activeColor: 'red' }] }), ['pads_rule_colour']);
+okWarn('activeColor in een 0.7-bestand', { ...withDesign({ controls: [{ match: '*', activeColor: '#ffb000' }] }), skinsContract: '0.7' }, ['v08_contract']);
+for (const k of ['toggle', 'pad', 'velocity']) ok('pads.rules kind ' + k, v8({ pads: { rules: [{ match: 'pad.kick', kind: k }] } }));
+ok('pads.rules kleuren en led', v8({ pads: { rules: [{ match: 'group:drums', color: '#223344', activeColor: '#ff5a4f', led: 'top' }, { match: '*', kind: 'pad' }] } }));
+bad('pads.rules geen lijst', v8({ pads: { rules: { match: '*' } } }), ['pads_rules']);
+bad('pads.rules regel geen object', v8({ pads: { rules: ['x'] } }), ['pads_rule']);
+bad('pads.rules match ontbreekt', v8({ pads: { rules: [{ kind: 'pad' }] } }), ['pads_rule_match']);
+bad('pads.rules kind onbekend', v8({ pads: { rules: [{ match: '*', kind: 'latch' }] } }), ['design_enum']);
+bad('pads.rules kleur ongeldig', v8({ pads: { rules: [{ match: '*', color: 'blue' }] } }), ['pads_rule_colour']);
+bad('pads.rules led onbekend', v8({ pads: { rules: [{ match: '*', led: 'middle' }] } }), ['design_enum']);
+okWarn('pads.rules alleen match', v8({ pads: { rules: [{ match: 'a' }] } }), ['pads_rule_empty']);
+okWarn('pads.rules onbekende sleutel', v8({ pads: { rules: [{ match: 'a', kind: 'pad', shape: 'circle' }] } }), ['unknown_field']);
+okWarn('pads.rules in een 0.7-bestand', { ...withDesign({ pads: { rules: [{ match: '*', kind: 'pad' }] } }), skinsContract: '0.7' }, ['v08_contract']);
 let fail = 0, n = 0;
 for (const lang of ['nl', 'en']) {
   cases.forEach(([name, skin, exp], i) => {

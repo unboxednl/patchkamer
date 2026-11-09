@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.31 for building agents
+# Patchkamer — Instrument contract v1.32 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -40,6 +40,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.29 | AI question for a device: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. A device asks one question to the AI provider the user chose in the settings (the key stays with the host; the device itself makes no network call). The user must confirm the question per device. For suggestions without the user having to chat, like a mapping suggestion from the MIDI Controller. |
 | v1.30 | Files from the internet: `host.fetchFile(this, url, opts)` fetches one https file for a device (`as`, `maxBytes`, `signal`, `onProgress`), only after a user click, without credentials and without `Referer`, with a limit on the size and error codes `url`, `aborted`, `network`, `http`, `size`, `response` (§13i). Optional; an old host does not have the function. The validator knows the function and gives an error for a call without a click. |
 | v1.31 | Subcategories in the library layout: a category in `patchkamer-bibliotheek.json` may have an optional field `parent` (the `key` of another category), so a category can have subcategories (§16). A device is assigned to a subcategory with the same `assign`; the `category` field of a device does not change |
+| v1.32 | Velocity for pads: `onpress(e, velocity)` and `onchange(on, velocity)` of `host.ui.pad` get a second argument, a number from 1 to 127 (100 unless a skin chooses a pad with velocity: then the touch pressure or the position of the click). A device that ignores the argument sounds the same (§12f) |
 
 ---
 
@@ -651,9 +652,9 @@ A **pad** is a push button that touches a sound, a step or a state: a drum pad, 
 | `role` | as §12d | Default `pad`. A pad in a row can be `step` |
 | `mode` | `'momentary'` (default) or `'toggle'` | Momentary: active while you press; toggle: every touch switches on or off |
 | `on` | `true`/`false` | Initial state (active) |
-| `onpress(e)` | function | Momentary: on pressing. Not used for toggle |
+| `onpress(e, velocity)` | function | Momentary: on pressing. Not used for toggle. `velocity` (1 to 127, since v1.32) is 100 unless a skin chooses a pad with velocity: then the host measures the hit (touch pressure or position of the click) |
 | `onrelease(e)` | function | On release (momentary) |
-| `onchange(on)` | function | Toggle: the new state. For a momentary pad without `onpress` you may use `onchange` |
+| `onchange(on, velocity)` | function | Toggle: the new state (`velocity` as for `onpress`; on release of a pad that a skin made momentary, `on` is `false` and `velocity` is empty). For a momentary pad without `onpress` you may use `onchange` |
 | `color` | `#rrggbb` | The device's preferred colour for this pad (per track or sound). A skin can use it (`color: "device"`) or choose a colour of its own. Anything other than `#rrggbb` is an error in the validator |
 | `text` | short text | Text on the pad, for example "1" |
 | `title` | text | Tooltip |

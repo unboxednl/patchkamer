@@ -29,8 +29,8 @@ function prune(o,keepPanels){ Object.keys(o).forEach(k=>{ const v=o[k]; if(Array
 function pruneAll(m){ prune(m.design,false); m.aps.forEach(a=>{ if(a.design){ prune(a.design,true); if(!Object.keys(a.design).length) delete a.design; } }); }
 // ---- bouwen ----
 const hasKey=(m,f)=>[m.design,...m.aps.map(a=>a.design)].some(d=>d&&f(d));
-function contractFor(m){ const lay=hasKey(m,d=>d.layout&&d.layout.panels&&d.layout.panels.some(p=>p.items&&p.items.length)), pd=hasKey(m,d=>d.pads||d.display), sec=hasKey(m,d=>(d.sections&&d.sections.length)||d.size), met=hasKey(m,d=>d.meters&&d.meters.length), ctl=hasKey(m,d=>d.controls&&d.controls.length);
-  return lay?'0.7':pd?'0.6':sec?'0.5':met?'0.4':ctl?'0.3':'0.2'; }
+function contractFor(m){ const lay=hasKey(m,d=>d.layout&&d.layout.panels&&d.layout.panels.some(p=>p.items&&p.items.length)), pd=hasKey(m,d=>d.pads||d.display), sec=hasKey(m,d=>(d.sections&&d.sections.length)||d.size), met=hasKey(m,d=>d.meters&&d.meters.length), ctl=hasKey(m,d=>d.controls&&d.controls.length), v8=hasKey(m,d=>(d.controls||[]).some(x=>x.activeColor!==undefined)||(d.pads&&d.pads.rules&&d.pads.rules.length));
+  return v8?'0.8':lay?'0.7':pd?'0.6':sec?'0.5':met?'0.4':ctl?'0.3':'0.2'; }
 function fin(d){ const c=clone(d); if(c.layout&&c.layout.panels){ const had=c.layout.panels.length; c.layout.panels=c.layout.panels.filter(p=>p.items&&p.items.length); if(!c.layout.panels.length&&had) delete c.layout.panels; if(!Object.keys(c.layout).length) delete c.layout; } return c; }   // een paneel zonder items is nog niet af en gaat niet mee
 function build(m,preview){ const name=(m.name||'').trim()||'Untitled', dev=m.dev, id=preview?dev.toLowerCase()+'.draft-preview':dev.toLowerCase()+'.'+(slug(name)||'custom'), t=new Date(), p2=n=>String(n).padStart(2,'0');
   const j={format:'patchkamer-skin',formatVersion:1,skinsContract:contractFor(m),id,device:dev,name:name.slice(0,60),version:m.version||'1.0.0'};
@@ -43,7 +43,7 @@ function devChecks(sk,r){ const L=regOf(r), out=[], pkt=PK.pkt; const ids=new Se
   const ok=m=>m==='*'||(m.startsWith('role:')?roles.has(m.slice(5)):m.startsWith('group:')?groups.has(m.slice(6)):ids.has(m)), bad=(w,m)=>out.push(pkt(m.startsWith('role:')?'m.se_dev_rol':m.startsWith('group:')?'m.se_dev_groep':'m.se_dev_id',w,m.replace(/^(role|group):/,'')));
   const lay=[['design',sk.design],...sk.appearances.map((a,i)=>['appearances['+i+'].design',a.design])]; let any=false;
   lay.forEach(([w,d])=>{ if(!d) return; (d.controls||[]).forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.controls['+i+'].match',x.match); }); (d.meters||[]).forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.meters['+i+'].match',x.match); });
-    (d.sections||[]).forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.sections['+i+'].match',x.match); }); if(d.pads&&d.pads.colors) Object.keys(d.pads.colors).forEach(k=>{ any=true; if(!ok(k)) bad(w+'.pads.colors',k); });
+    (d.sections||[]).forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.sections['+i+'].match',x.match); }); if(d.pads&&d.pads.colors) Object.keys(d.pads.colors).forEach(k=>{ any=true; if(!ok(k)) bad(w+'.pads.colors',k); }); if(d.pads&&d.pads.rules) d.pads.rules.forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.pads.rules['+i+'].match',x.match); });
     if(d.layout&&d.layout.panels) d.layout.panels.forEach((p,i)=>p.items.forEach((it,j)=>{ any=true; if(it!=='*'&&!ok(it)) bad(w+'.layout.panels['+i+'].items['+j+']',it); })); });
   if(any&&!L.length) out.unshift(pkt('m.se_dev_leeg')); return out; }
 function check(m,r){ const file=build(m,false), notes=[], errs=[]; let sk=null; try{ sk=PK.skValidate(file,'',notes,errs); }catch(e){ errs.push(e.message); }

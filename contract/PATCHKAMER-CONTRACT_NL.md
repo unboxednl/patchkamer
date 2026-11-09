@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.31 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.32 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -40,6 +40,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.29 | AI-vraag voor een apparaat: `host.ai(this, 'available' / 'ask' / 'settings', opts)`. Een apparaat stelt één vraag aan de AI-aanbieder die de gebruiker bij Instellingen heeft gekozen (de sleutel blijft bij de host; het apparaat zelf doet geen netwerkaanroep). De gebruiker moet de vraag per apparaat bevestigen. Voor voorstellen zonder dat de gebruiker hoeft te chatten, zoals een koppelvoorstel van de MIDI Controller. |
 | v1.30 | Bestanden van internet: `host.fetchFile(this, url, opts)` haalt voor een apparaat één https-bestand op (`as`, `maxBytes`, `signal`, `onProgress`), alleen na een klik van de gebruiker, zonder inloggegevens en zonder `Referer`, met een grens aan de grootte en foutcodes `url`, `aborted`, `network`, `http`, `size`, `response` (§13i). Optioneel; een oude host heeft de functie niet. De validator kent de functie en geeft een fout bij een aanroep zonder klik. |
 | v1.31 | Subcategorieën in de bibliotheekindeling: een categorie in `patchkamer-bibliotheek.json` mag een optioneel veld `parent` hebben (de `key` van een andere categorie), zodat een categorie onderliggende subcategorieën kan hebben (§16). Een apparaat wordt aan een subcategorie toegewezen met dezelfde `assign`; het `category`-veld van een apparaat verandert niet |
+| v1.32 | Velocity bij pads: `onpress(e, velocity)` en `onchange(on, velocity)` van `host.ui.pad` krijgen een tweede argument, een getal van 1 tot 127 (100 tenzij de gebruiker of een skin een pad met velocity kiest: dan de aanraakdruk of de plek van de klik). Een apparaat dat het argument negeert, klinkt gelijk (§12f) |
 
 ---
 
@@ -651,9 +652,9 @@ Een **pad** is een drukknop die een geluid, een stap of een stand aanraakt: een 
 | `role` | zoals §12d | Standaard `pad`. Een pad in een rij kan `step` zijn |
 | `mode` | `'momentary'` (standaard) of `'toggle'` | Momentary: actief zolang je indrukt; toggle: elke aanraking schakelt aan of uit |
 | `on` | `true`/`false` | Beginstand (actief) |
-| `onpress(e)` | functie | Momentary: bij indrukken. Bij toggle niet gebruikt |
+| `onpress(e, velocity)` | functie | Momentary: bij indrukken. Bij toggle niet gebruikt. `velocity` (1 tot 127, vanaf v1.32) is 100 tenzij een skin een pad met velocity kiest: dan meet de host de aanslag (aanraakdruk of plek van de klik) |
 | `onrelease(e)` | functie | Bij loslaten (momentary) |
-| `onchange(on)` | functie | Toggle: de nieuwe stand. Bij een momentary pad zonder `onpress` mag je `onchange` gebruiken |
+| `onchange(on, velocity)` | functie | Toggle: de nieuwe stand (`velocity` zoals bij `onpress`; bij loslaten van een skin-pad zonder aan/uit is `on` `false` en `velocity` leeg). Bij een momentary pad zonder `onpress` mag je `onchange` gebruiken |
 | `color` | `#rrggbb` | De voorkeurskleur van het apparaat voor dit pad (per spoor of klank). Een skin kan hem gebruiken (`color: "device"`) of een eigen kleur kiezen. Iets anders dan `#rrggbb` is een fout in de validator |
 | `text` | korte tekst | Tekst op het pad, bijvoorbeeld "1" |
 | `title` | tekst | Tooltip |

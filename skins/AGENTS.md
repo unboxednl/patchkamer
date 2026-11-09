@@ -2,7 +2,7 @@
 
 Dit bestand is voor AI-agents die **skins** maken voor Patchkamer-apparaten. Het is niet geschreven voor mensen. Het hoort bij de algemene instructies in `../AGENTS.md`; lees die eerst. Een skin bouwen is iets anders dan een apparaat bouwen: een skin raakt geen apparaatcode.
 
-**Eerlijk vooraf:** in versie 0.7 (laag 1 en release A, C, B1, D en B2 van laag 2) bestaat een skin uit CSS en ingesloten afbeeldingen plus een kleine set gevalideerde ontwerpkeuzes (`design`, hieronder), waaronder regels voor het gezicht van regelaars (`design.controls`) van meters (`design.meters`) voor de opmaak van secties en kaartbreedte (`design.sections`, `design.size`) voor het gezicht van pads en schermpjes (`design.pads`, `design.display`) en voor het indelen van regelaars in panelen en een volgorde (`design.layout`). Het formaat, de mappen, het laden en het wisselen van verschijningsvormen liggen vast; de eisen aan echte artwork, regelaargrafiek, indeling, bouwstenen en een editor (laag 2 en 3) levert Freek later aan (zie het contract, §13). Maak dus geen ingewikkelde skins en verzin geen eisen of `design`-sleutels die er niet zijn.
+**Eerlijk vooraf:** in versie 0.8 (laag 1 en release A, C, B1, D en B2 van laag 2) bestaat een skin uit CSS en ingesloten afbeeldingen plus een kleine set gevalideerde ontwerpkeuzes (`design`, hieronder), waaronder regels voor het gezicht van regelaars (`design.controls`) van meters (`design.meters`) voor de opmaak van secties en kaartbreedte (`design.sections`, `design.size`) voor het gezicht van pads en schermpjes (`design.pads`, `design.display`) en voor het indelen van regelaars in panelen en een volgorde (`design.layout`). Het formaat, de mappen, het laden en het wisselen van verschijningsvormen liggen vast; de eisen aan echte artwork, regelaargrafiek, indeling, bouwstenen en een editor (laag 2 en 3) levert Freek later aan (zie het contract, §13). Maak dus geen ingewikkelde skins en verzin geen eisen of `design`-sleutels die er niet zijn.
 
 **Skin-editor (laag 3).** De host heeft een editor (`patchkamer/js/skin-editor*.js`) die dezelfde bestanden schrijft als je met de hand zou maken: een skin voor één apparaat-id, `skinsContract` 0.7 of lager, niets nieuws in het formaat. Wat de editor exporteert komt door `validate-skin.mjs --device <apparaat>` zolang `author`, `license`, `description` en `icon` (mag `null`) ingevuld zijn; namen van verschijningen die hij zelf aanmaakt zijn Engels (Standard, Compact, Wide, Phone, Touch, Custom). Een agent kan een skin dus gewoon als bestand schrijven; de editor is voor mensen.
 
@@ -34,10 +34,10 @@ De mapnaam onder `library/` is **letterlijk** het `id` van het apparaat (lees he
 
 Een bestand `<naam>.patchkamer-skin.json` (kleine letters met streepjes, **geen versienummer** in de naam) met:
 
-- `format` (`"patchkamer-skin"`), `formatVersion` (`1`), `skinsContract` (`"0.7"`; `"0.6"`, `"0.5"`, `"0.4"`, `"0.3"`, `"0.2"` of `"0.1"` als de skin geen `layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design` heeft);
+- `format` (`"patchkamer-skin"`), `formatVersion` (`1`), `skinsContract` (`"0.8"`; `"0.7"`, `"0.6"`, `"0.5"`, `"0.4"`, `"0.3"`, `"0.2"` of `"0.1"` als de skin geen `layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design` heeft);
 - `id` (`<device-id>.<slug>`), `device` (het apparaat-id), `name` (Engels, 1 tot 60), `version` (semver), `author`, `license` (`CC0-1.0`), `description` (Engels, hoogstens 300), `created` (`YYYY-MM-DD`);
 - `icon` (`null` of een data-adres, hoogstens 200 kB) en `default` (de `id` van de verschijningsvorm als niets in Auto past);
-- `design` (optioneel, vanaf 0.2; `controls` vanaf 0.3, `meters` vanaf 0.4; `sections` en `size` vanaf 0.5; `pads` en `display` vanaf 0.6; `layout` vanaf 0.7): ontwerpkeuzes voor alle verschijningsvormen;
+- `design` (optioneel, vanaf 0.2; `controls` vanaf 0.3, `meters` vanaf 0.4; `sections` en `size` vanaf 0.5; `pads` en `display` vanaf 0.6; `layout` vanaf 0.7; `activeColor` bij `controls` en `pads.rules` vanaf 0.8): ontwerpkeuzes voor alle verschijningsvormen;
 - `appearances`: 1 tot 12 verschijningsvormen met `id`, `name`, optioneel `description`, `when` (`minWidth`, `maxWidth`, `screens` met `phone`, `compact`, `wide`), `css`, `assets` en eventueel een eigen `design` (overschrijft dat van de skin per sleutel).
 
 Alle velden, bereiken en regels staan in het contract: [`contract/SKINS-CONTRACT_NL.md`](contract/SKINS-CONTRACT_NL.md) (of `_EN.md`). Lees het volledig voor je een skin maakt.
@@ -52,7 +52,7 @@ Alle velden, bereiken en regels staan in het contract: [`contract/SKINS-CONTRACT
    ```
    Het resultaat moet één `OK`-regel zijn (exit 0), **zonder `let op`**. Bij een fout (exit 1) staan alle fouten in de uitvoer: herstel en draai opnieuw. Voor de hele bibliotheek: `node skins/contract/validate-skin.mjs --dir skins/library`. Meld nooit "klaar" zolang de validator niet `OK` geeft.
 4. **Test in de host** als je een browser tot je beschikking hebt (`../patchkamer/AGENTS.md`): laad de skin, kies hem op de kaart van het apparaat, en kijk of de verschijningsvormen wisselen. De validator kan niet zien of de CSS iets raakt of er goed uitziet. Heb je geen browser, schrijf dan in je oplevering dat dit **niet getest** is. Beweer niet dat het werkt.
-5. **Lever op:** het pad van het bestand, de contractversie (`0.7`), de `OK`-regel van de validator en wat je niet hebt kunnen testen.
+5. **Lever op:** het pad van het bestand, de contractversie (`0.8`), de `OK`-regel van de validator en wat je niet hebt kunnen testen.
 
 ### Ontwerpkeuzes (`design`, laag 1)
 
@@ -68,7 +68,7 @@ Werken via de host op alle apparaten; zonder CSS en zonder dat je de apparaatbro
 | `design.meters` (0.4) | lijst van hoogstens 64 regels `{ match, face, orientation, length, width, ballistics, peakHold, clip, scale, color, segments }` | alleen meters die het apparaat met `host.ui.meter` aanmeldt (id/group) |
 | `design.sections` (0.5) | lijst van hoogstens 32 regels `{ match, frame, columns, gap, bare, labels, align }` | alleen groepen regelaars die in één eigen element zitten (id/group) |
 | `design.size` (0.5) | `{ width }`: 200 tot 1600 | de kaartbreedte van een verschijningsvorm, alleen bij handmatige keuze |
-| `design.pads` (0.6) | één object `{ shape, size, color, palette, colors, idle, active, led, hit, press, gap }`; `colors` hoogstens 64 sleutels | alleen pads van `host.ui.pad`, stapknoppen van `host.ui.steps` met opties en eigen knoppen met `data-pk-role="pad"`/`"step"` (id/role/group) |
+| `design.pads` (0.6) | één object `{ shape, size, color, palette, colors, idle, active, led, hit, press, gap, rules }`; `colors` hoogstens 64 sleutels; `rules` (0.8) hoogstens 64 regels `{ match, kind (toggle, pad, velocity), color, activeColor, led }`: `kind` verandert gedrag en werkt alleen op pads van `host.ui.pad` | alleen pads van `host.ui.pad`, stapknoppen van `host.ui.steps` met opties en eigen knoppen met `data-pk-role="pad"`/`"step"` (id/role/group) |
 | `design.display` (0.6) | één object `{ style, nav, commit, lines, width, expand, targets, color }` | keuzes van `host.ui.select`/`host.ui.display` en, met `targets`, de preset- en tunekiezer in de kaartkop |
 | `design.layout` (0.7) | één object `{ flow, panels }`; hoogstens 16 panelen van elk hoogstens 64 `items` (id, `role:<rol>`, `group:<groep>` of `*`) | alle regelaars die het apparaat aanmeldt (id/role/group); ze worden verplaatst, nooit verborgen; apparaten met een eigen indeling (Control Surface) worden overgeslagen |
 
@@ -119,7 +119,7 @@ Alles in `library/` is `CC0-1.0` (publiek domein): zet `"license": "CC0-1.0"` op
 ## Controlelijst voor je oplevert
 
 - [ ] Bestand `<naam>.patchkamer-skin.json` in `library/<device-id>/`, mapnaam gelijk aan `device`.
-- [ ] `skinsContract` `"0.7"` (of `"0.6"`/`"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` zonder `layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design`), `format` `"patchkamer-skin"`, `formatVersion` `1`.
+- [ ] `skinsContract` `"0.8"` (of `"0.7"`/`"0.6"`/`"0.5"`/`"0.4"`/`"0.3"`/`"0.2"`/`"0.1"` zonder `activeColor`/`pads.rules`/`layout`/`pads`/`display`/`sections`/`size`/`meters`/`controls`/`design`), `format` `"patchkamer-skin"`, `formatVersion` `1`.
 - [ ] Namen en omschrijving Engels en merkvrij; `license` `CC0-1.0`; `created` is een echte datum.
 - [ ] Verschijningsvormen met een `when` die klopt (geen overlap die een vorm onbereikbaar maakt) en een `default`.
 - [ ] Een eventueel `design.controls` heeft hoogstens 64 regels, mikt alleen op id's, rollen en groepen uit het register van het apparaat (`--device` zonder `let op`) en verbergt niets.
