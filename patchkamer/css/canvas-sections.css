@@ -20,7 +20,8 @@
 .sec.min .secbt{top:0;height:var(--hh,48px);align-items:center;right:10px}
 .secbt button{flex:none;min-width:28px;padding:1px 7px;font-size:15px;opacity:.55}
 .sec:hover .secbt button,.secbt button:focus-visible{opacity:1}
-.secrz{position:absolute;z-index:3;pointer-events:auto;touch-action:none}
+/* de grepen zijn onzichtbare aanraakvlakken: geen enkele andere stijl mag er een achtergrond, rand of schaduw aan geven (op sommige systemen verscheen er een gevuld vierkantje over de hoek linksonder) */
+.secrz{position:absolute;z-index:3;pointer-events:auto;touch-action:none;background:none!important;border:0!important;box-shadow:none!important;outline:0!important;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;font-size:0;line-height:0;filter:none!important;backdrop-filter:none!important}
 .secrz.n{top:-8px;left:32px;right:32px;height:16px;cursor:ns-resize}
 .secrz.s{bottom:-8px;left:32px;right:32px;height:16px;cursor:ns-resize}
 .secrz.e{right:-8px;top:32px;bottom:32px;width:16px;cursor:ew-resize}

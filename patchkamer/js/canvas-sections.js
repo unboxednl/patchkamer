@@ -44,7 +44,7 @@ function layerAdd(el){ layer.appendChild(el); }
 // een sectie kiezen: hij licht op zoals een apparaat; kies je een apparaat, dan is de sectie weer losgelaten
 function selectSec(s){ H.secs.forEach(x=>x.el&&x.el.classList.toggle('sel',x===s)); if(s&&PK.selected) PK.select(null); }
 function build(s){ const e=document.createElement('div'); s.el=e;
-  e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<i class="secrz '+d+'"></i>').join('');
+  e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<span class="secrz '+d+'" aria-hidden="true"></span>').join('');
   const mn=e.querySelector('.secmenu'); mn.textContent='⋯'; mn.title=PK.pkt('m.sc_menu_titel'); mn.setAttribute('aria-label',mn.title);
   e.querySelector('.secminb').onclick=ev=>{ ev.stopPropagation(); toggleMin(s); };
   mn.onclick=ev=>{ ev.stopPropagation(); const b=mn.getBoundingClientRect(); menu(s,b.left,b.bottom+4); };

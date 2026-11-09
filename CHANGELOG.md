@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.27.1 (2026-11-09)
+
+### Fixed
+- **Canvas section: no square at the bottom left any more.** The invisible handles for resizing a section are now `span` elements that cannot get a background, border or shadow. On some systems (Chrome on Windows) a filled square in the card colour appeared over the rounded bottom-left corner. The cause was not found; the corner is now shielded against any styling.
+
 ## 0.27.0 (2026-11-09)
 
 ### Added

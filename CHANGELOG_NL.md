@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.27.1 (2026-11-09)
+
+### Opgelost
+- **Canvas-sectie: geen vierkantje meer linksonder.** De onzichtbare grepen om een sectie te vergroten zijn nu `span`-elementen die geen achtergrond, rand of schaduw kunnen krijgen. Op sommige systemen (Chrome op Windows) verscheen er een gevuld vierkantje in de kaartkleur over de ronde hoek linksonder. De oorzaak is niet gevonden; de hoek is nu afgeschermd tegen elke opmaak.
+
 ## 0.27.0 (2026-11-09)
 
 ### Toegevoegd
