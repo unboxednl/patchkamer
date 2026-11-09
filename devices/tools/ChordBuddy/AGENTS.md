@@ -13,7 +13,7 @@ Een hulpmiddel voor mensen zonder muziektheorie om akkoorden te vinden. De gebru
 | Naam | `Chord Buddy`; alleen de poortnamen hebben een Nederlandse variant (`i18n`) |
 | Soort | `utility` (categorie `tool`): Chord Buddy krijgt dus **presets** (geen tunes). Een set is een preset |
 | Poorten | event-ingang `in`; event-uitgangen `chords` (akkoordnoten) en `bass` (basnoten); sturing-ingang `mod` (automatisch, door `params()`); geen audio |
-| Contract | v1.19 (versie 1.1.0): `host.ui.adopt` met ids, `params()` plus `modExclude`, `host.frame`, tweetalig via `host.lang` |
+| Contract | v1.19 (versie 1.2.0): `host.ui.adopt` met ids, `params()` plus `modExclude`, `host.frame`, tweetalig via `host.lang` |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 ## Gebeurtenissen

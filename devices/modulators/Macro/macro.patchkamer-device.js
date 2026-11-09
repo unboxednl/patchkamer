@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Macro); de UI toont geen uitlegtekst meer.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n); kleuren van de invoervelden uit de host (--field, --field-fg);
 //          schuiven met data-pk-default. setState negeert onbekende velden, kapt getallen af op hun bereik en geeft bij een ongeldige waarde de beginwaarde;
 //          alle uitvoer (knopstanden, sturing, CC-waarden) blijft eindig. Ongebruikte hulpfuncties van de gedeelde code zijn weg; het uitgestuurde signaal is gelijk aan 1.8.0.
@@ -10,8 +11,6 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 // Teksten per taal (host.lang): de Nederlandse tekst is de sleutel, Engels staat hieronder; onbekende taal = Engels
 const EN = {
-  'Vier knoppen die elk een groep parameters tegelijk draaien, ook over apparaten heen. Kies per parameter welke knop hem stuurt en hoe ver. De CC-ingang accepteert {type:"cc", id:"m1"…"m4", value:0…1}.':
-    'Four knobs that each turn a group of parameters at once, even across devices. Choose per parameter which knob drives it and how far. The CC input accepts {type:"cc", id:"m1"…"m4", value:0…1}.',
   'naam van knop {0}': 'name of knob {0}', 'bipolair': 'bipolar',
   'bipolair: 50% is de knopstand, links eronder, rechts erboven': 'bipolar: 50% is the centre; left of it goes negative, right of it goes positive',
   'Glijden': 'Glide',
@@ -29,7 +28,6 @@ const MK_CSS = `
 :host{all:initial;display:block;container-type:inline-size;font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--fg,#e6e9ee)}
 *{box-sizing:border-box}
 .mk{display:grid;gap:10px;min-width:0}
-.mk .intro{color:var(--muted,#8a93a3);font-size:11px;line-height:1.45;margin:0}
 .box{padding:8px 10px;border:1px solid var(--line,#2a303a);border-radius:5px;background:var(--card-2,#161a20);display:grid;gap:8px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:end}
 .ctl{display:grid;gap:2px;min-width:110px;flex:1 1 120px}
@@ -140,7 +138,8 @@ const isNum = x => typeof x === 'number' && Number.isFinite(x);
 export default {
   id: 'nl.patchkamer.macro',
   name: 'Macro',
-  version: '1.11.0',
+  about: { nl: 'Vier knoppen die elk een groep parameters tegelijk draaien, ook over apparaten heen. Kies per parameter welke knop hem stuurt en hoe ver. De CC-ingang accepteert {type:"cc", id:"m1"…"m4", value:0…1}.', en: 'Four knobs that each turn a group of parameters at once, even across devices. Choose per parameter which knob drives it and how far. The CC input accepts {type:"cc", id:"m1"…"m4", value:0…1}.' },
+  version: '1.12.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 640, minWidth: 360 },
@@ -158,8 +157,7 @@ export default {
     function setV(i, v) { S.v[i] = clamp(v, 0, 1); push(i); if (ui) ui.k[i].set(S.v[i]); }
     function build(root) {
       const mk = E('div', 'mk'); root.appendChild(mk); ui = { k: [], n: [], b: [] };
-      mk.appendChild(E('p', 'intro', tx('Vier knoppen die elk een groep parameters tegelijk draaien, ook over apparaten heen. Kies per parameter welke knop hem stuurt en hoe ver. De CC-ingang accepteert {type:"cc", id:"m1"…"m4", value:0…1}.')));
-      const b1 = E('div', 'box'), r1 = E('div', 'row'); r1.style.alignItems = 'stretch'; b1.appendChild(r1); mk.appendChild(b1);
+            const b1 = E('div', 'box'), r1 = E('div', 'row'); r1.style.alignItems = 'stretch'; b1.appendChild(r1); mk.appendChild(b1);
       for (let i = 0; i < N; i++) {
         const col = E('div', 'ctl'); col.style.minWidth = '110px'; col.style.flex = '1 1 0'; col.style.gap = '6px';
         const nm = E('input'); nm.type = 'text'; nm.value = S.names[i]; nm.maxLength = NAME_MAX; nm.setAttribute('aria-label', tx('naam van knop {0}', i + 1)); nm.oninput = () => { S.names[i] = nm.value; }; col.appendChild(nm); ui.n[i] = nm;

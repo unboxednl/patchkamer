@@ -13,7 +13,7 @@ Een equalizer met vijf tot twaalf banden (band 1 = low shelf, band 5 = high shel
 | Naam | `Balance EQ` in alle talen; de kaart, de besturingen, de opties, de startprofielen, de meldingen en de poortnamen zijn tweetalig (`host.lang`, `LOC` en `TXT` bovenin) |
 | Soort | `effect`: dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | audio-ingang `in` (Stereo in); audio-uitgang `out` (Stereo uit); mastering-ingang `setup` (Master Director: driehoekpoort voor de gele, gestippelde mastering-kabel van de Master Director) |
-| Contract | v1.18 gebouwd; apparaatversie 1.14.0 |
+| Contract | v1.18 gebouwd; apparaatversie 1.15.0 |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Balans EQ, `nl.patchkamer.mastering.eq`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De DSP is sample voor sample gelijk aan het oude bestand (bewezen met een offline render); alleen de meldingen uit de DSP zijn codes geworden die de kaart vertaalt, en de waarden van de keuze "Doelkarakter" heten nu Engels (`transparent`, `firm`).

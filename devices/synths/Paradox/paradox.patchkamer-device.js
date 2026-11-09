@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Paradox); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (onwaarschijnlijk klankorganisme) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.11.0 — Bijgewerkt naar Patchkamer contract v1.11 (eigen map, nieuwe bestandsnaam zonder versienummer; id, poort-id's en state ongewijzigd):
 //   - tweetalig (host.lang): alle teksten in een woordenboek, namen van het apparaat en de poorten per taal in i18n; de universa heten Engels
@@ -57,15 +58,12 @@ const EN = {
  'Opkomsttijd van iedere stem.': 'Attack time of every voice.',
  'Uitsterftijd na een noot of autonome gebeurtenis.': 'Fade-out time after a note or autonomous event.',
  'Totaalniveau. Randomiseren verandert dit niet.': 'Overall level. Randomizing does not change this.',
- 'Geef het een noot. Voer het audio. Of laat het zichzelf verzinnen.': 'Give it a note. Feed it audio. Or let it invent itself.',
  'Een universum kiezen': 'Choose a universe', 'Kies een universum…': 'Choose a universe…',
  'Anatomie': 'Anatomy', 'Gedrag': 'Behavior', 'Leeft': 'Alive', 'Volg Start/Stop': 'Follow Start/Stop', 'Klok': 'Clock', 'Delen per': 'Division', '1 maat': '1 bar', '2 maten': '2 bars',
  'Live golfvorm, vreemde attractor en cellulaire automaat': 'Live waveform, strange attractor and cellular automaton',
  'stemmen': 'voices', 'BEVROREN': 'FROZEN', 'Lorenz-baan · celautomaat · live audio': 'Lorenz orbit · cellular automaton · live audio',
  'Muteer': 'Mutate', 'Celdeling!': 'Cell division!', 'Vouw de tijd': 'Fold time', 'Bevries geheugen': 'Freeze memory', 'Ontdooi geheugen': 'Thaw memory', 'PANIEK / stil': 'PANIC / silence',
  'Speel {0}': 'Play {0}',
- 'Klavier: externe noten houden hun toonhoogte. Kies Bespeelbaar om het interne organisme uit te zetten.': 'Keyboard: external notes keep their pitch. Choose Playable to switch the internal organism off.',
- 'Eten = audio-ingang. Geheugen bevriest alleen deze sessie; de inhoud wordt niet in tunes opgeslagen.': 'Feed = audio input. Freezing the memory only lasts this session; its contents are not stored in tunes.',
  'Wekt het organisme…': 'Waking the organism…', 'levend': 'alive', 'stil': 'idle', ' · geheugen bevroren': ' · memory frozen', ' · tempo ': ' · tempo ',
  'AudioWorklet-engine · Eten actief': 'AudioWorklet engine · Feed active', 'Compatibiliteits-engine · Eten actief': 'Compatibility engine · Feed active',
  'Buffer-engine · Eten niet beschikbaar · extra triggerlatentie': 'Buffer engine · Feed not available · extra trigger latency'
@@ -270,7 +268,7 @@ const drawLoop = (host, inst, cb, fps) => {
 };
 
 export default {
- id:'nl.patchkamer.paradox',name:'Paradox',version:'1.12.0',kind:'instrument',category:'synth',ui:{width:860,minWidth:320},about:{nl:'Onwaarschijnlijk klankorganisme.',en:'An improbable sound organism.'},
+ id:'nl.patchkamer.paradox',name:'Paradox',version:'1.13.0',kind:'instrument',category:'synth',ui:{width:860,minWidth:320},about:{nl:'Onwaarschijnlijk klankorganisme.\n\nGeef het een noot. Voer het audio. Of laat het zichzelf verzinnen.\n\nKlavier: externe noten houden hun toonhoogte. Kies Bespeelbaar om het interne organisme uit te zetten.\n\nEten is de audio-ingang. Geheugen bevriest alleen deze sessie; de inhoud wordt niet in tunes opgeslagen.',en:'An improbable sound organism.\n\nGive it a note. Feed it audio. Or let it invent itself.\n\nKeyboard: external notes keep their pitch. Choose Playable to switch the internal organism off.\n\nFeed is the audio input. Freezing the memory only lasts this session; its contents are not stored in tunes.'},
  i18n:{nl:{ports:{feed:'Eten',out:'Ontsnapping',notes:'Noten / CC'}}},
  ports:{audioIn:[{id:'feed',name:'Feed'}],audioOut:[{id:'out',name:'Escape'}],eventIn:[{id:'notes',name:'Notes / CC'}],eventOut:[],modIn:[],modOut:[],multiIn:[],multiOut:[]},
  create(ctx,host){
@@ -324,7 +322,7 @@ export default {
      :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}
      .lab{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card)}
      .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-     .hint,.status{color:var(--muted);font-size:11px;line-height:1.5}
+     .status{color:var(--muted);font-size:11px;line-height:1.5}
      select,button{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);border-radius:5px;padding:6px;max-width:100%;min-width:0}
      select{flex:1}button{cursor:pointer}button:hover{border-color:var(--audio)}input{accent-color:var(--audio)}
      .screen{position:relative;height:190px;min-width:0;margin:12px 0;background:var(--well);border:1px solid var(--line);border-radius:8px;overflow:hidden}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -335,7 +333,7 @@ export default {
     `;root.appendChild(style);
     function make(tag,text,parent,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;if(parent)parent.appendChild(e);return e;}
     const lab=make('div',null,root,'lab');
-    make('div',tx('Geef het een noot. Voer het audio. Of laat het zichzelf verzinnen.'),lab,'hint');
+    
     const bar=make('div',null,lab,'row');presetSelect=make('select',null,bar);presetSelect.setAttribute('aria-label',tx('Een universum kiezen'));const blank=make('option',tx('Kies een universum…'),presetSelect);blank.value='';
     PRESETS.forEach((p,i)=>{const o=make('option',p[0],presetSelect);o.value=String(i);});presetSelect.onchange=()=>{if(presetSelect.value!=='')api.setState(preset(Number(presetSelect.value)));};
     function select(parent,key,title,options){const wrap=make('label',null,parent,'row');make('span',title,wrap);const input=make('select',null,wrap);options.forEach(([value,name])=>{const o=make('option',name,input);o.value=String(value);});input.onchange=()=>{state[key]=['mode','division'].includes(key)?Number(input.value):input.value;apply();syncUI();};controls.push({el:input,key});return input;}
@@ -374,14 +372,14 @@ export default {
      const format=v=>key==='root'?Math.round(v):key==='rate'?v.toFixed(2)+' Hz':['attack','release'].includes(key)?v.toFixed(2)+' s':Math.round(v*100)+'%';
      output.textContent=format(def);
      input.oninput=()=>{state[key]=Number(input.value);apply();syncUI();};controls.push({el:input,key,output,format});}
-    make('div',tx('Klavier: externe noten houden hun toonhoogte. Kies Bespeelbaar om het interne organisme uit te zetten.'),lab,'hint');
+    
     const keyboard=make('div',null,lab,'keyboard'),names=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B','C'];
     names.forEach((name,index)=>{const key=make('button',name,keyboard,'key'+([1,3,6,8,10].includes(index)?' black':''));key.type='button';key.setAttribute('aria-label',tx('Speel {0}',name));
      let held=null;const release=()=>{if(held!==null){send({type:'off',note:held,time:ctx.currentTime});uiHeld.delete(held);held=null;}};
      key.onpointerdown=e=>{e.preventDefault();e.stopPropagation();key.setPointerCapture(e.pointerId);held=state.root+index;uiHeld.add(held);noteOn(held);};key.onblur=release;key.onpointerup=release;key.onpointercancel=release;key.onlostpointercapture=release;
      key.onkeydown=e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();held=state.root+index;uiHeld.add(held);noteOn(held);}};key.onkeyup=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();release();}};
     });
-    make('div',tx('Eten = audio-ingang. Geheugen bevriest alleen deze sessie; de inhoud wordt niet in tunes opgeslagen.'),lab,'hint');status=make('div',null,lab,'status');root.addEventListener('pointerdown',e=>e.stopPropagation());syncUI();
+    status=make('div',null,lab,'status');root.addEventListener('pointerdown',e=>e.stopPropagation());syncUI();
    },
    unmount,
    getState(){return {...state};},setState(s){state=normalize(s);apply();syncUI();},

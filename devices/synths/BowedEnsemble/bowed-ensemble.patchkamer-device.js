@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Uitleg naar about (menu Over Bowed Ensemble); de UI toont geen uitlegtekst meer.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — Versterking (+8 dB) achter de compressor: het apparaat en de tunes waren erg zacht (piek rond −14 tot −7 dBFS bij vierstemmige akkoorden). De uitgangsbegrenzer blijft de pieken afronden.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Bowed Ensemble (nieuwe id nl.patchkamer.bowedensemble, eigen map; voorheen Strijk Ensemble, nl.patchkamer.strijk);
@@ -28,12 +29,12 @@ const EN = {
   'BOWED ENSEMBLE · polyfoon strijkersensemble': 'BOWED ENSEMBLE · polyphonic strings ensemble',
   'Mod actief · {0} parameters': 'Mod active · {0} parameters',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
-  '16-stemmig · keyboard/sequencer → oranje Noten · stereo uit → mixer': '16 voices · keyboard/sequencer → orange Notes · stereo out → mixer',
-  'Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Expressie maakt swells. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis. MIDI-hardware sluit je via een keyboard/MIDI-apparaat van Patchkamer aan.':
-    'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Expression makes swells. A purple Mod cable controls sound parameters; the knobs stay the base. Connect MIDI hardware through a keyboard/MIDI device in Patchkamer.'
+  '16-stemmig · keyboard/sequencer → oranje Noten · stereo uit → mixer': '16 voices · keyboard/sequencer → orange Notes · stereo out → mixer'
 };
 export default {
-  id:'nl.patchkamer.bowedensemble',name:'Bowed Ensemble',version:'1.15.0',kind:'instrument',category:'synth',
+  id:'nl.patchkamer.bowedensemble',name:'Bowed Ensemble',version:'1.16.0',kind:'instrument',
+  about:{nl:'Een polyfoon strijkersensemble: stereo, 16 vaste stemmen, per stem 4 oscillatoren plus strijkruis. Er is geen interne sequencer en er klinkt niets totdat er een noot binnenkomt.\n\nSpeelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Expressie maakt swells. Een paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis. MIDI-hardware sluit je via een keyboard/MIDI-apparaat van Patchkamer aan.\n\nSluit een keyboard of sequencer aan op de oranje Noten-ingang en de stereo-uitgang op een mixer.',en:'A polyphonic strings ensemble: stereo, 16 fixed voices, 4 oscillators plus bow noise per voice. There is no internal sequencer and nothing sounds until a note arrives.\n\nPlays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Expression makes swells. A purple Mod cable controls sound parameters; the knobs stay the base. Connect MIDI hardware through a keyboard/MIDI device in Patchkamer.\n\nConnect a keyboard or sequencer to the orange Notes input and the stereo output to a mixer.'},
+  category:'synth',
   ui:{width:720,minWidth:340},
   ports:{audioIn:[],audioOut:[{id:'out',name:'Stereo strings'}],eventIn:[{id:'notes',name:'Keyboard / notes'}],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   i18n:{nl:{ports:{out:'Stereo strijkers',notes:'Keyboard / noten'}}},
@@ -171,7 +172,7 @@ export default {
         const actions=document.createElement('div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:6px;margin-top:10px';el.appendChild(actions);
         const button=(label,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',fn);actions.appendChild(b);};
         button(tx('Proefakkoord'),()=>{const t=ctx.currentTime;[48,55,60,64].forEach(n=>noteOn(n,0.78,t,2));});button(tx('Alles uit'),()=>panic());
-        status=document.createElement('p');status.style.cssText='font-size:12px;color:var(--mod);line-height:1.5';el.appendChild(status);const tip=document.createElement('p');tip.className='note';tip.textContent=tx('Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Expressie maakt swells. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis. MIDI-hardware sluit je via een keyboard/MIDI-apparaat van Patchkamer aan.');el.appendChild(tip);paint();
+        status=document.createElement('p');status.style.cssText='font-size:12px;color:var(--mod);line-height:1.5';el.appendChild(status);paint();
       },
       unmount(){if(root)root.innerHTML='';root=null;controls={};presetSelect=null;status=null;},
       onEvent(port,event){try{if(dead||port!=='notes'||!event||!Number.isFinite(event.time))return;const t=Math.max(ctx.currentTime,event.time),type=String(event.type).toLowerCase().replace(/[_-]/g,'');

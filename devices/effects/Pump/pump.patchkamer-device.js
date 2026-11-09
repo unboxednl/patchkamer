@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Pump); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.11.1 — Luisterfilter (Detector filter) en Release op tempo (Tempo release) zijn nu ook stuurbaar (params/modulate, standaard uit in Drift); knopwaarden, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: de keuzemenu's en vinkjes (Bron, Klok, Wat duikt, Sidechain-filtersoort, Release volgt tempo, Aan).
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pump en nieuwe id nl.patchkamer.pump (voorheen Pomp · sidechain, nl.patchkamer.pomp); presets en songs uit die tijd verwijzen naar de oude id.
@@ -20,7 +21,6 @@ const NL = {
   on: 'Aan', off: 'Uit (doorlaten)', sync: 'Release volgt tempo', syncTip: 'Trigger en Klok: de duik herstelt precies voor de volgende slag',
   listen: 'Luister naar sidechain', listenTip: 'Hoor wat de detector hoort (om het luisterfilter in te stellen)', test: 'Test duik', aria: 'Verloop van de demping',
   failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
-  note: 'Tip: zet Pump op de bas of pads, kies Klok 1/4 en Release volgt tempo: direct het bekende pompen, zonder kabels. Met Alleen het laag blijft de bovenkant van een pad staan terwijl de bas wijkt voor de kick. Sidechain: trek de kick (bijvoorbeeld een losse drumuitgang) naar de ingang Sidechain.',
   g0: 'Duik', g1: 'Sidechain-detector', g2: 'Klank',
   m_sc: 'Sidechain (audio)', m_trig: 'Trigger (events)', m_klok: 'Klok (vanzelf)',
   d16: '1/16', d8: '1/8', d4: '1/4 (elke tel)', d2: '1/2', d1: 'hele maat',
@@ -35,7 +35,6 @@ const EN = {
   on: 'On', off: 'Off (pass through)', sync: 'Release follows tempo', syncTip: 'Trigger and Clock: the duck recovers right before the next beat',
   listen: 'Listen to sidechain', listenTip: 'Hear what the detector hears (to set the detector filter)', test: 'Test duck', aria: 'Gain reduction over time',
   failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
-  note: 'Tip: put Pump on the bass or pads, choose Clock 1/4 and Release follows tempo: the familiar pumping at once, without cables. With Low end only, the top of a pad stays put while the bass gives way to the kick. Sidechain: patch the kick (for example a separate drum output) into the Sidechain input.',
   g0: 'Duck', g1: 'Sidechain detector', g2: 'Tone',
   m_sc: 'Sidechain (audio)', m_trig: 'Trigger (events)', m_klok: 'Clock (automatic)',
   d16: '1/16', d8: '1/8', d4: '1/4 (every beat)', d2: '1/2', d1: 'whole bar',
@@ -63,7 +62,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
-.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
+.stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
 .big{font-family:var(--mono,monospace);font-size:20px;color:var(--u-ink)}`;
 const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
@@ -153,8 +152,8 @@ class Pump extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Pump);`;
 
 export default {
-  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.12.0', kind: 'effect', category: 'effect',
-  about: { nl: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.', en: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.' },
+  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.13.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.\n\nTip: zet Pump op de bas of pads, kies Klok 1/4 en Release volgt tempo: direct het bekende pompen, zonder kabels. Met Alleen het laag blijft de bovenkant van een pad staan terwijl de bas wijkt voor de kick. Sidechain: trek de kick (bijvoorbeeld een losse drumuitgang) naar de ingang Sidechain.', en: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.\n\nTip: put Pump on the bass or pads, choose Clock 1/4 and Release follows tempo: the familiar pumping at once, without cables. With Low end only, the top of a pad stays put while the bass gives way to the kick. Sidechain: patch the kick (for example a separate drum output) into the Sidechain input.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', trig: 'Trigger', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }, { id: 'sc', name: 'Sidechain' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'trig', name: 'Trigger' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -224,7 +223,6 @@ export default {
       cv = ukEl(app, 'canvas'); cv.setAttribute('aria-label', tx('aria'));
       statusEl = ukEl(app, 'p', 'stt');
       ui.k = ukSliders(app, spec, [tx('g0'), tx('g1'), tx('g2')], (id, v) => { state[id] = v; eigen(); apply(); }, defaults, tx('dbl'));
-      ukEl(app, 'p', 'note', tx('note'));
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     function eigen() { if (state.preset !== 'Custom') { state.preset = 'Custom'; if (ui.preset) ui.preset.value = 'Custom'; } }
     function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }

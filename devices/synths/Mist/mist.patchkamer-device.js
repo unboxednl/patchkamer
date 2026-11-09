@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Mist); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (moduleerbare ambient) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.15.1 — Gecontroleerd op stuurbaarheid: alle klankregelaars stonden al in params(). Bewust niet stuurbaar: Evolutie (het aantal maten per fase, een compositorische stap
 //   en geen klank; vandaar modExclude). Geluid en instellingen ongewijzigd.
@@ -34,14 +35,10 @@ const EN = {
   'Mineur 9': 'Minor 9', 'Majeur 9': 'Major 9', 'Majeur 6': 'Major 6',
   'Mod actief · {0} parameters · knoppen blijven de basis': 'Mod active · {0} parameters · knobs stay the base',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
-  'Start transport voor akkoorden + melodie. Start drone speelt een stilstaand akkoord zonder klok. Melodieniveau = balans; dichtheid = ruimte tussen tonen. Stereo uit → mixer/output.':
-    'Start the transport for chords + melody. Start drone plays a static chord without the clock. Melody level = balance; density = space between tones. Stereo out → mixer/output.',
-  'Paarse Mod-kabel → bijvoorbeeld Drift. Helderheid en tijden bewegen logaritmisch. Grondtoon stuurt drone en automatische melodie; opkomst/uitklank gelden bij de volgende noot. Evolutie blijft handmatig.':
-    'Purple Mod cable → for example Drift. Brightness and times move logarithmically. Root controls the drone and the automatic melody; attack/release apply from the next note. Evolve stays manual.',
 };
 export default {
-  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.16.0', modExclude: ['evolve'], kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
-  about: { nl: 'Moduleerbaar ambientapparaat: drone en noten met een langzaam evoluerende klank.', en: 'A modulatable ambient device: drone and notes with a slowly evolving sound.' },
+  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.17.0', modExclude: ['evolve'], kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
+  about: { nl: 'Moduleerbaar ambientapparaat: drone en noten met een langzaam evoluerende klank.\n\nStart transport voor akkoorden en melodie. Start drone speelt een stilstaand akkoord zonder klok. Melodieniveau is de balans; dichtheid is de ruimte tussen de tonen. Stuur de stereo-uitgang naar een mixer of output.\n\nEen paarse Mod-kabel, bijvoorbeeld van Drift, laat de klankregelaars bewegen; de knoppen blijven de basis. Helderheid en tijden bewegen logaritmisch. Grondtoon stuurt de drone en de automatische melodie; opkomst en uitklank gelden bij de volgende noot. Evolutie blijft handmatig.', en: 'A modulatable ambient device: drone and notes with a slowly evolving sound.\n\nStart the transport for chords and melody. Start drone plays a static chord without the clock. Melody level is the balance; density is the space between the tones. Send the stereo output to a mixer or output.\n\nA purple Mod cable, for example from Drift, moves the sound controls; the knobs stay the base. Brightness and times move logarithmically. Root controls the drone and the automatic melody; attack and release apply from the next note. Evolve stays manual.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'notes', name: 'Notes / CC' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo uit', notes: 'Noten / CC' } } },
   create(ctx, host) {
@@ -200,9 +197,8 @@ export default {
         const knobs=document.createElement('div');knobs.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:8px;align-items:start';el.appendChild(knobs);
         for(const k in ranges) controls[k]=host.ui.knob(knobs,labels[k],ranges[k],state[k],v=> k==='root'?['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'][Math.round(v)%12]+(Math.floor(v/12)-1):k==='detune'?v.toFixed(1)+' ct':k==='cutoff'?Math.round(v)+' Hz':k==='attack'||k==='release'?v.toFixed(1)+' s':k==='evolve'?Math.round(v).toString():Math.round(v*100)+'%',v=>change(k,v),{default:defaults[k], id:k,group:GRP[k] });
         button=document.createElement('button'); button.type='button'; button.addEventListener('click',()=>{manual=!manual; gate(ctx.currentTime); paint();}); el.appendChild(button);
-        const tip=document.createElement('p'); tip.className='note'; tip.textContent=tx('Start transport voor akkoorden + melodie. Start drone speelt een stilstaand akkoord zonder klok. Melodieniveau = balans; dichtheid = ruimte tussen tonen. Stereo uit → mixer/output.'); el.appendChild(tip);
         modStatus=document.createElement('p');modStatus.style.cssText='font-size:12px;color:var(--mod);line-height:1.5';el.appendChild(modStatus);
-        const modTip=document.createElement('p');modTip.className='note';modTip.textContent=tx('Paarse Mod-kabel → bijvoorbeeld Drift. Helderheid en tijden bewegen logaritmisch. Grondtoon stuurt drone en automatische melodie; opkomst/uitklank gelden bij de volgende noot. Evolutie blijft handmatig.');el.appendChild(modTip);paint();showModulation();
+        paint();showModulation();
       },
       unmount(){ controls={}; selects={}; button=null; modStatus=null; if(rootEl)rootEl.innerHTML=''; rootEl=null; },
       onStep(info){try{

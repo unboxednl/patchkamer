@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.25.0 — Uitleg naar about (menu Over Stem Splitter); de UI toont geen uitlegtekst meer.
 // 1.24.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.23.3 — Knop 'Bas → Bass Finder': de basstem gaat als wav naar de Bass Finder, net als de drums naar de Drum Listener.
 // 1.23.1 — De host zet een wav, flac of ogg zelf om naar mp3 als de dienst alleen mp3/m4a aanneemt (voortgang 'mp3'); de kaart zegt dat; teksten voor de nieuwe foutcodes (mp3big, mp3, indecode).
@@ -35,7 +36,6 @@ const TXT = {
   nl: {
     stemNames: STEM_NL, all: 'Alle stems', in: 'In',
     warn: 'Let op: het geluid gaat naar een dienst op internet, dat kost geld per nummer, en je moet de rechten hebben op de muziek (auteursrecht). Er gaat niets weg tot je op Splitsen klikt.',
-    hint: 'Kies een nummer, een bestand of een opname uit de ingang, kies een dienst, en klik op Splitsen. De stems spelen met de klok mee, elk op een eigen uitgang.',
     choose: 'Bestand kiezen…', dropHint: 'of sleep een bestand op deze kaart', noSource: 'Nog geen nummer gekozen.', source: (n, mb) => n + ' (' + mb + ' MB)',
     rec: 'Opnemen uit ingang', recStart: 'Opnemen', recStop: 'Stop', recLen: { s10: '10 seconden', s30: '30 seconden', s60: '1 minuut', s120: '2 minuten', s180: '3 minuten' }, recLenLabel: 'Duur', recording: (s, t) => 'Opnemen… ' + s.toFixed(1) + ' / ' + t + ' s', recName: 'opname.wav',
     service: 'Dienst', model: 'Model', modelDefault: 'standaard uit de instellingen', settings: 'Instellingen…', noKey: 'Geen sleutel ingevuld: vul die in bij de instellingen.', noServices: 'Deze versie van Patchkamer kan geen stems splitsen (te oud).',
@@ -46,7 +46,7 @@ const TXT = {
     done: n => 'Klaar: ' + n + (n === 1 ? ' stem' : ' stems') + '.', cost2: p => ' Kosten volgens de instelling: ' + p + '.',
     stems: 'Stems', level: 'Niveau', mute: 'Dempen', solo: 'Solo', bpm: 'Tempo van het nummer', bpmHint: '0 = niet aanpassen; anders loopt het nummer mee met het tempo van de studio (de toonhoogte verandert mee)', loop: 'Herhalen',
     bits: 'WAV', dlStem: 'Bewaar', dlAll: 'Alle stems bewaren (zip)', dlMidi: 'MIDI bewaren (zip)', toDrums: 'Drums → Drum Listener', toBass: 'Bas → Bass Finder', clear: 'Stems wissen',
-    playHint: 'De stems starten en stoppen met het transport van de studio.', sentDrums: 'Drums naar de Drum Listener gestuurd.', noDrums: 'Er is geen drumstem.', noDrumTarget: 'De Drum Listener is niet beschikbaar.', sentBass: 'Bas naar de Bass Finder gestuurd.', noBass: 'Er is geen basstem.', noBassTarget: 'De Bass Finder is niet beschikbaar.',
+    sentDrums: 'Drums naar de Drum Listener gestuurd.', noDrums: 'Er is geen drumstem.', noDrumTarget: 'De Drum Listener is niet beschikbaar.', sentBass: 'Bas naar de Bass Finder gestuurd.', noBass: 'Er is geen basstem.', noBassTarget: 'De Bass Finder is niet beschikbaar.',
     errOldHost: 'Deze versie van Patchkamer kan geen stems splitsen.', errDrop: 'Dit lijkt geen audiobestand.', errBig: 'Bestand te groot (hoogstens 100 MB).', errWavBig: 'Te lang voor een WAV-bestand.', errNoWorklet: 'Opnemen uit de ingang heeft AudioWorklet nodig, en dat is hier niet beschikbaar.', errNoAudio: 'Geen geluid ontvangen. Verbind een bron met de ingang.', errNoSource: 'Kies eerst een nummer.',
     err: {
       declined: 'Geannuleerd: er is niets verstuurd.', aborted: 'Geannuleerd.', timeout: 'De dienst deed er te lang over (meer dan 20 minuten). Probeer het later opnieuw.',
@@ -60,7 +60,6 @@ const TXT = {
   en: {
     stemNames: STEM_EN, all: 'All stems', in: 'In',
     warn: 'Note: the sound goes to an online service, that costs money per track, and you need the rights to the music (copyright). Nothing leaves your computer until you click Split.',
-    hint: 'Pick a track, a file or a recording from the input, choose a service, and click Split. The stems play along with the clock, each on its own output.',
     choose: 'Choose file…', dropHint: 'or drop a file on this card', noSource: 'No track chosen yet.', source: (n, mb) => n + ' (' + mb + ' MB)',
     rec: 'Record from input', recStart: 'Record', recStop: 'Stop', recLen: { s10: '10 seconds', s30: '30 seconds', s60: '1 minute', s120: '2 minutes', s180: '3 minutes' }, recLenLabel: 'Length', recording: (s, t) => 'Recording… ' + s.toFixed(1) + ' / ' + t + ' s', recName: 'recording.wav',
     service: 'Service', model: 'Model', modelDefault: 'default from the settings', settings: 'Settings…', noKey: 'No key entered: enter it in the settings.', noServices: 'This version of Patchkamer cannot split stems (too old).',
@@ -71,7 +70,7 @@ const TXT = {
     done: n => 'Done: ' + n + (n === 1 ? ' stem' : ' stems') + '.', cost2: p => ' Cost according to the setting: ' + p + '.',
     stems: 'Stems', level: 'Level', mute: 'Mute', solo: 'Solo', bpm: 'Tempo of the track', bpmHint: '0 = leave as is; otherwise the track follows the studio tempo (the pitch changes with it)', loop: 'Repeat',
     bits: 'WAV', dlStem: 'Save', dlAll: 'Save all stems (zip)', dlMidi: 'Save MIDI (zip)', toDrums: 'Drums → Drum Listener', toBass: 'Bass → Bass Finder', clear: 'Clear stems',
-    playHint: 'The stems start and stop with the studio transport.', sentDrums: 'Drums sent to the Drum Listener.', noDrums: 'There is no drum stem.', noDrumTarget: 'The Drum Listener is not available.', sentBass: 'Bass sent to the Bass Finder.', noBass: 'There is no bass stem.', noBassTarget: 'The Bass Finder is not available.',
+    sentDrums: 'Drums sent to the Drum Listener.', noDrums: 'There is no drum stem.', noDrumTarget: 'The Drum Listener is not available.', sentBass: 'Bass sent to the Bass Finder.', noBass: 'There is no bass stem.', noBassTarget: 'The Bass Finder is not available.',
     errOldHost: 'This version of Patchkamer cannot split stems.', errDrop: 'This does not look like an audio file.', errBig: 'File too large (100 MB at most).', errWavBig: 'Too long for a WAV file.', errNoWorklet: 'Recording from the input needs AudioWorklet, which is not available here.', errNoAudio: 'No sound received. Connect a source to the input.', errNoSource: 'Choose a track first.',
     err: {
       declined: 'Cancelled: nothing was sent.', aborted: 'Cancelled.', timeout: 'The service took too long (more than 20 minutes). Try again later.',
@@ -137,7 +136,7 @@ const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,mo
   '.stems{display:grid;gap:4px}.stem{display:grid;grid-template-columns:minmax(80px,140px) auto auto auto auto;gap:8px;align-items:center}.stem b{font-weight:600}';
 
 export default {
-  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.24.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
+  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', about: { nl: 'Kies een nummer, een bestand of een opname uit de ingang, kies een dienst, en klik op Splitsen. De stems spelen met de klok mee, elk op een eigen uitgang.\n\nDe stems starten en stoppen met het transport van de studio.', en: 'Pick a track, a file or a recording from the input, choose a service, and click Split. The stems play along with the clock, each on its own output.\n\nThe stems start and stop with the studio transport.' }, version: '1.25.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
   i18n: { nl: { ports: { in: 'In', vocals: 'Zang', drums: 'Drums', bass: 'Bas', other: 'Rest', all: 'Alle stems' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'vocals', name: 'Vocals' }, { id: 'drums', name: 'Drums' }, { id: 'bass', name: 'Bass' }, { id: 'other', name: 'Other' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [{ id: 'all', name: 'All stems' }] },
   create(ctx, host) {
@@ -325,7 +324,7 @@ export default {
     Object.assign(self, {
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' }); el('style', CSS, sh);
-        const app = el('div', null, sh, 'app'); el('div', T.warn, app, 'warn'); el('div', T.hint, app, 'hint');
+        const app = el('div', null, sh, 'app'); el('div', T.warn, app, 'warn');
         const r1 = el('div', null, app, 'row');
         const file = el('input', null, r1); file.type = 'file'; file.accept = 'audio/*,.mp3,.m4a,.wav,.flac,.ogg'; file.style.display = 'none'; file.setAttribute('aria-label', T.choose);
         const choose = el('button', T.choose, r1); choose.type = 'button'; choose.onclick = () => file.click(); file.onchange = () => { if (file.files && file.files.length) takeFile(file.files[0]); file.value = ''; };
@@ -351,7 +350,6 @@ export default {
         const bpmL = el('label', T.bpm, r6); const bpm = el('input', null, bpmL); bpm.type = 'number'; bpm.min = '0'; bpm.max = '300'; bpm.step = '0.1'; bpm.title = T.bpmHint; bpm.setAttribute('aria-label', T.bpm);
         bpm.onchange = () => { const v = parseFloat(bpm.value); state.bpm = Number.isFinite(v) && v >= 20 ? cl(v, 20, 300) : 0; bpm.value = String(state.bpm); };
         const lpL = el('label', null, r6); lpL.className = 'inl'; const loop = el('input', null, lpL); loop.type = 'checkbox'; el('span', T.loop, lpL); loop.onchange = () => { state.loop = loop.checked; };
-        el('div', T.playHint, stemsBox, 'hint');
         // slepen van een bestand op de kaart; de host laat een afgehandelde drop met rust
         const hasFiles = e => e.dataTransfer && Array.prototype.includes.call(e.dataTransfer.types || [], 'Files');
         app.addEventListener('dragover', e => { if (hasFiles(e)) { e.preventDefault(); app.classList.add('drop'); } });

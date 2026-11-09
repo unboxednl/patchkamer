@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Uitleg naar about (menu Over De-esser); de UI toont geen uitlegtekst meer.
 // 1.1.1 — De reductiemeter (en de kromme in het scherm) toont de werkelijke reductie: bij Uit of mix onder 100% meldde hij nog de volle, niet toegepaste reductie. Het geluid is ongewijzigd.
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: de-esser met sibilantendetectie in een instelbare band (3 tot 10 kHz, bandbreedte in octaven), drempel, ratio, maximale reductie,
@@ -16,7 +17,6 @@
 const NL = {
   mode: 'Modus', split: 'Split-band (alleen de band)', wide: 'Wideband (alles)', on: 'Aan', off: 'Uit (doorlaten)', listen: 'Luister naar detectieband', listenTip: 'Hoor de band die de detector hoort, om de frequentie en bandbreedte in te stellen',
   aria: 'Frequentieverloop van de de-esser', gr: 'Reductie', lvl: 'Band', failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
-  note: 'Tip: zet Luister naar detectieband aan, zoek de frequentie waar de s het scherpst klinkt en zet de band daar. Verlaag dan de drempel tot de reductiemeter alleen bij s-klanken beweegt (2 tot 6 dB). Split-band laat de rest van de stem ongemoeid; Wideband klinkt meer als een gewone compressor op de s. Voor mannen ligt de s meestal rond 4 tot 7 kHz, voor vrouwen rond 6 tot 9 kHz.',
   g0: 'Detectie', g1: 'Reductie',
   freq: 'Frequentie', freq_t: 'middenfrequentie van de detectieband (en van de demping in split-band)', bw: 'Bandbreedte', bw_t: 'breedte van de band in octaven: klein = smal en gericht, groot = breed',
   thr: 'Drempel', thr_t: 'niveau van de band waarboven gedempt wordt', ratio: 'Ratio', ratio_t: 'hoeveel dB boven de drempel per dB uit; 100 = oneindig', range: 'Max. reductie', range_t: 'de grootste demping in dB',
@@ -25,7 +25,6 @@ const NL = {
 const EN = {
   mode: 'Mode', split: 'Split-band (band only)', wide: 'Wideband (everything)', on: 'On', off: 'Off (pass through)', listen: 'Listen to detection band', listenTip: 'Hear the band the detector hears, to set the frequency and bandwidth',
   aria: 'Frequency response of the de-esser', gr: 'Reduction', lvl: 'Band', failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
-  note: 'Tip: turn on Listen to detection band, find the frequency where the s sounds sharpest and put the band there. Then lower the threshold until the reduction meter only moves on s sounds (2 to 6 dB). Split-band leaves the rest of the voice alone; Wideband sounds more like an ordinary compressor on the s. For male voices the s is usually around 4 to 7 kHz, for female voices around 6 to 9 kHz.',
   g0: 'Detection', g1: 'Reduction',
   freq: 'Frequency', freq_t: 'centre frequency of the detection band (and of the reduction in split-band)', bw: 'Bandwidth', bw_t: 'width of the band in octaves: small = narrow and focused, large = wide',
   thr: 'Threshold', thr_t: 'level of the band above which it reduces', ratio: 'Ratio', ratio_t: 'dB in per dB out above the threshold; 100 = infinite', range: 'Max reduction', range_t: 'the largest reduction in dB',
@@ -51,7 +50,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
-.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
+.stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
 .big{font-family:var(--mono,monospace);font-size:22px;color:var(--u-ink)} .small{font-size:11px;color:var(--muted,#97a1ad);line-height:1.4}
 .lamp{display:inline-block;min-width:64px;text-align:center;padding:3px 8px;border-radius:5px;border:1px solid var(--line,#39424e);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#97a1ad)} .lamp.lit{background:var(--go,#7ee0a1);border-color:var(--go,#7ee0a1);color:var(--well,#14100a)}`;
 const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -151,8 +150,8 @@ class DeEss extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', DeEss);`;
 
 export default {
-  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.1.1', kind: 'effect', category: 'effect',
-  about: { nl: 'Dempt scherpe s-klanken in een stem. Een detectieband (3 tot 10 kHz) bepaalt wanneer; in split-band dempt alleen die band, in wideband het hele signaal.', en: 'Tames harsh s sounds in a voice. A detection band (3 to 10 kHz) decides when; in split-band only that band is reduced, in wideband the whole signal.' },
+  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.2.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Dempt scherpe s-klanken in een stem. Een detectieband (3 tot 10 kHz) bepaalt wanneer; in split-band dempt alleen die band, in wideband het hele signaal.\n\nTip: zet Luister naar detectieband aan, zoek de frequentie waar de s het scherpst klinkt en zet de band daar. Verlaag dan de drempel tot de reductiemeter alleen bij s-klanken beweegt (2 tot 6 dB). Split-band laat de rest van de stem ongemoeid; Wideband klinkt meer als een gewone compressor op de s. Voor mannen ligt de s meestal rond 4 tot 7 kHz, voor vrouwen rond 6 tot 9 kHz.', en: 'Tames harsh s sounds in a voice. A detection band (3 to 10 kHz) decides when; in split-band only that band is reduced, in wideband the whole signal.\n\nTip: turn on Listen to detection band, find the frequency where the s sounds sharpest and put the band there. Then lower the threshold until the reduction meter only moves on s sounds (2 to 6 dB). Split-band leaves the rest of the voice alone; Wideband sounds more like an ordinary compressor on the s. For male voices the s is usually around 4 to 7 kHz, for female voices around 6 to 9 kHz.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -203,7 +202,6 @@ export default {
       ui.lvl = ukEl(side, 'div', 'small', '');
       statusEl = ukEl(app, 'p', 'stt');
       ui.k = ukSliders(app, spec, [{ key: 'detection', label: tx('g0') }, { key: 'reduction', label: tx('g1') }], (id, v) => { state[id] = v; apply(); }, defaults, tx('dbl'));
-      ukEl(app, 'p', 'note', tx('note'));
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }
     function paint() { if (!root) return; ui.mode.value = state.mode; ui.on.textContent = state.on ? tx('on') : tx('off'); ui.on.classList.toggle('on', state.on); ui.listen.classList.toggle('on', listen); for (const [id, k] of Object.entries(ui.k)) k.set(state[id]); }

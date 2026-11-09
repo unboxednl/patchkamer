@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Patchbay Synth); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.2 — Alle continue regelaars zijn stuurbaar: de fijnstemmingen, alle FM- en PWM-schuiven van de VCO's, Filter fijn, alle filter- en VCA-ingangen en CV-schuiven, S/H-niveau, Volger- en
 //   Voorversterkerniveau, de inverters, de mixer, het volume links/rechts en Portamento, Toonafstand en Stemming van het klavier stonden niet in params(). Nu wel (38 erbij, alle standaard uit).
 //   De knopstand en de bewaarde instellingen blijven je basis; klank en instellingen zonder modulatie zijn ongewijzigd. Bewust weggelaten: de schakelaars en keuzes (VCO-bereik, Ringmod koppeling,
@@ -63,12 +64,9 @@ const EN = {
   'midden': 'center', 'wit': 'white', 'wit-roze': 'white-pink', 'roze': 'pink', 'roze-LF': 'pink-LF',
   // knoppen en teksten
   'Klank': 'Sound', 'Alle kabels los': 'Unplug all cables', 'klavier': 'keyboard', 'toets {0}': 'key {0}',
-  'uitgang': 'output', 'ingang': 'input',
   'uitgang {0}': 'output {0}', 'uitgang {0} — sleep naar een ingang': 'output {0} — drag to an input',
   'ingang {0}': 'input {0}', 'ingang {0} (voorbedraad: {1})': 'input {0} (normalled: {1})',
   '{0} → {1} ({2}) — klik om los te halen': '{0} → {1} ({2}) — click to unplug',
-  'Sleep van een {0} naar een {1}. Een kabel vervangt de voorbedrade bron (←). Klik een kabel om hem los te halen; sleep vanaf een bezette ingang om hem te verleggen.':
-    'Drag from an {0} to an {1}. A cable replaces the normalled source (←). Click a cable to unplug it; drag from an occupied input to move the cable.',
   'AudioWorklet laden…': 'Loading AudioWorklet…', 'AudioWorklet niet beschikbaar.': 'AudioWorklet not available.',
   'AudioWorklet niet beschikbaar ({0}): deze synth maakt hier geen geluid.': 'AudioWorklet not available ({0}): this synth makes no sound here.',
 };
@@ -361,14 +359,14 @@ svg.cords path.tmp{stroke-dasharray:6 5;pointer-events:none}
 .keys button.b{position:absolute;top:0;height:46px;background:#22252b;border-color:#000;z-index:2;color:#aaa}
 .keys button.down{background:var(--k-acc)!important}
 .foot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--k-muted);font-size:10px}
-.foot .co{color:var(--k-out);font-weight:700} .foot .ci{color:var(--k-in);font-weight:700}
 .note{color:var(--k-muted);font-size:10px}
 `;
 
 export default {
   id: 'nl.patchkamer.patchbaysynth',
   name: 'Patchbay Synth',
-  version: '1.11.2',
+  version: '1.12.0',
+  about: { nl: 'Modulaire synth met een patchpaneel: sleep een kabel van een uitgang naar een ingang. Een kabel vervangt de voorbedrade bron (←). Klik een kabel om hem los te halen; sleep vanaf een bezette ingang om hem te verleggen.', en: 'A modular-style synth with a patchbay: drag a cable from an output to an input. A cable replaces the normalled source (←). Click a cable to unplug it; drag from an occupied input to move the cable.' },
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1680, minWidth: 1200 },
@@ -519,9 +517,6 @@ export default {
         if (bl) { const wi = whites.indexOf(nn - 1); b.className = 'b'; b.style.left = ((wi + 0.68) * ww) + '%'; b.style.width = (ww * 0.64) + '%'; } else if (nn % 12 === 0) b.textContent = 'C' + (nn / 12 - 1);
         b.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); press(b, nn); }); b.addEventListener('pointerup', () => release(nn)); b.addEventListener('pointerleave', () => release(nn)); keys.appendChild(b); }
       const foot = document.createElement('div'); foot.className = 'foot';
-      { const help = document.createElement('span'); tx('Sleep van een {0} naar een {1}. Een kabel vervangt de voorbedrade bron (←). Klik een kabel om hem los te halen; sleep vanaf een bezette ingang om hem te verleggen.').split(/(\{\d\})/).forEach(part => {
-          if (part === '{0}' || part === '{1}') { const b = document.createElement('b'); b.className = part === '{0}' ? 'co' : 'ci'; b.textContent = tx(part === '{0}' ? 'uitgang' : 'ingang'); help.appendChild(b); } else if (part) help.appendChild(document.createTextNode(part)); });
-        foot.appendChild(help); }
       ui.note = document.createElement('span'); ui.note.className = 'note'; ui.note.textContent = wstate === 'fout' ? tx('AudioWorklet niet beschikbaar.') : wstate === 'laden' ? tx('AudioWorklet laden…') : ''; foot.appendChild(ui.note); kk.appendChild(foot);
       refreshAll(); if (typeof ResizeObserver !== 'undefined') { ui.ro = new ResizeObserver(() => drawCords()); ui.ro.observe(panel); }
     }

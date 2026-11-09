@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Four-Operator FM); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.11.0 — Nieuw als Four-Operator FM (nieuwe id nl.patchkamer.fouroperatorfm, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Four-Operator FM
@@ -124,16 +125,13 @@ registerProcessor('${WNAME}', class extends AudioWorkletProcessor {
 
 // Tekst: Nederlandse bron, Engels via het woordenboek (Engelse muziekvaktermen blijven Engels)
 const EN = {
-  'Vier operators, eigen envelopes, acht algoritmen en achtstemmige polyfonie.': 'Four operators, their own envelopes, eight algorithms and eight-voice polyphony.',
   'Klankbeeld': 'Sound', 'Algoritme': 'Algorithm', 'Algoritme {0}': 'Algorithm {0}',
   'Testnoot MIDI': 'Test note MIDI', 'Speel noot': 'Play note', 'Houd noot': 'Hold note', 'Test akkoord': 'Test chord', 'Alles uit': 'All off',
-  'FM-algoritme': 'FM algorithm', 'Onderste rij = hoorbare carriers · OP 4 heeft feedback': 'Bottom row = audible carriers · OP 4 has feedback',
+  'FM-algoritme': 'FM algorithm',
   'Fijnafstemming': 'Fine tune', 'Transpositie': 'Transpose', 'Uitgang': 'Output', 'Klank': 'Sound',
   'Golfvorm van de uitgang': 'Output waveform',
   'Audiomotor wordt voorbereid…': 'Preparing the audio engine…', 'Deze omgeving biedt geen audioprocessor.': 'This environment has no audio processor.',
   'Audiomotor gereed · keyboard en testknoppen beschikbaar': 'Audio engine ready · keyboard and test buttons available',
-  'OP 4 heeft feedback. De onderste rij van het schema is hoorbaar; de andere operators kleuren die carriers. Envelopes werken met tijden en een sustainniveau.': 'OP 4 has feedback. The bottom row of the diagram is what you hear; the other operators colour those carriers. Envelopes use times and a sustain level.',
-  'Eigen klanksynthese. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.': 'Own sound synthesis. The Mod input changes the sound without overwriting the base values.',
 };
 
 // Parameters: [naam, min, max, rol, schaal, eenheid, stap]
@@ -177,10 +175,11 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.fouroperatorfm',
   name: 'Four-Operator FM',
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1000, minWidth: 380 },
+  about: { nl: 'Een FM-synth met vier operators, eigen envelopes, acht algoritmen en achtstemmige polyfonie.\n\nOP 4 heeft feedback. De onderste rij van het schema is hoorbaar; de andere operators kleuren die carriers. Envelopes werken met tijden en een sustainniveau.\n\nEigen klanksynthese. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.', en: 'An FM synth with four operators, their own envelopes, eight algorithms and eight-voice polyphony.\n\nOP 4 has feedback. The bottom row of the diagram is audible; the other operators colour those carriers. Envelopes work with times and a sustain level.\n\nOwn sound synthesis. The Mod input changes the sound without overwriting the base values.' },
   i18n: { en: { ports: { out: 'Stereo', notes: 'Keyboard / notes' } } },
   ports: {
     audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }],
@@ -294,7 +293,6 @@ export default {
         g.strokeStyle = car ? P.audio : P.muted; g.lineWidth = car ? 2.5 : 1.5; g.strokeRect(p.x - 24, p.y - 13, 48, 26);
         g.fillStyle = P.wellFg; g.fillText('OP ' + (i + 1), p.x, p.y + 4);
       }
-      g.textAlign = 'left'; g.fillStyle = P.wellFg; g.fillText(tx('Onderste rij = hoorbare carriers · OP 4 heeft feedback'), 10, 124);
     }
     function drawScope() {
       if (dead || !scope || !scopeG) return;
@@ -348,7 +346,6 @@ export default {
         const wrap = add(el, 'div'), shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
         add(shadow, 'style', CSS);
         panel = add(shadow, 'div'); panel.className = 'app'; ui = {};
-        add(panel, 'p', tx('Vier operators, eigen envelopes, acht algoritmen en achtstemmige polyfonie.'));
         const top = add(panel, 'div'); top.className = 'row';
         ui.preset = select(top, tx('Klankbeeld'), Object.keys(PRESETS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...PRESETS[v], preset: v, testNote: state.testNote, operator: state.operator }));
         ui.algorithm = select(top, tx('Algoritme'), OPTIONS.algorithm.map(n => [n, tx('Algoritme {0}', n)]), state.algorithm, v => { state.algorithm = Number(v); apply(); if (graphDraw) graphDraw(); });
@@ -367,8 +364,6 @@ export default {
         const globals = add(panel, 'div'); globals.className = 'grid'; for (const g of GLOB) control(globals, g[0]);
         scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); scope.style.height = '64px'; scopeG = scope.getContext ? scope.getContext('2d') : null;
         engineText = add(panel, 'p'); tellEngine();
-        add(panel, 'p', tx('OP 4 heeft feedback. De onderste rij van het schema is hoorbaar; de andere operators kleuren die carriers. Envelopes werken met tijden en een sustainniveau.'));
-        add(panel, 'p', tx('Eigen klanksynthese. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.'));
         palC = null; layout();
         if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect && es[0].contentRect.width; if (w) { const n = Math.max(260, Math.min(1200, w)); if (n !== cw) { cw = n; layout(); } } }); ro.observe(scope); }
         if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);

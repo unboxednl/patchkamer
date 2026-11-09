@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Patch Mono); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Alle continue regelaars zijn stuurbaar: de vier routehoeveelheden (Route 1 t/m 4, -1 tot +1) stonden niet in params(). Nu wel (standaard uit); een modulator verschuift de
 //   hoeveelheid van de route, de knop en de bewaarde routes blijven je basis. Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Testnoot (werkstand) en de keuzelijsten en schakelaars.
 // 1.11.0 — Nieuw als Patch Mono (nieuwe id nl.patchkamer.patchmono, eigen map), bijgewerkt naar Patchkamer contract v1.11:
@@ -215,13 +216,9 @@ const EN = {
   'Testnoot MIDI': 'Test note (MIDI)', 'Speel noot': 'Play note', 'Houd noot': 'Hold note', 'Alles uit': 'All off',
   'Route {0} hoeveelheid': 'Route {0} amount', 'Vier interne patchroutes': 'Four internal patch routes', 'Bron': 'Source', 'Doel': 'Target', 'Hoeveelheid': 'Amount',
   'Sample & hold': 'Sample & hold', 'Externe envelope': 'External envelope',
-  'Monofone synth met één of twee oscillatoren, resonante filters en vier interne patchroutes.': 'Monophonic synth with one or two oscillators, resonant filters and four internal patch routes.',
   'Audiomotor wordt voorbereid…': 'Audio engine loading…', 'Deze omgeving biedt geen audioprocessor.': 'This environment offers no audio processor.',
   'Audiomotor gereed · keyboard en testknoppen beschikbaar': 'Audio engine ready · keyboard and test buttons available',
   'Golfvorm van de uitgang': 'Output waveform',
-  'Vier routes verbinden LFO, filter-EG, sample & hold of de externe envelope met pitch, cutoff of pulsbreedte. Extern geluid gaat ook door de klankfilters; zet Extern geluid open en gebruik Houd noot als gate. Dit is een interne matrix, geen elektrische CV/Hz-per-volt-aansluiting.':
-    'Four routes connect the LFO, filter EG, sample & hold or the external envelope to pitch, cutoff or pulse width. External audio also runs through the sound filters: open External audio and use Hold note as the gate. This is an internal matrix, not an electrical CV/Hz-per-volt connection.',
-  'De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.': 'The purple Mod input changes the sound without overwriting the base values.',
 };
 
 // bereik, vorm en lane van elke regelaar; de volgorde is de volgorde op de kaart. min/max/scale/step: zie contract §13.
@@ -313,11 +310,12 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.patchmono',
   name: 'Patch Mono',
-  version: '1.11.1',
+  version: '1.12.0',
   modExclude: ['testNote'],   // werkstand, geen klank
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
+  about: { nl: 'Monofone synth met één of twee oscillatoren, resonante filters en vier interne patchroutes.\n\nVier routes verbinden LFO, filter-EG, sample & hold of de externe envelope met pitch, cutoff of pulsbreedte. Extern geluid gaat ook door de klankfilters: zet Extern geluid open en gebruik Houd noot als gate. Dit is een interne matrix, geen elektrische CV/Hz-per-volt-aansluiting.\n\nDe paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.', en: 'Monophonic synth with one or two oscillators, resonant filters and four internal patch routes.\n\nFour routes connect the LFO, filter EG, sample & hold or the external envelope to pitch, cutoff or pulse width. External audio also runs through the sound filters: open External audio and use Hold note as gate. This is an internal matrix, not an electrical CV/Hz-per-volt connection.\n\nThe purple Mod input changes the sound without overwriting the base values.' },
   ports: {
     audioIn: [{ id: 'in', name: 'External audio / envelope' }],
     audioOut: [{ id: 'out', name: 'Stereo' }],
@@ -513,7 +511,6 @@ export default {
       const wrap = add(el, 'div'), shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
       add(shadow, 'style', CSS);
       panel = add(shadow, 'div'); panel.className = 'app';
-      add(panel, 'p', tx('Monofone synth met één of twee oscillatoren, resonante filters en vier interne patchroutes.'));
       const top = row(panel);
       select(top, 'Klankbeeld', Object.keys(SOUNDS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...SOUNDS[v], preset: v }));
       for (const id of ['variant', 'wave', 'wave2', 'priority', 'lfoWave']) {
@@ -536,8 +533,6 @@ export default {
       if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) cw = w; }); ro.observe(scope); }
       if (typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
       engineText = add(panel, 'p'); tellEngine();
-      add(panel, 'p', tx('Vier routes verbinden LFO, filter-EG, sample & hold of de externe envelope met pitch, cutoff of pulsbreedte. Extern geluid gaat ook door de klankfilters; zet Extern geluid open en gebruik Houd noot als gate. Dit is een interne matrix, geen elektrische CV/Hz-per-volt-aansluiting.'));
-      add(panel, 'p', tx('De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.'));
       stopDraw = frameLoop(draw, 30);
     }
     function control0(parent, ids) { const g = grid(parent); for (const id of ids) control(g, id); }

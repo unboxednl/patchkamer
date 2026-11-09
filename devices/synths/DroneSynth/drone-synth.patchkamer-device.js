@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Drone Synth); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Meer regelaars stuurbaar voor modulatoren: Interval van de tweede drone, Glide en Gate van de sequencer, en snelheid en niveau van de gebeurtenissen
 //   stonden niet in params(). Nu wel (alle standaard uit). Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Grondtoon (volgt de sequencer en noten),
 //   Galmgrootte (bouwt de galm opnieuw op) en de keuzelijsten en schakelaars.
@@ -43,10 +44,9 @@ const EN = {
   'Vervorming': 'Distortion', 'Delaytijd': 'Delay time', 'Delay feedback': 'Delay feedback', 'Galmgrootte': 'Reverb size', 'Galm mix': 'Reverb mix',
   'Filter & LFO': 'Filter & LFO', 'Ruimte & verval': 'Space & decay', 'Uitgang': 'Output', 'Bij stop': 'On stop', 'stil': 'silent', 'blijft klinken': 'keeps sounding',
   'Gebeurtenissen': 'Events', 'Type': 'Type', 'Geen': 'None', 'Sirene': 'Siren', 'Metaalslag': 'Metal hit', 'Radiostatic': 'Radio static', 'Hartslag': 'Heartbeat',
-  'Interval': 'Interval',  'Vuurt willekeurig rond het interval (±40%) zolang de klok loopt.': 'Fires at random around the interval (±40%) while the clock runs.',
+  'Interval': 'Interval',
   'Speel': 'Play', 'Grondtoon-sequencer': 'Root sequencer', 'Sets': 'Sets', 'Stijgend': 'Rising', 'Puls': 'Pulse', 'Willekeurig': 'Random', 'Kopieer maat naar alle': 'Copy bar to all', 'Leeg': 'Clear',
   '{0} stap {1}': '{0} step {1}',
-  'Eén noot per stap; een lege stap houdt de vorige toon aan. Inkomende noten (oranje ingang) zetten ook de grondtoon.': 'One note per step; an empty step holds the previous pitch. Incoming notes (orange input) also set the root.',
   'Tweede drone': 'Second drone',
 };
 
@@ -115,7 +115,6 @@ table{border-collapse:separate;border-spacing:3px;width:100%;min-width:560px;tab
 th{font-weight:400;font-size:10px;color:var(--d-muted);text-align:right;padding-right:6px;white-space:nowrap;width:44px}
 .st{width:100%;height:22px;border:1px solid var(--d-line);background:var(--d-panel-2);padding:0;cursor:pointer;border-radius:1px}
 .st.q{background:var(--step-q,#20252d)} .st.on{background:var(--d-accent);border-color:var(--d-accent)} .st.cur{box-shadow:inset 0 0 0 2px var(--d-fg)}
-.note{color:var(--d-muted);font-size:10px}
 `;
 
 // Stuurbare parameters (contract v1.3): id, naam, min, max, log, rol, bereik, aan, spoor
@@ -136,7 +135,8 @@ const LANES_EN = { drone: 'Drone', drone2: 'Second drone', ruis: 'Noise', filter
 export default {
   id: 'nl.patchkamer.drone',
   name: 'Drone Synth',
-  version: '1.11.1',
+  version: '1.12.0',
+  about: { nl: 'Een doorlopende drone- en ambientsynth: drie ontstemde oscillators plus een sub, een tweede drone-laag op een interval, gekleurde ruis, een resonant filter met trage LFO, vervorming, delay en galm. De klank klinkt zolang de klok loopt, of blijft klinken als Bij stop op blijft klinken staat.\n\nGebeurtenissen (sirene, metaalslag, radiostatic, hartslag) vuren willekeurig rond het ingestelde interval (±40%) zolang de klok loopt.\n\nDe grondtoon-sequencer speelt één noot per stap; een lege stap houdt de vorige toon aan. Inkomende noten (oranje ingang) zetten ook de grondtoon.', en: 'A continuous drone and ambient synth: three detuned oscillators plus a sub, a second drone layer at an interval, coloured noise, a resonant filter with a slow LFO, distortion, delay and reverb. The sound plays while the clock runs, or keeps sounding when On stop is set to keeps sounding.\n\nEvents (siren, metal hit, radio static, heartbeat) fire at random around the set interval (±40%) while the clock runs.\n\nThe root sequencer plays one note per step; an empty step holds the previous pitch. Incoming notes (orange input) also set the root.' },
   modExclude: ['freq', 'rsize'],   // grondtoon volgt sequencer en noten; galmgrootte bouwt de galm opnieuw op
   kind: 'instrument',
   category: 'synth',
@@ -357,7 +357,6 @@ export default {
         [m] = mod(rack, 'Gebeurtenissen');
         choose(m, 'evt', 'Type', [['none', 'Geen'], ['siren', 'Sirene'], ['impact', 'Metaalslag'], ['static', 'Radiostatic'], ['pulse', 'Hartslag']]);
         knob(m, 'erate', 'Interval', [1, 30, 0.5]); knob(m, 'elevel', 'Niveau', [0, 1, 0.01]);
-        const en = document.createElement('div'); en.className = 'note'; en.textContent = tx('Vuurt willekeurig rond het interval (±40%) zolang de klok loopt.'); m.appendChild(en);
         // Sequencer
         [m] = mod(rack, 'Speel');
         const pads = document.createElement('div'); pads.className = 'pads'; m.appendChild(pads);
@@ -380,7 +379,6 @@ export default {
          ['Kopieer maat naar alle', () => { for (let b = 0; b < MAXBARS; b++) if (b !== editBar) dgrid[b] = dgrid[editBar].slice(); }],
          ['Leeg', () => { dgrid = Array.from({ length: MAXBARS }, () => new Array(STEPS).fill(-1)); }]]
           .forEach(([n, f]) => { const b = document.createElement('button'); b.textContent = tx(n); b.onclick = () => { f(); paintSeq(); }; pr.appendChild(b); });
-        const sn = document.createElement('div'); sn.className = 'note'; sn.textContent = tx('Eén noot per stap; een lege stap houdt de vorige toon aan. Inkomende noten (oranje ingang) zetten ook de grondtoon.'); m.appendChild(sn);
         refreshAll(); paintSeq();
       },
       unmount() { root = null; },

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Guitar); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (akoestisch, elektrisch en bas) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Guitar (contract v1.20). Eigen motor als AudioWorklet (GuitarEngine): 6 snaren, elk een digitale golfgeleider (uitgebreid Karplus-Strong).
 //   - elke snaar: vertragingslijn met fractionele (kubische) uitlezing, demping die met aanslag en helderheid meegaat, stijfheid (allpass-dispersie),
@@ -29,9 +30,6 @@ const EN = {
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
   'AudioWorklet niet beschikbaar: Guitar kan hier geen geluid maken.': 'AudioWorklet not available: Guitar cannot make sound here.',
-  '6 snaren, één stem per snaar · keyboard/sequencer → oranje Noten · stereo uit → mixer': '6 strings, one voice per string · keyboard/sequencer → orange Notes · stereo out → mixer',
-  'Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Elke snaar klinkt één noot tegelijk: akkoorden verdelen zich over snaren (Strum-spreiding spreidt ze in de tijd), en een noot die een lopende noot op dezelfde snaar overlapt wordt een hammer-on of pull-off, dus laat sequencer-noten overlappen (dur langer dan de stap) voor legato. Buiging: knop Buiging, paarse Mod-kabel of cc bend/pitchbend (0,5 = midden). Type kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.':
-    'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Each string sounds one note at a time: chords are spread over the strings (Strum spread spreads them in time), and a note that overlaps a sounding note on the same string becomes a hammer-on or pull-off, so let sequencer notes overlap (dur longer than the step) for legato. Bend: the Bend knob, a purple Mod cable or cc bend/pitchbend (0.5 = centre). Type chooses the instrument; the sounds in the list set type and knobs together. A purple Mod cable controls sound parameters; the knobs stay the base.'
 };
 // [label, min, max, stap, start, eenheid, schaal, rol, drift, aan]
 const SPEC = {
@@ -392,9 +390,9 @@ class PkGuitar extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkGuitar);
 `;
 export default {
-  id: 'nl.patchkamer.guitar', name: 'Guitar', version: '1.21.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.guitar', name: 'Guitar', version: '1.22.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
-  about: { nl: 'Gitaarfamilie: akoestisch, elektrisch en bas.', en: 'A guitar family: acoustic, electric and bass.' },
+  about: { nl: 'Gitaarfamilie: akoestisch, elektrisch en bas.\n\nGuitar speelt alleen ontvangen noten: sluit een keyboard of sequencer aan op de oranje ingang Noten en stuur de stereo-uitgang naar een mixer. Het apparaat heeft zes snaren met één stem per snaar. Noten met een lengte (dur) werken met sequencers, noteon/noteoff met aangehouden toetsen.\n\nElke snaar klinkt één noot tegelijk: akkoorden verdelen zich over de snaren (Strum-spreiding spreidt ze in de tijd), en een noot die een lopende noot op dezelfde snaar overlapt wordt een hammer-on of pull-off. Laat sequencer-noten dus overlappen (dur langer dan de stap) voor legato.\n\nBuiging doe je met de knop Buiging, met een paarse Mod-kabel of met cc bend/pitchbend (0,5 = midden).\n\nType kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Een paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.', en: 'A guitar family: acoustic, electric and bass.\n\nGuitar plays received notes only: connect a keyboard or sequencer to the orange Notes input and send the stereo output to a mixer. It has six strings with one voice per string. Notes with a length (dur) work with sequencers, noteon/noteoff with held keys.\n\nEach string sounds one note at a time: chords are spread over the strings (Strum spread spreads them in time), and a note that overlaps a sounding note on the same string becomes a hammer-on or pull-off. So let sequencer notes overlap (dur longer than the step) for legato.\n\nBend with the Bend knob, a purple Mod cable or cc bend/pitchbend (0.5 = centre).\n\nType chooses the instrument; the sounds in the list set type and knobs together. A purple Mod cable controls sound parameters; the knobs stay the base.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo guitar' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo gitaar', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -450,7 +448,7 @@ export default {
     function noteOff(note, t) { queue({ k: 'off', note: clamp(note + effective.transpose, 0, 127), t }); }
     function setBend(v, t) { bendCC = v; post({ type: 'bend', value: v, t: Number.isFinite(t) ? t : ctx.currentTime }); }
     function panic() { if (timer) { clearTimeout(timer); timer = null; } pend.length = 0; pending.length = 0; apply(); bendCC = 0; if (node) node.port.postMessage({ type: 'stop' }); }
-    function paint() { for (const k in controls) controls[k].set(state[k]); if (presetSelect) presetSelect.value = state.preset; if (typeSelect) typeSelect.value = state.type; if (dirSelect) dirSelect.value = state.strumDir; if (legatoSelect) legatoSelect.value = state.legato; if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('6 snaren, één stem per snaar · keyboard/sequencer → oranje Noten · stereo uit → mixer'); } }
+    function paint() { for (const k in controls) controls[k].set(state[k]); if (presetSelect) presetSelect.value = state.preset; if (typeSelect) typeSelect.value = state.type; if (dirSelect) dirSelect.value = state.strumDir; if (legatoSelect) legatoSelect.value = state.legato; if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : ''; status.hidden = !status.textContent; } }
     function change(id, value) { const d = spec[id]; if (!d || !Number.isFinite(+value)) return; state[id] = Number(clamp(Math.round(+value / d[3]) * d[3], d[1], d[2]).toFixed(6)); state.preset = 'Custom'; apply(); paint(); }
     const fmt = (d, v) => d[5] === '%' ? (d[3] < 0.01 ? (v * 100).toFixed(1) : Math.round(v * 100)) + '%' : d[5] === 's' ? (v < 0.1 ? Math.round(v * 1000) + ' ms' : v.toFixed(2) + ' s') : d[5] === 'x' ? v.toFixed(2) + ' x' : d[5] === 'Hz' ? v.toFixed(1) + ' Hz' : d[5] === 'ms' ? Math.round(v) + ' ms' : v.toFixed(d[3] >= 1 ? 0 : d[3] >= 0.1 ? 1 : 2) + ' ' + d[5];
     const self = {
@@ -479,7 +477,6 @@ export default {
         button(tx('Alles uit'), () => panic());
         status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
-        const tip = document.createElement('p'); tip.className = 'note'; tip.textContent = tx('Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Elke snaar klinkt één noot tegelijk: akkoorden verdelen zich over snaren (Strum-spreiding spreidt ze in de tijd), en een noot die een lopende noot op dezelfde snaar overlapt wordt een hammer-on of pull-off, dus laat sequencer-noten overlappen (dur langer dan de stap) voor legato. Buiging: knop Buiging, paarse Mod-kabel of cc bend/pitchbend (0,5 = midden). Type kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.'); el.appendChild(tip);
         paint();
       },
       unmount() { if (root) root.innerHTML = ''; root = null; controls = {}; presetSelect = null; typeSelect = null; dirSelect = null; legatoSelect = null; status = null; warn = null; },
@@ -503,7 +500,7 @@ export default {
         if (dead) return; const next = {};
         if (offsets && typeof offsets === 'object' && !Array.isArray(offsets)) for (const id of Object.keys(spec)) { if (MODEX.includes(id)) continue; const v = offsets[id]; if (typeof v === 'number' && Number.isFinite(v)) next[id] = clamp(v, -1, 1); }
         mod = next; apply();
-        if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('Mod gereed · verbind een paarse sturingskabel'); }
+        if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('Mod gereed · verbind een paarse sturingskabel'); status.hidden = false; }
       },
       getState() { return { ...state }; },
       setState(raw) {

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Dissonant Cluster); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Alle continue regelaars zijn stuurbaar: Marge, Toonvolgen, de filteromhulling (aanval, verval, houd, loslaten), Amp sustain, Aanslag en Stereo stonden niet in params().
 //   Nu wel (alle standaard uit); ze werken vanaf de volgende noot, net als Zweving en de amp-tijden al deden. Klank en instellingen zonder modulatie zijn ongewijzigd.
 //   Bewust weggelaten: Stemmen, Openheid en Noten (gehele aantallen/stappen) en de keuzelijsten en schakelaars.
@@ -43,10 +44,9 @@ const EN = {
   'uit': 'off', 'Zacht': 'Soft', 'Hard': 'Hard', 'Vouw': 'Fold', 'Asymmetrisch': 'Asymmetric',
   'Zweving': 'Beating', 'Zweving-mix': 'Beating mix', 'Uiteendrijven': 'Drifting apart', 'Metaal': 'Metal', 'Ruis': 'Noise', 'Wrijving': 'Friction', 'Wrijving-snelheid': 'Friction rate',
   'Env-diepte': 'Env depth', 'Stemming': 'Tuning', 'Niveau': 'Level', 'Bron': 'Source', 'Uitgang': 'Output',
-  'Ruwheid': 'Roughness', 'dissonantiekaart': 'dissonance map', 'Dissonantiekaart · grijs: ruwheid van twee tonen per interval (Plomp & Levelt / Sethares) · rood: verboden consonante zones · groen: jouw stemmen': 'Dissonance map · grey: roughness of two tones per interval (Plomp & Levelt / Sethares) · red: forbidden consonant zones · highlighted: your voices',
+  'Ruwheid': 'Roughness', 'dissonantiekaart': 'dissonance map',
   'Structuur': 'Structure', 'Stemmen': 'Voices', 'Openheid': 'Openness', 'dicht': 'closed', 'Bewaker': 'Guard', 'geen consonante paren': 'no consonant pairs', 'Marge': 'Margin',
   'Golfvorm': 'Waveform', 'FM-verhouding': 'FM ratio', 'Ring-verhouding': 'Ring ratio', 'Diepte': 'Depth', 'Snelheid': 'Rate',
-  'Snelle volumebeweging tussen ongeveer 15 en 70 Hz wordt niet als ritme maar als ruwheid gehoord; rond 30 Hz is ze het sterkst.': 'Fast volume movement between about 15 and 70 Hz is heard not as rhythm but as roughness; it is strongest around 30 Hz.',
   'Toonvolgen': 'Key tracking', 'Aanslag': 'Velocity', 'Noten': 'Notes', 'klavier': 'keyboard',
   '{0} noten': '{0} notes', '{0} noot': '{0} note', '{0} stemmen': '{0} voices', 'bewaker schoof {0} tonen': 'guard moved {0} tones', 'bewaker schoof {0} toon': 'guard moved {0} tone',
   'dichtst bij consonant t.o.v. andere noten: {0}¢': 'closest to consonant against other notes: {0}¢', 'speel een noot': 'play a note',
@@ -125,7 +125,8 @@ input[type=checkbox]{accent-color:var(--acc);margin:0}
 export default {
   id: 'nl.patchkamer.dissonantcluster',
   name: 'Dissonant Cluster',
-  version: '1.11.1',
+  version: '1.12.0',
+  about: { nl: 'Een polyfone synth die alleen dissonant klinkt. Elke noot wordt een cluster van 2 tot 6 stemmen in een dissonante structuur; een consonantiebewaker houdt elk paar tonen (binnen een noot en tussen noten die tegelijk klinken) weg van priem, octaaf, kwint, kwart, tertsen en sexten.\n\nDe dissonantiekaart toont in grijs de ruwheid van twee tonen per interval (Plomp & Levelt / Sethares), in rood de verboden consonante zones en gemarkeerd jouw stemmen.\n\nSnelle volumebeweging (wrijving) tussen ongeveer 15 en 70 Hz wordt niet als ritme maar als ruwheid gehoord; rond 30 Hz is ze het sterkst.', en: 'A polyphonic synth that only sounds dissonant. Every note becomes a cluster of 2 to 6 voices in a dissonant structure; a consonance guard keeps every pair of tones (within a note and between notes that sound at the same time) away from unison, octave, fifth, fourth, thirds and sixths.\n\nThe dissonance map shows in grey the roughness of two tones per interval (Plomp & Levelt / Sethares), in red the forbidden consonant zones and, highlighted, your voices.\n\nFast volume movement (friction) between about 15 and 70 Hz is heard not as rhythm but as roughness; it is strongest around 30 Hz.' },
   modExclude: ['voices', 'open', 'poly'],   // gehele aantallen en stappen
   kind: 'instrument',
   category: 'synth',
@@ -308,8 +309,8 @@ export default {
       Object.keys(PRESETS).forEach(n => { const b = document.createElement('button'); b.textContent = n; b.onclick = () => { P = merge(PRESETS[n]); lastCents = null; applyGlobal(); refreshAll(); }; top.appendChild(b); });
       const me = document.createElement('div'); me.className = 'meter'; const ml = document.createElement('span'); ml.className = 'lab'; ml.textContent = tx('Ruwheid'); ui.bar = document.createElement('i'); const bw = document.createElement('div'); bw.className = 'bar'; bw.appendChild(ui.bar);
       ui.big = document.createElement('span'); ui.big.className = 'big'; ui.big.textContent = '—'; ui.info = document.createElement('div'); ui.info.className = 'note'; ui.info.style.gridColumn = '1/-1'; me.append(ml, bw, ui.big, ui.info); ws.appendChild(me);
-      const mp = document.createElement('div'); mp.className = 'map'; const mh = document.createElement('div'); mh.className = 'lab'; mh.textContent = tx('Dissonantiekaart · grijs: ruwheid van twee tonen per interval (Plomp & Levelt / Sethares) · rood: verboden consonante zones · groen: jouw stemmen');
-      ui.cv = document.createElement('canvas'); ui.cv.setAttribute('role', 'img'); ui.cv.setAttribute('aria-label', tx('dissonantiekaart')); mp.append(mh, ui.cv); ws.appendChild(mp);
+      const mp = document.createElement('div'); mp.className = 'map';
+      ui.cv = document.createElement('canvas'); ui.cv.setAttribute('role', 'img'); ui.cv.setAttribute('aria-label', tx('dissonantiekaart')); mp.append(ui.cv); ws.appendChild(mp);
       const G = document.createElement('div'); G.className = 'grid'; ws.appendChild(G);
       const cl = box(G, 'Cluster'); choose(cl, 'Structuur', STRUCT.map(s => [s[0], s[1]]), () => P.struct, v => { P.struct = v; });
       knob(cl, 'Stemmen', [2, 6, 1], () => P.voices, v => { P.voices = v; lastCents = null; }, v => String(v)); knob(cl, 'Openheid', [0, 3, 1], () => P.open, v => { P.open = v; lastCents = null; }, v => v ? '+' + v + ' oct' : tx('dicht'));
@@ -323,7 +324,6 @@ export default {
       choose(br, 'Ring-verhouding', RATIOS, () => P.ringRatio, v => { P.ringRatio = v; }); knob(br, 'Ring', [0, 1, 0.01], () => P.ring, v => { P.ring = v; }, pct);
       knob(br, 'Metaal', [0, 1, 0.01], () => P.metal, v => { P.metal = v; }, pct); knob(br, 'Ruis', [0, 1, 0.01], () => P.noise, v => { P.noise = v; }, pct);
       const wr = box(G, 'Wrijving'); knob(wr, 'Diepte', [0, 1, 0.01], () => P.rough, v => { P.rough = v; }, pct, false, 'Wrijving'); knob(wr, 'Snelheid', [8, 70], () => P.roughRate, v => { P.roughRate = v; }, v => v.toFixed(1) + ' Hz', true, 'Wrijving-snelheid');
-      const wn = document.createElement('div'); wn.className = 'note'; wn.textContent = tx('Snelle volumebeweging tussen ongeveer 15 en 70 Hz wordt niet als ritme maar als ruwheid gehoord; rond 30 Hz is ze het sterkst.'); wr.appendChild(wn);
       const fl = box(G, 'Filter'); choose(fl, 'Type', FTYPES, () => P.ftype, v => { P.ftype = v; }); knob(fl, 'Cutoff', [40, 18000], () => P.cut, v => { P.cut = v; }, hz, true);
       knob(fl, 'Reso', [0.3, 20, 0.1], () => P.res, v => { P.res = v; }, v => v.toFixed(1)); knob(fl, 'Env-diepte', [-1, 1, 0.01], () => P.fenv, v => { P.fenv = v; }, v => (v > 0 ? '+' : '') + Math.round(v * 100) + '%');
       knob(fl, 'Toonvolgen', [0, 1, 0.01], () => P.kt, v => { P.kt = v; }, pct); choose(fl, 'Shaper', STYPES, () => P.stype, v => { P.stype = v; }); knob(fl, 'Drive', [0, 1, 0.01], () => P.drive, v => { P.drive = v; }, pct);

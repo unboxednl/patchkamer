@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Wanderer); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.15.0 — Patchkamer contract v1.17: klembord, alleen kopiëren. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, 12 tikken per zestiende). Kopiëren geeft het motief zoals het nu klinkt (toonladdertrappen omgezet naar MIDI-noten, met velocity, lengte, verloop en ratchets) als notes-clip; wijzigt het motief later, dan blijft de kopie staan (momentopname, geen koppeling). Plakken kan niet (`paste` is leeg): `setClip` geeft `ok:false` met een reden, behalve voor de eigen momentopname (`native`), die niets verandert. `modExclude: ['reps']` toegevoegd (Herhaal eerst was al bewust buiten `params()` gelaten; de validator meldde dat als let op). Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Swing is nu ook bestuurbaar via params()/modulate() (standaard uit, drift 0,05; role swing). Modulatie komt alleen bovenop de knop (effectief = knop + o × 0,5, geclampt) en is nooit state. De overige continue regelaars (inclusief Mensachtig, Accenten, Spooknoten, Ratchets) zaten er al in.
@@ -20,8 +21,6 @@
 // octaafsprongen, wisselende notenlengte en accenten, 'herhaal eerst N keer, verander dan', vergrendelen en Volg akkoord: een akkoord op de ingang
 // bepaalt dan de toonschaal.
 const EN = {
-  'Verzint een motief in de toonladder, herhaalt het en verandert het beetje bij beetje. Trek de uitgang Noten naar een synth. Speel een akkoord op de ingang en zet Volg akkoord aan: dan dwaalt hij alleen over die tonen.':
-    'Invents a motif in the scale, repeats it and changes it little by little. Connect the Notes output to a synth. Play a chord on the input and switch on Follow chord: it then wanders over those notes only.',
   'Karakter': 'Character', 'Grondtoon': 'Root', 'Toonladder': 'Scale', 'Laagste': 'Lowest', 'Hoogste': 'Highest', 'Raster': 'Grid', 'Motieflengte': 'Motif length',
   'Verloop': 'Contour', 'Vlak': 'Flat', 'Crescendo': 'Crescendo', 'Decrescendo': 'Decrescendo', 'Zwelling': 'Swell', 'Dip': 'Dip',
   'Het apparaat is verwijderd.': 'The device has been removed.', 'Geen geldige clip.': 'Not a valid clip.', 'Motief van {0} stappen': 'Motif of {0} steps', 'Wanderer': 'Wanderer',
@@ -38,8 +37,6 @@ const EN = {
   'Notenlengte': 'Note length', 'Lengte-variatie': 'Length variation', 'Velocity': 'Velocity', 'Accenten': 'Accents', 'zware tellen harder': 'strong beats louder',
   'Spooknoten': 'Ghost notes', 'kans dat een lichte noot een zachte spooknoot wordt': 'chance that a weak note becomes a soft ghost note', 'Mensachtig': 'Humanize',
   'willekeurige velocity en lichte vertraging bij het spelen': 'random velocity and slight delay while playing', 'Ratchets': 'Ratchets', 'kans dat een noot een roll van 2 tot 4 noten wordt': 'chance that a note becomes a roll of 2 to 4 notes',
-  'Het motief herhaalt zich; na "Herhaal eerst" keer verandert elke noot met de kans Verandering, en soms schuift het hele motief een trede. Vergrendel houdt een motief vast dat je goed vindt (het wordt bewaard in de werkruimte). Paarse Mod: Drift op Dichtheid of Sprongen laat de melodie ademen; Volger op Dichtheid laat hem drukker spelen als de drums luider zijn. Live toetsenbord: sluit een toetsenbord aan op de ingang en zet Volg akkoord aan; dit apparaat stuurt geen toetsenbord door naar een synth.':
-    'The motif repeats; after "Repeat first" times every note changes with the chance Change, and now and then the whole motif shifts a scale step. Lock keeps a motif you like (it is saved in the workspace). Purple Mod: Drift on Density or Leaps lets the melody breathe; Follower on Density makes it play busier when the drums get louder. Live keyboard: connect a keyboard to the input and switch on Follow chord; this device does not pass a keyboard through to a synth.',
   'dubbelklik: standaard': 'double-click: default',
   'extra vertraging van noten op een oneven zestiende, bovenop de swing van de host (alleen rasters van 1/16 en sneller)': 'extra delay for notes on an odd sixteenth, on top of the host swing (grids of 1/16 and faster only)',
   'akkoord: ': 'chord: ', 'wacht op een akkoord (speelt intussen de toonladder)': 'waiting for a chord (plays the scale meanwhile)', 'wacht op een akkoord': 'waiting for a chord',
@@ -54,7 +51,6 @@ const LEGACY_CHARACTER = { 'Rustige lijn': 'Calm line', 'Arp-dwaler': 'Arp wande
 const UK_CSS = `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:var(--event,#7fd6ff);--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
- .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -68,7 +64,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
-.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}`;
+.stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}`;
 const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
@@ -102,7 +98,7 @@ function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([,
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.16.0', about: { nl: 'Kansmelodie: verzint een motief in de toonladder en verandert het beetje bij beetje.', en: 'Probability melody: invents a motif in a scale and changes it bit by bit.' }, kind: 'utility', category: 'sequencer', modExclude: ['reps'],
+  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.17.0', about: { nl: 'Kansmelodie: verzint een motief in de toonladder en verandert het beetje bij beetje.\n\nVerzint een motief in de toonladder, herhaalt het en verandert het beetje bij beetje. Trek de uitgang Noten naar een synth. Speel een akkoord op de ingang en zet Volg akkoord aan: dan dwaalt hij alleen over die tonen.\n\nHet motief herhaalt zich; na "Herhaal eerst" keer verandert elke noot met de kans Verandering, en soms schuift het hele motief een trede. Vergrendel houdt een motief vast dat je goed vindt (het wordt bewaard in de werkruimte). Paarse Mod: Drift op Dichtheid of Sprongen laat de melodie ademen; Volger op Dichtheid laat hem drukker spelen als de drums luider zijn. Live toetsenbord: sluit een toetsenbord aan op de ingang en zet Volg akkoord aan; dit apparaat stuurt geen toetsenbord door naar een synth.', en: 'Probability melody: invents a motif in a scale and changes it bit by bit.\n\nInvents a motif in the scale, repeats it and changes it little by little. Connect the Notes output to a synth. Play a chord on the input and switch on Follow chord: it then wanders over those notes only.\n\nThe motif repeats; after "Repeat first" times every note changes with the chance Change, and now and then the whole motif shifts a scale step. Lock keeps a motif you like (it is saved in the workspace). Purple Mod: Drift on Density or Leaps lets the melody breathe; Follower on Density makes it play busier when the drums get louder. Live keyboard: connect a keyboard to the input and switch on Follow chord; this device does not pass a keyboard through to a synth.' }, kind: 'utility', category: 'sequencer', modExclude: ['reps'],
   ui: { width: 820, minWidth: 400 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'akkoord', name: 'Chord / keys' }], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { akkoord: 'Akkoord / toetsen', notes: 'Noten' } } },
@@ -205,7 +201,6 @@ export default {
       const sw = Math.min(0.5, state.swing || 0); if (sw > 0) clip.swing = sw; return clip;
     }
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS);
-      ukEl(app, 'p', 'sub', tx('Verzint een motief in de toonladder, herhaalt het en verandert het beetje bij beetje. Trek de uitgang Noten naar een synth. Speel een akkoord op de ingang en zet Volg akkoord aan: dan dwaalt hij alleen over die tonen.'));
       const top = ukEl(app, 'div', 'top');
       ui.preset = ukSelect(top, tx('Karakter'), Object.keys(presets).map(k => [k, k]).concat([['Own', tx('Eigen')]]), state.preset, v => { if (presets[v]) { self.setState({ ...defaults, ...presets[v], preset: v, motif: null, run: state.run }); } });
       ui.root = ukSelect(top, tx('Grondtoon'), Array.from({ length: 61 }, (_, i) => [24 + i, nn(24 + i)]), state.root, v => { state.root = +v; eigen(); paint(); });
@@ -225,7 +220,6 @@ export default {
       cv = ukEl(app, 'canvas'); cv.setAttribute('aria-label', tx('het motief als pianorol; breedte = lengte, hoogte van het blokje en de strook = velocity. Klik om een noot te zetten of te wissen, sleep opzij voor de lengte, sleep in de strook voor de velocity'));
       cv.title = cv.getAttribute('aria-label'); cv.onpointerdown = down; cv.onpointermove = move; cv.onpointerup = up; cv.onpointercancel = up;
       ui.k = ukSliders(app, spec, [tx('Hoe de lijn loopt'), tx('Herhaling en verandering'), tx('Voordracht'), tx('Dynamiek en rolls')], (id, v) => { state[id] = id === 'reps' ? Math.round(v) : v; eigen(); resolve(); }, defaults, tx);
-      ukEl(app, 'p', 'note', tx('Het motief herhaalt zich; na "Herhaal eerst" keer verandert elke noot met de kans Verandering, en soms schuift het hele motief een trede. Vergrendel houdt een motief vast dat je goed vindt (het wordt bewaard in de werkruimte). Paarse Mod: Drift op Dichtheid of Sprongen laat de melodie ademen; Volger op Dichtheid laat hem drukker spelen als de drums luider zijn. Live toetsenbord: sluit een toetsenbord aan op de ingang en zet Volg akkoord aan; dit apparaat stuurt geen toetsenbord door naar een synth.'));
       paint(); raf = host && typeof host.frame === 'function' ? host.frame(self, draw, 20) : null; draw(); }
     function eigen() { if (state.preset !== 'Own') { state.preset = 'Own'; if (ui.preset) ui.preset.value = 'Own'; } }
     function heldText() { return state.follow ? (held.size ? tx('akkoord: ') + [...held.keys()].sort((a, b) => a - b).map(nn).join(' ') : tx('wacht op een akkoord (speelt intussen de toonladder)')) : ''; }

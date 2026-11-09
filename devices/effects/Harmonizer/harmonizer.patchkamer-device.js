@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Uitleg naar about (menu Over Harmonizer); de UI toont geen uitlegtekst meer.
 // 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Harmonizer: tot 4 stemmen die de toonhoogte van de ingang volgen op een eigen interval (halve tonen, of toonladdertrappen
 //   binnen een gekozen toonladder en grondtoon), met niveau, pan, detune en vertraging per stem, een glijtijd, zacht levend gemaakt met 'humanize'.
@@ -29,11 +30,11 @@ const TXT = {
   nl: { mode: 'Motor', grain: 'Korrel (snel)', vocoder: 'Vocoder (formanten)', win: 'Venster', fast: 'Snel', normal: 'Normaal', high: 'Hoog', follow: 'Volgen', off: 'Halve tonen (vast)', detect: 'Toonladder, toon van de ingang', notes: 'Toonladder, noten (event)',
     key: 'Grondtoon', scale: 'Toonladder', dry: 'Droog', harm: 'Stemmen', glide: 'Glij', formant: 'Formant %', hum: 'Humanize', voice: 'Stem {0}', on: 'Aan', iv: 'Interval', lv: 'Niveau', pan: 'Pan', dt: 'Detune', dly: 'Vertraging',
     st: 'st', deg: 'trap', src: 'Bron: {0}', nosrc: 'Bron: nog geen toon', lat: 'Latentie: {0} ms', center: 'M', load: 'AudioWorklet laden…', fail: 'AudioWorklet niet beschikbaar: het geluid gaat onbewerkt door.',
-    vtip: 'Gebruik Interval volgt = Toonladder om de stemmen binnen de toonladder te houden; de bron is de toon van het ingangsgeluid (monofoon) of de noten op de eventingang.' },
+ },
   en: { mode: 'Engine', grain: 'Grain (fast)', vocoder: 'Vocoder (formants)', win: 'Window', fast: 'Fast', normal: 'Normal', high: 'High', follow: 'Follow', off: 'Semitones (fixed)', detect: 'Scale, pitch of the input', notes: 'Scale, notes (event)',
     key: 'Key', scale: 'Scale', dry: 'Dry', harm: 'Voices', glide: 'Glide', formant: 'Formant %', hum: 'Humanize', voice: 'Voice {0}', on: 'On', iv: 'Interval', lv: 'Level', pan: 'Pan', dt: 'Detune', dly: 'Delay',
     st: 'st', deg: 'deg', src: 'Source: {0}', nosrc: 'Source: no pitch yet', lat: 'Latency: {0} ms', center: 'C', load: 'Loading AudioWorklet…', fail: 'AudioWorklet unavailable: the sound passes through unprocessed.',
-    vtip: 'Set Interval follows to Scale to keep the voices inside the scale; the source is the pitch of the input sound (monophonic) or the notes on the event input.' },
+ },
 };
 const WNAME = 'nl-patchkamer-harmonizer-1-0-0';
 const WORKLET = `
@@ -424,7 +425,8 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.harmonizer',
   name: 'Harmonizer',
-  version: '1.1.0',
+  version: '1.2.0',
+  about: { nl: 'Tot vier stemmen die de toonhoogte van de ingang volgen op een eigen interval.\n\nGebruik Interval volgt = Toonladder om de stemmen binnen de toonladder te houden; de bron is de toon van het ingangsgeluid (monofoon) of de noten op de eventingang.', en: 'Up to four voices that follow the pitch of the input at an interval of their own.\n\nSet Interval follows to Scale to keep the voices inside the scale; the source is the pitch of the input sound (monophonic) or the notes on the event input.' },
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', notes: 'Notes', mod: 'Mod' } } },
@@ -442,7 +444,7 @@ export default {
     const maskOf = () => { const sc = SCALES.find(x => x[0] === S.scale) || SCALES[0], m = new Array(12).fill(0); sc[3].forEach(iv => { m[(S.key + iv) % 12] = 1; }); return m; };
     function paintNote() {
       if (note) note.textContent = node ? fmt(T.lat, (latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr).toFixed(0)) : failed ? T.fail : T.load;
-      if (info) info.textContent = S.follow === 'off' ? T.vtip : (srcTxt || T.nosrc);
+      if (info) { info.textContent = S.follow === 'off' ? '' : (srcTxt || T.nosrc); info.style.display = S.follow === 'off' ? 'none' : ''; }
     }
     function apply() {
       if (!node) return;

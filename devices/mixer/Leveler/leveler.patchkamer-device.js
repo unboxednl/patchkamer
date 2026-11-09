@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Leveler); de UI toont geen uitlegtekst meer.
 // 1.16.0 — De IN- en UIT-meter via host.ui.meter (contract v1.18, additief): de host tekent ze (ids met.in en met.out, groep meters, dB-schaal −60 tot 0, horizontaal) en een skin kan er een VU-meter, ledlader of andere balk van maken. Het doelniveau blijft als streepje over beide meters staan zolang het gezicht een horizontale balk of ledlader is. De REGEL-balk en het limiterlampje blijven een eigen canvas (een regeling rond nul en een lampje passen niet in een niveaumeter) en de getallen blijven tekst. Een oudere host valt terug op het canvas met alle vier de rijen zoals voorheen. Geluid, worklet-berichten, state, presets en poorten ongewijzigd.
 // 1.15.1 — Alle zes continue regelaars (Target, Response, Window, Range ±, Gate, Ceiling) zijn nu stuurbaar via params/modulate; het apparaat krijgt daarmee automatisch een mod-ingang. Alles staat standaard uit in Drift. Knopwaarden, getState, presets en geluid zonder modulatie ongewijzigd. Bewust niet: het keuzemenu Stand (Regelen/Doorlaten) en de twee knoppen.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
@@ -83,14 +84,14 @@ const TXT = {
     b1: 'Huidig niveau = doel', b1t: 'Zet het doelniveau op wat er nu binnenkomt', b2: 'Regeling op 0',
     loading: 'Leveler laden…', failed: 'AudioWorklet niet beschikbaar: Leveler laat het geluid ongewijzigd door.',
     aria: 'Niveaumeter: in, uit en regeling', rIn: 'IN', rOut: 'UIT', rGain: 'REGEL', lim: 'limiter ', limIdle: 'limiter rust',
-    tip: 'Houdt het gemiddelde volume gelijk: meet over de meettijd en regelt in de reactietijd omhoog of omlaag naar het doel (omlaag drie keer sneller), binnen het bereik. Onder de stiltedrempel blijft de regeling staan. De limiter erachter vangt pieken boven het plafond op (5 ms vertraging).' },
+  },
   en: { mode: 'Mode', lvl: 'Leveling', thru: 'Pass through',
     gLevel: 'Level', gTiming: 'Timing', gLimits: 'Limits',
     target: 'Target', speed: 'Response', window: 'Window', range: 'Range ±', gate: 'Gate', ceiling: 'Ceiling',
     b1: 'Current level = target', b1t: 'Sets the target level to what is coming in now', b2: 'Reset gain',
     loading: 'Loading Leveler…', failed: 'AudioWorklet unavailable: Leveler passes the sound through unchanged.',
     aria: 'Level meter: in, out and gain', rIn: 'IN', rOut: 'OUT', rGain: 'GAIN', lim: 'limiter ', limIdle: 'limiter idle',
-    tip: 'Keeps the average volume steady: it measures over the measure time and moves the gain up or down to the target within the response time (down three times faster), within the range. Below the silence threshold the gain stays where it is. The limiter behind it catches peaks above the ceiling (5 ms delay).' },
+  },
 };
 
 const K = [   // id, tekstsleutel, [min, max, stap], standaard, weergave
@@ -117,7 +118,8 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.leveler',
   name: 'Leveler',
-  version: '1.16.0',
+  version: '1.17.0',
+  about: { nl: 'Houdt het gemiddelde volume gelijk: meet over de meettijd en regelt in de reactietijd omhoog of omlaag naar het doel (omlaag drie keer sneller), binnen het bereik. Onder de stiltedrempel blijft de regeling staan. De limiter erachter vangt pieken boven het plafond op (5 ms vertraging).', en: 'Keeps the average volume steady: it measures over the measure time and moves the gain up or down to the target within the response time (down three times faster), within the range. Below the silence threshold the gain stays where it is. The limiter behind it catches peaks above the ceiling (5 ms delay).' },
   kind: 'effect',
   category: 'mix',
   ui: { width: 420, minWidth: 300 },
@@ -222,7 +224,6 @@ export default {
         if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) cw = w; }); ro.observe(canvas); }
         if (typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
         note = document.createElement('div'); note.className = 'note'; el.appendChild(note); paintNote();
-        const tip = document.createElement('div'); tip.className = 'note'; tip.textContent = T.tip; el.appendChild(tip);
         paintAll(); stopLoop(); stopDraw = tekenLus(host, self, draw, 30);
       },
       unmount() { stopLoop(); if (hm) { ['in', 'out'].forEach(k => { try { hm[k].m.destroy(); } catch (e) {} }); hm = null; } if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin); canvas = null; g2 = null; note = null; ui = {}; },

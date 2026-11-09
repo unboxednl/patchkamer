@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Low Bass); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (basssynthesizer) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Low Bass (nieuwe id nl.patchkamer.lowbass, eigen map; voorheen Laag Bass, nl.patchkamer.laag), bijgewerkt naar Patchkamer contract v1.11.
 //   Het geluid is ongewijzigd; tunes en songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -13,16 +14,14 @@
 // drive, glide, ADSR, legato en zeven presets. Geen sequencer: speelt noten van een extern keyboard of een externe sequencer.
 
 const EN = {
-  'Keyboard / sequencer → Noten. Mono last-note priority; legato, sub en FM.': 'Keyboard / sequencer → Notes. Mono, last-note priority; legato, sub and FM.',
   'Eigen': 'Custom', 'Aan': 'On', 'Uit': 'Off', 'Proefbas': 'Test bass', 'Alles uit': 'All off',
-  'Paarse Mod-kabel laat klankparameters bewegen. Enveloppen en glide worden bij de volgende noot gelezen.': 'The purple Mod cable moves sound parameters. Envelopes and glide are read at the next note.',
   'Golfvorm': 'Waveform', 'Resonantie': 'Resonance', 'Zweving': 'Detune', 'FM-diepte': 'FM depth', 'Filter-envelope': 'Filter envelope',
 };
 const LABELS = { cutoff: 'Cutoff', resonance: 'Resonantie', sub: 'Sub', detune: 'Zweving', drive: 'Drive', fm: 'FM-diepte', env: 'Filter-envelope', glide: 'Glide', attack: 'Attack', decay: 'Decay', sustain: 'Sustain', release: 'Release', accent: 'Accent', level: 'Volume', bend: 'Pitchbend' };
 
 export default {
-  id: 'nl.patchkamer.lowbass', name: 'Low Bass', version: '1.12.0', kind: 'instrument', category: 'synth', ui: { width: 680, minWidth: 340 },
-  about: { nl: 'Basssynthesizer: monofoon met laatste-noot-prioriteit, legato, sub-oscillator en FM.', en: 'A bass synthesizer: monophonic with last-note priority, legato, sub oscillator and FM.' },
+  id: 'nl.patchkamer.lowbass', name: 'Low Bass', version: '1.13.0', kind: 'instrument', category: 'synth', ui: { width: 680, minWidth: 340 },
+  about: { nl: 'Basssynthesizer: monofoon met laatste-noot-prioriteit, legato, sub-oscillator en FM.\n\nVerbind een keyboard of sequencer met de ingang Noten.\n\nEen paarse Mod-kabel laat klankparameters bewegen. Enveloppen en glide worden bij de volgende noot gelezen.', en: 'A bass synthesizer: monophonic with last-note priority, legato, sub oscillator and FM.\n\nConnect a keyboard or sequencer to the Notes input.\n\nA purple Mod cable moves sound parameters. Envelopes and glide are read at the next note.' },
   i18n: { nl: { ports: { out: 'Bass uit', notes: 'Noten' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Bass out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
@@ -31,10 +30,10 @@ export default {
     const finite = (v, d, a, b) => typeof v === 'number' && Number.isFinite(v) ? clamp(v, a, b) : d;
     let mountHost = null, panel = null, uiHandles = {};
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
-    function mountUI(el, title, subtitle) {
+    function mountUI(el, title) {
       clearUI(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
       add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}label{min-width:0}`);
-      panel = add(shadow, 'div', undefined); panel.className = 'app'; if (subtitle) add(panel, 'p', subtitle); uiHandles = {}; return panel;
+      panel = add(shadow, 'div', undefined); panel.className = 'app'; uiHandles = {}; return panel;
     }
     function clearUI() { if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; uiHandles = {}; }
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
@@ -78,13 +77,12 @@ export default {
     function panic(t = ctx.currentTime) { held = []; off(t); }
     function paint() { for (const k in uiHandles) uiHandles[k].set(state[k]); }
     function render(el) {
-      mountUI(el, '', tx('Keyboard / sequencer → Noten. Mono last-note priority; legato, sub en FM.')); const top = row(panel);
+      mountUI(el, ''); const top = row(panel);
       select(top, 'Preset', Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen')]]), state.preset, v => { if (presets[v]) { self.setState({ ...defaults, ...presets[v], preset: v }); render(el); } });
       select(top, tx('Golfvorm'), [['sawtooth', 'Saw'], ['square', 'Square'], ['triangle', 'Triangle']], state.wave, v => { state.wave = v; state.preset = 'Custom'; apply(); });
       select(top, 'Legato', [['1', tx('Aan')], ['0', tx('Uit')]], state.legato ? '1' : '0', v => state.legato = v === '1');
       const box = grid(panel); for (const [k, d] of Object.entries(spec)) knob(box, k, tx(LABELS[k]), d.slice(0, 3), state[k], v => { state[k] = Number(v.toFixed(6)); state.preset = 'Custom'; apply(); }, v => k === 'cutoff' ? Math.round(v) + ' Hz' : v.toFixed(2), d[3]);
       button(row(panel), tx('Proefbas'), () => play(36, 0.85, ctx.currentTime, 0.6)); button(row(panel), tx('Alles uit'), () => panic());
-      add(panel, 'p', tx('Paarse Mod-kabel laat klankparameters bewegen. Enveloppen en glide worden bij de volgende noot gelezen.'));
     }
     const self = { inputs: {}, outputs: { out }, mount: render, unmount: clearUI, onTransport(info) { if (!dead && !info?.playing) panic(); }, onEvent(port, e) { try { if (dead || port !== 'notes' || !e || !Number.isFinite(e.time)) return; const t = Math.max(ctx.currentTime, e.time), type = String(e.type).toLowerCase().replace(/[_-]/g, ''); if (['note', 'noteon', 'noteoff'].includes(type) && Number.isFinite(e.note)) { const n = clamp(e.note, 0, 127); if (type === 'noteoff' || e.vel === 0) releaseNote(n, t); else play(n, finite(e.vel, 0.8, 0, 1), t, e.held === true ? undefined : Number.isFinite(e.dur) ? clamp(e.dur, 0.005, 120) : undefined); } else if (type === 'cc' && spec[e.id] && Number.isFinite(e.value)) { const d = spec[e.id]; state[e.id] = d[0] + clamp(e.value, 0, 1) * (d[1] - d[0]); state.preset = 'Custom'; apply(t); paint(); } else if (type === 'panic' || type === 'allnotesoff') panic(t); } catch {} }, params() { return Object.entries(spec).map(([id, d]) => ({ id, name: tx(LABELS[id]), lane: 'bass', laneName: 'Bass', min: d[0], max: d[1], scale: d[4], role: d[5], drift: 0.015, on: !['bend', 'level'].includes(id) })); }, modulate(o) { if (dead) return; mod = {}; if (o && typeof o === 'object') for (const k in spec) if (Number.isFinite(o[k])) mod[k] = clamp(o[k], -1, 1); apply(); }, getState() { return { ...state }; }, setState(raw) { if (dead) return; const s = raw && typeof raw === 'object' ? raw : {}, next = { ...defaults }; for (const [k, d] of Object.entries(spec)) next[k] = finite(s[k], d[3], d[0], d[1]); if (['sawtooth', 'square', 'triangle'].includes(s.wave)) next.wave = s.wave; if (typeof s.legato === 'boolean') next.legato = s.legato; if (s.preset === 'Custom' || s.preset === 'Eigen') next.preset = 'Custom'; else if (typeof s.preset === 'string' && Object.hasOwn(presets, s.preset)) next.preset = s.preset; state = next; apply(); if (mountHost) render(mountHost); }, destroy() { if (dead) return; dead = true; if (guardT) clearInterval(guardT); clearUI(); for (const n of sources) try { n.stop(); } catch {} for (const n of nodes) try { n.disconnect(); } catch {} held = []; } }; apply(); return self;
   },

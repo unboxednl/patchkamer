@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.0 — Uitleg naar about (menu Over Audio Output); de UI toont geen uitlegtekst meer.
 // 1.17.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.16.0 — De L/R-meter via host.ui.meter (contract v1.18, additief): één stereometer met twee analysers en een clip-lampje; de host tekent hem (ook in deze shadow root) en een skin kan er een VU-meter of ledlader van maken. Zonder host.ui.meter blijven de twee eigen balken met clip-knoppen. Geluid, bewaking, state, presets en poorten ongewijzigd.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
@@ -18,7 +19,7 @@ const DEFAULTS = { device: '', deviceLabel: '', level: -6, mono: false, limiter:
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { hint: 'Stuurt het geluid naar een uitgang van je computer: de standaarduitgang of een audio-interface die je systeem kent.',
+  nl: { 
     device: 'Uitgang', defaultDev: 'Standaarduitgang van het systeem', unnamed: 'Uitgang', choose: 'Kies uitgang…', refresh: 'Ververs lijst', pair: 'Paar',
     level: 'Volume', mono: 'Mono', limiter: 'Begrenzer', mute: 'Gedempt', left: 'L', right: 'R', clip: 'clip', toDefault: 'Speelt naar de standaarduitgang van het systeem.',
     toDevice: n => 'Speelt naar: ' + n, toPair: p => 'Speelt naar de standaarduitgang, kanalen ' + p + '.', paired: 'Een gekozen uitgang is stereo; een paar kiezen kan alleen op de standaarduitgang.',
@@ -26,7 +27,7 @@ const TXT = {
     denied: 'Geen toestemming voor deze uitgang. Kies hem opnieuw met Kies uitgang…', notFound: 'De gekozen uitgang is er niet (meer). Het geluid gaat naar de standaarduitgang.',
     blocked: 'De browser houdt het geluid tegen tot je ergens in Patchkamer klikt (druk op Start).', failed: m => 'Deze uitgang lukt niet: ' + m,
     guard: 'Er kwam een ongeldig signaal binnen; de begrenzer is hersteld.', loud: 'Pas op: het volume staat boven 0 dB.' },
-  en: { hint: 'Sends the sound to an output on your computer: the default output or an audio interface your system knows.',
+  en: { 
     device: 'Output', defaultDev: 'System default output', unnamed: 'Output', choose: 'Choose output…', refresh: 'Refresh list', pair: 'Pair',
     level: 'Volume', mono: 'Mono', limiter: 'Limiter', mute: 'Muted', left: 'L', right: 'R', clip: 'clip', toDefault: 'Playing to the default output of the system.',
     toDevice: n => 'Playing to: ' + n, toPair: p => 'Playing to the default output, channels ' + p + '.', paired: 'A chosen output is stereo; picking a pair only works on the default output.',
@@ -37,7 +38,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audiooutput', name: 'Audio Output', version: '1.17.0', kind: 'output', category: 'mix', ui: { width: 380, minWidth: 300 },
+  id: 'nl.patchkamer.audiooutput', name: 'Audio Output', version: '1.18.0', about: { nl: 'Stuurt het geluid naar een uitgang van je computer: de standaarduitgang of een audio-interface die je systeem kent.', en: 'Sends the sound to an output on your computer: the default output or an audio interface your system knows.' }, kind: 'output', category: 'mix', ui: { width: 380, minWidth: 300 },
   i18n: { nl: { ports: { in: 'In' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -161,8 +162,8 @@ export default {
       inputs: { in: input }, outputs: {},
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' });
-        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.hint,.status{color:var(--muted);font-size:11px;line-height:1.4}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{display:flex;gap:6px;align-items:center}select,button{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:5px 8px;min-width:0;max-width:100%}button{cursor:pointer}.meter{display:grid;grid-template-columns:14px 1fr 34px;gap:6px;align-items:center}.bar{height:8px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--audio)}.clip{font-size:9px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 0}.clip.on{background:var(--stop,#e0584a);color:#fff;border-color:var(--stop,#e0584a)}.gain{min-height:44px}[hidden]{display:none!important}';
-        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
+        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.status{color:var(--muted);font-size:11px;line-height:1.4}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{display:flex;gap:6px;align-items:center}select,button{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:5px 8px;min-width:0;max-width:100%}button{cursor:pointer}.meter{display:grid;grid-template-columns:14px 1fr 34px;gap:6px;align-items:center}.bar{height:8px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--audio)}.clip{font-size:9px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 0}.clip.on{background:var(--stop,#e0584a);color:#fff;border-color:var(--stop,#e0584a)}.gain{min-height:44px}[hidden]{display:none!important}';
+        const app = el('div', null, sh, 'app'); 
         const r1 = el('div', null, app, 'row'); const dev = el('select', null, r1); dev.setAttribute('aria-label', T.device);
         dev.onchange = () => { state.device = dev.value; const o = dev.options[dev.selectedIndex]; state.deviceLabel = dev.value ? (o ? o.textContent : '') : ''; route(); };
         const choose_ = el('button', T.choose, r1); choose_.type = 'button'; choose_.onclick = choose; const rf = el('button', T.refresh, r1); rf.type = 'button'; rf.onclick = () => refreshDevices();

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Uitleg naar about (menu Over Chord Buddy); de UI toont geen uitlegtekst meer.
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.0.0 — Patchkamer contract v1.19. Eerste versie van Chord Buddy: hulp bij akkoorden voor mensen zonder muziektheorie.
 //   Kies een toonsoort (westerse schalen, pentatoon, blues) en eventueel een stijl, of speel akkoorden op een MIDI-keyboard: het apparaat herkent ze,
@@ -635,7 +636,7 @@ const SPEC = { vel: [0.05, 1], bassVel: [0.05, 1], len: [0.1, 4], gate: [0.1, 1]
 const PRESET_KEYS = ['name', 'key', 'scale', 'style', 'ext', 'pads', 'beats', 'loop', 'voiceOn', 'bassOn', 'bassMode', 'voices', 'voicing'];
 
 export default {
-  id: 'nl.patchkamer.chordbuddy', name: 'Chord Buddy', version: '1.1.0', kind: 'utility', category: 'tool',
+  id: 'nl.patchkamer.chordbuddy', name: 'Chord Buddy', about: { nl: 'Hulp bij akkoorden, ook zonder muziektheorie: kies een toonsoort, speel een akkoord of vul de pads. Dit is advies, geen regelboek.\n\nNoten in het bereik van de pads worden niet als akkoord beluisterd.\n\nSets opslaan en laden: gebruik de presetbalk bovenaan de kaart (een set is een preset). De set zit ook in de werkruimte en de song. Start volgt de klok: start de transport van Patchkamer.\n\nTwee stemmen = terts en septiem (guide tones) of grondtoon en terts. De bas gaat apart naar de poort Bas.\n\nStrum 0 = alle noten tegelijk; hoger = een lichte gitaarstrum over de noten.\n\nDit zijn suggesties: richtlijnen, geen regels. Vertrouw je oor.', en: 'Help with chords, even without music theory: pick a key, play a chord or fill the pads. This is advice, not a rulebook.\n\nNotes in the pad range are not listened to as a chord.\n\nSave and load sets with the preset bar at the top of the card (a set is a preset). The set is also kept in the workspace and the song. Start follows the clock: start the Patchkamer transport.\n\nTwo voices = third and seventh (guide tones) or root and third. The bass goes separately to the Bass port.\n\nStrum 0 = all notes together; higher = a light guitar-style strum across the notes.\n\nThese are suggestions: guidelines, not rules. Trust your ear.' }, version: '1.2.0', kind: 'utility', category: 'tool',
   ui: { width: 900, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'In' }], eventOut: [{ id: 'chords', name: 'Chords' }, { id: 'bass', name: 'Bass' }], modIn: [], modOut: [] },
   i18n: { nl: { ports: { in: 'In', chords: 'Akkoorden', bass: 'Bas' } } },
@@ -902,7 +903,6 @@ export default {
           E(row, 'span', 'why1', P(s.why));
         });
       }
-      E(box, 'p', 'hint', T('Dit zijn suggesties: richtlijnen, geen regels. Vertrouw je oor.', 'These are suggestions: guidelines, not rules. Trust your ear.'));
     }
     function paintPads() {
       const g = els.padGrid; if (!g) return; g.replaceChildren();
@@ -954,7 +954,7 @@ export default {
     const CSS = `:host{display:block;color:var(--fg);font:13px system-ui,sans-serif}
 .app{container-type:inline-size;background:var(--card);border-radius:10px;padding:12px;box-sizing:border-box;display:grid;gap:10px}
  h3{margin:0 0 6px;font-size:14px;letter-spacing:.04em} h4{margin:8px 0 4px;font-size:13px} h5{margin:0 0 3px;font-size:12px;color:var(--muted)}
-.sub,.hint{color:var(--muted);margin:2px 0;line-height:1.4}.hint{font-size:12px}
+.hint{color:var(--muted);margin:2px 0;line-height:1.4}.hint{font-size:12px}
 .grid{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
 @container (min-width:720px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.full{grid-column:1/-1}}
 .sec{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:7px;min-width:0;align-content:start}
@@ -982,7 +982,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       root = el; el.replaceChildren();
       const host0 = E(el, 'div'), shadow = host0.attachShadow ? host0.attachShadow({ mode: 'open' }) : host0;
       E(shadow, 'style', '', CSS); const app = E(shadow, 'div', 'app');
-      E(app, 'p', 'sub', T('Hulp bij akkoorden, ook zonder muziektheorie: kies een toonsoort, speel een akkoord of vul de pads. Dit is advies, geen regelboek.', 'Help with chords, even without music theory: pick a key, play a chord or fill the pads. This is advice, not a rulebook.'));
       const grid = E(app, 'div', 'grid');
       // 1. toonsoort en stijl
       const s1 = E(grid, 'section', 'sec'); E(s1, 'h3', '', T('1 · Toonsoort & stijl', '1 · Key & style'));
@@ -1014,7 +1013,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       const r3b = E(s3, 'div', 'row');
       mkChk(r3b, T('Pads spelen via MIDI-noot', 'Play pads by MIDI note'), 'padMidi', 'pads', () => refresh('pads'));
       mkSel(r3b, T('Eerste pad = noot', 'First pad = note'), 'padBase', 'pads', noteOpts(0, 111), v => { S.padBase = +v; refresh('pads'); });
-      E(s3, 'p', 'hint', T('Noten in het bereik van de pads worden niet als akkoord beluisterd.', 'Notes in the pad range are not listened to as a chord.'));
       // 4. set
       const s4 = E(grid, 'section', 'sec'); E(s4, 'h3', '', T('4 · Set', '4 · Set'));
       const r4 = E(s4, 'div', 'row'), nl = E(r4, 'label', 'ctl'); E(nl, 'span', '', T('Naam van de set', 'Set name'));
@@ -1029,7 +1027,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       mkBtn(r4d, T('Exporteren (.json)', 'Export (.json)'), 'exportSet', 'set', exportSet, 'btn sm'); mkBtn(r4d, T('Importeren (.json)', 'Import (.json)'), 'importSet', 'set', () => els.file.click(), 'btn sm');
       els.file = E(r4d, 'input'); els.file.type = 'file'; els.file.accept = '.json,application/json'; els.file.hidden = true; els.file.onchange = importSet;
       els.status = E(s4, 'p', 'msg'); els.status.setAttribute('aria-live', 'polite'); els.count = E(s4, 'p', 'hint'); els.msg2 = E(s4, 'p', 'hint');
-      E(s4, 'p', 'hint', T('Sets opslaan en laden: gebruik de presetbalk bovenaan de kaart (een set is een preset). De set zit ook in de werkruimte en de song. Start volgt de klok: start de transport van Patchkamer.', 'Save and load sets with the preset bar at the top of the card (a set is a preset). The set is also kept in the workspace and the song. Start follows the clock: start the Patchkamer transport.'));
       // 5. advies
       const s5 = E(grid, 'section', 'sec full'); E(s5, 'h3', '', T('5 · Advies: bas en stemvoering', '5 · Advice: bass and voicing'));
       const r5 = E(s5, 'div', 'row');
@@ -1040,7 +1037,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       const r5b = E(s5, 'div', 'row');
       mkBtn(r5b, T('Pas stemvoering toe', 'Apply voicing'), 'applyVoicing', 'advice', applyVoicing);
       mkBtn(r5b, T('Alleen voorstel tonen', 'Show proposal only'), 'previewVoicing', 'advice', () => { ui.preview = !ui.preview; refresh('advice'); });
-      E(s5, 'p', 'hint', T('Twee stemmen = terts en septiem (guide tones) of grondtoon en terts. De bas gaat apart naar de poort Bas.', 'Two voices = third and seventh (guide tones) or root and third. The bass goes separately to the Bass port.'));
       els.adv = E(s5, 'div');
       // 6. uitgang
       const s6 = E(grid, 'section', 'sec full'); E(s6, 'h3', '', T('6 · Uitgang', '6 · Output'));
@@ -1050,7 +1046,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       const r6b = E(s6, 'div', 'row'), oct = [-2, -1, 0, 1, 2].map(n => [n, (n > 0 ? '+' : '') + n]), chs = Array.from({ length: 16 }, (_, i) => [i + 1, String(i + 1)]);
       mkSel(r6b, T('Octaaf akkoorden', 'Chord octave'), 'chordOct', 'out', oct, v => { S.chordOct = +v; }); mkSel(r6b, T('Octaaf bas', 'Bass octave'), 'bassOct', 'out', oct, v => { S.bassOct = +v; });
       mkSel(r6b, T('Kanaal akkoorden', 'Chord channel'), 'chCh', 'out', chs, v => { S.chCh = +v; }); mkSel(r6b, T('Kanaal bas', 'Bass channel'), 'bassCh', 'out', chs, v => { S.bassCh = +v; });
-      E(s6, 'p', 'hint', T('Strum 0 = alle noten tegelijk; hoger = een lichte gitaarstrum over de noten.', 'Strum 0 = all notes together; higher = a light guitar-style strum across the notes.'));
       syncCtl(); dirty.clear(); ['key', 'listen', 'pads', 'set', 'advice'].forEach(k => dirty.add(k)); flush();
       if (typeof host.frame === 'function') stopFrame = host.frame(self, () => { prune(); flush(); }, 15);
     }

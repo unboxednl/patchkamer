@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over LFO); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de continue regelaars Hz, Vervorm, Fase, Sterkte, Glijden en de envelope-tijden/-niveaus (alle standaard uit). Modulatie is nooit state en komt alleen
 //          bovenop de knop; een tweede modulator die de LFO stuurt geeft geen lus (modulate() roept zelf geen host.modulate aan). Bewust weggelaten: aantal stappen (geheel getal, discreet), vorm/snelheidsdeling (keuzes), vinkjes. De uitvoer zonder modulatie is gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang), kleuren uit de CSS-variabelen van de host, tekenen via host.frame met een ResizeObserver en een kleurcache (de tekenpoort is weg),
@@ -22,8 +23,6 @@ const EN = {
   'vorm van de LFO': 'shape of the LFO', 'Aantal stappen': 'Steps', 'Glijden': 'Glide', 'teken de stappen in de golf hierboven': 'draw the steps in the wave above',
   'Envelope · start op de Trigger-ingang (noten of trigs), gate = lengte van de noot': 'Envelope · starts on the Trigger input (notes or trigs), gate = length of the note',
   'Toewijzing · diepte als deel van het bereik van elke knop': 'Assignment · depth as a share of each knob range',
-  'Een LFO op het tempo van de klok. Trek de paarse uitgang naar de Mod-ingang van een apparaat en kies hieronder wat er meebeweegt. Parameters met ⚡ worden sample-nauwkeurig gestuurd.':
-    'An LFO at the tempo of the clock. Pull the purple output to the Mod input of a device and choose below what moves along. Parameters with ⚡ are controlled sample-accurately.',
   'Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>LFO</b> naar de ingang <b>Mod</b> van een apparaat. Kies daarna hier welke parameters meebewegen en hoeveel.':
     'Nothing connected yet. Pull a <b>purple cable</b> from the output <b>LFO</b> to the <b>Mod</b> input of a device. Then choose here which parameters move along and by how much.',
   'LFO': 'LFO', 'Envelope': 'Envelope', 'Sustain': 'Sustain', 'Hz': 'Hz', 'Delay': 'Delay', 'Attack': 'Attack', 'Hold': 'Hold', 'Decay': 'Decay', 'Release': 'Release',
@@ -38,7 +37,6 @@ const CSS = `
 :host{all:initial;display:block;container-type:inline-size;font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--fg,#e6e9ee)}
 *{box-sizing:border-box}
 .mk{display:grid;gap:10px;min-width:0}
-.mk .intro{color:var(--muted,#8a93a3);font-size:11px;line-height:1.45;margin:0}
 .box{padding:8px 10px;border:1px solid var(--line,#2a303a);border-radius:5px;background:var(--card-2,#161a20);display:grid;gap:8px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:end}
 .ctl{display:grid;gap:2px;min-width:110px;flex:1 1 120px}
@@ -206,7 +204,8 @@ const hzPos = hz => Math.log(hz / 0.01) / Math.log(2000);
 export default {
   id: 'nl.patchkamer.lfo',
   name: 'LFO',
-  version: '1.11.1',
+  about: { nl: 'Een LFO op het tempo van de klok. Trek de paarse uitgang naar de Mod-ingang van een apparaat en kies hieronder wat er meebeweegt. Parameters met ⚡ worden sample-nauwkeurig gestuurd.', en: 'An LFO at the tempo of the clock. Pull the purple output to the Mod input of a device and choose below what moves along. Parameters with ⚡ are controlled sample-accurately.' },
+  version: '1.12.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 760, minWidth: 380 },
@@ -278,8 +277,7 @@ export default {
       const xi = Math.floor(((e.clientX - r.left) / r.width) * cyc * n) % n, y = clamp(1 - 2 * (e.clientY - r.top) / r.height, -1, 1); if (!Number.isFinite(xi) || xi < 0 || !Number.isFinite(y)) return; S.steps[xi] = Math.round(y * 20) / 20; changed(); }
     function build(root) {
       const mk = E('div', 'mk'); root.appendChild(mk); ui = {};
-      mk.appendChild(E('p', 'intro', tx('Een LFO op het tempo van de klok. Trek de paarse uitgang naar de Mod-ingang van een apparaat en kies hieronder wat er meebeweegt. Parameters met ⚡ worden sample-nauwkeurig gestuurd.')));
-      const b1 = E('div', 'box'), r1 = E('div', 'row'); b1.appendChild(r1); mk.appendChild(b1);
+            const b1 = E('div', 'box'), r1 = E('div', 'row'); b1.appendChild(r1); mk.appendChild(b1);
       ui.shape = mkSelect(r1, tx('Vorm'), SHAPES.map(([v, t]) => [v, tx(t)]), S.shape, v => { S.shape = v; ui.stepsRow.style.display = v === 'steps' ? '' : 'none'; changed(); });
       ui.div = mkSelect(r1, tx('Snelheid'), DIVS.map(d => [d[0], tx(d[1])]), S.div, v => { S.div = v; ui.hz.el.style.display = v === 'free' ? '' : 'none'; changed(); });
       ui.hz = mkSlider(r1, 'Hz', 0, 1, 0.001, hzPos(S.hz), x => (0.01 * Math.pow(2000, x)).toFixed(2) + ' Hz', x => { S.hz = 0.01 * Math.pow(2000, x); changed(); }, hzPos(D.hz));

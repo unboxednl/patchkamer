@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Uitleg naar about (menu Over Pad Controller); de UI toont geen uitlegtekst meer.
 // 1.13.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.12.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pad Controller en nieuwe id nl.patchkamer.padcontroller; songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, apparaat- en poortnamen per taal in i18n).
@@ -26,16 +27,11 @@ const NOTE_SHIFT = 98, BTN_TRACK = [64, 65, 66, 67, 68, 69, 70, 71], BTN_SCENE =
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief
 const EN = {
-  'Koppel een apparaat aan een pad: Patchkamer legt de kabels. Op de controller kies je met Shift + pad welk apparaat je bespeelt. Je kunt hier ook op een pad klikken.':
-    'Link a device to a pad: Patchkamer lays the cables. On the controller, Shift + pad chooses which device you play. You can also click a pad here.',
   'Deze Patchkamer kan nog geen kabels leggen voor apparaten (contract v1.7 nodig). Werk Patchkamer bij.': 'This Patchkamer cannot lay cables for devices yet (contract v1.7 needed). Update Patchkamer.',
   'Verbind met MIDI': 'Connect MIDI',
   'Timing: strak (+12 ms, gelijkmatig)': 'Timing: tight (+12 ms, even)', 'Timing: direct (zo snel mogelijk)': 'Timing: direct (as fast as possible)',
   'Shift op de controller; klik hier om Shift na te doen met de muis': 'Shift on the controller; click here to imitate Shift with the mouse',
   'Knoppen (paars) →': 'Buttons (purple) →', 'Knoppen': 'Buttons', 'MIDI (ruw)': 'MIDI (raw)',
-  'Stap 1: koppelen, kiezen en spelen met de toetsen. In stap 2 krijgt elk soort apparaat een vaste indeling: drumpads voor drumcomputers, de 8 knoppen op de belangrijkste parameters. De pads lichten op in de kleur van de categorie van hun apparaat (de exacte kleur op de controller kan iets afwijken).':
-    'Step 1: link, choose and play with the keys. In step 2 each kind of device gets a fixed layout: drum pads for drum machines, the 8 knobs on the main parameters. The pads light up in the colour of their device category (the exact colour on the controller may differ a little).',
-  'Kies per MIDI-ingang wat die stuurt en kies de uitgang voor de lampjes. Zonder uitgang blijven de lampjes uit.': 'Choose for each MIDI input what it sends, and choose the output for the LEDs. Without an output the LEDs stay off.',
   'knoppen/pads': 'buttons/pads', 'toetsen': 'keys',
   'Web MIDI is hier niet beschikbaar. Gebruik een browser met Web MIDI en het losse Patchkamer-bestand (niet de ingebedde weergave).': 'Web MIDI is not available here. Use a browser with Web MIDI and the standalone Patchkamer file (not the embedded view).',
   'MIDI verbonden': 'MIDI connected', 'Geen toegang tot MIDI: ': 'No access to MIDI: ',
@@ -54,7 +50,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.padcontroller', name: 'Pad Controller', version: '1.13.0', status: 'retired', kind: 'utility', category: 'tool',
+  id: 'nl.patchkamer.padcontroller', name: 'Pad Controller', about: { nl: 'Koppel een apparaat aan een pad: Patchkamer legt de kabels. Op de controller kies je met Shift + pad welk apparaat je bespeelt. Je kunt hier ook op een pad klikken.\n\nKies per MIDI-ingang wat die stuurt en kies de uitgang voor de lampjes. Zonder uitgang blijven de lampjes uit.\n\nStap 1: koppelen, kiezen en spelen met de toetsen. In stap 2 krijgt elk soort apparaat een vaste indeling: drumpads voor drumcomputers, de 8 knoppen op de belangrijkste parameters. De pads lichten op in de kleur van de categorie van hun apparaat (de exacte kleur op de controller kan iets afwijken).', en: 'Link a device to a pad: Patchkamer lays the cables. On the controller, Shift + pad chooses which device you play. You can also click a pad here.\n\nChoose for each MIDI input what it sends, and choose the output for the LEDs. Without an output the LEDs stay off.\n\nStep 1: link, choose and play with the keys. In step 2 each kind of device gets a fixed layout: drum pads for drum machines, the 8 knobs on the main parameters. The pads light up in the colour of their device category (the exact colour on the controller may differ a little).' }, version: '1.14.0', status: 'retired', kind: 'utility', category: 'tool',
   ui: { width: 940, minWidth: 520, jacks: true },
   i18n: { nl: { ports: { midi: 'MIDI (ruw)', knoppen: 'Knoppen' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'midi', name: 'MIDI (raw)' }],
@@ -120,7 +116,6 @@ export default {
     // ---------- UI (gewone DOM, want de pad-aansluitingen moeten in de kaart zelf staan) ----------
     let root = null, ui = {}, padEls = [];
     const CSS = `.pkpc{display:grid;gap:10px;font-size:12px}.pkpc .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.pkpc .sub{margin:0;color:var(--muted);line-height:1.45}
 .pkpc .stt{font-family:var(--mono);font-size:11px;color:var(--mod)} .pkpc .warn{color:var(--stop)}
 .pkpc .grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;padding:8px;border-radius:8px;background:var(--well);border:1px solid var(--line)}
 .pkpc .pad{position:relative;min-height:62px;border-radius:6px;border:1px solid var(--line);background:var(--card-2);padding:4px 5px 16px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -137,11 +132,9 @@ export default {
 .pkpc table{border-collapse:collapse;font-size:11px} .pkpc td{padding:2px 8px 2px 0}`;
     const E = (p, tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; if (p) p.appendChild(e); return e; };
     function mount(el) { root = el; el.innerHTML = ''; const st = E(el, 'style'); st.textContent = CSS; const app = E(el, 'div', 'pkpc');
-      E(app, 'p', 'sub', tx('Koppel een apparaat aan een pad: Patchkamer legt de kabels. Op de controller kies je met Shift + pad welk apparaat je bespeelt. Je kunt hier ook op een pad klikken.'));
       if (!can) E(app, 'p', 'stt warn', tx('Deze Patchkamer kan nog geen kabels leggen voor apparaten (contract v1.7 nodig). Werk Patchkamer bij.'));
       const r1 = E(app, 'div', 'row'); ui.conn = E(r1, 'button', 'small', tx('Verbind met MIDI')); ui.conn.onclick = connectMidi; ui.ports = E(r1, 'span', 'stt'); ui.timing = E(r1, 'select'); [['strak', tx('Timing: strak (+12 ms, gelijkmatig)')], ['direct', tx('Timing: direct (zo snel mogelijk)')]].forEach(([v, x]) => { const o = E(ui.timing, 'option', '', x); o.value = v; }); ui.timing.value = S.timing; ui.timing.onchange = () => { S.timing = ui.timing.value; };
       ui.shift = E(r1, 'span', 'shift', 'SHIFT'); ui.shift.title = tx('Shift op de controller; klik hier om Shift na te doen met de muis'); ui.shift.onclick = () => { shift = !shift; paintShift(); };
-      E(app, 'p', 'sub', tx('Kies per MIDI-ingang wat die stuurt en kies de uitgang voor de lampjes. Zonder uitgang blijven de lampjes uit.'));
       ui.rolebox = E(app, 'div', 'row');
       ui.grid = E(app, 'div', 'grid'); padEls = [];
       for (let row = 4; row >= 0; row--) for (let c = 0; c < 8; c++) { const pad = row * 8 + c + 1, d = E(ui.grid, 'div', 'pad'); d.dataset.pad = pad; E(d, 'span', 'n', String(pad)); E(d, 'span', 't', '');
@@ -151,7 +144,6 @@ export default {
         padEls[pad] = d; }
       const kn = E(app, 'div', 'knobs'); E(kn, 'span', 'stt', tx('Knoppen (paars) →')); try { host.ui.jack(self, kn, 'knoppen', 'out', tx('Knoppen')); host.ui.jack(self, kn, 'midi', 'in', tx('MIDI (ruw)')); } catch (e) {} ui.knob = E(kn, 'span', 'stt', '');
       ui.ed = E(app, 'div', 'ed'); ui.act = E(app, 'p', 'stt'); ui.msg = E(app, 'p', 'stt');
-      E(app, 'p', 'sub', tx('Stap 1: koppelen, kiezen en spelen met de toetsen. In stap 2 krijgt elk soort apparaat een vaste indeling: drumpads voor drumcomputers, de 8 knoppen op de belangrijkste parameters. De pads lichten op in de kleur van de categorie van hun apparaat (de exacte kleur op de controller kan iets afwijken).'));
       ui.pick = ui.pick || 1; paint(); }
     function paintShift() { if (ui.shift) ui.shift.classList.toggle('on', shift); }
     function flashPad(pad) { const d = padEls[pad]; if (!d) return; d.classList.add('flash'); setTimeout(() => d.classList.remove('flash'), 150); }

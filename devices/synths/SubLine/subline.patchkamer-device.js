@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Sub Line); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Sub Line (nieuwe id nl.patchkamer.subline, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is ongewijzigd:
 //   - tweetalig (host.lang, namen per taal in i18n)
 //   - de audiomotor is een AudioWorklet via host.loadWorklet; de motor bevat alleen nog wat een monofone synth nodig heeft
@@ -171,7 +172,6 @@ registerProcessor(${JSON.stringify(WNAME)}, class extends AudioWorkletProcessor 
 
 // Teksten: Nederlandse bron, Engels op host.lang
 const EN = {
-  'Mono: zaagtand, puls, sub en ruis · PWM · portamento · patroon van 32 stappen en arpeggiator.': 'Mono: sawtooth, pulse, sub and noise · PWM · portamento · 32-step pattern and arpeggiator.',
   'Klank': 'Sound', 'Suboctaaf': 'Sub octave', '1 octaaf lager': '1 octave lower', '2 octaven lager': '2 octaves lower',
   'Prioriteit': 'Priority', 'Laatste': 'Last', 'Laagste': 'Lowest', 'Hoogste': 'Highest', 'Uit': 'Off', 'Aan': 'On',
   'Testnoot': 'Test note', 'Speel noot': 'Play note', 'Houd noot': 'Hold note', 'Alles uit': 'All notes off',
@@ -182,9 +182,6 @@ const EN = {
   'Audiomotor wordt voorbereid…': 'Preparing the audio engine…', 'Deze omgeving biedt geen audioprocessor.': 'This environment has no audio processor.',
   'Audiomotor gereed · ': 'Audio engine ready · ', 'interne klok loopt': 'internal clock running', 'keyboard en testknoppen beschikbaar': 'keyboard and test buttons available',
   'Interne klok · {0} BPM · stap {1}': 'Internal clock · {0} BPM · step {1}',
-  'Besturing kiest keyboard, eigen patroon of arpeggiator. De host bepaalt tempo en swing. De prioriteit bepaalt welke toets klinkt bij overlappende noten.':
-    'Control selects keyboard, own pattern or arpeggiator. The host sets tempo and swing. Priority decides which key sounds when notes overlap.',
-  'De paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.': 'The purple Mod input changes the sound without overwriting the base values.',
   'Filters': 'Filters', 'Versterker / envelope': 'Amp / envelope', 'Oscillatoren': 'Oscillators', 'Modulatie': 'Modulation', 'Master': 'Master',
   'Resonantie': 'Resonance', 'Filter-EG': 'Filter envelope', 'Pulsbreedte': 'Pulse width', 'PWM-diepte': 'PWM depth', 'Ruis': 'Noise',
   'LFO-snelheid': 'LFO rate', 'Transpositie': 'Transpose', 'Uitgang': 'Output', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Sequencer-gate': 'Sequencer gate',
@@ -249,7 +246,7 @@ const CSS = `
 :host{display:block;--s-acc:var(--audio,#4fd1c5);--s-ink:color-mix(in srgb,var(--s-acc) 65%,var(--fg,#d9e6e7));--s-cur:var(--event,#f4a261)}
 *{box-sizing:border-box}
 .app{font:12px/1.4 var(--mono,ui-monospace,monospace);color:var(--fg,#d9e6e7);display:grid;gap:8px;container-type:inline-size}
-.sub,.note{margin:0;color:var(--muted,#aabec5);font-size:11px}
+.note{margin:0;color:var(--muted,#aabec5);font-size:11px}
 .bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:end}
 label.sel{display:grid;gap:3px;color:var(--muted,#aabec5);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
 select,button,input[type=text]{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:4px;padding:4px 7px;max-width:100%}
@@ -275,10 +272,11 @@ canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);borde
 export default {
   id: 'nl.patchkamer.subline',
   name: 'Sub Line',
-  version: '1.11.0',
+  version: '1.12.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
+  about: { nl: 'Mono: zaagtand, puls, sub en ruis · PWM · portamento · patroon van 32 stappen en arpeggiator.\n\nBesturing kiest keyboard, eigen patroon of arpeggiator. De host bepaalt tempo en swing. De prioriteit bepaalt welke toets klinkt bij overlappende noten.\n\nDe paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.', en: 'Mono: sawtooth, pulse, sub and noise · PWM · portamento · 32-step pattern and arpeggiator.\n\nControl selects keyboard, own pattern or arpeggiator. The host sets tempo and swing. Priority decides which key sounds when notes overlap.\n\nThe purple Mod input changes the sound without overwriting the base values.' },
   ports: {
     audioIn: [],
     audioOut: [{ id: 'out', name: 'Out' }],
@@ -513,7 +511,6 @@ export default {
         shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
         add(shadow, 'style', CSS);
         const app = add(shadow, 'div', undefined, 'app');
-        add(app, 'p', tx('Mono: zaagtand, puls, sub en ruis · PWM · portamento · patroon van 32 stappen en arpeggiator.'), 'sub');
         const top = add(app, 'div', undefined, 'bar');
         choose(top, tx('Klank'), 'preset', Object.keys(PRESETS).map(k => [k, k]), v => {
           const keep = {}; for (const k of KEEP_ON_SOUND) keep[k] = state[k];
@@ -548,8 +545,6 @@ export default {
         if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) { cw = w; resizeCanvas(); } }); ro.observe(cv); }
         if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
         engineText = add(app, 'p', undefined, 'note'); tellEngine();
-        add(app, 'p', tx('Besturing kiest keyboard, eigen patroon of arpeggiator. De host bepaalt tempo en swing. De prioriteit bepaalt welke toets klinkt bij overlappende noten.'), 'note');
-        add(app, 'p', tx('De paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.'), 'note');
         stopLoop(); stopDraw = drawLoop(self, draw, 30);
       },
       unmount() { teardownUI(); },

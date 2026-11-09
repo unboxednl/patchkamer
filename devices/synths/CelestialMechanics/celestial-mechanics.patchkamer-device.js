@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Celestial Mechanics); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Celestial Mechanics (nieuwe id nl.patchkamer.celestialmechanics, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Celestial Mechanics
@@ -125,8 +126,6 @@ class Planets extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Planets);`;
 
 const EN = {
-  'Elke noot wordt een planeet. Doppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.':
-    'Every note becomes a planet. Doppler bends the pitch, the black hole pulls it down, planets that approach each other colour each other\'s sound. Drag in the universe to sling a planet away yourself.',
   'het zonnestelsel; sleep om een planeet weg te slingeren': 'the solar system; drag to sling a planet away',
   'Heelal': 'Universe', 'Eigen heelal': 'Custom universe',
   'Zonnestelsel': 'Solar System', 'Glazen sferen': 'Glass Spheres', 'Zwart gat': 'Black hole', 'Pulsar-dans': 'Pulsar Dance', 'Kometenregen': 'Comet Shower', 'Chaosnevel': 'Chaos Nebula', 'Ruimtewalvissen': 'Space Whales',
@@ -140,17 +139,15 @@ const EN = {
   'Baanmechaniek': 'Orbital mechanics', 'Ruimte-tijd': 'Space-time', 'Hemelverschijnselen': 'Celestial phenomena', 'Klank': 'Sound',
   'Zwaartekracht': 'Gravity', 'Baanmaat': 'Orbit size', 'Excentriciteit': 'Eccentricity', 'Tijd': 'Time', 'Lichtsnelheid': 'Speed of light', 'Wisselwerking': 'Interaction', 'Korrel': 'Grain',
   'Zonnevlammen': 'Solar flares', 'Kometen': 'Comets', 'Ether (galm)': 'Ether (reverb)', 'Echo uit de diepte': 'Echo from the deep', 'Uitgang': 'Output',
-  'Tips: Zwart gat omhoog en de banen krimpen, de tonen zakken en worden opgeslokt. Lichtsnelheid omlaag en elke baan wordt een jankende Doppler-sirene. Wisselwerking hoog en planeten trekken aan elkaar: chaos, botsingen en samensmeltingen. Pulsar en Echo volgen het tempo als de klok loopt. Paarse Mod-kabel: Drift op Zwaartekracht of Tijd laat het hele stelsel ademen.':
-    'Tips: turn Black hole up and the orbits shrink, the pitches sink and get swallowed. Turn Speed of light down and every orbit becomes a wailing Doppler siren. Turn Interaction up and planets pull at each other: chaos, collisions and mergers. Pulsar and Echo follow the tempo when the clock runs. Purple Mod cable: Drift on Gravity or Time makes the whole system breathe.',
   '{0} hemellichamen in de ruimte': '{0} celestial bodies in space',
   'AudioWorklet niet beschikbaar: dit heelal blijft stil (open Patchkamer in Chrome, Edge of Firefox).': 'AudioWorklet not available: this universe stays silent (open Patchkamer in Chrome, Edge or Firefox).',
   'Heelal (modulatie)': 'Universe',
 };
 
 export default {
-  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.12.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.13.0', kind: 'instrument', category: 'synth',
   ui: { width: 860, minWidth: 380 },
-  about: { nl: 'Een zwaartekrachtsynth: elke noot wordt een planeet die om een zon draait.', en: 'A gravity synth: every note becomes a planet orbiting a sun.' },
+  about: { nl: 'Een zwaartekrachtsynth: elke noot wordt een planeet die om een zon draait.\n\nDoppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.\n\nTips: Zwart gat omhoog en de banen krimpen, de tonen zakken en worden opgeslokt. Lichtsnelheid omlaag en elke baan wordt een jankende Doppler-sirene. Wisselwerking hoog en planeten trekken aan elkaar: chaos, botsingen en samensmeltingen. Pulsar en Echo volgen het tempo als de klok loopt. Paarse Mod-kabel: Drift op Zwaartekracht of Tijd laat het hele stelsel ademen.', en: 'A gravity synth: every note becomes a planet orbiting a sun.\n\nDoppler bends the pitch, the black hole pulls it down, planets that approach each other colour each other\'s sound. Drag in the universe to sling a planet away yourself.\n\nTips: turn Black hole up and the orbits shrink, the pitches sink and get swallowed. Turn Speed of light down and every orbit becomes a wailing Doppler siren. Turn Interaction up and planets pull at each other: chaos, collisions and mergers. Pulsar and Echo follow the tempo when the clock runs. Purple Mod cable: Drift on Gravity or Time makes the whole system breathe.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Uit', notes: 'Noten' } } },
   create(ctx, host) {
@@ -230,7 +227,6 @@ export default {
     const fromS = (d, x) => d.scale === 'log' ? d.min * (d.max / d.min) ** x : d.min + x * (d.max - d.min);
     const CSS = `:host{display:block;color:var(--fg,#e3e6ee);font:13px system-ui,sans-serif;--h-acc:#ffcf6b;--h-ink:color-mix(in srgb,var(--h-acc) 60%,var(--fg,#e3e6ee))}
 .app{container-type:inline-size;background:var(--card,#12141c);border-radius:10px;padding:14px;box-sizing:border-box}
-  .sub{margin:3px 0 10px;color:var(--muted,#9aa3b5);font-size:12px;line-height:1.45}
 .top{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#9aa3b5)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#1f2433);border:1px solid var(--line,#3a4256);border-radius:5px;padding:6px 8px;box-sizing:border-box;max-width:100%;text-transform:none;letter-spacing:0}
@@ -242,14 +238,13 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab{display:flex;justify-content:space-between;gap:6px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted,#9aa3b5)}
 .c output{font-size:11px;color:var(--fg,#e3e6ee);white-space:nowrap;text-transform:none}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--h-acc)}
-.st{font-size:11px;color:var(--mod,#b48cff);margin:6px 0 0} .note{font-size:11px;color:var(--muted,#9aa3b5);line-height:1.5;margin:10px 0 0}`;
+.st{font-size:11px;color:var(--mod,#b48cff);margin:6px 0 0}`;
     const el = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; p.appendChild(e); return e; };
     function selectBox(p, label, opts, value, change) { const box = el(p, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', e => e.stopPropagation()); return s; }
     const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
     function mount(hostEl) {
       unmount(); const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); root = hostEl;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
-      el(app, 'p', 'sub', tx('Elke noot wordt een planeet. Doppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.'));
       const top = el(app, 'div', 'top');
       ui.preset = selectBox(top, tx('Heelal'), Object.keys(presets).map(k => [k, tx(PRESET_LABELS[k])]).concat([['Custom', tx('Eigen heelal')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); });
       ui.scale = selectBox(top, tx('Toonladder (slingeren)'), SCALE_NAMES.map(([v, t]) => [v, tx(t)]), state.scale, v => { state.scale = v; state.preset = 'Custom'; paint(); });
@@ -280,7 +275,6 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           inp.addEventListener('pointerdown', e => e.stopPropagation());
           inp.oninput = () => { state[id] = fromS(d, +inp.value); state.preset = 'Custom'; o.textContent = fmt(d, state[id]); if (ui.preset) ui.preset.value = 'Custom'; apply(); };
           ui.k[id] = { set(v) { inp.value = String(toS(d, v)); o.textContent = fmt(d, v); } }; } });
-      el(app, 'p', 'note', tx('Tips: Zwart gat omhoog en de banen krimpen, de tonen zakken en worden opgeslokt. Lichtsnelheid omlaag en elke baan wordt een jankende Doppler-sirene. Wisselwerking hoog en planeten trekken aan elkaar: chaos, botsingen en samensmeltingen. Pulsar en Echo volgen het tempo als de klok loopt. Paarse Mod-kabel: Drift op Zwaartekracht of Tijd laat het hele stelsel ademen.'));
       paint(); paintStatus(); raf = host.frame(self, draw, 60);
     }
     function toWorld(e) { const b = canvas.getBoundingClientRect(), sc = Math.min(b.width, b.height) / 2 / 2.1; return { x: (e.clientX - b.left - b.width / 2) / sc, y: (e.clientY - b.top - b.height / 2) / sc }; }

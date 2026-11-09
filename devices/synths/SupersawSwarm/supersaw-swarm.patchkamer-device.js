@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Supersaw Swarm); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Supersaw Swarm (nieuwe id nl.patchkamer.supersawswarm, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Supersaw Swarm
@@ -24,14 +25,13 @@ const EN = {
   'Eigen klank': 'Custom sound', 'Klankbeeld': 'Preset', 'Zagen per noot': 'Saws per note', '7 (klassiek)': '7 (classic)', '9 (maximaal)': '9 (maximum)',
   'Akkoord per toets': 'Chord per key', 'Delaytijd': 'Delay time', 'Test akkoord': 'Test chord', 'Test noot': 'Test note', 'Alles uit': 'All off',
   'dubbelklik voor standaard': 'double-click for default', 'Gate stap {0}': 'Gate step {0}',
-  'Tot negen verstemde zaagtanden per noot, met octaaflaag, sub en een ingebouwde ruimte. Keyboard / sequencer → Noten, stereo uit → mixer.': 'Up to nine detuned sawtooth waves per note, with an octave layer, sub and a built-in space. Keyboard / sequencer → Notes, stereo out → mixer.',
   'Gate-patroon (16 stappen, loopt met de klok)': 'Gate pattern (16 steps, follows the clock)',
-  'Trance-gate en Pomp werken alleen als de klok loopt (Start). Akkoord per toets maakt van elke noot een akkoord; kies Losse noten als je akkoorden uit de sequencer stuurt. Galmlengte bouwt de galm opnieuw op; die wordt niet door Mod gestuurd.': 'Trance gate and Pump only work while the clock runs (Start). Chord per key turns every note into a chord; choose Single notes if you send chords from the sequencer. Reverb length rebuilds the reverb; Mod does not control it.',
 };
 
 export default {
-  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.12.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.13.0', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 360 },
+  about: { nl: 'Tot negen verstemde zaagtanden per noot, met octaaflaag, sub en een ingebouwde ruimte. Sluit een keyboard of sequencer aan op Noten en stuur de stereo-uitgang naar een mixer.\n\nTrance-gate en Pomp werken alleen als de klok loopt (Start). Akkoord per toets maakt van elke noot een akkoord; kies Losse noten als je akkoorden uit de sequencer stuurt. Galmlengte bouwt de galm opnieuw op; die wordt niet door Mod gestuurd.', en: 'Up to nine detuned sawtooth waves per note, with an octave layer, sub and a built-in space. Connect a keyboard or sequencer to Notes and send the stereo output to a mixer.\n\nTrance gate and Pump only work while the clock runs (Start). Chord per key turns every note into a chord; choose Single notes if you send chords from the sequencer. Reverb length rebuilds the reverb; Mod does not control it.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { notes: 'Noten' } } },
   create(ctx, host) {
@@ -228,7 +228,7 @@ export default {
     const fromSlider = (d, x) => { const v = d.scale === 'log' ? d.min * (d.max / d.min) ** x : d.min + x * (d.max - d.min); return d.step ? Math.round(v / d.step) * d.step : v; };
     const CSS = `:host{display:block;color:var(--fg,#dfe8ea);font:13px system-ui,sans-serif;--z-acc:#7fd6ff;--z-ink:color-mix(in srgb,var(--z-acc) 55%,var(--fg,#dfe8ea))}
 .app{container-type:inline-size;background:var(--card,#141c24);border-radius:10px;padding:14px;box-sizing:border-box}
-.sub{margin:3px 0 10px;color:var(--muted,#9fb2ba);font-size:12px;line-height:1.45}
+
 .top{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:6px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#9fb2ba)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#1f2c36);border:1px solid var(--line,#3b4d58);border-radius:5px;padding:6px 8px;box-sizing:border-box;max-width:100%;text-transform:none;letter-spacing:0}
@@ -242,13 +242,12 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
 .gate{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;margin-top:4px}
 .gate button{padding:0;height:24px;border-radius:3px;background:var(--well,#0c1419)} .gate button.on{background:var(--z-acc);border-color:var(--z-acc)}
 .gate button:nth-child(4n+1){border-left-width:2px} .gate button.cur{outline:2px solid var(--go,#6be3a0);outline-offset:-2px}
-.note{font-size:11px;color:var(--muted,#9fb2ba);line-height:1.5;margin:10px 0 0}`;
+`;
     function el(parent, tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; parent.appendChild(e); return e; }
     function selectBox(parent, label, opts, value, change) { const box = el(parent, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', e => e.stopPropagation()); return s; }
     function mount(host_el) {
       unmount(); const wrap = document.createElement('div'); host_el.appendChild(wrap); const sh = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; root = host_el;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
-      el(app, 'p', 'sub', tx('Tot negen verstemde zaagtanden per noot, met octaaflaag, sub en een ingebouwde ruimte. Keyboard / sequencer → Noten, stereo uit → mixer.'));
       const top = el(app, 'div', 'top');
       ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); });
       ui.unison = selectBox(top, tx('Zagen per noot'), [[1, '1'], [3, '3'], [5, '5'], [7, tx('7 (klassiek)')], [9, tx('9 (maximaal)')]], state.unison, v => { state.unison = +v; state.preset = 'Custom'; paint(); });
@@ -270,7 +269,6 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           for (let i = 0; i < 16; i++) { const b = el(row, 'button'); b.type = 'button'; b.setAttribute('aria-label', tx('Gate stap {0}', i + 1)); b.addEventListener('pointerdown', e => e.stopPropagation());
             b.onclick = () => { const p = state.pattern.split(''); p[i] = p[i] === '1' ? '0' : '1'; state.pattern = p.join(''); state.preset = 'Custom'; paint(); }; cursorCells.push(b); } }
       });
-      el(app, 'p', 'note', tx('Trance-gate en Pomp werken alleen als de klok loopt (Start). Akkoord per toets maakt van elke noot een akkoord; kies Losse noten als je akkoorden uit de sequencer stuurt. Galmlengte bouwt de galm opnieuw op; die wordt niet door Mod gestuurd.'));
       paint();
     }
     function paint() { if (!root) return; for (const [id, k] of Object.entries(ui.k || {})) k.set(state[id]); if (ui.preset) ui.preset.value = state.preset; if (ui.unison) ui.unison.value = String(state.unison); if (ui.chord) ui.chord.value = state.chord; if (ui.div) ui.div.value = state.div;

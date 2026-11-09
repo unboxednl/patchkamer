@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Follower); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de continue regelaars (versterking, eigen frequentie, aanzet, loslaten, vloer, bereik, aanslag-gevoeligheid, transiënt-verval, minimale afstand, poort; alle standaard uit).
 //          De effectieve waarde gaat naar de worklet; knop en getState blijven ongewijzigd en modulatie is nooit state. Geen lus: modulate() roept zelf geen host.modulate aan. Bewust weggelaten: Noot (geheel getal, discreet), focus/uitslag/richting/aanslagen sturen (keuzes).
 //          Risico: een gemoduleerde poort/vloer/versterking verandert direct de drempel van de aanslagdetectie (kan extra of minder trigs geven), niet het doorgaande geluid. Zonder modulatie gelijk aan 1.11.0.
@@ -27,8 +28,6 @@ const EN = {
   'Aanslag-gevoeligheid': 'Onset sensitivity', 'Transiënt-verval': 'Transient decay', 'Minimale afstand': 'Minimum spacing', 'Poort': 'Gate',
   'Aanslagen sturen': 'Send onsets as', 'Trig spoor {0}': 'Trig lane {0}', 'Noot': 'Note',
   'niveau, transiënt en helderheid': 'level, transient and brightness',
-  'Trek een <b>audiokabel</b> naar <b>Luistert naar</b> (bijvoorbeeld de drums), en een <b>paarse kabel</b> van <b>Follower</b> naar de Mod-ingang van een apparaat. Kies onderaan per parameter: Niveau, Transiënt of Helderheid, en hoe diep. Bij elke aanslag gaat er ook een trig uit via <b>Aanslagen</b>.':
-    'Pull an <b>audio cable</b> to <b>Listens to</b> (for example the drums), and a <b>purple cable</b> from <b>Follower</b> to the Mod input of a device. Below, choose per parameter: Level, Transient or Brightness, and how deep. On every onset a trig also goes out through <b>Onsets</b>.',
   'AudioWorklet niet beschikbaar: Follower stuurt niets (het geluid gaat wel door).': 'AudioWorklet unavailable: Follower controls nothing (the sound still passes through).',
   'Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>Follower</b> naar de ingang <b>Mod</b> van een apparaat. Kies daarna hier welke parameters meebewegen en hoeveel.':
     'Nothing connected yet. Pull a <b>purple cable</b> from the output <b>Follower</b> to the <b>Mod</b> input of a device. Then choose here which parameters move along and by how much.',
@@ -220,7 +219,7 @@ const DEF = () => ({ att: 5, rel: 150, gain: 0, floor: -50, range: 40, focus: 'a
 const RANGE = { att: [0.1, 200], rel: [5, 3000], gain: [-24, 36], floor: [-90, -10], range: [6, 80], freq: [40, 16000], tsens: [0, 1], tdec: [10, 1000], hold: [10, 500], gate: [-90, -10], trigNote: [24, 96] };
 
 export default {
-  id: 'nl.patchkamer.follower', name: 'Follower', version: '1.11.1', kind: 'modulator', category: 'mod',
+  id: 'nl.patchkamer.follower', name: 'Follower', about: { nl: 'Trek een audiokabel naar Luistert naar (bijvoorbeeld de drums), en een paarse kabel van Follower naar de Mod-ingang van een apparaat. Kies onderaan per parameter: Niveau, Transiënt of Helderheid, en hoe diep. Bij elke aanslag gaat er ook een trig uit via Aanslagen.', en: 'Pull an audio cable to Listens to (for example the drums), and a purple cable from Follower to the Mod input of a device. Below, choose per parameter: Level, Transient or Brightness, and how deep. On every onset a trig also goes out through Onsets.' }, version: '1.12.0', kind: 'modulator', category: 'mod',
   ui: { width: 760, minWidth: 380 },
   i18n: { en: { ports: { in: 'Listens to', out: 'Through', trig: 'Onsets' } } },
   ports: { audioIn: [{ id: 'in', name: 'Luistert naar' }], audioOut: [{ id: 'out', name: 'Door' }], eventIn: [], eventOut: [{ id: 'trig', name: 'Aanslagen' }], modIn: [], modOut: [{ id: 'mod', name: 'Follower' }] },
@@ -249,7 +248,6 @@ export default {
         if (S.trigOut === 'noot') host.emit(self, 'trig', { type: 'note', note: S.trigNote, vel, time, dur: 0.12 }); else host.emit(self, 'trig', { type: 'trig', lane: S.trigOut, vel, time }); } catch (e) {} }
     // ---------- UI ----------
     function build(root) { const mk = h('div', 'mk'); root.appendChild(mk);
-      const intro = h('p', 'intro'); intro.innerHTML = tx('Trek een <b>audiokabel</b> naar <b>Luistert naar</b> (bijvoorbeeld de drums), en een <b>paarse kabel</b> van <b>Follower</b> naar de Mod-ingang van een apparaat. Kies onderaan per parameter: Niveau, Transiënt of Helderheid, en hoe diep. Bij elke aanslag gaat er ook een trig uit via <b>Aanslagen</b>.'); mk.appendChild(intro);
       const cv = h('canvas'); cv.style.height = '96px'; cv.setAttribute('aria-label', tx('niveau, transiënt en helderheid')); mk.appendChild(cv);
       const st = h('div', 'intro'); mk.appendChild(st);
       const b1 = h('div', 'box'), r1 = h('div', 'row'), r2 = h('div', 'row'), r3 = h('div', 'row'); b1.append(r1, r2, r3); mk.appendChild(b1);

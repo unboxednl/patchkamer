@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.3.0 — Uitleg naar about (menu Over Compressor); de UI toont geen uitlegtekst meer.
 // 1.2.0 — Patchkamer contract v1.34: latency() meldt de lookahead aan de host (alleen weergave; de host compenseert niet).
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: compressor met drempel, ratio (1:1 tot oneindig), knee, attack, release (ook automatisch), make-up (ook automatisch),
@@ -19,7 +20,6 @@ const NL = {
   on: 'Aan', off: 'Uit (doorlaten)', auto: 'Auto-release', autoTip: 'Twee releases tegelijk (30 en 400 ms): snel herstel na een piek, traag na aanhoudend geluid', autoMk: 'Auto make-up', autoMkTip: 'Telt de reductie bij een ingang van −12 dB bij de make-up op',
   listen: 'Luister naar sidechain', listenTip: 'Hoor wat de detector hoort (na de filters), om ze in te stellen', aria: 'Overdrachtscurve: ingangsniveau tegen uitgangsniveau', gr: 'Reductie', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Door de lookahead loopt het geluid achter; de host compenseert dat niet',
   extNone: 'Extern: zonder kabel op de ingang Sidechain wordt er niet gecomprimeerd.', failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
-  note: 'Tip: begin met ratio 4:1, attack 10 ms en release 120 ms en verlaag de drempel tot de reductiemeter 3 tot 6 dB beweegt. Zet Mix op 40 tot 60% voor parallelle compressie. Met Lookahead hoort de compressor een piek al voor hij komt (kost latency). Een hoogdoorlaat van 80 tot 150 Hz op de sidechain voorkomt dat de bas het pompen veroorzaakt.',
   g0: 'Compressie', g1: 'Uitgang', g2: 'Sidechain',
   thr: 'Drempel', thr_t: 'vanaf dit niveau wordt gecomprimeerd', ratio: 'Ratio', ratio_t: 'ver boven de drempel: dB erboven per dB uit; 100 = oneindig (limiter)', knee: 'Knee', knee_t: '0 = hard, groter = zachte overgang rond de drempel',
   att: 'Attack', att_t: 'tijdconstante: 63% van de reductie bereikt', rel: 'Release', rel_t: 'tijdconstante: 63% van het herstel; niet in gebruik bij Auto-release',
@@ -32,7 +32,6 @@ const EN = {
   on: 'On', off: 'Off (pass through)', auto: 'Auto release', autoTip: 'Two releases at once (30 and 400 ms): fast recovery after a peak, slow after sustained sound', autoMk: 'Auto make-up', autoMkTip: 'Adds the reduction at an input of −12 dB to the make-up',
   listen: 'Listen to sidechain', listenTip: 'Hear what the detector hears (after the filters), to set them', aria: 'Transfer curve: input level against output level', gr: 'Reduction', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Lookahead delays the sound; the host does not compensate for it',
   extNone: 'External: without a cable on the Sidechain input nothing is compressed.', failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
-  note: 'Tip: start with ratio 4:1, attack 10 ms and release 120 ms and lower the threshold until the reduction meter moves 3 to 6 dB. Set Mix to 40 to 60% for parallel compression. With Lookahead the compressor sees a peak before it arrives (costs latency). A highpass of 80 to 150 Hz on the sidechain stops the bass from causing the pumping.',
   g0: 'Compression', g1: 'Output', g2: 'Sidechain',
   thr: 'Threshold', thr_t: 'compression starts from this level', ratio: 'Ratio', ratio_t: 'far above the threshold: dB in per dB out; 100 = infinite (limiter)', knee: 'Knee', knee_t: '0 = hard, larger = soft transition around the threshold',
   att: 'Attack', att_t: 'time constant: 63% of the reduction reached', rel: 'Release', rel_t: 'time constant: 63% of the recovery; unused with Auto release',
@@ -60,7 +59,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
-.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
+.stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
 .big{font-family:var(--mono,monospace);font-size:22px;color:var(--u-ink)} .small{font-size:11px;color:var(--muted,#97a1ad);line-height:1.4}
 .lamp{display:inline-block;min-width:64px;text-align:center;padding:3px 8px;border-radius:5px;border:1px solid var(--line,#39424e);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#97a1ad)} .lamp.lit{background:var(--go,#7ee0a1);border-color:var(--go,#7ee0a1);color:var(--well,#14100a)}`;
 const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -179,8 +178,8 @@ class Comp extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Comp);`;
 
 export default {
-  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.2.0', kind: 'effect', category: 'effect',
-  about: { nl: 'Maakt het verschil tussen zacht en luid kleiner. Drempel, ratio en knee bepalen hoeveel, attack en release hoe snel; met sidechain-filter, lookahead, parallelle mix en mid/side.', en: 'Narrows the gap between soft and loud. Threshold, ratio and knee set how much, attack and release how fast; with a sidechain filter, lookahead, parallel mix and mid/side.' },
+  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.3.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Maakt het verschil tussen zacht en luid kleiner. Drempel, ratio en knee bepalen hoeveel, attack en release hoe snel; met sidechain-filter, lookahead, parallelle mix en mid/side.\n\nTip: begin met ratio 4:1, attack 10 ms en release 120 ms en verlaag de drempel tot de reductiemeter 3 tot 6 dB beweegt. Zet Mix op 40 tot 60% voor parallelle compressie. Met Lookahead hoort de compressor een piek al voor hij komt (kost latency). Een hoogdoorlaat van 80 tot 150 Hz op de sidechain voorkomt dat de bas het pompen veroorzaakt.', en: 'Narrows the gap between soft and loud. Threshold, ratio and knee set how much, attack and release how fast; with a sidechain filter, lookahead, parallel mix and mid/side.\n\nTip: start with ratio 4:1, attack 10 ms and release 120 ms and lower the threshold until the reduction meter moves 3 to 6 dB. Set Mix to 40 to 60% for parallel compression. With Lookahead the compressor sees a peak before it arrives (costs latency). A highpass of 80 to 150 Hz on the sidechain stops the bass from causing the pumping.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
   modExclude: ['look'],
@@ -244,7 +243,6 @@ export default {
       ui.lvl = ukEl(side, 'div', 'small', ''); ui.lat = ukEl(side, 'div', 'small', ''); ui.lat.title = tx('latencyTip'); ui.ext = ukEl(side, 'div', 'small', tx('extNone'));
       statusEl = ukEl(app, 'p', 'stt');
       ui.k = ukSliders(app, spec, [{ key: 'dynamics', label: tx('g0') }, { key: 'output', label: tx('g1') }, { key: 'sidechain', label: tx('g2') }], (id, v) => { state[id] = v; apply(); paint(true); }, defaults, tx('dbl'));
-      ukEl(app, 'p', 'note', tx('note'));
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }
     function paint(light) { if (!root) return; if (!light) { ui.detect.value = state.detect; ui.chmode.value = state.chmode; ui.sc.value = state.sc;

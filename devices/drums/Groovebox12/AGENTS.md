@@ -13,7 +13,7 @@ Een groovebox met 12 tracks. Elke track heeft een klankmachine (7 drums en 4 syn
 | Naam | `Groovebox 12` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Uit / Out, de som), modulatie-ingang `mod`, bundel-uitgang `multi` (Losse uit / Separate outs: de twaalf tracks apart, na niveau en pan, vóór de sends en het FX-blok) |
-| Contract | v1.24 (apparaatversie 1.14.0) |
+| Contract | v1.24 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Takt Twaalf, `nl.patchkamer.takt12`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De bron van het oude bestand (een HTML-pagina met een bouwscript) is niet beschikbaar; dit bestand wordt rechtstreeks bewerkt.

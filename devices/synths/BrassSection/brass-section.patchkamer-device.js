@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Brass Section); de UI toont geen uitlegtekst meer.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.20.0 — Eerste uitgave van Brass Section (contract v1.20). Eigen motor als AudioWorklet (BrassEngine): 32 spelersstemmen, 1 tot 4 spelers per noot.
 //   - zaagtand (bandbegrensd) door een lowpass-filter dat openzwelt (Blat, Opzwellen) en helderder wordt bij hardere aanslag, met aanzetglijding
@@ -23,8 +24,6 @@ const EN = {
   'AudioWorklet laden…': 'Loading AudioWorklet…',
   'AudioWorklet niet beschikbaar: Brass Section kan hier geen geluid maken.': 'AudioWorklet not available: Brass Section cannot make sound here.',
   '32 stemmen · keyboard/sequencer → oranje Noten · stereo uit → mixer': '32 voices · keyboard/sequencer → orange Notes · stereo out → mixer',
-  'Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Hardere aanslag klinkt helderder (Aanslagkleur). Expressie maakt swells. Elke speler is een eigen stem: met 4 spelers heeft de motor ruimte voor 8 noten tegelijk. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.':
-    'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Harder notes sound brighter (Velocity colour). Expression makes swells. Each player is its own voice: with 4 players the engine has room for 8 notes at once. A purple Mod cable controls sound parameters; the knobs stay the base.'
 };
 // [label, min, max, stap, start, eenheid, schaal, rol, drift, aan]
 const SPEC = {
@@ -201,9 +200,9 @@ class PkBrass extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkBrass);
 `;
 export default {
-  id: 'nl.patchkamer.brass-section', name: 'Brass Section', version: '1.21.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.brass-section', name: 'Brass Section', version: '1.22.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
-  about: { nl: 'Een polyfoon koperinstrument (trompet, trombone, hoorn, sectie) met 1 tot 4 spelers per noot.', en: 'A polyphonic brass instrument (trumpet, trombone, horn, section) with 1 to 4 players per note.' },
+  about: { nl: 'Een polyfoon koperinstrument (trompet, trombone, hoorn, sectie) met 1 tot 4 spelers per noot.\n\nSpeelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Hardere aanslag klinkt helderder (Aanslagkleur). Expressie maakt swells. Elke speler is een eigen stem: met 4 spelers heeft de motor ruimte voor 8 noten tegelijk. Een paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.', en: 'A polyphonic brass instrument (trumpet, trombone, horn, section) with 1 to 4 players per note.\n\nPlays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Harder notes sound brighter (Velocity colour). Expression makes swells. Each player is its own voice: with 4 players the engine has room for 8 notes at once. A purple Mod cable controls sound parameters; the knobs stay the base.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo brass' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo koper', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -248,7 +247,6 @@ export default {
         button(tx('Proeftoon'), () => noteOn(64, 0.85, ctx.currentTime + 0.01, 1.2)); button(tx('Proefakkoord'), () => { const t = ctx.currentTime + 0.01; [52, 59, 64, 67].forEach(n => noteOn(n, 0.8, t, 1.5)); }); button(tx('Alles uit'), () => panic());
         status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
-        const tip = document.createElement('p'); tip.className = 'note'; tip.textContent = tx('Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Hardere aanslag klinkt helderder (Aanslagkleur). Expressie maakt swells. Elke speler is een eigen stem: met 4 spelers heeft de motor ruimte voor 8 noten tegelijk. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.'); el.appendChild(tip);
         paint();
       },
       unmount() { if (root) root.innerHTML = ''; root = null; controls = {}; presetSelect = null; status = null; warn = null; },

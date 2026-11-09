@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Uitleg naar about (menu Over Stereo Space); de UI toont geen uitlegtekst meer.
 // 1.13.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.12.2 — Alle 6 continue regelaars zijn nu stuurbaar via params/modulate (het apparaat krijgt daarmee een mod-ingang); alles staat standaard uit in Drift. De knopstand, getState, presets, poorten, Masterregie (configureMastering) en het geluid zonder modulatie zijn ongewijzigd; de motor krijgt de gemoduleerde waarde, de state nooit. Bewust niet stuurbaar: de keuzelijsten en vinkjes (monoBass, guard), en 'Auto / suggestion strength' (amount): die regelaar stuurt alleen hoe sterk Volg en Pas voorstel toe de analyse-suggesties overnemen, is geen klankparameter en doet niets zolang Volg uit staat; moduleren zou de volglus (bij Master Chain de gain-integrator) onvoorspelbaar maken en het toepassen van een voorstel laten afhangen van het moment.
 // 1.12.0 — contract v1.12: De poort `setup` is nu een mastering-ingang (driehoek, gele gestippelde kabel) in plaats van een modulatie-ingang; de opdrachten van de Master Director komen via host.mastering. Het geluid is ongewijzigd (zelfde DSP, zelfde worklet).
@@ -15,7 +16,6 @@ function frameLoop(host, inst, cb, fps) {
 }
 const SPEC={"key": "space", "controls": [{"id": "width", "value": 1.35, "min": 0.5, "max": 2.2, "unit": ""}, {"id": "depth", "value": 0.4, "min": 0, "max": 1, "unit": ""}, {"id": "fullness", "value": 0.3, "min": 0, "max": 0.8, "unit": ""}, {"id": "motion", "value": 0.15, "min": 0, "max": 1, "unit": ""}, {"id": "mix", "value": 0.25, "min": 0, "max": 1, "unit": ""}, {"id": "bass", "value": 140, "min": 60, "max": 350, "unit": "Hz"}, {"id": "monoBass", "value": true, "type": "check"}, {"id": "guard", "value": true, "type": "check"}], "profiles": {"Intimate room": {"width": 1.1, "depth": 0.15, "fullness": 0.18, "mix": 0.17, "motion": 0.06}, "Wide studio": {"width": 1.55, "depth": 0.35, "fullness": 0.3, "mix": 0.28, "motion": 0.12}, "Enveloping cloud": {"width": 1.8, "depth": 0.7, "fullness": 0.55, "mix": 0.5, "motion": 0.35}, "Subtle master": {"width": 1.15, "depth": 0.25, "fullness": 0.17, "mix": 0.12, "motion": 0.05}}};
 const NAME="Stereo Space";
-const DESC={"nl": "Echte twee-kanaals diffusie met vroege reflecties, microvertragingen, beweging, centraal laag en begrenzing van extra breedte.", "en": "True two-channel diffusion with early reflections, micro delays, motion, centred bass and limiting of the extra width."};
 const LOC={"nl": {"ctl": {"width": "Breedte", "depth": "Diepte", "fullness": "Volheid", "motion": "Beweging", "mix": "Mix", "bass": "Laaggrens", "monoBass": "Laag centraal", "guard": "Breedtebewaking"}, "opt": {}, "prof": {"Intimate room": "Intieme kamer", "Wide studio": "Brede studio", "Enveloping cloud": "Omhullende wolk", "Subtle master": "Subtiele master"}}, "en": {"ctl": {"width": "Width", "depth": "Depth", "fullness": "Fullness", "motion": "Motion", "mix": "Mix", "bass": "Bass limit", "monoBass": "Centered bass", "guard": "Width guard"}, "opt": {}, "prof": {"Intimate room": "Intimate room", "Wide studio": "Wide studio", "Enveloping cloud": "Enveloping cloud", "Subtle master": "Subtle master"}}};
 const TXT={
  "nl": {
@@ -47,7 +47,6 @@ const TXT={
   "strength": "Auto-/voorstelsterkte",
   "emptyMeter": "Laat audio door het apparaat lopen om te meten.",
   "spectrum": "Ingangsspectrum",
-  "proposalHint": "Analyse maakt een voorstel. Volg past alleen ontgrendelde parameters langzaam aan; zet het uit voor vaste instellingen.",
   "lock": "Vast",
   "lockFor": " vergrendelen",
   "refFile": "Referentiebestand",
@@ -59,7 +58,6 @@ const TXT={
   "listenMain": "Luister MAIN",
   "listenRef": "Luister REF",
   "stopRef": "Stop referentie",
-  "localNote": "Bestanden blijven lokaal. Een geladen referentiebestand wordt niet in presets/werkruimtes opgenomen. Ref-match gebruikt het gemeten niveau van de afgespeelde fragmenten.",
   "learning": "Analyse loopt: speel acht seconden representatieve audio.",
   "suggestion": "Voorstel uit acht seconden analyse; kies Pas voorstel toe.",
   "toolow": "Te weinig audiosignaal voor een voorstel.",
@@ -98,7 +96,6 @@ const TXT={
   "strength": "Auto / suggestion strength",
   "emptyMeter": "Play audio through the device to measure.",
   "spectrum": "Input spectrum",
-  "proposalHint": "Analysis makes a suggestion. Follow adapts only unlocked parameters slowly; turn it off for fixed settings.",
   "lock": "Lock",
   "lockFor": " lock",
   "refFile": "Reference file",
@@ -110,7 +107,6 @@ const TXT={
   "listenMain": "Listen MAIN",
   "listenRef": "Listen REF",
   "stopRef": "Stop reference",
-  "localNote": "Files stay local. A loaded reference file is not saved in presets or workspaces. Ref match uses the measured level of the passages that were played.",
   "learning": "Analysis running: play eight seconds of representative audio.",
   "suggestion": "Suggestion from eight seconds of analysis; choose Apply suggestion.",
   "toolow": "Too little audio signal for a suggestion.",
@@ -314,7 +310,7 @@ function defaults(){const s={bypass:false,match:false,auto:false,amount:.7,remot
 function normalize(raw){const s=defaults();raw=raw&&typeof raw==='object'?raw:{};for(const k of ['bypass','match','auto','remote'])if(typeof raw[k]==='boolean')s[k]=raw[k];if(Number.isFinite(raw.amount))s.amount=clamp(raw.amount,0,1);for(const c of SPEC.controls){if(c.type==='check'){if(typeof raw[c.id]==='boolean')s[c.id]=raw[c.id];}else if(c.type==='select'){if(c.options.some(o=>o[0]===raw[c.id]))s[c.id]=raw[c.id];}else if(typeof raw[c.id]==='number'&&Number.isFinite(raw[c.id]))s[c.id]=clamp(raw[c.id],c.min,c.max);}if(raw.locks&&typeof raw.locks==='object')for(const c of SPEC.controls)if(raw.locks[c.id]===true)s.locks[c.id]=true;if(SPEC.key==='multiband'&&s.highSplit<s.lowSplit*2){if(s.locks.highSplit&&!s.locks.lowSplit)s.lowSplit=s.highSplit/2;else s.highSplit=s.lowSplit*2;}return s;}
 const PRESET_SKIP=['bypass','match','auto','remote','locks'];  // werkstand, geen klank: een preset laat dit staan
 const __pkDef ={
- id:'nl.patchkamer.stereospace',name:'Stereo Space',version:'1.13.0',modExclude:['amount'],mastering:{protocol:1,configure:true},i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',setup:'Master Director'}}},kind:SPEC.key==='control'?'utility':'effect',category:'mastering',collection:'mastering',ui:{width:660,minWidth:320},
+ id:'nl.patchkamer.stereospace',about: { nl: 'Echte twee-kanaals diffusie met vroege reflecties, microvertragingen, beweging, centraal laag en begrenzing van extra breedte.\n\nAnalyse maakt een voorstel. Volg past alleen ontgrendelde parameters langzaam aan; zet het uit voor vaste instellingen.', en: 'True two-channel diffusion with early reflections, micro delays, motion, centred bass and limiting of the extra width.\n\nAnalysis makes a suggestion. Follow adapts only unlocked parameters slowly; turn it off for fixed settings.' }, name:'Stereo Space',version:'1.14.0',modExclude:['amount'],mastering:{protocol:1,configure:true},i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',setup:'Master Director'}}},kind:SPEC.key==='control'?'utility':'effect',category:'mastering',collection:'mastering',ui:{width:660,minWidth:320},
  ports:{audioIn:[{id:'in',name:'Stereo in'},...(SPEC.key==='comp'?[{id:'side',name:'Sidechain'}]:SPEC.key==='control'?[{id:'ref',name:'Reference'}]:[])],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[],modOut:[],multiIn:[],multiOut:[],masteringIn:[{id:'setup',name:'Master Director'}],masteringOut:[]},
  create(ctx,host){
   const TX=TXT[host&&host.lang]||TXT.en,LC=LOC[host&&host.lang]||LOC.en;const ctlName=c=>LC.ctl[c.id]||c.id,optName=(c,v)=>LC.opt[v]||v;
@@ -357,11 +353,11 @@ const __pkDef ={
   const self={
    inputs:{in:input,...(SPEC.key==='comp'?{side:aux}:SPEC.key==='control'?{ref:aux}:{})},outputs:{out:output},
    mount(el){if(dead)return;unmount();shell=document.createElement('div');el.appendChild(shell);shadow=shell.attachShadow({mode:'open'});const style=document.createElement('style');style.textContent=`
-    :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:9px;background:var(--card);padding:12px;border:1px solid var(--line);border-radius:9px}.hint,.status,.proposal{font-size:11px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:6px}
+    :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:9px;background:var(--card);padding:12px;border:1px solid var(--line);border-radius:9px}.status,.proposal{font-size:11px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}.proposal:empty{display:none}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:6px}
     select,button,input[type=file]{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);padding:5px;border-radius:4px;min-width:0;max-width:100%}button{cursor:pointer}button:hover{border-color:var(--audio)}input{accent-color:var(--audio)}input[type=range]{width:100%;min-width:0}.control{padding:8px;border:1px solid var(--line);border-radius:5px;background:var(--card-2)}.line{display:flex;justify-content:space-between;gap:5px;align-items:center}.lock{font-size:10px;color:var(--muted)}output{font-size:10px;color:var(--audio)}pre{font:11px/1.6 var(--mono,monospace);margin:0;padding:10px;background:var(--well);color:var(--well-fg,var(--fg));border-radius:6px;white-space:pre-wrap}.screen{height:95px;position:relative;min-width:0;overflow:hidden;background:var(--well);border-radius:5px}canvas{position:absolute;width:100%;height:100%;inset:0}.proposal{padding:7px;border-left:2px solid var(--audio)}
    `;shadow.appendChild(style);
     function make(tag,text,parent,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;if(parent)parent.appendChild(e);return e;}
-    const app=make('div',null,shadow,'app');make('div',DESC[host&&host.lang]||DESC.en,app,'hint');
+    const app=make('div',null,shadow,'app');
     const row=make('div',null,app,'row');
     const profile=make('select',null,row);profile.setAttribute('aria-label',TX.profileLabel);const blank=make('option',TX.profilePick,profile);blank.value='';for(const[name,values]of Object.entries(SPEC.profiles)){const o=make('option',LC.prof[name]||name,profile);o.value=name;}
     profile.onchange=()=>{const p=SPEC.profiles[profile.value];if(p){for(const[k,v]of Object.entries(p))if(!state.locks[k])state[k]=v;syncUI();}profile.value='';};
@@ -372,7 +368,7 @@ const __pkDef ={
     meter=make('pre',TX.emptyMeter,app);const screen=make('div',null,app,'screen');canvas=make('canvas',null,screen);canvas.setAttribute('aria-label',TX.spectrum);pen=canvas.getContext('2d');
     function resize(){if(!canvas)return;const d=Math.min(2,globalThis.devicePixelRatio||1);canvas.width=Math.max(1,screen.clientWidth*d);canvas.height=Math.max(1,screen.clientHeight*d);}ro=new ResizeObserver(resize);ro.observe(screen);resize();
     function draw(){if(!canvas||dead)return;const d=Math.min(2,globalThis.devicePixelRatio||1),w=canvas.width/d,h=canvas.height/d,css=getComputedStyle(shell);pen.setTransform(d,0,0,d,0,0);pen.fillStyle=css.getPropertyValue('--well').trim()||'Canvas';pen.fillRect(0,0,w,h);const values=lastStats?.spectrum;if(!values)return;pen.strokeStyle=css.getPropertyValue('--audio').trim()||'Highlight';pen.beginPath();for(let i=0;i<values.length;i++){const x=i/(values.length-1)*w,y=h-clamp((values[i]+100)/90,0,1)*h;if(i)pen.lineTo(x,y);else pen.moveTo(x,y);}pen.stroke();}draw();raf=frameLoop(host,self,draw,20);
-    proposalBox=make('div',TX.proposalHint,app,'proposal');
+    proposalBox=make('div',null,app,'proposal');
     const grid=make('div',null,app,'grid');
     for(const c of SPEC.controls){const wrap=make('div',null,grid,'control'),head=make('div',null,wrap,'line');make('span',ctlName(c),head);
      if(c.type==='check'){const i=make('input',null,head);i.type='checkbox';i.setAttribute('aria-label',ctlName(c));i.onchange=()=>{state[c.id]=i.checked;syncUI();};controls.push({el:i,key:c.id,check:true});}
@@ -382,7 +378,7 @@ const __pkDef ={
     }
     if(SPEC.key==='control'){const refRow=make('div',null,app,'row'),file=make('input',null,refRow);file.type='file';file.accept='audio/*';file.setAttribute('aria-label',TX.refFile);file.onchange=async()=>{const selected=file.files&&file.files[0];if(!selected)return;try{stopReference();const token=++refGeneration,bytes=await selected.arrayBuffer();if(dead||token!==refGeneration)return;const decoded=await ctx.decodeAudioData(bytes);if(dead||token!==refGeneration)return;referenceBuffer=decoded;notice(TX.refLoaded+selected.name+TX.refClick);}catch(e){notice(TX.refFail+e.message);}};
      button(TX.playRef,()=>{if(!referenceBuffer){notice(TX.loadFirst);return;}stopReference();referenceSource=ctx.createBufferSource();referenceSource.buffer=referenceBuffer;referenceSource.loop=true;referenceSource.connect(aux);sources.add(referenceSource);referenceSource.onended=stopReference;referenceSource.start();refPlaying=true;event({type:'reference',value:true});},refRow);
-     button(TX.listenMain,()=>event({type:'reference',value:false}),refRow);button(TX.listenRef,()=>event({type:'reference',value:true}),refRow);button(TX.stopRef,stopReference,refRow);make('div',TX.localNote,app,'hint');
+     button(TX.listenMain,()=>event({type:'reference',value:false}),refRow);button(TX.listenRef,()=>event({type:'reference',value:true}),refRow);button(TX.stopRef,stopReference,refRow);
     }
     status=make('div',engineLabel,app,'status');shadow.addEventListener('pointerdown',e=>e.stopPropagation());syncUI();paintStats();
    },unmount,

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Acid Baselines); de UI toont geen uitlegtekst meer.
 // 1.11.3 — Alle continue regelaars zijn stuurbaar: sub, ruis, osc 2, detune 2, ring, filter 2, F2 octaaf, tight, mix en crush deden al mee in de
 //   modulatie maar stonden niet in params(), dus Drift en andere modulatoren zagen ze niet. Nu staan ze er allemaal in (standaard uit).
 //   Klank en instellingen zijn ongewijzigd.
@@ -49,8 +50,6 @@ const EN = {
   'stap {0}': 'step {0}', 'Octaaf stap {0}': 'Octave step {0}',
   'Octaaf per stap, bovenop de knop Octaaf': 'Octave per step, on top of the Octave knob',
   'zet dit patroon in de maat die je bewerkt': 'put this pattern in the bar you are editing', 'Patroon kiezen…': 'Choose pattern…',
-  'Slide = glijden vanuit de vorige stap met open gate; dezelfde noot met slide is een bindboog. Octaaf = per stap −2…+2 octaven, bovenop de knop Octaaf. Zet "intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,9 = accent, overlappende noten = slide).':
-    'Slide = glide from the previous step with the gate open; the same note with slide is a tie. Octave = −2…+2 octaves per step, on top of the Octave knob. Switch "internal" off to play only notes from the orange input (vel > 0.9 = accent, overlapping notes = slide).',
 };
 const STEPS = 16, MAXBARS = 16;
 // geldige bereiken en keuzes voor setState (§13)
@@ -148,7 +147,6 @@ select.oc{width:100%;height:18px;padding:0;font-size:10px;text-align:center;text
 select.oc.up{background:var(--a-accent);border-color:var(--a-accent);color:#1a0d00} select.oc.down{background:var(--a-accent-dim);border-color:var(--a-accent);color:var(--a-fg)}
 .lib{display:flex;flex-wrap:wrap;gap:3px}
 .lib button{font-size:10px;padding:3px 6px;letter-spacing:.04em}
-.note{color:var(--a-muted);font-size:10px}
 `;
 
 // Stuurbare parameters (contract v1.3): id, naam, min, max, log, rol, voorgesteld bereik, standaard aan
@@ -183,8 +181,12 @@ const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 export default {
   id: 'nl.patchkamer.acidbaselines',
   name: 'Acid Baselines',
-  version: '1.11.3',
+  version: '1.12.0',
   kind: 'instrument',
+  about: {
+    nl: 'Een basslijn-synth: oscillator, tweevoudig lowpass-filter met resonantie, aparte normal/accent decay, soft attack, filter-FM, overdrive en een toonfilter. Eigen 16-staps sequencer met accent en slide, 1–16 sets, een lijnbibliotheek en een lijngenerator. Speelt ook noten van een externe sequencer.\n\nSlide = glijden vanuit de vorige stap met open gate; dezelfde noot met slide is een bindboog. Octaaf = per stap −2…+2 octaven, bovenop de knop Octaaf. Zet "intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,9 = accent, overlappende noten = slide).',
+    en: 'A bass-line synth: oscillator, dual lowpass filter with resonance, separate normal/accent decay, soft attack, filter FM, overdrive and a tone filter. Built-in 16-step sequencer with accent and slide, 1–16 sets, a line library and a line generator. Also plays notes from an external sequencer.\n\nSlide = glide from the previous step with the gate open; the same note with slide is a tie. Octave = −2…+2 octaves per step, on top of the Octave knob. Switch "internal" off to play only notes from the orange input (vel > 0.9 = accent, overlapping notes = slide).',
+  },
   category: 'synth',
   ui: { width: 1102, minWidth: 420 },
   ports: {
@@ -378,7 +380,6 @@ export default {
          ['Kopieer maat naar alle', () => { for (let b = 0; b < MAXBARS; b++) if (b !== editBar) grid[b] = copyBar(grid[editBar]); }],
          ['Leeg', () => { grid[editBar] = emptyBar(); }]]
           .forEach(([n, f]) => { const b = document.createElement('button'); b.textContent = tx(n); b.onclick = () => { f(); paint(); }; lib2.appendChild(b); });
-        const nt = document.createElement('div'); nt.className = 'note'; nt.textContent = tx('Slide = glijden vanuit de vorige stap met open gate; dezelfde noot met slide is een bindboog. Octaaf = per stap −2…+2 octaven, bovenop de knop Octaaf. Zet "intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,9 = accent, overlappende noten = slide).'); sb.appendChild(nt);
         refreshAll(); paint();
       },
       unmount() { root = null; },

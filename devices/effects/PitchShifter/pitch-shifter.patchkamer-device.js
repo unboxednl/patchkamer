@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Uitleg naar about (menu Over Pitch Shifter); de UI toont geen uitlegtekst meer.
 // 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Pitch Shifter: verschuift de toonhoogte (−24 … +24 halve tonen plus cents) met behoud van tempo, in drie motoren:
 //   Percussief (korte korrels zonder zoeker, ca. 3 tot 12 ms latentie, voor drums), Korrel (korrels met correlatiezoeker voor aansluitende golfvormen,
@@ -18,11 +19,11 @@ const RANGES = { semi: [-24, 24], cents: [-100, 100], formant: [0, 1], fshift: [
 const TXT = {
   nl: { mode: 'Motor', perc: 'Percussief (korrels, snel)', grain: 'Korrel (zang, instrumenten)', vocoder: 'Vocoder (formanten)', win: 'Venster', fast: 'Snel', normal: 'Normaal', high: 'Hoog',
     pitch: 'Toonhoogte', fine: 'Fijn', formant: 'Formant %', fshift: 'Formant st', mix: 'Mix', fb: 'Terugkoppeling', tone: 'Toon terugk.', glide: 'Glij',
-    lat: 'Latentie: {0} ms (bij grote intervallen in de korrelmotoren tot {1} ms)', latv: 'Latentie: {0} ms', unvoc: 'Formantbehoud en -verschuiving werken alleen in de motor Vocoder.',
+    lat: 'Latentie: {0} ms (bij grote intervallen in de korrelmotoren tot {1} ms)', latv: 'Latentie: {0} ms',
     load: 'AudioWorklet laden…', fail: 'AudioWorklet niet beschikbaar: het geluid gaat onbewerkt door.', ports: { out: 'Uit' } },
   en: { mode: 'Engine', perc: 'Percussive (grains, fast)', grain: 'Grain (voice, instruments)', vocoder: 'Vocoder (formants)', win: 'Window', fast: 'Fast', normal: 'Normal', high: 'High',
     pitch: 'Pitch', fine: 'Fine', formant: 'Formant %', fshift: 'Formant st', mix: 'Mix', fb: 'Feedback', tone: 'Feedback tone', glide: 'Glide',
-    lat: 'Latency: {0} ms (up to {1} ms for large intervals in the grain engines)', latv: 'Latency: {0} ms', unvoc: 'Formant keep and shift only work in the Vocoder engine.',
+    lat: 'Latency: {0} ms (up to {1} ms for large intervals in the grain engines)', latv: 'Latency: {0} ms',
     load: 'Loading AudioWorklet…', fail: 'AudioWorklet unavailable: the sound passes through unprocessed.', ports: { out: 'Out' } },
 };
 const WNAME = 'nl-patchkamer-pitchshifter-1-0-0';
@@ -372,7 +373,8 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.pitchshifter',
   name: 'Pitch Shifter',
-  version: '1.1.0',
+  version: '1.2.0',
+  about: { nl: 'Verschuift de toonhoogte met behoud van tempo, in drie motoren: Percussief, Korrel en Vocoder.\n\nFormantbehoud en -verschuiving werken alleen in de motor Vocoder.', en: 'Shifts the pitch while keeping the tempo, in three engines: Percussive, Grain and Vocoder.\n\nFormant keep and shift only work in the Vocoder engine.' },
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
@@ -392,7 +394,7 @@ export default {
       const ms = latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr;
       if (S.mode === 'vocoder') { note.textContent = fmt(T.latv, ms.toFixed(0)); return; }
       const half = 500 * Math.round((S.mode === 'perc' ? [480, 768, 1152] : [1152, 1920, 3072])[WINS.indexOf(S.win)] * sr / 48000) / sr;
-      note.textContent = fmt(T.lat, ms.toFixed(0), (ms + half).toFixed(0)) + ' ' + T.unvoc;
+      note.textContent = fmt(T.lat, ms.toFixed(0), (ms + half).toFixed(0));
     }
     function apply() {
       if (!node) return;

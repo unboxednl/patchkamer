@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Grain Cloud); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Grain Cloud (nieuwe id nl.patchkamer.graincloud, eigen map; voorheen Korrel, nl.patchkamer.korrel);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
@@ -23,7 +24,6 @@
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-  .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button,input[type=text],input[type=number]{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -36,7 +36,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
-.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}`;
+.stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}`;
 const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
@@ -92,10 +92,6 @@ const EN = {
   'neemt 4 seconden van de ingang op en bevriest dan': 'records 4 seconds from the input and then freezes',
   'de bron met de korrels die nu klinken': 'the source with the grains that are sounding now',
   'Waar en hoe vaak': 'Where and how often', 'Elke korrel': 'Every grain', 'Wolk en mix': 'Cloud and mix',
-  'Knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.':
-    'Cuts sound into tiny grains and scatters them again. As an effect: connect an audio cable to the input and choose Live. As a synth: choose Wave and play notes, or let the cloud float on endlessly.',
-  'Noten spelen een wolk op hun toonhoogte: C4 is de oorspronkelijke toon van de opname, bij Golf is dat A3. Tips: Korrelgrootte klein en Dichtheid hoog = ruisachtig zoemen; groot en laag = losse brokjes. Toonsprongen Octaven met Toonspreiding 12 maakt van elk geluid een glinsterend koor. Paarse Mod: Drift op Positie laat de wolk vanzelf door de opname dwalen.':
-    'Notes play a cloud at their pitch: C4 is the original pitch of the recording, with Wave it is A3. Tips: small Grain size and high Density = noisy buzzing; large and low = separate chunks. Pitch jumps Octaves with Pitch spread 12 turns any sound into a glittering choir. Purple Mod: Drift on Position lets the cloud wander through the recording by itself.',
   'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.': 'AudioWorklet unavailable: the sound passes through unchanged.',
   'dubbelklik: standaard': 'double-click: default',
   '← ouder        opname (8 s)        zojuist →': '← older        recording (8 s)        just now →',
@@ -171,9 +167,9 @@ class GrainCloud extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', GrainCloud);`;
 
 export default {
-  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.12.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.13.0', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 380 },
-  about: { nl: 'Een granulaire synth en effect: knipt geluid in korreltjes en strooit ze opnieuw uit.', en: 'A granular synth and effect: cuts sound into grains and scatters them again.' },
+  about: { nl: 'Een granulaire synth en effect: knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.\n\nNoten spelen een wolk op hun toonhoogte: C4 is de oorspronkelijke toon van de opname, bij Golf is dat A3.\n\nTips: Korrelgrootte klein en Dichtheid hoog = ruisachtig zoemen; groot en laag = losse brokjes. Toonsprongen Octaven met Toonspreiding 12 maakt van elk geluid een glinsterend koor. Paarse Mod: Drift op Positie laat de wolk vanzelf door de opname dwalen.', en: 'A granular synth and effect: cuts sound into tiny grains and scatters them again. As an effect: connect an audio cable to the input and choose Live. As a synth: choose Wave and play notes, or let the cloud float on endlessly.\n\nNotes play a cloud at their pitch: C4 is the original pitch of the recording, with Wave it is A3.\n\nTips: small Grain size and high Density = noisy buzzing; large and low = separate chunks. Pitch jumps Octaves with Pitch spread 12 turns any sound into a glittering choir. Purple Mod: Drift on Position lets the cloud wander through the recording by itself.' },
   ports: { audioIn: [{ id: 'in', name: 'In (source)' }], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { in: 'In (bron)', notes: 'Noten' } } },
   create(ctx, host) {
@@ -232,7 +228,6 @@ export default {
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, recTimer = 0;
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('#e7b6ff'));
-      ukEl(app, 'p', 'sub', tx('Knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.'));
       const top = ukEl(app, 'div', 'top');
       ui.preset = ukSelect(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen')]]), state.preset, v => { if (presets[v]) self.setState({ ...defaults, ...presets[v], preset: v }); });
       ui.src = ukSelect(top, tx('Bron'), SRCS, state.src, v => { state.src = v; custom(); apply(); paint(); });
@@ -246,7 +241,6 @@ export default {
       cv = ukEl(app, 'canvas'); cv.setAttribute('aria-label', tx('de bron met de korrels die nu klinken'));
       statusEl = ukEl(app, 'p', 'stt');
       ui.k = ukSliders(app, spec, [tx('Waar en hoe vaak'), tx('Elke korrel'), tx('Wolk en mix')], id => state[id], (id, v) => { state[id] = v; custom(); apply(); }, defaults, tx('dubbelklik: standaard'));
-      ukEl(app, 'p', 'note', tx('Noten spelen een wolk op hun toonhoogte: C4 is de oorspronkelijke toon van de opname, bij Golf is dat A3. Tips: Korrelgrootte klein en Dichtheid hoog = ruisachtig zoemen; groot en laag = losse brokjes. Toonsprongen Octaven met Toonspreiding 12 maakt van elk geluid een glinsterend koor. Paarse Mod: Drift op Positie laat de wolk vanzelf door de opname dwalen.'));
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     const post = m => { if (node) node.port.postMessage(m); };
     function custom() { if (state.preset !== 'Custom') { state.preset = 'Custom'; if (ui.preset) ui.preset.value = 'Custom'; } }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Stage Keys); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Verbeterd: noteoff, noteon, een aangehouden toets (held) en panic worden nu verwerkt (voorheen klonk elke toets van Keys in de stand "Toets vasthouden" door, omdat noteoff werd genegeerd). De drive is veel zachter (een zachte begrenzing met een kleine vaste kromming, gedeeld door de toename) en de ingang is versterkt, zodat het volume ook zonder drive goed is.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe id nl.patchkamer.stagekeys (voorheen nl.unboxed.stagekeys). Tweetalig (host.lang, namen per taal in i18n).
 //   - klankmodellen en hun state-waarden hebben neutrale namen: tine, reed, combpluck, organ, combo, vibes, bass (inst);
@@ -13,10 +14,11 @@
 export default {
   id: 'nl.patchkamer.stagekeys',
   name: 'Stage Keys',
-  version: '1.11.1',
+  version: '1.12.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 560, minWidth: 260 },
+  about: { nl: 'Polyfoon, tot 24 stemmen. Speel op het klavier of verbind een sequencer met Noten; Gespeeld stuurt door wat je speelt.\n\nCC-ids: tone, drive, tremolo, tremrate, tune, level, rotary, sustain, model.\n\nEen sturingskabel op Mod laat toon, stemming en de rest bewegen.', en: 'Polyphonic, up to 24 voices. Play on the keyboard or connect a sequencer to Notes; Played passes on what you play.\n\nCC ids: tone, drive, tremolo, tremrate, tune, level, rotary, sustain, model.\n\nA control cable on Mod moves tone, tuning and the rest.' },
   ports: {
     audioIn: [],
     audioOut: [{ id: 'out', name: 'Uit' }],
@@ -33,8 +35,6 @@ export default {
       'Reed-grom': 'Reed growl', 'Toon': 'Tone', 'Stemming': 'Tuning', 'Niveau': 'Level', 'Rotary traag': 'Rotary slow', 'Rotary snel': 'Rotary fast', 'Octaaf': 'Octave',
       'Klavier': 'Keyboard', 'Klavier een octaaf lager': 'Keyboard one octave down', 'Klavier een octaaf hoger': 'Keyboard one octave up', 'Sustainpedaal (ook via cc "sustain")': 'Sustain pedal (also via cc "sustain")',
       'Rotary-snelheid: traag 0,7 Hz / snel 6,6 Hz': 'Rotary speed: slow 0.7 Hz / fast 6.6 Hz', 'toetsen': 'keys', 'Gestuurd: ': 'Controlled: ',
-      'Polyfoon, tot {0} stemmen. Speel op het klavier of verbind een sequencer met Noten; Gespeeld stuurt door wat je speelt. CC-ids: tone, drive, tremolo, tremrate, tune, level, rotary, sustain, model. Een sturingskabel op Mod laat toon, stemming en de rest bewegen.':
-        'Polyphonic, up to {0} voices. Play on the keyboard or connect a sequencer to Notes; Played passes on what you play. CC ids: tone, drive, tremolo, tremrate, tune, level, rotary, sustain, model. A control cable on Mod moves tone, tuning and the rest.',
     };
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
     // ---- uitgangsketen: stemmen -> drive -> stereo tremolo (L/R in tegenfase) -> niveau ----
@@ -366,8 +366,7 @@ button.sus[aria-pressed="true"]{background:var(--md);border-color:var(--md)}
 .seg{display:inline-flex}.seg button{border-radius:0;padding:5px 7px}.seg button+button{border-left:0}
 .seg button:first-child{border-radius:3px 0 0 3px}.seg button:last-child{border-radius:0 3px 3px 0}
 .lab{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
-.foot{color:var(--mu);font-size:10px;line-height:1.45}
-@container (max-width:330px){.ctl{grid-template-columns:54px minmax(0,1fr) 40px}.foot{display:none}}
+@container (max-width:330px){.ctl{grid-template-columns:54px minmax(0,1fr) 40px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
 
     const mk = (tag, cls, parent, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; if (parent) parent.appendChild(e); return e; };
@@ -470,7 +469,6 @@ button.sus[aria-pressed="true"]{background:var(--md);border-color:var(--md)}
         const seg = mk('div', 'seg', row);
         [-2, -1, 0, 1, 2].forEach(o => { const b = mk('button', '', seg, o > 0 ? '+' + o : o < 0 ? '−' + -o : '0'); b.onclick = () => { state.oct = o; paintToggles(); }; ui.oct[o] = b; });
 
-        mk('div', 'foot', app, tx('Polyfoon, tot {0} stemmen. Speel op het klavier of verbind een sequencer met Noten; Gespeeld stuurt door wat je speelt. CC-ids: tone, drive, tremolo, tremrate, tune, level, rotary, sustain, model. Een sturingskabel op Mod laat toon, stemming en de rest bewegen.', MAX_VOICES));
         paintAll();
         if (typeof host.frame === 'function') stopFrame = host.frame(self, flush, 30);
       },

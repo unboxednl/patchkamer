@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Bass Finder); de UI toont geen uitlegtekst meer.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.20.0 — Eerste versie. Bass Finder luistert naar een monofone baslijn (bas, sub of synthbas; geen akkoorden) en schrijft de noten op: toonhoogte, start, lengte en velocity.
 //          Bron: een audiobestand (knop, of de tab Samples via loadAudio, met tempo en maten van het sample) of een opname van een paar maten uit de ingang (bijvoorbeeld van Audio Capture).
@@ -360,13 +361,11 @@ class BFCap extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', BFCap);`;
 
 const TXT = {
-  nl: { hint: 'Luistert naar een monofone baslijn (bas, sub of synthbas, geen akkoorden) en schrijft de noten op: toonhoogte, start, lengte en velocity. Laad een audiobestand (ook via de tab Samples), of neem een paar maten op uit de ingang, bijvoorbeeld van Audio Capture. De noten kun je corrigeren, naar een synth sturen en kopiëren naar een sequencer.',
-    load: 'Audiobestand laden…', record: 'Opnemen', stop: 'Stop', recLen: { b2: '2 maten', b4: '4 maten', b8: '8 maten', s5: '5 seconden', s10: '10 seconden', s20: '20 seconden' }, recLenLabel: 'Opnameduur',
+  nl: { load: 'Audiobestand laden…', record: 'Opnemen', stop: 'Stop', recLen: { b2: '2 maten', b4: '4 maten', b8: '8 maten', s5: '5 seconden', s10: '10 seconden', s20: '20 seconden' }, recLenLabel: 'Opnameduur',
     bpm: 'Tempo (BPM)', bpmAuto: 'auto', half: '÷2', dbl: '×2', bars: 'Maten', barsAuto: 'auto', grid: 'Raster', gridAuto: 'auto', grids: { '8': '1/8', '16': '1/16', '16t': 'triool 1/16', off: 'uit' },
     swing: 'Swing', swingAuto: 'auto', align: 'Eerste tel', alignSmart: 'slim', alignFirst: 'eerste noot op de maat', alignStart: 'begin van het geluid', sens: 'Gevoeligheid', shiftL: '◀ 1/16', shiftR: '1/16 ▶', shift: 'Patroon verschuiven',
     again: 'Opnieuw analyseren', clear: 'Wissen', play: 'Naar een synth sturen (klok)', level: 'Velocity', useTempo: 'Studiotempo gelijkzetten', saveClip: 'Clip bewaren (JSON)',
     del: 'Noot wissen', left: 'Noot eerder', right: 'Noot later', up: 'Halve toon omhoog', down: 'Halve toon omlaag', octUp: 'Octaaf omhoog', octDown: 'Octaaf omlaag', shorter: 'Korter', longer: 'Langer', add: 'Noot toevoegen',
-    editHint: 'Klik op een noot om hem te kiezen en sleep hem (rand rechts: lengte). Dubbelklik op een lege plek voegt een noot toe. Toetsen: Delete, pijlen (Shift = octaaf), [ en ] voor de lengte. De dunne omtrekken zijn wat er gevonden is voor het kwantiseren.',
     idle: 'Nog niets geladen. Laad een audiobestand of neem op uit de ingang.', busy: 'Analyseren…', recording: (s, t) => 'Opnemen… ' + s.toFixed(1) + ' / ' + t.toFixed(1) + ' s',
     notes: n => n + (n === 1 ? ' noot' : ' noten'), tuningTxt: c => 'stemming ' + (c > 0 ? '+' : '') + c + ' ct',
     summary: (bpm, how, bars, grid, swing, n, tun) => bpm.toFixed(1) + ' BPM (' + how + ') · ' + bars + (bars === 1 ? ' maat' : ' maten') + ' · raster ' + grid + ' · swing ' + Math.round(swing * 100) + '% · ' + n + (n === 1 ? ' noot' : ' noten') + (tun ? ' · ' + tun : ''),
@@ -376,13 +375,11 @@ const TXT = {
     truncated: 'Alleen de eerste 90 seconden zijn gebruikt.',
     noPaste: 'Bass Finder maakt alleen clips; plakken kan hier niet.', clipName: 'Bass Finder', swingHint: 'Zet de swing van de studio op 0 als je de herkende swing gebruikt.',
     lowConf: 'Het tempo is geschat; staat het op de helft of het dubbele, gebruik dan ÷2 of ×2.', canvas: 'Pianorol met de herkende noten' },
-  en: { hint: 'Listens to a monophonic bass line (bass, sub or synth bass, no chords) and writes down the notes: pitch, start, length and velocity. Load an audio file (also from the Samples tab) or record a few bars from the input, for example from Audio Capture. You can correct the notes, send them to a synth and copy them to a sequencer.',
-    load: 'Load audio file…', record: 'Record', stop: 'Stop', recLen: { b2: '2 bars', b4: '4 bars', b8: '8 bars', s5: '5 seconds', s10: '10 seconds', s20: '20 seconds' }, recLenLabel: 'Record length',
+  en: { load: 'Load audio file…', record: 'Record', stop: 'Stop', recLen: { b2: '2 bars', b4: '4 bars', b8: '8 bars', s5: '5 seconds', s10: '10 seconds', s20: '20 seconds' }, recLenLabel: 'Record length',
     bpm: 'Tempo (BPM)', bpmAuto: 'auto', half: '÷2', dbl: '×2', bars: 'Bars', barsAuto: 'auto', grid: 'Grid', gridAuto: 'auto', grids: { '8': '1/8', '16': '1/16', '16t': 'triplet 1/16', off: 'off' },
     swing: 'Swing', swingAuto: 'auto', align: 'Downbeat', alignSmart: 'smart', alignFirst: 'first note on the bar', alignStart: 'start of the sound', sens: 'Sensitivity', shiftL: '◀ 1/16', shiftR: '1/16 ▶', shift: 'Shift pattern',
     again: 'Analyse again', clear: 'Clear', play: 'Send to a synth (clock)', level: 'Velocity', useTempo: 'Set studio tempo to this', saveClip: 'Save clip (JSON)',
     del: 'Delete note', left: 'Note earlier', right: 'Note later', up: 'Semitone up', down: 'Semitone down', octUp: 'Octave up', octDown: 'Octave down', shorter: 'Shorter', longer: 'Longer', add: 'Add note',
-    editHint: 'Click a note to select it and drag it (right edge: length). Double-click an empty spot to add a note. Keys: Delete, arrows (Shift = octave), [ and ] for the length. The thin outlines are what was found before quantising.',
     idle: 'Nothing loaded yet. Load an audio file or record from the input.', busy: 'Analysing…', recording: (s, t) => 'Recording… ' + s.toFixed(1) + ' / ' + t.toFixed(1) + ' s',
     notes: n => n + (n === 1 ? ' note' : ' notes'), tuningTxt: c => 'tuning ' + (c > 0 ? '+' : '') + c + ' ct',
     summary: (bpm, how, bars, grid, swing, n, tun) => bpm.toFixed(1) + ' BPM (' + how + ') · ' + bars + (bars === 1 ? ' bar' : ' bars') + ' · grid ' + grid + ' · swing ' + Math.round(swing * 100) + '% · ' + n + (n === 1 ? ' note' : ' notes') + (tun ? ' · ' + tun : ''),
@@ -420,7 +417,7 @@ function cleanClip(c) {
 }
 
 export default {
-  id: 'nl.patchkamer.bass-finder', name: 'Bass Finder', version: '1.21.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
+  id: 'nl.patchkamer.bass-finder', name: 'Bass Finder', about: { nl: 'Luistert naar een monofone baslijn (bas, sub of synthbas, geen akkoorden) en schrijft de noten op: toonhoogte, start, lengte en velocity. Laad een audiobestand (ook via de tab Samples), of neem een paar maten op uit de ingang, bijvoorbeeld van Audio Capture. De noten kun je corrigeren, naar een synth sturen en kopiëren naar een sequencer.\n\nKlik op een noot om hem te kiezen en sleep hem (rand rechts: lengte). Dubbelklik op een lege plek voegt een noot toe. Toetsen: Delete, pijlen (Shift = octaaf), [ en ] voor de lengte. De dunne omtrekken zijn wat er gevonden is voor het kwantiseren.', en: 'Listens to a monophonic bass line (bass, sub or synth bass, no chords) and writes down the notes: pitch, start, length and velocity. Load an audio file (also from the Samples tab) or record a few bars from the input, for example from Audio Capture. You can correct the notes, send them to a synth and copy them to a sequencer.\n\nClick a note to select it and drag it (right edge: length). Double-click an empty spot to add a note. Keys: Delete, arrows (Shift = octave), [ and ] for the length. The thin outlines are what was found before quantising.' }, version: '1.22.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
   i18n: { nl: { ports: { in: 'In', thru: 'Door', notes: 'Noten' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'thru', name: 'Through' }], eventIn: [], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -543,7 +540,7 @@ export default {
 
     // ---- UI ----
     const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;background:var(--card,#15181d);border:1px solid var(--line,#39424e);border-radius:8px}' +
-      '.hint,.warn{color:var(--muted,#97a1ad);line-height:1.4}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}label.inl{flex-direction:row;align-items:center;gap:6px}' +
+      '.warn{color:var(--muted,#97a1ad);line-height:1.4}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}label.inl{flex-direction:row;align-items:center;gap:6px}' +
       'button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%}button{cursor:pointer}button:hover:not(:disabled){border-color:var(--acc,#4fd1c5)}button:disabled{opacity:.4;cursor:default}button.on{background:var(--acc,#4fd1c5);color:#111;border-color:var(--acc,#4fd1c5)}' +
       'input[type=number]{width:84px}input[type=checkbox]{padding:0}canvas{display:block;width:100%;background:var(--well,#0c0f13);border:1px solid var(--line,#39424e);border-radius:6px;cursor:crosshair;touch-action:none}canvas:focus-visible{outline:2px solid var(--acc,#4fd1c5)}' +
       '.status{min-height:16px;color:var(--event,#f4a261)}.status.err{color:#ff7b72}';
@@ -621,7 +618,7 @@ export default {
       inputs: { in: inG }, outputs: { thru },
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' }); el('style', CSS, sh);
-        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
+        const app = el('div', null, sh, 'app');
         const r1 = el('div', null, app, 'row');
         const file = el('input', null, r1); file.type = 'file'; file.accept = 'audio/*,.wav,.mp3,.flac,.ogg'; file.style.display = 'none'; file.setAttribute('aria-label', T.load);
         const loadB = el('button', T.load, r1); loadB.type = 'button'; loadB.onclick = () => file.click(); file.onchange = () => { if (file.files && file.files.length) loadFiles(Array.from(file.files), { name: file.files[0].name }); file.value = ''; };
@@ -650,7 +647,6 @@ export default {
         edits.push(mkBtn(re, '✕', T.del, remove), mkBtn(re, '◀', T.left, () => move(-1)), mkBtn(re, '▶', T.right, () => move(1)), mkBtn(re, '♭', T.down, () => pitch(-1)), mkBtn(re, '♯', T.up, () => pitch(1)),
           mkBtn(re, '8vb', T.octDown, () => pitch(-12)), mkBtn(re, '8va', T.octUp, () => pitch(12)), mkBtn(re, '−', T.shorter, () => stretch(-1)), mkBtn(re, '+', T.longer, () => stretch(1)));
         const addB = mkBtn(re, '＋', T.add, () => { const c = state.clip; if (!c) return; const used = new Set(c.notes.map(q => q[0])), u = unit(); let t = 0; while (used.has(t) && t < c.length - 1) t += u; addAt(Math.min(t, c.length - 1), c.notes.length ? c.notes[c.notes.length - 1][1] : 36); });
-        el('div', T.editHint, app, 'hint');
         const r4 = el('div', null, app, 'row');
         const lsend = el('label', null, r4); lsend.className = 'inl'; const send = el('input', null, lsend); send.type = 'checkbox'; el('span', T.play, lsend); send.onchange = () => { state.send = send.checked; };
         const levH = el('div', null, r4); const level = host.ui.knob(levH, T.level, [0.1, 1, 0.01], state.level, v => Math.round(v * 100) + '%', v => { state.level = v; }, { def: 0.9 });

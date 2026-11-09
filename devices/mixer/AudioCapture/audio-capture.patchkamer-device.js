@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Uitleg naar about (menu Over Audio Capture); de UI toont geen uitlegtekst meer.
 // 1.20.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.19.0 — Eerste versie. Audio Capture haalt het geluid van een ander browsertabblad, een venster of (waar het systeem het toelaat) het hele
 //          systeem de studio in. Na een klik op "Start capture" laat de browser je de bron kiezen (de gewone deelkeuze van het scherm); het
@@ -17,7 +18,7 @@ const DEFAULTS = { mode: 'stereo', gain: 0, hp: 0, invert: false, mute: false };
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { hint: 'Haalt het geluid van een ander tabblad, een venster of het systeem de studio in. Kies na het starten de bron en vink het delen van geluid aan.',
+  nl: { 
     start: 'Start capture', stop: 'Stop capture', mode: 'Weergave', modeStereo: 'Stereo', modeMono: 'Mono (kanalen samengeteld)',
     gain: 'Versterking', hp: 'Hoogdoorlaat', hpOff: 'uit', invert: 'Polariteit omkeren', mute: 'Dempen',
     left: 'L', right: 'R', clip: 'clip', idle: 'Capture is uit. Klik op Start capture en kies een bron; vink "geluid delen" aan.',
@@ -27,7 +28,7 @@ const TXT = {
     failed: m => 'Starten lukt niet: ' + m, lost: 'De capture is gestopt (het delen is beëindigd).',
     loop: 'Let op: kies je Patchkamer zelf of het systeemgeluid terwijl dit apparaat naar Speakers gaat, dan hoor je jezelf terug (rondzingen). Kies een ander tabblad of gebruik een koptelefoon.',
     platform: 'Systeemgeluid kan alleen op Windows. Op Linux en macOS: kies een tabblad, of gebruik Audio Input met een loopback-ingang.' },
-  en: { hint: 'Brings the sound of another tab, a window or the system into the studio. After starting, choose the source and tick sharing sound.',
+  en: { 
     start: 'Start capture', stop: 'Stop capture', mode: 'Mode', modeStereo: 'Stereo', modeMono: 'Mono (channels summed)',
     gain: 'Gain', hp: 'High-pass', hpOff: 'off', invert: 'Invert polarity', mute: 'Mute',
     left: 'L', right: 'R', clip: 'clip', idle: 'Capture is off. Click Start capture and choose a source; tick "share sound".',
@@ -40,7 +41,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audiocapture', name: 'Audio Capture', version: '1.20.0', kind: 'utility', category: 'mix', ui: { width: 440, minWidth: 380 },
+  id: 'nl.patchkamer.audiocapture', name: 'Audio Capture', version: '1.21.0', about: { nl: 'Haalt het geluid van een ander tabblad, een venster of het systeem de studio in. Kies na het starten de bron en vink het delen van geluid aan.', en: 'Brings the sound of another tab, a window or the system into the studio. After starting, choose the source and tick sharing sound.' }, kind: 'utility', category: 'mix', ui: { width: 440, minWidth: 380 },
   i18n: { nl: { ports: { out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -115,8 +116,8 @@ export default {
       inputs: {}, outputs: { out },
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' });
-        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.hint,.status,.warn{color:var(--muted);font-size:11px;line-height:1.4}.status.err{color:var(--stop,#e0584a)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{display:flex;gap:6px;align-items:center}select,button{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:5px 8px;min-width:0;max-width:100%}button{cursor:pointer}button.on{background:var(--audio);color:#06222a;border-color:var(--audio)}.meter{display:grid;grid-template-columns:14px 1fr 34px;gap:6px;align-items:center}.bar{height:8px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--audio)}.clip{font-size:9px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 0}.clip.on{background:var(--stop,#e0584a);color:#fff;border-color:var(--stop,#e0584a)}.gain{min-height:44px}';
-        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
+        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.status,.warn{color:var(--muted);font-size:11px;line-height:1.4}.status.err{color:var(--stop,#e0584a)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{display:flex;gap:6px;align-items:center}select,button{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:5px 8px;min-width:0;max-width:100%}button{cursor:pointer}button.on{background:var(--audio);color:#06222a;border-color:var(--audio)}.meter{display:grid;grid-template-columns:14px 1fr 34px;gap:6px;align-items:center}.bar{height:8px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--audio)}.clip{font-size:9px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 0}.clip.on{background:var(--stop,#e0584a);color:#fff;border-color:var(--stop,#e0584a)}.gain{min-height:44px}';
+        const app = el('div', null, sh, 'app'); 
         const r1 = el('div', null, app, 'row'); const startBtn = el('button', T.start, r1); startBtn.type = 'button'; startBtn.onclick = () => (running() ? stop() : start());
         const r2 = el('div', null, app, 'row'); const l2 = el('label', T.mode, r2); const mode = el('select', null, l2); mode.setAttribute('aria-label', T.mode);
         for (const [v, t] of [['stereo', T.modeStereo], ['mono', T.modeMono]]) { const o = el('option', t, mode); o.value = v; } mode.onchange = () => { state.mode = pick(mode.value, MODES, 'stereo'); route(); };

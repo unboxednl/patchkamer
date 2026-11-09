@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Uitleg naar about (menu Over Keyboard); de UI toont geen uitlegtekst meer.
 // 1.0.0 — Eerste versie (Patchkamer contract v1.28). Een klavier voor andere apparaten: een instelbaar aantal toetsen (25 tot 88), schermtoetsen met de muis of aanraking, de computertoetsen (A, W, S, E…,
 //         Z en X voor een octaaf lager of hoger), snelheid, transponeren, MIDI-kanaal, pitch bend en modulatiewiel, vasthouden (sustain) en Alles uit. Speelmodus puls (noot met lengte) of vasthouden
 //         (noot aan en uit). Geen MIDI-toegang nodig: een fysiek keyboard sluit je aan op de MIDI Controller. Vervangt het klavier van Keys / MIDI (teruggetrokken).
@@ -14,9 +15,9 @@ const KEYS = [25, 37, 49, 61, 76, 88];
 const KEYMAP = ['KeyA', 'KeyW', 'KeyS', 'KeyE', 'KeyD', 'KeyF', 'KeyT', 'KeyG', 'KeyY', 'KeyH', 'KeyU', 'KeyJ', 'KeyK', 'KeyO', 'KeyL', 'KeyP', 'Semicolon', 'Quote'];
 
 const TXT = {
-  nl: { hint: 'Klik op de toetsen, of gebruik de computertoetsen (A, W, S, E…). Verbind Noten met een synth, sampler of arpeggiator.', keys: 'Aantal toetsen', start: 'Laagste toets', octave: 'Octaaf', vel: 'Aanslag', mode: 'Speelmodus', pulse: 'Puls (noot met lengte)', hold: 'Vasthouden (noot aan en uit)',
+  nl: { keys: 'Aantal toetsen', start: 'Laagste toets', octave: 'Octaaf', vel: 'Aanslag', mode: 'Speelmodus', pulse: 'Puls (noot met lengte)', hold: 'Vasthouden (noot aan en uit)',
     len: 'Lengte', transpose: 'Transponeren', channel: 'Kanaal', bend: 'Pitch bend', mod: 'Modulatie', sustain: 'Sustain', panic: 'Alles uit', computer: 'Computertoetsen', computerOn: 'Computertoetsen aan', computerHint: 'Z en X: octaaf lager of hoger', hold1: 'Vasthouden' },
-  en: { hint: 'Click the keys, or use the computer keys (A, W, S, E…). Connect Notes to a synth, sampler or arpeggiator.', keys: 'Number of keys', start: 'Lowest key', octave: 'Octave', vel: 'Velocity', mode: 'Play mode', pulse: 'Pulse (note with length)', hold: 'Hold (note on and off)',
+  en: { keys: 'Number of keys', start: 'Lowest key', octave: 'Octave', vel: 'Velocity', mode: 'Play mode', pulse: 'Pulse (note with length)', hold: 'Hold (note on and off)',
     len: 'Length', transpose: 'Transpose', channel: 'Channel', bend: 'Pitch bend', mod: 'Modulation', sustain: 'Sustain', panic: 'All off', computer: 'Computer keys', computerOn: 'Computer keys on', computerHint: 'Z and X: octave down or up', hold1: 'Hold' },
 };
 
@@ -26,7 +27,7 @@ function normalize(s) { s = s && typeof s === 'object' ? s : {}; const d = defau
     duration: num(s.duration, 0.05, 4, d.duration), transpose: int(s.transpose, -24, 24, 0), channel: int(s.channel, 1, 16, 1), computer: s.computer !== false }; }
 
 export default {
-  id: 'nl.patchkamer.keyboard', name: 'Keyboard', version: '1.0.0', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 360 },
+  id: 'nl.patchkamer.keyboard', name: 'Keyboard', about: { nl: 'Klik op de toetsen, of gebruik de computertoetsen (A, W, S, E…). Verbind Noten met een synth, sampler of arpeggiator.', en: 'Click the keys, or use the computer keys (A, W, S, E…). Connect Notes to a synth, sampler or arpeggiator.' }, version: '1.1.0', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 360 },
   i18n: { nl: { ports: { notes: 'Noten' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -47,7 +48,7 @@ export default {
     function pedal(on) { sustain = on; if (!on) { for (const n of deferred) if (![...pressed.values()].some(p => p.note === n)) emit({ type: 'noteoff', note: n, vel: 0, time: ctx.currentTime }); deferred = []; } }
     function panic() { for (const k of [...pressed.keys()]) { const [, n] = String(k).split(':'); up(k, +n); } pedal(false); buttons.forEach(b => b.classList.remove('on')); emit({ type: 'allnotesoff', time: ctx.currentTime }); }
     const el = (tag, text, parent, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
-    const CSS = ':host{display:block}.kb{display:grid;gap:10px;font-size:12px;color:var(--fg)}.hint{color:var(--muted);line-height:1.45}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row label{display:flex;gap:6px;align-items:center}'
+    const CSS = ':host{display:block}.kb{display:grid;gap:10px;font-size:12px;color:var(--fg)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row label{display:flex;gap:6px;align-items:center}'
       + '.kb select,.kb input[type=number]{font:inherit;padding:2px 4px}.kb button{font:inherit;padding:3px 9px}.piano{position:relative;overflow-x:auto;padding:4px 0 8px;touch-action:pan-x}.keys{position:relative;height:130px;min-width:min-content}'
       + '.k{position:absolute;top:0;box-sizing:border-box;border:1px solid var(--line);border-radius:0 0 4px 4px;cursor:pointer;user-select:none;touch-action:none;display:flex;align-items:flex-end;justify-content:center;font:9px var(--mono,monospace);padding-bottom:3px}'
       + '.k.w{width:26px;height:130px;background:#e9ecf0;color:#4a5260}.k.b{width:16px;height:80px;background:#1b2028;color:#9aa4b2;z-index:2}.k.on{background:var(--sel);color:#fff}.k.c{font-weight:700}'
@@ -63,7 +64,7 @@ export default {
         const end = e => { if (b._src) { up(b._src, n); mark(n, false); b._src = null; } }; b.addEventListener('pointerup', end); b.addEventListener('pointercancel', end); });
     }
     function render() {
-      if (!sh || dead) return; sh.innerHTML = ''; el('style', CSS, sh); const m = el('div', null, sh, 'kb'); el('div', T.hint, m, 'hint');
+      if (!sh || dead) return; sh.innerHTML = ''; el('style', CSS, sh); const m = el('div', null, sh, 'kb');
       const piano = el('div', null, m, 'piano'), box = el('div', null, piano, 'keys'); buildKeys(box);
       const r1 = el('div', null, m, 'row');
       const sel = (label, opts, val, fn) => { const l = el('label', label, r1); const s = el('select', null, l); opts.forEach(([v, t]) => { const o = el('option', t, s); o.value = v; }); s.value = String(val); s.onchange = () => { fn(s.value); }; return s; };

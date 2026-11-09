@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Audio Input); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.12.2 — Dempen is nu een knop en staat standaard uit (de ingang klinkt meteen); 1.12.1 — bredere kaart. 1.12.0 — Eerste versie. Audio Input haalt geluid van een ingang van de computer in de studio: de standaardingang van de geluidskaart of een
@@ -20,7 +21,7 @@ const DEFAULTS = { device: '', deviceLabel: '', mode: 'stereo', ch: 1, capture: 
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { hint: 'Haalt geluid van een ingang van je computer: de standaardingang of een audio-interface die je systeem kent.',
+  nl: { 
     start: 'Start ingang', stop: 'Stop ingang', device: 'Ingang', defaultDev: 'Standaardingang van het systeem', unnamed: 'Ingang', capture: 'Kanalen van de ingang', capStereo: '2 (stereo)', capAll: 'Zoveel als de ingang geeft',
     mode: 'Weergave', modeStereo: 'Stereo (een paar)', modeMono: 'Mono (één kanaal naar links en rechts)', modeSum: 'Mono (paar samengeteld)', ch: 'Kanaal', pair: 'Paar',
     gain: 'Versterking', hp: 'Hoogdoorlaat', hpOff: 'uit', invert: 'Polariteit omkeren', mute: 'Dempen', processing: 'Browserbewerking (echo, ruis, automatisch niveau)',
@@ -30,7 +31,7 @@ const TXT = {
     notFound: 'De gekozen ingang is er niet (meer). Kies een andere.', busy: 'De ingang is in gebruik door een ander programma, of kon niet starten.', failed: m => 'Starten lukt niet: ' + m,
     feedback: 'Gebruik een koptelefoon of zet het volume laag: een microfoon bij de luidsprekers geeft rondzingen.', channelsNote: n => 'De ingang geeft ' + n + ' ' + (n === 1 ? 'kanaal' : 'kanalen') + '.',
     lost: 'De ingang is gestopt (losgekoppeld of afgenomen).', refresh: 'Ververs lijst' },
-  en: { hint: 'Brings sound in from an input on your computer: the default input or an audio interface your system knows.',
+  en: { 
     start: 'Start input', stop: 'Stop input', device: 'Input', defaultDev: 'System default input', unnamed: 'Input', capture: 'Channels of the input', capStereo: '2 (stereo)', capAll: 'As many as the input gives',
     mode: 'Mode', modeStereo: 'Stereo (a pair)', modeMono: 'Mono (one channel to left and right)', modeSum: 'Mono (pair summed)', ch: 'Channel', pair: 'Pair',
     gain: 'Gain', hp: 'High-pass', hpOff: 'off', invert: 'Invert polarity', mute: 'Mute', processing: 'Browser processing (echo, noise, auto level)',
@@ -43,7 +44,7 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.16.0', kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
+  id: 'nl.patchkamer.audioinput', name: 'Audio Input', version: '1.17.0', about: { nl: 'Haalt geluid van een ingang van je computer: de standaardingang of een audio-interface die je systeem kent.', en: 'Brings sound in from an input on your computer: the default input or an audio interface your system knows.' }, kind: 'utility', category: 'mix', ui: { width: 480, minWidth: 400 },
   i18n: { nl: { ports: { out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -130,8 +131,8 @@ export default {
       inputs: {}, outputs: { out },
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' });
-        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.hint,.status,.warn{color:var(--muted);font-size:11px;line-height:1.4}.status.err{color:var(--stop,#e0584a)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{display:flex;gap:6px;align-items:center}select,button{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:5px 8px;min-width:0;max-width:100%}button{cursor:pointer}button.on{background:var(--audio);color:#06222a;border-color:var(--audio)}.meter{display:grid;grid-template-columns:14px 1fr 34px;gap:6px;align-items:center}.bar{height:8px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--audio)}.clip{font-size:9px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 0}.clip.on{background:var(--stop,#e0584a);color:#fff;border-color:var(--stop,#e0584a)}.gain{min-height:44px}';
-        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
+        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.status,.warn{color:var(--muted);font-size:11px;line-height:1.4}.status.err{color:var(--stop,#e0584a)}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}label{display:flex;gap:6px;align-items:center}select,button{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:5px 8px;min-width:0;max-width:100%}button{cursor:pointer}button.on{background:var(--audio);color:#06222a;border-color:var(--audio)}.meter{display:grid;grid-template-columns:14px 1fr 34px;gap:6px;align-items:center}.bar{height:8px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--audio)}.clip{font-size:9px;text-align:center;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:1px 0}.clip.on{background:var(--stop,#e0584a);color:#fff;border-color:var(--stop,#e0584a)}.gain{min-height:44px}';
+        const app = el('div', null, sh, 'app'); 
         const r1 = el('div', null, app, 'row'); const startBtn = el('button', T.start, r1); startBtn.type = 'button'; startBtn.onclick = () => (running() ? stop() : start());
         const dev = el('select', null, r1); dev.setAttribute('aria-label', T.device); dev.onchange = () => { state.device = dev.value; const o = dev.options[dev.selectedIndex]; state.deviceLabel = dev.value ? (o ? o.textContent : '') : ''; if (running()) start(); };
         const rf = el('button', T.refresh, r1); rf.type = 'button'; rf.onclick = () => refreshDevices();

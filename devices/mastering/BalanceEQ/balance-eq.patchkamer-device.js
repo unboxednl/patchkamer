@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Uitleg naar about (menu Over Balance EQ); de UI toont geen uitlegtekst meer.
 // 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.13.0 — Balance EQ met verticale schuiven en 5 tot 12 banden. Drie secties (Frequentie, Gain, Q) met per band een verticale schuif: waarde erboven, bandnummer eronder (klik op het nummer = vergrendelen). Nieuw state-veld `bands` (5..12, standaard 5; zit in de preset) en `layout` (auto/side/stack; zit NIET in de preset). Bands 6..12 zijn bells; boven `bands` zijn ze niet actief en staan ze op hun standaard. Ruimere bereiken: frequentie 20..20000 Hz, gain -18..+18 dB, Q 0,1..20; fijn afstellen met pijltjes (klein), Shift/Page (groot), typen en dubbelklik. params() bevat de regelaars van de actieve banden. Het geluid met `bands:5` is bit-gelijk aan 1.12.2 (DSP: alleen de Q-ondergrens .2 -> .1 en actieve banden 6..12). Oude states en presets zonder `bands` laden als 5 banden.
 // 1.12.2 — Alle 17 continue regelaars zijn nu stuurbaar via params/modulate (het apparaat krijgt daarmee een mod-ingang); alles staat standaard uit in Drift. De knopstand, getState, presets, poorten, Masterregie (configureMastering) en het geluid zonder modulatie zijn ongewijzigd; de motor krijgt de gemoduleerde waarde, de state nooit. Bewust niet stuurbaar: de keuzelijsten en vinkjes (dynamic), en 'Auto / suggestion strength' (amount): die regelaar stuurt alleen hoe sterk Volg en Pas voorstel toe de analyse-suggesties overnemen, is geen klankparameter en doet niets zolang Volg uit staat; moduleren zou de volglus (bij Master Chain de gain-integrator) onvoorspelbaar maken en het toepassen van een voorstel laten afhangen van het moment.
@@ -19,7 +20,6 @@ const BAND_F=[90,330,1000,3300,9500,120,450,1500,2600,5000,7500,14000],BAND_Q=[0
 const SPEC={"key": "eq", "controls": [].concat(...BAND_F.map((f,i)=>[{"id": "f"+(i+1), "value": f, "min": 20, "max": 20000, "unit": "Hz"}, {"id": "g"+(i+1), "value": 0, "min": -18, "max": 18, "unit": "dB"}, {"id": "q"+(i+1), "value": BAND_Q[i], "min": 0.1, "max": 20, "unit": "", "log": true}])).concat([{"id": "dynamic", "value": false, "type": "check"}, {"id": "dynThreshold", "value": -30, "min": -60, "max": -6, "unit": "dB"}, {"id": "dynamicMax", "value": 3, "min": 0, "max": 9, "unit": "dB"}]), "profiles": {"Neutral": {"g1": 0, "g2": 0, "g3": 0, "g4": 0, "g5": 0}, "Warmer": {"g1": 0.7, "g5": -0.7}, "Brighter": {"g1": -0.5, "g5": 1}, "Gentle dynamics": {"dynamic": true, "dynamicMax": 2}}};
 const bandN=id=>{const m=/^[fgq](\d+)$/.exec(id);return m?+m[1]:0;};   // bandnummer van een regelaar-id (0 = geen bandregelaar)
 const NAME="Balance EQ";
-const DESC={"nl": "Vijf tot twaalf parametrische banden met verticale schuiven: low shelf, bells, high shelf. Kleine analysevoorstellen en optionele dynamische banden 2/4.", "en": "Five to twelve parametric bands with vertical faders: low shelf, bells, high shelf. Small analysis suggestions and optional dynamic bands 2/4."};
 const LOC=(()=>{const mk=(b,f,g,q)=>{const c={};for(let n=1;n<=BAND_MAX;n++){c['f'+n]=b+n+' '+f;c['g'+n]=b+n+' '+g;c['q'+n]=b+n+' '+q;}return c;};
  return {"nl": {"ctl": {...mk('Band ','frequentie','gain','Q'), "dynamic": "Dynamische banden", "dynThreshold": "Dynamische threshold", "dynamicMax": "Maximale dynamische cut"}, "opt": {}, "prof": {"Neutral": "Neutraal", "Warmer": "Warmer", "Brighter": "Helderder", "Gentle dynamics": "Milde dynamiek"}}, "en": {"ctl": {...mk('Band ','frequency','gain','Q'), "dynamic": "Dynamic bands", "dynThreshold": "Dynamic threshold", "dynamicMax": "Maximum dynamic cut"}, "opt": {}, "prof": {"Neutral": "Neutral", "Warmer": "Warmer", "Brighter": "Brighter", "Gentle dynamics": "Gentle dynamics"}}};})();
 const TXT={
@@ -52,7 +52,6 @@ const TXT={
   "strength": "Auto-/voorstelsterkte",
   "emptyMeter": "Laat audio door het apparaat lopen om te meten.",
   "spectrum": "Ingangsspectrum",
-  "proposalHint": "Analyse maakt een voorstel. Volg past alleen ontgrendelde parameters langzaam aan; zet het uit voor vaste instellingen.",
   "lock": "Vast",
   "lockFor": " vergrendelen",
   "secFreq": "Frequentie",
@@ -65,7 +64,6 @@ const TXT={
   "layoutStack": "Onder elkaar",
   "bandWord": "Band",
   "lockTip": "klik om te vergrendelen",
-  "bandsHint": "Band 1 is een low shelf, band 5 een high shelf, de andere banden zijn bells. Klik op een bandnummer om die instelling te vergrendelen (Volg en Masterregie laten haar staan). Pijltjes: kleine stap; Shift of Page: grote stap; dubbelklik: beginwaarde; klik op het getal om te typen.",
   "refFile": "Referentiebestand",
   "refLoaded": "Referentie geladen: ",
   "refClick": " · klik Speel referentie.",
@@ -75,7 +73,6 @@ const TXT={
   "listenMain": "Luister MAIN",
   "listenRef": "Luister REF",
   "stopRef": "Stop referentie",
-  "localNote": "Bestanden blijven lokaal. Een geladen referentiebestand wordt niet in presets/werkruimtes opgenomen. Ref-match gebruikt het gemeten niveau van de afgespeelde fragmenten.",
   "learning": "Analyse loopt: speel acht seconden representatieve audio.",
   "suggestion": "Voorstel uit acht seconden analyse; kies Pas voorstel toe.",
   "toolow": "Te weinig audiosignaal voor een voorstel.",
@@ -114,7 +111,6 @@ const TXT={
   "strength": "Auto / suggestion strength",
   "emptyMeter": "Play audio through the device to measure.",
   "spectrum": "Input spectrum",
-  "proposalHint": "Analysis makes a suggestion. Follow adapts only unlocked parameters slowly; turn it off for fixed settings.",
   "lock": "Lock",
   "lockFor": " lock",
   "secFreq": "Frequency",
@@ -127,7 +123,6 @@ const TXT={
   "layoutStack": "Stacked",
   "bandWord": "Band",
   "lockTip": "click to lock",
-  "bandsHint": "Band 1 is a low shelf, band 5 a high shelf, the other bands are bells. Click a band number to lock that setting (Follow and Master Director leave it alone). Arrow keys: small step; Shift or Page: large step; double-click: starting value; click the number to type.",
   "refFile": "Reference file",
   "refLoaded": "Reference loaded: ",
   "refClick": " · click Play reference.",
@@ -137,7 +132,6 @@ const TXT={
   "listenMain": "Listen MAIN",
   "listenRef": "Listen REF",
   "stopRef": "Stop reference",
-  "localNote": "Files stay local. A loaded reference file is not saved in presets or workspaces. Ref match uses the measured level of the passages that were played.",
   "learning": "Analysis running: play eight seconds of representative audio.",
   "suggestion": "Suggestion from eight seconds of analysis; choose Apply suggestion.",
   "toolow": "Too little audio signal for a suggestion.",
@@ -346,7 +340,7 @@ function normalize(raw){const s=defaults();raw=raw&&typeof raw==='object'?raw:{}
  return s;}
 const PRESET_SKIP=['bypass','match','auto','remote','locks','layout'];  // werkstand en weergave, geen klank: een preset laat dit staan (`bands` hoort wel bij de klank)
 const __pkDef ={
- id:'nl.patchkamer.balanceeq',name:'Balance EQ',version:'1.14.0',modExclude:['amount'],mastering:{protocol:1,configure:true},i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',setup:'Master Director'}}},kind:SPEC.key==='control'?'utility':'effect',category:'mastering',collection:'mastering',ui:{width:660,minWidth:320},
+ id:'nl.patchkamer.balanceeq',about: { nl: 'Vijf tot twaalf parametrische banden met verticale schuiven: low shelf, bells, high shelf. Kleine analysevoorstellen en optionele dynamische banden 2/4.\n\nBand 1 is een low shelf, band 5 een high shelf, de andere banden zijn bells. Klik op een bandnummer om die instelling te vergrendelen (Volg en Masterregie laten haar staan). Pijltjes: kleine stap; Shift of Page: grote stap; dubbelklik: beginwaarde; klik op het getal om te typen.\n\nAnalyse maakt een voorstel. Volg past alleen ontgrendelde parameters langzaam aan; zet het uit voor vaste instellingen.', en: 'Five to twelve parametric bands with vertical faders: low shelf, bells, high shelf. Small analysis suggestions and optional dynamic bands 2/4.\n\nBand 1 is a low shelf, band 5 a high shelf, the other bands are bells. Click a band number to lock that setting (Follow and Master Director leave it alone). Arrow keys: small step; Shift or Page: large step; double-click: starting value; click the number to type.\n\nAnalysis makes a suggestion. Follow adapts only unlocked parameters slowly; turn it off for fixed settings.' }, name:'Balance EQ',version:'1.15.0',modExclude:['amount'],mastering:{protocol:1,configure:true},i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',setup:'Master Director'}}},kind:SPEC.key==='control'?'utility':'effect',category:'mastering',collection:'mastering',ui:{width:660,minWidth:320},
  ports:{audioIn:[{id:'in',name:'Stereo in'},...(SPEC.key==='comp'?[{id:'side',name:'Sidechain'}]:SPEC.key==='control'?[{id:'ref',name:'Reference'}]:[])],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[],modOut:[],multiIn:[],multiOut:[],masteringIn:[{id:'setup',name:'Master Director'}],masteringOut:[]},
  create(ctx,host){
   const TX=TXT[host&&host.lang]||TXT.en,LC=LOC[host&&host.lang]||LOC.en;const ctlName=c=>LC.ctl[c.id]||c.id,optName=(c,v)=>LC.opt[v]||v;
@@ -423,7 +417,7 @@ const __pkDef ={
   const self={
    inputs:{in:input,...(SPEC.key==='comp'?{side:aux}:SPEC.key==='control'?{ref:aux}:{})},outputs:{out:output},
    mount(el){if(dead)return;unmount();shell=document.createElement('div');el.appendChild(shell);shadow=shell.attachShadow({mode:'open'});const style=document.createElement('style');style.textContent=`
-    :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:9px;background:var(--card);padding:12px;border:1px solid var(--line);border-radius:9px}h3{font:700 11px var(--disp,sans-serif);letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px;color:var(--muted)}h3 small{font:10px var(--mono,monospace);letter-spacing:0;text-transform:none;margin-left:4px}.hint,.status,.proposal{font-size:11px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:6px}
+    :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:9px;background:var(--card);padding:12px;border:1px solid var(--line);border-radius:9px}h3{font:700 11px var(--disp,sans-serif);letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px;color:var(--muted)}h3 small{font:10px var(--mono,monospace);letter-spacing:0;text-transform:none;margin-left:4px}.status,.proposal{font-size:11px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}.proposal:empty{display:none}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:6px}
     select,button,input[type=file]{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);padding:5px;border-radius:4px;min-width:0;max-width:100%}button{cursor:pointer}button:hover{border-color:var(--audio)}input{accent-color:var(--audio)}input[type=range]{width:100%;min-width:0}.control{padding:8px;border:1px solid var(--line);border-radius:5px;background:var(--card-2)}.line{display:flex;justify-content:space-between;gap:5px;align-items:center}.lock{font-size:10px;color:var(--muted)}output{font-size:10px;color:var(--audio)}pre{font:11px/1.6 var(--mono,monospace);margin:0;padding:10px;background:var(--well);color:var(--well-fg,var(--fg));border-radius:6px;white-space:pre-wrap}.screen{height:95px;position:relative;min-width:0;overflow:hidden;background:var(--well);border-radius:5px}canvas{position:absolute;width:100%;height:100%;inset:0}.proposal{padding:7px;border-left:2px solid var(--audio)}
     .view label{display:inline-flex;gap:6px;align-items:center}
     .eqs{--len:200px;display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;overflow-x:auto;min-width:0}.eqs[data-layout=side]{flex-wrap:nowrap}.eqs[data-layout=stack]{flex-direction:column;overflow-x:auto}
@@ -435,7 +429,7 @@ const __pkDef ={
    `;shadow.appendChild(style);
     function make(tag,text,parent,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;if(parent)parent.appendChild(e);return e;}
     const adopt=(e,o)=>{try{return host&&host.ui&&typeof host.ui.adopt==='function'?host.ui.adopt(e,o):e;}catch(_){return e;}};
-    const app=make('div',null,shadow,'app');make('div',DESC[host&&host.lang]||DESC.en,app,'hint');
+    const app=make('div',null,shadow,'app');
     const row=make('div',null,app,'row');
     const profile=make('select',null,row);profile.setAttribute('aria-label',TX.profileLabel);const blank=make('option',TX.profilePick,profile);blank.value='';for(const[name,values]of Object.entries(SPEC.profiles)){const o=make('option',LC.prof[name]||name,profile);o.value=name;}
     adopt(profile,{id:'profile',role:'select',group:'preset',label:TX.profileLabel});
@@ -452,14 +446,13 @@ const __pkDef ={
     layoutSel.onchange=()=>{state.layout=layoutSel.value;syncUI();};
     eqs=make('div',null,app,'eqs');eqs.setAttribute('role','group');eqs.setAttribute('aria-label',NAME);
     secBox={};for(const s of SECS){const sec=make('section',null,eqs,'sec');sec.setAttribute('data-sec',s.group);const h=make('h3',s.title,sec);if(s.unit)make('small',s.unit,h);secBox[s.k]={sec,cells:make('div',null,sec,'cells')};}
-    make('div',TX.bandsHint,app,'hint');
     const dyn=make('div',null,app,'grid');
     for(const id of ['dynamic','dynThreshold','dynamicMax']){const c=SPEC.controls.find(x=>x.id===id),wrap=make('div',null,dyn,'control'),head=make('div',null,wrap,'line');make('span',ctlName(c),head);
      if(c.type==='check'){const i=make('input',null,head);i.type='checkbox';i.setAttribute('aria-label',ctlName(c));adopt(i,{id:c.id,role:'toggle',group:'dynamic',label:ctlName(c)});i.onchange=()=>{state[c.id]=i.checked;syncUI();};controls.push({el:i,key:c.id,check:true});}
      else{const output=make('output',null,head),input=make('input',null,wrap);input.type='range';input.min=c.min;input.max=c.max;input.step=c.step||(c.max-c.min)/1000;input.setAttribute('aria-label',ctlName(c));adopt(input,{id:c.id,role:'param',group:'dynamic',label:ctlName(c)});input.oninput=()=>{state[c.id]=Number(input.value);syncUI();};controls.push({el:input,key:c.id,output,format:v=>fmt(v,1)+' dB'});
       const label=make('label',null,wrap,'lock'),lock=make('input',null,label);lock.type='checkbox';make('span',TX.lock,label);lock.setAttribute('aria-label',ctlName(c)+TX.lockFor);adopt(lock,{id:'locks.'+c.id,role:'toggle',group:'dynamic',label:ctlName(c)+TX.lockFor});lock.onchange=()=>{state.locks[c.id]=lock.checked;apply();};locks.push({el:lock,key:c.id});}
     }
-    proposalBox=make('div',TX.proposalHint,app,'proposal');
+    proposalBox=make('div',null,app,'proposal');
     meter=make('pre',TX.emptyMeter,app);const screen=make('div',null,app,'screen');canvas=make('canvas',null,screen);canvas.setAttribute('aria-label',TX.spectrum);pen=canvas.getContext('2d');
     function resize(){if(!canvas)return;const d=Math.min(2,globalThis.devicePixelRatio||1);canvas.width=Math.max(1,screen.clientWidth*d);canvas.height=Math.max(1,screen.clientHeight*d);}ro=new ResizeObserver(resize);ro.observe(screen);resize();
     function draw(){if(!canvas||dead)return;const d=Math.min(2,globalThis.devicePixelRatio||1),w=canvas.width/d,h=canvas.height/d,css=getComputedStyle(shell);pen.setTransform(d,0,0,d,0,0);pen.fillStyle=css.getPropertyValue('--well').trim()||'Canvas';pen.fillRect(0,0,w,h);const values=lastStats?.spectrum;if(!values)return;pen.strokeStyle=css.getPropertyValue('--audio').trim()||'Highlight';pen.beginPath();for(let i=0;i<values.length;i++){const x=i/(values.length-1)*w,y=h-clamp((values[i]+100)/90,0,1)*h;if(i)pen.lineTo(x,y);else pen.moveTo(x,y);}pen.stroke();}draw();raf=frameLoop(host,self,draw,20);

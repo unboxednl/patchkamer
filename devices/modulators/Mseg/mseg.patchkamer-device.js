@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Multi-Segment Envelope); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor Sterkte (standaard uit); de knop en getState blijven ongewijzigd, modulatie is nooit state en komt alleen bovenop de knop. Geen lus: modulate() roept zelf geen host.modulate aan.
 //          Bewust weggelaten: Lengte en Afspelen (keuzes), op raster (vinkje), de curvepunten (patroondata). Zonder modulatie gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Multi-Segment Envelope (de id nl.patchkamer.mseg blijft). Tweetalig (host.lang, poortnamen per taal in i18n).
@@ -21,8 +22,6 @@ const EN = {
   'Opbouw': 'Build-up', 'Golf': 'Wave', 'Trap': 'Steps', 'Ademen': 'Breathing', 'Break': 'Break', 'Plat': 'Flat',
   'op raster (1/16)': 'snap to grid (1/16)',
   'maat {0} van {1}': 'bar {0} of {1}', 'wacht op start': 'waiting for start',
-  'Teken een curve over 1 tot 64 maten: klik om een punt te maken, sleep om te verplaatsen, dubbelklik om weg te halen, Shift + slepen op een stuk lijn om het te krommen. Zo bouw je een opbouw of break over het hele nummer. Bij één keer start de curve met Start of een trigger.':
-    'Draw a curve over 1 to 64 bars: click to add a point, drag to move it, double-click to remove it, Shift + drag on a piece of line to bend it. This is how you build a build-up or a break across the whole song. With once, the curve starts on Start or a trigger.',
   'Toewijzing · diepte als deel van het bereik van elke knop': 'Assignment · depth as a share of each knob\'s range',
   'Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>Curve</b> naar de ingang <b>Mod</b> van een apparaat. Kies daarna hier welke parameters meebewegen en hoeveel.':
     'Nothing connected yet. Pull a <b>purple cable</b> from the output <b>Curve</b> to the <b>Mod</b> input of a device. Then choose here which parameters move along and by how much.',
@@ -37,7 +36,6 @@ const CSS = `
 :host{all:initial;display:block;container-type:inline-size;font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--fg,#e6e9ee)}
 *{box-sizing:border-box}
 .mk{display:grid;gap:10px;min-width:0}
-.mk .intro{color:var(--muted,#8a93a3);font-size:11px;line-height:1.45;margin:0}
 .box{padding:8px 10px;border:1px solid var(--line,#2a303a);border-radius:5px;background:var(--card-2,#161a20);display:grid;gap:8px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:end}
 .ctl{display:grid;gap:2px;min-width:110px;flex:1 1 120px}
@@ -205,7 +203,8 @@ function segShape(t, c) { if (Math.abs(c) < 0.01) return t; const k = c * 6; ret
 export default {
   id: 'nl.patchkamer.mseg',
   name: 'Multi-Segment Envelope',
-  version: '1.11.1',
+  about: { nl: 'Teken een curve over 1 tot 64 maten: klik om een punt te maken, sleep om te verplaatsen, dubbelklik om weg te halen, Shift + slepen op een stuk lijn om het te krommen. Zo bouw je een opbouw of break over het hele nummer. Bij één keer start de curve met Start of een trigger.', en: 'Draw a curve over 1 to 64 bars: click to add a point, drag to move it, double-click to remove it, Shift + drag on a piece of line to bend it. This is how you build a build-up or a break across the whole song. With once, the curve starts on Start or a trigger.' },
+  version: '1.12.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 760, minWidth: 380 },
@@ -271,8 +270,7 @@ export default {
     const stopLoop = () => { if (stopDraw) { stopDraw(); stopDraw = null; } };
     function build(root) {
       const mk = h('div', 'mk'); root.appendChild(mk); ui = {};
-      mk.appendChild(h('p', 'intro', tx('Teken een curve over 1 tot 64 maten: klik om een punt te maken, sleep om te verplaatsen, dubbelklik om weg te halen, Shift + slepen op een stuk lijn om het te krommen. Zo bouw je een opbouw of break over het hele nummer. Bij één keer start de curve met Start of een trigger.')));
-      const b1 = h('div', 'box'), r1 = h('div', 'row'); b1.appendChild(r1); mk.appendChild(b1);
+            const b1 = h('div', 'box'), r1 = h('div', 'row'); b1.appendChild(r1); mk.appendChild(b1);
       ui.len = mkSelect(r1, tx('Lengte'), LENS.map(n => [String(n), tx(n === 1 ? '{0} maat' : '{0} maten', n)]), String(S.len), v => { S.len = +v; changed(); });
       ui.mode = mkSelect(r1, tx('Afspelen'), [['loop', tx('herhalen')], ['once', tx('één keer')]], S.mode, v => { S.mode = v; changed(); });
       ui.amp = mkSlider(r1, tx('Sterkte'), 0, 1, 0.01, S.amp, v => Math.round(v * 100) + '%', v => { S.amp = v; changed(); });

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Chord Poly); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Chord Poly (nieuwe id nl.patchkamer.chordpoly, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Chord Poly
@@ -11,12 +12,9 @@
 const EN = {
   'Resonantie': 'Resonance', 'Filter-envelope': 'Filter envelope', 'Unison spreiding': 'Unison spread', 'Suboscillator': 'Sub oscillator',
   'Stereobreedte': 'Stereo width', 'Transpositie': 'Transpose', 'Uitgang': 'Output', 'Klank': 'Sound',
-  'Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.': 'Warm chords, sharp stabs and wide leads. Keyboard / sequencer → Notes.',
   'Klankbeeld': 'Preset', 'Golfvorm': 'Waveform', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle', 'Sinus': 'Sine',
   'Akkoordgeheugen': 'Chord memory', 'Losse noten': 'Single notes', 'Majeur': 'Major', 'Mineur': 'Minor', 'Mineur 7': 'Minor 7', 'Eigen intervallen': 'Custom intervals',
   'Eigen intervallen (0,4,7)': 'Custom intervals (0,4,7)', 'Test akkoord': 'Test chord', 'Alles uit': 'All off', 'Golfvorm van de uitgang': 'Output waveform',
-  'Tot 24 gelijktijdige stemmen, ieder met twee ontstemde oscillatoren en een sub. Akkoordgeheugen voegt intervallen toe aan elke inkomende noot; kies Losse noten voor volledige akkoorden uit een sequencer. Mod stuurt de basisregelaars zonder ze te overschrijven.':
-    'Up to 24 simultaneous voices, each with two detuned oscillators and a sub. Chord memory adds intervals to every incoming note; choose Single notes for full chords from a sequencer. Mod moves the basic controls without overwriting them.',
 };
 const CLAMP = (x, a, b) => Math.min(b, Math.max(a, x));
 // terugval voor een host zonder host.frame (contract §12b)
@@ -27,9 +25,9 @@ const drawLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.12.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.13.0', kind: 'instrument', category: 'synth',
   ui: { width: 840, minWidth: 380 },
-  about: { nl: 'Een polyfone akkoordsynth: twee ontstemde oscillatoren en een sub per noot, met akkoordgeheugen.', en: 'A polyphonic chord synth: two detuned oscillators and a sub per note, with chord memory.' },
+  about: { nl: 'Een polyfone akkoordsynth: twee ontstemde oscillatoren en een sub per noot, met akkoordgeheugen. Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.\n\nTot 24 gelijktijdige stemmen, ieder met twee ontstemde oscillatoren en een sub. Akkoordgeheugen voegt intervallen toe aan elke inkomende noot; kies Losse noten voor volledige akkoorden uit een sequencer. Mod stuurt de basisregelaars zonder ze te overschrijven.', en: 'A polyphonic chord synth: two detuned oscillators and a sub per note, with chord memory. Warm chords, sharp stabs and wide leads. Keyboard / sequencer → Notes.\n\nUp to 24 simultaneous voices, each with two detuned oscillators and a sub. Chord memory adds intervals to every incoming note; choose Single notes for full chords from a sequencer. Mod moves the basic controls without overwriting them.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { notes: 'Noten' } } },
   create(ctx, host) {
@@ -113,7 +111,6 @@ export default {
     function mount(el) {
       unmount(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; ui = { k: {} };
       add(shadow, 'style', CSS); panel = add(shadow, 'div'); panel.className = 'app';
-      add(panel, 'p', tx('Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.'));
       const top = add(panel, 'div'); top.className = 'row';
       ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]), state.preset, v => self.setState({ ...defaults, ...presets[v], preset: v }));
       ui.wave = selectBox(top, tx('Golfvorm'), [['sawtooth', tx('Zaagtand')], ['square', tx('Puls')], ['triangle', tx('Driehoek')], ['sine', tx('Sinus')]], state.wave, v => { state.wave = v; apply(); });
@@ -123,7 +120,6 @@ export default {
       scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); scopeG = scope.getContext('2d');
       if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) { cw = Math.max(260, Math.min(1200, w)); sizeScope(); } }); ro.observe(scope); }
       const g = add(panel, 'div'); g.className = 'grid'; for (const [id, d] of Object.entries(spec)) knob(g, id, d);
-      add(panel, 'p', tx('Tot 24 gelijktijdige stemmen, ieder met twee ontstemde oscillatoren en een sub. Akkoordgeheugen voegt intervallen toe aan elke inkomende noot; kies Losse noten voor volledige akkoorden uit een sequencer. Mod stuurt de basisregelaars zonder ze te overschrijven.'));
       if (typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
       stopDraw = drawLoop(host, self, draw, 30);
     }

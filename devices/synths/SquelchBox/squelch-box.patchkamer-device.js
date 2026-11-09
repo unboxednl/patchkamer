@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Squelch Box); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (acid-basssynth met sequencer) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Squelch Box (contract v1.27). Een zo getrouw mogelijke acid-bassynth, geïnspireerd op klassieke acid-bassynths uit de jaren tachtig:
 //   één oscillator, een driepolig (18 dB/oct) resonant diode-ladderfilter met een terugkoppeling die het laag wegneemt, een filter-envelope met accentcircuit
@@ -29,8 +30,6 @@ const EN = {
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
   'AudioWorklet niet beschikbaar: Squelch Box kan hier geen geluid maken.': 'AudioWorklet not available: Squelch Box cannot make sound here.',
-  'Slide op een stap glijdt naar de volgende stap en houdt de gate open (geen nieuwe aanzet van de envelopes). Tie houdt de gate van de vorige stap vast zonder nieuwe aanzet, op de toonhoogte van deze stap. Accent: harder, korte decay en een sweep die bij opeenvolgende accenten oploopt. Zet "Intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,85 = accent, overlappende noten = slide). Tempo en swing komen van de klok van de host.':
-    'Slide on a step glides into the next step and keeps the gate open (no new attack of the envelopes). Tie holds the gate of the previous step with no new attack, at the pitch of this step. Accent: louder, short decay and a sweep that builds up over consecutive accents. Switch "Internal" off to play only notes from the orange input (vel > 0.85 = accent, overlapping notes = slide). Tempo and swing come from the host clock.',
   'stap {0}': 'step {0}',
 };
 // [label, min, max, stap, start, eenheid, schaal, rol, drift, aan, groep]
@@ -287,9 +286,9 @@ registerProcessor('${WNAME}', PkSquelch);
 
 // ---------- het apparaat ----------
 export default {
-  id: 'nl.patchkamer.squelchbox', name: 'Squelch Box', version: '1.21.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.squelchbox', name: 'Squelch Box', version: '1.22.0', kind: 'instrument', category: 'synth',
   ui: { width: 900, minWidth: 360 },
-  about: { nl: 'Acid-basssynth met ingebouwde sequencer.', en: 'An acid bass synth with a built-in sequencer.' },
+  about: { nl: 'Acid-basssynth met ingebouwde sequencer.\n\nSlide op een stap glijdt naar de volgende stap en houdt de gate open (geen nieuwe aanzet van de envelopes). Tie houdt de gate van de vorige stap vast zonder nieuwe aanzet, op de toonhoogte van deze stap. Accent: harder, korte decay en een sweep die bij opeenvolgende accenten oploopt.\n\nZet "Intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,85 = accent, overlappende noten = slide). Tempo en swing komen van de klok van de host.', en: 'An acid bass synth with a built-in sequencer.\n\nSlide on a step glides into the next step and keeps the gate open (no new attack of the envelopes). Tie holds the gate of the previous step with no new attack, at the pitch of this step. Accent: louder, short decay and a sweep that builds up over consecutive accents.\n\nSwitch "Internal" off to play only notes from the orange input (vel > 0.85 = accent, overlapping notes = slide). Tempo and swing come from the host clock.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Uit', notes: 'Noten' } } },
   modExclude: MODEX,
@@ -425,7 +424,6 @@ export default {
         b2(tx('Alles uit'), () => panic());
         status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
-        const tip = document.createElement('p'); tip.className = 'note'; tip.textContent = tx('Slide op een stap glijdt naar de volgende stap en houdt de gate open (geen nieuwe aanzet van de envelopes). Tie houdt de gate van de vorige stap vast zonder nieuwe aanzet, op de toonhoogte van deze stap. Accent: harder, korte decay en een sweep die bij opeenvolgende accenten oploopt. Zet "Intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,85 = accent, overlappende noten = slide). Tempo en swing komen van de klok van de host.'); el.appendChild(tip);
         try { const c = getComputedStyle(canvas).getPropertyValue('--audio'); if (c && c.trim()) lineColor = c.trim(); } catch (e) {}
         if (typeof host.frame === 'function') stopFrame = host.frame(self, draw, 30);
         paint();

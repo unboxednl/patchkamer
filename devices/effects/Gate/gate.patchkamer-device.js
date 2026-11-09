@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.3.0 — Uitleg naar about (menu Over Gate); de UI toont geen uitlegtekst meer.
 // 1.2.0 — Patchkamer contract v1.34: latency() meldt de lookahead aan de host (alleen weergave; de host compenseert niet).
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: noise gate, expander en ducker in één: drempel, ratio (gate = oneindig, expander = zacht), attack, hold, release, range (hoeveel er gedempt wordt),
@@ -19,7 +20,6 @@ const NL = {
   mode: 'Soort', gate: 'Gate (dicht)', expander: 'Expander (zacht)', ducker: 'Ducker (sidechain luid = dempen)', detect: 'Detectie', peak: 'Peak', rms: 'RMS', src: 'Sidechain', int: 'Intern', ext: 'Extern (ingang Sidechain)',
   on: 'Aan', off: 'Uit (doorlaten)', listen: 'Luister naar sidechain', listenTip: 'Hoor wat de detector hoort (na de filters), om ze in te stellen', aria: 'Overdrachtscurve van de poort', gain: 'Poort (versterking)', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Door de lookahead loopt het geluid achter; de host compenseert dat niet',
   open: 'OPEN', closed: 'DICHT', duckOn: 'DEMPT', duckOff: 'LOS', extNone: 'Extern: zonder kabel op de ingang Sidechain gebeurt er niets.', failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
-  note: 'Tip: zet de drempel net boven de ruis en kies Peak. Een korte attack (0,2 tot 2 ms) houdt de aanzet van een noot; met Lookahead opent de poort al voor de aanzet. Hold en Hysterese voorkomen ratelen bij nootstaarten. Een hoogdoorlaat van 100 Hz op de sidechain voorkomt dat rommel van laag de poort opent. Voor Ducker: trek een spraakkanaal naar de ingang Sidechain en kies Extern.',
   g0: 'Poort', g1: 'Tijd', g2: 'Sidechain',
   thr: 'Drempel', thr_t: 'boven dit niveau gaat de poort open (ducker: boven dit niveau wordt gedempt)', ratio: 'Ratio', ratio_t: 'Expander en ducker: hoe steil er gedempt wordt (dB per dB); 100 = oneindig; de gate zelf is altijd oneindig', range: 'Range', range_t: 'de grootste demping in dB',
   hyst: 'Hysterese', hyst_t: 'eenmaal open sluit de poort pas zoveel dB onder de drempel (niet bij Ducker)',
@@ -31,7 +31,6 @@ const EN = {
   mode: 'Type', gate: 'Gate (closed)', expander: 'Expander (soft)', ducker: 'Ducker (loud sidechain = mute)', detect: 'Detection', peak: 'Peak', rms: 'RMS', src: 'Sidechain', int: 'Internal', ext: 'External (Sidechain input)',
   on: 'On', off: 'Off (pass through)', listen: 'Listen to sidechain', listenTip: 'Hear what the detector hears (after the filters), to set them', aria: 'Transfer curve of the gate', gain: 'Gate (gain)', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Lookahead delays the sound; the host does not compensate for it',
   open: 'OPEN', closed: 'CLOSED', duckOn: 'DUCKING', duckOff: 'IDLE', extNone: 'External: without a cable on the Sidechain input nothing happens.', failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
-  note: 'Tip: set the threshold just above the noise and choose Peak. A short attack (0.2 to 2 ms) keeps the start of a note; with Lookahead the gate opens before the start. Hold and Hysteresis stop chattering on note tails. A highpass of 100 Hz on the sidechain stops low rumble from opening the gate. For Ducker: patch a speech channel into the Sidechain input and choose External.',
   g0: 'Gate', g1: 'Time', g2: 'Sidechain',
   thr: 'Threshold', thr_t: 'above this level the gate opens (ducker: above this level it mutes)', ratio: 'Ratio', ratio_t: 'Expander and ducker: how steeply it mutes (dB per dB); 100 = infinite; the gate itself is always infinite', range: 'Range', range_t: 'the largest reduction in dB',
   hyst: 'Hysteresis', hyst_t: 'once open, the gate closes only this many dB below the threshold (not for Ducker)',
@@ -59,7 +58,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--u-acc)}
-.note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:8px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
+.stt{font-size:11px;color:var(--mod,#b48cff);margin:4px 0}
 .big{font-family:var(--mono,monospace);font-size:22px;color:var(--u-ink)} .small{font-size:11px;color:var(--muted,#97a1ad);line-height:1.4}
 .lamp{display:inline-block;min-width:64px;text-align:center;padding:3px 8px;border-radius:5px;border:1px solid var(--line,#39424e);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#97a1ad)} .lamp.lit{background:var(--go,#7ee0a1);border-color:var(--go,#7ee0a1);color:var(--well,#14100a)}`;
 const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -173,8 +172,8 @@ class Gate extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Gate);`;
 
 export default {
-  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.2.0', kind: 'effect', category: 'effect',
-  about: { nl: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.', en: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.' },
+  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.3.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.\n\nTip: zet de drempel net boven de ruis en kies Peak. Een korte attack (0,2 tot 2 ms) houdt de aanzet van een noot; met Lookahead opent de poort al voor de aanzet. Hold en Hysterese voorkomen ratelen bij nootstaarten. Een hoogdoorlaat van 100 Hz op de sidechain voorkomt dat rommel van laag de poort opent. Voor Ducker: trek een spraakkanaal naar de ingang Sidechain en kies Extern.', en: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.\n\nTip: set the threshold just above the noise and choose Peak. A short attack (0.2 to 2 ms) keeps the start of a note; with Lookahead the gate opens before the start. Hold and Hysteresis stop chattering on note tails. A highpass of 100 Hz on the sidechain stops low rumble from opening the gate. For Ducker: patch a speech channel into the Sidechain input and choose External.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
   modExclude: ['look'],
@@ -237,7 +236,6 @@ export default {
       ui.lvl = ukEl(side, 'div', 'small', ''); ui.lat = ukEl(side, 'div', 'small', ''); ui.lat.title = tx('latencyTip'); ui.ext = ukEl(side, 'div', 'small', tx('extNone'));
       statusEl = ukEl(app, 'p', 'stt');
       ui.k = ukSliders(app, spec, [{ key: 'gate', label: tx('g0') }, { key: 'time', label: tx('g1') }, { key: 'sidechain', label: tx('g2') }], (id, v) => { state[id] = v; apply(); paint(true); }, defaults, tx('dbl'));
-      ukEl(app, 'p', 'note', tx('note'));
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }
     function paint(light) { if (!root) return; if (!light) { ui.mode.value = state.mode; ui.detect.value = state.detect; ui.sc.value = state.sc;

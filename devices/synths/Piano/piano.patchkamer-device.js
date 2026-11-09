@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Piano); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (vleugel, pianino en e-piano) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Piano (contract v1.20). Eigen motor als AudioWorklet (PianoEngine): 40 stemmen, modale synthese met meerdere pianotypen.
 //   - elke noot is een bank van gedempte trillers (onharmonische deeltonen met snaarstijfheid, tweetraps uitklank, voor lage noten langer en hoge deeltonen korter),
@@ -24,9 +25,6 @@ const EN = {
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
   'AudioWorklet niet beschikbaar: Piano kan hier geen geluid maken.': 'AudioWorklet not available: Piano cannot make sound here.',
-  '40 stemmen · keyboard/sequencer → oranje Noten · stereo uit → mixer': '40 voices · keyboard/sequencer → orange Notes · stereo out → mixer',
-  'Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Het pedaal houdt losgelaten noten klinkend (cc pedal, of de knop). Hardere aanslag klinkt helderder (Aanslagkleur). Type kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.':
-    'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. The pedal keeps released notes sounding (cc pedal, or the button). Harder notes sound brighter (Velocity colour). Type chooses the instrument; the sounds in the list set type and knobs together. A purple Mod cable controls sound parameters; the knobs stay the base.'
 };
 // [label, min, max, stap, start, eenheid, schaal, rol, drift, aan]
 const SPEC = {
@@ -256,9 +254,9 @@ class PkPiano extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkPiano);
 `;
 export default {
-  id: 'nl.patchkamer.piano', name: 'Piano', version: '1.21.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.piano', name: 'Piano', version: '1.22.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
-  about: { nl: 'Polyfone pianofamilie: vleugel, pianino en e-piano.', en: 'A polyphonic piano family: grand, upright and electric piano.' },
+  about: { nl: 'Polyfone pianofamilie: vleugel, pianino en e-piano.\n\nPiano speelt alleen ontvangen noten, met 40 stemmen: sluit een keyboard of sequencer aan op de oranje ingang Noten en stuur de stereo-uitgang naar een mixer. Noten met een lengte (dur) werken met sequencers, noteon/noteoff met aangehouden toetsen.\n\nHet pedaal houdt losgelaten noten klinkend (cc pedal, of de knop). Hardere aanslag klinkt helderder (Aanslagkleur).\n\nType kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Een paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.', en: 'A polyphonic piano family: grand, upright and electric piano.\n\nPiano plays received notes only, with 40 voices: connect a keyboard or sequencer to the orange Notes input and send the stereo output to a mixer. Notes with a length (dur) work with sequencers, noteon/noteoff with held keys.\n\nThe pedal keeps released notes sounding (cc pedal, or the button). Harder notes sound brighter (Velocity colour).\n\nType chooses the instrument; the sounds in the list set type and knobs together. A purple Mod cable controls sound parameters; the knobs stay the base.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo piano' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo piano', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -283,7 +281,7 @@ export default {
     function noteOff(note, t) { post({ type: 'off', note: clamp(note + effective.transpose, 0, 127), t }); }
     function setPedal(on, t) { pedalOn = on; if (pedalBtn) pedalBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); if (pedalBtn) pedalBtn.style.opacity = on ? '1' : '.75'; post({ type: 'pedal', on, t: Number.isFinite(t) ? t : ctx.currentTime }); }
     function panic() { pending.length = 0; apply(); pedalOn = false; if (pedalBtn) { pedalBtn.setAttribute('aria-pressed', 'false'); pedalBtn.style.opacity = '.75'; } if (node) node.port.postMessage({ type: 'stop' }); }
-    function paint() { for (const k in controls) controls[k].set(state[k]); if (presetSelect) presetSelect.value = state.preset; if (typeSelect) typeSelect.value = state.type; if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('40 stemmen · keyboard/sequencer → oranje Noten · stereo uit → mixer'); } }
+    function paint() { for (const k in controls) controls[k].set(state[k]); if (presetSelect) presetSelect.value = state.preset; if (typeSelect) typeSelect.value = state.type; if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : ''; status.hidden = !status.textContent; } }
     function change(id, value) { const d = spec[id]; if (!d || !Number.isFinite(+value)) return; state[id] = Number(clamp(Math.round(+value / d[3]) * d[3], d[1], d[2]).toFixed(6)); state.preset = 'Custom'; apply(); paint(); }
     const fmt = (d, v) => d[5] === '%' ? (d[3] < 0.01 ? (v * 100).toFixed(1) : Math.round(v * 100)) + '%' : d[5] === 's' ? (v < 0.1 ? Math.round(v * 1000) + ' ms' : v.toFixed(2) + ' s') : d[5] === 'x' ? v.toFixed(2) + ' x' : d[5] === 'Hz' ? v.toFixed(1) + ' Hz' : v.toFixed(d[3] < 1 ? 1 : 0) + ' ' + d[5];
     const self = {
@@ -306,7 +304,6 @@ export default {
         pedalBtn = button(tx('Pedaal'), () => setPedal(!pedalOn)); pedalBtn.setAttribute('aria-pressed', pedalOn ? 'true' : 'false'); pedalBtn.style.opacity = pedalOn ? '1' : '.75'; button(tx('Alles uit'), () => panic());
         status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
-        const tip = document.createElement('p'); tip.className = 'note'; tip.textContent = tx('Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Het pedaal houdt losgelaten noten klinkend (cc pedal, of de knop). Hardere aanslag klinkt helderder (Aanslagkleur). Type kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.'); el.appendChild(tip);
         paint();
       },
       unmount() { if (root) root.innerHTML = ''; root = null; controls = {}; presetSelect = null; typeSelect = null; pedalBtn = null; status = null; warn = null; },
@@ -330,7 +327,7 @@ export default {
         if (dead) return; const next = {};
         if (offsets && typeof offsets === 'object' && !Array.isArray(offsets)) for (const id of Object.keys(spec)) { if (MODEX.includes(id)) continue; const v = offsets[id]; if (typeof v === 'number' && Number.isFinite(v)) next[id] = clamp(v, -1, 1); }
         mod = next; apply();
-        if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('Mod gereed · verbind een paarse sturingskabel'); }
+        if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('Mod gereed · verbind een paarse sturingskabel'); status.hidden = false; }
       },
       getState() { return { ...state }; },
       setState(raw) {

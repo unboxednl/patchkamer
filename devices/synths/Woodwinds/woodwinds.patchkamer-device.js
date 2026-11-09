@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Woodwinds); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (fluit, riet en saxofoon) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Woodwinds (contract v1.20). Eigen motor als AudioWorklet (WoodwindEngine): 16 stemmen, 1 tot 3 spelers per noot.
 //   - bron-filtermodel: elke stem is een harmonische reeks (Chebyshev-recursie, de toonhoogte ligt exact vast) waarvan de sterkte per deeltoon uit een
@@ -27,9 +28,6 @@ const EN = {
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
   'AudioWorklet niet beschikbaar: Woodwinds kan hier geen geluid maken.': 'AudioWorklet not available: Woodwinds cannot make sound here.',
-  '16 stemmen · keyboard/sequencer → oranje Noten · stereo uit → mixer': '16 voices · keyboard/sequencer → orange Notes · stereo out → mixer',
-  'Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Type kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Blaasdruk maakt de toon luider en helderder, Overblazen springt naar het tweede register (octaaf, bij klarinet en panfluit een twaalfde). Overlappende noten (dur langer dan de stap) klinken legato met een toonhoogteglijding. Beet en Grom geven riet en saxofoon hun rauwe kant. Buiging: cc bend/pitchbend (0,5 = midden, twee halve tonen omhoog en omlaag). Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.':
-    'Plays received notes only. Note + dur works with sequencers; noteon/noteoff with held keys. Type chooses the instrument; the sounds in the list set type and knobs together. Breath pressure makes the tone louder and brighter, Overblow jumps to the second register (an octave, a twelfth for clarinet and pan flute). Overlapping notes (dur longer than the step) sound legato with a pitch glide. Bite and Growl give reed and saxophone their raw side. Bend: cc bend/pitchbend (0.5 = centre, two semitones up and down). A purple Mod cable controls sound parameters; the knobs stay the base.'
 };
 // [label, min, max, stap, start, eenheid, schaal, rol, drift, aan]
 const SPEC = {
@@ -306,9 +304,9 @@ class PkWoodwinds extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkWoodwinds);
 `;
 export default {
-  id: 'nl.patchkamer.woodwinds', name: 'Woodwinds', version: '1.21.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.woodwinds', name: 'Woodwinds', version: '1.22.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
-  about: { nl: 'Houtblazers: fluit, riet en saxofoon.', en: 'Woodwinds: flute, reed and saxophone.' },
+  about: { nl: 'Houtblazers: fluit, riet en saxofoon.\n\nWoodwinds speelt alleen ontvangen noten, met 16 stemmen: sluit een keyboard of sequencer aan op de oranje ingang Noten en stuur de stereo-uitgang naar een mixer. Noten met een lengte (dur) werken met sequencers, noteon/noteoff met aangehouden toetsen.\n\nType kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Blaasdruk maakt de toon luider en helderder, Overblazen springt naar het tweede register (octaaf, bij klarinet en panfluit een twaalfde). Beet en Grom geven riet en saxofoon hun rauwe kant.\n\nOverlappende noten (dur langer dan de stap) klinken legato met een toonhoogteglijding. Buiging: cc bend/pitchbend (0,5 = midden, twee halve tonen omhoog en omlaag).\n\nEen paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.', en: 'Woodwinds: flute, reed and saxophone.\n\nWoodwinds plays received notes only, with 16 voices: connect a keyboard or sequencer to the orange Notes input and send the stereo output to a mixer. Notes with a length (dur) work with sequencers, noteon/noteoff with held keys.\n\nType chooses the instrument; the sounds in the list set type and knobs together. Breath pressure makes the tone louder and brighter, Overblow jumps to the second register (an octave, a twelfth for clarinet and pan flute). Bite and Growl give reed and saxophone their raw side.\n\nOverlapping notes (dur longer than the step) sound legato with a pitch glide. Bend: cc bend/pitchbend (0.5 = centre, two semitones up and down).\n\nA purple Mod cable controls sound parameters; the knobs stay the base.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo woodwinds' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo houtblazers', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -333,7 +331,7 @@ export default {
     function noteOff(note, t) { post({ type: 'off', note: clamp(note + effective.transpose, 0, 127), t }); }
     function setBend(v, t) { post({ type: 'bend', value: v, t: Number.isFinite(t) ? t : ctx.currentTime }); }
     function panic() { pending.length = 0; apply(); if (node) node.port.postMessage({ type: 'stop' }); }
-    function paint() { for (const k in controls) controls[k].set(state[k]); if (presetSelect) presetSelect.value = state.preset; if (typeSelect) typeSelect.value = state.type; if (legatoSelect) legatoSelect.value = state.legato; if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('16 stemmen · keyboard/sequencer → oranje Noten · stereo uit → mixer'); } }
+    function paint() { for (const k in controls) controls[k].set(state[k]); if (presetSelect) presetSelect.value = state.preset; if (typeSelect) typeSelect.value = state.type; if (legatoSelect) legatoSelect.value = state.legato; if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : ''; status.hidden = !status.textContent; } }
     function change(id, value) { const d = spec[id]; if (!d || !Number.isFinite(+value)) return; state[id] = Number(clamp(Math.round(+value / d[3]) * d[3], d[1], d[2]).toFixed(6)); state.preset = 'Custom'; apply(); paint(); }
     const fmt = (d, v) => d[5] === '%' ? Math.round(v * 100) + '%' : d[5] === 's' ? (v < 0.1 ? Math.round(v * 1000) + ' ms' : v.toFixed(2) + ' s') : d[5] === '' ? String(Math.round(v)) : d[5] === 'Hz' ? v.toFixed(1) + ' Hz' : d[5] === 'ms' ? Math.round(v) + ' ms' : v.toFixed(d[3] >= 1 ? 0 : d[3] >= 0.1 ? 1 : 2) + ' ' + d[5];
     const self = {
@@ -359,7 +357,6 @@ export default {
         button(tx('Alles uit'), () => panic());
         status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
-        const tip = document.createElement('p'); tip.className = 'note'; tip.textContent = tx('Speelt alleen ontvangen noten. Note + dur werkt met sequencers; noteon/noteoff met aangehouden toetsen. Type kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Blaasdruk maakt de toon luider en helderder, Overblazen springt naar het tweede register (octaaf, bij klarinet en panfluit een twaalfde). Overlappende noten (dur langer dan de stap) klinken legato met een toonhoogteglijding. Beet en Grom geven riet en saxofoon hun rauwe kant. Buiging: cc bend/pitchbend (0,5 = midden, twee halve tonen omhoog en omlaag). Paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.'); el.appendChild(tip);
         paint();
       },
       unmount() { if (root) root.innerHTML = ''; root = null; controls = {}; presetSelect = null; typeSelect = null; legatoSelect = null; status = null; warn = null; },
@@ -383,7 +380,7 @@ export default {
         if (dead) return; const next = {};
         if (offsets && typeof offsets === 'object' && !Array.isArray(offsets)) for (const id of Object.keys(spec)) { if (MODEX.includes(id)) continue; const v = offsets[id]; if (typeof v === 'number' && Number.isFinite(v)) next[id] = clamp(v, -1, 1); }
         mod = next; apply();
-        if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('Mod gereed · verbind een paarse sturingskabel'); }
+        if (status) { const a = Object.values(mod).filter(v => v !== 0).length; status.textContent = a ? tx('Mod actief · {0} parameters', a) : tx('Mod gereed · verbind een paarse sturingskabel'); status.hidden = false; }
       },
       getState() { return { ...state }; },
       setState(raw) {

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Click Synth); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving (met 'percussiesynth') staat nu in about.
 // 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is het gekozen patroon (A tot D) met de acht sporen als banen; elk spoor heeft zijn eigen lengte (1 tot 16, `lanes[].length`).
 //          Schema `device`: de nootnummers 36 tot 43 zijn geen General MIDI en de sporen hebben geen `type`, dus de host lijnt uit op naam (de namen hangen van de kit af) en wat niet past wordt weggelaten en gemeld. Per slag gaan velocity, kans en ratchet (1 tot 4) mee. De toonsprong (`t`) heeft geen plaats in het formaat: hij gaat alleen mee in `native` voor een clip uit dit apparaat
@@ -27,7 +28,6 @@ const TXT = {
     p: { pitch: 'Toonhoogte', penv: 'Pitch-envelope', ptime: 'Pitch-tijd', decay: 'Decay', color: 'Kleur', shape: 'Karakter', noise: 'Ruis', drive: 'Drive', crush: 'Crush', cut: 'Filter', res: 'Resonantie', pan: 'Pan', level: 'Niveau', vari: 'Willekeur' },
     groups: ['Toon en tijd', 'Klankvorm', 'Bewerking', 'Mix en leven'],
     engines: { tick: 'Tik (impuls + resonator)', bleep: 'Bleep (oscillator)', fm: 'FM-metaal', noise: 'Ruis (bandfilter)', modal: 'Modaal (hout → glas → metaal → vel)', string: 'Snaar (plukken)', zap: 'Zap (laser)', glitch: 'Glitch (stotter)' },
-    hints: { tick: 'Kleur = ruis in de klik · Karakter = resonantie', bleep: 'Kleur = sinus → blok → zaag · Karakter = octaaf-FM', fm: 'Kleur = verhouding modulator · Karakter = FM-diepte', noise: 'Kleur = wit → donker · Karakter = smalheid filter', modal: 'Kleur = materiaal: hout, glas, metaal, vel · Karakter = hoge delen sterven sneller', string: 'Kleur = helderheid · Karakter = vervorming', zap: 'Kleur = sinus → blok · Karakter = fold', glitch: 'Kleur = stotter-snelheid · Karakter = boventonen' },
     ftypes: { lp: 'Laagdoorlaat', bp: 'Banddoorlaat', hp: 'Hoogdoorlaat' }, center: 'midden', custom: 'Eigen kit', kit: 'Kit', pattern: 'Patroon', patTitle: n => 'patroon ' + n + ' · Shift-klik: kopieer het huidige patroon hierheen',
     clickStep: 'Klik op een stap', modes: { on: 'Aan / uit', accent: 'Accent (hard / zacht)', chance: 'Kans (100 → 25%)', ratchet: 'Ratchet (1 → 4)', tone: 'Toonsprong' },
     patSwing: 'Patroonswing', laneSwing: 'Spoorswing', swingTitle: 'extra swing op de oneven zestienden, bovenop de swing van de host (dubbelklik: 0)',
@@ -36,13 +36,11 @@ const TXT = {
     laneTitle: 'kies dit spoor · speelt de klank', mute: 'demp', solo: 'solo', stepAria: (i, j) => `spoor ${i} stap ${j}`, lenTitle: 'lengte van dit spoor (polyritme)', lenAria: i => 'lengte spoor ' + i,
     name: 'Naam', engine: 'Klankmotor', ftype: 'Filtertype', choke: 'Afknijpgroep', none: 'Geen', group: n => 'Groep ' + n, play: 'Speel', surprise: 'Verras', surpriseTitle: 'willekeurige klank binnen deze klankmotor',
     surprisePat: 'Verras patroon', surprisePatTitle: 'willekeurig ritme voor dit spoor', clearPat: 'Wis patroon', scopeAria: 'golfvorm van het gekozen spoor', knobTitle: name => name + ' — dubbelklik voor de waarde uit de kit',
-    note: 'Klik op een stap volgens de keuze bovenaan; Shift-klik zet een stap zacht, rechtsklik wist hem. Lengte per spoor maakt polyritmes (bijv. 7 tegen 16). Afknijpgroep: een slag kapt de andere sporen in dezelfde groep af (open/dichte hihat). Sequencer uit: speel vanuit een ander apparaat (drumprotocol trig, ch1–ch8) of met noten 36–43. De bundeluitgang geeft elk spoor los aan de Mixer.',
     noWorklet: 'AudioWorklet niet beschikbaar: Click Synth blijft stil (open Patchkamer in Chrome, Edge of Firefox).', bundle: 'Click Synth' },
   en: { clipBad: 'Not a valid clip.', clipKind: 'This device only takes drums.', clipGone: 'The device has been removed.',
     p: { pitch: 'Pitch', penv: 'Pitch envelope', ptime: 'Pitch time', decay: 'Decay', color: 'Color', shape: 'Character', noise: 'Noise', drive: 'Drive', crush: 'Crush', cut: 'Filter', res: 'Resonance', pan: 'Pan', level: 'Level', vari: 'Randomness' },
     groups: ['Pitch and time', 'Sound shape', 'Processing', 'Mix and life'],
     engines: { tick: 'Tick (impulse + resonator)', bleep: 'Bleep (oscillator)', fm: 'FM metal', noise: 'Noise (band filter)', modal: 'Modal (wood → glass → metal → skin)', string: 'String (pluck)', zap: 'Zap (laser)', glitch: 'Glitch (stutter)' },
-    hints: { tick: 'Color = noise in the click · Character = resonance', bleep: 'Color = sine → square → saw · Character = octave FM', fm: 'Color = modulator ratio · Character = FM depth', noise: 'Color = white → dark · Character = filter narrowness', modal: 'Color = material: wood, glass, metal, skin · Character = high parts die faster', string: 'Color = brightness · Character = distortion', zap: 'Color = sine → square · Character = fold', glitch: 'Color = stutter speed · Character = overtones' },
     ftypes: { lp: 'Low-pass', bp: 'Band-pass', hp: 'High-pass' }, center: 'center', custom: 'Custom kit', kit: 'Kit', pattern: 'Pattern', patTitle: n => 'pattern ' + n + ' · Shift-click: copy the current pattern here',
     clickStep: 'Click on a step', modes: { on: 'On / off', accent: 'Accent (hard / soft)', chance: 'Chance (100 → 25%)', ratchet: 'Ratchet (1 → 4)', tone: 'Pitch jump' },
     patSwing: 'Pattern swing', laneSwing: 'Lane swing', swingTitle: 'extra swing on the odd sixteenths, on top of the host swing (double-click: 0)',
@@ -51,7 +49,6 @@ const TXT = {
     laneTitle: 'select this lane · plays the sound', mute: 'mute', solo: 'solo', stepAria: (i, j) => `lane ${i} step ${j}`, lenTitle: 'length of this lane (polyrhythm)', lenAria: i => 'length of lane ' + i,
     name: 'Name', engine: 'Sound engine', ftype: 'Filter type', choke: 'Choke group', none: 'None', group: n => 'Group ' + n, play: 'Play', surprise: 'Surprise', surpriseTitle: 'a random sound within this sound engine',
     surprisePat: 'Surprise pattern', surprisePatTitle: 'a random rhythm for this lane', clearPat: 'Clear pattern', scopeAria: 'waveform of the selected lane', knobTitle: name => name + ' — double-click for the value from the kit',
-    note: 'Click a step according to the choice at the top; Shift-click makes a step soft, right-click clears it. Length per lane makes polyrhythms (e.g. 7 against 16). Choke group: a hit cuts off the other lanes in the same group (open/closed hi-hat). Sequencer off: play from another device (drum protocol trig, ch1–ch8) or with notes 36–43. The bundle output gives every lane separately to the Mixer.',
     noWorklet: 'AudioWorklet is not available: Click Synth stays silent (open Patchkamer in Chrome, Edge or Firefox).', bundle: 'Click Synth' },
 };
 const WNAME = 'nl-patchkamer-clicksynth-1-11-0';
@@ -121,8 +118,8 @@ const pkLoop = (host, getInst, cb, fps) => {   // tekenen via de klok van de hos
   const inst = getInst(); if (host && typeof host.frame === 'function' && inst && inst._id) return host.frame(inst, cb, fps);
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 export default {
-  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.16.0', kind: 'instrument', category: 'groove',
-  about: { nl: 'Percussiesynth. Acht sporen met elk een eigen klankmotor. Boetseer kliks, tiks, bleeps, zaps, hout, glas, metaal en glitches. Willekeur maakt elke slag net anders; elk spoor kan een eigen lengte hebben (polyritme).', en: 'Percussion synth. Eight lanes, each with its own sound engine. Shape clicks, ticks, bleeps, zaps, wood, glass, metal and glitches. Randomness makes every hit a little different; each lane can have its own length (polyrhythm).' },
+  id: 'nl.patchkamer.clicksynth', name: 'Click Synth', version: '1.17.0', kind: 'instrument', category: 'groove',
+about: { nl: 'Percussiesynth. Acht sporen met elk een eigen klankmotor. Boetseer kliks, tiks, bleeps, zaps, hout, glas, metaal en glitches. Willekeur maakt elke slag net anders; elk spoor kan een eigen lengte hebben (polyritme).\n\nKlik op een stap volgens de keuze bovenaan; Shift-klik zet een stap zacht, rechtsklik wist hem. Lengte per spoor maakt polyritmes (bijvoorbeeld 7 tegen 16). Afknijpgroep: een slag kapt de andere sporen in dezelfde groep af (open en dichte hihat).\n\nPer klankmotor hebben Kleur en Karakter een eigen betekenis. Tick: Kleur = ruis in de klik, Karakter = resonantie. Bleep: Kleur = sinus, blok, zaag; Karakter = octaaf-FM. FM: Kleur = verhouding van de modulator, Karakter = FM-diepte. Noise: Kleur = wit tot donker, Karakter = smalheid van het filter. Modal: Kleur = materiaal (hout, glas, metaal, vel), Karakter = hoe sneller de hoge delen uitsterven. String: Kleur = helderheid, Karakter = vervorming. Zap: Kleur = sinus tot blok, Karakter = fold. Glitch: Kleur = stotter-snelheid, Karakter = boventonen.\n\nStaat de sequencer uit, speel dan vanuit een ander apparaat (drumprotocol trig, ch1 tot ch8) of met de noten 36 tot 43. De bundeluitgang geeft elk spoor los aan de Mixer.', en: 'Percussion synth. Eight lanes, each with its own sound engine. Shape clicks, ticks, bleeps, zaps, wood, glass, metal and glitches. Randomness makes every hit a little different; each lane can have its own length (polyrhythm).\n\nClick a step according to the choice at the top; Shift-click makes a step soft, right-click clears it. Length per lane makes polyrhythms (for example 7 against 16). Choke group: a hit cuts off the other lanes in the same group (open and closed hi-hat).\n\nFor each sound engine, Color and Character mean something different. Tick: Color = noise in the click, Character = resonance. Bleep: Color = sine, square, saw; Character = octave FM. FM: Color = modulator ratio, Character = FM depth. Noise: Color = white to dark, Character = filter narrowness. Modal: Color = material (wood, glass, metal, skin), Character = how much faster the high parts die. String: Color = brightness, Character = distortion. Zap: Color = sine to square, Character = fold. Glitch: Color = stutter speed, Character = overtones.\n\nWith the sequencer off, play from another device (drum protocol trig, ch1 to ch8) or with notes 36 to 43. The bundle output gives every lane separately to the Mixer.' },
   ui: { width: 1080, minWidth: 560 },
   i18n: { en: { name: 'Click Synth', ports: { out: 'Stereo mix', trigger: 'Trigs / notes', mod: 'Mod', multi: 'Separate lanes (bundle)' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo mix' }], eventIn: [{ id: 'trigger', name: 'Trigs / noten' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiIn: [], multiOut: [{ id: 'multi', name: 'Sporen los (bundel)' }] },
@@ -152,7 +149,6 @@ export default {
     };
     const PGROUPS = T.groups;
     const ENGINES = Object.keys(T.engines).map(k => [k, T.engines[k]]);
-    const COLOR_HINT = T.hints;
     const FTYPES = Object.keys(T.ftypes).map(k => [k, T.ftypes[k]]);
     const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
     const sound = (engine, o = {}) => ({ engine, choke: 0, ftype: 'lp', p: { pitch: 400, penv: 0, ptime: 0.02, decay: 0.12, color: 0.3, shape: 0.5, noise: 0, drive: 0, crush: 0, cut: 20000, res: 0, pan: 0, level: 0.8, vari: 0.1, ...o } });
@@ -314,7 +310,7 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .c .lab{display:flex;justify-content:space-between;gap:6px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 .c output{font-size:11px;color:var(--fg,#e2e6ea);white-space:nowrap;text-transform:none}
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--k-acc)}
-.hint{font-size:11px;color:var(--k-ink)} .note{font-size:11px;color:var(--muted,#97a1ad);line-height:1.5;margin:6px 0 0} .stt{font-size:11px;color:var(--mod,#b48cff)}`;
+.stt{font-size:11px;color:var(--mod,#b48cff)}`;
     const el = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; p.appendChild(e); return e; };
     const stop = e => e.stopPropagation();
     function selectBox(p, label, opts, value, change) { const box = el(p, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', stop); return s; }
@@ -358,7 +354,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
       const b2 = el(et, 'button', '', T.surprise); b2.type = 'button'; b2.title = T.surpriseTitle; b2.addEventListener('pointerdown', stop); b2.onclick = () => { surprise(state.sel, true); paint(); audition(); };
       const b3 = el(et, 'button', '', T.surprisePat); b3.type = 'button'; b3.title = T.surprisePatTitle; b3.addEventListener('pointerdown', stop); b3.onclick = () => { randomPattern(state.sel); paint(); };
       const b4 = el(et, 'button', '', T.clearPat); b4.type = 'button'; b4.addEventListener('pointerdown', stop); b4.onclick = () => { state.lanes[state.sel].pats[state.pattern] = empty(); paint(); };
-      ui.hint = el(ed, 'div', 'hint'); cv = el(ed, 'canvas'); cv.setAttribute('aria-label', T.scopeAria);
+      cv = el(ed, 'canvas'); cv.setAttribute('aria-label', T.scopeAria);
       ui.k = {};
       PGROUPS.forEach((gname, gi) => { el(ed, 'h3', '', gname); const g = el(ed, 'div', 'grid');
         for (const [id, s] of Object.entries(PS)) { if (s.g !== gi) continue; const c = el(g, 'div', 'c'), lab = el(c, 'div', 'lab'); el(lab, 'span', '', s.name); const o = el(lab, 'output');
@@ -368,7 +364,6 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           inp.onchange = () => audition();
           inp.ondblclick = () => { const k = KITS[state.kit] ? KITS[state.kit]()[state.sel] : null; if (k) { state.lanes[state.sel].p[id] = k.p[id]; paint(); audition(); } };
           ui.k[id] = { set(v) { inp.value = String(toS(s, v)); o.textContent = fmt(s, v) + (id === 'pitch' ? ' · ' + noteOf(v) : ''); } }; } });
-      el(app, 'p', 'note', T.note);
       paint(); paintStatus(); raf = pkLoop(host, () => self, draw, 30);
     }
     function markEigen() { if (state.kit !== 'Custom') { state.kit = 'Custom'; if (ui.kit) ui.kit.value = 'Custom'; } }
@@ -399,7 +394,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     function paint() { if (!root) return; const L = state.lanes[state.sel]; if (ui.kit) ui.kit.value = state.kit; ui.pat.forEach((b, k) => b.classList.toggle('on', k === state.pattern)); ui.mode.value = state.mode;
       ui.patSw.set(state.patSwing[state.pattern]); ui.laneSw.set(L.swing); ui.rec.classList.toggle('on', rec); ui.rec.setAttribute('aria-pressed', String(rec)); ui.rec.textContent = rec ? T.on : T.off; ui.quant.textContent = state.quantize ? T.on : T.off; ui.quant.classList.toggle('on', state.quantize);
       ui.run.textContent = state.run ? T.on : T.off; ui.run.classList.toggle('on', state.run); ui.master.value = String(state.master);
-      ui.name.value = L.name; ui.engine.value = L.engine; ui.ftype.value = L.ftype; ui.choke.value = String(L.choke); ui.hint.textContent = COLOR_HINT[L.engine] || '';
+      ui.name.value = L.name; ui.engine.value = L.engine; ui.ftype.value = L.ftype; ui.choke.value = String(L.choke);
       for (const [id, k] of Object.entries(ui.k)) k.set(L.p[id]); paintRows(); }
     function draw() { if (dead || !root) return; const now = performance.now();
       rowEls.forEach((row, i) => (row._led || (row._led = row.querySelector('.led'))).classList.toggle('hit', flash[i] > now - 90 && flash[i] <= now + 5));
@@ -428,7 +423,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           for (let j = 0; j < L.len; j++) { const S = L.pats[state.pattern][j]; if (!(S.v > 0)) continue; const h = { t: j * 12, lane: i, vel: Math.max(0.01, S.v) }; if (S.v >= 0.9) { h.acc = true; h.vel = 1; } if (S.p < 1) h.prob = S.p; if (S.r > 1) h.ratchet = S.r; hits.push(h); } });
         hits.sort((a, b) => a.t - b.t || a.lane - b.lane);
         const native = { lens: state.lanes.map(L => L.len), steps: state.lanes.map(L => L.pats[state.pattern].slice(0, L.len).map(S => ({ v: S.v, p: S.p, r: S.r, t: S.t }))) };
-        return JSON.parse(JSON.stringify({ format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: clipName(), length, grid: 16, source: { device: CLIP_ID, name: 'Click Synth', version: '1.16.0', scheme: 'device' }, lanes, hits, native: { device: CLIP_ID, data: native } })); } catch { return null; } }
+        return JSON.parse(JSON.stringify({ format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: clipName(), length, grid: 16, source: { device: CLIP_ID, name: 'Click Synth', version: '1.17.0', scheme: 'device' }, lanes, hits, native: { device: CLIP_ID, data: native } })); } catch { return null; } }
     function setClip(clip) { try {
         if (dead) return { ok: false, reason: T.clipGone };
         if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1)) return { ok: false, reason: T.clipBad };

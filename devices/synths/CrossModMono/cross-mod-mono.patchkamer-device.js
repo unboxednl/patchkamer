@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Cross Mod Mono); de UI toont geen uitlegtekst meer.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Cross Mod Mono en een nieuwe id (nl.patchkamer.crossmodmono); tunes en songs uit de vorige versie verwijzen
 //   naar de oude id. Alleen de eigen motor blijft over (geen code meer voor andere varianten); het geluid is bit-identiek aan de vorige versie.
 //   - tweetalig (host.lang, namen per taal in i18n); de worklet wordt via host.loadWorklet geladen
@@ -189,9 +190,6 @@ const EN = {
   'Nootdeling': 'Note division', 'Arp-richting': 'Arp direction', 'Omhoog': 'Up', 'Omlaag': 'Down', 'Lengte': 'Length', 'Stap {0}': 'Step {0}',
   'Noot': 'Note', 'Speelt': 'Plays', 'Rust': 'Rest', 'rust': 'rest',
   'Golfvorm van de uitgang': 'Output waveform',
-  'Twee oscillatoren · hard sync · audio-rate kruismodulatie · twee envelopes · patroon / arp.': 'Two oscillators · hard sync · audio-rate cross modulation · two envelopes · pattern / arp.',
-  'Oscillator B kan de toonhoogte van A en het filter moduleren. Osc B laag maakt B tot een langzame modulator. Sync zet de fase van B terug bij elke cyclus van A. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.':
-    'Oscillator B can modulate the pitch of A and the filter. Osc B low turns B into a slow modulator. Sync resets the phase of B at every cycle of A. The Mod input changes the sound without overwriting the base values.',
   'Audiomotor wordt voorbereid…': 'Preparing audio engine…', 'Deze omgeving biedt geen audioprocessor.': 'This environment has no audio processor.',
   'Audiomotor gereed · interne klok loopt': 'Audio engine ready · internal clock running',
   'Audiomotor gereed · keyboard en testknoppen beschikbaar': 'Audio engine ready · keyboard and test buttons available',
@@ -292,10 +290,11 @@ canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);borde
 export default {
   id: 'nl.patchkamer.crossmodmono',
   name: 'Cross Mod Mono',
-  version: '1.11.0',
+  version: '1.12.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
+  about: { nl: 'Een monofone synth met twee oscillatoren, hard sync, kruismodulatie op audiosnelheid, twee envelopes, een tweepolig lowpass-filter, een LFO, portamento en een eigen patroon van 32 stappen of een arpeggiator.\n\nOscillator B kan de toonhoogte van A en het filter moduleren. Osc B laag maakt B tot een langzame modulator. Sync zet de fase van B terug bij elke cyclus van A. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.', en: 'A monophonic synth with two oscillators, hard sync, audio-rate cross modulation, two envelopes, a two-pole lowpass filter, an LFO, portamento and its own 32-step pattern or an arpeggiator.\n\nOscillator B can modulate the pitch of A and the filter. Osc B low turns B into a slow modulator. Sync resets the phase of B at every cycle of A. The Mod input changes the sound without overwriting the base values.' },
   i18n: { en: { ports: { notes: 'Keyboard / notes' } } },
   ports: {
     audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }],
@@ -484,7 +483,6 @@ export default {
     function buildUI() {
       if (!panel) return;
       panel.textContent = ''; ui = {}; stepButtons = []; scope = null; scopeCtx = null;
-      add(panel, 'p', tx('Twee oscillatoren · hard sync · audio-rate kruismodulatie · twee envelopes · patroon / arp.'));
       const top = row(panel);
       select(top, tx('Klank'), Object.keys(PRESETS).map(k => [k, k]), state.preset, v => {
         const keep = {}; for (const k of PERFORMANCE) keep[k] = state[k];
@@ -504,7 +502,6 @@ export default {
       scopeCtx = scope.getContext && scope.getContext('2d'); scopeData = new Float32Array(analyser.fftSize || 1024);
       sizeScope();
       ui.status = add(panel, 'p'); tellEngine();
-      add(panel, 'p', tx('Oscillator B kan de toonhoogte van A en het filter moduleren. Osc B laag maakt B tot een langzame modulator. Sync zet de fase van B terug bij elke cyclus van A. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.'));
       if (ro) { ro.disconnect(); if (scope && typeof ro.observe === 'function') ro.observe(scope); }
     }
     function sizeScope() {

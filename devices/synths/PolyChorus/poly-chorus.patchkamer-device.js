@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Poly Chorus); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Versterking (+9,5 dB) achter de compressor: het apparaat en de tunes waren erg zacht (pieken rond −34 tot −10 dBFS). Het plafond rondt de pieken af.
 // 1.11.0 — Nieuw als Poly Chorus (nieuwe id nl.patchkamer.polychorus, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is
 //   bit-identiek aan het oude bestand; de motor bevat alleen nog de code voor dit apparaat:
@@ -192,11 +193,6 @@ const EN = {
   'Golfvorm van de uitgang': 'Output waveform',
   'Audiomotor wordt voorbereid…': 'Preparing the audio engine…', 'Deze omgeving biedt geen audioprocessor.': 'This environment has no audio processor.',
   'Audiomotor gereed · keyboard en testknoppen beschikbaar': 'Audio engine ready · keyboard and test buttons available',
-  'Zes stemmen · zaagtand, puls met PWM, sub en ruis · stereo-chorus.': 'Six voices · sawtooth, pulse with PWM, sub and noise · stereo chorus.',
-  'De zaagtand, puls en sub worden gemengd. De hoogdoorlaat heeft vier standen. Chorus I en II zijn twee eigen delaymodulaties; samen geven ze een bredere chorus.':
-    'The sawtooth, pulse and sub are mixed. The high-pass has four settings. Chorus I and II are two delay modulations; together they give a wider chorus.',
-  'Eigen klanken en klanksynthese. De paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.':
-    'Own sounds and sound synthesis. The purple Mod input changes the sound without overwriting the base values.',
 };
 
 // id, naam, min, max, standaard, rol, schaal, eenheid, spoor, stap — de volgorde is de volgorde van params()
@@ -282,10 +278,11 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.polychorus',
   name: 'Poly Chorus',
-  version: '1.11.1',
+  version: '1.12.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
+  about: { nl: 'Zesstemmige synth: zaagtand, puls met PWM, sub en ruis, met een stereo-chorus.\n\nDe zaagtand, puls en sub worden gemengd. De hoogdoorlaat heeft vier standen. Chorus I en II zijn twee eigen delaymodulaties; samen geven ze een bredere chorus.\n\nHet apparaat heeft eigen klanken en klanksynthese. De paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.', en: 'A six-voice synth: sawtooth, pulse with PWM, sub and noise, with a stereo chorus.\n\nThe sawtooth, pulse and sub are mixed. The high-pass has four settings. Chorus I and II are two delay modulations; together they give a wider chorus.\n\nThe device has its own sounds and sound synthesis. The purple Mod input changes the sound without overwriting the base values.' },
   i18n: { nl: { ports: { out: 'Uit', notes: 'Noten' } } },
   ports: {
     audioIn: [],
@@ -416,7 +413,6 @@ export default {
         const wrap = add(el, 'div'), shadow = wrap.attachShadow({ mode: 'open' }); wrapEl = wrap;
         add(shadow, 'style', CSS); root = shadow;
         panel = add(shadow, 'div'); panel.className = 'app';
-        add(panel, 'p', tx('Zes stemmen · zaagtand, puls met PWM, sub en ruis · stereo-chorus.'));
         const top = add(panel, 'div'); top.className = 'row';
         choose(top, tx('Klank'), Object.keys(SOUNDS).map(k => [k, k]), () => state.preset, v => self.setState({ ...DEFAULTS, ...SOUNDS[v], preset: v, testNote: state.testNote }));
         const play = add(panel, 'div'); play.className = 'row';
@@ -443,8 +439,6 @@ export default {
         if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) cw = w; }); ro.observe(scope); }
         if (typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
         statusEl = add(panel, 'p'); status();
-        add(panel, 'p', tx('De zaagtand, puls en sub worden gemengd. De hoogdoorlaat heeft vier standen. Chorus I en II zijn twee eigen delaymodulaties; samen geven ze een bredere chorus.'));
-        add(panel, 'p', tx('Eigen klanken en klanksynthese. De paarse Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.'));
         stopLoop(); stopDraw = drawLoop(self, draw, 20);
       },
       unmount() { unmountUI(); },

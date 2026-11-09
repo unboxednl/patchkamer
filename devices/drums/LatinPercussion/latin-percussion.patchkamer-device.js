@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Latin Percussion); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.15.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is de gekozen bank (A tot D): 15 klanken van 16 stappen met waarden 0, 1 en 2 (accent).
 //          Schema `device`: de nootnummers zijn `baseNote` + 0 tot 14 en geen General MIDI, dus de banen hebben geen `type` en de host lijst ze alleen uit op naam (en op positie bij een clip uit dit apparaat); wat niet past, laat de host weg en meldt hij. De lengte is vast 16 stappen (192 tikken).
@@ -54,16 +55,12 @@ const PRESETS={"Latin Motor":{"patternData":["[[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0]
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
   nl: { clipPat: 'Bank', clipBad: 'Geen geldige clip.', clipKind: 'Dit apparaat neemt alleen drums.', clipGone: 'Het apparaat is verwijderd.',
-    help: 'Eigen gesynthetiseerde bongos, congas, timbales, agogos, shakers, whistles, quijada en star chime. Stapknoppen wisselen rust → gewone slag → accent. Choke bootst gedeelde klankgroepen na. Trig-lanen staan in de handleiding.',
-    note: 'Eigen klanksynthese en eigen klankbeelden. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven.',
     level: 'Niveau', grit: '8-bit korrel', master: 'Master', masterLane: 'Master', preset: 'Klankbeeld', bank: 'Bank', control: 'Besturing', controlPads: 'Alleen pads / externe trigs', controlSeq: 'Eigen patroon op interne klok',
     choke: 'Choke-groepen', chokeFree: 'Vrij polyfoon', chokeGroups: 'Gedeelde groepen', copyBank: 'Kopieer naar volgende bank', firstPad: 'Eerste pad MIDI', scopeAria: 'Golfvorm van de uitgang',
     loading: 'Audiomotor wordt voorbereid…', unavailable: 'Deze omgeving biedt geen audioprocessor.', ready: playing => 'Audiomotor gereed · ' + (playing ? 'interne klok loopt' : 'keyboard en testknoppen beschikbaar'),
     bankSwing: 'Bankswing', laneSwing: 'Klankswing', swingTitle: 'extra swing op de oneven zestienden, bovenop de swing van de host (dubbelklik: 0)', rec: 'Opname', recTitle: 'aan: binnenkomende trigs en noten worden in de gekozen bank geschreven, op de stap van dat moment (alleen als de klok loopt)', quantize: 'Kwantiseer', quantizeTitle: 'aan: naar de dichtstbijzijnde (geswingde) stap; uit: de stap die op dat moment klinkt', onWord: 'aan', offWord: 'uit',
     clock: (bpm, step) => 'Interne klok · ' + bpm + ' BPM · stap ' + step, padTitle: (name, midi) => name + ' · MIDI ' + midi },
   en: { clipPat: 'Bank', clipBad: 'Not a valid clip.', clipKind: 'This device only takes drums.', clipGone: 'The device has been removed.',
-    help: 'Original synthesized bongos, congas, timbales, agogos, shakers, whistles, quijada and star chime. Step buttons cycle rest → normal hit → accent. Choke imitates shared sound groups. The trig lanes are listed in the manual.',
-    note: 'Original sound synthesis and sound sets. The purple Mod input changes the sound without overwriting the base values.',
     level: 'Level', grit: '8-bit grit', master: 'Master', masterLane: 'Master', preset: 'Sound set', bank: 'Bank', control: 'Control', controlPads: 'Pads / external trigs only', controlSeq: 'Own pattern on the internal clock',
     choke: 'Choke groups', chokeFree: 'Free polyphony', chokeGroups: 'Shared groups', copyBank: 'Copy to next bank', firstPad: 'First pad MIDI', scopeAria: 'Waveform of the output',
     loading: 'Preparing the audio engine…', unavailable: 'This environment has no audio processor.', ready: playing => 'Audio engine ready · ' + (playing ? 'internal clock running' : 'keyboard and test buttons available'),
@@ -94,8 +91,8 @@ const buildSpec = T => {
 export default {
   id: 'nl.patchkamer.latinpercussion',
   name: 'Latin Percussion',
-  version: '1.16.0',
-  about: { nl: 'Vijftien eigen latin-klanken · 15 × 16 stappen · vier banken · pads en externe trigs.', en: 'Fifteen original latin sounds · 15 × 16 steps · four banks · pads and external trigs.' },
+  version: '1.17.0',
+  about: { nl: 'Vijftien eigen latin-klanken · 15 × 16 stappen · vier banken · pads en externe trigs.\n\nEigen gesynthetiseerde bongos, congas, timbales, agogos, shakers, whistles, quijada en star chime. Eigen klanksynthese en eigen klankbeelden. Stapknoppen wisselen rust, gewone slag, accent. Choke bootst gedeelde klankgroepen na. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven. De trig-lanen staan in de handleiding.', en: 'Fifteen original latin sounds · 15 × 16 steps · four banks · pads and external trigs.\n\nOriginal synthesized bongos, congas, timbales, agogos, shakers, whistles, quijada and star chime. Original sound synthesis and sound sets. Step buttons cycle rest, normal hit, accent. Choke imitates shared sound groups. The purple Mod input changes the sound without overwriting the base values. The trig lanes are listed in the manual.' },
   kind: 'instrument',
   category: 'groove',
   ui: { width: 920, minWidth: 380 },
@@ -190,7 +187,7 @@ export default {
       const swg=grid(parent);swingKnob(swg,T.bankSwing,()=>state.bankSwing[state.bank],v=>{state.bankSwing[state.bank]=v;});const pads=add(parent,'div');pads.className='pads';for(let i=0;i<15;i++){const b=button(pads,(i+1)+' · '+LANE_NAMES[i],()=>{state.lane=i;send({type:'trig',index:i,vel:0.9,time:ctx.currentTime});render(el);});if(i===state.lane)b.classList.add('active');}const lane=state.lane;add(parent,'h3',T.padTitle(LANE_NAMES[lane],state.baseNote+lane));controls(grid(parent),['d'+lane+'level','d'+lane+'tune','d'+lane+'decay','d'+lane+'pan']);swingKnob(grid(parent),T.laneSwing,()=>state.laneSwing[lane],v=>{state.laneSwing[lane]=v;});const rows=JSON.parse(state.patternData[state.bank]),steps=add(parent,'div');steps.className='pads';stepButtons=rows[lane].map((value,i)=>button(steps,(i+1)+(value===2?' !!':value?' ●':' ·'),()=>{rows[lane][i]=(value+1)%3;state.patternData[state.bank]=JSON.stringify(rows);render(el);}));knob(row(parent),'baseNote',T.firstPad,[0,112,1],state.baseNote,v=>{state.baseNote=v;apply();},v=>String(v));controls(grid(parent),['grit','level']);}
     function render(el){unmount();stepButtons=[];mountUI(el);const top=row(panel);select(top,T.preset,Object.keys(PRESETS).map(k=>[k,k]),state.preset,v=>self.setState({...DEFAULTS,...PRESETS[v],preset:v}));
       latinUI(panel,el);
-      scopeMount(panel,analyser);engineText=add(panel,'p');tellEngine();add(panel,'p',T.help);add(panel,'p',T.note);
+      scopeMount(panel,analyser);engineText=add(panel,'p');tellEngine();
     }
     // ---- klembord (contract v1.17, §13d): de gekozen bank (15 klanken x 16 stappen, waarden 0/1/2) ----
     const clipLanes=()=>LANE_NAMES.map((name,i)=>({id:'p'+i,name,type:'',note:Math.min(127,Math.round(state.baseNote??36)+i)}));

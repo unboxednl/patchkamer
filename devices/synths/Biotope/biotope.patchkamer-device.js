@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Biotope); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Biotope (nieuwe id nl.patchkamer.biotope, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Biotope
@@ -45,8 +46,6 @@ const EN = {
   'aan': 'on', 'stil': 'silent', 'stappen via triggers': 'steps via triggers', 'stappen volgen de hostklok': 'steps follow the host clock', 'vrije stappen': 'free steps',
 'Soundscape kiezen': 'Choose soundscape', 'Kies een soundscape…': 'Choose a soundscape…',
   'Alle lagen uit': 'All layers off', 'Aan': 'On', 'Volg start/stop': 'Follow start/stop',
-  'Meng de acht lagen. Dichtheid = activiteit, kleur = helderheid/hoogte, beweging = variatie. Ruimte voegt stereo-galm toe.': 'Mix the eight layers. Density = activity, tone = brightness/pitch, motion = variation. Space adds stereo reverb.',
-  'Vrij: stappen/min. Klok: bij lopend transport. Alleen triggers: via events van een sequencer. Dichtheid = materiaalactiviteit.': 'Free: steps/min. Clock: while the transport runs. Triggers only: via events from a sequencer. Density = material activity.'
 };
 function defaults() {
   const layers = {};
@@ -311,9 +310,9 @@ class BiotopeProcessor extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', BiotopeProcessor);`;
 
 export default {
-  id: 'nl.patchkamer.biotope', name: 'Biotope', version: '1.12.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.biotope', name: 'Biotope', version: '1.13.0', kind: 'instrument', category: 'synth',
   ui: { width: 760, minWidth: 300 },
-  about: { nl: 'Omgeving, textuur en drone: een procedurele soundscape-synth met acht lagen.', en: 'Ambience, texture and drone: a procedural soundscape synth with eight layers.' },
+  about: { nl: 'Omgeving, textuur en drone: een procedurele soundscape-synth met acht lagen.\n\nMeng de acht lagen. Dichtheid = activiteit, kleur = helderheid/hoogte, beweging = variatie. Ruimte voegt stereo-galm toe.\n\nVoetstappen: Vrij = stappen per minuut. Klok = bij lopend transport. Alleen triggers = via events van een sequencer. Dichtheid = materiaalactiviteit.', en: 'Ambience, texture and drone: a procedural soundscape synth with eight layers.\n\nMix the eight layers. Density = activity, tone = brightness/pitch, motion = variation. Space adds stereo reverb.\n\nFootsteps: Free = steps per minute. Clock = while the transport runs. Triggers only = via events from a sequencer. Density = material activity.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'events', name: 'Triggers / CC' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   i18n: { nl: { ports: { out: 'Stereo uit' } } },
   create(ctx, host) {
@@ -404,7 +403,7 @@ export default {
         const style = document.createElement('style'); style.textContent = `
           :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}
           *{box-sizing:border-box} .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-          .hint{color:var(--muted);font-size:11px;line-height:1.5}.layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:8px;margin:10px 0}
+          .layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:8px;margin:10px 0}
           .layer{min-width:0;border:1px solid var(--line);border-radius:6px;background:var(--card-2);padding:10px}
           .layer h3{font:700 14px var(--disp,sans-serif);margin:0 0 8px}.global{padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--well)}
           label.row{display:grid;grid-template-columns:88px minmax(40px,1fr) 43px;gap:7px;align-items:center;margin:6px 0}
@@ -440,7 +439,6 @@ export default {
         sceneSelect.addEventListener('pointerdown', e => e.stopPropagation());
         const silence = make('button', tx('Alle lagen uit'), bar); silence.type = 'button'; silence.onclick = () => { LAYERS.forEach(([id]) => { state.layers[id].level = 0; }); apply(); syncUI(); };
         check(bar, 'on', 'Aan'); check(bar, 'follow', 'Volg start/stop');
-        make('div', tx('Meng de acht lagen. Dichtheid = activiteit, kleur = helderheid/hoogte, beweging = variatie. Ruimte voegt stereo-galm toe.'), shadow, 'hint');
         const global = make('div', null, shadow, 'global'); slider(global, null, 'master', 'Uitgang'); slider(global, null, 'space', 'Ruimte'); slider(global, null, 'width', 'Breedte');
         const grid = make('div', null, shadow, 'layers');
         LAYERS.forEach(([id, name, variants]) => {
@@ -448,8 +446,7 @@ export default {
           select(card, id, 'variant', 'Karakter', variants.map((name, i) => [i, name]));
           slider(card, id, 'level', 'Volume'); slider(card, id, 'density', 'Dichtheid'); slider(card, id, 'tone', 'Kleur'); slider(card, id, 'motion', 'Beweging');
           if (id === 'steps') { slider(card, null, 'stepRate', 'Stappen/min', 20, 240, 1, v => Math.round(v));
-            select(card, null, 'stepSync', 'Klok', [[0, 'Vrij tempo'], [-1, 'Alleen triggers'], [1, 'Elke 1/16'], [2, 'Elke 1/8'], [4, 'Elke 1/4'], [8, 'Elke 1/2'], [16, 'Elke maat']]);
-            make('div', tx('Vrij: stappen/min. Klok: bij lopend transport. Alleen triggers: via events van een sequencer. Dichtheid = materiaalactiviteit.'), card, 'hint'); }
+            select(card, null, 'stepSync', 'Klok', [[0, 'Vrij tempo'], [-1, 'Alleen triggers'], [1, 'Elke 1/16'], [2, 'Elke 1/8'], [4, 'Elke 1/4'], [8, 'Elke 1/2'], [16, 'Elke maat']]); }
         });
         status = make('div', null, shadow, 'status'); syncUI();
       },

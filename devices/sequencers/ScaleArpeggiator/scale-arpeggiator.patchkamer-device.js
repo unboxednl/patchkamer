@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Uitleg naar about (menu Over Scale Arpeggiator); de UI toont geen uitlegtekst meer.
 // 1.15.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.14.1 — Meer continue regelaars bestuurbaar via params()/modulate(): Accent op de tel, Zwakke noten zachter, Swing, Mensachtig en Speelkans erbij (Gate en Velocity zaten er al in); de nieuwe staan standaard uit. Modulatie komt alleen bovenop de knop en is nooit state (effectief = knop + o × bereik, geclampt).
 //   Bewust weggelaten: patroon, snelheid, octaven, herhalingen, latch, actief, patroonlengte (keuzes) en de balkjes van het velocity- en lengtepatroon (patroondata). Zonder modulatie gelijk aan 1.14.0.
@@ -25,12 +26,9 @@ const EN = {
   'Akkoord wissen': 'Clear chord', 'Swing': 'Swing', 'Patroonlengte': 'Pattern length', 'Velocity-patroon': 'Velocity pattern', 'Lengte-patroon': 'Length pattern',
   'Balkjes: klik of sleep om de velocity en lengte van elke noot in de cyclus te zetten (hoog = hard of lang).': 'Bars: click or drag to set the velocity and length of each note in the cycle (high = loud or long).',
   'Interne klok gestopt': 'Internal clock stopped', 'Interne klok · {0} BPM': 'Internal clock · {0} BPM', 'Wacht op interne klok': 'Waiting for internal clock',
-  'Noten komen van de aangesloten oranje kabel. Latch bewaart het akkoord tot een nieuw akkoord of Wissen.': 'Notes come from the connected orange cable. Latch keeps the chord until a new chord or Clear.',
-  'De host bepaalt BPM en swing. 1/32 plant twee noten per zestiende vooruit; alle tijden zijn AudioContext-tijden. Een toetsenbord op de ingang is de akkoordbron zelf: zet Actief op Doorvoer om het toetsenbord ongewijzigd door te laten.':
-    'The host sets BPM and swing. 1/32 schedules two notes per sixteenth ahead; all times are AudioContext times. A keyboard on the input is the chord source itself: set Active to Pass-through to let the keyboard through unchanged.',
 };
 export default {
-  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.15.0', about: { nl: 'Arpeggiator: speelt de noten van een keyboard of sequencer om de beurt als arpeggio naar een synth. Start het hosttransport.', en: 'Arpeggiator: plays the notes from a keyboard or sequencer one after another as an arpeggio into a synth. Start the host transport.' }, kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
+  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.16.0', about: { nl: 'Arpeggiator: speelt de noten van een keyboard of sequencer om de beurt als arpeggio naar een synth. Start het hosttransport.\n\nNoten komen van de aangesloten oranje kabel. Latch bewaart het akkoord tot een nieuw akkoord of Wissen.\n\nDe host bepaalt BPM en swing. 1/32 plant twee noten per zestiende vooruit; alle tijden zijn AudioContext-tijden. Een toetsenbord op de ingang is de akkoordbron zelf: zet Actief op Doorvoer om het toetsenbord ongewijzigd door te laten.', en: 'Arpeggiator: plays the notes from a keyboard or sequencer one after another as an arpeggio into a synth. Start the host transport.\n\nNotes come from the connected orange cable. Latch keeps the chord until a new chord or Clear.\n\nThe host sets BPM and swing. 1/32 schedules two notes per sixteenth ahead; all times are AudioContext times. A keyboard on the input is the chord source itself: set Active to Pass-through to let the keyboard through unchanged.' }, kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'notes', name: 'Chord / keyboard' }], eventOut: [{ id: 'notes', name: 'Arpeggio' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -124,8 +122,7 @@ export default {
       knob(controls, 'chance', tx('Speelkans'), [0, 1, 0.01], state.chance, v => state.chance = v, pct);
       bars(panel, 'vpat', tx('Velocity-patroon'), state.vpat, () => state.plen, 0.05); bars(panel, 'gpat', tx('Lengte-patroon'), state.gpat, () => state.plen, 0.1);
       button(row(panel), tx('Akkoord wissen'), () => { reset(); emit({ type: 'allnotesoff', time: ctx.currentTime }); }); clockStatus = add(panel, 'p'); clockLabel();
-      status = add(panel, 'p', tx('Noten komen van de aangesloten oranje kabel. Latch bewaart het akkoord tot een nieuw akkoord of Wissen.'));
-      add(panel, 'p', tx('De host bepaalt BPM en swing. 1/32 plant twee noten per zestiende vooruit; alle tijden zijn AudioContext-tijden. Een toetsenbord op de ingang is de akkoordbron zelf: zet Actief op Doorvoer om het toetsenbord ongewijzigd door te laten.')); }
+    }
     const self = { inputs: {}, outputs: {}, mount: render, unmount() { status = null; clockStatus = null; clearUI(); },
       onEvent(port, e) { try { if (dead || port !== 'notes' || !e || !Number.isFinite(e.time)) return; if (e.type === 'cc' || !state.enabled) { emit({ ...e }); return; } if (!['note', 'noteon', 'noteoff', 'note_on', 'note_off', 'panic', 'allnotesoff'].includes(String(e.type).toLowerCase())) return; queue.push({ ...e }); queue.sort((a, b) => a.time - b.time); if (queue.length > 512) queue.shift();
           if (playing && missed.length) { const now = ctx.currentTime; missed = missed.filter(m => m.t >= now); const due = missed.filter(m => m.t >= e.time).sort((a, b) => a.t - b.t); if (due.length) { missed = missed.filter(m => m.t < e.time); for (const m of due) if (!tick(m.t, m.d, m.p, m.s)) missed.push(m); } } } catch { } },

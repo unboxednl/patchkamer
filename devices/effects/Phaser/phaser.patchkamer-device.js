@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Uitleg naar about (menu Over Phaser); de UI toont geen uitlegtekst meer.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 280 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n). setState negeert onbekende velden en kapt getallen af op hun bereik.
@@ -17,7 +18,6 @@ const STAGES = [4, 6, 8, 12];
 const EN = {
   'Trappen': 'Stages', 'vrij': 'free', '8 maten': '8 bars', '4 maten': '4 bars', '2 maten': '2 bars', '1 maat': '1 bar',
   'Snelheid': 'Rate', 'Diepte': 'Depth', 'Midden': 'Center',
-  'Stereo stelt het faseverschil tussen links en rechts in.': 'Stereo sets the phase difference between left and right.',
 };
 
 // ongeldige of ontbrekende waarden krijgen de standaard, getallen worden binnen hun bereik gehouden
@@ -34,7 +34,8 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.phaser',
   name: 'Phaser',
-  version: '1.15.0',
+  version: '1.16.0',
+  about: { nl: 'Klassieke phaser met 4 tot 12 allpass-trappen per kant, een LFO op de middenfrequentie, terugkoppeling en stereo.\n\nStereo stelt het faseverschil tussen links en rechts in.', en: 'Classic phaser with 4 to 12 allpass stages per side, an LFO on the centre frequency, feedback and stereo.\n\nStereo sets the phase difference between left and right.' },
   kind: 'effect',
   category: 'effect',
   i18n: { en: { name: 'Phaser', ports: { in: 'In', out: 'Out' } } },
@@ -96,7 +97,6 @@ export default {
         ui.fb = host.ui.knob(el, 'Feedback', [-0.95, 0.95, 0.01], S.fb, pct, v => { S.fb = v; apply(); }, { id: 'fb', group: 'feedback' });
         ui.stereo = host.ui.knob(el, 'Stereo', [0, 1, 0.01], S.stereo, v => Math.round(v * 180) + '°', v => { S.stereo = v; apply(); }, { id: 'stereo', group: 'stereo' });
         ui.mix = host.ui.knob(el, 'Mix', [0, 1, 0.01], S.mix, pct, v => { S.mix = v; apply(); }, { id: 'mix', group: 'mix' });
-        const n = document.createElement('div'); n.className = 'note'; n.textContent = tx('Stereo stelt het faseverschil tussen links en rechts in.'); el.appendChild(n);
       },
       onStep({ bpm: b }) { if (Number.isFinite(b) && b > 0 && b !== bpm) { bpm = b; if (S.sync !== 'free') apply(); } },
       params() { return MODP.map(([id, name, min, max, log, role, drift, on]) => ({ id, name: tx(name), lane: 'phaser', laneName: 'Phaser', min, max, role, scale: log ? 'log' : 'lin', drift, on })); },

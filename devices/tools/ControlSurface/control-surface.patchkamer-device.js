@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Control Surface); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.15.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.14.0 — Een preset neemt nu ook de toewijzingen (CC's en noten) mee, niet alleen de indeling: een controllerpreset is indeling plus MIDI-mapping. Een preset zonder toewijzingen wist ze nog steeds.
@@ -43,20 +44,18 @@ function slotsOf(st) {
 }
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { hint: 'Een paneel voor een controller met knoppen en schuiven. Draai aan de hardware en het paneel beweegt mee; de berichten gaan als CC naar de apparaten of de MIDI Hub die je aansluit.',
-    connect: 'MIDI verbinden', reconnect: 'MIDI opnieuw verbinden', input: 'MIDI-ingang', allInputs: 'Alle MIDI-ingangen', channel: 'Kanaal', anyCh: 'alle kanalen', ch: 'kanaal', learnAll: 'Leer alles', stopLearn: 'Stop leren', clear: 'Wis toewijzingen',
+  nl: { connect: 'MIDI verbinden', reconnect: 'MIDI opnieuw verbinden', input: 'MIDI-ingang', allInputs: 'Alle MIDI-ingangen', channel: 'Kanaal', anyCh: 'alle kanalen', ch: 'kanaal', learnAll: 'Leer alles', stopLearn: 'Stop leren', clear: 'Wis toewijzingen',
     layout: 'Indeling', types: { knob: 'Draaiknoppen', fader: 'Schuiven', pad: 'Pads', button: 'Knoppen' }, rows: 'Rijen', perRow: 'Per rij', band: 'Band', remove: 'Verwijder', addSection: '+ sectie', slot: 'Element', name: 'Naam', learn: 'Leer', clearOne: 'Wis', number: 'Nummer', kind: 'Soort', kindCc: 'CC', kindNote: 'Noot',
     last: 'Laatste invoer', none: 'nog niets ontvangen', unassigned: 'niet toegewezen', status: ['MIDI is uit. Klik op MIDI verbinden en geef toestemming.', 'MIDI verbonden', 'Web MIDI is hier niet beschikbaar (gebruik Chrome of Edge).', 'Geen toestemming voor MIDI.'],
-    learning: 'Beweeg het element op je controller…', learnedTo: s => 'Toegewezen aan ' + s, noSel: 'Klik op een element om het te benoemen of vast te leggen.', virtual: 'Je kunt de elementen ook met de muis bedienen.' },
-  en: { hint: 'A panel for a controller with knobs and faders. Move the hardware and the panel follows; the messages go as CC to the devices or the MIDI Hub you connect.',
-    connect: 'Connect MIDI', reconnect: 'Reconnect MIDI', input: 'MIDI input', allInputs: 'All MIDI inputs', channel: 'Channel', anyCh: 'all channels', ch: 'channel', learnAll: 'Learn all', stopLearn: 'Stop learning', clear: 'Clear assignments',
+    learning: 'Beweeg het element op je controller…', learnedTo: s => 'Toegewezen aan ' + s, noSel: 'Klik op een element om het te benoemen of vast te leggen.' },
+  en: { connect: 'Connect MIDI', reconnect: 'Reconnect MIDI', input: 'MIDI input', allInputs: 'All MIDI inputs', channel: 'Channel', anyCh: 'all channels', ch: 'channel', learnAll: 'Learn all', stopLearn: 'Stop learning', clear: 'Clear assignments',
     layout: 'Layout', types: { knob: 'Knobs', fader: 'Faders', pad: 'Pads', button: 'Buttons' }, rows: 'Rows', perRow: 'Per row', band: 'Band', remove: 'Remove', addSection: '+ section', slot: 'Element', name: 'Name', learn: 'Learn', clearOne: 'Clear', number: 'Number', kind: 'Kind', kindCc: 'CC', kindNote: 'Note',
     last: 'Last input', none: 'nothing received yet', unassigned: 'not assigned', status: ['MIDI is off. Click Connect MIDI and allow access.', 'MIDI connected', 'Web MIDI is not available here (use Chrome or Edge).', 'No permission for MIDI.'],
-    learning: 'Move the element on your controller…', learnedTo: s => 'Assigned to ' + s, noSel: 'Click an element to name it or assign it.', virtual: 'You can also operate the elements with the mouse.' }
+    learning: 'Move the element on your controller…', learnedTo: s => 'Assigned to ' + s, noSel: 'Click an element to name it or assign it.' }
 };
 
 export default {
-  id: 'nl.patchkamer.controlsurface', name: 'Control Surface', version: '1.16.0', status: 'retired', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 340 },
+  id: 'nl.patchkamer.controlsurface', name: 'Control Surface', about: { nl: 'Een paneel voor een controller met knoppen en schuiven. Draai aan de hardware en het paneel beweegt mee; de berichten gaan als CC naar de apparaten of de MIDI Hub die je aansluit.\n\nJe kunt de elementen ook met de muis bedienen.', en: 'A panel for a controller with knobs and faders. Move the hardware and the panel follows; the messages go as CC to the devices or the MIDI Hub you connect.\n\nYou can also operate the elements with the mouse.' }, version: '1.17.0', status: 'retired', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 340 },
   i18n: { nl: { ports: { out: 'CC uit' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [{ id: 'out', name: 'CC out' }], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -141,7 +140,7 @@ export default {
             box.addEventListener('click', () => { selected = slot.id; markSel(); }); }
         });
       }
-      el('div', T.virtual, root, 'hint'); const ed = el('div', null, root, 'editor'); ed.id = 'editor';
+      const ed = el('div', null, root, 'editor'); ed.id = 'editor';
       const act = el('div', null, root, 'line'); el('b', T.last + ': ', act); lastEl = el('span', lastText, act);
       // indeling: een regel per sectie
       const lay = el('div', null, root, 'layout'); el('b', T.layout, lay);
@@ -166,7 +165,7 @@ export default {
       mount(parent) {
         if (dead) return; self.unmount(); shell = el('div', null, parent); sh = shell.attachShadow({ mode: 'open' });
         const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}.hint{color:var(--muted);font-size:11px;line-height:1.4}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.line{display:flex;gap:6px;flex-wrap:wrap}.line span{color:var(--event)}.src{color:var(--event)}select,button,input[type=text],input[type=number]{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}input[type=number]{width:50px}button{cursor:pointer}button.on{background:var(--event);color:#1b1206;border-color:var(--event)}.body{display:grid;gap:10px}.panel{display:grid;gap:12px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--well,#0002)}.band{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}.sec{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:8px 6px}.layout{display:grid;gap:6px}.pad .box{width:34px;height:34px;background:var(--well,#0007);border:1px solid var(--line);cursor:pointer;border-radius:4px}.pad .box.on{background:var(--event)}.pad .box.sel{border-color:var(--sel,#7a6cf0)}.pad .box.lrn{border-color:var(--event)}.cell{display:grid;justify-items:center;gap:3px;min-width:0}.box{display:grid;place-items:center;cursor:ns-resize;touch-action:none;border:1px solid transparent;border-radius:6px;padding:2px}.box.sel{border-color:var(--sel,#7a6cf0)}.box.lrn{border-color:var(--event);box-shadow:0 0 0 2px var(--event)}.lbl{font-size:9px;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tr{fill:none;stroke:var(--line);stroke-width:3.2;stroke-linecap:round}.vl{fill:none;stroke:var(--event);stroke-width:3.2;stroke-linecap:round}.pt{stroke:var(--fg);stroke-width:2;stroke-linecap:round}.track{position:relative;width:14px;height:90px;background:var(--well,#0007);border:1px solid var(--line);border-radius:3px;overflow:hidden;display:flex;align-items:flex-end}.fill{width:100%;background:var(--event);height:0}.button .box{width:30px;height:20px;background:var(--well,#0007);border:1px solid var(--line);cursor:pointer}.button .box.on{background:var(--event)}.button .box.sel{border-color:var(--sel,#7a6cf0)}.button .box.lrn{border-color:var(--event)}[hidden]{display:none!important}';
-        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint'); root = el('div', null, app, 'body'); sh.addEventListener('pointerdown', e => e.stopPropagation()); render();
+        const app = el('div', null, sh, 'app'); root = el('div', null, app, 'body'); sh.addEventListener('pointerdown', e => e.stopPropagation()); render();
       },
       unmount() { if (shell) shell.remove(); shell = sh = root = lastEl = statusEl = null; els = new Map(); },
       getState() { return JSON.parse(JSON.stringify(state)); },

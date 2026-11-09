@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Uitleg naar about (menu Over Groovebox 12); de UI toont geen uitlegtekst meer.
 // 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.13.0 — Patchkamer contract v1.24: klembord voor het bewerkte patroon. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` met de soort `multi` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, dus 12 per stap):
 //          het patroon dat je bewerkt (`curPat`) is een clip met 12 sporen. Een drumtrack is een `drums`-spoor met één baan (type en GM-nummer volgen de machine), een synthtrack een `notes`-spoor; de lengte van een track (1 tot 16 stappen) is de lengte
@@ -37,13 +38,13 @@
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
   nl: { lockTitle: 'Parameter locks: kies een stap en draai', length: 'Lengte', note: 'Noot', off: 'uit', on: 'aan', patSong: 'Patronen &amp; song', chain: 'Ketting', copy: 'Kopieer →', clearTrigs: 'Wis trigs', random: 'Willekeurig',
-    chainNote: 'Ketting = patroonnummers op volgorde, bv. <code>1 1 2 3</code>.', fxSends: 'FX-blok &amp; sends', reverb: 'Galm', fxBlock: 'FX-blok', songs: 'Songs', demoNight: 'Demo: Nachtstad', demoBasic: 'Demo: Basis',
+    fxSends: 'FX-blok &amp; sends', reverb: 'Galm', fxBlock: 'FX-blok', songs: 'Songs', demoNight: 'Demo: Nachtstad', demoBasic: 'Demo: Basis',
     name: 'Naam', exportSum: 'Exporteren / importeren als tekst', toText: 'Naar tekst', copyText: 'Kopieer', import: 'Importeer',
     stepAria: n => `stap ${n}`, lenWord: 'lengte', lockStep: n => `P-lock stap ${n}: knoppen gelden alleen voor deze stap (dubbelklik = lock wissen)`, lockPick: 'P-lock: kies een stap', stepSel: n => `stap ${n} geselecteerd`,
     patSwing: 'Pat. swing', trkSwing: 'Trackswing', swingTitle: 'extra swing op de oneven zestienden, bovenop Swing en de swing van de host (dubbelklik: 0)',
     importFail: 'Kon deze tekst niet lezen als song.', clipPat: 'Patroon', clipBad: 'Geen geldige clip.', clipKind: 'De soort past niet: dit apparaat neemt een patroon met sporen (multi).', clipNoTrack: 'Geen enkel spoor van de clip past op een track van dit patroon.', clipGone: 'Het apparaat is nog niet geladen of verwijderd.', multi: 'Losse uit', songNight: 'Nachtstad', songBasic: 'Basis' },
   en: { lockTitle: 'Parameter locks: pick a step and turn a knob', length: 'Length', note: 'Note', off: 'off', on: 'on', patSong: 'Patterns &amp; song', chain: 'Chain', copy: 'Copy →', clearTrigs: 'Clear trigs', random: 'Random',
-    chainNote: 'Chain = pattern numbers in order, e.g. <code>1 1 2 3</code>.', fxSends: 'FX block &amp; sends', reverb: 'Reverb', fxBlock: 'FX block', songs: 'Songs', demoNight: 'Demo: Night City', demoBasic: 'Demo: Basic',
+    fxSends: 'FX block &amp; sends', reverb: 'Reverb', fxBlock: 'FX block', songs: 'Songs', demoNight: 'Demo: Night City', demoBasic: 'Demo: Basic',
     name: 'Name', exportSum: 'Export / import as text', toText: 'To text', copyText: 'Copy', import: 'Import',
     stepAria: n => `step ${n}`, lenWord: 'length', lockStep: n => `P-lock step ${n}: knobs only apply to this step (double-click = clear lock)`, lockPick: 'P-lock: pick a step', stepSel: n => `step ${n} selected`,
     patSwing: 'Pat. swing', trkSwing: 'Track swing', swingTitle: 'extra swing on the odd sixteenths, on top of Swing and the host swing (double-click: 0)',
@@ -146,7 +147,6 @@ select,input[type=text]{background:var(--t-panel-2);color:var(--t-fg);border:1px
 .pats.actions button{flex:1 1 auto;padding:5px 6px;font-family:var(--t-disp);letter-spacing:.06em;font-size:10px}
 .pats button.edit{border-color:var(--t-accent);color:var(--t-accent)} .pats button.play{background:color-mix(in srgb,var(--t-accent) 18%,var(--t-panel-2))}
 .chain{letter-spacing:.2em;text-transform:uppercase;width:100%}
-.note{color:var(--t-muted);font-size:10px;line-height:1.45}
 .songrow{display:flex;gap:6px} .songrow input{flex:1;min-width:80px}
 .songs{display:grid;gap:4px;max-height:132px;overflow:auto}
 .song{display:flex;gap:6px;align-items:center;border:1px solid var(--t-line);padding:3px 6px;border-radius:3px;flex-wrap:wrap}
@@ -204,7 +204,6 @@ const __HTML = T => `<div class="device">
       <div class="row"><label for="patSwing" title="${T.swingTitle}">${T.patSwing}</label><input type="range" id="patSwing" min="0" max="0.5" step="0.005" value="0" title="${T.swingTitle}"><output id="patSwingOut">0%</output></div>
       <div class="row wide"><label for="chain">${T.chain}</label><input type="text" id="chain" class="chain" value="1" maxlength="48"></div>
       <div class="pats actions"><button id="patCopy">${T.copy}</button><button id="patClear">${T.clearTrigs}</button><button id="patRnd">${T.random}</button></div>
-      <div class="note">${T.chainNote}</div>
     </div>
     <div class="panel">
       <h2>${T.fxSends}</h2>
@@ -238,8 +237,9 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.14.0',
+  version: '1.15.0',
   kind: 'instrument',
+  about: { nl: 'Een groovebox met 12 tracks, patronen, parameter locks en een songketting.\n\nKetting = patroonnummers op volgorde, bijvoorbeeld 1 1 2 3.', en: 'A groovebox with 12 tracks, patterns, parameter locks and a song chain.\n\nChain = pattern numbers in order, for example 1 1 2 3.' },
   category: 'groove',
   ui: { width: 1262 },
   i18n: { en: { ports: { out: 'Out', multi: 'Separate outs' } } },

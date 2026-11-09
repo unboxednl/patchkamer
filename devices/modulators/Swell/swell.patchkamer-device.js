@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Swell); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de zes continue regelaars (Ademgolf, Hoeveelheid, Warmte, Ruimte, Beweging, Variatie; alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state.
 //          Geen lus: modulate() roept zelf geen host.modulate aan, dus een Swell die zichzelf of een andere modulator stuurt leidt niet tot herhaling. Bewust weggelaten: Sfeer, Tempoverdeling (keuzes), Aan/Volg/Op tempo (vinkjes), de bereikregelaars per doel (routes, hangen aan het doel).
@@ -17,12 +18,11 @@ const fin = v => (Number.isFinite(v) ? v : 0);
 const EN = {
   'Rust': 'Calm', 'Geborgenheid': 'Cosy', 'Nabijheid': 'Closeness', 'Euforie': 'Euphoria',
   'Adem': 'Breath', 'Warmte': 'Warmth', 'Ruimte': 'Space', 'Zweving': 'Sway',
-  'Samenhangende beweging voor warme, rustige en open klankvelden.': 'Coherent movement for warm, calm and open soundscapes.',
   'Sfeer': 'Mood', 'Aan': 'On', 'Volg Start/Stop': 'Follow Start/Stop', 'Op tempo': 'Tempo sync', 'Tempoverdeling': 'Length in beats', '{0} tellen': '{0} beats',
   'De vier modulatiebanen': 'The four modulation lanes',
   'Ademgolf': 'Breath cycle', 'Hoeveelheid': 'Amount', 'Beweging': 'Motion', 'Variatie': 'Variation',
   'Alles neutraal': 'All neutral', 'Voorzichtig voorstel': 'Gentle suggestion',
-  'Doelen · vink parameters aan en kies de beweging. Bereik is een deel van het volledige parameterbereik; negatief keert de richting om.': 'Targets · tick parameters and pick the movement. Range is a share of the full parameter range; negative reverses the direction.',
+  'Doelen': 'Targets',
   'Verbind Swell met een paarse kabel aan een synth of effect. Voorzichtige voorstellen verschijnen hier automatisch.': 'Connect Swell with a purple cable to a synth or effect. Gentle suggestions appear here automatically.',
   '{0} beweging': '{0} movement', '{0} bereik': '{0} range',
   'Beweegt': 'Moving', 'Neutraal': 'Neutral', '{0} tellen bij {1} BPM': '{0} beats at {1} BPM', '{0} s per ademgolf': '{0} s per breath cycle', '{0} doel(en)': '{0} target(s)',
@@ -103,7 +103,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id: 'nl.patchkamer.swell', name: 'Swell', version: '1.12.0', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
+  id: 'nl.patchkamer.swell', name: 'Swell', about: { nl: 'Samenhangende beweging voor warme, rustige en open klankvelden.\n\nDoelen: vink parameters aan en kies de beweging. Bereik is een deel van het volledige parameterbereik; negatief keert de richting om.', en: 'Coherent movement for warm, calm and open soundscapes.\n\nTargets: tick parameters and pick the movement. Range is a share of the full parameter range; negative reverses the direction.' }, version: '1.13.0', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [{ id: 'mod', name: 'Swell' }], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -178,7 +178,7 @@ export default {
         const style = document.createElement('style'); style.textContent = CSS; shadow.appendChild(style);
         function make(tag, text, parent, cls) { const e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
         const D = DEF();
-        const app = make('div', null, shadow, 'app'); make('div', tx('Samenhangende beweging voor warme, rustige en open klankvelden.'), app, 'hint');
+        const app = make('div', null, shadow, 'app');
         const top = make('div', null, app, 'row'), profile = make('select', null, top); profile.setAttribute('aria-label', tx('Sfeer'));
         for (const [k, p] of Object.entries(PROFILES)) { const o = make('option', tx(p.name), profile); o.value = k; }
         profile.onchange = () => { const key = profile.value, p = PROFILES[key]; for (const k of ['period', 'depth', 'warmth', 'space', 'motion', 'human']) state[k] = p[k]; state.profile = key; syncUI(); }; controls.push({ el: profile, key: 'profile' });
@@ -197,7 +197,7 @@ export default {
         }
         const action = make('div', null, app, 'row'), neutral = make('button', tx('Alles neutraal'), action); neutral.type = 'button'; neutral.onclick = () => { state.on = false; syncUI(); };
         const recommend = make('button', tx('Voorzichtig voorstel'), action); recommend.type = 'button'; recommend.onclick = () => { for (const t of targets) { state.routes[t.id] = {}; for (const p of t.params) state.routes[t.id][p.id] = suggested(p); } drawRoutes(); update(); };
-        make('div', tx('Doelen · vink parameters aan en kies de beweging. Bereik is een deel van het volledige parameterbereik; negatief keert de richting om.'), app, 'hint'); routeBox = make('div', null, app); status = make('div', null, app, 'status'); shadow.addEventListener('pointerdown', e => e.stopPropagation()); drawRoutes(); syncUI();
+        make('div', tx('Doelen'), app, 'hint'); routeBox = make('div', null, app); status = make('div', null, app, 'status'); shadow.addEventListener('pointerdown', e => e.stopPropagation()); drawRoutes(); syncUI();
       },
       unmount,
       params() { return MODP.map(([id, name, min, max, log, role, drift, on]) => ({ id, name: tx(name), lane: 'swell', laneName: 'Swell', min, max, role, scale: log ? 'log' : 'lin', drift, on })); },

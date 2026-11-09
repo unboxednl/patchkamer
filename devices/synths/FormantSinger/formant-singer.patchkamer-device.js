@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Uitleg naar about (menu Over Formant Singer); de UI toont geen uitlegtekst meer.
 // 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.13.0 — Nieuw: Formant Singer, een zangsynth voor Patchkamer contract v1.13. Een tekst (lyrics) plus noten geven een zingende stem:
 //   elke noot zingt de volgende lettergreep, op de toonhoogte, lengte en velocity van die noot. Alles met Web Audio in dit ene bestand,
@@ -27,8 +28,6 @@ const EN = {
   'Stem & bron': 'Voice & source', 'Beweging': 'Movement', 'Spraak': 'Speech', 'Niveau': 'Level',
   'Herstart': 'Restart', 'Proef': 'Test', 'Alles uit': 'All off',
   'Lettergrepen': 'Syllables', 'volgende': 'next',
-  'Elke noot zingt de volgende lettergreep. Spatie, - of | scheidt lettergrepen; _ of ~ = melisma (klinker doorzingen); * of . = rust. Taal Klanken: schrijf klanken direct, bijvoorbeeld ha-lo of shaet.':
-    'Each note sings the next syllable. Space, - or | separates syllables; _ or ~ = melisma (keep the vowel); * or . = rest. Language Phonemes: write sounds directly, for example ha-lo or shaet.',
   'Lettergreep {0} van {1}': 'Syllable {0} of {1}', 'Geen tekst: vaste klinker': 'No lyrics: fixed vowel', 'Einde van de tekst': 'End of lyrics',
   'Mod actief · {0} parameters': 'Mod active · {0} parameters', 'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'Spectrum van de uitgang met F1 en F2 van de laatste klinker': 'Output spectrum with F1 and F2 of the last vowel',
@@ -406,8 +405,8 @@ Object.assign(DEFAULTS, { lyrics: 'la la la', lang: 'en', voice: 'alto', vowel: 
 const R0 = 0.21;   // doelniveau (rms) van één stem bij velocity 1, voor de uitgangsregeling
 
 export default {
-  id: 'nl.patchkamer.formantsinger', name: 'Formant Singer', version: '1.14.0', kind: 'instrument', category: 'synth', ui: { width: 520, minWidth: 400 },
-  about: { nl: 'Een zangsynth: een tekst plus noten geven een zingende stem (formantsynthese).', en: 'A singing synth: lyrics plus notes give a singing voice (formant synthesis).' },
+  id: 'nl.patchkamer.formantsinger', name: 'Formant Singer', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 520, minWidth: 400 },
+  about: { nl: 'Een zangsynth: een tekst plus noten geven een zingende stem (formantsynthese).\n\nElke noot zingt de volgende lettergreep. Spatie, - of | scheidt lettergrepen; _ of ~ = melisma (klinker doorzingen); * of . = rust. Taal Klanken: schrijf klanken direct, bijvoorbeeld ha-lo of shaet.', en: 'A singing synth: lyrics plus notes give a singing voice (formant synthesis).\n\nEach note sings the next syllable. Space, - or | separates syllables; _ or ~ = melisma (keep the vowel); * or . = rest. Language Phonemes: write sounds directly, for example ha-lo or shaet.' },
   ports: {
     audioIn: [], audioOut: [{ id: 'out', name: 'Stereo voice' }],
     eventIn: [{ id: 'notes', name: 'Notes' }, { id: 'lyrics', name: 'Lyrics / restart' }], eventOut: [],
@@ -818,7 +817,7 @@ button{cursor:pointer}button:hover{border-color:var(--audio)}
 .row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:6px 0}.row label{display:flex;gap:5px;align-items:center;color:var(--muted)}
 .syl{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0;max-height:96px;overflow:auto;padding:4px;background:var(--well);color:var(--well-fg);border-radius:4px}
 .syl span{padding:0 4px;border-radius:3px;border:1px solid transparent}.syl span.cur{background:var(--audio);color:var(--card);border-color:var(--audio)}.syl span.rest,.syl span.tie{opacity:.6}
-.note{font-size:11px;color:var(--muted);margin:4px 0}.stat{font-size:11px;color:var(--event);margin:3px 0}
+.stat{font-size:11px;color:var(--event);margin:3px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:3px 16px}
 .k{display:grid;grid-template-columns:minmax(0,132px) minmax(60px,1fr) 56px;gap:6px;align-items:center;min-height:24px}
 .k label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:11px}.k input{width:100%;min-width:0;margin:0;accent-color:var(--audio)}
@@ -895,7 +894,6 @@ canvas{display:block;width:100%;height:96px;background:var(--well);border-radius
         ui.vowel = sel(tx('Klinker'), VOWELS.map(v => [v, tx(VOWLAB[v])]), v => { state.vowel = VOWELS.includes(v) ? v : 'a'; }, ui.row2);
         el('div', r, 'sec', tx('Lettergrepen'));
         ui.chips = el('div', r, 'syl');
-        el('div', r, 'note', tx('Elke noot zingt de volgende lettergreep. Spatie, - of | scheidt lettergrepen; _ of ~ = melisma (klinker doorzingen); * of . = rust. Taal Klanken: schrijf klanken direct, bijvoorbeeld ha-lo of shaet.'));
         ui.stat = el('div', r, 'stat', '');
         const act = el('div', r, 'row');
         const b1 = el('button', act, '', tx('Herstart')); b1.type = 'button'; b1.addEventListener('click', () => { restart(); paintPos(); });

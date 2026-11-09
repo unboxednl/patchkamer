@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Loop Slicer); de UI toont geen uitlegtekst meer.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in het definitieveld about.
 // 1.20.0 — loadAudio(files): de tab Samples van de host laadt een sample in deze loop (contract v1.20); verder gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Loop Slicer (nieuwe id nl.patchkamer.loopslicer, eigen map; voorheen Snede, nl.patchkamer.snede);
@@ -27,8 +28,6 @@ const EN = {
   'Bewaar loop + patroon': 'Save loop + pattern', 'Exporteer slice WAV': 'Export slice WAV', 'Loop Slicer-bank laden': 'Load Loop Slicer bank',
   'Geen loop geladen': 'No loop loaded', 'Audio laden…': 'Loading audio…', 'Demo loop · 120 BPM / 1 maat': 'Demo loop · 120 BPM / 1 bar',
   'Laad WAV / MP3 of kies Demo-loop': 'Load WAV / MP3 or choose Demo loop',
-  'Sync gebruikt afspeelsnelheid: de toonhoogte verandert mee; geen onafhankelijke timestretch. Transpositie wijzigt ook de duur. WAV-export bevat de gekozen slice en omkering, zonder masterfilter, gain of temposync. Audio wordt als PCM16 met de opstelling bewaard. Maximaal 120 s, 16 MiB PCM16 en 50 MiB invoer.':
-    'Sync works through playback speed: the pitch changes with it; there is no independent time stretch. Transpose also changes the duration. The WAV export holds the chosen slice and its reversal, without master filter, gain or tempo sync. The audio is saved with the setup as PCM16. Maximum 120 s, 16 MiB PCM16 and 50 MiB input.',
   'Maximaal 16 MiB PCM16. Kies een kortere loop.': 'Maximum 16 MiB PCM16. Choose a shorter loop.',
   'Ongeldige PCM-audio.': 'Invalid PCM audio.', 'Loop te lang: maximaal 120 seconden.': 'Loop too long: maximum 120 seconds.',
   'Maximaal 50 MiB per audiobestand.': 'Maximum 50 MiB per audio file.', 'Maximaal 120 seconden per loop.': 'Maximum 120 seconds per loop.',
@@ -67,7 +66,7 @@ const LIMIT = 16 * 1024 * 1024;
 const DEMO_OLD_NAME = 'Eigen demo · 120 BPM / 1 maat', DEMO_NAME = 'Demo loop · 120 BPM / 1 bar', NONE_OLD_NAME = 'Geen loop geladen';
 
 export default {
-  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.21.0', about: { nl: 'WAV of MP3 laden, in slices knippen en de slices spelen met toetsen of als klokgestuurd patroon. De audio wordt met de opstelling opgeslagen.', en: 'Load a WAV or MP3, cut it into slices and play the slices from keys or as a clock-driven pattern. The audio is saved with the setup.' }, kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.22.0', about: { nl: 'WAV of MP3 laden, in slices knippen en de slices spelen met toetsen of als klokgestuurd patroon. \n\nSync gebruikt afspeelsnelheid: de toonhoogte verandert mee; geen onafhankelijke timestretch. Transpositie wijzigt ook de duur. WAV-export bevat de gekozen slice en omkering, zonder masterfilter, gain of temposync. Maximaal 120 s, 16 MiB PCM16 en 50 MiB invoer.', en: 'Load a WAV or MP3, cut it into slices and play the slices from keys or as a clock-driven pattern. The audio is saved with the setup.\n\nSync works through playback speed: the pitch changes with it; there is no independent time stretch. Transpose also changes the duration. The WAV export holds the chosen slice and its reversal, without master filter, gain or tempo sync. Maximum 120 s, 16 MiB PCM16 and 50 MiB input.' }, kind: 'instrument', category: 'groove',
   ui: { width: 900, minWidth: 380 },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo slices' }], eventIn: [{ id: 'notes', name: 'Slice notes / trigs' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo slices', notes: 'Slice-noten / trigs', mod: 'Mod' } } },
@@ -256,7 +255,6 @@ export default {
       const bank = row(panel); button(bank, tx('Bewaar loop + patroon'), () => download('loop-slicer-bank.json', new Blob([JSON.stringify({ format: 'patchkamer-loopslicer-1', state: self.getState() })], { type: 'application/json' }))); button(bank, tx('Exporteer slice WAV'), exportSlice);
       const bankFile = add(bank, 'input'); bankFile.type = 'file'; bankFile.accept = '.json'; bankFile.setAttribute('aria-label', tx('Loop Slicer-bank laden')); bankFile.onchange = () => importBank(bankFile.files[0]);
       status = add(panel, 'p', message || shownName());
-      add(panel, 'p', tx('Sync gebruikt afspeelsnelheid: de toonhoogte verandert mee; geen onafhankelijke timestretch. Transpositie wijzigt ook de duur. WAV-export bevat de gekozen slice en omkering, zonder masterfilter, gain of temposync. Audio wordt als PCM16 met de opstelling bewaard. Maximaal 120 s, 16 MiB PCM16 en 50 MiB invoer.'));
       drawWave();
     }
     // Zet een (ongeldige) state om in een geldige. keepAudio: het geladen geluid blijft, alleen de slice-instellingen komen uit raw (setPreset).

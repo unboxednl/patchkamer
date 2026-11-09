@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.5.0 — Uitleg naar about (menu Over MIDI Controller); de UI toont geen uitlegtekst meer.
 // 1.4.0 — Pads: een pad dat een CC stuurt (rij op 'pads' zetten) speelt een noot (36 voor het eerste pad, daarna omhoog); vaste pad-velocity voor pads die niet op aanslag reageren; bij elke invoer staat waar die heen ging (koppeling, noot naar apparaat of geen nootingang); de nootingang van een doel wordt bij wijzigingen opnieuw gekozen.
 // 1.3.0 — Kalibratie: de knop 'Kalibreer bereik' onthoudt per schuif of draaiknop het laagste en hoogste geziene bereik; stuurt een element maar een deel van 0..127, dan wordt dat bereik naar de hele slag geschaald (bereik in de indelingsrij te zien).
 // 1.2.0 — AI-voorstel (contract v1.29, host.ai): een knop vraagt de AI-aanbieder van de gebruiker om koppelingen op basis van de regelaars van het apparaat en de indeling van de controller; elk paar wordt gecontroleerd en het resultaat is met één klik ongedaan te maken.
@@ -19,8 +20,7 @@ const KINDS = ['cc', 'note', 'bend', 'pressure'];
 const MAXT = 24, MAXM = 128, MAXS = 256;
 
 const TXT = {
-  nl: { title: 'MIDI Controller', hint: 'Sluit je MIDI-controllers en keyboards aan, kies een Patchkamer-apparaat en bestuur het. Met een knop schakel je naar een ander apparaat; dezelfde draaiknoppen werken dan voor dat apparaat.',
-    connect: 'MIDI verbinden', connecting: 'Bezig met verbinden…', connected: 'MIDI verbonden', noMidi: 'Web MIDI is hier niet beschikbaar (gebruik een browser met Web MIDI).', denied: 'Toegang tot MIDI is geweigerd.',
+  nl: { title: 'MIDI Controller', connect: 'MIDI verbinden', connecting: 'Bezig met verbinden…', connected: 'MIDI verbonden', noMidi: 'Web MIDI is hier niet beschikbaar (gebruik een browser met Web MIDI).', denied: 'Toegang tot MIDI is geweigerd.',
     inputs: 'MIDI-ingangen', noInputs: 'Geen MIDI-apparaten gevonden. Sluit er een aan; het verschijnt vanzelf.', last: 'Laatste invoer', none: 'nog niets ontvangen',
     devices: 'Apparaten', add: 'Apparaat toevoegen…', noDevices: 'Voeg een Patchkamer-apparaat toe om het te bedienen.', active: 'actief', activate: 'Kies', remove: 'Verwijder',
     switchBtn: 'Schakelknop', learnSwitch: 'Leer knop', learningSwitch: 'Druk een knop…', noSwitch: 'geen knop', gone: 'niet meer in de werkruimte',
@@ -30,8 +30,7 @@ const TXT = {
     options: 'Opties', padVel: 'Vaste pad-velocity (voor pads die niet op aanslag reageren)', noPort: n => n + ' heeft geen ingang voor noten: pads en keyboard doen niets', notesOffTxt: 'noten staan uit', toMap: l => 'koppeling ' + l, toNote: (n, d) => 'noot ' + n + ' naar ' + d, center: 'Zet het gekozen apparaat midden in beeld', notes: 'Noten van een keyboard naar het actieve apparaat', refresh: 'Ververs regelaars', counts: n => n + (n === 1 ? ' regelaar' : ' regelaars'),
     srcCc: n => 'CC ' + n, srcNote: n => 'Noot ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Kanaaldruk', ch: 'kanaal', mapped: n => n + (n === 1 ? ' koppeling' : ' koppelingen'),
     sugDone: n => n + (n === 1 ? ' koppeling toegevoegd' : ' koppelingen toegevoegd'), sugNone: 'Niets toe te voegen: leer eerst je indeling, of alle knoppen zijn al gekoppeld.', needSurface: 'Leer eerst de indeling van je controller.' },
-  en: { title: 'MIDI Controller', hint: 'Connect your MIDI controllers and keyboards, pick a Patchkamer device and control it. A button switches to another device; the same knobs then work for that device.',
-    connect: 'Connect MIDI', connecting: 'Connecting…', connected: 'MIDI connected', noMidi: 'Web MIDI is not available here (use a browser with Web MIDI).', denied: 'Access to MIDI was denied.',
+  en: { title: 'MIDI Controller', connect: 'Connect MIDI', connecting: 'Connecting…', connected: 'MIDI connected', noMidi: 'Web MIDI is not available here (use a browser with Web MIDI).', denied: 'Access to MIDI was denied.',
     inputs: 'MIDI inputs', noInputs: 'No MIDI devices found. Plug one in; it shows up by itself.', last: 'Last input', none: 'nothing received yet',
     devices: 'Devices', add: 'Add a device…', noDevices: 'Add a Patchkamer device to control it.', active: 'active', activate: 'Select', remove: 'Remove',
     switchBtn: 'Switch button', learnSwitch: 'Learn button', learningSwitch: 'Press a button…', noSwitch: 'no button', gone: 'no longer in the workspace',
@@ -59,7 +58,7 @@ function normalize(s) {
 const sameSrc = (a, b) => !!a && !!b && a.k === b.k && (a.k === 'cc' || a.k === 'note' ? a.n === b.n : true) && (!a.ch || !b.ch || a.ch === b.ch);
 
 export default {
-  id: 'nl.patchkamer.midicontroller', name: 'MIDI Controller', version: '1.4.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
+  id: 'nl.patchkamer.midicontroller', name: 'MIDI Controller', about: { nl: 'Sluit je MIDI-controllers en keyboards aan, kies een Patchkamer-apparaat en bestuur het. Met een knop schakel je naar een ander apparaat; dezelfde draaiknoppen werken dan voor dat apparaat.', en: 'Connect your MIDI controllers and keyboards, pick a Patchkamer device and control it. A button switches to another device; the same knobs then work for that device.' }, version: '1.5.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en;
@@ -241,7 +240,6 @@ export default {
     let sh = null, devBox = null, mapBox = null, inBox = null, surfLine = null;
     function render() {
       if (!sh || dead) return; sh.innerHTML = ''; const st = el('style', CSS, sh); const m = el('div', null, sh, 'mc');
-      el('div', T.hint, m, 'hint');
       // verbinden en ingangen
       const top = el('div', null, m, 'box'); const r0 = el('div', null, top, 'row'); btn(status === 3 ? T.connected : status === 1 ? T.connecting : T.connect, connect, r0).disabled = status === 1 || status === 3; if (msg) el('span', msg, r0, 'msg');
       inBox = el('div', null, top); renderInputs();

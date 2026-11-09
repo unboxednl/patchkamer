@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Ladder Mono); de UI toont geen uitlegtekst meer. Geluid, state en poorten ongewijzigd.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam. Geluid, state en poorten ongewijzigd.
 // 1.15.1 — Meer regelaars stuurbaar voor modulatoren: toetsvolging, de vier tijden en houdniveaus van beide omhullingen en de LFO-snelheid stonden niet in params().
 //   Nu wel (alle standaard uit). Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Bereik 1-3, Bendbereik en Transpositie (gehele stappen, geen vloeiende regelaars),
@@ -38,13 +39,13 @@ function normalize(raw) {
 }
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { hint: 'Monofone analoge synth met drie oscillators en een 24 dB-laddermodel-filter. Verbind Noten met een keyboard of sequencer.', engine: ['Audiomotor wordt voorbereid…', 'Audiomotor gereed', 'Deze omgeving biedt geen AudioWorklet: het apparaat blijft stil.'],
+  nl: { engine: ['Audiomotor wordt voorbereid…', 'Audiomotor gereed', 'Deze omgeving biedt geen AudioWorklet: het apparaat blijft stil.'],
     groups: { osc: 'Oscillators', mix: 'Mixer', filter: 'Filter', contour: 'Filteromhulling', loud: 'Volume-omhulling', play: 'Spelen', mod: 'Modulatie', out: 'Uitgang' },
     labels: { wave1: 'Golfvorm 1', range1: 'Bereik 1', level1: 'Niveau 1', wave2: 'Golfvorm 2', range2: 'Bereik 2', tune2: 'Stemming 2', level2: 'Niveau 2', sync: 'Sync 2 op 1', wave3: 'Golfvorm 3', range3: 'Bereik 3', tune3: 'Stemming 3', level3: 'Niveau 3', keys3: 'Osc 3 volgt klavier',
       noise: 'Ruis', noiseColor: 'Ruiskleur', drive: 'Mixer-overstuur', cutoff: 'Cutoff', emphasis: 'Emphasis', contour: 'Omhullingsdiepte', keytrack: 'Toetsvolging', fAttack: 'Aanval', fDecay: 'Verval', fSustain: 'Houd', fRelease: 'Loslaten', aAttack: 'Aanval', aDecay: 'Verval', aSustain: 'Houd', aRelease: 'Loslaten',
       glide: 'Glide', trigger: 'Aanslag', bendRange: 'Bendbereik', transpose: 'Transpositie', lfoRate: 'LFO-snelheid', lfoShape: 'LFO-vorm', lfoPitch: 'LFO naar toonhoogte', lfoFilter: 'LFO naar filter', outDrive: 'Uitgangsvervorming', level: 'Niveau' },
     opts: { tri: 'Driehoek', shark: 'Haaientand', saw: 'Zaagtand', square: 'Blok', wide: 'Brede puls', narrow: 'Smalle puls', white: 'Wit', pink: 'Roze', retrigger: 'Elke noot', legato: 'Legato', sh: 'Sample & hold' } },
-  en: { hint: 'A monophonic analog synth with three oscillators and a 24 dB ladder-model filter. Connect Notes to a keyboard or sequencer.', engine: ['Preparing the audio engine…', 'Audio engine ready', 'This environment has no AudioWorklet: the device stays silent.'],
+  en: { engine: ['Preparing the audio engine…', 'Audio engine ready', 'This environment has no AudioWorklet: the device stays silent.'],
     groups: { osc: 'Oscillators', mix: 'Mixer', filter: 'Filter', contour: 'Filter envelope', loud: 'Loudness envelope', play: 'Play', mod: 'Modulation', out: 'Output' },
     labels: { wave1: 'Waveform 1', range1: 'Range 1', level1: 'Level 1', wave2: 'Waveform 2', range2: 'Range 2', tune2: 'Tune 2', level2: 'Level 2', sync: 'Sync 2 to 1', wave3: 'Waveform 3', range3: 'Range 3', tune3: 'Tune 3', level3: 'Level 3', keys3: 'Osc 3 follows keyboard',
       noise: 'Noise', noiseColor: 'Noise colour', drive: 'Mixer overload', cutoff: 'Cutoff', emphasis: 'Emphasis', contour: 'Envelope amount', keytrack: 'Key tracking', fAttack: 'Attack', fDecay: 'Decay', fSustain: 'Sustain', fRelease: 'Release', aAttack: 'Attack', aDecay: 'Decay', aSustain: 'Sustain', aRelease: 'Release',
@@ -149,7 +150,8 @@ registerProcessor('${WNAME}', class extends AudioWorkletProcessor {
 });`;
 
 export default {
-  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.16.0', modExclude: ['range1', 'range2', 'range3', 'bendRange', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
+  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.17.0', modExclude: ['range1', 'range2', 'range3', 'bendRange', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
+  about: { nl: 'Monofone analoge synth met drie oscillators en een 24 dB-laddermodel-filter.\n\nVerbind Noten met een keyboard of sequencer en stuur de uitgang naar een mixer.', en: 'A monophonic analog synth with three oscillators and a 24 dB ladder-model filter.\n\nConnect Notes to a keyboard or sequencer and send the output to a mixer.' },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -182,8 +184,8 @@ export default {
     }
     const el = (tag, text, parent, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
     function build(root) {
-      const css = el('style', null, root); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h3{margin:0 0 6px;font:700 11px var(--disp,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.hint,.status{color:var(--muted);font-size:11px;line-height:1.4}.grp{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px}select{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}label.s{display:grid;gap:3px}label.c{display:flex;gap:6px;align-items:center}';
-      const app = el('div', null, root, 'app'); el('div', T.hint, app, 'hint');
+      const css = el('style', null, root); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h3{margin:0 0 6px;font:700 11px var(--disp,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.status{color:var(--muted);font-size:11px;line-height:1.4}.grp{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px}select{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}label.s{display:grid;gap:3px}label.c{display:flex;gap:6px;align-items:center}';
+      const app = el('div', null, root, 'app');
       for (const g of GROUPS) {
         const box = el('div', null, app, 'grp'); el('h3', T.groups[g], box); const grid = el('div', null, box, 'grid');
         for (const [k, sp] of Object.entries(SPEC)) { if (sp.g !== g) continue; const lab = T.labels[k];

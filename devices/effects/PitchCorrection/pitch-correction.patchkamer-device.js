@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.2.0 — Uitleg naar about (menu Over Pitch Correction); de UI toont geen uitlegtekst meer.
 // 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Pitch Correction: monofone toonhoogtedetectie (YIN, ca. 62 tot 1100 Hz, kiesbaar bereik) en correctie naar de dichtstbijzijnde toegestane noot
 //   van een toonladder (12 schakelaars per toonhoogteklasse, grondtoon en toonladder als snelkeuze), met snelheid (0 = hard), mate, vibratobehoud en een instelbare
@@ -22,12 +23,10 @@ const RANGES = { key: [0, 11], speed: [0, 400], amount: [0, 1], keep: [0, 1], fo
 const TXT = {
   nl: { mode: 'Motor', grain: 'Korrel (snel)', vocoder: 'Vocoder (formanten)', win: 'Venster', fast: 'Snel', normal: 'Normaal', high: 'Hoog', range: 'Bereik', low: 'Laag (62–420 Hz)', mid: 'Normaal (75–800 Hz)', wide: 'Hoog (90–1100 Hz)',
     key: 'Grondtoon', scale: 'Toonladder', speed: 'Snelheid', amount: 'Mate', keep: 'Vibrato', formant: 'Formant %', gate: 'Drempel', hold: 'Houden', mix: 'Mix', ref: 'Stemming A',
-    det: 'Gehoord: {0}', corr: 'Gecorrigeerd: {0}', none: 'geen toon', lat: 'Latentie: {0} ms', load: 'AudioWorklet laden…', fail: 'AudioWorklet niet beschikbaar: het geluid gaat onbewerkt door.', aria: 'Gedetecteerde en gecorrigeerde toonhoogte', hard: 'hard',
-    tip: 'Monofoon: voor een enkele stem of lijn. Akkoorden, ruis en medeklinkers worden niet gecorrigeerd. Formantbehoud werkt alleen in de motor Vocoder.' },
+    det: 'Gehoord: {0}', corr: 'Gecorrigeerd: {0}', none: 'geen toon', lat: 'Latentie: {0} ms', load: 'AudioWorklet laden…', fail: 'AudioWorklet niet beschikbaar: het geluid gaat onbewerkt door.', aria: 'Gedetecteerde en gecorrigeerde toonhoogte', hard: 'hard', },
   en: { mode: 'Engine', grain: 'Grain (fast)', vocoder: 'Vocoder (formants)', win: 'Window', fast: 'Fast', normal: 'Normal', high: 'High', range: 'Range', low: 'Low (62–420 Hz)', mid: 'Normal (75–800 Hz)', wide: 'High (90–1100 Hz)',
     key: 'Key', scale: 'Scale', speed: 'Speed', amount: 'Amount', keep: 'Vibrato', formant: 'Formant %', gate: 'Threshold', hold: 'Hold', mix: 'Mix', ref: 'Tuning A',
-    det: 'Heard: {0}', corr: 'Corrected: {0}', none: 'no pitch', lat: 'Latency: {0} ms', load: 'Loading AudioWorklet…', fail: 'AudioWorklet unavailable: the sound passes through unprocessed.', aria: 'Detected and corrected pitch', hard: 'hard',
-    tip: 'Monophonic: for a single voice or line. Chords, noise and consonants are not corrected. Formant keep only works in the Vocoder engine.' },
+    det: 'Heard: {0}', corr: 'Corrected: {0}', none: 'no pitch', lat: 'Latency: {0} ms', load: 'Loading AudioWorklet…', fail: 'AudioWorklet unavailable: the sound passes through unprocessed.', aria: 'Detected and corrected pitch', hard: 'hard', },
 };
 const WNAME = 'nl-patchkamer-pitchcorrection-1-0-0';
 const WORKLET = `
@@ -408,7 +407,8 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.pitchcorrection',
   name: 'Pitch Correction',
-  version: '1.1.0',
+  version: '1.2.0',
+  about: { nl: 'Corrigeert de toonhoogte van een stem of lijn naar de dichtstbijzijnde toegestane noot van een toonladder.\n\nMonofoon: voor een enkele stem of lijn. Akkoorden, ruis en medeklinkers worden niet gecorrigeerd. Formantbehoud werkt alleen in de motor Vocoder.', en: 'Corrects the pitch of a voice or line to the nearest allowed note of a scale.\n\nMonophonic: for a single voice or line. Chords, noise and consonants are not corrected. Formant keep only works in the Vocoder engine.' },
   kind: 'effect',
   category: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
@@ -425,7 +425,7 @@ export default {
     const fmt = (s, ...a) => a.reduce((t, v, i) => t.replace('{' + i + '}', v), s);
     const noteName = (m, ref) => { const r = Math.round(m); return NOTES[((r % 12) + 12) % 12] + (Math.floor(r / 12) - 1); };
     const cents = m => { const c = Math.round((m - Math.round(m)) * 100); return (c > 0 ? '+' : '') + c + ' ct'; };
-    function paintNote() { if (note) note.textContent = (node ? fmt(T.lat, (latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr).toFixed(0)) : failed ? T.fail : T.load) + ' ' + T.tip; }
+    function paintNote() { if (note) note.textContent = (node ? fmt(T.lat, (latMs ?? 1000 * latencySamples(S.mode, S.win, sr) / sr).toFixed(0)) : failed ? T.fail : T.load); }
     function apply() {
       if (!node) return;
       node.port.postMessage({ type: 'cfg', c: { mode: MODES.indexOf(S.mode), win: WINS.indexOf(S.win), range: RANGEIDS.indexOf(S.range), speed: E('speed'), amount: E('amount'), keep: E('keep'), fa: S.formant, gate: Math.pow(10, S.gate / 20), hold: S.hold, mix: E('mix'), ref: S.ref, notes: S.notes } });

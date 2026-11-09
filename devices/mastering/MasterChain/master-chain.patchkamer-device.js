@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Uitleg naar about (menu Over Master Chain); de UI toont geen uitlegtekst meer.
 // 1.15.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.14.0 — De meters IN en UIT (momentane luidheid, LUFS-M), GR (buscompressie) en Limiter (limiterreductie) via host.ui.meter (contract v1.18, additief): de host tekent ze (ids met.in, met.out, met.gr en met.lim, groep meters, horizontaal, in dB) en een skin kan er een VU-meter, ledlader of andere balk van maken. Het zijn nieuwe, snelle balken boven het tekstblok; het tekstblok met alle getallen en het spectrumcanvas blijven zoals ze waren (piek, true-peak, LRA, correlatie en de LUFS-regels lopen sinds de laatste reset en zijn dus geen live niveau; het spectrum is een grafiek). Een oudere host toont de balken niet. Geluid, worklet-berichten, state, presets, poorten en Masterregie ongewijzigd.
 // 1.13.0 — Geluid veranderd (bewust, op verzoek): (1) de limiter hield het plafond 0,9 dB lager aan dan ingesteld; de uitgangspiek is nu gelijk aan Maximaal TP (zelfde 4×-meting als de kaart toont, nooit erboven). (2) Het Doelkarakter (transparent/warm/firm/club) werkt nu ook handmatig op de buscompressor: transparent = exact het oude gedrag; warm = zachter en langzamer (attack ×1,8, release ×1,6, knee +4 dB, ratio-boven-1 ×0,75); firm = strakker (×0,6, ×0,7, knee −3, ×1,3); club = stevig (×0,45, ×0,55, knee −4, ×1,5). Zonder compressor of bij ratio 1 doet het profiel niets. (3) De meter toont een regel DOEL met de afwijking in LU; het doel (Doel LUFS-I) stuurt zonder Volg nog steeds alleen Analyseer 8 s en de meting; uitleg in de kaart (NL+EN) en de handleiding is daarop aangepast. State, ids, poorten, getState en presets blijven compatibel; de worklet heeft een nieuwe naam zodat hij opnieuw laadt.
@@ -17,7 +18,6 @@ function frameLoop(host, inst, cb, fps) {
 }
 const SPEC={"key": "master", "controls": [{"id": "profile", "value": "transparent", "type": "select", "options": [["transparent", "transparent"], ["warm", "warm"], ["firm", "firm"], ["club", "club"]]}, {"id": "target", "value": -14, "min": -24, "max": -7, "unit": "LUFS"}, {"id": "gain", "value": 0, "min": -12, "max": 18, "unit": "dB"}, {"id": "ceiling", "value": -1, "min": -6, "max": -0.1, "unit": "dBTP"}, {"id": "eq", "value": true, "type": "check"}, {"id": "low", "value": 0, "min": -4, "max": 4, "unit": "dB"}, {"id": "mid", "value": 0, "min": -4, "max": 4, "unit": "dB"}, {"id": "high", "value": 0, "min": -4, "max": 4, "unit": "dB"}, {"id": "compress", "value": true, "type": "check"}, {"id": "threshold", "value": -18, "min": -60, "max": 0, "unit": "dB"}, {"id": "ratio", "value": 2, "min": 1, "max": 12, "unit": ""}, {"id": "attack", "value": 0.02, "min": 0.001, "max": 0.1, "unit": "s"}, {"id": "release", "value": 0.2, "min": 0.03, "max": 1.5, "unit": "s"}, {"id": "knee", "value": 6, "min": 0, "max": 18, "unit": "dB"}, {"id": "makeup", "value": 0, "min": -12, "max": 18, "unit": "dB"}, {"id": "compMix", "value": 1, "min": 0, "max": 1, "unit": ""}, {"id": "limit", "value": true, "type": "check"}], "profiles": {"Transparent": {"profile": "transparent", "target": -14, "ratio": 1.5, "high": 0}, "Warm": {"profile": "warm", "target": -14, "ratio": 1.5, "high": -0.6, "low": 0.3}, "Firm": {"profile": "firm", "target": -12, "ratio": 2}, "Club": {"profile": "club", "target": -10, "ratio": 2.2}}};
 const NAME="Master Chain";
-const DESC={"nl": "Masterketen: toonregeling → buscompressie → lookahead-limiter. LUFS-I/M/S, LRA en 4× true-peakmeting. Doelniveau is instelbaar.", "en": "Master chain: tone control → bus compression → lookahead limiter. LUFS-I/M/S, LRA and 4× true-peak metering. The target level is adjustable."};
 const LOC={"nl": {"ctl": {"profile": "Doelkarakter", "target": "Doel LUFS-I", "gain": "Gain voor limiter", "ceiling": "Maximaal TP", "eq": "Toonregeling", "low": "Laag", "mid": "Midden", "high": "Hoog", "compress": "Buscompressie", "threshold": "Threshold", "ratio": "Ratio", "attack": "Attack", "release": "Release", "knee": "Knee", "makeup": "Make-up", "compMix": "Compressormix", "limit": "Limiter"}, "opt": {"transparent": "Transparant", "warm": "Warm", "firm": "Stevig", "club": "Club"}, "prof": {"Transparent": "Transparant", "Warm": "Warm", "Firm": "Stevig", "Club": "Club"}}, "en": {"ctl": {"profile": "Target character", "target": "Target LUFS-I", "gain": "Gain before limiter", "ceiling": "Maximum TP", "eq": "Tone control", "low": "Low", "mid": "Mid", "high": "High", "compress": "Bus compression", "threshold": "Threshold", "ratio": "Ratio", "attack": "Attack", "release": "Release", "knee": "Knee", "makeup": "Make-up", "compMix": "Compressor mix", "limit": "Limiter"}, "opt": {"transparent": "Transparent", "warm": "Warm", "firm": "Firm", "club": "Club"}, "prof": {"Transparent": "Transparent", "Warm": "Warm", "Firm": "Firm", "Club": "Club"}}};
 const TXT={
  "nl": {
@@ -55,7 +55,6 @@ const TXT={
   "spectrum": "Ingangsspectrum",
   "goal": "DOEL",
   "off": "afwijking",
-  "proposalHint": "Analyse maakt een voorstel op basis van het doel (Doel LUFS-I) en het doelkarakter. Volg past alleen ontgrendelde parameters langzaam aan; zet het uit voor vaste instellingen. Het doel verandert het geluid niet zelf: zonder Volg staat het in de meting (regel DOEL) en stuurt het alleen Analyseer 8 s. Het doelkarakter werkt altijd op de compressor: Warm zachter en langzamer, Firm en Club strakker.",
   "lock": "Vast",
   "lockFor": " vergrendelen",
   "refFile": "Referentiebestand",
@@ -67,7 +66,6 @@ const TXT={
   "listenMain": "Luister MAIN",
   "listenRef": "Luister REF",
   "stopRef": "Stop referentie",
-  "localNote": "Bestanden blijven lokaal. Een geladen referentiebestand wordt niet in presets/werkruimtes opgenomen. Ref-match gebruikt het gemeten niveau van de afgespeelde fragmenten.",
   "learning": "Analyse loopt: speel acht seconden representatieve audio.",
   "suggestion": "Voorstel uit acht seconden analyse; kies Pas voorstel toe.",
   "toolow": "Te weinig audiosignaal voor een voorstel.",
@@ -112,7 +110,6 @@ const TXT={
   "spectrum": "Input spectrum",
   "goal": "TARGET",
   "off": "off by",
-  "proposalHint": "Analysis makes a suggestion based on the target (Target LUFS-I) and the target character. Follow adapts only unlocked parameters slowly; turn it off for fixed settings. The target does not change the sound by itself: without Follow it appears in the meter (the TARGET line) and only steers Analyse 8 s. The target character always acts on the compressor: Warm softer and slower, Firm and Club tighter.",
   "lock": "Lock",
   "lockFor": " lock",
   "refFile": "Reference file",
@@ -124,7 +121,6 @@ const TXT={
   "listenMain": "Listen MAIN",
   "listenRef": "Listen REF",
   "stopRef": "Stop reference",
-  "localNote": "Files stay local. A loaded reference file is not saved in presets or workspaces. Ref match uses the measured level of the passages that were played.",
   "learning": "Analysis running: play eight seconds of representative audio.",
   "suggestion": "Suggestion from eight seconds of analysis; choose Apply suggestion.",
   "toolow": "Too little audio signal for a suggestion.",
@@ -330,7 +326,7 @@ function defaults(){const s={bypass:false,match:false,auto:false,amount:.7,remot
 function normalize(raw){const s=defaults();raw=raw&&typeof raw==='object'?raw:{};for(const k of ['bypass','match','auto','remote'])if(typeof raw[k]==='boolean')s[k]=raw[k];if(Number.isFinite(raw.amount))s.amount=clamp(raw.amount,0,1);for(const c of SPEC.controls){if(c.type==='check'){if(typeof raw[c.id]==='boolean')s[c.id]=raw[c.id];}else if(c.type==='select'){if(c.options.some(o=>o[0]===raw[c.id]))s[c.id]=raw[c.id];}else if(typeof raw[c.id]==='number'&&Number.isFinite(raw[c.id]))s[c.id]=clamp(raw[c.id],c.min,c.max);}if(raw.locks&&typeof raw.locks==='object')for(const c of SPEC.controls)if(raw.locks[c.id]===true)s.locks[c.id]=true;if(SPEC.key==='multiband'&&s.highSplit<s.lowSplit*2){if(s.locks.highSplit&&!s.locks.lowSplit)s.lowSplit=s.highSplit/2;else s.highSplit=s.lowSplit*2;}return s;}
 const PRESET_SKIP=['bypass','match','auto','remote','locks'];  // werkstand, geen klank: een preset laat dit staan
 const __pkDef ={
- id:'nl.patchkamer.masterchain',name:'Master Chain',version:'1.15.0',modExclude:['amount'],mastering:{protocol:1,configure:true},i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',setup:'Master Director'}}},kind:SPEC.key==='control'?'utility':'effect',category:'mastering',collection:'mastering',ui:{width:660,minWidth:320},
+ id:'nl.patchkamer.masterchain',about: { nl: 'Masterketen: toonregeling → buscompressie → lookahead-limiter. LUFS-I/M/S, LRA en 4× true-peakmeting. Doelniveau is instelbaar.\n\nAnalyse maakt een voorstel op basis van het doel (Doel LUFS-I) en het doelkarakter. Volg past alleen ontgrendelde parameters langzaam aan; zet het uit voor vaste instellingen. Het doel verandert het geluid niet zelf: zonder Volg staat het in de meting (regel DOEL) en stuurt het alleen Analyseer 8 s. Het doelkarakter werkt altijd op de compressor: Warm zachter en langzamer, Firm en Club strakker.', en: 'Master chain: tone control → bus compression → lookahead limiter. LUFS-I/M/S, LRA and 4× true-peak metering. The target level is adjustable.\n\nAnalysis makes a suggestion based on the target (Target LUFS-I) and the target character. Follow adapts only unlocked parameters slowly; turn it off for fixed settings. The target does not change the sound by itself: without Follow it appears in the meter (the TARGET line) and only steers Analyse 8 s. The target character always acts on the compressor: Warm softer and slower, Firm and Club tighter.' }, name:'Master Chain',version:'1.16.0',modExclude:['amount'],mastering:{protocol:1,configure:true},i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',setup:'Master Director'}}},kind:SPEC.key==='control'?'utility':'effect',category:'mastering',collection:'mastering',ui:{width:660,minWidth:320},
  ports:{audioIn:[{id:'in',name:'Stereo in'},...(SPEC.key==='comp'?[{id:'side',name:'Sidechain'}]:SPEC.key==='control'?[{id:'ref',name:'Reference'}]:[])],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[],modOut:[],multiIn:[],multiOut:[],masteringIn:[{id:'setup',name:'Master Director'}],masteringOut:[]},
  create(ctx,host){
   const TX=TXT[host&&host.lang]||TXT.en,LC=LOC[host&&host.lang]||LOC.en;const ctlName=c=>LC.ctl[c.id]||c.id,optName=(c,v)=>LC.opt[v]||v;
@@ -373,11 +369,11 @@ const __pkDef ={
   const self={
    inputs:{in:input,...(SPEC.key==='comp'?{side:aux}:SPEC.key==='control'?{ref:aux}:{})},outputs:{out:output},
    mount(el){if(dead)return;unmount();shell=document.createElement('div');el.appendChild(shell);shadow=shell.attachShadow({mode:'open'});const style=document.createElement('style');style.textContent=`
-    :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.mt{display:grid;gap:5px}.mr{display:flex;align-items:center;gap:8px;min-height:14px}.mr>span{flex:none;width:64px;color:var(--muted);font-size:11px}.mr>.mw{flex:1 1 0;min-width:0;display:flex;align-items:center}.app{display:grid;gap:9px;background:var(--card);padding:12px;border:1px solid var(--line);border-radius:9px}.hint,.status,.proposal{font-size:11px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:6px}
+    :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.mt{display:grid;gap:5px}.mr{display:flex;align-items:center;gap:8px;min-height:14px}.mr>span{flex:none;width:64px;color:var(--muted);font-size:11px}.mr>.mw{flex:1 1 0;min-width:0;display:flex;align-items:center}.app{display:grid;gap:9px;background:var(--card);padding:12px;border:1px solid var(--line);border-radius:9px}.status,.proposal{font-size:11px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}.proposal:empty{display:none}.row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr));gap:6px}
     select,button,input[type=file]{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);padding:5px;border-radius:4px;min-width:0;max-width:100%}button{cursor:pointer}button:hover{border-color:var(--audio)}input{accent-color:var(--audio)}input[type=range]{width:100%;min-width:0}.control{padding:8px;border:1px solid var(--line);border-radius:5px;background:var(--card-2)}.line{display:flex;justify-content:space-between;gap:5px;align-items:center}.lock{font-size:10px;color:var(--muted)}output{font-size:10px;color:var(--audio)}pre{font:11px/1.6 var(--mono,monospace);margin:0;padding:10px;background:var(--well);color:var(--well-fg,var(--fg));border-radius:6px;white-space:pre-wrap}.screen{height:95px;position:relative;min-width:0;overflow:hidden;background:var(--well);border-radius:5px}canvas{position:absolute;width:100%;height:100%;inset:0}.proposal{padding:7px;border-left:2px solid var(--audio)}
    `;shadow.appendChild(style);
     function make(tag,text,parent,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;if(parent)parent.appendChild(e);return e;}
-    const app=make('div',null,shadow,'app');make('div',DESC[host&&host.lang]||DESC.en,app,'hint');
+    const app=make('div',null,shadow,'app');
     const row=make('div',null,app,'row');
     const profile=make('select',null,row);profile.setAttribute('aria-label',TX.profileLabel);const blank=make('option',TX.profilePick,profile);blank.value='';for(const[name,values]of Object.entries(SPEC.profiles)){const o=make('option',LC.prof[name]||name,profile);o.value=name;}
     profile.onchange=()=>{const p=SPEC.profiles[profile.value];if(p){for(const[k,v]of Object.entries(p))if(!state.locks[k])state[k]=v;syncUI();}profile.value='';};
@@ -391,7 +387,7 @@ const __pkDef ={
     function resize(){if(!canvas)return;const d=Math.min(2,globalThis.devicePixelRatio||1);canvas.width=Math.max(1,screen.clientWidth*d);canvas.height=Math.max(1,screen.clientHeight*d);}ro=new ResizeObserver(resize);ro.observe(screen);resize();
     function paintMeters(){if(!hms||!lastStats)return;for(const h of hms){let v;try{v=h.fn(lastStats);}catch(_){v=null;}h.m.set(typeof v==='number'&&Number.isFinite(v)?v:-200);}}
     function draw(){if(!canvas||dead)return;paintMeters();const d=Math.min(2,globalThis.devicePixelRatio||1),w=canvas.width/d,h=canvas.height/d,css=getComputedStyle(shell);pen.setTransform(d,0,0,d,0,0);pen.fillStyle=css.getPropertyValue('--well').trim()||'Canvas';pen.fillRect(0,0,w,h);const values=lastStats?.spectrum;if(!values)return;pen.strokeStyle=css.getPropertyValue('--audio').trim()||'Highlight';pen.beginPath();for(let i=0;i<values.length;i++){const x=i/(values.length-1)*w,y=h-clamp((values[i]+100)/90,0,1)*h;if(i)pen.lineTo(x,y);else pen.moveTo(x,y);}pen.stroke();}draw();raf=frameLoop(host,self,draw,20);
-    proposalBox=make('div',TX.proposalHint,app,'proposal');
+    proposalBox=make('div',null,app,'proposal');
     const grid=make('div',null,app,'grid');
     for(const c of SPEC.controls){const wrap=make('div',null,grid,'control'),head=make('div',null,wrap,'line');make('span',ctlName(c),head);
      if(c.type==='check'){const i=make('input',null,head);i.type='checkbox';i.setAttribute('aria-label',ctlName(c));i.onchange=()=>{state[c.id]=i.checked;syncUI();};controls.push({el:i,key:c.id,check:true});}
@@ -401,7 +397,7 @@ const __pkDef ={
     }
     if(SPEC.key==='control'){const refRow=make('div',null,app,'row'),file=make('input',null,refRow);file.type='file';file.accept='audio/*';file.setAttribute('aria-label',TX.refFile);file.onchange=async()=>{const selected=file.files&&file.files[0];if(!selected)return;try{stopReference();const token=++refGeneration,bytes=await selected.arrayBuffer();if(dead||token!==refGeneration)return;const decoded=await ctx.decodeAudioData(bytes);if(dead||token!==refGeneration)return;referenceBuffer=decoded;notice(TX.refLoaded+selected.name+TX.refClick);}catch(e){notice(TX.refFail+e.message);}};
      button(TX.playRef,()=>{if(!referenceBuffer){notice(TX.loadFirst);return;}stopReference();referenceSource=ctx.createBufferSource();referenceSource.buffer=referenceBuffer;referenceSource.loop=true;referenceSource.connect(aux);sources.add(referenceSource);referenceSource.onended=stopReference;referenceSource.start();refPlaying=true;event({type:'reference',value:true});},refRow);
-     button(TX.listenMain,()=>event({type:'reference',value:false}),refRow);button(TX.listenRef,()=>event({type:'reference',value:true}),refRow);button(TX.stopRef,stopReference,refRow);make('div',TX.localNote,app,'hint');
+     button(TX.listenMain,()=>event({type:'reference',value:false}),refRow);button(TX.listenRef,()=>event({type:'reference',value:true}),refRow);button(TX.stopRef,stopReference,refRow);
     }
     status=make('div',engineLabel,app,'status');shadow.addEventListener('pointerdown',e=>e.stopPropagation());syncUI();paintStats();
    },unmount,

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Uitleg naar about (menu Over Foundry); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.1 — Gecontroleerd op stuurbaarheid: alle continue klankregelaars stonden al in params(). Bewust niet stuurbaar: Morph A ↔ B (die schrijft de knopstanden zelf om
 //   en dat is state, geen modulatie; vandaar modExclude). Geluid en instellingen ongewijzigd.
@@ -35,15 +36,11 @@ const EN = {
   'Klankbeeld': 'Sound', 'Eigen sculptuur': 'Custom sculpture', 'Spel': 'Play mode', 'Metalen slag': 'Metal strike', 'Alles uit': 'All off', 'Muteer klank': 'Mutate sound',
   'X-as': 'X axis', 'Y-as': 'Y axis', 'Bewaar A': 'Save A', 'Bewaar B': 'Save B', 'Herstel A': 'Recall A', 'Herstel B': 'Recall B',
   'Staal': 'Steel', 'Glas': 'Glass', 'Beton': 'Concrete', 'Kabel / snaar': 'Cable / string', 'Bron': 'Source', 'Golfvorm': 'Waveform', 'Uit': 'Off',
-  'FM, metaalresonanties, ruis, ringmodulatie en wavefolding. Begin met Start drone en sculpt met het XY-vlak.':
-    'FM, metal resonances, noise, ring modulation and wavefolding. Start with Start / stop drone and sculpt with the XY pad.',
   'XY sound sculptor: pijltjestoetsen wijzigen X en Y': 'XY sound sculptor: arrow keys change X and Y',
   'Gemeten stereo-uitgang, ': 'Measured stereo output, ',
   'Modulatie actief · oranje marker = basis, paars = effectieve klank': 'Modulation active · orange marker = base, purple = effective sound',
   'Sleep in het XY-vlak. Start Drone of sluit noten aan in Noten-modus.': 'Drag in the XY pad. Start the drone, or connect notes in notes mode.',
   'Mod gereed · de knoppen blijven je basis': 'Mod ready · the knobs stay your base',
-  'A/B: bewaar twee klanken en beweeg Morph. Muteer verandert de klank, niet het uitgangsniveau. In Noten-modus: keyboard of sequencer → oranje ingang. Een paarse Mod-kabel werkt ook zonder transport. Extern geluid: bron → Extern materiaal, zet de gelijknamige regelaar open en start de drone/gate.':
-    'A/B: save two sounds and move Morph. Mutate changes the sound, not the output level. In notes mode: keyboard or sequencer → orange input. A purple Mod cable also works without transport. External sound: source → External material, open the knob of the same name and start the drone/gate.',
 };
 
 // spec: [label, min, max, stap, standaard, eenheid, schaal, rol, rij]
@@ -87,9 +84,9 @@ const hz = n => 440 * 2 ** ((n - 69) / 12);
 const FB_MAX = 0.82;
 
 export default {
-  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.12.0', modExclude: ['morph'], kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.13.0', modExclude: ['morph'], kind: 'instrument', category: 'synth',
   ui: { width: 920, minWidth: 380 },
-  about: { nl: 'Een industriële klankvormer: gecascadeerde FM, ringmodulatie, ruis en materiaalresonatoren.', en: 'An industrial sound sculptor: cascaded FM, ring modulation, noise and material resonators.' },
+  about: { nl: 'Een industriële klankvormer: gecascadeerde FM, metaalresonanties, ruis, ringmodulatie, materiaalresonatoren en wavefolding. Begin met Start / stop drone en sculpt met het XY-vlak.\n\nA/B: bewaar twee klanken en beweeg Morph. Muteer verandert de klank, niet het uitgangsniveau.\n\nIn Noten-modus: keyboard of sequencer naar de oranje ingang. Een paarse Mod-kabel werkt ook zonder transport. Extern geluid: bron naar Extern materiaal, zet de gelijknamige regelaar open en start de drone/gate.', en: 'An industrial sound sculptor: cascaded FM, metal resonances, noise, ring modulation, material resonators and wavefolding. Start with Start / stop drone and sculpt with the XY pad.\n\nA/B: save two sounds and move Morph. Mutate changes the sound, not the output level.\n\nIn notes mode: keyboard or sequencer to the orange input. A purple Mod cable also works without transport. External sound: source to External material, open the knob of the same name and start the drone/gate.' },
   ports: {
     audioIn: [{ id: 'in', name: 'External material' }], audioOut: [{ id: 'out', name: 'Stereo sculpture' }],
     eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [],
@@ -392,7 +389,7 @@ h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}`;
     function render(el) {
       unmount(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
       add(shadow, 'style', CSS); panel = add(shadow, 'div'); panel.className = 'app';
-      add(panel, 'p', tx('FM, metaalresonanties, ruis, ringmodulatie en wavefolding. Begin met Start drone en sculpt met het XY-vlak.')); uiHandles = {};
+      uiHandles = {};
       if (typeof ResizeObserver !== 'undefined') ro = new ResizeObserver(() => { for (const v of views) fit(v); });
       const top = row(panel);
       select(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen sculptuur')]]), state.preset, v => {
@@ -428,7 +425,7 @@ h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}`;
         add(panel, 'h3', tx(titles[lane])); const box = grid(panel);
         for (const [id, d] of Object.entries(spec)) if (d[8] === lane) knob(box, id, tx(d[0]), [d[1], d[2], d[3]], state[id], d[4], v => change(id, v), v => d[5] === '%' ? Math.round(v * 100) + '%' : d[5] === 'Hz' ? v.toFixed(v < 20 ? 2 : 0) + ' Hz' : v.toFixed(d[5] === 's' ? 3 : 2) + ' ' + d[5]);
       }
-      status = add(panel, 'p'); add(panel, 'p', tx('A/B: bewaar twee klanken en beweeg Morph. Muteer verandert de klank, niet het uitgangsniveau. In Noten-modus: keyboard of sequencer → oranje ingang. Een paarse Mod-kabel werkt ook zonder transport. Extern geluid: bron → Extern materiaal, zet de gelijknamige regelaar open en start de drone/gate.'));
+      status = add(panel, 'p');
       updateUI();
       if (xy) xyView = makeView(xy, 220); if (scopeCanvas) scopeView = makeView(scopeCanvas, 72);
       if (typeof window !== 'undefined' && window.addEventListener) window.addEventListener('patchkamer-skin', onSkin);

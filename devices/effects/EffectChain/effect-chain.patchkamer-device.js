@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Uitleg naar about (menu Over Effect Chain); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 960 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
@@ -65,51 +66,7 @@ const EN = {
   'Verplaats slot {0} links': 'Move slot {0} left', 'Verplaats slot {0} rechts': 'Move slot {0} right',
   'Effectketen van links naar rechts': 'Effect chain from left to right',
   'Onbewerkt signaal naar het volgende slot.': 'Unprocessed signal to the next slot.',
-  'Paarse Mod-ingang → Master en effectparameters per slot. Knoppen blijven de basis; keuzelijsten worden niet gemoduleerd.': 'Purple Mod input → Master and effect parameters per slot. The knobs stay the base; choice lists are not modulated.',
-  'IN → 1 → 2 → … → UIT · schuif horizontaal voor alle slots': 'IN → 1 → 2 → … → OUT · scroll sideways for all slots',
-  'Mix per slot mengt droog en effect. Verborgen slots blijven bewaard. Effectwissels onthouden hun parameters; wisselen of verplaatsen wist de effectstaart. Galm/echo lopen door als transport stopt. Limiter: zet slotmix en totale mix op 100%, uitgang op 0 dB; plaats hem als laatste.':
-    'Mix per slot blends dry and effect. Hidden slots are kept. Effect changes remember their parameters; switching or moving clears the effect tail. Reverb and echo keep ringing when the transport stops. Limiter: set slot mix and total mix to 100% and output to 0 dB; put it last.',
   'Deze effecten vereisen ScriptProcessor-ondersteuning in de browser.': 'These effects need ScriptProcessor support in the browser.',
-};
-const DESC_NL = {
-  pump: 'Tempo-ducking zonder kick-ingang. Zet de mix op 100% en start transport.',
-  trancegate: '16-staps amplitude-patroon op de hostklok. Mix 100% voor volledige gates.',
-  stutter: 'Neemt per maat het laatste fragment over en herhaalt het tijdelijk. De eerste maat vult de buffer.',
-  tempodelay: 'Echo in notenwaarden; volgt de BPM van Patchkamer.',
-  wobble: 'Tempo-gesynchroniseerde filterbeweging. Start het hosttransport.',
-  multiband: 'Eigen drive voor lage, midden- en hoge frequenties; geen mastering-crossover.',
-  freeze: 'Neemt de afgelopen audio op. Kies Bevroren nadat er geluid binnenkomt. Dit is een granulaire tijdlus, geen spectrale freeze.',
-  grains: 'Overlappende Hann-korrels met transpositie, spreiding en feedback.',
-  shimmer: 'Granulaire octaaftranspositie gevolgd door een diffuus ambientnetwerk.',
-  hybrid: 'Parallelle combinatie van de gekozen convolutionruimte en algoritmische ambientstaart.',
-  resonator: 'Vijf op akkoord gestemde comb-resonators kleuren het inkomende geluid.',
-  autofilter: 'Een LFO beweegt het filter rond de basisfrequentie.',
-  imager: 'Mid/side-breedte. Mono → stereo voegt decorrelatie toe; controleer ook in mono.',
-  vinyl: 'Gesynthetiseerde slijtage, ruis, tikjes en mechanische wow/flutter.',
-  freqecho: 'Verschuift boventonen in Hz bij elke echo; geen transpositie in halve tonen.',
-  cosmos: 'Acht gemoduleerde delaylijnen met diffusie voor lange, dichte ambientstaarten.',
-  crush: 'Echte bitkwantisatie en sample-hold, met jitter, drop-outs en rate-modulatie.',
-  limiter: '5 ms lookahead + sampleplafond (geen true-peak). Laatste slot, alle mixes 100%, uitgang 0 dB.'
-};
-const DESC_EN = {
-  pump: 'Tempo ducking without a kick input. Set the mix to 100% and start the transport.',
-  trancegate: '16-step amplitude pattern on the host clock. Mix 100% for full gates.',
-  stutter: 'Takes over the last fragment of each bar and repeats it for a while. The first bar fills the buffer.',
-  tempodelay: 'Echo in note values; follows the BPM of Patchkamer.',
-  wobble: 'Tempo-synced filter movement. Start the host transport.',
-  multiband: 'Separate drive for low, mid and high frequencies; not a mastering crossover.',
-  freeze: 'Records the audio of the last moments. Choose Frozen once sound is coming in. This is a granular time loop, not a spectral freeze.',
-  grains: 'Overlapping Hann grains with transposition, spread and feedback.',
-  shimmer: 'Granular octave transposition followed by a diffuse ambient network.',
-  hybrid: 'Parallel combination of the chosen convolution room and an algorithmic ambient tail.',
-  resonator: 'Five comb resonators tuned to a chord colour the incoming sound.',
-  autofilter: 'An LFO moves the filter around the base frequency.',
-  imager: 'Mid/side width. Mono → stereo adds decorrelation; also check in mono.',
-  vinyl: 'Synthesised wear, noise, crackle and mechanical wow/flutter.',
-  freqecho: 'Shifts the overtones in Hz with every echo; not a transposition in semitones.',
-  cosmos: 'Eight modulated delay lines with diffusion for long, dense ambient tails.',
-  crush: 'True bit quantisation and sample-and-hold, with jitter, drop-outs and rate modulation.',
-  limiter: '5 ms lookahead + sample ceiling (not true-peak). Last slot, all mixes 100%, output 0 dB.'
 };
 const LEGACY_PRESET = {
   'Ambient ruimte':'Ambient Space',
@@ -135,8 +92,8 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.16.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
-  about:{nl:'Een keten van effecten voor techno, EDM en ambient.',en:'A chain of effects for techno, EDM and ambient.'},
+  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.17.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
+  about:{ nl: 'Een keten van effecten voor techno, EDM en ambient.\n\nPaarse Mod-ingang → Master en effectparameters per slot. Knoppen blijven de basis; keuzelijsten worden niet gemoduleerd.\n\nKeten: IN → 1 → 2 → … → UIT · schuif horizontaal voor alle slots.\n\nMix per slot mengt droog en effect. Verborgen slots blijven bewaard. Effectwissels onthouden hun parameters; wisselen of verplaatsen wist de effectstaart. Galm/echo lopen door als transport stopt. Limiter: zet slotmix en totale mix op 100%, uitgang op 0 dB; plaats hem als laatste.\n\nPer effect:\nAuto Filter: Een LFO beweegt het filter rond de basisfrequentie.\nBeat Stutter: Neemt per maat het laatste fragment over en herhaalt het tijdelijk. De eerste maat vult de buffer.\nDigitale Gruis: Echte bitkwantisatie en sample-hold, met jitter, drop-outs en rate-modulatie.\nFreeze / Klankwolk: Neemt de afgelopen audio op. Kies Bevroren nadat er geluid binnenkomt. Dit is een granulaire tijdlus, geen spectrale freeze.\nFrequentie Echo: Verschuift boventonen in Hz bij elke echo; geen transpositie in halve tonen.\nGranular Delay: Overlappende Hann-korrels met transpositie, spreiding en feedback.\nHarmonische Resonators: Vijf op akkoord gestemde comb-resonators kleuren het inkomende geluid.\nHybride Reverb: Parallelle combinatie van de gekozen convolutionruimte en algoritmische ambientstaart.\nKosmos · ambient: Acht gemoduleerde delaylijnen met diffusie voor lange, dichte ambientstaarten.\nLimiter · peak: 5 ms lookahead + sampleplafond (geen true-peak). Laatste slot, alle mixes 100%, uitgang 0 dB.\nMultiband Drive: Eigen drive voor lage, midden- en hoge frequenties; geen mastering-crossover.\nPumping / Duck: Tempo-ducking zonder kick-ingang. Zet de mix op 100% en start transport.\nShimmer Reverb: Granulaire octaaftranspositie gevolgd door een diffuus ambientnetwerk.\nStereo Beeld: Mid/side-breedte. Mono → stereo voegt decorrelatie toe; controleer ook in mono.\nTempo Delay: Echo in notenwaarden; volgt de BPM van Patchkamer.\nTrance Gate: 16-staps amplitude-patroon op de hostklok. Mix 100% voor volledige gates.\nVinylstof: Gesynthetiseerde slijtage, ruis, tikjes en mechanische wow/flutter.\nWobble Filter: Tempo-gesynchroniseerde filterbeweging. Start het hosttransport.', en: 'A chain of effects for techno, EDM and ambient.\n\nPurple Mod input → Master and effect parameters per slot. The knobs stay the base; choice lists are not modulated.\n\nChain: IN → 1 → 2 → … → OUT · scroll sideways for all slots.\n\nMix per slot blends dry and effect. Hidden slots are kept. Effect changes remember their parameters; switching or moving clears the effect tail. Reverb and echo keep ringing when the transport stops. Limiter: set slot mix and total mix to 100% and output to 0 dB; put it last.\n\nPer effect:\nAuto Filter: An LFO moves the filter around the base frequency.\nBeat Stutter: Takes over the last fragment of each bar and repeats it for a while. The first bar fills the buffer.\nDigital Crush: True bit quantisation and sample-and-hold, with jitter, drop-outs and rate modulation.\nFreeze / Sound Cloud: Records the audio of the last moments. Choose Frozen once sound is coming in. This is a granular time loop, not a spectral freeze.\nFrequency Echo: Shifts the overtones in Hz with every echo; not a transposition in semitones.\nGranular Delay: Overlapping Hann grains with transposition, spread and feedback.\nHarmonic Resonators: Five comb resonators tuned to a chord colour the incoming sound.\nHybrid Reverb: Parallel combination of the chosen convolution room and an algorithmic ambient tail.\nCosmos · ambient: Eight modulated delay lines with diffusion for long, dense ambient tails.\nLimiter · peak: 5 ms lookahead + sample ceiling (not true-peak). Last slot, all mixes 100%, output 0 dB.\nMultiband Drive: Separate drive for low, mid and high frequencies; not a mastering crossover.\nPumping / Duck: Tempo ducking without a kick input. Set the mix to 100% and start the transport.\nShimmer Reverb: Granular octave transposition followed by a diffuse ambient network.\nStereo Image: Mid/side width. Mono → stereo adds decorrelation; also check in mono.\nTempo Delay: Echo in note values; follows the BPM of Patchkamer.\nTrance Gate: 16-step amplitude pattern on the host clock. Mix 100% for full gates.\nVinyl Dust: Synthesised wear, noise, crackle and mechanical wow/flutter.\nWobble Filter: Tempo-synced filter movement. Start the host transport.' },
   i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',mod:'Mod'}}},
   ports:{audioIn:[{id:'in',name:'Stereo in'}],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   create(ctx,host){
@@ -532,9 +489,7 @@ export default {
       host.ui.select(root,tx('Aantal'),Array.from({length:MAX},(_,i)=>[String(i+1),String(i+1)]),String(config.count),v=>{config.count=number(+v,1,MAX,4,1);customized();apply();render();}, { id:'count',group:'chain' });
       const levels=text('div','',root,'display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 18px');
       for(const [k,label,range] of [['input','Ingang',[-12,12,0.5]],['output','Uitgang',[-12,12,0.5]],['blend','Totale mix',[0,1,0.01]]])host.ui.knob(levels,tx(label),range,config[k],v=>fmt(v,k==='blend'?'%':'dB'),v=>{config[k]=number(v,range[0],range[1],config[k],range[2]);customized();apply();}, { id:k,group:'master' });
-      text('p',tx('Paarse Mod-ingang → Master en effectparameters per slot. Knoppen blijven de basis; keuzelijsten worden niet gemoduleerd.'),root,'font-size:12px;color:var(--mod);line-height:1.5');
       mountOverview();
-      text('p',tx('IN → 1 → 2 → … → UIT · schuif horizontaal voor alle slots'),root,'font-size:11px;opacity:.7;margin:8px 0');
       const strip=text('div','',root,'display:flex;flex-direction:row;gap:8px;overflow-x:auto;max-width:100%;padding:4px 2px 12px;scroll-snap-type:x proximity');strip.setAttribute('aria-label',tx('Effectketen van links naar rechts'));strip.setAttribute('tabindex','0');
       for(let i=0;i<config.count;i++){
         const c=config.slots[i],card=text('section','',strip,'flex:0 0 218px;min-width:0;scroll-snap-align:start;border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--card-2)');
@@ -546,7 +501,6 @@ export default {
         mountSlotView(card,i);
         if(c.type==='none'){text('p',tx('Onbewerkt signaal naar het volgende slot.'),card,'font-size:12px;opacity:.65');continue;}
         host.ui.knob(card,tx('Effectmix'),[0,1,0.01],c.mix,v=>fmt(v,'%'),v=>{c.mix=number(v,0,1,c.mix,0.01);customized();applySlot(i);}, { id:prefix(i)+'.mix',group:prefix(i) });
-                if(DESC_NL[c.type])text('p',(host.lang==='nl'?DESC_NL:DESC_EN)[c.type],card,'font-size:11px;line-height:1.4;opacity:.7');
         text('div',tx('Parameters')+' · '+nm(c.type),card,'font-size:11px;opacity:.7;border-top:1px solid var(--line);padding-top:8px;margin-top:6px');
         for(const [k,d] of Object.entries(defs[c.type].p)){
           const update=v=>{c.bank[c.type][k]=number(+v,d[1],d[2],d[4],d[3]);customized();applySlot(i);};
@@ -555,7 +509,6 @@ export default {
         }
       }
       startDraw();
-      text('p',tx('Mix per slot mengt droog en effect. Verborgen slots blijven bewaard. Effectwissels onthouden hun parameters; wisselen of verplaatsen wist de effectstaart. Galm/echo lopen door als transport stopt. Limiter: zet slotmix en totale mix op 100%, uitgang op 0 dB; plaats hem als laatste.'),root,'font-size:11px;line-height:1.5;opacity:.7;margin:6px 0');
     }
     const self={
       params(){return descriptors();},

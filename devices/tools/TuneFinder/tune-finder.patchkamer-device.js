@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.22.0 — Uitleg naar about (menu Over Tune Finder); de UI toont geen uitlegtekst meer.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.20.0 — Eerste versie. Tune Finder luistert naar een geluid (een enkele noot, een korte frase, een basloopje of een akkoord van één instrument) en zoekt in de
 //          bibliotheek de synth en de tune die er het meest op lijken. Bron: een audiobestand (knop, of de tab Samples via loadAudio) of een opname van enkele seconden
@@ -304,8 +305,7 @@ class TFCap extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', TFCap);`;
 
 const TXT = {
-  nl: { hint: 'Zoekt de synth en de tune uit de bibliotheek die het meest lijkt op een geluid: een enkele noot, een korte frase, een basloopje of een akkoord van één instrument. Laad een audiobestand of neem een paar seconden op uit de ingang, bijvoorbeeld van Audio Capture. De lijst is een vergelijking van klankkleur, aanzet en verloop; hij zegt niet dat het hetzelfde instrument is.',
-    load: 'Audiobestand laden…', record: 'Opnemen', stop: 'Stop', recLen: { s3: '3 seconden', s5: '5 seconden', s10: '10 seconden', s20: '20 seconden' }, recLenLabel: 'Opnameduur',
+  nl: { load: 'Audiobestand laden…', record: 'Opnemen', stop: 'Stop', recLen: { s3: '3 seconden', s5: '5 seconden', s10: '10 seconden', s20: '20 seconden' }, recLenLabel: 'Opnameduur',
     filter: 'Zoeken in', filterAll: 'alle instrumenten', again: 'Opnieuw zoeken', clear: 'Wissen', load1: 'Laden', loadBest: 'Beste laden', loadTitle: 'Zet deze tune op dit instrument in de werkruimte',
     idle: 'Nog niets geladen. Laad een audiobestand of neem op uit de ingang.', busy: 'Analyseren…', recording: (s, t) => 'Opnemen… ' + s.toFixed(1) + ' / ' + t.toFixed(1) + ' s',
     indexOk: (n, d, when) => 'Index: ' + n + ' tunes van ' + d + ' instrumenten' + (when ? ' (' + when + ')' : ''), indexNone: 'De index met tunes ontbreekt of past niet bij deze versie van Tune Finder.',
@@ -316,8 +316,7 @@ const TXT = {
     loaded: (t, d) => '“' + t + '” staat nu op ' + d + '.', needDevice: d => 'Zet eerst ' + d + ' in de werkruimte (bibliotheek, tab Apparaten) en druk dan op Laden. Of zoek de tune op in de tab Tunes.', noTune: t => 'De tune “' + t + '” staat niet in de geladen bibliotheken. Zoek hem in de tab Tunes.', noApi: 'Laden kan hier niet; zoek de tune in de tab Tunes.', failed: 'Laden is niet gelukt.',
     families: { bass: 'Bas en mono', 'keys-plucked': 'Toetsen en getokkeld', 'orchestral-voice': 'Blazers, strijkers en stem', 'poly-lead-pad': 'Poly, lead en pad', 'texture-drone': 'Textuur en drone', sample: 'Samples', other: 'Overig' },
     close: 'dicht bij', noMatch: 'Geen resultaat.' },
-  en: { hint: 'Finds the synth and tune of the library that comes closest to a sound: a single note, a short phrase, a bass line or a chord of one instrument. Load an audio file or record a few seconds from the input, for example from Audio Capture. The list compares timbre, attack and decay; it does not say it is the same instrument.',
-    load: 'Load audio file…', record: 'Record', stop: 'Stop', recLen: { s3: '3 seconds', s5: '5 seconds', s10: '10 seconds', s20: '20 seconds' }, recLenLabel: 'Record length',
+  en: { load: 'Load audio file…', record: 'Record', stop: 'Stop', recLen: { s3: '3 seconds', s5: '5 seconds', s10: '10 seconds', s20: '20 seconds' }, recLenLabel: 'Record length',
     filter: 'Search in', filterAll: 'all instruments', again: 'Search again', clear: 'Clear', load1: 'Load', loadBest: 'Load best', loadTitle: 'Put this tune on this instrument in the workspace',
     idle: 'Nothing loaded yet. Load an audio file or record from the input.', busy: 'Analysing…', recording: (s, t) => 'Recording… ' + s.toFixed(1) + ' / ' + t.toFixed(1) + ' s',
     indexOk: (n, d, when) => 'Index: ' + n + ' tunes of ' + d + ' instruments' + (when ? ' (' + when + ')' : ''), indexNone: 'The tune index is missing or does not fit this version of Tune Finder.',
@@ -338,7 +337,7 @@ const noteName = hz => { const m = Math.round(69 + 12 * Math.log2(hz / 440)); re
 let SHARED;                 // the decoded index, shared by all instances of this device (undefined: not decoded yet, null: not usable)
 
 export default {
-  id: 'nl.patchkamer.tune-finder', name: 'Tune Finder', version: '1.21.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 },
+  id: 'nl.patchkamer.tune-finder', name: 'Tune Finder', about: { nl: 'Zoekt de synth en de tune uit de bibliotheek die het meest lijkt op een geluid: een enkele noot, een korte frase, een basloopje of een akkoord van één instrument. Laad een audiobestand of neem een paar seconden op uit de ingang, bijvoorbeeld van Audio Capture. De lijst is een vergelijking van klankkleur, aanzet en verloop; hij zegt niet dat het hetzelfde instrument is.', en: 'Finds the synth and tune of the library that comes closest to a sound: a single note, a short phrase, a bass line or a chord of one instrument. Load an audio file or record a few seconds from the input, for example from Audio Capture. The list compares timbre, attack and decay; it does not say it is the same instrument.' }, version: '1.22.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 },
   i18n: { nl: { ports: { in: 'In', thru: 'Door' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'thru', name: 'Through' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -472,7 +471,7 @@ export default {
       inputs: { in: inG }, outputs: { thru },
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' }); el('style', CSS, sh);
-        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
+        const app = el('div', null, sh, 'app');
         const r1 = el('div', null, app, 'row');
         const file = el('input', null, r1); file.type = 'file'; file.accept = 'audio/*,.wav,.mp3,.flac,.ogg'; file.style.display = 'none'; file.setAttribute('aria-label', T.load);
         const loadB = el('button', T.load, r1); loadB.type = 'button'; loadB.onclick = () => file.click(); file.onchange = () => { if (file.files && file.files.length) loadFiles(Array.from(file.files)); file.value = ''; };

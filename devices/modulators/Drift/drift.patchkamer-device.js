@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Uitleg naar about (menu Over Drift); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor Drift (sterkte), Tempo van drift, Samenhang en Eigen (alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state; getState blijft gelijk.
 //          Sterkte, tempo en samenhang zijn van de (gedeelde) klok: een Drift die een master volgt negeert modulatie daarop. Geen lus: modulate() roept zelf geen host.modulate aan, dus een Drift die een andere Drift (of zichzelf) stuurt herhaalt niets.
 //          Een Drift die een andere Drift via de Volg-ingang volgt krijgt in de master nu ook diens vier parameters in de lijst (standaard uit). Bewust weggelaten: groep, volgmodus (keuzes), bevriezen en nieuw zaad (knoppen). Zonder modulatie gelijk aan 1.11.0.
@@ -26,8 +27,6 @@ const W = 360;              // zichtvenster in drifttijd (s): 80% verleden, 20% 
 
 // Teksten per taal (host.lang): de Nederlandse tekst is de sleutel, Engels staat hieronder; onbekende taal = Engels
 const EN = {
-  'Drift maakt geen geluid en speelt geen noten. Het laat de aangevinkte parameters van aangesloten apparaten langzaam rond hun knopstand bewegen; de knop blijft de basis.':
-    'Drift makes no sound and plays no notes. It lets the ticked parameters of connected devices wander slowly around their knob position; the knob stays the base.',
   'Drift': 'Drift', 'Tempo van drift': 'Drift speed', 'Samenhang': 'Coherence',
   'hoe snel de drifttijd loopt; ×1 = periodes van een halve minuut tot twintig minuten': 'how fast drift time runs; ×1 = periods from half a minute to twenty minutes',
   'hoe sterk gelijke soorten parameters (alle filters, alle toonhoogtes) samen bewegen, ook over sporen en apparaten heen': 'how strongly similar kinds of parameters (all filters, all pitches) move together, across lanes and devices too',
@@ -40,8 +39,8 @@ const EN = {
   'Volgen ': 'Follow mode ', 'gelijk': 'same', 'gespiegeld': 'mirrored', 'verschoven': 'shifted', 'manier van volgen': 'way of following',
   'Eigen': 'Own', 'mengt een eigen, losse beweging door de gedeelde heen': 'mixes an own, separate movement into the shared one',
   'Volgers: ': 'Followers: ',
-  'Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>Drift</b> naar de ingang <b>Mod</b> van een instrument. Alle apparaten met stuurbare parameters kunnen worden aangesloten. Drift maakt zelf geen geluid en speelt geen noten.':
-    'Nothing connected yet. Pull a <b>purple cable</b> from the output <b>Drift</b> to the <b>Mod</b> input of an instrument. Any device with controllable parameters can be connected. Drift makes no sound and plays no notes itself.',
+  'Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>Drift</b> naar de ingang <b>Mod</b> van een instrument. Alle apparaten met stuurbare parameters kunnen worden aangesloten.':
+    'Nothing connected yet. Pull a <b>purple cable</b> from the output <b>Drift</b> to the <b>Mod</b> input of an instrument. Any device with controllable parameters can be connected.',
   '{0} van {1} parameters driften': '{0} of {1} parameters drifting',
   'alle parameters van dit spoor aan/uit': 'all parameters of this lane on/off', 'alles in {0}': 'all in {0}',
   'bevries dit spoor': 'freeze this lane', 'bevries {0}': 'freeze {0}', 'nieuwe wind voor dit spoor': 'new wind for this lane', 'nieuwe wind {0}': 'new wind {0}',
@@ -53,7 +52,6 @@ const CSS = `
 :host{all:initial;display:block;container-type:inline-size;font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--fg,#e6e9ee)}
 *{box-sizing:border-box}
 .dm{display:grid;gap:10px;min-width:0}
-.intro{color:var(--muted,#8a93a3);font-size:11px;line-height:1.45;margin:0}
 .top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px 14px;align-items:end;padding:8px 10px;border:1px solid var(--line,#2a303a);border-radius:5px;background:var(--card-2,#161a20)}
 .ctl{display:grid;gap:2px;min-width:0}
 .ctl label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#8a93a3);display:flex;justify-content:space-between;gap:6px}
@@ -112,7 +110,8 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: ID,
   name: 'Drift',
-  version: '1.11.1',
+  about: { nl: 'Drift maakt geen geluid en speelt geen noten. Het laat de aangevinkte parameters van aangesloten apparaten langzaam rond hun knopstand bewegen; de knop blijft de basis.\n\nAlle apparaten met stuurbare parameters kunnen worden aangesloten: trek een paarse kabel van de uitgang Drift naar de ingang Mod van een instrument.', en: 'Drift makes no sound and plays no notes. It lets the ticked parameters of connected devices wander slowly around their knob position; the knob stays the base.\n\nAny device with controllable parameters can be connected: pull a purple cable from the output Drift to the Mod input of an instrument.' },
+  version: '1.12.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 820, minWidth: 380 },
@@ -224,7 +223,7 @@ export default {
     function paintTargets() {
       const box = ui.targets; box.innerHTML = ''; ui.lanes = []; if (ro) ro.disconnect();
       const real = me.targets.filter(T => T.params.length);
-      if (!real.length) { const e = E('div', 'empty'); e.innerHTML = tx('Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>Drift</b> naar de ingang <b>Mod</b> van een instrument. Alle apparaten met stuurbare parameters kunnen worden aangesloten. Drift maakt zelf geen geluid en speelt geen noten.'); box.appendChild(e); return; }
+      if (!real.length) { const e = E('div', 'empty'); e.innerHTML = tx('Nog niets aangesloten. Trek een <b>paarse kabel</b> van de uitgang <b>Drift</b> naar de ingang <b>Mod</b> van een instrument. Alle apparaten met stuurbare parameters kunnen worden aangesloten.'); box.appendChild(e); return; }
       const dup = {}; real.forEach(T => dup[T.name] = (dup[T.name] || 0) + 1);
       real.forEach(T => {
         const sec = E('section', 'tg'), h = E('h3', '', '→ ' + T.name + (dup[T.name] > 1 ? ' · ' + T.id : '')), sm = E('small'); h.appendChild(sm); sec.appendChild(h);
@@ -305,7 +304,6 @@ export default {
         const holder = document.createElement('div'); el.appendChild(holder); root = holder.attachShadow({ mode: 'open' }); root.addEventListener('pointerdown', e => e.stopPropagation());
         const st = document.createElement('style'); st.textContent = CSS; root.appendChild(st);
         const dm = E('div', 'dm'); root.appendChild(dm);
-        dm.appendChild(E('p', 'intro', tx('Drift maakt geen geluid en speelt geen noten. Het laat de aangevinkte parameters van aangesloten apparaten langzaam rond hun knopstand bewegen; de knop blijft de basis.')));
         ui = { lanes: [] }; col = null;
         if (typeof ResizeObserver !== 'undefined') ro = new ResizeObserver(es => { es.forEach(en => { const L = en.target.__lane; if (L) { L.w = en.contentRect.width; L.h = en.contentRect.height; } }); });
         buildTop(dm); ui.targets = E('div'); ui.targets.style.cssText = 'display:grid;gap:12px'; dm.appendChild(ui.targets);
