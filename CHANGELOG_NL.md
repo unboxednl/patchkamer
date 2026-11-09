@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.15.0 (2026-11-09)
+
+### Toegevoegd
+- **Clip Arranger 1.23.0: een clipbalk in 03 · Clip editor.** Knoppen voor de sporen en voor de 8 clips van het gekozen spoor (naam en lengte; lege clips gedimpt; de spelende clip gemarkeerd) schakelen met één klik van clip, zonder terug te scrollen naar de matrix. **‹ ›** gaan naar de vorige en volgende clip, **Nieuwe clip** springt naar het eerste lege slot, **Dupliceer** kopieert de clip naar het eerstvolgende lege slot en **Verwijder clip** maakt het slot leeg (Ongedaan werkt). Een sectie kiezen in 04 · Song arrangement zet de editor nu ook op de scène van die sectie, en de matrix omlijnt die scène. Geen nieuwe state-velden: bestaande songs en presets laden als voorheen.
+
 ## 0.14.0 (2026-11-09)
 
 ### Toegevoegd

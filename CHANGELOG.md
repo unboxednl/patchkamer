@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.15.0 (2026-11-09)
+
+### Added
+- **Clip Arranger 1.23.0: a clip bar in 03 · Clip editor.** Buttons for the tracks and for the 8 clips of the selected track (name and length; empty clips dimmed; the playing clip marked) switch clip with one click, without scrolling back to the matrix. **‹ ›** go to the previous and next clip, **New clip** jumps to the first empty slot, **Duplicate** copies the clip to the next empty slot and **Delete clip** empties the slot (Undo works). Choosing a section in 04 · Song arrangement now also puts the editor on that section's scene, and the matrix outlines that scene. No new state fields: existing songs and presets load as before.
+
 ## 0.14.0 (2026-11-09)
 
 ### Added
