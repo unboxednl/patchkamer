@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.16.2 (2026-11-09)
+
+### Changed
+- **Screenshot of the skin editor refreshed** (English and Dutch): it now shows the new *Colour at rest* and *Colour in use* fields.
+
 ## 0.16.1 (2026-11-09)
 
 ### Changed

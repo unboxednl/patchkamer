@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.16.2 (2026-11-09)
+
+### Gewijzigd
+- **Screenshot van de skin-editor ververst** (Nederlands en Engels): met de nieuwe velden *Kleur in rust* en *Kleur bij gebruik*.
+
 ## 0.16.1 (2026-11-09)
 
 ### Gewijzigd
