@@ -12,7 +12,10 @@ function showHostUpdate(sha,urls){ if(PK.$('pkHostUpdate')) return; const b=docu
   const later=document.createElement('button'); later.className='small'; later.type='button'; later.textContent=PK.pkt('m.host_later'); later.onclick=()=>b.remove();
   const never=document.createElement('button'); never.className='small'; never.type='button'; never.textContent=PK.pkt('m.host_niet_meer'); never.onclick=()=>{ try{ localStorage.setItem(HOSTCHK.key,sha); }catch(e){} b.remove(); };
   const load=document.createElement('button'); load.className='small'; load.type='button'; load.textContent=PK.pkt('m.host_laad'); /* fetch every own file past the browser cache, then reload, so the newest version is what starts */
-  load.onclick=async()=>{ load.disabled=true; load.textContent=PK.pkt('m.host_laden'); try{ await Promise.all((urls||[]).map(u=>fetch(u,{cache:'reload'}))); }catch(e){} location.reload(); };
+  load.onclick=async()=>{ load.disabled=true; load.textContent=PK.pkt('m.host_laden'); try{ /* clear what the browser keeps for Patchkamer: Cache Storage, service workers, then every own file past the HTTP cache (also files that load later, such as vendor/ and icons/) */
+    try{ if(window.caches){ for(const k of await caches.keys()) await caches.delete(k); } }catch(e){}
+    try{ if(navigator.serviceWorker){ for(const g of await navigator.serviceWorker.getRegistrations()) await g.unregister(); } }catch(e){}
+    await Promise.all((urls||[]).map(u=>fetch(u,{cache:'reload'}).catch(()=>null))); }catch(e){} location.reload(); };
   row.append(load,a,later,never); b.append(t,row); document.body.appendChild(b); }
 async function checkHostVersion(){ try{ if(window.pkNative) return; /* the app has its own check (Settings > Version) and serves a page with one extra script tag */ if(!/^https?:$/.test(location.protocol)||!(window.crypto&&crypto.subtle)||navigator.onLine===false) return;
   const pageUrl=location.href.split('#')[0].split('?')[0], base=new URL('.',pageUrl).href;
@@ -22,7 +25,7 @@ async function checkHostVersion(){ try{ if(window.pkNative) return; /* the app h
   const rel=u=>u===pageUrl?HOSTCHK.page:decodeURIComponent(u.slice(base.length)), sha=new Map(remote.tree.filter(x=>x.type==='blob').map(x=>[x.path,x.sha]));
   const names=own.map(rel), hashes=await Promise.all(mine.map(gitBlobSha)), all=a=>gitBlobSha(new TextEncoder().encode(a.join('\n')));
   const own1=await all(names.map((n,i)=>n+':'+hashes[i])), rem=await all(names.map(n=>n+':'+(sha.get(n)||''))); if(own1===rem) return;
-  let seen=''; try{ seen=localStorage.getItem(HOSTCHK.key)||''; }catch(e){} if(seen===rem) return; showHostUpdate(rem,own); }catch(e){} } PK.checkHostVersion=checkHostVersion;
+  let seen=''; try{ seen=localStorage.getItem(HOSTCHK.key)||''; }catch(e){} if(seen===rem) return; const more=remote.tree.filter(x=>x.type==='blob'&&!/\.(md|txt)$/i.test(x.path)&&!/^LICENSE/.test(x.path)).map(x=>new URL(x.path.split('/').map(encodeURIComponent).join('/'),base).href); showHostUpdate(rem,[...new Set([...own,...more,new URL('version.json',base).href])]); }catch(e){} } PK.checkHostVersion=checkHostVersion;
 // ---------- Instellingen > Versie: het nummer van deze host; in de app ook dat van de app en de nieuwste uitgave op GitHub ----------
 const VERREL='unboxednl/patchkamer';
 const okVer=v=>typeof v==='string'&&/^\d+\.\d+\.\d+$/.test(v);

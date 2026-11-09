@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.28.2 (2026-11-09)
+
+### Opgelost
+- **"Nieuwste versie laden" laadt nu echt de nieuwste versie.** De knop in de melding over een nieuwe versie haalde alleen de bestanden opnieuw op die de pagina zelf laadt, zodat bestanden die later laden (de bestanden in `vendor/` en `icons/`, het manifest en `version.json`) nog uit de browsercache konden komen. Nu leegt hij eerst de Cache Storage en eventuele service workers van Patchkamer, haalt daarna elk bestand van de host uit de lijst van GitHub langs de cache op en herlaadt pas dan. Niet getest met een echte nieuwe uitgave.
+
 ## 0.28.1 (2026-11-09)
 
 ### Opgelost
