@@ -4,7 +4,7 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
-## 0.14.0 (2026-11-09)
+## 0.13.1 (2026-11-09)
 
 ### Fixed
 - **Opening a song no longer rearranges the devices.** Before, the host clicked **Arrange** by itself a moment after a song opened (from the Songs tab, a dropped file or Open file), which undid a carefully set layout. Now the layout stays as saved in the song; **Arrange** is still there for when you want it.

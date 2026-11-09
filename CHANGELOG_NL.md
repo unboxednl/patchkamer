@@ -4,7 +4,7 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
-## 0.14.0 (2026-11-09)
+## 0.13.1 (2026-11-09)
 
 ### Opgelost
 - **Een song openen herschikt de apparaten niet meer.** Eerder klikte de host kort na het openen van een song (uit de tab Songs, een losgelaten bestand of Bestand openen) zelf op **Herschik**, waardoor een zorgvuldig gezette indeling verloren ging. Nu blijft de indeling zoals ze in de song is opgeslagen; **Herschik** blijft beschikbaar voor wie dat wil.
