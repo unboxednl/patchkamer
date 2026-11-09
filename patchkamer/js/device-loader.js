@@ -16,6 +16,8 @@ async function loadDeviceSource(src,origin,quiet,importUrl){
   validateDef(def); PK.pkApplyI18n(def); def._src=origin||{kind:'paste'}; def._code=src; delete def._builtin;
   const k=PK.Host.key(def.id,def.version), existed=PK.Host.registry.has(k); PK.Host.registry.set(k,def); if(!quiet){ PK.paintLib(); PK.refreshVersionSelects(); } def._replaced=existed; return def;
 } PK.loadDeviceSource=loadDeviceSource;
+// contract v1.33: optioneel `about` (uitleg bij het apparaat): een tekst, of een object per taal ({ nl, en }). Alinea's staan gescheiden door een lege regel. Geeft de tekst voor de gekozen taal (terugval: Engels, dan de eerste), of ''.
+function aboutOf(def){ const a=def&&def.about; let t=''; if(typeof a==='string') t=a; else if(a&&typeof a==='object') t=[a[PK.PK_LANG],a.en,...Object.values(a)].find(x=>typeof x==='string'&&x.trim())||''; return t.trim().slice(0,8000); } PK.aboutOf=aboutOf;
 function validateDef(d){
   const need=k=>{ if(!d||d[k]===undefined) throw new Error(PK.pkt('m.contract_veld_ontbreekt',k)); };
   ['id','name','version','kind','ports','create'].forEach(need);

@@ -36,6 +36,14 @@ function close(focusBack){ const m=MENU; if(!m) return; MENU=null;
   const r=m._id&&PK.Host.devices.get(m._id); if(r&&r.skEl&&r.pbarEl) r.pbarEl.appendChild(r.skEl);   // de skinkeuze gaat terug naar de kaart
   if(m._btn){ m._btn.setAttribute('aria-expanded','false'); if(focusBack) m._btn.focus(); }
   m.remove(); }
+// 'Over {apparaat}': de uitleg van het apparaat (`about` in de definitie, contract v1.33) in een venstertje; alinea's gescheiden door een lege regel
+function about(def){ const t=PK.aboutOf(def); if(!t) return; document.querySelectorAll('.pkmodal.aboutdlg').forEach(x=>x.remove());
+  const m=document.createElement('div'); m.className='pkmodal aboutdlg'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true');
+  const box=document.createElement('div'); box.className='box'; const h=document.createElement('h3'); h.textContent=PK.pkt('m.dm_over',def.name); box.appendChild(h);
+  const body=document.createElement('div'); body.className='aboutbody'; t.split(/\n\s*\n/).forEach(p=>{ const e=document.createElement('p'); e.textContent=p.trim(); body.appendChild(e); }); box.appendChild(body);
+  const row=document.createElement('div'); row.className='wsrow'; const b=document.createElement('button'); b.type='button'; b.className='small'; b.textContent=PK.pkt('m.sluiten_knop'); row.appendChild(b); box.appendChild(row); m.appendChild(box);
+  const done=()=>m.remove(); b.onclick=done; m.addEventListener('click',e=>{ if(e.target===m) done(); }); m.addEventListener('keydown',e=>{ e.stopPropagation(); if(e.key==='Escape') done(); });
+  document.body.appendChild(m); b.focus(); } PK.deviceAbout=about;
 // id: het apparaat waarvan het icoon is aangeklikt (null = lege vloer); anchor: element of punt {left,top,right,bottom}
 async function open(id,anchor,btn,floorAt){
   const was=MENU&&MENU._btn===btn&&MENU._id===id&&btn; close(false); if(was) return;
@@ -44,6 +52,7 @@ async function open(id,anchor,btn,floorAt){
   const item=(txt,hint,fn,dis,title)=>{ const b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem'); const t=document.createElement('span'); t.textContent=txt; b.appendChild(t);
     if(hint){ const k=document.createElement('kbd'); k.textContent=hint; b.appendChild(k); } if(dis){ b.disabled=true; } if(title) b.title=title; b.onclick=e=>{ e.stopPropagation(); close(false); fn(); }; m.appendChild(b); return b; };
   if(r){ const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=r.def.name; m.appendChild(ttl);
+    if(PK.aboutOf(r.def)) item(PK.pkt('m.dm_over',r.def.name),'',()=>about(r.def));
     item(PK.pkt('m.dm_kopieer'),r.inst&&typeof r.inst.clipInfo==='function'?'⇧Ctrl C':'Ctrl C',()=>{ PK.select(id); copyDevice(id); }); }
   item(PK.pkt('m.dm_plak'),'Ctrl V',()=>{ pasteDevice(floorAt||null); },!mem,mem?PK.pkt('m.dm_plak_titel',mem.name):PK.pkt('m.dm_niets_gekopieerd'));
   if(!r&&floorAt&&PK.secCreate){ item(PK.pkt('m.sc_maken'),'',()=>PK.secCreate(floorAt)); item(PK.pkt('m.jp_maken'),'',()=>PK.jumpCreate(floorAt)); }

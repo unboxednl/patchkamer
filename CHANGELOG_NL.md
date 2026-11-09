@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.19.0 (2026-11-09)
+
+### Toegevoegd
+- **Poorten in de titelbalk en een menu-optie Over {apparaat} (contract v1.33, stap 1).** De poorten van een apparaat staan nu als stipjes in de titelbalk (tussen naam en versiekeuze) in plaats van in een eigen rij: elk apparaat wordt zo ongeveer 40 px lager. Dit geldt niet voor smalle apparaten (breedte tot en met 340 px), de Mixer, apparaten die hun poorten zelf tekenen en apparaten met meer dan acht poorten; een skin met een eigen poortenmodus gaat voor. Het menu achter het icoon op de kaartbalk heeft **Over {naam}**, met de uitleg uit het nieuwe, optionele veld `about` van het apparaat (een tekst of een tekst per taal). Het contract (NL en EN, §12g) en de validator kennen `about` en zeggen dat een apparaat zijn eigen naam niet meer in zijn UI herhaalt; de testset heeft er zes gevallen bij (476). De apparaten zelf zijn nog niet aangepast: dat volgt in de volgende stappen (dubbele titels eruit, uitleg naar `about`).
+
 ## 0.18.0 (2026-11-09)
 
 ### Toegevoegd

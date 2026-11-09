@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.32 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.33 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -26,7 +26,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.15 | Regelaars herkenbaar voor skins: `id`, `role` en `group` op `host.ui.knob` (in de `opties`) en `host.ui.select` (nieuw 6e argument), de attributen `data-pk-id` / `data-pk-role` / `data-pk-group`, `host.ui.adopt` voor eigen elementen en `host.ui.list` voor het register; de validator meldt een `let op` bij dubbele of ontbrekende id's en kent `--controls` (§12d). |
 | v1.16 | Dekking van `params()`: elke continue regelaar hoort in `params()` (`modExclude` voor bewust uitgesloten, `on`/`drift` voor wat ongevraagd bewegen vals maakt, §8); de validator geeft een `let op` bij een regelaar die niet in `params()` staat, bij een apparaat met regelaars maar zonder `params()` en bij een param-id zonder regelaar, en `--controls` toont de kolom `in params()` |
 | v1.17 | Klembord: patronen en clips kopiëren en plakken tussen apparaten. Optioneel `clipInfo()`, `getClip()`, `setClip(clip)` (alle drie of geen) en het uitwisselformaat `patchkamer-clip` (JSON, tijd in tikken); de host zet de knoppen Kopieer en Plak in de kaartbalk en vertaalt tussen apparaten; de validator controleert de drie methoden en kent `--clip` (§13d) |
-| v1.18 | Meters: `host.ui.meter(parent, label, opts)` laat de host het niveau tekenen (balk, ledladder of ronde VU-meter met wijzer; lengte en breedte instelbaar door een skin), uit een of twee `AnalyserNode`s (`source`) of via `set(level)`; een meter staat in het register met rol `meter`; een apparaat zonder `host.ui.meter` op een oude host valt terug op zijn eigen tekening; het attribuut `data-pk-suffix` (tekst na het label bij MIDI-koppelen); de validator kent `host.ui.meter` en toont meters in `--controls` (§12e) |
+| v1.18 | Meters: `host.ui.meter(parent, label, opts)` laat de host het niveau tekenen (balk, ledladder of ronde VU-meter met wijzer; lengte en breedte instelbaar door een skin), uit een of twee `AnalyserNode`s (`source`) of via `set(level)`; een meter staat in het register met rol `meter`; een apparaat zonder `host.ui.meter` op een oude host valt terug op zijn eigen tekening; het attribuut `data-pk-suffix` (tekst na het label bij MIDI-koppelen); de validator kent `host.ui.meter` en toont meters in `--controls` (§12g) |
 | v1.19 | Tags voor tunes en presets: `tags` op een tune, map of pack (paden zoals `instrument/guitar/acoustic` en `style/hiphop`); de host toont ze als boom met inspringen (Tunes en Presets, Per instrument en Per stijl). Alleen de packs veranderen, apparaten niet (§13c) |
 | v1.20 | Samples: samplepacks (`*.patchkamer-samples.json`, geluid als base64) met een eigen tab in de bibliotheek, en voor apparaten die audio laden de optionele methode `loadAudio(files, info)` (§13e) |
 | v1.21 | Instellingen opnemen en afspelen: `host.watchParams`, `host.setParam`, `host.lockParams` en `host.paramsOf` laten een sequencer de regelaars van een ander apparaat volgen (ook wat een modulator doet), absoluut zetten en tegen modulatie vergrendelen (§13f) |
@@ -41,6 +41,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.30 | Bestanden van internet: `host.fetchFile(this, url, opts)` haalt voor een apparaat één https-bestand op (`as`, `maxBytes`, `signal`, `onProgress`), alleen na een klik van de gebruiker, zonder inloggegevens en zonder `Referer`, met een grens aan de grootte en foutcodes `url`, `aborted`, `network`, `http`, `size`, `response` (§13i). Optioneel; een oude host heeft de functie niet. De validator kent de functie en geeft een fout bij een aanroep zonder klik. |
 | v1.31 | Subcategorieën in de bibliotheekindeling: een categorie in `patchkamer-bibliotheek.json` mag een optioneel veld `parent` hebben (de `key` van een andere categorie), zodat een categorie onderliggende subcategorieën kan hebben (§16). Een apparaat wordt aan een subcategorie toegewezen met dezelfde `assign`; het `category`-veld van een apparaat verandert niet |
 | v1.32 | Velocity bij pads: `onpress(e, velocity)` en `onchange(on, velocity)` van `host.ui.pad` krijgen een tweede argument, een getal van 1 tot 127 (100 tenzij de gebruiker of een skin een pad met velocity kiest: dan de aanraakdruk of de plek van de klik). Een apparaat dat het argument negeert, klinkt gelijk (§12f) |
+| v1.33 | Uitleg bij het apparaat en geen eigen titel meer: de optionele definitieregel `about` (een tekst, of een object per taal `{ nl, en }`; alinea's gescheiden door een lege regel) staat in het menu van de kaart als **Over {naam}**. De host toont de poorten van breedere apparaten als stipjes in de titelbalk. Een apparaat noemt zijn eigen naam niet meer in zijn UI en zet zijn uitleg in `about` (§12g). Bestaande apparaten blijven werken. |
 
 ---
 
@@ -89,6 +90,7 @@ export default {
   kind: 'effect',                // 'instrument' | 'effect' | 'mixer' | 'output' | 'utility' | 'modulator'
   category: 'effect',            // optioneel: 'synth' | 'groove' | 'sequencer' | 'mod' | 'effect' | 'mix' | 'tool' | 'mastering'
   status: 'active',              // optioneel (v1.28): 'active' (standaard) of 'retired': een teruggetrokken apparaat staat niet in de bibliotheek (tenzij de gebruiker ze toont) maar laadt nog in oude werkruimtes en songs
+  about: { nl: 'Wat dit apparaat doet en kan.', en: 'What this device does and can do.' },   // optioneel (v1.33): uitleg in het menu van de kaart (Over {naam}); zie §12g
   ui: { width: 360, minWidth: 260, jacks: false },   // optioneel, zie §12
   i18n: { en: { name: 'Readable name', ports: { out: 'Out' } } },   // optioneel (v1.11): namen per taal, zie §12c
   ports: {
@@ -741,6 +743,13 @@ Een host zonder v1.22 heeft geen `host.ui.pad` of `host.ui.display`, en negeert 
 
 ---
 
+## 12g. Uitleg bij het apparaat en de titel (v1.33)
+
+- De kaart heeft een titelbalk met de naam van het apparaat. **Zet die naam niet nog eens in je UI**: geen kop, geen `h1` met de apparaatnaam, geen kicker die het herhaalt.
+- Uitleg over wat het apparaat doet en kan hoort **niet** meer in de UI, maar in `about` op de definitie: een tekst, of een object per taal (`{ nl: '…', en: '…' }`; de host kiest op de taal van de gebruiker, met terugval op Engels). Alinea's scheid je met een lege regel; er is geen opmaak, alleen tekst (hoogstens 8000 tekens). De gebruiker opent hem via het menu achter het icoon op de kaartbalk: **Over {naam}**.
+- Korte hulp bij één regelaar (een `title` of een label) en meldingen die bij de toestand horen (een fout, "geen bron gekozen") blijven in de UI.
+- De host zet de poorten van een apparaat als stipjes in de titelbalk (tussen naam en versiekeuze), tenzij het apparaat smal is (`ui.width` tot en met 340), de mixer is, `ui.jacks` gebruikt of meer dan acht poorten heeft: dan staan ze in een rij onder de balk. Reken er dus niet op dat de poortenrij ruimte inneemt.
+
 ## 13. State, versies en presets (v1.6)
 
 **State.** `getState()` geeft alles terug wat nodig is om het geluid en het gedrag exact te herstellen: knoppen, patronen en keuzes. Het resultaat moet gewone JSON zijn, zonder AudioNodes.
@@ -812,7 +821,7 @@ Voor controllers (zoals een MIDI-apparaat dat pads aan apparaten koppelt). Gewon
 | `host.ui.adopt(el, { id, role, group, label })` | v1.15 | Eigen element aanmelden als regelaar; geeft `el` terug (§12d) |
 | `host.ui.list(this)` | v1.15 | Het register: `[{ id, role, group, label, type, min, max, face }]` (§12d) |
 | `data-pk-id`, `data-pk-role`, `data-pk-group` | v1.15 | Dezelfde gegevens als attributen op eigen elementen (§12d) |
-| `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12e) |
+| `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12g) |
 | `data-pk-suffix` | v1.18 | Tekst (hoogstens 16 tekens) die de host bij het koppelen aan MIDI na het label zet: ` - suffix` (§12d) |
 | `host.ui.pad(parent, label, opts)` | v1.22 | Een pad laten tekenen door de host (momentary of toggle, `flash()`, kleur); geeft `{ el, set, flash, id, destroy }` (§12f) |
 | `host.ui.display(parent, label, opts)` | v1.22 | Een keuze die een skin als schermpje kan tonen; het model is een verborgen `<select>`; geeft `{ el, set, get, value, items, id, destroy }` (§12f) |
@@ -1186,7 +1195,7 @@ Wat de host niet doet: hij garandeert niet dat een server bereikbaar is of dat d
 | `host.noteNamesChanged(this)` | v1.14 | Je `noteNames()` is veranderd; andere apparaten horen het via `onPeers` (§13b) |
 | `clipInfo()`, `getClip()`, `setClip(clip)` | v1.17 | Patronen en clips kopiëren en plakken, optioneel en alle drie samen; formaat `patchkamer-clip` (§13d) |
 | `getClip({ kind: "multi" })`, `clipInfo().tracks` | v1.24 | Een scène of patroon met meerdere sporen als één clip (`kind: "multi"`), optioneel (§13d) |
-| `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12e) |
+| `host.ui.meter(parent, label, opts)` | v1.18 | Een meter laten tekenen door de host (balk, ledladder of rond VU, door een skin te kiezen); geeft `{ el, set, id, destroy }` (§12g) |
 | `data-pk-suffix` | v1.18 | Tekst (hoogstens 16 tekens) die de host bij het koppelen aan MIDI na het label zet: ` - suffix` (§12d) |
 | `host.ui.pad(parent, label, opts)` | v1.22 | Een pad laten tekenen door de host (momentary of toggle, `flash()`, kleur); geeft `{ el, set, flash, id, destroy }` (§12f) |
 | `host.ui.display(parent, label, opts)` | v1.22 | Een keuze die een skin als schermpje kan tonen; het model is een verborgen `<select>`; geeft `{ el, set, get, value, items, id, destroy }` (§12f) |
@@ -1306,7 +1315,7 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 18. Regelaars (v1.15, aanbevolen): elke `host.ui.knob`/`select` en elke eigen schuif heeft een `id` (= state-/parametersleutel, nooit het label), een `role` en een `group`; `node validate-instrument.mjs bestand.patchkamer-device.js --controls` toont de tabel zonder `let op` (§12d).
 19. Dekking (v1.16): `params()` bevat elke continue regelaar met `id` = state-sleutel, behalve wat in `modExclude` staat (testnoot, basisnoot, lengte, stemmen, stapdata); keuzes en vinkjes horen er niet in; parameters die niet ongevraagd mogen bewegen (toonhoogte, master, gate, octaaf, tijden) hebben `on: false` (§8). `--controls` toont in de kolom `in params()` geen `nee`.
 20. Klembord (v1.17, optioneel; `multi` v1.24): `clipInfo`/`getClip`/`setClip` samen; wie meerdere sporen levert, meldt `multi` en `tracks` en geeft `getClip({ kind: "multi" })`; `getClip()` geeft een geldige `patchkamer-clip` of `null`; `setClip` klemt alles zelf, geeft `{ ok, reason }`, zet niets half en stuurt geen gebeurtenissen; `setClip(getClip())` laat `getState()` gelijk (§13d).
-21. Meters (v1.18, optioneel): wie een niveau toont, gebruikt `host.ui.meter` (met `source` voor een bestaande `AnalyserNode`, anders met `set()`), met `id` en `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` als terugval op de eigen tekening, geen eigen demping, `destroy()` van de meter in `destroy()` van het apparaat, en een layout die de meter groter mag maken (§12e).
+21. Meters (v1.18, optioneel): wie een niveau toont, gebruikt `host.ui.meter` (met `source` voor een bestaande `AnalyserNode`, anders met `set()`), met `id` en `group`, `if (!host.ui || typeof host.ui.meter !== 'function')` als terugval op de eigen tekening, geen eigen demping, `destroy()` van de meter in `destroy()` van het apparaat, en een layout die de meter groter mag maken (§12g).
 22. Pads en schermpje (v1.22, optioneel): wie een drukknop of een keuze toont, gebruikt `host.ui.pad`, `host.ui.display` of `host.ui.steps` met `{ id, group, role, color }` (kleur altijd `#rrggbb`), met `if (!host.ui || typeof host.ui.pad !== 'function')` als terugval op de eigen knop; `set()` en `flash()` roepen geen handlers aan; het model van een keuze blijft het `<select>` en `setState` zet de waarde; `destroy()` van pad en keuze in `destroy()` van het apparaat (§12f).
 23. Stems (v1.23, optioneel): `split` alleen op een klik; `typeof host.stems === 'function'` gecontroleerd; zichtbaar gezegd dat het geluid naar een dienst op internet gaat, geld kost en rechten vraagt; annuleren via `signal`; tekst per foutcode in `host.lang`; stems en buffers niet in `getState()`/`getPreset()`; na het splitsen `host.setPorts` met de nieuwe AudioNodes al in `outputs` (§13g).
 24. Opnamelampje (v1.25, optioneel): `host.recording(this, true/false)` bij begin en einde van een opname en in `destroy`; `typeof host.recording === 'function'` gecontroleerd.
@@ -1342,7 +1351,7 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 | Het label als `id` van een regelaar | Het label is vertaald en verandert: een skin raakt de regelaar niet meer; de validator meldt een `let op` als het per taal verschilt | `id` = de sleutel in `getState()`/`params()` (§12d) |
 | Een paar regelaars met een id, de rest zonder | Een skin kan alleen de aangemelde aanwijzen; de rest blijft op de standaard | Geef alle knoppen, keuzes en schuiven een id |
 | `host.ui.adopt` op een `div` of een tekening | Geen model: de host kan er geen ander gezicht op leggen | Alleen op `input` (range/checkbox), `select` of `button` |
-| Een eigen meter tekenen terwijl `host.ui.meter` er is | Een skin kan het gezicht en de maat niet kiezen; de meter blijft een balk | `host.ui.meter`, met je oude tekening als terugval voor een oude host (§12e) |
+| Een eigen meter tekenen terwijl `host.ui.meter` er is | Een skin kan het gezicht en de maat niet kiezen; de meter blijft een balk | `host.ui.meter`, met je oude tekening als terugval voor een oude host (§12g) |
 | `host.ui.meter` zonder te controleren of hij bestaat | Het apparaat gooit op een oude host | `if (!host.ui || typeof host.ui.meter !== 'function')` en teken dan zelf |
 | Het niveau zelf dempen vóór `set()` | Het signaal vertraagt twee keer; een skin met een andere ballistiek helpt niet meer | Geef het ruwe niveau door, de host doet de val |
 | `source` laten vallen en toch een eigen analyser uitlezen in `set()` | Dubbel werk, ook buiten beeld | Geef de `AnalyserNode` als `source`; de host leest alleen als de kaart te zien is |

@@ -33,7 +33,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   ic.addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; e.stopPropagation(); setMini(id,false); });
   const pb=document.createElement('div'); pb.className='pbar';
   el.append(bar,pb,body,ic); PK.floor.appendChild(el);
-  const rec={def,inst,el,x:x||40,y:y||40,verSel:ver,w:null,h:null,mini:false,focus:0,modBar:mb,focusBtn:bf,iconEl:ic,ports:normPorts(def.ports,inst),portsEl:ports,pbarEl:pb,preset:null,presetSnap:null}; PK.Host.devices.set(id,rec); fillVersionSelect(ver,def); renderPorts(id);
+  const rec={def,inst,el,x:x||40,y:y||40,verSel:ver,w:null,h:null,mini:false,focus:0,modBar:mb,focusBtn:bf,iconEl:ic,ports:normPorts(def.ports,inst),portsEl:ports,pbarEl:pb,preset:null,presetSnap:null}; PK.Host.devices.set(id,rec); fillVersionSelect(ver,def); renderPorts(id); portsDefault(rec);
   el.addEventListener('scroll',()=>PK.drawCables(),true);   // ports inside a scrolling UI move: keep the cables attached
   ['e','s','se'].forEach(dir=>{ const hd=document.createElement('div'); hd.className='rz '+dir; hd.title=PK.pkt('m.sleep_om_de_grootte_te'); el.appendChild(hd);
     let st=null;
@@ -135,6 +135,11 @@ function setSize(id,w,h){
 } PK.setSize=setSize;
 function showDim(r){ const d=r.el.querySelector('.bar .dim'); if(d) d.textContent=`${r.el.offsetWidth} × ${r.el.offsetHeight}`; }
 function pkApplyI18n(d){ const o=d&&d.i18n&&d.i18n[PK.PK_LANG]; if(!o||typeof o!=='object') return d; if(typeof o.name==='string'&&o.name) d.name=o.name; if(o.ports&&typeof o.ports==='object'&&d.ports) for(const k of ['audioIn','audioOut','eventIn','eventOut','modIn','modOut','multiIn','multiOut','masteringIn','masteringOut','multiEventIn','multiEventOut']) if(Array.isArray(d.ports[k])) d.ports[k].forEach(p=>{ if(p&&typeof o.ports[p.id]==='string') p.name=o.ports[p.id]; }); return d; } PK.pkApplyI18n=pkApplyI18n;
+// standaard staan de poorten als stipjes in de titelbalk (zoals de poortenmodus 'bar' van een skin) en niet als eigen rij onder de balk: ruimtewinst.
+// Uitzonderingen: smalle apparaten (breedte tot BARMAX), de mixer, apparaten die hun poorten zelf tekenen (ui.jacks) en apparaten met meer dan MAXBAR poorten.
+const BARMAX=340, MAXBAR=8;
+function portsDefault(r){ if(!r||r.skPortsMode||!PK.skPortsOn) return; const d=r.def; if((d.ui&&d.ui.jacks)||PK.isMixerDef(d)||defWidth(d)<=BARMAX) return;
+  if(Object.values(r.ports).reduce((n,l)=>n+l.length,0)>MAXBAR) return; PK.skPortsOn(r,'bar'); } PK.portsDefault=portsDefault;
 function normPorts(P,inst){ P=P||{}; const L=k=>(Array.isArray(P[k])?P[k]:[]).map(x=>({id:String(x.id),name:x.name!=null?String(x.name):String(x.id)}));
   const r={audioIn:L('audioIn'),audioOut:L('audioOut'),eventIn:L('eventIn'),eventOut:L('eventOut'),modIn:L('modIn'),modOut:L('modOut'),multiIn:L('multiIn'),multiOut:L('multiOut'),masteringIn:L('masteringIn'),masteringOut:L('masteringOut'),multiEventIn:L('multiEventIn'),multiEventOut:L('multiEventOut')};
   if(inst&&typeof inst.params==='function'&&!r.modIn.some(x=>x.id==='mod')) r.modIn.push({id:'mod',name:'Mod'});   // contract v1.3

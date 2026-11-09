@@ -21,3 +21,4 @@
 .pkmodal{position:fixed;inset:0;z-index:90;background:var(--scrim);display:grid;place-items:center;padding:16px}
 .pkmodal .box{width:min(480px,100%);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:12px;font-size:13px;line-height:1.5;box-shadow:0 18px 50px var(--shadow)}
 .pkmodal .box .wsrow{justify-content:flex-end}
+.pkmodal.aboutdlg .box{width:min(560px,100%);max-height:86dvh;overflow:auto}.pkmodal.aboutdlg h3{margin:0}.pkmodal.aboutdlg .aboutbody{display:grid;gap:10px}.pkmodal.aboutdlg .aboutbody p{margin:0;white-space:pre-line}

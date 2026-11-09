@@ -37,6 +37,15 @@ const ok = (name, src, extra = {}) => cases.push([name, src, extra]);
 const warns = (name, src, w, extra = {}) => cases.push([name, src, { ...extra, warn: w }]);
 const errs = (name, src, e, extra = {}) => cases.push([name, src, { ...extra, err: e }]);
 
+// ---- about (v1.33)
+const withAbout = a => dev(`el.appendChild(document.createElement('div'));`).replace("kind: 'effect',", "kind: 'effect', about: " + a + ",");
+ok('about als tekst (v1.33)', withAbout("'Wat dit doet.\\n\\nTweede alinea.'"));
+ok('about per taal (v1.33)', withAbout("{ nl: 'Uitleg', en: 'Explanation' }"));
+errs('about is een getal', withAbout('5'), [['about moet een tekst', 'about must be a text']]);
+errs('about is een leeg object', withAbout('{}'), [['about moet een tekst', 'about must be a text']]);
+errs('about heeft een lege taaltekst', withAbout("{ nl: 'x', en: '' }"), [['about moet een tekst', 'about must be a text']]);
+errs('about is te lang', withAbout("'" + 'a'.repeat(8001) + "'"), [['about moet een tekst', 'about must be a text']]);
+
 // ---- zonder waarschuwing
 ok('geen host.ui, geen id', dev(`el.appendChild(document.createElement('div'));`));
 ok('knop zonder opties (oud gedrag)', dev(`ui.k.push(host.ui.knob(el, T.a, [0, 1, 0.01], 0.5, v => v, v => {}));`));

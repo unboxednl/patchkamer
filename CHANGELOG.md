@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.19.0 (2026-11-09)
+
+### Added
+- **Ports in the title bar and a menu item About {device} (contract v1.33, step 1).** A device's ports now sit as dots in the title bar (between the name and the version select) instead of in a row of their own, which makes each device about 40 px shorter. This does not apply to narrow devices (up to and including 340 px wide), the Mixer, devices that draw their own ports and devices with more than eight ports; a skin with its own port mode takes precedence. The menu behind the icon on the card bar has **About {name}**, with the explanation from the new, optional `about` field of the device (a text or a text per language). The contract (NL and EN, §12g) and the validator know `about` and say that a device no longer repeats its own name in its UI; the test set gained six cases (476). The devices themselves are not changed yet: that follows in the next steps (duplicate titles out, explanations into `about`).
+
 ## 0.18.0 (2026-11-09)
 
 ### Added

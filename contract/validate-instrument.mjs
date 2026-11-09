@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.32
+// validate-instrument.mjs — Patchkamer contract v1.33
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -19,6 +19,7 @@
 // v1.16 (§8): dekking van params(): elke continue regelaar (type=range, host.ui.knob, host.ui.adopt) hoort in params() te staan, met id = state-sleutel,
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
+// v1.33: optioneel `about` (tekst of object per taal, hoogstens 8000 tekens): anders een fout.
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
 // v1.25: opnamelampje: host.recording(inst, aan) bestaat op de nep-host en doet niets
 // v1.24: klembord, scènes met meerdere sporen: clipInfo().copy/paste mogen 'multi' bevatten, clipInfo().tracks beschrijft de doelsporen, getClip({ kind: 'multi' }) geeft kind 'multi' met tracks (1 tot 64, elk { slot, kind, clip }), setClip(multi) rondreis en rommel-multi's.
@@ -269,6 +270,7 @@ const V = {
     "v.ports_moet_een_lijst_zijn": "ports.{0} moet een lijst zijn",
     "v.ui_minwidth_moet_tussen_200": "ui.minWidth moet tussen 200 en ui.width liggen",
     "v.ui_width_moet_tussen_200": "ui.width moet tussen 200 en 6000 liggen",
+    "v.about_moet_tekst_zijn": "about moet een tekst zijn (hoogstens 8000 tekens) of een object per taal met zulke teksten",
     "v.version_moet_semver_zijn_x": "version moet semver zijn (x.y.z)",
     "v.id_moet_reverse_dns_zijn": "id moet reverse-DNS zijn, bv. nl.naam.instrument",
     "v.veld_ontbreekt": "veld \"{0}\" ontbreekt",
@@ -516,6 +518,7 @@ const V = {
     "v.ports_moet_een_lijst_zijn": "ports.{0} must be a list",
     "v.ui_minwidth_moet_tussen_200": "ui.minWidth must be between 200 and ui.width",
     "v.ui_width_moet_tussen_200": "ui.width must be between 200 and 6000",
+    "v.about_moet_tekst_zijn": "about must be a text (at most 8000 characters) or an object per language with such texts",
     "v.version_moet_semver_zijn_x": "version must be semver (x.y.z)",
     "v.id_moet_reverse_dns_zijn": "id must be reverse-DNS, e.g. nl.name.instrument",
     "v.veld_ontbreekt": "field \"{0}\" is missing",
@@ -781,6 +784,10 @@ if (!/^[a-z0-9]+(\.[a-z0-9-]+)+$/.test(d.id)) fail(vt('v.id_moet_reverse_dns_zij
 if (!/^\d+\.\d+\.\d+$/.test(d.version)) fail(vt('v.version_moet_semver_zijn_x'));
 if (!['instrument', 'effect', 'mixer', 'output', 'utility', 'modulator'].includes(d.kind)) fail('onbekende kind');
 if (d.ui !== undefined && (typeof d.ui !== 'object' || (d.ui.width !== undefined && !(d.ui.width >= 200 && d.ui.width <= 6000)))) fail(vt('v.ui_width_moet_tussen_200'));
+if (d.about !== undefined) {   // v1.33
+  const ok = x => typeof x === 'string' && x.trim().length > 0 && x.length <= 8000;
+  if (!(ok(d.about) || (d.about && typeof d.about === 'object' && !Array.isArray(d.about) && Object.keys(d.about).length && Object.values(d.about).every(ok)))) fail(vt('v.about_moet_tekst_zijn'));
+}
 if (d.status !== undefined && !['active', 'retired'].includes(d.status)) fail("status moet 'active' of 'retired' zijn");   // v1.28
 if (d.category !== undefined && !['synth', 'groove', 'sequencer', 'mod', 'effect', 'mix', 'tool', 'mastering'].includes(d.category)) fail('onbekende category (synth, groove, sequencer, mod, effect, mix, tool of mastering)');
 if (d.ui && d.ui.minWidth !== undefined && !(d.ui.minWidth >= 200 && d.ui.minWidth <= (d.ui.width || 300))) fail(vt('v.ui_minwidth_moet_tussen_200'));

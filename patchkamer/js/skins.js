@@ -232,10 +232,11 @@ const skUiEl=r=>r.el.querySelector(':scope > .body > .ui');
 function skDesignStrip(r){ const d=r.skDes; if(!d) return; if(PK.skPortsOff) PK.skPortsOff(r); if(PK.hapticsDetach) PK.hapticsDetach(r);
   d.card.forEach(p=>r.el.style.removeProperty(p)); const ui=skUiEl(r); if(ui){ d.ui.forEach(p=>ui.style.removeProperty(p)); if(ui.hasAttribute('style')&&!ui.getAttribute('style').trim()) ui.removeAttribute('style'); }
   const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec, hadP=!!r.skPad, hadD=!!r.skDsp, hadL=!!r.skLay; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skPad=null; r.skDsp=null; r.skLay=null; r.skHap=null; if(hadL&&PK.pnlOff) PK.pnlOff(r); if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); if(hadP) PK.padApply(r); if(hadD) PK.displayApply(r); }
-function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) return; const rec={card:[],ui:[]}; r.skDes=rec, ui=skUiEl(r);
+function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length){ if(PK.portsDefault) PK.portsDefault(r); return; } const rec={card:[],ui:[]}; r.skDes=rec, ui=skUiEl(r);
   const c=d.colors; if(c&&c.scheme==='custom'&&c.custom&&Object.keys(c.custom).length){ const v=PK.skColourVars(c.custom);
     for(const p in v.card){ r.el.style.setProperty(p,v.card[p]); rec.card.push(p); } if(ui) for(const p in v.ui){ ui.style.setProperty(p,v.ui[p]); rec.ui.push(p); } }
   const mode=d.ports&&d.ports.mode; if(mode&&mode!=='default'){ if(r.def.ui&&r.def.ui.jacks){ if(!r.skJackWarn){ r.skJackWarn=true; PK.status(PK.pkt('m.sk_jacks',r.def.name),true); } } else if(PK.skPortsOn) PK.skPortsOn(r,mode); }
+  if(PK.portsDefault) PK.portsDefault(r);   // zonder eigen poortenmodus van de skin: de standaard (poorten in de titelbalk)
   { const rules=PK.regRules(d); r.skCtl=rules.length?rules:null; }   // knobs.style/size = korte vorm (role:param), design.controls erna
   const h=d.haptics; if(h&&(h.click||h.turn||h.slide)){ const o={click:h.click||'off',turn:h.turn||'off',slide:h.slide||'off'}; if(o.click!=='off'||o.turn!=='off'||o.slide!=='off'){ r.skHap=o; if(PK.hapticsAttach) PK.hapticsAttach(r); } }
   { const mr=PK.meterRules(d); r.skMet=mr.length?mr:null; }   // design.meters (0.4): gezicht, richting, maat, ballistiek van de meters
@@ -245,7 +246,7 @@ function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length) re
   { const ly=d.layout; r.skLay=ly&&ly.panels&&ly.panels.length?ly:null; }   // design.layout (0.7): regelaars in panelen en volgorde; eerst verplaatsen, dan pas secties, pads en schermpje (die zoeken in de nieuwe indeling)
   if(r.skLay) PK.pnlApply(r);
   if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); if(r.skPad) PK.padApply(r); if(r.skDsp) PK.displayApply(r); }
-function skClear(r){ skStrip(r); skDesignStrip(r); r.skCur=null; r.skSkin=null; r.el.removeAttribute('data-pk-skin'); r.el.removeAttribute('data-pk-ap'); }
+function skClear(r){ skStrip(r); skDesignStrip(r); if(PK.portsDefault) PK.portsDefault(r); r.skCur=null; r.skSkin=null; r.el.removeAttribute('data-pk-skin'); r.el.removeAttribute('data-pk-ap'); }
 function skScreen(){ const w=window.innerWidth; return w<700?'phone':w<1100?'compact':'wide'; } PK.skScreen=skScreen;
 // automatisch: de eerste verschijningsvorm waarvan alle voorwaarden kloppen; anders `default`; anders de eerste. Invoer = kaartbreedte in vloercoördinaten (zonder zoom) en schermklasse; beide hangen niet af van wat de skin tekent.
 function skAuto(sk,w,cls){ const hit=sk.appearances.find(a=>a.when&&(a.when.minWidth==null||w>=a.when.minWidth)&&(a.when.maxWidth==null||w<=a.when.maxWidth)&&(!a.when.screens||a.when.screens.includes(cls)));
