@@ -4,6 +4,18 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.28.0 (2026-11-09)
+
+### Added
+- **The skin editor shows and edits the whole card (skins contract 0.9).** Until now the editor only knew what a device registers with the host (controls, small screen); the blocks, headings, buttons and small screens the device draws itself were invisible to the editor. Now the editor reads the real card:
+  - **Card structure:** a new tree at every appearance with all elements of the preview card (for all devices, also those that build their own screen or have no shadow root), at the top and open. The controls and panels are below it.
+  - **Clicking in the preview:** a click on an element in the preview (or in the original) picks it in the tree and shows its properties; with **Alt** you also pick an element under a control.
+  - **Styling:** per element background, text colour, border (colour, width, style), corner radius, inner space, font size, font weight, letter spacing, capitals, opacity and shadow (`design.elements`). Hiding, moving and enlarging are deliberately not possible.
+  - **Adding:** **+ Label**, **+ Block** and **+ Line** put a text (Dutch and English), frame or line before, after or inside an element (`design.decor`), with its own colour, height and alignment, an order and deleting.
+  - Works in an open shadow root and in the area of a device without a shadow root, and stays when the device rebuilds its screen (measured with Delay, Filter and Clip Arranger).
+  - **Skins contract 0.9:** new `design.elements` (at most 128 rules with a key and safe properties) and `design.decor` (at most 32 parts); the host turns them into safe CSS and never allows free CSS or script. Validator, contract (NL and EN) and test cases updated (1192 of 1192 green); skins of 0.1 up to and including 0.8 work unchanged. Manual (NL and EN) and notes updated.
+  - The mini designer in the Skins panel does not know the new fields yet (it is for the simple choices). Not listened to; touch operation of the new tree and selection not tested.
+
 ## 0.27.3 (2026-11-09)
 
 ### Fixed

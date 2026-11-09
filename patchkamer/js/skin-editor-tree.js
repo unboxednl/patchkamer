@@ -8,10 +8,10 @@
 const M=PK.skm, F=PK.ske_f, el=F.el;
 let E=null, nodeMap=new Map(), cap=80, roots=[];
 const pkt=(...a)=>PK.pkt(...a);
-const keyOf=s=>({skin:()=>'skin',aps:()=>'aps',ap:()=>'ap:'+s.ap,colors:()=>'colors:'+s.ap,ports:()=>'ports:'+s.ap,haptics:()=>'haptics:'+s.ap,ctls:()=>'ctls:'+s.ap,rest:()=>'rest:'+s.ap,panel:()=>'pn:'+s.ap+':'+s.pid,group:()=>'g:'+s.ap+':'+(s.g||''),display:()=>'d:'+s.ap+':'+s.kind,ctl:()=>'c:'+s.ap+':'+s.id}[s.k]||(()=>'skin'))();
+const keyOf=s=>({skin:()=>'skin',aps:()=>'aps',ap:()=>'ap:'+s.ap,colors:()=>'colors:'+s.ap,ports:()=>'ports:'+s.ap,haptics:()=>'haptics:'+s.ap,ctls:()=>'ctls:'+s.ap,rest:()=>'rest:'+s.ap,panel:()=>'pn:'+s.ap+':'+s.pid,group:()=>'g:'+s.ap+':'+(s.g||''),display:()=>'d:'+s.ap+':'+s.kind,ctl:()=>'c:'+s.ap+':'+s.id,domall:()=>'dom:'+s.ap,dom:()=>'e:'+s.ap+':'+(s.ri||0)+':'+(s.key||''),decor:()=>'dc:'+s.ap+':'+s.id}[s.k]||(()=>'skin'))();
 const curAp=()=>E.sel.ap||(E.r?PK.ske_stage.workAp():'*');   // zonder keuze: de laag die het voorbeeld toont
-const defOpen=k=>{ const ap=curAp(); return k==='skin'||k==='aps'||k==='ap:'+ap||k==='ctls:'+ap; };
-const isOpen=n=>E.exp.has(n.key)?E.exp.get(n.key):(defOpen(n.key)||(n.leaves<=40&&n.key.split(':')[1]===curAp()));
+const defOpen=k=>{ const ap=curAp(); return k==='skin'||k==='aps'||k==='ap:'+ap||k==='dom:'+ap; };
+const isOpen=n=>E.exp.has(n.key)?E.exp.get(n.key):(n.dom?n.depth<2:(defOpen(n.key)||(n.leaves<=40&&n.key.split(':')[1]===curAp()&&n.key.split(':')[0]!=='ctls')));
 function leaf(ap,x,pi){ return {key:'c:'+ap+':'+x.id,label:PK.ske_forms.regLabel(x),sel:{k:'ctl',ap,id:x.id},drag:{t:'ctl',id:x.id,ap},pi,id:x.id,role:x.role}; }
 function ctlsNodes(ap){ const regs=E.regs(), lo=M.layoutOf(E.m,ap), A=M.assign(lo.panels,regs), kids=[];
   if(lo.panels.length){ lo.panels.forEach((P,pi)=>{ const ls=regs.filter(x=>{ const q=A.get(x.id); return q&&q.pi===pi; }).map(x=>leaf(ap,x,pi)); const t=typeof P.title==='string'?P.title:(P.title&&(P.title[PK.PK_LANG]||P.title.nl))||'';
@@ -20,8 +20,17 @@ function ctlsNodes(ap){ const regs=E.regs(), lo=M.layoutOf(E.m,ap), A=M.assign(l
   else { const gs=[...new Set(regs.map(x=>x.group||''))]; gs.forEach(g=>{ const ls=regs.filter(x=>(x.group||'')===g).map(x=>leaf(ap,x,undefined)); kids.push({key:'g:'+ap+':'+g,label:g?pkt('m.dz_r_groep_x',g):pkt('m.se_zonder_groep'),sel:g?{k:'group',ap,g}:{k:'ctls',ap},children:ls,leaves:ls.length,group:true}); }); }
   { const hd=E.r?PK.ske_stage.displays(E.r).filter(d=>d.kind!=='select'):[]; const seen=new Set(); hd.forEach(d=>{ if(seen.has(d.kind)) return; seen.add(d.kind); kids.push({key:'d:'+ap+':'+d.kind,label:pkt('m.se_dsp_kop',pkt('m.dz_d_t_'+d.kind)),sel:{k:'display',ap,kind:d.kind},leaves:0}); }); }
   return kids; }
+// ---- de opbouw van de kaart (skins 0.9): de elementen die de kaart echt tekent, uitgelezen uit de voorbeeldkaart, met het toegevoegde decor van deze laag ----
+function scanGet(){ if(!E.r) return null; try{ E.scan=PK.skScan(E.r); }catch(e){ E.scan={roots:[],count:0,truncated:false}; } return E.scan; }
+const tagName=n=>n.tag+(n.label?' · '+n.label:'');
+function domKids(ap){ const sc=scanGet(), kids=[]; if(!sc) return kids; let uid=0;
+  const dl=PK.ske_forms.decorList(ap,E); if(dl.length) kids.push({key:'dcs:'+ap,label:pkt('m.se_dc_toegevoegd_kop'),sel:{k:'domall',ap},leaves:dl.length,showcount:true,children:dl.map(x=>({key:'dc:'+ap+':'+x.id,label:PK.ske_forms.decorLabel(x),sel:{k:'decor',ap,id:x.id},leaves:0,dom:true,depth:9}))});
+  const conv=(n,depth)=>({key:'e:'+ap+':'+n.ri+':'+(n.key||('~'+(uid++))),label:tagName(n),sel:{k:'dom',ap,ri:n.ri,key:n.key},children:n.kids.map(c=>conv(c,depth+1)),leaves:0,dom:true,depth,kind:n.kind});
+  sc.roots.forEach(rt=>{ if(sc.roots.length>1) kids.push({key:'er:'+ap+':'+rt.ri,label:pkt('m.se_wortel',rt.ri+1),sel:{k:'domall',ap},children:rt.kids.map(c=>conv(c,1)),leaves:0,dom:true,depth:0}); else rt.kids.forEach(c=>kids.push(conv(c,0))); });
+  return kids; }
 function build(){ const m=E.m, aps=['*',...m.aps.map(a=>a.id)], name=ap=>ap==='*'?pkt('m.se_basis'):(m.aps.find(a=>a.id===ap)||{}).name;
   const apNodes=aps.map(ap=>{ const ch=[{key:'colors:'+ap,label:pkt('m.dz_kleuren'),sel:{k:'colors',ap}},{key:'ports:'+ap,label:pkt('m.dz_poorten'),sel:{k:'ports',ap}},{key:'haptics:'+ap,label:pkt('m.dz_haptiek'),sel:{k:'haptics',ap}}];
+    { const dk=ap===curAp()?domKids(ap):[]; ch.push({key:'dom:'+ap,label:pkt('m.se_opbouw'),sel:{k:'domall',ap},children:dk,leaves:E.scan?E.scan.count:0,showcount:true,dom:false}); }
     const kids=ctlsNodes(ap); ch.push({key:'ctls:'+ap,label:pkt('m.se_regelaars'),sel:{k:'ctls',ap},children:kids,leaves:kids.reduce((n,x)=>n+(x.leaves||0),0),newzone:true});
     return {key:'ap:'+ap,label:name(ap)+(ap===m.dflt?' ★':''),sel:{k:'ap',ap},children:ch,leaves:0}; });
   return [{key:'skin',label:(m.name||'—'),sel:{k:'skin'},children:[{key:'aps',label:pkt('m.se_vormen'),sel:{k:'aps'},children:apNodes,leaves:0}],leaves:0}]; }
@@ -35,8 +44,8 @@ function draw(o){ o=o||{}; const box=E.els.tree; const had=box.contains(document
     const row=el('div','se-trow'+(n.key===cur?' on':'')); row.dataset.key=n.key; row.tabIndex=(fk?n.key===fk:n.key===cur)?0:-1; li.setAttribute('aria-selected',String(n.key===cur)); row.style.paddingLeft=(6+(lvl-1)*14)+'px';
     const tg=el('span','se-tg',kids.length?(open?'▾':'▸'):''); tg.onclick=e=>{ e.stopPropagation(); E.exp.set(n.key,!open); draw(); }; row.appendChild(tg);
     if(n.drag){ const g=el('span','se-grip','⠿'); g.title=pkt('m.se_sleep'); g.setAttribute('aria-hidden','true'); g.onpointerdown=ev=>startTree(ev,n); row.appendChild(g); }
-    row.appendChild(el('span','se-lb',n.label)); if(n.leaves!=null&&(n.panel||n.group||n.rest||n.newzone)) row.appendChild(el('span','se-ct',String(n.leaves)));
-    row.onclick=()=>{ E.select(n.sel,{fromTree:true}); }; row.ondblclick=()=>{ if(n.panel) rename(); }; li.appendChild(row);
+    row.appendChild(el('span','se-lb',n.label)); if(n.leaves!=null&&(n.panel||n.group||n.rest||n.newzone||n.showcount)) row.appendChild(el('span','se-ct',String(n.leaves)));
+    row.onmouseenter=()=>PK.ske_stage.hoverNode(n); row.onmouseleave=()=>PK.ske_stage.hoverNode(null); row.onclick=()=>{ E.select(n.sel,{fromTree:true}); }; row.ondblclick=()=>{ if(n.panel) rename(); }; li.appendChild(row);
     if(kids.length&&open){ const sub=el('ul'); sub.setAttribute('role','group'); let shown=0; const lim=E.capOver.get(n.key)||cap; kids.forEach(k=>{ if(!k.panel&&!k.group&&!k.rest&&k.id&&shown>=lim){ return; } if(k.id) shown++; walk(k,sub,lvl+1,n); }); const hidden=kids.filter(k=>k.id).length-shown; if(hidden>0){ const m2=el('li'); m2.appendChild(el('div','se-more','… +'+hidden)); m2.setAttribute('role','none'); sub.appendChild(m2); } li.appendChild(sub); }
     par.appendChild(li); };
   roots.forEach(n=>walk(n,ul,1,null));
@@ -86,9 +95,10 @@ function movePanel(d){ const s=selPanel(); if(!s) return; E.edit(()=>{ const a=M
 function delPanel(){ const s=selPanel(); if(!s) return; E.edit(()=>{ const lay=M.ensureLayout(E.m,s.ap), i=lay.panels.findIndex(p=>p.id===s.pid); if(i<0) return false; lay.panels.splice(i,1); }); E.select({k:'ctls',ap:s.ap},{fromTree:true,reveal:true,stay:true}); }
 function rename(){ if(!selPanel()) return; if(matchMedia('(max-width:899px)').matches) E.tab('props'); const f=E.els.props.querySelector('[data-fk='+(PK.PK_LANG==='en'?'ten':'tnl')+']'); if(f){ f.focus(); f.select&&f.select(); } }
 function tools(){ const b=E.els.ttools; if(!b) return; const s=selPanel(), ap=E.sel.ap||PK.ske_stage.workAp(), lo=M.layoutOf(E.m,ap), i=s?lo.panels.findIndex(p=>p.id===s.pid):-1;
-  const set=(a,dis)=>{ const x=b.querySelector('[data-act='+a+']'); if(x) x.disabled=!!dis; }; set('pn-add',lo.panels.length>=16); set('pn-up',!s||i<=0); set('pn-down',!s||i<0||i>=lo.panels.length-1); set('pn-del',!s||i<0); set('pn-ren',!s||i<0); }
+  const set=(a,dis)=>{ const x=b.querySelector('[data-act='+a+']'); if(x) x.disabled=!!dis; }; set('pn-add',lo.panels.length>=16); set('pn-up',!s||i<=0); set('pn-down',!s||i<0||i>=lo.panels.length-1); set('pn-del',(!s||i<0)&&E.sel.k!=='decor'); set('pn-ren',!s||i<0); const n=PK.ske_forms.decorList(ap,E).length; ['label','box','line'].forEach(t=>set('dc-'+t,n>=32)); }
 function buildTools(){ const b=E.els.ttools; b.innerHTML=''; const mk=(act,txt,title,fn)=>{ const x=el('button','small',txt); x.type='button'; x.dataset.act=act; x.title=x.ariaLabel=title; x.onclick=fn; b.appendChild(x); return x; };
-  mk('pn-add','+ '+pkt('m.se_paneel'),pkt('m.dz_pn_toevoegen'),addPanel); mk('pn-up','↑',pkt('m.dz_r_omhoog'),()=>movePanel(-1)); mk('pn-down','↓',pkt('m.dz_r_omlaag'),()=>movePanel(1)); mk('pn-ren','✎',pkt('m.se_hernoem'),rename); mk('pn-del','×',pkt('m.dz_pn_weg'),delPanel); b.setAttribute('role','toolbar'); b.setAttribute('aria-label',pkt('m.se_boom_gereedschap')); }
+  mk('pn-add','+ '+pkt('m.se_paneel'),pkt('m.dz_pn_toevoegen'),addPanel); mk('pn-up','↑',pkt('m.dz_r_omhoog'),()=>movePanel(-1)); mk('pn-down','↓',pkt('m.dz_r_omlaag'),()=>movePanel(1)); mk('pn-ren','✎',pkt('m.se_hernoem'),rename); mk('pn-del','×',pkt('m.dz_pn_weg'),()=>{ if(selPanel()) delPanel(); else PK.ske_forms.removeRule(E); });
+  ['label','box','line'].forEach(t=>mk('dc-'+t,'+ '+pkt('m.se_dc_'+t),pkt('m.se_dc_toevoegen_titel'),()=>PK.ske_forms.addDecor(t,E.sel))); b.setAttribute('role','toolbar'); b.setAttribute('aria-label',pkt('m.se_boom_gereedschap')); }
 function init(e){ E=e; F.init(e); if(!e.capOver) e.capOver=new Map(); e.els.tree.onkeydown=onKey; buildTools(); }
 function label(){ const r=E.els.tree.querySelector('[data-key="skin"] .se-lb'); if(r) r.textContent=E.m.name||'—'; tools(); }   // alleen de naam van de skin veranderde: de boom blijft staan (een klik die net begon, gaat niet verloren)
 PK.ske_tree={init,draw,drag,apply,keyOf,R,treeTarget,reveal,label};

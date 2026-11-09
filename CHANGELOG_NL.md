@@ -4,6 +4,18 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.28.0 (2026-11-09)
+
+### Toegevoegd
+- **De skin-editor toont en bewerkt de hele kaart (skinscontract 0.9).** Tot nu toe kende de editor alleen wat een apparaat bij de host aanmeldt (regelaars, schermpje); de blokken, koppen, knoppen en schermpjes die het apparaat zelf tekent, waren onzichtbaar voor de editor. Nu leest de editor de echte kaart uit:
+  - **Opbouw van de kaart:** een nieuwe boom bij elke verschijning met alle elementen van de voorbeeldkaart (voor alle apparaten, ook die een eigen scherm bouwen of geen shadow root hebben), bovenaan en open. De regelaars en panelen staan eronder.
+  - **Klikken in het voorbeeld:** een klik op een element in het voorbeeld (of in het origineel) kiest het in de boom en toont de eigenschappen; met **Alt** kies je ook een element onder een regelaar.
+  - **Opmaken:** per element achtergrond, tekstkleur, rand (kleur, dikte, stijl), afronding, ruimte binnen, lettergrootte, letterdikte, letterruimte, hoofdletters, dekking en schaduw (`design.elements`). Verbergen, verplaatsen en vergroten kan bewust niet.
+  - **Toevoegen:** **+ Label**, **+ Blok** en **+ Lijn** zetten een tekst (Nederlands en Engels), kader of lijn voor, na of in een element (`design.decor`), met eigen kleur, hoogte en uitlijning, een volgorde en verwijderen.
+  - Werkt in een open shadow root en in het vlak van een apparaat zonder shadow root, en blijft staan als het apparaat zijn scherm opnieuw opbouwt (gemeten met Delay, Filter en Clip Arranger).
+  - **Skinscontract 0.9:** nieuw `design.elements` (hoogstens 128 regels met een sleutel en veilige eigenschappen) en `design.decor` (hoogstens 32 onderdelen); de host maakt er veilige CSS van en laat nooit vrije CSS of script toe. Validator, contract (NL en EN) en testgevallen bijgewerkt (1192 van 1192 groen); skins van 0.1 tot en met 0.8 werken ongewijzigd. Handleiding (NL en EN) en notities bijgewerkt.
+  - De mini-ontwerper in het Skins-paneel kent de nieuwe velden nog niet (die is voor de eenvoudige keuzes). Niet beluisterd; touchbediening van de nieuwe boom en selectie niet getest.
+
 ## 0.27.3 (2026-11-09)
 
 ### Opgelost

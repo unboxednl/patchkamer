@@ -26,11 +26,13 @@ const layerOf=(m,ap)=>ap==='*'||!ap?m.design:((m.aps.find(a=>a.id===ap)||{}).des
 function layerMake(m,ap){ if(ap==='*'||!ap) return m.design; const a=m.aps.find(x=>x.id===ap); if(!a) return null; return a.design||(a.design={}); }
 // verwijder lege objecten en lijsten (niet layout.panels van een verschijning: leeg = de indeling van de skin opheffen)
 function prune(o,keepPanels){ Object.keys(o).forEach(k=>{ const v=o[k]; if(Array.isArray(v)){ if(!v.length&&k!=='items'&&!(k==='panels'&&keepPanels)) delete o[k]; else if(k==='panels') v.forEach(p=>prune(p,keepPanels)); } else if(v&&typeof v==='object'){ prune(v,keepPanels); if(!Object.keys(v).length) delete o[k]; } else if(v===undefined) delete o[k]; }); }
-function pruneAll(m){ prune(m.design,false); m.aps.forEach(a=>{ if(a.design){ prune(a.design,true); if(!Object.keys(a.design).length) delete a.design; } }); }
+function pruneEl(d){ if(d.elements){ d.elements=d.elements.filter(x=>x.style&&Object.keys(x.style).length); if(!d.elements.length) delete d.elements; } if(d.decor){ d.decor.forEach(x=>{ if(x.style&&!Object.keys(x.style).length) delete x.style; }); if(!d.decor.length) delete d.decor; } }
+function pruneAll(m){ prune(m.design,false); pruneEl(m.design); m.aps.forEach(a=>{ if(a.design){ prune(a.design,true); pruneEl(a.design); if(!Object.keys(a.design).length) delete a.design; } }); }
 // ---- bouwen ----
 const hasKey=(m,f)=>[m.design,...m.aps.map(a=>a.design)].some(d=>d&&f(d));
 function contractFor(m){ const lay=hasKey(m,d=>d.layout&&d.layout.panels&&d.layout.panels.some(p=>p.items&&p.items.length)), pd=hasKey(m,d=>d.pads||d.display), sec=hasKey(m,d=>(d.sections&&d.sections.length)||d.size), met=hasKey(m,d=>d.meters&&d.meters.length), ctl=hasKey(m,d=>d.controls&&d.controls.length), v8=hasKey(m,d=>(d.controls||[]).some(x=>x.activeColor!==undefined)||(d.pads&&d.pads.rules&&d.pads.rules.length));
-  return v8?'0.8':lay?'0.7':pd?'0.6':sec?'0.5':met?'0.4':ctl?'0.3':'0.2'; }
+  const v9=hasKey(m,d=>(d.elements&&d.elements.length)||(d.decor&&d.decor.length));
+  return v9?'0.9':v8?'0.8':lay?'0.7':pd?'0.6':sec?'0.5':met?'0.4':ctl?'0.3':'0.2'; }
 function fin(d){ const c=clone(d); if(c.layout&&c.layout.panels){ const had=c.layout.panels.length; c.layout.panels=c.layout.panels.filter(p=>p.items&&p.items.length); if(!c.layout.panels.length&&had) delete c.layout.panels; if(!Object.keys(c.layout).length) delete c.layout; } return c; }   // een paneel zonder items is nog niet af en gaat niet mee
 function build(m,preview){ const name=(m.name||'').trim()||'Untitled', dev=m.dev, id=preview?dev.toLowerCase()+'.draft-preview':dev.toLowerCase()+'.'+(slug(name)||'custom'), t=new Date(), p2=n=>String(n).padStart(2,'0');
   const j={format:'patchkamer-skin',formatVersion:1,skinsContract:contractFor(m),id,device:dev,name:name.slice(0,60),version:m.version||'1.0.0'};
@@ -46,8 +48,11 @@ function devChecks(sk,r){ const L=regOf(r), out=[], pkt=PK.pkt; const ids=new Se
     (d.sections||[]).forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.sections['+i+'].match',x.match); }); if(d.pads&&d.pads.colors) Object.keys(d.pads.colors).forEach(k=>{ any=true; if(!ok(k)) bad(w+'.pads.colors',k); }); if(d.pads&&d.pads.rules) d.pads.rules.forEach((x,i)=>{ any=true; if(!ok(x.match)) bad(w+'.pads.rules['+i+'].match',x.match); });
     if(d.layout&&d.layout.panels) d.layout.panels.forEach((p,i)=>p.items.forEach((it,j)=>{ any=true; if(it!=='*'&&!ok(it)) bad(w+'.layout.panels['+i+'].items['+j+']',it); })); });
   if(any&&!L.length) out.unshift(pkt('m.se_dev_leeg')); return out; }
+// de elementen en het decor van de skin moeten op de kaart te vinden zijn (de sleutel hoort bij de opbouw van het apparaat)
+function elChecks(sk,r){ const out=[]; if(!r||!PK.skElResolve) return out; const lay=[['design',sk.design],...sk.appearances.map((a,i)=>['appearances['+i+'].design',a.design])];
+  lay.forEach(([w,d])=>{ if(!d) return; (d.elements||[]).forEach((x,i)=>{ if(!PK.skElResolve(r,x.root||0,x.target)) out.push(PK.pkt('m.se_el_weg',w+'.elements['+i+']',x.target)); }); (d.decor||[]).forEach((x,i)=>{ if(x.target&&!PK.skElResolve(r,x.root||0,x.target)) out.push(PK.pkt('m.se_el_weg',w+'.decor['+i+']',x.target)); }); }); return out; }
 function check(m,r){ const file=build(m,false), notes=[], errs=[]; let sk=null; try{ sk=PK.skValidate(file,'',notes,errs); }catch(e){ errs.push(e.message); }
-  const strip=s=>String(s).replace(/^:\s*/,''); const dc=sk?devChecks(sk,r):[], en=errs.map(strip); if(!(m.name||'').trim()) en.unshift(PK.pkt('m.se_naam_leeg')); const nt=[...notes.map(strip)]; if(!(m.author||'').trim()) nt.push(PK.pkt('m.se_let_auteur')); if(!(m.description||'').trim()) nt.push(PK.pkt('m.se_let_beschrijving')); return {file,sk,errs:en,notes:[...nt,...dc]}; }
+  const strip=s=>String(s).replace(/^:\s*/,''); const dc=sk?[...devChecks(sk,r),...elChecks(sk,r)]:[], en=errs.map(strip); if(!(m.name||'').trim()) en.unshift(PK.pkt('m.se_naam_leeg')); const nt=[...notes.map(strip)]; if(!(m.author||'').trim()) nt.push(PK.pkt('m.se_let_auteur')); if(!(m.description||'').trim()) nt.push(PK.pkt('m.se_let_beschrijving')); return {file,sk,errs:en,notes:[...nt,...dc]}; }
 // ---- indeling: welke regelaar zit in welk paneel (zelfde regels als js/panels.js: expliciete items eerst, de eerste passende wint; '*' krijgt de rest) ----
 const itemHit=(it,u)=>it==='*'?false:it.startsWith('role:')?u.role===it.slice(5):it.startsWith('group:')?u.group===it.slice(6):(!!u.id&&u.id===it);
 function assign(panels,regs){ const A=new Map(), taken=new Set(); let star=null;

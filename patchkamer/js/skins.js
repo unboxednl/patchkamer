@@ -126,6 +126,8 @@ function skDesignClean(d,where,note){ if(d==null) return null; if(typeof d!=='ob
   if(d.display!=null){ const c=skDisplayClean(d.display,where+'.display',note); if(Object.keys(c).length) out.display=c; }
   if(d.layout!=null){ const c=skLayoutClean(d.layout,where+'.layout',note); if(c) out.layout=c; }
   if(d.size!=null){ const z=skSizeClean(d.size,where+'.size',note); if(z) out.size=z; }
+  if(d.elements!=null&&PK.skElementsClean){ const c=PK.skElementsClean(d.elements,where+'.elements',note); if(c.length) out.elements=c; }   // skins 0.9: opmaak van elementen van de kaart
+  if(d.decor!=null&&PK.skDecorClean){ const c=PK.skDecorClean(d.decor,where+'.decor',note); if(c.length) out.decor=c; }   // skins 0.9: toegevoegde labels, blokken en lijnen
   return Object.keys(out).length?out:null; }
 // skin-niveau en verschijning-niveau samenvoegen: per sleutel wint de verschijning
 function skDesignMerge(a,b){ const o={}; for(const g of Object.keys(SK_ENUM)){ const x=a&&a[g], y=b&&b[g]; if(!x&&!y) continue; o[g]={...x,...y}; if(g==='colors'&&((x&&x.custom)||(y&&y.custom))) o[g].custom={...(x&&x.custom),...(y&&y.custom)}; }
@@ -135,6 +137,7 @@ function skDesignMerge(a,b){ const o={}; for(const g of Object.keys(SK_ENUM)){ c
   if((a&&a.pads)||(b&&b.pads)){ o.pads={...(a&&a.pads),...(b&&b.pads)}; if((a&&a.pads&&a.pads.colors)||(b&&b.pads&&b.pads.colors)) o.pads.colors={...(a&&a.pads&&a.pads.colors),...(b&&b.pads&&b.pads.colors)}; if((a&&a.pads&&a.pads.rules)||(b&&b.pads&&b.pads.rules)) o.pads.rules=[...((a&&a.pads&&a.pads.rules)||[]),...((b&&b.pads&&b.pads.rules)||[])]; }   // per sleutel; colors per pad
   if((a&&a.display)||(b&&b.display)) o.display={...(a&&a.display),...(b&&b.display)};
   if((a&&a.layout)||(b&&b.layout)) o.layout={...(a&&a.layout),...(b&&b.layout)};   // layout (0.7): per sleutel (flow, panels); de panelen van een verschijning vervangen die van de skin, ook als ze leeg zijn
+  { const ex=(a&&a.elements)||[], ey=(b&&b.elements)||[]; if(ex.length||ey.length) o.elements=[...ex,...ey]; const dx=(a&&a.decor)||[], dy=(b&&b.decor)||[]; if(dx.length||dy.length){ const ids=new Set(dy.map(x=>x.id)); o.decor=[...dx.filter(x=>!ids.has(x.id)),...dy]; } }   // 0.9: elementen als regels (de laatste wint); decor per id (de verschijning wint)
   if(cx.length||cy.length) o.controls=[...cx,...cy];   // regels: eerst die van de skin, daarna die van de verschijning (de laatste passende regel wint)
   return o; } PK.skDesignMerge=skDesignMerge;
 const skEff=(sk,ap)=>skDesignMerge(sk&&sk.design,ap&&ap.design); PK.skEff=skEff;
@@ -229,7 +232,7 @@ function skHosts(r){ const ui=r.el.querySelector(':scope > .body > .ui'), out=[]
 function skStrip(r){ (r.skMO||[]).forEach(m=>m.disconnect()); r.skMO=[]; (r.skHosts||[]).forEach(h=>{ if(h.shadowRoot) h.shadowRoot.querySelectorAll('style[data-pk-skin]').forEach(s=>s.remove()); (r.skProps||[]).forEach(p=>h.style.removeProperty('--skin-asset-'+p)); if(h.hasAttribute('style')&&!h.getAttribute('style').trim()) h.removeAttribute('style'); }); r.skHosts=[]; r.skProps=[]; }
 // ---- design toepassen: kleuren als CSS-variabelen op de kaart en het apparaat-hostelement, poortenmodus, knoppen, haptiek; alles weer weg bij Standaard ----
 const skUiEl=r=>r.el.querySelector(':scope > .body > .ui');
-function skDesignStrip(r){ const d=r.skDes; if(!d) return; if(PK.skPortsOff) PK.skPortsOff(r); if(PK.hapticsDetach) PK.hapticsDetach(r);
+function skDesignStrip(r){ if(PK.skElOff) PK.skElOff(r); const d=r.skDes; if(!d) return; if(PK.skPortsOff) PK.skPortsOff(r); if(PK.hapticsDetach) PK.hapticsDetach(r);
   d.card.forEach(p=>r.el.style.removeProperty(p)); const ui=skUiEl(r); if(ui){ d.ui.forEach(p=>ui.style.removeProperty(p)); if(ui.hasAttribute('style')&&!ui.getAttribute('style').trim()) ui.removeAttribute('style'); }
   const had=!!r.skCtl, hadM=!!r.skMet, hadS=!!r.skSec, hadP=!!r.skPad, hadD=!!r.skDsp, hadL=!!r.skLay; r.skDes=null; r.skCtl=null; r.skMet=null; r.skSec=null; r.skPad=null; r.skDsp=null; r.skLay=null; r.skHap=null; if(hadL&&PK.pnlOff) PK.pnlOff(r); if(had) PK.regApply(r); if(hadM) PK.meterApply(r); if(hadS) PK.secApply(r); if(hadP) PK.padApply(r); if(hadD) PK.displayApply(r); }
 function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length){ if(PK.portsDefault) PK.portsDefault(r); return; } const rec={card:[],ui:[]}; r.skDes=rec, ui=skUiEl(r);
@@ -245,7 +248,8 @@ function skDesignApply(r,d){ skDesignStrip(r); if(!d||!Object.keys(d).length){ i
   { const dr=PK.displayRules(d); r.skDsp=dr; }   // design.display (0.6): het schermpje voor keuzelijsten en de kaartkop
   { const ly=d.layout; r.skLay=ly&&ly.panels&&ly.panels.length?ly:null; }   // design.layout (0.7): regelaars in panelen en volgorde; eerst verplaatsen, dan pas secties, pads en schermpje (die zoeken in de nieuwe indeling)
   if(r.skLay) PK.pnlApply(r);
-  if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); if(r.skPad) PK.padApply(r); if(r.skDsp) PK.displayApply(r); }
+  if(r.skCtl) PK.regApply(r); if(r.skMet) PK.meterApply(r); if(r.skSec) PK.secApply(r); if(r.skPad) PK.padApply(r); if(r.skDsp) PK.displayApply(r);
+  if(PK.skElApply&&((d.elements&&d.elements.length)||(d.decor&&d.decor.length))) PK.skElApply(r,d); }   // skins 0.9: elementen opmaken en decor toevoegen, als laatste (alle andere onderdelen hebben dan hun plek)
 function skClear(r){ skStrip(r); skDesignStrip(r); if(PK.portsDefault) PK.portsDefault(r); r.skCur=null; r.skSkin=null; r.el.removeAttribute('data-pk-skin'); r.el.removeAttribute('data-pk-ap'); }
 function skScreen(){ const w=window.innerWidth; return w<700?'phone':w<1100?'compact':'wide'; } PK.skScreen=skScreen;
 // automatisch: de eerste verschijningsvorm waarvan alle voorwaarden kloppen; anders `default`; anders de eerste. Invoer = kaartbreedte in vloercoördinaten (zonder zoom) en schermklasse; beide hangen niet af van wat de skin tekent.

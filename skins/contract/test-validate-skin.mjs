@@ -1,4 +1,4 @@
-// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.8) / test cases for the validator
+// test-validate-skin.mjs — testgevallen voor validate-skin.mjs (contract v0.9) / test cases for the validator
 // Gebruik / Usage:  node skins/contract/test-validate-skin.mjs      (exit 0 = alles groen / all green)
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
@@ -18,7 +18,7 @@ const SK = s => { const o = base(); return Object.assign(o, s); };
 // --- 0.1 en basis
 ok('0.1-bestand zonder design', SK({ skinsContract: '0.1' }));
 ok('0.2-bestand zonder design', base());
-okWarn('minor 9 is nieuwer', SK({ skinsContract: '0.9' }), ['contract_minor']);
+okWarn('minor 10 is nieuwer', SK({ skinsContract: '0.10' }), ['contract_minor']);
 bad('major 1', SK({ skinsContract: '1.0' }), ['contract_major']);
 okWarn('design in een 0.1-bestand', { ...withDesign({ ports: { mode: 'hover' } }), skinsContract: '0.1' }, ['design_contract']);
 // --- ports
@@ -145,7 +145,8 @@ okWarn('rotary met thumb', ctl({ match: 'cut', face: 'rotary', thumb: 'bar' }), 
 okWarn('rotary met thickness', ctl({ match: 'cut', face: 'rotary', thickness: 4 }), ['controls_slider_only']);
 okWarn('controls in een 0.2-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.2' }, ['controls_contract']);
 okWarn('controls in een 0.1-bestand', { ...ctl({ match: '*', size: 's' }), skinsContract: '0.1' }, ['controls_contract', 'design_contract']);
-okWarn('0.9 is nieuwer dan 0.8', SK({ skinsContract: '0.9' }), ['contract_minor']);
+okWarn('0.10 is nieuwer dan 0.9', SK({ skinsContract: '0.10' }), ['contract_minor']);
+ok('0.9 is bekend', SK({ skinsContract: '0.9' }), ['contract_minor']);
 ok('0.8 is bekend', SK({ skinsContract: '0.8' }), ['contract_minor']);
 ok('0.6 is bekend', SK({ skinsContract: '0.6' }), ['contract_minor']);
 ok('0.3 is bekend', SK({ skinsContract: '0.3' }), ['contract_minor']);
@@ -503,6 +504,45 @@ bad('pads.rules led onbekend', v8({ pads: { rules: [{ match: '*', led: 'middle' 
 okWarn('pads.rules alleen match', v8({ pads: { rules: [{ match: 'a' }] } }), ['pads_rule_empty']);
 okWarn('pads.rules onbekende sleutel', v8({ pads: { rules: [{ match: 'a', kind: 'pad', shape: 'circle' }] } }), ['unknown_field']);
 okWarn('pads.rules in een 0.7-bestand', { ...withDesign({ pads: { rules: [{ match: '*', kind: 'pad' }] } }), skinsContract: '0.7' }, ['v08_contract']);
+// --- elements en decor (0.9)
+const v9 = d => ({ ...withDesign(d), skinsContract: '0.9' });
+const T1 = 'div.app > h3:nth-of-type(1)';
+ok('elements alle eigenschappen', v9({ elements: [{ target: T1, style: { background: '#223344', color: '#fff', borderColor: '#ff0', borderWidth: 1, borderStyle: 'dashed', radius: 12, padding: 8, fontSize: 14, fontWeight: 600, letterSpacing: 0.1, textTransform: 'uppercase', opacity: 0.8, shadow: 'glow' } }] }));
+ok('elements met root en data-pk-id', v9({ elements: [{ root: 1, target: 'div.k[data-pk-id="cutoff"] > label', style: { color: '#ff0' } }] }));
+ok('elements in een verschijning', { ...withAppDesign({ elements: [{ target: 'section:nth-of-type(2) > h2', style: { radius: 4 } }] }), skinsContract: '0.9' });
+bad('elements geen lijst', v9({ elements: 'x' }), ['elements_list']);
+bad('elements regel geen object', v9({ elements: ['x'] }), ['elements_rule']);
+bad('elements target leeg', v9({ elements: [{ target: '', style: { radius: 4 } }] }), ['elements_target']);
+bad('elements target met accolade', v9({ elements: [{ target: 'div{color:red}', style: { radius: 4 } }] }), ['elements_target']);
+bad('elements target met komma', v9({ elements: [{ target: 'div, span', style: { radius: 4 } }] }), ['elements_target']);
+bad('elements target te veel delen', v9({ elements: [{ target: Array(15).fill('div').join(' > '), style: { radius: 4 } }] }), ['elements_target']);
+bad('elements target hoofdletter in tag', v9({ elements: [{ target: 'DIV', style: { radius: 4 } }] }), ['elements_target']);
+bad('elements kleur geen hex', v9({ elements: [{ target: T1, style: { background: 'red' } }] }), ['elements_color']);
+bad('elements radius te groot', v9({ elements: [{ target: T1, style: { radius: 99 } }] }), ['elements_num']);
+bad('elements fontSize geen getal', v9({ elements: [{ target: T1, style: { fontSize: '14px' } }] }), ['elements_num']);
+bad('elements radius geen geheel getal', v9({ elements: [{ target: T1, style: { radius: 4.5 } }] }), ['elements_num']);
+bad('elements opacity te laag', v9({ elements: [{ target: T1, style: { opacity: 0.1 } }] }), ['elements_num']);
+bad('elements enum onbekend', v9({ elements: [{ target: T1, style: { textTransform: 'big' } }] }), ['design_enum']);
+bad('elements root 9', v9({ elements: [{ root: 9, target: T1, style: { radius: 4 } }] }), ['elements_root']);
+okWarn('elements zonder eigenschap', v9({ elements: [{ target: T1, style: {} }] }), ['elements_empty']);
+okWarn('elements onbekende style-sleutel', v9({ elements: [{ target: T1, style: { color: '#fff', display: 'none' } }] }), ['unknown_field']);
+okWarn('elements in een 0.8-bestand', { ...withDesign({ elements: [{ target: T1, style: { radius: 4 } }] }), skinsContract: '0.8' }, ['v09_contract']);
+ok('decor label, blok en lijn', v9({ decor: [{ id: 'kop', type: 'label', target: T1, place: 'after', text: { nl: 'Mijn kop', en: 'My heading' }, style: { align: 'center', color: '#ff0' } }, { id: 'vlak-1', type: 'box', target: T1, place: 'before', style: { height: 40, background: '#112233' } }, { id: 'lijn', type: 'line', target: T1, style: { height: 2 } }] }));
+ok('decor aan het einde van de kaart', v9({ decor: [{ id: 'einde', type: 'label', target: '', place: 'end', text: 'EINDE' }] }));
+ok('decor met een tekst als string', v9({ decor: [{ id: 'a', type: 'label', target: T1, text: 'Hallo' }] }));
+bad('decor geen lijst', v9({ decor: {} }), ['decor_list']);
+bad('decor onderdeel geen object', v9({ decor: [1] }), ['decor_item']);
+bad('decor id hoofdletter', v9({ decor: [{ id: 'Kop', type: 'label', target: T1 }] }), ['decor_id']);
+bad('decor id ontbreekt', v9({ decor: [{ type: 'label', target: T1 }] }), ['decor_id']);
+okWarn('decor dubbele id', v9({ decor: [{ id: 'a', type: 'line', target: T1 }, { id: 'a', type: 'line', target: T1 }] }), ['decor_dup']);
+bad('decor type onbekend', v9({ decor: [{ id: 'a', type: 'image', target: T1 }] }), ['design_enum']);
+bad('decor place onbekend', v9({ decor: [{ id: 'a', type: 'line', target: T1, place: 'under' }] }), ['design_enum']);
+bad('decor zonder target met place after', v9({ decor: [{ id: 'a', type: 'line', place: 'after' }] }), ['decor_target_place']);
+bad('decor target ongeldig', v9({ decor: [{ id: 'a', type: 'line', target: 'div;x' }] }), ['elements_target']);
+bad('decor tekst te lang', v9({ decor: [{ id: 'a', type: 'label', target: T1, text: 'x'.repeat(121) }] }), ['decor_text']);
+bad('decor tekst met andere taal', v9({ decor: [{ id: 'a', type: 'label', target: T1, text: { de: 'x' } }] }), ['decor_text']);
+bad('decor hoogte te groot', v9({ decor: [{ id: 'a', type: 'box', target: T1, style: { height: 500 } }] }), ['elements_num']);
+okWarn('decor in een 0.8-bestand', { ...withDesign({ decor: [{ id: 'a', type: 'line', target: T1 }] }), skinsContract: '0.8' }, ['v09_contract']);
 let fail = 0, n = 0;
 for (const lang of ['nl', 'en']) {
   cases.forEach(([name, skin, exp], i) => {

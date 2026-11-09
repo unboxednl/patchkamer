@@ -1,4 +1,4 @@
-// validate-skin.mjs — Patchkamer skins contract v0.8
+// validate-skin.mjs — Patchkamer skins contract v0.9
 // Gebruik:  node validate-skin.mjs <bestand.patchkamer-skin.json | icon.svg|png|webp|jpg> [...] [--lang nl|en]
 //           node validate-skin.mjs --dir <bibliotheekmap> [--lang nl|en]
 //           node validate-skin.mjs <skin> --device <apparaat.patchkamer-device.js>   (0.3: id's, rollen en groepen in design.controls, 0.4: id's en groepen in design.meters, 0.5: groepen in design.sections, 0.6: id's, rollen en groepen in design.pads.colors en een schermpje zonder keuze in design.display, 0.7: id's, rollen en groepen in design.layout.panels[].items, tegen het register van het apparaat; onbekend = let op)
@@ -36,7 +36,7 @@ const M = {
   formatversion_new: ['formatVersion {0} is nieuwer dan deze validator (1); onbekende velden worden genegeerd', 'formatVersion {0} is newer than this validator (1); unknown fields are ignored'],
   contract_form: ['skinsContract moet tekst zijn in de vorm "major.minor" (bijvoorbeeld "0.1")', 'skinsContract must be text in the form "major.minor" (for example "0.1")'],
   contract_major: ['skinsContract {0}: deze validator kent alleen major 0; een andere major wordt door de host geweigerd', 'skinsContract {0}: this validator only knows major 0; the host rejects another major'],
-  contract_minor: ['skinsContract {0} is nieuwer dan 0.8; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.8; unknown fields are ignored'],
+  contract_minor: ['skinsContract {0} is nieuwer dan 0.9; onbekende velden worden genegeerd', 'skinsContract {0} is newer than 0.9; unknown fields are ignored'],
   controls_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
   controls_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
   controls_rule: ['{0} moet een object zijn', '{0} must be an object'],
@@ -105,6 +105,25 @@ const M = {
   pads_rule_match: ['{0} moet "*", een id, "role:<rol>" of "group:<groep>" zijn (1 tot 60 tekens uit [A-Za-z0-9._-])', '{0} must be "*", an id, "role:<role>" or "group:<group>" (1 to 60 characters from [A-Za-z0-9._-])'],
   pads_rule_colour: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
   pads_rule_empty: ['{0} heeft alleen een match; het doet niets', '{0} has only a match; it does nothing'],
+  elements_list: ['{0} moet een lijst regels zijn', '{0} must be a list of rules'],
+  elements_max: ['{0} heeft {1} regels; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} rules; the maximum is {2} (the rest is ignored)'],
+  elements_rule: ['{0} moet een object zijn', '{0} must be an object'],
+  elements_target: ['{0} moet een geldige sleutel zijn: delen van tag, hoogstens twee klassen, :nth-of-type(n) en [data-pk-id="x"], gescheiden door " > " (hoogstens 14 delen en 400 tekens)', '{0} must be a valid key: parts of tag, at most two classes, :nth-of-type(n) and [data-pk-id="x"], separated by " > " (at most 14 parts and 400 characters)'],
+  elements_root: ['{0} moet een geheel getal van 0 tot 7 zijn', '{0} must be a whole number from 0 to 7'],
+  elements_style: ['{0} moet een object zijn', '{0} must be an object'],
+  elements_color: ['{0} moet een kleur #rgb of #rrggbb zijn', '{0} must be a colour #rgb or #rrggbb'],
+  elements_num: ['{0} moet een getal van {1} tot {2} zijn', '{0} must be a number from {1} to {2}'],
+  elements_empty: ['{0} heeft geen enkele eigenschap; de regel doet niets', '{0} has no property; the rule does nothing'],
+  decor_list: ['{0} moet een lijst zijn', '{0} must be a list'],
+  decor_max: ['{0} heeft {1} onderdelen; het maximum is {2} (de rest wordt genegeerd)', '{0} has {1} parts; the maximum is {2} (the rest is ignored)'],
+  decor_item: ['{0} moet een object zijn', '{0} must be an object'],
+  decor_id: ['{0}.id moet 1 tot 24 tekens zijn uit [a-z0-9-] en met een letter of cijfer beginnen', '{0}.id must be 1 to 24 characters from [a-z0-9-] and start with a letter or digit'],
+  decor_dup: ['{0}.id komt al eerder voor; het onderdeel wordt genegeerd', '{0}.id is used before; the part is ignored'],
+  decor_target_place: ['{0}: zonder target kan place alleen "start" of "end" zijn (begin of einde van de kaart)', '{0}: without a target place can only be "start" or "end" (start or end of the card)'],
+  decor_text: ['{0} moet een tekst zijn (hoogstens 120 tekens) of een object met nl en en', '{0} must be a text (at most 120 characters) or an object with nl and en'],
+  v09_contract: ['design.elements en design.decor horen bij skinsContract 0.9; een host met 0.8 of lager negeert ze', 'design.elements and design.decor belong to skinsContract 0.9; a host with 0.8 or lower ignores them'],
+  ok_elements: ['{0} elementregels', '{0} element rules'],
+  ok_decor: ['{0} toegevoegde onderdelen', '{0} added parts'],
   v08_contract: ['activeColor bij controls en design.pads.rules horen bij skinsContract 0.8; een host met 0.7 of lager negeert ze', 'activeColor in controls and design.pads.rules belong to skinsContract 0.8; a host on 0.7 or lower ignores them'],
   pads_empty: ['{0} is leeg; het doet niets', '{0} is empty; it does nothing'],
   pads_contract: ['design.pads en design.display horen bij skinsContract 0.6; een host met 0.5 of lager negeert ze', 'design.pads and design.display belong to skinsContract 0.6; a host on 0.5 or lower ignores them'],
@@ -340,6 +359,47 @@ function checkSections(list, path, E, W, C) {
     if (matchOk && n === 0 && !SEC_KEYS.slice(1).some(k => r[k] !== undefined)) W('sections_empty', P);
     if (matchOk && C) C.push({ p: P, match: m, kind: 'sections' }); });
 }
+
+// design.elements en design.decor (0.9): opmaak van elementen van de kaart en toegevoegde labels, blokken en lijnen. Streng: fouten bij verkeerde waarden.
+const EL_MAX = 128, DECOR_MAX = 32;
+const EL_SEG = /^[a-z][a-z0-9-]{0,30}(?:\.[A-Za-z_][A-Za-z0-9_-]{0,40}){0,2}(?::nth-of-type\(\d{1,3}\))?(?:\[data-pk-id="[A-Za-z0-9._-]{1,60}"\])?$/;
+const selOk = s => typeof s === 'string' && s.length > 0 && s.length <= 400 && s.split(' > ').length <= 14 && s.split(' > ').every(x => EL_SEG.test(x));
+const EL_STYLE = { background: 'col', color: 'col', borderColor: 'col', borderWidth: [0, 8, 'n'], borderStyle: ['none', 'solid', 'dashed', 'dotted'], radius: [0, 48, 'n'], padding: [0, 40, 'n'], fontSize: [8, 48, 'n'], fontWeight: [400, 500, 600, 700], letterSpacing: [0, 0.4, 'f'], textTransform: ['none', 'uppercase', 'lowercase', 'capitalize'], opacity: [0.2, 1, 'f'], shadow: ['none', 'soft', 'strong', 'glow'] };
+const DECOR_STYLE = { ...EL_STYLE, align: ['left', 'center', 'right'], height: [1, 200, 'n'] };
+function checkStyle(st, path, table, E, W) { let n = 0;
+  if (st === undefined) return 0; if (!isObj(st)) { E('elements_style', path); return 0; }
+  for (const k of Object.keys(st)) if (!(k in table)) W('unknown_field', `${path}.${k}`);
+  for (const k of Object.keys(table)) { const v = st[k], t = table[k]; if (v === undefined) continue; const P = `${path}.${k}`;
+    if (t === 'col') { if (typeof v === 'string' && /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) n++; else E('elements_color', P); }
+    else if (t.length === 3 && (t[2] === 'n' || t[2] === 'f')) { if (typeof v === 'number' && Number.isFinite(v) && v >= t[0] && v <= t[1] && (t[2] === 'f' || Number.isInteger(v))) n++; else E('elements_num', P, t[0], t[1]); }
+    else { if (t.includes(v)) n++; else E('design_enum', P, t.map(x => typeof x === 'string' ? '"' + x + '"' : String(x)).join(', ')); } }
+  return n; }
+function checkElements(list, path, E, W) {
+  if (!Array.isArray(list)) { E('elements_list', path); return; }
+  if (list.length > EL_MAX) E('elements_max', path, list.length, EL_MAX);
+  list.slice(0, EL_MAX).forEach((r, i) => { const P = `${path}[${i}]`; if (!isObj(r)) { E('elements_rule', P); return; }
+    for (const k of Object.keys(r)) if (!['target', 'root', 'style'].includes(k)) W('unknown_field', `${P}.${k}`);
+    if (!selOk(r.target)) E('elements_target', `${P}.target`);
+    if (r.root !== undefined && !(Number.isInteger(r.root) && r.root >= 0 && r.root <= 7)) E('elements_root', `${P}.root`);
+    if (r.style === undefined) { W('elements_empty', `${P}.style`); return; }
+    const n = checkStyle(r.style, `${P}.style`, EL_STYLE, E, W); if (isObj(r.style) && n === 0 && !Object.keys(r.style).some(k => k in EL_STYLE)) W('elements_empty', `${P}.style`); });
+}
+function checkDecor(list, path, E, W) {
+  if (!Array.isArray(list)) { E('decor_list', path); return; }
+  if (list.length > DECOR_MAX) E('decor_max', path, list.length, DECOR_MAX);
+  const ids = new Set();
+  list.slice(0, DECOR_MAX).forEach((r, i) => { const P = `${path}[${i}]`; if (!isObj(r)) { E('decor_item', P); return; }
+    for (const k of Object.keys(r)) if (!['id', 'type', 'target', 'root', 'place', 'text', 'style'].includes(k)) W('unknown_field', `${P}.${k}`);
+    if (typeof r.id !== 'string' || !/^[a-z0-9][a-z0-9-]{0,23}$/.test(r.id)) E('decor_id', P); else if (ids.has(r.id)) W('decor_dup', P); else ids.add(r.id);
+    if (!['label', 'box', 'line'].includes(r.type)) E('design_enum', `${P}.type`, '"label", "box", "line"');
+    const place = r.place === undefined ? 'after' : r.place;
+    if (!['before', 'after', 'start', 'end'].includes(place)) E('design_enum', `${P}.place`, '"before", "after", "start", "end"');
+    const target = r.target === undefined ? '' : r.target;
+    if (target !== '' && !selOk(target)) E('elements_target', `${P}.target`); else if (target === '' && (place === 'before' || place === 'after')) E('decor_target_place', P);
+    if (r.root !== undefined && !(Number.isInteger(r.root) && r.root >= 0 && r.root <= 7)) E('elements_root', `${P}.root`);
+    if (r.text !== undefined) { const t = r.text, okT = typeof t === 'string' ? t.length <= 120 : (isObj(t) && Object.keys(t).every(k => ['nl', 'en'].includes(k) && typeof t[k] === 'string' && t[k].length <= 120)); if (!okT) E('decor_text', `${P}.text`); }
+    checkStyle(r.style, `${P}.style`, DECOR_STYLE, E, W); });
+}
 // design.pads (0.6): één object (geen lijst); colors geeft een eigen kleur per pad. Streng: fouten bij verkeerde waarden; geldige delen worden onthouden.
 function checkPads(src, path, E, W, C) {
   const o = {}; if (!isObj(src)) { E('pads_object', path); return o; }
@@ -440,7 +500,9 @@ function checkLayout(d, path, E, W, C) {
 function checkDesignShape(d, path, E, W, C) {
   const out = {};
   if (!isObj(d)) { E('design_object', path); return out; }
-  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls' && k !== 'meters' && k !== 'sections' && k !== 'layout') W('unknown_field', `${path}.${k}`);
+  for (const k of Object.keys(d)) if (!(k in KNOWN_DESIGN) && k !== 'controls' && k !== 'meters' && k !== 'sections' && k !== 'layout' && k !== 'elements' && k !== 'decor') W('unknown_field', `${path}.${k}`);
+  if (d.elements !== undefined) { out.elements = Array.isArray(d.elements) ? d.elements.slice(0, EL_MAX).filter(isObj) : []; checkElements(d.elements, `${path}.elements`, E, W); }
+  if (d.decor !== undefined) { out.decor = Array.isArray(d.decor) ? d.decor.slice(0, DECOR_MAX).filter(isObj) : []; checkDecor(d.decor, `${path}.decor`, E, W); }
   if (d.layout !== undefined) out.layout = checkLayout(d.layout, `${path}.layout`, E, W, C);
   if (d.sections !== undefined) { out.sections = Array.isArray(d.sections) ? d.sections.slice(0, SEC_MAX).filter(isObj) : []; checkSections(d.sections, `${path}.sections`, E, W, C); }
   if (d.meters !== undefined) { out.meters = Array.isArray(d.meters) ? d.meters.slice(0, CTL_MAX).filter(isObj) : []; checkMeters(d.meters, `${path}.meters`, E, W, C); }
@@ -549,7 +611,7 @@ function validateSkin(path, ctx = {}) {
   if (s.format !== 'patchkamer-skin') E('format');
   if (!isInt(s.formatVersion) || s.formatVersion < 1) E('formatversion'); else if (s.formatVersion > 1) W('formatversion_new', s.formatVersion);
   if (!isStr(s.skinsContract) || !/^\d+\.\d+$/.test(s.skinsContract)) E('contract_form');
-  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 8) W('contract_minor', s.skinsContract); }
+  else { const [maj, min] = s.skinsContract.split('.').map(Number); if (maj !== 0) E('contract_major', s.skinsContract); else if (min > 9) W('contract_minor', s.skinsContract); }
   const idOk = v => isStr(v) && /^[a-z0-9.-]{3,100}$/.test(v);
   if (!idOk(s.id)) E('id_form');
   const devOk = isStr(s.device) && /^[a-z0-9][a-z0-9.-]{1,98}[a-z0-9]$/.test(s.device);
@@ -641,6 +703,8 @@ function validateSkin(path, ctx = {}) {
   if ((hasPads || hasDisplay) && /^0\.[012345]$/.test(String(s.skinsContract))) W('pads_contract');
   const hasV8 = [skinDesign, ...appDesigns].some(x => x && ((x.controls || []).some(c => c && c.activeColor !== undefined) || (x.pads && Array.isArray(x.pads.rules) && x.pads.rules.length)));
   if (hasV8 && /^0\.[0-7]$/.test(String(s.skinsContract))) W('v08_contract');
+  const nEl = (skinDesign?.elements?.length || 0) + appDesigns.reduce((a, x) => a + (x?.elements?.length || 0), 0), nDec = (skinDesign?.decor?.length || 0) + appDesigns.reduce((a, x) => a + (x?.decor?.length || 0), 0);
+  if ((nEl || nDec) && /^0\.[0-8]$/.test(String(s.skinsContract))) W('v09_contract');
   const hasLayout = !!(skinDesign?.layout?.panels?.length || appDesigns.some(x => x?.layout?.panels?.length)), nPanels = (skinDesign?.layout?.panels?.length || 0) + appDesigns.reduce((a, x) => a + (x?.layout?.panels?.length || 0), 0);
   if (hasLayout && /^0\.[0-6]$/.test(String(s.skinsContract))) W('layout_contract');
   const hasSize = !!(skinDesign?.size && Object.keys(skinDesign.size).length) || appDesigns.some(x => x?.size && Object.keys(x.size).length);
@@ -673,7 +737,7 @@ function validateSkin(path, ctx = {}) {
   else if (!ctx.skipDirWarn) W('dir_elsewhere');
   const n = (apps || []).length;
   const info = [vt('ok_dev', s.device), vt(n === 1 ? 'ok_app' : 'ok_apps', n), vt('ok_css', cssTotal), vt('ok_assets', nAssets)];
-  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); if (nSec) info.push(vt('ok_sections', nSec)); if (hasSize) info.push(vt('ok_size')); if (hasPads) info.push(vt('ok_pads')); if (hasDisplay) info.push(vt('ok_display')); if (hasLayout) info.push(vt('ok_layout', nPanels)); info.push(vt('ok_file', size));
+  if (hasIcon) info.push(vt('ok_icon')); if (hasDesign) info.push(vt('ok_design')); if (nCtl) info.push(vt('ok_controls', nCtl)); if (nMet) info.push(vt('ok_meters', nMet)); if (nSec) info.push(vt('ok_sections', nSec)); if (nEl) info.push(vt('ok_elements', nEl)); if (nDec) info.push(vt('ok_decor', nDec)); if (hasSize) info.push(vt('ok_size')); if (hasPads) info.push(vt('ok_pads')); if (hasDisplay) info.push(vt('ok_display')); if (hasLayout) info.push(vt('ok_layout', nPanels)); info.push(vt('ok_file', size));
   return { errs, warns, line: `${isStr(s.name) ? s.name : '?'} ${isStr(s.version) ? s.version : '?'} (${isStr(s.id) ? s.id : '?'}) — ${info.join(', ')}`, id: s.id, device: s.device };
 }
 

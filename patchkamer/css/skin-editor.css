@@ -138,3 +138,4 @@ html.se-dragging,html.se-dragging *{cursor:grabbing!important;user-select:none!i
 }
 @media (pointer:coarse){ .skwin button,.skwin select,.skwin input[type=text],.skwin input[type=number],.skwin input[type=search]{min-height:44px} .skwin .dz-sw{width:56px;height:44px} .se-trow{min-height:44px} .se-grip{padding:0 10px} .se-sizer{width:28px;right:-28px} .se-corner{width:28px;height:28px;right:-28px;bottom:-28px} .se-view{padding-right:36px} .se-arr{width:40px;height:40px} }
 @media (prefers-reduced-motion:reduce){ .skwin *{transition:none!important;animation:none!important} }
+.se-keyline{font:11px var(--mono,monospace);color:var(--muted);padding:4px 6px;margin:4px 0;border:1px dashed var(--line);border-radius:4px;word-break:break-all}

@@ -44,6 +44,7 @@ const inside=(b,x,y)=>x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom, area=b=>b.wi
 function hit(r,x,y,withPanels){ const ds=displays(r).filter(d=>d.kind!=='select'&&inside(d.el.getBoundingClientRect(),x,y)); if(ds.length) return {t:'dsp',kind:ds[0].kind};
   const us=units(r).map(u=>({u,b:u.el.getBoundingClientRect()})).filter(o=>inside(o.b,x,y)).sort((a,b)=>area(a.b)-area(b.b)); if(us.length) return {t:'unit',u:us[0].u};
   if(withPanels){ const ps=panels(r).map(p=>({p,b:p.el.getBoundingClientRect()})).filter(o=>inside(o.b,x,y)).sort((a,b)=>area(a.b)-area(b.b)); if(ps.length) return {t:'panel',pid:ps[0].p.pid}; }
+  { const de=PK.skElAt?PK.skElAt(r,x,y):null; if(de&&inside(r.el.getBoundingClientRect(),x,y)) return de.decor?{t:'decor',id:de.decor,el:de.el}:{t:'dom',ri:de.ri,key:de.key,el:de.el}; }   // geen geregistreerd onderdeel: het element dat de kaart daar echt tekent (skins 0.9)
   return inside(r.el.getBoundingClientRect(),x,y)?{t:'card'}:null; }
 // ---- schermpje: vorige/volgende optie ----
 function stepSel(s,dir){ const L=[...s.options].filter(o=>!o.disabled); if(!L.length) return null; const i=L.findIndex(o=>o.value===s.value), j=i<0?(dir>0?0:L.length-1):i+dir; if(j<0||j>=L.length) return L[Math.max(0,i)];
@@ -55,7 +56,9 @@ function box(view,b){ const vb=view.getBoundingClientRect(); return {x:b.left-vb
 function rect(b){ return {left:b.left,top:b.top,right:b.right,bottom:b.bottom,width:b.width,height:b.height}; }
 function union(bs){ const b={left:Math.min(...bs.map(z=>z.left)),top:Math.min(...bs.map(z=>z.top)),right:Math.max(...bs.map(z=>z.right)),bottom:Math.max(...bs.map(z=>z.bottom))}; b.width=b.right-b.left; b.height=b.bottom-b.top; return b; }
 function frame(o,view,b,name,cls){ const q=box(view,b), d=el('div',cls||'se-sel'); Object.assign(d.style,{left:q.x+'px',top:q.y+'px',width:q.w+'px',height:q.h+'px'}); if(name){ const c=el('span','se-chip',name); if(q.y<24){ c.style.top='0'; c.style.left='0'; c.style.borderRadius='0 0 3px 0'; } d.appendChild(c); } o.appendChild(d); return q; }
-function selBox(r,main){ const s=E.sel; if(s.k==='ctl'){ const u=units(r).find(x=>x.id===s.id); if(u) return {b:u.el.getBoundingClientRect(),name:s.id,u,el:u.el}; }
+function selBox(r,main){ const s=E.sel; if(s.k==='dom'&&s.key){ const e=PK.skElResolve(r,s.ri||0,s.key); if(e&&e.isConnected) return {b:e.getBoundingClientRect(),name:e.localName+(s.key?'':''),el:e}; return null; }
+  if(s.k==='decor'){ if(!main) return null; const rs=PK.skRoots(r); let e=null; rs.forEach(rt=>{ if(!e) e=rt.node.querySelector('[data-pk-decor="'+s.id+'"]'); }); if(e) return {b:e.getBoundingClientRect(),name:s.id,el:e}; return null; }
+  if(s.k==='ctl'){ const u=units(r).find(x=>x.id===s.id); if(u) return {b:u.el.getBoundingClientRect(),name:s.id,u,el:u.el}; }
   else if(s.k==='display'){ const d=displays(r).find(x=>x.kind===s.kind); if(d) return {b:d.el.getBoundingClientRect(),name:pkt('m.se_dsp_kop',pkt('m.dz_d_t_'+s.kind)),d,el:d.el}; }
   else if(!main) return null;
   else if(s.k==='panel'){ const p=panels(r).find(x=>x.pid===s.pid); if(p) return {b:p.el.getBoundingClientRect(),name:s.pid,el:p.el}; }
@@ -76,7 +79,9 @@ function overlay(){ const X=E.els; if(!E.r||!X.ovl) return; empties();
     const sb=selBox(E.ro,false); if(sb) frame(o,X.oview,sb.b,sb.name); if(hover&&hover.which==='o') frame(o,X.oview,hover.b,'','se-hov'); } }
 // na een keuze in de boom: laat het gekozen element in het voorbeeld zien (scrollt de werkplek, niet de pagina)
 function show(){ if(!E.r) return; [[E.r,E.els.view,true],[E.ro,E.els.oview,false]].forEach(([r,v,main])=>{ if(!r||(!main&&!E.view.orig)) return; const sb=selBox(r,main); if(!sb||!sb.el) return; const b=sb.b, vb=v.getBoundingClientRect(); if(b.top<vb.top||b.bottom>vb.bottom) v.scrollTop+=b.top<vb.top?b.top-vb.top-24:b.bottom-vb.bottom+24; if(b.left<vb.left||b.right>vb.right) v.scrollLeft+=b.left<vb.left?b.left-vb.left-24:b.right-vb.right+24; }); schedule(); }
-function hoverMove(ev,which){ if(document.documentElement.classList.contains('se-dragging')) return; const r=which==='o'?E.ro:E.r; if(!r) return; const h=hit(r,ev.clientX,ev.clientY,false); let b=null; if(h&&h.t==='unit') b=rect(h.u.el.getBoundingClientRect()); else if(h&&h.t==='dsp'){ const d=displays(r).find(x=>x.kind===h.kind); if(d) b=rect(d.el.getBoundingClientRect()); }
+// de muis boven een rij in de boom: het element in het voorbeeld licht op
+function hoverNode(n){ const s=n&&n.sel; if(E&&E.r&&s&&s.k==='dom'&&s.key){ const e=PK.skElResolve(E.r,s.ri||0,s.key); if(e&&e.isConnected){ hover={which:'n',b:rect(e.getBoundingClientRect())}; schedule(); return; } } if(hover){ hover=null; schedule(); } }
+function hoverMove(ev,which){ if(document.documentElement.classList.contains('se-dragging')) return; const r=which==='o'?E.ro:E.r; if(!r) return; const h=hit(r,ev.clientX,ev.clientY,false); let b=null; if(h&&h.t==='unit') b=rect(h.u.el.getBoundingClientRect()); else if(h&&(h.t==='dom'||h.t==='decor')&&h.el) b=rect(h.el.getBoundingClientRect()); else if(h&&h.t==='dsp'){ const d=displays(r).find(x=>x.kind===h.kind); if(d) b=rect(d.el.getBoundingClientRect()); }
   const was=hover; hover=b?{which,b}:null; if((was&&was.b.left)!==(hover&&hover.b.left)||(was&&was.b.top)!==(hover&&hover.b.top)) schedule(); }
 // ---- doelen bij slepen ----
 function target(what){ return (x,y)=>{ const cb=E.r.el.getBoundingClientRect(), zb=zone&&!zone.hidden&&zone.getBoundingClientRect(); const nz=()=>({t:'newpanel',rect:zb?{x:zb.left,y:zb.top,w:zb.width,h:zb.height}:{x:cb.left,y:cb.bottom-4,w:cb.width,h:4},fill:true}); if(zb&&inside(zb,x,y)&&what.t==='ctl') return nz();
@@ -89,7 +94,8 @@ function target(what){ return (x,y)=>{ const cb=E.r.el.getBoundingClientRect(), 
     let best=null, bd=1e9; kids.forEach(z=>{ const d=inside(z.b,x,y)?0:Math.hypot(Math.max(z.b.left-x,0,x-z.b.right),Math.max(z.b.top-y,0,y-z.b.bottom)); if(d<bd){ bd=d; best=z; } });
     const b=best.b, before=y<b.top||(y<=b.bottom&&x<b.left+b.width/2); if(before) return {t:'in',pi,beforeId:best.id,rect:{x:b.left-1,y:b.top,w:2,h:b.height}};
     const nx=kids[kids.indexOf(best)+1]; return {t:'in',pi,beforeId:nx?nx.id:null,rect:{x:b.right-1,y:b.top,w:2,h:b.height}}; }; }
-function down(ev,which){ if(ev.button>0) return; const r=which==='o'?E.ro:E.r; if(!r) return; ev.preventDefault(); const h=hit(r,ev.clientX,ev.clientY,which==='n'); if(!h) return; const ap=workAp(); let sel, what=null;
+function down(ev,which){ if(ev.button>0) return; const r=which==='o'?E.ro:E.r; if(!r) return; ev.preventDefault(); let h=hit(r,ev.clientX,ev.clientY,which==='n'&&!ev.altKey); if(ev.altKey&&PK.skElAt){ const de=PK.skElAt(r,ev.clientX,ev.clientY); if(de) h=de.decor?{t:'decor',id:de.decor}:{t:'dom',ri:de.ri,key:de.key}; } if(!h) return; const ap=workAp(); let sel, what=null;
+  if(h.t==='dom'){ E.select({k:'dom',ap,ri:h.ri||0,key:h.key||null},{swallow:ev.pointerType==='touch',reveal:true}); return; } if(h.t==='decor'){ if(which==='o') return; E.select({k:'decor',ap,id:h.id},{swallow:ev.pointerType==='touch',reveal:true}); return; }
   if(h.t==='unit'){ sel=h.u.id?{k:'ctl',ap,id:h.u.id}:{k:'ap',ap}; if(h.u.id) what={t:'ctl',id:h.u.id,ap,label:h.u.id,from:which}; }
   else if(h.t==='dsp') sel={k:'display',ap,kind:h.kind};
   else if(h.t==='panel'){ const lo=M.layoutOf(E.m,ap); sel=lo.panels.some(p=>p.id===h.pid)?{k:'panel',ap,pid:h.pid}:{k:'rest',ap}; if(sel.k==='panel') what={t:'panel',pid:h.pid,ap,label:h.pid,from:which}; }
@@ -112,5 +118,5 @@ function sizerKey(ev){ const d={ArrowLeft:-1,ArrowRight:1}[ev.key]; if(!d||!E.r)
 function init(e){ E=e; const X=e.els; zone=X.zone; X.shield.onpointerdown=ev=>down(ev,'n'); X.oshield.onpointerdown=ev=>down(ev,'o');
   X.shield.onpointermove=ev=>hoverMove(ev,'n'); X.oshield.onpointermove=ev=>hoverMove(ev,'o'); [X.shield,X.oshield].forEach(s=>{ s.onpointerleave=()=>{ if(hover){ hover=null; schedule(); } }; });
   [X.sizer,X.corner].forEach(s=>{ s.onpointerdown=sizerDown; }); X.sizer.onkeydown=sizerKey; [X.view,X.oview].forEach(v=>v.addEventListener('scroll',schedule,{passive:true})); }
-PK.ske_stage={init,create,destroy,setWidth,fit,preview,schedule,units,panels,displays,previewAp,workAp,stepSel,syncWidthUi,target,dragState,show};
+PK.ske_stage={hoverNode,init,create,destroy,setWidth,fit,preview,schedule,units,panels,displays,previewAp,workAp,stepSel,syncWidthUi,target,dragState,show};
 })(window.__PK);
