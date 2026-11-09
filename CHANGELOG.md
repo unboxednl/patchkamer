@@ -4,6 +4,16 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.26.0 (2026-11-09)
+
+### Added
+- **Clip Arranger 1.29.0: editing sections and clips.**
+  - **Sections:** right-clicking a section block gives **Copy**, **Cut**, **Paste (after this one)**, **Duplicate** and **Delete**; also with Ctrl+C, Ctrl+X, Ctrl+V and Delete. You move a section by clicking it, holding the mouse button and dragging (a thick edge shows before or after the block). Every section block shows a cell per track with the clip number (outline = a different clip than the scene's, line = Continue), so what you choose in the Section row of the matrix shows in the song bar at once, and the matrix follows the section you choose in the song bar.
+  - **Clips:** right-clicking a clip gives **Copy**, **Cut**, **Paste**, **To next slot** and **Delete**; Ctrl+C, Ctrl+X, Ctrl+V, Delete and Ctrl+Z work for the part of the card where you last clicked. A clip only fits on a track of the same kind (drums with drums, keys and drone with each other); otherwise Paste is disabled.
+  - **Pages (clip editor):** **Copy page** and **Paste page** put the notes, CC and settings of the chosen page on another page, in the same clip or in another clip or on another track of the same kind; the target page is replaced.
+  - The status line (*Host transport is stopped*, bar and tempo) is now on the right in the row with the ports. **Template** and **Load template** are gone from the card.
+  - Card only: state, presets and playback are the same as in 1.28.0 (measured with the 58 presets and the default project, in song and session mode). Not listened to. Manual (NL and EN), device notes and screenshot updated.
+
 ## 0.25.1 (2026-11-09)
 
 ### Changed

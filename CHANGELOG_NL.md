@@ -4,6 +4,16 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.26.0 (2026-11-09)
+
+### Toegevoegd
+- **Clip Arranger 1.29.0: secties en clips bewerken.**
+  - **Secties:** rechtermuisknop op een sectieblok geeft **Kopieer**, **Knip**, **Plak (na deze)**, **Dupliceer** en **Verwijder**; ook met Ctrl+C, Ctrl+X, Ctrl+V en Delete. Een sectie verplaats je door hem aan te klikken, ingedrukt te houden en te slepen (een dikke rand toont voor of na het blok). Elk sectieblok toont per spoor een vakje met het clipnummer (rand = andere clip dan de scène, streep = Doorlopen), dus wat je in de rij Sectie van de matrix kiest staat meteen in de songbalk, en de matrix volgt de sectie die je in de songbalk kiest.
+  - **Clips:** rechtermuisknop op een clip geeft **Kopieer**, **Knip**, **Plak**, **Naar volgende slot** en **Verwijder**; Ctrl+C, Ctrl+X, Ctrl+V, Delete en Ctrl+Z werken voor het deel van de kaart waar je het laatst klikte. Een clip past alleen op een spoor van dezelfde soort (drums met drums, toetsen en drone onderling); anders is Plak uitgeschakeld.
+  - **Pagina's (clip-editor):** **Kopieer pagina** en **Plak pagina** zetten de noten, CC en instellingen van de gekozen pagina op een andere pagina, in dezelfde clip of in een andere clip of op een ander spoor van dezelfde soort; de doelpagina wordt vervangen.
+  - De statusregel (*Host transport staat stil*, maat en tempo) staat nu rechts in de regel met de poorten. **Startpunt** en **Laad startpunt** zijn uit de kaart.
+  - Alleen de kaart: state, presets en afspelen zijn gelijk aan 1.28.0 (gemeten met de 58 presets en het standaardproject, in song- en sessiemodus). Niet beluisterd. Handleiding (NL en EN), apparaatnotities en screenshot bijgewerkt.
+
 ## 0.25.1 (2026-11-09)
 
 ### Gewijzigd
