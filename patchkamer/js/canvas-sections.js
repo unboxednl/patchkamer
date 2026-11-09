@@ -44,7 +44,7 @@ function layerAdd(el){ layer.appendChild(el); }
 // een sectie kiezen: hij licht op zoals een apparaat; kies je een apparaat, dan is de sectie weer losgelaten
 function selectSec(s){ H.secs.forEach(x=>x.el&&x.el.classList.toggle('sel',x===s)); if(s&&PK.selected) PK.select(null); }
 function build(s){ const e=document.createElement('div'); s.el=e;
-  e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<span class="secrz '+d+'" aria-hidden="true"></span>').join('');
+  e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<span class="secrz rz-'+d+'" aria-hidden="true"></span>').join('');
   const mn=e.querySelector('.secmenu'); mn.textContent='⋯'; mn.title=PK.pkt('m.sc_menu_titel'); mn.setAttribute('aria-label',mn.title);
   e.querySelector('.secminb').onclick=ev=>{ ev.stopPropagation(); toggleMin(s); };
   mn.onclick=ev=>{ ev.stopPropagation(); const b=mn.getBoundingClientRect(); menu(s,b.left,b.bottom+4); };
@@ -63,7 +63,7 @@ function build(s){ const e=document.createElement('div'); s.el=e;
   const end=()=>{ if(d){ d=null; e.classList.remove('drag'); PK.drawCables(); if(PK.wslSave) PK.wslSave(); } };
   e.addEventListener('pointermove',mv); e.addEventListener('pointerup',end); e.addEventListener('pointercancel',end);
   // grootte, aan elke kant en hoek: nooit kleiner dan nodig is voor de leden
-  ['n','s','e','w','ne','nw','se','sw'].forEach(dir=>{ const g=e.querySelector('.secrz.'+dir); let st=null;
+  ['n','s','e','w','ne','nw','se','sw'].forEach(dir=>{ const g=e.querySelector('.secrz.rz-'+dir); let st=null;
     g.addEventListener('pointerdown',ev=>{ if(ev.button!==0) return; ev.stopPropagation(); ev.preventDefault(); st={cx:ev.clientX,cy:ev.clientY,x:s.x,y:s.y,w:s.w,h:s.h,b:bbox(s),sn:snapAll()}; g.setPointerCapture(ev.pointerId); });
     g.addEventListener('pointermove',ev=>{ if(!st) return; const k=H.view.scale, dx=(ev.clientX-st.cx)/k, dy=(ev.clientY-st.cy)/k, b=st.b;
       let x0=st.x, y0=st.y, x1=st.x+st.w, y1=st.y+st.h;

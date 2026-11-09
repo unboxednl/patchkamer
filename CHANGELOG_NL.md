@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.27.3 (2026-11-09)
+
+### Opgelost
+- **De echte oorzaak van het vierkantje in een canvas-sectie.** Drum Kit 1.18.1 en Pulse Drums 1.19.1 hadden een algemene stijlregel `.sw` (achtergrond in de kaartkleur, 20 px opvulling, afgeronde hoek) die in de pagina elk element met die klassenaam raakte, ook de hoekgreep linksonder van een sectie. Dat gaf een gevuld vierkantje zodra zo'n apparaat in de song zat. De apparaten gebruiken nu eigen klassenamen (`dk-app`, `pd-app`) en de richtingsklassen van de secties-grepen hebben een voorvoegsel (`rz-`).
+
 ## 0.27.2 (2026-11-09)
 
 ### Gewijzigd

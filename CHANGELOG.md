@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.27.3 (2026-11-09)
+
+### Fixed
+- **The real cause of the square in a canvas section.** Drum Kit 1.18.1 and Pulse Drums 1.19.1 had a generic style rule `.sw` (card-coloured background, 20 px padding, rounded corner) that hit every element with that class name in the page, including the bottom-left handle of a section. That gave a filled square as soon as such a device was in the song. The devices now use their own class names (`dk-app`, `pd-app`) and the direction classes of the section handles have a prefix (`rz-`).
+
 ## 0.27.2 (2026-11-09)
 
 ### Changed
