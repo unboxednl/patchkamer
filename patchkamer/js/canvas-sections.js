@@ -15,7 +15,7 @@
    ===================================================================== */
 const MAXS=40, GAP=48, PAD=28, MINW=180, MINH=110, LINES=['solid','dashed','dotted','none'], H=PK.Host;
 const hh=s=>Math.round(s.fs*1.5), topPad=s=>Math.round(hh(s)/2)+14;   // hoogte van de titelbalk; ruimte van de bovenrand tot de eerste apparaten
-H.secs=[]; H.jumps=[];
+H.secs=[]; H.jumps=[]; H.secsel=new Set();
 let layer=null, uid=1, popup=null;
 const wideOn=()=>!PK.LAY||PK.LAY.cls==='wide';
 const hex=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
@@ -42,13 +42,16 @@ function sync(){ if(!layer) return; const on=wideOn(); layer.hidden=!on; if(!on)
   H.devices.forEach(r=>r.el.classList.remove('secmin')); H.secs.forEach(s=>{ if(s.min) alive(s).forEach(id=>H.devices.get(id).el.classList.add('secmin')); }); }
 function layerAdd(el){ layer.appendChild(el); }
 // een sectie kiezen: hij licht op zoals een apparaat; kies je een apparaat, dan is de sectie weer losgelaten
-function selectSec(s){ H.secs.forEach(x=>x.el&&x.el.classList.toggle('sel',x===s)); if(s&&PK.selected) PK.select(null); }
+// add=true (Shift/Ctrl+klik): de sectie erbij of eraf in de selectie (multi-select.js); anders alleen deze sectie
+function paintSecSel(){ H.secs.forEach(x=>x.el&&x.el.classList.toggle('sel',H.secsel.has(x))); }
+function selectSec(s,add){ if(add&&s){ if(PK.mselFromSingle) PK.mselFromSingle(); if(H.secsel.has(s)) H.secsel.delete(s); else H.secsel.add(s); paintSecSel(); if(PK.mselChanged) PK.mselChanged(); return; }
+  H.secsel.clear(); if(s) H.secsel.add(s); paintSecSel(); if(s){ if(PK.mselClear) PK.mselClear(); if(PK.selected) PK.select(null); } }
 function build(s){ const e=document.createElement('div'); s.el=e;
   e.innerHTML='<div class="secfr"></div><div class="sechd"><b class="secn" hidden></b><span class="secnm"></span></div><div class="secbt"><button type="button" class="secminb"></button><button type="button" class="secmenu">⋯</button></div>'+['n','s','e','w','ne','nw','se','sw'].map(d=>'<span class="secrz rz-'+d+'" aria-hidden="true"></span>').join('');
   const mn=e.querySelector('.secmenu'); mn.textContent='⋯'; mn.title=PK.pkt('m.sc_menu_titel'); mn.setAttribute('aria-label',mn.title);
   e.querySelector('.secminb').onclick=ev=>{ ev.stopPropagation(); toggleMin(s); };
   mn.onclick=ev=>{ ev.stopPropagation(); const b=mn.getBoundingClientRect(); menu(s,b.left,b.bottom+4); };
-  e.addEventListener('pointerdown',ev=>{ if(ev.button===0||ev.button===2) selectSec(s); },true);
+  e.addEventListener('pointerdown',ev=>{ if(ev.button===0||ev.button===2) selectSec(s,ev.button===0&&(ev.shiftKey||ev.ctrlKey||ev.metaKey)); },true);
   const hd=e.querySelector('.sechd'); hd.addEventListener('contextmenu',ev=>{ ev.preventDefault(); ev.stopPropagation(); menu(s,ev.clientX,ev.clientY); }); hd.addEventListener('dblclick',ev=>{ if(!ev.target.closest('button')) edit(s); });
   // slepen aan de titel of aan het lege vlak: sectie en leden samen. Middelste of rechtermuisknop op het vlak verschuift het canvas, zoals daarbuiten.
   let d=null;
@@ -123,6 +126,20 @@ PK.secAnchor=function(id,dir,kind){ if(!wideOn()) return null; const s=minOf(id)
   return {x:s.x+(dir==='out'?w:0),y:s.y+h*f}; };
 PK.secSame=(a,b)=>{ if(!wideOn()) return false; const s=minOf(a); return !!s&&s.members.includes(b); };
 
+// kopiëren en plakken van secties (device-group.js) en de selectie (multi-select.js)
+PK.secSelected=()=>H.secs.filter(s=>H.secsel.has(s));
+PK.secSelect=list=>{ H.secsel.clear(); (list||[]).forEach(s=>{ if(H.secs.includes(s)) H.secsel.add(s); }); paintSecSel(); };
+PK.secMembers=s=>alive(s);
+PK.secBoxes=()=>H.secs.map(box);
+PK.secLimits=()=>({n:H.secs.length,max:MAXS,wide:!!layer&&wideOn()});
+PK.secOffset=(s,dx,dy)=>{ if(dx||dy){ shift(s,dx,dy); } };
+PK.secRemove=s=>{ if(H.secs.includes(s)) remove(s); };
+PK.secPaste=function(sp,members,dx,dy){ if(!layer||!wideOn()||H.secs.length>=MAXS) return null;
+  const s={id:'s'+(uid++),name:str(sp.name,40,PK.pkt('m.sc_standaardnaam')),color:hex(sp.color)?sp.color.toLowerCase():'#4fd1c5',alpha:num(sp.alpha,0,0.6,0.16),line:LINES.includes(sp.line)?sp.line:'solid',fs:Math.round(num(sp.fs,16,96,32)),n:0,
+    x:Math.round(num(sp.x,-1e6,1e6,0)+dx),y:Math.round(num(sp.y,-1e6,1e6,0)+dy),w:Math.round(num(sp.w,MINW,20000,560)),h:Math.round(num(sp.h,MINH,20000,380)),min:!!sp.min,members:members.slice()};
+  const n=Math.round(+sp.n); if(n>=1&&n<=9&&!holder(n,s)) s.n=n;   // een bezet nummer houdt de oorspronkelijke houder
+  H.secs.push(s); build(s); sync(); return s; };
+
 /* ---------- formulier en menu ---------- */
 function form(title,fields,okTxt){ return new Promise(res=>{ const m=document.createElement('div'); m.className='pkmodal'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true');
   const box=document.createElement('form'); box.className='box scform'; const h=document.createElement('div'); h.className='scttl'; h.textContent=title; box.appendChild(h); const els={};
@@ -162,8 +179,8 @@ async function create(at){ if(!layer||!wideOn()){ return; } if(H.secs.length>=MA
   // wat er al op ligt, hoort er nu bij
   H.devices.forEach((r,id)=>{ const c=centre(id); if(c&&under(c.x,c.y,rectOf(r))===s){ H.secs.forEach(x=>{ x.members=x.members.filter(m=>m!==id); }); s.members.push(id); } }); fit(s); sync(); PK.drawCables(); if(PK.wslSave) PK.wslSave(); }
 async function edit(s){ const o=await form(PK.pkt('m.sc_titel_edit'),secFields(s),PK.pkt('m.sc_ok_opslaan')); if(!o) return; secApply(s,o); paint(s); if(PK.wslSave) PK.wslSave(); }
-function remove(s){ alive(s).forEach(id=>H.devices.get(id).el.classList.remove('secmin')); H.secs=H.secs.filter(x=>x!==s); if(s.el) s.el.remove(); PK.drawCables(); if(PK.wslSave) PK.wslSave(); }
-function menu(s,x,y){ pop(x,y,[[PK.pkt('m.sc_bewerken'),()=>edit(s)],[PK.pkt(s.min?'m.sc_herstel':'m.sc_minimaliseer'),()=>toggleMin(s)],[PK.pkt('m.sc_verwijder'),()=>remove(s)]]); }
+function remove(s){ H.secsel.delete(s); alive(s).forEach(id=>H.devices.get(id).el.classList.remove('secmin')); H.secs=H.secs.filter(x=>x!==s); if(s.el) s.el.remove(); PK.drawCables(); if(PK.wslSave) PK.wslSave(); }
+function menu(s,x,y){ pop(x,y,[[PK.pkt('m.sc_bewerken'),()=>edit(s)],[PK.pkt(s.min?'m.sc_herstel':'m.sc_minimaliseer'),()=>toggleMin(s)],[PK.pkt('m.sc_kopieer'),()=>{ selectSec(s); if(PK.groupCopy) PK.groupCopy(PK.selection()); }],[PK.pkt('m.sc_verwijder'),()=>remove(s)]]); }
 
 /* ---------- jump points ---------- */
 function jpPaint(j){ const e=j.el; e.style.left=j.x+'px'; e.style.top=j.y+'px'; e.querySelector('b').textContent=j.n; e.querySelector('span').textContent=j.name; e.title=PK.pkt('m.jp_titel',j.n); }
@@ -190,7 +207,7 @@ PK.secCreate=create; PK.jumpCreate=jpCreate;
 /* ---------- opslaan en laden ---------- */
 function secState(){ const o={}; if(H.secs.length) o.sections=H.secs.map(s=>({id:s.id,name:s.name,color:s.color,alpha:+s.alpha.toFixed(2),line:s.line,fs:s.fs,...(s.n?{n:s.n}:{}),x:s.x,y:s.y,w:s.w,h:s.h,...(s.min?{min:true}:{}),members:alive(s)}));
   if(H.jumps.length) o.jumps=H.jumps.map(j=>({n:j.n,name:j.name,x:j.x,y:j.y,scale:+j.scale.toFixed(3)})); return o; } PK.secState=secState;
-function secClear(){ popClose(); H.secs.forEach(s=>s.el&&s.el.remove()); H.jumps.forEach(j=>j.el&&j.el.remove()); H.secs=[]; H.jumps=[]; uid=1; } PK.secClear=secClear;
+function secClear(){ popClose(); H.secsel.clear(); H.secs.forEach(s=>s.el&&s.el.remove()); H.jumps.forEach(j=>j.el&&j.el.remove()); H.secs=[]; H.jumps=[]; uid=1; } PK.secClear=secClear;
 function secLoad(p){ secClear(); if(!layer||!p) return; const seen=new Set(), nn=new Set();
   (Array.isArray(p.sections)?p.sections:[]).slice(0,MAXS).forEach(x=>{ if(!x||typeof x!=='object') return; const w=num(x.w,MINW,20000,560), h=num(x.h,MINH,20000,380);
     const s={id:'s'+(uid++),name:str(x.name,40,PK.pkt('m.sc_standaardnaam')),color:hex(x.color)?x.color.toLowerCase():'#4fd1c5',alpha:num(x.alpha,0,0.6,0.16),line:LINES.includes(x.line)?x.line:'solid',fs:Math.round(num(x.fs,16,96,32)),n:0,
@@ -200,7 +217,7 @@ function secLoad(p){ secClear(); if(!layer||!p) return; const seen=new Set(), nn
     const j={n,name:str(x.name,40,PK.pkt('m.jp_standaardnaam')),x:Math.round(num(x.x,-1e6,1e6,0)),y:Math.round(num(x.y,-1e6,1e6,0)),scale:num(x.scale,0.04,10,1)}; H.jumps.push(j); jpBuild(j); });
   sync(); } PK.secLoad=secLoad;
 
-function init(){ document.addEventListener('pointerdown',e=>{ const t=e.target; if(t&&t.closest&&t.closest('.card')) H.secs.forEach(x=>x.el&&x.el.classList.remove('sel')); },true);
+function init(){ document.addEventListener('pointerdown',e=>{ const t=e.target; if(t&&t.closest&&t.closest('.card')){ H.secsel.clear(); paintSecSel(); } },true);
   layer=document.createElement('div'); layer.className='seclayer'; PK.floor.insertBefore(layer,PK.floor.firstChild);
   const pf=PK.paintFloorEmpty; PK.paintFloorEmpty=function(){ pf.apply(this,arguments); sync(); };   // loopt mee met elke kabeltekening: indeling gewisseld, apparaat vervangen
   document.addEventListener('keydown',e=>{ if(!e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||PK.typing(e)||document.querySelector('.pkmodal')) return; const m=/^Digit([1-9])$/.exec(e.code||''); if(!m) return;

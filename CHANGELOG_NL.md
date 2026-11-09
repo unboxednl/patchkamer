@@ -4,6 +4,19 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.29.0 (2026-11-09)
+
+### Toegevoegd
+- **Meerdere apparaten selecteren en samen kopiëren en plakken, ook tussen werkruimtes.** Shift-klik of Ctrl/Cmd-klik op de titelbalk of het icoon van een kaart voegt hem toe aan de selectie of haalt hem eruit; Shift+slepen op de lege vloer (of op het vlak van een sectie) trekt een selectiekader; Shift/Ctrl-klik op de titel van een sectie kiest de sectie. Esc of een klik op de lege vloer wist de selectie, de statusregel noemt hoeveel er gekozen zijn en alle gekozen kaarten krijgen dezelfde markering als één gekozen apparaat (in elke kleurstijl en skin). Een gekozen kaart slepen aan de titelbalk verschuift de hele groep (gekozen secties met hun apparaten). Op aanraking staat in het menu achter het icoontje van een kaart **Selecteer meer**: tik kaarten aan of weg tot je op **Klaar** tikt.
+- **Een groep kopiëren en plakken met Ctrl/Cmd+C en Ctrl/Cmd+V.** Elk apparaat gaat mee zoals bij één kopie (instellingen, grootte, preset, skin) met zijn plek ten opzichte van de groep, plus de kabels waarvan beide uiteinden in de groep zitten (met hun kleur). Een gekozen canvas-sectie gaat mee met naam, kleur, dekking, lijnstijl, lettergrootte, grootte, minimalisatie en al zijn apparaten; een apparaat dat los én als lid van een gekozen sectie gekozen is, wordt één keer gekopieerd. Plakken zet de groep in de actieve werkruimte met zijn midden op de muis (of het midden van het beeld), op een plek waar hij geen andere kaart of sectie raakt, legt de kabels opnieuw met nieuwe id's en maakt het geplakte geheel de selectie. Een geplakte sectie houdt zijn viewpoint-nummer alleen als dat nummer vrij is. Het werkt in een andere werkruimte en na een herlaad (dezelfde opslag als het kopiëren van één apparaat, nieuw formaat `patchkamer-apparaten`). Plakken is alles of niets: een ontbrekende apparaatdefinitie, meer dan 40 secties of een apparaat dat mislukt wordt gemeld en er wordt niets geplaatst. Grenzen: 64 apparaten, 512 kabels, 8 MB. **Ctrl+Z** of de knop **Ongedaan maken** in de melding maakt een plak ongedaan (ongeveer 20 seconden). Het menu achter het icoontje van een kaart en het rechtsklikmenu van de vloer hebben **Kopieer selectie (n)** en **Plak selectie (n)**, en het menu van een sectie heeft **Kopieer sectie**.
+- Eén gekozen apparaat gedraagt zich precies als voorheen: Ctrl+C/V kopieert en plakt dat apparaat, of het patroon bij een apparaat met een eigen patroonklembord (het apparaat zelf met Shift+Ctrl+C). Tekstvelden houden hun eigen toetsen.
+- Handleiding (NL en EN): nieuwe sectie "Meerdere apparaten tegelijk kopiëren en plakken", de sneltoetsentabel en het sectiemenu bijgewerkt en een nieuwe schermafbeelding (22).
+
+### Opgelost
+- **Automatisch koppelen bleef weg bij een drumapparaat.** Een Drum Machine, Pulse Drums of Drum Kit heeft naast audio ook trigs, mod en losse uitgangen, dus op een drukker canvas kwamen er meer dan 7 mogelijkheden en verscheen er helemaal geen dialoog (bij synths wel). Nu blijven de voorgestelde koppelingen altijd staan, aangevuld met de dichtstbijzijnde mogelijkheden tot 7 rijen.
+
+### Gaat niet mee
+- Jump points worden niet gekopieerd, secties bestaan alleen in de brede indeling (in de compacte indeling worden alleen de apparaten geplakt) en een groep verplaatsen schuift andere kaarten niet opzij.
 ## 0.28.2 (2026-11-09)
 
 ### Opgelost

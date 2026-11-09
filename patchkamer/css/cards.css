@@ -4,7 +4,7 @@ svg.cables path{fill:none;stroke-width:2.5;opacity:.9}
 svg.cables path.audio{stroke:var(--audio)} svg.cables path.event{stroke:var(--event)} svg.cables path.pending{stroke-dasharray:6 5;opacity:.6}
 svg.cables path.hit{pointer-events:stroke;stroke:transparent;stroke-width:14;cursor:pointer}
 .card{position:absolute;width:300px;background:var(--card);border:1px solid var(--line);border-radius:6px;--lift:0 1px 3px var(--shadow),0 6px 16px var(--shadow);box-shadow:var(--lift);display:grid;grid-template-rows:auto auto minmax(0,1fr);min-width:0}
-.card.sel{border-color:var(--sel);box-shadow:0 0 0 1px var(--sel),0 0 16px 2px color-mix(in srgb,var(--sel) 60%,transparent),var(--lift)}
+.card.sel,.card.msel{border-color:var(--sel);box-shadow:0 0 0 1px var(--sel),0 0 16px 2px color-mix(in srgb,var(--sel) 60%,transparent),var(--lift)}
 .card .bar{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);cursor:grab;user-select:none;background:var(--bar);color:var(--bar-fg);border-radius:6px 6px 0 0}
 .card .bar:active{cursor:grabbing}
 .card .bar .nm{font-family:var(--disp);font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -36,7 +36,7 @@ body.nomodview .modbar,body.nomodview .pkmodmark{display:none!important}
 .card .rz.e{top:34px;right:-5px;bottom:14px;width:10px;cursor:ew-resize}
 .card .rz.s{left:14px;right:14px;bottom:-5px;height:10px;cursor:ns-resize}
 .card .rz.se{right:-2px;bottom:-2px;width:16px;height:16px;cursor:nwse-resize;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);border-radius:0 0 6px 0;opacity:.55}
-.card:hover .rz.se,.card.sel .rz.se,.card.resizing .rz.se{opacity:1;border-color:var(--audio)}
+.card:hover .rz.se,.card.sel .rz.se,.card.msel .rz.se,.card.resizing .rz.se{opacity:1;border-color:var(--audio)}
 .card .rz.e:hover,.card .rz.s:hover,.card.resizing .rz.e,.card.resizing .rz.s{background:rgba(79,209,197,.18)}
 .card.resizing{box-shadow:0 0 0 1px var(--audio),0 8px 24px var(--shadow)}
 .card .bar .dim{display:none;font-family:var(--mono);font-size:10px;color:var(--audio);font-variant-numeric:tabular-nums}

@@ -50,13 +50,13 @@ function addDevice(defId,x,y,state,fixedId,version){
     h.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,select,.dmbtn')||el.classList.contains('infocus')) return; drag={cx:e.clientX,cy:e.clientY,x0:rec.x,y0:rec.y}; h.setPointerCapture(e.pointerId); select(id); e.stopPropagation();});
     h.addEventListener('pointermove',e=>{if(!drag) return; rec.x=drag.x0+(e.clientX-drag.cx)/PK.Host.view.scale; rec.y=drag.y0+(e.clientY-drag.cy)/PK.Host.view.scale; el.style.left=rec.x+'px'; el.style.top=rec.y+'px'; PK.setDrop(PK.cableThroughRect({x:rec.x,y:rec.y,w:el.offsetWidth,h:el.offsetHeight},rec.ports,id,k=>!PK.hasCable(id,k))); if(PK.secHover) PK.secHover(id); PK.drawCables();});
     h.addEventListener('pointerup',()=>{ const c=drag&&PK.dropCable, was=!!drag&&Math.hypot(rec.x-drag.x0,rec.y-drag.y0)>4; drag=null; if(was&&!c){ makeRoom(id); } if(was&&PK.secDrop) PK.secDrop(id); if(c){ PK.setDrop(null); PK.insertOnCable(id,c); } else PK.setDrop(null); }); h.addEventListener('pointercancel',()=>{drag=null; PK.setDrop(null); if(PK.secHover) PK.secHover(null);}); });
-  el.addEventListener('pointerdown',e=>{select(id); e.stopPropagation();});
+  el.addEventListener('pointerdown',e=>{ if(!(PK.mselHas&&PK.mselHas(id)&&e.target.closest&&e.target.closest('.dmbtn'))) select(id); e.stopPropagation(); });   // het menu-icoon van een kaart in de groep laat de groep staan
   new ResizeObserver(en=>{ for(const x of en){ rec._w=el.offsetWidth; rec._h=el.offsetHeight; } PK.drawCables(); }).observe(el);
   PK.drawCables(); peersChanged(); return id;
 } PK.addDevice=addDevice;
 function initials(name){ const w=String(name).replace(/[^\p{L}\p{N} ]+/gu,' ').trim().split(/\s+/).filter(Boolean); if(!w.length) return '?'; return (w.length>1?w[0][0]+w[1][0]:w[0].slice(0,2)).toUpperCase(); }
 let zTop=10;
-const toFront=r=>{ r.el.style.zIndex=String(++zTop); };
+const toFront=r=>{ r.el.style.zIndex=String(++zTop); }; PK.toFront=toFront;
 // minimise to an icon and back; the size (r.w/r.h) is untouched, so restoring gives the previous size.
 // Restoring may overlap other devices on purpose (you want to use it now); nothing is rearranged.
 function setMini(id,on){ const r=PK.Host.devices.get(id); if(!r) return; r.mini=!!on; r.el.classList.toggle('mini',r.mini); if(!r.mini) toFront(r); select(id); PK.drawCables(); } PK.setMini=setMini;
@@ -123,7 +123,7 @@ function ctlSet(rec,key,f){ if(!Number.isFinite(f)) return false; f=Math.max(0,M
   if(kind==='select'){ const o=[...x.options]; if(!o.length) return false; const v=o[Math.min(o.length-1,Math.round(f*(o.length-1)))].value; if(x.value!==v){ x.value=v; x.dispatchEvent(new Event('input',{bubbles:true,composed:true})); x.dispatchEvent(new Event('change',{bubbles:true,composed:true})); } return true; }
   if(kind==='check'){ const want=f>=0.5; if(x.checked!==want) x.click(); return true; }
   if(f>=0.5){ x.click(); return true; } return false; } PK.ctlSet=ctlSet;
-function removeDevice(id){ const r=PK.Host.devices.get(id); if(!r) return; PK.Host.cables.filter(c=>c.from.id===id||c.to.id===id).forEach(PK.unpatch); PK.Host._modOff.delete(id); PK.Host._dropModSig(v=>v.sid===id||v.tid===id); PK.prmCleanup(id); if(PK.pnlOff) PK.pnlOff(r); try{r.inst.unmount&&r.inst.unmount(); r.inst.destroy&&r.inst.destroy();}catch(e){} PK.Host.stepSubs.delete(r.inst); r.el.remove(); PK.Host.devices.delete(id); if(PK.selected===id) PK.selected=null; PK.drawCables(); if(typeof PK.paintFocusBtn==='function') PK.paintFocusBtn(); peersChanged(); } PK.removeDevice=removeDevice;
+function removeDevice(id){ const r=PK.Host.devices.get(id); if(!r) return; PK.Host.cables.filter(c=>c.from.id===id||c.to.id===id).forEach(PK.unpatch); PK.Host._modOff.delete(id); PK.Host._dropModSig(v=>v.sid===id||v.tid===id); PK.prmCleanup(id); if(PK.pnlOff) PK.pnlOff(r); try{r.inst.unmount&&r.inst.unmount(); r.inst.destroy&&r.inst.destroy();}catch(e){} PK.Host.stepSubs.delete(r.inst); r.el.remove(); PK.Host.devices.delete(id); if(PK.selected===id) PK.selected=null; if(PK.mselDrop) PK.mselDrop(id); PK.drawCables(); if(typeof PK.paintFocusBtn==='function') PK.paintFocusBtn(); peersChanged(); } PK.removeDevice=removeDevice;
 // size: null = the device's own default (width from def.ui.width, height follows the content)
 function defWidth(def){ return PK.clamp((def.ui&&def.ui.width)||300,200,6000); } PK.defWidth=defWidth;
 function minWidth(def){ return PK.clamp((def.ui&&def.ui.minWidth)||200,200,defWidth(def)); } PK.minWidth=minWidth;
@@ -182,7 +182,7 @@ function updatePlaced(newKeys){ let n=0; [...PK.Host.devices.keys()].forEach(id=
     if(newKeys&&top&&top.version!==r.def.version&&PK.cmpVer(top.version,r.def.version)>0&&newKeys.has(PK.Host.key(top.id,top.version))){ switchVersion(id,top.version); n++; }
     else if(reloadDevice(id)) n++; }catch(e){ console.warn('reloadDevice()',e); } }); return n; } PK.updatePlaced=updatePlaced;
 function portExists(id,port,dir){ const r=PK.Host.devices.get(id); return !!(r&&r.el.querySelector(`.port[data-port="${port}"][data-dir="${dir}"]`)); }
-function select(id){ const ch=PK.selected!==id; PK.selected=id; PK.Host.devices.forEach((r,k)=>r.el.classList.toggle('sel',k===id)); if(ch) peersChanged(); } PK.select=select;
+function select(id){ if(PK.mselOnSelect) PK.mselOnSelect(id); const ch=PK.selected!==id; PK.selected=id; PK.Host.devices.forEach((r,k)=>r.el.classList.toggle('sel',k===id)); if(ch) peersChanged(); } PK.select=select;
 let _frameRaf=0, _vis={t:-1,wr:null};
 function deviceVisible(id){ const r=PK.Host.devices.get(id); if(!r||r.mini) return false; if(document.hidden) return false;
   if(r.el.classList.contains('infocus')) return !r.el.classList.contains('fvoff'); if(typeof PK.FOCUS!=='undefined'&&PK.FOCUS&&PK.FOCUS.open) return false;

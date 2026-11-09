@@ -4,7 +4,7 @@
    AUTOMATISCH KOPPELEN BIJ PLAATSEN · na het plaatsen biedt een dialoog kabels aan naar apparaten die al op de vloer staan.
    Alleen na een eigen handeling van de gebruiker (slepen, Plaatsen, tik op een compacte regel) en alleen als de schakelaar aan staat.
    ===================================================================== */
-const AUTOLINK_MAX=7;   // meer mogelijkheden (alle groepen samen, ook uitgevinkte) dan dit: geen dialoog, de gebruiker koppelt zelf
+const AUTOLINK_MAX=7;   // meer mogelijkheden (alle groepen samen, ook uitgevinkte) dan dit: alleen de voorgestelde plus de dichtstbijzijnde; zonder voorstel geen dialoog, de gebruiker koppelt zelf
 function autoLinkOn(){ let v=PK._alMem; try{ const s=localStorage.getItem('patchkamer.autoLink'); if(s==='1'||s==='0') v=s; }catch(e){} if(v==='1') return true; if(v==='0') return false; return !!PK.PKT.coarse.matches; }   // zonder eigen keuze: aan op een aanraakapparaat, uit op een desktop
 function autoLinkSet(on){ PK._alMem=on?'1':'0'; try{ localStorage.setItem('patchkamer.autoLink',PK._alMem); }catch(e){} autoLinkPaint(); } PK.autoLinkSet=autoLinkSet;
 function autoLinkPaint(){ const on=autoLinkOn(); ['alMenuCb','alSetCb'].forEach(i=>{ const e=PK.$(i); if(e) e.checked=on; }); } PK.autoLinkPaint=autoLinkPaint;
@@ -47,7 +47,7 @@ function alBuild(nid){
   // een effect mag ook tussen twee al gekoppelde apparaten (zelfde logica als neerzetten op een kabel)
   if(N.def.kind==='effect'&&PK.insertPorts(N.ports,'audio')) PK.Host.cables.forEach(c=>{ if(c.kind!=='audio'||c.from.id===nid||c.to.id===nid||!R.get(c.from.id)||!R.get(c.to.id)) return;
     items.push({n:seq++,type:'insert',kind:'insert',cable:c,aid:c.from.id,bid:c.to.id,A:R.get(c.from.id),B:R.get(c.to.id),checked:false,reason:''}); });
-  if(!items.length||items.length>AUTOLINK_MAX) return null;
+  if(!items.length) return null;
   // standaard aan: per bron-apparaat en soort hoogstens één voor de hand liggend voorstel, het volgende in de keten dat nog vrij is
   const dist=it=>Math.hypot(it.A.x-it.B.x,it.A.y-it.B.y), rk=it=>it.kind==='audio'?alRankA(it.B):alRankE(it.B);
   const best=new Map();
@@ -56,6 +56,10 @@ function alBuild(nid){
   best.forEach(i=>{ i.checked=true; });
   const ins=items.filter(i=>i.type==='insert'); const pick=ins.find(i=>PK.isOutputDef(i.B.def))||ins.find(i=>PK.isMixerDef(i.B.def));
   if(pick){ pick.checked=true; items.forEach(i=>{ if(i.type==='plain'&&i.kind==='audio') i.checked=false; }); }
+  // te veel mogelijkheden (een drumapparaat heeft audio, trigs, mod en losse uitgangen): de voorgestelde koppelingen blijven, de rest wordt ingekort tot de dichtstbijzijnde
+  if(items.length>AUTOLINK_MAX){ const keep=items.filter(i=>i.checked), rest=items.filter(i=>!i.checked).sort((x,y)=>dist(x)-dist(y)||x.n-y.n);
+    if(!keep.length) return null;
+    const out=new Set(keep.concat(rest.slice(0,Math.max(0,AUTOLINK_MAX-keep.length)))); return items.filter(i=>out.has(i)); }
   return items; }
 const alConflict=(x,y)=>x!==y&&((x.type==='insert'&&y.type==='insert')||(x.type==='insert'&&y.type==='plain'&&y.kind==='audio')||(y.type==='insert'&&x.type==='plain'&&x.kind==='audio'));
 function alDialog(nid,items){

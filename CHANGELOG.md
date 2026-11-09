@@ -4,6 +4,19 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.29.0 (2026-11-09)
+
+### Added
+- **Select several devices and copy and paste them together, between workspaces.** Shift-click or Ctrl/Cmd-click on the title bar or icon of a card adds it to or removes it from the selection; Shift+drag on the empty floor (or on the area of a section) draws a selection rectangle; Shift/Ctrl-click on the title of a section selects the section. Esc or a click on the empty floor clears the selection, the status line shows how many are selected, and all selected cards get the same highlight as a single selected device (in every colour style and skin). Dragging a selected card by its title bar moves the whole group (selected sections with their devices). On touch the menu behind a card's icon has **Select more**: tap cards to add or remove them until you tap **Done**.
+- **Copy and paste a group with Ctrl/Cmd+C and Ctrl/Cmd+V.** Each device goes along as with a single copy (settings, size, preset, skin) with its place relative to the group, plus the cables whose two ends are both in the group (with their colour). A selected canvas section goes along with name, colour, opacity, line style, letter size, size, minimised state and all its devices; a device selected on its own and as a member of a selected section is copied once. Pasting puts the group in the active workspace with its middle at the mouse (or the middle of the view), at a spot where it overlaps no other card or section, lays the cables again with new ids, and makes the pasted whole the selection. A pasted section keeps its viewpoint number only if that number is free. It works in another workspace and after a reload (same storage as copying one device, new format `patchkamer-apparaten`). Pasting is all or nothing: a missing device definition, more than 40 sections or a device that fails is reported and nothing is placed. Limits: 64 devices, 512 cables, 8 MB. **Ctrl+Z** or the **Undo** button in the message undoes a paste (about 20 seconds). The menu behind a card's icon and the right-click menu of the floor have **Copy selection (n)** and **Paste selection (n)**, and the menu of a section has **Copy section**.
+- One selected device behaves exactly as before: Ctrl+C/V copy and paste that device, or the pattern for a device with its own pattern clipboard (the device itself with Shift+Ctrl+C). Text fields keep their own keys.
+- User manual (NL and EN): new section "Copying and pasting several devices at once", the shortcut table and the section menu updated, and a new screenshot (22).
+
+### Fixed
+- **Auto-connect did not appear for a drum device.** A Drum Machine, Pulse Drums or Drum Kit has trigs, mod and separate outputs besides audio, so on a busier canvas there were more than 7 options and no dialog showed up at all (synths were fine). The suggested connections now always stay, topped up with the nearest options up to 7 rows.
+
+### Not included
+- Jump points are not copied, sections exist only in the wide layout (in the compact layout only the devices are pasted), and moving a group does not push other cards aside.
 ## 0.28.2 (2026-11-09)
 
 ### Fixed

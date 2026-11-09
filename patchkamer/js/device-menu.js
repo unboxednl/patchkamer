@@ -20,16 +20,17 @@ function pack(id){ const r=PK.Host.devices.get(id); if(!r) return null;
 function copyDevice(id){ const o=pack(id); if(!o){ PK.status(PK.pkt('m.dm_kopie_mislukt'),true); return false; }
   mem=o; PK.IDB.set(KEY,o); PK.status(PK.pkt('m.dm_gekopieerd',o.name)); return true; }
 // geheugen aanvullen vanuit de opslag (na een herstart); alleen een geldig, klein object
-async function load(){ if(mem) return mem; const o=await PK.IDB.get(KEY); if(o&&o.format==='patchkamer-apparaat'&&typeof o.def==='string'&&o.state&&typeof o.state==='object'&&JSON.stringify(o).length<=MAXB) mem=o; return mem; }
+async function load(){ if(mem) return mem; const o=await PK.IDB.get(KEY); if(o&&o.format===PK.groupFormat&&PK.groupValid(o)) mem=o; else if(o&&o.format==='patchkamer-apparaat'&&typeof o.def==='string'&&o.state&&typeof o.state==='object'&&JSON.stringify(o).length<=MAXB) mem=o; return mem; }
 // op (x,y) in vloercoördinaten, of in het midden van wat je ziet
 async function pasteDevice(at){ const o=await load(); if(!o){ PK.status(PK.pkt('m.dm_niets_gekopieerd'),true); return null; }
+  if(o.format===PK.groupFormat) return PK.groupPaste(o,at);   // een groep (device-group.js)
   let ver=o.version; if(!PK.Host.registry.has(PK.Host.key(o.def,ver))){ const l=PK.Host.latest(o.def); if(!l){ PK.status(PK.pkt('m.dm_niet_geladen',o.name||o.def),true); return null; } ver=l.version; }
   const A=PK.viewArea(), w=Math.max(200,+o.w||300), x=at?at.x:A.cx-w/2, y=at?at.y:A.cy-120;
   const nid=PK.addDevice(o.def,Math.round(x),Math.round(y),clone(o.state),undefined,ver); if(!nid) return null;
   if(o.w||o.h) PK.setSize(nid,o.w||undefined,o.h||undefined); if(o.mini) PK.setMini(nid,true);
   if(o.preset) PK.presetMark(nid,o.preset); if(o.skin) PK.skinRestore(nid,o.skin);
   PK.afterAdd(nid); return nid; }
-PK.deviceCopy=copyDevice; PK.devicePaste=pasteDevice;
+PK.deviceCopy=copyDevice; PK.devicePaste=pasteDevice; PK.devicePack=pack; PK.deviceClipSet=o=>{ mem=o; PK.IDB.set(KEY,o); };
 
 function close(focusBack){ const m=MENU; if(!m) return; MENU=null;
   document.removeEventListener('pointerdown',m._out,true); document.removeEventListener('keydown',m._key,true); document.removeEventListener('focusin',m._fin,true); window.removeEventListener('resize',m._res);
@@ -54,8 +55,12 @@ async function open(id,anchor,btn,floorAt){
   if(r){ const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=r.def.name; m.appendChild(ttl);
     if(PK.aboutOf(r.def)) item(PK.pkt('m.dm_over',r.def.name),'',()=>about(r.def));
     if(PK.manualOpen) item(PK.pkt('m.dm_handleiding'),'',()=>PK.manualOpen(r.def));
+    const g=PK.selection&&PK.selection(); if(g&&g.group&&(g.ids.includes(id))) item(PK.pkt('m.dg_kopieer_selectie',g.ids.length+g.secs.length),'Ctrl C',()=>{ PK.groupCopy(g); });
     item(PK.pkt('m.dm_kopieer'),r.inst&&typeof r.inst.clipInfo==='function'?'⇧Ctrl C':'Ctrl C',()=>{ PK.select(id); copyDevice(id); }); }
-  item(PK.pkt('m.dm_plak'),'Ctrl V',()=>{ pasteDevice(floorAt||null); },!mem,mem?PK.pkt('m.dm_plak_titel',mem.name):PK.pkt('m.dm_niets_gekopieerd'));
+  else { const g=PK.selection&&PK.selection(); if(g&&g.group) item(PK.pkt('m.dg_kopieer_selectie',g.ids.length+g.secs.length),'Ctrl C',()=>{ PK.groupCopy(g); }); }
+  const grp=mem&&mem.format===PK.groupFormat;
+  item(PK.pkt(grp?'m.dg_plak':'m.dm_plak',grp?mem.items.length:undefined),'Ctrl V',()=>{ pasteDevice(floorAt||null); },!mem,mem?(grp?PK.pkt('m.dg_plak_titel',mem.items.length,mem.sections.length):PK.pkt('m.dm_plak_titel',mem.name)):PK.pkt('m.dm_niets_gekopieerd'));
+  if(r&&PK.mselAddMode) item(PK.pkt(PK.mselAdding()?'m.ms_klaar_menu':'m.ms_meer'),PK.pkt('m.ms_hint'),()=>PK.mselAddMode(!PK.mselAdding(),id),false,PK.pkt('m.ms_meer_titel'));
   if(!r&&floorAt&&PK.secCreate){ item(PK.pkt('m.sc_maken'),'',()=>PK.secCreate(floorAt)); item(PK.pkt('m.jp_maken'),'',()=>PK.jumpCreate(floorAt)); }
   if(r&&r.skEl&&!r.skEl.hidden){ const h=document.createElement('div'); h.className='sec'; h.textContent=PK.pkt('m.sk_skin'); m.appendChild(h); m.appendChild(r.skEl); }
   document.body.appendChild(m);
@@ -72,8 +77,8 @@ async function open(id,anchor,btn,floorAt){
 // het icoontje op de balk wordt een knop; gebeurtenissen die de balk laten slepen blijven eruit (zie device-cards.js)
 function bind(id){ const r=PK.Host.devices.get(id); if(!r) return; const ic=r.el.querySelector('.bar .cicon'); if(!ic) return;
   ic.setAttribute('role','button'); ic.tabIndex=0; ic.setAttribute('aria-haspopup','menu'); ic.setAttribute('aria-expanded','false'); ic.setAttribute('aria-label',PK.pkt('m.dm_menu',r.def.name)); ic.title=PK.pkt('m.dm_menu_titel'); ic.classList.add('dmbtn');
-  ic.addEventListener('click',e=>{ e.stopPropagation(); PK.select(id); open(id,ic,ic); });
-  ic.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); PK.select(id); open(id,ic,ic); } }); }
+  ic.addEventListener('click',e=>{ e.stopPropagation(); if(!(PK.mselHas&&PK.mselHas(id))) PK.select(id); open(id,ic,ic); });
+  ic.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); if(!(PK.mselHas&&PK.mselHas(id))) PK.select(id); open(id,ic,ic); } }); }
 PK.deviceMenuBind=bind;
 
 function init(){
@@ -89,13 +94,14 @@ function init(){
   document.addEventListener('keydown',e=>{ if(!(e.ctrlKey||e.metaKey)||e.altKey||PK.textEntry(e)||document.querySelector('.pkmodal')) return; const k=(e.key||'').toLowerCase(); if(k!=='c'&&k!=='v') return;
     const id=PK.selected, r=id&&PK.Host.devices.get(id), inf=r&&PK.clipInfoOf?(()=>{ try{ return PK.clipInfoOf(id); }catch(x){ return null; } })():null,
       canCopyClip=!!(inf&&Array.isArray(inf.copy)&&inf.copy.length), canPasteClip=!!(inf&&Array.isArray(inf.paste)&&inf.paste.length);
-    if(k==='c'){ if(!r||(canCopyClip&&!e.shiftKey)) return;
+    if(k==='c'){ const g=PK.selection&&PK.selection(); if(g&&g.group){ e.preventDefault(); PK.groupCopy(g); return; }   // meer dan één gekozen: als groep (device-group.js)
+      if(!r||(canCopyClip&&!e.shiftKey)) return;
       const sel=window.getSelection&&window.getSelection(); if(sel&&!sel.isCollapsed){ try{ sel.removeAllRanges(); }catch(x){} }   // een achtergebleven tekstselectie (bijvoorbeeld na het slepen van een kaart) houdt het kopiëren van het apparaat niet tegen
       e.preventDefault(); copyDevice(id); return; }
     if(canPasteClip) return;   // patroon plakken (en Shift: direct) is van clip.js
     if(mem){ e.preventDefault(); pasteDevice(null); } else load().then(o=>{ if(o) pasteDevice(null); }); });
   // een klik op een kaart kiest het apparaat, ook als een regelaar erin de klik zelf afhandelt (anders blijft het vorige apparaat gekozen en kopieer je dat)
-  document.addEventListener('pointerdown',e=>{ if(e.button!==0&&e.button!==2) return; const c=e.target&&e.target.closest&&e.target.closest('.card'); if(!c||!c.dataset||!PK.Host.devices.has(c.dataset.id)||PK.selected===c.dataset.id) return; PK.select(c.dataset.id); },true);
+  document.addEventListener('pointerdown',e=>{ if(e.button!==0&&e.button!==2) return; const c=e.target&&e.target.closest&&e.target.closest('.card'); if(!c||!c.dataset||!PK.Host.devices.has(c.dataset.id)||PK.selected===c.dataset.id||(PK.mselHas&&PK.mselHas(c.dataset.id)&&(e.button===2||e.target.closest('.dmbtn')))) return; PK.select(c.dataset.id); },true);
 }
 PK.deviceMenuInit=init;
 })(window.__PK);

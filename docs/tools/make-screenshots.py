@@ -17,6 +17,7 @@ from playwright.sync_api import sync_playwright
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 LANGS = [a for a in sys.argv[1:] if a in ('nl', 'en')] or ['nl', 'en']
 ONLY_CLIP = '--only-clip' in sys.argv   # alleen de afbeeldingen van het klembord (20 en 21, plus 18 en 19 in een hoog venster)
+ONLY_SELECT = '--only-select' in sys.argv   # alleen de afbeelding van de selectie van meerdere apparaten (22)
 ALSO = [a[len('--also='):] for a in sys.argv[1:] if a.startswith('--also=')]
 LOCALE = {'en': 'en-US', 'nl': 'nl-NL'}
 PLACE = re.compile('place|plaats', re.I)
@@ -114,6 +115,13 @@ def shots(browser, lang, OUT, LIB, BASE):
             pg = newpage(w=1400, h=2300, libh=700, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
             pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
     if ONLY_CLIP: clip_docs(); print('klaar (klembord):', lang); return
+
+    def select_docs():   # meerdere apparaten gekozen: twee kaarten met Shift-klik, het kader en de melding in de statusregel (22)
+        pg = newpage(nopicker=True); build_patch(pg)
+        pg.click('#zoomFit'); pg.wait_for_timeout(700)   # alles in beeld
+        pg.locator('.card .bar .nm').nth(0).click(); pg.keyboard.down('Shift'); pg.locator('.card .bar .nm').nth(1).click(); pg.keyboard.up('Shift'); pg.wait_for_timeout(500)
+        pg.screenshot(path=OUT + '/22-multi-select.png', clip={'x': 0, 'y': 60, 'width': 1900, 'height': 1000}); done(pg)
+    if ONLY_SELECT: select_docs(); print('klaar (selectie):', lang); return
 
     pg = newpage(); pg.screenshot(path=OUT + '/01-start.png'); done(pg)
     pg = newpage(nopicker=True); load_lib(pg); pg.screenshot(path=OUT + '/02-library.png')
