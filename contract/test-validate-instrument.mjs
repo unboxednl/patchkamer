@@ -46,6 +46,18 @@ errs('about is een leeg object', withAbout('{}'), [['about moet een tekst', 'abo
 errs('about heeft een lege taaltekst', withAbout("{ nl: 'x', en: '' }"), [['about moet een tekst', 'about must be a text']]);
 errs('about is te lang', withAbout("'" + 'a'.repeat(8001) + "'"), [['about moet een tekst', 'about must be a text']]);
 
+// ---- latency (v1.34)
+const withLat = m => dev(`el.appendChild(document.createElement('div'));`).replace('getState() { return { v: 1 }; },', `getState() { return { v: 1 }; }, ${m},`);
+ok('latency geeft seconden (v1.34)', withLat('latency() { return 0.0125; }'));
+ok('latency geeft 0 (v1.34)', withLat('latency() { return 0; }'));
+errs('latency is geen functie', withLat('latency: 5'), [['latency (v1.34) moet een functie zijn', 'latency (v1.34) must be a function']]);
+errs('latency geeft een tekst', withLat("latency() { return '12 ms'; }"), [['latency() moet een eindig getal', 'latency() must return a finite number']]);
+errs('latency geeft NaN', withLat('latency() { return NaN; }'), [['latency() moet een eindig getal', 'latency() must return a finite number']]);
+errs('latency geeft een negatief getal', withLat('latency() { return -0.001; }'), [['latency() moet een eindig getal', 'latency() must return a finite number']]);
+errs('latency geeft meer dan 10 seconden (milliseconden verward met seconden)', withLat('latency() { return 12.5; }'), [['latency() moet een eindig getal', 'latency() must return a finite number']]);
+errs('latency gooit', withLat("latency() { throw new Error('stuk'); }"), [['latency() gooit', 'latency() throws']]);
+errs('latency verandert de state', withLat('latency() { this.n = (this.n || 0) + 1; return 0.001; }').replace('getState() { return { v: 1 }; }', 'getState() { return { v: 1, n: this.n || 0 }; }'), [['latency() verandert de state', 'latency() changes the state']]);
+
 // ---- zonder waarschuwing
 ok('geen host.ui, geen id', dev(`el.appendChild(document.createElement('div'));`));
 ok('knop zonder opties (oud gedrag)', dev(`ui.k.push(host.ui.knob(el, T.a, [0, 1, 0.01], 0.5, v => v, v => {}));`));

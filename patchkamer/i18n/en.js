@@ -948,6 +948,8 @@ PK.I18N.en={
    "m.t_ic_star":"star",
    "m.t_kabel_multievent":"(multi-MIDI)",
    "m.t_kabel_multi":"(bundle)",
+   "m.latency_titel":"Delay added by this device: {0} ({1} samples). The studio does not compensate for it.",
+   "m.t_kabel_latency":"delay up to here {0}",
    "m.t_kabel_mastering":"(mastering)",
    "ui.t_drop_titel":"Drop to load",
    "ui.t_drop_sub":"Songs, workspaces, devices, tunes, presets, skins and layouts. Devices go to the library.",

@@ -1,4 +1,4 @@
-# Patchkamer — Instrument contract v1.33 for building agents
+# Patchkamer — Instrument contract v1.34 for building agents
 
 This document is the complete, self-contained instruction for building an instrument, effect, modulator or utility device for **Patchkamer**, a modular browser studio on Web Audio. An agent that receives this document needs no other context. Deliver exactly one file `name.patchkamer-device.js` that complies with this contract and passes `validate-instrument.mjs` without errors.
 
@@ -42,6 +42,7 @@ _This version was rewritten on the basis of the host code and the library of Nov
 | v1.31 | Subcategories in the library layout: a category in `patchkamer-bibliotheek.json` may have an optional field `parent` (the `key` of another category), so a category can have subcategories (§16). A device is assigned to a subcategory with the same `assign`; the `category` field of a device does not change |
 | v1.32 | Velocity for pads: `onpress(e, velocity)` and `onchange(on, velocity)` of `host.ui.pad` get a second argument, a number from 1 to 127 (100 unless a skin chooses a pad with velocity: then the touch pressure or the position of the click). A device that ignores the argument sounds the same (§12f) |
 | v1.33 | Explanation for the device and no title of its own any more: the optional definition field `about` (a text, or an object per language `{ nl, en }`; paragraphs separated by a blank line) is in the card menu as **About {name}**. The host shows the ports of wider devices as dots in the title bar. A device no longer repeats its own name in its UI and puts its explanation in `about` (§12g). Existing devices keep working. |
+| v1.34 | Reporting delay: a device that delays the sound (lookahead, oversampling, a grain engine) can offer the optional method `latency()` (seconds, 0 to 10) and call `host.latencyChanged(this)` when the value changes. The host shows the delay on the card's title bar and in the text at a cable (delay up to here), but does not compensate (§13j). The validator checks `latency()`. Existing devices keep working. |
 
 ---
 
@@ -152,6 +153,7 @@ export default {
 | `bundles` | with `multiOut` | `{ portId: () => ({ label, channels }) }` (v1.5, §11) |
 | `onBundle(portId, key, bundle)` | with `multiIn` | Bundle connected, changed or detached (v1.5, §11) |
 | `getPreset()`, `setPreset(p)` | no | Only if a preset should not contain something (v1.6, §13). Always together. |
+| `latency()` | no | The delay in seconds the device adds between audio input and audio output (v1.34, §13j). Light and free of side effects. |
 
 Order when placing a card: `create` → `mount` → `setState(saved)` (if there is saved state) → cables. When loading a workspace the cables come only afterwards, in a following frame.
 
@@ -1154,6 +1156,29 @@ A device may not use the network (§15). If it still wants one file from the int
 
 What the host does not do: it does not guarantee that a server is reachable or that the browser allows the call (CORS), does not check the content and stores nothing.
 
+## 13j. Reporting delay (v1.34)
+
+Some effects delay the sound: a lookahead (compressor, limiter, gate), the linear-phase filters of oversampling, the window of a pitch shifter. Such a device reports it, so the user sees where delay arises and can compare parallel branches.
+
+| Call | What |
+|---|---|
+| `latency()` (on the instance, optional) | Returns the delay in **seconds** the sound picks up between the audio input and the audio output, at the current setting: a finite number from 0 to 10. `0` or no method means no delay. Free of side effects, light (the host calls it up to a few times a second), does not throw and does not change the state. |
+| `host.latencyChanged(this)` | Call this when the value changes without the host noticing (another mode, another lookahead, another sample rate). The host also reads `latency()` after every `setState` and once a second. Returns `true`, or `false` if the caller is not a device on the floor. |
+
+**Rules for the value.**
+- Report the delay of the **main path**, so also of the dry part. A device with a `mix` aligns its dry path with the wet one itself (as Distortion and Compressor do); if it reports only the wet path anyway, say so in its `about`.
+- If the delay depends on the signal (a pitch shifter that adds delay for a large interval), report the value for an unchanged pitch and mention the surcharge in the explanation.
+- Report only what is known and measured. A reverb that does not delay the dry part reports `0` (or has no method): the start of the tail is not a delay.
+- Seconds, not milliseconds or samples: `0.012` for 12 ms. The validator gives an error for a value above 10 (almost always milliseconds mistaken for seconds).
+
+**What the host does with it.**
+- The card's title bar shows a small label with the delay (for example "12 ms") as long as it is larger than 0.05 ms; its explanation also gives the number of samples.
+- For an audio or bundle cable the text at the cable adds "delay up to here": the sum of the delay of the devices before the cable, along the longest path (loops are not counted twice).
+- **The host does not compensate.** Reasons: it cannot know which branches come together again (a Mixer send, a group, a parallel process) and which do not; an extra delay in each parallel branch can disturb a feedback loop or a device that runs on the clock; and the value may change while playing. Whoever wants to align branches does that by hand with a delay (for example a Delay at the same time) in the branch that is too early.
+- An event (note, trig) is not delayed; only sound that passes through the device.
+
+**Old host.** A host without v1.34 ignores `latency()`. Call `host.latencyChanged` only after `typeof host.latencyChanged === 'function'`.
+
 ## 14. Host API at a glance
 
 | Call | Since | What |
@@ -1204,6 +1229,7 @@ What the host does not do: it does not guarantee that a server is reachable or t
 | `host.stems(this, action, opts)` | v1.23 | Have an online service split a track into stems: `'services'`, `'split'` (promise with AudioBuffers), `'send'` (give sound to another device) or `'settings'` (§13g) |
 | `host.fetchFile(this, url, opts)` | v1.30 | Fetch one https file from the internet, only after a click; `as`, `maxBytes`, `signal`, `onProgress` (§13i) |
 | `host.recording(this, on)` | v1.25 | Report that this device is recording: the host shows a red lamp with the time next to Start (§13h). |
+| `host.latencyChanged(this)` | v1.34 | Report that `latency()` gives another value; the host shows the delay on the card and at the cables, but does not compensate (§13j). |
 
 Use nothing else of the host. What is not listed here may change without notice.
 
@@ -1287,6 +1313,7 @@ The validator loads your module with a fake AudioContext, a fake DOM (with shado
 22. **Recording lamp (v1.25, §13h)**: the fake host knows `host.recording(this, on)` and ignores the call.
 23. **Selecting remotely (v1.28, §11c)**: the fake host knows `host.show(this, targetId, opts)` and returns `false`; `status` is `'active'` or `'retired'`.
 24. **Files from the internet (v1.30, §13i)**: the fake host knows `host.fetchFile(this, url, opts)` and rejects with `network`. A call during the test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` or `destroy`) is an error: a network call only starts on a click of the user. The check for `fetch(` does not see `host.fetchFile(` as network traffic.
+25. **Delay (v1.34, §13j)**: a device with `latency()` returns a finite number from 0 to 10 (seconds), in the initial state and after `setState`; `getState()` is equal afterwards. The fake host knows `host.latencyChanged(this)`.
 
 What the validator can *not* see: whether your texts are well translated, whether it sounds good, whether your own HTML knobs (outside `host.ui`) move along, and whether your timing is right. Test that in Patchkamer itself: set a preset, change a knob, choose the preset again and see whether everything jumps back.
 
@@ -1321,7 +1348,8 @@ What the validator can *not* see: whether your texts are well translated, whethe
 25. Selecting remotely (v1.28, optional): `host.show` only on a user action or on a message he gave himself; `typeof host.show === 'function'` checked.
 26. **AI question (v1.29, §11c, optional)**: `host.ai(this, 'ask', …)` only after a click; `typeof host.ai === 'function'` and `host.ai(this, 'available')` checked first; the answer is untrusted text and every value is checked before you set anything; the user sees what was proposed before it is applied; the fake host returns `false` for `available` and refuses `ask`.
 27. Files from the internet (v1.30, optional): `host.fetchFile` only on a click; `typeof host.fetchFile === 'function'` checked; visibly said where the file comes from; `maxBytes` set low; cancelling via `signal`; text per error code in `host.lang`; license and attribution of what you fetch kept; no token in the state; content never executed (§13i).
-28. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
+28. Delay (v1.34, optional): `latency()` returns seconds (0 to 10), only of what is known and measured, without side effects and without changing the state; on a change call `host.latencyChanged` (after `typeof host.latencyChanged === 'function'`); the dry path of a device with `mix` is delayed as long as the wet one (§13j).
+29. `node validate-instrument.mjs file.patchkamer-device.js` gives `OK`, without `warning`.
 
 ---
 

@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.33 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.34 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -42,6 +42,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.31 | Subcategorieën in de bibliotheekindeling: een categorie in `patchkamer-bibliotheek.json` mag een optioneel veld `parent` hebben (de `key` van een andere categorie), zodat een categorie onderliggende subcategorieën kan hebben (§16). Een apparaat wordt aan een subcategorie toegewezen met dezelfde `assign`; het `category`-veld van een apparaat verandert niet |
 | v1.32 | Velocity bij pads: `onpress(e, velocity)` en `onchange(on, velocity)` van `host.ui.pad` krijgen een tweede argument, een getal van 1 tot 127 (100 tenzij de gebruiker of een skin een pad met velocity kiest: dan de aanraakdruk of de plek van de klik). Een apparaat dat het argument negeert, klinkt gelijk (§12f) |
 | v1.33 | Uitleg bij het apparaat en geen eigen titel meer: de optionele definitieregel `about` (een tekst, of een object per taal `{ nl, en }`; alinea's gescheiden door een lege regel) staat in het menu van de kaart als **Over {naam}**. De host toont de poorten van breedere apparaten als stipjes in de titelbalk. Een apparaat noemt zijn eigen naam niet meer in zijn UI en zet zijn uitleg in `about` (§12g). Bestaande apparaten blijven werken. |
+| v1.34 | Vertraging melden: een apparaat dat het geluid vertraagt (lookahead, oversampling, een korrelmotor) kan de optionele methode `latency()` aanbieden (seconden, 0 tot 10) en `host.latencyChanged(this)` aanroepen als de waarde verandert. De host toont de vertraging op de titelbalk van de kaart en in de tekst bij een kabel (vertraging tot hier), maar compenseert niet (§13j). De validator controleert `latency()`. Bestaande apparaten blijven werken. |
 
 ---
 
@@ -152,6 +153,7 @@ export default {
 | `bundles` | bij `multiOut` | `{ poortId: () => ({ label, channels }) }` (v1.5, §11) |
 | `onBundle(poortId, sleutel, bundel)` | bij `multiIn` | Bundel aangesloten, gewijzigd of los (v1.5, §11) |
 | `getPreset()`, `setPreset(p)` | nee | Alleen als een preset iets niet moet bevatten (v1.6, §13). Altijd samen. |
+| `latency()` | nee | De vertraging in seconden die het apparaat tussen audio-ingang en -uitgang toevoegt (v1.34, §13j). Licht en zonder bijwerkingen. |
 
 Volgorde bij het plaatsen van een kaart: `create` → `mount` → `setState(opgeslagen)` (als er een opgeslagen state is) → kabels. Bij het laden van een werkruimte komen de kabels pas daarna, in een volgend frame.
 
@@ -1154,6 +1156,29 @@ Een apparaat mag geen netwerk gebruiken (§15). Wil het toch één bestand van i
 
 Wat de host niet doet: hij garandeert niet dat een server bereikbaar is of dat de browser de aanroep toestaat (CORS), controleert de inhoud niet en bewaart niets.
 
+## 13j. Vertraging melden (v1.34)
+
+Sommige effecten vertragen het geluid: een lookahead (compressor, limiter, gate), de lineaire-fase filters van oversampling, het venster van een toonhoogteverschuiver. Zo'n apparaat meldt dat, zodat de gebruiker ziet waar vertraging ontstaat en parallelle takken kan vergelijken.
+
+| Aanroep | Wat |
+|---|---|
+| `latency()` (op de instance, optioneel) | Geeft de vertraging in **seconden** die het geluid tussen de audio-ingang en de audio-uitgang oploopt, bij de huidige instelling: een eindig getal van 0 tot 10. `0` of geen methode betekent geen vertraging. Zonder bijwerkingen, licht (de host roept hem tot een paar keer per seconde aan), gooit niet en verandert de state niet. |
+| `host.latencyChanged(this)` | Roep dit aan als de waarde verandert zonder dat de host het merkt (andere modus, andere lookahead, andere samplerate). De host leest `latency()` bovendien na elke `setState` en één keer per seconde. Geeft `true`, of `false` als de aanroeper geen apparaat op de vloer is. |
+
+**Regels voor de waarde.**
+- Meld de vertraging van de **hoofdweg**, dus ook van het droge deel. Een apparaat met een `mix` trekt zijn droge weg zelf gelijk met de natte (zoals Distortion en Compressor doen); meldt het toch alleen de natte weg, zeg dat dan in zijn `about`.
+- Hangt de vertraging van het signaal af (een toonhoogteverschuiver die bij een groot interval extra vertraagt), meld dan de waarde bij een onveranderde toonhoogte en noem de toeslag in de uitleg.
+- Meld alleen wat bekend en gemeten is. Een galm die het droge deel niet vertraagt, meldt `0` (of geen methode): het begin van de staart is geen vertraging.
+- Seconden, geen milliseconden of samples: `0.012` voor 12 ms. De validator geeft een fout bij een waarde boven 10 (bijna altijd milliseconden die voor seconden zijn aangezien).
+
+**Wat de host ermee doet.**
+- Op de titelbalk van de kaart staat een klein etiket met de vertraging (bijvoorbeeld "12 ms"), zolang die groter is dan 0,05 ms; de uitleg erbij noemt ook het aantal samples.
+- Bij een audio- of bundelkabel zegt de tekst bij de kabel er "vertraging tot hier" bij: de optelsom van de vertraging van de apparaten voor de kabel, langs de langste weg (lussen tellen niet dubbel).
+- **De host compenseert niet.** Redenen: hij kan niet weten welke takken weer samenkomen (een Mixer-send, een groep, een parallelle verwerking) en welke niet; een extra vertraging in elke parallelle tak kan een terugkoppelingslus of een apparaat dat op de klok loopt verstoren; en de waarde mag tijdens het spelen veranderen. Wie takken gelijk wil trekken, doet dat zelf met een vertraging (bijvoorbeeld een Delay op dezelfde tijd) in de tak die te vroeg is.
+- Een gebeurtenis (noot, trig) wordt niet vertraagd; alleen geluid dat door het apparaat gaat.
+
+**Oude host.** Een host zonder v1.34 negeert `latency()`. Roep `host.latencyChanged` alleen aan na `typeof host.latencyChanged === 'function'`.
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -1204,6 +1229,7 @@ Wat de host niet doet: hij garandeert niet dat een server bereikbaar is of dat d
 | `host.stems(this, actie, opts)` | v1.23 | Een nummer door een dienst op internet in stems laten splitsen: `'services'`, `'split'` (belofte met AudioBuffers), `'send'` (geluid aan een ander apparaat geven) of `'settings'` (§13g) |
 | `host.fetchFile(this, url, opts)` | v1.30 | Eén https-bestand van internet ophalen, alleen na een klik; `as`, `maxBytes`, `signal`, `onProgress` (§13i) |
 | `host.recording(this, aan)` | v1.25 | Melden dat dit apparaat opneemt: de host toont een rood lampje met de tijd naast Start (§13h). |
+| `host.latencyChanged(this)` | v1.34 | Melden dat `latency()` een andere waarde geeft; de host toont de vertraging op de kaart en bij de kabels, maar compenseert niet (§13j). |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -1288,6 +1314,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 22. **Opnamelampje (v1.25, §13h)**: de nep-host kent `host.recording(this, aan)` en negeert de aanroep.
 23. **Kiezen op afstand (v1.28, §11c)**: de nep-host kent `host.show(this, doelId, opts)` en geeft `false`; `status` is `'active'` of `'retired'`.
 24. **Bestanden van internet (v1.30, §13i)**: de nep-host kent `host.fetchFile(this, url, opts)` en weigert met `network`. Een aanroep tijdens de test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` of `destroy`) is een fout: een netwerkaanroep start alleen op een klik van de gebruiker. De controle op `fetch(` ziet `host.fetchFile(` niet als netwerkverkeer.
+25. **Vertraging (v1.34, §13j)**: een apparaat met `latency()` geeft een eindig getal van 0 tot 10 (seconden), in de beginstand en na `setState`; `getState()` is daarna gelijk. De nep-host kent `host.latencyChanged(this)`.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1322,7 +1349,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 25. Kiezen op afstand (v1.28, optioneel): `host.show` alleen op een handeling van de gebruiker of een bericht dat hij zelf gaf; `typeof host.show === 'function'` gecontroleerd.
 26. **AI-vraag (v1.29, §11c, optioneel)**: `host.ai(this, 'ask', …)` alleen na een klik; eerst `typeof host.ai === 'function'` en `host.ai(this, 'available')` gecontroleerd; het antwoord is onbetrouwbare tekst en elke waarde wordt gecontroleerd voor je iets zet; de gebruiker ziet wat er is voorgesteld voor het wordt toegepast; de nep-host geeft `false` bij `available` en weigert `ask`.
 27. Bestanden van internet (v1.30, optioneel): `host.fetchFile` alleen op een klik; `typeof host.fetchFile === 'function'` gecontroleerd; zichtbaar gezegd waar het bestand vandaan komt; `maxBytes` laag gezet; annuleren via `signal`; tekst per foutcode in `host.lang`; licentie en vermelding van wat je ophaalt bewaard; geen token in de state; inhoud nooit uitgevoerd (§13i).
-28. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
+28. Vertraging (v1.34, optioneel): `latency()` geeft seconden (0 tot 10), alleen van wat bekend en gemeten is, zonder bijwerkingen en zonder de state te veranderen; bij een wijziging `host.latencyChanged` (na `typeof host.latencyChanged === 'function'`); de droge weg van een apparaat met `mix` loopt even lang vertraagd als de natte (§13j).
+29. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
 
 ---
 

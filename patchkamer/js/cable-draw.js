@@ -20,7 +20,8 @@ const cabSrcColor=id=>{ if(PK.V18.col!=='cat') return null; const r=PK.Host.devi
 function cableTipText(c){ const a=PK.Host.devices.get(c.from.id), b=PK.Host.devices.get(c.to.id); if(!a||!b) return '';
   const pn=(r,dir,port)=>{ const l=PK.portList(r.ports,dir,c.kind); if(l.length<2) return ''; const p=l.find(x=>x.id===port); return p?' ('+p.name+')':''; };
   let t=a.def.name+pn(a,'out',c.from.port)+' - '+b.def.name+pn(b,'in',c.to.port); if(t.length>60) t=t.slice(0,59)+'…';
-  const kk={multievent:'m.t_kabel_multievent',multi:'m.t_kabel_multi',mastering:'m.t_kabel_mastering'}[c.kind]; return kk?t+' '+PK.pkt(kk):t; } PK.cableTipText=cableTipText;
+  const kk={multievent:'m.t_kabel_multievent',multi:'m.t_kabel_multi',mastering:'m.t_kabel_mastering'}[c.kind]; if(kk) t+=' '+PK.pkt(kk);
+  const lt=PK.latencyCableText?PK.latencyCableText(c):''; return lt?t+' · '+lt:t; } PK.cableTipText=cableTipText;
 function cabTipHide(){ clearTimeout(PK.CABTIP.timer); PK.CABTIP.timer=0; PK.CABTIP.cable=null; if(PK.CABTIP.el){ PK.CABTIP.el.remove(); PK.CABTIP.el=null; } } PK.cabTipHide=cabTipHide;
 function cabTipShow(c,x,y){ if(PK.wire||document.body.classList.contains('wiring')||PK.dropCable){ cabTipHide(); return; } clearTimeout(PK.CABTIP.timer); PK.CABTIP.timer=0;
   const t=cableTipText(c); if(!t){ cabTipHide(); return; }

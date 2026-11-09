@@ -950,6 +950,8 @@ I18N.nl={
    "m.t_ic_star":"ster",
    "m.t_kabel_multievent":"(multi-MIDI)",
    "m.t_kabel_multi":"(bundel)",
+   "m.latency_titel":"Vertraging door dit apparaat: {0} ({1} samples). De studio compenseert dat niet.",
+   "m.t_kabel_latency":"vertraging tot hier {0}",
    "m.t_kabel_mastering":"(mastering)",
    "ui.t_drop_titel":"Laat los om te laden",
    "ui.t_drop_sub":"Songs, werkruimtes, apparaten, tunes, presets, skins en indelingen. Apparaten komen in de bibliotheek.",

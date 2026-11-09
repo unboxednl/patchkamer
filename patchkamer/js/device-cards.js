@@ -33,7 +33,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   ic.addEventListener('dblclick',e=>{ if(e.target.closest('button')) return; e.stopPropagation(); setMini(id,false); });
   const pb=document.createElement('div'); pb.className='pbar';
   el.append(bar,pb,body,ic); PK.floor.appendChild(el);
-  const rec={def,inst,el,x:x||40,y:y||40,verSel:ver,w:null,h:null,mini:false,focus:0,modBar:mb,focusBtn:bf,iconEl:ic,ports:normPorts(def.ports,inst),portsEl:ports,pbarEl:pb,preset:null,presetSnap:null}; PK.Host.devices.set(id,rec); fillVersionSelect(ver,def); renderPorts(id); portsDefault(rec);
+  const rec={def,inst,el,x:x||40,y:y||40,verSel:ver,w:null,h:null,mini:false,focus:0,modBar:mb,focusBtn:bf,iconEl:ic,ports:normPorts(def.ports,inst),portsEl:ports,pbarEl:pb,preset:null,presetSnap:null}; PK.Host.devices.set(id,rec); fillVersionSelect(ver,def); renderPorts(id); portsDefault(rec); if(PK.latencyInit) PK.latencyInit(rec);
   el.addEventListener('scroll',()=>PK.drawCables(),true);   // ports inside a scrolling UI move: keep the cables attached
   ['e','s','se'].forEach(dir=>{ const hd=document.createElement('div'); hd.className='rz '+dir; hd.title=PK.pkt('m.sleep_om_de_grootte_te'); el.appendChild(hd);
     let st=null;

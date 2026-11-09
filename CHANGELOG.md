@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.23.0 (2026-11-09)
+
+### Added
+- **Device contract v1.34: reporting delay (§13j).** A device that delays the sound (lookahead, oversampling, a grain engine) can offer the optional method `latency()` (seconds, 0 to 10) and call `host.latencyChanged(this)` when the value changes. The host shows the delay as a small label on the card's title bar and adds "delay up to here" to the text at an audio or bundle cable (the sum along the longest path; loops count once). **The host deliberately does not compensate**: it does not know which branches come together again (Mixer sends, groups), an extra delay in every parallel branch can disturb a feedback loop or a device on the clock, and the value may change while playing. The validator checks `latency()` (a number from 0 to 10, does not throw, does not change the state, also after `setState`; +9 test cases). Existing devices keep working; the next versions fill the field for the effects whose delay is measured.
+
 ## 0.22.0 (2026-11-09)
 
 ### Changed

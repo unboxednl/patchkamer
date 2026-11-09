@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.23.0 (2026-11-09)
+
+### Toegevoegd
+- **Apparaatcontract v1.34: vertraging melden (§13j).** Een apparaat dat het geluid vertraagt (lookahead, oversampling, een korrelmotor) kan de optionele methode `latency()` aanbieden (seconden, 0 tot 10) en `host.latencyChanged(this)` aanroepen als de waarde verandert. De host toont de vertraging als klein etiket op de titelbalk van de kaart en zet in de tekst bij een audio- of bundelkabel "vertraging tot hier" (de optelsom langs de langste weg; lussen tellen eenmaal). **De host compenseert bewust niet**: hij weet niet welke takken weer samenkomen (Mixer-sends, groepen), een extra vertraging in elke parallelle tak kan een terugkoppelingslus of een apparaat op de klok verstoren, en de waarde mag tijdens het spelen veranderen. De validator controleert `latency()` (getal van 0 tot 10, gooit niet, verandert de state niet, ook na `setState`; +9 testgevallen). Bestaande apparaten blijven werken; de volgende versies vullen het veld voor de effecten waar de vertraging gemeten is.
+
 ## 0.22.0 (2026-11-09)
 
 ### Gewijzigd

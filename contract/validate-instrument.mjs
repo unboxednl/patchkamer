@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.33
+// validate-instrument.mjs — Patchkamer contract v1.34
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -19,6 +19,7 @@
 // v1.16 (§8): dekking van params(): elke continue regelaar (type=range, host.ui.knob, host.ui.adopt) hoort in params() te staan, met id = state-sleutel,
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
+// v1.34: optioneel latency() (seconden, 0 tot 10) en host.latencyChanged(inst): de vertraging die het apparaat tussen audio-ingang en -uitgang toevoegt; gooit niet, verandert de state niet, blijft eindig na setState.
 // v1.33: optioneel `about` (tekst of object per taal, hoogstens 8000 tekens): anders een fout.
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
 // v1.25: opnamelampje: host.recording(inst, aan) bestaat op de nep-host en doet niets
@@ -193,6 +194,12 @@ const V = {
     "v.clip_titel": "Klembord (--clip):",
     "v.clip_geen": "(geen clipInfo/getClip/setClip)",
     "v.clip_nul": "(null)",
+    "v.latency_geen_functie": "latency (v1.34) moet een functie zijn die seconden geeft",
+    "v.latency_gooit": "latency() gooit: ",
+    "v.latency_ongeldig": "latency() moet een eindig getal van 0 tot 10 (seconden) geven {0}, kreeg: ",
+    "v.latency_state": "latency() verandert de state (hij moet licht zijn en geen bijwerkingen hebben)",
+    "v.latency_na_setstate": "na setState",
+    "v.latency_in_rust": "in de beginstand",
     "v.notenames_gooit": "noteNames() gooit: ",
     "v.notenames_ongeldig": "noteNames() moet een lijst van { note: 0..127, name: tekst } geven, kreeg: ",
     "v.een_host_frame_tekenfunctie_gooit": "een host.frame-tekenfunctie gooit: ",
@@ -441,6 +448,12 @@ const V = {
     "v.clip_titel": "Clipboard (--clip):",
     "v.clip_geen": "(no clipInfo/getClip/setClip)",
     "v.clip_nul": "(null)",
+    "v.latency_geen_functie": "latency (v1.34) must be a function that returns seconds",
+    "v.latency_gooit": "latency() throws: ",
+    "v.latency_ongeldig": "latency() must return a finite number from 0 to 10 (seconds) {0}, got: ",
+    "v.latency_state": "latency() changes the state (it must be light and free of side effects)",
+    "v.latency_na_setstate": "after setState",
+    "v.latency_in_rust": "in the initial state",
     "v.notenames_gooit": "noteNames() throws: ",
     "v.notenames_ongeldig": "noteNames() must return a list of { note: 0..127, name: text }, got: ",
     "v.een_host_frame_tekenfunctie_gooit": "a host.frame draw function throws: ",
@@ -664,6 +677,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   watchParams() { return false; }, setParam() { return false; }, lockParams() { return false; }, paramsOf() { return []; },
   // v1.14
   noteNamesChanged() {},
+  // v1.34
+  latencyChanged() {},
   mastering(inst, action, opts) { masteringCalls++; if (!['inspect', 'apply', 'analyse', 'accept', 'undo'].includes(action)) masteringBad = vt('v.host_mastering_onbekende_actie',action); if (!PL(curPorts || d.ports, 'masteringOut').length) masteringBad = vt('v.host_mastering_geen_masteringout'); return { changed: 0, results: [] }; },
   // v1.7
   frame(inst, cb, fps) { if (typeof cb !== 'function') { modBad = vt('v.host_frame_geef_een_functie'); return () => {}; } if (fps !== undefined && !(+fps > 0)) modBad = vt('v.host_frame_fps_moet_een');
@@ -957,6 +972,15 @@ for (const e of frames) if (!e.off) { try { e.cb(16.7); e.cb(50); e.cb(83.3); } 
 if (typeof inst.onPeers === 'function') { try { inst.onPeers([]); inst.onPeers(FAKE_PEERS); } catch (e) { fail(vt('v.onpeers_gooit') + e.message); } }
 // v1.14: noteNames() is optioneel; als hij er is, een lijst van { note 0..127, name } en hij gooit niet
 if (typeof inst.noteNames === 'function') { let l; try { l = inst.noteNames(); } catch (e) { fail(vt('v.notenames_gooit') + e.message); } if (!Array.isArray(l) || l.some(x => !x || !Number.isFinite(x.note) || x.note < 0 || x.note > 127 || typeof x.name !== 'string' || !x.name)) fail(vt('v.notenames_ongeldig') + JSON.stringify(l).slice(0, 80)); }
+// v1.34 (§13j): latency() is optioneel; als hij er is een functie die een eindig getal van 0 tot 10 seconden geeft, niet gooit en de state niet verandert
+if (inst.latency !== undefined) {
+  if (typeof inst.latency !== 'function') fail(vt('v.latency_geen_functie'));
+  const lat = when => { let x; try { x = inst.latency(); } catch (e) { fail(vt('v.latency_gooit') + e.message); } if (typeof x !== 'number' || !Number.isFinite(x) || x < 0 || x > 10) fail(vt('v.latency_ongeldig', when) + JSON.stringify(x)); };
+  let before; try { before = JSON.stringify(inst.getState()); } catch (e) { fail(vt('v.getstate_gooit') + e.message); }
+  lat(vt('v.latency_in_rust')); lat(vt('v.latency_in_rust'));
+  let after; try { after = JSON.stringify(inst.getState()); } catch (e) { fail(vt('v.getstate_gooit') + e.message); } if (norm(after) !== norm(before)) fail(vt('v.latency_state'));
+  try { inst.setState(JSON.parse(before)); } catch (e) { fail('setState() faalt: ' + e.message); } lat(vt('v.latency_na_setstate'));
+}
 // v1.17 (§13d): klembord. clipInfo/getClip/setClip: alle drie of geen; JSON; setClip(getClip()) laat de state gelijk; rommel gooit niet en zet niets half.
 let clipOn = false, clipWarn = false, clipOutInfo, clipOutClip, clipOutMulti;
 if (inst.clipInfo !== undefined || inst.getClip !== undefined || inst.setClip !== undefined) {
