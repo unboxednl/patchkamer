@@ -16,6 +16,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 LANGS = [a for a in sys.argv[1:] if a in ('nl', 'en')] or ['nl', 'en']
+ONLY_CLIP = '--only-clip' in sys.argv   # alleen de afbeeldingen van het klembord (20 en 21, plus 18 en 19 in een hoog venster)
 ALSO = [a[len('--also='):] for a in sys.argv[1:] if a.startswith('--also=')]
 LOCALE = {'en': 'en-US', 'nl': 'nl-NL'}
 PLACE = re.compile('place|plaats', re.I)
@@ -95,6 +96,25 @@ def shots(browser, lang, OUT, LIB, BASE):
         if pg.errs: print('PAGINAFOUTEN', lang, pg.errs)
         pg.context.close()
 
+    def clip_docs():   # plakmenu (20) en Kopieer alle sporen in het plakmenu van de Clip Arranger (21); beeld 1400 breed
+        CP = re.compile('^(Kopieer|Copy)$', re.I); PL = re.compile('^(Plak|Paste)$', re.I)
+        pg = newpage(w=1400, h=780, libh=700, nopicker=True); load_lib(pg)
+        place(pg, 'Drum Kit'); pg.click('#libToggle'); pg.wait_for_timeout(800)
+        pg.locator('.card .bar .clipbtn', has_text=CP).first.click(); pg.wait_for_timeout(400)   # Drum Kit is de bron
+        pg.locator('.card .bar button', has_text='\u00d7').first.click(); pg.wait_for_timeout(500)
+        pg.click('#libToggle'); pg.wait_for_timeout(300); place(pg, 'Pulse Drums'); pg.click('#libToggle'); pg.wait_for_timeout(1000)
+        pg.locator('.card .bar .clipmore').first.click(); pg.wait_for_timeout(500)
+        pg.locator('.clipmenu input[type=checkbox]').nth(1).check(); pg.wait_for_timeout(200)   # Pas lengte aan de clip aan
+        pg.screenshot(path=OUT + '/20-paste-menu.png', clip={'x': 0, 'y': 0, 'width': 1400, 'height': 700}); done(pg)
+        pg = newpage(w=1400, h=900, libh=700, nopicker=True); load_lib(pg)
+        place(pg, 'Clip Arranger'); pg.click('#libToggle'); pg.wait_for_timeout(1000)
+        pg.locator('.card .bar .clipmore').first.click(); pg.wait_for_timeout(500)
+        pg.screenshot(path=OUT + '/21-copy-all-tracks.png', clip={'x': 0, 'y': 0, 'width': 1400, 'height': 780}); done(pg)
+        for dev, name in (('Chord Buddy', '18-chord-buddy'), ('Balance EQ', '19-balance-eq')):   # de hele kaart: een hoog venster, anders knipt de vloer hem af
+            pg = newpage(w=1400, h=2300, libh=700, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
+            pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
+    if ONLY_CLIP: clip_docs(); print('klaar (klembord):', lang); return
+
     pg = newpage(); pg.screenshot(path=OUT + '/01-start.png'); done(pg)
     pg = newpage(nopicker=True); load_lib(pg); pg.screenshot(path=OUT + '/02-library.png')
     pg.click('#libCfgBtn'); pg.wait_for_timeout(400); pg.locator('#libwin').screenshot(path=OUT + '/10-library-layout.png'); done(pg)
@@ -141,9 +161,7 @@ def shots(browser, lang, OUT, LIB, BASE):
         sf = os.path.join(ROOT, 'skins', 'library', skinf + '.patchkamer-skin.json'); sid = json.load(open(sf))['id']
         menu_click(pg, '#skBtn'); pg.set_input_files('#skFile', sf); pg.wait_for_timeout(800); pg.is_visible('#skClose') and pg.click('#skClose'); pg.wait_for_timeout(300)
         pg.evaluate("sid=>{const s=document.querySelector('.sksel'); s.value=sid; s.dispatchEvent(new Event('change',{bubbles:true}))}", sid); pg.wait_for_timeout(1200)   # de keuzelijst Skin staat in het kaartmenu: zet hem direct; pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
-    for dev, name in (('Chord Buddy', '18-chord-buddy'), ('Balance EQ', '19-balance-eq')):
-        pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
-        pg.locator('.card').first.screenshot(path=OUT + '/' + name + '.png'); done(pg)
+    clip_docs()
     print('klaar:', lang, len(os.listdir(OUT)), 'afbeeldingen')
 
 if __name__ == '__main__':

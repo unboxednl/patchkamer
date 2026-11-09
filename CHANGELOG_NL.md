@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.16.1 (2026-11-09)
+
+### Gewijzigd
+- **Handleiding: schermafbeeldingen van het klembord.** Het hoofdstuk over patronen kopiëren en plakken toont nu het plakmenu (Pulse Drums, met de optie *Pas lengte aan de clip aan*) en het menu naast Plak op de Clip Arranger met *Kopieer alle sporen* (meerdere sporen tegelijk, contract v1.24). De bestaande schermafbeeldingen van Chord Buddy en Balance EQ staan nu ook in de handleiding en zijn opnieuw gemaakt als hele kaart. `docs/tools/make-screenshots.py --only-clip` maakt alleen deze vier. In beide talen.
+
 ## 0.16.0 (2026-11-09)
 
 ### Toegevoegd

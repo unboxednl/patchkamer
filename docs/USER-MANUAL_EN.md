@@ -206,6 +206,12 @@ Devices come in kinds. Every kind has its own README and its own user manual, wi
 | **Modulators** | Move the controls of other devices | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [Modulators manual](modulators/USER-MANUAL_EN.md) · [README](../devices/modulators/README.md) |
 | **Tools** | Play, record, measure and take notes | Control Surface, Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Scope | [Tools manual](tools/USER-MANUAL_EN.md) · [README](../devices/tools/README.md) |
 
+Two examples of a card in the library: **Chord Buddy** (kind Tools: help with chords, even without music theory) and **Balance EQ** (kind Mastering: an equalizer with five to twelve bands).
+
+![The Chord Buddy card](images/en/18-chord-buddy.png)
+
+![The Balance EQ card](images/en/19-balance-eq.png)
+
 **AI Chat (built in).** Besides the kinds above, the library has one device that comes with Patchkamer itself: **AI Chat**, under *Metering & utilities*. Place it, and ask in your own words for a device, a tune pack, a preset pack or a song. It needs a provider, an API key and a model under **Settings → AI assistant**; the provider bills the usage to you. The AI reads the documentation of this repository on GitHub by itself (the AGENTS.md files, the contract, the style guides) and hands you everything as a **proposal**: **Add** puts a device in the library and on the floor, or a tune or preset pack in your libraries, and **Open** opens a song in a new workspace tab. Nothing is added without your click. Read the code of a device before you add it: a device is not isolated from the page, and the check on the card only warns about network, storage and eval. The conversation stays when you switch workspace; **New chat** starts again. Not tested with real providers or keys: the flow with all three provider formats was tested with simulated answers. The AI cannot listen: tell it what you hear.
 
 Their ready-made sounds and settings have their own manuals: [Tunes](tunes/USER-MANUAL_EN.md) for devices that make sound and [Presets](presets/USER-MANUAL_EN.md) for the rest (also section 7).
@@ -225,6 +231,10 @@ A device that can share a pattern or clip gets two buttons in its card bar: **Co
 - **Paste options.** Next to **Paste** is a small arrow **▾** (or right-click Paste; with the keyboard, go to the arrow and press Enter). The menu applies to one paste and remembers nothing. **Octave** moves the clip's notes by −4 to +4 octaves before pasting (notes outside 0 to 127 are dropped and the message says how many; notes only). **Align by order** puts lane 1 of the clip on lane 1 of the target, lane 2 on lane 2, and so on, instead of matching by instrument; handy for Latin Percussion and Click Synth, which otherwise get nothing from an ordinary drum clip (drums only). **Match the clip's length** gives the target the clip's length; that works on a device with its own length per pattern and on Drum Kit and Pulse Drums, where the length applies to all patterns and so changes for the other patterns too (Pulse Drums gives all channels the same length, so a polymeter is lost; Undo restores it). With any other shared or a fixed length Patchkamer says it could not change the length. **Paste now** pastes at once, even while the clock runs. **Undo** works after every paste as usual.
 - **Like devices lose nothing.** If you paste a clip into a device of the same kind it was copied from (Drum Kit to Drum Kit, Tracker to Tracker), the device's own extras come along too, such as effect columns or condition steps, and the clip stays identical. Pattern Tracker and Pattern Playlist count as the same kind here. In a different kind of device Patchkamer leaves those extras out.
 - **Undo.** After pasting, the message shows an **Undo** button for about fifteen seconds. **Ctrl+Z** does the same in that time.
+
+![The paste menu of Pulse Drums, with the option Match the clip's length](images/en/20-paste-menu.png)
+
+![The menu next to Paste on the Clip Arranger, with Copy all tracks](images/en/21-copy-all-tracks.png)
 
 On a phone the buttons work with a tap (the arrow for the paste options too); you do not need shortcuts there. The buttons live in the card bar, so they are out of reach while the card is minimized to an icon.
 

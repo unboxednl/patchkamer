@@ -206,6 +206,12 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README en een eigen geb
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [Handleiding modulatoren](modulators/USER-MANUAL_NL.md) · [README](../devices/modulators/README_NL.md) |
 | **Tools** | Spelen, opnemen, meten en notities maken | Control Surface, Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Scope | [Handleiding tools](tools/USER-MANUAL_NL.md) · [README](../devices/tools/README_NL.md) |
 
+Twee voorbeelden van een kaart in de bibliotheek: **Chord Buddy** (soort Tools: hulp bij akkoorden, ook zonder muziektheorie) en **Balance EQ** (soort Mastering: een equalizer met vijf tot twaalf banden).
+
+![De kaart van Chord Buddy](images/nl/18-chord-buddy.png)
+
+![De kaart van Balance EQ](images/nl/19-balance-eq.png)
+
 **AI-chat (ingebouwd).** Naast de soorten hierboven heeft de bibliotheek één apparaat dat bij Patchkamer zelf hoort: **AI Chat**, onder *Meten & hulpmiddelen*. Plaats het en vraag in je eigen woorden om een device, een tunepack, een presetpack of een song. Het heeft een aanbieder, een API-sleutel en een model nodig onder **Instellingen → AI-assistent**; de aanbieder rekent het gebruik aan jou aan. De AI leest de documentatie van deze repository op GitHub zelf (de AGENTS.md-bestanden, het contract, de stijlgidsen) en geeft alles als **voorstel**: **Toevoegen** zet een device in de bibliotheek en op de vloer, of een tune- of presetpack in je bibliotheken, en **Openen** opent een song in een nieuwe werkruimte-tab. Zonder jouw klik wordt niets toegevoegd. Lees de code van een device voor je het toevoegt: een device is niet afgeschermd van de pagina, en de controle op de kaart waarschuwt alleen voor netwerk, opslag en eval. Het gesprek blijft staan als je van werkruimte wisselt; **Nieuw gesprek** begint opnieuw. Niet getest met echte aanbieders of sleutels: de werking met alle drie de formaten is getest met nagebootste antwoorden. De AI kan niet luisteren: vertel wat je hoort.
 
 Hun kant-en-klare klanken en instellingen hebben eigen handleidingen: [Tunes](tunes/USER-MANUAL_NL.md) voor apparaten die geluid maken en [Presets](presets/USER-MANUAL_NL.md) voor de rest (zie ook onderdeel 7).
@@ -225,6 +231,10 @@ Een apparaat dat een patroon of clip kan delen, krijgt in de balk van zijn kaart
 - **Plakopties.** Naast **Plak** staat een kleine pijl **▾** (of klik met de rechtermuisknop op Plak; met het toetsenbord ga je naar de pijl en druk je op Enter). Het menu geldt voor één plak en onthoudt niets. **Octaaf** verschuift de noten van de clip met −4 tot +4 octaven vóór het plakken (noten buiten 0 tot 127 vallen weg en de melding zegt hoeveel; alleen bij noten). **Uitlijnen op volgorde** zet baan 1 van de clip op baan 1 van het doel, baan 2 op baan 2, enzovoort, in plaats van op instrument; handig voor Latin Percussion en Click Synth, die met een gewone drumclip anders niets krijgen (alleen bij drums). **Pas lengte aan de clip aan** geeft het doel de lengte van de clip; dat werkt bij een apparaat dat per patroon zijn eigen lengte heeft en bij Drum Kit en Pulse Drums, waar de lengte voor alle patronen geldt en dus ook voor de andere patronen verandert (bij Pulse Drums krijgen alle kanalen dezelfde lengte, dus een polymeter vervalt; Ongedaan maken zet het terug). Bij een andere gedeelde of een vaste lengte meldt Patchkamer dat het de lengte niet kon veranderen. **Plak direct** plakt meteen, ook als de klok loopt. Na elke plak werkt **Ongedaan maken** gewoon.
 - **Gelijke apparaten verliezen niets.** Plak je een clip in een apparaat van dezelfde soort als waar je hem uit kopieerde (Drum Kit naar Drum Kit, Tracker naar Tracker), dan gaan ook de eigen extra's mee, zoals effectkolommen of conditiestappen, en blijft de clip gelijk. Pattern Tracker en Pattern Playlist tellen hierbij als dezelfde soort. In een ander soort apparaat laat Patchkamer die extra's weg.
 - **Ongedaan maken.** Na het plakken staat in de melding een knop **Ongedaan maken**, ongeveer vijftien seconden lang. **Ctrl+Z** doet hetzelfde in die tijd.
+
+![Het plakmenu van Pulse Drums, met de optie Pas lengte aan de clip aan](images/nl/20-paste-menu.png)
+
+![Het menu naast Plak op de Clip Arranger, met Kopieer alle sporen](images/nl/21-copy-all-tracks.png)
 
 Op een telefoon werken de knoppen met een tik (ook de pijl voor de plakopties); sneltoetsen heb je daar niet nodig. De knoppen staan in de kaartbalk, dus ze zijn niet bereikbaar zolang de kaart tot een icoon is geminimaliseerd.
 

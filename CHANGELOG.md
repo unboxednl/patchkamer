@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.16.1 (2026-11-09)
+
+### Changed
+- **User manual: screenshots of the clipboard.** The chapter on copying and pasting patterns now shows the paste menu (Pulse Drums, with the option *Match the clip's length*) and the menu next to Paste on the Clip Arranger with *Copy all tracks* (multiple tracks at once, contract v1.24). The existing screenshots of Chord Buddy and Balance EQ are now in the manual too, and are regenerated as full cards. `docs/tools/make-screenshots.py --only-clip` makes just these four. Both languages.
+
 ## 0.16.0 (2026-11-09)
 
 ### Added
