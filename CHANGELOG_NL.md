@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.20.0 (2026-11-09)
+
+### Toegevoegd
+- **Handleiding-venster.** Het menu achter het icoon op de kaartbalk heeft bij elk apparaat **Handleiding**. Die opent de handleiding van dat apparaat in een zwevend venster in Patchkamer zelf (geen nieuw tabblad), met de plaatjes. De tekst komt uit de docs-map op GitHub (`docs/<soort>/USER-MANUAL_NL.md` of `_EN.md`); de taal volgt de taal van de host en Engels is de terugval, ook als een kop ontbreekt. Is GitHub niet bereikbaar, dan probeert het venster het bestand naast de host. Je ziet alleen het deel van het apparaat; **Hele handleiding** toont de hele soort en links naar andere handleidingen openen in hetzelfde venster. Het venster is te verslepen en te vergroten, en op een smal scherm een blad onderaan. De markdown wordt zonder `innerHTML` omgezet, dus een handleiding kan geen script uitvoeren.
+
 ## 0.19.0 (2026-11-09)
 
 ### Toegevoegd

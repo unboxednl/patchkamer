@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.20.0 (2026-11-09)
+
+### Added
+- **Manual window.** The menu behind the icon on the card bar now has **Manual** on every device. It opens the manual of that device in a floating window inside Patchkamer itself (no new tab), with the pictures. The text comes from the docs folder on GitHub (`docs/<kind>/USER-MANUAL_NL.md` or `_EN.md`); the language follows the host language and English is the fallback, also when a heading is missing. If GitHub cannot be reached, the window tries the file next to the host. You only see the part for the device; **Whole manual** shows the whole kind, and links to other manuals open in the same window. The window can be dragged and resized, and on a narrow screen it is a sheet at the bottom. The markdown is converted without `innerHTML`, so a manual cannot run a script.
+
 ## 0.19.0 (2026-11-09)
 
 ### Added

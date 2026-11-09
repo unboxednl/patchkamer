@@ -53,6 +53,7 @@ async function open(id,anchor,btn,floorAt){
     if(hint){ const k=document.createElement('kbd'); k.textContent=hint; b.appendChild(k); } if(dis){ b.disabled=true; } if(title) b.title=title; b.onclick=e=>{ e.stopPropagation(); close(false); fn(); }; m.appendChild(b); return b; };
   if(r){ const ttl=document.createElement('div'); ttl.className='ttl'; ttl.textContent=r.def.name; m.appendChild(ttl);
     if(PK.aboutOf(r.def)) item(PK.pkt('m.dm_over',r.def.name),'',()=>about(r.def));
+    if(PK.manualOpen) item(PK.pkt('m.dm_handleiding'),'',()=>PK.manualOpen(r.def));
     item(PK.pkt('m.dm_kopieer'),r.inst&&typeof r.inst.clipInfo==='function'?'⇧Ctrl C':'Ctrl C',()=>{ PK.select(id); copyDevice(id); }); }
   item(PK.pkt('m.dm_plak'),'Ctrl V',()=>{ pasteDevice(floorAt||null); },!mem,mem?PK.pkt('m.dm_plak_titel',mem.name):PK.pkt('m.dm_niets_gekopieerd'));
   if(!r&&floorAt&&PK.secCreate){ item(PK.pkt('m.sc_maken'),'',()=>PK.secCreate(floorAt)); item(PK.pkt('m.jp_maken'),'',()=>PK.jumpCreate(floorAt)); }

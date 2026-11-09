@@ -20,5 +20,24 @@
 .libdev .src{font-size:.75em;color:var(--audio);overflow-wrap:anywhere}
 .pkmodal{position:fixed;inset:0;z-index:90;background:var(--scrim);display:grid;place-items:center;padding:16px}
 .pkmodal .box{width:min(480px,100%);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:12px;font-size:13px;line-height:1.5;box-shadow:0 18px 50px var(--shadow)}
+/* handleiding-venster (manual.js): zwevend, verplaatsbaar, formaat aan de hoek */
+.manwin{position:fixed;right:16px;top:70px;width:min(520px,calc(100vw - 32px));height:min(72vh,760px);z-index:80;display:flex;flex-direction:column;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;box-shadow:0 18px 50px var(--shadow);overflow:hidden;zoom:var(--pkfs)}
+.manwin[hidden]{display:none}
+.manwin .manbar{display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid var(--line);background:var(--bar);color:var(--bar-fg);cursor:grab;user-select:none}
+.manwin .mantitle{flex:1;font-family:var(--disp);font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.manwin .manscroll{flex:1;overflow:auto;padding:10px 14px 18px;font-size:13px;line-height:1.55;outline:none}
+.manwin .manrz{position:absolute;right:0;bottom:0;width:16px;height:16px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 50%,var(--muted) 50%,var(--muted) 58%,transparent 58%,transparent 72%,var(--muted) 72%,var(--muted) 80%,transparent 80%)}
+.manwin .manmsg{padding:14px 0;color:var(--muted)}
+.manwin .mdbody h2,.manwin .mdbody h3,.manwin .mdbody h4,.manwin .mdbody h5{font-family:var(--disp);letter-spacing:.04em;margin:18px 0 6px;line-height:1.25}
+.manwin .mdbody>h2:first-child,.manwin .mdbody>h3:first-child,.manwin .mdbody>h4:first-child{margin-top:2px}
+.manwin .mdbody h2{font-size:18px}.manwin .mdbody h3{font-size:16px}.manwin .mdbody h4{font-size:14px}.manwin .mdbody h5{font-size:13px;color:var(--muted)}
+.manwin .mdbody p{margin:8px 0}.manwin .mdbody ul,.manwin .mdbody ol{margin:6px 0;padding-left:22px}.manwin .mdbody li{margin:3px 0}
+.manwin .mdbody img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:4px;margin:6px 0;background:var(--well,var(--card))}
+.manwin .mdbody code{font-family:var(--mono);font-size:.92em;background:var(--well,var(--card-2,var(--card)));padding:1px 4px;border-radius:3px}
+.manwin .mdbody pre{background:var(--well,var(--card-2,var(--card)));padding:8px 10px;border-radius:5px;overflow:auto}.manwin .mdbody pre code{background:none;padding:0}
+.manwin .mdbody blockquote{margin:8px 0;padding:2px 12px;border-left:3px solid var(--event);color:var(--muted)}
+.manwin .mdbody hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.manwin .mdbody a{color:var(--audio)}
+.manwin .mdtable{overflow-x:auto;margin:8px 0}.manwin .mdbody table{border-collapse:collapse;font-size:12px}.manwin .mdbody th,.manwin .mdbody td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}.manwin .mdbody th{background:var(--card-2,var(--card))}
 .pkmodal .box .wsrow{justify-content:flex-end}
 .pkmodal.aboutdlg .box{width:min(560px,100%);max-height:86dvh;overflow:auto}.pkmodal.aboutdlg h3{margin:0}.pkmodal.aboutdlg .aboutbody{display:grid;gap:10px}.pkmodal.aboutdlg .aboutbody p{margin:0;white-space:pre-line}
