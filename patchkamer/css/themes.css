@@ -44,3 +44,22 @@
 :root[data-skin="s1000"] .card .bar .dim{font-family:var(--lcd-font);font-size:14px}
 :root[data-skin="s1000"] .k output{white-space:nowrap}
 :root[data-skin="light"] .card .bar,:root[data-skin="light"] .libbar{background:var(--card-2)}
+
+/* ---------- kleurstelling: aurora (kleurrijk donker): diep indigo met levendige accenten, voor wie inspiratie zoekt ---------- */
+:root[data-skin="aurora"]{
+  --bg:#0d0b1a; --floor:#110f22; --card:#1a1633; --card-2:#241e45; --line:#383063; --fg:#ece8ff; --muted:#a39dcc;
+  --audio:#3fe0c5; --event:#ffb86b; --go:#59e08f; --stop:#ff5f57; --sel:#b794ff; --mod:#f07bff; --multi:#a3e66a; --mastering:#ffd84d;
+  --well:#0a0818; --well-fg:#cfc9f2; --overlay:rgba(18,15,38,.93); --scrim:rgba(6,4,16,.62); --shadow:rgba(0,0,0,.6); --step-q:#2a2350; --glyph-fg:#120f26;
+  color-scheme:dark;
+}
+:root[data-skin="aurora"] .card .bar,:root[data-skin="aurora"] .libbar{background:linear-gradient(90deg,var(--card-2),color-mix(in srgb,var(--sel) 24%,var(--card-2)))}
+:root[data-skin="aurora"] .card{border-color:color-mix(in srgb,var(--sel) 38%,var(--line))}
+/* ---------- kleurstelling: papier (rustig licht): warm papierwit met zachte, gedempte accenten, prettig bij daglicht en lang werken ---------- */
+:root[data-skin="paper"]{
+  --bg:#ebe6dc; --floor:#f4f0e7; --card:#fffdf8; --card-2:#f1ece1; --line:#d6cebd; --fg:#2b2620; --muted:#645c4f;
+  --audio:#0b7d72; --event:#b34e08; --go:#2f7f35; --stop:#bb3022; --sel:#4457b8; --mod:#7f3fb0; --multi:#3f7f22; --mastering:#8f6c00;
+  --well:#efe9dc; --well-fg:#2e2a22; --overlay:rgba(255,253,248,.95); --scrim:rgba(43,38,32,.35); --shadow:rgba(60,48,30,.18); --step-q:#e2dac8; --glyph-fg:#fffdf8;
+  color-scheme:light;
+}
+:root[data-skin="paper"] .card .bar,:root[data-skin="paper"] .libbar{background:var(--card-2)}
+:root[data-skin="paper"] .card{box-shadow:0 1px 0 var(--line),0 8px 22px var(--shadow)}

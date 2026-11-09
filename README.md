@@ -15,7 +15,7 @@
 - **Keep your sounds.** Save the full setting of any device as a **tune** (devices that make sound) or a **preset** (effects, mixers and so on). Organise them in libraries and folders and share them as packs.
 - **Save and share your work.** Save a workspace as a file or in your browser, or export it as a **song** that carries all device code, a title, an author and a license, so anyone can open it.
 - **Load devices from anywhere.** From a folder on your computer, from GitHub or from a web address.
-- **Make it yours.** Dutch and English interface (follows your browser), dark, light and retro looks, a focus view, zoom and an audio quality setting (sample rate, latency, oversampling).
+- **Make it yours.** Dutch and English interface (follows your browser), five color schemes (dark, light, retro, aurora and paper), a focus view, zoom and an audio quality setting (sample rate, latency, oversampling).
 - **Private by design.** Plain HTML, CSS and JavaScript files, no build step. No install, no account, nothing uploaded.
 
 ## Quick start

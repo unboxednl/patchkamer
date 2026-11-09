@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.27.0 (2026-11-09)
+
+### Added
+- **Two new colour schemes: Aurora and Paper.** The **Color** choice now has five settings: dark, light, retro, **aurora** and **paper**. **Aurora** is a colourful dark look (deep indigo with aqua, apricot, pink and lavender accents, card bars with a soft colour gradient), meant to inspire. **Paper** is a calm, warm light look (paper white with muted accents and soft shadows), pleasant in daylight and during long sessions. Both also colour the cables and the devices (which follow the host's CSS variables) and remember your choice. Measured: text on the card reaches at least 14 : 1, muted text at least 5.4 : 1 and the cable and accent colours at least 4.3 : 1 against card and floor; no page errors in all five. Manual (NL and EN), the READMEs, both new screenshots and the notes on adding a colour scheme updated.
+
 ## 0.26.0 (2026-11-09)
 
 ### Added

@@ -15,7 +15,7 @@
 - **Bewaar je klanken.** Leg de volledige instelling van elk apparaat vast als **tune** (apparaten die geluid maken) of **preset** (effecten, mixers enzovoort). Ordenen kan in bibliotheken en mappen, en je deelt ze als pakket.
 - **Bewaar en deel je werk.** Bewaar een werkruimte als bestand of in je browser, of exporteer hem als **song** met alle apparaatcode, een titel, een maker en een licentie, zodat iedereen hem kan openen.
 - **Apparaten laden van overal.** Uit een map op je computer, van GitHub of van een webadres.
-- **Maak het van jou.** Nederlandse en Engelse interface (volgt je browser), donkere, lichte en retro uitstraling, een focusweergave, zoom en een instelling voor audiokwaliteit (sample rate, latency, oversampling).
+- **Maak het van jou.** Nederlandse en Engelse interface (volgt je browser), vijf kleurstellingen (donker, licht, retro, aurora en papier), een focusweergave, zoom en een instelling voor audiokwaliteit (sample rate, latency, oversampling).
 - **Privé door ontwerp.** Gewone HTML-, CSS- en JavaScript-bestanden, geen build-stap. Geen installatie, geen account, niets wordt geüpload.
 
 ## Snel starten

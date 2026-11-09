@@ -330,7 +330,7 @@ if(setPanel){ PK.$('setBtn').onclick=e=>{ e.stopPropagation(); setPanel.hidden?P
    ===================================================================== */
 PK.setName(PK.pkt('m.naamloos')); PK.paintFloorEmpty();
 // ---------- kleurstelling ----------
-(()=>{ const sel=PK.$('skin'), ok=v=>['dark','light','s1000'].includes(v); let v='dark'; try{ const x=localStorage.getItem('patchkamer.skin'); if(ok(x)) v=x; }catch(e){}
+(()=>{ const sel=PK.$('skin'), ok=v=>['dark','light','s1000','aurora','paper'].includes(v); let v='dark'; try{ const x=localStorage.getItem('patchkamer.skin'); if(ok(x)) v=x; }catch(e){}
   const set=x=>{ document.documentElement.dataset.skin=x; sel.value=x; try{ localStorage.setItem('patchkamer.skin',x); }catch(e){} requestAnimationFrame(PK.drawCables); window.dispatchEvent(new CustomEvent('patchkamer-skin',{detail:x})); };
   sel.onchange=()=>set(sel.value); set(v); })();
 window.addEventListener('resize',PK.drawCables); floorwrap.addEventListener('scroll',PK.drawCables);

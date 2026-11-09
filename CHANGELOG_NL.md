@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.27.0 (2026-11-09)
+
+### Toegevoegd
+- **Twee nieuwe kleurstellingen: Aurora en Papier.** De keuze **Kleur** heeft nu vijf standen: donker, licht, retro, **aurora** en **papier**. **Aurora** is een kleurrijk donker thema (diep indigo met aqua, abrikoos, roze en lavendel als accenten, kaartbalken met een zachte kleurovergang), bedoeld om te inspireren. **Papier** is een rustig, warm licht thema (papierwit met gedempte accenten en zachte schaduwen), prettig bij daglicht en tijdens lang werken. Beide kleuren ook de kabels en de apparaten (die de CSS-variabelen van de host volgen) en onthouden je keuze. Gemeten: tekst op de kaart haalt minstens 14 : 1, de gedempte tekst minstens 5,4 : 1 en de kabel- en accentkleuren minstens 4,3 : 1 tegen kaart en vloer; geen paginafouten in alle vijf. Handleiding (NL en EN), README's, beide nieuwe screenshots en de notities voor het toevoegen van een kleurstelling bijgewerkt.
+
 ## 0.26.0 (2026-11-09)
 
 ### Toegevoegd

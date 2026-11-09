@@ -73,7 +73,7 @@ The icon (a patch cable between two jacks) also shows as the tab icon in the bro
 | **☰** | The menu with everything else, in four groups (the four rows below). The menu closes after a choice. |
 | ☰ → **File** | **Workspace** (save, open and export your setup, section 8), **Arrange** (puts your devices neatly in order, from left to right) and **Clear** (empties the floor; click twice to confirm). |
 | ☰ → **Library** | **Tunes**, **Presets**, **Songs** and **Skins** open the library window on that tab (sections 7 and 8). |
-| ☰ → **View** | **Screen** and **Fit to this screen** (section 9), **Color** (dark, light or retro, section 10), **Focus** (shows the devices you flagged with **F** next to each other, section 9) and **Browse** (Focus with all devices, one at a time). |
+| ☰ → **View** | **Screen** and **Fit to this screen** (section 9), **Color** (dark, light, retro, aurora or paper, section 10), **Focus** (shows the devices you flagged with **F** next to each other, section 9) and **Browse** (Focus with all devices, one at a time). |
 | ☰ → **Other** | **Settings** (language, audio quality, display and more, section 10), **Latency** (shown small: the delay between a sound being calculated and you hearing it, as reported by your browser) and the switch **Offer to connect when placing a device**. |
 | **F1**, **F2**… tabs | The bar under the top bar holds your workspaces. Click a tab or press **F1** to **F10** to switch; **+** adds one and **×** closes one (section 8). |
 
@@ -414,11 +414,15 @@ The features that speed up your workflow the most, in one list:
 - **Simplify cards when zoomed out:** below about 55% zoom, cards show only their header; double-click or double-tap zooms in. Can be switched off.
 - **Version:** at the bottom of Settings is the version of Patchkamer and a link to the changelog (what changed per version). In the desktop app it also shows the version of the app, the latest release on GitHub and a download link when yours is older.
 - **Links:** at the bottom are links to the GitHub repository and to this user manual, in the language of your screen, and to the contract for device builders.
-- **Color** (top right): dark, light or retro.
+- **Color** (top right): dark, light, retro, aurora or paper. **Aurora** is a colourful dark look with deep indigo and vivid accents, meant to inspire; **Paper** is a calm, warm light look with soft accents, pleasant in daylight and during long sessions. Every colour scheme has readable contrast (text at least 4.5 : 1 against the card) and also colours the cables and the devices.
 
 ![The light and retro color schemes](images/en/03-patch-light.png)
 
 ![Retro](images/en/03-patch-retro.png)
+
+![Aurora](images/en/03-patch-aurora.png)
+
+![Paper](images/en/03-patch-paper.png)
 
 - **Browser storage:** Patchkamer remembers your settings, library layout, sources, workspace and your own tunes and presets in your browser. **Clear browser storage…** wipes all of that and starts fresh. Files on your computer and on GitHub stay as they are.
 

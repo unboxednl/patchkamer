@@ -73,7 +73,7 @@ Het icoon (een patchkabel tussen twee aansluitingen) verschijnt ook als tabbladi
 | **☰** | Het menu met al het andere, in vier groepen (de vier rijen hieronder). Het menu sluit na een keuze. |
 | ☰ → **Bestand** | **Werkruimte** (bewaar, open en exporteer je opstelling, onderdeel 8), **Herschik** (zet je apparaten netjes op volgorde, van links naar rechts) en **Leeg** (maakt de vloer leeg; klik twee keer om te bevestigen). |
 | ☰ → **Bibliotheek** | **Tunes**, **Presets**, **Songs** en **Skins** openen het bibliotheekvenster op die tab (onderdeel 7 en 8). |
-| ☰ → **Weergave** | **Scherm** en **Pas aan op dit scherm** (onderdeel 9), **Kleur** (donker, licht of retro, onderdeel 10), **Focus** (toont de apparaten die je met **F** hebt gemarkeerd naast elkaar, onderdeel 9) en **Bladeren** (Focus met alle apparaten, één tegelijk). |
+| ☰ → **Weergave** | **Scherm** en **Pas aan op dit scherm** (onderdeel 9), **Kleur** (donker, licht, retro, aurora of papier, onderdeel 10), **Focus** (toont de apparaten die je met **F** hebt gemarkeerd naast elkaar, onderdeel 9) en **Bladeren** (Focus met alle apparaten, één tegelijk). |
 | ☰ → **Overig** | **Instellingen** (taal, audiokwaliteit, weergave en meer, onderdeel 10), **Latency** (klein weergegeven: de vertraging tussen het berekenen van een geluid en het horen ervan, zoals je browser die meldt) en de schakelaar **Automatisch koppelen bij plaatsen**. |
 | Tabs **F1**, **F2**… | De balk onder de bovenbalk bevat je werkruimtes. Klik op een tab of druk op **F1** t/m **F10** om te wisselen; **+** voegt er een toe en **×** sluit er een (hoofdstuk 8). |
 
@@ -414,11 +414,15 @@ De functies die de werkwijze het meest versnellen, op een rij:
 - **Kaarten vereenvoudigen bij uitzoomen:** onder zo'n 55% zoom tonen kaarten alleen hun kop; dubbelklik of dubbeltik zoomt in. Uit te zetten.
 - **Versie:** onderaan Instellingen staat de versie van Patchkamer en een link naar de changelog (wat er per versie veranderde). In de desktop-app staat ook de versie van de app, de nieuwste uitgave op GitHub en een downloadlink als jouw versie ouder is.
 - **Links:** onderaan staan links naar de GitHub-repository en naar deze gebruikershandleiding, in de taal van je scherm, en naar het contract voor wie apparaten bouwt.
-- **Kleur** (rechtsboven): donker, licht of retro.
+- **Kleur** (rechtsboven): donker, licht, retro, aurora of papier. **Aurora** is een kleurrijk donker thema met diep indigo en levendige accenten, bedoeld om te inspireren; **Papier** is een rustig, warm licht thema met zachte accenten, prettig bij daglicht en tijdens lang werken. Elke kleurstelling heeft leesbaar contrast (tekst minstens 4,5 : 1 tegen de kaart) en kleurt ook de kabels en de apparaten.
 
 ![De kleurstellingen licht en retro](images/nl/03-patch-light.png)
 
 ![Retro](images/nl/03-patch-retro.png)
+
+![Aurora](images/nl/03-patch-aurora.png)
+
+![Papier](images/nl/03-patch-paper.png)
 
 - **Browsergeheugen:** Patchkamer onthoudt je instellingen, bibliotheekindeling, bronnen, werkruimte en je eigen tunes en presets in je browser. **Browsergeheugen wissen…** wist dat allemaal en begint opnieuw. Bestanden op je computer en op GitHub blijven staan.
 

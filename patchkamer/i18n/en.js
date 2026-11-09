@@ -19,6 +19,8 @@ PK.I18N.en={
    "ui.donker":"Dark",
    "ui.licht":"Light",
    "ui.retro":"Retro",
+   "ui.aurora":"Aurora",
+   "ui.papier":"Paper",
    "ui.kleur":"Color",
    "ui.bestand":"File",
    "ui.opslaan_als_bestand":"Save as file",

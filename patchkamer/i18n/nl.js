@@ -21,6 +21,8 @@ I18N.nl={
    "ui.donker":"Donker",
    "ui.licht":"Licht",
    "ui.retro":"Retro",
+   "ui.aurora":"Aurora",
+   "ui.papier":"Papier",
    "ui.kleur":"Kleur",
    "ui.bestand":"Bestand",
    "ui.opslaan_als_bestand":"Opslaan als bestand",

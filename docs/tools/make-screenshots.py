@@ -135,7 +135,7 @@ def shots(browser, lang, OUT, LIB, BASE):
     for i in (0, 1): pg.locator('.card').nth(i).locator('button', has_text='F').first.click(); pg.wait_for_timeout(200)
     menu_click(pg, '#focusBtn'); pg.wait_for_timeout(800); pg.locator('#focusview button, .focusview button').nth(1).click(); pg.wait_for_timeout(1000)
     pg.screenshot(path=OUT + '/08-focus.png'); done(pg)
-    for skin, name in (('light', '03-patch-light'), ('s1000', '03-patch-retro')):
+    for skin, name in (('light', '03-patch-light'), ('s1000', '03-patch-retro'), ('aurora', '03-patch-aurora'), ('paper', '03-patch-paper')):
         pg = newpage(nopicker=True, skin=skin); build_patch(pg); pg.screenshot(path=OUT + '/' + name + '.png'); done(pg)
     pg = newpage(h=1500, nopicker=True); load_lib(pg); place(pg, 'Acid Baselines'); pg.click('#libToggle'); pg.wait_for_timeout(2500)   # hoog scherm: de kaart past er helemaal op
     import_tunes(pg); pg.click('#libToggle'); pg.wait_for_timeout(300)   # het bibliotheekvenster weer dicht
