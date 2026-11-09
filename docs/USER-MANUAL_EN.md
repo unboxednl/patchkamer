@@ -301,7 +301,7 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 - **Export as song…** makes a shareable file (`.patchkamer-song.json`) that holds all device code, a title, the author and a license. Someone else can open it without any library.
 - **New empty workspace** starts again.
 
-**Songs.** The **Songs** tab of the library (or **Songs** in the ☰ menu) opens a song in a **new workspace tab** and arranges the devices afterwards (**Ctrl+Z** undoes it). It lists the **demo songs** from the `songs` folder of this repository on GitHub (songs in a subfolder, such as `hip-hop`, are grouped under an indented heading of their own), your **recent songs** (the last twelve, also files you opened) and **Open file…**. If a song needs devices that are not in your library yet, Patchkamer first loads the device library from **Settings → Load automatically**. Up to ten workspaces can be open, so close one first when they are all in use.
+**Songs.** The **Songs** tab of the library (or **Songs** in the ☰ menu) opens a song in a **new workspace tab** with the layout exactly as saved in the song (nothing is rearranged; use **Arrange** if you want that). It lists the **demo songs** from the `songs` folder of this repository on GitHub (songs in a subfolder, such as `hip-hop`, are grouped under an indented heading of their own), your **recent songs** (the last twelve, also files you opened) and **Open file…**. If a song needs devices that are not in your library yet, Patchkamer first loads the device library from **Settings → Load automatically**. Up to ten workspaces can be open, so close one first when they are all in use.
 
 **More than one workspace.** The tab bar under the top bar holds up to ten workspaces. Click a tab, or press **F1** to **F10**, to switch. **+** adds a new empty workspace; **×** closes one (Patchkamer asks first if it holds devices, and the last one cannot be closed: use **Clear**). Every workspace has its own devices, cables, tempo and name, and everything in this section works on the workspace you are in. When you switch, the clock stops and you start it again yourself. A new workspace loads what you chose under **Settings → Load automatically**. Patchkamer keeps your workspaces in your browser and opens them again the next time.
 
@@ -311,7 +311,7 @@ Your **workspace** is the whole setup: devices and their settings and patterns, 
 
 With a mouse you can drop files from your file manager onto the **floor** or the **library window**; a frame saying "Drop to load" appears. Patchkamer recognises the kind from the content and loads it without asking:
 
-- a **song** (`.patchkamer-song.json`) or a **workspace file** opens in a **new workspace tab**; your current workspace stays as it is. As with the **Songs** tab, the devices are arranged afterwards;
+- a **song** (`.patchkamer-song.json`) or a **workspace file** opens in a **new workspace tab**; your current workspace stays as it is. As with the **Songs** tab, the layout stays as it was saved;
 - a **device** (`.patchkamer-device.js`) goes into the **library**, not onto the floor. If the same version is already loaded it is replaced. Place it afterwards as usual;
 - a **tune pack** or **preset pack** (`.patchkamer-tunes.json`, `.patchkamer-presets.json`) goes into your tune or preset libraries, like **Import**;
 - a **skin** (`.patchkamer-skin.json`) goes into your skin library, like **Import** on the Skins tab;

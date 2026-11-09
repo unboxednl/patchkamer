@@ -1,7 +1,7 @@
 // js/song-panel.js — tab Songs van het bibliotheekvenster: demos en recente songs
 (function(PK){
 /* =====================================================================
-   SONGS · tab Songs in de bibliotheek: demo's van GitHub en recente songs. Een song opent in een nieuwe werkruimte-tab en de apparaten worden daarna herschikt.
+   SONGS · tab Songs in de bibliotheek: demo's van GitHub en recente songs. Een song opent in een nieuwe werkruimte-tab; de indeling blijft zoals de song ze heeft.
    ===================================================================== */
 const SONG_ADDR_KEY='patchkamerSongsAddr', SONG_ADDR_DEF='github.com/unboxednl/patchkamer/tree/main/songs', SONGREC_MAX=12, SONG_MAXBYTES=4000000; PK.SONG_ADDR_KEY=SONG_ADDR_KEY; PK.SONG_ADDR_DEF=SONG_ADDR_DEF; PK.SONGREC_MAX=SONGREC_MAX;
 PK.SONGREC=[], PK.SONG_DEMO=null, PK.SONG_DEMO_ERR='', PK.SONG_BUSY=false;
@@ -18,7 +18,7 @@ async function songOpen(obj,meta){   // obj = song of werkruimte (geparsed); met
   try{ if(devs.some(d=>!PK.Host.latest(d.def))){ PK.status(PK.pkt('m.songs_bibliotheek_laden')); try{ await PK.wsaLoad('dev',false); }catch(e){} }
     await PK.wslAdd(); const ok=await PK.openWorkspace(obj);
     if(ok){ songRecAdd({key:meta.key,title:songTitleOf(obj),author:String((obj&&obj.author)||'').slice(0,60),t:Date.now(),url:meta.url||'',name:meta.name||'',text:meta.text&&meta.text.length<=SONG_MAXBYTES?meta.text:''});
-      setTimeout(()=>{ try{ if(PK.Host.devices.size) PK.$('arrange').click(); }catch(e){} },1300); closeSongs(); }
+      closeSongs(); }   // de indeling van de song blijft zoals ze is opgeslagen; herschikken doe je zelf met Herschik
     return ok; }
   catch(e){ PK.status(PK.pkt('m.songs_openen_mislukt',e.message),true); return false; }
   finally{ PK.SONG_BUSY=false; } } PK.songOpen=songOpen;
