@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.23.2 (2026-11-09)
+
+### Toegevoegd
+- **Laad nieuwste versie.** De melding dat er op GitHub een andere versie staat heeft een knop **Laad nieuwste versie**. Die haalt de pagina, stijlbladen en scripts opnieuw op, buiten de browsercache om, en laadt de pagina daarna opnieuw, zodat je direct de laatste versie draait.
+
 ## 0.23.1 (2026-11-09)
 
 ### Toegevoegd

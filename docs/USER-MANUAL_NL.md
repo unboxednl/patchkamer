@@ -109,7 +109,7 @@ Een apparaat is een bestand dat eindigt op `.patchkamer-device.js`. Bronnen word
 
 **Bijwerken.** Een scan laadt ook de gewijzigde code van apparaten die al op de vloer staan: zo'n apparaat wordt opnieuw gemaakt met zijn instellingen, kabels en grootte, en de melding noemt hoeveel er zijn bijgewerkt.
 
-**Nieuwe versie van Patchkamer.** Bij het starten (via http of https) vergelijkt Patchkamer `patchkamer.html` en zijn stijlbladen en scripts met de versie op GitHub (`main`). Wijkt die af, dan verschijnt rechtsonder een melding met **Bekijk op GitHub**, **Later** en **Niet meer melden voor deze versie**. Een bestand dat je via `file://` opent, kan zichzelf niet lezen en krijgt geen melding.
+**Nieuwe versie van Patchkamer.** Bij het starten (via http of https) vergelijkt Patchkamer `patchkamer.html` en zijn stijlbladen en scripts met de versie op GitHub (`main`). Wijkt die af, dan verschijnt rechtsonder een melding met **Laad nieuwste versie**, **Bekijk op GitHub**, **Later** en **Niet meer melden voor deze versie**. **Laad nieuwste versie** haalt alle bestanden opnieuw op, buiten de browsercache om, en laadt de pagina daarna opnieuw. Een bestand dat je via `file://` opent, kan zichzelf niet lezen en krijgt geen melding.
 
 **Het kan ook vanzelf.** Onder **Instellingen → Automatisch laden** kan Patchkamer de apparatenbibliotheek, de presets en de tunes van GitHub laden zodra je met een lege werkruimte begint. De adressen kun je daar wijzigen (hoofdstuk 10). Elk adres wordt een eigen bron in de lijst, met een knop **Scannen**.
 

@@ -109,7 +109,7 @@ A device is a file that ends in `.patchkamer-device.js`. Sources are remembered,
 
 **Updating.** A scan also loads the changed code of devices that are already on the floor: such a device is rebuilt with its settings, cables and size, and the message says how many were updated.
 
-**New version of Patchkamer.** At startup (over http or https) Patchkamer compares `patchkamer.html` and its stylesheets and scripts with the version on GitHub (`main`). If it differs, a notice appears at the bottom right with **View on GitHub**, **Later** and **Do not tell me again for this version**. A file opened through `file://` cannot read itself and gets no notice.
+**New version of Patchkamer.** At startup (over http or https) Patchkamer compares `patchkamer.html` and its stylesheets and scripts with the version on GitHub (`main`). If it differs, a notice appears at the bottom right with **Load latest version**, **View on GitHub**, **Later** and **Do not tell me again for this version**. **Load latest version** fetches every file again, past the browser cache, and then reloads the page. A file opened through `file://` cannot read itself and gets no notice.
 
 **It can also happen by itself.** Under **Settings → Load automatically** Patchkamer can load the device library, the presets and the tunes from GitHub whenever you start with an empty workspace. You can change the addresses there (section 10). Each one becomes a source of its own in the list, with a **Scan** button.
 

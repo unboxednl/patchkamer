@@ -326,6 +326,8 @@ I18N.nl={
    "m.scan_geen":"geen wijzigingen gevonden",
    "m.scan_bijgewerkt_n":"{0} op de vloer bijgewerkt",
    "m.host_andere_versie":"Op GitHub staat een andere versie van patchkamer.html dan deze. Ververs de pagina of haal de nieuwste versie op om bij te blijven.",
+   "m.host_laad":"Laad nieuwste versie",
+   "m.host_laden":"Laden…",
    "m.host_bekijken":"Bekijk op GitHub",
    "m.host_later":"Later",
    "m.host_niet_meer":"Niet meer melden voor deze versie",

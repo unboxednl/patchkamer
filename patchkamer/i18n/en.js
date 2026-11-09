@@ -290,6 +290,8 @@ PK.I18N.en={
    "m.scan_geen":"no changes found",
    "m.scan_bijgewerkt_n":"{0} on the floor updated",
    "m.host_andere_versie":"GitHub has a different version of patchkamer.html than this one. Reload the page or fetch the latest version to stay up to date.",
+   "m.host_laad":"Load latest version",
+   "m.host_laden":"Loading…",
    "m.host_bekijken":"View on GitHub",
    "m.host_later":"Later",
    "m.host_niet_meer":"Do not tell me again for this version",
