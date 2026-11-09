@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.27.2 (2026-11-09)
+
+### Changed
+- **Screenshots in the manual refreshed (NL and EN).** The 34 general images and the card of every device (107 per language) were made again, so they show the ports in the title bar, the smaller cards without their own title and explanation, and the latest Clip Arranger. The script `docs/tools/make-device-screenshots.py` skips retired devices (Control Surface, Keys / MIDI, MIDI Hub, Pad Controller), because they are not in the library and so cannot be placed; their existing images stay.
+
 ## 0.27.1 (2026-11-09)
 
 ### Fixed

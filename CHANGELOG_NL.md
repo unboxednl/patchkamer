@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.27.2 (2026-11-09)
+
+### Gewijzigd
+- **Schermafbeeldingen van de handleiding ververst (NL en EN).** De 34 algemene afbeeldingen en de kaart van elk apparaat (107 per taal) zijn opnieuw gemaakt, zodat ze de poorten in de titelbalk en de kleinere kaarten zonder eigen titel en uitleg tonen, en de nieuwste Clip Arranger. Het script `docs/tools/make-device-screenshots.py` slaat teruggetrokken apparaten (Control Surface, Keys / MIDI, MIDI Hub, Pad Controller) over, omdat die niet in de bibliotheek staan en dus niet te plaatsen zijn; hun bestaande afbeeldingen blijven staan.
+
 ## 0.27.1 (2026-11-09)
 
 ### Opgelost

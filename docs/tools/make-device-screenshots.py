@@ -26,6 +26,7 @@ def devices(area=None, only=None):
         parts = os.path.relpath(f, os.path.join(ROOT, 'devices')).split(os.sep)
         slug = parts[2][:-len(SUFFIX)]
         if (area and parts[0] != area) or (only and slug != only): continue
+        if re.search(r"status:\s*['\"]retired", open(f, encoding='utf-8').read()): continue   # een teruggetrokken apparaat staat niet in de bibliotheek en is dus niet te plaatsen
         found.append((parts[0], slug, f))
     return found
 
