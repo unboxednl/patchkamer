@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.15.0 — Patchkamer contract v1.17: klembord, alleen kopiëren. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, 12 tikken per zestiende). Kopiëren geeft het motief zoals het nu klinkt (toonladdertrappen omgezet naar MIDI-noten, met velocity, lengte, verloop en ratchets) als notes-clip; wijzigt het motief later, dan blijft de kopie staan (momentopname, geen koppeling). Plakken kan niet (`paste` is leeg): `setClip` geeft `ok:false` met een reden, behalve voor de eigen momentopname (`native`), die niets verandert. `modExclude: ['reps']` toegevoegd (Herhaal eerst was al bewust buiten `params()` gelaten; de validator meldde dat als let op). Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Swing is nu ook bestuurbaar via params()/modulate() (standaard uit, drift 0,05; role swing). Modulatie komt alleen bovenop de knop (effectief = knop + o × 0,5, geclampt) en is nooit state. De overige continue regelaars (inclusief Mensachtig, Accenten, Spooknoten, Ratchets) zaten er al in.
 //   Bewust weggelaten: Herhaal eerst (geheel getal 1 tot 8, discreet), grondtoon, toonladder, laagste, hoogste, raster, motieflengte, verloop, karakter en de schakelaars (keuzes en vinkjes).
@@ -19,7 +20,6 @@
 // octaafsprongen, wisselende notenlengte en accenten, 'herhaal eerst N keer, verander dan', vergrendelen en Volg akkoord: een akkoord op de ingang
 // bepaalt dan de toonschaal.
 const EN = {
-  'WANDERER · kansmelodie': 'WANDERER · probability melody',
   'Verzint een motief in de toonladder, herhaalt het en verandert het beetje bij beetje. Trek de uitgang Noten naar een synth. Speel een akkoord op de ingang en zet Volg akkoord aan: dan dwaalt hij alleen over die tonen.':
     'Invents a motif in the scale, repeats it and changes it little by little. Connect the Notes output to a synth. Play a chord on the input and switch on Follow chord: it then wanders over those notes only.',
   'Karakter': 'Character', 'Grondtoon': 'Root', 'Toonladder': 'Scale', 'Laagste': 'Lowest', 'Hoogste': 'Highest', 'Raster': 'Grid', 'Motieflengte': 'Motif length',
@@ -54,7 +54,7 @@ const LEGACY_CHARACTER = { 'Rustige lijn': 'Calm line', 'Arp-dwaler': 'Arp wande
 const UK_CSS = `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:var(--event,#7fd6ff);--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
+ .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -102,7 +102,7 @@ function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([,
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.15.0', kind: 'utility', category: 'sequencer', modExclude: ['reps'],
+  id: 'nl.patchkamer.wanderer', name: 'Wanderer', version: '1.16.0', about: { nl: 'Kansmelodie: verzint een motief in de toonladder en verandert het beetje bij beetje.', en: 'Probability melody: invents a motif in a scale and changes it bit by bit.' }, kind: 'utility', category: 'sequencer', modExclude: ['reps'],
   ui: { width: 820, minWidth: 400 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'akkoord', name: 'Chord / keys' }], eventOut: [{ id: 'notes', name: 'Notes' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { akkoord: 'Akkoord / toetsen', notes: 'Noten' } } },
@@ -205,7 +205,6 @@ export default {
       const sw = Math.min(0.5, state.swing || 0); if (sw > 0) clip.swing = sw; return clip;
     }
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS);
-      ukEl(app, 'h2', '', tx('WANDERER · kansmelodie'));
       ukEl(app, 'p', 'sub', tx('Verzint een motief in de toonladder, herhaalt het en verandert het beetje bij beetje. Trek de uitgang Noten naar een synth. Speel een akkoord op de ingang en zet Volg akkoord aan: dan dwaalt hij alleen over die tonen.'));
       const top = ukEl(app, 'div', 'top');
       ui.preset = ukSelect(top, tx('Karakter'), Object.keys(presets).map(k => [k, k]).concat([['Own', tx('Eigen')]]), state.preset, v => { if (presets[v]) { self.setState({ ...defaults, ...presets[v], preset: v, motif: null, run: state.run }); } });

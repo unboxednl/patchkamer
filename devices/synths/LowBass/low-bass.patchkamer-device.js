@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (basssynthesizer) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Low Bass (nieuwe id nl.patchkamer.lowbass, eigen map; voorheen Laag Bass, nl.patchkamer.laag), bijgewerkt naar Patchkamer contract v1.11.
 //   Het geluid is ongewijzigd; tunes en songs uit die tijd verwijzen naar de oude id en laden hier niet in.
 //   - tweetalig (host.lang, apparaat- en poortnamen per taal in i18n)
@@ -20,7 +21,8 @@ const EN = {
 const LABELS = { cutoff: 'Cutoff', resonance: 'Resonantie', sub: 'Sub', detune: 'Zweving', drive: 'Drive', fm: 'FM-diepte', env: 'Filter-envelope', glide: 'Glide', attack: 'Attack', decay: 'Decay', sustain: 'Sustain', release: 'Release', accent: 'Accent', level: 'Volume', bend: 'Pitchbend' };
 
 export default {
-  id: 'nl.patchkamer.lowbass', name: 'Low Bass', version: '1.11.0', kind: 'instrument', category: 'synth', ui: { width: 680, minWidth: 340 },
+  id: 'nl.patchkamer.lowbass', name: 'Low Bass', version: '1.12.0', kind: 'instrument', category: 'synth', ui: { width: 680, minWidth: 340 },
+  about: { nl: 'Basssynthesizer: monofoon met laatste-noot-prioriteit, legato, sub-oscillator en FM.', en: 'A bass synthesizer: monophonic with last-note priority, legato, sub oscillator and FM.' },
   i18n: { nl: { ports: { out: 'Bass uit', notes: 'Noten' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Bass out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
@@ -31,8 +33,8 @@ export default {
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
     function mountUI(el, title, subtitle) {
       clearUI(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
-      add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--x-ink)}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}label{min-width:0}`);
-      panel = add(shadow, 'div', undefined); panel.className = 'app'; add(panel, 'h2', title); if (subtitle) add(panel, 'p', subtitle); uiHandles = {}; return panel;
+      add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}label{min-width:0}`);
+      panel = add(shadow, 'div', undefined); panel.className = 'app'; if (subtitle) add(panel, 'p', subtitle); uiHandles = {}; return panel;
     }
     function clearUI() { if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; uiHandles = {}; }
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
@@ -76,7 +78,7 @@ export default {
     function panic(t = ctx.currentTime) { held = []; off(t); }
     function paint() { for (const k in uiHandles) uiHandles[k].set(state[k]); }
     function render(el) {
-      mountUI(el, 'LOW BASS · bass synthesizer', tx('Keyboard / sequencer → Noten. Mono last-note priority; legato, sub en FM.')); const top = row(panel);
+      mountUI(el, '', tx('Keyboard / sequencer → Noten. Mono last-note priority; legato, sub en FM.')); const top = row(panel);
       select(top, 'Preset', Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen')]]), state.preset, v => { if (presets[v]) { self.setState({ ...defaults, ...presets[v], preset: v }); render(el); } });
       select(top, tx('Golfvorm'), [['sawtooth', 'Saw'], ['square', 'Square'], ['triangle', 'Triangle']], state.wave, v => { state.wave = v; state.preset = 'Custom'; apply(); });
       select(top, 'Legato', [['1', tx('Aan')], ['0', tx('Uit')]], state.legato ? '1' : '0', v => state.legato = v === '1');

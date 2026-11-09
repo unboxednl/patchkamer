@@ -17,7 +17,7 @@ Een gereedschap dat een **monofone baslijn** (bas, sub of synthbas; geen akkoord
 | Naam | `Bass Finder` in alle talen; alleen poortnamen hebben een Nederlandse variant (`i18n`); alle tekst staat in `TXT` (nl en en) |
 | Soort | `utility` (categorie `tool`): dit apparaat krijgt dus **presets** (geen tunes). Er is nog geen presetpack |
 | Poorten | audio-ingang `in` (In), audio-uitgang `thru` (Door / Through: de ingang ongewijzigd), eventuitgang `notes` (Noten / Notes); geen sturing |
-| Contract | v1.23 (apparaatversie 1.20.0); geen contractwijziging nodig |
+| Contract | v1.23 (apparaatversie 1.21.0); geen contractwijziging nodig |
 | Licentie apparaat | AGPL-3.0-or-later |
 | Icoon | `icon.svg` in deze map (lijnwerk met `currentColor`, zoals de andere tools; gevalideerd met `node skins/contract/validate-skin.mjs`) |
 

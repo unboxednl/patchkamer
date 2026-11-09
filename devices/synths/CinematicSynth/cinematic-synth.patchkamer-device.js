@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.15.1 — Alle continue regelaars zijn stuurbaar: Stereospreiding, Pitchdaling en Duur daling, de filteromhulling (aanval, verval, houd), Toetsvolging, de versterkingsomhulling
 //   (aanval, verval, houd, uitklinken), Vibrato-snelheid, Echotijd, Galmlengte, Galmdemping en Accent stonden niet in params(). Nu wel (alle standaard uit); de omhullingen en de
 //   daling werken, net als Ontstemming en Sub al deden, vanaf de volgende noot. Ook Aanzwelling deed niets bij modulatie (de noot las de knopstand): dat is hersteld.
@@ -44,7 +45,7 @@ function normalize(raw) {
 }
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { title: 'CINEMATIC SYNTH', hint: 'Filmische synth: braams, pads, drones, ostinati en arpeggio\'s. Verbind Noten met een keyboard of sequencer. De pulsmotor volgt de klok: druk op Start.',
+  nl: { hint: 'Filmische synth: braams, pads, drones, ostinati en arpeggio\'s. Verbind Noten met een keyboard of sequencer. De pulsmotor volgt de klok: druk op Start.',
     groups: { osc: 'Oscillators', filter: 'Filter', amp: 'Versterking', motion: 'Beweging', space: 'Ruimte en klank', pulse: 'Pulsmotor', out: 'Uitgang' },
     labels: { wave: 'Golfvorm', unison: 'Stemmen per noot', detune: 'Ontstemming', spread: 'Stereospreiding', layerWave: 'Tweede laag', layerOct: 'Octaaf tweede laag', layerMix: 'Mix tweede laag', sub: 'Sub', noise: 'Ruis', bend: 'Pitchdaling', bendTime: 'Duur daling',
       cutoff: 'Cutoff', resonance: 'Resonantie', envAmt: 'Aanzwelling', fAttack: 'Filteraanval', fDecay: 'Filterverval', fSustain: 'Filterhoud', keytrack: 'Toetsvolging', attack: 'Aanval', decay: 'Verval', sustain: 'Houd', release: 'Uitklinken',
@@ -52,7 +53,7 @@ const TXT = {
       reverbSize: 'Galmlengte', reverbDamp: 'Galmdemping', reverbMix: 'Galm', pulse: 'Patroon', rate: 'Snelheid', gate: 'Lengte', octaves: 'Octaven', accent: 'Accent', latch: 'Vasthouden', level: 'Niveau', transpose: 'Transpositie' },
     opts: { saw: 'Zaagtand', square: 'Blok', tri: 'Driehoek', sine: 'Sinus', off: 'Uit', eighths: 'Achtsten', sixteenths: 'Zestienden', arpUp: 'Omhoog', arpDown: 'Omlaag', arpUpDown: 'Heen en weer', arpRandom: 'Willekeurig', organRun: 'Orgelloop', chordHits: 'Akkoordslagen' },
     status: 'Stemmen: ' },
-  en: { title: 'CINEMATIC SYNTH', hint: 'Cinematic synth: braams, pads, drones, ostinati and arpeggios. Connect Notes to a keyboard or sequencer. The pulse engine follows the clock: press Start.',
+  en: { hint: 'Cinematic synth: braams, pads, drones, ostinati and arpeggios. Connect Notes to a keyboard or sequencer. The pulse engine follows the clock: press Start.',
     groups: { osc: 'Oscillators', filter: 'Filter', amp: 'Amplifier', motion: 'Motion', space: 'Space and tone', pulse: 'Pulse engine', out: 'Output' },
     labels: { wave: 'Waveform', unison: 'Voices per note', detune: 'Detune', spread: 'Stereo spread', layerWave: 'Second layer', layerOct: 'Second layer octave', layerMix: 'Second layer mix', sub: 'Sub', noise: 'Noise', bend: 'Pitch drop', bendTime: 'Drop time',
       cutoff: 'Cutoff', resonance: 'Resonance', envAmt: 'Swell', fAttack: 'Filter attack', fDecay: 'Filter decay', fSustain: 'Filter hold', keytrack: 'Key tracking', attack: 'Attack', decay: 'Decay', sustain: 'Sustain', release: 'Release',
@@ -63,7 +64,8 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.15.1', modExclude: ['unison', 'layerOct', 'octaves', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
+  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.16.0', modExclude: ['unison', 'layerOct', 'octaves', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
+  about: { nl: 'Een filmische synth voor braams, pads, drones, ostinati en arpeggio\'s.', en: 'A cinematic synth for braams, pads, drones, ostinatos and arpeggios.' },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -159,8 +161,8 @@ export default {
     // ---- UI ----
     const el = (tag, text, parent, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
     function build(root) {
-      const css = el('style', null, root); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h2{margin:0;font:700 20px var(--disp,sans-serif);letter-spacing:.08em}h3{margin:0 0 6px;font:700 11px var(--disp,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.hint,.status{color:var(--muted);font-size:11px;line-height:1.4}.grp{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px}select{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}label.s{display:grid;gap:3px}label.c{display:flex;gap:6px;align-items:center}';
-      const app = el('div', null, root, 'app'); el('h2', T.title, app); el('div', T.hint, app, 'hint');
+      const css = el('style', null, root); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h3{margin:0 0 6px;font:700 11px var(--disp,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.hint,.status{color:var(--muted);font-size:11px;line-height:1.4}.grp{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px}select{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}label.s{display:grid;gap:3px}label.c{display:flex;gap:6px;align-items:center}';
+      const app = el('div', null, root, 'app'); el('div', T.hint, app, 'hint');
       for (const g of GROUPS) {
         const box = el('div', null, app, 'grp'); el('h3', T.groups[g], box); const grid = el('div', null, box, 'grid');
         for (const [k, sp] of Object.entries(SPEC)) { if (sp.g !== g) continue; const lab = T.labels[k];

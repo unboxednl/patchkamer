@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.20.0 — Eerste versie. Tune Finder luistert naar een geluid (een enkele noot, een korte frase, een basloopje of een akkoord van één instrument) en zoekt in de
 //          bibliotheek de synth en de tune die er het meest op lijken. Bron: een audiobestand (knop, of de tab Samples via loadAudio) of een opname van enkele seconden
 //          uit de ingang (bijvoorbeeld van Audio Capture). Werking: van elke tune van elke synth staat onderaan dit bestand een vingerafdruk (klankkleur, harmonische
@@ -303,7 +304,7 @@ class TFCap extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', TFCap);`;
 
 const TXT = {
-  nl: { title: 'Tune Finder', hint: 'Zoekt de synth en de tune uit de bibliotheek die het meest lijkt op een geluid: een enkele noot, een korte frase, een basloopje of een akkoord van één instrument. Laad een audiobestand of neem een paar seconden op uit de ingang, bijvoorbeeld van Audio Capture. De lijst is een vergelijking van klankkleur, aanzet en verloop; hij zegt niet dat het hetzelfde instrument is.',
+  nl: { hint: 'Zoekt de synth en de tune uit de bibliotheek die het meest lijkt op een geluid: een enkele noot, een korte frase, een basloopje of een akkoord van één instrument. Laad een audiobestand of neem een paar seconden op uit de ingang, bijvoorbeeld van Audio Capture. De lijst is een vergelijking van klankkleur, aanzet en verloop; hij zegt niet dat het hetzelfde instrument is.',
     load: 'Audiobestand laden…', record: 'Opnemen', stop: 'Stop', recLen: { s3: '3 seconden', s5: '5 seconden', s10: '10 seconden', s20: '20 seconden' }, recLenLabel: 'Opnameduur',
     filter: 'Zoeken in', filterAll: 'alle instrumenten', again: 'Opnieuw zoeken', clear: 'Wissen', load1: 'Laden', loadBest: 'Beste laden', loadTitle: 'Zet deze tune op dit instrument in de werkruimte',
     idle: 'Nog niets geladen. Laad een audiobestand of neem op uit de ingang.', busy: 'Analyseren…', recording: (s, t) => 'Opnemen… ' + s.toFixed(1) + ' / ' + t.toFixed(1) + ' s',
@@ -315,7 +316,7 @@ const TXT = {
     loaded: (t, d) => '“' + t + '” staat nu op ' + d + '.', needDevice: d => 'Zet eerst ' + d + ' in de werkruimte (bibliotheek, tab Apparaten) en druk dan op Laden. Of zoek de tune op in de tab Tunes.', noTune: t => 'De tune “' + t + '” staat niet in de geladen bibliotheken. Zoek hem in de tab Tunes.', noApi: 'Laden kan hier niet; zoek de tune in de tab Tunes.', failed: 'Laden is niet gelukt.',
     families: { bass: 'Bas en mono', 'keys-plucked': 'Toetsen en getokkeld', 'orchestral-voice': 'Blazers, strijkers en stem', 'poly-lead-pad': 'Poly, lead en pad', 'texture-drone': 'Textuur en drone', sample: 'Samples', other: 'Overig' },
     close: 'dicht bij', noMatch: 'Geen resultaat.' },
-  en: { title: 'Tune Finder', hint: 'Finds the synth and tune of the library that comes closest to a sound: a single note, a short phrase, a bass line or a chord of one instrument. Load an audio file or record a few seconds from the input, for example from Audio Capture. The list compares timbre, attack and decay; it does not say it is the same instrument.',
+  en: { hint: 'Finds the synth and tune of the library that comes closest to a sound: a single note, a short phrase, a bass line or a chord of one instrument. Load an audio file or record a few seconds from the input, for example from Audio Capture. The list compares timbre, attack and decay; it does not say it is the same instrument.',
     load: 'Load audio file…', record: 'Record', stop: 'Stop', recLen: { s3: '3 seconds', s5: '5 seconds', s10: '10 seconds', s20: '20 seconds' }, recLenLabel: 'Record length',
     filter: 'Search in', filterAll: 'all instruments', again: 'Search again', clear: 'Clear', load1: 'Load', loadBest: 'Load best', loadTitle: 'Put this tune on this instrument in the workspace',
     idle: 'Nothing loaded yet. Load an audio file or record from the input.', busy: 'Analysing…', recording: (s, t) => 'Recording… ' + s.toFixed(1) + ' / ' + t.toFixed(1) + ' s',
@@ -337,7 +338,7 @@ const noteName = hz => { const m = Math.round(69 + 12 * Math.log2(hz / 440)); re
 let SHARED;                 // the decoded index, shared by all instances of this device (undefined: not decoded yet, null: not usable)
 
 export default {
-  id: 'nl.patchkamer.tune-finder', name: 'Tune Finder', version: '1.20.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 },
+  id: 'nl.patchkamer.tune-finder', name: 'Tune Finder', version: '1.21.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 },
   i18n: { nl: { ports: { in: 'In', thru: 'Door' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'thru', name: 'Through' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -439,7 +440,7 @@ export default {
 
     function setMsg(t, err) { msg = t || ''; msgErr = !!err; if (ui) { ui.status.textContent = msg; ui.status.classList.toggle('err', msgErr); } }
     const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;background:var(--card,#15181d);border:1px solid var(--line,#39424e);border-radius:8px}' +
-      'h2{margin:0;font-size:16px;letter-spacing:1px}h3{margin:4px 0 0;font-size:12px;color:var(--muted,#97a1ad);font-weight:600}.hint,.warn{color:var(--muted,#97a1ad);line-height:1.4}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}' +
+      'h3{margin:4px 0 0;font-size:12px;color:var(--muted,#97a1ad);font-weight:600}.hint,.warn{color:var(--muted,#97a1ad);line-height:1.4}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}' +
       'button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%}button{cursor:pointer}button:hover{border-color:var(--acc,#4fd1c5)}button.on{background:var(--acc,#4fd1c5);color:#111;border-color:var(--acc,#4fd1c5)}' +
       '.status{min-height:16px;color:var(--event,#f4a261)}.status.err{color:#ff7b72}.sum{color:var(--fg,#e2e6ea)}.res{display:grid;gap:4px}.hit{display:grid;grid-template-columns:22px minmax(120px,1fr) 90px auto;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid var(--line,#39424e)}' +
       '.hit .n{color:var(--muted,#97a1ad);text-align:right}.hit .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hit .t b{font-weight:600}.hit .t i{color:var(--muted,#97a1ad);font-style:normal}.bar{height:8px;background:var(--well,#0c0f13);border:1px solid var(--line,#39424e);border-radius:4px;overflow:hidden}.bar span{display:block;height:100%;background:var(--acc,#4fd1c5)}' +
@@ -471,7 +472,7 @@ export default {
       inputs: { in: inG }, outputs: { thru },
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' }); el('style', CSS, sh);
-        const app = el('div', null, sh, 'app'); el('h2', T.title, app); el('div', T.hint, app, 'hint');
+        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
         const r1 = el('div', null, app, 'row');
         const file = el('input', null, r1); file.type = 'file'; file.accept = 'audio/*,.wav,.mp3,.flac,.ogg'; file.style.display = 'none'; file.setAttribute('aria-label', T.load);
         const loadB = el('button', T.load, r1); loadB.type = 'button'; loadB.onclick = () => file.click(); file.onchange = () => { if (file.files && file.files.length) loadFiles(Array.from(file.files)); file.value = ''; };

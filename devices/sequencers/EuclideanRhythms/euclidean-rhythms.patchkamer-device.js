@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.15.0 — Patchkamer contract v1.17: klembord, alleen kopiëren. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, 12 tikken per zestiende). Kopiëren geeft een momentopname van de eerste maat: staat de gekozen rij op Noot, dan een notes-clip van die rij; anders een drums-clip van alle rijen die aan staan en naar een spoor gaan, elke baan met de eigen lengte (polymeter), accenten, ghost notes en kans meegenomen. Plakken kan niet (`paste` is leeg): `setClip` geeft `ok:false` met een reden, behalve voor de eigen momentopname (`native`), die niets verandert. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
 // 1.14.1 — Swing per rij en de hele klanklijst van een drumcomputer bereikbaar. Staat de swing van een rij op 0 (de standaard), dan geeft elke state dezelfde gebeurtenissen als voorheen.
 //   - swing per rij (`swing`, 0 … 0,5 van een zestiende, regelaar bij de gekozen rij): een slag die in een oneven zestiende valt (ook een 1/32-slag of de tweede helft van een ratchet daarin) komt (rijswing) × stepDur later, bovenop de swing van de host;
@@ -23,7 +24,6 @@
  * ratchet), mutatie die per maat de rotatie laat verspringen, en een ringweergave waarop je alles ziet lopen.
  */
 const EN = {
-  'EUCLIDEAN RHYTHMS · euclidische ritmes': 'EUCLIDEAN RHYTHMS · euclidean rhythms',
   'Verdeel slagen zo gelijk mogelijk over stappen: 3 over 8, 5 over 12, 7 over 16. Elke rij is een spoor; samen maken ze polyritmes. Trek de uitgang naar een drumapparaat (trigs) of naar een synth (noten). Met een toetsenbord op Notes in speel je de gekozen rij live.':
     'Spread pulses as evenly as possible over steps: 3 over 8, 5 over 12, 7 over 16. Each row is a track; together they make polyrhythms. Connect the output to a drum machine (trigs) or to a synth (notes). A keyboard on Notes in plays the selected row live.',
   'Voorbeeld': 'Example', 'Eigen': 'Custom', 'Loopt': 'Running', 'Aan': 'On', 'Uit': 'Off', 'Live spelen': 'Live play',
@@ -58,7 +58,7 @@ const LEGACY_PRESETS = { 'Klikwerk-kit': 'Drum kit', 'Afro-Cubaans': 'Afro-Cuban
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
+ .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button,input[type=text],input[type=number]{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -102,7 +102,7 @@ const ukVar = (el, name, d) => { const c = el._ukv || (el._ukv = {}), now = perf
 // ---------- einde UI-kit ----------
 
 export default {
-  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.15.0', kind: 'utility', category: 'sequencer',
+  id: 'nl.patchkamer.euclidean', name: 'Euclidean Rhythms', version: '1.16.0', about: { nl: 'Euclidische ritmes: acht rijen die slagen zo gelijk mogelijk over stappen verdelen, voor trigs of noten.', en: 'Euclidean rhythms: eight rows that spread beats as evenly as possible over steps, for trigs or notes.' }, kind: 'utility', category: 'sequencer',
   ui: { width: 900, minWidth: 420 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'reset', name: 'Reset' }, { id: 'keys', name: 'Notes in' }], eventOut: [{ id: 'trigs', name: 'Trigs / notes' }], modIn: [], modOut: [] },
   i18n: { nl: { ports: { reset: 'Reset', keys: 'Noten in', trigs: 'Trigs / noten' } } },
@@ -213,7 +213,6 @@ export default {
 .pv{font-family:var(--mono,monospace);font-size:12px;line-height:1.7;white-space:pre;color:var(--muted,#97a1ad);overflow:hidden}
 .strip{margin-top:10px}
 @container (max-width:640px){.vis{grid-template-columns:1fr}}`);
-      ukEl(app, 'h2', '', tx('EUCLIDEAN RHYTHMS · euclidische ritmes'));
       ukEl(app, 'p', 'sub', tx('Verdeel slagen zo gelijk mogelijk over stappen: 3 over 8, 5 over 12, 7 over 16. Elke rij is een spoor; samen maken ze polyritmes. Trek de uitgang naar een drumapparaat (trigs) of naar een synth (noten). Met een toetsenbord op Notes in speel je de gekozen rij live.'));
       const top = ukEl(app, 'div', 'top');
       ui.preset = ukSelect(top, tx('Voorbeeld'), PNAMES.map(k => [k, k]).concat([[CUSTOM, tx('Eigen')]]), state.preset, v => { if (PRESETS[v]) { const k = state.sel, run = state.run; self.setState({ ...state, preset: v, rows: PRESETS[v](), sel: k, run }); } });

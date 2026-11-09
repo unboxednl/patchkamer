@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.20.0 — Eerste uitgave van Brass Section (contract v1.20). Eigen motor als AudioWorklet (BrassEngine): 32 spelersstemmen, 1 tot 4 spelers per noot.
 //   - zaagtand (bandbegrensd) door een lowpass-filter dat openzwelt (Blat, Opzwellen) en helderder wordt bij hardere aanslag, met aanzetglijding
 //     van onderaf, adem- en lipruis, vibrato dat na een vertraging inzet, onderlinge verstemming, inzetverschil en stereospreiding per speler
@@ -17,7 +18,6 @@ const EN = {
   'Expressie': 'Expression', 'Uitgang': 'Output',
   'Toon & blat': 'Tone & blat', 'Aanzet & spel': 'Attack & playing', 'Sectie & vibrato': 'Section & vibrato', 'Spel & niveau': 'Playing & level',
   'Eigen klank': 'Custom sound', 'Proeftoon': 'Test note', 'Proefakkoord': 'Test chord', 'Alles uit': 'All off',
-  'BRASS SECTION · polyfoon koper': 'BRASS SECTION · polyphonic brass',
   'Mod actief · {0} parameters': 'Mod active · {0} parameters',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
@@ -201,8 +201,9 @@ class PkBrass extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkBrass);
 `;
 export default {
-  id: 'nl.patchkamer.brass-section', name: 'Brass Section', version: '1.20.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.brass-section', name: 'Brass Section', version: '1.21.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
+  about: { nl: 'Een polyfoon koperinstrument (trompet, trombone, hoorn, sectie) met 1 tot 4 spelers per noot.', en: 'A polyphonic brass instrument (trumpet, trombone, horn, section) with 1 to 4 players per note.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo brass' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo koper', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -234,7 +235,6 @@ export default {
       mount(el) {
         if (root) self.unmount(); root = el;
         const css = document.createElement('style'); css.textContent = '.bs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.bs-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.bs-grid .k label{font-size:10px;letter-spacing:.04em}.bs-grid .k output{font-size:11px;white-space:nowrap}.bs-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}'; el.appendChild(css);
-        const heading = document.createElement('div'); heading.textContent = tx('BRASS SECTION · polyfoon koper'); heading.style.cssText = 'font-size:14px;letter-spacing:1px;color:color-mix(in srgb,var(--audio) 60%,var(--fg));padding:8px 0'; el.appendChild(heading);
         presetSelect = host.ui.select(el, 'Brass', Object.keys(PRESETS).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, name => { if (Object.hasOwn(PRESETS, name)) self.setState({ ...defaults, ...PRESETS[name], preset: name }); }, { id: 'preset', group: 'preset' });
         const groups = [[tx('Toon & blat'), ['brightness', 'blat', 'swell', 'resonance', 'edge', 'mute', 'velBright'], 'tone'], [tx('Aanzet & spel'), ['attack', 'decay', 'sustain', 'release', 'scoop', 'scoopTime', 'breath', 'velocity'], 'attack'],
           [tx('Sectie & vibrato'), ['players', 'spread', 'stagger', 'width', 'vibrato', 'vibRate', 'vibDelay'], 'section'], [tx('Spel & niveau'), ['transpose', 'expression', 'level'], 'play']];

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.20.0 — Eerste versie. Drum Listener luistert naar een drumloop en schrijft op wat er gespeeld wordt: kick, snare (met clap en rim), gesloten en open hat,
 //          toms en overige percussie op eigen banen. Bron: een audiobestand (knop, of de tab Samples via loadAudio, met tempo en maten van het sample) of
 //          een opname van een paar maten uit de ingang (bijvoorbeeld van Audio Capture). De analyse draait lokaal in de pagina, zonder dienst op internet:
@@ -390,7 +391,7 @@ class DLCap extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', DLCap);`;
 
 const TXT = {
-  nl: { title: 'Drum Listener', hint: 'Luistert naar een drumloop en schrijft op wat er gespeeld wordt: kick, snare, hats, toms en percussie op eigen banen. Laad een audiobestand (ook via de tab Samples), of neem een paar maten op uit de ingang, bijvoorbeeld van Audio Capture. Het patroon kun je naar een drumcomputer sturen en kopiëren naar een sequencer.',
+  nl: { hint: 'Luistert naar een drumloop en schrijft op wat er gespeeld wordt: kick, snare, hats, toms en percussie op eigen banen. Laad een audiobestand (ook via de tab Samples), of neem een paar maten op uit de ingang, bijvoorbeeld van Audio Capture. Het patroon kun je naar een drumcomputer sturen en kopiëren naar een sequencer.',
     load: 'Audiobestand laden…', record: 'Opnemen', stop: 'Stop', recLen: { b2: '2 maten', b4: '4 maten', b8: '8 maten', s5: '5 seconden', s10: '10 seconden', s20: '20 seconden' }, recLenLabel: 'Opnameduur',
     bpm: 'Tempo (BPM)', bpmAuto: 'auto', half: '÷2', dbl: '×2', bars: 'Maten', barsAuto: 'auto', grid: 'Raster', gridAuto: 'auto', grids: { 16: '1/16', 32: '1/32', 12: 'triool 1/8', 24: 'triool 1/16' },
     swing: 'Swing', swingAuto: 'auto', align: 'Eerste tel', alignSmart: 'slim', alignStart: 'begin van het geluid', alignAuto: 'zoek de eerste tel', sens: 'Gevoeligheid', shiftL: '◀ 1/16', shiftR: '1/16 ▶', shift: 'Patroon verschuiven',
@@ -404,7 +405,7 @@ const TXT = {
     noPaste: 'Drum Listener maakt alleen clips; plakken kan hier niet.', clipName: 'Drum Listener', source: 'Bron', swingHint: 'Zet de swing van de studio op 0 als je de herkende swing gebruikt.',
     lowConf: 'Het tempo is geschat; staat het op de helft of het dubbele, gebruik dan ÷2 of ×2.',
     perc: 'Percussie', laneNames: { kick: 'Kick', snare: 'Snare', clap: 'Clap', rim: 'Rim', closedhat: 'Gesloten hat', openhat: 'Open hat', lowtom: 'Lage tom', midtom: 'Middentom', hitom: 'Hoge tom', cowbell: 'Cowbell', crash: 'Crash', ride: 'Ride', shaker: 'Shaker', tamb: 'Tamboerijn', conga: 'Conga', bongo: 'Bongo', clave: 'Clave', wood: 'Houtblok' } },
-  en: { title: 'Drum Listener', hint: 'Listens to a drum loop and writes down what is played: kick, snare, hats, toms and percussion on their own lanes. Load an audio file (also from the Samples tab) or record a few bars from the input, for example from Audio Capture. You can send the pattern to a drum machine and copy it to a sequencer.',
+  en: { hint: 'Listens to a drum loop and writes down what is played: kick, snare, hats, toms and percussion on their own lanes. Load an audio file (also from the Samples tab) or record a few bars from the input, for example from Audio Capture. You can send the pattern to a drum machine and copy it to a sequencer.',
     load: 'Load audio file…', record: 'Record', stop: 'Stop', recLen: { b2: '2 bars', b4: '4 bars', b8: '8 bars', s5: '5 seconds', s10: '10 seconds', s20: '20 seconds' }, recLenLabel: 'Record length',
     bpm: 'Tempo (BPM)', bpmAuto: 'auto', half: '÷2', dbl: '×2', bars: 'Bars', barsAuto: 'auto', grid: 'Grid', gridAuto: 'auto', grids: { 16: '1/16', 32: '1/32', 12: 'triplet 1/8', 24: 'triplet 1/16' },
     swing: 'Swing', swingAuto: 'auto', align: 'Downbeat', alignSmart: 'smart', alignStart: 'start of the sound', alignAuto: 'find the downbeat', sens: 'Sensitivity', shiftL: '◀ 1/16', shiftR: '1/16 ▶', shift: 'Shift pattern',
@@ -448,7 +449,7 @@ function cleanClip(c) {
 }
 
 export default {
-  id: 'nl.patchkamer.drum-listener', name: 'Drum Listener', version: '1.20.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
+  id: 'nl.patchkamer.drum-listener', name: 'Drum Listener', version: '1.21.0', kind: 'utility', category: 'tool', ui: { width: 760, minWidth: 380 },
   i18n: { nl: { ports: { in: 'In', thru: 'Door', trigs: 'Drum trigs' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'thru', name: 'Through' }], eventIn: [], eventOut: [{ id: 'trigs', name: 'Drum trigs' }], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
@@ -570,7 +571,7 @@ export default {
 
     // ---- UI ----
     const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;background:var(--card,#15181d);border:1px solid var(--line,#39424e);border-radius:8px}' +
-      'h2{margin:0;font-size:16px;letter-spacing:1px}.hint,.warn{color:var(--muted,#97a1ad);line-height:1.4}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}label.inl{flex-direction:row;align-items:center;gap:6px}' +
+      '.hint,.warn{color:var(--muted,#97a1ad);line-height:1.4}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}label.inl{flex-direction:row;align-items:center;gap:6px}' +
       'button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%}button{cursor:pointer}button:hover{border-color:var(--acc,#4fd1c5)}button.on{background:var(--acc,#4fd1c5);color:#111;border-color:var(--acc,#4fd1c5)}' +
       'input[type=number]{width:84px}input[type=checkbox]{padding:0}canvas{display:block;width:100%;background:var(--well,#0c0f13);border:1px solid var(--line,#39424e);border-radius:6px;cursor:crosshair}' +
       '.status{min-height:16px;color:var(--event,#f4a261)}.status.err{color:#ff7b72}.lanes{display:grid;gap:4px}.lane{display:grid;grid-template-columns:minmax(110px,220px) 90px auto;gap:8px;align-items:center}.lane span{color:var(--muted,#97a1ad)}';
@@ -628,7 +629,7 @@ export default {
       inputs: { in: inG }, outputs: { thru },
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' }); el('style', CSS, sh);
-        const app = el('div', null, sh, 'app'); el('h2', T.title, app); el('div', T.hint, app, 'hint');
+        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint');
         const r1 = el('div', null, app, 'row');
         const file = el('input', null, r1); file.type = 'file'; file.accept = 'audio/*,.wav,.mp3,.flac,.ogg'; file.style.display = 'none'; file.setAttribute('aria-label', T.load);
         const loadB = el('button', T.load, r1); loadB.type = 'button'; loadB.onclick = () => file.click(); file.onchange = () => { if (file.files && file.files.length) loadFiles(Array.from(file.files), { name: file.files[0].name }); file.value = ''; };

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Biotope (nieuwe id nl.patchkamer.biotope, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Biotope
 //   - setState volgt §13: waarden buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard
@@ -42,7 +43,7 @@ const EN = {
   'Vrij tempo': 'Free tempo', 'Alleen triggers': 'Triggers only', 'Elke 1/16': 'Every 1/16', 'Elke 1/8': 'Every 1/8', 'Elke 1/4': 'Every 1/4', 'Elke 1/2': 'Every 1/2', 'Elke maat': 'Every bar',
   'Initialiseren…': 'Initializing…', 'Buffer-engine (extra bediening-/triggerlatentie ≤ circa 240 ms)': 'Buffer engine (extra control/trigger latency up to about 240 ms)',
   'aan': 'on', 'stil': 'silent', 'stappen via triggers': 'steps via triggers', 'stappen volgen de hostklok': 'steps follow the host clock', 'vrije stappen': 'free steps',
-  'omgeving · textuur · drone': 'ambience · texture · drone', 'Soundscape kiezen': 'Choose soundscape', 'Kies een soundscape…': 'Choose a soundscape…',
+'Soundscape kiezen': 'Choose soundscape', 'Kies een soundscape…': 'Choose a soundscape…',
   'Alle lagen uit': 'All layers off', 'Aan': 'On', 'Volg start/stop': 'Follow start/stop',
   'Meng de acht lagen. Dichtheid = activiteit, kleur = helderheid/hoogte, beweging = variatie. Ruimte voegt stereo-galm toe.': 'Mix the eight layers. Density = activity, tone = brightness/pitch, motion = variation. Space adds stereo reverb.',
   'Vrij: stappen/min. Klok: bij lopend transport. Alleen triggers: via events van een sequencer. Dichtheid = materiaalactiviteit.': 'Free: steps/min. Clock: while the transport runs. Triggers only: via events from a sequencer. Density = material activity.'
@@ -310,8 +311,9 @@ class BiotopeProcessor extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', BiotopeProcessor);`;
 
 export default {
-  id: 'nl.patchkamer.biotope', name: 'Biotope', version: '1.11.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.biotope', name: 'Biotope', version: '1.12.0', kind: 'instrument', category: 'synth',
   ui: { width: 760, minWidth: 300 },
+  about: { nl: 'Omgeving, textuur en drone: een procedurele soundscape-synth met acht lagen.', en: 'Ambience, texture and drone: a procedural soundscape synth with eight layers.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'events', name: 'Triggers / CC' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   i18n: { nl: { ports: { out: 'Stereo uit' } } },
   create(ctx, host) {
@@ -401,8 +403,7 @@ export default {
         const shadow = container.attachShadow({ mode: 'open' });
         const style = document.createElement('style'); style.textContent = `
           :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}
-          *{box-sizing:border-box} .head,.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-          .head{padding:8px 0}.title{font:700 18px var(--disp, sans-serif);letter-spacing:.08em}
+          *{box-sizing:border-box} .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
           .hint{color:var(--muted);font-size:11px;line-height:1.5}.layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:8px;margin:10px 0}
           .layer{min-width:0;border:1px solid var(--line);border-radius:6px;background:var(--card-2);padding:10px}
           .layer h3{font:700 14px var(--disp,sans-serif);margin:0 0 8px}.global{padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--well)}
@@ -432,7 +433,6 @@ export default {
           const label = make('label', null, parent, 'choice'), input = make('input', null, label); input.type = 'checkbox'; make('span', tx(title), label);
           input.onchange = () => change(null, key, input.checked); input.addEventListener('pointerdown', e => e.stopPropagation()); controls.push({ el: input, type: 'check', key });
         }
-        const header = make('div', null, shadow, 'head'); make('span', 'BIOTOPE', header, 'title'); make('span', tx('omgeving · textuur · drone'), header, 'hint');
         const bar = make('div', null, shadow, 'bar'); sceneSelect = make('select', null, bar); sceneSelect.setAttribute('aria-label', tx('Soundscape kiezen'));
         const empty = make('option', tx('Kies een soundscape…'), sceneSelect); empty.value = '';
         SCENES.forEach((entry, i) => { const option = make('option', tx(entry[0]), sceneSelect); option.value = String(i); });

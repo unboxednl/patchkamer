@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.14.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.13.2 — Een koppeling onthoudt de naam van het element van een Control Surface (bijvoorbeeld "Filter 1") en toont die in plaats van alleen het CC-nummer.
 // 1.13.1 — Vier MIDI-ingangen (MIDI in, 2, 3 en 4) in plaats van één, zodat je meer dan één fysiek MIDI-apparaat tegelijk kunt gebruiken: zet per apparaat een Keys / MIDI op zijn eigen ingang (kies daar de MIDI-ingang) en verbind elk met een eigen ingang van de hub. Een koppeling en een noteroute kunnen op één ingang gelden of op alle; oude koppelingen en routes gelden op alle ingangen en werken dus als voorheen.
@@ -18,7 +19,7 @@ const KINDS = ['cc', 'note', 'bend', 'pressure', 'name'], INS = ['in', 'in2', 'i
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const TXT = {
-  nl: { title: 'MIDI Hub', hint: 'Koppel je MIDI-apparaat en de sporen van een sequencer aan apparaten, en zet hun knoppen en schuiven op een knop van je keyboard.',
+  nl: { hint: 'Koppel je MIDI-apparaat en de sporen van een sequencer aan apparaten, en zet hun knoppen en schuiven op een knop van je keyboard.',
     last: 'Laatste invoer', none: 'nog niets ontvangen', sources: 'Bronnen', noSources: 'Verbind een MIDI-bron (bijvoorbeeld Keys / MIDI) met MIDI in, en een sequencer met Sporen in.',
     kbd: 'MIDI in', inputs: 'Ingangen', kbdOn: 'ontvangt invoer', kbdOff: 'wacht op invoer', tracks: 'Sporen',
     devices: 'Actieve apparaten', addDevice: 'Apparaat toevoegen…', noDevices: 'Nog geen apparaten. Kies er hierboven een om toe te voegen.', remove: 'Verwijder',
@@ -28,7 +29,7 @@ const TXT = {
     min: 'min', max: 'max', invert: 'omkeren', toggle: 'wissel', clear: 'Alles wissen', refresh: 'Ververs regelaars', counts: n => n + ' regelaar' + (n === 1 ? '' : 's'),
     lib: 'Bibliotheek', libPick: 'Opgeslagen koppeling…', load: 'Laad', save: 'Bewaar als…', del: 'Wis', libName: 'Naam van de koppeling', gone: 'Apparaat staat niet meer in de werkruimte',
     inAny: 'alle ingangen', inN: p => (p === 'in' ? 'MIDI in' : 'MIDI in ' + p.slice(2)), srcCc: n => 'CC ' + n, srcName: n => 'CC ' + n, srcNote: n => 'Noot ' + noteName(n), srcBend: 'Pitch bend', srcPress: 'Kanaaldruk', anyCh: 'ch alle', unmapped: 'nog geen knop geleerd' },
-  en: { title: 'MIDI Hub', hint: 'Connect your MIDI device and the tracks of a sequencer to devices, and put their knobs and sliders on a knob of your keyboard.',
+  en: { hint: 'Connect your MIDI device and the tracks of a sequencer to devices, and put their knobs and sliders on a knob of your keyboard.',
     last: 'Last input', none: 'nothing received yet', sources: 'Sources', noSources: 'Connect a MIDI source (for example Keys / MIDI) to MIDI in, and a sequencer to Tracks in.',
     kbd: 'MIDI in', inputs: 'Inputs', kbdOn: 'receiving input', kbdOff: 'waiting for input', tracks: 'Tracks',
     devices: 'Active devices', addDevice: 'Add a device…', noDevices: 'No devices yet. Pick one above to add it.', remove: 'Remove',
@@ -60,7 +61,7 @@ function normalize(s) {
 }
 
 export default {
-  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.14.0', status: 'retired', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
+  id: 'nl.patchkamer.midihub', name: 'MIDI Hub', version: '1.15.0', status: 'retired', kind: 'utility', category: 'tool', ui: { width: 720, minWidth: 340 },
   i18n: { nl: { ports: { in: 'MIDI in', in2: 'MIDI in 2', in3: 'MIDI in 3', in4: 'MIDI in 4', tracks: 'Sporen in' } } },
   ports: { audioIn: [], audioOut: [], eventIn: INS.map((id, i) => ({ id, name: i ? 'MIDI in ' + (i + 1) : 'MIDI in' })), eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [], multiEventIn: [{ id: 'tracks', name: 'Tracks in' }], multiEventOut: [] },
   create(ctx, host) {
@@ -210,8 +211,8 @@ export default {
       inputs: {}, outputs: {},
       mount(parent) {
         if (dead) return; self.unmount(); shell = el('div', null, parent); sh = shell.attachShadow({ mode: 'open' });
-        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h2{margin:0;font:700 20px var(--disp,sans-serif);letter-spacing:.06em}h3{margin:0 0 6px;font:700 12px var(--disp,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.hint{color:var(--muted);font-size:11px;line-height:1.4}.sec{display:grid;gap:6px}.line{display:flex;gap:6px;flex-wrap:wrap}.act span{color:var(--event)}.tgt{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.tgt.gone{opacity:.6}.head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.head b{flex:1}.cnt{color:var(--muted);font-size:11px}.sub{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px}.cab.bad{color:var(--stop,#e0584a)}.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.row.map .src{min-width:120px;color:var(--event)}select,button,input[type=text],input[type=number]{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}input[type=number]{width:54px}button{cursor:pointer}button.on{background:var(--event);color:#1b1206;border-color:var(--event)}label{display:flex;gap:4px;align-items:center}.live{display:inline-block;width:46px;height:6px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.live i{display:block;height:100%;width:0;background:var(--event)}[hidden]{display:none!important}';
-        const app = el('div', null, sh, 'app'); el('h2', T.title, app); el('div', T.hint, app, 'hint'); root = el('div', null, app, 'body'); root.style.display = 'grid'; root.style.gap = '12px';
+        const css = el('style', null, sh); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h3{margin:0 0 6px;font:700 12px var(--disp,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.hint{color:var(--muted);font-size:11px;line-height:1.4}.sec{display:grid;gap:6px}.line{display:flex;gap:6px;flex-wrap:wrap}.act span{color:var(--event)}.tgt{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.tgt.gone{opacity:.6}.head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.head b{flex:1}.cnt{color:var(--muted);font-size:11px}.sub{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px}.cab.bad{color:var(--stop,#e0584a)}.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.row.map .src{min-width:120px;color:var(--event)}select,button,input[type=text],input[type=number]{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}input[type=number]{width:54px}button{cursor:pointer}button.on{background:var(--event);color:#1b1206;border-color:var(--event)}label{display:flex;gap:4px;align-items:center}.live{display:inline-block;width:46px;height:6px;background:var(--well,#0007);border-radius:3px;overflow:hidden}.live i{display:block;height:100%;width:0;background:var(--event)}[hidden]{display:none!important}';
+        const app = el('div', null, sh, 'app'); el('div', T.hint, app, 'hint'); root = el('div', null, app, 'body'); root.style.display = 'grid'; root.style.gap = '12px';
         sh.addEventListener('pointerdown', e => e.stopPropagation()); render();
       },
       unmount() { if (shell) shell.remove(); shell = sh = root = lastEl = null; liveBars.clear(); },

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (moduleerbare ambient) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.15.1 — Gecontroleerd op stuurbaarheid: alle klankregelaars stonden al in params(). Bewust niet stuurbaar: Evolutie (het aantal maten per fase, een compositorische stap
 //   en geen klank; vandaar modExclude). Geluid en instellingen ongewijzigd.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
@@ -31,7 +32,6 @@ const EN = {
   'Drone + noten': 'Drone + notes', 'Alleen noten': 'Notes only',
   'Open kwinten': 'Open fifths', 'Mineur 7': 'Minor 7', 'Majeur 7': 'Major 7', 'Sus / zwevend': 'Sus / floating', 'Open add9': 'Open add9',
   'Mineur 9': 'Minor 9', 'Majeur 9': 'Major 9', 'Majeur 6': 'Major 6',
-  'MIST · moduleerbare ambient': 'MIST · modulatable ambient',
   'Mod actief · {0} parameters · knoppen blijven de basis': 'Mod active · {0} parameters · knobs stay the base',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'Start transport voor akkoorden + melodie. Start drone speelt een stilstaand akkoord zonder klok. Melodieniveau = balans; dichtheid = ruimte tussen tonen. Stereo uit → mixer/output.':
@@ -40,7 +40,8 @@ const EN = {
     'Purple Mod cable → for example Drift. Brightness and times move logarithmically. Root controls the drone and the automatic melody; attack/release apply from the next note. Evolve stays manual.',
 };
 export default {
-  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.15.1', modExclude: ['evolve'], kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
+  id: 'nl.patchkamer.mist', name: 'Mist', version: '1.16.0', modExclude: ['evolve'], kind: 'instrument', category: 'synth', ui: { width: 560, minWidth: 300 },
+  about: { nl: 'Moduleerbaar ambientapparaat: drone en noten met een langzaam evoluerende klank.', en: 'A modulatable ambient device: drone and notes with a slowly evolving sound.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'notes', name: 'Notes / CC' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo uit', notes: 'Noten / CC' } } },
   create(ctx, host) {
@@ -191,7 +192,7 @@ export default {
     const guardT=!offline&&typeof setInterval==='function'?setInterval(guard,50):null;if(guardT&&guardT.unref)guardT.unref();
     let lastStep=-1;
     const instance={ inputs:{}, outputs:{out:ceiling},
-      mount(el){ if(rootEl)instance.unmount();rootEl=el; controls={}; selects={}; const title=document.createElement('div'); title.textContent=tx('MIST · moduleerbare ambient'); title.style.cssText='letter-spacing:1px;color:color-mix(in srgb,#9fd5cc 55%,var(--fg));padding:8px 0;font-size:12px'; el.appendChild(title);
+      mount(el){ if(rootEl)instance.unmount();rootEl=el; controls={}; selects={}; 
         selects.preset=host.ui.select(el,tx('Klankbeeld'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen klank')]]),state.preset,v=>{if(presets[v])instance.setState({...defaults,...presets[v],preset:v});}, { id:'preset',group:'preset' });
         selects.mode=host.ui.select(el,tx('Spel'),[['drone',tx('Drone + noten')],['notes',tx('Alleen noten')]],state.mode,v=>change('mode',v), { id:'mode',group:'play' });
         selects.chord=host.ui.select(el,tx('Akkoord'),[['open',tx('Open kwinten')],['minor',tx('Mineur 7')],['major',tx('Majeur 7')],['suspended',tx('Sus / zwevend')],['add9',tx('Open add9')],['minor9',tx('Mineur 9')],['major9',tx('Majeur 9')],['sixth',tx('Majeur 6')]],state.chord,v=>change('chord',v), { id:'chord',group:'voicing' });

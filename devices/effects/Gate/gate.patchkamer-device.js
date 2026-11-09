@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: noise gate, expander en ducker in één: drempel, ratio (gate = oneindig, expander = zacht), attack, hold, release, range (hoeveel er gedempt wordt),
 //          hysterese, sidechain-filters (hoog- en laagdoorlaat), meeluisteren met de sidechain, externe sidechain-ingang, lookahead tot 10 ms, stereo-koppeling en een meter die toont hoe open de poort is.
 //          Tweetalig (host.lang), tekenen via host.frame, meter door de host (host.ui.meter).
@@ -14,7 +15,6 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const NL = {
-  title: 'GATE', sub: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.',
   mode: 'Soort', gate: 'Gate (dicht)', expander: 'Expander (zacht)', ducker: 'Ducker (sidechain luid = dempen)', detect: 'Detectie', peak: 'Peak', rms: 'RMS', src: 'Sidechain', int: 'Intern', ext: 'Extern (ingang Sidechain)',
   on: 'Aan', off: 'Uit (doorlaten)', listen: 'Luister naar sidechain', listenTip: 'Hoor wat de detector hoort (na de filters), om ze in te stellen', aria: 'Overdrachtscurve van de poort', gain: 'Poort (versterking)', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Door de lookahead loopt het geluid achter; de host compenseert dat niet',
   open: 'OPEN', closed: 'DICHT', duckOn: 'DEMPT', duckOff: 'LOS', extNone: 'Extern: zonder kabel op de ingang Sidechain gebeurt er niets.', failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
@@ -27,7 +27,6 @@ const NL = {
   hpf: 'Hoogdoorlaat', hpf_t: 'laag onder deze frequentie telt niet mee voor de detector; 20 Hz = uit', lpf: 'Laagdoorlaat', lpf_t: 'hoog boven deze frequentie telt niet mee voor de detector; 20 kHz = uit',
 };
 const EN = {
-  title: 'GATE', sub: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.',
   mode: 'Type', gate: 'Gate (closed)', expander: 'Expander (soft)', ducker: 'Ducker (loud sidechain = mute)', detect: 'Detection', peak: 'Peak', rms: 'RMS', src: 'Sidechain', int: 'Internal', ext: 'External (Sidechain input)',
   on: 'On', off: 'Off (pass through)', listen: 'Listen to sidechain', listenTip: 'Hear what the detector hears (after the filters), to set them', aria: 'Transfer curve of the gate', gain: 'Gate (gain)', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Lookahead delays the sound; the host does not compensate for it',
   open: 'OPEN', closed: 'CLOSED', duckOn: 'DUCKING', duckOff: 'IDLE', extNone: 'External: without a cable on the Sidechain input nothing happens.', failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
@@ -44,7 +43,6 @@ const EN = {
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -174,7 +172,8 @@ class Gate extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Gate);`;
 
 export default {
-  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.0.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.1.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.', en: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
   modExclude: ['look'],
@@ -217,8 +216,6 @@ export default {
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, grM = null;
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--audio,#7ee0a1)'));
-      ukEl(app, 'h2', '', tx('title'));
-      ukEl(app, 'p', 'sub', tx('sub'));
       const top = ukEl(app, 'div', 'top');
       ui.mode = ukSelect(top, tx('mode'), [['gate', tx('gate')], ['expander', tx('expander')], ['ducker', tx('ducker')]], state.mode, v => { state.mode = v; apply(); paint(); }, 'mode');
       ui.detect = ukSelect(top, tx('detect'), [['peak', tx('peak')], ['rms', tx('rms')]], state.detect, v => { state.detect = v; apply(); }, 'detect');

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Chord Poly (nieuwe id nl.patchkamer.chordpoly, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Chord Poly
 //   - setState volgt §13 en de knoppen en keuzes volgen setState en cc (de UI wordt niet meer opnieuw opgebouwd)
@@ -10,7 +11,6 @@
 const EN = {
   'Resonantie': 'Resonance', 'Filter-envelope': 'Filter envelope', 'Unison spreiding': 'Unison spread', 'Suboscillator': 'Sub oscillator',
   'Stereobreedte': 'Stereo width', 'Transpositie': 'Transpose', 'Uitgang': 'Output', 'Klank': 'Sound',
-  'polyfone akkoordsynth': 'polyphonic chord synth',
   'Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.': 'Warm chords, sharp stabs and wide leads. Keyboard / sequencer → Notes.',
   'Klankbeeld': 'Preset', 'Golfvorm': 'Waveform', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle', 'Sinus': 'Sine',
   'Akkoordgeheugen': 'Chord memory', 'Losse noten': 'Single notes', 'Majeur': 'Major', 'Mineur': 'Minor', 'Mineur 7': 'Minor 7', 'Eigen intervallen': 'Custom intervals',
@@ -27,8 +27,9 @@ const drawLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.11.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.12.0', kind: 'instrument', category: 'synth',
   ui: { width: 840, minWidth: 380 },
+  about: { nl: 'Een polyfone akkoordsynth: twee ontstemde oscillatoren en een sub per noot, met akkoordgeheugen.', en: 'A polyphonic chord synth: two detuned oscillators and a sub per note, with chord memory.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { notes: 'Noten' } } },
   create(ctx, host) {
@@ -36,7 +37,7 @@ export default {
     let mountHost = null, panel = null, ui = {}, scope = null, scopeG = null, stopDraw = null, cw = 0, ro = null, col = null;
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
     const noDrag = el => { el.addEventListener('pointerdown', e => e.stopPropagation()); return el; };
-    const CSS = `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--x-ink)}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none}label{min-width:0}`;
+    const CSS = `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none}label{min-width:0}`;
 
     const clamp = CLAMP;
     const finite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? clamp(x, a, b) : d;
@@ -112,7 +113,7 @@ export default {
     function mount(el) {
       unmount(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; ui = { k: {} };
       add(shadow, 'style', CSS); panel = add(shadow, 'div'); panel.className = 'app';
-      add(panel, 'h2', 'CHORD POLY · ' + tx('polyfone akkoordsynth')); add(panel, 'p', tx('Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.'));
+      add(panel, 'p', tx('Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.'));
       const top = add(panel, 'div'); top.className = 'row';
       ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]), state.preset, v => self.setState({ ...defaults, ...presets[v], preset: v }));
       ui.wave = selectBox(top, tx('Golfvorm'), [['sawtooth', tx('Zaagtand')], ['square', tx('Puls')], ['triangle', tx('Driehoek')], ['sine', tx('Sinus')]], state.wave, v => { state.wave = v; apply(); });

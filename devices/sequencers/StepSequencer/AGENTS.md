@@ -13,7 +13,7 @@ Een monofone stap-sequencer: één patroon van 1 tot 64 stappen dat noten als ge
 | Naam | `Step Sequencer`; de poortnamen hebben een Nederlandse variant (`Noten in`, `Noten`) via `i18n` |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `in` (Notes in), eventuitgang `notes` (Notes); geen audio, geen modulatie |
-| Contract | v1.17 (apparaatversie 1.17.0) |
+| Contract | v1.17 (apparaatversie 1.18.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Presets: `../../../presets/step-sequencer.patchkamer-presets.json` (70 patronen in zes mappen).

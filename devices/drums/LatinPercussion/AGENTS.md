@@ -13,7 +13,7 @@ Vijftien eigen gesynthetiseerde latin-percussieklanken (bongo's, conga's, timbal
 | Naam | `Latin Percussion` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Stereo), eventingang `notes` (Noten / trigs), modulatie-ingang `mod` |
-| Contract | v1.17 (apparaatversie 1.15.0) |
+| Contract | v1.17 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id. Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De motor bevatte takken voor andere instrumenten; die zijn eruit.

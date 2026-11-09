@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.24.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.23.3 — Knop 'Bas → Bass Finder': de basstem gaat als wav naar de Bass Finder, net als de drums naar de Drum Listener.
 // 1.23.1 — De host zet een wav, flac of ogg zelf om naar mp3 als de dienst alleen mp3/m4a aanneemt (voortgang 'mp3'); de kaart zegt dat; teksten voor de nieuwe foutcodes (mp3big, mp3, indecode).
 // 1.23.2 — Gemeten met de echte dienst (07-11): een stem 'instrumental' (alles behalve de zang) staat standaard gedempt, omdat hij met de andere stems samen dubbel klinkt; de host laat de meegestuurde invoer ('song') weg.
@@ -32,7 +33,7 @@ const STEM_NL = { vocals: 'Zang', drums: 'Drums', bass: 'Bas', guitar: 'Gitaar',
 const STEM_EN = { vocals: 'Vocals', drums: 'Drums', bass: 'Bass', guitar: 'Guitar', piano: 'Piano', strings: 'Strings', synth: 'Synth', brass: 'Brass', wind: 'Wind', other: 'Other', instrumental: 'Instrumental' };
 const TXT = {
   nl: {
-    title: 'Stem Splitter', stemNames: STEM_NL, all: 'Alle stems', in: 'In',
+    stemNames: STEM_NL, all: 'Alle stems', in: 'In',
     warn: 'Let op: het geluid gaat naar een dienst op internet, dat kost geld per nummer, en je moet de rechten hebben op de muziek (auteursrecht). Er gaat niets weg tot je op Splitsen klikt.',
     hint: 'Kies een nummer, een bestand of een opname uit de ingang, kies een dienst, en klik op Splitsen. De stems spelen met de klok mee, elk op een eigen uitgang.',
     choose: 'Bestand kiezen…', dropHint: 'of sleep een bestand op deze kaart', noSource: 'Nog geen nummer gekozen.', source: (n, mb) => n + ' (' + mb + ' MB)',
@@ -57,7 +58,7 @@ const TXT = {
       failed: 'De dienst meldde dat het splitsen mislukte.', response: 'Onbegrijpelijk antwoord van de dienst.', zip: e => 'De uitvoer van de dienst is geen bruikbare zip (' + (e.message || '?') + ').', mp3big: e => 'Het nummer is te lang voor deze dienst, ook als mp3 met de laagste kwaliteit (' + Math.round((e.seconds || 0) / 60 * 10) / 10 + ' minuten; hoogstens ongeveer ' + Math.floor((e.maxSeconds || 0) / 60) + ' minuten en ' + ((e.maxSeconds || 0) % 60) + ' seconden). Neem een kortere versie.', mp3: e => 'Omzetten naar mp3 mislukte' + (e.message ? ' (' + e.message + ')' : '') + '.', indecode: 'Dit bestand is niet te decoderen om naar mp3 om te zetten.', decode: e => 'Een stem was niet te decoderen' + (e.message ? ' (' + e.message + ')' : '') + '.', unsupported: 'Deze browser kan de zip niet uitpakken (DecompressionStream ontbreekt).', read: 'Het bestand was niet te lezen.', other: 'Het splitsen is mislukt.' }
   },
   en: {
-    title: 'Stem Splitter', stemNames: STEM_EN, all: 'All stems', in: 'In',
+    stemNames: STEM_EN, all: 'All stems', in: 'In',
     warn: 'Note: the sound goes to an online service, that costs money per track, and you need the rights to the music (copyright). Nothing leaves your computer until you click Split.',
     hint: 'Pick a track, a file or a recording from the input, choose a service, and click Split. The stems play along with the clock, each on its own output.',
     choose: 'Choose file…', dropHint: 'or drop a file on this card', noSource: 'No track chosen yet.', source: (n, mb) => n + ' (' + mb + ' MB)',
@@ -129,14 +130,14 @@ async function zipBlob(files) {   // files: [{name, blob}]
 }
 
 const CSS = ':host{display:block;color:var(--fg,#e2e6ea);font:12px var(--mono,monospace)}*{box-sizing:border-box}[hidden]{display:none!important}.app{display:grid;gap:10px;padding:12px;background:var(--card,#15181d);border:1px solid var(--line,#39424e);border-radius:8px}.app.drop{border-color:var(--acc,#4fd1c5)}' +
-  'h2{margin:0;font-size:16px;letter-spacing:1px}.hint{color:var(--muted,#97a1ad);line-height:1.4}.warn{color:var(--event,#f4a261);line-height:1.4;border:1px solid var(--event,#f4a261);border-radius:6px;padding:6px 8px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}' +
+  '.hint{color:var(--muted,#97a1ad);line-height:1.4}.warn{color:var(--event,#f4a261);line-height:1.4;border:1px solid var(--event,#f4a261);border-radius:6px;padding:6px 8px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}' +
   'label{display:flex;flex-direction:column;gap:3px;color:var(--muted,#97a1ad);font-size:11px}label.inl{flex-direction:row;align-items:center;gap:6px}' +
   'button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%}button{cursor:pointer}button:hover:not(:disabled){border-color:var(--acc,#4fd1c5)}button:disabled{opacity:.5;cursor:default}button.on{background:var(--acc,#4fd1c5);color:#111;border-color:var(--acc,#4fd1c5)}' +
   'input[type=number]{width:70px}input[type=checkbox]{padding:0}input[type=range]{padding:0;width:140px}.status{min-height:16px;color:var(--event,#f4a261)}.status.err{color:#ff7b72}.status.ok{color:var(--fg,#e2e6ea)}' +
   '.stems{display:grid;gap:4px}.stem{display:grid;grid-template-columns:minmax(80px,140px) auto auto auto auto;gap:8px;align-items:center}.stem b{font-weight:600}';
 
 export default {
-  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.23.3', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
+  id: 'nl.patchkamer.stemsplitter', name: 'Stem Splitter', version: '1.24.0', kind: 'utility', category: 'tool', ui: { width: 640, minWidth: 360 }, modExclude: '*',
   i18n: { nl: { ports: { in: 'In', vocals: 'Zang', drums: 'Drums', bass: 'Bas', other: 'Rest', all: 'Alle stems' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'vocals', name: 'Vocals' }, { id: 'drums', name: 'Drums' }, { id: 'bass', name: 'Bass' }, { id: 'other', name: 'Other' }], eventIn: [], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [{ id: 'all', name: 'All stems' }] },
   create(ctx, host) {
@@ -324,7 +325,7 @@ export default {
     Object.assign(self, {
       mount(root) {
         if (dead) return; self.unmount(); shell = el('div', null, root); const sh = shell.attachShadow({ mode: 'open' }); el('style', CSS, sh);
-        const app = el('div', null, sh, 'app'); el('h2', T.title, app); el('div', T.warn, app, 'warn'); el('div', T.hint, app, 'hint');
+        const app = el('div', null, sh, 'app'); el('div', T.warn, app, 'warn'); el('div', T.hint, app, 'hint');
         const r1 = el('div', null, app, 'row');
         const file = el('input', null, r1); file.type = 'file'; file.accept = 'audio/*,.mp3,.m4a,.wav,.flac,.ogg'; file.style.display = 'none'; file.setAttribute('aria-label', T.choose);
         const choose = el('button', T.choose, r1); choose.type = 'button'; choose.onclick = () => file.click(); file.onchange = () => { if (file.files && file.files.length) takeFile(file.files[0]); file.value = ''; };

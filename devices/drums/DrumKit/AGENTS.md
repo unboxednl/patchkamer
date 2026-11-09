@@ -13,7 +13,7 @@ Een drumkit met tot 16 kanalen. Elk kanaal is één gesynthetiseerd instrument (
 | Naam | `Drum Kit` in alle talen; alleen een poortnaam heeft een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgangen `mix` (Stereo mix) en `ch1` … `ch16` (Drum 1 … 16); eventingang `trigger` (MIDI / trigs); eventuitgang `trigs` (Drum trigs); modulatie-ingang `mod`; bundel-uitgang `multi` (Losse uit / Separate outs: alle actieve kanalen, met de naam van het instrument) |
-| Contract | v1.26 (apparaatversie 1.16.0) |
+| Contract | v1.26 (apparaatversie 1.17.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Slagwerk, `nl.patchkamer.slagwerk`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De twee eerste klankmodellen heten nu `Deep` en `Punch` (in het oude bestand hadden ze een getal als naam); een oude state met die getallen is dus ook niet te lezen.

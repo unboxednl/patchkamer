@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Grain Cloud (nieuwe id nl.patchkamer.graincloud, eigen map; voorheen Korrel, nl.patchkamer.korrel);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Grain Cloud
@@ -9,7 +10,7 @@
 //   - tekenen via host.frame (met een ResizeObserver en een kleurcache); dubbelklik op een schuif zet hem terug op de beginwaarde
 //   - bewaker: de worklet begrenst de ingang (NaN wordt 0, ±16 is het plafond), schrijft alleen eindige waarden in de opname, accepteert
 //     alleen eindige parameters en noten, en zet een ontspoorde toestand terug. Normaal geluid blijft bit-identiek.
-/** Grain Cloud 1.11.0. Standalone, no external files.
+/** Grain Cloud 1.12.0. Standalone, no external files.
  * Granular: cuts sound into grains (5 ms – 1 s) and scatters them again, with their own pitch, direction and position.
  * Source:
  *  - Live: everything that arrives on the input (Grain Cloud as an effect: clouds, frozen echoes, stutters);
@@ -22,7 +23,7 @@
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
+  .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button,input[type=text],input[type=number]{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -91,7 +92,6 @@ const EN = {
   'neemt 4 seconden van de ingang op en bevriest dan': 'records 4 seconds from the input and then freezes',
   'de bron met de korrels die nu klinken': 'the source with the grains that are sounding now',
   'Waar en hoe vaak': 'Where and how often', 'Elke korrel': 'Every grain', 'Wolk en mix': 'Cloud and mix',
-  'GRAIN CLOUD · granulair': 'GRAIN CLOUD · granular',
   'Knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.':
     'Cuts sound into tiny grains and scatters them again. As an effect: connect an audio cable to the input and choose Live. As a synth: choose Wave and play notes, or let the cloud float on endlessly.',
   'Noten spelen een wolk op hun toonhoogte: C4 is de oorspronkelijke toon van de opname, bij Golf is dat A3. Tips: Korrelgrootte klein en Dichtheid hoog = ruisachtig zoemen; groot en laag = losse brokjes. Toonsprongen Octaven met Toonspreiding 12 maakt van elk geluid een glinsterend koor. Paarse Mod: Drift op Positie laat de wolk vanzelf door de opname dwalen.':
@@ -171,8 +171,9 @@ class GrainCloud extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', GrainCloud);`;
 
 export default {
-  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.11.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.12.0', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 380 },
+  about: { nl: 'Een granulaire synth en effect: knipt geluid in korreltjes en strooit ze opnieuw uit.', en: 'A granular synth and effect: cuts sound into grains and scatters them again.' },
   ports: { audioIn: [{ id: 'in', name: 'In (source)' }], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { in: 'In (bron)', notes: 'Noten' } } },
   create(ctx, host) {
@@ -231,7 +232,6 @@ export default {
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, recTimer = 0;
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('#e7b6ff'));
-      ukEl(app, 'h2', '', tx('GRAIN CLOUD · granulair'));
       ukEl(app, 'p', 'sub', tx('Knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.'));
       const top = ukEl(app, 'div', 'top');
       ui.preset = ukSelect(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen')]]), state.preset, v => { if (presets[v]) self.setState({ ...defaults, ...presets[v], preset: v }); });

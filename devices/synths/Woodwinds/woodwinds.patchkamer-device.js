@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (fluit, riet en saxofoon) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Woodwinds (contract v1.20). Eigen motor als AudioWorklet (WoodwindEngine): 16 stemmen, 1 tot 3 spelers per noot.
 //   - bron-filtermodel: elke stem is een harmonische reeks (Chebyshev-recursie, de toonhoogte ligt exact vast) waarvan de sterkte per deeltoon uit een
 //     spectraal model komt: helling die met de blaasdruk meegaat, even/oneven-verhouding (cilinder of kegel), formanten van de kast, lowpass, overblazen
@@ -22,7 +23,6 @@ const EN = {
   'Aan': 'On', 'Uit': 'Off',
   'Type': 'Type', 'Klank': 'Sound', 'Legato': 'Legato', 'Toon & formant': 'Tone & formant', 'Adem & aanzet': 'Breath & attack', 'Vibrato & legato': 'Vibrato & legato', 'Sectie & niveau': 'Section & level',
   'Eigen klank': 'Custom sound', 'Proeftoon': 'Test note', 'Proefakkoord': 'Test chord', 'Alles uit': 'All off',
-  'HOUTBLAZERS · fluit, riet en saxofoon': 'WOODWINDS · flute, reed and saxophone',
   'Mod actief · {0} parameters': 'Mod active · {0} parameters',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
@@ -306,8 +306,9 @@ class PkWoodwinds extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkWoodwinds);
 `;
 export default {
-  id: 'nl.patchkamer.woodwinds', name: 'Woodwinds', version: '1.20.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.woodwinds', name: 'Woodwinds', version: '1.21.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
+  about: { nl: 'Houtblazers: fluit, riet en saxofoon.', en: 'Woodwinds: flute, reed and saxophone.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo woodwinds' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo houtblazers', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -340,7 +341,6 @@ export default {
       mount(el) {
         if (root) self.unmount(); root = el;
         const css = document.createElement('style'); css.textContent = '.ww-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.ww-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.ww-grid .k label{font-size:10px;letter-spacing:.04em}.ww-grid .k output{font-size:11px;white-space:nowrap}.ww-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}'; el.appendChild(css);
-        const heading = document.createElement('div'); heading.textContent = tx('HOUTBLAZERS · fluit, riet en saxofoon'); heading.style.cssText = 'font-size:14px;letter-spacing:1px;color:color-mix(in srgb,var(--audio) 60%,var(--fg));padding:8px 0'; el.appendChild(heading);
         typeSelect = host.ui.select(el, tx('Type'), TYPE_IDS.map(k => [k, tx(TYPE_LABEL[k])]), state.type, k => { if (TYPE_IDS.includes(k)) { state.type = k; state.preset = 'Custom'; apply(); paint(); } }, { id: 'type', group: 'type' });
         presetSelect = host.ui.select(el, tx('Klank'), Object.keys(PRESETS).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, name => { if (Object.hasOwn(PRESETS, name)) self.setState({ ...defaults, ...PRESETS[name], preset: name }); }, { id: 'preset', group: 'preset' });
         const groups = [[tx('Toon & formant'), ['tone', 'body', 'reed', 'bite', 'growl', 'overblow'], 'tone'], [tx('Adem & aanzet'), ['pressure', 'breath', 'chiff', 'attack', 'release', 'velocity'], 'breath'],

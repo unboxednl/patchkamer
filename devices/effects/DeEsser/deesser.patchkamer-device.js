@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: de-esser met sibilantendetectie in een instelbare band (3 tot 10 kHz, bandbreedte in octaven), drempel, ratio, maximale reductie,
 //          attack en release, de modi split-band (alleen die band wordt gedempt) en wideband (het hele signaal), luistermodus voor de detectieband, parallelle mix en een reductiemeter.
 //          Tweetalig (host.lang), tekenen via host.frame, meter door de host (host.ui.meter).
@@ -12,7 +13,6 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const NL = {
-  title: 'DE-ESSER', sub: 'Dempt scherpe s-klanken in een stem. Een detectieband (3 tot 10 kHz) bepaalt wanneer; in split-band dempt alleen die band, in wideband het hele signaal.',
   mode: 'Modus', split: 'Split-band (alleen de band)', wide: 'Wideband (alles)', on: 'Aan', off: 'Uit (doorlaten)', listen: 'Luister naar detectieband', listenTip: 'Hoor de band die de detector hoort, om de frequentie en bandbreedte in te stellen',
   aria: 'Frequentieverloop van de de-esser', gr: 'Reductie', lvl: 'Band', failed: 'AudioWorklet niet beschikbaar: het geluid gaat ongewijzigd door.', dbl: 'dubbelklik: standaard',
   note: 'Tip: zet Luister naar detectieband aan, zoek de frequentie waar de s het scherpst klinkt en zet de band daar. Verlaag dan de drempel tot de reductiemeter alleen bij s-klanken beweegt (2 tot 6 dB). Split-band laat de rest van de stem ongemoeid; Wideband klinkt meer als een gewone compressor op de s. Voor mannen ligt de s meestal rond 4 tot 7 kHz, voor vrouwen rond 6 tot 9 kHz.',
@@ -22,7 +22,6 @@ const NL = {
   att: 'Attack', att_t: 'tijdconstante: 63% van de reductie bereikt', rel: 'Release', rel_t: 'tijdconstante: 63% van het herstel', mix: 'Mix', mix_t: 'deel van het bewerkte signaal (parallel mengen)',
 };
 const EN = {
-  title: 'DE-ESSER', sub: 'Tames harsh s sounds in a voice. A detection band (3 to 10 kHz) decides when; in split-band only that band is reduced, in wideband the whole signal.',
   mode: 'Mode', split: 'Split-band (band only)', wide: 'Wideband (everything)', on: 'On', off: 'Off (pass through)', listen: 'Listen to detection band', listenTip: 'Hear the band the detector hears, to set the frequency and bandwidth',
   aria: 'Frequency response of the de-esser', gr: 'Reduction', lvl: 'Band', failed: 'AudioWorklet unavailable: the sound passes through unchanged.', dbl: 'double-click: default',
   note: 'Tip: turn on Listen to detection band, find the frequency where the s sounds sharpest and put the band there. Then lower the threshold until the reduction meter only moves on s sounds (2 to 6 dB). Split-band leaves the rest of the voice alone; Wideband sounds more like an ordinary compressor on the s. For male voices the s is usually around 4 to 7 kHz, for female voices around 6 to 9 kHz.',
@@ -36,7 +35,6 @@ const EN = {
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -151,7 +149,8 @@ class DeEss extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', DeEss);`;
 
 export default {
-  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.0.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.1.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Dempt scherpe s-klanken in een stem. Een detectieband (3 tot 10 kHz) bepaalt wanneer; in split-band dempt alleen die band, in wideband het hele signaal.', en: 'Tames harsh s sounds in a voice. A detection band (3 to 10 kHz) decides when; in split-band only that band is reduced, in wideband the whole signal.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -190,8 +189,6 @@ export default {
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, grM = null;
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--audio,#7ee0a1)'));
-      ukEl(app, 'h2', '', tx('title'));
-      ukEl(app, 'p', 'sub', tx('sub'));
       const top = ukEl(app, 'div', 'top');
       ui.mode = ukSelect(top, tx('mode'), [['split', tx('split')], ['wide', tx('wide')]], state.mode, v => { state.mode = v; apply(); }, 'mode');
       ui.on = ukButton(top, '', '', 'on', () => { state.on = !state.on; apply(); paint(); });

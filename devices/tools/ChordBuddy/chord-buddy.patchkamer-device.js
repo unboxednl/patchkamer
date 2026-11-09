@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.0.0 — Patchkamer contract v1.19. Eerste versie van Chord Buddy: hulp bij akkoorden voor mensen zonder muziektheorie.
 //   Kies een toonsoort (westerse schalen, pentatoon, blues) en eventueel een stijl, of speel akkoorden op een MIDI-keyboard: het apparaat herkent ze,
 //   stelt toonsoorten en volgende akkoorden voor, bewaart akkoorden in 16 pads, speelt de pads als set (akkoorden en bas apart), en adviseert bas en stemvoering.
@@ -634,7 +635,7 @@ const SPEC = { vel: [0.05, 1], bassVel: [0.05, 1], len: [0.1, 4], gate: [0.1, 1]
 const PRESET_KEYS = ['name', 'key', 'scale', 'style', 'ext', 'pads', 'beats', 'loop', 'voiceOn', 'bassOn', 'bassMode', 'voices', 'voicing'];
 
 export default {
-  id: 'nl.patchkamer.chordbuddy', name: 'Chord Buddy', version: '1.0.0', kind: 'utility', category: 'tool',
+  id: 'nl.patchkamer.chordbuddy', name: 'Chord Buddy', version: '1.1.0', kind: 'utility', category: 'tool',
   ui: { width: 900, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'In' }], eventOut: [{ id: 'chords', name: 'Chords' }, { id: 'bass', name: 'Bass' }], modIn: [], modOut: [] },
   i18n: { nl: { ports: { in: 'In', chords: 'Akkoorden', bass: 'Bas' } } },
@@ -952,7 +953,7 @@ export default {
     // ---------- opbouw ----------
     const CSS = `:host{display:block;color:var(--fg);font:13px system-ui,sans-serif}
 .app{container-type:inline-size;background:var(--card);border-radius:10px;padding:12px;box-sizing:border-box;display:grid;gap:10px}
-h2{margin:0;font-size:19px;letter-spacing:.08em;color:var(--audio)} h3{margin:0 0 6px;font-size:14px;letter-spacing:.04em} h4{margin:8px 0 4px;font-size:13px} h5{margin:0 0 3px;font-size:12px;color:var(--muted)}
+ h3{margin:0 0 6px;font-size:14px;letter-spacing:.04em} h4{margin:8px 0 4px;font-size:13px} h5{margin:0 0 3px;font-size:12px;color:var(--muted)}
 .sub,.hint{color:var(--muted);margin:2px 0;line-height:1.4}.hint{font-size:12px}
 .grid{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
 @container (min-width:720px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.full{grid-column:1/-1}}
@@ -981,7 +982,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       root = el; el.replaceChildren();
       const host0 = E(el, 'div'), shadow = host0.attachShadow ? host0.attachShadow({ mode: 'open' }) : host0;
       E(shadow, 'style', '', CSS); const app = E(shadow, 'div', 'app');
-      E(app, 'h2', '', 'CHORD BUDDY');
       E(app, 'p', 'sub', T('Hulp bij akkoorden, ook zonder muziektheorie: kies een toonsoort, speel een akkoord of vul de pads. Dit is advies, geen regelboek.', 'Help with chords, even without music theory: pick a key, play a chord or fill the pads. This is advice, not a rulebook.'));
       const grid = E(app, 'div', 'grid');
       // 1. toonsoort en stijl

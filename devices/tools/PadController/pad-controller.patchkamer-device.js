@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.12.0 — Teruggetrokken (status 'retired'): vervangen door de MIDI Controller (MIDI-apparaten, koppelen en schakelen) en het Keyboard (klavier). De bibliotheek toont dit apparaat standaard niet meer; bestaande werkruimtes en songs laden het gewoon. Verder ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pad Controller en nieuwe id nl.patchkamer.padcontroller; songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, apparaat- en poortnamen per taal in i18n).
 //          Het apparaat herkent zijn controller niet meer aan de naam van de MIDI-poort: je kiest zelf per ingang wat die stuurt (toetsen, pads + knoppen of negeren) en de uitgang voor de lampjes (standaard geen).
@@ -53,7 +54,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.padcontroller', name: 'Pad Controller', version: '1.12.0', status: 'retired', kind: 'utility', category: 'tool',
+  id: 'nl.patchkamer.padcontroller', name: 'Pad Controller', version: '1.13.0', status: 'retired', kind: 'utility', category: 'tool',
   ui: { width: 940, minWidth: 520, jacks: true },
   i18n: { nl: { ports: { midi: 'MIDI (ruw)', knoppen: 'Knoppen' } } },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'midi', name: 'MIDI (raw)' }],
@@ -119,7 +120,7 @@ export default {
     // ---------- UI (gewone DOM, want de pad-aansluitingen moeten in de kaart zelf staan) ----------
     let root = null, ui = {}, padEls = [];
     const CSS = `.pkpc{display:grid;gap:10px;font-size:12px}.pkpc .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.pkpc h2{margin:0;font-size:17px;letter-spacing:.1em;text-transform:uppercase}.pkpc .sub{margin:0;color:var(--muted);line-height:1.45}
+.pkpc .sub{margin:0;color:var(--muted);line-height:1.45}
 .pkpc .stt{font-family:var(--mono);font-size:11px;color:var(--mod)} .pkpc .warn{color:var(--stop)}
 .pkpc .grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;padding:8px;border-radius:8px;background:var(--well);border:1px solid var(--line)}
 .pkpc .pad{position:relative;min-height:62px;border-radius:6px;border:1px solid var(--line);background:var(--card-2);padding:4px 5px 16px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -136,7 +137,7 @@ export default {
 .pkpc table{border-collapse:collapse;font-size:11px} .pkpc td{padding:2px 8px 2px 0}`;
     const E = (p, tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; if (p) p.appendChild(e); return e; };
     function mount(el) { root = el; el.innerHTML = ''; const st = E(el, 'style'); st.textContent = CSS; const app = E(el, 'div', 'pkpc');
-      E(app, 'h2', '', 'Pad Controller'); E(app, 'p', 'sub', tx('Koppel een apparaat aan een pad: Patchkamer legt de kabels. Op de controller kies je met Shift + pad welk apparaat je bespeelt. Je kunt hier ook op een pad klikken.'));
+      E(app, 'p', 'sub', tx('Koppel een apparaat aan een pad: Patchkamer legt de kabels. Op de controller kies je met Shift + pad welk apparaat je bespeelt. Je kunt hier ook op een pad klikken.'));
       if (!can) E(app, 'p', 'stt warn', tx('Deze Patchkamer kan nog geen kabels leggen voor apparaten (contract v1.7 nodig). Werk Patchkamer bij.'));
       const r1 = E(app, 'div', 'row'); ui.conn = E(r1, 'button', 'small', tx('Verbind met MIDI')); ui.conn.onclick = connectMidi; ui.ports = E(r1, 'span', 'stt'); ui.timing = E(r1, 'select'); [['strak', tx('Timing: strak (+12 ms, gelijkmatig)')], ['direct', tx('Timing: direct (zo snel mogelijk)')]].forEach(([v, x]) => { const o = E(ui.timing, 'option', '', x); o.value = v; }); ui.timing.value = S.timing; ui.timing.onchange = () => { S.timing = ui.timing.value; };
       ui.shift = E(r1, 'span', 'shift', 'SHIFT'); ui.shift.title = tx('Shift op de controller; klik hier om Shift na te doen met de muis'); ui.shift.onclick = () => { shift = !shift; paintShift(); };

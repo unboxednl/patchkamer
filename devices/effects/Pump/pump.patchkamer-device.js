@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.11.1 — Luisterfilter (Detector filter) en Release op tempo (Tempo release) zijn nu ook stuurbaar (params/modulate, standaard uit in Drift); knopwaarden, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: de keuzemenu's en vinkjes (Bron, Klok, Wat duikt, Sidechain-filtersoort, Release volgt tempo, Aan).
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Pump en nieuwe id nl.patchkamer.pump (voorheen Pomp · sidechain, nl.patchkamer.pomp); presets en songs uit die tijd verwijzen naar de oude id.
 //          Tweetalig (host.lang, poortnamen per taal in i18n), presetnamen in het Engels (de oude Nederlandse namen worden bij het laden herkend), kleuren uit de host, tekenen via host.frame.
@@ -14,7 +15,6 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const NL = {
-  title: 'PUMP', sub: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.',
   preset: 'Preset', source: 'Bron', every: 'Klok: elke', what: 'Wat duikt', all: 'Het hele signaal', lowOnly: 'Alleen het laag', highOnly: 'Alleen het hoog',
   listens: 'Sidechain luistert naar', lf: 'Laag (kick)', full: 'Alles', hf: 'Hoog (hats)',
   on: 'Aan', off: 'Uit (doorlaten)', sync: 'Release volgt tempo', syncTip: 'Trigger en Klok: de duik herstelt precies voor de volgende slag',
@@ -30,7 +30,6 @@ const NL = {
   tail: 'Release op tempo', tail_t: 'deel van de afstand tot de volgende slag, als Release volgt tempo aan staat',
 };
 const EN = {
-  title: 'PUMP', sub: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.',
   preset: 'Preset', source: 'Source', every: 'Clock: every', what: 'What ducks', all: 'The whole signal', lowOnly: 'Low end only', highOnly: 'High end only',
   listens: 'Sidechain listens to', lf: 'Low (kick)', full: 'Everything', hf: 'High (hats)',
   on: 'On', off: 'Off (pass through)', sync: 'Release follows tempo', syncTip: 'Trigger and Clock: the duck recovers right before the next beat',
@@ -52,7 +51,6 @@ const LEGACY = { 'Klassiek pompen': 'Classic pump', 'Alleen het laag': 'Low end 
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -155,7 +153,8 @@ class Pump extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Pump);`;
 
 export default {
-  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.11.1', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.12.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.', en: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', trig: 'Trigger', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }, { id: 'sc', name: 'Sidechain' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'trig', name: 'Trigger' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -210,8 +209,6 @@ export default {
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null;
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--audio,#7ee0a1)'));
-      ukEl(app, 'h2', '', tx('title'));
-      ukEl(app, 'p', 'sub', tx('sub'));
       const top = ukEl(app, 'div', 'top');
       ui.preset = ukSelect(top, tx('preset'), Object.keys(presets).map(k => [k, k]).concat([['Custom', 'Custom']]), state.preset, v => { if (presets[v]) self.setState({ ...defaults, ...presets[v], preset: v }); });
       ui.mode = ukSelect(top, tx('source'), MODES, state.mode, v => { state.mode = v; eigen(); apply(); paint(); });

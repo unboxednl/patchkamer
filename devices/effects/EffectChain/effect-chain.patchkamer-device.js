@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.11.1 — De kaart kan niet smaller dan 960 px (minWidth): daaronder werden titel, keuzelijsten of regelaars afgekapt als een bewaarde werkruimte of het slepen de kaart smaller maakte. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Effect Chain en nieuwe id nl.patchkamer.effect-chain (voorheen Schakel FX, nl.patchkamer.schakel); songs en presets uit die tijd verwijzen naar de oude id.
@@ -134,7 +135,8 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.15.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
+  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.16.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
+  about:{nl:'Een keten van effecten voor techno, EDM en ambient.',en:'A chain of effects for techno, EDM and ambient.'},
   i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',mod:'Mod'}}},
   ports:{audioIn:[{id:'in',name:'Stereo in'}],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
   create(ctx,host){
@@ -526,7 +528,6 @@ export default {
     const fmt=(v,unit)=>unit==='%'?Math.round(v*100)+'%':unit==='size'?tx(rooms[v][0]):unit==='mode'?['Low-pass','High-pass','Band-pass'][v]:unit==='Hz'?(v<10?v.toFixed(2):Math.round(v))+' Hz':unit==='s'?(v<0.1?Math.round(v*1000)+' ms':v.toFixed(2)+' s'):v.toFixed(1)+' '+unit;
     const text=(tag,str,parent,css)=>{const el=document.createElement(tag);el.textContent=str;if(css)el.style.cssText=css;parent.appendChild(el);return el;};
     function render(){if(dead)return;notifyParameters();if(!root)return;stopDrawing();if(ro)ro.disconnect();ro=typeof ResizeObserver==='function'?new ResizeObserver(es=>{for(const e of es)e.target._cw=e.contentRect.width;}):null;root.innerHTML='';ui={};slotViews=[];
-      text('div','EFFECT CHAIN · techno / EDM / ambient',root,'font-size:12px;letter-spacing:1px;color:var(--muted);padding:8px 0');
       ui.preset=host.ui.select(root,tx('Keten'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen keten')]]),config.preset,v=>{if(presets[v]){config=presets[v]();config.preset=v;apply();render();}}, { id:'preset',group:'chain' });
       host.ui.select(root,tx('Aantal'),Array.from({length:MAX},(_,i)=>[String(i+1),String(i+1)]),String(config.count),v=>{config.count=number(+v,1,MAX,4,1);customized();apply();render();}, { id:'count',group:'chain' });
       const levels=text('div','',root,'display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 18px');

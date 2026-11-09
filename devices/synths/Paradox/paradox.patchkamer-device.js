@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (onwaarschijnlijk klankorganisme) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.11.0 — Bijgewerkt naar Patchkamer contract v1.11 (eigen map, nieuwe bestandsnaam zonder versienummer; id, poort-id's en state ongewijzigd):
 //   - tweetalig (host.lang): alle teksten in een woordenboek, namen van het apparaat en de poorten per taal in i18n; de universa heten Engels
 //   - tekenen via host.frame met een ResizeObserver en een kleurcache (geen eigen animatielus, geen kleuropvraging per frame)
@@ -56,7 +57,6 @@ const EN = {
  'Opkomsttijd van iedere stem.': 'Attack time of every voice.',
  'Uitsterftijd na een noot of autonome gebeurtenis.': 'Fade-out time after a note or autonomous event.',
  'Totaalniveau. Randomiseren verandert dit niet.': 'Overall level. Randomizing does not change this.',
- 'Onwaarschijnlijk klankorganisme': 'Improbable sound organism',
  'Geef het een noot. Voer het audio. Of laat het zichzelf verzinnen.': 'Give it a note. Feed it audio. Or let it invent itself.',
  'Een universum kiezen': 'Choose a universe', 'Kies een universum…': 'Choose a universe…',
  'Anatomie': 'Anatomy', 'Gedrag': 'Behavior', 'Leeft': 'Alive', 'Volg Start/Stop': 'Follow Start/Stop', 'Klok': 'Clock', 'Delen per': 'Division', '1 maat': '1 bar', '2 maten': '2 bars',
@@ -270,7 +270,7 @@ const drawLoop = (host, inst, cb, fps) => {
 };
 
 export default {
- id:'nl.patchkamer.paradox',name:'Paradox',version:'1.11.0',kind:'instrument',category:'synth',ui:{width:860,minWidth:320},
+ id:'nl.patchkamer.paradox',name:'Paradox',version:'1.12.0',kind:'instrument',category:'synth',ui:{width:860,minWidth:320},about:{nl:'Onwaarschijnlijk klankorganisme.',en:'An improbable sound organism.'},
  i18n:{nl:{ports:{feed:'Eten',out:'Ontsnapping',notes:'Noten / CC'}}},
  ports:{audioIn:[{id:'feed',name:'Feed'}],audioOut:[{id:'out',name:'Escape'}],eventIn:[{id:'notes',name:'Notes / CC'}],eventOut:[],modIn:[],modOut:[],multiIn:[],multiOut:[]},
  create(ctx,host){
@@ -323,8 +323,8 @@ export default {
     const style=document.createElement('style');style.textContent=`
      :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}
      .lab{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card)}
-     .head,.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.head{justify-content:space-between}.brand{font:800 30px var(--disp,sans-serif);letter-spacing:.15em;text-transform:uppercase}
-     .hint,.status{color:var(--muted);font-size:11px;line-height:1.5}.badge{padding:5px 8px;border:1px solid var(--audio);border-radius:20px;color:var(--audio);text-transform:uppercase}
+     .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+     .hint,.status{color:var(--muted);font-size:11px;line-height:1.5}
      select,button{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);border-radius:5px;padding:6px;max-width:100%;min-width:0}
      select{flex:1}button{cursor:pointer}button:hover{border-color:var(--audio)}input{accent-color:var(--audio)}
      .screen{position:relative;height:190px;min-width:0;margin:12px 0;background:var(--well);border:1px solid var(--line);border-radius:8px;overflow:hidden}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -334,7 +334,7 @@ export default {
      .separator{height:1px;background:var(--line);margin:12px 0}label.switch{display:flex;gap:4px;align-items:center}.status{margin-top:9px;overflow-wrap:anywhere}.actions{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
     `;root.appendChild(style);
     function make(tag,text,parent,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;if(parent)parent.appendChild(e);return e;}
-    const lab=make('div',null,root,'lab'),head=make('div',null,lab,'head');make('span','Paradox',head,'brand');make('span',tx('Onwaarschijnlijk klankorganisme'),head,'badge');
+    const lab=make('div',null,root,'lab');
     make('div',tx('Geef het een noot. Voer het audio. Of laat het zichzelf verzinnen.'),lab,'hint');
     const bar=make('div',null,lab,'row');presetSelect=make('select',null,bar);presetSelect.setAttribute('aria-label',tx('Een universum kiezen'));const blank=make('option',tx('Kies een universum…'),presetSelect);blank.value='';
     PRESETS.forEach((p,i)=>{const o=make('option',p[0],presetSelect);o.value=String(i);});presetSelect.onchange=()=>{if(presetSelect.value!=='')api.setState(preset(Number(presetSelect.value)));};

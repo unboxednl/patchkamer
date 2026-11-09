@@ -15,7 +15,7 @@ Wat een rij speelt, is volledig **gegenereerd uit getallen**; er staat geen lijs
 | Naam | `Euclidean Rhythms` in alle talen; poortnamen hebben een Nederlandse variant (via `i18n`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingangen `reset` (Reset) en `keys` (Notes in / Noten in), eventuitgang `trigs` (Trigs / notes); geen audio, geen modulatie |
-| Contract | v1.17 (apparaatversie 1.15.0) |
+| Contract | v1.17 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Euclides, `nl.patchkamer.euclides`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state die je zelf in dit apparaat zet (zonder de nieuwe velden) klinkt gelijk aan vroeger: alle nieuwe velden hebben als standaard het oude gedrag.

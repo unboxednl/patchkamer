@@ -13,7 +13,7 @@ Een percussiesynth voor microgeluiden: kliks, tiks, bleeps, zaps, hout, glas, me
 | Naam | `Click Synth` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Stereo mix), eventingang `trigger` (Trigs / noten), modulatie-ingang `mod`, bundel-uitgang `multi` (Sporen los / Separate lanes: elk spoor apart) |
-| Contract | v1.17 (apparaatversie 1.15.0) |
+| Contract | v1.17 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Klikwerk, `nl.patchkamer.klikwerk`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De namen in de state zijn nu Engels: de klankmotoren (`tick`, `noise`, `modal` en `string` heetten `tik`, `ruis`, `modaal` en `snaar`), de kits, de namen van de sporen en de standen van "Klik op een stap" (`on`, `accent`, `chance`, `ratchet`, `tone`).

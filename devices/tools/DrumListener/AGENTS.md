@@ -17,7 +17,7 @@ Een gereedschap dat audio van een drumloop omzet in een patroon: kick, snare (me
 | Naam | `Drum Listener` in alle talen; alleen poortnamen hebben een Nederlandse variant (`i18n`); alle tekst staat in `TXT` (nl en en) |
 | Soort | `utility` (categorie `tool`): dit apparaat krijgt dus **presets** (geen tunes). Er is nog geen presetpack |
 | Poorten | audio-ingang `in` (In), audio-uitgang `thru` (Door / Through: de ingang ongewijzigd), eventuitgang `trigs` (Drum trigs); geen sturing |
-| Contract | v1.22 (apparaatversie 1.20.0); geen contractwijziging nodig |
+| Contract | v1.22 (apparaatversie 1.21.0); geen contractwijziging nodig |
 | Licentie apparaat | AGPL-3.0-or-later |
 | Icoon | `icon.svg` in deze map |
 

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in het definitieveld about.
 // 1.20.0 — loadAudio(files): de tab Samples van de host laadt een sample in deze loop (contract v1.20); verder gelijk aan 1.11.0.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Loop Slicer (nieuwe id nl.patchkamer.loopslicer, eigen map; voorheen Snede, nl.patchkamer.snede);
 //   songs uit die tijd verwijzen naar de oude id en laden hier niet in. Het geluid is bit-identiek aan het oude bestand.
@@ -17,7 +18,6 @@
 const EN = {
   'Uitgang': 'Output', 'Filter': 'Filter', 'Transpositie': 'Transpose', 'Slice-lengte': 'Slice length', 'Panorama': 'Pan',
   'Klank': 'Sound',
-  'WAV / MP3 → slices → toetsen of klokgestuurd patroon. Inclusief opgeslagen audio.': 'WAV / MP3 → slices → keys or clock-driven pattern. The audio is saved with the setup.',
   'Demo-loop laden': 'Load demo loop', 'Speel slice': 'Play slice', 'Alles uit': 'All off', 'Aantal slices': 'Slice count', 'Gelijk verdelen': 'Divide evenly',
   'Zoek transiënten': 'Find transients', 'Loop laden': 'Load loop', 'Golfvorm: sleep een interne slicegrens': 'Waveform: drag an inner slice boundary',
   'Slice past in klokstap': 'Fit slice to clock step', 'Omgekeerd': 'Reverse', 'Patroon afspelen': 'Play pattern', 'Willekeurige slices': 'Random slices',
@@ -39,7 +39,7 @@ const EN = {
 const CSS = `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px;--acc:var(--audio,#4fd1c5)}
-h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--acc)}
+
 p{line-height:1.5;color:var(--muted,#97a1ad);margin:8px 0}
 .row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin:8px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
@@ -67,7 +67,7 @@ const LIMIT = 16 * 1024 * 1024;
 const DEMO_OLD_NAME = 'Eigen demo · 120 BPM / 1 maat', DEMO_NAME = 'Demo loop · 120 BPM / 1 bar', NONE_OLD_NAME = 'Geen loop geladen';
 
 export default {
-  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.20.0', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.21.0', about: { nl: 'WAV of MP3 laden, in slices knippen en de slices spelen met toetsen of als klokgestuurd patroon. De audio wordt met de opstelling opgeslagen.', en: 'Load a WAV or MP3, cut it into slices and play the slices from keys or as a clock-driven pattern. The audio is saved with the setup.' }, kind: 'instrument', category: 'groove',
   ui: { width: 900, minWidth: 380 },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo slices' }], eventIn: [{ id: 'notes', name: 'Slice notes / trigs' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo slices', notes: 'Slice-noten / trigs', mod: 'Mod' } } },
@@ -77,7 +77,7 @@ export default {
     function mountUI(el) {
       clearUI(); mountHost = el; const wrap = add(el, 'div'); shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
       add(shadow, 'style', CSS); shadow.addEventListener('pointerdown', e => e.stopPropagation()); shadow.addEventListener('keydown', e => e.stopPropagation());
-      panel = add(shadow, 'div', undefined, 'app'); add(panel, 'h2', 'LOOP SLICER'); add(panel, 'p', tx('WAV / MP3 → slices → toetsen of klokgestuurd patroon. Inclusief opgeslagen audio.'));
+      panel = add(shadow, 'div', undefined, 'app'); 
       return panel;
     }
     function clearUI() { if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; shadow = null; }

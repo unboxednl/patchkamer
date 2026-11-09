@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (vleugel, pianino en e-piano) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Piano (contract v1.20). Eigen motor als AudioWorklet (PianoEngine): 40 stemmen, modale synthese met meerdere pianotypen.
 //   - elke noot is een bank van gedempte trillers (onharmonische deeltonen met snaarstijfheid, tweetraps uitklank, voor lage noten langer en hoge deeltonen korter),
 //     1 tot 3 licht verstemde snaren per noot, hamerpunt (kam in het spectrum), aanslagkleur door hamerhardheid en velocity, hamergeluid
@@ -19,7 +20,6 @@ const EN = {
   'Vleugel': 'Grand', 'Pianino': 'Upright', 'Honky-tonk': 'Honky-tonk', 'Tine e-piano': 'Tine e-piano', 'Riet e-piano': 'Reed e-piano', 'Clavichord': 'Clavichord',
   'Type': 'Type', 'Klank': 'Sound', 'Toon & snaren': 'Tone & strings', 'Uitklank & klankbord': 'Decay & body', 'Elektrisch': 'Electric', 'Spel & niveau': 'Playing & level',
   'Eigen klank': 'Custom sound', 'Proeftoon': 'Test note', 'Proefakkoord': 'Test chord', 'Pedaal': 'Pedal', 'Alles uit': 'All off',
-  'PIANO · vleugel, pianino en e-piano': 'PIANO · grand, upright and e-piano',
   'Mod actief · {0} parameters': 'Mod active · {0} parameters',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
@@ -256,8 +256,9 @@ class PkPiano extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkPiano);
 `;
 export default {
-  id: 'nl.patchkamer.piano', name: 'Piano', version: '1.20.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.piano', name: 'Piano', version: '1.21.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
+  about: { nl: 'Polyfone pianofamilie: vleugel, pianino en e-piano.', en: 'A polyphonic piano family: grand, upright and electric piano.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo piano' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo piano', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -290,7 +291,6 @@ export default {
       mount(el) {
         if (root) self.unmount(); root = el;
         const css = document.createElement('style'); css.textContent = '.pn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.pn-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.pn-grid .k label{font-size:10px;letter-spacing:.04em}.pn-grid .k output{font-size:11px;white-space:nowrap}.pn-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}'; el.appendChild(css);
-        const heading = document.createElement('div'); heading.textContent = tx('PIANO · vleugel, pianino en e-piano'); heading.style.cssText = 'font-size:14px;letter-spacing:1px;color:color-mix(in srgb,var(--audio) 60%,var(--fg));padding:8px 0'; el.appendChild(heading);
         typeSelect = host.ui.select(el, tx('Type'), TYPE_IDS.map(k => [k, tx(TYPE_LABEL[k])]), state.type, k => { if (TYPE_IDS.includes(k)) { state.type = k; state.preset = 'Custom'; apply(); paint(); } }, { id: 'type', group: 'type' });
         presetSelect = host.ui.select(el, tx('Klank'), Object.keys(PRESETS).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, name => { if (Object.hasOwn(PRESETS, name)) self.setState({ ...defaults, ...PRESETS[name], preset: name }); }, { id: 'preset', group: 'preset' });
         const groups = [[tx('Toon & snaren'), ['tone', 'velBright', 'strike', 'inharm', 'detune', 'hammer'], 'tone'], [tx('Uitklank & klankbord'), ['decay', 'after', 'release', 'body', 'bodyTune'], 'decay'],

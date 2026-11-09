@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.13.0 — Nieuw: Formant Singer, een zangsynth voor Patchkamer contract v1.13. Een tekst (lyrics) plus noten geven een zingende stem:
 //   elke noot zingt de volgende lettergreep, op de toonhoogte, lengte en velocity van die noot. Alles met Web Audio in dit ene bestand,
 //   zonder netwerk en zonder modellen: formant-/bronfiltersynthese.
@@ -14,7 +15,6 @@
 //   - de uitgangsvervormer volgt host.audio.oversample (§12c)
 
 const EN = {
-  'Formant Singer · zang met tekst': 'Formant Singer · singing from lyrics',
   'Tekst': 'Lyrics', 'Taal': 'Language', 'Stem': 'Voice', 'Spel': 'Mode', 'Einde van de tekst': 'End of lyrics',
   'Vaste klinker': 'Fixed vowel', 'Klinker': 'Vowel',
   'Nederlands': 'Dutch', 'English': 'English', 'Klanken': 'Phonemes',
@@ -406,7 +406,8 @@ Object.assign(DEFAULTS, { lyrics: 'la la la', lang: 'en', voice: 'alto', vowel: 
 const R0 = 0.21;   // doelniveau (rms) van één stem bij velocity 1, voor de uitgangsregeling
 
 export default {
-  id: 'nl.patchkamer.formantsinger', name: 'Formant Singer', version: '1.13.0', kind: 'instrument', category: 'synth', ui: { width: 520, minWidth: 400 },
+  id: 'nl.patchkamer.formantsinger', name: 'Formant Singer', version: '1.14.0', kind: 'instrument', category: 'synth', ui: { width: 520, minWidth: 400 },
+  about: { nl: 'Een zangsynth: een tekst plus noten geven een zingende stem (formantsynthese).', en: 'A singing synth: lyrics plus notes give a singing voice (formant synthesis).' },
   ports: {
     audioIn: [], audioOut: [{ id: 'out', name: 'Stereo voice' }],
     eventIn: [{ id: 'notes', name: 'Notes' }, { id: 'lyrics', name: 'Lyrics / restart' }], eventOut: [],
@@ -810,7 +811,6 @@ export default {
 
     // ---- UI ----
     const CSS = `:host{display:block}*{box-sizing:border-box}.r{color:var(--fg);font-size:12px;line-height:1.4;font-family:var(--mono,ui-monospace,monospace);min-width:0}
-h3{margin:0 0 6px;font-size:13px;letter-spacing:1px;font-weight:600;color:color-mix(in srgb,var(--audio) 60%,var(--fg))}
 .sec{border-top:1px solid var(--line);margin-top:8px;padding-top:6px;font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 textarea{width:100%;min-height:54px;resize:vertical;background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:6px;font:inherit}
 select,button{background:var(--field);color:var(--field-fg);border:1px solid var(--line);border-radius:4px;padding:3px 6px;font:inherit;min-width:0;max-width:100%}
@@ -882,7 +882,6 @@ canvas{display:block;width:100%;height:96px;background:var(--well);border-radius
         const r = el('div', sh, 'r'); ui = { k: {}, spans: [], shown: -2 };
         const stop = e => e.stopPropagation();
         r.addEventListener('keydown', stop); r.addEventListener('keyup', stop); r.addEventListener('pointerdown', stop);
-        el('h3', r, '', tx('Formant Singer · zang met tekst'));
         ui.lyr = el('textarea', r); ui.lyr.maxLength = 2000; ui.lyr.value = DEFAULTS.lyrics; ui.lyr.title = tx('Tekst'); ui.lyr.spellcheck = false;
         ui.lyr.addEventListener('input', () => { state.lyrics = ui.lyr.value.slice(0, 2000); parsed = parseLyrics(state.lyrics, state.lang); state.pos = Math.min(state.pos, parsed.length); drawChips(); });
         const sel = (label, opts, onchange, parent) => { const l = el('label', parent || ui.row1, '', label); const s = el('select', l); for (const [v, t] of opts) { const o = el('option', s, '', t); o.value = v; } s.addEventListener('change', () => onchange(s.value)); return s; };

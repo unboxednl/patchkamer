@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel '16-bands vocoder' staat nu in about.
 // 1.11.1 — De hulptekst noemt geen apparaat meer bij naam dat niet bestaat (Samplebank) maar spreekt van een sampler. Geluid, state en gedrag ongewijzigd.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Vocoder en nieuwe id nl.patchkamer.vocoder (voorheen Stem, nl.patchkamer.stem); presets en songs uit die tijd verwijzen naar de oude id. Tweetalig (host.lang, apparaat- en poortnamen per taal in i18n).
 //          Kleuren uit de CSS-variabelen van de host. De golfvorm tekent via host.frame met een ResizeObserver en een kleurcache (de tekenpoort-omzetting is weg); schuiven hebben data-pk-default.
@@ -12,7 +13,6 @@ const EN = {
   'Stemgevoeligheid': 'Voice sensitivity', 'Envelope-reactie': 'Envelope response', 'Formantverschuiving': 'Formant shift', 'Helderheid': 'Brightness',
   'Lucht / ruis': 'Air / noise', 'Interne draaggolf': 'Internal carrier', 'Externe draaggolf': 'External carrier', 'Droge stem': 'Dry voice', 'Vocoder': 'Vocoder',
   'Synth-uitklank': 'Synth release', 'Uitgang': 'Output', 'Klank': 'Tone',
-  'VOCODER · 16-bands vocoder': 'VOCODER · 16-band vocoder',
   'Stem / spraaksample → Stem / spraak. Keyboard → Noten draaggolf. Uitgang → mixer.': 'Voice / speech sample → Voice / speech. Keyboard → Carrier notes. Output → mixer.',
   'Klankbeeld': 'Preset', 'Interne golfvorm': 'Internal waveform', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle',
   'Draagakkoord aan': 'Carrier chord on', 'Draagakkoord uit': 'Carrier chord off',
@@ -22,7 +22,8 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.vocoder', name: 'Vocoder', version: '1.11.1', kind: 'effect', category: 'effect', ui: { width: 840, minWidth: 380 },
+  id: 'nl.patchkamer.vocoder', name: 'Vocoder', version: '1.12.0', kind: 'effect', category: 'effect', ui: { width: 840, minWidth: 380 },
+  about: { nl: 'Een 16-bands vocoder: een stem (of ander signaal) opent 16 banden op een draaggolf.', en: 'A 16-band vocoder: a voice (or other signal) opens 16 bands on a carrier.' },
   i18n: { nl: { ports: { voice: 'Stem / spraak', carrier: 'Externe draaggolf', out: 'Vocoder', notes: 'Noten draaggolf' } } },
   ports: { audioIn: [{ id: 'voice', name: 'Voice / speech' }, { id: 'carrier', name: 'External carrier' }], audioOut: [{ id: 'out', name: 'Vocoder' }], eventIn: [{ id: 'notes', name: 'Carrier notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
@@ -35,10 +36,10 @@ export default {
     };
     let mountHost = null, panel = null;
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
-    function mountUI(el, title, subtitle) {
+    function mountUI(el, subtitle) {
       clearUI(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
-      add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--audio,#91e0d4)}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--sel,#8de4d3)}input[type=range]{width:100%;padding:0;accent-color:var(--audio,#8ee4d3)}output{font:12px var(--mono,monospace);color:var(--fg,#f0d6a7)}canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none}label{min-width:0}`);
-      panel = add(shadow, 'div', undefined); panel.className = 'app'; add(panel, 'h2', title); if (subtitle) add(panel, 'p', subtitle); return panel;
+      add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--sel,#8de4d3)}input[type=range]{width:100%;padding:0;accent-color:var(--audio,#8ee4d3)}output{font:12px var(--mono,monospace);color:var(--fg,#f0d6a7)}canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none}label{min-width:0}`);
+      panel = add(shadow, 'div', undefined); panel.className = 'app'; if (subtitle) add(panel, 'p', subtitle); return panel;
     }
     function clearUI() { if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; }
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
@@ -146,7 +147,7 @@ export default {
     function note(n, vel, t, dur) { if ([...voices].filter(v => v.end > t + 0.01).length >= 12) { const oldest = [...voices].find(v => v.end > t + 0.01); off(oldest, t); } if (voices.size >= 20) { const oldest = [...voices].sort((a, b) => a.end - b.end)[0]; stopSource(oldest.osc); cleanup(oldest); } const osc = own(ctx.createOscillator()), g = gain(0); osc.type = state.wave; osc.frequency.setValueAtTime(hz(n), t); osc.connect(g).connect(voiceBus); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vel * 0.15, t + 0.01); const v = { osc, gain: g, n, end: Infinity }; voices.add(v); osc.onended = () => cleanup(v); start(osc, t); if (Number.isFinite(dur)) off(v, t + dur); }
     function panic(t = ctx.currentTime) { for (const v of voices) off(v, t); }
     function render(el) {
-      unmount(); mountUI(el, tx('VOCODER · 16-bands vocoder'), tx('Stem / spraaksample → Stem / spraak. Keyboard → Noten draaggolf. Uitgang → mixer.'));
+      unmount(); mountUI(el, tx('Stem / spraaksample → Stem / spraak. Keyboard → Noten draaggolf. Uitgang → mixer.'));
       const top = row(panel);
       select(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]), state.preset, v => self.setState({ ...defaults, ...presets[v], preset: v }));
       select(top, tx('Interne golfvorm'), [['sawtooth', tx('Zaagtand')], ['square', tx('Puls')], ['triangle', tx('Driehoek')]], state.wave, v => { state.wave = v; apply(); });

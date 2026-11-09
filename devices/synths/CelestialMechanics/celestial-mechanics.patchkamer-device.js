@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Celestial Mechanics (nieuwe id nl.patchkamer.celestialmechanics, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Celestial Mechanics
 //   - Engelse waarden in de state (scale, life, preset); Nederlandse namen alleen nog als tekst in de UI
@@ -124,7 +125,6 @@ class Planets extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Planets);`;
 
 const EN = {
-  'zwaartekrachtsynth': 'gravity synth',
   'Elke noot wordt een planeet. Doppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.':
     'Every note becomes a planet. Doppler bends the pitch, the black hole pulls it down, planets that approach each other colour each other\'s sound. Drag in the universe to sling a planet away yourself.',
   'het zonnestelsel; sleep om een planeet weg te slingeren': 'the solar system; drag to sling a planet away',
@@ -148,8 +148,9 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.11.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.12.0', kind: 'instrument', category: 'synth',
   ui: { width: 860, minWidth: 380 },
+  about: { nl: 'Een zwaartekrachtsynth: elke noot wordt een planeet die om een zon draait.', en: 'A gravity synth: every note becomes a planet orbiting a sun.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Uit', notes: 'Noten' } } },
   create(ctx, host) {
@@ -229,7 +230,7 @@ export default {
     const fromS = (d, x) => d.scale === 'log' ? d.min * (d.max / d.min) ** x : d.min + x * (d.max - d.min);
     const CSS = `:host{display:block;color:var(--fg,#e3e6ee);font:13px system-ui,sans-serif;--h-acc:#ffcf6b;--h-ink:color-mix(in srgb,var(--h-acc) 60%,var(--fg,#e3e6ee))}
 .app{container-type:inline-size;background:var(--card,#12141c);border-radius:10px;padding:14px;box-sizing:border-box}
-h2{margin:0;font-size:19px;letter-spacing:1.5px;color:var(--h-ink)} .sub{margin:3px 0 10px;color:var(--muted,#9aa3b5);font-size:12px;line-height:1.45}
+  .sub{margin:3px 0 10px;color:var(--muted,#9aa3b5);font-size:12px;line-height:1.45}
 .top{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#9aa3b5)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#1f2433);border:1px solid var(--line,#3a4256);border-radius:5px;padding:6px 8px;box-sizing:border-box;max-width:100%;text-transform:none;letter-spacing:0}
@@ -248,7 +249,6 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     function mount(hostEl) {
       unmount(); const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); root = hostEl;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
-      el(app, 'h2', '', 'CELESTIAL MECHANICS · ' + tx('zwaartekrachtsynth'));
       el(app, 'p', 'sub', tx('Elke noot wordt een planeet. Doppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.'));
       const top = el(app, 'div', 'top');
       ui.preset = selectBox(top, tx('Heelal'), Object.keys(presets).map(k => [k, tx(PRESET_LABELS[k])]).concat([['Custom', tx('Eigen heelal')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); });

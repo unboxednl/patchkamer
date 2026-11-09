@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.13.0 — Patchkamer contract v1.24: klembord voor het bewerkte patroon. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` met de soort `multi` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, dus 12 per stap):
 //          het patroon dat je bewerkt (`curPat`) is een clip met 12 sporen. Een drumtrack is een `drums`-spoor met één baan (type en GM-nummer volgen de machine), een synthtrack een `notes`-spoor; de lengte van een track (1 tot 16 stappen) is de lengte
 //          van zijn spoor (polymetrie blijft). `micro` wordt tikken (hoogstens 3), `retrig` ratchet, de condities 25%, 50% en 75% kans; p-locks, de overige condities, de klankinstellingen en alles van een track gaan alleen mee via `native` (het hele patroon): tussen
@@ -64,9 +65,7 @@ const __CSS = `
 @container dev (max-width:1020px){.device{grid-template-columns:168px minmax(0,1fr);grid-template-areas:"hdr hdr" "trk disp" "trk knobs" "trk trigs" "trk step" "side side"}}
 @container dev (max-width:700px){.device{grid-template-columns:minmax(0,1fr);grid-template-areas:"hdr" "trk" "disp" "knobs" "trigs" "step" "side";padding:10px}}
 header{grid-area:hdr;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:2px 4px 8px;border-bottom:1px solid var(--t-line)}
-h1{font-family:var(--t-disp);font-weight:600;font-size:20px;letter-spacing:.2em;text-transform:uppercase;margin:0}
-h1 b{color:var(--t-accent)}
-.transport{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-left:auto}
+.transport{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 button{font-family:var(--t-disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--t-panel-2);color:var(--t-fg);border:1px solid var(--t-line);padding:6px 10px;cursor:pointer;border-radius:3px;line-height:1.2}
 button:hover{border-color:var(--t-accent-2)}
 button:focus-visible{outline:1px solid var(--t-accent-2);outline-offset:2px}
@@ -167,7 +166,6 @@ kbd{border:1px solid var(--t-line);border-radius:3px;padding:0 4px;font-size:9px
 `;
 const __HTML = T => `<div class="device">
   <header>
-    <h1><b>Groovebox</b> 12</h1>
     <div class="transport">
       <button class="fill" id="fill">Fill</button>
       <span class="tp">BPM <input type="number" id="bpm" min="40" max="200" value="124"></span>
@@ -240,7 +238,7 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.13.0',
+  version: '1.14.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 1262 },

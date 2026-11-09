@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (acid-basssynth met sequencer) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Squelch Box (contract v1.27). Een zo getrouw mogelijke acid-bassynth, geïnspireerd op klassieke acid-bassynths uit de jaren tachtig:
 //   één oscillator, een driepolig (18 dB/oct) resonant diode-ladderfilter met een terugkoppeling die het laag wegneemt, een filter-envelope met accentcircuit
 //   (accent-sweep), slide met vaste glijtijd en een ingebouwde 16-staps sequencer met noot, octaaf omhoog/omlaag, accent, slide en tie.
@@ -18,7 +19,6 @@ const EN = {
   'Stemming': 'Tuning', 'Resonantie': 'Resonance', 'Env mod': 'Env Mod', 'Golfvorm': 'Waveform', 'Zaagtand': 'Sawtooth', 'Blok': 'Square',
   'Slide-tijd': 'Slide time', 'Gate-lengte': 'Gate length', 'Transpositie': 'Transpose',
   'Klank': 'Sound', 'Extra\'s (standaard = origineel)': 'Extras (default = original)', 'Uitgang': 'Output',
-  'SQUELCH BOX · acid-basssynth met sequencer': 'SQUELCH BOX · acid bass synth with sequencer',
   'Sequencer': 'Sequencer', 'Intern aan': 'Internal on', 'Patroon': 'Pattern', 'Lengte': 'Length', 'stappen': 'steps',
   'Willekeurig': 'Random', 'Muteer': 'Mutate', 'Leeg': 'Clear', 'Transponeer +': 'Transpose +', 'Transponeer −': 'Transpose −', 'Schuif ←': 'Shift ←', 'Schuif →': 'Shift →',
   'Bibliotheek…': 'Library…', 'zet dit patroon in het gekozen patroonvak': 'put this pattern in the selected pattern slot',
@@ -287,8 +287,9 @@ registerProcessor('${WNAME}', PkSquelch);
 
 // ---------- het apparaat ----------
 export default {
-  id: 'nl.patchkamer.squelchbox', name: 'Squelch Box', version: '1.20.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.squelchbox', name: 'Squelch Box', version: '1.21.0', kind: 'instrument', category: 'synth',
   ui: { width: 900, minWidth: 360 },
+  about: { nl: 'Acid-basssynth met ingebouwde sequencer.', en: 'An acid bass synth with a built-in sequencer.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Uit', notes: 'Noten' } } },
   modExclude: MODEX,
@@ -368,7 +369,6 @@ export default {
         const css = document.createElement('style');
         css.textContent = '.sq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px;margin-top:4px}.sq-grid .k{grid-template-columns:96px minmax(80px,1fr) 62px;gap:8px;min-height:30px}.sq-h{font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px}.sq-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}.sq-pats{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}.sq-pats button{min-width:28px;padding:2px 6px}.sq-pats button.sel{border-color:var(--sel,var(--fg));color:var(--fg)}.sq-cv{width:100%;max-width:320px;height:46px;background:var(--well,#0b0d10);border:1px solid var(--line)}.sq-seq .rowlab span{width:56px}.sq-oct{display:flex;gap:8px;align-items:center;flex-wrap:wrap}';
         el.appendChild(css);
-        const heading = document.createElement('div'); heading.textContent = tx('SQUELCH BOX · acid-basssynth met sequencer'); heading.style.cssText = 'font-size:14px;letter-spacing:1px;color:color-mix(in srgb,var(--audio) 60%,var(--fg));padding:8px 0'; el.appendChild(heading);
         const mk = (label, ids, grp, parent) => {
           const h = document.createElement('div'); h.className = 'sq-h'; h.textContent = label; parent.appendChild(h);
           const grid = document.createElement('div'); grid.className = 'sq-grid'; parent.appendChild(grid);

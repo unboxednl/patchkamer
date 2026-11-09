@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.0.0 — Patchkamer contract v1.28. Eerste versie: compressor met drempel, ratio (1:1 tot oneindig), knee, attack, release (ook automatisch), make-up (ook automatisch),
 //          peak- of RMS-detectie, lookahead tot 10 ms, sidechain-filter (hoog- en laagdoorlaat), externe sidechain-ingang, parallelle mix, stereo-koppeling en mid/side,
 //          een reductiemeter en een overdrachtscurve. Tweetalig (host.lang), tekenen via host.frame, meter door de host (host.ui.meter).
@@ -13,7 +14,6 @@
 
 // Teksten per taal (host.lang): Nederlandse bron, Engels als alternatief; onbekende taal = Engels
 const NL = {
-  title: 'COMPRESSOR', sub: 'Maakt het verschil tussen zacht en luid kleiner. Drempel, ratio en knee bepalen hoeveel, attack en release hoe snel; met sidechain-filter, lookahead, parallelle mix en mid/side.',
   detect: 'Detectie', peak: 'Peak', rms: 'RMS', chmode: 'Kanalen', stereo: 'Stereo (L/R)', ms: 'Mid/Side', src: 'Sidechain', int: 'Intern', ext: 'Extern (ingang Sidechain)',
   on: 'Aan', off: 'Uit (doorlaten)', auto: 'Auto-release', autoTip: 'Twee releases tegelijk (30 en 400 ms): snel herstel na een piek, traag na aanhoudend geluid', autoMk: 'Auto make-up', autoMkTip: 'Telt de reductie bij een ingang van −12 dB bij de make-up op',
   listen: 'Luister naar sidechain', listenTip: 'Hoor wat de detector hoort (na de filters), om ze in te stellen', aria: 'Overdrachtscurve: ingangsniveau tegen uitgangsniveau', gr: 'Reductie', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Door de lookahead loopt het geluid achter; de host compenseert dat niet',
@@ -27,7 +27,6 @@ const NL = {
   hpf: 'Hoogdoorlaat', hpf_t: 'laag onder deze frequentie telt niet mee voor de detector; 20 Hz = uit', lpf: 'Laagdoorlaat', lpf_t: 'hoog boven deze frequentie telt niet mee voor de detector; 20 kHz = uit',
 };
 const EN = {
-  title: 'COMPRESSOR', sub: 'Narrows the gap between soft and loud. Threshold, ratio and knee set how much, attack and release how fast; with a sidechain filter, lookahead, parallel mix and mid/side.',
   detect: 'Detection', peak: 'Peak', rms: 'RMS', chmode: 'Channels', stereo: 'Stereo (L/R)', ms: 'Mid/Side', src: 'Sidechain', int: 'Internal', ext: 'External (Sidechain input)',
   on: 'On', off: 'Off (pass through)', auto: 'Auto release', autoTip: 'Two releases at once (30 and 400 ms): fast recovery after a peak, slow after sustained sound', autoMk: 'Auto make-up', autoMkTip: 'Adds the reduction at an input of −12 dB to the make-up',
   listen: 'Listen to sidechain', listenTip: 'Hear what the detector hears (after the filters), to set them', aria: 'Transfer curve: input level against output level', gr: 'Reduction', lvl: 'Detector', latency: 'Latency: {0} ms', latencyTip: 'Lookahead delays the sound; the host does not compensate for it',
@@ -45,7 +44,6 @@ const EN = {
 const UK_CSS = (acc) => `:host{display:block;color:var(--fg,#e2e6ea);font:13px system-ui,sans-serif;--u-acc:${acc};--u-ink:color-mix(in srgb,var(--u-acc) 60%,var(--fg,#e2e6ea))}
 *{box-sizing:border-box}
 .app{container-type:inline-size;background:var(--card,#15181d);border-radius:10px;padding:14px}
-h2{margin:0;font-size:18px;letter-spacing:1.5px;color:var(--u-ink)} .sub{margin:3px 0 10px;color:var(--muted,#97a1ad);font-size:12px;line-height:1.45}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#97a1ad)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#20252d);border:1px solid var(--line,#39424e);border-radius:5px;padding:6px 8px;max-width:100%;text-transform:none;letter-spacing:0}
@@ -180,7 +178,8 @@ class Comp extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Comp);`;
 
 export default {
-  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.0.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.1.0', kind: 'effect', category: 'effect',
+  about: { nl: 'Maakt het verschil tussen zacht en luid kleiner. Drempel, ratio en knee bepalen hoeveel, attack en release hoe snel; met sidechain-filter, lookahead, parallelle mix en mid/side.', en: 'Narrows the gap between soft and loud. Threshold, ratio and knee set how much, attack and release how fast; with a sidechain filter, lookahead, parallel mix and mid/side.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
   modExclude: ['look'],
@@ -223,8 +222,6 @@ export default {
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, grM = null;
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('var(--audio,#7ee0a1)'));
-      ukEl(app, 'h2', '', tx('title'));
-      ukEl(app, 'p', 'sub', tx('sub'));
       const top = ukEl(app, 'div', 'top');
       ui.detect = ukSelect(top, tx('detect'), [['peak', tx('peak')], ['rms', tx('rms')]], state.detect, v => { state.detect = v; apply(); }, 'detect');
       ui.chmode = ukSelect(top, tx('chmode'), [['stereo', tx('stereo')], ['ms', tx('ms')]], state.chmode, v => { state.chmode = v; apply(); }, 'chmode');

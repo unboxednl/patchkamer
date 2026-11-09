@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de zes continue regelaars (Ademgolf, Hoeveelheid, Warmte, Ruimte, Beweging, Variatie; alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state.
 //          Geen lus: modulate() roept zelf geen host.modulate aan, dus een Swell die zichzelf of een andere modulator stuurt leidt niet tot herhaling. Bewust weggelaten: Sfeer, Tempoverdeling (keuzes), Aan/Volg/Op tempo (vinkjes), de bereikregelaars per doel (routes, hangen aan het doel).
 //          Zonder modulatie gelijk aan 1.11.0.
@@ -85,7 +86,7 @@ function waves(phase, s) {
 
 const CSS = `
 :host{display:block;min-width:0;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
-h2{font:700 25px var(--disp,sans-serif);letter-spacing:.12em;margin:0}.hint,.status{color:var(--muted);font-size:11px;line-height:1.5}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:7px}
+.hint,.status{color:var(--muted);font-size:11px;line-height:1.5}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:7px}
 label.control{display:grid;gap:6px;padding:8px;background:var(--card-2);border:1px solid var(--line);border-radius:5px}.label{display:flex;justify-content:space-between;gap:8px}output{color:var(--mod,var(--audio));font-size:10px}
 select,button{font:inherit;color:var(--field-fg,var(--fg));background:var(--field,var(--well));border:1px solid var(--line);border-radius:4px;padding:5px;min-width:0;max-width:100%}button{cursor:pointer}input{accent-color:var(--mod,var(--audio))}input[type=range]{width:100%;min-width:0}label.switch{display:flex;gap:5px;align-items:center}
 .screen{height:140px;position:relative;overflow:hidden;min-width:0;background:var(--well);border-radius:6px}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -102,7 +103,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id: 'nl.patchkamer.swell', name: 'Swell', version: '1.11.1', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
+  id: 'nl.patchkamer.swell', name: 'Swell', version: '1.12.0', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [{ id: 'mod', name: 'Swell' }], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -177,7 +178,7 @@ export default {
         const style = document.createElement('style'); style.textContent = CSS; shadow.appendChild(style);
         function make(tag, text, parent, cls) { const e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
         const D = DEF();
-        const app = make('div', null, shadow, 'app'); make('h2', 'SWELL', app); make('div', tx('Samenhangende beweging voor warme, rustige en open klankvelden.'), app, 'hint');
+        const app = make('div', null, shadow, 'app'); make('div', tx('Samenhangende beweging voor warme, rustige en open klankvelden.'), app, 'hint');
         const top = make('div', null, app, 'row'), profile = make('select', null, top); profile.setAttribute('aria-label', tx('Sfeer'));
         for (const [k, p] of Object.entries(PROFILES)) { const o = make('option', tx(p.name), profile); o.value = k; }
         profile.onchange = () => { const key = profile.value, p = PROFILES[key]; for (const k of ['period', 'depth', 'warmth', 'space', 'motion', 'human']) state[k] = p[k]; state.profile = key; syncUI(); }; controls.push({ el: profile, key: 'profile' });

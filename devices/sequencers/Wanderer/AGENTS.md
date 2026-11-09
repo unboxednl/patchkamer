@@ -13,7 +13,7 @@ Een kansmelodie-sequencer. Hij verzint een **motief** (2 tot 64 stappen) binnen 
 | Naam | `Wanderer` in alle talen; de poortnamen hebben een Nederlandse variant (via `i18n`: `Akkoord / toetsen`, `Noten`) |
 | Soort | `utility` (categorie `sequencer`): dit apparaat krijgt dus **presets** (geen tunes) |
 | Poorten | eventingang `akkoord` (Chord / keys), modulatie-ingang `mod`, eventuitgang `notes`; geen audio |
-| Contract | v1.17 (apparaatversie 1.15.0) |
+| Contract | v1.17 (apparaatversie 1.16.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe vorm van een ouder, Nederlandstalig bestand met een andere naam en id (`nl.patchkamer.dwaler`). Presets of songs uit die tijd verwijzen naar de oude id en laden hier niet in. Een oude state (met Nederlandse toonladdernamen zoals `mineur`) wordt bij het laden herkend en omgezet naar de Engelse sleutel.

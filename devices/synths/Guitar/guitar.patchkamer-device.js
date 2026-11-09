@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (akoestisch, elektrisch en bas) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Guitar (contract v1.20). Eigen motor als AudioWorklet (GuitarEngine): 6 snaren, elk een digitale golfgeleider (uitgebreid Karplus-Strong).
 //   - elke snaar: vertragingslijn met fractionele (kubische) uitlezing, demping die met aanslag en helderheid meegaat, stijfheid (allpass-dispersie),
 //     plukpositie (kam in de aanzet), pickup- of microfoonpositie (kam op de uitgang), plukruis, glij- en buigruis
@@ -24,7 +25,6 @@ const EN = {
   'Omlaag': 'Down', 'Omhoog': 'Up', 'Afwisselend': 'Alternating', 'Aan': 'On', 'Uit': 'Off',
   'Type': 'Type', 'Klank': 'Sound', 'Pluk & snaar': 'Pluck & string', 'Uitklank & kast': 'Decay & body', 'Pickup & versterker': 'Pickup & amp', 'Spel & niveau': 'Playing & level',
   'Eigen klank': 'Custom sound', 'Proeftoon': 'Test note', 'Proefakkoord': 'Test chord', 'Alles uit': 'All off',
-  'GITAAR · akoestisch, elektrisch en bas': 'GUITAR · acoustic, electric and bass',
   'Mod actief · {0} parameters': 'Mod active · {0} parameters',
   'Mod gereed · verbind een paarse sturingskabel': 'Mod ready · connect a purple control cable',
   'AudioWorklet laden…': 'Loading AudioWorklet…',
@@ -392,8 +392,9 @@ class PkGuitar extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkGuitar);
 `;
 export default {
-  id: 'nl.patchkamer.guitar', name: 'Guitar', version: '1.20.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.guitar', name: 'Guitar', version: '1.21.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
+  about: { nl: 'Gitaarfamilie: akoestisch, elektrisch en bas.', en: 'A guitar family: acoustic, electric and bass.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo guitar' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo gitaar', notes: 'Keyboard / noten' } } },
   modExclude: MODEX,
@@ -457,7 +458,6 @@ export default {
       mount(el) {
         if (root) self.unmount(); root = el;
         const css = document.createElement('style'); css.textContent = '.gt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.gt-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.gt-grid .k label{font-size:10px;letter-spacing:.04em}.gt-grid .k output{font-size:11px;white-space:nowrap}.gt-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}'; el.appendChild(css);
-        const heading = document.createElement('div'); heading.textContent = tx('GITAAR · akoestisch, elektrisch en bas'); heading.style.cssText = 'font-size:14px;letter-spacing:1px;color:color-mix(in srgb,var(--audio) 60%,var(--fg));padding:8px 0'; el.appendChild(heading);
         typeSelect = host.ui.select(el, tx('Type'), TYPE_IDS.map(k => [k, tx(TYPE_LABEL[k])]), state.type, k => { if (TYPE_IDS.includes(k)) { state.type = k; state.preset = 'Custom'; apply(); paint(); } }, { id: 'type', group: 'type' });
         presetSelect = host.ui.select(el, tx('Klank'), Object.keys(PRESETS).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, name => { if (Object.hasOwn(PRESETS, name)) self.setState({ ...defaults, ...PRESETS[name], preset: name }); }, { id: 'preset', group: 'preset' });
         const groups = [[tx('Pluk & snaar'), ['tone', 'velBright', 'pick', 'pickPos', 'stiff', 'detune', 'noise'], 'pluck'], [tx('Uitklank & kast'), ['decay', 'release', 'mute', 'body', 'bodyTune'], 'decay'],

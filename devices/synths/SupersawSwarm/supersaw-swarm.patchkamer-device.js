@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Supersaw Swarm (nieuwe id nl.patchkamer.supersawswarm, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, poortnamen per taal in i18n); de naam is in alle talen Supersaw Swarm
 //   - setState volgt §13: onbekende velden genegeerd, ongeldige waarden op de standaard, getallen afgekapt, audioparameters zacht; de knoppen volgen setState en cc
@@ -29,7 +30,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.11.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.12.0', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 360 },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { notes: 'Noten' } } },
@@ -227,7 +228,7 @@ export default {
     const fromSlider = (d, x) => { const v = d.scale === 'log' ? d.min * (d.max / d.min) ** x : d.min + x * (d.max - d.min); return d.step ? Math.round(v / d.step) * d.step : v; };
     const CSS = `:host{display:block;color:var(--fg,#dfe8ea);font:13px system-ui,sans-serif;--z-acc:#7fd6ff;--z-ink:color-mix(in srgb,var(--z-acc) 55%,var(--fg,#dfe8ea))}
 .app{container-type:inline-size;background:var(--card,#141c24);border-radius:10px;padding:14px;box-sizing:border-box}
-h2{margin:0;font-size:19px;letter-spacing:1px;color:var(--z-ink)} .sub{margin:3px 0 10px;color:var(--muted,#9fb2ba);font-size:12px;line-height:1.45}
+.sub{margin:3px 0 10px;color:var(--muted,#9fb2ba);font-size:12px;line-height:1.45}
 .top{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:6px}
 .sel{display:flex;flex-direction:column;gap:4px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#9fb2ba)}
 select,button{font:inherit;font-size:12px;color:var(--field-fg,#e4edef);background:var(--field,#1f2c36);border:1px solid var(--line,#3b4d58);border-radius:5px;padding:6px 8px;box-sizing:border-box;max-width:100%;text-transform:none;letter-spacing:0}
@@ -247,7 +248,6 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     function mount(host_el) {
       unmount(); const wrap = document.createElement('div'); host_el.appendChild(wrap); const sh = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; root = host_el;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
-      el(app, 'h2', '', 'SUPERSAW SWARM');
       el(app, 'p', 'sub', tx('Tot negen verstemde zaagtanden per noot, met octaaflaag, sub en een ingebouwde ruimte. Keyboard / sequencer → Noten, stereo uit → mixer.'));
       const top = el(app, 'div', 'top');
       ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); });

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.11.0 — Nieuw als Four-Operator FM (nieuwe id nl.patchkamer.fouroperatorfm, eigen map), bijgewerkt naar Patchkamer contract v1.11:
 //   - tweetalig (host.lang, namen per taal in i18n); de naam is in alle talen Four-Operator FM
 //   - setState volgt §13: waarden buiten het bereik worden afgekapt, ongeldige waarden krijgen de standaard; alle knoppen en keuzes volgen setState
@@ -159,7 +160,6 @@ const PRESET_SKIP = ['testNote', 'operator'];   // werkstand, geen klank: een pr
 
 const CSS = `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:var(--audio,#91e0d4);--x-acc2:var(--event,#e8c991);--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}
 .app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}
-h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--x-ink)}
 p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0}
@@ -177,7 +177,7 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.fouroperatorfm',
   name: 'Four-Operator FM',
-  version: '1.11.0',
+  version: '1.12.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1000, minWidth: 380 },
@@ -348,7 +348,7 @@ export default {
         const wrap = add(el, 'div'), shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
         add(shadow, 'style', CSS);
         panel = add(shadow, 'div'); panel.className = 'app'; ui = {};
-        add(panel, 'h2', 'Four-Operator FM'); add(panel, 'p', tx('Vier operators, eigen envelopes, acht algoritmen en achtstemmige polyfonie.'));
+        add(panel, 'p', tx('Vier operators, eigen envelopes, acht algoritmen en achtstemmige polyfonie.'));
         const top = add(panel, 'div'); top.className = 'row';
         ui.preset = select(top, tx('Klankbeeld'), Object.keys(PRESETS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...PRESETS[v], preset: v, testNote: state.testNote, operator: state.operator }));
         ui.algorithm = select(top, tx('Algoritme'), OPTIONS.algorithm.map(n => [n, tx('Algoritme {0}', n)]), state.algorithm, v => { state.algorithm = Number(v); apply(); if (graphDraw) graphDraw(); });

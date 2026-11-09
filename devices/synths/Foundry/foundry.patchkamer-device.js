@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.1 — Gecontroleerd op stuurbaarheid: alle continue klankregelaars stonden al in params(). Bewust niet stuurbaar: Morph A ↔ B (die schrijft de knopstanden zelf om
 //   en dat is state, geen modulatie; vandaar modExclude). Geluid en instellingen ongewijzigd.
 // 1.11.0 — Nieuw als Foundry (nieuwe id nl.patchkamer.foundry, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is ongewijzigd:
@@ -86,8 +87,9 @@ const hz = n => 440 * 2 ** ((n - 69) / 12);
 const FB_MAX = 0.82;
 
 export default {
-  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.11.1', modExclude: ['morph'], kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.12.0', modExclude: ['morph'], kind: 'instrument', category: 'synth',
   ui: { width: 920, minWidth: 380 },
+  about: { nl: 'Een industriële klankvormer: gecascadeerde FM, ringmodulatie, ruis en materiaalresonatoren.', en: 'An industrial sound sculptor: cascaded FM, ring modulation, noise and material resonators.' },
   ports: {
     audioIn: [{ id: 'in', name: 'External material' }], audioOut: [{ id: 'out', name: 'Stereo sculpture' }],
     eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [],
@@ -315,7 +317,7 @@ export default {
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
     const CSS = `:host{display:block;color:var(--fg);font:13px system-ui,sans-serif;--x-acc:#ffb36e;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg))}
 .app{container-type:inline-size;background:var(--card);border-radius:10px;padding:14px;box-sizing:border-box}
-h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--x-ink)}p{line-height:1.5;color:var(--muted);margin:8px 0}
+p{line-height:1.5;color:var(--muted);margin:8px 0}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
 .control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted)}
 button,select,input{font:inherit;color:var(--field-fg);background:var(--field);border:1px solid var(--line);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}
@@ -389,7 +391,7 @@ h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}`;
     function unmount() { stopDrawing(); xy = null; scopeCanvas = null; status = null; xyDown = false; clearUI(); }
     function render(el) {
       unmount(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
-      add(shadow, 'style', CSS); panel = add(shadow, 'div'); panel.className = 'app'; add(panel, 'h2', 'FOUNDRY · industrial sound sculptor');
+      add(shadow, 'style', CSS); panel = add(shadow, 'div'); panel.className = 'app';
       add(panel, 'p', tx('FM, metaalresonanties, ruis, ringmodulatie en wavefolding. Begin met Start drone en sculpt met het XY-vlak.')); uiHandles = {};
       if (typeof ResizeObserver !== 'undefined') ro = new ResizeObserver(() => { for (const v of views) fit(v); });
       const top = row(panel);

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.15.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.14.1 — Meer continue regelaars bestuurbaar via params()/modulate(): Accent op de tel, Zwakke noten zachter, Swing, Mensachtig en Speelkans erbij (Gate en Velocity zaten er al in); de nieuwe staan standaard uit. Modulatie komt alleen bovenop de knop en is nooit state (effectief = knop + o × bereik, geclampt).
 //   Bewust weggelaten: patroon, snelheid, octaven, herhalingen, latch, actief, patroonlengte (keuzes) en de balkjes van het velocity- en lengtepatroon (patroondata). Zonder modulatie gelijk aan 1.14.0.
 // 1.14.0 — Extra swing (`swing`, 0 … 0,5 van een zestiende, standaard 0). Een noot (of roll-herhaling) die in een oneven zestiende valt komt swing × stepDur later, bovenop de swing van de host; even zestienden blijven staan.
@@ -16,8 +17,6 @@
 // houdt zijn eigen tijd en lengte; held:true wacht op noteoff. Een wachtrij zorgt dat toekomstige ingangsnoten niet te vroeg klinken. Geen eigen
 // klok en geen audio.
 const EN = {
-  'SCALE ARPEGGIATOR · arpeggiator': 'SCALE ARPEGGIATOR · arpeggiator',
-  'Keyboard / sequencer → Akkoord → Arpeggio → synth. Start het hosttransport.': 'Keyboard / sequencer → Chord → Arpeggio → synth. Start the host transport.',
   'Patroon': 'Pattern', 'Omhoog': 'Up', 'Omlaag': 'Down', 'Heen / terug': 'Up / down', 'Speelvolgorde': 'Play order', 'Willekeurig': 'Random', 'Akkoord-puls': 'Chord pulse',
   'Heen / terug (herhaald)': 'Up / down (repeat ends)', 'Naar elkaar toe': 'Converge', 'Duim': 'Thumb',
   'Snelheid': 'Rate', '1/16 triool': '1/16 triplet', '1/8 triool': '1/8 triplet', '1/32 triool': '1/32 triplet',
@@ -31,7 +30,7 @@ const EN = {
     'The host sets BPM and swing. 1/32 schedules two notes per sixteenth ahead; all times are AudioContext times. A keyboard on the input is the chord source itself: set Active to Pass-through to let the keyboard through unchanged.',
 };
 export default {
-  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.14.1', kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
+  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.15.0', about: { nl: 'Arpeggiator: speelt de noten van een keyboard of sequencer om de beurt als arpeggio naar een synth. Start het hosttransport.', en: 'Arpeggiator: plays the notes from a keyboard or sequencer one after another as an arpeggio into a synth. Start the host transport.' }, kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'notes', name: 'Chord / keyboard' }], eventOut: [{ id: 'notes', name: 'Arpeggio' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -39,11 +38,11 @@ export default {
     const finite = (v, d, a, b) => typeof v === 'number' && Number.isFinite(v) ? clamp(v, a, b) : d;
     let mountHost = null, panel = null, uiHandles = {};
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
-    function mountUI(el, title, subtitle) {
+    function mountUI(el) {
       clearUI(); mountHost = el; const wrap = add(el, 'div'); const shadow = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
-      add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:var(--event,#91e0d4);--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}h2{margin:0 0 5px;font-size:20px;letter-spacing:1px;color:var(--x-ink)}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink)}canvas{display:block;width:100%;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none;cursor:crosshair}h3{font-size:13px;color:var(--x-ink);margin:14px 0 8px}label{min-width:0}.small{font-size:11px}`);
+      add(shadow, 'style', `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:var(--event,#91e0d4);--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink)}canvas{display:block;width:100%;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none;cursor:crosshair}h3{font-size:13px;color:var(--x-ink);margin:14px 0 8px}label{min-width:0}.small{font-size:11px}`);
       shadow.addEventListener('pointerdown', e => e.stopPropagation()); shadow.addEventListener('keydown', e => e.stopPropagation());
-      panel = add(shadow, 'div', undefined); panel.className = 'app'; add(panel, 'h2', title); if (subtitle) add(panel, 'p', subtitle); uiHandles = {}; return panel;
+      panel = add(shadow, 'div', undefined); panel.className = 'app'; uiHandles = {}; return panel;
     }
     function clearUI() { for (const h of Object.values(uiHandles)) try { h.dispose && h.dispose(); } catch { } if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; uiHandles = {}; }
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
@@ -106,7 +105,7 @@ export default {
       return true;
     }
     function clockLabel() { if (clockStatus) clockStatus.textContent = playing === false ? tx('Interne klok gestopt') : clockBpm ? tx('Interne klok · {0} BPM', Number(clockBpm.toFixed(2))) : tx('Wacht op interne klok'); }
-    function render(el) { mountUI(el, tx('SCALE ARPEGGIATOR · arpeggiator'), tx('Keyboard / sequencer → Akkoord → Arpeggio → synth. Start het hosttransport.'));
+    function render(el) { mountUI(el);
       const controls = grid(panel);
       select(controls, tx('Patroon'), modes.map(([v, t]) => [v, tx(t)]), state.mode, v => { state.mode = v; counter = 0; });
       select(controls, tx('Snelheid'), RATE_LABELS.map(([v, t]) => [v, tx(t)]), state.rate, v => state.rate = +v);
