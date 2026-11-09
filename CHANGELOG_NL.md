@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.28.1 (2026-11-09)
+
+### Opgelost
+- **Pulse Drums 1.19.2: geen kliks meer bij de bassdrum en de speelstand klopt als de klok al loopt.** De rumble werd bij elke bassdrum met een sprong naar 0,04 weggeduikt; zodra de rumble hoorbaar was (standaard) gaf dat een tik bij elke kick. Nu valt hij in ongeveer 10 ms zacht weg en komt hij na 0,26 s terug. Gemeten in een offline render: de sprong in het signaal bij een kick was 0,044 en is nu 0,003 (gelijk aan het gewone signaal); de klank en het niveau zijn gelijk gebleven. Swing speelt hierbij geen rol. Daarnaast deed het apparaat alsof de klok stilstond (statusregel "De host-transportknop start de sequencer" en geen stapcursor) als het werd geplaatst of geladen terwijl de klok van de host al liep, ook al klonk het wel; de speelstand volgt nu de stappen en `host.running`. Niet beluisterd.
+
 ## 0.28.0 (2026-11-09)
 
 ### Toegevoegd

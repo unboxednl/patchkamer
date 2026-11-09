@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.28.1 (2026-11-09)
+
+### Fixed
+- **Pulse Drums 1.19.2: no more clicks on the kick drum, and the play state is right when the clock is already running.** The rumble was ducked with a jump to 0.04 on every kick; as soon as the rumble was audible (the default) that gave a tick on every kick. Now it falls away softly in about 10 ms and comes back after 0.26 s. Measured in an offline render: the jump in the signal at a kick was 0.044 and is now 0.003 (the same as the normal signal); the sound and level are unchanged. Swing plays no part in this. Also, the device acted as if the clock were stopped (status line "The host transport starts the sequencer" and no step cursor) when it was placed or loaded while the host clock was already running, even though it did sound; the play state now follows the steps and `host.running`. Not listened to.
+
 ## 0.28.0 (2026-11-09)
 
 ### Added
