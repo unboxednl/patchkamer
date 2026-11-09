@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.24.0 (2026-11-09)
+
+### Toegevoegd
+- **Mini-ontwerper (Skins-paneel): kleur bij gebruik en padregels (skinscontract 0.8).** Bij **Regelaars** heeft elke regel nu ook een **Kleur bij gebruik** (de kleur terwijl je draait of sleept). Bij **Pads** kun je met **Padregel toevoegen** per pad, groep of rol het **type** (aan/uit, pad met of zonder velocity), de **kleur in rust**, de **kleur bij gebruik** en het **ledje** instellen; de laatste passende regel wint per eigenschap en je kunt regels verplaatsen en verwijderen. Het voorbeeld op de kaart volgt meteen en een export krijgt `skinsContract` 0.8 zodra een van die velden wordt gebruikt. Zo kan de mini-ontwerper hetzelfde als de skin-editor voor deze velden. Gemeten in de browser met een testapparaat: type, kleuren en de export kloppen. Handleiding (NL en EN) en apparaatnotities bijgewerkt.
+
 ## 0.23.2 (2026-11-09)
 
 ### Toegevoegd

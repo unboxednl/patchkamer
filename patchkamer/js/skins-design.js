@@ -32,7 +32,8 @@ function build(preview){ const name=D.name.trim()||'Untitled', id=preview?draftI
   const lay=o=>{ const l=o&&o.layout; return !!(l&&l.panels&&l.panels.some(p=>p.items&&p.items.length)); };
   const hasLay=lay(D.design)||D.aps.some(a=>lay(a.design));
   const hasPd=(D.design.pads||D.design.display)||D.aps.some(a=>a.design&&(a.design.pads||a.design.display));
-  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasLay?'0.7':hasPd?'0.6':hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
+  const v8=d=>!!(d&&(((d.controls||[]).some(c=>c&&c.activeColor))||(d.pads&&d.pads.rules&&d.pads.rules.length))), hasV8=v8(D.design)||D.aps.some(a=>v8(a.design));
+  const j={format:'patchkamer-skin',formatVersion:1,skinsContract:hasV8?'0.8':hasLay?'0.7':hasPd?'0.6':hasSec?'0.5':hasMet?'0.4':hasCtl?'0.3':'0.2',id,device:D.dev,name:name.slice(0,60),version:D.version||'1.0.0'};
   if(D.author.trim()) j.author=D.author.trim().slice(0,100); j.created=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
   const fin=d=>{ const c=clone(d); if(c.layout&&c.layout.panels){ const had=c.layout.panels.length; c.layout.panels=c.layout.panels.filter(p=>p.items&&p.items.length); if(!c.layout.panels.length&&had){ delete c.layout.panels; } if(!Object.keys(c.layout).length) delete c.layout; } return c; };   // een paneel zonder items is nog niet af en gaat niet mee
   if(D.dflt) j.default=D.dflt; { const dd=fin(D.design); if(Object.keys(dd).length) j.design=dd; }
@@ -136,6 +137,7 @@ function controlsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).f
         let pk=null; const paintSw=()=>{ sw.style.background=ru.color&&ru.color!=='accent'?ru.color:''; sw.classList.toggle('empty',!ru.color||ru.color==='accent'); hx.textContent=ru.color&&ru.color!=='accent'?ru.color:pkt('m.dz_r_accent'); clr.hidden=!ru.color; };
         sw.onclick=()=>{ if(pk){ pk.destroy(); pk=null; return; } pk=PK.colourPicker({value:(ru.color&&ru.color!=='accent')?ru.color:'#4fd1c5',label:pkt('m.dz_r_kleur'),onChange:h=>{ ru.color=h; paintSw(); preview(); },onCommit:h=>{ ru.color=h; paintSw(); preview(); }}); rw.after(pk.el); if(!ru.color){ ru.color=pk.get(); paintSw(); preview(); } };
         clr.onclick=()=>{ delete ru.color; if(pk){ pk.destroy(); pk=null; } paintSw(); preview(); }; cell.append(sw,hx,clr); rw.append(lb,cell); row.appendChild(rw); paintSw(); }
+      swatchRow(row,pkt('m.dz_r_kleur_gebruik'),()=>ru.activeColor,h=>{ if(h) ru.activeColor=h; else delete ru.activeColor; },true);
       list.appendChild(row); });
     const add=el('button','small',pkt('m.dz_r_toevoegen')); add.type='button'; add.disabled=getCtl().length>=64; add.onclick=()=>{ const a=getCtl(); a.push({match:'*',face:'default'}); setCtl(a); draw(); preview(); }; list.appendChild(add); };
   draw(); ctlStat(); }
@@ -286,6 +288,27 @@ function padsSection(box){ const pkt=PK.pkt, r=card(), reg=r?PK.regList(r).filte
         const rm=el('button','small','×'); rm.type='button'; rm.title=rm.ariaLabel=pkt('m.dz_r_weg'); rm.onclick=()=>{ const c={...cm()}; delete c[k]; setObj('pads','colors',Object.keys(c).length?c:''); draw(); preview(); };
         head.append(ms,rm); row.appendChild(head); swatchRow(row,pkt('m.dz_r_kleur'),()=>cm()[k],h=>{ const c={...cm()}; if(h) c[k]=h; setObj('pads','colors',Object.keys(c).length?c:''); },false); wrap.appendChild(row); });
       const add=el('button','small',pkt('m.dz_p_eigen_plus')); add.type='button'; add.disabled=Object.keys(cm()).length>=64||!keys.length; add.onclick=()=>{ const c={...cm()}, k=keys.find(x=>!(x in c)); if(!k) return; c[k]='#e4574a'; setObj('pads','colors',c); draw(); preview(); }; wrap.appendChild(add); };
+    draw(); }
+  // per pad (skins 0.8, pads.rules): type en kleuren van één pad, een groep of een rol; de laatste passende regel wint per eigenschap
+  { const wrap=el('div','dz-rules'); box.appendChild(el('div','dz-hint',pkt('m.dz_p_regels'))); box.appendChild(wrap);
+    const keys=['*','role:pad','role:step',...[...new Set(reg.map(x=>x.group).filter(Boolean))].map(g=>'group:'+g),...reg.map(x=>x.id)];
+    const rl=()=>(getObj('pads').rules||[]), put=a=>{ setObj('pads','rules',a.length?a:''); };
+    const draw=()=>{ wrap.innerHTML=''; const rules=rl();
+      rules.forEach((ru,i)=>{ const row=el('div','dz-rule'), head=el('div','dz-rhead'), ms=document.createElement('select'); ms.className='small'; ms.setAttribute('aria-label',pkt('m.dz_r_match'));
+        const opts=keys.includes(ru.match)?keys:[...keys,ru.match]; opts.forEach(v=>{ const o=el('option',null,v==='*'?pkt('m.dz_r_alle'):v); o.value=v; ms.appendChild(o); }); ms.value=ru.match;
+        ms.onchange=()=>{ ru.match=ms.value; preview(); };
+        const mv=d=>{ const a=rl(), j=i+d; if(j<0||j>=a.length) return; [a[i],a[j]]=[a[j],a[i]]; put(a); draw(); preview(); };
+        const up=el('button','small','↑'), dn=el('button','small','↓'), rm=el('button','small','×'); [up,dn,rm].forEach(b=>b.type='button'); up.title=up.ariaLabel=pkt('m.dz_r_omhoog'); dn.title=dn.ariaLabel=pkt('m.dz_r_omlaag'); rm.title=rm.ariaLabel=pkt('m.dz_r_weg'); up.disabled=i===0; dn.disabled=i===rules.length-1;
+        up.onclick=()=>mv(-1); dn.onclick=()=>mv(1); rm.onclick=()=>{ const a=rl(); a.splice(i,1); put(a); draw(); preview(); };
+        head.append(el('span','dz-rn',pkt('m.dz_r_n',i+1)),ms,up,dn,rm); row.appendChild(head);
+        const pick=(label,key,list)=>{ const rw=el('div','dz-row'), lb=el('label',null,label), s=document.createElement('select'); s.className='small'; s.setAttribute('aria-label',label+' ('+pkt('m.dz_r_n',i+1)+')');
+          [['',pkt('m.dz_r_zoals')],...list].forEach(([v,t])=>{ const o=el('option',null,t); o.value=v; s.appendChild(o); }); s.value=ru[key]===undefined?'':String(ru[key]); s.onchange=()=>{ if(s.value==='') delete ru[key]; else ru[key]=s.value; preview(); }; rw.append(lb,s); row.appendChild(rw); };
+        pick(pkt('m.se_pad_type'),'kind',[['toggle',pkt('m.se_pk_toggle')],['pad',pkt('m.se_pk_pad')],['velocity',pkt('m.se_pk_velocity')]]);
+        swatchRow(row,pkt('m.se_kleur_rust'),()=>ru.color,h=>{ if(h) ru.color=h; else delete ru.color; },true);
+        swatchRow(row,pkt('m.se_kleur_gebruik'),()=>ru.activeColor,h=>{ if(h) ru.activeColor=h; else delete ru.activeColor; },true);
+        pick(pkt('m.dz_p_led'),'led',E('led',['none','center','top','bottom','left','right']));
+        wrap.appendChild(row); });
+      const add=el('button','small',pkt('m.dz_p_regel_plus')); add.type='button'; add.disabled=rules.length>=64; add.onclick=()=>{ const a=rl().slice(); a.push({match:'*'}); put(a); draw(); preview(); }; wrap.appendChild(add); };
     draw(); }
   ctlStat(); }
 function displaySection(box){ const pkt=PK.pkt, r=card(); box.appendChild(el('h4',null,pkt('m.dz_schermpje')));

@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.24.0 (2026-11-09)
+
+### Added
+- **Mini designer (Skins panel): colour in use and pad rules (skins contract 0.8).** Under **Controls** every rule now also has a **Colour in use** (the colour while you turn or drag). Under **Pads**, **Add a pad rule** sets, per pad, group or role, the **type** (on/off, pad with or without velocity), the **colour at rest**, the **colour in use** and the **LED**; the last matching rule wins per property and you can move and delete rules. The preview on the card follows at once and an export gets `skinsContract` 0.8 as soon as one of these fields is used. So the mini designer can do the same as the skin editor for these fields. Measured in the browser with a test device: type, colours and the export are correct. Manual (NL and EN) and notes updated.
+
 ## 0.23.2 (2026-11-09)
 
 ### Added
