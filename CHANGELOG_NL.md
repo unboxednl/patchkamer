@@ -4,6 +4,17 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.21.0 (2026-11-09)
+
+### Toegevoegd
+- **Clip Arranger 1.26.0: scènes beheren, meerdere songs en clips uitrekken.**
+  - **Scènes:** het aantal is vrij (1 tot 24, was vast 8). Per scène hernoemen (ook met dubbelklik op de naam), een lege scène invoegen, dupliceren (alle sporen) en verwijderen; scènes slepen om ze te ordenen. **+ Scène** voegt er achteraan een toe en **Verwijder lege scènes** haalt lege scènes weg die in geen enkele song zitten. Verwijder je een scène, dan vervallen de secties die ernaar verwijzen (in alle songs) en **Ongedaan** brengt alles terug. De uitklapper **Scènenamen bewerken** is vervallen.
+  - **Meerdere songs op dezelfde scènes:** boven de songbalk een songkeuze met **Songnaam**, **Nieuwe song**, **Dupliceer song** (een remix begint als kopie) en **Verwijder song**. Een song is alleen de volgorde van secties; scènes en clips worden gedeeld. Een scène slepen op een songblok wijst hem toe aan die sectie, op de **+** in de songbalk maakt een nieuwe sectie achteraan. Scènes die in de gekozen song niet voorkomen zijn gedimd en de tooltip toont in welke songs ze wel zitten. Het veld bovenin heet nu **Project**.
+  - **Clips uitrekken over scènes:** sleep de greep onderaan een clip omlaag over lege scènes (of vul **Over scènes** in de clip-editor in). Scène k speelt dan vanaf k/aantal van de clip, bij het lanceren van scènes en in de song (met of zonder **Doorlopen**); een gedekte plek toont *deel 2/4* en een niet-lege plek stopt het uitrekken.
+  - **Slepen van clips zichtbaar in elke kleurstelling:** alle mogelijke doelen krijgen een stippellijn en het doel onder de muis een dikke rand met vulling, in de kleuren van de kleurstelling (voorheen alleen goed te zien in donker).
+  - De matrix scrolt binnen zijn kader met vaste spoorkoppen en een vaste scènekolom, zodat 24 scènes de pagina niet langer maken.
+  - Songs en presets van eerder werken ongewijzigd (`arrangement` blijft de actieve song). Gemeten: de 58 presets en het standaardproject geven dezelfde state en exact dezelfde gebeurtenissen en tijden als 1.25.0, in song- en sessiemodus. Niet beluisterd. Handleiding (NL en EN) en apparaatnotities bijgewerkt.
+
 ## 0.20.0 (2026-11-09)
 
 ### Toegevoegd

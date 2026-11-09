@@ -417,7 +417,7 @@ Je hoort het niet, dus werk met verhoudingen. Patchkamer heeft een [Mixer](../de
 | Drumritme met euclidische verdeling, polyritme | [Euclidean Rhythms](../devices/sequencers/EuclideanRhythms/AGENTS.md) | acht rijen, accent, ghost, fills |
 | Een complete song met verschillende lagen op een tijdlijn | [Pattern Playlist](../devices/sequencers/PatternPlaylist/AGENTS.md) | patronen en blokken, tot 32 sporen |
 | Noten in rijen (tracker), effectkolom, volgorde van patronen | [Pattern Tracker](../devices/sequencers/PatternTracker/AGENTS.md) | `ARP`, `RAT`, `DEL`, `PRB`, `CUT`, `CC`; `order` |
-| Clips, scènes en een arrangement | [Clip Arranger](../devices/sequencers/ClipArranger/AGENTS.md) | clips (patronen van 1 tot 64 maten), 8 scènes, `arrangement` van secties |
+| Clips, scènes en een arrangement | [Clip Arranger](../devices/sequencers/ClipArranger/AGENTS.md) | clips (patronen van 1 tot 64 maten), 1 tot 24 scènes (standaard 8), songs met een `arrangement` van secties |
 
 Veel klankbronnen (drums en enkele synths) hebben een **eigen stappenpatroon** en spelen mee met de klok; dan heb je geen sequencer nodig voor die laag. Controleer in de AGENTS.md van het apparaat of dat zo is.
 

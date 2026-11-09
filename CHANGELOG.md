@@ -4,6 +4,17 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.21.0 (2026-11-09)
+
+### Added
+- **Clip Arranger 1.26.0: managing scenes, multiple songs and stretching clips.**
+  - **Scenes:** the number is free (1 to 24, was fixed at 8). Per scene: rename (double-click the name works too), insert an empty scene, duplicate (all tracks) and delete; drag scenes to reorder them. **+ Scene** adds one at the end and **Delete empty scenes** removes empty scenes that are in no song. Deleting a scene removes the sections that point to it (in every song) and **Undo** brings everything back. The **Edit scene names** drop-down is gone.
+  - **Multiple songs on the same scenes:** above the song bar a song picker with **Song name**, **New song**, **Duplicate song** (a remix starts as a copy) and **Delete song**. A song is only the order of sections; scenes and clips are shared. Dragging a scene onto a song block assigns it to that section, onto the **+** in the song bar makes a new section at the end. Scenes that are not in the chosen song are dimmed and the tooltip shows which songs do use them. The field at the top is now called **Project**.
+  - **Stretching clips over scenes:** drag the handle at the bottom of a clip down over empty scenes (or fill in **Across scenes** in the clip editor). Scene k then plays from k/count of the clip, when launching scenes and in the song (with or without **Continue**); a covered cell shows *part 2/4* and a non-empty cell stops the stretch.
+  - **Dragging clips is visible in every colour scheme:** all possible targets get a dashed outline and the target under the mouse a thick outline with a fill, in the scheme's own colours (before, it was only clear in dark).
+  - The matrix scrolls inside its frame with fixed track headers and a fixed scene column, so 24 scenes do not make the page longer.
+  - Earlier songs and presets work unchanged (`arrangement` stays the active song). Measured: the 58 presets and the default project give the same state and exactly the same events and times as 1.25.0, in song and session mode. Not listened to. Manual (NL and EN) and device notes updated.
+
 ## 0.20.0 (2026-11-09)
 
 ### Added
