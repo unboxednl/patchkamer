@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.acidbaselines.compact",
+  "device": "nl.patchkamer.acidbaselines",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the knobs grouped per section in one frame and a tighter step grid, at roughly half the width and half the height of the standard card.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, less than half the standard width.",
+      "css": ".app{gap:4px;font-size:9px}\n.secs{display:flex!important;flex-wrap:wrap;gap:4px}\n.sec{padding:3px 4px 4px;gap:3px 0;grid-template-columns:repeat(auto-fill,minmax(39px,1fr));align-content:start;border-radius:3px;min-width:0}\n.sec h4{grid-column:1/-1;font-size:8px;letter-spacing:.14em;margin:0;padding:0 0 2px}\n.sec:nth-child(1){order:1;flex:8 1 320px}\n.sec:nth-child(2){order:4;flex:7 1 281px}\n.sec:nth-child(3){order:5;flex:5 1 203px}\n.sec:nth-child(4){order:2;flex:1 1 47px}\n.sec:nth-child(6){order:3;flex:1 1 47px}\n.sec:nth-child(5){order:6;flex:6 1 242px}\n.k,.k[style]{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center;align-items:start;gap:0;min-width:0}\n.k label{order:3;font-size:7.5px;letter-spacing:-.03em;text-align:center;max-width:100%;line-height:1.1;white-space:normal;overflow:visible;text-overflow:clip;text-transform:none}\n.k output{order:2;font-size:8px;text-align:center;line-height:1.1;color:var(--a-muted);white-space:nowrap}\n.k .kn{order:1;width:26px!important;height:26px!important;justify-self:center!important}\n.k .kn svg{width:100%;height:100%}\n.k select{order:1;width:100%;font-size:8px;padding:3px 0;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;border-radius:3px;cursor:pointer}\n.k:has(select) label{order:2}\n.seqbox{padding:3px 5px 4px;gap:2px 6px;border-radius:3px;display:flex;flex-wrap:wrap;align-items:center}\n.head{display:contents}\n.head h3{display:none}\n.head label{font-size:8px;order:0}\n.head .k,.head .k[style]{display:flex!important;flex-direction:row;gap:3px;align-items:center;order:0}\n.head .k label{order:0;font-size:8px}\n.head .k select{width:auto;padding:1px 3px}\n.bars{gap:2px;order:1;flex:1 1 auto}\n.bars button{font-size:9px;padding:0 4px;min-width:20px;height:16px;line-height:14px}\n.roll{overflow:hidden;order:2;flex:1 1 100%}\ntable{min-width:0;border-spacing:2px 1px;width:100%}\ntd{padding:0}\nth{width:30px;font-size:8px;line-height:1;padding:0 2px 0 0}\n.st{height:10px}\nselect.oc{height:11px;font-size:8px;padding:0;appearance:none;-webkit-appearance:none}\n.lib{display:contents}\n.lib button,.lib select{order:3;font-size:7.5px;padding:2px 2px;letter-spacing:0}\n.lib select{padding:1px 0;max-width:76px}"
+    }
+  ]
+}

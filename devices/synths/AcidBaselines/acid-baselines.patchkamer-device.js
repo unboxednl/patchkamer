@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie; rol param of select), zodat een skin ze als draaiknop,
+//   in groepen of anders ingedeeld kan tonen. Zonder skin ziet en klinkt alles hetzelfde; state, params() en poorten zijn ongewijzigd.
 // 1.12.0 — Uitleg naar about (menu Over Acid Baselines); de UI toont geen uitlegtekst meer.
 // 1.11.3 — Alle continue regelaars zijn stuurbaar: sub, ruis, osc 2, detune 2, ring, filter 2, F2 octaaf, tight, mix en crush deden al mee in de
 //   modulatie maar stonden niet in params(), dus Drift en andere modulatoren zagen ze niet. Nu staan ze er allemaal in (standaard uit).
@@ -181,7 +183,7 @@ const MODBY = Object.fromEntries(MODP.map(m => [m[0], m]));
 export default {
   id: 'nl.patchkamer.acidbaselines',
   name: 'Acid Baselines',
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'instrument',
   about: {
     nl: 'Een basslijn-synth: oscillator, tweevoudig lowpass-filter met resonantie, aparte normal/accent decay, soft attack, filter-FM, overdrive en een toonfilter. Eigen 16-staps sequencer met accent en slide, 1–16 sets, een lijnbibliotheek en een lijngenerator. Speelt ook noten van een externe sequencer.\n\nSlide = glijden vanuit de vorige stap met open gate; dezelfde noot met slide is een bindboog. Octaaf = per stap −2…+2 octaven, bovenop de knop Octaaf. Zet "intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,9 = accent, overlappende noten = slide).',
@@ -298,14 +300,16 @@ export default {
 
     // ---------- UI ----------
     const fmt = { fine: v => (v > 0 ? '+' : '') + Math.round(v) + ' ct', cut: v => Math.round(v) + ' Hz', res: v => (+v).toFixed(1), env: pct, ndec: v => (+v).toFixed(2) + ' s', adec: v => (+v).toFixed(2) + ' s', acc: pct, soft: v => Math.round(v * 1000) + ' ms', slide: v => (+v).toFixed(2) + ' s', fm: pct, drive: pct, muf: v => Math.round(v) + ' Hz', vca: v => (+v).toFixed(2) + ' s', lvl: pct, sub: pct, noise: pct, osc2: pct, det2: v => (v > 0 ? '+' : '') + Math.round(v) + ' ct', ring: pct, p2: pct, p2o: v => (v > 0 ? '+' : '') + (+v).toFixed(1) + ' oct', tight: v => (v > 0 ? Math.round(v) + ' Hz' : tx('uit')), mix: pct, crush: v => (v >= 16 ? tx('uit') : Math.round(v) + ' bit') };
+    let grp = '';
+    const adopt = (el, key, role, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id: key, role, group: grp, label }); } catch (e) { /* oud contract */ } } };
     function knob(parent, key, label, [mn, mx, st]) {
       const w = document.createElement('div'); w.className = 'k'; const l = document.createElement('label'), i = document.createElement('input'), o = document.createElement('output');
-      const id = 'k-' + key; l.textContent = tx(label); l.htmlFor = id; i.id = id; i.type = 'range'; i.min = mn; i.max = mx; i.step = st; i.dataset.pkDefault = String(DEFAULTS[key]);
+      const id = 'k-' + key; l.textContent = tx(label); l.htmlFor = id; i.id = id; i.type = 'range'; i.min = mn; i.max = mx; i.step = st; i.dataset.pkDefault = String(DEFAULTS[key]); adopt(i, key, 'param', tx(label));
       i.oninput = () => { P[key] = +i.value; o.textContent = fmt[key](P[key]); apply(); };
       w.append(l, i, o); parent.appendChild(w); refreshers.push(() => { i.value = P[key]; o.textContent = fmt[key](P[key]); });
     }
     function choose(parent, key, label, opts, num, after) {
-      const w = document.createElement('div'); w.className = 'k'; w.style.gridTemplateColumns = '82px minmax(0,1fr)'; const l = document.createElement('label'), s = document.createElement('select'); const id = 's-' + key; l.textContent = tx(label); l.htmlFor = id; s.id = id;
+      const w = document.createElement('div'); w.className = 'k'; w.style.gridTemplateColumns = '82px minmax(0,1fr)'; const l = document.createElement('label'), s = document.createElement('select'); const id = 's-' + key; l.textContent = tx(label); l.htmlFor = id; s.id = id; adopt(s, key, 'select', tx(label));
       opts.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = tx(t); s.appendChild(o); });
       s.onchange = () => { P[key] = num ? +s.value : s.value; apply(); after && after(); }; w.append(l, s); parent.appendChild(w); refreshers.push(() => { s.value = P[key]; });
     }
@@ -328,7 +332,7 @@ export default {
         const wrap = document.createElement('div'); el.appendChild(wrap); root = wrap.attachShadow({ mode: 'open' }); root.innerHTML = `<style>${CSS}</style>`;
         const app = document.createElement('div'); app.className = 'app'; root.appendChild(app);
         const secs = document.createElement('div'); secs.className = 'secs'; app.appendChild(secs);
-        const sec = t => { const d = document.createElement('div'); d.className = 'sec'; const h = document.createElement('h4'); h.textContent = tx(t); d.appendChild(h); secs.appendChild(d); return d; };
+        const sec = t => { grp = t.toLowerCase(); const d = document.createElement('div'); d.className = 'sec'; const h = document.createElement('h4'); h.textContent = tx(t); d.appendChild(h); secs.appendChild(d); return d; };
         let kb = sec('Oscillator');
         choose(kb, 'wave', 'Golfvorm', [['sawtooth', 'Zaagtand'], ['square', 'Blok']]);
         choose(kb, 'oct', 'Octaaf', [[-1, '−1'], [0, '0'], [1, '+1']], true);
@@ -350,7 +354,7 @@ export default {
         const head = document.createElement('div'); head.className = 'head'; sb.appendChild(head);
         const h3 = document.createElement('h3'); h3.textContent = 'Sequencer'; head.appendChild(h3);
         const tl = document.createElement('label'), tc = document.createElement('input'); tc.type = 'checkbox'; tc.onchange = () => { P.seqOn = tc.checked; }; tl.append(tc, document.createTextNode(tx('intern aan'))); head.appendChild(tl); refreshers.push(() => { tc.checked = !!P.seqOn; });
-        const setsWrap = document.createElement('div'); setsWrap.style.minWidth = '170px'; head.appendChild(setsWrap);
+        grp = 'seq'; const setsWrap = document.createElement('div'); setsWrap.style.minWidth = '170px'; head.appendChild(setsWrap);
         choose(setsWrap, 'bars', 'Sets', [[1, '1 × 16'], [2, '2 × 16'], [4, '4 × 16'], [8, '8 × 16'], [16, '16 × 16']], true, paint);
         const bars = document.createElement('div'); bars.className = 'bars'; sb.appendChild(bars);
         for (let b = 0; b < MAXBARS; b++) { const bt = document.createElement('button'); bt.textContent = b + 1; bt.onclick = () => { editBar = b; paint(); }; bars.appendChild(bt); barBtns.push(bt); }

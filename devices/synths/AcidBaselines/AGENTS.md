@@ -78,6 +78,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Geef elke tune een eigen `grid` met een lijn die bij de klank past. Is de lijn niet het punt, laat `grid` dan weg: het apparaat gebruikt dan de twee startlijnen.
 
+## Skins
+
+Alle knoppen en keuzelijsten zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cut`, `res`, `wave`, `ftype`, enzovoort), `role` is `param` (schuiven) of `select` (keuzelijsten) en `group` is `oscillator`, `filter`, `envelope`, `slide`, `distortion`, `output` of `seq` (Sets). De stapknoppen en de octaafkeuzes per stap hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.acidbaselines/` (draaiknoppen met de naam eronder, per sectie één kader, strak stappenraster, ongeveer 480 x 585 punten tegenover 1102 x 1059). Wijzig je de opbouw van de sectieregels (`.secs`, `.sec`, `.k`, `.seqbox`, `.roll`), controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/AcidBaselines/acid-baselines.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

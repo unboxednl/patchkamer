@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.3 (2026-11-10)
+
+### Added
+- **Compact skin for Acid Baselines, for small screens (device 1.13.0).** Rotary knobs instead of sliders, the name under each knob, the knobs grouped per section in one frame and a compact step grid without scrollbars: the card is about 480 x 585 points instead of 1102 x 1059. Pick it on the card under **Skin**. The device now registers its knobs and selects for skins (id is the state key, group per section); without a skin everything looks and sounds the same and the state, params() and ports are unchanged.
+
 ## 0.30.2 (2026-11-10)
 
 ### Changed

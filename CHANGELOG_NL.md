@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.3 (2026-11-10)
+
+### Toegevoegd
+- **Skin Compact voor Acid Baselines, voor kleine schermen (apparaat 1.13.0).** Draaiknoppen in plaats van schuiven, de naam onder elke knop, de knoppen per sectie in één kader en een compact stappenraster zonder scrollbalken: de kaart is ongeveer 480 x 585 punten in plaats van 1102 x 1059. Kies hem op de kaart bij **Skin**. Het apparaat meldt zijn knoppen en keuzelijsten nu aan voor skins (id is de state-sleutel, groep per sectie); zonder skin ziet en klinkt alles hetzelfde en state, params() en poorten zijn ongewijzigd.
+
 ## 0.30.2 (2026-11-10)
 
 ### Gewijzigd
