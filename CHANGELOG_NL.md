@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.29.1 (2026-11-10)
+
+### Opgelost
+- **Pad Sampler 1.5.1: de bankencatalogus scrolt.** In de tab Banken staan de catalogus (en de Freesound-resultaten) nu in een eigen schuifgebied met een schuifbalk, zodat het apparaat overzichtelijk blijft hoeveel banken de catalogus ook telt. Verder niets gewijzigd. Niet beluisterd.
+
 ## 0.29.0 (2026-11-09)
 
 ### Toegevoegd

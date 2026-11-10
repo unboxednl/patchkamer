@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.29.1 (2026-11-10)
+
+### Fixed
+- **Pad Sampler 1.5.1: the bank catalogue scrolls.** In the Banks tab the catalogue (and the Freesound results) now sit in their own scroll area with a scroll bar, so the device stays easy to oversee however many banks the catalogue holds. Nothing else changed. Not listened to.
+
 ## 0.29.0 (2026-11-09)
 
 ### Added

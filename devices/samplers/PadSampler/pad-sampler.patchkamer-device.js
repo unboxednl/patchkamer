@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.5.1 — Tab Banken: de catalogus en de Freesound-resultaten staan in een eigen schuifgebied (schuifbalk), zodat het apparaat overzichtelijk blijft als er veel banken zijn. Verder ongewijzigd.
 // 1.5.0 — Pad Sampler, fase 2b, Patchkamer contract v1.31 (gebouwd voor v1.26). Nieuw: Time-stretch (tempo zonder toonhoogte en toonhoogte zonder tempo; WSOLA met een ritmische en een tonale stand, in een Blob-worker met
 //          annuleren en voortgang, anders in brokken op de hoofdthread), SoundFonts laden (SF2 en SF3: keuze van preset of instrument, slagwerkpresets naar drum-pads, stereopaar, lus, envelope, filter, toonhoogte, balans,
 //          rapport van het genegeerde) en XPM-programma’s laden (drum en keygroup), alles in de tab Banken (lokaal). Geen nieuwe state-velden: oude states laden ongewijzigd en setState(getState()) blijft exact.
@@ -349,6 +350,8 @@ canvas.wave{display:block;width:100%;height:110px;background:var(--well);border:
 .banks .bgrp{display:flex;flex-direction:column;gap:6px;padding:8px;border:1px solid var(--line);border-radius:8px}
 .banks .bgrp h4{margin:0}
 .banks .bgrp .txt{flex:none;width:100%}
+.banks .catlist{display:flex;flex-direction:column;gap:10px;max-height:min(46vh,420px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-gutter:stable}
+.banks .fslist{max-height:min(30vh,260px);overflow-y:auto;overscroll-behavior:contain}
 .banks .bcard{display:flex;flex-direction:column;gap:6px;padding:8px 10px;border:1px solid var(--line);border-left-width:6px;border-radius:8px}
 .banks .bcard.green{border-left-color:#2e9e5b}.banks .bcard.yellow{border-left-color:#d9a400}
 .banks .bhead{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between}
@@ -1400,7 +1403,7 @@ function parseXpm(text) {
 export default {
   id: 'nl.patchkamer.padsampler',
   name: 'Pad Sampler',
-  version: '1.5.0',
+  version: '1.5.1',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 700, minWidth: 340 },
@@ -3130,9 +3133,10 @@ export default {
         // catalogus
         H('h4', null, P, B.catalog); H('p', 'muted', P, B.catHelp);
         const cards = [];
+        const catBox = H('div', 'catlist', P); catBox.setAttribute('data-bk', 'catlist'); catBox.tabIndex = 0; catBox.setAttribute('role', 'region'); catBox.setAttribute('aria-label', B.catalog);   // schuifbalk: de catalogus kan willekeurig lang worden
         for (const b of CATALOG) {
           const nm = b.name[lang] || b.name.en;
-          const c = H('div', 'bcard ' + b.status, P); c.setAttribute('data-bank', b.id); c.setAttribute('role', 'group'); c.setAttribute('aria-label', nm);
+          const c = H('div', 'bcard ' + b.status, catBox); c.setAttribute('data-bank', b.id); c.setAttribute('role', 'group'); c.setAttribute('aria-label', nm);
           const hd = H('div', 'bhead', c); H('strong', null, hd, nm);
           H('span', 'chip ' + b.status, hd, (b.status === 'green' ? B.green : B.yellow) + ' · ' + b.license.spdx).setAttribute('data-bk', 'chip');
           H('p', null, c, b.desc[lang] || b.desc.en);
