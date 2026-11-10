@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.4 (2026-11-10)
+
+### Added
+- **Pad Sampler 1.6.0: playhead in the waveform.** In the Layers and Zones tabs a light line now runs along the waveform while the sample sounds, one per sounding voice that plays the sample shown. It follows the loop, reversed playback and pitch. Measured in Chromium: the line moves during a hit and disappears at the end. Not listened to.
+- **Pad Sampler 1.6.0: four more free banks in the catalogue.** A lo-fi 1970s-style drum kit (Gogodze Phu Vol II, front mic), a plucked double bass (Meatbass), a bowed cello and a cut-down concert grand (Splendid Grand Piano). The first three are CC0 (LICENSE read at the pinned commit); the piano is marked yellow: the repository has no LICENSE file and only the readme says public domain, so you confirm it before loading. Not listened to.
+
 ## 0.30.3 (2026-11-10)
 
 ### Added

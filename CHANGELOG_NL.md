@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.4 (2026-11-10)
+
+### Toegevoegd
+- **Pad Sampler 1.6.0: afspeelkop in de golfvorm.** In de tabs Lagen en Zones loopt nu een lichte lijn door de golfvorm zolang het sample klinkt, één per klinkende stem die het getoonde sample speelt. Hij volgt de lus, omgekeerd afspelen en toonhoogte. Gemeten in Chromium: de lijn beweegt tijdens een slag en verdwijnt aan het eind. Niet beluisterd.
+- **Pad Sampler 1.6.0: vier gratis banken erbij in de catalogus.** Een lo-fi drumstel in jaren-70-stijl (Gogodze Phu Vol II, voor-microfoon), een getokkelde contrabas (Meatbass), een gestreken cello en een uitgeklede concertvleugel (Splendid Grand Piano). De eerste drie zijn CC0 (LICENSE gelezen op de vastgepinde commit); de piano staat op geel: de repo heeft geen LICENSE-bestand en alleen de readme zegt publiek domein, dus je bevestigt dat voor het laden. Niet beluisterd.
+
 ## 0.30.3 (2026-11-10)
 
 ### Toegevoegd
