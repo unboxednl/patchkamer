@@ -10,6 +10,12 @@ let _freshUntil=0; const rawBust=u=>Date.now()<_freshUntil&&/^https:\/\/raw\.git
 async function fetchText(url){
   try{ const r=await fetch(rawBust(url),{cache:'no-cache'}); if(!r.ok) throw new Error('HTTP '+r.status); const t=await r.text(); PK.IDB.set('code:'+url,{t:Date.now(),code:t}); return {text:t,cached:false}; }
   catch(e){ const c=await PK.IDB.get('code:'+url); if(c&&c.code) return {text:c.code,cached:true}; throw new Error('kon '+url+PK.pkt('m.niet_ophalen')+e.message+PK.NETMSG); } } PK.fetchText=fetchText;
+// parallel ophalen: start alle taken met een vast maximum tegelijk en geeft de beloften in dezelfde volgorde terug; de verwerking blijft in volgorde, dus de bibliotheek ziet er hetzelfde uit
+const LOADPAR=8;
+function ahead(items,fn,limit){ limit=limit||LOADPAR; let run=0, k=0; const out=items.map(()=>null), starts=[];
+  const pump=()=>{ while(run<limit&&k<items.length){ const i=k++; run++; starts[i](); } };
+  items.forEach((it,i)=>{ out[i]=new Promise((res,rej)=>{ starts[i]=()=>{ let p; try{ p=Promise.resolve(fn(it,i)); }catch(e){ p=Promise.reject(e); } p.then(res,rej).finally(()=>{ run--; pump(); }); }; }); out[i].catch(()=>{}); });
+  pump(); return out; } PK.ahead=ahead;
 const TREEMEMO=new Map();   // één GitHub-aanroep per repo en boom, ook als apparaten, presets en tunes als aparte bronnen laden
 async function fetchJSON(url){ const r=await fetch(url,{headers:{Accept:'application/vnd.github+json'},cache:Date.now()<_freshUntil?'no-cache':'default'}); if(!r.ok) throw new Error((r.status===403?PK.pkt('m.github_limiet_bereikt_of_geen'):'HTTP '+r.status)+PK.pkt('m.bij')+url); return r.json(); } PK.fetchJSON=fetchJSON;
 const looksLikeDevice=t=>/export\s+default\b/.test(t)&&/\bcreate\s*\(/.test(t); PK.looksLikeDevice=looksLikeDevice;
@@ -65,7 +71,7 @@ async function loadSource(src,opts={}){
       ppaths.forEach(w=>prs.push({path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
       { const bz=new Map(blobs.map(x=>[x.path,x.size])); skpaths.forEach(p=>skl.push({path:p.slice(base.length),size:bz.get(p),load:async()=>(await fetchText(rawOf(p))).text}));
         if(!src.only||src.only==='skins') blobs.forEach(x=>{ const k=skIconOf(x.path,x.path.slice(base.length)); if(k&&(x.size||0)<=PK.ICONMAX) ski.push({...k,get:async()=>{ const r=await fetch(rawBust(rawOf(x.path)),{cache:'no-cache'}); return r.ok?r.blob():null; }}); }); }
-      let pdone=0; for(const pth of paths){ if(PK.loadNote) PK.loadNote(pdone++,paths.length,pth.split('/').pop(),src); try{ const r=await fetchText(rawOf(pth)); if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
+      let pdone=0; const pre=ahead(paths,p=>fetchText(rawOf(p))); for(const [pi,pth] of paths.entries()){ if(PK.loadNote) PK.loadNote(pdone++,paths.length,pth.split('/').pop(),src); try{ const r=await pre[pi]; if(r.cached) cached++; await one(r.text,{sid:src.sid,kind:'github',url:rawOf(pth),path:pth.slice(base.length),label:src.label}); }catch(e){ errs.push(e.message); } }
       wpaths.forEach(w=>wss.push({name:w.name,path:w.path.slice(base.length),load:async()=>JSON.parse((await fetchText(rawOf(w.path))).text)}));
     } else if(src.kind==='url'){
       if(/\.json(\?|$)/i.test(src.url)||!/\.m?js(\?|$)/i.test(src.url)){
@@ -74,7 +80,7 @@ async function loadSource(src,opts={}){
         { const seenDev=new Set(); (m.skins||[]).map(prEntry).forEach(w=>{ const u=new URL(w.path,murl); if(u.origin!==new URL(murl).origin){ errs.push(w.path+PK.pkt('m.sk_andere_bron')); return; }
             skl.push({path:w.path,load:async()=>(await fetchText(u.href)).text}); const sg=w.path.split('/'), dev=sg[sg.length-2];
             if(dev&&/^[A-Za-z0-9._-]+$/.test(dev)&&!seenDev.has(dev)){ seenDev.add(dev); for(const ext of Object.keys(ICONTYPES)) ski.push({dev,ext,get:async()=>{ const r2=await fetch(new URL('icon.'+ext,u).href,{cache:'no-cache'}); return r2.ok?r2.blob():null; }}); } }); }
-        for(const x of (m.modules||[])){ const u=new URL(x,murl).href; try{ const r2=await fetchText(u); if(r2.cached) cached++; await one(r2.text,{sid:src.sid,kind:'url',url:u,path:String(x),label:src.label},sameOrigin(u)?u:null); }catch(e){ errs.push(e.message); } }
+        const mpre=ahead((m.modules||[]).map(x=>new URL(x,murl).href),u=>fetchText(u)); for(const [mi,x] of (m.modules||[]).entries()){ const u=new URL(x,murl).href; try{ const r2=await mpre[mi]; if(r2.cached) cached++; await one(r2.text,{sid:src.sid,kind:'url',url:u,path:String(x),label:src.label},sameOrigin(u)?u:null); }catch(e){ errs.push(e.message); } }
         (m.workspaces||[]).map(wsEntry).forEach(w=>{ const u=new URL(w.path,murl).href; wss.push({name:w.name,path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
         [...(m.presets||[]),...(m.tunes||[]),...(m.samples||[])].map(prEntry).forEach(w=>{ const u=new URL(w.path,murl).href; prs.push({path:w.path,load:async()=>JSON.parse((await fetchText(u)).text)}); });
         if(typeof m.library==='string'){ const u=new URL(m.library,murl).href; layout=async()=>JSON.parse((await fetchText(u)).text); } }
@@ -91,7 +97,7 @@ async function loadSource(src,opts={}){
       { const lg=byPath.get(PK.LAYOUT_FILE); if(lg) layout=async()=>JSON.parse(await lg()); }
       if(src.only){ if(src.only!=='devices') mods=[]; wps=[]; pps=pps.filter(w=>src.only==='tunes'?/\.patchkamer-tunes\.json$/i.test(w.path):src.only==='presets'?/\.patchkamer-presets\.json$/i.test(w.path):src.only==='samples'?/\.patchkamer-samples\.json$/i.test(w.path):false); }
       pps.forEach(w=>{ const get=byPath.get(w.path); if(get) prs.push({path:w.path,load:async()=>JSON.parse(await get())}); });
-      for(const pth of mods){ const get=byPath.get(pth); if(!get){ errs.push(pth+PK.pkt('m.staat_in_patchkamer_json_maar')); continue; } try{ await one(await get(),{sid:src.sid,kind:'folder',path:pth,label:src.label}); }catch(e){ errs.push(pth+': '+e.message); } }
+      const fpre=ahead(mods,pth=>byPath.has(pth)?byPath.get(pth)():null); for(const [fi,pth] of mods.entries()){ const get=byPath.get(pth); if(!get){ errs.push(pth+PK.pkt('m.staat_in_patchkamer_json_maar')); continue; } try{ await one(await fpre[fi],{sid:src.sid,kind:'folder',path:pth,label:src.label}); }catch(e){ errs.push(pth+': '+e.message); } }
       wps.forEach(w=>{ const get=byPath.get(w.path); if(get) wss.push({name:w.name,path:w.path,load:async()=>JSON.parse(await get())}); });
     }
     LIBWS.set(src.sid,wss);

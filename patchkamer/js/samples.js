@@ -19,7 +19,7 @@ const countOf=l=>{ let c=0; walk(l.tree,()=>c++); return c; };
 const user=()=>PK.SAM.libs.filter(l=>!l.ro);
 function persist(){ clearTimeout(persist.t); persist.t=setTimeout(()=>{ try{ PK.IDB.set('samples:user',user().map(l=>({lid:l.lid,name:l.name,author:l.author,license:l.license,description:l.description,tags:l.tags,tree:l.tree}))); }catch(e){} },0); }
 async function fromSource(src,list,errs){ PK.SAM.libs=PK.SAM.libs.filter(l=>!(l.ro&&l.src&&l.src.sid===src.sid));
-  let pdone=0; for(const w of list){ if(PK.loadNote) PK.loadNote(pdone++,list.length,String(w.path).split('/').pop(),src); try{ const j=await w.load(), n=normalize(j,PK.wsNameOf(w.path).replace(/\.patchkamer-samples$/i,'')); PK.SAM.libs.push({lid:'b:'+src.sid+':'+w.path,...n,ro:true,src:{sid:src.sid,label:src.label,path:w.path}}); }
+  let pdone=0; const pre=PK.ahead(list,w=>w.load()); for(const [pi,w] of list.entries()){ if(PK.loadNote) PK.loadNote(pdone++,list.length,String(w.path).split('/').pop(),src); try{ const j=await pre[pi], n=normalize(j,PK.wsNameOf(w.path).replace(/\.patchkamer-samples$/i,'')); PK.SAM.libs.push({lid:'b:'+src.sid+':'+w.path,...n,ro:true,src:{sid:src.sid,label:src.label,path:w.path}}); }
     catch(e){ errs.push(w.path+': '+e.message); } }
   if(PK.libTab&&PK.libTab()==='samples') paint(); } PK.samplesFromSource=fromSource;
 async function importFiles(files,quiet){ let n=0; const errs=[];

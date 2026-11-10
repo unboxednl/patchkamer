@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.1 (2026-11-10)
+
+### Changed
+- **Faster loading of a library.** The devices, presets, tunes, sample packs and skins of a source are now fetched in parallel (at most 8 at a time) instead of one after the other. They are still processed in the original order, so the library looks exactly the same. Measured with 40 ms delay per file on 111 devices and 98 preset libraries: 13.2 s before, 4.5 s after (same 111 devices, same order, no errors). With a real network the gain depends on the connection. Loading the devices of a workspace you open is unchanged.
+
 ## 0.30.0 (2026-11-10)
 
 ### Added

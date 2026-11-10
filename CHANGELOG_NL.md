@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.1 (2026-11-10)
+
+### Gewijzigd
+- **Sneller laden van een bibliotheek.** De apparaten, presets, tunes, samplepacks en skins van een bron worden nu parallel opgehaald (maximaal 8 tegelijk) in plaats van na elkaar. De verwerking blijft in de oorspronkelijke volgorde, dus de bibliotheek ziet er precies hetzelfde uit. Gemeten met 40 ms vertraging per bestand bij 111 apparaten en 98 presetbibliotheken: 13,2 s ervoor, 4,5 s erna (dezelfde 111 apparaten, dezelfde volgorde, geen fouten). Met een echt netwerk hangt de winst af van de verbinding. Het laden van de apparaten van een werkruimte die je opent is ongewijzigd.
+
 ## 0.30.0 (2026-11-10)
 
 ### Toegevoegd
