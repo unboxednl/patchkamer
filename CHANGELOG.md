@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.2 (2026-11-10)
+
+### Changed
+- **Screenshots in the manual refreshed (NL and EN).** The 37 host screens and the device card images per language were made again so they show the current version, for example the ÷ 2 and × 2 buttons in Clip Arranger. New: an image of Chord Buddy.
+
 ## 0.30.1 (2026-11-10)
 
 ### Changed

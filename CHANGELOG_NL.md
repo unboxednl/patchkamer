@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.2 (2026-11-10)
+
+### Gewijzigd
+- **Schermafbeeldingen van de handleiding ververst (NL en EN).** De 37 hostschermen en de kaartafbeeldingen van de apparaten per taal zijn opnieuw gemaakt, zodat ze de huidige versie tonen, bijvoorbeeld de knoppen ÷ 2 en × 2 in Clip Arranger. Nieuw: een afbeelding van Chord Buddy.
+
 ## 0.30.1 (2026-11-10)
 
 ### Gewijzigd
