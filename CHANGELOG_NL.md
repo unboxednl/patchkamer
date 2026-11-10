@@ -4,6 +4,14 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.0 (2026-11-10)
+
+### Toegevoegd
+- **Clip Arranger 1.30.0: cliplengte verdubbelen of halveren.** In de clip-editor staan naast CLIPLENGTE twee knoppen, ÷ 2 en × 2. Alle noten (positie en lengte), CC-punten en instellingspunten worden gelijkmatig over de nieuwe lengte herverdeeld. Bij hetzelfde tempo klinkt een verdubbeld patroon half zo snel; bij het dubbele tempo klinkt het weer als eerst. Zo kun je een song van 68 naar 138 BPM versnellen zonder dat de clips anders klinken. Verdubbelen kan tot 64 maten, halveren alleen bij een even aantal maten (4 wordt 2, 3 niet). Tijden die bij het halveren niet op 1/64 vallen worden afgerond; de knop meldt dat in zijn tooltip. Ongedaan maken zet het terug.
+
+### Opgelost
+- **Clip Arranger 1.29.1: de scènes in de matrix volgen de song als je een sectie verschuift.** Een sectie in de songbalk verslepen of met ← → verplaatsen liet de rijen van de matrix op de oude volgorde staan, zodat de volgorde van de matrix niet meer bij de song paste. Nu nemen de scènes van de song de plekken in die ze al hadden, in de volgorde van de song. Andere rijen blijven staan; namen en clips gaan met hun scène mee en alle songs verwijzen naar de nieuwe rij. Een lopende song speelt door zonder opnieuw te beginnen. Ongedaan maken zet alles terug.
+
 ## 0.29.1 (2026-11-10)
 
 ### Opgelost

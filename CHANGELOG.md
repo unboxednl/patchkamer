@@ -4,6 +4,14 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.0 (2026-11-10)
+
+### Added
+- **Clip Arranger 1.30.0: double or halve the clip length.** In the clip editor two buttons, ÷ 2 and × 2, sit next to CLIP LENGTH. All notes (position and length), CC points and setting points are spread evenly over the new length. At the same tempo a doubled pattern sounds half as fast; at double the tempo it sounds as before. That way you can speed a song up from 68 to 138 BPM without the clips sounding different. Doubling works up to 64 bars, halving only with an even number of bars (4 becomes 2, 3 does not). Times that do not fall on 1/64 when halving are rounded; the button says so in its tooltip. Undo puts it back.
+
+### Fixed
+- **Clip Arranger 1.29.1: the scenes in the matrix follow the song when you move a section.** Dragging a section in the song bar or moving it with ← → left the matrix rows in the old order, so the matrix order no longer matched the song. Now the scenes of the song take the slots they already had, in song order. Other rows stay where they are; names and clips move with their scene and all songs point to the new row. A running song keeps playing without restarting. Undo puts everything back.
+
 ## 0.29.1 (2026-11-10)
 
 ### Fixed
