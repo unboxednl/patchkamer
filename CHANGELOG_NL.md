@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.5 (2026-11-10)
+
+### Toegevoegd
+- **Pad Sampler 1.6.1: drie banken erbij in de catalogus, met verplichte vermelding (CC BY).** Muldjord Kit en DRS Kit (rock/metal- en veelzijdige drumstellen, één close-microfoon per onderdeel, 4 velocity-lagen) en een uitgekleede Salamander Grand Piano (één dynamiek, om de zes halve tonen een sample). De vermelding (maker, licentie, wijzigingen) staat altijd bij de bank en komt in de credits van de state. Er wordt niets in deze repository gekopieerd: de banken verwijzen alleen naar de bron (een vastgepinde versie op jsDelivr) en laden pas als je op Laden drukt. De catalogus heeft ook een lijst **Filter op licentie** (alle, vermelding vereist, zonder vermelding of één licentie zoals CC0) met een telling. Niet beluisterd.
+
 ## 0.30.4 (2026-11-10)
 
 ### Toegevoegd

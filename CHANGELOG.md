@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.5 (2026-11-10)
+
+### Added
+- **Pad Sampler 1.6.1: three more banks in the catalogue, with required credit (CC BY).** Muldjord Kit and DRS Kit (rock/metal and versatile drum kits, one close microphone per piece, 4 velocity layers) and a cut-down Salamander Grand Piano (one dynamic, one sample every six semitones). The credit (author, licence, changes) is always shown on the bank and is added to the credits of the state. Nothing is copied into this repository: the banks only refer to the source (a pinned version on jsDelivr) and load after you press Load. The catalogue also has a **Filter by licence** list (all, credit required, no credit needed, or one licence such as CC0) with a count. Not listened to.
+
 ## 0.30.4 (2026-11-10)
 
 ### Added
