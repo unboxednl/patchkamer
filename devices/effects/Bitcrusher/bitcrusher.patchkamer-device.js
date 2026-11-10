@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Met een skin (compacte indeling in panelen, `.pk-pnls` naast het scherm) is het golfvormscherm lager (56 px i.p.v. 84); zonder skin, geluid, state, ids en poorten ongewijzigd.
 // 1.0.0 — Patchkamer contract v1.28. Bitcrusher: bitdiepte (1 tot 16, ook fijn), sample-rate-reductie (vasthouden of lineair, met jitter),
 //         vier kwantiseerstijlen (mid-tread, mid-rise, afkappen, µ-law), dither (RPDF, TPDF, gevormd), ruis, een anti-alias-voorfilter dat je aan of uit zet
 //         (aliasing is dan een keuze), hoog- en laagdoorlaat na het crushen, mix en niveau. AudioWorklet, tweekanaals met één gedeelde samplekloktik.
@@ -125,7 +126,7 @@ function quantModel(x, L, st) {
 }
 
 export default {
-  id: 'nl.patchkamer.bitcrusher', name: 'Bitcrusher', version: '1.0.0', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.bitcrusher', name: 'Bitcrusher', version: '1.1.0', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ui: { width: 340, minWidth: 300 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },
@@ -178,7 +179,7 @@ export default {
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
         el.style.gridTemplateColumns = 'minmax(0, 1fr)';
-        const box = document.createElement('div'); box.style.cssText = 'height:84px;position:relative;min-width:0;overflow:hidden;border-radius:5px;background:var(--well,#111)';
+        const box = document.createElement('div'); box.className = 'bc-scr'; const sty = document.createElement('style'); sty.textContent = '.bc-scr:has(~ .pk-pnls){height:56px !important}'; el.appendChild(sty); box.style.cssText = 'height:84px;position:relative;min-width:0;overflow:hidden;border-radius:5px;background:var(--well,#111)';
         canvas = document.createElement('canvas'); canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%'; canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', T.screen); box.appendChild(canvas); el.appendChild(box); pen = canvas.getContext('2d');
         if (typeof ResizeObserver === 'function') { ro = new ResizeObserver(() => { size = [Math.max(10, box.clientWidth), Math.max(10, box.clientHeight)]; }); ro.observe(box); } size = [Math.max(10, box.clientWidth || 300), 84];
         ui.style = host.ui.select(el, T.style, STYLES.map((id, i) => [id, T.styles[i]]), S.style, v => { if (STYLES.includes(v)) { S.style = v; post(); } }, { id: 'style', group: 'crush' });

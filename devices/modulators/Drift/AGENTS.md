@@ -80,6 +80,10 @@ Elke preset heeft de volledige state van `getPreset()`, binnen het bereik, zonde
 - Koppelingen werken pas als het doelapparaat is aangesloten: de lijst met parameters komt van dat apparaat.
 - Elke uitgestuurde waarde is eindig en ligt tussen −1 en +1 (een niet-eindige waarde wordt 0). De beweging in het normale gebied is bit-identiek aan de oude versie (met een nepdoel en een nepklok vergeleken).
 
+## Skins
+
+De regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`amount`, `speed`, `coh`, `group`, `follow` en `eigen`), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `top` (Drift, Tempo van drift, Samenhang, Groep) en `link` (Volgen, Eigen). De knoppen Bevries en Nieuwe wind, de bereikschuiven per parameter en de vinkjes van de toewijzing hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.drift/` (draaiknoppen met naam en waarde eronder, weinig kaders, geen uitlegtekst, kaartbreedte 480 px); de CSS erin werkt in de shadow root van het apparaat. De `id`'s, rollen en groepen horen bij de vaste interface: hernoem ze niet (een skin die erop mikt valt dan stil terug).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/modulators/Drift/drift.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

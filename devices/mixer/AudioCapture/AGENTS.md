@@ -44,6 +44,10 @@ De gekozen bron staat niet in de state: een song kan nooit een bron aanzetten.
 
 De validator draait zonder bron. Test in Chromium door `navigator.mediaDevices.getDisplayMedia` te vervangen door een nepbron (een `OscillatorNode` via `createMediaStreamDestination` plus een canvas-beeldspoor): start, status, meters, einde van het delen, geweigerd, bron zonder geluid. Meld eerlijk dat een echte deelkeuze, systeemgeluid op Windows, de app en de vertraging niet zijn getest.
 
+## Skins
+
+De knop (`gain` of `level`) is al via `host.ui.knob` met `id`, `role` en `group` aangemeld; de keuzelijsten en vinkjes zijn eigen elementen in de shadow root en worden alleen met CSS aangepast. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.audiocapture/` (draaiknop in plaats van schuif; Start/Dempen, Weergave, Hoogdoorlaat, Polariteit en de L/R-meters staan in compacte rijen, de versterking is een draaiknop met de naam eronder en de twee uitlegregels (rondzingen, platform) zijn verborgen; de statusregel blijft; ongeveer 440 x 211 tegenover 440 x 518 punten). De CSS leunt op de volgorde van de kinderen van `.app` (`.row`, `.gain`, `.meter`, `.status`): wijzig je die volgorde, controleer dan die skin.
+
 ## Presets
 
 Het pack `../../../presets/audio-capture.patchkamer-presets.json` (formatVersion 2, CC0-1.0, namen Engels) heeft 12 presets in drie mappen: Stereo, Mono en Cleanup. Een preset kiest nooit een bron.

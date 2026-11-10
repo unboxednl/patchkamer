@@ -43,6 +43,10 @@ Wat Phaser met een state doet (getest):
 
 Wat Phaser met zijn ingang en zijn eigen terugkoppeling doet (getest): de terugkoppellus heeft geheugen. `NaN` of `±Infinity` blijft er voorgoed in rondgaan, en een lus die wegloopt (veel terugkoppeling, lage middenfrequentie, volle diepte) kan pieken van tienduizenden geven. Een bewaker kijkt in een live context om de 50 ms naar de uitvoer van de laatste trap van elke kant en bouwt de ketens opnieuw op zodra er iets niet-eindigs of groter dan ±200 staat. Het geluid komt dan binnen enkele tientallen milliseconden terug. In een offline render staat de bewaker uit. Normaal geluid is bit-identiek aan de vorige versie. Een `NaN` of `Infinity` op de ingang zelf komt, zolang hij duurt, ook op de uitgang (de droge route is een doorgeefroute).
 
+## Skins
+
+Phaser gebruikt `host.ui.knob` en `host.ui.select` met `id` (state-sleutel: `stages`, `sync`, `rate`, `depth`, `center`, `fb`, `stereo`, `mix`) en `group` (`filter`, `mod`, `feedback`, `stereo`, `mix`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.phaser/` (`design.layout`: alle regelaars in één kader van vier kolommen met draaiknoppen en de naam eronder; 300 x 253 punten tegenover 300 x 305). Phaser is al klein, de winst is bescheiden. De devicecode is er niet voor aangepast.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Phaser/phaser.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

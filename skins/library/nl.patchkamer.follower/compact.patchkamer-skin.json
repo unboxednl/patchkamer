@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.follower.compact",
+  "device": "nl.patchkamer.follower",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label and value underneath, grouped in few frames, no explanatory text, at roughly half the width of the standard card.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs with labels underneath, in tight frames, less than two thirds of the standard width.",
+      "css": ".mk{gap:3px}\n.mk .intro{font-size:9px;line-height:1.3}\n.intro:empty{display:none}\ncanvas{border-radius:3px;height:52px!important}\n.box{padding:4px 5px;gap:3px;border-radius:3px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:3px 1px}\n.box>.row{display:contents}\n.ctl{flex:0 0 56px;width:56px;min-width:0;display:grid;justify-items:center;gap:0}\n.ctl:has(select){order:-1;flex:1 1 80px;width:auto;margin-right:3px}\n.ctl:has(option[value=uni]),.ctl:has(option[value=i]){flex:2 1 140px}\n.ctl label{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;font-size:7.5px;letter-spacing:-.02em;text-transform:none;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}\n.ctl output{font-size:8px;line-height:1.1;letter-spacing:0;white-space:nowrap}\n.ctl .kn{order:-1;width:28px!important;height:28px!important;justify-self:center!important}\n.ctl .kn svg{width:100%;height:100%}\n.ctl select{order:-1;width:100%;font-size:9px;letter-spacing:-.02em;padding:4px 2px;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;border-radius:3px;min-height:26px}\n.ctl:has(select) label{order:2}\n.asg.box{display:grid}\n.empty{padding:5px 8px;line-height:1.3;font-size:9px;border-radius:3px}\n.asgbar,.asg{gap:4px}\n.mk .prow{grid-template-columns:minmax(56px,1fr) auto minmax(70px,1.3fr) 32px 10px;gap:2px 5px;min-height:20px;font-size:10px}\n.mk .prow select{grid-column:auto;font-size:9px;padding:1px 2px;min-height:22px;max-width:54px;border-radius:3px}\n.mk .prow output{font-size:9px}\n.mk .prow input[type=range]{height:14px}\n.mk details.lane{padding:2px 5px;border-radius:3px}\n.mk details.lane>summary{font-size:10px;padding:2px 0;letter-spacing:.04em}\n.mk .tg h3{font-size:11px;margin:0 0 2px;gap:6px}\n.mk .tg h3 small{font-size:9px}\n.mk .asgbar input[type=search]{font-size:10px;padding:3px 6px;min-height:24px;flex:1 1 100px}\n.mk .asgbar label.lab{font-size:9px;letter-spacing:0;text-transform:none;white-space:nowrap}"
+    }
+  ]
+}

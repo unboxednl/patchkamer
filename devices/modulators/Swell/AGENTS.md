@@ -76,6 +76,10 @@ Een preset hoort een **herkenbare beweging** te geven, geen vaste waarde: gebrui
 - Koppelingen werken pas als het doelapparaat is aangesloten: de lijst met parameters komt van dat apparaat.
 - Elke uitgestuurde waarde is eindig en ligt tussen −1 en +1: een niet-eindige waarde wordt 0, het tempo van de klok wordt begrensd op 1 … 1000 BPM, en een ontspoorde fase wordt teruggezet. De beweging in het normale gebied is bit-identiek aan de oude versie (met een nepdoel en een nepklok vergeleken, zie het rapport van de omzetting).
 
+## Skins
+
+De regelaars zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`profile`, `beats`, `period`, `depth`, `warmth`, `space`, `motion` en `human`), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `top` (Sfeer, Tempoverdeling) en `swell` (de zes knoppen). De drie vinkjes (Aan, Volg Start/Stop, Op tempo) en de regelaars per doel in de lijst hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.swell/` (draaiknoppen met naam en waarde eronder, weinig kaders, geen uitlegtekst, kaartbreedte 480 px); de CSS erin werkt in de shadow root van het apparaat. De `id`'s, rollen en groepen horen bij de vaste interface: hernoem ze niet (een skin die erop mikt valt dan stil terug).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/modulators/Swell/swell.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

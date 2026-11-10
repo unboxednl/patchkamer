@@ -1,0 +1,72 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.convolutionreverb.compact",
+  "device": "nl.patchkamer.convolutionreverb",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: the impulse-response choice on top, the ten knobs with the label underneath in one frame.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 490
+    },
+    "layout": {
+      "flow": "auto",
+      "panels": [
+        {
+          "id": "choice",
+          "items": [
+            "ir"
+          ],
+          "style": "plain",
+          "cols": 1,
+          "gap": "tight",
+          "bare": true,
+          "labels": "default",
+          "width": "full"
+        },
+        {
+          "id": "knobs",
+          "items": [
+            "predelay",
+            "start",
+            "length",
+            "stretch",
+            "balance",
+            "hp",
+            "lp",
+            "tilt",
+            "width",
+            "mix"
+          ],
+          "style": "line",
+          "cols": 5,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        }
+      ]
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: the impulse-response choice on top, the ten knobs with the label underneath in one frame."
+    }
+  ]
+}

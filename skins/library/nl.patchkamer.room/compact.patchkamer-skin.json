@@ -1,0 +1,79 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.room.compact",
+  "device": "nl.patchkamer.room",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the delay and the reverb each in their own frame.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 300
+    },
+    "layout": {
+      "flow": "auto",
+      "panels": [
+        {
+          "id": "sync",
+          "items": [
+            "sync"
+          ],
+          "style": "plain",
+          "cols": 1,
+          "gap": "tight",
+          "bare": true,
+          "labels": "default",
+          "width": "full"
+        },
+        {
+          "id": "delay",
+          "items": [
+            "time",
+            "fb",
+            "hp",
+            "dsend"
+          ],
+          "style": "line",
+          "cols": 4,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        },
+        {
+          "id": "reverb",
+          "items": [
+            "group:reverb",
+            "group:mix"
+          ],
+          "style": "line",
+          "cols": 3,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        }
+      ]
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: rotary knobs with the label underneath, the delay and the reverb each in their own frame."
+    }
+  ]
+}

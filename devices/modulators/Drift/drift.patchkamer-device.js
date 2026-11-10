@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep top/link; rol param of select), zodat een skin ze als draaiknop kan tonen (compacte skin). Geluid, state en params() zijn gelijk aan 1.12.0.
 // 1.12.0 — Uitleg naar about (menu Over Drift); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor Drift (sterkte), Tempo van drift, Samenhang en Eigen (alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state; getState blijft gelijk.
 //          Sterkte, tempo en samenhang zijn van de (gedeelde) klok: een Drift die een master volgt negeert modulatie daarop. Geen lus: modulate() roept zelf geen host.modulate aan, dus een Drift die een andere Drift (of zichzelf) stuurt herhaalt niets.
@@ -111,7 +112,7 @@ export default {
   id: ID,
   name: 'Drift',
   about: { nl: 'Drift maakt geen geluid en speelt geen noten. Het laat de aangevinkte parameters van aangesloten apparaten langzaam rond hun knopstand bewegen; de knop blijft de basis.\n\nAlle apparaten met stuurbare parameters kunnen worden aangesloten: trek een paarse kabel van de uitgang Drift naar de ingang Mod van een instrument.', en: 'Drift makes no sound and plays no notes. It lets the ticked parameters of connected devices wander slowly around their knob position; the knob stays the base.\n\nAny device with controllable parameters can be connected: pull a purple cable from the output Drift to the Mod input of an instrument.' },
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 820, minWidth: 380 },
@@ -177,17 +178,19 @@ export default {
 
     // ---------- UI ----------
     const E = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
-    function slider(parent, label, val, fmt, onin) {
-      const w = E('div', 'ctl'), l = E('label'), o = E('output'), i = E('input'); i.type = 'range'; i.min = 0; i.max = 1; i.step = 0.001; i.value = val; i.setAttribute('aria-label', label);
+    // skins (contract §12d): meldt een eigen regelaar aan zodat een skin hem als draaiknop kan tonen
+    const adopt = (el, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    function slider(parent, label, val, fmt, onin, id, group) {
+      const w = E('div', 'ctl'), l = E('label'), o = E('output'), i = E('input'); i.type = 'range'; i.min = 0; i.max = 1; i.step = 0.001; i.value = val; i.setAttribute('aria-label', label); if (id) adopt(i, id, 'param', group, label);
       l.append(document.createTextNode(label), o); o.textContent = fmt(val); i.oninput = () => { onin(+i.value); o.textContent = fmt(+i.value); };
       w.append(l, i); parent.appendChild(w); return { i, o, set(v) { i.value = v; o.textContent = fmt(v); } };
     }
     function buildTop(dm) {
       const top = E('div', 'top'); dm.appendChild(top);
       const c0 = () => clockOf(me), D = defClock();
-      ui.amount = slider(top, tx('Drift'), c0().amount, pct, v => { c0().amount = v; }); ui.amount.i.dataset.pkDefault = String(D.amount);
-      ui.speed = slider(top, tx('Tempo van drift'), xOfSpeed(c0().speed), x => fmtSpeed(speedOf(x)), x => { c0().speed = speedOf(x); }); ui.speed.i.dataset.pkDefault = String(xOfSpeed(D.speed));
-      ui.coh = slider(top, tx('Samenhang'), c0().coh, pct, v => { c0().coh = v; }); ui.coh.i.dataset.pkDefault = String(D.coh);
+      ui.amount = slider(top, tx('Drift'), c0().amount, pct, v => { c0().amount = v; }, 'amount', 'top'); ui.amount.i.dataset.pkDefault = String(D.amount);
+      ui.speed = slider(top, tx('Tempo van drift'), xOfSpeed(c0().speed), x => fmtSpeed(speedOf(x)), x => { c0().speed = speedOf(x); }, 'speed', 'top'); ui.speed.i.dataset.pkDefault = String(xOfSpeed(D.speed));
+      ui.coh = slider(top, tx('Samenhang'), c0().coh, pct, v => { c0().coh = v; }, 'coh', 'top'); ui.coh.i.dataset.pkDefault = String(D.coh);
       ui.speed.i.title = tx('hoe snel de drifttijd loopt; ×1 = periodes van een halve minuut tot twintig minuten');
       ui.coh.i.title = tx('hoe sterk gelijke soorten parameters (alle filters, alle toonhoogtes) samen bewegen, ook over sporen en apparaten heen');
       const b = E('div', 'btns'); top.appendChild(b);
@@ -195,7 +198,7 @@ export default {
       ui.reseed = E('button', '', tx('Nieuwe wind')); ui.reseed.title = tx('een nieuwe, andere beweging (zaad)'); ui.reseed.onclick = () => { c0().seed = newSeed(); paintAll(); };
       const gl = E('label', '', tx('Groep ')); gl.style.cssText = 'display:flex;gap:5px;align-items:center;font-size:11px;color:var(--muted,#8a93a3)';
       ui.group = E('select'); [['', '—'], ['A', 'A'], ['B', 'B'], ['C', 'C'], ['D', 'D']].forEach(([v, t]) => { const o = E('option', '', t); o.value = v; ui.group.appendChild(o); });
-      ui.group.setAttribute('aria-label', tx('groep')); ui.group.title = tx('Drifts in dezelfde groep delen klok, tempo, sterkte, samenhang en wind'); ui.group.onchange = () => setGroup(ui.group.value);
+      ui.group.setAttribute('aria-label', tx('groep')); adopt(ui.group, 'group', 'select', 'top', tx('Groep')); ui.group.title = tx('Drifts in dezelfde groep delen klok, tempo, sterkte, samenhang en wind'); ui.group.onchange = () => setGroup(ui.group.value);
       gl.appendChild(ui.group); b.append(ui.freeze, ui.reseed, gl);
       ui.link = E('div', 'link'); dm.appendChild(ui.link);
     }
@@ -208,8 +211,8 @@ export default {
       if (slave || grp) {
         const f = E('label', 'muted', tx('Volgen ')); f.style.cssText = 'display:flex;gap:5px;align-items:center';
         const s = E('select'); ['gelijk', 'gespiegeld', 'verschoven'].forEach(v => { const o = E('option', '', tx(v)); o.value = v; s.appendChild(o); });
-        s.value = me.S.follow; s.onchange = () => { me.S.follow = s.value; }; s.setAttribute('aria-label', tx('manier van volgen')); f.appendChild(s); L.appendChild(f);
-        const eg = E('div', 'ctl'); L.appendChild(eg); const es = slider(eg, tx('Eigen'), me.S.eigen, pct, v => { me.S.eigen = v; }); es.i.title = tx('mengt een eigen, losse beweging door de gedeelde heen'); es.i.dataset.pkDefault = '0';
+        s.value = me.S.follow; s.onchange = () => { me.S.follow = s.value; }; s.setAttribute('aria-label', tx('manier van volgen')); adopt(s, 'follow', 'select', 'link', tx('Volgen')); f.appendChild(s); L.appendChild(f);
+        const eg = E('div', 'ctl'); L.appendChild(eg); const es = slider(eg, tx('Eigen'), me.S.eigen, pct, v => { me.S.eigen = v; }, 'eigen', 'link'); es.i.title = tx('mengt een eigen, losse beweging door de gedeelde heen'); es.i.dataset.pkDefault = '0';
       }
       if (me.followers.length) { const f = E('span', 'followers', tx('Volgers: ') + me.followers.map(x => x.name).join(', ')); L.appendChild(f); }
     }

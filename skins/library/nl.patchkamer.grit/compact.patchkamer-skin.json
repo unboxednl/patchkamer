@@ -1,0 +1,54 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.grit.compact",
+  "device": "nl.patchkamer.grit",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, all in one frame.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 300
+    },
+    "layout": {
+      "flow": "auto",
+      "panels": [
+        {
+          "id": "main",
+          "items": [
+            "group:drive",
+            "group:filter",
+            "group:mod",
+            "group:out"
+          ],
+          "style": "line",
+          "cols": 6,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        }
+      ]
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: rotary knobs with the label underneath, all in one frame."
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.3.0 — Skin Compact: de hoogte van het scherm volgt de CSS-eigenschap --u-ch (zonder skin 170); regelaars zijn al herkenbaar (data-pk-id, -group). Geluid, state en ids ongewijzigd.
 // 1.2.0 — Uitleg naar about (menu Over De-esser); de UI toont geen uitlegtekst meer.
 // 1.1.1 — De reductiemeter (en de kromme in het scherm) toont de werkelijke reductie: bij Uit of mix onder 100% meldde hij nog de volle, niet toegepaste reductie. Het geluid is ongewijzigd.
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
@@ -57,6 +58,8 @@ const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
 const ukStop = e => e.stopPropagation();
+// hoogte van een canvas: een skin kan hem verlagen met de eigenschap --u-ch (40 tot 400); zonder skin blijft het de standaard
+const ukH = (el, d) => { const v = parseFloat(ukVar(el, '--u-ch', '')); return v >= 40 && v <= 400 ? v : d; };
 function ukShadow(hostEl, css) { const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); ukEl(sh, 'style').textContent = css; sh.addEventListener('pointerdown', ukStop); sh.addEventListener('keydown', ukStop); return ukEl(sh, 'div', 'app'); }
 function ukSelect(p, label, opts, value, change, id) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); if (id) s.setAttribute('data-pk-id', id); return s; }
 function ukButton(p, label, tip, id, click) { const b = ukEl(p, 'button', '', label); b.type = 'button'; if (tip) b.title = tip; if (id) b.setAttribute('data-pk-id', id); b.onclick = click; return b; }
@@ -150,7 +153,7 @@ class DeEss extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', DeEss);`;
 
 export default {
-  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.2.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.deesser', name: 'De-esser', version: '1.3.0', kind: 'effect', category: 'effect',
   about: { nl: 'Dempt scherpe s-klanken in een stem. Een detectieband (3 tot 10 kHz) bepaalt wanneer; in split-band dempt alleen die band, in wideband het hele signaal.\n\nTip: zet Luister naar detectieband aan, zoek de frequentie waar de s het scherpst klinkt en zet de band daar. Verlaag dan de drempel tot de reductiemeter alleen bij s-klanken beweegt (2 tot 6 dB). Split-band laat de rest van de stem ongemoeid; Wideband klinkt meer als een gewone compressor op de s. Voor mannen ligt de s meestal rond 4 tot 7 kHz, voor vrouwen rond 6 tot 9 kHz.', en: 'Tames harsh s sounds in a voice. A detection band (3 to 10 kHz) decides when; in split-band only that band is reduced, in wideband the whole signal.\n\nTip: turn on Listen to detection band, find the frequency where the s sounds sharpest and put the band there. Then lower the threshold until the reduction meter only moves on s sounds (2 to 6 dB). Split-band leaves the rest of the voice alone; Wideband sounds more like an ordinary compressor on the s. For male voices the s is usually around 4 to 7 kHz, for female voices around 6 to 9 kHz.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
@@ -206,7 +209,7 @@ export default {
     function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }
     function paint() { if (!root) return; ui.mode.value = state.mode; ui.on.textContent = state.on ? tx('on') : tx('off'); ui.on.classList.toggle('on', state.on); ui.listen.classList.toggle('on', listen); for (const [id, k] of Object.entries(ui.k)) k.set(state[id]); }
     let grTxt = '', lvTxt = '';
-    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, 170); const F = eff.freq !== undefined ? eff.freq : state.freq, BW = eff.bw !== undefined ? eff.bw : state.bw, gr = clamp(meter.gr || 0, 0, 48), gl = Math.pow(10, -gr / 20), split = state.mode === 'split', sr = ctx.sampleRate || 48000;
+    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, ukH(cv, 170)); const F = eff.freq !== undefined ? eff.freq : state.freq, BW = eff.bw !== undefined ? eff.bw : state.bw, gr = clamp(meter.gr || 0, 0, 48), gl = Math.pow(10, -gr / 20), split = state.mode === 'split', sr = ctx.sampleRate || 48000;
       if (g) { const acc = ukVar(cv, '--u-acc', '#7ee0a1'), line = ukVar(cv, '--line', '#333'), mut = ukVar(cv, '--muted', '#888'); g.clearRect(0, 0, w, h);
         const L = 30, B = 16, pw = w - L - 8, ph = h - B - 8, f0 = 1000, f1 = 16000, ylo = -24, yhi = 3, X = f => L + Math.log(f / f0) / Math.log(f1 / f0) * pw, Y = d => 8 + (yhi - d) / (yhi - ylo) * ph;
         g.strokeStyle = line; g.lineWidth = 1; g.fillStyle = mut; g.font = '9px monospace';

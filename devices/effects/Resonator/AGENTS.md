@@ -45,6 +45,10 @@ Wat Resonator met een state doet (getest):
 
 Wat Resonator met een foutieve ingang doet (getest): `NaN`, `±Infinity` en absurd grote waarden vergiftigen de geheugens niet meer. De worklet begrenst de ingang op ±16 en maakt `NaN` tot 0, en maakt de geheugens leeg als de toestand niet eindig of absurd groot wordt. De vorige versie bleef na één `NaN` voor altijd stil. Normaal geluid is bit-identiek aan de vorige versie. Het droge pad (`mix` onder 1) geeft de ingang ongewijzigd door, dus een `NaN` aan de ingang is tijdens die `NaN` zelf ook aan de uitgang te zien; daarna is alles weer in orde.
 
+## Skins
+
+De regelaars zijn via `host.ui.knob` en `host.ui.select` herkenbaar voor skins (`id` is de state-sleutel, `role` is `param` of `select`, groepen `tuning`, `resonance`, `mix` en `out`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.resonator/`: de twee keuzelijsten bovenaan en zeven draaiknoppen in één kader; kaartbreedte 336 omdat de poortrij van de kop (312 px) niet in 300 past; ongeveer 300 x 348 tegenover 336 x 324 punten. De skin gebruikt alleen `design.controls`, `design.layout` en `design.size`; het apparaat zelf is er niet voor aangepast. Hernoem je een id of groep, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Resonator/resonator.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

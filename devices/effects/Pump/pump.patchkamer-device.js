@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Skin Compact: de hoogte van het scherm volgt de CSS-eigenschap --u-ch (zonder skin 90); de schuiven melden zich met data-pk-id en -group aan, zodat een skin ze als draaiknop kan tonen. Geluid, state en ids ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Pump); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
 // 1.11.1 — Luisterfilter (Detector filter) en Release op tempo (Tempo release) zijn nu ook stuurbaar (params/modulate, standaard uit in Drift); knopwaarden, getState, presets, poorten en geluid zonder modulatie ongewijzigd. Alle continue regelaars staan nu in params(); bewust niet: de keuzemenu's en vinkjes (Bron, Klok, Wat duikt, Sidechain-filtersoort, Release volgt tempo, Aan).
@@ -68,6 +69,8 @@ const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
 const ukStop = e => e.stopPropagation();
+// hoogte van een canvas: een skin kan hem verlagen met de eigenschap --u-ch (40 tot 400); zonder skin blijft het de standaard
+const ukH = (el, d) => { const v = parseFloat(ukVar(el, '--u-ch', '')); return v >= 40 && v <= 400 ? v : d; };
 function ukShadow(hostEl, css) { const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); ukEl(sh, 'style').textContent = css; sh.addEventListener('pointerdown', ukStop); sh.addEventListener('keydown', ukStop); return ukEl(sh, 'div', 'app'); }
 function ukSelect(p, label, opts, value, change) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); return s; }
 const ukToS = (d, v) => d.scale === 'log' ? Math.log(v / d.min) / Math.log(d.max / d.min) : (v - d.min) / (d.max - d.min);
@@ -76,9 +79,9 @@ function ukFmt(d, v) { const u = d.unit || ''; if (u === '%') return Math.round(
   if (u === 'Hz') return v >= 1000 ? (v / 1000).toFixed(2) + ' kHz' : Math.round(v) + ' Hz'; if (u === 'dB') return (v > 0 ? '+' : '') + v.toFixed(1) + ' dB'; if (u === ':1') return v.toFixed(1) + ':1'; return v.toFixed(2) + (u ? ' ' + u : ''); }
 // schuifregelaars voor een spec {id:{name,min,max,scale,unit,g}} in groepen; set krijgt de nieuwe waarde
 function ukSliders(parent, spec, groups, set, defaults, dbl) { const handles = {};
-  groups.forEach((gname, gi) => { ukEl(parent, 'h3', '', gname); const g = ukEl(parent, 'div', 'grid');
+  groups.forEach((grp, gi) => { ukEl(parent, 'h3', '', grp.label); const g = ukEl(parent, 'div', 'grid');
     for (const [id, d] of Object.entries(spec)) { if (d.g !== gi) continue; const c = ukEl(g, 'div', 'c'), lab = ukEl(c, 'div', 'lab'); ukEl(lab, 'span', '', d.name).title = d.name; const o = ukEl(lab, 'output');
-      const inp = ukEl(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); inp.title = d.name + (d.tip ? ' — ' + d.tip : '') + ' · ' + dbl;
+      const inp = ukEl(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); inp.setAttribute('data-pk-id', id); inp.setAttribute('data-pk-group', grp.key); inp.title = d.name + (d.tip ? ' — ' + d.tip : '') + ' · ' + dbl;
       inp.oninput = () => { const v = ukFromS(d, +inp.value); set(id, v); o.textContent = ukFmt(d, v); };
       inp.ondblclick = () => { set(id, defaults[id]); handles[id].set(defaults[id]); };
       handles[id] = { set(v) { inp.value = String(ukToS(d, v)); o.textContent = ukFmt(d, v); }, el: c }; } });
@@ -152,7 +155,7 @@ class Pump extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Pump);`;
 
 export default {
-  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.13.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.14.0', kind: 'effect', category: 'effect',
   about: { nl: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.\n\nTip: zet Pump op de bas of pads, kies Klok 1/4 en Release volgt tempo: direct het bekende pompen, zonder kabels. Met Alleen het laag blijft de bovenkant van een pad staan terwijl de bas wijkt voor de kick. Sidechain: trek de kick (bijvoorbeeld een losse drumuitgang) naar de ingang Sidechain.', en: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.\n\nTip: put Pump on the bass or pads, choose Clock 1/4 and Release follows tempo: the familiar pumping at once, without cables. With Low end only, the top of a pad stays put while the bass gives way to the kick. Sidechain: patch the kick (for example a separate drum output) into the Sidechain input.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', trig: 'Trigger', mod: 'Mod' } } },
@@ -222,7 +225,7 @@ export default {
       ui.gr = ukEl(t2, 'span', 'big', '0.0 dB');
       cv = ukEl(app, 'canvas'); cv.setAttribute('aria-label', tx('aria'));
       statusEl = ukEl(app, 'p', 'stt');
-      ui.k = ukSliders(app, spec, [tx('g0'), tx('g1'), tx('g2')], (id, v) => { state[id] = v; eigen(); apply(); }, defaults, tx('dbl'));
+      ui.k = ukSliders(app, spec, [{ key: 'duck', label: tx('g0') }, { key: 'detector', label: tx('g1') }, { key: 'tone', label: tx('g2') }], (id, v) => { state[id] = v; eigen(); apply(); }, defaults, tx('dbl'));
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     function eigen() { if (state.preset !== 'Custom') { state.preset = 'Custom'; if (ui.preset) ui.preset.value = 'Custom'; } }
     function paintStatus() { if (statusEl) statusEl.textContent = ok ? '' : tx('failed'); }
@@ -231,7 +234,7 @@ export default {
       ui.div.parentElement.style.opacity = state.mode === 'klok' ? 1 : 0.4; ui.scf.parentElement.style.opacity = state.mode === 'sc' ? 1 : 0.4;
       for (const [id, k] of Object.entries(ui.k)) { k.set(state[id]); const show = !(['thr', 'ratio', 'scfreq'].includes(id) && state.mode !== 'sc') && !(id === 'xo' && state.band === 'alles') && !(id === 'hold' && state.mode === 'sc') && !(id === 'tail' && (!state.relSync || state.mode === 'sc')) && !(id === 'rel' && state.relSync && state.mode !== 'sc'); k.el.style.opacity = show ? 1 : 0.35; } }
     let grTxt = '';
-    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, 90); if (g) { const acc = ukVar(cv, '--u-acc', '#7ee0a1'); g.clearRect(0, 0, w, h);
+    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, ukH(cv, 90)); if (g) { const acc = ukVar(cv, '--u-acc', '#7ee0a1'); g.clearRect(0, 0, w, h);
         g.strokeStyle = ukVar(cv, '--line', '#333'); g.lineWidth = 1; [6, 12, 24].forEach(db => { const y = db / 30 * h; g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); g.fillStyle = ukVar(cv, '--muted', '#888'); g.font = '9px monospace'; g.fillText('−' + db + ' dB', 4, y - 2); });
         g.fillStyle = acc; g.globalAlpha = 0.35; g.beginPath(); g.moveTo(0, 0); hist.forEach((v, i) => g.lineTo(i / 239 * w, Math.min(1, v / 30) * h)); g.lineTo((hist.length - 1) / 239 * w, 0); g.fill(); g.globalAlpha = 1;
         g.strokeStyle = acc; g.lineWidth = 2; g.beginPath(); hist.forEach((v, i) => { const x = i / 239 * w, y = Math.min(1, v / 30) * h; i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.stroke(); }

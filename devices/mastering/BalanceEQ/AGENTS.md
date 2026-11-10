@@ -74,6 +74,10 @@ Drie secties naast elkaar (of onder elkaar als de kaart smal is, of altijd, kies
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
 - Het pack voor dit apparaat is gegenereerd uit de recepten van de Master Director (stijl × situatie); wijzig het niet met de hand maar via de generator, anders lopen apparaat en Director uiteen. De presets in dat pack hebben (nog) geen `bands`; ze laden als 5 banden.
 
+## Skins
+
+Alle regelaars waren al via `host.ui.adopt` herkenbaar voor skins (id = state-sleutel; per band `f1`..`f12`, `g1`..`g12`, `q1`..`q12`; groepen `frequency`, `gain`, `q`, `dynamic`, `follow`, `mode`, `layout`, `preset`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.balanceeq/`: de verticale schuiven worden draaiknoppen met waarde en bandnummer eronder, één kader per sectie, de kop in één rij; ongeveer 480 x 385 punten (5 banden) tegenover 660 x 795. Wijzig je de opbouw van `.eqs`, `.sec`, `.cell`, `.grid` of `.control`, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mastering/BalanceEQ/balance-eq.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`; met `--controls` zie je de ids, rollen en groepen (`frequency`, `gain`, `q`).

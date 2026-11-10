@@ -42,6 +42,10 @@ Wat Grit met een state doet (getest):
 - Onbekende velden worden genegeerd. Zet er geen in.
 - De saturatie volgt `host.audio.oversample` (`none`, `2x` of `4x`); zonder die waarde is het `2x`, zoals voorheen.
 
+## Skins
+
+De regelaars zijn via `host.ui.knob` en `host.ui.select` herkenbaar voor skins (`id` is de state-sleutel, `role` is `param` of `select`, groepen `drive`, `filter`, `mod` en `out`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.grit/`: zes draaiknoppen in één kader op één rij; ongeveer 300 x 262 tegenover 300 x 202 punten. De skin gebruikt alleen `design.controls`, `design.layout` en `design.size`; het apparaat zelf is er niet voor aangepast. Hernoem je een id of groep, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Grit/grit.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

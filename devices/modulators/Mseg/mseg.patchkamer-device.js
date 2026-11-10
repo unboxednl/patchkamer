@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep curve; rol param of select), zodat een skin ze als draaiknop kan tonen (compacte skin). Geluid, state en params() zijn gelijk aan 1.12.0.
 // 1.12.0 — Uitleg naar about (menu Over Multi-Segment Envelope); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor Sterkte (standaard uit); de knop en getState blijven ongewijzigd, modulatie is nooit state en komt alleen bovenop de knop. Geen lus: modulate() roept zelf geen host.modulate aan.
 //          Bewust weggelaten: Lengte en Afspelen (keuzes), op raster (vinkje), de curvepunten (patroondata). Zonder modulatie gelijk aan 1.11.0.
@@ -64,13 +65,15 @@ details.lane>summary small{font-family:var(--mono,monospace);letter-spacing:0;te
 @container (max-width:520px){ .prow{grid-template-columns:minmax(70px,1fr) minmax(80px,1.4fr) 44px 12px} .prow select{grid-column:1/-1} }
 `;
 const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
-function mkSlider(parent, label, min, max, step, val, fmt, onin) {
-  const w = h('div', 'ctl'), l = h('label'), o = h('output'), i = h('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label);
+// skins (contract §12d): meldt een eigen regelaar aan zodat een skin hem als draaiknop kan tonen; a = { h: host, id: state-sleutel, g: groep }
+const adopt = (el, a, role, label) => { if (a && a.h && a.h.ui && typeof a.h.ui.adopt === 'function') { try { a.h.ui.adopt(el, { id: a.id, role, group: a.g, label }); } catch (e) { /* oud contract */ } } };
+function mkSlider(parent, label, min, max, step, val, fmt, onin, a) {
+  const w = h('div', 'ctl'), l = h('label'), o = h('output'), i = h('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label); adopt(i, a, 'param', label);
   l.append(document.createTextNode(label), o); o.textContent = fmt(+val); i.oninput = () => { onin(+i.value); o.textContent = fmt(+i.value); };
   w.append(l, i); parent.appendChild(w); return { el: w, i, o, set(v) { i.value = v; o.textContent = fmt(+v); } };
 }
-function mkSelect(parent, label, opts, val, onch) {
-  const w = h('div', 'ctl'), l = h('label', '', label), s = h('select'); s.setAttribute('aria-label', label);
+function mkSelect(parent, label, opts, val, onch, a) {
+  const w = h('div', 'ctl'), l = h('label', '', label), s = h('select'); s.setAttribute('aria-label', label); adopt(s, a, 'select', label);
   opts.forEach(([v, t]) => { const o = h('option', '', t); o.value = v; s.appendChild(o); }); s.value = val; s.onchange = () => onch(s.value);
   w.append(l, s); parent.appendChild(w); return { el: w, s, set(v) { s.value = v; } };
 }
@@ -204,7 +207,7 @@ export default {
   id: 'nl.patchkamer.mseg',
   name: 'Multi-Segment Envelope',
   about: { nl: 'Teken een curve over 1 tot 64 maten: klik om een punt te maken, sleep om te verplaatsen, dubbelklik om weg te halen, Shift + slepen op een stuk lijn om het te krommen. Zo bouw je een opbouw of break over het hele nummer. Bij één keer start de curve met Start of een trigger.', en: 'Draw a curve over 1 to 64 bars: click to add a point, drag to move it, double-click to remove it, Shift + drag on a piece of line to bend it. This is how you build a build-up or a break across the whole song. With once, the curve starts on Start or a trigger.' },
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 760, minWidth: 380 },
@@ -269,12 +272,13 @@ export default {
     }
     const stopLoop = () => { if (stopDraw) { stopDraw(); stopDraw = null; } };
     function build(root) {
+      const A = (id, g) => ({ h: host, id, g });
       const mk = h('div', 'mk'); root.appendChild(mk); ui = {};
             const b1 = h('div', 'box'), r1 = h('div', 'row'); b1.appendChild(r1); mk.appendChild(b1);
-      ui.len = mkSelect(r1, tx('Lengte'), LENS.map(n => [String(n), tx(n === 1 ? '{0} maat' : '{0} maten', n)]), String(S.len), v => { S.len = +v; changed(); });
-      ui.mode = mkSelect(r1, tx('Afspelen'), [['loop', tx('herhalen')], ['once', tx('één keer')]], S.mode, v => { S.mode = v; changed(); });
-      ui.amp = mkSlider(r1, tx('Sterkte'), 0, 1, 0.01, S.amp, v => Math.round(v * 100) + '%', v => { S.amp = v; changed(); });
-      const pr = mkSelect(r1, tx('Voorbeeld'), [['', tx('kies…')], ...Object.keys(EXAMPLES).map(k => [k, tx(k)])], '', v => { if (EXAMPLES[v]) { S.pts = EXAMPLES[v].map(p => ({ ...p })); changed(); } pr.set(''); });
+      ui.len = mkSelect(r1, tx('Lengte'), LENS.map(n => [String(n), tx(n === 1 ? '{0} maat' : '{0} maten', n)]), String(S.len), v => { S.len = +v; changed(); }, A('len', 'curve'));
+      ui.mode = mkSelect(r1, tx('Afspelen'), [['loop', tx('herhalen')], ['once', tx('één keer')]], S.mode, v => { S.mode = v; changed(); }, A('mode', 'curve'));
+      ui.amp = mkSlider(r1, tx('Sterkte'), 0, 1, 0.01, S.amp, v => Math.round(v * 100) + '%', v => { S.amp = v; changed(); }, A('amp', 'curve'));
+      const pr = mkSelect(r1, tx('Voorbeeld'), [['', tx('kies…')], ...Object.keys(EXAMPLES).map(k => [k, tx(k)])], '', v => { if (EXAMPLES[v]) { S.pts = EXAMPLES[v].map(p => ({ ...p })); changed(); } pr.set(''); }, A('example', 'curve'));
       const sl = h('label', 'lab'), sc = h('input'); sc.type = 'checkbox'; sc.checked = S.snap; sc.onchange = () => { S.snap = sc.checked; }; sl.append(sc, document.createTextNode(tx('op raster (1/16)'))); r1.appendChild(sl); ui.snap = sc;
       ui.cv = h('canvas'); ui.cv.style.height = '170px'; ui.cv.style.touchAction = 'none'; ui.cv.setAttribute('role', 'img'); ui.cv.setAttribute('aria-label', tx('Curve')); b1.appendChild(ui.cv); ui.g = ui.cv.getContext('2d');
       ui.cv.addEventListener('pointerdown', onDown); ui.cv.addEventListener('pointermove', onMove); ui.cv.addEventListener('pointerup', onUp); ui.cv.addEventListener('dblclick', onDbl);

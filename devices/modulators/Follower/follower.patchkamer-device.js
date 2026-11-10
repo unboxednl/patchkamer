@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep det/hit; rol param of select), zodat een skin ze als draaiknop kan tonen (compacte skin). Geluid, state en params() zijn gelijk aan 1.12.0.
 // 1.12.0 — Uitleg naar about (menu Over Follower); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de continue regelaars (versterking, eigen frequentie, aanzet, loslaten, vloer, bereik, aanslag-gevoeligheid, transiënt-verval, minimale afstand, poort; alle standaard uit).
 //          De effectieve waarde gaat naar de worklet; knop en getState blijven ongewijzigd en modulatie is nooit state. Geen lus: modulate() roept zelf geen host.modulate aan. Bewust weggelaten: Noot (geheel getal, discreet), focus/uitslag/richting/aanslagen sturen (keuzes).
@@ -71,13 +72,15 @@ details.lane>summary small{font-family:var(--mono,monospace);letter-spacing:0;te
 @container (max-width:520px){ .prow{grid-template-columns:minmax(70px,1fr) minmax(80px,1.4fr) 44px 12px} .prow select{grid-column:1/-1} }
 `;
 const h = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
-function mkSlider(parent, label, min, max, step, val, fmt, onin) {
-  const w = h('div', 'ctl'), l = h('label'), o = h('output'), i = h('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label);
+// skins (contract §12d): meldt een eigen regelaar aan zodat een skin hem als draaiknop kan tonen; a = { h: host, id: state-sleutel, g: groep }
+const adopt = (el, a, role, label) => { if (a && a.h && a.h.ui && typeof a.h.ui.adopt === 'function') { try { a.h.ui.adopt(el, { id: a.id, role, group: a.g, label }); } catch (e) { /* oud contract */ } } };
+function mkSlider(parent, label, min, max, step, val, fmt, onin, a) {
+  const w = h('div', 'ctl'), l = h('label'), o = h('output'), i = h('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label); adopt(i, a, 'param', label);
   l.append(document.createTextNode(label), o); o.textContent = fmt(+val); i.oninput = () => { onin(+i.value); o.textContent = fmt(+i.value); };
   w.append(l, i); parent.appendChild(w); return { el: w, i, o, set(v) { i.value = v; o.textContent = fmt(+v); } };
 }
-function mkSelect(parent, label, opts, val, onch) {
-  const w = h('div', 'ctl'), l = h('label', '', label), s = h('select'); s.setAttribute('aria-label', label);
+function mkSelect(parent, label, opts, val, onch, a) {
+  const w = h('div', 'ctl'), l = h('label', '', label), s = h('select'); s.setAttribute('aria-label', label); adopt(s, a, 'select', label);
   opts.forEach(([v, t]) => { const o = h('option', '', t); o.value = v; s.appendChild(o); }); s.value = val; s.onchange = () => onch(s.value);
   w.append(l, s); parent.appendChild(w); return { el: w, s, set(v) { s.value = v; } };
 }
@@ -219,7 +222,8 @@ const DEF = () => ({ att: 5, rel: 150, gain: 0, floor: -50, range: 40, focus: 'a
 const RANGE = { att: [0.1, 200], rel: [5, 3000], gain: [-24, 36], floor: [-90, -10], range: [6, 80], freq: [40, 16000], tsens: [0, 1], tdec: [10, 1000], hold: [10, 500], gate: [-90, -10], trigNote: [24, 96] };
 
 export default {
-  id: 'nl.patchkamer.follower', name: 'Follower', about: { nl: 'Trek een audiokabel naar Luistert naar (bijvoorbeeld de drums), en een paarse kabel van Follower naar de Mod-ingang van een apparaat. Kies onderaan per parameter: Niveau, Transiënt of Helderheid, en hoe diep. Bij elke aanslag gaat er ook een trig uit via Aanslagen.', en: 'Pull an audio cable to Listens to (for example the drums), and a purple cable from Follower to the Mod input of a device. Below, choose per parameter: Level, Transient or Brightness, and how deep. On every onset a trig also goes out through Onsets.' }, version: '1.12.0', kind: 'modulator', category: 'mod',
+  id: 'nl.patchkamer.follower', name: 'Follower', about: { nl: 'Trek een audiokabel naar Luistert naar (bijvoorbeeld de drums), en een paarse kabel van Follower naar de Mod-ingang van een apparaat. Kies onderaan per parameter: Niveau, Transiënt of Helderheid, en hoe diep. Bij elke aanslag gaat er ook een trig uit via Aanslagen.', en: 'Pull an audio cable to Listens to (for example the drums), and a purple cable from Follower to the Mod input of a device. Below, choose per parameter: Level, Transient or Brightness, and how deep. On every onset a trig also goes out through Onsets.' }, version: '1.13.0', kind: 'modulator', category: 'mod', modExclude: ['trigNote'],   // noot van de trig (geheel getal), bewust niet stuurbaar
+ 
   ui: { width: 760, minWidth: 380 },
   i18n: { en: { ports: { in: 'Listens to', out: 'Through', trig: 'Onsets' } } },
   ports: { audioIn: [{ id: 'in', name: 'Luistert naar' }], audioOut: [{ id: 'out', name: 'Door' }], eventIn: [], eventOut: [{ id: 'trig', name: 'Aanslagen' }], modIn: [], modOut: [{ id: 'mod', name: 'Follower' }] },
@@ -247,26 +251,26 @@ export default {
     function emitOnset(t, v) { try { const time = Math.max(ctx.currentTime, t + 0.005), vel = clamp(0.4 + v * 0.6, 0, 1);
         if (S.trigOut === 'noot') host.emit(self, 'trig', { type: 'note', note: S.trigNote, vel, time, dur: 0.12 }); else host.emit(self, 'trig', { type: 'trig', lane: S.trigOut, vel, time }); } catch (e) {} }
     // ---------- UI ----------
-    function build(root) { const mk = h('div', 'mk'); root.appendChild(mk);
+    function build(root) { const A = (id, g) => ({ h: host, id, g }); const mk = h('div', 'mk'); root.appendChild(mk);
       const cv = h('canvas'); cv.style.height = '96px'; cv.setAttribute('aria-label', tx('niveau, transiënt en helderheid')); mk.appendChild(cv);
       const st = h('div', 'intro'); mk.appendChild(st);
       const b1 = h('div', 'box'), r1 = h('div', 'row'), r2 = h('div', 'row'), r3 = h('div', 'row'); b1.append(r1, r2, r3); mk.appendChild(b1);
-      const fs = mkSelect(r1, tx('Focus'), FOCUS.map(([v, t]) => [v, tx(t)]), S.focus, v => { S.focus = v; send(); });
-      const fq = mkSlider(r1, tx('Eigen frequentie'), 0, 1, 0.001, Math.log(S.freq / 40) / Math.log(400), x => Math.round(40 * 400 ** x) + ' Hz', x => { S.freq = 40 * 400 ** x; send(); });
-      const gn = mkSlider(r1, tx('Versterking'), -24, 36, 0.5, S.gain, v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', v => { S.gain = v; send(); });
-      const at = mkSlider(r2, tx('Aanzet'), 0, 1, 0.001, Math.log(S.att / 0.1) / Math.log(2000), x => (0.1 * 2000 ** x).toFixed(1) + ' ms', x => { S.att = 0.1 * 2000 ** x; send(); });
-      const rl = mkSlider(r2, tx('Loslaten'), 0, 1, 0.001, Math.log(S.rel / 5) / Math.log(600), x => Math.round(5 * 600 ** x) + ' ms', x => { S.rel = 5 * 600 ** x; send(); });
-      const fl = mkSlider(r2, tx('Vloer'), -90, -10, 1, S.floor, v => v + ' dB', v => { S.floor = v; send(); });
-      const rg = mkSlider(r2, tx('Bereik'), 6, 80, 1, S.range, v => v + ' dB', v => { S.range = v; send(); });
-      const pl = mkSelect(r3, tx('Uitslag'), [['uni', tx('0 … +1 (alleen omhoog)')], ['bi', tx('−1 … +1 (rond het midden)')]], S.pol, v => { S.pol = v; send(); });
-      const iv = mkSelect(r3, tx('Richting'), [['n', tx('Luider = meer')], ['i', tx('Luider = minder (omgekeerd)')]], S.inv ? 'i' : 'n', v => { S.inv = v === 'i'; send(); });
+      const fs = mkSelect(r1, tx('Focus'), FOCUS.map(([v, t]) => [v, tx(t)]), S.focus, v => { S.focus = v; send(); }, A('focus', 'det'));
+      const fq = mkSlider(r1, tx('Eigen frequentie'), 0, 1, 0.001, Math.log(S.freq / 40) / Math.log(400), x => Math.round(40 * 400 ** x) + ' Hz', x => { S.freq = 40 * 400 ** x; send(); }, A('freq', 'det'));
+      const gn = mkSlider(r1, tx('Versterking'), -24, 36, 0.5, S.gain, v => (v > 0 ? '+' : '') + v.toFixed(1) + ' dB', v => { S.gain = v; send(); }, A('gain', 'det'));
+      const at = mkSlider(r2, tx('Aanzet'), 0, 1, 0.001, Math.log(S.att / 0.1) / Math.log(2000), x => (0.1 * 2000 ** x).toFixed(1) + ' ms', x => { S.att = 0.1 * 2000 ** x; send(); }, A('att', 'det'));
+      const rl = mkSlider(r2, tx('Loslaten'), 0, 1, 0.001, Math.log(S.rel / 5) / Math.log(600), x => Math.round(5 * 600 ** x) + ' ms', x => { S.rel = 5 * 600 ** x; send(); }, A('rel', 'det'));
+      const fl = mkSlider(r2, tx('Vloer'), -90, -10, 1, S.floor, v => v + ' dB', v => { S.floor = v; send(); }, A('floor', 'det'));
+      const rg = mkSlider(r2, tx('Bereik'), 6, 80, 1, S.range, v => v + ' dB', v => { S.range = v; send(); }, A('range', 'det'));
+      const pl = mkSelect(r3, tx('Uitslag'), [['uni', tx('0 … +1 (alleen omhoog)')], ['bi', tx('−1 … +1 (rond het midden)')]], S.pol, v => { S.pol = v; send(); }, A('pol', 'det'));
+      const iv = mkSelect(r3, tx('Richting'), [['n', tx('Luider = meer')], ['i', tx('Luider = minder (omgekeerd)')]], S.inv ? 'i' : 'n', v => { S.inv = v === 'i'; send(); }, A('inv', 'det'));
       const b2 = h('div', 'box'), r4 = h('div', 'row'), r5 = h('div', 'row'); b2.append(r4, r5); mk.appendChild(b2);
-      const ts = mkSlider(r4, tx('Aanslag-gevoeligheid'), 0, 1, 0.01, S.tsens, v => Math.round(v * 100) + '%', v => { S.tsens = v; send(); });
-      const td = mkSlider(r4, tx('Transiënt-verval'), 0, 1, 0.001, Math.log(S.tdec / 10) / Math.log(100), x => Math.round(10 * 100 ** x) + ' ms', x => { S.tdec = 10 * 100 ** x; send(); });
-      const ho = mkSlider(r4, tx('Minimale afstand'), 10, 500, 1, S.hold, v => v + ' ms', v => { S.hold = v; send(); });
-      const gt = mkSlider(r4, tx('Poort'), -90, -10, 1, S.gate, v => v + ' dB', v => { S.gate = v; send(); });
-      const tr = mkSelect(r5, tx('Aanslagen sturen'), [...Array.from({ length: 8 }, (_, i) => ['ch' + (i + 1), tx('Trig spoor {0}', i + 1)]), ['noot', tx('Noot')]], S.trigOut, v => { S.trigOut = v; });
-      const tn = mkSlider(r5, tx('Noot'), 24, 96, 1, S.trigNote, v => { const n = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B']; return n[v % 12] + (Math.floor(v / 12) - 1); }, v => { S.trigNote = v; });
+      const ts = mkSlider(r4, tx('Aanslag-gevoeligheid'), 0, 1, 0.01, S.tsens, v => Math.round(v * 100) + '%', v => { S.tsens = v; send(); }, A('tsens', 'hit'));
+      const td = mkSlider(r4, tx('Transiënt-verval'), 0, 1, 0.001, Math.log(S.tdec / 10) / Math.log(100), x => Math.round(10 * 100 ** x) + ' ms', x => { S.tdec = 10 * 100 ** x; send(); }, A('tdec', 'hit'));
+      const ho = mkSlider(r4, tx('Minimale afstand'), 10, 500, 1, S.hold, v => v + ' ms', v => { S.hold = v; send(); }, A('hold', 'hit'));
+      const gt = mkSlider(r4, tx('Poort'), -90, -10, 1, S.gate, v => v + ' dB', v => { S.gate = v; send(); }, A('gate', 'hit'));
+      const tr = mkSelect(r5, tx('Aanslagen sturen'), [...Array.from({ length: 8 }, (_, i) => ['ch' + (i + 1), tx('Trig spoor {0}', i + 1)]), ['noot', tx('Noot')]], S.trigOut, v => { S.trigOut = v; }, A('trigOut', 'hit'));
+      const tn = mkSlider(r5, tx('Noot'), 24, 96, 1, S.trigNote, v => { const n = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B']; return n[v % 12] + (Math.floor(v / 12) - 1); }, v => { S.trigNote = v; }, A('trigNote', 'hit'));
       const ab = h('div', 'box asg'); mk.appendChild(ab); asg.mount(ab);
       ui = { cv, g: cv.getContext('2d'), st, set: () => { fs.set(S.focus); fq.set(Math.log(S.freq / 40) / Math.log(400)); gn.set(S.gain); at.set(Math.log(S.att / 0.1) / Math.log(2000)); rl.set(Math.log(S.rel / 5) / Math.log(600)); fl.set(S.floor); rg.set(S.range); pl.set(S.pol); iv.set(S.inv ? 'i' : 'n'); ts.set(S.tsens); td.set(Math.log(S.tdec / 10) / Math.log(100)); ho.set(S.hold); gt.set(S.gate); tr.set(S.trigOut); tn.set(S.trigNote); } };
       cw = cv.clientWidth; ch = cv.clientHeight; col = null;

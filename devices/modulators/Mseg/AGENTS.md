@@ -68,6 +68,10 @@ Een preset is een getekende curve plus lengte, afspeelstand en sterkte. De doele
 
 Wat een preset niet doet: toewijzingen opslaan (`sel`), een tempo bepalen (de curve volgt de klok van de host) of iets starten (in `once` start de gebruiker met Start of een trigger).
 
+## Skins
+
+De regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`len`, `mode`, `amp` en `example` (de keuzelijst Voorbeeld is een opdracht, geen state)), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `curve`. Het vinkje Op raster en de curve zelf (canvas) hebben geen id. De skin zet de kaartbreedte op 520 px, omdat de kaartkop met de naam Multi-Segment Envelope niet smaller kan. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.mseg/` (draaiknoppen met naam en waarde eronder, weinig kaders, geen uitlegtekst, kaartbreedte 520 px); de CSS erin werkt in de shadow root van het apparaat. De `id`'s, rollen en groepen horen bij de vaste interface: hernoem ze niet (een skin die erop mikt valt dan stil terug).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/modulators/Mseg/mseg.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

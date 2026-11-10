@@ -57,6 +57,10 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Soft bus`, `Drums`, `Ki
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
 - Het pack is gegenereerd (stijl × situatie, eigen waarden voor alle instellingen; generator `mpresets/buscomp.py`, buiten de repo) en daarna per preset met de motor gekalibreerd (make-up). Wijzig je het geluid van het apparaat, kalibreer `makeup` dan opnieuw; verander je waarden met de hand, controleer dan dat de piek niet hoger wordt dan de invoer.
 
+## Skins
+
+Alle regelaars zijn sinds 1.15.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`threshold`, `ratio`, `attack`, `release`, `knee`, `makeup`, `compMix`, `detector`, `amount`; vergrendelingen `locks.<sleutel>`; schakelaars `bypass`, `match`, `auto`, `remote`), `role` is `param`, `select` of `toggle`, `group` is `dynamics`, `output`, `follow`, `mode` of `preset`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.buscompressor/` (draaiknoppen met waarde en naam eronder, alles in één kader; ongeveer 480 x 313 punten tegenover 660 x 612). Wijzig je de opbouw van `.grid` of `.control`, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mastering/BusCompressor/bus-compressor.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

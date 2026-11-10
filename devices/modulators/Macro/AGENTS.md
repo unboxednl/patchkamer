@@ -66,6 +66,10 @@ Macro heeft geen eigen ritme of beweging; wat een preset bepaalt is de beginstan
 - Geen bijna-dubbelen: twee presets met alleen een ander naampje zijn geen twee presets.
 - Geen knoppen op 1 (of bipolair op 0 of 1) als beginstand, tenzij de opstelling dat bewust wil; een knop die al vol staat laat geen ruimte om te draaien.
 
+## Skins
+
+De regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`v.0` t/m `v.3` (de vier macroknoppen, naar de index in `state.v`) en `glide`), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `macro`. De naamvelden, de bipolair-vinkjes en de lijst met toewijzingen hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.macro/` (draaiknoppen met naam en waarde eronder, weinig kaders, geen uitlegtekst, kaartbreedte 480 px); de CSS erin werkt in de shadow root van het apparaat. De `id`'s, rollen en groepen horen bij de vaste interface: hernoem ze niet (een skin die erop mikt valt dan stil terug).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/modulators/Macro/macro.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

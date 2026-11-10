@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.4.0 — Skin Compact: de hoogte van het scherm volgt de CSS-eigenschap --u-ch (zonder skin 190); regelaars zijn al herkenbaar (data-pk-id, -group). Geluid, state en ids ongewijzigd.
 // 1.3.0 — Uitleg naar about (menu Over Gate); de UI toont geen uitlegtekst meer.
 // 1.2.0 — Patchkamer contract v1.34: latency() meldt de lookahead aan de host (alleen weergave; de host compenseert niet).
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
@@ -65,6 +66,8 @@ const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
 const ukStop = e => e.stopPropagation();
+// hoogte van een canvas: een skin kan hem verlagen met de eigenschap --u-ch (40 tot 400); zonder skin blijft het de standaard
+const ukH = (el, d) => { const v = parseFloat(ukVar(el, '--u-ch', '')); return v >= 40 && v <= 400 ? v : d; };
 function ukShadow(hostEl, css) { const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); ukEl(sh, 'style').textContent = css; sh.addEventListener('pointerdown', ukStop); sh.addEventListener('keydown', ukStop); return ukEl(sh, 'div', 'app'); }
 function ukSelect(p, label, opts, value, change, id) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); if (id) s.setAttribute('data-pk-id', id); return s; }
 function ukButton(p, label, tip, id, click) { const b = ukEl(p, 'button', '', label); b.type = 'button'; if (tip) b.title = tip; if (id) b.setAttribute('data-pk-id', id); b.onclick = click; return b; }
@@ -172,7 +175,7 @@ class Gate extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Gate);`;
 
 export default {
-  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.3.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.gate', name: 'Gate', version: '1.4.0', kind: 'effect', category: 'effect',
   about: { nl: 'Demp wat onder de drempel zakt: ruis tussen de noten, doorspraak, lekkage. Als gate, als zachte expander, of als ducker die dempt wanneer de sidechain luid wordt.\n\nTip: zet de drempel net boven de ruis en kies Peak. Een korte attack (0,2 tot 2 ms) houdt de aanzet van een noot; met Lookahead opent de poort al voor de aanzet. Hold en Hysterese voorkomen ratelen bij nootstaarten. Een hoogdoorlaat van 100 Hz op de sidechain voorkomt dat rommel van laag de poort opent. Voor Ducker: trek een spraakkanaal naar de ingang Sidechain en kies Extern.', en: 'Mutes what falls below the threshold: noise between notes, spill, bleed. As a gate, as a soft expander, or as a ducker that mutes when the sidechain gets loud.\n\nTip: set the threshold just above the noise and choose Peak. A short attack (0.2 to 2 ms) keeps the start of a note; with Lookahead the gate opens before the start. Hold and Hysteresis stop chattering on note tails. A highpass of 100 Hz on the sidechain stops low rumble from opening the gate. For Ducker: patch a speech channel into the Sidechain input and choose External.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
@@ -243,7 +246,7 @@ export default {
         for (const [id, k] of Object.entries(ui.k)) k.set(state[id]); ui.ext.style.display = state.sc === 'ext' ? '' : 'none'; }
       ui.k.ratio.el.style.opacity = state.mode === 'gate' ? 0.35 : 1; ui.k.hyst.el.style.opacity = state.mode === 'ducker' ? 0.35 : 1; ui.lat.textContent = tx('latency', (eff.look !== undefined ? eff.look : state.look).toFixed(1)); }
     let grTxt = '', lvTxt = '', lampTxt = '';
-    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, 190); const T = eff.thr !== undefined ? eff.thr : state.thr, R = eff.ratio !== undefined ? eff.ratio : state.ratio, RG = eff.range !== undefined ? eff.range : state.range, HY = eff.hyst !== undefined ? eff.hyst : state.hyst, duck = state.mode === 'ducker';
+    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, ukH(cv, 190)); const T = eff.thr !== undefined ? eff.thr : state.thr, R = eff.ratio !== undefined ? eff.ratio : state.ratio, RG = eff.range !== undefined ? eff.range : state.range, HY = eff.hyst !== undefined ? eff.hyst : state.hyst, duck = state.mode === 'ducker';
       const slope = state.mode === 'gate' || R >= 99.5 ? 1000 : Math.max(0, R - 1);
       if (g) { const acc = ukVar(cv, '--u-acc', '#7ee0a1'), line = ukVar(cv, '--line', '#333'), mut = ukVar(cv, '--muted', '#888'); g.clearRect(0, 0, w, h);
         const L = 30, B = 16, pw = w - L - 8, ph = h - B - 8, lo = -90, hi = 0, X = d => L + (d - lo) / (hi - lo) * pw, ylo = duck ? -60 : -90, Y = d => 8 + (hi - d) / (hi - ylo) * ph;

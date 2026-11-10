@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.pump.compact",
+  "device": "nl.patchkamer.pump",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the knobs grouped per section in one frame and a lower display, at roughly two thirds of the standard width.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, less than half the standard width.",
+      "css": ".app{--u-ch:44;padding:6px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,3.4fr) minmax(0,4fr);column-gap:4px;row-gap:3px;font-size:10px}\n.app>.top,.app>.disp,.app>.stt,.app>canvas{grid-column:1/-1}\n.top{gap:4px;margin:0;align-items:flex-end}\n.sel{flex:0 1 auto;min-width:0}select{max-width:100%}\n.sel{gap:1px;font-size:7.5px;letter-spacing:.04em}\nselect,button{font-size:10px;padding:3px 5px;border-radius:4px}\n.disp{grid-template-columns:minmax(0,1fr) 128px!important;gap:6px;margin:0}\n.side{gap:1px}\n.side .small{font-size:8.5px;line-height:1.2}\n.side .big{font-size:16px;line-height:1.1}\n.stt{margin:0;font-size:9px}\nh3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:8px;letter-spacing:.08em;margin:3px 0 0;padding:0;border:0}\n.grid{display:flex;gap:0;padding:3px 2px 3px;border:1px solid var(--line,#30363f);border-radius:4px;background:color-mix(in srgb,var(--fg,#e2e6ea) 3%,transparent)}\n.c{flex:1 1 0;display:grid;justify-items:center;align-content:start;gap:0;min-width:0}\n.c .lab{display:contents}\n.c .kn{order:1;width:28px!important;height:28px!important;justify-self:center!important}\n.c .kn svg{width:100%;height:100%}\n.c output{order:2;font-size:7.5px;line-height:1.1;color:var(--muted,#97a1ad);white-space:nowrap;text-align:center}\n.c .lab span{order:3;font-size:7px;letter-spacing:-.02em;line-height:1.1;text-transform:none;text-align:center;max-width:100%;overflow:visible;text-overflow:clip}\n.app>h3:nth-child(5),.app>.grid:nth-child(6){grid-column:1}\n.app>h3:nth-child(7),.app>.grid:nth-child(8){grid-column:2}\n.app>h3:nth-child(9),.app>.grid:nth-child(10){grid-column:3}\n.app>h3{grid-row:5}.app>.grid{grid-row:6}\n.app>canvas{grid-column:1/-1}\n.c .lab span{white-space:normal}"
+    }
+  ]
+}

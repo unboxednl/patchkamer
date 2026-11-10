@@ -1,0 +1,69 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.flanger.compact",
+  "device": "nl.patchkamer.flanger",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the name and value underneath, grouped in framed panels.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "m"
+      }
+    ],
+    "size": {
+      "width": 300
+    },
+    "layout": {
+      "flow": "auto",
+      "panels": [
+        {
+          "id": "mode",
+          "items": [
+            "sync",
+            "shape"
+          ],
+          "style": "line",
+          "cols": 2,
+          "gap": "tight",
+          "bare": true,
+          "labels": "above",
+          "width": "full"
+        },
+        {
+          "id": "knobs",
+          "items": [
+            "rate",
+            "depth",
+            "manual",
+            "fb",
+            "stereo",
+            "mix"
+          ],
+          "style": "line",
+          "cols": 6,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        }
+      ]
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: rotary knobs with the name and value underneath, grouped in framed panels."
+    }
+  ]
+}

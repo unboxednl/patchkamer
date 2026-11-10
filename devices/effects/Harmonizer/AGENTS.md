@@ -58,6 +58,10 @@ Bewaker (getest): ingang begrensd op ±16, `NaN` wordt 0, toestanden per blok op
 - De bron moet monofoon zijn voor `detect`: bij akkoorden of ruis is de bron onbetrouwbaar. Gebruik dan `notes` of `off`.
 - Vier stemmen met de Vocoder kosten ongeveer 7 % van een audioblok gemiddeld (spitsen tot 36 %); de korrelmotor met vier stemmen kost meer in spitsen (zie `docs/tools/measure-pitch.mjs harmonizer`).
 
+## Skins
+
+Harmonizer gebruikt `host.ui.knob`, `host.ui.select` en `host.ui.pad` met `id` (state-sleutel) en `group` (`engine`, `scale`, `v1` t/m `v4`, `mix`); de ids en groepen zijn de adressen voor skins. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.harmonizer/` (`design.layout`: eerst de vijf keuzelijsten, dan de vier stemmen en de mixregelaars in één kader, draaiknoppen met de naam eronder; ongeveer 480 x 523 punten tegenover 480 x 730). De stemkopjes (`STEM 1` enzovoort) en het kopje `STEMMEN` dragen sinds 1.3.0 het attribuut `data-pk-hd` en worden verborgen door een `<style>` in de kaart die alleen werkt als de host de regelaars in panelen zet (`:has(> .pk-pnls)`); zonder skin of zonder `layout` verandert er niets. Wijzig je `hd()` of de ids/groepen, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Harmonizer/harmonizer.patchkamer-device.js` met `--lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

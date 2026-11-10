@@ -80,6 +80,10 @@ De waarden van `div` zijn tekst (`'0.5'`, niet `0.5`); een onbekende waarde geef
 
 Wat LFO met zijn ingangen doet (getest): de uitvoer is **altijd eindig** en ligt in −1 … +1. Een ongeldig tempo, een `NaN`- of `Infinity`-tijd, een ongeldige stap of maat van de klok, of een trigger met een ongeldige tijd of duur wordt genegeerd of door een veilige waarde vervangen. De moduleerwaarden en de snelle sturing zijn gelijk aan de oude versie.
 
+## Skins
+
+De regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`shape`, `div`, `hz`, `deform`, `phase`, `amp`, `nsteps`, `glide`, `eDel`, `eAtk`, `eHold`, `eDec`, `eSus`, `eRel`), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `wave` (golf, ook de stapkeuzes) en `env` (envelope). De vinkjes en de diepteschuiven van de toewijzingslijst hebben geen id (de lijst volgt de aangesloten doelen). Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.lfo/` (draaiknoppen met naam en waarde eronder, weinig kaders, geen uitlegtekst, kaartbreedte 480 px); de CSS erin werkt in de shadow root van het apparaat. De `id`'s, rollen en groepen horen bij de vaste interface: hernoem ze niet (een skin die erop mikt valt dan stil terug).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/modulators/Lfo/lfo.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

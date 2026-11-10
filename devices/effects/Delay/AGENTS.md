@@ -79,6 +79,10 @@ Stuurbaar (`params()`, spoor `delay`): `swing`, `spread`, `msL`, `msR`, `fb`, `f
 - Een moduswissel dempt de echo's 15 ms (zachte demping) om een tik te voorkomen. Een wissel van `sat` schakelt hard om.
 - Zonder AudioWorklet gaat het geluid ongewijzigd door en meldt de kaart dat.
 
+## Skins
+
+Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): schuiven en keuzelijsten dragen `data-pk-id` (de state-sleutel) en sinds 1.1.0 ook `data-pk-group` (`s_time`, `s_left`, `s_right`, `s_fb`, `s_tone`, `s_motion`, `s_duck` of `s_out`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.delay/` (draaiknoppen met de naam eronder, de acht secties in vier rijen; ongeveer 480 x 403 tegenover 700 x 901). Wijzig je de volgorde van `SECTIONS` of de opbouw van `.disp`, `h3` of `.grid`, controleer dan die skin: hij plaatst de koppen en kaders met `nth-child` en geeft de keuzelijsten een vaste breedte per `data-pk-id`.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Delay/delay.patchkamer-device.js` plus `--lang nl` en `--lang en`, vanuit de root. Alle drie moeten `OK` geven, zonder `let op`.

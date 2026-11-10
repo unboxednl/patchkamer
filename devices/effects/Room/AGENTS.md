@@ -46,6 +46,10 @@ Wat Room met een state doet (getest):
 - Onbekende velden worden genegeerd. Zet er geen in.
 - Een nieuwe `size` bouwt de galmimpuls opnieuw op (met ruis): twee keer dezelfde state geeft dus niet precies dezelfde galmstaart.
 
+## Skins
+
+De regelaars zijn via `host.ui.knob` en `host.ui.select` herkenbaar voor skins (`id` is de state-sleutel, `role` is `param` of `select`, groepen `delay`, `reverb` en `mix`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.room/`: de delay-keuze als regel, de vier delay-knoppen in één kader en de galmknoppen in een tweede kader; ongeveer 300 x 296 tegenover 300 x 292 punten. De skin gebruikt alleen `design.controls`, `design.layout` en `design.size`; het apparaat zelf is er niet voor aangepast. Hernoem je een id of groep, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Room/room.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

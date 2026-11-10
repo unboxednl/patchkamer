@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.multibandbalance.compact",
+  "device": "nl.patchkamer.multibandbalance",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, one frame for the general settings and one per band, at less than half the standard height.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in one frame per group, less than half the standard height.",
+      "css": ".app{display:flex!important;flex-wrap:wrap;align-items:center;gap:3px 4px;padding:4px;font-size:9px;border-radius:5px}\n.app>*{min-width:0}\n.row{display:contents}\nselect,button,input[type=file]{font-size:9px;padding:2px 4px;border-radius:3px}\nbutton{height:24px;padding:0 6px;white-space:nowrap}\n.row>select{order:1;flex:0 1 170px;height:24px}\n.row>label{order:2;display:flex;align-items:center;gap:2px;font-size:9px;white-space:nowrap;padding:3px 2px}\n.row>label input{margin:0 2px 0 0}\n.row>button{order:3}\n.app>.line{order:5;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:start;gap:0;width:92px;flex:0 0 92px}\n.app>.line>span{order:2;font-size:7.5px;line-height:1.1;text-align:center;letter-spacing:-.03em}\n.app>.line>.kn{order:1;width:28px!important;height:28px!important}\n.app>.line>.kn svg{width:100%;height:100%}\n.mt{order:4;flex:1 1 100%;gap:2px}\n.mr{gap:4px;min-height:10px}\n.mr>span{width:44px;font-size:9px;white-space:nowrap}\npre{order:6;flex:1 1 245px;padding:3px 5px;font-size:8px;line-height:1.3;border-radius:4px;align-self:stretch}\n.screen{order:7;flex:1 1 90px;height:auto;min-height:48px;align-self:stretch;border-radius:4px}\n.proposal{order:8;flex:1 1 100%;padding:2px 5px;font-size:9px;line-height:1.3}\n.grid{order:9;flex:1 1 100%;display:flex;flex-wrap:wrap;gap:4px}\n.grp{display:flex;flex-wrap:wrap;align-content:flex-start;gap:2px 0;padding:3px;border:1px solid var(--line);background:var(--card-2);border-radius:4px;min-width:0}\n.control{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:start;gap:0;padding:0;border:0;background:none;border-radius:0;min-width:0;flex:1 1 56px}\n.control .line{display:contents}\n.control .line>span{order:4;max-width:100%;font-size:7.5px;line-height:1.1;text-align:center;letter-spacing:-.03em;overflow-wrap:anywhere}\n.control .line>output{order:2;font-size:8px;line-height:1.1;text-align:center;white-space:nowrap}\n.control .line>input{order:1;margin:7px 0 6px}\n.control>input[type=range]{order:1}\n.control>.kn{order:1;width:28px!important;height:28px!important;justify-self:center}\n.control>.kn svg{width:100%;height:100%}\n.control>select{order:1;width:100%;height:24px;padding:2px 0;font-size:8px;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;cursor:pointer}\n.control:has(>select){flex:2 1 100px}\n.control:has(>select) .line>span{order:2}\n.control:has(>select) .lock{order:3}\n.lock{order:3;display:flex;align-items:center;justify-content:center;gap:1px;font-size:7.5px;padding:1px 0 0}\n.lock input{margin:0 2px 0 0;width:11px;height:11px}\n.status{order:10;flex:1 1 100%;font-size:8.5px;line-height:1.2}\n.grp[data-g=main]{flex:1 1 100%}\n.grp[data-g^=band]{flex:1 1 100%}"
+    }
+  ]
+}

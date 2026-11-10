@@ -1,0 +1,41 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.mixer.compact",
+  "device": "nl.patchkamer.mixer",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the value and label underneath, narrow strips and shorter faders.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 600
+    },
+    "meters": [
+      {
+        "match": "group:meters",
+        "length": 84,
+        "width": 6
+      }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs, narrow strips, shorter faders.",
+      "css": ""
+    }
+  ]
+}

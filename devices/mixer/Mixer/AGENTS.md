@@ -67,6 +67,10 @@ Wat Mixer met een state doet (getest):
 - Een niet-eindige of absurde waarde (`NaN`, `±Infinity`, 1e9 en groter) die van een apparaat ervoor binnenkomt, laat de EQ-filters en de begrenzer niet meer voorgoed ontsporen: elke 100 ms vervangt de Mixer een ontspoord filter (de instellingen blijven) en het geluid komt terug. Getest met een burst van `NaN`, `±Infinity`, 1e9 en 1e30; normaal geluid is ongewijzigd.
 - Een state van de oude Mixer 1.x (lineaire niveaus, geen groepen) wordt nog omgezet.
 
+## Skins
+
+Mixer bouwt zijn eigen `<input type="range">`, `<select>` en strook-DOM zonder shadow root. Sinds 2.8.0 melden de regelaars zich aan met `host.ui.adopt`: id = het id uit `params()` (`ch1.trim`, `ch1.eq3.0`, `ch1.send`, `ch1.ret`, `ch1.pan`, `ch1.lvl`, `g1.*`, `master.*`; rol `param`, de fader `fader`), `ch1.grp` en `ch1.src` (rol `select`), plus `eq`, `target` en `curve` in de configuratierij; groep = de strook (`ch1`, `g1`, `master`). Het apparaat zet zelf een korte stijl (`SKINCSS`) die alleen werkt als de host een draaiknop (`.kn`) naast een mini-regelaar zet. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.mixer/` (draaiknoppen met naam en waarde eronder, smalle stroken, lagere fader en meters; 600 x 696 punten tegenover 960 x 756 bij 8 kanalen en 2 groepen). Wijzig je de klassen `mx2-*`, controleer dan die skin. De validator geeft sinds 2.8.0 een `let op` voor kanalen 9 tot 32 die niet in `params()` staan: dat komt doordat hij de UI met 32 kanalen bouwt terwijl `params()` bij 8 kanalen is opgevraagd; het is geen fout in het apparaat.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mixer/Mixer/mixer.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

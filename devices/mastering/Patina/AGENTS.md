@@ -58,6 +58,10 @@ Beide werken op het natte pad, vóór het mengen, en schalen dus met `mix`.
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
 - Het pack voor dit apparaat is gegenereerd door een eigen generator (`patina.py`: stijl × situatie, met waarden voor karakter, drive, mix, kleur, helderheid en laagbescherming) en daarna per preset in niveau gekalibreerd met `trim` (|dRms| < 1 dB op loop en roze ruis). Dit zijn eigen Patina-waarden, geen kopie van de Director-recepten; verander je het geluid van het apparaat, kalibreer `trim` dan opnieuw.
 
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.17.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (de naam van het veld in de state, plus `amount`), `role` is `param` (schuif) of `select` (keuzelijst) en `group` is de laan: `sat` (karakter, Drive, Mix, Kleur, Helderheid, Laagbescherming, Uitgangstrim) en `auto` (`amount`). De regelaars staan per groep in een omhulsel `.grp` (zonder skin `display:contents`, dus ongewijzigd uiterlijk). De vinkjes (aan/uit, Vast) hebben geen id. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.patina/` (draaiknoppen met de naam eronder, per groep één kader, meters en spectrum naast elkaar, ongeveer 480 x 360 punten tegenover 660 x 654). Wijzig je de opbouw van `.row`, `.line`, `.grid`, `.grp`, `.control`, `pre` of `.screen`, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mastering/Patina/patina.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

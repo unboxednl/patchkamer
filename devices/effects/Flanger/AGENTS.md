@@ -43,6 +43,10 @@ Wat Flanger met een state doet (getest):
 
 Wat Flanger met zijn ingang doet (getest): de worklet begrenst de ingang op ±16 (+24 dB) en maakt `NaN` tot 0, begrenst een niet-eindige stuurwaarde van Manual, en leegt zijn vertraglijn als er toch iets niet-eindigs in de uitvoer komt. Voorheen bleef de terugkoppeling na één `NaN` voorgoed `NaN` geven. De vertraglijn is groot genoeg voor de langste vertraging bij elke samplefrequentie (bij 96 kHz las de vorige versie bij veel Manual en diepte de verkeerde plek in de lijn). Normaal geluid is bit-identiek aan de vorige versie bij 44,1 en 48 kHz.
 
+## Skins
+
+Flanger gebruikt `host.ui.knob` en `host.ui.select` met `id` en `group`, maar heeft geen eigen shadow root: een skin kan hier alleen `design` gebruiken (draaiknoppen en `layout`-panelen), geen eigen CSS. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.flanger/`. Kaart 300 x 280 tegenover 300 x 325.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Flanger/flanger.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

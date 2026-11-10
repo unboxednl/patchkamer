@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.7 (2026-11-10)
+
+### Added
+- **Compact skin for 36 effects, mastering devices, modulators and mixer devices.** Rotary knobs with the name and value underneath, the controls grouped in one frame per group and no scrollbars; the cards become about 480 points wide (Mixer 600) and usually 30 to 60 percent shorter. Devices: Audio Capture, Audio Input, Audio Output, Balance EQ, Bitcrusher, Bus Compressor, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Drift, Effect Chain, Flanger, Follower, Gate, Grit, Harmonizer, Leveler, LFO, Macro, Master Chain, Master Director, Mix Check, Mixer, MSEG, Multiband Balance, Patina, Phaser, Pump, Resonator, Reverb, Room, Stereo Space, Swell en Vocoder. Where a device was already small or a skin gained nothing (Chorus, Filter, Tremolo, Frequency Shifter, Pitch Shifter, Pitch Correction, Speakers, Listening Output) there is no skin. Many devices register their controls for skins for this (id is the state key, group per section); without a skin they look and sound the same, and state, params() and ports are unchanged. The Effect Chain has a smaller minimum width (480 instead of 960).
+
 ## 0.30.6 (2026-11-10)
 
 ### Added

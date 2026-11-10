@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id v.0…v.3 en glide, groep macro; rol param), zodat een skin ze als draaiknop kan tonen (compacte skin). Geluid, state en presets zijn gelijk aan 1.12.0.
 // 1.12.0 — Uitleg naar about (menu Over Macro); de UI toont geen uitlegtekst meer.
 // 1.11.0 — Patchkamer contract v1.11. Tweetalig (host.lang, poortnamen per taal in i18n); kleuren van de invoervelden uit de host (--field, --field-fg);
 //          schuiven met data-pk-default. setState negeert onbekende velden, kapt getallen af op hun bereik en geeft bij een ongeldige waarde de beginwaarde;
@@ -55,8 +56,10 @@ details.lane>summary small{font-family:var(--mono,monospace);letter-spacing:0;te
 @container (max-width:520px){ .prow{grid-template-columns:minmax(70px,1fr) minmax(80px,1.4fr) 44px 12px} .prow select{grid-column:1/-1} }
 `;
 const E = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
-function mkSlider(parent, label, min, max, step, val, fmt, onin) {
-  const w = E('div', 'ctl'), l = E('label'), o = E('output'), i = E('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label); i.setAttribute('data-pk-default', String(val));
+// skins (contract §12d): meldt een eigen regelaar aan zodat een skin hem als draaiknop kan tonen; a = { h: host, id: state-sleutel, g: groep }
+const adopt = (el, a, role, label) => { if (a && a.h && a.h.ui && typeof a.h.ui.adopt === 'function') { try { a.h.ui.adopt(el, { id: a.id, role, group: a.g, label }); } catch (e) { /* oud contract */ } } };
+function mkSlider(parent, label, min, max, step, val, fmt, onin, a) {
+  const w = E('div', 'ctl'), l = E('label'), o = E('output'), i = E('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label); i.setAttribute('data-pk-default', String(val)); adopt(i, a, 'param', label);
   l.append(document.createTextNode(label), o); o.textContent = fmt(+val); i.oninput = () => { onin(+i.value); o.textContent = fmt(+i.value); };
   w.append(l, i); parent.appendChild(w); return { el: w, i, o, set(v) { i.value = v; o.textContent = fmt(+v); } };
 }
@@ -139,7 +142,7 @@ export default {
   id: 'nl.patchkamer.macro',
   name: 'Macro',
   about: { nl: 'Vier knoppen die elk een groep parameters tegelijk draaien, ook over apparaten heen. Kies per parameter welke knop hem stuurt en hoe ver. De CC-ingang accepteert {type:"cc", id:"m1"…"m4", value:0…1}.', en: 'Four knobs that each turn a group of parameters at once, even across devices. Choose per parameter which knob drives it and how far. The CC input accepts {type:"cc", id:"m1"…"m4", value:0…1}.' },
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'modulator',
   category: 'mod',
   ui: { width: 640, minWidth: 360 },
@@ -161,12 +164,12 @@ export default {
       for (let i = 0; i < N; i++) {
         const col = E('div', 'ctl'); col.style.minWidth = '110px'; col.style.flex = '1 1 0'; col.style.gap = '6px';
         const nm = E('input'); nm.type = 'text'; nm.value = S.names[i]; nm.maxLength = NAME_MAX; nm.setAttribute('aria-label', tx('naam van knop {0}', i + 1)); nm.oninput = () => { S.names[i] = nm.value; }; col.appendChild(nm); ui.n[i] = nm;
-        ui.k[i] = mkSlider(col, 'M' + (i + 1), 0, 1, 0.001, S.v[i], v => Math.round(v * 100) + '%', v => setV(i, v));
+        ui.k[i] = mkSlider(col, 'M' + (i + 1), 0, 1, 0.001, S.v[i], v => Math.round(v * 100) + '%', v => setV(i, v), { h: host, id: 'v.' + i, g: 'macro' });
         ui.k[i].i.style.height = '28px'; ui.k[i].i.ondblclick = () => setV(i, 0);
         const bl = E('label', 'lab'), bc = E('input'); bc.type = 'checkbox'; bc.checked = S.bip[i]; bc.onchange = () => { S.bip[i] = bc.checked; push(i); }; bl.title = tx('bipolair: 50% is de knopstand, links eronder, rechts erboven'); bl.append(bc, document.createTextNode(tx('bipolair'))); col.appendChild(bl); ui.b[i] = bc;
         r1.appendChild(col);
       }
-      const r2 = E('div', 'row'); b1.appendChild(r2); ui.glide = mkSlider(r2, tx('Glijden'), 0, 2, 0.01, S.glide, v => Math.round(v * 1000) + ' ms', v => { S.glide = v; });
+      const r2 = E('div', 'row'); b1.appendChild(r2); ui.glide = mkSlider(r2, tx('Glijden'), 0, 2, 0.01, S.glide, v => Math.round(v * 1000) + ' ms', v => { S.glide = v; }, { h: host, id: 'glide', g: 'macro' });
       const b3 = E('div', 'box'); b3.appendChild(E('div', 'lab', tx('Toewijzing · kies per parameter de knop (M1…M4) en de diepte'))); const ab = E('div', 'asg'); b3.appendChild(ab); mk.appendChild(b3);
       asg.mount(ab);
     }

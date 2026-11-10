@@ -48,6 +48,10 @@ Wat Leveler met een state doet (getest):
 IN en UIT zijn host-meters (`host.ui.meter`, contract v1.18): ids `met.in` en `met.out`, groep `meters`, `unit: 'db'`, bereik −60 tot 0 dB, horizontaal, zonder piekstreepje; ze worden gevoed met `set(db)` vanuit de eigen tekenklok (30 beelden per seconde) uit de worklet-berichten. Een skin kan er een ronde VU-meter, ledlader of andere balk van maken (`design.meters`, `match: "met.in"` of `"group:meters"`). Het doelniveau staat als streepje over een horizontale balk of ledlader; bij een VU-gezicht of een andere richting is het weg.
 Bewust **niet** omgezet: de REGEL-balk (een correctie rond nul, dus geen niveaumeter), het limiterlampje met de getalweergave en de getallen naast de meters; die blijven canvas of tekst. Een host zonder `host.ui.meter` tekent alles zoals voor 1.16.0 in één canvas. Geluid, worklet-berichten, `getState()` en presets zijn ongewijzigd.
 
+## Skins
+
+Leveler gebruikt `host.ui.knob` en `host.ui.select` met `id` en `group` (`mode`, `level`, `timing`, `limits`). Sinds 1.18.0 staan de zes knoppen in `div.lv-knobs` (per groep een `div.lv-sec`) en zet het apparaat zelf een korte stijl voor een skin met draaiknoppen (alleen actief als de host `data-pk-face` zet; zonder skin ongewijzigd). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.leveler/` (draaiknoppen met waarde en naam eronder in één kader, 360 x 259 punten tegenover 420 x 381). Wijzig je de klassen `lv-knobs`, `lv-sec` of `lv-btns`, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mixer/Leveler/leveler.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

@@ -54,6 +54,10 @@ Wat Follower met een state doet (getest):
 
 Wat Follower met zijn ingang doet (getest): `NaN`, `±Infinity` en absurd grote waarden (boven ±16) worden begrensd, zodat één foutieve waarde van een apparaat ervoor de volgers niet voorgoed vergiftigt; een bewaker zet een ontspoorde toestand per blok terug, en de worklet accepteert alleen eindige parameters. Normaal geluid, de drie stuursignalen en de aanslagen blijven bit-identiek aan de oude versie.
 
+## Skins
+
+De regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`focus`, `freq`, `gain`, `att`, `rel`, `floor`, `range`, `pol`, `inv`, `tsens`, `tdec`, `hold`, `gate`, `trigOut` en `trigNote`), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `det` (detectie) en `hit` (aanslagen). `trigNote` staat in `modExclude` (geheel getal, bewust niet stuurbaar). De diepteschuiven van de toewijzingslijst hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.follower/` (draaiknoppen met naam en waarde eronder, weinig kaders, geen uitlegtekst, kaartbreedte 480 px); de CSS erin werkt in de shadow root van het apparaat. De `id`'s, rollen en groepen horen bij de vaste interface: hernoem ze niet (een skin die erop mikt valt dan stil terug).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/modulators/Follower/follower.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

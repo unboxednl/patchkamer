@@ -43,6 +43,10 @@ Gedrag van `setState` (getest): bereik afgekapt, een tekst/`null`/`NaN`/ontbreke
 
 Een wissel van `ir`, `start`, `length`, `stretch` of `balance` bouwt een nieuwe buffer en kruisfade (60 ms), hoogstens ongeveer drie keer per seconde (debounce); bij modulatie van die vier gebeurt hetzelfde. Een eigen IR is hoogstens 12 s; langer wordt afgekapt.
 
+## Skins
+
+De regelaars zijn via `host.ui.knob` en `host.ui.select` herkenbaar voor skins (`id` is de state-sleutel, `role` is `param` of `select`, groepen `ir`, `tone` en `output`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.convolutionreverb/`: de IR-keuze als regel en tien draaiknoppen in vijf kolommen; de rij "Eigen IR" en de notities blijven eronder (ze hebben geen id); ongeveer 520 x 383 tegenover 490 x 302 punten. De skin gebruikt alleen `design.controls`, `design.layout` en `design.size`; het apparaat zelf is er niet voor aangepast. Hernoem je een id of groep, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/ConvolutionReverb/convolution-reverb.patchkamer-device.js --lang nl` en `--lang en`: `OK`, zonder `let op`.

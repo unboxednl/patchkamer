@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep wave/env; rol param of select), zodat een skin ze als draaiknop kan tonen (compacte skin). Geluid, state en params() zijn gelijk aan 1.12.0.
 // 1.12.0 — Uitleg naar about (menu Over LFO); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de continue regelaars Hz, Vervorm, Fase, Sterkte, Glijden en de envelope-tijden/-niveaus (alle standaard uit). Modulatie is nooit state en komt alleen
 //          bovenop de knop; een tweede modulator die de LFO stuurt geeft geen lus (modulate() roept zelf geen host.modulate aan). Bewust weggelaten: aantal stappen (geheel getal, discreet), vorm/snelheidsdeling (keuzes), vinkjes. De uitvoer zonder modulatie is gelijk aan 1.11.0.
@@ -66,14 +67,16 @@ details.lane>summary small{font-family:var(--mono,monospace);letter-spacing:0;te
 `;
 const E = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
 // def = de standaardstand van de schuif (dubbelklik zet hem daarop terug, ook als de UI later met andere waarden wordt gebouwd)
-function mkSlider(parent, label, min, max, step, val, fmt, onin, def) {
+// skins (contract §12d): meldt een eigen regelaar aan zodat een skin hem als draaiknop kan tonen; a = { h: host, id: state-sleutel, g: groep }
+const adopt = (el, a, role, label) => { if (a && a.h && a.h.ui && typeof a.h.ui.adopt === 'function') { try { a.h.ui.adopt(el, { id: a.id, role, group: a.g, label }); } catch (e) { /* oud contract */ } } };
+function mkSlider(parent, label, min, max, step, val, fmt, onin, def, a) {
   const w = E('div', 'ctl'), l = E('label'), o = E('output'), i = E('input'); i.type = 'range'; i.min = min; i.max = max; i.step = step; i.value = val; i.setAttribute('aria-label', label);
-  if (def != null) i.setAttribute('data-pk-default', String(def));
+  if (def != null) i.setAttribute('data-pk-default', String(def)); adopt(i, a, 'param', label);
   l.append(document.createTextNode(label), o); o.textContent = fmt(+val); i.oninput = () => { onin(+i.value); o.textContent = fmt(+i.value); };
   w.append(l, i); parent.appendChild(w); return { el: w, i, o, set(v) { i.value = v; o.textContent = fmt(+v); } };
 }
-function mkSelect(parent, label, opts, val, onch) {
-  const w = E('div', 'ctl'), l = E('label', '', label), s = E('select'); s.setAttribute('aria-label', label);
+function mkSelect(parent, label, opts, val, onch, a) {
+  const w = E('div', 'ctl'), l = E('label', '', label), s = E('select'); s.setAttribute('aria-label', label); adopt(s, a, 'select', label);
   opts.forEach(([v, t]) => { const o = E('option', '', t); o.value = v; s.appendChild(o); }); s.value = val; s.onchange = () => onch(s.value);
   w.append(l, s); parent.appendChild(w); return { el: w, s, set(v) { s.value = v; } };
 }
@@ -205,15 +208,16 @@ export default {
   id: 'nl.patchkamer.lfo',
   name: 'LFO',
   about: { nl: 'Een LFO op het tempo van de klok. Trek de paarse uitgang naar de Mod-ingang van een apparaat en kies hieronder wat er meebeweegt. Parameters met ⚡ worden sample-nauwkeurig gestuurd.', en: 'An LFO at the tempo of the clock. Pull the purple output to the Mod input of a device and choose below what moves along. Parameters with ⚡ are controlled sample-accurately.' },
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'modulator',
+  modExclude: ['nsteps'],   // geheel getal (aantal stappen), bewust niet stuurbaar
   category: 'mod',
   ui: { width: 760, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'trig', name: 'Trigger' }], eventOut: [], modIn: [], modOut: [{ id: 'mod', name: 'LFO' }] },
 
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
-    const D = DEF();
+    const D = DEF(); const A = (id, g) => ({ h: host, id, g });
     const S = DEF(); const mod = {}; let self, dead = false, ui = null, stopDraw = null, trigT = -1, gateEnd = -1, trigB = 0;
     let cw = 0, ch = 0, ro = null, col = null, colT = 0;
     const clock = mkClock(ctx, host);
@@ -278,14 +282,14 @@ export default {
     function build(root) {
       const mk = E('div', 'mk'); root.appendChild(mk); ui = {};
             const b1 = E('div', 'box'), r1 = E('div', 'row'); b1.appendChild(r1); mk.appendChild(b1);
-      ui.shape = mkSelect(r1, tx('Vorm'), SHAPES.map(([v, t]) => [v, tx(t)]), S.shape, v => { S.shape = v; ui.stepsRow.style.display = v === 'steps' ? '' : 'none'; changed(); });
-      ui.div = mkSelect(r1, tx('Snelheid'), DIVS.map(d => [d[0], tx(d[1])]), S.div, v => { S.div = v; ui.hz.el.style.display = v === 'free' ? '' : 'none'; changed(); });
-      ui.hz = mkSlider(r1, 'Hz', 0, 1, 0.001, hzPos(S.hz), x => (0.01 * Math.pow(2000, x)).toFixed(2) + ' Hz', x => { S.hz = 0.01 * Math.pow(2000, x); changed(); }, hzPos(D.hz));
+      ui.shape = mkSelect(r1, tx('Vorm'), SHAPES.map(([v, t]) => [v, tx(t)]), S.shape, v => { S.shape = v; ui.stepsRow.style.display = v === 'steps' ? '' : 'none'; changed(); }, A('shape', 'wave'));
+      ui.div = mkSelect(r1, tx('Snelheid'), DIVS.map(d => [d[0], tx(d[1])]), S.div, v => { S.div = v; ui.hz.el.style.display = v === 'free' ? '' : 'none'; changed(); }, A('div', 'wave'));
+      ui.hz = mkSlider(r1, 'Hz', 0, 1, 0.001, hzPos(S.hz), x => (0.01 * Math.pow(2000, x)).toFixed(2) + ' Hz', x => { S.hz = 0.01 * Math.pow(2000, x); changed(); }, hzPos(D.hz), A('hz', 'wave'));
       ui.hz.el.style.display = S.div === 'free' ? '' : 'none';
       const pct = v => Math.round(v * 100) + '%';
-      ui.deform = mkSlider(r1, tx('Vervorm'), -1, 1, 0.01, S.deform, pct, v => { S.deform = v; changed(); }, D.deform);
-      ui.phase = mkSlider(r1, tx('Fase'), 0, 1, 0.01, S.phase, v => Math.round(v * 360) + '°', v => { S.phase = v; changed(); }, D.phase);
-      ui.amp = mkSlider(r1, tx('Sterkte'), 0, 1, 0.01, S.amp, pct, v => { S.amp = v; changed(); }, D.amp);
+      ui.deform = mkSlider(r1, tx('Vervorm'), -1, 1, 0.01, S.deform, pct, v => { S.deform = v; changed(); }, D.deform, A('deform', 'wave'));
+      ui.phase = mkSlider(r1, tx('Fase'), 0, 1, 0.01, S.phase, v => Math.round(v * 360) + '°', v => { S.phase = v; changed(); }, D.phase, A('phase', 'wave'));
+      ui.amp = mkSlider(r1, tx('Sterkte'), 0, 1, 0.01, S.amp, pct, v => { S.amp = v; changed(); }, D.amp, A('amp', 'wave'));
       const r2 = E('div', 'row'); b1.appendChild(r2);
       const chk = (label, k, title) => { const l = E('label', 'lab'), c = E('input'); c.type = 'checkbox'; c.checked = !!S[k]; c.onchange = () => { S[k] = c.checked; changed(); }; l.title = tx(title || ''); l.append(c, document.createTextNode(tx(label))); r2.appendChild(l); ui['c_' + k] = c; };
       chk('Unipolair (0…+)', 'uni', 'alleen naar boven bewegen'); chk('Fase herstarten bij trigger', 'retrig', 'elke gebeurtenis op de Trigger-ingang zet de LFO op het begin'); chk('Envelope (DAHDSR)', 'env', 'de LFO volgt een envelope die start op de Trigger-ingang');
@@ -294,14 +298,14 @@ export default {
       let drag = false; ui.cv.addEventListener('pointerdown', e => { if (S.shape !== 'steps') return; drag = true; ui.cv.setPointerCapture(e.pointerId); stepEdit(e); });
       ui.cv.addEventListener('pointermove', e => { if (drag) stepEdit(e); }); ui.cv.addEventListener('pointerup', () => { drag = false; });
       ui.stepsRow = E('div', 'row'); b1.appendChild(ui.stepsRow); ui.stepsRow.style.display = S.shape === 'steps' ? '' : 'none';
-      ui.nsteps = mkSlider(ui.stepsRow, tx('Aantal stappen'), 2, 16, 1, S.nsteps, v => String(v), v => { S.nsteps = v; changed(); }, D.nsteps);
-      ui.glide = mkSlider(ui.stepsRow, tx('Glijden'), 0, 1, 0.01, S.glide, pct, v => { S.glide = v; changed(); }, D.glide);
+      ui.nsteps = mkSlider(ui.stepsRow, tx('Aantal stappen'), 2, 16, 1, S.nsteps, v => String(v), v => { S.nsteps = v; changed(); }, D.nsteps, A('nsteps', 'wave'));
+      ui.glide = mkSlider(ui.stepsRow, tx('Glijden'), 0, 1, 0.01, S.glide, pct, v => { S.glide = v; changed(); }, D.glide, A('glide', 'wave'));
       ui.stepsRow.appendChild(E('span', 'lab', tx('teken de stappen in de golf hierboven')));
       const b2 = E('div', 'box'), r3 = E('div', 'row'); b2.appendChild(E('div', 'lab', tx('Envelope · start op de Trigger-ingang (noten of trigs), gate = lengte van de noot'))); b2.appendChild(r3); mk.appendChild(b2);
       const sec = v => v < 1 ? Math.round(v * 1000) + ' ms' : v.toFixed(2) + ' s';
-      [['eDel', 'Delay', 0, 2], ['eAtk', 'Attack', 0.001, 4], ['eHold', 'Hold', 0, 2], ['eDec', 'Decay', 0.001, 4]].forEach(([k, l, mn, mx]) => { ui[k] = mkSlider(r3, l, mn, mx, 0.001, S[k], sec, v => { S[k] = v; changed(); }, D[k]); });
-      ui.eSus = mkSlider(r3, 'Sustain', 0, 1, 0.01, S.eSus, pct, v => { S.eSus = v; changed(); }, D.eSus);
-      ui.eRel = mkSlider(r3, 'Release', 0.001, 6, 0.001, S.eRel, sec, v => { S.eRel = v; changed(); }, D.eRel);
+      [['eDel', 'Delay', 0, 2], ['eAtk', 'Attack', 0.001, 4], ['eHold', 'Hold', 0, 2], ['eDec', 'Decay', 0.001, 4]].forEach(([k, l, mn, mx]) => { ui[k] = mkSlider(r3, l, mn, mx, 0.001, S[k], sec, v => { S[k] = v; changed(); }, D[k], A(k, 'env')); });
+      ui.eSus = mkSlider(r3, 'Sustain', 0, 1, 0.01, S.eSus, pct, v => { S.eSus = v; changed(); }, D.eSus, A('eSus', 'env'));
+      ui.eRel = mkSlider(r3, 'Release', 0.001, 6, 0.001, S.eRel, sec, v => { S.eRel = v; changed(); }, D.eRel, A('eRel', 'env'));
       const b3 = E('div', 'box'); b3.appendChild(E('div', 'lab', tx('Toewijzing · diepte als deel van het bereik van elke knop'))); const ab = E('div', 'asg'); b3.appendChild(ab); mk.appendChild(b3);
       asg.mount(ab);
       cw = ui.cv.clientWidth; ch = ui.cv.clientHeight; col = null;

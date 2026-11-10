@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 2.8.0 — Opmaak voor de skin Compact: de regelaars (trim, EQ, send, return, pan, fader, groepskeuze, bronkeuze, EQ-banden, doelniveau, fadercurve) melden zich aan met host.ui.adopt (id = id uit params(), rol param/fader/select, groep = strook) en het apparaat zet zelf een korte stijl voor een skin met draaiknoppen (alleen actief met een .kn naast een mini-regelaar; zonder skin ongewijzigd). Geluid, state, presets, params() en poorten ongewijzigd.
 // 2.7.0 — Instelbare fadercurve (Fadercurve, 1 tot 5; standaard 3): de schuif loopt over een positie van 0 tot 1 en het niveau volgt −60 + 66 · positie^(1/curve) dB, zodat het bovenste deel van de slag meer ruimte krijgt (curve 1 is de oude lineaire schuif; 0 dB ligt bij 3 op 75%). Het niveau in de state blijft in dB, dus bestaande songs klinken hetzelfde; de regelaar die een MIDI-schuif bestuurt heeft nu het bereik 0 tot 1 en volgt dezelfde curve.
 // 2.6.1 — Een VU-meter (skin) staat bovenaan de kanaalstrook, boven het kanaalnummer, in plaats van naast de fader. Het apparaat leest daarvoor het attribuut data-face van het meterelement (bar, ledladder of vu, door de host gezet) en zet de meter erheen of terug. Zonder skin, of met balken of ledladders, verandert er niets.
 // 2.6.0 — Niveaumeters van kanalen, groepen en master via host.ui.meter (contract v1.18, additief): de host tekent ze, een skin kan er een VU-meter of ledlader van maken en de lengte en breedte aanpassen. Standaardgezicht, maat, dB-schaal (−60 tot +6) en val zijn gelijk aan de eigen meter van voorheen; een oudere host valt terug op die eigen meter. De 100 ms-bewaker, geluid, getState, presets en poorten ongewijzigd.
@@ -128,10 +129,44 @@ const CSS = `
 .mx2-bun .port.jack{font-size:9px}
 `;
 
+// Opmaak voor de skin Compact: alleen actief als de host een draaiknop (.kn) naast een mini-regelaar zet; zonder skin doet dit niets
+const SKINCSS = `
+.mx2:has(.mx2-m .kn){gap:4px}
+.mx2:has(.mx2-m .kn) button{font-size:9px;padding:2px 5px}
+.mx2:has(.mx2-m .kn) .mx2-cfg{gap:2px 8px;padding:3px 6px}
+.mx2:has(.mx2-m .kn) .mx2-cfg label{font-size:8px;letter-spacing:.04em;gap:3px}
+.mx2:has(.mx2-m .kn) .mx2-cfg input[type=number]{width:36px;font-size:10px;padding:1px 3px}
+.mx2:has(.mx2-m .kn) .mx2-cfg .msg{min-width:0}
+.mx2:has(.mx2-m .kn) .mx2-cfg label:has(.kn){flex-direction:column;gap:0}
+.mx2:has(.mx2-m .kn) .mx2-cfg label:has(.kn) b{font-size:8px;text-align:center}
+.mx2:has(.mx2-m .kn) .mx2-cfg .kn{width:24px!important;height:24px!important}
+.mx2:has(.mx2-m .kn) .mx2-desk{gap:4px;padding:8px 0 3px}
+.mx2:has(.mx2-m .kn) .mx2-sec{gap:0;padding:5px 2px 4px}
+.mx2:has(.mx2-m .kn) .mx2-sec>.tag{font-size:8px;left:5px;padding:0 3px}
+.mx2:has(.mx2-m .kn) .mx2-strip{width:50px!important;gap:2px;padding:1px}
+.mx2:has(.mx2-m .kn) .mx2-head{min-height:0;gap:1px}
+.mx2:has(.mx2-m .kn) .mx2-head .lbl{font-size:12px}
+.mx2:has(.mx2-m .kn) .mx2-io{min-height:0}
+.mx2:has(.mx2-m .kn) input.nm{font-size:9px;padding:1px}
+.mx2:has(.mx2-m .kn) select{font-size:8.5px;padding:1px 0;min-height:16px}
+.mx2:has(.mx2-m .kn) select.src{font-size:8px}
+.mx2:has(.mx2-m .kn) .mx2-eq{padding:1px 0;gap:0}
+.mx2:has(.mx2-m .kn) .mx2-m{display:flex;flex-direction:column;align-items:center;gap:0}
+.mx2:has(.mx2-m .kn) .mx2-m .kn{order:0;width:26px!important;height:26px!important}
+.mx2:has(.mx2-m .kn) .mx2-m .l{order:1;display:flex;flex-direction:row;justify-content:center;align-items:baseline;gap:2px;font-size:7px;letter-spacing:0;line-height:1.2;max-width:100%;white-space:nowrap;overflow:hidden}
+.mx2:has(.mx2-m .kn) .mx2-m .l b{font-size:7.5px}
+.mx2:has(.mx2-m .kn) .mx2-bottom{gap:2px;padding-top:2px}
+.mx2:has(.mx2-m .kn) .mx2-fad{height:84px}
+.mx2:has(.mx2-m .kn) .mx2-fad input[type=range]{height:84px}
+.mx2:has(.mx2-m .kn) .mx2-db{font-size:9px}
+.mx2:has(.mx2-m .kn) .mx2-ms{min-height:22px;gap:2px}
+.mx2:has(.mx2-m .kn) .mx2-ms button{padding:2px 0;font-size:9px}
+`;
+
 export default {
   id: 'nl.patchkamer.mixer',
   name: 'Mixer',
-  version: '2.7.0',
+  version: '2.8.0',
   kind: 'mixer',
   modExclude: ['target'],   // doelniveau van 'gelijk trekken': geen audioregelaar maar een meetinstelling
   category: 'mix',
@@ -315,9 +350,11 @@ export default {
     const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
     const fmtDb = v => (v <= -59.5 ? '−∞' : (v > 0 ? '+' : '') + (+v).toFixed(1));
     const pct = v => Math.round(v * 100) + '%';
-    function mini(parent, label, [mn, mx, st], get, set, fmt, reset, cls) {
+    // eigen regelaars aanmelden voor skins (host.ui.adopt, v1.15): id = id uit params(), groep = strook; een oudere host negeert het
+    const adoptCtl = (el, id, role, label) => { if (!id || !host || !host.ui || typeof host.ui.adopt !== 'function') return; try { host.ui.adopt(el, { id, role, group: id.split('.')[0], label }); } catch (e) {} };
+    function mini(parent, label, [mn, mx, st], get, set, fmt, reset, cls, id) {
       const w = el('div', 'mx2-m' + (cls ? ' ' + cls : '')), l = el('div', 'l'), b = el('b', null, fmt(get())), i = el('input');
-      l.append(el('span', null, label), b); i.type = 'range'; i.min = mn; i.max = mx; i.step = st; i.value = get(); i.setAttribute('aria-label', label);
+      l.append(el('span', null, label), b); i.type = 'range'; i.min = mn; i.max = mx; i.step = st; i.value = get(); i.setAttribute('aria-label', label); adoptCtl(i, id, 'param', label);
       i.oninput = () => { set(+i.value); b.textContent = fmt(+i.value); applyAll(); };
       i.ondblclick = () => { set(reset); i.value = reset; b.textContent = fmt(reset); applyAll(); };
       w.append(l, i); parent.appendChild(w);
@@ -346,12 +383,12 @@ export default {
       const d0 = hm.destroy; hm.destroy = () => { mo.disconnect(); return d0.call(hm); };
       Promise.resolve().then(place);
     }
-    function fader(parent, get, set, an, mid) {
+    function fader(parent, get, set, an, mid, fid) {
       const f = el('div', 'mx2-fad'), i = el('input');
       let met, bar, pk, hm = null;
       if (hasHostMeter() && mid) { try { hm = host.ui.meter(f, T.level + ' ' + mid.slice(4).toUpperCase(), { id: mid, group: 'meters', source: an, kind: 'peak', unit: 'linear', range: [-60, 6], hold: true, orientation: 'vertical', length: 130, width: 8 }); } catch (e) { hm = null; } }
       if (hm) { f.classList.add('hm'); hostMeters.push(hm); growStrip(f, hm); watchFace(f, hm); } else { met = el('div', 'mx2-met'); bar = el('i'); pk = el('u'); }
-      i.type = 'range'; i.min = 0; i.max = 1; i.step = 0.001; i.value = dbToPos(get(), S.curve); i.setAttribute('aria-label', T.fader);
+      i.type = 'range'; i.min = 0; i.max = 1; i.step = 0.001; i.value = dbToPos(get(), S.curve); i.setAttribute('aria-label', T.fader); adoptCtl(i, fid, 'fader', T.fader);
       const v = el('div', 'mx2-db', fmtDb(get()));
       const fromPos = () => { const p = +i.value; let d = p <= 0.0005 ? -60 : Math.round(posToDb(p, S.curve) * 10) / 10; if (Math.abs(d) < 0.3) d = 0; return d; };
       i.oninput = () => { const d = fromPos(); set(d); v.textContent = fmtDb(d); applyAll(); };
@@ -360,27 +397,27 @@ export default {
       ui.refreshers.push(() => { i.value = dbToPos(get(), S.curve); v.textContent = fmtDb(get()); });
     }
     function jack(parent, id, dir, label, big) { if (!host.ui || !host.ui.jack) return; const j = host.ui.jack(self, parent, id, dir, label); if (big) j.classList.add('big'); return j; }
-    function eqBlock(s, c) { const eqb = el('div', 'mx2-eq'); s.appendChild(eqb); const arr = S.eq === 5 ? 'eq5' : 'eq3'; (S.eq === 5 ? EQ5 : EQ3).forEach((b, q) => mini(eqb, T[b.lab], [-15, 15, 0.5], () => c[arr][q], v => c[arr][q] = v, fmtDb, 0)); }
+    function eqBlock(s, c, pre) { const eqb = el('div', 'mx2-eq'); s.appendChild(eqb); const arr = S.eq === 5 ? 'eq5' : 'eq3'; (S.eq === 5 ? EQ5 : EQ3).forEach((b, q) => mini(eqb, T[b.lab], [-15, 15, 0.5], () => c[arr][q], v => c[arr][q] = v, fmtDb, 0, null, pre + '.' + arr + '.' + q)); }
     function paintMsg() { if (ui && ui.msg) ui.msg.textContent = msg; }
     function refresh() { if (ui) ui.refreshers.forEach(r => r()); }
 
     function render() {
       if (!root) return; root.innerHTML = ''; hostMeters.forEach(m => { try { m.destroy(); } catch (e) {} }); hostMeters = []; ui = { refreshers: [], meters: [], trims: [], msg: null };
-      const st = el('style'); st.textContent = CSS; root.appendChild(st);
+      const st = el('style'); st.textContent = CSS + SKINCSS; root.appendChild(st);
       const app = el('div', 'mx2'); root.appendChild(app);
       // configuration row
       const cfg = el('div', 'mx2-cfg'); app.appendChild(cfg);
       const numIn = (label, v, mn, mx, on) => { const l = el('label'), i = el('input'); i.type = 'number'; i.min = mn; i.max = mx; i.value = v; i.onchange = () => on(+i.value); l.append(label, i); cfg.appendChild(l); };
       numIn(T.chs, S.nCh, 1, MAXCH, v => configure(v, S.nGrp, true));
       numIn(T.grps, S.nGrp, 0, MAXGRP, v => configure(S.nCh, v, true));
-      { const l = el('label'), s = el('select'); [[3, T.bands3], [5, T.bands5]].forEach(([v, t]) => { const o = el('option', null, t); o.value = v; s.appendChild(o); }); s.value = S.eq; s.style.width = 'auto';
+      { const l = el('label'), s = el('select'); [[3, T.bands3], [5, T.bands5]].forEach(([v, t]) => { const o = el('option', null, t); o.value = v; s.appendChild(o); }); s.value = S.eq; s.style.width = 'auto'; adoptCtl(s, 'eq', 'select', T.eq);
         s.onchange = () => { S.eq = +s.value; rebuildAllEq(); applyAll(); paramsChanged(); render(); }; l.append(T.eq, s); cfg.appendChild(l); }
       cfg.appendChild(el('span', 'sep'));
       { const b = el('button', null, T.match); b.title = T.matchT; b.onclick = startMeasure; cfg.appendChild(b); }
       { const l = el('label'), c = el('input'); c.type = 'checkbox'; c.checked = S.auto; c.onchange = () => { S.auto = c.checked; chans.forEach(n => n.ema = null); }; l.append(c, T.cont); l.title = T.contT; cfg.appendChild(l); }
-      { const l = el('label'), i = el('input'), o = el('b', null, S.target + ' dB'); i.type = 'range'; i.min = -30; i.max = -6; i.step = 1; i.value = S.target; i.setAttribute('aria-label', T.goalA);
+      { const l = el('label'), i = el('input'), o = el('b', null, S.target + ' dB'); i.type = 'range'; i.min = -30; i.max = -6; i.step = 1; i.value = S.target; i.setAttribute('aria-label', T.goalA); adoptCtl(i, 'target', 'param', T.goal);
         i.oninput = () => { S.target = +i.value; o.textContent = S.target + ' dB'; }; o.style.fontWeight = '400'; o.style.color = 'var(--fg)'; l.append(T.goal, i, o); cfg.appendChild(l); }
-      { const l = el('label'), i = el('input'), o = el('b', null, T.curveAt(Math.round(dbToPos(0, S.curve) * 100))); i.type = 'range'; i.min = 1; i.max = 5; i.step = 0.1; i.value = S.curve; i.setAttribute('aria-label', T.curveA); l.title = T.curveT;
+      { const l = el('label'), i = el('input'), o = el('b', null, T.curveAt(Math.round(dbToPos(0, S.curve) * 100))); i.type = 'range'; i.min = 1; i.max = 5; i.step = 0.1; i.value = S.curve; i.setAttribute('aria-label', T.curveA); adoptCtl(i, 'curve', 'param', T.curve); l.title = T.curveT;
         i.oninput = () => { S.curve = +i.value; o.textContent = T.curveAt(Math.round(dbToPos(0, S.curve) * 100)); refresh(); }; o.style.fontWeight = '400'; o.style.color = 'var(--fg)'; l.append(T.curve, i, o); cfg.appendChild(l); }
       ui.msg = el('span', 'msg', msg); cfg.appendChild(ui.msg);
       cfg.appendChild(el('span', 'sep'));
@@ -395,22 +432,22 @@ export default {
         { const nm = el('input', 'nm'); nm.type = 'text'; nm.maxLength = 24; nm.value = c.name; nm.placeholder = chName(i); nm.title = T.chNameT; nm.setAttribute('aria-label', T.chNameA(k));
           nm.oninput = () => { c.name = nm.value.trim(); announce(); }; nm.addEventListener('pointerdown', e => e.stopPropagation()); s.appendChild(nm);
           ui.refreshers.push(() => { if (document.activeElement !== nm) nm.value = c.name; nm.placeholder = (srcOf(c.src) || {}).name || T.chN(k); }); }
-        { const sel = el('select', 'src'); sel.setAttribute('aria-label', T.srcA(k)); sel.title = T.srcT(k);
+        { const sel = el('select', 'src'); sel.setAttribute('aria-label', T.srcA(k)); adoptCtl(sel, 'ch' + k + '.src', 'select', T.srcA(k)); sel.title = T.srcT(k);
           const fill = () => { sel.innerHTML = ''; const o0 = el('option', null, T.cable); o0.value = ''; sel.appendChild(o0);
             bundlesIn.forEach(b => { const g = el('optgroup'); g.label = b.source.name + (b.label && b.label !== b.source.name ? ' · ' + b.label : ''); b.channels.forEach(ch => { const o = el('option', null, ch.name); o.value = b.key + '|' + ch.id; g.appendChild(o); }); sel.appendChild(g); });
             if (c.src && !srcOf(c.src)) { const o = el('option', null, T.lost); o.value = c.src; sel.appendChild(o); }
             sel.value = c.src; sel.className = 'src' + (!c.src ? ' none' : srcOf(c.src) ? '' : ' lost'); };
           fill(); sel.onchange = () => { c.src = sel.value; connectSrc(i); sel.className = 'src' + (!c.src ? ' none' : ''); refresh(); announce(); }; s.appendChild(sel); ui.refreshers.push(fill); }
         const io = el('div', 'mx2-io'); jack(io, 's' + k, 'out', T.jSend); jack(io, 'r' + k, 'in', T.jRet); s.appendChild(io);
-        ui.trims.push(mini(s, T.trim, [-24, 24, 0.5], () => c.trim, v => c.trim = v, fmtDb, 0, 'trim'));
-        eqBlock(s, c);
-        mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0);
-        mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8);
-        const g = el('select'); g.setAttribute('aria-label', T.toA(k)); { const o = el('option', null, T.toM); o.value = 0; o.title = T.toMT; g.appendChild(o); }
+        ui.trims.push(mini(s, T.trim, [-24, 24, 0.5], () => c.trim, v => c.trim = v, fmtDb, 0, 'trim', 'ch' + k + '.trim'));
+        eqBlock(s, c, 'ch' + k);
+        mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0, null, 'ch' + k + '.send');
+        mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8, null, 'ch' + k + '.ret');
+        const g = el('select'); g.setAttribute('aria-label', T.toA(k)); adoptCtl(g, 'ch' + k + '.grp', 'select', T.toA(k)); { const o = el('option', null, T.toM); o.value = 0; o.title = T.toMT; g.appendChild(o); }
         for (let q = 1; q <= S.nGrp; q++) { const o = el('option', null, '→ ' + (S.grp[q - 1].name || 'G' + q)); o.value = q; o.title = T.toT(grpName(q - 1)); g.appendChild(o); }
         g.value = c.grp <= S.nGrp ? c.grp : 0; g.onchange = () => { c.grp = +g.value; route(i); }; s.appendChild(g); ui.refreshers.push(() => { [...g.options].forEach(o => { const q = +o.value; if (q) { o.textContent = '→ ' + (S.grp[q - 1].name || 'G' + q); o.title = T.toT(grpName(q - 1)); } }); g.value = c.grp <= S.nGrp ? c.grp : 0; });
-        mini(s, T.pan, [-1, 1, 0.01], () => c.pan, v => c.pan = v, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100), 0);
-        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter, 'met.t' + k);
+        mini(s, T.pan, [-1, 1, 0.01], () => c.pan, v => c.pan = v, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100), 0, null, 'ch' + k + '.pan');
+        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter, 'met.t' + k, 'ch' + k + '.lvl');
         const ms = el('div', 'mx2-ms'), bm = el('button', 'm', 'M'), bs = el('button', 's', 'S'); bm.title = T.mute; bs.title = T.solo;
         bm.onclick = () => { c.mute = !c.mute; bm.classList.toggle('on', c.mute); applyAll(); }; bs.onclick = () => { c.solo = !c.solo; bs.classList.toggle('on', c.solo); s.classList.toggle('solo', c.solo); applyAll(); };
         ui.refreshers.push(() => { bm.classList.toggle('on', c.mute); bs.classList.toggle('on', c.solo); s.classList.toggle('solo', c.solo); });
@@ -425,10 +462,10 @@ export default {
           { const nm = el('input', 'nm'); nm.type = 'text'; nm.maxLength = 24; nm.value = c.name; nm.placeholder = T.grpN(k); nm.title = T.grpNameT; nm.setAttribute('aria-label', T.grpNameA(k));
             nm.oninput = () => { c.name = nm.value.trim(); refresh(); announce(); }; nm.addEventListener('pointerdown', e => e.stopPropagation()); s.appendChild(nm); }
           const io = el('div', 'mx2-io'); jack(io, 'gs' + k, 'out', T.jSend); jack(io, 'gr' + k, 'in', T.jRet); s.appendChild(io);
-          eqBlock(s, c);
-          mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0);
-          mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8);
-          const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter, 'met.g' + k);
+          eqBlock(s, c, 'g' + k);
+          mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0, null, 'g' + k + '.send');
+          mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8, null, 'g' + k + '.ret');
+          const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, n.meter, 'met.g' + k, 'g' + k + '.lvl');
           const ms = el('div', 'mx2-ms'), bm = el('button', 'm', 'M'); bm.title = T.mute; bm.onclick = () => { c.mute = !c.mute; bm.classList.toggle('on', c.mute); applyAll(); };
           ui.refreshers.push(() => bm.classList.toggle('on', c.mute)); ms.appendChild(bm); bot.appendChild(ms);
           tagCtl(s, 'G' + k);
@@ -438,10 +475,10 @@ export default {
       { const c = S.master, s = el('div', 'mx2-strip'); s.style.width = '76px'; secM.appendChild(s);
         const head = el('div', 'mx2-head'); jack(head, 'out', 'out', T.jOut, true); s.appendChild(head);
         const io = el('div', 'mx2-io'); jack(io, 'ms', 'out', T.jSend); jack(io, 'mr', 'in', T.jRet); s.appendChild(io);
-        eqBlock(s, c);
-        mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0);
-        mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8);
-        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, mMeter, 'met.master'); bot.appendChild(el('div', 'mx2-ms')); tagCtl(s, T.master); }
+        eqBlock(s, c, 'master');
+        mini(s, T.send, [0, 1, 0.01], () => c.send, v => c.send = v, pct, 0, null, 'master.send');
+        mini(s, T.ret, [0, 1, 0.01], () => c.ret, v => c.ret = v, pct, 0.8, null, 'master.ret');
+        const bot = el('div', 'mx2-bottom'); s.appendChild(bot); fader(bot, () => c.lvl, v => c.lvl = v, mMeter, 'met.master', 'master.lvl'); bot.appendChild(el('div', 'mx2-ms')); tagCtl(s, T.master); }
     }
 
     self = {

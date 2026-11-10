@@ -60,6 +60,10 @@ Wat Pump met een state doet (getest):
 - Onbekende velden worden genegeerd. Zet er geen in.
 - `Luister naar sidechain` (meeluisteren) is geen state: het staat na laden altijd uit.
 
+## Skins
+
+Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): sinds 1.14.0 melden de schuiven zich aan met `data-pk-id` (de state-sleutel: `depth`, `rel`, `att`, `hold`, `curve`, `thr`, `ratio`, `scfreq`, `xo`, `mix`, `makeup`, `tail`) en `data-pk-group` (`duck`, `detector` of `tone`). De hoogte van het duikscherm volgt de CSS-eigenschap `--u-ch` (standaard 90). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.pump/` (draaiknoppen met waarde en naam eronder, drie kaders naast elkaar, laag scherm; ongeveer 480 x 316 tegenover 720 x 673). Wijzig je de opbouw van `.top`, `h3` of `.grid`, controleer dan die skin: hij plaatst de koppen en kaders met `nth-child`.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Pump/pump.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

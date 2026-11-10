@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.4.0 — Skin Compact: de hoogte van de overdrachtscurve volgt de CSS-eigenschap --u-ch (zonder skin 190); regelaars zijn al herkenbaar (data-pk-id, -group). Geluid, state en ids ongewijzigd.
 // 1.3.0 — Uitleg naar about (menu Over Compressor); de UI toont geen uitlegtekst meer.
 // 1.2.0 — Patchkamer contract v1.34: latency() meldt de lookahead aan de host (alleen weergave; de host compenseert niet).
 // 1.1.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
@@ -66,6 +67,8 @@ const ukClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? ukClamp(x, a, b) : d;
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
 const ukStop = e => e.stopPropagation();
+// hoogte van een canvas: een skin kan hem verlagen met de eigenschap --u-ch (40 tot 400); zonder skin blijft het de standaard
+const ukH = (el, d) => { const v = parseFloat(ukVar(el, '--u-ch', '')); return v >= 40 && v <= 400 ? v : d; };
 function ukShadow(hostEl, css) { const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); ukEl(sh, 'style').textContent = css; sh.addEventListener('pointerdown', ukStop); sh.addEventListener('keydown', ukStop); return ukEl(sh, 'div', 'app'); }
 function ukSelect(p, label, opts, value, change, id) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); if (id) s.setAttribute('data-pk-id', id); return s; }
 function ukButton(p, label, tip, id, click) { const b = ukEl(p, 'button', '', label); b.type = 'button'; if (tip) b.title = tip; if (id) b.setAttribute('data-pk-id', id); b.onclick = click; return b; }
@@ -178,7 +181,7 @@ class Comp extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Comp);`;
 
 export default {
-  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.3.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.compressor', name: 'Compressor', version: '1.4.0', kind: 'effect', category: 'effect',
   about: { nl: 'Maakt het verschil tussen zacht en luid kleiner. Drempel, ratio en knee bepalen hoeveel, attack en release hoe snel; met sidechain-filter, lookahead, parallelle mix en mid/side.\n\nTip: begin met ratio 4:1, attack 10 ms en release 120 ms en verlaag de drempel tot de reductiemeter 3 tot 6 dB beweegt. Zet Mix op 40 tot 60% voor parallelle compressie. Met Lookahead hoort de compressor een piek al voor hij komt (kost latency). Een hoogdoorlaat van 80 tot 150 Hz op de sidechain voorkomt dat de bas het pompen veroorzaakt.', en: 'Narrows the gap between soft and loud. Threshold, ratio and knee set how much, attack and release how fast; with a sidechain filter, lookahead, parallel mix and mid/side.\n\nTip: start with ratio 4:1, attack 10 ms and release 120 ms and lower the threshold until the reduction meter moves 3 to 6 dB. Set Mix to 40 to 60% for parallel compression. With Lookahead the compressor sees a peak before it arrives (costs latency). A highpass of 80 to 150 Hz on the sidechain stops the bass from causing the pumping.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', mod: 'Mod' } } },
@@ -250,7 +253,7 @@ export default {
         for (const [id, k] of Object.entries(ui.k)) k.set(state[id]); ui.ext.style.display = state.sc === 'ext' ? '' : 'none'; }
       ui.k.rel.el.style.opacity = state.auto ? 0.35 : 1; ui.lat.textContent = tx('latency', (eff.look !== undefined ? eff.look : state.look).toFixed(1)); }
     let grTxt = '', lvTxt = '';
-    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, 190); const T = eff.thr !== undefined ? eff.thr : state.thr, W = eff.knee !== undefined ? eff.knee : state.knee, R = eff.ratio !== undefined ? eff.ratio : state.ratio, iR = R >= 99.5 ? 0 : 1 / R;
+    function draw() { if (dead || !cv) return; const { g, w, h } = ukCanvas(cv, ukH(cv, 190)); const T = eff.thr !== undefined ? eff.thr : state.thr, W = eff.knee !== undefined ? eff.knee : state.knee, R = eff.ratio !== undefined ? eff.ratio : state.ratio, iR = R >= 99.5 ? 0 : 1 / R;
       if (g) { const acc = ukVar(cv, '--u-acc', '#7ee0a1'), line = ukVar(cv, '--line', '#333'), mut = ukVar(cv, '--muted', '#888'); g.clearRect(0, 0, w, h);
         const L = 30, B = 16, pw = w - L - 8, ph = h - B - 8, lo = -60, hi = 0, X = d => L + (d - lo) / (hi - lo) * pw, Y = d => 8 + (hi - d) / (hi - lo) * ph;
         g.strokeStyle = line; g.lineWidth = 1; g.fillStyle = mut; g.font = '9px monospace';

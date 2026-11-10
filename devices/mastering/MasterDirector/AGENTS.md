@@ -35,6 +35,10 @@ Een preset (`getPreset()`) bevat dezelfde velden zonder `excluded` (de lijst van
 
 De formules staan in `recipe()` in het bestand. Ze zijn een grover model dan de presetpacks van de andere mastering-apparaten: die zijn per preset afgestemd (gemeten 07-11: bijna elke waarde verschilt, bijvoorbeeld Patina-drive tot 13,5 dB). Daarom gebruikt de host de packs zodra de keuze een Director-preset is (zie hierboven); het recept is de terugval voor alle andere keuzes en sterktes.
 
+## Skins
+
+De keuzelijsten (`style`, `situation`), de schakelaars (`direct`, `follow`, `sameChain`) en de sterkte (`strength`) zijn sinds 1.15.0 via `host.ui.adopt` herkenbaar voor skins (id = state-sleutel). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.masterdirector/` (sterkte als draaiknop, alles in strakke rijen; ongeveer 480 x 250 punten tegenover 670 x 444).
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mastering/MasterDirector/master-director.patchkamer-device.js --lang nl` en `--lang en`. Beide `OK`.

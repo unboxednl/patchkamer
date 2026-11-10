@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep top/swell; rol param of select), zodat een skin ze als draaiknop kan tonen (compacte skin). Geluid, state en params() zijn gelijk aan 1.13.0.
 // 1.13.0 — Uitleg naar about (menu Over Swell); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.11.1 — Zelf bestuurbaar (contract §8): params() + modulate() voor de zes continue regelaars (Ademgolf, Hoeveelheid, Warmte, Ruimte, Beweging, Variatie; alle standaard uit). Modulatie komt alleen bovenop de knop en is nooit state.
@@ -103,7 +104,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id: 'nl.patchkamer.swell', name: 'Swell', about: { nl: 'Samenhangende beweging voor warme, rustige en open klankvelden.\n\nDoelen: vink parameters aan en kies de beweging. Bereik is een deel van het volledige parameterbereik; negatief keert de richting om.', en: 'Coherent movement for warm, calm and open soundscapes.\n\nTargets: tick parameters and pick the movement. Range is a share of the full parameter range; negative reverses the direction.' }, version: '1.13.0', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
+  id: 'nl.patchkamer.swell', name: 'Swell', about: { nl: 'Samenhangende beweging voor warme, rustige en open klankvelden.\n\nDoelen: vink parameters aan en kies de beweging. Bereik is een deel van het volledige parameterbereik; negatief keert de richting om.', en: 'Coherent movement for warm, calm and open soundscapes.\n\nTargets: tick parameters and pick the movement. Range is a share of the full parameter range; negative reverses the direction.' }, version: '1.14.0', kind: 'modulator', category: 'mod', ui: { width: 640, minWidth: 300 },
   ports: { audioIn: [], audioOut: [], eventIn: [], eventOut: [], modIn: [], modOut: [{ id: 'mod', name: 'Swell' }], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host && host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -178,13 +179,15 @@ export default {
         const style = document.createElement('style'); style.textContent = CSS; shadow.appendChild(style);
         function make(tag, text, parent, cls) { const e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
         const D = DEF();
+        // skins (contract §12d): meldt een eigen regelaar aan zodat een skin hem als draaiknop kan tonen
+        const adopt = (el, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
         const app = make('div', null, shadow, 'app');
-        const top = make('div', null, app, 'row'), profile = make('select', null, top); profile.setAttribute('aria-label', tx('Sfeer'));
+        const top = make('div', null, app, 'row'), profile = make('select', null, top); profile.setAttribute('aria-label', tx('Sfeer')); adopt(profile, 'profile', 'select', 'top', tx('Sfeer'));
         for (const [k, p] of Object.entries(PROFILES)) { const o = make('option', tx(p.name), profile); o.value = k; }
         profile.onchange = () => { const key = profile.value, p = PROFILES[key]; for (const k of ['period', 'depth', 'warmth', 'space', 'motion', 'human']) state[k] = p[k]; state.profile = key; syncUI(); }; controls.push({ el: profile, key: 'profile' });
         function check(key, title) { const label = make('label', null, top, 'switch'), i = make('input', null, label); i.type = 'checkbox'; make('span', tx(title), label); i.onchange = () => { state[key] = i.checked; syncUI(); }; controls.push({ el: i, key, check: true }); }
         check('on', 'Aan'); check('follow', 'Volg Start/Stop'); check('sync', 'Op tempo');
-        const beats = make('select', null, top); beats.setAttribute('aria-label', tx('Tempoverdeling')); for (const n of BEATS) { const o = make('option', tx('{0} tellen', n), beats); o.value = String(n); } beats.onchange = () => { state.beats = Number(beats.value); syncUI(); }; controls.push({ el: beats, key: 'beats' });
+        const beats = make('select', null, top); beats.setAttribute('aria-label', tx('Tempoverdeling')); adopt(beats, 'beats', 'select', 'top', tx('Tempoverdeling')); for (const n of BEATS) { const o = make('option', tx('{0} tellen', n), beats); o.value = String(n); } beats.onchange = () => { state.beats = Number(beats.value); syncUI(); }; controls.push({ el: beats, key: 'beats' });
         const screen = make('div', null, app, 'screen'); canvas = make('canvas', null, screen); canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', tx('De vier modulatiebanen')); pen = canvas.getContext('2d');
         cw = screen.clientWidth; ch = screen.clientHeight; col = null;
         if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const r = es[0] && es[0].contentRect; if (r) { cw = r.width; ch = r.height; } }); ro.observe(screen); }
@@ -193,7 +196,7 @@ export default {
         const grid = make('div', null, app, 'controls');
         for (const [key, name, min, max, step, format] of KNOBS) {
           const label = make('label', null, grid, 'control'), head = make('div', null, label, 'label'); make('span', tx(name), head); const output = make('output', null, head), input = make('input', null, label);
-          input.type = 'range'; input.min = min; input.max = max; input.step = step; input.value = D[key]; input.dataset.pkDefault = String(D[key]); input.setAttribute('aria-label', tx(name)); input.oninput = () => { state[key] = Number(input.value); syncUI(); }; controls.push({ el: input, key, output, format });
+          input.type = 'range'; input.min = min; input.max = max; input.step = step; input.value = D[key]; input.dataset.pkDefault = String(D[key]); input.setAttribute('aria-label', tx(name)); adopt(input, key, 'param', 'swell', tx(name)); input.oninput = () => { state[key] = Number(input.value); syncUI(); }; controls.push({ el: input, key, output, format });
         }
         const action = make('div', null, app, 'row'), neutral = make('button', tx('Alles neutraal'), action); neutral.type = 'button'; neutral.onclick = () => { state.on = false; syncUI(); };
         const recommend = make('button', tx('Voorzichtig voorstel'), action); recommend.type = 'button'; recommend.onclick = () => { for (const t of targets) { state.routes[t.id] = {}; for (const p of t.params) state.routes[t.id][p.id] = suggested(p); } drawRoutes(); update(); };

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.0 — Opmaak voor de skin Compact: de zes regelaars staan per groep in een eigen vak (div.lv-sec binnen div.lv-knobs) en het apparaat zet zelf een korte stijl voor zo'n skin (alleen actief met data-pk-face door de host; zonder skin ongewijzigd). Geluid, state, presets en poorten ongewijzigd.
 // 1.17.0 — Uitleg naar about (menu Over Leveler); de UI toont geen uitlegtekst meer.
 // 1.16.0 — De IN- en UIT-meter via host.ui.meter (contract v1.18, additief): de host tekent ze (ids met.in en met.out, groep meters, dB-schaal −60 tot 0, horizontaal) en een skin kan er een VU-meter, ledlader of andere balk van maken. Het doelniveau blijft als streepje over beide meters staan zolang het gezicht een horizontale balk of ledlader is. De REGEL-balk en het limiterlampje blijven een eigen canvas (een regeling rond nul en een lampje passen niet in een niveaumeter) en de getallen blijven tekst. Een oudere host valt terug op het canvas met alle vier de rijen zoals voorheen. Geluid, worklet-berichten, state, presets en poorten ongewijzigd.
 // 1.15.1 — Alle zes continue regelaars (Target, Response, Window, Range ±, Gate, Ceiling) zijn nu stuurbaar via params/modulate; het apparaat krijgt daarmee automatisch een mod-ingang. Alles staat standaard uit in Drift. Knopwaarden, getState, presets en geluid zonder modulatie ongewijzigd. Bewust niet: het keuzemenu Stand (Regelen/Doorlaten) en de twee knoppen.
@@ -94,6 +95,21 @@ const TXT = {
   },
 };
 
+// Opmaak voor de skin Compact: alleen als de host een draaiknop (data-pk-face) in de vakken zet; zonder skin is dit alles uit en ziet het apparaat er hetzelfde uit
+const SKINCSS = `
+.ui:has(.lv-knobs [data-pk-face]){display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
+.ui:has(.lv-knobs [data-pk-face])>.k:first-of-type{order:1;flex:0 0 150px;grid-template-columns:auto minmax(0,1fr)!important;gap:4px}
+.ui:has(.lv-knobs [data-pk-face])>.lv-btns{order:2;flex:1 1 0;min-width:0;margin:0!important;gap:4px!important;flex-wrap:nowrap!important}
+.ui:has(.lv-knobs [data-pk-face])>.lv-btns button{flex:1 1 0;min-width:0;font-size:8.5px;padding:4px 3px;letter-spacing:0;white-space:normal;line-height:1.1}
+.ui:has(.lv-knobs [data-pk-face])>.lv-knobs{order:3;flex:1 1 100%;display:flex;gap:0;border:1px solid var(--line,#39434c);border-radius:4px;padding:4px 2px 3px}
+.ui:has(.lv-knobs [data-pk-face])>[role=group]{order:4;flex:1 1 100%;min-height:0}
+.ui:has(.lv-knobs [data-pk-face])>.note{order:5}
+.ui:has(.lv-knobs [data-pk-face]) .lv-sec{display:contents}
+.ui:has(.lv-knobs [data-pk-face]) .lv-knobs .k{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center;align-items:start;align-content:start;gap:0;min-width:0;flex:1 1 0}
+.ui:has(.lv-knobs [data-pk-face]) .lv-knobs .k .kn{order:1;width:28px!important;height:28px!important;justify-self:center!important}
+.ui:has(.lv-knobs [data-pk-face]) .lv-knobs .k output{order:2;font-size:8.5px;text-align:center;line-height:1.2;white-space:nowrap}
+.ui:has(.lv-knobs [data-pk-face]) .lv-knobs .k label{order:3;font-size:8px;letter-spacing:-.02em;text-align:center;line-height:1.1;white-space:normal;overflow:visible;text-overflow:clip;max-width:100%;text-transform:none}
+`;
 const K = [   // id, tekstsleutel, [min, max, stap], standaard, weergave
   ['target', 'target', [-36, -6, 0.5], -18, v => v.toFixed(1) + ' dB'],
   ['speed', 'speed', [0.2, 20, 0.1], 3, v => v.toFixed(1) + ' s'],
@@ -118,7 +134,7 @@ const tekenLus = (host, inst, cb, fps) => {
 export default {
   id: 'nl.patchkamer.leveler',
   name: 'Leveler',
-  version: '1.17.0',
+  version: '1.18.0',
   about: { nl: 'Houdt het gemiddelde volume gelijk: meet over de meettijd en regelt in de reactietijd omhoog of omlaag naar het doel (omlaag drie keer sneller), binnen het bereik. Onder de stiltedrempel blijft de regeling staan. De limiter erachter vangt pieken boven het plafond op (5 ms vertraging).', en: 'Keeps the average volume steady: it measures over the measure time and moves the gain up or down to the target within the response time (down three times faster), within the range. Below the silence threshold the gain stays where it is. The limiter behind it catches peaks above the ceiling (5 ms delay).' },
   kind: 'effect',
   category: 'mix',
@@ -193,9 +209,12 @@ export default {
       inputs: { in: input }, outputs: { out },
       mount(el) {
         ui = {};
+        { const st = document.createElement('style'); st.textContent = SKINCSS; el.appendChild(st); }
         ui.on = host.ui.select(el, T.mode, [['1', T.lvl], ['0', T.thru]], S.on ? '1' : '0', v => { S.on = v === '1'; send(); }, { id: 'on', group: 'mode' });
-        K.forEach(([k, tk, range, , fmt]) => { ui[k] = host.ui.knob(el, T[tk], range, S[k], fmt, v => { S[k] = v; send(); }, { id: k, group: GRP[k] }); });
-        const row = document.createElement('div'); row.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin:6px 0';
+        const kbox = document.createElement('div'); kbox.className = 'lv-knobs'; el.appendChild(kbox);   // per groep een eigen vak (een skin kan er een kader om zetten)
+        const secs = {};
+        K.forEach(([k, tk, range, , fmt]) => { const g = GRP[k]; if (!secs[g]) { secs[g] = document.createElement('div'); secs[g].className = 'lv-sec'; kbox.appendChild(secs[g]); } ui[k] = host.ui.knob(secs[g], T[tk], range, S[k], fmt, v => { S[k] = v; send(); }, { id: k, group: g }); });
+        const row = document.createElement('div'); row.className = 'lv-btns'; row.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin:6px 0';
         const b1 = document.createElement('button'); b1.type = 'button'; b1.textContent = T.b1; b1.title = T.b1t;
         b1.onclick = () => { if (meter.in > -80) { S.target = Math.round(clamp(meter.in, -36, -6) * 2) / 2; ui.target.set(S.target); send(); } };
         const b2 = document.createElement('button'); b2.type = 'button'; b2.textContent = T.b2; b2.onclick = () => { if (node) node.port.postMessage({ type: 'reset' }); };

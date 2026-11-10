@@ -50,6 +50,10 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Intimate room`, `Wide s
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Situations` (club, festival, big room, thuis, koptelefoon, studio, radio, auto, streaming), `Styles` (muziekstijlen) en één map per situatie met veelvoorkomende combinaties.
 - Het pack voor dit apparaat is gegenereerd uit de recepten van de Master Director (stijl × situatie); wijzig het niet met de hand maar via de generator, anders lopen apparaat en Director uiteen.
 
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.15.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (de naam van het veld in de state, plus `amount`), `role` is `param` (schuif) of `select` (keuzelijst) en `group` is de laan: `space` (Breedte, Diepte, Volheid, Beweging, Mix, Laaggrens) en `auto` (`amount`). De regelaars staan per groep in een omhulsel `.grp` (zonder skin `display:contents`, dus ongewijzigd uiterlijk). De vinkjes (aan/uit, Vast) hebben geen id. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.stereospace/` (draaiknoppen met de naam eronder, per groep één kader, meters en spectrum naast elkaar, ongeveer 480 x 335 punten tegenover 660 x 577). Wijzig je de opbouw van `.row`, `.line`, `.grid`, `.grp`, `.control`, `pre` of `.screen`, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mastering/StereoSpace/stereo-space.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

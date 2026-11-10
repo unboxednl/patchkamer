@@ -44,6 +44,10 @@ Keten: `MediaStreamSource` → `ChannelSplitter` (zoveel kanalen als de ingang g
 
 De validator en de testomgeving gebruiken geen echte ingang. Test met Chromium en de vlaggen `--use-fake-device-for-media-stream --use-fake-ui-for-media-stream` (een nepmicrofoon met piepjes): start, lijst met ingangen, meter, kanaalkeuze en stoppen. Meld eerlijk dat echte interfaces, meer dan twee kanalen en de vertraging niet zijn getest.
 
+## Skins
+
+De knop (`gain` of `level`) is al via `host.ui.knob` met `id`, `role` en `group` aangemeld; de keuzelijsten en vinkjes zijn eigen elementen in de shadow root en worden alleen met CSS aangepast. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.audioinput/` (draaiknop in plaats van schuif; de keuzelijsten staan in compacte rijen, de versterking is een draaiknop met de naam eronder en de uitlegregel over rondzingen is verborgen; de statusregel blijft; ongeveer 480 x 272 tegenover 480 x 568 punten). De CSS leunt op de volgorde van de kinderen van `.app` (`.row`, `.gain`, `.meter`, `.status`): wijzig je die volgorde, controleer dan die skin.
+
 ## Presets
 
 Het pack `../../../presets/audio-input.patchkamer-presets.json` (formatVersion 2, CC0-1.0, namen Engels) heeft 31 presets in vijf mappen: Line Level, Voice, Instruments, Interface Channels en Utility. Voeg geen namen van interfaces of merken toe.

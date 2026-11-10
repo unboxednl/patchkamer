@@ -50,6 +50,10 @@ Wat Vocoder met een state doet (getest):
 
 Wat Vocoder met zijn ingangen doet (getest): een enkele `NaN`, `±Infinity` of absurd grote waarde op een audio-ingang liet vroeger de synthesefilters voor altijd `NaN` geven (de vocoder bleef stil, ook na het verwijderen van de bron). Nu kijkt een bewaker om de 50 ms naar de uitgang en vervangt hij de bandfilters en de compressor zodra die niet eindig of absurd groot is. Het geluid komt dan binnen ongeveer 0,1 s terug. De bewaker staat uit in een offline render; normaal geluid blijft bit-identiek.
 
+## Skins
+
+Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): sinds 1.14.0 melden de schuiven zich aan met `data-pk-id` (de state-sleutel: `sensitivity`, `response`, `formant`, `brightness`, `noise`, `carrier`, `external`, `dry`, `wet`, `release`, `level`) en `data-pk-group` `vocoder`, de twee keuzelijsten met `preset` en `wave` (groep `setup`). De golfvorm tekent op de hoogte die de CSS hem geeft (standaard 64). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.vocoder/` (draaiknoppen met waarde en naam eronder, alle knoppen in één kader, lagere golfvorm; ongeveer 480 x 277 tegenover 840 x 513). Wijzig je de opbouw van `.row`, `canvas` of `.grid`, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Vocoder/vocoder.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

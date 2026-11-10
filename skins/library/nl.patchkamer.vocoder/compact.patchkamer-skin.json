@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.vocoder.compact",
+  "device": "nl.patchkamer.vocoder",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the value and label underneath, all knobs in one frame and a lower scope, at roughly half the standard width.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, less than half the standard width.",
+      "css": ".app{padding:6px;font-size:10px}\n.row{gap:4px;margin:0 0 4px;align-items:flex-end}\n.row .control{padding:0;border:0;gap:1px;flex:0 1 auto}\n.row .control span{font-size:7.5px;letter-spacing:.04em;text-transform:uppercase}\nselect,button{font-size:10px;padding:3px 5px;border-radius:4px}\ncanvas{height:40px;border-radius:4px}\n.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px 0;padding:4px 2px;margin-top:4px;border:1px solid var(--line,#344953);border-radius:4px;background:color-mix(in srgb,var(--fg,#d9e6e7) 3%,transparent)}\n.grid .control{display:grid;justify-items:center;align-content:start;gap:0;padding:0;border:0;border-radius:0}\n.grid .control .kn{order:1;width:28px!important;height:28px!important;justify-self:center!important}\n.grid .control .kn svg{width:100%;height:100%}\n.grid .control output{order:2;font-size:7.5px;line-height:1.1;color:var(--muted,#aabec5);white-space:nowrap;text-align:center}\n.grid .control span{order:3;font-size:7px;letter-spacing:-.02em;line-height:1.1;text-align:center;max-width:100%}"
+    }
+  ]
+}

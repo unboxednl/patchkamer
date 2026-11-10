@@ -62,6 +62,10 @@ Wat Compressor met een state doet (getest):
 - Onbekende velden worden genegeerd. Zet er geen in.
 - `Luister naar ...` (meeluisteren) is geen state: het staat na laden altijd uit.
 
+## Skins
+
+Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): `id` is de state-sleutel (`thr`, `ratio`, `knee`, `att`, `rel`, `makeup`, `mix`, `look`, `link`, `hpf`, `lpf`) en `group` is `dynamics`, `output` of `sidechain` (de keuzelijsten en knoppen bovenaan hebben alleen een `id`). De hoogte van de overdrachtscurve volgt de CSS-eigenschap `--u-ch` (standaard 190). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.compressor/` (draaiknoppen met waarde en naam eronder, drie kaders naast elkaar, lagere curve; ongeveer 480 x 316 tegenover 720 x 720). Wijzig je de opbouw van `.top`, `.disp`, `h3` of `.grid`, controleer dan die skin: hij plaatst de sectiekoppen en kaders met `nth-child`.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Compressor/compressor.patchkamer-device.js` en met `--lang nl` en `--lang en`, vanuit de root. Alle drie moeten `OK` geven, zonder `let op`.

@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.balanceeq.compact",
+  "device": "nl.patchkamer.balanceeq",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the value and band number underneath, grouped per section in one frame, at about three quarters of the standard width and about half the height.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs, grouped and tight, at a smaller width and height than the standard card.",
+      "css": ".app{display:flex;flex-wrap:wrap;gap:3px 5px;align-items:center;padding:6px;font-size:9px}\n.row,.view{display:contents}\n.row label,.view label{display:inline-flex;gap:2px;align-items:center;font-size:9px}\nselect,button{font-size:9px;padding:2px 4px;border-radius:3px}\ninput[type=checkbox]{margin:0;width:12px;height:12px}\n.line{display:inline-flex;gap:5px;justify-content:flex-start;align-items:center;font-size:9px}\n.line>span{white-space:nowrap}\n.kn{width:26px!important;height:26px!important}\n.kn svg{width:100%;height:100%}\n.eqs,.grid,.proposal,pre,.screen,.status{flex:1 1 100%;min-width:0}\n.eqs{gap:3px;overflow:visible!important}\n.sec{flex:1 1 calc(var(--n)*26px + 6px)!important;min-width:calc(var(--n)*25px + 6px)!important;padding:3px 3px 4px;border-radius:3px}\nh3{font-size:8px;margin:0 0 2px;letter-spacing:.06em}\nh3 small{font-size:8px}\n.cells{gap:0;justify-content:space-between}\n.cell{flex:1 1 25px;min-width:25px;max-width:46px;gap:0;justify-items:center}\n.cell .kn,.control .kn{justify-self:center!important}\n.cell .kn{order:1}\n.cell output.val{order:2;font-size:8px;min-height:0;line-height:1.1;letter-spacing:-.04em}\n.cell .num{order:3;min-width:16px;height:14px;font-size:9px;padding:0 2px;margin-top:1px}\n.grid{display:flex;flex-wrap:wrap;gap:3px}\n.control{flex:1 1 0;min-width:0;padding:3px 4px;display:grid;justify-items:center;gap:0;border-radius:3px}\n.control .line{display:contents}\n.control .kn{order:1}\n.control output{order:2;font-size:8px;line-height:1.1;white-space:nowrap}\n.control .line>span{order:3;font-size:8px;text-align:center;line-height:1.1;white-space:normal}\n.control .lock{order:4;font-size:8px;display:inline-flex;gap:2px;align-items:center}\n.control .lock input{width:12px;height:12px}\n.control:has(.line>input[type=checkbox]){grid-auto-flow:column;justify-content:center;align-content:center;gap:4px}\n.control:has(.line>input[type=checkbox]) .line{display:contents}\n.control:has(.line>input[type=checkbox]) .line>span{order:0;font-size:9px}\npre{padding:3px 6px;font-size:8.5px;line-height:1.35}\n.screen{height:44px}\n.status,.proposal{font-size:9px;line-height:1.3}\n.proposal{padding:3px 5px}\n.eqs[data-layout=side]{flex-wrap:wrap}\n.eqs[data-layout=stack]{flex-direction:column}\n.eqs[data-layout=stack] .sec{flex:none!important;min-width:0!important}\n.eqs[data-layout=stack] .cells{justify-content:flex-start;gap:2px}"
+    }
+  ]
+}

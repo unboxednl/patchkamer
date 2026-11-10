@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Skin Compact: de regelaars melden zich aan met data-pk-id en -group (voor een skin met draaiknoppen) en de golfvorm tekent op de hoogte die de CSS hem geeft (standaard 64). Geluid, state en ids ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Vocoder); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel '16-bands vocoder' staat nu in about.
 // 1.11.1 — De hulptekst noemt geen apparaat meer bij naam dat niet bestaat (Samplebank) maar spreekt van een sampler. Geluid, state en gedrag ongewijzigd.
@@ -20,7 +21,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.vocoder', name: 'Vocoder', version: '1.13.0', kind: 'effect', category: 'effect', ui: { width: 840, minWidth: 380 },
+  id: 'nl.patchkamer.vocoder', name: 'Vocoder', version: '1.14.0', kind: 'effect', category: 'effect', ui: { width: 840, minWidth: 380 },
   about: { nl: 'Een 16-bands vocoder: een stem (of ander signaal) opent 16 banden op een draaggolf.\n\nStem / spraaksample → Stem / spraak. Keyboard → Noten draaggolf. Uitgang → mixer.\n\nZonder stemsignaal blijft de vocoder stil: de stem opent de 16 banden. Gebruik een microfoonmodule of een sampler als stembron; deze module vraagt zelf geen microfoontoegang. Een tweede audio-ingang accepteert een externe synth als draaggolf. Zet daarvoor Externe draaggolf open. Droge stem mengt het oorspronkelijke signaal bij.', en: 'A 16-band vocoder: a voice (or other signal) opens 16 bands on a carrier.\n\nVoice / speech sample → Voice / speech. Keyboard → Carrier notes. Output → mixer.\n\nWithout a voice signal the vocoder stays silent: the voice opens the 16 bands. Use a microphone module or a sampler as the voice source; this module does not ask for microphone access itself. The second audio input accepts an external synth as the carrier: turn External carrier up for that. Dry voice mixes in the original signal.' },
   i18n: { nl: { ports: { voice: 'Stem / spraak', carrier: 'Externe draaggolf', out: 'Vocoder', notes: 'Noten draaggolf' } } },
   ports: { audioIn: [{ id: 'voice', name: 'Voice / speech' }, { id: 'carrier', name: 'External carrier' }], audioOut: [{ id: 'out', name: 'Vocoder' }], eventIn: [{ id: 'notes', name: 'Carrier notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -43,16 +44,16 @@ export default {
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
     const grid = parent => { const el = add(parent, 'div'); el.className = 'grid'; return el; };
     const button = (parent, label, fn) => { const b = add(parent, 'button', label); b.type = 'button'; b.onclick = fn; return b; };
-    function select(parent, label, options, value, change) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); return el; }
-    function knob(parent, label, bounds, value, dflt, change, format) {
+    function select(parent, label, options, value, change, id) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); if (id) { el.setAttribute('data-pk-id', id); el.setAttribute('data-pk-group', 'setup'); } return el; }
+    function knob(parent, label, bounds, value, dflt, change, format, id) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input');
-      input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.dataset.pkDefault = String(dflt);
+      input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.dataset.pkDefault = String(dflt); if (id) { input.setAttribute('data-pk-id', id); input.setAttribute('data-pk-group', 'vocoder'); }
       input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; return input;
     }
 
     const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
     const finite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? clamp(x, a, b) : d;
-    let dead = false, mod = {}, state, effective = {}, scope = null, sg = null, stopDraw = null, ro = null, cw = 600, col = null, colT = 0;
+    let dead = false, mod = {}, state, effective = {}, scope = null, sg = null, stopDraw = null, ro = null, cw = 600, ch = 64, col = null, colT = 0;
     const nodes = new Set(), sources = new Set();
     const own = n => (nodes.add(n), n), gain = v => { const n = own(ctx.createGain()); n.gain.value = v; return n; };
     const filter = (type, hz, q = 0.7) => { const n = own(ctx.createBiquadFilter()); n.type = type; n.frequency.value = Math.min(ctx.sampleRate * 0.45, hz); n.Q.value = q; return n; };
@@ -69,8 +70,8 @@ export default {
     function controls(parent) {
       for (const id of Object.keys(spec)) {
         const d = spec[id], format = v => d.unit === '%' ? Math.round(v * 100) + '%' : (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)) + (d.unit ? ' ' + d.unit : '');
-        if (d.scale === 'log') knob(parent, tx(d.name), [0, 1, 0.0001], Math.log(state[id] / d.min) / Math.log(d.max / d.min), Math.log(defaults[id] / d.min) / Math.log(d.max / d.min), x => { state[id] = d.min * (d.max / d.min) ** x; apply(); }, x => format(d.min * (d.max / d.min) ** x));
-        else knob(parent, tx(d.name), [d.min, d.max, d.step || 0.01], state[id], defaults[id], x => { state[id] = x; apply(); }, format);
+        if (d.scale === 'log') knob(parent, tx(d.name), [0, 1, 0.0001], Math.log(state[id] / d.min) / Math.log(d.max / d.min), Math.log(defaults[id] / d.min) / Math.log(d.max / d.min), x => { state[id] = d.min * (d.max / d.min) ** x; apply(); }, x => format(d.min * (d.max / d.min) ** x), id);
+        else knob(parent, tx(d.name), [d.min, d.max, d.step || 0.01], state[id], defaults[id], x => { state[id] = x; apply(); }, format, id);
       }
     }
     function readColors() {
@@ -81,7 +82,7 @@ export default {
     function drawScope() {
       if (dead || !scope || !sg) return;
       if (!col || performance.now() - colT > 1000) readColors();
-      const w = Math.max(260, Math.min(1200, cw)), h = 64, dpr = clamp(Number(globalThis.devicePixelRatio) || 1, 1, 4);
+      const w = Math.max(260, Math.min(1200, cw)), h = clamp(ch, 24, 400), dpr = clamp(Number(globalThis.devicePixelRatio) || 1, 1, 4);
       if (scope.width !== Math.round(w * dpr) || scope.height !== Math.round(h * dpr)) { scope.width = Math.round(w * dpr); scope.height = Math.round(h * dpr); }
       sg.setTransform(dpr, 0, 0, dpr, 0, 0); analyser.getFloatTimeDomainData(scopeData);
       sg.fillStyle = col.bg; sg.fillRect(0, 0, w, h); sg.strokeStyle = col.au; sg.beginPath();
@@ -147,12 +148,12 @@ export default {
     function render(el) {
       unmount(); mountUI(el);
       const top = row(panel);
-      select(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]), state.preset, v => self.setState({ ...defaults, ...presets[v], preset: v }));
-      select(top, tx('Interne golfvorm'), [['sawtooth', tx('Zaagtand')], ['square', tx('Puls')], ['triangle', tx('Driehoek')]], state.wave, v => { state.wave = v; apply(); });
+      select(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]), state.preset, v => self.setState({ ...defaults, ...presets[v], preset: v }), 'preset');
+      select(top, tx('Interne golfvorm'), [['sawtooth', tx('Zaagtand')], ['square', tx('Puls')], ['triangle', tx('Driehoek')]], state.wave, v => { state.wave = v; apply(); }, 'wave');
       button(top, tx('Draagakkoord aan'), () => { panic(); for (const n of [48, 55, 60, 63]) note(n, 0.8, ctx.currentTime); });
       button(top, tx('Draagakkoord uit'), () => panic());
-      scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); sg = scope.getContext('2d'); cw = scope.clientWidth || 600; col = null;
-      if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) cw = w; }); ro.observe(scope); }
+      scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); sg = scope.getContext('2d'); cw = scope.clientWidth || 600; ch = scope.clientHeight || 64; col = null;
+      if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width, hh = es[0] && es[0].contentRect.height; if (w) cw = w; if (hh) ch = hh; }); ro.observe(scope); }
       if (typeof window !== 'undefined' && window.addEventListener) window.addEventListener('patchkamer-skin', onSkin);
       controls(grid(panel));
       stopDraw = tekenLus(self, drawScope, 20);

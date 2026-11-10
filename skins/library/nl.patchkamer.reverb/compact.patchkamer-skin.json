@@ -1,0 +1,78 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.reverb.compact",
+  "device": "nl.patchkamer.reverb",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: the four choices in a row on top, the thirteen knobs with the label underneath in one frame.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 360
+    },
+    "layout": {
+      "flow": "auto",
+      "panels": [
+        {
+          "id": "choice",
+          "items": [
+            "model",
+            "sync",
+            "div",
+            "freeze"
+          ],
+          "style": "line",
+          "cols": 4,
+          "gap": "tight",
+          "bare": true,
+          "labels": "above",
+          "width": "full"
+        },
+        {
+          "id": "knobs",
+          "items": [
+            "size",
+            "decay",
+            "predelay",
+            "dampHi",
+            "dampLo",
+            "diff",
+            "mod",
+            "early",
+            "hp",
+            "lp",
+            "width",
+            "duck",
+            "mix"
+          ],
+          "style": "line",
+          "cols": 5,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        }
+      ]
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: the four choices in a row on top, the thirteen knobs with the label underneath in one frame."
+    }
+  ]
+}

@@ -60,6 +60,10 @@ Wat Gate met een state doet (getest):
 - Onbekende velden worden genegeerd. Zet er geen in.
 - `Luister naar ...` (meeluisteren) is geen state: het staat na laden altijd uit.
 
+## Skins
+
+Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): `id` is de state-sleutel (`thr`, `ratio`, `range`, `hyst`, `att`, `hold`, `rel`, `look`, `hpf`, `lpf`, `link`) en `group` is `gate`, `time` of `sidechain`. De hoogte van de overdrachtscurve volgt de CSS-eigenschap `--u-ch` (standaard 190). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.gate/` (draaiknoppen met waarde en naam eronder, drie kaders naast elkaar; ongeveer 480 x 316 tegenover 720 x 720). Wijzig je de opbouw van `.top`, `.disp`, `h3` of `.grid`, controleer dan die skin: hij plaatst de koppen en kaders met `nth-child`.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Gate/gate.patchkamer-device.js` en met `--lang nl` en `--lang en`, vanuit de root. Alle drie moeten `OK` geven, zonder `let op`.

@@ -54,6 +54,10 @@ Alle continue regelaars staan in `params()` (stuurbaar via de Mod-poort); bewust
 - `decay` boven 15 s met `mod` 0 en `diff` laag klinkt snel metalig; gebruik dan `diff` boven 0,8.
 - Hall `size` 1 met `decay` 11 s is de grens van wat nuttig is; meer lijnlengte maakt de dichtheid niet beter.
 
+## Skins
+
+De regelaars zijn via `host.ui.knob` en `host.ui.select` herkenbaar voor skins (`id` is de state-sleutel, `role` is `param` of `select`, groepen `space`, `tone`, `input` en `output`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.reverb/`: de vier keuzelijsten in één rij en dertien draaiknoppen in vijf kolommen; ongeveer 340 x 521 tegenover 360 x 366 punten. De skin gebruikt alleen `design.controls`, `design.layout` en `design.size`; het apparaat zelf is er niet voor aangepast. Hernoem je een id of groep, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Reverb/reverb.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

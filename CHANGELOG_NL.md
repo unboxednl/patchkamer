@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.7 (2026-11-10)
+
+### Toegevoegd
+- **Skin Compact voor 36 effecten, mastering-apparaten, modulators en mixer-apparaten.** Draaiknoppen met de naam en waarde eronder, de regelaars per groep in een kader en geen scrollbalken; de kaarten worden ongeveer 480 punten breed (Mixer 600) en meestal 30 tot 60 procent lager. Apparaten: Audio Capture, Audio Input, Audio Output, Balance EQ, Bitcrusher, Bus Compressor, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Drift, Effect Chain, Flanger, Follower, Gate, Grit, Harmonizer, Leveler, LFO, Macro, Master Chain, Master Director, Mix Check, Mixer, MSEG, Multiband Balance, Patina, Phaser, Pump, Resonator, Reverb, Room, Stereo Space, Swell en Vocoder. Waar een apparaat al klein was of een skin niets opleverde (Chorus, Filter, Tremolo, Frequency Shifter, Pitch Shifter, Pitch Correction, Speakers, Listening Output) is er geen skin. Veel apparaten melden hun regelaars daarvoor aan voor skins (id is de state-sleutel, groep per sectie); zonder skin zien en klinken ze hetzelfde, en state, params() en poorten zijn ongewijzigd. De Effect Chain heeft een kleinere minimale breedte (480 in plaats van 960).
+
 ## 0.30.6 (2026-11-10)
 
 ### Toegevoegd

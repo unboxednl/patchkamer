@@ -66,6 +66,10 @@ De ingang wordt begrensd op ±16 en NaN wordt 0. Per blok worden de klok, de fil
 
 Het scherm tekent via `host.frame` (30 beelden per seconde, alleen als de kaart te zien is). Het model gebruikt dezelfde kwantiseerders als de worklet maar zonder dither, ruis en jitter.
 
+## Skins
+
+Bitcrusher gebruikt `host.ui.knob` en `host.ui.select` met `id` en `group`, maar heeft geen eigen shadow root: een skin kan hier alleen `design` gebruiken (draaiknoppen en `layout`-panelen), geen eigen CSS. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.bitcrusher/`. Sinds 1.1.0 is het golfvormscherm met een skin 56 px hoog in plaats van 84 (CSS in het apparaat, alleen als de host het paneelblok `.pk-pnls` toevoegt; wijzig je de klasse `bc-scr`, controleer dan die skin). Kaart 340 x 456 tegenover 340 x 543.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Bitcrusher/bitcrusher.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root: beide `OK`, geen `let op`.

@@ -66,6 +66,10 @@ Wat Distortion met een state doet (getest met `check-preset.mjs`): getallen buit
 
 De ingang wordt begrensd op ±16 en NaN wordt 0. Per blok worden envelope, filters, DC-blokkering en de oversamplingfilters op eindigheid gecontroleerd; bij een ontsporing worden ze teruggezet. De uitgang wordt begrensd op ±64 (anders 0). Gemeten: 160 willekeurige en extreme instellingen en een burst van NaN, ±Infinity, ±1e9 en 1e30 geven geen enkele niet-eindige sample, en het geluid is direct daarna weer gelijk aan een run zonder burst. De worklet-naam bevat de versie (`nl-patchkamer-distortion-1-1-1`): verander je de code, verhoog dan de versie in die naam.
 
+## Skins
+
+Distortion gebruikt `host.ui.knob` en `host.ui.select` met `id` en `group`, maar heeft geen eigen shadow root: een skin kan hier alleen `design` gebruiken (draaiknoppen en `layout`-panelen), geen eigen CSS. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.distortion/`. Kaart 400 x 348 tegenover 340 x 424; de skin is bewust 400 breed omdat de kaartkop (latentie-aanduiding, versiekeuze, knoppen) zo'n 380 px nodig heeft en bij 340 wordt afgekapt.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/effects/Distortion/distortion.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root: beide `OK`, geen `let op`.

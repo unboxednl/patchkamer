@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.3.0 — Compacte skin (skins/library/nl.patchkamer.harmonizer): de stemkopjes dragen data-pk-hd en verdwijnen alleen als een skin de regelaars in panelen zet (dan staan de titels in de skin). Zonder skin ongewijzigd; geluid, state, ids en poorten ongewijzigd.
 // 1.2.0 — Uitleg naar about (menu Over Harmonizer); de UI toont geen uitlegtekst meer.
 // 1.1.0 — Patchkamer contract v1.34: latency() meldt de gemeten vertraging van de hoofdweg aan de host (alleen weergave; de host compenseert niet).
 // 1.0.0 — Eerste versie. Harmonizer: tot 4 stemmen die de toonhoogte van de ingang volgen op een eigen interval (halve tonen, of toonladdertrappen
@@ -425,7 +426,7 @@ function restoreValues(S, raw) {
 export default {
   id: 'nl.patchkamer.harmonizer',
   name: 'Harmonizer',
-  version: '1.2.0',
+  version: '1.3.0',
   about: { nl: 'Tot vier stemmen die de toonhoogte van de ingang volgen op een eigen interval.\n\nGebruik Interval volgt = Toonladder om de stemmen binnen de toonladder te houden; de bron is de toon van het ingangsgeluid (monofoon) of de noten op de eventingang.', en: 'Up to four voices that follow the pitch of the input at an interval of their own.\n\nSet Interval follows to Scale to keep the voices inside the scale; the source is the pitch of the input sound (monophonic) or the notes on the event input.' },
   kind: 'effect',
   category: 'effect',
@@ -470,7 +471,7 @@ export default {
       ['dry', 'harm', 'glide', 'formant', 'hum'].forEach(k => ui[k].set(S[k]));
       V.forEach(i => { ui['on' + i].set(S['on' + i]); ['iv', 'lv', 'pan', 'dt', 'dly'].forEach(p => ui[p + i].set(S[p + i])); });
     }
-    function hd(el, text) { const h = document.createElement('div'); h.textContent = text; h.style.cssText = 'grid-column:1/-1;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-top:6px'; el.appendChild(h); return h; }
+    function hd(el, text) { const h = document.createElement('div'); h.textContent = text; h.style.cssText = 'grid-column:1/-1;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-top:6px'; h.setAttribute('data-pk-hd', ''); el.appendChild(h); return h; }
     function toggle(el, label, id, group, get, set) {
       if (host.ui && typeof host.ui.pad === 'function') return host.ui.pad(el, label, { id, group, mode: 'toggle', on: get(), text: label, onchange: on => set(!!on) });
       const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.setAttribute('aria-pressed', String(get())); b.onclick = () => { const on = !get(); set(on); b.setAttribute('aria-pressed', String(on)); };
@@ -485,6 +486,7 @@ export default {
       mount(el) {
         el.addEventListener('pointerdown', e => e.stopPropagation());
         el.style.gridTemplateColumns = 'repeat(2, minmax(0, 1fr))';
+        { const st = document.createElement('style'); st.textContent = ':has(> .pk-pnls) > [data-pk-hd]{display:none}'; el.appendChild(st); }   // alleen met een skin die panelen gebruikt (zie Skins)
         const full = n => { if (n && n.el) n.el.style.gridColumn = '1 / -1'; return n; };
         ui.mode = host.ui.select(el, T.mode, MODES.map(m => [m, T[m]]), S.mode, v => { S.mode = v; latMs = null; apply(); }, { id: 'mode', group: 'engine' });
         ui.win = host.ui.select(el, T.win, WINS.map(m => [m, T[m]]), S.win, v => { S.win = v; latMs = null; apply(); }, { id: 'win', group: 'engine' });

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.0 — Skin Compact: schuiven en keuzelijsten melden hun sectie aan (data-pk-group, naast data-pk-id), zodat een skin ze als draaiknop in een kader kan tonen. Geluid, state, ids en poorten ongewijzigd.
 // 1.0.0 — Delay: een uitgebreid delay op vrije tijd (ms), op de klok van de host of op een eigen tempo (tap).
 //          Notenwaarden van 2 maten tot 1/64 (recht, punt, triool) of een aantal zestienden; links en rechts onafhankelijk, stereo-offset;
 //          stereo, ping-pong, mono en dual (eigen feedback per kant), kruisfeedback; hoogdoorlaat en laagdoorlaat, verzadiging (tape of buis) en diffusie in de lus;
@@ -255,7 +256,7 @@ class DelayFx extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', DelayFx);`;
 
 export default {
-  id: 'nl.patchkamer.delay', name: 'Delay', version: '1.0.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.delay', name: 'Delay', version: '1.1.0', kind: 'effect', category: 'effect',
   ui: { width: 700, minWidth: 340 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -396,7 +397,7 @@ export default {
         for (const [kind, id] of items) {
           if (kind === 'sl') {
             const d = spec[id], c = el(g, 'div', 'c'), lab = el(c, 'div', 'lab'); el(lab, 'span', '', d.name).title = d.name; const o = el(lab, 'output');
-            const inp = el(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); inp.setAttribute('data-pk-id', id); inp.title = d.name + ' · ' + tx('dbl');
+            const inp = el(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); inp.setAttribute('data-pk-id', id); inp.setAttribute('data-pk-group', h); inp.title = d.name + ' · ' + tx('dbl');
             inp.dataset.pkDefault = String(toS(d, defaults[id]));
             inp.oninput = () => { const v = fromS(d, +inp.value); state[id] = clamp(v, d.min, d.max); o.textContent = fmt(d, v); send(); paintDim(); };
             inp.ondblclick = () => { state[id] = defaults[id]; ui.k[id].set(defaults[id]); send(); paintDim(); };
@@ -404,7 +405,7 @@ export default {
           } else if (kind === 'sel') {
             const c = el(g, 'label', 'c'), lab = el(c, 'div', 'lab'); el(lab, 'span', '', tx(labelOf(id))); const s = el(c, 'select');
             for (const [v, t] of ENUMS[id]) { const op = el(s, 'option', '', t); op.value = v; }
-            s.value = state[id]; s.onchange = () => { state[id] = s.value; send(); paintDim(); }; ui.s[id] = s; s.parentElement.dataset.id = id;
+            s.value = state[id]; s.onchange = () => { state[id] = s.value; send(); paintDim(); }; ui.s[id] = s; s.parentElement.dataset.id = id; s.setAttribute('data-pk-id', id); s.setAttribute('data-pk-group', h);
           } else {
             const b = el(g, 'button', '', tx(id)); b.type = 'button'; if (D[id + 'Tip']) b.title = D[id + 'Tip'];
             if (id === 'tap') b.onclick = tap; else b.onclick = () => { state[id] = !state[id]; send(); paintDim(); };

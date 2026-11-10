@@ -45,6 +45,10 @@ Startprofielen in de kaart (keuzelijst "Startprofiel"): `Stereo`, `Mono`, `Check
 - Geef elke preset een Engelse naam, zonder merk- of modelnamen. Mappen: `Monitoring` (stereo, mono sum, links, rechts, side en stille niveaus, plus een niveau-gelijkgemaakte referentie) en `Situations` (mono of eenzijdig bij een passend niveau; die met `matched` in de naam hebben `refMatch: true`). Elke preset moet een eigen combinatie van `monitor`, `dim` en `refMatch` hebben (geen tweelingen); `refMatch` staat alleen aan in presets die over de referentie gaan. Er is geen verband met de stijl- en situatierecepten van de Director: Mix Check heeft maar drie velden en geen stijlen.
 - Dit pack komt niet uit de recepten van de Master Director (Mix Check heeft geen stijlen, zie de regel hierboven): het is een eigen, met de hand samengestelde set en mag met de hand worden aangepast, zolang elke preset een eigen combinatie van `monitor`, `dim` en `refMatch` houdt.
 
+## Skins
+
+Alle regelaars zijn sinds 1.15.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`monitor`, `dim`, `refMatch`, `amount`; vergrendeling `locks.dim`; schakelaars `bypass`, `match`, `auto`, `remote`), `role` is `param`, `select` of `toggle`, `group` is `monitor`, `follow`, `mode` of `preset`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.mixcheck/` (draaiknop met waarde en naam eronder, alles in één kader, kleinere referentierij; ongeveer 480 x 335 punten tegenover 660 x 530). Wijzig je de opbouw van `.grid`, `.control` of de referentierij, controleer dan die skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/mastering/MixCheck/mix-check.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

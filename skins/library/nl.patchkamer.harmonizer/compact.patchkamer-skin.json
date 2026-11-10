@@ -1,0 +1,78 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.harmonizer.compact",
+  "device": "nl.patchkamer.harmonizer",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the value and the label underneath, grouped per section in one frame, at roughly half the width and height of the standard card.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": 0.9
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, a good deal smaller than the standard card.",
+      "css": "",
+      "design": {
+        "layout": {
+          "flow": "rows",
+          "panels": [
+            {
+              "id": "sel",
+              "items": [
+                "mode",
+                "win",
+                "follow",
+                "key",
+                "scale"
+              ],
+              "style": "line",
+              "dir": "grid",
+              "cols": 3,
+              "gap": "tight",
+              "bare": true,
+              "labels": "below"
+            },
+            {
+              "id": "voices",
+              "items": [
+                "group:v1",
+                "group:v2",
+                "group:v3",
+                "group:v4",
+                "dry",
+                "harm",
+                "glide",
+                "formant",
+                "hum"
+              ],
+              "style": "line",
+              "dir": "grid",
+              "cols": 6,
+              "gap": "tight",
+              "bare": true,
+              "labels": "below"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

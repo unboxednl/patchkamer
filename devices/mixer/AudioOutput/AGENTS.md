@@ -40,6 +40,10 @@ Keten: `input` → toegangspoort `entry` → `ChannelSplitter` → kruismatrix (
 
 Echte uitgangen, meer dan twee kanalen en vertraging kunnen in Chromium zonder geluidskaart niet worden gemeten. Test de keten met een echte `AudioContext` in Chromium (meters, de NaN-lus, `setState`) en meld eerlijk wat niet is getest. De kanaalpaarkeuze is alleen met een apparaat met meer dan twee uitgangskanalen te proberen.
 
+## Skins
+
+De knop (`gain` of `level`) is al via `host.ui.knob` met `id`, `role` en `group` aangemeld; de keuzelijsten en vinkjes zijn eigen elementen in de shadow root en worden alleen met CSS aangepast. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.audiooutput/` (draaiknop in plaats van schuif; uitgang, paar en schakelaars staan in compacte rijen, het volume is een draaiknop met de naam eronder; de statusregel blijft; ongeveer 380 x 202 tegenover 380 x 297 punten). De CSS leunt op de volgorde van de kinderen van `.app` (`.row`, `.gain`, `.meter`, `.status`): wijzig je die volgorde, controleer dan die skin.
+
 ## Presets
 
 Het pack `../../../presets/audio-output.patchkamer-presets.json` (formatVersion 2, CC0-1.0, namen Engels) heeft 16 presets in vier mappen: Main Out, Headphones, Interface Pairs en Checks. Voeg geen namen van interfaces of merken toe.

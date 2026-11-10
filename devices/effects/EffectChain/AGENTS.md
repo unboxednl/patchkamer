@@ -22,6 +22,10 @@ Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een Nederl
 
 Alleen apparaten met `kind: 'instrument'` hebben tunes. Effect Chain is een `effect`, dus het krijgt **presets** en **nooit tunes** (contract §0 en §13c). Maak voor dit apparaat geen pack in `../../../tunes/`. Een presetpack heet `naam.patchkamer-presets.json` en staat in `../../../presets/`; het formaat is dat van het contract (§13c), `formatVersion` 2, licentie `CC0-1.0`, `device` is altijd `nl.patchkamer.effect-chain` en elke preset is `kind: "set"`. Maak alleen presets als de opdracht dat vraagt. In het apparaat zelf zitten 17 vaste ketenpresets (keuzelijst Chain); die zijn onderdeel van de code en geen presetpack.
 
+## Skins
+
+Effect Chain gebruikt `host.ui.knob` en `host.ui.select` met `id` en `group` (`chain`, `view`, `master`, `slot1` t/m `slot8`) en heeft geen eigen shadow root: een skin kan hier alleen `design` gebruiken. Sinds 1.18.0 hebben de bestaande elementen klassen (`ec-top`, `ec-lv`, `ec-strip`, `ec-card`, `ec-btns`, `ec-ph`, `ec-np`, `ec-ot`, `ec-os`) en zet het apparaat zelf een korte stijl (`SKINCSS`) die alleen werkt als de host een draaiknop (`data-pk-face`) in de keten zet; zonder skin is het uiterlijk ongewijzigd. De canvassen volgen de hoogte die die stijl geeft (`_ch`, gelezen door de ResizeObserver). `ui.minWidth` is van 960 naar 480 gegaan zodat een skin de kaart smaller mag maken. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.effect-chain/` (draaiknoppen met waarde en naam eronder, de slots in een omslaand raster van twee per rij zonder scrollen, 482 x 595 punten tegenover 1080 x 670). Wijzig je die klassen, controleer dan die skin.
+
 ## Presets maken: volledige ketens voor een toepassing
 
 **Een preset voor dit apparaat is een complete keten, geen los effect.** Effect Chain bestaat om tot **8 verschillende effecten achter elkaar** te zetten, en een preset laat zien wat dat oplevert: een doordachte combinatie van effecten, met per slot een uitgewerkte configuratie, voor één duidelijke **toepassing of sfeer**.

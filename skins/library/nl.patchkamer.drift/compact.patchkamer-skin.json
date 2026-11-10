@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.drift.compact",
+  "device": "nl.patchkamer.drift",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label and value underneath, grouped in few frames, no explanatory text, at roughly half the width of the standard card.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs with labels underneath, in tight frames, less than two thirds of the standard width.",
+      "css": ".dm{gap:4px}\n.top{display:flex;flex-wrap:wrap;gap:4px 1px;padding:4px 5px;align-items:flex-start;border-radius:3px}\n.top>.ctl{flex:0 0 58px;width:58px;min-width:0;justify-items:center;gap:0}\n.ctl label{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;font-size:8px;letter-spacing:-.02em;text-transform:none;line-height:1.15;text-align:center;max-width:100%}\n.ctl label output{font-size:8px;line-height:1.1;letter-spacing:0;white-space:nowrap}\n.ctl .kn{order:-1;width:28px!important;height:28px!important;justify-self:center!important}\n.ctl .kn svg{width:100%;height:100%}\n.btns{flex:1 1 auto;margin-left:auto;align-self:center;gap:4px;flex-wrap:wrap;justify-content:flex-end}\nbutton{font-size:10px;padding:5px 8px;min-height:26px;border-radius:3px}\n.btns label{font-size:9px!important;gap:3px!important}\nselect{font-size:10px;padding:4px 3px;min-height:26px;border-radius:3px}\n.link{padding:3px 6px;gap:2px 8px;font-size:9px;border-radius:3px}\n.link:has(>.muted:only-child){display:none}\n.link .ctl{display:grid;grid-auto-flow:row;justify-items:center;gap:0;min-width:46px}\n.link .ctl .kn{width:24px!important;height:24px!important}\n.link label.muted{font-size:9px}\n.empty{padding:5px 8px;line-height:1.3;font-size:9px;border-radius:3px}\n.tg{gap:3px}\n.tg h3{font-size:11px;gap:6px}\n.tg h3 small{font-size:9px}\n.lane{padding:4px 5px;gap:4px;border-radius:3px}\n.lhead{margin-bottom:2px}\n.lhead b{font-size:11px}\n.lhead button{min-height:22px;padding:1px 6px}\n.prow{min-height:18px;gap:4px;grid-template-columns:16px 8px minmax(50px,1fr) minmax(60px,1.3fr) 34px 40px}\n.prow output,.prow .live{font-size:9px}\n.plot{min-height:56px}\n.cap{font-size:9px;margin-top:2px}\n.prow{min-height:16px;font-size:10px}\n.prow input[type=checkbox]{width:12px;height:12px}\n.prow input[type=range]{height:12px}\n.lane{align-items:start}"
+    }
+  ]
+}

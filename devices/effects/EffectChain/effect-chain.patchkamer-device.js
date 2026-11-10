@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.0 — Opmaak voor de skin Compact (en minWidth van 960 naar 480, zodat de skin de kaart smaller mag maken): klassen ec-top/ec-lv/ec-strip/ec-card/ec-btns op de bestaande elementen, een korte stijl die alleen werkt als de host een draaiknop (data-pk-face) in de keten zet, en een canvas dat de hoogte volgt die de stijl geeft (zonder skin gelijk aan voorheen). Geluid, state, presets, poorten en ids ongewijzigd.
 // 1.17.0 — Uitleg naar about (menu Over Effect Chain); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.15.0 — Regelaars herkenbaar voor skins (contract v1.15, additief): id, rol en groep op de host.ui.knob/select-aanroepen; een oudere host negeert ze. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
@@ -92,7 +93,7 @@ const tekenLus = (host, inst, cb, fps) => {
 };
 
 export default {
-  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.17.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:960},
+  id:'nl.patchkamer.effect-chain', name:'Effect Chain', version:'1.18.0', kind:'effect', category:'effect', ui:{width:1080,minWidth:480},
   about:{ nl: 'Een keten van effecten voor techno, EDM en ambient.\n\nPaarse Mod-ingang → Master en effectparameters per slot. Knoppen blijven de basis; keuzelijsten worden niet gemoduleerd.\n\nKeten: IN → 1 → 2 → … → UIT · schuif horizontaal voor alle slots.\n\nMix per slot mengt droog en effect. Verborgen slots blijven bewaard. Effectwissels onthouden hun parameters; wisselen of verplaatsen wist de effectstaart. Galm/echo lopen door als transport stopt. Limiter: zet slotmix en totale mix op 100%, uitgang op 0 dB; plaats hem als laatste.\n\nPer effect:\nAuto Filter: Een LFO beweegt het filter rond de basisfrequentie.\nBeat Stutter: Neemt per maat het laatste fragment over en herhaalt het tijdelijk. De eerste maat vult de buffer.\nDigitale Gruis: Echte bitkwantisatie en sample-hold, met jitter, drop-outs en rate-modulatie.\nFreeze / Klankwolk: Neemt de afgelopen audio op. Kies Bevroren nadat er geluid binnenkomt. Dit is een granulaire tijdlus, geen spectrale freeze.\nFrequentie Echo: Verschuift boventonen in Hz bij elke echo; geen transpositie in halve tonen.\nGranular Delay: Overlappende Hann-korrels met transpositie, spreiding en feedback.\nHarmonische Resonators: Vijf op akkoord gestemde comb-resonators kleuren het inkomende geluid.\nHybride Reverb: Parallelle combinatie van de gekozen convolutionruimte en algoritmische ambientstaart.\nKosmos · ambient: Acht gemoduleerde delaylijnen met diffusie voor lange, dichte ambientstaarten.\nLimiter · peak: 5 ms lookahead + sampleplafond (geen true-peak). Laatste slot, alle mixes 100%, uitgang 0 dB.\nMultiband Drive: Eigen drive voor lage, midden- en hoge frequenties; geen mastering-crossover.\nPumping / Duck: Tempo-ducking zonder kick-ingang. Zet de mix op 100% en start transport.\nShimmer Reverb: Granulaire octaaftranspositie gevolgd door een diffuus ambientnetwerk.\nStereo Beeld: Mid/side-breedte. Mono → stereo voegt decorrelatie toe; controleer ook in mono.\nTempo Delay: Echo in notenwaarden; volgt de BPM van Patchkamer.\nTrance Gate: 16-staps amplitude-patroon op de hostklok. Mix 100% voor volledige gates.\nVinylstof: Gesynthetiseerde slijtage, ruis, tikjes en mechanische wow/flutter.\nWobble Filter: Tempo-gesynchroniseerde filterbeweging. Start het hosttransport.', en: 'A chain of effects for techno, EDM and ambient.\n\nPurple Mod input → Master and effect parameters per slot. The knobs stay the base; choice lists are not modulated.\n\nChain: IN → 1 → 2 → … → OUT · scroll sideways for all slots.\n\nMix per slot blends dry and effect. Hidden slots are kept. Effect changes remember their parameters; switching or moving clears the effect tail. Reverb and echo keep ringing when the transport stops. Limiter: set slot mix and total mix to 100% and output to 0 dB; put it last.\n\nPer effect:\nAuto Filter: An LFO moves the filter around the base frequency.\nBeat Stutter: Takes over the last fragment of each bar and repeats it for a while. The first bar fills the buffer.\nDigital Crush: True bit quantisation and sample-and-hold, with jitter, drop-outs and rate modulation.\nFreeze / Sound Cloud: Records the audio of the last moments. Choose Frozen once sound is coming in. This is a granular time loop, not a spectral freeze.\nFrequency Echo: Shifts the overtones in Hz with every echo; not a transposition in semitones.\nGranular Delay: Overlapping Hann grains with transposition, spread and feedback.\nHarmonic Resonators: Five comb resonators tuned to a chord colour the incoming sound.\nHybrid Reverb: Parallel combination of the chosen convolution room and an algorithmic ambient tail.\nCosmos · ambient: Eight modulated delay lines with diffusion for long, dense ambient tails.\nLimiter · peak: 5 ms lookahead + sample ceiling (not true-peak). Last slot, all mixes 100%, output 0 dB.\nMultiband Drive: Separate drive for low, mid and high frequencies; not a mastering crossover.\nPumping / Duck: Tempo ducking without a kick input. Set the mix to 100% and start the transport.\nShimmer Reverb: Granular octave transposition followed by a diffuse ambient network.\nStereo Image: Mid/side width. Mono → stereo adds decorrelation; also check in mono.\nTempo Delay: Echo in note values; follows the BPM of Patchkamer.\nTrance Gate: 16-step amplitude pattern on the host clock. Mix 100% for full gates.\nVinyl Dust: Synthesised wear, noise, crackle and mechanical wow/flutter.\nWobble Filter: Tempo-synced filter movement. Start the host transport.' },
   i18n:{nl:{ports:{in:'Stereo in',out:'Stereo uit',mod:'Mod'}}},
   ports:{audioIn:[{id:'in',name:'Stereo in'}],audioOut:[{id:'out',name:'Stereo out'}],eventIn:[],eventOut:[],modIn:[{id:'mod',name:'Mod'}],modOut:[]},
@@ -153,6 +154,37 @@ export default {
     function initial(){return {count:4,input:0,output:0,blend:1,preset:'Ambient Space',slots:[slot('chorus',0.3),slot('delay',0.25),slot('reverb',0.35),...Array.from({length:5},()=>slot())]};}
     config=initial();
     const choices=new Set(['size','mode','rpm','freeze','chord','grid','pattern','division','reverse']);
+// Opmaak voor de skin Compact: alleen actief als de host een draaiknop (data-pk-face) in de keten zet; zonder skin doet dit niets
+const SKINCSS=`
+.ec-top{display:grid;gap:5px;min-width:0}
+.ec-top:has([data-pk-face]){display:flex;flex-wrap:wrap;align-items:flex-end;gap:3px 6px}
+.ec-top:has([data-pk-face])>.k:not([data-pk-face]){flex:1 1 100px;min-width:0;display:flex!important;flex-direction:column;gap:1px;grid-template-columns:none!important;margin:0}
+.ec-top:has([data-pk-face])>.k:nth-of-type(1){flex:3 1 150px}
+.ec-top:has([data-pk-face])>.k:nth-of-type(2){flex:0 0 56px}
+.ec-top:has([data-pk-face])>.k:last-of-type{flex:0 0 140px}
+.ec-top:has([data-pk-face])>.k:not([data-pk-face]) select{order:1;width:100%;font-size:10px;padding:2px 4px;min-height:24px}
+.ec-top:has([data-pk-face])>.k:not([data-pk-face]) label{order:2;font-size:7.5px;letter-spacing:.02em;line-height:1;text-align:center}
+.ec-top:has([data-pk-face])>.ec-lv{flex:0 0 auto;display:flex!important;gap:0}
+.ec-top:has([data-pk-face])>.ec-ot{display:none}
+.ec-top:has([data-pk-face])>canvas{flex:1 1 150px;min-width:0;height:40px!important;margin:0!important}
+.ec-top:has([data-pk-face])>.ec-os{flex:1 1 100%;font-size:9px!important;margin:0!important;line-height:1.2!important;opacity:.8}
+.ec-top .k[data-pk-face],.ec-strip .k[data-pk-face]{display:grid!important;grid-template-columns:minmax(0,1fr)!important;justify-items:center;align-items:start;align-content:start;gap:0;width:54px;min-width:0;margin:0}
+.ec-top .k .kn,.ec-strip .k .kn{order:1;width:26px!important;height:26px!important;justify-self:center!important}
+.ec-top .k[data-pk-face] output,.ec-strip .k[data-pk-face] output{order:2;font-size:8px;text-align:center;line-height:1.1;white-space:nowrap}
+.ec-top .k[data-pk-face] label,.ec-strip .k[data-pk-face] label{order:3;overflow-wrap:anywhere;font-size:7.5px;letter-spacing:-.02em;text-align:center;line-height:1.05;white-space:normal;overflow:visible;text-overflow:clip;max-width:100%;text-transform:none}
+.ec-strip:has([data-pk-face]){overflow:visible!important;flex-wrap:wrap!important;padding:2px 0!important;gap:4px!important;scroll-snap-type:none!important}
+.ec-strip:has([data-pk-face])>.ec-card{flex:1 1 220px!important;display:flex;flex-wrap:wrap;align-content:flex-start;gap:2px 0;padding:4px 5px 5px!important;border-radius:5px!important}
+.ec-strip:has([data-pk-face]) .ec-card>strong{flex:0 0 auto;font-size:9px!important;margin-right:6px}
+.ec-strip:has([data-pk-face]) .ec-card>.ec-btns{flex:1 1 0;margin:0!important;gap:3px!important}
+.ec-strip:has([data-pk-face]) .ec-card>.ec-btns button{flex:1 1 0;font-size:8px;padding:2px 3px;letter-spacing:0;min-height:22px;min-width:26px}
+.ec-strip:has([data-pk-face]) .ec-card>.ec-btns button:first-child{flex:3 1 0}
+.ec-strip:has([data-pk-face]) .ec-card>.k:not([data-pk-face]){flex:1 1 100%;display:flex!important;flex-direction:column;gap:1px;grid-template-columns:none!important;margin:0}
+.ec-strip:has([data-pk-face]) .ec-card>.k:not([data-pk-face]) select{order:1;width:100%;font-size:10px;padding:2px 4px;min-height:24px}
+.ec-strip:has([data-pk-face]) .ec-card>.k:not([data-pk-face]) label{order:2;font-size:7.5px;letter-spacing:.02em;line-height:1;text-align:center}
+.ec-strip:has([data-pk-face]) .ec-card>canvas{flex:1 1 100%;height:36px!important;margin:1px 0!important}
+.ec-strip:has([data-pk-face]) .ec-card>.ec-ph{display:none}
+.ec-strip:has([data-pk-face]) .ec-card>.ec-np{font-size:9px!important;margin:2px 0}
+`;
     const prefix=i=>'slot'+(i+1);
     const scaleFor=d=>d[1]>0&&['Hz','s'].includes(d[5])?'log':'lin';
     function roleFor(key){if(['cutoff','tone','freq','center'].includes(key))return 'filter';if(key==='resonance')return 'res';if(['root','pitch','shift'].includes(key))return 'pitch';if(['release','decay','feedback'].includes(key))return 'decay';if(['attack','length','recovery'].includes(key))return 'env';if(['width','pan'].includes(key))return 'pan';if(['level','trim','makeup','boost','drive','low','mid','high'].includes(key))return 'level';if(['time','predelay','delay'].includes(key))return 'delay';return 'motion';}
@@ -195,9 +227,9 @@ export default {
     const spectrum=new Uint8Array(512),wave=new Float32Array(1024),waveL=new Float32Array(1024),waveR=new Float32Array(1024);
     const visualModes=[['spectrum','Spectrum · lijn'],['bars','Spectrum · balken'],['spectrogram','Spectrogram'],['wave','Golfvorm'],['stereo','Stereobeeld'],['levels','Niveaumeters'],['off','Uit / minder CPU']];
     const GUARD_MAX=100;   // a sample above this (+40 dBFS) or not finite counts as a runaway filter
-    function canvas(parent,width,height,label,fixedDark){const c=document.createElement('canvas');c._plotWidth=width;c._plotHeight=height;c._baseWidth=width;c.style.cssText='display:block;width:100%;max-width:'+width+'px;height:'+height+'px;border-radius:6px;background:'+(fixedDark?'#101c20':'var(--well)')+';margin:4px 0';c.setAttribute('role','img');c.setAttribute('aria-label',label);parent.appendChild(c);if(ro)ro.observe(c);prepareCanvas(c);return c;}
-    function prepareCanvas(c){const dpr=Math.min(4,Math.max(1,Number(globalThis.devicePixelRatio)||1)),w=c._cw>0?Math.min(c._cw,c._baseWidth):c._baseWidth,h=c._plotHeight;
-      c._plotWidth=w;const bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh;}const g=c._g||(c._g=c.getContext('2d'));if(g)g.setTransform(bw/w,0,0,bh/h,0,0);return g;
+    function canvas(parent,width,height,label,fixedDark){const c=document.createElement('canvas');c._plotWidth=width;c._plotHeight=height;c._baseWidth=width;c._baseHeight=height;c.style.cssText='display:block;width:100%;max-width:'+width+'px;height:'+height+'px;border-radius:6px;background:'+(fixedDark?'#101c20':'var(--well)')+';margin:4px 0';c.setAttribute('role','img');c.setAttribute('aria-label',label);parent.appendChild(c);if(ro)ro.observe(c);prepareCanvas(c);return c;}
+    function prepareCanvas(c){const dpr=Math.min(4,Math.max(1,Number(globalThis.devicePixelRatio)||1)),w=c._cw>0?Math.min(c._cw,c._baseWidth):c._baseWidth,h=c._ch>0?c._ch:c._plotHeight;
+      c._plotWidth=w;c._plotHeight=h;const bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh;}const g=c._g||(c._g=c.getContext('2d'));if(g)g.setTransform(bw/w,0,0,bh/h,0,0);return g;
     }
     // colours come from the host's CSS variables, read at most once a second and after a skin change
     function ensureColors(){const now=performance.now();if(col&&now-colT<1000)return;colT=now;const cs=getComputedStyle(root),v=(n,d)=>cs.getPropertyValue(n).trim()||d;
@@ -205,13 +237,13 @@ export default {
     const stopDrawing=()=>{if(stopDraw){stopDraw();stopDraw=null;}};
     const startDraw=()=>{stopDrawing();if(dead||!root||viewMode==='off')return;stopDraw=tekenLus(host,self,drawVisuals,30);};
     const onSkin=()=>{col=null;};
-    function mountOverview(){
-      host.ui.select(root,tx('Weergave'),visualModes.map(([k,n])=>[k,tx(n)]),viewMode,v=>{if(visualModes.some(([key])=>key===v)){viewMode=v;render();}}, { id:'view',group:'view' });
+    function mountOverview(top){
+      host.ui.select(top,tx('Weergave'),visualModes.map(([k,n])=>[k,tx(n)]),viewMode,v=>{if(visualModes.some(([key])=>key===v)){viewMode=v;render();}}, { id:'view',group:'view' });
       if(viewMode==='off'){overview=null;return;}
-      const title=text('div',tx('UITGANG · ')+tx(visualModes.find(([key])=>key===viewMode)[1]),root,'font:11px system-ui,sans-serif;color:var(--fg);margin-top:6px');
-      const c=canvas(root,256,66,tx('Live uitgang: ')+viewMode,viewMode==='spectrogram');
-      const stats=text('div',tx('Piek')+' — · RMS —',root,'font:11px system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--fg);line-height:1.4;margin-bottom:5px');
-      overview={canvas:c,title,stats};
+      const title=text('div',tx('UITGANG · ')+tx(visualModes.find(([key])=>key===viewMode)[1]),top,'font:11px system-ui,sans-serif;color:var(--fg);margin-top:6px');
+      const c=canvas(top,256,66,tx('Live uitgang: ')+viewMode,viewMode==='spectrogram');
+      const stats=text('div',tx('Piek')+' — · RMS —',top,'font:11px system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--fg);line-height:1.4;margin-bottom:5px');
+      title.className='ec-ot';stats.className='ec-os';overview={canvas:c,title,stats};
     }
     function mountSlotView(card,i){if(viewMode==='off')return;const c=canvas(card,218,100,tx('Effectgrafiek slot {0}',i+1));slotViews.push({canvas:c,index:i,wave:new Float32Array(512),freq:new Float32Array(128),mag:new Float32Array(128),phase:new Float32Array(128),response:new Float32Array(128)});}
     function background(c,title){const g=prepareCanvas(c);if(!g)return null;const w=c._plotWidth,h=c._plotHeight;g.clearRect(0,0,w,h);g.fillStyle=col.bg;g.fillRect(0,0,w,h);g.strokeStyle=col.ln;g.lineWidth=1;for(let j=1;j<4;j++){g.beginPath();g.moveTo(0,j*h/4);g.lineTo(w,j*h/4);g.stroke();}g.font='11px system-ui,sans-serif';g.fillStyle=col.fg;if(title)g.fillText(title,7,13);return g;}
@@ -484,24 +516,25 @@ export default {
     };
     const fmt=(v,unit)=>unit==='%'?Math.round(v*100)+'%':unit==='size'?tx(rooms[v][0]):unit==='mode'?['Low-pass','High-pass','Band-pass'][v]:unit==='Hz'?(v<10?v.toFixed(2):Math.round(v))+' Hz':unit==='s'?(v<0.1?Math.round(v*1000)+' ms':v.toFixed(2)+' s'):v.toFixed(1)+' '+unit;
     const text=(tag,str,parent,css)=>{const el=document.createElement(tag);el.textContent=str;if(css)el.style.cssText=css;parent.appendChild(el);return el;};
-    function render(){if(dead)return;notifyParameters();if(!root)return;stopDrawing();if(ro)ro.disconnect();ro=typeof ResizeObserver==='function'?new ResizeObserver(es=>{for(const e of es)e.target._cw=e.contentRect.width;}):null;root.innerHTML='';ui={};slotViews=[];
-      ui.preset=host.ui.select(root,tx('Keten'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen keten')]]),config.preset,v=>{if(presets[v]){config=presets[v]();config.preset=v;apply();render();}}, { id:'preset',group:'chain' });
-      host.ui.select(root,tx('Aantal'),Array.from({length:MAX},(_,i)=>[String(i+1),String(i+1)]),String(config.count),v=>{config.count=number(+v,1,MAX,4,1);customized();apply();render();}, { id:'count',group:'chain' });
-      const levels=text('div','',root,'display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 18px');
+    function render(){if(dead)return;notifyParameters();if(!root)return;stopDrawing();if(ro)ro.disconnect();ro=typeof ResizeObserver==='function'?new ResizeObserver(es=>{for(const e of es){e.target._cw=e.contentRect.width;if(e.target._baseHeight&&e.contentRect.height>0)e.target._ch=e.contentRect.height;}}):null;root.innerHTML='';ui={};slotViews=[];{const st=document.createElement('style');st.textContent=SKINCSS;root.appendChild(st);}
+      const top=text('div','',root);top.className='ec-top';
+      ui.preset=host.ui.select(top,tx('Keten'),Object.keys(presets).map(k=>[k,k]).concat([['Custom',tx('Eigen keten')]]),config.preset,v=>{if(presets[v]){config=presets[v]();config.preset=v;apply();render();}}, { id:'preset',group:'chain' });
+      host.ui.select(top,tx('Aantal'),Array.from({length:MAX},(_,i)=>[String(i+1),String(i+1)]),String(config.count),v=>{config.count=number(+v,1,MAX,4,1);customized();apply();render();}, { id:'count',group:'chain' });
+      const levels=text('div','',top,'display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px 18px');levels.className='ec-lv';
       for(const [k,label,range] of [['input','Ingang',[-12,12,0.5]],['output','Uitgang',[-12,12,0.5]],['blend','Totale mix',[0,1,0.01]]])host.ui.knob(levels,tx(label),range,config[k],v=>fmt(v,k==='blend'?'%':'dB'),v=>{config[k]=number(v,range[0],range[1],config[k],range[2]);customized();apply();}, { id:k,group:'master' });
-      mountOverview();
-      const strip=text('div','',root,'display:flex;flex-direction:row;gap:8px;overflow-x:auto;max-width:100%;padding:4px 2px 12px;scroll-snap-type:x proximity');strip.setAttribute('aria-label',tx('Effectketen van links naar rechts'));strip.setAttribute('tabindex','0');
+      mountOverview(top);
+      const strip=text('div','',root,'display:flex;flex-direction:row;gap:8px;overflow-x:auto;max-width:100%;padding:4px 2px 12px;scroll-snap-type:x proximity');strip.className='ec-strip';strip.setAttribute('aria-label',tx('Effectketen van links naar rechts'));strip.setAttribute('tabindex','0');
       for(let i=0;i<config.count;i++){
         const c=config.slots[i],card=text('section','',strip,'flex:0 0 218px;min-width:0;scroll-snap-align:start;border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--card-2)');
-        text('strong','SLOT '+(i+1)+(i<config.count-1?' →':''),card,'font-size:11px;color:var(--muted)');
-        const row=text('div','',card,'display:flex;gap:6px;margin:7px 0');
+        card.className='ec-card';text('strong','SLOT '+(i+1)+(i<config.count-1?' →':''),card,'font-size:11px;color:var(--muted)');
+        const row=text('div','',card,'display:flex;gap:6px;margin:7px 0');row.className='ec-btns';
         const bypass=text('button',c.bypass?tx('Bypass aan'):tx('Effect aan'),row);bypass.type='button';bypass.setAttribute('aria-pressed',String(c.bypass));bypass.addEventListener('click',()=>{c.bypass=!c.bypass;customized();applySlot(i);render();});
         for(const [label,delta] of [['←',-1],['→',1]]){const b=text('button',label,row);b.type='button';b.disabled=i+delta<0||i+delta>=config.count;b.setAttribute('aria-label',tx(delta<0?'Verplaats slot {0} links':'Verplaats slot {0} rechts',i+1));b.addEventListener('click',()=>{const j=i+delta;if(j<0||j>=config.count)return;[config.slots[i],config.slots[j]]=[config.slots[j],config.slots[i]];customized();apply();render();});}
         host.ui.select(card,'Effect',[['reverb',nm('reverb')],...Object.entries(defs).filter(([k])=>k!=='reverb').map(([k,d])=>[k,tx(d.name)])],c.type,v=>{if(!Object.hasOwn(defs,v))return;c.type=v;if(v==='limiter')c.mix=1;if(!c.bank[v])c.bank[v]=params(v);customized();applySlot(i);render();}, { id:prefix(i)+'.type',group:prefix(i) });
         mountSlotView(card,i);
-        if(c.type==='none'){text('p',tx('Onbewerkt signaal naar het volgende slot.'),card,'font-size:12px;opacity:.65');continue;}
+        if(c.type==='none'){text('p',tx('Onbewerkt signaal naar het volgende slot.'),card,'font-size:12px;opacity:.65').className='ec-np';continue;}
         host.ui.knob(card,tx('Effectmix'),[0,1,0.01],c.mix,v=>fmt(v,'%'),v=>{c.mix=number(v,0,1,c.mix,0.01);customized();applySlot(i);}, { id:prefix(i)+'.mix',group:prefix(i) });
-        text('div',tx('Parameters')+' · '+nm(c.type),card,'font-size:11px;opacity:.7;border-top:1px solid var(--line);padding-top:8px;margin-top:6px');
+        text('div',tx('Parameters')+' · '+nm(c.type),card,'font-size:11px;opacity:.7;border-top:1px solid var(--line);padding-top:8px;margin-top:6px').className='ec-ph';
         for(const [k,d] of Object.entries(defs[c.type].p)){
           const update=v=>{c.bank[c.type][k]=number(+v,d[1],d[2],d[4],d[3]);customized();applySlot(i);};
           if(d[5]==='size'||d[5]==='mode'||d[5]==='rpm'||d[5]==='freeze'||d[5]==='chord'||['grid','pattern','division','reverse'].includes(d[5])){const names=d[5]==='grid'?gridNames:d[5]==='pattern'?['Offbeat','Syncopen','Tresillo','Broken']:d[5]==='division'?['1/16','1/8','1/8 gepunt','1/4','1/4 gepunt','1/2','1/2 gepunt','1 maat']:d[5]==='reverse'?['Vooruit','Achteruit']:d[5]==='size'?rooms.map(r=>tx(r[0])+' · '+r[1]+' s'):d[5]==='rpm'?['33⅓ RPM','45 RPM','78 RPM']:d[5]==='freeze'?['Live opnemen','Bevroren']:d[5]==='chord'?['Open / majeur','Mineur 9','Sus','Majeur 9']:['Low-pass','High-pass','Band-pass'];host.ui.select(card,tx(d[0]),names.map((n,j)=>[String(j),d[5]==='size'?n:tx(n)]),String(c.bank[c.type][k]),update, { id:prefix(i)+'.'+c.type+'.'+k,group:prefix(i) });}

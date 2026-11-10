@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.swell.compact",
+  "device": "nl.patchkamer.swell",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label and value underneath, grouped in few frames, no explanatory text, at roughly half the width of the standard card.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs with labels underneath, in tight frames, less than two thirds of the standard width.",
+      "css": ".app{gap:3px;padding:4px 5px;border-radius:6px}\n.app>.row{gap:3px 6px}\n.app>.row select{font-size:10px;padding:3px 4px;min-height:26px;border-radius:3px;max-width:100px}\nlabel.switch{font-size:10px;gap:3px;white-space:nowrap}\n.screen{height:80px;border-radius:3px}\n.controls{display:flex;flex-wrap:wrap;gap:2px 0;padding:4px 3px;background:var(--card-2);border:1px solid var(--line);border-radius:3px}\n.controls label.control{flex:1 1 68px;min-width:0;padding:0;border:0;background:none;display:grid;justify-items:center;gap:0}\n.controls .label{display:flex;flex-direction:column;align-items:center;gap:0;font-size:8px;letter-spacing:-.02em;line-height:1.15;text-align:center;max-width:100%;overflow-wrap:anywhere}\n.controls output{font-size:8px;line-height:1.1;white-space:nowrap}\n.controls .kn{order:-1;width:30px!important;height:30px!important;justify-self:center!important}\n.controls .kn svg{width:100%;height:100%}\n.app>.row button{font-size:10px;padding:4px 8px;min-height:26px;border-radius:3px}\n.hint{display:none}\n.status{font-size:9px;line-height:1.3}\np{font-size:9px;line-height:1.3;margin:0;color:var(--muted)}\ndetails{padding:3px 5px;margin-bottom:3px;border-radius:3px}\nsummary{font-size:11px;margin-bottom:3px}\n.app .route{grid-template-columns:minmax(64px,1fr) 62px minmax(60px,1fr) 38px;gap:4px;min-height:22px;font-size:10px}\n.app .route select{font-size:9px;padding:1px 2px;min-height:22px;border-radius:3px}\n.app .route output{font-size:9px}\n.app .route input[type=range]{height:14px}"
+    }
+  ]
+}
