@@ -120,6 +120,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Stel `level` per tune af zodat het gemiddelde niveau van alle tunes gelijk is (de tunes uit het meegeleverde pack zijn zo afgesteld dat het gemiddelde niveau tussen ongeveer -27 en -20 dBFS ligt, in een offline render van 8 tot 10 seconden, en de piek onder 0,45; sommige stille texturen staan al op `level` 1).
 
+## Skins
+
+Alle schuiven, keuzelijsten en vinkjes zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`matter`, `mode`, `on`, enzovoort; `universe` is de keuzelijst met universa en staat niet in de state), `role` is `param`, `select` of `toggle` en `group` is `top`, `switch`, `timbre`, `memory`, `space`, `life`, `voice` of `out`. De schuiven staan in secties (`div.sec`, standaard `display:contents`, dus zonder skin ongewijzigd). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.paradox/` (draaiknoppen met naam en waarde eronder, per groep één kader, lager scherm, ongeveer 480 x 403 punten tegenover 860 x 848). Wijzig je de opbouw (`.lab`, `.row`, `.screen`, `.actions`, `.parameters`, `.sec`, `.control`), controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/Paradox/paradox.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

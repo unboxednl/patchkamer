@@ -148,6 +148,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Namen van tunes en packs zijn Engels. Geef elke tune een naam die beschrijft hoe hij klinkt of wat hij doet.
 
+## Skins
+
+Alle schuiven, keuzelijsten en het vinkje `guard` zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`voices`, `cut`, `fa`, `aa`, `ftype`, enzovoort), `role` is `param`, `select` of `toggle`, en `group` is `cluster`, `bron`, `friction`, `filter`, `fenv`, `aenv` of `out`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.dissonantcluster/` (draaiknoppen met waarde en naam eronder, per sectie een kader in een raster van negen kolommen; ongeveer 480 x 640 punten tegenover 1180 x 790). De skin leunt op `.ws`, `.top`, `.meter`, `.map`, `.grid`, `.mod` (op volgorde: cluster, bron, wrijving, filter, filter-envelope, amp-envelope, uitgang), `.k` en `.keys`: wijzig je die, controleer dan de skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/DissonantCluster/dissonant-cluster.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

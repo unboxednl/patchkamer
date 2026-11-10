@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.6 (2026-11-10)
+
+### Toegevoegd
+- **Standaardskin voor nieuwe apparaten.** Onder **Instellingen** kies je **Standaard** of **Compact (kleine schermen)**. Een apparaat dat je daarna plaatst krijgt de skin Compact als hij er een heeft. Bestaande apparaten en songs veranderen niet; per kaart kies je zelf bij **Skin**. De keuze is een voorkeur van deze browser.
+- **Skin Compact voor 31 synths.** Draaiknoppen met de naam en waarde eronder, per groep één kader en geen scrollbalken; de kaarten worden ongeveer 480 punten breed en meestal 20 tot 60 procent lager. Synths: Acid Stepper, Basic Mono, Biotope, Bowed Ensemble, Brass Section, Celestial Mechanics, Chord Poly, Cinematic Synth, Cross Mod Mono, Dissonant Cluster, Drone Synth, Duofone, Formant Singer, Foundry, Four Operator FM, Grain Cloud, Guitar, Karplus String, Ladder Mono, Low Bass, Mist, Paradox, Patch Mono, Piano, Poly Chorus, Squelch Box, Stage Keys, Sub Line, Supersaw Swarm, Triple Osc Poly en Woodwinds. De apparaten melden hun regelaars daarvoor aan voor skins (id is de state-sleutel, groep per sectie); zonder skin zien en klinken ze hetzelfde, en state, params() en poorten zijn ongewijzigd. Woodwinds en Brass Section staan nu in een eigen shadow root.
+
 ## 0.30.5 (2026-11-10)
 
 ### Toegevoegd

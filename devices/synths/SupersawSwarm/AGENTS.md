@@ -144,3 +144,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: polyfone supersaw voor akkoorden en leads in trance en aanverwante stijlen. Noten op `notes`, audio uit `out` (stereo).
+
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `unison`, `chord`, ...), `role` is `param` of `select` en `group` is `sound`, `swarm`, `envelope`, `space`, `motion` (de schuiven) of `top` (de vier keuzelijsten). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.supersawswarm/` (draaiknoppen met de naam eronder, per groep één kader, ongeveer 480 x 457 punten tegenover 820 x 753). De skin mikt op de volgorde van de blokken (`.top`, `.acts`, daarna per groep `h3` en `.grid`); wijzig je die, controleer dan die skin.

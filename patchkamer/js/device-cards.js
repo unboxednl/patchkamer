@@ -85,7 +85,7 @@ function makeRoom(startId){
   if(moved.size){ const t0=performance.now(); const tick=()=>{ PK.drawCables(); if(performance.now()-t0<450) requestAnimationFrame(tick); else moved.forEach(k=>{const r=PK.Host.devices.get(k); r&&r.el.classList.remove('moving');}); }; requestAnimationFrame(tick); }
   return moved.size;
 }
-function afterAdd(nid){ const r=PK.Host.devices.get(nid); if(!r) return; toFront(r); const n=makeRoom(nid); select(nid); if(PK.secDrop) PK.secDrop(nid);
+function afterAdd(nid){ const r=PK.Host.devices.get(nid); if(!r) return; if(PK.skDefApply) PK.skDefApply(nid); toFront(r); const n=makeRoom(nid); select(nid); if(PK.secDrop) PK.secDrop(nid);
   r.el.classList.remove('fresh'); void r.el.offsetWidth; r.el.classList.add('fresh'); setTimeout(()=>r.el.classList.remove('fresh'),1700); PK.drawCables();
   PK.status(PK.pkt('m.geplaatst',r.def.name)+(n?PK.pktp('m.apparaten_opgeschoven_apparaat_opgeschoven',n>1,n):'')); } PK.afterAdd=afterAdd;
 function modApply(tid){ const r=PK.Host.devices.get(tid); if(!r||typeof r.inst.modulate!=='function') return; const m=PK.Host._modOff.get(tid), sum={};

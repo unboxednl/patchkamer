@@ -1,0 +1,62 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.squelchbox.compact",
+  "device": "nl.patchkamer.squelchbox",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the knobs grouped in frames and tighter buttons and step rows, on a card 480 px wide instead of 900.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": 0.9
+      }
+    ],
+    "size": {
+      "width": 480
+    },
+    "sections": [
+      {
+        "match": "*",
+        "frame": "line",
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:sound",
+        "columns": 7
+      },
+      {
+        "match": "group:out",
+        "columns": 1
+      },
+      {
+        "match": "group:extra",
+        "columns": 5
+      },
+      {
+        "match": "group:seq",
+        "frame": "line",
+        "bare": false,
+        "labels": "default"
+      }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames on a narrower card.",
+      "css": ""
+    }
+  ]
+}

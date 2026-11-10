@@ -26,6 +26,10 @@ Een polyfone synth voor filmische klank (braams, pads, drones, ostinati, impacts
 
 Alle velden staan in `SPEC` bovenin het bestand (type, bereik, standaard). `normalize` kapt getallen af en geeft een ongeldige waarde de standaard. Nieuwe parameters: voeg ze toe aan `SPEC` (UI, state en tunes volgen), en geef ze een label in `TXT.nl` en `TXT.en`.
 
+## Skins
+
+Alle regelaars gebruiken `host.ui.knob` met `id` (de state-sleutel) en `group` (`osc`, `filter`, `amp`, `motion`, `space`, `pulse`, `out`); de keuzelijsten en het vinkje zijn eigen elementen en doen niet mee als regelaar. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.cinematicsynth/` (draaiknoppen met de waarde en naam eronder, per groep een kader in een raster van acht kolommen; ongeveer 480 x 485 punten tegenover 760 x 1120). De skin leunt op de klassen `.app`, `.grp`, `.grid`, `.k`, `label.s` en `label.c` in de shadow root: wijzig je die, controleer dan de skin.
+
 ## Wat getest is en wat niet
 
 Offline renders in Chromium (`OfflineAudioContext`): 56 tunes, 30 willekeurige en extreme instellingen met sturing ±1 en ongeldige gebeurtenissen (geen niet-eindige samples, nooit stil). Het geluid is niet beluisterd, en de pulsmotor is alleen getest met onStep-aanroepen die vooraf zijn ingepland. Meet het niveau opnieuw na een wijziging aan de keten.

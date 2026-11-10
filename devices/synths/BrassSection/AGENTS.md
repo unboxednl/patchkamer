@@ -139,3 +139,7 @@ Het pack `../../../tunes/brass-section.patchkamer-tunes.json` heeft 32 tunes in 
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: polyfoon koper (32 stemmen) voor melodielijnen, stabs, swells en secties. Noten op `notes`, audio uit `out` (stereo). Stuur hem met een sequencer die `dur` meestuurt; er zit geen galm in, zet er een effect achter.
+
+## Skins
+
+Sinds 1.23.0 staat de UI in een open shadow root (met de basisstijlen van de host erbij, zodat het er zonder skin hetzelfde uitziet), zodat een skin er CSS in kan zetten. Knoppen en keuzelijsten komen via `host.ui.knob` en `host.ui.select` met `id` (state-sleutel) en `group` (`preset`, `tone`, `attack`, `section`, `play`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.brass-section/` (ongeveer 480 x 435 punten tegenover 720 x 899). Wijzig je de opbouw (`.app`, `.bs-grid`, de kopjes), controleer dan die skin.

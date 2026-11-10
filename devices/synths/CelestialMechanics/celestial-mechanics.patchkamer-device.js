@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: setup, orbit, spacetime, phenomena, sound; rol param of select), zodat een skin ze als draaiknop kan tonen; oude host: genegeerd. De hoogte van het tekenvlak volgt nu de CSS-hoogte (standaard 340 px, dus zonder skin ongewijzigd), zodat een skin het lager kan maken zonder dat het beeld vervormt. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Celestial Mechanics); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Celestial Mechanics (nieuwe id nl.patchkamer.celestialmechanics, eigen map), bijgewerkt naar Patchkamer contract v1.11:
@@ -145,7 +146,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.13.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.14.0', kind: 'instrument', category: 'synth',
   ui: { width: 860, minWidth: 380 },
   about: { nl: 'Een zwaartekrachtsynth: elke noot wordt een planeet die om een zon draait.\n\nDoppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.\n\nTips: Zwart gat omhoog en de banen krimpen, de tonen zakken en worden opgeslokt. Lichtsnelheid omlaag en elke baan wordt een jankende Doppler-sirene. Wisselwerking hoog en planeten trekken aan elkaar: chaos, botsingen en samensmeltingen. Pulsar en Echo volgen het tempo als de klok loopt. Paarse Mod-kabel: Drift op Zwaartekracht of Tijd laat het hele stelsel ademen.', en: 'A gravity synth: every note becomes a planet orbiting a sun.\n\nDoppler bends the pitch, the black hole pulls it down, planets that approach each other colour each other\'s sound. Drag in the universe to sling a planet away yourself.\n\nTips: turn Black hole up and the orbits shrink, the pitches sink and get swallowed. Turn Speed of light down and every orbit becomes a wailing Doppler siren. Turn Interaction up and planets pull at each other: chaos, collisions and mergers. Pulsar and Echo follow the tempo when the clock runs. Purple Mod cable: Drift on Gravity or Time makes the whole system breathe.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -240,16 +241,18 @@ h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:var(--h-acc)}
 .st{font-size:11px;color:var(--mod,#b48cff);margin:6px 0 0}`;
     const el = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; p.appendChild(e); return e; };
-    function selectBox(p, label, opts, value, change) { const box = el(p, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', e => e.stopPropagation()); return s; }
+    const adopt = (e, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(e, { id, role, group, label }); } catch (err) { /* oud contract */ } } return e; };
+    const GROUP_IDS = ['orbit', 'spacetime', 'phenomena', 'sound'];   // sectie-id per groep van de regelaars (voor skins)
+    function selectBox(p, label, opts, value, change, id) { const box = el(p, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', e => e.stopPropagation()); return id ? adopt(s, id, 'select', 'setup', label) : s; }
     const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
     function mount(hostEl) {
       unmount(); const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow({ mode: 'open' }); root = hostEl;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
       const top = el(app, 'div', 'top');
-      ui.preset = selectBox(top, tx('Heelal'), Object.keys(presets).map(k => [k, tx(PRESET_LABELS[k])]).concat([['Custom', tx('Eigen heelal')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); });
-      ui.scale = selectBox(top, tx('Toonladder (slingeren)'), SCALE_NAMES.map(([v, t]) => [v, tx(t)]), state.scale, v => { state.scale = v; state.preset = 'Custom'; paint(); });
-      ui.root = selectBox(top, tx('Grondtoon'), Array.from({ length: 49 }, (_, i) => [24 + i, NOTE_NAMES[(24 + i) % 12] + (Math.floor((24 + i) / 12) - 1)]), state.root, v => { state.root = +v; state.preset = 'Custom'; paint(); });
-      ui.life = selectBox(top, tx('Levensduur'), LIFE.map(([v, t]) => [v, tx(t)]), state.life, v => { state.life = v; state.preset = 'Custom'; apply(); paint(); });
+      ui.preset = selectBox(top, tx('Heelal'), Object.keys(presets).map(k => [k, tx(PRESET_LABELS[k])]).concat([['Custom', tx('Eigen heelal')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); }, 'preset');
+      ui.scale = selectBox(top, tx('Toonladder (slingeren)'), SCALE_NAMES.map(([v, t]) => [v, tx(t)]), state.scale, v => { state.scale = v; state.preset = 'Custom'; paint(); }, 'scale');
+      ui.root = selectBox(top, tx('Grondtoon'), Array.from({ length: 49 }, (_, i) => [24 + i, NOTE_NAMES[(24 + i) % 12] + (Math.floor((24 + i) / 12) - 1)]), state.root, v => { state.root = +v; state.preset = 'Custom'; paint(); }, 'root');
+      ui.life = selectBox(top, tx('Levensduur'), LIFE.map(([v, t]) => [v, tx(t)]), state.life, v => { state.life = v; state.preset = 'Custom'; apply(); paint(); }, 'life');
       canvas = el(app, 'canvas'); canvas.setAttribute('aria-label', tx('het zonnestelsel; sleep om een planeet weg te slingeren'));
       cw = canvas.clientWidth || 600; try { ro = new ResizeObserver(() => { cw = canvas.clientWidth || cw; }); ro.observe(canvas); } catch { ro = null; }
       canvas.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); try { canvas.setPointerCapture(e.pointerId); } catch {} drag = { a: toWorld(e), b: toWorld(e) }; });
@@ -272,7 +275,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
         for (const [id, d] of Object.entries(spec)) { if (d.g !== gi) continue; const c = el(g, 'div', 'c'), lab = el(c, 'div', 'lab'); el(lab, 'span', '', tx(d.name)); const o = el(lab, 'output');
           const inp = el(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = '0.001'; inp.setAttribute('aria-label', tx(d.name)); inp.title = tx(d.name);
           inp.value = String(toS(d, defaults[id])); inp.dataset.pkDefault = inp.value; o.textContent = fmt(d, defaults[id]);
-          inp.addEventListener('pointerdown', e => e.stopPropagation());
+          inp.addEventListener('pointerdown', e => e.stopPropagation()); adopt(inp, id, 'param', GROUP_IDS[d.g] || 'sound', tx(d.name));
           inp.oninput = () => { state[id] = fromS(d, +inp.value); state.preset = 'Custom'; o.textContent = fmt(d, state[id]); if (ui.preset) ui.preset.value = 'Custom'; apply(); };
           ui.k[id] = { set(v) { inp.value = String(toS(d, v)); o.textContent = fmt(d, v); } }; } });
       paint(); paintStatus(); raf = host.frame(self, draw, 60);
@@ -281,7 +284,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     function paintStatus() { if (!statusEl) return; statusEl.textContent = workletOk ? tx('{0} hemellichamen in de ruimte', view.p.length) : tx('AudioWorklet niet beschikbaar: dit heelal blijft stil (open Patchkamer in Chrome, Edge of Firefox).'); }
     let lastStatus = 0;
     function draw(ts) { if (dead || !canvas) return;
-      const dpr = clamp(globalThis.devicePixelRatio || 1, 1, 3), w = Math.max(200, cw), h = 340;
+      const dpr = clamp(globalThis.devicePixelRatio || 1, 1, 3), w = Math.max(200, cw), h = Math.max(120, canvas.clientHeight || 340);
       if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
       const g = canvas.getContext('2d'); if (!g) return; g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.fillStyle = 'rgba(5,6,11,0.32)'; g.fillRect(0, 0, w, h);

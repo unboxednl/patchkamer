@@ -133,6 +133,10 @@ De motor laat geen niet-eindige waarde (`NaN`, `Infinity`) door: parameters word
 
 Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het formaat en de licentie (`CC0-1.0` voor alles in `tunes/`) staan in `../../../tunes/AGENTS.md`. Voor dit apparaat is `device` altijd `nl.patchkamer.crossmodmono` en elke tune is `kind: "set"` met een `state` als hierboven. Zet geen merknamen van bestaande apparatuur in naam of omschrijving, en verzin geen persoon bij `author`. Voor een tune die een eigen lijn speelt, zet je `mode`, `division`, `length`, `seqNotes` en `seqOn` in de state (zie hierboven); `tunes/AGENTS.md` zegt dat patronen niet bij de klank horen, maar voor deze zelfspelende tunes zijn ze de bedoeling.
 
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `wave`, `mode`, enzovoort), `role` is `param` of `select` (ook de aan/uit-keuzes `legato`, `sync` en `oscBLow`), `group` is het spoor (`filter`, `amp`, `source`, `motion`, `master`) of `setup`, `play`, `seq`. Elk spoor zit in een eigen `div.grp` met `data-g` en `data-t` (korte titel); zonder skin is dat `display:contents`, dus het uiterlijk is ongewijzigd. `length` (Lengte) is bewust geen aangemelde regelaar: een nieuwe lengte bouwt de hele UI opnieuw op, en dat verbreekt een sleepgebaar op een draaiknop. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.crossmodmono/` (draaiknoppen met waarde en naam eronder, per spoor een kader, een rooster van 8 stappen per rij; ongeveer 480 x 510 punten, 480 x 605 met het eigen patroon, tegenover 920 x 1370). De skin leunt op `.app`, `.row` (op volgorde: setup, test, besturing), `.pads`, `.grp` en `.control`: wijzig je die, controleer dan de skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/CrossModMono/cross-mod-mono.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

@@ -112,6 +112,10 @@ Laat `testNote` en `operator` weg uit een tune. Zet geen routing erin (het appar
 
 Het apparaat kan niet ontsporen: de operators zijn begrensde sinussen, en ook feedback 7 met een modulatiediepte van 1 blijft eindig. Een bewaker in de motor zet de stemmen en het gelijkspanningsfilter terug als er toch een niet-eindige waarde in de uitvoer zou komen, zodat het apparaat niet voor altijd stil kan vallen.
 
+## Skins
+
+Alle keuzelijsten en knoppen zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`level`, `feedback`, `o1ratio`, `preset`, `algorithm`, `operator`, enzovoort), `role` is `param` (schuiven) of `select`, `group` is `play` (testnoot), `operator` (de regelaars van de gekozen operator; ze worden bij een andere operator opnieuw aangemeld), `global` of `sound`. De knoppen hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.fouroperatorfm/` (draaiknoppen met de naam eronder, per sectie een kader, kleinere grafieken, ongeveer 480 x 451 punten tegenover 1000 x 853). Testnoot staat bewust in `modExclude`. Wijzig je de opbouw van de UI (`.row`, `.grid`, `.control`, de canvassen), controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/FourOperatorFM/four-operator-fm.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

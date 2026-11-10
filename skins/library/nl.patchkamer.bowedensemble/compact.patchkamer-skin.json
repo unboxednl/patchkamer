@@ -1,0 +1,52 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.bowedensemble.compact",
+  "device": "nl.patchkamer.bowedensemble",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, grouped per section in one frame, without headings.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 482
+    },
+    "sections": [
+      {
+        "match": "*",
+        "frame": "line",
+        "columns": 5,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:ensemble",
+        "columns": 4
+      },
+      {
+        "match": "group:play",
+        "columns": 3
+      }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: rotary knobs with the label underneath, grouped per section in one frame, without headings."
+    }
+  ]
+}

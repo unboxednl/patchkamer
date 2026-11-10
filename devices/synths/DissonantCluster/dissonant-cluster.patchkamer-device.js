@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: cluster, bron, friction, filter, fenv, aenv, out); zachte afbreekstreep in het label Uiteendrijven (onzichtbaar tenzij het afbreekt); geluid, state, params() en uiterlijk zonder skin ongewijzigd.
 // 1.12.0 — Uitleg naar about (menu Over Dissonant Cluster); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Alle continue regelaars zijn stuurbaar: Marge, Toonvolgen, de filteromhulling (aanval, verval, houd, loslaten), Amp sustain, Aanslag en Stereo stonden niet in params().
 //   Nu wel (alle standaard uit); ze werken vanaf de volgende noot, net als Zweving en de amp-tijden al deden. Klank en instellingen zonder modulatie zijn ongewijzigd.
@@ -125,7 +126,7 @@ input[type=checkbox]{accent-color:var(--acc);margin:0}
 export default {
   id: 'nl.patchkamer.dissonantcluster',
   name: 'Dissonant Cluster',
-  version: '1.12.0',
+  version: '1.13.0',
   about: { nl: 'Een polyfone synth die alleen dissonant klinkt. Elke noot wordt een cluster van 2 tot 6 stemmen in een dissonante structuur; een consonantiebewaker houdt elk paar tonen (binnen een noot en tussen noten die tegelijk klinken) weg van priem, octaaf, kwint, kwart, tertsen en sexten.\n\nDe dissonantiekaart toont in grijs de ruwheid van twee tonen per interval (Plomp & Levelt / Sethares), in rood de verboden consonante zones en gemarkeerd jouw stemmen.\n\nSnelle volumebeweging (wrijving) tussen ongeveer 15 en 70 Hz wordt niet als ritme maar als ruwheid gehoord; rond 30 Hz is ze het sterkst.', en: 'A polyphonic synth that only sounds dissonant. Every note becomes a cluster of 2 to 6 voices in a dissonant structure; a consonance guard keeps every pair of tones (within a note and between notes that sound at the same time) away from unison, octave, fifth, fourth, thirds and sixths.\n\nThe dissonance map shows in grey the roughness of two tones per interval (Plomp & Levelt / Sethares), in red the forbidden consonant zones and, highlighted, your voices.\n\nFast volume movement (friction) between about 15 and 70 Hz is heard not as rhythm but as roughness; it is strongest around 30 Hz.' },
   modExclude: ['voices', 'open', 'poly'],   // gehele aantallen en stappen
   kind: 'instrument',
@@ -290,16 +291,17 @@ export default {
 
     // ---------- UI ----------
     // aria = naam van de stuurbare parameter (zie MODP), zodat de host de modulatiestip op deze regelaar zet
-    function knob(parent, label, [mn, mx, st], get, set, fmt, log, aria) {
-      const w = document.createElement('div'); w.className = 'k'; const l = document.createElement('label'), i = document.createElement('input'), o = document.createElement('output'); l.textContent = tx(label); i.type = 'range'; i.setAttribute('aria-label', tx(aria || label));
+    function adopt(el, id, role, label, parent) { if (id && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group: parent && parent.dataset ? parent.dataset.g : undefined, label }); } catch (e) { /* oud contract */ } } }
+    function knob(parent, id, label, [mn, mx, st], get, set, fmt, log, aria) {
+      const w = document.createElement('div'); w.className = 'k'; const l = document.createElement('label'), i = document.createElement('input'), o = document.createElement('output'); l.textContent = tx(label).replace('Uiteendrijven', 'Uiteen\u00addrijven'); i.type = 'range'; i.setAttribute('aria-label', tx(aria || label));
       const d0 = (() => { const sv = P; P = DEF(); try { return get(); } finally { P = sv; } })();
       if (log) { i.min = 0; i.max = 1; i.step = 0.001; const to = x => mn * Math.pow(mx / mn, x), from = v => Math.log(v / mn) / Math.log(mx / mn); i.dataset.pkDefault = String(from(d0)); i.oninput = () => { set(to(+i.value)); o.textContent = fmt(get()); after(); }; refreshers.push(() => { i.value = from(get()); o.textContent = fmt(get()); }); }
       else { i.min = mn; i.max = mx; i.step = st; i.dataset.pkDefault = String(d0); i.oninput = () => { set(+i.value); o.textContent = fmt(get()); after(); }; refreshers.push(() => { i.value = get(); o.textContent = fmt(get()); }); }
-      w.append(l, i, o); parent.appendChild(w);
+      w.append(l, i, o); parent.appendChild(w); adopt(i, id, 'param', tx(aria || label), parent);
     }
-    function choose(parent, label, opts, get, set) { const w = document.createElement('div'); w.className = 'k'; w.style.gridTemplateColumns = '112px minmax(0,1fr)'; const l = document.createElement('label'), s = document.createElement('select'); l.textContent = tx(label); s.setAttribute('aria-label', tx(label));
-      opts.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = tx(t); s.appendChild(o); }); s.onchange = () => { set(s.value); lastCents = null; refreshAll(); after(); }; refreshers.push(() => { s.value = String(get()); }); w.append(l, s); parent.appendChild(w); }
-    function box(parent, title, extra) { const m = document.createElement('section'); m.className = 'mod'; const h = document.createElement('h3'); h.textContent = tx(title); m.appendChild(h); if (extra) extra(h); parent.appendChild(m); return m; }
+    function choose(parent, id, label, opts, get, set) { const w = document.createElement('div'); w.className = 'k'; w.style.gridTemplateColumns = '112px minmax(0,1fr)'; const l = document.createElement('label'), s = document.createElement('select'); l.textContent = tx(label); s.setAttribute('aria-label', tx(label));
+      opts.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = tx(t); s.appendChild(o); }); s.onchange = () => { set(s.value); lastCents = null; refreshAll(); after(); }; refreshers.push(() => { s.value = String(get()); }); w.append(l, s); parent.appendChild(w); adopt(s, id, 'select', tx(label), parent); }
+    function box(parent, title, extra, g) { const m = document.createElement('section'); m.className = 'mod'; if (g) m.dataset.g = g; const h = document.createElement('h3'); h.textContent = tx(title); m.appendChild(h); if (extra) extra(h); parent.appendChild(m); return m; }
     const after = () => { applyGlobal(); applyTune(); liveApply(); drawMap(); };
     const refreshAll = () => { refreshers.forEach(f => f()); drawMap(); };
     const pct = v => Math.round(v * 100) + '%', hz = v => v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + ' kHz' : Math.round(v) + ' Hz', sec = v => v < 1 ? Math.round(v * 1000) + ' ms' : v.toFixed(2) + ' s';
@@ -312,29 +314,29 @@ export default {
       const mp = document.createElement('div'); mp.className = 'map';
       ui.cv = document.createElement('canvas'); ui.cv.setAttribute('role', 'img'); ui.cv.setAttribute('aria-label', tx('dissonantiekaart')); mp.append(ui.cv); ws.appendChild(mp);
       const G = document.createElement('div'); G.className = 'grid'; ws.appendChild(G);
-      const cl = box(G, 'Cluster'); choose(cl, 'Structuur', STRUCT.map(s => [s[0], s[1]]), () => P.struct, v => { P.struct = v; });
-      knob(cl, 'Stemmen', [2, 6, 1], () => P.voices, v => { P.voices = v; lastCents = null; }, v => String(v)); knob(cl, 'Openheid', [0, 3, 1], () => P.open, v => { P.open = v; lastCents = null; }, v => v ? '+' + v + ' oct' : tx('dicht'));
-      knob(cl, 'Zweving', [0, 40, 0.1], () => P.beat, v => { P.beat = v; }, v => v.toFixed(1) + ' Hz'); knob(cl, 'Zweving-mix', [0, 1, 0.01], () => P.beatMix, v => { P.beatMix = v; }, pct);
-      knob(cl, 'Uiteendrijven', [0, 50, 0.5], () => P.drift, v => { P.drift = v; }, v => v ? v + ' ct/s' : tx('uit'));
+      const cl = box(G, 'Cluster', null, 'cluster'); choose(cl, 'struct', 'Structuur', STRUCT.map(s => [s[0], s[1]]), () => P.struct, v => { P.struct = v; });
+      knob(cl, 'voices', 'Stemmen', [2, 6, 1], () => P.voices, v => { P.voices = v; lastCents = null; }, v => String(v)); knob(cl, 'open', 'Openheid', [0, 3, 1], () => P.open, v => { P.open = v; lastCents = null; }, v => v ? '+' + v + ' oct' : tx('dicht'));
+      knob(cl, 'beat', 'Zweving', [0, 40, 0.1], () => P.beat, v => { P.beat = v; }, v => v.toFixed(1) + ' Hz'); knob(cl, 'beatMix', 'Zweving-mix', [0, 1, 0.01], () => P.beatMix, v => { P.beatMix = v; }, pct);
+      knob(cl, 'drift', 'Uiteendrijven', [0, 50, 0.5], () => P.drift, v => { P.drift = v; }, v => v ? v + ' ct/s' : tx('uit'));
       const gd = document.createElement('div'); gd.className = 'k'; gd.style.gridTemplateColumns = '112px minmax(0,1fr)'; const gl = document.createElement('label'); gl.textContent = tx('Bewaker'); const gc = document.createElement('label'); gc.className = 'note'; gc.style.display = 'flex'; gc.style.gap = '6px'; gc.style.alignItems = 'center';
-      const gcb = document.createElement('input'); gcb.type = 'checkbox'; gcb.onchange = () => { P.guard = gcb.checked; lastCents = null; drawMap(); }; refreshers.push(() => { gcb.checked = !!P.guard; }); gc.append(gcb, document.createTextNode(tx('geen consonante paren'))); gd.append(gl, gc); cl.appendChild(gd);
-      knob(cl, 'Marge', [10, 60, 1], () => P.margin, v => { P.margin = v; lastCents = null; }, v => '±' + v + ' ct');
-      const br = box(G, 'Bron'); choose(br, 'Golfvorm', WAVES, () => P.wave, v => { P.wave = v; });
-      choose(br, 'FM-verhouding', RATIOS, () => P.fmRatio, v => { P.fmRatio = v; }); knob(br, 'FM-index', [0, 10, 0.01], () => P.fmi, v => { P.fmi = v; }, v => v.toFixed(2));
-      choose(br, 'Ring-verhouding', RATIOS, () => P.ringRatio, v => { P.ringRatio = v; }); knob(br, 'Ring', [0, 1, 0.01], () => P.ring, v => { P.ring = v; }, pct);
-      knob(br, 'Metaal', [0, 1, 0.01], () => P.metal, v => { P.metal = v; }, pct); knob(br, 'Ruis', [0, 1, 0.01], () => P.noise, v => { P.noise = v; }, pct);
-      const wr = box(G, 'Wrijving'); knob(wr, 'Diepte', [0, 1, 0.01], () => P.rough, v => { P.rough = v; }, pct, false, 'Wrijving'); knob(wr, 'Snelheid', [8, 70], () => P.roughRate, v => { P.roughRate = v; }, v => v.toFixed(1) + ' Hz', true, 'Wrijving-snelheid');
-      const fl = box(G, 'Filter'); choose(fl, 'Type', FTYPES, () => P.ftype, v => { P.ftype = v; }); knob(fl, 'Cutoff', [40, 18000], () => P.cut, v => { P.cut = v; }, hz, true);
-      knob(fl, 'Reso', [0.3, 20, 0.1], () => P.res, v => { P.res = v; }, v => v.toFixed(1)); knob(fl, 'Env-diepte', [-1, 1, 0.01], () => P.fenv, v => { P.fenv = v; }, v => (v > 0 ? '+' : '') + Math.round(v * 100) + '%');
-      knob(fl, 'Toonvolgen', [0, 1, 0.01], () => P.kt, v => { P.kt = v; }, pct); choose(fl, 'Shaper', STYPES, () => P.stype, v => { P.stype = v; }); knob(fl, 'Drive', [0, 1, 0.01], () => P.drive, v => { P.drive = v; }, pct);
-      [['Filter-envelope', 'f'], ['Amp-envelope', 'a']].forEach(([t, p]) => { const m = box(G, t);
+      const gcb = document.createElement('input'); gcb.type = 'checkbox'; gcb.setAttribute('aria-label', tx('Bewaker')); gcb.onchange = () => { P.guard = gcb.checked; lastCents = null; drawMap(); }; refreshers.push(() => { gcb.checked = !!P.guard; }); gc.append(gcb, document.createTextNode(tx('geen consonante paren'))); gd.append(gl, gc); cl.appendChild(gd); adopt(gcb, 'guard', 'toggle', tx('Bewaker'), cl);
+      knob(cl, 'margin', 'Marge', [10, 60, 1], () => P.margin, v => { P.margin = v; lastCents = null; }, v => '±' + v + ' ct');
+      const br = box(G, 'Bron', null, 'bron'); choose(br, 'wave', 'Golfvorm', WAVES, () => P.wave, v => { P.wave = v; });
+      choose(br, 'fmRatio', 'FM-verhouding', RATIOS, () => P.fmRatio, v => { P.fmRatio = v; }); knob(br, 'fmi', 'FM-index', [0, 10, 0.01], () => P.fmi, v => { P.fmi = v; }, v => v.toFixed(2));
+      choose(br, 'ringRatio', 'Ring-verhouding', RATIOS, () => P.ringRatio, v => { P.ringRatio = v; }); knob(br, 'ring', 'Ring', [0, 1, 0.01], () => P.ring, v => { P.ring = v; }, pct);
+      knob(br, 'metal', 'Metaal', [0, 1, 0.01], () => P.metal, v => { P.metal = v; }, pct); knob(br, 'noise', 'Ruis', [0, 1, 0.01], () => P.noise, v => { P.noise = v; }, pct);
+      const wr = box(G, 'Wrijving', null, 'friction'); knob(wr, 'rough', 'Diepte', [0, 1, 0.01], () => P.rough, v => { P.rough = v; }, pct, false, 'Wrijving'); knob(wr, 'roughRate', 'Snelheid', [8, 70], () => P.roughRate, v => { P.roughRate = v; }, v => v.toFixed(1) + ' Hz', true, 'Wrijving-snelheid');
+      const fl = box(G, 'Filter', null, 'filter'); choose(fl, 'ftype', 'Type', FTYPES, () => P.ftype, v => { P.ftype = v; }); knob(fl, 'cut', 'Cutoff', [40, 18000], () => P.cut, v => { P.cut = v; }, hz, true);
+      knob(fl, 'res', 'Reso', [0.3, 20, 0.1], () => P.res, v => { P.res = v; }, v => v.toFixed(1)); knob(fl, 'fenv', 'Env-diepte', [-1, 1, 0.01], () => P.fenv, v => { P.fenv = v; }, v => (v > 0 ? '+' : '') + Math.round(v * 100) + '%');
+      knob(fl, 'kt', 'Toonvolgen', [0, 1, 0.01], () => P.kt, v => { P.kt = v; }, pct); choose(fl, 'stype', 'Shaper', STYPES, () => P.stype, v => { P.stype = v; }); knob(fl, 'drive', 'Drive', [0, 1, 0.01], () => P.drive, v => { P.drive = v; }, pct);
+      [['Filter-envelope', 'f'], ['Amp-envelope', 'a']].forEach(([t, p]) => { const m = box(G, t, null, p === 'f' ? 'fenv' : 'aenv');
         const an = nm => (p === 'a' ? 'Amp ' : 'Filter ') + nm.toLowerCase();
-        knob(m, 'Attack', [0.001, 8], () => P[p + 'a'], v => { P[p + 'a'] = v; }, sec, true, an('Attack')); knob(m, 'Decay', [0.01, 8], () => P[p + 'd'], v => { P[p + 'd'] = v; }, sec, true, an('Decay'));
-        knob(m, 'Sustain', [0, 1, 0.01], () => P[p + 's'], v => { P[p + 's'] = v; }, pct, false, an('Sustain')); knob(m, 'Release', [0.01, 10], () => P[p + 'r'], v => { P[p + 'r'] = v; }, sec, true, an('Release'));
-        if (p === 'a') knob(m, 'Aanslag', [0, 1, 0.01], () => P.vel, v => { P.vel = v; }, pct); });
-      const uo = box(G, 'Uitgang'); knob(uo, 'Noten', [1, 6, 1], () => P.poly, v => { P.poly = v; }, v => String(v)); knob(uo, 'Stereo', [0, 1, 0.01], () => P.width, v => { P.width = v; }, pct);
-      knob(uo, 'Stemming', [-100, 100, 1], () => P.tune, v => { P.tune = v; }, v => (v > 0 ? '+' : '') + v + ' ct'); knob(uo, 'Niveau', [0, 1, 0.01], () => P.lvl, v => { P.lvl = v; }, pct);
-      knob(uo, 'Pan', [-1, 1, 0.01], () => P.pan, v => { P.pan = v; }, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100));
+        knob(m, p + 'a', 'Attack', [0.001, 8], () => P[p + 'a'], v => { P[p + 'a'] = v; }, sec, true, an('Attack')); knob(m, p + 'd', 'Decay', [0.01, 8], () => P[p + 'd'], v => { P[p + 'd'] = v; }, sec, true, an('Decay'));
+        knob(m, p + 's', 'Sustain', [0, 1, 0.01], () => P[p + 's'], v => { P[p + 's'] = v; }, pct, false, an('Sustain')); knob(m, p + 'r', 'Release', [0.01, 10], () => P[p + 'r'], v => { P[p + 'r'] = v; }, sec, true, an('Release'));
+        if (p === 'a') knob(m, 'vel', 'Aanslag', [0, 1, 0.01], () => P.vel, v => { P.vel = v; }, pct); });
+      const uo = box(G, 'Uitgang', null, 'out'); knob(uo, 'poly', 'Noten', [1, 6, 1], () => P.poly, v => { P.poly = v; }, v => String(v)); knob(uo, 'width', 'Stereo', [0, 1, 0.01], () => P.width, v => { P.width = v; }, pct);
+      knob(uo, 'tune', 'Stemming', [-100, 100, 1], () => P.tune, v => { P.tune = v; }, v => (v > 0 ? '+' : '') + v + ' ct'); knob(uo, 'lvl', 'Niveau', [0, 1, 0.01], () => P.lvl, v => { P.lvl = v; }, pct);
+      knob(uo, 'pan', 'Pan', [-1, 1, 0.01], () => P.pan, v => { P.pan = v; }, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100));
       const kb = document.createElement('div'); kb.className = 'keys'; kb.setAttribute('aria-label', tx('klavier')); ws.appendChild(kb); const held = new Map(), NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
       for (let n = 36; n < 72; n++) { const b = document.createElement('button'), bl = [1, 3, 6, 8, 10].includes(n % 12); b.className = bl ? 'b' : ''; b.textContent = n % 12 === 0 ? 'C' + (Math.floor(n / 12) - 1) : ''; b.title = NN[n % 12] + (Math.floor(n / 12) - 1); b.setAttribute('aria-label', b.title);
         b.addEventListener('pointerdown', e => { e.preventDefault(); b.classList.add('down'); held.set(n, noteGroup(n, 0.85, ctx.currentTime, null)); drawMap(); });

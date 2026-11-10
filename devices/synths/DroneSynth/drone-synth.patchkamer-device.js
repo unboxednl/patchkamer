@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: drone, droneb, noise, filter, space, out, events, play, seq); geluid, state, params() en uiterlijk zonder skin ongewijzigd.
 // 1.12.0 — Uitleg naar about (menu Over Drone Synth); de UI toont geen uitlegtekst meer.
 // 1.11.1 — Meer regelaars stuurbaar voor modulatoren: Interval van de tweede drone, Glide en Gate van de sequencer, en snelheid en niveau van de gebeurtenissen
 //   stonden niet in params(). Nu wel (alle standaard uit). Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Grondtoon (volgt de sequencer en noten),
@@ -135,7 +136,7 @@ const LANES_EN = { drone: 'Drone', drone2: 'Second drone', ruis: 'Noise', filter
 export default {
   id: 'nl.patchkamer.drone',
   name: 'Drone Synth',
-  version: '1.12.0',
+  version: '1.13.0',
   about: { nl: 'Een doorlopende drone- en ambientsynth: drie ontstemde oscillators plus een sub, een tweede drone-laag op een interval, gekleurde ruis, een resonant filter met trage LFO, vervorming, delay en galm. De klank klinkt zolang de klok loopt, of blijft klinken als Bij stop op blijft klinken staat.\n\nGebeurtenissen (sirene, metaalslag, radiostatic, hartslag) vuren willekeurig rond het ingestelde interval (±40%) zolang de klok loopt.\n\nDe grondtoon-sequencer speelt één noot per stap; een lege stap houdt de vorige toon aan. Inkomende noten (oranje ingang) zetten ook de grondtoon.', en: 'A continuous drone and ambient synth: three detuned oscillators plus a sub, a second drone layer at an interval, coloured noise, a resonant filter with a slow LFO, distortion, delay and reverb. The sound plays while the clock runs, or keeps sounding when On stop is set to keeps sounding.\n\nEvents (siren, metal hit, radio static, heartbeat) fire at random around the set interval (±40%) while the clock runs.\n\nThe root sequencer plays one note per step; an empty step holds the previous pitch. Incoming notes (orange input) also set the root.' },
   modExclude: ['freq', 'rsize'],   // grondtoon volgt sequencer en noten; galmgrootte bouwt de galm opnieuw op
   kind: 'instrument',
@@ -285,12 +286,13 @@ export default {
       nfreq: v => v + ' Hz', nq: v => (+v).toFixed(1), nlevel: pct, cut: v => v + ' Hz', res: v => (+v).toFixed(1), lrate: v => (+v).toFixed(2) + ' Hz', ldepth: v => v + ' Hz', pitchmod: v => v + ' ct',
       drive: pct, dtime: v => (+v).toFixed(2) + ' s', dfb: pct, rsize: v => (+v).toFixed(1) + ' s', rmix: pct, erate: v => v + ' s', elevel: pct, glide: v => (+v).toFixed(2) + ' s', gate: pct, lvl: pct,
     };
+    let curG; const adopt = (el, id, role, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group: curG, label }); } catch (e) { /* oud contract */ } } };
     function knob(parent, key, label, [mn, mx, st]) {
       const w = document.createElement('div'); w.className = 'k';
       const l = document.createElement('label'), i = document.createElement('input'), o = document.createElement('output');
       const id = 'k-' + key; l.textContent = tx(label); l.htmlFor = id; i.id = id; i.type = 'range'; i.min = mn; i.max = mx; i.step = st; i.dataset.pkDefault = String(DEFAULTS[key]);
       i.oninput = () => { P[key] = +i.value; o.textContent = fmt[key](P[key]); apply(); };
-      w.append(l, i, o); parent.appendChild(w);
+      w.append(l, i, o); parent.appendChild(w); adopt(i, key, 'param', tx(label));
       refreshers.push(() => { i.value = P[key]; o.textContent = fmt[key](P[key]); });
     }
     function choose(parent, key, label, opts, num) {
@@ -298,13 +300,13 @@ export default {
       const l = document.createElement('label'), s = document.createElement('select'); const id = 's-' + key; l.textContent = tx(label); l.htmlFor = id; s.id = id;
       opts.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = tx(t); s.appendChild(o); });
       s.onchange = () => { P[key] = num ? +s.value : s.value; apply(); if (key === 'dbars') paintSeq(); };
-      w.append(l, s); parent.appendChild(w); refreshers.push(() => { s.value = P[key]; });
+      w.append(l, s); parent.appendChild(w); adopt(s, key, 'select', tx(label)); refreshers.push(() => { s.value = P[key]; });
     }
     function toggle(h3, key, label) {
       const l = document.createElement('label'), c = document.createElement('input'); c.type = 'checkbox'; c.onchange = () => { P[key] = c.checked; apply(); if (key === 'seqOn') paintSeq(); };
-      l.append(c, document.createTextNode(tx(label))); h3.appendChild(l); refreshers.push(() => { c.checked = !!P[key]; });
+      l.append(c, document.createTextNode(tx(label))); h3.appendChild(l); adopt(c, key, 'toggle', tx(label)); refreshers.push(() => { c.checked = !!P[key]; });
     }
-    function mod(page, title, wide) { const m = document.createElement('section'); m.className = 'mod' + (wide ? ' wide' : ''); const h = document.createElement('h3'); h.textContent = tx(title); m.appendChild(h); page.appendChild(m); return [m, h]; }
+    function mod(page, title, wide, g) { const m = document.createElement('section'); m.className = 'mod' + (wide ? ' wide' : ''); if (g) m.dataset.g = g; curG = g; const h = document.createElement('h3'); h.textContent = tx(title); m.appendChild(h); page.appendChild(m); return [m, h]; }
     function refreshAll() { refreshers.forEach(f => f()); }
 
     function paintSeq() {
@@ -332,36 +334,36 @@ export default {
           apply(); refreshAll(); };
         const rack = document.createElement('div'); rack.className = 'rack'; app.appendChild(rack);
         // Bron
-        let [m, h] = mod(rack, 'Drone'); toggle(h, 'droneOn', 'aan');
+        let [m, h] = mod(rack, 'Drone', false, 'drone'); toggle(h, 'droneOn', 'aan');
         knob(m, 'freq', 'Grondtoon', [20, 220, 0.5]); choose(m, 'wave', 'Golfvorm', [['sawtooth', 'Zaagtand'], ['square', 'Blok'], ['triangle', 'Driehoek'], ['sine', 'Sinus']]);
         knob(m, 'fine', 'Stemming', [-100, 100, 1]); knob(m, 'detune', 'Ontstemming', [0, 60, 0.5]); knob(m, 'sub', 'Sub-octaaf', [0, 1, 0.01]); knob(m, 'dlevel', 'Niveau', [0, 1, 0.01]);
-        [m, h] = mod(rack, 'Drone B'); toggle(h, 'dbOn', 'aan');
+        [m, h] = mod(rack, 'Drone B', false, 'droneb'); toggle(h, 'dbOn', 'aan');
         choose(m, 'dbWave', 'Golfvorm', [['triangle', 'Driehoek'], ['sawtooth', 'Zaagtand'], ['square', 'Blok'], ['sine', 'Sinus']]);
         knob(m, 'dbInt', 'Interval', [-24, 24, 1]); knob(m, 'dbDet', 'Ontstemming', [0, 60, 0.5]); knob(m, 'dbLvl', 'Niveau', [0, 1, 0.01]);
-        [m, h] = mod(rack, 'Ruis'); toggle(h, 'noiseOn', 'aan');
+        [m, h] = mod(rack, 'Ruis', false, 'noise'); toggle(h, 'noiseOn', 'aan');
         choose(m, 'ntype', 'Kleur', [['brown', 'Bruin'], ['pink', 'Roze'], ['white', 'Wit']]);
         knob(m, 'nfreq', 'Bandfilter', [60, 8000, 1]); knob(m, 'nq', 'Resonantie', [0.3, 18, 0.1]); knob(m, 'nlevel', 'Niveau', [0, 1, 0.01]);
         // Filter
-        [m] = mod(rack, 'Filter & LFO');
+        [m] = mod(rack, 'Filter & LFO', false, 'filter');
         knob(m, 'cut', 'Afsnijfreq.', [80, 12000, 1]); knob(m, 'res', 'Resonantie', [0.3, 20, 0.1]);
         knob(m, 'lrate', 'LFO snelheid', [0.02, 8, 0.01]); knob(m, 'ldepth', 'LFO diepte', [0, 4000, 1]); knob(m, 'pitchmod', 'Toonwobbel', [0, 80, 0.5]);
         // Ruimte
-        [m] = mod(rack, 'Ruimte & verval');
+        [m] = mod(rack, 'Ruimte & verval', false, 'space');
         knob(m, 'drive', 'Vervorming', [0, 1, 0.01]); knob(m, 'dtime', 'Delaytijd', [0.05, 1.5, 0.01]); knob(m, 'dfb', 'Delay feedback', [0, 0.95, 0.01]);
         knob(m, 'rsize', 'Galmgrootte', [0.5, 10, 0.1]); knob(m, 'rmix', 'Galm mix', [0, 1, 0.01]);
-        [m, h] = mod(rack, 'Uitgang'); knob(m, 'lvl', 'Niveau', [0, 1, 0.01]);
+        [m, h] = mod(rack, 'Uitgang', false, 'out'); knob(m, 'lvl', 'Niveau', [0, 1, 0.01]);
         const hl = document.createElement('div'); hl.className = 'k'; hl.style.gridTemplateColumns = '86px minmax(0,1fr)'; const hll = document.createElement('label'); hll.textContent = tx('Bij stop'); const hs = document.createElement('select'); hs.id = 's-hold';
         [['0', 'stil'], ['1', 'blijft klinken']].forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = tx(t); hs.appendChild(o); }); hll.htmlFor = 's-hold';
-        hs.onchange = () => { P.hold = hs.value === '1'; apply(); }; refreshers.push(() => { hs.value = P.hold ? '1' : '0'; }); hl.append(hll, hs); m.appendChild(hl);
+        hs.onchange = () => { P.hold = hs.value === '1'; apply(); }; refreshers.push(() => { hs.value = P.hold ? '1' : '0'; }); hl.append(hll, hs); m.appendChild(hl); adopt(hs, 'hold', 'select', tx('Bij stop'));
         // Gebeurtenissen
-        [m] = mod(rack, 'Gebeurtenissen');
+        [m] = mod(rack, 'Gebeurtenissen', false, 'events');
         choose(m, 'evt', 'Type', [['none', 'Geen'], ['siren', 'Sirene'], ['impact', 'Metaalslag'], ['static', 'Radiostatic'], ['pulse', 'Hartslag']]);
         knob(m, 'erate', 'Interval', [1, 30, 0.5]); knob(m, 'elevel', 'Niveau', [0, 1, 0.01]);
         // Sequencer
-        [m] = mod(rack, 'Speel');
+        [m] = mod(rack, 'Speel', false, 'play');
         const pads = document.createElement('div'); pads.className = 'pads'; m.appendChild(pads);
         NOTES.forEach(([n, f]) => { const b = document.createElement('button'); b.textContent = n; b.onclick = () => { setPitch(f, ctx.currentTime, Math.max(0.005, E('glide') / 3)); b.classList.add('held'); setTimeout(() => b.classList.remove('held'), 250); }; pads.appendChild(b); padBtns.push(b); });
-        [m, h] = mod(rack, 'Grondtoon-sequencer', true); toggle(h, 'seqOn', 'aan');
+        [m, h] = mod(rack, 'Grondtoon-sequencer', true, 'seq'); toggle(h, 'seqOn', 'aan');
         const sh = document.createElement('div'); sh.className = 'seqhead'; m.appendChild(sh);
         choose(sh, 'dbars', 'Sets', [[1, '1 × 16'], [2, '2 × 16'], [4, '4 × 16'], [8, '8 × 16'], [16, '16 × 16']], true);
         knob(sh, 'glide', 'Glide', [0, 1, 0.01]); knob(sh, 'gate', 'Gate', [0, 1, 0.01]);

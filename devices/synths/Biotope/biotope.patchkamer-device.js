@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-/CC-sleutel zoals rain_level, groep = laag of global; rol param, select of toggle), zodat een skin ze als draaiknop kan tonen; oude host: genegeerd. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Biotope); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Biotope (nieuwe id nl.patchkamer.biotope, eigen map), bijgewerkt naar Patchkamer contract v1.11:
@@ -310,7 +311,7 @@ class BiotopeProcessor extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', BiotopeProcessor);`;
 
 export default {
-  id: 'nl.patchkamer.biotope', name: 'Biotope', version: '1.13.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.biotope', name: 'Biotope', version: '1.14.0', kind: 'instrument', category: 'synth',
   ui: { width: 760, minWidth: 300 },
   about: { nl: 'Omgeving, textuur en drone: een procedurele soundscape-synth met acht lagen.\n\nMeng de acht lagen. Dichtheid = activiteit, kleur = helderheid/hoogte, beweging = variatie. Ruimte voegt stereo-galm toe.\n\nVoetstappen: Vrij = stappen per minuut. Klok = bij lopend transport. Alleen triggers = via events van een sequencer. Dichtheid = materiaalactiviteit.', en: 'Ambience, texture and drone: a procedural soundscape synth with eight layers.\n\nMix the eight layers. Density = activity, tone = brightness/pitch, motion = variation. Space adds stereo reverb.\n\nFootsteps: Free = steps per minute. Clock = while the transport runs. Triggers only = via events from a sequencer. Density = material activity.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo out' }], eventIn: [{ id: 'events', name: 'Triggers / CC' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
@@ -412,31 +413,32 @@ export default {
           button{cursor:pointer}input[type=range]{width:100%;min-width:0;accent-color:var(--audio)} input[type=checkbox]{accent-color:var(--audio)}
           output{text-align:right;color:var(--audio);font-size:11px}.status{color:var(--muted);font-size:10px;margin-top:8px;overflow-wrap:anywhere}
         `; shadow.appendChild(style);
+        const adopt = (el, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } return el; };
         function make(tag, text, parent, className) { const e = document.createElement(tag); if (text) e.textContent = text; if (className) e.className = className; if (parent) parent.appendChild(e); return e; }
         function change(layer, key, value) { if (layer) state.layers[layer][key] = value; else state[key] = value; apply(); syncUI(); }
         function slider(parent, layer, key, title, min = 0, max = 1, step = .01, format = v => Math.round(v * 100) + '%') {
           const dflt = layer ? defaults().layers[layer][key] : defaults()[key];
           const label = make('label', null, parent, 'row'); make('span', tx(title), label);
           const input = make('input', null, label); input.type = 'range'; input.min = min; input.max = max; input.step = step; input.value = String(dflt); input.dataset.pkDefault = String(dflt);
-          input.setAttribute('aria-label', (layer ? tx(LAYERS.find(x => x[0] === layer)[1]) + ' ' : '') + tx(title));
+          input.setAttribute('aria-label', (layer ? tx(LAYERS.find(x => x[0] === layer)[1]) + ' ' : '') + tx(title)); adopt(input, layer ? layer + '_' + key : key, 'param', layer || (key.startsWith('step') ? 'steps' : 'global'), tx(title));
           const value = make('output', null, label); input.oninput = () => change(layer, key, Number(input.value));
           input.addEventListener('pointerdown', e => e.stopPropagation()); controls.push({ el: input, type: 'range', layer, key, value, format });
         }
         function select(parent, layer, key, title, options) {
           const label = make('label', null, parent, 'choice'); make('span', tx(title), label); const input = make('select', null, label);
           options.forEach(([v, name]) => { const o = make('option', tx(name), input); o.value = String(v); });
-          input.onchange = () => change(layer, key, Number(input.value)); input.addEventListener('pointerdown', e => e.stopPropagation());
+          input.onchange = () => change(layer, key, Number(input.value)); input.addEventListener('pointerdown', e => e.stopPropagation()); adopt(input, layer ? layer + '_' + key : key, 'select', layer || (key.startsWith('step') ? 'steps' : 'global'), tx(title));
           controls.push({ el: input, type: 'select', layer, key }); return input;
         }
         function check(parent, key, title) {
           const label = make('label', null, parent, 'choice'), input = make('input', null, label); input.type = 'checkbox'; make('span', tx(title), label);
-          input.onchange = () => change(null, key, input.checked); input.addEventListener('pointerdown', e => e.stopPropagation()); controls.push({ el: input, type: 'check', key });
+          input.onchange = () => change(null, key, input.checked); input.addEventListener('pointerdown', e => e.stopPropagation()); adopt(input, key, 'toggle', 'global', tx(title)); controls.push({ el: input, type: 'check', key });
         }
         const bar = make('div', null, shadow, 'bar'); sceneSelect = make('select', null, bar); sceneSelect.setAttribute('aria-label', tx('Soundscape kiezen'));
         const empty = make('option', tx('Kies een soundscape…'), sceneSelect); empty.value = '';
         SCENES.forEach((entry, i) => { const option = make('option', tx(entry[0]), sceneSelect); option.value = String(i); });
         sceneSelect.onchange = () => { if (sceneSelect.value !== '') { state = scene(Number(sceneSelect.value)); apply(); syncUI(); } };
-        sceneSelect.addEventListener('pointerdown', e => e.stopPropagation());
+        sceneSelect.addEventListener('pointerdown', e => e.stopPropagation()); adopt(sceneSelect, 'scene', 'select', 'global', tx('Soundscape kiezen'));
         const silence = make('button', tx('Alle lagen uit'), bar); silence.type = 'button'; silence.onclick = () => { LAYERS.forEach(([id]) => { state.layers[id].level = 0; }); apply(); syncUI(); };
         check(bar, 'on', 'Aan'); check(bar, 'follow', 'Volg start/stop');
         const global = make('div', null, shadow, 'global'); slider(global, null, 'master', 'Uitgang'); slider(global, null, 'space', 'Ruimte'); slider(global, null, 'width', 'Breedte');

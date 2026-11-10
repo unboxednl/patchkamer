@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.12.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = het state-pad zoals osc.0.semi, f1.cut, fa; groep per blok: osc1 t/m osc3, mix, shaper, filter1, filter2, fenv, aenv, voice); skin Compact erbij. Geluid, state en ids ongewijzigd.
 // 1.11.2 — Alle continue regelaars zijn stuurbaar: per oscillator Halve tonen, Fijn, Spreiding, Stereo, FM-ratio en FM-index, Reso van filter 2, Toonvolgen van beide filters, Filter sustain,
 //   Filter release, Amp sustain en Aanslag stonden niet in params(). Nu wel (alle standaard uit); ze werken vanaf de volgende noot, net als de omhullingen en niveaus al deden.
 //   Klank en instellingen zonder modulatie zijn ongewijzigd. Bewust weggelaten: Unison (aantal), Stemmen (aantal), Octaaf, Type, Vorm, Routing, Akkoord en Ligging (aantallen en keuzelijsten).
@@ -118,7 +119,7 @@ input[type=checkbox]{accent-color:var(--x-acc);margin:0}
 export default {
   id: 'nl.patchkamer.polysynth',
   name: 'Triple Osc Poly',
-  version: '1.11.2',
+  version: '1.12.0',
   // aantallen (unison, stemmen) blijven buiten sturing; de filterregelaars f1.*/f2.* staan wel in params() (cut1, res1, env1, kt1, cut2, res2, env2, kt2), maar de validator herkent die ids niet aan hun state-sleutel
   modExclude: ['osc.0.uni', 'osc.1.uni', 'osc.2.uni', 'poly', 'f1.cut', 'f1.res', 'f1.env', 'f1.kt', 'f2.cut', 'f2.res', 'f2.env', 'f2.kt'],
   kind: 'instrument',
@@ -238,16 +239,19 @@ export default {
     const held = new Map();
 
     // ---------- UI ----------
-    function knob(parent, label, [mn, mx, st], get, set, fmt, log) {
+    // meldt een regelaar aan bij de host (host.ui.adopt), zodat een skin hem als draaiknop kan tonen; id = state-pad (osc.0.semi, f1.cut, fa), groep = het blok (osc1, filter1, ...)
+    const adopt = (e, key, role, parent, label) => { if (key && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(e, { id: key, role, group: (parent && parent.dataset && parent.dataset.grp) || 'main', label }); } catch (err) { /* oud contract */ } } };
+    const dflt = key => key.split('.').reduce((o, k) => (o == null ? o : o[k]), DEF());
+    function knob(parent, label, [mn, mx, st], get, set, fmt, log, key) {
       const w = document.createElement('div'); w.className = 'k'; const l = document.createElement('label'), i = document.createElement('input'), o = document.createElement('output'); l.textContent = tx(label);
       i.type = 'range'; i.setAttribute('aria-label', tx(label));
-      if (log) { i.min = 0; i.max = 1; i.step = 0.001; const to = x => mn * Math.pow(mx / mn, x), from = v => Math.log(v / mn) / Math.log(mx / mn); i.oninput = () => { set(to(+i.value)); o.textContent = fmt(get()); }; refreshers.push(() => { i.value = from(get()); o.textContent = fmt(get()); }); }
-      else { i.min = mn; i.max = mx; i.step = st; i.oninput = () => { set(+i.value); o.textContent = fmt(get()); }; refreshers.push(() => { i.value = get(); o.textContent = fmt(get()); }); }
+      if (log) { i.min = 0; i.max = 1; i.step = 0.001; const to = x => mn * Math.pow(mx / mn, x), from = v => Math.log(v / mn) / Math.log(mx / mn); if (key) { i.dataset.pkDefault = String(from(dflt(key))); adopt(i, key, 'param', parent, tx(label)); } i.oninput = () => { set(to(+i.value)); o.textContent = fmt(get()); }; refreshers.push(() => { i.value = from(get()); o.textContent = fmt(get()); }); }
+      else { i.min = mn; i.max = mx; i.step = st; if (key) { i.dataset.pkDefault = String(dflt(key)); adopt(i, key, 'param', parent, tx(label)); } i.oninput = () => { set(+i.value); o.textContent = fmt(get()); }; refreshers.push(() => { i.value = get(); o.textContent = fmt(get()); }); }
       w.append(l, i, o); parent.appendChild(w);
     }
-    function choose(parent, label, opts, get, set) { const w = document.createElement('div'); w.className = 'k'; w.style.gridTemplateColumns = '86px minmax(0,1fr)'; const l = document.createElement('label'), s = document.createElement('select'); l.textContent = tx(label); s.setAttribute('aria-label', tx(label));
+    function choose(parent, label, opts, get, set, key) { const w = document.createElement('div'); w.className = 'k'; w.style.gridTemplateColumns = '86px minmax(0,1fr)'; const l = document.createElement('label'), s = document.createElement('select'); l.textContent = tx(label); s.setAttribute('aria-label', tx(label)); adopt(s, key, 'select', parent, tx(label));
       opts.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = tx(t); s.appendChild(o); }); s.onchange = () => { set(s.value); refreshAll(); }; refreshers.push(() => { s.value = String(get()); }); w.append(l, s); parent.appendChild(w); }
-    function box(parent, title, toggle) { const m = document.createElement('section'); m.className = 'mod'; const h = document.createElement('h3'); h.textContent = tx(title); m.appendChild(h);
+    function box(parent, title, toggle, grp) { const m = document.createElement('section'); m.className = 'mod'; if (grp) m.dataset.grp = grp; const h = document.createElement('h3'); h.textContent = tx(title); m.appendChild(h);
       if (toggle) { const l = document.createElement('label'), c = document.createElement('input'); c.type = 'checkbox'; c.onchange = () => { toggle[1](c.checked); m.classList.toggle('off', !c.checked); }; refreshers.push(() => { c.checked = !!toggle[0](); m.classList.toggle('off', !c.checked); }); l.append(c, document.createTextNode(tx('aan'))); h.appendChild(l); }
       parent.appendChild(m); return m; }
     const refreshAll = () => refreshers.forEach(f => f());
@@ -259,32 +263,32 @@ export default {
       Object.keys(PRESETS).forEach(n => { const b = document.createElement('button'); b.textContent = n; b.onclick = () => { loadPreset(n); }; top.appendChild(b); });
       voiceInfo = document.createElement('span'); voiceInfo.className = 'voices'; voiceInfo.style.marginLeft = 'auto'; top.appendChild(voiceInfo);
       const g = document.createElement('div'); g.className = 'grid'; ps.appendChild(g);
-      P.osc.forEach((o, i) => { const m = box(g, 'Oscillator ' + (i + 1), [() => P.osc[i].on, v => { P.osc[i].on = v; }]);
-        choose(m, 'Type', OTYPES, () => P.osc[i].type, v => { P.osc[i].type = v; });
-        choose(m, 'Octaaf', [[-3, '−3'], [-2, '−2'], [-1, '−1'], [0, '0'], [1, '+1'], [2, '+2']], () => P.osc[i].oct, v => { P.osc[i].oct = +v; });
-        knob(m, 'Halve tonen', [-12, 12, 1], () => P.osc[i].semi, v => { P.osc[i].semi = v; }, v => (v > 0 ? '+' : '') + v);
-        knob(m, 'Fijn', [-50, 50, 1], () => P.osc[i].fine, v => { P.osc[i].fine = v; }, v => (v > 0 ? '+' : '') + v + ' ct');
-        knob(m, 'Niveau', [0, 1, 0.01], () => P.osc[i].lvl, v => { P.osc[i].lvl = v; }, pct);
-        knob(m, 'Unison', [1, 7, 1], () => P.osc[i].uni, v => { P.osc[i].uni = v; }, v => v + '×');
-        knob(m, 'Spreiding', [0, 60, 0.5], () => P.osc[i].det, v => { P.osc[i].det = v; }, v => v + ' ct');
-        knob(m, 'Stereo', [0, 1, 0.01], () => P.osc[i].spread, v => { P.osc[i].spread = v; }, pct);
-        knob(m, 'FM-ratio', [0.25, 12, 0.01], () => P.osc[i].fmr, v => { P.osc[i].fmr = v; }, v => '×' + v.toFixed(2));
-        knob(m, 'FM-index', [0, 12, 0.01], () => P.osc[i].fmi, v => { P.osc[i].fmi = v; }, v => v.toFixed(2)); });
-      const mx = box(g, 'Menging'); knob(mx, 'Ruis', [0, 1, 0.01], () => P.noise, v => { P.noise = v; }, pct); knob(mx, 'Ring 1×2', [0, 1, 0.01], () => P.ring, v => { P.ring = v; }, pct); knob(mx, 'FM 2→1', [0, 1, 0.01], () => P.fm21, v => { P.fm21 = v; }, pct);
-      const sh = box(g, 'Shaper'); choose(sh, 'Vorm', STYPES, () => P.shp.type, v => { P.shp.type = v; }); knob(sh, 'Drive', [0, 1, 0.01], () => P.shp.drive, v => { P.shp.drive = v; }, pct);
-      [['f1', 'Filter 1', null], ['f2', 'Filter 2', [() => P.f2on, v => { P.f2on = v; }]]].forEach(([k, t, tg]) => { const m = box(g, t, tg);
-        choose(m, 'Type', FTYPES, () => P[k].type, v => { P[k].type = v; });
-        knob(m, 'Cutoff', [40, 20000], () => P[k].cut, v => { P[k].cut = v; }, hz, true); knob(m, 'Reso', [0.3, 20, 0.1], () => P[k].res, v => { P[k].res = v; }, v => v.toFixed(1));
-        knob(m, 'Env-diepte', [-1, 1, 0.01], () => P[k].env, v => { P[k].env = v; }, v => (v > 0 ? '+' : '') + Math.round(v * 100) + '%'); knob(m, 'Toonvolgen', [0, 1, 0.01], () => P[k].kt, v => { P[k].kt = v; }, pct);
-        if (k === 'f2') choose(m, 'Routing', [['serial', 'Serieel (1 → 2)'], ['parallel', 'Parallel']], () => P.route, v => { P.route = v; }); });
-      [['Filter-envelope', 'f'], ['Amp-envelope', 'a']].forEach(([t, p]) => { const m = box(g, t);
-        knob(m, 'Attack', [0.001, 8], () => P[p + 'a'], v => { P[p + 'a'] = v; }, sec, true); knob(m, 'Decay', [0.01, 8], () => P[p + 'd'], v => { P[p + 'd'] = v; }, sec, true);
-        knob(m, 'Sustain', [0, 1, 0.01], () => P[p + 's'], v => { P[p + 's'] = v; }, pct); knob(m, 'Release', [0.01, 10], () => P[p + 'r'], v => { P[p + 'r'] = v; }, sec, true);
-        if (p === 'a') knob(m, 'Aanslag', [0, 1, 0.01], () => P.vel, v => { P.vel = v; }, pct); });
-      const vo = box(g, 'Stemmen & uitgang'); knob(vo, 'Stemmen', [1, 12, 1], () => P.poly, v => { P.poly = v; }, v => String(v));
-      choose(vo, 'Akkoord', CHORDS.map(c => [c[0], c[1]]), () => P.chord, v => { P.chord = v; }); choose(vo, 'Ligging', [[0, 'Dicht'], [1, 'Open'], [2, 'Open + bas']], () => P.spread, v => { P.spread = +v; });
-      knob(vo, 'Stemming', [-100, 100, 1], () => P.tune, v => { P.tune = v; }, v => (v > 0 ? '+' : '') + v + ' ct');
-      knob(vo, 'Niveau', [0, 1, 0.01], () => P.lvl, v => { P.lvl = v; applyGlobal(); }, pct); knob(vo, 'Pan', [-1, 1, 0.01], () => P.pan, v => { P.pan = v; applyGlobal(); }, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100));
+      P.osc.forEach((o, i) => { const m = box(g, 'Oscillator ' + (i + 1), [() => P.osc[i].on, v => { P.osc[i].on = v; }], 'osc' + (i + 1)), K = 'osc.' + i + '.';
+        choose(m, 'Type', OTYPES, () => P.osc[i].type, v => { P.osc[i].type = v; }, K + 'type');
+        choose(m, 'Octaaf', [[-3, '−3'], [-2, '−2'], [-1, '−1'], [0, '0'], [1, '+1'], [2, '+2']], () => P.osc[i].oct, v => { P.osc[i].oct = +v; }, K + 'oct');
+        knob(m, 'Halve tonen', [-12, 12, 1], () => P.osc[i].semi, v => { P.osc[i].semi = v; }, v => (v > 0 ? '+' : '') + v, false, K + 'semi');
+        knob(m, 'Fijn', [-50, 50, 1], () => P.osc[i].fine, v => { P.osc[i].fine = v; }, v => (v > 0 ? '+' : '') + v + ' ct', false, K + 'fine');
+        knob(m, 'Niveau', [0, 1, 0.01], () => P.osc[i].lvl, v => { P.osc[i].lvl = v; }, pct, false, K + 'lvl');
+        knob(m, 'Unison', [1, 7, 1], () => P.osc[i].uni, v => { P.osc[i].uni = v; }, v => v + '×', false, K + 'uni');
+        knob(m, 'Spreiding', [0, 60, 0.5], () => P.osc[i].det, v => { P.osc[i].det = v; }, v => v + ' ct', false, K + 'det');
+        knob(m, 'Stereo', [0, 1, 0.01], () => P.osc[i].spread, v => { P.osc[i].spread = v; }, pct, false, K + 'spread');
+        knob(m, 'FM-ratio', [0.25, 12, 0.01], () => P.osc[i].fmr, v => { P.osc[i].fmr = v; }, v => '×' + v.toFixed(2), false, K + 'fmr');
+        knob(m, 'FM-index', [0, 12, 0.01], () => P.osc[i].fmi, v => { P.osc[i].fmi = v; }, v => v.toFixed(2), false, K + 'fmi'); });
+      const mx = box(g, 'Menging', null, 'mix'); knob(mx, 'Ruis', [0, 1, 0.01], () => P.noise, v => { P.noise = v; }, pct, false, 'noise'); knob(mx, 'Ring 1×2', [0, 1, 0.01], () => P.ring, v => { P.ring = v; }, pct, false, 'ring'); knob(mx, 'FM 2→1', [0, 1, 0.01], () => P.fm21, v => { P.fm21 = v; }, pct, false, 'fm21');
+      const sh = box(g, 'Shaper', null, 'shaper'); choose(sh, 'Vorm', STYPES, () => P.shp.type, v => { P.shp.type = v; }, 'shp.type'); knob(sh, 'Drive', [0, 1, 0.01], () => P.shp.drive, v => { P.shp.drive = v; }, pct, false, 'shp.drive');
+      [['f1', 'Filter 1', null], ['f2', 'Filter 2', [() => P.f2on, v => { P.f2on = v; }]]].forEach(([k, t, tg]) => { const m = box(g, t, tg, k === 'f1' ? 'filter1' : 'filter2');
+        choose(m, 'Type', FTYPES, () => P[k].type, v => { P[k].type = v; }, k + '.type');
+        knob(m, 'Cutoff', [40, 20000], () => P[k].cut, v => { P[k].cut = v; }, hz, true, k + '.cut'); knob(m, 'Reso', [0.3, 20, 0.1], () => P[k].res, v => { P[k].res = v; }, v => v.toFixed(1), false, k + '.res');
+        knob(m, 'Env-diepte', [-1, 1, 0.01], () => P[k].env, v => { P[k].env = v; }, v => (v > 0 ? '+' : '') + Math.round(v * 100) + '%', false, k + '.env'); knob(m, 'Toonvolgen', [0, 1, 0.01], () => P[k].kt, v => { P[k].kt = v; }, pct, false, k + '.kt');
+        if (k === 'f2') choose(m, 'Routing', [['serial', 'Serieel (1 → 2)'], ['parallel', 'Parallel']], () => P.route, v => { P.route = v; }, 'route'); });
+      [['Filter-envelope', 'f'], ['Amp-envelope', 'a']].forEach(([t, p]) => { const m = box(g, t, null, p === 'f' ? 'fenv' : 'aenv');
+        knob(m, 'Attack', [0.001, 8], () => P[p + 'a'], v => { P[p + 'a'] = v; }, sec, true, p + 'a'); knob(m, 'Decay', [0.01, 8], () => P[p + 'd'], v => { P[p + 'd'] = v; }, sec, true, p + 'd');
+        knob(m, 'Sustain', [0, 1, 0.01], () => P[p + 's'], v => { P[p + 's'] = v; }, pct, false, p + 's'); knob(m, 'Release', [0.01, 10], () => P[p + 'r'], v => { P[p + 'r'] = v; }, sec, true, p + 'r');
+        if (p === 'a') knob(m, 'Aanslag', [0, 1, 0.01], () => P.vel, v => { P.vel = v; }, pct, false, 'vel'); });
+      const vo = box(g, 'Stemmen & uitgang', null, 'voice'); knob(vo, 'Stemmen', [1, 12, 1], () => P.poly, v => { P.poly = v; }, v => String(v), false, 'poly');
+      choose(vo, 'Akkoord', CHORDS.map(c => [c[0], c[1]]), () => P.chord, v => { P.chord = v; }, 'chord'); choose(vo, 'Ligging', [[0, 'Dicht'], [1, 'Open'], [2, 'Open + bas']], () => P.spread, v => { P.spread = +v; }, 'spread');
+      knob(vo, 'Stemming', [-100, 100, 1], () => P.tune, v => { P.tune = v; }, v => (v > 0 ? '+' : '') + v + ' ct', false, 'tune');
+      knob(vo, 'Niveau', [0, 1, 0.01], () => P.lvl, v => { P.lvl = v; applyGlobal(); }, pct, false, 'lvl'); knob(vo, 'Pan', [-1, 1, 0.01], () => P.pan, v => { P.pan = v; applyGlobal(); }, v => Math.abs(v) < 0.02 ? 'C' : (v < 0 ? 'L' : 'R') + Math.round(Math.abs(v) * 100), false, 'pan');
       // speelbaar klavier: twee octaven vanaf C3
       const kb = document.createElement('div'); kb.className = 'keys'; kb.setAttribute('aria-label', tx('klavier')); ps.appendChild(kb);
       for (let n = 48; n < 72; n++) { const b = document.createElement('button'), black = [1, 3, 6, 8, 10].includes(n % 12); b.className = black ? 'b' : ''; b.textContent = n % 12 === 0 ? 'C' + (Math.floor(n / 12) - 1) : ''; b.title = NOTE[n % 12] + (Math.floor(n / 12) - 1); b.setAttribute('aria-label', b.title);

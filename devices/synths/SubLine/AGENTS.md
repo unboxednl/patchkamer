@@ -130,3 +130,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: bas en lead (monofoon). Noten op `notes`, audio uit `out`; zonder eigen sequencer.
+
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `subOctave`, `mode`, `length`, ...; de stapregelaars heten `stepNote` en `stepOn`), `role` is `param` of `select` en `group` is `top`, `seq`, `filter`, `amp`, `source`, `motion` of `master`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.subline/` (draaiknoppen met de naam eronder, per blok één kader, ongeveer 480 x 485 punten tegenover 920 x 795). De skin mikt op de volgorde van de blokken in `.app` (`div:nth-of-type(n)`); wijzig je die, controleer dan die skin.

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group voice/motion/speech/level resp. text), zodat een skin ze als draaiknop kan tonen. Geluid, state en ids ongewijzigd; zonder skin ziet het apparaat er identiek uit. Aantal stemmen staat bewust in modExclude (hoort bij de adoptie; params() ongewijzigd).
 // 1.15.0 — Uitleg naar about (menu Over Formant Singer); de UI toont geen uitlegtekst meer.
 // 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.13.0 — Nieuw: Formant Singer, een zangsynth voor Patchkamer contract v1.13. Een tekst (lyrics) plus noten geven een zingende stem:
@@ -405,7 +406,7 @@ Object.assign(DEFAULTS, { lyrics: 'la la la', lang: 'en', voice: 'alto', vowel: 
 const R0 = 0.21;   // doelniveau (rms) van één stem bij velocity 1, voor de uitgangsregeling
 
 export default {
-  id: 'nl.patchkamer.formantsinger', name: 'Formant Singer', version: '1.15.0', kind: 'instrument', category: 'synth', ui: { width: 520, minWidth: 400 },
+  id: 'nl.patchkamer.formantsinger', name: 'Formant Singer', version: '1.16.0', modExclude: ['voices'], kind: 'instrument', category: 'synth', ui: { width: 520, minWidth: 400 },
   about: { nl: 'Een zangsynth: een tekst plus noten geven een zingende stem (formantsynthese).\n\nElke noot zingt de volgende lettergreep. Spatie, - of | scheidt lettergrepen; _ of ~ = melisma (klinker doorzingen); * of . = rust. Taal Klanken: schrijf klanken direct, bijvoorbeeld ha-lo of shaet.', en: 'A singing synth: lyrics plus notes give a singing voice (formant synthesis).\n\nEach note sings the next syllable. Space, - or | separates syllables; _ or ~ = melisma (keep the vowel); * or . = rest. Language Phonemes: write sounds directly, for example ha-lo or shaet.' },
   ports: {
     audioIn: [], audioOut: [{ id: 'out', name: 'Stereo voice' }],
@@ -883,15 +884,16 @@ canvas{display:block;width:100%;height:96px;background:var(--well);border-radius
         r.addEventListener('keydown', stop); r.addEventListener('keyup', stop); r.addEventListener('pointerdown', stop);
         ui.lyr = el('textarea', r); ui.lyr.maxLength = 2000; ui.lyr.value = DEFAULTS.lyrics; ui.lyr.title = tx('Tekst'); ui.lyr.spellcheck = false;
         ui.lyr.addEventListener('input', () => { state.lyrics = ui.lyr.value.slice(0, 2000); parsed = parseLyrics(state.lyrics, state.lang); state.pos = Math.min(state.pos, parsed.length); drawChips(); });
-        const sel = (label, opts, onchange, parent) => { const l = el('label', parent || ui.row1, '', label); const s = el('select', l); for (const [v, t] of opts) { const o = el('option', s, '', t); o.value = v; } s.addEventListener('change', () => onchange(s.value)); return s; };
+        const adopt = (e, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(e, { id, role, group, label }); } catch (err) { /* oud contract */ } } };
+        const sel = (label, opts, onchange, parent, id) => { const l = el('label', parent || ui.row1, '', label); const s = el('select', l); for (const [v, t] of opts) { const o = el('option', s, '', t); o.value = v; } s.addEventListener('change', () => onchange(s.value)); if (id) adopt(s, id, 'select', 'text', label); return s; };
         ui.row1 = el('div', r, 'row');
-        ui.lang = sel(tx('Taal'), [['en', tx('English')], ['nl', tx('Nederlands')], ['phon', tx('Klanken')]], v => { state.lang = LANGS.includes(v) ? v : 'en'; parsed = parseLyrics(state.lyrics, state.lang); state.pos = Math.min(state.pos, parsed.length); drawChips(); });
-        ui.voice = sel(tx('Stem'), VOICES.map(v => [v, tx(VLAB[v])]), v => { state.voice = v; apply(); });
-        ui.mode = sel(tx('Spel'), [['mono', tx('Mono (legato)')], ['poly', tx('Polyfoon')]], v => { state.mode = v; });
-        ui.onEnd = sel(tx('Einde van de tekst'), [['loop', tx('Herhalen')], ['hold', tx('Aanhouden')], ['stop', tx('Stoppen')]], v => { state.onEnd = v; });
+        ui.lang = sel(tx('Taal'), [['en', tx('English')], ['nl', tx('Nederlands')], ['phon', tx('Klanken')]], v => { state.lang = LANGS.includes(v) ? v : 'en'; parsed = parseLyrics(state.lyrics, state.lang); state.pos = Math.min(state.pos, parsed.length); drawChips(); }, undefined, 'lang');
+        ui.voice = sel(tx('Stem'), VOICES.map(v => [v, tx(VLAB[v])]), v => { state.voice = v; apply(); }, undefined, 'voice');
+        ui.mode = sel(tx('Spel'), [['mono', tx('Mono (legato)')], ['poly', tx('Polyfoon')]], v => { state.mode = v; }, undefined, 'mode');
+        ui.onEnd = sel(tx('Einde van de tekst'), [['loop', tx('Herhalen')], ['hold', tx('Aanhouden')], ['stop', tx('Stoppen')]], v => { state.onEnd = v; }, undefined, 'onEnd');
         ui.row2 = el('div', r, 'row');
         const fl = el('label', ui.row2, '', tx('Vaste klinker')); ui.fixed = el('input', fl); ui.fixed.type = 'checkbox'; ui.fixed.addEventListener('change', () => { state.fixed = ui.fixed.checked; paintPos(); });
-        ui.vowel = sel(tx('Klinker'), VOWELS.map(v => [v, tx(VOWLAB[v])]), v => { state.vowel = VOWELS.includes(v) ? v : 'a'; }, ui.row2);
+        ui.vowel = sel(tx('Klinker'), VOWELS.map(v => [v, tx(VOWLAB[v])]), v => { state.vowel = VOWELS.includes(v) ? v : 'a'; }, ui.row2, 'vowel');
         el('div', r, 'sec', tx('Lettergrepen'));
         ui.chips = el('div', r, 'syl');
         ui.stat = el('div', r, 'stat', '');
@@ -899,12 +901,12 @@ canvas{display:block;width:100%;height:96px;background:var(--well);border-radius
         const b1 = el('button', act, '', tx('Herstart')); b1.type = 'button'; b1.addEventListener('click', () => { restart(); paintPos(); });
         const b2 = el('button', act, '', tx('Proef')); b2.type = 'button'; b2.addEventListener('click', () => { try { testNote(); } catch { /* geen geluid */ } });
         const b3 = el('button', act, '', tx('Alles uit')); b3.type = 'button'; b3.addEventListener('click', () => panic(ctx.currentTime));
-        const groups = [[tx('Stem & bron'), ['size', 'breath', 'bright', 'voices', 'detune', 'spread']], [tx('Beweging'), ['vibRate', 'vibDepth', 'vibDelay', 'glide', 'attack', 'release']], [tx('Spraak'), ['consonants', 'onset']], [tx('Niveau'), ['level']]];
-        for (const [label, ids] of groups) {
+        const groups = [[tx('Stem & bron'), ['size', 'breath', 'bright', 'voices', 'detune', 'spread'], 'voice'], [tx('Beweging'), ['vibRate', 'vibDepth', 'vibDelay', 'glide', 'attack', 'release'], 'motion'], [tx('Spraak'), ['consonants', 'onset'], 'speech'], [tx('Niveau'), ['level'], 'level']];
+        for (const [label, ids, gid] of groups) {
           el('div', r, 'sec', label); const grid = el('div', r, 'grid');
           for (const id of ids) {
             const d = SPEC[id], row = el('div', grid, 'k'); const lb = el('label', row, '', tx(d[0])); lb.title = tx(d[0]);
-            const inp = el('input', row); inp.type = 'range'; inp.min = String(d[1]); inp.max = String(d[2]); inp.step = String(d[3]); inp.value = String(d[4]); inp.setAttribute('data-pk-default', String(d[4]));
+            const inp = el('input', row); inp.type = 'range'; inp.min = String(d[1]); inp.max = String(d[2]); inp.step = String(d[3]); inp.value = String(d[4]); inp.setAttribute('data-pk-default', String(d[4])); adopt(inp, id, 'param', gid, tx(d[0]));
             const o = el('output', row, '', fmt(id, d[4]));
             inp.addEventListener('input', () => change(id, inp.value));
             ui.k[id] = { input: inp, out: o };

@@ -134,3 +134,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: bas in acid-stijl met een eigen patroon van 16 stappen. Het speelt mee met de klok van de studio; externe noten op `notes` kunnen er ook in. Audio uit `out`. Patroon zit in de `state`, een aparte sequencer is niet nodig.
+
+## Skins
+
+Alle knoppen en keuzelijsten zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `resonance`, `pattern`, `mode`, `wave`, `division`, `length`, `notes`, `steps`, `accents`, `slides`, enzovoort), `role` is `param` of `select` en `group` is `seq`, `step`, `filter`, `play` of `out`. De stapknoppen hebben geen id. Patroonlengte en stapnoot staan in `modExclude`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.acidstepper/` (draaiknoppen met de naam eronder, kaders per onderdeel, strak stappenraster, ongeveer 480 x 429 punten tegenover 840 x 1025). Wijzig je de opbouw (`.row`, `.pads`, `.grid`, `.control`), controleer dan die skin.

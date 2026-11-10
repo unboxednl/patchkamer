@@ -95,6 +95,10 @@ Het apparaat kan niet ontsporen: de filters zijn begrensd, na de stemmen staat e
 - Een akkoord met zes intervallen (`memory`) en een lange `release`: de 24 stemmen zijn snel op en oudere noten breken af.
 - `preset` in de tune zetten of velden verzinnen. Zet geen routing, patronen van noten of klokstanden in de state.
 
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `attack`, `wave`, `chord`, enzovoort), `role` is `param` (schuiven) of `select`, en `group` is `filter`, `osc`, `env`, `fx`, `out` (knoppen) of `setup` (keuzelijsten). Elke groep zit in een eigen `div.grp` met `data-t` (de titel); zonder skin is dat `display:contents`, dus het uiterlijk is ongewijzigd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.chordpoly/` (draaiknoppen met waarde en naam eronder, per groep een kader, smalle scope; ongeveer 480 x 320 punten tegenover 840 x 552). Wijzig je `.grp`, `.row`, `.control` of de scope, controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/ChordPoly/chord-poly.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

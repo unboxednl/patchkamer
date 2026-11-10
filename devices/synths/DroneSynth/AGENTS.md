@@ -125,6 +125,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 - Geen tune die stil is (`droneOn: false` zonder andere bron, of `lvl: 0`) en geen tune die alleen met de transport klinkt zonder dat dat de bedoeling is (vergeet `hold` niet).
 - Geen `gate` op een tune zonder patroon (`gate` werkt alleen bij `seqOn` en een noot per stap).
 
+## Skins
+
+Alle schuiven, keuzelijsten en aan/uit-vinkjes zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`freq`, `cut`, `wave`, `droneOn`, `hold`, enzovoort), `role` is `param`, `select` of `toggle`, en `group` is `drone`, `droneb`, `noise`, `filter`, `space`, `out`, `events`, `play` of `seq`. De stapknoppen van de sequencer en de toonpads hebben geen id. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.drone/` (draaiknoppen met waarde en naam eronder, per sectie een kader, strak stappenraster zonder scrollbalk; ongeveer 480 x 660 punten tegenover 1102 x 849). De skin leunt op `.rack`, `.mod` (op volgorde: drone, drone B, ruis, filter, ruimte, uitgang, gebeurtenissen, speel, sequencer), `.k`, `.seqhead`, `.seq` en `table`: wijzig je die, controleer dan de skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/DroneSynth/drone-synth.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

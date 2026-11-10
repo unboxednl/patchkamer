@@ -145,6 +145,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Zet liever alle velden erin: dan klinkt de tune hetzelfde als de startwaarden ooit veranderen. Vermeld in de omschrijving van het pack welke tunes `live` gebruiken (effecten); zet dat niet in hun naam.
 
+## Skins
+
+Alle keuzelijsten en knoppen zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`pos`, `size`, `level`, `preset`, `src`, `wave`, `steps`, enzovoort), `role` is `param` (schuiven, genormaliseerd 0 tot 1) of `select`, `group` is `where`, `grain` of `cloud` (schuiven) of `source` (keuzelijsten). De knoppen (Wolk, Bevries, Neem op, Test noot) hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.graincloud/` (draaiknoppen met de naam eronder, per groep een kader, lager golfvlak, ongeveer 480 x 416 punten tegenover 820 x 688). Wijzig je de opbouw van de UI (`.top`, `.sel`, `.grid`, `.c`, `.lab`), controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/GrainCloud/grain-cloud.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

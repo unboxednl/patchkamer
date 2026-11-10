@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: filter, osc, env, fx, out) en per groep een omhullend element (zonder skin display:contents,
+//   dus ongewijzigd uiterlijk); de scope volgt zijn CSS-hoogte. Geluid, state, params() en poorten ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Chord Poly); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Nieuw als Chord Poly (nieuwe id nl.patchkamer.chordpoly, eigen map), bijgewerkt naar Patchkamer contract v1.11:
@@ -11,7 +13,7 @@
  * daarna chorus, drive, compressor en plafond. Akkoordgeheugen voegt intervallen toe aan elke inkomende noot. */
 const EN = {
   'Resonantie': 'Resonance', 'Filter-envelope': 'Filter envelope', 'Unison spreiding': 'Unison spread', 'Suboscillator': 'Sub oscillator',
-  'Stereobreedte': 'Stereo width', 'Transpositie': 'Transpose', 'Uitgang': 'Output', 'Klank': 'Sound',
+  'Stereobreedte': 'Stereo width', 'Transpositie': 'Transpose', 'Uitgang': 'Output', 'Klank': 'Sound', 'Effecten': 'Effects',
   'Klankbeeld': 'Preset', 'Golfvorm': 'Waveform', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle', 'Sinus': 'Sine',
   'Akkoordgeheugen': 'Chord memory', 'Losse noten': 'Single notes', 'Majeur': 'Major', 'Mineur': 'Minor', 'Mineur 7': 'Minor 7', 'Eigen intervallen': 'Custom intervals',
   'Eigen intervallen (0,4,7)': 'Custom intervals (0,4,7)', 'Test akkoord': 'Test chord', 'Alles uit': 'All off', 'Golfvorm van de uitgang': 'Output waveform',
@@ -25,17 +27,17 @@ const drawLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.13.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.14.0', kind: 'instrument', category: 'synth',
   ui: { width: 840, minWidth: 380 },
   about: { nl: 'Een polyfone akkoordsynth: twee ontstemde oscillatoren en een sub per noot, met akkoordgeheugen. Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.\n\nTot 24 gelijktijdige stemmen, ieder met twee ontstemde oscillatoren en een sub. Akkoordgeheugen voegt intervallen toe aan elke inkomende noot; kies Losse noten voor volledige akkoorden uit een sequencer. Mod stuurt de basisregelaars zonder ze te overschrijven.', en: 'A polyphonic chord synth: two detuned oscillators and a sub per note, with chord memory. Warm chords, sharp stabs and wide leads. Keyboard / sequencer → Notes.\n\nUp to 24 simultaneous voices, each with two detuned oscillators and a sub. Chord memory adds intervals to every incoming note; choose Single notes for full chords from a sequencer. Mod moves the basic controls without overwriting them.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { notes: 'Noten' } } },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
-    let mountHost = null, panel = null, ui = {}, scope = null, scopeG = null, stopDraw = null, cw = 0, ro = null, col = null;
+    let mountHost = null, panel = null, ui = {}, scope = null, scopeG = null, stopDraw = null, cw = 0, ch = 64, ro = null, col = null;
     const add = (parent, tag, text, css) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (css) el.style.cssText = css; parent.appendChild(el); return el; };
     const noDrag = el => { el.addEventListener('pointerdown', e => e.stopPropagation()); return el; };
-    const CSS = `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none}label{min-width:0}`;
+    const CSS = `:host{display:block;color:var(--fg,#d9e6e7);font:13px system-ui,sans-serif;--x-acc:#91e0d4;--x-acc2:#e8c991;--x-ink:color-mix(in srgb,var(--x-acc) 60%,var(--fg,#d9e6e7));--x-ink2:color-mix(in srgb,var(--x-acc2) 60%,var(--fg,#d9e6e7))}.app{container-type:inline-size;background:var(--card,#142129);border-radius:10px;padding:14px;box-sizing:border-box}p{line-height:1.5;color:var(--muted,#aabec5);margin:8px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.control{display:flex;flex-direction:column;gap:5px;padding:8px;border:1px solid var(--line,#344953);border-radius:7px;min-width:0}.control span{font-size:11px;color:var(--muted,#adc3c9)}button,select,input{font:inherit;color:var(--field-fg,#e4edef);background:var(--field,#223640);border:1px solid var(--line,#49616c);border-radius:5px;padding:7px;max-width:100%;box-sizing:border-box}button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--x-acc)}input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px;touch-action:none}label{min-width:0}.grp{display:contents}`;
 
     const clamp = CLAMP;
     const finite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? clamp(x, a, b) : d;
@@ -86,10 +88,14 @@ export default {
     const fmtOf = d => v => d.unit === '%' ? Math.round(v * 100) + '%' : (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)) + (d.unit ? ' ' + d.unit : '');
     const toPos = (d, v) => d.scale === 'log' ? Math.log(v / d.min) / Math.log(d.max / d.min) : v;
     function selectBox(parent, label, options, value, change) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = noDrag(add(box, 'select')); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); return el; }
+    const GROUP = { cutoff: 'filter', resonance: 'filter', env: 'filter', detune: 'osc', sub: 'osc', transpose: 'osc', attack: 'env', decay: 'env', sustain: 'env', release: 'env', chorus: 'fx', width: 'fx', drive: 'fx', level: 'out' };
+    const GTITLE = { filter: 'Filter', osc: 'Oscillator', env: 'Envelope', fx: 'Effecten', out: 'Uitgang' };
+    const groupBox = (parent, g) => { let b = parent.querySelector(':scope > .grp[data-g="' + g + '"]'); if (!b) { b = add(parent, 'div'); b.className = 'grp'; b.dataset.g = g; b.dataset.t = tx(GTITLE[g]); } return b; };
+    const adopt = (el, id, role, label, group) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
     function knob(parent, id, d) {
-      const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', tx(d.name)); const fmt = fmtOf(d), log = d.scale === 'log';
+      const box = add(groupBox(parent, GROUP[id]), 'label'); box.className = 'control'; add(box, 'span', tx(d.name)); const fmt = fmtOf(d), log = d.scale === 'log';
       const out = add(box, 'output', fmt(state[id])), input = noDrag(add(box, 'input')); input.type = 'range';
-      [input.min, input.max, input.step] = (log ? [0, 1, 0.001] : [d.min, d.max, d.step || 0.01]).map(String); input.value = String(toPos(d, state[id])); input.setAttribute('data-pk-default', String(toPos(d, defaults[id])));
+      [input.min, input.max, input.step] = (log ? [0, 1, 0.001] : [d.min, d.max, d.step || 0.01]).map(String); input.value = String(toPos(d, state[id])); input.setAttribute('data-pk-default', String(toPos(d, defaults[id]))); adopt(input, id, 'param', tx(d.name), GROUP[id]);
       input.oninput = () => { const n = Number(input.value); state[id] = log ? d.min * (d.max / d.min) ** n : n; out.textContent = fmt(state[id]); apply(); };
       ui.k[id] = { set(v) { input.value = String(toPos(d, v)); out.textContent = fmt(v); } };
     }
@@ -97,13 +103,13 @@ export default {
       if (!panel) return; for (const [id, k] of Object.entries(ui.k)) k.set(state[id]);
       ui.preset.value = state.preset; ui.wave.value = state.wave; ui.chord.value = state.chord; ui.memory.value = state.memory;
     }
-    function sizeScope() { if (!scope || !cw) return; const dpr = clamp(Number(globalThis.devicePixelRatio) || 1, 1, 4); scope.width = Math.round(cw * dpr); scope.height = Math.round(64 * dpr); if (scopeG) scopeG.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    function sizeScope() { if (!scope || !cw) return; const dpr = clamp(Number(globalThis.devicePixelRatio) || 1, 1, 4); scope.width = Math.round(cw * dpr); scope.height = Math.round(ch * dpr); if (scopeG) scopeG.setTransform(dpr, 0, 0, dpr, 0, 0); }
     function readColors() { const cs = getComputedStyle(panel), v = (n, d) => cs.getPropertyValue(n).trim() || d; col = { well: v('--well', '#0b171d'), wellFg: v('--well-fg', '#c7dbe0') }; }
     const onSkin = () => { col = null; };
     const data = new Float32Array(analyser.fftSize || 1024);
     function draw() {
       if (dead || !scope || !scopeG || !cw) return; if (!col) readColors();
-      const w = cw, h = 64, g = scopeG; analyser.getFloatTimeDomainData(data);
+      const w = cw, h = ch, g = scopeG; analyser.getFloatTimeDomainData(data);
       g.fillStyle = col.well; g.fillRect(0, 0, w, h); g.strokeStyle = col.wellFg; g.beginPath();
       for (let i = 0; i < data.length; i++) { const x = i / (data.length - 1) * w, y = h / 2 - clamp(data[i], -1, 1) * h * 0.46; i ? g.lineTo(x, y) : g.moveTo(x, y); }
       g.stroke();
@@ -115,17 +121,18 @@ export default {
       ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]), state.preset, v => self.setState({ ...defaults, ...presets[v], preset: v }));
       ui.wave = selectBox(top, tx('Golfvorm'), [['sawtooth', tx('Zaagtand')], ['square', tx('Puls')], ['triangle', tx('Driehoek')], ['sine', tx('Sinus')]], state.wave, v => { state.wave = v; apply(); });
       ui.chord = selectBox(top, tx('Akkoordgeheugen'), [['none', tx('Losse noten')], ['major', tx('Majeur')], ['minor', tx('Mineur')], ['sus', 'Sus4'], ['seventh', tx('Mineur 7')], ['memory', tx('Eigen intervallen')]], state.chord, v => { state.chord = v; });
+      adopt(ui.preset, 'preset', 'select', tx('Klankbeeld'), 'setup'); adopt(ui.wave, 'wave', 'select', tx('Golfvorm'), 'setup'); adopt(ui.chord, 'chord', 'select', tx('Akkoordgeheugen'), 'setup');
       { const box = add(top, 'label'); box.className = 'control'; add(box, 'span', tx('Eigen intervallen (0,4,7)')); const input = noDrag(add(box, 'input')); input.type = 'text'; input.value = state.memory; input.onchange = () => { state.memory = parseMemory(input.value); input.value = state.memory; }; ui.memory = input; }
       for (const [label, fn] of [[tx('Test akkoord'), () => { for (const n of [48, 55, 60, 64]) playSingle(n, 0.8, ctx.currentTime, 1.2); }], [tx('Alles uit'), () => panic()]]) { const b = noDrag(add(top, 'button', label)); b.type = 'button'; b.onclick = fn; }
       scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); scopeG = scope.getContext('2d');
-      if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) { cw = Math.max(260, Math.min(1200, w)); sizeScope(); } }); ro.observe(scope); }
+      if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) { cw = Math.max(260, Math.min(1200, w)); ch = Math.max(20, Math.min(200, es[0].contentRect.height || 64)); sizeScope(); } }); ro.observe(scope); }
       const g = add(panel, 'div'); g.className = 'grid'; for (const [id, d] of Object.entries(spec)) knob(g, id, d);
       if (typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
       stopDraw = drawLoop(host, self, draw, 30);
     }
     function unmount() {
       if (stopDraw) { stopDraw(); stopDraw = null; } if (ro) { ro.disconnect(); ro = null; } if (typeof window.removeEventListener === 'function') window.removeEventListener('patchkamer-skin', onSkin);
-      if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; scope = null; scopeG = null; col = null; cw = 0; ui = { k: {} };
+      if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; scope = null; scopeG = null; col = null; cw = 0; ch = 64; ui = { k: {} };
     }
     const self = {
       inputs: {}, outputs: { out }, mount, unmount,

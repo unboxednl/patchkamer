@@ -67,6 +67,10 @@ Een tune bevat alle velden behalve eventueel een deel van `patterns`; elke tune 
 
 Draai na elke wijziging `node contract/validate-instrument.mjs devices/synths/SquelchBox/squelch-box.patchkamer-device.js` (ook met `--lang en` en `--lang nl`). Voor een tunepack draai je `node devices/synths/SquelchBox/check-tune.mjs tunes/<pack>.patchkamer-tunes.json`: die haalt elke tune door `setState()` en `getState()` en meldt een ontbrekend of onbekend veld, een waarde die het apparaat verandert (bijvoorbeeld buiten het bereik) en een fout in `format`, `device`, `kind` of de licentie. De patronenlijst vult het apparaat aan tot 16 plekken; de tunecheck eist dat de ontbrekende plekken leeg zijn. Dat controleert de state, niet het geluid: of de motor bij elke tune alleen eindige samples geeft, test je apart (laad `WORKLET` met een nep-`host.loadWorklet` en render `SquelchEngine` in blokken van 128). Een geluidswijziging is niet beluisterd tenzij de oplevering dat zegt.
 
+## Skins
+
+Alle regelaars staan via `host.ui.knob`, `host.ui.select` en `host.ui.steps` met `id` en `group` (`sound` incl. de golfvorm, `out`, `extra`, `seq`) in het register; een skin kan de knoppen als draaiknop tonen en per groep een kader geven. Het apparaat tekent in het vlak van de kaart zelf (geen shadow root), dus een skin kan er geen eigen CSS in kwijt. Sinds 1.23.0 staan de blokken Klank, Uitgang en Extra's daarom in `div.sq-blk` binnen `div.sq-blks`, en heeft het apparaat een paar CSS-regels die alleen gelden als de host `data-pk-sec` op een knoppenblok zet (kleine-letter labels, strakke koppen, lage scope, lage stappenrijen, strakke knoppenrijen). Zonder skin is de kaart ongewijzigd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.squelchbox/` (ongeveer 480 x 703 punten tegenover 900 x 1071). Wijzig je de opbouw van `.sq-blks`, `.sq-grid` of `.sq-seq`, controleer dan die skin.
+
 ## Documentatie en songs
 
 - Handleiding van Squelch Box: [NL](../../../docs/synths/USER-MANUAL_NL.md#squelch-box) · [EN](../../../docs/synths/USER-MANUAL_EN.md#squelch-box).

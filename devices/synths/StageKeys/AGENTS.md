@@ -103,6 +103,10 @@ Een tune hoeft geen patroon te bevatten. Wil je er toch een demonstratie bij mak
 - Reken niet op meer dan 24 gelijktijdige noten of op twee noten van dezelfde toonhoogte tegelijk.
 - Verwacht geen doorklinkende noot na Stop: Stop klinkt alles uit.
 
+## Skins
+
+De zes schuiven (`tone`, `drive`, `tremDepth`, `tremRate`, `tune`, `lvl`) zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins (`role` param, `group` sound; `id` is de state-sleutel). Een skin kan ze zo als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.stagekeys/` (zes draaiknoppen in één kader, ongeveer 480 x 271 punten tegenover 560 x 347). Wijzig je de opbouw van `.ctrls` of `.ctl`, controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/StageKeys/stage-keys.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

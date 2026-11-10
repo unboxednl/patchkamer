@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.acidstepper.compact",
+  "device": "nl.patchkamer.acidstepper",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the controls grouped in frames, a tight step grid and no explanatory text.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "A compact layout for small screens: rotary knobs with the label underneath, the controls grouped in frames, a tight step grid and no explanatory text.",
+      "css": ".app{display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:4px;font-size:9px}\n.row{order:1;display:flex;flex-wrap:wrap;gap:4px 5px;margin:0;align-items:flex-end;border:1px solid var(--line,#344953);border-radius:4px;padding:4px 5px}\n.pads{order:2;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px}\n.pads button{min-height:0;height:26px;padding:1px 2px;font-size:7.5px;line-height:1.1;text-align:center;white-space:normal;border-radius:3px;display:flex;align-items:center;justify-content:center}\n.pads+.grid{order:3}\ncanvas{order:4;height:28px!important;border-radius:3px}\ncanvas+.grid{order:5}\n.grid{display:grid;gap:3px 2px;border:1px solid var(--line,#344953);border-radius:4px;padding:4px 4px 3px;margin:0}\n.pads+.grid{grid-template-columns:minmax(0,.8fr) repeat(3,minmax(0,1.4fr));align-items:center}\ncanvas+.grid{grid-template-columns:repeat(6,minmax(0,1fr))}\nh3,p{display:none}\n.control{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:start;gap:0;border:0;padding:0;min-width:0;border-radius:0}\n.control>span:not(.kn){order:3;font-size:7.5px;text-align:center;line-height:1.1;max-width:100%;letter-spacing:-.02em}\n.control>output{order:2;font-size:8px;line-height:1.1;text-align:center;white-space:nowrap}\n.control>.kn{order:1;width:26px!important;height:26px!important;justify-self:center!important}\n.control .kn svg{width:100%;height:100%}\n.control>select{order:1;width:100%;font-size:8.5px;padding:3px 0;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;border-radius:3px;cursor:pointer}\n.row .control{flex:1 1 52px}\n.row .control:nth-child(1),.row .control:nth-child(2){flex:3 1 120px}\n.row button{font-size:8.5px;padding:3px 6px;border-radius:3px;align-self:flex-end}"
+    }
+  ]
+}

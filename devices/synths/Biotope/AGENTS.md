@@ -145,3 +145,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: atmosfeer en omgevingsgeluid (acht procedurele lagen), geen toonhoogtespel. Events op `events` (triggers/CC) sturen de lagen; audio uit `out` (stereo). Gebruik onder een song als achtergrond; de klank is niet beluisterd.
+
+## Skins
+
+Alle schuiven, keuzelijsten en schakelaars zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state- of CC-sleutel (`master`, `space`, `width`, `rain_level`, `rain_variant`, `stepRate`, `stepSync`, `on`, `follow`, enzovoort; `scene` voor de soundscape-keuze), `group` is `global`, een laag (`rain`, `drops`, `bubbles`, `wind`, `steps`, `fire`, `sea`, `creaks`) of `steps`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.biotope/` (draaiknoppen met de naam eronder, een kader per laag in twee kolommen, ongeveer 480 x 555 punten tegenover 760 x 1058). Wijzig je de opbouw (`.layer`, `label.row`, `.global`, `.bar`), controleer dan die skin.

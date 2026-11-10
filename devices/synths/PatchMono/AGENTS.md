@@ -144,6 +144,10 @@ Neutrale richtlijnen (niet beluisterd; controleer ze in een host):
 - Geen routes met een `amount` van ±1 op `pitch` voor een muzikale klank, tenzij de bron `lfo` heet en je wilt dat het wiebelt: ±24 halve tonen is een enorme sprong.
 - Zet geen velden in die hier niet staan, en geen `routes` die geen tekst met een lijst van vier objecten of een echte lijst zijn.
 
+## Skins
+
+Alle regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `resonance`, `preset`, `variant`, enzovoort; voor de routes `route0` t/m `route3` voor de hoeveelheid en `route0.source`, `route0.dest` voor de keuzelijsten), `role` is `param` (schuiven) of `select`, `group` is de baan (`filter`, `amp`, `source`, `motion`, `master`), `setup` (bovenste rij en testnoot) of `routes`. Elke baan staat in een eigen `div.sec` (met `data-lane`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.patchmono/` (draaiknoppen met de naam eronder, per baan één kader, ongeveer 480 x 517 punten tegenover 920 x 1260). Wijzig je de opbouw van `.app`, `.sec`, `.grid`, `.control` of `.row`, controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/PatchMono/patch-mono.patchkamer-device.js` en met `--lang en`. Dat moet `OK` geven, zonder `let op`.

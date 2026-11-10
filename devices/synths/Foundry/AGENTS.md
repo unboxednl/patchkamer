@@ -118,6 +118,10 @@ Wat een tune niet doet:
 - Geen `external` boven 0 tenzij je weet dat er een bron aan de ingang hangt (anders geen effect, maar het gaat ten koste van ruimte in de mix).
 - Geen merknamen in naam of omschrijving, en verzin geen persoon bij `author`.
 
+## Skins
+
+Alle keuzelijsten en knoppen zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`fm`, `level`, `morph`, `preset`, `mode`, `xAxis`, `yAxis`, `material`, `wave`, `scope`, enzovoort), `role` is `param` (schuiven) of `select`, `group` is `source`, `material`, `motion`, `envelope`, `morph`, `sound`, `xy` of `tone`. De knoppen (Start/stop, Bewaar A, enzovoort) hebben geen id. De UI wordt bij Spel en Scope opnieuw opgebouwd en meldt de regelaars dan opnieuw aan. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.foundry/` (draaiknoppen met de naam eronder, per sectie een kader, kleinere vlakken, ongeveer 480 x 743 punten tegenover 920 x 1418). Wijzig je de opbouw van de UI (`.row`, `.grid`, `.control`, `h3`, de canvassen), controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/Foundry/foundry.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

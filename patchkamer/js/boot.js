@@ -391,6 +391,7 @@ document.addEventListener('keydown',e=>{ if(PK.typing(e)) return; if((e.ctrlKey|
 PK._alMem=null, PK._alUndo=null;
 ['alMenuCb','alSetCb'].forEach(i=>{ const e=PK.$(i); if(e) e.onchange=()=>PK.autoLinkSet(e.checked); });
 PK.PKT.coarse.addEventListener('change',PK.autoLinkPaint); PK.autoLinkPaint();
+{ const e=PK.$('skDefSel'); if(e) e.onchange=()=>PK.skDefSet(e.value); PK.skDefPaint(); }
 document.addEventListener('keydown',e=>{ if(PK.typing(e)||document.querySelector('.pkmodal')) return; if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key==='z'||e.key==='Z')&&PK._alUndo){ if(PK.alUndo()) e.preventDefault(); } });
 // ===== focus =====
 /* =====================================================================

@@ -1,0 +1,93 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.7",
+  "id": "nl.patchkamer.string.compact",
+  "device": "nl.patchkamer.string",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, grouped per section (string, excitation, pitch, output) in one frame, a lower keyboard and no wasted space.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      },
+      {
+        "match": "role:select",
+        "face": "default"
+      }
+    ],
+    "size": {
+      "width": 480
+    },
+    "layout": {
+      "flow": "rows",
+      "panels": [
+        {
+          "id": "string",
+          "title": {
+            "nl": "Snaar en aanslag",
+            "en": "String and excitation"
+          },
+          "items": [
+            "decay",
+            "damp",
+            "bright",
+            "stiff",
+            "pos",
+            "bow"
+          ],
+          "style": "line",
+          "cols": 6,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        },
+        {
+          "id": "pitch",
+          "title": {
+            "nl": "Toon en uitgang",
+            "en": "Pitch and output"
+          },
+          "items": [
+            "tune",
+            "oct",
+            "spread",
+            "lvl"
+          ],
+          "style": "line",
+          "cols": 4,
+          "gap": "tight",
+          "bare": true,
+          "labels": "below",
+          "width": "full"
+        },
+        {
+          "id": "rest",
+          "items": [
+            "*"
+          ],
+          "style": "plain",
+          "width": "auto",
+          "gap": "tight"
+        }
+      ]
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, less tall than the standard card.",
+      "css": ""
+    }
+  ]
+}

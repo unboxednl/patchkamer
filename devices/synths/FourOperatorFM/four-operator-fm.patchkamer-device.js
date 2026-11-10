@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group play/operator/global/sound), zodat een skin ze als draaiknop kan tonen; ook na het wisselen van operator. Geluid, state en ids ongewijzigd; zonder skin ziet het apparaat er identiek uit. Testnoot staat bewust in modExclude (hoort bij de adoptie; params() ongewijzigd).
 // 1.13.0 — Uitleg naar about (menu Over Four-Operator FM); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.11.0 — Nieuw als Four-Operator FM (nieuwe id nl.patchkamer.fouroperatorfm, eigen map), bijgewerkt naar Patchkamer contract v1.11:
@@ -175,7 +176,8 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.fouroperatorfm',
   name: 'Four-Operator FM',
-  version: '1.13.0',
+  version: '1.14.0',
+  modExclude: ['testNote'],
   kind: 'instrument',
   category: 'synth',
   ui: { width: 1000, minWidth: 380 },
@@ -306,16 +308,18 @@ export default {
     }
     const onSkin = () => { palC = null; };
 
-    function select(parent, label, options, value, change) {
+    const adopt = (el, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    const groupOf = id => id === 'testNote' ? 'play' : /^o[1-4]/.test(id) ? 'operator' : 'global';
+    function select(parent, label, options, value, change, id, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label);
       const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); }
-      el.value = String(value); el.onchange = () => change(el.value); return el;
+      el.value = String(value); el.onchange = () => change(el.value); if (id) adopt(el, id, 'select', group, label); return el;
     }
     // schuif met het getal ernaast; log: de schuif loopt van 0 tot 1
     function knob(parent, id, label, min, max, step, value, def, change, format, toSlider, fromSlider) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label);
       const out = add(box, 'output', format(value)), input = add(box, 'input');
-      input.type = 'range'; input.min = String(min); input.max = String(max); input.step = String(step); input.value = String(toSlider(value)); input.setAttribute('data-pk-default', String(toSlider(def)));
+      input.type = 'range'; input.min = String(min); input.max = String(max); input.step = String(step); input.value = String(toSlider(value)); input.setAttribute('data-pk-default', String(toSlider(def))); adopt(input, id, 'param', groupOf(id), label);
       input.oninput = () => { const v = fromSlider(Number(input.value)); out.textContent = format(v); change(v); };
       return { set(v) { input.value = String(toSlider(v)); out.textContent = format(v); } };
     }
@@ -347,8 +351,8 @@ export default {
         add(shadow, 'style', CSS);
         panel = add(shadow, 'div'); panel.className = 'app'; ui = {};
         const top = add(panel, 'div'); top.className = 'row';
-        ui.preset = select(top, tx('Klankbeeld'), Object.keys(PRESETS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...PRESETS[v], preset: v, testNote: state.testNote, operator: state.operator }));
-        ui.algorithm = select(top, tx('Algoritme'), OPTIONS.algorithm.map(n => [n, tx('Algoritme {0}', n)]), state.algorithm, v => { state.algorithm = Number(v); apply(); if (graphDraw) graphDraw(); });
+        ui.preset = select(top, tx('Klankbeeld'), Object.keys(PRESETS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...PRESETS[v], preset: v, testNote: state.testNote, operator: state.operator }), 'preset', 'sound');
+        ui.algorithm = select(top, tx('Algoritme'), OPTIONS.algorithm.map(n => [n, tx('Algoritme {0}', n)]), state.algorithm, v => { state.algorithm = Number(v); apply(); if (graphDraw) graphDraw(); }, 'algorithm', 'sound');
         const play = add(panel, 'div'); play.className = 'row';
         ui.testNote = knob(play, 'testNote', tx('Testnoot MIDI'), 24, 96, 1, state.testNote, DEFAULTS.testNote, v => { state.testNote = v; }, v => String(v), v => v, x => x);
         const btn = (label, fn) => { const b = add(play, 'button', label); b.type = 'button'; b.onclick = fn; return b; };
@@ -359,7 +363,7 @@ export default {
         graph = add(panel, 'canvas'); graph.setAttribute('aria-label', tx('FM-algoritme')); graph.style.height = '130px'; graphG = graph.getContext ? graph.getContext('2d') : null;
         graphDraw = drawGraph;
         const opRow = add(panel, 'div'); opRow.className = 'row';
-        ui.operator = select(opRow, 'Operator', [0, 1, 2, 3].map(i => [i, 'OP ' + (i + 1)]), state.operator, v => { state.operator = Number(v); buildOpGrid(); });
+        ui.operator = select(opRow, 'Operator', [0, 1, 2, 3].map(i => [i, 'OP ' + (i + 1)]), state.operator, v => { state.operator = Number(v); buildOpGrid(); }, 'operator', 'operator');
         opGrid = add(panel, 'div'); opGrid.className = 'grid'; buildOpGrid();
         const globals = add(panel, 'div'); globals.className = 'grid'; for (const g of GLOB) control(globals, g[0]);
         scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); scope.style.height = '64px'; scopeG = scope.getContext ? scope.getContext('2d') : null;

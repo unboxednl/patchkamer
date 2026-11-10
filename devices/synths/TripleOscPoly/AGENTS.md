@@ -217,3 +217,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: meerstemmige subtractieve synth voor leads, pads en akkoorden. Noten op `notes`, audio uit `out` (stereo).
+
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.12.0 via `host.ui.adopt` herkenbaar voor skins: `id` is het state-pad (`osc.0.semi`, `f1.cut`, `fa`, `route`, `chord`, ...), `role` is `param` of `select` en `group` is het blok: `osc1`, `osc2`, `osc3`, `mix`, `shaper`, `filter1`, `filter2`, `fenv`, `aenv`, `voice`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.polysynth/` (draaiknoppen met de naam eronder, elk blok in één kader, ongeveer 480 x 650 punten tegenover 1180 x 809). De skin mikt op de volgorde van de tien blokken in `.grid` (`.mod:nth-child(n)`); verander je die volgorde, controleer dan die skin.

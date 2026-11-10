@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, rol param, select of toggle, groep per sectie) en de schuiven staan in secties (div.sec, display:contents), zodat de skin Compact ze als draaiknop in één kader per groep kan tonen. Geluid, state, presets, poorten en uiterlijk zonder skin ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Paradox); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (onwaarschijnlijk klankorganisme) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.11.0 — Bijgewerkt naar Patchkamer contract v1.11 (eigen map, nieuwe bestandsnaam zonder versienummer; id, poort-id's en state ongewijzigd):
@@ -34,6 +35,7 @@ const PARAMETERS = [
  ['release','Verval',.03,8,1.3,'Uitsterftijd na een noot of autonome gebeurtenis.'],
  ['level','Uitgang',0,1,.55,'Totaalniveau. Randomiseren verandert dit niet.']
 ];
+const GROUPS = { matter: 'timbre', mutation: 'timbre', friction: 'timbre', fold: 'timbre', fracture: 'timbre', memory: 'memory', warp: 'memory', size: 'memory', space: 'space', orbit: 'space', life: 'life', density: 'life', input: 'life', rate: 'life', root: 'voice', attack: 'voice', release: 'voice', level: 'out' };
 const EN = {
  'Plasma': 'Plasma', 'Glasvlees': 'Glass flesh', 'Machinekoor': 'Machine choir', 'Zwerm': 'Swarm', 'Breuklijn': 'Fault line', 'Tijdlek': 'Time leak',
  'Bespeelbaar': 'Playable', 'Drone': 'Drone', 'Organisme': 'Organism',
@@ -268,11 +270,12 @@ const drawLoop = (host, inst, cb, fps) => {
 };
 
 export default {
- id:'nl.patchkamer.paradox',name:'Paradox',version:'1.13.0',kind:'instrument',category:'synth',ui:{width:860,minWidth:320},about:{nl:'Onwaarschijnlijk klankorganisme.\n\nGeef het een noot. Voer het audio. Of laat het zichzelf verzinnen.\n\nKlavier: externe noten houden hun toonhoogte. Kies Bespeelbaar om het interne organisme uit te zetten.\n\nEten is de audio-ingang. Geheugen bevriest alleen deze sessie; de inhoud wordt niet in tunes opgeslagen.',en:'An improbable sound organism.\n\nGive it a note. Feed it audio. Or let it invent itself.\n\nKeyboard: external notes keep their pitch. Choose Playable to switch the internal organism off.\n\nFeed is the audio input. Freezing the memory only lasts this session; its contents are not stored in tunes.'},
+ id:'nl.patchkamer.paradox',name:'Paradox',version:'1.14.0',kind:'instrument',category:'synth',ui:{width:860,minWidth:320},about:{nl:'Onwaarschijnlijk klankorganisme.\n\nGeef het een noot. Voer het audio. Of laat het zichzelf verzinnen.\n\nKlavier: externe noten houden hun toonhoogte. Kies Bespeelbaar om het interne organisme uit te zetten.\n\nEten is de audio-ingang. Geheugen bevriest alleen deze sessie; de inhoud wordt niet in tunes opgeslagen.',en:'An improbable sound organism.\n\nGive it a note. Feed it audio. Or let it invent itself.\n\nKeyboard: external notes keep their pitch. Choose Playable to switch the internal organism off.\n\nFeed is the audio input. Freezing the memory only lasts this session; its contents are not stored in tunes.'},
  i18n:{nl:{ports:{feed:'Eten',out:'Ontsnapping',notes:'Noten / CC'}}},
  ports:{audioIn:[{id:'feed',name:'Feed'}],audioOut:[{id:'out',name:'Escape'}],eventIn:[{id:'notes',name:'Notes / CC'}],eventOut:[],modIn:[],modOut:[],multiIn:[],multiOut:[]},
  create(ctx,host){
   const tx=(k,...a)=>{let t=host.lang==='nl'?k:(EN[k]??k);a.forEach((v,i)=>{t=t.replace('{'+i+'}',v);});return t;};
+  const adopt=(el,id,role,group,label)=>{if(host.ui&&typeof host.ui.adopt==='function'){try{host.ui.adopt(el,{id,role,group,label});}catch(_){/* oud contract */}}};
   let state=defaults(),offsets={},effective,dead=false,transport=false,bpm=Number.isFinite(host.bpm)?host.bpm:120;
   let backend=null,local=null,timer=null,nextTime=0,frozen=false,label='Wekt het organisme…';const queued=[],sources=new Set(),uiHeld=new Set();let telemetry=null;const trail=[];
   let shell=null,root=null,controls=[],presetSelect=null,status=null,freezeButton=null,cv=null,g=null,stopDraw=null,observer=null;
@@ -329,17 +332,17 @@ export default {
      .parameters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:7px;margin:12px 0}
      .control{min-width:0;padding:9px;border:1px solid var(--line);border-radius:6px;background:var(--card-2)}.label{display:flex;justify-content:space-between;gap:8px;margin-bottom:7px}.value{color:var(--audio)}input[type=range]{display:block;width:100%;margin:0}
      .keyboard{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;margin:10px 0}.key{padding:15px 0 8px;font-size:10px;border-bottom:4px solid var(--audio);touch-action:none}.key.black{background:var(--card-2);border-bottom-color:var(--mod)}
-     .separator{height:1px;background:var(--line);margin:12px 0}label.switch{display:flex;gap:4px;align-items:center}.status{margin-top:9px;overflow-wrap:anywhere}.actions{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
+     .sec{display:contents}.separator{height:1px;background:var(--line);margin:12px 0}label.switch{display:flex;gap:4px;align-items:center}.status{margin-top:9px;overflow-wrap:anywhere}.actions{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
     `;root.appendChild(style);
     function make(tag,text,parent,cls){const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;if(parent)parent.appendChild(e);return e;}
     const lab=make('div',null,root,'lab');
     
     const bar=make('div',null,lab,'row');presetSelect=make('select',null,bar);presetSelect.setAttribute('aria-label',tx('Een universum kiezen'));const blank=make('option',tx('Kies een universum…'),presetSelect);blank.value='';
-    PRESETS.forEach((p,i)=>{const o=make('option',p[0],presetSelect);o.value=String(i);});presetSelect.onchange=()=>{if(presetSelect.value!=='')api.setState(preset(Number(presetSelect.value)));};
-    function select(parent,key,title,options){const wrap=make('label',null,parent,'row');make('span',title,wrap);const input=make('select',null,wrap);options.forEach(([value,name])=>{const o=make('option',name,input);o.value=String(value);});input.onchange=()=>{state[key]=['mode','division'].includes(key)?Number(input.value):input.value;apply();syncUI();};controls.push({el:input,key});return input;}
-    const row=make('div',null,lab,'row');select(row,'mode',tx('Anatomie'),MODES.map((name,i)=>[i,tx(name)]));select(row,'behavior',tx('Gedrag'),BEHAVIORS.map(([v,n])=>[v,tx(n)]));
-    function check(parent,key,title){const label=make('label',null,parent,'switch'),input=make('input',null,label);input.type='checkbox';make('span',title,label);input.onchange=()=>{state[key]=input.checked;apply();syncUI();};controls.push({key,el:input,check:true});}
-    const switches=make('div',null,lab,'row');check(switches,'on',tx('Leeft'));check(switches,'follow',tx('Volg Start/Stop'));check(switches,'sync',tx('Klok'));select(switches,'division',tx('Delen per'),DIVISIONS.map(([v,n])=>[v,/[a-z]/.test(n)?tx(n):n]));
+    PRESETS.forEach((p,i)=>{const o=make('option',p[0],presetSelect);o.value=String(i);});presetSelect.onchange=()=>{if(presetSelect.value!=='')api.setState(preset(Number(presetSelect.value)));};adopt(presetSelect,'universe','select','top',tx('Een universum kiezen'));
+    function select(parent,key,title,options,group){const wrap=make('label',null,parent,'row');make('span',title,wrap);const input=make('select',null,wrap);options.forEach(([value,name])=>{const o=make('option',name,input);o.value=String(value);});input.onchange=()=>{state[key]=['mode','division'].includes(key)?Number(input.value):input.value;apply();syncUI();};adopt(input,key,'select',group,title);controls.push({el:input,key});return input;}
+    const row=make('div',null,lab,'row');select(row,'mode',tx('Anatomie'),MODES.map((name,i)=>[i,tx(name)]),'top');select(row,'behavior',tx('Gedrag'),BEHAVIORS.map(([v,n])=>[v,tx(n)]),'top');
+    function check(parent,key,title){const label=make('label',null,parent,'switch'),input=make('input',null,label);input.type='checkbox';make('span',title,label);input.onchange=()=>{state[key]=input.checked;apply();syncUI();};adopt(input,key,'toggle','switch',title);controls.push({key,el:input,check:true});}
+    const switches=make('div',null,lab,'row');check(switches,'on',tx('Leeft'));check(switches,'follow',tx('Volg Start/Stop'));check(switches,'sync',tx('Klok'));select(switches,'division',tx('Delen per'),DIVISIONS.map(([v,n])=>[v,/[a-z]/.test(n)?tx(n):n]),'switch');
     const screen=make('div',null,lab,'screen');cv=make('canvas',null,screen);cv.setAttribute('role','img');cv.setAttribute('aria-label',tx('Live golfvorm, vreemde attractor en cellulaire automaat'));g=cv.getContext('2d');
     function resize(w,h){if(!cv||!(w>0)||!(h>0))return;cw=w;ch=h;const dpr=Math.min(2,globalThis.devicePixelRatio||1);cv.width=Math.max(1,Math.round(w*dpr));cv.height=Math.max(1,Math.round(h*dpr));}
     observer=new ResizeObserver(es=>{const r=es[0]&&es[0].contentRect;if(r)resize(r.width,r.height);});observer.observe(screen);resize(screen.clientWidth||300,screen.clientHeight||190);
@@ -368,7 +371,7 @@ export default {
     freezeButton=button(tx('Bevries geheugen'),()=>{frozen=!frozen;send({type:'freeze',value:frozen,time:ctx.currentTime});syncUI();});
     button(tx('PANIEK / stil'),()=>{state.on=false;send({type:'panic',time:ctx.currentTime});apply();syncUI();});
     const grid=make('div',null,lab,'parameters');
-    for(const[key,name,min,max,def,hint]of PARAMETERS){const control=make('label',null,grid,'control');control.title=tx(hint);const label=make('div',null,control,'label');make('span',tx(name),label);const output=make('span',null,label,'value');const input=make('input',null,control);input.type='range';input.min=min;input.max=max;input.step=key==='root'?1:(max-min)/500;input.value=String(def);input.setAttribute('data-pk-default',String(def));input.setAttribute('aria-label',tx(name));
+    let sec=null,secGroup=null;for(const[key,name,min,max,def,hint]of PARAMETERS){if(GROUPS[key]!==secGroup){secGroup=GROUPS[key];sec=make('div',null,grid,'sec');sec.dataset.group=secGroup;}const control=make('label',null,sec,'control');control.title=tx(hint);const label=make('div',null,control,'label');make('span',tx(name),label);const output=make('span',null,label,'value');const input=make('input',null,control);input.type='range';input.min=min;input.max=max;input.step=key==='root'?1:(max-min)/500;input.value=String(def);input.setAttribute('data-pk-default',String(def));input.setAttribute('aria-label',tx(name));adopt(input,key,'param',GROUPS[key],tx(name));
      const format=v=>key==='root'?Math.round(v):key==='rate'?v.toFixed(2)+' Hz':['attack','release'].includes(key)?v.toFixed(2)+' s':Math.round(v*100)+'%';
      output.textContent=format(def);
      input.oninput=()=>{state[key]=Number(input.value);apply();syncUI();};controls.push({el:input,key,output,format});}

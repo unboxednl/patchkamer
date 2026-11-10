@@ -284,6 +284,8 @@ A **skin** only changes the **looks** of one device, never its sound, settings o
 
 **Choosing on the card.** As soon as a device has at least one skin, the card's bar shows two lists: **Skin** (**Default** is the device's own look) and **Appearance**. With **Auto** Patchkamer picks the appearance itself from the **width of the card** and the **screen size** (phone, compact or wide); the list shows which one is active. If you choose an appearance yourself, Auto stays off for that device until you go back to **Auto**. The choice applies immediately. With **Default** everything is gone and the device looks exactly as before. If the bars on the cards are switched off (Settings), choose from the Skins tab with **Apply** and **Choose**.
 
+**Default skin for new devices.** Under **Settings** choose **Default skin for new devices**: **Standard** or **Compact (small screens)**. A device you place afterwards gets the skin called Compact if it has one; otherwise it stays Standard. Devices already placed and songs do not change, and on the card you can always choose under **Skin**. The choice is a preference of this browser.
+
 **Saving.** The choice per device is stored in the workspace and in the song, together with the skins used (at most 20), so a song keeps its looks without the library. When you open one, those skins quietly enter your register (a newer version wins). Workspaces and songs without skins load as always. Skins never touch the sound: the device's settings are the same with and without a skin.
 
 **Design choices (skins contract 0.8).** Besides CSS, a skin can contain **design choices** that work on every device, set as the skin's default and overridable per appearance:

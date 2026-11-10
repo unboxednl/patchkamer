@@ -132,6 +132,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Alle velden van een tune hoeven er niet in te staan: een ontbrekend veld krijgt de startwaarde. Zet ze liever allemaal, dan klinkt de tune hetzelfde als de startwaarden ooit veranderen.
 
+## Skins
+
+Alle regelaars zijn sinds 1.13.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `resonance`, `preset`, `hpf`, `chorusMode`, `vcaMode`, `testNote`, enzovoort), `role` is `param` (schuiven) of `select`, `group` is de sectie (`oscillator`, `filter`, `amp`, `modulation`, `chorus`, `output`) of `setup` (klankkeuze en testnoot). Elke sectie staat in een eigen `div.sec` (met `data-lane`). `testNote` staat bewust in `modExclude`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.polychorus/` (draaiknoppen met de naam eronder, per sectie één kader, ongeveer 480 x 484 punten tegenover 920 x 1094). Wijzig je de opbouw van `.app`, `.sec`, `.grid`, `.control` of `.row`, controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/PolyChorus/poly-chorus.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

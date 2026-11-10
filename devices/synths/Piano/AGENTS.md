@@ -126,6 +126,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Het pack `../../../tunes/piano.patchkamer-tunes.json` heeft 43 tunes in 11 mappen (Grand 5, Upright 4, Honky-tonk 4, Tine 5, Reed 5, Clavichord 4, Layered 3, Ballad 4, Pop 3, Jazz 3, Lo-fi 3), met `tags` (`instrument/piano`, `instrument/piano/grand`, `.../upright`, `.../honky-tonk`, `.../electric`, `.../clavichord`, `style/ballad`, `style/pop`, `style/jazz`, `style/lofi`).
 
+## Skins
+
+Alle regelaars staan sinds 1.20.0 via `host.ui.knob` en `host.ui.select` met `id` (de state-sleutel) en `group` (`type`, `preset`, `tone`, `decay`, `electric`, `play`) in het register, dus een skin kan ze als draaiknop tonen (`design.controls` met `face: rotary`) en per groep een kader geven (`design.sections`). Het apparaat tekent in het vlak van de kaart zelf (geen shadow root); een skin kan daar dus geen eigen CSS in kwijt. Sinds 1.23.0 heeft het apparaat daarom een paar CSS-regels die alleen gelden als de host `data-pk-sec` op een knoppenblok zet (kleine-letter labels, strakke koppen en knoppenrij; klassen `pn-h`, `pn-act`, `pn-st`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.piano/` (ongeveer 480 x 528 punten tegenover 720 x 774). Wijzig je de opbouw van `.pn-grid` of de koppen, controleer dan die skin.
+
 ## Controleren
 
 - Vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/Piano/piano.patchkamer-device.js` (en met `--lang en` en `--lang nl`). Dat moet `OK` geven, zonder `let op`.

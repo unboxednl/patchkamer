@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group = bronnen/materiaal/beweging/envelope, morph, sound, xy, tone), zodat een skin ze als draaiknop kan tonen; ook na het opnieuw opbouwen van de UI. Geluid, state en ids ongewijzigd; zonder skin ziet het apparaat er identiek uit.
 // 1.13.0 — Uitleg naar about (menu Over Foundry); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.1 — Gecontroleerd op stuurbaarheid: alle continue klankregelaars stonden al in params(). Bewust niet stuurbaar: Morph A ↔ B (die schrijft de knopstanden zelf om
@@ -84,7 +85,7 @@ const hz = n => 440 * 2 ** ((n - 69) / 12);
 const FB_MAX = 0.82;
 
 export default {
-  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.13.0', modExclude: ['morph'], kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.foundry', name: 'Foundry', version: '1.14.0', modExclude: ['morph'], kind: 'instrument', category: 'synth',
   ui: { width: 920, minWidth: 380 },
   about: { nl: 'Een industriële klankvormer: gecascadeerde FM, metaalresonanties, ruis, ringmodulatie, materiaalresonatoren en wavefolding. Begin met Start / stop drone en sculpt met het XY-vlak.\n\nA/B: bewaar twee klanken en beweeg Morph. Muteer verandert de klank, niet het uitgangsniveau.\n\nIn Noten-modus: keyboard of sequencer naar de oranje ingang. Een paarse Mod-kabel werkt ook zonder transport. Extern geluid: bron naar Extern materiaal, zet de gelijknamige regelaar open en start de drone/gate.', en: 'An industrial sound sculptor: cascaded FM, metal resonances, noise, ring modulation, material resonators and wavefolding. Start with Start / stop drone and sculpt with the XY pad.\n\nA/B: save two sounds and move Morph. Mutate changes the sound, not the output level.\n\nIn notes mode: keyboard or sequencer to the orange input. A purple Mod cable also works without transport. External sound: source to External material, open the knob of the same name and start the drone/gate.' },
   ports: {
@@ -326,14 +327,16 @@ h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}`;
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
     const grid = parent => { const el = add(parent, 'div'); el.className = 'grid'; return el; };
     const button = (parent, label, fn) => { const bt = add(parent, 'button', label); bt.type = 'button'; bt.onclick = fn; return bt; };
-    function select(parent, label, options, value, change) {
+    const adopt = (el, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    const laneOf = { source: 'source', material: 'material', motion: 'motion', play: 'envelope', morph: 'morph' };
+    function select(parent, label, options, value, change, id, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select');
       for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); }
-      el.value = String(value); el.onchange = () => change(el.value); return el;
+      el.value = String(value); el.onchange = () => change(el.value); if (id) adopt(el, id, 'select', group, label); return el;
     }
-    function knob(parent, id, label, bounds, value, dflt, onchange, format) {
+    function knob(parent, id, label, bounds, value, dflt, onchange, format, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input');
-      input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.setAttribute('data-pk-default', String(dflt));
+      input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.setAttribute('data-pk-default', String(dflt)); adopt(input, id, 'param', group || 'sound', label);
       input.oninput = () => { const n = Number(input.value); out.textContent = format(n); onchange(n); };
       uiHandles[id] = { set(v) { input.value = String(v); out.textContent = format(v); } }; return input;
     }
@@ -394,12 +397,12 @@ h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}`;
       const top = row(panel);
       select(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen sculptuur')]]), state.preset, v => {
         if (Object.hasOwn(presets, v)) { const snapshots = { sceneA: state.sceneA, sceneB: state.sceneB }; self.setState({ ...defaults, ...presets[v], ...snapshots, preset: v }); }
-      });
-      select(top, tx('Spel'), [['drone', 'Drone / transport'], ['notes', 'Keyboard / sequencer']], state.mode, v => { stop(); state.mode = v; muted = false; apply(); render(el); });
+      }, 'preset', 'sound');
+      select(top, tx('Spel'), [['drone', 'Drone / transport'], ['notes', 'Keyboard / sequencer']], state.mode, v => { stop(); state.mode = v; muted = false; apply(); render(el); }, 'mode', 'sound');
       button(top, 'Start / stop drone', () => { if (droneActive()) stop(); else { state.mode = 'drone'; manual = true; muted = false; apply(); droneOn(); } render(el); });
       button(top, tx('Metalen slag'), () => { state.mode = 'notes'; manual = false; muted = false; apply(); play(48, 0.9, ctx.currentTime, 0.25); render(el); });
       button(top, tx('Alles uit'), stop); button(top, tx('Muteer klank'), mutate);
-      const axis = row(panel); select(axis, tx('X-as'), axisOptions(), state.xAxis, v => { state.xAxis = v; dirty = true; }); select(axis, tx('Y-as'), axisOptions(), state.yAxis, v => { state.yAxis = v; dirty = true; });
+      const axis = row(panel); select(axis, tx('X-as'), axisOptions(), state.xAxis, v => { state.xAxis = v; dirty = true; }, 'xAxis', 'xy'); select(axis, tx('Y-as'), axisOptions(), state.yAxis, v => { state.yAxis = v; dirty = true; }, 'yAxis', 'xy');
       xy = add(panel, 'canvas'); xy.tabIndex = 0; xy.setAttribute('role', 'application'); xy.setAttribute('aria-label', tx('XY sound sculptor: pijltjestoetsen wijzigen X en Y'));
       xy.onpointerdown = e => { e.preventDefault(); e.stopPropagation(); xyDown = true; xy.setPointerCapture?.(e.pointerId); setXY(e); };
       xy.onpointermove = e => { if (xyDown) setXY(e); };
@@ -414,16 +417,16 @@ h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}`;
       button(snapshots, tx('Bewaar B'), () => { sceneB = baseSnapshot(); state.sceneB = JSON.stringify(sceneB); updateUI(); });
       button(snapshots, tx('Herstel A'), () => { if (sceneA) { Object.assign(state, sceneA); state.morph = 0; state.preset = 'Custom'; apply(); updateUI(); } });
       button(snapshots, tx('Herstel B'), () => { if (sceneB) { Object.assign(state, sceneB); state.morph = 1; state.preset = 'Custom'; apply(); updateUI(); } });
-      knob(snapshots, 'morph', 'Morph A ↔ B', [0, 1, 0.01], state.morph, 0, morph, v => Math.round(v * 100) + '%');
+      knob(snapshots, 'morph', 'Morph A ↔ B', [0, 1, 0.01], state.morph, 0, morph, v => Math.round(v * 100) + '%', 'morph');
       const toneRow = row(panel);
-      select(toneRow, tx('Materiaal'), [['steel', tx('Staal')], ['glass', tx('Glas')], ['concrete', tx('Beton')], ['cable', tx('Kabel / snaar')]], state.material, v => { state.material = v; state.preset = 'Custom'; apply(); });
-      select(toneRow, tx('Bron'), [['sine', 'Sine'], ['triangle', 'Triangle'], ['sawtooth', 'Saw'], ['square', 'Square']], state.wave, v => { state.wave = v; state.preset = 'Custom'; apply(); });
-      select(toneRow, 'Scope', [['wave', tx('Golfvorm')], ['spectrum', 'Spectrum'], ['off', tx('Uit')]], state.scope, v => { state.scope = v; render(el); });
+      select(toneRow, tx('Materiaal'), [['steel', tx('Staal')], ['glass', tx('Glas')], ['concrete', tx('Beton')], ['cable', tx('Kabel / snaar')]], state.material, v => { state.material = v; state.preset = 'Custom'; apply(); }, 'material', 'tone');
+      select(toneRow, tx('Bron'), [['sine', 'Sine'], ['triangle', 'Triangle'], ['sawtooth', 'Saw'], ['square', 'Square']], state.wave, v => { state.wave = v; state.preset = 'Custom'; apply(); }, 'wave', 'tone');
+      select(toneRow, 'Scope', [['wave', tx('Golfvorm')], ['spectrum', 'Spectrum'], ['off', tx('Uit')]], state.scope, v => { state.scope = v; render(el); }, 'scope', 'tone');
       if (state.scope !== 'off') { scopeCanvas = add(panel, 'canvas'); scopeCanvas.setAttribute('aria-label', tx('Gemeten stereo-uitgang, ') + state.scope); }
       const titles = { source: 'Bronnen & frequenties', material: 'Materiaal & vervorming', motion: 'Beweging & ruimte', play: 'Envelope & niveau' };
       for (const lane of ['source', 'material', 'motion', 'play']) {
         add(panel, 'h3', tx(titles[lane])); const box = grid(panel);
-        for (const [id, d] of Object.entries(spec)) if (d[8] === lane) knob(box, id, tx(d[0]), [d[1], d[2], d[3]], state[id], d[4], v => change(id, v), v => d[5] === '%' ? Math.round(v * 100) + '%' : d[5] === 'Hz' ? v.toFixed(v < 20 ? 2 : 0) + ' Hz' : v.toFixed(d[5] === 's' ? 3 : 2) + ' ' + d[5]);
+        for (const [id, d] of Object.entries(spec)) if (d[8] === lane) knob(box, id, tx(d[0]), [d[1], d[2], d[3]], state[id], d[4], v => change(id, v), v => d[5] === '%' ? Math.round(v * 100) + '%' : d[5] === 'Hz' ? v.toFixed(v < 20 ? 2 : 0) + ' Hz' : v.toFixed(d[5] === 's' ? 3 : 2) + ' ' + d[5], laneOf[lane]);
       }
       status = add(panel, 'p');
       updateUI();

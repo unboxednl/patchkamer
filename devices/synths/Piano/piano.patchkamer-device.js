@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.23.0 — Voor skins met compacte secties (host zet data-pk-labels op de knoppenblokken): kleinere, kleine-letter labels, strakke koppen en knoppenrij; zonder skin ongewijzigd. Klassen pn-h, pn-act en pn-st op kop, knoppenrij en status. Geluid, state en ids ongewijzigd.
 // 1.22.0 — Uitleg naar about (menu Over Piano); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (vleugel, pianino en e-piano) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Piano (contract v1.20). Eigen motor als AudioWorklet (PianoEngine): 40 stemmen, modale synthese met meerdere pianotypen.
@@ -254,7 +255,7 @@ class PkPiano extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', PkPiano);
 `;
 export default {
-  id: 'nl.patchkamer.piano', name: 'Piano', version: '1.22.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.piano', name: 'Piano', version: '1.23.0', kind: 'instrument', category: 'synth',
   ui: { width: 720, minWidth: 340 },
   about: { nl: 'Polyfone pianofamilie: vleugel, pianino en e-piano.\n\nPiano speelt alleen ontvangen noten, met 40 stemmen: sluit een keyboard of sequencer aan op de oranje ingang Noten en stuur de stereo-uitgang naar een mixer. Noten met een lengte (dur) werken met sequencers, noteon/noteoff met aangehouden toetsen.\n\nHet pedaal houdt losgelaten noten klinkend (cc pedal, of de knop). Hardere aanslag klinkt helderder (Aanslagkleur).\n\nType kiest het instrument; de klanken in de lijst zetten type en knoppen samen. Een paarse Mod-kabel stuurt klankparameters; de knoppen blijven de basis.', en: 'A polyphonic piano family: grand, upright and electric piano.\n\nPiano plays received notes only, with 40 voices: connect a keyboard or sequencer to the orange Notes input and send the stereo output to a mixer. Notes with a length (dur) work with sequencers, noteon/noteoff with held keys.\n\nThe pedal keeps released notes sounding (cc pedal, or the button). Harder notes sound brighter (Velocity colour).\n\nType chooses the instrument; the sounds in the list set type and knobs together. A purple Mod cable controls sound parameters; the knobs stay the base.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo piano' }], eventIn: [{ id: 'notes', name: 'Keyboard / notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -288,21 +289,25 @@ export default {
       inputs: {}, outputs: { out },
       mount(el) {
         if (root) self.unmount(); root = el;
-        const css = document.createElement('style'); css.textContent = '.pn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.pn-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.pn-grid .k label{font-size:10px;letter-spacing:.04em}.pn-grid .k output{font-size:11px;white-space:nowrap}.pn-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}'; el.appendChild(css);
+        const css = document.createElement('style'); css.textContent = '.pn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 18px;margin-top:4px}.pn-grid .k{grid-template-columns:124px minmax(90px,1fr) 62px;gap:8px;min-height:30px}.pn-grid .k label{font-size:10px;letter-spacing:.04em}.pn-grid .k output{font-size:11px;white-space:nowrap}.pn-grid input[type=range]{width:100%;min-width:90px;height:24px;margin:0;cursor:pointer;accent-color:var(--audio,#e4c697)}'
+          + '.pn-grid[data-pk-sec]{gap:2px 0;margin-top:0}.pn-grid[data-pk-sec] .k{min-height:0;min-width:0}.pn-grid[data-pk-cols="6"]{grid-template-columns:repeat(6,minmax(0,1fr))!important}.pn-grid[data-pk-labels=below] .k label{text-transform:none;font-size:7.5px;letter-spacing:-.04em;line-height:1.1;text-align:center;white-space:normal;overflow-wrap:anywhere}.pn-grid[data-pk-labels=below] .k output{font-size:9px;line-height:1.2}'
+          + '.pn-h:has(+ .pn-grid[data-pk-sec]){border-top:0!important;padding-top:0!important;margin:5px 0 2px!important;font-size:9px!important;letter-spacing:.12em;text-transform:uppercase}'
+          + '.k[data-pk-id=type]:has(~ .pn-grid[data-pk-sec]),.k[data-pk-id=preset]:has(~ .pn-grid[data-pk-sec]){grid-template-columns:36px minmax(0,1fr)!important;gap:4px!important;min-height:0}.k:has(~ .pn-grid[data-pk-sec]) select{padding:2px 4px;font-size:11px}'
+          + '.pn-grid[data-pk-sec] ~ .pn-act{gap:3px!important;margin-top:6px!important}.pn-grid[data-pk-sec] ~ .pn-act button{font-size:9px;padding:3px 7px}.pn-grid[data-pk-sec] ~ .pn-st{margin:2px 0 0!important;font-size:9px!important;line-height:1.2!important}.pn-grid[data-pk-sec] ~ .note{margin:0;font-size:9px}'; el.appendChild(css);
         typeSelect = host.ui.select(el, tx('Type'), TYPE_IDS.map(k => [k, tx(TYPE_LABEL[k])]), state.type, k => { if (TYPE_IDS.includes(k)) { state.type = k; state.preset = 'Custom'; apply(); paint(); } }, { id: 'type', group: 'type' });
         presetSelect = host.ui.select(el, tx('Klank'), Object.keys(PRESETS).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, name => { if (Object.hasOwn(PRESETS, name)) self.setState({ ...defaults, ...PRESETS[name], preset: name }); }, { id: 'preset', group: 'preset' });
         const groups = [[tx('Toon & snaren'), ['tone', 'velBright', 'strike', 'inharm', 'detune', 'hammer'], 'tone'], [tx('Uitklank & klankbord'), ['decay', 'after', 'release', 'body', 'bodyTune'], 'decay'],
           [tx('Elektrisch'), ['tremolo', 'tremRate', 'drive'], 'electric'], [tx('Spel & niveau'), ['width', 'velocity', 'tune', 'transpose', 'level'], 'play']];
         for (const [label, ids, grp] of groups) {
-          const h = document.createElement('div'); h.textContent = label; h.style.cssText = 'font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px'; el.appendChild(h);
+          const h = document.createElement('div'); h.textContent = label; h.className = 'pn-h'; h.style.cssText = 'font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px'; el.appendChild(h);
           const grid = document.createElement('div'); grid.className = 'pn-grid'; el.appendChild(grid);
           for (const id of ids) { const d = spec[id], before = grid.children.length; controls[id] = host.ui.knob(grid, d[0], [d[1], d[2], d[3]], state[id], v => fmt(d, v), v => change(id, v), { default: defaults[id], id, group: grp }); const row = grid.children[before]; if (row) row.title = d[0]; }
         }
-        const actions = document.createElement('div'); actions.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:10px'; el.appendChild(actions);
+        const actions = document.createElement('div'); actions.className = 'pn-act'; actions.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-top:10px'; el.appendChild(actions);
         const button = (label, fn) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.addEventListener('click', fn); actions.appendChild(b); return b; };
         button(tx('Proeftoon'), () => noteOn(60, 0.8, ctx.currentTime + 0.01, 1.5)); button(tx('Proefakkoord'), () => { const t = ctx.currentTime + 0.01; [48, 55, 60, 64, 67].forEach((n, i) => noteOn(n, 0.75, t + i * 0.02, 2)); });
         pedalBtn = button(tx('Pedaal'), () => setPedal(!pedalOn)); pedalBtn.setAttribute('aria-pressed', pedalOn ? 'true' : 'false'); pedalBtn.style.opacity = pedalOn ? '1' : '.75'; button(tx('Alles uit'), () => panic());
-        status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
+        status = document.createElement('p'); status.className = 'pn-st'; status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
         paint();
       },

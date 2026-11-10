@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel of routesleutel, groep = de baan, rol param of select) en elke baan staat in een eigen blok (div.sec met kop en regelaars), zodat een skin ze als draaiknoppen in één kader kan tonen (skin Compact). Geluid, state en params() ongewijzigd; zonder skin ziet het er hetzelfde uit.
 // 1.12.0 — Uitleg naar about (menu Over Patch Mono); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Alle continue regelaars zijn stuurbaar: de vier routehoeveelheden (Route 1 t/m 4, -1 tot +1) stonden niet in params(). Nu wel (standaard uit); een modulator verschuift de
 //   hoeveelheid van de route, de knop en de bewaarde routes blijven je basis. Klank en instellingen zijn ongewijzigd. Bewust weggelaten: Testnoot (werkstand) en de keuzelijsten en schakelaars.
@@ -310,7 +311,7 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.patchmono',
   name: 'Patch Mono',
-  version: '1.12.0',
+  version: '1.13.0',
   modExclude: ['testNote'],   // werkstand, geen klank
   kind: 'instrument',
   category: 'synth',
@@ -437,29 +438,32 @@ export default {
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
     const grid = parent => { const el = add(parent, 'div'); el.className = 'grid'; return el; };
     const button = (parent, label, fn) => { const b = add(parent, 'button', tx(label)); b.type = 'button'; b.onclick = fn; return b; };
-    function select(parent, label, options, value, change) {
+    // meldt een regelaar aan bij de host, zodat een skin hem herkent (contract v1.15); een oudere host negeert dit
+    const adopt = (el, id, role, group, label) => { if (id && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label: tx(label) }); } catch (e) { /* oud contract */ } } };
+    function select(parent, label, options, value, change, id, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', tx(label));
-      const el = add(box, 'select');
+      const el = add(box, 'select'); adopt(el, id, 'select', group, label);
       for (const [v, text] of options) { const o = add(el, 'option', tx(text)); o.value = String(v); }
       el.value = String(value); el.onchange = () => change(el.value); return el;
     }
     // schuif; get/set lezen en schrijven de waarde in de state (bij een logaritmische schuif loopt de schuif 0..1)
-    function knob(parent, id, label, bounds, value, change, format, dflt) {
+    function knob(parent, id, label, bounds, value, change, format, dflt, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', tx(label));
       const out2 = add(box, 'output', format(value)), el = add(box, 'input');
       el.type = 'range'; [el.min, el.max, el.step] = bounds.map(String); el.value = String(value); if (dflt !== undefined) el.dataset.pkDefault = String(dflt);
       if (/^route\d$/.test(id)) el.dataset.pkId = id;   // koppelt de routehoeveelheid aan zijn stuurbare parameter
+      adopt(el, id, 'param', group, label);
       el.oninput = () => { const n = Number(el.value); out2.textContent = format(n); change(n); };
       return { el, out: out2 };
     }
-    function control(parent, id) {
+    function control(parent, id, group) {
       const d = SPEC[id], fmt = v => (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)) + (d.unit ? ' ' + d.unit : '');
       if (d.scale === 'log') {
         const pos = v => Math.log(v / d.min) / Math.log(d.max / d.min), val = x => d.min * (d.max / d.min) ** x;
-        const k = knob(parent, id, d.name, [0, 1, 0.001], pos(state[id]), x => { state[id] = val(x); apply(); }, x => fmt(val(x)), pos(DEFAULTS[id]));
+        const k = knob(parent, id, d.name, [0, 1, 0.001], pos(state[id]), x => { state[id] = val(x); apply(); }, x => fmt(val(x)), pos(DEFAULTS[id]), group);
         handles[id] = { refresh() { k.el.value = String(pos(state[id])); k.out.textContent = fmt(state[id]); } };
       } else {
-        const k = knob(parent, id, d.name, [d.min, d.max, d.step || 0.01], state[id], x => { state[id] = x; apply(); }, fmt, DEFAULTS[id]);
+        const k = knob(parent, id, d.name, [d.min, d.max, d.step || 0.01], state[id], x => { state[id] = x; apply(); }, fmt, DEFAULTS[id], group);
         handles[id] = { refresh() { k.el.value = String(state[id]); k.out.textContent = fmt(state[id]); } };
       }
     }
@@ -501,9 +505,9 @@ export default {
       for (let i = 0; i < 4; i++) {
         const r = row(parent), entry = routes[i]; add(r, 'span', String(i + 1));
         const update = () => { state.routes = JSON.stringify(routes); apply(); };
-        select(r, 'Bron', [['off', 'Uit'], ['lfo', 'LFO'], ['env', 'Filter-EG'], ['sh', 'Sample & hold'], ['external', 'Externe envelope']], entry.source, v => { entry.source = v; update(); });
-        select(r, 'Doel', [['pitch', 'Pitch'], ['cutoff', 'Cutoff'], ['pw', 'Pulsbreedte']], entry.dest, v => { entry.dest = v; update(); });
-        knob(r, 'route' + i, 'Hoeveelheid', [-1, 1, 0.01], entry.amount, v => { entry.amount = v; update(); }, v => Number(v).toFixed(2), 0);
+        select(r, 'Bron', [['off', 'Uit'], ['lfo', 'LFO'], ['env', 'Filter-EG'], ['sh', 'Sample & hold'], ['external', 'Externe envelope']], entry.source, v => { entry.source = v; update(); }, 'route' + i + '.source', 'routes');
+        select(r, 'Doel', [['pitch', 'Pitch'], ['cutoff', 'Cutoff'], ['pw', 'Pulsbreedte']], entry.dest, v => { entry.dest = v; update(); }, 'route' + i + '.dest', 'routes');
+        knob(r, 'route' + i, 'Hoeveelheid', [-1, 1, 0.01], entry.amount, v => { entry.amount = v; update(); }, v => Number(v).toFixed(2), 0, 'routes');
       }
     }
     function render(el) {
@@ -512,22 +516,23 @@ export default {
       add(shadow, 'style', CSS);
       panel = add(shadow, 'div'); panel.className = 'app';
       const top = row(panel);
-      select(top, 'Klankbeeld', Object.keys(SOUNDS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...SOUNDS[v], preset: v }));
+      select(top, 'Klankbeeld', Object.keys(SOUNDS).map(k => [k, k]), state.preset, v => self.setState({ ...DEFAULTS, ...SOUNDS[v], preset: v }), 'preset', 'setup');
       for (const id of ['variant', 'wave', 'wave2', 'priority', 'lfoWave']) {
         if (id === 'wave2' && state.variant === 'single') continue;
-        select(top, FIELD_LABELS[id], OPT_LABELS[id], state[id], v => { state[id] = v; apply(); if (id === 'variant') render(el); });
+        select(top, FIELD_LABELS[id], OPT_LABELS[id], state[id], v => { state[id] = v; apply(); if (id === 'variant') render(el); }, id, 'setup');
       }
-      select(top, 'Legato', [[0, 'Uit'], [1, 'Aan']], +state.legato, v => { state.legato = v === '1'; apply(); });
+      select(top, 'Legato', [[0, 'Uit'], [1, 'Aan']], +state.legato, v => { state.legato = v === '1'; apply(); }, 'legato', 'setup');
       const play = row(panel);
-      knob(play, 'testNote', 'Testnoot MIDI', [24, 96, 1], state.testNote, v => { state.testNote = v; }, v => String(v), DEFAULTS.testNote);
+      knob(play, 'testNote', 'Testnoot MIDI', [24, 96, 1], state.testNote, v => { state.testNote = v; }, v => String(v), DEFAULTS.testNote, 'setup');
       button(play, 'Speel noot', () => note(state.testNote, 0.85, ctx.currentTime, 1));
       button(play, 'Houd noot', () => { heldDemo = !heldDemo; if (heldDemo) note(state.testNote, 0.8, ctx.currentTime, undefined, true); else panic(); });
       button(play, 'Alles uit', () => panic());
       for (const lane of Object.keys(LANES)) {
-        add(panel, 'h3', tx(LANES[lane]));
-        control0(panel, Object.keys(SPEC).filter(id => SPEC[id].lane === lane && !(state.variant === 'single' && DUAL_ONLY.includes(id))));
+        const sec = add(panel, 'div'); sec.className = 'sec'; sec.dataset.lane = lane;
+        add(sec, 'h3', tx(LANES[lane]));
+        control0(sec, Object.keys(SPEC).filter(id => SPEC[id].lane === lane && !(state.variant === 'single' && DUAL_ONLY.includes(id))), lane);
       }
-      routesUI(panel);
+      const routesSec = add(panel, 'div'); routesSec.className = 'sec'; routesSec.dataset.lane = 'routes'; routesUI(routesSec);
       scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang')); col = null;
       cw = scope.clientWidth || cw;
       if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) cw = w; }); ro.observe(scope); }
@@ -535,7 +540,7 @@ export default {
       engineText = add(panel, 'p'); tellEngine();
       stopDraw = frameLoop(draw, 30);
     }
-    function control0(parent, ids) { const g = grid(parent); for (const id of ids) control(g, id); }
+    function control0(parent, ids, group) { const g = grid(parent); for (const id of ids) control(g, id, group); }
 
     const descriptors = () => Object.entries(SPEC).map(([id, d]) => ({ id, name: tx(d.name), lane: d.lane, laneName: tx(LANES[d.lane]), min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role, drift: 0.015, on: d.role !== 'level' && d.role !== 'pitch' })).concat(ROUTE_IDS.map((id, i) => ({ id, name: tx('Route {0} hoeveelheid', i + 1), lane: 'motion', laneName: tx(LANES.motion), min: -1, max: 1, scale: 'lin', role: 'depth', drift: 0.08, on: false })));
     function receiveMod(raw) {

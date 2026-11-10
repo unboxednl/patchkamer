@@ -132,6 +132,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Zet liever alle velden erin: dan klinkt de tune hetzelfde als de startwaarden ooit veranderen.
 
+## Skins
+
+Alle regelaars komen uit `host.ui.knob` en `host.ui.select` met `id`, `role` en `group` (`preset`, `play`, `voicing`, `melody`, `tone`, `space`, `env`, `out`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.mist/`: draaiknoppen met de naam eronder, in twee panelen (`design.layout`), ongeveer 480 x 347 punten tegenover 560 x 414. Het apparaat bouwt zijn regelaars in het vlak van de kaart (geen shadow root), dus de skin kan geen eigen CSS toepassen en gebruikt alleen `design`. Verander je de ids of groepen, controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/Mist/mist.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

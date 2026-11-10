@@ -124,3 +124,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: eenvoudige monofone synth voor bas of lead. Noten op `notes`, audio uit `out` (mono). Geen eigen patroon: stuur hem met een sequencer.
+
+## Skins
+
+Alle regelaars zijn via `host.ui.knob`/`host.ui.select` herkenbaar voor skins (sinds 1.15.0): `id` is de state-sleutel (`fine`, `cut`, `res`, `env`, `dec`, `sub`, `glide`, `lvl`, `wave`), `group` is `osc`, `filter`, `env`, `play` of `out`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.mono/` (draaiknoppen met de naam eronder, drie kaders via `design.layout`, 340 x 255 punten tegenover 340 x 317). Wijzig je een id of groep, controleer dan die skin.

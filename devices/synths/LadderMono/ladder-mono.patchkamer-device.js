@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.0 — De keuzelijsten en vinkjes melden zich ook aan voor skins (host.ui.adopt, id = state-sleutel, rol select of toggle, groep als de knoppen), zodat de skin Compact ze kan opmaken. Geluid, state, presets, poorten en uiterlijk zonder skin ongewijzigd.
 // 1.17.0 — Uitleg naar about (menu Over Ladder Mono); de UI toont geen uitlegtekst meer. Geluid, state en poorten ongewijzigd.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam. Geluid, state en poorten ongewijzigd.
 // 1.15.1 — Meer regelaars stuurbaar voor modulatoren: toetsvolging, de vier tijden en houdniveaus van beide omhullingen en de LFO-snelheid stonden niet in params().
@@ -150,7 +151,7 @@ registerProcessor('${WNAME}', class extends AudioWorkletProcessor {
 });`;
 
 export default {
-  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.17.0', modExclude: ['range1', 'range2', 'range3', 'bendRange', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
+  id: 'nl.patchkamer.laddermono', name: 'Ladder Mono', version: '1.18.0', modExclude: ['range1', 'range2', 'range3', 'bendRange', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 780, minWidth: 340 },
   about: { nl: 'Monofone analoge synth met drie oscillators en een 24 dB-laddermodel-filter.\n\nVerbind Noten met een keyboard of sequencer en stuur de uitgang naar een mixer.', en: 'A monophonic analog synth with three oscillators and a 24 dB ladder-model filter.\n\nConnect Notes to a keyboard or sequencer and send the output to a mixer.' },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
@@ -183,14 +184,15 @@ export default {
       const sp = SPEC[id]; if (!sp || sp.t === 'enum' || sp.t === 'bool') return; let v = sp.scale === 'log' ? sp.min * Math.pow(sp.max / sp.min, f) : sp.min + f * (sp.max - sp.min); if (sp.t === 'int') v = Math.round(v); state[id] = clamp(v, sp.min, sp.max); if (ui[id] && ui[id].set) ui[id].set(state[id]); sendParams();
     }
     const el = (tag, text, parent, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; };
+    const adopt = (e, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(e, { id, role, group, label }); } catch (err) { /* oud contract */ } } };
     function build(root) {
       const css = el('style', null, root); css.textContent = ':host{display:block;color:var(--fg);font:12px var(--mono,monospace)}*{box-sizing:border-box}.app{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}h3{margin:0 0 6px;font:700 11px var(--disp,sans-serif);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.status{color:var(--muted);font-size:11px;line-height:1.4}.grp{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--well,#0002)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px}select{font:inherit;background:var(--field,var(--well));color:var(--field-fg,var(--fg));border:1px solid var(--line);border-radius:4px;padding:4px 7px;min-width:0;max-width:100%}label.s{display:grid;gap:3px}label.c{display:flex;gap:6px;align-items:center}';
       const app = el('div', null, root, 'app');
       for (const g of GROUPS) {
         const box = el('div', null, app, 'grp'); el('h3', T.groups[g], box); const grid = el('div', null, box, 'grid');
         for (const [k, sp] of Object.entries(SPEC)) { if (sp.g !== g) continue; const lab = T.labels[k];
-          if (sp.t === 'enum') { const w = el('label', null, grid, 's'); el('span', lab, w); const s = el('select', null, w); s.setAttribute('aria-label', lab); for (const o of sp.o) { const op = el('option', T.opts[o] || o, s); op.value = o; } s.value = state[k]; s.onchange = () => { state[k] = s.value; sendParams(); }; ui[k] = { set: v => { s.value = v; } }; }
-          else if (sp.t === 'bool') { const w = el('label', null, grid, 'c'); const c = el('input', null, w); c.type = 'checkbox'; c.checked = state[k]; el('span', lab, w); c.setAttribute('aria-label', lab); c.onchange = () => { state[k] = c.checked; sendParams(); }; ui[k] = { set: v => { c.checked = v; } }; }
+          if (sp.t === 'enum') { const w = el('label', null, grid, 's'); el('span', lab, w); const s = el('select', null, w); s.setAttribute('aria-label', lab); for (const o of sp.o) { const op = el('option', T.opts[o] || o, s); op.value = o; } s.value = state[k]; s.onchange = () => { state[k] = s.value; sendParams(); }; adopt(s, k, 'select', g, lab); ui[k] = { set: v => { s.value = v; } }; }
+          else if (sp.t === 'bool') { const w = el('label', null, grid, 'c'); const c = el('input', null, w); c.type = 'checkbox'; c.checked = state[k]; el('span', lab, w); c.setAttribute('aria-label', lab); c.onchange = () => { state[k] = c.checked; sendParams(); }; adopt(c, k, 'toggle', g, lab); ui[k] = { set: v => { c.checked = v; } }; }
           else { const h = el('div', null, grid); const kn = host.ui.knob(h, (g === 'contour' || g === 'loud') ? lab + ' ' : lab, [sp.min, sp.max, sp.t === 'int' ? 1 : (sp.max - sp.min) / 400], state[k], v => (sp.f ? sp.f(v) : v.toFixed(2)), v => { state[k] = sp.t === 'int' ? Math.round(v) : v; sendParams(); }, { default: sp.d, scale: sp.scale, id: k, group: g }); ui[k] = kn; }
         }
       }

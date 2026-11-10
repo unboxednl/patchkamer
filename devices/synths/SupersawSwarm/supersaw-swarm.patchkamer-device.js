@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: sound, swarm, envelope, space, motion; keuzelijsten in de groep top); skin Compact erbij. Geluid, state en ids ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Supersaw Swarm); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Supersaw Swarm (nieuwe id nl.patchkamer.supersawswarm, eigen map), bijgewerkt naar Patchkamer contract v1.11:
@@ -29,7 +30,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.13.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.14.0', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 360 },
   about: { nl: 'Tot negen verstemde zaagtanden per noot, met octaaflaag, sub en een ingebouwde ruimte. Sluit een keyboard of sequencer aan op Noten en stuur de stereo-uitgang naar een mixer.\n\nTrance-gate en Pomp werken alleen als de klok loopt (Start). Akkoord per toets maakt van elke noot een akkoord; kies Losse noten als je akkoorden uit de sequencer stuurt. Galmlengte bouwt de galm opnieuw op; die wordt niet door Mod gestuurd.', en: 'Up to nine detuned sawtooth waves per note, with an octave layer, sub and a built-in space. Connect a keyboard or sequencer to Notes and send the stereo output to a mixer.\n\nTrance gate and Pump only work while the clock runs (Start). Chord per key turns every note into a chord; choose Single notes if you send chords from the sequencer. Reverb length rebuilds the reverb; Mod does not control it.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -244,15 +245,18 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
 .gate button:nth-child(4n+1){border-left-width:2px} .gate button.cur{outline:2px solid var(--go,#6be3a0);outline-offset:-2px}
 `;
     function el(parent, tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; parent.appendChild(e); return e; }
-    function selectBox(parent, label, opts, value, change) { const box = el(parent, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', e => e.stopPropagation()); return s; }
+    // meldt een regelaar aan bij de host (host.ui.adopt), zodat een skin hem als draaiknop kan tonen; id = state-sleutel
+    const adopt = (e, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(e, { id, role, group, label }); } catch (err) { /* oud contract */ } } };
+    const GKEYS = ['sound', 'swarm', 'envelope', 'space', 'motion'];
+    function selectBox(parent, label, opts, value, change, key) { const box = el(parent, 'label', 'sel'); el(box, 'span', '', label); const s = el(box, 'select'); for (const [v, t] of opts) { const o = el(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); s.addEventListener('pointerdown', e => e.stopPropagation()); if (key) adopt(s, key, 'select', 'top', label); return s; }
     function mount(host_el) {
       unmount(); const wrap = document.createElement('div'); host_el.appendChild(wrap); const sh = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; root = host_el;
       el(sh, 'style').textContent = CSS; const app = el(sh, 'div', 'app');
       const top = el(app, 'div', 'top');
-      ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); });
-      ui.unison = selectBox(top, tx('Zagen per noot'), [[1, '1'], [3, '3'], [5, '5'], [7, tx('7 (klassiek)')], [9, tx('9 (maximaal)')]], state.unison, v => { state.unison = +v; state.preset = 'Custom'; paint(); });
-      ui.chord = selectBox(top, tx('Akkoord per toets'), CHORD_NAMES.map(([v, n]) => [v, tx(n)]), state.chord, v => { state.chord = v; state.preset = 'Custom'; paint(); });
-      ui.div = selectBox(top, tx('Delaytijd'), Object.keys(DIVS).map(k => [k, k]), state.div, v => { state.div = v; state.preset = 'Custom'; apply(); paint(); });
+      ui.preset = selectBox(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen klank')]]), state.preset, v => { if (Object.hasOwn(presets, v)) self.setState({ ...defaults, ...presets[v], preset: v }); }, 'preset');
+      ui.unison = selectBox(top, tx('Zagen per noot'), [[1, '1'], [3, '3'], [5, '5'], [7, tx('7 (klassiek)')], [9, tx('9 (maximaal)')]], state.unison, v => { state.unison = +v; state.preset = 'Custom'; paint(); }, 'unison');
+      ui.chord = selectBox(top, tx('Akkoord per toets'), CHORD_NAMES.map(([v, n]) => [v, tx(n)]), state.chord, v => { state.chord = v; state.preset = 'Custom'; paint(); }, 'chord');
+      ui.div = selectBox(top, tx('Delaytijd'), Object.keys(DIVS).map(k => [k, k]), state.div, v => { state.div = v; state.preset = 'Custom'; apply(); paint(); }, 'div');
       const acts = el(app, 'div', 'acts');
       const b1 = el(acts, 'button', '', tx('Test akkoord')); b1.type = 'button'; b1.onclick = () => { const t = ctx.currentTime + 0.03; for (const n of [57, 60, 64, 69]) playSingle(n, 0.85, t, 1.6, n); };
       const b2 = el(acts, 'button', '', tx('Test noot')); b2.type = 'button'; b2.onclick = () => play(57, 0.85, ctx.currentTime + 0.03, 0.9);
@@ -261,7 +265,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
       GROUPS.forEach((gname, gi) => { el(app, 'h3', '', tx(gname)); const g = el(app, 'div', 'grid');
         for (const [id, d] of Object.entries(spec)) { if (d.g !== gi) continue; const c = el(g, 'div', 'c'); const lab = el(c, 'div', 'lab'); el(lab, 'span', '', tx(d.name)).title = tx(d.name); const o = el(lab, 'output');
           const inp = el(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', tx(d.name)); inp.title = tx(d.name) + ' — ' + tx('dubbelklik voor standaard');
-          inp.addEventListener('pointerdown', e => e.stopPropagation());
+          inp.addEventListener('pointerdown', e => e.stopPropagation()); inp.dataset.pkDefault = String(toSlider(d, defaults[id])); adopt(inp, id, 'param', GKEYS[gi], tx(d.name));
           inp.oninput = () => { state[id] = fromSlider(d, +inp.value); state.preset = 'Custom'; o.textContent = fmt(d, state[id]); apply(); if (ui.preset) ui.preset.value = 'Custom'; };
           inp.ondblclick = () => { state[id] = defaults[id]; state.preset = 'Custom'; apply(); paint(); };
           ui.k[id] = { set(v) { inp.value = String(toSlider(d, v)); o.textContent = fmt(d, v); } }; }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep = blok: top, seq, filter, amp, source, motion, master); skin Compact erbij. Geluid, state en ids ongewijzigd.
 // 1.12.0 — Uitleg naar about (menu Over Sub Line); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.0 — Nieuw als Sub Line (nieuwe id nl.patchkamer.subline, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is ongewijzigd:
 //   - tweetalig (host.lang, namen per taal in i18n)
@@ -272,7 +273,7 @@ canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);borde
 export default {
   id: 'nl.patchkamer.subline',
   name: 'Sub Line',
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
@@ -408,10 +409,12 @@ export default {
     const refreshAll = () => refreshers.forEach(f => f());
     const fmtNum = (v, unit) => (Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) > 0 && Math.abs(v) < 0.1 ? v.toFixed(3) : v.toFixed(2)) + (unit ? ' ' + unit : '');
 
-    function knob(parent, label, min, max, step, getV, setV, fmt, def, id) {
+    // meldt een regelaar aan bij de host (host.ui.adopt), zodat een skin hem als draaiknop kan tonen; id = state-sleutel, groep = blok
+    const adopt = (e, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(e, { id, role, group, label }); } catch (err) { /* oud contract */ } } };
+    function knob(parent, label, min, max, step, getV, setV, fmt, def, id, key, group) {
       const w = add(parent, 'div', undefined, 'k'), l = add(w, 'label', label), i = add(w, 'input'), o = add(w, 'output');
       const uid = 'k-' + id; l.htmlFor = uid; i.id = uid; i.type = 'range'; i.min = String(min); i.max = String(max); i.step = String(step);
-      i.dataset.pkDefault = String(def);
+      i.dataset.pkDefault = String(def); adopt(i, key, 'param', group, label);
       i.oninput = () => { const n = Number(i.value); setV(n); o.textContent = fmt(n); };
       const paint = () => { i.value = String(getV()); o.textContent = fmt(getV()); };
       paint(); refreshers.push(paint); return i;
@@ -422,16 +425,16 @@ export default {
       const fmt = v => fmtNum(v, d.unit);
       const w = add(parent, 'div', undefined, 'k'), l = add(w, 'label', tx(d.name)), i = add(w, 'input'), o = add(w, 'output');
       const uid = 'p-' + id; l.htmlFor = uid; i.id = uid; l.title = tx(d.name); i.type = 'range';
-      i.min = String(lg ? 0 : d.min); i.max = String(lg ? 1 : d.max); i.step = String(lg ? 0.001 : d.step); i.dataset.pkDefault = String(toPos(DEFAULTS[id]));
+      i.min = String(lg ? 0 : d.min); i.max = String(lg ? 1 : d.max); i.step = String(lg ? 0.001 : d.step); i.dataset.pkDefault = String(toPos(DEFAULTS[id])); adopt(i, id, 'param', d.lane, tx(d.name));
       i.oninput = () => { state[id] = lg ? d.min * (d.max / d.min) ** Number(i.value) : Number(i.value); o.textContent = fmt(state[id]); apply(); };
       const paint = () => { i.value = String(toPos(state[id])); o.textContent = fmt(state[id]); };
       paint(); refreshers.push(paint);
     }
-    function choose(parent, label, id, opts, onChange) {
+    function choose(parent, label, id, opts, onChange, group) {
       const w = add(parent, 'label', undefined, 'sel'); w.append(document.createTextNode(label));
       const s = add(w, 'select');
       opts.forEach(([v, t]) => { const o = add(s, 'option', t); o.value = String(v); });
-      s.onchange = () => onChange(s.value);
+      s.onchange = () => onChange(s.value); adopt(s, id, 'select', group, label);
       const paint = () => { s.value = String(id === 'legato' ? Number(state.legato) : state[id]); };
       paint(); refreshers.push(paint); return s;
     }
@@ -451,10 +454,10 @@ export default {
       const kn = document.createElement('div'); kn.className = 'k'; editorBox.appendChild(kn);
       const l = add(kn, 'label', tx('Noot')), inp = add(kn, 'input'), out2 = add(kn, 'output');
       l.htmlFor = inp.id = 'step-note';
-      inp.type = 'range'; inp.min = '24'; inp.max = '96'; inp.step = '1'; inp.value = String(state.seqNotes[sel]); inp.dataset.pkDefault = String(SEQ_N[sel]); inp.setAttribute('aria-label', tx('Noot')); out2.textContent = String(state.seqNotes[sel]);
+      inp.type = 'range'; inp.min = '24'; inp.max = '96'; inp.step = '1'; inp.value = String(state.seqNotes[sel]); inp.dataset.pkDefault = String(SEQ_N[sel]); inp.setAttribute('aria-label', tx('Noot')); adopt(inp, 'stepNote', 'param', 'seq', tx('Noot')); out2.textContent = String(state.seqNotes[sel]);
       inp.oninput = () => { const n = Number(inp.value); state.seqNotes[sel] = n; out2.textContent = String(n); stepBtns[sel].textContent = stepLabel(sel); };
       const s = add(editorBox, 'label', undefined, 'sel'); s.append(document.createTextNode(tx('Speelt')));
-      const se = add(s, 'select'); [[0, tx('Rust')], [1, tx('Noot')]].forEach(([v, t]) => { const o = add(se, 'option', t); o.value = String(v); });
+      const se = add(s, 'select'); adopt(se, 'stepOn', 'select', 'seq', tx('Speelt')); [[0, tx('Rust')], [1, tx('Noot')]].forEach(([v, t]) => { const o = add(se, 'option', t); o.value = String(v); });
       se.value = String(state.seqOn[sel]);
       se.onchange = () => { state.seqOn[sel] = Number(se.value); stepBtns[sel].textContent = stepLabel(sel); stepBtns[sel].classList.toggle('rest', !state.seqOn[sel]); };
     }
@@ -515,13 +518,13 @@ export default {
         choose(top, tx('Klank'), 'preset', Object.keys(PRESETS).map(k => [k, k]), v => {
           const keep = {}; for (const k of KEEP_ON_SOUND) keep[k] = state[k];
           self.setState({ ...freshState(), ...PRESETS[v], preset: v, ...keep });
-        });
-        choose(top, tx('Suboctaaf'), 'subOctave', OPTIONS.subOctave.map(([v, t]) => [v, tx(t)]), v => { state.subOctave = Number(v); apply(); });
-        choose(top, tx('Prioriteit'), 'priority', OPTIONS.priority.map(([v, t]) => [v, tx(t)]), v => { state.priority = v; apply(); });
-        choose(top, 'Legato', 'legato', [[0, tx('Uit')], [1, tx('Aan')]], v => { state.legato = v === '1'; apply(); });
+        }, 'top');
+        choose(top, tx('Suboctaaf'), 'subOctave', OPTIONS.subOctave.map(([v, t]) => [v, tx(t)]), v => { state.subOctave = Number(v); apply(); }, 'top');
+        choose(top, tx('Prioriteit'), 'priority', OPTIONS.priority.map(([v, t]) => [v, tx(t)]), v => { state.priority = v; apply(); }, 'top');
+        choose(top, 'Legato', 'legato', [[0, tx('Uit')], [1, tx('Aan')]], v => { state.legato = v === '1'; apply(); }, 'top');
         const play = add(app, 'div', undefined, 'bar');
         const tk = add(play, 'div'); tk.style.cssText = 'min-width:220px;flex:1 1 220px';
-        knob(tk, tx('Testnoot'), 24, 96, 1, () => state.testNote, v => { state.testNote = v; }, v => String(v), DEFAULTS.testNote, 'test');
+        knob(tk, tx('Testnoot'), 24, 96, 1, () => state.testNote, v => { state.testNote = v; }, v => String(v), DEFAULTS.testNote, 'test', 'testNote', 'top');
         const b1 = add(play, 'button', tx('Speel noot')); b1.type = 'button'; b1.onclick = () => note(state.testNote, 0.85, ctx.currentTime, 1);
         const b2 = add(play, 'button', tx('Houd noot')); b2.type = 'button';
         b2.onclick = () => { heldDemo = !heldDemo; if (heldDemo) note(state.testNote, 0.8, ctx.currentTime, undefined, true); else panic(); };
@@ -529,11 +532,11 @@ export default {
 
         const sq = add(app, 'div', undefined, 'sec'); add(sq, 'h4', tx('Sequencer'));
         const sbar = add(sq, 'div', undefined, 'bar');
-        choose(sbar, tx('Besturing'), 'mode', OPTIONS.mode.map(([v, t]) => [v, tx(t)]), v => { panic(); state.mode = v; sequenceCounter = 0; buildSteps(); });
-        choose(sbar, tx('Nootdeling'), 'division', [[1, '1/16'], [2, '1/8'], [4, '1/4']], v => { state.division = Number(v); });
-        choose(sbar, tx('Arp-richting'), 'arpDirection', OPTIONS.arpDirection.map(([v, t]) => [v, tx(t)]), v => { state.arpDirection = v; });
+        choose(sbar, tx('Besturing'), 'mode', OPTIONS.mode.map(([v, t]) => [v, tx(t)]), v => { panic(); state.mode = v; sequenceCounter = 0; buildSteps(); }, 'seq');
+        choose(sbar, tx('Nootdeling'), 'division', [[1, '1/16'], [2, '1/8'], [4, '1/4']], v => { state.division = Number(v); }, 'seq');
+        choose(sbar, tx('Arp-richting'), 'arpDirection', OPTIONS.arpDirection.map(([v, t]) => [v, tx(t)]), v => { state.arpDirection = v; }, 'seq');
         const lw = add(sbar, 'div'); lw.style.cssText = 'min-width:200px;flex:1 1 200px';
-        knob(lw, tx('Lengte'), 1, 32, 1, () => state.length, v => { state.length = v; buildSteps(); }, v => String(v), DEFAULTS.length, 'length');
+        knob(lw, tx('Lengte'), 1, 32, 1, () => state.length, v => { state.length = v; buildSteps(); }, v => String(v), DEFAULTS.length, 'length', 'length', 'seq');
         stepsBox = add(sq, 'div', undefined, 'pads'); editorBox = add(sq, 'div', undefined, 'bar'); buildSteps();
 
         for (const lane of Object.keys(LANES)) {

@@ -65,4 +65,9 @@ function skPaintPick(r){ const el=r.skEl; if(!el) return; const list=PK.skinsFor
   else add(s2,'auto','Auto');
   s2.disabled=!ok; if(!was) requestAnimationFrame(PK.drawCables); } PK.skPaintPick=skPaintPick;
 function skUiRefresh(){ PK.Host.devices.forEach(skPaintPick); if(PK.skPanel&&!PK.skPanel.hidden) skPaintPanel(); } PK.skUiRefresh=skUiRefresh;
+// Standaardskin voor nieuwe apparaten: voorkeur '' (Standaard) of 'compact'; een apparaat met een skin waarvan de id op .compact eindigt krijgt die bij het plaatsen (alleen nieuw geplaatste apparaten, geen songs of werkruimtes)
+const skDefGet=()=>{ try{ return localStorage.getItem('patchkamer.defaultSkin')==='compact'?'compact':''; }catch(e){ return PK._skDef||''; } };
+function skDefSet(v){ PK._skDef=v==='compact'?'compact':''; try{ localStorage.setItem('patchkamer.defaultSkin',PK._skDef); }catch(e){} skDefPaint(); } PK.skDefSet=skDefSet;
+function skDefPaint(){ const e=PK.$('skDefSel'); if(e) e.value=skDefGet(); } PK.skDefPaint=skDefPaint;
+function skDefApply(nid){ const v=skDefGet(), r=PK.Host.devices.get(nid); if(!v||!r||r.skin) return; const e=PK.skinsFor(r.def.id).find(x=>x.skin.id.endsWith('.'+v)); if(e) PK.skinSet(nid,e.skin.id,'auto',true); } PK.skDefApply=skDefApply;
 })(window.__PK);

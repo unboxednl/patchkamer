@@ -107,6 +107,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 - Laat `cutoff` onder 100 niet samen met `env` 0 staan: dan klinkt alleen nog een dof gebrom.
 - Verzin geen velden of routing: er zit geen routing in de state.
 
+## Skins
+
+Alle knoppen en keuzelijsten zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `resonance`, `wave`, `legato`, `preset`, enzovoort), `role` is `param` (knoppen) of `select` (keuzelijsten) en `group` is `filter`, `osc`, `dynamics`, `out` of `top` (de drie keuzelijsten bovenaan). De knoppen staan in secties (`div.sec`, standaard `display:contents`, dus zonder skin ongewijzigd). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.lowbass/` (draaiknoppen met naam en waarde eronder, per groep één kader, ongeveer 480 x 255 punten tegenover 680 x 620). Wijzig je de opbouw (`.app`, `.row`, `.grid`, `.sec`, `.control`), controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/LowBass/low-bass.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

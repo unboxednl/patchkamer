@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.23.0 — Voor skins met compacte secties (host zet data-pk-sec op de knoppenblokken): de blokken Klank, Uitgang en Extra's staan in div.sq-blk binnen div.sq-blks (zonder skin gewoon onder elkaar), de golfvorm hoort bij groep sound, en een paar CSS-regels die alleen gelden met zo'n skin (kleine-letter labels, strakke koppen, lage scope, strakke knoppenrijen). Geluid, state en ids ongewijzigd.
 // 1.22.0 — Uitleg naar about (menu Over Squelch Box); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel (acid-basssynth met sequencer) staat nu in het definitieveld about. Geluid en state ongewijzigd.
 // 1.20.0 — Eerste uitgave van Squelch Box (contract v1.27). Een zo getrouw mogelijke acid-bassynth, geïnspireerd op klassieke acid-bassynths uit de jaren tachtig:
@@ -286,7 +287,7 @@ registerProcessor('${WNAME}', PkSquelch);
 
 // ---------- het apparaat ----------
 export default {
-  id: 'nl.patchkamer.squelchbox', name: 'Squelch Box', version: '1.22.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.squelchbox', name: 'Squelch Box', version: '1.23.0', kind: 'instrument', category: 'synth',
   ui: { width: 900, minWidth: 360 },
   about: { nl: 'Acid-basssynth met ingebouwde sequencer.\n\nSlide op een stap glijdt naar de volgende stap en houdt de gate open (geen nieuwe aanzet van de envelopes). Tie houdt de gate van de vorige stap vast zonder nieuwe aanzet, op de toonhoogte van deze stap. Accent: harder, korte decay en een sweep die bij opeenvolgende accenten oploopt.\n\nZet "Intern" uit om alleen noten van de oranje ingang te spelen (vel > 0,85 = accent, overlappende noten = slide). Tempo en swing komen van de klok van de host.', en: 'An acid bass synth with a built-in sequencer.\n\nSlide on a step glides into the next step and keeps the gate open (no new attack of the envelopes). Tie holds the gate of the previous step with no new attack, at the pitch of this step. Accent: louder, short decay and a sweep that builds up over consecutive accents.\n\nSwitch "Internal" off to play only notes from the orange input (vel > 0.85 = accent, overlapping notes = slide). Tempo and swing come from the host clock.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -366,19 +367,24 @@ export default {
       mount(el) {
         if (root) self.unmount(); root = el;
         const css = document.createElement('style');
-        css.textContent = '.sq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px;margin-top:4px}.sq-grid .k{grid-template-columns:96px minmax(80px,1fr) 62px;gap:8px;min-height:30px}.sq-h{font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px}.sq-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}.sq-pats{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}.sq-pats button{min-width:28px;padding:2px 6px}.sq-pats button.sel{border-color:var(--sel,var(--fg));color:var(--fg)}.sq-cv{width:100%;max-width:320px;height:46px;background:var(--well,#0b0d10);border:1px solid var(--line)}.sq-seq .rowlab span{width:56px}.sq-oct{display:flex;gap:8px;align-items:center;flex-wrap:wrap}';
+        css.textContent = '.sq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px;margin-top:4px}.sq-grid .k{grid-template-columns:96px minmax(80px,1fr) 62px;gap:8px;min-height:30px}.sq-h{font-size:12px;opacity:.8;border-top:1px solid var(--line);padding-top:8px;margin-top:9px}.sq-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}.sq-pats{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}.sq-pats button{min-width:28px;padding:2px 6px}.sq-pats button.sel{border-color:var(--sel,var(--fg));color:var(--fg)}.sq-cv{width:100%;max-width:320px;height:46px;background:var(--well,#0b0d10);border:1px solid var(--line)}.sq-seq .rowlab span{width:56px}.sq-oct{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sq-blks,.sq-blk{display:grid;gap:5px;min-width:0}'
+          + '.sq-blks:has(.sq-grid[data-pk-sec]){display:flex;flex-wrap:wrap;gap:4px}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk{gap:2px}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk{flex:1 1 auto;min-width:0}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=sound]{flex:1 1 100%}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out]{flex:1 1 56px}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=extra]{flex:5 1 280px}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out]>.sq-h,.sq-blk:has(>.sq-grid[data-pk-sec])>.sq-h{border-top:0;padding-top:0;margin:0 0 2px;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.sq-grid[data-pk-sec]{gap:2px 0;margin-top:0}.sq-grid[data-pk-sec] .k{min-height:0;min-width:0}.sq-grid[data-pk-labels=below] .k label{text-transform:none;font-size:7.5px;letter-spacing:-.04em;line-height:1.1;text-align:center;white-space:normal;overflow-wrap:anywhere}.sq-grid[data-pk-labels=below] .k output{font-size:9px;line-height:1.2}'
+          + '.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out]:not(:has([data-pk-sec])){border:1px solid var(--line);border-radius:3px;padding:3px 2px 3px}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out] .sq-grid{margin-top:0;grid-template-columns:minmax(0,1fr)}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out] .k{grid-template-columns:100%!important;justify-items:center;gap:0;min-height:0}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out] .k label{order:3;text-transform:none;font-size:7.5px;letter-spacing:-.04em;text-align:center}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out] .k output{order:2;font-size:9px;line-height:1.2}.sq-blks:has(.sq-grid[data-pk-sec])>.sq-blk[data-g=out] .k .kn{order:1;justify-self:center!important}.sq-grid[data-pk-sec] select{font-size:9px;padding:2px 2px}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .st{height:11px}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .sq-pats{flex-wrap:nowrap}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .sq-pats button{min-width:0;flex:1 1 0;padding:2px 0}'
+          + '.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-cvw{margin-top:4px;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-cv{max-width:none;height:24px}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .sq-h{border-top:0;padding-top:0;margin:4px 0 0;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .sq-act{gap:3px;margin-top:3px}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .sq-act button{font-size:8.5px;padding:3px 5px}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-seq .sq-pats{margin-top:3px}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .sq-st{margin:2px 0 0!important;font-size:9px!important;line-height:1.2!important}.sq-blks:has(.sq-grid[data-pk-sec]) ~ .note{margin:0;font-size:9px}';
         el.appendChild(css);
+        const blks = document.createElement('div'); blks.className = 'sq-blks'; el.appendChild(blks);
         const mk = (label, ids, grp, parent) => {
-          const h = document.createElement('div'); h.className = 'sq-h'; h.textContent = label; parent.appendChild(h);
-          const grid = document.createElement('div'); grid.className = 'sq-grid'; parent.appendChild(grid);
+          const blk = document.createElement('div'); blk.className = 'sq-blk'; blk.dataset.g = grp; parent.appendChild(blk);
+          const h = document.createElement('div'); h.className = 'sq-h'; h.textContent = label; blk.appendChild(h);
+          const grid = document.createElement('div'); grid.className = 'sq-grid'; blk.appendChild(grid);
           for (const id of ids) { const d = spec[id], before = grid.children.length; controls[id] = host.ui.knob(grid, d[0], [d[1], d[2], d[3]], state[id], v => fmt(d, v), v => change(id, v), { default: defaults[id], id, group: grp, scale: d[6] === 'log' ? 'log' : undefined }); const row = grid.children[before]; if (row) row.title = d[0]; }
           return grid;
         };
-        const sound = mk(tx('Klank'), ['tune', 'cut', 'res', 'envmod', 'decay', 'accent'], 'sound', el);
-        waveSel = host.ui.select(sound, tx('Golfvorm'), [['saw', tx('Zaagtand')], ['square', tx('Blok')]], state.wave, v => { if (WAVES.includes(v)) { state.wave = v; apply(); } }, { id: 'wave', group: 'osc' });
-        mk(tx('Uitgang'), ['vol'], 'out', el);
-        const ex = mk(tx('Extra\'s (standaard = origineel)'), ['slide', 'gate', 'drive', 'trans', 'drift'], 'extra', el);
-        const cvw = document.createElement('div'); cvw.style.cssText = 'margin-top:8px;font-size:11px;opacity:.8'; cvw.textContent = tx('Cutoff-verloop'); el.appendChild(cvw);
+        const sound = mk(tx('Klank'), ['tune', 'cut', 'res', 'envmod', 'decay', 'accent'], 'sound', blks);
+        waveSel = host.ui.select(sound, tx('Golfvorm'), [['saw', tx('Zaagtand')], ['square', tx('Blok')]], state.wave, v => { if (WAVES.includes(v)) { state.wave = v; apply(); } }, { id: 'wave', group: 'sound' });
+        mk(tx('Uitgang'), ['vol'], 'out', blks);
+        const ex = mk(tx('Extra\'s (standaard = origineel)'), ['slide', 'gate', 'drive', 'trans', 'drift'], 'extra', blks);
+        const cvw = document.createElement('div'); cvw.className = 'sq-cvw'; cvw.style.cssText = 'margin-top:8px;font-size:11px;opacity:.8'; cvw.textContent = tx('Cutoff-verloop'); el.appendChild(cvw);
         canvas = document.createElement('canvas'); canvas.className = 'sq-cv'; canvas.width = 320; canvas.height = 46; el.appendChild(canvas);
         // sequencer
         const sq = document.createElement('div'); sq.className = 'sq-seq'; el.appendChild(sq);
@@ -422,7 +428,7 @@ export default {
         b2(tx('Proeftoon'), () => playNote(BASE + 12 + effective.trans, false, ctx.currentTime + 0.01, 0.5, false, false));
         b2(tx('Proef-accent'), () => playNote(BASE + 12 + effective.trans, true, ctx.currentTime + 0.01, 0.5, false, false));
         b2(tx('Alles uit'), () => panic());
-        status = document.createElement('p'); status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
+        status = document.createElement('p'); status.className = 'sq-st'; status.style.cssText = 'font-size:12px;color:var(--mod);line-height:1.5'; el.appendChild(status);
         warn = document.createElement('p'); warn.className = 'note'; warn.textContent = node ? '' : tx('AudioWorklet laden…'); el.appendChild(warn);
         try { const c = getComputedStyle(canvas).getPropertyValue('--audio'); if (c && c.trim()) lineColor = c.trim(); } catch (e) {}
         if (typeof host.frame === 'function') stopFrame = host.frame(self, draw, 30);

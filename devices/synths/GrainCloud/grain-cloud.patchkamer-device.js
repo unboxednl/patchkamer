@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group where/grain/cloud/source), zodat een skin ze als draaiknop kan tonen. Geluid, state en ids ongewijzigd; zonder skin ziet het apparaat er identiek uit.
 // 1.13.0 — Uitleg naar about (menu Over Grain Cloud); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.11.0 — Patchkamer contract v1.11. Nieuw als Grain Cloud (nieuwe id nl.patchkamer.graincloud, eigen map; voorheen Korrel, nl.patchkamer.korrel);
@@ -42,7 +43,7 @@ const ukFinite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? u
 const ukEl = (p, tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (p) p.appendChild(e); return e; };
 const ukStop = e => e.stopPropagation();
 function ukShadow(hostEl, css) { const wrap = document.createElement('div'); hostEl.appendChild(wrap); const sh = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap; ukEl(sh, 'style').textContent = css; sh.addEventListener('pointerdown', ukStop); sh.addEventListener('keydown', ukStop); return ukEl(sh, 'div', 'app'); }
-function ukSelect(p, label, opts, value, change) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); return s; }
+function ukSelect(p, label, opts, value, change, adopt, id) { const box = ukEl(p, 'label', 'sel'); ukEl(box, 'span', '', label); const s = ukEl(box, 'select'); for (const [v, t] of opts) { const o = ukEl(s, 'option', '', t); o.value = String(v); } s.value = String(value); s.onchange = () => change(s.value); if (adopt && id) adopt(s, id, 'select', 'source', label); return s; }
 const ukToS = (d, v) => d.scale === 'log' ? Math.log(v / d.min) / Math.log(d.max / d.min) : (v - d.min) / (d.max - d.min);
 const ukFromS = (d, x) => { const v = d.scale === 'log' ? d.min * (d.max / d.min) ** x : d.min + x * (d.max - d.min); return d.step ? Math.round(v / d.step) * d.step : v; };
 function ukFmt(d, v) { const u = d.unit || ''; if (u === '%') return Math.round(v * 100) + '%'; if (u === 'ms') return v < 1 ? v.toFixed(2) + ' ms' : v < 100 ? v.toFixed(1) + ' ms' : Math.round(v) + ' ms';
@@ -50,10 +51,10 @@ function ukFmt(d, v) { const u = d.unit || ''; if (u === '%') return Math.round(
   if (u === 'st') return (v > 0 ? '+' : '') + (Number.isInteger(v) ? v : v.toFixed(1)) + ' st'; if (u === 'dB') return (v > 0 ? '+' : '') + v.toFixed(1) + ' dB'; if (u === ':1') return v.toFixed(1) + ':1';
   if (u === '/s') return v.toFixed(v < 10 ? 1 : 0) + '/s'; if (u === 'x') return v.toFixed(2) + '×'; if (u === 'int') return String(Math.round(v)); return v.toFixed(2) + (u ? ' ' + u : ''); }
 // sliders for a spec {id:{name,min,max,scale,unit,g}} in groups; get/set read and write the value
-function ukSliders(parent, spec, groups, get, set, defaults, dbl) { const handles = {};
+function ukSliders(parent, spec, groups, get, set, defaults, dbl, adopt, gids) { const handles = {};
   groups.forEach((gname, gi) => { if (gname) ukEl(parent, 'h3', '', gname); const g = ukEl(parent, 'div', 'grid');
     for (const [id, d] of Object.entries(spec)) { if ((d.g || 0) !== gi) continue; const c = ukEl(g, 'div', 'c'), lab = ukEl(c, 'div', 'lab'); ukEl(lab, 'span', '', d.name).title = d.name; const o = ukEl(lab, 'output');
-      const inp = ukEl(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); inp.title = d.name + (d.tip ? ' — ' + d.tip : '') + ' · ' + dbl;
+      const inp = ukEl(c, 'input'); inp.type = 'range'; inp.min = '0'; inp.max = '1'; inp.step = d.step ? String(d.step / (d.max - d.min)) : '0.001'; inp.setAttribute('aria-label', d.name); if (adopt) { inp.dataset.pkDefault = String(ukToS(d, defaults[id])); adopt(inp, id, 'param', (gids || [])[gi] || 'sliders', d.name); } inp.title = d.name + (d.tip ? ' — ' + d.tip : '') + ' · ' + dbl;
       inp.oninput = () => { const v = ukFromS(d, +inp.value); set(id, v); o.textContent = ukFmt(d, v); };
       inp.ondblclick = () => { set(id, defaults[id]); handles[id].set(defaults[id]); };
       handles[id] = { set(v) { inp.value = String(ukToS(d, v)); o.textContent = ukFmt(d, v); }, el: c }; } });
@@ -167,7 +168,7 @@ class GrainCloud extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', GrainCloud);`;
 
 export default {
-  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.13.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.14.0', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 380 },
   about: { nl: 'Een granulaire synth en effect: knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.\n\nNoten spelen een wolk op hun toonhoogte: C4 is de oorspronkelijke toon van de opname, bij Golf is dat A3.\n\nTips: Korrelgrootte klein en Dichtheid hoog = ruisachtig zoemen; groot en laag = losse brokjes. Toonsprongen Octaven met Toonspreiding 12 maakt van elk geluid een glinsterend koor. Paarse Mod: Drift op Positie laat de wolk vanzelf door de opname dwalen.', en: 'A granular synth and effect: cuts sound into tiny grains and scatters them again. As an effect: connect an audio cable to the input and choose Live. As a synth: choose Wave and play notes, or let the cloud float on endlessly.\n\nNotes play a cloud at their pitch: C4 is the original pitch of the recording, with Wave it is A3.\n\nTips: small Grain size and high Density = noisy buzzing; large and low = separate chunks. Pitch jumps Octaves with Pitch spread 12 turns any sound into a glittering choir. Purple Mod: Drift on Position lets the cloud wander through the recording by itself.' },
   ports: { audioIn: [{ id: 'in', name: 'In (source)' }], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -227,12 +228,13 @@ export default {
       apply(); paintStatus(); }).catch(() => { ok = false; paintStatus(); });
     // ---------- UI ----------
     let root = null, ui = {}, cv = null, stopDraw = null, statusEl = null, recTimer = 0;
+    const adopt = (el, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
     function mount(el) { unmount(); root = el; const app = ukShadow(el, UK_CSS('#e7b6ff'));
       const top = ukEl(app, 'div', 'top');
-      ui.preset = ukSelect(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen')]]), state.preset, v => { if (presets[v]) self.setState({ ...defaults, ...presets[v], preset: v }); });
-      ui.src = ukSelect(top, tx('Bron'), SRCS, state.src, v => { state.src = v; custom(); apply(); paint(); });
-      ui.wave = ukSelect(top, tx('Golf'), WAVES, state.wave, v => { state.wave = v; custom(); apply(); });
-      ui.steps = ukSelect(top, tx('Toonsprongen'), STEPS, state.steps, v => { state.steps = v; custom(); apply(); });
+      ui.preset = ukSelect(top, tx('Klankbeeld'), Object.keys(presets).map(k => [k, k]).concat([['Custom', tx('Eigen')]]), state.preset, v => { if (presets[v]) self.setState({ ...defaults, ...presets[v], preset: v }); }, adopt, 'preset');
+      ui.src = ukSelect(top, tx('Bron'), SRCS, state.src, v => { state.src = v; custom(); apply(); paint(); }, adopt, 'src');
+      ui.wave = ukSelect(top, tx('Golf'), WAVES, state.wave, v => { state.wave = v; custom(); apply(); }, adopt, 'wave');
+      ui.steps = ukSelect(top, tx('Toonsprongen'), STEPS, state.steps, v => { state.steps = v; custom(); apply(); }, adopt, 'steps');
       const t2 = ukEl(app, 'div', 'top');
       ui.cloud = ukEl(t2, 'button', '', tx('Wolk (drone)')); ui.cloud.type = 'button'; ui.cloud.title = tx('zonder noten: een eindeloze wolk op de oorspronkelijke toon'); ui.cloud.onclick = () => { state.cloud = !state.cloud; custom(); apply(); paint(); };
       ui.freeze = ukEl(t2, 'button', '', tx('Bevries')); ui.freeze.type = 'button'; ui.freeze.title = tx('Live ↔ Bevroren: de opname staat stil'); ui.freeze.onclick = () => { state.src = state.src === 'frozen' ? 'live' : 'frozen'; custom(); apply(); paint(); };
@@ -240,7 +242,7 @@ export default {
       const t3 = ukEl(t2, 'button', '', tx('Test noot')); t3.type = 'button'; t3.onclick = () => post({ type: 'note', note: 60, vel: 0.8, time: ctx.currentTime, dur: 1.5 });
       cv = ukEl(app, 'canvas'); cv.setAttribute('aria-label', tx('de bron met de korrels die nu klinken'));
       statusEl = ukEl(app, 'p', 'stt');
-      ui.k = ukSliders(app, spec, [tx('Waar en hoe vaak'), tx('Elke korrel'), tx('Wolk en mix')], id => state[id], (id, v) => { state[id] = v; custom(); apply(); }, defaults, tx('dubbelklik: standaard'));
+      ui.k = ukSliders(app, spec, [tx('Waar en hoe vaak'), tx('Elke korrel'), tx('Wolk en mix')], id => state[id], (id, v) => { state[id] = v; custom(); apply(); }, defaults, tx('dubbelklik: standaard'), adopt, ['where', 'grain', 'cloud']);
       paint(); paintStatus(); stopDraw = ukLoop(host, self, draw, 30); }
     const post = m => { if (node) node.port.postMessage(m); };
     function custom() { if (state.preset !== 'Custom') { state.preset = 'Custom'; if (ui.preset) ui.preset.value = 'Custom'; } }

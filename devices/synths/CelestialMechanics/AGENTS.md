@@ -129,3 +129,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: experimentele, zwaartekracht-gestuurde synth (elke noot is een planeet), voor sfeer en ambient. Noten op `notes`, audio uit `out` (stereo). De toonhoogte is de noot, maar het Dopplereffect van de baan verschuift hem; een agent kan niet luisteren, dus controleer dat in de app.
+
+## Skins
+
+Alle schuiven en keuzelijsten zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`gravity`, `orbit`, `hole`, `ether`, `level`, `preset`, `scale`, `root`, `life`, enzovoort), `group` is `setup`, `orbit`, `spacetime`, `phenomena` of `sound`. De hoogte van het tekenvlak volgt de CSS-hoogte (standaard 340 px). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.celestialmechanics/` (draaiknoppen met de naam eronder, kaders per groep, lager tekenvlak, ongeveer 480 x 450 punten tegenover 860 x 893). Wijzig je de opbouw (`.top`, `.grid`, `.c`, `canvas`), controleer dan die skin.

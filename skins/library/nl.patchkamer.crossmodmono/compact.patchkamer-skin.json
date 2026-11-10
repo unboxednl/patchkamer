@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.crossmodmono.compact",
+  "device": "nl.patchkamer.crossmodmono",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the value and label underneath, the knobs grouped per section in one frame, compact selects, a slim scope and a dense step grid, at roughly half the standard width and well under half the height.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, about half the standard width.",
+      "css": ".app{padding:5px;border-radius:5px;font-size:8px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;align-content:start}\n.app>*{grid-column:1/-1;min-width:0}\n.row{margin:0;gap:3px 4px}\n.row:nth-child(1){display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:end}\n.row:nth-child(3){display:grid;grid-template-columns:2fr 1fr 1fr 1.3fr;align-items:end}\n.row .control{display:grid;grid-template-columns:minmax(0,1fr);gap:1px;padding:0;border:0;border-radius:0;justify-items:center;text-align:center;align-content:start}\n.row .control span:not(.kn){order:3;font-size:7.5px;line-height:1.1;letter-spacing:-.03em;color:var(--muted,#adc3c9)}\n.row .control output{order:2;font-size:8px;line-height:1.1}\n.row .control select{order:1;width:100%;font-size:8px;padding:3px 2px;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;border-radius:3px;cursor:pointer}\n.row .control input[type=range]{order:1;width:100%;height:12px;margin:2px 0}\n.row .control .kn{order:1;width:26px!important;height:26px!important;justify-self:center!important}\n.row .control .kn svg{width:100%;height:100%}\n.row button{font-size:8px;padding:3px 6px;border-radius:3px;min-width:0}\n.row:nth-child(2){display:flex;flex-wrap:wrap;align-items:center}\n.row:nth-child(2) .control{width:62px}\n.pads{grid-template-columns:repeat(8,minmax(0,1fr));gap:2px}\n.pads button{min-height:20px;padding:1px 2px;font-size:8px;line-height:1.1;border-radius:3px;white-space:nowrap;overflow:hidden}\n.pads button.cur{border-width:2px;padding:0 1px}\n.row:nth-child(5){display:flex;flex-wrap:wrap;align-items:center}\n.row:nth-child(5)>span{font-size:8px}\n.row:nth-child(5) .control{width:62px}\n.grp{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));align-content:start;gap:2px 0;padding:3px 4px 4px;border:1px solid var(--line,#344953);border-radius:3px;min-width:0}\n.grp::before{content:attr(data-t);grid-column:1/-1;font-size:8px;letter-spacing:.1em;text-transform:uppercase;line-height:1.1;color:var(--x-ink2,var(--muted));padding-bottom:1px}\n.grp h3{display:none}\n.grp .grid{display:contents}\n.grp[data-g=filter]{--n:5;grid-column:span 5;order:1}\n.grp[data-g=amp]{--n:2;grid-column:span 2;order:2}\n.grp[data-g=master]{--n:1;grid-column:span 1;order:3}\n.grp[data-g=source]{--n:4;grid-column:span 4;order:4}\n.grp[data-g=motion]{--n:4;grid-column:span 4;order:5}\n.grp .control{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:start;align-content:start;gap:0;padding:0;border:0;border-radius:0;min-width:0}\n.grp .control span:not(.kn){order:3;font-size:7.5px;letter-spacing:-.03em;text-align:center;max-width:100%;line-height:1.1;color:var(--muted,#adc3c9)}\n.grp .control output{order:2;font-size:8px;text-align:center;line-height:1.1;white-space:nowrap}\n.grp .control .kn{order:1;width:26px!important;height:26px!important;justify-self:center!important}\n.grp .control .kn svg{width:100%;height:100%}\ncanvas{height:28px;border-radius:3px;order:8}\np{order:9;margin:0;font-size:8px;line-height:1.1}"
+    }
+  ]
+}

@@ -35,6 +35,10 @@ Alle velden staan in `SPEC` bovenin het bestand. `normalize` kapt getallen af en
 
 Motor in Node: filterhelling ongeveer 24 dB per octaaf bij hoge frequenties, zelfoscillatie op de cutoff, 60 willekeurige en extreme configuraties met ongeldige gebeurtenissen (geen niet-eindige samples, geen resets), en 0,07 ms per blok van 128 samples (budget 2,67 ms). In Chromium: de worklet laadt, alle tunes klinken en zijn gemeten. Het geluid is niet beluisterd.
 
+## Skins
+
+Alle knoppen, keuzelijsten en vinkjes zijn sinds 1.18.0 herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `wave1`, `sync`, enzovoort), `role` is `param` (knoppen), `select` (keuzelijsten) of `toggle` (vinkjes) en `group` is `osc`, `mix`, `filter`, `contour`, `loud`, `play`, `mod` of `out`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.laddermono/` (draaiknoppen met naam en waarde eronder, per sectie één kader, ongeveer 480 x 430 punten tegenover 780 x 1043 of meer). De skin gebruikt de CSS-klassen van de shadow root (`.app`, `.grp`, `.grid`, `.k`, `label.s`, `label.c`) en de volgorde van de groepen (`.grp:nth-child(n)`). Wijzig je die opbouw, controleer dan die skin.
+
 ## Tunes
 
 `../../../tunes/ladder-mono-classics.patchkamer-tunes.json` (formatVersion 1, CC0-1.0, namen Engels, geen merk- of modelnamen): 58 tunes in 7 mappen. De niveaus (`level`) zijn zo gezet dat een noot een piek van ongeveer 0,8 geeft (een paar ruis- en pad-geluiden komen tot 0,57).

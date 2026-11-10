@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, rol param, groep sound), zodat een skin ze als draaiknop kan tonen (skin Compact). Geluid, state en params() ongewijzigd; zonder skin ziet het er hetzelfde uit.
 // 1.12.0 — Uitleg naar about (menu Over Stage Keys); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Verbeterd: noteoff, noteon, een aangehouden toets (held) en panic worden nu verwerkt (voorheen klonk elke toets van Keys in de stand "Toets vasthouden" door, omdat noteoff werd genegeerd). De drive is veel zachter (een zachte begrenzing met een kleine vaste kromming, gedeeld door de toename) en de ingang is versterkt, zodat het volume ook zonder drive goed is.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe id nl.patchkamer.stagekeys (voorheen nl.unboxed.stagekeys). Tweetalig (host.lang, namen per taal in i18n).
@@ -14,7 +15,7 @@
 export default {
   id: 'nl.patchkamer.stagekeys',
   name: 'Stage Keys',
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 560, minWidth: 260 },
@@ -455,6 +456,7 @@ button.sus[aria-pressed="true"]{background:var(--md);border-color:var(--md)}
           const tr = mk('span', 'tr', row);
           const input = mk('input', '', tr); input.type = 'range'; input.min = p.min; input.max = p.max; input.step = p.step; input.value = state[p.key];
           input.setAttribute('aria-label', tx(p.name)); input.dataset.pkDefault = String(DEFAULTS[p.key]);
+          if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(input, { id: p.key, role: 'param', group: 'sound', label: tx(p.name) }); } catch (e) { /* oud contract */ } }
           const mkr = mk('i', 'mk', tr); mkr.hidden = true;
           const o = mk('output', '', row, p.fmt(state[p.key]));
           input.oninput = () => { state[p.key] = +input.value; apply(); paintCtl(p); };

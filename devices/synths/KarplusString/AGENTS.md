@@ -88,6 +88,10 @@ Een bewaker in de worklet controleert elke stem: wordt de uitvoer niet eindig (`
 - Met `bow` boven 0 klinkt een noot zolang hij vastgehouden wordt: geef gestreken noten dus een `dur` die past, en vermijd `decay` 20 met `bow` 1 (de ruis voedt de lus voortdurend; niet apart op toonhoogte of niveau beoordeeld).
 - Reken niet op meer dan acht gelijktijdige noten, op noten onder MIDI 24, of op een lange uitklink na het einde van de noot (hooguit 0,25 s).
 
+## Skins
+
+Alle regelaars komen uit `host.ui.knob` en `host.ui.select` met `id`, `role` en `group` (`string`, `excite`, `pitch`, `out`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.string/`: draaiknoppen met de naam eronder, in twee panelen (`design.layout`), ongeveer 480 x 344 punten tegenover 520 x 385. De kaart kan niet smaller dan ongeveer 482 punten (de kaartkop). Het apparaat bouwt zijn regelaars in het vlak van de kaart (geen shadow root), dus de skin kan geen eigen CSS toepassen en gebruikt alleen `design`. Verander je de ids of groepen, controleer dan die skin.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/KarplusString/karplus-string.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

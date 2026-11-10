@@ -151,3 +151,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: polyfoon strijkersensemble (16 stemmen) voor pads en akkoorden. Noten op `notes`, audio uit `out` (stereo). Stuur hem met een akkoordsequencer; let op de polyfonie van 16 stemmen.
+
+## Skins
+
+Alle regelaars zijn herkenbaar voor skins (`id` is de state-sleutel, `group` is `tone`, `ensemble` of `play`; de presetkeuze heeft `preset`). Sinds 1.17.0 dragen de kop, de groepskoppen en de statusregel de class `sk-x`; ze verdwijnen alleen als een skin de regelaars een ander gezicht geeft (`:has(.k[data-pk-face])`), zonder skin is er niets veranderd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.bowedensemble/` (draaiknoppen met de naam eronder, per groep één kader via `design.sections`, 482 x 484 punten tegenover 720 x 764). Wijzig je de groepsrasters (`.sk-grid`), controleer dan die skin.

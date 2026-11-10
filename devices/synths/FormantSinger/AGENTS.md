@@ -164,6 +164,12 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Voor d
 
 Zet liever alle velden erin: dan klinkt de tune hetzelfde als de startwaarden ooit veranderen. Zet geen merknamen van bestaande apparatuur of artiesten in naam, tekst of omschrijving.
 
+## Skins
+
+Alle keuzelijsten en knoppen zijn sinds 1.16.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`size`, `breath`, `vibRate`, `level`, `lang`, `voice`, `mode`, `onEnd`, `vowel`, enzovoort), `role` is `param` (schuiven) of `select`, `group` is `voice`, `motion`, `speech`, `level` of `text` (keuzelijsten). Het vinkje Vaste klinker en de knoppen hebben geen id. Een skin kan zo de schuiven als draaiknop tonen (`design.controls` met `face: rotary`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.formantsinger/` (draaiknoppen met de naam eronder, per groep een kader, ongeveer 480 x 513 punten tegenover 520 x 994). Wijzig je de opbouw van de UI (`.r`, `.sec`, `.grid`, `.k`), controleer dan die skin: hij wijst de groepen aan met `:nth-child`.
+
+Aantal stemmen (`voices`) staat bewust in `modExclude`.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/FormantSinger/formant-singer.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

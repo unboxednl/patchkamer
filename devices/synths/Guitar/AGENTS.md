@@ -138,6 +138,10 @@ Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/`. Het fo
 
 Het pack `../../../tunes/guitar.patchkamer-tunes.json` heeft 40 tunes in 11 mappen (Acoustic 5, Nylon 4, 12-String 3, Clean 5, Crunch 4, Muted 3, Bass 5, Strum 3, Ambient 3, Funk 2, Rock 3), met `tags` op de mappen (`instrument/guitar/acoustic`, `.../nylon`, `.../12-string`, `.../electric`, `instrument/guitar`, `instrument/bass`, `style/ambient`, `style/funk`, `style/rock`). Het pack zelf heeft geen `tags`, zodat de basklanken niet als gitaar tellen.
 
+## Skins
+
+Guitar gebruikt al `host.ui.knob` en `host.ui.select` met `id` (state-sleutel) en `group` (`type`, `preset`, `pluck`, `decay`, `amp`, `play`), maar heeft geen eigen shadow root: een skin kan hier alleen `design` gebruiken (de host past dat toe op de gewone DOM), geen eigen CSS. Sinds 1.23.0 mag het label van een draaiknop over twee regels en staan de kopjes dichter op hun sectie, alleen als de host `data-pk-face` of `data-pk-sec` zet (dus alleen met een skin). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.guitar/` (draaiknoppen met de naam eronder, per groep een kader in 6 kolommen, ongeveer 480 x 701 punten tegenover 720 x 918). Wijzig je de klassen `gt-grid` of `gt-h`, controleer dan die skin.
+
 ## Controleren
 
 - Vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/Guitar/guitar.patchkamer-device.js` (en met `--lang en` en `--lang nl`). Dat moet `OK` geven, zonder `let op`.

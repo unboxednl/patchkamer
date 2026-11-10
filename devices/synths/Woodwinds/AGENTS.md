@@ -157,3 +157,7 @@ Het pack `../../../tunes/woodwinds.patchkamer-tunes.json` heeft 42 tunes in 12 m
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Synths](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: houtblazers voor melodielijnen, solo's, secties en pads. Noten op `notes`, audio uit `out` (stereo). Stuur hem met een sequencer die `dur` meestuurt (en laat noten overlappen voor legato); er zit geen galm in, zet er een effect achter.
+
+## Skins
+
+Sinds 1.23.0 staat de UI in een open shadow root (met de basisstijlen van de host erbij, zodat het er zonder skin hetzelfde uitziet), zodat een skin er CSS in kan zetten. Alle knoppen en keuzelijsten komen via `host.ui.knob` en `host.ui.select` met `id` (de state-sleutel: `tone`, `pressure`, `type`, `legato`, ...) en `group` (`type`, `preset`, `tone`, `breath`, `motion`, `play`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.woodwinds/` (draaiknoppen met de naam eronder, per groep één kader, ongeveer 480 x 420 punten tegenover 720 x 846). Wijzig je de opbouw (`.app`, `.ww-grid`, de kopjes of de knoppenrij), controleer dan die skin.

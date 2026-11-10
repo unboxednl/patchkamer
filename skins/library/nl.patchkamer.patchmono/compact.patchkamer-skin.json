@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.patchmono.compact",
+  "device": "nl.patchkamer.patchmono",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: every slider becomes a rotary knob with the value and the name underneath, grouped per section in one frame, with a flat patch-route block and a low scope.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, much smaller than the standard card.",
+      "css": ":host{font-size:9px}\n.app{display:flex;flex-wrap:wrap;gap:4px;align-items:flex-start;padding:6px;border-radius:0}\n.app>*{flex:1 1 100%;min-width:0}\n.row{display:flex;flex-wrap:wrap;gap:3px 4px;align-items:flex-end;margin:0}\n.app>.row:nth-child(1){order:0;border:1px solid var(--line);border-radius:3px;padding:3px 4px 4px}\n.app>.row:nth-child(1) .control{flex:1 1 50px;min-width:0;padding:0;border:0;gap:1px}\n.app>.row:nth-child(1) .control:nth-child(1){flex:2.2 1 90px}\n.app>.row:nth-child(1) .control:nth-child(2){flex:2 1 90px}\n.control span{font-size:7.5px;line-height:1.1;letter-spacing:-.02em}\nselect,button{font-size:9px;padding:3px 2px;border-radius:3px}\nselect{appearance:none;-webkit-appearance:none;text-overflow:ellipsis}\n.app>.row:nth-child(2){flex:1 1 170px;gap:3px 4px;align-items:center;order:6;border:1px solid var(--line);border-radius:3px;padding:3px 4px}\n.app>.row:nth-child(2) button{flex:1 1 auto;padding:3px 4px}\n.sec[data-lane=filter]{order:1}.sec[data-lane=amp]{order:2}.sec[data-lane=source]{order:3}.sec[data-lane=master]{order:4}.sec[data-lane=motion]{order:5}.sec[data-lane=routes]{order:7}\n.app>canvas{order:8}.app>p{order:9}\n.sec{flex:1 1 auto;border:1px solid var(--line);border-radius:3px;padding:3px 4px 4px;margin:0}\n.sec h3{margin:0 0 2px;font-size:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}\n.sec .grid{display:flex;flex-wrap:wrap;gap:3px 0}\n.control:has(.kn){display:grid;grid-template-columns:100%;justify-items:center;align-content:start;gap:0;padding:0;border:0;flex:0 0 52px}\n.control:has(.kn) span{order:3;text-align:center;max-width:100%}\n.control:has(.kn) output{order:2;font-size:8px;line-height:1.2;text-align:center}\n.control:has(.kn) .kn{order:1;width:26px!important;height:26px!important;justify-self:center!important}\n.control .kn svg{width:100%;height:100%}\n.app>.row:nth-child(2) .control:has(.kn){flex:0 0 52px}\n.sec[data-lane=routes]{display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;flex:1 1 100%}\n.sec[data-lane=routes] h3{grid-column:1/-1}\n.sec[data-lane=routes] .row{flex-wrap:nowrap;align-items:flex-end;gap:3px}\n.sec[data-lane=routes] .row>span{font-size:9px;padding-bottom:6px}\n.sec[data-lane=routes] .control{flex:1 1 0;min-width:0;padding:0;border:0;gap:1px}\n.sec[data-lane=routes] .control:has(.kn){flex:0 0 52px}\ncanvas{height:34px}\np{margin:0;font-size:8px;line-height:1.2}"
+    }
+  ]
+}

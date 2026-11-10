@@ -1,0 +1,49 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.woodwinds.compact",
+  "device": "nl.patchkamer.woodwinds",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath and the knobs grouped per section in one frame, at roughly half the width and a third of the height of the standard card.",
+  "created": "2026-11-10",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 480
+    },
+    "sections": [
+      {
+        "match": "*",
+        "frame": "line",
+        "columns": 6,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:play",
+        "columns": 7
+      }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, less than half the standard width.",
+      "css": ".app{gap:0 8px;display:flex;flex-wrap:wrap;align-content:flex-start;font-size:9px}\n.app>.k[data-pk-id=type],.app>.k[data-pk-id=preset]{flex:1 1 200px;min-width:0;margin:0 0 4px;grid-template-columns:auto minmax(0,1fr);gap:6px}\n.app>.k[data-pk-id=type] label,.app>.k[data-pk-id=preset] label{text-align:left;font-size:8px}\n.app>div:not(.k):not(.ww-grid){flex:1 1 100%;font-size:8px!important;letter-spacing:.14em;text-transform:uppercase;border-top:0!important;padding:0 0 2px!important;margin:3px 0 0!important}\n.ww-grid{flex:1 1 100%;margin:0!important;min-height:0;padding:3px 4px 4px!important;row-gap:3px!important}\n.k label,.ww-grid .k label{font-size:7.5px;letter-spacing:0;line-height:1.05;overflow:visible;text-overflow:clip;white-space:normal;overflow-wrap:anywhere;text-align:center;max-width:100%}\n.ww-grid .k{min-height:0!important;grid-template-columns:minmax(0,1fr)!important}\n.ww-grid .k output{font-size:8.5px;line-height:1.1;color:var(--muted)}\n.ww-grid select{width:100%;font-size:8px;padding:3px 0;appearance:none;-webkit-appearance:none;text-align:center;text-align-last:center}\n.app>div:has(button){flex:1 1 100%;margin-top:5px!important;gap:4px!important}\n.app button{font-size:9px;padding:3px 8px}\n.app>p{flex:1 1 100%;margin:0;min-height:0}"
+    }
+  ]
+}

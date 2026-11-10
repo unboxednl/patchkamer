@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.6 (2026-11-10)
+
+### Added
+- **Default skin for new devices.** Under **Settings** choose **Standard** or **Compact (small screens)**. A device you place afterwards gets the Compact skin if it has one. Existing devices and songs do not change; on each card you still choose under **Skin**. The choice is a preference of this browser.
+- **Compact skin for 31 synths.** Rotary knobs with the name and value underneath, one frame per group and no scrollbars; the cards become about 480 points wide and usually 20 to 60 percent shorter. Synths: Acid Stepper, Basic Mono, Biotope, Bowed Ensemble, Brass Section, Celestial Mechanics, Chord Poly, Cinematic Synth, Cross Mod Mono, Dissonant Cluster, Drone Synth, Duofone, Formant Singer, Foundry, Four Operator FM, Grain Cloud, Guitar, Karplus String, Ladder Mono, Low Bass, Mist, Paradox, Patch Mono, Piano, Poly Chorus, Squelch Box, Stage Keys, Sub Line, Supersaw Swarm, Triple Osc Poly and Woodwinds. The devices register their controls for skins for this (id is the state key, group per section); without a skin they look and sound the same, and state, params() and ports are unchanged. Woodwinds and Brass Section now live in their own shadow root.
+
 ## 0.30.5 (2026-11-10)
 
 ### Added

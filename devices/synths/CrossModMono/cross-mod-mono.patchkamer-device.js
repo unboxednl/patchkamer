@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep = spoor of setup/play/seq) en elk spoor in een eigen element (zonder skin display:contents, dus ongewijzigd uiterlijk);
+//   de scope volgt zijn CSS-hoogte. Geluid, state, params() en poorten ongewijzigd. Lengte blijft een gewone schuif (een nieuwe lengte bouwt de UI opnieuw op); testNote en length staan bewust in modExclude.
 // 1.12.0 — Uitleg naar about (menu Over Cross Mod Mono); de UI toont geen uitlegtekst meer.
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Cross Mod Mono en een nieuwe id (nl.patchkamer.crossmodmono); tunes en songs uit de vorige versie verwijzen
 //   naar de oude id. Alleen de eigen motor blijft over (geen code meer voor andere varianten); het geluid is bit-identiek aan de vorige versie.
@@ -182,7 +184,7 @@ registerProcessor(${JSON.stringify(WNAME)}, class extends AudioWorkletProcessor 
 const EN = {
   'Resonantie': 'Resonance', 'Filter-EG': 'Filter envelope', 'Pulsbreedte': 'Pulse width', 'PWM-diepte': 'PWM depth', 'Ruis': 'Noise',
   'LFO-snelheid': 'LFO rate', 'Transpositie': 'Transpose', 'Uitgang': 'Output level', 'Osc A niveau': 'Osc A level', 'Osc B niveau': 'Osc B level',
-  'Osc B fijn': 'Osc B fine', 'Gatelengte': 'Gate length', 'Versterker / envelope': 'Amplifier / envelope', 'Oscillatoren': 'Oscillators', 'Modulatie': 'Modulation',
+  'Osc B fijn': 'Osc B fine', 'Gatelengte': 'Gate length', 'Versterker / envelope': 'Amplifier / envelope', 'Versterker': 'Amplifier', 'Oscillatoren': 'Oscillators', 'Modulatie': 'Modulation',
   'Filters': 'Filter', 'Zaagtand': 'Sawtooth', 'Puls': 'Pulse', 'Driehoek': 'Triangle', 'Osc A golf': 'Osc A wave', 'Osc B golf': 'Osc B wave',
   'Osc B laag': 'Osc B low', 'LFO-vorm': 'LFO shape', 'Uit': 'Off', 'Aan': 'On', 'Klank': 'Sound', 'Nootprioriteit': 'Note priority',
   'Laatste': 'Last', 'Laagste': 'Lowest', 'Hoogste': 'Highest', 'Testnoot (MIDI)': 'Test note (MIDI)', 'Speel noot': 'Play note', 'Houd noot': 'Hold note',
@@ -249,6 +251,7 @@ const OPTIONS = {   // sleutel: [[waarde, Nederlandse tekst], …]
   arpDirection: [['up', 'Omhoog'], ['down', 'Omlaag']],
 };
 const LABELS = { wave: 'Osc A golf', wave2: 'Osc B golf', lfoWave: 'LFO-vorm', priority: 'Nootprioriteit', sync: 'Hard sync', oscBLow: 'Osc B laag', legato: 'Legato' };
+const SHORT = { amp: 'Versterker' };   // kortere titel voor een skin (data-t)
 const BOOLEANS = ['legato', 'sync', 'oscBLow'];
 // Klanken (state-waarden, taalneutraal): alleen wat afwijkt van de standaard
 const PRESETS = {
@@ -284,16 +287,17 @@ button{cursor:pointer;touch-action:none}button:focus-visible,input:focus-visible
 button.active{background:color-mix(in srgb,var(--x-acc) 38%,var(--field,#223640));border-color:var(--x-acc)}
 input[type=range]{width:100%;padding:0;accent-color:var(--x-acc)}output{font:12px monospace;color:var(--x-ink2)}
 .pads{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.pads button{min-height:64px;text-align:left;white-space:pre-line}.pads button.cur{border-color:var(--sel,#9b8cff);border-width:2px}
-h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}
+h3{font-size:13px;color:var(--x-ink2);margin:14px 0 8px}label{min-width:0}.grp{display:contents}
 canvas{display:block;width:100%;height:64px;background:var(--well,#0b171d);border:1px solid var(--line,#36505a);border-radius:6px}`;
 
 export default {
   id: 'nl.patchkamer.crossmodmono',
   name: 'Cross Mod Mono',
-  version: '1.12.0',
+  version: '1.13.0',
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
+  modExclude: ['testNote', 'length'],
   about: { nl: 'Een monofone synth met twee oscillatoren, hard sync, kruismodulatie op audiosnelheid, twee envelopes, een tweepolig lowpass-filter, een LFO, portamento en een eigen patroon van 32 stappen of een arpeggiator.\n\nOscillator B kan de toonhoogte van A en het filter moduleren. Osc B laag maakt B tot een langzame modulator. Sync zet de fase van B terug bij elke cyclus van A. De Mod-ingang verandert de klank zonder de basiswaarden te overschrijven.', en: 'A monophonic synth with two oscillators, hard sync, audio-rate cross modulation, two envelopes, a two-pole lowpass filter, an LFO, portamento and its own 32-step pattern or an arpeggiator.\n\nOscillator B can modulate the pitch of A and the filter. Osc B low turns B into a slow modulator. Sync resets the phase of B at every cycle of A. The Mod input changes the sound without overwriting the base values.' },
   i18n: { en: { ports: { notes: 'Keyboard / notes' } } },
   ports: {
@@ -434,22 +438,23 @@ export default {
     }
 
     // ---- UI ----
-    let wrap = null, panel = null, ui = {}, stepButtons = [], scope = null, scopeCtx = null, scopeData = null, scopeW = 300, ro = null, col = null, colT = 0, stopDraw = null;
+    let wrap = null, panel = null, ui = {}, stepButtons = [], scope = null, scopeCtx = null, scopeData = null, scopeW = 300, scopeH = 64, ro = null, col = null, colT = 0, stopDraw = null;
     const add = (parent, tag, text, cls) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (cls) el.className = cls; parent.appendChild(el); return el; };
     const row = parent => add(parent, 'div', undefined, 'row');
     const button = (parent, label, fn) => { const b = add(parent, 'button', label); b.type = 'button'; b.onclick = fn; return b; };
-    function select(parent, label, options, value, change) {
+    const adopt = (el, id, role, label, group) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    function select(parent, label, options, value, change, meta) {
       const box = add(parent, 'label', undefined, 'control'); add(box, 'span', label);
       const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); }
-      el.value = String(value); el.onchange = () => change(el.value); return el;
+      el.value = String(value); el.onchange = () => change(el.value); if (meta) adopt(el, meta[0], 'select', label, meta[1]); return el;
     }
     // schuif met getal ernaast; logaritmische parameters lopen over een schuif van 0…1; dubbelklik = beginwaarde via data-pk-default
-    function knob(parent, id, label, [min, max, step], value, def, change, format, log) {
+    function knob(parent, id, label, [min, max, step], value, def, change, format, log, group) {
       const box = add(parent, 'label', undefined, 'control'); add(box, 'span', label);
       const o = add(box, 'output'), input = add(box, 'input'); input.type = 'range';
       const pos = v => log ? Math.log(v / log.min) / Math.log(log.max / log.min) : v, val = x => log ? log.min * (log.max / log.min) ** x : x;
       input.min = String(min); input.max = String(max); input.step = String(step); input.value = String(pos(value)); input.dataset.pkDefault = String(pos(def));
-      o.textContent = format(value);
+      o.textContent = format(value); if (group) adopt(input, id, 'param', label, group);
       input.oninput = () => { const v = val(Number(input.value)); o.textContent = format(v); change(v); };
       ui[id] = { set(v) { input.value = String(pos(v)); o.textContent = format(v); } };
     }
@@ -457,8 +462,8 @@ export default {
       for (const id of ids) {
         const d = SPEC_BY_ID[id], fmt = v => (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)) + (d.unit ? ' ' + d.unit : '');
         const change = v => { state[id] = v; apply(); };
-        if (d.scale === 'log') knob(parent, id, tx(d.name), [0, 1, 0.001], state[id], DEF[id], change, fmt, d);
-        else knob(parent, id, tx(d.name), [d.min, d.max, d.step], state[id], DEF[id], change, fmt);
+        if (d.scale === 'log') knob(parent, id, tx(d.name), [0, 1, 0.001], state[id], DEF[id], change, fmt, d, d.lane);
+        else knob(parent, id, tx(d.name), [d.min, d.max, d.step], state[id], DEF[id], change, fmt, undefined, d.lane);
       }
     }
     function tellEngine() {
@@ -468,17 +473,17 @@ export default {
     }
     function sequenceUI(parent) {
       const settings = row(parent);
-      select(settings, tx('Besturing'), OPTIONS.mode.map(([v, t]) => [v, tx(t)]), state.mode, v => { panic(); state.mode = v; sequenceCounter = 0; buildUI(); });
-      select(settings, tx('Nootdeling'), [[1, '1/16'], [2, '1/8'], [4, '1/4']], state.division, v => { state.division = +v; });
-      select(settings, tx('Arp-richting'), OPTIONS.arpDirection.map(([v, t]) => [v, tx(t)]), state.arpDirection, v => { state.arpDirection = v; });
+      select(settings, tx('Besturing'), OPTIONS.mode.map(([v, t]) => [v, tx(t)]), state.mode, v => { panic(); state.mode = v; sequenceCounter = 0; buildUI(); }, ['mode', 'seq']);
+      select(settings, tx('Nootdeling'), [[1, '1/16'], [2, '1/8'], [4, '1/4']], state.division, v => { state.division = +v; }, ['division', 'seq']);
+      select(settings, tx('Arp-richting'), OPTIONS.arpDirection.map(([v, t]) => [v, tx(t)]), state.arpDirection, v => { state.arpDirection = v; }, ['arpDirection', 'seq']);
       knob(settings, 'length', tx('Lengte'), [1, 32, 1], state.length, DEF.length, v => { state.length = v; state.selected = Math.min(state.selected, v - 1); sequenceCounter = 0; buildUI(); }, v => String(v));
       if (state.mode !== 'sequence') return;
       const pads = add(parent, 'div', undefined, 'pads');
       stepButtons = state.seqNotes.slice(0, state.length).map((n, i) => button(pads, (i + 1) + ' · ' + (state.seqOn[i] ? n : tx('rust')), () => { state.selected = i; buildUI(); }));
       const editor = row(parent), i = state.selected;
       add(editor, 'span', tx('Stap {0}', i + 1));
-      knob(editor, 'seqNote', tx('Noot'), [24, 96, 1], state.seqNotes[i], state.seqNotes[i], v => { state.seqNotes[i] = v; stepButtons[i].textContent = (i + 1) + ' · ' + (state.seqOn[i] ? v : tx('rust')); }, v => String(v));
-      select(editor, tx('Speelt'), [[0, tx('Rust')], [1, tx('Noot')]], state.seqOn[i], v => { state.seqOn[i] = +v; buildUI(); });
+      knob(editor, 'seqNote', tx('Noot'), [24, 96, 1], state.seqNotes[i], state.seqNotes[i], v => { state.seqNotes[i] = v; stepButtons[i].textContent = (i + 1) + ' · ' + (state.seqOn[i] ? v : tx('rust')); }, v => String(v), undefined, 'seq');
+      select(editor, tx('Speelt'), [[0, tx('Rust')], [1, tx('Noot')]], state.seqOn[i], v => { state.seqOn[i] = +v; buildUI(); }, ['seqOn', 'seq']);
     }
     function buildUI() {
       if (!panel) return;
@@ -487,17 +492,17 @@ export default {
       select(top, tx('Klank'), Object.keys(PRESETS).map(k => [k, k]), state.preset, v => {
         const keep = {}; for (const k of PERFORMANCE) keep[k] = state[k];
         self.setState({ ...DEF, ...keep, ...PRESETS[v], preset: v });
-      });
-      for (const id of ['wave', 'wave2', 'lfoWave', 'priority']) select(top, tx(LABELS[id]), OPTIONS[id].map(([v, t]) => [v, tx(t)]), state[id], v => { state[id] = v; apply(); });
-      for (const id of BOOLEANS) select(top, tx(LABELS[id]), [[0, tx('Uit')], [1, tx('Aan')]], +state[id], v => { state[id] = v === '1'; apply(); });
+      }, ['preset', 'setup']);
+      for (const id of ['wave', 'wave2', 'lfoWave', 'priority']) select(top, tx(LABELS[id]), OPTIONS[id].map(([v, t]) => [v, tx(t)]), state[id], v => { state[id] = v; apply(); }, [id, 'setup']);
+      for (const id of BOOLEANS) select(top, tx(LABELS[id]), [[0, tx('Uit')], [1, tx('Aan')]], +state[id], v => { state[id] = v === '1'; apply(); }, [id, 'setup']);
       const play = row(panel);
-      knob(play, 'testNote', tx('Testnoot (MIDI)'), [24, 96, 1], state.testNote, DEF.testNote, v => { state.testNote = v; }, v => String(v));
+      knob(play, 'testNote', tx('Testnoot (MIDI)'), [24, 96, 1], state.testNote, DEF.testNote, v => { state.testNote = v; }, v => String(v), undefined, 'play');
       button(play, tx('Speel noot'), () => note(state.testNote, 0.85, ctx.currentTime, 1));
       ui.hold = button(play, tx('Houd noot'), () => { heldDemo = !heldDemo; ui.hold.classList.toggle('active', heldDemo); if (heldDemo) note(state.testNote, 0.8, ctx.currentTime, undefined, true); else panic(); });
       ui.hold.classList.toggle('active', heldDemo);
       button(play, tx('Alles uit'), () => panic());
       sequenceUI(panel);
-      for (const lane of Object.keys(LANES)) { add(panel, 'h3', tx(LANES[lane])); const g = add(panel, 'div', undefined, 'grid'); controls(g, SPEC.filter(d => d.lane === lane).map(d => d.id)); }
+      for (const lane of Object.keys(LANES)) { const gp = add(panel, 'div', undefined, 'grp'); gp.dataset.g = lane; gp.dataset.t = tx(SHORT[lane] || LANES[lane]); add(gp, 'h3', tx(LANES[lane])); const g = add(gp, 'div', undefined, 'grid'); controls(g, SPEC.filter(d => d.lane === lane).map(d => d.id)); }
       scope = add(panel, 'canvas'); scope.setAttribute('aria-label', tx('Golfvorm van de uitgang'));
       scopeCtx = scope.getContext && scope.getContext('2d'); scopeData = new Float32Array(analyser.fftSize || 1024);
       sizeScope();
@@ -507,7 +512,7 @@ export default {
     function sizeScope() {
       if (!scope) return;
       const dpr = clamp(Number(globalThis.devicePixelRatio) || 1, 1, 4), w = Math.max(260, Math.min(1200, scopeW));
-      if (scope.width !== Math.round(w * dpr)) { scope.width = Math.round(w * dpr); scope.height = Math.round(64 * dpr); }
+      if (scope.width !== Math.round(w * dpr) || scope.height !== Math.round(scopeH * dpr)) { scope.width = Math.round(w * dpr); scope.height = Math.round(scopeH * dpr); }
       if (scopeCtx) scopeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     function readColors() {
@@ -517,7 +522,7 @@ export default {
     function draw() {
       if (dead || !scope || !scopeCtx) return;
       if (!col || performance.now() - colT > 1000) readColors();
-      const g = scopeCtx, w = Math.max(260, Math.min(1200, scopeW)), h = 64;
+      const g = scopeCtx, w = Math.max(260, Math.min(1200, scopeW)), h = scopeH;
       analyser.getFloatTimeDomainData(scopeData);
       g.fillStyle = col.well; g.fillRect(0, 0, w, h); g.strokeStyle = col.fg; g.beginPath();
       for (let i = 0; i < scopeData.length; i++) { const x = i / (scopeData.length - 1) * w, y = h / 2 - clamp(scopeData[i], -1, 1) * h * 0.46; i ? g.lineTo(x, y) : g.moveTo(x, y); }
@@ -545,7 +550,7 @@ export default {
         wrap = add(el, 'div'); const root = wrap.attachShadow ? wrap.attachShadow({ mode: 'open' }) : wrap;
         add(root, 'style', CSS); panel = add(root, 'div', undefined, 'app');
         buildUI();
-        if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) { scopeW = w; sizeScope(); } }); if (scope) ro.observe(scope); }
+        if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(es => { const w = es[0] && es[0].contentRect.width; if (w) { scopeW = w; scopeH = Math.max(20, Math.min(200, es[0].contentRect.height || 64)); sizeScope(); } }); if (scope) ro.observe(scope); }
         if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('patchkamer-skin', onSkin);
         stopLoop(); stopDraw = drawLoop(host, self, draw, 20);
       },

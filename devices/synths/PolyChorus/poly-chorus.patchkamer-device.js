@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, groep = de sectie, rol param of select) en elke sectie staat in een eigen blok (div.sec met kop en regelaars), zodat een skin ze als draaiknoppen in één kader kan tonen (skin Compact). Geluid, state en params() ongewijzigd; testNote staat nu in modExclude (bewust niet stuurbaar, zoals bij Patch Mono); zonder skin ziet het er hetzelfde uit.
 // 1.12.0 — Uitleg naar about (menu Over Poly Chorus); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Versterking (+9,5 dB) achter de compressor: het apparaat en de tunes waren erg zacht (pieken rond −34 tot −10 dBFS). Het plafond rondt de pieken af.
 // 1.11.0 — Nieuw als Poly Chorus (nieuwe id nl.patchkamer.polychorus, eigen map), bijgewerkt naar Patchkamer contract v1.11. Het geluid is
@@ -244,12 +245,12 @@ const SOUNDS = {
 };
 // indeling van de kaart (alleen de UI; de state en de sporen van params() staan hierboven)
 const SECTIONS = [
-  ['Oscillator', ['saw', 'pulse', 'sub', 'noise', 'pw', 'transpose']],
-  ['Filter', ['@hpf', 'cutoff', 'resonance', 'filterEnv', 'keytrack', 'drive']],
-  ['Versterker', ['@vcaMode', 'attack', 'decay', 'sustain', 'release']],
-  ['Modulatie', ['lfoRate', 'vibrato', 'lfoFilter', 'pwm', 'glide']],
-  ['Chorus', ['@chorusMode', 'chorusMix', 'width']],
-  ['Uitgang', ['level']],
+  ['Oscillator', ['saw', 'pulse', 'sub', 'noise', 'pw', 'transpose'], 'oscillator'],
+  ['Filter', ['@hpf', 'cutoff', 'resonance', 'filterEnv', 'keytrack', 'drive'], 'filter'],
+  ['Versterker', ['@vcaMode', 'attack', 'decay', 'sustain', 'release'], 'amp'],
+  ['Modulatie', ['lfoRate', 'vibrato', 'lfoFilter', 'pwm', 'glide'], 'modulation'],
+  ['Chorus', ['@chorusMode', 'chorusMix', 'width'], 'chorus'],
+  ['Uitgang', ['level'], 'output'],
 ];
 
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -278,7 +279,8 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.polychorus',
   name: 'Poly Chorus',
-  version: '1.12.0',
+  version: '1.13.0',
+  modExclude: ['testNote'],   // werkstand, geen klank (de testnoot is nu een aangemelde regelaar; zo blijft hij bewust buiten params())
   kind: 'instrument',
   category: 'synth',
   ui: { width: 920, minWidth: 380 },
@@ -360,19 +362,21 @@ export default {
     // ---------- UI ----------
     const add = (parent, tag, text) => { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; parent.appendChild(el); return el; };
     const fmtOf = id => { const d = SPEC[id]; return v => (Math.abs(v) >= 100 ? v.toFixed(0) : Number(v).toFixed(2)) + (d.unit ? ' ' + d.unit : ''); };
-    function knob(parent, id) {
+    // meldt een regelaar aan bij de host, zodat een skin hem herkent (contract v1.15); een oudere host negeert dit
+    const adopt = (el, id, role, group, label) => { if (host && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    function knob(parent, id, group) {
       const d = SPEC[id], log = d.scale === 'log', fmt = fmtOf(id);
       const toVal = x => (log ? d.min * (d.max / d.min) ** x : x), toPos = v => (log ? Math.log(v / d.min) / Math.log(d.max / d.min) : v);
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', tx(d.name));
       const o = add(box, 'output', fmt(state[id])), i = add(box, 'input'); i.type = 'range';
       [i.min, i.max, i.step] = (log ? [0, 1, 0.001] : [d.min, d.max, d.step]).map(String);
-      i.value = String(toPos(state[id])); i.dataset.pkDefault = String(toPos(d.def));
+      i.value = String(toPos(state[id])); i.dataset.pkDefault = String(toPos(d.def)); adopt(i, id, 'param', group, tx(d.name));
       i.addEventListener('input', () => { state[id] = toVal(Number(i.value)); o.textContent = fmt(state[id]); apply(); });
       refreshers.push(() => { i.value = String(toPos(state[id])); o.textContent = fmt(state[id]); });
     }
-    function choose(parent, label, options, get, set) {
+    function choose(parent, label, options, get, set, id, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label);
-      const el = add(box, 'select');
+      const el = add(box, 'select'); adopt(el, id, 'select', group, label);
       for (const [v, t] of options) { const o = add(el, 'option', tx(t)); o.value = String(v); }
       el.value = String(get()); el.addEventListener('change', () => set(el.value));
       refreshers.push(() => { el.value = String(get()); });
@@ -414,11 +418,11 @@ export default {
         add(shadow, 'style', CSS); root = shadow;
         panel = add(shadow, 'div'); panel.className = 'app';
         const top = add(panel, 'div'); top.className = 'row';
-        choose(top, tx('Klank'), Object.keys(SOUNDS).map(k => [k, k]), () => state.preset, v => self.setState({ ...DEFAULTS, ...SOUNDS[v], preset: v, testNote: state.testNote }));
+        choose(top, tx('Klank'), Object.keys(SOUNDS).map(k => [k, k]), () => state.preset, v => self.setState({ ...DEFAULTS, ...SOUNDS[v], preset: v, testNote: state.testNote }), 'preset', 'setup');
         const play = add(panel, 'div'); play.className = 'row';
         { // testnoot
           const box = add(play, 'label'); box.className = 'control'; add(box, 'span', tx('Testnoot MIDI'));
-          const o = add(box, 'output', String(state.testNote)), i = add(box, 'input'); i.type = 'range'; i.min = '24'; i.max = '96'; i.step = '1'; i.value = String(state.testNote); i.dataset.pkDefault = String(DEFAULTS.testNote);
+          const o = add(box, 'output', String(state.testNote)), i = add(box, 'input'); i.type = 'range'; i.min = '24'; i.max = '96'; i.step = '1'; i.value = String(state.testNote); i.dataset.pkDefault = String(DEFAULTS.testNote); adopt(i, 'testNote', 'param', 'setup', tx('Testnoot MIDI'));
           i.addEventListener('input', () => { state.testNote = Number(i.value); o.textContent = String(state.testNote); });
           refreshers.push(() => { i.value = String(state.testNote); o.textContent = String(state.testNote); });
         }
@@ -427,11 +431,12 @@ export default {
         btn('Houd noot', () => { heldDemo = !heldDemo; if (heldDemo) note(state.testNote, 0.8, ctx.currentTime, undefined, true); else panic(); });
         btn('Test akkoord', () => { for (const n of [0, 3, 7]) note(state.testNote + n, 0.7, ctx.currentTime, 1.6); });
         btn('Alles uit', () => panic());
-        for (const [title, ids] of SECTIONS) {
-          add(panel, 'h3', tx(title));
-          const g = add(panel, 'div'); g.className = 'grid';
+        for (const [title, ids, group] of SECTIONS) {
+          const sec = add(panel, 'div'); sec.className = 'sec'; sec.dataset.lane = group;
+          add(sec, 'h3', tx(title));
+          const g = add(sec, 'div'); g.className = 'grid';
           for (const id of ids) {
-            if (id[0] === '@') { const k = id.slice(1); choose(g, tx(LABELS[k]), OPTIONS[k], () => state[k], v => { state[k] = typeof DEFAULTS[k] === 'number' ? Number(v) : v; apply(); }); } else knob(g, id);
+            if (id[0] === '@') { const k = id.slice(1); choose(g, tx(LABELS[k]), OPTIONS[k], () => state[k], v => { state[k] = typeof DEFAULTS[k] === 'number' ? Number(v) : v; apply(); }, k, group); } else knob(g, id, group);
           }
         }
         add(panel, 'h3', tx('Golfvorm van de uitgang'));
