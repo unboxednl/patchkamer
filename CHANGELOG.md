@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.20 (2026-11-11)
+
+### Changed
+- **Clip Arranger (1.34.0): assign a clip to a scene with a drop-down list.** Every cell in the matrix has a drop-down list (▾; an empty cell shows choose clip ▾) with the clips of the library, no clip, or a new clip. The same clip may be in as many scenes as you like. An empty cell no longer creates a clip by itself.
+
 ## 0.30.19 (2026-11-11)
 
 ### Changed

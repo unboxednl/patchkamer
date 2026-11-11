@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.20 (2026-11-11)
+
+### Gewijzigd
+- **Clip Arranger (1.34.0): een clip aan een scène toekennen met een keuzelijst.** Elke cel in de matrix heeft een keuzelijst (▾; een lege cel toont kies clip ▾) met de clips van de bibliotheek, geen clip, of een nieuwe clip. Dezelfde clip mag in zoveel scènes als je wilt. Een lege cel maakt niet meer vanzelf een clip aan.
+
 ## 0.30.19 (2026-11-11)
 
 ### Gewijzigd
