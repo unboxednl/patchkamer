@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.25 (2026-11-11)
+
+### Hersteld
+- **Pulse Drums (1.20.1): elke slag klinkt gelijk, ook bij 135 BPM.** Bij een tempo waarop een tel niet in een heel aantal renderblokken van 128 samples past (135 BPM: 166,67 blokken), tikte elke derde bassdrum harder dan de andere twee, omdat de ruis van de klik anders klinkt als de start midden in een blok valt. De start van elke slag wordt nu naar boven afgerond op een blokgrens (hooguit 2,7 ms later, nooit eerder dan gepland). Gemeten in een echte browser met de tune Squelch: de scherpste sprong per slag was 0,31, 0,19 en 0,13 voor de drie plekken en is nu 0,27 voor alle drie. Niet beluisterd. Drum Kit, Click Synth, Latin Percussion en Drum Machine gebruiken dezelfde opbouw en zijn niet aangepast.
+
 ## 0.30.24 (2026-11-11)
 
 ### Gewijzigd

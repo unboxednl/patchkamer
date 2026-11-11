@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.25 (2026-11-11)
+
+### Fixed
+- **Pulse Drums (1.20.1): every hit sounds the same, also at 135 BPM.** At a tempo where one beat is not a whole number of 128-sample render blocks (135 BPM: 166.67 blocks), every third kick drum clicked harder than the other two, because the noise of the click sounds different when the start falls in the middle of a block. The start of each hit is now rounded up to a block boundary (at most 2.7 ms later, never earlier than planned). Measured in a real browser with the Squelch tune: the sharpest jump per hit was 0.31, 0.19 and 0.13 for the three positions and is now 0.27 for all three. Not listened to. Drum Kit, Click Synth, Latin Percussion and Drum Machine use the same construction and were not changed.
+
 ## 0.30.24 (2026-11-11)
 
 ### Changed

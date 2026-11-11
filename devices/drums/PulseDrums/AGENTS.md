@@ -13,7 +13,7 @@ Een drumworkstation voor techno. Tot 16 kanalen met 27 instrumenten (de 24 van D
 | Naam | `Pulse Drums` in alle talen; alleen een poortnaam heeft een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgangen `mix` (Stereo mix), `rumble` (Rumble) en `ch1` … `ch16` (Drum 1 … 16); eventingang `trigger` (MIDI / trigs); eventuitgang `trigs` (Drum trigs); modulatie-ingang `mod`; bundel-uitgang `multi` (Losse uit / Separate outs) |
-| Contract | v1.26 (apparaatversie 1.20.0) |
+| Contract | v1.26 (apparaatversie 1.20.1) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Drums, `nl.patchkamer.puls-drums`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De twee eerste klankmodellen heten nu `Deep` en `Punch` (in het oude bestand hadden ze een getal als naam).
@@ -110,6 +110,7 @@ De schuiven hebben als id de `params()`-sleutel of een sleutel als `edit.velocit
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/drums/PulseDrums/pulse-drums.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
+- **Starttijd van een slag (sinds 1.20.1):** `hit` rondt de starttijd naar boven af op een grens van het renderblok (128 samples, `quantumStart`), hooguit 2,7 ms later en nooit eerder dan gepland. Reden (gemeten in Chromium, ook in de echte host): de klik van de bassdrum (ruis) en de aanzet klinken anders als de start midden in een blok valt. Past een stap niet in een heel aantal blokken (135 BPM: een tel is 166,67 blokken), dan loopt die plek in een vaste cyclus en tikt elke derde slag harder (scherpste sprong 0,31, 0,19 en 0,13 voor de drie plekken, daarna 0,27 voor alle). Haal de afronding niet weg en plan geen slag op een tijd die er niet door gaat; een nieuw geluid in `hit` start dus ook op `t`.
 - Je kunt niet horen hoe een tune klinkt. Schrijf in je oplevering dat het **niet beluisterd** is.
 - Het geluid is bewezen gelijk aan dat van het oude bestand: elke aanroep naar de audiograaf (knooppunten, tijden, waarden) is identiek in 40 willekeurige kits (ongeveer 390.000 aanroepen), met vaste willekeur voor kans en humanize, en `getState`, `params()` en de bundel zijn gelijk. Een geluidswijziging moet dus een bewuste keuze zijn.
 
