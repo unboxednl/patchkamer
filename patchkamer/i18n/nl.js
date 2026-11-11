@@ -1054,6 +1054,8 @@ I18N.nl={
    "m.dm_niets_gekopieerd":"Er is nog geen apparaat gekopieerd",
    "m.dm_niet_geladen":"{0} is niet geladen: laad dat apparaat eerst",
    "m.dm_kopieer":"Kopieer apparaat",
+   "m.dm_clip_kopieer":"Kopieer patroon",
+   "m.dm_clip_plak":"Plak patroon",
    "m.dm_plak":"Plak apparaat",
    "m.dm_plak_titel":"Plak een nieuw {0} met de gekopieerde instellingen",
    "m.dm_menu":"Menu van {0}",

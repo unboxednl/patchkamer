@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.crossmodmono.compact",
   "device": "nl.patchkamer.crossmodmono",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the value and label underneath, the knobs grouped per section in one frame, compact selects, a slim scope and a dense step grid, at roughly half the standard width and well under half the height.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     }
   },
   "appearances": [

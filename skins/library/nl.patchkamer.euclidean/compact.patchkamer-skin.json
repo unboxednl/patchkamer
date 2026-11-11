@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.euclidean.compact",
   "device": "nl.patchkamer.euclidean",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs per row and for the selected row, small selects, a smaller ring view and no explanatory text.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 630
+      "width": 480
     }
   },
   "appearances": [

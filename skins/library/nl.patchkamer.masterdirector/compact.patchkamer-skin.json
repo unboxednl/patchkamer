@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.masterdirector.compact",
   "device": "nl.patchkamer.masterdirector",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: the strength as a rotary knob, selects and options in tight rows, at about three quarters of the standard width and less than half the height.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     }
   },
   "appearances": [

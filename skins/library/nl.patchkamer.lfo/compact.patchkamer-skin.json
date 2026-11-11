@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.lfo.compact",
   "device": "nl.patchkamer.lfo",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the label and value underneath, grouped in few frames, no explanatory text, at roughly half the width of the standard card.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     }
   },
   "appearances": [

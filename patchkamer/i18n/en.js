@@ -1052,6 +1052,8 @@ PK.I18N.en={
    "m.dm_niets_gekopieerd":"No device has been copied yet",
    "m.dm_niet_geladen":"{0} is not loaded: load that device first",
    "m.dm_kopieer":"Copy device",
+   "m.dm_clip_kopieer":"Copy pattern",
+   "m.dm_clip_plak":"Paste pattern",
    "m.dm_plak":"Paste device",
    "m.dm_plak_titel":"Paste a new {0} with the copied settings",
    "m.dm_menu":"Menu of {0}",

@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.polysynth.compact",
   "device": "nl.patchkamer.polysynth",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the label underneath, every block in one frame with its knobs close together, and the blocks packed two or three per row, in a card less than half as wide as the standard one.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 420
     }
   },
   "appearances": [

@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.squelchbox.compact",
   "device": "nl.patchkamer.squelchbox",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the label underneath, the knobs grouped in frames and tighter buttons and step rows, on a card 480 px wide instead of 900.",
@@ -21,7 +21,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     },
     "sections": [
       {

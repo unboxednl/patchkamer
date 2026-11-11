@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.11 (2026-11-11)
+
+### Gewijzigd
+- **Kaartkop bepaalt de kaartbreedte niet meer, en 27 compacte skins worden smaller.** De kaartkop (titel, poorten, versiekeuze, Kopieer en Plak) dwong een minimale kaartbreedte af (±482 punten, met Kopieer en Plak 540 tot 690), en bij sommige apparaten liep de inhoud daardoor buiten de kaart (bijvoorbeeld Drum Machine, Pitch Shifter en Frequency Shifter, waar waarden en knoppen werden afgekapt). De kaart is nu een eigen container en de kop past zich aan: de titel wordt afgekort, op een kaart smaller dan ±520 punten verdwijnen Kopieer en Plak uit de balk (ze staan dan als **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje) en onder 400 punten verdwijnt de versiekeuze van een apparaat met maar één versie. Een kaart kan daardoor smaller dan 480 punten, ook op een telefoon van 412 punten. De bestaande kaartbreedtes en de apparaten zelf veranderen niet. De skin **Compact** wordt daardoor smaller (breedte in punten, daarna de oude): Acid Stepper, Audio Input, Biotope, Bowed Ensemble, Brass Section, Cross Mod Mono, De-esser, Formant Singer, Grain Cloud, Guitar, LFO, Master Director, Mist, Mix Check, Piano, Scale Arpeggiator, Squelch Box, Karplus String en Supersaw Swarm 400 (480), Dissonant Cluster, Drone Synth, Harmonizer en Triple Osc Poly 420 (480), Drum Machine, Euclidean Rhythms en Chord Sequencer 480 (660, 630 en 690) en Click Synth 560 (612). Het blijft per apparaat de eigen minimale breedte, want sommige apparaten (Convolution Reverb 490, Click Synth 560) houden een eigen ondergrens. Pattern Tracker, Pattern Playlist, Drum Kit, Pulse Drums, Groovebox 12 en Mixer blijven even breed: daar past de inhoud niet smaller.
+
 ## 0.30.10 (2026-11-11)
 
 ### Toegevoegd

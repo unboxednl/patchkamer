@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.string.compact",
   "device": "nl.patchkamer.string",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the label underneath, grouped per section (string, excitation, pitch, output) in one frame, a lower keyboard and no wasted space.",
@@ -25,7 +25,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     },
     "layout": {
       "flow": "rows",

@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.dissonantcluster.compact",
   "device": "nl.patchkamer.dissonantcluster",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the value and label underneath, the knobs grouped per section in one frame, a slim roughness map and keyboard, at well under half the standard width and height.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 420
     }
   },
   "appearances": [

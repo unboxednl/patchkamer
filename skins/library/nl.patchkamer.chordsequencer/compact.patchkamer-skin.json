@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.chordsequencer.compact",
   "device": "nl.patchkamer.chordsequencer",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the label underneath, controls grouped in frames, a single row of 16 step pads with velocity and length sliders aligned underneath, and no explanatory text.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 690
+      "width": 480
     }
   },
   "appearances": [

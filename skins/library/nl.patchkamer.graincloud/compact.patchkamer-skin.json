@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.graincloud.compact",
   "device": "nl.patchkamer.graincloud",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the label underneath, the knobs grouped per section in one frame and a smaller waveform, at roughly half the width and height of the standard card.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     }
   },
   "appearances": [

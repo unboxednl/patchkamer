@@ -3,10 +3,13 @@ svg.cables{position:absolute;left:0;top:0;width:1px;height:1px;pointer-events:no
 svg.cables path{fill:none;stroke-width:2.5;opacity:.9}
 svg.cables path.audio{stroke:var(--audio)} svg.cables path.event{stroke:var(--event)} svg.cables path.pending{stroke-dasharray:6 5;opacity:.6}
 svg.cables path.hit{pointer-events:stroke;stroke:transparent;stroke-width:14;cursor:pointer}
-.card{position:absolute;width:300px;background:var(--card);border:1px solid var(--line);border-radius:6px;--lift:0 1px 3px var(--shadow),0 6px 16px var(--shadow);box-shadow:var(--lift);display:grid;grid-template-rows:auto auto minmax(0,1fr);min-width:0}
+.card{position:absolute;width:300px;background:var(--card);border:1px solid var(--line);border-radius:6px;--lift:0 1px 3px var(--shadow),0 6px 16px var(--shadow);box-shadow:var(--lift);display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);min-width:0;container:card/inline-size}
 .card.sel,.card.msel{border-color:var(--sel);box-shadow:0 0 0 1px var(--sel),0 0 16px 2px color-mix(in srgb,var(--sel) 60%,transparent),var(--lift)}
 .card .bar{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);cursor:grab;user-select:none;background:var(--bar);color:var(--bar-fg);border-radius:6px 6px 0 0}
 .card .bar:active{cursor:grabbing}
+.card .bar{min-width:0}   /* de kop bepaalt de kaartbreedte niet meer: wat niet past valt weg (zie de container queries hieronder) */
+@container card (max-width:520px){.card .bar .clipcopy,.card .bar .clippaste{display:none}}   /* Kopieer patroon en Plak patroon staan dan in het apparaatmenu */
+@container card (max-width:400px){.card .bar select.ver:disabled{display:none}}   /* de versiekeuze van een apparaat met één versie doet niets */
 .card .bar .nm{font-family:var(--disp);font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .bar .nm small{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0;text-transform:none;margin-left:6px}
 .card .bar .led{width:7px;height:7px;border-radius:50%;background:var(--line)}

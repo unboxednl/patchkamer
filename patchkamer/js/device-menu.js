@@ -56,7 +56,8 @@ async function open(id,anchor,btn,floorAt){
     if(PK.aboutOf(r.def)) item(PK.pkt('m.dm_over',r.def.name),'',()=>about(r.def));
     if(PK.manualOpen) item(PK.pkt('m.dm_handleiding'),'',()=>PK.manualOpen(r.def));
     const g=PK.selection&&PK.selection(); if(g&&g.group&&(g.ids.includes(id))) item(PK.pkt('m.dg_kopieer_selectie',g.ids.length+g.secs.length),'Ctrl C',()=>{ PK.groupCopy(g); });
-    item(PK.pkt('m.dm_kopieer'),r.inst&&typeof r.inst.clipInfo==='function'?'⇧Ctrl C':'Ctrl C',()=>{ PK.select(id); copyDevice(id); }); }
+    item(PK.pkt('m.dm_kopieer'),r.inst&&typeof r.inst.clipInfo==='function'?'⇧Ctrl C':'Ctrl C',()=>{ PK.select(id); copyDevice(id); });
+    if(r._clipBtns){ const cb=r._clipBtns; item(PK.pkt('m.dm_clip_kopieer'),'',()=>cb.copy.click(),false,cb.copy.title); item(PK.pkt('m.dm_clip_plak'),'',()=>cb.paste.click(),false,cb.paste.title); } }   // Kopieer/Plak van de kaartbalk verdwijnen op een smalle kaart (cards.css): het menu is dan de weg
   else { const g=PK.selection&&PK.selection(); if(g&&g.group) item(PK.pkt('m.dg_kopieer_selectie',g.ids.length+g.secs.length),'Ctrl C',()=>{ PK.groupCopy(g); }); }
   const grp=mem&&mem.format===PK.groupFormat;
   item(PK.pkt(grp?'m.dg_plak':'m.dm_plak',grp?mem.items.length:undefined),'Ctrl V',()=>{ pasteDevice(floorAt||null); },!mem,mem?(grp?PK.pkt('m.dg_plak_titel',mem.items.length,mem.sections.length):PK.pkt('m.dm_plak_titel',mem.name)):PK.pkt('m.dm_niets_gekopieerd'));

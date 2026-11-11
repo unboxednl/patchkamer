@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.drone.compact",
   "device": "nl.patchkamer.drone",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "A compact layout for small screens: rotary knobs with the value and label underneath, the knobs grouped per section in one frame and a tight step grid, at less than half the standard width and a fraction of the height.",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 420
     }
   },
   "appearances": [

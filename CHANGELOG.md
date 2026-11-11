@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.11 (2026-11-11)
+
+### Changed
+- **The card bar no longer sets the card width, and 27 compact skins get narrower.** The card bar (title, ports, version choice, Copy and Paste) forced a minimum card width (about 482 points, with Copy and Paste 540 to 690), and for some devices the content then ran outside the card (for example Drum Machine, Pitch Shifter and Frequency Shifter, where values and knobs were cut off). The card is now its own container and the bar adapts: the title is shortened, on a card narrower than about 520 points Copy and Paste leave the bar (they are then **Copy pattern** and **Paste pattern** in the menu behind the icon) and below 400 points the version choice of a device with only one version disappears. A card can now be narrower than 480 points, also on a phone of 412 points. Existing card widths and the devices themselves do not change. The **Compact** skin gets narrower as a result (width in points, then the old one): Acid Stepper, Audio Input, Biotope, Bowed Ensemble, Brass Section, Cross Mod Mono, De-esser, Formant Singer, Grain Cloud, Guitar, LFO, Master Director, Mist, Mix Check, Piano, Scale Arpeggiator, Squelch Box, Karplus String and Supersaw Swarm 400 (480), Dissonant Cluster, Drone Synth, Harmonizer and Triple Osc Poly 420 (480), Drum Machine, Euclidean Rhythms and Chord Sequencer 480 (660, 630 and 690) and Click Synth 560 (612). Each device keeps its own minimum width, so some devices (Convolution Reverb 490, Click Synth 560) keep their own floor. Pattern Tracker, Pattern Playlist, Drum Kit, Pulse Drums, Groovebox 12 and Mixer stay the same width: their content does not fit narrower.
+
 ## 0.30.10 (2026-11-11)
 
 ### Added

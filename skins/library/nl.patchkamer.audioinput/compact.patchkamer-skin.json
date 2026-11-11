@@ -5,7 +5,7 @@
   "id": "nl.patchkamer.audioinput.compact",
   "device": "nl.patchkamer.audioinput",
   "name": "Compact",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
   "description": "test",
@@ -20,7 +20,7 @@
       }
     ],
     "size": {
-      "width": 480
+      "width": 400
     }
   },
   "appearances": [
