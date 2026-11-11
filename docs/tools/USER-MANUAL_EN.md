@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-This manual covers the fourteen **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
+This manual covers the seventeen **tools** of Patchkamer. Tools are helpers: you use them to play, keep time, record, measure, take notes or control other devices. They are not effects, and apart from the Metronome click they make no sound of their own. For the basics (starting Patchkamer, loading a library, drawing cables) see the [main manual](../USER-MANUAL_EN.md). The list of tools is in the [tools folder](../../devices/tools/README.md).
 
 ## Which tool for which goal
 
@@ -22,6 +22,7 @@ This manual covers the fourteen **tools** of Patchkamer. Tools are helpers: you 
 | see the sound: spectrum, waveform, level | [Scope](#scope) | **In** and **Through** audio |
 | hear a click in time with the clock, or let a drum play on the beats | [Metronome](#metronome) | a click on **Out** and trigs on **Trigs** |
 | write down ideas, the key and a to-do list | [Notes](#notes) | no ports |
+| make a remix or hit version of a song in a Clip Arranger, or start a new song from a style | [Remix](#remix) | no ports |
 | connect a MIDI keyboard and the tracks of a sequencer to devices, and put their knobs on your keyboard knobs | [MIDI Hub](#midi-hub) | four **MIDI in** event ins, a **Tracks in** multi-MIDI in, and an event out per device |
 | show a controller with knobs, faders and pads as a panel and send its messages on | [Control Surface](#control-surface) | a **CC out** event out |
 
@@ -32,6 +33,7 @@ This manual covers the fourteen **tools** of Patchkamer. Tools are helpers: you 
 - **Multitrack** listens to a *bundle* (the thick green cable with many channels) and does not pass sound on. It sits next to the Mixer, not in the path.
 - **Metronome** has an audio out (the click) and an event out (**Trigs**). Connect **Out** to your mixer to hear the click, and **Trigs** to a drum machine or sampler to let it play on the beats.
 - **Notes** is not connected to anything.
+- **Remix** is not connected to anything either: it reads and writes the Clip Arranger directly, without a cable.
 
 Apart from the click of Metronome, none of these tools adds to your sound: they play, look, record or note.
 
@@ -574,6 +576,46 @@ The service decides what it accepts. If it only takes mp3 or m4a (**fal.ai · Mu
 - On bass lines played by Patchkamer's own synths it finds the right note (pitch to the nearest semitone, start within 50 ms) with an F1 of about 0.95 for clean sound and about 0.92 over ten situations, including soft, noisy, low-passed, mono, staccato, legato and glide. Sound with a lot of **room** (reverb) is much harder (about 0.80: the tail of a note is sometimes read as a new note), and a **chorus** costs a little (about 0.92). Put on the grid with a known tempo, about 90 % of the notes have the right step, pitch and length (within one step).
 - The **length** is the length of the sound, not of the key press: a bass with a long release gets longer notes than were played (typically 20 to 45 ms too long, for bass with a long fade 100 to 170 ms). **Octave:** when a sound has a weak sub-octave or two oscillators an octave or a fifth apart, the lowest tone you hear is what is written; shift the octave with **8va** or **8vb** if you want something else. A very slow attack (a pad-like bass) is heard late.
 - This was measured on bass lines from Patchkamer's own synths, **not on real recordings** (an electric bass, a microphone, a record) and not by listening. Real playing has noise, hum, fretting and slides that were not part of the measurement.
+
+---
+
+## Remix
+
+**What it is for.** Remix reads the song of a **Clip Arranger**, analyses it and puts a remix in as an **extra song**. Your first song stays. Remix can also **start a new song** from a style, with a key, chords, bass, drums and a hook as a starting point. It works on notes and clips, not on audio, and has no ports.
+
+![The Remix card](../images/en/tools/remix.png)
+
+**The controls**
+
+- **CLIP ARRANGER** chooses the Clip Arranger on the floor (with one Clip Arranger it is already right). **SONG** chooses which song is the source.
+- **RECIPE** chooses what Remix does:
+  - **Hit version**: the classic order intro, verse, chorus, verse, chorus, breakdown, double chorus, outro, 3:30 at most. The hook is not in the intro; the verses are shortened if needed.
+  - **Radio edit**: the same order with a shorter intro and shorter verses, so the chorus comes sooner.
+  - **Club mix**: a DJ intro with only a kick, groove, verse, build-up, drop, breakdown, build-up, drop, outro and a DJ outro; a mix of a few minutes, in blocks of 8, 16 and 32 bars.
+  - **Tempo flip**: the song at a new tempo. If that is about a factor 2 higher or lower (68 to 138 BPM), all clips are doubled or halved in length and so are the sections, so it sounds the same length at the new tempo and the clips do not sound different.
+  - **New song**: a song from a **STYLE** (House, Pop, Hip-hop, Disco, Synthwave) with its own **KEY**, **MODE** and **SEED**. The same seed gives the same song; another seed gives another hook.
+- **DRUMS** (with Hit version and Radio edit): **from the source** keeps the drums, **club (four on the floor)** replaces them.
+- **NEW TEMPO** (with Tempo flip) and **Apply tempo** (with Tempo flip and New song) also set the tempo of the studio.
+- **ANALYSE** shows what Remix sees in the song, without changing anything. **MAKE REMIX** writes the remix as a new song in the Clip Arranger. **RESTORE** takes it away again and puts the tempo back if Remix had set it.
+
+![Remix after Make remix](../images/en/tools/remix-result.png)
+
+**What the analysis shows.** The key (with the relative key), the tempo and the length; the hook (track and clip); the chords of the chorus and the verse with Roman numerals; a bar with the sections (colour: chorus, verse, breakdown or build-up, rest) and their length in bars; the role of each track; and a **hit score** from 0 to 100 with a list of checks: a danceable tempo, 3:30 at most, sections of 4 bars (8 for a club mix), the first chorus within 50 seconds, a short intro, a breakdown, a double last chorus, an outro, a hook that returns and chords in the scale.
+
+**Ports.** None. Remix reads and writes the Clip Arranger directly.
+
+**Example.** Place a Clip Arranger, import the pack **Clip Arranger Song Starters** and choose for example **Deep House Chords**. Place Remix, choose **Hit version** and press **MAKE REMIX**. The song list of the Clip Arranger now has a second song; the scenes and clips of the first stay as they were. Choose **New song** with style **Pop** for a song from scratch.
+
+**Presets.** The pack **Remix Recipes** has 21 presets in four folders: **Hit edits** (Hit Version, Hit Version Club Drums, Radio Edit, Radio Edit Club Drums), **Club** (Club Mix), **Tempo flips** (Double Time 68 to 138, 62 to 124, 75 to 150, Half Time 140 to 70, 128 to 64, Small Shift to 124 and 128) and **New songs** (House, Pop, Hip-hop, Disco and Synthwave, also in another key). A preset holds the recipe and the settings, not the chosen Clip Arranger and not the source song.
+
+**Tips and limits**
+
+- Remix cannot listen: it measures the structure, the key and the chords, not how it sounds. A high hit score is not a verdict on the music. **Not listened to:** listen to the remix yourself.
+- Remix only writes when you click, and only an extra song, extra scenes and extra clips. With **RESTORE** you put the Clip Arranger back as it was; that restore data lives only in memory, so after closing the page you can no longer restore (the Clip Arranger has its own **Undo**).
+- The analysis finds the key, the chords and the hook from the notes; these are estimates. A key can be the relative one (A minor or C major), and with few notes it says "uncertain".
+- Halving in **Tempo flip** can drop notes that do not fall on a half sixteenth; Remix reports how many. Clips of one bar cannot be halved. Stretched clips (over scenes) are not scaled.
+- A Clip Arranger has at most 24 scenes, 48 clips per track and 16 songs. When there is no room left Remix says so and skips a block or does nothing.
+- Use a source song you are allowed to edit. Remix gives no permission to release someone else's work.
 
 ---
 

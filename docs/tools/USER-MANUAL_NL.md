@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Deze handleiding gaat over de veertien **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
+Deze handleiding gaat over de zeventien **tools** van Patchkamer. Tools zijn hulpmiddelen: je gebruikt ze om te spelen, de maat te houden, op te nemen, te meten, notities te maken of andere apparaten te besturen. Het zijn geen effecten en op de tik van Metronome na maken ze zelf geen geluid. Voor de basis (Patchkamer starten, een bibliotheek laden, kabels trekken) zie de [basishandleiding](../USER-MANUAL_NL.md). De lijst met tools staat in de [map tools](../../devices/tools/README_NL.md).
 
 ## Welke tool voor welk doel
 
@@ -22,6 +22,7 @@ Deze handleiding gaat over de veertien **tools** van Patchkamer. Tools zijn hulp
 | het geluid zien: spectrum, golfvorm, niveau | [Scope](#scope) | audio **In** en **Door** |
 | een tik horen op de klok, of een drum op de slagen laten spelen | [Metronome](#metronome) | een tik op **Uit** en trigs op **Trigs** |
 | ideeën, toonsoort en een lijst met taken opschrijven | [Notes](#notes) | geen poorten |
+| een remix of hit-versie van een song in een Clip Arranger maken, of een nieuwe song laten beginnen uit een stijl | [Remix](#remix) | geen poorten |
 | een MIDI-keyboard en de sporen van een sequencer koppelen aan apparaten, en hun regelaars op knoppen van je keyboard zetten | [MIDI Hub](#midi-hub) | een eventingang **MIDI in**, een multi-MIDI-ingang **Sporen in** en een eventuitgang per apparaat |
 | een controller met knoppen, schuiven en pads als paneel tonen en zijn berichten doorsturen | [Control Surface](#control-surface) | een eventuitgang **CC uit** |
 
@@ -32,6 +33,7 @@ Deze handleiding gaat over de veertien **tools** van Patchkamer. Tools zijn hulp
 - **Multitrack** luistert naar een *bundel* (de dikke groene kabel met veel kanalen) en geeft het geluid niet door. Hij hangt naast de Mixer, niet in het pad.
 - **Metronome** heeft een audio-uitgang (de tik) en een eventuitgang (**Trigs**). Sluit **Uit** aan op je mixer om de tik te horen, en **Trigs** op een drumcomputer of sampler om die op de slagen te laten spelen.
 - **Notes** sluit je nergens op aan.
+- **Remix** sluit je ook nergens op aan: het leest en schrijft de Clip Arranger rechtstreeks, zonder kabel.
 
 Op de tik van Metronome na voegt geen van deze tools iets toe aan je geluid: ze spelen, kijken, nemen op of noteren.
 
@@ -574,6 +576,46 @@ De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan (**fal.ai ·
 - Op baslijnen van Patchkamers eigen synths vindt het de juiste noot (toonhoogte op de halve toon, start binnen 50 ms) met een F1 van ongeveer 0,95 voor schoon geluid en ongeveer 0,92 over tien situaties, waaronder zacht, met ruis, met laagdoorlaat, mono, staccato, legato en glide. Geluid met veel **ruimte** (galm) is veel moeilijker (ongeveer 0,80: de staart van een noot wordt soms voor een nieuwe noot gelezen), en een **chorus** kost een beetje (ongeveer 0,92). Op het raster gezet met een bekend tempo heeft ongeveer 90 % van de noten de juiste stap, toonhoogte en lengte (binnen een stap).
 - De **lengte** is de lengte van het geluid, niet van de toetsaanslag: een bas met een lange release krijgt langere noten dan er gespeeld zijn (meestal 20 tot 45 ms te lang, bij een bas met een lange uitklinking 100 tot 170 ms). **Octaaf:** heeft een geluid een zwakke suboctaaf of twee oscillators op een octaaf of een kwint van elkaar, dan wordt de laagste toon die je hoort opgeschreven; verschuif het octaaf met **8va** of **8vb** als je iets anders wilt. Een heel trage aanzet (een padachtige bas) wordt te laat gehoord.
 - Dit is gemeten op baslijnen van Patchkamers eigen synths, **niet op echte opnames** (een elektrische bas, een microfoon, een plaat) en niet door te luisteren. Echt spel heeft ruis, brom, grepen en glijders die niet in de meting zaten.
+
+---
+
+## Remix
+
+**Waar het voor dient.** Remix leest de song van een **Clip Arranger**, analyseert hem en zet er een remix als **extra song** in. Je eerste song blijft staan. Remix kan ook een **nieuwe song beginnen** uit een stijl, met toonsoort, akkoorden, bas, drums en een hook als beginpunt. Het werkt op noten en clips, niet op audio, en heeft geen poorten.
+
+![De kaart van Remix](../images/nl/tools/remix.png)
+
+**De regelaars**
+
+- **CLIP ARRANGER** kiest de Clip Arranger op de vloer (met één Clip Arranger staat hij al goed). **SONG** kiest welke song de bron is.
+- **RECEPT** kiest wat Remix doet:
+  - **Hit-versie**: de klassieke volgorde intro, couplet, refrein, couplet, refrein, breakdown, dubbel refrein, outro, hooguit 3:30. De hook zit niet in de intro; de coupletten worden zo nodig ingekort.
+  - **Radio edit**: dezelfde volgorde met een kortere intro en kortere coupletten, zodat het refrein eerder komt.
+  - **Club mix**: DJ-intro met alleen een kick, groove, couplet, opbouw, drop, breakdown, opbouw, drop, outro en een DJ-uitloop; een mix van een paar minuten, in blokken van 8, 16 en 32 maten.
+  - **Tempo flip**: de song naar een nieuw tempo. Ligt dat ongeveer een factor 2 hoger of lager (68 naar 138 BPM), dan worden alle clips verdubbeld of gehalveerd in lengte en de secties ook, zodat het bij het nieuwe tempo even lang klinkt en de clips niet anders klinken.
+  - **Nieuwe song**: een song uit een **STIJL** (House, Pop, Hip-hop, Disco, Synthwave) met een eigen **TOONSOORT**, **TOONAARD** en **SEED**. Dezelfde seed geeft dezelfde song; een andere seed een andere hook.
+- **SLAGWERK** (bij Hit-versie en Radio edit): **van de bron** laat de drums staan, **club (4 op de vloer)** vervangt ze.
+- **NIEUW TEMPO** (bij Tempo flip) en **Tempo toepassen** (bij Tempo flip en Nieuwe song) zetten ook het tempo van de studio.
+- **ANALYSEER** toont wat Remix in de song ziet, zonder iets te veranderen. **MAAK REMIX** schrijft de remix als nieuwe song in de Clip Arranger. **HERSTEL** haalt hem weer weg en zet het tempo terug als Remix dat had gezet.
+
+![Remix na Maak remix](../images/nl/tools/remix-result.png)
+
+**Wat de analyse toont.** De toonsoort (met de relatieve toonsoort), het tempo en de lengte; de hook (spoor en clip); de akkoorden van het refrein en het couplet met Romeinse cijfers; een balk met de secties (kleur: refrein, couplet, breakdown of opbouw, rest) en hun lengte in maten; de rol van elk spoor; en een **hitscore** van 0 tot 100 met een lijst van controles: een dansbaar tempo, hooguit 3:30, secties van 4 maten (bij een clubmix 8), het eerste refrein binnen 50 seconden, een korte intro, een breakdown, een dubbel laatste refrein, een outro, een hook die terugkomt en akkoorden in de toonladder.
+
+**Poorten.** Geen. Remix leest en schrijft de Clip Arranger rechtstreeks.
+
+**Voorbeeld.** Plaats een Clip Arranger, importeer het pack **Clip Arranger Song Starters** en kies bijvoorbeeld **Deep House Chords**. Plaats Remix, kies **Hit-versie** en druk op **MAAK REMIX**. In de songkeuze van de Clip Arranger staat nu een tweede song; de scènes en clips van de eerste blijven zoals ze waren. Kies **Nieuwe song** met stijl **Pop** voor een song vanaf nul.
+
+**Presets.** Het pack **Remix Recipes** heeft 21 presets in vier mappen: **Hit edits** (Hit Version, Hit Version Club Drums, Radio Edit, Radio Edit Club Drums), **Club** (Club Mix), **Tempo flips** (Double Time 68 to 138, 62 to 124, 75 to 150, Half Time 140 to 70, 128 to 64, Small Shift to 124 en 128) en **New songs** (House, Pop, Hip-hop, Disco en Synthwave, ook in een andere toonsoort). Een preset bevat het recept en de instellingen, niet de gekozen Clip Arranger en niet de bronsong.
+
+**Tips en beperkingen**
+
+- Remix kan niet luisteren: het meet de structuur, de toonsoort en de akkoorden, niet hoe het klinkt. Een hoge hitscore is geen oordeel over de muziek. **Niet beluisterd:** luister zelf naar de remix.
+- Remix schrijft alleen als jij klikt, en alleen een extra song, extra scènes en extra clips. Met **HERSTEL** zet je de Clip Arranger terug zoals hij was; die herstelgegevens staan alleen in het geheugen, dus na het sluiten van de pagina kun je niet meer herstellen (de Clip Arranger heeft zelf nog **Undo**).
+- De analyse herkent toonsoort, akkoorden en de hook uit de noten; het zijn schattingen. Een toonsoort kan de relatieve zijn (A mineur of C majeur), en bij weinig noten staat er "onzeker".
+- Halveren in **Tempo flip** kan noten laten vervallen die niet op een halve zestiende vallen; Remix meldt hoeveel. Clips van één maat zijn niet te halveren. Uitgerekte clips (over scènes) worden niet meegeschaald.
+- Een Clip Arranger heeft hoogstens 24 scènes, 48 clips per spoor en 16 songs. Is er geen plek meer, dan meldt Remix dat en slaat het een blok over of doet het niets.
+- Is de gekozen song een bron voor een remix van jezelf, dan gebruik je een song die jij mag bewerken. Remix geeft geen toestemming om andermans werk uit te brengen.
 
 ---
 

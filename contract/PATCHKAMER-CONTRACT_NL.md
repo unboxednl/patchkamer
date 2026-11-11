@@ -1,4 +1,4 @@
-# Patchkamer — Instrumentcontract v1.34 voor bouwende agents
+# Patchkamer — Instrumentcontract v1.35 voor bouwende agents
 
 Dit document is de volledige, zelfstandige instructie om een instrument, effect, modulator of hulpapparaat te bouwen voor **Patchkamer**, een modulaire browserstudio op Web Audio. Een agent die dit document krijgt, heeft geen andere context nodig. Lever precies één bestand `naam.patchkamer-device.js` op dat aan dit contract voldoet en zonder fouten door `validate-instrument.mjs` komt.
 
@@ -43,6 +43,7 @@ _Deze versie is opnieuw geschreven op basis van de host-code en de bibliotheek v
 | v1.32 | Velocity bij pads: `onpress(e, velocity)` en `onchange(on, velocity)` van `host.ui.pad` krijgen een tweede argument, een getal van 1 tot 127 (100 tenzij de gebruiker of een skin een pad met velocity kiest: dan de aanraakdruk of de plek van de klik). Een apparaat dat het argument negeert, klinkt gelijk (§12f) |
 | v1.33 | Uitleg bij het apparaat en geen eigen titel meer: de optionele definitieregel `about` (een tekst, of een object per taal `{ nl, en }`; alinea's gescheiden door een lege regel) staat in het menu van de kaart als **Over {naam}**. De host toont de poorten van breedere apparaten als stipjes in de titelbalk. Een apparaat noemt zijn eigen naam niet meer in zijn UI en zet zijn uitleg in `about` (§12g). Bestaande apparaten blijven werken. |
 | v1.34 | Vertraging melden: een apparaat dat het geluid vertraagt (lookahead, oversampling, een korrelmotor) kan de optionele methode `latency()` aanbieden (seconden, 0 tot 10) en `host.latencyChanged(this)` aanroepen als de waarde verandert. De host toont de vertraging op de titelbalk van de kaart en in de tekst bij een kabel (vertraging tot hier), maar compenseert niet (§13j). De validator controleert `latency()`. Bestaande apparaten blijven werken. |
+| v1.35 | De song van een ander apparaat lezen en schrijven: `host.stateOf(this, doelId)` geeft een JSON-kopie van de state van een ander apparaat, `host.setStateOf(this, doelId, state)` zet een state via `setState` van dat apparaat, alleen kort na een klik van de gebruiker. Bedoeld voor een apparaat dat de song van een sequencer analyseert of er een remix in zet. Optioneel; bestaande apparaten blijven werken (§13k). |
 
 ---
 
@@ -1179,6 +1180,23 @@ Sommige effecten vertragen het geluid: een lookahead (compressor, limiter, gate)
 
 **Oude host.** Een host zonder v1.34 negeert `latency()`. Roep `host.latencyChanged` alleen aan na `typeof host.latencyChanged === 'function'`.
 
+## 13k. De state van een ander apparaat lezen en schrijven (v1.35)
+
+Voor een hulpapparaat dat de inhoud van een ander apparaat bekijkt en daar iets in zet: bijvoorbeeld een remixer die de song van een sequencer analyseert en er een nieuwe song in schrijft. Gewone instrumenten en effecten hebben dit niet nodig.
+
+| Aanroep | Wat |
+|---|---|
+| `host.stateOf(this, doelId)` | Een JSON-kopie van `getState()` van het doel (een id uit `host.peers(this)`), of `null` bij een onbekend doel, jijzelf, een voorbeeldkaart in de bibliotheek, een doel zonder `getState` of een state die niet naar JSON gaat. Alleen lezen; wat je ermee doet, raakt het doel niet. |
+| `host.setStateOf(this, doelId, state)` | Zet `state` (een gewoon JSON-object, hoogstens 8 MB) met `setState()` van het doel. Het doel zuivert zelf (§13). Geeft `true` als de state is aangeboden en `setState` niet gooide, anders `false`. Alleen kort na een klik of toets van de gebruiker; zonder die klik geeft de host `false` en doet niets. |
+
+- **Een kopie, geen verwijzing.** Wijzig de kopie van `stateOf` en schrijf haar met `setStateOf` terug. Vervang nooit blind alles: begin bij de gelezen state en wijzig alleen wat je bedoelt, zodat velden die jij niet kent behouden blijven.
+- **De host houdt geen geschiedenis bij.** Bewaar de gelezen state zelf als je Herstel wilt aanbieden, en zet hem met `setStateOf` terug.
+- **De gebruiker blijft de baas.** Schrijf alleen als de gebruiker daarom vraagt (een knop), toon wat er verandert en laat het origineel waar het kan staan (bijvoorbeeld als een extra song naast de eerste). Schrijf nooit bij `create`, `mount`, `setState`, `setPreset` of een timer.
+- **Het doel bepaalt de vorm.** Wat in de state van een doel mag staan, staat in de `AGENTS.md` van dat apparaat; de state heeft geen vast formaat in dit contract. Een doel dat de state weigert of aanpast, laat dat in `getState()` zien: lees na het schrijven met `stateOf` terug als je wilt weten wat er is blijven staan.
+- **Het is geen sleutel voor geluid.** Het stuurt geen gebeurtenissen; alleen de klok van de studio laat horen wat er in de state staat.
+
+**Oude host.** Een host zonder v1.35 heeft deze twee aanroepen niet. Controleer `typeof host.stateOf === 'function'` en toon anders een melding.
+
 ## 14. Host-API in één overzicht
 
 | Aanroep | Sinds | Wat |
@@ -1230,6 +1248,7 @@ Sommige effecten vertragen het geluid: een lookahead (compressor, limiter, gate)
 | `host.fetchFile(this, url, opts)` | v1.30 | Eén https-bestand van internet ophalen, alleen na een klik; `as`, `maxBytes`, `signal`, `onProgress` (§13i) |
 | `host.recording(this, aan)` | v1.25 | Melden dat dit apparaat opneemt: de host toont een rood lampje met de tijd naast Start (§13h). |
 | `host.latencyChanged(this)` | v1.34 | Melden dat `latency()` een andere waarde geeft; de host toont de vertraging op de kaart en bij de kabels, maar compenseert niet (§13j). |
+| `host.stateOf(this, doelId)`, `host.setStateOf(this, doelId, state)` | v1.35 | De state van een ander apparaat lezen (kopie) en schrijven, het schrijven alleen na een klik (§13k). |
 
 Gebruik niets anders van de host. Wat hier niet staat, kan zonder aankondiging veranderen.
 
@@ -1315,6 +1334,7 @@ De validator laadt je module met een nep-AudioContext, een nep-DOM (met shadow r
 23. **Kiezen op afstand (v1.28, §11c)**: de nep-host kent `host.show(this, doelId, opts)` en geeft `false`; `status` is `'active'` of `'retired'`.
 24. **Bestanden van internet (v1.30, §13i)**: de nep-host kent `host.fetchFile(this, url, opts)` en weigert met `network`. Een aanroep tijdens de test (in `create`, `mount`, `setState`, `setPreset`, `onStep`, `onEvent`, `onTransport` of `destroy`) is een fout: een netwerkaanroep start alleen op een klik van de gebruiker. De controle op `fetch(` ziet `host.fetchFile(` niet als netwerkverkeer.
 25. **Vertraging (v1.34, §13j)**: een apparaat met `latency()` geeft een eindig getal van 0 tot 10 (seconden), in de beginstand en na `setState`; `getState()` is daarna gelijk. De nep-host kent `host.latencyChanged(this)`.
+26. **State van een ander apparaat (v1.35, §13k)**: de nep-host kent `host.stateOf(this, doelId)` (geeft `null`) en `host.setStateOf(this, doelId, state)` (geeft `false`). De validator controleert er verder niets van.
 
 Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed klinkt, of je eigen HTML-knoppen (buiten `host.ui`) meebewegen, en of je timing klopt. Test dat in Patchkamer zelf: zet een preset, verander een knop, kies de preset opnieuw en kijk of alles terugspringt.
 
@@ -1350,7 +1370,8 @@ Wat de validator níet kan zien: of je teksten goed vertaald zijn, of het goed k
 26. **AI-vraag (v1.29, §11c, optioneel)**: `host.ai(this, 'ask', …)` alleen na een klik; eerst `typeof host.ai === 'function'` en `host.ai(this, 'available')` gecontroleerd; het antwoord is onbetrouwbare tekst en elke waarde wordt gecontroleerd voor je iets zet; de gebruiker ziet wat er is voorgesteld voor het wordt toegepast; de nep-host geeft `false` bij `available` en weigert `ask`.
 27. Bestanden van internet (v1.30, optioneel): `host.fetchFile` alleen op een klik; `typeof host.fetchFile === 'function'` gecontroleerd; zichtbaar gezegd waar het bestand vandaan komt; `maxBytes` laag gezet; annuleren via `signal`; tekst per foutcode in `host.lang`; licentie en vermelding van wat je ophaalt bewaard; geen token in de state; inhoud nooit uitgevoerd (§13i).
 28. Vertraging (v1.34, optioneel): `latency()` geeft seconden (0 tot 10), alleen van wat bekend en gemeten is, zonder bijwerkingen en zonder de state te veranderen; bij een wijziging `host.latencyChanged` (na `typeof host.latencyChanged === 'function'`); de droge weg van een apparaat met `mix` loopt even lang vertraagd als de natte (§13j).
-29. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
+29. State van een ander apparaat (v1.35, optioneel): `host.setStateOf` alleen op een klik van de gebruiker en nooit in `create`, `mount`, `setState`, `setPreset` of een timer; begin bij de gelezen state, laat onbekende velden staan, laat het origineel waar het kan staan en bewaar de oude state voor Herstel; `typeof host.stateOf === 'function'` gecontroleerd (§13k).
+30. `node validate-instrument.mjs bestand.patchkamer-device.js` geeft `OK`, zonder `waarschuwing`.
 
 ---
 

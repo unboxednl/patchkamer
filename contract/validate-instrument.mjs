@@ -1,4 +1,4 @@
-// validate-instrument.mjs — Patchkamer contract v1.34
+// validate-instrument.mjs — Patchkamer contract v1.35
 // Gebruik: node validate-instrument.mjs mijn-instrument.patchkamer-device.js [--lang nl|en] [--controls] [--clip]
 // Laadt de module met een nep-AudioContext en een nep-DOM (incl. Shadow DOM), controleert het
 // contract en roept create, mount, onStep (2 maten), onEvent, onTransport, getState/setState en
@@ -19,6 +19,7 @@
 // v1.16 (§8): dekking van params(): elke continue regelaar (type=range, host.ui.knob, host.ui.adopt) hoort in params() te staan, met id = state-sleutel,
 //        of bewust uitgesloten te zijn met `modExclude: [ids]` (of '*') op de definitie. Alleen "let op" (nooit een fout) voor: continue regelaars die niet in params() staan,
 //        een instrument/effect/mixer met continue regelaars maar zonder params(), en een param-id zonder regelaar of state-sleutel. --controls krijgt de kolom "in params()".
+// v1.35: host.stateOf(inst, doelId) en host.setStateOf(inst, doelId, state): de state van een ander apparaat lezen en schrijven; de nep-host geeft null en false.
 // v1.34: optioneel latency() (seconden, 0 tot 10) en host.latencyChanged(inst): de vertraging die het apparaat tussen audio-ingang en -uitgang toevoegt; gooit niet, verandert de state niet, blijft eindig na setState.
 // v1.33: optioneel `about` (tekst of object per taal, hoogstens 8000 tekens): anders een fout.
 // v1.17: klembord: optioneel clipInfo()/getClip()/setClip(clip) (alle drie of geen): formaat patchkamer-clip, setClip(getClip()) laat de state gelijk, rommel gooit niet en zet niets half. --clip toont de uitvoer.
@@ -677,6 +678,8 @@ const host = { ctx, lang: HOSTLANG, audio: { sampleRate: 48000, quality: 'normal
   watchParams() { return false; }, setParam() { return false; }, lockParams() { return false; }, paramsOf() { return []; },
   // v1.14
   noteNamesChanged() {},
+  // v1.35
+  stateOf() { return null; }, setStateOf() { return false; },
   // v1.34
   latencyChanged() {},
   mastering(inst, action, opts) { masteringCalls++; if (!['inspect', 'apply', 'analyse', 'accept', 'undo'].includes(action)) masteringBad = vt('v.host_mastering_onbekende_actie',action); if (!PL(curPorts || d.ports, 'masteringOut').length) masteringBad = vt('v.host_mastering_geen_masteringout'); return { changed: 0, results: [] }; },

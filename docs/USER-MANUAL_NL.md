@@ -208,7 +208,7 @@ Apparaten zijn er in soorten. Elke soort heeft een eigen README en een eigen geb
 | **Mastering** | Een mix afmaken: toon, dynamiek, saturatie, breedte, volume en controle | Balance EQ, Multiband Balance, Bus Compressor, Patina, Stereo Space, Master Chain, Mix Check, Master Director, Listening Output | [Handleiding mastering](mastering/USER-MANUAL_NL.md) · [README](../devices/mastering/README_NL.md) |
 | **Mixer** | Binnenhalen, mixen, het niveau gelijk houden, afspelen | Mixer, Leveler, Speakers, Audio Input, Audio Capture, Audio Output | [Handleiding mixer](mixer/USER-MANUAL_NL.md) · [README](../devices/mixer/README_NL.md) |
 | **Modulatoren** | De regelaars van andere apparaten bewegen | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [Handleiding modulatoren](modulators/USER-MANUAL_NL.md) · [README](../devices/modulators/README_NL.md) |
-| **Tools** | Spelen, opnemen, meten en notities maken | Control Surface, Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Scope | [Handleiding tools](tools/USER-MANUAL_NL.md) · [README](../devices/tools/README_NL.md) |
+| **Tools** | Spelen, opnemen, meten, notities maken en remixen | Control Surface, Keys / MIDI, Metronome, MIDI Hub, Multitrack, Notes, Pad Controller, Recorder, Remix, Scope | [Handleiding tools](tools/USER-MANUAL_NL.md) · [README](../devices/tools/README_NL.md) |
 
 Twee voorbeelden van een kaart in de bibliotheek: **Chord Buddy** (soort Tools: hulp bij akkoorden, ook zonder muziektheorie) en **Balance EQ** (soort Mastering: een equalizer met vijf tot twaalf banden).
 

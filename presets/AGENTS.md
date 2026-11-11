@@ -130,8 +130,9 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [Control Surface](../devices/tools/ControlSurface/) | Control Surface Layouts | 28 | 5: Controllers, Strips, Faders, Knobs, Pads | [`control-surface.patchkamer-presets.json`](control-surface.patchkamer-presets.json) | 2 |
 | [Metronome](../devices/tools/Metronome/) | Metronome Basics | 9 | 3: Practice, Subdivisions, Loud | [`metronome.patchkamer-presets.json`](metronome.patchkamer-presets.json) | 2 |
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4: Sound Controllers, Wheels and Pedals, Effects, Utility | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) | 2 |
+| [Remix](../devices/tools/Remix/) | Remix Recipes | 21 | 4: Hit edits, Club, Tempo flips, New songs | [`remix.patchkamer-presets.json`](remix.patchkamer-presets.json) | 2 |
 
-Samen 54 packs met 2255 presets.
+Samen 55 packs met 2276 presets.
 <!-- list-devices:end presets -->
 
 ## Wat je niet doet

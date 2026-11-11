@@ -4,6 +4,15 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.32.0 (2026-11-11)
+
+### Added
+- **Remix (1.0.0), a new device in Tools.** Remix reads the song of a Clip Arranger, analyses key, chords, sections and hook, and puts a remix in the same Clip Arranger as an **extra song**; the first song stays and **Restore** takes the remix away. Recipes: **Hit version** and **Radio edit** (intro, verse, chorus, verse, chorus, breakdown, double chorus, outro, 3:30 at most, after a classic hit formula), **Club mix** (DJ intro with only a kick, build-ups, drops, breakdown, DJ outro), **Tempo flip** (clips and sections ×2 or ÷2 at a tempo that differs by about a factor 2, for example 68 to 138 BPM) and **New song** from a style (House, Pop, Hip-hop, Disco, Synthwave) with a key, chord progression, bass, drums and a hook from a seed, to bootstrap a song. The analysis shows the key, chords with Roman numerals, sections, hook and a hit score with checks (length, first chorus, sections of 4 bars, breakdown, outro, chords in the scale). Remix works on notes and clips and cannot listen: **not listened to**. Pack **Remix Recipes** with 21 presets, manual and screenshots in both languages.
+- **Contract v1.35, §13k: reading and writing another device's state.** `host.stateOf(this, targetId)` returns a copy of another device's state, `host.setStateOf(this, targetId, state)` sets a state through that device's `setState`, only shortly after a click by the user. Optional; existing devices keep working. The validator, the tests and both contract languages are updated.
+
+### Changed
+- **Song instructions:** step 2 names a classic hit formula and points to the styles and recipes of Remix; the AGENTS.md of Clip Arranger describes how another device may read and write the song.
+
 ## 0.31.0 (2026-11-11)
 
 ### Added

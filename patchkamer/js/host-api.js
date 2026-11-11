@@ -112,6 +112,14 @@ const Host={
   setParam(inst,targetId,paramId,value){ return PK.prmSet(inst,targetId,paramId,+value); },
   lockParams(inst,targetId,ids){ return PK.prmLock(inst,targetId,ids); },
   paramsOf(inst,targetId){ return PK.prmList(inst,targetId); },
+  // contract v1.35: de state van een ander apparaat lezen en schrijven (een sequencer-song analyseren of er een remix in zetten). stateOf geeft een JSON-kopie van getState()
+  // of null; setStateOf zet een state via setState() van het doel (dat zuivert zelf) en werkt alleen kort na een klik van de gebruiker. Geen ongedaan maken hier: wie schrijft, bewaart de oude state zelf.
+  stateOf(inst,targetId){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!me||!r||targetId===me||r.pvw||typeof r.inst.getState!=='function') return null;
+    try{ return JSON.parse(JSON.stringify(r.inst.getState())); }catch(e){ console.warn('stateOf',r.def.name,e); return null; } },
+  setStateOf(inst,targetId,state){ const me=inst&&inst._id, r=this.devices.get(targetId); if(!me||!r||targetId===me||r.pvw||typeof r.inst.setState!=='function') return false;
+    if(!state||typeof state!=='object'||Array.isArray(state)) return false; const ua=typeof navigator!=='undefined'&&navigator.userActivation; if(ua&&!ua.isActive) return false;
+    let copy; try{ const txt=JSON.stringify(state); if(txt.length>8e6) return false; copy=JSON.parse(txt); }catch(e){ return false; }
+    try{ r.inst.setState(copy); }catch(e){ console.warn('setStateOf',r.def.name,e); return false; } return true; },
   // contract v1.5: is deze poort van mij bekabeld? (bv. om een bundel alleen op lege kanalen te zetten)
   isWired(inst,port,dir){ const id=inst&&inst._id; return this.cables.some(c=>dir==='out'?(c.from.id===id&&c.from.port===port):(c.to.id===id&&c.to.port===port)); },
   eventBundleChanged(inst,port){ const sid=inst&&inst._id; if(!sid) return; this.cables.filter(c=>c.kind==='multievent'&&c.from.id===sid&&(port==null||c.from.port===port)).forEach(PK.deliverEventBundle); },

@@ -58,6 +58,10 @@ errs('latency geeft meer dan 10 seconden (milliseconden verward met seconden)', 
 errs('latency gooit', withLat("latency() { throw new Error('stuk'); }"), [['latency() gooit', 'latency() throws']]);
 errs('latency verandert de state', withLat('latency() { this.n = (this.n || 0) + 1; return 0.001; }').replace('getState() { return { v: 1 }; }', 'getState() { return { v: 1, n: this.n || 0 }; }'), [['latency() verandert de state', 'latency() changes the state']]);
 
+// ---- state van een ander apparaat (v1.35)
+const withPeerState = body => dev(`el.appendChild(document.createElement('div'));`).replace('getState() { return { v: 1 }; },', `getState() { return { v: 1 }; }, onPeers() { ${body} },`);
+ok('stateOf en setStateOf bestaan op de nep-host (v1.35)', withPeerState("if (typeof host.stateOf === 'function') { const s = host.stateOf(this, 'x'); if (s === null && host.setStateOf(this, 'x', {}) === false) this.n = 1; }"));
+
 // ---- zonder waarschuwing
 ok('geen host.ui, geen id', dev(`el.appendChild(document.createElement('div'));`));
 ok('knop zonder opties (oud gedrag)', dev(`ui.k.push(host.ui.knob(el, T.a, [0, 1, 0.01], 0.5, v => v, v => {}));`));

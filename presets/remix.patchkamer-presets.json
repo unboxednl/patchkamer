@@ -1,0 +1,347 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.remix",
+  "name": "Remix Recipes",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Recipes for Remix: a hit version or radio edit in the classic order, a club mix, tempo flips (double or half time) and new songs from a style. The chosen Clip Arranger and the source song are not part of a preset.",
+  "tree": [
+    {
+      "folder": "Hit edits",
+      "items": [
+        {
+          "name": "Hit Version",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "hit",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Hit Version, Club Drums",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "hit",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "club",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Radio Edit",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "radio",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Radio Edit, Club Drums",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "radio",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "club",
+            "applyTempo": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Club",
+      "items": [
+        {
+          "name": "Club Mix",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "club",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Tempo flips",
+      "items": [
+        {
+          "name": "Double Time 68 to 138",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 138,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Double Time 62 to 124",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 124,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Double Time 75 to 150",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 150,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Half Time 140 to 70",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 70,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Half Time 128 to 64",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 64,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Small Shift to 124",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 124,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "Small Shift to 128",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "flip",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "New songs",
+      "items": [
+        {
+          "name": "New House",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New House in G minor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "house",
+            "tonic": 7,
+            "mode": "minor",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Pop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "pop",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Pop in A minor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "pop",
+            "tonic": 9,
+            "mode": "minor",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Hip-hop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "hiphop",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Disco",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "disco",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Disco in D major",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "disco",
+            "tonic": 2,
+            "mode": "major",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Synthwave",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "synthwave",
+            "tonic": -1,
+            "mode": "auto",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        },
+        {
+          "name": "New Synthwave in A minor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "recipe": "new",
+            "targetBpm": 128,
+            "style": "synthwave",
+            "tonic": 9,
+            "mode": "minor",
+            "seed": 1,
+            "drums": "keep",
+            "applyTempo": true
+          }
+        }
+      ]
+    }
+  ]
+}

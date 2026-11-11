@@ -4,6 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.32.0 (2026-11-11)
+
+### Toegevoegd
+- **Remix (1.0.0), een nieuw apparaat in Tools.** Remix leest de song van een Clip Arranger, analyseert toonsoort, akkoorden, secties en hook, en zet een remix als **extra song** in dezelfde Clip Arranger; de eerste song blijft staan en **Herstel** haalt de remix weg. Recepten: **Hit-versie** en **Radio edit** (intro, couplet, refrein, couplet, refrein, breakdown, dubbel refrein, outro, hooguit 3:30, naar een klassieke hitformule), **Club mix** (DJ-intro met alleen een kick, opbouw, drops, breakdown, DJ-uitloop), **Tempo flip** (clips en secties ×2 of ÷2 bij een tempo dat ongeveer een factor 2 verschilt, bijvoorbeeld 68 naar 138 BPM) en **Nieuwe song** uit een stijl (House, Pop, Hip-hop, Disco, Synthwave) met toonsoort, akkoordgang, bas, slagwerk en een hook uit een seed, voor het bootstrappen van een song. De analyse toont toonsoort, akkoorden met Romeinse cijfers, secties, hook en een hitscore met controles (duur, eerste refrein, secties van 4 maten, breakdown, outro, akkoorden in de toonladder). Remix werkt op noten en clips en kan niet luisteren: **niet beluisterd**. Pack **Remix Recipes** met 21 presets, handleiding en screenshots in beide talen.
+- **Contract v1.35, §13k: de state van een ander apparaat lezen en schrijven.** `host.stateOf(this, doelId)` geeft een kopie van de state van een ander apparaat, `host.setStateOf(this, doelId, state)` zet een state via `setState` van dat apparaat, alleen kort na een klik van de gebruiker. Optioneel; bestaande apparaten blijven werken. Validator, tests en beide contracttalen zijn bijgewerkt.
+
+### Gewijzigd
+- **Songinstructies:** stap 2 noemt een klassieke hitformule en verwijst naar de stijlen en recepten van Remix; de AGENTS.md van Clip Arranger beschrijft hoe een ander apparaat de song mag lezen en schrijven.
+
 ## 0.31.0 (2026-11-11)
 
 ### Toegevoegd

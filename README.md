@@ -40,7 +40,7 @@ Devices come in kinds. Every kind has its own README in its folder and its own u
 | **Mastering** | Finish a mix: tone, dynamics, saturation, width, loudness and checking, for many styles and situations | Balance EQ, Multiband Balance, Bus Compressor, Patina, Stereo Space, Master Chain, Mix Check, Master Director, Listening Output | [devices/mastering](devices/mastering/README.md) | [Mastering](docs/mastering/USER-MANUAL_EN.md) |
 | **Mixer** | Bring in, mix, keep the level steady, play out | Mixer, Leveler, Speakers, Audio Input, Audio Capture, Audio Output | [devices/mixer](devices/mixer/README.md) | [Mixer](docs/mixer/USER-MANUAL_EN.md) |
 | **Modulators** | Move the controls of other devices | Drift, Follower, LFO, Macro, Multi-Segment Envelope, Swell | [devices/modulators](devices/modulators/README.md) | [Modulators](docs/modulators/USER-MANUAL_EN.md) |
-| **Tools** | Play, record, measure and take notes | Bass Finder, Chord Buddy, Control Surface (retired), Drum Listener, Keyboard, Keys / MIDI (retired), Metronome, MIDI Controller, MIDI Hub (retired), Multitrack, Notes, Pad Controller (retired), Recorder, Scope, Stem Splitter, Tune Finder | [devices/tools](devices/tools/README.md) | [Tools](docs/tools/USER-MANUAL_EN.md) |
+| **Tools** | Play, record, measure, take notes and remix | Bass Finder, Chord Buddy, Control Surface (retired), Drum Listener, Keyboard, Keys / MIDI (retired), Metronome, MIDI Controller, MIDI Hub (retired), Multitrack, Notes, Pad Controller (retired), Recorder, Remix, Scope, Stem Splitter, Tune Finder | [devices/tools](devices/tools/README.md) | [Tools](docs/tools/USER-MANUAL_EN.md) |
 
 ## Ready-made sounds and settings
 
@@ -59,7 +59,7 @@ A device is a single `.patchkamer-device.js` file. The **contract** says exactly
 node contract/validate-instrument.mjs devices/synths/Duofone/duofone.patchkamer-device.js
 ```
 
-Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, where to put the files and what to check. The current contract is **v1.34**. Every version is tagged (`contract/vX.Y`).
+Point your AI agent at [AGENTS.md](AGENTS.md). It tells the agent what to read, where to put the files and what to check. The current contract is **v1.35**. Every version is tagged (`contract/vX.Y`).
 
 ## What is in this repository
 

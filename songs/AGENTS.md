@@ -194,6 +194,8 @@ Schrijf daarna op papier, voor je verder gaat:
 
 Een maat duurt `240 / bpm` seconden. Dit blad is de basis van het hele nummer en van de review in stap 12.
 
+Een bekende methode als beginpunt (de klassieke hitformule voor een dansbare popsingle): een dansgroove die doorloopt, hooguit 3:30, de volgorde intro, couplet, refrein, couplet, refrein, breakdown, dubbel refrein, outro, secties in veelvouden van 4 maten, een refrein van hooguit 8 maten en tempo hooguit 135 BPM. Het apparaat [Remix](../devices/tools/Remix/AGENTS.md) heeft deze regels, vijf stijlen (tempo, toonsoort, akkoordgangen, basritme, slagwerk per sectie) en een hookgenerator als recepten; lees ze in zijn bestand als je een stijl nodig hebt. Het is een beginpunt: werk de toonsoort, de akkoorden en de structuur zelf uit op het blad.
+
 ### Stap 3. De sequencer kiezen en het nummer inrichten
 
 Kies de sequencer die bij de vorm van het nummer past (tabel in [§5](#5-songstructuur-en-lengtes-in-maten) en [../devices/sequencers/AGENTS.md](../devices/sequencers/AGENTS.md)): bijvoorbeeld Clip Arranger voor scènes en een arrangement, Pattern Playlist of Pattern Tracker voor patronen in een volgorde, Chord Sequencer of Chord Buddy voor akkoorden. Lees zijn `AGENTS.md`.
