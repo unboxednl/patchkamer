@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.23 (2026-11-11)
+
+### Gewijzigd
+- **Clip Arranger (1.37.0): kleuren met een kleurkiezer.** Spoor, scène en sectie krijgen een kleur via een kleurkiezer in plaats van een lijst met nummers (het potlood bij het spoor en bij de scène; Kleur in de sectie-instellingen). Klik op de naam van een scène om hem te hernoemen. Kies je een sectie, dan staat links en rechts van haar scènes een verticale lijn in de kleur van de sectie. De vakjes met clipnummers in de sectieblokken zijn weg.
+
 ## 0.30.22 (2026-11-11)
 
 ### Gewijzigd

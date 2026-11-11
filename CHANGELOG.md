@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.23 (2026-11-11)
+
+### Changed
+- **Clip Arranger (1.37.0): colours with a colour picker.** Track, scene and section get a colour through a colour picker instead of a list with numbers (the pencil at the track and at the scene; Colour in the section settings). Click the name of a scene to rename it. When you choose a section, a vertical line in the colour of the section is shown to the left and right of its scenes. The cells with clip numbers in the section blocks are gone.
+
 ## 0.30.22 (2026-11-11)
 
 ### Changed
