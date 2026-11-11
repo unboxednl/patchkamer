@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.18 (2026-11-11)
+
+### Gewijzigd
+- **Clip Arranger (1.32.0): de clips zijn een bibliotheek per spoor, los van de scènes.** Een clip uit een scène halen (rechtermuisknop of Delete: Haal uit scène) laat hem in de clipbalk (03) staan; Verwijder clip helemaal gooit hem echt weg. De × bij een scène verwijdert de rij weer echt (niet meer grijs) en haar clips blijven in de bibliotheek. Een nieuwe scène (+) heeft lege cellen; zet er een clip in via Hergebruik clip of door hem uit de clipbalk naar de cel te slepen. De bibliotheek begint met 8 clips en groeit tot 48. Oude songs en presets klinken gelijk. Dit herstelt de × van 0.30.17, die een scène alleen grijs maakte.
+
 ## 0.30.17 (2026-11-11)
 
 ### Toegevoegd

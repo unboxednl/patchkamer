@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.18 (2026-11-11)
+
+### Changed
+- **Clip Arranger (1.32.0): the clips are a library per track, separate from the scenes.** Taking a clip out of a scene (right-click or Delete: Take out of scene) leaves it in the clip bar (03); Delete clip completely really throws it away. The × on a scene deletes the row again (no longer just dimmed) and its clips stay in the library. A new scene (+) has empty cells; put a clip in via Reuse clip or by dragging it from the clip bar onto the cell. The library starts with 8 clips and grows up to 48. Old songs and presets sound the same. This corrects the × of 0.30.17, which only dimmed a scene.
+
 ## 0.30.17 (2026-11-11)
 
 ### Added
