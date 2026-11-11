@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.21 (2026-11-11)
+
+### Changed
+- **Clip Arranger (1.35.0): section 02 (Track) is now in the track header.** Click the name or the label of a track to change it, the track type is a drop-down in the header, and colour, transpose, gate, swing, velocity and Audition track (for drums also protocol, row swing and the drum rows) are behind the pencil. Live record → this clip is now in the clip editor, which has become section 02.
+
 ## 0.30.20 (2026-11-11)
 
 ### Changed

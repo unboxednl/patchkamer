@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.21 (2026-11-11)
+
+### Gewijzigd
+- **Clip Arranger (1.35.0): sectie 02 (Track) zit nu in de spoorkop.** Klik op de naam of het label van een spoor om het aan te passen, het tracktype is een keuzelijst in de kop, en kleur, transponeren, gate, swing, velocity en Track auditeren (bij drums ook protocol, swing rij en de drumrijen) staan onder het potlood. Live opname → deze clip staat nu in de clip-editor, die sectie 02 is geworden.
+
 ## 0.30.20 (2026-11-11)
 
 ### Gewijzigd
