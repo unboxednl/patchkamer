@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.19 (2026-11-11)
+
+### Changed
+- **Clip Arranger (1.33.0): the clips really are a library per track, separate from the scenes.** In 03 the clips stay in a fixed order with fixed numbers; a scene is only a row that points to one clip per track. Deleting, adding, duplicating or moving scenes no longer changes the library (in 0.30.18 the clips shifted to the back). An empty cell shows + (click makes a new clip). Take out of scene leaves the clip in 03, Delete clip completely throws it away. The same clip can be in more scenes (reference, ↻); dragging a clip from the clip bar onto a cell puts it in. Old songs and presets (including the 58 shipped ones) load and sound the same.
+
 ## 0.30.18 (2026-11-11)
 
 ### Changed
