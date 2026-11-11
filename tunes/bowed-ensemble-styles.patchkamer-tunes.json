@@ -1,12 +1,12 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.bowedensemble",
   "name": "Bowed Ensemble Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Tunes for Bowed Ensemble by music style: cinematic, ambient, pop, ballad, trance, synthwave, film score, lo-fi, neo-classical, disco & funk and deep house. Six sounds per style: pads, basses, leads and plucks or stabs.",
+  "description": "Tunes for Bowed Ensemble by music style: cinematic, ambient, pop, ballad, trance, synthwave, film score, lo-fi, neo-classical, disco & funk and deep house. Six sounds per style: pads, basses, leads and plucks or stabs. Also has Liquid DnB, Dancefloor DnB, Neuro Pads and Jungle folders.",
   "tags": [
     "instrument/strings"
   ],
@@ -1915,6 +1915,337 @@
             "release": 3.5,
             "velocity": 0.7,
             "transpose": 0,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Liquid DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Liquid Legato Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "cutoff": 4500,
+            "resonance": 0.7,
+            "body": 0.6,
+            "bow": 0.1,
+            "detune": 6,
+            "width": 1,
+            "vibrato": 0.25,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.6,
+            "space": 0.5,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 1.0,
+            "attack": 0.4,
+            "decay": 1,
+            "sustain": 0.9,
+            "release": 2.2,
+            "velocity": 0.7,
+            "transpose": 0,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Silk Violins",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/strings/violin"
+          ],
+          "state": {
+            "cutoff": 6500,
+            "resonance": 0.7,
+            "body": 0.35,
+            "bow": 0.12,
+            "detune": 5,
+            "width": 0.8,
+            "vibrato": 0.3,
+            "rate": 5.4,
+            "human": 0.35,
+            "ensemble": 0.55,
+            "space": 0.45,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 1.0,
+            "attack": 0.25,
+            "decay": 0.8,
+            "sustain": 0.85,
+            "release": 1.6,
+            "velocity": 0.7,
+            "transpose": 12,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Soul Cello",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/strings/cello"
+          ],
+          "state": {
+            "cutoff": 3000,
+            "resonance": 0.7,
+            "body": 0.85,
+            "bow": 0.18,
+            "detune": 3,
+            "width": 0.8,
+            "vibrato": 0.4,
+            "rate": 5,
+            "human": 0.35,
+            "ensemble": 0.3,
+            "space": 0.4,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 0.76,
+            "attack": 0.12,
+            "decay": 0.6,
+            "sustain": 0.85,
+            "release": 1.0,
+            "velocity": 0.7,
+            "transpose": -12,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Liquid Pizzicato",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/strings/pizzicato"
+          ],
+          "state": {
+            "cutoff": 4800,
+            "resonance": 0.7,
+            "body": 0.5,
+            "bow": 0.04,
+            "detune": 3,
+            "width": 0.8,
+            "vibrato": 0,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.35,
+            "space": 0.45,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 0.925,
+            "attack": 0.005,
+            "decay": 0.3,
+            "sustain": 0,
+            "release": 0.35,
+            "velocity": 0.7,
+            "transpose": 0,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dancefloor DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Staccato Rave Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "cutoff": 7500,
+            "resonance": 0.9,
+            "body": 0.3,
+            "bow": 0.2,
+            "detune": 9,
+            "width": 1,
+            "vibrato": 0,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.7,
+            "space": 0.25,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 1.0,
+            "attack": 0.005,
+            "decay": 0.15,
+            "sustain": 0.2,
+            "release": 0.2,
+            "velocity": 0.7,
+            "transpose": 0,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Orchestral Hit Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
+          "state": {
+            "cutoff": 8500,
+            "resonance": 0.7,
+            "body": 0.5,
+            "bow": 0.25,
+            "detune": 8,
+            "width": 1,
+            "vibrato": 0,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.5,
+            "space": 0.35,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 0.925,
+            "attack": 0.005,
+            "decay": 0.35,
+            "sustain": 0,
+            "release": 0.4,
+            "velocity": 0.7,
+            "transpose": 0,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Euphoric Rising Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
+          "state": {
+            "cutoff": 9000,
+            "resonance": 0.7,
+            "body": 0.4,
+            "bow": 0.15,
+            "detune": 10,
+            "width": 1,
+            "vibrato": 0.2,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.8,
+            "space": 0.55,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 1.0,
+            "attack": 1.0,
+            "decay": 1,
+            "sustain": 0.95,
+            "release": 2.5,
+            "velocity": 0.7,
+            "transpose": 0,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neuro Pads",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/pad"
+      ],
+      "items": [
+        {
+          "name": "Dark Strings Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "cutoff": 1600,
+            "resonance": 1.4,
+            "body": 0.8,
+            "bow": 0.3,
+            "detune": 14,
+            "width": 1,
+            "vibrato": 0.1,
+            "rate": 5.1,
+            "human": 0.6,
+            "ensemble": 0.8,
+            "space": 0.6,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 0.906,
+            "attack": 1.0,
+            "decay": 1.5,
+            "sustain": 0.9,
+            "release": 3.5,
+            "velocity": 0.7,
+            "transpose": -12,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jungle",
+      "tags": [
+        "style/jungle"
+      ],
+      "items": [
+        {
+          "name": "Dub Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "cutoff": 2600,
+            "resonance": 0.7,
+            "body": 0.7,
+            "bow": 0.1,
+            "detune": 7,
+            "width": 0.8,
+            "vibrato": 0.15,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.6,
+            "space": 0.6,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 1.0,
+            "attack": 0.3,
+            "decay": 1,
+            "sustain": 0.8,
+            "release": 2.5,
+            "velocity": 0.7,
+            "transpose": 0,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Ragga Cello Line",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/strings/cello"
+          ],
+          "state": {
+            "cutoff": 2200,
+            "resonance": 0.7,
+            "body": 0.9,
+            "bow": 0.25,
+            "detune": 2,
+            "width": 0.8,
+            "vibrato": 0.35,
+            "rate": 5.1,
+            "human": 0.35,
+            "ensemble": 0.2,
+            "space": 0.35,
+            "pan": 0,
+            "expression": 0.9,
+            "level": 0.63,
+            "attack": 0.08,
+            "decay": 0.5,
+            "sustain": 0.8,
+            "release": 0.6,
+            "velocity": 0.7,
+            "transpose": -12,
             "preset": "Custom"
           }
         }

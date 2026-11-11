@@ -1,12 +1,12 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.drummachine",
   "name": "Drum Machine Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Kits for Drum Machine in the most common styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave. Three kits per style, each with a groove and matching sound settings.",
+  "description": "Kits for Drum Machine in the most common styles: techno, house, trance, drum & bass, dubstep, hip-hop, funk & disco, electro, pop, rock, jazz and synthwave. Three kits per style, each with a groove and matching sound settings. Drum and bass folders: Tech Step, Liquid DnB, Dancefloor DnB, Neurofunk, Jump Up, Jungle and Halftime DnB, each with a one-bar groove for 170 to 176 BPM; ghost notes sit on the off-beat steps, which play softer.",
   "tags": [
     "instrument/drums/kit"
   ],
@@ -4103,6 +4103,1293 @@
               }
             },
             "lvl": 0.586
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Tech Step",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Hard Step",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 50,
+                "dec": 0.3,
+                "tone": 0.7,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 250,
+                "dec": 0.12,
+                "tone": 4200,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.03,
+                "tone": 11000,
+                "lvl": 0.8,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 420,
+                "dec": 0.05,
+                "tone": 3200,
+                "lvl": 0.7,
+                "pan": -0.2
+              }
+            },
+            "lvl": 0.7371
+          }
+        },
+        {
+          "name": "Steel Rail",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "perc": [
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 48,
+                "dec": 0.26,
+                "tone": 0.75,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 270,
+                "dec": 0.1,
+                "tone": 4600,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.025,
+                "tone": 10500,
+                "lvl": 0.5,
+                "pan": 0.15
+              },
+              "perc": {
+                "tune": 650,
+                "dec": 0.05,
+                "tone": 3800,
+                "lvl": 0.55,
+                "pan": -0.25
+              }
+            },
+            "lvl": 0.7523
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Liquid DnB",
+      "tags": [
+        "style/drum-and-bass",
+        "style/liquid"
+      ],
+      "items": [
+        {
+          "name": "Soft Step",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 46,
+                "dec": 0.5,
+                "tone": 0.2,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 200,
+                "dec": 0.2,
+                "tone": 1900,
+                "lvl": 0.8,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.06,
+                "tone": 8000,
+                "lvl": 0.45,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 520,
+                "dec": 0.14,
+                "tone": 2200,
+                "lvl": 0.4,
+                "pan": -0.25
+              }
+            },
+            "lvl": 0.9187,
+            "swing": 0.12
+          }
+        },
+        {
+          "name": "Brushed Roll",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 47,
+                "dec": 0.55,
+                "tone": 0.15,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 190,
+                "dec": 0.25,
+                "tone": 1500,
+                "lvl": 0.75,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.08,
+                "tone": 7000,
+                "lvl": 0.4,
+                "pan": 0.25
+              },
+              "perc": {
+                "tune": 330,
+                "dec": 0.06,
+                "tone": 1800,
+                "lvl": 0.4,
+                "pan": 0
+              }
+            },
+            "lvl": 0.7755,
+            "swing": 0.1,
+            "laneSwing": {
+              "perc": 0.2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dancefloor DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Big Drop",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 44,
+                "dec": 0.6,
+                "tone": 0.45,
+                "lvl": 1,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 210,
+                "dec": 0.3,
+                "tone": 2600,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.05,
+                "tone": 9000,
+                "lvl": 0.5,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 800,
+                "dec": 0.2,
+                "tone": 3500,
+                "lvl": 0.5,
+                "pan": -0.2
+              }
+            },
+            "lvl": 0.7604
+          }
+        },
+        {
+          "name": "Clap Drop",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 42,
+                "dec": 0.55,
+                "tone": 0.5,
+                "lvl": 1,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 230,
+                "dec": 0.22,
+                "tone": 2800,
+                "lvl": 0.85,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.04,
+                "tone": 9500,
+                "lvl": 0.5,
+                "pan": 0.15
+              },
+              "perc": {
+                "tune": 900,
+                "dec": 0.18,
+                "tone": 1200,
+                "lvl": 0.7,
+                "pan": 0
+              }
+            },
+            "lvl": 0.627
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neurofunk",
+      "tags": [
+        "style/drum-and-bass",
+        "style/neurofunk"
+      ],
+      "items": [
+        {
+          "name": "Dry Machine",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 54,
+                "dec": 0.14,
+                "tone": 0.8,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 260,
+                "dec": 0.08,
+                "tone": 4800,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.02,
+                "tone": 11500,
+                "lvl": 0.85,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 700,
+                "dec": 0.05,
+                "tone": 4000,
+                "lvl": 0.8,
+                "pan": -0.3
+              }
+            },
+            "lvl": 0.7283
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jump Up",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Bounce Box",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 56,
+                "dec": 0.3,
+                "tone": 0.6,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 235,
+                "dec": 0.16,
+                "tone": 3400,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.04,
+                "tone": 10500,
+                "lvl": 0.55,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 380,
+                "dec": 0.1,
+                "tone": 2000,
+                "lvl": 0.55,
+                "pan": -0.2
+              }
+            },
+            "lvl": 0.7829
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jungle",
+      "tags": [
+        "style/jungle",
+        "style/breakbeat",
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Amen Run",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 58,
+                "dec": 0.22,
+                "tone": 0.55,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 245,
+                "dec": 0.14,
+                "tone": 3000,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.05,
+                "tone": 8500,
+                "lvl": 0.5,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 450,
+                "dec": 0.05,
+                "tone": 1500,
+                "lvl": 0.4,
+                "pan": 0
+              }
+            },
+            "lvl": 0.794
+          }
+        },
+        {
+          "name": "Ragga Roll",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                1
+              ],
+              "hat": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "perc": [
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                1,
+                0,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 60,
+                "dec": 0.25,
+                "tone": 0.5,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 225,
+                "dec": 0.17,
+                "tone": 2600,
+                "lvl": 0.9,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.035,
+                "tone": 8000,
+                "lvl": 0.4,
+                "pan": 0.15
+              },
+              "perc": {
+                "tune": 300,
+                "dec": 0.18,
+                "tone": 900,
+                "lvl": 0.6,
+                "pan": -0.3
+              }
+            },
+            "lvl": 0.829,
+            "swing": 0.05
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Halftime DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Half Weight",
+          "kind": "set",
+          "version": "1.18.0",
+          "state": {
+            "pat": {
+              "kick": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              "snare": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "hat": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              "perc": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            "v": {
+              "kick": {
+                "tune": 38,
+                "dec": 0.9,
+                "tone": 0.4,
+                "lvl": 1,
+                "pan": 0
+              },
+              "snare": {
+                "tune": 190,
+                "dec": 0.4,
+                "tone": 2200,
+                "lvl": 0.95,
+                "pan": 0
+              },
+              "hat": {
+                "dec": 0.045,
+                "tone": 9000,
+                "lvl": 0.5,
+                "pan": 0.2
+              },
+              "perc": {
+                "tune": 500,
+                "dec": 0.12,
+                "tone": 2000,
+                "lvl": 0.4,
+                "pan": -0.25
+              }
+            },
+            "lvl": 0.5551
           }
         }
       ]

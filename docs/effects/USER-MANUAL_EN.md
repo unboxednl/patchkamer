@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Effects take sound in, change it and send it on. This manual describes the 23 effects in [`devices/effects/`](../../devices/effects/README.md): Bitcrusher, Chorus, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Effect Chain, Filter, Flanger, Frequency Shifter, Gate, Grit, Harmonizer, Phaser, Pitch Correction, Pitch Shifter, Pump, Resonator, Reverb, Room, Tremolo and Vocoder. For starting Patchkamer, loading a library and drawing cables, see the [basic manual](../USER-MANUAL_EN.md).
+Effects take sound in, change it and send it on. This manual describes the 25 effects in [`devices/effects/`](../../devices/effects/README.md): Bitcrusher, Chorus, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Effect Chain, Filter, Flanger, Frequency Shifter, Gate, Grit, Harmonizer, Phaser, Pitch Correction, Pitch Shifter, Pump, Resonator, Reverb, Room, Stutter, Transient Shaper, Tremolo and Vocoder. For starting Patchkamer, loading a library and drawing cables, see the [basic manual](../USER-MANUAL_EN.md).
 
 ## Contents
 
@@ -32,9 +32,11 @@ Effects take sound in, change it and send it on. This manual describes the 23 ef
 24. [Resonator](#resonator)
 25. [Reverb](#reverb)
 26. [Room](#room)
-27. [Tremolo](#tremolo)
-28. [Vocoder](#vocoder)
-29. [If it does not work](#if-it-does-not-work)
+27. [Stutter](#stutter)
+28. [Transient Shaper](#transient-shaper)
+29. [Tremolo](#tremolo)
+30. [Vocoder](#vocoder)
+31. [If it does not work](#if-it-does-not-work)
 
 ## Which effect for which goal
 
@@ -61,6 +63,8 @@ Effects take sound in, change it and send it on. This manual describes the 23 ef
 | Tune an out-of-tune voice or line to a scale | [Pitch Correction](#pitch-correction) | Monophonic detection, twelve note switches, retune speed from hard to slow, vibrato kept or flattened. |
 | Shift the pitch of a sound up or down without changing its tempo | [Pitch Shifter](#pitch-shifter) | Three engines: percussive for drums, grain for voices and instruments, vocoder when formants matter. Also octave layers and shimmer. |
 | Add a believable space to a vocal, drums, strings or a pad (hall, plate, spring, room) | [Reverb](#reverb) | Five reverb models with decay, damping, pre-delay, ducking and freeze. |
+| Give a snare more snap, a kick more punch or tighten a break, at any level | [Transient Shaper](#transient-shaper) | Boosts or reduces attack and sustain independently of the level; fast, normal and long times; optional three bands (low, mid, high). |
+| Roll, chop or stop the sound on the beat (snare rolls, build-ups, tape-stop drops, gates) | [Stutter](#stutter) | Repeats the last steps at 1/4 to 1/32 with gate patterns and pitch ramps; tape stop and reverse swell; from a button, events or automatically. |
 
 ## Using effects
 
@@ -818,6 +822,74 @@ The card hides the controls that do not apply to the chosen source.
 
 **Tips.** The reverb tail is generated from noise when you change **Reverb**, so it differs a little each time. The packs keep **Feedback** below 75%. A guard lowers the feedback for a moment if the echo loop starts to grow, and rebuilds the loop if it gets a faulty value.
 
+## Stutter
+
+**What it is for.** Stutter repeats the last piece of the sound on the beat: a snare roll, a build-up from 1/8 to 1/32, a tape-stop drop, a gated chop of a break or bass, or a reverse swell. It records the last steps of the input all the time; when you start it, that piece is frozen and repeated on the studio tempo for as long as the button is held or the trigger runs. The edges of every repeat and switching on and off use short fades, so it does not click. Without stutter the sound passes through unchanged. There is no delay.
+
+![The Stutter card](../images/en/effects/stutter.png)
+
+**Controls.**
+
+At the top:
+
+- **Stutter** is the button: hold it to repeat. With **Latch** on, one click starts and the next one stops. **Start on the step** makes it begin on the next sixteenth of the clock (only while the clock runs).
+- **Type:** *Beat repeat*, *Tape stop* (the sound slows down like a tape coming to a halt) or *Reverse swell* (the last piece backwards, swelling in).
+- **Repeat rate:** 1/4, 1/4 T, 1/8, 1/8 T, 1/16, 1/16 T, 1/32 or 1/32 T (T = triplet).
+- **Loop (steps):** 1, 2, 4 or 8 repeat lengths make up the loop (at most 4.5 s).
+- **Gate pattern:** which repeats sound, for example `x . x x` (x = sound, . = silent).
+- **Direction:** *Forward*, *Reverse* or *Alternating* (per repeat of the loop). Only for *Beat repeat*.
+- **Build up to:** *Off*, or a shorter rate: the repeat moves a note value shorter every **Repeats per stage** (1, 2, 3, 4, 6 or 8), for example 1/8, 1/16, 1/32. Only with **Loop** 1.
+- **Auto:** *Off*, *Last 2 steps of the bar*, *Last beat of the bar*, *Last half bar* or *Last bar of four*: Stutter starts by itself at those moments (needs the clock).
+- A display shows the output level (brighter while stuttering) and the gate pattern with the repeat that sounds now.
+
+**Repeat:** **Gate length** (5 to 100%: how much of each repeat is open), **Pitch per repeat** (−3 to +3 semitones per repeat of the loop: rising or falling rolls) and **Decay per repeat** (0 to 12 dB: each next repeat gets softer).
+
+**Tape stop:** **Stop time** (50 ms to 3 s) and **Stop curve** (0.5 to 4; 1 is straight, higher is slow at first and then fast to zero).
+
+**Reverse:** **Swell** (0 to 100%: how much the level swells within the loop).
+
+**Trigger and output:** **Mix** (while stuttering: the share of the repeated signal), **Output** (−24 to +12 dB) and **Trig length (steps)** (1 to 64: how long a trig keeps the effect on; a note uses its own length).
+
+The card dims the controls that do not apply to the chosen type.
+
+**Ports.** **In**, **Out**, **Trigger** (events: a trig or note starts it; a CC from 50% starts it and below 50% stops it) and **Mod** (nine parameters).
+
+**Example.** Drum bus → Stutter → Mixer. Choose the preset **Drum & Bass › Snare Roll Build 1/8 to 1/32**, start the clock and hold the **Stutter** button at the end of a bar: the last eighth of the drums repeats faster and faster. For a drop choose **Drum & Bass › Drop Tape Stop**. For a fill without touching anything choose **Drum & Bass › Auto Fill Last Beat**. To start it from a sequencer, patch its trigs or notes into **Trigger**.
+
+**Presets.** Pack **Stutter Basics** (34 presets) in [`presets/stutter.patchkamer-presets.json`](../../presets/stutter.patchkamer-presets.json), in the folders **Drum & Bass** (Snare Roll 1/16, Snare Roll Build 1/8 to 1/32, Snare Roll Triplet, Build-up 1/4 to 1/32, Build-up Fast 1/16 to 1/32, Drop Tape Stop, Fast Tape Stop, Half-time Chop, Break Stutter Gallop, Amen Chop 1/32, Bass Gate 1/16, Reverse Swell 1 Bar, Reverse Fill Half Bar, Pitch Rise Roll, Pitch Drop Roll, Echo Tail Chop, Auto Fill Last Beat, Auto Build Last Half Bar, Auto Gallop Bar of Four, Auto Tick Last Two Steps), **Techno** (Techno Gate 1/16, Rhythmic Stab Triplets, Snare Build 1/4 to 1/16, Hat Roll Latched), **House** (Offbeat Chop, Vocal Stutter 1/16, Hat Roll 1/32), **Hip-hop** (Vinyl Stop, Beat Repeat 1/4, Chopped Sample 1/8), **Cinematic** (Reverse Riser 2 Bars, Slow-down, Gated Pad, Pulse Freeze). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶. I have not listened to them.
+
+**Tips and limits.** The repeated piece is at most 4.5 seconds long. A pitch ramp above or below the original speed makes a repeat shorter or longer than its slot (it is cut off or followed by silence). The worklet limits its inputs to +24 dB and needs AudioWorklet; without it the sound passes through unchanged and the card says so.
+
+## Transient Shaper
+
+**What it is for.** Transient Shaper boosts or reduces the attack and the sustain of a sound, at any level. A snare gets more snap, a kick more punch, a break gets tighter or looser, a pad softer. You do not set a threshold: a fast and a slow follower measure the level, and the difference between them (in dB) tells where the onset is and where the tail is, so a soft hit and a hard hit sound the same once shaped. Below about −70 dBFS the effect fades out, so noise is not pumped up.
+
+![The Transient Shaper card](../images/en/effects/transient-shaper.png)
+
+**Controls.**
+
+At the top:
+
+- **Times:** *Fast (hats, percussion)*, *Normal (snare, breaks)* or *Long (kick, bass)*: how fast the followers react. Use *Long* on low sounds, where short times would follow the waves themselves.
+- **3 bands** splits the sound into low, mid and high, each with its own attack and sustain. The bands add back up to the original. **On** / **Off (pass through)** switches the effect.
+- **Boost** and **Cut** are meters that show the gain that is applied now, and **Now** gives it in dB. The graph shows the gain over time: boost above the line, cut below it.
+
+**Shape:** **Attack** (−100 to +100%: plus is more punch, minus is a softer onset) and **Sustain** (−100 to +100%: plus is a longer tail, minus a shorter one). These work when **3 bands** is off.
+
+**Bands and crossovers** (when **3 bands** is on): **Low attack**, **Low sustain**, **Mid attack**, **Mid sustain**, **High attack**, **High sustain** (each −100 to +100%), **Low/mid crossover** (40 to 1000 Hz) and **Mid/high crossover** (600 Hz to 12 kHz).
+
+**Output:** **Mix** (the share of the shaped signal; lower than 100% is parallel shaping) and **Output** (−24 to +12 dB).
+
+The card dims the controls that do not apply.
+
+**Ports.** **In**, **Out** and **Mod** (twelve parameters).
+
+**Example.** Put Transient Shaper on a break (or the drum bus) before the Mixer. Choose the preset **Drum & Bass › Break Tightening**: the tails of the drums get shorter, so the break feels tighter. For a snare with more snap choose **Drum & Bass › Snare Snap**. For low and high of a break separately choose **Drum & Bass › Jungle Break Punch** (three bands). Watch the **Boost** meter: if the output peaks, lower **Output**.
+
+**Presets.** Pack **Transient Shaper Basics** (35 presets) in [`presets/transient-shaper.patchkamer-presets.json`](../../presets/transient-shaper.patchkamer-presets.json), in the folders **Drum & Bass** (Snare Snap, Snare Crack, Kick Punch, Kick Tight, Sub Kick Weight, Break Tightening, Break Loose Tail, Amen Snap, Jungle Break Punch, Break Room Reduce, Bass Tightening, Neuro Bass Control, Reese Bass Smooth, Rolling Bass Pluck, Hat Control, Hat Sparkle, Pad Softening, Parallel Break Punch), **Techno** (Kick Thump, Clap Space, Hat Snap, Rumble Tamer), **House** (Groove Lift, Shaker Tick, Bass Tight and Clear), **Hip-hop** (Boom Bap Snare, Soft Lo-fi Drums, Sub Boom Punch), **Cinematic** (Soft Swell, Impact Hit, Percussion Room), **Mix Repairs** (Dry Up, Add Room, Subtle Glue, Transparent Neutral). Load it with the **Presets** tab of the library → **Import…** (or from a library that contains it), then choose a preset in the bar at the top of the card or step through them with ◀ ▶. I have not listened to them.
+
+**Tips and limits.** There is no delay (no lookahead). With **Attack** and **Sustain** at 0%, **3 bands** off, **Mix** 100% and **Output** 0 dB the sound passes through unchanged. A big attack boost can create peaks; the effect has no limiter. The gain is limited to +18 dB and −40 dB. The worklet limits its inputs to +24 dB and needs AudioWorklet; without it the sound passes through unchanged and the card says so.
+
 ## Tremolo
 
 **What it is for.** Tremolo makes the volume go up and down at a steady speed. It has two knobs.
@@ -866,9 +938,10 @@ Sliders: **Voice sensitivity** (how strongly the voice opens the bands), **Envel
 
 - **No sound.** Check the cables: audio from the source into **In** (for Vocoder into **Voice / speech**) and from **Out** to the Mixer or Speakers. Press **Start**, or click anywhere in Patchkamer: browsers pause audio until you interact. See also section 13 of the [basic manual](../USER-MANUAL_EN.md).
 - **The effect does nothing.** Check **Mix** (at 0% you hear only the original), the slot in Effect Chain (**Bypass on**, or **Pass-through**, or **Effect mix** at 0%) and **Depth** (at 0% a sweeping effect does not move).
-- **The effect passes the sound through unchanged.** Flanger, Frequency Shifter, Pump, Resonator and three filter types (ladder and the two comb filters) need AudioWorklet. If your browser has none, the card says so. Use a current Chrome or Edge.
+- **The effect passes the sound through unchanged.** Flanger, Frequency Shifter, Pump, Resonator, Stutter, Transient Shaper and three filter types (ladder and the two comb filters) need AudioWorklet. If your browser has none, the card says so. Use a current Chrome or Edge.
 - **Tempo-synced movement stands still.** Press **Start**: the tempo options follow the studio clock. Pump set to *Clock* and the rhythm effects in Effect Chain need it too.
 - **Pump does not duck.** *Sidechain* needs a signal on the **Sidechain** port (and it must pass the **Threshold**); *Trigger* needs trigs or notes on **Trigger**; *Clock* needs the clock to run.
+- **Stutter does not repeat.** Hold the **Stutter** button (or switch **Latch** on), patch trigs or notes into **Trigger**, or choose an **Auto** setting; **Auto** and **Start on the step** need the clock to run. A pitch ramp that is too high or too low makes the repeats shorter than their slot, with silence in between.
 - **Resonator does not follow the notes.** Choose *root follows the notes* under **Notes** and patch notes into **Notes**.
 - **Crackles or dropouts.** Effect Chain runs many effects in the main thread: use fewer slots, or switch the analyzer to *Off / less CPU*. See also Settings → Audio in the [basic manual](../USER-MANUAL_EN.md).
 - **A knob does not move with the modulator.** The knob is the base value. Check the cable (purple) into **Mod** and that the modulator has a lane for this effect. Choices (lists) are not modulated.

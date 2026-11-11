@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.padsampler",
  "name": "Pad Sampler Demos",
  "author": "Patchkamer",
  "license": "CC0-1.0",
- "description": "Kits en keygroups die alleen de ingebouwde, gesynthetiseerde demo-samples gebruiken: ze klinken meteen, zonder bestand te laden. / Kits and keygroups that only use the built-in synthesised demo samples: they sound at once, without loading a file.",
+ "description": "Kits en keygroups die alleen de ingebouwde, gesynthetiseerde demo-samples gebruiken: ze klinken meteen, zonder bestand te laden. / Kits and keygroups that only use the built-in synthesised demo samples: they sound at once, without loading a file. Drum and bass kits from the built-in demo samples (Tech Step, Liquid, Dancefloor, Neurofunk, Jump Up, Jungle and Halftime) and two bass keygroups.",
  "tags": [],
  "tree": [
   {
@@ -10556,6 +10556,5861 @@
             "velLo": 1,
             "velHi": 127,
             "tune": 0,
+            "loop": {
+             "on": true,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            }
+           }
+          ]
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Drum and Bass Kits",
+   "tags": [
+    "instrument/drums/kit",
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Hard Step Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.621,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Hard Step Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.27,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.22,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:sub",
+            "semi": 3,
+            "fine": 0,
+            "level": 0.45,
+            "pan": 0,
+            "offset": 2,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Sub Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.94,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.5,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick",
+            "semi": -1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:sub",
+            "semi": 0,
+            "fine": 0,
+            "level": 0.6,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.49,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.16,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 180,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:rim",
+            "semi": 4,
+            "fine": 0,
+            "level": 0.6,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ghost Snare",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 8.32,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.06,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 500,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 6,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Rim Tick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 1.72,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.04,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:rim",
+            "semi": 6,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 0.31,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.035,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 5,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 0.38,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.14,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Clap",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.32,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.12,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:clap",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Crash",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -1.89,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.8,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:crash",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Metal Perc",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.62,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.08,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:perc",
+            "semi": 12,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Silk Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass",
+      "style/liquid"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.571,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Silk Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.12,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.38,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-soft",
+            "semi": 1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:kick",
+            "semi": -1,
+            "fine": 0,
+            "level": 0.5,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 60,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Soft Kick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 9.02,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-soft",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 9.33,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.2,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 7500,
+           "res": 0.15,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": -1,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:shaker",
+            "semi": -2,
+            "fine": 0,
+            "level": 0.5,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ghost Brush",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 12,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.09,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "bp",
+           "cutoff": 4500,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:shaker",
+            "semi": -3,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Side Stick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -0.68,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.05,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:rim",
+            "semi": -3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 5.29,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.05,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 9500,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 2,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 6.24,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.2,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 9000,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 1,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ride",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.53,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.5,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 2500,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:crash",
+            "semi": 5,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Shaker",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 8.58,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.1,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:shaker",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Arena Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.658,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Arena Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -2.03,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.4,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:kick",
+            "semi": -2,
+            "fine": 0,
+            "level": 0.6,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:sub",
+            "semi": -1,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Long Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.49,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.7,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick",
+            "semi": -3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:sub",
+            "semi": -2,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.79,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0.12,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:clap",
+            "semi": -1,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Clap",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.89,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.25,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0.18,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:clap",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:clap",
+            "semi": 3,
+            "fine": 0,
+            "level": 0.5,
+            "pan": 0,
+            "offset": 8,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 0.62,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.04,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": -0.23,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.22,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Crash",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -1.48,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 1.4,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0.15,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:crash",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Tom",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.83,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:tom-lo",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hit",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.76,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.9,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:sub",
+            "semi": 7,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:crash",
+            "semi": -5,
+            "fine": 0,
+            "level": 0.5,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Dry Gate Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass",
+      "style/neurofunk"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.591,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Dry Gate Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 2.59,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.13,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Gated Sub",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.05,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.12,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:sub",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.53,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.09,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 300,
+           "res": 0.3,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 6,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:rim",
+            "semi": 7,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ghost",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.46,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.04,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 900,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 9,
+            "fine": 0,
+            "level": 0.5,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Metal Tick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 2.55,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.03,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:rim",
+            "semi": 10,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": -1.21,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.022,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 7,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Pedal Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 0.8,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.07,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 6,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Zap",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 2.97,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.1,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:perc",
+            "semi": 19,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Clang",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.56,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.1,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:cowbell",
+            "semi": 7,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Bounce Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.585,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Bounce Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -0.99,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.28,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick",
+            "semi": 1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": 1,
+            "fine": 0,
+            "level": 0.6,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 90,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Fat Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.11,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": -1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:tom-lo",
+            "semi": -7,
+            "fine": 0,
+            "level": 0.5,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 4.11,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.22,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:clap",
+            "semi": 2,
+            "fine": 0,
+            "level": 0.55,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ghost",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 8.86,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.06,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 500,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 5,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Clap",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 7.41,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.14,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:clap",
+            "semi": 1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": -1.46,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.04,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": -0.46,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.14,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Low Tom",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.88,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:tom-lo",
+            "semi": -2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Cowbell",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.45,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.2,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:cowbell",
+            "semi": 0,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Chopped Break Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/jungle",
+      "style/drum-and-bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.47,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Chopped Break Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 2.25,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.22,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 6500,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Heavy Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 1.95,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 6000,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:sub",
+            "semi": 2,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 8.61,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.2,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 7000,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:clap",
+            "semi": 3,
+            "fine": 0,
+            "level": 0.35,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ghost Snares",
+          "mode": "drum",
+          "play": "cycle",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 9.11,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.07,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 600,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 6,
+            "fine": 0,
+            "level": 0.35,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:snare",
+            "semi": 8,
+            "fine": 0,
+            "level": 0.35,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:snare",
+            "semi": 5,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "cycle",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 5.9,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.04,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 9000,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 5,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 5.1,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.16,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 9000,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ride",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 1.28,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.45,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 3000,
+           "res": 0.1,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:crash",
+            "semi": 6,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Wood",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -0.79,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.06,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:rim",
+            "semi": -6,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Conga",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 0.54,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.18,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:tom-hi",
+            "semi": 4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Heavy Half Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.509,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Heavy Half Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -1.8,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.75,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick",
+            "semi": -4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:sub",
+            "semi": -3,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": -3,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Short Kick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 2.56,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.3,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": -1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "all",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 4.95,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.45,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0.2,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": -4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:clap",
+            "semi": -2,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Clap",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.7,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.4,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0.25,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:clap",
+            "semi": -2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 0.62,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.04,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": -0.4,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.22,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Tom",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 3.8,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.45,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:tom-lo",
+            "semi": -4,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Sub Drop",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 1.96,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 1.1,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:sub",
+            "semi": -3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Crash",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -2.3,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 1.6,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0.25,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:crash",
+            "semi": -3,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Roller Hats Kit",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "style/drum-and-bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.556,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Roller Hats Kit",
+        "pads": [
+         {
+          "name": "Kick",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 2,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 2.51,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.24,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:kick-hard",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Snare",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 5.37,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.18,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Ghost",
+          "mode": "drum",
+          "play": "random",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 6.66,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.06,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "hp",
+           "cutoff": 600,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:snare",
+            "semi": 7,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:snare",
+            "semi": 9,
+            "fine": 0,
+            "level": 0.4,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat Roll",
+          "mode": "drum",
+          "play": "cycle",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 1.68,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.035,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 3,
+            "fine": 0,
+            "level": 0.9,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 4,
+            "fine": 0,
+            "level": 0.8,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 5,
+            "fine": 0,
+            "level": 0.7,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Hat Accent",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": -1.24,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.05,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-closed",
+            "semi": 1,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Open Hat",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 1,
+          "output": 0,
+          "level": 0.13,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.15,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:hat-open",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Shaker",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": 8.79,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.09,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:shaker",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         {
+          "name": "Rim",
+          "mode": "drum",
+          "play": "velocity",
+          "polyphony": 4,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -1.01,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "ad",
+           "attack": 0.0005,
+           "decay": 0.05,
+           "sustain": 1,
+           "release": 0.05
+          },
+          "filter": {
+           "type": "off",
+           "cutoff": 8000,
+           "res": 0.2,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": true,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           {
+            "sampleId": "demo:rim",
+            "semi": 2,
+            "fine": 0,
+            "level": 1,
+            "pan": 0,
+            "offset": 0,
+            "root": null,
+            "velLo": 1,
+            "velHi": 127,
+            "start": 0,
+            "end": 1,
+            "loop": {
+             "on": false,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            },
+            "gain": 0
+           },
+           null,
+           null,
+           null
+          ],
+          "zones": []
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Drum and Bass Keygroups",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Roller Sub",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "instrument/bass/sub"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.569,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Keys",
+        "pads": [
+         {
+          "name": "Roller Sub",
+          "mode": "key",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -3,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "adsr",
+           "attack": 0.004,
+           "decay": 0.2,
+           "sustain": 1,
+           "release": 0.09
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 420,
+           "res": 0.15,
+           "envAmt": 0,
+           "velAmt": 0
+          },
+          "oneShot": false,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           null,
+           null,
+           null,
+           null
+          ],
+          "zones": [
+           {
+            "sampleId": "demo:sine",
+            "root": 72,
+            "keyLo": 0,
+            "keyHi": 127,
+            "velLo": 1,
+            "velHi": 127,
+            "tune": 0,
+            "loop": {
+             "on": true,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            }
+           }
+          ]
+         },
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank B",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank C",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       },
+       {
+        "name": "Bank D",
+        "pads": [
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null,
+         null
+        ]
+       }
+      ],
+      "samples": {}
+     }
+    },
+    {
+     "name": "Detuned Growl",
+     "kind": "set",
+     "version": "1.6.1",
+     "tags": [
+      "instrument/bass"
+     ],
+     "state": {
+      "v": 1,
+      "bank": 0,
+      "pad": 0,
+      "layer": 0,
+      "baseNote": 36,
+      "level": 0.694,
+      "padVel": 100,
+      "banks": [
+       {
+        "name": "Keys",
+        "pads": [
+         {
+          "name": "Detuned Growl",
+          "mode": "key",
+          "play": "velocity",
+          "polyphony": 1,
+          "muteGroup": 0,
+          "output": 0,
+          "level": -6,
+          "pan": 0,
+          "tune": 0,
+          "fine": 0,
+          "env": {
+           "shape": "adsr",
+           "attack": 0.003,
+           "decay": 0.25,
+           "sustain": 0.8,
+           "release": 0.08
+          },
+          "filter": {
+           "type": "lp",
+           "cutoff": 1100,
+           "res": 0.45,
+           "envAmt": 0.35,
+           "velAmt": 0.2
+          },
+          "oneShot": false,
+          "reverse": false,
+          "sends": [
+           0,
+           0
+          ],
+          "baseNote": 60,
+          "layers": [
+           null,
+           null,
+           null,
+           null
+          ],
+          "zones": [
+           {
+            "sampleId": "demo:saw",
+            "root": 60,
+            "keyLo": 0,
+            "keyHi": 127,
+            "velLo": 1,
+            "velHi": 127,
+            "tune": -0.14,
+            "loop": {
+             "on": true,
+             "start": 0,
+             "end": 1,
+             "xfade": 0
+            }
+           },
+           {
+            "sampleId": "demo:saw",
+            "root": 60,
+            "keyLo": 0,
+            "keyHi": 127,
+            "velLo": 1,
+            "velHi": 127,
+            "tune": 0.14,
             "loop": {
              "on": true,
              "start": 0,

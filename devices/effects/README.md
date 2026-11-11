@@ -27,6 +27,8 @@ Effects take sound in, change it and send it on. Put them between a sound source
 | Resonator | Four resonators tuned to a root note and a chord. | [`Resonator/`](Resonator/) | [Resonator](../../docs/effects/USER-MANUAL_EN.md#resonator) |
 | Reverb | An algorithmic reverb with five models: Hall, Plate, Spring, Room and Chamber. | [`Reverb/`](Reverb/) | [Reverb](../../docs/effects/USER-MANUAL_EN.md#reverb) |
 | Room | A delay and a reverb in one effect. | [`Room/`](Room/) | [Room](../../docs/effects/USER-MANUAL_EN.md#room) |
+| Stutter | Beat repeat, gate and roll on the tempo: repeats the last steps at 1/4 to 1/32 (also triplets), with gate patterns, pitch ramps, decay, build-ups, tape stop and reverse; starts from a button, events or the end of the bar. | [`Stutter/`](Stutter/) | [Stutter](../../docs/effects/USER-MANUAL_EN.md#stutter) |
+| Transient Shaper | Boosts or reduces the attack and sustain of a sound at any level, with three time settings, an optional three-band mode, mix and gain meters. | [`TransientShaper/`](TransientShaper/) | [Transient Shaper](../../docs/effects/USER-MANUAL_EN.md#transient-shaper) |
 | Tremolo | Makes the volume go up and down. | [`Tremolo/`](Tremolo/) | [Tremolo](../../docs/effects/USER-MANUAL_EN.md#tremolo) |
 | Vocoder | A 16-band vocoder: a voice plays a synth. | [`Vocoder/`](Vocoder/) | [Vocoder](../../docs/effects/USER-MANUAL_EN.md#vocoder) |
 

@@ -2,13 +2,13 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 33 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 35 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
 1. [What synths do](#what-synths-do)
 2. [Which synth for which goal](#which-synth-for-which-goal)
-3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
+3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Neuro Bass](#neuro-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
 6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
@@ -38,6 +38,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | A bass line that plays by itself, with accent and slide per step | [Acid Baselines](#acid-baselines) (16 steps, 16 patterns), [Acid Stepper](#acid-stepper) (simpler), [Squelch Box](#squelch-box) (a faithful classic acid bass) |
 | A bass or lead that plays its own pattern or arpeggio | [Sub Line](#sub-line), [Cross Mod Mono](#cross-mod-mono) |
 | A bass played from my own keyboard or sequencer | [Low Bass](#low-bass), [Basic Mono](#basic-mono), [Sub Line](#sub-line) |
+| A drum & bass or dubstep bass with moving vowel filters and a clean sub | [Neuro Bass](#neuro-bass), [Low Bass](#low-bass) |
 | A simple, direct mono sound with few knobs | [Basic Mono](#basic-mono) |
 | A lead with two pitches at once, ring modulation, hard sync or sample & hold | [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono) |
 | A classic analog mono sound: fat bass, singing lead, resonant filter that sings by itself | [Ladder Mono](#ladder-mono) |
@@ -225,6 +226,46 @@ The sequencer under the controls:
 
 - Legato only works while the previous note still sounds (overlapping or held notes); separate notes always strike again. The filter envelope restarts on every note, also with legato.
 - Envelopes and glide are read when the next note starts.
+- A built-in guard replaces the filters if they derail, so a modulator can not silence the device for good.
+
+### Neuro Bass
+
+**What it is for.** A mono bass for drum & bass and bass music (neurofunk, tech-step, detune stacks, liquid sub-mids, jump-up wobbles, dubstep). It plays the notes that arrive on its **Notes** port (the last note wins). Two oscillators with two voices each (a detune stack), a sine sub, FM and ring modulation, three shaping stages, a vowel formant filter you sweep with **Morph**, a resonant filter, a tempo-synced LFO and an amplifier envelope with glide, velocity and accent. A crossover splits the sound: the sub and everything below the **Crossover** stay clean and mono, only the high band is distorted.
+
+![The Neuro Bass card](../images/en/synths/neuro-bass.png)
+
+**Controls.** The card has six sections.
+
+- **Oscillators:** **Wave 1** and **Wave 2** (Saw, Square, Pulse, Triangle, Sine), **Detune** (0 to 60 cents between the two voices of each oscillator), **Unison** (how strong the second voice is), **Osc 2 mix**, **Osc 2 pitch** (−24 to 24 semitones), **FM** (oscillator 2 modulates the pitch of oscillator 1), **Ring** (ring modulation), **Sub** (a clean sine), **Sub octave** (0 or −1) and **Crossover** (40 to 300 Hz).
+- **Shaping:** three stages in a row, each with a type (**Off**, **Fold**, **Clip**, **Soft**, **Asym**, **Rectify**, **Bit**) and an amount (**Drive 1** to **Drive 3**). Only the high band goes through them.
+- **Formant:** **Vowel A** and **Vowel B** (OO, OH, AH, EH, EE, UE), **Morph** (the position between the two vowels; it also opens the first shaping stage a little), **Formant mix** and **Formant Q** (how sharp the vowels are).
+- **Filter:** **Filter type** (LP 24, LP 12, BP), **Cutoff**, **Resonance** and **Filter env** (0 to 5 octaves).
+- **LFO:** **LFO shape**, **LFO sync** (**Free**, **Note** restarts at every note, **Tempo** follows the clock and restarts at every note), **LFO Rate** (Hz, when not on Tempo), **LFO division** (1/1 to 1/32, also triplets, when on Tempo) and four depths: **LFO Morph** (the vowel sweep), **LFO Cutoff**, **LFO Drive** (the second shaping stage) and **LFO Wobble** (the volume of the high band).
+- **Amp:** **Attack**, **Decay** (also for the filter envelope), **Sustain**, **Release**, **Glide**, **Legato**, **Accent**, **Level** and **Bend** (−12 to 12 semitones).
+- **Test bass** plays a note, **All off** stops everything.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer. |
+| **Mod** | modulation in (purple) | A modulator can move 30 controls (all the knobs on the card). |
+| **Bass out** | audio out (teal) | Connect to **Speakers** or a **Mixer** channel. |
+
+**Example.**
+
+1. Place **Keys / MIDI**, **Neuro Bass** and **Speakers**. Connect the notes of Keys to **Notes** and **Bass out** to **In**.
+2. Choose a tune from the folder **Neurofunk** and play low notes (MIDI notes 28 to 48).
+3. Turn **Morph** and **LFO Morph** to hear the vowels move; set **LFO sync** to **Tempo** and change **LFO division** to follow the beat.
+4. Raise **Drive 1** and **Drive 2**: the highs get harsher while the sub stays clean.
+
+**Tunes.** Pack **Neuro Bass Styles**: 70 tunes in 9 folders (Neurofunk, Detune Stack, Liquid, Jump Up, Dancefloor, Sub, Dubstep and Bass Music, Techno, Stabs and Hits), file [`neuro-bass-styles.patchkamer-tunes.json`](../../tunes/neuro-bass-styles.patchkamer-tunes.json). A tune is only a sound; the notes come from your keyboard or sequencer. A few names: **Dark Roller**, **Formant Growl**, **Classic Detune Stack**, **Warm Sub Mid**, **Wobble Bounce**, **Pure Sub**.
+
+**Tips and limits.**
+
+- The sub and the low band under **Crossover** are never shaped. The notes of a bass lie low: with a high crossover most of the character comes from the harmonics above it.
+- **LFO sync** on **Tempo** reads the tempo of the clock; when the clock is not running it uses 120 BPM.
+- Legato only works while the previous note still sounds (overlapping or held notes). Envelopes and glide are read when the next note starts.
 - A built-in guard replaces the filters if they derail, so a modulator can not silence the device for good.
 
 ### Sub Line

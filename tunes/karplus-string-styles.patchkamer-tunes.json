@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.string",
  "name": "Karplus String Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "String sounds for Karplus String by style: guitars, harps, koto, bowed strings, metallic strings and muted plucks for Folk, Ambient, Cinematic, Pop, World, Lo-fi, Ballad, Flamenco, Jazz and Metallic.",
+ "description": "String sounds for Karplus String by style: guitars, harps, koto, bowed strings, metallic strings and muted plucks for Folk, Ambient, Cinematic, Pop, World, Lo-fi, Ballad, Flamenco, Jazz and Metallic. Also has Liquid DnB, Dancefloor DnB, Neuro Pads and Jungle folders.",
  "tree": [
   {
    "folder": "Folk",
@@ -1292,6 +1292,237 @@
       "spread": 0.4,
       "oct": 0,
       "lvl": 0.92
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Liquid Harp Arpeggio",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/harp"
+     ],
+     "state": {
+      "decay": 6,
+      "damp": 0.3,
+      "bright": 0.45,
+      "pos": 0.35,
+      "bow": 0,
+      "stiff": 0.05,
+      "tune": 0,
+      "spread": 0.9,
+      "oct": 0,
+      "lvl": 0.492
+     }
+    },
+    {
+     "name": "Silk Bowed Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/strings",
+      "instrument/pad"
+     ],
+     "state": {
+      "decay": 5,
+      "damp": 0.5,
+      "bright": 0.4,
+      "pos": 0.12,
+      "bow": 0.6,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.9,
+      "oct": 0,
+      "lvl": 0.599
+     }
+    },
+    {
+     "name": "Soft Pluck Keys",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
+     "state": {
+      "decay": 2.5,
+      "damp": 0.5,
+      "bright": 0.35,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 0.7,
+      "oct": 0,
+      "lvl": 0.7
+     }
+    },
+    {
+     "name": "Mellow Bass Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
+     "state": {
+      "decay": 2,
+      "damp": 0.6,
+      "bright": 0.3,
+      "pos": 0.2,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.1,
+      "oct": 0,
+      "lvl": 1.0
+     }
+    },
+    {
+     "name": "Glass Bell Pluck",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/bell"
+     ],
+     "state": {
+      "decay": 4,
+      "damp": 0.2,
+      "bright": 0.8,
+      "pos": 0.25,
+      "bow": 0,
+      "stiff": 0.5,
+      "tune": 0,
+      "spread": 0.8,
+      "oct": 0,
+      "lvl": 0.508
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Pluck Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
+     "state": {
+      "decay": 0.8,
+      "damp": 0.6,
+      "bright": 0.9,
+      "pos": 0.1,
+      "bow": 0,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": 0,
+      "lvl": 0.612
+     }
+    },
+    {
+     "name": "Metal Rave Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/plucked"
+     ],
+     "state": {
+      "decay": 1.5,
+      "damp": 0.3,
+      "bright": 0.95,
+      "pos": 0.3,
+      "bow": 0,
+      "stiff": 0.7,
+      "tune": 0,
+      "spread": 0.7,
+      "oct": 0,
+      "lvl": 0.444
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Neuro Pads",
+   "tags": [
+    "style/drum-and-bass",
+    "instrument/pad"
+   ],
+   "items": [
+    {
+     "name": "Dark Bowed Drone",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "decay": 8,
+      "damp": 0.55,
+      "bright": 0.3,
+      "pos": 0.1,
+      "bow": 0.85,
+      "stiff": 0.1,
+      "tune": 0,
+      "spread": 0.9,
+      "oct": 0,
+      "lvl": 0.835
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle"
+   ],
+   "items": [
+    {
+     "name": "Dub Pluck Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/bass/pluck"
+     ],
+     "state": {
+      "decay": 1.8,
+      "damp": 0.7,
+      "bright": 0.25,
+      "pos": 0.25,
+      "bow": 0,
+      "stiff": 0,
+      "tune": 0,
+      "spread": 0.1,
+      "oct": 0,
+      "lvl": 1.0
+     }
+    },
+    {
+     "name": "Koto Skank",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/plucked/koto"
+     ],
+     "state": {
+      "decay": 1.2,
+      "damp": 0.6,
+      "bright": 0.8,
+      "pos": 0.08,
+      "bow": 0,
+      "stiff": 0.3,
+      "tune": 0,
+      "spread": 0.6,
+      "oct": 0,
+      "lvl": 0.444
      }
     }
    ]

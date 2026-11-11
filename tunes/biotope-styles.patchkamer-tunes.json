@@ -1,7 +1,7 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.biotope",
   "name": "Biotope Styles",
   "author": "Freek van Gool",
@@ -6276,6 +6276,672 @@
                 "tone": 0.5,
                 "motion": 0.5,
                 "variant": 0
+              },
+              "creaks": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neurofunk Atmospheres",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Rainy Underpass",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.35,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0.9,
+                "density": 0.6,
+                "tone": 0.4,
+                "motion": 0.5,
+                "variant": 4
+              },
+              "drops": {
+                "level": 1,
+                "density": 0.3,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 3
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.5,
+                "density": 0.4,
+                "tone": 0.25,
+                "motion": 0.3,
+                "variant": 0
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Metal Corridor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.5,
+            "width": 0.6,
+            "stepRate": 40,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0.9,
+                "density": 0.5,
+                "tone": 0.45,
+                "motion": 0.4,
+                "variant": 3
+              },
+              "drops": {
+                "level": 0.9,
+                "density": 0.25,
+                "tone": 0.6,
+                "motion": 0.6,
+                "variant": 3
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.8,
+                "density": 0.4,
+                "tone": 0.35,
+                "motion": 0.3,
+                "variant": 1
+              },
+              "steps": {
+                "level": 1,
+                "density": 0.25,
+                "tone": 0.45,
+                "motion": 0.4,
+                "variant": 5
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 1,
+                "density": 0.35,
+                "tone": 0.4,
+                "motion": 0.6,
+                "variant": 3
+              }
+            }
+          }
+        },
+        {
+          "name": "Sealed Chamber",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.6,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0.5,
+                "density": 0.3,
+                "tone": 0.35,
+                "motion": 0.3,
+                "variant": 3
+              },
+              "drops": {
+                "level": 1,
+                "density": 0.25,
+                "tone": 0.45,
+                "motion": 0.5,
+                "variant": 1
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.7,
+                "density": 0.3,
+                "tone": 0.4,
+                "motion": 0.2,
+                "variant": 1
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 1,
+                "density": 0.3,
+                "tone": 0.4,
+                "motion": 0.7,
+                "variant": 3
+              }
+            }
+          }
+        },
+        {
+          "name": "Cold Tunnel Drip",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.65,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 1,
+                "density": 0.6,
+                "tone": 0.45,
+                "motion": 0.4,
+                "variant": 3
+              },
+              "drops": {
+                "level": 1,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.7,
+                "variant": 1
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.9,
+                "density": 0.4,
+                "tone": 0.4,
+                "motion": 0.2,
+                "variant": 0
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Ship Hull Dread",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.45,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "drops": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.8,
+                "density": 0.35,
+                "tone": 0.4,
+                "motion": 0.3,
+                "variant": 1
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 1,
+                "density": 0.45,
+                "tone": 0.4,
+                "motion": 0.7,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 1,
+                "density": 0.4,
+                "tone": 0.4,
+                "motion": 0.6,
+                "variant": 3
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Intro and Break Textures",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Night City Rain",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.3,
+            "width": 0.6,
+            "stepRate": 55,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0.8,
+                "density": 0.5,
+                "tone": 0.45,
+                "motion": 0.5,
+                "variant": 1
+              },
+              "drops": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.8,
+                "density": 0.45,
+                "tone": 0.4,
+                "motion": 0.3,
+                "variant": 0
+              },
+              "steps": {
+                "level": 0.9,
+                "density": 0.15,
+                "tone": 0.4,
+                "motion": 0.5,
+                "variant": 2
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Vinyl Embers",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.1,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 1,
+                "density": 0.35,
+                "tone": 0.85,
+                "motion": 0.3,
+                "variant": 0
+              },
+              "drops": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 1,
+                "density": 0.75,
+                "tone": 0.8,
+                "motion": 0.4,
+                "variant": 2
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Roof Downpour",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.3,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0.75,
+                "density": 0.7,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 4
+              },
+              "drops": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.3,
+                "density": 0.35,
+                "tone": 0.3,
+                "motion": 0.4,
+                "variant": 1
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "creaks": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "Distant Surge",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "on": true,
+            "follow": false,
+            "master": 1,
+            "space": 0.4,
+            "width": 0.6,
+            "stepRate": 90,
+            "stepSync": 0,
+            "layers": {
+              "rain": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "drops": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "bubbles": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "wind": {
+                "level": 0.3,
+                "density": 0.3,
+                "tone": 0.3,
+                "motion": 0.6,
+                "variant": 1
+              },
+              "steps": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "fire": {
+                "level": 0,
+                "density": 0.45,
+                "tone": 0.5,
+                "motion": 0.5,
+                "variant": 0
+              },
+              "sea": {
+                "level": 0.6,
+                "density": 0.4,
+                "tone": 0.3,
+                "motion": 1,
+                "variant": 3
               },
               "creaks": {
                 "level": 0,

@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.piano",
  "name": "Piano",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Tunes for Piano: grand, upright and honky-tonk pianos, tine and reed electric pianos, clavichord, layer-friendly sounds and ballad, pop, jazz and lo-fi settings. Checked for range and behaviour, not listened to.",
+ "description": "Tunes for Piano: grand, upright and honky-tonk pianos, tine and reed electric pianos, clavichord, layer-friendly sounds and ballad, pop, jazz and lo-fi settings. Checked for range and behaviour, not listened to. Also has Liquid DnB, DnB Keys and Jungle folders.",
  "tags": [
   "instrument/piano"
  ],
@@ -1346,6 +1346,402 @@
       "tune": 0,
       "transpose": 0,
       "level": 0.8,
+      "preset": "Custom"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Liquid Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "type": "tine",
+      "tone": 0.4,
+      "velBright": 0.5,
+      "strike": 0.125,
+      "inharm": 0,
+      "detune": 1.5,
+      "decay": 1.5,
+      "after": 0.6,
+      "release": 0.35,
+      "hammer": 0.25,
+      "body": 0.2,
+      "bodyTune": 1,
+      "tremolo": 0.25,
+      "tremRate": 4,
+      "drive": 0,
+      "width": 0.9,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.878,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Soulful Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "type": "reed",
+      "tone": 0.45,
+      "velBright": 0.6,
+      "strike": 0.125,
+      "inharm": 0.05,
+      "detune": 1.5,
+      "decay": 1.2,
+      "after": 0.6,
+      "release": 0.3,
+      "hammer": 0.3,
+      "body": 0.2,
+      "bodyTune": 1,
+      "tremolo": 0.3,
+      "tremRate": 4.2,
+      "drive": 0.2,
+      "width": 0.8,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.86,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Velvet Grand",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/grand"
+     ],
+     "state": {
+      "type": "grand",
+      "tone": 0.35,
+      "velBright": 0.35,
+      "strike": 0.125,
+      "inharm": 1,
+      "detune": 3,
+      "decay": 1.6,
+      "after": 0.6,
+      "release": 0.35,
+      "hammer": 0.3,
+      "body": 0.45,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.8,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.4,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Sunset Upright",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/upright"
+     ],
+     "state": {
+      "type": "upright",
+      "tone": 0.4,
+      "velBright": 0.5,
+      "strike": 0.125,
+      "inharm": 1,
+      "detune": 4,
+      "decay": 1.2,
+      "after": 0.5,
+      "release": 0.3,
+      "hammer": 0.4,
+      "body": 0.4,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.7,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.457,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Hall Ballad Grand",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/grand"
+     ],
+     "state": {
+      "type": "grand",
+      "tone": 0.45,
+      "velBright": 0.45,
+      "strike": 0.125,
+      "inharm": 1,
+      "detune": 3,
+      "decay": 2.2,
+      "after": 0.8,
+      "release": 0.6,
+      "hammer": 0.3,
+      "body": 0.5,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 1,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.391,
+      "preset": "Custom"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "DnB Keys",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Rave Piano Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/upright"
+     ],
+     "state": {
+      "type": "upright",
+      "tone": 0.8,
+      "velBright": 0.8,
+      "strike": 0.125,
+      "inharm": 1.2,
+      "detune": 6,
+      "decay": 0.5,
+      "after": 0.2,
+      "release": 0.15,
+      "hammer": 0.5,
+      "body": 0.3,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.7,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.477,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Dancefloor Chord Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/grand"
+     ],
+     "state": {
+      "type": "grand",
+      "tone": 0.75,
+      "velBright": 0.7,
+      "strike": 0.125,
+      "inharm": 1,
+      "detune": 4,
+      "decay": 0.6,
+      "after": 0.2,
+      "release": 0.12,
+      "hammer": 0.45,
+      "body": 0.35,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.8,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.387,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Bright Tine Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "type": "tine",
+      "tone": 0.8,
+      "velBright": 0.8,
+      "strike": 0.125,
+      "inharm": 0,
+      "detune": 1.5,
+      "decay": 0.6,
+      "after": 0.2,
+      "release": 0.12,
+      "hammer": 0.35,
+      "body": 0.2,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.8,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.8,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Honky Rave Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/honky-tonk"
+     ],
+     "state": {
+      "type": "honky",
+      "tone": 0.75,
+      "velBright": 0.7,
+      "strike": 0.125,
+      "inharm": 1,
+      "detune": 14,
+      "decay": 0.5,
+      "after": 0.2,
+      "release": 0.12,
+      "hammer": 0.5,
+      "body": 0.3,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.8,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.379,
+      "preset": "Custom"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle"
+   ],
+   "items": [
+    {
+     "name": "Jungle Piano Roll",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/upright"
+     ],
+     "state": {
+      "type": "upright",
+      "tone": 0.65,
+      "velBright": 0.7,
+      "strike": 0.125,
+      "inharm": 1,
+      "detune": 5,
+      "decay": 0.8,
+      "after": 0.3,
+      "release": 0.2,
+      "hammer": 0.45,
+      "body": 0.35,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.6,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.512,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Dub Tine Echo",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "type": "tine",
+      "tone": 0.35,
+      "velBright": 0.5,
+      "strike": 0.125,
+      "inharm": 0,
+      "detune": 1.5,
+      "decay": 1.8,
+      "after": 0.7,
+      "release": 0.4,
+      "hammer": 0.2,
+      "body": 0.2,
+      "bodyTune": 1,
+      "tremolo": 0.5,
+      "tremRate": 3,
+      "drive": 0,
+      "width": 1,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.8,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Clav Skank",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/clavichord"
+     ],
+     "state": {
+      "type": "clav",
+      "tone": 0.6,
+      "velBright": 0.7,
+      "strike": 0.125,
+      "inharm": 0.3,
+      "detune": 2,
+      "decay": 0.5,
+      "after": 0.1,
+      "release": 0.1,
+      "hammer": 0.5,
+      "body": 0.3,
+      "bodyTune": 1,
+      "tremolo": 0,
+      "tremRate": 4.5,
+      "drive": 0,
+      "width": 0.6,
+      "velocity": 0.8,
+      "tune": 0,
+      "transpose": 0,
+      "level": 0.372,
       "preset": "Custom"
      }
     }

@@ -1,7 +1,7 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.celestialmechanics",
   "name": "Celestial Mechanics Styles",
   "author": "Freek van Gool",
@@ -1759,7 +1759,7 @@
           }
         },
         {
-          "name": "Black Sun Choir",
+          "name": "Dark Sun Choir",
           "kind": "set",
           "version": "1.0.0",
           "state": {
@@ -1938,6 +1938,318 @@
             "scale": "minorPentatonic",
             "life": "forever",
             "root": 45,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neurofunk Atmospheres",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Orbiting Dread",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 2,
+            "orbit": 1.2,
+            "ecc": 0.3,
+            "time": 0.4,
+            "hole": 0.15,
+            "light": 20,
+            "couple": 0.3,
+            "grain": 0.3,
+            "flare": 0.2,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.8,
+            "echo": 0.3,
+            "level": 0.384,
+            "scale": "minorPentatonic",
+            "life": "forever",
+            "root": 50,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Dead Star Corridor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 1.2,
+            "orbit": 1.5,
+            "ecc": 0.5,
+            "time": 0.25,
+            "hole": 0.3,
+            "light": 8,
+            "couple": 0.5,
+            "grain": 0.2,
+            "flare": 0.3,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.85,
+            "echo": 0.5,
+            "level": 0.342,
+            "scale": "minorPentatonic",
+            "life": "forever",
+            "root": 48,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Tidal Hum Fog",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 1.5,
+            "orbit": 1.0,
+            "ecc": 0.2,
+            "time": 0.3,
+            "hole": 0,
+            "light": 25,
+            "couple": 0.2,
+            "grain": 0.1,
+            "flare": 0.1,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.9,
+            "echo": 0.35,
+            "level": 0.281,
+            "scale": "minorPentatonic",
+            "life": "forever",
+            "root": 55,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dark Liquid Pads",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/pad"
+      ],
+      "items": [
+        {
+          "name": "Glass Moon Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 3,
+            "orbit": 1,
+            "ecc": 0.05,
+            "time": 0.5,
+            "hole": 0,
+            "light": 30,
+            "couple": 0.15,
+            "grain": 0,
+            "flare": 0.1,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.8,
+            "echo": 0.35,
+            "level": 0.259,
+            "scale": "lydian",
+            "life": "forever",
+            "root": 55,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Slow Planet Choir",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 1.5,
+            "orbit": 1.3,
+            "ecc": 0.2,
+            "time": 0.3,
+            "hole": 0,
+            "light": 18,
+            "couple": 0.35,
+            "grain": 0.25,
+            "flare": 0.15,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.85,
+            "echo": 0.4,
+            "level": 0.319,
+            "scale": "minorPentatonic",
+            "life": "forever",
+            "root": 52,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "DnB Risers and Impacts",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/fx",
+        "instrument/fx/riser"
+      ],
+      "items": [
+        {
+          "name": "Comet Riser",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 5,
+            "orbit": 0.8,
+            "ecc": 0.5,
+            "time": 1.5,
+            "hole": 0,
+            "light": 2.5,
+            "couple": 0.35,
+            "grain": 0.3,
+            "flare": 0.5,
+            "pulsar": 0,
+            "comets": 0.7,
+            "ether": 0.6,
+            "echo": 0.45,
+            "level": 0.411,
+            "scale": "wholeTone",
+            "life": "long",
+            "root": 57,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Doppler Swoosh",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 8,
+            "orbit": 0.6,
+            "ecc": 0.6,
+            "time": 1.2,
+            "hole": 0,
+            "light": 1.5,
+            "couple": 0.3,
+            "grain": 0.3,
+            "flare": 0.5,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.7,
+            "echo": 0.3,
+            "level": 0.652,
+            "scale": "minorPentatonic",
+            "life": "short",
+            "root": 55,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Horizon Downlift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 6,
+            "orbit": 0.9,
+            "ecc": 0.3,
+            "time": 1,
+            "hole": 0.3,
+            "light": 6,
+            "couple": 0.4,
+            "grain": 0.35,
+            "flare": 0.5,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.6,
+            "echo": 0.3,
+            "level": 0.5,
+            "scale": "minorPentatonic",
+            "life": "long",
+            "root": 55,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Singularity Drop",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 6,
+            "orbit": 1,
+            "ecc": 0.2,
+            "time": 1,
+            "hole": 0.9,
+            "light": 12,
+            "couple": 0.1,
+            "grain": 0.05,
+            "flare": 0.1,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.25,
+            "echo": 0.1,
+            "level": 0.757,
+            "scale": "minorPentatonic",
+            "life": "short",
+            "root": 34,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Intro and Break Textures",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Flare Static",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 10,
+            "orbit": 0.7,
+            "ecc": 0.6,
+            "time": 3,
+            "hole": 0,
+            "light": 5,
+            "couple": 0.9,
+            "grain": 0.8,
+            "flare": 1,
+            "pulsar": 0,
+            "comets": 0,
+            "ether": 0.3,
+            "echo": 0.2,
+            "level": 0.375,
+            "scale": "chromatic",
+            "life": "forever",
+            "root": 72,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Meteor Rain",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "gravity": 7,
+            "orbit": 0.8,
+            "ecc": 0.4,
+            "time": 1.5,
+            "hole": 0,
+            "light": 10,
+            "couple": 0.3,
+            "grain": 0.25,
+            "flare": 0.6,
+            "pulsar": 0,
+            "comets": 0.5,
+            "ether": 0.55,
+            "echo": 0.4,
+            "level": 0.435,
+            "scale": "wholeTone",
+            "life": "short",
+            "root": 64,
             "preset": "Custom"
           }
         }

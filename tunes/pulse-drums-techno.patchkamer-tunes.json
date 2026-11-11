@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.pulsedrums",
  "name": "Pulse Drums Techno",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Techno kits for Pulse Drums in eight styles: techno, minimal, peak time, hard techno, dub techno, acid, electro and breaks. The kits use what Pulse adds: the kick layers, FM percussion, polymetric channel lengths, rumble and grit. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune.",
+ "description": "Techno kits for Pulse Drums in eight styles: techno, minimal, peak time, hard techno, dub techno, acid, electro and breaks. The kits use what Pulse adds: the kick layers, FM percussion, polymetric channel lengths, rumble and grit. Loading a tune switches the device's own sequencer off, so you can audition the kit with your own sequencer; switch it back on to hear the groove stored in the tune. Drum and bass folders (around 172 to 176 BPM) with a two-bar groove in pattern A, a variation in B, a breakdown in C and a fill in D: Tech Step, Dancefloor DnB, Neurofunk, Jungle, Halftime DnB and Jump Up, with rumble and grit set per kit.",
  "tags": [
   "instrument/drums/kit"
  ],
@@ -5806,6 +5806,11379 @@
       "length": 16,
       "master": 0.5011,
       "run": false
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Tech Step",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Pressure Step",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "tune": 1.91,
+        "sweep": 0.36,
+        "decay": 0.3,
+        "drive": 0.45,
+        "body": 0.9,
+        "sub": 0.3,
+        "click": 0.3,
+        "seqLength": 32,
+        "level": 0.544,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "tune": 1,
+        "decay": 0.19,
+        "tone": 0.82,
+        "noise": 0.7,
+        "drive": 0.4,
+        "seqLength": 32,
+        "level": 0.417,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Punch",
+        "decay": 0.06,
+        "tone": 0.8,
+        "filter": "highpass",
+        "cutoff": 700,
+        "pan": 0.12,
+        "seqLength": 32,
+        "level": 0.95,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "decay": 0.035,
+        "tone": 0.9,
+        "pan": 0.25,
+        "seqLength": 32,
+        "level": 0.764,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Industrial",
+        "decay": 0.11,
+        "pan": -0.2,
+        "seqLength": 32,
+        "level": 0.169,
+        "choke": 0,
+        "steps": [
+         [],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Industrial",
+        "decay": 0.04,
+        "pan": -0.3,
+        "seqLength": 32,
+        "level": 0.222,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 1.0,
+      "human": 0,
+      "rumble": 0.14,
+      "rumbleTone": 180,
+      "grit": 0.15
+     }
+    },
+    {
+     "name": "Wire Roller",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "tune": -5.89,
+        "sweep": 0.19,
+        "decay": 0.26,
+        "drive": 0.4,
+        "body": 0.9,
+        "sub": 0.25,
+        "click": 0.35,
+        "seqLength": 32,
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Punch",
+        "tune": 3,
+        "decay": 0.17,
+        "tone": 0.88,
+        "noise": 0.8,
+        "drive": 0.35,
+        "seqLength": 32,
+        "level": 0.661,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Industrial",
+        "decay": 0.05,
+        "tone": 0.85,
+        "filter": "highpass",
+        "cutoff": 800,
+        "pan": -0.1,
+        "seqLength": 32,
+        "level": 0.551,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmhat",
+        "decay": 0.04,
+        "fm": 2.5,
+        "ratio": 3.2,
+        "pan": 0.2,
+        "seqLength": 32,
+        "model": "Punch",
+        "level": 0.464,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Industrial",
+        "decay": 0.12,
+        "pan": -0.25,
+        "seqLength": 32,
+        "level": 0.279,
+        "choke": 0,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmperc",
+        "decay": 0.05,
+        "fm": 3.2,
+        "ratio": 5.1,
+        "pan": 0.3,
+        "tune": 7,
+        "seqLength": 32,
+        "model": "Punch",
+        "level": 0.566,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.27
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.45
+          },
+          null,
+          null,
+          {
+           "v": 0.27
+          },
+          {
+           "v": 0.45
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.27
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.5747,
+      "human": 0,
+      "rumble": 0.12,
+      "rumbleTone": 200,
+      "grit": 0.1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Sub Warfare",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "tune": -5.51,
+        "sweep": 0.469,
+        "decay": 0.5,
+        "drive": 0.3,
+        "body": 0.95,
+        "sub": 0.5,
+        "click": 0.2,
+        "seqLength": 32,
+        "level": 0.495,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Rock",
+        "decay": 0.24,
+        "tone": 0.6,
+        "noise": 0.65,
+        "drive": 0.2,
+        "seqLength": 32,
+        "level": 0.42,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          },
+          {
+           "v": 0.7,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.9,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Pop",
+        "decay": 0.22,
+        "tone": 0.65,
+        "seqLength": 32,
+        "level": 0.95,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          {
+           "v": 0.665,
+           "r": 2
+          },
+          {
+           "v": 0.665,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          {
+           "v": 0.855,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.76
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.76
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.95
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.285
+          },
+          null,
+          {
+           "v": 0.38
+          },
+          null,
+          {
+           "v": 0.522
+          },
+          {
+           "v": 0.665
+          },
+          {
+           "v": 0.807
+          },
+          {
+           "v": 0.95,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Pop",
+        "decay": 0.04,
+        "tone": 0.75,
+        "pan": 0.2,
+        "seqLength": 32,
+        "level": 0.606,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.65
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "decay": 0.2,
+        "pan": -0.2,
+        "seqLength": 32,
+        "level": 0.375,
+        "choke": 0,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Pop",
+        "decay": 1.6,
+        "tone": 0.6,
+        "pan": 0.1,
+        "seqLength": 32,
+        "level": 0.301,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.793,
+      "human": 0,
+      "rumble": 0.3,
+      "rumbleTone": 150,
+      "grit": 0.08
+     }
+    },
+    {
+     "name": "Peak Hour",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Rock",
+        "tune": -0.43,
+        "sweep": 0.375,
+        "decay": 0.42,
+        "drive": 0.3,
+        "body": 0.9,
+        "sub": 0.3,
+        "click": 0.3,
+        "seqLength": 32,
+        "level": 0.789,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Pop",
+        "decay": 0.26,
+        "tone": 0.62,
+        "noise": 0.7,
+        "drive": 0.2,
+        "seqLength": 32,
+        "level": 0.669,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.9,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "clapdigital",
+        "model": "Industrial",
+        "decay": 0.2,
+        "tone": 0.6,
+        "seqLength": 32,
+        "level": 0.95,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          {
+           "v": 0.81,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          {
+           "v": 0.72
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.72
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.72
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.9
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.27
+          },
+          null,
+          {
+           "v": 0.36
+          },
+          null,
+          {
+           "v": 0.495
+          },
+          {
+           "v": 0.63
+          },
+          {
+           "v": 0.765
+          },
+          {
+           "v": 0.9,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmhat",
+        "decay": 0.045,
+        "fm": 1.8,
+        "ratio": 2.4,
+        "pan": 0.25,
+        "seqLength": 32,
+        "model": "Punch",
+        "level": 0.429,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Pop",
+        "decay": 0.24,
+        "pan": -0.25,
+        "seqLength": 32,
+        "level": 0.568,
+        "choke": 0,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "crash",
+        "model": "Rock",
+        "decay": 1.9,
+        "tone": 0.55,
+        "pan": -0.1,
+        "seqLength": 32,
+        "level": 0.433,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          },
+          {
+           "v": 0.75,
+           "r": 3
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.7066,
+      "human": 0,
+      "rumble": 0.2,
+      "rumbleTone": 190,
+      "grit": 0.05
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Neurofunk",
+   "tags": [
+    "style/drum-and-bass",
+    "style/neurofunk"
+   ],
+   "items": [
+    {
+     "name": "Gated Steel",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "tune": 4.52,
+        "sweep": 0.3,
+        "decay": 0.16,
+        "drive": 0.55,
+        "body": 0.9,
+        "sub": 0.2,
+        "click": 0.4,
+        "seqLength": 32,
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "tune": 2,
+        "decay": 0.12,
+        "tone": 0.92,
+        "noise": 0.85,
+        "drive": 0.45,
+        "seqLength": 32,
+        "level": 0.597,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Industrial",
+        "decay": 0.04,
+        "tone": 0.9,
+        "filter": "highpass",
+        "cutoff": 1100,
+        "pan": 0.15,
+        "seqLength": 32,
+        "level": 0.479,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "decay": 0.02,
+        "tone": 0.95,
+        "pan": 0.25,
+        "seqLength": 32,
+        "level": 0.273,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "fmmetal",
+        "decay": 0.07,
+        "fm": 4.2,
+        "ratio": 7.3,
+        "pan": -0.3,
+        "seqLength": 32,
+        "model": "Punch",
+        "level": 0.405,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.7732,
+      "human": 0,
+      "rumble": 0.08,
+      "rumbleTone": 240,
+      "grit": 0.28
+     }
+    },
+    {
+     "name": "Iron Lung",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Punch",
+        "tune": -3.06,
+        "sweep": 0.167,
+        "decay": 0.13,
+        "drive": 0.5,
+        "body": 0.85,
+        "sub": 0.15,
+        "click": 0.45,
+        "seqLength": 32,
+        "level": 0.605,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Lo-fi",
+        "tune": 2,
+        "decay": 0.14,
+        "tone": 0.88,
+        "noise": 0.75,
+        "drive": 0.25,
+        "seqLength": 32,
+        "level": 0.479,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Punch",
+        "decay": 0.04,
+        "tone": 0.9,
+        "filter": "highpass",
+        "cutoff": 1000,
+        "pan": -0.15,
+        "seqLength": 32,
+        "level": 0.95,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "decay": 0.025,
+        "tone": 0.92,
+        "pan": 0.2,
+        "seqLength": 32,
+        "level": 0.188,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "zap",
+        "model": "Industrial",
+        "decay": 0.09,
+        "tone": 0.7,
+        "pan": -0.25,
+        "sweep": 0.4,
+        "seqLength": 32,
+        "level": 0.117,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 1.0,
+      "human": 0,
+      "rumble": 0.06,
+      "rumbleTone": 260,
+      "grit": 0.35
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle",
+    "style/breakbeat",
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Dub Jungle",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Lo-fi",
+        "tune": 2.5,
+        "sweep": 0.306,
+        "decay": 0.27,
+        "drive": 0.25,
+        "body": 0.85,
+        "sub": 0.35,
+        "click": 0.25,
+        "seqLength": 32,
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Lo-fi",
+        "tune": 3,
+        "decay": 0.22,
+        "tone": 0.7,
+        "noise": 0.75,
+        "drive": 0.25,
+        "seqLength": 32,
+        "level": 0.801,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          },
+          {
+           "v": 0.9,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Lo-fi",
+        "decay": 0.07,
+        "tone": 0.6,
+        "filter": "highpass",
+        "cutoff": 450,
+        "pan": 0.1,
+        "seqLength": 32,
+        "level": 0.725,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          }
+         ],
+         [],
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.06
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Lo-fi",
+        "decay": 0.04,
+        "tone": 0.7,
+        "pan": 0.25,
+        "seqLength": 32,
+        "level": 0.846,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          },
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "conga",
+        "model": "Lo-fi",
+        "decay": 0.22,
+        "tune": 2,
+        "pan": -0.3,
+        "seqLength": 32,
+        "level": 0.273,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [],
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.6981,
+      "human": 0,
+      "rumble": 0.25,
+      "rumbleTone": 170,
+      "grit": 0.05
+     }
+    },
+    {
+     "name": "Rewind Amen",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Funk",
+        "tune": -2.84,
+        "sweep": 0.286,
+        "decay": 0.22,
+        "drive": 0.25,
+        "body": 0.9,
+        "sub": 0.2,
+        "click": 0.3,
+        "seqLength": 32,
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "tune": 4,
+        "decay": 0.2,
+        "tone": 0.66,
+        "noise": 0.75,
+        "drive": 0.25,
+        "seqLength": 32,
+        "level": 0.797,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          },
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.7,
+           "r": 2
+          },
+          {
+           "v": 0.9,
+           "r": 2
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.3
+          },
+          {
+           "v": 0.4
+          },
+          {
+           "v": 0.7,
+           "r": 2
+          },
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "ride",
+        "model": "Funk",
+        "decay": 0.35,
+        "tone": 0.6,
+        "pan": 0.25,
+        "seqLength": 32,
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "wood",
+        "model": "Funk",
+        "decay": 0.06,
+        "pan": -0.3,
+        "seqLength": 32,
+        "level": 0.543,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.7195,
+      "human": 0,
+      "rumble": 0.12,
+      "rumbleTone": 200,
+      "grit": 0.1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Halftime DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Dark Halftime",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Deep",
+        "tune": -6.86,
+        "sweep": 0.392,
+        "decay": 0.62,
+        "drive": 0.3,
+        "body": 0.95,
+        "sub": 0.6,
+        "click": 0.18,
+        "seqLength": 32,
+        "level": 0.9,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Industrial",
+        "tune": -2,
+        "decay": 0.45,
+        "tone": 0.55,
+        "noise": 0.7,
+        "drive": 0.35,
+        "seqLength": 32,
+        "level": 0.821,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "clap",
+        "model": "Industrial",
+        "decay": 0.3,
+        "tone": 0.5,
+        "seqLength": 32,
+        "level": 0.868,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.64
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.64
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.24
+          },
+          null,
+          {
+           "v": 0.32
+          },
+          null,
+          {
+           "v": 0.44
+          },
+          {
+           "v": 0.56
+          },
+          {
+           "v": 0.68
+          },
+          {
+           "v": 0.8,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Industrial",
+        "decay": 0.04,
+        "tone": 0.7,
+        "pan": 0.2,
+        "seqLength": 32,
+        "level": 0.291,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Industrial",
+        "decay": 0.22,
+        "pan": -0.2,
+        "seqLength": 32,
+        "level": 0.291,
+        "choke": 0,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Rock",
+        "decay": 0.1,
+        "tone": 0.5,
+        "filter": "highpass",
+        "cutoff": 400,
+        "pan": 0.1,
+        "seqLength": 32,
+        "level": 0.771,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          },
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.05
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.4125,
+      "human": 0,
+      "rumble": 0.4,
+      "rumbleTone": 130,
+      "grit": 0.2
+     }
+    },
+    {
+     "name": "Concrete Slow",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Industrial",
+        "tune": -2.15,
+        "sweep": 0.412,
+        "decay": 0.7,
+        "drive": 0.45,
+        "body": 1,
+        "sub": 0.55,
+        "click": 0.2,
+        "seqLength": 32,
+        "level": 0.659,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Rock",
+        "tune": -3,
+        "decay": 0.4,
+        "tone": 0.5,
+        "noise": 0.7,
+        "drive": 0.3,
+        "seqLength": 32,
+        "level": 0.546,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "rim",
+        "model": "Industrial",
+        "decay": 0.05,
+        "tone": 0.8,
+        "pan": -0.1,
+        "seqLength": 32,
+        "level": 0.266,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Punch",
+        "decay": 0.04,
+        "tone": 0.8,
+        "pan": 0.2,
+        "seqLength": 32,
+        "level": 0.95,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Punch",
+        "decay": 0.2,
+        "pan": -0.25,
+        "seqLength": 32,
+        "level": 0.54,
+        "choke": 0,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.5496,
+      "human": 0,
+      "rumble": 0.35,
+      "rumbleTone": 120,
+      "grit": 0.25
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jump Up",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Hype Bounce",
+     "kind": "set",
+     "version": "1.20.1",
+     "state": {
+      "kit": "Custom",
+      "channels": [
+       {
+        "type": "kick",
+        "model": "Funk",
+        "tune": -4.13,
+        "sweep": 0.303,
+        "decay": 0.3,
+        "drive": 0.3,
+        "body": 0.9,
+        "sub": 0.25,
+        "click": 0.3,
+        "seqLength": 32,
+        "level": 0.443,
+        "steps": [
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          }
+         ],
+         [
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "model": "Funk",
+        "decay": 0.25,
+        "tone": 0.58,
+        "noise": 0.6,
+        "drive": 0.15,
+        "seqLength": 32,
+        "level": 0.37,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 1.0
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3
+          },
+          null,
+          {
+           "v": 0.4
+          },
+          null,
+          {
+           "v": 0.55
+          },
+          {
+           "v": 0.7
+          },
+          {
+           "v": 0.85
+          },
+          {
+           "v": 1.0,
+           "r": 2
+          }
+         ]
+        ]
+       },
+       {
+        "type": "snare",
+        "note": 40,
+        "model": "Funk",
+        "decay": 0.06,
+        "tone": 0.6,
+        "filter": "highpass",
+        "cutoff": 400,
+        "pan": 0.1,
+        "seqLength": 32,
+        "level": 0.95,
+        "steps": [
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.3,
+           "micro": 0.04
+          }
+         ]
+        ]
+       },
+       {
+        "type": "closedhat",
+        "model": "Funk",
+        "decay": 0.04,
+        "tone": 0.75,
+        "pan": 0.2,
+        "seqLength": 32,
+        "level": 0.5,
+        "choke": 0,
+        "steps": [
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ],
+         [
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       },
+       {
+        "type": "openhat",
+        "model": "Funk",
+        "decay": 0.14,
+        "pan": -0.2,
+        "seqLength": 32,
+        "level": 0.356,
+        "choke": 0,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          {
+           "v": 0.5
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          }
+         ]
+        ]
+       },
+       {
+        "type": "hitom",
+        "model": "Funk",
+        "decay": 0.28,
+        "tune": 2,
+        "pan": -0.25,
+        "seqLength": 32,
+        "level": 0.307,
+        "steps": [
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.5
+          },
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          },
+          {
+           "v": 0.75,
+           "r": 3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          {
+           "v": 0.75,
+           "r": 3
+          }
+         ],
+         [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+           "v": 0.8
+          }
+         ]
+        ]
+       }
+      ],
+      "length": 32,
+      "pattern": 0,
+      "run": false,
+      "master": 0.8335,
+      "human": 0,
+      "rumble": 0.1,
+      "rumbleTone": 220,
+      "grit": 0.1
      }
     }
    ]

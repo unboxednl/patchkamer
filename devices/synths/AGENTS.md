@@ -54,6 +54,7 @@ Dit overzicht komt uit `devices/AGENTS.md` en wordt gegenereerd door `docs/tools
 | [Layered Landscape](LayeredLandscape/AGENTS.md) | `nl.patchkamer.layeredlandscape` | Een ambient-instrument met vier lagen (drone, pad, sfeer, ruistextuur) met een stereo-ruimte, een master-effect en patronen per laag |
 | [Low Bass](LowBass/AGENTS.md) | `nl.patchkamer.lowbass` | Een mono bassynth zonder sequencer: twee oscillatoren, een sinus-sub, optioneel FM, drive en legato |
 | [Mist](Mist/AGENTS.md) | `nl.patchkamer.mist` | Een drone- en ambient-synth die de klok volgt: een stilstaand akkoord met eigen akkoordgang en melodie, wind, galm en echo's |
+| [Neuro Bass](NeuroBass/AGENTS.md) | `nl.patchkamer.neurobass` | Een mono bas voor drum & bass en bass music: een detune-stack van twee oscillatoren, een sub, FM en ringmodulatie, drie vervormtrappen, een vocaal formantfilter met een Morph-macro, een resonant filter en een LFO op tempo |
 | [Paradox](Paradox/AGENTS.md) | `nl.patchkamer.paradox` | Een experimentele synth die zelf meebeweegt: chaos, een cellulaire automaat, een wavefolder en een granulair geheugen; bespeelbaar, drone of organisme |
 | [Patch Mono](PatchMono/AGENTS.md) | `nl.patchkamer.patchmono` | Een monosynth in twee opbouwen (één of twee oscillatoren) met een audio-ingang en vier interne patchroutes |
 | [Patchbay Synth](PatchbaySynth/AGENTS.md) | `nl.patchkamer.patchbaysynth` | Een halfmodulaire synth met een patchpaneel: drie VCO's, ringmodulator, filter, envelopes, sample & hold en kabels |

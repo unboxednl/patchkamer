@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.loopslicer",
  "name": "Loop Slicer Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Loop Slicer styles: 69 slice setups for the built-in demo loop (a one-bar drum break at 120 BPM): rearranged slice patterns, chops, stutters, reversed and pitched hits, and sparse hits to play from keys. Every folder works directly without loading anything. The 8 tunes in the folder Own Loop keep the loop you have loaded and only change how it is sliced and played: they stay silent until a loop is loaded. Sequencer tunes need the transport running; tunes without a pattern are played with notes from MIDI note 36 upward (one slice per key).",
+ "description": "Loop Slicer styles: 80 slice setups for the built-in demo loop (a one-bar drum break at 120 BPM): rearranged slice patterns, chops, stutters, reversed and pitched hits, and sparse hits to play from keys. Every folder works directly without loading anything. The 8 tunes in the folder Own Loop keep the loop you have loaded and only change how it is sliced and played: they stay silent until a loop is loaded. Sequencer tunes need the transport running; tunes without a pattern are played with notes from MIDI note 36 upward (one slice per key). Drum and bass folders (the demo loop sliced into two-step, rolling, neuro, jungle and half-time patterns; each plays directly): Tech Step, Liquid DnB, Dancefloor DnB, Neurofunk, Jump Up, Jungle and Halftime DnB.",
  "tags": [
   "instrument/drums"
  ],
@@ -2862,6 +2862,506 @@
        13,
        14,
        15
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Tech Step",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Razor Chop",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 15000,
+      "tune": -1,
+      "gate": 0.7,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       2,
+       5,
+       4,
+       -1,
+       5,
+       -1,
+       -1,
+       -1,
+       0,
+       13,
+       12,
+       -1,
+       13,
+       -1
+      ]
+     }
+    },
+    {
+     "name": "Steel Switch",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 12000,
+      "tune": 0,
+      "gate": 0.55,
+      "pan": 0.05,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       5,
+       0,
+       4,
+       -1,
+       0,
+       -1,
+       -1,
+       -1,
+       0,
+       -1,
+       12,
+       13,
+       10,
+       13
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass",
+    "style/liquid"
+   ],
+   "items": [
+    {
+     "name": "Velvet Slice",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 8500,
+      "tune": -3,
+      "gate": 1,
+      "pan": -0.1,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       2,
+       5,
+       4,
+       -1,
+       5,
+       -1,
+       -1,
+       13,
+       0,
+       -1,
+       12,
+       -1,
+       6,
+       13
+      ]
+     }
+    },
+    {
+     "name": "Brushed Skip",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 7000,
+      "tune": -2,
+      "gate": 1,
+      "pan": 0.1,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       1,
+       0,
+       4,
+       1,
+       2,
+       1,
+       -1,
+       -1,
+       0,
+       -1,
+       12,
+       13,
+       10,
+       12
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Drop Hits",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 16000,
+      "tune": -3,
+      "gate": 0.9,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       6,
+       -1,
+       4,
+       -1,
+       5,
+       -1,
+       -1,
+       -1,
+       0,
+       -1,
+       12,
+       -1,
+       13,
+       -1
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Neurofunk",
+   "tags": [
+    "style/drum-and-bass",
+    "style/neurofunk"
+   ],
+   "items": [
+    {
+     "name": "Gate Cutter",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 2600,
+      "tune": -7,
+      "gate": 0.45,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       -1,
+       -1,
+       4,
+       -1,
+       -1,
+       0,
+       -1,
+       -1,
+       0,
+       -1,
+       12,
+       -1,
+       -1,
+       -1
+      ]
+     }
+    },
+    {
+     "name": "Dry Stab",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 3600,
+      "tune": -9,
+      "gate": 0.4,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 2,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       2,
+       -1,
+       4,
+       -1,
+       0,
+       -1,
+       -1,
+       -1,
+       0,
+       -1,
+       12,
+       8,
+       12,
+       -1
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jump Up",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Bounce Chops",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 12000,
+      "tune": 0,
+      "gate": 0.6,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       5,
+       0,
+       4,
+       -1,
+       6,
+       0,
+       13,
+       -1,
+       0,
+       -1,
+       12,
+       -1,
+       13,
+       -1
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle",
+    "style/breakbeat",
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Ragga Rush",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 14000,
+      "tune": -1,
+      "gate": 0.8,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       1,
+       0,
+       4,
+       -1,
+       2,
+       4,
+       0,
+       13,
+       0,
+       -1,
+       12,
+       -1,
+       12,
+       12
+      ]
+     }
+    },
+    {
+     "name": "Roll Call",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 13000,
+      "tune": 0,
+      "gate": 0.85,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 1,
+      "retrigger": 1,
+      "random": true,
+      "seed": 1990,
+      "pattern": [
+       -1,
+       -1,
+       0,
+       -1,
+       4,
+       -1,
+       0,
+       4,
+       -1,
+       12,
+       0,
+       12,
+       12,
+       -1,
+       12,
+       12
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Halftime DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Half Drag",
+     "kind": "set",
+     "version": "1.23.0",
+     "state": {
+      "level": 1.0,
+      "cutoff": 9000,
+      "tune": -5,
+      "gate": 1,
+      "pan": 0,
+      "demoLoop": true,
+      "cuts": "0,0.0625,0.125,0.1875,0.25,0.3125,0.375,0.4375,0.5,0.5625,0.625,0.6875,0.75,0.8125,0.875,0.9375,1",
+      "baseNote": 36,
+      "sync": true,
+      "reverse": false,
+      "sequence": true,
+      "division": 2,
+      "retrigger": 1,
+      "random": false,
+      "seed": 9137,
+      "pattern": [
+       0,
+       -1,
+       2,
+       -1,
+       -1,
+       -1,
+       6,
+       -1,
+       12,
+       -1,
+       0,
+       -1,
+       -1,
+       -1,
+       6,
+       -1
       ]
      }
     }

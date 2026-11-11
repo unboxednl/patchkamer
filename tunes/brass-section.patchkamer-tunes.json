@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.brass-section",
  "name": "Brass Section",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Tunes for Brass Section: trumpet, trombone and horn solos, one to four player sections, stabs, swells, funk and ballad sounds. Checked for range and behaviour, not listened to.",
+ "description": "Tunes for Brass Section: trumpet, trombone and horn solos, one to four player sections, stabs, swells, funk and ballad sounds. Checked for range and behaviour, not listened to. Also has Dancefloor DnB, Liquid DnB and Jungle folders.",
  "tags": [
   "instrument/brass"
  ],
@@ -1138,6 +1138,318 @@
      "tags": [
       "instrument/brass"
      ]
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Rave Brass Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/section"
+     ],
+     "state": {
+      "brightness": 3200,
+      "blat": 0.85,
+      "swell": 0.06,
+      "resonance": 1.6,
+      "edge": 0.55,
+      "mute": 0,
+      "velBright": 0.8,
+      "attack": 0.005,
+      "decay": 0.15,
+      "sustain": 0.1,
+      "release": 0.1,
+      "scoop": 15,
+      "scoopTime": 0.07,
+      "breath": 0.15,
+      "velocity": 0.8,
+      "players": 4,
+      "spread": 10,
+      "stagger": 0,
+      "width": 0.9,
+      "vibrato": 0,
+      "vibRate": 5.3,
+      "vibDelay": 0.4,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.964,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Fanfare Hit",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/section"
+     ],
+     "state": {
+      "brightness": 2600,
+      "blat": 0.75,
+      "swell": 0.1,
+      "resonance": 1.2,
+      "edge": 0.5,
+      "mute": 0,
+      "velBright": 0.6,
+      "attack": 0.01,
+      "decay": 0.3,
+      "sustain": 0.35,
+      "release": 0.25,
+      "scoop": 20,
+      "scoopTime": 0.07,
+      "breath": 0.25,
+      "velocity": 0.8,
+      "players": 4,
+      "spread": 9,
+      "stagger": 6,
+      "width": 1,
+      "vibrato": 0.1,
+      "vibRate": 5.3,
+      "vibDelay": 0.2,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.969,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Brass Riser Swell",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass"
+     ],
+     "state": {
+      "brightness": 2400,
+      "blat": 0.9,
+      "swell": 0.8,
+      "resonance": 1.4,
+      "edge": 0.5,
+      "mute": 0,
+      "velBright": 0.6,
+      "attack": 0.9,
+      "decay": 0.5,
+      "sustain": 0.9,
+      "release": 0.6,
+      "scoop": 0,
+      "scoopTime": 0.07,
+      "breath": 0.2,
+      "velocity": 0.8,
+      "players": 4,
+      "spread": 12,
+      "stagger": 20,
+      "width": 1,
+      "vibrato": 0.2,
+      "vibRate": 5.3,
+      "vibDelay": 0.8,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.58,
+      "preset": "Custom"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Liquid Flugel Hook",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/trumpet"
+     ],
+     "state": {
+      "brightness": 1200,
+      "blat": 0.3,
+      "swell": 0.1,
+      "resonance": 0.9,
+      "edge": 0.15,
+      "mute": 0,
+      "velBright": 0.5,
+      "attack": 0.06,
+      "decay": 0.3,
+      "sustain": 0.8,
+      "release": 0.3,
+      "scoop": 18,
+      "scoopTime": 0.07,
+      "breath": 0.3,
+      "velocity": 0.8,
+      "players": 1,
+      "spread": 8,
+      "stagger": 12,
+      "width": 0.5,
+      "vibrato": 0.35,
+      "vibRate": 5,
+      "vibDelay": 0.3,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.843,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Muted Soul Trumpet",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/trumpet"
+     ],
+     "state": {
+      "brightness": 1800,
+      "blat": 0.5,
+      "swell": 0.1,
+      "resonance": 1.8,
+      "edge": 0.25,
+      "mute": 0.75,
+      "velBright": 0.6,
+      "attack": 0.03,
+      "decay": 0.25,
+      "sustain": 0.8,
+      "release": 0.2,
+      "scoop": 25,
+      "scoopTime": 0.07,
+      "breath": 0.2,
+      "velocity": 0.8,
+      "players": 1,
+      "spread": 8,
+      "stagger": 12,
+      "width": 0.6,
+      "vibrato": 0.3,
+      "vibRate": 5.3,
+      "vibDelay": 0.3,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.744,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Soul Horn Section",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/section"
+     ],
+     "state": {
+      "brightness": 1600,
+      "blat": 0.4,
+      "swell": 0.1,
+      "resonance": 1.1,
+      "edge": 0.2,
+      "mute": 0,
+      "velBright": 0.5,
+      "attack": 0.04,
+      "decay": 0.3,
+      "sustain": 0.7,
+      "release": 0.35,
+      "scoop": 22,
+      "scoopTime": 0.07,
+      "breath": 0.25,
+      "velocity": 0.8,
+      "players": 3,
+      "spread": 8,
+      "stagger": 14,
+      "width": 0.8,
+      "vibrato": 0.2,
+      "vibRate": 5.3,
+      "vibDelay": 0.5,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.8,
+      "preset": "Custom"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle"
+   ],
+   "items": [
+    {
+     "name": "Ragga Horn Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/section"
+     ],
+     "state": {
+      "brightness": 2000,
+      "blat": 0.7,
+      "swell": 0.1,
+      "resonance": 1.2,
+      "edge": 0.45,
+      "mute": 0,
+      "velBright": 0.6,
+      "attack": 0.008,
+      "decay": 0.2,
+      "sustain": 0.2,
+      "release": 0.15,
+      "scoop": 40,
+      "scoopTime": 0.07,
+      "breath": 0.25,
+      "velocity": 0.8,
+      "players": 2,
+      "spread": 12,
+      "stagger": 8,
+      "width": 0.7,
+      "vibrato": 0,
+      "vibRate": 5.3,
+      "vibDelay": 0.4,
+      "transpose": 0,
+      "expression": 0.9,
+      "level": 0.8,
+      "preset": "Custom"
+     }
+    },
+    {
+     "name": "Dub Trombone Line",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/brass/trombone"
+     ],
+     "state": {
+      "brightness": 900,
+      "blat": 0.5,
+      "swell": 0.1,
+      "resonance": 1.2,
+      "edge": 0.3,
+      "mute": 0,
+      "velBright": 0.6,
+      "attack": 0.06,
+      "decay": 0.3,
+      "sustain": 0.8,
+      "release": 0.3,
+      "scoop": 60,
+      "scoopTime": 0.1,
+      "breath": 0.3,
+      "velocity": 0.8,
+      "players": 1,
+      "spread": 8,
+      "stagger": 12,
+      "width": 0.6,
+      "vibrato": 0.2,
+      "vibRate": 5.3,
+      "vibDelay": 0.4,
+      "transpose": -12,
+      "expression": 0.9,
+      "level": 0.76,
+      "preset": "Custom"
+     }
     }
    ]
   }

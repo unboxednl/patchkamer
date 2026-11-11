@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.formantsinger",
  "name": "Formant Singer Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Tunes for Formant Singer by style: choir, solo voices, bass voices, whisper and breath, pads and ambient, cinematic, pop leads, robot and FX, chant, lullaby, hymn and syllable study. Every tune is a complete voice with a short original text (about 2 to 9 syllables, in English, Dutch or phonemes) that fits the style. The text expects one note per syllable: a chord counts as one note, and the text starts again after the last syllable. Syllables per text: Choir 4 to 5; Solo Voices 4 to 7; Bass Voices 1 to 4; Whisper and Breath 3 to 6; Pads and Ambient 1 to 4; Cinematic 1 to 6; Pop Leads 4 to 6; Robot and FX 2 to 5; Chant 4 to 6; Lullaby 3 to 7; Hymn 2 to 9; Syllable Study 6 to 8. Tunes with a fixed vowel sing that one vowel on every note. Play a melody with that many notes (the card shows the current syllable); press Restart to start the text again.",
+ "description": "Tunes for Formant Singer by style: choir, solo voices, bass voices, whisper and breath, pads and ambient, cinematic, pop leads, robot and FX, chant, lullaby, hymn and syllable study. Every tune is a complete voice with a short original text (about 2 to 9 syllables, in English, Dutch or phonemes) that fits the style. The text expects one note per syllable: a chord counts as one note, and the text starts again after the last syllable. Syllables per text: Choir 4 to 5; Solo Voices 4 to 7; Bass Voices 1 to 4; Whisper and Breath 3 to 6; Pads and Ambient 1 to 4; Cinematic 1 to 6; Pop Leads 4 to 6; Robot and FX 2 to 5; Chant 4 to 6; Lullaby 3 to 7; Hymn 2 to 9; Syllable Study 6 to 8. Tunes with a fixed vowel sing that one vowel on every note. Play a melody with that many notes (the card shows the current syllable); press Restart to start the text again. Also has Liquid DnB, Dancefloor DnB, Neuro Pads and Jungle folders with soulful leads, vocal chops, choir pads and chants.",
  "tags": [
   "instrument/voice"
  ],
@@ -1993,6 +1993,348 @@
       "mode": "mono",
       "onEnd": "loop",
       "level": 0.64
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Soulful Alto Hook",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
+     "state": {
+      "lyrics": "feel it all the way",
+      "lang": "en",
+      "voice": "alto",
+      "size": 0,
+      "vowel": "a",
+      "fixed": false,
+      "vibRate": 5.2,
+      "vibDepth": 26,
+      "vibDelay": 0.25,
+      "glide": 0.12,
+      "attack": 0.05,
+      "release": 0.4,
+      "breath": 0.16,
+      "bright": 0.45,
+      "voices": 1,
+      "spread": 0.5,
+      "detune": 8,
+      "consonants": 0.7,
+      "onset": 60,
+      "mode": "mono",
+      "onEnd": "loop",
+      "level": 0.553
+     }
+    },
+    {
+     "name": "Liquid Choir Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad",
+      "instrument/voice/choir"
+     ],
+     "state": {
+      "lyrics": "ooh",
+      "lang": "en",
+      "voice": "alto",
+      "size": 0,
+      "vowel": "o",
+      "fixed": true,
+      "vibRate": 5.5,
+      "vibDepth": 10,
+      "vibDelay": 0.9,
+      "glide": 0.06,
+      "attack": 1.0,
+      "release": 3.0,
+      "breath": 0.25,
+      "bright": 0.4,
+      "voices": 6,
+      "spread": 1,
+      "detune": 16,
+      "consonants": 0.8,
+      "onset": 60,
+      "mode": "poly",
+      "onEnd": "loop",
+      "level": 0.45
+     }
+    },
+    {
+     "name": "Airy Falsetto",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
+     "state": {
+      "lyrics": "ah",
+      "lang": "en",
+      "voice": "soprano",
+      "size": 1.0,
+      "vowel": "a",
+      "fixed": true,
+      "vibRate": 5.5,
+      "vibDepth": 18,
+      "vibDelay": 0.5,
+      "glide": 0.1,
+      "attack": 0.12,
+      "release": 0.6,
+      "breath": 0.4,
+      "bright": 0.35,
+      "voices": 1,
+      "spread": 0.5,
+      "detune": 8,
+      "consonants": 0.8,
+      "onset": 60,
+      "mode": "mono",
+      "onEnd": "loop",
+      "level": 0.473
+     }
+    },
+    {
+     "name": "Breathy Hum Lead",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
+     "state": {
+      "lyrics": "mm",
+      "lang": "en",
+      "voice": "alto",
+      "size": -0.5,
+      "vowel": "a",
+      "fixed": false,
+      "vibRate": 5.5,
+      "vibDepth": 20,
+      "vibDelay": 0.4,
+      "glide": 0.09,
+      "attack": 0.08,
+      "release": 0.4,
+      "breath": 0.5,
+      "bright": 0.3,
+      "voices": 1,
+      "spread": 0.5,
+      "detune": 8,
+      "consonants": 0.8,
+      "onset": 60,
+      "mode": "mono",
+      "onEnd": "loop",
+      "level": 0.145
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Vocal Chop Ah",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "lyrics": "ha ya ha ya",
+      "lang": "en",
+      "voice": "alto",
+      "size": 0.5,
+      "vowel": "a",
+      "fixed": false,
+      "vibRate": 5.5,
+      "vibDepth": 0,
+      "vibDelay": 0.3,
+      "glide": 0.01,
+      "attack": 0.01,
+      "release": 0.12,
+      "breath": 0.1,
+      "bright": 0.6,
+      "voices": 1,
+      "spread": 0.5,
+      "detune": 8,
+      "consonants": 0.9,
+      "onset": 40,
+      "mode": "mono",
+      "onEnd": "loop",
+      "level": 0.389
+     }
+    },
+    {
+     "name": "Hey Chop Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "lyrics": "hey",
+      "lang": "en",
+      "voice": "tenor",
+      "size": 1.0,
+      "vowel": "a",
+      "fixed": false,
+      "vibRate": 5.5,
+      "vibDepth": 0,
+      "vibDelay": 0.3,
+      "glide": 0.01,
+      "attack": 0.005,
+      "release": 0.1,
+      "breath": 0.2,
+      "bright": 0.7,
+      "voices": 1,
+      "spread": 0.5,
+      "detune": 8,
+      "consonants": 1,
+      "onset": 70,
+      "mode": "mono",
+      "onEnd": "loop",
+      "level": 0.444
+     }
+    },
+    {
+     "name": "Vocal Stab Choir",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/voice/choir"
+     ],
+     "state": {
+      "lyrics": "ah",
+      "lang": "en",
+      "voice": "alto",
+      "size": 0,
+      "vowel": "a",
+      "fixed": true,
+      "vibRate": 5.5,
+      "vibDepth": 0,
+      "vibDelay": 0.3,
+      "glide": 0.01,
+      "attack": 0.01,
+      "release": 0.2,
+      "breath": 0.12,
+      "bright": 0.65,
+      "voices": 4,
+      "spread": 1,
+      "detune": 14,
+      "consonants": 0.8,
+      "onset": 60,
+      "mode": "poly",
+      "onEnd": "loop",
+      "level": 0.463
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Neuro Pads",
+   "tags": [
+    "style/drum-and-bass",
+    "instrument/pad"
+   ],
+   "items": [
+    {
+     "name": "Dark Vowel Drift",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "lyrics": "uh",
+      "lang": "en",
+      "voice": "bass",
+      "size": -3,
+      "vowel": "uh",
+      "fixed": true,
+      "vibRate": 5.5,
+      "vibDepth": 8,
+      "vibDelay": 1,
+      "glide": 0.06,
+      "attack": 1.2,
+      "release": 3.5,
+      "breath": 0.35,
+      "bright": 0.25,
+      "voices": 5,
+      "spread": 1,
+      "detune": 24,
+      "consonants": 0.8,
+      "onset": 60,
+      "mode": "poly",
+      "onEnd": "loop",
+      "level": 0.44
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle"
+   ],
+   "items": [
+    {
+     "name": "Ragga Chant",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "lyrics": "ya ya ya yo",
+      "lang": "en",
+      "voice": "tenor",
+      "size": 0,
+      "vowel": "a",
+      "fixed": false,
+      "vibRate": 5.5,
+      "vibDepth": 6,
+      "vibDelay": 0.3,
+      "glide": 0.02,
+      "attack": 0.01,
+      "release": 0.15,
+      "breath": 0.2,
+      "bright": 0.6,
+      "voices": 1,
+      "spread": 0.5,
+      "detune": 8,
+      "consonants": 1,
+      "onset": 60,
+      "mode": "mono",
+      "onEnd": "loop",
+      "level": 0.68
+     }
+    },
+    {
+     "name": "Dub Hum Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
+     "state": {
+      "lyrics": "mm",
+      "lang": "en",
+      "voice": "tenor",
+      "size": -1,
+      "vowel": "a",
+      "fixed": false,
+      "vibRate": 5.5,
+      "vibDepth": 10,
+      "vibDelay": 0.8,
+      "glide": 0.06,
+      "attack": 0.8,
+      "release": 2.5,
+      "breath": 0.25,
+      "bright": 0.3,
+      "voices": 4,
+      "spread": 0.9,
+      "detune": 12,
+      "consonants": 0.8,
+      "onset": 60,
+      "mode": "poly",
+      "onEnd": "loop",
+      "level": 0.234
      }
     }
    ]

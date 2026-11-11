@@ -27,6 +27,8 @@ Effecten nemen geluid op, veranderen het en sturen het door. Zet ze tussen een g
 | Resonator | Vier resonatoren gestemd op een grondtoon en een akkoord. | [`Resonator/`](Resonator/) | [Resonator](../../docs/effects/USER-MANUAL_NL.md#resonator) |
 | Reverb | Een algoritmische galm met vijf modellen: Hall, Plate, Spring, Room en Chamber. | [`Reverb/`](Reverb/) | [Reverb](../../docs/effects/USER-MANUAL_NL.md#reverb) |
 | Room | Een delay en een galm in één effect. | [`Room/`](Room/) | [Room](../../docs/effects/USER-MANUAL_NL.md#room) |
+| Stutter | Beat repeat, gate en roll op het tempo: herhaalt de laatste stappen op 1/4 tot 1/32 (ook triolen), met gate-patronen, pitch-ramps, decay, opbouw, tape stop en reverse; start met een knop, events of aan het eind van de maat. | [`Stutter/`](Stutter/) | [Stutter](../../docs/effects/USER-MANUAL_NL.md#stutter) |
+| Transient Shaper | Versterkt of dempt de aanzet en het uitklinken van een geluid op elk niveau, met drie tijdinstellingen, een optionele driebandsmodus, mix en meters voor de versterking. | [`TransientShaper/`](TransientShaper/) | [Transient Shaper](../../docs/effects/USER-MANUAL_NL.md#transient-shaper) |
 | Tremolo | Laat het volume op en neer gaan. | [`Tremolo/`](Tremolo/) | [Tremolo](../../docs/effects/USER-MANUAL_NL.md#tremolo) |
 | Vocoder | Een vocoder met 16 banden: een stem bespeelt een synth. | [`Vocoder/`](Vocoder/) | [Vocoder](../../docs/effects/USER-MANUAL_NL.md#vocoder) |
 

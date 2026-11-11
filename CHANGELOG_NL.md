@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.33.0 (2026-11-11)
+
+### Toegevoegd
+- **Drum & bass: drie nieuwe apparaten en veel nieuwe klanken.** **Neuro Bass (1.0.0, Synths)**: een mono bas met twee oscillatoren, FM en ringmodulatie, een schone mono sub onder een instelbare crossover (alleen de hoge band wordt vervormd), drie waveshaper-trappen, een formantfilter met een Morph-macro, een LFO op tempo en een begrenzer; 70 tunes (Neurofunk, Detune Stack, Liquid, Jump Up, Dancefloor, Sub, Dubstep and Bass Music, Techno, Stabs and Hits). **Transient Shaper (1.0.0, Effects)**: attack en sustain omhoog of omlaag, onafhankelijk van het niveau, optioneel drie banden, geen latency; 35 presets. **Stutter (1.0.0, Effects)**: beat repeat op het tempo (1/4 tot 1/32, triolen), gate-patroon, pitch-ramp, decay, tape stop en reverse; 34 presets.
+- **Nieuwe drum & bass-tunes in 41 bestaande packs (ongeveer 620 tunes):** bassynths (Neurofunk, Detune Stack, Liquid, Dancefloor DnB, Jump Up, Jungle, DnB Leads), leads, keys, pads, strijkers en zang (Liquid DnB, Dancefloor DnB, Neuro Pads), donkere texturen, risers en impacts, en drumkits met patronen (Tech Step, Liquid, Dancefloor, Neurofunk, Jump Up, Jungle, Halftime, Amen Chops). Packs gaan naar 1.1.0. Niveaus zijn per apparaat gemeten en gelijkgetrokken. Niet beluisterd.
+
 ## 0.32.0 (2026-11-11)
 
 ### Toegevoegd

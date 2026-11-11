@@ -1,12 +1,12 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.polychorus",
   "name": "Poly Chorus Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Tunes for Poly Chorus by music style: synthwave, ambient, cinematic, pop, trance, house, deep house, funk & disco, soul, electro, lo-fi and techno. Six sounds per style: bass, lead, pad, chords, plucks and textures, all with the built-in stereo chorus.",
+  "description": "Tunes for Poly Chorus by music style: synthwave, ambient, cinematic, pop, trance, house, deep house, funk & disco, soul, electro, lo-fi and techno. Six sounds per style: bass, lead, pad, chords, plucks and textures, all with the built-in stereo chorus. Also has Dancefloor DnB, Liquid DnB, Neuro Pads and Jungle folders.",
   "tree": [
     {
       "folder": "Synthwave",
@@ -2685,6 +2685,432 @@
             "hpf": 1,
             "vcaMode": "env",
             "level": 0.358
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dancefloor DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Rave Stab Chord",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/chords"
+          ],
+          "state": {
+            "saw": 1,
+            "pulse": 0.4,
+            "sub": 0.15,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0.2,
+            "transpose": 0,
+            "cutoff": 2800,
+            "resonance": 0.35,
+            "filterEnv": 3,
+            "keytrack": 0.5,
+            "drive": 0.35,
+            "attack": 0.002,
+            "decay": 0.2,
+            "sustain": 0,
+            "release": 0.2,
+            "lfoRate": 2,
+            "vibrato": 0,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 2,
+            "chorusMix": 0.5,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.537
+          }
+        },
+        {
+          "name": "Rave Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
+          "state": {
+            "saw": 1,
+            "pulse": 0.6,
+            "sub": 0.1,
+            "noise": 0,
+            "pw": 0.4,
+            "pwm": 0.6,
+            "transpose": 0,
+            "cutoff": 5500,
+            "resonance": 0.25,
+            "filterEnv": 0.8,
+            "keytrack": 0.7,
+            "drive": 0.2,
+            "attack": 0.006,
+            "decay": 0.4,
+            "sustain": 0.8,
+            "release": 0.3,
+            "lfoRate": 5.5,
+            "vibrato": 14,
+            "lfoFilter": 0,
+            "glide": 0.04,
+            "chorusMode": 3,
+            "chorusMix": 0.6,
+            "width": 1,
+            "hpf": 0,
+            "vcaMode": "env",
+            "level": 0.439
+          }
+        },
+        {
+          "name": "Pump Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
+          "state": {
+            "saw": 0.9,
+            "pulse": 0.5,
+            "sub": 0.1,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0.2,
+            "transpose": 0,
+            "cutoff": 3500,
+            "resonance": 0.25,
+            "filterEnv": 0.6,
+            "keytrack": 0.5,
+            "drive": 0.2,
+            "attack": 0.03,
+            "decay": 1,
+            "sustain": 0.85,
+            "release": 0.5,
+            "lfoRate": 2,
+            "vibrato": 0,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 3,
+            "chorusMix": 0.7,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.37
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Liquid DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Liquid Poly Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
+          "state": {
+            "saw": 0.5,
+            "pulse": 0.7,
+            "sub": 0.1,
+            "noise": 0,
+            "pw": 0.35,
+            "pwm": 0.5,
+            "transpose": 0,
+            "cutoff": 1800,
+            "resonance": 0.15,
+            "filterEnv": 0.6,
+            "keytrack": 0.5,
+            "drive": 0.05,
+            "attack": 1.2,
+            "decay": 2,
+            "sustain": 0.85,
+            "release": 3.5,
+            "lfoRate": 0.3,
+            "vibrato": 0,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 3,
+            "chorusMix": 0.85,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.505
+          }
+        },
+        {
+          "name": "Silk Keys",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/keys"
+          ],
+          "state": {
+            "saw": 0.2,
+            "pulse": 0.8,
+            "sub": 0.1,
+            "noise": 0,
+            "pw": 0.4,
+            "pwm": 0.3,
+            "transpose": 0,
+            "cutoff": 2600,
+            "resonance": 0.25,
+            "filterEnv": 1.8,
+            "keytrack": 0.6,
+            "drive": 0.05,
+            "attack": 0.004,
+            "decay": 0.9,
+            "sustain": 0.25,
+            "release": 0.8,
+            "lfoRate": 2,
+            "vibrato": 0,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 1,
+            "chorusMix": 0.55,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.441
+          }
+        },
+        {
+          "name": "Warm Strings",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/strings"
+          ],
+          "state": {
+            "saw": 1,
+            "pulse": 0.3,
+            "sub": 0.1,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0.2,
+            "transpose": 0,
+            "cutoff": 3000,
+            "resonance": 0.25,
+            "filterEnv": 0.7,
+            "keytrack": 0.6,
+            "drive": 0.05,
+            "attack": 0.35,
+            "decay": 1,
+            "sustain": 0.9,
+            "release": 1.2,
+            "lfoRate": 5,
+            "vibrato": 8,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 3,
+            "chorusMix": 0.7,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.346
+          }
+        },
+        {
+          "name": "Soul Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
+          "state": {
+            "saw": 0.6,
+            "pulse": 0.4,
+            "sub": 0.15,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0.2,
+            "transpose": 0,
+            "cutoff": 3800,
+            "resonance": 0.25,
+            "filterEnv": 1,
+            "keytrack": 0.7,
+            "drive": 0.08,
+            "attack": 0.02,
+            "decay": 0.4,
+            "sustain": 0.75,
+            "release": 0.4,
+            "lfoRate": 5.2,
+            "vibrato": 20,
+            "lfoFilter": 0,
+            "glide": 0.05,
+            "chorusMode": 1,
+            "chorusMix": 0.45,
+            "width": 1,
+            "hpf": 0,
+            "vcaMode": "env",
+            "level": 0.647
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neuro Pads",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/pad"
+      ],
+      "items": [
+        {
+          "name": "Neuro Poly Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "saw": 1,
+            "pulse": 0.2,
+            "sub": 0.2,
+            "noise": 0.03,
+            "pw": 0.5,
+            "pwm": 0.2,
+            "transpose": 0,
+            "cutoff": 700,
+            "resonance": 0.45,
+            "filterEnv": 1.5,
+            "keytrack": 0.4,
+            "drive": 0.5,
+            "attack": 1,
+            "decay": 2,
+            "sustain": 0.85,
+            "release": 3,
+            "lfoRate": 0.25,
+            "vibrato": 0,
+            "lfoFilter": 0.35,
+            "glide": 0.005,
+            "chorusMode": 3,
+            "chorusMix": 0.9,
+            "width": 1,
+            "hpf": 0,
+            "vcaMode": "env",
+            "level": 0.278
+          }
+        },
+        {
+          "name": "Growl Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass"
+          ],
+          "state": {
+            "saw": 1,
+            "pulse": 0.6,
+            "sub": 0.5,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0.8,
+            "transpose": -12,
+            "cutoff": 600,
+            "resonance": 0.3,
+            "filterEnv": 1,
+            "keytrack": 0.3,
+            "drive": 0.6,
+            "attack": 0.01,
+            "decay": 0.4,
+            "sustain": 0.9,
+            "release": 0.2,
+            "lfoRate": 0.4,
+            "vibrato": 0,
+            "lfoFilter": 0.15,
+            "glide": 0.005,
+            "chorusMode": 2,
+            "chorusMix": 0.7,
+            "width": 1,
+            "hpf": 0,
+            "vcaMode": "env",
+            "level": 0.28
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jungle",
+      "tags": [
+        "style/jungle"
+      ],
+      "items": [
+        {
+          "name": "Jungle Organ Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/organ"
+          ],
+          "state": {
+            "saw": 0,
+            "pulse": 1,
+            "sub": 0.3,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0,
+            "transpose": 0,
+            "cutoff": 3000,
+            "resonance": 0.25,
+            "filterEnv": 0.5,
+            "keytrack": 0.5,
+            "drive": 0.15,
+            "attack": 0.003,
+            "decay": 0.15,
+            "sustain": 0.1,
+            "release": 0.12,
+            "lfoRate": 2,
+            "vibrato": 0,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 1,
+            "chorusMix": 0.4,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.51
+          }
+        },
+        {
+          "name": "Dub Wash Pad",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/pad"
+          ],
+          "state": {
+            "saw": 0.7,
+            "pulse": 0.5,
+            "sub": 0.2,
+            "noise": 0,
+            "pw": 0.5,
+            "pwm": 0.2,
+            "transpose": 0,
+            "cutoff": 1500,
+            "resonance": 0.25,
+            "filterEnv": 0.5,
+            "keytrack": 0.5,
+            "drive": 0.1,
+            "attack": 0.7,
+            "decay": 2,
+            "sustain": 0.8,
+            "release": 2.5,
+            "lfoRate": 0.2,
+            "vibrato": 0,
+            "lfoFilter": 0,
+            "glide": 0.005,
+            "chorusMode": 3,
+            "chorusMix": 0.75,
+            "width": 1,
+            "hpf": 1,
+            "vcaMode": "env",
+            "level": 0.432
           }
         }
       ]

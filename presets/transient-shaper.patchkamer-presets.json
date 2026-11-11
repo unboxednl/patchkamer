@@ -1,0 +1,827 @@
+{
+  "format": "patchkamer-presets",
+  "formatVersion": 2,
+  "version": "1.0.0",
+  "device": "nl.patchkamer.transientshaper",
+  "name": "Transient Shaper Basics",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "Starting points for Transient Shaper, with drum and bass first: snare snap, kick punch and weight, break tightening, amen and jungle breaks, bass tightening, neuro bass control, pad softening and hat control. Then techno, house, hip-hop, cinematic and general mix repairs.",
+  "tree": [
+    {
+      "folder": "Drum & Bass",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Snare Snap",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 70,
+            "sustain": -25,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Snare Crack",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 90,
+            "sustain": -10,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -3,
+            "speed": "fast",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Kick Punch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 60,
+            "sustain": 0,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Kick Tight",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 30,
+            "sustain": -55,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -1,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Sub Kick Weight",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 15,
+            "sustain": 35,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Break Tightening",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 25,
+            "sustain": -50,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Break Loose Tail",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": -10,
+            "sustain": 50,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -1,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Amen Snap",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 0,
+            "lowSustain": -30,
+            "midAttack": 60,
+            "midSustain": -10,
+            "highAttack": 40,
+            "highSustain": -20,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -3,
+            "speed": "normal",
+            "bands": true,
+            "on": true
+          }
+        },
+        {
+          "name": "Jungle Break Punch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 30,
+            "lowSustain": -20,
+            "midAttack": 50,
+            "midSustain": -30,
+            "highAttack": 20,
+            "highSustain": -40,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -3,
+            "speed": "normal",
+            "bands": true,
+            "on": true
+          }
+        },
+        {
+          "name": "Break Room Reduce",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 0,
+            "lowSustain": -40,
+            "midAttack": 0,
+            "midSustain": -60,
+            "highAttack": 0,
+            "highSustain": -70,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "normal",
+            "bands": true,
+            "on": true
+          }
+        },
+        {
+          "name": "Bass Tightening",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 20,
+            "lowSustain": -40,
+            "midAttack": 0,
+            "midSustain": -30,
+            "highAttack": 0,
+            "highSustain": -20,
+            "xoLow": 140,
+            "xoHigh": 1800,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": true,
+            "on": true
+          }
+        },
+        {
+          "name": "Neuro Bass Control",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 0,
+            "lowSustain": -25,
+            "midAttack": -35,
+            "midSustain": -10,
+            "highAttack": -50,
+            "highSustain": -20,
+            "xoLow": 160,
+            "xoHigh": 2200,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": true,
+            "on": true
+          }
+        },
+        {
+          "name": "Detune Bass Smooth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": -40,
+            "sustain": 0,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Rolling Bass Pluck",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 45,
+            "sustain": -35,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -1,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Hat Control",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": -35,
+            "sustain": -45,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "fast",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Hat Sparkle",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 45,
+            "sustain": -15,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -1,
+            "speed": "fast",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Pad Softening",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": -70,
+            "sustain": 10,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Parallel Break Punch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 100,
+            "sustain": -20,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 0.4,
+            "out": -1,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Techno",
+      "tags": [
+        "style/techno"
+      ],
+      "items": [
+        {
+          "name": "Kick Thump",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 50,
+            "sustain": 10,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Clap Space",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 20,
+            "sustain": 40,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Hat Snap",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 60,
+            "sustain": -30,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "fast",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Rumble Tamer",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": -30,
+            "lowSustain": -40,
+            "midAttack": 0,
+            "midSustain": -10,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 120,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": true,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "House",
+      "tags": [
+        "style/house"
+      ],
+      "items": [
+        {
+          "name": "Groove Lift",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 35,
+            "sustain": 20,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Shaker Tick",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 60,
+            "sustain": -10,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "fast",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Bass Tight and Clear",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 25,
+            "lowSustain": -20,
+            "midAttack": 20,
+            "midSustain": -15,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 150,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": true,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Hip-hop",
+      "tags": [
+        "style/hiphop"
+      ],
+      "items": [
+        {
+          "name": "Boom Bap Snare",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 60,
+            "sustain": 30,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -3,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Soft Lo-fi Drums",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": -30,
+            "sustain": 20,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Sub Boom Punch",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 55,
+            "sustain": 15,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -3,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Cinematic",
+      "tags": [
+        "style/cinematic"
+      ],
+      "items": [
+        {
+          "name": "Soft Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": -80,
+            "sustain": 20,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Impact Hit",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 45,
+            "sustain": 60,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -4,
+            "speed": "long",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Percussion Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 70,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -2,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Mix Repairs",
+      "items": [
+        {
+          "name": "Dry Up",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": -60,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Add Room",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 45,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": -1,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Subtle Glue",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 15,
+            "sustain": 15,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 0.7,
+            "out": 0,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        },
+        {
+          "name": "Transparent Neutral",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "attack": 0,
+            "sustain": 0,
+            "lowAttack": 0,
+            "lowSustain": 0,
+            "midAttack": 0,
+            "midSustain": 0,
+            "highAttack": 0,
+            "highSustain": 0,
+            "xoLow": 200,
+            "xoHigh": 2500,
+            "mix": 1,
+            "out": 0,
+            "speed": "normal",
+            "bands": false,
+            "on": true
+          }
+        }
+      ]
+    }
+  ]
+}

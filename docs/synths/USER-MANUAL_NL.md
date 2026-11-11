@@ -2,13 +2,13 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 33 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 35 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
 1. [Wat synths doen](#wat-synths-doen)
 2. [Welke synth voor welk doel](#welke-synth-voor-welk-doel)
-3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
+3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Neuro Bass](#neuro-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
 6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
@@ -38,6 +38,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Een baslijn die vanzelf speelt, met accent en slide per stap | [Acid Baselines](#acid-baselines) (16 stappen, 16 patronen), [Acid Stepper](#acid-stepper) (eenvoudiger), [Squelch Box](#squelch-box) (een getrouwe klassieke acid-bas) |
 | Een bas of lead die zijn eigen patroon of arpeggio speelt | [Sub Line](#sub-line), [Cross Mod Mono](#cross-mod-mono) |
 | Een bas die ik vanaf mijn eigen toetsenbord of sequencer speel | [Low Bass](#low-bass), [Basic Mono](#basic-mono), [Sub Line](#sub-line) |
+| Een drum & bass- of dubstepbas met bewegende klinkerfilters en een schone sub | [Neuro Bass](#neuro-bass), [Low Bass](#low-bass) |
 | Een eenvoudige, directe monoklank met weinig knoppen | [Basic Mono](#basic-mono) |
 | Een lead met twee toonhoogten tegelijk, ringmodulatie, hard sync of sample & hold | [Duofone](#duofone), [Cross Mod Mono](#cross-mod-mono) |
 | Een klassiek analoog monogeluid: dikke bas, zingende lead, een resonant filter dat zelf zingt | [Ladder Mono](#ladder-mono) |
@@ -225,6 +226,46 @@ De sequencer onder de regelaars:
 
 - Legato werkt alleen zolang de vorige noot nog klinkt (overlappende of vastgehouden noten); losse noten slaan altijd opnieuw aan. De filter-envelope slaat bij elke noot opnieuw aan, ook bij legato.
 - Enveloppen en glide worden gelezen als de volgende noot begint.
+- Een ingebouwde bewaker vervangt de filters als ze ontsporen, zodat een modulator het apparaat niet voorgoed stil kan leggen.
+
+### Neuro Bass
+
+**Waar het voor dient.** Een mono bas voor drum & bass en bass music (neurofunk, tech-step, detune-stacks, liquid sub-mids, jump-up wobbles, dubstep). Hij speelt de noten die op zijn poort **Noten** binnenkomen (de laatste noot wint). Twee oscillatoren met elk twee stemmen (een detune-stack), een sinus-sub, FM en ringmodulatie, drie vervormtrappen, een vocaal formantfilter dat je met **Morph** laat zwepen, een resonant filter, een LFO op tempo en een versterker-envelope met glide, velocity en accent. Een crossover splitst het geluid: de sub en alles onder de **Crossover** blijven schoon en mono, alleen de hoge band wordt vervormd.
+
+![De kaart van Neuro Bass](../images/nl/synths/neuro-bass.png)
+
+**De regelaars.** De kaart heeft zes secties.
+
+- **Oscillatoren:** **Golfvorm 1** en **Golfvorm 2** (Saw, Square, Pulse, Triangle, Sine), **Zweving** (0 tot 60 cent tussen de twee stemmen van elke oscillator), **Unison** (hoe sterk de tweede stem is), **Osc 2 mix**, **Osc 2 toon** (−24 tot 24 halve tonen), **FM** (oscillator 2 moduleert de toonhoogte van oscillator 1), **Ring** (ringmodulatie), **Sub** (een schone sinus), **Sub-octaaf** (0 of −1) en **Crossover** (40 tot 300 Hz).
+- **Vervorming:** drie trappen achter elkaar, elk met een soort (**Uit**, **Fold**, **Clip**, **Soft**, **Asym**, **Rectify**, **Bit**) en een hoeveelheid (**Drive 1** tot **Drive 3**). Alleen de hoge band gaat erdoorheen.
+- **Formant:** **Vocaal A** en **Vocaal B** (OO, OH, AH, EH, EE, UE), **Morph** (de plek tussen de twee klinkers; hij opent ook de eerste vervormtrap een beetje), **Formant-mix** en **Formant Q** (hoe scherp de klinkers zijn).
+- **Filter:** **Filtertype** (LP 24, LP 12, BP), **Cutoff**, **Resonantie** en **Filter-envelope** (0 tot 5 octaven).
+- **LFO:** **LFO-vorm**, **LFO-sync** (**Vrij**, **Noot** begint bij elke noot opnieuw, **Tempo** volgt de klok en begint bij elke noot opnieuw), **LFO Rate** (Hz, als het niet op Tempo staat), **LFO-maat** (1/1 tot 1/32, ook triolen, bij Tempo) en vier diepten: **LFO Morph** (de klinkerzwiep), **LFO Cutoff**, **LFO Drive** (de tweede vervormtrap) en **LFO Wobble** (het volume van de hoge band).
+- **Versterker:** **Attack**, **Decay** (ook voor de filter-envelope), **Sustain**, **Release**, **Glide**, **Legato**, **Accent**, **Level** en **Bend** (−12 tot 12 halve tonen).
+- **Proefbas** speelt een noot, **Alles uit** stopt alles.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer. |
+| **Mod** | modulatie in (paars) | Een modulator kan 30 regelaars bewegen (alle knoppen op de kaart). |
+| **Bas uit** | audio uit (groenblauw) | Sluit aan op **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.**
+
+1. Plaats **Keys / MIDI**, **Neuro Bass** en **Speakers**. Verbind de noten van Keys met **Noten** en **Bas uit** met **In**.
+2. Kies een tune uit de map **Neurofunk** en speel lage noten (MIDI-noot 28 tot 48).
+3. Draai **Morph** en **LFO Morph** open en hoor de klinkers bewegen; zet **LFO-sync** op **Tempo** en kies een **LFO-maat** die bij de beat past.
+4. Draai **Drive 1** en **Drive 2** op: de hoogte wordt harder terwijl de sub schoon blijft.
+
+**Tunes.** Pack **Neuro Bass Styles**: 70 tunes in 9 mappen (Neurofunk, Detune Stack, Liquid, Jump Up, Dancefloor, Sub, Dubstep and Bass Music, Techno, Stabs and Hits), bestand [`neuro-bass-styles.patchkamer-tunes.json`](../../tunes/neuro-bass-styles.patchkamer-tunes.json). Een tune is alleen een klank; de noten komen van je toetsenbord of sequencer. Een paar namen: **Dark Roller**, **Formant Growl**, **Classic Detune Stack**, **Warm Sub Mid**, **Wobble Bounce**, **Pure Sub**.
+
+**Tips en beperkingen.**
+
+- De sub en de lage band onder de **Crossover** worden nooit vervormd. De noten van een bas liggen laag: met een hoge crossover komt het meeste karakter van de boventonen erboven.
+- **LFO-sync** op **Tempo** leest het tempo van de klok; draait de klok niet, dan geldt 120 BPM.
+- Legato werkt alleen zolang de vorige noot nog klinkt (overlappende of vastgehouden noten). Enveloppen en glide worden gelezen als de volgende noot begint.
 - Een ingebouwde bewaker vervangt de filters als ze ontsporen, zodat een modulator het apparaat niet voorgoed stil kan leggen.
 
 ### Sub Line

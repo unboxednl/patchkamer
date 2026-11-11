@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.supersawswarm",
  "name": "Supersaw Swarm Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Supersaw tunes for Supersaw Swarm in trance, hardstyle, progressive, big room, synthwave, pop, future bass, eurodance, ambient and cinematic styles: leads, chords, pads, plucks, basses and textures. Tunes that use the trance gate or the pump only move with a running clock; they are also usable without one.",
+ "description": "Supersaw tunes for Supersaw Swarm in trance, hardstyle, progressive, big room, synthwave, pop, future bass, eurodance, ambient and cinematic styles: leads, chords, pads, plucks, basses and textures. Tunes that use the trance gate or the pump only move with a running clock; they are also usable without one. Also has Dancefloor DnB, Liquid DnB, Neuro DnB and Jungle folders: rave stabs, wide supersaw leads, liquid pads and chords, dark neuro pads and dub stabs.",
  "tree": [
   {
    "folder": "Trance",
@@ -2265,6 +2265,470 @@
       "unison": 7,
       "chord": "minadd9",
       "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Dancefloor Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
+     "state": {
+      "cutoff": 3800,
+      "resonance": 1.8,
+      "env": 2.6,
+      "drive": 0.3,
+      "detune": 34,
+      "mix": 0.85,
+      "spread": 0.9,
+      "octave": 0.45,
+      "sub": 0.1,
+      "attack": 0.001,
+      "decay": 0.2,
+      "sustain": 0.05,
+      "release": 0.16,
+      "chorus": 0.2,
+      "delay": 0,
+      "feedback": 0.2,
+      "hall": 0.18,
+      "size": 1.4,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 7,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Dancefloor Supersaw",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
+     "state": {
+      "cutoff": 9500,
+      "resonance": 1.2,
+      "env": 0.7,
+      "drive": 0.25,
+      "detune": 40,
+      "mix": 0.9,
+      "spread": 0.9,
+      "octave": 0.4,
+      "sub": 0.08,
+      "attack": 0.004,
+      "decay": 0.5,
+      "sustain": 0.9,
+      "release": 0.35,
+      "chorus": 0.35,
+      "delay": 0.14,
+      "feedback": 0.3,
+      "hall": 0.25,
+      "size": 2.2,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 0.99,
+      "unison": 9,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Wide Hit Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
+     "state": {
+      "cutoff": 5200,
+      "resonance": 1,
+      "env": 1.8,
+      "drive": 0.4,
+      "detune": 45,
+      "mix": 0.95,
+      "spread": 0.9,
+      "octave": 0.55,
+      "sub": 0.2,
+      "attack": 0.001,
+      "decay": 0.28,
+      "sustain": 0.15,
+      "release": 0.22,
+      "chorus": 0.15,
+      "delay": 0,
+      "feedback": 0.42,
+      "hall": 0.15,
+      "size": 1.2,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 0.887,
+      "unison": 9,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Pumping Wall",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
+     "state": {
+      "cutoff": 4800,
+      "resonance": 0.8,
+      "env": 0.4,
+      "drive": 0.2,
+      "detune": 36,
+      "mix": 0.9,
+      "spread": 0.9,
+      "octave": 0.4,
+      "sub": 0.12,
+      "attack": 0.03,
+      "decay": 1.2,
+      "sustain": 0.9,
+      "release": 0.5,
+      "chorus": 0.4,
+      "delay": 0.08,
+      "feedback": 0.42,
+      "hall": 0.3,
+      "size": 2.4,
+      "gate": 0,
+      "pump": 0.7,
+      "transpose": 0,
+      "level": 0.838,
+      "unison": 9,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Euphoric Riser Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
+     "state": {
+      "cutoff": 7000,
+      "resonance": 1,
+      "env": 1.8,
+      "drive": 0.18,
+      "detune": 42,
+      "mix": 0.9,
+      "spread": 0.9,
+      "octave": 0.5,
+      "sub": 0.05,
+      "attack": 1.4,
+      "decay": 2,
+      "sustain": 0.9,
+      "release": 1.6,
+      "chorus": 0.5,
+      "delay": 0.2,
+      "feedback": 0.45,
+      "hall": 0.5,
+      "size": 5,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 9,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Liquid Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
+     "state": {
+      "cutoff": 2600,
+      "resonance": 0.7,
+      "env": 0.3,
+      "drive": 0.05,
+      "detune": 22,
+      "mix": 0.7,
+      "spread": 1,
+      "octave": 0.2,
+      "sub": 0.08,
+      "attack": 0.9,
+      "decay": 2,
+      "sustain": 0.9,
+      "release": 3,
+      "chorus": 0.55,
+      "delay": 0.1,
+      "feedback": 0.3,
+      "hall": 0.55,
+      "size": 6,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 0.94,
+      "unison": 5,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Silk Chords",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
+     "state": {
+      "cutoff": 3000,
+      "resonance": 0.9,
+      "env": 0.9,
+      "drive": 0.05,
+      "detune": 18,
+      "mix": 0.65,
+      "spread": 0.9,
+      "octave": 0.25,
+      "sub": 0.1,
+      "attack": 0.04,
+      "decay": 0.8,
+      "sustain": 0.55,
+      "release": 1.2,
+      "chorus": 0.4,
+      "delay": 0.12,
+      "feedback": 0.3,
+      "hall": 0.45,
+      "size": 4,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 5,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Warm Lead",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/lead"
+     ],
+     "state": {
+      "cutoff": 3800,
+      "resonance": 1,
+      "env": 1.2,
+      "drive": 0.1,
+      "detune": 12,
+      "mix": 0.5,
+      "spread": 0.9,
+      "octave": 0.1,
+      "sub": 0.25,
+      "attack": 0.03,
+      "decay": 0.5,
+      "sustain": 0.7,
+      "release": 0.5,
+      "chorus": 0.35,
+      "delay": 0.25,
+      "feedback": 0.4,
+      "hall": 0.4,
+      "size": 3.5,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 3,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Neuro DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Neuro Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
+     "state": {
+      "cutoff": 900,
+      "resonance": 3,
+      "env": 1.4,
+      "drive": 0.45,
+      "detune": 55,
+      "mix": 1,
+      "spread": 1,
+      "octave": 0.1,
+      "sub": 0.3,
+      "attack": 1.1,
+      "decay": 2,
+      "sustain": 0.8,
+      "release": 2.5,
+      "chorus": 0.6,
+      "delay": 0.1,
+      "feedback": 0.4,
+      "hall": 0.45,
+      "size": 5,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 0.675,
+      "unison": 9,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Dark Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
+     "state": {
+      "cutoff": 1400,
+      "resonance": 4,
+      "env": 3.2,
+      "drive": 0.55,
+      "detune": 30,
+      "mix": 0.8,
+      "spread": 0.9,
+      "octave": 0.05,
+      "sub": 0.35,
+      "attack": 0.001,
+      "decay": 0.22,
+      "sustain": 0,
+      "release": 0.18,
+      "chorus": 0.1,
+      "delay": 0,
+      "feedback": 0.42,
+      "hall": 0.15,
+      "size": 1.2,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 7,
+      "chord": "none",
+      "div": "3/16",
+      "pattern": "1011011010110110"
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle"
+   ],
+   "items": [
+    {
+     "name": "Dub Chord Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
+     "state": {
+      "cutoff": 2000,
+      "resonance": 1.5,
+      "env": 2,
+      "drive": 0.1,
+      "detune": 10,
+      "mix": 0.4,
+      "spread": 0.9,
+      "octave": 0.05,
+      "sub": 0.3,
+      "attack": 0.002,
+      "decay": 0.3,
+      "sustain": 0.1,
+      "release": 0.4,
+      "chorus": 0.1,
+      "delay": 0.45,
+      "feedback": 0.62,
+      "hall": 0.35,
+      "size": 3,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 3,
+      "chord": "none",
+      "div": "3/8",
+      "pattern": "1011011010110110"
+     }
+    },
+    {
+     "name": "Jungle Pad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/pad"
+     ],
+     "state": {
+      "cutoff": 1800,
+      "resonance": 1.2,
+      "env": 0.5,
+      "drive": 0.12,
+      "detune": 30,
+      "mix": 0.7,
+      "spread": 0.9,
+      "octave": 0.1,
+      "sub": 0.2,
+      "attack": 0.7,
+      "decay": 2,
+      "sustain": 0.85,
+      "release": 2.5,
+      "chorus": 0.45,
+      "delay": 0.3,
+      "feedback": 0.5,
+      "hall": 0.5,
+      "size": 5,
+      "gate": 0,
+      "pump": 0,
+      "transpose": 0,
+      "level": 1.0,
+      "unison": 5,
+      "chord": "none",
+      "div": "1/4",
       "pattern": "1011011010110110"
      }
     }

@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Effecten nemen geluid op, veranderen het en sturen het door. Deze handleiding beschrijft de 23 effecten in [`devices/effects/`](../../devices/effects/README_NL.md): Bitcrusher, Chorus, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Effect Chain, Filter, Flanger, Frequency Shifter, Gate, Grit, Harmonizer, Phaser, Pitch Correction, Pitch Shifter, Pump, Resonator, Reverb, Room, Tremolo en Vocoder. Voor het starten van Patchkamer, het laden van een bibliotheek en het trekken van kabels: zie de [basishandleiding](../USER-MANUAL_NL.md).
+Effecten nemen geluid op, veranderen het en sturen het door. Deze handleiding beschrijft de 25 effecten in [`devices/effects/`](../../devices/effects/README_NL.md): Bitcrusher, Chorus, Compressor, Convolution Reverb, De-esser, Delay, Distortion, Effect Chain, Filter, Flanger, Frequency Shifter, Gate, Grit, Harmonizer, Phaser, Pitch Correction, Pitch Shifter, Pump, Resonator, Reverb, Room, Stutter, Transient Shaper, Tremolo en Vocoder. Voor het starten van Patchkamer, het laden van een bibliotheek en het trekken van kabels: zie de [basishandleiding](../USER-MANUAL_NL.md).
 
 ## Inhoud
 
@@ -32,9 +32,11 @@ Effecten nemen geluid op, veranderen het en sturen het door. Deze handleiding be
 24. [Resonator](#resonator)
 25. [Reverb](#reverb)
 26. [Room](#room)
-27. [Tremolo](#tremolo)
-28. [Vocoder](#vocoder)
-29. [Als het niet werkt](#als-het-niet-werkt)
+27. [Stutter](#stutter)
+28. [Transient Shaper](#transient-shaper)
+29. [Tremolo](#tremolo)
+30. [Vocoder](#vocoder)
+31. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Welk effect voor welk doel
 
@@ -61,6 +63,8 @@ Effecten nemen geluid op, veranderen het en sturen het door. Deze handleiding be
 | Een valse stem of lijn naar een toonladder stemmen | [Pitch Correction](#pitch-correction) | Monofone detectie, twaalf notenschakelaars, correctiesnelheid van hard tot traag, vibrato behouden of vlak. |
 | De toonhoogte van een geluid omhoog of omlaag zetten zonder het tempo te veranderen | [Pitch Shifter](#pitch-shifter) | Drie motoren: percussief voor drums, korrel voor stemmen en instrumenten, vocoder als formanten tellen. Ook octaaflagen en shimmer. |
 | Een geloofwaardige ruimte geven aan zang, drums, snaren of een pad (hall, plate, spring, room) | [Reverb](#reverb) | Vijf galmmodellen met decay, demping, pre-delay, ducking en freeze. |
+| Een snare meer tik geven, een kick meer stoot of een break strakker maken, op elk niveau | [Transient Shaper](#transient-shaper) | Versterkt of dempt aanzet en uitklink onafhankelijk van het niveau; snelle, normale en lange tijden; optioneel drie banden (laag, mid, hoog). |
+| Het geluid op de tel laten rollen, hakken of stoppen (snare-rolls, opbouw, tape-stop drops, gates) | [Stutter](#stutter) | Herhaalt de laatste stappen op 1/4 tot 1/32 met gate-patronen en pitch-ramps; tape stop en reverse swell; met een knop, events of automatisch. |
 
 ## Effecten gebruiken
 
@@ -818,6 +822,74 @@ De kaart verbergt de regelaars die niet bij de gekozen bron horen.
 
 **Tips.** De galmstaart wordt uit ruis gemaakt als je **Galm** wijzigt, dus hij verschilt telkens een beetje. De pakketten houden **Feedback** onder 75%. Een bewaker verlaagt de feedback even als de echolus gaat oplopen, en bouwt de lus opnieuw op bij een foutieve waarde.
 
+## Stutter
+
+**Waar het voor dient.** Stutter herhaalt het laatste stukje geluid op de tel: een snare-roll, een opbouw van 1/8 naar 1/32, een tape-stop drop, een gated hak van een break of bas, of een reverse swell. Het neemt de laatste stappen van de ingang steeds op; als je het start, wordt dat stuk bevroren en herhaald op het tempo van de studio, zolang je de knop vasthoudt of de trigger loopt. De randen van elke herhaling en het in- en uitschakelen lopen via korte fades, dus het klikt niet. Zonder stutter gaat het geluid ongewijzigd door. Er is geen vertraging.
+
+![De Stutter-kaart](../images/nl/effects/stutter.png)
+
+**De regelaars.**
+
+Bovenaan:
+
+- **Stutter** is de knop: houd hem ingedrukt om te herhalen. Met **Vasthouden** aan start één klik en stopt de volgende. **Op de stap starten** laat hem beginnen op de eerstvolgende zestiende van de klok (alleen als de klok loopt).
+- **Soort:** *Beat repeat*, *Tape stop* (het geluid vertraagt als een band die tot stilstand komt) of *Reverse swell* (het laatste stuk achteruit, aanzwellend).
+- **Herhaling:** 1/4, 1/4 T, 1/8, 1/8 T, 1/16, 1/16 T, 1/32 of 1/32 T (T = triool).
+- **Lus (stappen):** 1, 2, 4 of 8 herhalingslengtes vormen samen de lus (hoogstens 4,5 s).
+- **Gate-patroon:** welke herhalingen klinken, bijvoorbeeld `x . x x` (x = geluid, . = stil).
+- **Richting:** *Vooruit*, *Achteruit* of *Wisselend* (per herhaling van de lus). Alleen bij *Beat repeat*.
+- **Bouw op naar:** *Uit*, of een kortere herhaling: de herhaling wordt elke **Herhalingen per trap** (1, 2, 3, 4, 6 of 8) een nootwaarde korter, bijvoorbeeld 1/8, 1/16, 1/32. Alleen met **Lus** 1.
+- **Automatisch:** *Uit*, *Laatste 2 stappen van de maat*, *Laatste tel van de maat*, *Laatste halve maat* of *Laatste maat van vier*: Stutter start dan vanzelf (heeft de klok nodig).
+- Een scherm toont het uitgangsniveau (helderder tijdens het stotteren) en het gate-patroon met de herhaling die nu klinkt.
+
+**Herhaling:** **Gate-lengte** (5 tot 100%: hoeveel van elke herhaling open is), **Pitch per herhaling** (−3 tot +3 halve tonen per herhaling van de lus: stijgende of dalende rolls) en **Decay per herhaling** (0 tot 12 dB: elke volgende herhaling wordt zachter).
+
+**Tape stop:** **Stoptijd** (50 ms tot 3 s) en **Stopcurve** (0,5 tot 4; 1 is recht, hoger is eerst langzaam en dan snel naar nul).
+
+**Reverse:** **Swell** (0 tot 100%: hoeveel het niveau aanzwelt binnen de lus).
+
+**Trigger en uitgang:** **Mix** (tijdens het stotteren: het deel van het herhaalde signaal), **Uitgang** (−24 tot +12 dB) en **Lengte trig (stappen)** (1 tot 64: hoe lang een trig het effect aan laat; een noot gebruikt zijn eigen lengte).
+
+De kaart dimt de regelaars die niet bij de gekozen soort horen.
+
+**Poorten.** **In**, **Uit**, **Trigger** (events: een trig of noot start het; een CC vanaf 50% start het en eronder stopt het) en **Mod** (negen parameters).
+
+**Voorbeeld.** Drumbus → Stutter → Mixer. Kies de preset **Drum & Bass › Snare Roll Build 1/8 to 1/32**, start de klok en houd de knop **Stutter** ingedrukt aan het eind van een maat: het laatste achtste van de drums herhaalt steeds sneller. Voor een drop kies je **Drum & Bass › Drop Tape Stop**. Voor een vulling zonder iets aan te raken kies je **Drum & Bass › Auto Fill Last Beat**. Om hem vanuit een sequencer te starten, sluit je diens trigs of noten aan op **Trigger**.
+
+**Presets.** Pakket **Stutter Basics** (34 presets) in [`presets/stutter.patchkamer-presets.json`](../../presets/stutter.patchkamer-presets.json), in de mappen **Drum & Bass** (Snare Roll 1/16, Snare Roll Build 1/8 to 1/32, Snare Roll Triplet, Build-up 1/4 to 1/32, Build-up Fast 1/16 to 1/32, Drop Tape Stop, Fast Tape Stop, Half-time Chop, Break Stutter Gallop, Amen Chop 1/32, Bass Gate 1/16, Reverse Swell 1 Bar, Reverse Fill Half Bar, Pitch Rise Roll, Pitch Drop Roll, Echo Tail Chop, Auto Fill Last Beat, Auto Build Last Half Bar, Auto Gallop Bar of Four, Auto Tick Last Two Steps), **Techno** (Techno Gate 1/16, Rhythmic Stab Triplets, Snare Build 1/4 to 1/16, Hat Roll Latched), **House** (Offbeat Chop, Vocal Stutter 1/16, Hat Roll 1/32), **Hip-hop** (Vinyl Stop, Beat Repeat 1/4, Chopped Sample 1/8), **Cinematic** (Reverse Riser 2 Bars, Slow-down, Gated Pad, Pulse Freeze). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶. Ik heb ze niet beluisterd.
+
+**Tips.** Het herhaalde stuk is hoogstens 4,5 seconde lang. Een pitch-ramp boven of onder de oorspronkelijke snelheid maakt een herhaling korter of langer dan zijn plek (hij wordt afgekapt of gevolgd door stilte). De worklet begrenst zijn ingangen op +24 dB en heeft AudioWorklet nodig; zonder gaat het geluid ongewijzigd door en meldt de kaart dat.
+
+## Transient Shaper
+
+**Waar het voor dient.** Transient Shaper versterkt of dempt de aanzet en het uitklinken van een geluid, op elk niveau. Een snare krijgt meer tik, een kick meer stoot, een break wordt strakker of losser, een pad zachter. Je stelt geen drempel in: een snelle en een langzame volger meten het niveau, en het verschil tussen die twee (in dB) laat zien waar de aanzet zit en waar de staart, dus een zacht en een hard geslagen drum klinken hetzelfde na het bewerken. Onder circa −70 dBFS neemt het effect af, zodat ruis niet wordt opgepompt.
+
+![De Transient Shaper-kaart](../images/nl/effects/transient-shaper.png)
+
+**De regelaars.**
+
+Bovenaan:
+
+- **Tijden:** *Snel (hi-hats, percussie)*, *Normaal (snare, breaks)* of *Lang (kick, bas)*: hoe snel de volgers reageren. Gebruik *Lang* voor lage geluiden, waar korte tijden de golven zelf zouden volgen.
+- **3 banden** verdeelt het geluid in laag, mid en hoog, elk met een eigen attack en sustain. De banden tellen weer op tot het origineel. **Aan** / **Uit (doorlaten)** schakelt het effect.
+- **Versterking** en **Demping** zijn meters die tonen hoeveel er nu wordt versterkt of gedempt, en **Nu** geeft het in dB. De grafiek toont de versterking in de tijd: versterking boven de lijn, demping eronder.
+
+**Vorm:** **Attack** (−100 tot +100%: plus is meer aanzet, min is een zachtere aanzet) en **Sustain** (−100 tot +100%: plus is langer uitklinken, min korter). Deze werken als **3 banden** uit staat.
+
+**Banden en crossovers** (als **3 banden** aan staat): **Laag attack**, **Laag sustain**, **Mid attack**, **Mid sustain**, **Hoog attack**, **Hoog sustain** (elk −100 tot +100%), **Crossover laag/mid** (40 tot 1000 Hz) en **Crossover mid/hoog** (600 Hz tot 12 kHz).
+
+**Uitgang:** **Mix** (het deel van het bewerkte signaal; lager dan 100% is parallel bewerken) en **Uitgang** (−24 tot +12 dB).
+
+De kaart dimt de regelaars die niet van toepassing zijn.
+
+**Poorten.** **In**, **Uit** en **Mod** (twaalf parameters).
+
+**Voorbeeld.** Zet Transient Shaper op een break (of de drumbus) vóór de Mixer. Kies de preset **Drum & Bass › Break Tightening**: de staarten van de drums worden korter, dus de break voelt strakker. Voor een snare met meer tik kies je **Drum & Bass › Snare Snap**. Voor laag en hoog van een break apart kies je **Drum & Bass › Jungle Break Punch** (drie banden). Kijk naar de meter **Versterking**: piekt de uitgang, verlaag dan **Uitgang**.
+
+**Presets.** Pakket **Transient Shaper Basics** (35 presets) in [`presets/transient-shaper.patchkamer-presets.json`](../../presets/transient-shaper.patchkamer-presets.json), in de mappen **Drum & Bass** (Snare Snap, Snare Crack, Kick Punch, Kick Tight, Sub Kick Weight, Break Tightening, Break Loose Tail, Amen Snap, Jungle Break Punch, Break Room Reduce, Bass Tightening, Neuro Bass Control, Reese Bass Smooth, Rolling Bass Pluck, Hat Control, Hat Sparkle, Pad Softening, Parallel Break Punch), **Techno** (Kick Thump, Clap Space, Hat Snap, Rumble Tamer), **House** (Groove Lift, Shaker Tick, Bass Tight and Clear), **Hip-hop** (Boom Bap Snare, Soft Lo-fi Drums, Sub Boom Punch), **Cinematic** (Soft Swell, Impact Hit, Percussion Room), **Mix Repairs** (Dry Up, Add Room, Subtle Glue, Transparent Neutral). Laad het met de tab **Presets** van de bibliotheek → **Importeren…** (of via een bibliotheek die het bevat) en kies dan een preset in de balk bovenaan de kaart, of blader met ◀ ▶. Ik heb ze niet beluisterd.
+
+**Tips.** Er is geen vertraging (geen lookahead). Met **Attack** en **Sustain** op 0%, **3 banden** uit, **Mix** 100% en **Uitgang** 0 dB gaat het geluid ongewijzigd door. Een grote aanzetversterking kan pieken geven; het effect heeft geen limiter. De versterking is begrensd op +18 dB en −40 dB. De worklet begrenst zijn ingangen op +24 dB en heeft AudioWorklet nodig; zonder gaat het geluid ongewijzigd door en meldt de kaart dat.
+
 ## Tremolo
 
 **Waar het voor dient.** Tremolo laat het volume in een vaste snelheid op en neer gaan. Er zijn twee knoppen.
@@ -866,9 +938,10 @@ Schuiven: **Stemgevoeligheid** (hoe sterk de stem de banden opent), **Envelope-r
 
 - **Ik hoor niets.** Controleer de kabels: audio van de bron naar **In** (bij Vocoder naar **Stem / spraak**) en van **Uit** naar de Mixer of Speakers. Druk op **Start**, of klik ergens in Patchkamer: browsers pauzeren audio tot je iets doet. Zie ook onderdeel 13 van de [basishandleiding](../USER-MANUAL_NL.md).
 - **Het effect doet niets.** Controleer **Mix** (op 0% hoor je alleen het origineel), het slot in Effect Chain (**Bypass aan**, of **Doorvoer**, of **Effectmix** op 0%) en **Diepte** (op 0% beweegt een zwiepend effect niet).
-- **Het effect geeft het geluid ongewijzigd door.** Flanger, Frequency Shifter, Pump, Resonator en drie filtertypen (ladder en de twee kamfilters) hebben AudioWorklet nodig. Heeft je browser dat niet, dan meldt de kaart het. Gebruik een actuele Chrome of Edge.
+- **Het effect geeft het geluid ongewijzigd door.** Flanger, Frequency Shifter, Pump, Resonator, Stutter, Transient Shaper en drie filtertypen (ladder en de twee kamfilters) hebben AudioWorklet nodig. Heeft je browser dat niet, dan meldt de kaart het. Gebruik een actuele Chrome of Edge.
 - **Beweging op tempo staat stil.** Druk op **Start**: de tempokeuzes volgen de klok van de studio. Pump op *Klok* en de ritme-effecten in Effect Chain hebben hem ook nodig.
 - **Pump duikt niet.** *Sidechain* heeft een signaal nodig op de poort **Sidechain** (en het moet de **Drempel** halen); *Trigger* heeft trigs of noten nodig op **Trigger**; *Klok* heeft een lopende klok nodig.
+- **Stutter herhaalt niet.** Houd de knop **Stutter** ingedrukt (of zet **Vasthouden** aan), sluit trigs of noten aan op **Trigger**, of kies een instelling bij **Automatisch**; **Automatisch** en **Op de stap starten** hebben een lopende klok nodig. Een te hoge of te lage pitch-ramp maakt de herhalingen korter dan hun plek, met stilte ertussen.
 - **Resonator volgt de noten niet.** Kies *grondtoon volgt de noten* bij **Noten** en sluit noten aan op **Noten**.
 - **Krakende of haperende audio.** Effect Chain draait veel effecten in de hoofdthread: gebruik minder slots, of zet de analyzer op *Uit / minder CPU*. Zie ook Instellingen → Audio in de [basishandleiding](../USER-MANUAL_NL.md).
 - **Een knop beweegt niet mee met de modulator.** De knop is de basiswaarde. Controleer de (paarse) kabel naar **Mod** en of de modulator een spoor voor dit effect heeft. Keuzes (lijsten) worden niet gemoduleerd.

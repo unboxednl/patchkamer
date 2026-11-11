@@ -4,7 +4,7 @@
 
 Kant-en-klare instellingen voor apparaten die geen eigen geluid maken (effecten, mixers, modulatoren, sequencers en andere tools), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, of gebruik een pack als beginpunt voor je eigen presets. Apparaten die geluid maken hebben [tunes](../tunes/README_NL.md).
 
-Deze map heeft **52 packs met 2205 presets**, één pack per apparaat: 23 voor effecten, 9 voor mastering, 3 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 3 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
+Deze map heeft **56 packs met 2324 presets**, één pack per apparaat: 25 voor effecten, 9 voor mastering, 4 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 4 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
@@ -62,7 +62,9 @@ Deze map heeft **52 packs met 2205 presets**, één pack per apparaat: 23 voor e
 | [Scale Arpeggiator](../devices/sequencers/ScaleArpeggiator/) | Scale Arpeggiator Patterns | 59 | 10 | [`scale-arpeggiator.patchkamer-presets.json`](scale-arpeggiator.patchkamer-presets.json) |
 | [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | 6 | [`step-sequencer.patchkamer-presets.json`](step-sequencer.patchkamer-presets.json) |
 | [Stereo Space](../devices/mastering/StereoSpace/) | Stereo Space Situations and Styles | 128 | 10 | [`stereo-space.patchkamer-presets.json`](stereo-space.patchkamer-presets.json) |
+| [Stutter](../devices/effects/Stutter/) | Stutter Basics | 34 | 5 | [`stutter.patchkamer-presets.json`](stutter.patchkamer-presets.json) |
 | [Swell](../devices/modulators/Swell/) | Swell Presets | 55 | 8 | [`swell.patchkamer-presets.json`](swell.patchkamer-presets.json) |
+| [Transient Shaper](../devices/effects/TransientShaper/) | Transient Shaper Basics | 35 | 6 | [`transient-shaper.patchkamer-presets.json`](transient-shaper.patchkamer-presets.json) |
 | [Tremolo](../devices/effects/Tremolo/) | Tremolo Basics | 13 | 4 | [`tremolo.patchkamer-presets.json`](tremolo.patchkamer-presets.json) |
 | [Vocoder](../devices/effects/Vocoder/) | Vocoder Basics | 14 | 4 | [`vocoder.patchkamer-presets.json`](vocoder.patchkamer-presets.json) |
 | [Wanderer](../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | 9 | [`wanderer.patchkamer-presets.json`](wanderer.patchkamer-presets.json) |

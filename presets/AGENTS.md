@@ -97,6 +97,8 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [Resonator](../devices/effects/Resonator/) | Resonator Basics | 13 | 3: Subtle, Chords, Extreme | [`resonator.patchkamer-presets.json`](resonator.patchkamer-presets.json) | 2 |
 | [Reverb](../devices/effects/Reverb/) | Reverb Rooms | 31 | 6: Hall, Plate, Spring, Room, Chamber, Creative | [`reverb.patchkamer-presets.json`](reverb.patchkamer-presets.json) | 2 |
 | [Room](../devices/effects/Room/) | Room Basics | 12 | 3: Spaces, Delays, Space FX | [`room.patchkamer-presets.json`](room.patchkamer-presets.json) | 2 |
+| [Stutter](../devices/effects/Stutter/) | Stutter Basics | 34 | 5: Drum & Bass, Techno, House, Hip-hop, Cinematic | [`stutter.patchkamer-presets.json`](stutter.patchkamer-presets.json) | 2 |
+| [Transient Shaper](../devices/effects/TransientShaper/) | Transient Shaper Basics | 35 | 6: Drum & Bass, Techno, House, Hip-hop, Cinematic, Mix Repairs | [`transient-shaper.patchkamer-presets.json`](transient-shaper.patchkamer-presets.json) | 2 |
 | [Tremolo](../devices/effects/Tremolo/) | Tremolo Basics | 13 | 4: Classic, Slow, Rhythmic, Extreme | [`tremolo.patchkamer-presets.json`](tremolo.patchkamer-presets.json) | 2 |
 | [Vocoder](../devices/effects/Vocoder/) | Vocoder Basics | 14 | 4: Voices, Textures, Extreme, External | [`vocoder.patchkamer-presets.json`](vocoder.patchkamer-presets.json) | 2 |
 | [Balance EQ](../devices/mastering/BalanceEQ/) | Balance EQ Situations and Styles | 128 | 10: Situations, Styles, Club, Festival, Big Room, Home / Hi-Fi, Headphones, Studio / Reference, Radio / Broadcast, Car | [`balance-eq.patchkamer-presets.json`](balance-eq.patchkamer-presets.json) | 2 |
@@ -132,7 +134,7 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4: Sound Controllers, Wheels and Pedals, Effects, Utility | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) | 2 |
 | [Remix](../devices/tools/Remix/) | Remix Recipes | 21 | 4: Hit edits, Club, Tempo flips, New songs | [`remix.patchkamer-presets.json`](remix.patchkamer-presets.json) | 2 |
 
-Samen 55 packs met 2276 presets.
+Samen 57 packs met 2345 presets.
 <!-- list-devices:end presets -->
 
 ## Wat je niet doet

@@ -1,12 +1,12 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.mono",
   "name": "Basic Mono Styles",
   "author": "Freek van Gool",
   "license": "CC0-1.0",
-  "description": "Tunes for Basic Mono by music style: techno, house, electro, hip-hop, funk, synthwave, dub, pop, chiptune, acid, trance and ambient. Basses, leads, stabs and plucks, a few arps and drones. Play them from a keyboard or an external sequencer; one voice at a time.",
+  "description": "Tunes for Basic Mono by music style: techno, house, electro, hip-hop, funk, synthwave, dub, pop, chiptune, acid, trance and ambient, plus drum & bass folders for sub basses, neurofunk, liquid, dancefloor, jump up, jungle and leads. Basses, leads, stabs and plucks, a few arps and drones. Play them from a keyboard or an external sequencer; one voice at a time.",
   "tree": [
     {
       "folder": "Techno",
@@ -1323,6 +1323,518 @@
             "sub": 0.8,
             "glide": 0,
             "lvl": 0.25
+          }
+        }
+      ]
+    },
+    {
+      "folder": "DnB Sub",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Clean Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 140,
+            "res": 0.8,
+            "env": 0.02,
+            "dec": 0.6,
+            "sub": 0.4,
+            "glide": 0.03,
+            "lvl": 0.4547
+          }
+        },
+        {
+          "name": "Round Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 220,
+            "res": 1.5,
+            "env": 0.1,
+            "dec": 0.5,
+            "sub": 0.7,
+            "glide": 0.05,
+            "lvl": 0.3863
+          }
+        },
+        {
+          "name": "Long Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 160,
+            "res": 1,
+            "env": 0.05,
+            "dec": 1.6,
+            "sub": 0.6,
+            "glide": 0.08,
+            "lvl": 0.4132
+          }
+        },
+        {
+          "name": "Punchy Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 200,
+            "res": 2,
+            "env": 0.25,
+            "dec": 0.2,
+            "sub": 0.5,
+            "glide": 0.02,
+            "lvl": 0.3972
+          }
+        },
+        {
+          "name": "Sine Weight",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 100,
+            "res": 0.5,
+            "env": 0,
+            "dec": 1,
+            "sub": 1,
+            "glide": 0.04,
+            "lvl": 0.2847
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neurofunk",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Resonant Snarl",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 300,
+            "res": 14,
+            "env": 0.35,
+            "dec": 0.25,
+            "sub": 0.35,
+            "glide": 0.03,
+            "lvl": 0.394
+          }
+        },
+        {
+          "name": "Vowel Sweep",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 200,
+            "res": 15,
+            "env": 0.55,
+            "dec": 0.55,
+            "sub": 0.3,
+            "glide": 0.05,
+            "lvl": 0.3791
+          }
+        },
+        {
+          "name": "Hollow Talk",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 260,
+            "res": 14,
+            "env": 0.45,
+            "dec": 0.4,
+            "sub": 0.4,
+            "glide": 0.04,
+            "lvl": 0.2437
+          }
+        },
+        {
+          "name": "Metal Whistle",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 500,
+            "res": 16,
+            "env": 0.25,
+            "dec": 0.18,
+            "sub": 0.3,
+            "glide": 0.02,
+            "lvl": 0.4222
+          }
+        },
+        {
+          "name": "Deep Gnash",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 150,
+            "res": 11,
+            "env": 0.7,
+            "dec": 0.3,
+            "sub": 0.5,
+            "glide": 0.06,
+            "lvl": 0.3636
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Liquid",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Warm Round Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 450,
+            "res": 1.5,
+            "env": 0.12,
+            "dec": 0.45,
+            "sub": 0.7,
+            "glide": 0.06,
+            "lvl": 0.3944
+          }
+        },
+        {
+          "name": "Soft Pluck Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 300,
+            "res": 3,
+            "env": 0.3,
+            "dec": 0.2,
+            "sub": 0.6,
+            "glide": 0,
+            "lvl": 0.5
+          }
+        },
+        {
+          "name": "Silk Glide",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 260,
+            "res": 2,
+            "env": 0.15,
+            "dec": 0.5,
+            "sub": 0.7,
+            "glide": 0.2,
+            "lvl": 0.4033
+          }
+        },
+        {
+          "name": "Amber Roll",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 350,
+            "res": 2.5,
+            "env": 0.2,
+            "dec": 0.35,
+            "sub": 0.6,
+            "glide": 0.05,
+            "lvl": 0.3413
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dancefloor DnB",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Festival Mid",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 450,
+            "res": 8,
+            "env": 0.4,
+            "dec": 0.3,
+            "sub": 0.5,
+            "glide": 0.03,
+            "lvl": 0.3718
+          }
+        },
+        {
+          "name": "Hard Roller",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 350,
+            "res": 10,
+            "env": 0.55,
+            "dec": 0.2,
+            "sub": 0.5,
+            "glide": 0.02,
+            "lvl": 0.3943
+          }
+        },
+        {
+          "name": "Big Room Stab",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 500,
+            "res": 6,
+            "env": 0.6,
+            "dec": 0.15,
+            "sub": 0.4,
+            "glide": 0,
+            "lvl": 0.441
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jump Up",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Honk Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 250,
+            "res": 14,
+            "env": 0.55,
+            "dec": 0.18,
+            "sub": 0.45,
+            "glide": 0,
+            "lvl": 0.2705
+          }
+        },
+        {
+          "name": "Rubber Bounce",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 200,
+            "res": 12,
+            "env": 0.6,
+            "dec": 0.22,
+            "sub": 0.5,
+            "glide": 0.05,
+            "lvl": 0.3699
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Jungle",
+      "tags": [
+        "style/jungle"
+      ],
+      "items": [
+        {
+          "name": "Ragga Sub",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 130,
+            "res": 0.8,
+            "env": 0.03,
+            "dec": 1.2,
+            "sub": 0.6,
+            "glide": 0.12,
+            "lvl": 0.3726
+          }
+        },
+        {
+          "name": "Dread Bass",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/synth"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 240,
+            "res": 3,
+            "env": 0.15,
+            "dec": 0.8,
+            "sub": 0.7,
+            "glide": 0.1,
+            "lvl": 0.388
+          }
+        },
+        {
+          "name": "Rolling Thunder",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/bass/sub"
+          ],
+          "state": {
+            "wave": "triangle",
+            "fine": 0,
+            "cut": 110,
+            "res": 0.6,
+            "env": 0.02,
+            "dec": 2,
+            "sub": 0.8,
+            "glide": 0.18,
+            "lvl": 0.3135
+          }
+        }
+      ]
+    },
+    {
+      "folder": "DnB Leads",
+      "tags": [
+        "style/drum-and-bass"
+      ],
+      "items": [
+        {
+          "name": "Pulse Stab Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
+          "state": {
+            "wave": "square",
+            "fine": 0,
+            "cut": 1500,
+            "res": 5,
+            "env": 0.4,
+            "dec": 0.25,
+            "sub": 0,
+            "glide": 0.02,
+            "lvl": 0.4391
+          }
+        },
+        {
+          "name": "Air Lead",
+          "kind": "set",
+          "version": "1.0.0",
+          "tags": [
+            "instrument/lead"
+          ],
+          "state": {
+            "wave": "sawtooth",
+            "fine": 0,
+            "cut": 2500,
+            "res": 3,
+            "env": 0.3,
+            "dec": 1,
+            "sub": 0,
+            "glide": 0.06,
+            "lvl": 0.6503
           }
         }
       ]

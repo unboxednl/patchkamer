@@ -51,6 +51,8 @@ Dit overzicht komt uit `devices/AGENTS.md` en wordt gegenereerd door `docs/tools
 | [Resonator](Resonator/AGENTS.md) | `nl.patchkamer.resonator` | Vier resonatoren gestemd op een grondtoon en een akkoord. |
 | [Reverb](Reverb/AGENTS.md) | `nl.patchkamer.reverb` | Een algoritmische galm met vijf modellen: Hall, Plate, Spring, Room en Chamber. |
 | [Room](Room/AGENTS.md) | `nl.patchkamer.room` | Een delay en een galm in één effect. |
+| [Stutter](Stutter/AGENTS.md) | `nl.patchkamer.stutter` | Beat repeat, gate en roll op het tempo: herhaalt de laatste stappen op 1/4 tot 1/32 (ook triolen), met gate-patronen, pitch-ramps, decay, opbouw, tape stop en reverse; start met een knop, events of aan het eind van de maat. |
+| [Transient Shaper](TransientShaper/AGENTS.md) | `nl.patchkamer.transientshaper` | Versterkt of dempt de aanzet en het uitklinken van een geluid op elk niveau, met drie tijdinstellingen, een optionele driebandsmodus, mix en meters voor de versterking. |
 | [Tremolo](Tremolo/AGENTS.md) | `nl.patchkamer.tremolo` | Laat het volume op en neer gaan. |
 | [Vocoder](Vocoder/AGENTS.md) | `nl.patchkamer.vocoder` | Een vocoder met 16 banden: een stem bespeelt een synth. |
 

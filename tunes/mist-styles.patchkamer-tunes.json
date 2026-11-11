@@ -1,7 +1,7 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.mist",
   "name": "Mist Styles",
   "author": "Freek van Gool",
@@ -1573,6 +1573,307 @@
             "density": 0.35,
             "warmth": 1,
             "detune": 5,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neurofunk Atmospheres",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Minor Fog",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 53,
+            "chord": "minor",
+            "mode": "drone",
+            "level": 0.543,
+            "cutoff": 700,
+            "air": 0.15,
+            "motion": 0.25,
+            "space": 0.85,
+            "echo": 0.35,
+            "attack": 7,
+            "release": 16,
+            "evolve": 4,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.8,
+            "detune": 6,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Open Hollow",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 57,
+            "chord": "open",
+            "mode": "drone",
+            "level": 0.589,
+            "cutoff": 900,
+            "air": 0.2,
+            "motion": 0.2,
+            "space": 0.9,
+            "echo": 0.3,
+            "attack": 8,
+            "release": 18,
+            "evolve": 4,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 1,
+            "detune": 3,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Sus Pressure",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 55,
+            "chord": "suspended",
+            "mode": "drone",
+            "level": 0.556,
+            "cutoff": 1400,
+            "air": 0.4,
+            "motion": 0.6,
+            "space": 0.8,
+            "echo": 0.5,
+            "attack": 6,
+            "release": 14,
+            "evolve": 4,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.4,
+            "detune": 12,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Cold Ninth Air",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 58,
+            "chord": "minor9",
+            "mode": "drone",
+            "level": 0.562,
+            "cutoff": 1800,
+            "air": 0.5,
+            "motion": 0.5,
+            "space": 0.85,
+            "echo": 0.45,
+            "attack": 6,
+            "release": 14,
+            "evolve": 4,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.3,
+            "detune": 9,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dark Liquid Pads",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/pad"
+      ],
+      "items": [
+        {
+          "name": "Velvet Minor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 50,
+            "chord": "minor9",
+            "mode": "drone",
+            "level": 0.543,
+            "cutoff": 1200,
+            "air": 0.1,
+            "motion": 0.3,
+            "space": 0.9,
+            "echo": 0.3,
+            "attack": 5,
+            "release": 14,
+            "evolve": 8,
+            "melody": 0.15,
+            "density": 0.12,
+            "warmth": 0.9,
+            "detune": 4,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Slow Add9 Haze",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 53,
+            "chord": "add9",
+            "mode": "drone",
+            "level": 0.519,
+            "cutoff": 1000,
+            "air": 0.12,
+            "motion": 0.35,
+            "space": 0.9,
+            "echo": 0.35,
+            "attack": 6,
+            "release": 16,
+            "evolve": 8,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.7,
+            "detune": 5,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Night Sixth",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 52,
+            "chord": "sixth",
+            "mode": "drone",
+            "level": 0.513,
+            "cutoff": 1100,
+            "air": 0.18,
+            "motion": 0.3,
+            "space": 0.85,
+            "echo": 0.4,
+            "attack": 6,
+            "release": 16,
+            "evolve": 8,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.85,
+            "detune": 6,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Intro and Break Textures",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Wind Corridor",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 60,
+            "chord": "open",
+            "mode": "drone",
+            "level": 0.562,
+            "cutoff": 600,
+            "air": 1,
+            "motion": 0.7,
+            "space": 0.7,
+            "echo": 0.2,
+            "attack": 4,
+            "release": 10,
+            "evolve": 4,
+            "melody": 0,
+            "density": 0,
+            "warmth": 0.5,
+            "detune": 2,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Hum and Static",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 62,
+            "chord": "suspended",
+            "mode": "drone",
+            "level": 0.576,
+            "cutoff": 3000,
+            "air": 0.8,
+            "motion": 0.9,
+            "space": 0.6,
+            "echo": 0.25,
+            "attack": 3,
+            "release": 8,
+            "evolve": 4,
+            "melody": 0,
+            "density": 0,
+            "warmth": 0.2,
+            "detune": 14,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "DnB Risers and Impacts",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/fx",
+        "instrument/fx/riser"
+      ],
+      "items": [
+        {
+          "name": "Opening Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 55,
+            "chord": "suspended",
+            "mode": "drone",
+            "level": 0.75,
+            "cutoff": 2500,
+            "air": 0.6,
+            "motion": 0.8,
+            "space": 0.8,
+            "echo": 0.5,
+            "attack": 12,
+            "release": 6,
+            "evolve": 4,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.3,
+            "detune": 12,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Dark Rise",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "root": 51,
+            "chord": "minor",
+            "mode": "drone",
+            "level": 0.75,
+            "cutoff": 800,
+            "air": 0.3,
+            "motion": 0.6,
+            "space": 0.85,
+            "echo": 0.4,
+            "attack": 12,
+            "release": 6,
+            "evolve": 4,
+            "melody": 0.1,
+            "density": 0.1,
+            "warmth": 0.6,
+            "detune": 9,
             "preset": "Custom"
           }
         }

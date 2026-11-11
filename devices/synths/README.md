@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 33 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 35 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -12,6 +12,7 @@ Not sure which one to pick? The manual starts with a table "Which synth for whic
 | **Acid Stepper** | A simpler acid bass synth with its own 16-step pattern, accent, slide, drive and a four-pole filter | [`AcidStepper/`](AcidStepper/) | [65](../../tunes/acid-stepper-styles.patchkamer-tunes.json) | [Acid Stepper](../../docs/synths/USER-MANUAL_EN.md#acid-stepper) |
 | **Squelch Box** | A faithful acid bass synth inspired by classic acid bass machines: one oscillator, an 18 dB/oct resonant diode-ladder filter, accent sweep, slide and a 16-step sequencer with tie | [`SquelchBox/`](SquelchBox/) | [31](../../tunes/squelch-box-styles.patchkamer-tunes.json) | [Squelch Box](../../docs/synths/USER-MANUAL_EN.md#squelch-box) |
 | **Low Bass** | A mono bass synth without a sequencer: two oscillators, a sine sub, optional FM, drive and legato | [`LowBass/`](LowBass/) | [64](../../tunes/low-bass-styles.patchkamer-tunes.json) | [Low Bass](../../docs/synths/USER-MANUAL_EN.md#low-bass) |
+| **Neuro Bass** | A mono bass for drum & bass and bass music: a detune stack of two oscillators, a sub, FM and ring modulation, three shaping stages, a vowel formant filter with a Morph macro, a resonant filter and a tempo-synced LFO | [`NeuroBass/`](NeuroBass/) | [70](../../tunes/neuro-bass-styles.patchkamer-tunes.json) | [Neuro Bass](../../docs/synths/USER-MANUAL_EN.md#neuro-bass) |
 | **Sub Line** | A mono synth for bass lines and leads with a 32-step pattern, an arpeggiator and a sub oscillator | [`SubLine/`](SubLine/) | [68](../../tunes/subline-styles.patchkamer-tunes.json) | [Sub Line](../../docs/synths/USER-MANUAL_EN.md#sub-line) |
 | **Basic Mono** | The simplest mono synth: one oscillator, a sub, a resonant filter, glide and nine knobs | [`BasicMono/`](BasicMono/) | [65](../../tunes/basic-mono-styles.patchkamer-tunes.json) | [Basic Mono](../../docs/synths/USER-MANUAL_EN.md#basic-mono) |
 | **Duofone** | A synth with two oscillators that play two pitches at once, ring modulation, hard sync and sample & hold | [`Duofone/`](Duofone/) | [60](../../tunes/duofone-styles.patchkamer-tunes.json) | [Duofone](../../docs/synths/USER-MANUAL_EN.md#duofone) |

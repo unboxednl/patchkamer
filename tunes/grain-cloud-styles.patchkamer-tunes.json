@@ -1,7 +1,7 @@
 {
   "format": "patchkamer-tunes",
   "formatVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "device": "nl.patchkamer.graincloud",
   "name": "Grain Cloud Styles",
   "author": "Freek van Gool",
@@ -1729,6 +1729,368 @@
             "src": "live",
             "wave": "choir",
             "steps": "fifths",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Neurofunk Atmospheres",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture"
+      ],
+      "items": [
+        {
+          "name": "Thin Choir Fog",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.3,
+            "spread": 0.5,
+            "scan": 0,
+            "size": 500,
+            "dens": 9,
+            "pitch": -5,
+            "pspread": 0.2,
+            "rev": 0,
+            "pan": 0.7,
+            "shape": 0.1,
+            "fb": 0,
+            "mix": 1,
+            "att": 4,
+            "rel": 8,
+            "level": 0.472,
+            "src": "wave",
+            "wave": "choir",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Rust Wall",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.4,
+            "spread": 0.3,
+            "scan": 0,
+            "size": 80,
+            "dens": 40,
+            "pitch": -7,
+            "pspread": 12,
+            "rev": 0,
+            "pan": 0.8,
+            "shape": 0.3,
+            "fb": 0,
+            "mix": 1,
+            "att": 3,
+            "rel": 7,
+            "level": 0.83,
+            "src": "wave",
+            "wave": "saw",
+            "steps": "octfifth",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Hiss Grains",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.2,
+            "spread": 0.9,
+            "scan": 0,
+            "size": 25,
+            "dens": 90,
+            "pitch": 7,
+            "pspread": 0,
+            "rev": 0,
+            "pan": 0.9,
+            "shape": 0.5,
+            "fb": 0,
+            "mix": 1,
+            "att": 3,
+            "rel": 6,
+            "level": 0.83,
+            "src": "wave",
+            "wave": "noise",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Hollow Pipes",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.5,
+            "spread": 0.4,
+            "scan": 0,
+            "size": 300,
+            "dens": 18,
+            "pitch": -3,
+            "pspread": 7,
+            "rev": 0,
+            "pan": 0.6,
+            "shape": 0.15,
+            "fb": 0,
+            "mix": 1,
+            "att": 4,
+            "rel": 8,
+            "level": 0.91,
+            "src": "wave",
+            "wave": "organ",
+            "steps": "fifths",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Dark Liquid Pads",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/pad"
+      ],
+      "items": [
+        {
+          "name": "Glass Smoke",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.35,
+            "spread": 0.5,
+            "scan": 0,
+            "size": 400,
+            "dens": 14,
+            "pitch": -12,
+            "pspread": 3,
+            "rev": 0,
+            "pan": 0.8,
+            "shape": 0.1,
+            "fb": 0,
+            "mix": 1,
+            "att": 3,
+            "rel": 7,
+            "level": 0.83,
+            "src": "wave",
+            "wave": "glass",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Organ Mist",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.3,
+            "spread": 0.6,
+            "scan": 0,
+            "size": 600,
+            "dens": 10,
+            "pitch": -5,
+            "pspread": 0.5,
+            "rev": 0,
+            "pan": 0.7,
+            "shape": 0.1,
+            "fb": 0,
+            "mix": 1,
+            "att": 4,
+            "rel": 8,
+            "level": 0.921,
+            "src": "wave",
+            "wave": "organ",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "DnB Risers and Impacts",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/fx",
+        "instrument/fx/riser"
+      ],
+      "items": [
+        {
+          "name": "Dust Swell",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.5,
+            "spread": 0.8,
+            "scan": 1,
+            "size": 60,
+            "dens": 70,
+            "pitch": 0,
+            "pspread": 0,
+            "rev": 0,
+            "pan": 0.8,
+            "shape": 0.4,
+            "fb": 0,
+            "mix": 1,
+            "att": 8,
+            "rel": 1,
+            "level": 1.0,
+            "src": "wave",
+            "wave": "noise",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Reversed Bloom",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.3,
+            "spread": 0.4,
+            "scan": 0,
+            "size": 500,
+            "dens": 20,
+            "pitch": -5,
+            "pspread": 0,
+            "rev": 0.9,
+            "pan": 0.8,
+            "shape": 0.1,
+            "fb": 0,
+            "mix": 1,
+            "att": 2.5,
+            "rel": 3,
+            "level": 1.0,
+            "src": "wave",
+            "wave": "glass",
+            "steps": "free",
+            "cloud": false,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Grain Slam",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.3,
+            "spread": 0.5,
+            "scan": 0,
+            "size": 300,
+            "dens": 30,
+            "pitch": -12,
+            "pspread": 0,
+            "rev": 0,
+            "pan": 0.7,
+            "shape": 0.2,
+            "fb": 0,
+            "mix": 1,
+            "att": 0.005,
+            "rel": 1.6,
+            "level": 1.0,
+            "src": "wave",
+            "wave": "noise",
+            "steps": "free",
+            "cloud": false,
+            "preset": "Custom"
+          }
+        }
+      ]
+    },
+    {
+      "folder": "Intro and Break Textures",
+      "tags": [
+        "style/drum-and-bass",
+        "instrument/texture",
+        "style/glitch"
+      ],
+      "items": [
+        {
+          "name": "Glitch Dust",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.2,
+            "spread": 1,
+            "scan": 0,
+            "size": 8,
+            "dens": 12,
+            "pitch": 0,
+            "pspread": 0,
+            "rev": 0,
+            "pan": 1,
+            "shape": 1,
+            "fb": 0,
+            "mix": 1,
+            "att": 1,
+            "rel": 3,
+            "level": 1.0,
+            "src": "wave",
+            "wave": "noise",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Stutter Choir",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.3,
+            "spread": 0.2,
+            "scan": 0,
+            "size": 60,
+            "dens": 25,
+            "pitch": 0,
+            "pspread": 2,
+            "rev": 0.3,
+            "pan": 0.9,
+            "shape": 0.8,
+            "fb": 0,
+            "mix": 1,
+            "att": 1,
+            "rel": 3,
+            "level": 0.275,
+            "src": "wave",
+            "wave": "choir",
+            "steps": "free",
+            "cloud": true,
+            "preset": "Custom"
+          }
+        },
+        {
+          "name": "Tape Wobble Bed",
+          "kind": "set",
+          "version": "1.0.0",
+          "state": {
+            "pos": 0.5,
+            "spread": 0.2,
+            "scan": 0,
+            "size": 200,
+            "dens": 22,
+            "pitch": -12,
+            "pspread": 0.5,
+            "rev": 0,
+            "pan": 0.6,
+            "shape": 0.2,
+            "fb": 0,
+            "mix": 1,
+            "att": 3,
+            "rel": 6,
+            "level": 0.83,
+            "src": "wave",
+            "wave": "saw",
+            "steps": "free",
             "cloud": true,
             "preset": "Custom"
           }

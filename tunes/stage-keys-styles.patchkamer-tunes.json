@@ -1,12 +1,12 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.0.0",
+ "version": "1.1.0",
  "device": "nl.patchkamer.stagekeys",
  "name": "Stage Keys Styles",
  "author": "Freek van Gool",
  "license": "CC0-1.0",
- "description": "Keyboard sounds for Stage Keys by style: electric pianos, organs, vibraphone, plucks and bass for Soul, Funk, Jazz, Pop, Gospel, Rock, Disco, House, Lo-fi, Reggae and Ballad.",
+ "description": "Keyboard sounds for Stage Keys by style: electric pianos, organs, vibraphone, plucks and bass for Soul, Funk, Jazz, Pop, Gospel, Rock, Disco, House, Lo-fi, Reggae and Ballad. Also has Liquid DnB, Dancefloor DnB and Jungle folders.",
  "tree": [
   {
    "folder": "Soul",
@@ -1346,6 +1346,258 @@
       "rotaryFast": false,
       "oct": 1,
       "lvl": 0.838
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Liquid DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Liquid Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "inst": "tine",
+      "tone": 0.35,
+      "drive": 0.05,
+      "tremRate": 4.5,
+      "tremDepth": 0.15,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.844
+     }
+    },
+    {
+     "name": "Midnight Tine",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "inst": "tine",
+      "tone": 0.2,
+      "drive": 0.04,
+      "tremRate": 3.2,
+      "tremDepth": 0.3,
+      "tune": -3,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.753
+     }
+    },
+    {
+     "name": "Smooth Reed",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "inst": "reed",
+      "tone": 0.4,
+      "drive": 0.05,
+      "tremRate": 4,
+      "tremDepth": 0.2,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.801
+     }
+    },
+    {
+     "name": "Silk Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
+     "state": {
+      "inst": "vibes",
+      "tone": 0.3,
+      "drive": 0.02,
+      "tremRate": 5,
+      "tremDepth": 0.4,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.679
+     }
+    },
+    {
+     "name": "Sunday Drawbars",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
+     "state": {
+      "inst": "organ",
+      "tone": 0.4,
+      "drive": 0.08,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.966
+     }
+    },
+    {
+     "name": "Round Sub Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
+     "state": {
+      "inst": "bass",
+      "tone": 0.3,
+      "drive": 0.08,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": -1,
+      "lvl": 0.926
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Dancefloor DnB",
+   "tags": [
+    "style/drum-and-bass"
+   ],
+   "items": [
+    {
+     "name": "Rave Organ Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
+     "state": {
+      "inst": "organ",
+      "tone": 0.9,
+      "drive": 0.3,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": true,
+      "oct": 0,
+      "lvl": 1.0
+     }
+    },
+    {
+     "name": "Comb Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/chords"
+     ],
+     "state": {
+      "inst": "combpluck",
+      "tone": 0.8,
+      "drive": 0.3,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 1.0
+     }
+    },
+    {
+     "name": "Bright Tine Stab",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/piano/electric"
+     ],
+     "state": {
+      "inst": "tine",
+      "tone": 0.85,
+      "drive": 0.25,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jungle",
+   "tags": [
+    "style/jungle"
+   ],
+   "items": [
+    {
+     "name": "Skank Combo",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/organ"
+     ],
+     "state": {
+      "inst": "combo",
+      "tone": 0.7,
+      "drive": 0.2,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 1.0
+     }
+    },
+    {
+     "name": "Dub Vibes",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/mallet/vibes"
+     ],
+     "state": {
+      "inst": "vibes",
+      "tone": 0.5,
+      "drive": 0.05,
+      "tremRate": 3,
+      "tremDepth": 0.5,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": 0,
+      "lvl": 0.723
+     }
+    },
+    {
+     "name": "Sub Dub Bass",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/bass"
+     ],
+     "state": {
+      "inst": "bass",
+      "tone": 0.2,
+      "drive": 0.25,
+      "tremRate": 4.5,
+      "tremDepth": 0,
+      "tune": 0,
+      "rotaryFast": false,
+      "oct": -1,
+      "lvl": 1.0
      }
     }
    ]
