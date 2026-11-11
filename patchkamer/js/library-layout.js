@@ -6,7 +6,7 @@
 function paintIcons(){ PK.Host.devices.forEach(r=>{ const c=PK.categoryOf(r.def), col=PK.catColor(c); r.iconEl.className='pkicon c-ic-'+c; r.iconEl.style.setProperty('--ic',col); r.el.style.setProperty('--ic',col);
     const m=PK.devIconParts(r.def,r), sig=c+'|'+m.html; if(r._icSig===sig) return; r._icSig=sig;
     const g=r.iconEl.querySelector('.glyph'); if(g){ g.className='glyph'+(m.img?' img':''); g.innerHTML=m.html; }
-    const b=r.el.querySelector('.bar .cicon'); if(b){ b.className='cicon'+(m.img?' img':''); b.dataset.ik=c; b.innerHTML=m.html; } });
+    const b=r.el.querySelector('.bar .cicon'); if(b){ b.classList.add('cicon'); b.classList.toggle('img',!!m.img); b.dataset.ik=c; b.innerHTML=m.html; } });
   if(typeof PK.focusEl!=='undefined'&&PK.focusEl&&PK.FOCUS.layout==='one') try{ PK.focusOneApply(); }catch(e){} } PK.paintIcons=paintIcons;
 function catsChanged(){ PK.LIB.layoutT=Date.now(); PK.LIB.catList=PK.cleanCatList(PK.LIB.catList||PK.CATS.map(([key,label])=>({key,label}))); PK.applyCats(); PK.saveLib(); PK.paintLib(); paintIcons(); }
 function ensureCatList(){ if(!PK.LIB.catList||!PK.LIB.catList.length) PK.LIB.catList=PK.CATS.map(([key,label])=>({key,label})); }

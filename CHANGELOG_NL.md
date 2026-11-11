@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.12 (2026-11-11)
+
+### Opgelost
+- **Het menu achter het icoontje op de kaartbalk werkte niet meer na het kiezen van een skin.** Bij het laden of wisselen van een skin ververst Patchkamer de apparaaticoontjes en daarbij ging de menuknop-klasse van het icoontje verloren, waardoor een klik de kaart begon te slepen in plaats van het menu te openen. Het menu met Handleiding, Kopieer, Plak, Selecteer meer en de skinkeuze is er weer, ook met een skin (getest met Drum Machine en Acid Baselines, nl en en, met een echte muisklik). Elk apparaat heeft een eigen kop in de gebruikershandleiding, dus Handleiding opent bij alle 108 apparaten het juiste deel in een apart venster binnen Patchkamer.
+
 ## 0.30.11 (2026-11-11)
 
 ### Gewijzigd

@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.12 (2026-11-11)
+
+### Fixed
+- **The menu behind the icon on the card bar stopped working after choosing a skin.** When a skin is loaded or switched, Patchkamer refreshes the device icons and in doing so the menu-button class of the icon was lost, so a click started dragging the card instead of opening the menu. The menu with Manual, Copy, Paste, Select more and the skin choice is back, also with a skin (tested with Drum Machine and Acid Baselines, nl and en, with a real mouse click). Every device has its own heading in the user manual, so Manual opens the right part for all 108 devices in a separate window inside Patchkamer.
+
 ## 0.30.11 (2026-11-11)
 
 ### Changed
