@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.16 (2026-11-11)
+
+### Toegevoegd
+- **Click Synth (1.19.0) toont een hint bij Klik op een stap.** Onder de keuzelijst staat een korte tekst die zegt wat een klik in de gekozen stand doet (aan/uit, accent, kans, ratchet of toonsprong), dezelfde tekst staat als tooltip op de stappen en de keuzelijst heeft een tooltip. Zo is te zien dat een stap eerst aan moet staan en dat je Kans, Ratchet en Toonsprong via die keuzelijst instelt. Geluid, state en poorten zijn ongewijzigd; handleiding en `AGENTS.md` zijn bijgewerkt.
+
 ## 0.30.15 (2026-11-11)
 
 ### Toegevoegd

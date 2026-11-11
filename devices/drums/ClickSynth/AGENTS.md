@@ -64,6 +64,8 @@ Parameters in `p` (`pitch`, `ptime`, `decay` en `cut` werken logaritmisch bij mo
 | `level` | Niveau | 0 … 1 | 0,8 |
 | `vari` | Willekeur: elke slag net anders (toonhoogte, decay, kleur, karakter, pan en velocity) | 0 … 1 | 0,1 |
 
+**Hint (1.19.0).** Onder de keuzelijst Klik op een stap staat `.mhint` met een korte tekst per stand (`T.modeHint`: aan/uit, accent, kans, ratchet, toonsprong); dezelfde tekst is de tooltip op de stappen, de keuzelijst heeft `T.modeTip`. `paint()` zet de tekst bij elke wijziging van de stand. State, geluid en poorten zijn ongewijzigd.
+
 Een stap in `pats[patroon][n]`: `v` velocity (0 = geen slag; 0,45 zacht, 0,75 gewoon, 1 accent), `p` kans (0 … 1), `r` ratchet (1 … 4 slagen) en `t` toonsprong in halve tonen (−24 … 24).
 
 Klankmotoren, met wat `color` en `shape` doen:

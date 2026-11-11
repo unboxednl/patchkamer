@@ -368,7 +368,7 @@ Click Synth is a percussion synth for small sounds: clicks, ticks, bleeps, zaps,
 |---|---|
 | **Kit** | Starts from a whole kit: Micro Click, Wood & Glass, Bleep Lab, Insects, Glitch Works or Minimal Techno. After you change something it says **Custom kit**. |
 | **Pattern A, B, C, D** | The pattern you edit and hear. **Shift-click** copies the current pattern to that one. |
-| **Click on a step** | What a click on a step does: **On / off**, **Accent (hard / soft)**, **Chance (100 → 25%)**, **Ratchet (1 → 4)** or **Pitch jump**. **Shift-click** makes a step soft and right-click clears it. |
+| **Click on a step** | What a click on a step does: **On / off**, **Accent (hard / soft)**, **Chance (100 → 25%)**, **Ratchet (1 → 4)** or **Pitch jump**. **Shift-click** makes a step soft and right-click clears it. Below the list a short hint says what a click does in the chosen mode (with Chance, Ratchet and Pitch jump you see the value as a number in the step). A step has to be on first: choose **On / off** to switch steps on or off and then change to Chance, Ratchet or Pitch jump. |
 | **Sequencer** | **On**: the built-in sequencer plays along with the clock. **Off**: play only from another device. |
 | **Master** | Volume of the whole synth. |
 | **Surprise kit** | A random new sound for every lane; the patterns stay. |

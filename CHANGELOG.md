@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.16 (2026-11-11)
+
+### Added
+- **Click Synth (1.19.0) shows a hint for Click on a step.** Below the list a short text says what a click does in the chosen mode (on/off, accent, chance, ratchet or pitch jump), the same text is the tooltip on the steps, and the list has a tooltip. This makes it visible that a step has to be on first and that you set Chance, Ratchet and Pitch jump through that list. Sound, state and ports are unchanged; the manual and `AGENTS.md` are updated.
+
 ## 0.30.15 (2026-11-11)
 
 ### Added

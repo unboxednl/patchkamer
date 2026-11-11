@@ -368,7 +368,7 @@ Click Synth is een percussiesynth voor kleine geluiden: kliks, tiks, bleeps, zap
 |---|---|
 | **Kit** | Begint bij een hele kit: Micro Click, Wood & Glass, Bleep Lab, Insects, Glitch Works of Minimal Techno. Na een wijziging staat er **Eigen kit**. |
 | **Patroon A, B, C, D** | Het patroon dat je bewerkt en hoort. **Shift-klik** kopieert het huidige patroon daarheen. |
-| **Klik op een stap** | Wat een klik op een stap doet: **Aan / uit**, **Accent (hard / zacht)**, **Kans (100 → 25%)**, **Ratchet (1 → 4)** of **Toonsprong**. **Shift-klik** zet een stap zacht en rechtsklik wist hem. |
+| **Klik op een stap** | Wat een klik op een stap doet: **Aan / uit**, **Accent (hard / zacht)**, **Kans (100 → 25%)**, **Ratchet (1 → 4)** of **Toonsprong**. **Shift-klik** zet een stap zacht en rechtsklik wist hem. Onder de keuzelijst staat een korte hint die zegt wat een klik in de gekozen stand doet (bij Kans, Ratchet en Toonsprong zie je de waarde als getal in de stap). Een stap moet eerst aan staan: kies **Aan / uit** om stappen aan of uit te zetten en wissel daarna naar Kans, Ratchet of Toonsprong. |
 | **Sequencer** | **Aan**: de ingebouwde sequencer speelt mee met de klok. **Uit**: alleen spelen vanaf een ander apparaat. |
 | **Master** | Volume van de hele synth. |
 | **Verras kit** | Een willekeurige nieuwe klank voor elk spoor; de patronen blijven. |
