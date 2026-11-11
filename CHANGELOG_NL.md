@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.22 (2026-11-11)
+
+### Gewijzigd
+- **Clip Arranger (1.36.0): meer scènes in één sectie.** Bij Scènes in de sectie-instellingen voeg je met + scène scènes toe (en wissel je de volgorde); ze spelen na elkaar, elk Maten lang, en de reeks herhaalt Herhalingen keer. Een clip die over twee scènes is uitgerekt, speelt zo door de hele sectie. Songs en presets zonder dit veld klinken gelijk.
+- **De rij Sectie onder de tracks is weg** en de clipknoppen in 01 zijn weg (ze staan in 02; Knip clip is erbij gekomen). De kop van 02 toont nu TRACK / SCÈNE / CLIP van de gekozen clip. In plaats van het vierkantje wordt + nu overal als gewone + getoond.
+
 ## 0.30.21 (2026-11-11)
 
 ### Gewijzigd

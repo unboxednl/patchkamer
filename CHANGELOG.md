@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.22 (2026-11-11)
+
+### Changed
+- **Clip Arranger (1.36.0): more scenes in one section.** At Scenes in the section settings you add scenes with + scene (and change the order); they play one after another, each Bars long, and the series repeats Repeats times. A clip stretched over two scenes then plays through the whole section. Songs and presets without this field sound the same.
+- **The Section row under the tracks is gone** and the clip buttons in 01 are gone (they are in 02; Cut clip was added). The header of 02 now shows TRACK / SCENE / CLIP of the selected clip. The + is shown as a plain + everywhere instead of a box.
+
 ## 0.30.21 (2026-11-11)
 
 ### Changed
