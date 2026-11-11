@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.24 (2026-11-11)
+
+### Gewijzigd
+- **Clip Arranger (1.37.1):** minder ruimte tussen de poortenrij en de regel met Project, en de verticale lijn in de kleur van de sectie staat verder naar links, los van de afspeelknoppen van de scènes.
+
 ## 0.30.23 (2026-11-11)
 
 ### Gewijzigd
