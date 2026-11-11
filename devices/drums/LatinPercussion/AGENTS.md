@@ -13,7 +13,7 @@ Vijftien eigen gesynthetiseerde latin-percussieklanken (bongo's, conga's, timbal
 | Naam | `Latin Percussion` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Stereo), eventingang `notes` (Noten / trigs), modulatie-ingang `mod` |
-| Contract | v1.17 (apparaatversie 1.17.0) |
+| Contract | v1.17 (apparaatversie 1.18.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id. Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De motor bevatte takken voor andere instrumenten; die zijn eruit.
@@ -105,6 +105,10 @@ De ingang `notes` speelt klanken altijd zoals voorheen. Staat de knop **Opname**
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.latinpercussion`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **ritme met klank**: een patroon (in `patternData`) plus de instellingen van de pads. Gebruik de banken A tot D voor varianten (hoofdritme, variatie, fill, break); de klok speelt de bank die in `bank` staat. Geef elke tune een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Maak alleen tunes als de opdracht dat vraagt.
+
+## Skins
+
+Sinds 1.18.0 melden de regelaars zich aan via `host.ui.adopt`: de draaiknoppen (`d<pad>level`, `d<pad>tune`, `d<pad>decay`, `d<pad>pan`, `grit`, `level`, `baseNote`, `bankSwing.<bank>`, `laneSwing.<pad>`) als rol `param` en de keuzelijsten (`preset`, `bank`, `sequence`, `choke`) als rol `select`. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.latinpercussion/` (draaiknoppen met de naam eronder, vijf pads per rij, zestien stappen op één rij; ongeveer 610 x 405 punten tegenover 920 x 1405; smaller kan niet omdat de kaartkop 605 breed is). Wijzig je de opbouw van `.row`, `.grid`, `.pads` of de volgorde van de kinderen van `.app`, controleer dan die skin: hij plaatst die op volgorde (`nth-child`).
 
 ## Controleren
 

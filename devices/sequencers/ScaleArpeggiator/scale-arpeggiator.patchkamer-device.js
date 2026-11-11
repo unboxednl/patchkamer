@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, rol param of select, groep spelen/gevoel), zodat een skin ze als draaiknop kan tonen; zonder skin ongewijzigd.
 // 1.16.0 — Uitleg naar about (menu Over Scale Arpeggiator); de UI toont geen uitlegtekst meer.
 // 1.15.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.14.1 — Meer continue regelaars bestuurbaar via params()/modulate(): Accent op de tel, Zwakke noten zachter, Swing, Mensachtig en Speelkans erbij (Gate en Velocity zaten er al in); de nieuwe staan standaard uit. Modulatie komt alleen bovenop de knop en is nooit state (effectief = knop + o × bereik, geclampt).
@@ -28,7 +29,7 @@ const EN = {
   'Interne klok gestopt': 'Internal clock stopped', 'Interne klok · {0} BPM': 'Internal clock · {0} BPM', 'Wacht op interne klok': 'Waiting for internal clock',
 };
 export default {
-  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.16.0', about: { nl: 'Arpeggiator: speelt de noten van een keyboard of sequencer om de beurt als arpeggio naar een synth. Start het hosttransport.\n\nNoten komen van de aangesloten oranje kabel. Latch bewaart het akkoord tot een nieuw akkoord of Wissen.\n\nDe host bepaalt BPM en swing. 1/32 plant twee noten per zestiende vooruit; alle tijden zijn AudioContext-tijden. Een toetsenbord op de ingang is de akkoordbron zelf: zet Actief op Doorvoer om het toetsenbord ongewijzigd door te laten.', en: 'Arpeggiator: plays the notes from a keyboard or sequencer one after another as an arpeggio into a synth. Start the host transport.\n\nNotes come from the connected orange cable. Latch keeps the chord until a new chord or Clear.\n\nThe host sets BPM and swing. 1/32 schedules two notes per sixteenth ahead; all times are AudioContext times. A keyboard on the input is the chord source itself: set Active to Pass-through to let the keyboard through unchanged.' }, kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
+  id: 'nl.patchkamer.scale-arpeggiator', name: 'Scale Arpeggiator', version: '1.17.0', about: { nl: 'Arpeggiator: speelt de noten van een keyboard of sequencer om de beurt als arpeggio naar een synth. Start het hosttransport.\n\nNoten komen van de aangesloten oranje kabel. Latch bewaart het akkoord tot een nieuw akkoord of Wissen.\n\nDe host bepaalt BPM en swing. 1/32 plant twee noten per zestiende vooruit; alle tijden zijn AudioContext-tijden. Een toetsenbord op de ingang is de akkoordbron zelf: zet Actief op Doorvoer om het toetsenbord ongewijzigd door te laten.', en: 'Arpeggiator: plays the notes from a keyboard or sequencer one after another as an arpeggio into a synth. Start the host transport.\n\nNotes come from the connected orange cable. Latch keeps the chord until a new chord or Clear.\n\nThe host sets BPM and swing. 1/32 schedules two notes per sixteenth ahead; all times are AudioContext times. A keyboard on the input is the chord source itself: set Active to Pass-through to let the keyboard through unchanged.' }, kind: 'utility', category: 'sequencer', ui: { width: 620, minWidth: 330 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'notes', name: 'Chord / keyboard' }], eventOut: [{ id: 'notes', name: 'Arpeggio' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   create(ctx, host) {
     const tx = (k, ...a) => { let t = host.lang === 'nl' ? k : (EN[k] ?? k); a.forEach((v, i) => { t = t.replace('{' + i + '}', v); }); return t; };
@@ -43,11 +44,12 @@ export default {
       panel = add(shadow, 'div', undefined); panel.className = 'app'; uiHandles = {}; return panel;
     }
     function clearUI() { for (const h of Object.values(uiHandles)) try { h.dispose && h.dispose(); } catch { } if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; uiHandles = {}; }
+    const adopt = (el, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
     const grid = parent => { const el = add(parent, 'div'); el.className = 'grid'; return el; };
     const button = (parent, label, fn) => { const b = add(parent, 'button', label); b.type = 'button'; b.onclick = fn; return b; };
-    function select(parent, label, options, value, change) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); return el; }
-    function knob(parent, id, label, bounds, value, change, format = v => Number(v).toFixed(2)) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input'); input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(defaults[id]); input.setAttribute('data-pk-default', input.value); input.setAttribute('aria-label', label); input.value = String(value);
+    function select(parent, label, options, value, change, id) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); if (id) adopt(el, id, 'select', 'play', label); return el; }
+    function knob(parent, id, label, bounds, value, change, format = v => Number(v).toFixed(2)) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input'); input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(defaults[id]); input.setAttribute('data-pk-default', input.value); adopt(input, id, 'param', 'feel', label); input.setAttribute('aria-label', label); input.value = String(value);
       input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; uiHandles[id] = { set(v) { input.value = String(v); out.textContent = format(v); } }; return input; }
     // balkjes-editor voor een patroon van maximaal 16 waarden
     function bars(parent, id, label, arr, lenGet, lo) { const h3 = add(parent, 'h3', label), cv = add(parent, 'canvas'); cv.style.height = '64px'; cv.setAttribute('aria-label', label); cv.title = tx('Balkjes: klik of sleep om de velocity en lengte van elke noot in de cyclus te zetten (hoog = hard of lang).'); let w = 300, down = false;
@@ -105,13 +107,13 @@ export default {
     function clockLabel() { if (clockStatus) clockStatus.textContent = playing === false ? tx('Interne klok gestopt') : clockBpm ? tx('Interne klok · {0} BPM', Number(clockBpm.toFixed(2))) : tx('Wacht op interne klok'); }
     function render(el) { mountUI(el);
       const controls = grid(panel);
-      select(controls, tx('Patroon'), modes.map(([v, t]) => [v, tx(t)]), state.mode, v => { state.mode = v; counter = 0; });
-      select(controls, tx('Snelheid'), RATE_LABELS.map(([v, t]) => [v, tx(t)]), state.rate, v => state.rate = +v);
-      select(controls, tx('Octaven'), [[1, '1'], [2, '2'], [3, '3'], [4, '4']], state.octaves, v => state.octaves = +v);
-      select(controls, tx('Herhalingen'), [[1, '1'], [2, '2'], [3, '3'], [4, '4']], state.repeat, v => state.repeat = +v);
-      select(controls, tx('Latch'), [[0, tx('Uit')], [1, tx('Akkoord vasthouden')]], state.latch ? 1 : 0, v => { state.latch = v === '1'; if (!state.latch) latched.clear(); });
-      select(controls, tx('Actief'), [[1, tx('Arpeggio')], [0, tx('Doorvoer')]], state.enabled ? 1 : 0, v => { state.enabled = v === '1'; reset(); });
-      select(controls, tx('Patroonlengte'), Array.from({ length: 16 }, (_, i) => [i + 1, String(i + 1)]), state.plen, v => { state.plen = +v; counter = 0; uiHandles.vpat && uiHandles.vpat.set(); uiHandles.gpat && uiHandles.gpat.set(); });
+      select(controls, tx('Patroon'), modes.map(([v, t]) => [v, tx(t)]), state.mode, v => { state.mode = v; counter = 0; }, 'mode');
+      select(controls, tx('Snelheid'), RATE_LABELS.map(([v, t]) => [v, tx(t)]), state.rate, v => state.rate = +v, 'rate');
+      select(controls, tx('Octaven'), [[1, '1'], [2, '2'], [3, '3'], [4, '4']], state.octaves, v => state.octaves = +v, 'octaves');
+      select(controls, tx('Herhalingen'), [[1, '1'], [2, '2'], [3, '3'], [4, '4']], state.repeat, v => state.repeat = +v, 'repeat');
+      select(controls, tx('Latch'), [[0, tx('Uit')], [1, tx('Akkoord vasthouden')]], state.latch ? 1 : 0, v => { state.latch = v === '1'; if (!state.latch) latched.clear(); }, 'latch');
+      select(controls, tx('Actief'), [[1, tx('Arpeggio')], [0, tx('Doorvoer')]], state.enabled ? 1 : 0, v => { state.enabled = v === '1'; reset(); }, 'enabled');
+      select(controls, tx('Patroonlengte'), Array.from({ length: 16 }, (_, i) => [i + 1, String(i + 1)]), state.plen, v => { state.plen = +v; counter = 0; uiHandles.vpat && uiHandles.vpat.set(); uiHandles.gpat && uiHandles.gpat.set(); }, 'plen');
       const pct = v => Math.round(v * 100) + '%';
       knob(controls, 'gate', tx('Gate'), [0.1, 1.5, 0.01], state.gate, v => state.gate = v);
       knob(controls, 'velocity', tx('Velocity'), [0.05, 1, 0.01], state.velocity, v => state.velocity = v);

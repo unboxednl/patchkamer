@@ -327,6 +327,10 @@ De host kopieert en plakt met de knoppen Kopieer en Plak in de kaartbalk en met 
 
 **Risico's.** Een patroon van 12 tracks is groot (ongeveer 150 KB `native`); zonder `native` (tussen verschillende apparaten) is er veel minder dan er is. Stappen achter de tracklengte klinken niet en gaan dus niet mee zonder `native`. Een klankinstelling hoort bij een patroon: plak je een patroon in Groovebox 12 mét `native`, dan verandert ook de klank van dat patroon.
 
+## Skins
+
+De regelaars waren al aangemeld (de knoppen per pagina als `syn.<sleutel>` enzovoort, de vaste schuiven en keuzelijsten met `g.*`, `track.*`, `pattern.*`, `step.vel`, de zestien trigs als rol `pad`), dus voor de skin `Compact` is de devicecode niet gewijzigd. De skin staat in `../../../skins/library/nl.patchkamer.groovebox12/` (draaiknoppen met de naam eronder, twaalf tracks in twee rijen, trigs van ongeveer 34 x 30 punten; ongeveer 610 x 556 punten tegenover 1262 x 659). Hij leunt op de klassen `.tracks`, `.display`, `.knobs`, `.trigs`, `.stepbar` en `.side` en op de volgorde van de drie panelen in `.side`; wijzig je die, controleer dan de skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/drums/Groovebox12/groovebox-12.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

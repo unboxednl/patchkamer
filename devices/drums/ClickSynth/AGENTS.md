@@ -13,7 +13,7 @@ Een percussiesynth voor microgeluiden: kliks, tiks, bleeps, zaps, hout, glas, me
 | Naam | `Click Synth` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Stereo mix), eventingang `trigger` (Trigs / noten), modulatie-ingang `mod`, bundel-uitgang `multi` (Sporen los / Separate lanes: elk spoor apart) |
-| Contract | v1.17 (apparaatversie 1.17.0) |
+| Contract | v1.17 (apparaatversie 1.18.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Klikwerk, `nl.patchkamer.klikwerk`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De namen in de state zijn nu Engels: de klankmotoren (`tick`, `noise`, `modal` en `string` heetten `tik`, `ruis`, `modaal` en `snaar`), de kits, de namen van de sporen en de standen van "Klik op een stap" (`on`, `accent`, `chance`, `ratchet`, `tone`).
@@ -130,6 +130,10 @@ De ingang `trigger` (trigs `ch1` … `ch8`, noten 36 … 43 of 60 … 67) speelt
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.clicksynth`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **kit**: acht sporen met klank en ritme. Zet `kit` op `Custom` voor een eigen kit. Geef elke tune en elk spoor een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Maak alleen tunes als de opdracht dat vraagt.
+
+## Skins
+
+Sinds 1.18.0 melden de twee zwenkers (`patSwing`, `laneSwing`), `master` en alle veertien klankknoppen zich aan via `host.ui.adopt` (rol `param`, groep `top` of `g0` tot `g3`). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.clicksynth/` (draaiknoppen met de naam eronder, de acht sporen met stappen van 23 x 20 punten, de klankknoppen in vier kaders op één rij; ongeveer 612 x 526 punten tegenover 1080 x 909). Wijzig je de opbouw van `.top`, `.rows`, `.ed` of de klassen `.c`, `.lab`, `.grid`, dan moet je die skin controleren (hij kiest de groepen met `nth-of-type`).
 
 ## Controleren
 

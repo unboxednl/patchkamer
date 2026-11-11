@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.8 (2026-11-11)
+
+### Toegevoegd
+- **Skin Compact voor 13 drum-, sequencer- en sampler-apparaten.** Draaiknoppen met de naam en waarde eronder, de regelaars per groep in een kader, compacte pad- en stapraster (pads en stappen blijven tikbaar) en geen scrollbalken. Apparaten: Chord Sequencer, Click Synth, Drum Kit, Drum Machine, Euclidean Rhythms, Groovebox 12, Latin Percussion, Loop Slicer, Pulse Drums, Samplebank, Scale Arpeggiator, Step Sequencer en Wanderer. De kaartkop (naam, Kopieer/Plak, sluitknop) bepaalt bij veel van deze apparaten een minimale breedte, dus de kaarten worden 480 tot 690 punten breed (Scale Arpeggiator, Loop Slicer en Samplebank 480) en meestal 15 tot 50 procent lager. De apparaten melden hun regelaars daarvoor aan voor skins (id is de state-sleutel, groep per sectie); zonder skin zien en klinken ze hetzelfde, en state, params() en poorten zijn ongewijzigd. Pad Sampler heeft nog geen Compact-skin.
+
 ## 0.30.7 (2026-11-10)
 
 ### Toegevoegd

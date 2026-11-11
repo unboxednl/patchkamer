@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.20.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, rol param of select, groep `pattern`/`row`), zodat een skin ze als draaiknop kan tonen; zonder skin ongewijzigd.
 // 1.19.0 — Uitleg naar about (menu Over Step Sequencer); de UI toont geen uitlegtekst meer.
 // 1.18.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.17.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende). Zonder drumcomputer aan de uitgang is het patroon een `notes`-clip, met een drumcomputer (`noteNames`) een `drums`-clip met de klanken als banen. Plakken zet alleen het patroon (`n`, `acc`, `vel`, `ln`, `mt`, `len`, `res`); swing, humanize, octaaf, gate en werkstand blijven. Het apparaat is mono: per rasterstap blijft de hardste noot. Een clip uit hetzelfde apparaat komt via `native` verliesvrij terug. Verder niets gewijzigd: `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.14.1.
@@ -23,7 +24,7 @@ const EN = {
 const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const MAXN = 64, LO = 12, HI = 108, ROWS = 25, LANEMAX = 64;
 export default {
-  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.19.0', about: { nl: 'Stap-sequencer: één patroon van stappen dat noten naar een synth, drone of drumcomputer stuurt.\n\nStuurt note-gebeurtenissen; verbind de oranje uitgang met een synth. Klik in de rol voor een noot, sleep de rechterrand voor de lengte, klik of sleep in de strook voor de velocity.\n\nSluit een toetsenbord (Keys) aan op de ingang: dat gaat meteen door naar de uitgang. Met Opnemen aan schrijft het de noten in het patroon (tijdens de klok op de plek van de aanslag, anders stap voor stap).\n\nSwing per rij vertraagt de noten van één rij (een klank van de drumcomputer) op de oneven zestienden; Swing vertraagt het hele patroon. Beide komen bovenop de swing van de host. Inspelen kwantiseert naar het geswingde raster; per stap past één noot (een nieuwe noot vervangt de oude).', en: 'Step sequencer: one pattern of steps that sends notes to a synth, drone or drum machine.\n\nSends note events; connect the orange output to a synth. Click in the roll to place a note, drag its right edge for the length, click or drag in the strip for the velocity.\n\nConnect a keyboard (Keys) to the input: it goes straight through to the output. With Record on it writes the notes into the pattern (on the beat position while the clock runs, otherwise step by step).\n\nRow swing delays the notes of one row (one sound of the drum machine) on the odd sixteenths; Swing delays the whole pattern. Both come on top of the host swing. Recording quantizes to the swung grid; a step holds one note (a new note replaces the old one).' }, category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
+  id: 'nl.patchkamer.seq', name: 'Step Sequencer', version: '1.20.0', about: { nl: 'Stap-sequencer: één patroon van stappen dat noten naar een synth, drone of drumcomputer stuurt.\n\nStuurt note-gebeurtenissen; verbind de oranje uitgang met een synth. Klik in de rol voor een noot, sleep de rechterrand voor de lengte, klik of sleep in de strook voor de velocity.\n\nSluit een toetsenbord (Keys) aan op de ingang: dat gaat meteen door naar de uitgang. Met Opnemen aan schrijft het de noten in het patroon (tijdens de klok op de plek van de aanslag, anders stap voor stap).\n\nSwing per rij vertraagt de noten van één rij (een klank van de drumcomputer) op de oneven zestienden; Swing vertraagt het hele patroon. Beide komen bovenop de swing van de host. Inspelen kwantiseert naar het geswingde raster; per stap past één noot (een nieuwe noot vervangt de oude).', en: 'Step sequencer: one pattern of steps that sends notes to a synth, drone or drum machine.\n\nSends note events; connect the orange output to a synth. Click in the roll to place a note, drag its right edge for the length, click or drag in the strip for the velocity.\n\nConnect a keyboard (Keys) to the input: it goes straight through to the output. With Record on it writes the notes into the pattern (on the beat position while the clock runs, otherwise step by step).\n\nRow swing delays the notes of one row (one sound of the drum machine) on the odd sixteenths; Swing delays the whole pattern. Both come on top of the host swing. Recording quantizes to the swung grid; a step holds one note (a new note replaces the old one).' }, category: 'sequencer', kind: 'utility', ui: { width: 880, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'in', name: 'Notes in' }], eventOut: [{ id: 'notes', name: 'Notes' }] },
   i18n: { nl: { ports: { in: 'Noten in', notes: 'Noten' } } },
   create(ctx, host) {
@@ -303,11 +304,12 @@ export default {
     // ---- bediening ------------------------------------------------------------------------------------------------------------------------
     const noteName = m => NOTE_NAMES[m % 12] + (Math.floor(m / 12) - 1);
     function shift(fn) { fn(); dirty = true; }
-    function select(parent, label, options, value, change) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); return el; }
-    function knob(parent, label, bounds, value, change, format, def) {
+    const adopt = (el, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    function select(parent, label, options, value, change, id, group) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); if (id) adopt(el, id, 'select', group || 'pattern', label); return el; }
+    function knob(parent, label, bounds, value, change, format, def, id, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input');
       input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.dataset.pkDefault = String(def);
-      input.addEventListener('pointerdown', e => e.stopPropagation()); input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; return input;
+      if (id) adopt(input, id, 'param', group || 'pattern', label); input.addEventListener('pointerdown', e => e.stopPropagation()); input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; return input;
     }
     const button = (parent, label, fn, title) => { const b = add(parent, 'button', label); b.type = 'button'; b.onclick = fn; if (title) b.title = title; return b; };
     function toggle(parent, label, key, after) { const b = button(parent, label, () => { state[key] = !state[key]; b.classList.toggle('active', state[key]); if (after) after(); }); b.classList.toggle('active', state[key]); b.setAttribute('aria-pressed', String(state[key])); return b; }
@@ -320,13 +322,13 @@ export default {
       add(shadow, 'style', `:host{display:block;color:var(--fg);font:13px system-ui,sans-serif}.app{container-type:inline-size;background:var(--card);border-radius:10px;padding:14px;box-sizing:border-box}.row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;margin:8px 0}.control{display:flex;flex-direction:column;gap:4px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;min-width:0;flex:1 1 90px}select{width:100%}.control span{font-size:11px;color:var(--muted)}button,select,input{font:inherit;color:var(--field-fg);background:var(--field);border:1px solid var(--line);border-radius:5px;padding:6px 8px;max-width:100%;box-sizing:border-box}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--sel)}button.active{background:color-mix(in srgb,var(--event) 40%,var(--field));border-color:var(--event)}button.rec.active{background:color-mix(in srgb,var(--stop) 55%,var(--field));border-color:var(--stop)}input[type=range]{width:100%;padding:0;accent-color:var(--event)}output{font:12px monospace;color:var(--fg)}canvas{display:block;width:100%;border-radius:6px;touch-action:none;cursor:crosshair}`);
       const panel = add(shadow, 'div'); panel.className = 'app';
       const r1 = add(panel, 'div'); r1.className = 'row';
-      select(r1, tx('Raster'), [[16, '1/16'], [32, '1/32'], [64, '1/64']], state.res, v => { state.res = +v; dirty = true; });
-      knob(r1, tx('Lengte'), [1, MAXN, 1], state.len, v => { state.len = v; state.cur = Math.min(state.cur, v - 1); page = Math.min(page, pages() - 1); dirty = true; syncPager(); }, v => String(v), 16);
-      select(r1, tx('Octaaf'), [[-1, '−1'], [0, '0'], [1, '+1']], state.oct, v => { state.oct = +v; });
-      knob(r1, 'Gate', [0.1, 1, 0.01], state.gate, v => { state.gate = v; dirty = true; }, v => Math.round(v * 100) + '%', 0.6);
-      knob(r1, 'Swing', [0, 0.6, 0.01], state.swing, v => state.swing = v, v => Math.round(v * 100) + '%', 0);
-      knob(r1, tx('Humanize tijd'), [0, 1, 0.01], state.humT, v => state.humT = v, v => Math.round(v * 100) + '%', 0);
-      knob(r1, tx('Humanize velocity'), [0, 1, 0.01], state.humV, v => state.humV = v, v => Math.round(v * 100) + '%', 0);
+      select(r1, tx('Raster'), [[16, '1/16'], [32, '1/32'], [64, '1/64']], state.res, v => { state.res = +v; dirty = true; }, 'res');
+      knob(r1, tx('Lengte'), [1, MAXN, 1], state.len, v => { state.len = v; state.cur = Math.min(state.cur, v - 1); page = Math.min(page, pages() - 1); dirty = true; syncPager(); }, v => String(v), 16, 'len');
+      select(r1, tx('Octaaf'), [[-1, '−1'], [0, '0'], [1, '+1']], state.oct, v => { state.oct = +v; }, 'oct');
+      knob(r1, 'Gate', [0.1, 1, 0.01], state.gate, v => { state.gate = v; dirty = true; }, v => Math.round(v * 100) + '%', 0.6, 'gate');
+      knob(r1, 'Swing', [0, 0.6, 0.01], state.swing, v => state.swing = v, v => Math.round(v * 100) + '%', 0, 'swing');
+      knob(r1, tx('Humanize tijd'), [0, 1, 0.01], state.humT, v => state.humT = v, v => Math.round(v * 100) + '%', 0, 'humT');
+      knob(r1, tx('Humanize velocity'), [0, 1, 0.01], state.humV, v => state.humV = v, v => Math.round(v * 100) + '%', 0, 'humV');
       const rsBox = add(panel, 'div'); rsBox.className = 'row'; labels.rs = rsBox; lastLaneSig = null; syncRowSwing();
       const r2 = add(panel, 'div'); r2.className = 'row';
       recBtn = toggle(r2, '● ' + tx('Opnemen'), 'rec'); recBtn.classList.add('rec');
@@ -353,8 +355,8 @@ export default {
       const box = labels.rs; if (!box || !box.isConnected && !shadow) return; box.textContent = '';
       const opts = lanes ? lanes.map(l => [l.note, l.name]) : Array.from({ length: ROWS }, (_, r) => { const m = state.view + (ROWS - 1) - r; return [m, noteName(m)]; });
       if (!opts.some(o => o[0] === rsel)) rsel = opts[0][0];
-      select(box, tx('Rij'), opts, rsel, v => { rsel = +v; syncRowSwing(); });
-      knob(box, tx('Rij-swing'), [0, 0.5, 0.01], rowSwingOf(rsel), v => setRowSwing(rsel, v), v => Math.round(v * 100) + '%', 0);
+      select(box, tx('Rij'), opts, rsel, v => { rsel = +v; syncRowSwing(); }, 'row', 'row');
+      knob(box, tx('Rij-swing'), [0, 0.5, 0.01], rowSwingOf(rsel), v => setRowSwing(rsel, v), v => Math.round(v * 100) + '%', 0, 'rowSwing', 'row');
     }
     function syncPager() {
       const p = labels.pager; if (!p) return; p.textContent = '';

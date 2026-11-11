@@ -13,7 +13,7 @@ Een drumworkstation voor techno. Tot 16 kanalen met 27 instrumenten (de 24 van D
 | Naam | `Pulse Drums` in alle talen; alleen een poortnaam heeft een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgangen `mix` (Stereo mix), `rumble` (Rumble) en `ch1` … `ch16` (Drum 1 … 16); eventingang `trigger` (MIDI / trigs); eventuitgang `trigs` (Drum trigs); modulatie-ingang `mod`; bundel-uitgang `multi` (Losse uit / Separate outs) |
-| Contract | v1.26 (apparaatversie 1.19.2) |
+| Contract | v1.26 (apparaatversie 1.20.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Drums, `nl.patchkamer.puls-drums`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De twee eerste klankmodellen heten nu `Deep` en `Punch` (in het oude bestand hadden ze een getal als naam).
@@ -102,6 +102,10 @@ Getest (Playwright in een echte browser, nl en en): `setClip(getClip())` laat `g
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.pulsedrums`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **kit met groove**: instrumenten, klankmodellen en een patroon. Houd hem klein: laat patronen die je niet gebruikt leeg en houd het aantal kanalen laag. Geef elke tune een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Maak alleen tunes als de opdracht dat vraagt.
+
+## Skins
+
+De schuiven hebben als id de `params()`-sleutel of een sleutel als `edit.velocity`, `step.chance` en `patternSwing.<n>` (rol `param`), de stapknoppen `chN.step.K` (rol `step`). Sinds 1.20.0 heeft het apparaat de stijlconstante `CSK`, die alleen werkt binnen `.pd-app:has(.kn)`, dus alleen als de host draaiknoppen heeft geplaatst; zonder skin ongewijzigd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.pulsedrums/` (draaiknoppen met de naam eronder, stappen van 22 punten breed, strakke werkbalken, ongeveer 600 x 1330 tegenover 1180 x 1938 bij 12 kanalen van 64 stappen). Wijzig je de klassen `toolbar`, `track`, `step`, `editor` of `bottom`, controleer dan die skin.
 
 ## Controleren
 

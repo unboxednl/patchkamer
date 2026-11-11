@@ -1,0 +1,35 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.6",
+  "id": "nl.patchkamer.pulsedrums.compact",
+  "device": "nl.patchkamer.pulsedrums",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, tight toolbars, a smaller step grid, the channel controls and the step lab in one grid, at roughly half the width and a third less height.",
+  "created": "2026-11-11",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 600
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs and a tight step grid.",
+      "css": ""
+    }
+  ]
+}

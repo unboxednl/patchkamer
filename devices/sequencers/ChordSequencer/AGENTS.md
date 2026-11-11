@@ -269,6 +269,10 @@ Naast de spoorclip geeft het apparaat de actieve scène (vier sporen A tot D) al
 
 **Risico's.** Plakken op een scène met `native` vervangt ook de spoornamen, `enabled`, gate/velocity per stap enzovoort van die vier sporen: dat is bedoeld (scène kopiëren) maar een andere schaal dan een enkel spoor. De transpositie en gate/velocity van de spoorinstellingen (`t<n>gate` enzovoort in de state, buiten de scène) blijven staan.
 
+## Skins
+
+Regelaars zijn sinds 1.19.0 via `host.ui.adopt` herkenbaar voor skins (id = state- of spoorsleutel: launch, editTrack, thru, rquant (groep `scene`), enabled, mode, grid, quality, division, root, inversion, length, ratchet, probability, swing (groep `track`), `t<n>gate|velocity|transpose` (groep `mix`) en in spelwijze Noten bars, root, newVel, newLen, selVel, selLen (groep `notes`); rol `param` of `select`; groep `scene`, `track`, `mix` en `notes`). Zonder skin is er niets veranderd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.chordsequencer/` (draaiknoppen met de naam eronder, per groep een kader, geen uitlegtekst; ongeveer 690 x 449 punten tegenover 840 x 1063). De zestien stapknoppen staan in één rij boven de velocity- en lengteschuifjes (zelfde zestien kolommen); die schuifjes blijven gewone schuiven. De kaartkop met Kopieer/Plak en acht lampjes is minstens ongeveer 686 punten breed, daarom is de skin 690 breed. De skin gebruikt `:nth-child` op de bewerk-grid (volgorde: spoornaam, actief, spel, swing, raster, akkoord, nootdeling, vijf knoppen, progressie); controleer de skin als je die volgorde wijzigt.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/sequencers/ChordSequencer/chord-sequencer.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

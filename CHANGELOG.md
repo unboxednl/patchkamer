@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.8 (2026-11-11)
+
+### Added
+- **Compact skin for 13 drum, sequencer and sampler devices.** Rotary knobs with the name and value underneath, the controls grouped in one frame per group, compact pad and step grids (pads and steps stay tappable) and no scrollbars. Devices: Chord Sequencer, Click Synth, Drum Kit, Drum Machine, Euclidean Rhythms, Groovebox 12, Latin Percussion, Loop Slicer, Pulse Drums, Samplebank, Scale Arpeggiator, Step Sequencer en Wanderer. The card header (name, Copy/Paste, close button) sets a minimum width for many of these devices, so the cards become 480 to 690 points wide (Scale Arpeggiator, Loop Slicer and Samplebank 480) and usually 15 to 50 percent shorter. The devices register their controls for skins for this (id is the state key, group per section); without a skin they look and sound the same, and state, params() and ports are unchanged. Pad Sampler has no Compact skin yet.
+
 ## 0.30.7 (2026-11-10)
 
 ### Added

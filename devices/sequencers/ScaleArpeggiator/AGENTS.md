@@ -123,6 +123,10 @@ Nieuwe sleutel `swing` (0 … 0,5 van een zestiende, standaard 0, altijd in de s
 
 Regel (voor alle apparaten gelijk): `swing` is een fractie van een zestiende (0 … 0,5; de UI toont 0 … 50 %, dubbelklik op een schuif = 0). De lokale vertraging van een gebeurtenis in een **oneven zestiende** (positie in zestienden, naar beneden afgerond, is oneven) is `(som van de niveaus) × stepDur`, de som begrensd op 0,5; de swing van de host (`info.time`) blijft er los onder. Even zestienden blijven staan. Rasters van 1/8 en langzamer hebben alleen gebeurtenissen op even zestienden en schuiven dus niet. Een ontbrekend of niet-eindig veld is 0; met alles op 0 spelen state en klokstappen precies als voor versie 1.11.0. Een noot (ook elke herhaling bij `repeat`, en `chord`-pulsen) valt in een oneven zestiende als `floor(positie)` oneven is. Bij `rate` 2 (1/8) en langzamer speelt de arpeggiator alleen op even zestienden: dan is swing zonder effect; gebruik `rate` 1 (1/16) of sneller. Opnemen/kwantiseren is niet van toepassing: dit apparaat is een generator.
 
+## Skins
+
+Regelaars zijn sinds 1.17.0 via `host.ui.adopt` herkenbaar voor skins (id = state- of spoorsleutel: mode, rate, octaves, repeat, latch, enabled, plen (selects) en gate, velocity, accent, ghost, swing, human, chance (knoppen); rol `param` of `select`; groep `play` en `feel`). Zonder skin is er niets veranderd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.scale-arpeggiator/` (draaiknoppen met de naam eronder, per groep een kader, geen uitlegtekst; ongeveer 480 x 353 punten tegenover 620 x 735). De balkjes-editors (canvassen) zijn in de skin lager (30 punten) via CSS; de tekening is balkjes en wordt niet vervormd. De skin gebruikt `:nth-child` op de eerste zeven `.control`-elementen (de selects); verander je de volgorde of het aantal selects, controleer dan de skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/sequencers/ScaleArpeggiator/scale-arpeggiator.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

@@ -173,6 +173,10 @@ Sinds 1.15.0 staat `modExclude: ['reps']` in de definitie (Herhaal eerst is een 
 
 **Risico's.** Momentopname van de stand van dat moment: het motief muteert verder, de kopie niet. Een motief dat een ander bereik of een andere toonladder heeft op het moment van plakken, blijft zoals gekopieerd (het zijn gewone noten). Humanize en toevalsratchets kunnen niet vooraf bekeken worden.
 
+## Skins
+
+Regelaars zijn sinds 1.18.0 via `host.ui.adopt` herkenbaar voor skins (id = state- of spoorsleutel: preset, root, scale, lo, hi, div, len, contour (selects) en alle regelaars uit `spec` (density, jump, drift, chord, octave, mut, reps, gate, ... in de groepen `line`, `repeat`, `delivery`, `dynamics`); rol `param` of `select`; groep `setup`, `line`, `repeat`, `delivery` en `dynamics`). Zonder skin is er niets veranderd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.wanderer/` (draaiknoppen met de naam eronder, per groep een kader, geen uitlegtekst; ongeveer 540 x 461 punten tegenover 820 x 861). De pianorol (canvas) blijft zoals hij was. De kaartkop met Kopieer/Plak is minstens ongeveer 535 punten breed, daarom is de skin 540 breed. De groepskoppen (`h3`) zijn verborgen; de vier groepen zijn kaders via `:nth-child` op `.grid`. Verander je de volgorde van de blokken, controleer dan de skin.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/sequencers/Wanderer/wanderer.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

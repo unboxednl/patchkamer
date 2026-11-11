@@ -290,6 +290,10 @@ De host kopieert met de knop Kopieer in de kaartbalk en met Ctrl/Cmd+C (contract
 - Zonder drumapparaat aan `trigs` hebben de banen geen `note` en heten ze "Spoor n": de host kan ze dan niet op naam of type aan een doel koppelen en meldt dat ze niet geplaatst zijn. Sluit eerst het drumapparaat aan als je de banen wilt laten landen.
 - Gelijke uitgang op twee rijen (twee rijen naar `ch1`): alleen de eerste komt mee.
 
+## Skins
+
+Regelaars zijn sinds 1.18.0 via `host.ui.adopt` herkenbaar voor skins (id = state- of spoorsleutel: `r<n>.steps|pulses|rot|div|out|acc|fill` (selects) en `r<n>.vel|prob|mut` (knoppen) per rij, en `swing`, `gate`, `accVel`, `softVel`, `ghost`, `ghostVel`, `curveAmt`, `human` voor de gekozen rij; rol `param` of `select`; groep `rows` en `selected`). Zonder skin is er niets veranderd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.euclidean/` (draaiknoppen met de naam eronder, per groep een kader, geen uitlegtekst; ongeveer 630 x 637 punten tegenover 900 x 967). De ringweergave blijft een canvas van 280 hoog in de code; de skin toont er met `object-fit: cover` het midden van (zonder vervorming). De kaartkop met Kopieer/Plak is minstens ongeveer 627 punten breed, daarom is de skin 630 breed. Wijzig je de rijkolommen (`.rh`/`.r`) of de klassen `.vis`, `.pv`, `.strip`, `.c`, dan moet je de skin aanpassen.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/sequencers/EuclideanRhythms/euclidean-rhythms.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.

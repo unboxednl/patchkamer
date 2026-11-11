@@ -13,7 +13,7 @@ Een drumcomputer met vier gesynthetiseerde geluiden (kick, snare, hat en perc) e
 | Naam | `Drum Machine` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgang `out` (Uit / Out, de som), eventuitgang `trigs` (Trigs), modulatie-ingang `mod` (Mod), bundel-uitgang `multi` (Losse uit / Separate outs: de vier geluiden apart, na niveau en pan) |
-| Contract | v1.17 (apparaatversie 1.17.0) |
+| Contract | v1.17 (apparaatversie 1.18.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Drumcomputer, `nl.patchkamer.drums`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in.
@@ -77,6 +77,10 @@ Drum Machine heeft geen eventingang (alleen de eventuitgang `trigs`) en dus ook 
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.drummachine`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **groove**: patronen plus klank. Geef elke tune een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Maak alleen tunes als de opdracht dat vraagt.
+
+## Skins
+
+De schuiven van de geluidentabel (id `<geluid>.<param>`, groep = het geluid), de knoppen voor niveau en swing (`lvl`, `swing`, `laneSwing.<geluid>`) en de stapknoppen (`pat.<geluid>`, rol `step`) zijn via `host.ui` herkenbaar voor skins. Sinds 1.18.0 heeft de geluidentabel de klasse `dm-tab` en staan de niveau- en swingknoppen in een omhulsel `dm-sw` (`display: contents`, dus zonder skin ongewijzigd); het apparaat heeft CSS die alleen werkt als de host draaiknoppen (`.kn`, `data-pk-face`) heeft geplaatst. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.drummachine/` (draaiknoppen met de naam eronder, de zes knoppen in een rij, hogere stappen). De kaartkop (naam, klembordknoppen) is bij deze naam ongeveer 660 breed; de skin vraagt daarom 660. Wijzig je `dm-tab` of `dm-sw`, controleer dan die skin.
 
 ## Controleren
 

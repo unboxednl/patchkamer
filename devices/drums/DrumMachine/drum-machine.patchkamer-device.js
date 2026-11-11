@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.0 — Opmaak voor de skin Compact (alleen met data-pk-face, dus alleen met een skin die draaiknoppen kiest; zonder skin ongewijzigd): de geluidentabel krijgt klasse dm-tab en de knoppen voor niveau en swing staan in een omhulsel dm-sw (display: contents zonder skin) zodat ze in een rij van zes kunnen. Geluid, state, presets, params, poorten en ids ongewijzigd.
 // 1.17.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is de vier banen (kick, snare, hat, perc) van 16 stappen. Het apparaat kent alleen aan/uit: de velocity wordt bij plakken weggelaten (`vel: 'binary'`), en
 //          banen van een andere drumcomputer die niet op type of naam passen worden door de host weggelaten en gemeld; een baan die in de clip ontbreekt wordt leeg. Stuurt zelf geen gebeurtenissen. Verder niets gewijzigd: getState, presets, tunes, geluid en poorten gelijk aan 1.16.0.
 // 1.16.0 — Stappen en tabelregelaars herkenbaar voor skins (contract v1.22, additief): elke stappenrij roept host.ui.steps aan met opts { id: 'pat.<geluid>', group: <geluid>, role: 'step', color } zodat een skin de vorm, maat, kleur en het ledje van de stapknoppen kiest
@@ -45,7 +46,7 @@ const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.17.0',
+  version: '1.18.0',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -124,7 +125,7 @@ export default {
       mount(el) { lvlKnob = null;
         VOICES.forEach(([k, lab]) => { rows[k] = host.ui.steps(el, lab, state.pat[k], undefined, { id: 'pat.' + k, group: k, role: 'step', color: VCOL[k] }); });
         // compact table: one row per drum sound, one column per parameter
-        const g = document.createElement('div'); g.style.cssText = 'display:grid;grid-template-columns:44px repeat(5,minmax(0,1fr));gap:2px 8px;align-items:center;margin-top:4px;min-width:0';
+        const g = document.createElement('div'); g.className = 'dm-tab'; g.style.cssText = 'display:grid;grid-template-columns:44px repeat(5,minmax(0,1fr));gap:2px 8px;align-items:center;margin-top:4px;min-width:0';
         const cap = t => { const s = document.createElement('span'); s.textContent = t; s.style.cssText = 'font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'; return s; };
         g.appendChild(cap('')); COLS.forEach(([, l]) => g.appendChild(cap(l)));
         VOICES.forEach(([vk, vl]) => { const n = cap(vl); n.style.color = 'var(--fg)'; g.appendChild(n);
@@ -137,10 +138,22 @@ export default {
             if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(i, { id: vk + '.' + pk, role: 'param', group: vk, label: vl + ' ' + d[0] }); } catch (e) { /* oudere host */ } }
             cell.append(i, o); g.appendChild(cell); cells[vk + '.' + pk] = { i, o }; }); });
         el.appendChild(g);
-        lvlKnob = host.ui.knob(el, T.lvl, [0, 1, 0.01], state.lvl, pct, v => { state.lvl = v; apply(); }, { id: 'lvl', group: 'out' });
+        const css = document.createElement('style'); css.textContent = '.dm-sw{display:contents}'
+          + '.dm-sw:has(.k[data-pk-face]){display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 2px;margin-top:2px}'
+          + '.dm-sw .k[data-pk-face]{grid-template-columns:minmax(0,1fr);justify-items:center;gap:0;min-height:0;min-width:0}'
+          + '.dm-sw .k[data-pk-face]>.kn{order:1}.dm-sw .k[data-pk-face]>output{order:2;text-align:center;font-size:9px;line-height:1.1}'
+          + '.dm-sw .k[data-pk-face]>label{order:3;font-size:8px;letter-spacing:-.02em;text-transform:none;line-height:1.1;text-align:center;white-space:normal;overflow-wrap:anywhere;max-width:100%}'
+          + '.dm-tab:has(.kn){grid-template-columns:34px repeat(5,minmax(0,1fr))!important;gap:0 2px!important;margin-top:2px!important}'
+          + '.dm-tab:has(.kn)>span{text-align:center;font-size:8px!important;letter-spacing:0!important}.dm-tab:has(.kn)>span:nth-child(6n+1){text-align:left}'
+          + '.dm-tab:has(.kn)>div{justify-items:center;align-items:start}.dm-tab:has(.kn)>div>output{font-size:9px!important;line-height:1.1;text-align:center}'
+          + '.dm-tab:has(.kn)>div>.kn,.dm-sw .k[data-pk-face]>.kn{justify-self:center!important}'
+          + '.st[data-pk-skp]{height:20px}';
+        el.appendChild(css);
+        const sw = document.createElement('div'); sw.className = 'dm-sw'; el.appendChild(sw);
+        lvlKnob = host.ui.knob(sw, T.lvl, [0, 1, 0.01], state.lvl, pct, v => { state.lvl = v; apply(); }, { id: 'lvl', group: 'out' });
         // swing: patroon en per geluid (extra op de oneven zestienden, naast de hostswing)
-        swKnob = host.ui.knob(el, T.swing, [0, 0.5, 0.005], state.swing, pct, v => { state.swing = v; }, { default: 0, id: 'swing', group: 'swing' });
-        lswKnobs = {}; VOICES.forEach(([k, lab]) => { lswKnobs[k] = host.ui.knob(el, lab + ' ' + T.laneSwing, [0, 0.5, 0.005], state.laneSwing[k], pct, v => { state.laneSwing[k] = v; }, { default: 0, id: 'laneSwing.' + k, group: 'swing' }); });
+        swKnob = host.ui.knob(sw, T.swing, [0, 0.5, 0.005], state.swing, pct, v => { state.swing = v; }, { default: 0, id: 'swing', group: 'swing' });
+        lswKnobs = {}; VOICES.forEach(([k, lab]) => { lswKnobs[k] = host.ui.knob(sw, lab + ' ' + T.laneSwing, [0, 0.5, 0.005], state.laneSwing[k], pct, v => { state.laneSwing[k] = v; }, { default: 0, id: 'laneSwing.' + k, group: 'swing' }); });
       },
       onStep({ step, time, stepDur, bpm }) { const sd = Number.isFinite(stepDur) && stepDur > 0 ? stepDur : Number.isFinite(bpm) && bpm > 0 ? 15 / bpm : 0, odd = step % 2 === 1;
         VOICES.forEach(([k]) => { if (state.pat[k][step]) { const v = step % 4 === 0 ? 1 : 0.75, t = odd ? time + clamp(exv('swing', state.swing) + exv('laneSwing.' + k, state.laneSwing[k]), 0, 0.5) * sd : time; hit(k, t, v); host.emit(self, 'trigs', { type: 'trig', lane: k, vel: v, time: t }); } }); Object.values(rows).forEach(r => r.cursor(step)); },

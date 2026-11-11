@@ -1,0 +1,55 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.6",
+  "id": "nl.patchkamer.drummachine.compact",
+  "device": "nl.patchkamer.drummachine",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the sound parameters in one grid and a tight step grid.",
+  "created": "2026-11-11",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "pads": {
+      "gap": "tight"
+    },
+    "size": {
+      "width": 660
+    },
+    "sections": [
+      {
+        "match": "*",
+        "frame": "line",
+        "bare": true,
+        "gap": "tight",
+        "labels": "below"
+      },
+      {
+        "match": "group:swing",
+        "columns": 5
+      },
+      {
+        "match": "group:out",
+        "columns": 1
+      }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs and a tight step grid.",
+      "css": ""
+    }
+  ]
+}

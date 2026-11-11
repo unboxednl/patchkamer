@@ -13,7 +13,7 @@ Een drumkit met tot 16 kanalen. Elk kanaal is één gesynthetiseerd instrument (
 | Naam | `Drum Kit` in alle talen; alleen een poortnaam heeft een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgangen `mix` (Stereo mix) en `ch1` … `ch16` (Drum 1 … 16); eventingang `trigger` (MIDI / trigs); eventuitgang `trigs` (Drum trigs); modulatie-ingang `mod`; bundel-uitgang `multi` (Losse uit / Separate outs: alle actieve kanalen, met de naam van het instrument) |
-| Contract | v1.26 (apparaatversie 1.18.1) |
+| Contract | v1.26 (apparaatversie 1.19.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Slagwerk, `nl.patchkamer.slagwerk`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De twee eerste klankmodellen heten nu `Deep` en `Punch` (in het oude bestand hadden ze een getal als naam); een oude state met die getallen is dus ook niet te lezen.
@@ -107,6 +107,10 @@ Getest (Playwright in een echte browser, nl en en): `setClip(getClip())` laat `g
 - Een pack heet `naam.patchkamer-tunes.json` en staat in `../../../tunes/` (licentie `CC0-1.0`); `device` is `nl.patchkamer.drumkit`, elke tune is `kind: "set"`. Lees `../../../tunes/AGENTS.md` voor het formaat.
 - Een tune is een **kit met groove**. Houd hem klein: elk kanaal heeft 4 × 64 stappen, dus laat patronen die je niet gebruikt leeg en houd het aantal kanalen laag. Geef elke tune een Engelse naam, zonder merk- of modelnamen, ook niet in de vorm "in de stijl van …".
 - Gebruik precies de sleutels hierboven, met waarden binnen het bereik. Maak alleen tunes als de opdracht dat vraagt.
+
+## Skins
+
+Alle schuiven (master, humanize, patroonswing, stapvelocity en -kans en de regelaars van het gekozen kanaal) melden zich sinds 1.19.0 via `host.ui.adopt` aan: `id` is `master`, `human`, `patternSwing.<n>`, `editVelocity`, `editProbability` of `ch<n>.<sleutel>` (zoals in `params()`), rol `param`, groep `master`, `pattern`, `edit` of `channel`. De keuzelijsten, knoppen en stappen niet. Het apparaat tekent in een gewone div (geen shadow root) en heeft de stijlconstante `CSK`, die alleen werkt binnen `.dk-app:has(.kn)`, dus alleen als de host draaiknoppen heeft geplaatst. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.drumkit/` (draaiknoppen met de naam eronder, stappen van 22 punten breed, werkbalken strak, ongeveer 600 x 1030 tegenover 1180 x 1533). Wijzig je de klassen `toolbar`, `track`, `step`, `editor` of `bottom`, controleer dan die skin.
 
 ## Controleren
 

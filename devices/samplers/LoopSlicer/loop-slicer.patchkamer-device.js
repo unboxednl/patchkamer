@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.23.0 — Regelaars (draaiknoppen, keuzelijsten) herkenbaar voor skins via host.ui.adopt (id = state-sleutel, groep sound/play/pattern/loop; rol param of select) en golfvormhoogte via de CSS-variabele --pk-wave-h (standaard 120); zonder skin ongewijzigd; modExclude voor baseNote. Geen wijziging in geluid, state of poorten.
 // 1.22.0 — Uitleg naar about (menu Over Loop Slicer); de UI toont geen uitlegtekst meer.
 // 1.21.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in het definitieveld about.
 // 1.20.0 — loadAudio(files): de tab Samples van de host laadt een sample in deze loop (contract v1.20); verder gelijk aan 1.11.0.
@@ -66,8 +67,8 @@ const LIMIT = 16 * 1024 * 1024;
 const DEMO_OLD_NAME = 'Eigen demo · 120 BPM / 1 maat', DEMO_NAME = 'Demo loop · 120 BPM / 1 bar', NONE_OLD_NAME = 'Geen loop geladen';
 
 export default {
-  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.22.0', about: { nl: 'WAV of MP3 laden, in slices knippen en de slices spelen met toetsen of als klokgestuurd patroon. \n\nSync gebruikt afspeelsnelheid: de toonhoogte verandert mee; geen onafhankelijke timestretch. Transpositie wijzigt ook de duur. WAV-export bevat de gekozen slice en omkering, zonder masterfilter, gain of temposync. Maximaal 120 s, 16 MiB PCM16 en 50 MiB invoer.', en: 'Load a WAV or MP3, cut it into slices and play the slices from keys or as a clock-driven pattern. The audio is saved with the setup.\n\nSync works through playback speed: the pitch changes with it; there is no independent time stretch. Transpose also changes the duration. The WAV export holds the chosen slice and its reversal, without master filter, gain or tempo sync. Maximum 120 s, 16 MiB PCM16 and 50 MiB input.' }, kind: 'instrument', category: 'groove',
-  ui: { width: 900, minWidth: 380 },
+  id: 'nl.patchkamer.loopslicer', name: 'Loop Slicer', version: '1.23.0', about: { nl: 'WAV of MP3 laden, in slices knippen en de slices spelen met toetsen of als klokgestuurd patroon. \n\nSync gebruikt afspeelsnelheid: de toonhoogte verandert mee; geen onafhankelijke timestretch. Transpositie wijzigt ook de duur. WAV-export bevat de gekozen slice en omkering, zonder masterfilter, gain of temposync. Maximaal 120 s, 16 MiB PCM16 en 50 MiB invoer.', en: 'Load a WAV or MP3, cut it into slices and play the slices from keys or as a clock-driven pattern. The audio is saved with the setup.\n\nSync works through playback speed: the pitch changes with it; there is no independent time stretch. Transpose also changes the duration. The WAV export holds the chosen slice and its reversal, without master filter, gain or tempo sync. Maximum 120 s, 16 MiB PCM16 and 50 MiB input.' }, kind: 'instrument', category: 'groove',
+  ui: { width: 900, minWidth: 380 }, modExclude: ['baseNote'],
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo slices' }], eventIn: [{ id: 'notes', name: 'Slice notes / trigs' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
   i18n: { nl: { ports: { out: 'Stereo slices', notes: 'Slice-noten / trigs', mod: 'Mod' } } },
   create(ctx, host) {
@@ -79,15 +80,17 @@ export default {
       panel = add(shadow, 'div', undefined, 'app'); 
       return panel;
     }
-    function clearUI() { if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; shadow = null; }
+    function clearUI() { if (hMO) { hMO.disconnect(); hMO = null; hRoot = null; } if (mountHost) mountHost.innerHTML = ''; mountHost = null; panel = null; shadow = null; }
     const row = parent => add(parent, 'div', undefined, 'row');
     const grid = parent => add(parent, 'div', undefined, 'grid');
     const button = (parent, label, fn) => { const b = add(parent, 'button', label); b.type = 'button'; b.onclick = fn; return b; };
-    function select(parent, label, options, value, change) { const box = add(parent, 'label', undefined, 'control'); add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); return el; }
-    function knob(parent, label, bounds, value, def, change, format) {
+    let grp = '';
+    const pkAdopt = (el, id, role, label) => { if (id && host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group: grp, label }); } catch (e) { /* oud contract */ } } };
+    function select(parent, label, options, value, change, id) { const box = add(parent, 'label', undefined, 'control'); add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); pkAdopt(el, id, 'select', label); return el; }
+    function knob(parent, label, bounds, value, def, change, format, id) {
       const box = add(parent, 'label', undefined, 'control'); add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input');
       input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.dataset.pkDefault = String(def);
-      input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; return input;
+      input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; pkAdopt(input, id, 'param', label); return input;
     }
     function download(name, blob) { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
 
@@ -105,10 +108,11 @@ export default {
     const cleanType = e => String(e?.type || '').toLowerCase().replace(/[_-]/g, '');
     const fmtOf = d => v => d.unit === '%' ? Math.round(v * 100) + '%' : (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)) + (d.unit ? ' ' + d.unit : '');
     function controls(parent) {
+      grp = 'sound';
       for (const [id, d] of Object.entries(spec)) {
         const format = fmtOf(d);
-        if (d.scale === 'log') { const pos = v => Math.log(v / d.min) / Math.log(d.max / d.min); knob(parent, d.name, [0, 1, 0.001], pos(state[id]), pos(defaults[id]), x => { state[id] = d.min * (d.max / d.min) ** x; apply(); }, x => format(d.min * (d.max / d.min) ** x)); }
-        else knob(parent, d.name, [d.min, d.max, d.step || 0.01], state[id], defaults[id], x => { state[id] = x; apply(); }, format);
+        if (d.scale === 'log') { const pos = v => Math.log(v / d.min) / Math.log(d.max / d.min); knob(parent, d.name, [0, 1, 0.001], pos(state[id]), pos(defaults[id]), x => { state[id] = d.min * (d.max / d.min) ** x; apply(); }, x => format(d.min * (d.max / d.min) ** x), id); }
+        else knob(parent, d.name, [d.min, d.max, d.step || 0.01], state[id], defaults[id], x => { state[id] = x; apply(); }, format, id);
       }
     }
     const cvs = { cw: 0, h: 0, ro: null };
@@ -207,11 +211,14 @@ export default {
       const v = { source, gain: g, end: t + duration }; voices.add(v); source.onended = () => cleanup(v); sources.add(source);
       source.start(t, (state.reverse ? 1 - hi : lo) * buffer.length / buffer.sampleRate, seconds); stopSource(source, t + duration + 0.001);
     }
+    let hSeen = 0, hMO = null, hRoot = null;
+    function watchH(cv) { try { const r = cv.getRootNode(); if (r === hRoot) return; if (hMO) hMO.disconnect(); hRoot = r; hMO = new MutationObserver(() => { if (wave && waveH() !== hSeen) drawWave(); }); hMO.observe(r, { childList: true, subtree: true }); } catch { } }
+    function waveH() { try { const n = parseInt(getComputedStyle(wave).getPropertyValue('--pk-wave-h'), 10); return n >= 40 && n <= 400 ? n : 120; } catch { return 120; } }
     function drawWave() {
-      if (!wave || !mountHost) return; const { g, w, h } = canvasSize(wave, 120); if (!g) return;
+      if (!wave || !mountHost) return; const hh = waveH(); hSeen = hh; watchH(wave); const { g, w, h } = canvasSize(wave, hh); if (!g) return;
       const { well, fg, audio, ev } = palette();
       g.fillStyle = well; g.fillRect(0, 0, w, h);
-      if (!peaks) { g.fillStyle = fg; g.font = '13px system-ui'; g.fillText(tx('Laad WAV / MP3 of kies Demo-loop'), 12, 62); return; }
+      if (!peaks) { g.fillStyle = fg; g.font = '13px system-ui'; g.fillText(tx('Laad WAV / MP3 of kies Demo-loop'), 12, h / 2 + 2); return; }
       g.globalAlpha = 0.28; g.fillStyle = audio; g.fillRect(cutPoints[state.selected] * w, 0, (cutPoints[state.selected + 1] - cutPoints[state.selected]) * w, h); g.globalAlpha = 1;
       g.strokeStyle = audio; g.beginPath(); for (let i = 0; i < peaks.length; i++) { const x = i / (peaks.length - 1) * w, v = peaks[i] * h * 0.43; g.moveTo(x, h / 2 - v); g.lineTo(x, h / 2 + v); } g.stroke();
       g.strokeStyle = ev; for (const x of cutPoints) { g.beginPath(); g.moveTo(x * w, 0); g.lineTo(x * w, h); g.stroke(); }
@@ -234,7 +241,7 @@ export default {
     function render(el) {
       unmount(); mountUI(el); try { window.addEventListener('patchkamer-skin', onSkin); } catch { }
       const top = row(panel); button(top, tx('Demo-loop laden'), demo); button(top, tx('Speel slice'), () => play(state.selected)); button(top, tx('Alles uit'), () => panic());
-      select(top, tx('Aantal slices'), [[4, '4'], [8, '8'], [16, '16'], [32, '32']], cutPoints.length - 1, v => { equal(+v); render(el); });
+      grp = 'loop'; select(top, tx('Aantal slices'), [[4, '4'], [8, '8'], [16, '16'], [32, '32']], cutPoints.length - 1, v => { equal(+v); render(el); }, 'slices');
       button(top, tx('Gelijk verdelen'), () => { equal(cutPoints.length - 1); render(el); }); button(top, tx('Zoek transiënten'), () => { detect(); render(el); });
       const file = add(panel, 'input'); file.type = 'file'; file.accept = '.wav,.mp3,audio/wav,audio/mpeg'; file.setAttribute('aria-label', tx('Loop laden')); file.onchange = () => load(file.files[0]);
       wave = add(panel, 'canvas'); wave.setAttribute('aria-label', tx('Golfvorm: sleep een interne slicegrens')); wave.ondragover = e => e.preventDefault(); wave.ondrop = e => { e.preventDefault(); load(e.dataTransfer.files[0]); };
@@ -244,14 +251,14 @@ export default {
       wave.onpointerup = wave.onpointercancel = () => drag = -1;
       const pads = add(panel, 'div', undefined, 'pads');
       for (let i = 0; i < cutPoints.length - 1; i++) { const b = button(pads, tx('{0} · MIDI {1}', i + 1, state.baseNote + i), () => { state.selected = i; play(i); render(el); }); if (i === state.selected) b.classList.add('active'); }
-      const settings = grid(panel);
-      for (const [id, label] of [['sync', 'Slice past in klokstap'], ['reverse', 'Omgekeerd'], ['sequence', 'Patroon afspelen'], ['random', 'Willekeurige slices']]) select(settings, tx(label), [[0, tx('Uit')], [1, tx('Aan')]], +state[id], v => state[id] = v === '1');
-      select(settings, tx('Patroon-nootdeling'), [[1, '1/16'], [2, '1/8'], [4, '1/4']], state.division, v => state.division = +v);
-      select(settings, tx('Retrigger'), [[1, '1×'], [2, '2×'], [4, '4×']], state.retrigger, v => state.retrigger = +v);
-      knob(settings, tx('Eerste slice MIDI'), [0, 95, 1], state.baseNote, defaults.baseNote, v => state.baseNote = v, v => String(v)); controls(settings);
+      const settings = grid(panel); grp = 'play';
+      for (const [id, label] of [['sync', 'Slice past in klokstap'], ['reverse', 'Omgekeerd'], ['sequence', 'Patroon afspelen'], ['random', 'Willekeurige slices']]) select(settings, tx(label), [[0, tx('Uit')], [1, tx('Aan')]], +state[id], v => state[id] = v === '1', id);
+      select(settings, tx('Patroon-nootdeling'), [[1, '1/16'], [2, '1/8'], [4, '1/4']], state.division, v => state.division = +v, 'division');
+      select(settings, tx('Retrigger'), [[1, '1×'], [2, '2×'], [4, '4×']], state.retrigger, v => state.retrigger = +v, 'retrigger');
+      knob(settings, tx('Eerste slice MIDI'), [0, 95, 1], state.baseNote, defaults.baseNote, v => state.baseNote = v, v => String(v), 'baseNote'); controls(settings);
       add(panel, 'h3', tx('Patroon · klik een stap, kies daarna een slice of rust'));
       const steps = add(panel, 'div', undefined, 'pads'); buttons = state.pattern.map((n, i) => button(steps, (i + 1) + ' · ' + (n < 0 ? tx('rust') : n + 1), () => { state.editStep = i; render(el); }));
-      select(row(panel), tx('Slice op stap {0}', state.editStep + 1), [[-1, tx('Rust')], ...Array.from({ length: cutPoints.length - 1 }, (_, i) => [i, tx('Slice {0}', i + 1)])], state.pattern[state.editStep], v => { state.pattern[state.editStep] = +v; render(el); });
+      grp = 'pattern'; select(row(panel), tx('Slice op stap {0}', state.editStep + 1), [[-1, tx('Rust')], ...Array.from({ length: cutPoints.length - 1 }, (_, i) => [i, tx('Slice {0}', i + 1)])], state.pattern[state.editStep], v => { state.pattern[state.editStep] = +v; render(el); }, 'stepSlice');
       const bank = row(panel); button(bank, tx('Bewaar loop + patroon'), () => download('loop-slicer-bank.json', new Blob([JSON.stringify({ format: 'patchkamer-loopslicer-1', state: self.getState() })], { type: 'application/json' }))); button(bank, tx('Exporteer slice WAV'), exportSlice);
       const bankFile = add(bank, 'input'); bankFile.type = 'file'; bankFile.accept = '.json'; bankFile.setAttribute('aria-label', tx('Loop Slicer-bank laden')); bankFile.onchange = () => importBank(bankFile.files[0]);
       status = add(panel, 'p', message || shownName());

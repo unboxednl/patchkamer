@@ -164,3 +164,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 ## Samples uit de bibliotheek (v1.20)
 
 De instance heeft `loadAudio(files, info)` (contract §13e): de tab Samples van de host geeft het eerste bestand door, met dezelfde verwerking als Bestand kiezen (maximaal 50 MiB en 120 seconden). Een samplepack levert zo een loop; kies daarna een tune uit `tunes/loop-slicer-break-chops.patchkamer-tunes.json` of eigen slices.
+
+## Skins
+
+Sinds 1.23.0 zijn de keuzelijsten en draaiknoppen via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`level`, `cutoff`, `tune`, `gate`, `pan`, `baseNote`, `sync`, `reverse`, `sequence`, `random`, `division`, `retrigger`) of een eigen sleutel zonder state (`slices` voor Aantal slices, `stepSlice` voor Slice op stap), `role` is `param` of `select` en `group` is `loop`, `play`, `sound` of `pattern`. De golfvorm leest zijn hoogte uit de CSS-variabele `--pk-wave-h` (standaard 120) en tekent zich opnieuw als een skin die wijzigt. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.loopslicer/` (draaiknoppen met de naam eronder, slices en stappen in twee rijen van acht, ongeveer 480 x 470 tot 500 punten tegenover 900 x 1310). Wijzig je de opbouw van de panelen (`.row`, `.pads`, `.grid`), controleer dan die skin; hij kiest de rijen met `:nth-of-type` op de volgorde van de `div`s.

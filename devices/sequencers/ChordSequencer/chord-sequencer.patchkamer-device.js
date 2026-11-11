@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.19.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = spoor- of state-sleutel, rol param of select, groep `scene`, `track`, `mix` of `notes`), zodat een skin ze als draaiknop kan tonen; zonder skin ongewijzigd.
 // 1.18.0 — Uitleg naar about (menu Over Chord Sequencer); de UI toont geen uitlegtekst meer.
 // 1.17.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in het definitieveld about.
 // 1.16.0 — Patchkamer contract v1.24: klembord, scènes met meerdere sporen. `clipInfo()` meldt nu ook `multi` en `tracks` (de vier sporen van de actieve scène, allemaal `notes`), `getClip({ kind: 'multi' })` geeft de actieve scène als clip met vier sporen (akkoord-, arpeggio- en pulssporen als momentopname van vier maten, zoals bij één spoor) en `setClip` neemt een multi-clip: elk toegewezen spoor wordt een `notes`-spoor, niet toegewezen sporen blijven staan. Een scène van Chord Sequencer zelf die niet is aangepast komt via `native` exact terug (akkoorden, arpeggio's en instellingen). De gewone clip van het gekozen spoor, `getState`, presets, geluid en bestaande songs zijn gelijk aan 1.15.0. Niet beluisterd.
@@ -50,7 +51,7 @@ const EN = {
 };
 const LEGACY_NAMES = ['Akkoorden', 'Bas', 'Puls', 'Bellen'];
 export default {
-  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.18.0', about: { nl: 'Akkoord- en patroonsequencer: vier onafhankelijke sporen die elk een eigen synth sturen, allemaal op de klok van de studio.\n\nKlik in het rooster om een noot te zetten; klik op een blokje om het te kiezen. Hoogte van het blokje = velocity, breedte = lengte.\n\nVerschillende patroonlengtes lopen onafhankelijk. Elke maat kiest het volgende progressiegetal; vier maten vormen de cyclus. Transpositie op de ingang gebruikt C4 / MIDI 60 als nul. Een volledig akkoord gaat als losse, gelijktijdige noten naar de uitgang: gebruik daarvoor een polyfone synth.\n\nLive: sluit een toetsenbord (Keys) aan op de ingang Live. Het gekozen spoor stuurt de noten door naar zijn uitgang; met Opnemen aan en de transport lopend worden ze in het spoor geschreven (spelwijze Noten).', en: 'Chord and pattern sequencer: four independent tracks that each drive their own synth, all on the studio clock.\n\nClick in the grid to place a note; click a block to select it. Block height = velocity, width = length.\n\nDifferent pattern lengths run independently. Each bar picks the next progression number; four bars make the cycle. Transpose on the input uses C4 / MIDI 60 as zero. A full chord goes to the output as separate, simultaneous notes: use a polyphonic synth for it.\n\nLive: connect a keyboard (Keys) to the Live input. The selected track passes the notes to its output; with Record on and the transport running they are written into the track (play mode Notes).' }, kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
+  id: 'nl.patchkamer.chordsequencer', name: 'Chord Sequencer', version: '1.19.0', about: { nl: 'Akkoord- en patroonsequencer: vier onafhankelijke sporen die elk een eigen synth sturen, allemaal op de klok van de studio.\n\nKlik in het rooster om een noot te zetten; klik op een blokje om het te kiezen. Hoogte van het blokje = velocity, breedte = lengte.\n\nVerschillende patroonlengtes lopen onafhankelijk. Elke maat kiest het volgende progressiegetal; vier maten vormen de cyclus. Transpositie op de ingang gebruikt C4 / MIDI 60 als nul. Een volledig akkoord gaat als losse, gelijktijdige noten naar de uitgang: gebruik daarvoor een polyfone synth.\n\nLive: sluit een toetsenbord (Keys) aan op de ingang Live. Het gekozen spoor stuurt de noten door naar zijn uitgang; met Opnemen aan en de transport lopend worden ze in het spoor geschreven (spelwijze Noten).', en: 'Chord and pattern sequencer: four independent tracks that each drive their own synth, all on the studio clock.\n\nClick in the grid to place a note; click a block to select it. Block height = velocity, width = length.\n\nDifferent pattern lengths run independently. Each bar picks the next progression number; four bars make the cycle. Transpose on the input uses C4 / MIDI 60 as zero. A full chord goes to the output as separate, simultaneous notes: use a polyphonic synth for it.\n\nLive: connect a keyboard (Keys) to the Live input. The selected track passes the notes to its output; with Record on and the transport running they are written into the track (play mode Notes).' }, kind: 'utility', category: 'sequencer', ui: { width: 840, minWidth: 380 },
   ports: { audioIn: [], audioOut: [], eventIn: [{ id: 'transpose', name: 'Transpose' }, { id: 'live', name: 'Live' }], eventOut: [{ id: 'a', name: 'Track A' }, { id: 'b', name: 'Track B' }, { id: 'c', name: 'Track C' }, { id: 'd', name: 'Track D' }], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [], multiEventOut: [{ id: 'tracks', name: 'Tracks' }] },
   i18n: { nl: { ports: { transpose: 'Transpositie', live: 'Live', a: 'Spoor A', b: 'Spoor B', c: 'Spoor C', d: 'Spoor D', tracks: 'Sporen' } } },
   create(ctx, host) {
@@ -66,11 +67,12 @@ export default {
     const row = parent => { const el = add(parent, 'div'); el.className = 'row'; return el; };
     const grid = parent => { const el = add(parent, 'div'); el.className = 'grid'; return el; };
     const button = (parent, label, fn) => { const b = add(parent, 'button', label); b.type = 'button'; b.onclick = fn; return b; };
-    function select(parent, label, options, value, change) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); return el; }
-    function knob(parent, label, bounds, value, change, format, def) {
+    const adopt = (el, id, role, group, label) => { if (host.ui && typeof host.ui.adopt === 'function') { try { host.ui.adopt(el, { id, role, group, label }); } catch (e) { /* oud contract */ } } };
+    function select(parent, label, options, value, change, id, group) { const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const el = add(box, 'select'); for (const [v, text] of options) { const o = add(el, 'option', text); o.value = String(v); } el.value = String(value); el.onchange = () => change(el.value); if (id) adopt(el, id, 'select', group || 'track', label); return el; }
+    function knob(parent, label, bounds, value, change, format, def, id, group) {
       const box = add(parent, 'label'); box.className = 'control'; add(box, 'span', label); const out = add(box, 'output', format(value)), input = add(box, 'input');
       input.type = 'range'; [input.min, input.max, input.step] = bounds.map(String); input.value = String(value); input.dataset.pkDefault = String(def);
-      input.addEventListener('pointerdown', e => e.stopPropagation()); input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; return input;
+      if (id) adopt(input, id, 'param', group || 'track', label); input.addEventListener('pointerdown', e => e.stopPropagation()); input.oninput = () => { const n = Number(input.value); out.textContent = format(n); change(n); }; return input;
     }
 
     const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -122,7 +124,7 @@ export default {
     }
     function apply() { resolve(); }
     function launch(index) { if (state.launch === 'now' || playing === false) { panic(); state.scene = index; counters = [0, 0, 0, 0]; queuedScene = null; } else queuedScene = index; if (infoText) infoText.textContent = queuedScene === null ? tx('Scène {0}', state.scene + 1) : tx('Scène {0} op de volgende maat', index + 1); }
-    function controls(parent, ids) { for (const id of ids) { const d = spec[id], format = v => (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)); knob(parent, d.name, [d.min, d.max, 0.01], state[id], x => { state[id] = x; apply(); }, format, defaults[id]); } }
+    function controls(parent, ids) { for (const id of ids) { const d = spec[id], format = v => (Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2)); knob(parent, d.name, [d.min, d.max, 0.01], state[id], x => { state[id] = x; apply(); }, format, defaults[id], id, 'mix'); } }
     // ---- live spelen en inspelen ----
     const curTrack = () => scenes[state.scene][state.editTrack];
     function closeHeld(t = ctx.currentTime) { for (const [n, port] of held) emit(port, { type: 'noteoff', note: n, time: t }); held.clear(); }
@@ -186,27 +188,27 @@ export default {
       syncBundle(); unmount(); mountUI(el);
       const top = row(panel);
       for (let i = 0; i < 4; i++) { const b = button(top, tx('Scène {0}', i + 1), () => launch(i)); if (i === state.scene) b.classList.add('active'); }
-      select(top, tx('Scènewissel'), [['bar', tx('Volgende maat')], ['now', tx('Direct')]], state.launch, v => state.launch = v);
+      select(top, tx('Scènewissel'), [['bar', tx('Volgende maat')], ['now', tx('Direct')]], state.launch, v => state.launch = v, 'launch', 'scene');
       button(top, tx('Kopieer scène naar volgende'), () => { scenes[(state.scene + 1) % 4] = scenes[state.scene].map((t, i) => cleanTrack(t, i)); });
       button(top, tx('Alles uit'), () => panic());
       const selectRow = row(panel);
-      select(selectRow, tx('Bewerk spoor'), scenes[state.scene].map((t, i) => [i, String.fromCharCode(65 + i) + ' · ' + (t.name || defaultName(i))]), state.editTrack, v => { changeTarget(+v); render(el); });
-      select(selectRow, tx('Live doorgeven'), [[1, tx('Aan')], [0, tx('Uit')]], state.thru === false ? 0 : 1, v => { if (v === '1') delete state.thru; else { closeHeld(); state.thru = false; } });
+      select(selectRow, tx('Bewerk spoor'), scenes[state.scene].map((t, i) => [i, String.fromCharCode(65 + i) + ' · ' + (t.name || defaultName(i))]), state.editTrack, v => { changeTarget(+v); render(el); }, 'editTrack', 'scene');
+      select(selectRow, tx('Live doorgeven'), [[1, tx('Aan')], [0, tx('Uit')]], state.thru === false ? 0 : 1, v => { if (v === '1') delete state.thru; else { closeHeld(); state.thru = false; } }, 'thru', 'scene');
       const recBtn = button(selectRow, tx('Opnemen'), () => { if (state.record) delete state.record; else state.record = true; recBtn.classList.toggle('active', state.record === true); }); recBtn.classList.toggle('active', state.record === true);
-      select(selectRow, tx('Kwantiseren'), [[1, tx('Aan')], [0, tx('Uit')]], state.rquant === false ? 0 : 1, v => { if (v === '1') delete state.rquant; else state.rquant = false; });
+      select(selectRow, tx('Kwantiseren'), [[1, tx('Aan')], [0, tx('Uit')]], state.rquant === false ? 0 : 1, v => { if (v === '1') delete state.rquant; else state.rquant = false; }, 'rquant', 'scene');
       const tr = curTrack(), i = state.editTrack, dt = track(i); const edit = grid(panel);
       const nameBox = add(edit, 'label'); nameBox.className = 'control'; add(nameBox, 'span', tx('Spoornaam'));
       const nameInput = add(nameBox, 'input'); nameInput.type = 'text'; nameInput.value = tr.name || defaultName(i); nameInput.addEventListener('pointerdown', e => e.stopPropagation());
       nameInput.onchange = () => { const v = nameInput.value.slice(0, 40); tr.name = v === defaultName(i) ? '' : v; };
-      select(edit, tx('Actief'), [[0, tx('Uit')], [1, tx('Aan')]], +tr.enabled, v => { tr.enabled = v === '1'; if (!tr.enabled) emit(PORTS[i], { type: 'allnotesoff', time: ctx.currentTime }); });
-      select(edit, tx('Spel'), [['chord', tx('Volledig akkoord')], ['arp', tx('Arpeggio')], ['pulse', tx('Alleen grondtoon')], ['notes', tx('Noten (opgenomen)')]], tr.mode, v => { tr.mode = v; render(el); });
-      knob(edit, tx('Swing'), [0, 0.5, 0.01], tr.swing || 0, v => { if (v > 0) tr.swing = r3(v); else delete tr.swing; }, v => Math.round(v * 100) + '%', 0);
-      select(edit, tx('Raster'), [[1, '1/16'], [2, '1/32'], [4, '1/64']], tr.grid || 1, v => { if (+v === 1) delete tr.grid; else tr.grid = +v; if (tr.mode === 'notes') { rollDirty = true; } });
+      select(edit, tx('Actief'), [[0, tx('Uit')], [1, tx('Aan')]], +tr.enabled, v => { tr.enabled = v === '1'; if (!tr.enabled) emit(PORTS[i], { type: 'allnotesoff', time: ctx.currentTime }); }, 'enabled');
+      select(edit, tx('Spel'), [['chord', tx('Volledig akkoord')], ['arp', tx('Arpeggio')], ['pulse', tx('Alleen grondtoon')], ['notes', tx('Noten (opgenomen)')]], tr.mode, v => { tr.mode = v; render(el); }, 'mode');
+      knob(edit, tx('Swing'), [0, 0.5, 0.01], tr.swing || 0, v => { if (v > 0) tr.swing = r3(v); else delete tr.swing; }, v => Math.round(v * 100) + '%', 0, 'swing');
+      select(edit, tx('Raster'), [[1, '1/16'], [2, '1/32'], [4, '1/64']], tr.grid || 1, v => { if (+v === 1) delete tr.grid; else tr.grid = +v; if (tr.mode === 'notes') { rollDirty = true; } }, 'grid');
       if (tr.mode !== 'notes') {
-        select(edit, tx('Akkoord'), Object.keys(qualities).map(k => [k, k]), tr.quality, v => tr.quality = v);
-        select(edit, tx('Nootdeling'), [[1, '1/16'], [2, '1/8'], [4, '1/4'], [8, '1/2']], tr.division, v => tr.division = +v);
-        for (const [id, label, min, max] of [['root', 'Grondtoon MIDI', 24, 96], ['inversion', 'Omkeerligging', 0, 3], ['length', 'Patroonlengte', 1, 16], ['ratchet', 'Herhalingen per stap', 1, 4]]) knob(edit, tx(label), [min, max, 1], tr[id], v => tr[id] = v, v => String(v), dt[id]);
-        knob(edit, tx('Speelkans'), [0, 1, 0.01], tr.probability, v => tr.probability = v, v => Number(v).toFixed(2), 1);
+        select(edit, tx('Akkoord'), Object.keys(qualities).map(k => [k, k]), tr.quality, v => tr.quality = v, 'quality');
+        select(edit, tx('Nootdeling'), [[1, '1/16'], [2, '1/8'], [4, '1/4'], [8, '1/2']], tr.division, v => tr.division = +v, 'division');
+        for (const [id, label, min, max] of [['root', 'Grondtoon MIDI', 24, 96], ['inversion', 'Omkeerligging', 0, 3], ['length', 'Patroonlengte', 1, 16], ['ratchet', 'Herhalingen per stap', 1, 4]]) knob(edit, tx(label), [min, max, 1], tr[id], v => tr[id] = v, v => String(v), dt[id], id);
+        knob(edit, tx('Speelkans'), [0, 1, 0.01], tr.probability, v => tr.probability = v, v => Number(v).toFixed(2), 1, 'probability');
         const progBox = add(edit, 'label'); progBox.className = 'control'; add(progBox, 'span', tx('Progressie per maat (0,3,-2,5)'));
         const progInput = add(progBox, 'input'); progInput.type = 'text'; progInput.value = tr.progression.join(','); progInput.addEventListener('pointerdown', e => e.stopPropagation());
         progInput.onchange = () => { tr.progression = Array.from({ length: 4 }, (_, j) => Math.round(finite(Number(progInput.value.split(',')[j]), 0, -24, 24))); };
@@ -222,17 +224,17 @@ export default {
       } else {
         stepButtons = [];
         const nb = grid(panel);
-        knob(nb, tx('Maten'), [1, 4, 1], tr.bars || 1, v => { if (v === 1) delete tr.bars; else tr.bars = v; const Lm = v * 64; tr.rec = (tr.rec || []).filter(x => x[0] < Lm).map(x => [x[0], x[1], x[2], Math.min(x[3], Lm - x[0])]); selNote = -1; rollDirty = true; syncNoteUI(); }, v => String(v), 1);
-        knob(nb, tx('Grondtoon MIDI'), [24, 96, 1], tr.root, v => tr.root = v, v => String(v), dt.root);
-        knob(nb, tx('Nieuwe noot: velocity'), [0.05, 1, 0.01], newVel, v => newVel = v, v => v.toFixed(2), 0.8);
-        knob(nb, tx('Nieuwe noot: lengte (rasterstappen)'), [1, 16, 1], newLen, v => newLen = v, v => String(v), 1);
+        knob(nb, tx('Maten'), [1, 4, 1], tr.bars || 1, v => { if (v === 1) delete tr.bars; else tr.bars = v; const Lm = v * 64; tr.rec = (tr.rec || []).filter(x => x[0] < Lm).map(x => [x[0], x[1], x[2], Math.min(x[3], Lm - x[0])]); selNote = -1; rollDirty = true; syncNoteUI(); }, v => String(v), 1, 'bars', 'notes');
+        knob(nb, tx('Grondtoon MIDI'), [24, 96, 1], tr.root, v => tr.root = v, v => String(v), dt.root, 'root', 'notes');
+        knob(nb, tx('Nieuwe noot: velocity'), [0.05, 1, 0.01], newVel, v => newVel = v, v => v.toFixed(2), 0.8, 'newVel', 'notes');
+        knob(nb, tx('Nieuwe noot: lengte (rasterstappen)'), [1, 16, 1], newLen, v => newLen = v, v => String(v), 1, 'newLen', 'notes');
         roll = add(panel, 'canvas'); roll.setAttribute('aria-label', tx('Pianoroll van de opgenomen noten'));
         roll.addEventListener('pointerdown', e => { e.stopPropagation(); const rc = roll.getBoundingClientRect(), mx = e.clientX - rc.left, my = e.clientY - rc.top, h = hitRoll(tr, mx, my);
           if (h.hit >= 0) selNote = h.hit; else { const q = gridUnit(tr), L = (tr.bars || 1) * 64, p = clamp(Math.floor(h.u / q) * q, 0, L - 1); recordNote(tr, p, clamp(h.n, 0, 127), newVel, Math.min(newLen * q, L - p)); selNote = tr.rec.findIndex(x => x[0] === p && x[1] === clamp(h.n, 0, 127)); }
           rollDirty = true; syncNoteUI(); });
         const sb = grid(panel); selInfo = add(sb, 'p', '');
-        const sv = knob(sb, tx('Gekozen noot: velocity'), [0.01, 1, 0.01], 0.8, v => { const x = tr.rec?.[selNote]; if (x) { x[2] = r3(v); rollDirty = true; } }, v => v.toFixed(2), 0.8);
-        const sl = knob(sb, tx('Gekozen noot: lengte (rasterstappen)'), [1, 64, 1], 1, v => { const x = tr.rec?.[selNote]; if (x) { x[3] = clamp(Math.round(v * gridUnit(tr)), 1, (tr.bars || 1) * 64 - x[0]); rollDirty = true; } }, v => String(v), 1);
+        const sv = knob(sb, tx('Gekozen noot: velocity'), [0.01, 1, 0.01], 0.8, v => { const x = tr.rec?.[selNote]; if (x) { x[2] = r3(v); rollDirty = true; } }, v => v.toFixed(2), 0.8, 'selVel', 'notes');
+        const sl = knob(sb, tx('Gekozen noot: lengte (rasterstappen)'), [1, 64, 1], 1, v => { const x = tr.rec?.[selNote]; if (x) { x[3] = clamp(Math.round(v * gridUnit(tr)), 1, (tr.bars || 1) * 64 - x[0]); rollDirty = true; } }, v => String(v), 1, 'selLen', 'notes');
         noteSliders = { set(v, l) { sv.value = v; sv.dispatchEvent(new Event('input')); sl.value = l; sl.dispatchEvent(new Event('input')); }, setEnabled(on) { sv.disabled = sl.disabled = !on; } };
         const ab = row(panel); button(ab, tx('Verwijder noot'), () => { if (selNote >= 0 && tr.rec) { tr.rec.splice(selNote, 1); selNote = -1; rollDirty = true; syncNoteUI(); } }); button(ab, tx('Wis alle noten'), () => { delete tr.rec; selNote = -1; rollDirty = true; syncNoteUI(); });
         controls(grid(panel), ['t' + i + 'gate', 't' + i + 'velocity', 't' + i + 'transpose']);

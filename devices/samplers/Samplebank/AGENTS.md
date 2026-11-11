@@ -125,3 +125,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 ## Samples uit de bibliotheek (v1.20)
 
 De instance heeft `loadAudio(files, info)` (contract §13e): de tab Samples van de host geeft een of meer bestanden door, geladen vanaf de geselecteerde pad (zoals Laad WAV of MP3 in een pad).
+
+## Skins
+
+Sinds 1.23.0 zijn de keuzelijsten en draaiknoppen via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`bank`, `playMode`, `level`, `cutoff`, `pan`, `baseNote`) of de padsleutel (`start`, `end`, `gain`, `tune`, `fadeIn`, `fadeOut`, `root`, `mode`; `copyTo` voor Kopieer pad naar bank), `role` is `param` of `select` en `group` is `bank`, `sample` of `master`. De golfvorm leest zijn hoogte uit de CSS-variabele `--pk-wave-h` (standaard 130) en tekent zich opnieuw als een skin die wijzigt. De bewerkregelaars staan in `modExclude` (ze horen bij één pad, niet bij de modulatie). De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.samplebank/` (draaiknoppen met de naam eronder, zestien pads in twee rijen van acht, ongeveer 480 x 475 punten tegenover 860 x 1148). Wijzig je de opbouw van de panelen (`.row`, `.pads`, `.grid`), controleer dan die skin; hij kiest de rijen met `:nth-of-type` op de volgorde van de `div`s.

@@ -1,0 +1,34 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.loopslicer.compact",
+  "device": "nl.patchkamer.loopslicer",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath, the slice pads and the pattern steps in two rows of eight and the settings grouped in one frame, at roughly half the width and half the height of the standard card.",
+  "created": "2026-11-11",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary"
+      }
+    ],
+    "size": {
+      "width": 480
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, tighter pads and rows, much smaller than the standard card.",
+      "css": ".app{display:flex;flex-wrap:wrap;align-content:flex-start;gap:4px;padding:6px;font-size:9px;border-radius:4px;--pk-wave-h:64px}\n.app>*{min-width:0}\nbutton,select,input{padding:2px 5px;font-size:9px;border-radius:3px}\n.row{margin:0;gap:3px;flex:1 1 100%;align-items:center}\n.row button{height:24px;padding:2px 4px;font-size:8.5px}\n.row .control{display:flex;flex-direction:row;align-items:center;gap:3px;border:0;padding:0;flex:0 0 auto}\n.row .control>span{font-size:7.5px;letter-spacing:-.03em}\n.row select{height:24px}\n.app>input[type=file]{flex:1 1 100%;width:auto;height:24px;padding:0 3px;font-size:9px;line-height:20px}\ninput[type=file]::file-selector-button{font:inherit;padding:1px 5px;margin:0 4px 0 0;border-radius:3px}\ncanvas{flex:1 1 100%;width:100%;border-radius:3px}\n.pads{flex:1 1 100%;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px}\n.pads button{min-height:26px;padding:1px 3px;font-size:8px;line-height:1.2;white-space:normal;overflow:hidden;text-align:left;border-radius:3px}\n.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px 0;align-content:start;padding:3px 4px 4px;border:1px solid var(--line,#39424e);border-radius:3px;flex:1 1 100%}\n.grid .control{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-content:start;gap:0;border:0;padding:0;min-width:0}\n.grid .control>span:not(.kn){order:3;font-size:7px;line-height:1.1;text-align:center;max-width:100%;letter-spacing:-.05em;overflow-wrap:anywhere;padding:0 2px}\n.grid output{order:2;font:8px/1.1 monospace;text-align:center;white-space:nowrap}\n.grid .kn{order:1;width:28px!important;height:28px!important;justify-self:center!important}\n.grid .kn svg{width:100%;height:100%}\n.grid .control:has(select) select{order:1;width:54px;height:24px;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;padding:2px 0}\nh3{display:none}\n.row:nth-of-type(5){flex:1 1 100%}\n.row:nth-of-type(6){flex:1 1 100%}\n.row:nth-of-type(6) input[type=file]{flex:1 1 110px;width:auto;height:24px;padding:0 3px;font-size:8.5px;line-height:20px}\np{margin:0;font-size:8px;line-height:1.2;flex:1 1 100%}"
+    }
+  ]
+}

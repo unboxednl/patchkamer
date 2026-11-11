@@ -199,6 +199,10 @@ Er is geen undo in het apparaat. De host maakt vóór het plakken een momentopna
 
 Getest met een nep-host in Node: de rondreis `setClip(getClip())` laat `getState()` gelijk in 600 willekeurige states (300 voor `notes` en 300 voor `drums`, ook via JSON-tekst), ook zonder `native` blijven tijd en toonhoogte gelijk; ongeldige en extreme clips (`NaN`, `Infinity`, lengtes tot 1e9, 100000 noten, onbekende velden, verkeerde soort) geven geen fout en laten de state intact of binnen het bereik; kopiëren naar Clip Arranger en terug behoudt noten en lengte voor zover het formaat het toelaat (accent en kans niet). Niet beluisterd.
 
+## Skins
+
+Regelaars zijn sinds 1.20.0 via `host.ui.adopt` herkenbaar voor skins (id = state- of spoorsleutel: res, len, oct, gate, swing, humT, humV, row, rowSwing; rol `param` of `select`; groep `pattern` en `row`). Zonder skin is er niets veranderd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.seq/` (draaiknoppen met de naam eronder, per groep een kader, geen uitlegtekst; ongeveer 580 x 546 punten tegenover 880 x 727). Het rolcanvas (pianorol, accenten, velocity-strook) is ongewijzigd en blijft de hoogte van de standaardkaart; bij 32 stappen zijn de stappen in de rol ongeveer 15 punten breed. De kaartkop (met Kopieer/Plak) is minstens ongeveer 576 punten breed, daarom is de skin 580 breed. De opbouw van de rijen `.row` (drie: instellingen, rij en rij-swing, knoppen) en `.pager` staat in de skin; controleer de skin als je die wijzigt.
+
 ## Controleren
 
 - `node contract/validate-instrument.mjs devices/sequencers/StepSequencer/step-sequencer.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
