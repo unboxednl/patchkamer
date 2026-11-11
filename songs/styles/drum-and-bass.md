@@ -83,6 +83,21 @@ Totaal 128 maten, bij 174 BPM ongeveer 2 minuten 55.
 - Veelgemaakte fouten: een kick op elke tel (dan is het techno); een bas die in de lage midden vecht met de kick; te veel ghost-snares op gelijke velocity; geen fill voor de drop.
 - Houd de bas mono onder 150 Hz.
 
+## Smaken en voorbeeldsongs (sinds 0.33.0)
+
+De map `drum-and-bass` heeft drie songs, elk in een eigen smaak; kijk er bij een nieuwe song naar voor de indeling van apparaten, tunes en kanalen.
+
+| Smaak | Song | Tempo en toonsoort | Wat het kenmerkt |
+|---|---|---|---|
+| Dancefloor | [stadium-daybreak](../drum-and-bass/stadium-daybreak.patchkamer-song.json) | 174, A mineur | Supersaw-hook, vocal chops, mid-bas boven een schone sub, snare-roll plus riser vóór de drop, pomp op de akkoorden |
+| Liquid, minimaal | [amber-hours](../drum-and-bass/amber-hours.patchkamer-song.json) | 172, A dorisch, swing 0,08 | Rhodes-achtige m9-akkoorden, bassgitaar plus sub, fluit, strijkers, zachte ghost-snares, vinyltextuur, lang evoluerende groove |
+| Neurofunk | [iron-cathedral](../drum-and-bass/iron-cathedral.patchkamer-song.json) | 174, E frygisch | Morphende [Neuro Bass](../../devices/synths/NeuroBass/AGENTS.md), droge strakke drums, drone en cluster in plaats van akkoorden, hits, risers, stutter-fills |
+
+- Nieuwe apparaten voor deze stijl: [Neuro Bass](../../devices/synths/NeuroBass/AGENTS.md) (tunes: Neurofunk, Detune Stack, Liquid, Jump Up, Dancefloor, Sub), [Transient Shaper](../../devices/effects/TransientShaper/AGENTS.md) en [Stutter](../../devices/effects/Stutter/AGENTS.md) (presets: map `Drum & Bass`).
+- Veel packs hebben sinds 0.33.0 eigen DnB-mappen: `Neurofunk`, `Detune Stack`, `Liquid`, `Liquid DnB`, `Dancefloor DnB`, `Jump Up`, `Jungle`, `Halftime DnB`, `DnB Leads`, `DnB Keys`, `Neurofunk Atmospheres`, `DnB Risers and Impacts`, `Intro and Break Textures`. Zoek ze in [tunes/AGENTS.md](../../tunes/AGENTS.md#de-packs).
+- Drumkit-tunes hebben `run: false` (zie [tunes/AGENTS.md](../../tunes/AGENTS.md)): stuur de drums met een sequencer aan.
+- Meet de Master Chain: met de preset `Drum & bass` en veel energie zit de limiter in de drops op het plafond. Zet de kanalen zachter als de piek bij elke seconde op het plafond staat.
+
 ## Passende devices, tunes en presets
 
 - Drums: [Drum Kit](../../devices/drums/DrumKit/AGENTS.md) en [Drum Machine](../../devices/drums/DrumMachine/AGENTS.md), map `Drum & Bass` in [drum-kit-styles](../../tunes/drum-kit-styles.patchkamer-tunes.json) en [drum-machine-styles](../../tunes/drum-machine-styles.patchkamer-tunes.json); [Loop Slicer](../../devices/samplers/LoopSlicer/AGENTS.md), map `Drum and Bass` in [loop-slicer-styles](../../tunes/loop-slicer-styles.patchkamer-tunes.json).

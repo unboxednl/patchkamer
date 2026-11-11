@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.34.0 (2026-11-11)
+
+### Added
+- **Three drum & bass songs** in `songs/drum-and-bass/`, each in its own flavour: **Stadium Daybreak** (dancefloor, 174 BPM, A minor: supersaw hook, vocal chops, split sub and mid bass), **Amber Hours** (minimal liquid, 172 BPM, A dorian: electric-piano chords, bass guitar, flute, strings, vinyl texture) and **Iron Cathedral** (neurofunk, 174 BPM, E phrygian: morphing Neuro Bass, dry tight drums, drone and cluster, stutter fills). They use the new Neuro Bass, Transient Shaper and Stutter and the new DnB tunes. `check-song` gives exit code 0 for all three; the two heavier songs sit on the Master Chain ceiling in the drops, and the outro of Iron Cathedral was not measured. Not listened to. The style guide `songs/styles/drum-and-bass.md` lists the three flavours and the new packs.
+
 ## 0.33.0 (2026-11-11)
 
 ### Added

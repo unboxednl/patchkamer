@@ -35,6 +35,30 @@ Drie songs waarvan de drums uit een **sample** komen: een break uit het pack [Br
 | [funk-breakbeat](breakbeat/funk-breakbeat.patchkamer-song.json) | breakbeat, 128 BPM, D dorisch | Big Stomp Break | intro, build, main, break, main, outro (64 maten) |
 | [liquid-roller](drum-and-bass/liquid-roller.patchkamer-song.json) | liquid drum and bass, 175 BPM, F mineur | Liquid Roller | intro, build, drop, break, build, drop, outro (84 maten) |
 
+## Minimale liquid drum and bass
+
+Een song met gesynthetiseerde drums: een Clip Arranger speelt zachte two-step drums op een Drum Kit, een sub en een basgitaar, elektrische piano, strijkers, fluit, vibrafoon en een vinylkraaktextuur. Op papier en met metingen gecontroleerd (niveaus, geen clipping, elk kanaal geeft geluid), **niet beluisterd**.
+
+| Bestand | Stijl | Opbouw |
+|---|---|---|
+| [amber-hours](drum-and-bass/amber-hours.patchkamer-song.json) | minimale liquid drum and bass, 172 BPM, A mineur | intro, groove, break, groove met een extra laag, outro (112 maten) |
+
+## Dancefloor drum and bass
+
+Een drum and bass-song in big-room-stijl met gesynthetiseerde drums en een Neuro Bass (een schone sub onder een vervormde mid-bas), een supersaw-hook, pompende akkoordpads die door de kick worden ingedrukt, vocal chops, risers en impacts, gespeeld door een Clip Arranger. Op papier en met metingen gecontroleerd (niveaus, geen clipping, elk kanaal geeft geluid), **niet beluisterd**.
+
+| Bestand | Stijl | Opbouw |
+|---|---|---|
+| [stadium-daybreak](drum-and-bass/stadium-daybreak.patchkamer-song.json) | dancefloor drum and bass, 174 BPM, A mineur | intro, build, drop, break, build, drop met een extra laag, outro (128 maten) |
+
+## Donkere neurofunk
+
+Een donkere, technische neurofunk-song met gesynthetiseerde drums (een droge, gated Drum Kit), een constant morphende Neuro Bass met een schone sub, een tweede detune-stack-baslaag in de tweede drop, metalen stabs, risers, impacts, stutter-fills en een drone en dissonant cluster voor de intro en de break, gespeeld door een Clip Arranger. Op papier en met metingen gecontroleerd (niveaus, geen clipping, elk kanaal geeft geluid), **niet beluisterd**.
+
+| Bestand | Stijl | Opbouw |
+|---|---|---|
+| [iron-cathedral](drum-and-bass/iron-cathedral.patchkamer-song.json) | donkere neurofunk, 174 BPM, E frygisch | intro, build, drop, break, build, drop met een extra baslaag, outro (128 maten) |
+
 Zelf een song componeren als AI-agent? Begin bij [AGENTS.md](AGENTS.md).
 
 ## Licentie

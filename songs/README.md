@@ -35,6 +35,30 @@ Three songs whose drums come from a **sample**: a break from the [Break Loops](.
 | [funk-breakbeat](breakbeat/funk-breakbeat.patchkamer-song.json) | breakbeat, 128 BPM, D dorian | Big Stomp Break | intro, build, main, break, main, outro (64 bars) |
 | [liquid-roller](drum-and-bass/liquid-roller.patchkamer-song.json) | liquid drum and bass, 175 BPM, F minor | Liquid Roller | intro, build, drop, break, build, drop, outro (84 bars) |
 
+## Minimal liquid drum and bass
+
+A song with synthesized drums: a Clip Arranger plays soft two-step drums on a Drum Kit, a sub and a bass guitar, electric piano, strings, flute, vibraphone and a vinyl crackle texture. Checked on paper and by measurement (levels, no clipping, every channel makes sound), **not listened to**.
+
+| File | Style | Structure |
+|---|---|---|
+| [amber-hours](drum-and-bass/amber-hours.patchkamer-song.json) | minimal liquid drum and bass, 172 BPM, A minor | intro, groove, break, groove with an extra layer, outro (112 bars) |
+
+## Dancefloor drum and bass
+
+A big-room style drum and bass song with synthesized drums and a Neuro Bass (a clean sub under a distorted mid bass), a supersaw hook, pumping chord pads ducked by the kick, vocal chops, risers and impacts, played by a Clip Arranger. Checked on paper and by measurement (levels, no clipping, every channel makes sound), **not listened to**.
+
+| File | Style | Structure |
+|---|---|---|
+| [stadium-daybreak](drum-and-bass/stadium-daybreak.patchkamer-song.json) | dancefloor drum and bass, 174 BPM, A minor | intro, build, drop, break, build, drop with an extra layer, outro (128 bars) |
+
+## Dark neurofunk
+
+A dark, technical neurofunk song with synthesized drums (a dry, gated Drum Kit), a constantly morphing Neuro Bass with a clean sub, a second detune-stack bass layer in the second drop, metal stabs, risers, impacts, stutter fills, and a drone and dissonant cluster for the intro and the break, played by a Clip Arranger. Checked on paper and by measurement (levels, no clipping, every channel makes sound), **not listened to**.
+
+| File | Style | Structure |
+|---|---|---|
+| [iron-cathedral](drum-and-bass/iron-cathedral.patchkamer-song.json) | dark neurofunk, 174 BPM, E phrygian | intro, build, drop, break, build, drop with an extra bass layer, outro (128 bars) |
+
 To compose your own song as an AI agent, start at [AGENTS.md](AGENTS.md) (in Dutch).
 
 ## License
