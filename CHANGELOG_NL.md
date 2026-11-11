@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.9 (2026-11-11)
+
+### Gewijzigd
+- **Instructies voor agents die een song maken: vaste volgorde en canvassecties (`songs/AGENTS.md`).** De werkwijze begint nu bij muziekstijl en muziektheorie (toonsoort, akkoorden, structuur op papier), kiest dan de sequencer en richt het nummer in met sequencerpresets (sporen, scènes, arrangement, niet de noten en clips), kiest daarna de muziekdevices met hun tunes en presets, bepaalt dan de modulatie, kiest de effecten met hun presets en eindigt met afmixen en mastering. Elke soort apparaat staat in een eigen genummerde canvassectie (1 Sequencers, 2 Instruments, 3 Modulation, 4 Effects, 5 Mix and master), met het veld `workspace.sections` beschreven. Nieuw: een verplichte review op harmonie, opbouw en muziektheorie vóór de oplevering, en regels en veelgemaakte fouten voor deze werkwijze.
+
 ## 0.30.8 (2026-11-11)
 
 ### Toegevoegd

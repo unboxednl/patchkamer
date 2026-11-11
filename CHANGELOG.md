@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.9 (2026-11-11)
+
+### Changed
+- **Instructions for agents that make a song: fixed order and canvas sections (`songs/AGENTS.md`, Dutch).** The method now starts with music style and music theory (key, chords, structure on paper), then picks the sequencer and lays out the track with sequencer presets (tracks, scenes, arrangement, not the notes and clips), then picks the music devices with their tunes and presets, then decides the modulation, picks the effects with their presets and ends with mixing and mastering. Each kind of device sits in its own numbered canvas section (1 Sequencers, 2 Instruments, 3 Modulation, 4 Effects, 5 Mix and master), with the `workspace.sections` field described. New: a required review of harmony, structure and music theory before delivery, and rules and common mistakes for this method.
+
 ## 0.30.8 (2026-11-11)
 
 ### Added

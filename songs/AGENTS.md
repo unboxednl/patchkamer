@@ -26,7 +26,7 @@ Omhoog: de [root AGENTS.md](../AGENTS.md). Omlaag, welke apparaten je kunt gebru
 Een song is **een bestand** `<titel>.patchkamer-song.json` met een werkruimte erin: de apparaten op de vloer, hun instellingen (`state`), de kabels ertussen, het tempo en de swing. Het is geen audio. Als iemand het opent en op **Start** drukt, spelen de sequencers en drumcomputers hun noten en patronen mee met de klok van de studio.
 
 - Je maakt een song dus door een **JSON-bestand te schrijven**. Je hoeft de host niet te bedienen.
-- De song bevat de `state` van elk apparaat, niet de tune of preset zelf. Je kopieert de state uit het pack (stap 5) en het bestand is dan zelfstandig.
+- De song bevat de `state` van elk apparaat, niet de tune of preset zelf. Je kopieert de state uit het pack (stap 4) en het bestand is dan zelfstandig.
 - Voorbeelden die in dit formaat zijn gebouwd en gemeten: [example-house](example-house.patchkamer-song.json), [example-ambient](example-ambient.patchkamer-song.json) en [example-hip-hop](example-hip-hop.patchkamer-song.json).
 - De apparaten moeten bij de gebruiker in de bibliotheek staan (de meegeleverde bibliotheek van deze repo is genoeg). De voorbeelden hebben `defs: []`: ze bevatten geen apparaatcode. Zoekt de host een apparaat dat niet in de bibliotheek staat, dan meldt hij het als ontbrekend. Een export uit de host ("Exporteer als song…") bevat wel alle apparaatcode.
 
@@ -62,6 +62,8 @@ Bovenste niveau:
 | `view` | `{ "x": 0, "y": 0, "scale": 1 }` | alleen de weergave |
 | `views` | `[{ "name": "Drums", "x": 0, "y": 0, "scale": 1 }]` | optioneel: camerastanden, hoogstens 30; `x`, `y` is het midden van de uitsnede, `scale` relatief aan de schermschaal |
 | `layouts` | `{ "compact": { "<id>": { "x": 0, "y": 0, "w": null, "h": null, "mini": false } } }` | optioneel: compacte indeling voor kleine schermen; de gewone velden van `devices` blijven de brede indeling |
+| `sections` | `[{ "name": "1 · Sequencers", "n": 1, "color": "#e8ae61", "alpha": 0.16, "line": "solid", "fs": 32, "x": -40, "y": -80, "w": 700, "h": 520, "members": ["d1"] }]` | optioneel maar **verplicht voor een song uit deze handleiding**: canvassecties, zie [Canvassecties](#canvassecties) |
+| `jumps` | `[{ "n": 6, "name": "Overzicht", "x": 900, "y": 300, "scale": 0.4 }]` | optioneel: sprongpunten (Alt+n); delen de nummers 1 tot 9 met de secties |
 | `devices` | lijst van apparaten | zie hieronder |
 | `cables` | lijst van kabels | zie hieronder |
 
@@ -85,6 +87,24 @@ Een kabel: `{ "from": { "id": "d1", "port": "notes" }, "to": { "id": "d2", "port
 | `mastering` | instellingen van mastering-apparaten | alleen Master Director |
 
 `port` is de poort-`id` uit de tabel in [../devices/AGENTS.md](../devices/AGENTS.md), geen weergavenaam. Een uitgang van een soort past alleen op een ingang van dezelfde soort. De host controleert alleen bij `audio`-kabels of de poort bestaat; een `event`-, `mod`- of bundelkabel naar een poort die niet bestaat legt hij gewoon aan, en dan gebeurt er niets. `check-song.py` controleert dat wel.
+
+### Canvassecties
+
+Een canvassectie is een gekleurd vlak op de werkvloer met een naam, waar apparaten bij horen. In een song staan ze in `workspace.sections`. Elke song die je maakt deelt de vloer in **vijf secties** in, in de volgorde van de [werkwijze](#de-volgorde-en-de-canvassecties):
+
+| `n` | `name` (Engels, de titel van de song is ook Engels) | Bevat | Voorgestelde `color` |
+|---|---|---|---|
+| 1 | `1 · Sequencers` | sequencers, arpeggiators, Chord Buddy | `#e8ae61` |
+| 2 | `2 · Instruments` | synths, samplers, drumcomputers | `#4fd1c5` |
+| 3 | `3 · Modulation` | modulators | `#b794f4` |
+| 4 | `4 · Effects` | effecten | `#63b3ed` |
+| 5 | `5 · Mix and master` | Mixer, Master Chain, Speakers | `#f6ad55` |
+
+- **Veld per sectie:** `name` (40 tekens), `n` (1 tot 9, uniek in de hele werkruimte; Alt+n kadert de sectie in beeld), `color` (hex `#rrggbb`), `alpha` (0 tot 0,6; gebruik 0,12 tot 0,2), `line` (`solid`, `dashed`, `dotted` of `none`), `fs` (lettergrootte van de naam, 16 tot 96; 28 tot 36), `x`, `y`, `w`, `h` (vloercoördinaten; `w` ≥ 180, `h` ≥ 110), `min` (alleen `true` als hij geminimaliseerd moet zijn), `members` (lijst met de `id`'s van de apparaten, bijvoorbeeld `["d1","d2"]`; een apparaat hoort bij hoogstens één sectie).
+- **Een soort die je niet gebruikt** krijgt geen sectie; de nummers van de andere blijven staan. Gebruik dus `n` = 4 voor effecten ook als er geen modulatie is. Gebruik geen `n` voor iets anders: de nummers 1 tot 5 horen bij de secties, 6 tot 9 zijn vrij voor `jumps`.
+- **Plaatsing.** De secties staan van links naar rechts in de volgorde 1 tot 5 (de signaalrichting). Binnen een sectie zet je de apparaten onder elkaar of in een raster, ruim uit elkaar. De sectie moet **alle** leden omvatten: `x` en `y` liggen 28 pixels links en ongeveer 80 pixels boven het linker- en bovenste lid (de naam hangt half buiten de bovenrand), `w` en `h` reiken tot 28 pixels voorbij het rechter- en onderste lid. De breedte van een kaart staat als "breedte … px" in de uitvoer van de validator (en in de `AGENTS.md` van het apparaat); een kaart is hoger dan hij lijkt, dus schat de hoogte ruim (een kaart met veel regelaars is al snel 400 pixels of meer). Secties mogen elkaar niet overlappen: laat 48 pixels ertussen.
+- **Opslag.** De host leest `sections` en `jumps` bij het openen en zet alleen leden die in `devices` staan; een `id` die er niet is, wordt overgeslagen. Ze werken in de brede indeling; op een klein scherm (compacte indeling) zijn ze verborgen.
+- **Controle.** Het script `check-song.py` kijkt niet naar secties. Controleer daarom zelf dat elk apparaat precies in één sectie staat (`members` samen = alle `devices`, geen dubbele), dat de nummers uniek zijn, en dat de coördinaten alle leden omvatten. Heb je geen scherm bekeken, schrijf dan in de oplevering dat de plaatsing niet is gezien.
 
 **De klok.** De song start niet vanzelf: sequencers, drumcomputers met een eigen patroon en arpeggiators spelen alleen zolang de klok loopt. Wie de song opent, drukt op **Start**. Details: [../devices/AGENTS.md](../devices/AGENTS.md#de-klok).
 
@@ -133,50 +153,62 @@ De `state` van Basic Mono is de tune `Dusty Bass` uit [basic-mono-styles](../tun
 
 ## 4. Werkwijze, stap voor stap
 
+De volgorde is vast en gaat van het muzikale naar het technische: **eerst stijl en muziektheorie, dan de sequencer, dan de klankbronnen, dan modulatie, dan effecten, en pas dan afmixen en mastering.** Zo haal je alles uit Patchkamer: elke soort apparaat heeft presets en tunes die je als beginpunt gebruikt, en elke laag bouwt op de vorige. Sla geen stap over en ga niet vooruit zonder dat de vorige klaar is; ga je terug (bijvoorbeeld omdat een akkoord niet past), loop dan de stappen daarna opnieuw langs.
+
+### De volgorde en de canvassecties
+
+Elke soort apparaat staat op de werkvloer in een **eigen canvassectie** (een gekleurd vlak met een naam en een nummer, zie [§2](#canvassecties)). De nummers volgen de volgorde van de stappen, zodat iemand die de song opent met Alt+1 tot en met Alt+5 van sectie naar sectie springt in de volgorde waarin hij is gebouwd.
+
+| Stap | Wat | Canvassectie (`n`, naam) | Wat erin staat |
+|---|---|---|---|
+| 1 | De opdracht | geen | |
+| 2 | Muziekstijl en muziektheorie | geen | alleen op papier: toonsoort, akkoorden, structuur |
+| 3 | Sequencer kiezen, nummer inrichten met sequencerpresets | **1 · Sequencers** | Clip Arranger, Pattern Playlist, Chord Sequencer, Chord Buddy, andere sequencers, arpeggiators |
+| 4 | Muziekdevices kiezen, tunes en presets gebruiken | **2 · Instruments** | synths, samplers, drumcomputers |
+| 5 | Noten en patronen schrijven (tracks en clips) | sectie 1 en 2 | de inhoud van de sequencers |
+| 6 | Modulatie bepalen | **3 · Modulation** | LFO, Macro, Drift, Swell, MSEG, Follower |
+| 7 | Effecten kiezen, met presets | **4 · Effects** | effecten per kanaal en send-effecten |
+| 8 | Kabels | alle | |
+| 9 | Afmixen en mastering | **5 · Mix and master** | Mixer, Master Chain, Speakers |
+| 10 | Canvas indelen | alle | secties, nummers, plaatsing |
+| 11 | Controleren | | meetscript |
+| 12 | Review voor vrijgave | | harmonie, opbouw en muziektheorie |
+| 13 | Opleveren | | |
+
+Een soort die je niet gebruikt (bijvoorbeeld geen modulatie) krijgt geen sectie; de nummers van de andere blijven staan, zodat 4 altijd effecten is.
+
 ### Stap 1. De opdracht
 
 Haal uit de opdracht: **stijl** (of sfeer), **tempo** (of laat de stijlgids kiezen), **lengte** (in minuten of maten), **instrumenten** die verplicht of verboden zijn, **auteur** en **titel** (zie [regels](#7-regels)). Ontbreekt iets, kies het eenvoudigste dat de stijlgids toestaat en schrijf in je oplevering wat je koos.
 
-### Stap 2. Stijl kiezen en lezen
+### Stap 2. Muziekstijl en muziektheorie
 
-Kies uit de [tabel](#6-stijlen-op-hoofdlijnen) de stijl die het dichtst bij de opdracht ligt en lees `styles/<stijl>.md` **helemaal**, daarna [MUSIC-THEORY.md](MUSIC-THEORY.md) voor de delen die je nodig hebt (nootnummers, toonladders, akkoorden, ritme, dynamiek, structuur, mixen, de vertaling naar Patchkamer-waarden in [§12](MUSIC-THEORY.md#12-omzetten-naar-patchkamer) en de [controlelijst](MUSIC-THEORY.md#13-controlelijst)). Mengt de opdracht twee stijlen (bijvoorbeeld "ambient met een beat"), lees dan beide gidsen en kies één stijl voor de ritmesectie en één voor de klankkleur.
+Hier begint elke song, vóór je een apparaat aanraakt. Kies uit de [tabel](#6-stijlen-op-hoofdlijnen) de stijl die het dichtst bij de opdracht ligt en lees `styles/<stijl>.md` **helemaal**, daarna [MUSIC-THEORY.md](MUSIC-THEORY.md) voor de delen die je nodig hebt (nootnummers, toonladders, akkoorden, ritme, dynamiek, structuur, mixen, de vertaling naar Patchkamer-waarden in [§12](MUSIC-THEORY.md#12-omzetten-naar-patchkamer) en de [controlelijst](MUSIC-THEORY.md#13-controlelijst)). Mengt de opdracht twee stijlen (bijvoorbeeld "ambient met een beat"), lees dan beide gidsen en kies één stijl voor de ritmesectie en één voor de klankkleur.
 
-### Stap 3. Structuur en tempo kiezen
+Schrijf daarna op papier, voor je verder gaat:
 
-Schrijf eerst op papier: tempo (`bpm`), swing, toonsoort en akkoordprogressie, de secties met hun lengte in maten, en welke rol in welke sectie speelt. Een maat duurt `240 / bpm` seconden. Zie [§5](#5-songstructuur-en-lengtes-in-maten). Houd het klein: 3 tot 6 klankbronnen is genoeg; elke rol heeft een eigen register en taak ([MUSIC-THEORY §10](MUSIC-THEORY.md#10-arrangeren)).
+- tempo (`bpm`), swing, maatsoort;
+- **toonsoort en toonladder**, en de **akkoordprogressie** per sectie (met de nootnamen en de MIDI-nummers van de akkoorden);
+- de **structuur**: de secties met hun lengte in maten ([§5](#5-songstructuur-en-lengtes-in-maten)) en wat er per sectie verandert (spanning opbouwen, uitlaten, break, drop);
+- welke **rol** (drums, bas, akkoorden, melodie, pad, textuur) in welke sectie speelt, elk met een eigen register en taak ([MUSIC-THEORY §10](MUSIC-THEORY.md#10-arrangeren)). Houd het klein: 3 tot 6 klankbronnen is genoeg.
 
-### Stap 4. Devices kiezen
+Een maat duurt `240 / bpm` seconden. Dit blad is de basis van het hele nummer en van de review in stap 12.
 
-Kies per rol een apparaat uit [../devices/AGENTS.md](../devices/AGENTS.md) (tabellen per soort met `id`, poorten en links) en de sectie "Passende devices, tunes en presets" van de stijlgids. Lees daarna van **elk gekozen apparaat** zijn `AGENTS.md` (staat in de laatste kolom van de tabel): daar staan de state, de bereiken en de valkuilen. Kies de signaalketen in [../devices/AGENTS.md](../devices/AGENTS.md#typische-signaalketens).
+### Stap 3. De sequencer kiezen en het nummer inrichten
 
-Eenvoudige keuzehulp:
+Kies de sequencer die bij de vorm van het nummer past (tabel in [§5](#5-songstructuur-en-lengtes-in-maten) en [../devices/sequencers/AGENTS.md](../devices/sequencers/AGENTS.md)): bijvoorbeeld Clip Arranger voor scènes en een arrangement, Pattern Playlist of Pattern Tracker voor patronen in een volgorde, Chord Sequencer of Chord Buddy voor akkoorden. Lees zijn `AGENTS.md`.
 
-| Rol | Klankbron | Noten komen van |
-|---|---|---|
-| Drums | een drumcomputer met een eigen patroon: [Drum Machine](../devices/drums/DrumMachine/AGENTS.md), [Drum Kit](../devices/drums/DrumKit/AGENTS.md), [Groovebox 12](../devices/drums/Groovebox12/AGENTS.md), [Pulse Drums](../devices/drums/PulseDrums/AGENTS.md), [Latin Percussion](../devices/drums/LatinPercussion/AGENTS.md) | het patroon in de state van de drumcomputer zelf; geen sequencer nodig |
-| Bas | [Low Bass](../devices/synths/LowBass/AGENTS.md), [Basic Mono](../devices/synths/BasicMono/AGENTS.md), [Sub Line](../devices/synths/SubLine/AGENTS.md), [Acid Stepper](../devices/synths/AcidStepper/AGENTS.md) | een sequencer (hieronder), of het eigen patroon van de synth (Sub Line, Acid Stepper) |
-| Akkoorden, pads | [Chord Poly](../devices/synths/ChordPoly/AGENTS.md), [Poly Chorus](../devices/synths/PolyChorus/AGENTS.md), [Stage Keys](../devices/synths/StageKeys/AGENTS.md), [Bowed Ensemble](../devices/synths/BowedEnsemble/AGENTS.md), [Triple Osc Poly](../devices/synths/TripleOscPoly/AGENTS.md) | Chord Sequencer, Pattern Tracker, Clip Arranger of Step Sequencer |
-| Melodie, lead | de synths hierboven of [Four-Operator FM](../devices/synths/FourOperatorFM/AGENTS.md), [Supersaw Swarm](../devices/synths/SupersawSwarm/AGENTS.md) | Step Sequencer, Wanderer of een song-sequencer |
-| Drones, texturen | [Drone Synth](../devices/synths/DroneSynth/AGENTS.md), [Mist](../devices/synths/Mist/AGENTS.md), [Layered Landscape](../devices/synths/LayeredLandscape/AGENTS.md), [Biotope](../devices/synths/Biotope/AGENTS.md) | Clip Arranger, een lange noot, of hun eigen patroon |
-| Ruimte, kleur | [Room](../devices/effects/Room/AGENTS.md), [Chorus](../devices/effects/Chorus/AGENTS.md), [Filter](../devices/effects/Filter/AGENTS.md), [Pump](../devices/effects/Pump/AGENTS.md), [Grit](../devices/effects/Grit/AGENTS.md) | audio |
-| Mix en uitgang | [Mixer](../devices/mixer/Mixer/AGENTS.md), [Master Chain](../devices/mastering/MasterChain/AGENTS.md), [Speakers](../devices/mixer/Speakers/AGENTS.md) | audio |
+- **Gebruik de presets van de sequencer voor de inrichting van het nummer**: het aantal en de soort sporen, de scènes of patronen, het arrangement met de lengte van de secties, de namen. Zoek in [../presets/AGENTS.md](../presets/AGENTS.md#de-packs) het pack van de sequencer en een preset in de map die bij je stijl past (voor Clip Arranger: de map van het genre in *Clip Arranger Song Starters*). Kopieer `state` letterlijk (zie stap 4 voor de werkwijze).
+- **Gebruik ze niet voor de programmering van tracks en clips.** De noten, de akkoorden, de ritmes en de CC- en instellingenlijnen in de clips schrijf je zelf in stap 5, uit je toonsoort, akkoordprogressie en structuur van stap 2. Een preset is de plattegrond van het nummer, niet de muziek.
+- Pas de structuur aan je blad van stap 2 aan: zet het aantal maten per sectie, de volgorde, het aantal sporen en de namen gelijk aan wat je op papier hebt.
+- Zet de sequencers in canvassectie **1 · Sequencers**.
 
-Sequencers (noten en trigs, maken zelf geen geluid). Per sequencer: zijn `AGENTS.md` en de sequencer-handleiding voor toonlengte, timing, velocity en raster:
+### Stap 4. De muziekdevices kiezen en hun presets gebruiken
 
-| Sequencer | Voor | `AGENTS.md` | Handleiding |
-|---|---|---|---|
-| Step Sequencer | één lijn van 1 tot 64 stappen: bas, motief, drumtrigger | [AGENTS.md](../devices/sequencers/StepSequencer/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#step-sequencer) · [EN](../docs/sequencers/USER-MANUAL_EN.md#step-sequencer) |
-| Chord Sequencer | akkoorden, bas en arpeggio in vier sporen, scènes | [AGENTS.md](../devices/sequencers/ChordSequencer/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#chord-sequencer) · [EN](../docs/sequencers/USER-MANUAL_EN.md#chord-sequencer) |
-| Scale Arpeggiator | een akkoord of toetsenbord arpeggieren | [AGENTS.md](../devices/sequencers/ScaleArpeggiator/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#scale-arpeggiator) · [EN](../docs/sequencers/USER-MANUAL_EN.md#scale-arpeggiator) |
-| Wanderer | generatieve melodie in een toonladder | [AGENTS.md](../devices/sequencers/Wanderer/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#wanderer) · [EN](../docs/sequencers/USER-MANUAL_EN.md#wanderer) |
-| Euclidean Rhythms | ritme en polyritme, drumtrigs | [AGENTS.md](../devices/sequencers/EuclideanRhythms/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#euclidean-rhythms) · [EN](../docs/sequencers/USER-MANUAL_EN.md#euclidean-rhythms) |
-| Pattern Tracker | noten in rijen met effectkolom en een **volgorde** van patronen (songstructuur) | [AGENTS.md](../devices/sequencers/PatternTracker/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#pattern-tracker) · [EN](../docs/sequencers/USER-MANUAL_EN.md#pattern-tracker) |
-| Pattern Playlist | patronen als blokken op een tijdlijn per laag (songstructuur) | [AGENTS.md](../devices/sequencers/PatternPlaylist/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#pattern-playlist) · [EN](../docs/sequencers/USER-MANUAL_EN.md#pattern-playlist) |
-| Clip Arranger | clips, scènes en een **arrangement** (songstructuur) | [AGENTS.md](../devices/sequencers/ClipArranger/AGENTS.md) | [NL](../docs/sequencers/USER-MANUAL_NL.md#clip-arranger) · [EN](../docs/sequencers/USER-MANUAL_EN.md#clip-arranger) |
+Kies per rol een apparaat uit [../devices/AGENTS.md](../devices/AGENTS.md) (tabellen per soort met `id`, poorten en links) en de sectie "Passende devices, tunes en presets" van de stijlgids. Gebruik de **soorten die Patchkamer biedt** voor wat de rol vraagt, niet steeds dezelfde twee synths: kijk bij elke rol naar synths, samplers en drumcomputers en kies wat het beste klinkt bij de stijl. Lees van **elk gekozen apparaat** zijn `AGENTS.md` (laatste kolom van de tabel): daar staan de state, de bereiken en de valkuilen.
 
-Gemeenschappelijk voor alle sequencers (raster 1/16, 1/32 en 1/64, velocity, nootlengte, timing, accenten): [NL](../docs/sequencers/USER-MANUAL_NL.md#wat-de-sequencers-gemeen-hebben) · [EN](../docs/sequencers/USER-MANUAL_EN.md#what-the-sequencers-have-in-common).
+Kijk **voor elk device naar zijn tunes en presets** en gebruik ze:
 
-### Stap 5. Tunes en presets kiezen en kopiëren
 
 - **Apparaten die geluid maken** (`kind: instrument`: synths, samplers, drums) hebben **tunes** in `../tunes/`. Werkwijze en tabel van de packs: [../tunes/AGENTS.md](../tunes/AGENTS.md#tunes-gebruiken-in-een-song). Handleiding: [NL](../docs/tunes/USER-MANUAL_NL.md) · [EN](../docs/tunes/USER-MANUAL_EN.md).
 - **Alle andere apparaten** (sequencers, effecten, mastering, modulators, mixer) hebben **presets** in `../presets/`. Werkwijze en tabel: [../presets/AGENTS.md](../presets/AGENTS.md#een-preset-in-een-song-gebruiken). Handleiding: [NL](../docs/presets/USER-MANUAL_NL.md) · [EN](../docs/presets/USER-MANUAL_EN.md).
@@ -187,7 +219,9 @@ Gemeenschappelijk voor alle sequencers (raster 1/16, 1/32 en 1/64, velocity, noo
 - Er is niet voor elk apparaat een pack. Mixer en Speakers hebben er geen: schrijf hun state zelf volgens hun `AGENTS.md` (Mixer: kanalen met `lvl` in dB, `pan`, `send`; Speakers: `lvl`).
 - Hulpmiddel om een tune of preset te vinden: `python3 ../docs/tools/list-devices.py` genereert de tabellen; de tabellen in de drie `AGENTS.md`-bestanden zijn de uitkomst.
 
-### Stap 6. De sequencerinhoud schrijven
+Zet de apparaten in canvassectie **2 · Instruments**.
+
+### Stap 5. De sequencerinhoud schrijven (tracks en clips)
 
 Schrijf de noten met de velden van de gekozen sequencer. Per apparaat gelden eigen regels; lees die in zijn `AGENTS.md`. Algemeen:
 
@@ -200,7 +234,15 @@ Schrijf de noten met de velden van de gekozen sequencer. Per apparaat gelden eig
 - **Binnen het patroon.** Elke noot ligt binnen de lengte van het patroon en van de clip; een noot erbuiten wordt afgekapt of nooit gespeeld.
 - **Akkoorden en bas.** Zet de bas in een eigen register (28 tot 48) onder de akkoorden (48 en hoger). Laat bas en kick elk een eigen ritme.
 
-### Stap 7. Kabels
+### Stap 6. Modulatie bepalen
+
+Beslis nu waar het geluid moet bewegen: een filter dat opent in de opbouw, een pad dat ademt, een pan die langzaam wandelt, een bas die pompt. Gebruik de modulators (LFO, Macro, Drift, Swell, MSEG, Follower; [../devices/modulators/AGENTS.md](../devices/modulators/AGENTS.md)) en kies **een preset uit hun pack** in de map die bij de stijl of het doel past (*By Genre*, *Build-ups*, *Filter Sweeps*, enzovoort; [../presets/AGENTS.md](../presets/AGENTS.md#de-packs)). Kopieer `state` letterlijk en pas alleen de toewijzing aan (welk doel, welke parameter, hoe diep) en tempo-gebonden waarden. Modulatie ondersteunt de muziek: een beweging die op de maat van het nummer valt klinkt gewild, een willekeurige niet. Gebruik niets dat de song niet vraagt. Zet de modulators in canvassectie **3 · Modulation**; de kabels komen in stap 8.
+
+### Stap 7. Effecten kiezen, met hun presets
+
+Kies pas nu de effecten, nadat de klankbronnen en de modulatie vaststaan, en kies ze om een reden (ruimte, kleur, dynamiek, beweging), per kanaal of als send-effect op de Mixer. Zoek bij elk effect in [../presets/AGENTS.md](../presets/AGENTS.md#de-packs) het pack en de preset die bij je stijl en bij de bron past, kopieer `state` letterlijk en pas alleen aan wat bij deze song hoort (mix, tijd in noten van het tempo). Eén galm of delay als send voor alle kanalen is meestal beter dan een galm op elke bron. Lees van elk effect zijn `AGENTS.md` ([../devices/effects/AGENTS.md](../devices/effects/AGENTS.md)). Zet de effecten in canvassectie **4 · Effects**.
+
+### Stap 8. Kabels
 
 Leg één kabel per verbinding vast in `cables`. Controleer elke poort-`id` in de tabel van [../devices/AGENTS.md](../devices/AGENTS.md#de-apparaten).
 
@@ -211,14 +253,19 @@ Leg één kabel per verbinding vast in `cables`. Controleer elke poort-`id` in d
 5. **Modulatie (optioneel):** modulator `mod` → doel `mod` (kind `mod`). De toewijzing staat in de state van de modulator (zie zijn `AGENTS.md`).
 6. Elke notenpoort die je gebruikt heeft een klankbron; elke klankbron heeft een weg naar **Speakers**. Een ontbrekende kabel naar Speakers geeft een stille song.
 
-### Stap 8. Mixer en mastering
+### Stap 9. Afmixen en mastering
 
 - Niveaus op hoofdlijnen: [MUSIC-THEORY §11](MUSIC-THEORY.md#11-mixen-op-hoofdlijnen). Begin met kick en bas, voeg de rest zachter toe.
 - De Mixer rekent in dB (`lvl` −60 tot 6, standaard −6; master 0). Zet kanalen tussen −8 en −16 dB als je meerdere bronnen optelt; zet ze zachter als `check-song.py` een te hoge piek meldt.
 - Master Chain: kies een preset uit de map `Styles` die bij je stijl past (de namen zijn genres) en zet het plafond (`ceiling`) op −3 dBTP of lager. Speakers heeft een begrenzer (drempel −3 dB) achter het volume (`lvl` standaard 0,8), maar laat je mix niet op die begrenzer rekenen.
 - Meer over mastering: [NL](../docs/mastering/USER-MANUAL_NL.md) · [EN](../docs/mastering/USER-MANUAL_EN.md).
+- Zet de Mixer, Master Chain en Speakers in canvassectie **5 · Mix and master**.
 
-### Stap 9. Controleren
+### Stap 10. Het canvas indelen
+
+Zet de apparaten in de vijf secties van [de tabel hierboven](#de-volgorde-en-de-canvassecties) en schrijf `workspace.sections` volgens [§2](#canvassecties). Houd per sectie de volgorde van links naar rechts aan (sequencers, instrumenten, modulatie, effecten, mix en mastering), zodat de signaalrichting op het canvas klopt en de nummers 1 tot 5 van links naar rechts oplopen.
+
+### Stap 11. Controleren
 
 Vanuit de root van de repo:
 
@@ -238,9 +285,20 @@ Eis voor een oplevering:
 
 Het script zegt niets over of het goed klinkt.
 
-### Stap 10. Opleveren
+### Stap 12. Review voor vrijgave
 
-Lever op: het pad van het bestand, de stijl en de structuur (secties met maten en de duur), tempo en toonsoort, de gebruikte apparaten en tunes/presets (naam en map), de contractversie (`patchkamer`), de uitvoer van `check-song.py` (exitcode, piek, aantal fouten en waarschuwingen) en **wat je niet hebt kunnen controleren**. Schrijf dat je niet hebt geluisterd.
+Een song gaat pas naar de gebruiker nadat hij is **gereviewd op harmonie, opbouw en muziektheorie**. Doe dit als een aparte ronde, bij voorkeur door een andere agent die alleen het bestand en je blad van stap 2 krijgt (die kijkt zonder jouw aannames), en zo niet, dan zelf met een pauze tussen schrijven en lezen. Lees de noten uit het bestand, niet uit je geheugen. Controleer:
+
+- **Harmonie.** Elke noot ligt in de toonladder of is een bewuste afwijking (chromatische doorgang, blue note, leadingtone). Akkoorden kloppen met de progressie van stap 2 (MIDI-nummers, inversies, stemvoering zonder grote sprongen). Bas en akkoorden botsen niet (de bas speelt de grondtoon of een akkoordtoon op de maat). Geen twee bronnen die dezelfde functie in hetzelfde register spelen. Hoogste en laagste noot per rol liggen binnen het register van de rol ([MUSIC-THEORY §10](MUSIC-THEORY.md#10-arrangeren)).
+- **Opbouw.** Het aantal maten per sectie klopt met stap 2 en met het arrangement. Er verandert iets elke 8 maten (nieuwe rol, filter, fill). Er is een verloop: een intro die opbouwt, spanning en ontlading, een break of drop op een plek die het hoort, een einde dat rustig uitloopt of netjes sluit ([§5](#5-songstructuur-en-lengtes-in-maten)). Geen sectie die alleen een kopie is zonder verandering. Elke sectie heeft een doel dat je in één zin kunt zeggen.
+- **Muziektheorie en ritme.** Ritme en accenten volgen de stijl (kick, backbeat, swing niet dubbel), velocity en articulatie variëren, de dynamiek loopt mee met de structuur ([MUSIC-THEORY §7, §8 en §13](MUSIC-THEORY.md#13-controlelijst)). Modulatie en effecten ondersteunen de muziek en niet andersom.
+- **Techniek.** De controles van stap 11 zijn groen en elke rol is bij solo hoorbaar.
+
+Vind je een fout, herstel hem in het bestand en herhaal stap 11 en 12. Een review die niets vindt, schrijf je ook op ("geen bevindingen" met wat je controleerde). Je kunt niet luisteren: schrijf in de oplevering dat harmonie, opbouw en theorie op papier zijn gecontroleerd en niet gehoord.
+
+### Stap 13. Opleveren
+
+Lever op: het pad van het bestand, de stijl en de structuur (secties met maten en de duur), tempo en toonsoort, de gebruikte apparaten en tunes/presets (naam en map), de contractversie (`patchkamer`), de uitkomst van de review van stap 12 (bevindingen en wat je herstelde), de canvassecties (nummers en namen), de uitvoer van `check-song.py` (exitcode, piek, aantal fouten en waarschuwingen) en **wat je niet hebt kunnen controleren**. Schrijf dat je niet hebt geluisterd.
 
 ## 5. Songstructuur en lengtes in maten
 
@@ -312,6 +370,10 @@ Nuances die over stijlen heen gelden:
 - **Niets verzinnen.** Gebruik alleen apparaten, poorten en state-sleutels die in de tabellen en de `AGENTS.md` van het apparaat staan. Kopieer tunes en presets uit de packs.
 - **Geen geheimen.** Zet geen sleutels, wachtwoorden of persoonlijke gegevens in de song, ook niet in `description`.
 - **Werk binnen de repo.** Lees en schrijf alleen binnen de repo en haal geen gegevens van buiten op. Het controlescript blokkeert alle verzoeken buiten `localhost`. Schrijf het songbestand in `songs/`, tenzij de opdracht een andere plek noemt, en pas geen bestanden aan buiten wat de opdracht noemt (geen apparaat, tune, preset of contract).
+- **Volgorde van de werkwijze.** Stijl en muziektheorie eerst, dan sequencer, instrumenten, modulatie, effecten, en als laatste mixen en mastering ([§4](#4-werkwijze-stap-voor-stap)). Gebruik bij elke soort de presets en tunes van het apparaat als beginpunt.
+- **Presets zijn de plattegrond, niet de muziek.** Gebruik sequencerpresets voor de inrichting van het nummer (sporen, scènes, arrangement), maar schrijf de noten en patronen in de tracks en clips zelf.
+- **Canvassecties.** Elke soort apparaat staat in zijn eigen genummerde canvassectie ([Canvassecties](#canvassecties)).
+- **Geen vrijgave zonder review** op harmonie, opbouw en muziektheorie (stap 12).
 - **Commit of push niet**, tenzij de opdracht dat vraagt.
 - **Voorbeelden zijn voorbeelden.** Wijzig de voorbeeldsongs in `songs/example-*.patchkamer-song.json` niet, tenzij gevraagd; maak een nieuw bestand.
 
@@ -336,6 +398,9 @@ Nuances die over stijlen heen gelden:
 | Dezelfde `id` voor twee apparaten | de tweede verdringt de eerste | `d1`, `d2`, …, uniek |
 | Mono-synth met overlappende noten | noten knippen elkaar af | laat de lengte eindigen voor de volgende noot, of gebruik een polyfone synth |
 | Geen verandering over 16 maten of meer | de song raakt het spoor bijster | verander elke 8 maten iets ([MUSIC-THEORY §10](MUSIC-THEORY.md#10-arrangeren)) |
+| Clipinhoud uit een sequencerpreset overgenomen | de song klinkt als de preset en niet als jouw akkoorden en structuur | kopieer van de preset alleen sporen, scènes en arrangement; schrijf `notes`, `cc` en `auto` van de clips zelf (stap 5) |
+| Apparaat in geen of twee canvassecties, of een `n` dubbel | de sectie klopt niet met de volgorde van de werkwijze | `members` samen = alle `devices`, geen dubbele `id`, elke `n` één keer |
+| Review overgeslagen | akkoorden die niet in de toonladder passen, een sectie zonder verloop | stap 12: harmonie, opbouw en theorie langs, bevindingen opschrijven |
 | Een merk-, artiest- of nummernaam | in strijd met de regels | zoek je bestand door: `grep -n -i -E "<namen die je gebruikte>" songs/<bestand>` en lees titel en omschrijving na |
 
 ## 9. Opdrachtsjabloon voor gebruikers
@@ -377,7 +442,7 @@ Dit bestand is het toegangspunt. De rest:
 - Overzichten per soort: [synths](../devices/synths/README.md), [samplers](../devices/samplers/README.md), [drums](../devices/drums/README.md), [sequencers](../devices/sequencers/README.md), [modulators](../devices/modulators/README.md), [effects](../devices/effects/README.md), [mastering](../devices/mastering/README.md), [mixer](../devices/mixer/README.md), [tools](../devices/tools/README.md)
 
 **Gereedschap**
-- [../docs/tools/check-song.py](../docs/tools/check-song.py): controleert en meet een song (zie [Stap 9](#stap-9-controleren))
+- [../docs/tools/check-song.py](../docs/tools/check-song.py): controleert en meet een song (zie [Stap 11](#stap-11-controleren))
 - [../docs/tools/list-devices.py](../docs/tools/list-devices.py): genereert de tabellen in de `AGENTS.md`-bestanden
 
 **Contract en algemeen**
