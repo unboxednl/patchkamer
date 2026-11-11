@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.10 (2026-11-11)
+
+### Added
+- **Compact skin for Layered Landscape, Pattern Tracker and Pattern Playlist.** Layered Landscape becomes about 540 x 1070 points instead of 1100 x 2006: rotary knobs with the name underneath, the controls in one frame per section and shorter canvases (XY, sample and scope). The device registers its controls for skins for this (id is the state key, group per section) and the canvases follow the height from the CSS; without a skin everything looks and sounds the same and state, params() and ports are unchanged. Pattern Tracker and Pattern Playlist become about 20 percent narrower and 25 percent shorter (992 points wide, smaller margins, no explanation text, ports in the card header). Clip Arranger and Listening Output have no skin: Clip Arranger does not live in a shadow root and Listening Output is already a single knob.
+
 ## 0.30.9 (2026-11-11)
 
 ### Changed

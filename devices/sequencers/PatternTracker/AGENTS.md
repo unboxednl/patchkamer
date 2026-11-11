@@ -311,3 +311,7 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Sequencers](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe presets van dit apparaat zijn opgebouwd: [presets/AGENTS.md](../../../presets/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: sturing, patronen in een trackertabel van tot 32 kolommen. Elk spoor `track1` … `track8` (meer via `trackCount`, tot 32) gaat naar een eigen synth of drumcomputer, of gebruik de bundeluitgang `tracks`. De ingang `input` neemt live noten en CC op.
+
+## Skins
+
+`skins/library/nl.patchkamer.patterntracker/compact.patchkamer-skin.json` (id `nl.patchkamer.patterntracker.compact`) is a CSS-only compact skin for the shadow root: smaller margins and controls, lower rows, no explanatory text, ports as a bar. The device has no `host.ui` controls, so there are no rotary knobs; the timeline and grid stay wide (card 992 px, no scrollbars).
