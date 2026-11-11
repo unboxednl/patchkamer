@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.31.0 (2026-11-11)
+
+### Toegevoegd
+- **AI Chat kan devices op je vloer aanpassen.** Vraag bijvoorbeeld om de hoge tonen helderder te maken of de mastering te corrigeren: de AI bekijkt de werkruimte en de regelaars van de devices, leest in de repository wat ze doen en stelt wijzigingen voor met de oude en nieuwe waarde. **Pas toe** zet ze, **Maak ongedaan** zet ze terug. Zonder jouw klik verandert er niets.
+
 ## 0.30.25 (2026-11-11)
 
 ### Hersteld

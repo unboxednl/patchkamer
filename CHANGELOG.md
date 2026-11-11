@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.31.0 (2026-11-11)
+
+### Added
+- **AI Chat can adjust devices on your floor.** Ask for example for brighter high frequencies or a correction of the mastering: the AI looks at the workspace and the controls of the devices, reads in the repository what they do and proposes changes with the old and new value. **Apply** sets them, **Undo** puts them back. Nothing changes without your click.
+
 ## 0.30.25 (2026-11-11)
 
 ### Fixed
