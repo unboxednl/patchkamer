@@ -29,7 +29,7 @@ Elk apparaat heeft een groenblauwe **audio-uitgang** met de hele kit gemengd. De
 
 Alle zes apparaten hebben **tunes**. Een tune is de volledige instelling van één apparaat, inclusief de patronen, dus een tune kiezen geeft je een groove. Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor hoe je ze gebruikt en deelt. De tunes staan op een vergelijkbaar volume, dus wisselen van tune geeft geen sprong in luidheid.
 
-**Met je eigen sequencer.** Drum Kit, Pulse Drums, Click Synth en Latin Percussion nemen noten van een sequencer aan. Hun tunes zetten de **eigen sequencer van het apparaat uit** (Drum Kit en Pulse Drums: **Sequencer uit**; Click Synth: de knop **Sequencer**; Latin Percussion: **Besturing** staat op *Alleen pads / externe trigs*). De patronen van de tune blijven bewaard: zet de eigen sequencer weer aan en je hoort de groove van de tune. Zo kun je met je eigen sequencer beluisteren welke kit het best klinkt. Drum Machine en Groovebox 12 hebben geen noteningang: hun eigen patroon is hun enige bron.
+**Met je eigen sequencer.** Drum Kit, Pulse Drums, Click Synth en Latin Percussion nemen noten van een sequencer aan. Hun tunes zetten de **eigen sequencer van het apparaat uit** (Drum Kit en Pulse Drums: **Sequencer uit**; Click Synth: de knop **Sequencer**; Latin Percussion: **Besturing** staat op *Alleen pads / externe trigs*). De patronen van de tune blijven bewaard: zet de eigen sequencer weer aan en je hoort de groove van de tune. Zo kun je met je eigen sequencer beluisteren welke kit het best klinkt. Drum Machine heeft geen noteningang: zijn eigen patroon is zijn enige bron. Groovebox 12 speelt zijn eigen patroon en neemt daarnaast live noten en trigs aan (noot 36 t/m 47, zie de poorten bij Groovebox 12), zonder dat daarvoor iets uit hoeft.
 
 **Swing en live inspelen.** Elke drumcomputer met een eigen sequencer heeft **extra swing** bovenop de swing van de studio: **Patroon swing** (Click Synth en Latin Percussion: per patroon of bank) en **Kanaal swing** (per kanaal, spoor of klank), elk 0 tot 50 % van een zestiende; Drum Machine heeft swing per patroon en per groep (kick, snare, hat, perc) en Groovebox 12 per patroon en per track. Alleen de oneven zestienden schuiven, een ratchet schuift als geheel mee, en met alles op 0 klinkt het als voorheen. **Pulse Drums, Drum Kit, Click Synth en Latin Percussion** kunnen bovendien **live inspelen**: zet **Opname** aan, start de klok en speel op je toetsenbord of pads; de slag komt als stap in het actieve patroon op het juiste kanaal, met **Kwantiseer** (Pulse Drums, Click Synth, Latin Percussion; standaard aan) naar het dichtstbijzijnde geswingde stap. Een nieuwe slag op dezelfde plek vervangt de oude. Een gastinstrument van Pulse Drums of Drum Kit (een instrument zonder kanaal) klinkt wel maar wordt niet opgenomen. Drum Machine en Groovebox 12 hebben geen ingang voor noten en nemen niet op.
 
@@ -94,7 +94,7 @@ Drum Machine heeft het pack **Drum Machine Styles**: 36 tunes in twaalf mappen (
 - Er is geen geluid zolang de klok niet loopt: druk op **Start**.
 - Met vier geluiden kun je veel doen door **Tune** en **Decay** te bewegen terwijl het speelt, of door een modulator dat te laten doen.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het hele patroon (4 banen van 16 stappen). Een drumcomputer-slag is alleen aan of uit, dus de velocity van een clip gaat verloren. Banen worden op soort uitgelijnd (hat is een gesloten hi-hat); een baan van de clip die niet past, wordt weggelaten en gemeld, en een baan zonder slagen in de clip wordt leeg.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op het hele patroon (4 banen van 16 stappen). Een drumcomputer-slag is alleen aan of uit, dus de velocity van een clip gaat verloren. Banen worden op soort uitgelijnd (hat is een gesloten hi-hat); een baan van de clip die niet past, wordt weggelaten en gemeld, en een baan zonder slagen in de clip wordt leeg.
 
 ## Drum Kit
 
@@ -170,7 +170,7 @@ Drum Kit heeft het pack **Drum Kit Styles**: 38 tunes in twaalf mappen (Techno, 
 - Zonder klok speelt een patroon niet. De knop **Auditie** en noten op de ingang werken wel.
 - De kick van een kit begint hoger dan een echte bass drum: gebruik een lage **Tuning** (de tunes gebruiken waarden rond −22 st).
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op patroon A tot D als drums. Velocity, kans en ratchet gaan mee. De lengte is voor alle patronen gelijk en blijft die van de kit: een kortere clip wordt herhaald, een langere afgekapt. Plakken wist het hele actieve patroon, ook kanalen die niet in de clip staan; Ongedaan maken in de melding herstelt het.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op patroon A tot D als drums. Velocity, kans en ratchet gaan mee. De lengte is voor alle patronen gelijk en blijft die van de kit: een kortere clip wordt herhaald, een langere afgekapt. Plakken wist het hele actieve patroon, ook kanalen die niet in de clip staan; Ongedaan maken in de melding herstelt het.
 
 ## Groovebox 12
 
@@ -223,8 +223,10 @@ Groovebox 12 is een groovebox met 12 tracks. Elke track heeft een klankmachine (
 | Poort | Soort | Gebruik |
 |---|---|---|
 | **Mod** | modulatie in (paars) | Een modulator kan regelaars van de tracks bewegen. |
+| **Noten / trigs** | events in (oranje) | Speelt een track live: noot **36 t/m 47** (C1 t/m B1) is track 1 t/m 12, of een trig met lane `t1` t/m `t12` (ook `kick`, `snare`, `hat`, `perc`). Een muted track klinkt niet; een synthtrack klinkt op zijn standaardnoot. Een sequencer toont de twaalf tracks met hun naam. |
 | **Uit** | audio uit (groenblauw) | De hele kast. Sluit aan op **Speakers** of een **Mixer**-kanaal. |
 | **Losse uit** | bundel uit (groen) | De twaalf tracks apart, na niveau en pan, vóór de sends en het FX-blok. |
+| **Trigs** | events uit (oranje) | Elke slag die de sequencer van de Groovebox speelt: een drumtrack als trig (lane `t1` t/m `t12`), een synthtrack als noot. Zo stuurt de Groovebox een ander apparaat aan. |
 
 ### Een voorbeeld
 
@@ -241,7 +243,7 @@ Groovebox 12 heeft het pack **Groovebox 12 Styles**: 38 tunes in twaalf mappen (
 
 - De klok is die van de host: Groovebox 12 heeft geen eigen afspeelknop. Druk bovenin op **Start**.
 - Een patroon bevat de 12 tracks. **Wis trigs** en **Willekeurig** werken op het patroon dat je bewerkt, dus kopieer het eerst met **Kopieer →** als je het wilt bewaren.
-- **Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het patroon dat je bewerkt, met alle 12 tracks in één keer: de drumtracks als drumsporen en de synthtracks als notensporen, elk met zijn eigen lengte (polymeter), kans (de condities 25%, 50% en 75%), ratchet (retrig) en microtiming. Tussen twee Groovebox 12's gaat het hele patroon mee, mét klank, p-locks en alle condities. Naar een ander apparaat (Pattern Tracker, Clip Arranger, Chord Sequencer) gaan de tracks per soort en op volgorde; wat niet past, blijft weg en wordt gemeld. Plak je in Groovebox 12 vanuit een ander apparaat, dan krijgen de toegewezen tracks de stappen en de lengte (hun stappen en p-locks worden eerst gewist), klank en instellingen blijven; tracks zonder bron blijven staan. Een enkel spoor (bijvoorbeeld uit Step Sequencer) kun je er niet in plakken. Het patroon dat je bewerkt blijft gekozen, ook na **Ongedaan maken**.
+- **Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op het patroon dat je bewerkt, met alle 12 tracks in één keer: de drumtracks als drumsporen en de synthtracks als notensporen, elk met zijn eigen lengte (polymeter), kans (de condities 25%, 50% en 75%), ratchet (retrig) en microtiming. Tussen twee Groovebox 12's gaat het hele patroon mee, mét klank, p-locks en alle condities. Naar een ander apparaat (Pattern Tracker, Clip Arranger, Chord Sequencer) gaan de tracks per soort en op volgorde; wat niet past, blijft weg en wordt gemeld. Plak je in Groovebox 12 vanuit een ander apparaat, dan krijgen de toegewezen tracks de stappen en de lengte (hun stappen en p-locks worden eerst gewist), klank en instellingen blijven; tracks zonder bron blijven staan. Een enkel spoor (bijvoorbeeld uit Step Sequencer) kun je er niet in plakken. Het patroon dat je bewerkt blijft gekozen, ook na **Ongedaan maken**.
 
 ## Pulse Drums
 
@@ -296,7 +298,7 @@ Pulse Drums heeft het pack **Pulse Drums Techno**: 26 tunes in acht mappen (Tech
 - De kick begint hoog: de tunes gebruiken een lage **Tuning** (rond −22 st). Zet hem zelf lager als een kit die je maakt dun klinkt.
 - Een **Techno DNA** kiezen vervangt de kit en de patronen; bewaar die van jou eerst als tune.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op patroon A tot D als drums, met polymeter (de eigen lengte per kanaal) en microtiming. Every, phase, fill en locks gaan alleen mee naar een ander exemplaar van Pulse Drums; naar andere apparaten gaan ze verloren. Een polymeter-clip in een apparaat met één lengte wordt herhaald tot hij weer uitkomt en kan daardoor zeer lang worden.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op patroon A tot D als drums, met polymeter (de eigen lengte per kanaal) en microtiming. Every, phase, fill en locks gaan alleen mee naar een ander exemplaar van Pulse Drums; naar andere apparaten gaan ze verloren. Een polymeter-clip in een apparaat met één lengte wordt herhaald tot hij weer uitkomt en kan daardoor zeer lang worden.
 
 ## Latin Percussion
 
@@ -348,7 +350,7 @@ Latin Percussion heeft het pack **Latin Percussion Styles**: 39 tunes in dertien
 - De patronen zijn 16 stappen; de ritmes van de stijlen zijn geschreven voor één maat.
 - De pads werken als testtoetsenbord: klik er een om hem te horen.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op de gekozen bank (A tot D) met 15 klanken van 16 stappen. Het accent blijft. De nootnummers zijn hier geen General MIDI en de klanken hebben geen soort, dus uitlijnen gaat alleen op klanknaam: uit een gewone drumkit past bijna niets.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op de gekozen bank (A tot D) met 15 klanken van 16 stappen. Het accent blijft. De nootnummers zijn hier geen General MIDI en de klanken hebben geen soort, dus uitlijnen gaat alleen op klanknaam: uit een gewone drumkit past bijna niets.
 
 ## Click Synth
 
@@ -413,7 +415,7 @@ Click Synth heeft het pack **Click Synth Styles**: 30 tunes in tien mappen (Mini
 - De klank wordt gemaakt in een AudioWorklet. Zonder (een oude browser) meldt de kaart dat en blijft hij stil.
 - Willekeur en de kans per stap zorgen dat het resultaat elke keer anders is; dat is de bedoeling.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het gekozen patroon (A tot D) met 8 sporen, elk met een eigen lengte. Kans en ratchet gaan mee; de toonsprong per stap alleen naar een ander exemplaar van Click Synth. Een clip van elders zet alle sporen op de cliplengte (hoogstens 16 stappen). Uitlijnen gaat op spoornaam; uit een gewone drumkit past weinig.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op het gekozen patroon (A tot D) met 8 sporen, elk met een eigen lengte. Kans en ratchet gaan mee; de toonsprong per stap alleen naar een ander exemplaar van Click Synth. Een clip van elders zet alle sporen op de cliplengte (hoogstens 16 stappen). Uitlijnen gaat op spoornaam; uit een gewone drumkit past weinig.
 
 ## Als het niet werkt
 

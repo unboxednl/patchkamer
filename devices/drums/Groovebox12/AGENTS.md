@@ -12,7 +12,7 @@ Een groovebox met 12 tracks. Elke track heeft een klankmachine (7 drums en 4 syn
 | `id` | `nl.patchkamer.groovebox12`. Verander die nooit: daaraan hangen tunes en songs van gebruikers |
 | Naam | `Groovebox 12` in alle talen; alleen de poortnamen hebben een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
-| Poorten | audio-uitgang `out` (Uit / Out, de som), modulatie-ingang `mod`, bundel-uitgang `multi` (Losse uit / Separate outs: de twaalf tracks apart, na niveau en pan, vóór de sends en het FX-blok) |
+| Poorten | event-ingang `notes` (Noten / trigs), event-uitgang `trigs` (Trigs), audio-uitgang `out` (Uit / Out, de som), modulatie-ingang `mod`, bundel-uitgang `multi` (Losse uit / Separate outs: de twaalf tracks apart, na niveau en pan, vóór de sends en het FX-blok) |
 | Contract | v1.24 (apparaatversie 1.15.0) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
@@ -301,9 +301,12 @@ Groovebox 12 had al één eigen schuif **Swing** (`G.swing`, 50 … 80, start 54
 
 Optelregel: de extra vertraging van een oneven zestiende = `min(0,5; pat.swing + track.swing) × stapduur`, bovenop `G.swing` en de hostswing. Oneven = het stapnummer van de klok (`info.step`, bij ontbreken de positie sinds de start), dus bij een track met een eigen lengte (polymetrie) telt de klokstap; `G.swing` blijft op de plaats in de track werken. Alle retrigs van die stap schuiven als geheel mee (met de micro-timing erbij). Ongeldige of ontbrekende waarden geven 0 (boven 0,5 wordt het 0,5); een oude song of tune zonder deze velden klinkt gelijk. De velden staan in `getState().pats` en dus in een tune.
 
-## Geen noten- of triggeringang
+## Noten en trigs (1.16.0)
 
-Groovebox 12 heeft geen eventingang en dus geen `noteNames`: er is geen live inspelen (opname of kwantiseren) en geen noot waarmee een sequencer de tracks kan benoemen. Het apparaat heeft wel een eigen stappenraster (16 stappen per track, 8 patronen), maar de stappen zijn alleen via de UI en de state te vullen.
+- **Ingang `notes`** (`onEvent`): een `note` met nootnummer 36 t/m 47 (C1 t/m B1) en `vel` > 0 speelt track 1 t/m 12; een `trig` met `lane` `t1` t/m `t12`, een machine-id (`bd`, `sd`, `rs`, `cp`, `hh`, `cy`, `cb`) of een alias (`kick`, `snare`, `hat`, `perc`, `clap`, `rim`, `cymbal`, `cowbell`) speelt de eerste passende track. Alles anders (cc, onbekende lane, nootnummers buiten het bereik, rommel) wordt genegeerd zonder fout. Een muted track klinkt niet. Het geluid loopt via dezelfde `trig()` als de sequencer, zonder p-locks, op de standaardnoot 48 voor een synthtrack. `time` wordt begrensd op `ctx.currentTime`.
+- **`noteNames()`** geeft 12 rijen `{note: 36 + i, name: '<n> · <tracknaam>'}`; `host.noteNamesChanged` gaat mee met `notifyParams` (andere naam of machine).
+- **Uitgang `trigs`**: bij elke slag van de sequencer (ook elke retrig) een `trig` met lane `t<n>` voor een drumtrack of een `note` (`note` = de stap, `dur` = 90% van de retriglengte) voor een synthtrack, met de tijd van de slag. De sequencer zelf klinkt ongewijzigd; de poort voegt alleen events toe.
+- Live spelen neemt niets op: de stappen blijven alleen via de UI en de state te vullen.
 
 ## Tunes maken
 
@@ -354,4 +357,4 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Tunes (klanken, `kind: set`): [groovebox-12-styles.patchkamer-tunes.json](../../../tunes/groovebox-12-styles.patchkamer-tunes.json). Kies een tune als beginpunt voor de `state` van dit apparaat in de song; velden die de tune niet noemt krijgen hun standaard. Hoe tunes zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md).
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Drums](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
-- Rol in een song: drums en synthlijnen in één apparaat (12 tracks, elk met eigen lengte voor polymetrie). Het speelt zelf op de klok; er is geen noteningang, alleen `mod`. Audio komt uit `out` (de som, met het FX-blok) of per track uit de bundel `multi`.
+- Rol in een song: drums en synthlijnen in één apparaat (12 tracks, elk met eigen lengte voor polymetrie). Het speelt zelf op de klok en kan ook live gespeeld worden via `notes` (noot 36 t/m 47); de slagen gaan via `trigs` naar buiten. Audio komt uit `out` (de som, met het FX-blok) of per track uit de bundel `multi`.

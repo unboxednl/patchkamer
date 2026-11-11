@@ -8,15 +8,12 @@ svg.cables path.hit{pointer-events:stroke;stroke:transparent;stroke-width:14;cur
 .card .bar{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);cursor:grab;user-select:none;background:var(--bar);color:var(--bar-fg);border-radius:6px 6px 0 0}
 .card .bar:active{cursor:grabbing}
 .card .bar{min-width:0}   /* de kop bepaalt de kaartbreedte niet meer: wat niet past valt weg (zie de container queries hieronder) */
-@container card (max-width:520px){.card .bar .clipcopy,.card .bar .clippaste{display:none}}   /* Kopieer patroon en Plak patroon staan dan in het apparaatmenu */
 @container card (max-width:400px){.card .bar select.ver:disabled{display:none}}   /* de versiekeuze van een apparaat met één versie doet niets */
 .card .bar .nm{font-family:var(--disp);font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .bar .nm small{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0;text-transform:none;margin-left:6px}
 .card .bar .led{width:7px;height:7px;border-radius:50%;background:var(--line)}
 .card.active .bar .led{background:var(--event);box-shadow:0 0 6px var(--event)}
 .card .bar button{padding:1px 6px;font-size:11px}
-.card .bar .clipbtn{flex:none}
-.card .bar .clipbtn.dis{opacity:.45}
 .card .body{padding:8px 10px;display:grid;gap:6px;min-width:0;position:relative}
 .card .ui{display:grid;gap:5px;min-width:0}
 /* modulatie zichtbaar: strook met wat er nu gestuurd wordt + stip op de schuifregelaars */

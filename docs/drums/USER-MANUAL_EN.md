@@ -29,7 +29,7 @@ Every device has a teal **audio out** with the whole kit mixed. Most also have a
 
 All six devices have **tunes**. A tune is the complete setting of one device, including its patterns, so choosing a tune gives you a groove. See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use and share them. The tunes are set to a similar loudness, so changing from one tune to another does not make a jump in volume.
 
-**With your own sequencer.** Drum Kit, Pulse Drums, Click Synth and Latin Percussion accept notes from a sequencer. Their tunes switch the **device's own sequencer off** (Drum Kit and Pulse Drums: **Sequencer off**; Click Synth: the **Sequencer** button; Latin Percussion: **Control** is set to *Pads / external trigs only*). The tune's patterns stay stored: switch the own sequencer back on and you hear the tune's groove. This way you can audition with your own sequencer which kit sounds best. Drum Machine and Groovebox 12 have no note input: their own pattern is their only source.
+**With your own sequencer.** Drum Kit, Pulse Drums, Click Synth and Latin Percussion accept notes from a sequencer. Their tunes switch the **device's own sequencer off** (Drum Kit and Pulse Drums: **Sequencer off**; Click Synth: the **Sequencer** button; Latin Percussion: **Control** is set to *Pads / external trigs only*). The tune's patterns stay stored: switch the own sequencer back on and you hear the tune's groove. This way you can audition with your own sequencer which kit sounds best. Drum Machine has no note input: its own pattern is its only source. Groovebox 12 plays its own pattern and also accepts live notes and trigs (note 36 to 47, see the ports under Groovebox 12), without anything having to be switched off.
 
 **Swing and live recording.** Every drum machine with its own sequencer has **extra swing** on top of the studio swing: **Pattern swing** (Click Synth and Latin Percussion: per pattern or bank) and **Channel swing** (per channel, track or sound), each 0 to 50 % of a sixteenth; Drum Machine has swing per pattern and per group (kick, snare, hat, perc) and Groovebox 12 per pattern and per track. Only the odd sixteenths move, a ratchet moves as a whole, and with everything at 0 it sounds as before. **Pulse Drums, Drum Kit, Click Synth and Latin Percussion** can also **record live**: switch **Record** on, start the clock and play on your keyboard or pads; the hit is written as a step in the active pattern on the right channel, with **Quantize** (Pulse Drums, Click Synth, Latin Percussion; on by default) to the nearest swung step. A new hit in the same place replaces the old one. A guest instrument of Pulse Drums or Drum Kit (an instrument without a channel) does sound but is not recorded. Drum Machine and Groovebox 12 have no note input and do not record.
 
@@ -94,7 +94,7 @@ Drum Machine has the pack **Drum Machine Styles**: 36 tunes in twelve folders (T
 - There is no sound until the clock runs: press **Start**.
 - With four sounds you can do a lot by moving **Tune** and **Decay** while it plays, or by letting a modulator do it.
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on the whole pattern (4 lanes of 16 steps). A drum machine hit is only on or off, so a clip's velocity is lost. Lanes are matched by kind (hat is a closed hi-hat); a lane in the clip that does not fit is left out and reported, and a lane with no hits in the clip becomes empty.
+**Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on the whole pattern (4 lanes of 16 steps). A drum machine hit is only on or off, so a clip's velocity is lost. Lanes are matched by kind (hat is a closed hi-hat); a lane in the clip that does not fit is left out and reported, and a lane with no hits in the clip becomes empty.
 
 ## Drum Kit
 
@@ -170,7 +170,7 @@ Drum Kit has the pack **Drum Kit Styles**: 38 tunes in twelve folders (Techno, H
 - Without the clock a pattern does not play. The **Audition** button and notes on the input do work.
 - The kick of a kit starts higher than a real bass drum: use a low **Tuning** (the tunes use values around −22 st).
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on pattern A to D as drums. Velocity, probability and ratchet come along. The length is the same for all patterns and stays that of the kit: a shorter clip is repeated, a longer one cut. Paste clears the whole active pattern, also channels that are not in the clip; Undo in the message restores it.
+**Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on pattern A to D as drums. Velocity, probability and ratchet come along. The length is the same for all patterns and stays that of the kit: a shorter clip is repeated, a longer one cut. Paste clears the whole active pattern, also channels that are not in the clip; Undo in the message restores it.
 
 ## Groovebox 12
 
@@ -222,9 +222,11 @@ Groovebox 12 is a groovebox with 12 tracks. Every track has a sound machine (sev
 
 | Port | Kind | Use |
 |---|---|---|
+| **Notes / trigs** | events in (orange) | Plays a track live: note **36 to 47** (C1 to B1) is track 1 to 12, or a trig with lane `t1` to `t12` (also `kick`, `snare`, `hat`, `perc`). A muted track is silent; a synth track sounds at its default note. A sequencer shows the twelve tracks by name. |
 | **Mod** | modulation in (purple) | A modulator can move controls of the tracks. |
 | **Out** | audio out (teal) | The whole box. Connect to **Speakers** or a **Mixer** channel. |
 | **Separate outs** | bundle out (green) | The twelve tracks apart, after level and pan, before the sends and the FX block. |
+| **Trigs** | events out (orange) | Every hit the Groovebox's sequencer plays: a drum track as a trig (lane `t1` to `t12`), a synth track as a note. This lets the Groovebox drive another device. |
 
 ### An example
 
@@ -241,7 +243,7 @@ Groovebox 12 has the pack **Groovebox 12 Styles**: 38 tunes in twelve folders (T
 
 - The clock is that of the host: Groovebox 12 has no play button of its own. Press **Start** at the top.
 - A pattern holds the 12 tracks. **Clear trigs** and **Random** work on the pattern you are editing, so copy it first with **Copy →** if you want to keep it.
-- **Copy and paste.** **Copy** and **Paste** in the card bar work on the pattern you are editing, with all 12 tracks in one go: the drum tracks as drum tracks and the synth tracks as note tracks, each with its own length (polymeter), probability (the conditions 25%, 50% and 75%), ratchet (retrig) and micro-timing. Between two Groovebox 12s the whole pattern comes along, with sound, p-locks and all conditions. To another device (Pattern Tracker, Clip Arranger, Chord Sequencer) the tracks go by kind and in order; what does not fit is left out and reported. If you paste into Groovebox 12 from another device, the assigned tracks get the steps and the length (their steps and p-locks are cleared first), sound and settings stay; tracks without a source stay as they are. You cannot paste a single track (for example from Step Sequencer) into it. The pattern you are editing stays selected, also after **Undo**.
+- **Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on the pattern you are editing, with all 12 tracks in one go: the drum tracks as drum tracks and the synth tracks as note tracks, each with its own length (polymeter), probability (the conditions 25%, 50% and 75%), ratchet (retrig) and micro-timing. Between two Groovebox 12s the whole pattern comes along, with sound, p-locks and all conditions. To another device (Pattern Tracker, Clip Arranger, Chord Sequencer) the tracks go by kind and in order; what does not fit is left out and reported. If you paste into Groovebox 12 from another device, the assigned tracks get the steps and the length (their steps and p-locks are cleared first), sound and settings stay; tracks without a source stay as they are. You cannot paste a single track (for example from Step Sequencer) into it. The pattern you are editing stays selected, also after **Undo**.
 
 ## Pulse Drums
 
@@ -296,7 +298,7 @@ Pulse Drums has the pack **Pulse Drums Techno**: 26 tunes in eight folders (Tech
 - The kick starts high: the tunes use a low **Tuning** (around −22 st). Lower it yourself if a kit you make sounds thin.
 - Choosing a **Techno DNA** replaces the kit and the patterns; save yours as a tune first.
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on pattern A to D as drums, with polymeter (each channel's own length) and microtiming. Every, phase, fill and locks only travel to another Pulse Drums; they are lost on other devices. A polymeter clip in a device with one length is repeated until it lines up again and can become very long.
+**Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on pattern A to D as drums, with polymeter (each channel's own length) and microtiming. Every, phase, fill and locks only travel to another Pulse Drums; they are lost on other devices. A polymeter clip in a device with one length is repeated until it lines up again and can become very long.
 
 ## Latin Percussion
 
@@ -348,7 +350,7 @@ Latin Percussion has the pack **Latin Percussion Styles**: 39 tunes in thirteen 
 - The patterns are 16 steps; the rhythms of the styles are written for one bar.
 - The pads work as a test keyboard: click one to hear it.
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on the selected bank (A to D) with 15 sounds of 16 steps. The accent is kept. The note numbers here are not General MIDI and the sounds have no kind, so lanes are matched by sound name only: almost nothing from an ordinary drum kit will fit.
+**Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on the selected bank (A to D) with 15 sounds of 16 steps. The accent is kept. The note numbers here are not General MIDI and the sounds have no kind, so lanes are matched by sound name only: almost nothing from an ordinary drum kit will fit.
 
 ## Click Synth
 
@@ -413,7 +415,7 @@ Click Synth has the pack **Click Synth Styles**: 30 tunes in ten folders (Minima
 - The sound is made in an AudioWorklet. Without one (an old browser) the card says so and stays silent.
 - Randomness and the chance per step make the result differ every time; that is on purpose.
 
-**Copy and paste.** **Copy** and **Paste** in the card bar work on the selected pattern (A to D) with 8 lanes, each with its own length. Probability and ratchet come along; the pitch jump per step only to another Click Synth. A clip from elsewhere sets all lanes to the clip length (at most 16 steps). Lanes are matched by name; little from an ordinary drum kit will fit.
+**Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on the selected pattern (A to D) with 8 lanes, each with its own length. Probability and ratchet come along; the pitch jump per step only to another Click Synth. A clip from elsewhere sets all lanes to the clip length (at most 16 steps). Lanes are matched by name; little from an ordinary drum kit will fit.
 
 ## If it does not work
 

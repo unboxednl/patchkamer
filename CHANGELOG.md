@@ -4,6 +4,21 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.30.15 (2026-11-11)
+
+### Added
+- **Groovebox 12 (1.16.0) now has a notes input and a trig output.** The input **Notes / trigs** plays a track live: note 36 to 47 (C1 to B1) is track 1 to 12, or a trig with lane `t1` to `t12` (also `kick`, `snare`, `hat`, `perc`). A muted track is silent and a synth track sounds at its default note. The device passes the twelve tracks with their names to a sequencer (`noteNames`). The output **Trigs** sends every hit of its own sequencer out: a drum track as a trig, a synth track as a note. This lets you play Groovebox 12 from a sequencer or drive another device with it. Sound, state, presets and existing songs are unchanged. The manual and `AGENTS.md` are updated; the manuals of the other drum devices, sequencers and tools now name Copy and Paste in the menu behind the icon instead of in the card bar.
+
+## 0.30.14 (2026-11-11)
+
+### Changed
+- **Copy and Paste are no longer in the card bar, only in the menu behind the icon.** They were there twice. For devices with patterns or clips the menu has the lines **Copy pattern**, **Paste pattern** and **Paste options** (the arrow ▾ next to Paste moved there; the window opens at the icon). **Ctrl+C** and **Ctrl+V** work as before. The card bar gets shorter as a result, so cards can be narrower. The manual and `patchkamer/AGENTS.md` are updated.
+
+## 0.30.13 (2026-11-11)
+
+### Fixed
+- **The Skin heading in the menu behind the icon was drawn over the device name.** The heading shared its class name with the canvas sections, whose rule (fixed positioning) won. The heading is now in its place below the menu items, for all devices with skins.
+
 ## 0.30.12 (2026-11-11)
 
 ### Fixed

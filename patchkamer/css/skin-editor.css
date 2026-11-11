@@ -42,7 +42,7 @@ html.se-open{overflow:hidden}
 .se-fit{position:relative}
 .se-slot{transform-origin:0 0;position:relative}
 .se-slot .card{position:relative!important;left:0!important;top:0!important;margin:0;z-index:auto!important}
-.se-slot .card .bar button,.se-slot .card .bar select,.se-slot .card .rz,.se-slot .card .pskin,.se-slot .card .clipbtn{display:none!important}
+.se-slot .card .bar button,.se-slot .card .bar select,.se-slot .card .rz,.se-slot .card .pskin{display:none!important}
 .se-shield{position:absolute;inset:0;z-index:5;cursor:crosshair;touch-action:pan-x pan-y}
 .se-pane.orig .se-shield{cursor:grab}
 .se-below{position:absolute;left:0;right:0;top:calc(100% + 8px);display:flex;flex-direction:column;gap:6px;z-index:6}

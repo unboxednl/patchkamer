@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.16.0 — Noten- en trig-poorten. Ingang `notes` (Noten / trigs): noot 36 t/m 47 of een trig met lane t1 t/m t12 (ook machinenaam of kick, snare, hat, perc) speelt de track live; `noteNames()` geeft de rijen aan een sequencer. Uitgang `trigs` (Trigs): elke slag van de sequencer gaat als trig (drumtrack, lane t<n>) of noot (synthtrack) naar buiten. Geluid van de sequencer is ongewijzigd; state ongewijzigd.
 // 1.15.0 — Uitleg naar about (menu Over Groovebox 12); de UI toont geen uitlegtekst meer.
 // 1.14.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
 // 1.13.0 — Patchkamer contract v1.24: klembord voor het bewerkte patroon. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` met de soort `multi` (formaat `patchkamer-clip`, tijd in tikken van 12 per zestiende, dus 12 per stap):
@@ -19,8 +20,7 @@
 //          Risico: Volume, FX drive en delay-feedback bewegen via setTargetAtTime (geen sprongen), maar FX drive vervangt bij elke wijziging de vervormingscurve (zelfde pad als de eigen knop); niet beluisterd op zipper-ruis.
 // 1.11.1 — Extra swing op patroonniveau (`pat.swing`) en per track (`track.swing`), 0 … 50% van een stap, naast de bestaande Swing-schuif (G.swing, 50 … 80) en de hostswing. De som van
 //          patroon- en trackswing (begrensd tot 50%) vertraagt de oneven zestienden (stapnummer van de klok) met som × stap; de bestaande swing op het tracklokale stapnummer is ongewijzigd.
-//          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0). Het apparaat heeft geen noten- of triggeringang (geen eventIn): live inspelen en noteNames
-//          zijn er dus niet.
+//          Standaard 0 = ongewijzigd (alle gebeurtenissen bit-voor-bit gelijk aan 1.11.0).
 // 1.11.0 — Patchkamer contract v1.11. Nieuwe naam Groovebox 12 en nieuwe id nl.patchkamer.groovebox12 (voorheen Takt Twaalf, nl.patchkamer.takt12); tunes en songs uit die tijd
 //          verwijzen naar de oude id. Tweetalig (host.lang; namen van het apparaat en de poorten per taal in i18n; alle teksten in TXT).
 //          setState en modulate controleren alles: getallen binnen hun bereik, onbekende of ongeldige waarden op de standaard, ontbrekende sporen, stappen en
@@ -237,13 +237,13 @@ function __ctxProxy(ctx, live) {
 export default {
   id: 'nl.patchkamer.groovebox12',
   name: 'Groovebox 12',
-  version: '1.15.0',
+  version: '1.16.0',
   kind: 'instrument',
   about: { nl: 'Een groovebox met 12 tracks, patronen, parameter locks en een songketting.\n\nKetting = patroonnummers op volgorde, bijvoorbeeld 1 1 2 3.', en: 'A groovebox with 12 tracks, patterns, parameter locks and a song chain.\n\nChain = pattern numbers in order, for example 1 1 2 3.' },
   category: 'groove',
   ui: { width: 1262 },
-  i18n: { en: { ports: { out: 'Out', multi: 'Separate outs' } } },
-  ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], multiOut: [{ id: 'multi', name: 'Losse uit' }] },
+  i18n: { en: { ports: { out: 'Out', multi: 'Separate outs', notes: 'Notes / trigs', trigs: 'Trigs' } } },
+  ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [{ id: 'notes', name: 'Noten / trigs' }], eventOut: [{ id: 'trigs', name: 'Trigs' }], modIn: [{ id: 'mod', name: 'Mod' }], multiOut: [{ id: 'multi', name: 'Losse uit' }] },
   create(ctx0, host) {
     const TX = TXT[host && host.lang] || TXT.en;
     const live = new Set(), ctx = __ctxProxy(ctx0, live), OUT = ctx0.createGain();
@@ -496,10 +496,24 @@ function modulateAll(o){ const was=MODT.map(m=>Object.keys(m).length>0), wasG=Ob
   for(let i=0;i<NT;i++) if(was[i]||Object.keys(MODT[i]).length) applyTrackMod(i);
   if(wasG||Object.keys(GM).length) applyGlobal(); }
 let modSig='';
-function notifyParams(){ const sig=P().tracks.map(tr=>tr.machine+':'+tr.name).join('|'); if(sig===modSig) return; const first=!modSig; modSig=sig; try{ host.bundleChanged&&host.bundleChanged(INST,'multi'); }catch(e){} if(!first){ try{ host.paramsChanged&&host.paramsChanged(INST); }catch(e){} } }
+function notifyParams(){ const sig=P().tracks.map(tr=>tr.machine+':'+tr.name).join('|'); if(sig===modSig) return; const first=!modSig; modSig=sig; try{ host.noteNamesChanged&&host.noteNamesChanged(INST); }catch(e){} try{ host.bundleChanged&&host.bundleChanged(INST,'multi'); }catch(e){} if(!first){ try{ host.paramsChanged&&host.paramsChanged(INST); }catch(e){} } }
 
 // ---------- voices ----------
 function env(param,t,lvl,atk,hold,dec,floor){param.cancelScheduledValues(t); param.setValueAtTime(floor||0.0001,t); param.linearRampToValueAtTime(lvl,t+atk); param.setValueAtTime(lvl,t+atk+hold); param.setTargetAtTime(floor||0.0001,t+atk+hold,dec/4);}
+// contract v1.13 (events): wat de sequencer afspeelt gaat ook naar de poort Trigs. Een drumtrack stuurt een trig met lane t<n> (zoals de klemborden), een synthtrack een noot met de toonhoogte van de stap.
+function emitOut(tr,i,t,vel,step,dur){ try{ if(!host||typeof host.emit!=='function') return;
+  if(MACH[tr.machine].synth) host.emit(INST,'trigs',{type:'note',note:step.note,vel,time:t,dur:Math.max(0.02,dur*0.9)}); else host.emit(INST,'trigs',{type:'trig',lane:'t'+(i+1),vel,time:t}); }catch(e){} }
+// live spelen vanaf de poort Noten / trigs: noot 36 t/m 47 (C1 t/m B1) = track 1 t/m 12; een trig met lane t1 t/m t12, een machinenaam (bd, sd, rs, cp, hh, cy, cb) of kick, snare, hat, perc. Een muted track klinkt niet; een synthtrack klinkt op zijn standaardnoot (48).
+const LANE_ALIAS={kick:'bd',snare:'sd',hat:'hh',perc:'cb',clap:'cp',rim:'rs',cymbal:'cy',cowbell:'cb'};
+function laneTrack(lane){ if(typeof lane!=='string') return -1; const m=/^t(\d{1,2})$/.exec(lane); if(m){ const n=+m[1]-1; return n>=0&&n<NT?n:-1; }
+  const k=LANE_ALIAS[lane]||lane; return PP().tracks.findIndex(t=>t.machine===k); }
+function onEvt(ev){ if(!A||!ev||typeof ev!=='object') return; let i=-1;
+  if(ev.type==='note'){ if(!(ev.vel>0)) return; i=Math.round(ev.note)-36; if(!(i>=0&&i<NT)) return; }
+  else if(ev.type==='trig') i=laneTrack(ev.lane); else return;
+  if(i<0) return; const pat=PP(); if(pat.tracks[i].mute) return;
+  const vel=Number.isFinite(ev.vel)?clamp(ev.vel,0,1):0.8, t=Math.max(ctx0.currentTime,Number.isFinite(ev.time)?ev.time:0);
+  trig(pat,i,t,null,vel); }
+function noteList(){ return P().tracks.map((tr,i)=>({note:36+i,name:`${i+1} · ${String(tr.name).slice(0,30)}`})); }
 function trig(pat,i,t,step,vel){
   const tr=pat.tracks[i], s=A.tr[i], p=mergedParams(tr,step,i), S=p.syn, M=p.amp, F=p.flt, m=tr.machine, out=s.in;
   const acc=vel>0.9?1+M.acc*0.6:1, v=(1-M.vel*(1-vel))*acc;
@@ -583,7 +597,7 @@ function tick(info){
       const step=tr.steps[st]; if(!step.on||tr.mute) return;
       if(!condOK(step.cond,loop,first)) return;
       let t=nextT+(st%2?stepDur()*sw:0)+step.micro*stepDur()+(oddPos?Math.min(0.5,swv('p'+(pIdx+1)+'.swing',pat.swing||0)+swv('t'+(i+1)+'.swing',tr.swing||0))*stepDur():0);
-      const n=step.retrig; for(let k=0;k<n;k++) trig(pat,i,t+k*stepDur()/n,step,step.vel*(k?0.75:1));
+      const n=step.retrig; for(let k=0;k<n;k++){ const tt=t+k*stepDur()/n, vv=step.vel*(k?0.75:1); trig(pat,i,tt,step,vv); emitOut(tr,i,tt,vv,step,stepDur()/n); }
     });
     const curPos=pos; setTimeout(()=>{uiCur=curPos; paintTrigsCursor();},Math.max(0,(nextT-ctx.currentTime)*1000));
     pos++; nextT+=stepDur(); if(pos>=STEPS*8*64) pos=0;
@@ -767,7 +781,7 @@ build(); for(let k=0;k<NT;k++) applyTrack(k);
 return {
   tick,
   transport(p){ if(p){running=true; pos=0; playPat=-1;} else stop(); },
-  params:modParams, modulate:modulateAll,
+  params:modParams, modulate:modulateAll, event:onEvt, noteNames:noteList,
   // contract v1.5: elke track apart, na level en pan (s.pan), vóór de sends en het FX-blok
   bundle(){ return {label:TX.multi, channels:A?A.tr.map((s,i)=>({id:'t'+(i+1), name:`${i+1} · ${P().tracks[i].name}`, node:s.pan})):[]}; },
   clipInfo, getClip, setClip,
@@ -790,6 +804,8 @@ return {
         if (pendingMod) { api.modulate(pendingMod); pendingMod = null; }
         try { host.bundleChanged && host.bundleChanged(INST, 'multi'); } catch (e) {}
       },
+      onEvent(port, ev) { if (api && port === 'notes') try { api.event(ev); } catch (e) { console.warn('Groovebox 12', e); } },
+      noteNames() { return api ? api.noteNames() : []; },
       onStep(info) { if (api) try { api.tick(info); } catch (e) { console.warn('Groovebox 12', e); } },
       onTransport({ playing }) { if (api) try { api.transport(playing); } catch (e) { console.warn('Groovebox 12', e); } },
       // contract v1.3 — twaalf sporen, één per track

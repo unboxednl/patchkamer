@@ -4,6 +4,21 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.30.15 (2026-11-11)
+
+### Toegevoegd
+- **Groovebox 12 (1.16.0) heeft nu een noten-ingang en een trig-uitgang.** De ingang **Noten / trigs** speelt een track live: noot 36 t/m 47 (C1 t/m B1) is track 1 t/m 12, of een trig met lane `t1` t/m `t12` (ook `kick`, `snare`, `hat`, `perc`). Een muted track klinkt niet en een synthtrack klinkt op zijn standaardnoot. Het apparaat geeft de twaalf tracks met hun naam door aan een sequencer (`noteNames`). De uitgang **Trigs** stuurt elke slag van de eigen sequencer naar buiten: een drumtrack als trig, een synthtrack als noot. Zo kun je Groovebox 12 met een sequencer bespelen of er een ander apparaat mee aansturen. Geluid, state, presets en bestaande songs zijn ongewijzigd. Handleiding en `AGENTS.md` zijn bijgewerkt; de handleidingen van de andere drumapparaten, sequencers en hulpmiddelen noemen Kopieer en Plak nu in het menu achter het icoontje in plaats van in de kaartbalk.
+
+## 0.30.14 (2026-11-11)
+
+### Gewijzigd
+- **Kopieer en Plak staan niet meer in de kaartbalk, alleen nog in het menu achter het icoontje.** Ze stonden dubbel. Het menu heeft bij apparaten met patronen of clips de regels **Kopieer patroon**, **Plak patroon** en **Plakopties** (de pijl ▾ naast Plak is daar ingegaan; het venster opent bij het icoontje). **Ctrl+C** en **Ctrl+V** werken zoals voorheen. De kaartbalk wordt daardoor korter, zodat kaarten smaller kunnen. De handleiding en `patchkamer/AGENTS.md` zijn bijgewerkt.
+
+## 0.30.13 (2026-11-11)
+
+### Opgelost
+- **Het kopje Skin in het menu achter het icoontje stond over de naam van het apparaat heen.** Het kopje deelde zijn klassenaam met de canvassecties, waarvan de regel (vast gepositioneerd) won. Het kopje staat nu op zijn plek onder de menuregels, bij alle apparaten met skins.
+
 ## 0.30.12 (2026-11-11)
 
 ### Opgelost

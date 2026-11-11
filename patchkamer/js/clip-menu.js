@@ -93,8 +93,9 @@ function menuOpen(id,anchor,btn){
 // pijl naast Plak (aanraking, toetsenbord) en rechtsklik op Plak of de pijl
 function clipMoreBtn(id,pasteBtn){
   const b=document.createElement('button'); b.type='button'; b.className='clipbtn clipmore'; b.textContent='▾'; b.setAttribute('aria-haspopup','dialog'); b.setAttribute('aria-expanded','false'); b.setAttribute('aria-label',PK.pkt('m.clip_o_titel'));
-  b.onclick=e=>{ e.stopPropagation(); PK.select(id); menuOpen(id,b,b); };
-  [b,pasteBtn].forEach(x=>x.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); PK.select(id); menuOpen(id,b,b); }));
+  const anc=()=>{ if(b.isConnected) return b; const r=PK.Host.devices.get(id), i=r&&r.el.querySelector('.bar .cicon'); return i||b; };   // de knop staat niet meer in de balk: het venster hangt dan aan het icoontje
+  b.onclick=e=>{ e.stopPropagation(); PK.select(id); menuOpen(id,anc(),b); };
+  [b,pasteBtn].forEach(x=>x.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); PK.select(id); menuOpen(id,anc(),b); }));
   return b;
 } PK.clipMoreBtn=clipMoreBtn;
 

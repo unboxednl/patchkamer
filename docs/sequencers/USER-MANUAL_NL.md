@@ -239,7 +239,7 @@ Een preset bevat geen kabels, en verandert niet welk spoor je bewerkt of of je o
 - Een scènewissel met **Direct** kapt de klinkende noten af. Gebruik **Volgende maat** voor een live wissel.
 - Een toetsenbord dat tegelijk met **Live** en met de synth is verbonden, klinkt dubbel.
 
-**Kopiëren en plakken.** Met **Kopieer** en **Plak** in de kaartbalk neem je het gekozen spoor van de actieve scène mee als noten. Een spoor in de spelwijze Noten is een echte clip (hoogstens 4 maten, 256 noten); een akkoord-, arpeggio- of pulsespoor wordt gerenderd en gekopieerd als momentopname van vier maten noten, zonder koppeling met de instellingen. Plakken zet het spoor op de spelwijze Noten (de akkoordinstellingen blijven staan) en de melding heeft een knop Ongedaan maken. **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu naast Plak) neemt de hele actieve scène mee, alle vier de sporen; plak je die in een andere Chord Sequencer of in een andere scène, dan komen ook de akkoorden, arpeggio's en instellingen exact terug. In een ander soort apparaat komen de vier sporen als noten aan.
+**Kopiëren en plakken.** Met **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje neem je het gekozen spoor van de actieve scène mee als noten. Een spoor in de spelwijze Noten is een echte clip (hoogstens 4 maten, 256 noten); een akkoord-, arpeggio- of pulsespoor wordt gerenderd en gekopieerd als momentopname van vier maten noten, zonder koppeling met de instellingen. Plakken zet het spoor op de spelwijze Noten (de akkoordinstellingen blijven staan) en de melding heeft een knop Ongedaan maken. **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu naast Plak) neemt de hele actieve scène mee, alle vier de sporen; plak je die in een andere Chord Sequencer of in een andere scène, dan komen ook de akkoorden, arpeggio's en instellingen exact terug. In een ander soort apparaat komen de vier sporen als noten aan.
 
 ## Stap- en melodiesequencers
 
@@ -367,7 +367,7 @@ Het pack **Wanderer Melodies** heeft 60 presets in 9 mappen: Lead Lines (9), Bas
 - Een heel snel **Raster** (1/32, 1/64) met hoge **Ratchets** geeft heel veel noten per seconde.
 - De swing van de klok van de studio verschuift de noten; Wanderer heeft geen eigen swing.
 
-**Kopiëren en plakken.** **Kopieer** in de kaartbalk legt het huidige motief (met verloop en ratchets, omgezet naar MIDI-noten) als momentopname op het klembord. **Plak** kan niet: Wanderer verandert het motief zelf.
+**Kopiëren en plakken.** **Kopieer patroon** in het menu achter het icoontje legt het huidige motief (met verloop en ratchets, omgezet naar MIDI-noten) als momentopname op het klembord. **Plak** kan niet: Wanderer verandert het motief zelf.
 
 ## Arpeggiators
 
@@ -499,7 +499,7 @@ Het pack **Euclidean Rhythms Grooves** heeft 65 presets in 8 mappen: Techno (8),
 - Gebruik bij 1/32 of 1/64 **Kans** of een **Verloop**; anders is het een constante vlaag.
 - Swing komt van de klok van de studio; voor een shuffle-gevoel gebruik je 12 stappen met het tempo 1/8 triool.
 
-**Kopiëren en plakken.** **Kopieer** in de kaartbalk legt een momentopname van het ritme op het klembord: de gekozen rij als noten (rij Noot) of alle rijen die spelen als drums, met eigen baanlengtes. **Plak** kan hier niet: de rijen worden berekend uit getallen.
+**Kopiëren en plakken.** **Kopieer patroon** in het menu achter het icoontje legt een momentopname van het ritme op het klembord: de gekozen rij als noten (rij Noot) of alle rijen die spelen als drums, met eigen baanlengtes. **Plak** kan hier niet: de rijen worden berekend uit getallen.
 
 ## Patroon- en clipsequencers
 
@@ -578,7 +578,7 @@ Het pack **Pattern Playlist Arrangements** heeft 35 presets in 5 mappen: Dance F
 - Noten die je opneemt worden bij de volgende ronde door het afspelen opgepikt. De schakelaars voor opnemen en kwantiseren worden niet in een preset bewaard.
 - Songs van het eerdere apparaat (Regie Playlist) verwijzen naar de oude id en laden niet; het exportbestandsformaat kun je wel importeren.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol als noten, in de drum-editor als drums. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte blijft (een langere clip wordt afgekapt, een korter veelvoud herhaald). Noten op dezelfde rij delen velocity en lengte. Kans en retrigger gaan mee; arpeggio, gate en CC alleen tussen Tracker en Playlist. Ctrl+Z maakt het plakken ongedaan. **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu) neemt het hele patroon mee, alle kanalen: een kanaal met een aangesloten drumcomputer als drums, de andere als noten. Bij plakken gaan ze op soort en volgorde naar de kanalen van het doel; kanalen die niet passen blijven weg en worden gemeld, kanalen van het doel zonder bron blijven staan. Tussen Tracker en Playlist gaat alles verliesvrij mee.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol als noten, in de drum-editor als drums. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte blijft (een langere clip wordt afgekapt, een korter veelvoud herhaald). Noten op dezelfde rij delen velocity en lengte. Kans en retrigger gaan mee; arpeggio, gate en CC alleen tussen Tracker en Playlist. Ctrl+Z maakt het plakken ongedaan. **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu) neemt het hele patroon mee, alle kanalen: een kanaal met een aangesloten drumcomputer als drums, de andere als noten. Bij plakken gaan ze op soort en volgorde naar de kanalen van het doel; kanalen die niet passen blijven weg en worden gemeld, kanalen van het doel zonder bron blijven staan. Tussen Tracker en Playlist gaat alles verliesvrij mee.
 
 ### Pattern Tracker
 
@@ -627,7 +627,7 @@ Het pack **Pattern Tracker Modules** heeft 34 presets in 4 mappen: Module Classi
 - Dezelfde beperkingen als bij Pattern Playlist gelden: één cel per rij per spoor, rijposities binnen het patroon, en stel het raster in voordat je schrijft.
 - Inspelen schrijft in het patroon van de huidige volgordestap.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol als noten, in de drum-editor als drums. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte blijft (een langere clip wordt afgekapt, een korter veelvoud herhaald). Noten op dezelfde rij delen velocity en lengte. Kans en retrigger gaan mee; arpeggio, gate en CC alleen tussen Tracker en Playlist. Ctrl+Z maakt het plakken ongedaan. **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu) neemt het hele patroon mee, alle kanalen: een kanaal met een aangesloten drumcomputer als drums, de andere als noten. Bij plakken gaan ze op soort en volgorde naar de kanalen van het doel; kanalen die niet passen blijven weg en worden gemeld, kanalen van het doel zonder bron blijven staan. Tussen Tracker en Playlist gaat alles verliesvrij mee.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op het kanaal van het gekozen spoor in het gekozen patroon: in de pianorol als noten, in de drum-editor als drums. Plakken vervangt alleen de cellen van dat kanaal; de patroonlengte blijft (een langere clip wordt afgekapt, een korter veelvoud herhaald). Noten op dezelfde rij delen velocity en lengte. Kans en retrigger gaan mee; arpeggio, gate en CC alleen tussen Tracker en Playlist. Ctrl+Z maakt het plakken ongedaan. **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu) neemt het hele patroon mee, alle kanalen: een kanaal met een aangesloten drumcomputer als drums, de andere als noten. Bij plakken gaan ze op soort en volgorde naar de kanalen van het doel; kanalen die niet passen blijven weg en worden gemeld, kanalen van het doel zonder bron blijven staan. Tussen Tracker en Playlist gaat alles verliesvrij mee.
 
 ### Clip Arranger
 
@@ -663,7 +663,7 @@ Clip Arranger werkt als een sessieweergave. Per spoor (1 tot 16) zijn er 8 **cli
 
 **Lengte verdubbelen of halveren.** De knoppen **÷ 2** en **× 2** naast CLIPLENGTE halveren of verdubbelen de clip en verdelen alle noten (positie en lengte), CC-punten en instellingspunten gelijkmatig opnieuw. Bij hetzelfde tempo klinkt een verdubbelde clip half zo snel; bij het dubbele tempo klinkt hij weer als eerst. Verdubbelen kan tot 64 maten, halveren alleen bij een even aantal maten; tijden die niet op 1/64 vallen worden afgerond. Ctrl+Z maakt het ongedaan.
 
-**Kopiëren en plakken.** **Kopieer** en **Plak** in de kaartbalk werken op de gekozen clip van het gekozen spoor (toetsen en drone als noten, een drumspoor als drums). **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu naast Plak) neemt de hele scène mee: de gekozen clip van elk spoor. Plakken wijst de sporen toe op soort en volgorde, in één keer en met één Ongedaan maken; sporen die niet passen blijven staan en worden gemeld.
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op de gekozen clip van het gekozen spoor (toetsen en drone als noten, een drumspoor als drums). **Shift-klik** op Kopieer (of **Kopieer alle sporen** in het menu naast Plak) neemt de hele scène mee: de gekozen clip van elk spoor. Plakken wijst de sporen toe op soort en volgorde, in één keer en met één Ongedaan maken; sporen die niet passen blijven staan en worden gemeld.
 
 
 

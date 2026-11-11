@@ -21,7 +21,7 @@ function addDevice(defId,x,y,state,fixedId,version){
   const ver=document.createElement('select'); ver.className='ver'; ver.title=PK.pkt('m.versie_wisselen'); ver.setAttribute('aria-label',PK.pkt('m.versie')); ver.addEventListener('pointerdown',e=>e.stopPropagation()); ver.onchange=()=>switchVersion(id,ver.value); bar.appendChild(ver);
   const bf=document.createElement('button'); bf.className='fbtn'; bf.textContent='f'; bf.title=PK.pkt('m.focus_zet_dit_apparaat_in'); bf.setAttribute('aria-label',PK.pkt('m.focus_3')); bf.setAttribute('aria-pressed','false'); bf.onclick=e=>{e.stopPropagation(); PK.setFocus(id,!PK.Host.devices.get(id).focus);};
   const bm=document.createElement('button'); bm.textContent='–'; bm.title=PK.pkt('m.minimaliseer_tot_icoon'); bm.setAttribute('aria-label',PK.pkt('m.minimaliseer')); bm.onclick=e=>{e.stopPropagation(); setMini(id,true);};
-  const bx=document.createElement('button'); bx.textContent='×'; bx.title=PK.pkt('m.verwijder'); bx.onclick=e=>{e.stopPropagation(); removeDevice(id);}; bar.append(...PK.clipBtns(id,inst),bf,bm,bx);
+  const bx=document.createElement('button'); bx.textContent='×'; bx.title=PK.pkt('m.verwijder'); bx.onclick=e=>{e.stopPropagation(); removeDevice(id);}; bar.append(bf,bm,bx); PK.clipBtns(id,inst);   // Kopieer, Plak en de plakopties staan alleen nog in het menu achter het icoontje (device-menu.js); de knoppen leven los van de balk
   const body=document.createElement('div'); body.className='body';
   const ports=document.createElement('div'); ports.className='ports';
   body.appendChild(ports);

@@ -70,7 +70,7 @@ button.on{border-color:var(--audio);color:var(--audio)}
 .card .bar .cicon.dmbtn:focus-visible{outline:2px solid var(--fg);outline-offset:1px}
 .dmenu{position:fixed;z-index:85;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;box-shadow:0 14px 40px var(--shadow);padding:6px;display:grid;gap:2px;font-size:12px;width:min(260px,calc(100vw - 16px))}
 .dmenu .ttl,.dmenu .sec{font-family:var(--mono);font-size:10px;color:var(--muted);padding:4px 6px 2px;letter-spacing:.04em;text-transform:uppercase}
-.dmenu .sec{border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
+.dmenu .sec{position:static;border-radius:0;background:none;cursor:default;border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
 .dmenu>button{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;padding:6px 8px;border:0;background:transparent;color:inherit;border-radius:4px;font:inherit}
 .dmenu>button:hover:not(:disabled),.dmenu>button:focus-visible{background:var(--card-2)}
 .dmenu>button:disabled{opacity:.45}
