@@ -522,7 +522,7 @@ The service decides what it accepts. If it only takes mp3 or m4a (**fal.ai · Mu
 
 ![The Tune Finder card, empty](../images/en/tools/tune-finder.png)
 
-**How it works.** Every tune of every synth in the library (2211 tunes of 34 instruments) was played on four notes (C2, C3, C4 and C5) and measured: the colour of the sound, its harmonics, the attack, the way it dies away and its stereo width. Tune Finder measures your sound the same way and ranks the tunes by how little they differ. It compares timbre; it does not say that your sound *is* that instrument. Drum machines and the Loop Slicer are not included (use the **Drum Listener** for drums), and neither are a few tunes that need sound on an input (Grain Cloud, Patch Mono).
+**How it works.** Every tune of every synth in the library (2961 tunes of 38 instruments) was played on four notes (C2, C3, C4 and C5) and measured: the colour of the sound, its harmonics, the attack, the way it dies away and its stereo width. Tune Finder measures your sound the same way and ranks the tunes by how little they differ. It compares timbre; it does not say that your sound *is* that instrument. Drum machines and the Loop Slicer are not included (use the **Drum Listener** for drums), and neither are a few tunes that need sound on an input (Grain Cloud, Patch Mono).
 
 **Getting audio in**
 

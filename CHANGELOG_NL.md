@@ -4,6 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.37.2 (2026-11-12)
+
+### Gewijzigd
+- **Tune Finder 1.22.1**: de index is opnieuw gebouwd en telt nu 2961 tunes van 38 instrumenten (met Neuro Bass, Drawbar Organ, Brass Section, Squelch Box en de uitgebreide packs). De analyse is gelijk; handleiding en AGENTS.md hebben de nieuwe aantallen.
+- **Tellingen en tabellen rechtgezet:** `tunes/README` en de tunehandleiding (NL en EN) noemen nu 47 packs met 3365 tunes (36 voor synths, 4 voor samplers, 7 voor drums), met de ontbrekende rijen Neuro Bass, Squelch Box en Acoustic Drums en de aantallen en mappen van de uitgebreide packs; `presets/README` noemt 57 packs met 2345 presets, met de rij van Remix.
+
+### Let op
+- De tune **Iron Acid** (Acid Baselines Classics) geeft bij het bouwen van de index 152240 niet-eindige samples in de offline render; de tune is van vóór de uitbreiding en is niet aangepast.
+
 ## 0.37.1 (2026-11-12)
 
 ### Verbeterd

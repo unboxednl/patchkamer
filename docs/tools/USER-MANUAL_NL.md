@@ -522,7 +522,7 @@ De dienst bepaalt wat hij aanneemt. Neemt hij alleen mp3 of m4a aan (**fal.ai ·
 
 ![De kaart van Tune Finder, leeg](../images/nl/tools/tune-finder.png)
 
-**Hoe het werkt.** Elke tune van elke synth in de bibliotheek (2211 tunes van 34 instrumenten) is gespeeld op vier noten (C2, C3, C4 en C5) en opgemeten: de kleur van het geluid, de harmonischen, de aanzet, hoe het uitklinkt en de stereobreedte. Tune Finder meet jouw geluid op dezelfde manier en zet de tunes op volgorde van het kleinste verschil. Het vergelijkt klankkleur; het zegt niet dat jouw geluid dat instrument *is*. Drumcomputers en de Loop Slicer zitten er niet in (voor drums is er de **Drum Listener**), en ook een paar tunes die geluid op een ingang nodig hebben (Grain Cloud, Patch Mono) niet.
+**Hoe het werkt.** Elke tune van elke synth in de bibliotheek (2961 tunes van 38 instrumenten) is gespeeld op vier noten (C2, C3, C4 en C5) en opgemeten: de kleur van het geluid, de harmonischen, de aanzet, hoe het uitklinkt en de stereobreedte. Tune Finder meet jouw geluid op dezelfde manier en zet de tunes op volgorde van het kleinste verschil. Het vergelijkt klankkleur; het zegt niet dat jouw geluid dat instrument *is*. Drumcomputers en de Loop Slicer zitten er niet in (voor drums is er de **Drum Listener**), en ook een paar tunes die geluid op een ingang nodig hebben (Grain Cloud, Patch Mono) niet.
 
 **Geluid erin krijgen**
 

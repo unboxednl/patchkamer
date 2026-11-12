@@ -4,11 +4,11 @@
 
 Ready-made settings for devices that make no sound of their own (effects, mixers, modulators, sequencers and other tools), saved as data. Choose one from the list on a device's card, or use a pack as the starting point for your own. Devices that make sound have [tunes](../tunes/README.md) instead.
 
-This folder has **56 packs with 2324 presets**, one pack per device: 25 for effects, 9 for mastering, 4 for the mixer, 6 for modulators, 8 for sequencers and 4 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
+This folder has **57 packs with 2345 presets**, one pack per device: 25 for effects, 9 for mastering, 4 for the mixer, 6 for modulators, 8 for sequencers and 5 for the tools. The **Effect Chain Basics** pack is special: each of its 14 presets is a complete chain of 4 to 8 effects built for one use. The **Clip Arranger Song Starters** pack holds composition starting configurations per genre: tracks, scenes and an arrangement with first parts. A sequencer preset holds the pattern and the settings, not the working state of the card (the selected track, the zoom and so on). The column **Folders** is the number of folders in the pack; their names are in the manual.
 
 ## The packs
 
-### Effects (23)
+### Packs (57)
 
 | Device | Pack | Presets | Folders | File |
 |---|---|---|---|---|
@@ -56,6 +56,7 @@ This folder has **56 packs with 2324 presets**, one pack per device: 25 for effe
 | [Pitch Correction](../devices/effects/PitchCorrection/) | Pitch Correction Basics | 24 | 5 | [`pitch-correction.patchkamer-presets.json`](pitch-correction.patchkamer-presets.json) |
 | [Pitch Shifter](../devices/effects/PitchShifter/) | Pitch Shifter Basics | 30 | 5 | [`pitch-shifter.patchkamer-presets.json`](pitch-shifter.patchkamer-presets.json) |
 | [Pump](../devices/effects/Pump/) | Pump Basics | 13 | 3 | [`pump.patchkamer-presets.json`](pump.patchkamer-presets.json) |
+| [Remix](../devices/tools/Remix/) | Remix Recipes | 21 | 4 | [`remix.patchkamer-presets.json`](remix.patchkamer-presets.json) |
 | [Resonator](../devices/effects/Resonator/) | Resonator Basics | 13 | 3 | [`resonator.patchkamer-presets.json`](resonator.patchkamer-presets.json) |
 | [Reverb](../devices/effects/Reverb/) | Reverb Rooms | 31 | 6 | [`reverb.patchkamer-presets.json`](reverb.patchkamer-presets.json) |
 | [Room](../devices/effects/Room/) | Room Basics | 12 | 3 | [`room.patchkamer-presets.json`](room.patchkamer-presets.json) |

@@ -4,11 +4,11 @@
 
 Kant-en-klare instellingen voor apparaten die geen eigen geluid maken (effecten, mixers, modulatoren, sequencers en andere tools), opgeslagen als data. Kies er een uit de lijst op de kaart van een apparaat, of gebruik een pack als beginpunt voor je eigen presets. Apparaten die geluid maken hebben [tunes](../tunes/README_NL.md).
 
-Deze map heeft **56 packs met 2324 presets**, één pack per apparaat: 25 voor effecten, 9 voor mastering, 4 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 4 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
+Deze map heeft **57 packs met 2345 presets**, één pack per apparaat: 25 voor effecten, 9 voor mastering, 4 voor de mixer, 6 voor modulatoren, 8 voor sequencers en 5 voor de tools. Het pack **Effect Chain Basics** is bijzonder: elk van zijn 14 presets is een complete keten van 4 tot 8 effecten voor één toepassing. Het pack **Clip Arranger Song Starters** bevat compositie-startconfiguraties per genre: sporen, scènes en een arrangement met eerste partijen. Een sequencerpreset bevat het patroon en de instellingen, niet de werkstand van de kaart (het gekozen spoor, de zoom enzovoort). De kolom **Mappen** is het aantal mappen in het pack; de namen staan in de handleiding.
 
 ## De packs
 
-### Effecten (23)
+### Packs (57)
 
 | Apparaat | Pack | Presets | Mappen | Bestand |
 |---|---|---|---|---|
@@ -56,6 +56,7 @@ Deze map heeft **56 packs met 2324 presets**, één pack per apparaat: 25 voor e
 | [Pitch Correction](../devices/effects/PitchCorrection/) | Pitch Correction Basics | 24 | 5 | [`pitch-correction.patchkamer-presets.json`](pitch-correction.patchkamer-presets.json) |
 | [Pitch Shifter](../devices/effects/PitchShifter/) | Pitch Shifter Basics | 30 | 5 | [`pitch-shifter.patchkamer-presets.json`](pitch-shifter.patchkamer-presets.json) |
 | [Pump](../devices/effects/Pump/) | Pump Basics | 13 | 3 | [`pump.patchkamer-presets.json`](pump.patchkamer-presets.json) |
+| [Remix](../devices/tools/Remix/) | Remix Recipes | 21 | 4 | [`remix.patchkamer-presets.json`](remix.patchkamer-presets.json) |
 | [Resonator](../devices/effects/Resonator/) | Resonator Basics | 13 | 3 | [`resonator.patchkamer-presets.json`](resonator.patchkamer-presets.json) |
 | [Reverb](../devices/effects/Reverb/) | Reverb Rooms | 31 | 6 | [`reverb.patchkamer-presets.json`](reverb.patchkamer-presets.json) |
 | [Room](../devices/effects/Room/) | Room Basics | 12 | 3 | [`room.patchkamer-presets.json`](room.patchkamer-presets.json) |
