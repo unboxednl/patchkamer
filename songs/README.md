@@ -59,6 +59,14 @@ A dark, technical neurofunk song with synthesized drums (a dry, gated Drum Kit),
 |---|---|---|
 | [iron-cathedral](drum-and-bass/iron-cathedral.patchkamer-song.json) | dark neurofunk, 174 BPM, E phrygian | intro, build, drop, break, build, drop with an extra bass layer, outro (128 bars) |
 
+## Funk
+
+A funk song with **sampled acoustic drums** (the new [Acoustic Drums](../devices/drums/AcousticDrums/AGENTS.md): ghost snares, open and closed hi-hats, side stick, rimshot, ride and toms) and a [Drawbar Organ](../devices/synths/DrawbarOrgan/AGENTS.md) with a rotary speaker that runs slow in the verses and fast in the climax, together with a bass guitar, a muted funk guitar, comb-pluck keys and a horn section, played by a Clip Arranger. **The drums need a kit download:** click "Load kit" on Acoustic Drums (about 31 MB, taken from the internet only after your click); without a loaded kit the song plays without drums. Checked on paper and by measurement (levels, no clipping, every channel and every drum sound makes sound, with the kit loaded), **not listened to**.
+
+| File | Style | Structure |
+|---|---|---|
+| [sunday-pocket](funk/sunday-pocket.patchkamer-song.json) | funk, 104 BPM, E dorian | intro, verse, pre, hook, verse, break, organ solo, final hook, outro (104 bars, about 4:00) |
+
 ## Dance: techno, house, trance, EDM, progressive and a top 40 song
 
 Six songs with a Clip Arranger for the structure, Pulse Drums or Drum Kit with a kick tuned low and long (a fundamental around 50 to 65 Hz and a tail of a third of a second, so it does not sound like a bongo), and a sidechain pump. Checked on paper and by measurement (levels, no clipping, every track and every drum channel sounds), **not listened to**. The top 40 song was started with the [Remix](../devices/tools/Remix/AGENTS.md) device (recipe *New song*, style Pop).

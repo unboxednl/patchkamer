@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.37.0 (2026-11-12)
+
+### Added
+- **Funk song Sunday Pocket** in `songs/funk/` (104 BPM, swing 0.12, E dorian, 104 bars): Acoustic Drums with ghost snares, choked hi-hats and rimshots, Drawbar Organ with a rotary that moves from stop to slow and fast per section, bass and guitar, Stage Keys and Brass Section, Mixer and Master Chain. The drums need the kit download ("Load kit" on Acoustic Drums, about 31 MB); without that kit the song plays without drums. Not listened to. Section in `songs/styles/funk-disco.md` and rows in both songs READMEs.
+
 ## 0.36.2 (2026-11-12)
 
 ### Improved

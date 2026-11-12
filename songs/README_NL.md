@@ -59,6 +59,14 @@ Een donkere, technische neurofunk-song met gesynthetiseerde drums (een droge, ga
 |---|---|---|
 | [iron-cathedral](drum-and-bass/iron-cathedral.patchkamer-song.json) | donkere neurofunk, 174 BPM, E frygisch | intro, build, drop, break, build, drop met een extra baslaag, outro (128 maten) |
 
+## Funk
+
+Een funksong met **gesampled akoestisch slagwerk** (het nieuwe [Acoustic Drums](../devices/drums/AcousticDrums/AGENTS.md): ghost-snares, open en gesloten hi-hat, side stick, rimshot, ride en toms) en een [Drawbar Organ](../devices/synths/DrawbarOrgan/AGENTS.md) met een rotary-luidspreker die in de coupletten langzaam draait en in de climax snel, samen met een basgitaar, een gedempte funkgitaar, keys met een kamfilter-pluck-klank en een koperensectie, gespeeld door een Clip Arranger. **De drums vragen een kit-download:** klik op "Kit laden" bij Acoustic Drums (ongeveer 31 MB, pas na jouw klik van internet gehaald); zonder geladen kit klinkt de song zonder drums. Op papier en met metingen gecontroleerd (niveaus, geen clipping, elk kanaal en elk drumgeluid geeft geluid, met geladen kit), **niet beluisterd**.
+
+| Bestand | Stijl | Opbouw |
+|---|---|---|
+| [sunday-pocket](funk/sunday-pocket.patchkamer-song.json) | funk, 104 BPM, E dorisch | intro, couplet, pre, hook, couplet, break, orgelsolo, laatste hook, outro (104 maten, ongeveer 4:00) |
+
 ## Dance: techno, house, trance, EDM, progressive en een top 40 song
 
 Zes songs met een Clip Arranger voor de structuur, Pulse Drums of Drum Kit met een lage, lange kick (een grondtoon rond 50 tot 65 Hz en een staart van een derde seconde, zodat hij niet als een bongo klinkt) en een sidechain-pomp. Gecontroleerd op papier en met metingen (niveaus, geen clipping, elk spoor en elk drumkanaal klinkt), **niet beluisterd**. De top 40 song is gestart met het apparaat [Remix](../devices/tools/Remix/AGENTS.md) (recept *Nieuwe song*, stijl Pop).
