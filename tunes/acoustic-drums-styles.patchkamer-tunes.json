@@ -1,0 +1,1156 @@
+{
+ "format": "patchkamer-tunes",
+ "formatVersion": 1,
+ "version": "1.0.0",
+ "device": "nl.patchkamer.acousticdrums",
+ "name": "Acoustic Drums Styles",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Voicings for Acoustic Drums: set, microphones, mix, tuning, ring, ghost note and rimshot thresholds for funk, soul and jazz. A tune holds settings only and loads no recordings: choose Load kit yourself. Each tune names the set and microphones it was made for; load that set first, or the missing microphones stay silent.",
+ "tags": [
+  "instrument/drums/acoustic"
+ ],
+ "tree": [
+  {
+   "folder": "Funk",
+   "tags": [
+    "style/funk"
+   ],
+   "items": [
+    {
+     "name": "Funk Tight",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": 1,
+      "snareRing": 0.35,
+      "kickRing": 0.5,
+      "tomRing": 0.5,
+      "ghost": 0.3,
+      "rim": 0.92,
+      "hatFade": 0.06,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Funk Tight Dry",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funklite",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": 1.5,
+      "snareRing": 0.25,
+      "kickRing": 0.4,
+      "tomRing": 0.4,
+      "ghost": 0.32,
+      "rim": 0.94,
+      "hatFade": 0.05,
+      "human": 0.001,
+      "variation": 0.6
+     }
+    },
+    {
+     "name": "Funk Open Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.9,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.9,
+        "pan": 0
+       }
+      },
+      "snareTune": 0,
+      "snareRing": 0.8,
+      "kickRing": 0.9,
+      "tomRing": 0.9,
+      "ghost": 0.28,
+      "rim": 0.93,
+      "hatFade": 0.1,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Funk Overhead Kit",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.6,
+        "pan": 0
+       },
+       "oh": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -0.5,
+      "snareRing": 0.7,
+      "ghost": 0.3,
+      "rim": 0.93,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Funk Pocket",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.3,
+        "pan": 0
+       }
+      },
+      "snareTune": 0.5,
+      "snareRing": 0.5,
+      "kickRing": 0.6,
+      "ghost": 0.34,
+      "rim": 0.95,
+      "hatFade": 0.07,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Funk Fat Back",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "snareTune": -2,
+      "kickTune": -1.5,
+      "snareRing": 0.6,
+      "kickRing": 0.8,
+      "ghost": 0.3,
+      "rim": 0.9,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Funk Ghost Heavy",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": 0.5,
+      "snareRing": 0.4,
+      "ghost": 0.45,
+      "rim": 0.95,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Funk Rimshot Accent",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.4,
+        "pan": 0
+       }
+      },
+      "snareTune": 1,
+      "snareRing": 0.5,
+      "ghost": 0.25,
+      "rim": 0.8,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Funk Tom Fill",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.4,
+        "pan": 0
+       }
+      },
+      "floorTune": -1,
+      "rackTune": -1,
+      "tomRing": 1,
+      "snareRing": 0.5,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Funk Tight Hats",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "hatFade": 0.04,
+      "snareRing": 0.4,
+      "ghost": 0.3,
+      "human": 0.001,
+      "variation": 0.8
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Soul",
+   "tags": [
+    "style/soul"
+   ],
+   "items": [
+    {
+     "name": "Soul Dry",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -1,
+      "snareRing": 0.3,
+      "kickRing": 0.35,
+      "tomRing": 0.35,
+      "ghost": 0.3,
+      "rim": 0.97,
+      "hatFade": 0.07,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Soul Dry Muffled",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funklite",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -2.5,
+      "kickTune": -1,
+      "snareRing": 0.15,
+      "kickRing": 0.25,
+      "tomRing": 0.25,
+      "ghost": 0.3,
+      "rim": 1,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Soul Ballad Ringy",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.8,
+        "pan": 0
+       },
+       "room": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -1.5,
+      "snareRing": 1,
+      "kickRing": 1,
+      "tomRing": 1,
+      "ghost": 0.22,
+      "rim": 1,
+      "hatFade": 0.14,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Soul Ballad Soft",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funklite",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.9,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.7,
+        "pan": 0
+       }
+      },
+      "snareTune": -1,
+      "snareRing": 0.8,
+      "ghost": 0.2,
+      "rim": 1,
+      "human": 0.005,
+      "variation": 1
+     }
+    },
+    {
+     "name": "Soul Studio",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "kickmic",
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.5,
+        "pan": 0
+       },
+       "kickmic": {
+        "level": 0.4,
+        "pan": 0
+       }
+      },
+      "snareTune": 0,
+      "snareRing": 0.5,
+      "kickRing": 0.6,
+      "ghost": 0.3,
+      "rim": 0.96,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Soul Warm Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room",
+       "lofi"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.7,
+        "pan": 0
+       },
+       "room": {
+        "level": 1,
+        "pan": 0
+       },
+       "lofi": {
+        "level": 0.3,
+        "pan": 0
+       }
+      },
+      "snareTune": -1,
+      "snareRing": 0.7,
+      "kickRing": 0.8,
+      "ghost": 0.28,
+      "rim": 0.98,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Soul Backbeat",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.2,
+        "pan": 0
+       }
+      },
+      "snareTune": 0.5,
+      "snareRing": 0.45,
+      "ghost": 0.26,
+      "rim": 0.9,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Soul Slow Burn",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.9,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.6,
+        "pan": 0
+       }
+      },
+      "snareTune": -2,
+      "kickTune": -2,
+      "snareRing": 0.9,
+      "kickRing": 0.9,
+      "ghost": 0.25,
+      "rim": 1,
+      "hatFade": 0.12,
+      "human": 0.006
+     }
+    },
+    {
+     "name": "Soul Tight Pocket",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funklite",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": 0.5,
+      "snareRing": 0.35,
+      "kickRing": 0.4,
+      "ghost": 0.3,
+      "rim": 0.96,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Soul Live Band",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "oh",
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.8,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.6,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.6,
+        "pan": 0
+       }
+      },
+      "snareTune": -0.5,
+      "snareRing": 0.7,
+      "ghost": 0.28,
+      "rim": 0.95,
+      "human": 0.005
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Jazz",
+   "tags": [
+    "style/jazz"
+   ],
+   "items": [
+    {
+     "name": "Jazz Club",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "snareTune": 0,
+      "snareRing": 0.9,
+      "kickRing": 0.8,
+      "tomRing": 0.9,
+      "ghost": 0.3,
+      "rim": 1,
+      "hatFade": 0.09,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Jazz Club Snares Off",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "snares": false,
+      "snareTune": -1,
+      "snareRing": 0.9,
+      "kickRing": 0.8,
+      "ghost": 0.3,
+      "rim": 1,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Jazz Brush-less Soft",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.9,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "levels": {
+       "kick": 0.8,
+       "snare": 0.8
+      },
+      "snareTune": -1,
+      "snareRing": 0.6,
+      "kickRing": 0.5,
+      "ghost": 0.4,
+      "rim": 1,
+      "human": 0.005
+     }
+    },
+    {
+     "name": "Jazz Ride Forward",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.6,
+        "pan": 0
+       },
+       "oh": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "levels": {
+       "cymbals": 1.2,
+       "kick": 0.7
+      },
+      "snareRing": 0.7,
+      "ghost": 0.35,
+      "rim": 1,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Jazz Small Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.8,
+        "pan": 0
+       }
+      },
+      "snareTune": 0.5,
+      "snareRing": 0.8,
+      "kickRing": 0.7,
+      "ghost": 0.3,
+      "rim": 1,
+      "human": 0.005
+     }
+    },
+    {
+     "name": "Jazz Big Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "oh",
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.7,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.5,
+        "pan": 0
+       },
+       "room": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -1,
+      "snareRing": 1,
+      "kickRing": 1,
+      "tomRing": 1,
+      "ghost": 0.3,
+      "rim": 1,
+      "human": 0.005
+     }
+    },
+    {
+     "name": "Jazz Open Toms",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "floorTune": -1.5,
+      "rackTune": -1,
+      "tomRing": 1,
+      "snareRing": 0.8,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Jazz Damped",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.3,
+      "kickRing": 0.3,
+      "tomRing": 0.3,
+      "ghost": 0.3,
+      "rim": 1,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Jazz Bebop Tight",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.4,
+        "pan": 0
+       }
+      },
+      "snareTune": 1.5,
+      "kickTune": 1,
+      "snareRing": 0.5,
+      "kickRing": 0.5,
+      "ghost": 0.32,
+      "rim": 1,
+      "hatFade": 0.05,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Jazz Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "jazz",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.8,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.8,
+        "pan": 0
+       }
+      },
+      "snareTune": -2,
+      "kickTune": -1,
+      "snareRing": 0.9,
+      "ghost": 0.4,
+      "rim": 1,
+      "human": 0.007,
+      "variation": 1
+     }
+    }
+   ]
+  },
+  {
+   "folder": "Studio",
+   "tags": [
+    "style/funk"
+   ],
+   "items": [
+    {
+     "name": "Dry Studio",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.3,
+      "kickRing": 0.4,
+      "tomRing": 0.3,
+      "human": 0.001,
+      "variation": 0.7
+     }
+    },
+    {
+     "name": "Close Mics",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "kickmic",
+       "snaremic",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.4,
+        "pan": 0
+       },
+       "kickmic": {
+        "level": 1,
+        "pan": 0
+       },
+       "snaremic": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.4,
+      "kickRing": 0.5,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Wide Overheads",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "kickmic",
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.3,
+        "pan": 0
+       },
+       "oh": {
+        "level": 1,
+        "pan": 0
+       },
+       "kickmic": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.6,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Live Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.6,
+        "pan": 0
+       },
+       "room": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.9,
+      "kickRing": 0.9,
+      "tomRing": 1,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Lofi Tape",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funklite",
+      "mics": [
+       "mid",
+       "lofi"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.6,
+        "pan": 0
+       },
+       "lofi": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -1.5,
+      "kickTune": -1,
+      "snareRing": 0.5,
+      "human": 0.004
+     }
+    },
+    {
+     "name": "Lofi Crunch",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funklite",
+      "mics": [
+       "lofi"
+      ],
+      "micMix": {
+       "lofi": {
+        "level": 1,
+        "pan": 0
+       }
+      },
+      "snareTune": -1,
+      "snareRing": 0.4,
+      "kickRing": 0.5,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "All Mics Balanced",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "kickmic",
+       "snaremic",
+       "oh",
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 0.8,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.7,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.6,
+        "pan": 0
+       },
+       "kickmic": {
+        "level": 0.5,
+        "pan": 0
+       },
+       "snaremic": {
+        "level": 0.5,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.7,
+      "human": 0.002
+     }
+    },
+    {
+     "name": "Mid Plus Room",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.6,
+        "pan": 0
+       }
+      },
+      "snareRing": 0.7,
+      "human": 0.003
+     }
+    },
+    {
+     "name": "Tight Studio Hats",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "oh",
+       "mid"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "oh": {
+        "level": 0.3,
+        "pan": 0
+       }
+      },
+      "hatFade": 0.04,
+      "snareRing": 0.4,
+      "human": 0.001
+     }
+    },
+    {
+     "name": "Natural Human",
+     "kind": "set",
+     "version": "1.0.0",
+     "state": {
+      "set": "funk",
+      "mics": [
+       "mid",
+       "room"
+      ],
+      "micMix": {
+       "mid": {
+        "level": 1,
+        "pan": 0
+       },
+       "room": {
+        "level": 0.3,
+        "pan": 0
+       }
+      },
+      "human": 0.008,
+      "variation": 1,
+      "snareRing": 0.7
+     }
+    }
+   ]
+  }
+ ]
+}

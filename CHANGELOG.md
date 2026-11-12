@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.36.0 (2026-11-12)
+
+### Added
+- **Acoustic Drums** (drums, 1.0.0): a sampled acoustic drum kit for funk, soul and jazz with real snares, hi-hats and cymbals. The recordings (a freely licensed jazz kit, CC0) are loaded through a link after a click and never copied into the repo; source, licence and download size are shown on the card before the click (sets Funk and soul, Funk and soul compact and Jazz, 15 to 45 MB per microphone). Velocity layers with crossfade, round robin, automatic ghost notes and rimshots, side stick, flam, buzz, snares on/off, tuning and damping, hi-hat with closed, pedal, half, open and splash and choking without a pop, ride with bell, crash, toms, microphone mix, separate outputs and the same clip and lane coupling as Drum Kit. Pack `acoustic-drums-styles` with 40 voicings. Not listened to.
+- **Drawbar Organ** (synths, 1.0.0): a drawbar organ with a shared bank of 91 tonewheel generators (equal tempered, with octave foldback and crosstalk), two manuals and bass pedals with split points, key click, percussion, vibrato and chorus, a rotary speaker (stop, slow, fast with ramp, Doppler and two microphones), preamp with spring reverb and a second sound model, Combo. Pack `drawbar-organ-styles` with 88 tunes (jazz, soul, funk, gospel, blues, ballad, percussive, rotary, combo and bass split). Not listened to.
+
 ## 0.35.6 (2026-11-12)
 
 ### Improved

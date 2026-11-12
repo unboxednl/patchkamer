@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Drumapparaten maken ritme en percussie. Deze pagina beschrijft de zes drumapparaten die bij Patchkamer horen: **Drum Machine**, **Drum Kit**, **Groovebox 12**, **Pulse Drums**, **Latin Percussion** en **Click Synth**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/drums](../../devices/drums/README_NL.md).
+Drumapparaten maken ritme en percussie. Deze pagina beschrijft de zeven drumapparaten die bij Patchkamer horen: **Drum Machine**, **Drum Kit**, **Groovebox 12**, **Pulse Drums**, **Latin Percussion**, **Click Synth** en **Acoustic Drums**. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/drums](../../devices/drums/README_NL.md).
 
 ## Inhoud
 
@@ -14,7 +14,8 @@ Drumapparaten maken ritme en percussie. Deze pagina beschrijft de zes drumappara
 6. [Pulse Drums](#pulse-drums)
 7. [Latin Percussion](#latin-percussion)
 8. [Click Synth](#click-synth)
-9. [Als het niet werkt](#als-het-niet-werkt)
+9. [Acoustic Drums](#acoustic-drums)
+10. [Als het niet werkt](#als-het-niet-werkt)
 
 ## Wat drumapparaten doen
 
@@ -27,7 +28,7 @@ Een gewone patch heeft twee stappen, van links naar rechts:
 
 Elk apparaat heeft een groenblauwe **audio-uitgang** met de hele kit gemengd. De meeste hebben ook een groene poort **Losse uit** (bundel) die elke drum apart geeft: sluit hem aan op de **bundel in** van een Mixer om elke drum een eigen kanaal te geven, met eigen volume en effecten.
 
-Alle zes apparaten hebben **tunes**. Een tune is de volledige instelling van één apparaat, inclusief de patronen, dus een tune kiezen geeft je een groove. Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor hoe je ze gebruikt en deelt. De tunes staan op een vergelijkbaar volume, dus wisselen van tune geeft geen sprong in luidheid.
+Alle zeven apparaten hebben **tunes**. Een tune is de volledige instelling van één apparaat, inclusief de patronen, dus een tune kiezen geeft je een groove. Zie [Tunes](../tunes/USER-MANUAL_NL.md) voor hoe je ze gebruikt en deelt. De tunes staan op een vergelijkbaar volume, dus wisselen van tune geeft geen sprong in luidheid.
 
 **Met je eigen sequencer.** Drum Kit, Pulse Drums, Click Synth en Latin Percussion nemen noten van een sequencer aan. Hun tunes zetten de **eigen sequencer van het apparaat uit** (Drum Kit en Pulse Drums: **Sequencer uit**; Click Synth: de knop **Sequencer**; Latin Percussion: **Besturing** staat op *Alleen pads / externe trigs*). De patronen van de tune blijven bewaard: zet de eigen sequencer weer aan en je hoort de groove van de tune. Zo kun je met je eigen sequencer beluisteren welke kit het best klinkt. Drum Machine heeft geen noteningang: zijn eigen patroon is zijn enige bron. Groovebox 12 speelt zijn eigen patroon en neemt daarnaast live noten en trigs aan (noot 36 t/m 47, zie de poorten bij Groovebox 12), zonder dat daarvoor iets uit hoeft.
 
@@ -47,6 +48,7 @@ Dubbelklik op een schuif om terug te gaan naar de beginwaarde. Klik op het getal
 | Techno met een gelaagde kick, FM-percussie, polymeter en een rumble | [Pulse Drums](#pulse-drums) |
 | Latin percussie: bongo's, conga's, timbales, agogo's, shakers en fluitjes | [Latin Percussion](#latin-percussion) |
 | Kliks, tiks, bleeps, glitches en andere kleine geluiden, met polyritme | [Click Synth](#click-synth) |
+| Echte opgenomen akoestische drums voor funk, soul of jazz (laadt een kit na een klik) | [Acoustic Drums](#acoustic-drums) |
 | Drums spelen vanaf mijn eigen keyboard of pads | [Drum Kit](#drum-kit), [Pulse Drums](#pulse-drums), [Latin Percussion](#latin-percussion) of [Click Synth](#click-synth) |
 
 ## Drum Machine
@@ -416,6 +418,57 @@ Click Synth heeft het pack **Click Synth Styles**: 30 tunes in tien mappen (Mini
 - Willekeur en de kans per stap zorgen dat het resultaat elke keer anders is; dat is de bedoeling.
 
 **Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** in het menu achter het icoontje werken op het gekozen patroon (A tot D) met 8 sporen, elk met een eigen lengte. Kans en ratchet gaan mee; de toonsprong per stap alleen naar een ander exemplaar van Click Synth. Een clip van elders zet alle sporen op de cliplengte (hoogstens 16 stappen). Uitlijnen gaat op spoornaam; uit een gewone drumkit past weinig.
+
+## Acoustic Drums
+
+### Waar is het voor
+
+Acoustic Drums is een gesampled akoestisch drumstel voor funk, soul en jazz: echte opnames van een gespeeld stel, geen synthese. De opnames zitten niet in Patchkamer. Je kiest een set en de microfoons, ziet hoeveel er wordt gedownload en klikt op **Kit laden**. De bestanden komen dan via een link (Virtuosity Drums van Versilian Studios, drummer Austin McMahon, licentie CC0 1.0). Je kunt annuleren tijdens het laden. Een tune, preset of song bevat instellingen en laadt geen opnames: een patch die hem gebruikt, heeft dus eerst een klik op **Kit laden** nodig. Zonder kit speelt het apparaat stil en dat staat op de kaart.
+
+![De kaart van Acoustic Drums](../images/nl/drums/acoustic-drums.png)
+
+### De knoppen
+
+| Knop | Wat hij doet |
+|---|---|
+| **Set** | **Funk en soul** (ongeveer 31 MB met de middenmicrofoon), **Funk en soul, compact** (ongeveer 15 MB) of **Jazz** (ongeveer 45 MB; ook snaren uit, flat ride, sizzle-crash en buzz). De kaart toont vóór de klik het exacte aantal bestanden en megabytes. |
+| **Microfoons** | Welke microfoons worden geladen: kick-microfoon, snare-microfoon, overheads, midden (het hele stel), room en lo-fi. Elke extra microfoon is een eigen download (een hele extra microfoon is ongeveer even groot als de eerste). |
+| **Kit laden**, **Annuleren**, **Kit wissen** | De gekozen bestanden ophalen met een voortgangsregel, het laden stoppen (de vorige kit blijft staan) of het geheugen vrijgeven. |
+| **Patroon A tot D**, **Lengte**, **Eigen sequencer**, **Swing** | Een kleine stappensequencer voor 12 stukken. Klik op een stap om te wisselen tussen uit, zacht, middel en hard. |
+| **Beluisteren** | Een knop voor elk geluid met zijn MIDI-noot, op een velocity die je kiest. |
+| **Kick**, **Snare**, **Toms**, **Hi-hats**, **Gevoel** | Stemming en uitklinking (demping) per stuk, **Snaarbleed** (de kick met en zonder snaarresonantie, als de set beide heeft), **Snaren** aan of uit, **Ghost-drempel** (zachtere slagen klinken als ghost note) en **Rimshot-drempel** (hardere slagen klinken als rimshot; 100% zet hem uit), **Hi-hat afkaptijd**, **Humanize** (0 tot 10 ms) en **Variatie** (kleine willekeurige veranderingen in stemming en niveau). |
+| **Mix** | Master, een niveau per stuk en een niveau en pan per geladen microfoon. |
+
+Slagen herhalen nooit precies: een round robin die niet direct herhaalt, een kleine verandering in stemming (ongeveer 3 cent) en niveau (ongeveer 0,5 dB) en een overgang tussen aangrenzende velocity-lagen. Een gesloten of pedaal-hi-hat kapt open klanken af met een korte fade, en een bekken kan worden afgegrepen met noot 52 of met dezelfde noot op een heel lage velocity. Een hi-hat-pedaal op CC 4 maakt van noot 42 gesloten, half, driekwart of open.
+
+### Poorten
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **MIDI / trigs** | events in (oranje) | General MIDI-noten (36 kick, 38 snare, 42 gesloten hat, 46 open hat, 49 crash, 51 ride en meer, zie de tekst op de kaart) of trigs van banen zoals Drum Kit. |
+| **Mod** | sturing in (paars) | Een modulator kan stemming, uitklinking, drempels, humanize en de mix bewegen. |
+| **Stereo mix** | audio uit (blauwgroen) | Alles. |
+| **Kick**, **Snare**, **Hi-hats**, **Toms**, **Bekkens**, **Room-microfoon** | audio uit (blauwgroen) | Hetzelfde geluid apart, tegelijk actief met de mix. |
+| **Losse uit (bundel)** | bundel uit (groen) | De vijf groepen, naar een Mixer. |
+
+### Een voorbeeld
+
+1. Plaats **Acoustic Drums** en **Speakers**. Verbind **Stereo mix** met **In** op Speakers.
+2. Kies **Funk en soul** met de middenmicrofoon en klik op **Kit laden**. Wacht op "Geladen".
+3. Kies een tune zoals **Funk › Funk Tight**, zet **Eigen sequencer** aan en druk op **Start**.
+4. Zet de **Ghost-drempel** hoger voor meer ghost notes, of **Snare uitklinking** lager voor een drogere snare.
+
+### Tunes
+
+Acoustic Drums heeft het pack **Acoustic Drums Styles**: 40 voicings in vier mappen (Funk, Soul, Jazz en Studio). Een tune zet microfoons, mix, stemming, uitklinking en drempels; hij bevat geen patronen en geen opnames. Het bestand is [`tunes/acoustic-drums-styles.patchkamer-tunes.json`](../../tunes/acoustic-drums-styles.patchkamer-tunes.json).
+
+### Tips en grenzen
+
+- Er is een host nodig die bestanden kan ophalen (contract v1.30) en een verbinding. Mislukt een bestand, dan zie je de reden; de rest van de kit speelt gewoon.
+- De kit kost geheugen: na het decoderen ongeveer drie keer de download.
+- Niet inbegrepen: de doorlopende snare-roll, percussie en de epic-microfoons van de bronbibliotheek.
+
+**Kopiëren en plakken.** **Kopieer patroon** en **Plak patroon** werken op het getoonde patroon (A tot D, tot 32 stappen, 12 banen) als drums. Kans en ratchet bestaan hier niet.
 
 ## Als het niet werkt
 

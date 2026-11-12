@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Drum devices make rhythm and percussion sound. This page covers the six drum devices that come with Patchkamer: **Drum Machine**, **Drum Kit**, **Groovebox 12**, **Pulse Drums**, **Latin Percussion** and **Click Synth**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/drums](../../devices/drums/README.md).
+Drum devices make rhythm and percussion sound. This page covers the seven drum devices that come with Patchkamer: **Drum Machine**, **Drum Kit**, **Groovebox 12**, **Pulse Drums**, **Latin Percussion**, **Click Synth** and **Acoustic Drums**. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/drums](../../devices/drums/README.md).
 
 ## Contents
 
@@ -14,7 +14,8 @@ Drum devices make rhythm and percussion sound. This page covers the six drum dev
 6. [Pulse Drums](#pulse-drums)
 7. [Latin Percussion](#latin-percussion)
 8. [Click Synth](#click-synth)
-9. [If it does not work](#if-it-does-not-work)
+9. [Acoustic Drums](#acoustic-drums)
+10. [If it does not work](#if-it-does-not-work)
 
 ## What drum devices do
 
@@ -27,7 +28,7 @@ A typical patch has two steps, from left to right:
 
 Every device has a teal **audio out** with the whole kit mixed. Most also have a green **Separate outs** (bundle) port that gives every drum on its own: connect it to the **bundle in** of a Mixer to give each drum its own channel with its own volume and effects.
 
-All six devices have **tunes**. A tune is the complete setting of one device, including its patterns, so choosing a tune gives you a groove. See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use and share them. The tunes are set to a similar loudness, so changing from one tune to another does not make a jump in volume.
+All seven devices have **tunes**. A tune is the complete setting of one device, including its patterns, so choosing a tune gives you a groove. See [Tunes](../tunes/USER-MANUAL_EN.md) for how to use and share them. The tunes are set to a similar loudness, so changing from one tune to another does not make a jump in volume.
 
 **With your own sequencer.** Drum Kit, Pulse Drums, Click Synth and Latin Percussion accept notes from a sequencer. Their tunes switch the **device's own sequencer off** (Drum Kit and Pulse Drums: **Sequencer off**; Click Synth: the **Sequencer** button; Latin Percussion: **Control** is set to *Pads / external trigs only*). The tune's patterns stay stored: switch the own sequencer back on and you hear the tune's groove. This way you can audition with your own sequencer which kit sounds best. Drum Machine has no note input: its own pattern is its only source. Groovebox 12 plays its own pattern and also accepts live notes and trigs (note 36 to 47, see the ports under Groovebox 12), without anything having to be switched off.
 
@@ -47,6 +48,7 @@ Double-click a slider to go back to its starting value. Click the number to type
 | Techno with a layered kick, FM percussion, polymeter and a rumble | [Pulse Drums](#pulse-drums) |
 | Latin percussion: bongos, congas, timbales, agogos, shakers and whistles | [Latin Percussion](#latin-percussion) |
 | Clicks, ticks, bleeps, glitches and other small sounds, with polyrhythm | [Click Synth](#click-synth) |
+| Real recorded acoustic drums for funk, soul or jazz (downloads a kit after a click) | [Acoustic Drums](#acoustic-drums) |
 | Play drums from my own keyboard or pads | [Drum Kit](#drum-kit), [Pulse Drums](#pulse-drums), [Latin Percussion](#latin-percussion) or [Click Synth](#click-synth) |
 
 ## Drum Machine
@@ -416,6 +418,57 @@ Click Synth has the pack **Click Synth Styles**: 30 tunes in ten folders (Minima
 - Randomness and the chance per step make the result differ every time; that is on purpose.
 
 **Copy and paste.** **Copy pattern** and **Paste pattern** in the menu behind the icon work on the selected pattern (A to D) with 8 lanes, each with its own length. Probability and ratchet come along; the pitch jump per step only to another Click Synth. A clip from elsewhere sets all lanes to the clip length (at most 16 steps). Lanes are matched by name; little from an ordinary drum kit will fit.
+
+## Acoustic Drums
+
+### What it is for
+
+Acoustic Drums is a sampled acoustic drum kit for funk, soul and jazz: real recordings of a played kit, not synthesis. The recordings are not inside Patchkamer. You choose a set and the microphones, see how much will be downloaded, and click **Load kit**. The files then come through a link (Virtuosity Drums by Versilian Studios, drummer Austin McMahon, licence CC0 1.0). You can cancel while it loads. A tune, preset or song holds settings and loads no recordings, so a patch that uses it needs a click on **Load kit** first; without a kit the device is silent and the card says so.
+
+![The Acoustic Drums card](../images/en/drums/acoustic-drums.png)
+
+### The controls
+
+| Control | What it does |
+|---|---|
+| **Set** | **Funk and soul** (about 31 MB with the mid microphone), **Funk and soul, compact** (about 15 MB) or **Jazz** (about 45 MB; also snares off, flat ride, sizzle crash and buzz). The card shows the exact number of files and megabytes before you click. |
+| **Microphones** | Which microphones to load: kick mic, snare mic, overheads, mid (the whole kit), room and lo-fi. Every extra microphone adds its own download (a whole extra microphone is roughly the same size again). |
+| **Load kit**, **Cancel**, **Clear kit** | Fetch the chosen files with a progress line, stop loading (the previous kit stays), or free the memory. |
+| **Pattern A to D**, **Length**, **Own sequencer**, **Swing** | A small step sequencer for 12 pieces. Click a step to cycle off, soft, medium and hard. |
+| **Audition** | A button for every sound with its MIDI note, at a velocity you choose. |
+| **Kick**, **Snare**, **Toms**, **Hi-hats**, **Feel** | Tuning and ring (damping) per piece, **Snare bleed** (the kick with and without snare resonance, when the set has both), **Snares** on or off, **Ghost threshold** (softer hits play as ghost notes) and **Rimshot threshold** (harder hits play as rimshot; 100% turns it off), **Hi-hat choke time**, **Humanize** (0 to 10 ms) and **Variation** (small random changes in tuning and level). |
+| **Mix** | Master, a level per piece and a level and pan per loaded microphone. |
+
+Hits never repeat exactly: a round robin that does not repeat directly, a small change in tuning (about 3 cents) and level (about 0.5 dB), and a blend between neighbouring velocity layers. A closed or pedal hi-hat cuts open sounds with a short fade, and a cymbal can be grabbed with note 52 or with the same note at a very low velocity. A hi-hat pedal on CC 4 makes note 42 closed, half, three-quarter or open.
+
+### Ports
+
+| Port | Kind | Use |
+|---|---|---|
+| **MIDI / trigs** | events in (orange) | General MIDI notes (36 kick, 38 snare, 42 closed hat, 46 open hat, 49 crash, 51 ride and more, see the card text) or trigs from Drum Kit-style lanes. |
+| **Mod** | modulation in (purple) | A modulator can move tuning, ring, thresholds, humanize and the mix. |
+| **Stereo mix** | audio out (teal) | Everything. |
+| **Kick**, **Snare**, **Hi-hats**, **Toms**, **Cymbals**, **Room mic** | audio out (teal) | The same sound apart, all active together with the mix. |
+| **Separate outs (bundle)** | bundle out (green) | The five groups, to a Mixer. |
+
+### An example
+
+1. Place **Acoustic Drums** and **Speakers**. Connect **Stereo mix** to **In** on Speakers.
+2. Choose **Funk and soul** with the mid microphone and click **Load kit**. Wait for "Loaded".
+3. Choose a tune such as **Funk › Funk Tight**, turn **Own sequencer** on and press **Start**.
+4. Raise **Ghost threshold** for more ghost notes, or lower **Snare ring** for a drier snare.
+
+### Tunes
+
+Acoustic Drums has the pack **Acoustic Drums Styles**: 40 voicings in four folders (Funk, Soul, Jazz and Studio). A tune sets the microphones, mix, tuning, ring and thresholds; it holds no patterns and no recordings. The file is [`tunes/acoustic-drums-styles.patchkamer-tunes.json`](../../tunes/acoustic-drums-styles.patchkamer-tunes.json).
+
+### Tips and limits
+
+- It needs a host that can fetch files (contract v1.30) and a connection. If a file fails you see the reason; the rest of the kit still plays.
+- The kit takes memory: about three times the download once decoded.
+- Not included: continuous snare roll, percussion and the epic microphones of the source library.
+
+**Copy and paste.** **Copy pattern** and **Paste pattern** work on the shown pattern (A to D, up to 32 steps, 12 lanes) as drums. Probability and ratchet do not exist here.
 
 ## If it does not work
 

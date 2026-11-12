@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [USER-MANUAL_NL.md](USER-MANUAL_NL.md)*
 
-Synths are the devices that make sound from notes. This page covers the 35 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
+Synths are the devices that make sound from notes. This page covers the 36 synths that come with Patchkamer. For the basics (opening Patchkamer, loading a library, drawing cables) see the [main user manual](../USER-MANUAL_EN.md). The folder with the devices is described in [devices/synths](../../devices/synths/README.md).
 
 ## Contents
 
@@ -11,7 +11,7 @@ Synths are the devices that make sound from notes. This page covers the 35 synth
 3. [Basses](#basses): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Neuro Bass](#neuro-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Mono synths for leads and sound design](#mono-synths-for-leads-and-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyphonic synths, pads and chords](#polyphonic-synths-pads-and-chords): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
-6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
+6. [Keys and strings](#keys-and-strings): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Drawbar Organ](#drawbar-organ), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Special and modular](#special-and-modular): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone and texture synths](#drone-and-texture-synths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
 9. [Voice](#voice): [Formant Singer](#formant-singer)
@@ -54,6 +54,7 @@ Every synth has **tunes**: a tune is the complete setting of one synth, and some
 | Acoustic pianos (grand, upright, honky-tonk), tine and reed electric pianos, clavichord | [Piano](#piano) |
 | Guitars: steel-string, nylon, clean and overdriven electric, palm-muted, 12-string and bass guitar | [Guitar](#guitar) |
 | Electric pianos, organs, vibraphone | [Stage Keys](#stage-keys) |
+| A drawbar organ for funk, soul, jazz and gospel, with percussion, vibrato, a rotary speaker and bass pedals | [Drawbar Organ](#drawbar-organ) |
 | Bells, glass, tines, FM basses | [Four-Operator FM](#four-operator-fm) |
 | Plucked or bowed single strings (guitar, harp, koto) | [Karplus String](#karplus-string) |
 | Dissonant clusters, drones, tension, sound effects | [Dissonant Cluster](#dissonant-cluster) |
@@ -925,6 +926,43 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 - Up to 24 voices; one voice per pitch, so striking the same note again cuts the previous one of that pitch short.
 - The **Tone** value is read at every new note, so a change affects the next note.
 - Every model has a fixed release after you let go of a key (for example about 0.2 s for Tine Piano and 0.12 s for Synth Bass).
+
+### Drawbar Organ
+
+**What it is for.** A drawbar organ inspired by classic tonewheel organs, for funk, soul, jazz, gospel and blues. One shared bank of 91 generators feeds every key, as in the original: each key taps its own pitch plus the intervals of the nine drawbars, tuned equal-tempered (so 5⅓′ and especially 1⅗′ are not pure) and with the top octaves folded back. It plays every key at once (no voice limit), has no velocity dynamics (**Touch** is a soft option) and keeps the level of a chord within about 4 dB of that of one note. It has no sequencer or keyboard of its own: play it from **Keys** or a sequencer.
+
+![The Drawbar Organ card](../images/en/synths/drawbar-organ.png)
+
+**Controls.**
+
+- **Sound model:** **Tonewheel** (sine generators with a trace of 2nd and 3rd harmonic) or **Combo** (a compact divide-down organ sound made of square and pulse waves). Buttons **Test chord** and **All off**.
+- **Drawbars** for **Upper**, **Lower** and **Bass pedals**: nine vertical drawbars per manual (16′, 5⅓′, 8′, 4′, 2⅔′, 2′, 1⅗′, 1⅓′, 1′; brown, white and black like the original) and two for the bass pedals (16′ and 8′). Positions 0 to 8 in steps of 3 dB; a drawbar pulled down is louder. Double-click a drawbar for its start value. Below each group the registration is shown as digits (for example `88 8000 000`).
+- **Combo footage switches** (only with Combo): **16′**, **8′**, **4′**, **2⅔′**, **2′** and **IV mixture**, and the knob **Reed** (square wave to narrow pulse).
+- **Percussion** (Tonewheel only, on Upper only): **On**, **Percussion harmonic** (**2nd harmonic** or **3rd harmonic**), **Fast** (otherwise slow), **Soft** (otherwise normal) and **Single trigger**: the percussion fires only on the first key of a legato phrase, as in the original. With percussion on, the 1′ drawbar is silent.
+- **Vibrato and chorus:** **Type** (V1, V2, V3 vibrato; C1, C2, C3 chorus), **Vibrato Upper** and **Vibrato Lower** (on or off per manual), **Scanner rate** (5 to 8.5 Hz, 6.8 Hz is the standard) and **Depth**.
+- **Rotary:** **Bypass**, **Stop**, **Slow** and **Fast**, with the knobs **Speed** (0 = stop, 0.5 = slow, 1 = fast), **Mic distance**, **Stereo spread** and **Horn / drum**. The horn speeds up in about 1.6 s and slows down in about 3.7 s, the drum in about 5 s and 9 s (time to 90 %); while the speed changes you hear a little rotor noise. The line under the two dials shows the speeds of horn and drum (**Rotor: horn … Hz, drum … Hz**).
+- **Key contact:** **Key click** (how hard the nine contacts of a key close), **Contact spread** (the contacts do not close at the same moment: up to 3.5 ms apart), **Release click**, **Leakage** (faint crosstalk between generators and busbars) and **Touch** (0 = every key equally loud).
+- **Amplifier:** **Drive** (warm tube saturation, with oversampling against aliasing), **Bass**, **Treble** (±10 dB), **Reverb** (short spring reverb) and **Volume**.
+- **Keyboard:** **Routing** (**Split and bass pedals** or **MIDI channel**), **Bass pedals up to** (notes below it play the bass pedals), **Split point (Upper from)** (notes below it, down to the bass limit, play Lower) and **Rotary toggle key** (a note that toggles the rotary between slow and fast and does not sound). In channel mode MIDI channel 1 plays Upper, 2 Lower and 3 the bass pedals.
+
+**Ports.**
+
+| Port | Kind | Use |
+|---|---|---|
+| **Keyboard / notes** | notes in (orange) | Notes from **Keys / MIDI** or a sequencer. Held keys (`noteon`/`noteoff`) and notes with a length both work. A `cc` with `rotary` (0 stop, 0.5 slow, 1 fast), `perc`, `vibrato` or `model` switches that function; every other control also answers to its id (`up0` to `up8`, `lo0` to `lo8`, `pd0`, `pd1`, `drive`, `reverb`, `vol` and so on). |
+| **Mod** | modulation in (purple) | A modulator can move 37 controls: the drawbars of all three groups, drive, bass, treble, reverb, volume, the key contact knobs, scanner rate and depth, rotary speed, mic distance, spread, horn / drum and reed. **Speed** is the way to switch the rotary from a modulator: a square wave between 0.5 and 1 gives a realistic slow-to-fast change. |
+| **Out** | audio out (teal) | Stereo organ; connect to **Speakers** or a **Mixer** channel. |
+
+**Example.** Place **Keys**, **Drawbar Organ** and **Speakers**. Connect **Notes** of Keys to **Keyboard / notes** and **Out** to **In**. Choose the tune **Greasy Trio** (888000000 with third-harmonic percussion and chorus C3), play with the mouse or a MIDI keyboard and click **Fast** for the rotary. For bass and chords from one keyboard choose a tune from the folder **Bass Split**, or set **Bass pedals up to** to C3 and **Split point** to C4.
+
+**Tunes.** Pack **Drawbar Organ Styles**: 88 tunes in 10 folders (Jazz, Soul, Funk, Gospel, Blues, Ballad, Percussive, Rotary Variations, Combo, Bass Split), file [`drawbar-organ-styles.patchkamer-tunes.json`](../../tunes/drawbar-organ-styles.patchkamer-tunes.json). A few names: **Greasy Trio**, **Smoky Club**, **Full Gospel**, **Perc Funk**, **Slow Stew Combo**, **Split Bass and Chords**.
+
+**Tips and limits.**
+
+- The 91 generators run all the time, so the load barely depends on the number of keys. In a test (not in a real browser with real speakers) the engine used 3 % to 14 % of the time budget of a block on average (the worst block 28 %).
+- The oversampling of the drive follows the quality in the settings and adds about 0.2 ms of delay (2×).
+- Combo ignores the drawbars and percussion; Tonewheel ignores the footage switches. Changing the model silences held notes.
+- The sound has been measured but **not listened to**.
 
 ### Four-Operator FM
 

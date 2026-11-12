@@ -2,7 +2,7 @@
 
 *English version: [USER-MANUAL_EN.md](USER-MANUAL_EN.md)*
 
-Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 35 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
+Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 36 synths die bij Patchkamer horen. De basis (Patchkamer openen, een bibliotheek laden, kabels trekken) staat in de [basishandleiding](../USER-MANUAL_NL.md). De map met de apparaten is beschreven in [devices/synths](../../devices/synths/README_NL.md).
 
 ## Inhoud
 
@@ -11,7 +11,7 @@ Synths zijn de apparaten die uit noten geluid maken. Deze pagina beschrijft de 3
 3. [Bassen](#bassen): [Acid Baselines](#acid-baselines), [Acid Stepper](#acid-stepper), [Squelch Box](#squelch-box), [Low Bass](#low-bass), [Neuro Bass](#neuro-bass), [Sub Line](#sub-line), [Basic Mono](#basic-mono)
 4. [Monosynths voor leads en sound design](#monosynths-voor-leads-en-sound-design): [Duofone](#duofone), [Ladder Mono](#ladder-mono), [Cross Mod Mono](#cross-mod-mono), [Patch Mono](#patch-mono)
 5. [Polyfone synths, pads en akkoorden](#polyfone-synths-pads-en-akkoorden): [Poly Chorus](#poly-chorus), [Triple Osc Poly](#triple-osc-poly), [Supersaw Swarm](#supersaw-swarm), [Chord Poly](#chord-poly), [Cinematic Synth](#cinematic-synth), [Bowed Ensemble](#bowed-ensemble), [Brass Section](#brass-section), [Woodwinds](#woodwinds)
-6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
+6. [Toetsen en snaren](#toetsen-en-snaren): [Piano](#piano), [Guitar](#guitar), [Stage Keys](#stage-keys), [Drawbar Organ](#drawbar-organ), [Four-Operator FM](#four-operator-fm), [Karplus String](#karplus-string)
 7. [Bijzonder en modulair](#bijzonder-en-modulair): [Dissonant Cluster](#dissonant-cluster), [Patchbay Synth](#patchbay-synth)
 8. [Drone- en textuursynths](#drone--en-textuursynths): [Layered Landscape](#layered-landscape), [Biotope](#biotope), [Drone Synth](#drone-synth), [Celestial Mechanics](#celestial-mechanics), [Paradox](#paradox), [Foundry](#foundry), [Mist](#mist), [Grain Cloud](#grain-cloud)
 9. [Zang](#zang): [Formant Singer](#formant-singer)
@@ -54,6 +54,7 @@ Elke synth heeft **tunes**: een tune is de volledige instelling van één synth,
 | Akoestische piano's (vleugel, pianino, honky-tonk), tine- en riet-e-piano, clavichord | [Piano](#piano) |
 | Gitaren: staalsnarig, nylon, clean en overdrive elektrisch, gedempt, 12-snarig en basgitaar | [Guitar](#guitar) |
 | Elektrische piano's, orgels, vibrafoon | [Stage Keys](#stage-keys) |
+| Een orgel met trekkers voor funk, soul, jazz en gospel, met percussie, vibrato, een rotary-luidspreker en basvoeten | [Drawbar Organ](#drawbar-organ) |
 | Klokken, glas, tines, FM-bassen | [Four-Operator FM](#four-operator-fm) |
 | Geplukte of gestreken losse snaren (gitaar, harp, koto) | [Karplus String](#karplus-string) |
 | Dissonante clusters, drones, spanning, geluidseffecten | [Dissonant Cluster](#dissonant-cluster) |
@@ -925,6 +926,43 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Tot 24 stemmen; één stem per toonhoogte, dus dezelfde noot opnieuw aanslaan kapt de vorige van die toonhoogte kort af.
 - De waarde van de toonknop wordt bij elke nieuwe noot gelezen, dus een wijziging werkt vanaf de volgende noot.
 - Elk model heeft een vaste uitklank na het loslaten van een toets (bijvoorbeeld ongeveer 0,2 s bij Tine Piano en 0,12 s bij Synth-bas).
+
+### Drawbar Organ
+
+**Waar het voor dient.** Een orgel met trekkers, geïnspireerd op klassieke tonewheel-orgels, voor funk, soul, jazz, gospel en blues. Eén gedeelde bank van 91 generatoren voedt elke toets, zoals bij het origineel: elke toets tapt zijn eigen toonhoogte plus de intervallen van de negen trekkers, gelijkzwevend gestemd (5⅓′ en vooral 1⅗′ zijn dus niet zuiver) en met de hoogste octaven teruggevouwen. Het speelt alle toetsen tegelijk (geen stemmenlimiet), heeft geen velocity-dynamiek (**Aanslag** is een zachte optie) en houdt het niveau van een akkoord binnen ongeveer 4 dB van dat van één noot. Het heeft geen eigen sequencer of klavier: speel het vanaf **Keys** of een sequencer.
+
+![De kaart van Drawbar Organ](../images/nl/synths/drawbar-organ.png)
+
+**Knoppen.**
+
+- **Klankmodel:** **Tonewheel** (sinusgeneratoren met een zweempje 2e en 3e harmonische) of **Combo** (een compacte divide-down orgelklank van blok- en pulsgolven). Knoppen **Proefakkoord** en **Alles uit**.
+- **Trekkers** voor **Upper**, **Lower** en **Basvoeten**: negen verticale trekkers per manual (16′, 5⅓′, 8′, 4′, 2⅔′, 2′, 1⅗′, 1⅓′, 1′; bruin, wit en zwart zoals het origineel) en twee voor de basvoeten (16′ en 8′). Standen 0 tot 8 in stappen van 3 dB; een trekker die je naar beneden trekt is luider. Dubbelklik op een trekker voor zijn beginwaarde. Onder elke groep staat de registratie als cijfers (bijvoorbeeld `88 8000 000`).
+- **Combo-voetschakelaars** (alleen bij Combo): **16′**, **8′**, **4′**, **2⅔′**, **2′** en **IV mixtuur**, en de knop **Riet** (van blokgolf naar smalle puls).
+- **Percussie** (alleen Tonewheel, alleen op Upper): **Aan**, **Percussie-harmonische** (**2e harmonische** of **3e harmonische**), **Snel** (anders langzaam), **Zacht** (anders normaal) en **Enkele trigger**: de percussie klinkt alleen op de eerste toets van een legato-frase, zoals bij het origineel. Met percussie aan zwijgt de 1′-trekker.
+- **Vibrato en chorus:** **Soort** (V1, V2, V3 vibrato; C1, C2, C3 chorus), **Vibrato Upper** en **Vibrato Lower** (per manual aan of uit), **Scannersnelheid** (5 tot 8,5 Hz, 6,8 Hz is de standaard) en **Diepte**.
+- **Rotary:** **Bypass**, **Stop**, **Langzaam** en **Snel**, met de knoppen **Snelheid** (0 = stop, 0,5 = langzaam, 1 = snel), **Micafstand**, **Stereo-spreiding** en **Hoorn / trommel**. De hoorn loopt in ongeveer 1,6 s op snelheid en in ongeveer 3,7 s uit, de trommel in ongeveer 5 s en 9 s (tijd tot 90 %); tijdens het wisselen hoor je een beetje rotorgeluid. De regel onder de twee wijzers toont de snelheden van hoorn en trommel (**Rotor: hoorn … Hz, trommel … Hz**).
+- **Toetscontact:** **Aanzetklik** (hoe hard de negen contacten van een toets sluiten), **Contactspreiding** (de contacten sluiten niet op hetzelfde moment: tot 3,5 ms uit elkaar), **Loslaatklik**, **Lekkage** (zwakke overspraak tussen generatoren en bussen) en **Aanslag** (0 = elke toets even hard).
+- **Versterker:** **Drive** (warme buisverzadiging, met oversampling tegen aliasing), **Bas**, **Hoog** (±10 dB), **Hall** (korte veerhall) en **Volume**.
+- **Klavier:** **Verdeling** (**Splitpunt en basvoeten** of **MIDI-kanaal**), **Basvoeten tot** (noten eronder spelen de basvoeten), **Splitpunt (Upper vanaf)** (noten eronder, tot de basgrens, spelen Lower) en **Toets voor rotary** (een noot die de rotary wisselt tussen langzaam en snel en niet klinkt). In kanaalstand speelt MIDI-kanaal 1 Upper, 2 Lower en 3 de basvoeten.
+
+**Poorten.**
+
+| Poort | Soort | Gebruik |
+|---|---|---|
+| **Keyboard / noten** | noten in (oranje) | Noten van **Keys / MIDI** of een sequencer. Aangehouden toetsen (`noteon`/`noteoff`) en noten met een lengte werken allebei. Een `cc` met `rotary` (0 stop, 0,5 langzaam, 1 snel), `perc`, `vibrato` of `model` schakelt die functie; elke andere regelaar luistert ook naar zijn id (`up0` tot `up8`, `lo0` tot `lo8`, `pd0`, `pd1`, `drive`, `reverb`, `vol` enzovoort). |
+| **Mod** | sturing in (paars) | Een modulator kan 37 regelaars bewegen: de trekkers van alle drie de groepen, drive, bas, hoog, hall, volume, de knoppen van het toetscontact, scannersnelheid en -diepte, rotary-snelheid, micafstand, spreiding, hoorn / trommel en riet. **Snelheid** is de weg om de rotary vanuit een modulator te schakelen: een blokgolf tussen 0,5 en 1 geeft een realistische wissel van langzaam naar snel. |
+| **Uit** | audio uit (blauwgroen) | Stereo orgel; verbind met **Speakers** of een **Mixer**-kanaal. |
+
+**Voorbeeld.** Plaats **Keys**, **Drawbar Organ** en **Speakers**. Verbind **Noten** van Keys met **Keyboard / noten** en **Uit** met **In**. Kies de tune **Greasy Trio** (888000000 met percussie op de derde harmonische en chorus C3), speel met de muis of een MIDI-keyboard en klik op **Snel** voor de rotary. Voor bas en akkoorden vanaf één keyboard kies je een tune uit de map **Bass Split**, of zet je **Basvoeten tot** op C3 en **Splitpunt** op C4.
+
+**Tunes.** Pack **Drawbar Organ Styles**: 88 tunes in 10 mappen (Jazz, Soul, Funk, Gospel, Blues, Ballad, Percussive, Rotary Variations, Combo, Bass Split), bestand [`drawbar-organ-styles.patchkamer-tunes.json`](../../tunes/drawbar-organ-styles.patchkamer-tunes.json). Een paar namen: **Greasy Trio**, **Smoky Club**, **Full Gospel**, **Perc Funk**, **Slow Stew Combo**, **Split Bass and Chords**.
+
+**Tips en beperkingen.**
+
+- De 91 generatoren lopen steeds, dus de belasting hangt nauwelijks af van het aantal toetsen. In een test (niet in een echte browser met echte luidsprekers) gebruikte de motor gemiddeld 3 % tot 14 % van het tijdbudget van een blok (het slechtste blok 28 %).
+- De oversampling van de drive volgt de kwaliteit in de instellingen en geeft ongeveer 0,2 ms vertraging (2×).
+- Combo negeert de trekkers en de percussie; Tonewheel negeert de voetschakelaars. Een ander klankmodel zet aangehouden noten stil.
+- Het geluid is gemeten maar **niet beluisterd**.
 
 ### Four-Operator FM
 

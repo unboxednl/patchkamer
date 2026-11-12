@@ -2,7 +2,7 @@
 
 *Nederlandse versie: [README_NL.md](README_NL.md)*
 
-Devices that make sound from notes: 35 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
+Devices that make sound from notes: 36 synths for basses, leads, pads, chords, keys, strings, sound design, modular patching, drones, textures and singing. Every synth has **tunes** (a tune is the complete setting of one synth) and no presets.
 
 Not sure which one to pick? The manual starts with a table "Which synth for which goal".
 
@@ -28,6 +28,7 @@ Not sure which one to pick? The manual starts with a table "Which synth for whic
 | **Brass Section** | A polyphonic brass instrument with 1 to 4 players per note: a filter that swells open (the blat), pitch scoop, breath noise, delayed vibrato and a mute | [`BrassSection/`](BrassSection/) | [32](../../tunes/brass-section.patchkamer-tunes.json) | [Brass Section](../../docs/synths/USER-MANUAL_EN.md#brass-section) |
 | **Woodwinds** | A woodwind family with its own engine: flute, clarinet, oboe, bassoon, alto and tenor saxophone, recorder and pan flute, with 1 to 3 players per note, tuned air noise, tongue chiff, overblow, delayed vibrato, legato glide, and bite and growl for the reeds | [`Woodwinds/`](Woodwinds/) | [42](../../tunes/woodwinds.patchkamer-tunes.json) | [Woodwinds](../../docs/synths/USER-MANUAL_EN.md#woodwinds) |
 | **Stage Keys** | A polyphonic keys synth with seven sound models (tine and reed piano, organs, vibraphone, bass), drive and stereo tremolo | [`StageKeys/`](StageKeys/) | [66](../../tunes/stage-keys-styles.patchkamer-tunes.json) | [Stage Keys](../../docs/synths/USER-MANUAL_EN.md#stage-keys) |
+| **Drawbar Organ** | A drawbar organ inspired by classic tonewheel organs: two manuals with nine drawbars and bass pedals, key click, percussion, vibrato and chorus, a rotary speaker, preamp and spring reverb, plus a compact combo organ model | [`DrawbarOrgan/`](DrawbarOrgan/) | [88](../../tunes/drawbar-organ-styles.patchkamer-tunes.json) | [Drawbar Organ](../../docs/synths/USER-MANUAL_EN.md#drawbar-organ) |
 | **Four-Operator FM** | An FM synth with four operators, eight algorithms and eight voices | [`FourOperatorFM/`](FourOperatorFM/) | [67](../../tunes/four-operator-fm-styles.patchkamer-tunes.json) | [Four-Operator FM](../../docs/synths/USER-MANUAL_EN.md#four-operator-fm) |
 | **Guitar** | A plucked-string family with its own engine: steel-string, nylon, clean and overdriven electric, palm-muted, 12-string and bass guitar, with one voice per string, a strum helper, hammer-ons and bend | [`Guitar/`](Guitar/) | [40](../../tunes/guitar.patchkamer-tunes.json) | [Guitar](../../docs/synths/USER-MANUAL_EN.md#guitar) |
 | **Karplus String** | A plucked and bowed string model with eight voices and its own two-octave keyboard | [`KarplusString/`](KarplusString/) | [60](../../tunes/karplus-string-styles.patchkamer-tunes.json) | [Karplus String](../../docs/synths/USER-MANUAL_EN.md#karplus-string) |

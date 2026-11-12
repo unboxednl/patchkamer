@@ -30,6 +30,7 @@ Dit overzicht komt uit `devices/AGENTS.md` en wordt gegenereerd door `docs/tools
 
 | Apparaat | `id` | Wat het doet |
 |---|---|---|
+| [Acoustic Drums](AcousticDrums/AGENTS.md) | `nl.patchkamer.acousticdrums` | Een gesampled akoestisch drumstel voor funk, soul en jazz: opnames die na een klik via een link worden geladen (CC0, grootte vooraf zichtbaar), velocity-lagen met een zachte overgang, round robin, ghost notes en rimshots op de snare, een hi-hat die natuurlijk afkapt, bekkens, toms, kiesbare microfoons en losse uitgangen; patroon kopiëren en plakken als drums |
 | [Click Synth](ClickSynth/AGENTS.md) | `nl.patchkamer.clicksynth` | Een percussiesynth voor kliks, tiks, bleeps, zaps, hout, glas en glitches: acht sporen met een eigen klankmotor, willekeur en polyritme; patroon kopiëren en plakken, met kans, ratchet en eigen spoorlengte; uitlijnen op spoornaam |
 | [Drum Kit](DrumKit/AGENTS.md) | `nl.patchkamer.drumkit` | Een drumworkstation met tot 16 kanalen gesynthetiseerde instrumenten, vier patronen van maximaal 64 stappen, een aparte uitgang per kanaal en noten of trigs in; patroon A tot D kopiëren en plakken als drums; velocity, kans en ratchet gaan mee en de lengte blijft die van de kit |
 | [Drum Machine](DrumMachine/AGENTS.md) | `nl.patchkamer.drummachine` | Een eenvoudige drumcomputer met vier geluiden (kick, snare, hat, perc) van elk 16 stappen, met tune, decay, toon, niveau en pan per geluid; patroon kopiëren en plakken (alleen aan/uit, per baan op soort uitgelijnd) |
