@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Prestatie: de operator- en stemobjecten van de motor krijgen al hun velden meteen (ook alive), zodat ze één vorm houden. Geluid, state en ids ongewijzigd (uitvoer bit-identiek).
 // 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group play/operator/global/sound), zodat een skin ze als draaiknop kan tonen; ook na het wisselen van operator. Geluid, state en ids ongewijzigd; zonder skin ziet het apparaat er identiek uit. Testnoot staat bewust in modExclude (hoort bij de adoptie; params() ongewijzigd).
 // 1.13.0 — Uitleg naar about (menu Over Four-Operator FM); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam.
@@ -26,7 +27,7 @@ const FM_CARRIERS = [[0], [0], [0], [0], [0, 2], [0, 1, 2], [0, 1, 2], [0, 1, 2,
 class FmEngine {
   constructor(sr, p) {
     this.sr = sr; this.p = { ...p }; this.target = { ...p }; this.queue = []; this.voices = []; this.serial = 0; this.frame = 0; this.lfoPhase = 0;
-    this.dc = 0; this.last = 0; this.op = Array.from({ length: 4 }, () => ({}));
+    this.dc = 0; this.last = 0; this.op = Array.from({ length: 4 }, () => ({ ratio: 0, level: 0, a: 0, d: 0, s: 0, r: 0, tune: 1 }));
     this.setParams(p); this.prepareFM();
   }
   setParams(p) { this.target = { ...p }; for (const k in p) if (typeof p[k] !== 'number' || k === 'algorithm') this.p[k] = p[k]; }
@@ -54,7 +55,7 @@ class FmEngine {
     return e.value;
   }
   voice(note, vel, token) {
-    return { note, vel, token, gate: true, age: 0, ops: Array.from({ length: 4 }, () => ({ value: 0, stage: 'attack', age: 0 })), phases: [0, 0, 0, 0], opOut: [0, 0, 0, 0], inc: [0, 0, 0, 0], fb: 0, fb2: 0 };
+    return { note, vel, token, gate: true, age: 0, ops: Array.from({ length: 4 }, () => ({ value: 0, stage: 'attack', age: 0 })), phases: [0, 0, 0, 0], opOut: [0, 0, 0, 0], inc: [0, 0, 0, 0], fb: 0, fb2: 0, alive: true };
   }
   event(e) {
     const type = e.type;
@@ -176,7 +177,7 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.fouroperatorfm',
   name: 'Four-Operator FM',
-  version: '1.14.0',
+  version: '1.14.1',
   modExclude: ['testNote'],
   kind: 'instrument',
   category: 'synth',

@@ -4,6 +4,19 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.35.4 (2026-11-12)
+
+### Improved
+- **Devices that are lighter on the processor.** Same cause as with Celestial Mechanics (0.35.3): objects whose fields were added later, which stopped the browser from speeding up the inner loop. For each device the output was compared with the previous version and is identical sample for sample (with a fixed noise source), except where noted below.
+  - **Click Synth 1.19.1:** about 3.5 times faster in the inner loop.
+  - **Layered Landscape 1.14.1:** 1.6 to 2.6 times faster (parameter names are no longer rebuilt every block).
+  - **Latin Percussion 1.18.1:** 1.3 to 1.5 times faster.
+  - **Poly Chorus 1.13.1:** 25 to 34% faster (the settings are no longer kept in a dictionary-mode object).
+  - **Grain Cloud 1.14.1** and **Four-Operator FM 1.14.1:** small gains (up to about 12% and 4 to 9%).
+  - Woodwinds, Piano and Paradox were checked and not changed: nothing to gain there.
+- **Cinematic Synth 1.17.1: second voice limit.** Released notes that were still ringing out did not count towards the limit of 10 voices, so when played very fast more than 150 voices sounded at once and the audio clock fell behind (measured ratio 0.29, now 1.0). There is now also a limit of 32 sounding voices: a ringing-out voice is cut first (30 ms fade), otherwise the oldest. Normal playing is unchanged; only above 32 simultaneous voices is a ringing tail cut earlier. This is a behaviour change that was not listened to.
+- Not listened to; the speeds were measured in Node on a busy machine.
+
 ## 0.35.3 (2026-11-12)
 
 ### Improved

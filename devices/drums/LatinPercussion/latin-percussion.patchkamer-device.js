@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.1 — Prestatie: de stemmen krijgen al hun velden bij het aanmaken (fastOff kwam eerst laat erbij), en de sleutelnamen en tabellen per klank worden niet meer per sample opgebouwd. Geluid bit-identiek; state, presets en poorten ongewijzigd.
 // 1.18.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group per blok), zodat een skin ze als draaiknop kan tonen (skin Compact). Geluid, state, params() en poorten ongewijzigd; zonder skin ziet het apparaat er hetzelfde uit.
 // 1.17.0 — Uitleg naar about (menu Over Latin Percussion); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
@@ -25,23 +26,25 @@
 
 // Audiomotor: draait in de AudioWorklet (als tekst via toString) en in de pagina als terugval.
 class LatinEngine {
-  constructor(sr,p){this.sr=sr;this.p={...p};this.target={...p};this.queue=[];this.voices=[];this.serial=0;this.frame=0;this.dcL=0;this.dcR=0;this.lastL=0;this.lastR=0;this.setParams(p);}
+  constructor(sr,p){this.sr=sr;this.p={...p};this.target={...p};this.queue=[];this.voices=[];this.serial=0;this.frame=0;this.dcL=0;this.dcR=0;this.lastL=0;this.lastR=0;
+    this.K=Array.from({length:15},(_,i)=>({tune:'d'+i+'tune',decay:'d'+i+'decay',level:'d'+i+'level',pan:'d'+i+'pan'}));this.BASE=[0.16,0.2,0.065,0.24,0.3,0.18,0.23,0.4,0.45,0.12,0.09,0.15,0.7,0.5,0.65];this.F1=[270,190,260,220,155];this.F2=[680,490,850,590];this.GROUPS=[0,0,1,1,2,3,4,5,5,6,6,7,7,8,9];
+    this.setParams(p);}
   setParams(p){this.target={...p};for(const k in p)if(typeof p[k]!=='number'||k==='baseNote')this.p[k]=p[k];}
   enqueue(e){if(!Number.isFinite(e?.time))return;const v={...e};if(v.type==='panic'||v.type==='allnotesoff')this.queue=this.queue.filter(x=>x.time<v.time);if(v.type==='note'||v.type==='noteon'){v.token=++this.serial;if(!v.held&&Number.isFinite(v.dur)){this.queue.push({type:'autooff',token:v.token,time:v.time+Math.max(0.005,v.dur)});}}this.queue.push(v);this.queue.sort((a,b)=>a.time-b.time);if(this.queue.length>2048)this.queue.splice(0,this.queue.length-2048);}
   event(e){const type=e.type;if(type==='control'){this.setParams(e.params);return;}if(type==='panic'||type==='allnotesoff'){for(const v of this.voices){v.gate=false;v.fastOff=true;}return;}if(type==='trig'){this.hit(e.index,e.vel,e.time);return;}
     if(type==='note'||type==='noteon'){if(!(e.vel>0))return;this.hit(e.note-(this.p.baseNote??36),e.vel,e.time);}}
-  hit(index,velocity,time){if(!Number.isInteger(index)||index<0||index>14||!velocity)return;const groups=[0,0,1,1,2,3,4,5,5,6,6,7,7,8,9];if(this.p.choke)for(const v of this.voices)if(groups[v.index]===groups[index])v.fastOff=true;if(this.voices.length>=64)this.voices.shift();this.voices.push({index,vel:velocity,age:0,gate:true,alive:true,ph:0,noise:0,smooth:0,offGain:1,seed:(++this.serial*1009)>>>0});}
-  percussion(v){const p=this.p,i=v.index,k='d'+i,rate=2**((p[k+'tune']||0)/12),t=v.age*rate,decay=p[k+'decay']||1,base=[0.16,0.2,0.065,0.24,0.3,0.18,0.23,0.4,0.45,0.12,0.09,0.15,0.7,0.5,0.65][i],d=base*decay;v.seed=(Math.imul(v.seed,1664525)+1013904223)>>>0;const noise=v.seed/2147483648-1;v.smooth=v.smooth*0.6+noise*0.4;const high=noise-v.smooth;let x=0;
-    if(i<5){const f=[270,190,260,220,155][i],freq=f*(1+0.7*Math.exp(-t*80));v.ph=(v.ph+freq*rate/this.sr)%1;x=(Math.sin(v.ph*Math.PI*2)+0.3*Math.sin(v.ph*Math.PI*2*1.58)*Math.exp(-t*30))*Math.exp(-t/d*4)+high*Math.exp(-t*180)*0.2;}
-    else if(i<9){const f=[680,490,850,590][i-5];v.ph=(v.ph+f*rate/this.sr)%1;x=(Math.sin(v.ph*Math.PI*2)*0.5+Math.sin(v.ph*Math.PI*2*1.47)*0.25+Math.sin(v.ph*Math.PI*2*2.09)*0.2)*Math.exp(-t/d*4)+high*Math.exp(-t*120)*0.13;}
+  hit(index,velocity,time){if(!Number.isInteger(index)||index<0||index>14||!velocity)return;const groups=this.GROUPS;if(this.p.choke)for(const v of this.voices)if(groups[v.index]===groups[index])v.fastOff=true;if(this.voices.length>=64)this.voices.shift();this.voices.push({index,vel:velocity,age:0,gate:true,alive:true,fastOff:false,ph:0,noise:0,smooth:0,offGain:1,seed:(++this.serial*1009)>>>0});}
+  percussion(v){const p=this.p,i=v.index,K=this.K[i],rate=2**((p[K.tune]||0)/12),t=v.age*rate,decay=p[K.decay]||1,base=this.BASE[i],d=base*decay;v.seed=(Math.imul(v.seed,1664525)+1013904223)>>>0;const noise=v.seed/2147483648-1;v.smooth=v.smooth*0.6+noise*0.4;const high=noise-v.smooth;let x=0;
+    if(i<5){const f=this.F1[i],freq=f*(1+0.7*Math.exp(-t*80));v.ph=(v.ph+freq*rate/this.sr)%1;x=(Math.sin(v.ph*Math.PI*2)+0.3*Math.sin(v.ph*Math.PI*2*1.58)*Math.exp(-t*30))*Math.exp(-t/d*4)+high*Math.exp(-t*180)*0.2;}
+    else if(i<9){const f=this.F2[i-5];v.ph=(v.ph+f*rate/this.sr)%1;x=(Math.sin(v.ph*Math.PI*2)*0.5+Math.sin(v.ph*Math.PI*2*1.47)*0.25+Math.sin(v.ph*Math.PI*2*2.09)*0.2)*Math.exp(-t/d*4)+high*Math.exp(-t*120)*0.13;}
     else if(i<11){const shake=i===9?0.3+0.7*Math.max(0,Math.sin(t*170)):1;x=high*shake*Math.exp(-t/d*4)*0.65;}
     else if(i<13){const freq=i===11?1650:1450;v.ph=(v.ph+freq*rate/this.sr*(1+0.009*Math.sin(t*35)))%1;x=Math.sin(v.ph*Math.PI*2)*Math.min(1,t/0.012)*Math.exp(-Math.max(0,t-d*0.4)/(d*0.25))*0.6;}
     else if(i===13)x=(high*0.6+Math.sin(t*2*Math.PI*190)*0.2)*Math.max(0,Math.sin(t*240))*Math.exp(-t/d*4);
     else{for(let j=0;j<7;j++)if(t>j*0.018)x+=Math.sin((t-j*0.018)*2*Math.PI*(1700+j*417))*Math.exp(-(t-j*0.018)/d*4)*0.11;}
-    if(v.fastOff)v.offGain*=0.965;const bits=p.grit||0;x=x*(1-bits)+Math.round(x*127)/127*bits;v.age+=1/this.sr;v.alive=t<d*4&&v.offGain>0.00001;return x*v.vel*(p[k+'level']??0.7)*v.offGain;}
+    if(v.fastOff)v.offGain*=0.965;const bits=p.grit||0;x=x*(1-bits)+Math.round(x*127)/127*bits;v.age+=1/this.sr;v.alive=t<d*4&&v.offGain>0.00001;return x*v.vel*(p[K.level]??0.7)*v.offGain;}
   process(left,right,time){const sr=this.sr;for(let i=0;i<left.length;i++){const t=time+i/sr;while(this.queue.length&&this.queue[0].time<=t+1e-10)this.event(this.queue.shift());if((this.frame&31)===0){for(const k in this.target)if(typeof this.target[k]==='number'&&k!=='baseNote')this.p[k]+=(this.target[k]-this.p[k])*0.04;}
       const p=this.p;let l=0,r=0;
-      for(const v of this.voices){const sample=this.percussion(v),pan=p['d'+v.index+'pan']||0;l+=sample*Math.sqrt((1-pan)/2);r+=sample*Math.sqrt((1+pan)/2);}
+      for(const v of this.voices){const sample=this.percussion(v),pan=p[this.K[v.index].pan]||0;l+=sample*Math.sqrt((1-pan)/2);r+=sample*Math.sqrt((1+pan)/2);}
       for(let j=this.voices.length-1;j>=0;j--)if(this.voices[j].alive===false)this.voices.splice(j,1);
       const yl=l-this.lastL+0.995*this.dcL,yr=r-this.lastR+0.995*this.dcR;this.lastL=l;this.lastR=r;this.dcL=yl;this.dcR=yr;left[i]=Number.isFinite(yl)?0.9*Math.tanh(yl/0.9):0;right[i]=Number.isFinite(yr)?0.9*Math.tanh(yr/0.9):0;this.frame++;}
   }
@@ -92,7 +95,7 @@ const buildSpec = T => {
 export default {
   id: 'nl.patchkamer.latinpercussion',
   name: 'Latin Percussion',
-  version: '1.18.0',
+  version: '1.18.1',
   about: { nl: 'Vijftien eigen latin-klanken · 15 × 16 stappen · vier banken · pads en externe trigs.\n\nEigen gesynthetiseerde bongos, congas, timbales, agogos, shakers, whistles, quijada en star chime. Eigen klanksynthese en eigen klankbeelden. Stapknoppen wisselen rust, gewone slag, accent. Choke bootst gedeelde klankgroepen na. De paarse Mod-ingang verandert de klank zonder basiswaarden te overschrijven. De trig-lanen staan in de handleiding.', en: 'Fifteen original latin sounds · 15 × 16 steps · four banks · pads and external trigs.\n\nOriginal synthesized bongos, congas, timbales, agogos, shakers, whistles, quijada and star chime. Original sound synthesis and sound sets. Step buttons cycle rest, normal hit, accent. Choke imitates shared sound groups. The purple Mod input changes the sound without overwriting the base values. The trig lanes are listed in the manual.' },
   kind: 'instrument',
   category: 'groove',

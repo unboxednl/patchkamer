@@ -4,6 +4,19 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.35.4 (2026-11-12)
+
+### Verbeterd
+- **Lichtere apparaten voor de processor.** Dezelfde oorzaak als bij Celestial Mechanics (0.35.3): objecten met velden die pas later werden toegevoegd, waardoor de browser de rekenlus niet kon versnellen. Per apparaat is de uitvoer vergeleken met de vorige versie en is die sample voor sample identiek (met een vaste ruisbron), behalve waar hieronder anders staat.
+  - **Click Synth 1.19.1:** ongeveer 3,5 keer sneller in de rekenlus.
+  - **Layered Landscape 1.14.1:** 1,6 tot 2,6 keer sneller (parameternamen worden niet meer elk blok opnieuw opgebouwd).
+  - **Latin Percussion 1.18.1:** 1,3 tot 1,5 keer sneller.
+  - **Poly Chorus 1.13.1:** 25 tot 34 % sneller (de instellingen staan niet meer in een woordenboek-object).
+  - **Grain Cloud 1.14.1** en **Four-Operator FM 1.14.1:** kleine winst (tot ongeveer 12 % en 4 tot 9 %).
+  - Woodwinds, Piano en Paradox zijn nagelopen en niet gewijzigd: daar was niets te winnen.
+- **Cinematic Synth 1.17.1: tweede stemgrens.** Losgelaten noten die nog uitklonken telden niet mee voor de limiet van 10 stemmen, waardoor bij heel snel spelen meer dan 150 stemmen tegelijk klonken en de audioklok achterliep (gemeten verhouding 0,29, nu 1,0). Er geldt nu ook een grens van 32 klinkende stemmen: eerst wordt een uitklinkende stem afgekapt (30 ms uitfade), anders de oudste. Bij normaal spelen verandert er niets; alleen boven 32 gelijktijdig klinkende stemmen wordt een uitklinkende staart eerder afgekapt. Dit is een gedragsverandering die niet is beluisterd.
+- Niet beluisterd; de snelheden zijn gemeten in Node op een drukke machine.
+
 ## 0.35.3 (2026-11-12)
 
 ### Verbeterd

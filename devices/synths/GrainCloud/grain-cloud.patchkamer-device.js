@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Prestatie: stemmen hebben vanaf het begin hetzelfde veld cloud (één vorm), de werkbuffers worden hergebruikt in plaats van per blok nieuw gemaakt, stemmen en korrels worden ter plekke opgeschoond en constante berekeningen staan buiten de samplelus. Geluid, state en ids ongewijzigd (uitvoer bit-identiek).
 // 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, role param of select, group where/grain/cloud/source), zodat een skin ze als draaiknop kan tonen. Geluid, state en ids ongewijzigd; zonder skin ziet het apparaat er identiek uit.
 // 1.13.0 — Uitleg naar about (menu Over Grain Cloud); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
@@ -106,7 +107,7 @@ const BL_S=8, MAXG=160, IN_MAX=16;
 const lim=v=>(v>-IN_MAX&&v<IN_MAX)?v:(v!==v?0:v>0?IN_MAX:-IN_MAX);
 class GrainCloud extends AudioWorkletProcessor{
   constructor(){ super(); const sr=sampleRate; this.BL=Math.round(BL_S*sr); this.buf=[new Float32Array(this.BL),new Float32Array(this.BL)]; this.w=0; this.filled=0;
-    this.tab=null; this.tabType=''; this.G=[]; this.V=[]; this.q=[]; this.seed=99; this.scanPh=0; this.recLeft=0; this.n=0; this.fbL=0; this.fbR=0;
+    this.tab=null; this.tabType=''; this.G=[]; this.V=[]; this.q=[]; this.seed=99; this.scanPh=0; this.recLeft=0; this.n=0; this.fbL=0; this.fbR=0; this.wL=new Float32Array(0); this.wR=new Float32Array(0);
     this.s={src:'live',wave:'choir',pos:0.3,spread:0.2,size:120,dens:20,pitch:0,pspread:0,steps:'free',rev:0,pan:0.6,shape:0.3,scan:0,fb:0,mix:1,att:0.3,rel:1.5,level:0.8,cloud:true};
     this.port.onmessage=e=>{ const m=e.data||{}; if(m.type==='set'){ const s=m.s||{}; for(const k in s){ if(!(k in this.s)) continue; const v=s[k], cur=this.s[k]; if(typeof cur==='number'?(typeof v==='number'&&Number.isFinite(v)):(typeof v===typeof cur&&(k!=='src'||v==='live'||v==='frozen'||v==='wave'))) this.s[k]=v; } } else if(m.type==='rec'){ this.recLeft=Math.round(4*sampleRate); this.filled=0; this.w=0; } else if(m.type==='note'){ if(Number.isFinite(m.note)&&Number.isFinite(m.vel)&&(m.dur==null||Number.isFinite(m.dur))) this.q.push(m); } else this.q.push(m); }; }
   rnd(){ this.seed=(this.seed*16807)%2147483647; return this.seed/2147483647; }
@@ -124,7 +125,7 @@ class GrainCloud extends AudioWorkletProcessor{
     // make it seamless: crossfade the last 20 ms into the first
     const X=Math.round(0.02*sr); for(let i=0;i<X;i++){ const a=i/X; t[i]=t[i]*a+t[L-X+i]*(1-a); }
     this.tab=t; this.tabType=type; }
-  voice(m){ if(this.V.length>=8){ this.V.shift(); } this.V.push({note:m.note,semi:m.note-(this.s.src==='wave'?57:60),vel:m.vel,env:0,on:true,until:m.dur!=null?currentTime+m.dur:1e9,acc:0}); }
+  voice(m){ if(this.V.length>=8){ this.V.shift(); } this.V.push({cloud:false,note:m.note,semi:m.note-(this.s.src==='wave'?57:60),vel:m.vel,env:0,on:true,until:m.dur!=null?currentTime+m.dur:1e9,acc:0}); }
   spawn(v){ const s=this.s, sr=sampleRate; if(this.G.length>=MAXG) return;
     const L=Math.max(32,Math.round(s.size*0.001*sr)); let ps=0; if(s.pspread>0){ const r=(this.rnd()*2-1)*s.pspread;
       if(s.steps==='free') ps=r; else { const opts=s.steps==='octaves'?[-24,-12,0,12,24]:s.steps==='fifths'?[-12,-5,0,7,12,19]:[-12,0,7,12,19,24]; const c=opts.filter(o=>Math.abs(o)<=Math.max(1,s.pspread)); ps=c[Math.floor(this.rnd()*c.length)]; } }
@@ -144,22 +145,22 @@ class GrainCloud extends AudioWorkletProcessor{
     const ka=Math.exp(-1/(Math.max(0.005,s.att)*sr/ N)), kr=Math.exp(-1/(Math.max(0.01,s.rel)*sr/N));
     for(const v of this.V){ if(v.on&&currentTime>=v.until) v.on=false; const tgt=v.on?1:0; v.env=tgt+(v.env-tgt)*(v.on?ka:kr);
       v.acc+=N*s.dens/sr; let k=0; while(v.acc>=1&&k<16){ v.acc-=1+(this.rnd()-0.5)*0.6; if(v.env>0.002) this.spawn(v); k++; } }
-    this.V=this.V.filter(v=>v.on||v.env>0.002);
+    { const V=this.V; let j=0; for(let a=0;a<V.length;a++){ const v=V[a]; if(v.on||v.env>0.002) V[j++]=v; } V.length=j; }
     this.scanPh=(this.scanPh+s.scan*0.15*N/sr)%1;
     if(!Number.isFinite(this.scanPh)) this.scanPh=0;
     const src=s.src==='wave'?null:this.buf, T=this.tab, TL=T?T.length:1, sh=s.shape;
-    const wL=new Float32Array(N), wR=new Float32Array(N);
-    for(const g of this.G){ for(let t=0;t<N&&g.i<g.L;t++,g.i++){ const x=g.i/g.L; let w=0.5-0.5*Math.cos(2*Math.PI*x); if(sh>0){ const tr=Math.min(1,Math.min(x,1-x)/Math.max(0.02,0.5*(1-sh))); w=w*(1-sh)+tr*sh; }
+    if(this.wL.length!==N){ this.wL=new Float32Array(N); this.wR=new Float32Array(N); } else { this.wL.fill(0); this.wR.fill(0); }
+    const wL=this.wL, wR=this.wR, trD=Math.max(0.02,0.5*(1-sh));
+    for(const g of this.G){ for(let t=0;t<N&&g.i<g.L;t++,g.i++){ const x=g.i/g.L; let w=0.5-0.5*Math.cos(2*Math.PI*x); if(sh>0){ const tr=Math.min(1,Math.min(x,1-x)/trD); w=w*(1-sh)+tr*sh; }
         const pos=g.p+g.i*g.rate; let l, r;
         if(src){ let i0=Math.floor(pos), f=pos-i0; i0=((i0%BL)+BL)%BL; const i1=(i0+1)%BL; l=src[0][i0]+(src[0][i1]-src[0][i0])*f; r=src[1][i0]+(src[1][i1]-src[1][i0])*f; }
         else { let i0=Math.floor(pos), f=pos-i0; i0=((i0%TL)+TL)%TL; const i1=(i0+1)%TL; l=r=T[i0]+(T[i1]-T[i0])*f; }
         wL[t]+=l*w*g.gL; wR[t]+=r*w*g.gR; } }
-    this.G=this.G.filter(g=>g.i<g.L);
+    { const G=this.G; let j=0; for(let a=0;a<G.length;a++){ const g=G[a]; if(g.i<g.L) G[j++]=g; } G.length=j; }
     const norm=0.9/Math.sqrt(Math.max(1,s.dens*s.size*0.001));
-    const rec=(s.src==='live'||this.recLeft>0);
+    const rec=(s.src==='live'||this.recLeft>0), dry=s.src==='wave'?0:(1-s.mix);
     for(let t=0;t<N;t++){ const xl=iL?lim(iL[t]):0, xr=iR?lim(iR[t]):0; const yl=wL[t]*norm, yr=wR[t]*norm;
       if(rec){ this.buf[0][this.w]=lim(xl+yl*s.fb); this.buf[1][this.w]=lim(xr+yr*s.fb); this.w=(this.w+1)%BL; if(this.filled<BL) this.filled++; if(this.recLeft>0){ this.recLeft--; if(this.recLeft===0) this.port.postMessage({recDone:true}); } }
-      const dry=s.src==='wave'?0:(1-s.mix);
       oL[t]=Math.tanh((xl*dry+yl*s.mix)*s.level*1.2); oR[t]=Math.tanh((xr*dry+yr*s.mix)*s.level*1.2); }
     if((this.n+=1)%10===0){ const view={type:'view',g:this.G.slice(0,80).map(g=>{ const P=g.p+g.i*g.rate; return src?[(((P-(this.w-Math.min(this.filled,BL)))%BL)+BL)%BL/Math.max(1,Math.min(this.filled,BL)),g.i/g.L]:[(((P%TL)+TL)%TL)/TL,g.i/g.L]; }),voices:this.V.length};
       if(this.n%60===0){ const n=160, pk=new Float32Array(n); if(src){ const len=Math.min(this.filled,BL), st=this.w-len; for(let b=0;b<n;b++){ let m=0; const a=Math.floor(b*len/n), e=Math.floor((b+1)*len/n); for(let i=a;i<e;i+=8){ const v=Math.abs(this.buf[0][(((st+i)%BL)+BL)%BL]); if(v>m) m=v; } pk[b]=m; } } else if(T){ for(let b=0;b<n;b++){ let m=0; for(let i=Math.floor(b*TL/n);i<Math.floor((b+1)*TL/n);i+=8) m=Math.max(m,Math.abs(T[i])); pk[b]=m; } } view.peaks=Array.from(pk); }
@@ -168,7 +169,7 @@ class GrainCloud extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', GrainCloud);`;
 
 export default {
-  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.14.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.graincloud', name: 'Grain Cloud', version: '1.14.1', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 380 },
   about: { nl: 'Een granulaire synth en effect: knipt geluid in korreltjes en strooit ze opnieuw uit. Als effect: zet een audiokabel op de ingang en kies Live. Als synth: kies Golf en speel noten, of laat de wolk eindeloos zweven.\n\nNoten spelen een wolk op hun toonhoogte: C4 is de oorspronkelijke toon van de opname, bij Golf is dat A3.\n\nTips: Korrelgrootte klein en Dichtheid hoog = ruisachtig zoemen; groot en laag = losse brokjes. Toonsprongen Octaven met Toonspreiding 12 maakt van elk geluid een glinsterend koor. Paarse Mod: Drift op Positie laat de wolk vanzelf door de opname dwalen.', en: 'A granular synth and effect: cuts sound into tiny grains and scatters them again. As an effect: connect an audio cable to the input and choose Live. As a synth: choose Wave and play notes, or let the cloud float on endlessly.\n\nNotes play a cloud at their pitch: C4 is the original pitch of the recording, with Wave it is A3.\n\nTips: small Grain size and high Density = noisy buzzing; large and low = separate chunks. Pitch jumps Octaves with Pitch spread 12 turns any sound into a glittering choir. Purple Mod: Drift on Position lets the cloud wander through the recording by itself.' },
   ports: { audioIn: [{ id: 'in', name: 'In (source)' }], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },

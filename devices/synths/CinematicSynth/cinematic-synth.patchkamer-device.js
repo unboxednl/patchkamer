@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.17.1 — Prestatie bij snel spelen: afgeklonken noten (nog in hun uitklink) telden niet mee voor de stemlimiet, waardoor onder een stresstest meer dan 150 stemmen tegelijk klonken en de audioklok achterliep. Nu staat er een tweede grens van 32 klinkende stemmen (uitklinkende stemmen eerst, anders de oudste, met een korte afsluiting van 30 ms). Bij normaal spelen en bij minder dan 32 stemmen is de klank ongewijzigd.
 // 1.17.0 — Uitleg naar about (menu Over Cinematic Synth); de UI toont geen uitlegtekst meer.
 // 1.16.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
 // 1.15.1 — Alle continue regelaars zijn stuurbaar: Stereospreiding, Pitchdaling en Duur daling, de filteromhulling (aanval, verval, houd), Toetsvolging, de versterkingsomhulling
@@ -65,14 +66,14 @@ const TXT = {
 };
 
 export default {
-  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.17.0', modExclude: ['unison', 'layerOct', 'octaves', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
+  id: 'nl.patchkamer.cinematicsynth', name: 'Cinematic Synth', version: '1.17.1', modExclude: ['unison', 'layerOct', 'octaves', 'transpose'], kind: 'instrument', category: 'synth', ui: { width: 760, minWidth: 340 },
   about: { nl: 'Een filmische synth voor braams, pads, drones, ostinati en arpeggio\'s.\n\nVerbind Noten met een keyboard of sequencer. De pulsmotor volgt de klok: druk op Start.', en: 'A cinematic synth for braams, pads, drones, ostinatos and arpeggios.\n\nConnect Notes to a keyboard or sequencer. The pulse engine follows the clock: press Start.' },
   i18n: { nl: { ports: { notes: 'Noten', out: 'Uit' } } },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [], modOut: [], multiIn: [], multiOut: [] },
   create(ctx, host) {
     const T = TXT[host && host.lang] || TXT.en;
     let state = defaults(), dead = false, shell = null, ui = {}, statusEl = null, stopFrame = null, voices = [], held = new Map(), chord = new Map(), mod = {}, nextT = 0, pulseIdx = 0, rnd = 12345, lastRelease = 0;
-    const MAXV = 10, now = () => ctx.currentTime, tc = (p, v, t, c) => { try { p.setTargetAtTime(v, t === undefined ? now() : t, c === undefined ? 0.03 : c); } catch (e) { p.value = v; } };
+    const MAXV = 10, MAXT = 32, now = () => ctx.currentTime, tc = (p, v, t, c) => { try { p.setTargetAtTime(v, t === undefined ? now() : t, c === undefined ? 0.03 : c); } catch (e) { p.value = v; } };
     const eff = k => { const sp = SPEC[k]; let v = state[k]; if (mod[k]) { if (sp.scale === 'log') v = v * Math.pow(sp.max / sp.min, mod[k]); else v = v + mod[k] * (sp.max - sp.min); } return clamp(v, sp.min, sp.max); };
     // ---- geluidsketen achter de stemmen ----
     const vsum = ctx.createGain(), shaper = ctx.createWaveShaper(), low = ctx.createBiquadFilter(), high = ctx.createBiquadFilter(), bus = ctx.createGain(), master = ctx.createGain(), comp = ctx.createDynamicsCompressor(), out = ctx.createGain();
@@ -113,6 +114,7 @@ export default {
     function noteOn(note, vel, t, dur, hold) {
       if (!Number.isFinite(note) || !Number.isFinite(t)) return null; note = clamp(Math.round(note), 0, 127); vel = Number.isFinite(vel) ? clamp(vel, 0.01, 1) : 0.8;
       const live = voices.filter(v => !v.dead && !v.off); if (live.length >= MAXV) killVoice(live[0], t);
+      const ringing = voices.filter(v => !v.dead); if (ringing.length >= MAXT) killVoice(ringing.find(v => v.off) || ringing[0], t);
       const f0 = hzOf(note + state.transpose), un = state.unison, lw = state.layerWave, lun = Math.min(un, 3), srcs = [], g = ctx.createGain(), mix = ctx.createGain(), fl = ctx.createBiquadFilter();
       fl.type = 'lowpass'; fl.Q.value = eff('resonance'); fcv.connect(fl.detune); lfoF.connect(fl.detune);
       const kt = Math.pow(f0 / 261.63, eff('keytrack')), ea = eff('envAmt'), base = clamp(state.cutoff * kt, 30, 18000), peak = clamp(base * Math.pow(2, ea), 30, 20000), sus = clamp(base * Math.pow(2, ea * eff('fSustain')), 30, 20000);

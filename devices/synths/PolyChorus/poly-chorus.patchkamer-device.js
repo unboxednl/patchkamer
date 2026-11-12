@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.13.1 — Prestatie: de parameterobjecten van de motor krijgen al hun sleutels meteen (anders werden ze een woordenboek en was elke lezing in de samplelus traag) en de hoogdoorlaattabel wordt niet meer per stem opnieuw gemaakt. Geluid, state en ids ongewijzigd (uitvoer bit-identiek).
 // 1.13.0 — Regelaars herkenbaar voor skins (host.ui.adopt: id = state-sleutel, groep = de sectie, rol param of select) en elke sectie staat in een eigen blok (div.sec met kop en regelaars), zodat een skin ze als draaiknoppen in één kader kan tonen (skin Compact). Geluid, state en params() ongewijzigd; testNote staat nu in modExclude (bewust niet stuurbaar, zoals bij Patch Mono); zonder skin ziet het er hetzelfde uit.
 // 1.12.0 — Uitleg naar about (menu Over Poly Chorus); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.11.1 — Versterking (+9,5 dB) achter de compressor: het apparaat en de tunes waren erg zacht (pieken rond −34 tot −10 dBFS). Het plafond rondt de pieken af.
@@ -25,7 +26,15 @@ const NUM_KEYS = ['cutoff', 'resonance', 'filterEnv', 'keytrack', 'attack', 'dec
 // (behalve NUM_KEYS, dat de worklet-tekst zelf meegeeft).
 class PolyChorusEngine {
   constructor(sr, p) {
-    this.sr = sr; this.p = {}; this.target = {}; this.queue = []; this.voices = []; this.serial = 0; this.frame = 0;
+    this.sr = sr; this.queue = [];
+    // p en target hebben vanaf het begin alle sleutels (undefined = nog niet gezet), zodat het object een vaste vorm houdt; een sleutel die
+    // pas gaandeweg wordt toegevoegd, maakt van het object een woordenboek en dat maakt elke lezing in de samplelus langzaam.
+    // Houd deze lijst gelijk aan NUM_KEYS plus hpf, chorusMode en vcaMode.
+    this.p = { cutoff: undefined, resonance: undefined, filterEnv: undefined, keytrack: undefined, attack: undefined, decay: undefined, sustain: undefined, release: undefined, pw: undefined, pwm: undefined, noise: undefined, lfoRate: undefined,
+      vibrato: undefined, lfoFilter: undefined, drive: undefined, glide: undefined, transpose: undefined, saw: undefined, pulse: undefined, sub: undefined, chorusMix: undefined, width: undefined, hpf: undefined, chorusMode: undefined, vcaMode: undefined };
+    this.target = { cutoff: undefined, resonance: undefined, filterEnv: undefined, keytrack: undefined, attack: undefined, decay: undefined, sustain: undefined, release: undefined, pw: undefined, pwm: undefined, noise: undefined, lfoRate: undefined,
+      vibrato: undefined, lfoFilter: undefined, drive: undefined, glide: undefined, transpose: undefined, saw: undefined, pulse: undefined, sub: undefined, chorusMix: undefined, width: undefined };
+    this.hpfHz = [20, 80, 180, 400]; this.voices = []; this.serial = 0; this.frame = 0;
     this.seed = 197903; this.lfoPhase = 0;
     this.delayL = new Float32Array(Math.ceil(sr * 0.08)); this.delayR = new Float32Array(this.delayL.length);
     this.delayPos = 0; this.chorusPhase = 0; this.dcL = 0; this.dcR = 0; this.lastL = 0; this.lastR = 0;
@@ -120,7 +129,7 @@ class PolyChorusEngine {
       const tracking = (p.keytrack ?? 0.5) * (v.note - 60) / 12;
       const cut = Math.max(25, Math.min(sr * 0.43, (p.cutoff || 2500) * 2 ** ((p.filterEnv || 0) * e + (p.lfoFilter || 0) * lfo * 3 + tracking)));
       v.g = Math.tan(Math.PI * cut / sr); v.k = Math.max(0.07, 2 - (p.resonance || 0) * 1.93);
-      const hpf = [20, 80, 180, 400][p.hpf || 0] || 20;
+      const hpf = this.hpfHz[p.hpf || 0] || 20;
       v.hg = Math.tan(Math.PI * Math.min(sr * 0.43, hpf) / sr);
     }
     x = Math.tanh(x * (1 + (p.drive || 0) * 5));
@@ -144,7 +153,7 @@ class PolyChorusEngine {
     for (let i = 0; i < left.length; i++) {
       const t = time + i / sr;
       while (this.queue.length && this.queue[0].time <= t + 1e-10) this.event(this.queue.shift());
-      if ((this.frame & 31) === 0) for (const k in this.target) this.p[k] += (this.target[k] - this.p[k]) * 0.04;
+      if ((this.frame & 31) === 0) for (const k of NUM_KEYS) { const tv = this.target[k]; if (tv !== undefined) this.p[k] += (tv - this.p[k]) * 0.04; }
       const p = this.p, rate = p.lfoRate || 1;
       this.lfoPhase += rate / sr;
       if (this.lfoPhase >= 1) { this.lfoPhase %= 1; this.random(); }   // de sample-and-hold-trekking blijft de ruisreeks opschuiven
@@ -279,7 +288,7 @@ label{min-width:0}`;
 export default {
   id: 'nl.patchkamer.polychorus',
   name: 'Poly Chorus',
-  version: '1.13.0',
+  version: '1.13.1',
   modExclude: ['testNote'],   // werkstand, geen klank (de testnoot is nu een aangemelde regelaar; zo blijft hij bewust buiten params())
   kind: 'instrument',
   category: 'synth',

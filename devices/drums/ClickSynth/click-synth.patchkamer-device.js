@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.19.1 — Prestatie: de stemmen in de AudioWorklet krijgen al hun velden meteen bij het aanmaken (geen late toevoegingen meer, dus één vorm voor V8), en de glitch-tabel wordt niet meer per segment aangemaakt. Geluid bit-identiek; state, presets en poorten ongewijzigd.
 // 1.19.0 — Hint bij Klik op een stap: een korte tekst onder de keuzelijst die zegt wat een klik in de gekozen stand doet (aan/uit, accent, kans, ratchet, toonsprong), dezelfde tekst als tooltip op de stappen, en een tooltip op de keuzelijst. Geluid, state en poorten ongewijzigd.
 // 1.18.0 — Regelaars herkenbaar voor skins (host.ui.adopt: de zwenkers, master en alle klankknoppen als rol param, groep per blok), zodat een skin ze als draaiknop kan tonen (skin Compact). Geluid, state, params() en poorten ongewijzigd; zonder skin ziet het apparaat er hetzelfde uit.
 // 1.17.0 — Uitleg naar about (menu Over Click Synth); de UI toont geen uitlegtekst meer.
@@ -62,6 +63,7 @@ const WORKLET = `
 const TAU=Math.PI*2;
 const MAT=[[1,2.57,4.21,6.13],[1,2.32,4.25,6.63],[1,2.76,5.40,8.93],[1,1.59,2.14,2.65]]; // wood, glass, metal, skin/drum
 const FMR=[0.5,1,1.41,2,2.76,3.5,5.19,7.3,11.2];
+const GLOPT=[0.5,1,1,1.5,2,3,0.75], NOMODES=[], NOBUF=new Float32Array(0);
 class ClickSynth extends AudioWorkletProcessor{
   constructor(){ super(); this.V=[]; this.q=[]; this.seed=4242;
     this.port.onmessage=e=>{ const m=e.data||{}; if(m.type==='hit') this.q.push(m); else if(m.type==='panic'){ for(const v of this.V) v.kill=1; this.q=[]; } }; }
@@ -72,6 +74,7 @@ class ClickSynth extends AudioWorkletProcessor{
     const decS=Math.max(8,p.decay*sr), v={lane:m.lane,engine:p.engine,off,n:0,age:0,f0,p,vel:m.vel,choke:p.choke,
       kdec:Math.exp(-1/decS),env:1,att:Math.max(2,Math.round(0.00025*sr)),pe:1,kpe:Math.exp(-1/Math.max(4,p.ptime*sr)),ph:0,ph2:0,
       y1:0,y2:0,lp:0,ic1:0,ic2:0,hold:0,hv:0,kill:0,kv:1,gl:1,glN:0,
+      a1:0,a2:0,b0:0,bg:0,ba1:0,ba2:0,bk:0,modes:NOMODES,buf:NOBUF,bi:0,prev:0,fb:0,dead:0,fg:0,fk:0,fa1:0,fa2:0,fa3:0,
       gL:Math.cos((p.pan+1)*Math.PI/4)*m.vel*p.level, gR:Math.sin((p.pan+1)*Math.PI/4)*m.vel*p.level};
     if(p.engine==='modal'){ const c=p.color*3, i=Math.min(2,Math.floor(c)), fr=c-i, R=MAT[i].map((x,k)=>x+(MAT[i+1][k]-x)*fr);
       v.modes=R.map((ratio,k)=>{ const f=f0*ratio; if(f>sr*0.45) return null; const d=p.decay*Math.pow(1+p.shape*3,-k)*sr, r=Math.exp(-1/Math.max(4,d)), w=TAU*f/sr; return {a1:2*r*Math.cos(w),a2:-r*r,b0:Math.sin(w)*0.7,y1:0,y2:0,g:[1,0.62,0.42,0.3][k]}; }).filter(Boolean); v.kdec=Math.exp(-1/(p.decay*sr*1.3)); }
@@ -101,7 +104,7 @@ class ClickSynth extends AudioWorkletProcessor{
           case 'modal':{ const exc=n===0?1:(n<40?this.rnd()*p.noise*0.3*(1-n/40):0); for(const md of v.modes){ const y=exc*md.b0+md.a1*md.y1+md.a2*md.y2; md.y2=md.y1; md.y1=y; s+=y*md.g; } env=v.kill?v.kv:1; if(n>p.decay*sr*5) v.dead=1; break; }
           case 'string':{ const L=v.buf.length, i=v.bi, y=v.buf[i]; const nx=v.buf[(i+1)%L]; const d=0.5+0.45*(1-p.color); v.buf[i]=(y*d+nx*(1-d))*v.fb; v.bi=(i+1)%L; s=y*0.9; if(p.shape>0) s=s*(1-p.shape)+Math.tanh(s*4)*p.shape*0.6; env=v.kill?v.kv:Math.min(1,env*4); if(n>p.decay*sr*5) v.dead=1; break; }
           case 'zap':{ v.ph+=f/sr; v.ph-=Math.floor(v.ph); const x=TAU*v.ph; s=Math.sin(x+p.shape*4*Math.sin(x)); if(p.color>0) s=s*(1-p.color)+(v.ph<0.5?1:-1)*p.color*0.7; s*=0.8; break; }
-          case 'glitch':{ if(v.glN--<=0){ v.glN=Math.round((0.0004+Math.pow(1-p.color,2)*0.03)*sr); const opt=[0.5,1,1,1.5,2,3,0.75]; v.gl=opt[Math.floor((this.rnd()*0.5+0.5)*opt.length)%opt.length]; }
+          case 'glitch':{ if(v.glN--<=0){ v.glN=Math.round((0.0004+Math.pow(1-p.color,2)*0.03)*sr); v.gl=GLOPT[Math.floor((this.rnd()*0.5+0.5)*GLOPT.length)%GLOPT.length]; }
             v.ph+=f*v.gl/sr; v.ph-=Math.floor(v.ph); s=(v.ph<0.5?0.7:-0.7)*(1-p.shape*0.5)+Math.sin(TAU*v.ph*3)*p.shape*0.4; break; }
         }
         if(p.noise>0&&v.engine!=='modal'&&v.engine!=='noise') s=s*(1-p.noise*0.6)+this.rnd()*p.noise*env*0.7;
@@ -124,7 +127,7 @@ const pkLoop = (host, getInst, cb, fps) => {   // tekenen via de klok van de hos
   const inst = getInst(); if (host && typeof host.frame === 'function' && inst && inst._id) return host.frame(inst, cb, fps);
   let raf = 0, last = 0, stop = false; const f = t => { if (stop) return; raf = requestAnimationFrame(f); if (document.hidden || t - last < 1000 / fps - 2) return; last = t; cb(t); }; raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); }; };
 export default {
-  id: 'nl.patchkamer.clicksynth', modExclude: ['patSwing', 'laneSwing'] /* de zwenkers volgen het gekozen patroon of spoor; params() biedt ze per patroon (patSwing.0 tot .3) en per spoor (lN.swing) */, name: 'Click Synth', version: '1.19.0', kind: 'instrument', category: 'groove',
+  id: 'nl.patchkamer.clicksynth', modExclude: ['patSwing', 'laneSwing'] /* de zwenkers volgen het gekozen patroon of spoor; params() biedt ze per patroon (patSwing.0 tot .3) en per spoor (lN.swing) */, name: 'Click Synth', version: '1.19.1', kind: 'instrument', category: 'groove',
 about: { nl: 'Percussiesynth. Acht sporen met elk een eigen klankmotor. Boetseer kliks, tiks, bleeps, zaps, hout, glas, metaal en glitches. Willekeur maakt elke slag net anders; elk spoor kan een eigen lengte hebben (polyritme).\n\nKlik op een stap volgens de keuze bovenaan; Shift-klik zet een stap zacht, rechtsklik wist hem. Lengte per spoor maakt polyritmes (bijvoorbeeld 7 tegen 16). Afknijpgroep: een slag kapt de andere sporen in dezelfde groep af (open en dichte hihat).\n\nPer klankmotor hebben Kleur en Karakter een eigen betekenis. Tick: Kleur = ruis in de klik, Karakter = resonantie. Bleep: Kleur = sinus, blok, zaag; Karakter = octaaf-FM. FM: Kleur = verhouding van de modulator, Karakter = FM-diepte. Noise: Kleur = wit tot donker, Karakter = smalheid van het filter. Modal: Kleur = materiaal (hout, glas, metaal, vel), Karakter = hoe sneller de hoge delen uitsterven. String: Kleur = helderheid, Karakter = vervorming. Zap: Kleur = sinus tot blok, Karakter = fold. Glitch: Kleur = stotter-snelheid, Karakter = boventonen.\n\nStaat de sequencer uit, speel dan vanuit een ander apparaat (drumprotocol trig, ch1 tot ch8) of met de noten 36 tot 43. De bundeluitgang geeft elk spoor los aan de Mixer.', en: 'Percussion synth. Eight lanes, each with its own sound engine. Shape clicks, ticks, bleeps, zaps, wood, glass, metal and glitches. Randomness makes every hit a little different; each lane can have its own length (polyrhythm).\n\nClick a step according to the choice at the top; Shift-click makes a step soft, right-click clears it. Length per lane makes polyrhythms (for example 7 against 16). Choke group: a hit cuts off the other lanes in the same group (open and closed hi-hat).\n\nFor each sound engine, Color and Character mean something different. Tick: Color = noise in the click, Character = resonance. Bleep: Color = sine, square, saw; Character = octave FM. FM: Color = modulator ratio, Character = FM depth. Noise: Color = white to dark, Character = filter narrowness. Modal: Color = material (wood, glass, metal, skin), Character = how much faster the high parts die. String: Color = brightness, Character = distortion. Zap: Color = sine to square, Character = fold. Glitch: Color = stutter speed, Character = overtones.\n\nWith the sequencer off, play from another device (drum protocol trig, ch1 to ch8) or with notes 36 to 43. The bundle output gives every lane separately to the Mixer.' },
   ui: { width: 1080, minWidth: 560 },
   i18n: { en: { name: 'Click Synth', ports: { out: 'Stereo mix', trigger: 'Trigs / notes', mod: 'Mod', multi: 'Separate lanes (bundle)' } } },
@@ -431,7 +434,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
           for (let j = 0; j < L.len; j++) { const S = L.pats[state.pattern][j]; if (!(S.v > 0)) continue; const h = { t: j * 12, lane: i, vel: Math.max(0.01, S.v) }; if (S.v >= 0.9) { h.acc = true; h.vel = 1; } if (S.p < 1) h.prob = S.p; if (S.r > 1) h.ratchet = S.r; hits.push(h); } });
         hits.sort((a, b) => a.t - b.t || a.lane - b.lane);
         const native = { lens: state.lanes.map(L => L.len), steps: state.lanes.map(L => L.pats[state.pattern].slice(0, L.len).map(S => ({ v: S.v, p: S.p, r: S.r, t: S.t }))) };
-        return JSON.parse(JSON.stringify({ format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: clipName(), length, grid: 16, source: { device: CLIP_ID, name: 'Click Synth', version: '1.19.0', scheme: 'device' }, lanes, hits, native: { device: CLIP_ID, data: native } })); } catch { return null; } }
+        return JSON.parse(JSON.stringify({ format: 'patchkamer-clip', formatVersion: 1, kind: 'drums', name: clipName(), length, grid: 16, source: { device: CLIP_ID, name: 'Click Synth', version: '1.19.1', scheme: 'device' }, lanes, hits, native: { device: CLIP_ID, data: native } })); } catch { return null; } }
     function setClip(clip) { try {
         if (dead) return { ok: false, reason: T.clipGone };
         if (!clip || typeof clip !== 'object' || Array.isArray(clip) || clip.format !== 'patchkamer-clip' || (clip.formatVersion !== undefined && clip.formatVersion !== 1)) return { ok: false, reason: T.clipBad };
