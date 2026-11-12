@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.36.2 (2026-11-12)
+
+### Improved
+- **Drum Kit (1.19.3): lighter page.** The marker for the current step on the step buttons was updated every animation frame on all buttons of all channels; it now only updates when the step changes. In a main-thread measurement the drawing time of Drum Kit dropped from about 0.2 to 0.03 s per 6 s. Sound, state and appearance are unchanged.
+
 ## 0.36.1 (2026-11-12)
 
 ### Fixed

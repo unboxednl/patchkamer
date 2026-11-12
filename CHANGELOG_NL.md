@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.36.2 (2026-11-12)
+
+### Verbeterd
+- **Drum Kit (1.19.3): lichtere pagina.** De markering van de huidige stap op de stapknoppen werd elk beeldframe op alle knoppen van alle kanalen bijgewerkt; nu alleen nog als de stap verandert. In een meting van de hoofddraad daalde de tijd van het tekenen van Drum Kit van ongeveer 0,2 naar 0,03 s per 6 s. Geluid, state en uiterlijk zijn ongewijzigd.
+
 ## 0.36.1 (2026-11-12)
 
 ### Opgelost
