@@ -2,7 +2,7 @@
   "format": "patchkamer-bibliotheek",
   "formatVersion": 1,
   "catV": 2,
-  "saved": "2026-11-07T17:02:05.000Z",
+  "saved": "2026-11-12T12:00:00.000Z",
   "categories": [
     {
       "key": "synth",
@@ -110,11 +110,13 @@
     "nl.patchkamer.room": "fx-space",
     "nl.patchkamer.delay": "fx-space",
     "nl.patchkamer.reverb": "fx-space",
+    "nl.patchkamer.stutter": "fx-space",
     "nl.patchkamer.convolutionreverb": "fx-space",
     "nl.patchkamer.compressor": "fx-dyn",
     "nl.patchkamer.gate": "fx-dyn",
     "nl.patchkamer.deesser": "fx-dyn",
     "nl.patchkamer.pump": "fx-dyn",
+    "nl.patchkamer.transientshaper": "fx-dyn",
     "nl.patchkamer.grit": "fx-drive",
     "nl.patchkamer.distortion": "fx-drive",
     "nl.patchkamer.bitcrusher": "fx-drive",

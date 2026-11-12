@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.36.1 (2026-11-12)
+
+### Opgelost
+- **Stutter en Transient Shaper staan nu in een subcategorie van Effecten.** Ze misten in de bibliotheekindeling en stonden daardoor los bovenaan Effecten, boven de subcategorieën. Stutter staat nu onder Tijd & ruimte, Transient Shaper onder Dynamica.
+
 ## 0.36.0 (2026-11-12)
 
 ### Toegevoegd

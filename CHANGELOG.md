@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.36.1 (2026-11-12)
+
+### Fixed
+- **Stutter and Transient Shaper now sit in a subcategory of Effects.** They were missing from the library layout and so stood loose at the top of Effects, above the subcategories. Stutter is now under Time & space, Transient Shaper under Dynamics.
+
 ## 0.36.0 (2026-11-12)
 
 ### Added
