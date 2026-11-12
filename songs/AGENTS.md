@@ -254,6 +254,7 @@ Leg één kabel per verbinding vast in `cables`. Controleer elke poort-`id` in d
 4. **Uitgang:** Mixer `out` → eventueel [Master Chain](../devices/mastering/MasterChain/AGENTS.md) (`in` → `out`) → Speakers `in`.
 5. **Modulatie (optioneel):** modulator `mod` → doel `mod` (kind `mod`). De toewijzing staat in de state van de modulator (zie zijn `AGENTS.md`).
 6. Elke notenpoort die je gebruikt heeft een klankbron; elke klankbron heeft een weg naar **Speakers**. Een ontbrekende kabel naar Speakers geeft een stille song.
+7. **Elk spoor en elk drumkanaal.** Loop alle sporen van de sequencer langs: heeft een spoor noten, dan hoort er een kabel van zijn poort naar een klankbron bij. Bij een Drum Kit die via `trigger` wordt gespeeld: elk kanaal dat je wilt horen heeft een eigen `note`, en de sequencer moet die noot sturen (eigen patronen in de kit spelen niet mee als `run` uit staat). Een kanaal zonder noten van de sequencer blijft stil, zonder foutmelding.
 
 ### Stap 9. Afmixen en mastering
 
@@ -385,6 +386,7 @@ Nuances die over stijlen heen gelden:
 |---|---|---|
 | Noten buiten het patroon | de noot wordt afgekapt of nooit gespeeld (Step Sequencer: alleen stappen onder `len`; Pattern Tracker: `row` onder `length`; Clip Arranger: `step` onder `bars × 16`; Chord Sequencer: `p` onder `bars × 64`) | tel de posities per patroon; `check-song.py` vindt dit niet, het meet alleen of er geluid is |
 | Lijst korter dan 64 bij Step Sequencer | het beginpatroon blijft staan en klinkt mee | tel `n`, `vel`, `ln`, `acc`, `mt`: 64 plaatsen |
+| Drumkanaal dat de sequencer nooit aanstuurt | een kanaal van de Drum Kit met een eigen patroon (rim, shaker, cowbell) blijft stil: de kit staat op `run: false` en de sequencer stuurt zijn noot niet; `check-song.py` meldt het niet | vergelijk per kitkanaal `note` met de noten die de sequencer naar `trigger` stuurt; geef een ontbrekend instrument een eigen spoor en kabel, of laat de kit zelf spelen (`run: true`) |
 | Ontbrekende kabel naar Speakers | stille song | `check-song.py` meldt stilte (piek onder −80 dBFS) of hoort geen enkele kabel; kijk of elke klankbron via een keten bij `Speakers` `in` uitkomt |
 | Kabel naar een poort die niet bestaat | gebeurt niets (alleen audio wordt gecontroleerd) | `check-song.py` controleert elke poort; kijk ook in de tabel van [../devices/AGENTS.md](../devices/AGENTS.md#de-apparaten) |
 | Een klok die niet loopt | niets speelt | de gebruiker drukt op Start; `check-song.py` doet dat zelf |

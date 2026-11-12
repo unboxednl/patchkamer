@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.34.1 (2026-11-12)
+
+### Fixed
+- **Hip-hop songs: every drum channel now sounds.** In Boom Bap, G-Funk, Lo-Fi and Trap, rim, shaker, cowbell, woodblock and sub 808 had their own pattern in the Drum Kit, but the Drum Kit is set to `run: false` and the Pattern Tracker never sent their notes, so they stayed silent. Each missing instrument now has its own Pattern Tracker track (**Rim**, **Shaker**, **Cowbell**, **Wood**, **Sub**) with a cable to `trigger`, with the same hits as the pattern in the kit, in the sections where the kick plays. Measured in the host over the whole song: every channel produces sound. Not listened to.
+- **songs/AGENTS.md:** step 8 and the pitfalls list: check every track and every drum channel, because a channel the sequencer never drives stays silent without an error.
+
 ## 0.34.0 (2026-11-11)
 
 ### Added
