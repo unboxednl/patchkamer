@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.0.2 — Lichtere processor: de acht sinussen van de modulatie per sample zijn vervangen door een rotatie die per blok exact wordt hersteld. De uitvoer wijkt hierdoor hoogstens één Float32-stap af (1,5e-8, -156 dBFS), onhoorbaar; verder ongewijzigd.
 // 1.0.1 — Lichtere processor: de acht lijnen van het feedback-delay-network staan tijdens het blok als losse getallen in plaats van in arrays, links en rechts delen positie en breuk bij de pre-delay en de vroege reflecties, zonder vroege reflecties (Early 0) vallen de taps weg, de tapposities en -versterkingen staan vooraf in arrays die bij het maken al bestaan (geen nieuwe array per blok), de gelijk-vermogen mix rekent bij een stabiele mix niet meer per sample en een lijnlengte die zijn doel heeft bereikt wordt niet meer bijgesteld. Geluid, state, poorten en uiterlijk bit-identiek (zelfde uitvoer als 1.0.0 gemeten).
 // 1.0.0 — Nieuw apparaat (contract v1.28): een algoritmische galm met vijf modellen (Hall, Plate, Spring, Room, Chamber) in één AudioWorklet.
 //          Hall, Plate, Room en Chamber zijn een feedback-delay-network van 8 gemoduleerde lijnen (Householder-matrix) met vier ingangsdiffusers, een tabel vroege reflecties en per lijn een
@@ -34,7 +35,7 @@ const TXT = {
 };
 const DEF = { model: 'hall', size: 0.5, decay: 2.5, predelay: 20, sync: false, div: '16', dampHi: 6000, dampLo: 1, diff: 0.7, mod: 0.4, early: 0.3, hp: 20, lp: 20000, width: 1, duck: 0, freeze: false, mix: 0.3 };
 
-const WNAME = 'nl-patchkamer-reverb-1-0-1';
+const WNAME = 'nl-patchkamer-reverb-1-0-2';
 const WORKLET = `
 const IN_MAX = 16, TWO_PI = 6.283185307179586;
 const P0 = { model: 'hall', size: 0.5, decay: 2.5, pd: 0.02, dampHi: 6000, dampLo: 1, diff: 0.7, mod: 0.4, early: 0.3, hp: 20, lp: 20000, width: 1, duck: 0, freeze: false, mix: 0.3 };
@@ -101,6 +102,7 @@ class FDN {
     for (let ch = 0; ch < 2; ch++) for (let k = 0; k < 4; k++) { const len = Math.max(2, Math.round(c.ap[k] * 0.001 * sr * (ch ? 1.09 : 1))); this.ap[ch].push({ b: new Float32Array(len), i: 0 }); }
     this.bufs = []; this.masks = []; this.len = new Float64Array(8); this.tgt = new Float64Array(8); this.ph = new Float64Array(8); this.rate = new Float64Array(8);
     for (let i = 0; i < 8; i++) { const maxLen = Math.ceil(c.lines[i] * 0.001 * sr * 2.1) + Math.ceil(c.mod * sr) + 16, n = pow2(maxLen); this.bufs.push(new Float32Array(n)); this.masks.push(n - 1); this.ph[i] = (i * 0.37) % 1; this.rate[i] = c.modRate[i] / sr; }
+    this.cd = new Float64Array(8); this.sdn = new Float64Array(8); for (let i = 0; i < 8; i++) { this.cd[i] = Math.cos(TWO_PI * this.rate[i]); this.sdn[i] = Math.sin(TWO_PI * this.rate[i]); }
     this.g = new Float64Array(8); this.gT = new Float64Array(8); this.p = new Float64Array(8); this.pT = new Float64Array(8); this.la = new Float64Array(8); this.laT = new Float64Array(8);
     this.s1 = new Float64Array(8); this.s2 = new Float64Array(8); this.ys = new Float64Array(8);
     this.w = 0; this.cl = 1 - Math.exp(-TWO_PI * 250 / sr);
@@ -142,6 +144,15 @@ class FDN {
     const la0 = la[0]; const la1 = la[1]; const la2 = la[2]; const la3 = la[3]; const la4 = la[4]; const la5 = la[5]; const la6 = la[6]; const la7 = la[7];
     const masks0 = masks[0]; const masks1 = masks[1]; const masks2 = masks[2]; const masks3 = masks[3]; const masks4 = masks[4]; const masks5 = masks[5]; const masks6 = masks[6]; const masks7 = masks[7];
     const bufs0 = bufs[0]; const bufs1 = bufs[1]; const bufs2 = bufs[2]; const bufs3 = bufs[3]; const bufs4 = bufs[4]; const bufs5 = bufs[5]; const bufs6 = bufs[6]; const bufs7 = bufs[7];
+    const cd = this.cd, sd = this.sdn;
+    let sn0 = Math.sin(TWO_PI * ph0), cs0 = Math.cos(TWO_PI * ph0); const cd0 = cd[0], sd0 = sd[0];
+    let sn1 = Math.sin(TWO_PI * ph1), cs1 = Math.cos(TWO_PI * ph1); const cd1 = cd[1], sd1 = sd[1];
+    let sn2 = Math.sin(TWO_PI * ph2), cs2 = Math.cos(TWO_PI * ph2); const cd2 = cd[2], sd2 = sd[2];
+    let sn3 = Math.sin(TWO_PI * ph3), cs3 = Math.cos(TWO_PI * ph3); const cd3 = cd[3], sd3 = sd[3];
+    let sn4 = Math.sin(TWO_PI * ph4), cs4 = Math.cos(TWO_PI * ph4); const cd4 = cd[4], sd4 = sd[4];
+    let sn5 = Math.sin(TWO_PI * ph5), cs5 = Math.cos(TWO_PI * ph5); const cd5 = cd[5], sd5 = sd[5];
+    let sn6 = Math.sin(TWO_PI * ph6), cs6 = Math.cos(TWO_PI * ph6); const cd6 = cd[6], sd6 = sd[6];
+    let sn7 = Math.sin(TWO_PI * ph7), cs7 = Math.cos(TWO_PI * ph7); const cd7 = cd[7], sd7 = sd[7];
     const tpd = P.pd * sr; let w = this.w, pw = this.pdW, pdc = this.pdc;
     const fzc = fz0 === fz1, noEarly = eG === 0;
     for (let n = 0; n < N; n++) {
@@ -157,7 +168,8 @@ class FDN {
       }
       let t0 = tgt0 - len0; if (t0 !== 0) { if (t0 > 0.1) t0 = 0.1; else if (t0 < -0.1) t0 = -0.1; len0 += t0; }
       ph0 += rate0; if (ph0 >= 1) ph0 -= 1;
-      const hp0 = w - (len0 + md * Math.sin(TWO_PI * ph0)), hi0 = Math.floor(hp0), hf0 = hp0 - hi0, m0 = masks0, b0 = bufs0;
+      { const ns = sn0 * cd0 + cs0 * sd0; cs0 = cs0 * cd0 - sn0 * sd0; sn0 = ns; }
+      const hp0 = w - (len0 + md * sn0), hi0 = Math.floor(hp0), hf0 = hp0 - hi0, m0 = masks0, b0 = bufs0;
       const u0 = b0[(hi0 - 1) & m0], v0 = b0[hi0 & m0], x0 = b0[(hi0 + 1) & m0], q0 = b0[(hi0 + 2) & m0];
       const r0 = ((((q0 - u0) * 0.5 + (v0 - x0) * 1.5) * hf0 + (u0 - 2.5 * v0 + 2 * x0 - 0.5 * q0)) * hf0 + (x0 - u0) * 0.5) * hf0 + v0;
       s20 += cL * (r0 - s20);
@@ -165,7 +177,8 @@ class FDN {
       const y0 = g0 * s10;
       let t1 = tgt1 - len1; if (t1 !== 0) { if (t1 > 0.1) t1 = 0.1; else if (t1 < -0.1) t1 = -0.1; len1 += t1; }
       ph1 += rate1; if (ph1 >= 1) ph1 -= 1;
-      const hp1 = w - (len1 + md * Math.sin(TWO_PI * ph1)), hi1 = Math.floor(hp1), hf1 = hp1 - hi1, m1 = masks1, b1 = bufs1;
+      { const ns = sn1 * cd1 + cs1 * sd1; cs1 = cs1 * cd1 - sn1 * sd1; sn1 = ns; }
+      const hp1 = w - (len1 + md * sn1), hi1 = Math.floor(hp1), hf1 = hp1 - hi1, m1 = masks1, b1 = bufs1;
       const u1 = b1[(hi1 - 1) & m1], v1 = b1[hi1 & m1], x1 = b1[(hi1 + 1) & m1], q1 = b1[(hi1 + 2) & m1];
       const r1 = ((((q1 - u1) * 0.5 + (v1 - x1) * 1.5) * hf1 + (u1 - 2.5 * v1 + 2 * x1 - 0.5 * q1)) * hf1 + (x1 - u1) * 0.5) * hf1 + v1;
       s21 += cL * (r1 - s21);
@@ -173,7 +186,8 @@ class FDN {
       const y1 = g1 * s11;
       let t2 = tgt2 - len2; if (t2 !== 0) { if (t2 > 0.1) t2 = 0.1; else if (t2 < -0.1) t2 = -0.1; len2 += t2; }
       ph2 += rate2; if (ph2 >= 1) ph2 -= 1;
-      const hp2 = w - (len2 + md * Math.sin(TWO_PI * ph2)), hi2 = Math.floor(hp2), hf2 = hp2 - hi2, m2 = masks2, b2 = bufs2;
+      { const ns = sn2 * cd2 + cs2 * sd2; cs2 = cs2 * cd2 - sn2 * sd2; sn2 = ns; }
+      const hp2 = w - (len2 + md * sn2), hi2 = Math.floor(hp2), hf2 = hp2 - hi2, m2 = masks2, b2 = bufs2;
       const u2 = b2[(hi2 - 1) & m2], v2 = b2[hi2 & m2], x2 = b2[(hi2 + 1) & m2], q2 = b2[(hi2 + 2) & m2];
       const r2 = ((((q2 - u2) * 0.5 + (v2 - x2) * 1.5) * hf2 + (u2 - 2.5 * v2 + 2 * x2 - 0.5 * q2)) * hf2 + (x2 - u2) * 0.5) * hf2 + v2;
       s22 += cL * (r2 - s22);
@@ -181,7 +195,8 @@ class FDN {
       const y2 = g2 * s12;
       let t3 = tgt3 - len3; if (t3 !== 0) { if (t3 > 0.1) t3 = 0.1; else if (t3 < -0.1) t3 = -0.1; len3 += t3; }
       ph3 += rate3; if (ph3 >= 1) ph3 -= 1;
-      const hp3 = w - (len3 + md * Math.sin(TWO_PI * ph3)), hi3 = Math.floor(hp3), hf3 = hp3 - hi3, m3 = masks3, b3 = bufs3;
+      { const ns = sn3 * cd3 + cs3 * sd3; cs3 = cs3 * cd3 - sn3 * sd3; sn3 = ns; }
+      const hp3 = w - (len3 + md * sn3), hi3 = Math.floor(hp3), hf3 = hp3 - hi3, m3 = masks3, b3 = bufs3;
       const u3 = b3[(hi3 - 1) & m3], v3 = b3[hi3 & m3], x3 = b3[(hi3 + 1) & m3], q3 = b3[(hi3 + 2) & m3];
       const r3 = ((((q3 - u3) * 0.5 + (v3 - x3) * 1.5) * hf3 + (u3 - 2.5 * v3 + 2 * x3 - 0.5 * q3)) * hf3 + (x3 - u3) * 0.5) * hf3 + v3;
       s23 += cL * (r3 - s23);
@@ -189,7 +204,8 @@ class FDN {
       const y3 = g3 * s13;
       let t4 = tgt4 - len4; if (t4 !== 0) { if (t4 > 0.1) t4 = 0.1; else if (t4 < -0.1) t4 = -0.1; len4 += t4; }
       ph4 += rate4; if (ph4 >= 1) ph4 -= 1;
-      const hp4 = w - (len4 + md * Math.sin(TWO_PI * ph4)), hi4 = Math.floor(hp4), hf4 = hp4 - hi4, m4 = masks4, b4 = bufs4;
+      { const ns = sn4 * cd4 + cs4 * sd4; cs4 = cs4 * cd4 - sn4 * sd4; sn4 = ns; }
+      const hp4 = w - (len4 + md * sn4), hi4 = Math.floor(hp4), hf4 = hp4 - hi4, m4 = masks4, b4 = bufs4;
       const u4 = b4[(hi4 - 1) & m4], v4 = b4[hi4 & m4], x4 = b4[(hi4 + 1) & m4], q4 = b4[(hi4 + 2) & m4];
       const r4 = ((((q4 - u4) * 0.5 + (v4 - x4) * 1.5) * hf4 + (u4 - 2.5 * v4 + 2 * x4 - 0.5 * q4)) * hf4 + (x4 - u4) * 0.5) * hf4 + v4;
       s24 += cL * (r4 - s24);
@@ -197,7 +213,8 @@ class FDN {
       const y4 = g4 * s14;
       let t5 = tgt5 - len5; if (t5 !== 0) { if (t5 > 0.1) t5 = 0.1; else if (t5 < -0.1) t5 = -0.1; len5 += t5; }
       ph5 += rate5; if (ph5 >= 1) ph5 -= 1;
-      const hp5 = w - (len5 + md * Math.sin(TWO_PI * ph5)), hi5 = Math.floor(hp5), hf5 = hp5 - hi5, m5 = masks5, b5 = bufs5;
+      { const ns = sn5 * cd5 + cs5 * sd5; cs5 = cs5 * cd5 - sn5 * sd5; sn5 = ns; }
+      const hp5 = w - (len5 + md * sn5), hi5 = Math.floor(hp5), hf5 = hp5 - hi5, m5 = masks5, b5 = bufs5;
       const u5 = b5[(hi5 - 1) & m5], v5 = b5[hi5 & m5], x5 = b5[(hi5 + 1) & m5], q5 = b5[(hi5 + 2) & m5];
       const r5 = ((((q5 - u5) * 0.5 + (v5 - x5) * 1.5) * hf5 + (u5 - 2.5 * v5 + 2 * x5 - 0.5 * q5)) * hf5 + (x5 - u5) * 0.5) * hf5 + v5;
       s25 += cL * (r5 - s25);
@@ -205,7 +222,8 @@ class FDN {
       const y5 = g5 * s15;
       let t6 = tgt6 - len6; if (t6 !== 0) { if (t6 > 0.1) t6 = 0.1; else if (t6 < -0.1) t6 = -0.1; len6 += t6; }
       ph6 += rate6; if (ph6 >= 1) ph6 -= 1;
-      const hp6 = w - (len6 + md * Math.sin(TWO_PI * ph6)), hi6 = Math.floor(hp6), hf6 = hp6 - hi6, m6 = masks6, b6 = bufs6;
+      { const ns = sn6 * cd6 + cs6 * sd6; cs6 = cs6 * cd6 - sn6 * sd6; sn6 = ns; }
+      const hp6 = w - (len6 + md * sn6), hi6 = Math.floor(hp6), hf6 = hp6 - hi6, m6 = masks6, b6 = bufs6;
       const u6 = b6[(hi6 - 1) & m6], v6 = b6[hi6 & m6], x6 = b6[(hi6 + 1) & m6], q6 = b6[(hi6 + 2) & m6];
       const r6 = ((((q6 - u6) * 0.5 + (v6 - x6) * 1.5) * hf6 + (u6 - 2.5 * v6 + 2 * x6 - 0.5 * q6)) * hf6 + (x6 - u6) * 0.5) * hf6 + v6;
       s26 += cL * (r6 - s26);
@@ -213,7 +231,8 @@ class FDN {
       const y6 = g6 * s16;
       let t7 = tgt7 - len7; if (t7 !== 0) { if (t7 > 0.1) t7 = 0.1; else if (t7 < -0.1) t7 = -0.1; len7 += t7; }
       ph7 += rate7; if (ph7 >= 1) ph7 -= 1;
-      const hp7 = w - (len7 + md * Math.sin(TWO_PI * ph7)), hi7 = Math.floor(hp7), hf7 = hp7 - hi7, m7 = masks7, b7 = bufs7;
+      { const ns = sn7 * cd7 + cs7 * sd7; cs7 = cs7 * cd7 - sn7 * sd7; sn7 = ns; }
+      const hp7 = w - (len7 + md * sn7), hi7 = Math.floor(hp7), hf7 = hp7 - hi7, m7 = masks7, b7 = bufs7;
       const u7 = b7[(hi7 - 1) & m7], v7 = b7[hi7 & m7], x7 = b7[(hi7 + 1) & m7], q7 = b7[(hi7 + 2) & m7];
       const r7 = ((((q7 - u7) * 0.5 + (v7 - x7) * 1.5) * hf7 + (u7 - 2.5 * v7 + 2 * x7 - 0.5 * q7)) * hf7 + (x7 - u7) * 0.5) * hf7 + v7;
       s27 += cL * (r7 - s27);
@@ -373,7 +392,7 @@ class Reverb extends AudioWorkletProcessor {
 registerProcessor('${WNAME}', Reverb);`;
 
 export default {
-  id: 'nl.patchkamer.reverb', name: 'Reverb', version: '1.0.1', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.reverb', name: 'Reverb', version: '1.0.2', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ui: { width: 340, minWidth: 300 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },

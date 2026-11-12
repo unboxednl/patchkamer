@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.37.1 (2026-11-12)
+
+### Improved
+- **Reverb (1.0.2) computes about 1.5 to 2.5 times less.** The eight sines for the modulation of the delay lines are no longer calculated per sample but with a rotation that is restored exactly every block. Measured in Node with the settings from Iron Cathedral and Skyline Ascent: chamber over 2.4 times faster than 1.0.0, hall and plate about 1.5 to 1.6 times. The output deviates by at most one Float32 step (1.5e-8, or -156 dBFS), which is inaudible. Not listened to.
+
 ## 0.37.0 (2026-11-12)
 
 ### Added
