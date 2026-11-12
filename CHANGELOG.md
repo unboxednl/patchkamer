@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.35.2 (2026-11-12)
+
+### Fixed
+- **Pulse Drums tunes: kicks no longer sound like a bongo.** In the *Pulse Drums Techno* pack (1.1.1), 24 of the 37 tunes had a kick that was too high or too short: a fundamental above 80 Hz or a decay below 0.1 s (mostly the newer drum and bass tunes with a `tune` around -6 to +4, and the short kicks of Hypnotic, Squelch, Half-Time and Miami, among others). For each tune only the kick's `tune` and `decay` were changed (the rest of the state is untouched), measured in the real host: the fundamental now lies between about 37 and 76 Hz, falling to about 32 to 59 Hz, and the decay is longer (-12 dB after 0.09 to 0.2 s). Not listened to.
+
 ## 0.35.1 (2026-11-12)
 
 ### Fixed

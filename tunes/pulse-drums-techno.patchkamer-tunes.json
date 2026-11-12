@@ -1,7 +1,7 @@
 {
  "format": "patchkamer-tunes",
  "formatVersion": 1,
- "version": "1.1.0",
+ "version": "1.1.1",
  "device": "nl.patchkamer.pulsedrums",
  "name": "Pulse Drums Techno",
  "author": "Freek van Gool",
@@ -31,7 +31,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.92,
-        "decay": 0.4,
+        "decay": 0.5,
         "sub": 0.16,
         "click": 0.35,
         "drive": 0.3,
@@ -305,12 +305,12 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.92,
-        "decay": 0.22,
+        "decay": 0.5,
         "sub": 0.16,
         "click": 0.35,
         "drive": 0.3,
         "body": 0.85,
-        "tune": -22,
+        "tune": -24,
         "steps": [
          [
           {
@@ -1251,7 +1251,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.8,
-        "decay": 0.25,
+        "decay": 0.5,
         "sub": 0.1,
         "click": 0.55,
         "drive": 0.3,
@@ -1460,7 +1460,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.85,
-        "decay": 0.3,
+        "decay": 0.5,
         "sub": 0.12,
         "click": 0.4,
         "drive": 0.3,
@@ -1697,7 +1697,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.82,
-        "decay": 0.28,
+        "decay": 0.5,
         "sub": 0.1,
         "click": 0.5,
         "drive": 0.3,
@@ -2158,12 +2158,12 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.95,
-        "decay": 0.35,
+        "decay": 0.5,
         "sub": 0.22,
         "click": 0.45,
         "drive": 0.2,
         "body": 0.85,
-        "tune": -22,
+        "tune": -24,
         "steps": [
          [
           {
@@ -2391,7 +2391,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.95,
-        "decay": 0.3,
+        "decay": 0.5,
         "sub": 0.18,
         "click": 0.5,
         "drive": 0.25,
@@ -2844,12 +2844,12 @@
         "type": "kick",
         "model": "Industrial",
         "level": 0.98,
-        "decay": 0.25,
+        "decay": 0.3,
         "sub": 0.3,
         "click": 0.55,
         "drive": 0.55,
         "body": 0.85,
-        "tune": -16,
+        "tune": -14,
         "steps": [
          [
           {
@@ -3830,7 +3830,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.92,
-        "decay": 0.38,
+        "decay": 0.8,
         "sub": 0.16,
         "click": 0.35,
         "drive": 0.3,
@@ -4059,7 +4059,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.92,
-        "decay": 0.3,
+        "decay": 0.5,
         "sub": 0.16,
         "click": 0.35,
         "drive": 0.3,
@@ -4957,7 +4957,7 @@
         "click": 0.35,
         "drive": 0.3,
         "body": 0.85,
-        "tune": -22,
+        "tune": -20,
         "steps": [
          [
           {
@@ -5182,7 +5182,7 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.92,
-        "decay": 0.3,
+        "decay": 0.5,
         "sub": 0.15,
         "click": 0.35,
         "drive": 0.3,
@@ -5411,12 +5411,12 @@
         "type": "kick",
         "model": "Punch",
         "level": 0.92,
-        "decay": 0.3,
+        "decay": 0.5,
         "sub": 0.16,
         "click": 0.35,
         "drive": 0.3,
         "body": 0.85,
-        "tune": -22,
+        "tune": -24,
         "steps": [
          [
           {
@@ -5649,7 +5649,7 @@
         "click": 0.3,
         "drive": 0.3,
         "body": 0.85,
-        "tune": -22,
+        "tune": -24,
         "steps": [
          [
           {
@@ -5826,7 +5826,7 @@
        {
         "type": "kick",
         "model": "Industrial",
-        "tune": 1.91,
+        "tune": -12,
         "sweep": 0.36,
         "decay": 0.3,
         "drive": 0.45,
@@ -6869,9 +6869,9 @@
        {
         "type": "kick",
         "model": "Punch",
-        "tune": -5.89,
+        "tune": -14,
         "sweep": 0.19,
-        "decay": 0.26,
+        "decay": 0.3,
         "drive": 0.4,
         "body": 0.9,
         "sub": 0.25,
@@ -8056,7 +8056,7 @@
        {
         "type": "kick",
         "model": "Deep",
-        "tune": -5.51,
+        "tune": -12,
         "sweep": 0.469,
         "decay": 0.5,
         "drive": 0.3,
@@ -9170,9 +9170,9 @@
        {
         "type": "kick",
         "model": "Rock",
-        "tune": -0.43,
+        "tune": -12,
         "sweep": 0.375,
-        "decay": 0.42,
+        "decay": 0.5,
         "drive": 0.3,
         "body": 0.9,
         "sub": 0.3,
@@ -10254,9 +10254,9 @@
        {
         "type": "kick",
         "model": "Industrial",
-        "tune": 4.52,
+        "tune": -12,
         "sweep": 0.3,
-        "decay": 0.16,
+        "decay": 0.3,
         "drive": 0.55,
         "body": 0.9,
         "sub": 0.2,
@@ -11215,9 +11215,9 @@
        {
         "type": "kick",
         "model": "Punch",
-        "tune": -3.06,
+        "tune": -12,
         "sweep": 0.167,
-        "decay": 0.13,
+        "decay": 0.5,
         "drive": 0.5,
         "body": 0.85,
         "sub": 0.15,
@@ -12196,9 +12196,9 @@
        {
         "type": "kick",
         "model": "Lo-fi",
-        "tune": 2.5,
+        "tune": -12,
         "sweep": 0.306,
-        "decay": 0.27,
+        "decay": 0.5,
         "drive": 0.25,
         "body": 0.85,
         "sub": 0.35,
@@ -13239,9 +13239,9 @@
        {
         "type": "kick",
         "model": "Funk",
-        "tune": -2.84,
+        "tune": -12,
         "sweep": 0.286,
-        "decay": 0.22,
+        "decay": 0.5,
         "drive": 0.25,
         "body": 0.9,
         "sub": 0.2,
@@ -14040,7 +14040,7 @@
        {
         "type": "kick",
         "model": "Deep",
-        "tune": -6.86,
+        "tune": -12,
         "sweep": 0.392,
         "decay": 0.62,
         "drive": 0.3,
@@ -15989,9 +15989,9 @@
        {
         "type": "kick",
         "model": "Funk",
-        "tune": -4.13,
+        "tune": -12,
         "sweep": 0.303,
-        "decay": 0.3,
+        "decay": 0.5,
         "drive": 0.3,
         "body": 0.9,
         "sub": 0.25,

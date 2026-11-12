@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.35.2 (2026-11-12)
+
+### Opgelost
+- **Pulse Drums-tunes: kicks klinken niet meer als een bongo.** In het pack *Pulse Drums Techno* (1.1.1) hadden 24 van de 37 tunes een kick die te hoog of te kort was: een grondtoon boven 80 Hz of een uitklinktijd onder 0,1 s (vooral de nieuwere drum & bass-tunes met een `tune` rond -6 tot +4, en de korte kicks van onder meer Hypnotic, Squelch, Half-Time en Miami). Per tune is alleen de `tune` en de `decay` van de kick aangepast (de rest van de state is ongewijzigd), gemeten in de echte host: de grondtoon ligt nu tussen ca. 37 en 76 Hz, zakkend naar ca. 32 tot 59 Hz, en de uitklinktijd is langer (-12 dB na 0,09 tot 0,2 s). Niet beluisterd.
+
 ## 0.35.1 (2026-11-12)
 
 ### Opgelost
