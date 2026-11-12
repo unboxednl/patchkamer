@@ -4,6 +4,13 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.35.5 (2026-11-12)
+
+### Verbeterd
+- **Mastering-apparaten rekenen veel minder.** Master Chain (1.17.1) was in een druk stuk het duurste apparaat (in Iron Cathedral gaf weglaten +0,25 op de verhouding audiotijd/wandtijd). Per sample werden machten, e-machten en nieuwe arrays berekend; die zijn nu gecachet of weggehaald, de true-peakmeting gebruikt een lus zonder modulo, en filter- en omhullingstoestanden die na stilte in denormale getallen (rond 1e-310, waar de processor tot vijf keer trager rekent) bleven hangen, worden nu op nul gezet. Dezelfde wijzigingen zijn doorgevoerd in **Balance EQ 1.15.1**, **Bus Compressor 1.15.1**, **Multiband Balance 1.15.1** (ongeveer 40 % sneller), **Patina 1.17.1**, **Stereo Space 1.15.1** en **Mix Check 1.15.1**.
+- Het geluid en de gemelde LUFS-, LRA- en true-peakwaarden zijn bit-identiek in twee testinstellingen met 10 s muziek (uitvoer en meterberichten gehasht). Alleen in stilte, bij waarden onder 1e-30 (onder -600 dBFS), is de uitvoer niet bit-identiek (grootste afwijking 2,3e-29). Dat is niet hoorbaar en alleen gemeten.
+- De rekentijd per blok van Master Chain daalt in een Node-test van mediaan 125 naar 60 microseconden. In de echte host (Chromium) kreeg Iron Cathedral een betere verhouding audiotijd/wandtijd (0,70 naar ongeveer 0,8 op een zwaar belaste machine). Niet beluisterd.
+
 ## 0.35.4 (2026-11-12)
 
 ### Verbeterd

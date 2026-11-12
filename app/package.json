@@ -1,7 +1,7 @@
 {
   "name": "patchkamer-app",
   "productName": "Patchkamer",
-  "version": "0.35.4",
+  "version": "0.35.5",
   "description": "Patchkamer as a desktop app: the same host in its own window, with the bundled library.",
   "main": "main.js",
   "license": "AGPL-3.0-or-later",

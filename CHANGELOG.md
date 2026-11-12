@@ -4,6 +4,13 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.35.5 (2026-11-12)
+
+### Improved
+- **Mastering devices compute much less.** Master Chain (1.17.1) was the most expensive device in a busy piece (in Iron Cathedral, removing it gave +0.25 on the audio time/wall time ratio). Per sample, powers, exponentials and new arrays were calculated; these are now cached or removed, the true-peak measurement uses a loop without modulo, and filter and envelope states that stayed stuck at denormal numbers after silence (around 1e-310, where the processor computes up to five times slower) are now set to zero. The same changes were made in **Balance EQ 1.15.1**, **Bus Compressor 1.15.1**, **Multiband Balance 1.15.1** (about 40% faster), **Patina 1.17.1**, **Stereo Space 1.15.1** and **Mix Check 1.15.1**.
+- The sound and the reported LUFS, LRA and true-peak values are bit-identical in two test settings with 10 s of music (output and meter messages hashed). Only in silence, for values below 1e-30 (below -600 dBFS), is the output not bit-identical (largest deviation 2.3e-29). That is inaudible and was only measured.
+- The processing time per block of Master Chain drops from a median of 125 to 60 microseconds in a Node test. In the real host (Chromium), Iron Cathedral got a better audio time/wall time ratio (0.70 to about 0.8 on a heavily loaded machine). Not listened to.
+
 ## 0.35.4 (2026-11-12)
 
 ### Improved
