@@ -69,7 +69,7 @@ Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): si
 - `node contract/validate-instrument.mjs devices/effects/Pump/pump.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
 - Je kunt niet horen hoe een preset klinkt. Heb je geen browser, schrijf dan in je oplevering dat de preset **niet beluisterd** is.
 - Alle tekst in het apparaat staat in de woordenboeken `NL` en `EN` bovenin het bestand. Een nieuwe tekst krijgt altijd nl én en.
-- De worklet-naam bevat de versie (`nl-patchkamer-pump-1-11-0`): de host onthoudt code per naam. Verander je de worklet, verhoog dan de versie in die naam.
+- De worklet-naam bevat de versie (`nl-patchkamer-pump-1-14-2`): de host onthoudt code per naam. Verander je de worklet, verhoog dan de versie in die naam.
 
 ## Wat je niet doet
 

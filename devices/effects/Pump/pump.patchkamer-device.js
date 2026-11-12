@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.2 — Lichtere processor: de modus, de band, het luisterfilter, de makeup (een macht van 10) en de drempel worden per blok bepaald in plaats van per sample, onder de drempel vallen de logaritme en de macht weg (de demping is dan precies 0 dB), de toestand staat tijdens het blok in lokale variabelen en er wordt geen lege lijst meer per blok gemaakt. Geluid, state, poorten en uiterlijk bit-identiek (zelfde uitvoer als 1.14.1 gemeten).
 // 1.14.1 — Een duck-moment binnen een halve sample van het blokeinde rondde af op de blokgrootte en werd nooit verwerkt (ruim 0,4% van de events ging verloren); de positie is nu begrensd op het laatste sample van het blok.
 // 1.14.0 — Skin Compact: de hoogte van het scherm volgt de CSS-eigenschap --u-ch (zonder skin 90); de schuiven melden zich met data-pk-id en -group aan, zodat een skin ze als draaiknop kan tonen. Geluid, state en ids ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Pump); de UI toont geen uitlegtekst meer.
@@ -104,11 +105,12 @@ const ukLoop = (host, inst, cb, fps) => {
 function ukResolve(spec, state, mod) { const e = { ...state }; for (const [id, d] of Object.entries(spec)) { const x = d.nomod ? 0 : (mod[id] || 0); if (!x) continue; e[id] = ukClamp(d.scale === 'log' ? state[id] * (d.max / d.min) ** x : state[id] + x * (d.max - d.min), d.min, d.max); } return e; }
 function ukParams(spec, lane, laneName) { return Object.entries(spec).filter(([, d]) => !d.nomod).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'color', drift: d.drift ?? 0.015, on: d.on ?? (!d.role || !['level', 'pitch'].includes(d.role)) })); }
 
-const WNAME = 'nl-patchkamer-pump-1-11-0';
+const WNAME = 'nl-patchkamer-pump-1-14-2';
 const WORKLET = `
 const IN_MAX = 16;
 const ENUM = { mode: ['sc', 'trig', 'klok'], band: ['alles', 'laag', 'hoog'], scf: ['lp', 'hp', 'full'] };
 const cl = v => (v > -IN_MAX && v < IN_MAX) ? v : (v !== v ? 0 : v > 0 ? IN_MAX : -IN_MAX);
+const NONE = [];
 class Pump extends AudioWorkletProcessor{
   constructor(){ super(); this.s={mode:'sc',depth:0.8,thr:-24,ratio:6,att:3,hold:20,rel:180,curve:0.5,band:'alles',xo:120,mix:1,makeup:0,listen:false,scf:'lp',scfreq:150};
     this.env=0; this.lp=[0,0]; this.sl=0; this.sh=0; this.q=[]; this.duckAt=-1; this.n=0; this.minG=1; this.scPk=0; this.g=1;
@@ -122,26 +124,33 @@ class Pump extends AudioWorkletProcessor{
     const iL=I&&I[0]?I[0]:null, iR=I&&I[1]?I[1]:iL, sL=S&&S[0]?S[0]:null, sR=S&&S[1]?S[1]:sL, oL=O[0], oR=O[1]||O[0];
     const ka=Math.exp(-1/(Math.max(0.05,s.att)*0.001*sr)), kr=Math.exp(-1/(Math.max(5,s.rel)*0.001*sr));
     const cx=1-Math.exp(-2*Math.PI*s.xo/sr), cs=1-Math.exp(-2*Math.PI*s.scfreq/sr);
-    let starts=[]; if(this.q.length){ const keep=[]; for(const t of this.q){ if(t<currentTime+N/sr) starts.push(Math.min(N-1,Math.max(0,Math.round((t-currentTime)*sr)))); else keep.push(t); } this.q=keep; starts.sort((a,b)=>a-b); }
+    let starts=NONE; if(this.q.length){ starts=[]; const keep=[]; for(const t of this.q){ if(t<currentTime+N/sr) starts.push(Math.min(N-1,Math.max(0,Math.round((t-currentTime)*sr)))); else keep.push(t); } this.q=keep; starts.sort((a,b)=>a-b); }
     let si=0; const attS=Math.max(1,s.att*0.001*sr), holdS=s.hold*0.001*sr, relS=Math.max(1,s.rel*0.001*sr), ex=1+s.curve*3;
+    // per blok constant: de modus, de band, het luisterfilter, de makeup en de drempel (voorheen per sample opnieuw bepaald)
+    const modeSc=s.mode==='sc', band=s.band, bAll=band==='alles', bLaag=band==='laag', scf=s.scf, scLp=scf==='lp', scHp=scf==='hp', listen=s.listen, mix=s.mix, imix=1-s.mix, depth=s.depth, ratio1=1-1/s.ratio, thr=s.thr;
+    const mk=Math.pow(10,s.makeup/20), thrLin=Math.pow(10,thr/20)*0.9999;
+    let env=this.env, sl=this.sl, lp0=this.lp[0], lp1=this.lp[1], scPk=this.scPk, minG=this.minG, duckAt=this.duckAt, g=this.g;
     for(let t=0;t<N;t++){
       const xl=iL?cl(iL[t]):0, xr=iR?cl(iR[t]):0;
       // sidechain-detector met luisterfilter
-      let sc=0; if(sL){ const m=(cl(sL[t])+(sR?cl(sR[t]):cl(sL[t])))*0.5; this.sl+=(m-this.sl)*cs; sc=s.scf==='lp'?this.sl:s.scf==='hp'?m-this.sl:m; }
-      const a=Math.abs(sc); if(a>this.scPk) this.scPk=a;
-      let g=1;
-      if(s.mode==='sc'){ this.env=a>this.env?a+(this.env-a)*ka:a+(this.env-a)*kr; const db=20*Math.log10(this.env+1e-9), over=db-s.thr; const gr=over>0?Math.min(48,over*(1-1/s.ratio)):0; g=Math.pow(10,-gr*s.depth/20); }
-      else { while(si<starts.length&&starts[si]<=t){ this.duckAt=0; si++; }
-        if(this.duckAt>=0){ const u=this.duckAt++; let d; if(u<attS) d=u/attS; else if(u<attS+holdS) d=1; else { const r=(u-attS-holdS)/relS; d=r<1?Math.pow(1-r,ex):0; if(r>=1) this.duckAt=-1; }
-          g=1-s.depth*d; } }
-      this.g=g; if(g<this.minG) this.minG=g;
+      let sc=0; if(sL){ const m=(cl(sL[t])+(sR?cl(sR[t]):cl(sL[t])))*0.5; sl+=(m-sl)*cs; sc=scLp?sl:scHp?m-sl:m; }
+      const a=sc<0?-sc:sc; if(a>scPk) scPk=a;
+      g=1;
+      if(modeSc){ env=a>env?a+(env-a)*ka:a+(env-a)*kr;
+        // onder de drempel is de demping precies 0 (g = 1): de logaritme en de macht vallen dan weg
+        if(env+1e-9>=thrLin){ const db=20*Math.log10(env+1e-9), over=db-thr; const gr=over>0?Math.min(48,over*ratio1):0; g=Math.pow(10,-gr*depth/20); } }
+      else { while(si<starts.length&&starts[si]<=t){ duckAt=0; si++; }
+        if(duckAt>=0){ const u=duckAt++; let d; if(u<attS) d=u/attS; else if(u<attS+holdS) d=1; else { const r=(u-attS-holdS)/relS; d=r<1?Math.pow(1-r,ex):0; if(r>=1) duckAt=-1; }
+          g=1-depth*d; } }
+      if(g<minG) minG=g;
       let yl, yr;
-      if(s.listen){ yl=yr=sc; }
-      else { if(s.band==='alles'){ yl=xl*g; yr=xr*g; }
-        else { this.lp[0]+=(xl-this.lp[0])*cx; this.lp[1]+=(xr-this.lp[1])*cx; const hl=xl-this.lp[0], hr=xr-this.lp[1];
-          if(s.band==='laag'){ yl=this.lp[0]*g+hl; yr=this.lp[1]*g+hr; } else { yl=this.lp[0]+hl*g; yr=this.lp[1]+hr*g; } }
-        const mk=Math.pow(10,s.makeup/20); yl=(xl*(1-s.mix)+yl*s.mix)*mk; yr=(xr*(1-s.mix)+yr*s.mix)*mk; }
+      if(listen){ yl=yr=sc; }
+      else { if(bAll){ yl=xl*g; yr=xr*g; }
+        else { lp0+=(xl-lp0)*cx; lp1+=(xr-lp1)*cx; const hl=xl-lp0, hr=xr-lp1;
+          if(bLaag){ yl=lp0*g+hl; yr=lp1*g+hr; } else { yl=lp0+hl*g; yr=lp1+hr*g; } }
+        yl=(xl*imix+yl*mix)*mk; yr=(xr*imix+yr*mix)*mk; }
       oL[t]=yl; oR[t]=yr; }
+    this.env=env; this.sl=sl; this.lp[0]=lp0; this.lp[1]=lp1; this.scPk=scPk; this.minG=minG; this.duckAt=duckAt; this.g=g;
     // bewaker: een ontspoorde toestand herstelt zichzelf in plaats van het geluid voorgoed te stoppen
     if(!(this.env>=0&&this.env<1e6)) this.env=0;
     if(!(Math.abs(this.sl)<1e6)) this.sl=0;
@@ -156,7 +165,7 @@ class Pump extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Pump);`;
 
 export default {
-  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.14.1', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.14.2', kind: 'effect', category: 'effect',
   about: { nl: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.\n\nTip: zet Pump op de bas of pads, kies Klok 1/4 en Release volgt tempo: direct het bekende pompen, zonder kabels. Met Alleen het laag blijft de bovenkant van een pad staan terwijl de bas wijkt voor de kick. Sidechain: trek de kick (bijvoorbeeld een losse drumuitgang) naar de ingang Sidechain.', en: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.\n\nTip: put Pump on the bass or pads, choose Clock 1/4 and Release follows tempo: the familiar pumping at once, without cables. With Low end only, the top of a pad stays put while the bass gives way to the kick. Sidechain: patch the kick (for example a separate drum output) into the Sidechain input.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', trig: 'Trigger', mod: 'Mod' } } },

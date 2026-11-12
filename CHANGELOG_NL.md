@@ -4,6 +4,13 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.35.6 (2026-11-12)
+
+### Verbeterd
+- **Reverb (1.0.1), Transient Shaper (1.0.1) en Pump (1.14.2) rekenen minder.** Toestanden staan nu in lokale variabelen, constanten worden per blok bepaald en bij een uitgeschakeld onderdeel (bijvoorbeeld Early op 0 in Reverb) vervalt het rekenwerk. In een rekentest met de instellingen uit Iron Cathedral en Skyline Ascent: Reverb 1,1 tot 1,5 keer sneller, Transient Shaper ongeveer 1,7 keer, Pump 1,0 tot 1,1 keer in dat geval (tot 3,5 keer in andere instellingen). De uitvoer is sample voor sample identiek (hash over alle uitvoerbits, op meerdere invoeren).
+- Delay en Distortion zijn onderzocht en niet gewijzigd: elke variant die dezelfde uitvoer geeft was niet sneller.
+- Niet beluisterd; de snelheden zijn gemeten in Node op een drukke machine.
+
 ## 0.35.5 (2026-11-12)
 
 ### Verbeterd

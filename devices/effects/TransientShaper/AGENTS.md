@@ -62,7 +62,7 @@ Wat het apparaat met een state doet (getest):
 - `node contract/validate-instrument.mjs devices/effects/TransientShaper/transient-shaper.patchkamer-device.js --lang nl` en `--lang en`, vanuit de root. Beide moeten `OK` geven, zonder `let op`.
 - Je kunt niet horen hoe een preset klinkt. Heb je geen browser, schrijf dan in je oplevering dat de preset **niet beluisterd** is.
 - Alle tekst in het apparaat staat in de woordenboeken `NL` en `EN` bovenin het bestand. Een nieuwe tekst krijgt altijd nl én en.
-- De worklet-naam bevat de versie (`nl-patchkamer-transientshaper-1-0-0`): de host onthoudt code per naam. Verander je de worklet, verhoog dan de versie in die naam.
+- De worklet-naam bevat de versie (`nl-patchkamer-transientshaper-1-0-1`): de host onthoudt code per naam. Verander je de worklet, verhoog dan de versie in die naam.
 - Meten: laad het apparaat met een nep-`AudioContext`, haal de worklet-code op via `host.loadWorklet` en draai blokken van 128 samples (zie `../../../docs/tools/worklet-harness.mjs` voor het patroon).
 
 ## Wat je niet doet

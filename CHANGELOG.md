@@ -4,6 +4,13 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.35.6 (2026-11-12)
+
+### Improved
+- **Reverb (1.0.1), Transient Shaper (1.0.1) and Pump (1.14.2) compute less.** States are now in local variables, constants are determined per block and for a switched-off part (for example Early at 0 in Reverb) the calculation is skipped. In a calculation test with the settings from Iron Cathedral and Skyline Ascent: Reverb 1.1 to 1.5 times faster, Transient Shaper about 1.7 times, Pump 1.0 to 1.1 times in that case (up to 3.5 times in other settings). The output is identical sample for sample (hash over all output bits, on several inputs).
+- Delay and Distortion were investigated and not changed: every variant that gives the same output was not faster.
+- Not listened to; the speeds were measured in Node on a busy machine.
+
 ## 0.35.5 (2026-11-12)
 
 ### Improved

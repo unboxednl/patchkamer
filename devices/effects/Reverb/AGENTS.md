@@ -15,7 +15,7 @@ Een algoritmische galm met vijf modellen in één apparaat: **Hall** (groot, lan
 | Poorten | audio-ingang `in`, audio-uitgang `out`, sturing `mod` |
 | Contract | v1.28 |
 | Licentie apparaat | AGPL-3.0-or-later |
-| Worklet | `nl-patchkamer-reverb-1-0-0`: verhoog de versie in de naam als je de worklet wijzigt (de host onthoudt code per naam) |
+| Worklet | `nl-patchkamer-reverb-1-0-1`: verhoog de versie in de naam als je de worklet wijzigt (de host onthoudt code per naam) |
 
 ## Geen tunes, wel presets
 

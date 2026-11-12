@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.0.1 — Lichtere processor: alle toestanden (filters, volgers, versterkingen, gladmakers) staan tijdens het blok als losse getallen in plaats van in arrays, de vier banden zijn uitgeschreven in plaats van in een lus, een gladgemaakte waarde die zijn doel al heeft bereikt wordt niet meer bijgewerkt en bij een band met attack en sustain op 0 (versterking precies 0 dB) vallen de logaritme en de exponent weg. Geluid, state, poorten en uiterlijk bit-identiek (zelfde uitvoer als 1.0.0 gemeten).
 // 1.0.0 — Patchkamer contract v1.34. Eerste versie: versterkt of dempt de aanzet (attack) en de uitklink (sustain) van een signaal, onafhankelijk van het ingangsniveau.
 //          Werking: een snelle en een langzame envelope-volger; hun verschil in dB (snel minus langzaam) is positief tijdens een aanzet en negatief tijdens het uitklinken.
 //          Dat verschil is een verhouding en dus onafhankelijk van de drempel. Attack en sustain (-100 tot +100 %) schalen het verschil tot een versterking in dB.
@@ -95,7 +96,7 @@ function ukMeter(host, parent, label, id, range, len) { if (!(host && host.ui &&
 function ukResolve(spec, state, mod) { const e = { ...state }; for (const [id, d] of Object.entries(spec)) { const x = mod[id] || 0; if (!x) continue; e[id] = ukClamp(d.scale === 'log' ? state[id] * (d.max / d.min) ** x : state[id] + x * (d.max - d.min), d.min, d.max); } return e; }
 function ukParams(spec, lane, laneName) { return Object.entries(spec).map(([id, d]) => ({ id, name: d.name, lane, laneName, min: d.min, max: d.max, scale: d.scale || 'lin', role: d.role || 'level', drift: d.drift ?? 0.05, on: d.on ?? false })); }
 
-const WNAME = 'nl-patchkamer-transientshaper-1-0-0';
+const WNAME = 'nl-patchkamer-transientshaper-1-0-1';
 const WORKLET = `
 const IN_MAX = 16;
 const SPEEDS = { fast: [0.0002, 0.004, 0.006, 0.05], normal: [0.0005, 0.010, 0.015, 0.12], long: [0.002, 0.030, 0.045, 0.30] };
@@ -126,32 +127,70 @@ class TransientShaper extends AudioWorkletProcessor{
     this.xlS += (s.xl - this.xlS) * 0.25; this.xhS += (s.xh - this.xhS) * 0.25;
     const fl = lim(this.xlS, 20, sr * 0.4), fh = lim(Math.max(this.xhS, fl * 1.25), 40, sr * 0.45);
     this.cA = bq(fl, sr); this.cB = bq(fh, sr); const cA = this.cA, cB = this.cB, z = this.z;
-    const q = (i, c, x) => { const y = c[0] * x + z[i]; z[i] = c[1] * x - c[3] * y + z[i + 1]; z[i + 1] = c[2] * x - c[4] * y; return y; };
+    const a0 = cA[0], a1 = cA[1], a2 = cA[2], a3 = cA[3], a4 = cA[4], e0 = cB[0], e1 = cB[1], e2 = cB[2], e3 = cB[3], e4 = cB[4];
+    // alle toestanden als losse getallen in de lus (geen arrays, geen sluitingen); na de lus gaan ze terug naar hun arrays
     const sa = this.sa, ss = this.ss, ta = s.att, ts = s.sus, ef = this.ef, es = this.es, gs = this.gs, k = this.k, kp = this.kp, kg = this.kg;
-    const tm = s.on ? s.mix : 0, tb = s.bands ? 1 : 0, to = s.out; const d = [0, 0, 0, 0], gdb = [0, 0, 0, 0]; let up = this.up, dn = this.dn, lv = this.lv;
+    let z0 = z[0], z1 = z[1], z2 = z[2], z3 = z[3], z4 = z[4], z5 = z[5], z6 = z[6], z7 = z[7], z8 = z[8], z9 = z[9], z10 = z[10], z11 = z[11], z12 = z[12], z13 = z[13], z14 = z[14], z15 = z[15];
+    let ef0 = ef[0], ef1 = ef[1], ef2 = ef[2], ef3 = ef[3], es0 = es[0], es1 = es[1], es2 = es[2], es3 = es[3], gs0 = gs[0], gs1 = gs[1], gs2 = gs[2], gs3 = gs[3];
+    let sa0 = sa[0], sa1 = sa[1], sa2 = sa[2], sa3 = sa[3], ss0 = ss[0], ss1 = ss[1], ss2 = ss[2], ss3 = ss[3];
+    const ta0 = ta[0], ta1 = ta[1], ta2 = ta[2], ta3 = ta[3], ts0 = ts[0], ts1 = ts[1], ts2 = ts[2], ts3 = ts[3];
+    const k0 = k[0], k1 = k[1], k2 = k[2], k3 = k[3], k4 = k[4], k5 = k[5], k6 = k[6], k7 = k[7], k8 = k[8], k9 = k[9], k10 = k[10], k11 = k[11], k12 = k[12], k13 = k[13], k14 = k[14], k15 = k[15];
+    let gd0 = 0, gd1 = 0, gd2 = 0, gd3 = 0, sm = this.sm, so = this.so, sb = this.sb;
+    const tm = s.on ? s.mix : 0, tb = s.bands ? 1 : 0, to = s.out; let up = this.up, dn = this.dn, lv = this.lv;
     for (let t = 0; t < N; t++) {
       const xl = iL ? cl(iL[t]) : 0, xr = iR ? cl(iR[t]) : 0;
-      for (let b = 0; b < 4; b++) {
-        sa[b] += (ta[b] - sa[b]) * kp; if (Math.abs(ta[b] - sa[b]) < 1e-9) sa[b] = ta[b];
-        ss[b] += (ts[b] - ss[b]) * kp; if (Math.abs(ts[b] - ss[b]) < 1e-9) ss[b] = ts[b]; }
-      this.sm += (tm - this.sm) * kp; if (Math.abs(tm - this.sm) < 1e-9) this.sm = tm;
-      this.so += (to - this.so) * kp; if (Math.abs(to - this.so) < 1e-9) this.so = to;
-      this.sb += (tb - this.sb) * kp; if (Math.abs(tb - this.sb) < 1e-9) this.sb = tb;
+      // een gladgemaakte waarde die zijn doel al heeft bereikt, blijft staan: overslaan geeft precies dezelfde uitkomst
+      if (sa0 !== ta0) { sa0 += (ta0 - sa0) * kp; if (Math.abs(ta0 - sa0) < 1e-9) sa0 = ta0; } if (ss0 !== ts0) { ss0 += (ts0 - ss0) * kp; if (Math.abs(ts0 - ss0) < 1e-9) ss0 = ts0; }
+      if (sa1 !== ta1) { sa1 += (ta1 - sa1) * kp; if (Math.abs(ta1 - sa1) < 1e-9) sa1 = ta1; } if (ss1 !== ts1) { ss1 += (ts1 - ss1) * kp; if (Math.abs(ts1 - ss1) < 1e-9) ss1 = ts1; }
+      if (sa2 !== ta2) { sa2 += (ta2 - sa2) * kp; if (Math.abs(ta2 - sa2) < 1e-9) sa2 = ta2; } if (ss2 !== ts2) { ss2 += (ts2 - ss2) * kp; if (Math.abs(ts2 - ss2) < 1e-9) ss2 = ts2; }
+      if (sa3 !== ta3) { sa3 += (ta3 - sa3) * kp; if (Math.abs(ta3 - sa3) < 1e-9) sa3 = ta3; } if (ss3 !== ts3) { ss3 += (ts3 - ss3) * kp; if (Math.abs(ts3 - ss3) < 1e-9) ss3 = ts3; }
+      if (sm !== tm) { sm += (tm - sm) * kp; if (Math.abs(tm - sm) < 1e-9) sm = tm; }
+      if (so !== to) { so += (to - so) * kp; if (Math.abs(to - so) < 1e-9) so = to; }
+      if (sb !== tb) { sb += (tb - sb) * kp; if (Math.abs(tb - sb) < 1e-9) sb = tb; }
       // drie banden: laag, mid en hoog tellen (afsplitsend) weer op tot het origineel
-      const ll = q(0, cA, q(2, cA, xl)), lr = q(8, cA, q(10, cA, xr)), rl = xl - ll, rr = xr - lr;
-      const ml = q(4, cB, q(6, cB, rl)), mr = q(12, cB, q(14, cB, rr)), hl = rl - ml, hr = rr - mr;
-      d[0] = Math.max(Math.abs(xl), Math.abs(xr)); d[1] = Math.max(Math.abs(ll), Math.abs(lr)); d[2] = Math.max(Math.abs(ml), Math.abs(mr)); d[3] = Math.max(Math.abs(hl), Math.abs(hr));
-      for (let b = 0; b < 4; b++) {
-        const a = d[b], i = b * 4, f = ef[b], sl = es[b];
-        ef[b] = f + (a - f) * (a > f ? k[i] : k[i + 1]); es[b] = sl + (a - sl) * (a > sl ? k[i + 2] : k[i + 3]);
-        const df = 8.685889638065035 * Math.log((ef[b] + 1e-7) / (es[b] + 1e-7)), w = es[b] >= 3e-4 ? 1 : es[b] / 3e-4;
-        let g = df > 0 ? sa[b] * df * w : -ss[b] * df * w; g = g > 18 ? 18 : g < -40 ? -40 : g; gdb[b] = g;
-        const gl = Math.exp(g * 0.11512925464970229); gs[b] += (gl - gs[b]) * kg; if (gl === 1 && Math.abs(1 - gs[b]) < 1e-9) gs[b] = 1; }
-      const ysl = xl * gs[0], ysr = xr * gs[0]; let yl = ysl, yr = ysr, gu, gd;
-      if (this.sb > 0) { const bl = ll * gs[1] + ml * gs[2] + hl * gs[3], br = lr * gs[1] + mr * gs[2] + hr * gs[3]; yl = ysl + (bl - ysl) * this.sb; yr = ysr + (br - ysr) * this.sb; }
-      if (this.sb > 0.5) { gu = Math.max(gdb[1], gdb[2], gdb[3]); gd = Math.min(gdb[1], gdb[2], gdb[3]); } else { gu = gdb[0]; gd = gdb[0]; }
-      if (gu > up) up = gu; if (gd < dn) dn = gd; if (d[0] > lv) lv = d[0];
-      const m = this.sm, og = this.so; oL[t] = (xl * (1 - m) + yl * m) * og; oR[t] = (xr * (1 - m) + yr * m) * og; }
+      let x = xl, y = a0 * x + z2; z2 = a1 * x - a3 * y + z3; z3 = a2 * x - a4 * y; x = y; y = a0 * x + z0; z0 = a1 * x - a3 * y + z1; z1 = a2 * x - a4 * y; const ll = y;
+      x = xr; y = a0 * x + z10; z10 = a1 * x - a3 * y + z11; z11 = a2 * x - a4 * y; x = y; y = a0 * x + z8; z8 = a1 * x - a3 * y + z9; z9 = a2 * x - a4 * y; const lr = y;
+      const rl = xl - ll, rr = xr - lr;
+      x = rl; y = e0 * x + z6; z6 = e1 * x - e3 * y + z7; z7 = e2 * x - e4 * y; x = y; y = e0 * x + z4; z4 = e1 * x - e3 * y + z5; z5 = e2 * x - e4 * y; const ml = y;
+      x = rr; y = e0 * x + z14; z14 = e1 * x - e3 * y + z15; z15 = e2 * x - e4 * y; x = y; y = e0 * x + z12; z12 = e1 * x - e3 * y + z13; z13 = e2 * x - e4 * y; const mr = y;
+      const hl = rl - ml, hr = rr - mr;
+      const d0 = Math.max(Math.abs(xl), Math.abs(xr));
+      { const a = Math.max(Math.abs(xl), Math.abs(xr)), f = ef0, sl = es0; ef0 = f + (a - f) * (a > f ? k0 : k1); es0 = sl + (a - sl) * (a > sl ? k2 : k3);
+        // attack en sustain van deze band op 0: de versterking is precies 0 dB, dus de logaritme en de exponent vallen weg
+        let gl;
+        if (sa0 === 0 && ss0 === 0) { gd0 = 0; gl = 1; }
+        else { const df = 8.685889638065035 * Math.log((ef0 + 1e-7) / (es0 + 1e-7)), w = es0 >= 3e-4 ? 1 : es0 / 3e-4;
+          let g = df > 0 ? sa0 * df * w : -ss0 * df * w; g = g > 18 ? 18 : g < -40 ? -40 : g; gd0 = g; gl = Math.exp(g * 0.11512925464970229); }
+        gs0 += (gl - gs0) * kg; if (gl === 1 && Math.abs(1 - gs0) < 1e-9) gs0 = 1; }
+      { const a = Math.max(Math.abs(ll), Math.abs(lr)), f = ef1, sl = es1; ef1 = f + (a - f) * (a > f ? k4 : k5); es1 = sl + (a - sl) * (a > sl ? k6 : k7);
+        // attack en sustain van deze band op 0: de versterking is precies 0 dB, dus de logaritme en de exponent vallen weg
+        let gl;
+        if (sa1 === 0 && ss1 === 0) { gd1 = 0; gl = 1; }
+        else { const df = 8.685889638065035 * Math.log((ef1 + 1e-7) / (es1 + 1e-7)), w = es1 >= 3e-4 ? 1 : es1 / 3e-4;
+          let g = df > 0 ? sa1 * df * w : -ss1 * df * w; g = g > 18 ? 18 : g < -40 ? -40 : g; gd1 = g; gl = Math.exp(g * 0.11512925464970229); }
+        gs1 += (gl - gs1) * kg; if (gl === 1 && Math.abs(1 - gs1) < 1e-9) gs1 = 1; }
+      { const a = Math.max(Math.abs(ml), Math.abs(mr)), f = ef2, sl = es2; ef2 = f + (a - f) * (a > f ? k8 : k9); es2 = sl + (a - sl) * (a > sl ? k10 : k11);
+        // attack en sustain van deze band op 0: de versterking is precies 0 dB, dus de logaritme en de exponent vallen weg
+        let gl;
+        if (sa2 === 0 && ss2 === 0) { gd2 = 0; gl = 1; }
+        else { const df = 8.685889638065035 * Math.log((ef2 + 1e-7) / (es2 + 1e-7)), w = es2 >= 3e-4 ? 1 : es2 / 3e-4;
+          let g = df > 0 ? sa2 * df * w : -ss2 * df * w; g = g > 18 ? 18 : g < -40 ? -40 : g; gd2 = g; gl = Math.exp(g * 0.11512925464970229); }
+        gs2 += (gl - gs2) * kg; if (gl === 1 && Math.abs(1 - gs2) < 1e-9) gs2 = 1; }
+      { const a = Math.max(Math.abs(hl), Math.abs(hr)), f = ef3, sl = es3; ef3 = f + (a - f) * (a > f ? k12 : k13); es3 = sl + (a - sl) * (a > sl ? k14 : k15);
+        // attack en sustain van deze band op 0: de versterking is precies 0 dB, dus de logaritme en de exponent vallen weg
+        let gl;
+        if (sa3 === 0 && ss3 === 0) { gd3 = 0; gl = 1; }
+        else { const df = 8.685889638065035 * Math.log((ef3 + 1e-7) / (es3 + 1e-7)), w = es3 >= 3e-4 ? 1 : es3 / 3e-4;
+          let g = df > 0 ? sa3 * df * w : -ss3 * df * w; g = g > 18 ? 18 : g < -40 ? -40 : g; gd3 = g; gl = Math.exp(g * 0.11512925464970229); }
+        gs3 += (gl - gs3) * kg; if (gl === 1 && Math.abs(1 - gs3) < 1e-9) gs3 = 1; }
+      const ysl = xl * gs0, ysr = xr * gs0; let yl = ysl, yr = ysr, gu, gd;
+      if (sb > 0) { const bl = ll * gs1 + ml * gs2 + hl * gs3, br = lr * gs1 + mr * gs2 + hr * gs3; yl = ysl + (bl - ysl) * sb; yr = ysr + (br - ysr) * sb; }
+      if (sb > 0.5) { gu = Math.max(gd1, gd2, gd3); gd = Math.min(gd1, gd2, gd3); } else { gu = gd0; gd = gd0; }
+      if (gu > up) up = gu; if (gd < dn) dn = gd; if (d0 > lv) lv = d0;
+      const m = sm, og = so; oL[t] = (xl * (1 - m) + yl * m) * og; oR[t] = (xr * (1 - m) + yr * m) * og; }
+    z[0] = z0; z[1] = z1; z[2] = z2; z[3] = z3; z[4] = z4; z[5] = z5; z[6] = z6; z[7] = z7; z[8] = z8; z[9] = z9; z[10] = z10; z[11] = z11; z[12] = z12; z[13] = z13; z[14] = z14; z[15] = z15;
+    ef[0] = ef0; ef[1] = ef1; ef[2] = ef2; ef[3] = ef3; es[0] = es0; es[1] = es1; es[2] = es2; es[3] = es3; gs[0] = gs0; gs[1] = gs1; gs[2] = gs2; gs[3] = gs3;
+    sa[0] = sa0; sa[1] = sa1; sa[2] = sa2; sa[3] = sa3; ss[0] = ss0; ss[1] = ss1; ss[2] = ss2; ss[3] = ss3; this.sm = sm; this.so = so; this.sb = sb;
     // bewaker: een ontspoorde toestand herstelt zichzelf in plaats van het geluid voorgoed te stoppen
     for (let b = 0; b < 4; b++) { if (!(ef[b] >= 0 && ef[b] < 1e6)) ef[b] = 0; if (!(es[b] >= 0 && es[b] < 1e6)) es[b] = 0; if (!(gs[b] > 0 && gs[b] < 1e4)) gs[b] = 1; if (!(Math.abs(sa[b]) <= 1)) sa[b] = 0; if (!(Math.abs(ss[b]) <= 1)) ss[b] = 0; }
     for (let i = 0; i < 16; i++) if (!(Math.abs(z[i]) < 1e6)) z[i] = 0;
@@ -163,7 +202,7 @@ class TransientShaper extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', TransientShaper);`;
 
 export default {
-  id: 'nl.patchkamer.transientshaper', name: 'Transient Shaper', version: '1.0.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.transientshaper', name: 'Transient Shaper', version: '1.0.1', kind: 'effect', category: 'effect',
   about: {
     nl: 'Versterkt of dempt de aanzet (attack) en het uitklinken (sustain) van een geluid, op elk niveau. Zo krijgt een snare meer tik, een kick meer stoot, wordt een break strakker of een pad zachter, zonder een drempel in te stellen.\n\nHoe het werkt: een snelle en een langzame volger meten het niveau. Zijn ze het oneens, dan is er een aanzet (snel hoger) of een uitklink (snel lager); dat verschil in dB bepaalt hoeveel er wordt versterkt of gedempt. Het verschil is een verhouding, dus een zacht en een hard geslagen drum klinken hetzelfde bewerkt. Onder circa -70 dBFS neemt het effect af, zodat ruis niet wordt opgepompt.\n\nTijden: Snel voor hi-hats en percussie, Normaal voor snares en breaks, Lang voor kicks en bas. Met 3 banden krijgen laag, mid en hoog elk een eigen attack en sustain: strak laag, scherpe mid, rustige hoog. De banden worden afgesplitst en tellen weer op tot het origineel.\n\nBij attack en sustain 0 % (3 banden uit, mix 100 %, uitgang 0 dB) gaat het signaal ongewijzigd door. Geen vertraging (geen lookahead). Een flinke aanzetversterking kan pieken geven: verlaag de uitgang of zet er een limiter achter.',
     en: 'Boosts or reduces the attack and the sustain of a sound, at any level. A snare gets more snap, a kick more punch, a break gets tighter or a pad softer, without setting a threshold.\n\nHow it works: a fast and a slow follower measure the level. When they disagree there is an onset (fast is higher) or a tail (fast is lower); that difference in dB decides how much is boosted or cut. The difference is a ratio, so a soft and a hard hit sound the same once shaped. Below about -70 dBFS the effect fades out, so noise is not pumped up.\n\nTimes: Fast for hats and percussion, Normal for snares and breaks, Long for kicks and bass. With 3 bands, low, mid and high each get their own attack and sustain: tight lows, a sharp mid, a calm top. The bands are split off and add back up to the original.\n\nWith attack and sustain at 0% (3 bands off, mix 100%, output 0 dB) the signal passes through unchanged. No delay (no lookahead). A big attack boost can create peaks: lower the output or follow it with a limiter.',
