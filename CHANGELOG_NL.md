@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.35.1 (2026-11-12)
+
+### Opgelost
+- **Clip Arranger (1.37.2): de matrix houdt zijn scrollpositie vast.** Een scène lager in de lijst afspelen springt niet meer terug naar de bovenste scène. De matrix scrolt de scène die speelt nu ook in beeld als die buiten beeld valt.
+
 ## 0.35.0 (2026-11-12)
 
 ### Toegevoegd
