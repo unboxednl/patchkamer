@@ -59,6 +59,19 @@ A dark, technical neurofunk song with synthesized drums (a dry, gated Drum Kit),
 |---|---|---|
 | [iron-cathedral](drum-and-bass/iron-cathedral.patchkamer-song.json) | dark neurofunk, 174 BPM, E phrygian | intro, build, drop, break, build, drop with an extra bass layer, outro (128 bars) |
 
+## Dance: techno, house, trance, EDM, progressive and a top 40 song
+
+Six songs with a Clip Arranger for the structure, Pulse Drums or Drum Kit with a kick tuned low and long (a fundamental around 50 to 65 Hz and a tail of a third of a second, so it does not sound like a bongo), and a sidechain pump. Checked on paper and by measurement (levels, no clipping, every track and every drum channel sounds), **not listened to**. The top 40 song was started with the [Remix](../devices/tools/Remix/AGENTS.md) device (recipe *New song*, style Pop).
+
+| File | Style | Structure |
+|---|---|---|
+| [concrete-meridian](techno/concrete-meridian.patchkamer-song.json) | techno, 130 BPM, A minor | intro, build, main, breakdown, rebuild, peak with an acid lead, outro (144 bars, 4:26) |
+| [late-train-home](house/late-train-home.patchkamer-song.json) | house, 124 BPM, A minor | intro, build, drop, break, rise, second peak, outro (136 bars, 4:23) |
+| [skyline-ascent](trance/skyline-ascent.patchkamer-song.json) | trance, 138 BPM, A minor | intro, build, break, riser, drop, groove, break, riser, drop, outro (200 bars, 5:48) |
+| [skyline-ignition](edm/skyline-ignition.patchkamer-song.json) | EDM, 128 BPM, E minor | intro, build-up, drop, breakdown, build-up, drop, outro (136 bars, 4:15) |
+| [slow-horizon](progressive/slow-horizon.patchkamer-song.json) | progressive house and trance, 126 BPM, A minor | intro, bass in, build, three peaks around a long break, outro (224 bars, 7:07) |
+| [golden-hour-lights](pop/golden-hour-lights.patchkamer-song.json) | top 40 pop, 102 BPM, G major | intro, verse, chorus, verse, chorus, breakdown, final chorus, outro (80 bars, 3:08) |
+
 To compose your own song as an AI agent, start at [AGENTS.md](AGENTS.md) (in Dutch).
 
 ## License

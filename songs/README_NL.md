@@ -59,6 +59,19 @@ Een donkere, technische neurofunk-song met gesynthetiseerde drums (een droge, ga
 |---|---|---|
 | [iron-cathedral](drum-and-bass/iron-cathedral.patchkamer-song.json) | donkere neurofunk, 174 BPM, E frygisch | intro, build, drop, break, build, drop met een extra baslaag, outro (128 maten) |
 
+## Dance: techno, house, trance, EDM, progressive en een top 40 song
+
+Zes songs met een Clip Arranger voor de structuur, Pulse Drums of Drum Kit met een lage, lange kick (een grondtoon rond 50 tot 65 Hz en een staart van een derde seconde, zodat hij niet als een bongo klinkt) en een sidechain-pomp. Gecontroleerd op papier en met metingen (niveaus, geen clipping, elk spoor en elk drumkanaal klinkt), **niet beluisterd**. De top 40 song is gestart met het apparaat [Remix](../devices/tools/Remix/AGENTS.md) (recept *Nieuwe song*, stijl Pop).
+
+| Bestand | Stijl | Opbouw |
+|---|---|---|
+| [concrete-meridian](techno/concrete-meridian.patchkamer-song.json) | techno, 130 BPM, A mineur | intro, build, main, breakdown, rebuild, peak met een acid-lead, outro (144 maten, 4:26) |
+| [late-train-home](house/late-train-home.patchkamer-song.json) | house, 124 BPM, A mineur | intro, build, drop, break, rise, tweede peak, outro (136 maten, 4:23) |
+| [skyline-ascent](trance/skyline-ascent.patchkamer-song.json) | trance, 138 BPM, A mineur | intro, build, break, riser, drop, groove, break, riser, drop, outro (200 maten, 5:48) |
+| [skyline-ignition](edm/skyline-ignition.patchkamer-song.json) | EDM, 128 BPM, E mineur | intro, build-up, drop, breakdown, build-up, drop, outro (136 maten, 4:15) |
+| [slow-horizon](progressive/slow-horizon.patchkamer-song.json) | progressive house en trance, 126 BPM, A mineur | intro, bas erin, build, drie pieken rond een lange break, outro (224 maten, 7:07) |
+| [golden-hour-lights](pop/golden-hour-lights.patchkamer-song.json) | top 40 pop, 102 BPM, G majeur | intro, couplet, refrein, couplet, refrein, breakdown, laatste refrein, outro (80 maten, 3:08) |
+
 Zelf een song componeren als AI-agent? Begin bij [AGENTS.md](AGENTS.md).
 
 ## Licentie

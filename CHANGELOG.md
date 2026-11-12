@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.35.0 (2026-11-12)
+
+### Added
+- **Six new songs for dance genres**, each with a Clip Arranger for the structure: **Concrete Meridian** (techno, 130 BPM, 4:26), **Late Train Home** (house, 124 BPM, 4:23), **Skyline Ascent** (trance, 138 BPM, 5:48), **Skyline Ignition** (EDM, 128 BPM, 4:15), **Slow Horizon** (progressive, 126 BPM, 7:07) and **Golden Hour Lights** (top 40 pop, 102 BPM, 3:08), in `songs/techno/`, `house/`, `trance/`, `edm/`, `progressive/` and `pop/`. The top 40 song was started with **Remix** (recipe New song, style Pop, hit score 100 out of 100) and then worked out. The Pulse Drums kicks are lower and longer (model Deep, tune -16 to -17, decay 0.8, sweep 0.65: a fundamental of about 63 Hz falling to about 45 Hz, a tail of about 0.35 s), because a high, short kick sounds like a bongo. Every track and every drum channel gets notes from the sequencer. Checked with `check-song.py` and per-device measurements; for four songs the full length was not measured in one run (the machine was overloaded, the rest was measured in test copies). **Not listened to.**
+
 ## 0.34.2 (2026-11-12)
 
 ### Fixed
