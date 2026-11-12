@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.35.3 (2026-11-12)
+
+### Verbeterd
+- **Celestial Mechanics (1.14.1) vraagt veel minder van de processor.** In een druk stuk met veel planeten nam dit apparaat van alle apparaten het meeste van de audiodraad (gemeten ca. 52 %). De planeten kregen hun velden pas gaandeweg, waardoor de browser de rekenlus niet kon versnellen; nu hebben ze vanaf het begin dezelfde velden. Daarnaast worden er geen nieuwe arrays per audioblok meer gemaakt, is er een sinus per planeet per sample minder en wordt de panning per blok berekend. In een rekentest met 14 planeten was het ruim twee tot vier keer sneller, met exact dezelfde uitvoer (zelfde samples als 1.14.0). Niet beluisterd; wel gemeten dat het geluid niet verandert.
+
 ## 0.35.2 (2026-11-12)
 
 ### Opgelost

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Lichter voor de processor: elke planeet heeft vanaf het begin dezelfde velden (de motor liep daardoor ruim twee keer sneller), geen nieuwe arrays per audioblok, een sinus minder per planeet per sample en de panning wordt per blok berekend in plaats van per sample. Geluid, state, poorten en uiterlijk bit-identiek (zelfde uitvoer als 1.14.0 gemeten).
 // 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: setup, orbit, spacetime, phenomena, sound; rol param of select), zodat een skin ze als draaiknop kan tonen; oude host: genegeerd. De hoogte van het tekenvlak volgt nu de CSS-hoogte (standaard 340 px, dus zonder skin ongewijzigd), zodat een skin het lager kan maken zonder dat het beeld vervormt. Geluid, state, presets, poorten en uiterlijk ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Celestial Mechanics); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de ondertitel staat nu in about.
@@ -29,7 +30,7 @@ const WORKLET = `
 const TAU=Math.PI*2, MAXP=14;
 class Planets extends AudioWorkletProcessor{
   constructor(){ super(); this.P=[]; this.q=[]; this.id=1; this.s={gravity:6,hole:0,ecc:0.3,light:6,couple:0.5,grain:0.35,flare:0.5,pulsar:0,time:1,orbit:1,level:0.8,comets:0,life:'long'};
-    this.gm=1; this.kick=0; this.ping=0; this.pingPh=0; this.frame=0; this.seed=12345; this.events=[]; this.cometT=0;
+    this.coup=new Float32Array(MAXP*MAXP); this.sa=new Float32Array(MAXP); this.sb=new Float32Array(MAXP); this.gm=1; this.kick=0; this.ping=0; this.pingPh=0; this.frame=0; this.seed=12345; this.events=[]; this.cometT=0;
     this.port.onmessage=e=>{ const m=e.data||{}; if(m.type==='set'){ if(m.s&&typeof m.s==='object') for(const k of Object.keys(m.s)){ const v=m.s[k]; if(k==='life'){ if(v==='short'||v==='long'||v==='forever') this.s.life=v; } else if(k in this.s&&typeof v==='number'&&Number.isFinite(v)) this.s[k]=v; } } else if(m.time===undefined||Number.isFinite(m.time)) this.q.push(m); }; }
   rnd(){ this.seed=(this.seed*16807)%2147483647; return this.seed/2147483647; }
   radiusFor(note){ const k=Math.min(1,Math.max(0,(note-24)/84)); return (0.32+1.45*(1-k))*this.s.orbit; }
@@ -39,7 +40,8 @@ class Planets extends AudioWorkletProcessor{
     const rr=Math.hypot(x,y)||0.01, vc=Math.sqrt(GM/rr), e=this.s.ecc*(0.4+0.6*this.rnd()), dir=this.rnd()<0.12?-1:1;
     const vx=opt.vx??(-y/rr*vc*(1-e*0.55)*dir+x/rr*vc*e*0.25), vy=opt.vy??(x/rr*vc*(1-e*0.55)*dir+y/rr*vc*e*0.25);
     const p={id:this.id++,note,f0:440*Math.pow(2,(note-69)/12),vel,x,y,vx,vy,m:0.02+0.05*vel,ph:this.rnd(),amp:0,age:0,life:opt.life??1e9,leaving:false,rel:opt.rel??1.6,
-      comet:!!opt.comet,fm:0,flare:0,b1:0,b2:0,dead:false,fNow:0,pan:0,gain:0,lastF:0}; this.P.push(p); return p; }
+      comet:!!opt.comet,fm:0,flare:0,b1:0,b2:0,dead:false,fNow:0,pan:0,gain:0,lastF:0,
+      cl:0,cr:0,gainT:0,gainK:0,r:0,gulp:0,clap:0,gone:false,merged:false,swallow:false,flareLock:false,ecl:false,src:NaN}; this.P.push(p); return p; }
   handle(m){ if((m.type==='note'||m.type==='off'||m.type==='throw')&&!Number.isFinite(m.note)) return; if(m.type==='note'&&m.vel!==undefined&&!Number.isFinite(m.vel)) return;
     if(m.type==='throw'&&!(Number.isFinite(m.x)&&Number.isFinite(m.y)&&Number.isFinite(m.vx)&&Number.isFinite(m.vy))) return; if(m.type==='step'&&!(Number.isFinite(m.step)&&Number.isFinite(m.time))) return;
     const lifeOf=dur=>this.s.life==='forever'?1e9:this.s.life==='short'?Math.min(dur??1.5,2):Math.max(dur??4,4);
@@ -85,14 +87,15 @@ class Planets extends AudioWorkletProcessor{
     this.sanitize();
     const P=this.P, n=P.length, holeRs=0.015+s.hole*0.33, c=s.light;
     // per planeet: frequentie, pan, volume, FM-koppeling voor dit blok
-    const coup=new Float32Array(n*n);
+    if(this.coup.length<n*n){ this.coup=new Float32Array(n*n); } if(this.sa.length<n){ this.sa=new Float32Array(n); this.sb=new Float32Array(n); }
+    const coup=this.coup;
     for(let i=0;i<n;i++){ const p=P[i]; p.age+=N/sr;
       const r=Math.max(1e-3,p.r||Math.hypot(p.x,p.y)), vr=(p.x*p.vx+p.y*p.vy)/r;
       let f=p.f0*Math.min(4,Math.max(0.25,1/(1+vr/c)));                          // Doppler
       const red=Math.sqrt(Math.max(0,1-holeRs/r)); f*=s.hole>0.001?Math.max(0.02,red):1;  // roodverschuiving
       if(p.dead){ p.gulp=(p.gulp||1)*0.93; f*=p.gulp; }
       p.fNow=Math.min(sr*0.45,f);
-      p.pan=Math.max(-1,Math.min(1,p.x/1.6));
+      p.pan=Math.max(-1,Math.min(1,p.x/1.6)); { const pa=(p.pan+1)*0.25*Math.PI; p.cl=Math.cos(pa); p.cr=Math.sin(pa); }
       let target=p.vel*0.11/(0.55+0.45*r);
       if(p.comet) target*=0.8;
       if(p.age>=p.life&&!p.leaving){ p.leaving=true; }
@@ -104,19 +107,20 @@ class Planets extends AudioWorkletProcessor{
       for(let j=0;j<n;j++){ if(j===i) continue; const q=P[j], d=Math.hypot(p.x-q.x,p.y-q.y); coup[i*n+j]=s.couple*4*q.m*10/(1+d*d*60); } }
     // geluid
     const gr=s.grain*3.2, lvl=s.level;
-    const sinv=new Float32Array(n);
+    let sinv=this.sa, snext=this.sb;
+    for(let i=0;i<n;i++) sinv[i]=Math.sin(P[i].ph*TAU);
     for(let t=0;t<N;t++){ let l=0, rr=0;
-      for(let i=0;i<n;i++) sinv[i]=Math.sin(P[i].ph*TAU);
       for(let i=0;i<n;i++){ const p=P[i]; let fm=0; for(let j=0;j<n;j++) if(j!==i) fm+=coup[i*n+j]*sinv[j];
         p.ph+=p.fNow/sr; if(p.ph>1) p.ph-=Math.floor(p.ph);
-        const x=p.ph*TAU; let v=Math.sin(x+gr*Math.sin(x)*0.6+fm);                  // korrel: zelf-FM; koppeling: FM van de buren
-        if(p.comet) v=Math.sin(x)*0.7+Math.sin(x*2.01)*0.3;
+        const x=p.ph*TAU, sx=Math.sin(x); snext[i]=sx; let v;                  // korrel: zelf-FM; koppeling: FM van de buren
+        if(p.comet) v=sx*0.7+Math.sin(x*2.01)*0.3; else v=Math.sin(x+gr*sx*0.6+fm);
         // zonnevlam / klap: ruis door een resonator op de planeettoon
         if(p.flare>1e-4||p.clap>1e-4){ this.seed=(this.seed*16807)%2147483647; const nz=this.seed/1073741823.5-1;
           const w=TAU*Math.min(0.45,(p.fNow*3)/sr), rq=0.995, cw=2*rq*Math.cos(w); const y=nz*(p.flare*0.08+(p.clap||0)*0.25)+cw*p.b1-rq*rq*p.b2; p.b2=p.b1; p.b1=y; v+=y*0.6;
           p.flare*=0.99994; p.clap=(p.clap||0)*0.9996; if(p.flare<1e-4) p.flare=0; }
         p.gain=p.gainT+(p.gain-p.gainT)*p.gainK;
-        const g=p.gain, a=(p.pan+1)*0.25*Math.PI; l+=v*g*Math.cos(a); rr+=v*g*Math.sin(a); }
+        const g=p.gain; l+=v*g*p.cl; rr+=v*g*p.cr; }
+      { const tmp=sinv; sinv=snext; snext=tmp; }
       if(this.ping>1e-4){ this.pingPh+=1900/sr; const pv=Math.sin(this.pingPh*TAU)*this.ping*0.25; l+=pv; rr+=pv; this.ping*=0.9985; }
       { const a=Math.tanh(l*lvl), b=Math.tanh(rr*lvl); L[t]=a===a?a:0; R[t]=b===b?b:0; } }
     // opruimen
@@ -146,7 +150,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.14.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.celestialmechanics', name: 'Celestial Mechanics', version: '1.14.1', kind: 'instrument', category: 'synth',
   ui: { width: 860, minWidth: 380 },
   about: { nl: 'Een zwaartekrachtsynth: elke noot wordt een planeet die om een zon draait.\n\nDoppler buigt de toon, het zwarte gat trekt hem omlaag, planeten die elkaar naderen kleuren elkaars klank. Sleep in het heelal om zelf een planeet weg te slingeren.\n\nTips: Zwart gat omhoog en de banen krimpen, de tonen zakken en worden opgeslokt. Lichtsnelheid omlaag en elke baan wordt een jankende Doppler-sirene. Wisselwerking hoog en planeten trekken aan elkaar: chaos, botsingen en samensmeltingen. Pulsar en Echo volgen het tempo als de klok loopt. Paarse Mod-kabel: Drift op Zwaartekracht of Tijd laat het hele stelsel ademen.', en: 'A gravity synth: every note becomes a planet orbiting a sun.\n\nDoppler bends the pitch, the black hole pulls it down, planets that approach each other colour each other\'s sound. Drag in the universe to sling a planet away yourself.\n\nTips: turn Black hole up and the orbits shrink, the pitches sink and get swallowed. Turn Speed of light down and every orbit becomes a wailing Doppler siren. Turn Interaction up and planets pull at each other: chaos, collisions and mergers. Pulsar and Echo follow the tempo when the clock runs. Purple Mod cable: Drift on Gravity or Time makes the whole system breathe.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Out' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },

@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.35.3 (2026-11-12)
+
+### Improved
+- **Celestial Mechanics (1.14.1) is much lighter on the processor.** In a busy piece with many planets this device took the most of the audio thread of all devices (measured about 52%). The planets got their fields only gradually, which stopped the browser from speeding up the inner loop; they now have the same fields from the start. In addition, no new arrays are created per audio block, there is one sine less per planet per sample and the panning is computed per block. In a calculation test with 14 planets it was two to four times faster, with exactly the same output (same samples as 1.14.0). Not listened to; it was measured that the sound does not change.
+
 ## 0.35.2 (2026-11-12)
 
 ### Fixed
