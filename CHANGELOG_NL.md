@@ -4,6 +4,13 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.34.2 (2026-11-12)
+
+### Opgelost
+- **Plop bij een choke** in Drum Kit (1.19.1) en Pulse Drums (1.20.2): als een gesloten hat een open hat afkapte, sprong de uitklinkende envelope terug naar zijn piek. De release houdt nu de huidige waarde vast (`cancelAndHoldAtTime`). Niet beluisterd.
+- **Drum Kit 1.19.2 en Drum Machine 1.18.1**: dezelfde fix als Pulse Drums 1.20.1. De start van een slag wordt naar boven afgerond op een grens van 128 samples, zodat elke slag gelijk klinkt bij 135 BPM. Gemeten in een offline render (135 BPM, aanzet van de eerste 20 ms): de kick van Drum Kit had een cyclus van drie (0,057 / 0,042 / 0,045) en is nu gelijk (0,044 / 0,043 / 0,043); de snare van Drum Machine had 0,099 / 0,117 / 0,089 en is nu gelijk (0,106). Click Synth en Latin Percussion starten in een worklet, sample-nauwkeurig, en hebben dit niet. Niet beluisterd.
+- **Pump 1.14.1**: een duck-moment binnen een halve sample van het blokeinde ging verloren (ongeveer 0,4% van de events); de positie wordt nu begrensd op het laatste sample van het blok.
+
 ## 0.34.1 (2026-11-12)
 
 ### Opgelost

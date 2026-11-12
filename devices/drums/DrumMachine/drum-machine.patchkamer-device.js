@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.18.1 — Elke slag klinkt nu gelijk, ook bij 135 BPM: de start van een slag wordt naar boven afgerond op een grens van 128 samples (zoals Pulse Drums 1.20.1). Niet beluisterd.
 // 1.18.0 — Opmaak voor de skin Compact (alleen met data-pk-face, dus alleen met een skin die draaiknoppen kiest; zonder skin ongewijzigd): de geluidentabel krijgt klasse dm-tab en de knoppen voor niveau en swing staan in een omhulsel dm-sw (display: contents zonder skin) zodat ze in een rij van zes kunnen. Geluid, state, presets, params, poorten en ids ongewijzigd.
 // 1.17.0 — Patchkamer contract v1.17: klembord voor patronen. Nieuw: `clipInfo()`, `getClip()` en `setClip(clip)` (formaat `patchkamer-clip`, kind `drums`, tijd in tikken van 12 per zestiende). Het patroon is de vier banen (kick, snare, hat, perc) van 16 stappen. Het apparaat kent alleen aan/uit: de velocity wordt bij plakken weggelaten (`vel: 'binary'`), en
 //          banen van een andere drumcomputer die niet op type of naam passen worden door de host weggelaten en gemeld; een baan die in de clip ontbreekt wordt leeg. Stuurt zelf geen gebeurtenissen. Verder niets gewijzigd: getState, presets, tunes, geluid en poorten gelijk aan 1.16.0.
@@ -46,7 +47,7 @@ const PAT = { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0
 export default {
   id: 'nl.patchkamer.drummachine',
   name: 'Drum Machine',
-  version: '1.18.0',
+  version: '1.18.1',
   kind: 'instrument',
   category: 'groove',
   ui: { width: 440, minWidth: 320 },
@@ -69,7 +70,10 @@ export default {
     let rows = {}, cells = {}, self, dead = false, lvlKnob = null, swKnob = null, lswKnobs = {};
     const apply = () => { if (dead) return; const t = ctx.currentTime; VOICES.forEach(([k]) => { bus[k].g.gain.setTargetAtTime(eff(k, 'lvl'), t, 0.03); bus[k].p.pan.setTargetAtTime(eff(k, 'pan'), t, 0.03); }); out.gain.setTargetAtTime(exv('lvl', state.lvl), t, 0.02); };
     apply();
+    // De start van elke slag valt op een grens van het renderblok (128 samples), naar boven afgerond (hooguit 2,7 ms later, nooit eerder dan gepland): zo klinkt elke slag gelijk, ook bij tempo's waarvan de stap niet in een heel aantal blokken past.
+    const quantumStart = x => Math.ceil(x * ctx.sampleRate / 128 - 1e-6) * 128 / ctx.sampleRate;
     function hit(lane, t, v) {
+      t = quantumStart(t);
       const dst = bus[lane].g, dec = eff(lane, 'dec');
       if (lane === 'kick') { const tune = eff('kick', 'tune'), o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(tune * 3.2, t); o.frequency.exponentialRampToValueAtTime(tune, t + 0.045);
         g.gain.setValueAtTime(v * 1.1, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dec); o.connect(g).connect(dst); o.start(t); o.stop(t + dec + 0.05);

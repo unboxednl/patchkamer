@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Een duck-moment binnen een halve sample van het blokeinde rondde af op de blokgrootte en werd nooit verwerkt (ruim 0,4% van de events ging verloren); de positie is nu begrensd op het laatste sample van het blok.
 // 1.14.0 — Skin Compact: de hoogte van het scherm volgt de CSS-eigenschap --u-ch (zonder skin 90); de schuiven melden zich met data-pk-id en -group aan, zodat een skin ze als draaiknop kan tonen. Geluid, state en ids ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Pump); de UI toont geen uitlegtekst meer.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam; de omschrijving staat nu in about.
@@ -121,7 +122,7 @@ class Pump extends AudioWorkletProcessor{
     const iL=I&&I[0]?I[0]:null, iR=I&&I[1]?I[1]:iL, sL=S&&S[0]?S[0]:null, sR=S&&S[1]?S[1]:sL, oL=O[0], oR=O[1]||O[0];
     const ka=Math.exp(-1/(Math.max(0.05,s.att)*0.001*sr)), kr=Math.exp(-1/(Math.max(5,s.rel)*0.001*sr));
     const cx=1-Math.exp(-2*Math.PI*s.xo/sr), cs=1-Math.exp(-2*Math.PI*s.scfreq/sr);
-    let starts=[]; if(this.q.length){ const keep=[]; for(const t of this.q){ if(t<currentTime+N/sr) starts.push(Math.max(0,Math.round((t-currentTime)*sr))); else keep.push(t); } this.q=keep; starts.sort((a,b)=>a-b); }
+    let starts=[]; if(this.q.length){ const keep=[]; for(const t of this.q){ if(t<currentTime+N/sr) starts.push(Math.min(N-1,Math.max(0,Math.round((t-currentTime)*sr)))); else keep.push(t); } this.q=keep; starts.sort((a,b)=>a-b); }
     let si=0; const attS=Math.max(1,s.att*0.001*sr), holdS=s.hold*0.001*sr, relS=Math.max(1,s.rel*0.001*sr), ex=1+s.curve*3;
     for(let t=0;t<N;t++){
       const xl=iL?cl(iL[t]):0, xr=iR?cl(iR[t]):0;
@@ -155,7 +156,7 @@ class Pump extends AudioWorkletProcessor{
 registerProcessor('${WNAME}', Pump);`;
 
 export default {
-  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.14.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.pump', name: 'Pump', version: '1.14.1', kind: 'effect', category: 'effect',
   about: { nl: 'Laat de bas en pads wijken voor de kick. Sidechain luistert naar een tweede audio-ingang, Trigger naar trigs of noten, Klok pompt vanzelf op het tempo.\n\nTip: zet Pump op de bas of pads, kies Klok 1/4 en Release volgt tempo: direct het bekende pompen, zonder kabels. Met Alleen het laag blijft de bovenkant van een pad staan terwijl de bas wijkt voor de kick. Sidechain: trek de kick (bijvoorbeeld een losse drumuitgang) naar de ingang Sidechain.', en: 'Makes the bass and pads give way to the kick. Sidechain listens to a second audio input, Trigger to trigs or notes, Clock pumps by itself on the tempo.\n\nTip: put Pump on the bass or pads, choose Clock 1/4 and Release follows tempo: the familiar pumping at once, without cables. With Low end only, the top of a pad stays put while the bass gives way to the kick. Sidechain: patch the kick (for example a separate drum output) into the Sidechain input.' },
   ui: { width: 720, minWidth: 360 },
   i18n: { en: { ports: { in: 'In', sc: 'Sidechain', out: 'Out', trig: 'Trigger', mod: 'Mod' } } },
