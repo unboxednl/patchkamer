@@ -74,7 +74,7 @@ Het icoon (een patchkabel tussen twee aansluitingen) verschijnt ook als tabbladi
 | ☰ → **Bestand** | **Werkruimte** (bewaar, open en exporteer je opstelling, onderdeel 8), **Herschik** (zet je apparaten netjes op volgorde, van links naar rechts) en **Leeg** (maakt de vloer leeg; klik twee keer om te bevestigen). |
 | ☰ → **Bibliotheek** | **Tunes**, **Presets**, **Songs** en **Skins** openen het bibliotheekvenster op die tab (onderdeel 7 en 8). |
 | ☰ → **Weergave** | **Scherm** en **Pas aan op dit scherm** (onderdeel 9), **Kleur** (donker, licht, retro, aurora of papier, onderdeel 10), **Focus** (toont de apparaten die je met **F** hebt gemarkeerd naast elkaar, onderdeel 9) en **Bladeren** (Focus met alle apparaten, één tegelijk). |
-| ☰ → **Overig** | **Instellingen** (taal, audiokwaliteit, weergave en meer, onderdeel 10), **Latency** (klein weergegeven: de vertraging tussen het berekenen van een geluid en het horen ervan, zoals je browser die meldt) en de schakelaar **Automatisch koppelen bij plaatsen**. |
+| ☰ → **Overig** | **Instellingen** (taal, audiokwaliteit, weergave en meer, onderdeel 10), **Latency** (klein weergegeven: de vertraging tussen het berekenen van een geluid en het horen ervan, zoals je browser die meldt), **Realtime** (houdt de audiodraad het bij: 100 % is goed, eronder ontbreekt per seconde geluid en hapert het; bij haperingen verschijnt ook een rood lampje naast Start) en de schakelaar **Automatisch koppelen bij plaatsen**. |
 | Tabs **F1**, **F2**… | De balk onder de bovenbalk bevat je werkruimtes. Klik op een tab of druk op **F1** t/m **F10** om te wisselen; **+** voegt er een toe en **×** sluit er een (hoofdstuk 8). |
 
 Het grote vlak is de **vloer**. Daar staan je apparaten. Het venster links is de **bibliotheek**, met de apparaten die je kunt plaatsen. Rechtsonder zie je de zoomknoppen.
@@ -493,7 +493,7 @@ Patchkamer is gemaakt om net zo goed door AI-agents als door mensen te worden ge
 
 **Mijn MIDI-keyboard wordt niet gevonden.** Gebruik Chrome of Edge, klik op **MIDI verbinden** op Keys en geef toegang. Kies het keyboard onder **MIDI-ingang**.
 
-**Geknetter of haperingen.** Open Instellingen → Audio en kies *Gebalanceerde* of *Stabiele* latency, of zet de kwaliteit op *Laag*.
+**Geknetter of haperingen.** Kijk in ☰ → Overig bij **Realtime**: staat die onder 100 % (of verschijnt het rode lampje naast Start), dan is de audiodraad vol; haal een zwaar apparaat weg of zet de kwaliteit lager. Open verder Instellingen → Audio en kies *Gebalanceerde* of *Stabiele* latency, of zet de kwaliteit op *Laag*.
 
 **De mapvraag zegt "7 bestanden uploaden".** Zie onderdeel 4: er wordt niets geüpload en het getal telt alle bestanden in de map.
 

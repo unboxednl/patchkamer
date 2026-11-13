@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.40.0 (2026-11-13)
+
+### Toegevoegd
+- **Realtime-meter:** onder ☰ → Overig staat naast Latency nu de regel **Realtime**, en naast Start verschijnt een rood lampje als de audiodraad het niet bijhoudt. De host vergelijkt elke seconde de audioklok met de wandklok over de laatste drie seconden: 100 % is goed, eronder ontbreekt per seconde zoveel geluid en hapert het. De eerste twee seconden na Start tellen niet mee. De meter leest alleen; geluid, apparaten en songs veranderen niet. Hij meldt pas bij (bijna) vol, niet hoeveel ruimte er nog is (`AudioRenderCapacity` bestaat niet in de browsers). Handleiding (NL en EN) en AGENTS.md bijgewerkt.
+
 ## 0.39.0 (2026-11-13)
 
 ### Toegevoegd

@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.40.0 (2026-11-13)
+
+### Added
+- **Realtime meter:** under ☰ → Other, next to Latency, there is now a **Realtime** line, and a red lamp appears next to Start when the audio thread cannot keep up. Every second the host compares the audio clock with the wall clock over the last three seconds: 100% is good, below that this much sound is missing every second and it glitches. The first two seconds after Start do not count. The meter only reads; sound, devices and songs are unchanged. It only reports when the thread is (nearly) full, not how much room is left (`AudioRenderCapacity` does not exist in the browsers). Manual (NL and EN) and AGENTS.md updated.
+
 ## 0.39.0 (2026-11-13)
 
 ### Added

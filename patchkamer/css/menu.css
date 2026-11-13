@@ -5,11 +5,11 @@
 .hdrmenu[hidden]{display:none}
 .hdrmenu h4{margin:0 0 6px;font-family:var(--disp);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .hdrmenu .hm-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.hdrmenu button,.hdrmenu select,.hdrmenu .tp,.hdrmenu #latBox{min-height:44px;font-size:14px}
+.hdrmenu button,.hdrmenu select,.hdrmenu .tp,.hdrmenu #latBox,.hdrmenu #loadBox{min-height:44px;font-size:14px}
 .hdrmenu button{padding:8px 10px;letter-spacing:.04em}
 .hdrmenu .tp{justify-content:space-between;font-size:11px;padding:0 4px}
 .hdrmenu .tp select{flex:1 1 auto;min-width:0}
-.hdrmenu #latBox{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}   /* de latency staat klein in het menu */
+.hdrmenu #latBox,.hdrmenu #loadBox{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}   /* de latency staat klein in het menu */
 .hdrmenu #fitScreen{grid-column:1/-1}
 .hdrmenu .narrowonly{display:inline-block}
 @media (max-width:699px){.hdrmenu{left:calc(8px/var(--pkfs,1));right:calc(8px/var(--pkfs,1));width:auto}}

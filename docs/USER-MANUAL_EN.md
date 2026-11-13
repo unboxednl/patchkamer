@@ -74,7 +74,7 @@ The icon (a patch cable between two jacks) also shows as the tab icon in the bro
 | ☰ → **File** | **Workspace** (save, open and export your setup, section 8), **Arrange** (puts your devices neatly in order, from left to right) and **Clear** (empties the floor; click twice to confirm). |
 | ☰ → **Library** | **Tunes**, **Presets**, **Songs** and **Skins** open the library window on that tab (sections 7 and 8). |
 | ☰ → **View** | **Screen** and **Fit to this screen** (section 9), **Color** (dark, light, retro, aurora or paper, section 10), **Focus** (shows the devices you flagged with **F** next to each other, section 9) and **Browse** (Focus with all devices, one at a time). |
-| ☰ → **Other** | **Settings** (language, audio quality, display and more, section 10), **Latency** (shown small: the delay between a sound being calculated and you hearing it, as reported by your browser) and the switch **Offer to connect when placing a device**. |
+| ☰ → **Other** | **Settings** (language, audio quality, display and more, section 10), **Latency** (shown small: the delay between a sound being calculated and you hearing it, as reported by your browser), **Realtime** (is the audio thread keeping up: 100% is good, below that sound goes missing every second and it glitches; when it glitches a red lamp also appears next to Start) and the switch **Offer to connect when placing a device**. |
 | **F1**, **F2**… tabs | The bar under the top bar holds your workspaces. Click a tab or press **F1** to **F10** to switch; **+** adds one and **×** closes one (section 8). |
 
 The big area is the **floor**. Your devices live there. The window on the left is the **library**, with the devices you can place. Bottom right you find the zoom controls.
@@ -493,7 +493,7 @@ Patchkamer is made to be built by AI agents as well as by people. Point your age
 
 **My MIDI keyboard is not found.** Use Chrome or Edge, click **Connect MIDI** on Keys and allow access. Pick the keyboard under **MIDI input**.
 
-**Crackles or dropouts.** Open Settings → Audio and choose *Balanced* or *Stable* latency, or lower the quality to *Low*.
+**Crackles or dropouts.** Check ☰ → Other → **Realtime**: if it is below 100% (or the red lamp next to Start appears) the audio thread is full; remove a heavy device or lower the quality. Then open Settings → Audio and choose *Balanced* or *Stable* latency, or lower the quality to *Low*.
 
 **The folder prompt says "Upload 7 files".** See section 4: nothing is uploaded and the number counts all files in the folder.
 

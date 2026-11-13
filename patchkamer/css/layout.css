@@ -19,3 +19,5 @@
 .reclamp:hover,.reclamp:focus-visible{border-color:var(--stop)}
 @keyframes reclamp{0%,100%{opacity:1}50%{opacity:.2}}
 @media (prefers-reduced-motion:reduce){.reclamp i{animation:none}}
+.loadlamp{display:inline-flex;align-items:center;padding:3px 8px;border:1px solid var(--stop);border-radius:6px;background:transparent;color:var(--stop);font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;cursor:default}
+.loadlamp[hidden]{display:none}
