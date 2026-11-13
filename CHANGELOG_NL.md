@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.37.3 (2026-11-13)
+
+### Opgelost
+- **Iron Acid** (Acid Baselines Classics 1.1.1, tune 1.0.1): filter-FM van 0,2 naar 0,05. Bij 0,2 ontspoorde het filter in de offline render (152240 niet-eindige samples); de resonantie was niet de oorzaak. De bewaker van het apparaat werkt alleen live, daar gaf het een korte hapering. Nu 0 niet-eindige samples. Niet beluisterd: de felheid kan iets anders zijn.
+- **Tune Finder 1.22.2**: index opnieuw gebouwd, Iron Acid heeft nu een echte vingerafdruk.
+
 ## 0.37.2 (2026-11-12)
 
 ### Gewijzigd
