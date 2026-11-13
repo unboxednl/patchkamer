@@ -1,9 +1,5 @@
 {
-<<<<<<< Updated upstream
-  "version": "0.38.0",
-=======
-  "version": "0.37.4",
->>>>>>> Stashed changes
+  "version": "0.39.0",
   "contract": "1.35",
   "skinsContract": "0.9"
 }

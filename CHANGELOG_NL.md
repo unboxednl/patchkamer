@@ -4,19 +4,17 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
-<<<<<<< Updated upstream
+## 0.39.0 (2026-11-13)
+
+### Toegevoegd
+- **Clip Arranger 1.38.0**: knop **Nieuw project** naast de projectnaam. Die begint een leeg project: één lege scène, één lege sectie in één song, lege clips en geen titel; de vier standaardsporen blijven. Met Undo haal je het oude project terug. State en presets zijn gelijk.
+
 ## 0.38.0 (2026-11-13)
 
 ### Toegevoegd
 - **Sax Studio** (synths, 1.0.0): levensechte sopraan-, alto-, tenor- en baritonsaxofoons uit echte opnames (MTG Solo Saxophones, CC BY 4.0) die pas na een klik op **Laden** van internet komen en nooit in de repo worden gekopieerd. Velocity kiest subtone, normaal of bite, de notelengte kiest staccato, overlappende noten klinken als mono-legato; growl, falloff, scoop, vibrato, adem- en klepruis en een sectiestand voor funk- en soulstabs. Met het tunepack **Sax Studio Styles** (36 tunes) en de skin Compact. Gemeten, niet beluisterd.
 - **Brass Studio** (synths, 1.0.0): koper als fysisch model (lipriet, pijp en bel): trompet, bugel, trombone, basstrombone, hoorn en tuba, een sectie van één tot vier spelers, dempers met wa-wa, scoop, rip, fall, doit, shake en drop, en legato. Met het tunepack **Brass Studio Styles** (45 tunes) en de skin Compact. Gemeten, niet beluisterd.
 - **Funk Bass** (synths, 1.0.0): een basgitaar als fysisch model voor soul, funk en jazz, met dode noot, vingers, pull, slap en pop uit velocity en notelengte, hammer-on en slide, fretless, vlakwond of roundwound snaren, pickups en 4 of 5 snaren. Met het tunepack **Funk Bass Styles** (26 tunes), negen **Step Sequencer**-patronen (`step-sequencer-funk-bass`) en de skin Compact. Gemeten, niet beluisterd.
-=======
-## 0.37.4 (2026-11-13)
-
-### Toegevoegd
-- **Clip Arranger 1.38.0**: knop **Nieuw project** naast de projectnaam. Die begint een leeg project: één lege scène, één lege sectie in één song, lege clips en geen titel; de vier standaardsporen blijven. Met Undo haal je het oude project terug. State en presets zijn gelijk.
->>>>>>> Stashed changes
 
 ## 0.37.3 (2026-11-13)
 
