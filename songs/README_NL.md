@@ -65,7 +65,9 @@ Een funksong met **gesampled akoestisch slagwerk** (het nieuwe [Acoustic Drums](
 
 | Bestand | Stijl | Opbouw |
 |---|---|---|
+| [back-alley-drawbars](funk/back-alley-drawbars.patchkamer-song.json) | funk, 106 BPM, F blues | cold open, main riff, vraag en antwoord, orgel stijgt op, afgekleed, gitaar en koper, iedereen terug, last call |
 | [sunday-pocket](funk/sunday-pocket.patchkamer-song.json) | funk, 104 BPM, E dorisch | intro, couplet, pre, hook, couplet, break, orgelsolo, laatste hook, outro (104 maten, ongeveer 4:00) |
+| [sunday-grease](funk/sunday-grease.patchkamer-song.json) | funk, 104 BPM | intro, thema, thema met koper, orgelsolo, break, tweede orgelsolo, thema uit, outro |
 
 ## Dance: techno, house, trance, EDM, progressive en een top 40 song
 

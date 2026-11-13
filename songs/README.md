@@ -65,7 +65,9 @@ A funk song with **sampled acoustic drums** (the new [Acoustic Drums](../devices
 
 | File | Style | Structure |
 |---|---|---|
+| [back-alley-drawbars](funk/back-alley-drawbars.patchkamer-song.json) | funk, 106 BPM, F blues | cold open, main riff, question and answer, organ takes flight, strip it back, guitar and horns, everybody back in, last call |
 | [sunday-pocket](funk/sunday-pocket.patchkamer-song.json) | funk, 104 BPM, E dorian | intro, verse, pre, hook, verse, break, organ solo, final hook, outro (104 bars, about 4:00) |
+| [sunday-grease](funk/sunday-grease.patchkamer-song.json) | funk, 104 BPM | intro, head, head with horns, organ solo, break, second organ solo, head out, outro |
 
 ## Dance: techno, house, trance, EDM, progressive and a top 40 song
 

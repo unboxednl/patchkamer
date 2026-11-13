@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.41.0 (2026-11-13)
+
+### Toegevoegd
+- **Funksongs** in `songs/funk/`: **Back Alley Drawbars** (106 BPM, F-blues: backbeat-drums, bas, gedempte gitaarchanks, vraag-en-antwoord-orgel en koperstoten) en **Sunday Grease** (104 BPM: drums, bas, funkgitaar, twee orgelsolo's, koperstabs en een phaser) naast **Sunday Pocket**, die weer in de repo staat. Alle drie worden door een Clip Arranger gespeeld en gebruiken Acoustic Drums (de kit laadt pas na een klik). Gemeten, niet beluisterd.
+
 ## 0.40.0 (2026-11-13)
 
 ### Toegevoegd
