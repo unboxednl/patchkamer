@@ -1,0 +1,77 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.5",
+  "id": "nl.patchkamer.saxstudio.compact",
+  "device": "nl.patchkamer.saxstudio",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout for small screens: rotary knobs with the label underneath and the knobs grouped per section in one frame, at roughly half the width of the standard card.",
+  "created": "2026-11-13",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "sections": [
+      {
+        "match": "group:play",
+        "frame": "line",
+        "columns": 5,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:fx",
+        "frame": "line",
+        "columns": 5,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:pitch",
+        "frame": "line",
+        "columns": 5,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:sect",
+        "frame": "line",
+        "columns": 5,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      },
+      {
+        "match": "group:tone",
+        "frame": "line",
+        "columns": 5,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      }
+    ],
+    "size": {
+      "width": 400
+    }
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, about half the standard width.",
+      "css": ""
+    }
+  ]
+}

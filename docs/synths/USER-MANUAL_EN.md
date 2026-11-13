@@ -964,6 +964,72 @@ To shape outside sound: connect an audio source to **External audio / envelope**
 - Combo ignores the drawbars and percussion; Tonewheel ignores the footage switches. Changing the model silences held notes.
 - The sound has been measured but **not listened to**.
 
+### Sax Studio
+
+**What it is for.** Lifelike saxophones for sequencers: soprano, alto, tenor and baritone, played from real recordings (MTG Solo Saxophones, CC BY 4.0). The recordings are not in Patchkamer or in the repository: choose an instrument and a size (compact: every other note, shifted by a semitone; full: every note) and click **Load**. The download size is shown first and you can cancel. A tune, preset or song never loads recordings; without loaded recordings the device is silent. It plays one instrument at a time and has no sequencer of its own: play it from **Keys** or a sequencer.
+
+**How the playing follows the sequencer.**
+
+- **Velocity** picks the layer, the colour and the articulation: soft notes are subtone (darker, slower attack, more breath), normal notes are normal and hard notes have bite (sharp attack, extra presence).
+- **Note length** picks staccato (short notes, short release). A note that starts before the previous one ends, or after a very small gap, plays mono-legato: the previous note slides over to the new one without a new attack or breath.
+- Growl, falloff and scoop (selectable per type of note), vibrato with delay, rate and depth (the **Mod** input can drive it), breath and key noise, humanize, transpose and tuning, and a section mode with two to four stacked voices (unison, octaves, major, minor, fourths) for funk and soul stabs.
+- The finish is light: low cut, three EQ bands, high cut, drive and a small room, plate or hall.
+
+**Ports.** Notes in (orange), **Mod** in (purple) and a stereo **Out** (teal) to **Speakers** or a **Mixer** channel.
+
+**Tunes.** Pack **Sax Studio Styles**: 36 tunes in 9 folders (Jazz Ballad, Bebop, Soul and Funk, Smooth, Rock and Roll Honk, Subtone Ballad, Growler, Section Stabs, Clean), one tune per instrument, file [`sax-studio-styles.patchkamer-tunes.json`](../../tunes/sax-studio-styles.patchkamer-tunes.json).
+
+**Tips and limits.**
+
+- Growl, falloff, scoop, subtone and bite are imitated by processing the recordings; there are no recordings of those techniques themselves.
+- A note outside the range of the instrument is moved by an octave. Most controls work from the next note; level, expression, vibrato and tone work immediately.
+- A full load is 30 to 36 MB in memory, and twice that during a replacement.
+- The sound has been measured but **not listened to**.
+
+### Brass Studio
+
+**What it is for.** Brass as a physical model, not recordings: a lip reed with a nonlinear valve flow, a bore with losses and a bell that radiates. Trumpet, flugelhorn, trombone, bass trombone, French horn and tuba, alone or as a section of one to four players. The sound gets brighter and brassier the harder you play (brass effect). 16 voices, no sequencer of its own: play it from **Keys** or a sequencer.
+
+**Controls.**
+
+- **Instrument and mouthpiece:** **Instrument**, **Mouthpiece**, **Lip tension**, **Bell size** and **Bore taper** (small ranges on purpose, the pitch stays in tune).
+- **Playing:** **Tonguing**, **Bite**, **Brightness**, **Breath**, **Legato**, **Vibrato**, **Vibrato rate**, **Vibrato delay**, **Ornament** (**Scoop**, **Rip**, **Fall**, **Doit**, **Shake**, **Drop**) with **Ornament amount**. Fall, doit and drop start where the note ends, so send notes with a length.
+- **Mute:** **Open**, **Straight**, **Cup**, **Harmon**, **Plunger**, **Bucket**; with Harmon and plunger **Wah**, **Wah rate** and **Wah depth** (by hand or automatic).
+- **Section:** **Players** (1 to 4), **Section mix** (**Same**, **Trumpets + trombone**, **Octave doubling**), **Section detune**, **Timing looseness** and **Stereo width**.
+- **Level:** **Tuning**, **Transpose**, **Output**; buttons **Test note**, **Test chord** and **All off**.
+
+**Playing.** Velocity changes the level and the colour; note length decides between short, tongued notes and long ones. Overlapping notes play legato: the same voice slides to the new pitch without a new attack.
+
+**Tunes.** Pack **Brass Studio Styles**: 45 tunes in 7 folders (Trumpet, Muted Trumpet, Flugelhorn, Trombone, French Horn, Tuba, Section), file [`brass-studio-styles.patchkamer-tunes.json`](../../tunes/brass-studio-styles.patchkamer-tunes.json).
+
+**Tips and limits.**
+
+- The low notes of trombone, bass trombone, horn and tuba speak slowly, especially when soft.
+- The mutes are filters, not a change of the bore, and are estimated rather than measured on real mutes.
+- Extreme knob positions (bell size at the maximum on the highest notes of flugelhorn and horn) can make the pitch jump.
+- The sound has been measured but **not listened to**.
+
+### Funk Bass
+
+**What it is for.** A bass guitar as a physical model for soul, funk and jazz. Each string is a waveguide with stiffness, damping that depends on the frequency, a pluck position, fret buzz and a dead spot, followed by a pickup model, a body, tone controls, compression and a cabinet. At most one voice per string (four or five strings): a new note on a string stops the previous one. No sequencer of its own: play it from **Keys** or a sequencer, for example the **Step Sequencer** with the 9 patterns from the preset pack `step-sequencer-funk-bass`.
+
+**The articulations come from velocity and note length.**
+
+- **Dead** (very soft or very short notes, **Dead note up to**, **Dead note shorter than**), **Finger** (soft to medium, warm and round), **Pull** (harder, the string against the frets), **Slap** (from **Slap from**, thumb: sharp attack, bright, a fret click) and **Pop** (from **Pop from**, nasal, short, a high click). Setting a threshold above 1 switches that articulation off.
+- **Octave slap:** an octave up after a slap is a pop (**Octave is pop**).
+- **Hammer-on and slide:** notes that overlap on one string play hammer-on or pull-off up to 7 semitones and slide above that (**Hammer-on and slide**: **Automatic**, **Hammer-on**, **Slide** or **Off**).
+- **Keyswitches** on the keys 0 to 11 (automatic, finger, pull, slap, pop, dead, palm mute, harmonic, pick) and the `cc` `art` do the same.
+
+**Controls.** **Strings** (4 or 5 with low B), **String type** (**Roundwound**, **Flatwound**), **Technique** (**Fingers**, **Pick**), **Fretless** (with the **Mwah** filter), **Pickup type** (**Single-coil**, **Humbucker**), **Bridge / neck**, **Tone control** (**Active**, **Passive**) with **Bass**, **Mid** and **Treble**, **Drive**, **Compression**, **Cabinet** and **Volume**; per string **Sustain**, **String brightness**, **Stiffness**, **Fret buzz**, **Tension**, **Dead spot**, **Pluck position**, **Touch response**, **Position** (open strings for funk, thick strings and high frets for jazz), **Glide time**, **Damping time**, **Flat-hand mute**, **Playing noise** and **Humanize**.
+
+**Tunes and patterns.** Pack **Funk Bass Styles**: 26 tunes in 9 folders (Motown, Funk, Slap, Jazz, Disco, Soul, Dub, Rock, Basics), file [`funk-bass-styles.patchkamer-tunes.json`](../../tunes/funk-bass-styles.patchkamer-tunes.json). The Motown, jazz and soul tunes switch slap and pop off. The preset pack [`step-sequencer-funk-bass.patchkamer-presets.json`](../../presets/step-sequencer-funk-bass.patchkamer-presets.json) holds nine patterns (ghost-note funk, slap and pop octaves, staccato funk, Motown eighths, walking jazz, disco octaves, neo-soul with slide, reggae, fusion slide).
+
+**Tips and limits.**
+
+- A velocity of 1 in a sequencer gives pops by default; lower **Pop from** and **Slap from** to taste or switch them off.
+- The dead spot and the body resonances are model parameters, not measured on a real bass.
+- The sound has been measured but **not listened to**: listen especially to slap, pop and the slide noise.
+
 ### Four-Operator FM
 
 **What it is for.** An FM synth with four sine operators and eight voices. Every operator has its own frequency ratio, level, fine tune and envelope. Eight algorithms decide which operators modulate each other and which ones you hear (the carriers). Operator 4 has feedback. Good for bells, glass, tines, electric pianos and FM basses.

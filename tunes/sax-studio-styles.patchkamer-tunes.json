@@ -1,0 +1,1146 @@
+{
+ "format": "patchkamer-tunes",
+ "formatVersion": 1,
+ "version": "1.0.0",
+ "device": "nl.patchkamer.saxstudio",
+ "name": "Sax Studio Styles",
+ "author": "Freek van Gool",
+ "license": "CC0-1.0",
+ "description": "Settings for Sax Studio: soprano, alto, tenor and baritone voicings for jazz ballad, bebop, soul and funk, smooth, rock and roll honk, subtone ballad, growler and section stabs. A tune holds settings only and loads no recordings: choose the instrument and click Load yourself. Each tune names the instrument it was made for; load that instrument first.",
+ "tags": [
+  "instrument/woodwind/sax"
+ ],
+ "tree": [
+  {
+   "folder": "Jazz Ballad",
+   "items": [
+    {
+     "name": "Soprano Jazz Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "level": 0.85,
+      "dyn": 0.7,
+      "subthr": 0.38,
+      "acc": 0.92,
+      "tongue": 0.35,
+      "legato": 70,
+      "glide": 55,
+      "fall": 0.25,
+      "vib": 22,
+      "vibDelay": 0.45,
+      "breath": 0.9,
+      "keys": 0.35,
+      "human": 0.35,
+      "hp": 90,
+      "presence": -1.5,
+      "air": -0.5,
+      "lp": 11000,
+      "roomMix": 0.25,
+      "room": "plate"
+     }
+    },
+    {
+     "name": "Alto Jazz Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "level": 0.85,
+      "dyn": 0.7,
+      "subthr": 0.38,
+      "acc": 0.92,
+      "tongue": 0.35,
+      "legato": 70,
+      "glide": 55,
+      "fall": 0.25,
+      "vib": 22,
+      "vibRate": 4.9,
+      "vibDelay": 0.45,
+      "breath": 0.9,
+      "keys": 0.35,
+      "human": 0.35,
+      "body": 1.5,
+      "presence": -1,
+      "air": -1.5,
+      "lp": 11000,
+      "roomMix": 0.25,
+      "room": "plate"
+     }
+    },
+    {
+     "name": "Tenor Jazz Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "level": 0.85,
+      "dyn": 0.7,
+      "subthr": 0.38,
+      "acc": 0.92,
+      "tongue": 0.35,
+      "legato": 70,
+      "glide": 55,
+      "fall": 0.25,
+      "vib": 22,
+      "vibRate": 4.7,
+      "vibDelay": 0.45,
+      "breath": 0.9,
+      "keys": 0.35,
+      "human": 0.35,
+      "hp": 50,
+      "body": 3,
+      "presence": -1,
+      "air": -1.5,
+      "lp": 11000,
+      "roomMix": 0.25,
+      "room": "plate"
+     }
+    },
+    {
+     "name": "Baritone Jazz Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "level": 0.85,
+      "dyn": 0.7,
+      "subthr": 0.38,
+      "acc": 0.92,
+      "tongue": 0.35,
+      "legato": 70,
+      "glide": 55,
+      "fall": 0.25,
+      "vib": 19,
+      "vibRate": 4.3,
+      "vibDelay": 0.45,
+      "breath": 0.9,
+      "keys": 0.35,
+      "human": 0.35,
+      "hp": 35,
+      "body": 4,
+      "presence": -1,
+      "air": -2.5,
+      "lp": 11000,
+      "roomMix": 0.25,
+      "room": "plate"
+     }
+    }
+   ],
+   "tags": [
+    "style/jazz",
+    "style/ballad"
+   ]
+  },
+  {
+   "folder": "Bebop",
+   "items": [
+    {
+     "name": "Soprano Bebop",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "dyn": 0.75,
+      "subthr": 0.2,
+      "acc": 0.8,
+      "tongue": 0.7,
+      "stac": 140,
+      "legato": 90,
+      "glide": 25,
+      "snap": 0.8,
+      "fall": 0.35,
+      "vib": 5,
+      "vibRate": 5.5,
+      "vibDelay": 0.6,
+      "breath": 0.4,
+      "keys": 0.7,
+      "human": 0.45,
+      "hp": 90,
+      "body": -1.5,
+      "presence": 1.5,
+      "air": 1,
+      "lp": 14000,
+      "roomMix": 0.1
+     }
+    },
+    {
+     "name": "Alto Bebop",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "dyn": 0.75,
+      "subthr": 0.2,
+      "acc": 0.8,
+      "tongue": 0.7,
+      "stac": 140,
+      "legato": 90,
+      "glide": 25,
+      "snap": 0.8,
+      "fall": 0.35,
+      "vib": 5,
+      "vibDelay": 0.6,
+      "breath": 0.4,
+      "keys": 0.7,
+      "human": 0.45,
+      "presence": 2,
+      "lp": 14000,
+      "roomMix": 0.1
+     }
+    },
+    {
+     "name": "Tenor Bebop",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "dyn": 0.75,
+      "subthr": 0.2,
+      "acc": 0.8,
+      "tongue": 0.7,
+      "stac": 140,
+      "legato": 90,
+      "glide": 25,
+      "snap": 0.8,
+      "fall": 0.35,
+      "vib": 5,
+      "vibRate": 5,
+      "vibDelay": 0.6,
+      "breath": 0.4,
+      "keys": 0.7,
+      "human": 0.45,
+      "hp": 50,
+      "body": 1.5,
+      "presence": 2,
+      "lp": 14000,
+      "roomMix": 0.1
+     }
+    },
+    {
+     "name": "Baritone Bebop",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "dyn": 0.75,
+      "subthr": 0.2,
+      "acc": 0.8,
+      "tongue": 0.7,
+      "stac": 140,
+      "legato": 90,
+      "glide": 25,
+      "snap": 0.8,
+      "fall": 0.35,
+      "vib": 2,
+      "vibRate": 4.6,
+      "vibDelay": 0.6,
+      "breath": 0.4,
+      "keys": 0.7,
+      "human": 0.45,
+      "hp": 35,
+      "body": 2.5,
+      "presence": 2,
+      "air": -1,
+      "lp": 14000,
+      "roomMix": 0.1
+     }
+    }
+   ],
+   "tags": [
+    "style/jazz"
+   ]
+  },
+  {
+   "folder": "Soul and Funk",
+   "items": [
+    {
+     "name": "Soprano Soul and Funk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "level": 0.9,
+      "dyn": 0.8,
+      "acc": 0.75,
+      "tongue": 0.85,
+      "stac": 200,
+      "snap": 0.8,
+      "growl": 0.35,
+      "fall": 0.3,
+      "scoop": 0.25,
+      "vib": 4,
+      "vibRate": 5.5,
+      "vibDelay": 0.5,
+      "breath": 0.35,
+      "keys": 0.6,
+      "human": 0.25,
+      "hp": 130,
+      "body": -0.5,
+      "presence": 2.5,
+      "air": 1,
+      "drive": 0.15,
+      "roomMix": 0.1,
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Alto Soul and Funk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "level": 0.9,
+      "dyn": 0.8,
+      "acc": 0.75,
+      "tongue": 0.85,
+      "stac": 200,
+      "snap": 0.8,
+      "growl": 0.35,
+      "fall": 0.3,
+      "scoop": 0.25,
+      "vib": 4,
+      "vibDelay": 0.5,
+      "breath": 0.35,
+      "keys": 0.6,
+      "human": 0.25,
+      "hp": 100,
+      "body": 1,
+      "presence": 3,
+      "drive": 0.15,
+      "roomMix": 0.1,
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Tenor Soul and Funk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "level": 0.9,
+      "dyn": 0.8,
+      "acc": 0.75,
+      "tongue": 0.85,
+      "stac": 200,
+      "snap": 0.8,
+      "growl": 0.35,
+      "fall": 0.3,
+      "scoop": 0.25,
+      "vib": 4,
+      "vibRate": 5,
+      "vibDelay": 0.5,
+      "breath": 0.35,
+      "keys": 0.6,
+      "human": 0.25,
+      "hp": 90,
+      "body": 2.5,
+      "presence": 3,
+      "drive": 0.15,
+      "roomMix": 0.1,
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Baritone Soul and Funk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "level": 0.9,
+      "dyn": 0.8,
+      "acc": 0.75,
+      "tongue": 0.85,
+      "stac": 200,
+      "snap": 0.8,
+      "growl": 0.35,
+      "fall": 0.3,
+      "scoop": 0.25,
+      "vib": 1,
+      "vibRate": 4.6,
+      "vibDelay": 0.5,
+      "breath": 0.35,
+      "keys": 0.6,
+      "human": 0.25,
+      "hp": 75,
+      "body": 3.5,
+      "presence": 3,
+      "air": -1,
+      "drive": 0.15,
+      "roomMix": 0.1,
+      "fallOn": "accent"
+     }
+    }
+   ],
+   "tags": [
+    "style/soul",
+    "style/funk"
+   ]
+  },
+  {
+   "folder": "Smooth",
+   "items": [
+    {
+     "name": "Soprano Smooth",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "dyn": 0.5,
+      "tongue": 0.4,
+      "legato": 60,
+      "glide": 60,
+      "fall": 0.2,
+      "vib": 18,
+      "vibRate": 5.8,
+      "vibDelay": 0.25,
+      "breath": 0.7,
+      "hp": 90,
+      "body": -2.5,
+      "presence": 1,
+      "air": 4,
+      "roomMix": 0.3,
+      "room": "hall"
+     }
+    },
+    {
+     "name": "Alto Smooth",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "dyn": 0.5,
+      "tongue": 0.4,
+      "legato": 60,
+      "glide": 60,
+      "fall": 0.2,
+      "vib": 18,
+      "vibRate": 5.5,
+      "vibDelay": 0.25,
+      "breath": 0.7,
+      "body": -1,
+      "presence": 1.5,
+      "air": 3,
+      "roomMix": 0.3,
+      "room": "hall"
+     }
+    },
+    {
+     "name": "Tenor Smooth",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "dyn": 0.5,
+      "tongue": 0.4,
+      "legato": 60,
+      "glide": 60,
+      "fall": 0.2,
+      "vib": 18,
+      "vibRate": 5.3,
+      "vibDelay": 0.25,
+      "breath": 0.7,
+      "hp": 50,
+      "body": 0.5,
+      "presence": 1.5,
+      "air": 3,
+      "roomMix": 0.3,
+      "room": "hall"
+     }
+    },
+    {
+     "name": "Baritone Smooth",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "dyn": 0.5,
+      "tongue": 0.4,
+      "legato": 60,
+      "glide": 60,
+      "fall": 0.2,
+      "vib": 15,
+      "vibRate": 4.9,
+      "vibDelay": 0.25,
+      "breath": 0.7,
+      "hp": 35,
+      "body": 1.5,
+      "presence": 1.5,
+      "air": 2,
+      "roomMix": 0.3,
+      "room": "hall"
+     }
+    }
+   ],
+   "tags": [
+    "style/jazz",
+    "style/pop"
+   ]
+  },
+  {
+   "folder": "Rock and Roll Honk",
+   "items": [
+    {
+     "name": "Soprano Rock and Roll Honk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "level": 1,
+      "dyn": 0.8,
+      "acc": 0.7,
+      "tongue": 1,
+      "stac": 220,
+      "snap": 0.85,
+      "growl": 0.6,
+      "growlRate": 70,
+      "fall": 0.4,
+      "vib": 0,
+      "vibRate": 5.5,
+      "breath": 0.2,
+      "keys": 0.3,
+      "human": 0.4,
+      "hp": 120,
+      "body": 1.5,
+      "presence": 3.5,
+      "air": 1,
+      "lp": 9000,
+      "drive": 0.5,
+      "roomMix": 0.08,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Alto Rock and Roll Honk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "level": 1,
+      "dyn": 0.8,
+      "acc": 0.7,
+      "tongue": 1,
+      "stac": 220,
+      "snap": 0.85,
+      "growl": 0.6,
+      "growlRate": 70,
+      "fall": 0.4,
+      "vib": 0,
+      "breath": 0.2,
+      "keys": 0.3,
+      "human": 0.4,
+      "hp": 90,
+      "body": 3,
+      "presence": 4,
+      "lp": 9000,
+      "drive": 0.5,
+      "roomMix": 0.08,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Tenor Rock and Roll Honk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "level": 1,
+      "dyn": 0.8,
+      "acc": 0.7,
+      "tongue": 1,
+      "stac": 220,
+      "snap": 0.85,
+      "growl": 0.6,
+      "growlRate": 70,
+      "fall": 0.4,
+      "vib": 0,
+      "vibRate": 5,
+      "breath": 0.2,
+      "keys": 0.3,
+      "human": 0.4,
+      "hp": 80,
+      "body": 4.5,
+      "presence": 4,
+      "lp": 9000,
+      "drive": 0.5,
+      "roomMix": 0.08,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Baritone Rock and Roll Honk",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "level": 1,
+      "dyn": 0.8,
+      "acc": 0.7,
+      "tongue": 1,
+      "stac": 220,
+      "snap": 0.85,
+      "growl": 0.6,
+      "growlRate": 70,
+      "fall": 0.4,
+      "vib": 0,
+      "vibRate": 4.6,
+      "breath": 0.2,
+      "keys": 0.3,
+      "human": 0.4,
+      "hp": 65,
+      "body": 5.5,
+      "presence": 4,
+      "air": -1,
+      "lp": 9000,
+      "drive": 0.5,
+      "roomMix": 0.08,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    }
+   ],
+   "tags": [
+    "style/rock"
+   ]
+  },
+  {
+   "folder": "Subtone Ballad",
+   "items": [
+    {
+     "name": "Soprano Subtone Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "level": 0.9,
+      "dyn": 0.8,
+      "subthr": 0.5,
+      "acc": 0.95,
+      "tongue": 0.1,
+      "legato": 80,
+      "glide": 70,
+      "vib": 14,
+      "vibRate": 4.9,
+      "vibDelay": 0.5,
+      "breath": 1.2,
+      "human": 0.35,
+      "hp": 90,
+      "body": 0.5,
+      "presence": -0.5,
+      "air": -2,
+      "lp": 9000,
+      "roomMix": 0.28,
+      "room": "plate"
+     }
+    },
+    {
+     "name": "Alto Subtone Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "level": 0.9,
+      "dyn": 0.8,
+      "subthr": 0.5,
+      "acc": 0.95,
+      "tongue": 0.1,
+      "legato": 80,
+      "glide": 70,
+      "vib": 14,
+      "vibRate": 4.6,
+      "vibDelay": 0.5,
+      "breath": 1.2,
+      "human": 0.35,
+      "body": 2,
+      "air": -3,
+      "lp": 9000,
+      "roomMix": 0.28,
+      "room": "plate"
+     }
+    },
+    {
+     "name": "Tenor Subtone Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "level": 0.9,
+      "dyn": 0.8,
+      "subthr": 0.5,
+      "acc": 0.95,
+      "tongue": 0.1,
+      "legato": 80,
+      "glide": 70,
+      "vib": 14,
+      "vibRate": 4.4,
+      "vibDelay": 0.5,
+      "breath": 1.2,
+      "human": 0.35,
+      "hp": 50,
+      "body": 3.5,
+      "air": -3,
+      "lp": 9000,
+      "roomMix": 0.28,
+      "room": "plate"
+     }
+    },
+    {
+     "name": "Baritone Subtone Ballad",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "level": 0.9,
+      "dyn": 0.8,
+      "subthr": 0.5,
+      "acc": 0.95,
+      "tongue": 0.1,
+      "legato": 80,
+      "glide": 70,
+      "vib": 11,
+      "vibRate": 4,
+      "vibDelay": 0.5,
+      "breath": 1.2,
+      "human": 0.35,
+      "hp": 35,
+      "body": 4.5,
+      "air": -4,
+      "lp": 9000,
+      "roomMix": 0.28,
+      "room": "plate"
+     }
+    }
+   ],
+   "tags": [
+    "style/ballad",
+    "style/jazz"
+   ]
+  },
+  {
+   "folder": "Growler",
+   "items": [
+    {
+     "name": "Soprano Growler",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "level": 1.2,
+      "dyn": 0.8,
+      "tongue": 0.9,
+      "growl": 1,
+      "growlRate": 66,
+      "fall": 0.6,
+      "scoop": 0.3,
+      "vib": 6,
+      "vibRate": 5.5,
+      "vibDelay": 0.6,
+      "breath": 0.3,
+      "hp": 110,
+      "body": 0.5,
+      "presence": 2.5,
+      "air": 1,
+      "drive": 0.35,
+      "roomMix": 0.1,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Alto Growler",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "level": 1.2,
+      "dyn": 0.8,
+      "tongue": 0.9,
+      "growl": 1,
+      "growlRate": 55,
+      "fall": 0.6,
+      "scoop": 0.3,
+      "vib": 6,
+      "vibDelay": 0.6,
+      "breath": 0.3,
+      "hp": 80,
+      "body": 2,
+      "presence": 3,
+      "drive": 0.35,
+      "roomMix": 0.1,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Tenor Growler",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "level": 1.2,
+      "dyn": 0.8,
+      "tongue": 0.9,
+      "growl": 1,
+      "growlRate": 55,
+      "fall": 0.6,
+      "scoop": 0.3,
+      "vib": 6,
+      "vibRate": 5,
+      "vibDelay": 0.6,
+      "breath": 0.3,
+      "hp": 70,
+      "body": 3.5,
+      "presence": 3,
+      "drive": 0.35,
+      "roomMix": 0.1,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Baritone Growler",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "level": 1.2,
+      "dyn": 0.8,
+      "tongue": 0.9,
+      "growl": 1,
+      "growlRate": 46,
+      "fall": 0.6,
+      "scoop": 0.3,
+      "vib": 3,
+      "vibRate": 4.6,
+      "vibDelay": 0.6,
+      "breath": 0.3,
+      "hp": 50,
+      "body": 4.5,
+      "presence": 3,
+      "air": -1,
+      "drive": 0.35,
+      "roomMix": 0.1,
+      "growlOn": "all",
+      "fallOn": "accent"
+     }
+    }
+   ],
+   "tags": [
+    "style/rock",
+    "style/soul"
+   ]
+  },
+  {
+   "folder": "Section Stabs",
+   "items": [
+    {
+     "name": "Soprano Section Stabs",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "dyn": 0.85,
+      "acc": 0.7,
+      "tongue": 0.9,
+      "stac": 260,
+      "legato": 0,
+      "glide": 20,
+      "snap": 0.9,
+      "fall": 0.45,
+      "scoop": 0.2,
+      "vib": 0,
+      "vibRate": 5.5,
+      "breath": 0.25,
+      "keys": 0.4,
+      "human": 0.35,
+      "spread": 14,
+      "width": 0.7,
+      "lag": 10,
+      "hp": 140,
+      "body": -1.5,
+      "presence": 2,
+      "air": 1,
+      "drive": 0.12,
+      "roomMix": 0.12,
+      "mode": "section",
+      "stack": "major",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Alto Section Stabs",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "dyn": 0.85,
+      "acc": 0.7,
+      "tongue": 0.9,
+      "stac": 260,
+      "legato": 0,
+      "glide": 20,
+      "snap": 0.9,
+      "fall": 0.45,
+      "scoop": 0.2,
+      "vib": 0,
+      "breath": 0.25,
+      "keys": 0.4,
+      "human": 0.35,
+      "spread": 14,
+      "width": 0.7,
+      "lag": 10,
+      "hp": 110,
+      "presence": 2.5,
+      "drive": 0.12,
+      "roomMix": 0.12,
+      "mode": "section",
+      "stack": "major",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Tenor Section Stabs",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "dyn": 0.85,
+      "acc": 0.7,
+      "tongue": 0.9,
+      "stac": 260,
+      "legato": 0,
+      "glide": 20,
+      "snap": 0.9,
+      "fall": 0.45,
+      "scoop": 0.2,
+      "vib": 0,
+      "vibRate": 5,
+      "breath": 0.25,
+      "keys": 0.4,
+      "human": 0.35,
+      "spread": 14,
+      "width": 0.7,
+      "lag": 10,
+      "hp": 100,
+      "body": 1.5,
+      "presence": 2.5,
+      "drive": 0.12,
+      "roomMix": 0.12,
+      "mode": "section",
+      "stack": "minor",
+      "fallOn": "accent"
+     }
+    },
+    {
+     "name": "Baritone Section Stabs",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "dyn": 0.85,
+      "acc": 0.7,
+      "tongue": 0.9,
+      "stac": 260,
+      "legato": 0,
+      "glide": 20,
+      "snap": 0.9,
+      "fall": 0.45,
+      "scoop": 0.2,
+      "vib": 0,
+      "vibRate": 4.6,
+      "breath": 0.25,
+      "keys": 0.4,
+      "human": 0.35,
+      "voices": 2,
+      "spread": 14,
+      "width": 0.7,
+      "lag": 10,
+      "hp": 85,
+      "body": 2.5,
+      "presence": 2.5,
+      "air": -1,
+      "drive": 0.12,
+      "roomMix": 0.12,
+      "mode": "section",
+      "stack": "octaves",
+      "fallOn": "accent"
+     }
+    }
+   ],
+   "tags": [
+    "style/funk",
+    "style/soul"
+   ]
+  },
+  {
+   "folder": "Clean",
+   "items": [
+    {
+     "name": "Soprano Clean",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "sop",
+      "vibRate": 5.5,
+      "human": 0.2,
+      "hp": 90,
+      "body": -1.5,
+      "presence": -0.5,
+      "air": 1,
+      "roomMix": 0.12
+     }
+    },
+    {
+     "name": "Alto Clean",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "alt",
+      "human": 0.2,
+      "roomMix": 0.12
+     }
+    },
+    {
+     "name": "Tenor Clean",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "ten",
+      "vibRate": 5,
+      "human": 0.2,
+      "hp": 50,
+      "body": 1.5,
+      "roomMix": 0.12
+     }
+    },
+    {
+     "name": "Baritone Clean",
+     "kind": "set",
+     "version": "1.0.0",
+     "tags": [
+      "instrument/woodwind/sax"
+     ],
+     "state": {
+      "instrument": "bar",
+      "vib": 7,
+      "vibRate": 4.6,
+      "human": 0.2,
+      "hp": 35,
+      "body": 2.5,
+      "air": -1,
+      "roomMix": 0.12
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -126,6 +126,7 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [Pattern Playlist](../devices/sequencers/PatternPlaylist/) | Pattern Playlist Arrangements | 35 | 5: Dance Floor, Bass Music, Hip-hop and Soul, Song Forms, Ambient and Cinematic | [`pattern-playlist.patchkamer-presets.json`](pattern-playlist.patchkamer-presets.json) | 2 |
 | [Pattern Tracker](../devices/sequencers/PatternTracker/) | Pattern Tracker Modules | 34 | 4: Module Classics, Songwriting Forms, World and Latin, Electronic Rows | [`pattern-tracker.patchkamer-presets.json`](pattern-tracker.patchkamer-presets.json) | 2 |
 | [Scale Arpeggiator](../devices/sequencers/ScaleArpeggiator/) | Scale Arpeggiator Patterns | 59 | 10: Classic Patterns, Trance and Dance, House and Disco, Synthwave and Retro, Ambient and Cinematic, Funk and Jazz, Fine Grids and Rolls, Dynamics, Generative, Live Playing | [`scale-arpeggiator.patchkamer-presets.json`](scale-arpeggiator.patchkamer-presets.json) | 2 |
+| [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Funk Bass Patterns | 9 | 1: Funk Bass Patterns | [`step-sequencer-funk-bass.patchkamer-presets.json`](step-sequencer-funk-bass.patchkamer-presets.json) | 2 |
 | [Step Sequencer](../devices/sequencers/StepSequencer/) | Step Sequencer Patterns | 70 | 6: Bass Lines, Arpeggios, Drum Triggers, Melodic Hooks, Long Notes & Pads, Polymeter & Feel | [`step-sequencer.patchkamer-presets.json`](step-sequencer.patchkamer-presets.json) | 2 |
 | [Wanderer](../devices/sequencers/Wanderer/) | Wanderer Melodies | 60 | 9: Lead Lines, Basslines, Arps and Plucks, Ambient and Slow, Genre Starters, Dynamics, Rolls and Ratchets, Follow Chord, Evolving | [`wanderer.patchkamer-presets.json`](wanderer.patchkamer-presets.json) | 2 |
 | [Chord Buddy](../devices/tools/ChordBuddy/) | Chord Buddy Starter Sets | 30 | 10: Pop, Rock, Folk, Blues, Jazz, Classical, Soul & R&B, Hip-hop, House & EDM, Ambient & Cinematic | [`chord-buddy.patchkamer-presets.json`](chord-buddy.patchkamer-presets.json) | 2 |
@@ -134,7 +135,7 @@ Hij werkt ook `devices/AGENTS.md` en `tunes/AGENTS.md` bij. De mappen zijn de ma
 | [MIDI Hub](../devices/tools/MidiHub/) | MIDI Hub Basics | 15 | 4: Sound Controllers, Wheels and Pedals, Effects, Utility | [`midi-hub.patchkamer-presets.json`](midi-hub.patchkamer-presets.json) | 2 |
 | [Remix](../devices/tools/Remix/) | Remix Recipes | 21 | 4: Hit edits, Club, Tempo flips, New songs | [`remix.patchkamer-presets.json`](remix.patchkamer-presets.json) | 2 |
 
-Samen 57 packs met 2345 presets.
+Samen 58 packs met 2354 presets.
 <!-- list-devices:end presets -->
 
 ## Wat je niet doet

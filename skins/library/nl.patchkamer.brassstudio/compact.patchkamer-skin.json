@@ -1,0 +1,45 @@
+{
+  "format": "patchkamer-skin",
+  "formatVersion": 1,
+  "skinsContract": "0.9",
+  "id": "nl.patchkamer.brassstudio.compact",
+  "device": "nl.patchkamer.brassstudio",
+  "name": "Compact",
+  "version": "1.0.0",
+  "author": "Freek van Gool",
+  "license": "CC0-1.0",
+  "description": "A compact layout: rotary knobs with the label underneath, grouped per section, at about two thirds of the width and a third of the height of the standard card.",
+  "created": "2026-11-13",
+  "icon": null,
+  "default": "compact",
+  "design": {
+    "controls": [
+      {
+        "match": "role:param",
+        "face": "rotary",
+        "size": "s"
+      }
+    ],
+    "size": {
+      "width": 400
+    },
+    "sections": [
+      {
+        "match": "*",
+        "frame": "line",
+        "columns": 8,
+        "gap": "tight",
+        "bare": true,
+        "labels": "below"
+      }
+    ]
+  },
+  "appearances": [
+    {
+      "id": "compact",
+      "name": "Compact",
+      "description": "Rotary knobs in grouped frames, less than the standard width.",
+      "css": ".bst{gap:2px;font-size:9px}\n.sec{border:0!important;padding:0!important;gap:3px 4px!important;margin:0;grid-template-columns:repeat(auto-fill,minmax(50px,1fr))!important}\n.sec h4{font-size:8px;letter-spacing:.14em;margin:4px 0 1px;padding:0}\n.sec>.k:has(select){grid-column:span 3;grid-template-columns:auto minmax(0,1fr)!important;gap:5px!important}\n.sec>.k:has(select) label{font-size:7px;letter-spacing:0;text-align:left}\n.k{min-height:0!important;grid-template-columns:minmax(0,1fr);gap:1px}\n.k label{font-size:7px;letter-spacing:-.02em;line-height:1.05;overflow:visible;text-overflow:clip;white-space:normal;overflow-wrap:anywhere;text-align:center;max-width:100%}\n.k output{font-size:8px;line-height:1.1;color:var(--muted)}\nselect{width:100%;font-size:8px;padding:3px 2px}\n.acts{margin-top:3px;gap:4px}\nbutton{font-size:8px;padding:3px 6px}\n.stat,.warn{font-size:8px;margin:0;min-height:0}"
+    }
+  ]
+}

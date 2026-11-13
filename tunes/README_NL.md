@@ -18,6 +18,7 @@ Deze map heeft **47 packs met 3365 tunes**, één pack per apparaat: 36 voor syn
 | [Biotope](../devices/synths/Biotope/) | Biotope Styles | 95 | 15 | [`biotope-styles.patchkamer-tunes.json`](biotope-styles.patchkamer-tunes.json) |
 | [Bowed Ensemble](../devices/synths/BowedEnsemble/) | Bowed Ensemble Styles | 75 | 15 | [`bowed-ensemble-styles.patchkamer-tunes.json`](bowed-ensemble-styles.patchkamer-tunes.json) |
 | [Brass Section](../devices/synths/BrassSection/) | Brass Section | 40 | 11 | [`brass-section.patchkamer-tunes.json`](brass-section.patchkamer-tunes.json) |
+| [Brass Studio](../devices/synths/BrassStudio/) | Brass Studio Styles | 45 | 7 | [`brass-studio-styles.patchkamer-tunes.json`](brass-studio-styles.patchkamer-tunes.json) |
 | [Celestial Mechanics](../devices/synths/CelestialMechanics/) | Celestial Mechanics Styles | 85 | 15 | [`celestial-mechanics-styles.patchkamer-tunes.json`](celestial-mechanics-styles.patchkamer-tunes.json) |
 | [Chord Poly](../devices/synths/ChordPoly/) | Chord Poly Styles | 132 | 24 | [`chord-poly-styles.patchkamer-tunes.json`](chord-poly-styles.patchkamer-tunes.json) |
 | [Cinematic Synth](../devices/synths/CinematicSynth/) | Cinematic Synth Scores | 67 | 11 | [`cinematic-synth-scores.patchkamer-tunes.json`](cinematic-synth-scores.patchkamer-tunes.json) |
@@ -29,6 +30,7 @@ Deze map heeft **47 packs met 3365 tunes**, één pack per apparaat: 36 voor syn
 | [Formant Singer](../devices/synths/FormantSinger/) | Formant Singer Styles | 76 | 16 | [`formant-singer-styles.patchkamer-tunes.json`](formant-singer-styles.patchkamer-tunes.json) |
 | [Foundry](../devices/synths/Foundry/) | Foundry Styles | 81 | 14 | [`foundry-styles.patchkamer-tunes.json`](foundry-styles.patchkamer-tunes.json) |
 | [Four-Operator FM](../devices/synths/FourOperatorFM/) | Four-Operator FM Styles | 99 | 18 | [`four-operator-fm-styles.patchkamer-tunes.json`](four-operator-fm-styles.patchkamer-tunes.json) |
+| [Funk Bass](../devices/synths/FunkBass/) | Funk Bass Styles | 26 | 9 | [`funk-bass-styles.patchkamer-tunes.json`](funk-bass-styles.patchkamer-tunes.json) |
 | [Grain Cloud](../devices/synths/GrainCloud/) | Grain Cloud Styles | 73 | 14 | [`grain-cloud-styles.patchkamer-tunes.json`](grain-cloud-styles.patchkamer-tunes.json) |
 | [Guitar](../devices/synths/Guitar/) | Guitar | 51 | 14 | [`guitar.patchkamer-tunes.json`](guitar.patchkamer-tunes.json) |
 | [Karplus String](../devices/synths/KarplusString/) | Karplus String Styles | 70 | 14 | [`karplus-string-styles.patchkamer-tunes.json`](karplus-string-styles.patchkamer-tunes.json) |
@@ -42,6 +44,7 @@ Deze map heeft **47 packs met 3365 tunes**, één pack per apparaat: 36 voor syn
 | [Patchbay Synth](../devices/synths/PatchbaySynth/) | Patchbay Synth Styles | 118 | 22 | [`patchbay-synth-styles.patchkamer-tunes.json`](patchbay-synth-styles.patchkamer-tunes.json) |
 | [Piano](../devices/synths/Piano/) | Piano | 55 | 14 | [`piano.patchkamer-tunes.json`](piano.patchkamer-tunes.json) |
 | [Poly Chorus](../devices/synths/PolyChorus/) | Poly Chorus Styles | 83 | 16 | [`poly-chorus-styles.patchkamer-tunes.json`](poly-chorus-styles.patchkamer-tunes.json) |
+| [Sax Studio](../devices/synths/SaxStudio/) | Sax Studio Styles | 36 | 9 | [`sax-studio-styles.patchkamer-tunes.json`](sax-studio-styles.patchkamer-tunes.json) |
 | [Squelch Box](../devices/synths/SquelchBox/) | Squelch Box Styles | 31 | 8 | [`squelch-box-styles.patchkamer-tunes.json`](squelch-box-styles.patchkamer-tunes.json) |
 | [Stage Keys](../devices/synths/StageKeys/) | Stage Keys Styles | 78 | 14 | [`stage-keys-styles.patchkamer-tunes.json`](stage-keys-styles.patchkamer-tunes.json) |
 | [Sub Line](../devices/synths/SubLine/) | Sub Line Styles | 97 | 17 | [`subline-styles.patchkamer-tunes.json`](subline-styles.patchkamer-tunes.json) |

@@ -964,6 +964,72 @@ Extern geluid vormen: sluit een audiobron aan op **Extern geluid / envelope**, z
 - Combo negeert de trekkers en de percussie; Tonewheel negeert de voetschakelaars. Een ander klankmodel zet aangehouden noten stil.
 - Het geluid is gemeten maar **niet beluisterd**.
 
+### Sax Studio
+
+**Waar het voor is.** Levensechte saxofoons voor sequencers: sopraan, alto, tenor en bariton, gespeeld uit echte opnames (MTG Solo Saxophones, CC BY 4.0). De opnames zitten niet in Patchkamer en niet in de repo: kies een instrument en een omvang (compact: om de andere noot, een halve toon verschoven; volledig: alle noten) en klik op **Laden**. De grootte staat vooraf in beeld en je kunt annuleren. Een tune, preset of song laadt nooit opnames; zonder geladen opnames is het apparaat stil. Het speelt één instrument tegelijk en heeft geen eigen sequencer: speel het vanuit **Keys** of een sequencer.
+
+**Hoe het spel de sequencer volgt.**
+
+- **Velocity** kiest laag, kleur en artikulatie: zachte noten zijn subtone (donkerder, langzamere aanzet, meer adem), gewone noten normaal en harde noten hebben bite (scherpe aanzet, extra aanwezigheid).
+- **Notelengte** kiest staccato (korte noten, korte uitloop). Een noot die begint voordat de vorige afloopt, of na een heel klein gat, klinkt als mono-legato: de vorige noot glijdt over naar de nieuwe, zonder nieuwe aanzet en zonder adem.
+- Growl, falloff en scoop (per soort noot te kiezen), vibrato met vertraging, snelheid en diepte (de **Mod**-ingang kan het sturen), adem- en klepruis, humanize, transpositie en stemming, en een sectiestand met twee tot vier gestapelde stemmen (unisono, octaven, majeur, mineur, kwarten) voor funk- en soulstabs.
+- De nabewerking is licht: lage afsnijding, drie EQ-banden, hoge afsnijding, drive en een kleine kamer, plaat of zaal.
+
+**Poorten.** Noten in (oranje), **Mod** in (paars) en een stereo **Out** (blauwgroen) naar **Speakers** of een **Mixer**-kanaal.
+
+**Tunes.** Pack **Sax Studio Styles**: 36 tunes in 9 mappen (Jazz Ballad, Bebop, Soul and Funk, Smooth, Rock and Roll Honk, Subtone Ballad, Growler, Section Stabs, Clean), één tune per instrument, bestand [`sax-studio-styles.patchkamer-tunes.json`](../../tunes/sax-studio-styles.patchkamer-tunes.json).
+
+**Tips en grenzen.**
+
+- Growl, falloff, scoop, subtone en bite zijn nagebootst door de opnames te bewerken; er zijn geen opnames van die speeltechnieken zelf.
+- Een noot buiten het bereik van het instrument wordt een octaaf verschoven. De meeste bedieningen werken vanaf de volgende noot; niveau, expressie, vibrato en klank werken direct.
+- Een volledige lading is 30 tot 36 MB geheugen, en tijdens een vervanging het dubbele.
+- De klank is gemeten maar **niet beluisterd**.
+
+### Brass Studio
+
+**Waar het voor is.** Koper als fysisch model, niet als opnames: een lipriet met niet-lineaire klepstroom, een pijp met verliezen en een bel die uitstraalt. Trompet, bugel, trombone, basstrombone, hoorn en tuba, alleen of als sectie van één tot vier spelers. Hoe harder je speelt, hoe helderder en blazender de klank (brass-effect). 16 stemmen, geen eigen sequencer: speel het vanuit **Keys** of een sequencer.
+
+**Bediening.**
+
+- **Instrument en kopstuk:** **Instrument**, **Kopstuk**, **Lipspanning**, **Belgrootte** en **Conus** (bewust kleine bereiken, de toon blijft zuiver).
+- **Spel:** **Tongstoot**, **Blat**, **Helderheid**, **Adem**, **Legato**, **Vibrato**, **Vibratosnelheid**, **Vibratovertraging**, **Versiering** (**Scoop**, **Rip**, **Fall**, **Doit**, **Shake**, **Drop**) met **Versieringsmaat**. Fall, doit en drop beginnen waar de noot eindigt: stuur dus noten met een lengte.
+- **Demper:** **Open**, **Straight**, **Cup**, **Harmon**, **Plunger**, **Emmer**; bij Harmon en plunger **Wa-wa**, **Wa-wa snelheid** en **Wa-wa diepte** (met de hand of automatisch).
+- **Sectie:** **Spelers** (1 tot 4), **Samenstelling** (**Zelfde**, **Trompetten + trombone**, **Octaafdubbel**), **Verstemming**, **Timing-menselijkheid** en **Stereobreedte**.
+- **Niveau:** **Stemming**, **Transpositie**, **Uitgang**; knoppen **Proeftoon**, **Proefakkoord** en **Alles uit**.
+
+**Spelen.** Velocity verandert niveau en kleur; de notelengte bepaalt of het korte, gestoten noten of lange noten worden. Overlappende noten klinken legato: dezelfde stem schuift naar de nieuwe toon zonder nieuwe aanzet.
+
+**Tunes.** Pack **Brass Studio Styles**: 45 tunes in 7 mappen (Trumpet, Muted Trumpet, Flugelhorn, Trombone, French Horn, Tuba, Section), bestand [`brass-studio-styles.patchkamer-tunes.json`](../../tunes/brass-studio-styles.patchkamer-tunes.json).
+
+**Tips en grenzen.**
+
+- De lage noten van trombone, basstrombone, hoorn en tuba spreken langzaam aan, vooral zacht.
+- De dempers zijn filters, geen verandering van de pijp, en geschat in plaats van gemeten aan echte dempers.
+- Uiterste knopstanden (belgrootte op het maximum bij de hoogste noten van bugel en hoorn) kunnen een toonhoogtesprong geven.
+- De klank is gemeten maar **niet beluisterd**.
+
+### Funk Bass
+
+**Waar het voor is.** Een basgitaar als fysisch model voor soul, funk en jazz. Elke snaar is een golfgeleider met stijfheid, frequentie-afhankelijke demping, plukpositie, snaarrammel en een dode plek, gevolgd door een pickupmodel, een body, toonregeling, compressie en een kast. Hooguit één stem per snaar (vier of vijf snaren): een nieuwe noot op een snaar stopt de vorige. Geen eigen sequencer: speel het vanuit **Keys** of een sequencer, bijvoorbeeld de **Step Sequencer** met de 9 patronen uit het presetpack `step-sequencer-funk-bass`.
+
+**De aanslagen volgen uit velocity en notelengte.**
+
+- **Dood** (zeer zachte of zeer korte noten, **Dode noot tot**, **Dode noot korter dan**), **Vinger** (zacht tot midden, warm en rond), **Pull** (harder, de snaar tegen de frets), **Slap** (vanaf **Slap vanaf**, duim: scherpe aanzet, helder, fretklik) en **Pop** (vanaf **Pop vanaf**, nasaal, kort, hoge klik). Een drempel boven 1 zet die aanslag uit.
+- **Octaaf-slap:** een octaaf omhoog na een slap is een pop (**Octaaf is pop**).
+- **Hammer-on en slide:** overlappende noten op één snaar klinken als hammer-on of pull-off tot 7 halve tonen en als slide daarboven (**Hammer-on en slide**: **Automatisch**, **Hammer-on**, **Slide** of **Uit**).
+- **Keyswitches** op de toetsen 0 tot 11 (automatisch, vinger, pull, slap, pop, dood, palm mute, flageolet, plectrum) en de `cc` `art` doen hetzelfde.
+
+**Bediening.** **Snaren** (4 of 5 met lage B), **Snaartype** (**Roundwound**, **Vlakwond**), **Techniek** (**Vingers**, **Plectrum**), **Fretless** (met het **Mwah**-filter), **Pickuptype** (**Single-coil**, **Humbucker**), **Brug / hals**, **Toonregeling** (**Actief**, **Passief**) met **Bas**, **Mid** en **Hoog**, **Drive**, **Compressie**, **Kast** en **Volume**; per snaar **Uitklank**, **Snaarhelderheid**, **Stijfheid**, **Rammel**, **Spanning**, **Dode plek**, **Plukpositie**, **Aanslaggevoeligheid**, **Positie** (open snaren voor funk, dikke snaren en hoge frets voor jazz), **Glijtijd**, **Dempen**, **Dempvlak**, **Speelgeluid** en **Mensvariatie**.
+
+**Tunes en patronen.** Pack **Funk Bass Styles**: 26 tunes in 9 mappen (Motown, Funk, Slap, Jazz, Disco, Soul, Dub, Rock, Basics), bestand [`funk-bass-styles.patchkamer-tunes.json`](../../tunes/funk-bass-styles.patchkamer-tunes.json). De tunes voor Motown, jazz en soul zetten slap en pop uit. Het presetpack [`step-sequencer-funk-bass.patchkamer-presets.json`](../../presets/step-sequencer-funk-bass.patchkamer-presets.json) bevat negen patronen (ghost-note funk, slap- en popoctaven, staccato funk, Motown-achtsten, walking jazz, discooctaven, neo-soul met slide, reggae, fusion-slide).
+
+**Tips en grenzen.**
+
+- Een velocity van 1 in een sequencer geeft standaard pops; zet **Pop vanaf** en **Slap vanaf** naar smaak lager of schakel ze uit.
+- De dode plek en de bodyresonanties zijn modelparameters, niet gemeten aan een echte bas.
+- De klank is gemeten maar **niet beluisterd**: luister vooral naar slap, pop en het slide-geluid.
+
 ### Four-Operator FM
 
 **Waar het voor dient.** Een FM-synth met vier sinus-operators en acht stemmen. Elke operator heeft een eigen frequentieverhouding, niveau, fijnafstemming en envelope. Acht algoritmes bepalen welke operators elkaar moduleren en welke je hoort (de carriers). Operator 4 heeft feedback. Handig voor klokken, glas, tines, elektrische piano's en FM-bassen.
