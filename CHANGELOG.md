@@ -4,12 +4,19 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+<<<<<<< Updated upstream
 ## 0.38.0 (2026-11-13)
 
 ### Added
 - **Sax Studio** (synths, 1.0.0): lifelike soprano, alto, tenor and baritone saxophones from real recordings (MTG Solo Saxophones, CC BY 4.0) that are fetched from the internet only after a click on **Load** and are never copied into the repository. Velocity picks subtone, normal or bite, note length picks staccato, overlapping notes play mono-legato; growl, falloff, scoop, vibrato, breath and key noise, and a section mode for funk and soul stabs. With the tune pack **Sax Studio Styles** (36 tunes) and the skin Compact. Measured, not listened to.
 - **Brass Studio** (synths, 1.0.0): brass as a physical model (lip reed, bore and bell): trumpet, flugelhorn, trombone, bass trombone, French horn and tuba, a section of one to four players, mutes with wah, scoop, rip, fall, doit, shake and drop, and legato. With the tune pack **Brass Studio Styles** (45 tunes) and the skin Compact. Measured, not listened to.
 - **Funk Bass** (synths, 1.0.0): a bass guitar as a physical model for soul, funk and jazz, with dead notes, fingers, pull, slap and pop from velocity and note length, hammer-on and slide, fretless, flatwound or roundwound strings, pickups and 4 or 5 strings. With the tune pack **Funk Bass Styles** (26 tunes), nine **Step Sequencer** patterns (`step-sequencer-funk-bass`) and the skin Compact. Measured, not listened to.
+=======
+## 0.37.4 (2026-11-13)
+
+### Added
+- **Clip Arranger 1.38.0**: button **New project** next to the project name. It starts an empty project: one empty scene, one empty section in one song, empty clips and no title; the four standard tracks stay. Undo brings the old project back. State and presets are unchanged.
+>>>>>>> Stashed changes
 
 ## 0.37.3 (2026-11-13)
 

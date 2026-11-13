@@ -1,7 +1,11 @@
 {
   "name": "patchkamer-app",
   "productName": "Patchkamer",
+<<<<<<< Updated upstream
   "version": "0.38.0",
+=======
+  "version": "0.37.4",
+>>>>>>> Stashed changes
   "description": "Patchkamer as a desktop app: the same host in its own window, with the bundled library.",
   "main": "main.js",
   "license": "AGPL-3.0-or-later",
