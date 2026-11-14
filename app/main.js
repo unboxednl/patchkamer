@@ -54,6 +54,7 @@ function handler(req, res) {
   let p;
   try { p = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { return send(res, 400, 'bad request'); }
   if (p === '/' || p === '/patchkamer.html') return sendHost(res);
+  if (p === '/meten.html') return sendFile(res, path.join(hostDir, 'meten.html'));
   if (p === '/version.json') return sendFile(res, path.join(hostDir, 'version.json'));
   if (p === '/__app/asio.js') return sendFile(res, path.join(__dirname, 'app-asio.js'));
   { const parts = p.split('/').filter(Boolean);

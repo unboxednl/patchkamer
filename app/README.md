@@ -28,6 +28,10 @@ npm run probe
 
 Prints the base and output latency that this Chromium reports per `latencyHint` and sample rate, as JSON, and also writes it to `patchkamer-probe.json` (next to the exe, or in the current folder). With the portable exe: `Patchkamer-0.1.0-portable.exe --probe` from a terminal, then open `patchkamer-probe.json`. Run it on the machine and sound card you play on. The numbers say how much the audio path of Chromium costs; they are the basis for deciding whether a native ASIO route is worth building.
 
+## Measure audio
+
+The page `meten.html` (also linked under Settings > Audio) measures the delay that the browser reports and the headroom of the audio thread: it loads the thread with calculations in steps of 10 percent of the buffer time and reports where the audio clock starts to fall behind. It also checks whether a busy main thread disturbs the audio. In the app the page is served at `/meten.html`; the report can be copied or saved as JSON. It does not run through the ASIO route; the delay of that route is shown in the button at the bottom left.
+
 ## Notes
 
 - The page is served from `http://127.0.0.1:47318` (fixed port, so settings and workspaces stay in one place). If that port is taken, a random port is used and settings are stored under that address.

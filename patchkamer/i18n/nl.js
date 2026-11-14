@@ -1440,6 +1440,8 @@ I18N.nl={
    "m.dz_d_t_tune":"Instrumenttunes in de kaartkop",
    "m.sk_pad_stat":"Pad-regels: nu {0} van {1} pads en stappen aangepast op de eerste kaart van dit apparaat.",
    "m.sk_dsp_stat":"Schermpje: nu {0} van {1} keuzelijsten aangepast op de eerste kaart van dit apparaat.",
+   "ui.t_meten_link":"Audio meten: vertraging en rekenruimte",
+   "ui.t_meten_note":"opent een aparte pagina; er klinkt niets",
    "ui.t_restore_files":"Bestanden van internet automatisch laden bij het openen van een song",
    "ui.t_restore_files_note":"Staat er een apparaat op de vloer dat bestanden van internet nodig heeft (bijvoorbeeld een drumkit of saxofoonopnames), dan haalt het die zelf op zodra je een song of werkruimte opent. Uit: je klikt zelf op Laden. De bestanden komen van dezelfde vermelde bron als bij die knop en niets wordt in de song bewaard.",
    "ui.t_clip_bar":"Plakken op de maatgrens",

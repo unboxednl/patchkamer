@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.46.0 (2026-11-14)
+
+### Toegevoegd
+- **Meetpagina voor audio** (`meten.html`, gelinkt onder Instellingen > Audio, ook in de app op `/meten.html`): toont de vertraging die de browser meldt voor de gekozen latency-keuze en sample rate, belast de audiothread in stappen van 10 procent van de bufferduur en meldt waar de audioklok achterloopt, en controleert of een bezette hoofdthread de audio verstoort. Er klinkt niets; het rapport kun je kopiëren of als JSON bewaren. Alleen gedraaid in headless Chromium op Linux, waar de getallen niets zeggen over een echte geluidskaart; nog niet op Windows gedraaid.
+
 ## 0.45.1 (2026-11-14)
 
 ### Gewijzigd

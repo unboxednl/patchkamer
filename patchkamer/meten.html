@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audiometing</title>
+<style>
+:root{--bg:#10141a;--card:#171b22;--fg:#dce1e8;--dim:#8d97a5;--line:#2a3039;--go:#5fe0a0;--mid:#f0c060;--stop:#ff7a7a;--acc:#6ab0ff}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6f9;--card:#fff;--fg:#1c2128;--dim:#5c6673;--line:#d5dae1;--go:#168a54;--mid:#a06a00;--stop:#c0302b;--acc:#1e66c8}}
+:root[data-theme=light]{--bg:#f4f6f9;--card:#fff;--fg:#1c2128;--dim:#5c6673;--line:#d5dae1;--go:#168a54;--mid:#a06a00;--stop:#c0302b;--acc:#1e66c8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,sans-serif;padding:20px 16px 48px}
+main{max-width:760px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+p{margin:6px 0}.dim{color:var(--dim)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+label{display:flex;gap:6px;align-items:center}
+select,button{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+button{cursor:pointer}button:hover:not(:disabled){border-color:var(--acc)}button:disabled{opacity:.5;cursor:default}
+button.go{border-color:var(--acc);color:var(--acc)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--line)}th{color:var(--dim);font-weight:500}th.n{text-align:right}
+td.n{text-align:right}
+.ok{color:var(--go)}.warn{color:var(--mid)}.bad{color:var(--stop)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}.bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+pre{margin:0;white-space:pre-wrap;word-break:break-all;font:12px/1.4 ui-monospace,monospace;max-height:220px;overflow:auto}
+.verdict{font-size:16px;margin:8px 0 2px}
+</style>
+</head>
+<body>
+<main>
+<h1 id="t_title">Audiometing</h1>
+<p class="dim" id="t_intro"></p>
+
+<div class="card">
+  <h2 id="t_h_set"></h2>
+  <div class="row">
+    <label><span id="t_l_hint"></span><select id="hint"><option value="interactive">interactive</option><option value="balanced">balanced</option><option value="playback">playback</option></select></label>
+    <label><span id="t_l_rate"></span><select id="rate"><option value="0">auto</option><option value="44100">44,1 kHz</option><option value="48000">48 kHz</option><option value="96000">96 kHz</option></select></label>
+  </div>
+  <div class="row"><button id="b_lat" class="go"></button><button id="b_load" class="go"></button><button id="b_stop" disabled></button></div>
+  <div class="bar"><i id="prog"></i></div>
+  <p class="dim" id="status"></p>
+</div>
+
+<div class="card" id="c_lat" hidden>
+  <h2 id="t_h_lat"></h2>
+  <table id="tb_lat"></table>
+  <p class="dim" id="t_lat_note"></p>
+</div>
+
+<div class="card" id="c_load" hidden>
+  <h2 id="t_h_load"></h2>
+  <div class="verdict" id="verdict"></div>
+  <table id="tb_load"></table>
+  <p class="dim" id="t_load_note"></p>
+</div>
+
+<div class="card">
+  <h2 id="t_h_rep"></h2>
+  <div class="row"><button id="b_copy"></button><button id="b_save"></button></div>
+  <pre id="json"></pre>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const D={
+nl:{title:'Audiometing',intro:'Meet op deze computer hoeveel vertraging het geluid heeft en hoeveel rekenruimte de audiothread van de browser heeft. Er klinkt niets. Sluit andere zware programma\'s en draai de test het liefst met het scherm aan en de stroom aangesloten.',
+ h_set:'Instellingen',l_hint:'Latency-keuze',l_rate:'Sample rate',lat:'Meet de vertraging',load:'Meet de rekenruimte',stop:'Stop',
+ h_lat:'Vertraging',h_load:'Rekenruimte van de audiothread',h_rep:'Rapport',copy:'Kopieer',save:'Bewaar als bestand',copied:'Gekopieerd',
+ c_item:'Onderdeel',c_val:'Waarde',base:'Browserbuffer (baseLatency)',out:'Uitgang en geluidskaart (outputLatency)',sum:'Samen',rate:'Sample rate',state:'Toestand',route:'Audioroute',
+ route_asio:'ASIO (via de app)',route_web:'Browser (WASAPI, CoreAudio of ALSA, afhankelijk van het systeem)',notgiven:'niet opgegeven door deze browser',
+ lat_note:'De uitgangswaarde is wat de browser meldt, niet wat een microfoon zou meten. Een bluetoothapparaat of een instelling in de geluidskaartdriver komt er vaak niet in terug. Voor de echte rondgang (toets tot geluid) is een externe meting nodig.',
+ step:'Belasting',ratio:'Klok loopt bij',res:'Uitkomst',fine:'Gaat goed',hap:'Haperingen',heavy:'Ernstig',
+ v_ok:'De audiothread hield het vol tot {0} % van de bufferduur. Daarboven haperde het.',v_all:'De audiothread hield alle stappen vol (tot {0} %). Meer testen kan, maar dit is al ruim.',v_none:'Al bij de eerste stap haperde het geluid: deze computer haalt de browser-audiothread niet bij. Controleer stroombeheer en achtergrondprogramma\'s.',
+ load_note:'Elke stap laat de audiothread een vast deel van de tijd tussen twee buffers bezig houden met rekenwerk (de sommen zijn eerst op de hoofdthread geijkt). 100 % betekent: precies de hele bufferduur. Een uitkomst ver onder de 100 % zegt dat er in de praktijk minder rekenruimte is dan de klok doet vermoeden, bijvoorbeeld door stroombesparing. Een song met veel apparaten gebruikt zijn eigen deel van deze ruimte.',
+ st_cal:'Even ijken…',st_run:'Stap {0} van {1}: {2} % belasting…',st_done:'Klaar.',st_stop:'Gestopt.',st_lat:'Vertraging gemeten.',st_nowebaudio:'Deze browser heeft geen Web Audio.',st_fail:'Mislukt: ',
+ main_t:'Hoofdthread-test',main_ok:'Met een bezette hoofdthread (scherm, knoppen, laden) bleef de klok op {0} %.',main_bad:'Met een bezette hoofdthread zakte de klok naar {0} %: de audio is niet los van de rest van de pagina.'},
+en:{title:'Audio measurement',intro:'Measures on this computer how much delay the sound has and how much processing headroom the browser\'s audio thread has. Nothing is played. Close other heavy programs and, if you can, run the test with the screen on and the power plugged in.',
+ h_set:'Settings',l_hint:'Latency choice',l_rate:'Sample rate',lat:'Measure the delay',load:'Measure the headroom',stop:'Stop',
+ h_lat:'Delay',h_load:'Headroom of the audio thread',h_rep:'Report',copy:'Copy',save:'Save as file',copied:'Copied',
+ c_item:'Item',c_val:'Value',base:'Browser buffer (baseLatency)',out:'Output and sound card (outputLatency)',sum:'Total',rate:'Sample rate',state:'State',route:'Audio route',
+ route_asio:'ASIO (through the app)',route_web:'Browser (WASAPI, CoreAudio or ALSA, depending on the system)',notgiven:'not reported by this browser',
+ lat_note:'The output value is what the browser reports, not what a microphone would measure. A Bluetooth device or a setting in the sound card driver often does not show up in it. For the real round trip (key to sound) an external measurement is needed.',
+ step:'Load',ratio:'Clock keeps up',res:'Result',fine:'Fine',hap:'Glitches',heavy:'Severe',
+ v_ok:'The audio thread held up to {0} % of the buffer time. Above that it glitched.',v_all:'The audio thread held every step (up to {0} %). You can test more, but this is already generous.',v_none:'The sound glitched at the first step: this computer does not keep up with the browser audio thread. Check power management and background programs.',
+ load_note:'Each step makes the audio thread spend a fixed share of the time between two buffers on calculations (the sums are first calibrated on the main thread). 100 % means exactly the whole buffer time. A result far below 100 % means there is less headroom in practice than the clock suggests, for example because of power saving. A song with many devices uses its own part of this headroom.',
+ st_cal:'Calibrating…',st_run:'Step {0} of {1}: {2} % load…',st_done:'Done.',st_stop:'Stopped.',st_lat:'Delay measured.',st_nowebaudio:'This browser has no Web Audio.',st_fail:'Failed: ',
+ main_t:'Main thread test',main_ok:'With a busy main thread (screen, buttons, loading) the clock stayed at {0} %.',main_bad:'With a busy main thread the clock dropped to {0} %: the audio is not separate from the rest of the page.'}};
+let lang='nl'; try{ const p=localStorage.getItem('patchkamer.lang'); lang=(p==='nl'||p==='en')?p:(/^nl\b/i.test(navigator.language||'')?'nl':'en'); }catch(e){ lang=/^nl\b/i.test(navigator.language||'')?'nl':'en'; }
+const T=D[lang]; document.documentElement.lang=lang;
+const $=id=>document.getElementById(id), fmt=(s,...a)=>s.replace(/\{(\d+)\}/g,(m,i)=>a[i]);
+const set=(id,t)=>{ $(id).textContent=t; };
+document.title=T.title; set('t_title',T.title); set('t_intro',T.intro); set('t_h_set',T.h_set); set('t_l_hint',T.l_hint); set('t_l_rate',T.l_rate);
+set('b_lat',T.lat); set('b_load',T.load); set('b_stop',T.stop); set('t_h_lat',T.h_lat); set('t_h_load',T.h_load); set('t_h_rep',T.h_rep); set('b_copy',T.copy); set('b_save',T.save);
+set('t_lat_note',T.lat_note); set('t_load_note',T.load_note);
+
+const REP={version:1,when:null,userAgent:navigator.userAgent,platform:navigator.platform||'',cores:navigator.hardwareConcurrency||null,isolated:!!self.crossOriginIsolated,
+  asio:!!(window.__pkAsio&&window.__pkAsio.info&&window.__pkAsio.info.ok),latency:null,load:null,mainThread:null};
+function showRep(){ REP.when=new Date().toISOString(); $('json').textContent=JSON.stringify(REP,null,1); }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let stopFlag=false, busy=false, ctx=null;
+function setBusy(b){ busy=b; $('b_lat').disabled=b; $('b_load').disabled=b; $('b_stop').disabled=!b; $('hint').disabled=b; $('rate').disabled=b; }
+function opts(){ const o={latencyHint:$('hint').value}; const r=+$('rate').value; if(r) o.sampleRate=r; return o; }
+async function open(){ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) throw new Error(T.st_nowebaudio); const c=new AC(opts()); await c.resume().catch(()=>{}); return c; }
+async function closeCtx(){ if(ctx){ try{ await ctx.close(); }catch(e){} ctx=null; } }
+function row(a,b,cls){ return '<tr><td>'+a+'</td><td class="n'+(cls?' '+cls:'')+'">'+b+'</td></tr>'; }
+const ms=x=>(x*1000).toFixed(1)+' ms';
+
+async function measureLatency(){
+  set('status',T.st_cal); ctx=await open(); await sleep(600);
+  const b=+ctx.baseLatency||0, o=+ctx.outputLatency||0, sum=b+o;
+  const asio=REP.asio;
+  $('tb_lat').innerHTML='<tr><th>'+T.c_item+'</th><th class="n">'+T.c_val+'</th></tr>'+
+    row(T.base,ms(b))+row(T.out,o?ms(o):T.notgiven,o?'':'warn')+row(T.sum,o?ms(sum):'–',!o?'':sum>0.04?'bad':sum>0.02?'warn':'ok')+
+    row(T.rate,ctx.sampleRate+' Hz')+row(T.state,ctx.state)+row(T.route,asio?T.route_asio:T.route_web);
+  $('c_lat').hidden=false;
+  REP.latency={hint:$('hint').value,requestedRate:+$('rate').value||null,sampleRate:ctx.sampleRate,baseMs:+(b*1000).toFixed(2),outputMs:o?+(o*1000).toFixed(2):null,state:ctx.state};
+  await closeCtx(); set('status',T.st_lat); showRep();
+}
+
+// werk dat de audiothread bezig houdt: dezelfde som in de worklet en op de hoofdthread
+const BURN='function burn(n){ let x=1.0001; for(let i=0;i<n;i++){ x=x*1.0000001+Math.sin(x)*1e-9; } return x; }';
+const WORKLET=BURN+';class Burner extends AudioWorkletProcessor{ constructor(){ super(); this.n=0; this.s=0; this.port.onmessage=e=>{ this.n=e.data|0; }; }'+
+  ' process(){ if(this.n>0) this.s+=burn(this.n); return true; } } registerProcessor("pk-burner",Burner);';
+const burn=new Function('n',BURN+';return burn(n);');
+function calibrate(){ let best=Infinity; const N=300000; for(let k=0;k<7;k++){ const t=performance.now(); burn(N); best=Math.min(best,performance.now()-t); } return N/best; }   // sommen per milliseconde
+
+async function ratioOver(c,secs){ const t0=c.currentTime, w0=performance.now(); await sleep(secs*1000); return (c.currentTime-t0)/((performance.now()-w0)/1000); }
+
+async function measureLoad(){
+  set('status',T.st_cal); ctx=await open();
+  const blob=URL.createObjectURL(new Blob([WORKLET],{type:'text/javascript'}));
+  await ctx.audioWorklet.addModule(blob);
+  const node=new AudioWorkletNode(ctx,'pk-burner',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[1]});
+  const mute=ctx.createGain(); mute.gain.value=0; node.connect(mute); mute.connect(ctx.destination);
+  const perMs=calibrate(), budgetMs=128/ctx.sampleRate*1000;
+  const steps=[10,20,30,40,50,60,70,80,90,100,110,120,140,160], WARM=1.2, HOLD=3;
+  $('c_load').hidden=false; $('tb_load').innerHTML='<tr><th>'+T.step+'</th><th class="n">'+T.ratio+'</th><th>'+T.res+'</th></tr>'; $('verdict').textContent='';
+  const out=[]; let lastOk=0, failed=false;
+  for(let i=0;i<steps.length&&!stopFlag;i++){
+    const p=steps[i]; set('status',fmt(T.st_run,i+1,steps.length,p)); $('prog').style.width=Math.round(i/steps.length*100)+'%';
+    node.port.postMessage(Math.round(perMs*budgetMs*p/100));
+    await sleep(WARM*1000); const r=Math.min(1,Math.max(0,await ratioOver(ctx,HOLD)));
+    const cls=r<0.9?'bad':r<0.97?'warn':'ok', txt=r<0.9?T.heavy:r<0.97?T.hap:T.fine;
+    $('tb_load').insertAdjacentHTML('beforeend','<tr><td>'+p+' %</td><td class="n '+cls+'">'+Math.round(r*100)+' %</td><td class="'+cls+'">'+txt+'</td></tr>');
+    out.push({loadPct:p,clockPct:Math.round(r*1000)/10});
+    if(r>=0.97) lastOk=p; else { failed=true; break; }
+  }
+  node.port.postMessage(0);
+  REP.load={hint:$('hint').value,sampleRate:ctx.sampleRate,budgetMs:+budgetMs.toFixed(3),sumsPerMs:Math.round(perMs),steps:out,heldPct:lastOk,allHeld:!failed&&!stopFlag};
+  const v=$('verdict');
+  if(stopFlag){ v.textContent=''; }
+  else if(!lastOk){ v.textContent=T.v_none; v.className='verdict bad'; }
+  else if(!failed){ v.textContent=fmt(T.v_all,lastOk); v.className='verdict ok'; }
+  else { v.textContent=fmt(T.v_ok,lastOk); v.className='verdict '+(lastOk>=70?'ok':'warn'); }
+  // hoofdthread: houdt de audio het vol als de pagina zelf druk is (halve belasting, hoofdthread afwisselend 60 ms bezig)
+  if(!stopFlag&&lastOk>=40){
+    set('status',T.main_t); node.port.postMessage(Math.round(perMs*budgetMs*Math.min(lastOk,60)/100));
+    await sleep(WARM*1000);
+    let busyOn=true; (async()=>{ while(busyOn){ const t=performance.now(); while(performance.now()-t<60){ burn(2000); } await sleep(40); } })();
+    const r=Math.min(1,await ratioOver(ctx,HOLD+1)); busyOn=false; node.port.postMessage(0);
+    const good=r>=0.97; $('tb_load').insertAdjacentHTML('beforeend','<tr><td>'+T.main_t+'</td><td class="n '+(good?'ok':'bad')+'">'+Math.round(r*100)+' %</td><td class="'+(good?'ok':'bad')+'">'+(good?T.fine:T.hap)+'</td></tr>');
+    REP.mainThread={clockPct:Math.round(r*1000)/10,ok:good};
+    $('verdict').textContent+=' '+fmt(good?T.main_ok:T.main_bad,Math.round(r*100));
+  }
+  await closeCtx(); $('prog').style.width='100%'; set('status',stopFlag?T.st_stop:T.st_done); showRep();
+}
+
+async function run(fn){ if(busy) return; stopFlag=false; setBusy(true); $('prog').style.width='0'; try{ await fn(); }catch(e){ set('status',T.st_fail+(e&&e.message||e)); await closeCtx(); } setBusy(false); }
+$('b_lat').onclick=()=>run(measureLatency);
+$('b_load').onclick=()=>run(measureLoad);
+$('b_stop').onclick=()=>{ stopFlag=true; };
+$('b_copy').onclick=async()=>{ try{ await navigator.clipboard.writeText($('json').textContent); set('status',T.copied); }catch(e){ const r=document.createRange(); r.selectNodeContents($('json')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); } };
+$('b_save').onclick=()=>{ showRep(); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([$('json').textContent],{type:'application/json'})); a.download='patchkamer-meting.json'; a.click(); };
+showRep();
+})();
+</script>
+</body>
+</html>

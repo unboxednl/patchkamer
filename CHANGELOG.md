@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.46.0 (2026-11-14)
+
+### Added
+- **Audio measurement page** (`meten.html`, linked under Settings > Audio, also in the app at `/meten.html`): shows the delay the browser reports for the chosen latency setting and sample rate, loads the audio thread in steps of 10 percent of the buffer time and reports where the audio clock falls behind, and checks whether a busy main thread disturbs the audio. Nothing is played; the report can be copied or saved as JSON. Run in headless Chromium on Linux only, where the numbers say nothing about a real sound card; not yet run on Windows.
+
 ## 0.45.1 (2026-11-14)
 
 ### Changed
