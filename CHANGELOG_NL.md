@@ -4,6 +4,15 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.45.1 (2026-11-14)
+
+### Gewijzigd
+- **Lichtere audiothread** (gemeten in headless Chromium met de song Skyline Ignition, 22 apparaten: ongeveer 83% van een kern ervoor, ongeveer 61% erna, in de eerste 10 seconden; niet gemeten met een echte uitgang en niet beluisterd):
+  - **Pulse Drums 1.20.3:** de rumble-convolver draait alleen als er een kick aan hangt, en tonen en ruislagen stoppen na hun eigen envelope. Alle 8 kanalen vol: 0,51 naar 0,35 van een kern.
+  - **Supersaw Swarm 1.14.1** en **Chord Poly 1.14.1:** zonder stemmen en na de staart wordt de keten losgekoppeld (slaap) en wordt hij bij de eerste noot zonder klik weer wakker; een doel dat al bereikt is wordt niet opnieuw gezet. Chord Poly met een LFO op de cutoff: ongeveer 29% lichter. De detune van Chord Poly verschilt hoogstens 1,5 ns oscillatorfase (tot -68 dBFS bij normaal gebruik, -47 dBFS bij extreme instellingen).
+  - **Reverb 1.0.3** en **Delay 1.1.1:** bij stille ingang en uitgeklonken staart slaan ze hun rekenwerk over; Reverb Spring is ongeveer 2x sneller. Uitvoer gelijk aan de oude versie (hoogstens -144 dBFS verschil). Eén klankwijziging: Reverb wist de toestand van een uitgeschakeld ingangsfilter, zodat die niet meer als tik terugkomt als het filter weer aangaat.
+- In drukke delen van een song (de drop) is de winst klein; de slaap helpt vooral in rustige stukken, intro's en ongebruikte takken.
+
 ## 0.45.0 (2026-11-14)
 
 ### Toegevoegd

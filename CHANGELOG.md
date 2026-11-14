@@ -4,6 +4,15 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.45.1 (2026-11-14)
+
+### Changed
+- **Lighter audio thread** (measured in headless Chromium with the song Skyline Ignition, 22 devices: about 83% of one core before, about 61% after, in the first 10 seconds; not measured on a real output and not listened to):
+  - **Pulse Drums 1.20.3:** the rumble convolver only runs when a kick is connected, and tones and noise layers stop after their own envelope. All 8 lanes busy: 0.51 to 0.35 of a core.
+  - **Supersaw Swarm 1.14.1** and **Chord Poly 1.14.1:** without voices and after the tail the chain is disconnected (sleep) and wakes without a click on the first note; a target that is already reached is not set again. Chord Poly with an LFO on the cutoff: about 29% lighter. The detune of Chord Poly changes by at most 1.5 ns of oscillator phase (up to -68 dBFS in normal use, -47 dBFS in extreme settings).
+  - **Reverb 1.0.3** and **Delay 1.1.1:** with a silent input and a finished tail they skip their calculation; Reverb Spring is about 2x faster. Output equal to the old version (at most -144 dBFS difference). One change in sound: Reverb clears the state of an input filter that is switched off, so it no longer plays back as a tick when the filter is switched on.
+- In busy parts of a song (the drop) the gain is small; the sleep helps mostly in quiet parts, intros and unused branches.
+
 ## 0.45.0 (2026-11-14)
 
 ### Added
