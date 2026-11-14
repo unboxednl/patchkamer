@@ -4,6 +4,11 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.48.1 (2026-11-14)
+
+### Opgelost
+- **Screenshots in de handleiding ververst** (NL en EN) voor de nieuwe knop Snel opnemen naast Start. `docs/tools/make-screenshots.py` werkt weer: Kopieer en Plakopties worden nu geopend via het apparaatmenu, zoals de host dat sinds de verhuizing uit de kaartbalk doet.
+
 ## 0.48.0 (2026-11-14)
 
 ### Gewijzigd

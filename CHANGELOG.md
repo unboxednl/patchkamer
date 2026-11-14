@@ -4,6 +4,11 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.48.1 (2026-11-14)
+
+### Fixed
+- **Documentation screenshots refreshed** (NL and EN) for the new Fast record button next to Start. `docs/tools/make-screenshots.py` works again: Copy and Paste options are now opened from the device menu, as the host does since the move out of the card bar.
+
 ## 0.48.0 (2026-11-14)
 
 ### Changed

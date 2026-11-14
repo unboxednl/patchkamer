@@ -98,18 +98,20 @@ def shots(browser, lang, OUT, LIB, BASE):
         pg.context.close()
 
     def clip_docs():   # plakmenu (20) en Kopieer alle sporen in het plakmenu van de Clip Arranger (21); beeld 1400 breed
-        CP = re.compile('^(Kopieer|Copy)$', re.I); PL = re.compile('^(Plak|Paste)$', re.I)
+        CP = re.compile('^(Kopieer patroon|Copy pattern)$', re.I); OPT = re.compile('^(Plakopties|Paste options)$', re.I)
+        def dm(pg, rx):   # Kopieer en Plakopties staan in het menu achter het icoontje van de kaart, niet meer in de kaartbalk
+            pg.locator('.card .dmbtn').first.click(); pg.wait_for_timeout(300); pg.locator('.dmenu button', has_text=rx).first.click(); pg.wait_for_timeout(400)
         pg = newpage(w=1400, h=780, libh=700, nopicker=True); load_lib(pg)
         place(pg, 'Drum Kit'); pg.click('#libToggle'); pg.wait_for_timeout(800)
-        pg.locator('.card .bar .clipbtn', has_text=CP).first.click(); pg.wait_for_timeout(400)   # Drum Kit is de bron
+        dm(pg, CP)   # Drum Kit is de bron
         pg.locator('.card .bar button', has_text='\u00d7').first.click(); pg.wait_for_timeout(500)
         pg.click('#libToggle'); pg.wait_for_timeout(300); place(pg, 'Pulse Drums'); pg.click('#libToggle'); pg.wait_for_timeout(1000)
-        pg.locator('.card .bar .clipmore').first.click(); pg.wait_for_timeout(500)
+        dm(pg, OPT)
         pg.locator('.clipmenu input[type=checkbox]').nth(1).check(); pg.wait_for_timeout(200)   # Pas lengte aan de clip aan
         pg.screenshot(path=OUT + '/20-paste-menu.png', clip={'x': 0, 'y': 0, 'width': 1400, 'height': 700}); done(pg)
         pg = newpage(w=1400, h=900, libh=700, nopicker=True); load_lib(pg)
         place(pg, 'Clip Arranger'); pg.click('#libToggle'); pg.wait_for_timeout(1000)
-        pg.locator('.card .bar .clipmore').first.click(); pg.wait_for_timeout(500)
+        dm(pg, OPT)
         pg.screenshot(path=OUT + '/21-copy-all-tracks.png', clip={'x': 0, 'y': 0, 'width': 1400, 'height': 780}); done(pg)
         for dev, name in (('Chord Buddy', '18-chord-buddy'), ('Balance EQ', '19-balance-eq')):   # de hele kaart: een hoog venster, anders knipt de vloer hem af
             pg = newpage(w=1400, h=2300, libh=700, nopicker=True); load_lib(pg); place(pg, dev); pg.click('#libToggle'); pg.wait_for_timeout(1500)
