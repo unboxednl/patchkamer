@@ -15,7 +15,7 @@ Een uitgebreid delay-effect. De delaytijd is **vrij** (1 tot 4000 ms), **gesynch
 | Poorten | audio-ingang `in` (stereo; mono wordt naar twee kanalen gezet), audio-uitgang `out` (stereo), sturing `mod`; geen events |
 | Contract | v1.28 (het apparaat gebruikt niets nieuwers dan v1.8) |
 | Licentie apparaat | AGPL-3.0-or-later |
-| Worklet | `nl-patchkamer-delay-1-0-0`; verhoog de versie in de naam als je de worklet-code wijzigt |
+| Worklet | `nl-patchkamer-delay-1-1-1`; verhoog de versie in de naam als je de worklet-code wijzigt |
 
 ## Geen tunes, wel presets
 
@@ -77,6 +77,7 @@ Stuurbaar (`params()`, spoor `delay`): `swing`, `spread`, `msL`, `msR`, `fb`, `f
 - De begrenzer zit **alleen in het terugvoerpad** (knie 0,6, plafond 1,0): echo's tot 0 dBFS blijven ongewijzigd, bij feedback boven 100% loopt het niveau op tot het plafond. De wet-uitgang wordt bij 1,0 zacht begrensd tot 1,4 (+3 dBFS).
 - Bewaker: de ingang wordt begrensd op ±16 (+24 dB) en NaN wordt 0; parameterberichten worden alleen eindig geaccepteerd; per blok worden de filter- en omhullendetoestanden gecontroleerd en bij een ontsporing worden de lijnen geleegd. Het eerste bericht met de state na het laden zet de niveaus direct (geen fade vanuit stilte).
 - Een moduswissel dempt de echo's 15 ms (zachte demping) om een tik te voorkomen. Een wissel van `sat` schakelt hard om.
+- **Slaapstand (1.1.1):** is de ingang stil (alle samples onder 1e-9, ongeveer -180 dBFS), is alles wat de laatste tijd in de vier lijnen is geschreven kleiner dan 1e-9 gedurende de langste leesafstand plus marge (huidige en doeltijden, modulatiebereik, bij reverse de hele lijn), en zijn de filter- en allpassgeheugens (`Seg.settled`) uitgeklonken, dan slaat `process()` het lezen, filteren en schrijven over: nullen schrijven (zoals de lus zou doen), de tijdstappen (`adv`, `revAdv`), de zachte niveaus en de modulatiefase laten doorlopen en nul als natte uitvoer geven; het droge pad blijft gewoon. Elk blok met ingang boven de drempel wekt hem in dat blok. Hij slaapt niet bij feedback boven 0,98 (een lus met versterking boven 1 laat een rest onder de drempel aangroeien; de oude code gaat dan vanzelf oscilleren) en niet zolang er in freeze iets in de lijnen staat. Bij zachte feedback (bijvoorbeeld 0,4) slaapt hij ongeveer 7 s na een impuls. `process()` geeft altijd `true`: `return false` gaf in Chromium geen meetbaar voordeel. De limiter-melding naar de kaart gaat alleen nog bij verandering (het apparaat onthoudt de laatste waarde).
 - Zonder AudioWorklet gaat het geluid ongewijzigd door en meldt de kaart dat.
 
 ## Skins
@@ -88,6 +89,7 @@ Het apparaat is herkenbaar voor skins (`design.controls` met `face: rotary`): sc
 - `node contract/validate-instrument.mjs devices/effects/Delay/delay.patchkamer-device.js` plus `--lang nl` en `--lang en`, vanuit de root. Alle drie moeten `OK` geven, zonder `let op`.
 - `node --no-warnings docs/tools/measure-delay.mjs [sectie ...]`: metingen in Node met de echte worklet-code (delaytijd tegen ingesteld, sync bij tempo's en soorten, tempowissel, swing, feedbackverloop, filters, stabiliteit, NaN-burst, modi, reverse, tikken, alle presets, rekenlast). Eindigt met `alle controles OK`.
 - `node --no-warnings devices/effects/Delay/check-preset.mjs presets/delay.patchkamer-presets.json`.
+- Vergelijk je een wijziging in de worklet met de vorige versie, doe dat dan sample voor sample (honderd+ willekeurige en extreme configuraties, bursts met stilte ertussen, NaN/Infinity): zonder slaapstand (`SLEEP_IN = 0`) hoort de uitvoer bit-identiek te zijn, met slaapstand mag alleen de uitgeklonken staart (onder -120 dBFS) verschillen.
 - Je kunt niet horen hoe een preset klinkt. Schrijf in je oplevering dat het **niet beluisterd** is.
 - De teksten staan in het bestand zelf (`NL` en `EN`). Een nieuwe tekst krijgt altijd nl én en.
 

@@ -99,6 +99,15 @@ Het apparaat kan niet ontsporen: de filters zijn begrensd, na de stemmen staat e
 
 Alle schuiven en keuzelijsten zijn sinds 1.14.0 via `host.ui.adopt` herkenbaar voor skins: `id` is de state-sleutel (`cutoff`, `attack`, `wave`, `chord`, enzovoort), `role` is `param` (schuiven) of `select`, en `group` is `filter`, `osc`, `env`, `fx`, `out` (knoppen) of `setup` (keuzelijsten). Elke groep zit in een eigen `div.grp` met `data-t` (de titel); zonder skin is dat `display:contents`, dus het uiterlijk is ongewijzigd. De meegeleverde skin `Compact` staat in `../../../skins/library/nl.patchkamer.chordpoly/` (draaiknoppen met waarde en naam eronder, per groep een kader, smalle scope; ongeveer 480 x 320 punten tegenover 840 x 552). Wijzig je `.grp`, `.row`, `.control` of de scope, controleer dan die skin.
 
+## Rekenlast (slaap)
+
+Alle apparaten draaien op één audiothread, dus elke node telt. Web Audio rekent alleen wat via een verbinding naar de uitgang of een meter wordt opgevraagd. Daarom **slaapt** de keten achter de uitgang: 3 s na de laatste stem koppelt `ceil` los van `out` en van de scope-meter (`sleep()`); `playSingle` roept `wake()` aan. Wat je niet moet breken:
+
+- `out` is een vaste gain (x1) achter `ceil`; die verbindingen zijn de kleppen. De LFO's van de chorus hangen aan `pulse` zodat ze doorlopen (zelfde fase als zonder slaap).
+- Parameters die tijdens de slaap een nieuw doel kregen (`ease`), krijgen in `wake()` de waarde van nu, anders start de curve van een oude waarde.
+- `ease` zet een gelijk, al uitgeklonken doel niet opnieuw: modulatie (apply() draait elke 33 ms bij een LFO) liet anders op elke oscillator van elke stem een eeuwige setTarget achter (a-rate op de audiothread: een pad met LFO op de cutoff kostte 0,093 kern, nu 0,066). Gevolg: de detune van een stem rekent na de eerste `apply` op blokniveau, wat na 10 s ongeveer 1e-4 sample tijdverschuiving geeft (verschil t.o.v. 1.14.0: tot 4e-4, in extreme staten tot 4,5e-3). Wil je exact gelijk aan 1.14.0, zet dan in `apply()` `ease(v.osc[i].detune, ...)` terug naar `smooth(...)` (kost die 29%).
+- Meetmethode en cijfers staan in de kop van het bestand (1.14.1).
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/ChordPoly/chord-poly.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

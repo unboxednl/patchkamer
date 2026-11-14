@@ -1,4 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Lichter voor de audiothread, geluid gelijk. (1) Slaap: zonder stemmen koppelt de keten (hoogdoorlaat, vervormer, chorus, delay, galm, compressor, plafond) zich los van de uitgang en van de compressormeter,
+//   zodra de staart is uitgeklonken (delay-echo's tot onder -120 dB plus de galm op volle lengte, +0,5 s); Web Audio rekent hem dan niet meer door. De LFO's van de chorus blijven lopen (fase gelijk), de eerste
+//   noot of stap met gate/pomp hangt alles weer vast, en parameters die tijdens de slaap een nieuw doel kregen, krijgen bij het wakker worden de waarde die ze zonder slaap hadden. Met gate of pomp aan en de klok lopend slaapt hij niet.
+//   (2) Een gelijk, al uitgeklonken doel wordt niet opnieuw gezet (ease) voor de gedeelde parameters, de mixgains per stem en de delaytijd; detune en Q blijven bewust zoals voorheen.
+//   Meting (1 apparaat, losse Chromium-pagina, audiothread in kern): in stilte 0,10 -> 0,007; na spelen en uitklinken 0,08 -> 0,011; spelen 0,15 -> 0,15 (gelijk). In de song Skyline Ignition (intro, 22 apparaten): 0,90 -> 0,77.
+//   Offline (OfflineAudioContext, stap voor stap geplant, 14 scenario's met tunes, presets, akkoorden, noteoff, retrigger, mod, setState, extreme staten, stilte en wake, ook met gate en pomp): max |verschil| t.o.v. 1.14.0 4e-4 (7e-4 in de extreme staat met alles op maximum); twee runs van 1.14.0 onderling 6e-5..7e-4 (Chrome somt niet elke run in dezelfde volgorde). Geen NaN of Infinity. Niet beluisterd.
 // 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: sound, swarm, envelope, space, motion; keuzelijsten in de groep top); skin Compact erbij. Geluid, state en ids ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Supersaw Swarm); de UI toont geen uitlegtekst meer. Geluid en state ongewijzigd.
 // 1.12.0 — Titel in de UI verwijderd: de kaartbalk toont de naam. Geluid en state ongewijzigd.
@@ -30,7 +36,7 @@ const EN = {
 };
 
 export default {
-  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.14.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.supersawswarm', name: 'Supersaw Swarm', version: '1.14.1', kind: 'instrument', category: 'synth',
   ui: { width: 820, minWidth: 360 },
   about: { nl: 'Tot negen verstemde zaagtanden per noot, met octaaflaag, sub en een ingebouwde ruimte. Sluit een keyboard of sequencer aan op Noten en stuur de stereo-uitgang naar een mixer.\n\nTrance-gate en Pomp werken alleen als de klok loopt (Start). Akkoord per toets maakt van elke noot een akkoord; kies Losse noten als je akkoorden uit de sequencer stuurt. Galmlengte bouwt de galm opnieuw op; die wordt niet door Mod gestuurd.', en: 'Up to nine detuned sawtooth waves per note, with an octave layer, sub and a built-in space. Connect a keyboard or sequencer to Notes and send the stereo output to a mixer.\n\nTrance gate and Pump only work while the clock runs (Start). Chord per key turns every note into a chord; choose Single notes if you send chords from the sequencer. Reverb length rebuilds the reverb; Mod does not control it.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -46,6 +52,14 @@ export default {
     const gain = v => { const n = own(ctx.createGain()); n.gain.value = v; return n; };
     const biquad = (type, f, q = 0.707) => { const n = own(ctx.createBiquadFilter()); n.type = type; n.frequency.value = Math.min(ctx.sampleRate * 0.45, f); n.Q.value = q; return n; };
     const smooth = (p, v, t = ctx.currentTime, tc = 0.03) => { try { p.setTargetAtTime(v, t, tc); } catch {} };
+    // zacht naar een doel, maar een gelijk doel dat al is uitgeklonken (20 tijdconstanten, e^-20 = 2e-9) wordt niet opnieuw gezet: dat zou dezelfde vlakke waarde geven
+    // en laat anders een eindeloze setTarget-gebeurtenis op elke parameter achter, die de audiothread per sample doorrekent. Een doel dat nog onderweg is, wordt wel
+    // opnieuw gezet zoals voorheen. goal onthoudt per parameter het laatste doel, het tijdstip en de waarde op dat tijdstip, zodat de waarde op elk later moment
+    // met de formule van setTarget bekend is (nodig voor wake(): een node die slaapt, rekent zijn parameters niet door). seed() = beginwaarde van een nieuwe node.
+    const goal = new WeakMap(), pending = new Set();
+    const goalAt = (g, t) => g.v + (g.x - g.v) * Math.exp(-(t - g.t) / g.tc);
+    const seed = (p, v = p.value, tc = 0.03) => { goal.set(p, { v, t: -Infinity, x: v, tc }); return p; };
+    const ease = (p, v, t = ctx.currentTime, tc = 0.03) => { const g = goal.get(p); if (g && g.v === v && t - g.t >= 20 * g.tc) return; goal.set(p, { v, t, x: g ? goalAt(g, t) : p.value, tc }); if (asleep) pending.add(p); else smooth(p, v, t, tc); };
     const stopSource = (n, t = ctx.currentTime) => { try { n.stop(t); } catch {} };
 
     // ---------- parameters ----------
@@ -106,13 +120,14 @@ export default {
 
     // ---------- vaste keten ----------
     // bus en ceil blijven altijd staan; alles ertussen (de staart) wordt door buildTail gebouwd en kan bij een ontsporing opnieuw worden opgebouwd
-    const bus = gain(1), ceil = own(ctx.createWaveShaper());
+    const bus = gain(1), ceil = own(ctx.createWaveShaper()), out = gain(1), pulse = own(ctx.createAnalyser()); pulse.fftSize = 32;
     let lowcut, pre, shaper, post, gateG, pumpG, dry, chorusWet, sum, delaySend, hallSend, master, volume, comp, chorus, mono, dL, dR, fb, dHp, dLp, merge, dRet, preDelay, conv, hallRet, hallHp;
-    let tailNodes = null;
+    let tailNodes = null, asleep = false, quietAt = -1e9;   // quietAt: sinds wanneer er geen stem meer is (een nieuw apparaat is al stil)
     const monBus = own(ctx.createAnalyser()), monOut = own(ctx.createAnalyser()); monBus.fftSize = monOut.fftSize = 256; bus.connect(monBus);
     const cc = new Float32Array(2049); for (let i = 0; i < cc.length; i++) cc[i] = 0.93 * Math.tanh((i / (cc.length - 1) * 2 - 1) / 0.93); ceil.curve = cc; ceil.oversample = '2x';
-    const out = ceil;
+    ceil.connect(out);   // out is een vaste uitgangsgain (x1, exact neutraal); ceil en alles ervoor wordt losgekoppeld als er niets klinkt (zie sleep/wake)
     function buildTail() {
+      pending.clear();
       if (tailNodes) { try { bus.disconnect(lowcut); } catch {} for (const n of tailNodes) { stopSource(n); try { n.disconnect(); } catch {} nodes.delete(n); sources.delete(n); } }
       const n0 = new Set(nodes), s0 = new Set(sources);
       lowcut = biquad('highpass', 28); pre = gain(1); shaper = own(ctx.createWaveShaper()); post = gain(1);
@@ -126,7 +141,7 @@ export default {
       chorus = [];
       for (let i = 0; i < 3; i++) { const d = own(ctx.createDelay(0.1)), lfo = own(ctx.createOscillator()), depth = gain(0.002), pan = own(ctx.createStereoPanner());
         d.delayTime.value = 0.012 + i * 0.006; lfo.frequency.value = 0.21 + i * 0.13; lfo.connect(depth).connect(d.delayTime); pan.pan.value = [-1, 1, 0][i];
-        pumpG.connect(d).connect(pan).connect(chorusWet); sources.add(lfo); lfo.start(); chorus.push({ d, depth }); }
+        pumpG.connect(d).connect(pan).connect(chorusWet); lfo.connect(pulse); sources.add(lfo); lfo.start(); chorus.push({ d, depth }); }
       sum.connect(master); sum.connect(delaySend); sum.connect(hallSend);
       // ping-pongdelay op tempo
       mono = gain(1); mono.channelCount = 1; mono.channelCountMode = 'explicit'; mono.channelInterpretation = 'speakers';
@@ -136,7 +151,7 @@ export default {
       // galm: convolutie met eigen impulsrespons
       preDelay = own(ctx.createDelay(0.2)); conv = own(ctx.createConvolver()); hallRet = gain(1); hallHp = biquad('highpass', 180);
       preDelay.delayTime.value = 0.025; hallSend.connect(hallHp).connect(preDelay).connect(conv).connect(hallRet).connect(master);
-      master.connect(volume).connect(comp).connect(ceil); comp.connect(monOut);
+      master.connect(volume).connect(comp).connect(ceil); if (!asleep) comp.connect(monOut);
       tailNodes = [...nodes].filter(n => !n0.has(n)).concat([...sources].filter(n => !s0.has(n)));
       buildIR(state.size);
     }
@@ -155,32 +170,48 @@ export default {
     // stoppen we alle stemmen en bouwen we de staart opnieuw op.
     const chk = new Float32Array(256);
     const bad = an => { an.getFloatTimeDomainData(chk); for (let i = 0; i < chk.length; i++) if (!(Math.abs(chk[i]) < 100)) return true; return false; };
-    function guard() { if (dead) return; if (bad(monBus) || bad(monOut)) recover(); }
+    function guard() { if (dead || asleep) return; if (bad(monBus) || bad(monOut)) recover(); }
     function recover() { for (const v of [...voices]) { for (const o of v.osc) stopSource(o); cleanup(v); } buildTail(); apply(); }
     // alleen in een live context: een offline render loopt niet in wandkloktijd, daar zou een timer willekeurig midden in de render ingrijpen
     const offline = typeof OfflineAudioContext !== 'undefined' && ctx instanceof OfflineAudioContext;
     const guardT = !offline && typeof setInterval === 'function' ? setInterval(guard, 50) : null; if (guardT && guardT.unref) guardT.unref();
     function scheduleIR() { if (Math.abs(state.size - irSize) < 0.05) return; if (irTimer) clearTimeout(irTimer); irTimer = setTimeout(() => { irTimer = null; if (!dead) buildIR(state.size); }, 180); }
 
+    // ---------- slaap ----------
+    // Web Audio rekent alleen wat via een verbinding naar de uitgang of een meter wordt opgevraagd. Zonder stemmen is de keten stil; zodra de staart (de echo's van de delay
+    // tot onder -120 dB plus de galm van zijn volle lengte) is uitgeklonken koppelen we ceil los van de uitgang en comp van zijn meter: galm, delay, chorus, compressor
+    // en plafond rekenen dan niet meer. De LFO's van de chorus blijven lopen (ze hangen aan pulse), zodat hun fase gelijk blijft aan die van een keten die nooit slaapt.
+    // playSingle roept wake() aan vóór de stem klinkt; de keten is dan stil en de curven gaan door nul, dus zonder klik.
+    const tailTime = () => { const fbk = Math.min(0.95, Math.max(eff.feedback, state.feedback, 0)), rounds = fbk < 1e-6 ? 1 : Math.ceil(Math.log(1e-6) / Math.log(fbk)); return 2 * rounds * delayTime() + Math.max(irSize, state.size) + 0.5; };
+    function sleep() { if (asleep || dead) return; asleep = true; try { ceil.disconnect(out); } catch {} try { comp.disconnect(monOut); } catch {} }
+    function wake() { if (!asleep) return; asleep = false; try { ceil.connect(out); } catch {} try { comp.connect(monOut); } catch {}
+      // parameters die tijdens de slaap een nieuw doel kregen, krijgen hun waarde van nu en gaan vandaar door, precies zoals een keten die nooit sliep
+      for (const p of pending) { const g = goal.get(p), now = ctx.currentTime; p.cancelScheduledValues(0); p.setValueAtTime(goalAt(g, now), now); smooth(p, g.v, now, g.tc); } pending.clear(); }
+    const napT = typeof setInterval === 'function' ? setInterval(() => { if (!dead && !asleep && !voices.size && !(playing && (eff.gate > 0 || eff.pump > 0)) && ctx.currentTime >= quietAt + tailTime()) sleep(); }, 250) : null; if (napT && napT.unref) napT.unref();
+
     // ---------- stemmen ----------
     const voices = new Set();
     const MAXNOTES = 14;
     function level(v, t) { const age = t - v.t; if (age < 0) return 0; if (Number.isFinite(v.off) && t >= v.off) return v.offValue * Math.max(0, 1 - (t - v.off) / v.rel); if (age < v.a) return v.peak * age / v.a; if (age < v.a + v.d) return v.peak * (1 - (1 - v.s) * (age - v.a) / v.d); return v.peak * v.s; }
     function release(v, t, seconds = eff.release) { if (v.ended || t >= v.end) return; const val = level(v, t); v.amp.gain.cancelScheduledValues(t); v.amp.gain.setValueAtTime(val, t); v.amp.gain.linearRampToValueAtTime(0, t + seconds); v.off = t; v.offValue = val; v.rel = seconds; v.end = t + seconds; for (const o of v.osc) stopSource(o, t + seconds + 0.02); }
-    function cleanup(v) { if (v.ended) return; v.ended = true; voices.delete(v); for (const n of v.owned) { try { n.disconnect(); } catch {} nodes.delete(n); sources.delete(n); } }
+    function cleanup(v) { if (v.ended) return; v.ended = true; voices.delete(v); if (!voices.size) quietAt = ctx.currentTime; for (const n of v.owned) { try { n.disconnect(); } catch {} nodes.delete(n); sources.delete(n); } }
     const offsets = n => Array.from({ length: n }, (_, i) => n === 1 ? 0 : i / (n - 1) * 2 - 1);
+    const mixGoals = n => ({ side: n > 1 ? eff.mix * 1.25 / Math.sqrt(n - 1) : 0, center: 0.62 * (1 - 0.45 * eff.mix), near: (1 + eff.spread) / 2, far: (1 - eff.spread) / 2, oct: eff.octave * 0.42, sub: eff.sub * 0.55 });
+    const detuneOf = (v, i) => eff.transpose * 100 + v.det[i] * eff.detune;
+    // let op: de detune (en de Q van het filter) blijven smooth, geen ease: een parameter zonder gebeurtenissen rekent een oscillator met een start tussen twee samples (de willekeurige fase)
+    // tot een sample anders, en een filter met veel resonantie anders, dan een met gebeurtenissen; het geluid blijft zo gelijk aan dat van voor de wijziging
     function voiceMix(v, t) {
-      const n = v.n, side = n > 1 ? eff.mix * 1.25 / Math.sqrt(n - 1) : 0, center = 0.62 * (1 - 0.45 * eff.mix), sp = eff.spread;
-      smooth(v.cG.gain, center, t); smooth(v.lG.gain, side, t); smooth(v.rG.gain, side, t);
-      smooth(v.lToL.gain, (1 + sp) / 2, t); smooth(v.lToR.gain, (1 - sp) / 2, t); smooth(v.rToR.gain, (1 + sp) / 2, t); smooth(v.rToL.gain, (1 - sp) / 2, t);
-      smooth(v.octG.gain, eff.octave * 0.42, t); smooth(v.subG.gain, eff.sub * 0.55, t);
-      v.osc.forEach((o, i) => { if (v.det[i] !== undefined) smooth(o.detune, eff.transpose * 100 + v.det[i] * eff.detune, t); });
+      const g = mixGoals(v.n);
+      ease(v.cG.gain, g.center, t); ease(v.lG.gain, g.side, t); ease(v.rG.gain, g.side, t);
+      ease(v.lToL.gain, g.near, t); ease(v.lToR.gain, g.far, t); ease(v.rToR.gain, g.near, t); ease(v.rToL.gain, g.far, t);
+      ease(v.octG.gain, g.oct, t); ease(v.subG.gain, g.sub, t);
+      v.osc.forEach((o, i) => { if (v.det[i] !== undefined) smooth(o.detune, detuneOf(v, i), t); });
     }
     function voiceFilter(v, t) { const age = Math.max(0, t - v.t), base = eff.cutoff, top = Math.min(ctx.sampleRate * 0.45, base * 2 ** eff.env), sus = Math.min(ctx.sampleRate * 0.45, base * 2 ** (eff.env * v.s));
       for (const f of [v.f1, v.f2]) { f.frequency.cancelScheduledValues(t); if (age < v.a + v.d && !Number.isFinite(v.off)) { f.frequency.setValueAtTime(age < v.a ? base : top, t); if (age < v.a) f.frequency.exponentialRampToValueAtTime(top, v.t + v.a); f.frequency.exponentialRampToValueAtTime(Math.max(20, sus), v.t + v.a + v.d); } else smooth(f.frequency, sus, t); }
       smooth(v.f1.Q, eff.resonance, t); }
     function playSingle(note, vel, t, dur, root) {
-      if (dead) return;
+      if (dead) return; wake();
       for (const v of [...voices]) if (v.end < ctx.currentTime - 0.05) cleanup(v);
       const live = [...voices].filter(v => v.end > t + 0.01).sort((a, b) => a.t - b.t);
       if (live.length >= MAXNOTES) release(live[0], Math.max(ctx.currentTime, t), 0.01);
@@ -200,8 +231,9 @@ export default {
       const so = O(ctx.createOscillator()); so.type = 'sine'; so.frequency.value = f0 / 2; so.detune.value = eff.transpose * 100; so.connect(subG); sources.add(so); so.start(t); osc.push(so);
       const v = { n, osc, det, cG, lG, rG, octG, subG, lToL, lToR, rToL, rToR, f1, f2, amp, root, t, a: eff.attack, d: eff.decay, s: eff.sustain, peak: 0.1 * (0.35 + 0.65 * vel), end: Infinity, off: NaN, owned, ended: false };
       voices.add(v); so.onended = () => cleanup(v);
-      { const nn = v.n, side = nn > 1 ? eff.mix * 1.25 / Math.sqrt(nn - 1) : 0, sp = eff.spread; cG.gain.value = 0.62 * (1 - 0.45 * eff.mix); lG.gain.value = rG.gain.value = side;
-        lToL.gain.value = rToR.gain.value = (1 + sp) / 2; lToR.gain.value = rToL.gain.value = (1 - sp) / 2; octG.gain.value = eff.octave * 0.42; subG.gain.value = eff.sub * 0.55; }
+      { const g = mixGoals(v.n); cG.gain.value = g.center; lG.gain.value = rG.gain.value = g.side;
+        lToL.gain.value = rToR.gain.value = g.near; lToR.gain.value = rToL.gain.value = g.far; octG.gain.value = g.oct; subG.gain.value = g.sub;
+        seed(cG.gain, g.center); seed(lG.gain, g.side); seed(rG.gain, g.side); seed(lToL.gain, g.near); seed(rToR.gain, g.near); seed(lToR.gain, g.far); seed(rToL.gain, g.far); seed(octG.gain, g.oct); seed(subG.gain, g.sub); }
       amp.gain.setValueAtTime(0, t); amp.gain.linearRampToValueAtTime(v.peak, t + v.a); amp.gain.linearRampToValueAtTime(v.peak * v.s, t + v.a + v.d);
       f1.Q.value = eff.resonance; voiceFilter(v, t);
       if (Number.isFinite(dur)) release(v, t + Math.max(0.005, dur));
@@ -213,10 +245,10 @@ export default {
     function delayTime() { return clamp(stepDur * DIVS[state.div], 0.02, 3.9); }
     function apply() {
       const old = eff; resolve(); const t = ctx.currentTime;
-      smooth(pre.gain, 1 + eff.drive * 3); smooth(post.gain, 1 / (1 + eff.drive * 1.6)); smooth(volume.gain, eff.level * 1.1);
-      smooth(dry.gain, 1 - eff.chorus * 0.3); smooth(chorusWet.gain, eff.chorus * 0.75); for (const c of chorus) smooth(c.depth.gain, 0.0004 + eff.chorus * 0.0032);
-      smooth(delaySend.gain, eff.delay * 0.7); smooth(fb.gain, eff.feedback); const dt = delayTime(); smooth(dL.delayTime, dt, t, 0.05); smooth(dR.delayTime, dt, t, 0.05);
-      smooth(hallSend.gain, eff.hall * 0.9); smooth(hallRet.gain, 0.9);
+      ease(pre.gain, 1 + eff.drive * 3); ease(post.gain, 1 / (1 + eff.drive * 1.6)); ease(volume.gain, eff.level * 1.1);
+      ease(dry.gain, 1 - eff.chorus * 0.3); ease(chorusWet.gain, eff.chorus * 0.75); for (const c of chorus) ease(c.depth.gain, 0.0004 + eff.chorus * 0.0032);
+      ease(delaySend.gain, eff.delay * 0.7); ease(fb.gain, eff.feedback); const dt = delayTime(); ease(dL.delayTime, dt, t, 0.05); ease(dR.delayTime, dt, t, 0.05);
+      ease(hallSend.gain, eff.hall * 0.9); ease(hallRet.gain, 0.9);
       if (!playing || eff.gate === 0) smooth(gateG.gain, 1); if (!playing || eff.pump === 0) smooth(pumpG.gain, 1);
       for (const v of voices) { if (v.end <= t) continue; voiceMix(v, t); if (old.cutoff !== eff.cutoff || old.env !== eff.env || old.resonance !== eff.resonance) voiceFilter(v, t); }
       scheduleIR();
@@ -284,8 +316,8 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
     const self = {
       inputs: {}, outputs: { out },
       mount, unmount,
-      onStep(info) { try { if (dead || !info) return; playing = true; const t = finite(info.time, ctx.currentTime, 0, 1e9), sd = Number.isFinite(info.stepDur) && info.stepDur > 0 ? info.stepDur : stepDur;
-          if (Math.abs(sd - stepDur) > 1e-4) { stepDur = sd; const dt = delayTime(); smooth(dL.delayTime, dt, t, 0.05); smooth(dR.delayTime, dt, t, 0.05); }
+      onStep(info) { try { if (dead || !info) return; playing = true; if (asleep && (eff.gate > 0 || eff.pump > 0)) wake(); const t = finite(info.time, ctx.currentTime, 0, 1e9), sd = Number.isFinite(info.stepDur) && info.stepDur > 0 ? info.stepDur : stepDur;
+          if (Math.abs(sd - stepDur) > 1e-4) { stepDur = sd; const dt = delayTime(); ease(dL.delayTime, dt, t, 0.05); ease(dR.delayTime, dt, t, 0.05); }
           const step = ((info.step | 0) % 16 + 16) % 16;
           if (eff.gate > 0) { const on = state.pattern[step] === '1', g = gateG.gain; g.cancelScheduledValues(t); g.setTargetAtTime(on ? 1 : 1 - eff.gate, t, 0.004); if (on) g.setTargetAtTime(1 - eff.gate * 0.35, t + sd * 0.55, sd * 0.25); }
           if (eff.pump > 0 && step % 4 === 0) { const p = pumpG.gain; p.cancelScheduledValues(t); p.setTargetAtTime(1 - eff.pump * 0.85, t, 0.003); p.setTargetAtTime(1, t + 0.02, sd * 1.1); }
@@ -302,7 +334,7 @@ input[type=range]{width:100%;height:24px;margin:0;cursor:pointer;accent-color:va
       modulate(o) { try { if (dead) return; mod = {}; if (o && typeof o === 'object' && !Array.isArray(o)) for (const id of Object.keys(spec)) if (!spec[id].nomod && typeof o[id] === 'number' && Number.isFinite(o[id])) mod[id] = clamp(o[id], -1, 1); apply(); } catch {} },
       getState() { return { ...state }; },
       setState(raw) { if (dead) return; state = normalize(raw); apply(); paint(); },
-      destroy() { if (dead) return; dead = true; if (irTimer) clearTimeout(irTimer); if (guardT) clearInterval(guardT); unmount(); for (const v of [...voices]) cleanup(v); for (const n of sources) stopSource(n); for (const n of nodes) try { n.disconnect(); } catch {} sources.clear(); nodes.clear(); },
+      destroy() { if (dead) return; dead = true; if (napT) clearInterval(napT); if (irTimer) clearTimeout(irTimer); if (guardT) clearInterval(guardT); unmount(); for (const v of [...voices]) cleanup(v); for (const n of sources) stopSource(n); for (const n of nodes) try { n.disconnect(); } catch {} sources.clear(); nodes.clear(); },
     };
     apply();
     return self;

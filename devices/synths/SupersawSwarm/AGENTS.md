@@ -118,6 +118,16 @@ Het apparaat heeft een bewaker (zie hieronder) en geen instelling kan het stil o
 
 Een meter kijkt om de 50 ms naar de uitvoer van de stemmen (vóór de vervormer, die een ontsporing anders zou verbergen) en naar de uitvoer van de eindtrap. Bij `NaN`, `Infinity` of een waarde boven ±100 stopt de bewaker alle stemmen en bouwt de hele effectketen opnieuw op (hoogdoorlaat, delay met terugkoppeling, galm, compressor). Voorheen bleef één `NaN` in het laagfilter of de delay voor altijd hangen, waarna de uitgang stil bleef of `NaN` aan de rest van de studio doorgaf. In een offline render staat de meter uit. In het normale gebied verandert hij niets aan het geluid.
 
+## Rekenlast (slaap)
+
+Alle apparaten draaien op één audiothread, dus elke node telt, ook zonder noot. Web Audio rekent alleen wat via een verbinding naar de uitgang of een meter wordt opgevraagd. Daarom **slaapt** de keten achter de uitgang: zonder stemmen, en zodra de staart is uitgeklonken (delay-echo's tot onder -120 dB plus de galm op volle lengte, `tailTime()`), koppelen `ceil` en de compressormeter los (`sleep()`). De eerste noot (`playSingle`) of een stap met gate/pomp aan (`onStep`) roept `wake()` aan. Wat je niet moet breken:
+
+- `out` is een vaste gain (x1) achter `ceil`; die verbinding en `comp -> monOut` zijn de kleppen. Haal je ze weg, dan rekent de keten altijd door (0,10 kern per apparaat in stilte).
+- De LFO's van de chorus hangen aan `pulse` zodat ze doorlopen (zelfde fase als zonder slaap).
+- Parameters die tijdens de slaap een nieuw doel kregen (`ease`), krijgen in `wake()` de waarde van nu (formule van `setTarget`), anders start de curve van een oude waarde. Gebruik `ease` voor gedeelde parameters, `smooth` voor de detune en de Q per stem (bewust: een oscillator of filter zonder gebeurtenissen rekent in Chrome iets anders dan een met gebeurtenissen).
+- Met gate of pomp aan en de klok lopend slaapt hij niet.
+- Meetmethode en cijfers staan in de kop van het bestand (1.14.1). Een offline vergelijking met een oude versie heeft een ruisvloer van 6e-5 tot 7e-4: Chrome somt invoeren niet elke run in dezelfde volgorde.
+
 ## Controleren
 
 - Draai vanuit de root van de repo: `node contract/validate-instrument.mjs devices/synths/SupersawSwarm/supersaw-swarm.patchkamer-device.js` (en met `--lang en`). Dat moet `OK` geven, zonder `let op`.

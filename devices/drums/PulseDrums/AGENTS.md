@@ -13,7 +13,7 @@ Een drumworkstation voor techno. Tot 16 kanalen met 27 instrumenten (de 24 van D
 | Naam | `Pulse Drums` in alle talen; alleen een poortnaam heeft een Nederlandse variant (via `i18n`); alle tekst in de kaart staat in `TXT` (nl en en) |
 | Soort | `instrument`: dit apparaat krijgt dus **tunes** (geen presets) |
 | Poorten | audio-uitgangen `mix` (Stereo mix), `rumble` (Rumble) en `ch1` … `ch16` (Drum 1 … 16); eventingang `trigger` (MIDI / trigs); eventuitgang `trigs` (Drum trigs); modulatie-ingang `mod`; bundel-uitgang `multi` (Losse uit / Separate outs) |
-| Contract | v1.26 (apparaatversie 1.20.1) |
+| Contract | v1.26 (apparaatversie 1.20.3) |
 | Licentie apparaat | AGPL-3.0-or-later |
 
 Dit apparaat is de nieuwe, bijgewerkte vorm van een ouder bestand met een andere naam en id (Puls Drums, `nl.patchkamer.puls-drums`). Tunes of songs uit die tijd verwijzen naar de oude id en laden hier niet in. De twee eerste klankmodellen heten nu `Deep` en `Punch` (in het oude bestand hadden ze een getal als naam).
@@ -131,3 +131,4 @@ Dit zijn de plaatsen waar je terechtkunt voor documentatie en voor het componere
 - Overzicht van alle apparaten en hun signaalketens: [devices/AGENTS.md](../../../devices/AGENTS.md). Een song componeren: [songs/AGENTS.md](../../../songs/AGENTS.md).
 - Route voor agents: [soort Drums](../AGENTS.md) → [devices/AGENTS.md](../../AGENTS.md) → [root AGENTS.md](../../../AGENTS.md). Contract: [NL](../../../contract/PATCHKAMER-CONTRACT_NL.md) · [EN](../../../contract/PATCHKAMER-CONTRACT_EN.md). Hoe tunes van dit apparaat zijn opgebouwd: [tunes/AGENTS.md](../../../tunes/AGENTS.md). <!-- agents-tree -->
 - Rol in een song: drums, gebouwd voor techno. Het speelt zelf patronen A tot D op de klok (per kanaal een eigen lengte voor polymetrie) en kan via `trigger` getriggerd worden. De som komt uit `mix`; `rumble` en `ch1` … `ch16` zijn aparte audio-uitgangen; `trigs` stuurt de slagen door.
+- **Zuinig voor de audiothread (sinds 1.20.3):** een brontoon of ruislaag stopt zodra zijn eigen envelope op 1e-5 is (+5 ms) en niet pas aan het eind van de stem (`source(...)` krijgt de kortste van de twee eindtijden; `release` zet een stop nooit later dan gepland, via `s.pdStop`). Alleen bassdrumbussen zijn met de rumble-convolver verbonden (`rumbleLink` in `apply`); een niet-kickbus met send 0 laat de ConvolverNode anders de hele tijd nullen doorrekenen (~0,065 van een kern). Voeg een nieuwe laag dus altijd toe met een eindtijd die bij zijn eigen envelope past, en verbind een bus niet 'voor de zekerheid' met `rumbleIn`. Gemeten: alle 8 kanalen vol bij 135 BPM 0,51 → 0,35 van een kern; geluid gelijk (Skyline Ignition-instellingen max |verschil| 1,4e-6, de ruisvloer van de meting zelf). Niet beluisterd.

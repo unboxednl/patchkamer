@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.0.3 — Lichtere processor. (1) Slaapstand: is de ingang stil (onder 1e-9) en is het geheugen van de motor overal kleiner dan 1e-9 (scan om de 16 blokken), dan rekent process() niet meer maar houdt idle() alleen bij wat ook zonder ingang verandert; het droge pad blijft, de natte uitvoer is nul, een blok met ingang wekt hem direct (een staart is na ongeveer 2,3 x decay uitgeklonken). (2) Spring rekent de vier allpass-ketens van beide kanalen in een lus, de vroege reflecties gaan per twee taps, de allpass-toestanden van de diffusers zijn losse variabelen, de invoerlus is korter en er is geen afval meer per blok (geen sleutelstring, geen concat). (3) Een ingangsfilter dat uit staat wordt gewist (de oude toestand speelde als tik terug zodra het weer aanging; dit is de enige klankwijziging, gemeten in ongeveer 3 van 128 scenario's). Gemeten in Node, 128 samples per blok (budget 2667 us), kleinste tijd oud naar nieuw: hall 29,7 naar 22,8 us, plate 32,9 naar 24,3, Spring 68,1 naar 30,3, room 32,9 naar 24,4, chamber 31,3 naar 24,0; stilte hall 28,1 naar 3,0 us en Spring 66,7 naar 2,4. In de host (Chromium, een kern): stilte 0,028 naar 0,012 (vloer van een lege worklet 0,008). Uitvoer sample voor sample gelijk aan 1.0.2 (zonder slaapstand 0 afwijkende samples in 36 willekeurige/extreme scenario's; met slaapstand hoogstens 6e-8 = -144 dBFS verschil, alleen in de uitgeklonken staart). Niet beluisterd.
 // 1.0.2 — Lichtere processor: de acht sinussen van de modulatie per sample zijn vervangen door een rotatie die per blok exact wordt hersteld. De uitvoer wijkt hierdoor hoogstens één Float32-stap af (1,5e-8, -156 dBFS), onhoorbaar; verder ongewijzigd.
 // 1.0.1 — Lichtere processor: de acht lijnen van het feedback-delay-network staan tijdens het blok als losse getallen in plaats van in arrays, links en rechts delen positie en breuk bij de pre-delay en de vroege reflecties, zonder vroege reflecties (Early 0) vallen de taps weg, de tapposities en -versterkingen staan vooraf in arrays die bij het maken al bestaan (geen nieuwe array per blok), de gelijk-vermogen mix rekent bij een stabiele mix niet meer per sample en een lijnlengte die zijn doel heeft bereikt wordt niet meer bijgesteld. Geluid, state, poorten en uiterlijk bit-identiek (zelfde uitvoer als 1.0.0 gemeten).
 // 1.0.0 — Nieuw apparaat (contract v1.28): een algoritmische galm met vijf modellen (Hall, Plate, Spring, Room, Chamber) in één AudioWorklet.
@@ -35,9 +36,10 @@ const TXT = {
 };
 const DEF = { model: 'hall', size: 0.5, decay: 2.5, predelay: 20, sync: false, div: '16', dampHi: 6000, dampLo: 1, diff: 0.7, mod: 0.4, early: 0.3, hp: 20, lp: 20000, width: 1, duck: 0, freeze: false, mix: 0.3 };
 
-const WNAME = 'nl-patchkamer-reverb-1-0-2';
+const WNAME = 'nl-patchkamer-reverb-1-0-3';
 const WORKLET = `
 const IN_MAX = 16, TWO_PI = 6.283185307179586;
+const SLEEP_IN = 1e-9, SLEEP_ST = 1e-9;   // slaap: ingang stiller dan -180 dBFS en elke geheugenwaarde van de motor kleiner dan 1e-9
 const P0 = { model: 'hall', size: 0.5, decay: 2.5, pd: 0.02, dampHi: 6000, dampLo: 1, diff: 0.7, mod: 0.4, early: 0.3, hp: 20, lp: 20000, width: 1, duck: 0, freeze: false, mix: 0.3 };
 const RNG = { size: [0, 1], decay: [0.1, 30], pd: [0, 0.5], dampHi: [1000, 20000], dampLo: [0.25, 2], diff: [0, 1], mod: [0, 1], early: [0, 1], hp: [20, 1000], lp: [1000, 20000], width: [0, 2], duck: [0, 1], mix: [0, 1] };
 const MODELS = ['hall', 'plate', 'spring', 'room', 'chamber'];
@@ -47,6 +49,7 @@ function herm(buf, mask, pos) {
   const i = Math.floor(pos), f = pos - i, y0 = buf[(i - 1) & mask], y1 = buf[i & mask], y2 = buf[(i + 1) & mask], y3 = buf[(i + 2) & mask];
   return ((((y3 - y0) * 0.5 + (y1 - y2) * 1.5) * f + (y0 - 2.5 * y1 + 2 * y2 - 0.5 * y3)) * f + (y2 - y0) * 0.5) * f + y1;
 }
+function small(a, th) { for (let i = 0; i < a.length; i++) { const v = a[i]; if (!(v < th && v > -th)) return false; } return true; }
 function lin(buf, mask, pos) { const i = Math.floor(pos), f = pos - i; return buf[i & mask] * (1 - f) + buf[(i + 1) & mask] * f; }
 
 // afstemming per model: lijnlengtes (ms, bij grootte 0,5), vier ingangsdiffusers (ms), vroege reflecties [ms, links, rechts], begin van de late galm, modulatie, klankverschuiving
@@ -106,12 +109,12 @@ class FDN {
     this.g = new Float64Array(8); this.gT = new Float64Array(8); this.p = new Float64Array(8); this.pT = new Float64Array(8); this.la = new Float64Array(8); this.laT = new Float64Array(8);
     this.s1 = new Float64Array(8); this.s2 = new Float64Array(8); this.ys = new Float64Array(8);
     this.w = 0; this.cl = 1 - Math.exp(-TWO_PI * 250 / sr);
-    this.erN = c.taps.length; this.tapS = new Float64Array(this.erN); this.tg1 = new Float64Array(this.erN); this.tg2 = new Float64Array(this.erN); for (let k = 0; k < this.erN; k++) { this.tg1[k] = c.taps[k][1]; this.tg2[k] = c.taps[k][2]; } this.pdc = P.pd * sr; this.fz = P.freeze ? 0 : 1; this.last = ''; this.sm = { diff: P.diff, mod: P.mod, early: P.early };
+    this.erN = c.taps.length; this.tapS = new Float64Array(this.erN); this.tg1 = new Float64Array(this.erN); this.tg2 = new Float64Array(this.erN); for (let k = 0; k < this.erN; k++) { this.tg1[k] = c.taps[k][1]; this.tg2[k] = c.taps[k][2]; } this.pdc = P.pd * sr; this.fz = P.freeze ? 0 : 1; this.last = [NaN, 0, 0, 0, 0]; this.sm = { diff: P.diff, mod: P.mod, early: P.early };
     this.retune(P, true);
   }
   retune(P, snap) {
-    const sr = sampleRate, scale = 0.5 * Math.pow(4, P.size), key = [P.size, P.decay, P.dampHi, P.dampLo, P.freeze].join();
-    if (key === this.last && !snap) return; this.last = key;
+    const sr = sampleRate, scale = 0.5 * Math.pow(4, P.size), L = this.last;
+    if (!snap && P.size === L[0] && P.decay === L[1] && P.dampHi === L[2] && P.dampLo === L[3] && P.freeze === L[4]) return; L[0] = P.size; L[1] = P.decay; L[2] = P.dampHi; L[3] = P.dampLo; L[4] = P.freeze;
     for (let i = 0; i < 8; i++) {
       this.tgt[i] = Math.max(8, this.c.lines[i] * 0.001 * sr * scale); if (snap) this.len[i] = this.tgt[i];
       const co = lineCoefs(this.tgt[i] / sr, P.decay, P.dampHi * this.c.hi, P.dampLo, P.freeze);
@@ -121,6 +124,28 @@ class FDN {
   }
   reset() { for (let i = 0; i < 8; i++) { this.bufs[i].fill(0); this.s1[i] = 0; this.s2[i] = 0; } for (const ch of this.ap) for (const a of ch) a.b.fill(0); this.pdL.fill(0); this.pdR.fill(0); }
   revive(P) { this.reset(); this.pdc = P.pd * sampleRate; this.fz = P.freeze ? 0 : 1; this.sm = { diff: P.diff, mod: P.mod, early: P.early }; this.retune(P, true); }
+  // is het geheugen (lijnen, diffusers, pre-delay) overal kleiner dan th? Dan is de staart uitgeklonken
+  clean(th) {
+    for (let i = 0; i < 8; i++) if (!small(this.bufs[i], th)) return false;
+    for (const ch of this.ap) for (const a of ch) if (!small(a.b, th)) return false;
+    return small(this.pdL, th) && small(this.pdR, th) && small(this.s1, th) && small(this.s2, th);
+  }
+  // een blok stilte zonder rekenwerk: houdt alleen bij wat in process() ook zonder ingang verandert (zachte parameters, lijnlengtes, modulatiefase, pre-delay, schrijfposities)
+  idle(N, P) {
+    const sr = sampleRate, S = this.sm; this.retune(P, false);
+    for (let i = 0; i < 8; i++) { this.g[i] += (this.gT[i] - this.g[i]) * 0.3; this.p[i] += (this.pT[i] - this.p[i]) * 0.3; this.la[i] += (this.laT[i] - this.la[i]) * 0.3; }
+    S.diff += (P.diff - S.diff) * 0.3; S.mod += (P.mod - S.mod) * 0.3; S.early += (P.early - S.early) * 0.3;
+    this.fz = P.freeze ? 0 : 1;
+    const len = this.len, tgt = this.tgt, ph = this.ph, rate = this.rate;
+    for (let i = 0; i < 8; i++) {
+      let l = len[i]; const t = tgt[i];
+      if (l !== t) for (let n = 0; n < N; n++) { let d = t - l; if (d !== 0) { if (d > 0.1) d = 0.1; else if (d < -0.1) d = -0.1; l += d; } }
+      len[i] = l;
+      let q = ph[i]; const r = rate[i]; for (let n = 0; n < N; n++) { q += r; if (q >= 1) q -= 1; } ph[i] = q;
+    }
+    const tpd = P.pd * sr; let pdc = this.pdc; for (let n = 0; n < N; n++) pdc += (tpd - pdc) * 0.002; this.pdc = pdc;
+    this.w = (this.w + N) & 4194303; this.pdW = (this.pdW + N) & 4194303;
+  }
   process(inL, inR, oL, oR, N, P) {
     const sr = sampleRate, c = this.c, S = this.sm, scale = 0.5 * Math.pow(4, P.size);
     this.retune(P, false);
@@ -155,6 +180,9 @@ class FDN {
     let sn7 = Math.sin(TWO_PI * ph7), cs7 = Math.cos(TWO_PI * ph7); const cd7 = cd[7], sd7 = sd[7];
     const tpd = P.pd * sr; let w = this.w, pw = this.pdW, pdc = this.pdc;
     const fzc = fz0 === fz1, noEarly = eG === 0;
+    const aL0 = apL[0].b, aL1 = apL[1].b, aL2 = apL[2].b, aL3 = apL[3].b, aR0 = apR[0].b, aR1 = apR[1].b, aR2 = apR[2].b, aR3 = apR[3].b;
+    const nL0 = aL0.length, nL1 = aL1.length, nL2 = aL2.length, nL3 = aL3.length, nR0 = aR0.length, nR1 = aR1.length, nR2 = aR2.length, nR3 = aR3.length;
+    let iL0 = apL[0].i, iL1 = apL[1].i, iL2 = apL[2].i, iL3 = apL[3].i, iR0 = apR[0].i, iR1 = apR[1].i, iR2 = apR[2].i, iR3 = apR[3].i;
     for (let n = 0; n < N; n++) {
       const fz = fzc ? fz0 : fz0 + (fz1 - fz0) * (n / N), xl = inL[n] * fz, xr = inR[n] * fz;
       pdL[pw & pdMask] = xl; pdR[pw & pdMask] = xr;
@@ -162,10 +190,14 @@ class FDN {
       // late: pre-delayed input through the diffusers (links en rechts delen positie en breuk)
       const lp = pw - pdc - lateS, li = Math.floor(lp), lf = lp - li, l0 = li & pdMask, l1 = (li + 1) & pdMask, lm = 1 - lf;
       let dl = pdL[l0] * lm + pdL[l1] * lf, dr = pdR[l0] * lm + pdR[l1] * lf;
-      for (let k = 0; k < 4; k++) {
-        let a = apL[k], d = a.b[a.i], v = dl - apg * d; a.b[a.i] = v; dl = d + apg * v; if (++a.i >= a.b.length) a.i = 0;
-        a = apR[k]; d = a.b[a.i]; v = dr - apg * d; a.b[a.i] = v; dr = d + apg * v; if (++a.i >= a.b.length) a.i = 0;
-      }
+      { let d = aL0[iL0], v = dl - apg * d; aL0[iL0] = v; dl = d + apg * v; if (++iL0 >= nL0) iL0 = 0;
+        d = aR0[iR0]; v = dr - apg * d; aR0[iR0] = v; dr = d + apg * v; if (++iR0 >= nR0) iR0 = 0;
+        d = aL1[iL1]; v = dl - apg * d; aL1[iL1] = v; dl = d + apg * v; if (++iL1 >= nL1) iL1 = 0;
+        d = aR1[iR1]; v = dr - apg * d; aR1[iR1] = v; dr = d + apg * v; if (++iR1 >= nR1) iR1 = 0;
+        d = aL2[iL2]; v = dl - apg * d; aL2[iL2] = v; dl = d + apg * v; if (++iL2 >= nL2) iL2 = 0;
+        d = aR2[iR2]; v = dr - apg * d; aR2[iR2] = v; dr = d + apg * v; if (++iR2 >= nR2) iR2 = 0;
+        d = aL3[iL3]; v = dl - apg * d; aL3[iL3] = v; dl = d + apg * v; if (++iL3 >= nL3) iL3 = 0;
+        d = aR3[iR3]; v = dr - apg * d; aR3[iR3] = v; dr = d + apg * v; if (++iR3 >= nR3) iR3 = 0; }
       let t0 = tgt0 - len0; if (t0 !== 0) { if (t0 > 0.1) t0 = 0.1; else if (t0 < -0.1) t0 = -0.1; len0 += t0; }
       ph0 += rate0; if (ph0 >= 1) ph0 -= 1;
       { const ns = sn0 * cd0 + cs0 * sd0; cs0 = cs0 * cd0 - sn0 * sd0; sn0 = ns; }
@@ -252,10 +284,15 @@ class FDN {
       const lt = (y0 - y1 + y2 - y3 + y4 - y5 + y6 - y7) * 0.3536, rt = (y0 + y1 - y2 - y3 + y4 + y5 - y6 - y7) * 0.3536;
       // early reflections (zonder vroege reflecties, eG = 0, vallen de taps weg)
       let el = 0, er = 0;
-      if (!noEarly) for (let k = 0; k < nt; k++) {
-        const pos = pw - pdc - tapS[k], ti = Math.floor(pos), tf = pos - ti, t0 = ti & pdMask, t1 = (ti + 1) & pdMask, tm = 1 - tf;
-        const vl = pdL[t0] * tm + pdL[t1] * tf, vr = pdR[t0] * tm + pdR[t1] * tf;
-        if (k & 1) { el += vr * tg1[k]; er += vl * tg2[k]; } else { el += vl * tg1[k]; er += vr * tg2[k]; }
+      if (!noEarly) {
+        const pb = pw - pdc; let k = 0;
+        for (; k + 1 < nt; k += 2) {
+          let pos = pb - tapS[k], ti = Math.floor(pos), tf = pos - ti, t0 = ti & pdMask, t1 = (ti + 1) & pdMask, tm = 1 - tf;
+          el += (pdL[t0] * tm + pdL[t1] * tf) * tg1[k]; er += (pdR[t0] * tm + pdR[t1] * tf) * tg2[k];
+          pos = pb - tapS[k + 1]; ti = Math.floor(pos); tf = pos - ti; t0 = ti & pdMask; t1 = (ti + 1) & pdMask; tm = 1 - tf;
+          el += (pdR[t0] * tm + pdR[t1] * tf) * tg1[k + 1]; er += (pdL[t0] * tm + pdL[t1] * tf) * tg2[k + 1];
+        }
+        if (k < nt) { const pos = pb - tapS[k], ti = Math.floor(pos), tf = pos - ti, t0 = ti & pdMask, t1 = (ti + 1) & pdMask, tm = 1 - tf; el += (pdL[t0] * tm + pdL[t1] * tf) * tg1[k]; er += (pdR[t0] * tm + pdR[t1] * tf) * tg2[k]; }
       }
       oL[n] = lt * lG + el * eG * 0.6; oR[n] = rt * lG + er * eG * 0.6;
       w = (w + 1) & 4194303; pw = (pw + 1) & 4194303;
@@ -264,6 +301,7 @@ class FDN {
     ph[0] = ph0; ph[1] = ph1; ph[2] = ph2; ph[3] = ph3; ph[4] = ph4; ph[5] = ph5; ph[6] = ph6; ph[7] = ph7;
     s1[0] = s10; s1[1] = s11; s1[2] = s12; s1[3] = s13; s1[4] = s14; s1[5] = s15; s1[6] = s16; s1[7] = s17;
     s2[0] = s20; s2[1] = s21; s2[2] = s22; s2[3] = s23; s2[4] = s24; s2[5] = s25; s2[6] = s26; s2[7] = s27;
+    apL[0].i = iL0; apL[1].i = iL1; apL[2].i = iL2; apL[3].i = iL3; apR[0].i = iR0; apR[1].i = iR1; apR[2].i = iR2; apR[3].i = iR3;
     this.w = w; this.pdW = pw; this.pdc = pdc;
   }
 }
@@ -276,11 +314,11 @@ class Spring {
     this.z = [new Float64Array(this.K), new Float64Array(this.K)]; this.ze = [new Float64Array(this.K), new Float64Array(this.K)];
     this.g = new Float64Array(2); this.gT = new Float64Array(2); this.p = new Float64Array(2); this.pT = new Float64Array(2); this.la = new Float64Array(2); this.laT = new Float64Array(2);
     this.s1 = new Float64Array(2); this.s2 = new Float64Array(2); this.ph = new Float64Array([0, 0.41]); this.hpS = new Float64Array(2); this.lpS = new Float64Array(2);
-    this.w = 0; this.cl = 1 - Math.exp(-TWO_PI * 180 / sr); this.last = ''; this.sm = { diff: P.diff, mod: P.mod, early: P.early }; this.fz = P.freeze ? 0 : 1;
+    this.w = 0; this.cl = 1 - Math.exp(-TWO_PI * 180 / sr); this.last = [NaN, 0, 0, 0, 0]; this.sm = { diff: P.diff, mod: P.mod, early: P.early }; this.fz = P.freeze ? 0 : 1;
     this.retune(P, true);
   }
   retune(P, snap) {
-    const sr = sampleRate, scale = 0.6 + 1.1 * P.size, key = [P.size, P.decay, P.dampHi, P.dampLo, P.freeze].join(); if (key === this.last && !snap) return; this.last = key;
+    const sr = sampleRate, scale = 0.6 + 1.1 * P.size, L = this.last; if (!snap && P.size === L[0] && P.decay === L[1] && P.dampHi === L[2] && P.dampLo === L[3] && P.freeze === L[4]) return; L[0] = P.size; L[1] = P.decay; L[2] = P.dampHi; L[3] = P.dampLo; L[4] = P.freeze;
     for (let i = 0; i < 2; i++) {
       this.tgt[i] = this.c.springs[i] * 0.001 * sr * scale; if (snap) this.len[i] = this.tgt[i];
       const co = lineCoefs(this.tgt[i] / sr, P.decay, P.dampHi * this.c.hi, P.dampLo, P.freeze);
@@ -289,6 +327,21 @@ class Spring {
   }
   reset() { for (let i = 0; i < 2; i++) { this.bufs[i].fill(0); this.z[i].fill(0); this.ze[i].fill(0); this.s1[i] = this.s2[i] = this.hpS[i] = this.lpS[i] = 0; } }
   revive(P) { this.reset(); this.fz = P.freeze ? 0 : 1; this.sm = { diff: P.diff, mod: P.mod, early: P.early }; this.retune(P, true); }
+  clean(th) {
+    for (let i = 0; i < 2; i++) if (!small(this.bufs[i], th) || !small(this.z[i], th) || !small(this.ze[i], th)) return false;
+    return small(this.s1, th) && small(this.s2, th) && small(this.hpS, th) && small(this.lpS, th);
+  }
+  idle(N, P) {
+    const sr = sampleRate, S = this.sm; this.retune(P, false);
+    for (let i = 0; i < 2; i++) { this.g[i] += (this.gT[i] - this.g[i]) * 0.3; this.p[i] += (this.pT[i] - this.p[i]) * 0.3; this.la[i] += (this.laT[i] - this.la[i]) * 0.3; }
+    S.diff += (P.diff - S.diff) * 0.3; S.mod += (P.mod - S.mod) * 0.3; S.early += (P.early - S.early) * 0.3;
+    this.fz = P.freeze ? 0 : 1;
+    for (let ch = 0; ch < 2; ch++) {
+      let l = this.len[ch]; const tg = this.tgt[ch]; for (let n = 0; n < N; n++) { let t = tg - l; if (t > 0.1) t = 0.1; else if (t < -0.1) t = -0.1; l += t; } this.len[ch] = l;
+      let q = this.ph[ch]; const r = (ch ? 0.43 : 0.31) / sr + 0.0; for (let n = 0; n < N; n++) { q += r; if (q >= 1) q -= 1; } this.ph[ch] = q;
+    }
+    this.w = (this.w + N) & 4194303;
+  }
   process(inL, inR, oL, oR, N, P) {
     const sr = sampleRate, S = this.sm, K = this.K; this.retune(P, false);
     for (let i = 0; i < 2; i++) { this.g[i] += (this.gT[i] - this.g[i]) * 0.3; this.p[i] += (this.pT[i] - this.p[i]) * 0.3; this.la[i] += (this.laT[i] - this.la[i]) * 0.3; }
@@ -296,29 +349,37 @@ class Spring {
     const fz0 = this.fz, fz1 = P.freeze ? 0 : 1; this.fz = fz1;
     const a = 0.3 + 0.42 * S.diff, md = S.mod * 0.0005 * sr, early = S.early, hpk = 1 - Math.exp(-TWO_PI * 90 / sr), lpk = 1 - Math.exp(-TWO_PI * 5200 / sr);
     const bufs = this.bufs, masks = this.masks, len = this.len, tgt = this.tgt, g = this.g, p = this.p, la = this.la, s1 = this.s1, s2 = this.s2, z = this.z, ze = this.ze, ph = this.ph, cL = this.cl, hpS = this.hpS, lpS = this.lpS;
-    let w = this.w; const outs = [oL, oR], ins = [inL, inR];
-    const wn = WETNORM.spring * tcomp(P.decay);
+    let w = this.w;
+    const wn = WETNORM.spring * tcomp(P.decay), b0 = bufs[0], b1 = bufs[1], m0 = masks[0], m1 = masks[1], ze0 = ze[0], ze1 = ze[1], z0 = z[0], z1 = z[1], tg0 = tgt[0], tg1 = tgt[1], r0 = 0.31 / sr + 0.0, r1 = 0.43 / sr + 0.0;
+    const g0 = g[0], g1 = g[1], p0 = p[0], p1 = p[1], la0 = la[0], la1 = la[1];
+    let hp0 = hpS[0], hp1 = hpS[1], lp0 = lpS[0], lp1 = lpS[1], ln0 = len[0], ln1 = len[1], ph0 = ph[0], ph1 = ph[1], s20 = s2[0], s21 = s2[1], s10 = s1[0], s11 = s1[1];
     for (let n = 0; n < N; n++) {
       const fz = fz0 + (fz1 - fz0) * (n / N);
-      for (let ch = 0; ch < 2; ch++) {
-        // input: band limit (lo-fi) and, per spring, a dispersed copy for the first pass
-        let x = ins[ch][n] * fz; hpS[ch] += hpk * (x - hpS[ch]); x -= hpS[ch]; lpS[ch] += lpk * (x - lpS[ch]); x = lpS[ch];
-        let e = x; const zc = ze[ch];
-        for (let k = 0; k < K; k++) { const v = a * e + zc[k]; zc[k] = e - a * v; e = v; }
-        let t = tgt[ch] - len[ch]; if (t > 0.1) t = 0.1; else if (t < -0.1) t = -0.1; len[ch] += t;
-        ph[ch] += (ch ? 0.43 : 0.31) / sr + 0.0; if (ph[ch] >= 1) ph[ch] -= 1;
-        let y = herm(bufs[ch], masks[ch], w - (len[ch] + md * Math.sin(TWO_PI * ph[ch])));
-        const zz = z[ch];
-        for (let k = 0; k < K; k++) { const v = a * y + zz[k]; zz[k] = y - a * v; y = v; }
-        const late = y;
-        s2[ch] += cL * (y - s2[ch]);
-        s1[ch] = (1 - p[ch]) * (y + la[ch] * s2[ch]) + p[ch] * s1[ch];
-        let l = g[ch] * s1[ch]; l = l / (1 + 0.5 * l * l);
-        bufs[ch][w & masks[ch]] = x * 0.5 + l;
-        outs[ch][n] = (late * (1 - early) * 0.9 + e * early * 0.9) * wn;
+      let x0 = inL[n] * fz; hp0 += hpk * (x0 - hp0); x0 -= hp0; lp0 += lpk * (x0 - lp0); x0 = lp0;
+      let x1 = inR[n] * fz; hp1 += hpk * (x1 - hp1); x1 -= hp1; lp1 += lpk * (x1 - lp1); x1 = lp1;
+      let e0 = x0, e1 = x1;
+      let t0 = tg0 - ln0; if (t0 > 0.1) t0 = 0.1; else if (t0 < -0.1) t0 = -0.1; ln0 += t0;
+      ph0 += r0; if (ph0 >= 1) ph0 -= 1;
+      let y0 = herm(b0, m0, w - (ln0 + md * Math.sin(TWO_PI * ph0)));
+      let t1 = tg1 - ln1; if (t1 > 0.1) t1 = 0.1; else if (t1 < -0.1) t1 = -0.1; ln1 += t1;
+      ph1 += r1; if (ph1 >= 1) ph1 -= 1;
+      let y1 = herm(b1, m1, w - (ln1 + md * Math.sin(TWO_PI * ph1)));
+      // vier onafhankelijke allpass-ketens in een lus (zelfde rekenvolgorde per keten, maar de processor kan ze door elkaar uitvoeren)
+      for (let k = 0; k < K; k++) {
+        let v = a * e0 + ze0[k]; ze0[k] = e0 - a * v; e0 = v;
+        v = a * e1 + ze1[k]; ze1[k] = e1 - a * v; e1 = v;
+        v = a * y0 + z0[k]; z0[k] = y0 - a * v; y0 = v;
+        v = a * y1 + z1[k]; z1[k] = y1 - a * v; y1 = v;
       }
+      s20 += cL * (y0 - s20); s10 = (1 - p0) * (y0 + la0 * s20) + p0 * s10; let l0 = g0 * s10; l0 = l0 / (1 + 0.5 * l0 * l0);
+      b0[w & m0] = x0 * 0.5 + l0;
+      oL[n] = (y0 * (1 - early) * 0.9 + e0 * early * 0.9) * wn;
+      s21 += cL * (y1 - s21); s11 = (1 - p1) * (y1 + la1 * s21) + p1 * s11; let l1 = g1 * s11; l1 = l1 / (1 + 0.5 * l1 * l1);
+      b1[w & m1] = x1 * 0.5 + l1;
+      oR[n] = (y1 * (1 - early) * 0.9 + e1 * early * 0.9) * wn;
       w = (w + 1) & 4194303;
     }
+    hpS[0] = hp0; hpS[1] = hp1; lpS[0] = lp0; lpS[1] = lp1; len[0] = ln0; len[1] = ln1; ph[0] = ph0; ph[1] = ph1; s2[0] = s20; s2[1] = s21; s1[0] = s10; s1[1] = s11;
     this.w = w;
   }
 }
@@ -328,7 +389,7 @@ class Reverb extends AudioWorkletProcessor {
     super(); const o = (options && options.processorOptions) || {};
     this.T = { ...P0 }; this.C = { ...P0 }; this.apply(o.params || {}, true);
     this.hp = [new BQ(), new BQ()]; this.lp = [new BQ(), new BQ()]; this.pool = {}; for (const m of MODELS) this.pool[m] = m === 'spring' ? new Spring(m, this.C) : new FDN(m, this.C); this.eng = this.pool[this.C.model]; this.old = null; this.xf = 0; this.xfN = 1; this.n = 0; this.bs = 0;
-    this.env = 0; this.duckG = 1; this.mixC = this.T.mix; this.bad = 0;
+    this.env = 0; this.duckG = 1; this.mixC = this.T.mix; this.bad = 0; this.sleep = false; this.qn = 0;
     this.port.onmessage = e => { const m = e.data || {}; if (m.type === 'set') this.apply(m.p || {}, false); };
   }
   apply(o, snap) {
@@ -347,29 +408,33 @@ class Reverb extends AudioWorkletProcessor {
     if (N !== this.bs) this.alloc(N);
     const iL = I && I[0] ? I[0] : null, iR = I && I[1] ? I[1] : iL, xl = this.xl, xr = this.xr;
     let pk = 0;
-    for (let n = 0; n < N; n++) { const a = iL ? cl(iL[n]) : 0, b = iR ? cl(iR[n]) : a; xl[n] = a; xr[n] = b; const m = (a < 0 ? -a : a) > (b < 0 ? -b : b) ? (a < 0 ? -a : a) : (b < 0 ? -b : b); if (m > pk) pk = m; }
+    if (iL) { for (let n = 0; n < N; n++) { const a = cl(iL[n]), b = cl(iR[n]); xl[n] = a; xr[n] = b; const aa = a < 0 ? -a : a, bb = b < 0 ? -b : b, m = aa > bb ? aa : bb; if (m > pk) pk = m; } }
+    else { xl.fill(0); xr.fill(0); }
+    const quiet = pk < SLEEP_IN; if (!quiet) { this.sleep = false; this.qn = 0; }
     const T = this.T, C = this.C;
     for (const k in RNG) C[k] += (T[k] - C[k]) * 0.3;
     C.model = T.model; C.freeze = T.freeze; C.pd = T.pd;
-    if (this.eng.model !== C.model) { const nx = this.pool[C.model]; if (nx === this.old) this.old = null; nx.revive(C); this.old = this.eng; this.eng = nx; this.xf = 0; this.xfN = Math.round(0.08 * sampleRate); }
-    // input filters
-    let fl = xl, fr = xr;
-    if (C.hp > 20.5 || C.lp < 19990) {
-      if (C.hp > 20.5) { for (let c = 0; c < 2; c++) this.hp[c].set('hp', C.hp); this.hp[0].run(fl, this.fl, N); this.hp[1].run(fr, this.fr, N); fl = this.fl; fr = this.fr; }
-      if (C.lp < 19990) { for (let c = 0; c < 2; c++) this.lp[c].set('lp', C.lp); this.lp[0].run(fl, this.ol, N); this.lp[1].run(fr, this.or, N); fl = this.ol; fr = this.or; }
-    }
+    if (this.eng.model !== C.model) { const nx = this.pool[C.model]; if (nx === this.old) this.old = null; nx.revive(C); this.old = this.eng; this.eng = nx; this.xf = 0; this.xfN = Math.round(0.08 * sampleRate); this.sleep = false; this.qn = 0; }
     const wl = this.wl, wr = this.wr;
-    this.eng.process(fl, fr, wl, wr, N, C);
-    if (this.old) {
-      const ol = this.vl, orr = this.vr;
-      this.old.process(fl, fr, ol, orr, N, C);
-      for (let n = 0; n < N; n++) { const t = Math.min(1, (this.xf + n) / this.xfN), a = Math.cos(t * Math.PI / 2), b = Math.sin(t * Math.PI / 2); wl[n] = wl[n] * b + ol[n] * a; wr[n] = wr[n] * b + orr[n] * a; }
-      this.xf += N; if (this.xf >= this.xfN) this.old = null;
+    if (this.sleep) this.eng.idle(N, C);   // stil en uitgeklonken: de motor staat schoon, alleen de zachte toestanden lopen mee; wl en wr zijn nul
+    else {
+      // input filters
+      let fl = xl, fr = xr;
+      // een filter dat uit staat wordt gewist, anders speelt zijn oude toestand (die bleef staan) als tik terug zodra hij weer aangaat
+      if (C.hp > 20.5) { for (let c = 0; c < 2; c++) this.hp[c].set('hp', C.hp); this.hp[0].run(fl, this.fl, N); this.hp[1].run(fr, this.fr, N); fl = this.fl; fr = this.fr; } else { this.hp[0].reset(); this.hp[1].reset(); }
+      if (C.lp < 19990) { for (let c = 0; c < 2; c++) this.lp[c].set('lp', C.lp); this.lp[0].run(fl, this.ol, N); this.lp[1].run(fr, this.or, N); fl = this.ol; fr = this.or; } else { this.lp[0].reset(); this.lp[1].reset(); }
+      this.eng.process(fl, fr, wl, wr, N, C);
+      if (this.old) {
+        const ol = this.vl, orr = this.vr;
+        this.old.process(fl, fr, ol, orr, N, C);
+        for (let n = 0; n < N; n++) { const t = Math.min(1, (this.xf + n) / this.xfN), a = Math.cos(t * Math.PI / 2), b = Math.sin(t * Math.PI / 2); wl[n] = wl[n] * b + ol[n] * a; wr[n] = wr[n] * b + orr[n] * a; }
+        this.xf += N; if (this.xf >= this.xfN) this.old = null;
+      }
+      // bewaker: een niet-eindige of absurde uitgang wist de motor
+      let bad = false;
+      for (let n = 0; n < N; n++) { const a = wl[n], b = wr[n]; if (!(a > -64 && a < 64 && b > -64 && b < 64)) { bad = true; break; } }
+      if (bad) { this.eng.reset(); if (this.old) this.old.reset(); wl.fill(0); wr.fill(0); this.bad++; }
     }
-    // bewaker: een niet-eindige of absurde uitgang wist de motor
-    let bad = false;
-    for (let n = 0; n < N; n++) { const a = wl[n], b = wr[n]; if (!(a > -64 && a < 64 && b > -64 && b < 64)) { bad = true; break; } }
-    if (bad) { this.eng.reset(); if (this.old) this.old.reset(); wl.fill(0); wr.fill(0); this.bad++; }
     // ducking, breedte, mix
     const sr = sampleRate, ka = Math.exp(-N / (0.01 * sr)), kr = Math.exp(-N / (0.3 * sr));
     this.env = pk > this.env ? pk + (this.env - pk) * ka : pk + (this.env - pk) * kr;
@@ -385,14 +450,16 @@ class Reverb extends AudioWorkletProcessor {
       oL[n] = xl[n] * dry + (m + s) * wet; if (st) oR[n] = xr[n] * dry + (m - s) * wet;
     }
     if (!(this.env >= 0 && this.env < 1e6)) this.env = 0;
-    for (const f of this.hp.concat(this.lp)) if (!(Math.abs(f.y1) < 1e6 && Math.abs(f.y2) < 1e6)) f.reset();
+    for (let c = 0; c < 2; c++) { const f = this.hp[c], q = this.lp[c]; if (!(Math.abs(f.y1) < 1e6 && Math.abs(f.y2) < 1e6)) f.reset(); if (!(Math.abs(q.y1) < 1e6 && Math.abs(q.y2) < 1e6)) q.reset(); }
+    // slaap: ingang stil, geen kruisfade bezig en het geheugen van de motor overal ~0 (een scan elke 16 blokken, stopt bij de eerste waarde boven de drempel)
+    if (!this.sleep && quiet && !this.old) { if ((++this.qn & 15) === 0 && this.eng.clean(SLEEP_ST)) { this.eng.reset(); wl.fill(0); wr.fill(0); for (let c = 0; c < 2; c++) { this.hp[c].reset(); this.lp[c].reset(); } this.sleep = true; } }
     return true;
   }
 }
 registerProcessor('${WNAME}', Reverb);`;
 
 export default {
-  id: 'nl.patchkamer.reverb', name: 'Reverb', version: '1.0.2', category: 'effect', kind: 'effect',
+  id: 'nl.patchkamer.reverb', name: 'Reverb', version: '1.0.3', category: 'effect', kind: 'effect',
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ui: { width: 340, minWidth: 300 },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }] },

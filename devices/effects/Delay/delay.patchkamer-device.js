@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.1.1 — Lichtere processor: slaapstand. Is de ingang stil (onder 1e-9), is alles wat de laatste tijd in de lijnen is geschreven (langste leesafstand plus marge, bij reverse de hele lijn) kleiner dan 1e-9 en zijn de filter- en allpassgeheugens uitgeklonken, dan slaat process() het lezen, filteren en schrijven over: nullen schrijven, de tijdstappen, zachte niveaus en modulatiefase laten doorlopen en nul als natte uitvoer geven (droog pad ongewijzigd); een blok met ingang wekt hem direct. Hij slaapt niet bij feedback boven 0,98 (een lus met versterking boven 1 laat een rest aangroeien; de oude code gaat dan vanzelf oscilleren) en niet zolang freeze iets vasthoudt. Het limiter-bericht naar de kaart gaat alleen nog bij verandering. De DSP in het normale spelen is ongewijzigd (profiel: ongeveer de helft van de tijd zit in de kubieke lezing van de vier lijnen; geen bit-identieke winst gevonden). Gemeten in Node (budget 2667 us per blok): stilte 12,8 naar 3,1 us, signaal gelijk (14,3 us); in de host stilte 0,019 naar 0,012 (vloer 0,008). Uitvoer sample voor sample gelijk aan 1.1.0: zonder slaapstand 0 afwijkende samples in 15 willekeurige/extreme scenario's; met slaapstand en feedback tot 0,98 hoogstens 3e-9 = -170 dBFS (met willekeurige tijdwissels 1,5e-8); bij feedback tot 1,2 hoogstens 1e-6 (-119 dBFS) doordat de oude code een rest onder de drempel in een instabiele lus laat aangroeien. Niet beluisterd.
 // 1.1.0 — Skin Compact: schuiven en keuzelijsten melden hun sectie aan (data-pk-group, naast data-pk-id), zodat een skin ze als draaiknop in een kader kan tonen. Geluid, state, ids en poorten ongewijzigd.
 // 1.0.0 — Delay: een uitgebreid delay op vrije tijd (ms), op de klok van de host of op een eigen tempo (tap).
 //          Notenwaarden van 2 maten tot 1/64 (recht, punt, triool) of een aantal zestienden; links en rechts onafhankelijk, stereo-offset;
@@ -82,9 +83,10 @@ const DIVKEYS = Object.keys(DIVS), FEELS = { straight: 1, dotted: 1.5, triplet: 
 const DIVTXT = { '2bar': 'd_2bar', '1bar': 'd_1bar', '1/2': 'd_1_2', '1/4': 'd_1_4', '1/8': 'd_1_8', '1/16': 'd_1_16', '1/32': 'd_1_32', '1/64': 'd_1_64', steps: 'd_steps' };
 const MAXT = 8;   // langste delaytijd per lijn, in seconden
 
-const WNAME = 'nl-patchkamer-delay-1-0-0';
+const WNAME = 'nl-patchkamer-delay-1-1-1';
 const WORKLET = `
 const IN_MAX = 16, TWO_PI = 2 * Math.PI;
+const SLEEP_IN = 1e-9, SLEEP_W = 1e-9;   // slaap: ingang stiller dan -180 dBFS en alles wat de laatste tijd in de lijnen is geschreven (en elk filtergeheugen) kleiner dan 1e-9
 const ENUM = { mode: ['stereo', 'pingpong', 'mono', 'dual'], sat: ['off', 'tape', 'tube'], mt: ['sine', 'tape', 'chorus'], glide: ['fade', 'tape'] };
 const NUM = { fbL: [0, 1.25], fbR: [0, 1.25], xf: [0, 1], hp: [10, 4000], lp: [200, 20000], drive: [0, 1], mr: [0.02, 20], md: [0, 1], diff: [0, 1], duck: [0, 1], duckThr: [-80, 0], duckRel: [10, 3000], glideTime: [5, 5000], dry: [0, 1], wet: [0, 1], lvl: [0, 8] };
 const cl = v => (v > -IN_MAX && v < IN_MAX) ? v : (v !== v ? 0 : v > 0 ? IN_MAX : -IN_MAX);
@@ -97,7 +99,14 @@ class Seg {
     this.ab = [new Float32Array(this.al[0]), new Float32Array(this.al[1])]; this.ai = [0, 0];
     this.p1 = 0; this.p2 = 0.5; this.W1 = 4800; this.W2 = 4800;
   }
-  clear() { this.buf.fill(0); this.hz1 = this.hz2 = this.lz1 = this.lz2 = this.dcx = this.dcy = 0; this.ab[0].fill(0); this.ab[1].fill(0); }
+  clear() { this.buf.fill(0); this.clearState(); }
+  // zijn de filter- en allpassgeheugens (die niet in de lijn worden geschreven maar wel de uitgang voeden) uitgeklonken?
+  settled(th) {
+    if (!(this.hz1 < th && this.hz1 > -th && this.hz2 < th && this.hz2 > -th && this.lz1 < th && this.lz1 > -th && this.lz2 < th && this.lz2 > -th && this.dcx < th && this.dcx > -th && this.dcy < th && this.dcy > -th)) return false;
+    for (let k = 0; k < 2; k++) { const a = this.ab[k]; for (let i = 0; i < a.length; i++) { const v = a[i]; if (!(v < th && v > -th)) return false; } }
+    return true;
+  }
+  clearState() { this.hz1 = this.hz2 = this.lz1 = this.lz2 = this.dcx = this.dcy = 0; this.ab[0].fill(0); this.ab[1].fill(0); }
 }
 class DelayFx extends AudioWorkletProcessor {
   constructor() {
@@ -105,7 +114,7 @@ class DelayFx extends AudioWorkletProcessor {
     const sr = sampleRate, n = 1 << Math.ceil(Math.log2(sr * 8.5)); this.n = n; this.dMax = n - 16; this.w = 0;
     this.seg = [0, 1, 2, 3].map(k => new Seg(n, sr, k));
     this.s = { mode: 'stereo', sat: 'off', mt: 'sine', glide: 'fade', freeze: false, reverse: false, fbL: 0.4, fbR: 0.4, xf: 0, hp: 80, lp: 6000, drive: 0, mr: 0.8, md: 0, diff: 0, duck: 0, duckThr: -30, duckRel: 300, glideTime: 250, dry: 0, wet: 0, lvl: 1 };
-    this.snap = true; this.first = true; this.muteN = 0; this.mgS = 1;
+    this.snap = true; this.first = true; this.muteN = 0; this.mgS = 1; this.sleep = false; this.qw = 1e9; this.limSent = 0;
     this.hpS = 80; this.lpS = 6000; this.drS = 0; this.dfS = 0; this.fb0 = 0.4; this.fb1 = 0.4; this.ginS = 1; this.dryS = 0; this.wetS = 0; this.lvS = 1; this.rmS = 0; this.dkS = 1; this.env = 0;
     this.ph = 0; this.fl1 = 0; this.fl2 = 0; this.dr = 0; this.limPk = 0; this.cnt = 0; this.gt = false; this.mdMax = 0.01 * sr; this.fi = 1 / (0.02 * sr); this.gk = 0.001;
     const kf = 1 - Math.exp(-TWO_PI * 7 / sr), kd = 1 - Math.exp(-TWO_PI * 0.4 / sr); this.kf = kf; this.kd = kd;
@@ -150,17 +159,26 @@ class DelayFx extends AudioWorkletProcessor {
     const c = (x1 - xm1) * 0.5, v = x0 - x1, w = c + v, a = w + v + (x2 - x0) * 0.5, bb = w + a;
     return ((a * f - bb) * f + c) * f + x0;
   }
-  rs(sg, lf) {
+  // de tijdstappen van een lijn (glijden of kruisfade naar een nieuwe tijd); ook in de slaapstand nodig
+  adv(sg) {
     if (this.gt) sg.da += (sg.tgt - sg.da) * this.gk;
     else if (sg.xm < 1) {
       sg.xm += this.fi;
       if (sg.xm >= 1) { sg.xm = 1; if (sg.pend >= 0) { if (Math.abs(sg.pend - sg.da) > 0.01) { sg.db = sg.da; sg.da = sg.pend; sg.xm = 0; } sg.pend = -1; } }
     }
+  }
+  rs(sg, lf) {
+    this.adv(sg);
     const m = lf !== 0 ? lf * Math.min(this.mdMax, 0.4 * sg.da) : 0, dm = this.dMax;
     let a = sg.da + m; a = a < 4 ? 4 : a > dm ? dm : a;
     let v = this.rd(sg, a);
     if (sg.xm < 1) { let b2 = sg.db + m; b2 = b2 < 4 ? 4 : b2 > dm ? dm : b2; v = v * sg.xm + this.rd(sg, b2) * (1 - sg.xm); }
     return v;
+  }
+  revAdv(sg) {
+    const Wt = Math.max(256, Math.min(sg.tgt, 4 * sampleRate));
+    sg.p1 += 1 / sg.W1; if (sg.p1 >= 1) { sg.p1 -= 1; sg.W1 = Wt; }
+    sg.p2 += 1 / sg.W2; if (sg.p2 >= 1) { sg.p2 -= 1; sg.W2 = Wt; }
   }
   rev(sg) {
     const f1 = 0.5 - 0.5 * Math.cos(TWO_PI * sg.p1), f2 = 0.5 - 0.5 * Math.cos(TWO_PI * sg.p2);
@@ -192,6 +210,11 @@ class DelayFx extends AudioWorkletProcessor {
     const N = O[0].length, iL = I && I[0] ? I[0] : null, iR = I && I[1] ? I[1] : iL, oL = O[0], oR = O[1] || null;
     const mode = s.mode, stereo = mode === 'stereo' || mode === 'dual', pp = mode === 'pingpong', mono = mode === 'mono', dual = mode === 'dual';
     const S0 = this.seg[0], S1 = this.seg[1], S2 = this.seg[2], S3 = this.seg[3], mask = this.n - 1;
+    // stil? (alle ingangssamples kleiner dan -160 dBFS; NaN telt als geluid, de bewaker ruimt dat op)
+    let loud = false;
+    if (iL) for (let n = 0; n < N; n++) { let a = iL[n], b = iR[n]; a = a < 0 ? -a : a; b = b < 0 ? -b : b; if (!(a < SLEEP_IN && b < SLEEP_IN)) { loud = true; break; } }
+    if (loud) { this.sleep = false; this.qw = 0; }
+    const idle = this.sleep, w0 = this.w;
     this.hpS += (s.hp - this.hpS) * 0.25; this.lpS += (s.lp - this.lpS) * 0.25; this.drS += (s.drive - this.drS) * 0.25; this.dfS += (s.diff - this.dfS) * 0.25;
     this.coef(); this.gd = 0.65 * this.dfS; this.satMode = s.sat === 'tape' ? 1 : s.sat === 'tube' ? 2 : 0;
     this.g = 1 + 4 * this.drS; this.gi = 1 / this.g; const tk = Math.tanh(0.35); this.thk = th(0.35); this.tcn = 1 / (this.g * (1 - tk * tk));
@@ -212,29 +235,40 @@ class DelayFx extends AudioWorkletProcessor {
       let lL = 0, lR = 0;
       if (md > 0) {
         ph += mr; if (ph >= 1) ph -= 1;
-        if (mt === 'chorus') { lL = Math.sin(TWO_PI * ph); lR = Math.sin(TWO_PI * (ph + 0.25)); }
-        else if (mt === 'tape') {
-          this.fl1 += (Math.random() * 2 - 1 - this.fl1) * this.kf; this.fl2 += (Math.random() * 2 - 1 - this.fl2) * this.kf; this.dr += (Math.random() * 2 - 1 - this.dr) * this.kd;
-          const dd = 0.25 * this.dr * this.nd;
-          lL = Math.min(1, Math.max(-1, 0.7 * Math.sin(TWO_PI * ph) + 0.25 * this.fl1 * this.nf + dd)); lR = Math.min(1, Math.max(-1, 0.7 * Math.sin(TWO_PI * (ph + 0.31)) + 0.25 * this.fl2 * this.nf + dd));
-        } else { lL = Math.sin(TWO_PI * ph); lR = Math.sin(TWO_PI * (ph + 0.33)); }
-        lL *= md; lR *= md;
+        if (idle) { if (mt === 'tape') { this.fl1 += (Math.random() * 2 - 1 - this.fl1) * this.kf; this.fl2 += (Math.random() * 2 - 1 - this.fl2) * this.kf; this.dr += (Math.random() * 2 - 1 - this.dr) * this.kd; } }
+        else {
+          if (mt === 'chorus') { lL = Math.sin(TWO_PI * ph); lR = Math.sin(TWO_PI * (ph + 0.25)); }
+          else if (mt === 'tape') {
+            this.fl1 += (Math.random() * 2 - 1 - this.fl1) * this.kf; this.fl2 += (Math.random() * 2 - 1 - this.fl2) * this.kf; this.dr += (Math.random() * 2 - 1 - this.dr) * this.kd;
+            const dd = 0.25 * this.dr * this.nd;
+            lL = Math.min(1, Math.max(-1, 0.7 * Math.sin(TWO_PI * ph) + 0.25 * this.fl1 * this.nf + dd)); lR = Math.min(1, Math.max(-1, 0.7 * Math.sin(TWO_PI * (ph + 0.31)) + 0.25 * this.fl2 * this.nf + dd));
+          } else { lL = Math.sin(TWO_PI * ph); lR = Math.sin(TWO_PI * (ph + 0.33)); }
+          lL *= md; lR *= md;
+        }
       }
       this.w = w;
-      const y0 = this.chain(S0, this.rs(S0, lL));
-      let y1 = 0, y2 = 0, y3 = 0;
-      if (!pp) y1 = this.chain(S1, this.rs(S1, lL));
-      if (stereo) y2 = this.chain(S2, this.rs(S2, lR));
-      if (!mono) y3 = this.chain(S3, this.rs(S3, lR));
-      if (pp) { S0.buf[w] = (xl + xr) * 0.5 * ginS + this.lim(y3 * fb0); S3.buf[w] = this.lim(y0 * fb0); S1.buf[w] = 0; S2.buf[w] = 0; }
-      else if (mono) { S0.buf[w] = (xl + xr) * 0.5 * ginS + this.lim(y1 * fb0); S1.buf[w] = this.lim(y0 * fb0); S2.buf[w] = 0; S3.buf[w] = 0; }
-      else { const a = y1 * fb0, b = y3 * fb1; S0.buf[w] = xl * ginS + this.lim(a + (b - a) * xf); S1.buf[w] = this.lim(y0 * fb0); S2.buf[w] = xr * ginS + this.lim(b + (a - b) * xf); S3.buf[w] = this.lim(y2 * fb1); }
       let wl, wr;
-      if (pp) { wl = y0; wr = y3; } else if (mono) { wl = wr = y0 + y1; } else { wl = y0 + y1; wr = y2 + y3; }
-      if (rmS > 0.001) {
-        let rl, rr;
-        if (pp) { rl = this.rev(S0); rr = this.rev(S3); } else if (mono) { rl = rr = this.rev(S0) + this.rev(S1); } else { rl = this.rev(S0) + this.rev(S1); rr = this.rev(S2) + this.rev(S3); }
-        wl += (rl - wl) * rmS; wr += (rr - wr) * rmS;
+      if (idle) {
+        // slaap: de lijnen zijn leeg, dus niets lezen of filteren; wel nullen schrijven (zoals de lus zou doen), de tijdstappen laten doorlopen en nul uitgeven
+        S0.buf[w] = 0; S1.buf[w] = 0; S2.buf[w] = 0; S3.buf[w] = 0;
+        this.adv(S0); if (!pp) this.adv(S1); if (stereo) this.adv(S2); if (!mono) this.adv(S3);
+        if (rmS > 0.001) { if (pp) { this.revAdv(S0); this.revAdv(S3); } else if (mono) { this.revAdv(S0); this.revAdv(S1); } else { this.revAdv(S0); this.revAdv(S1); this.revAdv(S2); this.revAdv(S3); } }
+        wl = 0; wr = 0;
+      } else {
+        const y0 = this.chain(S0, this.rs(S0, lL));
+        let y1 = 0, y2 = 0, y3 = 0;
+        if (!pp) y1 = this.chain(S1, this.rs(S1, lL));
+        if (stereo) y2 = this.chain(S2, this.rs(S2, lR));
+        if (!mono) y3 = this.chain(S3, this.rs(S3, lR));
+        if (pp) { S0.buf[w] = (xl + xr) * 0.5 * ginS + this.lim(y3 * fb0); S3.buf[w] = this.lim(y0 * fb0); S1.buf[w] = 0; S2.buf[w] = 0; }
+        else if (mono) { S0.buf[w] = (xl + xr) * 0.5 * ginS + this.lim(y1 * fb0); S1.buf[w] = this.lim(y0 * fb0); S2.buf[w] = 0; S3.buf[w] = 0; }
+        else { const a = y1 * fb0, b = y3 * fb1; S0.buf[w] = xl * ginS + this.lim(a + (b - a) * xf); S1.buf[w] = this.lim(y0 * fb0); S2.buf[w] = xr * ginS + this.lim(b + (a - b) * xf); S3.buf[w] = this.lim(y2 * fb1); }
+        if (pp) { wl = y0; wr = y3; } else if (mono) { wl = wr = y0 + y1; } else { wl = y0 + y1; wr = y2 + y3; }
+        if (rmS > 0.001) {
+          let rl, rr;
+          if (pp) { rl = this.rev(S0); rr = this.rev(S3); } else if (mono) { rl = rr = this.rev(S0) + this.rev(S1); } else { rl = this.rev(S0) + this.rev(S1); rr = this.rev(S2) + this.rev(S3); }
+          wl += (rl - wl) * rmS; wr += (rr - wr) * rmS;
+        }
       }
       wl = this.oc(wl); wr = this.oc(wr);
       mgS += ((this.muteN > 0 ? 0 : 1) - mgS) * sd; if (this.muteN > 0) this.muteN--;
@@ -244,19 +278,31 @@ class DelayFx extends AudioWorkletProcessor {
       w = (w + 1) & mask;
     }
     this.w = w; this.dryS = dryS; this.wetS = wetS; this.lvS = lvS; this.ginS = ginS; this.fb0 = fb0; this.fb1 = fb1; this.dkS = dkS; this.rmS = rmS; this.ph = ph; this.mgS = mgS;
+    // slaap: ingang stil en alles wat de laatste (langste leesafstand + marge) tijd in de lijnen is geschreven kleiner dan SLEEP_W: de staart is uitgeklonken en de lijnen zijn leeg
+    if (!idle) {
+      let q = !loud;
+      if (q) scan: for (const sg of this.seg) { const b = sg.buf; for (let i = 0; i < N; i++) { const v = b[(w0 + i) & mask]; if (!(v < SLEEP_W && v > -SLEEP_W)) { q = false; break scan; } } }
+      this.qw = q ? this.qw + N : 0;
+      // een lus met versterking boven ~1 laat een rest onder de drempel nog aangroeien (de oude code gaat dan vanzelf oscilleren): dan niet slapen, behalve bij freeze (versterking precies 1, de ingang is dicht)
+      if (q && (s.freeze || Math.max(fbL, fbR, fb0, fb1) <= 0.98)) {
+        let reach = 0; for (const sg of this.seg) { if (sg.da > reach) reach = sg.da; if (sg.db > reach) reach = sg.db; if (sg.tgt > reach) reach = sg.tgt; if (sg.pend > reach) reach = sg.pend; }
+        reach += this.mdMax + 4104; if (s.reverse || this.rmS > 0.001 || reach > this.n) reach = this.n;
+        if (this.qw >= reach && this.seg.every(sg => sg.settled(SLEEP_W))) { for (const sg of this.seg) sg.clearState(); this.sleep = true; }
+      }
+    }
     // bewaker: een ontspoorde toestand herstelt zichzelf in plaats van het geluid voorgoed te stoppen
     let bad = !(this.env >= 0 && this.env < 1e6);
     for (const q of this.seg) if (!(Math.abs(q.hz1) < 1e4 && Math.abs(q.hz2) < 1e4 && Math.abs(q.lz1) < 1e4 && Math.abs(q.lz2) < 1e4 && Math.abs(q.dcx) < 1e4 && Math.abs(q.dcy) < 1e4 && q.da === q.da && q.db === q.db)) bad = true;
     if (!(Math.abs(this.dryS) < 1e3 && Math.abs(this.wetS) < 1e3 && Math.abs(this.fb0) < 1e3 && Math.abs(this.fb1) < 1e3 && Math.abs(this.dkS) < 1e3 && Math.abs(this.mgS) < 1e3 && Math.abs(this.ph) < 1e3)) { this.dryS = 0; this.wetS = 0; this.fb0 = this.fb1 = 0.4; this.dkS = 1; this.ginS = 1; this.lvS = 1; this.rmS = 0; this.ph = 0; this.mgS = 1; this.snap = true; bad = true; }
     if (bad) this.clearAll();
-    if ((this.cnt += 1) % 8 === 0) { this.port.postMessage({ lim: this.limPk > 0.9 ? 1 : 0 }); this.limPk = 0; }
+    if ((this.cnt += 1) % 8 === 0) { const lv = this.limPk > 0.9 ? 1 : 0; if (lv !== this.limSent) { this.limSent = lv; this.port.postMessage({ lim: lv }); } this.limPk = 0; }   // alleen een bericht bij verandering (het apparaat onthoudt de laatste waarde)
     return true;
   }
 }
 registerProcessor('${WNAME}', DelayFx);`;
 
 export default {
-  id: 'nl.patchkamer.delay', name: 'Delay', version: '1.1.0', kind: 'effect', category: 'effect',
+  id: 'nl.patchkamer.delay', name: 'Delay', version: '1.1.1', kind: 'effect', category: 'effect',
   ui: { width: 700, minWidth: 340 },
   i18n: { en: { ports: { in: 'In', out: 'Out', mod: 'Mod' } } },
   ports: { audioIn: [{ id: 'in', name: 'In' }], audioOut: [{ id: 'out', name: 'Uit' }], eventIn: [], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },

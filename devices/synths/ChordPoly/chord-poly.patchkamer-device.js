@@ -1,4 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+// 1.14.1 — Lichter voor de audiothread. (1) Slaap: 3 s na de laatste stem koppelt de keten (chorus, vervormer, compressor, plafond) zich los van de uitgang en de scope; Web Audio rekent hem dan niet meer door. De LFO's
+//   van de chorus blijven lopen (fase gelijk); de volgende noot hangt alles weer vast, en parameters die tijdens de slaap een nieuw doel kregen, krijgen bij het wakker worden de waarde die ze zonder slaap hadden.
+//   (2) Een gelijk, al uitgeklonken doel wordt niet opnieuw gezet (ease): modulatie (LFO op de cutoff) liet op elke stem en elke oscillator eindeloze setTarget-gebeurtenissen achter, die de audiothread per sample doorrekende.
+//   Meting (3 apparaten, losse Chromium-pagina, audiothread in kern): in stilte 0,015 -> 0,010; een pad met LFO-modulatie op de cutoff 0,093 -> 0,066 (-29%); zonder modulatie spelen gelijk (stabs 0,132 -> 0,142, pad 0,182 -> 0,173, binnen de meetruis van 0,01).
+//   Offline (OfflineAudioContext, stap voor stap geplant, 8 scenario's + 3 extreme met tunes, akkoorden, noteoff, retrigger, mod, setState, stilte en wake): zonder de detune-overslag max |verschil| 5e-6 (-106 dBFS, gelijk aan twee runs van 1.14.0);
+//   met de overslag in de scenario's tot 4e-4 (-68 dBFS) en in extreme staten (resonantie 5, kwadraat, mod +-1) tot 4,5e-3: een oscillator zonder detune-gebeurtenissen rekent in Chrome op blokniveau in plaats van per sample,
+//   wat na 10 s een tijdverschuiving van 1e-4 sample geeft (gemeten). Niet beluisterd; geen NaN of Infinity.
 // 1.14.0 — Regelaars herkenbaar voor skins (host.ui.adopt, id = state-sleutel, groep per sectie: filter, osc, env, fx, out) en per groep een omhullend element (zonder skin display:contents,
 //   dus ongewijzigd uiterlijk); de scope volgt zijn CSS-hoogte. Geluid, state, params() en poorten ongewijzigd.
 // 1.13.0 — Uitleg naar about (menu Over Chord Poly); de UI toont geen uitlegtekst meer.
@@ -27,7 +34,7 @@ const drawLoop = (host, inst, cb, fps) => {
   raf = requestAnimationFrame(f); return () => { stop = true; cancelAnimationFrame(raf); };
 };
 export default {
-  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.14.0', kind: 'instrument', category: 'synth',
+  id: 'nl.patchkamer.chordpoly', name: 'Chord Poly', version: '1.14.1', kind: 'instrument', category: 'synth',
   ui: { width: 840, minWidth: 380 },
   about: { nl: 'Een polyfone akkoordsynth: twee ontstemde oscillatoren en een sub per noot, met akkoordgeheugen. Warme akkoorden, scherpe stabs en brede leads. Keyboard / sequencer → Noten.\n\nTot 24 gelijktijdige stemmen, ieder met twee ontstemde oscillatoren en een sub. Akkoordgeheugen voegt intervallen toe aan elke inkomende noot; kies Losse noten voor volledige akkoorden uit een sequencer. Mod stuurt de basisregelaars zonder ze te overschrijven.', en: 'A polyphonic chord synth: two detuned oscillators and a sub per note, with chord memory. Warm chords, sharp stabs and wide leads. Keyboard / sequencer → Notes.\n\nUp to 24 simultaneous voices, each with two detuned oscillators and a sub. Chord memory adds intervals to every incoming note; choose Single notes for full chords from a sequencer. Mod moves the basic controls without overwriting them.' },
   ports: { audioIn: [], audioOut: [{ id: 'out', name: 'Stereo' }], eventIn: [{ id: 'notes', name: 'Notes' }], eventOut: [], modIn: [{ id: 'mod', name: 'Mod' }], modOut: [] },
@@ -41,11 +48,19 @@ export default {
 
     const clamp = CLAMP;
     const finite = (x, d, a, b) => typeof x === 'number' && Number.isFinite(x) ? clamp(x, a, b) : d;
-    let dead = false, mod = {}, state, effective = {};
+    let dead = false, mod = {}, state, effective = {}, asleep = false, quietAt = 0;   // quietAt: sinds wanneer er geen stem meer is
     const nodes = new Set(), sources = new Set();
     const own = n => (nodes.add(n), n), gain = v => { const n = own(ctx.createGain()); n.gain.value = v; return n; };
     const filter = (type, hz, q = 0.7) => { const n = own(ctx.createBiquadFilter()); n.type = type; n.frequency.value = Math.min(ctx.sampleRate * 0.45, hz); n.Q.value = q; return n; };
     const smooth = (p, v, t = ctx.currentTime, tc = 0.025) => p.setTargetAtTime(v, t, tc);
+    // zacht naar een doel, maar een gelijk doel dat al is uitgeklonken (20 tijdconstanten, e^-20 = 2e-9) wordt niet opnieuw gezet: dat zou dezelfde vlakke waarde geven
+    // en laat anders een eindeloze setTarget-gebeurtenis op elke parameter achter, die de audiothread per sample doorrekent. Een doel dat nog onderweg is, wordt wel
+    // opnieuw gezet zoals voorheen. goal onthoudt per parameter het laatste doel, het tijdstip en de waarde op dat tijdstip, zodat de waarde op elk later moment
+    // met de formule van setTarget bekend is (nodig voor wake(): een node die slaapt, rekent zijn parameters niet door).
+    const goal = new WeakMap(), pending = new Set();
+    const goalAt = (g, t) => g.v + (g.x - g.v) * Math.exp(-(t - g.t) / g.tc);
+    const seed = (p, v = p.value, tc = 0.025) => { goal.set(p, { v, t: -Infinity, x: v, tc }); return p; };
+    const ease = (p, v, t = ctx.currentTime, tc = 0.025) => { const g = goal.get(p); if (g && g.v === v && t - g.t >= 20 * g.tc) return; goal.set(p, { v, t, x: g ? goalAt(g, t) : p.value, tc }); if (asleep) pending.add(p); else smooth(p, v, t, tc); };
     const hz = n => 440 * 2 ** ((n - 69) / 12);
     const start = (n, t = ctx.currentTime) => { sources.add(n); n.start(t); return n; };
     const stopSource = (n, t = ctx.currentTime) => { try { n.stop(t); } catch {} };
@@ -65,19 +80,31 @@ export default {
     state = { ...defaults }; resolve();
     const voices = new Set(), bus = gain(1), dry = gain(0.8), wet = gain(0.3), pre = gain(1), shaper = own(ctx.createWaveShaper()), volume = gain(0.7);
     const comp = compressor();
-    const out = ceiling(), analyser = own(ctx.createAnalyser());
+    // out is een vaste uitgangsgain (x1, exact neutraal); de keten erachter (ceil en alles ervoor) wordt losgekoppeld als er geen stem klinkt (zie sleep/wake),
+    // want Web Audio rekent alleen wat door een verbinding naar de uitgang of een meter wordt opgevraagd
+    const ceil = ceiling(), out = gain(1), analyser = own(ctx.createAnalyser()), pulse = own(ctx.createAnalyser());
     const curve = new Float32Array(2049); for (let i = 0; i < curve.length; i++) curve[i] = Math.tanh((i / (curve.length - 1) * 2 - 1) * 2) / Math.tanh(2); shaper.curve = curve; shaper.oversample = '2x';
-    bus.connect(dry).connect(pre); wet.connect(pre); pre.connect(shaper).connect(volume).connect(comp).connect(out); out.connect(analyser); analyser.fftSize = 1024;
-    const chorus = []; for (let i = 0; i < 2; i++) { const delay = own(ctx.createDelay(0.1)), lfo = own(ctx.createOscillator()), depth = gain(0.002), pan = own(ctx.createStereoPanner()); delay.delayTime.value = 0.018 + i * 0.007; lfo.frequency.value = 0.27 + i * 0.11; lfo.connect(depth).connect(delay.delayTime); bus.connect(delay).connect(pan).connect(wet); start(lfo); chorus.push({ delay, lfo, depth, pan, i }); }
+    bus.connect(dry).connect(pre); wet.connect(pre); pre.connect(shaper).connect(volume).connect(comp).connect(ceil); ceil.connect(out); ceil.connect(analyser); analyser.fftSize = 1024; pulse.fftSize = 32;
+    const chorus = []; for (let i = 0; i < 2; i++) { const delay = own(ctx.createDelay(0.1)), lfo = own(ctx.createOscillator()), depth = gain(0.002), pan = own(ctx.createStereoPanner()); delay.delayTime.value = 0.018 + i * 0.007; lfo.frequency.value = 0.27 + i * 0.11; lfo.connect(depth).connect(delay.delayTime); bus.connect(delay).connect(pan).connect(wet); lfo.connect(pulse); start(lfo); chorus.push({ delay, lfo, depth, pan, i }); }
     function voiceLevel(v, t) { const age = t - v.t; if (age < 0) return 0; if (Number.isFinite(v.off) && t >= v.off) return v.offValue * Math.max(0, 1 - (t - v.off) / v.rel); if (age < v.a) return v.peak * age / v.a; if (age < v.a + v.d) return v.peak * (1 - (1 - v.s) * (age - v.a) / v.d); return v.peak * v.s; }
     function release(v, t, seconds = effective.release) { if (v.ended || t >= v.end) return; const value = voiceLevel(v, t); v.amp.gain.cancelScheduledValues(t); v.amp.gain.setValueAtTime(value, t); v.amp.gain.linearRampToValueAtTime(0, t + seconds); v.off = t; v.offValue = value; v.rel = seconds; v.end = t + seconds; for (const o of v.osc) stopSource(o, t + seconds + 0.01); }
-    function cleanup(v) { if (v.ended) return; v.ended = true; voices.delete(v); for (const n of v.owned) { try { n.disconnect(); } catch {} nodes.delete(n); sources.delete(n); } }
-    function filterVoice(v, t) { const age = Math.max(0, t - v.t), base = effective.cutoff, env = effective.env; v.filter.frequency.cancelScheduledValues(t); const peak = Math.min(ctx.sampleRate * 0.45, base * 2 ** env), sustain = Math.min(ctx.sampleRate * 0.45, base * 2 ** (env * v.s)); if (age < v.a) { v.filter.frequency.setValueAtTime(base, t); v.filter.frequency.exponentialRampToValueAtTime(peak, v.t + v.a); v.filter.frequency.exponentialRampToValueAtTime(sustain, v.t + v.a + v.d); } else smooth(v.filter.frequency, sustain, t); smooth(v.filter.Q, effective.resonance, t); }
-    function apply() { const old = effective; resolve(); smooth(volume.gain, effective.level); smooth(pre.gain, 1 + effective.drive * 2.5); smooth(dry.gain, 1 - effective.chorus * 0.25); smooth(wet.gain, effective.chorus * 0.65); for (const c of chorus) { smooth(c.depth.gain, 0.0003 + effective.chorus * 0.003); smooth(c.pan.pan, (c.i ? 1 : -1) * effective.width); } for (const v of voices) { if (v.end <= ctx.currentTime) continue; for (let i = 0; i < v.osc.length; i++) { smooth(v.osc[i].detune, effective.transpose * 100 + (i === 0 ? -effective.detune : i === 1 ? effective.detune : 0)); if (i < 2) v.osc[i].type = state.wave; } smooth(v.subGain.gain, effective.sub * 0.5); if (old.cutoff !== effective.cutoff || old.env !== effective.env || old.resonance !== effective.resonance) filterVoice(v, Math.max(ctx.currentTime, v.t)); } }
+    function cleanup(v) { if (v.ended) return; v.ended = true; voices.delete(v); if (!voices.size) quietAt = ctx.currentTime + 3; for (const n of v.owned) { try { n.disconnect(); } catch {} nodes.delete(n); sources.delete(n); } }
+    // Slaap: zonder stemmen is de keten stil. Na een nastaart van 3 s (de chorus-delay is 0,1 s; de compressor is dan helemaal losgelaten, anders zou hij bij de volgende noot nog een beetje ingedrukt zijn) koppelen we ceil los van de uitgang en de meter; dan rekent
+    // Web Audio de hele keten niet meer door. De LFO's blijven lopen (ze hangen aan pulse) zodat hun fase gelijk blijft aan die van een keten die nooit slaapt.
+    // Bij de volgende noot (playSingle) hangt wake() alles weer vast, vóór de noot klinkt; de keten is dan stil en de curven gaan door nul, dus zonder klik.
+    const sleep = () => { if (asleep || dead) return; asleep = true; try { ceil.disconnect(out); } catch {} try { ceil.disconnect(analyser); } catch {} };
+    const wake = () => { if (!asleep) return; asleep = false; try { ceil.connect(out); ceil.connect(analyser); } catch {}
+      // parameters die tijdens de slaap een nieuw doel kregen, krijgen hun waarde van nu en gaan vandaar door, precies zoals een keten die nooit sliep
+      for (const p of pending) { const g = goal.get(p), now = ctx.currentTime; p.cancelScheduledValues(0); p.setValueAtTime(goalAt(g, now), now); smooth(p, g.v, now, g.tc); } pending.clear(); };
+    const napT = typeof setInterval === 'function' ? setInterval(() => { if (!dead && !asleep && !voices.size && ctx.currentTime >= quietAt) sleep(); }, 250) : null; if (napT && napT.unref) napT.unref();
+    function filterVoice(v, t) { const age = Math.max(0, t - v.t), base = effective.cutoff, env = effective.env; v.filter.frequency.cancelScheduledValues(t); const peak = Math.min(ctx.sampleRate * 0.45, base * 2 ** env), sustain = Math.min(ctx.sampleRate * 0.45, base * 2 ** (env * v.s)); if (age < v.a) { v.filter.frequency.setValueAtTime(base, t); v.filter.frequency.exponentialRampToValueAtTime(peak, v.t + v.a); v.filter.frequency.exponentialRampToValueAtTime(sustain, v.t + v.a + v.d); } else smooth(v.filter.frequency, sustain, t); ease(v.filter.Q, effective.resonance, t); }
+    function apply() { const old = effective; resolve(); ease(volume.gain, effective.level); ease(pre.gain, 1 + effective.drive * 2.5); ease(dry.gain, 1 - effective.chorus * 0.25); ease(wet.gain, effective.chorus * 0.65); for (const c of chorus) { ease(c.depth.gain, 0.0003 + effective.chorus * 0.003); ease(c.pan.pan, (c.i ? 1 : -1) * effective.width); } for (const v of voices) { if (v.end <= ctx.currentTime) continue; for (let i = 0; i < v.osc.length; i++) { ease(v.osc[i].detune, detuneOf(i)); if (i < 2 && v.osc[i].type !== state.wave) v.osc[i].type = state.wave; } ease(v.subGain.gain, effective.sub * 0.5); if (old.cutoff !== effective.cutoff || old.env !== effective.env || old.resonance !== effective.resonance) filterVoice(v, Math.max(ctx.currentTime, v.t)); } }
+    const detuneOf = i => effective.transpose * 100 + (i === 0 ? -effective.detune : i === 1 ? effective.detune : 0);
     function playSingle(note, vel, t, duration, root = note) {
-      if (dead) return; for (const v of [...voices]) if (v.end < ctx.currentTime - 0.05) cleanup(v); if ([...voices].filter(v => v.end > t + 0.01).length >= 24) { const oldest = [...voices].filter(v => v.end > t + 0.01).sort((a, b) => a.t - b.t)[0]; release(oldest, Math.max(ctx.currentTime, t), 0.008); } if (voices.size >= 32) { const oldest = [...voices].sort((a, b) => a.end - b.end)[0]; for (const o of oldest.osc) stopSource(o, ctx.currentTime); cleanup(oldest); }
+      if (dead) return; wake(); for (const v of [...voices]) if (v.end < ctx.currentTime - 0.05) cleanup(v); if ([...voices].filter(v => v.end > t + 0.01).length >= 24) { const oldest = [...voices].filter(v => v.end > t + 0.01).sort((a, b) => a.t - b.t)[0]; release(oldest, Math.max(ctx.currentTime, t), 0.008); } if (voices.size >= 32) { const oldest = [...voices].sort((a, b) => a.end - b.end)[0]; for (const o of oldest.osc) stopSource(o, ctx.currentTime); cleanup(oldest); }
       const amp = gain(0), f = filter('lowpass', effective.cutoff, effective.resonance), p = own(ctx.createStereoPanner()), s = gain(effective.sub * 0.5), osc = [own(ctx.createOscillator()), own(ctx.createOscillator()), own(ctx.createOscillator())];
       osc[0].type = osc[1].type = state.wave; osc[2].type = 'square'; for (let i = 0; i < 3; i++) { osc[i].frequency.setValueAtTime(hz(note) * (i === 2 ? 0.5 : 1), t); osc[i].detune.value = effective.transpose * 100 + (i === 0 ? -effective.detune : i === 1 ? effective.detune : 0); if (i === 2) osc[i].connect(s).connect(f); else osc[i].connect(f); start(osc[i], t); } f.connect(amp).connect(p).connect(bus); p.pan.value = ((note % 7) / 3 - 1) * effective.width * 0.3;
+      osc.forEach((o, i) => seed(o.detune, detuneOf(i))); seed(s.gain, effective.sub * 0.5); seed(f.Q, effective.resonance);
       const v = { osc, amp, filter: f, subGain: s, root, t, a: effective.attack, d: effective.decay, s: effective.sustain, peak: 0.12 * vel, end: Infinity, owned: [...osc, amp, f, p, s], ended: false }; voices.add(v); osc[0].onended = () => cleanup(v); amp.gain.setValueAtTime(0, t); amp.gain.linearRampToValueAtTime(v.peak, t + v.a); amp.gain.linearRampToValueAtTime(v.peak * v.s, t + v.a + v.d); filterVoice(v, t); if (Number.isFinite(duration)) release(v, t + Math.max(0.005, duration));
     }
     function play(note, vel, t, dur) { const intervals = state.chord === 'memory' ? state.memory.split(',').map(Number) : chords[state.chord] || [0]; for (const interval of intervals) if (note + interval >= 0 && note + interval <= 127) playSingle(note + interval, vel / Math.sqrt(intervals.length), t, dur, note); }
@@ -109,7 +136,7 @@ export default {
     const data = new Float32Array(analyser.fftSize || 1024);
     function draw() {
       if (dead || !scope || !scopeG || !cw) return; if (!col) readColors();
-      const w = cw, h = ch, g = scopeG; analyser.getFloatTimeDomainData(data);
+      const w = cw, h = ch, g = scopeG; if (asleep) data.fill(0); else analyser.getFloatTimeDomainData(data);
       g.fillStyle = col.well; g.fillRect(0, 0, w, h); g.strokeStyle = col.wellFg; g.beginPath();
       for (let i = 0; i < data.length; i++) { const x = i / (data.length - 1) * w, y = h / 2 - clamp(data[i], -1, 1) * h * 0.46; i ? g.lineTo(x, y) : g.moveTo(x, y); }
       g.stroke();
@@ -146,7 +173,7 @@ export default {
         state.chord = Object.hasOwn(chords, s.chord) || s.chord === 'memory' ? s.chord : 'none';
         state.memory = parseMemory(typeof s.memory === 'string' ? s.memory : defaults.memory); state.preset = Object.hasOwn(presets, s.preset) ? s.preset : defaults.preset; apply(); paint();
       },
-      destroy() { if (dead) return; dead = true; unmount(); dispose(); voices.clear(); },
+      destroy() { if (dead) return; dead = true; if (napT) clearInterval(napT); unmount(); dispose(); voices.clear(); },
     };
     apply(); return self;
   },

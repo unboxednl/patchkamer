@@ -15,7 +15,7 @@ Een algoritmische galm met vijf modellen in één apparaat: **Hall** (groot, lan
 | Poorten | audio-ingang `in`, audio-uitgang `out`, sturing `mod` |
 | Contract | v1.28 |
 | Licentie apparaat | AGPL-3.0-or-later |
-| Worklet | `nl-patchkamer-reverb-1-0-2`: verhoog de versie in de naam als je de worklet wijzigt (de host onthoudt code per naam) |
+| Worklet | `nl-patchkamer-reverb-1-0-3`: verhoog de versie in de naam als je de worklet wijzigt (de host onthoudt code per naam) |
 
 ## Geen tunes, wel presets
 
@@ -64,6 +64,13 @@ De regelaars zijn via `host.ui.knob` en `host.ui.select` herkenbaar voor skins (
 - `node devices/effects/Reverb/check-preset.mjs` haalt elke preset door `setState` en `getState` en meldt ontbrekende of onbekende velden en gewijzigde waarden.
 - `node docs/tools/measure-reverb.mjs` meet RT60 per model en band, echodichtheid, kleuring, stereo-decorrelatie, latency, rekenlast, stabiliteit (NaN/Infinity/1e30, freeze) en de modelwissel. Je kunt niet horen hoe een preset klinkt: schrijf in je oplevering dat de klank **niet beluisterd** is.
 - De worklet-code wordt in dat script uit het apparaat zelf geladen: een wijziging in de DSP komt dus vanzelf in de meting.
+
+## Rekenlast en slaapstand (1.0.3)
+
+- **Slaapstand:** is de ingang stil (alle samples onder 1e-9, ongeveer -180 dBFS) en is al het geheugen van de actieve motor (lijnen, diffusers, pre-delay, demping, bij Spring ook de allpass-ketens) overal kleiner dan 1e-9, dan rekent `process()` niet meer: de motor wordt gewist en `idle()` houdt alleen bij wat ook zonder ingang verandert (zachte parameters, lijnlengtes, modulatiefase, pre-delay, schrijfposities); de natte uitvoer is nul, het droge pad blijft. Elk blok met ingang wekt hem in dat blok. De scan loopt elke 16 stille blokken en stopt bij de eerste waarde boven de drempel; een modelwissel wekt hem. Een staart van een impuls is na ongeveer 2,3 keer de decay uitgeklonken (bij decay 2,5 s na ongeveer 6 s). `process()` geeft altijd `true`: `return false` gaf in Chromium geen meetbaar voordeel.
+- Een ingangsfilter (`hp`, `lp`) dat uit staat wordt gewist; in 1.0.2 bleef zijn toestand staan en speelde die als tik terug zodra het filter weer aanging (gemeten: een nummer in ongeveer 3 van de 128 willekeurige scenario's, tot 5e-3).
+- Spring rekent de vier onafhankelijke allpass-ketens van beide kanalen in één lus, de vroege reflecties gaan per twee taps, de allpass-toestanden van de ingangsdiffusers staan als losse variabelen en de invoerlus is korter: bit-identiek aan 1.0.2.
+- Meetregel: vergelijk een wijziging aan de motor met de vorige versie sample voor sample; met `SLEEP_IN = 0` en `SLEEP_ST = 0` (nooit slapen) moet de uitvoer bit-identiek zijn.
 
 ## Wat je niet doet
 
