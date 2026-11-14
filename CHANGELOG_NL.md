@@ -4,6 +4,12 @@
 
 Alle belangrijke wijzigingen in Patchkamer (de host en de desktop-app) per versie. Het versienummer staat in `patchkamer/version.json` en onder **Instellingen > Versie**. Oudere geschiedenis staat in het git-log.
 
+## 0.44.0 (2026-11-14)
+
+### Gewijzigd
+
+- **Startscherm: 100% betekent nu echt klaar.** De voortgangsbalk telde alleen geladen items; het terugzetten van de werkruimte (kaarten bouwen) en het aansluiten van de kabels telden niet mee, dus de balk stond al op 100% terwijl je nog moest wachten. Nu reserveert de balk een deel voor de werkruimte, blijft hij tot het eind onder 100%, en pas als de kabels zijn aangesloten staat hij op 100% en verdwijnt het scherm. Is er geen werkruimte om terug te zetten, dan wordt er niets gereserveerd. Alleen een weergave: wat er geladen wordt en de volgorde zijn niet veranderd. Getest in headless Chromium (balk blijft op 92% zolang de werkruimte wordt opgebouwd, 100% pas daarna); niet getest op een echte, trage machine.
+
 ## 0.43.0 (2026-11-14)
 
 ### Gewijzigd

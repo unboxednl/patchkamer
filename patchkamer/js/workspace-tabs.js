@@ -26,7 +26,7 @@ async function wslInit(o){ const auto=o&&o.auto?o.auto:()=>PK.wsaAutoLoad(); let
   if(saved&&Array.isArray(saved.slots)&&saved.slots.length){ PK.WSL.slots=saved.slots.filter(x=>x&&x.id).slice(0,WSL_MAX).map(x=>({id:x.id,name:String(x.name||'').slice(0,60),state:x.state||null})); PK.WSL.cur=Math.min(Math.max(0,saved.cur|0),PK.WSL.slots.length-1); }
   if(!PK.WSL.slots.length){ PK.WSL.slots=[{id:wslUid(),name:PK.pkt('m.naamloos'),state:null}]; PK.WSL.cur=0; }
   const t=PK.WSL.slots[PK.WSL.cur];
-  if(!PK.PK_PENDING&&PK.Host.devices.size===0&&t.state&&Array.isArray(t.state.devices)&&t.state.devices.length){ if(o&&o.always) await auto(); if(o&&o.ws) o.ws(); await PK.openWorkspace(t.state); }   // eerst de bibliotheken (devices, skins, presets), dan de werkruimte die ze gebruikt
-  else if(PK.Host.devices.size===0) await auto();
+  if(!PK.PK_PENDING&&PK.Host.devices.size===0&&t.state&&Array.isArray(t.state.devices)&&t.state.devices.length){ if(o&&o.always) await auto(); if(o&&o.ws) await o.ws(); await PK.openWorkspace(t.state); }   // eerst de bibliotheken (devices, skins, presets), dan de werkruimte die ze gebruikt
+  else if(PK.Host.devices.size===0){ if(o&&o.none) o.none(); await auto(); }
   PK.WSL.ready=true; wslPaint(); } PK.wslInit=wslInit;
 })(window.__PK);

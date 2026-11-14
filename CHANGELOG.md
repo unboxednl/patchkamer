@@ -4,6 +4,12 @@
 
 All notable changes to Patchkamer (the host and the desktop app) per version. The version number is in `patchkamer/version.json` and shown under **Settings > Version**. Older history is in the git log.
 
+## 0.44.0 (2026-11-14)
+
+### Changed
+
+- **Startup screen: 100% now means really done.** The progress bar only counted loaded items; restoring the workspace (building the cards) and connecting the cables were not counted, so the bar showed 100% while you still had to wait. The bar now reserves a share for the workspace, stays below 100% until the end, and only reaches 100% (and the screen closes) once the cables are connected. If there is no workspace to restore, nothing is reserved. Display only: what is loaded and the order are unchanged. Tested in headless Chromium (the bar holds at 92% while the workspace is built, 100% only afterwards); not tested on a real, slow machine.
+
 ## 0.43.0 (2026-11-14)
 
 ### Changed

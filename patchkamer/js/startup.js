@@ -41,7 +41,9 @@ function startupBegin(){
   // voortgang = geladen items (apparaten, tunes, presets, skins, samples) gedeeld door alle items; wat nog niet geteld is, schat de vorige start
   function totals(){ let tot=0,done=0; for(const [k,c] of S.chips){ if(k==='ws') continue; const ss=[...S.segs.values()].filter(x=>x.key===k), t=ss.reduce((a,x)=>a+x.total,0); tot+=t>0?t:S.est[k]; done+=ss.reduce((a,x)=>a+x.done,0); }
     return {tot:Math.max(tot,1),done}; }
-  function paint(){ if(!S.el) return; const {tot,done}=totals(), p=Math.min(1,done/tot); S.bar.style.width=(p*100).toFixed(1)+'%'; S.pct.textContent=Math.round(p*100)+'%'; S.el.setAttribute('aria-valuenow',String(Math.round(p*100))); if(S.cab) S.cab.grow(Math.floor(done)); }
+  // de balk haalt 100% pas als alles echt klaar is: de laatste WSW zit voor het terugzetten van de werkruimte (kaarten bouwen, kabels aansluiten), en alleen finish() zet hem op 100%
+  const WSW=()=>S.nows?0:.08, wsFrac=()=>{ const c=S.chips.get('ws'); const s=c&&c.e.dataset.s; return s==='done'?1:s==='act'?.4:0; };
+  function paint(){ if(!S.el||S.fin) return; const {tot,done}=totals(), p=Math.min(.99,Math.min(1,done/tot)*(1-WSW())+WSW()*wsFrac()); S.bar.style.width=(p*100).toFixed(1)+'%'; S.pct.textContent=Math.round(p*100)+'%'; S.el.setAttribute('aria-valuenow',String(Math.round(p*100))); if(S.cab) S.cab.grow(Math.floor(done)); }
   function chip(key){ let c=S.chips.get(key); if(c||!S.el) return c;
     const e=document.createElement('span'); e.className='spc'; e.dataset.s='wait'; e.innerHTML='<i></i><b></b><u></u>'; e.querySelector('b').textContent=PK.pkt('m.su_k_'+key); S.chips.set(key,c={e,n:e.querySelector('u'),total:0});
     // vaste volgorde: Apparaten, Tunes, Presets, Skins, Samples, Werkruimte
@@ -79,7 +81,11 @@ function startupBegin(){
   S.srcEnd=src=>{ if(!S.el) return; const k=kindOf(src); if(--S.pend[k]<=0) done(k); };
   // de bibliotheken van Instellingen (alleen als ze aan staan), twee soorten tegelijk; elke soort krijgt zijn vinkje zodra hij klaar is
   S.auto=async()=>{ await S.each(kindsOn(),2,async k=>{ S.step(PK.pkt('m.su_laden_'+k),k); try{ const src=await PK.wsaLoad(k,false); const st=src&&PK.SRCSTATE.get(src.sid); if(st&&st.state==='err') S.warn(k); }catch(e){ S.warn(k); } done(k); }); };
-  S.finish=()=>{ PK.loadNote=null; if(!S.el) return; S.chips.forEach((c,k)=>{ if(c.e.dataset.s==='act') done(k); else if(c.e.dataset.s==='wait') c.e.remove(); }); S.chips.forEach((c,k)=>{ if(!c.e.isConnected) S.chips.delete(k); });
+  // laat de werkruimte echt neerkomen: eerst een beeld tekenen (zodat 'Werkruimte' zichtbaar is voor het zware werk), en daarna wachten tot de kabels zijn aangesloten
+  S.noWs=()=>{ S.nows=true; };   // er valt niets terug te zetten: de balk hoeft niets te reserveren
+  S.paintNow=()=>new Promise(r=>{ let d=false; const go=()=>{ if(!d){ d=true; r(); } }; requestAnimationFrame(()=>requestAnimationFrame(go)); setTimeout(go,120); });
+  S.settle=()=>!S.el?Promise.resolve():new Promise(r=>setTimeout(r,450)).then(()=>S.paintNow());
+  S.finish=()=>{ PK.loadNote=null; if(!S.el) return; S.fin=true; const w=S.chips.get('ws'); if(w&&w.e.dataset.s==='act') mark('ws','done'); S.chips.forEach((c,k)=>{ if(c.e.dataset.s==='act') done(k); else if(c.e.dataset.s==='wait') c.e.remove(); }); S.chips.forEach((c,k)=>{ if(!c.e.isConnected) S.chips.delete(k); });
     try{ const o={}; for(const k of KINDS){ const t=segsOf(k).reduce((a,x)=>a+x.total,0); if(t>0) o[k]=t; } localStorage.setItem(COUNTS_KEY,JSON.stringify({...S.est,...o})); }catch(e){}   // voor de schatting van de volgende start
     const {done:n}=totals(); if(S.cab) S.cab.grow(Math.floor(n)); S.bar.style.width='100%'; S.pct.textContent='100%'; S.txt.textContent=S.warns?PK.pkt('m.su_klaar_let_op'):PK.pkt('m.su_klaar'); S.sub.textContent='';
     // even laten zien dat alles is aangesloten, dan faden de kabels weg en daarna het scherm
